@@ -433,7 +433,7 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 		/* XXX needed to avoid race */
 		if (!wantedhost && u->myuser)
 		{
-			md = metadata_find(u->myuser, METADATA_USER, "private:usercloak");
+			md = metadata_find(u->myuser, "private:usercloak");
 			if (md)
 				wantedhost = md->value;
 		}

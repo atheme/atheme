@@ -10,6 +10,26 @@
 #ifndef __ATHEME_OBJECT_H__
 #define __ATHEME_OBJECT_H__
 
+struct metadata_ {
+	char *name;
+	char *value;
+	boolean_t private;
+	node_t node;
+};
+
+typedef struct metadata_ metadata_t;
+
+typedef struct {
+	void *target;
+	const char *name;
+	char *value;
+} hook_metadata_change_t;
+
+typedef struct {
+	myuser_t *mu;
+	list_t taglist;
+} metadata_subscription_t;
+
 typedef void (*destructor_t)(void *);
 
 typedef struct {
@@ -18,6 +38,7 @@ typedef struct {
 	int refcount;
 #endif
 	destructor_t destructor;
+	list_t metadata;
 } object_t;
 
 E void object_init(object_t *, const char *name, destructor_t destructor);
@@ -25,6 +46,11 @@ E void object_init(object_t *, const char *name, destructor_t destructor);
 E void *object_ref(void *);
 #endif
 E void object_unref(void *);
+
+E metadata_t *metadata_add(void *target, const char *name, const char *value);
+E void metadata_delete(void *target, const char *name);
+E metadata_t *metadata_find(void *target, const char *name);
+E void metadata_delete_all(void *target);
 
 #define object(x) ((object_t *) x)
 

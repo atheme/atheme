@@ -60,7 +60,7 @@ unsigned int get_template_flags(mychan_t *mc, const char *name)
 
 	if (mc != NULL)
 	{
-		md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+		md = metadata_find(mc, "private:templates");
 		if (md != NULL)
 		{
 			d = getitem(md->value, name);

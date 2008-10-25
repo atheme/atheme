@@ -180,7 +180,7 @@ void join(char *chan, char *nick)
 			 * time otherwise, but never ever create a channel
 			 * with TS 0 -- jilles */
 			ts = mc->registered;
-			md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
+			md = metadata_find(mc, "private:channelts");
 			if (md != NULL)
 				ts = atol(md->value);
 			if (ts == 0)
@@ -422,7 +422,7 @@ void handle_burstlogin(user_t *u, char *login)
 		}
 		/* we're running without a persistent db, create it */
 		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
-		metadata_add(mu, METADATA_USER, "fake", "1");
+		metadata_add(mu, "fake", "1");
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */
 		return;
@@ -484,7 +484,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login)
 		}
 		/* we're running without a persistent db, create it */
 		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
-		metadata_add(mu, METADATA_USER, "fake", "1");
+		metadata_add(mu, "fake", "1");
 	}
 	u->myuser = mu;
 	n = node_create();
@@ -622,14 +622,14 @@ boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
 
 	mask = get_source_mask(si);
 
-	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
+	md_failnum = metadata_find(mu, "private:loginfail:failnum");
 	count = md_failnum ? atoi(md_failnum->value) : 0;
 	count++;
 	snprintf(numeric, sizeof numeric, "%d", count);
-	md_failnum = metadata_add(mu, METADATA_USER, "private:loginfail:failnum", numeric);
-	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", mask);
+	md_failnum = metadata_add(mu, "private:loginfail:failnum", numeric);
+	metadata_add(mu, "private:loginfail:lastfailaddr", mask);
 	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
-	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", numeric);
+	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
 	if (is_soper(mu))
 		snoop("SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), mu->name);

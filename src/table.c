@@ -57,6 +57,8 @@ static void table_destroy(void *obj)
 		node_free(n);
 	}
 
+	metadata_delete_all(table);
+
 	free(table);
 }
 

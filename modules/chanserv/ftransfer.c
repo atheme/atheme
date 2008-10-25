@@ -97,8 +97,8 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
 
 	/* delete transfer metadata -- prevents a user from stealing it back */
-	metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
-	metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
+	metadata_delete(mc, "private:verify:founderchg:newfounder");
+	metadata_delete(mc, "private:verify:founderchg:timestamp");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -56,7 +56,7 @@ static void close_check_join(void *vdata)
 	if (mc == NULL)
 		return;
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, "private:close:closer"))
 	{
 		/* don't join if we're already in there */
 		if (!chanuser_find(cu->chan, user_find_named(chansvs.nick)))
@@ -112,15 +112,15 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		if (metadata_find(mc, "private:close:closer"))
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is already closed."), target);
 			return;
 		}
 
-		metadata_add(mc, METADATA_CHANNEL, "private:close:closer", si->su->nick);
-		metadata_add(mc, METADATA_CHANNEL, "private:close:reason", reason);
-		metadata_add(mc, METADATA_CHANNEL, "private:close:timestamp", itoa(CURRTIME));
+		metadata_add(mc, "private:close:closer", si->su->nick);
+		metadata_add(mc, "private:close:reason", reason);
+		metadata_add(mc, "private:close:timestamp", itoa(CURRTIME));
 
 		if ((c = channel_find(target)))
 		{
@@ -150,15 +150,15 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
-		if (!metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		if (!metadata_find(mc, "private:close:closer"))
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is not closed."), target);
 			return;
 		}
 
-		metadata_delete(mc, METADATA_CHANNEL, "private:close:closer");
-		metadata_delete(mc, METADATA_CHANNEL, "private:close:reason");
-		metadata_delete(mc, METADATA_CHANNEL, "private:close:timestamp");
+		metadata_delete(mc, "private:close:closer");
+		metadata_delete(mc, "private:close:reason");
+		metadata_delete(mc, "private:close:timestamp");
 		mc->flags &= ~MC_INHABIT;
 		c = channel_find(target);
 		if (c != NULL)

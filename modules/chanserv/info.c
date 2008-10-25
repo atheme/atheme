@@ -72,7 +72,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (!has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, "private:close:closer")))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 has been closed down by the %s administration."), mc->name, me.netname);
 		return;
@@ -114,7 +114,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
+	md = metadata_find(mc, "private:mlockext");
 	if (mc->mlock_on || mc->mlock_off || mc->mlock_limit || mc->mlock_key || md)
 	{
 		char params[BUFSIZE];
@@ -222,10 +222,10 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 
 	if ((!hide_info || chanuser_find(mc->chan, si->su)) &&
-			(md = metadata_find(mc, METADATA_CHANNEL, "url")))
+			(md = metadata_find(mc, "url")))
 		command_success_nodata(si, "URL        : %s", md->value);
 
-	if (!hide_info && (md = metadata_find(mc, METADATA_CHANNEL, "email")))
+	if (!hide_info && (md = metadata_find(mc, "email")))
 		command_success_nodata(si, "Email      : %s", md->value);
 
 	*buf = '\0';
@@ -287,7 +287,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "GUARD");
 
-		if (chansvs.fantasy && !metadata_find(mc, METADATA_CHANNEL, "disable_fantasy"))
+		if (chansvs.fantasy && !metadata_find(mc, "disable_fantasy"))
 			strcat(buf, " FANTASY");
 	}
 
@@ -302,16 +302,16 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
 
-	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
+	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, "private:mark:setter")))
 	{
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:reason");
+		md = metadata_find(mc, "private:mark:reason");
 		reason = md != NULL ? md->value : "unknown";
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:timestamp");
+		md = metadata_find(mc, "private:mark:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
@@ -323,16 +323,16 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
 		command_success_nodata(si, _("%s is temporarily holding this channel."), chansvs.nick);
 
-	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, "private:close:closer")))
 	{
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:close:reason");
+		md = metadata_find(mc, "private:close:reason");
 		reason = md != NULL ? md->value : "unknown";
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:close:timestamp");
+		md = metadata_find(mc, "private:close:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);

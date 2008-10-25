@@ -25,7 +25,7 @@ on_channel_message(void *p)
 	{
 		mychan_t *mc = mychan_find(data->c->name);
 
-		if (metadata_find(mc, METADATA_CHANNEL, "kickdots"))
+		if (metadata_find(mc, "kickdots"))
 		{
 			kick(chansvs.nick, data->c->name, data->u->nick, data->msg);
 		}

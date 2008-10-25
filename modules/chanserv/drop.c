@@ -105,7 +105,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, "private:close:closer"))
 	{
 		logcommand(si, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
 		command_fail(si, fault_noprivs, _("The channel \2%s\2 is closed; it cannot be dropped."), mc->name);

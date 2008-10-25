@@ -115,7 +115,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+	if (metadata_find(mu, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
 		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (frozen)", mu->name);
@@ -178,13 +178,13 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		strlcpy(lau, u->user, BUFSIZE);
 		strlcat(lau, "@", BUFSIZE);
 		strlcat(lau, u->vhost, BUFSIZE);
-		metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+		metadata_add(mu, "private:host:vhost", lau);
 
 		/* and for opers */
 		strlcpy(lao, u->user, BUFSIZE);
 		strlcat(lao, "@", BUFSIZE);
 		strlcat(lao, u->host, BUFSIZE);
-		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+		metadata_add(mu, "private:host:actual", lao);
 
 		/* They have not entered the services operator password. */
 		u->flags &= ~UF_SOPER_PASS;
@@ -194,7 +194,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
-		md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
+		md_failnum = metadata_find(mu, "private:loginfail:failnum");
 		if (md_failnum && (atoi(md_failnum->value) > 0))
 		{
 			metadata_t *md_failtime, *md_failaddr;
@@ -206,9 +206,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("\2%d\2 failed %s since %s."),
 				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
-			md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
+			md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
 			ts = atol(md_failtime->value);
-			md_failaddr = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailaddr");
+			md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 
 			tm = *localtime(&ts);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
@@ -216,9 +216,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Last failed attempt from: \2%s\2 on %s."),
 				md_failaddr->value, strfbuf);
 
-			metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */
-			metadata_delete(mu, METADATA_USER, "private:loginfail:lastfailtime");
-			metadata_delete(mu, METADATA_USER, "private:loginfail:lastfailaddr");
+			metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
+			metadata_delete(mu, "private:loginfail:lastfailtime");
+			metadata_delete(mu, "private:loginfail:lastfailaddr");
 		}
 
 		mu->lastlogin = CURRTIME;

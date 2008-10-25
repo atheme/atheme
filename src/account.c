@@ -120,7 +120,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	if (mu->flags & MU_ENFORCE)
 	{
 		mu->flags &= ~MU_ENFORCE;
-		metadata_add(mu, METADATA_USER, "private:doenforce", "1");
+		metadata_add(mu, "private:doenforce", "1");
 	}
 
 	/* If it's already crypted, don't touch the password. Otherwise,
@@ -170,7 +170,6 @@ void myuser_delete(myuser_t *mu)
 	mychan_t *mc;
 	user_t *u;
 	node_t *n, *tn;
-	metadata_t *md;
 	mymemo_t *memo;
 	chanacs_t *ca;
 
@@ -238,12 +237,7 @@ void myuser_delete(myuser_t *mu)
 	if (soper_find(mu))
 		soper_delete(mu->soper);
 
-	/* delete the metadata */
-	LIST_FOREACH_SAFE(n, tn, mu->metadata.head)
-	{
-		md = (metadata_t *) n->data;
-		metadata_delete(mu, METADATA_USER, md->name);
-	}
+	metadata_delete_all(mu);
 
 	/* kill any authcookies */
 	authcookie_destroy_all(mu);
@@ -732,9 +726,6 @@ myuser_name_t *myuser_name_add(const char *name)
  */
 static void myuser_name_delete(myuser_name_t *mun)
 {
-	metadata_t *md;
-	node_t *n, *tn;
-
 	return_if_fail(mun != NULL);
 
 	if (!(runflags & RF_STARTING))
@@ -742,12 +733,7 @@ static void myuser_name_delete(myuser_name_t *mun)
 
 	mowgli_patricia_delete(oldnameslist, mun->name);
 
-	/* delete the metadata */
-	LIST_FOREACH_SAFE(n, tn, mun->metadata.head)
-	{
-		md = n->data;
-		metadata_delete(mun, METADATA_USER_NAME, md->name);
-	}
+	metadata_delete_all(mun);
 
 	BlockHeapFree(myuser_name_heap, mun);
 
@@ -778,19 +764,19 @@ void myuser_name_remember(const char *name, myuser_t *mu)
 	if (myuser_name_find(name))
 		return;
 
-	md = metadata_find(mu, METADATA_USER, "private:mark:setter");
+	md = metadata_find(mu, "private:mark:setter");
 	if (md == NULL)
 		return;
 
 	mun = myuser_name_add(name);
 
-	metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
-	md = metadata_find(mu, METADATA_USER, "private:mark:reason");
+	metadata_add(mun, md->name, md->value);
+	md = metadata_find(mu, "private:mark:reason");
 	if (md != NULL)
-		metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
-	md = metadata_find(mu, METADATA_USER, "private:mark:timestamp");
+		metadata_add(mun, md->name, md->value);
+	md = metadata_find(mu, "private:mark:timestamp");
 	if (md != NULL)
-		metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
+		metadata_add(mun, md->name, md->value);
 
 	return;
 }
@@ -821,8 +807,8 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	if (mun == NULL)
 		return;
 
-	md = metadata_find(mu, METADATA_USER, "private:mark:reason");
-	md2 = metadata_find(mun, METADATA_USER_NAME, "private:mark:reason");
+	md = metadata_find(mu, "private:mark:reason");
+	md2 = metadata_find(mun, "private:mark:reason");
 	if (md != NULL && md2 != NULL && strcmp(md->value, md2->value))
 	{
 		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, mu->name, name);
@@ -837,12 +823,12 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 				md2->value, mu->name, name);
 	}
 
-	LIST_FOREACH(n, mun->metadata.head)
+	LIST_FOREACH(n, object(mun)->metadata.head)
 	{
 		md = n->data;
 		/* prefer current metadata to saved */
-		if (!metadata_find(mu, METADATA_USER, md->name))
-			metadata_add(mu, METADATA_USER, md->name, md->value);
+		if (!metadata_find(mu, md->name))
+			metadata_add(mu, md->name, md->value);
 	}
 
 	object_unref(mun);
@@ -857,7 +843,6 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 /* private destructor for mychan_t. */
 static void mychan_delete(mychan_t *mc)
 {
-	metadata_t *md;
 	node_t *n, *tn;
 
 	return_if_fail(mc != NULL);
@@ -869,12 +854,7 @@ static void mychan_delete(mychan_t *mc)
 	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		object_unref(n->data);
 
-	/* delete the metadata */
-	LIST_FOREACH_SAFE(n, tn, mc->metadata.head)
-	{
-		md = (metadata_t *) n->data;
-		metadata_delete(mc, METADATA_CHANNEL, md->name);
-	}
+	metadata_delete_all(mc);
 
 	mowgli_patricia_delete(mclist, mc->name);
 
@@ -1036,7 +1016,7 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 /* private destructor for chanacs_t */
 static void chanacs_delete(chanacs_t *ca)
 {
-	node_t *n, *tn;
+	node_t *n;
 
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
@@ -1053,11 +1033,7 @@ static void chanacs_delete(chanacs_t *ca)
 		node_free(n);
 	}
 
-	LIST_FOREACH_SAFE(n, tn, ca->metadata.head)
-	{
-		metadata_t *md = n->data;
-		metadata_delete(ca, METADATA_CHANACS, md->name);
-	}
+	metadata_delete_all(ca);
 
 	free(ca->host);
 
@@ -1542,114 +1518,63 @@ boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *host
  * M E T A D A T A *
  *******************/
 
-metadata_t *metadata_add(void *target, int type, const char *name, const char *value)
+metadata_t *metadata_add(void *target, const char *name, const char *value)
 {
-	myuser_t *mu = NULL;
-	mychan_t *mc = NULL;
-	chanacs_t *ca = NULL;
-	myuser_name_t *mun = NULL;
+	object_t *obj;
 	metadata_t *md;
 	hook_metadata_change_t mdchange;
 
-	if (!name || !value)
-		return NULL;
+	return_val_if_fail(name != NULL, NULL);
+	return_val_if_fail(value != NULL, NULL);
 
-	if (type == METADATA_USER)
-		mu = target;
-	else if (type == METADATA_CHANNEL)
-		mc = target;
-	else if (type == METADATA_CHANACS)
-		ca = target;
-	else if (type == METADATA_USER_NAME)
-		mun = target;
-	else
-	{
-		slog(LG_DEBUG, "metadata_add(): called on unknown type %d", type);
-		return NULL;
-	}
+	obj = object(target);
 
-	if ((md = metadata_find(target, type, name)))
-		metadata_delete(target, type, name);
+	if ((md = metadata_find(target, name)))
+		metadata_delete(target, name);
 
 	md = BlockHeapAlloc(metadata_heap);
 
 	md->name = strshare_get(name);
 	md->value = sstrdup(value);
 
-	if (type == METADATA_USER)
-		node_add(md, &md->node, &mu->metadata);
-	else if (type == METADATA_CHANNEL)
-		node_add(md, &md->node, &mc->metadata);
-	else if (type == METADATA_CHANACS)
-		node_add(md, &md->node, &ca->metadata);
-	else if (type == METADATA_USER_NAME)
-		node_add(md, &md->node, &mun->metadata);
-	else
-	{
-		slog(LG_DEBUG, "metadata_add(): trying to add metadata to unknown type %d", type);
-
-		strshare_unref(md->name);
-		free(md->value);
-		BlockHeapFree(metadata_heap, md);
-
-		return NULL;
-	}
+	node_add(md, &md->node, &obj->metadata);
 
 	if (!strncmp("private:", md->name, 8))
 		md->private = TRUE;
 
-	mdchange.target = target;
-	mdchange.name = md->name;
-	mdchange.value = md->value;
-	mdchange.type = type;
-	hook_call_event("metadata_change", &mdchange);
+	/* XXX only call the hook for users */
+	if (obj->destructor == (destructor_t)myuser_delete)
+	{
+		mdchange.target = target;
+		mdchange.name = md->name;
+		mdchange.value = md->value;
+		hook_call_event("metadata_change", &mdchange);
+	}
 
 	return md;
 }
 
-void metadata_delete(void *target, int type, const char *name)
+void metadata_delete(void *target, const char *name)
 {
-	myuser_t *mu;
-	mychan_t *mc;
-	chanacs_t *ca;
-	myuser_name_t *mun;
-	metadata_t *md = metadata_find(target, type, name);
+	object_t *obj;
+	metadata_t *md = metadata_find(target, name);
 	hook_metadata_change_t mdchange;
 
 	if (!md)
 		return;
 
-	mdchange.target = target;
-	mdchange.name = name;
-	mdchange.value = NULL;
-	mdchange.type = type;
-	hook_call_event("metadata_change", &mdchange);
+	obj = object(target);
 
-	if (type == METADATA_USER)
+	/* XXX only call the hook for users */
+	if (obj->destructor == (destructor_t)myuser_delete)
 	{
-		mu = target;
-		node_del(&md->node, &mu->metadata);
+		mdchange.target = target;
+		mdchange.name = name;
+		mdchange.value = NULL;
+		hook_call_event("metadata_change", &mdchange);
 	}
-	else if (type == METADATA_CHANNEL)
-	{
-		mc = target;
-		node_del(&md->node, &mc->metadata);
-	}
-	else if (type == METADATA_CHANACS)
-	{
-		ca = target;
-		node_del(&md->node, &ca->metadata);
-	}
-	else if (type == METADATA_USER_NAME)
-	{
-		mun = target;
-		node_del(&md->node, &mun->metadata);
-	}
-	else
-	{
-		slog(LG_DEBUG, "metadata_delete(): trying to delete metadata from unknown type %d", type);
-		return;
-	}
+
+	node_del(&md->node, &obj->metadata);
 
 	strshare_unref(md->name);
 	free(md->value);
@@ -1657,46 +1582,17 @@ void metadata_delete(void *target, int type, const char *name)
 	BlockHeapFree(metadata_heap, md);
 }
 
-metadata_t *metadata_find(void *target, int type, const char *name)
+metadata_t *metadata_find(void *target, const char *name)
 {
+	object_t *obj;
 	node_t *n;
-	myuser_t *mu;
-	mychan_t *mc;
-	chanacs_t *ca;
-	myuser_name_t *mun;
-	list_t *l = NULL;
 	metadata_t *md;
 
-	if (!name)
-		return NULL;
+	return_val_if_fail(name != NULL, NULL);
 
-	if (type == METADATA_USER)
-	{
-		mu = target;
-		l = &mu->metadata;
-	}
-	else if (type == METADATA_CHANNEL)
-	{
-		mc = target;
-		l = &mc->metadata;
-	}
-	else if (type == METADATA_CHANACS)
-	{
-		ca = target;
-		l = &ca->metadata;
-	}
-	else if (type == METADATA_USER_NAME)
-	{
-		mun = target;
-		l = &mun->metadata;
-	}
-	else
-	{
-		slog(LG_DEBUG, "metadata_find(): trying to lookup metadata on unknown type %d", type);
-		return NULL;
-	}
+	obj = object(target);
 
-	LIST_FOREACH(n, l->head)
+	LIST_FOREACH(n, obj->metadata.head)
 	{
 		md = n->data;
 
@@ -1705,6 +1601,20 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 	}
 
 	return NULL;
+}
+
+void metadata_delete_all(void *target)
+{
+	object_t *obj;
+	node_t *n, *tn;
+	metadata_t *md;
+
+	obj = object(target);
+	LIST_FOREACH_SAFE(n, tn, obj->metadata.head)
+	{
+		md = n->data;
+		metadata_delete(obj, md->name);
+	}
 }
 
 static int expire_myuser_cb(const char *key, void *data, void *unused)
@@ -1859,7 +1769,7 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 	{
 		slog(LG_REGISTER, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
 		mu->flags &= ~MU_OLD_ALIAS;
-		metadata_delete(mu, METADATA_USER, "private:alias:parent");
+		metadata_delete(mu, "private:alias:parent");
 	}
 
 	if (!nicksvs.no_nick_ownership)

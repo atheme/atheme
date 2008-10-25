@@ -96,13 +96,13 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
+		if (metadata_find(mc, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
 			return;
 		}
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+		md = metadata_find(mc, "private:templates");
 
 		if (md != NULL)
 		{
@@ -156,7 +156,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags = allow_flags(restrictflags);
 		}
 		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		if (metadata_find(mc, "private:close:closer"))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
 			return;
@@ -212,7 +212,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		found = denied = FALSE;
 		oldflags = 0;
 
-		md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+		md = metadata_find(mc, "private:templates");
 		if (md != NULL)
 		{
 			p = md->value;
@@ -328,9 +328,9 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		if (newstr[0] == '\0')
-			metadata_delete(mc, METADATA_CHANNEL, "private:templates");
+			metadata_delete(mc, "private:templates");
 		else
-			metadata_add(mc, METADATA_CHANNEL, "private:templates", newstr);
+			metadata_add(mc, "private:templates", newstr);
 		if (oldflags == 0)
 			command_success_nodata(si, _("Added template \2%s\2 with flags \2%s\2 in \2%s\2."), target, bitmask_to_flags(newflags, chanacs_flags), channel);
 		else if (newflags == 0)

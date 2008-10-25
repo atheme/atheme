@@ -37,6 +37,7 @@ static void logfile_delete(void *vdata)
 
 	fclose(lf->log_file);
 	free(lf->log_path);
+	metadata_delete_all(lf);
 	free(lf);
 }
 

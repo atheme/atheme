@@ -82,13 +82,13 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	md = metadata_find(mu, METADATA_USER, "private:setpass:key");
+	md = metadata_find(mu, "private:setpass:key");
 	if (md != NULL && crypt_verify_password(key, md->value))
 	{
 		snoop("SETPASS:VS: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "SETPASS %s", mu->name);
 		set_password(mu, password);
-		metadata_delete(mu, METADATA_USER, "private:setpass:key");
+		metadata_delete(mu, "private:setpass:key");
 
 		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), mu->name, password);
 
@@ -112,10 +112,10 @@ static void clear_setpass_key(void *vptr)
 	myuser_t *mu = u->myuser;
 	metadata_t *md;
 
-	if (!(md = metadata_find(mu, METADATA_USER, "private:setpass:key")))
+	if (!(md = metadata_find(mu, "private:setpass:key")))
 		return;
 
-	metadata_delete(mu, METADATA_USER, "private:setpass:key");
+	metadata_delete(mu, "private:setpass:key");
 	notice(nicksvs.nick, u->nick, "Warning: SENDPASS had been used to mail you a password recovery "
 		"key. Since you have identified, that key is no longer valid.");
 }

@@ -55,8 +55,6 @@ struct myuser_
   list_t chanacs;
   soper_t *soper;
 
-  list_t metadata;
-
   unsigned int flags;
   
   list_t memos; /* store memos */
@@ -114,8 +112,6 @@ struct myuser_name_
   object_t parent;
 
   char name[NICKLEN];
-
-  list_t metadata;
 };
 
 struct mychan_
@@ -135,8 +131,6 @@ struct mychan_
   char *mlock_key;
 
   unsigned int flags;
-
-  list_t metadata;
 };
 
 #define MC_HOLD        0x00000001
@@ -168,7 +162,6 @@ struct chanacs_
 	mychan_t *mychan;
 	char     *host;
 	unsigned int  level;
-	list_t	  metadata;
 	time_t    tmodified;
 	node_t    cnode;
 };
@@ -231,7 +224,6 @@ struct mymemo_ {
 	char 	 text[MEMOLEN];
 	time_t	 sent;
 	unsigned int status;
-	list_t	 metadata;
 };
 
 /* memo status flags */

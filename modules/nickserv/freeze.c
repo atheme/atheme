@@ -78,15 +78,15 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+		if (metadata_find(mu, "private:freeze:freezer"))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is already frozen."), target);
 			return;
 		}
 
-		metadata_add(mu, METADATA_USER, "private:freeze:freezer", get_oper_name(si));
-		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
-		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
+		metadata_add(mu, "private:freeze:freezer", get_oper_name(si));
+		metadata_add(mu, "private:freeze:reason", reason);
+		metadata_add(mu, "private:freeze:timestamp", itoa(CURRTIME));
 		/* log them out */
 		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
@@ -108,15 +108,15 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
-		if (!metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+		if (!metadata_find(mu, "private:freeze:freezer"))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not frozen."), target);
 			return;
 		}
 
-		metadata_delete(mu, METADATA_USER, "private:freeze:freezer");
-		metadata_delete(mu, METADATA_USER, "private:freeze:reason");
-		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
+		metadata_delete(mu, "private:freeze:freezer");
+		metadata_delete(mu, "private:freeze:reason");
+		metadata_delete(mu, "private:freeze:timestamp");
 
 		wallops("%s thawed the account \2%s\2.", get_oper_name(si), target);
 		snoop("FREEZE:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));

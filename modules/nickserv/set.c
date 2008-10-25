@@ -97,13 +97,13 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(si->smu->email, email))
 	{
-		md = metadata_find(si->smu, METADATA_USER, "private:verify:emailchg:newemail");
+		md = metadata_find(si->smu, "private:verify:emailchg:newemail");
 		if (md != NULL)
 		{
 			command_success_nodata(si, _("The email address change to \2%s\2 has been cancelled."), md->value);
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:key");
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:newemail");
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:timestamp");
+			metadata_delete(si->smu, "private:verify:emailchg:key");
+			metadata_delete(si->smu, "private:verify:emailchg:newemail");
+			metadata_delete(si->smu, "private:verify:emailchg:timestamp");
 		}
 		else
 			command_fail(si, fault_nochange, _("The email address for account \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
@@ -122,16 +122,16 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		unsigned long key = makekey();
 
-		metadata_add(si->smu, METADATA_USER, "private:verify:emailchg:key", itoa(key));
-		metadata_add(si->smu, METADATA_USER, "private:verify:emailchg:newemail", email);
-		metadata_add(si->smu, METADATA_USER, "private:verify:emailchg:timestamp", itoa(time(NULL)));
+		metadata_add(si->smu, "private:verify:emailchg:key", itoa(key));
+		metadata_add(si->smu, "private:verify:emailchg:newemail", email);
+		metadata_add(si->smu, "private:verify:emailchg:timestamp", itoa(time(NULL)));
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETEMAIL, si->smu, itoa(key)))
 		{
 			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Your email address is unchanged."));
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:key");
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:newemail");
-			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:timestamp");
+			metadata_delete(si->smu, "private:verify:emailchg:key");
+			metadata_delete(si->smu, "private:verify:emailchg:newemail");
+			metadata_delete(si->smu, "private:verify:emailchg:timestamp");
 			return;
 		}
 
@@ -508,7 +508,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!value)
 	{
-		md = metadata_find(si->smu, METADATA_USER, property);
+		md = metadata_find(si->smu, property);
 
 		if (!md)
 		{
@@ -516,14 +516,14 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_delete(si->smu, METADATA_USER, property);
+		metadata_delete(si->smu, property);
 		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
 
 	count = 0;
-	LIST_FOREACH(n, si->smu->metadata.head)
+	LIST_FOREACH(n, object(si->smu)->metadata.head)
 	{
 		md = n->data;
 		if (strchr(property, ':') ? md->private : !md->private)
@@ -542,7 +542,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	metadata_add(si->smu, METADATA_USER, property, value);
+	metadata_add(si->smu, property, value);
 	logcommand(si, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }

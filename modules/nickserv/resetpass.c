@@ -64,7 +64,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si, PRIV_MARK))
+	if ((md = metadata_find(mu, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, name);
@@ -77,7 +77,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if ((md = metadata_find(mu, "private:mark:setter")))
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
 		command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), name, md->value);
@@ -88,7 +88,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The password for the account %s has been changed to %s."), name, newpass);
 	set_password(mu, newpass);
 	free(newpass);
-	metadata_delete(mu, METADATA_USER, "private:setpass:key");
+	metadata_delete(mu, "private:setpass:key");
 
 	wallops("%s reset the password for the account %s", get_oper_name(si), name);
 	snoop("RESETPASS: \2%s\2 by \2%s\2", name, get_oper_name(si));

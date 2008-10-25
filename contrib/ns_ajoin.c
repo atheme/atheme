@@ -44,7 +44,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp(parv[0], "LIST"))
 	{
 		command_success_nodata(si, "\2AJOIN LIST\2:");
-		if ((md = metadata_find(si->smu, METADATA_USER, "private:autojoin")))
+		if ((md = metadata_find(si->smu, "private:autojoin")))
 		{
 			strlcpy(buf, md->value, sizeof buf);
 
@@ -66,7 +66,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if ((md = metadata_find(si->smu, METADATA_USER, "private:autojoin")))
+		if ((md = metadata_find(si->smu, "private:autojoin")))
 		{
 			strlcpy(buf, md->value, sizeof buf);
 
@@ -91,18 +91,18 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			strlcpy(buf, md->value, sizeof buf);
 			strncat(buf, ",", sizeof buf);
 			strncat(buf, parv[1], sizeof buf);
-			metadata_delete(si->smu, METADATA_USER, "private:autojoin");
-			metadata_add(si->smu, METADATA_USER, "private:autojoin", buf);
+			metadata_delete(si->smu, "private:autojoin");
+			metadata_add(si->smu, "private:autojoin", buf);
 		}
 		else
 		{
-			metadata_add(si->smu, METADATA_USER, "private:autojoin", parv[1]);
+			metadata_add(si->smu, "private:autojoin", parv[1]);
 		}
 		command_success_nodata(si, "%s added to AJOIN successfully.", parv[1]);
 	}
 	else if (!strcasecmp(parv[0], "CLEAR"))
 	{
-		metadata_delete(si->smu, METADATA_USER, "private:autojoin");
+		metadata_delete(si->smu, "private:autojoin");
 		command_success_nodata(si, "AJOIN list cleared successfully.");
 	}
 	else if (!strcasecmp(parv[0], "DEL"))
@@ -114,7 +114,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (!(md = metadata_find(si->smu, METADATA_USER, "private:autojoin")))
+		if (!(md = metadata_find(si->smu, "private:autojoin")))
 		{
 			command_fail(si, fault_badparams, "%s is not on your AJOIN list.", parv[1]);
 			return;
@@ -166,7 +166,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		if (!list[itempos + rmlen])
 		{
 			// This item is the last item in the list, so we can simply truncate
-			metadata_delete(si->smu, METADATA_USER, "private:autojoin");
+			metadata_delete(si->smu, "private:autojoin");
 		}
 		else
 		{
@@ -206,7 +206,7 @@ static void ajoin_on_identify(void *vptr)
 	char buf[512];
 	char *chan;
 
-	if (!(md = metadata_find(mu, METADATA_USER, "private:autojoin")))
+	if (!(md = metadata_find(mu, "private:autojoin")))
 		return;
 
 	strlcpy(buf, md->value, sizeof buf);

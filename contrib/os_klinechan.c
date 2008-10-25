@@ -60,7 +60,7 @@ static void klinechan_check_join(void *vdata)
 	if (!(mc = mychan_find(cu->chan->name)))
 		return;
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:klinechan:closer"))
+	if (metadata_find(mc, "private:klinechan:closer"))
 	{
 		if (has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
 			notice(opersvs.nick, cu->user->nick,
@@ -90,13 +90,13 @@ static void klinechan_show_info(void *vdata)
 
 	if (!has_priv(hdata->si, PRIV_CHAN_AUSPEX))
 		return;
-	md = metadata_find(hdata->mc, METADATA_CHANNEL, "private:klinechan:closer");
+	md = metadata_find(hdata->mc, "private:klinechan:closer");
 	if (md == NULL)
 		return;
 	setter = md->value;
-	md = metadata_find(hdata->mc, METADATA_CHANNEL, "private:klinechan:reason");
+	md = metadata_find(hdata->mc, "private:klinechan:reason");
 	reason = md != NULL ? md->value : "unknown";
-	md = metadata_find(hdata->mc, METADATA_CHANNEL, "private:klinechan:timestamp");
+	md = metadata_find(hdata->mc, "private:klinechan:timestamp");
 	ts = md != NULL ? atoi(md->value) : 0;
 
 	tm = *localtime(&ts);
@@ -143,15 +143,15 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (metadata_find(mc, METADATA_CHANNEL, "private:klinechan:closer"))
+		if (metadata_find(mc, "private:klinechan:closer"))
 		{
 			command_fail(si, fault_nochange, "\2%s\2 is already on autokline.", target);
 			return;
 		}
 
-		metadata_add(mc, METADATA_CHANNEL, "private:klinechan:closer", si->su->nick);
-		metadata_add(mc, METADATA_CHANNEL, "private:klinechan:reason", reason);
-		metadata_add(mc, METADATA_CHANNEL, "private:klinechan:timestamp", itoa(CURRTIME));
+		metadata_add(mc, "private:klinechan:closer", si->su->nick);
+		metadata_add(mc, "private:klinechan:reason", reason);
+		metadata_add(mc, "private:klinechan:timestamp", itoa(CURRTIME));
 
 		wallops("%s enabled automatic klines on the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
 		snoop("KLINECHAN:ON: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
@@ -160,15 +160,15 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
-		if (!metadata_find(mc, METADATA_CHANNEL, "private:klinechan:closer"))
+		if (!metadata_find(mc, "private:klinechan:closer"))
 		{
 			command_fail(si, fault_nochange, "\2%s\2 is not closed.", target);
 			return;
 		}
 
-		metadata_delete(mc, METADATA_CHANNEL, "private:klinechan:closer");
-		metadata_delete(mc, METADATA_CHANNEL, "private:klinechan:reason");
-		metadata_delete(mc, METADATA_CHANNEL, "private:klinechan:timestamp");
+		metadata_delete(mc, "private:klinechan:closer");
+		metadata_delete(mc, "private:klinechan:reason");
+		metadata_delete(mc, "private:klinechan:timestamp");
 
 		wallops("%s disabled automatic klines on the channel \2%s\2.", get_oper_name(si), target);
 		snoop("KLINECHAN:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));

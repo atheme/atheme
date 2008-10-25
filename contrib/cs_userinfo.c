@@ -66,7 +66,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
+	if (metadata_find(mc, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), mc->name);
 		return;
@@ -89,7 +89,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 			ca = n->data;
 			if (ca->myuser == NULL)
 				continue;
-			md = metadata_find(ca, METADATA_CHANACS, "userinfo");
+			md = metadata_find(ca, "userinfo");
 			if (md == NULL)
 				continue;
 			command_success_nodata(si, "%-19s %s", ca->myuser->name, md->value);
@@ -125,14 +125,14 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (parc == 2)
 		{
-			metadata_delete(ca, METADATA_CHANACS, "userinfo");
+			metadata_delete(ca, "userinfo");
 			command_success_nodata(si, _("Deleted userinfo for \2%s\2 on \2%s\2."),
 						mu->name, mc->name);
 			logcommand(si, CMDLOG_SET, "%s USERINFO %s", mc->name, mu->name);
 			return;
 		}
 
-		metadata_add(ca, METADATA_CHANACS, "userinfo", parv[2]);
+		metadata_add(ca, "userinfo", parv[2]);
 		command_success_nodata(si, _("Added userinfo for \2%s\2 on \2%s\2."),
 					mu->name, mc->name);
 		logcommand(si, CMDLOG_SET, "%s USERINFO %s %s", mc->name, mu->name, parv[2]);
@@ -159,7 +159,7 @@ static void userinfo_check_join(void *vptr)
 	ca = chanacs_find(mc, mu, 0);
 	if (ca == NULL || ca->level & CA_AKICK)
 		return;
-	if (!(md = metadata_find(ca, METADATA_CHANACS, "userinfo")))
+	if (!(md = metadata_find(ca, "userinfo")))
 		return;
 	msg(chansvs.nick, cu->chan->name, "[%s] %s", cu->user->nick, md->value);
 }

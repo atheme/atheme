@@ -63,10 +63,10 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			/* in the future we could add a LIMIT parameter */
 			*buf = '\0';
 
-			if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")) {
+			if (metadata_find(mc, "private:mark:setter")) {
 				strlcat(buf, "\2[marked]\2", BUFSIZE);
 			}
-			if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) {
+			if (metadata_find(mc, "private:close:closer")) {
 				if (*buf)
 					strlcat(buf, " ", BUFSIZE);
 

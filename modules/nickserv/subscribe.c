@@ -153,8 +153,10 @@ static void hook_metadata_change(void *ptr)
 	if (strchr(md->name, ':'))
 		return;
 
+#if 0
 	if (md->type != METADATA_USER)
 		return;
+#endif
 
 	mu = (myuser_t *) md->target;
 

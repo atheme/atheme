@@ -169,9 +169,9 @@ static int account_register(void *conn, int parc, char *parv[])
 			return 0;
 		}
 
-		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
+		metadata_add(mu, "private:verify:register:key", key);
 		free(key);
-		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
+		metadata_add(mu, "private:verify:register:timestamp", itoa(time(NULL)));
 
 		xmlrpc_string(buf, "Registration successful but e-mail activation required within one day.");
 
@@ -231,7 +231,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 	if (!strcasecmp(parv[2], "REGISTER"))
 	{
-		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
+		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
 		{
 			xmlrpc_generic_error(4, "The operation has already been verified.");
 			return 0;
@@ -243,8 +243,8 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 			snoop("REGISTER:VS: \2%s\2 via xmlrpc", mu->email);
 
-			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
-			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
+			metadata_delete(mu, "private:verify:register:key");
+			metadata_delete(mu, "private:verify:register:timestamp");
 
 			logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 			xmlrpc_string(buf, "Registration verification was successful.");
@@ -259,7 +259,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 	}
 	else if (!strcasecmp(parv[2], "EMAILCHG"))
 	{
-		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
+		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
 		{
 			xmlrpc_generic_error(4, "The operation has already been verified.");
 			return 0;
@@ -267,16 +267,16 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 		if (!strcasecmp(parv[3], md->value))
                 {
-			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
+			md = metadata_find(mu, "private:verify:emailchg:newemail");
 
 			myuser_set_email(mu, md->value);
 
 			snoop("SET:EMAIL:VS: \2%s\2 via xmlrpc", mu->email);
 			logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+			metadata_delete(mu, "private:verify:emailchg:key");
+			metadata_delete(mu, "private:verify:emailchg:newemail");
+			metadata_delete(mu, "private:verify:emailchg:timestamp");
 
 			xmlrpc_string(buf, "E-Mail change verification was successful.");
 			xmlrpc_send(1, buf);
@@ -345,13 +345,13 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (mu->metadata.count >= me.mdlimit)
+	if (object(mu)->metadata.count >= me.mdlimit)
 	{
 		xmlrpc_generic_error(9, "Metadata table full.");
 		return 0;
 	}
 
-	metadata_add(mu, METADATA_USER, parv[2], parv[3]);
+	metadata_add(mu, parv[2], parv[3]);
 
 	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "SET PROPERTY %s to %s", parv[2], parv[3]);
 
@@ -408,13 +408,13 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!metadata_find(mu, METADATA_USER, parv[2]))
+	if (!metadata_find(mu, parv[2]))
 	{
 		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
-	metadata_delete(mu, METADATA_USER, parv[2]);
+	metadata_delete(mu, parv[2]);
 
 	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "SET PROPERTY %s (deleted)", parv[2]);
 
@@ -465,7 +465,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 	}
 
 	/* if private, pretend it doesn't exist */
-	if (!(md = metadata_find(mu, METADATA_USER, parv[1])) || md->private)
+	if (!(md = metadata_find(mu, parv[1])) || md->private)
 	{
 		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
@@ -528,12 +528,12 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 			return 0;
 		}
 		/* XXX more checks here, perhaps as a configurable regexp? */
-		metadata_add(mu, METADATA_USER, "private:usercloak", parv[2]);
+		metadata_add(mu, "private:usercloak", parv[2]);
 		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
 	}
 	else
 	{
-		metadata_delete(mu, METADATA_USER, "private:usercloak");
+		metadata_delete(mu, "private:usercloak");
 		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_ADMIN, "VHOST DELETE");
 	}
 

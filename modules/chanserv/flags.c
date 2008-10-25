@@ -48,7 +48,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	char ss[40];
 	static char flagname[400];
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
 	{
 		p = md->value;
@@ -116,7 +116,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (target || !has_priv(si, PRIV_CHAN_AUSPEX)))
+	if (metadata_find(mc, "private:close:closer") && (target || !has_priv(si, PRIV_CHAN_AUSPEX)))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
 		return;

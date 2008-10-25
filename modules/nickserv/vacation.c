@@ -35,7 +35,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snprintf(tsbuf, BUFSIZE, "%lu", (unsigned long)CURRTIME);
-	metadata_add(si->smu, METADATA_USER, "private:vacation", tsbuf);
+	metadata_add(si->smu, "private:vacation", tsbuf);
 
 	logcommand(si, CMDLOG_SET, "VACATION");
 	snoop("VACATION: \2%s\2", get_source_name(si));
@@ -52,18 +52,18 @@ command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."
 
 static void user_identify_hook(user_t *u)
 {
-	if (!metadata_find(u->myuser, METADATA_USER, "private:vacation"))
+	if (!metadata_find(u->myuser, "private:vacation"))
 		return;
 
 	notice(nicksvs.nick, u->nick, _("Your account is no longer marked as being on vacation."));
-	metadata_delete(u->myuser, METADATA_USER, "private:vacation");
+	metadata_delete(u->myuser, "private:vacation");
 }
 
 static void user_expiry_hook(hook_expiry_req_t *req)
 {
 	myuser_t *mu = req->data.mu;
 
-	if (!metadata_find(mu, METADATA_USER, "private:vacation"))
+	if (!metadata_find(mu, "private:vacation"))
 		return;
 
 	if (mu->lastlogin >= CURRTIME || (unsigned int)(CURRTIME - mu->lastlogin) < nicksvs.expiry * 3)
@@ -75,7 +75,7 @@ static void nick_expiry_hook(hook_expiry_req_t *req)
 	mynick_t *mn = req->data.mn;
 	myuser_t *mu = mn->owner;
 
-	if (!metadata_find(mu, METADATA_USER, "private:vacation"))
+	if (!metadata_find(mu, "private:vacation"))
 		return;
 
 	if (mu->lastlogin >= CURRTIME || (unsigned int)(CURRTIME - mu->lastlogin) < nicksvs.expiry * 3)
@@ -84,7 +84,7 @@ static void nick_expiry_hook(hook_expiry_req_t *req)
 
 static void info_hook(hook_user_req_t *hdata)
 {
-	if (metadata_find(hdata->mu, METADATA_USER, "private:vacation"))
+	if (metadata_find(hdata->mu, "private:vacation"))
 		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", hdata->mu->name);
 }
 

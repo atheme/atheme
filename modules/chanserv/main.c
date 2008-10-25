@@ -85,7 +85,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+		md = metadata_find(mc, "disable_fantasy");
 		if (md)
 		{
 			/* fantasy disabled on this channel. don't message them, just bail. */
@@ -332,7 +332,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		remove_ban_exceptions(chansvs.me->me, chan, u);
 		if (ca2 != NULL)
 		{
-			md = metadata_find(ca2, METADATA_CHANACS, "reason");
+			md = metadata_find(ca2, "reason");
 			if (md != NULL && *md->value != '|')
 			{
 				snprintf(akickreason, sizeof akickreason,
@@ -468,10 +468,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		}
 	}
 
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, METADATA_CHANNEL, "private:entrymsg")))
+	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "private:entrymsg")))
 		notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
 
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, METADATA_CHANNEL, "url")))
+	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "url")))
 		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 
 	if (flags & CA_USEDUPDATE)
@@ -534,29 +534,29 @@ static void cs_keeptopic_topicset(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	md = metadata_find(mc, "private:topic:text");
 	if (md != NULL)
 	{
 		if (c->topic != NULL && !strcmp(md->value, c->topic))
 			return;
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
+		metadata_delete(mc, "private:topic:text");
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
+	if (metadata_find(mc, "private:topic:setter"))
+		metadata_delete(mc, "private:topic:setter");
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:ts"))
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:ts");
+	if (metadata_find(mc, "private:topic:ts"))
+		metadata_delete(mc, "private:topic:ts");
 
 	if (c->topic && c->topic_setter)
 	{
 		slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
 			c->topic_setter, c->topic);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:setter",
+		metadata_add(mc, "private:topic:setter",
 			c->topic_setter);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:text",
+		metadata_add(mc, "private:topic:text",
 			c->topic);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:ts",
+		metadata_add(mc, "private:topic:ts",
 			itoa(c->topicts));
 	}
 	else
@@ -620,7 +620,7 @@ static void cs_newchan(channel_t *c)
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
+	md = metadata_find(mc, "private:channelts");
 	if (md != NULL)
 		channelts = atol(md->value);
 	if (channelts == 0)
@@ -648,7 +648,7 @@ static void cs_newchan(channel_t *c)
 	else if (c->ts != channelts)
 	{
 		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
-		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
+		metadata_add(mc, "private:channelts", str);
 	}
 	else if (!(MC_TOPICLOCK & mc->flags) && LIST_LENGTH(&c->members) == 0)
 		/* Same channel, let's assume ircd has kept topic.
@@ -662,17 +662,17 @@ static void cs_newchan(channel_t *c)
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
+	md = metadata_find(mc, "private:topic:setter");
 	if (md == NULL)
 		return;
 	setter = md->value;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	md = metadata_find(mc, "private:topic:text");
 	if (md == NULL)
 		return;
 	text = md->value;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
+	md = metadata_find(mc, "private:topic:ts");
 	if (md == NULL)
 		return;
 	topicts = atol(md->value);
@@ -691,7 +691,7 @@ static void cs_tschange(channel_t *c)
 
 	/* store new TS */
 	snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
-	metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
+	metadata_add(mc, "private:channelts", str);
 
 	/* schedule a mode lock check when we know the new modes
 	 * -- jilles */
@@ -713,7 +713,7 @@ static void cs_leave_empty(void *unused)
 				(!config_options.chan || irccasecmp(mc->name, config_options.chan)) &&
 				(!(mc->flags & MC_GUARD) ||
 				 (config_options.leave_chans && mc->chan->nummembers == 1) ||
-				 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&
+				 metadata_find(mc, "private:close:closer")) &&
 				chanuser_find(mc->chan, chansvs.me->me))
 		{
 			slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);

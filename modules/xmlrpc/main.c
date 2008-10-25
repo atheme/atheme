@@ -251,7 +251,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer") != NULL)
+	if (metadata_find(mu, "private:freeze:freezer") != NULL)
 	{
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
 		xmlrpc_generic_error(6, "The account has been frozen.");

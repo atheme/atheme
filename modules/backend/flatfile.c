@@ -45,7 +45,7 @@ static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privda
 
 	muout++;
 
-	LIST_FOREACH(tn, mu->metadata.head)
+	LIST_FOREACH(tn, object(mu)->metadata.head)
 	{
 		metadata_t *md = (metadata_t *)tn->data;
 
@@ -156,7 +156,7 @@ static void flatfile_db_save(void *arg)
 			fprintf(f, "CA %s %s %s %ld\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
 					bitmask_to_flags(ca->level, chanacs_flags), (long)ca->tmodified);
 
-			LIST_FOREACH(tn2, ca->metadata.head)
+			LIST_FOREACH(tn2, object(ca)->metadata.head)
 			{
 				metadata_t *md = (metadata_t *)tn2->data;
 
@@ -167,7 +167,7 @@ static void flatfile_db_save(void *arg)
 			caout++;
 		}
 
-		LIST_FOREACH(tn, mc->metadata.head)
+		LIST_FOREACH(tn, object(mc)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
@@ -207,7 +207,7 @@ static void flatfile_db_save(void *arg)
 	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
 		fprintf(f, "NAM %s\n", mun->name);
-		LIST_FOREACH(tn, mun->metadata.head)
+		LIST_FOREACH(tn, object(mun)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
@@ -428,11 +428,11 @@ static void flatfile_db_load(void)
 				mu->lastlogin = lastlogin;
 
 				if (strcmp(failnum, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:failnum", failnum);
+					metadata_add(mu, "private:loginfail:failnum", failnum);
 				if (strcmp(lastfailaddr, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", lastfailaddr);
+					metadata_add(mu, "private:loginfail:lastfailaddr", lastfailaddr);
 				if (strcmp(lastfailtime, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", lastfailtime);
+					metadata_add(mu, "private:loginfail:lastfailtime", lastfailtime);
 
 				/* Verification keys were moved to metadata,
 				 * but we'll still accept them from legacy
@@ -444,8 +444,8 @@ static void flatfile_db_load(void)
 				if ((s = strtok(NULL, " ")))
 				{
 					strip(s);
-					metadata_add(mu, METADATA_USER, "private:verify:register:key", s);
-					metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", "0");
+					metadata_add(mu, "private:verify:register:key", s);
+					metadata_add(mu, "private:verify:register:timestamp", "0");
 				}
 			}
 		}
@@ -678,13 +678,13 @@ static void flatfile_db_load(void)
 			{
 				mu = myuser_find(name);
 				if (mu != NULL)
-					metadata_add(mu, METADATA_USER, property, value);
+					metadata_add(mu, property, value);
 			}
 			else if (type[0] == 'C')
 			{
 				mc = mychan_find(name);
 				if (mc != NULL)
-					metadata_add(mc, METADATA_CHANNEL, property, value);
+					metadata_add(mc, property, value);
 			}
 			else if (type[0] == 'A')
 			{
@@ -697,14 +697,14 @@ static void flatfile_db_load(void)
 					*mask++ = '\0';
 					ca = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
 					if (ca != NULL)
-						metadata_add(ca, METADATA_CHANACS, property, value);
+						metadata_add(ca, property, value);
 				}
 			}
 			else if (type[0] == 'N')
 			{
 				mun = myuser_name_find(name);
 				if (mun != NULL)
-					metadata_add(mun, METADATA_USER_NAME, property, value);
+					metadata_add(mun, property, value);
 			}
 			else
 				slog(LG_DEBUG, "db_load(): unknown metadata type %s", type);
@@ -724,7 +724,7 @@ static void flatfile_db_load(void)
 				mc = mychan_find(chan);
 
 				if (mc)
-					metadata_add(mc, METADATA_CHANNEL, "url", url);
+					metadata_add(mc, "url", url);
 			}
 		}
 		else if (!strcmp("EM", item))
@@ -742,7 +742,7 @@ static void flatfile_db_load(void)
 				mc = mychan_find(chan);
 
 				if (mc)
-					metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", message);
+					metadata_add(mc, "private:entrymsg", message);
 			}
 		}
 		else if (!strcmp("CA", item))

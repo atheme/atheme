@@ -79,11 +79,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			const char *reason;
 			time_t ts;
 
-			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:setter");
+			md = metadata_find(mun, "private:mark:setter");
 			setter = md != NULL ? md->value : "unknown";
-			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:reason");
+			md = metadata_find(mun, "private:mark:reason");
 			reason = md != NULL ? md->value : "unknown";
-			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:timestamp");
+			md = metadata_find(mun, "private:mark:timestamp");
 			ts = md != NULL ? atoi(md->value) : 0;
 
 			tm = *localtime(&ts);
@@ -128,11 +128,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+	if ((md = metadata_find(mu, "private:usercloak")))
 		vhost = md->value;
 	else
 		vhost = NULL;
-	if (!hide_info && (md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
+	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
 	{
 		strlcpy(buf, md->value, sizeof buf);
 		if (vhost != NULL)
@@ -150,7 +150,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("vHost      : %s"), vhost);
 	if (has_priv(si, PRIV_USER_AUSPEX))
 	{
-		if ((md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+		if ((md = metadata_find(mu, "private:host:actual")))
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
@@ -319,16 +319,16 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Channels   : %d founder, %d other"), founder, other);
 	}
 
-	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:freeze:freezer")))
 	{
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
 
-		md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
+		md = metadata_find(mu, "private:freeze:reason");
 		reason = md != NULL ? md->value : "unknown";
 
-		md = metadata_find(mu, METADATA_USER, "private:freeze:timestamp");
+		md = metadata_find(mu, "private:freeze:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
@@ -337,16 +337,16 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
 	}
 
-	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:mark:setter")))
 	{
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
 
-		md = metadata_find(mu, METADATA_USER, "private:mark:reason");
+		md = metadata_find(mu, "private:mark:reason");
 		reason = md != NULL ? md->value : "unknown";
 
-		md = metadata_find(mu, METADATA_USER, "private:mark:timestamp");
+		md = metadata_find(mu, "private:mark:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
@@ -359,12 +359,12 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), mu->name);
 
 	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
-			(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail")))
+			(md = metadata_find(mu, "private:verify:emailchg:newemail")))
 	{
 		const char *newemail = md->value;
 		time_t ts;
 
-		md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+		md = metadata_find(mu, "private:verify:emailchg:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);

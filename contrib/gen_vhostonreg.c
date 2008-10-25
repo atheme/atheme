@@ -82,7 +82,7 @@ static void user_add_host(myuser_t *mu)
 	strlcat(newhost, ".", sizeof newhost);
 	strlcat(newhost, me.hidehostsuffix, sizeof newhost);
 
-	metadata_add(mu, METADATA_USER, "private:usercloak", newhost);
+	metadata_add(mu, "private:usercloak", newhost);
 }
 
 static void handle_verify_register(void *vptr)
@@ -109,7 +109,7 @@ static void hook_user_identify(void *vptr)
 	user_t *u = vptr;
 
 	/* if they have an existing cloak, don't do anything */
-	if ((metadata_find(u->myuser, METADATA_USER, "private:usercloak")) || (me.hidehostsuffix == NULL))
+	if ((metadata_find(u->myuser, "private:usercloak")) || (me.hidehostsuffix == NULL))
 		return;	
 
 	/* they do not, add one. */

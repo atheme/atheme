@@ -139,11 +139,11 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (c->ts > 0)
 	{
 		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
-		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
+		metadata_add(mc, "private:channelts", str);
 	}
 
 	if (chansvs.deftemplates != NULL && *chansvs.deftemplates != '\0')
-		metadata_add(mc, METADATA_CHANNEL, "private:templates",
+		metadata_add(mc, "private:templates",
 				chansvs.deftemplates);
 
 	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, si->smu->name);

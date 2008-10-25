@@ -46,13 +46,13 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 		mu = mn->owner;
 
 	*buf = '\0';
-	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer")) {
+	if (metadata_find(mu, "private:freeze:freezer")) {
 		if (*buf)
 			strlcat(buf, " ", BUFSIZE);
 
 		strlcat(buf, "\2[frozen]\2", BUFSIZE);
 	}
-	if (metadata_find(mu, METADATA_USER, "private:mark:setter")) {
+	if (metadata_find(mu, "private:mark:setter")) {
 		if (*buf)
 			strlcat(buf, " ", BUFSIZE);
 
@@ -120,10 +120,10 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			if (hostpattern)
 			{
 				hostmatch = FALSE;
-				md = metadata_find(mu, METADATA_USER, "private:host:actual");
+				md = metadata_find(mu, "private:host:actual");
 				if (md != NULL && !match(hostpattern, md->value))
 					hostmatch = TRUE;
-				md = metadata_find(mu, METADATA_USER, "private:host:vhost");
+				md = metadata_find(mu, "private:host:vhost");
 				if (md != NULL && !match(hostpattern, md->value))
 					hostmatch = TRUE;
 				if (!hostmatch)
@@ -144,10 +144,10 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			if (hostpattern)
 			{
 				hostmatch = FALSE;
-				md = metadata_find(mu, METADATA_USER, "private:host:actual");
+				md = metadata_find(mu, "private:host:actual");
 				if (md != NULL && !match(hostpattern, md->value))
 					hostmatch = TRUE;
-				md = metadata_find(mu, METADATA_USER, "private:host:vhost");
+				md = metadata_find(mu, "private:host:vhost");
 				if (md != NULL && !match(hostpattern, md->value))
 					hostmatch = TRUE;
 				if (!hostmatch)

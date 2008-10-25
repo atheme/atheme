@@ -418,7 +418,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (type == EMAIL_SETEMAIL)
 	{
 		/* special case for e-mail change */
-		metadata_t *md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
+		metadata_t *md = metadata_find(mu, "private:verify:emailchg:newemail");
 
 		if (md && md->value)
 			email = md->value;

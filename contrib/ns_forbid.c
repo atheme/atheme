@@ -64,9 +64,9 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 	mu = myuser_add(account, "*", FORBID_EMAIL, MU_CRYPTPASS | MU_ENFORCE | MU_HOLD | MU_NOBURSTLOGIN);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
-	metadata_add(mu, METADATA_USER, "private:freeze:freezer", get_oper_name(si));
-	metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
-	metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
+	metadata_add(mu, "private:freeze:freezer", get_oper_name(si));
+	metadata_add(mu, "private:freeze:reason", reason);
+	metadata_add(mu, "private:freeze:timestamp", itoa(CURRTIME));
 	if (!nicksvs.no_nick_ownership)
 	{
 		mn = mynick_add(mu, mu->name);
@@ -94,7 +94,7 @@ static void destroy_forbid(sourceinfo_t *si, const char *account)
 		return;
 	}
 
-	md = metadata_find(mu, METADATA_USER, "private:freeze:freezer");
+	md = metadata_find(mu, "private:freeze:freezer");
 	if (md == NULL || mu->registered != mu->lastlogin ||
 			LIST_LENGTH(&mu->nicks) != 1 ||
 			strcmp(mu->email, FORBID_EMAIL))

@@ -91,10 +91,10 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	free(newpass);
 
 	/* prevents users from "stealing it back" in the event of a takeover */
-	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
-	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
-	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
-	metadata_delete(mu, METADATA_USER, "private:setpass:key");
+	metadata_delete(mu, "private:verify:emailchg:key");
+	metadata_delete(mu, "private:verify:emailchg:newemail");
+	metadata_delete(mu, "private:verify:emailchg:timestamp");
+	metadata_delete(mu, "private:setpass:key");
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{

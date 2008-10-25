@@ -89,7 +89,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
@@ -112,7 +112,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, mu->name);
 			if (ca->level & CA_AKICK)
 			{
-				md = metadata_find(ca, METADATA_CHANACS, "reason");
+				md = metadata_find(ca, "reason");
 				if (md != NULL)
 					command_success_nodata(si, "Ban reason: %s", md->value);
 			}
@@ -127,7 +127,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, ca->host);
 		if (ca->level & CA_AKICK)
 		{
-			md = metadata_find(ca, METADATA_CHANACS, "reason");
+			md = metadata_find(ca, "reason");
 			if (md != NULL)
 				command_success_nodata(si, "Ban reason: %s", md->value);
 		}

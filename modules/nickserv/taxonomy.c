@@ -67,7 +67,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), mu->name);
 
-	LIST_FOREACH(n, mu->metadata.head)
+	LIST_FOREACH(n, object(mu)->metadata.head)
 	{
 		metadata_t *md = n->data;
 

@@ -85,7 +85,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
@@ -155,7 +155,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
         
-        if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+        if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
@@ -230,7 +230,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
         
-        if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+        if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;

@@ -889,7 +889,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 	}
 
 	/* non-standard type C modes separately */
-	md = metadata_find(mychan, METADATA_CHANNEL, "private:mlockext");
+	md = metadata_find(mychan, "private:mlockext");
 	if (md != NULL)
 	{
 		p = md->value;

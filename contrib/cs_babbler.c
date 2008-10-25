@@ -56,10 +56,10 @@ on_channel_message(void *p)
 		if (!mc)
 			return;
 
-		if (!metadata_find(mc, METADATA_CHANNEL, "babbler:enable"))
+		if (!metadata_find(mc, "babbler:enable"))
 			return;
 
-		if (!(md = metadata_find(mc, METADATA_CHANNEL, "babbler:nicks")))
+		if (!(md = metadata_find(mc, "babbler:nicks")))
 			return;
 
 		if (strstr(md->value, data->u->nick))
@@ -67,12 +67,12 @@ on_channel_message(void *p)
 			char *source = NULL;
 			char *target;
 
-			if (!(md = metadata_find(mc, METADATA_CHANNEL, "babbler:target")))
+			if (!(md = metadata_find(mc, "babbler:target")))
 				return;
 
 			target = md->value;
 
-			if (!(md = metadata_find(mc, METADATA_CHANNEL, "babbler:source")))
+			if (!(md = metadata_find(mc, "babbler:source")))
 				source = chansvs.nick;
 			else
 				source = md->value;

@@ -180,8 +180,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		char *key = gen_pw(12);
 		mu->flags |= MU_WAITAUTH;
 
-		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
-		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
+		metadata_add(mu, "private:verify:register:key", key);
+		metadata_add(mu, "private:verify:register:timestamp", itoa(time(NULL)));
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_REGISTER, mu, key))
 		{
@@ -227,10 +227,10 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL)
 	{
 		snprintf(lau, BUFSIZE, "%s@%s", si->su->user, si->su->vhost);
-		metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+		metadata_add(mu, "private:host:vhost", lau);
 
 		snprintf(lao, BUFSIZE, "%s@%s", si->su->user, si->su->host);
-		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+		metadata_add(mu, "private:host:actual", lao);
 	}
 
 	if (!(mu->flags & MU_WAITAUTH))

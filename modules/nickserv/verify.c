@@ -77,7 +77,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(op, "REGISTER"))
 	{
-		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
+		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
@@ -90,8 +90,8 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 			logcommand(si, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 
-			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
-			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
+			metadata_delete(mu, "private:verify:register:key");
+			metadata_delete(mu, "private:verify:register:timestamp");
 
 			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
 			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
@@ -119,7 +119,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(op, "EMAILCHG"))
 	{
-		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
+		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
@@ -127,16 +127,16 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!strcasecmp(key, md->value))
 		{
-			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
+			md = metadata_find(mu, "private:verify:emailchg:newemail");
 
 			myuser_set_email(mu, md->value);
 
 			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 			logcommand(si, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
-			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+			metadata_delete(mu, "private:verify:emailchg:key");
+			metadata_delete(mu, "private:verify:emailchg:newemail");
+			metadata_delete(mu, "private:verify:emailchg:timestamp");
 
 			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
 
@@ -182,7 +182,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(op, "REGISTER"))
 	{
-		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
+		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
@@ -193,8 +193,8 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		snoop("REGISTER:VS: \2%s\2 for \2%s\2 by \2%s\2", mu->email, mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_REGISTER, "FVERIFY REGISTER %s (email: %s)", mu->name, mu->email);
 
-		metadata_delete(mu, METADATA_USER, "private:verify:register:key");
-		metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
+		metadata_delete(mu, "private:verify:register:key");
+		metadata_delete(mu, "private:verify:register:timestamp");
 
 		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
 		LIST_FOREACH(n, mu->logins.head)
@@ -213,22 +213,22 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(op, "EMAILCHG"))
 	{
-		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
+		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
 		}
 
-		md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
+		md = metadata_find(mu, "private:verify:emailchg:newemail");
 
 		myuser_set_email(mu, md->value);
 
 		snoop("SET:EMAIL:VS: \2%s\2 for \2%s\2 by \2%s\2", mu->email, mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_REGISTER, "FVERIFY EMAILCHG %s (email: %s)", mu->name, mu->email);
 
-		metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
-		metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
-		metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+		metadata_delete(mu, "private:verify:emailchg:key");
+		metadata_delete(mu, "private:verify:emailchg:newemail");
+		metadata_delete(mu, "private:verify:emailchg:timestamp");
 
 		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
 

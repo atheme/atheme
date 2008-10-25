@@ -332,7 +332,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		myuser_t *mu = myuser_find(p->username);
 		if(mu && login_user(p))
 		{
-			if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+			if ((md = metadata_find(mu, "private:usercloak")))
 				cloak = md->value;
 			else
 				cloak = "*";
@@ -418,7 +418,7 @@ int login_user(sasl_session_t *p)
 	if(mu == NULL) /* WTF? */
 		return 0;
 
- 	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+ 	if ((md = metadata_find(mu, "private:freeze:freezer")))
 	{
 		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
 		return 0;
@@ -482,7 +482,7 @@ static void sasl_newuser(void *vptr)
 	strlcpy(lau, u->user, BUFSIZE);
 	strlcat(lau, "@", BUFSIZE);
 	strlcat(lau, u->vhost, BUFSIZE);
-	metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+	metadata_add(mu, "private:host:vhost", lau);
 
 	/* and for opers */
 	strlcpy(lao, u->user, BUFSIZE);
@@ -492,16 +492,16 @@ static void sasl_newuser(void *vptr)
 	slog(LG_DEBUG, "nick %s host %s vhost %s ip %s",
 			u->nick, u->host, u->vhost, u->ip);
 	if (!strcmp(u->host, u->vhost) && *u->ip != '\0' &&
-			metadata_find(mu, METADATA_USER, "private:usercloak"))
+			metadata_find(mu, "private:usercloak"))
 		strlcat(lao, u->ip, BUFSIZE);
 	else
 		strlcat(lao, u->host, BUFSIZE);
-	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+	metadata_add(mu, "private:host:actual", lao);
 
 	logcommand_user(saslsvs.me, u, CMDLOG_LOGIN, "LOGIN");
 
 	/* check for failed attempts and let them know */
-	if ((md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
+	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
 	{
 		metadata_t *md_failtime, *md_failaddr;
 		time_t ts;
@@ -512,9 +512,9 @@ static void sasl_newuser(void *vptr)
 		notice(saslsvs.nick, u->nick, "\2%d\2 failed %s since %s.",
 			atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
-		md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
+		md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
 		ts = atol(md_failtime->value);
-		md_failaddr = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailaddr");
+		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
@@ -522,9 +522,9 @@ static void sasl_newuser(void *vptr)
 		notice(saslsvs.nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
 			md_failaddr->value, strfbuf);
 
-		metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */
-		metadata_delete(mu, METADATA_USER, "private:loginfail:lastfailtime");
-		metadata_delete(mu, METADATA_USER, "private:loginfail:lastfailaddr");
+		metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
+		metadata_delete(mu, "private:loginfail:lastfailtime");
+		metadata_delete(mu, "private:loginfail:lastfailaddr");
 	}
 
 	mu->lastlogin = CURRTIME;

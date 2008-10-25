@@ -94,7 +94,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	/* deletion action */
 	if (!host)
 	{
-		metadata_delete(mu, METADATA_USER, "private:usercloak");
+		metadata_delete(mu, "private:usercloak");
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
@@ -129,7 +129,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	metadata_add(mu, METADATA_USER, "private:usercloak", host);
+	metadata_add(mu, "private:usercloak", host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, mu->name);
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, mu->name, get_oper_name(si));
@@ -152,7 +152,7 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
-		md = metadata_find(mu, METADATA_USER, "private:usercloak");
+		md = metadata_find(mu, "private:usercloak");
 		if (md == NULL)
 			continue;
 		if (!match(pattern, md->value))
@@ -177,7 +177,7 @@ static void vhost_on_identify(void *vptr)
 	metadata_t *md;
 
 	/* NO CLOAK?!*$*%*&&$(!& */
-	if (!(md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+	if (!(md = metadata_find(mu, "private:usercloak")))
 		return;
 
 	do_sethost(u, md->value);

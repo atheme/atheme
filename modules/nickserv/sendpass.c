@@ -94,7 +94,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if ((md = metadata_find(mu, "private:mark:setter")))
 	{
 		ismarked = true;
 		if (op == op_none)
@@ -115,9 +115,9 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (op == op_clear)
 	{
-		if (metadata_find(mu, METADATA_USER, "private:setpass:key"))
+		if (metadata_find(mu, "private:setpass:key"))
 		{
-			metadata_delete(mu, METADATA_USER, "private:setpass:key");
+			metadata_delete(mu, "private:setpass:key");
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s CLEAR", mu->name);
 			snoop("SENDPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), mu->name);
@@ -130,7 +130,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	/* alternative, safer method? */
 	if (command_find(si->service->cmdtree, "SETPASS"))
 	{
-		if (metadata_find(mu, METADATA_USER, "private:setpass:key"))
+		if (metadata_find(mu, "private:setpass:key"))
 		{
 			command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);
 			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), mu->name);
@@ -139,7 +139,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		key = gen_pw(12);
 		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
 		{
-			metadata_add(mu, METADATA_USER, "private:setpass:key", crypt_string(key, gen_salt()));
+			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
 			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);

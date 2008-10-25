@@ -176,13 +176,13 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (mc->metadata.count >= me.mdlimit)
+	if (object(mc)->metadata.count >= me.mdlimit)
 	{
 		xmlrpc_generic_error(9, "Metadata table full.");
 		return 0;
 	}
 
-	metadata_add(mc, METADATA_CHANNEL, parv[3], parv[4]);
+	metadata_add(mc, parv[3], parv[4]);
 
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, parv[3], parv[4]);
 
@@ -253,13 +253,13 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!metadata_find(mc, METADATA_CHANNEL, parv[3]))
+	if (!metadata_find(mc, parv[3]))
 	{
 		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
-	metadata_delete(mc, METADATA_CHANNEL, parv[3]);
+	metadata_delete(mc, parv[3]);
 
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, parv[3]);
 
@@ -310,7 +310,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 	}
 
 	/* if private, pretend it doesn't exist */
-	if (!(md = metadata_find(mc, METADATA_CHANNEL, parv[1])) || md->private)
+	if (!(md = metadata_find(mc, parv[1])) || md->private)
 	{
 		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;

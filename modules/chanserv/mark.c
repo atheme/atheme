@@ -74,15 +74,15 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter"))
+		if (metadata_find(mc, "private:mark:setter"))
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is already marked."), target);
 			return;
 		}
 
-		metadata_add(mc, METADATA_CHANNEL, "private:mark:setter", get_oper_name(si));
-		metadata_add(mc, METADATA_CHANNEL, "private:mark:reason", info);
-		metadata_add(mc, METADATA_CHANNEL, "private:mark:timestamp", itoa(CURRTIME));
+		metadata_add(mc, "private:mark:setter", get_oper_name(si));
+		metadata_add(mc, "private:mark:reason", info);
+		metadata_add(mc, "private:mark:timestamp", itoa(CURRTIME));
 
 		wallops("%s marked the channel \2%s\2.", get_oper_name(si), target);
 		snoop("MARK:ON: \2%s\2 by \2%s\2 for \2%s\2", target, get_oper_name(si), info);
@@ -91,15 +91,15 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
-		if (!metadata_find(mc, METADATA_CHANNEL, "private:mark:setter"))
+		if (!metadata_find(mc, "private:mark:setter"))
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is not marked."), target);
 			return;
 		}
 
-		metadata_delete(mc, METADATA_CHANNEL, "private:mark:setter");
-		metadata_delete(mc, METADATA_CHANNEL, "private:mark:reason");
-		metadata_delete(mc, METADATA_CHANNEL, "private:mark:timestamp");
+		metadata_delete(mc, "private:mark:setter");
+		metadata_delete(mc, "private:mark:reason");
+		metadata_delete(mc, "private:mark:timestamp");
 
 		wallops("%s unmarked the channel \2%s\2.", get_oper_name(si), target);
 		snoop("MARK:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));

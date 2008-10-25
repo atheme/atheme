@@ -100,7 +100,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
@@ -154,7 +154,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			}
 			chanacs_modify_simple(ca2, CA_AKICK, 0);
 			if (reason != NULL)
-				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
+				metadata_add(ca2, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
 			chanacs_close(ca2);
@@ -187,7 +187,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			}
 			chanacs_modify_simple(ca2, CA_AKICK, 0);
 			if (reason != NULL)
-				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
+				metadata_add(ca2, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
 			chanacs_close(ca2);
@@ -272,7 +272,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			if (ca->level == CA_AKICK)
 			{
-				md = metadata_find(ca, METADATA_CHANACS, "reason");
+				md = metadata_find(ca, "reason");
 				ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 				if (ca->myuser == NULL)
 					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),

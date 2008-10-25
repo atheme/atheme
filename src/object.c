@@ -31,7 +31,8 @@
  * Inputs:
  *      - pointer to object manager area
  *      - (optional) name of object
- *      - (optional) custom destructor
+ *      - (optional) custom destructor; if this is specified it must free
+ *        the metadata itself
  *
  * Outputs:
  *      - none
@@ -110,7 +111,10 @@ void object_unref(void *object)
 		if (obj->destructor != NULL)
 			obj->destructor(obj);
 		else
+		{
+			metadata_delete_all(obj);
 			free(obj);
+		}
 	}
 }
 

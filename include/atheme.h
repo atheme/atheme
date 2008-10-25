@@ -43,7 +43,6 @@
 #include "confparse.h"
 #include "global.h"
 #include "flags.h"
-#include "metadata.h"
 #include "phandler.h"
 #include "servtree.h"
 #include "services.h"

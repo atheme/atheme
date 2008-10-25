@@ -203,9 +203,9 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mail || !strcasecmp(mail, "NONE") || !strcasecmp(mail, "OFF"))
 	{
-		if (metadata_find(mc, METADATA_CHANNEL, "email"))
+		if (metadata_find(mc, "email"))
 		{
-			metadata_delete(mc, METADATA_CHANNEL, "email");
+			metadata_delete(mc, "email");
 			command_success_nodata(si, _("The e-mail address for channel \2%s\2 was deleted."), mc->name);
 			logcommand(si, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
 			return;
@@ -222,7 +222,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* we'll overwrite any existing metadata */
-	metadata_add(mc, METADATA_CHANNEL, "email", mail);
+	metadata_add(mc, "email", mail);
 
 	logcommand(si, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
@@ -251,9 +251,9 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		/* not in a namespace to allow more natural use of SET PROPERTY.
 		 * they may be able to introduce spaces, though. c'est la vie.
 		 */
-		if (metadata_find(mc, METADATA_CHANNEL, "url"))
+		if (metadata_find(mc, "url"))
 		{
-			metadata_delete(mc, METADATA_CHANNEL, "url");
+			metadata_delete(mc, "url");
 			logcommand(si, CMDLOG_SET, "%s SET URL NONE", mc->name);
 			command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), parv[0]);
 			return;
@@ -264,7 +264,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* we'll overwrite any existing metadata */
-	metadata_add(mc, METADATA_CHANNEL, "url", url);
+	metadata_add(mc, "url", url);
 
 	logcommand(si, CMDLOG_SET, "%s SET URL %s", mc->name, url);
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
@@ -292,9 +292,9 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		/* entrymsg is private because users won't see it if they're AKICKED,
 		 * if the channel is +i, or if the channel is RESTRICTED
 		 */
-		if (metadata_find(mc, METADATA_CHANNEL, "private:entrymsg"))
+		if (metadata_find(mc, "private:entrymsg"))
 		{
-			metadata_delete(mc, METADATA_CHANNEL, "private:entrymsg");
+			metadata_delete(mc, "private:entrymsg");
 			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name);
 			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
 			return;
@@ -305,7 +305,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* we'll overwrite any existing metadata */
-	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", parv[1]);
+	metadata_add(mc, "private:entrymsg", parv[1]);
 
 	logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, parv[1]);
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
@@ -361,9 +361,9 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 
 		/* XXX is it portable to compare times like that? */
 		if ((si->smu == tmu)
-			&& (md = metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
+			&& (md = metadata_find(mc, "private:verify:founderchg:newfounder"))
 			&& !irccasecmp(md->value, si->smu->name)
-			&& (md = metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp"))
+			&& (md = metadata_find(mc, "private:verify:founderchg:timestamp"))
 			&& (atol(md->value) >= si->smu->registered))
 		{
 			node_t *n;
@@ -375,7 +375,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+			if (metadata_find(mc, "private:close:closer"))
 			{
 				command_fail(si, fault_noprivs, _("\2%s\2 is closed; it cannot be transferred."), mc->name);
 				return;
@@ -397,8 +397,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
 
 			/* delete transfer metadata */
-			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
-			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
+			metadata_delete(mc, "private:verify:founderchg:newfounder");
+			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
 			/* done! */
 			snoop("SET:FOUNDER: \2%s\2 -> \2%s\2", mc->name, tmu->name);
@@ -418,10 +418,10 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		 * Maybe he is trying to cancel a transfer?
 		 */
 
-		if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
+		if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 		{
-			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
-			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
+			metadata_delete(mc, "private:verify:founderchg:newfounder");
+			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
 			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
 			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
@@ -453,7 +453,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* check for lazy cancellation of outstanding requests */
-	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
+	if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 	{
 		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
 		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
@@ -461,8 +461,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
 
-	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder", tmu->name);
-	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp", itoa(time(NULL)));
+	metadata_add(mc, "private:verify:founderchg:newfounder", tmu->name);
+	metadata_add(mc, "private:verify:founderchg:timestamp", itoa(time(NULL)));
 
 	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), tmu->name, mc->name);
 	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), tmu->name);
@@ -683,7 +683,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	ext_minus[0] = '\0';
 	if (mask_ext)
 	{
-		md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
+		md = metadata_find(mc, "private:mlockext");
 		if (md != NULL)
 		{
 			arg = md->value;
@@ -723,9 +723,9 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		if (newext[0] != '\0')
-			metadata_add(mc, METADATA_CHANNEL, "private:mlockext", newext);
+			metadata_add(mc, "private:mlockext", newext);
 		else
-			metadata_delete(mc, METADATA_CHANNEL, "private:mlockext");
+			metadata_delete(mc, "private:mlockext");
 	}
 
 	end = modebuf;
@@ -1018,7 +1018,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp("ON", parv[1]))
 	{
-		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+		metadata_t *md = metadata_find(mc, "disable_fantasy");
 
 		if (!md)
 		{
@@ -1026,7 +1026,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
+		metadata_delete(mc, "disable_fantasy");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "FANTASY", mc->name);
@@ -1034,7 +1034,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp("OFF", parv[1]))
 	{
-		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+		metadata_t *md = metadata_find(mc, "disable_fantasy");
 
 		if (md)
 		{
@@ -1042,7 +1042,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
+		metadata_add(mc, "disable_fantasy", "on");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "FANTASY", mc->name);
@@ -1206,7 +1206,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!value)
 	{
-		md = metadata_find(mc, METADATA_CHANNEL, property);
+		md = metadata_find(mc, property);
 
 		if (!md)
 		{
@@ -1214,14 +1214,14 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_delete(mc, METADATA_CHANNEL, property);
+		metadata_delete(mc, property);
 		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
 
 	count = 0;
-	LIST_FOREACH(n, mc->metadata.head)
+	LIST_FOREACH(n, object(mc)->metadata.head)
 	{
 		md = n->data;
 		if (strchr(property, ':') ? md->private : !md->private)
@@ -1240,7 +1240,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	metadata_add(mc, METADATA_CHANNEL, property, value);
+	metadata_add(mc, property, value);
 	logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }

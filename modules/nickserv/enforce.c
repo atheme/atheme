@@ -88,23 +88,23 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strcasecmp(setting, "ON") == 0)
 	{
-		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
+		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
 		{
 			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 		else
 		{
 			logcommand(si, CMDLOG_SET, "SET ENFORCE ON");
-			metadata_add(si->smu, METADATA_USER, "private:doenforce", "1");
+			metadata_add(si->smu, "private:doenforce", "1");
 			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
 	{
-		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
+		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
 		{
 			logcommand(si, CMDLOG_SET, "SET ENFORCE OFF");
-			metadata_delete(si->smu, METADATA_USER, "private:doenforce");
+			metadata_delete(si->smu, "private:doenforce");
 			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 		else
@@ -253,7 +253,7 @@ void enforce_timeout_check(void *arg)
 			continue;
 		if (myuser_access_verify(u, mn->owner))
 			continue;
-		if (!metadata_find(mn->owner, METADATA_USER, "private:doenforce"))
+		if (!metadata_find(mn->owner, "private:doenforce"))
 			continue;
 
 		notice(nicksvs.nick, u->nick, "You failed to identify in time for the nickname %s", mn->nick);
@@ -270,7 +270,7 @@ static void show_enforce(void *vdata)
 {
 	hook_user_req_t *hdata = vdata;
 
-	if (metadata_find(hdata->mu, METADATA_USER, "private:doenforce"))
+	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, "%s has enabled nick protection", hdata->mu->name);
 }
 
@@ -297,7 +297,7 @@ static void check_enforce(void *vdata)
 	if (is_internal_client(hdata->u))
 		return;
 
-	if (!metadata_find(hdata->mn->owner, METADATA_USER, "private:doenforce"))
+	if (!metadata_find(hdata->mn->owner, "private:doenforce"))
 		return;
 	/* check if this nick has been used recently enough */
 	if (nicksvs.enforce_expiry > 0 &&
@@ -351,10 +351,10 @@ static int idcheck_foreach_cb(const char *key, void *data, void *privdata)
 	metadata_t *md;
 	myuser_t *mu = (myuser_t *) data;
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:idcheck")))
-		metadata_delete(mu, METADATA_USER, "private:idcheck");
-	if ((md = metadata_find(mu, METADATA_USER, "private:enforcer")))
-		metadata_delete(mu, METADATA_USER, "private:enforcer");
+	if ((md = metadata_find(mu, "private:idcheck")))
+		metadata_delete(mu, "private:idcheck");
+	if ((md = metadata_find(mu, "private:enforcer")))
+		metadata_delete(mu, "private:enforcer");
 
 	return 0;
 }
