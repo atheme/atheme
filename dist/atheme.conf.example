@@ -378,6 +378,15 @@ loadmodule "modules/global/main";
 #loadmodule "modules/gameserv/help";
 #loadmodule "modules/gameserv/namegen";
 
+/* Channel listing service.
+ *
+ * Allows users to list channels with more flexibility than the /list
+ * command.
+ *
+ * Core components				modules/alis/main
+ */
+#loadmodule "modules/alis/main";
+
 /*
  * Various modules.
  *
