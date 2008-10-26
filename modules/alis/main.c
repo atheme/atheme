@@ -51,6 +51,14 @@ DECLARE_MODULE_V1
 #define DIR_SET		1
 #define DIR_EQUAL	2
 
+struct
+{
+	char *nick;
+	char *user;
+	char *host;
+	char *real;
+} alis_config;
+
 service_t *alis;
 list_t alis_cmdtree;
 list_t alis_helptree;
@@ -80,25 +88,82 @@ struct alis_query
 	int skip;
 };
 
+/* Configuration */
+list_t conf_alis_table;
+static int conf_alis_nick(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	free(alis_config.nick);
+	alis_config.nick = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_alis_user(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	free(alis_config.user);
+	alis_config.user = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_alis_host(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	free(alis_config.host);
+	alis_config.host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_alis_real(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	free(alis_config.real);
+	alis_config.real = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_alis(config_entry_t *ce)
+{
+	subblock_handler(ce, &conf_alis_table);
+	return 0;
+}
+
 static void alis_config_ready(void *unused)
 {
 	if (alis)
 		del_service(alis);
 
-	alis = add_service("ALIS", "alis", me.name, "Channel Directory", alis_handler, &alis_cmdtree);
+	alis = add_service(alis_config.nick, alis_config.user, alis_config.host ? alis_config.host : me.name, alis_config.real, alis_handler, &alis_cmdtree);
 
 	hook_del_hook("config_ready", alis_config_ready);
 }
 
 void _modinit(module_t *m)
 {
-	if (me.me != NULL)
-		alis_config_ready(NULL);
-	else
-	{
-		hook_add_event("config_ready");
-		hook_add_hook("config_ready", alis_config_ready);
-	}
+	hook_add_event("config_ready");
+	hook_add_hook("config_ready", alis_config_ready);
+
+	add_top_conf("ALIS", conf_alis);
+	add_conf_item("NICK", &conf_alis_table, conf_alis_nick);
+	add_conf_item("USER", &conf_alis_table, conf_alis_user);
+	add_conf_item("HOST", &conf_alis_table, conf_alis_host);
+	add_conf_item("REAL", &conf_alis_table, conf_alis_real);
+	alis_config.nick = sstrdup("ALIS");
+	alis_config.user = sstrdup("alis");
+	alis_config.host = NULL;
+	alis_config.real = sstrdup("Channel Directory");
 
 	command_add(&alis_list, &alis_cmdtree);
 	command_add(&alis_help, &alis_cmdtree);
@@ -109,7 +174,18 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
+	del_conf_item("REAL", &conf_alis_table);
+	del_conf_item("HOST", &conf_alis_table);
+	del_conf_item("USER", &conf_alis_table);
+	del_conf_item("NICK", &conf_alis_table);
+	del_top_conf("ALIS");
+
 	hook_del_hook("config_ready", alis_config_ready);
+
+	free(alis_config.nick);
+	free(alis_config.user);
+	free(alis_config.host);
+	free(alis_config.real);
 
 	command_delete(&alis_list, &alis_cmdtree);
 	command_delete(&alis_help, &alis_cmdtree);
