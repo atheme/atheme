@@ -46,7 +46,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *target = parv[1];
 	char *flagstr = parv[2];
-	mychan_t *mc = mychan_find(channel);
+	mychan_t *mc;
 	myuser_t *tmu;
 	unsigned int addflags, removeflags;
 
@@ -57,7 +57,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-
+	mc = mychan_find(channel);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
