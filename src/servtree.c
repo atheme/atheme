@@ -134,47 +134,7 @@ void del_service(service_t * sptr)
 
 service_t *find_service(char *name)
 {
-	service_t *sptr;
-	user_t *u;
-	char *p;
-	char name2[NICKLEN];
-	mowgli_patricia_iteration_state_t state;
-
-	p = strchr(name, '@');
-	if (p != NULL)
-	{
-		/* Make sure it's for us, not for a jupe -- jilles */
-		if (irccasecmp(p + 1, me.name))
-			return NULL;
-		strlcpy(name2, name, sizeof name2);
-		p = strchr(name2, '@');
-		if (p != NULL)
-			*p = '\0';
-		sptr = mowgli_patricia_retrieve(services, name2);
-		if (sptr != NULL)
-			return sptr;
-		MOWGLI_PATRICIA_FOREACH(sptr, &state, services)
-		{
-			if (sptr->me != NULL && !strcasecmp(name2, sptr->user))
-				return sptr;
-		}
-	}
-	else
-	{
-		sptr = mowgli_patricia_retrieve(services, name);
-		if (sptr != NULL)
-			return sptr;
-
-		if (ircd->uses_uid)
-		{
-			/* yuck yuck -- but quite efficient -- jilles */
-			u = user_find(name);
-			if (u != NULL && u->server == me.me)
-				return mowgli_patricia_retrieve(services, u->nick);
-		}
-	}
-
-	return NULL;
+	return mowgli_patricia_retrieve(services, name);
 }
 
 char *service_name(char *name)

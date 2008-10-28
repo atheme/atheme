@@ -460,6 +460,10 @@ handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char
 void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
 {
 	char *vec[3];
+	user_t *u, *target_u;
+	char *p;
+	char name2[NICKLEN];
+	node_t *n;
 
 	/* message from server, ignore */
 	if (si->su == NULL)
@@ -472,10 +476,57 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 		return;
 	}
 
-	si->service = find_service(target);
+	target_u = NULL;
+	si->service = NULL;
+	p = strchr(target, '@');
+	if (p != NULL)
+	{
+		/* Make sure it's for us, not for a jupe -- jilles */
+		if (!irccasecmp(p + 1, me.name))
+		{
+			strlcpy(name2, target, sizeof name2);
+			p = strchr(name2, '@');
+			if (p != NULL)
+				*p = '\0';
+			si->service = find_service(name2);
+			if (si->service == NULL)
+			{
+				target_u = NULL;
+				LIST_FOREACH(n, me.me->userlist.head)
+				{
+					u = n->data;
+					/* don't leak info about enforcers */
+					if (u->flags & UF_ENFORCER)
+						continue;
+					if (irccasecmp(u->user, name2))
+						continue;
+					if (target_u == NULL)
+						target_u = u;
+					else
+					{
+						numeric_sts(me.name, 407, si->su->nick, "%s :Ambiguous recipient", target);
+						return;
+					}
+				}
+				if (target_u != NULL)
+					si->service = find_service(target_u->nick);
+			}
+		}
+	}
+	else
+	{
+		target_u = user_find(target);
+		if (target_u != NULL)
+			si->service = find_service(target_u->nick);
+	}
 
 	if (si->service == NULL)
 	{
+		if (!is_notice && target_u != NULL && target_u->server == me.me)
+		{
+			notice(target_u->nick, si->su->nick, "This is a registered nick enforcer, and not a real user.");
+			return;
+		}
 		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
 		{
 			/* If it's not a notice and looks like a nick or
