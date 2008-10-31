@@ -78,9 +78,6 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	/* Display name, either <Service> or <Service>@<Server> */
 	sptr->disp = service_name(name);
 
-	if (me.numeric && *me.numeric)
-		sptr->uid = sstrdup(uid_get());
-
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
 
@@ -96,7 +93,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 		}
 	}
 
-	sptr->me = user_add(name, user, host, NULL, NULL, ircd->uses_uid ? sptr->uid : NULL, real, me.me, CURRTIME);
+	sptr->me = user_add(name, user, host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, real, me.me, CURRTIME);
 	sptr->me->flags |= UF_IRCOP;
 
 	if (me.connected)
@@ -127,7 +124,6 @@ void del_service(service_t * sptr)
 	free(sptr->user);
 	free(sptr->host);
 	free(sptr->real);
-	free(sptr->uid);
 
 	BlockHeapFree(service_heap, sptr);
 }

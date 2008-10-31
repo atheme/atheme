@@ -546,7 +546,7 @@ static void inspircd_sasl_sts(char *target, char mode, char *data)
 	return_if_fail(s != NULL);
 	return_if_fail(saslsvs.me != NULL);
 
-	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, saslsvs.me->uid, target, mode, data);
+	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, saslsvs.me->me->uid, target, mode, data);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])

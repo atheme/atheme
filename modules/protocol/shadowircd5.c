@@ -653,7 +653,7 @@ static void shadowircd_sasl_sts(char *target, char mode, char *data)
 	}
 
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->name,
-			saslsvs.me->uid,
+			saslsvs.me->me->uid,
 			target,
 			mode,
 			data);

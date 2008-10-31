@@ -16,7 +16,6 @@ struct service_ {
 	char *host;
 	char *real;
 	char *disp;
-	char *uid;
 
 	user_t *me;
 

@@ -233,7 +233,7 @@ void services_init(void)
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services)
 	{
 		if (ircd->uses_uid && svs->me->uid[0] == '\0')
-			user_changeuid(svs->me, svs->uid);
+			user_changeuid(svs->me, uid_get());
 		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 			user_changeuid(svs->me, NULL);
 		if (!ircd->uses_uid)
@@ -296,8 +296,6 @@ void reintroduce_user(user_t *u)
 	if (*u->uid)
 	{
 		user_changeuid(u, uid_get());
-		/* The following assumes that all UIDs have the same length. */
-		strcpy(svs->uid, u->uid);
 	}
 	else
 	{

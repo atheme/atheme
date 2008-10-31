@@ -1,7 +1,5 @@
 Some ideas concerning things that we may eventually work on.
 
-service_t.uid is pretty meaningless, remove it?
-
 command aliases
 
 interruptible commands (so as to make ns_mxcheck lookup async)
