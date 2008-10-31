@@ -153,11 +153,6 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	if (!strncmp("private:", md->name, 8))
 		md->private = TRUE;
 
-	/* XXX only call the hook for users */
-	if (obj->destructor == (destructor_t)myuser_delete)
-	{
-	}
-
 	return md;
 }
 
