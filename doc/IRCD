@@ -114,8 +114,8 @@ all, and should not be used.
 inspircd
 --------
 
-You should use inspircd11 for inspircd 1.1.x. InspIRCd 1.0.x support 
-(inspircd10) has been dropped.
+You should use inspircd11 for inspircd 1.1.x and inspircd12 for inspircd 1.2.x.
+InspIRCd 1.0.x support (inspircd10) has been dropped.
 
 You need <uline> tags for services on all servers on the network.
 
@@ -125,6 +125,9 @@ this are the m_globops.so and m_services_account.so modules, which must be
 loaded at all times on your inspircd servers if you wish to use this version of
 atheme. If the servers are protocol 1102 or newer, m_globops.so is not
 required, although it will be used if loaded.
+
+For inspircd12, jupes will use SIDs numerically following services's SID, make
+sure to leave plenty of space.
 
 The inspircd support is developed in cooperation with the inspircd
 developers.

@@ -461,7 +461,10 @@ static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 
 static void inspircd_jupe(const char *server, const char *reason)
 {
+	static char sid[3+1];
+	int i;
 	server_t *s;
+
 	if (!me.connected)
 		return;
 
@@ -471,13 +474,36 @@ static void inspircd_jupe(const char *server, const char *reason)
 		/* We need to wait for the RSQUIT to be processed -- jilles */
 		sts(":%s RSQUIT :%s", opersvs.me->me->uid, server);
 		s->flags |= SF_JUPE_PENDING;
+		return;
 	}
-	else
+
+	/* Remove any previous jupe first */
+	sts(":%s SQUIT %s :%s", me.numeric, server, reason);
+	/* dirty dirty make up some sid */
+	if (sid[0] == '\0')
+		strlcpy(sid, me.numeric, sizeof sid);
+	do
 	{
-		/* Remove any previous jupe first */
-		sts(":%s SQUIT %s :%s", me.numeric, server, reason);
-		sts(":%s SERVER %s * 1 :%s", me.numeric, server, reason);
-	}
+		i = 2;
+		for (;;)
+		{
+			if (sid[i] == 'Z')
+			{
+				sid[i] = '0';
+				i--;
+				/* eek, no more sids */
+				if (i < 0)
+					return;
+				continue;
+			}
+			else if (sid[i] == '9')
+				sid[i] = 'A';
+			else sid[i]++;
+			break;
+		}
+	} while (server_find(sid));
+
+	sts(":%s SERVER %s * 1 %s :%s", me.numeric, server, sid, reason);
 }
 
 static void inspircd_sethost_sts(char *source, char *target, char *host)
