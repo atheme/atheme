@@ -1526,15 +1526,13 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->auth = src->auth;
 }
 
-static void free_cstructs(struct me *mesrc, chansvs_t *svssrc)
+static void free_cstructs(struct me *mesrc)
 {
 	free(mesrc->netname);
 	free(mesrc->hidehostsuffix);
 	free(mesrc->adminname);
 	free(mesrc->adminemail);
 	free(mesrc->mta);
-
-	free(svssrc->nick);
 }
 
 boolean_t conf_rehash(void)
@@ -1577,7 +1575,7 @@ boolean_t conf_rehash(void)
 		slog(LG_ERROR, "conf_rehash(): conf file was malformed, aborting rehash");
 
 		/* freeing the new conf strings */
-		free_cstructs(&me, &chansvs);
+		free_cstructs(&me);
 
 		/* return everything to the way it was before */
 		copy_me(hold_me, &me);
@@ -1701,18 +1699,6 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `auth' set in %s; " "defaulting to NONE", config_file);
 		me.auth = AUTH_NONE;
-	}
-
-	if (!chansvs.nick || !chansvs.user || !chansvs.host || !chansvs.real)
-	{
-		slog(LG_ERROR, "conf_check(): invalid chanserv{} block in %s", config_file);
-		return FALSE;
-	}
-
-	if ((strchr(chansvs.user, ' ')) || (strlen(chansvs.user) > 10))
-	{
-		slog(LG_ERROR, "conf_check(): invalid `chanserv::user' in %s", config_file);
-		return FALSE;
 	}
 
 	/* we know ca_all now */
