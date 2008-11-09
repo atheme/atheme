@@ -890,9 +890,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
-	boolean_t onlydeop;
 	time_t ts;
-	const char *p;
 
 	/* :server.moo FMODE #blarp tshere +ntsklLg keymoo 1337 secks */
 	if (*parv[0] == '#')
