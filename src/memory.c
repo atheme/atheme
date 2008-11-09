@@ -77,7 +77,7 @@ char *sstrndup(const char *s, int len)
 
 	t = smalloc(len + 1);
 
-	strlcpy(t, s, len);
+	strlcpy(t, s, len + 1);
 	return t;
 }
 
