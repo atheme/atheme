@@ -614,17 +614,17 @@ nickserv {
 	 */
 	nick = "NickServ";
 
-	/* user
+	/* (*)user
 	 * The username we want NickServ to have.
 	 */
 	user = "NickServ";
 
-	/* host
+	/* (*)host
 	 * The hostname we want NickServ to have.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The realname (gecos) information we want NickServ to have.
 	 */
 	real = "Nickname Services";
@@ -660,17 +660,17 @@ chanserv {
 	 */
 	nick = "ChanServ";
 
-	/* user
+	/* (*)user
 	 * The username we want the client to have.
 	 */
 	user = "ChanServ";
 
-	/* host
+	/* (*)host
 	 * The hostname we want the client to have.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The GECOS of the client.
 	 */
 	real = "Channel Services";
@@ -762,22 +762,22 @@ chanserv {
  * The Global notice modules provide the ability to mass-notify a network.
  */
 global {
-	/* nick
+	/* (*)nick
 	 * Sets the nick used for sending out a global notice.
 	 */
 	nick = "Global";
 
-	/* user
+	/* (*)user
 	 * Sets the username used for this client.
 	 */
 	user = "Global";
 
-	/* host
+	/* (*)host
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Network Announcements";
@@ -791,22 +791,22 @@ global {
  * on the IRC network.
  */
 operserv {
-	/* nick
+	/* (*)nick
 	 * The nickname we want the Operator Service to have.
 	 */
 	nick = "OperServ";
 
-	/* user
+	/* (*)user
 	 * Sets the username used for this client.
 	 */
 	user = "OperServ";
 
-	/* host
+	/* (*)host
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Operator Services";
@@ -825,17 +825,17 @@ saslserv {
 	 */
 	nick = "SaslServ";
 
-	/* user
+	/* (*)user
 	 * The username we want SaslServ to have.
 	 */
 	user = "SaslServ";
 
-	/* host
+	/* (*)host
 	 * The hostname we want SaslServ to have.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The realname (gecos) information we want SaslServ to have.
 	 */
 	real = "SASL Authentication Agent";
@@ -854,17 +854,17 @@ memoserv {
 	 */
 	nick = "MemoServ";
 
-	/* user
+	/* (*)user
 	 * The username we want MemoServ to have.
 	 */
 	user = "MemoServ";
 
-	/* host
+	/* (*)host
 	 * The hostname we want MemoServ to have.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The realname (gecos) information we want MemoServ to have.
 	 */
 	real = "Memo Services";
@@ -877,22 +877,22 @@ memoserv {
  * GameServ provides various in-channel commands for games.
  */
 gameserv {
-	/* nick
+	/* (*)nick
 	 * The nickname we want GameServ to have.
 	 */
 	nick = "GameServ";
 
-	/* user
+	/* (*)user
 	 * Sets the username used for this client.
 	 */
 	user = "GameServ";
 
-	/* host
+	/* (*)host
 	 * The hostname used for this client.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Game Services";
@@ -908,17 +908,17 @@ alis {
 	 */
 	nick = "ALIS";
 
-	/* user
+	/* (*)user
 	 * The username we want ALIS to have.
 	 */
 	user = "alis";
 
-	/* host
+	/* (*)host
 	 * The hostname we want ALIS to have.
 	 */
 	host = "services.int";
 
-	/* real
+	/* (*)real
 	 * The realname (gecos) information we want ALIS to have.
 	 */
 	real = "Channel Directory";
