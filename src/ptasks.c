@@ -442,7 +442,7 @@ handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char
 		if (!is_internal_client(cu->user))
 			continue;
 
-		si->service = find_service(cu->user->nick);
+		si->service = service_find_nick(cu->user->nick);
 
 		if (si->service == NULL)
 			continue;
@@ -488,7 +488,7 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 			p = strchr(name2, '@');
 			if (p != NULL)
 				*p = '\0';
-			si->service = find_service(name2);
+			si->service = service_find_nick(name2);
 			if (si->service == NULL)
 			{
 				target_u = NULL;
@@ -509,7 +509,7 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 					}
 				}
 				if (target_u != NULL)
-					si->service = find_service(target_u->nick);
+					si->service = service_find_nick(target_u->nick);
 			}
 		}
 	}
@@ -517,7 +517,7 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	{
 		target_u = user_find(target);
 		if (target_u != NULL)
-			si->service = find_service(target_u->nick);
+			si->service = service_find_nick(target_u->nick);
 	}
 
 	if (si->service == NULL)

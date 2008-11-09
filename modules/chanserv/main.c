@@ -169,20 +169,16 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 static void chanserv_config_ready(void *unused)
 {
-	if (chansvs.me)
-		del_service(chansvs.me);
-
-	chansvs.me = add_service(chansvs.nick, chansvs.user,
-				 chansvs.host, chansvs.real,
-				 chanserv, &cs_cmdtree);
+	chansvs.nick = chansvs.me->nick;
+	chansvs.user = chansvs.me->user;
+	chansvs.host = chansvs.me->host;
+	chansvs.real = chansvs.me->real;
 	chansvs.disp = chansvs.me->disp;
 
 	service_set_chanmsg(chansvs.me, TRUE);
 
 	if (me.connected)
-		join_registered(!config_options.leave_chans);
-
-	hook_del_hook("config_ready", chanserv_config_ready);
+		join_registered(FALSE); /* !config_options.leave_chans */
 }
 
 void _modinit(module_t *m)
@@ -190,16 +186,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", chanserv_config_ready);
 
-	if (!cold_start)
-	{
-		chansvs.me = add_service(chansvs.nick, chansvs.user, chansvs.host, chansvs.real, chanserv, &cs_cmdtree);
-		chansvs.disp = chansvs.me->disp;
-
-		service_set_chanmsg(chansvs.me, TRUE);
-
-		if (me.connected)
-			join_registered(!config_options.leave_chans);
-	}
+	chansvs.me = service_add("chanserv", chanserv, &cs_cmdtree, &conf_ci_table);
 
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
@@ -222,10 +209,16 @@ void _moddeinit(void)
 {
 	if (chansvs.me)
 	{
-		del_service(chansvs.me);
+		chansvs.nick = NULL;
+		chansvs.user = NULL;
+		chansvs.host = NULL;
+		chansvs.real = NULL;
+		chansvs.disp = NULL;
+		service_delete(chansvs.me);
 		chansvs.me = NULL;
 	}
 
+	hook_del_hook("config_ready", chanserv_config_ready);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_del_hook("channel_register", (void (*)(void *)) cs_register);

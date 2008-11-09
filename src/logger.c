@@ -367,7 +367,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 	va_end(args);
 
 	slog(level, "%s %s:%s!%s@%s[%s] %s",
-			svs != NULL ? svs->name : me.name,
+			svs != NULL ? svs->nick : me.name,
 			source->myuser != NULL ? source->myuser->name : "",
 			source->nick, source->user, source->vhost,
 			source->ip[0] != '\0' ? source->ip : source->host,
@@ -406,7 +406,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 	va_end(args);
 
 	slog(level, "%s %s:%s(%s)[%s] %s",
-			svs != NULL ? svs->name : me.name,
+			svs != NULL ? svs->nick : me.name,
 			login != NULL ? login->name : "",
 			type,
 			source != NULL ? source->hbuf : "<noconn>",

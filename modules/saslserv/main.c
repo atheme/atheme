@@ -66,13 +66,11 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 
 static void saslserv_config_ready(void *unused)
 {
-        if (saslsvs.me)
-                del_service(saslsvs.me);
-
-        saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
-                                 saslsvs.host, saslsvs.real, saslserv, NULL);
-
-        hook_del_hook("config_ready", saslserv_config_ready);
+	saslsvs.nick = saslsvs.me->nick;
+	saslsvs.user = saslsvs.me->user;
+	saslsvs.host = saslsvs.me->host;
+	saslsvs.real = saslsvs.me->real;
+	saslsvs.disp = saslsvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -85,11 +83,7 @@ void _modinit(module_t *m)
 	hook_add_hook("user_add", sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
-        if (!cold_start)
-        {
-                saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
-			saslsvs.host, saslsvs.real, saslserv, NULL);
-        }
+	saslsvs.me = service_add("saslserv", saslserv, NULL, &conf_ss_table);
 	authservice_loaded++;
 }
 
@@ -103,7 +97,12 @@ void _moddeinit(void)
 
         if (saslsvs.me)
 	{
-		del_service(saslsvs.me);
+		saslsvs.nick = NULL;
+		saslsvs.user = NULL;
+		saslsvs.host = NULL;
+		saslsvs.real = NULL;
+		saslsvs.disp = NULL;
+                service_delete(saslsvs.me);
 		saslsvs.me = NULL;
 	}
 	authservice_loaded--;

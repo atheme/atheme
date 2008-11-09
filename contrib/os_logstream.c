@@ -102,7 +102,7 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 			node_free(n);
 
 			if (irccasecmp(config_options.chan, chan))
-				part(chan, si->service->name);
+				part(chan, si->service->nick);
 
 			command_success_nodata(si, "Removed \2%s\2.", chan);
 
@@ -110,7 +110,7 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	join(chan, si->service->name);
+	join(chan, si->service->nick);
 	lf = irc_logstream_new(chan, LG_CMD_ADMIN | LG_DEBUG);
 	n = node_create();
 	node_add(lf, n, &irc_logstreams);

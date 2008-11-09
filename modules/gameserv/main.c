@@ -54,15 +54,11 @@ static void gameserv(sourceinfo_t *si, int parc, char *parv[])
 
 static void gameserv_config_ready(void *unused)
 {
-	if (gamesvs.me)
-		del_service(gamesvs.me);
-
-	gamesvs.me = add_service(gamesvs.nick, gamesvs.user,
-				 gamesvs.host, gamesvs.real,
-				 gameserv, &gs_cmdtree);
+	gamesvs.nick = gamesvs.me->nick;
+	gamesvs.user = gamesvs.me->user;
+	gamesvs.host = gamesvs.me->host;
+	gamesvs.real = gamesvs.me->real;
 	gamesvs.disp = gamesvs.me->disp;
-
-        hook_del_hook("config_ready", gameserv_config_ready);
 }
 
 void _modinit(module_t *m)
@@ -70,21 +66,22 @@ void _modinit(module_t *m)
         hook_add_event("config_ready");
         hook_add_hook("config_ready", gameserv_config_ready);
 
-        if (!cold_start)
-        {
-                gamesvs.me = add_service(gamesvs.nick, gamesvs.user,
-			gamesvs.host, gamesvs.real, gameserv, &gs_cmdtree);
-                gamesvs.disp = gamesvs.me->disp;
-        }
+	gamesvs.me = service_add("gameserv", gameserv, &gs_cmdtree, &conf_gs_table);
 }
 
 void _moddeinit(void)
 {
         if (gamesvs.me)
 	{
-                del_service(gamesvs.me);
+		gamesvs.nick = NULL;
+		gamesvs.user = NULL;
+		gamesvs.host = NULL;
+		gamesvs.real = NULL;
+		gamesvs.disp = NULL;
+                service_delete(gamesvs.me);
 		gamesvs.me = NULL;
 	}
+	hook_del_hook("config_ready", gameserv_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

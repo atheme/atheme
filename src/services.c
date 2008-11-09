@@ -24,7 +24,6 @@
 #include "atheme.h"
 #include "pmodule.h"
 
-extern mowgli_patricia_t *services;
 int authservice_loaded = 0;
 int use_myuser_access = 0;
 int use_svsignore = 0;
@@ -230,14 +229,14 @@ void services_init(void)
 	service_t *svs;
 	mowgli_patricia_iteration_state_t state;
 
-	MOWGLI_PATRICIA_FOREACH(svs, &state, services)
+	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
 		if (ircd->uses_uid && svs->me->uid[0] == '\0')
 			user_changeuid(svs->me, uid_get());
 		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 			user_changeuid(svs->me, NULL);
 		if (!ircd->uses_uid)
-			kill_id_sts(NULL, svs->name, "Attempt to use service nick");
+			kill_id_sts(NULL, svs->nick, "Attempt to use service nick");
 		introduce_nick(svs->me);
 	}
 }
@@ -250,9 +249,9 @@ void joinall(char *name)
 	if (name == NULL)
 		return;
 
-	MOWGLI_PATRICIA_FOREACH(svs, &state, services)
+	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
-		join(name, svs->name);
+		join(name, svs->nick);
 	}
 }
 
@@ -265,7 +264,7 @@ void partall(char *name)
 	if (name == NULL)
 		return;
 	mc = mychan_find(name);
-	MOWGLI_PATRICIA_FOREACH(svs, &state, services)
+	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
 		if (svs == chansvs.me && mc != NULL && config_options.join_chans)
 			continue;
@@ -273,7 +272,7 @@ void partall(char *name)
 		 * channel may disappear under our feet
 		 * -- jilles */
 		if (chanuser_find(channel_find(name), svs->me))
-			part(name, svs->name);
+			part(name, svs->nick);
 	}
 }
 
@@ -284,7 +283,7 @@ void reintroduce_user(user_t *u)
 	channel_t *c;
 	service_t *svs;
 
-	svs = find_service(u->nick);
+	svs = service_find_nick(u->nick);
 	if (svs == NULL)
 	{
 		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
@@ -662,7 +661,7 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 	}
 
 	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
-		msg(si->service->name, si->su->nick, "%s", buf);
+		msg(si->service->nick, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
 }
@@ -692,7 +691,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 
 	if (si->output_limit && si->output_count > si->output_limit)
 	{
-		notice(si->service->name, si->su->nick, _("Output limit (%u) exceeded, halting output"), si->output_limit);
+		notice(si->service->nick, si->su->nick, _("Output limit (%u) exceeded, halting output"), si->output_limit);
 		return;
 	}
 
@@ -709,7 +708,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 		if (*p == '\0')
 			p = space; /* replace empty lines with a space */
 		if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
-			msg(si->service->name, si->su->nick, "%s", p);
+			msg(si->service->nick, si->su->nick, "%s", p);
 		else
 			notice_user_sts(si->service->me, si->su, p);
 		p = q;
@@ -734,7 +733,7 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 	}
 
 	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
-		msg(si->service->name, si->su->nick, "%s", buf);
+		msg(si->service->nick, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
 }

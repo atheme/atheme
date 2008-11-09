@@ -65,6 +65,16 @@ extern int token_to_value(struct Token token_table[], const char *token);
 #define TOKEN_UNMATCHED -1
 #define TOKEN_ERROR -2
 
+/* XXX */
+E list_t conf_ci_table;
+E list_t conf_gl_table;
+E list_t conf_oi_table;
+E list_t conf_ni_table;
+E list_t conf_gi_table;
+E list_t conf_ms_table;
+E list_t conf_ss_table;
+E list_t conf_gs_table;
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

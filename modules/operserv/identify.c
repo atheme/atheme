@@ -87,7 +87,7 @@ static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su->flags & UF_SOPER_PASS)
 	{
-		command_fail(si, fault_nochange, _("You are already identified to %s."), si->service->name);
+		command_fail(si, fault_nochange, _("You are already identified to %s."), si->service->nick);
 		return;
 	}
 
@@ -100,7 +100,7 @@ static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	si->su->flags |= UF_SOPER_PASS;
 	command_success_nodata(si, _("You are now identified to %s."),
-			si->service->name);
+			si->service->nick);
 	logcommand(si, CMDLOG_ADMIN, "IDENTIFY");
 }
 

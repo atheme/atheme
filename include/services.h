@@ -18,6 +18,10 @@ typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
 typedef struct gamesvs_ gamesvs_t;
 
+/* The nick/user/host/real/disp strings in these structs simply point
+ * to their counterparts in the service_t, and will probably be removed
+ * at some point.
+ */
 /* core services */
 struct chansvs_
 {

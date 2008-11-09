@@ -384,7 +384,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	else
 		mu = NULL;
 
-	svs = find_service(parv[3]);
+	svs = service_find_nick(parv[3]);
 	if (svs == NULL || svs->cmdtree == NULL)
 	{
 		slog(LG_DEBUG, "xmlrpcmethod_command(): invalid service %s", parv[3]);

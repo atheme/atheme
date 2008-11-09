@@ -137,13 +137,11 @@ static void nickserv_config_ready(void *unused)
 {
 	int i;
 
-        if (nicksvs.me)
-                del_service(nicksvs.me);
-
-        nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-                                 nicksvs.host, nicksvs.real,
-				 nickserv, &ns_cmdtree);
-        nicksvs.disp = nicksvs.me->disp;
+	nicksvs.nick = nicksvs.me->nick;
+	nicksvs.user = nicksvs.me->user;
+	nicksvs.host = nicksvs.me->host;
+	nicksvs.real = nicksvs.me->real;
+	nicksvs.disp = nicksvs.me->disp;
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
@@ -164,12 +162,7 @@ void _modinit(module_t *m)
         hook_add_event("nick_check");
         hook_add_hook("nick_check", nickserv_handle_nickchange);
 
-        if (!cold_start)
-        {
-                nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-			nicksvs.host, nicksvs.real, nickserv, &ns_cmdtree);
-                nicksvs.disp = nicksvs.me->disp;
-        }
+	nicksvs.me = service_add("nickserv", nickserv, &ns_cmdtree, &conf_ni_table);
 	authservice_loaded++;
 }
 
@@ -177,7 +170,12 @@ void _moddeinit(void)
 {
         if (nicksvs.me)
 	{
-                del_service(nicksvs.me);
+		nicksvs.nick = NULL;
+		nicksvs.user = NULL;
+		nicksvs.host = NULL;
+		nicksvs.real = NULL;
+		nicksvs.disp = NULL;
+                service_delete(nicksvs.me);
 		nicksvs.me = NULL;
 	}
 	authservice_loaded--;

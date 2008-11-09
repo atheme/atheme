@@ -18,6 +18,7 @@ DECLARE_MODULE_V1
 
 service_t *catserv;
 list_t catserv_cmdtree;
+list_t catserv_conftable;
 
 static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[]);
 static void catserv_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -30,7 +31,7 @@ command_t catserv_help = { "HELP", "Displays contextual help information.",
 
 void _modinit(module_t *m)
 {
-	catserv = add_service("CatServ", "meow", "meowth.nu", "Kitty cat!", catserv_handler, &catserv_cmdtree);
+	catserv = service_add("catserv", catserv_handler, &catserv_cmdtree, &catserv_conftable);
 
 	command_add(&catserv_meow, &catserv_cmdtree);
 	command_add(&catserv_help, &catserv_cmdtree);
@@ -41,7 +42,7 @@ void _moddeinit()
 	command_delete(&catserv_meow, &catserv_cmdtree);
 	command_delete(&catserv_help, &catserv_cmdtree);
 
-	del_service(catserv);
+	service_delete(catserv);
 }
 
 static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[])

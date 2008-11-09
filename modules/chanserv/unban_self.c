@@ -68,7 +68,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 
 	if (target && irccasecmp(target, si->su->nick))
 	{
-		command_fail(si, fault_noprivs, _("You may only unban yourself via %s."), si->service->name);
+		command_fail(si, fault_noprivs, _("You may only unban yourself via %s."), si->service->nick);
 		if (validhostmask(target))
 			command_fail(si, fault_noprivs, _("Try \2/mode %s -b %s\2"), channel, target);
 		return;

@@ -51,17 +51,10 @@ DECLARE_MODULE_V1
 #define DIR_SET		1
 #define DIR_EQUAL	2
 
-struct
-{
-	char *nick;
-	char *user;
-	char *host;
-	char *real;
-} alis_config;
-
 service_t *alis;
 list_t alis_cmdtree;
 list_t alis_helptree;
+list_t alis_conftable;
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -88,112 +81,26 @@ struct alis_query
 	int skip;
 };
 
-/* Configuration */
-list_t conf_alis_table;
-static int conf_alis_nick(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	free(alis_config.nick);
-	alis_config.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_alis_user(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	free(alis_config.user);
-	alis_config.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_alis_host(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	free(alis_config.host);
-	alis_config.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_alis_real(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	free(alis_config.real);
-	alis_config.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_alis(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_alis_table);
-	return 0;
-}
-
-static void alis_config_ready(void *unused)
-{
-	if (alis)
-		del_service(alis);
-
-	alis = add_service(alis_config.nick, alis_config.user, alis_config.host ? alis_config.host : me.name, alis_config.real, alis_handler, &alis_cmdtree);
-
-	hook_del_hook("config_ready", alis_config_ready);
-}
-
 void _modinit(module_t *m)
 {
-	hook_add_event("config_ready");
-	hook_add_hook("config_ready", alis_config_ready);
-
-	add_top_conf("ALIS", conf_alis);
-	add_conf_item("NICK", &conf_alis_table, conf_alis_nick);
-	add_conf_item("USER", &conf_alis_table, conf_alis_user);
-	add_conf_item("HOST", &conf_alis_table, conf_alis_host);
-	add_conf_item("REAL", &conf_alis_table, conf_alis_real);
-	alis_config.nick = sstrdup("ALIS");
-	alis_config.user = sstrdup("alis");
-	alis_config.host = NULL;
-	alis_config.real = sstrdup("Channel Directory");
-
 	command_add(&alis_list, &alis_cmdtree);
 	command_add(&alis_help, &alis_cmdtree);
 
 	help_addentry(&alis_helptree, "HELP", "help/help", NULL);
 	help_addentry(&alis_helptree, "LIST", "help/alis/list", NULL);
+
+	alis = service_add("alis", alis_handler, &alis_cmdtree, &alis_conftable);
 }
 
 void _moddeinit()
 {
-	del_conf_item("REAL", &conf_alis_table);
-	del_conf_item("HOST", &conf_alis_table);
-	del_conf_item("USER", &conf_alis_table);
-	del_conf_item("NICK", &conf_alis_table);
-	del_top_conf("ALIS");
-
-	hook_del_hook("config_ready", alis_config_ready);
-
-	free(alis_config.nick);
-	free(alis_config.user);
-	free(alis_config.host);
-	free(alis_config.real);
-
 	command_delete(&alis_list, &alis_cmdtree);
 	command_delete(&alis_help, &alis_cmdtree);
 
 	help_delentry(&alis_helptree, "HELP");
 	help_delentry(&alis_helptree, "LIST");
 
-	del_service(alis);
+	service_delete(alis);
 }
 
 static int alis_parse_mode(const char *text, int *key, int *limit, int *ext)
@@ -504,10 +411,10 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (command == NULL)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), alis->name);
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), alis->nick);
 		command_success_nodata(si, _("\2%s\2 allows searching for channels with more\n"
 					"flexibility than the /list command."),
-				alis->name);
+				alis->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", alis->disp);

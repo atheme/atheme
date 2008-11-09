@@ -57,15 +57,11 @@ static void memoserv(sourceinfo_t *si, int parc, char *parv[])
 
 static void memoserv_config_ready(void *unused)
 {
-	if (memosvs.me)
-		del_service(memosvs.me);
-
-	memosvs.me = add_service(memosvs.nick, memosvs.user,
-				 memosvs.host, memosvs.real,
-				 memoserv, &ms_cmdtree);
+	memosvs.nick = memosvs.me->nick;
+	memosvs.user = memosvs.me->user;
+	memosvs.host = memosvs.me->host;
+	memosvs.real = memosvs.me->real;
 	memosvs.disp = memosvs.me->disp;
-
-        hook_del_hook("config_ready", memoserv_config_ready);
 }
 
 void _modinit(module_t *m)
@@ -79,21 +75,22 @@ void _modinit(module_t *m)
 	hook_add_event("user_away");
 	hook_add_hook("user_away", on_user_away);
 
-        if (!cold_start)
-        {
-                memosvs.me = add_service(memosvs.nick, memosvs.user,
-			memosvs.host, memosvs.real, memoserv, &ms_cmdtree);
-                memosvs.disp = memosvs.me->disp;
-        }
+	memosvs.me = service_add("memoserv", memoserv, &ms_cmdtree, &conf_ms_table);
 }
 
 void _moddeinit(void)
 {
         if (memosvs.me)
 	{
-                del_service(memosvs.me);
+		memosvs.nick = NULL;
+		memosvs.user = NULL;
+		memosvs.host = NULL;
+		memosvs.real = NULL;
+		memosvs.disp = NULL;
+                service_delete(memosvs.me);
 		memosvs.me = NULL;
 	}
+	hook_del_hook("config_ready", memoserv_config_ready);
 }
 
 static void on_user_identify(void *vptr)

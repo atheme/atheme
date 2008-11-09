@@ -54,15 +54,11 @@ static void oservice(sourceinfo_t *si, int parc, char *parv[])
 
 static void operserv_config_ready(void *unused)
 {
-        if (opersvs.me)
-                del_service(opersvs.me);
-
-        opersvs.me = add_service(opersvs.nick, opersvs.user,
-                                 opersvs.host, opersvs.real,
-				 oservice, &os_cmdtree);
-        opersvs.disp = opersvs.me->disp;
-
-        hook_del_hook("config_ready", operserv_config_ready);
+	opersvs.nick = opersvs.me->nick;
+	opersvs.user = opersvs.me->user;
+	opersvs.host = opersvs.me->host;
+	opersvs.real = opersvs.me->real;
+	opersvs.disp = opersvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -70,21 +66,22 @@ void _modinit(module_t *m)
         hook_add_event("config_ready");
         hook_add_hook("config_ready", operserv_config_ready);
 
-        if (!cold_start)
-        {
-                opersvs.me = add_service(opersvs.nick, opersvs.user,
-                        opersvs.host, opersvs.real, oservice, &os_cmdtree);
-                opersvs.disp = opersvs.me->disp;
-        }
+        opersvs.me = service_add("operserv", oservice, &os_cmdtree, &conf_oi_table);
 }
 
 void _moddeinit(void)
 {
 	if (opersvs.me)
 	{
-		del_service(opersvs.me);
+		opersvs.nick = NULL;
+		opersvs.user = NULL;
+		opersvs.host = NULL;
+		opersvs.real = NULL;
+		opersvs.disp = NULL;
+		service_delete(opersvs.me);
 		opersvs.me = NULL;
 	}
+        hook_del_hook("config_ready", operserv_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

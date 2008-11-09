@@ -11,7 +11,9 @@
 #define SERVTREE_H
 
 struct service_ {
-	char *name;
+	char *internal_name;
+
+	char *nick;
 	char *user;
 	char *host;
 	char *real;
@@ -25,14 +27,18 @@ struct service_ {
 	list_t *cmdtree;
 
 	boolean_t chanmsg;
+
+	list_t *conf_table;
 };
 
+E mowgli_patricia_t *services_name;
+E mowgli_patricia_t *services_nick;
+
 E void servtree_init(void);
-E service_t *add_service(char *name, char *user, char *host, char *real,
-        void (*handler)(sourceinfo_t *si, int parc, char *parv[]),
-        list_t *cmdtree);
-E void del_service(service_t *sptr);
-E service_t *find_service(char *name);
+E service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree, list_t *conf_table);
+E void service_delete(service_t *sptr);
+E service_t *service_find(const char *name);
+E service_t *service_find_nick(const char *nick);
 E char *service_name(char *name);
 E void service_set_chanmsg(service_t *, boolean_t);
 

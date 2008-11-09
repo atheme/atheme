@@ -77,10 +77,6 @@ static int c_si_mdlimit(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
 
 /* CService client information. */
-static int c_ci_nick(config_entry_t *);
-static int c_ci_user(config_entry_t *);
-static int c_ci_host(config_entry_t *);
-static int c_ci_real(config_entry_t *);
 static int c_ci_fantasy(config_entry_t *);
 static int c_ci_vop(config_entry_t *);
 static int c_ci_hop(config_entry_t *);
@@ -93,46 +89,12 @@ static int c_ci_maxchanacs(config_entry_t *);
 static int c_ci_maxfounders(config_entry_t *);
 static int c_ci_deftemplates(config_entry_t *);
 
-/* GService client information. */
-static int c_gl_nick(config_entry_t *);
-static int c_gl_user(config_entry_t *);
-static int c_gl_host(config_entry_t *);
-static int c_gl_real(config_entry_t *);
-
-/* OService client information. */
-static int c_oi_nick(config_entry_t *);
-static int c_oi_user(config_entry_t *);
-static int c_oi_host(config_entry_t *);
-static int c_oi_real(config_entry_t *);
-
 /* NickServ client information. */
-static int c_ni_nick(config_entry_t *);
-static int c_ni_user(config_entry_t *);
-static int c_ni_host(config_entry_t *);
-static int c_ni_real(config_entry_t *);
 static int c_ni_spam(config_entry_t *);
 static int c_ni_no_nick_ownership(config_entry_t *);
 static int c_ni_expire(config_entry_t *);
 static int c_ni_enforce_expire(config_entry_t *);
 static int c_ni_enforce_delay(config_entry_t *);
-
-/* SaslServ client information. */
-static int c_ss_nick(config_entry_t *);
-static int c_ss_user(config_entry_t *);
-static int c_ss_host(config_entry_t *);
-static int c_ss_real(config_entry_t *);
-
-/* MemoServ client information. */
-static int c_ms_nick(config_entry_t *);
-static int c_ms_user(config_entry_t *);
-static int c_ms_host(config_entry_t *);
-static int c_ms_real(config_entry_t *);
-
-/* GameServ client information. */
-static int c_gs_nick(config_entry_t *);
-static int c_gs_user(config_entry_t *);
-static int c_gs_host(config_entry_t *);
-static int c_gs_real(config_entry_t *);
 
 /* language:: stuff */
 static int c_la_name(config_entry_t *);
@@ -293,8 +255,6 @@ void conf_init(void)
 		free(me.adminemail);
 	if (me.mta)
 		free(me.mta);
-	if (chansvs.nick)
-		free(chansvs.nick);
 	if (config_options.chan)
 		free(config_options.chan);
 	if (config_options.global)
@@ -302,7 +262,7 @@ void conf_init(void)
 	if (config_options.languagefile)
 		free(config_options.languagefile);
 
-	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = 
+	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = config_options.chan = 
 		config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
@@ -344,14 +304,8 @@ void conf_init(void)
 			free(me.desc);
 		if (me.vhost)
 			free(me.vhost);
-		if (chansvs.user)
-			free(chansvs.user);
-		if (chansvs.host)
-			free(chansvs.host);
-		if (chansvs.real)
-			free(chansvs.real);
 
-		me.name = me.desc = me.vhost = chansvs.user = chansvs.host = chansvs.real = NULL;
+		me.name = me.desc = me.vhost = NULL;
 
 		set_match_mapping(MATCH_RFC1459);	/* default to RFC compliancy */
 	}
@@ -585,10 +539,6 @@ void init_newconf(void)
 	add_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, c_gi_uplink_sendq_limit);
 
 	/* chanserv{} block */
-	add_conf_item("NICK", &conf_ci_table, c_ci_nick);
-	add_conf_item("USER", &conf_ci_table, c_ci_user);
-	add_conf_item("HOST", &conf_ci_table, c_ci_host);
-	add_conf_item("REAL", &conf_ci_table, c_ci_real);
 	add_conf_item("FANTASY", &conf_ci_table, c_ci_fantasy);
 	add_conf_item("VOP", &conf_ci_table, c_ci_vop);
 	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
@@ -602,22 +552,10 @@ void init_newconf(void)
 	add_conf_item("DEFTEMPLATES", &conf_ci_table, c_ci_deftemplates);
 
 	/* global{} block */
-	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
-	add_conf_item("USER", &conf_gl_table, c_gl_user);
-	add_conf_item("HOST", &conf_gl_table, c_gl_host);
-	add_conf_item("REAL", &conf_gl_table, c_gl_real);
 
 	/* operserv{} block */
-	add_conf_item("NICK", &conf_oi_table, c_oi_nick);
-	add_conf_item("USER", &conf_oi_table, c_oi_user);
-	add_conf_item("HOST", &conf_oi_table, c_oi_host);
-	add_conf_item("REAL", &conf_oi_table, c_oi_real);
 
 	/* nickserv{} block */
-	add_conf_item("NICK", &conf_ni_table, c_ni_nick);
-	add_conf_item("USER", &conf_ni_table, c_ni_user);
-	add_conf_item("HOST", &conf_ni_table, c_ni_host);
-	add_conf_item("REAL", &conf_ni_table, c_ni_real);
 	add_conf_item("SPAM", &conf_ni_table, c_ni_spam);
 	add_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, c_ni_no_nick_ownership);
 	add_conf_item("EXPIRE", &conf_ni_table, c_ni_expire);
@@ -625,22 +563,10 @@ void init_newconf(void)
 	add_conf_item("ENFORCE_DELAY", &conf_ni_table, c_ni_enforce_delay);
 
 	/* saslserv{} block */
-	add_conf_item("NICK", &conf_ss_table, c_ss_nick);
-	add_conf_item("USER", &conf_ss_table, c_ss_user);
-	add_conf_item("HOST", &conf_ss_table, c_ss_host);
-	add_conf_item("REAL", &conf_ss_table, c_ss_real);
 
 	/* memoserv{} block */
-	add_conf_item("NICK", &conf_ms_table, c_ms_nick);
-	add_conf_item("USER", &conf_ms_table, c_ms_user);
-	add_conf_item("HOST", &conf_ms_table, c_ms_host);
-	add_conf_item("REAL", &conf_ms_table, c_ms_real);
 
 	/* memoserv{} block */
-	add_conf_item("NICK", &conf_gs_table, c_gs_nick);
-	add_conf_item("USER", &conf_gs_table, c_gs_user);
-	add_conf_item("HOST", &conf_gs_table, c_gs_host);
-	add_conf_item("REAL", &conf_gs_table, c_gs_real);
 	
 	/* language:: stuff */
 	add_conf_item("NAME", &conf_la_table, c_la_name);
@@ -1238,46 +1164,6 @@ static int c_si_casemapping(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ci_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ci_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ci_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_ci_fantasy(config_entry_t *ce)
 {
 	chansvs.fantasy = TRUE;
@@ -1553,86 +1439,6 @@ static int c_gi_expire(config_entry_t *ce)
 	return 0;
 }
 
-static int c_oi_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	opersvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_oi_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	opersvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_oi_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	opersvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_oi_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	opersvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ni_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ni_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ni_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ni_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_ni_spam(config_entry_t *ce)
 {
 	nicksvs.spam = TRUE;
@@ -1671,166 +1477,6 @@ static int c_ni_enforce_delay(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	nicksvs.enforce_delay = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_ss_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	saslsvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ss_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	saslsvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ss_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	saslsvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ss_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	saslsvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ms_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	memosvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ms_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	memosvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ms_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	memosvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ms_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	memosvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gs_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	gamesvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gs_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	gamesvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gs_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	gamesvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gs_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	gamesvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gl_nick(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	globsvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gl_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	globsvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gl_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	globsvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gl_real(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	globsvs.real = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

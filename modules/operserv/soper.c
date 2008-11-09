@@ -280,7 +280,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 		if (mu->soper->password == NULL &&
 				!command_find(si->service->cmdtree, "IDENTIFY"))
 		{
-			command_fail(si, fault_noprivs, _("Refusing to set a services operator password if %s IDENTIFY is not loaded."), si->service->name);
+			command_fail(si, fault_noprivs, _("Refusing to set a services operator password if %s IDENTIFY is not loaded."), si->service->nick);
 			return;
 		}
 		wallops("\2%s\2 is changing services operator password for \2%s\2",
@@ -297,7 +297,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 			if (u->flags & UF_SOPER_PASS)
 			{
 				u->flags &= ~UF_SOPER_PASS;
-				notice(si->service->name, u->nick, "You are no longer identified to %s.", si->service->name);
+				notice(si->service->nick, u->nick, "You are no longer identified to %s.", si->service->nick);
 			}
 		}
 	}

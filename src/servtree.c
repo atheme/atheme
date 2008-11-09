@@ -21,9 +21,13 @@
  */
 
 #include "atheme.h"
+#include "pmodule.h"
 
-mowgli_patricia_t *services;
+mowgli_patricia_t *services_name;
+mowgli_patricia_t *services_nick;
 static BlockHeap *service_heap;
+
+static void servtree_update(void *dummy);
 
 static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 {
@@ -32,13 +36,17 @@ static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 void servtree_init(void)
 {
 	service_heap = BlockHeapCreate(sizeof(service_t), 12);
-	services = mowgli_patricia_create(strcasecanon);
+	services_name = mowgli_patricia_create(strcasecanon);
+	services_nick = mowgli_patricia_create(strcasecanon);
 
 	if (!service_heap)
 	{
 		slog(LG_INFO, "servtree_init(): Block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
+
+        hook_add_event("config_ready");
+	hook_add_hook("config_ready", servtree_update);
 }
 
 static void me_me_init(void)
@@ -48,41 +56,122 @@ static void me_me_init(void)
 	me.me = server_add(me.name, 0, NULL, me.numeric ? me.numeric : NULL, me.desc);
 }
 
-service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree)
+static int conf_service_nick(config_entry_t *ce)
+{
+	service_t *sptr;
+
+	if (!ce->ce_vardata)
+		return -1;
+
+	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	if (!sptr)
+		return -1;
+
+	mowgli_patricia_delete(services_nick, sptr->nick);
+	free(sptr->nick);
+	sptr->nick = sstrdup(ce->ce_vardata);
+	mowgli_patricia_add(services_nick, sptr->nick, sptr);
+
+	return 0;
+}
+
+static int conf_service_user(config_entry_t *ce)
+{
+	service_t *sptr;
+
+	if (!ce->ce_vardata)
+		return -1;
+
+	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	if (!sptr)
+		return -1;
+
+	free(sptr->user);
+	sptr->user = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_service_host(config_entry_t *ce)
+{
+	service_t *sptr;
+
+	if (!ce->ce_vardata)
+		return -1;
+
+	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	if (!sptr)
+		return -1;
+
+	free(sptr->host);
+	sptr->host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_service_real(config_entry_t *ce)
+{
+	service_t *sptr;
+
+	if (!ce->ce_vardata)
+		return -1;
+
+	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	if (!sptr)
+		return -1;
+
+	free(sptr->real);
+	sptr->real = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_service(config_entry_t *ce)
+{
+	service_t *sptr;
+
+	sptr = service_find(ce->ce_varname);
+	if (!sptr)
+		return -1;
+
+	subblock_handler(ce, sptr->conf_table);
+	return 0;
+}
+
+service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree, list_t *conf_table)
 {
 	service_t *sptr;
 	user_t *u;
+	struct ConfTable *subblock;
 
-	if (me.me == NULL)
-		me_me_init();
-	
-	if ( name == NULL )
+	if (name == NULL)
 	{
-		slog(LG_INFO, "add_service(): Bad error! We were given a NULL pointer for service name!");
+		slog(LG_INFO, "service_add(): Bad error! We were given a NULL pointer for service name!");
 		return NULL;
 	}
 
-	if ((sptr = find_service(name)))
+	if (service_find(name) || service_find_nick(name))
 	{
-		slog(LG_DEBUG, "add_service(): Service `%s' already exists.", name);
+		slog(LG_INFO, "service_add(): Service `%s' already exists.", name);
 		return NULL;
 	}
 
 	sptr = BlockHeapAlloc(service_heap);
 
-	sptr->name = sstrdup(name);
-	sptr->user = sstrdup(user);
-	sptr->host = sstrdup(host);
-	sptr->real = sstrdup(real);
-
-	/* Display name, either <Service> or <Service>@<Server> */
-	sptr->disp = service_name(name);
+	sptr->internal_name = sstrdup(name);
+	/* default these */
+	sptr->nick = sstrdup(name);
+	sptr->user = sstrdup(name);
+	sptr->host = sstrdup("services.int");
+	sptr->real = sstrdup(name);
+	sptr->disp = sstrdup(name);
 
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
 
 	sptr->cmdtree = cmdtree;
 	sptr->chanmsg = FALSE;
+	sptr->conf_table = conf_table;
 
 	if (me.connected)
 	{
@@ -93,34 +182,44 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 		}
 	}
 
-	sptr->me = user_add(name, user, host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, real, me.me, CURRTIME);
-	sptr->me->flags |= UF_IRCOP;
+	sptr->me = NULL;
 
-	if (me.connected)
-	{
-		if (!ircd->uses_uid)
-			kill_id_sts(NULL, sptr->name, "Attempt to use service nick");
-		introduce_nick(sptr->me);
-		/* if the snoop channel already exists, join it now */
-		if (config_options.chan != NULL && channel_find(config_options.chan) != NULL)
-			join(config_options.chan, name);
-	}
+	mowgli_patricia_add(services_name, sptr->internal_name, sptr);
+	mowgli_patricia_add(services_nick, sptr->nick, sptr);
 
-	mowgli_patricia_add(services, sptr->name, sptr);
+	subblock = find_top_conf(name);
+	if (subblock == NULL)
+		add_top_conf(sptr->internal_name, conf_service);
+	add_conf_item("NICK", sptr->conf_table, conf_service_nick);
+	add_conf_item("USER", sptr->conf_table, conf_service_user);
+	add_conf_item("HOST", sptr->conf_table, conf_service_host);
+	add_conf_item("REAL", sptr->conf_table, conf_service_real);
 
 	return sptr;
 }
 
-void del_service(service_t * sptr)
+void service_delete(service_t *sptr)
 {
-	mowgli_patricia_delete(services, sptr->name);
+	struct ConfTable *subblock;
+
+	mowgli_patricia_delete(services_name, sptr->internal_name);
+	mowgli_patricia_delete(services_nick, sptr->nick);
+
+	del_conf_item("REAL", sptr->conf_table);
+	del_conf_item("HOST", sptr->conf_table);
+	del_conf_item("USER", sptr->conf_table);
+	del_conf_item("NICK", sptr->conf_table);
+	subblock = find_top_conf(sptr->internal_name);
+	if (subblock != NULL && subblock->handler == conf_service)
+		del_top_conf(sptr->internal_name);
 
 	quit_sts(sptr->me, "Service unloaded.");
 	user_delete(sptr->me);
 	sptr->me = NULL;
 	sptr->handler = NULL;
 	free(sptr->disp);	/* service_name() does a malloc() */
-	free(sptr->name);
+	free(sptr->internal_name);
+	free(sptr->nick);
 	free(sptr->user);
 	free(sptr->host);
 	free(sptr->real);
@@ -128,9 +227,62 @@ void del_service(service_t * sptr)
 	BlockHeapFree(service_heap, sptr);
 }
 
-service_t *find_service(char *name)
+service_t *service_find(const char *name)
 {
-	return mowgli_patricia_retrieve(services, name);
+	return mowgli_patricia_retrieve(services_name, name);
+}
+
+service_t *service_find_nick(const char *nick)
+{
+	return mowgli_patricia_retrieve(services_nick, nick);
+}
+
+static void servtree_update(void *dummy)
+{
+	service_t *sptr;
+	mowgli_patricia_iteration_state_t state;
+
+	if (me.me == NULL)
+		me_me_init();
+	
+	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
+	{
+		free(sptr->disp);
+		sptr->disp = service_name(sptr->nick);
+		if (sptr->me != NULL)
+		{
+			if (!strcmp(sptr->nick, sptr->me->nick) &&
+					!strcmp(sptr->user, sptr->me->user) &&
+					!strcmp(sptr->host, sptr->me->host) &&
+					!strcmp(sptr->real, sptr->me->gecos))
+				continue;
+			if (me.connected)
+				quit_sts(sptr->me, "Updating information");
+			/* XXX what if nick already exists */
+			user_changenick(sptr->me, sptr->nick, CURRTIME);
+			strlcpy(sptr->me->user, sptr->user, sizeof sptr->me->user);
+			strlcpy(sptr->me->host, sptr->host, sizeof sptr->me->host);
+			strlcpy(sptr->me->gecos, sptr->real, sizeof sptr->me->gecos);
+			if (me.connected)
+				reintroduce_user(sptr->me);
+		}
+		else
+		{
+			/* XXX what if nick already exists */
+			sptr->me = user_add(sptr->nick, sptr->user, sptr->host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, sptr->real, me.me, CURRTIME);
+			sptr->me->flags |= UF_IRCOP;
+
+			if (me.connected)
+			{
+				if (!ircd->uses_uid)
+					kill_id_sts(NULL, sptr->nick, "Attempt to use service nick");
+				introduce_nick(sptr->me);
+				/* if the snoop channel already exists, join it now */
+				if (config_options.chan != NULL && channel_find(config_options.chan) != NULL)
+					join(config_options.chan, sptr->nick);
+			}
+		}
+	}
 }
 
 char *service_name(char *name)

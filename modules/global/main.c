@@ -207,15 +207,11 @@ static void gservice(sourceinfo_t *si, int parc, char *parv[])
 
 static void global_config_ready(void *unused)
 {
-	if (globsvs.me)
-		del_service(globsvs.me);
-
-	globsvs.me = add_service(globsvs.nick, globsvs.user,
-			globsvs.host, globsvs.real,
-			gservice, &gs_cmdtree);
+	globsvs.nick = globsvs.me->nick;
+	globsvs.user = globsvs.me->user;
+	globsvs.host = globsvs.me->host;
+	globsvs.real = globsvs.me->real;
 	globsvs.disp = globsvs.me->disp;
-
-	hook_del_hook("config_ready", global_config_ready);
 }
 
 void _modinit(module_t *m)
@@ -226,13 +222,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", global_config_ready);
 
-	if (!cold_start)
-	{
-		globsvs.me = add_service(globsvs.nick, globsvs.user,
-				globsvs.host, globsvs.real,
-				gservice, &gs_cmdtree);
-		globsvs.disp = globsvs.me->disp;
-	}
+	globsvs.me = service_add("global", gservice, &gs_cmdtree, &conf_gl_table);
 
 	command_add(&gs_global, &gs_cmdtree);
 
@@ -252,7 +242,12 @@ void _moddeinit(void)
 {
 	if (globsvs.me)
 	{
-		del_service(globsvs.me);
+		globsvs.nick = NULL;
+		globsvs.user = NULL;
+		globsvs.host = NULL;
+		globsvs.real = NULL;
+		globsvs.disp = NULL;
+		service_delete(globsvs.me);
 		globsvs.me = NULL;
 	}
 
@@ -268,6 +263,8 @@ void _moddeinit(void)
 	help_delentry(&gs_helptree, "HELP");
 
 	command_delete(&gs_help, &gs_cmdtree);
+
+	hook_del_hook("config_ready", global_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

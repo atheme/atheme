@@ -123,7 +123,7 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 				return;
 			}
 
-			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->name);
+			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
 
 			ifnest = ifnest_false = 0;
 			while (fgets(buf, BUFSIZE, help_file))
@@ -161,7 +161,7 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 		}
 		else if (c->func)
 		{
-			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->name);
+			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
 
 			c->func(si);
 

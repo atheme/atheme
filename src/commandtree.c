@@ -142,7 +142,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 	}
 	else
 	{
-		notice(svs->name, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+		notice(svs->nick, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 	}
 }
 

@@ -78,7 +78,7 @@ unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 
 	if (handler != NULL)
 	{
-		handler(cmd, args, si->su->nick, si->service->name);
+		handler(cmd, args, si->su->nick, si->service->nick);
 		return 1;
 	}
 
