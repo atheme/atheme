@@ -25,6 +25,7 @@ list_t gs_cmdtree;
 list_t *os_cmdtree;
 list_t gs_helptree;
 list_t *os_helptree;
+list_t gs_conftable;
 
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
@@ -222,7 +223,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", global_config_ready);
 
-	globsvs.me = service_add("global", gservice, &gs_cmdtree, &conf_gl_table);
+	globsvs.me = service_add("global", gservice, &gs_cmdtree, &gs_conftable);
 
 	command_add(&gs_global, &gs_cmdtree);
 

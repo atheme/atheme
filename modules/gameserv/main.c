@@ -18,6 +18,7 @@ DECLARE_MODULE_V1
 
 list_t gs_cmdtree;
 list_t gs_helptree;
+list_t gs_conftable;
 
 /* main services client routine */
 static void gameserv(sourceinfo_t *si, int parc, char *parv[])
@@ -66,7 +67,7 @@ void _modinit(module_t *m)
         hook_add_event("config_ready");
         hook_add_hook("config_ready", gameserv_config_ready);
 
-	gamesvs.me = service_add("gameserv", gameserv, &gs_cmdtree, &conf_gs_table);
+	gamesvs.me = service_add("gameserv", gameserv, &gs_cmdtree, &gs_conftable);
 }
 
 void _moddeinit(void)

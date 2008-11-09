@@ -39,14 +39,9 @@ PARAM_ERROR(config_entry_t *ce)
 
 static int c_serverinfo(config_entry_t *);
 static int c_cservice(config_entry_t *);
-static int c_gservice(config_entry_t *);
-static int c_oservice(config_entry_t *);
 static int c_general(config_entry_t *);
 static int c_uplink(config_entry_t *);
 static int c_nickserv(config_entry_t *);
-static int c_saslserv(config_entry_t *);
-static int c_memoserv(config_entry_t *);
-static int c_gameserv(config_entry_t *);
 static int c_loadmodule(config_entry_t *);
 static int c_operclass(config_entry_t *);
 static int c_operator(config_entry_t *);
@@ -168,14 +163,10 @@ static struct Token logflags[] = {
 list_t confblocks;
 list_t conf_si_table;
 list_t conf_ci_table;
-list_t conf_gl_table;
-list_t conf_oi_table;
 list_t conf_ni_table;
 list_t conf_gi_table;
 list_t conf_ms_table;
 list_t conf_la_table;
-list_t conf_ss_table;
-list_t conf_gs_table;
 
 /* *INDENT-ON* */
 
@@ -478,15 +469,7 @@ void init_newconf(void)
 	/* First we set up the blocks. */
 	add_top_conf("SERVERINFO", c_serverinfo);
 	add_top_conf("CHANSERV", c_cservice);
-	add_top_conf("CSERVICE", c_cservice);
-	add_top_conf("GLOBAL", c_gservice);
-	add_top_conf("GSERVICE", c_gservice);
-	add_top_conf("OPERSERV", c_oservice);
-	add_top_conf("OSERVICE", c_oservice);
 	add_top_conf("NICKSERV", c_nickserv);
-	add_top_conf("SASLSERV", c_saslserv);
-	add_top_conf("MEMOSERV", c_memoserv);
-	add_top_conf("GAMESERV", c_gameserv);
 	add_top_conf("UPLINK", c_uplink);
 	add_top_conf("GENERAL", c_general);
 	add_top_conf("LOADMODULE", c_loadmodule);
@@ -585,39 +568,9 @@ static int c_cservice(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gservice(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_gl_table);
-	return 0;
-}
-
-static int c_oservice(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_oi_table);
-	return 0;
-}
-
 static int c_nickserv(config_entry_t *ce)
 {
 	subblock_handler(ce, &conf_ni_table);
-	return 0;
-}
-
-static int c_saslserv(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_ss_table);
-	return 0;
-}
-
-static int c_memoserv(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_ms_table);
-	return 0;
-}
-
-static int c_gameserv(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_gs_table);
 	return 0;
 }
 

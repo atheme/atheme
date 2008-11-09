@@ -67,13 +67,7 @@ extern int token_to_value(struct Token token_table[], const char *token);
 
 /* XXX */
 E list_t conf_ci_table;
-E list_t conf_gl_table;
-E list_t conf_oi_table;
 E list_t conf_ni_table;
-E list_t conf_gi_table;
-E list_t conf_ms_table;
-E list_t conf_ss_table;
-E list_t conf_gs_table;
 
 #endif
 

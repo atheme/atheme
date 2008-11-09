@@ -21,6 +21,7 @@ static void on_user_away(void *vptr);
 
 list_t ms_cmdtree;
 list_t ms_helptree;
+list_t ms_conftable;
 
 /* main services client routine */
 static void memoserv(sourceinfo_t *si, int parc, char *parv[])
@@ -75,7 +76,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_away");
 	hook_add_hook("user_away", on_user_away);
 
-	memosvs.me = service_add("memoserv", memoserv, &ms_cmdtree, &conf_ms_table);
+	memosvs.me = service_add("memoserv", memoserv, &ms_cmdtree, &ms_conftable);
 }
 
 void _moddeinit(void)

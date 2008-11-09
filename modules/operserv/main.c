@@ -18,6 +18,7 @@ DECLARE_MODULE_V1
 
 list_t os_cmdtree;
 list_t os_helptree;
+list_t os_conftable;
 
 /* main services client routine */
 static void oservice(sourceinfo_t *si, int parc, char *parv[])
@@ -66,7 +67,7 @@ void _modinit(module_t *m)
         hook_add_event("config_ready");
         hook_add_hook("config_ready", operserv_config_ready);
 
-        opersvs.me = service_add("operserv", oservice, &os_cmdtree, &conf_oi_table);
+        opersvs.me = service_add("operserv", oservice, &os_cmdtree, &os_conftable);
 }
 
 void _moddeinit(void)

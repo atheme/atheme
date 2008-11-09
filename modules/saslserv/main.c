@@ -16,6 +16,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+list_t saslserv_conftable;
+
 list_t sessions;
 list_t sasl_mechanisms;
 
@@ -83,7 +85,7 @@ void _modinit(module_t *m)
 	hook_add_hook("user_add", sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
-	saslsvs.me = service_add("saslserv", saslserv, NULL, &conf_ss_table);
+	saslsvs.me = service_add("saslserv", saslserv, NULL, &saslserv_conftable);
 	authservice_loaded++;
 }
 
