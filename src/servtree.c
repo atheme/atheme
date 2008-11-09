@@ -143,6 +143,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	service_t *sptr;
 	user_t *u;
 	struct ConfTable *subblock;
+	const char *nick;
 
 	if (name == NULL)
 	{
@@ -159,12 +160,17 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	sptr = BlockHeapAlloc(service_heap);
 
 	sptr->internal_name = sstrdup(name);
-	/* default these */
-	sptr->nick = sstrdup(name);
-	sptr->user = sstrdup(name);
+	/* default these, to reasonably safe values */
+	nick = strchr(name, ':');
+	if (nick != NULL)
+		nick++;
+	else
+		nick = name;
+	sptr->nick = sstrndup(nick, 9);
+	sptr->user = sstrndup(nick, 10);
 	sptr->host = sstrdup("services.int");
-	sptr->real = sstrdup(name);
-	sptr->disp = sstrdup(name);
+	sptr->real = sstrndup(name, 50);
+	sptr->disp = sstrdup(sptr->nick);
 
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
