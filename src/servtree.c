@@ -56,9 +56,20 @@ static void me_me_init(void)
 	me.me = server_add(me.name, 0, NULL, me.numeric ? me.numeric : NULL, me.desc);
 }
 
+static void create_unique_service_nick(char *dest, size_t len)
+{
+	unsigned int i = arc4random();
+
+	do
+		snprintf(dest, len, "ath%06x", (i++) & 0xFFFFFF);
+	while (service_find_nick(dest) || user_find_named(dest));
+	return;
+}
+
 static int conf_service_nick(config_entry_t *ce)
 {
 	service_t *sptr;
+	char newnick[9 + 1];
 
 	if (!ce->ce_vardata)
 		return -1;
@@ -69,7 +80,15 @@ static int conf_service_nick(config_entry_t *ce)
 
 	mowgli_patricia_delete(services_nick, sptr->nick);
 	free(sptr->nick);
-	sptr->nick = sstrdup(ce->ce_vardata);
+	if (service_find_nick(ce->ce_vardata))
+	{
+		create_unique_service_nick(newnick, sizeof newnick);
+		slog(LG_INFO, "conf_service_nick(): using nick %s for service %s due to duplication",
+				newnick, sptr->internal_name);
+		sptr->nick = sstrdup(newnick);
+	}
+	else
+		sptr->nick = sstrdup(ce->ce_vardata);
 	mowgli_patricia_add(services_nick, sptr->nick, sptr);
 
 	return 0;
@@ -141,9 +160,9 @@ static int conf_service(config_entry_t *ce)
 service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree, list_t *conf_table)
 {
 	service_t *sptr;
-	user_t *u;
 	struct ConfTable *subblock;
 	const char *nick;
+	char newnick[9 + 1];
 
 	if (name == NULL)
 	{
@@ -151,7 +170,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		return NULL;
 	}
 
-	if (service_find(name) || service_find_nick(name))
+	if (service_find(name))
 	{
 		slog(LG_INFO, "service_add(): Service `%s' already exists.", name);
 		return NULL;
@@ -166,7 +185,14 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		nick++;
 	else
 		nick = name;
-	sptr->nick = sstrndup(nick, 9);
+	strlcpy(newnick, nick, sizeof newnick);
+	if (service_find_nick(newnick))
+	{
+		create_unique_service_nick(newnick, sizeof newnick);
+		slog(LG_INFO, "service_add(): using nick %s for service %s due to duplication",
+				newnick, name);
+	}
+	sptr->nick = sstrdup(newnick);
 	sptr->user = sstrndup(nick, 10);
 	sptr->host = sstrdup("services.int");
 	sptr->real = sstrndup(name, 50);
@@ -178,15 +204,6 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	sptr->cmdtree = cmdtree;
 	sptr->chanmsg = FALSE;
 	sptr->conf_table = conf_table;
-
-	if (me.connected)
-	{
-		u = user_find_named(name);
-		if (u != NULL)
-		{
-			kill_user(NULL, u, "Nick taken by service");
-		}
-	}
 
 	sptr->me = NULL;
 
@@ -247,6 +264,7 @@ static void servtree_update(void *dummy)
 {
 	service_t *sptr;
 	mowgli_patricia_iteration_state_t state;
+	user_t *u;
 
 	if (me.me == NULL)
 		me_me_init();
@@ -264,7 +282,9 @@ static void servtree_update(void *dummy)
 				continue;
 			if (me.connected)
 				quit_sts(sptr->me, "Updating information");
-			/* XXX what if nick already exists */
+			u = user_find_named(sptr->nick);
+			if (u != NULL && u != sptr->me)
+				kill_user(NULL, u, "Nick taken by service");
 			user_changenick(sptr->me, sptr->nick, CURRTIME);
 			strlcpy(sptr->me->user, sptr->user, sizeof sptr->me->user);
 			strlcpy(sptr->me->host, sptr->host, sizeof sptr->me->host);
@@ -274,13 +294,25 @@ static void servtree_update(void *dummy)
 		}
 		else
 		{
-			/* XXX what if nick already exists */
+			u = user_find_named(sptr->nick);
+			if (u != NULL)
+				kill_user(NULL, u, "Nick taken by service");
 			sptr->me = user_add(sptr->nick, sptr->user, sptr->host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, sptr->real, me.me, CURRTIME);
 			sptr->me->flags |= UF_IRCOP;
 
 			if (me.connected)
 			{
-				if (!ircd->uses_uid)
+				/*
+				 * Possibly send a kill for the service nick now
+				 * - do not send a kill if we already sent
+				 *   one above
+				 * - do not send a kill if we use UID, with
+				 *   UID we can always kill the other user
+				 *   in nick collisions and killing a nick
+				 *   with UID is likely to cause the desyncs
+				 *   UID is meant to avoid
+				 */
+				if (u == NULL && !ircd->uses_uid)
 					kill_id_sts(NULL, sptr->nick, "Attempt to use service nick");
 				introduce_nick(sptr->me);
 				/* if the snoop channel already exists, join it now */
