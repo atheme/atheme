@@ -384,6 +384,7 @@ fi
 AC_SUBST(PICFLAGS)
 
 ATHEME_C_GCC_TRY_FLAGS([-std=gnu99], atheme_cv_c_gcc_std_gnu99)
+ATHEME_C_GCC_TRY_FLAGS([-Werror-implicit-function-declaration], atheme_cv_c_gcc_w_error_implicit_function_declaration)
 
 AC_ARG_ENABLE(warnings,
 AC_HELP_STRING([--enable-warnings],[ Enable compiler warnings]),
