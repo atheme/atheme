@@ -46,7 +46,6 @@
  * InspIRCd 1.2					modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * PleXusIRCd 3.x				modules/protocol/plexus
- * PTlink IRCd					modules/protocol/ptlink
  * ShadowIRCd 3.3/3.6 family			modules/protocol/shadowircd
  * ShadowIRCd 5.x				modules/protocol/shadowircd5
  * UltimateIRCd 3.0 or later			modules/protocol/ultimate3

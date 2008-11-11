@@ -204,29 +204,6 @@ shared
 
 The above block should do the trick.
 
-ptlink
-------
-
-Atheme's server name must match ServicesServer in network.dconf (on all
-servers on the network).
-
-The following options/features are not recommended: HideServerOnWhois (not
-effective), SecureModes (Atheme does not set channels +r), RestrictedChans (not
-implemented by Atheme), user mode +H (various bugs and tricks allow users to
-see the oper status anyway), stealth mode (highly unethical and various bugs
-and tricks allow users to get around it).
-
-PTlink ircd allows services to do various special things like restarting the
-server; write a module if you want to use those.
-
-By default, Atheme assumes cmode +a (channel admin/protect, AdminWithDot in
-network.dconf) and cmode +h (halfops, compile time option) are enabled. If
-this is not the case, compile and load the ircd_noprotect and/or
-ircd_nohalfops modules from contrib.
-
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
-
 ratbox
 ------
 
