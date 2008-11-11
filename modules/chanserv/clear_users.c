@@ -95,7 +95,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		if (cu->user == si->su || is_internal_client(cu->user))
 			continue;
 
-		kick(chansvs.nick, c->name, cu->user->nick, fullreason);
+		try_kick(chansvs.me->me, c, cu->user, fullreason);
 	}
 
 	/* the channel may be empty now, so our pointer may be bogus! */
