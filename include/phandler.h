@@ -55,7 +55,7 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_RATBOX			11
 #define PROTOCOL_SCYLLA			12
 #define PROTOCOL_SHADOWIRCD		13
-#define PROTOCOL_SORCERY		14
+#define PROTOCOL_SORCERY		14 /* obsolete */
 #define PROTOCOL_ULTIMATE3		15
 #define PROTOCOL_UNDERNET		16
 #define PROTOCOL_UNREAL			17

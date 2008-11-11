@@ -259,21 +259,6 @@ complies with all requirements necessary for compatibility mode.
 Note that only ShadowIRCd 3.2 and later properly support the removal
 of AKILLs, although it may appear to sort of work in earlier versions.
 
-sorcery
--------
-
-You need U:lines for services on all servers on the network. If a server lacks
-U:lines, a storm of mode changes may result.
-
-ircd-sor is designed for services not joining channels, not having the
-ability to prevent services being kicked/deopped and the like. If you want to
-use fantasy commands, you will have to enable join_chans anyway; beware of bots
-fighting with chanserv.
-
-The TOPIC and TOPICAPPEND commands cannot be used to change topics as
-ircd-sor does not allow services to set newer topics. KEEPTOPIC and
-TOPICLOCK can be used, however.
-
 ultimate3
 ---------
 

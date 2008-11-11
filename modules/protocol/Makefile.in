@@ -32,7 +32,6 @@ BASE_SRCS =			\
 	$(SRCDIR)/shadowircd.c	\
 	$(SRCDIR)/shadowircd5.c	\
 	$(SRCDIR)/solidircd.c	\
-	$(SRCDIR)/sorcery.c	\
 	$(SRCDIR)/ultimate3.c	\
 	$(SRCDIR)/undernet.c	\
 	$(SRCDIR)/unreal.c
