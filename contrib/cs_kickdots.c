@@ -27,7 +27,7 @@ on_channel_message(void *p)
 
 		if (metadata_find(mc, "kickdots"))
 		{
-			kick(chansvs.nick, data->c->name, data->u->nick, data->msg);
+			kick(chansvs.me->me, data->c, data->u, data->msg);
 		}
 	}
 }

@@ -102,7 +102,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 					join(mc->name, chansvs.nick);
 			}
 			/* XXX duplicate the whole thing in cs_join()? */
-			kick(chansvs.nick, mc->name, cu->user->nick, "User is banned from this channel");
+			kick(chansvs.me->me, mc->chan, cu->user, "User is banned from this channel");
 			continue;
 		}
 		if (ircd->uses_owner)

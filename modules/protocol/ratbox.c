@@ -181,21 +181,14 @@ static void ratbox_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void ratbox_kick(char *from, char *channel, char *to, char *reason)
+static void ratbox_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	channel_t *chan = channel_find(channel);
-	user_t *user = user_find(to);
-	user_t *from_p = user_find(from);
-
-	if (!chan || !user)
-		return;
-
-	if (chan->ts != 0 || chanuser_find(chan, from_p))
-		sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel, CLIENT_NAME(user), reason);
+	if (c->ts != 0 || chanuser_find(c, source))
+		sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
 	else
-		sts(":%s KICK %s %s :%s", ME, channel, CLIENT_NAME(user), reason);
+		sts(":%s KICK %s %s :%s", ME, c->name, CLIENT_NAME(u), reason);
 
-	chanuser_delete(chan, user);
+	chanuser_delete(c, u);
 }
 
 /* PRIVMSG wrapper */

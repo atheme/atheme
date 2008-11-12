@@ -255,7 +255,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 					}
 					ban(chansvs.me->me, ca->mychan->chan, u);
 					remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
-					kick(chansvs.nick, ca->mychan->name, u->nick, "User is banned from this channel");
+					kick(chansvs.me->me, ca->mychan->chan, u, "User is banned from this channel");
 					continue;
 				}
 

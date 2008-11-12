@@ -151,21 +151,14 @@ static void asuka_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes
 }
 
 /* kicks a user from a channel */
-static void asuka_kick(char *from, char *channel, char *to, char *reason)
+static void asuka_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	channel_t *chan = channel_find(channel);
-	user_t *fptr = user_find_named(from);
-	user_t *user = user_find_named(to);
-
-	if (!chan || !user || !fptr)
-		return;
-
-	if (chanuser_find(chan, fptr))
-		sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
+	if (chanuser_find(c, source))
+		sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
 	else
-		sts("%s K %s %s :%s", me.numeric, channel, user->uid, reason);
+		sts("%s K %s %s :%s", me.numeric, c->name, u->uid, reason);
 
-	chanuser_delete(chan, user);
+	chanuser_delete(c, u);
 }
 
 /* PRIVMSG wrapper */

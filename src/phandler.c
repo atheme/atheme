@@ -29,7 +29,7 @@ void (*introduce_nick) (user_t *u) = generic_introduce_nick;
 void (*wallops_sts) (const char *text) = generic_wallops_sts;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
-void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
+void (*kick) (user_t *source, channel_t *c, user_t *u, const char *reason) = generic_kick;
 void (*msg) (const char *from, const char *target, const char *fmt, ...) = generic_msg;
 void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = generic_notice_user_sts;
 void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = generic_notice_global_sts;
@@ -84,7 +84,7 @@ void generic_chan_lowerts(channel_t *c, user_t *u)
 	join_sts(c, u, TRUE, channel_modes(c, TRUE));
 }
 
-void generic_kick(char *from, char *channel, char *to, char *reason)
+void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
 	/* We can't do anything here. Bail. */
 }

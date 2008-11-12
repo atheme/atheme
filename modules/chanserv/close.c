@@ -69,7 +69,7 @@ static void close_check_join(void *vdata)
 		channel_mode_va(chansvs.me->me, cu->chan, 3, "+isbl", "*!*@*", "1");
 
 		/* clear the channel */
-		kick(chansvs.nick, cu->chan->name, cu->user->nick, "This channel has been closed");
+		kick(chansvs.me->me, cu->chan, cu->user, "This channel has been closed");
 		((hook_channel_joinpart_t *)vdata)->cu = NULL;
 	}
 }
@@ -139,7 +139,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 				cu = (chanuser_t *)n->data;
 
 				if (!is_internal_client(cu->user))
-					kick(chansvs.nick, target, cu->user->nick, "This channel has been closed");
+					kick(chansvs.me->me, c, cu->user, "This channel has been closed");
 			}
 		}
 

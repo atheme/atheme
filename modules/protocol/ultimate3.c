@@ -144,17 +144,11 @@ static void ultimate3_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 }
 
 /* kicks a user from a channel */
-static void ultimate3_kick(char *from, char *channel, char *to, char *reason)
+static void ultimate3_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	channel_t *chan = channel_find(channel);
-	user_t *user = user_find(to);
+	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
 
-	if (!chan || !user)
-		return;
-
-	sts(":%s KICK %s %s :%s", from, channel, to, reason);
-
-	chanuser_delete(chan, user);
+	chanuser_delete(c, u);
 }
 
 /* PRIVMSG wrapper */

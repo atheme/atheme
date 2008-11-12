@@ -165,18 +165,11 @@ static void nefarious_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 }
 
 /* kicks a user from a channel */
-static void nefarious_kick(char *from, char *channel, char *to, char *reason)
+static void nefarious_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	channel_t *chan = channel_find(channel);
-	user_t *fptr = user_find_named(from);
-	user_t *user = user_find_named(to);
+	sts("%s K %s %s :%s", source->uid, c->name, u->uid, reason);
 
-	if (!chan || !user || !fptr)
-		return;
-
-	sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
-
-	chanuser_delete(chan, user);
+	chanuser_delete(c, u);
 }
 
 /* PRIVMSG wrapper */

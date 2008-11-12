@@ -103,9 +103,9 @@ E void (*join_sts)(channel_t *c, user_t *u, boolean_t isnew, char *modes);
  * if the topic is timestamped on this ircd, clear it */
 E void (*chan_lowerts)(channel_t *c, user_t *u);
 /* kick a user from a channel
- * from is a client on the services server which may or may not be
+ * source is a client on the services server which may or may not be
  * on the channel */
-E void (*kick)(char *from, char *channel, char *to, char *reason);
+E void (*kick)(user_t *source, channel_t *c, user_t *u, const char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
 E void (*msg)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
@@ -210,7 +210,7 @@ E void generic_quit_sts(user_t *u, const char *reason);
 E void generic_wallops_sts(const char *text);
 E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void generic_chan_lowerts(channel_t *c, user_t *u);
-E void generic_kick(char *from, char *channel, char *to, char *reason);
+E void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason);
 E void generic_msg(const char *from, const char *target, const char *fmt, ...);
 E void generic_notice_user_sts(user_t *from, user_t *target, const char *text);
 E void generic_notice_global_sts(user_t *from, const char *mask, const char *text);

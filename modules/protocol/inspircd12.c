@@ -294,18 +294,11 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void inspircd_kick(char *from, char *channel, char *to, char *reason)
+static void inspircd_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	channel_t *chan = channel_find(channel);
-	user_t *user = user_find(to);
-	user_t *from_p = user_find(from);
+	sts(":%s KICK %s %s :%s", source->uid, c->name, u->uid, reason);
 
-	if (!chan || !user)
-		return;
-
-	sts(":%s KICK %s %s :%s", from_p->uid, channel, user->uid, reason);
-
-	chanuser_delete(chan, user);
+	chanuser_delete(c, u);
 }
 
 /* PRIVMSG wrapper */

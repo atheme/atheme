@@ -110,7 +110,7 @@ void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reaso
 				target->nick, reason);
 		return;
 	}
-	kick(source->nick, chan->name, target->nick, reason);
+	kick(source, chan, target, reason);
 }
 
 /* sends a KILL message for a user and removes the user from the userlist
