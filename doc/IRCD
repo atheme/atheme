@@ -225,17 +225,6 @@ as it reduces ghosts/desyncs and propagates user IP addresses. Although
 Atheme does not support IPv6 connections itself, user IPv6 addresses will
 be properly stored and logged.
 
-shadowircd
-----------
-
-Atheme does not support the "modern" ShadowIRCd protocol,
-revisions 3400 and 4000. You will need to use compatibility mode
-with Atheme. Proper care has been taken to ensure that Atheme
-complies with all requirements necessary for compatibility mode.
-
-Note that only ShadowIRCd 3.2 and later properly support the removal
-of AKILLs, although it may appear to sort of work in earlier versions.
-
 ultimate3
 ---------
 

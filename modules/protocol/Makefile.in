@@ -28,7 +28,6 @@ BASE_SRCS =			\
 	$(SRCDIR)/officeirc.c	\
 	$(SRCDIR)/plexus.c	\
 	$(SRCDIR)/ratbox.c	\
-	$(SRCDIR)/shadowircd.c	\
 	$(SRCDIR)/shadowircd5.c	\
 	$(SRCDIR)/solidircd.c	\
 	$(SRCDIR)/ultimate3.c	\
