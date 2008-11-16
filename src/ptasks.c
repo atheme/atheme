@@ -36,9 +36,9 @@ void handle_info(user_t *u)
 		return;
 
 	for (i = 0; infotext[i]; i++)
-		numeric_sts(me.name, 371, u->nick, ":%s", infotext[i]);
+		numeric_sts(me.me, 371, u, ":%s", infotext[i]);
 
-	numeric_sts(me.name, 374, u->nick, ":End of /INFO list");
+	numeric_sts(me.me, 374, u, ":End of /INFO list");
 }
 
 void handle_version(user_t *u)
@@ -49,7 +49,7 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.name, 351, u->nick, "atheme-%s. %s :%s%s%s%s%s%s%s%s%s%s [%s]",
+	numeric_sts(me.me, 351, u, "atheme-%s. %s :%s%s%s%s%s%s%s%s%s%s [%s]",
 		    version, me.name, 
 		    (match_mapping) ? "A" : "",
 		    log_debug_enabled() ? "d" : "",
@@ -62,7 +62,7 @@ void handle_version(user_t *u)
 		    (config_options.raw) ? "r" : "",
 		    (runflags & RF_LIVE) ? "n" : "",
 		    ircd->ircdname);
-	numeric_sts(me.name, 351, u->nick, ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
+	numeric_sts(me.me, 351, u, ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
 }
 
 void handle_admin(user_t *u)
@@ -74,20 +74,20 @@ void handle_admin(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.name, 256, u->nick, ":Administrative info about %s", me.name);
-	numeric_sts(me.name, 257, u->nick, ":%s", me.adminname);
-	numeric_sts(me.name, 258, u->nick, ":Atheme IRC Services (atheme-%s)", version);
-	numeric_sts(me.name, 259, u->nick, ":<%s>", me.adminemail);
+	numeric_sts(me.me, 256, u, ":Administrative info about %s", me.name);
+	numeric_sts(me.me, 257, u, ":%s", me.adminname);
+	numeric_sts(me.me, 258, u, ":Atheme IRC Services (atheme-%s)", version);
+	numeric_sts(me.me, 259, u, ":<%s>", me.adminemail);
 }
 
 static void dictionary_stats_cb(const char *line, void *privdata)
 {
-	numeric_sts(me.name, 249, ((user_t *)privdata)->nick, "B :%s", line);
+	numeric_sts(me.me, 249, ((user_t *)privdata), "B :%s", line);
 }
 
 static void connection_stats_cb(const char *line, void *privdata)
 {
-	numeric_sts(me.name, 249, ((user_t *)privdata)->nick, "F :%s", line);
+	numeric_sts(me.me, 249, ((user_t *)privdata), "F :%s", line);
 }
 
 void handle_stats(user_t *u, char req)
@@ -125,7 +125,7 @@ void handle_stats(user_t *u, char req)
 		  LIST_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
-			  numeric_sts(me.name, 213, u->nick, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
+			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
 		  }
 		  break;
 
@@ -134,13 +134,13 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.name, 249, u->nick, "E :Last event to run: %s", last_event_ran);
+		  numeric_sts(me.me, 249, u, "E :Last event to run: %s", last_event_ran);
 
-		  numeric_sts(me.name, 249, u->nick, "E :%-28s %s", "Operation", "Next Execution");
+		  numeric_sts(me.me, 249, u, "E :%-28s %s", "Operation", "Next Execution");
 		  for (i = 0; i < MAX_EVENTS; i++)
 		  {
 			  if (event_table[i].active)
-				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4ld seconds (%ld)", event_table[i].name, (long)(event_table[i].when - CURRTIME), (long)event_table[i].frequency);
+				  numeric_sts(me.me, 249, u, "E :%-28s %4ld seconds (%ld)", event_table[i].name, (long)(event_table[i].when - CURRTIME), (long)event_table[i].frequency);
 		  }
 
 		  break;
@@ -161,13 +161,13 @@ void handle_stats(user_t *u, char req)
 		  LIST_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
-			  numeric_sts(me.name, 244, u->nick, "H * * %s", uplink->name);
+			  numeric_sts(me.me, 244, u, "H * * %s", uplink->name);
 		  }
 		  break;
 
 	  case 'I':
 	  case 'i':
-		  numeric_sts(me.name, 215, u->nick, "I * * *@%s 0 nonopered", me.name);
+		  numeric_sts(me.me, 215, u, "I * * *@%s 0 nonopered", me.name);
 		  break;
 
 	  case 'K':
@@ -179,7 +179,7 @@ void handle_stats(user_t *u, char req)
 		  {
 			  k = (kline_t *)n->data;
 
-			  numeric_sts(me.name, 216, u->nick, "%c %s * %s :%s",
+			  numeric_sts(me.me, 216, u, "%c %s * %s :%s",
 					  k->duration ? 'k' : 'K',
 					  k->host, k->user, k->reason);
 		  }
@@ -203,7 +203,7 @@ void handle_stats(user_t *u, char req)
 			  if (j == 0)
 				  fl[j++] = '*';
 			  fl[j] = '\0';
-			  numeric_sts(me.name, 243, u->nick, "O *@* %s %s %s %s",
+			  numeric_sts(me.me, 243, u, "O *@* %s %s %s %s",
 					  fl, soper->myuser ? soper->myuser->name : soper->name,
 					  soper->operclass ? soper->operclass->name : soper->classname, "-1");
 		  }
@@ -214,30 +214,30 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.name, 249, u->nick, "T :event      %7d", claro_state.event);
-		  numeric_sts(me.name, 249, u->nick, "T :node       %7d", claro_state.node);
-		  numeric_sts(me.name, 249, u->nick, "T :connection %7d", connection_count());
-		  numeric_sts(me.name, 249, u->nick, "T :operclass  %7d", cnt.operclass);
-		  numeric_sts(me.name, 249, u->nick, "T :soper      %7d", cnt.soper);
-		  numeric_sts(me.name, 249, u->nick, "T :tld        %7d", cnt.tld);
-		  numeric_sts(me.name, 249, u->nick, "T :kline      %7d", cnt.kline);
-		  numeric_sts(me.name, 249, u->nick, "T :server     %7d", cnt.server);
-		  numeric_sts(me.name, 249, u->nick, "T :user       %7d", cnt.user);
-		  numeric_sts(me.name, 249, u->nick, "T :chan       %7d", cnt.chan);
-		  numeric_sts(me.name, 249, u->nick, "T :chanuser   %7d", cnt.chanuser);
-		  numeric_sts(me.name, 249, u->nick, "T :myuser     %7d", cnt.myuser);
-		  numeric_sts(me.name, 249, u->nick, "T :myuser_acc %7d", cnt.myuser_access);
-		  numeric_sts(me.name, 249, u->nick, "T :mynick     %7d", cnt.mynick);
-		  numeric_sts(me.name, 249, u->nick, "T :myuser_nam %7d", cnt.myuser_name);
-		  numeric_sts(me.name, 249, u->nick, "T :mychan     %7d", cnt.mychan);
-		  numeric_sts(me.name, 249, u->nick, "T :chanacs    %7d", cnt.chanacs);
+		  numeric_sts(me.me, 249, u, "T :event      %7d", claro_state.event);
+		  numeric_sts(me.me, 249, u, "T :node       %7d", claro_state.node);
+		  numeric_sts(me.me, 249, u, "T :connection %7d", connection_count());
+		  numeric_sts(me.me, 249, u, "T :operclass  %7d", cnt.operclass);
+		  numeric_sts(me.me, 249, u, "T :soper      %7d", cnt.soper);
+		  numeric_sts(me.me, 249, u, "T :tld        %7d", cnt.tld);
+		  numeric_sts(me.me, 249, u, "T :kline      %7d", cnt.kline);
+		  numeric_sts(me.me, 249, u, "T :server     %7d", cnt.server);
+		  numeric_sts(me.me, 249, u, "T :user       %7d", cnt.user);
+		  numeric_sts(me.me, 249, u, "T :chan       %7d", cnt.chan);
+		  numeric_sts(me.me, 249, u, "T :chanuser   %7d", cnt.chanuser);
+		  numeric_sts(me.me, 249, u, "T :myuser     %7d", cnt.myuser);
+		  numeric_sts(me.me, 249, u, "T :myuser_acc %7d", cnt.myuser_access);
+		  numeric_sts(me.me, 249, u, "T :mynick     %7d", cnt.mynick);
+		  numeric_sts(me.me, 249, u, "T :myuser_nam %7d", cnt.myuser_name);
+		  numeric_sts(me.me, 249, u, "T :mychan     %7d", cnt.mychan);
+		  numeric_sts(me.me, 249, u, "T :chanacs    %7d", cnt.chanacs);
 
-		  numeric_sts(me.name, 249, u->nick, "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
-		  numeric_sts(me.name, 249, u->nick, "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
+		  numeric_sts(me.me, 249, u, "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
+		  numeric_sts(me.me, 249, u, "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
 		  break;
 
 	  case 'u':
-		  numeric_sts(me.name, 242, u->nick, ":Services Uptime: %s", timediff(CURRTIME - me.start));
+		  numeric_sts(me.me, 242, u, ":Services Uptime: %s", timediff(CURRTIME - me.start));
 		  break;
 
 	  case 'V':
@@ -247,7 +247,7 @@ void handle_stats(user_t *u, char req)
 
 		  /* we received this command from the uplink, so,
 		   * hmm, it is not idle */
-		  numeric_sts(me.name, 249, u->nick, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
+		  numeric_sts(me.me, 249, u, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
 				  curr_uplink->name,
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
@@ -257,7 +257,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.name, 218, u->nick, "Y uplink 300 %u 1 %u 0.0 0.0 1",
+		  numeric_sts(me.me, 218, u, "Y uplink 300 %u 1 %u 0.0 0.0 1",
 				  me.recontime, config_options.uplink_sendq_limit);
 		  break;
 
@@ -265,7 +265,7 @@ void handle_stats(user_t *u, char req)
 		  break;
 	}
 
-	numeric_sts(me.name, 219, u->nick, "%c :End of /STATS report", req);
+	numeric_sts(me.me, 219, u, "%c :End of /STATS report", req);
 }
 
 void handle_whois(user_t *u, const char *target)
@@ -279,19 +279,19 @@ void handle_whois(user_t *u, const char *target)
 
 	if (t != NULL)
 	{
-		numeric_sts(me.name, 311, u->nick, "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
+		numeric_sts(me.me, 311, u, "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
 		/* channels purposely omitted */
-		numeric_sts(me.name, 312, u->nick, "%s %s :%s", t->nick, t->server->name, t->server->desc);
+		numeric_sts(me.me, 312, u, "%s %s :%s", t->nick, t->server->name, t->server->desc);
 		if (t->flags & UF_AWAY)
-			numeric_sts(me.name, 301, u->nick, "%s :Gone", t->nick);
+			numeric_sts(me.me, 301, u, "%s :Gone", t->nick);
 		if (is_ircop(t))
-			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
+			numeric_sts(me.me, 313, u, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
 		if (t->myuser && !(t->myuser->flags & MU_WAITAUTH))
-			numeric_sts(me.name, 330, u->nick, "%s %s :is logged in as", t->nick, t->myuser->name);
+			numeric_sts(me.me, 330, u, "%s %s :is logged in as", t->nick, t->myuser->name);
 	}
 	else
-		numeric_sts(me.name, 401, u->nick, "%s :No such nick", target);
-	numeric_sts(me.name, 318, u->nick, "%s :End of WHOIS", target);
+		numeric_sts(me.me, 401, u, "%s :No such nick", target);
+	numeric_sts(me.me, 318, u, "%s :End of WHOIS", target);
 }
 
 static void single_trace(user_t *u, user_t *t)
@@ -300,9 +300,9 @@ static void single_trace(user_t *u, user_t *t)
 
 	classname = t->flags & UF_ENFORCER ? "enforcer" : "service";
 	if (is_ircop(t))
-		numeric_sts(me.name, 204, u->nick, "Oper %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
+		numeric_sts(me.me, 204, u, "Oper %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
 	else
-		numeric_sts(me.name, 205, u->nick, "User %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
+		numeric_sts(me.me, 205, u, "User %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
 }
 
 /* target -> object to trace
@@ -329,7 +329,7 @@ void handle_trace(user_t *u, const char *target, const char *dest)
 			nusers--;
 		}
 		if (has_priv_user(u, PRIV_SERVER_AUSPEX))
-			numeric_sts(me.name, 206, u->nick, "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
+			numeric_sts(me.me, 206, u, "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
 		target = me.name;
 	}
 	else
@@ -341,7 +341,7 @@ void handle_trace(user_t *u, const char *target, const char *dest)
 			target = t->nick;
 		}
 	}
-	numeric_sts(me.name, 262, u->nick, "%s :End of TRACE", target);
+	numeric_sts(me.me, 262, u, "%s :End of TRACE", target);
 }
 
 void handle_motd(user_t *u)
@@ -362,7 +362,7 @@ void handle_motd(user_t *u)
 	f = fopen(SYSCONFDIR "/atheme.motd", "r");
 	if (!f)
 	{
-		numeric_sts(me.name, 422, u->nick, ":The MOTD file is unavailable.");
+		numeric_sts(me.me, 422, u, ":The MOTD file is unavailable.");
 		return;
 	}
 
@@ -372,7 +372,7 @@ void handle_motd(user_t *u)
 	snprintf(nbuf, BUFSIZE, "%d", nicksvs.no_nick_ownership ? 0 : cnt.mynick);
 	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
 
-	numeric_sts(me.name, 375, u->nick, ":- %s Message of the Day -", me.name);
+	numeric_sts(me.me, 375, u, ":- %s Message of the Day -", me.name);
 
 	while (fgets(lbuf, BUFSIZE, f))
 	{
@@ -385,10 +385,10 @@ void handle_motd(user_t *u)
 		replace(lbuf, BUFSIZE, "&mynicks&", nbuf);
 		replace(lbuf, BUFSIZE, "&mychans&", cbuf);
 
-		numeric_sts(me.name, 372, u->nick, ":- %s", lbuf);
+		numeric_sts(me.me, 372, u, ":- %s", lbuf);
 	}
 
-	numeric_sts(me.name, 376, u->nick, ":End of the message of the day.");
+	numeric_sts(me.me, 376, u, ":End of the message of the day.");
 
 	fclose(f);
 }
@@ -504,7 +504,7 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 						target_u = u;
 					else
 					{
-						numeric_sts(me.name, 407, si->su->nick, "%s :Ambiguous recipient", target);
+						numeric_sts(me.me, 407, si->su, "%s :Ambiguous recipient", target);
 						return;
 					}
 				}
@@ -532,9 +532,9 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 			/* If it's not a notice and looks like a nick or
 			 * user@server, send back an error message */
 			if (strchr(target, '@') || !ircd->uses_uid || (!ircd->uses_p10 && !isdigit(target[0])))
-				numeric_sts(me.name, 401, si->su->nick, "%s :No such nick", target);
+				numeric_sts(me.me, 401, si->su, "%s :No such nick", target);
 			else
-				numeric_sts(me.name, 401, si->su->nick, "* :Target left IRC. Failed to deliver: [%.20s]", message);
+				numeric_sts(me.me, 401, si->su, "* :Target left IRC. Failed to deliver: [%.20s]", message);
 		}
 		return;
 	}

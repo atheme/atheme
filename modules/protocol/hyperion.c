@@ -323,7 +323,7 @@ static void hyperion_wallchops(user_t *sender, channel_t *channel, const char *m
 }
 
 /* numeric wrapper */
-static void hyperion_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void hyperion_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -332,7 +332,7 @@ static void hyperion_numeric_sts(char *from, int numeric, char *target, char *fm
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
 /* KILL wrapper */

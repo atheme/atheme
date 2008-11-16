@@ -194,7 +194,7 @@ static void officeirc_notice_channel_sts(user_t *from, channel_t *target, const 
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void officeirc_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void officeirc_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -203,7 +203,7 @@ static void officeirc_numeric_sts(char *from, int numeric, char *target, char *f
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
 /* KILL wrapper */

@@ -333,7 +333,7 @@ static void inspircd_notice_channel_sts(user_t *from, channel_t *target, const c
 	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
-static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void inspircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -342,7 +342,7 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PUSH %s ::%s %d %s %s", me.numeric, target, from, numeric, target, buf);
+	sts(":%s PUSH %s ::%s %d %s %s", from->sid, target->uid, from->name, numeric, target->nick, buf);
 }
 
 /* KILL wrapper */

@@ -260,7 +260,7 @@ static void bahamut_wallchops(user_t *sender, channel_t *channel, const char *me
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
 
-static void bahamut_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void bahamut_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -269,7 +269,7 @@ static void bahamut_numeric_sts(char *from, int numeric, char *target, char *fmt
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
 /* KILL wrapper */

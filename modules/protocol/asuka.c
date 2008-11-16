@@ -232,23 +232,16 @@ static void asuka_wallchops(user_t *sender, channel_t *channel, const char *mess
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
-static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void asuka_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *source_p, *target_p;
-
-	source_p = user_find_named(from);
-	target_p = user_find_named(target);
-
-	if (!target_p)
-		return;
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts("%s %d %s %s", source_p ? source_p->uid : me.numeric, numeric, target_p->uid, buf);
+	sts("%s %d %s %s", from->sid, numeric, target->uid, buf);
 }
 
 /* KILL wrapper */

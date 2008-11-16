@@ -264,7 +264,7 @@ static void solidircd_wallchops(user_t *sender, channel_t *channel, const char *
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
 
-static void solidircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void solidircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -273,7 +273,7 @@ static void solidircd_numeric_sts(char *from, int numeric, char *target, char *f
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
 }
 
 /* KILL wrapper */
@@ -389,9 +389,9 @@ static void solidircd_sethost_sts(char *source, char *target, char *host)
 		return;
 
 	if (irccasecmp(tu->host, host))
-		numeric_sts(me.name, 396, target, "%s :is now your hidden host (set by %s)", host, source);
+		numeric_sts(me.me, 396, tu, "%s :is now your hidden host (set by %s)", host, source);
 	else
-		numeric_sts(me.name, 396, target, "%s :hostname reset by %s", host, source);
+		numeric_sts(me.me, 396, tu, "%s :hostname reset by %s", host, source);
 	sts(":%s SVSMODE %s +v", source, target);
 	sts(":%s SVHOST %s :%s", me.name, target, host);
 }

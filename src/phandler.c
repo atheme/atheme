@@ -35,7 +35,7 @@ void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = gener
 void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = generic_notice_global_sts;
 void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) = generic_notice_channel_sts;
 void (*wallchops) (user_t *source, channel_t *target, const char *message) = generic_wallchops;
-void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
+void (*numeric_sts) (server_t *from, int numeric, user_t *target, const char *fmt, ...) = generic_numeric_sts;
 void (*kill_id_sts) (user_t *killer, const char *id, const char *reason) = generic_kill_id_sts;
 void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
@@ -131,7 +131,7 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 	}
 }
 
-void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list va;
 	char *buf;
@@ -140,7 +140,7 @@ void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 	vasprintf(&buf, fmt, va);
 	va_end(va);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 	free(buf);
 }
 

@@ -438,17 +438,16 @@ static void shadowircd_wallchops(user_t *sender, channel_t *channel, const char 
 }
 
 /* numeric wrapper */
-static void shadowircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void shadowircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *t = user_find(target);
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", ME, numeric, CLIENT_NAME(t), buf);
+	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
 /* KILL wrapper */
