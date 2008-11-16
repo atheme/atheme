@@ -29,6 +29,7 @@ struct ircd_ {
 	const char *halfops_mchar;
 	unsigned int type;
 	unsigned int perm_mode;		/* Modes to not disappear when empty */
+	unsigned int oimmune_mode;	/* Mode to disallow kicking ircops */
 	const char *ban_like_modes;		/* e.g. "beI" */
 	char except_mchar;
 	char invex_mchar;

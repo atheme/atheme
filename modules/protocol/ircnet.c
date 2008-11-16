@@ -37,6 +37,7 @@ ircd_t IRCNet = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_IRCNET,		/* Protocol type */
 	0,                              /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"beIR",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */

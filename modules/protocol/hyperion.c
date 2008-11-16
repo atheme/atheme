@@ -40,6 +40,7 @@ ircd_t Hyperion = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_HYPERION,		/* Protocol type */
 	CMODE_PERM | CMODE_JUPED,       /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"beIqd",                        /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */

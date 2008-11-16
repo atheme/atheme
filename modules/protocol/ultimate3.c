@@ -36,6 +36,7 @@ ircd_t ultimate3 = {
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_ULTIMATE3,		/* Protocol type */
 	0,                              /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"be",                           /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	0,                              /* Invex mchar */

@@ -37,6 +37,7 @@ ircd_t Asuka = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_ASUKA,			/* Protocol type */
 	0,                              /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"b",                            /* Ban-like cmodes */
 	0,                              /* Except mchar */
 	0,                              /* Invex mchar */

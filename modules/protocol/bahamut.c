@@ -36,6 +36,7 @@ ircd_t Bahamut = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_BAHAMUT,		/* Protocol type */
 	0,                              /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */

@@ -99,6 +99,17 @@ void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reaso
 	return_if_fail(target != NULL);
 	return_if_fail(reason != NULL);
 
+	if (chan->modes & ircd->oimmune_mode && is_ircop(target))
+	{
+		wallops("Not kicking oper %s!%s@%s from protected %s (%s: %s)",
+				target->nick, target->user, target->vhost,
+				chan->name, source ? source->nick : me.name,
+				reason);
+		notice(source->nick, chan->name,
+				"Not kicking oper %s (%s)",
+				target->nick, reason);
+		return;
+	}
 	if (target->flags & UF_IMMUNE)
 	{
 		wallops("Not kicking immune user %s!%s@%s from %s (%s: %s)",

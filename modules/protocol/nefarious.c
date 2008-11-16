@@ -37,6 +37,7 @@ ircd_t Nefarious = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_NEFARIOUS,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
+	0,                              /* Oper-immune cmode */
 	"be",                           /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'e',                            /* Invex mchar (+e also exempts from +i in Nefarious) */

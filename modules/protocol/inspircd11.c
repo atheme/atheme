@@ -35,6 +35,7 @@ ircd_t InspIRCd = {
         "+h",                           /* Mode we set for halfops. */
 		PROTOCOL_INSPIRCD,		/* Protocol type */
 		0,                              /* Permanent cmodes */
+		0,                              /* Oper-immune cmode */
 		"beIg",                         /* Ban-like cmodes */
 		'e',                            /* Except mchar */
 		'I',                            /* Invex mchar */
