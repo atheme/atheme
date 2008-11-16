@@ -641,7 +641,8 @@ atheme_regex_t *regex_create(char *pattern, int flags)
 		if (errnum != 0)
 		{
 			regerror(errnum, &preg->un.posix, errmsg, BUFSIZE);
-			slog(LG_ERROR, "regex_match(): %s\n", errmsg);
+			slog(LG_ERROR, "regex_match(): %s in %s",
+					errmsg, pattern);
 			regfree(&preg->un.posix);
 			free(preg);
 			return NULL;
