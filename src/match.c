@@ -24,6 +24,9 @@
 #include "atheme.h"
 
 #include <regex.h>
+#ifdef HAVE_PCRE
+#include <pcre.h>
+#endif
 
 #define BadPtr(x) (!(x) || (*(x) == '\0'))
 
@@ -576,9 +579,22 @@ const unsigned int charattrs[] = {
 	/* 0xFF */ 0,
 };
 
+enum atheme_regex_type
+{
+	at_posix = 1,
+	at_pcre = 2
+};
+
 struct atheme_regex_
 {
-	regex_t posix;
+	enum atheme_regex_type type;
+	union
+	{
+		regex_t posix;
+#ifdef HAVE_PCRE
+		pcre *pcre;
+#endif
+	} un;
 };
 
 /*
@@ -597,15 +613,40 @@ atheme_regex_t *regex_create(char *pattern, int flags)
 	}
 	
 	preg = smalloc(sizeof(atheme_regex_t));
-	errnum = regcomp(&preg->posix, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
-	
-	if (errnum != 0)
+	if (flags & AREGEX_PCRE)
 	{
-		regerror(errnum, &preg->posix, errmsg, BUFSIZE);
-		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
-		regfree(&preg->posix);
+#ifdef HAVE_PCRE
+		const char *errptr;
+		int erroffset;
+
+		preg->un.pcre = pcre_compile(pattern, (flags & AREGEX_ICASE ? PCRE_CASELESS : 0) | PCRE_NO_AUTO_CAPTURE, &errptr, &erroffset, NULL);
+		if (preg->un.pcre == NULL)
+		{
+			slog(LG_ERROR, "regex_match(): %s at offset %d in %s",
+					errptr, erroffset, pattern);
+			free(preg);
+			return NULL;
+		}
+		preg->type = at_pcre;
+#else
+		slog(LG_ERROR, "regex_match(): PCRE support is not compiled in");
 		free(preg);
 		return NULL;
+#endif
+	}
+	else
+	{
+		errnum = regcomp(&preg->un.posix, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
+
+		if (errnum != 0)
+		{
+			regerror(errnum, &preg->un.posix, errmsg, BUFSIZE);
+			slog(LG_ERROR, "regex_match(): %s\n", errmsg);
+			regfree(&preg->un.posix);
+			free(preg);
+			return NULL;
+		}
+		preg->type = at_posix;
 	}
 	
 	return preg;
@@ -635,6 +676,8 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
 	{
 		if (*p == 'i')
 			*pflags |= AREGEX_ICASE;
+		else if (*p == 'p')
+			*pflags |= AREGEX_PCRE;
 		else if (!isalnum(*p))
 			return NULL;
 		p++;
@@ -646,27 +689,30 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
 
 /*
  * regex_match()
- *  Internal wrapper API for POSIX-based regex matching.
+ *  Internal wrapper API for regex matching.
  *  `preg' is the regex to check with, `string' needs to be checked against.
  *  Returns `true' on match, `false' else.
  */
 boolean_t regex_match(atheme_regex_t *preg, char *string)
 {
-	boolean_t retval;
-	
 	if (preg == NULL || string == NULL)
 	{
 		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
 		return FALSE;
 	}
 
-	/* match it */
-	if (regexec(&preg->posix, string, 0, NULL, 0) == 0)
-		retval = TRUE;
-	else
-		retval = FALSE;
-	
-	return retval;
+	switch (preg->type)
+	{
+		case at_posix:
+			return regexec(&preg->un.posix, string, 0, NULL, 0) == 0;
+#ifdef HAVE_PCRE
+		case at_pcre:
+			return pcre_exec(preg->un.pcre, NULL, string, strlen(string), 0, 0, NULL, 0) >= 0;
+#endif
+		default:
+			slog(LG_ERROR, "regex_match(): we were given a pattern of unknown type %d, bad!", preg->type);
+			return FALSE;
+	}
 }
 
 /*
@@ -675,7 +721,20 @@ boolean_t regex_match(atheme_regex_t *preg, char *string)
  */
 boolean_t regex_destroy(atheme_regex_t *preg)
 {
-	regfree(&preg->posix);
+	switch (preg->type)
+	{
+		case at_posix:
+			regfree(&preg->un.posix);
+			break;
+#ifdef HAVE_PCRE
+		case at_pcre:
+			pcre_free(preg->un.pcre);
+			break;
+#endif
+		default:
+			slog(LG_ERROR, "regex_destroy(): we were given a pattern of unknown type %d, bad!", preg->type);
+			break;
+	}
 	free(preg);
 	return TRUE;
 }

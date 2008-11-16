@@ -338,9 +338,10 @@ static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 	{
 		rwatch_t *rw = n->data;
 
-		command_success_nodata(si, "%s (%s%s%s) - %s",
+		command_success_nodata(si, "%s (%s%s%s%s) - %s",
 				rw->regex,
 				rw->reflags & AREGEX_ICASE ? "i" : "",
+				rw->reflags & AREGEX_PCRE ? "p" : "",
 				rw->actions & RWACT_SNOOP ? "S" : "",
 				rw->actions & RWACT_KLINE ? "\2K\2" : "",
 				rw->reason);

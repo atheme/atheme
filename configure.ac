@@ -468,6 +468,23 @@ AC_SUBST(MOWGLI_CFLAGS)
 AC_SUBST(MOWGLI_LIBS)
 AC_SUBST(LIBMOWGLI)
 
+AC_ARG_WITH(pcre,
+AC_HELP_STRING([--with-pcre],[ Enable PCRE regular expression support]),
+[],
+[with_pcre=no])
+
+if test "x$with_pcre" != xno; then
+	PKG_CHECK_MODULES(PCRE, [libpcre], [], [
+		AC_ERROR([PCRE requested, but not found.])])
+
+	CFLAGS="$CFLAGS $PCRE_CFLAGS"
+	LIBS="$LIBS $PCRE_LIBS"
+
+	AC_SUBST(PCRE_CFLAGS)
+	AC_SUBST(PCRE_LIBS)
+	AC_DEFINE([HAVE_PCRE], [1], [Define if you want to use PCRE])
+fi
+
 BUILDROOT=`pwd`
 AC_SUBST(BUILDROOT)
 
@@ -509,6 +526,7 @@ Configuration:
 	Socket Engine        : ${SOCKET_ENGINE}
 	Block Allocator      : ${balloc}
 	Mowgli installation  : ${MOWGLI_SOURCE}
+	PCRE support         : ${with_pcre}
 	CFLAGS               : ${CFLAGS}
 
 Type make to build Atheme, and make install to install it."

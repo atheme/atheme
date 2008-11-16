@@ -13,12 +13,12 @@ saved whenever it is modified.
 See RMATCH for more information about regular
 expression syntax.
 
-Syntax: RWATCH ADD /<pattern>/[i] <reason>
+Syntax: RWATCH ADD /<pattern>/[i][p] <reason>
 
 Adds a regular expression to the RWATCH list.
 The reason is shown in snoop notices and kline reasons.
 
-Syntax: RWATCH DEL /<pattern>/[i]
+Syntax: RWATCH DEL /<pattern>/[i][p]
 
 Removes a regular expression from the RWATCH list.
 
@@ -26,10 +26,11 @@ Syntax: RWATCH LIST
 
 Shows the RWATCH list. The meaning of the letters is:
     i - case insensitive match
+    p - PCRE pattern
     S - matching clients are shown in the snoop channel
     K - matching clients are banned from the network
 
-Syntax: RWATCH SET /<pattern>/[i] <options>
+Syntax: RWATCH SET /<pattern>/[i][p] <options>
 
 Changes the action for a regular expression. Possible
 values for <options> are:

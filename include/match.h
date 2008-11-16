@@ -54,6 +54,7 @@ E char *collapse(char *);
 
 /* regex_create() flags */
 #define AREGEX_ICASE	1 /* case insensitive */
+#define AREGEX_PCRE	2 /* use libpcre engine */
 
 typedef struct atheme_regex_ atheme_regex_t;
 

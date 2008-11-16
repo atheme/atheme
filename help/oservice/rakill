@@ -9,7 +9,7 @@ Be careful, as regex is very easy to
 make mistakes with. Use RMATCH first.
 The regex syntax is exactly the same.
 
-Syntax: RAKILL /<pattern>/[i] <reason>
+Syntax: RAKILL /<pattern>/[i][p] <reason>
 
 Example:
     /msg &nick& RAKILL /^m[oo|00]cow/i No moocows allowed.
