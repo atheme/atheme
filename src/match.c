@@ -23,6 +23,8 @@
 
 #include "atheme.h"
 
+#include <regex.h>
+
 #define BadPtr(x) (!(x) || (*(x) == '\0'))
 
 int match_mapping = MATCH_RFC1459;
@@ -574,29 +576,34 @@ const unsigned int charattrs[] = {
 	/* 0xFF */ 0,
 };
 
+struct atheme_regex_
+{
+	regex_t posix;
+};
+
 /*
  * regex_compile()
  *  Compile a regex of `pattern' and return it.
  */
-regex_t *regex_create(char *pattern, int flags)
+atheme_regex_t *regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];
 	int errnum;
-	regex_t *preg;
+	atheme_regex_t *preg;
 	
 	if (pattern == NULL)
 	{
 		return NULL;
 	}
 	
-	preg = (regex_t *)malloc(sizeof(regex_t));
-	errnum = regcomp(preg, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
+	preg = smalloc(sizeof(atheme_regex_t));
+	errnum = regcomp(&preg->posix, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
 	
 	if (errnum != 0)
 	{
-		regerror(errnum, preg, errmsg, BUFSIZE);
+		regerror(errnum, &preg->posix, errmsg, BUFSIZE);
 		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
-		regfree(preg);
+		regfree(&preg->posix);
 		free(preg);
 		return NULL;
 	}
@@ -643,7 +650,7 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
  *  `preg' is the regex to check with, `string' needs to be checked against.
  *  Returns `true' on match, `false' else.
  */
-boolean_t regex_match(regex_t *preg, char *string)
+boolean_t regex_match(atheme_regex_t *preg, char *string)
 {
 	boolean_t retval;
 	
@@ -654,7 +661,7 @@ boolean_t regex_match(regex_t *preg, char *string)
 	}
 
 	/* match it */
-	if (regexec(preg, string, 0, NULL, 0) == 0)
+	if (regexec(&preg->posix, string, 0, NULL, 0) == 0)
 		retval = TRUE;
 	else
 		retval = FALSE;
@@ -666,9 +673,9 @@ boolean_t regex_match(regex_t *preg, char *string)
  * regex_destroy()
  *  Perform cleanup with regex `preg', free associated memory.
  */
-boolean_t regex_destroy(regex_t *preg)
+boolean_t regex_destroy(atheme_regex_t *preg)
 {
-	regfree(preg);
+	regfree(&preg->posix);
 	free(preg);
 	return TRUE;
 }

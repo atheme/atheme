@@ -43,7 +43,7 @@ struct rwatch_
 	int reflags; /* AREGEX_* */
 	char *reason;
 	int actions; /* RWACT_* */
-	regex_t *re;
+	atheme_regex_t *re;
 };
 
 command_t os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
@@ -213,7 +213,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char *pattern;
 	char *reason;
-	regex_t *regex;
+	atheme_regex_t *regex;
 	rwatch_t *rw;
 	int flags;
 	char *args = parv[0];

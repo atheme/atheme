@@ -11,8 +11,6 @@
 #ifndef _MATCH_H
 #define _MATCH_H
 
-#include <regex.h>
-
 /* cidr.c */
 E int match_ips(const char *mask, const char *address);
 E int match_cidr(const char *mask, const char *address);
@@ -57,10 +55,12 @@ E char *collapse(char *);
 /* regex_create() flags */
 #define AREGEX_ICASE	1 /* case insensitive */
 
-E regex_t *regex_create(char *pattern, int flags);
+typedef struct atheme_regex_ atheme_regex_t;
+
+E atheme_regex_t *regex_create(char *pattern, int flags);
 E char *regex_extract(char *pattern, char **pend, int *pflags);
-E boolean_t regex_match(regex_t *preg, char *string);
-E boolean_t regex_destroy(regex_t *preg);
+E boolean_t regex_match(atheme_regex_t *preg, char *string);
+E boolean_t regex_destroy(atheme_regex_t *preg);
 
 #endif
 

@@ -47,7 +47,7 @@ void _moddeinit(void)
 
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 {
-	regex_t *regex;
+	atheme_regex_t *regex;
 	char usermask[512];
 	unsigned int matches = 0, maxmatches;
 	mowgli_patricia_iteration_state_t state;
