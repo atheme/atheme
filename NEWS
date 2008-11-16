@@ -49,6 +49,8 @@ code
 - Fix a minor memory leak on /os REHASH.
 - Fix null pointer dereference with some invalid config files.
 - Move the metadata entries to object_t.
+- Change some protocol module functions to take object pointers instead of
+  names and add some const keywords.
 other
 - Allow arbitrary line lengths in flatfile database loader.
 - Synchronized with libmowgli 0.7 framework.
