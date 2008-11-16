@@ -16,15 +16,21 @@ ircd protocol
   Large networks may need to increase this.
 - Limit IRC command output to 2000 lines. XMLRPC is unaffected.
 - Add tracking for the "server admin" umode in some ircds.
+- Remove some obsolete protocol modules: aurora, sorcery, ptlink, shadowircd.
+  If you do still use one of these, please contact us.
 nickserv
 - Snoop on freeze on/off.
 - Add nickserv/vacation module, allowing to temporarily extend expiry times.
 - Make register help text depend on whether email verification is used.
+- Refer users to their email if they try to identify again while unverified.
+  [MERGED]
+- In FUNGROUP, allow dropping account names, by specifying a new account name.
 chanserv
 - Allow multiple spaces before fantasy commands when ChanServ is addressed
   by nickname.
 - QUIET/UNQUIET now notify the target user or channel.
 - Show the current successor in /cs info (for +A users and opers).
+- FFLAGS now overrides the NEVEROP setting on the target account.
 alis
 - Fix handling of key and limit options.
 memoserv
@@ -33,12 +39,16 @@ oper
 - Allow searching for AKILLs matching a given mask or id in AKILL LIST.
 - Allow running an operserv-only services instance, which picks up login
   names from the main instance (currently only for hyperion and TS6 ircds).
+- Add optional PCRE support. Configure --with-pcre to enable it and add
+  the p flag to use it (e.g. /os rmatch /\d\d\d/p). The regex wrapper has
+  been changed slightly to make this possible.
 xmlrpc
 code
 - Change kline_delete() to take a kline_t pointer instead of a user and host.
 - Allow modules to influence the expiry process.
 - Fix a minor memory leak on /os REHASH.
 - Fix null pointer dereference with some invalid config files.
+- Move the metadata entries to object_t.
 other
 - Allow arbitrary line lengths in flatfile database loader.
 - Synchronized with libmowgli 0.7 framework.
@@ -46,6 +56,11 @@ other
   has been deprecated since version 0.3.
 - Fix ircservices conversion for ircservices 5.1.
 - Improve flood detection.
+- Fix a bug with /os identify introducing enforcers.
+- Fix a bug that could cause normal users to be seen as enforcers.
+- Allow any service's nick/user/host/realname to be set in the configuration
+  file, and update them on a rehash. The service creation code works quite a
+  bit differently to make this possible.
 
 Atheme Services 3.1 Release Notes
 =================================
