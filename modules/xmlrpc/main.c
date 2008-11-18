@@ -239,7 +239,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(1, "Insufficient parameters.");
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
 		return 0;
 	}
 
@@ -247,21 +247,21 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (!(mu = myuser_find(parv[0])))
 	{
-		xmlrpc_generic_error(3, "The account is not registered.");
+		xmlrpc_generic_error(fault_nosuch_source, "The account is not registered.");
 		return 0;
 	}
 
 	if (metadata_find(mu, "private:freeze:freezer") != NULL)
 	{
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
-		xmlrpc_generic_error(6, "The account has been frozen.");
+		xmlrpc_generic_error(fault_noprivs, "The account has been frozen.");
 		return 0;
 	}
 
 	if (!verify_password(mu, parv[1]))
 	{
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
-		xmlrpc_generic_error(5, "The password is not valid for this account.");
+		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 		return 0;
 	}
 
@@ -300,19 +300,19 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(1, "Insufficient parameters.");
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		xmlrpc_generic_error(3, "Unknown user.");
+		xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(5, "Invalid authcookie for this account.");
+		xmlrpc_generic_error(fault_authfail, "Invalid authcookie for this account.");
 		return 0;
 	}
 
@@ -356,14 +356,14 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	{
 		if (strchr(parv[i], '\r') || strchr(parv[i], '\n'))
 		{
-			xmlrpc_generic_error(2, "Invalid parameters.");
+			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
 			return 0;
 		}
 	}
 
 	if (parc < 5)
 	{
-		xmlrpc_generic_error(1, "Insufficient parameters.");
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
 		return 0;
 	}
 
@@ -371,13 +371,13 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	{
 		if ((mu = myuser_find(parv[1])) == NULL)
 		{
-			xmlrpc_generic_error(3, "Unknown user.");
+			xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
 			return 0;
 		}
 
 		if (authcookie_validate(parv[0], mu) == FALSE)
 		{
-			xmlrpc_generic_error(5, "Invalid authcookie for this account.");
+			xmlrpc_generic_error(fault_authfail, "Invalid authcookie for this account.");
 			return 0;
 		}
 	}
@@ -388,13 +388,13 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	if (svs == NULL || svs->cmdtree == NULL)
 	{
 		slog(LG_DEBUG, "xmlrpcmethod_command(): invalid service %s", parv[3]);
-		xmlrpc_generic_error(3, "Invalid service name.");
+		xmlrpc_generic_error(fault_nosuch_source, "Invalid service name.");
 		return 0;
 	}
 	cmd = command_find(svs->cmdtree, parv[4]);
 	if (cmd == NULL)
 	{
-		xmlrpc_generic_error(3, "Invalid command name.");
+		xmlrpc_generic_error(fault_nosuch_source, "Invalid command name.");
 		return 0;
 	}
 
@@ -419,7 +419,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 			xmlrpc_send(1, buf);
 		}
 		else
-			xmlrpc_generic_error(14, "Command did not return a result.");
+			xmlrpc_generic_error(fault_unimplemented, "Command did not return a result.");
 	}
 
 	return 0;
