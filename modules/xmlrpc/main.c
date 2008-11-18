@@ -286,7 +286,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
  * XML outputs:
  *       fault 1 - insufficient parameters
  *       fault 3 - unknown user
- *       fault 5 - validation failed
+ *       fault 15 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -312,7 +312,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(fault_authfail, "Invalid authcookie for this account.");
+		xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
 		return 0;
 	}
 
@@ -377,7 +377,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 
 		if (authcookie_validate(parv[0], mu) == FALSE)
 		{
-			xmlrpc_generic_error(fault_authfail, "Invalid authcookie for this account.");
+			xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
 			return 0;
 		}
 	}

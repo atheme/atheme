@@ -110,7 +110,8 @@ enum faultcode_
 	fault_notverified	= 11,
 	fault_nochange		= 12,
 	fault_already_authed	= 13,
-	fault_unimplemented	= 14
+	fault_unimplemented	= 14,
+	fault_badauthcookie	= 15
 };
 
 typedef enum faultcode_ faultcode_t;
