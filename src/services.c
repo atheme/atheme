@@ -277,7 +277,7 @@ void partall(char *name)
 	mc = mychan_find(name);
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
-		if (svs == chansvs.me && mc != NULL && config_options.join_chans)
+		if (svs == chansvs.me && mc != NULL && mc->flags & MC_GUARD)
 			continue;
 		/* Do not cache this channel_find(), the
 		 * channel may disappear under our feet
