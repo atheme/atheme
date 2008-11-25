@@ -166,10 +166,12 @@ void myuser_delete(myuser_t *mu)
 {
 	myuser_t *successor;
 	mychan_t *mc;
+	mynick_t *mn;
 	user_t *u;
 	node_t *n, *tn;
 	mymemo_t *memo;
 	chanacs_t *ca;
+	char nicks[200];
 
 	return_if_fail(mu != NULL);
 
@@ -254,9 +256,32 @@ void myuser_delete(myuser_t *mu)
 	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
 		myuser_access_delete(mu, (char *)n->data);
 
-	/* delete their nicks */
+	/* delete their nicks and report them */
+	nicks[0] = '\0';
 	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)
-		object_unref(n->data);
+	{
+		mn = n->data;
+		if (irccasecmp(mn->nick, mu->name))
+		{
+			slog(LG_REGISTER, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
+					mn->nick,
+					(long)(CURRTIME - mn->lastseen),
+					mu->name);
+			if (strlen(nicks) + strlen(mn->nick) + 3 >= sizeof nicks)
+			{
+				snoop(_("DELETE: %s from \2%s\2"), nicks, mu->name);
+				nicks[0] = '\0';
+			}
+			if (nicks[0] != '\0')
+				strlcat(nicks, ", ", sizeof nicks);
+			strlcat(nicks, "\2", sizeof nicks);
+			strlcat(nicks, mn->nick, sizeof nicks);
+			strlcat(nicks, "\2", sizeof nicks);
+		}
+		object_unref(mn);
+	}
+	if (nicks[0] != '\0')
+		snoop(_("DELETE: %s from \2%s\2"), nicks, mu->name);
 
 	/* mu->name is the index for this dtree */
 	mowgli_patricia_delete(mulist, mu->name);
