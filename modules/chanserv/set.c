@@ -475,7 +475,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char modebuf[32], *end, c;
-	int add = -1;
+	int dir = MTYPE_NUL;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	unsigned int mask, changed;
 	boolean_t mask_ext;
@@ -529,7 +529,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	while (*letters)
 	{
-		if (*letters != '+' && *letters != '-' && add < 0)
+		if (*letters != '+' && *letters != '-' && dir == MTYPE_NUL)
 		{
 			letters++;
 			continue;
@@ -538,15 +538,15 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		switch ((c = *letters++))
 		{
 		  case '+':
-			  add = 1;
+			  dir = MTYPE_ADD;
 			  break;
 
 		  case '-':
-			  add = 0;
+			  dir = MTYPE_DEL;
 			  break;
 
 		  case 'k':
-			  if (add)
+			  if (dir == MTYPE_ADD)
 			  {
 				  arg = strtok(NULL, " ");
 				  if (!arg)
@@ -577,7 +577,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			  break;
 
 		  case 'l':
-			  if (add)
+			  if (dir == MTYPE_ADD)
 			  {
 				  arg = strtok(NULL, " ");
 				  if(!arg)
@@ -608,7 +608,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 			  if (flag)
 			  {
-				  if (add)
+				  if (dir == MTYPE_ADD)
 					  newlock_on |= flag, newlock_off &= ~flag;
 				  else
 					  newlock_off |= flag, newlock_on &= ~flag;
@@ -619,7 +619,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			  {
 				  if (c == ignore_mode_list[i].mode)
 				  {
-					  if (add)
+					  if (dir == MTYPE_ADD)
 					  {
 						  arg = strtok(NULL, " ");
 						  if(!arg)
