@@ -91,7 +91,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Founder    : %s"), mychan_founder_names(mc));
 
 	if (chanacs_source_has_flag(mc, si, CA_ACLVIEW) ||
-		!has_priv(si, PRIV_CHAN_AUSPEX))
+		has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		mu = mychan_pick_successor(mc);
 		if (mu != NULL)
