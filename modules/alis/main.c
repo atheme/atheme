@@ -266,7 +266,7 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 		if (chptr->key != NULL)
 			modestr[j++] = 'k';
 		modestr[j] = '\0';
-		strlcat(modestr, flags_to_string(chptr->modes), sizeof modestr);
+		strlcat(modestr, flags_to_string(chptr->modes & ~ircd->oimmune_mode), sizeof modestr);
 	}
 
 	if(query->show_mode && show_topicwho && show_topic)
