@@ -378,7 +378,9 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
         {
                 if((chptr = channel_find(query.mask)) != NULL)
                 {
-                        if(!(chptr->modes & CMODE_SEC))
+                        if(!(chptr->modes & CMODE_SEC) ||
+					(si->su != NULL &&
+					 chanuser_find(chptr, si->su)))
                                 print_channel(si, chptr, &query);
                 }
 
