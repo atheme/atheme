@@ -28,7 +28,7 @@ ircd_t ShadowIRCd = {
         TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	FALSE,				/* Whether or not we use vHosts. */
-	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
+	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
         CMODE_PROTECT,                  /* Integer flag for owner channel flag. */
         CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */
@@ -37,7 +37,7 @@ ircd_t ShadowIRCd = {
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_SHADOWIRCD,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
-	0,                              /* Oper-immune cmode */
+	CMODE_IMMUNE,                   /* Oper-immune cmode */
 	"beIq",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
