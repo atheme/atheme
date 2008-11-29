@@ -160,7 +160,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 		if (tcnt >= me.maxusers)
 		{
-			command_fail(si, fault_toomany, _("\2%s\2 has too many nicknames registered."), email);
+			command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
 			return;
 		}
 	}

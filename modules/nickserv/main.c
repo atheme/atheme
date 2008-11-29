@@ -66,7 +66,6 @@ struct
 	{ "\2%s\2 is not a registered nickname.", N_("\2%s\2 is not a registered account.") },
 	{ "Syntax: INFO <nickname>", N_("Syntax: INFO <account>") },
 	{ "No nicknames matched pattern \2%s\2", N_("No accounts matched pattern \2%s\2") },
-	{ "\2%s\2 has too many nicknames registered.", N_("\2%s\2 has too many accounts registered.") },
 	{ "An email containing nickname activation instructions has been sent to \2%s\2.", N_("An email containing account activation instructions has been sent to \2%s\2.") },
 	{ "If you do not complete registration within one day your nickname will expire.", N_("If you do not complete registration within one day your account will expire.") },
 	{ "%s registered the nick \2%s\2 and gained services operator privileges.", N_("%s registered the account \2%s\2 and gained services operator privileges.") },
