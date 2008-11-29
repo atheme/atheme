@@ -61,14 +61,11 @@ struct
 	{ "Reclaims use of a nickname.", N_("Disconnects an old session.") },
 	{ "Registers a nickname.", N_("Registers an account.") },
 	{ "Lists nicknames registered matching a given pattern.", N_("Lists accounts matching a given pattern.") },
-	{ "Lists nicknames registered to an e-mail address.", N_("Lists accounts registered to an e-mail address.") },
 
 	/* messages */
 	{ "\2%s\2 is not a registered nickname.", N_("\2%s\2 is not a registered account.") },
 	{ "Syntax: INFO <nickname>", N_("Syntax: INFO <account>") },
 	{ "No nicknames matched pattern \2%s\2", N_("No accounts matched pattern \2%s\2") },
-	{ "Nicknames matching e-mail address \2%s\2:", N_("Accounts matching e-mail address \2%s\2:") },
-	{ "No nicknames matched e-mail address \2%s\2", N_("No accounts matched e-mail address \2%s\2") },
 	{ "\2%s\2 has too many nicknames registered.", N_("\2%s\2 has too many accounts registered.") },
 	{ "An email containing nickname activation instructions has been sent to \2%s\2.", N_("An email containing account activation instructions has been sent to \2%s\2.") },
 	{ "If you do not complete registration within one day your nickname will expire.", N_("If you do not complete registration within one day your account will expire.") },

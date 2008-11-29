@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listmail = { "LISTMAIL", N_("Lists nicknames registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail };
+command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -53,7 +53,7 @@ static int listmail_foreach_cb(const char *key, void *data, void *privdata)
 	{
 		/* in the future we could add a LIMIT parameter */
 		if (state->matches == 0)
-			command_success_nodata(state->origin, "Nicknames matching e-mail address \2%s\2:", state->pattern);
+			command_success_nodata(state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
 
 		command_success_nodata(state->origin, "- %s (%s)", mu->name, mu->email);
 		state->matches++;
@@ -83,7 +83,7 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
 	if (state.matches == 0)
-		command_success_nodata(si, _("No nicknames matched e-mail address \2%s\2"), email);
+		command_success_nodata(si, _("No accounts matched e-mail address \2%s\2"), email);
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
 						    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, email);
