@@ -28,6 +28,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/list.c	\
 	$(SRCDIR)/listchans.c	\
 	$(SRCDIR)/listmail.c	\
+	$(SRCDIR)/listownmail.c	\
 	$(SRCDIR)/logout.c	\
 	$(SRCDIR)/mark.c	\
 	$(SRCDIR)/register.c	\

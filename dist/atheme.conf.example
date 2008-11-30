@@ -110,6 +110,7 @@ loadmodule "modules/backend/flatfile";
  * INFO command					modules/nickserv/info
  * LIST command					modules/nickserv/list
  * LISTMAIL command				modules/nickserv/listmail
+ * LISTOWNMAIL command				modules/nickserv/listownmail
  * LOGIN command (for no_nick_ownership)	modules/nickserv/login
  * LOGOUT command				modules/nickserv/logout
  * MARK command					modules/nickserv/mark
@@ -143,6 +144,7 @@ loadmodule "modules/nickserv/identify";
 loadmodule "modules/nickserv/info";
 loadmodule "modules/nickserv/list";
 loadmodule "modules/nickserv/listmail";
+#loadmodule "modules/nickserv/listownmail";
 #loadmodule "modules/nickserv/login";
 loadmodule "modules/nickserv/logout";
 loadmodule "modules/nickserv/mark";

@@ -1,0 +1,9 @@
+Help for LISTOWNMAIL:
+
+LISTOWNMAIL shows accounts registered to
+your account's e-mail address.
+
+Syntax: LISTOWNMAIL
+
+Examples:
+    /msg &nick& LISTOWNMAIL
