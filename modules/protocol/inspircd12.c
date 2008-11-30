@@ -349,9 +349,9 @@ static void inspircd_numeric_sts(server_t *from, int numeric, user_t *target, co
 static void inspircd_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
-		sts(":%s KILL %s :[%s] Killed (%s (%s))", CLIENT_NAME(killer), id, me.name, killer->nick, reason);
+		sts(":%s KILL %s :Killed (%s (%s))", CLIENT_NAME(killer), id, killer->nick, reason);
 	else
-		sts(":%s KILL %s :[%s] Killed (%s (%s))", ME, id, me.name, me.name, reason);
+		sts(":%s KILL %s :Killed (%s (%s))", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
