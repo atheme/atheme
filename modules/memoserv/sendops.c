@@ -183,9 +183,11 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Is the user online? If so, tell them about the new memo. */
 		if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", si->smu->name);
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (%d).", si->smu->name, LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s).", si->smu->name, si->su->nick);
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", si->smu->name, si->su->nick, LIST_LENGTH(&tmu->memos));
+		myuser_notice(memosvs.nick, tmu, _("To read it, type /%s%s READ %d"),
+					ircd->uses_rcommand ? "" : "msg ", memosvs.disp, LIST_LENGTH(&tmu->memos));
 	}
 
 	/* Tell user memo sent, return */

@@ -104,6 +104,8 @@ static void on_user_identify(void *vptr)
 		notice(memosvs.nick, u->nick, ngettext(N_("You have %d new memo."),
 						       N_("You have %d new memos."),
 						       mu->memoct_new), mu->memoct_new);
+		notice(memosvs.nick, u->nick, _("To read them, type /%s%s READ NEW"),
+					ircd->uses_rcommand ? "" : "msg ", memosvs.disp);
 	}
 }
 
@@ -129,6 +131,8 @@ static void on_user_away(void *vptr)
 		notice(memosvs.nick, u->nick, ngettext(N_("You have %d new memo."),
 						       N_("You have %d new memos."),
 						       mu->memoct_new), mu->memoct_new);
+		notice(memosvs.nick, u->nick, _("To read them, type /%s%s READ NEW"),
+					ircd->uses_rcommand ? "" : "msg ", memosvs.disp);
 	}
 }
 
