@@ -30,6 +30,10 @@
 # define RTLD_NOW RTLD_LAZY
 #endif
 
+#ifndef RTLD_LOCAL
+#define RTLD_LOCAL 0
+#endif
+
 #ifndef __HPUX__
 # define PLATFORM_SUFFIX ".so"
 #else
@@ -50,7 +54,7 @@
  */
 void *linker_open(const char *path)
 {
-	return dlopen(path, RTLD_NOW);
+	return dlopen(path, RTLD_NOW | RTLD_LOCAL);
 }
 
 /*
