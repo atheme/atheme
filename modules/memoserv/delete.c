@@ -47,7 +47,8 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	node_t *n, *tn;
-	unsigned int i = 0, delcount = 0, memonum = 0, deleteall = 0;
+	unsigned int i = 0, delcount = 0, memonum = 0;
+	unsigned int deleteall = 0, deleteold = 0;
 	mymemo_t *memo;
 	
 	/* We only take 1 arg, and we ignore all others */
@@ -59,7 +60,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "DELETE");
 		
-		command_fail(si, fault_needmoreparams, _("Syntax: DELETE ALL|message id"));
+		command_fail(si, fault_needmoreparams, _("Syntax: DELETE ALL|OLD|message id"));
 		return;
 	}
 	
@@ -82,7 +83,10 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	{
 		deleteall = 1;
 	}
-	
+	else if (!strcasecmp("old",arg1))
+	{
+		deleteold = 1;
+	}
 	else
 	{
 		memonum = atoi(arg1);
@@ -108,12 +112,12 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
+		memo = (mymemo_t*) n->data;
 		
-		if ((i == memonum) || (deleteall == 1))
+		if (i == memonum || deleteall ||
+				(deleteold && memo->status & MEMO_READ))
 		{
 			delcount++;
-			
-			memo = (mymemo_t*) n->data;
 			
 			if (!(memo->status & MEMO_READ))
 				si->smu->memoct_new--;
