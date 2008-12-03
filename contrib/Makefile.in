@@ -38,7 +38,7 @@ BIN		= atheme@EXEEXT@
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include
+CFLAGS		= -I../include @CFLAGS@
 
 LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@

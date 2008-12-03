@@ -11,7 +11,7 @@ MODULE = crypto
 include ../Makefile.defs
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-CFLAGS		= @CFLAGS@ -I../../include
+CFLAGS		= -I../../include @CFLAGS@
 
 BASE_SRCS =				\
 	$(SRCDIR)/@POSIX_CRYPTC@	\

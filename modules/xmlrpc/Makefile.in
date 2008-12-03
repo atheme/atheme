@@ -11,7 +11,7 @@ MODULE = xmlrpc
 include ../Makefile.defs
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-CFLAGS		= @CFLAGS@ -I../../include
+CFLAGS		= -I../../include @CFLAGS@
 
 default: all
 

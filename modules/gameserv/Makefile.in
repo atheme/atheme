@@ -11,7 +11,7 @@ MODULE = gameserv
 include ../Makefile.defs
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I$(SRCDIR)/../../include
-CFLAGS		= @CFLAGS@ -I$(SRCDIR)/../../include
+CFLAGS		= -I$(SRCDIR)/../../include @CFLAGS@
 
 BASE_SRCS =			\
 	$(SRCDIR)/main.c	\

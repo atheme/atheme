@@ -11,7 +11,7 @@ MODULE = backend
 include ../Makefile.defs
 
 MKDEP		= @MKDEP@
-CFLAGS		= @CFLAGS@ -I../../include
+CFLAGS		= -I../../include @CFLAGS@
 
 BASE_SRCS =			\
 	$(SRCDIR)/flatfile.c
