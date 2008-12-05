@@ -40,6 +40,7 @@
  * Hybrid 7.1.2 and later			modules/protocol/hybrid
  * ircd-ratbox 2.0 and later			modules/protocol/ratbox
  * IRCNet ircd (ircd 2.11)			modules/protocol/ircnet
+ * ircd-seven                                   modules/protocol/ircd-seven
  * ircu 2.10.11.07 or later			modules/protocol/undernet
  * IRCXPRO 1.2/OfficeIRC			modules/protocol/officeirc
  * InspIRCd 1.1b1 or later			modules/protocol/inspircd11
