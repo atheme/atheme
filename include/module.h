@@ -68,17 +68,32 @@ E void *module_locate_symbol(const char *modname, const char *sym);
 E void module_unload(module_t *m);
 E module_t *module_find(const char *name);
 E module_t *module_find_published(const char *name);
+E boolean_t module_request(const char *name);
+
+#define MODULE_TRY_REQUEST_DEPENDENCY(self, modname) \
+	if (module_request(modname) == FALSE)				\
+	{								\
+		(self)->mflags = MODTYPE_FAIL;				\
+		return;							\
+	}
+
+#define MODULE_TRY_REQUEST_SYMBOL(self, dest, modname, sym) \
+	if ((dest = module_locate_symbol(modname, sym)) == NULL)		\
+	{									\
+		MODULE_TRY_REQUEST_DEPENDENCY(self, modname);			\
+		if ((dest = module_locate_symbol(modname, sym)) == NULL)	\
+		{								\
+			(self)->mflags = MODTYPE_FAIL;				\
+			return;							\
+		}								\
+	}
 
 /* Use this macro in your _modinit() function to use symbols from
  * other modules. It will abort the _modinit() and unload your module
  * without calling _moddeinit(). -- jilles */
 /* XXX this assumes the parameter is called m */
 #define MODULE_USE_SYMBOL(dest, modname, sym) \
-	if ((dest = module_locate_symbol(modname, sym)) == NULL)	\
-	{								\
-		m->mflags = MODTYPE_FAIL;				\
-		return;							\
-	}
+	MODULE_TRY_REQUEST_SYMBOL(m, dest, modname, sym)
 
 #endif
 
