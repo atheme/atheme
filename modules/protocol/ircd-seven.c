@@ -12,13 +12,59 @@
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/charybdis.h"
+#include "protocol/ircd-seven.h"
 
 DECLARE_MODULE_V1("protocol/ircd-seven", TRUE, _modinit, NULL, "$Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
+ircd_t Seven = {
+        "ircd-seven",			/* IRCd name */
+        "$$",                           /* TLD Prefix, used by Global. */
+        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
+        FALSE,                          /* Whether or not we use RCOMMAND */
+        FALSE,                          /* Whether or not we support channel owners. */
+        FALSE,                          /* Whether or not we support channel protection. */
+        FALSE,                          /* Whether or not we support halfops. */
+	FALSE,				/* Whether or not we use P10 */
+	FALSE,				/* Whether or not we use vHosts. */
+	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
+        0,                              /* Integer flag for owner channel flag. */
+        0,                              /* Integer flag for protect channel flag. */
+        0,                              /* Integer flag for halfops. */
+        "+",                            /* Mode we set for owner. */
+        "+",                            /* Mode we set for protect. */
+        "+",                            /* Mode we set for halfops. */
+	PROTOCOL_CHARYBDIS,		/* Protocol type */
+	CMODE_PERM,                     /* Permanent cmodes */
+	CMODE_IMMUNE,                   /* Oper-immune cmode */
+	"beIq",                         /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I',                            /* Invex mchar */
+	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
+};
+
+struct cmode_ seven_mode_list[] = {
+  { 'i', CMODE_INVITE },
+  { 'm', CMODE_MOD    },
+  { 'n', CMODE_NOEXT  },
+  { 'p', CMODE_PRIV   },
+  { 's', CMODE_SEC    },
+  { 't', CMODE_TOPIC  },
+  { 'c', CMODE_NOCOLOR},
+  { 'r', CMODE_REGONLY},
+  { 'z', CMODE_OPMOD  },
+  { 'g', CMODE_FINVITE},
+  { 'L', CMODE_EXLIMIT},
+  { 'P', CMODE_PERM   },
+  { 'F', CMODE_FTARGET},
+  { 'Q', CMODE_DISFWD },
+  { 'M', CMODE_IMMUNE },
+  { '\0', 0 }
+};
+
 struct cmode_ seven_user_mode_list[] = {
-  { 'm', UF_IMMUNE   },
+  { 'p', UF_IMMUNE   },
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
@@ -31,7 +77,10 @@ void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
+	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;
+
+	ircd = &Seven;
 
 	m->mflags = MODTYPE_CORE;
 
