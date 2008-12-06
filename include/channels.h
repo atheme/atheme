@@ -73,7 +73,7 @@ struct chanban_
 struct cmode_
 {
         char mode;
-        unsigned int value;
+        unsigned long value;
 };
 
 struct extmode
