@@ -126,7 +126,7 @@ static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(tu));
-	cu->modes |= CMODE_OWNER;
+	cu->modes |= CSTATUS_OWNER;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been set as owner on %s by %s", mc->name, get_source_name(si));
@@ -199,7 +199,7 @@ static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(tu));
-	cu->modes &= ~CMODE_OWNER;
+	cu->modes &= ~CSTATUS_OWNER;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been unset as owner on %s by %s", mc->name, get_source_name(si));

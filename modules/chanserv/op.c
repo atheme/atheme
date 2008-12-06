@@ -120,7 +120,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
-	cu->modes |= CMODE_OP;
+	cu->modes |= CSTATUS_OP;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been opped on %s by %s", mc->name, get_source_name(si));
@@ -187,7 +187,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
-	cu->modes &= ~CMODE_OP;
+	cu->modes &= ~CSTATUS_OP;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been deopped on %s by %s", mc->name, get_source_name(si));

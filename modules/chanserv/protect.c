@@ -126,7 +126,7 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(tu));
-	cu->modes |= CMODE_PROTECT;
+	cu->modes |= CSTATUS_PROTECT;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been set as protected on %s by %s", mc->name, get_source_name(si));
@@ -199,7 +199,7 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(tu));
-	cu->modes &= ~CMODE_PROTECT;
+	cu->modes &= ~CSTATUS_PROTECT;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been unset as protected on %s by %s", mc->name, get_source_name(si));

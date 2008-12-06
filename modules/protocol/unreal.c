@@ -28,9 +28,9 @@ ircd_t Unreal = {
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY | CMODE_ADMONLY, /* Oper-only cmodes */
-        CMODE_OWNER,                    /* Integer flag for owner channel flag. */
-        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
-        CMODE_HALFOP,                   /* Integer flag for halfops. */
+        CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
+        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
         "+q",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
@@ -79,20 +79,20 @@ struct extmode unreal_ignore_mode_list[] = {
 };
 
 struct cmode_ unreal_status_mode_list[] = {
-  { 'q', CMODE_OWNER   },
-  { 'a', CMODE_PROTECT },
-  { 'o', CMODE_OP      },
-  { 'h', CMODE_HALFOP  },
-  { 'v', CMODE_VOICE   },
+  { 'q', CSTATUS_OWNER   },
+  { 'a', CSTATUS_PROTECT },
+  { 'o', CSTATUS_OP      },
+  { 'h', CSTATUS_HALFOP  },
+  { 'v', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ unreal_prefix_mode_list[] = {
-  { '*', CMODE_OWNER   },
-  { '~', CMODE_PROTECT },
-  { '@', CMODE_OP      },
-  { '%', CMODE_HALFOP  },
-  { '+', CMODE_VOICE   },
+  { '*', CSTATUS_OWNER   },
+  { '~', CSTATUS_PROTECT },
+  { '@', CSTATUS_OP      },
+  { '%', CSTATUS_HALFOP  },
+  { '+', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 

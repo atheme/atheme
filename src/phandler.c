@@ -126,7 +126,7 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 	LIST_FOREACH(n, channel->members.head)
 	{
 		cu = (chanuser_t *)n->data;
-		if (cu->user->server != me.me && cu->modes & CMODE_OP)
+		if (cu->user->server != me.me && cu->modes & CSTATUS_OP)
 			notice(sender->nick, cu->user->nick, "[@%s] %s", channel->name, message);
 	}
 }

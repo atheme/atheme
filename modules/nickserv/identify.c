@@ -277,22 +277,22 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 					cu->modes |= ircd->protect_mode;
 				}
 
-				if (!(cu->modes & CMODE_OP) && ca->level & CA_AUTOOP)
+				if (!(cu->modes & CSTATUS_OP) && ca->level & CA_AUTOOP)
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
-					cu->modes |= CMODE_OP;
+					cu->modes |= CSTATUS_OP;
 				}
 
-				if (ircd->uses_halfops && !(cu->modes & (CMODE_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
+				if (ircd->uses_halfops && !(cu->modes & (CSTATUS_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
 					cu->modes |= ircd->halfops_mode;
 				}
 
-				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)) && ca->level & CA_AUTOVOICE)
+				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)) && ca->level & CA_AUTOVOICE)
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
-					cu->modes |= CMODE_VOICE;
+					cu->modes |= CSTATUS_VOICE;
 				}
 			}
 		}

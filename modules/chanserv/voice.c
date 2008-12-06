@@ -112,7 +112,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
-	cu->modes |= CMODE_VOICE;
+	cu->modes |= CSTATUS_VOICE;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
@@ -173,7 +173,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
-	cu->modes &= ~CMODE_VOICE;
+	cu->modes &= ~CSTATUS_VOICE;
 
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));

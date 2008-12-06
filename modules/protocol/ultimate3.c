@@ -29,8 +29,8 @@ ircd_t ultimate3 = {
 	TRUE,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
-        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
-        CMODE_HALFOP,                   /* Integer flag for halfops. */
+        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
@@ -61,18 +61,18 @@ struct extmode ultimate3_ignore_mode_list[] = {
 };
 
 struct cmode_ ultimate3_status_mode_list[] = {
-  { 'a', CMODE_PROTECT },
-  { 'o', CMODE_OP    },
-  { 'h', CMODE_HALFOP },
-  { 'v', CMODE_VOICE },
+  { 'a', CSTATUS_PROTECT },
+  { 'o', CSTATUS_OP    },
+  { 'h', CSTATUS_HALFOP },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ ultimate3_prefix_mode_list[] = {
-  { '!', CMODE_PROTECT },
-  { '@', CMODE_OP    },
-  { '%', CMODE_HALFOP  },
-  { '+', CMODE_VOICE },
+  { '!', CSTATUS_PROTECT },
+  { '@', CSTATUS_OP    },
+  { '%', CSTATUS_HALFOP  },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -449,7 +449,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)ts, c->name, cu->user->nick);
-					cu->modes = CMODE_OP;
+					cu->modes = CSTATUS_OP;
 				}
 				else
 					cu->modes = 0;

@@ -60,14 +60,14 @@ struct extmode dreamforge_ignore_mode_list[] = {
 };
 
 struct cmode_ dreamforge_status_mode_list[] = {
-  { 'o', CMODE_OP      },
-  { 'v', CMODE_VOICE   },
+  { 'o', CSTATUS_OP      },
+  { 'v', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ dreamforge_prefix_mode_list[] = {
-  { '@', CMODE_OP      },
-  { '+', CMODE_VOICE   },
+  { '@', CSTATUS_OP      },
+  { '+', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 

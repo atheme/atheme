@@ -563,7 +563,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 				/* it's a service, reop */
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
 				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;
@@ -656,7 +656,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 				/* it's a service, reop */
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
 				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;

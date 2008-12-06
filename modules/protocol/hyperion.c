@@ -76,14 +76,14 @@ struct extmode hyperion_ignore_mode_list[] = {
 };
 
 struct cmode_ hyperion_status_mode_list[] = {
-  { 'o', CMODE_OP    },
-  { 'v', CMODE_VOICE },
+  { 'o', CSTATUS_OP    },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ hyperion_prefix_mode_list[] = {
-  { '@', CMODE_OP    },
-  { '+', CMODE_VOICE },
+  { '@', CSTATUS_OP    },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -623,7 +623,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts(":%s MODE %s +o %s", cu->user->nick, c->name, cu->user->nick);
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;

@@ -60,16 +60,16 @@ struct extmode officeirc_ignore_mode_list[] = {
 };
 
 struct cmode_ officeirc_status_mode_list[] = {
-  { 'q', CMODE_OWNER | CMODE_OP  },
-  { 'o', CMODE_OP      },
-  { 'v', CMODE_VOICE   },
+  { 'q', CSTATUS_OWNER | CSTATUS_OP  },
+  { 'o', CSTATUS_OP      },
+  { 'v', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ officeirc_prefix_mode_list[] = {
-  { '.', CMODE_OWNER | CMODE_OP  },
-  { '@', CMODE_OP      },
-  { '+', CMODE_VOICE   },
+  { '.', CSTATUS_OWNER | CSTATUS_OP  },
+  { '@', CSTATUS_OP      },
+  { '+', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
@@ -714,7 +714,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts(":%s MODE %s +o %s", CLIENT_NAME(cu->user), c->name, CLIENT_NAME(cu->user));
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;

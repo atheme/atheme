@@ -139,17 +139,17 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (fl & (CA_AUTOOP | CA_OP))
 		{
-			if (!noop && fl & CA_AUTOOP && !(CMODE_OP & cu->modes))
+			if (!noop && fl & CA_AUTOOP && !(CSTATUS_OP & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_OP;
+				cu->modes |= CSTATUS_OP;
 			}
 			continue;
 		}
-		if ((CMODE_OP & cu->modes))
+		if ((CSTATUS_OP & cu->modes))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
-			cu->modes &= ~CMODE_OP;
+			cu->modes &= ~CSTATUS_OP;
 		}
 		if (ircd->uses_halfops)
 		{
@@ -170,17 +170,17 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (fl & (CA_AUTOVOICE | CA_VOICE))
 		{
-			if (!noop && fl & CA_AUTOVOICE && !(CMODE_VOICE & cu->modes))
+			if (!noop && fl & CA_AUTOVOICE && !(CSTATUS_VOICE & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_VOICE;
+				cu->modes |= CSTATUS_VOICE;
 			}
 			continue;
 		}
-		if ((CMODE_VOICE & cu->modes))
+		if ((CSTATUS_VOICE & cu->modes))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
-			cu->modes &= ~CMODE_VOICE;
+			cu->modes &= ~CSTATUS_VOICE;
 		}
 	}
 

@@ -60,14 +60,14 @@ struct extmode undernet_ignore_mode_list[] = {
 };
 
 struct cmode_ undernet_status_mode_list[] = {
-  { 'o', CMODE_OP    },
-  { 'v', CMODE_VOICE },
+  { 'o', CSTATUS_OP    },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ undernet_prefix_mode_list[] = {
-  { '@', CMODE_OP    },
-  { '+', CMODE_VOICE },
+  { '@', CSTATUS_OP    },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -544,7 +544,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts("%s M %s +o %s", me.numeric, c->name, CLIENT_NAME(cu->user));
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;
@@ -813,7 +813,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 							cu->user->uid);
 				}
 				else
-					cu->modes &= ~CMODE_OP;
+					cu->modes &= ~CSTATUS_OP;
 			}
 		}
 		else if (c == 'v')
@@ -821,7 +821,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 			LIST_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
-				cu->modes &= ~CMODE_VOICE;
+				cu->modes &= ~CSTATUS_VOICE;
 			}
 		}
 		else

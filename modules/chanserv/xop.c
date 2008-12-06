@@ -302,15 +302,15 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 			if (level & CA_AUTOOP)
 			{
-				if (!(cu->modes & CMODE_OP))
+				if (!(cu->modes & CSTATUS_OP))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-					cu->modes |= CMODE_OP;
+					cu->modes |= CSTATUS_OP;
 				}
 			}
 			else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
 			{
-				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode)))
+				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->halfops_mode;
@@ -319,10 +319,10 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
 			{
 				/* XXX HOP should have +V */
-				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
+				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-					cu->modes |= CMODE_VOICE;
+					cu->modes |= CSTATUS_VOICE;
 				}
 			}
 		}
@@ -404,15 +404,15 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 		if (level & CA_AUTOOP)
 		{
-			if (!(cu->modes & CMODE_OP))
+			if (!(cu->modes & CSTATUS_OP))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_OP;
+				cu->modes |= CSTATUS_OP;
 			}
 		}
 		else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
 		{
-			if (!(cu->modes & (CMODE_OP | ircd->halfops_mode)))
+			if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes |= ircd->halfops_mode;
@@ -421,10 +421,10 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
 		{
 			/* XXX HOP should have +V */
-			if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
+			if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_VOICE;
+				cu->modes |= CSTATUS_VOICE;
 			}
 		}
 	}

@@ -316,7 +316,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 				}
 				else
 				{
-					if (cu->user->server == me.me && status_mode_list[i].value == CMODE_OP)
+					if (cu->user->server == me.me && status_mode_list[i].value == CSTATUS_OP)
 					{
 						if (source == NULL)
 							reop_service(chan, cu->user, &first_deopped_service);

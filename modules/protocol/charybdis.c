@@ -71,14 +71,14 @@ struct extmode charybdis_ignore_mode_list[] = {
 };
 
 struct cmode_ charybdis_status_mode_list[] = {
-  { 'o', CMODE_OP    },
-  { 'v', CMODE_VOICE },
+  { 'o', CSTATUS_OP    },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ charybdis_prefix_mode_list[] = {
-  { '@', CMODE_OP    },
-  { '+', CMODE_VOICE },
+  { '@', CSTATUS_OP    },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -114,7 +114,7 @@ static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, us
 	if (u != NULL)
 	{
 		target_cu = chanuser_find(target_c, u);
-		if (target_cu != NULL && target_cu->modes & CMODE_OP)
+		if (target_cu != NULL && target_cu->modes & CSTATUS_OP)
 			return TRUE;
 		if (chanacs_user_flags(target_mc, u) & CA_SET)
 			return TRUE;

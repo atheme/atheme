@@ -65,14 +65,14 @@ struct extmode bahamut_ignore_mode_list[] = {
 };
 
 struct cmode_ bahamut_status_mode_list[] = {
-  { 'o', CMODE_OP    },
-  { 'v', CMODE_VOICE },
+  { 'o', CSTATUS_OP    },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ bahamut_prefix_mode_list[] = {
-  { '@', CMODE_OP    },
-  { '+', CMODE_VOICE },
+  { '@', CSTATUS_OP    },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -538,7 +538,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)ts, c->name, cu->user->nick);
-					cu->modes = CMODE_OP;
+					cu->modes = CSTATUS_OP;
 				}
 				else
 					cu->modes = 0;

@@ -104,7 +104,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	LIST_FOREACH(n, c->members.head)
 	{
 		cu = n->data;
-		if (cu->modes & (CMODE_OP | CMODE_VOICE))
+		if (cu->modes & (CSTATUS_OP | CSTATUS_VOICE))
 			continue;
 		if (is_internal_client(cu->user))
 			continue;

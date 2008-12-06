@@ -29,7 +29,7 @@ ircd_t Solidircd = {
 	CMODE_OPERONLY,			/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
-	CMODE_HALFOP,                   /* Integer flag for halfops. */
+	CSTATUS_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
@@ -67,16 +67,16 @@ struct extmode solidircd_ignore_mode_list[] = {
 };
 
 struct cmode_ solidircd_status_mode_list[] = {
-  { 'o', CMODE_OP    },
-  { 'h', CMODE_HALFOP },
-  { 'v', CMODE_VOICE },
+  { 'o', CSTATUS_OP    },
+  { 'h', CSTATUS_HALFOP },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ solidircd_prefix_mode_list[] = {
-  { '@', CMODE_OP    },
-  { '%', CMODE_HALFOP  },
-  { '+', CMODE_VOICE },
+  { '@', CSTATUS_OP    },
+  { '%', CSTATUS_HALFOP  },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
@@ -558,7 +558,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)ts, c->name, cu->user->nick);
-					cu->modes = CMODE_OP;
+					cu->modes = CSTATUS_OP;
 				}
 				else
 					cu->modes = 0;

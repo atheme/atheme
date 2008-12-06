@@ -423,23 +423,23 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 
 	if (flags & CA_AUTOOP)
 	{
-		if (!(noop || cu->modes & CMODE_OP))
+		if (!(noop || cu->modes & CSTATUS_OP))
 		{
 			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
-			cu->modes |= CMODE_OP;
+			cu->modes |= CSTATUS_OP;
 		}
 	}
-	else if (secure && (cu->modes & CMODE_OP) && !(flags & CA_OP))
+	else if (secure && (cu->modes & CSTATUS_OP) && !(flags & CA_OP))
 	{
 		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
-		cu->modes &= ~CMODE_OP;
+		cu->modes &= ~CSTATUS_OP;
 	}
 
 	if (ircd->uses_halfops)
 	{
 		if (flags & CA_AUTOHALFOP)
 		{
-			if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode)))
+			if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
 			{
 				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
 				cu->modes |= ircd->halfops_mode;
@@ -454,10 +454,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 
 	if (flags & CA_AUTOVOICE)
 	{
-		if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
+		if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
 		{
 			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
-			cu->modes |= CMODE_VOICE;
+			cu->modes |= CSTATUS_VOICE;
 		}
 	}
 
@@ -634,7 +634,7 @@ static void cs_newchan(channel_t *c)
 		/* No ops to clear */
 		chan_lowerts(c, chansvs.me->me);
 		cu = chanuser_add(c, CLIENT_NAME(chansvs.me->me));
-		cu->modes |= CMODE_OP;
+		cu->modes |= CSTATUS_OP;
 		/* make sure it parts again sometime (empty SJOIN etc) */
 		mc->flags |= MC_INHABIT;
 	}

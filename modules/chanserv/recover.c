@@ -117,10 +117,10 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes &= ~ircd->protect_mode;
 			}
-			if ((CMODE_OP & cu->modes))
+			if ((CSTATUS_OP & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
-				cu->modes &= ~CMODE_OP;
+				cu->modes &= ~CSTATUS_OP;
 			}
 			if (ircd->uses_halfops && (ircd->halfops_mode & cu->modes))
 			{
@@ -153,9 +153,9 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		if (!(CMODE_OP & origin_cu->modes))
+		if (!(CSTATUS_OP & origin_cu->modes))
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(si->su));
-		origin_cu->modes |= CMODE_OP;
+		origin_cu->modes |= CSTATUS_OP;
 	}
 
 	if (origin_cu != NULL || (si->su != NULL && chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))

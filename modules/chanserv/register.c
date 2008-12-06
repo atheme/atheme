@@ -101,7 +101,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make sure they're opped */
-	if (!(CMODE_OP & cu->modes))
+	if (!(CSTATUS_OP & cu->modes))
 	{
 		command_fail(si, fault_noprivs, _("You must be a channel operator in \2%s\2 in order to register it."), name);
 		return;

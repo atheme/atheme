@@ -50,9 +50,6 @@ struct chanban_
   int type; /* 'b', 'e', 'I', etc -- jilles */
 };
 
-#define CMODE_OP        0x00000020      /* SPECIAL */
-#define CMODE_VOICE     0x00000200      /* SPECIAL */
-
 #define CMODE_INVITE    0x00000001
 #define CMODE_KEY       0x00000002
 #define CMODE_LIMIT     0x00000004
@@ -62,9 +59,11 @@ struct chanban_
 #define CMODE_SEC       0x00000080
 #define CMODE_TOPIC     0x00000100
 
-#define CMODE_OWNER     0x10000000      /* unreal/inspircd +q */
-#define CMODE_PROTECT   0x20000000      /* unreal/inspircd +a */
-#define CMODE_HALFOP    0x40000000      /* unreal/inspircd +h */
+#define CSTATUS_OP      0x00000001
+#define CSTATUS_VOICE   0x00000002
+#define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
+#define CSTATUS_PROTECT 0x00000008      /* unreal/inspircd +a */
+#define CSTATUS_HALFOP  0x00000010      /* unreal/inspircd +h */
 
 #define MTYPE_NUL 0
 #define MTYPE_ADD 1

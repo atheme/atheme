@@ -27,9 +27,9 @@ ircd_t InspIRCd = {
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
-        CMODE_OWNER,                    /* Integer flag for owner channel flag. */
-        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
-        CMODE_HALFOP,                   /* Integer flag for halfops. */
+        CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
+        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
         "+q",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
@@ -83,20 +83,20 @@ struct extmode inspircd_ignore_mode_list[] = {
 };
 
 struct cmode_ inspircd_status_mode_list[] = {
-  { 'q', CMODE_OWNER   },
-  { 'a', CMODE_PROTECT },
-  { 'o', CMODE_OP      },
-  { 'h', CMODE_HALFOP  },
-  { 'v', CMODE_VOICE   },
+  { 'q', CSTATUS_OWNER   },
+  { 'a', CSTATUS_PROTECT },
+  { 'o', CSTATUS_OP      },
+  { 'h', CSTATUS_HALFOP  },
+  { 'v', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ inspircd_prefix_mode_list[] = {
-  { '~', CMODE_OWNER   },
-  { '&', CMODE_PROTECT },
-  { '@', CMODE_OP      },
-  { '%', CMODE_HALFOP  },
-  { '+', CMODE_VOICE   },
+  { '~', CSTATUS_OWNER   },
+  { '&', CSTATUS_PROTECT },
+  { '@', CSTATUS_OP      },
+  { '%', CSTATUS_HALFOP  },
+  { '+', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
@@ -718,7 +718,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts(":%s FMODE %s %lu +o %s", me.numeric, c->name, (unsigned long)ts, cu->user->uid);
-				cu->modes = CMODE_OP;
+				cu->modes = CSTATUS_OP;
 			}
 			else
 				cu->modes = 0;

@@ -102,7 +102,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (cu->modes & CMODE_OWNER || cu->modes & CMODE_PROTECT)
+	if (cu->modes & CSTATUS_OWNER || cu->modes & CSTATUS_PROTECT)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is protected from kicks; you cannot kick them."), tu->nick);
 		return;
@@ -164,7 +164,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (cu->modes & CMODE_OWNER || cu->modes & CMODE_PROTECT)
+	if (cu->modes & CSTATUS_OWNER || cu->modes & CSTATUS_PROTECT)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is protected from kicks; you cannot kick them."), tu->nick);
 		return;

@@ -211,7 +211,7 @@ void join(char *chan, char *nick)
 	}
 	join_sts(c, u, isnew, channel_modes(c, TRUE));
 	cu = chanuser_add(c, CLIENT_NAME(u));
-	cu->modes |= CMODE_OP;
+	cu->modes |= CSTATUS_OP;
 	if (isnew)
 	{
 		hook_call_event("channel_add", c);

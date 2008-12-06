@@ -30,9 +30,9 @@ ircd_t ShadowIRCd = {
 	FALSE,				/* Whether or not we use P10 */
 	FALSE,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-        CMODE_PROTECT,                  /* Integer flag for owner channel flag. */
-        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
-        CMODE_HALFOP,                   /* Integer flag for halfops. */
+        CSTATUS_PROTECT,                  /* Integer flag for owner channel flag. */
+        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
         "+a",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
@@ -78,18 +78,18 @@ struct cmode_ shadowircd_mode_list[] = {
 };
 
 struct cmode_ shadowircd_status_mode_list[] = {
-  { 'a', CMODE_PROTECT },
-  { 'o', CMODE_OP    },
-  { 'h', CMODE_HALFOP },
-  { 'v', CMODE_VOICE },
+  { 'a', CSTATUS_PROTECT },
+  { 'o', CSTATUS_OP    },
+  { 'h', CSTATUS_HALFOP },
+  { 'v', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ shadowircd_prefix_mode_list[] = {
-  { '!', CMODE_PROTECT },
-  { '@', CMODE_OP    },
-  { '%', CMODE_HALFOP },
-  { '+', CMODE_VOICE },
+  { '!', CSTATUS_PROTECT },
+  { '@', CSTATUS_OP    },
+  { '%', CSTATUS_HALFOP },
+  { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
 
