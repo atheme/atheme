@@ -237,7 +237,7 @@ void p10_parse(char *line)
 			 * pull the origin off into `origin', and have pos for the
 			 * command, message will be the part afterwards
 			 */
-			if (*line == ':' || me.recvsvr == TRUE)
+			if (*line == ':' || me.recvsvr)
 			{
 				origin = line;
 				if (*origin == ':')

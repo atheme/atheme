@@ -31,7 +31,7 @@ void init_uid(void)
 	unsigned int i;
 	char buf[BUFSIZE];
 
-	if (ircd->uses_p10 == TRUE)
+	if (ircd->uses_p10)
 	{
 		me.numeric = sstrdup(uinttobase64(buf, (uint64_t) atoi(me.numeric), 2));
 		uindex = 5;

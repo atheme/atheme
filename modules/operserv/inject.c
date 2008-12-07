@@ -61,7 +61,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	/* looks like someone INJECT'd an INJECT command.
 	 * this is probably a bad thing.
 	 */
-	if (injecting == TRUE)
+	if (injecting)
 	{
 		command_fail(si, fault_noprivs, _("You cannot inject an INJECT command."));
 		return;

@@ -215,11 +215,11 @@ static void httpd_recvqhandler(connection_t *cptr)
 		ph = (path_handler_t *)n->data;
 		handling_done = !strcmp(hd->filename, ph->path);
 
-		if (handling_done == TRUE)
+		if (handling_done)
 			break;
 	}
 
-	if (handling_done == TRUE)
+	if (handling_done)
 	{
 		if (hd->requestbuf != NULL)
 		{

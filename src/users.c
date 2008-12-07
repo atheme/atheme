@@ -298,7 +298,7 @@ user_t *user_find(const char *nick)
 	if (nick == NULL)
 		return NULL;
 
-	if (ircd->uses_uid == TRUE)
+	if (ircd->uses_uid)
 	{
 		u = mowgli_patricia_retrieve(uidlist, nick);
 

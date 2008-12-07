@@ -595,7 +595,7 @@ void set_password(myuser_t *mu, const char *newpassword)
 		return;
 
 	/* if we can, try to crypt it */
-	if (crypto_module_loaded == TRUE)
+	if (crypto_module_loaded)
 	{
 		mu->flags |= MU_CRYPTPASS;
 		strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), PASSLEN);
@@ -613,7 +613,7 @@ boolean_t verify_password(myuser_t *mu, const char *password)
 		return FALSE;
 
 	if (mu->flags & MU_CRYPTPASS)
-		if (crypto_module_loaded == TRUE)
+		if (crypto_module_loaded)
 			return crypt_verify_password(password, mu->pass);
 		else
 		{	/* not good!

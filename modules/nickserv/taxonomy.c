@@ -71,7 +71,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_t *md = n->data;
 
-		if (md->private == TRUE && !isoper)
+		if (md->private && !isoper)
 			continue;
 
 		command_success_nodata(si, "%-32s: %s", md->name, md->value);

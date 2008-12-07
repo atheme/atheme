@@ -97,7 +97,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	{
 		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-		if (regex_match(regex, usermask) == TRUE)
+		if (regex_match(regex, usermask))
 		{
 			matches++;
 			if (matches <= maxmatches)
