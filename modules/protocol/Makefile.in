@@ -27,6 +27,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/ircnet.c	\
 	$(SRCDIR)/nefarious.c	\
 	$(SRCDIR)/officeirc.c	\
+	$(SRCDIR)/p10-generic.c	\
 	$(SRCDIR)/plexus.c	\
 	$(SRCDIR)/ratbox.c	\
 	$(SRCDIR)/shadowircd.c	\
