@@ -98,56 +98,6 @@ static void check_hidehost(user_t *u);
 
 /* *INDENT-ON* */
 
-/* login to our uplink */
-static unsigned int nefarious_server_login(void)
-{
-	int ret;
-
-	ret = sts("PASS :%s", curr_uplink->pass);
-	if (ret == 1)
-		return 1;
-
-	me.bursting = TRUE;
-
-	/* SERVER irc.undernet.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
-	sts("SERVER %s 1 %lu %lu J10 %s]]] +s :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
-
-	services_init();
-
-	sts("%s EB", me.numeric);
-
-	return 0;
-}
-
-/* introduce a client */
-static void nefarious_introduce_nick(user_t *u)
-{
-	const char *omode = is_ircop(u) ? "o" : "";
-
-	sts("%s N %s 1 %lu %s %s +i%s%sk ]]]]]] %s :%s", me.numeric, u->nick, (unsigned long)u->ts, u->user, u->host, omode, chansvs.fantasy ? "" : "d", u->uid, u->gecos);
-}
-
-/* invite a user to a channel */
-static void nefarious_invite_sts(user_t *sender, user_t *target, channel_t *channel)
-{
-	/* target is a nick, weird eh? -- jilles */
-	sts("%s I %s %s", sender->uid, target->nick, channel->name);
-}
-
-static void nefarious_quit_sts(user_t *u, const char *reason)
-{
-	if (!me.connected)
-		return;
-
-	sts("%s Q :%s", u->uid, reason);
-}
-
-/* WALLOPS wrapper */
-static void nefarious_wallops_sts(const char *text)
-{
-	sts("%s WA :%s", me.numeric, text);
-}
-
 /* join a channel */
 static void nefarious_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
@@ -173,100 +123,10 @@ static void nefarious_kick(user_t *source, channel_t *c, user_t *u, const char *
 	chanuser_delete(c, u);
 }
 
-/* PRIVMSG wrapper */
-static void nefarious_msg(const char *from, const char *target, const char *fmt, ...)
-{
-	va_list ap;
-	user_t *u = user_find_named(from);
-	char buf[BUFSIZE];
-
-	if (!u)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s P %s :%s", u->uid, target, buf);
-}
-
 /* NOTICE wrapper */
-static void nefarious_notice_user_sts(user_t *from, user_t *target, const char *text)
-{
-	sts("%s O %s :%s", from ? from->uid : me.numeric, target->uid, text);
-}
-
-static void nefarious_notice_global_sts(user_t *from, const char *mask, const char *text)
-{
-	node_t *n;
-	tld_t *tld;
-
-	if (!strcmp(mask, "*"))
-	{
-		LIST_FOREACH(n, tldlist.head)
-		{
-			tld = n->data;
-			sts("%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
-		}
-	}
-	else
-		sts("%s O %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
-}
-
 static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
 	sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
-}
-
-static void nefarious_wallchops(user_t *sender, channel_t *channel, const char *message)
-{
-	sts("%s WC %s :%s", sender->uid, channel->name, message);
-}
-
-static void nefarious_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
-{
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s %d %s %s", from->sid, numeric, target->uid, buf);
-}
-
-/* KILL wrapper */
-static void nefarious_kill_id_sts(user_t *killer, const char *id, const char *reason)
-{
-	if (killer != NULL)
-		sts("%s D %s :%s!%s (%s)", killer->uid, id, killer->host, killer->nick, reason);
-	else
-		sts("%s D %s :%s (%s)", me.numeric, id, me.name, reason);
-}
-
-/* PART wrapper */
-static void nefarious_part_sts(channel_t *c, user_t *u)
-{
-	sts("%s L %s", u->uid, c->name);
-}
-
-/* server-to-server KLINE wrapper */
-static void nefarious_kline_sts(char *server, char *user, char *host, long duration, char *reason)
-{
-	if (!me.connected)
-		return;
-
-	/* hold permanent akills for four weeks -- jilles */
-	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, reason);
-}
-
-/* server-to-server UNKLINE wrapper */
-static void nefarious_unkline_sts(char *server, char *user, char *host)
-{
-	if (!me.connected)
-		return;
-
-	sts("%s GL * -%s@%s", me.numeric, user, host);
 }
 
 /* topic wrapper */
@@ -297,15 +157,6 @@ static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
 		return;
 
 	sts("%s M %s %s", fptr->uid, target->name, modes);
-}
-
-/* ping wrapper */
-static void nefarious_ping_sts(void)
-{
-	if (!me.connected)
-		return;
-
-	sts("%s G !%lu %s %lu", me.numeric, (unsigned long)CURRTIME, me.name, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -346,21 +197,6 @@ static boolean_t nefarious_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void nefarious_jupe(const char *server, const char *reason)
-{
-	server_t *s;
-
-	if (!me.connected)
-		return;
-
-	/* hold it for a day (arbitrary) -- jilles */
-	/* get rid of local deactivation too */
-	s = server_find(server);
-	if (s != NULL && s->uplink != NULL)
-		sts("%s JU %s +%s %d %lu :%s", me.numeric, s->uplink->sid, server, 86400, (unsigned long)CURRTIME, reason);
-	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
-}
-
 static void nefarious_sethost_sts(char *source, char *target, char *host)
 {
 	user_t *tu = user_find_named(target);
@@ -395,122 +231,6 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	else if (c->topic != NULL && ts < c->topicts)
 		return;
 	handle_topic_from(si, c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
-}
-
-/* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
-static void m_ping(sourceinfo_t *si, int parc, char *parv[])
-{
-	/* reply to PING's */
-	if (si->su != NULL)
-		sts("%s Z %s %s", me.numeric, me.numeric, si->su->nick);
-	else if (parv[0][0] != '!')
-		sts("%s Z %s %s", me.numeric, me.numeric, si->s->name);
-	else
-		sts("%s Z %s %s", me.numeric, me.numeric, parv[0]);
-}
-
-static void m_pong(sourceinfo_t *si, int parc, char *parv[])
-{
-	me.uplinkpong = CURRTIME;
-
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
-	if (me.bursting)
-	{
-#ifdef HAVE_GETTIMEOFDAY
-		e_time(burstime, &burstime);
-
-		slog(LG_INFO, "m_pong(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
-
-		wallops("Finished synching to network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
-#else
-		slog(LG_INFO, "m_pong(): finished synching with uplink");
-		wallops("Finished synching to network.");
-#endif
-
-		me.bursting = FALSE;
-	}
-}
-
-static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc != 2)
-		return;
-
-	handle_message(si, parv[0], FALSE, parv[1]);
-}
-
-static void m_notice(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc != 2)
-		return;
-
-	handle_message(si, parv[0], TRUE, parv[1]);
-}
-
-static void m_create(sourceinfo_t *si, int parc, char *parv[])
-{
-	char buf[BUFSIZE];
-	int chanc;
-	char *chanv[256];
-	int i;
-
-	chanc = sjtoken(parv[0], ',', chanv);
-
-	for (i = 0; i < chanc; i++)
-	{
-		channel_t *c = channel_add(chanv[i], atoi(parv[1]), si->su->server);
-
-		/* Tell the core to check mode locks now,
-		 * otherwise it may only happen after the next
-		 * mode change.
-		 * P10 does not allow any redundant modes
-		 * so this will not look ugly. -- jilles */
-		channel_mode_va(NULL, c, 1, "+");
-
-		buf[0] = '@';
-		buf[1] = '\0';
-
-		strlcat(buf, si->su->uid, BUFSIZE);
-
-		chanuser_add(c, buf);
-	}
-}
-
-static void m_join(sourceinfo_t *si, int parc, char *parv[])
-{
-	int chanc;
-	char *chanv[256];
-	int i;
-	node_t *n, *tn;
-	chanuser_t *cu;
-
-	/* JOIN 0 is really a part from all channels */
-	if (!strcmp(parv[0], "0"))
-	{
-		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
-		{
-			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, si->su);
-		}
-		return;
-	}
-	if (parc < 2)
-		return;
-
-	chanc = sjtoken(parv[0], ',', chanv);
-
-	for (i = 0; i < chanc; i++)
-	{
-		channel_t *c = channel_find(chanv[i]);
-
-		if (!c)
-		{
-			c = channel_add(chanv[i], atoi(parv[1]), si->su->server);
-			channel_mode_va(NULL, c, 1, "+");
-		}
-
-		chanuser_add(c, si->su->uid);
-	}
 }
 
 static void m_burst(sourceinfo_t *si, int parc, char *parv[])
@@ -638,21 +358,6 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
-static void m_part(sourceinfo_t *si, int parc, char *parv[])
-{
-	int chanc;
-	char *chanv[256];
-	int i;
-
-	chanc = sjtoken(parv[0], ',', chanv);
-	for (i = 0; i < chanc; i++)
-	{
-		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, chanv[i]);
-
-		chanuser_delete(channel_find(chanv[i]), si->su);
-	}
-}
-
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
@@ -744,14 +449,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		for (i = 0; i < parc; i++)
 			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
 	}
-}
-
-static void m_quit(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
-
-	/* user_delete() takes care of removing channels and so forth */
-	user_delete(si->su);
 }
 
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
@@ -891,137 +588,6 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_kick(sourceinfo_t *si, int parc, char *parv[])
-{
-	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
-
-	/* -> :rakaur KICK #shrike rintaun :test */
-	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
-
-	if (!u)
-	{
-		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s", parv[1]);
-		return;
-	}
-
-	if (!c)
-	{
-		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
-		return;
-	}
-
-	if (!chanuser_find(c, u))
-	{
-		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", u->nick, c->name);
-		return;
-	}
-
-	chanuser_delete(c, u);
-
-	/* if they kicked us, let's rejoin */
-	if (is_internal_client(u))
-	{
-		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
-		join(parv[0], u->nick);
-	}
-}
-
-static void m_kill(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
-}
-
-static void m_squit(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
-	server_delete(parv[0]);
-}
-
-/* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
-static void m_server(sourceinfo_t *si, int parc, char *parv[])
-{
-	server_t *s;
-
-	/* We dont care about the max connections. */
-	parv[5][2] = '\0';
-
-	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
-			parv[0], parv[5],
-			parv[4][0] == 'P' ? "eob" : "bursting");
-	s = handle_server(si, parv[0], parv[5], atoi(parv[1]), parv[7]);
-
-	/* SF_EOB may only be set when we have all users on the server.
-	 * so store the fact that they are EOB in another flag.
-	 * handle_eob() will set SF_EOB when the uplink has finished bursting.
-	 * -- jilles */
-	if (s != NULL && parv[4][0] == 'P')
-		s->flags |= SF_EOB2;
-}
-
-static void m_stats(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_stats(si->su, parv[0][0]);
-}
-
-static void m_admin(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_admin(si->su);
-}
-
-static void m_version(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_version(si->su);
-}
-
-static void m_info(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_info(si->su);
-}
-
-static void m_motd(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_motd(si->su);
-}
-
-static void m_whois(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_whois(si->su, parv[1]);
-}
-
-static void m_trace(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
-}
-
-static void m_away(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
-}
-
-static void m_pass(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (strcmp(curr_uplink->pass, parv[0]))
-	{
-		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
-		runflags |= RF_SHUTDOWN;
-	}
-}
-
-static void m_error(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
-}
-
-static void m_eos(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_eob(si->s);
-
-	/* acknowledge a local END_OF_BURST */
-	if (si->s->uplink == me.me)
-		sts("%s EA", me.numeric);
-}
-
 static void check_hidehost(user_t *u)
 {
 	static boolean_t warned = FALSE;
@@ -1051,33 +617,17 @@ static void check_hidehost(user_t *u)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
+
 	/* Symbol relocation voodoo. */
-	server_login = &nefarious_server_login;
-	introduce_nick = &nefarious_introduce_nick;
-	quit_sts = &nefarious_quit_sts;
-	wallops_sts = &nefarious_wallops_sts;
 	join_sts = &nefarious_join_sts;
 	kick = &nefarious_kick;
-	msg = &nefarious_msg;
-	notice_user_sts = &nefarious_notice_user_sts;
-	notice_global_sts = &nefarious_notice_global_sts;
 	notice_channel_sts = &nefarious_notice_channel_sts;
-	wallchops = &nefarious_wallchops;
-	numeric_sts = &nefarious_numeric_sts;
-	kill_id_sts = &nefarious_kill_id_sts;
-	part_sts = &nefarious_part_sts;
-	kline_sts = &nefarious_kline_sts;
-	unkline_sts = &nefarious_unkline_sts;
 	topic_sts = &nefarious_topic_sts;
 	mode_sts = &nefarious_mode_sts;
-	ping_sts = &nefarious_ping_sts;
 	ircd_on_login = &nefarious_on_login;
 	ircd_on_logout = &nefarious_on_logout;
-	jupe = &nefarious_jupe;
-	invite_sts = &nefarious_invite_sts;
 	sethost_sts = &nefarious_sethost_sts;
-
-	parse = &p10_parse;
 
 	mode_list = nefarious_mode_list;
 	ignore_mode_list = nefarious_ignore_mode_list;
@@ -1087,38 +637,19 @@ void _modinit(module_t * m)
 
 	ircd = &Nefarious;
 
-	pcommand_add("G", m_ping, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("Z", m_pong, 1, MSRC_SERVER);
-	pcommand_add("P", m_privmsg, 2, MSRC_USER);
-	pcommand_add("O", m_notice, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG);
-	pcommand_add("C", m_create, 1, MSRC_USER);
-	pcommand_add("J", m_join, 1, MSRC_USER);
-	pcommand_add("EB", m_eos, 0, MSRC_SERVER);
+	/* override these */
+	pcommand_delete("B");
+	pcommand_delete("N");
+	pcommand_delete("M");
+	pcommand_delete("OM");
+	pcommand_delete("CM");
+	pcommand_delete("T");
 	pcommand_add("B", m_burst, 2, MSRC_SERVER);
-	pcommand_add("L", m_part, 1, MSRC_USER);
 	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("Q", m_quit, 1, MSRC_USER);
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
-	pcommand_add("K", m_kick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("D", m_kill, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SQ", m_squit, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("S", m_server, 8, MSRC_SERVER);
-	pcommand_add("SERVER", m_server, 8, MSRC_UNREG);
-	pcommand_add("R", m_stats, 2, MSRC_USER);
-	pcommand_add("AD", m_admin, 1, MSRC_USER);
-	pcommand_add("V", m_version, 1, MSRC_USER);
-	pcommand_add("F", m_info, 1, MSRC_USER);
-	pcommand_add("W", m_whois, 2, MSRC_USER);
-	pcommand_add("TR", m_trace, 1, MSRC_USER);
-	pcommand_add("A", m_away, 0, MSRC_USER);
-	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
-	pcommand_add("Y", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("MO", m_motd, 1, MSRC_USER);
 
 	m->mflags = MODTYPE_CORE;
 
