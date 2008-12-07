@@ -101,7 +101,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		source = si->smu != NULL && LIST_LENGTH(&si->smu->logins) > 0 ?
 			si->smu->logins.head->data : si->service->me;
 	sprintf(usermask, "%s!%s@%s %s", source->nick, source->user, source->host, source->gecos);
-	if (regex_match(regex, (char *)usermask))
+	if (regex_match(regex, usermask))
 	{
 		regex_destroy(regex);
 		command_fail(si, fault_noprivs, _("The provided regex matches you, refusing RAKILL."));
@@ -118,7 +118,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	{
 		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-		if (regex_match(regex, (char *)usermask))
+		if (regex_match(regex, usermask))
 		{
 			/* match */
 			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - akilling"), u->nick, u->user, u->host, u->gecos);
