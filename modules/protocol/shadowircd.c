@@ -104,6 +104,8 @@ struct cmode_ shadowircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
+/* *INDENT-ON* */
+
 #ifdef HOSTSLASH
 static boolean_t shadowircd_is_valid_hostslash(const char *host)
 {
@@ -127,8 +129,6 @@ static boolean_t shadowircd_is_valid_hostslash(const char *host)
         return dot;
 }
 #endif
-
-/* *INDENT-ON* */
 
 void _modinit(module_t * m)
 {
