@@ -8,6 +8,9 @@
  * $Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
+/* option: enable hosts with slashes ('/') */
+#define HOSTSLASH
+
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
@@ -73,12 +76,40 @@ struct cmode_ seven_user_mode_list[] = {
 
 /* *INDENT-ON* */
 
+#ifdef HOSTSLASH
+static boolean_t seven_is_valid_hostslash(const char *host)
+{
+        const char *p;
+        boolean_t dot = FALSE;
+
+        if (*host == '.' || *host == '/' || *host == ':')
+                return FALSE;
+
+        for (p = host; *p != '\0'; p++)
+        {
+                if (*p == '.' || *p == ':' || *p == '/')
+                        dot = TRUE;
+                else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+                                        (*p >= 'a' && *p <= 'z') || *p == '-'))
+                        return FALSE;
+        }
+        /* hyperion allows a trailing / but RichiH does not want it, whatever */
+        if (dot && p[-1] == '/')
+                return FALSE;
+        return dot;
+}
+#endif
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
 	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;
+
+#ifdef HOSTSLASH
+	is_valid_host = &seven_is_valid_hostslash;
+#endif
 
 	ircd = &Seven;
 
