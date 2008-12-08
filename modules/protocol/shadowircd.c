@@ -9,6 +9,9 @@
  * $Id$
  */
 
+/* option: enable hosts with slashes ('/') */
+/* #define HOSTSLASH */
+
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
@@ -101,6 +104,30 @@ struct cmode_ shadowircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
+#ifdef HOSTSLASH
+static boolean_t shadowircd_is_valid_hostslash(const char *host)
+{
+        const char *p;
+        boolean_t dot = FALSE;
+
+        if (*host == '.' || *host == '/' || *host == ':')
+                return FALSE;
+
+        for (p = host; *p != '\0'; p++)
+        {
+                if (*p == '.' || *p == ':' || *p == '/')
+                        dot = TRUE;
+                else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+                                        (*p >= 'a' && *p <= 'z') || *p == '-'))
+                        return FALSE;
+        }
+        /* hyperion allows a trailing / but RichiH does not want it, whatever */
+        if (dot && p[-1] == '/')
+                return FALSE;
+        return dot;
+}
+#endif
+
 /* *INDENT-ON* */
 
 void _modinit(module_t * m)
@@ -111,6 +138,10 @@ void _modinit(module_t * m)
 	user_mode_list = shadowircd_user_mode_list;
 	status_mode_list = shadowircd_status_mode_list;
 	prefix_mode_list = shadowircd_prefix_mode_list;
+
+#ifdef HOSTSLASH
+	is_valid_host = &shadowircd_is_valid_hostslash;
+#endif
 
 	ircd = &ShadowIRCd;
 
