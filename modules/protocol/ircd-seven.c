@@ -8,9 +8,6 @@
  * $Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
-/* option: enable hosts with slashes ('/') */
-#define HOSTSLASH
-
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
@@ -76,7 +73,6 @@ struct cmode_ seven_user_mode_list[] = {
 
 /* *INDENT-ON* */
 
-#ifdef HOSTSLASH
 static boolean_t seven_is_valid_hostslash(const char *host)
 {
         const char *p;
@@ -98,7 +94,6 @@ static boolean_t seven_is_valid_hostslash(const char *host)
                 return FALSE;
         return dot;
 }
-#endif
 
 void _modinit(module_t * m)
 {
@@ -107,9 +102,7 @@ void _modinit(module_t * m)
 	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;
 
-#ifdef HOSTSLASH
 	is_valid_host = &seven_is_valid_hostslash;
-#endif
 
 	ircd = &Seven;
 
