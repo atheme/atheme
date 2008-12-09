@@ -12,6 +12,7 @@ ircd protocol
 - nefarious: allow /ns vhost (FAKEHOST).
 - nefarious: let services joining channels op themselves, avoiding HACK(4)
   notices
+- ircd-seven: new protocol module
 - Limit the send queue to the ircd to a configurable value, default 1MB.
   Large networks may need to increase this.
 - Limit IRC command output to 2000 lines. XMLRPC is unaffected.
@@ -25,6 +26,8 @@ nickserv
 - Refer users to their email if they try to identify again while unverified.
   [MERGED]
 - In FUNGROUP, allow dropping account names, by specifying a new account name.
+- Add optional nickserv/listownmail to allow users to see accounts with
+  their email.
 chanserv
 - Allow multiple spaces before fantasy commands when ChanServ is addressed
   by nickname.
@@ -33,7 +36,9 @@ chanserv
 - FFLAGS now overrides the NEVEROP setting on the target account.
 alis
 - Fix handling of key and limit options.
+- Allow alis list on a single +s channel the user is on.
 memoserv
+- Add DELETE OLD to delete all read memos.
 gameserv
 oper
 - Allow searching for AKILLs matching a given mask or id in AKILL LIST.
@@ -42,6 +47,7 @@ oper
 - Add optional PCRE support. Configure --with-pcre to enable it and add
   the p flag to use it (e.g. /os rmatch /\d\d\d/p). The regex wrapper has
   been changed slightly to make this possible.
+- Report other nicks of deleted accounts to snoop and log file.
 xmlrpc
 code
 - Change kline_delete() to take a kline_t pointer instead of a user and host.
@@ -51,6 +57,10 @@ code
 - Move the metadata entries to object_t.
 - Change some protocol module functions to take object pointers instead of
   names and add some const keywords.
+- Modules can now request other modules be loaded. This has been used to
+  move some generic TS6 and P10 stuff into common modules.
+- Rename CMODE_OP and the like to CSTATUS_*, emphasizing that they are
+  separate from simple modes.
 other
 - Allow arbitrary line lengths in flatfile database loader.
 - Synchronized with libmowgli 0.7 framework.
@@ -63,6 +73,8 @@ other
 - Allow any service's nick/user/host/realname to be set in the configuration
   file, and update them on a rehash. The service creation code works quite a
   bit differently to make this possible.
+- Fix running on MacOS X 10.5.
+- Fix compilation sometimes using system include files in place of our own.
 
 Atheme Services 3.1 Release Notes
 =================================
