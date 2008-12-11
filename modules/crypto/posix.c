@@ -16,14 +16,14 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static const char *posix_crypt_string(const char *key, const char *salt)
+static const char *posixc_crypt_string(const char *key, const char *salt)
 {
 	return crypt(key, salt);
 }
 
 void _modinit(module_t *m)
 {
-	crypt_string = &posix_crypt_string;
+	crypt_string = &posixc_crypt_string;
 
 	crypto_module_loaded = TRUE;
 }
