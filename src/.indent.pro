@@ -28,7 +28,6 @@
 --line-length200
 
 /* typedefs */
--T boolean_t
 -T node_t
 -T list_t
 -T tld_t
