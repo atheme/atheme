@@ -78,9 +78,10 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
+		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD %s", module);
+
 		module_unload(m);
 
-		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD %s", module);
 		command_success_nodata(si, _("Module \2%s\2 unloaded."), module);
 	}
 }
