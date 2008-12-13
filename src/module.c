@@ -58,7 +58,7 @@ module_t *module_load(const char *filespec)
 {
 	node_t *n;
 	module_t *m;
-	v1_moduleheader_t *h;
+	v2_moduleheader_t *h;
 	void *handle = NULL;
 #ifdef HAVE_DLINFO
 	struct link_map *map;
@@ -82,7 +82,7 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	h = (v1_moduleheader_t *) linker_getsym(handle, "_header");
+	h = (v2_moduleheader_t *) linker_getsym(handle, "_header");
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
@@ -90,6 +90,28 @@ module_t *module_load(const char *filespec)
 
 		if (me.connected)
 			snoop(_("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module."), filespec);
+
+		linker_close(handle);
+		return NULL;
+	}
+
+	if (h->abi_ver != MAPI_ATHEME_V2)
+	{
+		slog(LG_ERROR, "module_load(): %s: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V2);
+
+		if (me.connected)
+			snoop(_("MODLOAD:ERROR: Module \2%s\2 has wrong MAPI version (%u != %u), please recompile it."), filespec, h->abi_ver, MAPI_ATHEME_V2);
+
+		linker_close(handle);
+		return NULL;
+	}
+
+	if (h->abi_rev != CURRENT_ABI_REVISION)
+	{
+		slog(LG_ERROR, "module_load(): %s: ABI revision mismatch (%u != %u), please recompile.", filespec, h->abi_rev, CURRENT_ABI_REVISION);
+
+		if (me.connected)
+			snoop(_("MODLOAD:ERROR: Module \2%s\2 has wrong ABI revision (%u != %u), please recompile it."), filespec, h->abi_rev, CURRENT_ABI_REVISION);
 
 		linker_close(handle);
 		return NULL;

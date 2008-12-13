@@ -11,14 +11,15 @@
 #define MODULE_H
 
 #include "privs.h"
+#include "abirev.h"
 
 typedef struct module_ module_t;
-typedef struct v1_moduleheader_ v1_moduleheader_t;
+typedef struct v2_moduleheader_ v2_moduleheader_t;
 
 struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	v1_moduleheader_t *header;
+	v2_moduleheader_t *header;
 
 	unsigned int mflags;
 
@@ -36,13 +37,14 @@ struct module_ {
 #define MODTYPE_FAIL		0x8000 /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
-#define MAPI_ATHEME_V1		1
+#define MAPI_ATHEME_V2		2
 
 #define MAX_CMD_PARC		20
 
-struct v1_moduleheader_ {
+struct v2_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
+	unsigned int abi_rev;
 	const char *name;
 	boolean_t norestart;
 	void (*modinit)(module_t *m);
@@ -52,8 +54,9 @@ struct v1_moduleheader_ {
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	v1_moduleheader_t _header = { \
-		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V1, \
+	v2_moduleheader_t _header = { \
+		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V2, \
+		CURRENT_ABI_REVISION, \
 		name, norestart, modinit, deinit, ven, ver \
 	}
 
