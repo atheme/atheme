@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/topic", FALSE, _modinit, _moddeinit,
+	"chanserv/topic", false, _modinit, _moddeinit,
 	"$Id: topic.c 8019 2007-04-02 09:27:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

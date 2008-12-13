@@ -13,20 +13,20 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", true, _modinit, NULL, "$Id: bahamut.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Bahamut = {
         "Bahamut 1.8.x",                /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -57,7 +57,7 @@ struct cmode_ bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
-static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode bahamut_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
@@ -85,49 +85,49 @@ struct cmode_ bahamut_user_mode_list[] = {
 
 /* *INDENT-ON* */
 
-static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 	int num, timeslice, v;
 
 	if (!strcmp(value, "0") && u == NULL && mu == NULL)
-		return TRUE;
+		return true;
 	p = value, arg2 = NULL;
 	while (*p != '\0')
 	{
 		if (*p == ':')
 		{
 			if (arg2 != NULL)
-				return FALSE;
+				return false;
 			arg2 = p + 1;
 		}
 		else if (!isdigit(*p))
-			return FALSE;
+			return false;
 		p++;
 	}
 	if (arg2 == NULL)
-		return FALSE;
+		return false;
 	if (p - arg2 > 3 || arg2 - value - 1 > 3)
-		return FALSE;
+		return false;
 	num = atoi(value);
 	timeslice = atoi(arg2);
 	if (num <= 0 || num > 127 || timeslice <= 0 || timeslice > 127)
-		return FALSE;
+		return false;
 	if (u != NULL || mu != NULL)
 	{
 		/* the following are the same restrictions bahamut
 		 * applies to local clients
 		 */
 		if (num < 2 || num > 20 || timeslice > 60)
-			return FALSE;
+			return false;
 		v = (timeslice - 1) / 8 + 1;
 		if (num < v)
-			return FALSE;
+			return false;
 		v = num / 2;
 		if (timeslice < v)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 
 /* login to our uplink */
@@ -139,7 +139,7 @@ static unsigned int bahamut_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
@@ -179,7 +179,7 @@ static void bahamut_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void bahamut_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void bahamut_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -194,7 +194,7 @@ static void bahamut_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "bahamut_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
 	sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts, c->name,
-				channel_modes(c, TRUE), u->nick);
+				channel_modes(c, true), u->nick);
 	chanban_clear(c);
 	/*handle_topic(c, "", 0, "");*/
 	/* Don't destroy keeptopic info, I'll admit this is ugly -- jilles */
@@ -348,14 +348,14 @@ static void bahamut_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t bahamut_on_logout(char *origin, char *user, char *wantedhost)
+static bool bahamut_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
-	return FALSE;
+	return false;
 }
 
 static void bahamut_jupe(const char *server, const char *reason)
@@ -459,7 +459,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -468,7 +468,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -476,7 +476,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
@@ -488,7 +488,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 
 	channel_t *c;
-	boolean_t keep_new_modes = TRUE;
+	bool keep_new_modes = true;
 	unsigned int userc;
 	char *userv[256];
 	unsigned int i;
@@ -550,7 +550,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			hook_call_event("channel_tschange", c);
 		}
 		else if (ts > c->ts)
-			keep_new_modes = FALSE;
+			keep_new_modes = false;
 
 		if (keep_new_modes)
 			channel_mode(NULL, c, parc - 3, parv + 2);
@@ -617,7 +617,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	struct in_addr ip;
 	char ipstring[64];
-	boolean_t realchange;
+	bool realchange;
 
 	/* -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker */
 	if (parc == 10)
@@ -942,7 +942,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

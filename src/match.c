@@ -656,7 +656,7 @@ atheme_regex_t *regex_create(char *pattern, int flags)
 char *regex_extract(char *pattern, char **pend, int *pflags)
 {
 	char c, *p, *p2;
-	boolean_t backslash = FALSE;
+	bool backslash = false;
 
 	c = *pattern;
 	if (isalnum(c) || isspace(c) || c == '\\')
@@ -694,12 +694,12 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
  *  `preg' is the regex to check with, `string' needs to be checked against.
  *  Returns `true' on match, `false' else.
  */
-boolean_t regex_match(atheme_regex_t *preg, char *string)
+bool regex_match(atheme_regex_t *preg, char *string)
 {
 	if (preg == NULL || string == NULL)
 	{
 		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
-		return FALSE;
+		return false;
 	}
 
 	switch (preg->type)
@@ -712,7 +712,7 @@ boolean_t regex_match(atheme_regex_t *preg, char *string)
 #endif
 		default:
 			slog(LG_ERROR, "regex_match(): we were given a pattern of unknown type %d, bad!", preg->type);
-			return FALSE;
+			return false;
 	}
 }
 
@@ -720,7 +720,7 @@ boolean_t regex_match(atheme_regex_t *preg, char *string)
  * regex_destroy()
  *  Perform cleanup with regex `preg', free associated memory.
  */
-boolean_t regex_destroy(atheme_regex_t *preg)
+bool regex_destroy(atheme_regex_t *preg)
 {
 	switch (preg->type)
 	{
@@ -737,7 +737,7 @@ boolean_t regex_destroy(atheme_regex_t *preg)
 			break;
 	}
 	free(preg);
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

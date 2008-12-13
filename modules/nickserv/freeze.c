@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/freeze", FALSE, _modinit, _moddeinit,
+	"nickserv/freeze", false, _modinit, _moddeinit,
 	"$Id: freeze.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

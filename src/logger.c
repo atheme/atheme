@@ -213,20 +213,20 @@ void log_shutdown(void)
  * Side Effects:
  *       - none
  */
-boolean_t log_debug_enabled(void)
+bool log_debug_enabled(void)
 {
 	node_t *n;
 	logfile_t *lf;
 
 	if (log_force)
-		return TRUE;
+		return true;
 	LIST_FOREACH(n, log_files.head)
 	{
 		lf = n->data;
 		if (lf->log_mask & (LG_DEBUG | LG_RAWDATA))
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /*

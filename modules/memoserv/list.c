@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/list", FALSE, _modinit, _moddeinit,
+	"memoserv/list", false, _modinit, _moddeinit,
 	"$Id: list.c 8331 2007-05-27 14:13:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

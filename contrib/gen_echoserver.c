@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/gen_echoserver", FALSE, _modinit, _moddeinit,
+	"contrib/gen_echoserver", false, _modinit, _moddeinit,
 	"$Id: gen_echoserver.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );

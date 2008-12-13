@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/flags", FALSE, _modinit, _moddeinit,
+	"chanserv/flags", false, _modinit, _moddeinit,
 	"$Id: flags.c 8103 2007-04-04 22:51:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -260,7 +260,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 			target = tmu->name;
 
-			ca = chanacs_open(mc, tmu, NULL, TRUE);
+			ca = chanacs_open(mc, tmu, NULL, true);
 
 			if (ca->level & CA_FOUNDER && removeflags & CA_FLAGS && !(removeflags & CA_FOUNDER))
 			{
@@ -323,7 +323,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		                command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
 				return;
 			}
-			ca = chanacs_open(mc, NULL, target, TRUE);
+			ca = chanacs_open(mc, NULL, target, true);
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{
 				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);

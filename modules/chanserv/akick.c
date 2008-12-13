@@ -13,7 +13,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 
 DECLARE_MODULE_V1
 (
-	"chanserv/akick", FALSE, _modinit, _moddeinit,
+	"chanserv/akick", false, _modinit, _moddeinit,
 	"$Id: akick.c 8211 2007-04-30 00:42:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -145,7 +145,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			/* new entry */
-			ca2 = chanacs_open(mc, NULL, uname, TRUE);
+			ca2 = chanacs_open(mc, NULL, uname, true);
 			if (chanacs_is_table_full(ca2))
 			{
 				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -178,7 +178,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			/* new entry */
-			ca2 = chanacs_open(mc, mu, NULL, TRUE);
+			ca2 = chanacs_open(mc, mu, NULL, true);
 			if (chanacs_is_table_full(ca2))
 			{
 				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -297,7 +297,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_GET, "%s AKICK LIST", mc->name);
 	}
 	else
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

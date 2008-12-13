@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/testcmd", FALSE, _modinit, _moddeinit,
+	"operserv/testcmd", false, _modinit, _moddeinit,
 	"$Id: os_testcmd.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 struct testcmddata
 {
 	sourceinfo_t *prevsi;
-	boolean_t got_result;
+	bool got_result;
 };
 
 static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[]);
@@ -56,7 +56,7 @@ static void testcmd_command_fail(sourceinfo_t *si, faultcode_t code, const char 
 	struct testcmddata *udata = si->callerdata;
 
 	command_success_nodata(udata->prevsi, "Command failed with fault %d, \"%s\"", code, message);
-	udata->got_result = TRUE;
+	udata->got_result = true;
 }
 
 static void testcmd_command_success_nodata(sourceinfo_t *si, const char *message)
@@ -67,7 +67,7 @@ static void testcmd_command_success_nodata(sourceinfo_t *si, const char *message
 		command_success_nodata(udata->prevsi, "More comment \"%s\"", message);
 	else
 		command_success_nodata(udata->prevsi, "Command succeeded with no data, \"%s\"", message);
-	udata->got_result = TRUE;
+	udata->got_result = true;
 }
 
 static void testcmd_command_success_string(sourceinfo_t *si, const char *result, const char *message)
@@ -75,7 +75,7 @@ static void testcmd_command_success_string(sourceinfo_t *si, const char *result,
 	struct testcmddata *udata = si->callerdata;
 
 	command_success_nodata(udata->prevsi, "Command succeeded with string \"%s\", \"%s\"", result, message);
-	udata->got_result = TRUE;
+	udata->got_result = true;
 }
 
 static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[])
@@ -112,7 +112,7 @@ static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	udata.prevsi = si;
-	udata.got_result = FALSE;
+	udata.got_result = false;
 	memset(newparv, '\0', sizeof newparv);
 	if (parc >= 3)
 		newparc = sjtoken(parv[2], ';', newparv);

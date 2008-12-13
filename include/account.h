@@ -277,17 +277,17 @@ typedef struct {
 } hook_metadata_change_t;
 
 /* pmodule.c XXX */
-E boolean_t backend_loaded;
+E bool backend_loaded;
 
 /* dbhandler.c */
 E void (*db_save)(void *arg);
 E void (*db_load)(void);
 
 /* function.c */
-E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
+E bool is_founder(mychan_t *mychan, myuser_t *myuser);
 
 E void set_password(myuser_t *mu, const char *newpassword);
-E boolean_t verify_password(myuser_t *mu, const char *password);
+E bool verify_password(myuser_t *mu, const char *password);
 
 /* node.c */
 E list_t klnlist;
@@ -316,8 +316,8 @@ E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 E unsigned int myuser_num_channels(myuser_t *mu);
 
-E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
-E boolean_t myuser_access_add(myuser_t *mu, const char *mask);
+E bool myuser_access_verify(user_t *u, myuser_t *mu);
+E bool myuser_access_add(myuser_t *mu, const char *mask);
 E char *myuser_access_find(myuser_t *mu, const char *mask);
 E void myuser_access_delete(myuser_t *mu, const char *mask);
 
@@ -332,7 +332,7 @@ E void myuser_name_restore(const char *name, myuser_t *mu);
 
 E mychan_t *mychan_add(char *name);
 //inline mychan_t *mychan_find(const char *name);
-E boolean_t mychan_isused(mychan_t *mc);
+E bool mychan_isused(mychan_t *mc);
 E unsigned int mychan_num_founders(mychan_t *mc);
 E const char *mychan_founder_names(mychan_t *mc);
 E myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime);
@@ -348,20 +348,20 @@ E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsig
 E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
 E unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
 E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
-E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
+E bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
 E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
-//inline boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
+//inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
 E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
-E chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create);
+E chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bool create);
 //inline void chanacs_close(chanacs_t *ca);
-E boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-E boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
+E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
 
-//inline boolean_t chanacs_is_table_full(chanacs_t *ca);
+//inline bool chanacs_is_table_full(chanacs_t *ca);
 
-E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags);
+E bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+E bool chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags);
 
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

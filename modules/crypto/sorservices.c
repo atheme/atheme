@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"crypto/sorservices", FALSE, _modinit, _moddeinit,
+	"crypto/sorservices", false, _modinit, _moddeinit,
 	"$Id: sorservices.c 7779 2007-03-03 13:55:42Z pippijn $",
 	"OpenServices devel team, http://openservices.sorcery.net"
 );
@@ -330,14 +330,14 @@ void _modinit(module_t *m)
 {
 	crypt_string = &sorservices_crypt_string;
 
-	crypto_module_loaded = TRUE;
+	crypto_module_loaded = true;
 }
 
 void _moddeinit(void)
 {
 	crypt_string = &generic_crypt_string;
 
-	crypto_module_loaded = FALSE;
+	crypto_module_loaded = false;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

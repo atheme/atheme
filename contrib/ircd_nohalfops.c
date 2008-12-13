@@ -16,12 +16,12 @@
 
 DECLARE_MODULE_V1
 (
-	"ircd_nohalfops", FALSE, _modinit, _moddeinit,
+	"ircd_nohalfops", false, _modinit, _moddeinit,
 	"$Id: ircd_nohalfops.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-boolean_t oldflag;
+bool oldflag;
 
 void _modinit(module_t *m)
 {
@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 		return;
 	}
 	oldflag = ircd->uses_halfops;
-	ircd->uses_halfops = FALSE;
+	ircd->uses_halfops = false;
 	update_chanacs_flags();
 }
 

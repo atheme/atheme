@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/group", FALSE, _modinit, _moddeinit,
+	"nickserv/group", false, _modinit, _moddeinit,
 	"$Id: group.c 8299 2007-05-20 12:43:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

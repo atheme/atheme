@@ -13,20 +13,20 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", true, _modinit, NULL, "$Id: ultimate3.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t ultimate3 = {
         "UltimateIRCd 3.0.*",           /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        TRUE,                           /* Whether or not we support channel protection. */
-        TRUE,                           /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	TRUE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        true,                           /* Whether or not we support channel protection. */
+        true,                           /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	true,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
@@ -94,7 +94,7 @@ static unsigned int ultimate3_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("CAPAB TS5 NOQUIT SSJ5 BURST TSMODE NICKIP CLIENT");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
@@ -134,7 +134,7 @@ static void ultimate3_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void ultimate3_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void ultimate3_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -282,16 +282,16 @@ static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t ultimate3_on_logout(char *origin, char *user, char *wantedhost)
+static bool ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", me.name, origin,
 				(unsigned long)CURRTIME);
 
-	return FALSE;
+	return false;
 }
 
 static void ultimate3_jupe(const char *server, const char *reason)
@@ -381,7 +381,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -390,7 +390,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -398,7 +398,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
@@ -516,7 +516,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char *ipbuf;
 	struct in_addr addr;
-	boolean_t realchange;
+	bool realchange;
 
 	if (parc == 12)
 	{
@@ -837,7 +837,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/xop", FALSE, _modinit, _moddeinit,
+	"chanserv/xop", false, _modinit, _moddeinit,
 	"$Id: xop.c 8309 2007-05-22 20:37:44Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -235,7 +235,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	chanacs_t *ca;
 	node_t *n;
 	unsigned int addflags = level, removeflags = ~level;
-	boolean_t isnew;
+	bool isnew;
 
 	if (!mu)
 	{
@@ -247,7 +247,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		}
 
 		target = collapse(target);
-		ca = chanacs_open(mc, NULL, target, TRUE);
+		ca = chanacs_open(mc, NULL, target, true);
 		if (ca->level == level)
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2"), target, leveldesc, mc->name);
@@ -329,7 +329,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	ca = chanacs_open(mc, mu, NULL, TRUE);
+	ca = chanacs_open(mc, mu, NULL, true);
 
 	if (ca->level & CA_FOUNDER)
 	{

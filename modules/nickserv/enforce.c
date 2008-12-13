@@ -17,7 +17,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/enforce",FALSE, _modinit, _moddeinit,
+	"nickserv/enforce",false, _modinit, _moddeinit,
 	"$Id: enforce.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -233,7 +233,7 @@ void enforce_timeout_check(void *arg)
 	enforce_timeout_t *timeout;
 	user_t *u;
 	mynick_t *mn;
-	boolean_t valid;
+	bool valid;
 
 	LIST_FOREACH_SAFE(n, tn, enforce_list.head)
 	{

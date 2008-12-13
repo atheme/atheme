@@ -78,7 +78,7 @@ struct cmode_
 struct extmode
 {
 	char mode;
-	boolean_t (*check)(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+	bool (*check)(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 };
 
 /* channel related hooks */
@@ -117,7 +117,7 @@ E int mode_to_flag(char c);
 E void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[]);
 E void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...);
 E void clear_simple_modes(channel_t *c);
-E char *channel_modes(channel_t *c, boolean_t doparams);
+E char *channel_modes(channel_t *c, bool doparams);
 E void modestack_flush_channel(channel_t *channel);
 E void modestack_forget_channel(channel_t *channel);
 E void modestack_finalize_channel(channel_t *channel);
@@ -125,7 +125,7 @@ E void modestack_mode_simple(const char *source, channel_t *channel, int dir, in
 E void modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit);
 E void modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value);
 E void modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value);
-E void check_modes(mychan_t *mychan, boolean_t sendnow);
+E void check_modes(mychan_t *mychan, bool sendnow);
 
 /* channels.c */
 E mowgli_patricia_t *chanlist;

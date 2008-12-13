@@ -43,7 +43,7 @@ unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
 			event_table[i].arg = arg;
 			event_table[i].when = CURRTIME + when;
 			event_table[i].frequency = when;
-			event_table[i].active = TRUE;
+			event_table[i].active = true;
 
 			if (event_table[i].when < event_time_min && event_time_min != -1)
 				event_time_min = event_table[i].when;
@@ -77,7 +77,7 @@ unsigned int event_add_once(const char *name, EVH *func, void *arg, time_t when)
 			event_table[i].arg = arg;
 			event_table[i].when = CURRTIME + when;
 			event_table[i].frequency = 0;
-			event_table[i].active = TRUE;
+			event_table[i].active = true;
 
 			if (event_table[i].when < event_time_min && event_time_min != -1)
 				event_time_min = event_table[i].when;
@@ -109,7 +109,7 @@ void event_delete(EVH *func, void *arg)
 	event_table[i].name = NULL;
 	event_table[i].func = NULL;
 	event_table[i].arg = NULL;
-	event_table[i].active = FALSE;
+	event_table[i].active = false;
 
 	claro_state.event--;
 }
@@ -136,7 +136,7 @@ void event_run(void)
 				event_table[i].name = NULL;
 				event_table[i].func = NULL;
 				event_table[i].arg = NULL;
-				event_table[i].active = FALSE;
+				event_table[i].active = false;
 
 				claro_state.event--;
 			}

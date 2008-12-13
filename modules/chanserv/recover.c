@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/recover", FALSE, _modinit, _moddeinit,
+	"chanserv/recover", false, _modinit, _moddeinit,
 	"$Id: recover.c 8257 2007-05-13 14:09:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -48,7 +48,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	char *name = parv[0];
 	char hostbuf2[BUFSIZE];
 	char e;
-	boolean_t added_exempt = FALSE;
+	bool added_exempt = false;
 	int i;
 	char str[3];
 
@@ -192,7 +192,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 				{
 					chanban_add(mc->chan, hostbuf2, e);
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, e, hostbuf2);
-					added_exempt = TRUE;
+					added_exempt = true;
 				}
 			}
 		}

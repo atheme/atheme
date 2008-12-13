@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/close", FALSE, _modinit, _moddeinit,
+	"chanserv/close", false, _modinit, _moddeinit,
 	"$Id: close.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -169,7 +169,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* hmm, channel still exists, probably permanent? */
 			channel_mode_va(chansvs.me->me, c, 2, "-isbl", "*!*@*");
-			check_modes(mc, TRUE);
+			check_modes(mc, true);
 		}
 
 		wallops("%s reopened the channel \2%s\2.", get_oper_name(si), target);

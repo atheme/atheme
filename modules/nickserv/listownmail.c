@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/listownmail", FALSE, _modinit, _moddeinit,
+	"nickserv/listownmail", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );

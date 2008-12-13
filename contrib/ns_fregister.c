@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/fregister", FALSE, _modinit, _moddeinit,
+	"nickserv/fregister", false, _modinit, _moddeinit,
 	"$Id: ns_fregister.c 7789 2007-03-04 00:00:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

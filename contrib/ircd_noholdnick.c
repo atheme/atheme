@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"ircd_noholdnick", FALSE, _modinit, _moddeinit,
+	"ircd_noholdnick", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );

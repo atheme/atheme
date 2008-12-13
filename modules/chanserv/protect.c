@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/protect", FALSE, _modinit, _moddeinit,
+	"chanserv/protect", false, _modinit, _moddeinit,
 	"$Id: op.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -63,7 +63,7 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	chanuser_t *cu;
 
-	if (ircd->uses_protect == FALSE)
+	if (ircd->uses_protect == false)
 	{
 		command_fail(si, fault_noprivs, _("The IRCd software you are running does not support this feature."));
 		return;
@@ -144,7 +144,7 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	chanuser_t *cu;
 
-	if (ircd->uses_protect == FALSE)
+	if (ircd->uses_protect == false)
 	{
 		command_fail(si, fault_noprivs, _("The IRCd software you are running does not support this feature."));
 		return;

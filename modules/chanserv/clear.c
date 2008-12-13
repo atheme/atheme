@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/clear", FALSE, _modinit, _moddeinit,
+	"chanserv/clear", false, _modinit, _moddeinit,
 	"$Id: clear.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -80,7 +80,7 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&cs_clear_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		return;
 	}
 

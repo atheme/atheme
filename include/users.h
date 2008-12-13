@@ -51,9 +51,9 @@ struct user_
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
 /* function.c */
-E boolean_t is_ircop(user_t *user);
-E boolean_t is_admin(user_t *user);
-E boolean_t is_internal_client(user_t *user);
+E bool is_ircop(user_t *user);
+E bool is_admin(user_t *user);
+E bool is_internal_client(user_t *user);
 
 /* users.c */
 E mowgli_patricia_t *userlist;
@@ -66,7 +66,7 @@ E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
-E boolean_t user_changenick(user_t *u, const char *nick, time_t ts);
+E bool user_changenick(user_t *u, const char *nick, time_t ts);
 E void user_mode(user_t *user, const char *modes);
 
 /* uid.c */

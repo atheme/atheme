@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/forbid", FALSE, _modinit, _moddeinit,
+	"nickserv/forbid", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );

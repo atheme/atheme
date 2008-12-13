@@ -18,20 +18,20 @@
 #include "protocol/charybdis.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id$", "ShadowIRCd Development Group <http://www.shadowircd.net>");
+DECLARE_MODULE_V1("protocol/shadowircd", true, _modinit, NULL, "$Id$", "ShadowIRCd Development Group <http://www.shadowircd.net>");
 
 /* *INDENT-OFF* */
 
 ircd_t ShadowIRCd = {
         "ShadowIRCd 5+",		/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
-        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        TRUE,                           /* Whether or not we support channel owners. */
-        TRUE,                           /* Whether or not we support channel protection. */
-        TRUE,                           /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        true,                           /* Whether or not we support channel owners. */
+        true,                           /* Whether or not we support channel protection. */
+        true,                           /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
         CSTATUS_PROTECT,                  /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
@@ -107,25 +107,25 @@ struct cmode_ shadowircd_user_mode_list[] = {
 /* *INDENT-ON* */
 
 #ifdef HOSTSLASH
-static boolean_t shadowircd_is_valid_hostslash(const char *host)
+static bool shadowircd_is_valid_hostslash(const char *host)
 {
         const char *p;
-        boolean_t dot = FALSE;
+        bool dot = false;
 
         if (*host == '.' || *host == '/' || *host == ':')
-                return FALSE;
+                return false;
 
         for (p = host; *p != '\0'; p++)
         {
                 if (*p == '.' || *p == ':' || *p == '/')
-                        dot = TRUE;
+                        dot = true;
                 else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
                                         (*p >= 'a' && *p <= 'z') || *p == '-'))
-                        return FALSE;
+                        return false;
         }
         /* hyperion allows a trailing / but RichiH does not want it, whatever */
         if (dot && p[-1] == '/')
-                return FALSE;
+                return false;
         return dot;
 }
 #endif
@@ -147,7 +147,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

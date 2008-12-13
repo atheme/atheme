@@ -99,7 +99,7 @@ int tokenize(char *message, char **parv)
 	 * also make sure there's a space before it... if not then we're screwed
 	 */
 	pos = message;
-	while (TRUE)
+	while (true)
 	{
 		if ((pos = strchr(pos, ':')))
 		{

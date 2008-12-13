@@ -35,9 +35,9 @@ struct me
   unsigned int mdlimit;		/* metadata entry limit		      */
   time_t start;                 /* starting time                      */
   server_t *me;                 /* pointer to our server struct       */
-  boolean_t connected;          /* are we connected?                  */
-  boolean_t bursting;           /* are we bursting?                   */
-  boolean_t recvsvr;		/* received server peer               */
+  bool connected;          /* are we connected?                  */
+  bool bursting;           /* are we bursting?                   */
+  bool recvsvr;		/* received server peer               */
 
   unsigned int maxlogins;           /* maximum logins per username        */
   unsigned int maxusers;            /* maximum usernames from one email   */
@@ -73,20 +73,20 @@ struct ConfOption
   unsigned int kline_time;          /* default expire for klines  */
   unsigned int commit_interval;     /* interval between commits   */
 
-  boolean_t silent;             /* stop sending WALLOPS?      */
-  boolean_t join_chans;         /* join registered channels?  */
-  boolean_t leave_chans;        /* leave channels when empty? */
-  boolean_t secure;             /* require /msg <service>@host? */
+  bool silent;             /* stop sending WALLOPS?      */
+  bool join_chans;         /* join registered channels?  */
+  bool leave_chans;        /* leave channels when empty? */
+  bool secure;             /* require /msg <service>@host? */
 
   unsigned int defuflags;           /* default username flags     */
   unsigned int defcflags;           /* default channel flags      */
 
-  boolean_t raw;                /* enable raw/inject?         */
+  bool raw;                /* enable raw/inject?         */
 
   char *global;                 /* nick for global noticer    */
   char *languagefile;		/* path to language file (if any) */
 
-  boolean_t verbose_wallops;	/* verbose wallops? :)        */
+  bool verbose_wallops;	/* verbose wallops? :)        */
 
   unsigned int default_clone_limit;  /* default clone limit */
   unsigned int uplink_sendq_limit;
@@ -140,10 +140,10 @@ E int runflags;
 #define RF_REHASHING    0x00000010      /* rehashing   */
 
 /* conf.c */
-E boolean_t conf_parse(const char *);
+E bool conf_parse(const char *);
 E void conf_init(void);
-E boolean_t conf_rehash(void);
-E boolean_t conf_check(void);
+E bool conf_rehash(void);
+E bool conf_check(void);
 
 /* confp.c */
 E void config_free(config_file_t *cfptr);
@@ -158,7 +158,7 @@ E void unmark_all_illegal(void);
 E void remove_illegals(void);
 
 /* atheme.c */
-E boolean_t cold_start;
+E bool cold_start;
 E char *config_file;
 
 /* version.c */

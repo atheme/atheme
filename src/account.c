@@ -458,13 +458,13 @@ myuser_num_channels(myuser_t *mu)
  *     - user to verify, account to verify against
  *
  * Outputs:
- *     - TRUE if user matches an accesslist entry
- *     - FALSE otherwise
+ *     - true if user matches an accesslist entry
+ *     - false otherwise
  *
  * Side Effects:
  *     - last login time updated if user matches
  */
-boolean_t
+bool
 myuser_access_verify(user_t *u, myuser_t *mu)
 {
 	node_t *n;
@@ -475,11 +475,11 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	if (u == NULL || mu == NULL)
 	{
 		slog(LG_DEBUG, "myuser_access_verify(): invalid parameters: u = %p, mu = %p", u, mu);
-		return FALSE;
+		return false;
 	}
 
 	if (!use_myuser_access)
-		return FALSE;
+		return false;
 
 	snprintf(buf, sizeof buf, "%s@%s", u->user, u->vhost);
 	snprintf(buf2, sizeof buf2, "%s@%s", u->user, u->host);
@@ -492,11 +492,11 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 		if (!match(entry, buf) || !match(entry, buf2) || !match(entry, buf3) || !match_cidr(entry, buf3))
 		{
 			mu->lastlogin = CURRTIME;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 /*
@@ -506,13 +506,13 @@ myuser_access_verify(user_t *u, myuser_t *mu)
  *     - account to attach access mask to, access mask itself
  *
  * Outputs:
- *     - FALSE: me.mdlimit is reached (too many access entries)
- *     - TRUE : success
+ *     - false: me.mdlimit is reached (too many access entries)
+ *     - true : success
  *
  * Side Effects:
  *     - an access mask is added to an account.
  */
-boolean_t
+bool
 myuser_access_add(myuser_t *mu, const char *mask)
 {
 	node_t *n;
@@ -521,13 +521,13 @@ myuser_access_add(myuser_t *mu, const char *mask)
 	if (mu == NULL || mask == NULL)
 	{
 		slog(LG_DEBUG, "myuser_access_add(): invalid parameters: mu = %p, mask = %p", mu, mask);
-		return FALSE;
+		return false;
 	}
 
 	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
 		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", mu->name);
-		return FALSE;
+		return false;
 	}
 
 	msk = sstrdup(mask);
@@ -536,7 +536,7 @@ myuser_access_add(myuser_t *mu, const char *mask)
 
 	cnt.myuser_access++;
 
-	return TRUE;
+	return true;
 }
 
 /*
@@ -915,7 +915,7 @@ mychan_t *mychan_add(char *name)
 /* Check if there is anyone on the channel fulfilling the conditions.
  * Fairly expensive, but this is sometimes necessary to avoid
  * inappropriate drops. -- jilles */
-boolean_t mychan_isused(mychan_t *mc)
+bool mychan_isused(mychan_t *mc)
 {
 	node_t *n;
 	channel_t *c;
@@ -923,14 +923,14 @@ boolean_t mychan_isused(mychan_t *mc)
 
 	c = mc->chan;
 	if (c == NULL)
-		return FALSE;
+		return false;
 	LIST_FOREACH(n, c->members.head)
 	{
 		cu = n->data;
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 unsigned int mychan_num_founders(mychan_t *mc)
@@ -1308,23 +1308,23 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int
 	return chanacs_find_host_literal(mychan, mask, level);
 }
 
-boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
+bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 {
 	myuser_t *mu;
 
-	return_val_if_fail(mychan != NULL && u != NULL, FALSE);
+	return_val_if_fail(mychan != NULL && u != NULL, false);
 
 	mu = u->myuser;
 	if (mu != NULL)
 	{
 		if (chanacs_find(mychan, mu, level))
-			return TRUE;
+			return true;
 	}
 
 	if (chanacs_find_host_by_user(mychan, u, level))
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
@@ -1364,16 +1364,16 @@ unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 }
 
 /* Look for the chanacs exactly matching mu or host (exactly one of mu and
- * host must be non-NULL). If not found, and create is TRUE, create a new
+ * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create)
+chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bool create)
 {
 	chanacs_t *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
-	return_val_if_fail(mychan != NULL, FALSE);
-	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), FALSE); 
+	return_val_if_fail(mychan != NULL, false);
+	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), false); 
 
 	if (mu != NULL)
 	{
@@ -1401,33 +1401,33 @@ chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bo
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
 {
-	return_val_if_fail(ca != NULL, FALSE);
-	return_val_if_fail(addflags != NULL && removeflags != NULL, FALSE);
+	return_val_if_fail(ca != NULL, false);
+	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
 
 	*addflags &= ~ca->level;
 	*removeflags &= ca->level & ~*addflags;
 	/* no change? */
 	if ((*addflags | *removeflags) == 0)
-		return TRUE;
+		return true;
 	/* attempting to add bad flag? */
 	if (~restrictflags & *addflags)
-		return FALSE;
+		return false;
 	/* attempting to remove bad flag? */
 	if (~restrictflags & *removeflags)
-		return FALSE;
+		return false;
 	/* attempting to manipulate user with more privs? */
 	if (~restrictflags & ca->level)
-		return FALSE;
+		return false;
 	ca->level = (ca->level | *addflags) & ~*removeflags;
 	ca->tmodified = CURRTIME;
 
-	return TRUE;
+	return true;
 }
 
 /* version that doesn't return the changes made */
-boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags)
+bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags)
 {
 	unsigned int a, r;
 
@@ -1443,14 +1443,14 @@ boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned i
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
-	return_val_if_fail(mychan != NULL, FALSE);
-	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), FALSE); 
-	return_val_if_fail(addflags != NULL && removeflags != NULL, FALSE);
+	return_val_if_fail(mychan != NULL, false);
+	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), false); 
+	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
 
 	if (mu != NULL)
 	{
@@ -1460,10 +1460,10 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			*removeflags = 0;
 			/* no change? */
 			if ((*addflags | *removeflags) == 0)
-				return TRUE;
+				return true;
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
-				return FALSE;
+				return false;
 			chanacs_add(mychan, mu, *addflags, CURRTIME);
 		}
 		else
@@ -1472,16 +1472,16 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			*removeflags &= ca->level & ~*addflags;
 			/* no change? */
 			if ((*addflags | *removeflags) == 0)
-				return TRUE;
+				return true;
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
-				return FALSE;
+				return false;
 			/* attempting to remove bad flag? */
 			if (~restrictflags & *removeflags)
-				return FALSE;
+				return false;
 			/* attempting to manipulate user with more privs? */
 			if (~restrictflags & ca->level)
-				return FALSE;
+				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
 			if (ca->level == 0)
@@ -1496,10 +1496,10 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			*removeflags = 0;
 			/* no change? */
 			if ((*addflags | *removeflags) == 0)
-				return TRUE;
+				return true;
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
-				return FALSE;
+				return false;
 			chanacs_add_host(mychan, hostmask, *addflags, CURRTIME);
 		}
 		else
@@ -1508,27 +1508,27 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			*removeflags &= ca->level & ~*addflags;
 			/* no change? */
 			if ((*addflags | *removeflags) == 0)
-				return TRUE;
+				return true;
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
-				return FALSE;
+				return false;
 			/* attempting to remove bad flag? */
 			if (~restrictflags & *removeflags)
-				return FALSE;
+				return false;
 			/* attempting to manipulate user with more privs? */
 			if (~restrictflags & ca->level)
-				return FALSE;
+				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
 			if (ca->level == 0)
 				object_unref(ca);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 /* version that doesn't return the changes made */
-boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags)
+bool chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags)
 {
 	unsigned int a, r;
 

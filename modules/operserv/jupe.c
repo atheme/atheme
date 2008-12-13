@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/jupe", FALSE, _modinit, _moddeinit,
+	"operserv/jupe", false, _modinit, _moddeinit,
 	"$Id: jupe.c 8105 2007-04-05 16:02:05Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

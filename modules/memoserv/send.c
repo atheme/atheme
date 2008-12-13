@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/send", FALSE, _modinit, _moddeinit,
+	"memoserv/send", false, _modinit, _moddeinit,
 	"$Id: send.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -35,7 +35,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/subscribe", FALSE, _modinit, _moddeinit,
+	"nickserv/subscribe", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -44,7 +44,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu = si->smu, *tmu;
 	char *name = parv[0], *tag;
-	boolean_t do_remove = FALSE;
+	bool do_remove = false;
 	metadata_subscription_t *md;
 
 	if (parc < 1)
@@ -64,7 +64,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 	if (*name == '-')
 	{
-		do_remove = TRUE;
+		do_remove = true;
 		name++;
 	}
 
@@ -78,7 +78,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	if (do_remove)
 	{
 		node_t *n;
-		boolean_t found = FALSE;
+		bool found = false;
 
 		LIST_FOREACH(n, tmu->subscriptions.head)
 		{
@@ -86,7 +86,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 			if (md->mu == mu)
 			{
-				found = TRUE;
+				found = true;
 				break;
 			}
 		}

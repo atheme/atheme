@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"xmlrpc/main", FALSE, _modinit, _moddeinit,
+	"xmlrpc/main", false, _modinit, _moddeinit,
 	"$Id: main.c 8405 2007-06-03 21:40:48Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -163,7 +163,7 @@ static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *
 			newmessage[i++] = *p, p++;
 	newmessage[i] = '\0';
 	xmlrpc_generic_error(code, newmessage);
-	hd->sent_reply = TRUE;
+	hd->sent_reply = true;
 }
 
 static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
@@ -209,7 +209,7 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
 		return;
 	xmlrpc_string(buf, result);
 	xmlrpc_send(1, buf);
-	hd->sent_reply = TRUE;
+	hd->sent_reply = true;
 }
 
 /* These taken from the old modules/xmlrpc/account.c */
@@ -310,7 +310,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
 		return 0;
@@ -375,7 +375,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 			return 0;
 		}
 
-		if (authcookie_validate(parv[0], mu) == FALSE)
+		if (authcookie_validate(parv[0], mu) == false)
 		{
 			xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
 			return 0;

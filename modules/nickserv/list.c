@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/list", FALSE, _modinit, _moddeinit,
+	"nickserv/list", false, _modinit, _moddeinit,
 	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -80,7 +80,7 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char pat[512], *nickpattern = NULL, *hostpattern = NULL, *p;
-	boolean_t hostmatch;
+	bool hostmatch;
 	mowgli_patricia_iteration_state_t state;
 	myuser_t *mu;
 	mynick_t *mn;
@@ -119,13 +119,13 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				continue;
 			if (hostpattern)
 			{
-				hostmatch = FALSE;
+				hostmatch = false;
 				md = metadata_find(mu, "private:host:actual");
 				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = TRUE;
+					hostmatch = true;
 				md = metadata_find(mu, "private:host:vhost");
 				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = TRUE;
+					hostmatch = true;
 				if (!hostmatch)
 					continue;
 			}
@@ -143,13 +143,13 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			mu = mn->owner;
 			if (hostpattern)
 			{
-				hostmatch = FALSE;
+				hostmatch = false;
 				md = metadata_find(mu, "private:host:actual");
 				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = TRUE;
+					hostmatch = true;
 				md = metadata_find(mu, "private:host:vhost");
 				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = TRUE;
+					hostmatch = true;
 				if (!hostmatch)
 					continue;
 			}

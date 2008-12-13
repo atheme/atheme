@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/help", FALSE, _modinit, _moddeinit,
+	"chanserv/help", false, _modinit, _moddeinit,
 	"$Id: help.c 8417 2007-06-08 00:48:04Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -83,9 +83,9 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, " ");
 		}
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, _("For a verbose listing of all commands, type:"));
-		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == false) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, " ");
 
 		command_help_short(si, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FDROP FFLAGS FTRANSFER");

@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/logonnews", FALSE, _modinit, _moddeinit,
+	"operserv/logonnews", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );

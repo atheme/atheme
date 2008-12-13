@@ -24,7 +24,7 @@
 #include "atheme.h"
 
 static char saltbuf[BUFSIZE];
-boolean_t crypto_module_loaded = FALSE;
+bool crypto_module_loaded = false;
 
 /*
  * crypt_string is just like crypt(3) under UNIX
@@ -41,14 +41,14 @@ const char *generic_crypt_string(const char *str, const char *salt)
 /*
  * crypt_verify_password is a frontend to crypt_string().
  */
-boolean_t crypt_verify_password(const char *uinput, const char *pass)
+bool crypt_verify_password(const char *uinput, const char *pass)
 {
 	const char *cstr = crypt_string(uinput, pass);
 
 	if (!strcmp(cstr, pass))
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 const char *gen_salt(void)

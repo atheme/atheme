@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/modrestart", TRUE, _modinit, _moddeinit,
+	"operserv/modrestart", true, _modinit, _moddeinit,
 	"$Id: modrestart.c 8079 2007-04-02 17:37:39Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -43,16 +43,16 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 	int loadedbefore, kept;
-	boolean_t old_silent;
-	boolean_t fail1 = FALSE;
-	boolean_t unloaded_something;
+	bool old_silent;
+	bool fail1 = false;
+	bool unloaded_something;
 
 	snoop("MODRESTART: \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "MODRESTART");
 	wallops("Restarting modules by request of \2%s\2", get_oper_name(si));
 
 	old_silent = config_options.silent;
-	config_options.silent = TRUE; /* no wallops */
+	config_options.silent = true; /* no wallops */
 
 	loadedbefore = modules.count;
 
@@ -61,7 +61,7 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	 * may unload other modules */
 	do
 	{
-		unloaded_something = FALSE;
+		unloaded_something = false;
 		LIST_FOREACH(n, modules.head)
 		{
 			module_t *m = n->data;
@@ -71,7 +71,7 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 			if (!m->header->norestart && strcmp(m->header->name, "operserv/main") && strcmp(m->header->name, "operserv/modrestart"))
 			{
 				module_unload(m);
-				unloaded_something = TRUE;
+				unloaded_something = true;
 				break;
 			}
 		}
@@ -80,9 +80,9 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	kept = modules.count;
 
 	/* now reload again */
-	cold_start = TRUE; /* XXX */
+	cold_start = true; /* XXX */
 	fail1 = !conf_rehash();
-	cold_start = FALSE;
+	cold_start = false;
 
 	config_options.silent = old_silent;
 

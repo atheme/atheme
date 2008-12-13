@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/set", FALSE, _modinit, _moddeinit,
+	"chanserv/set", false, _modinit, _moddeinit,
 	"$Id: set.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -176,7 +176,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&cs_set_cmdtree, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		return;
 	}
 
@@ -442,7 +442,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	{
 		chanacs_t *ca;
 
-		ca = chanacs_open(mc, tmu, NULL, TRUE);
+		ca = chanacs_open(mc, tmu, NULL, true);
 		if (ca->level == 0 && chanacs_is_table_full(ca))
 		{
 			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -478,10 +478,10 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	int dir = MTYPE_NUL;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	unsigned int mask, changed;
-	boolean_t mask_ext;
+	bool mask_ext;
 	char newlock_key[KEYLEN];
 	char newlock_ext[MAXEXTMODES][512];
-	boolean_t newlock_ext_off[MAXEXTMODES];
+	bool newlock_ext_off[MAXEXTMODES];
 	char newext[512];
 	char ext_plus[MAXEXTMODES + 1], ext_minus[MAXEXTMODES + 1];
 	int i;
@@ -511,19 +511,19 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		mask = ~ircd->oper_only_modes;
-		mask_ext = TRUE;
+		mask_ext = true;
 	}
 	else
 	{
 		mask = has_priv(si, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
-		mask_ext = FALSE;
+		mask_ext = false;
 
 	}
 
 	for (i = 0; i < MAXEXTMODES; i++)
 	{
 		newlock_ext[i][0] = '\0';
-		newlock_ext_off[i] = FALSE;
+		newlock_ext_off[i] = false;
 	}
 	newlock_key[0] = '\0';
 
@@ -638,12 +638,12 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 							  return;
 						  }
 						  strlcpy(newlock_ext[i], arg, sizeof newlock_ext[i]);
-						  newlock_ext_off[i] = FALSE;
+						  newlock_ext_off[i] = false;
 					  }
 					  else
 					  {
 						  newlock_ext[i][0] = '\0';
-						  newlock_ext_off[i] = TRUE;
+						  newlock_ext_off[i] = true;
 					  }
 				  }
 			  }
@@ -750,7 +750,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (changed & ircd->oper_only_modes)
 		snoop(_("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
 
-	check_modes(mc, TRUE);
+	check_modes(mc, true);
 
 	return;
 }

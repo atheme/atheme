@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/rwatch", FALSE, _modinit, _moddeinit,
+	"operserv/rwatch", false, _modinit, _moddeinit,
 	"$Id: rwatch.c 7959 2007-03-20 12:25:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -201,7 +201,7 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&os_rwatch_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		return;
 	}
 

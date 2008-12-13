@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"xmlrpc/account", FALSE, _modinit, _moddeinit,
+	"xmlrpc/account", false, _modinit, _moddeinit,
 	"$Id: account.c 8389 2007-06-03 20:36:51Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -223,7 +223,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 	}
 
 	/* avoid information leaks */
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -331,7 +331,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -394,7 +394,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -511,7 +511,7 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -574,7 +574,7 @@ static int do_set_password(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;

@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/rnc", FALSE, _modinit, _moddeinit,
+	"operserv/rnc", false, _modinit, _moddeinit,
 	"$Id: rnc.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );

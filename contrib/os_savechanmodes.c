@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/savechanmodes", FALSE, _modinit, _moddeinit,
+	"operserv/savechanmodes", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
@@ -58,7 +58,7 @@ static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
 	{
-		fprintf(out, "chan %s %s\n", c->name, channel_modes(c, TRUE));
+		fprintf(out, "chan %s %s\n", c->name, channel_modes(c, true));
 		if (c->topic)
 			fprintf(out, "topic %s %lu %s\n", c->topic_setter,
 					(unsigned long)c->topicts,

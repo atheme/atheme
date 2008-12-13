@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
+	"chanserv/taxonomy", false, _modinit, _moddeinit,
 	"$Id: taxonomy.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -44,7 +44,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	mychan_t *mc;
 	node_t *n;
-	boolean_t isoper;
+	bool isoper;
 
 	if (!target || *target != '#')
 	{

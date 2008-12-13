@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/main", FALSE, _modinit, _moddeinit,
+	"nickserv/main", false, _modinit, _moddeinit,
 	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -101,7 +101,7 @@ static void nickserv_handle_nickchange(void *user_p)
 		{
 			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
 			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
-			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == false) ? "msg " : "", chansvs.disp);
 
 			u->flags |= UF_SEENINFO;
 		}
@@ -123,7 +123,7 @@ static void nickserv_handle_nickchange(void *user_p)
 	}
 
 	notice(nicksvs.nick, u->nick, _("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
-		(ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+		(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp);
 	hdata.u = u;
 	hdata.mn = mn;
 	hook_call_event("nick_enforce", &hdata);

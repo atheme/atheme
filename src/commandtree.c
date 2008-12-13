@@ -142,7 +142,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 	}
 	else
 	{
-		notice(svs->nick, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+		notice(svs->nick, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", svs->disp);
 	}
 }
 
@@ -179,26 +179,26 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 }
 
 /* name1 name2 name3... */
-static boolean_t string_in_list(const char *str, const char *name)
+static bool string_in_list(const char *str, const char *name)
 {
 	char *p;
 	int l;
 
 	if (str == NULL)
-		return FALSE;
+		return false;
 	l = strlen(name);
 	while (*str != '\0')
 	{
 		p = strchr(str, ' ');
 		if (p != NULL ? p - str == l && !strncasecmp(str, name, p - str) : !strcasecmp(str, name))
-			return TRUE;
+			return true;
 		if (p == NULL)
-			return FALSE;
+			return false;
 		str = p;
 		while (*str == ' ')
 			str++;
 	}
-	return FALSE;
+	return false;
 }
 
 /*

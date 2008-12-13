@@ -202,7 +202,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	sptr->notice_handler = dummy_handler;
 
 	sptr->cmdtree = cmdtree;
-	sptr->chanmsg = FALSE;
+	sptr->chanmsg = false;
 	sptr->conf_table = conf_table;
 
 	sptr->me = NULL;
@@ -338,7 +338,7 @@ char *service_name(char *name)
 	return str;
 }
 
-void service_set_chanmsg(service_t *service, boolean_t chanmsg)
+void service_set_chanmsg(service_t *service, bool chanmsg)
 {
 	return_if_fail(service != NULL);
 

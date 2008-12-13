@@ -14,7 +14,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/wumpus", FALSE, _modinit, _moddeinit,
+	"contrib/wumpus", false, _modinit, _moddeinit,
 	"$Id$",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
@@ -45,7 +45,7 @@ struct player_ {
 	room_t    *location;
 	int        arrows;
 	int	   hp;
-	boolean_t  has_moved;
+	bool  has_moved;
 };
 
 typedef struct player_ player_t;
@@ -54,8 +54,8 @@ struct game_ {
 	int wumpus;
 	int mazesize;
 	list_t players;
-	boolean_t running;
-	boolean_t starting;
+	bool running;
+	bool starting;
 
 	room_t *rmemctx;	/* memory page context */
 	service_t *svs;
@@ -114,7 +114,7 @@ distance_to_wumpus(player_t *player)
 }
 
 /* can we move or perform an action on this room? */
-static boolean_t
+static bool
 adjacent_room(player_t *p, int id)
 {
 	node_t *n;
@@ -124,10 +124,10 @@ adjacent_room(player_t *p, int id)
 		room_t *r = (room_t *) n->data;
 
 		if (r->id == id)
-			return TRUE;
+			return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* finds a player in the list */
@@ -200,15 +200,15 @@ resign_player(player_t *player)
 
 /* ------------------------------ game functions */
 
-/* builds the maze, and returns FALSE if the maze is too small */
-boolean_t
+/* builds the maze, and returns false if the maze is too small */
+bool
 build_maze(int size)
 {
 	int i, j;
 	room_t *w;
 
 	if (size < 10)
-		return FALSE;
+		return false;
 
 	slog(LG_DEBUG, "wumpus: building maze of %d chambers", size);
 
@@ -307,7 +307,7 @@ build_maze(int size)
 
 	slog(LG_DEBUG, "wumpus: built maze");
 
-	return TRUE;
+	return true;
 }
 
 /* init_game depends on these */
@@ -344,7 +344,7 @@ init_game(void)
 
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "The game has started!");
 
-	wumpus.running = TRUE;
+	wumpus.running = true;
 	wumpus.speed = 60;
 	wumpus.wump_hp = 70;
 }
@@ -353,7 +353,7 @@ init_game(void)
 void
 start_game(void *unused)
 {
-	wumpus.starting = FALSE;
+	wumpus.starting = false;
 
 	if (wumpus.players.count < 2)
 	{
@@ -391,7 +391,7 @@ end_game(void)
 	}
 
 	wumpus.wumpus = -1;
-	wumpus.running = FALSE;
+	wumpus.running = false;
 
 	event_delete(move_wumpus, NULL);
 
@@ -447,7 +447,7 @@ shoot_player(player_t *p, int target_id)
 		return;
 	}
 
-	if (adjacent_room(p, target_id) == FALSE)
+	if (adjacent_room(p, target_id) == false)
 	{
 		notice(wumpus_cfg.nick, p->u->nick, "You can't shoot into room %d from here.");
 		return;
@@ -533,7 +533,7 @@ move_wumpus(void *unused)
 	node_t *n, *tn;
 	room_t *r;
 	int w_kills = 0;
-	boolean_t moved = FALSE;
+	bool moved = false;
 
 	/* can we do any of this? if this is null, we really shouldn't be here */
 	if (wumpus.rmemctx == NULL)
@@ -557,7 +557,7 @@ move_wumpus(void *unused)
 		{
 			room_t *tr = (room_t *) n->data;
 
-			if (rand() % 42 == 0 && moved == FALSE)
+			if (rand() % 42 == 0 && moved == false)
 			{
 #ifdef DEBUG_AI
 				msg(wumpus_cfg.nick, wumpus_cfg.chan, "I moved to chamber %d", tr->id);
@@ -568,7 +568,7 @@ move_wumpus(void *unused)
 				wumpus.wumpus = tr->id;
 				tr->contents = E_WUMPUS;
 
-				moved = TRUE;
+				moved = true;
 			}
 		}
 	}
@@ -599,7 +599,7 @@ move_wumpus(void *unused)
 		}
 
 		/* prepare for the next turn */
-		p->has_moved = FALSE;
+		p->has_moved = false;
 	}
 
 	/* report any wumpus kills */
@@ -635,7 +635,7 @@ move_player(player_t *p, int id)
 {
 	node_t *n;
 
-	if (adjacent_room(p, id) == FALSE)
+	if (adjacent_room(p, id) == false)
 	{
 		notice(wumpus_cfg.nick, p->u->nick, "Sorry, you cannot get to room %d from here.", id);
 		return;
@@ -751,7 +751,7 @@ void cmd_start(char *origin)
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has started the game! Use \2/msg Wumpus JOIN\2 to play! You have\2 60 seconds\2.",
 		origin);
 
-	wumpus.starting = TRUE;
+	wumpus.starting = true;
 
 	event_add_once("start_game", start_game, NULL, 60);
 }
@@ -864,8 +864,8 @@ void cmd_reset(char *origin)
 
 		end_game();
 
-		wumpus.running = FALSE;
-		wumpus.starting = FALSE;
+		wumpus.running = false;
+		wumpus.starting = false;
 	}
 }
 

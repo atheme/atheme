@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/modload", FALSE, _modinit, _moddeinit,
+	"operserv/modload", false, _modinit, _moddeinit,
 	"$Id: modload.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

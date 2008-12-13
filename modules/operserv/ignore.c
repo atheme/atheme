@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/ignore", FALSE, _modinit, _moddeinit,
+	"operserv/ignore", false, _modinit, _moddeinit,
 	"$Id: ignore.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -80,7 +80,7 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
         c = command_find(&os_ignore_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 

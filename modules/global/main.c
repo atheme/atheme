@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"global/main", FALSE, _modinit, _moddeinit,
+	"global/main", false, _modinit, _moddeinit,
 	"$Id: main.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -63,7 +63,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	node_t *n, *tn;
 	char *params = parv[0];
 	static char *sender = NULL;
-	boolean_t isfirst;
+	bool isfirst;
 	char buf[BUFSIZE];
 
 	if (!params)
@@ -109,7 +109,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			return;
 		}
 
-		isfirst = TRUE;
+		isfirst = true;
 		LIST_FOREACH(n, globlist.head)
 		{
 			global = (struct global_ *)n->data;
@@ -122,7 +122,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			 * should come from global even if /os global was
 			 * used. */
 			notice_global_sts(globsvs.me->me, "*", buf);
-			isfirst = FALSE;
+			isfirst = false;
 			/* log everything */
 			logcommand(si, CMDLOG_ADMIN, "GLOBAL %s", global->text);
 		}

@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/vacation", FALSE, _modinit, _moddeinit,
+	"nickserv/vacation", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );

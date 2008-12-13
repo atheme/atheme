@@ -13,12 +13,12 @@
 
 DECLARE_MODULE_V1
 (
-	"ircd_noprotect", FALSE, _modinit, _moddeinit,
+	"ircd_noprotect", false, _modinit, _moddeinit,
 	"$Id: ircd_noprotect.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-boolean_t oldflag;
+bool oldflag;
 
 void _modinit(module_t *m)
 {
@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 		return;
 	}
 	oldflag = ircd->uses_protect;
-	ircd->uses_protect = FALSE;
+	ircd->uses_protect = false;
 	update_chanacs_flags();
 }
 

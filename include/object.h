@@ -13,7 +13,7 @@
 struct metadata_ {
 	char *name;
 	char *value;
-	boolean_t private;
+	bool private;
 	node_t node;
 };
 

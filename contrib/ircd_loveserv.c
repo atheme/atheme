@@ -14,7 +14,7 @@
 
 DECLARE_MODULE_V1
 (
-        "contrib/ircd_loveserv", FALSE, _modinit, _moddeinit,
+        "contrib/ircd_loveserv", false, _modinit, _moddeinit,
         "$Id: ircd_loveserv.c 7785 2007-03-03 15:54:32Z pippijn $",
         "Atheme Development Group <http://www.atheme.org>"
 );

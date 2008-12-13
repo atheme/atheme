@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/set_accountname", FALSE, _modinit, _moddeinit,
+	"nickserv/set_accountname", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -2,7 +2,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/tabletest", FALSE, _modinit, _moddeinit,
+	"operserv/tabletest", false, _modinit, _moddeinit,
 	"$Id: os_tabletest.c 7997 2007-03-27 22:04:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

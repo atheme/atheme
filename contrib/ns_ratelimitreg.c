@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/ns_ratelimitreg", FALSE, _modinit, _moddeinit,
+	"contrib/ns_ratelimitreg", false, _modinit, _moddeinit,
 	"$Revision$",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );

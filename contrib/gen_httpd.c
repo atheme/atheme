@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
+	"contrib/gen_httpd", false, _modinit, _moddeinit,
 	"$Id: gen_httpd.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
@@ -26,7 +26,7 @@ struct httpddata
 {
 	char method[64];
 	char filename[256];
-	boolean_t connection_close;
+	bool connection_close;
 };
 
 static int open_file(const char *filename)
@@ -62,7 +62,7 @@ static void process_header(connection_t *cptr, char *line)
 			if (!strcasecmp(p, "close"))
 			{
 				slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
-				hd->connection_close = TRUE;
+				hd->connection_close = true;
 			}
 			p = strtok(NULL, ", \t");
 		}
@@ -78,7 +78,7 @@ static void check_close(connection_t *cptr)
 		sendq_add_eof(cptr);
 }
 
-static void send_error(connection_t *cptr, int errorcode, const char *text, boolean_t sendentity)
+static void send_error(connection_t *cptr, int errorcode, const char *text, bool sendentity)
 {
 	struct httpddata *hd;
 	char buf1[300];
@@ -131,7 +131,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 	int in;
 	struct stat sb;
 	off_t count1;
-	boolean_t is_get;
+	bool is_get;
 
 	count = recvq_getline(cptr, buf, sizeof buf - 1);
 	if (count <= 0)
@@ -139,7 +139,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 	if (cptr->flags & CF_NONEWLINE)
 	{
 		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->hbuf);
-		send_error(cptr, 400, "Bad request", TRUE);
+		send_error(cptr, 400, "Bad request", true);
 		sendq_add_eof(cptr);
 		return;
 	}
@@ -166,7 +166,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 		strlcpy(hd->filename, p, sizeof hd->filename);
 		p = strtok(NULL, "");
 		if (p == NULL || !strcmp(p, "HTTP/1.0"))
-			hd->connection_close = TRUE;
+			hd->connection_close = true;
 		slog(LG_DEBUG, "httpd_recvqhandler(): request %s for %s", hd->method, hd->filename);
 	}
 	else if (count == 0)
@@ -174,7 +174,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 		is_get = !strcmp(hd->method, "GET");
 		if (!is_get && strcmp(hd->method, "HEAD"))
 		{
-			send_error(cptr, 501, "Method Not Implemented", TRUE);
+			send_error(cptr, 501, "Method Not Implemented", true);
 			check_close(cptr);
 			return;
 		}
@@ -241,7 +241,7 @@ static void do_listen(connection_t *cptr)
 	hd = smalloc(sizeof(*hd));
 	hd->method[0] = '\0';
 	hd->filename[0] = '\0';
-	hd->connection_close = FALSE;
+	hd->connection_close = false;
 	newptr->userdata = hd;
 	newptr->recvq_handler = httpd_recvqhandler;
 	newptr->close_handler = httpd_closehandler;

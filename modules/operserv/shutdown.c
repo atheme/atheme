@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/shutdown", FALSE, _modinit, _moddeinit,
+	"operserv/shutdown", false, _modinit, _moddeinit,
 	"$Id: shutdown.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

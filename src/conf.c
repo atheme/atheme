@@ -213,13 +213,13 @@ static void conf_process(config_file_t *cfp)
 	}
 }
 
-boolean_t conf_parse(const char *file)
+bool conf_parse(const char *file)
 {
 	config_file_t *cfp;
 
 	cfp = config_load(file);
 	if (cfp == NULL)
-		return FALSE;
+		return false;
 
 	conf_process(cfp);
 	config_free(cfp);
@@ -231,7 +231,7 @@ boolean_t conf_parse(const char *file)
 	}
 
 	hook_call_event("config_ready", NULL);
-	return TRUE;
+	return true;
 }
 
 void conf_init(void)
@@ -266,18 +266,18 @@ void conf_init(void)
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
-	config_options.silent = config_options.join_chans = config_options.leave_chans = config_options.raw = FALSE;
+	config_options.silent = config_options.join_chans = config_options.leave_chans = config_options.raw = false;
 
 	me.auth = AUTH_NONE;
 
 	me.mdlimit = 30;
 
-	chansvs.fantasy = FALSE;
+	chansvs.fantasy = false;
 	chansvs.ca_vop = CA_VOP_DEF & ca_all;
 	chansvs.ca_hop = CA_HOP_DEF & ca_all;
 	chansvs.ca_aop = CA_AOP_DEF & ca_all;
 	chansvs.ca_sop = CA_SOP_DEF & ca_all;
-	chansvs.changets = FALSE;
+	chansvs.changets = false;
 	if (chansvs.trigger != NULL)
 		free(chansvs.trigger);
 	chansvs.trigger = sstrdup("!");
@@ -579,7 +579,7 @@ static int c_loadmodule(config_entry_t *ce)
 	char pathbuf[4096];
 	char *name;
 
-	if (cold_start == FALSE)
+	if (cold_start == false)
 		return 0;
 
 	if (ce->ce_vardata == NULL)
@@ -1119,7 +1119,7 @@ static int c_si_casemapping(config_entry_t *ce)
 
 static int c_ci_fantasy(config_entry_t *ce)
 {
-	chansvs.fantasy = TRUE;
+	chansvs.fantasy = true;
 
 	return 0;
 }
@@ -1166,7 +1166,7 @@ static int c_ci_sop(config_entry_t *ce)
 
 static int c_ci_changets(config_entry_t *ce)
 {
-	chansvs.changets = TRUE;
+	chansvs.changets = true;
 	return 0;
 }
 
@@ -1236,31 +1236,31 @@ static int c_gi_chan(config_entry_t *ce)
 
 static int c_gi_silent(config_entry_t *ce)
 {
-	config_options.silent = TRUE;
+	config_options.silent = true;
 	return 0;
 }
 
 static int c_gi_verbose_wallops(config_entry_t *ce)
 {
-	config_options.verbose_wallops = TRUE;
+	config_options.verbose_wallops = true;
 	return 0;
 }
 
 static int c_gi_secure(config_entry_t *ce)
 {
-	config_options.secure = TRUE;
+	config_options.secure = true;
 	return 0;
 }
 
 static int c_gi_join_chans(config_entry_t *ce)
 {
-	config_options.join_chans = TRUE;
+	config_options.join_chans = true;
 	return 0;
 }
 
 static int c_gi_leave_chans(config_entry_t *ce)
 {
-	config_options.leave_chans = TRUE;
+	config_options.leave_chans = true;
 	return 0;
 }
 
@@ -1313,7 +1313,7 @@ static int c_gi_cflags(config_entry_t *ce)
 
 static int c_gi_raw(config_entry_t *ce)
 {
-	config_options.raw = TRUE;
+	config_options.raw = true;
 	return 0;
 }
 
@@ -1394,13 +1394,13 @@ static int c_gi_expire(config_entry_t *ce)
 
 static int c_ni_spam(config_entry_t *ce)
 {
-	nicksvs.spam = TRUE;
+	nicksvs.spam = true;
 	return 0;
 }
 
 static int c_ni_no_nick_ownership(config_entry_t *ce)
 {
-	nicksvs.no_nick_ownership = TRUE;
+	nicksvs.no_nick_ownership = true;
 	return 0;
 }
 
@@ -1488,7 +1488,7 @@ static void free_cstructs(struct me *mesrc)
 	free(mesrc->mta);
 }
 
-boolean_t conf_rehash(void)
+bool conf_rehash(void)
 {
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
 	char *oldsnoop;
@@ -1503,7 +1503,7 @@ boolean_t conf_rehash(void)
 	{
 		slog(LG_ERROR, "conf_rehash(): unable to load configuration file, aborting rehash");
 		runflags &= ~RF_REHASHING;
-		return FALSE;
+		return false;
 	}
 
 	copy_me(&me, hold_me);
@@ -1540,7 +1540,7 @@ boolean_t conf_rehash(void)
 		free(oldsnoop);
 
 		runflags &= ~RF_REHASHING;
-		return FALSE;
+		return false;
 	}
 
 	if (oldsnoop != NULL || config_options.chan != NULL)
@@ -1562,15 +1562,15 @@ boolean_t conf_rehash(void)
 	free(oldsnoop);
 
 	runflags &= ~RF_REHASHING;
-	return TRUE;
+	return true;
 }
 
-boolean_t conf_check(void)
+bool conf_check(void)
 {
 	if (!me.name)
 	{
 		slog(LG_ERROR, "conf_check(): no `name' set in %s", config_file);
-		return FALSE;
+		return false;
 	}
 
 	/* The following checks could perhaps be stricter */
@@ -1578,7 +1578,7 @@ boolean_t conf_check(void)
 			strchr(me.name, ' '))
 	{
 		slog(LG_ERROR, "conf_check(): bogus `name' in %s (did you specify a valid server name?)", config_file);
-		return FALSE;
+		return false;
 	}
 
 	if (isdigit(me.name[0]))
@@ -1596,25 +1596,25 @@ boolean_t conf_check(void)
 	if (!me.netname)
 	{
 		slog(LG_INFO, "conf_check(): no `netname' set in %s", config_file);
-		return FALSE;
+		return false;
 	}
 
 	if (!me.adminname)
 	{
 		slog(LG_INFO, "conf_check(): no `adminname' set in %s", config_file);
-		return FALSE;
+		return false;
 	}
 
 	if (!me.adminemail)
 	{
 		slog(LG_INFO, "conf_check(): no `adminemail' set in %s", config_file);
-		return FALSE;
+		return false;
 	}
 
 	if (!me.mta && me.auth == AUTH_EMAIL)
 	{
 		slog(LG_INFO, "conf_check(): no `mta' set in %s (but `auth' is email)", config_file);
-		return FALSE;
+		return false;
 	}
 
 	if (!me.maxlogins)
@@ -1688,7 +1688,7 @@ boolean_t conf_check(void)
 		config_options.commit_interval = 300;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

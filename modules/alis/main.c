@@ -38,7 +38,7 @@
 
 DECLARE_MODULE_V1
 (
-	"alis/main", FALSE, _modinit, _moddeinit,
+	"alis/main", false, _modinit, _moddeinit,
 	"$Revision$",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
@@ -419,7 +419,7 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 				alis->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", alis->disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", alis->disp);
 		command_success_nodata(si, " ");
 		command_help(si, &alis_cmdtree);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));

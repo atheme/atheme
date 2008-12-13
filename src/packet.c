@@ -32,11 +32,11 @@ struct timeval burstime;
 
 static void irc_recvq_handler(connection_t *cptr)
 {
-	boolean_t wasnonl;
+	bool wasnonl;
 	char parsebuf[BUFSIZE + 1];
 	int count;
 
-	wasnonl = cptr->flags & CF_NONEWLINE ? TRUE : FALSE;
+	wasnonl = cptr->flags & CF_NONEWLINE ? true : false;
 	count = recvq_getline(cptr, parsebuf, sizeof parsebuf - 1);
 	if (count <= 0)
 		return;
@@ -90,9 +90,9 @@ static void irc_handle_connect(void *vptr)
 	{
 		cptr->flags = CF_UPLINK;
 		cptr->recvq_handler = irc_recvq_handler;
-		me.connected = TRUE;
+		me.connected = true;
 		/* no SERVER message received */
-		me.recvsvr = FALSE;
+		me.recvsvr = false;
 
 		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 

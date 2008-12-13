@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/why", FALSE, _modinit, _moddeinit,
+	"chanserv/why", false, _modinit, _moddeinit,
 	"$Id: why.c 8209 2007-04-30 00:14:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

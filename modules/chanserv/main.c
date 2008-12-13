@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/main", FALSE, _modinit, _moddeinit,
+	"chanserv/main", false, _modinit, _moddeinit,
 	"$Id: main.c 8425 2007-06-09 21:15:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -28,7 +28,7 @@ static void cs_leave_empty(void *unused);
 list_t cs_cmdtree;
 list_t cs_helptree;
 
-static void join_registered(boolean_t all)
+static void join_registered(bool all)
 {
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
@@ -72,7 +72,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_t *md;
 
-		if (chansvs.fantasy == FALSE)
+		if (chansvs.fantasy == false)
 		{
 			/* *all* fantasy disabled */
 			return;
@@ -175,10 +175,10 @@ static void chanserv_config_ready(void *unused)
 	chansvs.real = chansvs.me->real;
 	chansvs.disp = chansvs.me->disp;
 
-	service_set_chanmsg(chansvs.me, TRUE);
+	service_set_chanmsg(chansvs.me, true);
 
 	if (me.connected)
-		join_registered(FALSE); /* !config_options.leave_chans */
+		join_registered(false); /* !config_options.leave_chans */
 }
 
 void _modinit(module_t *m)
@@ -236,8 +236,8 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	channel_t *chan;
 	mychan_t *mc;
 	unsigned int flags;
-	boolean_t noop;
-	boolean_t secure;
+	bool noop;
+	bool secure;
 	metadata_t *md;
 	chanacs_t *ca2;
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -279,7 +279,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		if (mc->mlock_on & CMODE_INVITE || chan->modes & CMODE_INVITE)
 		{
 			if (!(chan->modes & CMODE_INVITE))
-				check_modes(mc, TRUE);
+				check_modes(mc, true);
 			remove_banlike(chansvs.me->me, chan, ircd->invex_mchar, u);
 			modestack_flush_channel(chan);
 		}
@@ -371,7 +371,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 				join(chan->name, chansvs.nick);
 		}
 		if (!(chan->modes & CMODE_INVITE))
-			check_modes(mc, TRUE);
+			check_modes(mc, true);
 		modestack_flush_channel(chan);
 		try_kick(chansvs.me->me, chan, u, "Invite only channel");
 		hdata->cu = NULL;
@@ -512,7 +512,7 @@ static void cs_register(hook_channel_req_t *hdata)
 		if (mc->flags & MC_GUARD)
 			join(mc->name, chansvs.nick);
 
-		check_modes(mc, TRUE);
+		check_modes(mc, true);
 	}
 }
 
@@ -630,7 +630,7 @@ static void cs_newchan(channel_t *c)
 		c->ts = channelts;
 		clear_simple_modes(c);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
-		check_modes(mc, FALSE);
+		check_modes(mc, false);
 		/* No ops to clear */
 		chan_lowerts(c, chansvs.me->me);
 		cu = chanuser_add(c, CLIENT_NAME(chansvs.me->me));

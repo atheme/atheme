@@ -46,7 +46,7 @@ int runflags;
 
 char *config_file;
 char *log_path;
-boolean_t cold_start = FALSE;
+bool cold_start = false;
 
 extern char **environ;
 
@@ -92,8 +92,8 @@ static void process_mowgli_log(const char *line)
 
 int main(int argc, char *argv[])
 {
-	boolean_t have_conf = FALSE;
-	boolean_t have_log = FALSE;
+	bool have_conf = false;
+	bool have_log = false;
 	char buf[32];
 	int i, pid, r;
 	FILE *pid_file;
@@ -137,10 +137,10 @@ int main(int argc, char *argv[])
 		{
 		  case 'c':
 			  config_file = sstrdup(optarg);
-			  have_conf = TRUE;
+			  have_conf = true;
 			  break;
 		  case 'd':
-			  log_force = TRUE;
+			  log_force = true;
 			  break;
 		  case 'h':
 			  print_help();
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 			  break;
 		  case 'l':
 			  log_path = sstrdup(optarg);
-			  have_log = TRUE;
+			  have_log = true;
 			  break;
 		  case 'n':
 			  runflags |= RF_LIVE;
@@ -167,13 +167,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (have_conf == FALSE)
+	if (have_conf == false)
 		config_file = sstrdup(SYSCONFDIR "/atheme.conf");
 
-	if (have_log == FALSE)
+	if (have_log == false)
 		log_path = sstrdup(LOGDIR "/atheme.log");
 
-	cold_start = TRUE;
+	cold_start = true;
 
 	runflags |= RF_STARTING;
 
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 
 	/* we've done the critical startup steps now */
-	cold_start = FALSE;
+	cold_start = false;
 
 	/* load our db */
 	if (db_load)
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
 	/* reseed rng a little every five minutes */
 	event_add("rng_reseed", rng_reseed, NULL, 293);
 
-	me.connected = FALSE;
+	me.connected = false;
 	uplink_connect();
 
 	/* main loop */
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
 		sendq_flush(curr_uplink->conn);
 	connection_close_all();
 
-	me.connected = FALSE;
+	me.connected = false;
 
 	/* should we restart? */
 	if (runflags & RF_RESTART)

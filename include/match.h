@@ -60,8 +60,8 @@ typedef struct atheme_regex_ atheme_regex_t;
 
 E atheme_regex_t *regex_create(char *pattern, int flags);
 E char *regex_extract(char *pattern, char **pend, int *pflags);
-E boolean_t regex_match(atheme_regex_t *preg, char *string);
-E boolean_t regex_destroy(atheme_regex_t *preg);
+E bool regex_match(atheme_regex_t *preg, char *string);
+E bool regex_destroy(atheme_regex_t *preg);
 
 #endif
 

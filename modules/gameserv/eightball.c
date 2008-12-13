@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"gameserv/eightball", FALSE, _modinit, _moddeinit,
+	"gameserv/eightball", false, _modinit, _moddeinit,
 	"$Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -208,7 +208,7 @@ void user_delete(user_t *u)
 	chanuser_t *cu;
 	mynick_t *mn;
 	char oldnick[NICKLEN];
-	boolean_t doenforcer = FALSE;
+	bool doenforcer = false;
 
 	if (!u)
 	{
@@ -218,7 +218,7 @@ void user_delete(user_t *u)
 
 	if (u->flags & UF_DOENFORCE)
 	{
-		doenforcer = TRUE;
+		doenforcer = true;
 		strlcpy(oldnick, u->nick, sizeof oldnick);
 		u->flags &= ~UF_DOENFORCE;
 	}
@@ -381,17 +381,17 @@ void user_changeuid(user_t *u, const char *uid)
  *     - a user object's nick and TS is changed.
  *     - in event of a collision, the user may be killed
  */
-boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
+bool user_changenick(user_t *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
 	user_t *u2;
 	char oldnick[NICKLEN];
-	boolean_t doenforcer = FALSE;
+	bool doenforcer = false;
 
 	u2 = user_find_named(nick);
 	if (u->flags & UF_DOENFORCE && u2 != u)
 	{
-		doenforcer = TRUE;
+		doenforcer = true;
 		strlcpy(oldnick, u->nick, sizeof oldnick);
 		u->flags &= ~UF_DOENFORCE;
 	}
@@ -401,7 +401,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 		{
 			/* caller should not let this happen */
 			slog(LG_ERROR, "user_changenick(): tried to change local nick %s to %s which already exists", u->nick, nick);
-			return FALSE;
+			return false;
 		}
 		slog(LG_INFO, "user_changenick(): nick collision on %s", nick);
 		if (u2->server == me.me)
@@ -416,7 +416,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				 */
 				kill_id_sts(NULL, u->uid, "Nick change collision with services");
 				user_delete(u);
-				return TRUE;
+				return true;
 			}
 			if (ts == u2->ts || ((ts < u2->ts) ^ (!irccasecmp(u->user, u2->user) && !irccasecmp(u->host, u2->host))))
 			{
@@ -434,7 +434,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				 */
 				kill_id_sts(NULL, u->nick, "Nick change collision with services");
 				user_delete(u);
-				return TRUE;
+				return true;
 			}
 			else
 			{
@@ -444,7 +444,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				 */
 				kill_id_sts(NULL, u->nick, "Nick change collision with services");
 				user_delete(u);
-				return TRUE;
+				return true;
 			}
 		}
 		else
@@ -467,7 +467,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				user_delete(u);
 				user_delete(u2);
 			}
-			return TRUE;
+			return true;
 		}
 	}
 	if (u->myuser != NULL && (mn = mynick_find(u->nick)) != NULL &&
@@ -483,7 +483,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 	if (doenforcer)
 		introduce_enforcer(oldnick);
 
-	return FALSE;
+	return false;
 }
 
 /*
@@ -507,7 +507,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 void user_mode(user_t *user, const char *modes)
 {
 	int dir = MTYPE_ADD;
-	boolean_t was_ircop, was_invis;
+	bool was_ircop, was_invis;
 	int iter;
 
 	if (!user)

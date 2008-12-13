@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
+	"chanserv/clear_users", false, _modinit, _moddeinit,
 	"$Id: clear_users.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -231,7 +231,7 @@ unsigned long makekey(void)
 	return k;
 }
 
-boolean_t is_internal_client(user_t *u)
+bool is_internal_client(user_t *u)
 {
 	return (u && (!u->server || u->server == me.me));
 }
@@ -298,31 +298,31 @@ int validemail(const char *email)
 	return valid;
 }
 
-boolean_t validhostmask(const char *host)
+bool validhostmask(const char *host)
 {
 	char *p, *q;
 
 	if (strchr(host, ' '))
-		return FALSE;
+		return false;
 
 	/* make sure it has ! and @ in that order and only once */
 	p = strchr(host, '!');
 	q = strchr(host, '@');
 	if (p == NULL || q == NULL || p > q || strchr(p + 1, '!') ||
 			strchr(q + 1, '@'))
-		return FALSE;
+		return false;
 
 	/* XXX this NICKLEN is too long */
 	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
-		return FALSE;
+		return false;
 
 	if (host[0] == ',' || host[0] == '-' || host[0] == '#' || host[0] == '@' || host[0] == '!')
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
-boolean_t validtopic(const char *topic)
+bool validtopic(const char *topic)
 {
 	int i;
 
@@ -331,14 +331,14 @@ boolean_t validtopic(const char *topic)
 	 * ludicrous stuff.
 	 */
 	if (strlen(topic) > 450)
-		return FALSE;
+		return false;
 	for (i = 0; topic[i] != '\0'; i++)
 	{
 		switch (topic[i])
 		{
 			case '\r':
 			case '\n':
-				return FALSE;
+				return false;
 		}
 	}
 	if (ircd->flags & IRCD_TOPIC_NOCOLOUR)
@@ -355,23 +355,23 @@ boolean_t validtopic(const char *topic)
 				case 23:
 				case 27:
 				case 31:
-					return FALSE;
+					return false;
 			}
 		}
 	}
-	return TRUE;
+	return true;
 }
 
-boolean_t has_ctrl_chars(const char *text)
+bool has_ctrl_chars(const char *text)
 {
 	int i;
 
 	for (i = 0; text[i] != '\0'; i++)
 	{
 		if (text[i] > 0 && text[i] < 32)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 static void sendemail_waited(pid_t pid, int status, void *data)
@@ -562,31 +562,31 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 }
 
 /* various access level checkers */
-boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
+bool is_founder(mychan_t *mychan, myuser_t *myuser)
 {
 	if (!myuser)
-		return FALSE;
+		return false;
 
 	if (chanacs_find(mychan, myuser, CA_FOUNDER))
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
-boolean_t is_ircop(user_t *user)
+bool is_ircop(user_t *user)
 {
 	if (UF_IRCOP & user->flags)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
-boolean_t is_admin(user_t *user)
+bool is_admin(user_t *user)
 {
 	if (UF_ADMIN & user->flags)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 void set_password(myuser_t *mu, const char *newpassword)
@@ -607,10 +607,10 @@ void set_password(myuser_t *mu, const char *newpassword)
 	}
 }
 
-boolean_t verify_password(myuser_t *mu, const char *password)
+bool verify_password(myuser_t *mu, const char *password)
 {
 	if (mu == NULL || password == NULL)
-		return FALSE;
+		return false;
 
 	if (mu->flags & MU_CRYPTPASS)
 		if (crypto_module_loaded)
@@ -622,7 +622,7 @@ boolean_t verify_password(myuser_t *mu, const char *password)
 			 */
 			if (strcmp(password, "*"))
 				slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
-			return FALSE;
+			return false;
 		}
 	else
 		return (strcmp(mu->pass, password) == 0);

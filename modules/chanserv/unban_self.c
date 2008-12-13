@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/unban_self", FALSE, _modinit, _moddeinit,
+	"chanserv/unban_self", false, _modinit, _moddeinit,
 	"$Id: ban.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

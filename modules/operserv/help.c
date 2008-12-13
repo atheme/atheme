@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/help", FALSE, _modinit, _moddeinit,
+	"operserv/help", false, _modinit, _moddeinit,
 	"$Id: help.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -59,7 +59,7 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 				opersvs.nick, opersvs.nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", opersvs.disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, os_cmdtree);

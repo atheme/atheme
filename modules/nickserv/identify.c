@@ -20,7 +20,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
+	"nickserv/" COMMAND_LC, false, _modinit, _moddeinit,
 	"$Id: identify.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

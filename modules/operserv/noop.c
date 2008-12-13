@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/noop", TRUE, _modinit, _moddeinit,
+	"operserv/noop", true, _modinit, _moddeinit,
 	"$Id: noop.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

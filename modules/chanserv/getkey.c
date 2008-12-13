@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/getkey", FALSE, _modinit, _moddeinit,
+	"chanserv/getkey", false, _modinit, _moddeinit,
 	"$Id: getkey.c 7905 2007-03-06 23:02:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

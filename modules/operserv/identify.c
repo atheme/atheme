@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/identify", FALSE, _modinit, _moddeinit,
+	"operserv/identify", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -40,10 +40,10 @@ void _moddeinit()
 	help_delentry(os_helptree, "IDENTIFY");
 }
 
-static boolean_t verify_operserv_password(soper_t *so, char *password)
+static bool verify_operserv_password(soper_t *so, char *password)
 {
 	if (so == NULL || password == NULL)
-		return FALSE;
+		return false;
 
 	if (crypto_module_loaded)
 		return crypt_verify_password(password, so->password);

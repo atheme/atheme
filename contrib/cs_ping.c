@@ -2,7 +2,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/ping", FALSE, _modinit, _moddeinit,
+	"chanserv/ping", false, _modinit, _moddeinit,
 	"$Id: ping.c 2527 2005-10-03 17:40:09Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -199,26 +199,26 @@ void authcookie_expire(void *arg)
  *       a ticket and myuser pair that needs to be validated
  *
  * Outputs:
- *       TRUE if the authcookie is valid,
- *       otherwise FALSE
+ *       true if the authcookie is valid,
+ *       otherwise false
  *
  * Side Effects:
  *       expired authcookies are destroyed here
  */
-boolean_t authcookie_validate(char *ticket, myuser_t *myuser)
+bool authcookie_validate(char *ticket, myuser_t *myuser)
 {
 	authcookie_t *ac = authcookie_find(ticket, myuser);
 
 	if (ac == NULL)
-		return FALSE;
+		return false;
 
 	if (ac->expire <= CURRTIME)
 	{
 		authcookie_destroy(ac);
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

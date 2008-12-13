@@ -26,10 +26,10 @@ struct httpddata
 	char *replybuf;
 	int length;
 	int lengthdone;
-	boolean_t connection_close;
-	boolean_t correct_content_type;
-	boolean_t expect_100_continue;
-	boolean_t sent_reply;
+	bool connection_close;
+	bool correct_content_type;
+	bool expect_100_continue;
+	bool sent_reply;
 };
 
 #endif

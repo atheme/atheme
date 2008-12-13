@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/raw", FALSE, _modinit, _moddeinit,
+	"operserv/raw", false, _modinit, _moddeinit,
 	"$Id: raw.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

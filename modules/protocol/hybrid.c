@@ -12,20 +12,20 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", true, _modinit, NULL, "$Id: hybrid.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Hybrid = {
         "Hybrid 7.1.2+",		/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
-        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -113,7 +113,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

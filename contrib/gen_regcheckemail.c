@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/gen_regcheckemail", FALSE, _modinit, _moddeinit,
+	"contrib/gen_regcheckemail", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );

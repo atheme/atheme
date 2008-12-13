@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"gameserv/dice", FALSE, _modinit, _moddeinit,
+	"gameserv/dice", false, _modinit, _moddeinit,
 	"$Id: dice.c 8339 2007-05-29 22:13:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

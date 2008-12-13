@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"misc/httpd", FALSE, _modinit, _moddeinit,
+	"misc/httpd", false, _modinit, _moddeinit,
 	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -84,9 +84,9 @@ static void clear_httpddata(struct httpddata *hd)
 	}
 	hd->length = 0;
 	hd->lengthdone = 0;
-	hd->correct_content_type = FALSE;
-	hd->expect_100_continue = FALSE;
-	hd->sent_reply = FALSE;
+	hd->correct_content_type = false;
+	hd->expect_100_continue = false;
+	hd->sent_reply = false;
 }
 
 static int open_file(const char *filename)
@@ -122,7 +122,7 @@ static void process_header(connection_t *cptr, char *line)
 			if (!strcasecmp(p, "close"))
 			{
 				slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
-				hd->connection_close = TRUE;
+				hd->connection_close = true;
 			}
 			p = strtok(NULL, ", \t");
 		}
@@ -151,7 +151,7 @@ static void check_close(connection_t *cptr)
 		sendq_add_eof(cptr);
 }
 
-static void send_error(connection_t *cptr, int errorcode, const char *text, boolean_t sendentity)
+static void send_error(connection_t *cptr, int errorcode, const char *text, bool sendentity)
 {
 	struct httpddata *hd;
 	char buf1[300];
@@ -206,7 +206,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 	off_t count1;
 	node_t *n;
 	path_handler_t *ph = NULL;
-	boolean_t is_get, is_post, handling_done = FALSE;
+	bool is_get, is_post, handling_done = false;
 
 	hd = cptr->userdata;
 
@@ -244,7 +244,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 	if (cptr->flags & CF_NONEWLINE)
 	{
 		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->hbuf);
-		send_error(cptr, 400, "Bad request", TRUE);
+		send_error(cptr, 400, "Bad request", true);
 		sendq_add_eof(cptr);
 		return;
 	}
@@ -272,7 +272,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 		strlcpy(hd->filename, p, sizeof hd->filename);
 		p = strtok(NULL, "");
 		if (p == NULL || !strcmp(p, "HTTP/1.0"))
-			hd->connection_close = TRUE;
+			hd->connection_close = true;
 		slog(LG_DEBUG, "httpd_recvqhandler(): request %s for %s", hd->method, hd->filename);
 	}
 	else if (count == 0)
@@ -282,7 +282,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 
 		if (!is_post && !is_get)
 		{
-			send_error(cptr, 501, "Method Not Implemented", TRUE);
+			send_error(cptr, 501, "Method Not Implemented", true);
 			sendq_add_eof(cptr);
 			return;
 		}
@@ -333,19 +333,19 @@ static void httpd_recvqhandler(connection_t *cptr)
 		{
 			if (hd->length <= 0)
 			{
-				send_error(cptr, 411, "Length Required", TRUE);
+				send_error(cptr, 411, "Length Required", true);
 				sendq_add_eof(cptr);
 				return;
 			}
 			if (hd->length > REQUEST_MAX)
 			{
-				send_error(cptr, 413, "Request Entity Too Large", TRUE);
+				send_error(cptr, 413, "Request Entity Too Large", true);
 				sendq_add_eof(cptr);
 				return;
 			}
 			if (!hd->correct_content_type)
 			{
-				send_error(cptr, 415, "Unsupported Media Type", TRUE);
+				send_error(cptr, 415, "Unsupported Media Type", true);
 				sendq_add_eof(cptr);
 				return;
 			}
@@ -387,7 +387,7 @@ static void do_listen(connection_t *cptr)
 	hd = smalloc(sizeof(*hd));
 	hd->requestbuf = NULL;
 	hd->replybuf = NULL;
-	hd->connection_close = FALSE;
+	hd->connection_close = false;
 	clear_httpddata(hd);
 	newptr->userdata = hd;
 	newptr->recvq_handler = httpd_recvqhandler;

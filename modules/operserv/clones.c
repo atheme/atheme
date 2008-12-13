@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/clones", FALSE, _modinit, _moddeinit,
+	"operserv/clones", false, _modinit, _moddeinit,
 	"$Id: clones.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -38,7 +38,7 @@ list_t *os_helptree;
 list_t os_clones_cmds;
 
 static list_t clone_exempts;
-boolean_t kline_enabled;
+bool kline_enabled;
 mowgli_patricia_t *hostlist;
 BlockHeap *hostentry_heap;
 static long kline_duration;
@@ -291,7 +291,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&os_clones_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -312,7 +312,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("CLONES klines are already enabled."));
 			return;
 		}
-		kline_enabled = TRUE;
+		kline_enabled = true;
 		command_success_nodata(si, _("Enabled CLONES klines."));
 		wallops("\2%s\2 enabled CLONES klines", get_oper_name(si));
 		snoop("CLONES:KLINE:ON: \2%s\2", get_oper_name(si));
@@ -326,7 +326,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("CLONES klines are already disabled."));
 			return;
 		}
-		kline_enabled = FALSE;
+		kline_enabled = false;
 		command_success_nodata(si, _("Disabled CLONES klines."));
 		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
 		snoop("CLONES:KLINE:OFF: \2%s\2", get_oper_name(si));

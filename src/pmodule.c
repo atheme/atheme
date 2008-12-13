@@ -33,8 +33,8 @@ struct cmode_ *status_mode_list;
 struct cmode_ *prefix_mode_list;
 struct cmode_ *user_mode_list;
 ircd_t *ircd;
-boolean_t pmodule_loaded = FALSE;
-boolean_t backend_loaded = FALSE;
+bool pmodule_loaded = false;
+bool backend_loaded = false;
 
 void pcommand_init(void)
 {

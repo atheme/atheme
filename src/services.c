@@ -172,7 +172,7 @@ void join(char *chan, char *nick)
 	channel_t *c;
 	user_t *u;
 	chanuser_t *cu;
-	boolean_t isnew = FALSE;
+	bool isnew = false;
 	mychan_t *mc;
 	metadata_t *md;
 	time_t ts;
@@ -201,15 +201,15 @@ void join(char *chan, char *nick)
 		c = channel_add(chan, ts, me.me);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		if (mc != NULL)
-			check_modes(mc, FALSE);
-		isnew = TRUE;
+			check_modes(mc, false);
+		isnew = true;
 	}
 	else if ((cu = chanuser_find(c, u)))
 	{
 		slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
 		return;
 	}
-	join_sts(c, u, isnew, channel_modes(c, TRUE));
+	join_sts(c, u, isnew, channel_modes(c, true));
 	cu = chanuser_add(c, CLIENT_NAME(u));
 	cu->modes |= CSTATUS_OP;
 	if (isnew)
@@ -323,13 +323,13 @@ void reintroduce_user(user_t *u)
 	{
 		c = ((chanuser_t *)n->data)->chan;
 		if (LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
-			join_sts(c, u, 0, channel_modes(c, TRUE));
+			join_sts(c, u, 0, channel_modes(c, true));
 		else
 		{
 			/* channel will have been destroyed... */
 			/* XXX resend the bans instead of destroying them? */
 			chanban_clear(c);
-			join_sts(c, u, 1, channel_modes(c, TRUE));
+			join_sts(c, u, 1, channel_modes(c, true));
 			if (c->topic != NULL)
 				topic_sts(c, c->topic_setter, c->topicts, 0, c->topic);
 		}
@@ -612,7 +612,7 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
  * Note:
  *       - kills are currently not done
  */
-boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
+bool bad_password(sourceinfo_t *si, myuser_t *mu)
 {
 	const char *mask;
 	struct tm tm;
@@ -624,7 +624,7 @@ boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
 	 * as they could /ns set password anyway.
 	 */
 	if (si->smu == mu)
-		return FALSE;
+		return false;
 
 	command_add_flood(si, FLOOD_MODERATE);
 
@@ -651,7 +651,7 @@ boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
 		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", mu->name, mask, strfbuf);
 	}
 
-	return FALSE;
+	return false;
 }
 
 void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)

@@ -20,7 +20,7 @@ struct ev_entry
   const char *name;
   time_t frequency;
   time_t when;
-  boolean_t active;
+  bool active;
 };
 
 E struct ev_entry event_table[MAX_EVENTS];

@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/akill", FALSE, _modinit, _moddeinit,
+	"operserv/akill", false, _modinit, _moddeinit,
 	"$Id: akill.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -109,7 +109,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&os_akill_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -259,15 +259,15 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcmp(kuser, "*"))
 	{
-		boolean_t unsafe = FALSE;
+		bool unsafe = false;
 		char *p;
 
 		if (!match(khost, "127.0.0.1") || !match_ips(khost, "127.0.0.1"))
-			unsafe = TRUE;
+			unsafe = true;
 		else if (me.vhost != NULL && (!match(khost, me.vhost) || !match_ips(khost, me.vhost)))
-			unsafe = TRUE;
+			unsafe = true;
 		else if ((p = strrchr(khost, '/')) != NULL && IsDigit(p[1]) && atoi(p + 1) < 4)
-			unsafe = TRUE;
+			unsafe = true;
 		if (unsafe)
 		{
 			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. This mask is unsafe."), kuser, khost);
@@ -460,28 +460,28 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	char *param = parv[0];
 	char *user = NULL, *host = NULL;
 	unsigned long num = 0;
-	boolean_t full = FALSE;
+	bool full = false;
 	node_t *n;
 	kline_t *k;
 
 	if (param != NULL)
 	{
 		if (!strcasecmp(param, "FULL"))
-			full = TRUE;
+			full = true;
 		else if ((host = strchr(param, '@')) != NULL)
 		{
 			*host++ = '\0';
 			user = param;
-			full = TRUE;
+			full = true;
 		}
 		else if (strchr(param, '.') || strchr(param, ':'))
 		{
 			host = param;
-			full = TRUE;
+			full = true;
 		}
 		else if (isdigit(param[0]) &&
 				(num = strtoul(param, NULL, 10)) != 0)
-			full = TRUE;
+			full = true;
 		else
 		{
 			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKILL LIST");

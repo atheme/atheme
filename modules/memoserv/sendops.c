@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/sendops", FALSE, _modinit, _moddeinit,
+	"memoserv/sendops", false, _modinit, _moddeinit,
 	"$Id: sendops.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -47,7 +47,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo;
 	mychan_t *mc;
 	int sent = 0, tried = 0;
-	boolean_t ignored;
+	bool ignored;
 
 	/* Grab args */
 	char *target = parv[0];
@@ -144,7 +144,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		sent++;
 
 		/* Make sure we're not on ignore */
-		ignored = FALSE;
+		ignored = false;
 		LIST_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
@@ -158,7 +158,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 				mu = mn != NULL ? mn->owner : NULL;
 			}
 			if (mu == si->smu)
-				ignored = TRUE;
+				ignored = true;
 		}
 		if (ignored)
 			continue;

@@ -12,20 +12,20 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, "$Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
         "InspIRCd 1.1.x", /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        TRUE,                          /* Whether or not we support channel owners. */
-        TRUE,                          /* Whether or not we support channel protection. */
-        TRUE,                           /* Whether or not we support halfops. */
-		FALSE,				/* Whether or not we use P10 */
-		TRUE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        true,                          /* Whether or not we support channel owners. */
+        true,                          /* Whether or not we support channel protection. */
+        true,                           /* Whether or not we support halfops. */
+		false,				/* Whether or not we use P10 */
+		true,				/* Whether or not we use vHosts. */
 		CMODE_OPERONLY,			/* Oper-only cmodes */
         CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
@@ -67,11 +67,11 @@ struct cmode_ inspircd_mode_list[] = {
   { '\0', 0 }
 };
 
-static boolean_t check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_nickflood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_nickflood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
@@ -107,9 +107,9 @@ struct cmode_ inspircd_user_mode_list[] = {
 };
 
 /* CAPABilities */
-static boolean_t has_servicesmod = false;
-static boolean_t has_globopsmod = false;
-static boolean_t has_svshold = false;
+static bool has_servicesmod = false;
+static bool has_globopsmod = false;
+static bool has_svshold = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_SNONOTICE 1102 /* has SNONOTICE and OPERNOTICE commands */
@@ -117,18 +117,18 @@ static int has_protocol = 0;
 
 /* *INDENT-ON* */
 
-static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	/* +F doesn't support *, so don't bother checking for it -- w00t */
 	return check_jointhrottle(value, c, mc, u, mu);
 }
 
-static boolean_t check_nickflood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_nickflood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	return *value == '*' ? check_jointhrottle(value + 1, c, mc, u, mu) : check_jointhrottle(value, c, mc, u, mu);
 }
 
-static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 
@@ -138,37 +138,37 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 		if (*p == ':')
 		{
 			if (arg2 != NULL)
-				return FALSE;
+				return false;
 			arg2 = p + 1;
 		}
 		else if (!isdigit(*p))
-			return FALSE;
+			return false;
 		p++;
 	}
 	if (arg2 == NULL)
-		return FALSE;
+		return false;
 	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
-static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	channel_t *target_c;
 	mychan_t *target_mc;
 
 	if (*value != '#' || strlen(value) > 50)
-		return FALSE;
+		return false;
 	if (u == NULL && mu == NULL)
-		return TRUE;
+		return true;
 	target_c = channel_find(value);
 	target_mc = mychan_find(value);
 	if (target_c == NULL && target_mc == NULL)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
-static boolean_t check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *ch = value;
 
@@ -181,11 +181,11 @@ static boolean_t check_rejoindelay(const char *value, channel_t *c, mychan_t *mc
 
 	if (atoi(value) <= 0)
 	{
-		return FALSE;
+		return false;
 	}
 	else
 	{
-		return TRUE;
+		return true;
 	}
 }
 
@@ -199,14 +199,14 @@ static unsigned int inspircd_server_login(void)
 	sleep(3);
 
 	/* will be determined in CAPAB. */
-	ircd->uses_owner = FALSE;
-	ircd->uses_protect = FALSE;
+	ircd->uses_owner = false;
+	ircd->uses_protect = false;
 
 	ret = sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 	sts("BURST");
 	/* XXX: Being able to get this data as a char* would be nice - Brain */
         sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
@@ -291,7 +291,7 @@ static void inspircd_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void inspircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 	{
@@ -311,7 +311,7 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 		c->name, (unsigned long)c->ts);
 
 	sts(":%s FJOIN %s %lu :@,%s", me.name, c->name, (unsigned long)c->ts, u->nick);
-	sts(":%s FMODE %s %lu %s", me.name, c->name, (unsigned long)c->ts, channel_modes(c, TRUE));
+	sts(":%s FMODE %s %lu %s", me.name, c->name, (unsigned long)c->ts, channel_modes(c, true));
 }
 
 /* kicks a user from a channel */
@@ -462,13 +462,13 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on logout */
-static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
+static bool inspircd_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	sts(":%s METADATA %s accountname :", me.name, origin);
-	return FALSE;
+	return false;
 }
 
 static void inspircd_jupe(const char *server, const char *reason)
@@ -584,7 +584,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -593,7 +593,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -601,7 +601,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
@@ -612,8 +612,8 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i;
 	unsigned int j;
 	unsigned int nlen;
-	boolean_t prefix = TRUE;
-	boolean_t keep_new_modes = TRUE;
+	bool prefix = true;
+	bool keep_new_modes = true;
 	char *userv[256];
 	char prefixandnick[51];
 	time_t ts;
@@ -690,7 +690,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	for (i = 0; i < userc; i++)
 	{
 		nlen = 0;
-		prefix = TRUE;
+		prefix = true;
 
 		slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
 
@@ -841,7 +841,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
-	boolean_t onlydeop;
+	bool onlydeop;
 	time_t ts;
 	const char *p;
 
@@ -857,12 +857,12 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 		ts = atoi(parv[1]);
 		if (ts == c->ts && has_protocol < PROTOCOL_NEWTS)
 		{
-			onlydeop = TRUE;
+			onlydeop = true;
 			p = parv[2];
 			while (*p != '\0')
 			{
 				if (!strchr("-qaohv", *p))
-					onlydeop = FALSE;
+					onlydeop = false;
 				p++;
 			}
 			if (onlydeop && si->s != NULL)
@@ -1116,11 +1116,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (strstr(parv[1], "m_services_account.so"))
 		{
-			has_servicesmod = TRUE;
+			has_servicesmod = true;
 		}
 		if (strstr(parv[1], "m_globops.so"))
 		{
-			has_globopsmod = TRUE;
+			has_globopsmod = true;
 		}
 		if (strstr(parv[1], "m_svshold.so"))
 		{
@@ -1128,8 +1128,8 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (strstr(parv[1], "m_chanprotect.so"))
 		{
-			ircd->uses_owner = TRUE;
-			ircd->uses_protect = TRUE;
+			ircd->uses_owner = true;
+			ircd->uses_protect = true;
 		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
@@ -1245,7 +1245,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -13,20 +13,20 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", true, _modinit, NULL, "$Id: dreamforge.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t DreamForge = {
         "DreamForge 4.6.7 and later",   /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -89,7 +89,7 @@ static unsigned int dreamforge_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("PROTOCTL NOQUIT WATCH=128 SAFELIST");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
@@ -129,7 +129,7 @@ static void dreamforge_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void dreamforge_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void dreamforge_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 	{
@@ -293,15 +293,15 @@ static void dreamforge_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t dreamforge_on_logout(char *origin, char *user, char *wantedhost)
+static bool dreamforge_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 
-	return FALSE;
+	return false;
 }
 
 static void dreamforge_jupe(const char *server, const char *reason)
@@ -361,7 +361,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -370,7 +370,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -378,7 +378,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
@@ -399,7 +399,7 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
-	boolean_t realchange;
+	bool realchange;
 
 	if (parc == 8)
 	{
@@ -720,7 +720,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
+	"xmlrpc/channel", false, _modinit, _moddeinit,
 	"$Id: channel.c 8425 2007-06-09 21:15:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -58,7 +58,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -149,7 +149,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -228,7 +228,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -361,7 +361,7 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
  
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -437,7 +437,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 		return 0;
 	}
  
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -519,7 +519,7 @@ static int do_access_get(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;

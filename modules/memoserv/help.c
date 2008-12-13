@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/help", FALSE, _modinit, _moddeinit,
+	"memoserv/help", false, _modinit, _moddeinit,
 	"$Id: help.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -49,7 +49,7 @@ void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 allows users to send memos to registered users."), memosvs.nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", memosvs.disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", memosvs.disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, ms_cmdtree);

@@ -13,20 +13,20 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", true, _modinit, NULL, "$Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Charybdis = {
         "Charybdis",			/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
-        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -61,8 +61,8 @@ struct cmode_ charybdis_mode_list[] = {
   { '\0', 0 }
 };
 
-static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode charybdis_ignore_mode_list[] = {
   { 'f', check_forward },
@@ -93,39 +93,39 @@ struct cmode_ charybdis_user_mode_list[] = {
 
 /* ircd allows forwards to existing channels; the target channel must be
  * +F or the setter must have ops in it */
-static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	channel_t *target_c;
 	mychan_t *target_mc;
 	chanuser_t *target_cu;
 
 	if (*value != '#' || strlen(value) > 50)
-		return FALSE;
+		return false;
 	if (u == NULL && mu == NULL)
-		return TRUE;
+		return true;
 	target_c = channel_find(value);
 	target_mc = mychan_find(value);
 	if (target_c == NULL && target_mc == NULL)
-		return FALSE;
+		return false;
 	if (target_c != NULL && target_c->modes & CMODE_FTARGET)
-		return TRUE;
+		return true;
 	if (target_mc != NULL && target_mc->mlock_on & CMODE_FTARGET)
-		return TRUE;
+		return true;
 	if (u != NULL)
 	{
 		target_cu = chanuser_find(target_c, u);
 		if (target_cu != NULL && target_cu->modes & CSTATUS_OP)
-			return TRUE;
+			return true;
 		if (chanacs_user_flags(target_mc, u) & CA_SET)
-			return TRUE;
+			return true;
 	}
 	else if (mu != NULL)
 		if (chanacs_find(target_mc, mu, CA_SET))
-			return TRUE;
-	return FALSE;
+			return true;
+	return false;
 }
 
-static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 
@@ -135,24 +135,24 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 		if (*p == ':')
 		{
 			if (arg2 != NULL)
-				return FALSE;
+				return false;
 			arg2 = p + 1;
 		}
 		else if (!isdigit(*p))
-			return FALSE;
+			return false;
 		p++;
 	}
 	if (arg2 == NULL)
-		return FALSE;
+		return false;
 	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 /* this may be slow, but it is not used much */
-/* returns TRUE if it matches, FALSE if not */
+/* returns true if it matches, false if not */
 /* note that the host part matches differently from a regular ban */
-static boolean_t extgecos_match(const char *mask, user_t *u)
+static bool extgecos_match(const char *mask, user_t *u)
 {
 	char hostgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	char realgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
@@ -170,7 +170,7 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
 	const char *p;
-	boolean_t negate, matched;
+	bool negate, matched;
 	int exttype;
 	channel_t *target_c;
 
@@ -254,7 +254,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

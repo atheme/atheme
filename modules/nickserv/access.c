@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/access", FALSE, _modinit, _moddeinit,
+	"nickserv/access", false, _modinit, _moddeinit,
 	"$Id: access.c 8239 2007-05-09 20:05:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -41,7 +41,7 @@ void _moddeinit()
 	use_myuser_access--;
 }
 
-static boolean_t username_is_random(const char *name)
+static bool username_is_random(const char *name)
 {
 	const char *p;
 	int lower = 0, upper = 0, digit = 0;
@@ -49,7 +49,7 @@ static boolean_t username_is_random(const char *name)
 	if (*name == '~')
 		name++;
 	if (strlen(name) < 9)
-		return FALSE;
+		return false;
 	p = name;
 	while (*p != '\0')
 	{
@@ -62,10 +62,10 @@ static boolean_t username_is_random(const char *name)
 		p++;
 	}
 	if (digit >= 4 && lower + upper > 1)
-		return TRUE;
+		return true;
 	if (lower == 0 || upper == 0 || (upper <= 2 && isupper(*name)))
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 static char *construct_mask(user_t *u)
@@ -77,19 +77,19 @@ static char *construct_mask(user_t *u)
 		"*.t-ipconnect.??", "*.t-ipconnect.???",
 		"*.ipt.aol.com", NULL };
 	int i;
-	boolean_t hostisdyn = FALSE, havedigits;
+	bool hostisdyn = false, havedigits;
 	const char *p, *prevdot, *lastdot;
 
 	for (i = 0; dynhosts[i] != NULL; i++)
 		if (!match(dynhosts[i], u->host))
-			hostisdyn = TRUE;
+			hostisdyn = true;
 	if (hostisdyn)
 	{
 		/* note that all dyn patterns contain a dot */
 		p = u->host;
 		prevdot = u->host;
 		lastdot = strrchr(u->host, '.');
-		havedigits = TRUE;
+		havedigits = true;
 		while (*p)
 		{
 			if (*p == '.')
@@ -97,10 +97,10 @@ static char *construct_mask(user_t *u)
 				if (!havedigits || p == lastdot || !strcasecmp(p, ".Level3.net"))
 					break;
 				prevdot = p;
-				havedigits = FALSE;
+				havedigits = false;
 			}
 			else if (isdigit(*p))
-				havedigits = TRUE;
+				havedigits = true;
 			p++;
 		}
 		snprintf(mask, sizeof mask, "%s@*%s", u->user, prevdot);
@@ -114,7 +114,7 @@ static char *construct_mask(user_t *u)
 	return mask;
 }
 
-static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen)
+static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen)
 {
 	int i;
 	const char *p;
@@ -122,42 +122,42 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, size_t de
 	p = host;
 
 	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
-		return FALSE;
+		return false;
 	while (isdigit(*p))
 		p++;
 	if (*p++ != '.')
-		return FALSE;
+		return false;
 	if (p[0] == '*' && p[1] == '\0')
 	{
 		snprintf(dest, destlen, "%.*s0.0.0/8", (int)(p - host), host);
-		return TRUE;
+		return true;
 	}
 
 	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
-		return FALSE;
+		return false;
 	while (isdigit(*p))
 		p++;
 	if (*p++ != '.')
-		return FALSE;
+		return false;
 	if (p[0] == '*' && (p[1] == '\0' || (p[1] == '.' && p[2] == '*' && p[3] == '\0')))
 	{
 		snprintf(dest, destlen, "%.*s0.0/16", (int)(p - host), host);
-		return TRUE;
+		return true;
 	}
 
 	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
-		return FALSE;
+		return false;
 	while (isdigit(*p))
 		p++;
 	if (*p++ != '.')
-		return FALSE;
+		return false;
 	if (p[0] == '*' && p[1] == '\0')
 	{
 		snprintf(dest, destlen, "%.*s0/24", (int)(p - host), host);
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 static void myuser_access_delete_enforce(myuser_t *mu, char *mask)

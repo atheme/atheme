@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/hold", FALSE, _modinit, _moddeinit,
+	"chanserv/hold", false, _modinit, _moddeinit,
 	"$Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

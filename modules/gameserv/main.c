@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"gameserv/main", FALSE, _modinit, _moddeinit,
+	"gameserv/main", false, _modinit, _moddeinit,
 	"$Id: main.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

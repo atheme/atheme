@@ -178,7 +178,7 @@ static void uplink_close(connection_t *cptr)
 
 	event_add_once("reconn", reconn, NULL, me.recontime);
 
-	me.connected = FALSE;
+	me.connected = false;
 
 	if (curr_uplink->flags & UPF_ILLEGAL)
 	{

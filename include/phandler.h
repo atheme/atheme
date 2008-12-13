@@ -13,13 +13,13 @@
 struct ircd_ {
 	const char *ircdname;
 	const char *tldprefix;
-	boolean_t uses_uid;
-	boolean_t uses_rcommand;
-	boolean_t uses_owner;
-	boolean_t uses_protect;
-	boolean_t uses_halfops;
-	boolean_t uses_p10;		/* Parser hackhack. */
-	boolean_t uses_vhost;		/* Do we use vHosts? */
+	bool uses_uid;
+	bool uses_rcommand;
+	bool uses_owner;
+	bool uses_protect;
+	bool uses_halfops;
+	bool uses_p10;		/* Parser hackhack. */
+	bool uses_vhost;		/* Do we use vHosts? */
 	unsigned int oper_only_modes;
 	unsigned int owner_mode;
 	unsigned int protect_mode;
@@ -77,7 +77,7 @@ typedef struct ircd_ ircd_t;
 
 /* server login, usually sends PASS, CAPAB, SERVER and SVINFO
  * you can still change ircd->uses_uid at this point
- * set me.bursting = TRUE
+ * set me.bursting = true
  * return 1 if sts() failed (by returning 1), otherwise 0 */
 E unsigned int (*server_login)(void);
 /* introduce a client on the services server */
@@ -96,7 +96,7 @@ E void (*wallops_sts)(const char *text);
  * note that the channelts can still be old in this case (e.g. kills)
  * modes is a convenience argument giving the simple modes with parameters
  * do not rely upon chanuser_find(c,u) */
-E void (*join_sts)(channel_t *c, user_t *u, boolean_t isnew, char *modes);
+E void (*join_sts)(channel_t *c, user_t *u, bool isnew, char *modes);
 /* lower the TS of a channel, joining it with the given client on the
  * services server (opped), replacing the current simple modes with the
  * ones stored in the channel_t and clearing all other statuses
@@ -165,9 +165,9 @@ E void (*ping_sts)(void);
 E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
 /* mark user 'origin' as logged out
  * first check if me.connected is true and bail if not
- * return FALSE if successful or logins are not supported
- * return TRUE if the user was killed to force logout (P10) */
-E boolean_t (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
+ * return false if successful or logins are not supported
+ * return true if the user was killed to force logout (P10) */
+E bool (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
 /* introduce a fake server
  * it is ok to use opersvs to squit the old server
  * if SQUIT uses kill semantics (e.g. charybdis), server_delete() the server
@@ -202,14 +202,14 @@ E node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first)
 E node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first);
 /* check a vhost for validity; the core will already have checked for
  * @!?*, space, empty, : at start, length and cidr masks */
-E boolean_t (*is_valid_host)(const char *host);
+E bool (*is_valid_host)(const char *host);
 
 E unsigned int generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
 E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 E void generic_quit_sts(user_t *u, const char *reason);
 E void generic_wallops_sts(const char *text);
-E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
+E void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes);
 E void generic_chan_lowerts(channel_t *c, user_t *u);
 E void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason);
 E void generic_msg(const char *from, const char *target, const char *fmt, ...);
@@ -226,7 +226,7 @@ E void generic_topic_sts(channel_t *c, const char *setter, time_t ts, time_t pre
 E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_on_login(char *origin, char *user, char *wantedhost);
-E boolean_t generic_on_logout(char *origin, char *user, char *wantedhost);
+E bool generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(const char *server, const char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
@@ -235,7 +235,7 @@ E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, ch
 E void generic_sasl_sts(char *target, char mode, char *data);
 E node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first);
 E node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *first);
-E boolean_t generic_is_valid_host(const char *host);
+E bool generic_is_valid_host(const char *host);
 
 E struct cmode_ *mode_list;
 E struct extmode *ignore_mode_list;

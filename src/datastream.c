@@ -153,18 +153,18 @@ void sendq_flush(connection_t * cptr)
 	}
 }
 
-boolean_t sendq_nonempty(connection_t *cptr)
+bool sendq_nonempty(connection_t *cptr)
 {
 	node_t *n;
 	struct sendq *sq;
 
 	if (cptr->flags & CF_SEND_DEAD)
-		return FALSE;
+		return false;
 	if (cptr->flags & CF_SEND_EOF)
-		return TRUE;
+		return true;
 	n = cptr->sendq.head;
 	if (n == NULL)
-		return FALSE;
+		return false;
 	sq = n->data;
 	return sq->firstfree > sq->firstused;
 }

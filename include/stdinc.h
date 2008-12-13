@@ -17,7 +17,7 @@
 #include <link.h>
 #endif
 
-typedef mowgli_boolean_t boolean_t;
+#include <stdbool.h>
 
 #endif
 

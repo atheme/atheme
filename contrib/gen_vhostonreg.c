@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"misc/vhostonreg", FALSE, _modinit, _moddeinit,
+	"misc/vhostonreg", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -46,7 +46,7 @@ static void user_add_host(myuser_t *mu)
 	int maxlen1, i;
 	char newhost[HOSTLEN];
 	const char *p;
-	boolean_t invalidchar = FALSE;
+	bool invalidchar = false;
 
 	maxlen1 = HOSTLEN - 2 - strlen(me.hidehostsuffix);
 	if (maxlen1 < 9)
@@ -58,7 +58,7 @@ static void user_add_host(myuser_t *mu)
 		if (isalnum(*p) || strchr(VALID_SPECIALS, *p))
 			newhost[i++] = *p;
 		else
-			invalidchar = TRUE;
+			invalidchar = true;
 		p++;
 	}
 	if (invalidchar || *p != '\0')

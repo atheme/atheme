@@ -38,7 +38,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/graphtastical", TRUE, _modinit, NULL,
+	"contrib/graphtastical", true, _modinit, NULL,
 	"$Id: flatfile.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

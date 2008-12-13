@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
+	"nickserv/taxonomy", false, _modinit, _moddeinit,
 	"$Id: taxonomy.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -42,7 +42,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	myuser_t *mu;
 	node_t *n;
-	boolean_t isoper;
+	bool isoper;
 
 	if (!target && si->smu)
 		target = si->smu->name;

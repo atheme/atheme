@@ -10,18 +10,18 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("protocol/ts6-generic", TRUE, _modinit, NULL, "$Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ts6-generic", true, _modinit, NULL, "$Id: charybdis.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
-static boolean_t use_rserv_support = FALSE;
-static boolean_t use_tb = FALSE;
-static boolean_t use_euid = FALSE;
+static bool use_rserv_support = false;
+static bool use_tb = false;
+static bool use_euid = false;
 
 static void server_eob(server_t *s);
 static server_t *sid_find(char *name);
 
 static char ts6sid[3 + 1] = "";
 
-static boolean_t ts6_is_valid_host(const char *host)
+static bool ts6_is_valid_host(const char *host)
 {
 	const char *p;
 
@@ -29,8 +29,8 @@ static boolean_t ts6_is_valid_host(const char *host)
 		if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
 					(*p >= 'a' && *p <= 'z') || *p == '.'
 					|| *p == ':' || *p == '-'))
-			return FALSE;
-	return TRUE;
+			return false;
+	return true;
 }
 
 /* login to our uplink */
@@ -40,12 +40,12 @@ static unsigned int ts6_server_login(void)
 
 	if (!me.numeric)
 	{
-		ircd->uses_uid = FALSE;
+		ircd->uses_uid = false;
 		ret = sts("PASS %s :TS", curr_uplink->pass);
 	}
 	else if (strlen(me.numeric) == 3 && isdigit(*me.numeric))
 	{
-		ircd->uses_uid = TRUE;
+		ircd->uses_uid = true;
 		ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, me.numeric);
 	}
 	else
@@ -55,7 +55,7 @@ static unsigned int ts6_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
@@ -99,7 +99,7 @@ static void ts6_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void ts6_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void ts6_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
@@ -114,7 +114,7 @@ static void ts6_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "ts6_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
 	sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts, c->name,
-				channel_modes(c, TRUE), CLIENT_NAME(u));
+				channel_modes(c, true), CLIENT_NAME(u));
 	if (ircd->uses_uid)
 		chanban_clear(c);
 }
@@ -325,15 +325,15 @@ static void ts6_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t ts6_on_logout(char *origin, char *user, char *wantedhost)
+static bool ts6_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find(origin);
 
 	if (!me.connected || !use_rserv_support || !u)
-		return FALSE;
+		return false;
 
 	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));
-	return FALSE;
+	return false;
 }
 
 /* XXX we don't have an appropriate API for this, what about making JUPE
@@ -488,7 +488,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -497,7 +497,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -505,7 +505,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
@@ -513,7 +513,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
 	channel_t *c;
-	boolean_t keep_new_modes = TRUE;
+	bool keep_new_modes = true;
 	unsigned int userc;
 	char *userv[256];
 	unsigned int i;
@@ -575,7 +575,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_event("channel_tschange", c);
 	}
 	else if (ts > c->ts)
-		keep_new_modes = FALSE;
+		keep_new_modes = false;
 
 	if (keep_new_modes)
 		channel_mode(NULL, c, parc - 3, parv + 2);
@@ -604,7 +604,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
-	boolean_t keep_new_modes = TRUE;
+	bool keep_new_modes = true;
 	node_t *n, *tn;
 	channel_t *c;
 	chanuser_t *cu;
@@ -666,7 +666,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_event("channel_tschange", c);
 	}
 	else if (ts > c->ts)
-		keep_new_modes = FALSE;
+		keep_new_modes = false;
 
 	if (keep_new_modes)
 		channel_mode(NULL, c, parc - 2, parv + 2);
@@ -1020,7 +1020,7 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 		if (ircd->uses_uid)
 		{
 			slog(LG_INFO, "m_pass(): uplink does not support TS6, falling back to TS5");
-			ircd->uses_uid = FALSE;
+			ircd->uses_uid = false;
 		}
 		ts6sid[0] = '\0';
 	}
@@ -1138,25 +1138,25 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *p;
 
-	use_euid = FALSE;
-	use_rserv_support = FALSE;
-	use_tb = FALSE;
+	use_euid = false;
+	use_rserv_support = false;
+	use_tb = false;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "EUID"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink supports EUID, enabling support.");
-			use_euid = TRUE;
+			use_euid = true;
 		}
 		if (!irccasecmp(p, "SERVICES"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink has rserv extensions, enabling support.");
-			use_rserv_support = TRUE;
+			use_rserv_support = true;
 		}
 		if (!irccasecmp(p, "TB"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink does topic bursting, using if appropriate.");
-			use_tb = TRUE;
+			use_tb = true;
 		}
 	}
 

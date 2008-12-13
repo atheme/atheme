@@ -14,20 +14,20 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", true, _modinit, NULL, "$Id: bircd.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Asuka = {
         "Asuka 1.2.1 and later",        /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	TRUE,				/* Whether or not we use P10 */
-	TRUE,				/* Whether or not we use vhosts. */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	true,				/* Whether or not we use P10 */
+	true,				/* Whether or not we use vhosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -112,20 +112,20 @@ static void asuka_on_login(char *origin, char *user, char *wantedhost)
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static boolean_t asuka_on_logout(char *origin, char *user, char *wantedhost)
+static bool asuka_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find_named(origin);
 
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (u != NULL)
 	{
 		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, user);
-		return TRUE;
+		return true;
 	}
 	else
-		return FALSE;
+		return false;
 }
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
@@ -224,7 +224,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 
 static void check_hidehost(user_t *u)
 {
-	static boolean_t warned = FALSE;
+	static bool warned = false;
 
 	/* do they qualify? */
 	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
@@ -240,7 +240,7 @@ static void check_hidehost(user_t *u)
 		if (!warned)
 		{
 			wallops("Misconfiguration: serverinfo::hidehostsuffix not set");
-			warned = TRUE;
+			warned = true;
 		}
 		return;
 	}
@@ -279,7 +279,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

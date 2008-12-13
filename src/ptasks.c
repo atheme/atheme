@@ -414,7 +414,7 @@ void handle_away(user_t *u, const char *message)
 }
 
 static void
-handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
+handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
 	hook_cmessage_data_t cdata;
@@ -447,7 +447,7 @@ handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char
 		if (si->service == NULL)
 			continue;
 
-		if (si->service->chanmsg == FALSE)
+		if (si->service->chanmsg == false)
 			continue;
 
 		if (is_notice)
@@ -457,7 +457,7 @@ handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char
 	}
 }
 
-void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
+void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *message)
 {
 	char *vec[3];
 	user_t *u, *target_u;
@@ -642,7 +642,7 @@ void handle_topic(channel_t *c, const char *setter, time_t ts, const char *topic
 static const char *skip_kill_path(const char *reason)
 {
 	const char *p;
-	bool have_dot = FALSE;
+	bool have_dot = false;
 
 	p = reason;
 	while (*p != ' ')
@@ -650,7 +650,7 @@ static const char *skip_kill_path(const char *reason)
 		if (strchr("<>()#&?%$,;", *p) || *p == '\0')
 			return reason;
 		if (*p == '!' || *p == '.')
-			have_dot = TRUE;
+			have_dot = true;
 		p++;
 	}
 	return have_dot ? p + 1 : reason;
@@ -714,7 +714,7 @@ server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
 			slog(LG_ERROR, "handle_server(): uplink %s actually has name %s, continuing anyway", curr_uplink->name, name);
 		s = server_add(name, hops, me.name, sid, desc);
 		me.actual = s->name;
-		me.recvsvr = TRUE;
+		me.recvsvr = true;
 	}
 	else
 		slog(LG_ERROR, "handle_server(): unregistered/unknown server attempting to introduce another server %s", name);
@@ -870,13 +870,13 @@ void command_add_flood(sourceinfo_t *si, unsigned int amount)
 		si->su->msgs += amount;
 }
 
-boolean_t should_reg_umode(user_t *u)
+bool should_reg_umode(user_t *u)
 {
 	mynick_t *mn;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership ||
 			u->myuser == NULL || u->myuser->flags & MU_WAITAUTH)
-		return FALSE;
+		return false;
 	mn = mynick_find(u->nick);
 	return mn != NULL && mn->owner == u->myuser;
 }

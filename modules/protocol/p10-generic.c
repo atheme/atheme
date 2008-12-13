@@ -13,7 +13,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("protocol/p10-generic", TRUE, _modinit, NULL, "$Id: p10.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/p10-generic", true, _modinit, NULL, "$Id: p10.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 static void check_hidehost(user_t *u);
 
@@ -26,7 +26,7 @@ static unsigned int p10_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	/* SERVER irc.p10.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
 	sts("SERVER %s 1 %lu %lu J10 %s]]] +s :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
@@ -68,7 +68,7 @@ static void p10_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void p10_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void p10_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
@@ -89,7 +89,7 @@ static void p10_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "p10_chan_lowerts(): lowering TS for %s to %lu",
 			c->name, (unsigned long)c->ts);
 	sts("%s B %s %lu %s %s:o", me.numeric, c->name, (unsigned long)c->ts,
-			channel_modes(c, TRUE), u->uid);
+			channel_modes(c, true), u->uid);
 	chanban_clear(c);
 }
 
@@ -259,20 +259,20 @@ static void p10_on_login(char *origin, char *user, char *wantedhost)
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static boolean_t p10_on_logout(char *origin, char *user, char *wantedhost)
+static bool p10_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find_named(origin);
 
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (u != NULL)
 	{
 		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, user);
-		return TRUE;
+		return true;
 	}
 	else
-		return FALSE;
+		return false;
 }
 
 static void p10_jupe(const char *server, const char *reason)
@@ -343,7 +343,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -352,7 +352,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -360,7 +360,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_create(sourceinfo_t *si, int parc, char *parv[])
@@ -448,7 +448,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	char newnick[16+NICKLEN];
 	char *p;
 	time_t ts;
-	boolean_t keep_new_modes = TRUE;
+	bool keep_new_modes = true;
 
 	/* S BURST <channel> <ts> [parameters]
 	 * parameters can be:
@@ -491,7 +491,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_event("channel_tschange", c);
 	}
 	else if (ts > c->ts)
-		keep_new_modes = FALSE;
+		keep_new_modes = false;
 	if (parc < 3 || parv[2][0] != '+')
 	{
 		/* Tell the core to check mode locks now,
@@ -902,7 +902,7 @@ static void m_eos(sourceinfo_t *si, int parc, char *parv[])
 
 static void check_hidehost(user_t *u)
 {
-	static boolean_t warned = FALSE;
+	static bool warned = false;
 
 	/* do they qualify? */
 	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
@@ -918,7 +918,7 @@ static void check_hidehost(user_t *u)
 		if (!warned)
 		{
 			wallops("Misconfiguration: serverinfo::hidehostsuffix not set");
-			warned = TRUE;
+			warned = true;
 		}
 		return;
 	}

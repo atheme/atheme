@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/drop", FALSE, _modinit, _moddeinit,
+	"nickserv/drop", false, _modinit, _moddeinit,
 	"$Id: drop.c 8321 2007-05-24 20:10:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

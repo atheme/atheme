@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/generatepass", FALSE, _modinit, _moddeinit,
+	"nickserv/generatepass", false, _modinit, _moddeinit,
 	"$Id: ns_generatepass.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Epiphanic Networks <http://www.epiphanic.org>"
 );

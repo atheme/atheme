@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
+	"xmlrpc/memo", false, _modinit, _moddeinit,
 	"$Id: memo.c 8391 2007-06-03 20:38:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -71,7 +71,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -208,7 +208,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -344,7 +344,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -442,7 +442,7 @@ static int memo_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -526,7 +526,7 @@ static int memo_read(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -639,7 +639,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -728,7 +728,7 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -793,7 +793,7 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -859,7 +859,7 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mu) == FALSE)
+	if (authcookie_validate(parv[0], mu) == false)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;

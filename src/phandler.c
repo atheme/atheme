@@ -27,7 +27,7 @@
 unsigned int(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (user_t *u) = generic_introduce_nick;
 void (*wallops_sts) (const char *text) = generic_wallops_sts;
-void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
+void (*join_sts) (channel_t *c, user_t *u, bool isnew, char *modes) = generic_join_sts;
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (user_t *source, channel_t *c, user_t *u, const char *reason) = generic_kick;
 void (*msg) (const char *from, const char *target, const char *fmt, ...) = generic_msg;
@@ -45,7 +45,7 @@ void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_s
 void (*ping_sts) (void) = generic_ping_sts;
 void (*quit_sts) (user_t *u, const char *reason) = generic_quit_sts;
 void (*ircd_on_login) (char *origin, char *user, char *wantedhost) = generic_on_login;
-boolean_t (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
+bool (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
 void (*jupe) (const char *server, const char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
@@ -55,7 +55,7 @@ void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *lo
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first) = generic_next_matching_ban;
 node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first) = generic_next_matching_host_chanacs;
-boolean_t (*is_valid_host)(const char *host) = generic_is_valid_host;
+bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 
 unsigned int generic_server_login(void)
 {
@@ -73,7 +73,7 @@ void generic_wallops_sts(const char *text)
 	slog(LG_INFO, "Don't know how to send wallops: %s", text);
 }
 
-void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	/* We can't do anything here. Bail. */
 }
@@ -81,7 +81,7 @@ void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 void generic_chan_lowerts(channel_t *c, user_t *u)
 {
 	slog(LG_ERROR, "chan_lowerts() called but not supported!");
-	join_sts(c, u, TRUE, channel_modes(c, TRUE));
+	join_sts(c, u, true, channel_modes(c, true));
 }
 
 void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
@@ -189,10 +189,10 @@ void generic_on_login(char *origin, char *user, char *wantedhost)
 	/* nothing to do here. */
 }
 
-boolean_t generic_on_logout(char *origin, char *user, char *wantedhost)
+bool generic_on_logout(char *origin, char *user, char *wantedhost)
 {
 	/* nothing to do here. */
-	return FALSE;
+	return false;
 }
 
 void generic_jupe(const char *server, const char *reason)
@@ -277,10 +277,10 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 	return NULL;
 }
 
-boolean_t generic_is_valid_host(const char *host)
+bool generic_is_valid_host(const char *host)
 {
 	/* don't know what to do here */
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

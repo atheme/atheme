@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/inject", FALSE, _modinit, _moddeinit,
+	"operserv/inject", false, _modinit, _moddeinit,
 	"$Id: inject.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -43,7 +43,7 @@ void _moddeinit()
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *inject;
-	static boolean_t injecting = FALSE;
+	static bool injecting = false;
 	inject = parv[0];
 
 	if (!config_options.raw)
@@ -67,9 +67,9 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	injecting = TRUE;
+	injecting = true;
 	irc_parse(inject);
-	injecting = FALSE;
+	injecting = false;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

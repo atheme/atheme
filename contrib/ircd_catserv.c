@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/ircd_catserv", FALSE, _modinit, _moddeinit,
+	"contrib/ircd_catserv", false, _modinit, _moddeinit,
 	"$Id: ircd_catserv.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

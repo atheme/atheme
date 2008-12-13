@@ -50,7 +50,7 @@ static helpentry_t *help_cmd_find(sourceinfo_t *si, const char *cmd, list_t *lis
 	return NULL;
 }
 
-static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
+static bool evaluate_condition(sourceinfo_t *si, const char *s)
 {
 	char word[80];
 	char *p, *q;
@@ -92,7 +92,7 @@ static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
 	else if (!strcmp(word, "auth"))
 		return me.auth != AUTH_NONE;
 	else
-		return FALSE;
+		return false;
 }
 
 void help_display(sourceinfo_t *si, const char *command, list_t *list)

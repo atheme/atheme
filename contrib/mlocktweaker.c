@@ -18,7 +18,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/mlocktweaker", FALSE, _modinit, _moddeinit,
+	"contrib/mlocktweaker", false, _modinit, _moddeinit,
 	"$Id$",
 	"William Pitcock <nenolod@atheme.org>"
 );

@@ -26,7 +26,7 @@ struct service_ {
 
 	list_t *cmdtree;
 
-	boolean_t chanmsg;
+	bool chanmsg;
 
 	list_t *conf_table;
 };
@@ -40,7 +40,7 @@ E void service_delete(service_t *sptr);
 E service_t *service_find(const char *name);
 E service_t *service_find_nick(const char *nick);
 E char *service_name(char *name);
-E void service_set_chanmsg(service_t *, boolean_t);
+E void service_set_chanmsg(service_t *, bool);
 
 #endif
 

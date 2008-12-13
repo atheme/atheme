@@ -46,7 +46,7 @@ struct v2_moduleheader_ {
 	unsigned int abi_ver;
 	unsigned int abi_rev;
 	const char *name;
-	boolean_t norestart;
+	bool norestart;
 	void (*modinit)(module_t *m);
 	void (*deinit)(void);
 	const char *vendor;
@@ -71,10 +71,10 @@ E void *module_locate_symbol(const char *modname, const char *sym);
 E void module_unload(module_t *m);
 E module_t *module_find(const char *name);
 E module_t *module_find_published(const char *name);
-E boolean_t module_request(const char *name);
+E bool module_request(const char *name);
 
 #define MODULE_TRY_REQUEST_DEPENDENCY(self, modname) \
-	if (module_request(modname) == FALSE)				\
+	if (module_request(modname) == false)				\
 	{								\
 		(self)->mflags = MODTYPE_FAIL;				\
 		return;							\

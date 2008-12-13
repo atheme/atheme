@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"backend/flatfile", TRUE, _modinit, NULL,
+	"backend/flatfile", true, _modinit, NULL,
 	"$Id: flatfile.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -937,7 +937,7 @@ void _modinit(module_t *m)
 	db_load = &flatfile_db_load;
 	db_save = &flatfile_db_save;
 
-	backend_loaded = TRUE;
+	backend_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

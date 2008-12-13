@@ -409,24 +409,24 @@ module_t *module_find_published(const char *name)
  *       a published name of a module to load.
  *
  * outputs:
- *       TRUE: if the module was loaded, or is already present.
+ *       true: if the module was loaded, or is already present.
  *
  * side effects:
  *       a module might be loaded.
  */
-boolean_t module_request(const char *name)
+bool module_request(const char *name)
 {
 	module_t *m;
 	char path[BUFSIZE];
 
 	if ((m = module_find_published(name)) != NULL)
-		return TRUE;
+		return true;
 
 	snprintf(path, BUFSIZE, "%s/modules/%s", MODDIR, name);
 	if ((m = module_load(path)) == NULL)
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -230,134 +230,134 @@ soper_t *soper_find_named(const char *name)
 	return NULL;
 }
 
-boolean_t is_soper(myuser_t *myuser)
+bool is_soper(myuser_t *myuser)
 {
 	if (!myuser)
-		return FALSE;
+		return false;
 
 	if (myuser->soper)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
-boolean_t is_conf_soper(myuser_t *myuser)
+bool is_conf_soper(myuser_t *myuser)
 {
 	if (!myuser)
-		return FALSE;
+		return false;
 
 	if (myuser->soper && myuser->soper->flags & SOPER_CONF)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 /* name1 name2 name3... */
-static boolean_t string_in_list(const char *str, const char *name)
+static bool string_in_list(const char *str, const char *name)
 {
 	char *p;
 	int l;
 
 	if (str == NULL)
-		return FALSE;
+		return false;
 	l = strlen(name);
 	while (*str != '\0')
 	{
 		p = strchr(str, ' ');
 		if (p != NULL ? p - str == l && !strncasecmp(str, name, p - str) : !strcasecmp(str, name))
-			return TRUE;
+			return true;
 		if (p == NULL)
-			return FALSE;
+			return false;
 		str = p;
 		while (*str == ' ')
 			str++;
 	}
-	return FALSE;
+	return false;
 }
 
-boolean_t has_any_privs(sourceinfo_t *si)
+bool has_any_privs(sourceinfo_t *si)
 {
 	if (si->su != NULL && is_ircop(si->su))
-		return TRUE;
+		return true;
 	if (si->smu && is_soper(si->smu))
-		return TRUE;
-	return FALSE;
+		return true;
+	return false;
 }
 
-boolean_t has_any_privs_user(user_t *u)
+bool has_any_privs_user(user_t *u)
 {
 	if (u == NULL)
-		return FALSE;
+		return false;
 	if (is_ircop(u))
-		return TRUE;
+		return true;
 	if (u->myuser && is_soper(u->myuser))
-		return TRUE;
-	return FALSE;
+		return true;
+	return false;
 }
 
-boolean_t has_priv(sourceinfo_t *si, const char *priv)
+bool has_priv(sourceinfo_t *si, const char *priv)
 {
 	return si->su != NULL ? has_priv_user(si->su, priv) :
 		has_priv_myuser(si->smu, priv);
 }
 
-boolean_t has_priv_user(user_t *u, const char *priv)
+bool has_priv_user(user_t *u, const char *priv)
 {
 	operclass_t *operclass;
 
 	if (priv == NULL)
-		return TRUE;
+		return true;
 	if (u == NULL)
-		return FALSE;
+		return false;
 	if (is_ircop(u))
 	{
 		operclass = operclass_find("ircop");
 		if (operclass != NULL && string_in_list(operclass->privs, priv))
-			return TRUE;
+			return true;
 	}
 	if (u->myuser && is_soper(u->myuser))
 	{
 		operclass = u->myuser->soper->operclass;
 		if (operclass == NULL)
-			return FALSE;
+			return false;
 		if (operclass->flags & OPERCLASS_NEEDOPER && !is_ircop(u))
-			return FALSE;
+			return false;
 		if (u->myuser->soper->password != NULL && !(u->flags & UF_SOPER_PASS))
-			return FALSE;
+			return false;
 		if (string_in_list(operclass->privs, priv))
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
-boolean_t has_priv_myuser(myuser_t *mu, const char *priv)
+bool has_priv_myuser(myuser_t *mu, const char *priv)
 {
 	operclass_t *operclass;
 
 	if (priv == NULL)
-		return TRUE;
+		return true;
 	if (mu == NULL)
-		return FALSE;
+		return false;
 	if (!is_soper(mu))
-		return FALSE;
+		return false;
 	operclass = mu->soper->operclass;
 	if (operclass == NULL)
-		return FALSE;
+		return false;
 	if (string_in_list(operclass->privs, priv))
-		return TRUE;
-	return FALSE;
+		return true;
+	return false;
 }
 
-boolean_t has_priv_operclass(operclass_t *operclass, const char *priv)
+bool has_priv_operclass(operclass_t *operclass, const char *priv)
 {
 	if (operclass == NULL)
-		return FALSE;
+		return false;
 	if (string_in_list(operclass->privs, priv))
-		return TRUE;
-	return FALSE;
+		return true;
+	return false;
 }
 
-boolean_t has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
+bool has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
 {
 	char *privs2;
 	char *priv;
@@ -369,12 +369,12 @@ boolean_t has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
 		if (!has_priv(si, priv))
 		{
 			free(privs2);
-			return FALSE;
+			return false;
 		}
 		priv = strtok(NULL, " ");
 	}
 	free(privs2);
-	return TRUE;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

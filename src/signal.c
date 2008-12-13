@@ -172,7 +172,7 @@ void check_signals(void)
 		wallops(_("Exiting on signal %d."), SIGINT);
 		if (chansvs.me != NULL && chansvs.me->me != NULL)
 			quit_sts(chansvs.me->me, "caught interrupt");
-		me.connected = FALSE;
+		me.connected = false;
 		slog(LG_INFO, "sighandler(): caught interrupt; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}

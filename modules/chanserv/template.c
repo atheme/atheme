@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/template", FALSE, _modinit, _moddeinit,
+	"chanserv/template", false, _modinit, _moddeinit,
 	"$Id: template.c 8319 2007-05-24 20:09:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -67,7 +67,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int oldflags, newflags = 0, addflags, removeflags, restrictflags;
 	char *p, *q, *r;
 	char ss[40], newstr[400];
-	boolean_t found, denied;
+	bool found, denied;
 
 	if (!channel)
 	{
@@ -209,7 +209,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else if (removeflags & CA_FLAGS)
 			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 
-		found = denied = FALSE;
+		found = denied = false;
 		oldflags = 0;
 
 		md = metadata_find(mc, "private:templates");
@@ -234,7 +234,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				}
 				if ((size_t)(q - p) == l && !strncasecmp(target, p, l))
 				{
-					found = TRUE;
+					found = true;
 					oldflags = flags_to_bitmask(ss, chanacs_flags, 0);
 					addflags &= ~oldflags;
 					removeflags &= oldflags & ~addflags;
@@ -248,7 +248,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 							~restrictflags & removeflags ||
 							~restrictflags & oldflags)
 					{
-						denied = TRUE;
+						denied = true;
 						break;
 					}
 					newflags = (oldflags | addflags) & ~removeflags;
@@ -298,7 +298,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			else if (~restrictflags & addflags ||
 					~restrictflags & removeflags ||
 					~restrictflags & oldflags)
-				denied = TRUE;
+				denied = true;
 			else if (md != NULL)
 				snprintf(newstr + strlen(newstr), sizeof newstr - strlen(newstr), " %s=%s", target, bitmask_to_flags(newflags, chanacs_flags));
 			else

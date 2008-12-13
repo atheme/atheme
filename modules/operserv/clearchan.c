@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/clearchan", FALSE, _modinit, _moddeinit,
+	"operserv/clearchan", false, _modinit, _moddeinit,
 	"$Id: clearchan.c 7913 2007-03-06 23:39:47Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );

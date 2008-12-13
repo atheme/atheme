@@ -151,7 +151,7 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	node_add(md, &md->node, &obj->metadata);
 
 	if (!strncmp("private:", md->name, 8))
-		md->private = TRUE;
+		md->private = true;
 
 	return md;
 }

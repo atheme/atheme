@@ -12,9 +12,9 @@
 
 E const char *(*crypt_string)(const char *str, const char *salt);
 E const char *generic_crypt_string(const char *str, const char *salt);
-E boolean_t crypt_verify_password(const char *uinput, const char *pass);
+E bool crypt_verify_password(const char *uinput, const char *pass);
 E const char *gen_salt(void);
-E boolean_t crypto_module_loaded;
+E bool crypto_module_loaded;
 
 #endif
 

@@ -13,20 +13,20 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", true, _modinit, NULL, "$Id: officeirc.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t officeirc = {
         "officeirc/ircxpro",            /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        TRUE,                           /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        true,                           /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -90,7 +90,7 @@ static unsigned int officeirc_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
@@ -130,7 +130,7 @@ static void officeirc_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void officeirc_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void officeirc_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 	{
@@ -298,14 +298,14 @@ static void officeirc_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t officeirc_on_logout(char *origin, char *user, char *wantedhost)
+static bool officeirc_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
-	return FALSE;
+	return false;
 }
 
 static void officeirc_jupe(const char *server, const char *reason)
@@ -365,7 +365,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -374,7 +374,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -382,7 +382,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
@@ -403,7 +403,7 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
-	boolean_t realchange;
+	bool realchange;
 
 	if (parc == 8)
 	{
@@ -666,7 +666,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i;
 	time_t ts;
 	char *p;
-	boolean_t keep_new_modes = TRUE;
+	bool keep_new_modes = true;
 
 	/* :origin SJOIN chan ts :users */
 	if (si->s == NULL)
@@ -726,7 +726,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_event("channel_tschange", c);
 	}
 	else if (ts > c->ts)
-		keep_new_modes = FALSE;
+		keep_new_modes = false;
 
 	userc = sjtoken(parv[parc - 1], ' ', userv);
 
@@ -831,7 +831,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

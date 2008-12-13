@@ -31,7 +31,7 @@ struct chansvs_
   char *real;                   /* the IRC client's realname  */
   char *disp;			/* the IRC client's dispname  */
 
-  boolean_t fantasy;		/* enable fantasy commands    */
+  bool fantasy;		/* enable fantasy commands    */
 
   unsigned int ca_vop;		/* xop access levels */
   unsigned int ca_hop;
@@ -40,7 +40,7 @@ struct chansvs_
 
   char *trigger;		/* trigger, e.g. !, ` or .    */
 
-  boolean_t changets;		/* use TS to better deop people */
+  bool changets;		/* use TS to better deop people */
 
   service_t *me;                /* our user_t struct          */
 
@@ -88,8 +88,8 @@ struct memosvs_
 /* authentication services */
 struct nicksvs_
 {
-  boolean_t  spam;
-  boolean_t  no_nick_ownership;
+  bool  spam;
+  bool  no_nick_ownership;
 
   char   *nick;
   char   *user;
@@ -168,7 +168,7 @@ E void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void snoop(const char *fmt, ...) PRINTFLIKE(1, 2);
 E void notice(const char *from, const char *to, const char *message, ...) PRINTFLIKE(3, 4);
 E void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
-E boolean_t bad_password(sourceinfo_t *si, myuser_t *mu);
+E bool bad_password(sourceinfo_t *si, myuser_t *mu);
 E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);

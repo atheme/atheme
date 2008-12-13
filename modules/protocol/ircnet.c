@@ -14,20 +14,20 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", true, _modinit, NULL, "$Id: ircnet.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t IRCNet = {
         "ircd 2.11.1p1 or later",       /* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
-        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	false,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -87,7 +87,7 @@ static unsigned int ircnet_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("SERVER %s 1 %s :%s", me.name, me.numeric, me.desc);
 
@@ -139,7 +139,7 @@ static void ircnet_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void ircnet_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void ircnet_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	sts(":%s NJOIN %s :@%s", me.numeric, c->name, u->uid);
 	if (isnew && modes[0] && modes[1])
@@ -304,10 +304,10 @@ static void ircnet_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t ircnet_on_logout(char *origin, char *user, char *wantedhost)
+static bool ircnet_on_logout(char *origin, char *user, char *wantedhost)
 {
 	/* nothing to do on ratbox */
-	return FALSE;
+	return false;
 }
 
 static void ircnet_jupe(const char *server, const char *reason)
@@ -417,7 +417,7 @@ static void m_eob(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -426,7 +426,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -434,7 +434,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
@@ -774,7 +774,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

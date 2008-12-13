@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/read", FALSE, _modinit, _moddeinit,
+	"memoserv/read", false, _modinit, _moddeinit,
 	"$Id: read.c 8331 2007-05-27 14:13:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -50,7 +50,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[32];
 	struct tm tm;
-	boolean_t readnew;
+	bool readnew;
 	
 	/* Grab arg */
 	char *arg1 = parv[0];

@@ -17,20 +17,20 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8415 2007-06-06 22:34:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", true, _modinit, NULL, "$Id: hyperion.c 8415 2007-06-06 22:34:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Hyperion = {
         "Hyperion 1.0",                 /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
-        FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	TRUE,				/* Whether or not we use vHosts. */
+        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        false,                          /* Whether or not we use RCOMMAND */
+        false,                          /* Whether or not we support channel owners. */
+        false,                          /* Whether or not we support channel protection. */
+        false,                          /* Whether or not we support halfops. */
+	false,				/* Whether or not we use P10 */
+	true,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_JUPED,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -65,8 +65,8 @@ struct cmode_ hyperion_mode_list[] = {
   { '\0', 0 }
 };
 
-static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode hyperion_ignore_mode_list[] = {
   /*{ 'D', 0 },*/
@@ -95,27 +95,27 @@ struct cmode_ hyperion_user_mode_list[] = {
   { '\0', 0 }
 };
 
-static boolean_t use_svslogin = FALSE;
+static bool use_svslogin = false;
 
 /* *INDENT-ON* */
 
-static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	channel_t *target_c;
 	mychan_t *target_mc;
 
 	if (*value != '#' || strlen(value) > 30)
-		return FALSE;
+		return false;
 	if (u == NULL && mu == NULL)
-		return TRUE;
+		return true;
 	target_c = channel_find(value);
 	target_mc = mychan_find(value);
 	if (target_c == NULL && target_mc == NULL)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
-static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;
 
@@ -125,18 +125,18 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 		if (*p == ',')
 		{
 			if (arg2 != NULL)
-				return FALSE;
+				return false;
 			arg2 = p + 1;
 		}
 		else if (!isdigit(*p))
-			return FALSE;
+			return false;
 		p++;
 	}
 	if (arg2 == NULL)
-		return FALSE;
+		return false;
 	if (p - arg2 > 5 || arg2 - value - 1 > 5 || !atoi(value) || !atoi(arg2))
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 static node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
@@ -185,25 +185,25 @@ static node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, nod
 	return NULL;
 }
 
-static boolean_t hyperion_is_valid_host(const char *host)
+static bool hyperion_is_valid_host(const char *host)
 {
 	const char *p;
-	boolean_t dot = FALSE;
+	bool dot = false;
 
 	if (*host == '.' || *host == '/' || *host == ':')
-		return FALSE;
+		return false;
 
 	for (p = host; *p != '\0'; p++)
 	{
 		if (*p == '.' || *p == ':' || *p == '/')
-			dot = TRUE;
+			dot = true;
 		else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
 					(*p >= 'a' && *p <= 'z') || *p == '-'))
-			return FALSE;
+			return false;
 	}
 	/* hyperion allows a trailing / but RichiH does not want it, whatever */
 	if (dot && p[-1] == '/')
-		return FALSE;
+		return false;
 	return dot;
 }
 
@@ -216,7 +216,7 @@ static unsigned int hyperion_server_login(void)
 	if (ret == 1)
 		return 1;
 
-	me.bursting = TRUE;
+	me.bursting = true;
 
 	sts("CAPAB :QS EX DE CHW IE QU DNCR SRV SIGNON");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
@@ -265,7 +265,7 @@ static void hyperion_wallops_sts(const char *text)
 }
 
 /* join a channel */
-static void hyperion_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void hyperion_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
@@ -448,23 +448,23 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t hyperion_on_logout(char *origin, char *user, char *wantedhost)
+static bool hyperion_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
 
 	if (!me.connected)
-		return FALSE;
+		return false;
 
 	u = user_find(origin);
 	if (!u)
-		return FALSE;
+		return false;
 	if (use_svslogin)
 		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, "0", origin, u->user, wantedhost ? u->host : u->vhost);
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s MODE %s -e", me.name, origin);
 
-	return FALSE;
+	return false;
 }
 
 static void hyperion_jupe(const char *server, const char *reason)
@@ -563,7 +563,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Finished synching to network.");
 #endif
 
-		me.bursting = FALSE;
+		me.bursting = false;
 	}
 }
 
@@ -572,7 +572,7 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], false, parv[1]);
 }
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
@@ -580,7 +580,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_message(si, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], true, parv[1]);
 }
 
 static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
@@ -665,7 +665,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
-	boolean_t realchange;
+	bool realchange;
 
 	/* got the right number of args for an introduction? */
 	if (parc == 9)
@@ -887,7 +887,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(p, "SIGNON"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink can do SIGNON, enabling support.");
-			use_svslogin = TRUE;
+			use_svslogin = true;
 		}
 	}
 #endif
@@ -1099,7 +1099,7 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 
-	pmodule_loaded = TRUE;
+	pmodule_loaded = true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/kickdots", FALSE, _modinit, _moddeinit,
+	"chanserv/kickdots", false, _modinit, _moddeinit,
 	"$Id: cs_kickdots.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );

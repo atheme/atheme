@@ -85,24 +85,24 @@ E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
 E soper_t *soper_find_named(const char *name);
 
-E boolean_t is_soper(myuser_t *myuser);
-E boolean_t is_conf_soper(myuser_t *myuser);
+E bool is_soper(myuser_t *myuser);
+E bool is_conf_soper(myuser_t *myuser);
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
  * warning: do not use this for any kind of real privilege! */
-E boolean_t has_any_privs(sourceinfo_t *);
-E boolean_t has_any_privs_user(user_t *);
+E bool has_any_privs(sourceinfo_t *);
+E bool has_any_privs_user(user_t *);
 /* has_priv(): for sources of commands */
-E boolean_t has_priv(sourceinfo_t *, const char *);
+E bool has_priv(sourceinfo_t *, const char *);
 /* has_priv_user(): for online users */
-E boolean_t has_priv_user(user_t *, const char *);
+E bool has_priv_user(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
-E boolean_t has_priv_myuser(myuser_t *, const char *);
+E bool has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */
-E boolean_t has_priv_operclass(operclass_t *, const char *);
+E bool has_priv_operclass(operclass_t *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */
-E boolean_t has_all_operclass(sourceinfo_t *, operclass_t *);
+E bool has_all_operclass(sourceinfo_t *, operclass_t *);
 
 #endif /* PRIVS_H */
 
