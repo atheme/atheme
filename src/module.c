@@ -86,7 +86,7 @@ module_t *module_load(const char *filespec)
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
+		slog(LG_ERROR, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
 
 		if (me.connected)
 			snoop(_("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module."), filespec);
@@ -119,7 +119,7 @@ module_t *module_load(const char *filespec)
 
 	if (module_find_published(h->name))
 	{
-		slog(LG_DEBUG, "module_load(): %s: Published name %s already exists.", filespec, h->name);
+		slog(LG_INFO, "module_load(): %s: Published name %s already exists.", filespec, h->name);
 
 		if (me.connected)
 			snoop(_("MODLOAD:ERROR: Module \2%s\2 already exists while loading \2%s\2."), h->name, filespec);
