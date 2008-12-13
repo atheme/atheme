@@ -40,6 +40,7 @@
 #include "sysconf.h"
 #include "account.h"
 #include "tools.h"
+#include "conf.h"
 #include "confparse.h"
 #include "global.h"
 #include "flags.h"

@@ -139,17 +139,6 @@ E int runflags;
 #define RF_RESTART      0x00000008      /* restart     */
 #define RF_REHASHING    0x00000010      /* rehashing   */
 
-/* conf.c */
-E bool conf_parse(const char *);
-E void conf_init(void);
-E bool conf_rehash(void);
-E bool conf_check(void);
-
-/* confp.c */
-E void config_free(config_file_t *cfptr);
-E config_file_t *config_load(const char *filename);
-E config_entry_t *config_find(config_entry_t *ceptr, const char *name);
-
 /* node.c */
 E void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
