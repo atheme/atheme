@@ -9,7 +9,7 @@
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
-NLS="no"
+NLS="yes"
 SASL="yes"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
