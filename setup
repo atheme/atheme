@@ -101,9 +101,9 @@ esac
 echo ""
 
 ok=0
-echo "Would you like to enable support for internationalization of"
-echo "the messages used by Services? This will require gettext to be"
-echo "installed, including development packages."
+echo "Would you like to disable support for internationalization of"
+echo "the messages used by Services? Internationalization support"
+echo "will require gettext to be installed, including development packages."
 while [ $ok -eq 0 ] ; do
   echo -n "[$NLS] "
   if read INPUT ; then : ; else echo "" ; exit 1 ; fi
@@ -118,13 +118,13 @@ NLS=$INPUT
 
 case "$NLS" in
   [Yy])
-    ARGS="$ARGS --enable-nls"
+    ARGS="$ARGS --disable-nls"
     ;;
   Yes)
-    ARGS="$ARGS --enable-nls"
+    ARGS="$ARGS --disable-nls"
     ;;
   yes)
-    ARGS="$ARGS --enable-nls"
+    ARGS="$ARGS --disable-nls"
     ;;
 esac
 
