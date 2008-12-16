@@ -12,9 +12,6 @@
 /* option: enable hosts with slashes ('/') */
 /* #define HOSTSLASH */
 
-/* option: enable prefixaq (~&) */
-/* #define PREFIXAQ */
-
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
@@ -26,7 +23,7 @@ DECLARE_MODULE_V1("protocol/shadowircd", true, _modinit, NULL, "$Id$", "ShadowIR
 /* *INDENT-OFF* */
 
 ircd_t ShadowIRCd = {
-        "ShadowIRCd 6+",		/* IRCd name */
+        "ShadowIRCd 5+",		/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
         true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
@@ -36,18 +33,10 @@ ircd_t ShadowIRCd = {
 	false,				/* Whether or not we use P10 */
 	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-#ifdef PREFIXAQ
-        CSTATUS_OWNER,                  /* Integer flag for owner channel flag. */
-#else
-	CSTATUS_PROTECT,                /* Integer flag for owner channel flag. */
-#endif
-        CSTATUS_PROTECT,                /* Integer flag for protect channel flag. */
-        CSTATUS_HALFOP,                 /* Integer flag for halfops. */
-#ifdef PREFIXAQ
-        "+q",                           /* Mode we set for owner. */
-#else
-	"+a",                           /* Mode we set for owner. */
-#endif
+        CSTATUS_PROTECT,                  /* Integer flag for owner channel flag. */
+        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
+        "+a",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_SHADOWIRCD,		/* Protocol type */
@@ -92,9 +81,6 @@ struct cmode_ shadowircd_mode_list[] = {
 };
 
 struct cmode_ shadowircd_status_mode_list[] = {
-#ifdef PREFIXAQ
-  { 'q', CSTATUS_OWNER },
-#endif
   { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP    },
   { 'h', CSTATUS_HALFOP },
@@ -103,12 +89,7 @@ struct cmode_ shadowircd_status_mode_list[] = {
 };
 
 struct cmode_ shadowircd_prefix_mode_list[] = {
-#ifdef PREFIXAQ
-  { '~', CSTATUS_OWNER },
-  { '&', CSTATUS_PROTECT },
-#else
   { '!', CSTATUS_PROTECT },
-#endif
   { '@', CSTATUS_OP    },
   { '%', CSTATUS_HALFOP },
   { '+', CSTATUS_VOICE },
