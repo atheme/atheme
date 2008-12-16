@@ -19,8 +19,11 @@ dist/atheme.conf.userserv-example
 dist/atheme.conf.operserv-example
 include/serno.h
 include/sysconf.h
+libmowgli/buildsys.mk
+libmowgli/extra.mk
 libmowgli/libmowgli.pc
 libmowgli/mk/rules.mk
+libmowgli/src/libmowgli/.deps
 libmowgli/src/examples/patriciatest/patriciatest
 libmowgli/src/libmowgli/mowgli_config.h
 modules/Makefile.common
