@@ -25,8 +25,6 @@ struct _configentry
 	char *ce_varname;
 	char *ce_vardata;
 	int ce_vardatanum;
-	int ce_fileposstart;
-	int ce_fileposend;
 
 	int ce_sectlinenum;
 	config_entry_t *ce_entries;

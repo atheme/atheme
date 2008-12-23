@@ -118,7 +118,6 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 			  }
 			  *lastce = curce;
 			  lastce = &(curce->ce_next);
-			  curce->ce_fileposend = (ptr - confdata);
 			  curce = NULL;
 			  break;
 		  case '{':
@@ -151,7 +150,6 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  continue;
 			  }
 			  curce = cursection;
-			  cursection->ce_fileposend = (ptr - confdata);
 			  cursection = cursection->ce_prevlevel;
 			  if (!cursection)
 				  lastce = &(curcf->cf_entries);
@@ -242,7 +240,6 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  curce->ce_varlinenum = linenumber;
 				  curce->ce_fileptr = curcf;
 				  curce->ce_prevlevel = cursection;
-				  curce->ce_fileposstart = (start - confdata);
 			  }
 			  break;
 		  case '\n':
@@ -306,7 +303,6 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  curce->ce_varlinenum = linenumber;
 				  curce->ce_fileptr = curcf;
 				  curce->ce_prevlevel = cursection;
-				  curce->ce_fileposstart = (start - confdata);
 			  }
 			  if ((*ptr == ';') || (*ptr == '\n'))
 				  ptr--;
