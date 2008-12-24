@@ -43,11 +43,13 @@
 
 #define MAX_INCLUDE_NESTING 16
 
-static void config_error(const char *format, ...);
 static config_file_t *config_parse(const char *filename, char *confdata);
 static void config_entry_free(config_entry_t *ceptr);
+static config_file_t *config_load_internal(config_file_t *parent, const char *filename);
 
-static void config_error(const char *format, ...)
+#define CF_ERRORED(cf) ((cf)->cf_curline <= 0)
+
+static void config_error(config_file_t *cf, const char *format, ...)
 {
 	va_list ap;
 	char buffer[1024];
@@ -58,288 +60,272 @@ static void config_error(const char *format, ...)
 	va_end(ap);
 	if ((ptr = strchr(buffer, '\n')) != NULL)
 		*ptr = '\0';
-	slog(LG_ERROR, "config_parse(): %s", buffer);
+	if (cf != NULL)
+	{
+		if (cf->cf_curline < 0)
+			cf->cf_curline = -cf->cf_curline;
+		slog(LG_ERROR, "config_parse(): %s:%d: %s",
+				cf->cf_filename, cf->cf_curline, buffer);
+		/* mark config parse as failed */
+		cf->cf_curline = -cf->cf_curline;
+	}
+	else
+		slog(LG_ERROR, "config_parse(): %s",
+				buffer);
+}
+
+static void skip_ws(char ** restrict pos, config_file_t * restrict cf)
+{
+	int startline;
+
+	for (;;)
+	{
+		switch (**pos)
+		{
+			case ' ':
+			case '\t':
+			case '\r':
+			case '=': /* XXX */
+				break;
+			case '\n':
+				cf->cf_curline++;
+				break;
+			case '/':
+				if ((*pos)[1] == '*')
+				{
+					startline = cf->cf_curline;
+					(*pos)++;
+					(*pos)++;
+					while (**pos != '\0' && (**pos != '*' || (*pos)[1] != '/'))
+					{
+						if (**pos == '\n')
+							cf->cf_curline++;
+						(*pos)++;
+					}
+					if (**pos == '\0')
+						config_error(cf, "File ends inside comment starting at line %d", startline);
+					else
+						(*pos)++; /* skip '*' */
+				}
+				else if ((*pos)[1] == '/')
+				{
+					while (**pos != '\0' && **pos != '\n' && **pos != '\r')
+						(*pos)++;
+					continue;
+				}
+				else
+					return;
+				break;
+			case '#':
+				while (**pos != '\0' && **pos != '\n' && **pos != '\r')
+					(*pos)++;
+				continue;
+			default:
+				return;
+		}
+		if (**pos == '\0')
+			return;
+		(*pos)++;
+	}
+}
+
+static char *get_value(char **pos, config_file_t *cf, char * restrict skipped)
+{
+	char *p = *pos;
+	char *q;
+	char *start;
+
+	*skipped = '\0';
+	if (*p == '"')
+	{
+		p++;
+		start = p;
+		q = p;
+		while (*p != '\0' && *p != '\r' && *p != '\n' && *p != '"')
+		{
+			if (*p == '\\' && (p[1] == '"' || p[1] == '\\'))
+				p++;
+			*q++ = *p++;
+		}
+		if (*p == '\0')
+		{
+			config_error(cf, "File ends inside quoted string");
+			return NULL;
+		}
+		if (*p == '\r' || *p == '\n')
+		{
+			config_error(cf, "Newline inside quoted string");
+			return NULL;
+		}
+		if (*p != '"')
+		{
+			config_error(cf, "Weird character terminating quoted string (BUG)");
+			return NULL;
+		}
+		p++;
+		*q = '\0';
+		*pos = p;
+		skip_ws(pos, cf);
+		return start;
+	}
+	else
+	{
+		start = p;
+		while (*p != '\0' && *p != '\t' && *p != '\r' && *p != '\n' &&
+				*p != ' ' && *p != '/' && *p != '#' &&
+				*p != ';')
+			p++;
+		if (p == start)
+			return NULL;
+		*pos = p;
+		skip_ws(pos, cf);
+		if (p == *pos)
+			*skipped = *p;
+		*p = '\0';
+		if (p == *pos)
+			(*pos)++;
+		return start;
+	}
 }
 
 static config_file_t *config_parse(const char *filename, char *confdata)
 {
-	char *ptr;
-	char *start;
-	int linenumber = 1;
-	config_entry_t *curce;
-	config_entry_t **lastce;
-	config_entry_t *cursection;
+	config_file_t *cf, *subcf, *lastcf;
+	config_entry_t **pprevce, *ce, *upce;
+	char *p, *val;
+	char c;
 
-	config_file_t *curcf;
-	config_file_t *lastcf;
-
-	lastcf = curcf = (config_file_t *)smalloc(sizeof(config_file_t));
-	memset(curcf, 0, sizeof(config_file_t));
-	curcf->cf_filename = sstrdup(filename);
-	lastce = &(curcf->cf_entries);
-	curce = NULL;
-	cursection = NULL;
-
-	for (ptr = confdata; *ptr; ptr++)
+	cf = smalloc(sizeof *cf);
+	cf->cf_filename = sstrdup(filename);
+	cf->cf_curline = 1;
+	cf->cf_mem = confdata;
+	lastcf = cf;
+	pprevce = &cf->cf_entries;
+	upce = NULL;
+	p = confdata;
+	while (*p != '\0')
 	{
-		switch (*ptr)
+		skip_ws(&p, cf);
+		if (*p == '\0' || CF_ERRORED(cf))
+			break;
+		if (*p == '}')
 		{
-		  case '#':
-			  while (*++ptr && (*ptr != '\n'))
-				  ;
-			  if (!*ptr)
-			  {
-				  /* make for(;;) exit from the loop */
-				  ptr--;
-				  continue;
-			  }
-			  linenumber++;
-			  break;
-		  case ';':
-			  if (!curce)
-			  {
-				  config_error("%s:%i: Ignoring extra semicolon\n", filename, linenumber);
-				  break;
-			  }
-			  if (!cursection && !strcmp(curce->ce_varname, "include"))
-			  {
-				  config_file_t *cfptr;
-
-				  if (!curce->ce_vardata)
-				  {
-					  config_error("%s:%i: Ignoring \"include\": No filename given\n", filename, linenumber);
-					  config_entry_free(curce);
-					  curce = NULL;
-					  continue;
-				  }
-				  if (strlen(curce->ce_vardata) > 255)
-					  curce->ce_vardata[255] = '\0';
-				  cfptr = config_load(curce->ce_vardata);
-				  if (cfptr)
-				  {
-					  lastcf->cf_next = cfptr;
-					  lastcf = cfptr;
-					  while (lastcf->cf_next)
-						  lastcf = lastcf->cf_next;
-				  }
-				  else
-				  {
-					  config_error("%s:%i: ... included from here\n", filename, linenumber);
-					  config_entry_free(curce);
-					  config_free(curcf);
-					  return NULL;
-				  }
-				  config_entry_free(curce);
-				  curce = NULL;
-				  continue;
-			  }
-			  *lastce = curce;
-			  lastce = &(curce->ce_next);
-			  curce = NULL;
-			  break;
-		  case '{':
-			  if (!curce)
-			  {
-				  config_error("%s:%i: No name for section start\n", filename, linenumber);
-				  continue;
-			  }
-			  else if (curce->ce_entries)
-			  {
-				  config_error("%s:%i: Ignoring extra section start\n", filename, linenumber);
-				  continue;
-			  }
-			  curce->ce_sectlinenum = linenumber;
-			  lastce = &(curce->ce_entries);
-			  cursection = curce;
-			  curce = NULL;
-			  break;
-		  case '}':
-			  if (curce)
-			  {
-				  config_error("%s:%i: Missing semicolon before close brace\n", filename, linenumber);
-				  config_entry_free(curce);
-				  config_free(curcf);
-				  return NULL;
-			  }
-			  else if (!cursection)
-			  {
-				  config_error("%s:%i: Ignoring extra close brace\n", filename, linenumber);
-				  continue;
-			  }
-			  curce = cursection;
-			  cursection = cursection->ce_prevlevel;
-			  if (!cursection)
-				  lastce = &(curcf->cf_entries);
-			  else
-				  lastce = &(cursection->ce_entries);
-			  for (; *lastce; lastce = &((*lastce)->ce_next))
-				  continue;
-			  break;
-		  case '/':
-			  if (*(ptr + 1) == '/')
-			  {
-				  ptr += 2;
-				  while (*ptr && (*ptr != '\n'))
-					  ptr++;
-				  if (!*ptr)
-					  break;
-				  ptr--;	/* grab the \n on next loop thru */
-				  continue;
-			  }
-			  else if (*(ptr + 1) == '*')
-			  {
-				  int commentstart = linenumber;
-
-				  for (ptr += 2; *ptr; ptr++)
-				  {
-					  if ((*ptr == '*') && (*(ptr + 1) == '/'))
-					  {
-						  ptr++;
-						  break;
-					  }
-					  else if (*ptr == '\n')
-						  linenumber++;
-				  }
-				  if (!*ptr)
-				  {
-					  config_error("%s:%i: Comment on this line does not end\n", filename, commentstart);
-					  config_entry_free(curce);
-					  config_free(curcf);
-					  return NULL;
-				  }
-			  }
-			  break;
-		  case '\"':
-			  start = ++ptr;
-			  for (; *ptr; ptr++)
-			  {
-				  if (*ptr == '\\' && (ptr[1] == '\"' || ptr[1] == '\\'))
-				  {
-					  char *tptr = ptr;
-					  while ((*tptr = *(tptr + 1)))
-						  tptr++;
-				  }
-				  else if ((*ptr == '\"') || (*ptr == '\n'))
-					  break;
-			  }
-			  if (!*ptr || (*ptr == '\n'))
-			  {
-				  config_error("%s:%i: Unterminated quote found\n", filename, linenumber);
-				  config_entry_free(curce);
-				  config_free(curcf);
-				  return NULL;
-			  }
-			  if (curce)
-			  {
-				  if (curce->ce_vardata)
-				  {
-					  config_error("%s:%i: Ignoring extra data\n", filename, linenumber);
-				  }
-				  else
-				  {
-					  char *eptr;
-
-					  curce->ce_vardata = (char *)smalloc(ptr - start + 1);
-					  strlcpy(curce->ce_vardata, start, ptr - start + 1);
-					  curce->ce_vardatanum = strtol(curce->ce_vardata, &eptr, 0) & 0xffffffff;	/* we only want 32bits and long is 64bit on 64bit compiles */
-					  if (eptr != (curce->ce_vardata + (ptr - start)))
-					  {
-						  curce->ce_vardatanum = 0;
-					  }
-				  }
-			  }
-			  else
-			  {
-				  curce = (config_entry_t *)smalloc(sizeof(config_entry_t));
-				  memset(curce, 0, sizeof(config_entry_t));
-				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
-				  strlcpy(curce->ce_varname, start, ptr - start + 1);
-				  curce->ce_varlinenum = linenumber;
-				  curce->ce_fileptr = curcf;
-				  curce->ce_prevlevel = cursection;
-			  }
-			  break;
-		  case '\n':
-			  linenumber++;
-			  break;
-		  case '\t':
-		  case ' ':
-		  case '=':
-		  case '\r':
-			  break;
-		  default:
-			  if ((*ptr == '*') && (*(ptr + 1) == '/'))
-			  {
-				  config_error("%s:%i: Ignoring extra end comment\n", filename, linenumber);
-				  ptr++;
-				  break;
-			  }
-			  start = ptr;
-			  for (; *ptr; ptr++)
-			  {
-				  if ((*ptr == ' ') || (*ptr == '\t') || (*ptr == '\n') || (*ptr == ';'))
-					  break;
-			  }
-			  if (!*ptr)
-			  {
-				  if (curce)
-					  config_error("%s: Unexpected EOF for variable starting at %i\n", filename, curce->ce_varlinenum);
-				  else if (cursection)
-					  config_error("%s: Unexpected EOF for section starting at %i\n", filename, cursection->ce_sectlinenum);
-				  else
-					  config_error("%s: Unexpected EOF.\n", filename);
-				  config_entry_free(curce);
-				  config_free(curcf);
-				  return NULL;
-			  }
-			  if (curce)
-			  {
-				  if (curce->ce_vardata)
-				  {
-					  config_error("%s:%i: Ignoring extra data\n", filename, linenumber);
-				  }
-				  else
-				  {
-					  char *eptr;
-
-					  curce->ce_vardata = (char *)smalloc(ptr - start + 1);
-					  strlcpy(curce->ce_vardata, start, ptr - start + 1);
-					  curce->ce_vardatanum = strtol(curce->ce_vardata, &eptr, 0) & 0xffffffff;	/* we only want 32bits and long is 64bit on 64bit compiles */
-					  if (eptr != (curce->ce_vardata + (ptr - start)))
-					  {
-						  curce->ce_vardatanum = 0;
-					  }
-				  }
-			  }
-			  else
-			  {
-				  curce = (config_entry_t *)smalloc(sizeof(config_entry_t));
-				  memset(curce, 0, sizeof(config_entry_t));
-				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
-				  strlcpy(curce->ce_varname, start, ptr - start + 1);
-				  curce->ce_varlinenum = linenumber;
-				  curce->ce_fileptr = curcf;
-				  curce->ce_prevlevel = cursection;
-			  }
-			  if ((*ptr == ';') || (*ptr == '\n'))
-				  ptr--;
-			  break;
-		}		/* switch */
-	}			/* for */
-	if (curce)
-	{
-		config_error("%s: Unexpected EOF for variable starting on line %i\n", filename, curce->ce_varlinenum);
-		config_entry_free(curce);
-		config_free(curcf);
-		return NULL;
+			if (upce == NULL)
+			{
+				config_error(cf, "Extraneous closing brace");
+				break;
+			}
+			ce = upce;
+			ce->ce_sectlinenum = cf->cf_curline;
+			pprevce = &ce->ce_next;
+			upce = ce->ce_prevlevel;
+			p++;
+			skip_ws(&p, cf);
+			if (CF_ERRORED(cf))
+				break;
+			if (*p != ';')
+			{
+				config_error(cf, "Missing semicolon after closing brace for section ending at line %d", ce->ce_sectlinenum);
+				break;
+			}
+			ce = NULL;
+			p++;
+			continue;
+		}
+		val = get_value(&p, cf, &c);
+		if (CF_ERRORED(cf))
+			break;
+		if (val == NULL)
+		{
+			config_error(cf, "Unexpected character trying to read variable name");
+			break;
+		}
+		ce = smalloc(sizeof *ce);
+		ce->ce_fileptr = cf;
+		ce->ce_varlinenum = cf->cf_curline;
+		ce->ce_varname = val;
+		ce->ce_prevlevel = upce;
+		*pprevce = ce;
+		pprevce = &ce->ce_next;
+		if (c == '\0' && (*p == '{' || *p == ';'))
+			c = *p++;
+		if (c == '{')
+		{
+			pprevce = &ce->ce_entries;
+			upce = ce;
+			ce = NULL;
+		}
+		else if (c == ';')
+		{
+			ce = NULL;
+		}
+		else if (c != '\0')
+		{
+			config_error(cf, "Unexpected characters after unquoted string %s", ce->ce_varname);
+			break;
+		}
+		else
+		{
+			val = get_value(&p, cf, &c);
+			if (CF_ERRORED(cf))
+				break;
+			if (val == NULL)
+			{
+				config_error(cf, "Unexpected character trying to read value for %s", ce->ce_varname);
+				break;
+			}
+			ce->ce_vardata = val;
+			ce->ce_vardatanum = strtol(val, NULL, 10);
+			if (c == '\0' && (*p == '{' || *p == ';'))
+				c = *p++;
+			if (c == '{')
+			{
+				pprevce = &ce->ce_entries;
+				upce = ce;
+				ce = NULL;
+			}
+			else if (c == ';')
+			{
+				if (upce == NULL && !strcasecmp(ce->ce_varname, "include"))
+				{
+					subcf = config_load_internal(cf, ce->ce_vardata);
+					if (subcf == NULL)
+					{
+						config_error(cf, "Error in file included from here");
+						break;
+					}
+					lastcf->cf_next = subcf;
+					while (lastcf->cf_next != NULL)
+						lastcf = lastcf->cf_next;
+				}
+				ce = NULL;
+			}
+			else
+			{
+				config_error(cf, "Unexpected characters after value %s %s", ce->ce_varname, ce->ce_vardata);
+				break;
+			}
+		}
 	}
-	else if (cursection)
+	if (!CF_ERRORED(cf) && upce != NULL)
 	{
-		config_error("%s: Unexpected EOF for section starting on line %i\n", filename, cursection->ce_sectlinenum);
-		config_free(curcf);
-		return NULL;
+		config_error(cf, "One or more sections not closed");
+		ce = upce;
+		while (ce->ce_prevlevel != NULL)
+			ce = ce->ce_prevlevel;
+		if (ce->ce_vardata != NULL)
+			config_error(cf, "First unclosed section is %s %s at line %d",
+					ce->ce_varname, ce->ce_vardata, ce->ce_varlinenum);
+		else
+			config_error(cf, "First unclosed section is %s at line %d",
+					ce->ce_varname, ce->ce_varlinenum);
 	}
-	return curcf;
+	if (CF_ERRORED(cf))
+	{
+		config_free(cf);
+		cf = NULL;
+	}
+	return cf;
 }
 
 static void config_entry_free(config_entry_t *ceptr)
@@ -351,10 +337,12 @@ static void config_entry_free(config_entry_t *ceptr)
 		nptr = ceptr->ce_next;
 		if (ceptr->ce_entries)
 			config_entry_free(ceptr->ce_entries);
+#if 0 /* now inside cf->cf_mem */
 		if (ceptr->ce_varname)
 			free(ceptr->ce_varname);
 		if (ceptr->ce_vardata)
 			free(ceptr->ce_vardata);
+#endif
 		free(ceptr);
 	}
 }
@@ -370,11 +358,13 @@ void config_free(config_file_t *cfptr)
 			config_entry_free(cfptr->cf_entries);
 		if (cfptr->cf_filename)
 			free(cfptr->cf_filename);
+		if (cfptr->cf_mem)
+			free(cfptr->cf_mem);
 		free(cfptr);
 	}
 }
 
-config_file_t *config_load(const char *filename)
+static config_file_t *config_load_internal(config_file_t *parent, const char *filename)
 {
 	struct stat sb;
 	FILE *fp;
@@ -385,25 +375,25 @@ config_file_t *config_load(const char *filename)
 
 	if (nestcnt > MAX_INCLUDE_NESTING)
 	{
-		config_error("Includes nested too deep \"%s\"\n", filename);
+		config_error(parent, "Includes nested too deep \"%s\"\n", filename);
 		return NULL;
 	}
 
 	fp = fopen(filename, "rb");
 	if (!fp)
 	{
-		config_error("Couldn't open \"%s\": %s\n", filename, strerror(errno));
+		config_error(parent, "Couldn't open \"%s\": %s\n", filename, strerror(errno));
 		return NULL;
 	}
 	if (stat(filename, &sb) == -1)
 	{
-		config_error("Couldn't fstat \"%s\": %s\n", filename, strerror(errno));
+		config_error(parent, "Couldn't fstat \"%s\": %s\n", filename, strerror(errno));
 		fclose(fp);
 		return NULL;
 	}
 	if (!S_ISREG(sb.st_mode))
 	{
-		config_error("Not a regular file: \"%s\"\n", filename);
+		config_error(parent, "Not a regular file: \"%s\"\n", filename);
 		fclose(fp);
 		return NULL;
 	}
@@ -414,7 +404,7 @@ config_file_t *config_load(const char *filename)
 		ret = fread(buf, 1, sb.st_size, fp);
 		if (ret != sb.st_size)
 		{
-			config_error("Error reading \"%s\": %s\n", filename, strerror(errno ? errno : EFAULT));
+			config_error(parent, "Error reading \"%s\": %s\n", filename, strerror(errno ? errno : EFAULT));
 			free(buf);
 			fclose(fp);
 			return NULL;
@@ -427,8 +417,13 @@ config_file_t *config_load(const char *filename)
 	nestcnt++;
 	cfptr = config_parse(filename, buf);
 	nestcnt--;
-	free(buf);
+	/* buf is owned by cfptr or freed now */
 	return cfptr;
+}
+
+config_file_t *config_load(const char *filename)
+{
+	return config_load_internal(NULL, filename);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

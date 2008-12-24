@@ -15,6 +15,8 @@ struct _configfile
 	char *cf_filename;
 	config_entry_t *cf_entries;
 	config_file_t *cf_next;
+	int cf_curline;
+	char *cf_mem;
 };
 
 struct _configentry
