@@ -27,13 +27,28 @@
 #include "privs.h"
 #include "datastream.h"
 
+enum conftype
+{
+	CONF_HANDLER,
+	CONF_UINT,
+	CONF_DUPSTR
+};
+
 struct ConfTable
 {
 	char *name;
-	int rehashable;
-	int (*handler) (config_entry_t *);
-	char *str_val;
-	int *int_val;
+	enum conftype type;
+	union
+	{
+		int (*handler) (config_entry_t *);
+		char **dupstr_val;
+		struct
+		{
+			unsigned int *var;
+			unsigned int min;
+			unsigned int max;
+		} uint_val;
+	} un;
 };
 
 static inline int
@@ -194,6 +209,58 @@ static void conf_report_error(config_entry_t *ce, const char *fmt, ...)
 	slog(LG_INFO, "%s:%d: configuration error - %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
 }
 
+static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
+{
+	unsigned long v;
+	char *end;
+
+	switch (ct->type)
+	{
+		case CONF_HANDLER:
+			ct->un.handler(ce);
+			break;
+		case CONF_UINT:
+			if (ce->ce_vardata == NULL)
+			{
+				PARAM_ERROR(ce);
+				return;
+			}
+			errno = 0;
+			v = strtoul(ce->ce_vardata, &end, 10);
+			if (errno != 0 || *end != '\0' || end == ce->ce_vardata)
+			{
+				slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
+						ce->ce_fileptr->cf_filename,
+						ce->ce_varlinenum,
+						ce->ce_vardata,
+						ce->ce_varname);
+				return;
+			}
+			if (v > ct->un.uint_val.max || v < ct->un.uint_val.min)
+			{
+				slog(LG_INFO, "%s:%i: value %lu is out of range [%u,%u] for configuration option: %s",
+						ce->ce_fileptr->cf_filename,
+						ce->ce_varlinenum,
+						v,
+						ct->un.uint_val.min,
+						ct->un.uint_val.max,
+						ce->ce_varname);
+				return;
+			}
+			*ct->un.uint_val.var = v;
+			break;
+		case CONF_DUPSTR:
+			if (ce->ce_vardata == NULL)
+			{
+				PARAM_ERROR(ce);
+				return;
+			}
+			free(*ct->un.dupstr_val);
+			*ct->un.dupstr_val = sstrdup(ce->ce_vardata);
+			break;
+	}
+}
+
 static void conf_process(config_file_t *cfp)
 {
 	config_file_t *cfptr;
@@ -211,7 +278,7 @@ static void conf_process(config_file_t *cfp)
 
 				if (!strcasecmp(ct->name, ce->ce_varname))
 				{
-					ct->handler(ce);
+					process_configentry(ct, ce);
 					break;
 				}
 			}
@@ -324,7 +391,7 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 
 			if (!strcasecmp(ct->name, ce->ce_varname))
 			{
-				ct->handler(ce);
+				process_configentry(ct, ce);
 				break;
 			}
 		}
@@ -380,8 +447,8 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	ct = BlockHeapAlloc(conftable_heap);
 
 	ct->name = sstrdup(name);
-	ct->rehashable = 1;
-	ct->handler = handler;
+	ct->type = CONF_HANDLER;
+	ct->un.handler = handler;
 
 	node_add(ct, node_create(), &confblocks);
 }
@@ -399,8 +466,48 @@ void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_en
 	ct = BlockHeapAlloc(conftable_heap);
 
 	ct->name = sstrdup(name);
-	ct->rehashable = 1;
-	ct->handler = handler;
+	ct->type = CONF_HANDLER;
+	ct->un.handler = handler;
+
+	node_add(ct, node_create(), conflist);
+}
+
+void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max)
+{
+	struct ConfTable *ct;
+
+	if ((ct = find_conf_item(name, conflist)))
+	{
+		slog(LG_DEBUG, "add_uint_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	ct = BlockHeapAlloc(conftable_heap);
+
+	ct->name = sstrdup(name);
+	ct->type = CONF_UINT;
+	ct->un.uint_val.var = var;
+	ct->un.uint_val.min = min;
+	ct->un.uint_val.max = max;
+
+	node_add(ct, node_create(), conflist);
+}
+
+void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
+{
+	struct ConfTable *ct;
+
+	if ((ct = find_conf_item(name, conflist)))
+	{
+		slog(LG_DEBUG, "add_dupstr_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	ct = BlockHeapAlloc(conftable_heap);
+
+	ct->name = sstrdup(name);
+	ct->type = CONF_DUPSTR;
+	ct->un.dupstr_val = var;
 
 	node_add(ct, node_create(), conflist);
 }
@@ -445,7 +552,7 @@ void del_conf_item(const char *name, list_t *conflist)
 
 conf_handler_t conftable_get_conf_handler(struct ConfTable *ct)
 {
-	return ct->handler;
+	return ct->type == CONF_HANDLER ? ct->un.handler : NULL;
 }
 
 /* stolen from Sentinel */
