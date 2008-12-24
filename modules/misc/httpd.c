@@ -29,38 +29,8 @@ struct httpd_configuration
 {
 	char *host;
 	char *www_root;
-	int port;
+	unsigned int port;
 } httpd_config;
-
-static int conf_httpd_host(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	httpd_config.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_httpd_www_root(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	httpd_config.www_root = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_httpd_port(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	httpd_config.port = ce->ce_vardatanum;
-
-	return 0;
-}
 
 static int conf_httpd(config_entry_t *ce)
 {
@@ -443,9 +413,9 @@ void _modinit(module_t *m)
 	hook_add_hook("config_ready", httpd_config_ready);
 
 	add_top_conf("HTTPD", conf_httpd);
-	add_conf_item("HOST", &conf_httpd_table, conf_httpd_host);
-	add_conf_item("WWW_ROOT", &conf_httpd_table, conf_httpd_www_root);
-	add_conf_item("PORT", &conf_httpd_table, conf_httpd_port);
+	add_dupstr_conf_item("HOST", &conf_httpd_table, &httpd_config.host);
+	add_dupstr_conf_item("WWW_ROOT", &conf_httpd_table, &httpd_config.www_root);
+	add_uint_conf_item("PORT", &conf_httpd_table, &httpd_config.port, 1, 65535);
 }
 
 void _moddeinit(void)
