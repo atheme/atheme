@@ -14,14 +14,7 @@ struct Token
 	int value;
 };
 
-struct ConfTable
-{
-	char *name;
-	int rehashable;
-	int (*handler) (config_entry_t *);
-	char *str_val;
-	int *int_val;
-};
+struct ConfTable;
 
 /* conf.c */
 E bool conf_parse(const char *);
@@ -37,6 +30,9 @@ E void add_conf_item(const char *name, list_t *conflist, int (*handler)(config_e
 E void del_top_conf(const char *name);
 E void del_conf_item(const char *name, list_t *conflist);
 E int subblock_handler(config_entry_t *ce, list_t *entries);
+/* sort of a hack for servtree.c */
+typedef int (*conf_handler_t)(config_entry_t *);
+E conf_handler_t conftable_get_conf_handler(struct ConfTable *ct);
 
 E int token_to_value(struct Token token_table[], const char *token);
 /* special return values for token_to_value */

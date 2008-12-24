@@ -27,6 +27,15 @@
 #include "privs.h"
 #include "datastream.h"
 
+struct ConfTable
+{
+	char *name;
+	int rehashable;
+	int (*handler) (config_entry_t *);
+	char *str_val;
+	int *int_val;
+};
+
 static inline int
 PARAM_ERROR(config_entry_t *ce)
 {
@@ -432,6 +441,11 @@ void del_conf_item(const char *name, list_t *conflist)
 	free(ct->name);
 
 	BlockHeapFree(conftable_heap, ct);
+}
+
+conf_handler_t conftable_get_conf_handler(struct ConfTable *ct)
+{
+	return ct->handler;
 }
 
 /* stolen from Sentinel */

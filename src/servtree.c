@@ -233,7 +233,7 @@ void service_delete(service_t *sptr)
 	del_conf_item("USER", sptr->conf_table);
 	del_conf_item("NICK", sptr->conf_table);
 	subblock = find_top_conf(sptr->internal_name);
-	if (subblock != NULL && subblock->handler == conf_service)
+	if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
 		del_top_conf(sptr->internal_name);
 
 	quit_sts(sptr->me, "Service unloaded.");
