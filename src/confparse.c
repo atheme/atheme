@@ -20,6 +20,23 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Description of config files parsed by this:
+ *
+ * configfile   = *WS *configentry
+ * configentry  = value [1*WS value] [1*WS "{" *(configentry 1*WS) "}" ] *WS ";"
+ * value        = 1*achar / DQUOTE *qchar DQUOTE
+ * achar        = <any CHAR except WS or DQUOTE>
+ * qchar        = <any CHAR except DQUOTE or \> / "\\" / "\" DQUOTE
+ * comment      = "/" "*" <anything except * /> "*" "/" /
+ *                "#" *CHAR %0x0A
+ * WS           = %x09 / %x0A / %x0D / SPACE / "=" / comment
+ *
+ * A value of "include" for toplevel configentries causes a file to be
+ * included. The included file is logically appended to the current file,
+ * no matter where the include directive is. Include files must have balanced
+ * braces.
+ */
 
 #include "atheme.h"
 #include <sys/stat.h>
