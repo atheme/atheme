@@ -38,6 +38,10 @@
  * no matter where the include directive is. Include files must have balanced
  * braces.
  */
+/*
+ * Original idea from the csircd config parser written by Fred Jacobs
+ * and Chris Behrens.
+ */
 
 #include "atheme.h"
 #include <sys/stat.h>
