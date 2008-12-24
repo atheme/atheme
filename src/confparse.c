@@ -342,12 +342,7 @@ static void config_entry_free(config_entry_t *ceptr)
 		nptr = ceptr->ce_next;
 		if (ceptr->ce_entries)
 			config_entry_free(ceptr->ce_entries);
-#if 0 /* now inside cf->cf_mem */
-		if (ceptr->ce_varname)
-			free(ceptr->ce_varname);
-		if (ceptr->ce_vardata)
-			free(ceptr->ce_vardata);
-#endif
+		/* ce_varname and ce_vardata are inside cf_mem */
 		free(ceptr);
 	}
 }
@@ -361,10 +356,8 @@ void config_free(config_file_t *cfptr)
 		nptr = cfptr->cf_next;
 		if (cfptr->cf_entries)
 			config_entry_free(cfptr->cf_entries);
-		if (cfptr->cf_filename)
-			free(cfptr->cf_filename);
-		if (cfptr->cf_mem)
-			free(cfptr->cf_mem);
+		free(cfptr->cf_filename);
+		free(cfptr->cf_mem);
 		free(cfptr);
 	}
 }
