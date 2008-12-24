@@ -377,8 +377,8 @@ void config_free(config_file_t *cfptr)
 config_file_t *config_load(const char *filename)
 {
 	struct stat sb;
-	FILE *fd;
-	int ret;
+	FILE *fp;
+	size_t ret;
 	char *buf = NULL;
 	config_file_t *cfptr;
 	static int nestcnt;
@@ -389,8 +389,8 @@ config_file_t *config_load(const char *filename)
 		return NULL;
 	}
 
-	fd = fopen(filename, "rb");
-	if (!fd)
+	fp = fopen(filename, "rb");
+	if (!fp)
 	{
 		config_error("Couldn't open \"%s\": %s\n", filename, strerror(errno));
 		return NULL;
@@ -398,31 +398,32 @@ config_file_t *config_load(const char *filename)
 	if (stat(filename, &sb) == -1)
 	{
 		config_error("Couldn't fstat \"%s\": %s\n", filename, strerror(errno));
-		fclose(fd);
+		fclose(fp);
 		return NULL;
 	}
 	if (!S_ISREG(sb.st_mode))
 	{
 		config_error("Not a regular file: \"%s\"\n", filename);
-		fclose(fd);
+		fclose(fp);
 		return NULL;
 	}
 	buf = (char *)smalloc(sb.st_size + 1);
 	if (sb.st_size)
 	{
-		ret = fread(buf, 1, sb.st_size, fd);
+		errno = 0;
+		ret = fread(buf, 1, sb.st_size, fp);
 		if (ret != sb.st_size)
 		{
-			config_error("Error reading \"%s\": %s\n", filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
+			config_error("Error reading \"%s\": %s\n", filename, strerror(errno ? errno : EFAULT));
 			free(buf);
-			fclose(fd);
+			fclose(fp);
 			return NULL;
 		}
 	}
 	else
 		ret = 0;
 	buf[ret] = '\0';
-	fclose(fd);
+	fclose(fp);
 	nestcnt++;
 	cfptr = config_parse(filename, buf);
 	nestcnt--;
