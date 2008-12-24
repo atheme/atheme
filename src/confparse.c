@@ -69,7 +69,7 @@ static void config_error(config_file_t *cf, const char *format, ...)
 	{
 		if (cf->cf_curline < 0)
 			cf->cf_curline = -cf->cf_curline;
-		slog(LG_ERROR, "config_parse(): %s:%d: %s",
+		slog(LG_ERROR, "%s:%d: %s",
 				cf->cf_filename, cf->cf_curline, buffer);
 		/* mark config parse as failed */
 		cf->cf_curline = -cf->cf_curline;
