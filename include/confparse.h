@@ -37,7 +37,6 @@ struct _configentry
 /* confp.c */
 E void config_free(config_file_t *cfptr);
 E config_file_t *config_load(const char *filename);
-E config_entry_t *config_find(config_entry_t *ceptr, const char *name);
 
 #endif
 
