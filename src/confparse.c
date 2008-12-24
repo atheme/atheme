@@ -29,7 +29,8 @@
  * achar        = <any CHAR except WS or DQUOTE>
  * qchar        = <any CHAR except DQUOTE or \> / "\\" / "\" DQUOTE
  * comment      = "/" "*" <anything except * /> "*" "/" /
- *                "#" *CHAR %0x0A
+ *                "#" *CHAR %0x0A /
+ *                "//" *CHAR %0x0A
  * WS           = %x09 / %x0A / %x0D / SPACE / "=" / comment
  *
  * A value of "include" for toplevel configentries causes a file to be
