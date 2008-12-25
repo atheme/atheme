@@ -29,16 +29,6 @@
 #include "datastream.h"
 #include <limits.h>
 
-static inline int
-PARAM_ERROR(config_entry_t *ce)
-{
-	slog(LG_INFO, "%s:%i: no parameter for configuration option: %s",
-	     ce->ce_fileptr->cf_filename,
-	     ce->ce_varlinenum,
-	     ce->ce_varname);
-	return 1;
-}
-
 static int c_serverinfo(config_entry_t *);
 static int c_cservice(config_entry_t *);
 static int c_general(config_entry_t *);
@@ -121,23 +111,6 @@ list_t conf_ms_table;
 list_t conf_la_table;
 
 /* *INDENT-ON* */
-
-#if 0
-static void conf_report_error(config_entry_t *ce, const char *fmt, ...)
-{
-	va_list va;
-	char buf[BUFSIZE];
-
-	return_if_fail(ce != NULL);
-	return_if_fail(fmt != NULL);
-
-	va_start(va, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, va);
-	va_end(va);
-
-	slog(LG_INFO, "%s:%d: configuration error - %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
-}
-#endif
 
 bool conf_parse(const char *file)
 {
@@ -347,7 +320,10 @@ static int c_loadmodule(config_entry_t *ce)
 		return 0;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	name = ce->ce_vardata;
 
@@ -371,14 +347,17 @@ static int c_uplink(config_entry_t *ce)
 	unsigned int port = 0;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	if (me.name != NULL && !irccasecmp(ce->ce_vardata, me.name))
-		slog(LG_ERROR, "%s:%d: uplink's server name %s should not be the same as our server name, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		conf_report_warning(ce, "uplink's server name %s should not be the same as our server name, continuing anyway", ce->ce_vardata);
 	else if (!strchr(ce->ce_vardata, '.'))
-		slog(LG_ERROR, "%s:%d: uplink's server name %s is invalid, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		conf_report_warning(ce, "uplink's server name %s is invalid, continuing anyway", ce->ce_vardata);
 	else if (isdigit(ce->ce_vardata[0]))
-		slog(LG_ERROR, "%s:%d: uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		conf_report_warning(ce, "uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_vardata);
 
 	name = ce->ce_vardata;
 
@@ -387,21 +366,30 @@ static int c_uplink(config_entry_t *ce)
 		if (!strcasecmp("HOST", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			host = ce->ce_vardata;
 		}
 		else if (!strcasecmp("VHOST", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			vhost = ce->ce_vardata;
 		}
 		else if (!strcasecmp("PASSWORD", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			password = ce->ce_vardata;
 		}
@@ -411,7 +399,7 @@ static int c_uplink(config_entry_t *ce)
 		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option uplink::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option uplink::%s", ce->ce_varname);
 			continue;
 		}
 	}
@@ -428,7 +416,10 @@ static int c_operclass(config_entry_t *ce)
 	int flags = 0;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	name = ce->ce_vardata;
 
@@ -437,9 +428,9 @@ static int c_operclass(config_entry_t *ce)
 		if (!strcasecmp("PRIVS", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL && ce->ce_entries == NULL)
-				PARAM_ERROR(ce);
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
 
-			if (ce->ce_entries == NULL)
+			if (ce->ce_vardata != NULL)
 			{
 				if (privs == NULL)
 					privs = sstrdup(ce->ce_vardata);
@@ -487,7 +478,7 @@ static int c_operclass(config_entry_t *ce)
 			flags |= OPERCLASS_NEEDOPER;
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option operclass::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option operclass::%s", ce->ce_varname);
 			continue;
 		}
 	}
@@ -507,7 +498,10 @@ static int c_operator(config_entry_t *ce)
 	config_entry_t *topce;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	topce = ce;
 	name = ce->ce_vardata;
@@ -517,23 +511,29 @@ static int c_operator(config_entry_t *ce)
 		if (!strcasecmp("OPERCLASS", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			operclass = operclass_find(ce->ce_vardata);
 			if (operclass == NULL)
-				slog(LG_ERROR, "%s:%d: invalid operclass %s for operator %s",
-						ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata, name);
+				conf_report_warning(ce, "invalid operclass %s for operator %s",
+						ce->ce_vardata, name);
 		}
 		else if (!strcasecmp("PASSWORD", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			password = ce->ce_vardata;
 		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option operator::%s", ce->ce_varname);
 			continue;
 		}
 	}
@@ -541,8 +541,8 @@ static int c_operator(config_entry_t *ce)
 	if (operclass != NULL)
 		soper_add(name, operclass->name, SOPER_CONF, password);
 	else
-		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
-						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);
+		conf_report_warning(topce, "skipping operator %s because of bad/missing parameters",
+						name);
 	return 0;
 }
 
@@ -585,7 +585,10 @@ static int c_string(config_entry_t *ce)
 	config_entry_t *topce;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	topce = ce;
 	name = ce->ce_vardata;
@@ -595,13 +598,16 @@ static int c_string(config_entry_t *ce)
 		if (!strcasecmp("TRANSLATION", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
+			{
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				return 0;
+			}
 
 			trans = ce->ce_vardata;
 		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option string::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option string::%s", ce->ce_varname);
 			continue;
 		}
 	}
@@ -609,14 +615,17 @@ static int c_string(config_entry_t *ce)
 	if (trans != NULL)
 		translation_create(name, trans);
 	else
-		slog(LG_ERROR, "%s:%d: missing translation for string", topce->ce_fileptr->cf_filename, topce->ce_varlinenum);
+		conf_report_warning(topce, "missing translation for string");
 	return 0;
 }
 
 static int c_si_name(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	if (!(runflags & RF_REHASHING))
 		me.name = sstrdup(ce->ce_vardata);
@@ -627,7 +636,10 @@ static int c_si_name(config_entry_t *ce)
 static int c_si_numeric(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	if (!(runflags & RF_REHASHING))
 		me.numeric = sstrdup(ce->ce_vardata);
@@ -648,9 +660,7 @@ static int c_si_loglevel(config_entry_t *ce)
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			mask |= val;
 		else
-		{
-			slog(LG_INFO, "%s:%d: unknown flag: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
-		}
+			conf_report_warning(ce, "unknown flag: %s", ce->ce_vardata);
 	}
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
@@ -659,9 +669,7 @@ static int c_si_loglevel(config_entry_t *ce)
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			mask |= val;
 		else
-		{
-			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
-		}
+			conf_report_warning(flce, "unknown flag: %s", flce->ce_vardata);
 	}
 	log_master_set_mask(mask);
 
@@ -671,7 +679,10 @@ static int c_si_loglevel(config_entry_t *ce)
 static int c_si_auth(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	if (!strcasecmp("EMAIL", ce->ce_vardata))
 		me.auth = AUTH_EMAIL;
@@ -685,7 +696,10 @@ static int c_si_auth(config_entry_t *ce)
 static int c_si_casemapping(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	if (!strcasecmp("ASCII", ce->ce_vardata))
 		set_match_mapping(MATCH_ASCII);
@@ -699,7 +713,10 @@ static int c_si_casemapping(config_entry_t *ce)
 static int c_ci_vop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	chansvs.ca_vop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
@@ -709,7 +726,10 @@ static int c_ci_vop(config_entry_t *ce)
 static int c_ci_hop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	chansvs.ca_hop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
@@ -719,7 +739,10 @@ static int c_ci_hop(config_entry_t *ce)
 static int c_ci_aop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	chansvs.ca_aop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
@@ -729,7 +752,10 @@ static int c_ci_aop(config_entry_t *ce)
 static int c_ci_sop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
@@ -750,9 +776,7 @@ static int c_gi_uflags(config_entry_t *ce)
 			config_options.defuflags |= val;
 
 		else
-		{
-			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
-		}
+			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
 	}
 
 	return 0;
@@ -772,9 +796,7 @@ static int c_gi_cflags(config_entry_t *ce)
 			config_options.defcflags |= val;
 
 		else
-		{
-			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
-		}
+			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
 	}
 
 	if (config_options.defcflags & MC_TOPICLOCK)
@@ -786,9 +808,12 @@ static int c_gi_cflags(config_entry_t *ce)
 static int c_gi_expire(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
-	slog(LG_INFO, "warning: general::expire has been deprecated. please use nickserv::expire and chanserv::expire respectively.");
+	conf_report_warning(ce, "general::expire has been deprecated. please use nickserv::expire and chanserv::expire respectively.");
 
 	process_duration_configentry(ce, &nicksvs.expiry, "d");
 	process_duration_configentry(ce, &chansvs.expiry, "d");
@@ -802,7 +827,10 @@ static int c_logfile(config_entry_t *ce)
 	unsigned int logval = 0;
 
 	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	{
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		return 0;
+	}
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
@@ -814,7 +842,7 @@ static int c_logfile(config_entry_t *ce)
 			logval |= val;
 		else
 		{
-			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
+			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
 		}
 	}
 

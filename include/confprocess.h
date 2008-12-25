@@ -32,6 +32,7 @@ E bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
 		unsigned int min, unsigned int max);
 E bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 		const char *defunit);
+E void conf_report_warning(config_entry_t *ce, const char *fmt, ...) PRINTFLIKE (2, 3);
 /* sort of a hack for servtree.c */
 typedef int (*conf_handler_t)(config_entry_t *);
 E conf_handler_t conftable_get_conf_handler(struct ConfTable *ct);

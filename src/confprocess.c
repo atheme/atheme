@@ -56,23 +56,13 @@ struct ConfTable
 	} un;
 };
 
-static inline int
-PARAM_ERROR(config_entry_t *ce)
-{
-	slog(LG_INFO, "%s:%i: no parameter for configuration option: %s",
-	     ce->ce_fileptr->cf_filename,
-	     ce->ce_varlinenum,
-	     ce->ce_varname);
-	return 1;
-}
-
 static BlockHeap *conftable_heap;
 
 list_t confblocks;
 
 /* *INDENT-ON* */
 
-static void conf_report_error(config_entry_t *ce, const char *fmt, ...)
+void conf_report_warning(config_entry_t *ce, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];
@@ -84,7 +74,7 @@ static void conf_report_error(config_entry_t *ce, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, va);
 	va_end(va);
 
-	slog(LG_INFO, "%s:%d: configuration error - %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
+	slog(LG_INFO, "%s:%d: warning: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
 }
 
 bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
@@ -95,25 +85,21 @@ bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
 
 	if (ce->ce_vardata == NULL)
 	{
-		PARAM_ERROR(ce);
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
 		return false;
 	}
 	errno = 0;
 	v = strtoul(ce->ce_vardata, &end, 10);
 	if (errno != 0 || *end != '\0' || end == ce->ce_vardata)
 	{
-		slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
-				ce->ce_fileptr->cf_filename,
-				ce->ce_varlinenum,
+		conf_report_warning(ce, "invalid number \"%s\" for configuration option: %s",
 				ce->ce_vardata,
 				ce->ce_varname);
 		return false;
 	}
 	if (v > max || v < min)
 	{
-		slog(LG_INFO, "%s:%i: value %lu is out of range [%u,%u] for configuration option: %s",
-				ce->ce_fileptr->cf_filename,
-				ce->ce_varlinenum,
+		conf_report_warning(ce, "value %lu is out of range [%u,%u] for configuration option: %s",
 				v,
 				min,
 				max,
@@ -149,16 +135,14 @@ bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 
 	if (ce->ce_vardata == NULL)
 	{
-		PARAM_ERROR(ce);
+		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
 		return false;
 	}
 	errno = 0;
 	v = strtoul(ce->ce_vardata, &end, 10);
 	if (errno != 0 || end == ce->ce_vardata)
 	{
-		slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
-				ce->ce_fileptr->cf_filename,
-				ce->ce_varlinenum,
+		conf_report_warning(ce, "invalid number \"%s\" for configuration option: %s",
 				ce->ce_vardata,
 				ce->ce_varname);
 		return false;
@@ -175,9 +159,7 @@ bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 				break;
 		if (duration_units[i].name == NULL)
 		{
-			slog(LG_INFO, "%s:%i: invalid unit \"%s\" for configuration option: %s",
-					ce->ce_fileptr->cf_filename,
-					ce->ce_varlinenum,
+			conf_report_warning(ce, "invalid unit \"%s\" for configuration option: %s",
 					unit,
 					ce->ce_varname);
 			return false;
@@ -186,9 +168,7 @@ bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 	max = UINT_MAX / duration_units[i].value;
 	if (v > max)
 	{
-		slog(LG_INFO, "%s:%i: value %lu%s is out of range [%u%s,%u%s] for configuration option: %s",
-				ce->ce_fileptr->cf_filename,
-				ce->ce_varlinenum,
+		conf_report_warning(ce, "value %lu%s is out of range [%u%s,%u%s] for configuration option: %s",
 				v,
 				duration_units[i].name,
 				0,
@@ -224,7 +204,7 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 		case CONF_DUPSTR:
 			if (ce->ce_vardata == NULL)
 			{
-				PARAM_ERROR(ce);
+				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
 				return;
 			}
 			free(*ct->un.dupstr_val);
@@ -244,9 +224,7 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 				*ct->un.bool_val = false;
 			else
 			{
-				slog(LG_INFO, "%s:%i: invalid boolean \"%s\" for configuration option: %s, assuming true for now",
-						ce->ce_fileptr->cf_filename,
-						ce->ce_varlinenum,
+				conf_report_warning(ce, "invalid boolean \"%s\" for configuration option: %s, assuming true for now",
 						ce->ce_vardata,
 						ce->ce_varname);
 				*ct->un.bool_val = true;
@@ -278,7 +256,7 @@ void conf_process(config_file_t *cfp)
 			}
 
 			if (ct == NULL)
-				conf_report_error(ce, "invalid configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "invalid configuration option: %s", ce->ce_varname);
 		}
 	}
 }
@@ -302,7 +280,7 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 		}
 
 		if (ct == NULL)
-			conf_report_error(ce, "invalid configuration option: %s", ce->ce_varname);
+			conf_report_warning(ce, "invalid configuration option: %s", ce->ce_varname);
 	}
 	return 0;
 }
