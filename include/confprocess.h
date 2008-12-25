@@ -27,6 +27,8 @@ E void add_bool_conf_item(const char *name, list_t *conflist, bool *var);
 E void del_top_conf(const char *name);
 E void del_conf_item(const char *name, list_t *conflist);
 E int subblock_handler(config_entry_t *ce, list_t *entries);
+E bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
+		unsigned int min, unsigned int max);
 /* sort of a hack for servtree.c */
 typedef int (*conf_handler_t)(config_entry_t *);
 E conf_handler_t conftable_get_conf_handler(struct ConfTable *ct);

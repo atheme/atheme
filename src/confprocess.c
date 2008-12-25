@@ -80,45 +80,55 @@ static void conf_report_error(config_entry_t *ce, const char *fmt, ...)
 	slog(LG_INFO, "%s:%d: configuration error - %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
 }
 
-static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
+bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
+		unsigned int min, unsigned int max)
 {
 	unsigned long v;
 	char *end;
 
+	if (ce->ce_vardata == NULL)
+	{
+		PARAM_ERROR(ce);
+		return false;
+	}
+	errno = 0;
+	v = strtoul(ce->ce_vardata, &end, 10);
+	if (errno != 0 || *end != '\0' || end == ce->ce_vardata)
+	{
+		slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
+				ce->ce_fileptr->cf_filename,
+				ce->ce_varlinenum,
+				ce->ce_vardata,
+				ce->ce_varname);
+		return false;
+	}
+	if (v > max || v < min)
+	{
+		slog(LG_INFO, "%s:%i: value %lu is out of range [%u,%u] for configuration option: %s",
+				ce->ce_fileptr->cf_filename,
+				ce->ce_varlinenum,
+				v,
+				min,
+				max,
+				ce->ce_varname);
+		return false;
+	}
+	*var = v;
+	return true;
+}
+
+static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
+{
 	switch (ct->type)
 	{
 		case CONF_HANDLER:
 			ct->un.handler(ce);
 			break;
 		case CONF_UINT:
-			if (ce->ce_vardata == NULL)
-			{
-				PARAM_ERROR(ce);
+			if (!process_uint_configentry(ce, ct->un.uint_val.var,
+					ct->un.uint_val.min,
+					ct->un.uint_val.max))
 				return;
-			}
-			errno = 0;
-			v = strtoul(ce->ce_vardata, &end, 10);
-			if (errno != 0 || *end != '\0' || end == ce->ce_vardata)
-			{
-				slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
-						ce->ce_fileptr->cf_filename,
-						ce->ce_varlinenum,
-						ce->ce_vardata,
-						ce->ce_varname);
-				return;
-			}
-			if (v > ct->un.uint_val.max || v < ct->un.uint_val.min)
-			{
-				slog(LG_INFO, "%s:%i: value %lu is out of range [%u,%u] for configuration option: %s",
-						ce->ce_fileptr->cf_filename,
-						ce->ce_varlinenum,
-						v,
-						ct->un.uint_val.min,
-						ct->un.uint_val.max,
-						ce->ce_varname);
-				return;
-			}
-			*ct->un.uint_val.var = v;
 			break;
 		case CONF_DUPSTR:
 			if (ce->ce_vardata == NULL)

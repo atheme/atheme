@@ -414,10 +414,7 @@ static int c_uplink(config_entry_t *ce)
 		}
 		else if (!strcasecmp("PORT", ce->ce_varname))
 		{
-			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
-
-			port = ce->ce_vardatanum;
+			(void)process_uint_configentry(ce, &port, 1, 65535);
 		}
 		else
 		{
