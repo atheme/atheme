@@ -26,6 +26,7 @@
 #include "pmodule.h"
 #include "privs.h"
 #include "datastream.h"
+#include <limits.h>
 
 enum conftype
 {
@@ -79,22 +80,13 @@ static int c_si_name(config_entry_t *);
 static int c_si_desc(config_entry_t *);
 static int c_si_numeric(config_entry_t *);
 static int c_si_vhost(config_entry_t *);
-static int c_si_recontime(config_entry_t *);
-static int c_si_restarttime(config_entry_t *);
 static int c_si_netname(config_entry_t *);
 static int c_si_hidehostsuffix(config_entry_t *);
 static int c_si_adminname(config_entry_t *);
 static int c_si_adminemail(config_entry_t *);
 static int c_si_mta(config_entry_t *);
 static int c_si_loglevel(config_entry_t *);
-static int c_si_maxlogins(config_entry_t *);
-static int c_si_maxusers(config_entry_t *);
-static int c_si_maxnicks(config_entry_t *);
-static int c_si_maxchans(config_entry_t *);
-static int c_si_emaillimit(config_entry_t *);
-static int c_si_emailtime(config_entry_t *);
 static int c_si_auth(config_entry_t *);
-static int c_si_mdlimit(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
 
 /* CService client information. */
@@ -104,14 +96,11 @@ static int c_ci_aop(config_entry_t *);
 static int c_ci_sop(config_entry_t *);
 static int c_ci_trigger(config_entry_t *);
 static int c_ci_expire(config_entry_t *);
-static int c_ci_maxchanacs(config_entry_t *);
-static int c_ci_maxfounders(config_entry_t *);
 static int c_ci_deftemplates(config_entry_t *);
 
 /* NickServ client information. */
 static int c_ni_expire(config_entry_t *);
 static int c_ni_enforce_expire(config_entry_t *);
-static int c_ni_enforce_delay(config_entry_t *);
 
 /* language:: stuff */
 static int c_la_name(config_entry_t *);
@@ -120,12 +109,9 @@ static int c_la_translator(config_entry_t *);
 static int c_gi_chan(config_entry_t *);
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
-static int c_gi_flood_msgs(config_entry_t *);
-static int c_gi_flood_time(config_entry_t *);
 static int c_gi_kline_time(config_entry_t *);
 static int c_gi_commit_interval(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
-static int c_gi_default_clone_limit(config_entry_t *);
 static int c_gi_uplink_sendq_limit(config_entry_t *);
 
 static BlockHeap *conftable_heap;
@@ -638,8 +624,8 @@ void init_newconf(void)
 	add_conf_item("DESC", &conf_si_table, c_si_desc);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
 	add_conf_item("VHOST", &conf_si_table, c_si_vhost);
-	add_conf_item("RECONTIME", &conf_si_table, c_si_recontime);
-	add_conf_item("RESTARTTIME", &conf_si_table, c_si_restarttime);
+	add_uint_conf_item("RECONTIME", &conf_si_table, &me.recontime, 0, INT_MAX);
+	add_uint_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, 0, INT_MAX);
 	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
 	add_conf_item("NETNAME", &conf_si_table, c_si_netname);
 	add_conf_item("HIDEHOSTSUFFIX", &conf_si_table, c_si_hidehostsuffix);
@@ -647,14 +633,14 @@ void init_newconf(void)
 	add_conf_item("ADMINEMAIL", &conf_si_table, c_si_adminemail);
 	add_conf_item("MTA", &conf_si_table, c_si_mta);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
-	add_conf_item("MAXLOGINS", &conf_si_table, c_si_maxlogins);
-	add_conf_item("MAXUSERS", &conf_si_table, c_si_maxusers);
-	add_conf_item("MAXNICKS", &conf_si_table, c_si_maxnicks);
-	add_conf_item("MAXCHANS", &conf_si_table, c_si_maxchans);
-	add_conf_item("EMAILLIMIT", &conf_si_table, c_si_emaillimit);
-	add_conf_item("EMAILTIME", &conf_si_table, c_si_emailtime);
+	add_uint_conf_item("MAXLOGINS", &conf_si_table, &me.maxlogins, 1, INT_MAX);
+	add_uint_conf_item("MAXUSERS", &conf_si_table, &me.maxusers, 0, INT_MAX);
+	add_uint_conf_item("MAXNICKS", &conf_si_table, &me.maxnicks, 1, INT_MAX);
+	add_uint_conf_item("MAXCHANS", &conf_si_table, &me.maxchans, 1, INT_MAX);
+	add_uint_conf_item("EMAILLIMIT", &conf_si_table, &me.emaillimit, 1, INT_MAX);
+	add_uint_conf_item("EMAILTIME", &conf_si_table, &me.emailtime, 1, INT_MAX);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
-	add_conf_item("MDLIMIT", &conf_si_table, c_si_mdlimit);
+	add_uint_conf_item("MDLIMIT", &conf_si_table, &me.mdlimit, 0, INT_MAX);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
 
 	/* general{} block. */
@@ -667,12 +653,12 @@ void init_newconf(void)
 	add_conf_item("CFLAGS", &conf_gi_table, c_gi_cflags);
 	add_bool_conf_item("RAW", &conf_gi_table, &config_options.raw);
 	add_bool_conf_item("SECURE", &conf_gi_table, &config_options.secure);
-	add_conf_item("FLOOD_MSGS", &conf_gi_table, c_gi_flood_msgs);
-	add_conf_item("FLOOD_TIME", &conf_gi_table, c_gi_flood_time);
+	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, &config_options.flood_msgs, 0, INT_MAX);
+	add_uint_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, 0, INT_MAX);
 	add_conf_item("KLINE_TIME", &conf_gi_table, c_gi_kline_time);
 	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
-	add_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, c_gi_default_clone_limit);
+	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
 	add_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, c_gi_uplink_sendq_limit);
 
 	/* chanserv{} block */
@@ -684,8 +670,8 @@ void init_newconf(void)
 	add_bool_conf_item("CHANGETS", &conf_ci_table, &chansvs.changets);
 	add_conf_item("TRIGGER", &conf_ci_table, c_ci_trigger);
 	add_conf_item("EXPIRE", &conf_ci_table, c_ci_expire);
-	add_conf_item("MAXCHANACS", &conf_ci_table, c_ci_maxchanacs);
-	add_conf_item("MAXFOUNDERS", &conf_ci_table, c_ci_maxfounders);
+	add_uint_conf_item("MAXCHANACS", &conf_ci_table, &chansvs.maxchanacs, 0, INT_MAX);
+	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2)); /* fit on a line */
 	add_conf_item("DEFTEMPLATES", &conf_ci_table, c_ci_deftemplates);
 
 	/* global{} block */
@@ -697,7 +683,7 @@ void init_newconf(void)
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, &nicksvs.no_nick_ownership);
 	add_conf_item("EXPIRE", &conf_ni_table, c_ni_expire);
 	add_conf_item("ENFORCE_EXPIRE", &conf_ni_table, c_ni_enforce_expire);
-	add_conf_item("ENFORCE_DELAY", &conf_ni_table, c_ni_enforce_delay);
+	add_uint_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, 1, INT_MAX);
 
 	/* saslserv{} block */
 
@@ -1058,42 +1044,12 @@ static int c_si_numeric(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_mdlimit(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.mdlimit = ce->ce_vardatanum;
-
-	return 0;
-}
-
 static int c_si_vhost(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
 	me.vhost = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_recontime(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.recontime = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_si_restarttime(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.restarttime = ce->ce_vardatanum;
 
 	return 0;
 }
@@ -1177,68 +1133,6 @@ static int c_si_loglevel(config_entry_t *ce)
 		}
 	}
 	log_master_set_mask(mask);
-
-	return 0;
-}
-
-static int c_si_maxlogins(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.maxlogins = ce->ce_vardatanum;
-
-	return 0;
-
-}
-
-static int c_si_maxusers(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.maxusers = ce->ce_vardatanum;
-
-	return 0;
-
-}
-
-static int c_si_maxnicks(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.maxnicks = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_si_maxchans(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.maxchans = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_si_emaillimit(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.emaillimit = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_si_emailtime(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.emailtime = ce->ce_vardatanum;
 
 	return 0;
 }
@@ -1333,26 +1227,6 @@ static int c_ci_expire(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_maxchanacs(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.maxchanacs = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_ci_maxfounders(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.maxfounders = ce->ce_vardatanum;
-
-	return 0;
-}
-
 static int c_ci_deftemplates(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -1422,26 +1296,6 @@ static int c_gi_cflags(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_flood_msgs(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.flood_msgs = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int c_gi_default_clone_limit(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.default_clone_limit = ce->ce_vardatanum;
-
-	return 0;
-}
-
 static int c_gi_uplink_sendq_limit(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -1450,16 +1304,6 @@ static int c_gi_uplink_sendq_limit(config_entry_t *ce)
 	config_options.uplink_sendq_limit = ce->ce_vardatanum;
 	if (curr_uplink && curr_uplink->conn)
 		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
-
-	return 0;
-}
-
-static int c_gi_flood_time(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.flood_time = ce->ce_vardatanum;
 
 	return 0;
 }
@@ -1513,16 +1357,6 @@ static int c_ni_enforce_expire(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	nicksvs.enforce_expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
-static int c_ni_enforce_delay(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.enforce_delay = ce->ce_vardatanum;
 
 	return 0;
 }
