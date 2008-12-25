@@ -2,7 +2,8 @@ Atheme Services 3.2 Release Notes
 =================================
 [MERGED] indicates items merged to the 3.1 branch
 ircd protocol
-- Add support for ShadowIRCd 5 [MERGED].
+- Add support for ShadowIRCd 5 [MERGED]. This replaces the support for
+  older versions of ShadowIRCd.
 - hyperion: improve detection of overwritten I:line spoofs.
 - hyperion: Add support for UF_IMMUNE.
 - general: Do not enforce AKICKs against users marked UF_IMMUNE; it is
@@ -61,6 +62,7 @@ code
   move some generic TS6 and P10 stuff into common modules.
 - Rename CMODE_OP and the like to CSTATUS_*, emphasizing that they are
   separate from simple modes.
+- Use C99 booleans (<stdbool.h>, bool, true, false).
 other
 - Allow arbitrary line lengths in flatfile database loader.
 - Synchronized with libmowgli 0.7 framework.
@@ -75,6 +77,11 @@ other
   bit differently to make this possible.
 - Fix running on MacOS X 10.5.
 - Fix compilation sometimes using system include files in place of our own.
+- Change the default for gettext (NLS) to disabled in the setup script.
+- Add a check against loading incompatible modules. Formerly, trying to load
+  incompatible modules often caused a crash.
+- Rework the configuration file parser to detect more errors and make it
+  easier to add configuration options.
 
 Atheme Services 3.1 Release Notes
 =================================
