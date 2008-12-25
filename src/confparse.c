@@ -280,7 +280,6 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				break;
 			}
 			ce->ce_vardata = val;
-			ce->ce_vardatanum = strtol(val, NULL, 10);
 			if (c == '\0' && (*p == '{' || *p == ';'))
 				c = *p++;
 			if (c == '{')

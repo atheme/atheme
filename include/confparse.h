@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (C) 2005-2008 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Config file parser.
@@ -26,13 +26,10 @@ struct _configentry
 	int ce_varlinenum;
 	char *ce_varname;
 	char *ce_vardata;
-	int ce_vardatanum;
+	int ce_sectlinenum; /* line containing closing brace */
 
-	int ce_sectlinenum;
 	config_entry_t *ce_entries;
-
 	config_entry_t *ce_prevlevel;
-
 	config_entry_t *ce_next;
 };
 
