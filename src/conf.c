@@ -256,7 +256,7 @@ void init_newconf(void)
 	add_dupstr_conf_item("DESC", &conf_si_table, &me.desc);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
 	add_dupstr_conf_item("VHOST", &conf_si_table, &me.vhost);
-	add_uint_conf_item("RECONTIME", &conf_si_table, &me.recontime, 0, INT_MAX);
+	add_uint_conf_item("RECONTIME", &conf_si_table, &me.recontime, 10, INT_MAX);
 	add_uint_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, 0, INT_MAX);
 	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
 	add_dupstr_conf_item("NETNAME", &conf_si_table, &me.netname);
