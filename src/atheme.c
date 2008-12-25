@@ -224,6 +224,7 @@ int main(int argc, char *argv[])
 
 	translation_init();
 	init_nodes();
+	init_confprocess();
 	init_newconf();
 	servtree_init();
 	init_ircpacket();

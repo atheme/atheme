@@ -61,6 +61,7 @@ BASE_SRCS =				\
 	$(SRCDIR)/ctcp-common.c		\
 	$(SRCDIR)/conf.c		\
 	$(SRCDIR)/confparse.c		\
+	$(SRCDIR)/confprocess.c		\
 	$(SRCDIR)/connection.c		\
 	$(SRCDIR)/crypto.c		\
 	$(SRCDIR)/culture.c		\
