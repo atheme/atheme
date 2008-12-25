@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "conf.h" /* XXX conf_ci_table */
 
 DECLARE_MODULE_V1
 (

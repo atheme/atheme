@@ -22,6 +22,7 @@
  */
 
 #include "atheme.h"
+#include "conf.h"
 #include "uplink.h"
 #include "pmodule.h" /* pcommand_init */
 #include "internal.h"

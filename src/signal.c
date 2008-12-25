@@ -23,6 +23,7 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "conf.h"
 #include "internal.h"
 #include <signal.h>
 #include <sys/wait.h>

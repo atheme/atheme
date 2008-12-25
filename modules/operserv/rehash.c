@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "conf.h"
 
 DECLARE_MODULE_V1
 (
