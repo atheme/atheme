@@ -73,7 +73,6 @@ static int c_gi_cflags(config_entry_t *);
 static int c_gi_kline_time(config_entry_t *);
 static int c_gi_commit_interval(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
-static int c_gi_uplink_sendq_limit(config_entry_t *);
 
 /* *INDENT-OFF* */
 
@@ -291,7 +290,7 @@ void init_newconf(void)
 	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
 	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
-	add_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, c_gi_uplink_sendq_limit);
+	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, &config_options.uplink_sendq_limit, 10240, INT_MAX);
 
 	/* chanserv{} block */
 	add_bool_conf_item("FANTASY", &conf_ci_table, &chansvs.fantasy);
@@ -804,18 +803,6 @@ static int c_gi_cflags(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_uplink_sendq_limit(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.uplink_sendq_limit = ce->ce_vardatanum;
-	if (curr_uplink && curr_uplink->conn)
-		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
-
-	return 0;
-}
-
 static int c_gi_kline_time(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -990,6 +977,9 @@ bool conf_rehash(void)
 			joinall(config_options.chan);
 		}
 	}
+
+	if (curr_uplink && curr_uplink->conn)
+		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
 
 	remove_illegals();
 
