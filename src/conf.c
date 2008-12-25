@@ -52,14 +52,7 @@ static int c_string(config_entry_t *);
 static int c_logfile(config_entry_t *);
 
 static int c_si_name(config_entry_t *);
-static int c_si_desc(config_entry_t *);
 static int c_si_numeric(config_entry_t *);
-static int c_si_vhost(config_entry_t *);
-static int c_si_netname(config_entry_t *);
-static int c_si_hidehostsuffix(config_entry_t *);
-static int c_si_adminname(config_entry_t *);
-static int c_si_adminemail(config_entry_t *);
-static int c_si_mta(config_entry_t *);
 static int c_si_loglevel(config_entry_t *);
 static int c_si_auth(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
@@ -69,19 +62,12 @@ static int c_ci_vop(config_entry_t *);
 static int c_ci_hop(config_entry_t *);
 static int c_ci_aop(config_entry_t *);
 static int c_ci_sop(config_entry_t *);
-static int c_ci_trigger(config_entry_t *);
 static int c_ci_expire(config_entry_t *);
-static int c_ci_deftemplates(config_entry_t *);
 
 /* NickServ client information. */
 static int c_ni_expire(config_entry_t *);
 static int c_ni_enforce_expire(config_entry_t *);
 
-/* language:: stuff */
-static int c_la_name(config_entry_t *);
-static int c_la_translator(config_entry_t *);
-
-static int c_gi_chan(config_entry_t *);
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
 static int c_gi_kline_time(config_entry_t *);
@@ -267,17 +253,17 @@ void init_newconf(void)
 
 	/* Now we fill in the information */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
-	add_conf_item("DESC", &conf_si_table, c_si_desc);
+	add_dupstr_conf_item("DESC", &conf_si_table, &me.desc);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
-	add_conf_item("VHOST", &conf_si_table, c_si_vhost);
+	add_dupstr_conf_item("VHOST", &conf_si_table, &me.vhost);
 	add_uint_conf_item("RECONTIME", &conf_si_table, &me.recontime, 0, INT_MAX);
 	add_uint_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, 0, INT_MAX);
 	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
-	add_conf_item("NETNAME", &conf_si_table, c_si_netname);
-	add_conf_item("HIDEHOSTSUFFIX", &conf_si_table, c_si_hidehostsuffix);
-	add_conf_item("ADMINNAME", &conf_si_table, c_si_adminname);
-	add_conf_item("ADMINEMAIL", &conf_si_table, c_si_adminemail);
-	add_conf_item("MTA", &conf_si_table, c_si_mta);
+	add_dupstr_conf_item("NETNAME", &conf_si_table, &me.netname);
+	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, &me.hidehostsuffix);
+	add_dupstr_conf_item("ADMINNAME", &conf_si_table, &me.adminname);
+	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, &me.adminemail);
+	add_dupstr_conf_item("MTA", &conf_si_table, &me.mta);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
 	add_uint_conf_item("MAXLOGINS", &conf_si_table, &me.maxlogins, 1, INT_MAX);
 	add_uint_conf_item("MAXUSERS", &conf_si_table, &me.maxusers, 0, INT_MAX);
@@ -290,7 +276,7 @@ void init_newconf(void)
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
 
 	/* general{} block. */
-	add_conf_item("CHAN", &conf_gi_table, c_gi_chan);
+	add_dupstr_conf_item("CHAN", &conf_gi_table, &config_options.chan);
 	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, &config_options.verbose_wallops);
 	add_bool_conf_item("SILENT", &conf_gi_table, &config_options.silent);
 	add_bool_conf_item("JOIN_CHANS", &conf_gi_table, &config_options.join_chans);
@@ -314,11 +300,11 @@ void init_newconf(void)
 	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 	add_bool_conf_item("CHANGETS", &conf_ci_table, &chansvs.changets);
-	add_conf_item("TRIGGER", &conf_ci_table, c_ci_trigger);
+	add_dupstr_conf_item("TRIGGER", &conf_ci_table, &chansvs.trigger);
 	add_conf_item("EXPIRE", &conf_ci_table, c_ci_expire);
 	add_uint_conf_item("MAXCHANACS", &conf_ci_table, &chansvs.maxchanacs, 0, INT_MAX);
 	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2)); /* fit on a line */
-	add_conf_item("DEFTEMPLATES", &conf_ci_table, c_ci_deftemplates);
+	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, &chansvs.deftemplates);
 
 	/* global{} block */
 
@@ -338,8 +324,8 @@ void init_newconf(void)
 	/* memoserv{} block */
 	
 	/* language:: stuff */
-	add_conf_item("NAME", &conf_la_table, c_la_name);
-	add_conf_item("TRANSLATOR", &conf_la_table, c_la_translator);
+	add_dupstr_conf_item("NAME", &conf_la_table, &me.language_name);
+	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, &me.language_translator);
 }
 
 static int c_serverinfo(config_entry_t *ce)
@@ -638,26 +624,6 @@ static int c_string(config_entry_t *ce)
 	return 0;
 }
 
-static int c_la_name(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.language_name = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_la_translator(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.language_translator = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_si_name(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -669,16 +635,6 @@ static int c_si_name(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_desc(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.desc = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_si_numeric(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -686,66 +642,6 @@ static int c_si_numeric(config_entry_t *ce)
 
 	if (!(runflags & RF_REHASHING))
 		me.numeric = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_vhost(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.vhost = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_netname(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.netname = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_hidehostsuffix(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.hidehostsuffix = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_adminname(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.adminname = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_adminemail(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.adminemail = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_mta(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.mta = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
@@ -851,46 +747,12 @@ static int c_ci_sop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_trigger(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	if (chansvs.trigger != NULL)
-		free(chansvs.trigger);
-	chansvs.trigger = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_ci_expire(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
 	chansvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
-static int c_ci_deftemplates(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	if (chansvs.deftemplates != NULL)
-		free(chansvs.deftemplates);
-	chansvs.deftemplates = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gi_chan(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.chan = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
