@@ -248,8 +248,8 @@ void init_newconf(void)
 	add_dupstr_conf_item("DESC", &conf_si_table, &me.desc);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
 	add_dupstr_conf_item("VHOST", &conf_si_table, &me.vhost);
-	add_uint_conf_item("RECONTIME", &conf_si_table, &me.recontime, 10, INT_MAX);
-	add_uint_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, 0, INT_MAX);
+	add_duration_conf_item("RECONTIME", &conf_si_table, &me.recontime, "s");
+	add_duration_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, "s");
 	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
 	add_dupstr_conf_item("NETNAME", &conf_si_table, &me.netname);
 	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, &me.hidehostsuffix);
@@ -262,7 +262,7 @@ void init_newconf(void)
 	add_uint_conf_item("MAXNICKS", &conf_si_table, &me.maxnicks, 1, INT_MAX);
 	add_uint_conf_item("MAXCHANS", &conf_si_table, &me.maxchans, 1, INT_MAX);
 	add_uint_conf_item("EMAILLIMIT", &conf_si_table, &me.emaillimit, 1, INT_MAX);
-	add_uint_conf_item("EMAILTIME", &conf_si_table, &me.emailtime, 1, INT_MAX);
+	add_duration_conf_item("EMAILTIME", &conf_si_table, &me.emailtime, "s");
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
 	add_uint_conf_item("MDLIMIT", &conf_si_table, &me.mdlimit, 0, INT_MAX);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
@@ -278,7 +278,7 @@ void init_newconf(void)
 	add_bool_conf_item("RAW", &conf_gi_table, &config_options.raw);
 	add_bool_conf_item("SECURE", &conf_gi_table, &config_options.secure);
 	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, &config_options.flood_msgs, 0, INT_MAX);
-	add_uint_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, 0, INT_MAX);
+	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, "s");
 	add_duration_conf_item("KLINE_TIME", &conf_gi_table, &config_options.kline_time, "d");
 	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, &config_options.commit_interval, "m");
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
@@ -307,7 +307,7 @@ void init_newconf(void)
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, &nicksvs.no_nick_ownership);
 	add_duration_conf_item("EXPIRE", &conf_ni_table, &nicksvs.expiry, "d");
 	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, &nicksvs.enforce_expiry, "d");
-	add_uint_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, 1, INT_MAX);
+	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, "s");
 
 	/* saslserv{} block */
 
