@@ -29,6 +29,7 @@ E void add_top_conf(const char *name, int (*handler)(config_entry_t *ce));
 E void add_conf_item(const char *name, list_t *conflist, int (*handler)(config_entry_t *ce));
 E void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max);
 E void add_dupstr_conf_item(const char *name, list_t *conflist, char **var);
+E void add_bool_conf_item(const char *name, list_t *conflist, bool *var);
 E void del_top_conf(const char *name);
 E void del_conf_item(const char *name, list_t *conflist);
 E int subblock_handler(config_entry_t *ce, list_t *entries);

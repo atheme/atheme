@@ -31,7 +31,8 @@ enum conftype
 {
 	CONF_HANDLER,
 	CONF_UINT,
-	CONF_DUPSTR
+	CONF_DUPSTR,
+	CONF_BOOL
 };
 
 struct ConfTable
@@ -41,13 +42,14 @@ struct ConfTable
 	union
 	{
 		int (*handler) (config_entry_t *);
-		char **dupstr_val;
 		struct
 		{
 			unsigned int *var;
 			unsigned int min;
 			unsigned int max;
 		} uint_val;
+		char **dupstr_val;
+		bool *bool_val;
 	} un;
 };
 
@@ -258,6 +260,28 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 			free(*ct->un.dupstr_val);
 			*ct->un.dupstr_val = sstrdup(ce->ce_vardata);
 			break;
+		case CONF_BOOL:
+			if (ce->ce_vardata == NULL ||
+					!strcasecmp(ce->ce_vardata, "yes") ||
+					!strcasecmp(ce->ce_vardata, "on") ||
+					!strcasecmp(ce->ce_vardata, "true") ||
+					!strcmp(ce->ce_vardata, "1"))
+				*ct->un.bool_val = true;
+			else if (!strcasecmp(ce->ce_vardata, "no") ||
+					!strcasecmp(ce->ce_vardata, "off") ||
+					!strcasecmp(ce->ce_vardata, "false") ||
+					!strcmp(ce->ce_vardata, "0"))
+				*ct->un.bool_val = false;
+			else
+			{
+				slog(LG_INFO, "%s:%i: invalid boolean \"%s\" for configuration option: %s, assuming true for now",
+						ce->ce_fileptr->cf_filename,
+						ce->ce_varlinenum,
+						ce->ce_vardata,
+						ce->ce_varname);
+				*ct->un.bool_val = true;
+				return;
+			}
 	}
 }
 
@@ -508,6 +532,25 @@ void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
 	ct->name = sstrdup(name);
 	ct->type = CONF_DUPSTR;
 	ct->un.dupstr_val = var;
+
+	node_add(ct, node_create(), conflist);
+}
+
+void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
+{
+	struct ConfTable *ct;
+
+	if ((ct = find_conf_item(name, conflist)))
+	{
+		slog(LG_DEBUG, "add_bool_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	ct = BlockHeapAlloc(conftable_heap);
+
+	ct->name = sstrdup(name);
+	ct->type = CONF_BOOL;
+	ct->un.bool_val = var;
 
 	node_add(ct, node_create(), conflist);
 }
