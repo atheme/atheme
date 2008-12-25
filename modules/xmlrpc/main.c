@@ -24,6 +24,11 @@ static void handle_request(connection_t *cptr, void *requestbuf);
 
 path_handler_t handle_xmlrpc = { NULL, handle_request };
 
+struct
+{
+	char *path;
+} xmlrpc_config;
+
 connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
 list_t *httpd_path_handlers;
@@ -38,15 +43,6 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 
 /* Configuration */
 list_t conf_xmlrpc_table;
-static int conf_xmlrpc_path(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	handle_xmlrpc.path = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
 
 static int conf_xmlrpc(config_entry_t *ce)
 {
@@ -92,8 +88,10 @@ static void handle_request(connection_t *cptr, void *requestbuf)
 
 static void xmlrpc_config_ready(void *vptr)
 {
-	if (handle_xmlrpc.path == NULL)
-		handle_xmlrpc.path = "/xmlrpc";
+	/* Note: handle_xmlrpc.path may point to freed memory between
+	 * reading the config and here.
+	 */
+	handle_xmlrpc.path = xmlrpc_config.path;
 
 	if (handle_xmlrpc.handler != NULL)
 	{
@@ -113,8 +111,10 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", xmlrpc_config_ready);
 
+	xmlrpc_config.path = sstrdup("/xmlrpc");
+
 	add_top_conf("XMLRPC", conf_xmlrpc);
-	add_conf_item("PATH", &conf_xmlrpc_table, conf_xmlrpc_path);
+	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, &xmlrpc_config.path);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
@@ -139,6 +139,8 @@ void _moddeinit(void)
 
 	del_conf_item("PATH", &conf_xmlrpc_table);
 	del_top_conf("XMLRPC");
+
+	free(xmlrpc_config.path);
 
 	hook_del_hook("config_ready", xmlrpc_config_ready);
 }
