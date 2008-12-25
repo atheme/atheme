@@ -22,6 +22,7 @@ E struct ConfTable *find_conf_item(const char *name, list_t *conflist);
 E void add_top_conf(const char *name, int (*handler)(config_entry_t *ce));
 E void add_conf_item(const char *name, list_t *conflist, int (*handler)(config_entry_t *ce));
 E void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max);
+E void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *var, const char *defunit);
 E void add_dupstr_conf_item(const char *name, list_t *conflist, char **var);
 E void add_bool_conf_item(const char *name, list_t *conflist, bool *var);
 E void del_top_conf(const char *name);
@@ -29,6 +30,8 @@ E void del_conf_item(const char *name, list_t *conflist);
 E int subblock_handler(config_entry_t *ce, list_t *entries);
 E bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
 		unsigned int min, unsigned int max);
+E bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
+		const char *defunit);
 /* sort of a hack for servtree.c */
 typedef int (*conf_handler_t)(config_entry_t *);
 E conf_handler_t conftable_get_conf_handler(struct ConfTable *ct);

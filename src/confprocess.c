@@ -22,11 +22,13 @@
  */
 
 #include "atheme.h"
+#include <limits.h>
 
 enum conftype
 {
 	CONF_HANDLER,
 	CONF_UINT,
+	CONF_DURATION,
 	CONF_DUPSTR,
 	CONF_BOOL
 };
@@ -44,6 +46,11 @@ struct ConfTable
 			unsigned int min;
 			unsigned int max;
 		} uint_val;
+		struct
+		{
+			unsigned int *var;
+			const char *defunit;
+		} duration_val;
 		char **dupstr_val;
 		bool *bool_val;
 	} un;
@@ -117,6 +124,84 @@ bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
 	return true;
 }
 
+static struct
+{
+	const char *name;
+	unsigned int value;
+} duration_units[] =
+{
+	{ "s", 1 }, /* must be first */
+	{ "m", 60 },
+	{ "h", 60 * 60 },
+	{ "d", 24 * 60 * 60 },
+	{ "w", 7 * 24 * 60 * 60 },
+	{ NULL, 0 }
+};
+
+bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
+		const char *defunit)
+{
+	unsigned long v;
+	unsigned int i;
+	unsigned int max;
+	const char *unit;
+	char *end;
+
+	if (ce->ce_vardata == NULL)
+	{
+		PARAM_ERROR(ce);
+		return false;
+	}
+	errno = 0;
+	v = strtoul(ce->ce_vardata, &end, 10);
+	if (errno != 0 || end == ce->ce_vardata)
+	{
+		slog(LG_INFO, "%s:%i: invalid number \"%s\" for configuration option: %s",
+				ce->ce_fileptr->cf_filename,
+				ce->ce_varlinenum,
+				ce->ce_vardata,
+				ce->ce_varname);
+		return false;
+	}
+	while (*end == ' ' || *end == '\t')
+		end++;
+	unit = *end != '\0' ? end : defunit;
+	if (unit == NULL || *unit == '\0')
+		i = 0;
+	else
+	{
+		for (i = 0; duration_units[i].name != NULL; i++)
+			if (!strcasecmp(duration_units[i].name, unit))
+				break;
+		if (duration_units[i].name == NULL)
+		{
+			slog(LG_INFO, "%s:%i: invalid unit \"%s\" for configuration option: %s",
+					ce->ce_fileptr->cf_filename,
+					ce->ce_varlinenum,
+					unit,
+					ce->ce_varname);
+			return false;
+		}
+	}
+	max = UINT_MAX / duration_units[i].value;
+	if (v > max)
+	{
+		slog(LG_INFO, "%s:%i: value %lu%s is out of range [%u%s,%u%s] for configuration option: %s",
+				ce->ce_fileptr->cf_filename,
+				ce->ce_varlinenum,
+				v,
+				duration_units[i].name,
+				0,
+				duration_units[i].name,
+				max,
+				duration_units[i].name,
+				ce->ce_varname);
+		return false;
+	}
+	*var = v * duration_units[i].value;
+	return true;
+}
+
 static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 {
 	switch (ct->type)
@@ -128,6 +213,12 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 			if (!process_uint_configentry(ce, ct->un.uint_val.var,
 					ct->un.uint_val.min,
 					ct->un.uint_val.max))
+				return;
+			break;
+		case CONF_DURATION:
+			if (!process_duration_configentry(ce,
+						ct->un.duration_val.var,
+						ct->un.duration_val.defunit))
 				return;
 			break;
 		case CONF_DUPSTR:
@@ -303,6 +394,26 @@ void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, u
 	ct->un.uint_val.var = var;
 	ct->un.uint_val.min = min;
 	ct->un.uint_val.max = max;
+
+	node_add(ct, node_create(), conflist);
+}
+
+void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *var, const char *defunit)
+{
+	struct ConfTable *ct;
+
+	if ((ct = find_conf_item(name, conflist)))
+	{
+		slog(LG_DEBUG, "add_uint_conf_item(): duplicate item %s", name);
+		return;
+	}
+
+	ct = BlockHeapAlloc(conftable_heap);
+
+	ct->name = sstrdup(name);
+	ct->type = CONF_DURATION;
+	ct->un.duration_val.var = var;
+	ct->un.duration_val.defunit = defunit;
 
 	node_add(ct, node_create(), conflist);
 }
