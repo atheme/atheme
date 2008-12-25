@@ -62,16 +62,9 @@ static int c_ci_vop(config_entry_t *);
 static int c_ci_hop(config_entry_t *);
 static int c_ci_aop(config_entry_t *);
 static int c_ci_sop(config_entry_t *);
-static int c_ci_expire(config_entry_t *);
-
-/* NickServ client information. */
-static int c_ni_expire(config_entry_t *);
-static int c_ni_enforce_expire(config_entry_t *);
 
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
-static int c_gi_kline_time(config_entry_t *);
-static int c_gi_commit_interval(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
 
 /* *INDENT-OFF* */
@@ -286,8 +279,8 @@ void init_newconf(void)
 	add_bool_conf_item("SECURE", &conf_gi_table, &config_options.secure);
 	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, &config_options.flood_msgs, 0, INT_MAX);
 	add_uint_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, 0, INT_MAX);
-	add_conf_item("KLINE_TIME", &conf_gi_table, c_gi_kline_time);
-	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
+	add_duration_conf_item("KLINE_TIME", &conf_gi_table, &config_options.kline_time, "d");
+	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, &config_options.commit_interval, "m");
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
 	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
 	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, &config_options.uplink_sendq_limit, 10240, INT_MAX);
@@ -300,7 +293,7 @@ void init_newconf(void)
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 	add_bool_conf_item("CHANGETS", &conf_ci_table, &chansvs.changets);
 	add_dupstr_conf_item("TRIGGER", &conf_ci_table, &chansvs.trigger);
-	add_conf_item("EXPIRE", &conf_ci_table, c_ci_expire);
+	add_duration_conf_item("EXPIRE", &conf_ci_table, &chansvs.expiry, "d");
 	add_uint_conf_item("MAXCHANACS", &conf_ci_table, &chansvs.maxchanacs, 0, INT_MAX);
 	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2)); /* fit on a line */
 	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, &chansvs.deftemplates);
@@ -312,8 +305,8 @@ void init_newconf(void)
 	/* nickserv{} block */
 	add_bool_conf_item("SPAM", &conf_ni_table, &nicksvs.spam);
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, &nicksvs.no_nick_ownership);
-	add_conf_item("EXPIRE", &conf_ni_table, c_ni_expire);
-	add_conf_item("ENFORCE_EXPIRE", &conf_ni_table, c_ni_enforce_expire);
+	add_duration_conf_item("EXPIRE", &conf_ni_table, &nicksvs.expiry, "d");
+	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, &nicksvs.enforce_expiry, "d");
 	add_uint_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, 1, INT_MAX);
 
 	/* saslserv{} block */
@@ -743,16 +736,6 @@ static int c_ci_sop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_expire(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	chansvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
 static int c_gi_uflags(config_entry_t *ce)
 {
 	config_entry_t *flce;
@@ -800,26 +783,6 @@ static int c_gi_cflags(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_kline_time(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.kline_time = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
-static int c_gi_commit_interval(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	config_options.commit_interval = (ce->ce_vardatanum * 60);
-
-	return 0;
-}
-
 static int c_gi_expire(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -827,28 +790,8 @@ static int c_gi_expire(config_entry_t *ce)
 
 	slog(LG_INFO, "warning: general::expire has been deprecated. please use nickserv::expire and chanserv::expire respectively.");
 
-	nicksvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-	chansvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
-static int c_ni_expire(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
-
-	return 0;
-}
-
-static int c_ni_enforce_expire(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	nicksvs.enforce_expiry = (ce->ce_vardatanum * 60 * 60 * 24);
+	process_duration_configentry(ce, &nicksvs.expiry, "d");
+	process_duration_configentry(ce, &chansvs.expiry, "d");
 
 	return 0;
 }
