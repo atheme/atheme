@@ -700,7 +700,7 @@ chanserv {
 	vop = "+VA";
 	hop = "+vVhHtA";
 	aop = "+vhoOtriA";
-	sop = "+vhoOtrsifA";
+	sop = "+vhoOtrsifAa";
 
 	/* (*) deftemplates
 	 * Defines default templates to set on new channels, as a
