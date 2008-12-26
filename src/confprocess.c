@@ -74,7 +74,7 @@ void conf_report_warning(config_entry_t *ce, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, va);
 	va_end(va);
 
-	slog(LG_INFO, "%s:%d: warning: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
+	slog(LG_ERROR, "%s:%d: warning: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
 }
 
 bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
