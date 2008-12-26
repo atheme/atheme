@@ -143,6 +143,14 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			lau[0] = '\0';
+			LIST_FOREACH(n, mu->logins.head)
+			{
+				if (lau[0] != '\0')
+					strlcat(lau, ", ", sizeof lau);
+				strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
+			}
+			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
 			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
 			return;
 		}
