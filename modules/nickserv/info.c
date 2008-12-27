@@ -336,6 +336,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
 	}
+	else if (metadata_find(mu, "private:freeze:freezer"))
+		command_success_nodata(si, _("%s has been frozen by the %s administration."), mu->name, me.netname);
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:mark:setter")))
 	{
