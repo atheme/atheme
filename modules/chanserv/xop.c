@@ -300,6 +300,22 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			if (match(target, hostbuf))
 				continue;
 
+			if (ircd->uses_owner && level & CA_USEOWNER)
+			{
+				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_OWNER))
+				{
+					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+					cu->modes |= CSTATUS_OWNER;
+				}
+			}
+			if (ircd->uses_protect && level & CA_USEPROTECT)
+			{
+				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT))
+				{
+					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+					cu->modes |= CSTATUS_PROTECT;
+				}
+			}
 			if (level & CA_AUTOOP)
 			{
 				if (!(cu->modes & CSTATUS_OP))
@@ -402,6 +418,22 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		if (cu->user->myuser != mu)
 			continue;
 
+		if (ircd->uses_owner && level & CA_USEOWNER)
+		{
+			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_OWNER))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes |= CSTATUS_OWNER;
+			}
+		}
+		if (ircd->uses_protect && level & CA_USEPROTECT)
+		{
+			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes |= CSTATUS_PROTECT;
+			}
+		}
 		if (level & CA_AUTOOP)
 		{
 			if (!(cu->modes & CSTATUS_OP))
