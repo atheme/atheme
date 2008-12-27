@@ -178,7 +178,7 @@ static char *get_value(char **pos, config_file_t *cf, char * restrict skipped)
 		start = p;
 		while (*p != '\0' && *p != '\t' && *p != '\r' && *p != '\n' &&
 				*p != ' ' && *p != '/' && *p != '#' &&
-				*p != ';')
+				*p != ';' && *p != '{' && *p != '}')
 			p++;
 		if (p == start)
 			return NULL;
