@@ -155,9 +155,7 @@ nefarious
 
 You need U:lines for services on all servers on the network.
 
-You must enable join_chans as P10 is designed for services to work that way.
-
-Login-on-connect is not supported.
+EXTENDED_ACCOUNTS must be enabled. Login-on-connect is not supported.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
@@ -173,8 +171,8 @@ before -h.
 the same time may cause trouble. Other uses of FAKEHOST may also cause
 trouble. Combining +x and /ns vhost is OK.
 
-Ban exceptions are supported, although some Nefarious versions have bugs where
-they are not sent properly.
+Ban exceptions (EXCEPTS and BREAK_P10) are supported, although some Nefarious
+versions have bugs where they are not sent properly.
 
 officeirc
 ---------
