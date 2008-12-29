@@ -679,7 +679,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* umode +e: identified to current nick */
 		/* As hyperion clears +e on nick changes, this is safe. */
 		if (!use_svslogin && strchr(parv[3], 'e'))
-			handle_burstlogin(u, NULL);
+			handle_burstlogin(u, NULL, 0);
 
 		/* if the server supports SIGNON, we will get an SNICK
 		 * for this user, potentially with a login name
@@ -908,7 +908,7 @@ static void m_snick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (parc >= 6)
 			if (strcmp(parv[5], "0"))
-				handle_burstlogin(u, parv[5]);
+				handle_burstlogin(u, parv[5], 0);
 
 		handle_nickchange(u);
 	}
@@ -982,7 +982,7 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 		if (!strcmp(parv[0], "0"))
 			handle_clearlogin(si, si->su);
 		else
-			handle_setlogin(si, si->su, parv[0]);
+			handle_setlogin(si, si->su, parv[0], 0);
 	}
 }
 

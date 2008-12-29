@@ -1073,7 +1073,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		if (u == NULL)
 			return;
 
-		handle_burstlogin(u, parv[2]);
+		handle_burstlogin(u, parv[2], 0);
 	}
 }
 

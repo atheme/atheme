@@ -104,7 +104,8 @@ static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 	if (!me.connected || u == NULL)
 		return;
 
-	sts("%s AC %s %s", me.numeric, u->uid, u->myuser->name);
+	sts("%s AC %s %s %lu", me.numeric, u->uid, account->name,
+			(unsigned long)account->registered);
 	check_hidehost(u);
 }
 
@@ -129,6 +130,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	struct in_addr ip;
 	char ipstring[64];
+	char *p;
 
 	/* got the right number of args for an introduction? */
 	if (parc >= 8)
@@ -153,7 +155,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			user_mode(u, parv[5]);
 			if (strchr(parv[5], 'r'))
 			{
-				handle_burstlogin(u, parv[6]);
+				p = strchr(parv[6], ':');
+				if (p != NULL)
+					*p++ = '\0';
+				handle_burstlogin(u, parv[6], p ? atol(p) : 0);
 				/* killed to force logout? */
 				if (user_find(parv[parc - 2]) == NULL)
 					return;

@@ -671,7 +671,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* This is ok because this ircd clears +r on nick changes
 		 * -- jilles */
 		if (strchr(parv[3], 'r'))
-			handle_burstlogin(u, NULL);
+			handle_burstlogin(u, NULL, 0);
 
 		handle_nickchange(u);
 	}

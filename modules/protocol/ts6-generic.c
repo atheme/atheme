@@ -832,7 +832,7 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 
 		user_mode(u, parv[3]);
 		if (*parv[9] != '*')
-			handle_burstlogin(u, parv[9]);
+			handle_burstlogin(u, parv[9], 0);
 
 		/* server_eob() cannot know if a user was introduced
 		 * with NICK/UID or EUID and handle_nickchange() must
@@ -1048,7 +1048,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		 * SASL users.
 		 * --gxti
 		 */
-		handle_burstlogin(u, parv[2]);
+		handle_burstlogin(u, parv[2], 0);
 	}
 	else if (!irccasecmp(parv[1], "SU"))
 	{
@@ -1064,7 +1064,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		if (parc == 3)
 			handle_clearlogin(si, u);
 		else
-			handle_setlogin(si, u, parv[3]);
+			handle_setlogin(si, u, parv[3], 0);
 	}
 	else if (!irccasecmp(parv[1], "REALHOST"))
 	{
@@ -1127,7 +1127,7 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcmp(parv[4], "0"))
 		handle_clearlogin(si, u);
 	else
-		handle_setlogin(si, u, parv[4]);
+		handle_setlogin(si, u, parv[4], 0);
 }
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])

@@ -389,6 +389,8 @@ void handle_nickchange(user_t *u)
 
 /* User u is bursted as being logged in to login (if not NULL) or as
  * being identified to their current nick (if login is NULL)
+ * The timestamp is the time of registration of the account, if the ircd
+ * stores this, or 0 if not known.
  * Update the administration or log them out on ircd
  * How to use this in protocol modules:
  * 1. if login info is bursted in a command that always occurs, call
@@ -399,7 +401,7 @@ void handle_nickchange(user_t *u)
  *    server confirms EOB
  * -- jilles
  */
-void handle_burstlogin(user_t *u, char *login)
+void handle_burstlogin(user_t *u, char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -434,6 +436,18 @@ void handle_burstlogin(user_t *u, char *login)
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */
 		return;
+	if (ts != 0 && ts != mu->registered)
+	{
+		/* wrong account creation time
+		 * if we have an authentication service, log them out */
+		slog(LG_INFO, "handle_burstlogin(): got stale login %s for user %s", login, u->nick);
+		if (authservice_loaded)
+		{
+			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s is stale, forcing logout"), login);
+			ircd_on_logout(u, login);
+		}
+		return;
+	}
 	if (mu->flags & MU_NOBURSTLOGIN && authservice_loaded)
 	{
 		/* no splits for this account, this bursted login cannot
@@ -450,7 +464,7 @@ void handle_burstlogin(user_t *u, char *login)
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
-void handle_setlogin(sourceinfo_t *si, user_t *u, char *login)
+void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -492,7 +506,26 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login)
 		}
 		/* we're running without a persistent db, create it */
 		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
+		if (ts != 0)
+			mu->registered = ts;
 		metadata_add(mu, "fake", "1");
+	}
+	else if (ts != 0 && ts != mu->registered)
+	{
+		if (backend_loaded)
+		{
+			slog(LG_DEBUG, "handle_setlogin(): got unexpected registration time for login %s for user %s (%lu != %lu)",
+					login, u->nick,
+					(unsigned long)ts,
+					(unsigned long)mu->registered);
+			return;
+		}
+		if (LIST_LENGTH(&mu->logins))
+			slog(LG_INFO, "handle_setlogin(): account %s with changing registration time has logins", login);
+		slog(LG_DEBUG, "handle_setlogin(): changing registration time for %s from %lu to %lu",
+				mu->name, (unsigned long)mu->registered,
+				(unsigned long)ts);
+		mu->registered = ts;
 	}
 	u->myuser = mu;
 	n = node_create();

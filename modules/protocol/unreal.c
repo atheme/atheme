@@ -646,7 +646,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* If the user's SVID is equal to their nick TS,
 		 * they're properly logged in -- jilles */
 		if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
-			handle_burstlogin(u, NULL);
+			handle_burstlogin(u, NULL, 0);
 
 		handle_nickchange(u);
 	}

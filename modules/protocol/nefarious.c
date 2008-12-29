@@ -165,7 +165,8 @@ static void nefarious_on_login(user_t *u, myuser_t *account, const char *wantedh
 	if (!me.connected || u == NULL)
 		return;
 
-	sts("%s AC %s R %s", me.numeric, u->uid, account->name);
+	sts("%s AC %s R %s %lu", me.numeric, u->uid, account->name,
+			(unsigned long)account->registered);
 	check_hidehost(u);
 }
 
@@ -383,7 +384,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			i = 1;
 			if (strchr(parv[5], 'r'))
 			{
-				handle_burstlogin(u, parv[5+i]);
+				p = strchr(parv[5+i], ':');
+				if (p != NULL)
+					*p++ = '\0';
+				handle_burstlogin(u, parv[5+i], p ? atol(p) : 0);
 				/* killed to force logout? */
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
