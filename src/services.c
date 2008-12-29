@@ -432,6 +432,8 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 		}
 		/* we're running without a persistent db, create it */
 		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
+		if (ts != 0)
+			mu->registered = ts;
 		metadata_add(mu, "fake", "1");
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */

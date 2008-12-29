@@ -11,8 +11,6 @@ You must enable join_chans as P10 is designed for services to work that way.
 P10 does not support logout, so users are killed (from the services server)
 when they log out. It is suggested that the logout module is not loaded.
 Users dropping their account will be killed; this cannot be avoided.
-Furthermore, Atheme assumes it is the only entity on the network sending
-ACCOUNT messages.
 
 Asuka's +N (no notices/wallchops) mode is turned off whenever a
 notice/wallchops is to be sent to a channel (it should not block notices from
@@ -49,8 +47,6 @@ You must enable join_chans as P10 is designed for services to work that way.
 P10 does not support logout, so users are killed (from the services server)
 when they log out. It is suggested that the logout module is not loaded.
 Users dropping their account will be killed; this cannot be avoided.
-Furthermore, Atheme assumes it is the only entity on the network sending
-ACCOUNT messages.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct.
@@ -161,7 +157,6 @@ You need U:lines for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
 
-Atheme assumes it is the only entity on the network sending ACCOUNT messages.
 Login-on-connect is not supported.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
@@ -254,8 +249,6 @@ You must enable join_chans as P10 is designed for services to work that way.
 P10 does not support logout, so users are killed (from the services server)
 when they log out. It is suggested that the logout module is not loaded.
 Users dropping their account will be killed; this cannot be avoided.
-Furthermore, Atheme assumes it is the only entity on the network sending
-ACCOUNT messages.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).

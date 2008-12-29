@@ -901,6 +901,16 @@ static void m_eos(sourceinfo_t *si, int parc, char *parv[])
 		sts("%s EA", me.numeric);
 }
 
+static void m_account(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u;
+
+	u = user_find(parv[0]);
+	if (u == NULL)
+		return;
+	handle_setlogin(si, u, parv[1], parc > 2 ? atol(parv[2]) : 0);
+}
+
 static void check_hidehost(user_t *u)
 {
 	static bool warned = false;
@@ -990,6 +1000,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MO", m_motd, 1, MSRC_USER);
+	pcommand_add("AC", m_account, 2, MSRC_SERVER);
 
 	m->mflags = MODTYPE_CORE;
 }

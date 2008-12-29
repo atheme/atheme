@@ -585,6 +585,43 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_account(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u;
+	static bool warned = false;
+
+	u = user_find(parv[0]);
+	if (u == NULL)
+		return;
+	if (strlen(parv[1]) != 1 || (parv[1][0] != 'U' && parc < 3))
+	{
+		if (!warned)
+		{
+			slog(LG_ERROR, "m_account(): got account with second parameter %s, %u parameters, Atheme requires F:EXTENDED_ACCOUNTS:TRUE", parv[1], parc);
+			wallops("Invalid ACCOUNT syntax, check F:EXTENDED_ACCOUNTS:TRUE");
+			warned = true;
+		}
+		return;
+	}
+	switch (parv[1][0])
+	{
+		case 'R':
+			handle_setlogin(si, u, parv[2], parc > 3 ? atol(parv[3]) : 0);
+			break;
+		case 'M':
+			if (!u->myuser)
+				slog(LG_INFO, "Account rename (%s) for not logged in user %s, processing anyway",
+						parv[2], u->nick);
+			handle_setlogin(si, u, parv[2], 0);
+			break;
+		case 'U':
+			handle_clearlogin(si, u);
+			break;
+		default:
+			slog(LG_INFO, "Unrecognized ACCOUNT type %s", parv[1]);
+	}
+}
+
 static void check_hidehost(user_t *u)
 {
 	static bool warned = false;
@@ -641,12 +678,14 @@ void _modinit(module_t * m)
 	pcommand_delete("OM");
 	pcommand_delete("CM");
 	pcommand_delete("T");
+	pcommand_delete("AC");
 	pcommand_add("B", m_burst, 2, MSRC_SERVER);
 	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("AC", m_account, 2, MSRC_SERVER);
 
 	m->mflags = MODTYPE_CORE;
 
