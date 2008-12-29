@@ -297,14 +297,14 @@ static void ircnet_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ircnet_on_login(char *origin, char *user, char *wantedhost)
+static void ircnet_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
 	/* nothing to do on ratbox */
 	return;
 }
 
 /* protocol-specific stuff to do on login */
-static bool ircnet_on_logout(char *origin, char *user, char *wantedhost)
+static bool ircnet_on_logout(user_t *u, const char *account)
 {
 	/* nothing to do on ratbox */
 	return false;

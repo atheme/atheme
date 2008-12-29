@@ -266,10 +266,8 @@ static void ultimate3_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
+static void ultimate3_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u = user_find(origin);
-
 	if (!me.connected || u == NULL)
 		return;
 
@@ -277,18 +275,18 @@ static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %lu", me.name, origin,
+		sts(":%s SVSMODE %s +rd %lu", me.name, u->nick,
 				(unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
-static bool ultimate3_on_logout(char *origin, char *user, char *wantedhost)
+static bool ultimate3_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return false;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %lu", me.name, origin,
+		sts(":%s SVSMODE %s -r+d %lu", me.name, u->nick,
 				(unsigned long)CURRTIME);
 
 	return false;

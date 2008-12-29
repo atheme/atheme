@@ -116,11 +116,9 @@ static void asuka_wallchops(user_t *sender, channel_t *channel, const char *mess
 }
 
 /* protocol-specific stuff to do on login */
-static void asuka_on_login(char *origin, char *user, char *wantedhost)
+static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u = user_find_named(origin);
-
-	if (!u)
+	if (!me.connected || u == NULL)
 		return;
 
 	sts("%s AC %s %s", me.numeric, u->uid, u->myuser->name);
@@ -129,16 +127,14 @@ static void asuka_on_login(char *origin, char *user, char *wantedhost)
 
 /* P10 does not support logout, so kill the user
  * we can't keep track of which logins are stale and which aren't -- jilles */
-static bool asuka_on_logout(char *origin, char *user, char *wantedhost)
+static bool asuka_on_logout(user_t *u, const char *account)
 {
-	user_t *u = user_find_named(origin);
-
 	if (!me.connected)
 		return false;
 
 	if (u != NULL)
 	{
-		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, user);
+		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
 		return true;
 	}
 	else

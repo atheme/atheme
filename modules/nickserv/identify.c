@@ -134,7 +134,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), u->myuser->name);
 		return;
 	}
-	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
+	else if (u->myuser != NULL && ircd_on_logout(u, u->myuser->name))
 		/* logout killed the user... */
 		return;
 
@@ -238,7 +238,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		/* don't allow them to join regonly chans until their
 		 * email is verified */
 		if (!(mu->flags & MU_WAITAUTH))
-			ircd_on_login(si->su->nick, mu->name, NULL);
+			ircd_on_login(si->su, mu, NULL);
 
 		hook_call_event("user_identify", u);
 

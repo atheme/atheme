@@ -333,10 +333,8 @@ static void bahamut_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void bahamut_on_login(char *origin, char *user, char *wantedhost)
+static void bahamut_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u = user_find(origin);
-
 	if (!me.connected || u == NULL)
 		return;
 
@@ -344,17 +342,17 @@ static void bahamut_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
-static bool bahamut_on_logout(char *origin, char *user, char *wantedhost)
+static bool bahamut_on_logout(user_t *u, const char *account)
 {
 	if (!me.connected)
 		return false;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 	return false;
 }
 

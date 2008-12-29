@@ -424,7 +424,7 @@ void handle_burstlogin(user_t *u, char *login)
 			if (authservice_loaded)
 			{
 				notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
-				ircd_on_logout(u->nick, login, NULL);
+				ircd_on_logout(u, login);
 			}
 			return;
 		}
@@ -441,7 +441,7 @@ void handle_burstlogin(user_t *u, char *login)
 		 * if we have an authentication service, log them out */
 		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
 		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s seems invalid, forcing logout"), login);
-		ircd_on_logout(u->nick, login, NULL);
+		ircd_on_logout(u, login);
 		return;
 	}
 	u->myuser = mu;

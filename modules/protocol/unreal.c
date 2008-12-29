@@ -331,15 +331,9 @@ static void unreal_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void unreal_on_login(char *origin, char *user, char *wantedhost)
+static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u;
-
-	if (!me.connected)
-		return;
-
-	u = user_find(origin);
-	if (u == NULL)
+	if (!me.connected || u == NULL)
 		return;
 
 	/* Can only do this for nickserv, and can only record identified
@@ -347,17 +341,17 @@ static void unreal_on_login(char *origin, char *user, char *wantedhost)
 	 */
 	/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
 	if (should_reg_umode(u))
-		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)u->ts);
+		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts);
 }
 
 /* protocol-specific stuff to do on logout */
-static bool unreal_on_logout(char *origin, char *user, char *wantedhost)
+static bool unreal_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return false;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, origin);
+		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
 
 	return false;
 }

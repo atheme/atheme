@@ -159,15 +159,15 @@ E void (*mode_sts)(char *sender, channel_t *target, char *modes);
 /* ping the uplink
  * first check if me.connected is true and bail if not */
 E void (*ping_sts)(void);
-/* mark user 'origin' as logged in as 'user'
+/* mark user 'u' as logged in as 'account'
  * wantedhost is currently not used
  * first check if me.connected is true and bail if not */
-E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
-/* mark user 'origin' as logged out
+E void (*ircd_on_login)(user_t *u, myuser_t *account, const char *wantedhost);
+/* mark user 'u' as logged out
  * first check if me.connected is true and bail if not
  * return false if successful or logins are not supported
  * return true if the user was killed to force logout (P10) */
-E bool (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
+E bool (*ircd_on_logout)(user_t *u, const char *account);
 /* introduce a fake server
  * it is ok to use opersvs to squit the old server
  * if SQUIT uses kill semantics (e.g. charybdis), server_delete() the server
@@ -225,8 +225,8 @@ E void generic_unkline_sts(char *server, char *user, char *host);
 E void generic_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic);
 E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
-E void generic_on_login(char *origin, char *user, char *wantedhost);
-E bool generic_on_logout(char *origin, char *user, char *wantedhost);
+E void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost);
+E bool generic_on_logout(user_t *u, const char *account);
 E void generic_jupe(const char *server, const char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);

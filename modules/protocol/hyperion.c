@@ -412,17 +412,13 @@ static void hyperion_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void hyperion_on_login(char *origin, char *user, char *wantedhost)
+static void hyperion_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u;
 	metadata_t *md;
 
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return;
 
-	u = user_find(origin);
-	if (!u)
-		return;
 	if (use_svslogin)
 	{
 		/* XXX needed to avoid race */
@@ -434,7 +430,7 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 		}
 		if (wantedhost && strlen(wantedhost) >= HOSTLEN)
 			wantedhost = NULL;
-		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, user, origin, u->user, wantedhost ? wantedhost : u->vhost);
+		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, u->nick, account->name, u->nick, u->user, wantedhost ? wantedhost : u->vhost);
 		/* we'll get a SIGNON confirming the changes later, no need
 		 * to change the fields yet */
 		/* XXX try to avoid a redundant SETHOST */
@@ -444,25 +440,20 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 
 	/* set +e if they're identified to the nick they are using */
 	if (should_reg_umode(u))
-		sts(":%s MODE %s +e", me.name, origin);
+		sts(":%s MODE %s +e", me.name, u->nick);
 }
 
 /* protocol-specific stuff to do on login */
-static bool hyperion_on_logout(char *origin, char *user, char *wantedhost)
+static bool hyperion_on_logout(user_t *u, const char *account)
 {
-	user_t *u;
-
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return false;
 
-	u = user_find(origin);
-	if (!u)
-		return false;
 	if (use_svslogin)
-		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, "0", origin, u->user, wantedhost ? u->host : u->vhost);
+		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, u->nick, "0", u->nick, u->user, u->vhost);
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s MODE %s -e", me.name, origin);
+		sts(":%s MODE %s -e", me.name, u->nick);
 
 	return false;
 }

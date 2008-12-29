@@ -160,14 +160,12 @@ static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
 }
 
 /* protocol-specific stuff to do on login */
-static void nefarious_on_login(char *origin, char *user, char *wantedhost)
+static void nefarious_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u = user_find_named(origin);
-
-	if (!u)
+	if (!me.connected || u == NULL)
 		return;
 
-	sts("%s AC %s R %s", me.numeric, u->uid, u->myuser->name);
+	sts("%s AC %s R %s", me.numeric, u->uid, account->name);
 	check_hidehost(u);
 }
 
@@ -175,14 +173,9 @@ static void nefarious_on_login(char *origin, char *user, char *wantedhost)
  * we can't keep track of which logins are stale and which aren't -- jilles 
  * Except we can in Nefarious --nenolod
  */
-static bool nefarious_on_logout(char *origin, char *user, char *wantedhost)
+static bool nefarious_on_logout(user_t *u, const char *account)
 {
-	user_t *u = user_find_named(origin);
-
-	if (!me.connected)
-		return false;
-
-	if (!u)
+	if (!me.connected || u == NULL)
 		return false;
 
 	sts("%s AC %s U", me.numeric, u->uid);

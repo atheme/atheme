@@ -205,7 +205,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!(mu->flags & MU_WAITAUTH))
 			/* only grant ircd registered status if it's verified */
-			ircd_on_login(si->su->nick, mu->name, NULL);
+			ircd_on_login(si->su, mu, NULL);
 	}
 
 	if (!nicksvs.no_nick_ownership && si->su != NULL)

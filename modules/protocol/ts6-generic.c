@@ -314,22 +314,18 @@ static void ts6_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ts6_on_login(char *origin, char *user, char *wantedhost)
+static void ts6_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u = user_find(origin);
-
-	if (!me.connected || !use_rserv_support || !u)
+	if (!me.connected || !use_rserv_support || u == NULL)
 		return;
 
-	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), user);
+	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), account->name);
 }
 
 /* protocol-specific stuff to do on login */
-static bool ts6_on_logout(char *origin, char *user, char *wantedhost)
+static bool ts6_on_logout(user_t *u, const char *account)
 {
-	user_t *u = user_find(origin);
-
-	if (!me.connected || !use_rserv_support || !u)
+	if (!me.connected || !use_rserv_support || u == NULL)
 		return false;
 
 	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));

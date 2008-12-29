@@ -98,7 +98,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			LIST_FOREACH(n, mu->logins.head)
 			{
 				user_t *u = n->data;
-				ircd_on_login(u->nick, mu->name, NULL);
+				ircd_on_login(u, mu, NULL);
 			}
 
 			/* XXX should this indeed be after ircd_on_login? */
@@ -200,7 +200,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			user_t *u = n->data;
-			ircd_on_login(u->nick, mu->name, NULL);
+			ircd_on_login(u, mu, NULL);
 		}
 
 		/* XXX should this indeed be after ircd_on_login? */

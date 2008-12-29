@@ -284,16 +284,10 @@ static void plexus_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void plexus_on_login(char *origin, char *user, char *wantedhost)
+static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	user_t *u;
-
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return;
-
-	u = user_find(origin);
-	if (u == NULL)
-		return;		/* realistically, this should never happen --nenolod */
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
@@ -303,32 +297,25 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 
 #ifdef USE_NETADMIN
 	if (has_priv(u, PRIV_ADMIN))
-		sts(":%s ENCAP * SVSMODE %s %lu +rdN %lu", nicksvs.nick, origin, (unsigned long)u->ts, (unsigned long)CURRTIME);
+		sts(":%s ENCAP * SVSMODE %s %lu +rdN %lu", nicksvs.nick, u->nick, (unsigned long)u->ts, (unsigned long)CURRTIME);
 	else
 #endif
-		sts(":%s ENCAP * SVSMODE %s %lu +rd %lu", nicksvs.nick, origin, (unsigned long)u->ts, (unsigned long)CURRTIME);
+		sts(":%s ENCAP * SVSMODE %s %lu +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
-static bool plexus_on_logout(char *origin, char *user, char *wantedhost)
+static bool plexus_on_logout(user_t *u, const char *account)
 {
-	user_t *u;
-
-	if (!me.connected)
+	if (!me.connected || u == NULL)
 		return false;
 
 	if (nicksvs.no_nick_ownership)
 		return false;
 
-	u = user_find(origin);
-
-	if (u == NULL)
-		return false;
-
 #ifdef USE_NETADMIN
-	sts(":%s ENCAP * SVSMODE %s %lu -rN", nicksvs.nick, origin, (unsigned long)u->ts);
+	sts(":%s ENCAP * SVSMODE %s %lu -rN", nicksvs.nick, u->nick, (unsigned long)u->ts);
 #else
-	sts(":%s ENCAP * SVSMODE %s %lu -r", nicksvs.nick, origin, (unsigned long)u->ts);
+	sts(":%s ENCAP * SVSMODE %s %lu -r", nicksvs.nick, u->nick, (unsigned long)u->ts);
 #endif
 	return false;
 }

@@ -44,8 +44,8 @@ void (*topic_sts) (channel_t *c, const char *setter, time_t ts, time_t prevts, c
 void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
 void (*quit_sts) (user_t *u, const char *reason) = generic_quit_sts;
-void (*ircd_on_login) (char *origin, char *user, char *wantedhost) = generic_on_login;
-bool (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
+void (*ircd_on_login) (user_t *u, myuser_t *account, const char *wantedhost) = generic_on_login;
+bool (*ircd_on_logout) (user_t *u, const char *account) = generic_on_logout;
 void (*jupe) (const char *server, const char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
@@ -184,12 +184,12 @@ void generic_quit_sts(user_t *u, const char *reason)
 	/* cant do anything here. bail. */
 }
 
-void generic_on_login(char *origin, char *user, char *wantedhost)
+void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
 	/* nothing to do here. */
 }
 
-bool generic_on_logout(char *origin, char *user, char *wantedhost)
+bool generic_on_logout(user_t *u, const char *account)
 {
 	/* nothing to do here. */
 	return false;

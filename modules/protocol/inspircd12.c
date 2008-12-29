@@ -435,21 +435,21 @@ static void inspircd_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void inspircd_on_login(char *origin, char *user, char *wantedhost)
+static void inspircd_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.numeric, origin, user);
+	sts(":%s METADATA %s accountname :%s", me.numeric, u->nick, account->name);
 }
 
 /* protocol-specific stuff to do on logout */
-static bool inspircd_on_logout(char *origin, char *user, char *wantedhost)
+static bool inspircd_on_logout(user_t *u, const char *account)
 {
 	if (!me.connected)
 		return false;
 
-	sts(":%s METADATA %s accountname :", me.numeric, origin);
+	sts(":%s METADATA %s accountname :", me.numeric, u->nick);
 	return false;
 }
 

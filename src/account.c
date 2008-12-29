@@ -184,7 +184,7 @@ void myuser_delete(myuser_t *mu)
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
-		if (!authservice_loaded || !ircd_on_logout(u->nick, mu->name, NULL))
+		if (!authservice_loaded || !ircd_on_logout(u, mu->name))
 		{
 			u->myuser = NULL;
 			node_del(n, &mu->logins);
@@ -320,7 +320,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = n->data;
-			ircd_on_logout(u->nick, mu->name, NULL);
+			ircd_on_logout(u, mu->name);
 		}
 	}
 	mowgli_patricia_delete(mulist, mu->name);
@@ -331,7 +331,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			u = n->data;
-			ircd_on_login(u->nick, mu->name, NULL);
+			ircd_on_login(u, mu, NULL);
 		}
 	}
 }
