@@ -39,7 +39,7 @@ buildid=`echo "\$Revision: 8031 $" | \
 
 $spitshell >version.c <<!SUB!THIS!
 /*
- * Copyright (c) 2005-2008 Atheme Development Group
+ * Copyright (c) 2005-2009 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains version information.
@@ -58,7 +58,7 @@ const char *osinfo = "$osinfo";
 const char *infotext[] =
 {
   "Atheme IRC Services --",
-  "Copyright (c) 2005-2008 Atheme Development Group (http://www.atheme.org)",
+  "Copyright (c) 2005-2009 Atheme Development Group (http://www.atheme.org)",
   " ",
   "Permission to use, copy, modify, and/or distribute this software for any",
   "purpose with or without fee is hereby granted, provided that the above",
