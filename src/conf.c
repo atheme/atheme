@@ -234,7 +234,7 @@ void init_newconf(void)
 	add_top_conf("STRING", c_string);
 	add_top_conf("LOGFILE", c_logfile);
 
-	/* Now we fill in the information */
+	/* serverinfo{} block */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
 	add_dupstr_conf_item("DESC", &conf_si_table, &me.desc);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
@@ -258,7 +258,7 @@ void init_newconf(void)
 	add_uint_conf_item("MDLIMIT", &conf_si_table, &me.mdlimit, 0, INT_MAX);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
 
-	/* general{} block. */
+	/* general{} block */
 	add_dupstr_conf_item("CHAN", &conf_gi_table, &config_options.chan);
 	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, &config_options.verbose_wallops);
 	add_bool_conf_item("SILENT", &conf_gi_table, &config_options.silent);
@@ -289,10 +289,6 @@ void init_newconf(void)
 	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2)); /* fit on a line */
 	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, &chansvs.deftemplates);
 
-	/* global{} block */
-
-	/* operserv{} block */
-
 	/* nickserv{} block */
 	add_bool_conf_item("SPAM", &conf_ni_table, &nicksvs.spam);
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, &nicksvs.no_nick_ownership);
@@ -300,12 +296,6 @@ void init_newconf(void)
 	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, &nicksvs.enforce_expiry, "d");
 	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, "s");
 
-	/* saslserv{} block */
-
-	/* memoserv{} block */
-
-	/* memoserv{} block */
-	
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, &me.language_name);
 	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, &me.language_translator);
