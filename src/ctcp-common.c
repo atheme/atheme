@@ -41,18 +41,8 @@ static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick
 static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsnick)
 {
 	notice(svsnick, origin,
-		"\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s%s [%s]\001",
-		version, revision, me.name,
-		(match_mapping) ? "A" : "",
-		log_debug_enabled() ? "d" : "",
-		(me.auth) ? "e" : "",
-		(config_options.flood_msgs) ? "F" : "",
-		(config_options.leave_chans) ? "l" : "",
-		(config_options.join_chans) ? "j" : "",
-		(chansvs.changets) ? "t" : "",
-		(!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "",
-		(runflags & RF_LIVE) ? "n" : "",
-		ircd->ircdname);
+		"\001VERSION atheme-%s. %s %s %s [%s]\001",
+		version, revision, me.name, get_conf_opts(), ircd->ircdname);
 }
 
 static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)

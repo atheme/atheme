@@ -112,6 +112,24 @@ list_t conf_la_table;
 
 /* *INDENT-ON* */
 
+const char *get_conf_opts(void)
+{
+	static char opts[53];
+
+	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s",
+			match_mapping ? "A" : "",
+			log_debug_enabled() ? "d" : "",
+			me.auth ? "e" : "",
+			config_options.flood_msgs ? "F" : "",
+			config_options.leave_chans ? "l" : "", 
+			config_options.join_chans ? "j" : "", 
+			chansvs.changets ? "t" : "",
+			!match_mapping ? "R" : "",
+			config_options.raw ? "r" : "",
+			runflags & RF_LIVE ? "n" : "");
+	return opts;
+}
+
 bool conf_parse(const char *file)
 {
 	config_file_t *cfp;

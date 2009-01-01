@@ -49,19 +49,8 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "atheme-%s. %s :%s%s%s%s%s%s%s%s%s%s [%s]",
-		    version, me.name, 
-		    (match_mapping) ? "A" : "",
-		    log_debug_enabled() ? "d" : "",
-		    (me.auth) ? "e" : "",
-		    (config_options.flood_msgs) ? "F" : "",
-		    (config_options.leave_chans) ? "l" : "", 
-		    (config_options.join_chans) ? "j" : "", 
-		    (chansvs.changets) ? "t" : "",
-		    (!match_mapping) ? "R" : "",
-		    (config_options.raw) ? "r" : "",
-		    (runflags & RF_LIVE) ? "n" : "",
-		    ircd->ircdname);
+	numeric_sts(me.me, 351, u, "atheme-%s. %s :%s [%s]",
+		    version, me.name, get_conf_opts(), ircd->ircdname);
 	numeric_sts(me.me, 351, u, ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
 }
 

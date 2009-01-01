@@ -208,17 +208,7 @@ static unsigned int inspircd_server_login(void)
 
 	me.bursting = true;
 	sts("BURST");
-	/* XXX: Being able to get this data as a char* would be nice - Brain */
-        sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
-								                      log_debug_enabled() ? "d" : "",
-							                              (me.auth) ? "e" : "",
-										      (config_options.flood_msgs) ? "F" : "",
-										      (config_options.leave_chans) ? "l" : "",
-										      (config_options.join_chans) ? "j" : "",
-										      (chansvs.changets) ? "t" : "",
-										      (!match_mapping) ? "R" : "",
-										      (config_options.raw) ? "r" : "",
-										      (runflags & RF_LIVE) ? "n" : "");
+        sts(":%s VERSION :atheme-%s. %s %s",me.name, version, me.name, get_conf_opts());
 	services_init();
 	return 0;
 }
