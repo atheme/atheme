@@ -247,6 +247,15 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
+	LIST_FOREACH(n, object(mu)->metadata.head)
+	{
+		md = n->data;
+		if (md->private)
+			continue;
+		command_success_nodata(si, _("Metadata   : %s = %s"),
+				md->name, md->value);
+	}
+
 	*buf = '\0';
 
 	if (MU_HIDEMAIL & mu->flags)

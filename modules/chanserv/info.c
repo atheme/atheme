@@ -47,6 +47,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm;
 	myuser_t *mu;
 	metadata_t *md;
+	node_t *n;
 	hook_channel_req_t req;
 	char *p, *q, *qq;
 	int dir;
@@ -227,6 +228,23 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!hide_info && (md = metadata_find(mc, "email")))
 		command_success_nodata(si, "Email      : %s", md->value);
+
+	if (!hide_info)
+	{
+		LIST_FOREACH(n, object(mc)->metadata.head)
+		{
+			md = n->data;
+			if (md->private)
+				continue;
+			/* these are shown separately */
+			if (!strcasecmp(md->name, "email") ||
+					!strcasecmp(md->name, "url") ||
+					!strcasecmp(md->name, "disable_fantasy"))
+				continue;
+			command_success_nodata(si, _("Metadata   : %s = %s"),
+					md->name, md->value);
+		}
+	}
 
 	*buf = '\0';
 
