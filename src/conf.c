@@ -307,7 +307,7 @@ static int c_loadmodule(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -334,7 +334,7 @@ static int c_uplink(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -353,7 +353,7 @@ static int c_uplink(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -363,7 +363,7 @@ static int c_uplink(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -373,7 +373,7 @@ static int c_uplink(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -385,7 +385,7 @@ static int c_uplink(config_entry_t *ce)
 		}
 		else
 		{
-			conf_report_warning(ce, "Invalid configuration option uplink::%s", ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option");
 			continue;
 		}
 	}
@@ -403,7 +403,7 @@ static int c_operclass(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -414,7 +414,7 @@ static int c_operclass(config_entry_t *ce)
 		if (!strcasecmp("PRIVS", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL && ce->ce_entries == NULL)
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 
 			if (ce->ce_vardata != NULL)
 			{
@@ -464,7 +464,7 @@ static int c_operclass(config_entry_t *ce)
 			flags |= OPERCLASS_NEEDOPER;
 		else
 		{
-			conf_report_warning(ce, "Invalid configuration option operclass::%s", ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option");
 			continue;
 		}
 	}
@@ -485,7 +485,7 @@ static int c_operator(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -498,7 +498,7 @@ static int c_operator(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -511,7 +511,7 @@ static int c_operator(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -519,7 +519,7 @@ static int c_operator(config_entry_t *ce)
 		}
 		else
 		{
-			conf_report_warning(ce, "Invalid configuration option operator::%s", ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option");
 			continue;
 		}
 	}
@@ -566,7 +566,7 @@ static int c_string(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -579,7 +579,7 @@ static int c_string(config_entry_t *ce)
 		{
 			if (ce->ce_vardata == NULL)
 			{
-				conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
@@ -587,7 +587,7 @@ static int c_string(config_entry_t *ce)
 		}
 		else
 		{
-			conf_report_warning(ce, "Invalid configuration option string::%s", ce->ce_varname);
+			conf_report_warning(ce, "Invalid configuration option");
 			continue;
 		}
 	}
@@ -603,7 +603,7 @@ static int c_si_name(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -617,7 +617,7 @@ static int c_si_numeric(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -649,7 +649,7 @@ static int c_si_loglevel(config_entry_t *ce)
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			mask |= val;
 		else
-			conf_report_warning(flce, "unknown flag: %s", flce->ce_vardata);
+			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
 	}
 	log_master_set_mask(mask);
 
@@ -660,7 +660,7 @@ static int c_si_auth(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -677,7 +677,7 @@ static int c_si_casemapping(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -694,7 +694,7 @@ static int c_ci_vop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -707,7 +707,7 @@ static int c_ci_hop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -720,7 +720,7 @@ static int c_ci_aop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -733,7 +733,7 @@ static int c_ci_sop(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -789,7 +789,7 @@ static int c_gi_expire(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
@@ -808,7 +808,7 @@ static int c_logfile(config_entry_t *ce)
 
 	if (ce->ce_vardata == NULL)
 	{
-		conf_report_warning(ce, "no parameter for configuration option: %s", ce->ce_varname);
+		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
