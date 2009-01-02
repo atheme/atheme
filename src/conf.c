@@ -29,11 +29,7 @@
 #include "datastream.h"
 #include <limits.h>
 
-static int c_serverinfo(config_entry_t *);
-static int c_cservice(config_entry_t *);
-static int c_general(config_entry_t *);
 static int c_uplink(config_entry_t *);
-static int c_nickserv(config_entry_t *);
 static int c_loadmodule(config_entry_t *);
 static int c_operclass(config_entry_t *);
 static int c_operator(config_entry_t *);
@@ -222,11 +218,11 @@ void conf_init(void)
 void init_newconf(void)
 {
 	/* First we set up the blocks. */
-	add_top_conf("SERVERINFO", c_serverinfo);
-	add_top_conf("CHANSERV", c_cservice);
-	add_top_conf("NICKSERV", c_nickserv);
+	add_subblock_top_conf("SERVERINFO", &conf_si_table);
+	add_subblock_top_conf("CHANSERV", &conf_ci_table);
+	add_subblock_top_conf("NICKSERV", &conf_ni_table);
 	add_top_conf("UPLINK", c_uplink);
-	add_top_conf("GENERAL", c_general);
+	add_subblock_top_conf("GENERAL", &conf_gi_table);
 	add_top_conf("LOADMODULE", c_loadmodule);
 	add_top_conf("OPERCLASS", c_operclass);
 	add_top_conf("OPERATOR", c_operator);
@@ -299,24 +295,6 @@ void init_newconf(void)
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, &me.language_name);
 	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, &me.language_translator);
-}
-
-static int c_serverinfo(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_si_table);
-	return 0;
-}
-
-static int c_cservice(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_ci_table);
-	return 0;
-}
-
-static int c_nickserv(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_ni_table);
-	return 0;
 }
 
 static int c_loadmodule(config_entry_t *ce)
@@ -551,12 +529,6 @@ static int c_operator(config_entry_t *ce)
 	else
 		conf_report_warning(topce, "skipping operator %s because of bad/missing parameters",
 						name);
-	return 0;
-}
-
-static int c_general(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_gi_table);
 	return 0;
 }
 

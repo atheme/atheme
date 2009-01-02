@@ -32,12 +32,6 @@ struct httpd_configuration
 	unsigned int port;
 } httpd_config;
 
-static int conf_httpd(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_httpd_table);
-	return 0;
-}
-
 static void clear_httpddata(struct httpddata *hd)
 {
 	hd->method[0] = '\0';
@@ -412,7 +406,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", httpd_config_ready);
 
-	add_top_conf("HTTPD", conf_httpd);
+	add_subblock_top_conf("HTTPD", &conf_httpd_table);
 	add_dupstr_conf_item("HOST", &conf_httpd_table, &httpd_config.host);
 	add_dupstr_conf_item("WWW_ROOT", &conf_httpd_table, &httpd_config.www_root);
 	add_uint_conf_item("PORT", &conf_httpd_table, &httpd_config.port, 1, 65535);

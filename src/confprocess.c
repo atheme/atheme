@@ -30,7 +30,8 @@ enum conftype
 	CONF_UINT,
 	CONF_DURATION,
 	CONF_DUPSTR,
-	CONF_BOOL
+	CONF_BOOL,
+	CONF_SUBBLOCK
 };
 
 struct ConfTable
@@ -53,6 +54,7 @@ struct ConfTable
 		} duration_val;
 		char **dupstr_val;
 		bool *bool_val;
+		list_t *subblock;
 	} un;
 };
 
@@ -230,6 +232,9 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 				*ct->un.bool_val = true;
 				return;
 			}
+		case CONF_SUBBLOCK:
+			subblock_handler(ce, ct->un.subblock);
+			break;
 	}
 }
 
@@ -332,6 +337,25 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	ct->name = sstrdup(name);
 	ct->type = CONF_HANDLER;
 	ct->un.handler = handler;
+
+	node_add(ct, node_create(), &confblocks);
+}
+
+void add_subblock_top_conf(const char *name, list_t *list)
+{
+	struct ConfTable *ct;
+
+	if ((ct = find_top_conf(name)))
+	{
+		slog(LG_DEBUG, "add_top_conf(): duplicate config block '%s'.", name);
+		return;
+	}
+
+	ct = BlockHeapAlloc(conftable_heap);
+
+	ct->name = sstrdup(name);
+	ct->type = CONF_SUBBLOCK;
+	ct->un.subblock = list;
 
 	node_add(ct, node_create(), &confblocks);
 }

@@ -44,12 +44,6 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 /* Configuration */
 list_t conf_xmlrpc_table;
 
-static int conf_xmlrpc(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_xmlrpc_table);
-	return 0;
-}
-
 struct sourceinfo_vtable xmlrpc_vtable = {
 	"xmlrpc",
 	xmlrpc_command_fail,
@@ -113,7 +107,7 @@ void _modinit(module_t *m)
 
 	xmlrpc_config.path = sstrdup("/xmlrpc");
 
-	add_top_conf("XMLRPC", conf_xmlrpc);
+	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
 	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, &xmlrpc_config.path);
 
 	xmlrpc_set_buffer(dump_buffer);

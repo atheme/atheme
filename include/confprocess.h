@@ -20,6 +20,7 @@ E void init_confprocess(void);
 E struct ConfTable *find_top_conf(const char *name);
 E struct ConfTable *find_conf_item(const char *name, list_t *conflist);
 E void add_top_conf(const char *name, int (*handler)(config_entry_t *ce));
+E void add_subblock_top_conf(const char *name, list_t *list);
 E void add_conf_item(const char *name, list_t *conflist, int (*handler)(config_entry_t *ce));
 E void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max);
 E void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *var, const char *defunit);
