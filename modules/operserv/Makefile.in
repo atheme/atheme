@@ -19,6 +19,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/clearchan.c	\
 	$(SRCDIR)/clones.c	\
 	$(SRCDIR)/compare.c	\
+	$(SRCDIR)/greplog.c	\
 	$(SRCDIR)/help.c	\
 	$(SRCDIR)/identify.c	\
 	$(SRCDIR)/ignore.c	\

@@ -262,6 +262,7 @@ loadmodule "modules/chanserv/why";
  * CLEARCHAN command				modules/operserv/clearchan
  * CLONES system				modules/operserv/clones
  * COMPARE command				modules/operserv/compare
+ * GREPLOG command				modules/operserv/greplog
  * HELP command					modules/operserv/help
  * IGNORE system				modules/operserv/ignore
  * IDENTIFY command				modules/operserv/identify
@@ -292,6 +293,7 @@ loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clearchan";
 #loadmodule "modules/operserv/clones";
 loadmodule "modules/operserv/compare";
+#loadmodule "modules/operserv/greplog";
 loadmodule "modules/operserv/help";
 loadmodule "modules/operserv/identify";
 loadmodule "modules/operserv/ignore";
