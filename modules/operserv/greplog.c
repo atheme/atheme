@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/greplog", FALSE, _modinit, _moddeinit,
+	"operserv/greplog", false, _modinit, _moddeinit,
 	"$Id: os_greplog.c 54 2008-09-30 23:07:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
