@@ -39,7 +39,7 @@ void _moddeinit(void)
 
 #define MAXMATCHES 100
 
-static const char *get_logfile(unsigned int *masks)
+static const char *get_logfile(const unsigned int *masks)
 {
 	logfile_t *lf;
 	int i;
@@ -55,7 +55,7 @@ static const char *get_logfile(unsigned int *masks)
 
 static const char *get_commands_log(void)
 {
-	unsigned int masks[] = {
+	const unsigned int masks[] = {
 		LG_CMD_ALL,
 		LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_CMD_DO | LG_CMD_LOGIN,
 		LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_CMD_DO,
@@ -69,7 +69,7 @@ static const char *get_commands_log(void)
 
 static const char *get_account_log(void)
 {
-	unsigned int masks[] = {
+	const unsigned int masks[] = {
 		LG_CMD_REGISTER | LG_CMD_SET | LG_REGISTER,
 		LG_CMD_REGISTER | LG_REGISTER,
 		0
