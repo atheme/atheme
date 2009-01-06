@@ -781,7 +781,7 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 
 	*buf = '\0';
 
-	if (parc < 3)
+	if (parc < 2)
 	{
 		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
@@ -847,7 +847,7 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 
 	*buf = '\0';
 
-	if (parc < 3)
+	if (parc < 2)
 	{
 		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
