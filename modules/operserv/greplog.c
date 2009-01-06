@@ -39,6 +39,44 @@ void _moddeinit(void)
 
 #define MAXMATCHES 100
 
+static const char *get_logfile(unsigned int *masks)
+{
+	logfile_t *lf;
+	int i;
+
+	for (i = 0; masks[i] != 0; i++)
+	{
+		lf = logfile_find_mask(masks[i]);
+		if (lf != NULL)
+			return lf->log_path;
+	}
+	return NULL;
+}
+
+static const char *get_commands_log(void)
+{
+	unsigned int masks[] = {
+		LG_CMD_ALL,
+		LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_CMD_DO | LG_CMD_LOGIN,
+		LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_CMD_DO,
+		LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET,
+		LG_CMD_ADMIN | LG_CMD_REGISTER,
+		LG_CMD_ADMIN,
+		0
+	};
+	return get_logfile(masks);
+}
+
+static const char *get_account_log(void)
+{
+	unsigned int masks[] = {
+		LG_CMD_REGISTER | LG_CMD_SET | LG_REGISTER,
+		LG_CMD_REGISTER | LG_REGISTER,
+		0
+	};
+	return get_logfile(masks);
+}
+
 /* GREPLOG <service> <mask> */
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -47,8 +85,6 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	FILE *in;
 	char str[1024];
 	char *p, *q;
-	const char *commands_log = "var/commands.log"; /* XXX */
-	const char *account_log = "var/account.log"; /* XXX */
 	char logfile[256];
 	time_t t;
 	struct tm tm;
@@ -85,11 +121,17 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	else
 		days = 0;
 
+	baselog = !strcmp(service, "*") ? get_account_log() : get_commands_log();
+	if (baselog == NULL)
+	{
+		command_fail(si, fault_badparams, _("There is no log file matching your request."));
+		return;
+	}
+
 	snoop("GREPLOG: \2%s\2 \2%s\2 by \2%s\2", service, pattern, get_oper_name(si));
 
 	for (day = 0; day <= days; day++)
 	{
-		baselog = !strcmp(service, "*") ? account_log : commands_log;
 		if (day == 0)
 			strlcpy(logfile, baselog, sizeof logfile);
 		else

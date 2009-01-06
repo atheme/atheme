@@ -15,6 +15,9 @@ start and end in *.
 The optional third parameter is the number of
 previous days to search in addition to today.
 
+Note that this command will only work if sufficient
+information is written to log files.
+
 Syntax: GREPLOG <service> <pattern> [days]
 Syntax: GREPLOG * <pattern> [days]
 
