@@ -2,7 +2,7 @@
  * atheme-services: A collection of minimalist IRC services   
  * logger.c: Logging routines
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)           
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -249,6 +249,46 @@ void log_master_set_mask(unsigned int mask)
 	if (log_file == NULL)
 		return;
 	log_file->log_mask = mask;
+}
+
+/*
+ * logfile_find_mask(unsigned int log_mask)
+ *
+ * Returns a log file that logs all of the bits in log_mask (and possibly
+ * more), or NULL if there is none. If an exact match exists, it is returned.
+ *
+ * Inputs:
+ *       - log mask
+ *
+ * Outputs:
+ *       - logfile_t object pointer, guaranteed to be a file, not some
+ *         other kind of log stream
+ *
+ * Side Effects:
+ *       - none
+ */
+logfile_t *logfile_find_mask(unsigned int log_mask)
+{
+	node_t *n;
+	logfile_t *lf;
+
+	LIST_FOREACH(n, log_files.head)
+	{
+		lf = n->data;
+		if (lf->write_func != logfile_write)
+			continue;
+		if (lf->log_mask == log_mask)
+			return lf;
+	}
+	LIST_FOREACH(n, log_files.head)
+	{
+		lf = n->data;
+		if (lf->write_func != logfile_write)
+			continue;
+		if ((lf->log_mask & log_mask) == log_mask)
+			return lf;
+	}
+	return NULL;
 }
 
 /*

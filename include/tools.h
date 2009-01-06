@@ -103,6 +103,7 @@ E void log_open(void);
 E void log_shutdown(void);
 E bool log_debug_enabled(void);
 E void log_master_set_mask(unsigned int mask);
+E logfile_t *logfile_find_mask(unsigned int log_mask);
 E void slog(unsigned int level, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...) PRINTFLIKE(4, 5);
