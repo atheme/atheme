@@ -182,7 +182,6 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 				node_del(n, &loglines);
 				free(n->data);
 				node_free(n);
-				break;
 			}
 		}
 		fclose(in);
