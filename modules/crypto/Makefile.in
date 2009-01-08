@@ -16,6 +16,8 @@ CFLAGS		= -I../../include @CFLAGS@
 BASE_SRCS =				\
 	$(SRCDIR)/@POSIX_CRYPTC@	\
 	$(SRCDIR)/ircservices.c		\
+	$(SRCDIR)/rawmd5.c		\
+	$(SRCDIR)/rawsha1.c		\
 	$(SRCDIR)/sorservices.c
 
 include ../Makefile.common
