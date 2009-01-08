@@ -63,9 +63,15 @@ void write_accounts(void)
 #if VERSION_BUILD >= 1185
 	char decr_pass[PASSMAX];
 #endif
-	char passwdbuf[33];
+	char passwdbuf[PASSMAX * 3 + 1];
 	char *passwd;
+	const char *encmod;
 
+#if VERSION_BUILD >= 1899
+	encmod = EncModule;
+#else
+	encmod = "enc_old";
+#endif
 	if (!f)
 		return;
 
@@ -107,13 +113,39 @@ void write_accounts(void)
 				athemeflags |= 0x100; /* MU_CRYPTPASS */
 				/* this stuff may contain '\0' and other
 				 * garbage, encode it -- jilles */
-				strcpy(passwdbuf, "$ircservices$");
-				/* the encrypted password is 16 bytes long,
-				 * but the last 8 bytes are constant,
-				 * omit them */
-				for (ii = 0; ii <= 7; ii++)
-					sprintf(passwdbuf + 13 + 2 * ii, "%02x",
-							255 & (int)na->nc->pass[ii]);
+				if (!strcmp(encmod, "enc_old"))
+				{
+					strcpy(passwdbuf, "$ircservices$");
+					/* the encrypted password is 16 bytes long,
+					 * but the last 8 bytes are constant,
+					 * omit them */
+					for (ii = 0; ii <= 7; ii++)
+						sprintf(passwdbuf + 13 + 2 * ii, "%02x",
+								255 & (int)na->nc->pass[ii]);
+				}
+				else if (!strcmp(encmod, "enc_md5"))
+				{
+					strcpy(passwdbuf, "$rawmd5$");
+					for (ii = 0; ii <= 15; ii++)
+						sprintf(passwdbuf + 8 + 2 * ii, "%02x",
+								255 & (int)na->nc->pass[ii]);
+				}
+				else if (!strcmp(encmod, "enc_sha1"))
+				{
+					strcpy(passwdbuf, "$rawsha1$");
+					for (ii = 0; ii <= 19; ii++)
+						sprintf(passwdbuf + 9 + 2 * ii, "%02x",
+								255 & (int)na->nc->pass[ii]);
+				}
+				else
+				{
+					/* unknown encryption module, hmm */
+					sprintf(passwdbuf, "$%s$", encmod);
+					passwd = passwdbuf + strlen(passwdbuf);
+					for (ii = 0; ii <= 19; ii++)
+						sprintf(passwd + 2 * ii, "%02x",
+								255 & (int)na->nc->pass[ii]);
+				}
 				passwd = passwdbuf;
 #else
 				passwd = nc->display;
