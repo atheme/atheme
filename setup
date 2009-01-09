@@ -159,10 +159,19 @@ echo "Press enter to begin compilation."
 echo -n ""
 if read INPUT ; then : ; else echo "" ; exit 1 ; fi
 
-make
+if make --version 2>/dev/null | grep 'GNU Make' >/dev/null; then
+	GMAKE=make
+elif gmake --version 2>/dev/null | grep 'GNU Make' >/dev/null; then
+	GMAKE=gmake
+else
+	echo "'make' does not seem to be GNU Make, trying to use it anyway..."
+	GMAKE=make
+fi
+
+$GMAKE
 if [ $? != 0 ]; then
 	echo "Compilation failed"
-	echo "Command was: make"
+	echo "Command was: $GMAKE"
 	echo "Please fix this and try again"
 	exit 1
 fi
@@ -172,10 +181,10 @@ echo "Press enter to begin installation."
 echo -n ""
 if read INPUT ; then : ; else echo "" ; exit 1 ; fi
 
-make install
+$GMAKE install
 if [ $? != 0 ]; then
 	echo "Installation failed"
-	echo "Command was: make install"
+	echo "Command was: $GMAKE install"
 	echo "Please fix this and try again"
 	exit 1
 fi
