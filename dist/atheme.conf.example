@@ -90,8 +90,11 @@ loadmodule "modules/backend/flatfile";
  * Raw MD5 (Anope compatibility)		modules/crypto/rawmd5
  * Raw SHA1 (Anope compatibility)		modules/crypto/rawsha1
  *
- * The ircservices and sorservices modules are only recommended for use with
- * a database converted from other services with password encryption.
+ * The ircservices, sorservices, rawmd5 and rawsha1 modules are only
+ * recommended for use with a database converted from other services with
+ * password encryption.
+ *
+ * The rawsha1 module requires OpenSSL.
  */
 #loadmodule "modules/crypto/posix";
 
