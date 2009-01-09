@@ -34,7 +34,8 @@
 #undef CONVERT_FORBID
 
 /* define this if you want to keep encrypted passwords as such
- * (this requires using the ircservices crypto module) */
+ * (this requires using the ircservices, rawmd5 or rawsha1 crypto module
+ * depending on how anope is configured) */
 #define CONVERT_CRYPTPASS
 
 /* define this if you want to convert not having the AUTOOP flag
