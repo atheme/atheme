@@ -68,7 +68,7 @@ void write_accounts(void)
 	char *passwd;
 	const char *encmod;
 
-#if VERSION_BUILD >= 1899
+#if VERSION_BUILD >= 1489
 	encmod = EncModule;
 #else
 	encmod = "enc_old";
