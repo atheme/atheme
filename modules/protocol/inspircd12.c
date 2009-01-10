@@ -430,7 +430,7 @@ static void inspircd_on_login(user_t *u, myuser_t *account, const char *wantedho
 	if (!me.connected)
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.numeric, u->nick, account->name);
+	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, account->name);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -439,7 +439,7 @@ static bool inspircd_on_logout(user_t *u, const char *account)
 	if (!me.connected)
 		return false;
 
-	sts(":%s METADATA %s accountname :", me.numeric, u->nick);
+	sts(":%s METADATA %s accountname :", me.numeric, u->uid);
 	return false;
 }
 
