@@ -4,12 +4,12 @@ command aliases
 
 interruptible commands (so as to make ns_mxcheck lookup async)
 
-extend src/logger.c's api to expose more about logfiles and use this to
-do /os greplog (see freenode modules) without simply assuming logfile
-paths; such an /os greplog can live in modules/operserv/
-
 vhost request system
 1. allow users to request vhosts, opers approve/deny
 2. allow opers to offer vhosts, users approve/deny
 
 cidr limits in /os clones
+
+think about additional timestamps for recognized vs identified
+
+"failed logins since" is misleading
