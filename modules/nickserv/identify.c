@@ -208,11 +208,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			metadata_t *md_failtime, *md_failaddr;
 			time_t ts;
 
-			tm = *localtime(&mu->lastlogin);
-			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-
-			command_success_nodata(si, _("\2%d\2 failed %s since %s."),
-				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
+			command_success_nodata(si, _("\2%d\2 failed %s since last login."),
+				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins");
 
 			md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
 			ts = atol(md_failtime->value);
