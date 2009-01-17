@@ -95,6 +95,118 @@ static bool seven_is_valid_hostslash(const char *host)
         return dot;
 }
 
+/* The following m_functions are copied from generic_ts6, with additions to handle the
+ * "identified" / "owns this nick" flag.
+ */
+
+static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+
+	/* got the right number of args for an introduction? */
+	if (parc == 8)
+	{
+		s = server_find(parv[6]);
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
+
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
+
+		user_mode(u, parv[3]);
+
+		/* If server is not yet EOB we will do this later.
+		 * This avoids useless "please identify" -- jilles */
+		if (s->flags & SF_EOB)
+			handle_nickchange(user_find(parv[0]));
+	}
+
+	/* if it's only 2 then it's a nickname change */
+	else if (parc == 2)
+	{
+		bool realchange;
+
+                if (!si->su)
+                {       
+                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
+                        return;
+                }
+
+		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
+
+		realchange = irccasecmp(si->su->nick, parv[0]);
+
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
+
+		/* fix up +e if necessary -- jilles */
+		if (realchange && should_reg_umode(si->su))
+			/* changed nick to registered one, reset +e */
+			sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(si->su), si->su->nick);
+
+		/* It could happen that our PING arrived late and the
+		 * server didn't acknowledge EOB yet even though it is
+		 * EOB; don't send double notices in that case -- jilles */
+		if (si->su->server->flags & SF_EOB)
+			handle_nickchange(si->su);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
+/* protocol-specific stuff to do on login */
+static void seven_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+{
+	if (!me.connected || u == NULL)
+		return;
+
+	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), account->name);
+
+	if (should_reg_umode(u))
+		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);
+}
+
+static bool seven_on_logout(user_t *u, const char *account)
+{
+	if (!me.connected || u == NULL)
+		return false;
+
+	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));
+	sts(":%s ENCAP * IDENTIFIED %s %s OFF", ME, CLIENT_NAME(u), u->nick);
+	return false;
+}
+
+static void nick_group(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && should_reg_umode(u))
+		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);
+}
+
+static void nick_ungroup(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && !nicksvs.no_nick_ownership)
+		sts(":%s ENCAP * IDENTIFIED %s %s OFF", ME, CLIENT_NAME(u), u->nick);
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
@@ -102,9 +214,19 @@ void _modinit(module_t * m)
 	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;
 
+	ircd_on_login = &seven_on_login;
+	ircd_on_logout = &seven_on_logout;
 	is_valid_host = &seven_is_valid_hostslash;
 
+	pcommand_delete("NICK");
+	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+
 	ircd = &Seven;
+
+	hook_add_event("nick_group");
+	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_event("nick_ungroup");
+	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 
