@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include <limits.h>
 
 DECLARE_MODULE_V1
 (
@@ -20,27 +21,52 @@ static void check_registration(void *vptr);
 static void handle_register(void *vptr);
 
 /* settings */
-int ratelimitreg_max = 5; /* allow this many account registrations */
-int ratelimitreg_period = 60; /* in this time */
-int ratelimitreg_wallops_period = 3600; /* send wallops at most once an hour */
+unsigned int ratelimitreg_max = 5; /* allow this many account registrations */
+unsigned int ratelimitreg_period = 60; /* in this time */
+unsigned int ratelimitreg_wallops_period = 3600; /* send wallops at most once an hour */
 
 /* dynamic state */
-int ratelimitreg_count = 0;
+unsigned int ratelimitreg_count = 0;
 time_t ratelimitreg_firsttime = 0;
+
+static list_t *conftable;
 
 void _modinit(module_t *m)
 {
+	service_t *svs;
+
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/main");
+
 	hook_add_event("user_can_register");
 	hook_add_event("user_register");
 
 	hook_add_hook("user_can_register", check_registration);
 	hook_add_hook("user_register", handle_register);
+
+	svs = service_find("nickserv");
+	conftable = svs != NULL ? svs->conf_table : NULL;
+
+	if (conftable != NULL)
+	{
+		add_uint_conf_item("RATELIMITREG_MAX", conftable, &ratelimitreg_max, 1, INT_MAX);
+		add_duration_conf_item("RATELIMITREG_PERIOD", conftable, &ratelimitreg_period, "s");
+		add_duration_conf_item("RATELIMITREG_WALLOPS_PERIOD", conftable, &ratelimitreg_wallops_period, "s");
+	}
+	else
+		slog(LG_ERROR, "ns_ratelimitreg/_modinit(): no nickserv??");
 }
 
 void _moddeinit(void)
 {
 	hook_del_hook("user_can_register", check_registration);
 	hook_del_hook("user_register", handle_register);
+
+	if (conftable != NULL)
+	{
+		del_conf_item("RATELIMITREG_MAX", conftable);
+		del_conf_item("RATELIMITREG_PERIOD", conftable);
+		del_conf_item("RATELIMITREG_WALLOPS_PERIOD", conftable);
+	}
 }
 
 static void check_registration(void *vptr)
