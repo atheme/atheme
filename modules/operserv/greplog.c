@@ -91,12 +91,17 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	list_t loglines = { NULL, NULL, 0 };
 	node_t *n, *tn;
 
-	/* require both user and channel auspex
+	/* require user, channel and server auspex
 	 * (channel auspex checked via in command_t)
 	 */
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
 		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_USER_AUSPEX);
+		return;
+	}
+	if (!has_priv(si, PRIV_SERVER_AUSPEX))
+	{
+		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_SERVER_AUSPEX);
 		return;
 	}
 
