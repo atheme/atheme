@@ -41,6 +41,7 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
+	user_t *u;
 
 	if (!nicksvs.no_nick_ownership && IsDigit(*account))
 	{
@@ -72,6 +73,14 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 		mn = mynick_add(mu, mu->name);
 		mn->registered = CURRTIME;
 		mn->lastseen = CURRTIME;
+		u = user_find_named(mu->name);
+		if (u != NULL)
+		{
+			notice(si->service->nick, u->nick,
+					_("The nick \2%s\2 is now forbidden."),
+					mu->name);
+			hook_call_event("nick_enforce", &(hook_nick_enforce_t){ .u = u, .mn = mn });
+		}
 	}
 
 	snoop("FORBID:ON: \2%s\2 by \2%s\2 (%s)",
