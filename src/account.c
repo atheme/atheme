@@ -481,6 +481,9 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	if (!use_myuser_access)
 		return false;
 
+	if (metadata_find(mu, "private:freeze:freezer"))
+		return false;
+
 	snprintf(buf, sizeof buf, "%s@%s", u->user, u->vhost);
 	snprintf(buf2, sizeof buf2, "%s@%s", u->user, u->host);
 	snprintf(buf3, sizeof buf3, "%s@%s", u->user, u->ip);
