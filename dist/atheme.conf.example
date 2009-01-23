@@ -999,8 +999,9 @@ logfile "var/commands.log" { commands; };
 /* The general {} block defines general configuration options. */
 general {
 	/* (*)chan
-	 * The channel the client joins and sends certain
-	 * messages to.
+	 * The channel to send detailed reports of events to.
+	 * All services will join this channel.
+	 * You should protect it appropriately.
 	 * Comment to disable.
 	 */
 	chan = "#services";
