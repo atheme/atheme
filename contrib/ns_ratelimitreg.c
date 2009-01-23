@@ -77,7 +77,7 @@ static void check_registration(void *vptr)
 	if (hdata->approved)
 		return;
 
-	if (ratelimitreg_firsttime + ratelimitreg_period > CURRTIME)
+	if ((unsigned int)(CURRTIME - ratelimitreg_firsttime) > ratelimitreg_period)
 		ratelimitreg_count = 0, ratelimitreg_firsttime = CURRTIME;
 
 	if (ratelimitreg_count > ratelimitreg_max &&
@@ -87,7 +87,7 @@ static void check_registration(void *vptr)
 		hdata->approved = 1;
 		snoop("REGISTER:THROTTLED: %s by \2%s\2", hdata->account,
 				hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
-		if (lastwallops + ratelimitreg_wallops_period < CURRTIME)
+		if ((unsigned int)(CURRTIME - lastwallops) >= ratelimitreg_wallops_period)
 		{
 			wallops("Registration of %s by %s was throttled.",
 					hdata->account,
@@ -101,7 +101,7 @@ static void handle_register(void *vptr)
 {
 	(void)vptr;
 
-	if (ratelimitreg_firsttime + ratelimitreg_period > CURRTIME)
+	if ((unsigned int)(CURRTIME - ratelimitreg_firsttime) > ratelimitreg_period)
 		ratelimitreg_count = 0, ratelimitreg_firsttime = CURRTIME;
 	ratelimitreg_count++;
 }
