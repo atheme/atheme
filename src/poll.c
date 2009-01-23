@@ -101,7 +101,7 @@ static void update_poll_fds(void)
  * connection_select()
  *
  * inputs:
- *       delay in microseconds
+ *       delay in milliseconds
  *
  * outputs:
  *       none
@@ -109,7 +109,7 @@ static void update_poll_fds(void)
  * side effects:
  *       registered sockets and their associated handlers are acted on.
  */
-void connection_select(time_t delay)
+void connection_select(int delay)
 {
 	int sr;
 	node_t *n, *tn;
@@ -118,7 +118,7 @@ void connection_select(time_t delay)
 
 	update_poll_fds();
 
-	if ((sr = poll(pollfds, connection_list.count, delay / 100)) > 0)
+	if ((sr = poll(pollfds, connection_list.count, delay)) > 0)
 	{
 		/* Iterate twice, so we don't touch freed memory if
 		 * a connection is closed.

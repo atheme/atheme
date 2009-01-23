@@ -85,7 +85,7 @@ static void update_select_sets(void)
  * connection_select()
  *
  * inputs:
- *       delay in nanoseconds
+ *       delay in milliseconds
  *
  * outputs:
  *       none
@@ -93,7 +93,7 @@ static void update_select_sets(void)
  * side effects:
  *       registered sockets and their associated handlers are acted on.
  */
-void connection_select(time_t delay)
+void connection_select(int delay)
 {
 	int sr;
 	node_t *n, *tn;
@@ -101,8 +101,8 @@ void connection_select(time_t delay)
 	struct timeval to;
 
 	update_select_sets();
-	to.tv_sec = 0;
-	to.tv_usec = delay;
+	to.tv_sec = delay / 1000;
+	to.tv_usec = delay % 1000 * 1000;
 
 	if ((sr = select(claro_state.maxfd + 1, &readfds, &writefds, NULL, &to)) > 0)
 	{

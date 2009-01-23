@@ -85,7 +85,7 @@ extern void connection_stats(void (*)(const char *, void *), void *);
 extern void connection_write(connection_t *to, char *format, ...) PRINTFLIKE(2, 3);
 //inline void connection_write_raw(connection_t *to, char *data);
 extern connection_t *connection_find(int);
-extern void connection_select(time_t delay);
+extern void connection_select(int delay);
 //inline int connection_count(void);
 
 extern list_t connection_list;

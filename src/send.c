@@ -87,7 +87,7 @@ void io_loop(void)
 		if (delay <= CURRTIME)
 			event_run();
 
-		connection_select(25000);
+		connection_select(250);
 
 		/* actually handle signals when it's safe to do so -- jilles */
 		check_signals();
