@@ -106,6 +106,8 @@ void event_delete(EVH *func, void *arg)
 
 	slog(LG_DEBUG, "event_delete(): removing \"%s\"", event_table[i].name);
 
+	if (last_event_ran == event_table[i].name)
+		last_event_ran = "<removed>";
 	event_table[i].name = NULL;
 	event_table[i].func = NULL;
 	event_table[i].arg = NULL;
