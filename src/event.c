@@ -135,6 +135,8 @@ void event_run(void)
 				event_table[i].when = CURRTIME + event_table[i].frequency;
 			else
 			{
+				/* not nice but we need to play safe */
+				last_event_ran = "<onceonly>";
 				event_table[i].name = NULL;
 				event_table[i].func = NULL;
 				event_table[i].arg = NULL;
