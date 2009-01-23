@@ -75,6 +75,7 @@ void reconn(void *arg)
 void io_loop(void)
 {
 	time_t delay;
+	int t;
 
 	while (!(runflags & (RF_SHUTDOWN | RF_RESTART)))
 	{
@@ -85,9 +86,17 @@ void io_loop(void)
 		delay = event_next_time();
 
 		if (delay <= CURRTIME)
+		{
 			event_run();
+			CURRTIME = time(NULL);
+			delay = event_next_time();
+		}
 
-		connection_select(250);
+		if (delay <= CURRTIME)
+			t = 250;
+		else
+			t = (delay - CURRTIME) * 1000;
+		connection_select(t);
 
 		/* actually handle signals when it's safe to do so -- jilles */
 		check_signals();
