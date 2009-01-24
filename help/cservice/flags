@@ -28,6 +28,11 @@ don't have. For this purpose, +v grants +V, +h grants +H,
 +o grants +O and +r grants +b.
 
 #endif
+#if module chanserv/set_limitflags
+If the LIMITFLAGS option is set for the channel, this is
+restricted further, see help for SET LIMITFLAGS.
+
+#endif
 If you do not have +f you may still remove your own access
 with -*.
 
