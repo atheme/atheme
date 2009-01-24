@@ -118,7 +118,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 has no access to \2%s\2."), mu->name, mc->name);
 			return;
 		}
-		if (ca->level & ~allow_flags(restrictflags))
+		if (ca->level & ~allow_flags(mc, restrictflags))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
 			return;

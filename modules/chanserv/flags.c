@@ -224,7 +224,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					return;
 				}
 			}
-			restrictflags = allow_flags(restrictflags);
+			restrictflags = allow_flags(mc, restrictflags);
 		}
 
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')

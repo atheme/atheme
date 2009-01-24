@@ -151,7 +151,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
-		restrictflags = allow_flags(restrictflags);
+		restrictflags = allow_flags(mc, restrictflags);
 		if ((restrictflags & level) != level)
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -175,7 +175,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
-		restrictflags = allow_flags(restrictflags);
+		restrictflags = allow_flags(mc, restrictflags);
 		if ((restrictflags & level) != level)
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));

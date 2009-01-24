@@ -221,7 +221,7 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags, struct 
 }
 
 /* flags a non-founder with +f and these flags is allowed to set -- jilles */
-unsigned int allow_flags(unsigned int flags)
+unsigned int allow_flags(mychan_t *mc, unsigned int flags)
 {
 	flags &= ~CA_AKICK;
 	if (flags & CA_REMOVE)

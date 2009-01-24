@@ -153,7 +153,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 				return;
 			}
-			restrictflags = allow_flags(restrictflags);
+			restrictflags = allow_flags(mc, restrictflags);
 		}
 		
 		if (metadata_find(mc, "private:close:closer"))

@@ -24,7 +24,7 @@ E void flags_make_bitmasks(const char *string, struct flags_table table[], unsig
 E unsigned int flags_to_bitmask(const char *, struct flags_table[], unsigned int flags);
 E char *bitmask_to_flags(unsigned int, struct flags_table[]);
 E char *bitmask_to_flags2(unsigned int, unsigned int, struct flags_table[]);
-E unsigned int allow_flags(unsigned int flags);
+E unsigned int allow_flags(mychan_t *mc, unsigned int flags);
 E void update_chanacs_flags(void);
 
 #endif
