@@ -6,4 +6,5 @@ Channel registrations will expire after &chanexpiry& days.
 Registered users: &myusers&
 Registered channels: &mychans&
 
-Please /join #help for help.
+The services administrator can add additional information
+here such as where to get additional help with services.
