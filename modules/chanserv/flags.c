@@ -78,14 +78,15 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			p = r;
 		}
 	}
-	if (level == chansvs.ca_sop)
+	if (level == chansvs.ca_sop && level == get_template_flags(mc, "SOP"))
 		return "SOP";
-	if (level == chansvs.ca_aop)
+	if (level == chansvs.ca_aop && level == get_template_flags(mc, "AOP"))
 		return "AOP";
 	/* if vop==hop, prefer vop */
-	if (level == chansvs.ca_vop)
+	if (level == chansvs.ca_vop && level == get_template_flags(mc, "VOP"))
 		return "VOP";
-	if (level == chansvs.ca_hop)
+	if (chansvs.ca_hop != chansvs.ca_vop && level == chansvs.ca_hop &&
+			level == get_template_flags(mc, "HOP"))
 		return "HOP";
 	return NULL;
 }
