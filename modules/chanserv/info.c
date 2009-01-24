@@ -317,6 +317,14 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		strcat(buf, "PRIVATE");
 	}
 
+	if (use_limitflags && MC_LIMITFLAGS & mc->flags)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "LIMITFLAGS");
+	}
+
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
 

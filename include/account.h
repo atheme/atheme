@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2006 Atheme Development Group
+ * Copyright (c) 2005-2009 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for account information.
@@ -135,7 +135,7 @@ struct mychan_
 
 #define MC_HOLD        0x00000001
 #define MC_NOOP        0x00000002
-/* this isn't used. 0x00000004 */
+#define MC_LIMITFLAGS  0x00000004
 #define MC_SECURE      0x00000008
 #define MC_VERBOSE     0x00000010
 #define MC_RESTRICTED  0x00000020
@@ -205,6 +205,8 @@ struct chanacs_
 
 /* joining with one of these flags updates used time */
 #define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_FOUNDER | CA_USEPROTECT | CA_USEOWNER)
+/* "high" privs (for MC_LIMITFLAGS) */
+#define CA_HIGHPRIVS     (CA_SET | CA_RECOVER | CA_FLAGS)
 #define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_FOUNDER | CA_USEPROTECT | CA_USEOWNER)
 #define CA_ALL_ALL       (CA_ALLPRIVS | CA_AKICK)
 

@@ -209,6 +209,7 @@ loadmodule "modules/nickserv/vhost";
  * Channel takeover recovery (RECOVER command)	modules/chanserv/recover
  * REGISTER command				modules/chanserv/register
  * SET command					modules/chanserv/set
+ * SET LIMITFLAGS command			modules/chanserv/set_limitflags
  * Channel info hiding (SET PRIVATE command)	modules/chanserv/set_private
  * STATUS command				modules/chanserv/status
  * Channel metadata viewer (TAXONOMY command)	modules/chanserv/taxonomy
@@ -248,6 +249,7 @@ loadmodule "modules/chanserv/op";
 loadmodule "modules/chanserv/recover";
 loadmodule "modules/chanserv/register";
 loadmodule "modules/chanserv/set";
+#loadmodule "modules/chanserv/set_limitflags";
 #loadmodule "modules/chanserv/set_private";
 loadmodule "modules/chanserv/status";
 loadmodule "modules/chanserv/taxonomy";

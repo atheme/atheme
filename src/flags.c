@@ -2,7 +2,7 @@
  * atheme-services: A collection of minimalist IRC services   
  * flags.c: Functions to convert a flags table into a bitmask.
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)           
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -221,8 +221,11 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags, struct 
 }
 
 /* flags a non-founder with +f and these flags is allowed to set -- jilles */
-unsigned int allow_flags(mychan_t *mc, unsigned int flags)
+unsigned int allow_flags(mychan_t *mc, unsigned int theirflags)
 {
+	unsigned int flags;
+
+	flags = theirflags;
 	flags &= ~CA_AKICK;
 	if (flags & CA_REMOVE)
 		flags |= CA_AKICK;
@@ -232,6 +235,13 @@ unsigned int allow_flags(mychan_t *mc, unsigned int flags)
 		flags |= CA_AUTOHALFOP;
 	if (flags & CA_VOICE)
 		flags |= CA_AUTOVOICE;
+	if (use_limitflags && mc->flags & MC_LIMITFLAGS)
+	{
+		if (!(theirflags & (CA_HIGHPRIVS & ~CA_FLAGS)))
+			flags &= CA_AKICK;
+		else if ((theirflags & CA_HIGHPRIVS) != CA_HIGHPRIVS)
+			flags &= ~CA_HIGHPRIVS;
+	}
 	return flags;
 }
 

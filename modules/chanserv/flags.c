@@ -224,7 +224,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					return;
 				}
 			}
-			restrictflags = allow_flags(mc, restrictflags);
+			if (irccasecmp(target, si->smu->name))
+				restrictflags = allow_flags(mc, restrictflags);
 		}
 
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')

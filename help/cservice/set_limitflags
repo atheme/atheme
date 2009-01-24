@@ -1,0 +1,13 @@
+Help for SET LIMITFLAGS:
+
+SET LIMITFLAGS limits the power of the +f flag.
+
+Users with +f that have neither +s nor +R
+may only set +b (akick), and users that do not
+have all of +s and +R may not set +s, +R and
++f.
+
+Syntax: SET <#channel> LIMITFLAGS ON|OFF
+
+Example:
+    /msg &nick& SET #foo LIMITFLAGS ON

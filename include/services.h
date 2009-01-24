@@ -153,6 +153,7 @@ E int use_svsignore;
 E int use_privmsg;
 E int use_account_private;
 E int use_channel_private;
+E int use_limitflags;
 
 E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
