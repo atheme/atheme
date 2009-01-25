@@ -76,7 +76,9 @@ static struct Token cflags[] = {
   { "KEEPTOPIC",   MC_KEEPTOPIC   },
   { "VERBOSE_OPS", MC_VERBOSE_OPS },
   { "TOPICLOCK",   MC_TOPICLOCK   },
-  { "GUARD",	   MC_GUARD	  },
+  { "GUARD",       MC_GUARD       },
+  { "PRIVATE",     MC_PRIVATE     },
+  { "LIMITFLAGS",  MC_LIMITFLAGS  },
   { "NONE",        0              },
   { NULL, 0 }
 };
