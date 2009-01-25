@@ -236,9 +236,12 @@ void service_delete(service_t *sptr)
 	if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
 		del_top_conf(sptr->internal_name);
 
-	quit_sts(sptr->me, "Service unloaded.");
-	user_delete(sptr->me);
-	sptr->me = NULL;
+	if (sptr->me != NULL)
+	{
+		quit_sts(sptr->me, "Service unloaded.");
+		user_delete(sptr->me);
+		sptr->me = NULL;
+	}
 	sptr->handler = NULL;
 	free(sptr->disp);	/* service_name() does a malloc() */
 	free(sptr->internal_name);
