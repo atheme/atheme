@@ -57,7 +57,7 @@ void modules_init(void)
 module_t *module_load(const char *filespec)
 {
 	node_t *n;
-	module_t *m;
+	module_t *m, *old_modtarget;
 	v2_moduleheader_t *h;
 	void *handle = NULL;
 #ifdef HAVE_DLINFO
@@ -147,13 +147,14 @@ module_t *module_load(const char *filespec)
 #endif
 
 	/* set the module target for module dependencies */
+	old_modtarget = modtarget;
 	modtarget = m;
 
 	if (h->modinit)
 		h->modinit(m);
 
 	/* we won't be loading symbols outside the init code */
-	modtarget = NULL;
+	modtarget = old_modtarget;
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
