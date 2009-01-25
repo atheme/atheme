@@ -61,6 +61,7 @@ struct ConfTable
 static BlockHeap *conftable_heap;
 
 list_t confblocks;
+bool conf_need_rehash;
 
 /* *INDENT-ON* */
 
@@ -271,6 +272,7 @@ void conf_process(config_file_t *cfp)
 				conf_report_warning(ce, "invalid configuration option");
 		}
 	}
+	conf_need_rehash = false;
 }
 
 int subblock_handler(config_entry_t *ce, list_t *entries)
@@ -346,6 +348,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	ct->un.handler = handler;
 
 	node_add(ct, node_create(), &confblocks);
+	conf_need_rehash = true;
 }
 
 void add_subblock_top_conf(const char *name, list_t *list)
@@ -365,6 +368,7 @@ void add_subblock_top_conf(const char *name, list_t *list)
 	ct->un.subblock = list;
 
 	node_add(ct, node_create(), &confblocks);
+	conf_need_rehash = true;
 }
 
 void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_entry_t *ce))
@@ -384,6 +388,7 @@ void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_en
 	ct->un.handler = handler;
 
 	node_add(ct, node_create(), conflist);
+	conf_need_rehash = true;
 }
 
 void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max)
@@ -405,6 +410,7 @@ void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, u
 	ct->un.uint_val.max = max;
 
 	node_add(ct, node_create(), conflist);
+	conf_need_rehash = true;
 }
 
 void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *var, const char *defunit)
@@ -425,6 +431,7 @@ void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *va
 	ct->un.duration_val.defunit = defunit;
 
 	node_add(ct, node_create(), conflist);
+	conf_need_rehash = true;
 }
 
 void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
@@ -444,6 +451,7 @@ void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
 	ct->un.dupstr_val = var;
 
 	node_add(ct, node_create(), conflist);
+	conf_need_rehash = true;
 }
 
 void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
@@ -463,6 +471,7 @@ void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
 	ct->un.bool_val = var;
 
 	node_add(ct, node_create(), conflist);
+	conf_need_rehash = true;
 }
 
 void del_top_conf(const char *name)

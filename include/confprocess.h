@@ -45,6 +45,8 @@ E int token_to_value(struct Token token_table[], const char *token);
 #define TOKEN_UNMATCHED -1
 #define TOKEN_ERROR -2
 
+E bool conf_need_rehash;
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
