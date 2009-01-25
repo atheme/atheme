@@ -55,7 +55,7 @@ void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 	if (conf_rehash())
 		command_success_nodata(si, _("REHASH completed."));
 	else
-		command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please corrrect any errors in the file and try again."), config_file);
+		command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
