@@ -20,6 +20,7 @@ ircd protocol
 - Add tracking for the "server admin" umode in some ircds.
 - Remove some obsolete protocol modules: aurora, sorcery, ptlink, shadowircd.
   If you do still use one of these, please contact us.
+- Add support for P10 account creation times.
 nickserv
 - Snoop on freeze on/off.
 - Add nickserv/vacation module, allowing to temporarily extend expiry times.
@@ -29,27 +30,47 @@ nickserv
 - In FUNGROUP, allow dropping account names, by specifying a new account name.
 - Add optional nickserv/listownmail to allow users to see accounts with
   their email.
+- When refusing a login due to maxlogins, tell the user what the logged in
+  nicks are.
+- Show FREEZE status (but not setter, time or reason) to normal users.
+- Show taxonomy (property, metadata) in INFO.
+- Show recognized (access list) a bit better in INFO.
+- Ignore access lists for frozen accounts. [MERGED]
+- Add ns_enforce contrib module. This allows admins to toggle enforce on any
+  nickname.
+- When a user is recognized but not identified, still tell them to identify,
+  but with a shorter message.
 chanserv
 - Allow multiple spaces before fantasy commands when ChanServ is addressed
   by nickname.
 - QUIET/UNQUIET now notify the target user or channel.
 - Show the current successor in /cs info (for +A users and opers).
 - FFLAGS now overrides the NEVEROP setting on the target account.
+- Set owner/protect if appropriate after xOP ADD.
+- Show taxonomy (property, metadata) in INFO.
+- Add chanserv/set_limitflags, allows limiting +f's power.
 alis
 - Fix handling of key and limit options.
 - Allow alis list on a single +s channel the user is on.
 memoserv
 - Add DELETE OLD to delete all read memos.
 gameserv
+- Do not add chanserv commands if fantasy is disabled.
 oper
 - Allow searching for AKILLs matching a given mask or id in AKILL LIST.
 - Allow running an operserv-only services instance, which picks up login
-  names from the main instance (currently only for hyperion and TS6 ircds).
+  names from the main instance (currently only for hyperion, TS6 and P10
+  ircds).
 - Add optional PCRE support. Configure --with-pcre to enable it and add
   the p flag to use it (e.g. /os rmatch /\d\d\d/p). The regex wrapper has
   been changed slightly to make this possible.
 - Report other nicks of deleted accounts to snoop and log file.
+- Add operserv/greplog module (from freenode modules) to allow searching
+  through recent logs from IRC.
+- Automatically rehash after loading modules that need a rehash.
 xmlrpc
+- Fix atheme.memo.ignore.list and atheme.memo.ignore.clear to require only
+  two arguments (third wasn't ever in use). [MERGED]
 code
 - Change kline_delete() to take a kline_t pointer instead of a user and host.
 - Allow modules to influence the expiry process.
@@ -82,6 +103,10 @@ other
   incompatible modules often caused a crash.
 - Rework the configuration file parser to detect more errors and make it
   easier to add configuration options.
+- Add +a to the example configuration's SOP to fit expectations better.
+- Update anope_convert for anope 1.8 enc_md5/enc_sha1 passwords.
+- Wake up the process less often if it is idling.
+- Install an example services MOTD automatically.
 
 Atheme Services 3.1 Release Notes
 =================================
