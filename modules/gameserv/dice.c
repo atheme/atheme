@@ -78,7 +78,7 @@ void _moddeinit()
  * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
  * but this is quicker and easier...                                  -- nenolod
  */
-static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
+static void gs_command_report(sourceinfo_t *si, mychan_t *mc, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -89,22 +89,71 @@ static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 
 	if (si->c != NULL)
 		msg(chansvs.nick, si->c->name, "%s", buf);
+	else if (mc != NULL)
+		notice(si->service->nick, mc->name, "(%s) %s", si->su ? si->su->nick : get_source_name(si), buf);
 	else
 		command_success_nodata(si, "%s", buf);
 }
 
+static bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, mychan_t **pmc)
+{
+	mychan_t *mc;
+	chanuser_t *cu;
+
+	if (*parc == 0)
+		return true;
+	if ((*parv)[0][0] == '#')
+	{
+		mc = mychan_find((*parv)[0]);
+		if (mc == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), (*parv)[0]);
+			return false;
+		}
+		if (mc->chan == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
+			return false;
+		}
+		if (si->c == NULL)
+		{
+			if (!metadata_find(mc, "gameserv"))
+			{
+				command_fail(si, fault_noprivs, _("%s is not enabled on \2%s\2."), "GAMESERV", mc->name);
+				return false;
+			}
+			cu = chanuser_find(mc->chan, si->su);
+			if (cu == NULL || cu->modes == 0)
+			{
+				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				return false;
+			}
+		}
+		(*parc)--;
+		(*parv)++;
+		*pmc = mc;
+	}
+	else
+		*pmc = NULL;
+	return true;
+}
+
 static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *arg = si->c != NULL ? parv[1] : parv[0];
+	char *arg;
+	mychan_t *mc;
 	int dice = 0, sides = 0, i = 0, roll = 0, modifier = 0;
 	char buf[BUFSIZE];
 
-	if (!arg)
+	if (!gs_do_parameters(si, &parc, &parv, &mc))
+		return;
+	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLL");
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLL [dice]d<sides>"));
 		return;
 	}
+	arg = parv[0];
 
 	sscanf(arg, "%dd%d+%d", &dice, &sides, &modifier);
 
@@ -157,30 +206,32 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (modifier != 0)
-		gs_command_report(si, "(%s) + %d == \2%d\2", buf, modifier, (roll + modifier));
+		gs_command_report(si, mc, "(%s) + %d == \2%d\2", buf, modifier, (roll + modifier));
 	else
-		gs_command_report(si, "%s == \2%d\2", buf, roll);
+		gs_command_report(si, mc, "%s == \2%d\2", buf, roll);
 }
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 {
-	int ii = si->c != NULL ? 1 : 0;
-	char *arg_dice = parv[ii++];
-	char *arg_difficulty = parv[ii++];
-
+	mychan_t *mc;
+	char *arg_dice, *arg_difficulty;
+	int ii = 0;
 	int dice, difficulty;
 	int roll, total = 0, roll_count = 0, i;
 	int success = 0, failure = 0, botches = 0, rerolls = 0;
-
 	static char buf[BUFSIZE];
 	char *end_p;
 
-	if (arg_dice == NULL || arg_difficulty == NULL)
+	if (!gs_do_parameters(si, &parc, &parv, &mc))
+		return;
+	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "WOD");
 		command_fail(si, fault_needmoreparams, _("Syntax: WOD <dice> <difficulty>"));
 		return;
 	}
+	arg_dice = parv[ii++];
+	arg_difficulty = parv[ii++];
 
 	while (roll_count < 3 && arg_dice != NULL && arg_difficulty != NULL)
 	{
@@ -227,13 +278,13 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 			rerolls = rerolls - botches;
 			total = success - botches;
 
-			gs_command_report(si, _("%s rolls %d dice at difficulty %d: %s"), si->su->nick, dice, difficulty, buf);
+			gs_command_report(si, mc, _("%s rolls %d dice at difficulty %d: %s"), si->su->nick, dice, difficulty, buf);
 
 			if (rerolls > 0)
-				gs_command_report(si, _("Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d if you have a specialty."),
+				gs_command_report(si, mc, _("Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d if you have a specialty."),
 					success, failure, botches, total, rerolls);
 			else
-				gs_command_report(si, _("Successes: %d, Failures: %d, Botches: %d, Total: %d."),
+				gs_command_report(si, mc, _("Successes: %d, Failures: %d, Botches: %d, Total: %d."),
 					success, failure, botches, total);
 		}
 
@@ -247,17 +298,20 @@ static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
 static void command_df(sourceinfo_t *si, int parc, char *parv[])
 {
-	int ii = si->c != NULL ? 1 : 0;
-	char *arg_dice = parv[ii++];
+	mychan_t *mc;
+	char *arg_dice;
 	char buf[BUFSIZE];
 	int i, dice;
 
-	if (arg_dice == NULL)
+	if (!gs_do_parameters(si, &parc, &parv, &mc))
+		return;
+	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DF");
 		command_fail(si, fault_needmoreparams, _("Syntax: DF <dice>"));
 		return;
 	}
+	arg_dice = parv[0];
 
 	dice = atoi(arg_dice);
 	*buf = '\0';
@@ -278,7 +332,7 @@ static void command_df(sourceinfo_t *si, int parc, char *parv[])
 			strlcpy(buf, df_dice_table[roll], BUFSIZE);
 	}
 
-	gs_command_report(si, _("Result: %s"), buf);
+	gs_command_report(si, mc, _("Result: %s"), buf);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
