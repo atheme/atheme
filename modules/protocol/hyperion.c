@@ -468,12 +468,12 @@ static void hyperion_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void hyperion_sethost_sts(char *source, char *target, char *host)
+static void hyperion_sethost_sts(user_t *source, user_t *target, const char *host)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s SETHOST %s :%s", source, target, host);
+	sts(":%s SETHOST %s :%s", source->nick, target->nick, host);
 }
 
 static void hyperion_fnc_sts(user_t *source, user_t *u, char *newnick, int type)

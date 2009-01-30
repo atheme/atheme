@@ -490,21 +490,12 @@ static void inspircd_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s * 1 %s :%s", me.numeric, server, sid, reason);
 }
 
-static void inspircd_sethost_sts(char *source, char *target, char *host)
+static void inspircd_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *u;
-	user_t *tu;
-
 	if (!me.connected)
 		return;
 
-	u = user_find_named (source);
-	return_if_fail (u != NULL);
-
-	tu = user_find_named (target);
-	return_if_fail (tu != NULL);
-
-	sts(":%s CHGHOST %s %s", u->uid, tu->uid, host);
+	sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
 }
 
 static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)

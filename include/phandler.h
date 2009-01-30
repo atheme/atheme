@@ -178,8 +178,8 @@ E bool (*ircd_on_logout)(user_t *u, const char *account);
 E void (*jupe)(const char *server, const char *reason);
 /* set a dynamic spoof on a user
  * if the ircd does not notify the user of this, do
- * notice(source, target, "Setting your host to \2%s\2.", host); */
-E void (*sethost_sts)(char *source, char *target, char *host);
+ * notice(source->nick, target->nick, "Setting your host to \2%s\2.", host); */
+E void (*sethost_sts)(user_t *source, user_t *target, const char *host);
 /* force a nickchange for a user
  * possible values for type:
  * FNC_REGAIN: give a registered user their nick back
@@ -228,7 +228,7 @@ E void generic_ping_sts(void);
 E void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost);
 E bool generic_on_logout(user_t *u, const char *account);
 E void generic_jupe(const char *server, const char *reason);
-E void generic_sethost_sts(char *source, char *target, char *host);
+E void generic_sethost_sts(user_t *source, user_t *target, const char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
 E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account);
 E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char *login);

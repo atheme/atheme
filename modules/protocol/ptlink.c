@@ -323,14 +323,9 @@ static void ptlink_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 Atheme-%s-jupe :%s", me.name, server, version, reason);
 }
 
-static void ptlink_sethost_sts(char *source, char *target, char *host)
+static void ptlink_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *tu = user_find(target);
-
-	if (!tu)
-		return;
-
-	sts(":%s NEWMASK %s :%s", me.name, host, tu->nick);
+	sts(":%s NEWMASK %s :%s", me.name, host, target->nick);
 }
 
 static void ptlink_fnc_sts(user_t *source, user_t *u, char *newnick, int type)

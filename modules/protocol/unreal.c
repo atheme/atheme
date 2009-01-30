@@ -366,18 +366,16 @@ static void unreal_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void unreal_sethost_sts(char *source, char *target, char *host)
+static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *tu = user_find(target);
-
-	if (!me.connected || !tu)
+	if (!me.connected)
 		return;
 
-	if (irccasecmp(tu->host, host))
-		numeric_sts(me.me, 396, tu, "%s :is now your hidden host (set by %s)", host, source);
+	if (irccasecmp(target->host, host))
+		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else
-		numeric_sts(me.me, 396, tu, "%s :hostname reset by %s", host, source);
-	sts(":%s CHGHOST %s :%s", source, target, host);
+		numeric_sts(me.me, 396, target, "%s :hostname reset by %s", host, source->nick);
+	sts(":%s CHGHOST %s :%s", source->nick, target->nick, host);
 }
 
 static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)

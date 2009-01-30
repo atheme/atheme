@@ -346,17 +346,12 @@ static void ts6_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
-static void ts6_sethost_sts(char *source, char *target, char *host)
+static void ts6_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *tu = user_find(target);
-
-	if (!tu)
-		return;
-
 	if (use_euid)
-		sts(":%s CHGHOST %s :%s", ME, CLIENT_NAME(tu), host);
+		sts(":%s CHGHOST %s :%s", ME, CLIENT_NAME(target), host);
 	else
-		sts(":%s ENCAP * CHGHOST %s :%s", ME, tu->nick, host);
+		sts(":%s ENCAP * CHGHOST %s :%s", ME, target->nick, host);
 }
 
 static void ts6_fnc_sts(user_t *source, user_t *u, char *newnick, int type)

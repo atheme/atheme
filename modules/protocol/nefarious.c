@@ -191,17 +191,12 @@ static bool nefarious_on_logout(user_t *u, const char *account)
 	return false;
 }
 
-static void nefarious_sethost_sts(char *source, char *target, char *host)
+static void nefarious_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *tu = user_find_named(target);
-
-	if (!tu)
-		return;
-
-	sts("%s FA %s %s", me.numeric, tu->uid, host);
+	sts("%s FA %s %s", me.numeric, target->uid, host);
 	/* need to set +x; this will be echoed */
-	if (!(tu->flags & UF_HIDEHOSTREQ))
-		sts("%s M %s +x", me.numeric, tu->uid);
+	if (!(target->flags & UF_HIDEHOSTREQ))
+		sts("%s M %s +x", me.numeric, target->uid);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])

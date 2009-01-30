@@ -47,7 +47,7 @@ void (*quit_sts) (user_t *u, const char *reason) = generic_quit_sts;
 void (*ircd_on_login) (user_t *u, myuser_t *account, const char *wantedhost) = generic_on_login;
 bool (*ircd_on_logout) (user_t *u, const char *account) = generic_on_logout;
 void (*jupe) (const char *server, const char *reason) = generic_jupe;
-void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
+void (*sethost_sts) (user_t *source, user_t *target, const char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
 void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
@@ -200,7 +200,7 @@ void generic_jupe(const char *server, const char *reason)
 	/* nothing to do here. */
 }
 
-void generic_sethost_sts(char *source, char *target, char *host)
+void generic_sethost_sts(user_t *source, user_t *target, const char *host)
 {
 	/* nothing to do here. */
 }

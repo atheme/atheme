@@ -482,14 +482,12 @@ static void inspircd_jupe(const char *server, const char *reason)
 	}
 }
 
-static void inspircd_sethost_sts(char *source, char *target, char *host)
+static void inspircd_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	user_t *tu = user_find(target);
-
-	if (!me.connected || !tu)
+	if (!me.connected)
 		return;
 
-	sts(":%s CHGHOST %s %s", source, target, host);
+	sts(":%s CHGHOST %s %s", source->nick, target->nick, host);
 }
 
 static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
