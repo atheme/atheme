@@ -333,6 +333,27 @@ static void ptlink_sethost_sts(char *source, char *target, char *host)
 	sts(":%s NEWMASK %s :%s", me.name, host, tu->nick);
 }
 
+static void ptlink_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	char prefix[NICKLEN];
+	int i;
+
+	/* cannot FNC to an exact nick */
+	if (type != FNC_FORCE)
+		return;
+
+	/* ptlink wants to generate the numerical suffix itself */
+	strlcpy(prefix, newnick, sizeof prefix);
+	i = strlen(prefix) - 1;
+	while (i > 0 && isdigit((unsigned char)prefix[i]))
+		i--;
+	if (i == 0)
+		strlcpy(prefix, "Guest", sizeof prefix);
+	else
+		prefix[++i] = '\0';
+	sts(":%s SVSGUEST %s %s 99999", me.name, u->nick, prefix);
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -777,6 +798,7 @@ void _modinit(module_t * m)
 	jupe = &ptlink_jupe;
 	invite_sts = &ptlink_invite_sts;
 	sethost_sts = &ptlink_sethost_sts;
+	fnc_sts = &ptlink_fnc_sts;
 
 	mode_list = ptlink_mode_list;
 	ignore_mode_list = ptlink_ignore_mode_list;
