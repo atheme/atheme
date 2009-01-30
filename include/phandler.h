@@ -52,7 +52,7 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_IRCNET			7
 #define PROTOCOL_MONKEY			8 /* obsolete */
 #define PROTOCOL_PLEXUS			9
-#define PROTOCOL_PTLINK			10 /* obsolete */
+#define PROTOCOL_PTLINK			10
 #define PROTOCOL_RATBOX			11
 #define PROTOCOL_SCYLLA			12
 #define PROTOCOL_SHADOWIRCD		13
