@@ -969,10 +969,11 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 
-	if (s != NULL && s->uplink != me.me)
+	if (s != NULL)
 	{
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
+		 * Not in inspircd12 -- jilles
 		 */
 		sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
 	}
