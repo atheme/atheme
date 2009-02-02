@@ -520,7 +520,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[0]));
+		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 
