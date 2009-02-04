@@ -1095,6 +1095,24 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		smsg.buf = parv[5];
 		hook_call_event("sasl_input", &smsg);
 	}
+	else if (!irccasecmp(parv[1], "RSMSG"))
+	{
+		char buf[512];
+		char dest[NICKLEN + HOSTLEN];
+		int i;
+
+		if (parc < 4)
+			return;
+		buf[0] = '\0';
+		for (i = 3; i < parc; i++)
+		{
+			if (i > 3)
+				strlcat(buf, " ", sizeof buf);
+			strlcat(buf, parv[i], sizeof buf);
+		}
+		snprintf(dest, sizeof dest, "%s@%s", parv[2], me.name);
+		handle_message(si, dest, false, buf);
+	}
 }
 
 static void m_signon(sourceinfo_t *si, int parc, char *parv[])
