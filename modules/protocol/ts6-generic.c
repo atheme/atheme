@@ -286,7 +286,8 @@ static void ts6_topic_sts(channel_t *c, const char *setter, time_t ts, time_t pr
 	}
 	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
 	if (joined)
-		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), c->name);
+		sts(":%s PART %s :Topic set for %s",
+				CLIENT_NAME(chansvs.me->me), c->name, setter);
 	c->topicts = CURRTIME;
 }
 

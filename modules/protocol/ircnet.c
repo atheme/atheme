@@ -269,7 +269,8 @@ static void ircnet_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 	}
 	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
 	if (joined)
-		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), c->name);
+		sts(":%s PART %s :Topic set for %s",
+				CLIENT_NAME(chansvs.me->me), c->name, setter);
 }
 
 /* mode wrapper */
