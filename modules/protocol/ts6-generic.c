@@ -286,7 +286,8 @@ static void ts6_topic_sts(channel_t *c, const char *setter, time_t ts, time_t pr
 	}
 	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
 	if (joined)
-		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), c->name);
+		sts(":%s PART %s :Topic set for %s",
+				CLIENT_NAME(chansvs.me->me), c->name, setter);
 	c->topicts = CURRTIME;
 }
 
@@ -1094,6 +1095,24 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		smsg.mode = *parv[4];
 		smsg.buf = parv[5];
 		hook_call_event("sasl_input", &smsg);
+	}
+	else if (!irccasecmp(parv[1], "RSMSG"))
+	{
+		char buf[512];
+		char dest[NICKLEN + HOSTLEN];
+		int i;
+
+		if (parc < 4)
+			return;
+		buf[0] = '\0';
+		for (i = 3; i < parc; i++)
+		{
+			if (i > 3)
+				strlcat(buf, " ", sizeof buf);
+			strlcat(buf, parv[i], sizeof buf);
+		}
+		snprintf(dest, sizeof dest, "%s@%s", parv[2], me.name);
+		handle_message(si, dest, false, buf);
 	}
 }
 

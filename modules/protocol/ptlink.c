@@ -330,23 +330,7 @@ static void ptlink_sethost_sts(user_t *source, user_t *target, const char *host)
 
 static void ptlink_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
-	char prefix[NICKLEN];
-	int i;
-
-	/* cannot FNC to an exact nick */
-	if (type != FNC_FORCE)
-		return;
-
-	/* ptlink wants to generate the numerical suffix itself */
-	strlcpy(prefix, newnick, sizeof prefix);
-	i = strlen(prefix) - 1;
-	while (i > 0 && isdigit((unsigned char)prefix[i]))
-		i--;
-	if (i == 0)
-		strlcpy(prefix, "Guest", sizeof prefix);
-	else
-		prefix[++i] = '\0';
-	sts(":%s SVSGUEST %s %s 99999", me.name, u->nick, prefix);
+	sts(":%s SVSNICK %s %lu %s", me.name, u->nick, (unsigned long)u->ts, newnick);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -520,7 +504,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[0]));
+		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 

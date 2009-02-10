@@ -99,6 +99,9 @@ static bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, mychan_t
 {
 	mychan_t *mc;
 	chanuser_t *cu;
+	metadata_t *md;
+	const char *who;
+	bool allow;
 
 	if (*parc == 0)
 		return true;
@@ -117,13 +120,36 @@ static bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, mychan_t
 		}
 		if (si->c == NULL)
 		{
-			if (!metadata_find(mc, "gameserv"))
+			md = metadata_find(mc, "gameserv");
+			if (md == NULL)
 			{
 				command_fail(si, fault_noprivs, _("%s is not enabled on \2%s\2."), "GAMESERV", mc->name);
 				return false;
 			}
 			cu = chanuser_find(mc->chan, si->su);
-			if (cu == NULL || cu->modes == 0)
+			if (cu == NULL)
+			{
+				command_fail(si, fault_nosuch_target, _("You are not on \2%s\2."), mc->name);
+				return false;
+			}
+			who = md->value;
+			/* don't subvert +m; other modes can be subverted
+			 * though
+			 */
+			if (mc->chan->modes & CMODE_MOD && !strcasecmp(who, "all"))
+				who = "voice";
+			if (!strcasecmp(who, "all"))
+				allow = true;
+			else if (!strcasecmp(who, "voice") || !strcmp(who, "1"))
+				allow = cu->modes != 0 || chanacs_source_flags(mc, si) & (CA_AUTOOP | CA_OP | CA_AUTOVOICE | CA_VOICE);
+			else if (!strcasecmp(who, "op"))
+				allow = cu->modes & CSTATUS_OP || chanacs_source_flags(mc, si) & (CA_AUTOOP | CA_OP);
+			else
+			{
+				command_fail(si, fault_noprivs, _("%s is not enabled on \2%s\2."), "GAMESERV", mc->name);
+				return false;
+			}
+			if (!allow)
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 				return false;
