@@ -1,0 +1,19 @@
+Help for SET GAMESERV:
+
+SET GAMESERV allows gaming services to be
+used, sending to the channel, via
+/msg GameServ <command> <channel> <parameters>.
+
+You can decide who may use GameServ:
+    ALL   - allow all channel members
+    VOICE - allow ops/voiced
+    OP    - allow ops
+    OFF   - allow noone
+
+For OP and VOICE, both channel status and &nick&
+flags apply.
+
+Syntax: SET <#channel> GAMESERV ALL|VOICE|OP|OFF
+
+Example:
+    /msg &nick& SET #foo GAMESERV VOICE

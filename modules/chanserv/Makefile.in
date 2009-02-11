@@ -42,6 +42,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/recover.c	\
 	$(SRCDIR)/register.c	\
 	$(SRCDIR)/set.c		\
+	$(SRCDIR)/set_gameserv.c \
 	$(SRCDIR)/set_limitflags.c \
 	$(SRCDIR)/set_private.c	\
 	$(SRCDIR)/status.c	\
