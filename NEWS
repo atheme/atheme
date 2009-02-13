@@ -10,6 +10,8 @@ ircd protocol
   impossible to ban them effectively.
 - inspircd12: various fixes and updates.
 - ratbox: make akills work with ircd-ratbox 3.x.
+- ratbox: add support for ratbox services shortcuts (ENCAP RSMSG,
+  m_rsshortcut.so)
 - nefarious: allow /ns vhost (FAKEHOST).
 - nefarious: let services joining channels op themselves, avoiding HACK(4)
   notices
@@ -18,7 +20,7 @@ ircd protocol
   Large networks may need to increase this.
 - Limit IRC command output to 2000 lines. XMLRPC is unaffected.
 - Add tracking for the "server admin" umode in some ircds.
-- ptlink: add support for forced nick changes (SVSGUEST).
+- ptlink: add support for forced nick changes (SVSNICK), fix nickTS.
 - Remove some obsolete protocol modules: aurora, sorcery, shadowircd.
   If you do still use one of these, please contact us.
 - Add support for P10 account creation times.
@@ -58,7 +60,9 @@ memoserv
 gameserv
 - Do not add chanserv commands if fantasy is disabled.
 - Allow ROLL, WOD and DF with a channel name to send the results to that
-  channel without requiring fantasy commands.
+  channel without requiring fantasy commands. This must be specifically
+  enabled on a per-channel basis using the new ChanServ command SET GAMESERV
+  (module chanserv/set_gameserv).
 oper
 - Allow searching for AKILLs matching a given mask or id in AKILL LIST.
 - Allow running an operserv-only services instance, which picks up login
