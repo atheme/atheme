@@ -61,7 +61,7 @@ const char *uinttobase64(char *buf, uint64_t v, int64_t count)
 	return buf;
 }
 
-unsigned int base64touint(char *buf)
+unsigned int base64touint(const char *buf)
 {
 	int bits;
 	unsigned int v = 0;
@@ -70,6 +70,19 @@ unsigned int base64touint(char *buf)
 	while (--count >= 0 && (bits = ub64_lookuptab[255 & *buf++]) != '\377')
 		v = v << 6 | bits;
 	return v;
+}
+
+void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
+{
+	struct in_addr ip;
+
+	ipstring[0] = '\0';
+	if (strlen(b64) == 6)
+	{
+		ip.s_addr = ntohl(base64touint(b64));
+		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN))
+			ipstring[0] = '\0';
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

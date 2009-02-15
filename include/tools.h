@@ -153,8 +153,9 @@ E int sjtoken(char *message, char delimiter, char **parv);
 E int tokenize(char *message, char **parv);
 
 /* ubase64.c */
-E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
-E unsigned int base64touint(char* buf);
+E const char *uinttobase64(char *buf, uint64_t v, int64_t count);
+E unsigned int base64touint(const char *buf);
+E void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
 
 /* strshare.c */
 void strshare_init(void);

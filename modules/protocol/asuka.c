@@ -145,8 +145,7 @@ static bool asuka_on_logout(user_t *u, const char *account)
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	struct in_addr ip;
-	char ipstring[64];
+	char ipstring[HOSTIPLEN];
 	char *p;
 	int i;
 
@@ -157,13 +156,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
-		ipstring[0] = '\0';
-		if (strlen(parv[parc - 3]) == 6)
-		{
-			ip.s_addr = ntohl(base64touint(parv[parc - 3]));
-			if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
-				ipstring[0] = '\0';
-		}
+		decode_p10_ip(parv[parc - 3], ipstring);
 		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 		if (u == NULL)
 			return;
