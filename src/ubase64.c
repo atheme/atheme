@@ -75,13 +75,48 @@ unsigned int base64touint(const char *buf)
 void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 {
 	struct in_addr ip;
+	char buf[4];
+	int i, j;
+	size_t len;
 
 	ipstring[0] = '\0';
-	if (strlen(b64) == 6)
+	len = strlen(b64);
+	if (len == 6)
 	{
 		ip.s_addr = ntohl(base64touint(b64));
 		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN))
 			ipstring[0] = '\0';
+	}
+	else if (len == 24 || (len < 24 && strchr(b64, '_')))
+	{
+		/* why is this encoded in such a complicated manner? */
+		i = 0;
+		j = 0;
+		while (b64[i] != '\0')
+		{
+			if (b64[i] == '_')
+			{
+				i++;
+				if (j >= HOSTIPLEN - 2)
+					break;
+				if (j == 0)
+					ipstring[j++] = '0';
+				if (b64[i] == '\0')
+					ipstring[j++] = ':';
+				ipstring[j++] = ':';
+			}
+			else
+			{
+				if (j >= HOSTIPLEN - 5)
+					break;
+				if (j != 0)
+					ipstring[j++] = ':';
+				strlcpy(buf, b64 + i, 4);
+				i += strlen(buf);
+				j += sprintf(ipstring + j, "%x", (uint16_t)base64touint(buf));
+			}
+		}
+		ipstring[j] = '\0';
 	}
 }
 

@@ -29,7 +29,7 @@ static unsigned int p10_server_login(void)
 	me.bursting = true;
 
 	/* SERVER irc.p10.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
-	sts("SERVER %s 1 %lu %lu J10 %s]]] +s :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
+	sts("SERVER %s 1 %lu %lu J10 %s]]] +s6 :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
 
 	services_init();
 

@@ -274,8 +274,8 @@ Users dropping their account will be killed; this cannot be avoided.
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
 
-Atheme does not support IPv6 (neither IPv6 connections nor IPv6 IPs in P10
-protocol). IPs of IPv6 clients will not be stored or logged.
+Although Atheme does not support IPv6 connections itself, user IPv6 addresses
+will be properly stored and logged.
 
 Atheme does not support oplevels; they should be disabled.
 
