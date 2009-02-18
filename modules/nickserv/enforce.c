@@ -22,8 +22,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-#define ENFORCE_CHECK_FREQ 5
-
 typedef struct {
 	char nick[NICKLEN];
 	char host[HOSTLEN];
@@ -33,6 +31,7 @@ typedef struct {
 
 list_t enforce_list;
 BlockHeap *enforce_timeout_heap;
+time_t enforce_next;
 
 static void guest_nickname(user_t *u);
 
@@ -235,11 +234,16 @@ void enforce_timeout_check(void *arg)
 	mynick_t *mn;
 	bool valid;
 
+	enforce_next = 0;
 	LIST_FOREACH_SAFE(n, tn, enforce_list.head)
 	{
 		timeout = n->data;
 		if (timeout->timelimit > CURRTIME)
+		{
+			enforce_next = timeout->timelimit;
+			event_add_once("enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
 			break; /* assume sorted list */
+		}
 		u = user_find_named(timeout->nick);
 		mn = mynick_find(timeout->nick);
 		valid = u != NULL && mn != NULL && (!strcmp(u->host, timeout->host) || !strcmp(u->vhost, timeout->host));
@@ -341,6 +345,14 @@ static void check_enforce(void *vdata)
 			node_add(timeout, &timeout->node, &enforce_list);
 		else
 			node_add_before(timeout, &timeout->node, &enforce_list, n->next);
+
+		if (enforce_next == 0 || enforce_next > timeout->timelimit)
+		{
+			if (enforce_next != 0)
+				event_delete(enforce_timeout_check, NULL);
+			enforce_next = timeout->timelimit;
+			event_add_once("enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
+		}
 	}
 
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
@@ -386,7 +398,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	event_add("enforce_timeout_check", enforce_timeout_check, NULL, ENFORCE_CHECK_FREQ);
 	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
 	command_add(&ns_release, ns_cmdtree);
 	command_add(&ns_set_enforce, ns_set_cmdtree);
@@ -404,7 +415,8 @@ void _moddeinit()
 {
 	enforce_remove_enforcers(NULL);
 	event_delete(enforce_remove_enforcers, NULL);
-	event_delete(enforce_timeout_check, NULL);
+	if (enforce_next)
+		event_delete(enforce_timeout_check, NULL);
 	command_delete(&ns_release, ns_cmdtree);
 	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
