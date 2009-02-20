@@ -52,14 +52,6 @@ int sts(const char *fmt, ...)
 	return 0;
 }
 
-void reconn(void *arg)
-{
-	if (me.connected)
-		return;
-
-	uplink_connect();
-}
-
 /*
  * io_loop()
  *

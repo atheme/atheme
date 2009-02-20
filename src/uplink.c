@@ -117,6 +117,14 @@ uplink_t *uplink_find(const char *name)
 	return NULL;
 }
 
+static void reconn(void *arg)
+{
+	if (me.connected)
+		return;
+
+	uplink_connect();
+}
+
 void uplink_connect(void)
 {
 	uplink_t *u;
