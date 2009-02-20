@@ -24,6 +24,7 @@ ircd protocol
 - Remove some obsolete protocol modules: aurora, sorcery, shadowircd.
   If you do still use one of these, please contact us.
 - Add support for P10 account creation times.
+- Add support for P10 user IPv6 addresses.
 nickserv
 - Snoop on freeze on/off.
 - Add nickserv/vacation module, allowing to temporarily extend expiry times.
@@ -43,6 +44,7 @@ nickserv
   nickname.
 - When a user is recognized but not identified, still tell them to identify,
   but with a shorter message.
+- Make nickserv/enforce timings more accurate.
 chanserv
 - Allow multiple spaces before fantasy commands when ChanServ is addressed
   by nickname.
