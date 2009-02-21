@@ -148,10 +148,7 @@ void connection_select(int delay)
 			if (pollfds[slot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
 			{
 				pollfds[slot].events &= ~(POLLWRNORM | POLLOUT | POLLHUP | POLLERR);
-				if (CF_IS_CONNECTING(cptr))
-					hook_call_event("connected", cptr);
-				else
-					cptr->write_handler(cptr);
+				cptr->write_handler(cptr);
 			}
 		}
 

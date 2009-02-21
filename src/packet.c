@@ -80,16 +80,13 @@ static void ping_uplink(void *arg)
 		event_delete(ping_uplink, NULL);
 }
 
-static void irc_handle_connect(void *vptr)
+void irc_handle_connect(connection_t *cptr)
 {
-	connection_t *cptr = vptr;
-
 	/* add our server */
-
-	if (cptr == curr_uplink->conn)
 	{
 		cptr->flags = CF_UPLINK;
 		cptr->recvq_handler = irc_recvq_handler;
+		connection_setselect(cptr, recvq_put, sendq_flush);
 		me.connected = true;
 		/* no SERVER message received */
 		me.recvsvr = false;
@@ -111,12 +108,6 @@ static void irc_handle_connect(void *vptr)
 		event_add("ping_uplink", ping_uplink, NULL, 300);
 		me.uplinkpong = time(NULL);
 	}
-}
-
-void init_ircpacket(void)
-{
-	hook_add_event("connected");
-	hook_add_hook("connected", irc_handle_connect);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

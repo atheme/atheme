@@ -9,8 +9,6 @@ hook_del_hook("name", handler)
 Current list of hooks
 
 Name               Argument type                         
-(claro)
-connected          connection_t *
 (main)
 config_ready       <none>
 (ircd)

@@ -115,10 +115,7 @@ void connection_select(int delay)
 
 			if (FD_ISSET(cptr->fd, &writefds))
 			{
-				if (CF_IS_CONNECTING(cptr))
-					hook_call_event("connected", cptr);
-				else
-					cptr->write_handler(cptr);
+				cptr->write_handler(cptr);
 			}
 		}
 

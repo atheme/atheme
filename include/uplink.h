@@ -47,7 +47,7 @@ E void uplink_connect(void);
 E struct timeval burstime;
 #endif
 
-E void init_ircpacket(void);
+E void irc_handle_connect(connection_t *cptr);
 
 /* parse.c */
 E void (*parse)(char *line);

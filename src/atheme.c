@@ -228,7 +228,6 @@ int main(int argc, char *argv[])
 	init_confprocess();
 	init_newconf();
 	servtree_init();
-	init_ircpacket();
 
 	modules_init();
 	pcommand_init();

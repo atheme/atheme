@@ -154,7 +154,7 @@ void uplink_connect(void)
 
 	u = curr_uplink;
 	
-	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, recvq_put, sendq_flush);
+	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, NULL, irc_handle_connect);
 	if (curr_uplink->conn != NULL)
 	{
 		curr_uplink->conn->close_handler = uplink_close;
