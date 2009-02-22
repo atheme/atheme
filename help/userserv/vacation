@@ -1,0 +1,14 @@
+Help for VACATION:
+
+VACATION extends the expiration time for your
+account (but not your channels) to three
+times the usual value. You can only do this
+if your account is registered long enough.
+
+Vacation mode is disabled automatically the
+next time you log in to &nick&.
+
+Syntax: VACATION
+
+Examples:
+    /msg &nick& VACATION
