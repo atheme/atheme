@@ -38,6 +38,12 @@ Examples:
     /msg &nick& TEMPLATE #foo
     /msg &nick& TEMPLATE #foo user VOP
     /msg &nick& TEMPLATE #foo user !+A
+#if halfops
     /msg &nick& TEMPLATE #foo co-founder +*-OH
     /msg &nick& TEMPLATE #foo op -*+vVhoti
+#endif
+#if !halfops
+    /msg &nick& TEMPLATE #foo co-founder +*-O
+    /msg &nick& TEMPLATE #foo op -*+vVoti
+#endif
     /msg &nick& TEMPLATE #foo obsoletetemplate -*
