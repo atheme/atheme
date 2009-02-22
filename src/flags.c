@@ -87,7 +87,7 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 				  /* If this is chanacs_flags[], remove the ban flag. */
 				  if (table == chanacs_flags)
 				  {
-					  *addflags &= CA_ALLPRIVS & ca_all;
+					  *addflags &= CA_ALLPRIVS;
 					  *addflags &= ~CA_FOUNDER;
 					  *removeflags |= CA_AKICK;
 				  }
@@ -117,6 +117,12 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 		}
 
 		string++;
+	}
+
+	if (table == chanacs_flags)
+	{
+		*addflags &= ca_all;
+		*removeflags &= ca_all;
 	}
 
 	return;
