@@ -282,7 +282,6 @@ loadmodule "modules/chanserv/why";
  * MODINSPECT command				modules/operserv/modinspect
  * MODLIST command				modules/operserv/modlist
  * MODLOAD command				modules/operserv/modload
- * MODRESTART command				modules/operserv/modrestart
  * MODUNLOAD command				modules/operserv/modunload
  * NOOP system					modules/operserv/noop
  * Regex mass akill (RAKILL command)		modules/operserv/rakill
@@ -312,7 +311,6 @@ loadmodule "modules/operserv/mode";
 loadmodule "modules/operserv/modinspect";
 loadmodule "modules/operserv/modlist";
 loadmodule "modules/operserv/modload";
-loadmodule "modules/operserv/modrestart";
 loadmodule "modules/operserv/modunload";
 loadmodule "modules/operserv/noop";
 #loadmodule "modules/operserv/rakill";

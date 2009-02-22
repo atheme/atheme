@@ -29,7 +29,6 @@ BASE_SRCS =			\
 	$(SRCDIR)/modinspect.c	\
 	$(SRCDIR)/modlist.c	\
 	$(SRCDIR)/modload.c	\
-	$(SRCDIR)/modrestart.c	\
 	$(SRCDIR)/modunload.c	\
 	$(SRCDIR)/noop.c	\
 	$(SRCDIR)/raw.c		\

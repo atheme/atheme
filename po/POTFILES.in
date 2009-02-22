@@ -102,7 +102,6 @@ modules/operserv/mode.c
 modules/operserv/modinspect.c
 modules/operserv/modlist.c
 modules/operserv/modload.c
-modules/operserv/modrestart.c
 modules/operserv/modunload.c
 modules/operserv/noop.c
 modules/operserv/rakill.c
