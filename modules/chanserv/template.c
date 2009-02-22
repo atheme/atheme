@@ -236,6 +236,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				{
 					found = true;
 					oldflags = flags_to_bitmask(ss, chanacs_flags, 0);
+					oldflags &= ca_all;
 					addflags &= ~oldflags;
 					removeflags &= oldflags & ~addflags;
 					/* no change? */
