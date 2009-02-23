@@ -149,8 +149,6 @@ static void nickserv_config_ready(void *unused)
 	else
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
 			itranslation_destroy(_(nick_account_trans[i].nickstring));
-
-        hook_del_hook("config_ready", nickserv_config_ready);
 }
 
 void _modinit(module_t *m)
@@ -178,6 +176,9 @@ void _moddeinit(void)
 		nicksvs.me = NULL;
 	}
 	authservice_loaded--;
+
+        hook_del_hook("config_ready", nickserv_config_ready);
+        hook_del_hook("nick_check", nickserv_handle_nickchange);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
