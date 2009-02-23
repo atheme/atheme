@@ -387,11 +387,13 @@ static void httpd_config_ready(void *vptr)
 {
 	if (httpd_config.host != NULL && httpd_config.port != 0)
 	{
+		/* Some code depends on connection_t.listener == listener. */
+		if (listener != NULL)
+			return;
 		listener = connection_open_listener_tcp(httpd_config.host,
 			httpd_config.port, do_listen);
 		if (listener == NULL)
 			slog(LG_ERROR, "httpd_config_ready(): failed to open listener on host %s port %d", httpd_config.host, httpd_config.port);
-		hook_del_hook("config_ready", httpd_config_ready);
 	}
 	else
 		slog(LG_ERROR, "httpd_config_ready(): httpd {} block missing or invalid");
@@ -415,6 +417,7 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	event_delete(httpd_checkidle, NULL);
+	hook_del_hook("config_ready", httpd_config_ready);
 	connection_close_soon_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);
 	del_conf_item("WWW_ROOT", &conf_httpd_table);
