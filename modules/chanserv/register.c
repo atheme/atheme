@@ -48,6 +48,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	char str[21];
 	hook_channel_register_check_t hdatac;
 	hook_channel_req_t hdata;
+	unsigned int fl;
 
 	if (!name)
 	{
@@ -151,6 +152,25 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.mc = mc;
 	hook_call_event("channel_register", &hdata);
+	/* Allow the hook to override this. */
+	fl = chanacs_source_flags(mc, si);
+	cu = chanuser_find(mc->chan, si->su);
+	if (cu == NULL)
+		;
+	else if (ircd->uses_owner && fl & CA_USEOWNER && fl & CA_AUTOOP &&
+			!(cu->modes & CSTATUS_OWNER))
+	{
+		modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+				ircd->owner_mchar[1], CLIENT_NAME(si->su));
+		cu->modes |= CSTATUS_OWNER;
+	}
+	else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
+			!(cu->modes & CSTATUS_PROTECT))
+	{
+		modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+				ircd->protect_mchar[1], CLIENT_NAME(si->su));
+		cu->modes |= CSTATUS_PROTECT;
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
