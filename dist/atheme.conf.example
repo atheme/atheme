@@ -247,6 +247,8 @@ loadmodule "modules/chanserv/kick";
 loadmodule "modules/chanserv/list";
 loadmodule "modules/chanserv/mark";
 loadmodule "modules/chanserv/op";
+#loadmodule "modules/chanserv/owner";
+#loadmodule "modules/chanserv/protect";
 #loadmodule "modules/chanserv/quiet";
 loadmodule "modules/chanserv/recover";
 loadmodule "modules/chanserv/register";
