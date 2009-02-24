@@ -310,7 +310,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			}
 			if (ircd->uses_protect && level & CA_USEPROTECT)
 			{
-				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT))
+				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT) && !(ircd->uses_owner && cu->modes & CSTATUS_OWNER))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= CSTATUS_PROTECT;
@@ -428,7 +428,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		}
 		if (ircd->uses_protect && level & CA_USEPROTECT)
 		{
-			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT))
+			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT) && !(ircd->uses_owner && cu->modes & CSTATUS_OWNER))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes |= CSTATUS_PROTECT;

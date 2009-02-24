@@ -276,7 +276,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 					cu->modes |= ircd->owner_mode;
 				}
 
-				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
+				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && !(ircd->uses_owner && cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->protect_mode;

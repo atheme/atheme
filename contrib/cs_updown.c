@@ -102,7 +102,7 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (fl & CA_USEPROTECT)
 		{
-			if (fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes))
+			if (fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes) && !(ircd->uses_owner && cu->modes & ircd->owner_mode))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes |= ircd->protect_mode;

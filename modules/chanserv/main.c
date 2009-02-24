@@ -409,7 +409,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (flags & CA_USEPROTECT)
 		{
-			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode))
+			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode || (ircd->uses_owner && cu->modes & ircd->owner_mode)))
 			{
 				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 				cu->modes |= ircd->protect_mode;
