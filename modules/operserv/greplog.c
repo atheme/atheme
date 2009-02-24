@@ -198,7 +198,8 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 			p = n->data;
 			matches++;
 			command_success_nodata(si, "[%d] %s", matches, p);
-			free(p);
+			node_del(n, &loglines);
+			free(n->data);
 			node_free(n);
 		}
 		if (matches == 0 && lines > linesv && lines > 0)
