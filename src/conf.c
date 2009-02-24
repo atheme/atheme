@@ -908,6 +908,7 @@ bool conf_rehash(void)
 		/* not fully ok, oh well */
 		unmark_all_illegal();
 
+		free_cstructs(hold_me);
 		free(hold_me);
 		free(oldsnoop);
 
@@ -933,6 +934,7 @@ bool conf_rehash(void)
 
 	remove_illegals();
 
+	free_cstructs(hold_me);
 	free(hold_me);
 	free(oldsnoop);
 
