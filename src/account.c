@@ -462,7 +462,7 @@ myuser_num_channels(myuser_t *mu)
  *     - false otherwise
  *
  * Side Effects:
- *     - last login time updated if user matches
+ *     - none
  */
 bool
 myuser_access_verify(user_t *u, myuser_t *mu)
@@ -493,10 +493,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 		char *entry = (char *) n->data;
 
 		if (!match(entry, buf) || !match(entry, buf2) || !match(entry, buf3) || !match_cidr(entry, buf3))
-		{
-			mu->lastlogin = CURRTIME;
 			return true;
-		}
 	}
 
 	return false;

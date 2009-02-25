@@ -43,7 +43,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn = NULL;
 	myuser_name_t *mun;
 	user_t *u = NULL;
-	bool u_unidentified = false;
+	bool recognized = false;
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32], lastlogin[32], *p;
 	time_t registered;
@@ -111,9 +111,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (u != NULL && u->myuser != mu)
 		{
 			if (myuser_access_verify(u, mu))
-				u_unidentified = true;
-			else
-				u = NULL;
+				recognized = true;
+			u = NULL;
 		}
 	}
 
@@ -160,14 +159,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
+	if (recognized)
+		command_success_nodata(si, _("Recognized : now (matches access list)"), mn->nick);
 	/* show nick's lastseen/online, if we have a nick */
 	if (u != NULL)
-	{
-		if (u_unidentified)
-			command_success_nodata(si, _("Last seen  : now (unidentified)"));
-		else
-			command_success_nodata(si, _("Last seen  : now"));
-	}
+		command_success_nodata(si, _("Last seen  : now"));
 	else if (mn != NULL)
 	{
 		tm2 = *localtime(&mn->lastseen);
@@ -181,7 +177,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	/* if noone is logged in to this account, show account's lastseen,
 	 * unless we have a nick and it quit at the same time as the account
 	 */
-	if (LIST_LENGTH(&mu->logins) == 0 && !u_unidentified)
+	if (LIST_LENGTH(&mu->logins) == 0)
 	{
 		tm2 = *localtime(&mu->lastlogin);
 		strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);

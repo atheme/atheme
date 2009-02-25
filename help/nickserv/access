@@ -2,10 +2,9 @@ Help for ACCESS:
 
 ACCESS maintains a list of user@host masks from where
 &nick& will recognize you, so it will not prompt you to
-change nick. Getting channel access or editing nickname
-settings still requires identification, however. Also,
-you can only be recognized as the nick you are
-currently using.
+change nick. Preventing expiry, getting channel access
+or editing nickname settings still requires
+identification, however.
 
 Access list entries can use hostnames with optional
 wildcards, IP addresses and CIDR masks. There are

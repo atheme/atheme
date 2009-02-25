@@ -121,7 +121,6 @@ static void nickserv_handle_nickchange(void *user_p)
 	{
 		notice(nicksvs.nick, u->nick, _("Please identify via \2/%s%s identify <password>\2."),
 			(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp);
-		mn->lastseen = CURRTIME;
 		return;
 	}
 
