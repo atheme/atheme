@@ -87,7 +87,7 @@ static void update_poll_fds(void)
 			pollfds[slot].events |= POLLWRNORM;
 			pollfds[slot].revents = 0;
 		}
-		else
+		if (cptr->read_handler)
 		{
 			pollfds[slot].fd = cptr->fd;
 			pollfds[slot].events |= POLLRDNORM;
