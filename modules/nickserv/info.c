@@ -160,7 +160,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (recognized)
-		command_success_nodata(si, _("Recognized : now (matches access list)"), mn->nick);
+		command_success_nodata(si, _("Recognized : now (matches access list)"));
 	/* show nick's lastseen/online, if we have a nick */
 	if (u != NULL)
 		command_success_nodata(si, _("Last seen  : now"));
