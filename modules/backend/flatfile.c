@@ -834,14 +834,19 @@ static void flatfile_db_load(void)
 					{
 					  case SHRIKE_CA_VOP:
 						  fl2 = chansvs.ca_vop;
+						  break;
 					  case SHRIKE_CA_AOP:
 						  fl2 = chansvs.ca_aop;
+						  break;
 					  case SHRIKE_CA_SOP:
 						  fl2 = chansvs.ca_sop;
+						  break;
 					  case SHRIKE_CA_SUCCESSOR:
 						  fl2 = CA_SUCCESSOR_0;
+						  break;
 					  case SHRIKE_CA_FOUNDER:
 						  fl2 = CA_FOUNDER_0;
+						  break;
 					}
 
 					if ((!mu) && (validhostmask(causer)))
