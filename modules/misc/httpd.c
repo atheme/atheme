@@ -117,11 +117,9 @@ static void check_close(connection_t *cptr)
 
 static void send_error(connection_t *cptr, int errorcode, const char *text, bool sendentity)
 {
-	struct httpddata *hd;
 	char buf1[300];
 	char buf2[700];
 
-	hd = cptr->userdata;
 	if (errorcode < 100 || errorcode > 999)
 		errorcode = 500;
 	snprintf(buf2, sizeof buf2, "HTTP/1.1 %d %s\r\n", errorcode, text);

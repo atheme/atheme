@@ -360,12 +360,11 @@ static void check_enforce(void *vdata)
 
 static int idcheck_foreach_cb(const char *key, void *data, void *privdata)
 {
-	metadata_t *md;
 	myuser_t *mu = (myuser_t *) data;
 
-	if ((md = metadata_find(mu, "private:idcheck")))
+	if (metadata_find(mu, "private:idcheck"))
 		metadata_delete(mu, "private:idcheck");
-	if ((md = metadata_find(mu, "private:enforcer")))
+	if (metadata_find(mu, "private:enforcer"))
 		metadata_delete(mu, "private:enforcer");
 
 	return 0;

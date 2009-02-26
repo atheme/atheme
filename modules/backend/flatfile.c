@@ -404,7 +404,7 @@ static void flatfile_db_load(void)
 				unsigned int registered, lastlogin;
 				char *failnum, *lastfailaddr, *lastfailtime;
 
-				if ((mu = myuser_find(s)))
+				if (myuser_find(s))
 				{
 					slog(LG_INFO, "db_load(): skipping duplicate account %s (line %d)", s, linecnt);
 					continue;
@@ -540,7 +540,7 @@ static void flatfile_db_load(void)
 				continue;
 			}
 
-			if ((mynick_find(nick)))
+			if (mynick_find(nick))
 			{
 				slog(LG_INFO, "db_load(): skipping duplicate nick %s (account %s) (line %d)", nick, user, linecnt);
 				continue;
@@ -622,11 +622,11 @@ static void flatfile_db_load(void)
 		else if (!strcmp("MC", item))
 		{
 			/* mychans */
-			char *mcname, *mcpass;
+			char *mcname;
 
 			if ((s = strtok(NULL, " ")))
 			{
-				if ((mc = mychan_find(s)))
+				if (mychan_find(s))
 				{
 					slog(LG_INFO, "db_load(): skipping duplicate channel %s (line %d)", s, linecnt);
 					continue;
@@ -635,8 +635,8 @@ static void flatfile_db_load(void)
 				mcin++;
 
 				mcname = s;
-				/* unused */
-				mcpass = strtok(NULL, " ");
+				/* unused (old password) */
+				(void)strtok(NULL, " ");
 
 				mc = mychan_add(mcname);
 

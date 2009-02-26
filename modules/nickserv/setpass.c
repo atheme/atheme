@@ -110,9 +110,8 @@ static void clear_setpass_key(void *vptr)
 {
 	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
-	metadata_t *md;
 
-	if (!(md = metadata_find(mu, "private:setpass:key")))
+	if (!metadata_find(mu, "private:setpass:key"))
 		return;
 
 	metadata_delete(mu, "private:setpass:key");

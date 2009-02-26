@@ -243,7 +243,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 	char *arg_dice, *arg_difficulty;
 	int ii = 0;
 	int dice, difficulty;
-	int roll, total = 0, roll_count = 0, i;
+	int roll, total, roll_count = 0, i;
 	int success = 0, failure = 0, botches = 0, rerolls = 0;
 	static char buf[BUFSIZE];
 	char *end_p;
@@ -261,7 +261,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 
 	while (roll_count < 3 && arg_dice != NULL && arg_difficulty != NULL)
 	{
-		total = 0, success = 0, failure = 0, botches = 0, rerolls = 0;
+		success = 0, failure = 0, botches = 0, rerolls = 0;
 		roll_count++;
 
 		dice = atoi(arg_dice);

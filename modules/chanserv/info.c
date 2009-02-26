@@ -73,7 +73,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, "private:close:closer")))
+	if (!has_priv(si, PRIV_CHAN_AUSPEX) && metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 has been closed down by the %s administration."), mc->name, me.netname);
 		return;

@@ -182,7 +182,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(op, "REGISTER"))
 	{
-		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, "private:verify:register:key")))
+		if (!(mu->flags & MU_WAITAUTH) || !metadata_find(mu, "private:verify:register:key"))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
@@ -213,7 +213,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(op, "EMAILCHG"))
 	{
-		if (!(md = metadata_find(mu, "private:verify:emailchg:key")))
+		if (!metadata_find(mu, "private:verify:emailchg:key"))
 		{
 			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
