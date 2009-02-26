@@ -37,7 +37,6 @@ LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
 RPATH		= @RPATH@
 CPPFLAGS	= @CPPFLAGS@
-SOCKET_ENGINE	= @SOCKET_ENGINE@.c
 
 # Want absolute paths?
 SRCDIR		= .
@@ -84,6 +83,7 @@ BASE_SRCS =				\
 	$(SRCDIR)/parse.c		\
 	$(SRCDIR)/phandler.c		\
 	$(SRCDIR)/pmodule.c		\
+	$(SRCDIR)/poll.c		\
 	$(SRCDIR)/privs.c		\
 	$(SRCDIR)/ptasks.c		\
 	$(SRCDIR)/send.c		\
@@ -102,8 +102,7 @@ BASE_SRCS =				\
 	$(SRCDIR)/users.c		\
 	$(SRCDIR)/uid.c			\
 	$(SRCDIR)/uplink.c		\
-	$(SRCDIR)/xmlrpc.c		\
-	$(SRCDIR)/${SOCKET_ENGINE}
+	$(SRCDIR)/xmlrpc.c
 
 SRCS = ${BASE_SRCS} $(SRCDIR)/version.c
 

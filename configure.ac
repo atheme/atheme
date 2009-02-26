@@ -80,14 +80,10 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([strdup strlcpy strlcat inet_pton inet_ntop gettimeofday umask mmap arc4random getrlimit fork getpid execve])
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
 AC_CHECK_FUNC(gethostbyname,, AC_CHECK_LIB(nsl, gethostbyname))
-AC_CHECK_FUNC(select, SOCKET_ENGINE="select",)
-dnl this is broken right now
-AC_CHECK_FUNC(poll, SOCKET_ENGINE="poll",)
 
 POSIX_CRYPTC=""
 AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
-AC_SUBST(SOCKET_ENGINE)
 AC_SUBST(POSIX_CRYPTC)
 
 dnl gettextize's Makefile.in wants this
@@ -523,7 +519,6 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Large network support: ${LARGENET}
 	OpenSSL SASL support : ${SSL}
-	Socket Engine        : ${SOCKET_ENGINE}
 	Block Allocator      : ${balloc}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
