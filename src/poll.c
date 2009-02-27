@@ -64,37 +64,41 @@ void init_socket_queues(void)
  *       none
  *
  * outputs:
- *       none
+ *       number of sockets to be polled
  *
  * side effects:
  *       registered sockets are prepared for the poll() loop.
  */
-static void update_poll_fds(void)
+static nfds_t update_poll_fds(void)
 {
 	node_t *n;
 	connection_t *cptr;
-	int slot = 0;
+	nfds_t slot = 0;
 
 	LIST_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
 
-		cptr->pollslot = slot;
+		cptr->pollslot = -1;
 
 		if (CF_IS_CONNECTING(cptr) || sendq_nonempty(cptr))
 		{
 			pollfds[slot].fd = cptr->fd;
 			pollfds[slot].events |= POLLWRNORM;
 			pollfds[slot].revents = 0;
+			cptr->pollslot = slot;
 		}
 		if (cptr->read_handler)
 		{
 			pollfds[slot].fd = cptr->fd;
 			pollfds[slot].events |= POLLRDNORM;
 			pollfds[slot].revents = 0;
+			cptr->pollslot = slot;
 		}
-		slot++;
+		if (cptr->pollslot != -1)
+			slot++;
 	}
+	return slot;
 }
 
 /*
@@ -115,10 +119,11 @@ void connection_select(int delay)
 	node_t *n, *tn;
 	connection_t *cptr;
 	int slot;
+	nfds_t count;
 
-	update_poll_fds();
+	count = update_poll_fds();
 
-	if ((sr = poll(pollfds, connection_list.count, delay)) > 0)
+	if ((sr = poll(pollfds, count, delay)) > 0)
 	{
 		/* Iterate twice, so we don't touch freed memory if
 		 * a connection is closed.
@@ -128,10 +133,10 @@ void connection_select(int delay)
 			cptr = n->data;
 			slot = cptr->pollslot;
 
-			if (pollfds[slot].revents == 0)
+			if (slot == -1 || pollfds[slot].revents == 0)
 				continue;
 
-			if (pollfds[slot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR))
+			if (pollfds[slot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR) && cptr->read_handler)
 			{
 				pollfds[slot].events &= ~(POLLRDNORM | POLLIN | POLLHUP | POLLERR);
 				cptr->read_handler(cptr);
@@ -143,9 +148,9 @@ void connection_select(int delay)
 			cptr = n->data;
 			slot = cptr->pollslot;
 
-			if (pollfds[slot].revents == 0)
+			if (slot == -1 || pollfds[slot].revents == 0)
 				continue;
-			if (pollfds[slot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
+			if (pollfds[slot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR) && cptr->write_handler)
 			{
 				pollfds[slot].events &= ~(POLLWRNORM | POLLOUT | POLLHUP | POLLERR);
 				cptr->write_handler(cptr);
