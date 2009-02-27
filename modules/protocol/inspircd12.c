@@ -812,7 +812,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
 		if (u == NULL)
 			return;
-		user_mode(u, parv[9]);
+		user_mode(u, parv[8]);
 
 		/* If server is not yet EOB we will do this later.
 		 * This avoids useless "please identify" -- jilles */
