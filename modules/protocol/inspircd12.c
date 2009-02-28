@@ -947,7 +947,7 @@ static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
-		join(parv[0], u->uid);
+		join(parv[0], u->nick);
 	}
 }
 
