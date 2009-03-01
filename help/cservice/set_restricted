@@ -1,12 +1,12 @@
 Help for SET RESTRICTED:
 
 SET RESTRICTED designates a channel as restricted access.
-Users who are not on the access list of the channel, or
-who do not have the chan:joinstaffonly privilege
-immediately kickbanned from the channel, removing any
-ban exceptions matching them first. If the channel
-is set +i, no ban will be set and invite exceptions
-will be removed.
+Users who are not on the access list of the channel,
+or who do not have the chan:joinstaffonly privilege
+will be kicked and banned from the channel upon join,
+removing any ban exceptions matching them first.
+If the channel is set +i, no ban will be set
+and invite exceptions will be removed.
 
 Syntax: SET <#channel> RESTRICTED ON|OFF
 
