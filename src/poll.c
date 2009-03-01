@@ -79,24 +79,19 @@ static nfds_t update_poll_fds(void)
 	{
 		cptr = n->data;
 
-		cptr->pollslot = -1;
-
-		if (cptr->write_handler)
+		if (cptr->read_handler || cptr->write_handler)
 		{
 			pollfds[slot].fd = cptr->fd;
-			pollfds[slot].events |= POLLWRNORM;
+			if (cptr->read_handler)
+				pollfds[slot].events |= POLLRDNORM;
+			if (cptr->write_handler)
+				pollfds[slot].events |= POLLWRNORM;
 			pollfds[slot].revents = 0;
 			cptr->pollslot = slot;
-		}
-		if (cptr->read_handler)
-		{
-			pollfds[slot].fd = cptr->fd;
-			pollfds[slot].events |= POLLRDNORM;
-			pollfds[slot].revents = 0;
-			cptr->pollslot = slot;
-		}
-		if (cptr->pollslot != -1)
 			slot++;
+		}
+		else
+			cptr->pollslot = -1;
 	}
 	return slot;
 }
