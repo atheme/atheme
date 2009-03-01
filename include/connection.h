@@ -75,8 +75,8 @@ extern connection_t *connection_open_listener_tcp(char *, unsigned int,
 extern connection_t *connection_accept_tcp(connection_t *,
 	void(*)(connection_t *),
 	void(*)(connection_t *));
-extern void connection_setselect(connection_t *, void(*)(connection_t *),
-	void(*)(connection_t *));
+extern void connection_setselect_read(connection_t *, void(*)(connection_t *));
+extern void connection_setselect_write(connection_t *, void(*)(connection_t *));
 extern void connection_close(connection_t *);
 extern void connection_close_soon(connection_t *);
 extern void connection_close_soon_children(connection_t *);

@@ -506,23 +506,40 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 }
 
 /*
- * connection_setselect()
+ * connection_setselect_read()
  *
  * inputs:
  *       connection_t to register/deregister interest on,
- *       replacement handlers (NULL = no interest)
+ *       replacement handler (NULL = no interest)
  *
  * outputs:
  *       none
  *
  * side effects:
- *       the handlers are changed for the connection_t.
+ *       the read handler is changed for the connection_t.
  */
-void connection_setselect(connection_t *cptr,
-	void (*read_handler)(connection_t *),
-	void (*write_handler)(connection_t *))
+void connection_setselect_read(connection_t *cptr,
+	void (*read_handler)(connection_t *))
 {
 	cptr->read_handler = read_handler;
+}
+
+/*
+ * connection_setselect_write()
+ *
+ * inputs:
+ *       connection_t to register/deregister interest on,
+ *       replacement handler (NULL = no interest)
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       the write handler is changed for the connection_t.
+ */
+void connection_setselect_write(connection_t *cptr,
+	void (*write_handler)(connection_t *))
+{
 	cptr->write_handler = write_handler;
 }
 

@@ -86,7 +86,8 @@ void irc_handle_connect(connection_t *cptr)
 	{
 		cptr->flags = CF_UPLINK;
 		cptr->recvq_handler = irc_recvq_handler;
-		connection_setselect(cptr, recvq_put, sendq_flush);
+		connection_setselect_read(cptr, recvq_put);
+		connection_setselect_write(cptr, sendq_flush);
 		me.connected = true;
 		/* no SERVER message received */
 		me.recvsvr = false;
