@@ -589,36 +589,6 @@ void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 	}
 }
 
-/*
- * connection_write()
- *
- * inputs:
- *       connection_t to write to, format string, parameters
- *
- * outputs:
- *       none
- *
- * side effects:
- *       data is added to the connection_t sendq cache.
- */
-void connection_write(connection_t *to, char *format, ...)
-{
-	char buf[BUFSIZE * 12];
-	va_list args;
-	unsigned int len;
-
-	va_start(args, format);
-	vsnprintf(buf, BUFSIZE * 12, format, args);
-	va_end(args);
-
-	len = strlen(buf);
-	buf[len++] = '\r';
-	buf[len++] = '\n';
-	buf[len] = '\0';
-
-	sendq_add(to, buf, len);
-}
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
