@@ -81,7 +81,7 @@ static nfds_t update_poll_fds(void)
 
 		cptr->pollslot = -1;
 
-		if (CF_IS_CONNECTING(cptr) || sendq_nonempty(cptr))
+		if (cptr->write_handler)
 		{
 			pollfds[slot].fd = cptr->fd;
 			pollfds[slot].events |= POLLWRNORM;

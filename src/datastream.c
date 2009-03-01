@@ -49,6 +49,9 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		return;
 	}
 
+	if (len == 0)
+		return;
+
 	if (cptr->sendq_limit != 0 &&
 			LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
 	{
@@ -57,6 +60,9 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		cptr->flags |= CF_DEAD;
 		return;
 	}
+
+	if (!sendq_nonempty(cptr))
+		connection_setselect_write(cptr, sendq_flush);
 
 	n = cptr->sendq.tail;
 	if (n != NULL)
@@ -95,6 +101,8 @@ void sendq_add_eof(connection_t * cptr)
 		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
 	}
+	if (!sendq_nonempty(cptr))
+		connection_setselect_write(cptr, sendq_flush);
 	cptr->flags |= CF_SEND_EOF;
 }
 
@@ -151,6 +159,7 @@ void sendq_flush(connection_t * cptr)
 #endif
 		cptr->flags |= CF_SEND_DEAD;
 	}
+	connection_setselect_write(cptr, NULL);
 }
 
 bool sendq_nonempty(connection_t *cptr)

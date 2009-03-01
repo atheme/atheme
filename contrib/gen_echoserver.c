@@ -67,8 +67,7 @@ static void my_rhandler(connection_t * cptr)
 
 static void do_listen(connection_t *cptr)
 {
-	connection_t *newptr = connection_accept_tcp(cptr,
-		my_rhandler, sendq_flush);
+	connection_t *newptr = connection_accept_tcp(cptr, my_rhandler, NULL);
 	slog(LG_DEBUG, "do_listen(): accepted %d", cptr->fd);
 }
 
