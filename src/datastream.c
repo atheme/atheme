@@ -52,7 +52,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 	if (cptr->sendq_limit != 0 &&
 			LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
 	{
-		slog(LG_INFO, "sendq_flush(): sendq limit exceeded on connection %s[%d]",
+		slog(LG_INFO, "sendq_add(): sendq limit exceeded on connection %s[%d]",
 				cptr->name, cptr->fd);
 		cptr->flags |= CF_DEAD;
 		return;
