@@ -196,7 +196,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 	/* except if the user has no wildcards */
 	for (p = target; *p; p++)
 	{
-		if (*p != '*' && *p != '?' && *p != '.')
+		if (*p != '*' && *p != '?')
 			i++;
 	}
 
