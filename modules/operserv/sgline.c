@@ -114,7 +114,6 @@ static void os_cmd_sgline(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u;
 	char *target = parv[0];
 	char *token = strtok(parv[1], " ");
 	char *treason, reason[BUFSIZE];
