@@ -26,8 +26,10 @@
 #include "privs.h"
 
 list_t klnlist;
+list_t xlnlist;
 
 static BlockHeap *kline_heap;	/* 16 */
+static BlockHeap *xline_heap;	/* 16 */
 
 /*************
  * L I S T S *
@@ -36,8 +38,9 @@ static BlockHeap *kline_heap;	/* 16 */
 void init_nodes(void)
 {
 	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
+	xline_heap = BlockHeapCreate(sizeof(xline_t), 16);
 
-	if (kline_heap == NULL)
+	if (kline_heap == NULL || xline_heap == NULL)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -238,6 +241,142 @@ void kline_expire(void *arg)
 				k->user, k->host, k->setby);
 
 			kline_delete(k);
+		}
+	}
+}
+
+/*************
+ * X L I N E *
+ *************/
+
+xline_t *xline_add(char *realname, char *reason, long duration)
+{
+	xline_t *x;
+	node_t *n = node_create();
+	static unsigned int xcnt = 0;
+
+	slog(LG_DEBUG, "xline_add(): %s -> %s (%ld)", realname, reason, duration);
+
+	x = BlockHeapAlloc(xline_heap);
+
+	node_add(x, n, &xlnlist);
+
+	x->realname = sstrdup(realname);
+	x->reason = sstrdup(reason);
+	x->duration = duration;
+	x->settime = CURRTIME;
+	x->expires = CURRTIME + duration;
+	x->number = ++xcnt;
+
+	cnt.xline++;
+
+	xline_sts("*", realname, duration, reason);
+
+	return x;
+}
+
+void xline_delete(const char *realname)
+{
+	xline_t *x = xline_find(realname);
+	node_t *n;
+
+	if (!x)
+	{
+		slog(LG_DEBUG, "xline_delete(): called for nonexistant xline: %s", realname);
+		return;
+	}
+
+	slog(LG_DEBUG, "xline_delete(): %s -> %s", x->realname, x->reason);
+
+	/* only unxline if ircd has not already removed this -- jilles */
+	if (x->duration == 0 || x->expires > CURRTIME)
+		unxline_sts("*", x->realname);
+
+	n = node_find(x, &xlnlist);
+	node_del(n, &xlnlist);
+	node_free(n);
+
+	free(x->realname);
+	free(x->reason);
+	free(x->setby);
+
+	BlockHeapFree(xline_heap, x);
+
+	cnt.xline--;
+}
+
+xline_t *xline_find(const char *realname)
+{
+	xline_t *x;
+	node_t *n;
+
+	LIST_FOREACH(n, xlnlist.head)
+	{
+		x = (xline_t *)n->data;
+
+		if (!match(x->realname, realname))
+			return x;
+	}
+
+	return NULL;
+}
+
+xline_t *xline_find_num(unsigned int number)
+{
+	xline_t *x;
+	node_t *n;
+
+	LIST_FOREACH(n, xlnlist.head)
+	{
+		x = (xline_t *)n->data;
+
+		if (x->number == number)
+			return x;
+	}
+
+	return NULL;
+}
+
+xline_t *xline_find_user(user_t *u)
+{
+	xline_t *x;
+	node_t *n;
+
+	LIST_FOREACH(n, xlnlist.head)
+	{
+		x = (xline_t *)n->data;
+
+		if (x->duration != 0 && x->expires <= CURRTIME)
+			continue;
+
+		if (!match(x->realname, u->gecos))
+			return x;
+	}
+
+	return NULL;
+}
+
+void xline_expire(void *arg)
+{
+	xline_t *x;
+	node_t *n, *tn;
+
+	LIST_FOREACH_SAFE(n, tn, xlnlist.head)
+	{
+		x = (xline_t *)n->data;
+
+		if (x->duration == 0)
+			continue;
+
+		if (x->expires <= CURRTIME)
+		{
+			snoop(_("XLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+				x->realname, time_ago(x->settime), x->setby);
+
+			verbose_wallops(_("XLINE expired on \2%s\2, set by \2%s\2"),
+				x->realname, x->setby);
+
+			xline_delete(x->realname);
 		}
 	}
 }

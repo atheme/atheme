@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 #define DB_ATHEME	2
 
 /* flatfile state */
-unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;
+unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0;
 
 static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privdata)
 {
@@ -87,6 +87,7 @@ static void flatfile_db_save(void *arg)
 	mychan_t *mc;
 	chanacs_t *ca;
 	kline_t *k;
+	xline_t *x;
 	svsignore_t *svsignore;
 	soper_t *soper;
 	node_t *n, *tn, *tn2;
@@ -97,7 +98,7 @@ static void flatfile_db_save(void *arg)
 	errno = 0;
 
 	/* reset state */
-	muout = 0, mcout = 0, caout = 0, kout = 0;
+	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0;
 
 	/* write to a temporary file first */
 	if (!(f = fopen(DATADIR "/atheme.db.new", "w")))
@@ -257,8 +258,22 @@ static void flatfile_db_save(void *arg)
 		kout++;
 	}
 
-	/* DE <muout> <mcout> <caout> <kout> */
-	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, kout);
+	slog(LG_DEBUG, "db_save(): saving xlines");
+
+	fprintf(f, "XID %lu\n", me.xline_id);
+
+	LIST_FOREACH(n, xlnlist.head)
+	{
+		x = (xline_t *)n->data;
+
+		/* XL <gecos> <duration> <settime> <setby> <reason> */
+		fprintf(f, "XL %s %ld %ld %s %s\n", x->realname, x->duration, (long)x->settime, x->setby, x->reason);
+
+		xout++;
+	}
+
+	/* DE <muout> <mcout> <caout> <kout> <xout> */
+	fprintf(f, "DE %d %d %d %d %d\n", muout, mcout, caout, kout, xout);
 
 	was_errored = ferror(f);
 	if (!was_errored)
@@ -298,9 +313,10 @@ static void flatfile_db_load(void)
 	myuser_name_t *mun;
 	mychan_t *mc;
 	kline_t *k;
+	xline_t *x;
 	svsignore_t *svsignore;
 	unsigned int versn = 0, i;
-	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
+	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0;
 	FILE *f;
 	char *item, *s, *buf;
 	size_t bufsize = BUFSIZE, n;
@@ -907,6 +923,37 @@ static void flatfile_db_load(void)
 
 			kin++;
 		}
+		else if (!strcmp("XID", item))
+		{
+			/* unique xline id */
+			char *id = strtok(NULL, " ");
+			me.xline_id = atol(id);
+		}
+		else if (!strcmp("XL", item))
+		{
+			char *realname, *reason, *setby, *tmp;
+			time_t settime;
+			long duration;
+
+			realname = strtok(NULL, " ");
+			tmp = strtok(NULL, " ");
+			duration = atol(tmp);
+			tmp = strtok(NULL, " ");
+			settime = atol(tmp);
+			setby = strtok(NULL, " ");
+			reason = strtok(NULL, "");
+
+			strip(reason);
+
+			x = xline_add(realname, reason, duration);
+			x->settime = settime;
+
+			/* XXX this is not nice, oh well -- jilles */
+			x->expires = x->settime + x->duration;
+			x->setby = sstrdup(setby);
+
+			xin++;
+		}
 		else if (!strcmp("DE", item))
 		{
 			/* end */
@@ -925,6 +972,10 @@ static void flatfile_db_load(void)
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != kin)
 					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
+
+			if ((s = strtok(NULL, " ")))
+				if ((i = atoi(s)) != xin)
+					slog(LG_ERROR, "db_load(): got %d xlines; expected %d", xin, i);
 		}
 	}
 

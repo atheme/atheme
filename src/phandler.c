@@ -40,6 +40,8 @@ void (*kill_id_sts) (user_t *killer, const char *id, const char *reason) = gener
 void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
+void (*xline_sts) (char *server, char *realname, long duration, char *reason) = generic_xline_sts;
+void (*unxline_sts) (char *server, char *realname) = generic_unxline_sts;
 void (*topic_sts) (channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic) = generic_topic_sts;
 void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
@@ -160,6 +162,16 @@ void generic_kline_sts(char *server, char *user, char *host, long duration, char
 }
 
 void generic_unkline_sts(char *server, char *user, char *host)
+{
+	/* cant do anything here. bail. */
+}
+
+void generic_xline_sts(char *server, char *realname, long duration, char *reason)
+{
+	/* cant do anything here. bail. */
+}
+
+void generic_unxline_sts(char *server, char *realname)
 {
 	/* cant do anything here. bail. */
 }

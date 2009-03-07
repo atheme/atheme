@@ -82,6 +82,7 @@ static void connection_stats_cb(const char *line, void *privdata)
 void handle_stats(user_t *u, char req)
 {
 	kline_t *k;
+	xline_t *x;
 	node_t *n;
 	uplink_t *uplink;
 	soper_t *soper;
@@ -210,6 +211,7 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.me, 249, u, "T :soper      %7d", cnt.soper);
 		  numeric_sts(me.me, 249, u, "T :tld        %7d", cnt.tld);
 		  numeric_sts(me.me, 249, u, "T :kline      %7d", cnt.kline);
+		  numeric_sts(me.me, 249, u, "T :xline      %7d", cnt.xline);
 		  numeric_sts(me.me, 249, u, "T :server     %7d", cnt.server);
 		  numeric_sts(me.me, 249, u, "T :user       %7d", cnt.user);
 		  numeric_sts(me.me, 249, u, "T :chan       %7d", cnt.chan);
@@ -239,6 +241,22 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.me, 249, u, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
 				  curr_uplink->name,
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
+		  break;
+
+	  case 'x':
+	  case 'X':
+		  if (!has_priv_user(u, PRIV_MASS_AKILL))
+			  break;
+
+		  LIST_FOREACH(n, xlnlist.head)
+		  {
+			  x = (xline_t *)n->data;
+
+			  numeric_sts(me.me, 216, u, "%c %s * * :%s",
+					  x->duration ? 'x' : 'X',
+					  x->realname, x->reason);
+		  }
+
 		  break;
 
 	  case 'y':

@@ -39,6 +39,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/rnc.c		\
 	$(SRCDIR)/rwatch.c	\
 	$(SRCDIR)/shutdown.c	\
+	$(SRCDIR)/sgline.c	\
 	$(SRCDIR)/soper.c	\
 	$(SRCDIR)/specs.c	\
 	$(SRCDIR)/uptime.c	\

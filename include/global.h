@@ -48,6 +48,7 @@ struct me
   unsigned int emailtime;           /* ... in this amount of time         */
 
   unsigned long kline_id;	/* unique ID for AKILLs			*/
+  unsigned long xline_id;	/* unique ID for AKILLs			*/
 
   time_t uplinkpong;            /* when the uplink last sent a PONG   */
 
@@ -100,6 +101,7 @@ struct cnt
   unsigned int svsignore;
   unsigned int tld;
   unsigned int kline;
+  unsigned int xline;
   unsigned int server;
   unsigned int user;
   unsigned int chan;

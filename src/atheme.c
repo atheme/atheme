@@ -346,6 +346,9 @@ int main(int argc, char *argv[])
 	/* check kline expires every minute */
 	event_add("kline_expire", kline_expire, NULL, 60);
 
+	/* check xline expires every minute */
+	event_add("xline_expire", xline_expire, NULL, 60);
+
 	/* check authcookie expires every ten minutes */
 	event_add("authcookie_expire", authcookie_expire, NULL, 600);
 
