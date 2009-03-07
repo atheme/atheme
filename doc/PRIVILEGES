@@ -109,9 +109,9 @@ operserv:omode
 operserv:akill
 	use /os akill and /stats k
 operserv:massakill
-	do mass kills and akills on channels and regular expressions
-	os clearchan/rakill/rwatch
-	this also needs chan:admin or user:auspex depending on the command
+	do mass kills and akills on channels and regular expressions (/os
+	clearchan/rakill/rwatch), use /os sgline and /stats x
+	this may also need chan:admin or user:auspex depending on the command
 operserv:akill-anymask
 	set akills which do not have any non-wildcard requirements
 operserv:jupe
