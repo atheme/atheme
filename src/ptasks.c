@@ -252,8 +252,9 @@ void handle_stats(user_t *u, char req)
 		  {
 			  x = (xline_t *)n->data;
 
-			  numeric_sts(me.me, 216, u, "%c %s * * :%s",
+			  numeric_sts(me.me, 247, u, "%c %d %s :%s",
 					  x->duration ? 'x' : 'X',
+					  0, /* hit count */
 					  x->realname, x->reason);
 		  }
 
