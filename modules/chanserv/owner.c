@@ -42,8 +42,8 @@ void _modinit(module_t *m)
         command_add(&cs_owner, cs_cmdtree);
         command_add(&cs_deowner, cs_cmdtree);
 
-	help_addentry(cs_helptree, "OWNER", "help/cservice/op_voice", NULL);
-	help_addentry(cs_helptree, "DEOWNER", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "OWNER", "help/cservice/owner", NULL);
+	help_addentry(cs_helptree, "DEOWNER", "help/cservice/owner", NULL);
 }
 
 void _moddeinit()

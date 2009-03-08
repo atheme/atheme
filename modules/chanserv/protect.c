@@ -42,8 +42,8 @@ void _modinit(module_t *m)
         command_add(&cs_protect, cs_cmdtree);
         command_add(&cs_deprotect, cs_cmdtree);
 
-	help_addentry(cs_helptree, "PROTECT", "help/cservice/op_voice", NULL);
-	help_addentry(cs_helptree, "DEPROTECT", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "PROTECT", "help/cservice/protect", NULL);
+	help_addentry(cs_helptree, "DEPROTECT", "help/cservice/protect", NULL);
 }
 
 void _moddeinit()
