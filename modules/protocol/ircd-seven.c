@@ -99,6 +99,60 @@ static bool seven_is_valid_hostslash(const char *host)
  * "identified" / "owns this nick" flag.
  */
 
+static void m_euid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+
+	/* got the right number of args for an introduction? */
+	if (parc >= 11)
+	{
+		s = si->s;
+		slog(LG_DEBUG, "m_euid(): new user on `%s': %s", s->name, parv[0]);
+
+		u = user_add(parv[0],				/* nick */
+			parv[4],				/* user */
+			*parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
+			parv[5],				/* hostname (visible) */
+			parv[6],				/* ip */
+			parv[7],				/* uid */
+			parv[parc - 1],				/* gecos */
+			s,					/* object parent (server) */
+			atoi(parv[2]));				/* hopcount */
+		if (u == NULL)
+			return;
+
+		user_mode(u, parv[3]);
+		if (*parv[9] != '*')
+		{
+			handle_burstlogin(u, parv[9], 0);
+			/* If an account is given in burst, then either they logged in with sasl,
+			 * or they logged in before a split and are now returning. Either way we need
+			 * to check for identified-to-nick status and update the ircd state accordingly.
+			 * For sasl they should be marked identified, and when returning from a split
+			 * their nick may have been ungrouped, they may have changed nicks, or their account
+			 * may have been dropped.
+			 */
+			sts(":%s ENCAP * IDENTIFIED %s %s %s", ME, CLIENT_NAME(u), u->nick,
+					should_reg_umode(u) ? "" : "OFF");
+		}
+
+		/* server_eob() cannot know if a user was introduced
+		 * with NICK/UID or EUID and handle_nickchange() must
+		 * be called exactly once for each new user -- jilles */
+		if (s->flags & SF_EOB)
+			handle_nickchange(u);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_euid(): got EUID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_euid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
@@ -220,6 +274,8 @@ void _modinit(module_t * m)
 
 	pcommand_delete("NICK");
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_delete("EUID");
+	pcommand_add("EUID", m_euid, 11, MSRC_SERVER);
 
 	ircd = &Seven;
 
