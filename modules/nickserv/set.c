@@ -569,6 +569,12 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 	if (si->smu == NULL)
 		return;
 
+	if (auth_module_loaded)
+	{
+		command_fail(si, fault_noprivs, _("You must change the password in the external system."));
+		return;
+	}
+
 	if (password == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PASSWORD");
