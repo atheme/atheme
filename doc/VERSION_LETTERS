@@ -5,6 +5,7 @@ Version replies (from /version or ctcp version) contain a sequence
 of letters like FljR. Their meaning is as follows:
 
 A - ASCII casemapping is used
+a - external authentication is used
 d - debug logging is enabled
 e - nick/account registration requires email verification
 F - flood checking is enabled
