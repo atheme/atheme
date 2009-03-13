@@ -50,6 +50,7 @@ BASE_SRCS =				\
 	$(SRCDIR)/account.c		\
 	$(SRCDIR)/atheme.c		\
 	$(SRCDIR)/arc4random.c		\
+	$(SRCDIR)/auth.c		\
 	$(SRCDIR)/authcookie.c		\
 	$(SRCDIR)/balloc.c		\
 	$(SRCDIR)/base64.c		\

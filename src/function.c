@@ -589,45 +589,6 @@ bool is_admin(user_t *user)
 	return false;
 }
 
-void set_password(myuser_t *mu, const char *newpassword)
-{
-	if (mu == NULL || newpassword == NULL)
-		return;
-
-	/* if we can, try to crypt it */
-	if (crypto_module_loaded)
-	{
-		mu->flags |= MU_CRYPTPASS;
-		strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), PASSLEN);
-	}
-	else
-	{
-		mu->flags &= ~MU_CRYPTPASS;			/* just in case */
-		strlcpy(mu->pass, newpassword, PASSLEN);
-	}
-}
-
-bool verify_password(myuser_t *mu, const char *password)
-{
-	if (mu == NULL || password == NULL)
-		return false;
-
-	if (mu->flags & MU_CRYPTPASS)
-		if (crypto_module_loaded)
-			return crypt_verify_password(password, mu->pass);
-		else
-		{	/* not good!
-			 * but don't complain about crypted password '*',
-			 * this is supposed to never match
-			 */
-			if (strcmp(password, "*"))
-				slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
-			return false;
-		}
-	else
-		return (strcmp(mu->pass, password) == 0);
-}
-
 char *sbytes(float x)
 {
 	if (x > 1073741824.0)

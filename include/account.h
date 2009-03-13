@@ -301,9 +301,6 @@ E void (*db_load)(void);
 /* function.c */
 E bool is_founder(mychan_t *mychan, myuser_t *myuser);
 
-E void set_password(myuser_t *mu, const char *newpassword);
-E bool verify_password(myuser_t *mu, const char *password);
-
 /* node.c */
 E list_t klnlist;
 

@@ -39,6 +39,7 @@
 #include "match.h"
 #include "sysconf.h"
 #include "account.h"
+#include "auth.h"
 #include "tools.h"
 #include "confprocess.h"
 #include "confparse.h"
