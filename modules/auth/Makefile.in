@@ -1,0 +1,25 @@
+# Copyright (c) 2009 Atheme Development Group
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+
+MODULE = auth
+
+include ../Makefile.defs
+
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
+# XXX ldap stuff is only needed by ldap.c
+CFLAGS		= -I../../include @CFLAGS@ @LDAP_CFLAGS@ @LDAP_LIBS@
+LDAP_CFLAGS	= @LDAP_CFLAGS@
+LDAP_LIBS	= @LDAP_LIBS@
+
+# Note that ../Makefile.common requires there always be at least one module
+BASE_SRCS =				\
+	dummy.c				\
+	@LDAP_AUTHC@
+
+ldap.so: ldap.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${LDAP_CFLAGS} ${LDAP_LIBS} ${SRCDIR}/ldap.c -o ldap.so
+
+include ../Makefile.common

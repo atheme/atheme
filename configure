@@ -661,6 +661,9 @@ RANLIB
 MKDEP
 CPP
 POSIX_CRYPTC
+LDAP_CFLAGS
+LDAP_LIBS
+LDAP_AUTHC
 mkdir_p
 DOCDIR
 MODDIR
@@ -6822,6 +6825,163 @@ fi
 
 
 
+# Thank autoconf and openldap developers for making me do all this stuff.
+LDAP_CFLAGS=""
+LDAP_LIBS=""
+LDAP_AUTHC=""
+{ echo "$as_me:$LINENO: checking for ldap_initialize in -lldap" >&5
+echo $ECHO_N "checking for ldap_initialize in -lldap... $ECHO_C" >&6; }
+if test "${ac_cv_lib_ldap_ldap_initialize+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lldap  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_initialize ();
+int
+main ()
+{
+return ldap_initialize ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_ldap_ldap_initialize=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_ldap_ldap_initialize=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_ldap_ldap_initialize" >&5
+echo "${ECHO_T}$ac_cv_lib_ldap_ldap_initialize" >&6; }
+if test $ac_cv_lib_ldap_ldap_initialize = yes; then
+
+	LDAP_CFLAGS=""
+	LDAP_LIBS="-lldap"
+	LDAP_AUTHC="ldap.c"
+
+else
+
+	unset ac_cv_lib_ldap_ldap_initialize
+	saveCFLAGS="$CFLAGS"
+	saveLIBS="$LIBS"
+	CFLAGS="$CFLAGS -I/usr/local/include"
+	LIBS="$LIBS -L/usr/local/lib"
+	{ echo "$as_me:$LINENO: checking for ldap_initialize in -lldap" >&5
+echo $ECHO_N "checking for ldap_initialize in -lldap... $ECHO_C" >&6; }
+if test "${ac_cv_lib_ldap_ldap_initialize+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lldap  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_initialize ();
+int
+main ()
+{
+return ldap_initialize ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_ldap_ldap_initialize=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_ldap_ldap_initialize=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_ldap_ldap_initialize" >&5
+echo "${ECHO_T}$ac_cv_lib_ldap_ldap_initialize" >&6; }
+if test $ac_cv_lib_ldap_ldap_initialize = yes; then
+
+		LDAP_CFLAGS="-I/usr/local/include"
+		LDAP_LIBS="-L/usr/local/lib -lldap"
+		LDAP_AUTHC="ldap.c"
+
+fi
+
+	CFLAGS="$saveCFLAGS"
+	LIBS="$saveLIBS"
+
+fi
+
+
+
+
+
+
 mkdir_p="mkdir -p"
 
 
@@ -10332,7 +10492,7 @@ fi
 BUILDROOT=`pwd`
 
 
-ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
+ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -10911,6 +11071,7 @@ do
     "modules/Makefile.common") CONFIG_FILES="$CONFIG_FILES modules/Makefile.common" ;;
     "modules/Makefile.defs") CONFIG_FILES="$CONFIG_FILES modules/Makefile.defs" ;;
     "modules/alis/Makefile") CONFIG_FILES="$CONFIG_FILES modules/alis/Makefile" ;;
+    "modules/auth/Makefile") CONFIG_FILES="$CONFIG_FILES modules/auth/Makefile" ;;
     "modules/backend/Makefile") CONFIG_FILES="$CONFIG_FILES modules/backend/Makefile" ;;
     "modules/chanserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/chanserv/Makefile" ;;
     "modules/crypto/Makefile") CONFIG_FILES="$CONFIG_FILES modules/crypto/Makefile" ;;
@@ -11066,6 +11227,9 @@ RANLIB!$RANLIB$ac_delim
 MKDEP!$MKDEP$ac_delim
 CPP!$CPP$ac_delim
 POSIX_CRYPTC!$POSIX_CRYPTC$ac_delim
+LDAP_CFLAGS!$LDAP_CFLAGS$ac_delim
+LDAP_LIBS!$LDAP_LIBS$ac_delim
+LDAP_AUTHC!$LDAP_AUTHC$ac_delim
 mkdir_p!$mkdir_p$ac_delim
 DOCDIR!$DOCDIR$ac_delim
 MODDIR!$MODDIR$ac_delim
@@ -11080,9 +11244,6 @@ LOCALEDIR!$LOCALEDIR$ac_delim
 SSL_LIBS!$SSL_LIBS$ac_delim
 PICFLAGS!$PICFLAGS$ac_delim
 RPATH!$RPATH$ac_delim
-PKG_CONFIG!$PKG_CONFIG$ac_delim
-MOWGLI_CFLAGS!$MOWGLI_CFLAGS$ac_delim
-MOWGLI_LIBS!$MOWGLI_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -11124,6 +11285,9 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+PKG_CONFIG!$PKG_CONFIG$ac_delim
+MOWGLI_CFLAGS!$MOWGLI_CFLAGS$ac_delim
+MOWGLI_LIBS!$MOWGLI_LIBS$ac_delim
 subdirs!$subdirs$ac_delim
 LIBMOWGLI!$LIBMOWGLI$ac_delim
 PCRE_CFLAGS!$PCRE_CFLAGS$ac_delim
@@ -11133,7 +11297,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 10; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

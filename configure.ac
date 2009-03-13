@@ -86,6 +86,33 @@ AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
 AC_SUBST(POSIX_CRYPTC)
 
+# Thank autoconf and openldap developers for making me do all this stuff.
+LDAP_CFLAGS=""
+LDAP_LIBS=""
+LDAP_AUTHC=""
+AC_CHECK_LIB(ldap, ldap_initialize, [
+	LDAP_CFLAGS=""
+	LDAP_LIBS="-lldap"
+	LDAP_AUTHC="ldap.c"
+], [
+	unset ac_cv_lib_ldap_ldap_initialize
+	saveCFLAGS="$CFLAGS"
+	saveLIBS="$LIBS"
+	CFLAGS="$CFLAGS -I/usr/local/include"
+	LIBS="$LIBS -L/usr/local/lib"
+	AC_CHECK_LIB(ldap, ldap_initialize, [
+		LDAP_CFLAGS="-I/usr/local/include"
+		LDAP_LIBS="-L/usr/local/lib -lldap"
+		LDAP_AUTHC="ldap.c"
+	])
+	CFLAGS="$saveCFLAGS"
+	LIBS="$saveLIBS"
+])
+
+AC_SUBST(LDAP_CFLAGS)
+AC_SUBST(LDAP_LIBS)
+AC_SUBST(LDAP_AUTHC)
+
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"
 AC_SUBST(mkdir_p)
@@ -491,6 +518,7 @@ AC_OUTPUT([po/Makefile.in
 	modules/Makefile.common
 	modules/Makefile.defs
 	modules/alis/Makefile
+	modules/auth/Makefile
 	modules/backend/Makefile
 	modules/chanserv/Makefile
 	modules/crypto/Makefile

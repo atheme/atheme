@@ -99,6 +99,22 @@ loadmodule "modules/backend/flatfile";
  */
 #loadmodule "modules/crypto/posix";
 
+/* Authentication module.
+ *
+ * These allow using passwords from an external system. The password given
+ * when registering a new account is also checked against the external
+ * system.
+ *
+ * The following authentication modules are available:
+ *
+ * LDAP						modules/auth/ldap
+ *
+ * The LDAP module requires OpenLDAP client libraries. It uses them in a
+ * synchronous manner, which means that an unresponsive LDAP server can
+ * freeze services.
+ */
+#loadmodule "modules/auth/ldap";
+
 /* NickServ modules.
  *
  * Here you can disable or enable certain features of NickServ, by
@@ -962,6 +978,25 @@ httpd {
 	 */
 	port = 8080;
 };
+
+/* LDAP configuration.
+ *
+ * The ldap {} block contains settings specific to the LDAP authentication
+ * module.
+ */
+ldap {
+	/* (*)url
+	 * LDAP URL of the server to use.
+	 */
+	url = "ldap://127.0.0.1";
+
+	/* (*)dnformat
+	 * Format string to convert an account name to an LDAP DN.
+	 * Must contain exactly one %s which will be replaced by the account
+	 * name.
+	 */
+	dnformat = "cn=%s,dc=jillestest,dc=com";
+}
 
 /******************************************************************************
  * LOGGING SECTION.                                                           *
