@@ -165,7 +165,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	mu = myuser_add(account, pass, email, config_options.defuflags | MU_NOBURSTLOGIN);
+	mu = myuser_add(account, auth_module_loaded ? "*" : pass, email, config_options.defuflags | MU_NOBURSTLOGIN | (auth_module_loaded ? MU_CRYPTPASS : 0));
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 	if (!nicksvs.no_nick_ownership)
@@ -173,6 +173,17 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_add(mu, mu->name);
 		mn->registered = CURRTIME;
 		mn->lastseen = CURRTIME;
+	}
+
+	if (auth_module_loaded)
+	{
+		if (!verify_password(mu, pass))
+		{
+			command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
+			bad_password(si, mu);
+			object_unref(mu);
+			return;
+		}
 	}
 
 	if (me.auth == AUTH_EMAIL)
