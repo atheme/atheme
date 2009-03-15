@@ -17,6 +17,3 @@ account merging?
 /cs rename?
 
 more fault codes
-
-ldap authentication
-  simple: change password checks to use ldap, change registration procedure
