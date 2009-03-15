@@ -994,6 +994,8 @@ ldap {
 	 * Format string to convert an account name to an LDAP DN.
 	 * Must contain exactly one %s which will be replaced by the account
 	 * name.
+	 * Services will attempt a simple bind with this DN and the given
+	 * password; if this is successful the password is considered correct.
 	 */
 	dnformat = "cn=%s,dc=jillestest,dc=com";
 }
