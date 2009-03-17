@@ -120,6 +120,7 @@ void connection_select(int delay)
 
 	if ((sr = poll(pollfds, count, delay)) > 0)
 	{
+		CURRTIME = time(NULL);
 		/* Iterate twice, so we don't touch freed memory if
 		 * a connection is closed.
 		 * -- jilles */
