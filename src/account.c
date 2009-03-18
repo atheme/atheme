@@ -968,13 +968,32 @@ const char *mychan_founder_names(mychan_t *mc)
 	return names;
 }
 
+static unsigned int add_auto_flags(unsigned int flags)
+{
+	if (flags & CA_OP)
+		flags |= CA_AUTOOP;
+	if (flags & CA_HALFOP)
+		flags |= CA_AUTOHALFOP;
+	if (flags & CA_VOICE)
+		flags |= CA_AUTOVOICE;
+	return flags;
+}
+
+/* When to consider a user recently seen */
+#define RECENTLY_SEEN (7 * 86400)
+
 /* Find a user fulfilling the conditions who can take another channel */
-myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime)
+static myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	node_t *n;
 	chanacs_t *ca;
-	myuser_t *mu;
+	myuser_t *mu, *hi_mu;
+	unsigned int level, hi_level;
+	bool recent_ok, hi_recent_ok;
 
+	hi_mu = NULL;
+	hi_level = 0;
+	hi_recent_ok = false;
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
@@ -983,15 +1002,34 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 		mu = ca->myuser;
 		if (mu == NULL || ca->level & CA_FOUNDER)
 			continue;
-		if ((ca->level & minlevel) == minlevel && (maxtime == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < maxtime))
+		if ((ca->level & minlevel) != minlevel)
+			continue;
+		/* now have a user with requested flags */
+		recent_ok = LIST_LENGTH(&mu->logins) > 0 ||
+			CURRTIME - mu->lastlogin < RECENTLY_SEEN;
+		level = add_auto_flags(ca->level);
+		/* compare with previous candidate, this user must be
+		 * "better" to beat the previous. this means that ties
+		 * are broken in favour of the user added first.
+		 */
+		if (hi_mu != NULL)
 		{
-			if (has_priv_myuser(mu, PRIV_REG_NOLIMIT))
-				return mu;
-			if (myuser_num_channels(mu) < me.maxchans)
-				return mu;
+			/* previous candidate has flags this user doesn't? */
+			if (hi_level & ~level)
+				continue;
+			/* if equal flags, recent_ok must be better */
+			if (hi_level == level && (!recent_ok || hi_recent_ok))
+				continue;
+		}
+		if (has_priv_myuser(mu, PRIV_REG_NOLIMIT) ||
+				myuser_num_channels(mu) < me.maxchans)
+		{
+			hi_mu = mu;
+			hi_level = level;
+			hi_recent_ok = recent_ok;
 		}
 	}
-	return NULL;
+	return hi_mu;
 }
 
 /* Pick a suitable successor
@@ -1003,33 +1041,29 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 {
 	myuser_t *mu;
 
-	/* full privs? */
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all & ~CA_FOUNDER, 7*86400);
+	/* value +R higher than other flags
+	 * (old successor has this, but not sop, and help file mentions this)
+	 */
+	mu = mychan_pick_candidate(mc, CA_RECOVER);
 	if (mu != NULL)
 		return mu;
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all & ~CA_FOUNDER, 0);
+	/* +f is also a powerful flag */
+	mu = mychan_pick_candidate(mc, CA_FLAGS);
 	if (mu != NULL)
 		return mu;
-	/* someone with +R then? (old successor has this, but not sop) */
-	mu = mychan_pick_candidate(mc, CA_RECOVER, 7*86400);
-	if (mu != NULL)
-		return mu;
-	mu = mychan_pick_candidate(mc, CA_RECOVER, 0);
-	if (mu != NULL)
-		return mu;
+	/* I guess +q means something */
+	if (ca_all & CA_USEOWNER)
+	{
+		mu = mychan_pick_candidate(mc, CA_USEOWNER | CA_AUTOOP);
+		if (mu != NULL)
+			return mu;
+	}
 	/* an op perhaps? */
-	mu = mychan_pick_candidate(mc, CA_OP, 7*86400);
+	mu = mychan_pick_candidate(mc, CA_OP);
 	if (mu != NULL)
 		return mu;
-	mu = mychan_pick_candidate(mc, CA_OP, 0);
-	if (mu != NULL)
-		return mu;
-	/* just an active user with access */
-	mu = mychan_pick_candidate(mc, 0, 7*86400);
-	if (mu != NULL)
-		return mu;
-	/* ok you can't say we didn't try */
-	return mychan_pick_candidate(mc, 0, 0);
+	/* just a user with access */
+	return mychan_pick_candidate(mc, 0);
 }
 
 /*****************
