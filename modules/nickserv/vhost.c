@@ -75,6 +75,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *host = parv[1];
 	myuser_t *mu;
+	metadata_t *md;
 	char *p;
 
 	if (!target)
@@ -94,6 +95,11 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	/* deletion action */
 	if (!host)
 	{
+		if (!metadata_find(mu, "private:usercloak"))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 does not have a vhost set."), mu->name);
+			return;
+		}
 		metadata_delete(mu, "private:usercloak");
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
@@ -126,6 +132,13 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		/* This can be stuff like missing dots too. */
 		command_fail(si, fault_badparams, _("The vhost provided is invalid."));
+		return;
+	}
+
+	md = metadata_find(mu, "private:usercloak");
+	if (md != NULL && !strcmp(md->value, host))
+	{
+		command_fail(si, fault_nochange, _("\2%s\2 already has the given vhost set."), mu->name);
 		return;
 	}
 
