@@ -197,14 +197,12 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
 {
 	connection_t *cptr;
 	struct httpddata *hd;
-	char buf[XMLRPC_BUFSIZE];
 
 	cptr = si->connection;
 	hd = cptr->userdata;
 	if (hd->sent_reply)
 		return;
-	xmlrpc_string(buf, result);
-	xmlrpc_send(1, buf);
+	xmlrpc_send_string(result);
 	hd->sent_reply = true;
 }
 
@@ -230,7 +228,6 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	authcookie_t *ac;
-	char buf[BUFSIZE];
 	const char *sourceip;
 
 	if (parc < 2)
@@ -267,8 +264,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, mu, CMDLOG_LOGIN, "LOGIN");
 
-	xmlrpc_string(buf, ac->ticket);
-	xmlrpc_send(1, buf);
+	xmlrpc_send_string(ac->ticket);
 
 	return 0;
 }
@@ -292,7 +288,6 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 {
 	authcookie_t *ac;
 	myuser_t *mu;
-	char buf[XMLRPC_BUFSIZE];
 
 	if (parc < 2)
 	{
@@ -317,8 +312,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 	ac = authcookie_find(parv[0], mu);
 	authcookie_destroy(ac);
 
-	xmlrpc_string(buf, "You are now logged out.");
-	xmlrpc_send(1, buf);
+	xmlrpc_send_string("You are now logged out.");
 
 	return 0;
 }
