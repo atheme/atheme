@@ -780,7 +780,7 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 		return;
 	}
 
-	for (i = 0; i <= strlen(s1) - 1; i++)
+	for (i = 0; s1[i] != '\0'; i++)
 	{
 		c = s1[i];
 		if (c > 127)
@@ -824,7 +824,7 @@ static void xmlrpc_append_char_encode(string_t *s, const char *s1)
 		return;
 	}
 
-	for (i = 0; i <= strlen(s1) - 1; i++)
+	for (i = 0; s1[i] != '\0'; i++)
 	{
 		c = s1[i];
 		if (c > 127)
