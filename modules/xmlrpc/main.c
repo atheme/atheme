@@ -345,7 +345,6 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	int newparc;
 	char *newparv[20];
 	struct httpddata *hd = ((connection_t *)conn)->userdata;
-	char buf[XMLRPC_BUFSIZE];
 	int i;
 
 	for (i = 0; i < parc; i++)
@@ -410,10 +409,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	if (!hd->sent_reply)
 	{
 		if (hd->replybuf != NULL)
-		{
-			xmlrpc_string(buf, hd->replybuf);
-			xmlrpc_send(1, buf);
-		}
+			xmlrpc_send_string(hd->replybuf);
 		else
 			xmlrpc_generic_error(fault_unimplemented, "Command did not return a result.");
 	}

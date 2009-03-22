@@ -71,6 +71,7 @@ E int xmlrpc_set_options(int type, const char *value);
 E void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
 E void xmlrpc_generic_error(int code, const char *string);
 E void xmlrpc_send(int argc, ...);
+E void xmlrpc_send_string(const char *value);
 E int xmlrpc_about(void *userdata, int ac, char **av);
 E void xmlrpc_char_encode(char *outbuffer, const char *s1);
 E char *xmlrpc_decode_string(char *buf);
