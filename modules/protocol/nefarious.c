@@ -327,7 +327,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 					p++;
 					while (*p)
 					{
-						if (*p == 'o')
+						if (*p == 'o' || (*p >= '0' && *p <= '9' && !prefix[0]))
 							prefix[prefix[0] ? 1 : 0] = '@';
 						else if (*p == 'h')
 							prefix[prefix[0] ? 1 : 0] = '%';
