@@ -977,6 +977,7 @@ void _modinit(module_t * m)
 	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
 	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
 	pcommand_add("K", m_kick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("OK", m_kick, 2, MSRC_USER); /* OPKICK, treat as KICK */
 	pcommand_add("D", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQ", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("S", m_server, 8, MSRC_SERVER);
