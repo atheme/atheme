@@ -199,7 +199,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_LOGIN, COMMAND_UC);
 
-		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
+		command_success_nodata(si, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), u->myuser->name);
 
 		/* check for failed attempts and let them know */
 		md_failnum = metadata_find(mu, "private:loginfail:failnum");
