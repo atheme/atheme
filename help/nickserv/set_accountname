@@ -1,0 +1,8 @@
+Help for SET ACCOUNTNAME:
+
+SET ACCOUNTNAME allows you to change your account
+name to any nick registered to your account.
+Your account name is used in various places as
+a name for you.
+
+Syntax: SET ACCOUNTNAME <nick>
