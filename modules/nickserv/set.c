@@ -215,7 +215,7 @@ static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
 
 	if (params == NULL)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "QUIETCHG");
 		return;
 	}
 
