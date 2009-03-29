@@ -15,6 +15,7 @@ DECLARE_MODULE_V1("protocol/ts6-generic", true, _modinit, NULL, "$Id: charybdis.
 static bool use_rserv_support = false;
 static bool use_tb = false;
 static bool use_euid = false;
+static bool use_eopmod = false;
 
 static void server_eob(server_t *s);
 static server_t *sid_find(char *name);
@@ -57,7 +58,7 @@ static unsigned int ts6_server_login(void)
 
 	me.bursting = true;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
 			(unsigned long)CURRTIME);
@@ -267,6 +268,15 @@ static void ts6_topic_sts(channel_t *c, const char *setter, time_t ts, time_t pr
 	if (!me.connected || !c)
 		return;
 
+	/* If possible, try to use ETB */
+	if (use_eopmod && (c->ts > 0 || ts > prevts))
+	{
+		sts(":%s ETB 0 %s %lu %s :%s",
+				CLIENT_NAME(chansvs.me->me),
+				c->name, (unsigned long)ts, setter, topic);
+		return;
+	}
+
 	/* If possible, try to use TB
 	 * Note that because TOPIC does not contain topicTS, it may be
 	 * off a few seconds on other servers, hence the 60 seconds here.
@@ -459,6 +469,28 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	handle_topic_from(si, c, parc > 3 ? parv[2] : si->s->name, ts, parv[parc - 1]);
+}
+
+static void m_etb(sourceinfo_t *si, int parc, char *parv[])
+{
+	channel_t *c = channel_find(parv[1]);
+	time_t channelts;
+	time_t topicts;
+
+	if (c == NULL)
+		return;
+
+	/* Our uplink is trying to change the topic during burst,
+	 * and we have already set a topic. Assume our change won.
+	 * -- jilles */
+	if (si->s != NULL && si->s->uplink == me.me &&
+			!(si->s->flags & SF_EOB) && c->topic != NULL)
+		return;
+
+	channelts = atol(parv[0]);
+	topicts = atol(parv[2]);
+	if (c->topic == NULL || channelts < c->ts || (channelts == c->ts && topicts > c->topicts))
+		handle_topic_from(si, c, parv[3], topicts, parv[parc - 1]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
@@ -1169,6 +1201,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	use_euid = false;
 	use_rserv_support = false;
 	use_tb = false;
+	use_eopmod = false;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "EUID"))
@@ -1185,6 +1218,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink does topic bursting, using if appropriate.");
 			use_tb = true;
+		}
+		if (!irccasecmp(p, "EOPMOD"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink supports EOPMOD, enabling support.");
+			use_eopmod = true;
 		}
 	}
 
@@ -1289,6 +1327,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("TB", m_tb, 3, MSRC_SERVER);
+	pcommand_add("ETB", m_etb, 5, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
 	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
