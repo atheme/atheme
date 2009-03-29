@@ -27,16 +27,16 @@ modules: $(EXTRA_OBJS) $(OBJS)
 .SUFFIXES: .o .so
 
 .c.o:
-	${CC} -c ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+	${CC} -c ${PICFLAGS} ${CFLAGS} ${CPPFLAGS} $< -o $@
 
 .c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+	${CC} ${PICFLAGS} ${CFLAGS} ${CPPFLAGS} $< -o $@
 
 .PHONY: depend clean distclean
 
 # This sed command sucks but I don't know a better way -- jilles
 depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's|\([^.]*\)\.o:|$(SRCDIR)/\1.so:|' > .depend
+	${MKDEP} ${PICFLAGS} ${CFLAGS} ${CPPFLAGS} ${SRCS} | sed -e 's|\([^.]*\)\.o:|$(SRCDIR)/\1.so:|' > .depend
 
 clean:
 	${RM} -f $(OBJS) $(EXTRA_OBJS)
