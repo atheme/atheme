@@ -247,7 +247,7 @@ void init_newconf(void)
 	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, &me.adminemail);
 	add_dupstr_conf_item("MTA", &conf_si_table, &me.mta);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
-	add_uint_conf_item("MAXLOGINS", &conf_si_table, &me.maxlogins, 1, INT_MAX);
+	add_uint_conf_item("MAXLOGINS", &conf_si_table, &me.maxlogins, 3, INT_MAX);
 	add_uint_conf_item("MAXUSERS", &conf_si_table, &me.maxusers, 0, INT_MAX);
 	add_uint_conf_item("MAXNICKS", &conf_si_table, &me.maxnicks, 1, INT_MAX);
 	add_uint_conf_item("MAXCHANS", &conf_si_table, &me.maxchans, 1, INT_MAX);
