@@ -67,6 +67,22 @@ static void guest_nickname(user_t *u)
 	fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 }
 
+static void check_enforce_all(myuser_t *mu)
+{
+	node_t *n;
+	mynick_t *mn;
+	user_t *u;
+
+	LIST_FOREACH(n, mu->nicks.head)
+	{
+		mn = n->data;
+		u = user_find(mn->nick);
+		if (u != NULL && u->myuser != mn->owner &&
+				!myuser_access_verify(u, mn->owner))
+			check_enforce(&(hook_nick_enforce_t){ .u = u, .mn = mn });
+	}
+}
+
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 {
 	metadata_t *md;
@@ -96,6 +112,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "SET ENFORCE ON");
 			metadata_add(si->smu, "private:doenforce", "1");
 			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
+			check_enforce_all(si->smu);
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
