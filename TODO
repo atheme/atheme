@@ -17,3 +17,13 @@ account merging?
 /cs rename?
 
 more fault codes
+
+/ns ghost does not allow disconnecting a user that does not use a registered
+nick but is logged in to an account with a known password (it is possible to
+disconnect any user logged in to the same account as you); however, it would be
+bad to check the same password against two accounts (nick/login). new syntax?
+
+make sendpass/setpass codes expire after some time
+
+show realhost/ip of other users logged in to same account?
+
