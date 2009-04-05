@@ -55,6 +55,7 @@ SRCS =					\
 	$(SRCDIR)/gen_echoserver.c	\
 	$(SRCDIR)/gen_httpd.c		\
 	$(SRCDIR)/gen_listenerdemo.c	\
+	$(SRCDIR)/gen_regcheckemail.c	\
 	$(SRCDIR)/gen_vhostonreg.c	\
 	$(SRCDIR)/graphtastical.c	\
 	$(SRCDIR)/ircd_catserv.c	\
