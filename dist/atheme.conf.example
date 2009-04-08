@@ -998,7 +998,7 @@ ldap {
 	 * password; if this is successful the password is considered correct.
 	 */
 	dnformat = "cn=%s,dc=jillestest,dc=com";
-}
+};
 
 /******************************************************************************
  * LOGGING SECTION.                                                           *
