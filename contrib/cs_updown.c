@@ -155,8 +155,8 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UP");
-		command_fail(si, fault_needmoreparams, "Syntax: UP <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DOWN");
+		command_fail(si, fault_needmoreparams, "Syntax: DOWN <#channel>");
 		return;
 	}
 
