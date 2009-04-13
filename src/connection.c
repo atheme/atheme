@@ -354,8 +354,8 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 
 		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 		{
+			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(errno));
 			close(s);
-			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
 			return NULL;
 		}
 	}
@@ -378,7 +378,10 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	if (connect(s, (struct sockaddr *)&sa, sizeof(sa)) == -1 &&
 			errno != EINPROGRESS && errno != EINTR)
 	{
-		slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
+		if (vhost)
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %s", host, vhost, strerror(errno));
+		else
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
 		close(s);
 		return NULL;
 	}
