@@ -606,6 +606,42 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, _ns_setpassword };
 
+#ifdef ENABLE_NLS
+static void _ns_setlanguage(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *language = strtok(parv[0], " ");
+	language_t *lang;
+
+	if (si->smu == NULL)
+		return;
+
+	if (language == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LANGUAGE");
+		command_fail(si, fault_needmoreparams, _("Valid languages are: %s"), language_names());
+		return;
+	}
+
+	lang = language_find(language);
+
+	if (lang == NULL || !language_is_valid(lang))
+	{
+		command_fail(si, fault_badparams, _("Invalid language \2%s\2."), language);
+		command_fail(si, fault_badparams, _("Valid languages are: %s"), language_names());
+		return;
+	}
+
+	logcommand(si, CMDLOG_SET, "SET LANGUAGE %s", language_get_name(lang));
+
+	si->smu->language = lang;
+
+	command_success_nodata(si, _("The language for \2%s\2 has been changed to \2%s\2."), si->smu->name, language_get_name(lang));
+
+	return;
+}
+command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, _ns_setlanguage };
+#endif /* ENABLE_NLS */
+
 command_t *ns_set_commands[] = {
 	&ns_set_email,
 	&ns_set_emailmemos,
@@ -616,6 +652,9 @@ command_t *ns_set_commands[] = {
 	&ns_set_neverop,
 	&ns_set_password,
 	&ns_set_property,
+#ifdef ENABLE_NLS
+	&ns_set_language,
+#endif
 	NULL
 };
 
@@ -635,6 +674,9 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
 	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 	help_addentry(ns_helptree, "SET PROPERTY", "help/nickserv/set_property", NULL);
+#ifdef ENABLE_NLS
+	help_addentry(ns_helptree, "SET LANGUAGE", "help/nickserv/set_language", NULL);
+#endif
 
 	/* populate ns_set_cmdtree */
 	command_add_many(ns_set_commands, &ns_set_cmdtree);
@@ -652,6 +694,9 @@ void _moddeinit()
 	help_delentry(ns_helptree, "SET NOOP");
 	help_delentry(ns_helptree, "SET PASSWORD");
 	help_delentry(ns_helptree, "SET PROPERTY");
+#ifdef ENABLE_NLS
+	help_delentry(ns_helptree, "SET LANGUAGE");
+#endif
 
 	/* clear ns_set_cmdtree */
 	command_delete_many(ns_set_commands, &ns_set_cmdtree);

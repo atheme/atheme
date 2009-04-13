@@ -120,6 +120,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 		mu->flags &= ~MU_ENFORCE;
 		metadata_add(mu, "private:doenforce", "1");
 	}
+	mu->language = language_add("en");
 
 	/* If it's already crypted, don't touch the password. Otherwise,
 	 * use set_password() to initialize it. Why? Because set_password

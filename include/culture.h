@@ -17,6 +17,14 @@ E void translation_create(const char *str, const char *trans);
 E void translation_destroy(const char *str);
 E void translation_init(void);
 
+typedef struct language_ language_t;
+
+E language_t *language_add(const char *name);
+E language_t *language_find(const char *name);
+E const char *language_names(void);
+E const char *language_get_name(const language_t *lang);
+E bool language_is_valid(const language_t *lang);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -82,6 +82,8 @@ struct myuser_
   list_t nicks; /* registered nicks, must include mu->name if nonempty */
 
   list_t subscriptions; /* presence subscriptors */
+  
+  language_t *language;
 };
 
 #define MU_HOLD        0x00000001

@@ -314,6 +314,12 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
 
+#ifdef ENABLE_NLS
+	if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
+		command_success_nodata(si, _("Language   : %s"),
+				language_get_name(mu->language));
+#endif
+
 	if (mu->soper && (mu == si->smu || has_priv(si, PRIV_VIEWPRIVS)))
 	{
 		command_success_nodata(si, _("Oper class : %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);

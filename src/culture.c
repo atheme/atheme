@@ -22,6 +22,7 @@
  */
 
 #include "atheme.h"
+#include "internal.h"
 
 struct translation_
 {
@@ -180,6 +181,109 @@ void translation_destroy(const char *str)
 	free(t->name);
 	free(t->replacement);
 	free(t);
+}
+
+enum
+{
+	LANG_VALID = 1		/* have catalogs for this */
+};
+
+struct language_
+{
+	char *name;
+	unsigned int flags; /* LANG_* */
+	node_t node;
+};
+
+static list_t language_list;
+
+void
+language_init(void)
+{
+	DIR *dir;
+	struct dirent *ent;
+	language_t *lang;
+
+	lang = language_add("en");
+	lang->flags |= LANG_VALID;
+	dir = opendir(LOCALEDIR);
+	if (dir != NULL)
+	{
+		while ((ent = readdir(dir)) != NULL)
+		{
+			if (ent->d_name[0] != '.' &&
+					strcmp(ent->d_name, "all_languages") &&
+					strcmp(ent->d_name, "locale.alias"))
+			{
+				lang = language_add(ent->d_name);
+				lang->flags |= LANG_VALID;
+			}
+		}
+		closedir(dir);
+	}
+}
+
+language_t *
+language_add(const char *name)
+{
+	language_t *lang;
+
+	lang = language_find(name);
+	if (lang != NULL)
+		return lang;
+	slog(LG_DEBUG, "language_add(): %s", name);
+	lang = smalloc(sizeof(*lang));
+	lang->name = sstrdup(name);
+	node_add(lang, &lang->node, &language_list);
+	return lang;
+}
+
+language_t *
+language_find(const char *name)
+{
+	node_t *n;
+	language_t *lang;
+
+	LIST_FOREACH(n, language_list.head)
+	{
+		lang = n->data;
+		if (!strcmp(lang->name, name))
+			return lang;
+	}
+	return NULL;
+}
+
+const char *
+language_names(void)
+{
+	static char names[512];
+	node_t *n;
+	language_t *lang;
+
+	names[0] = '\0';
+	LIST_FOREACH(n, language_list.head)
+	{
+		lang = n->data;
+		if (lang->flags & LANG_VALID)
+		{
+			if (names[0] != '\0')
+				strlcat(names, " ", sizeof names);
+			strlcat(names, lang->name, sizeof names);
+		}
+	}
+	return names;
+}
+
+const char *
+language_get_name(const language_t *lang)
+{
+	return lang->name;
+}
+
+bool
+language_is_valid(const language_t *lang)
+{
+	return (lang->flags & LANG_VALID) != 0;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

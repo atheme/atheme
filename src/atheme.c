@@ -224,6 +224,9 @@ int main(int argc, char *argv[])
         init_socket_queues();
 
 	translation_init();
+#ifdef ENABLE_NLS
+	language_init();
+#endif
 	init_nodes();
 	init_confprocess();
 	init_newconf();

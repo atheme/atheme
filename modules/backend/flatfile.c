@@ -31,7 +31,7 @@ static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privda
 	node_t *tn;
 
 	/* MU <name> <pass> <email> <registered> <lastlogin> <failnum*> <lastfail*>
-	 * <lastfailon*> <flags>
+	 * <lastfailon*> <flags> <language>
 	 *
 	 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 	 */
@@ -39,9 +39,10 @@ static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privda
 	fprintf(f, " %ld", (long)mu->lastlogin);
 	fprintf(f, " 0 0 0");
 	if (LIST_LENGTH(&mu->logins) > 0)
-		fprintf(f, " %d\n", mu->flags & ~MU_NOBURSTLOGIN);
+		fprintf(f, " %d", mu->flags & ~MU_NOBURSTLOGIN);
 	else
-		fprintf(f, " %d\n", mu->flags);
+		fprintf(f, " %d", mu->flags);
+	fprintf(f, " %s\n", language_get_name(mu->language));
 
 	muout++;
 
@@ -419,6 +420,7 @@ static void flatfile_db_load(void)
 				 */
 				unsigned int registered, lastlogin;
 				char *failnum, *lastfailaddr, *lastfailtime;
+				char *flagstr, *language;
 
 				if (myuser_find(s))
 				{
@@ -437,8 +439,10 @@ static void flatfile_db_load(void)
 				failnum = strtok(NULL, " ");
 				lastfailaddr = strtok(NULL, " ");
 				lastfailtime = strtok(NULL, " ");
+				flagstr = strtok(NULL, " ");
+				language = strtok(NULL, " ");
 
-				mu = myuser_add(muname, mupass, muemail, atol(strtok(NULL, " ")));
+				mu = myuser_add(muname, mupass, muemail, atol(flagstr));
 
 				mu->registered = registered;
 				mu->lastlogin = lastlogin;
@@ -463,6 +467,12 @@ static void flatfile_db_load(void)
 					metadata_add(mu, "private:verify:register:key", s);
 					metadata_add(mu, "private:verify:register:timestamp", "0");
 				}
+
+				/* Create entries for languages in the db
+				 * even if we do not have catalogs for them.
+				 */
+				if (language != NULL)
+					mu->language = language_add(language);
 			}
 		}
 		else if (!strcmp("ME", item))
