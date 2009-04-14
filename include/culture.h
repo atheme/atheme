@@ -24,6 +24,7 @@ E language_t *language_find(const char *name);
 E const char *language_names(void);
 E const char *language_get_name(const language_t *lang);
 E bool language_is_valid(const language_t *lang);
+E void language_set_active(language_t *lang);
 
 #endif
 

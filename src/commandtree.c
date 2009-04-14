@@ -114,9 +114,13 @@ command_t *command_find(list_t *commandtree, const char *command)
 
 void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
 {
+	if (si->smu != NULL)
+		language_set_active(si->smu->language);
+
 	if (has_priv(si, c->access))
 	{
 		c->cmd(si, parc, parv);
+		language_set_active(NULL);
 		return;
 	}
 
@@ -125,6 +129,8 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 	/*snoop(_("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/
+	if (si->smu != NULL)
+		language_set_active(NULL);
 }
 
 void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree)
@@ -142,7 +148,13 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 	}
 	else
 	{
+		if (si->smu != NULL)
+			language_set_active(si->smu->language);
+
 		notice(svs->nick, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", svs->disp);
+
+		if (si->smu != NULL)
+			language_set_active(NULL);
 	}
 }
 

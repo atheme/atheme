@@ -221,6 +221,10 @@ language_init(void)
 		}
 		closedir(dir);
 	}
+	lang = language_add("ru_RU");
+	lang->flags |= LANG_VALID;
+	lang = language_add("ru_RU.UTF-8");
+	lang->flags |= LANG_VALID;
 }
 
 language_t *
@@ -284,6 +288,27 @@ bool
 language_is_valid(const language_t *lang)
 {
 	return (lang->flags & LANG_VALID) != 0;
+}
+
+void
+language_set_active(language_t *lang)
+{
+#ifdef ENABLE_NLS
+	static language_t *currlang;
+
+	if (lang == NULL)
+		lang = language_list.head->data;
+	if (currlang == lang)
+		return;
+	slog(LG_DEBUG, "language_set_active(): changing language from [%s] to [%s]",
+			currlang != NULL ? currlang->name : "<default>",
+			lang->name);
+	setlocale(LC_MESSAGES, lang->name);
+	textdomain(PACKAGE_NAME);
+	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
+	currlang = lang;
+	setenv("LANGUAGE", currlang->name, 1);
+#endif
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
