@@ -213,7 +213,8 @@ language_init(void)
 		{
 			if (ent->d_name[0] != '.' &&
 					strcmp(ent->d_name, "all_languages") &&
-					strcmp(ent->d_name, "locale.alias"))
+					strcmp(ent->d_name, "locale.alias") &&
+					strcmp(ent->d_name, "default"))
 			{
 				lang = language_add(ent->d_name);
 				lang->flags |= LANG_VALID;
@@ -228,6 +229,8 @@ language_add(const char *name)
 {
 	language_t *lang;
 
+	if (!strcmp(name, "default"))
+		return NULL;
 	lang = language_find(name);
 	if (lang != NULL)
 		return lang;
@@ -277,12 +280,16 @@ language_names(void)
 const char *
 language_get_name(const language_t *lang)
 {
+	if (lang == NULL)
+		return "default";
 	return lang->name;
 }
 
 bool
 language_is_valid(const language_t *lang)
 {
+	if (lang == NULL)
+		return true;
 	return (lang->flags & LANG_VALID) != 0;
 }
 
@@ -293,11 +300,15 @@ language_set_active(language_t *lang)
 	static language_t *currlang;
 
 	if (lang == NULL)
-		lang = language_list.head->data;
+	{
+		lang = language_find(config_options.language);
+		if (lang == NULL)
+			lang = language_find("en");
+	}
 	if (currlang == lang)
 		return;
 	slog(LG_DEBUG, "language_set_active(): changing language from [%s] to [%s]",
-			currlang != NULL ? currlang->name : "<default>",
+			currlang != NULL ? currlang->name : "default",
 			lang->name);
 	setlocale(LC_MESSAGES, lang->name);
 	textdomain(PACKAGE_NAME);

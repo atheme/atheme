@@ -1166,6 +1166,12 @@ general {
 	 * IRCd's sendq limit for servers.
 	 */
 	uplink_sendq_limit = 1048576;
+
+	/* (*)language
+	 * Language to use for channel and oper messages and as default
+	 * for users.
+	 */
+	language = "en";
 };
 
 /******************************************************************************

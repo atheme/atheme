@@ -168,6 +168,8 @@ void conf_init(void)
 		free(config_options.global);
 	if (config_options.languagefile)
 		free(config_options.languagefile);
+	if (config_options.language)
+		free(config_options.language);
 
 	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = config_options.chan = 
 		config_options.global = config_options.languagefile = NULL;
@@ -183,6 +185,8 @@ void conf_init(void)
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
 	config_options.silent = config_options.join_chans = config_options.leave_chans = config_options.raw = false;
+
+	config_options.language = sstrdup("en");
 
 	me.auth = AUTH_NONE;
 
@@ -274,6 +278,7 @@ void init_newconf(void)
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
 	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
 	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, &config_options.uplink_sendq_limit, 10240, INT_MAX);
+	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, &config_options.language);
 
 	/* chanserv{} block */
 	add_bool_conf_item("FANTASY", &conf_ci_table, &chansvs.fantasy);

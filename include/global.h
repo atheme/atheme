@@ -91,6 +91,8 @@ struct ConfOption
 
   unsigned int default_clone_limit;  /* default clone limit */
   unsigned int uplink_sendq_limit;
+
+  char *language;		/* default language */
 } config_options;
 
 /* keep track of how many of what we have */

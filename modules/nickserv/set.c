@@ -624,7 +624,8 @@ static void _ns_setlanguage(sourceinfo_t *si, int parc, char *parv[])
 
 	lang = language_find(language);
 
-	if (lang == NULL || !language_is_valid(lang))
+	if (strcmp(language, "default") &&
+			(lang == NULL || !language_is_valid(lang)))
 	{
 		command_fail(si, fault_badparams, _("Invalid language \2%s\2."), language);
 		command_fail(si, fault_badparams, _("Valid languages are: %s"), language_names());
