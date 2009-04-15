@@ -221,10 +221,6 @@ language_init(void)
 		}
 		closedir(dir);
 	}
-	lang = language_add("ru_RU");
-	lang->flags |= LANG_VALID;
-	lang = language_add("ru_RU.UTF-8");
-	lang->flags |= LANG_VALID;
 }
 
 language_t *
