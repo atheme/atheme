@@ -1,0 +1,10 @@
+Help for SET LANGUAGE:
+
+SET LANGUAGE changes the language services
+uses to communicate with you.
+
+Syntax: SET LANGUAGE <abbreviation>
+
+Example:
+    /msg &nick& SET LANGUAGE en
+    /msg &nick& SET LANGUAGE ru
