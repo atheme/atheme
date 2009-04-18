@@ -111,9 +111,9 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 				help_file = fopen(c->file, "r");
 			else
 			{
-				snprintf(buf, sizeof buf, "%s/%s", SHAREDIR, c->file);
-				if (nicksvs.no_nick_ownership && !strncmp(c->file, "help/nickserv/", 14))
-					memcpy(buf + (sizeof(SHAREDIR) - 1) + 6, "userserv", 8);
+				snprintf(buf, sizeof buf, "%s/%s", SHAREDIR "/help", c->file);
+				if (nicksvs.no_nick_ownership && !strncmp(c->file, "nickserv/", 9))
+					memcpy(buf + (sizeof(SHAREDIR "/help") - 1) + 1, "userserv", 8);
 				help_file = fopen(buf, "r");
 			}
 
@@ -188,7 +188,11 @@ void help_addentry(list_t *list, const char *topic, const char *fname,
 	if (func != NULL)
 		he->func = func;
 	else if (fname != NULL)
+	{
+		if (!strncmp(fname, "help/", 5))
+			fname += 5;
 		he->file = sstrdup(fname);
+	}
 
 	n = node_create();
 
