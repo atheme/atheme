@@ -175,24 +175,14 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 void help_addentry(list_t *list, const char *topic, const char *fname,
 	void (*func)(sourceinfo_t *si))
 {
-	helpentry_t *he = smalloc(sizeof(helpentry_t));
+	helpentry_t *he;
 	node_t *n;
 
-	memset(he, 0, sizeof(helpentry_t));
+	return_if_fail(list != NULL);
+	return_if_fail(topic != NULL);
+	return_if_fail(func != NULL || fname != NULL);
 
-	if (!list && !topic && !func && !fname)
-	{
-		slog(LG_DEBUG, "help_addentry(): invalid params");
-		return;
-	}
-
-	/* further paranoia */
-	if (!func && !fname)
-	{
-		slog(LG_DEBUG, "help_addentry(): invalid params");
-		return;
-	}
-
+	he = smalloc(sizeof(helpentry_t));
 	he->name = sstrdup(topic);
 
 	if (func != NULL)
