@@ -285,6 +285,14 @@ language_get_name(const language_t *lang)
 	return lang->name;
 }
 
+const char *
+language_get_real_name(const language_t *lang)
+{
+	if (lang == NULL)
+		return config_options.language;
+	return lang->name;
+}
+
 bool
 language_is_valid(const language_t *lang)
 {

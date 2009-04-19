@@ -98,8 +98,9 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 void help_display(sourceinfo_t *si, const char *command, list_t *list)
 {
 	helpentry_t *c;
-	FILE *help_file;
-	char buf[BUFSIZE];
+	FILE *help_file = NULL;
+	char subname[BUFSIZE], buf[BUFSIZE];
+	const char *langname = NULL;
 	int ifnest, ifnest_false;
 
 	/* take the command through the hash table */
@@ -111,10 +112,25 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 				help_file = fopen(c->file, "r");
 			else
 			{
-				snprintf(buf, sizeof buf, "%s/%s", SHAREDIR "/help", c->file);
-				if (nicksvs.no_nick_ownership && !strncmp(c->file, "nickserv/", 9))
-					memcpy(buf + (sizeof(SHAREDIR "/help") - 1) + 1, "userserv", 8);
-				help_file = fopen(buf, "r");
+				strlcpy(subname, c->file, sizeof subname);
+				if (nicksvs.no_nick_ownership && !strncmp(subname, "nickserv/", 9))
+					memcpy(subname, "userserv", 8);
+				if (si->smu != NULL)
+				{
+					langname = language_get_real_name(si->smu->language);
+					if (!strcmp(langname, "en"))
+						langname = NULL;
+				}
+				if (langname != NULL)
+				{
+					snprintf(buf, sizeof buf, "%s/%s/%s", SHAREDIR "/help", langname, subname);
+					help_file = fopen(buf, "r");
+				}
+				if (help_file == NULL)
+				{
+					snprintf(buf, sizeof buf, "%s/%s", SHAREDIR "/help", subname);
+					help_file = fopen(buf, "r");
+				}
 			}
 
 			if (!help_file)
