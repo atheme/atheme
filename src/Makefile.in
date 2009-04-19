@@ -195,6 +195,19 @@ install: build
 			cd ..; \
 		fi; \
 	done)
+	if [ @USE_NLS@ = yes ]; then \
+		$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/ru; \
+		(cd ../help-ru; for i in *; do \
+		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/ru; \
+		if [ -d $$i ]; then \
+			cd $$i; \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/ru/$$i; \
+			for j in *; do \
+				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/ru/$$i; \
+			done; \
+			cd ..; \
+		fi; \
+	done); fi
 
 #deinstall:
 #	if [ -d ${prefix} ] ; then \
