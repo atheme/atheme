@@ -29,7 +29,7 @@ LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme-services@EXEEXT@
 MKDEP		= @MKDEP@
-CFLAGS		= -I../include @CFLAGS@ -DBINDIR=\"$(bindir)\"
+CFLAGS		= -I. -I../include @CFLAGS@ -DBINDIR=\"$(bindir)\"
 
 VERSION		= @PACKAGE_VERSION@
 
