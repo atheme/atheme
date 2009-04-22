@@ -95,6 +95,7 @@ static void check_registration(void *vptr)
 	switch (pid = fork())
 	{
 		case 0: /* child */
+			connection_close_all_fds();
 			strlcpy(buf, hdata->email, sizeof buf);
 			user = strtok(buf, "@");
 			domain = strtok(NULL, "@");

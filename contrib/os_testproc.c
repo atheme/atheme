@@ -116,6 +116,7 @@ static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_toomany, "Failed to fork");
 			return;
 		case 0:
+			connection_close_all_fds();
 			close(pipes[0]);
 			dup2(pipes[1], 1);
 			dup2(pipes[1], 2);

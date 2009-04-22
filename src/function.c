@@ -498,6 +498,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		case -1:
 			return 0;
 		case 0:
+			connection_close_all_fds();
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
 			execl("/bin/sh", "sh", "-c", cmdbuf, NULL);

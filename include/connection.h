@@ -81,6 +81,7 @@ extern void connection_close(connection_t *);
 extern void connection_close_soon(connection_t *);
 extern void connection_close_soon_children(connection_t *);
 extern void connection_close_all(void);
+extern void connection_close_all_fds(void);
 extern void connection_stats(void (*)(const char *, void *), void *);
 extern connection_t *connection_find(int);
 extern void connection_select(int delay);

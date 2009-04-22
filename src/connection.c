@@ -296,6 +296,33 @@ void connection_close_all(void)
 }
 
 /*
+ * connection_close_all_fds()
+ *
+ * Close all file descriptors of the connection subsystem in a child process.
+ *
+ * inputs:
+ *       none
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       file descriptors belonging to all connections are closed
+ *       no handlers called
+ */
+void connection_close_all_fds(void)
+{
+	node_t *n, *tn;
+	connection_t *cptr;
+
+	LIST_FOREACH_SAFE(n, tn, connection_list.head)
+	{
+		cptr = n->data;
+		close(cptr->fd);
+	}
+}
+
+/*
  * connection_open_tcp()
  *
  * inputs:
