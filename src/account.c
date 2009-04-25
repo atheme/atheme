@@ -826,6 +826,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	myuser_name_t *mun;
 	metadata_t *md, *md2;
 	node_t *n;
+	char *copy;
 
 	mun = myuser_name_find(name);
 	if (mun == NULL)
@@ -852,7 +853,19 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 		md = n->data;
 		/* prefer current metadata to saved */
 		if (!metadata_find(mu, md->name))
-			metadata_add(mu, md->name, md->value);
+		{
+			if (strcmp(md->name, "private:mark:reason") ||
+					!strncmp(md->value, "(restored) ", 11))
+				metadata_add(mu, md->name, md->value);
+			else
+			{
+				copy = smalloc(strlen(md->value) + 12);
+				memcpy(copy, "(restored) ", 11);
+				strcpy(copy + 11, md->value);
+				metadata_add(mu, md->name, copy);
+				free(copy);
+			}
+		}
 	}
 
 	object_unref(mun);
