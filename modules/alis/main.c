@@ -35,6 +35,7 @@
  */
 
 #include "atheme.h"
+#include <limits.h>
 
 DECLARE_MODULE_V1
 (
@@ -79,6 +80,7 @@ struct alis_query
 	int mode_limit;
 	int mode_ext[MAXEXTMODES];
 	int skip;
+	int maxmatches;
 };
 
 void _modinit(module_t *m)
@@ -156,6 +158,29 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 			{
 				command_fail(si, fault_badparams, "Invalid -max option");
 				return 0;
+			}
+		}
+		else if(!strcasecmp(opt, "-maxmatches"))
+		{
+			if((arg = parv[i++]) == NULL || (query->maxmatches = atoi(arg)) == 0)
+			{
+				command_fail(si, fault_badparams, "Invalid -maxmatches option");
+				return 0;
+			}
+			if(si->su != NULL && !has_priv(si, PRIV_CHAN_AUSPEX))
+			{
+				if(query->maxmatches > ALIS_MAX_MATCH)
+				{
+					command_fail(si, fault_badparams, "Invalid -maxmatches option");
+					return 0;
+				}
+				if(query->maxmatches <= 0)
+					query->maxmatches = ALIS_MAX_MATCH;
+			}
+			else
+			{
+				if(query->maxmatches <= 0)
+					query->maxmatches = INT_MAX;
 			}
 		}
 		else if(!strcasecmp(opt, "-skip"))
@@ -359,9 +384,10 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *chptr;
 	struct alis_query query;
 	mowgli_patricia_iteration_state_t state;
-	int maxmatch = ALIS_MAX_MATCH;
+	int maxmatch;
 
 	memset(&query, 0, sizeof(struct alis_query));
+	query.maxmatches = ALIS_MAX_MATCH;
 
         query.mask = parc >= 1 ? parv[0] : "*";
 	if (!parse_alis(si, parc - 1, parv + 1, &query))
@@ -369,9 +395,10 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "LIST %s", query.mask);
 
+	maxmatch = query.maxmatches;
 	command_success_nodata(si,
 		"Returning maximum of %d channel names matching '\2%s\2'",
-		ALIS_MAX_MATCH, query.mask);
+		query.maxmatches, query.mask);
 
         /* hunting for one channel.. */
         if(strchr(query.mask, '*') == NULL && strchr(query.mask, '?') == NULL)

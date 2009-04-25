@@ -29,6 +29,7 @@
 #include "datastream.h"
 #include "authcookie.h"
 #include <sys/resource.h>
+#include <poll.h>
 
 chansvs_t chansvs;
 globsvs_t globsvs;
@@ -373,7 +374,12 @@ int main(int argc, char *argv[])
 	remove(pidfilename);
 	errno = 0;
 	if (curr_uplink != NULL && curr_uplink->conn != NULL)
+	{
+		sendq_add_eof(curr_uplink->conn);
 		sendq_flush(curr_uplink->conn);
+		poll((struct pollfd[]){ { .fd = curr_uplink->conn->fd,
+				.events = POLLIN, .revents = 0 } }, 1, 1000);
+	}
 	connection_close_all();
 
 	me.connected = false;
