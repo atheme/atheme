@@ -893,6 +893,11 @@ static void m_snick(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!u)
 		return;
+	if (is_internal_client(u))
+	{
+		slog(LG_DEBUG, "m_snick(): ignoring SNICK for internal client %s", u->nick);
+		return;
+	}
 
 	if (!strcmp(parv[2], "spoof.host") || !strcmp(parv[2], "cloaked.fn"))
 		/* Spoofhost is equal to include/config.h's or
