@@ -379,8 +379,8 @@ void snoop(const char *fmt, ...)
 /* protocol wrapper for nickchange/nick burst */
 void handle_nickchange(user_t *u)
 {
-	if (u == NULL)
-		return;
+	return_if_fail(u != NULL);
+	return_if_fail(!is_internal_client(u));
 
 	if (runflags & RF_LIVE && log_debug_enabled())
 		notice(globsvs.me != NULL ? globsvs.nick : me.name, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
