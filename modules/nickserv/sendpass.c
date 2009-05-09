@@ -53,6 +53,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md;
 	enum specialoperation op = op_none;
 	bool ismarked = false;
+	char cmdtext[NICKLEN + 20];
 
 	if (!name)
 	{
@@ -102,7 +103,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, md->value);
 			if (has_priv(si, PRIV_MARK))
-				command_fail(si, fault_badparams, _("Use SENDPASS %s FORCE to override this restriction."), mu->name);
+			{
+				snprintf(cmdtext, sizeof cmdtext,
+						"SENDPASS %s FORCE", mu->name);
+				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
+			}
 			return;
 		}
 		else if (!has_priv(si, PRIV_MARK))
