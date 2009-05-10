@@ -22,7 +22,7 @@ static void vhost_on_identify(void *vptr);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 3, ns_cmd_vhost };
+command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost };
 command_t ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost };
 
 void _modinit(module_t *m)
@@ -76,8 +76,10 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *host;
 	myuser_t *mu;
-	metadata_t *md;
+	metadata_t *md, *markmd;
 	char *p;
+	bool force = false;
+	char cmdtext[NICKLEN + HOSTLEN + 20];
 
 	if (!target)
 	{
@@ -103,18 +105,64 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		if (parc < 3)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VHOST");
-			command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON <vhost>"));
+			command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON <vhost> [FORCE]"));
 			return;
 		}
 		host = parv[2];
+		if (parc == 4 && !strcasecmp(parv[3], "FORCE"))
+			force = true;
+		else if (parc >= 4)
+		{
+			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
+			command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON <vhost> [FORCE]"));
+			return;
+		}
 	}
 	else if (!strcasecmp(parv[1], "OFF"))
+	{
 		host = NULL;
+		if (parc == 3 && !strcasecmp(parv[2], "FORCE"))
+			force = true;
+		else if (parc >= 3)
+		{
+			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
+			command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> OFF [FORCE]"));
+			return;
+		}
+	}
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "VHOST");
 		command_fail(si, fault_badparams, _("Syntax: VHOST <account> ON|OFF [vhost]"));
 		return;
+	}
+
+	if ((markmd = metadata_find(mu, "private:mark:setter")))
+	{
+		if (!force)
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST %s (marked by %s)", mu->name, markmd->value);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, markmd->value);
+			if (has_priv(si, PRIV_MARK))
+			{
+				if (host)
+					snprintf(cmdtext, sizeof cmdtext,
+							"VHOST %s ON %s FORCE",
+							mu->name, host);
+				else
+					snprintf(cmdtext, sizeof cmdtext,
+							"VHOST %s OFF FORCE",
+							mu->name);
+				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
+			}
+			return;
+		}
+		else if (!has_priv(si, PRIV_MARK))
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST %s (marked by %s)", mu->name, markmd->value);
+			command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MARK);
+			return;
+		}
 	}
 
 	/* deletion action */
@@ -129,6 +177,11 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
+		if (markmd)
+		{
+			wallops("%s deleted vhost from the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, mu->name);
+		}
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
 	}
@@ -173,6 +226,11 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, mu->name, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
 			mu->name, host);
+	if (markmd)
+	{
+		wallops("%s set vhost %s on the \2MARKED\2 account %s.", get_oper_name(si), host, mu->name);
+		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, mu->name);
+	}
 	do_sethost_all(mu, host);
 	return;
 }
