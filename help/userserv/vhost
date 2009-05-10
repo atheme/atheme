@@ -11,8 +11,8 @@ Syntax: VHOST <account> OFF
 If the account is marked, you can override this
 using the FORCE keyword.
 
-Syntax: SENDPASS <account> ON <vhost> FORCE
-Syntax: SENDPASS <account> OFF FORCE
+Syntax: VHOST <account> ON <vhost> FORCE
+Syntax: VHOST <account> OFF FORCE
 
 Examples:
     /msg &nick& VHOST spb ON may.explode.on.impact

@@ -11,8 +11,8 @@ Syntax: VHOST <nickname> OFF
 If the nickname is marked, you can override this
 using the FORCE keyword.
 
-Syntax: SENDPASS <nickname> ON <vhost> FORCE
-Syntax: SENDPASS <nickname> OFF FORCE
+Syntax: VHOST <nickname> ON <vhost> FORCE
+Syntax: VHOST <nickname> OFF FORCE
 
 Examples:
     /msg &nick& VHOST spb ON may.explode.on.impact
