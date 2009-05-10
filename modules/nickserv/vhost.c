@@ -22,7 +22,7 @@ static void vhost_on_identify(void *vptr);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 2, ns_cmd_vhost };
+command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 3, ns_cmd_vhost };
 command_t ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost };
 
 void _modinit(module_t *m)
@@ -69,11 +69,12 @@ static void do_sethost_all(myuser_t *mu, char *host)
 	}
 }
 
-/* VHOST <account> [host] */
+/* VHOST <account> [host]  (legacy) */
+/* VHOST <account> ON|OFF [host] */
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	char *host = parv[1];
+	char *host;
 	myuser_t *mu;
 	metadata_t *md;
 	char *p;
@@ -81,7 +82,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VHOST");
-		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> [vhost]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON|OFF [vhost]"));
 		return;
 	}
 
@@ -89,6 +90,30 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mu = myuser_find_ext(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		return;
+	}
+
+	if (parc == 1)
+		host = NULL;
+	else if (parc == 2 && (strchr(parv[1], '.') || strchr(parv[1], ':') ||
+					strchr(parv[1], '/')))
+		host = parv[1];
+	else if (!strcasecmp(parv[1], "ON"))
+	{
+		if (parc < 3)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VHOST");
+			command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> ON <vhost>"));
+			return;
+		}
+		host = parv[2];
+	}
+	else if (!strcasecmp(parv[1], "OFF"))
+		host = NULL;
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "VHOST");
+		command_fail(si, fault_badparams, _("Syntax: VHOST <account> ON|OFF [vhost]"));
 		return;
 	}
 

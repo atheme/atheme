@@ -3,11 +3,11 @@ Help for VHOST:
 VHOST allows operators to set a virtual host (also
 known as a spoof or cloak) on an account. This vhost
 will be set on the user immediately and each time
-they identify. If no vhost is specified, clear any
-existing vhost.
+they identify.
 
-Syntax: VHOST <nickname> [<vhost>]
+Syntax: VHOST <nickname> ON <vhost>
+Syntax: VHOST <nickname> OFF
 
 Examples:
-    /msg &nick& VHOST spb may.explode.on.impact
-    /msg &nick& VHOST nenolod
+    /msg &nick& VHOST spb ON may.explode.on.impact
+    /msg &nick& VHOST nenolod OFF
