@@ -80,7 +80,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VHOST");
 		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> [vhost]"));
 		return;
 	}
