@@ -362,7 +362,7 @@ if test "$shared_modules" = yes; then
 			[String containing extra underscores prepended to symbols loaded from modules.])
 	else
 		AC_MSG_CHECKING(for extra underscores prepended to symbol names)
-		AC_CACHE_VAL(symbol_underscores,
+		AC_CACHE_VAL(atheme_cv_symbol_underscores,
 		[
 cat << EOF > conftest.c
 #include <$nlist_h>
@@ -446,16 +446,16 @@ dnl ATHEME_C_GCC_TRY_FLAGS([-Werror], atheme_cv_c_gcc_w_error)
 AC_ARG_ENABLE(propolice,
 AC_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)]),
 [
-ATHEME_C_GCC_TRY_FLAGS([-fno-stack-protector-all], atheme_nspa)
-ATHEME_C_GCC_TRY_FLAGS([-fno-pie], atheme_npie)
-ATHEME_C_GCC_TRY_FLAGS([-nonow], atheme_nonow)
-ATHEME_C_GCC_TRY_FLAGS([-norelro], atheme_no_relro)
+ATHEME_C_GCC_TRY_FLAGS([-fno-stack-protector-all], atheme_cv_nspa)
+ATHEME_C_GCC_TRY_FLAGS([-fno-pie], atheme_cv_npie)
+ATHEME_C_GCC_TRY_FLAGS([-nonow], atheme_cv_nonow)
+ATHEME_C_GCC_TRY_FLAGS([-norelro], atheme_cv_no_relro)
 ])
 
 AC_ARG_ENABLE(profile,
 AC_HELP_STRING([--enable-profile],[ Enable profiling extensions]),
 [
-ATHEME_C_GCC_TRY_FLAGS([-pg], atheme_pg)
+ATHEME_C_GCC_TRY_FLAGS([-pg], atheme_cv_pg)
 ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
