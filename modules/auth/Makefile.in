@@ -10,7 +10,8 @@ include ../Makefile.defs
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
 # XXX ldap stuff is only needed by ldap.c
-CFLAGS		= -I../../include @CFLAGS@ @LDAP_CFLAGS@ @LDAP_LIBS@
+CFLAGS		= -I../../include @CFLAGS@ @LDAP_CFLAGS@
+LDFLAGS		= @LDFLAGS@
 LDAP_CFLAGS	= @LDAP_CFLAGS@
 LDAP_LIBS	= @LDAP_LIBS@
 
@@ -19,7 +20,7 @@ BASE_SRCS =				\
 	dummy.c				\
 	@LDAP_AUTHC@
 
-ldap.so: ldap.c
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${LDAP_CFLAGS} ${LDAP_LIBS} ${SRCDIR}/ldap.c -o ldap.so
-
 include ../Makefile.common
+
+ldap.so: ldap.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} ${LDAP_CFLAGS} ${LDAP_LIBS} ${SRCDIR}/ldap.c -o ldap.so
