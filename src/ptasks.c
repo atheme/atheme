@@ -666,13 +666,29 @@ static const char *skip_kill_path(const char *reason)
 
 void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 {
-	const char *source;
+	const char *source, *source1, *origreason;
+	char qreason[512];
 	user_t *u;
 	static time_t lastkill = 0;
 	static unsigned int killcount = 0;
 
 	source = get_oper_name(si);
+	if (si->su)
+		source1 = si->su->nick;
+	else if (si->s)
+		source1 = si->s->name;
+	else
+		source1 = me.name;
+	origreason = reason;
 	reason = skip_kill_path(reason);
+	if (reason[0] == '[' || !strncmp(reason, "Killed", 6))
+		snprintf(qreason, sizeof qreason, "%s", reason);
+	else if (origreason == reason)
+		snprintf(qreason, sizeof qreason, "Killed (%s (%s))",
+				source1, reason);
+	else
+		snprintf(qreason, sizeof qreason, "Killed (%s %s)",
+				source1, reason);
 
 	u = user_find(victim);
 	if (u == NULL)
@@ -680,7 +696,7 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	else if (u->flags & UF_ENFORCER)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed enforcer %s (%s)", source, u->nick, reason);
-		user_delete(u);
+		user_delete(u, qreason);
 	}
 	else if (u->server == me.me)
 	{
@@ -701,7 +717,7 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	else
 	{
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
-		user_delete(u);
+		user_delete(u, qreason);
 	}
 }
 

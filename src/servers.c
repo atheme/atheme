@@ -189,7 +189,7 @@ void server_delete(const char *name)
 		 * -- jilles */
 		if (u->myuser != NULL)
 			u->myuser->flags &= ~MU_NOBURSTLOGIN;
-		user_delete(u);
+		user_delete(u, "*.net *.split");
 	}
 
 	LIST_FOREACH_SAFE(n, tn, s->children.head)

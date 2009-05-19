@@ -137,13 +137,13 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 			{
 				kill_id_sts(NULL, uid, "Ghost detected via nick collision (new)");
 				kill_id_sts(NULL, u2->uid, "Ghost detected via nick collision (old)");
-				user_delete(u2);
+				user_delete(u2, "Ghost detected via nick collision (old)");
 			}
 			else
 			{
 				/* There is no way we can do this properly. */
 				kill_id_sts(NULL, nick, "Ghost detected via nick collision");
-				user_delete(u2);
+				user_delete(u2, "Ghost detected via nick collision");
 			}
 			return NULL;
 		}
@@ -189,12 +189,13 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 }
 
 /*
- * user_delete(user_t *u)
+ * user_delete(user_t *u, const char *comment)
  *
  * Destroys a user object and deletes the object from the users DTree.
  *
  * Inputs:
  *     - user object to delete
+ *     - quit comment
  *
  * Outputs:
  *     - nothing
@@ -202,7 +203,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
  * Side Effects:
  *     - on success, a user is deleted from the users DTree.
  */
-void user_delete(user_t *u)
+void user_delete(user_t *u, const char *comment)
 {
 	node_t *n, *tn;
 	chanuser_t *cu;
@@ -223,7 +224,10 @@ void user_delete(user_t *u)
 		u->flags &= ~UF_DOENFORCE;
 	}
 
-	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
+	if (!comment)
+		comment = "";
+
+	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s (%s)", u->nick, u->server->name, comment);
 
 	hook_call_event("user_delete", u);
 
@@ -415,7 +419,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 				 * their client and continue.
 				 */
 				kill_id_sts(NULL, u->uid, "Nick change collision with services");
-				user_delete(u);
+				user_delete(u, "Nick change collision with services");
 				return true;
 			}
 			if (ts == u2->ts || ((ts < u2->ts) ^ (!irccasecmp(u->user, u2->user) && !irccasecmp(u->host, u2->host))))
@@ -433,7 +437,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 				 * old nick.
 				 */
 				kill_id_sts(NULL, u->nick, "Nick change collision with services");
-				user_delete(u);
+				user_delete(u, "Nick change collision with services");
 				return true;
 			}
 			else
@@ -443,7 +447,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 				 * old nick.
 				 */
 				kill_id_sts(NULL, u->nick, "Nick change collision with services");
-				user_delete(u);
+				user_delete(u, "Nick change collision with services");
 				return true;
 			}
 		}
@@ -456,16 +460,16 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 			{
 				kill_id_sts(NULL, u->uid, "Ghost detected via nick change collision (new)");
 				kill_id_sts(NULL, u2->uid, "Ghost detected via nick change collision (old)");
-				user_delete(u);
-				user_delete(u2);
+				user_delete(u, "Ghost detected via nick change collision (new)");
+				user_delete(u2, "Ghost detected via nick change collision (old)");
 			}
 			else
 			{
 				/* There is no way we can do this properly. */
 				kill_id_sts(NULL, u->nick, "Ghost detected via nick change collision");
 				kill_id_sts(NULL, nick, "Ghost detected via nick change collision");
-				user_delete(u);
-				user_delete(u2);
+				user_delete(u, "Ghost detected via nick change collision");
+				user_delete(u2, "Ghost detected via nick change collision");
 			}
 			return true;
 		}

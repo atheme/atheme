@@ -239,7 +239,7 @@ void service_delete(service_t *sptr)
 	if (sptr->me != NULL)
 	{
 		quit_sts(sptr->me, "Service unloaded.");
-		user_delete(sptr->me);
+		user_delete(sptr->me, "Service unloaded.");
 		sptr->me = NULL;
 	}
 	sptr->handler = NULL;

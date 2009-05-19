@@ -196,7 +196,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			if (u != NULL && u->flags & UF_ENFORCER)
 			{
 				quit_sts(u, "RELEASE command");
-				user_delete(u);
+				user_delete(u, "RELEASE command");
 			}
 			command_success_nodata(si, _("\2%s\2 has been released."), target);
 		}
@@ -238,7 +238,7 @@ static void enforce_remove_enforcers(void *arg)
 		if (u->flags & UF_ENFORCER)
 		{
 			quit_sts(u, "Timed out");
-			user_delete(u);
+			user_delete(u, "Timed out");
 		}
 	}
 }

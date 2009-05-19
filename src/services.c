@@ -132,6 +132,7 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	char qreason[512];
 
 	return_if_fail(victim != NULL);
 
@@ -151,7 +152,9 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 	}
 	else
 		kill_id_sts(source, CLIENT_NAME(victim), buf);
-	user_delete(victim);
+	snprintf(qreason, sizeof qreason, "Killed (%s (%s))",
+			source != NULL ? source->nick : me.name, buf);
+	user_delete(victim, qreason);
 }
 
 void introduce_enforcer(const char *nick)

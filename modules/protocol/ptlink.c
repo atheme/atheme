@@ -565,7 +565,7 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(si->su);
+	user_delete(si->su, parv[0]);
 }
 
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])

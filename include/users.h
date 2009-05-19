@@ -62,7 +62,7 @@ E mowgli_patricia_t *uidlist;
 E void init_users(void);
 
 E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
-E void user_delete(user_t *u);
+E void user_delete(user_t *u, const char *comment);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
