@@ -469,9 +469,6 @@ AC_ARG_ENABLE(rpath,
 AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
    [enablerpath="$enableval"], [enablerpath="yes"])
 RPATH=""
-if test "x$enablerpath" = "xyes"; then
-    RPATH="-Wl,-rpath,${libdir}"
-fi
 
 AC_SUBST(RPATH)
 
@@ -481,6 +478,9 @@ PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.7.0],
 	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
 	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -lmowgli"
 	LIBMOWGLI="libmowgli"
+	if test "x$enablerpath" = "xyes"; then
+		RPATH="-Wl,-rpath,${libdir}"
+	fi
 	AC_CONFIG_SUBDIRS([libmowgli])
 ])
 
