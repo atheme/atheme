@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bugs@atheme.org\n"
-"POT-Creation-Date: 2009-04-20 00:24+0200\n"
+"POT-Creation-Date: 2009-05-22 09:07-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -446,9 +446,9 @@ msgstr ""
 #: modules/nickserv/info.c:96 modules/nickserv/listchans.c:70
 #: modules/nickserv/logout.c:60 modules/nickserv/mark.c:67
 #: modules/nickserv/resetpass.c:56 modules/nickserv/return.c:60
-#: modules/nickserv/sendpass.c:80 modules/nickserv/setpass.c:68
+#: modules/nickserv/sendpass.c:81 modules/nickserv/setpass.c:68
 #: modules/nickserv/taxonomy.c:58 modules/nickserv/verify.c:65
-#: modules/nickserv/verify.c:179 modules/nickserv/vhost.c:91
+#: modules/nickserv/verify.c:179 modules/nickserv/vhost.c:94
 #: modules/operserv/soper.c:151 modules/operserv/soper.c:209
 #: modules/operserv/soper.c:255
 #, c-format
@@ -899,13 +899,13 @@ msgid "No channel matched pattern %s"
 msgstr ""
 
 #: modules/chanserv/list.c:91 modules/nickserv/list.c:165
-#: modules/nickserv/vhost.c:182
+#: modules/nickserv/vhost.c:265
 #, c-format
 msgid "%d match for pattern %s"
 msgstr ""
 
 #: modules/chanserv/list.c:91 modules/nickserv/list.c:165
-#: modules/nickserv/vhost.c:183
+#: modules/nickserv/vhost.c:266
 #, c-format
 msgid "%d matches for pattern %s"
 msgstr ""
@@ -2955,8 +2955,9 @@ msgid ""
 "password."
 msgstr ""
 
-#: modules/nickserv/resetpass.c:70 modules/nickserv/sendpass.c:149
-#: modules/nickserv/sendpass.c:174
+#: modules/nickserv/resetpass.c:70 modules/nickserv/sendpass.c:154
+#: modules/nickserv/sendpass.c:179 modules/nickserv/vhost.c:183
+#: modules/nickserv/vhost.c:232
 #, c-format
 msgid "Overriding MARK placed by %s on the account %s."
 msgstr ""
@@ -2966,7 +2967,8 @@ msgstr ""
 msgid "The password for the account %s has been changed to %s."
 msgstr ""
 
-#: modules/nickserv/resetpass.c:83 modules/nickserv/sendpass.c:103
+#: modules/nickserv/resetpass.c:83 modules/nickserv/sendpass.c:104
+#: modules/nickserv/vhost.c:145
 #, c-format
 msgid ""
 "This operation cannot be performed on %s, because the account has been "
@@ -3005,76 +3007,76 @@ msgstr ""
 msgid "Email registration passwords."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:60
+#: modules/nickserv/sendpass.c:61
 msgid "Syntax: SENDPASS <account>"
 msgstr ""
 
-#: modules/nickserv/sendpass.c:73
+#: modules/nickserv/sendpass.c:74
 msgid "Syntax: SENDPASS <account> [FORCE|CLEAR]"
 msgstr ""
 
-#: modules/nickserv/sendpass.c:87
+#: modules/nickserv/sendpass.c:88
 #, c-format
 msgid ""
 "%s belongs to a services operator; you need %s privilege to send the "
 "password."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:93
+#: modules/nickserv/sendpass.c:94
 #, c-format
 msgid "%s is not verified."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:105
+#: modules/nickserv/sendpass.c:109 modules/nickserv/vhost.c:156
 #, c-format
-msgid "Use SENDPASS %s FORCE to override this restriction."
+msgid "Use %s to override this restriction."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:111 modules/operserv/clearchan.c:89
-#: modules/operserv/rakill.c:62 modules/operserv/rwatch.c:310
-#: modules/operserv/rwatch.c:410 modules/operserv/specs.c:99
-#: src/commandtree.c:128
+#: modules/nickserv/sendpass.c:116 modules/nickserv/vhost.c:163
+#: modules/operserv/clearchan.c:89 modules/operserv/rakill.c:62
+#: modules/operserv/rwatch.c:310 modules/operserv/rwatch.c:410
+#: modules/operserv/specs.c:99
 #, c-format
 msgid "You do not have %s privilege."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:123
+#: modules/nickserv/sendpass.c:128
 #, c-format
 msgid "The password change key for %s has been cleared."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:126
+#: modules/nickserv/sendpass.c:131
 #, c-format
 msgid "%s did not have a password change key outstanding."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:135
+#: modules/nickserv/sendpass.c:140
 #, c-format
 msgid "%s already has a password change key outstanding."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:136
+#: modules/nickserv/sendpass.c:141
 #, c-format
 msgid "Use SENDPASS %s CLEAR to clear it so that a new one can be sent."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:145
+#: modules/nickserv/sendpass.c:150
 #, c-format
 msgid "The password change key for %s has been sent to %s."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:153 modules/nickserv/sendpass.c:178
+#: modules/nickserv/sendpass.c:158 modules/nickserv/sendpass.c:183
 msgid "Email send failed."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:161
+#: modules/nickserv/sendpass.c:166
 #, c-format
 msgid ""
 "The password for the account %s is encrypted; a new password will be "
 "assigned and sent."
 msgstr ""
 
-#: modules/nickserv/sendpass.c:170
+#: modules/nickserv/sendpass.c:175
 #, c-format
 msgid "The password for %s has been sent to %s."
 msgstr ""
@@ -3356,47 +3358,55 @@ msgstr ""
 msgid "Lists user virtualhosts."
 msgstr ""
 
-#: modules/nickserv/vhost.c:84
-msgid "Syntax: VHOST <account> [vhost]"
+#: modules/nickserv/vhost.c:87 modules/nickserv/vhost.c:136
+msgid "Syntax: VHOST <account> ON|OFF [vhost]"
 msgstr ""
 
-#: modules/nickserv/vhost.c:100
+#: modules/nickserv/vhost.c:108 modules/nickserv/vhost.c:117
+msgid "Syntax: VHOST <account> ON <vhost> [FORCE]"
+msgstr ""
+
+#: modules/nickserv/vhost.c:129
+msgid "Syntax: VHOST <account> OFF [FORCE]"
+msgstr ""
+
+#: modules/nickserv/vhost.c:173
 #, c-format
 msgid "%s does not have a vhost set."
 msgstr ""
 
-#: modules/nickserv/vhost.c:104
+#: modules/nickserv/vhost.c:177
 #, c-format
 msgid "Deleted vhost for %s."
 msgstr ""
 
-#: modules/nickserv/vhost.c:117
+#: modules/nickserv/vhost.c:195
 msgid "The vhost provided contains invalid characters."
 msgstr ""
 
-#: modules/nickserv/vhost.c:122
+#: modules/nickserv/vhost.c:200
 msgid "The vhost provided is too long."
 msgstr ""
 
-#: modules/nickserv/vhost.c:128
+#: modules/nickserv/vhost.c:206
 msgid "The vhost provided looks like a CIDR mask."
 msgstr ""
 
-#: modules/nickserv/vhost.c:134
+#: modules/nickserv/vhost.c:212
 msgid "The vhost provided is invalid."
 msgstr ""
 
-#: modules/nickserv/vhost.c:141
+#: modules/nickserv/vhost.c:219
 #, c-format
 msgid "%s already has the given vhost set."
 msgstr ""
 
-#: modules/nickserv/vhost.c:146
+#: modules/nickserv/vhost.c:224
 #, c-format
 msgid "Assigned vhost %s to %s."
 msgstr ""
 
-#: modules/nickserv/vhost.c:180
+#: modules/nickserv/vhost.c:263
 #, c-format
 msgid "No vhosts matched pattern %s"
 msgstr ""
@@ -4469,30 +4479,35 @@ msgstr ""
 msgid "DELETE: %s from %s"
 msgstr ""
 
-#: src/account.c:838
+#: src/account.c:839
 #, c-format
 msgid ""
 "Not restoring mark \"%s\" for account %s (name %s) which is already marked"
 msgstr ""
 
-#: src/account.c:839
+#: src/account.c:840
 #, c-format
 msgid "MARK:FORGET: \"%s\" for %s (%s) (already marked)"
 msgstr ""
 
-#: src/account.c:845
+#: src/account.c:846
 #, c-format
 msgid "MARK:RESTORE: \"%s\" for %s (%s)"
 msgstr ""
 
-#: src/account.c:1610
+#: src/account.c:1623
 #, c-format
 msgid "EXPIRE: %s from %s "
 msgstr ""
 
-#: src/account.c:1664 src/account.c:1702
+#: src/account.c:1677 src/account.c:1715
 #, c-format
 msgid "EXPIRE: %s from %s"
+msgstr ""
+
+#: src/commandtree.c:128
+#, c-format
+msgid "You do not have the %s privilege."
 msgstr ""
 
 #: src/commandtree.c:177 src/commandtree.c:236
@@ -4591,29 +4606,29 @@ msgstr ""
 msgid "XLINE expired on %s, set by %s"
 msgstr ""
 
-#: src/ptasks.c:696
+#: src/ptasks.c:712
 #, c-format
 msgid "Services kill fight (%s -> %s), shutting down!"
 msgstr ""
 
-#: src/ptasks.c:697
+#: src/ptasks.c:713
 #, c-format
 msgid "ERROR: Services kill fight (%s -> %s), shutting down!"
 msgstr ""
 
-#: src/ptasks.c:787
+#: src/ptasks.c:803
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
-#: src/ptasks.c:834 src/ptasks.c:849
+#: src/ptasks.c:850 src/ptasks.c:865
 msgid "You have triggered services flood protection."
 msgstr ""
 
-#: src/ptasks.c:835
+#: src/ptasks.c:851
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: src/ptasks.c:850
+#: src/ptasks.c:866
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
@@ -4650,27 +4665,27 @@ msgstr ""
 msgid "Got SIGUSR2; restarting."
 msgstr ""
 
-#: src/users.c:314
+#: src/users.c:318
 #, c-format
 msgid "user_find(): found user %s by nick!"
 msgstr ""
 
-#: src/services.c:429
+#: src/services.c:432
 #, c-format
 msgid "Account %s dropped, forcing logout"
 msgstr ""
 
-#: src/services.c:449
+#: src/services.c:452
 #, c-format
 msgid "Login to account %s is stale, forcing logout"
 msgstr ""
 
-#: src/services.c:460
+#: src/services.c:463
 #, c-format
 msgid "Login to account %s seems invalid, forcing logout"
 msgstr ""
 
-#: src/services.c:741
+#: src/services.c:746
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
 msgstr ""

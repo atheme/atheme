@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: bugs@atheme.org\n"
-"POT-Creation-Date: 2009-04-20 00:24+0200\n"
+"POT-Creation-Date: 2009-05-22 09:07-0500\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -442,9 +442,9 @@ msgstr "Указано неверное имя шаблона, используйте /%s%s TEMPLATE %s для получени
 #: modules/nickserv/info.c:96 modules/nickserv/listchans.c:70
 #: modules/nickserv/logout.c:60 modules/nickserv/mark.c:67
 #: modules/nickserv/resetpass.c:56 modules/nickserv/return.c:60
-#: modules/nickserv/sendpass.c:80 modules/nickserv/setpass.c:68
+#: modules/nickserv/sendpass.c:81 modules/nickserv/setpass.c:68
 #: modules/nickserv/taxonomy.c:58 modules/nickserv/verify.c:65
-#: modules/nickserv/verify.c:179 modules/nickserv/vhost.c:91
+#: modules/nickserv/verify.c:179 modules/nickserv/vhost.c:94
 #: modules/operserv/soper.c:151 modules/operserv/soper.c:209
 #: modules/operserv/soper.c:255
 #, c-format
@@ -912,13 +912,13 @@ msgid "No channel matched pattern %s"
 msgstr "Каналов соответствующих маске %s не обнаружено."
 
 #: modules/chanserv/list.c:91 modules/nickserv/list.c:165
-#: modules/nickserv/vhost.c:182
+#: modules/nickserv/vhost.c:265
 #, c-format
 msgid "%d match for pattern %s"
 msgstr "Итого: %d совпадений по маске %s"
 
 #: modules/chanserv/list.c:91 modules/nickserv/list.c:165
-#: modules/nickserv/vhost.c:183
+#: modules/nickserv/vhost.c:266
 #, c-format
 msgid "%d matches for pattern %s"
 msgstr "Итого: %d совпадений по маске %s"
@@ -2978,8 +2978,9 @@ msgid ""
 "password."
 msgstr "%s принадлежит оператору сервисов. Вам необходима %s привилегия, чтобы сбросить ему пароль."
 
-#: modules/nickserv/resetpass.c:70 modules/nickserv/sendpass.c:149
-#: modules/nickserv/sendpass.c:174
+#: modules/nickserv/resetpass.c:70 modules/nickserv/sendpass.c:154
+#: modules/nickserv/sendpass.c:179 modules/nickserv/vhost.c:183
+#: modules/nickserv/vhost.c:232
 #, c-format
 msgid "Overriding MARK placed by %s on the account %s."
 msgstr "Обходим MARK поставленный %s на аккаунт %s."
@@ -2989,7 +2990,8 @@ msgstr "Обходим MARK поставленный %s на аккаунт %s."
 msgid "The password for the account %s has been changed to %s."
 msgstr "Пароль на аккаунте %s был изменен на %s."
 
-#: modules/nickserv/resetpass.c:83 modules/nickserv/sendpass.c:103
+#: modules/nickserv/resetpass.c:83 modules/nickserv/sendpass.c:104
+#: modules/nickserv/vhost.c:145
 #, c-format
 msgid ""
 "This operation cannot be performed on %s, because the account has been "
@@ -3028,76 +3030,76 @@ msgstr "Случайный пароль был установлен на %s."
 msgid "Email registration passwords."
 msgstr "Отравить email с паролями."
 
-#: modules/nickserv/sendpass.c:60
+#: modules/nickserv/sendpass.c:61
 msgid "Syntax: SENDPASS <account>"
 msgstr "Синтаксис: SENDPASS <аккаунт>"
 
-#: modules/nickserv/sendpass.c:73
+#: modules/nickserv/sendpass.c:74
 msgid "Syntax: SENDPASS <account> [FORCE|CLEAR]"
 msgstr "Синтаксис: SENDPASS <аккаунт> [FORCE|CLEAR]"
 
-#: modules/nickserv/sendpass.c:87
+#: modules/nickserv/sendpass.c:88
 #, c-format
 msgid ""
 "%s belongs to a services operator; you need %s privilege to send the "
 "password."
 msgstr "%s принадлежит оператору сервисов, вам необходима %s привилегия, чтобы отправить пароль по почте."
 
-#: modules/nickserv/sendpass.c:93
+#: modules/nickserv/sendpass.c:94
 #, c-format
 msgid "%s is not verified."
 msgstr "Регистрация ника %s еще не подтверждена, вы не можете запросить для него новый пароль."
 
-#: modules/nickserv/sendpass.c:105
-#, c-format
-msgid "Use SENDPASS %s FORCE to override this restriction."
+#: modules/nickserv/sendpass.c:109 modules/nickserv/vhost.c:156
+#, fuzzy, c-format
+msgid "Use %s to override this restriction."
 msgstr "Используйте SENDPASS %s FORCE чтобы обойти это ограничение."
 
-#: modules/nickserv/sendpass.c:111 modules/operserv/clearchan.c:89
-#: modules/operserv/rakill.c:62 modules/operserv/rwatch.c:310
-#: modules/operserv/rwatch.c:410 modules/operserv/specs.c:99
-#: src/commandtree.c:128
+#: modules/nickserv/sendpass.c:116 modules/nickserv/vhost.c:163
+#: modules/operserv/clearchan.c:89 modules/operserv/rakill.c:62
+#: modules/operserv/rwatch.c:310 modules/operserv/rwatch.c:410
+#: modules/operserv/specs.c:99
 #, c-format
 msgid "You do not have %s privilege."
 msgstr "У вас нет %s привилегии."
 
-#: modules/nickserv/sendpass.c:123
+#: modules/nickserv/sendpass.c:128
 #, c-format
 msgid "The password change key for %s has been cleared."
 msgstr "Ключ для сброса пароля ника %s успешно очищен."
 
-#: modules/nickserv/sendpass.c:126
+#: modules/nickserv/sendpass.c:131
 #, c-format
 msgid "%s did not have a password change key outstanding."
 msgstr "%s не имеет незавершенных процедур изменения пароля."
 
-#: modules/nickserv/sendpass.c:135
+#: modules/nickserv/sendpass.c:140
 #, c-format
 msgid "%s already has a password change key outstanding."
 msgstr "%s уже в процессе получения пароля (SENDPASS)."
 
-#: modules/nickserv/sendpass.c:136
+#: modules/nickserv/sendpass.c:141
 #, c-format
 msgid "Use SENDPASS %s CLEAR to clear it so that a new one can be sent."
 msgstr "Используйте SENDPASS %s CLEAR чтобы отменить старый процесс получения пароля."
 
-#: modules/nickserv/sendpass.c:145
+#: modules/nickserv/sendpass.c:150
 #, c-format
 msgid "The password change key for %s has been sent to %s."
 msgstr "Ключ изменения пароля для %s был послан на %s."
 
-#: modules/nickserv/sendpass.c:153 modules/nickserv/sendpass.c:178
+#: modules/nickserv/sendpass.c:158 modules/nickserv/sendpass.c:183
 msgid "Email send failed."
 msgstr "Отправка email завершилась неудачей."
 
-#: modules/nickserv/sendpass.c:161
+#: modules/nickserv/sendpass.c:166
 #, c-format
 msgid ""
 "The password for the account %s is encrypted; a new password will be "
 "assigned and sent."
 msgstr "Пароль для аккаунта %s зашифрован. Будет назначен новый пароль и отправлен по почте."
 
-#: modules/nickserv/sendpass.c:170
+#: modules/nickserv/sendpass.c:175
 #, c-format
 msgid "The password for %s has been sent to %s."
 msgstr "Пароль для %s был отправлен на %s."
@@ -3387,47 +3389,58 @@ msgstr "Управляет пользовательскими vhosts."
 msgid "Lists user virtualhosts."
 msgstr "Выводит список vhosts пользователя."
 
-#: modules/nickserv/vhost.c:84
-msgid "Syntax: VHOST <account> [vhost]"
+#: modules/nickserv/vhost.c:87 modules/nickserv/vhost.c:136
+#, fuzzy
+msgid "Syntax: VHOST <account> ON|OFF [vhost]"
 msgstr "Синтаксис: VHOST <аккаунт> [vhost]"
 
-#: modules/nickserv/vhost.c:100
+#: modules/nickserv/vhost.c:108 modules/nickserv/vhost.c:117
+#, fuzzy
+msgid "Syntax: VHOST <account> ON <vhost> [FORCE]"
+msgstr "Синтаксис: VHOST <аккаунт> [vhost]"
+
+#: modules/nickserv/vhost.c:129
+#, fuzzy
+msgid "Syntax: VHOST <account> OFF [FORCE]"
+msgstr "Синтаксис: VHOST <аккаунт> [vhost]"
+
+#: modules/nickserv/vhost.c:173
 #, fuzzy, c-format
 msgid "%s does not have a vhost set."
 msgstr "%s не имеет operclass."
 
-#: modules/nickserv/vhost.c:104
+#: modules/nickserv/vhost.c:177
 #, c-format
 msgid "Deleted vhost for %s."
 msgstr "Удален vhost для %s."
 
-#: modules/nickserv/vhost.c:117
+#: modules/nickserv/vhost.c:195
 msgid "The vhost provided contains invalid characters."
 msgstr "Vhost содержит недопустимые символы."
 
-#: modules/nickserv/vhost.c:122
+#: modules/nickserv/vhost.c:200
 msgid "The vhost provided is too long."
 msgstr "Vhost слишком длинный."
 
-#: modules/nickserv/vhost.c:128
+#: modules/nickserv/vhost.c:206
 msgid "The vhost provided looks like a CIDR mask."
 msgstr "Vhost похож на CIDR маску."
 
-#: modules/nickserv/vhost.c:134
+#: modules/nickserv/vhost.c:212
 msgid "The vhost provided is invalid."
 msgstr "Недопустимый vhost."
 
-#: modules/nickserv/vhost.c:141
+#: modules/nickserv/vhost.c:219
 #, fuzzy, c-format
 msgid "%s already has the given vhost set."
 msgstr "Сессия с ником %s была закрыта."
 
-#: modules/nickserv/vhost.c:146
+#: modules/nickserv/vhost.c:224
 #, c-format
 msgid "Assigned vhost %s to %s."
 msgstr "Установлен vhost %s для %s."
 
-#: modules/nickserv/vhost.c:180
+#: modules/nickserv/vhost.c:263
 #, c-format
 msgid "No vhosts matched pattern %s"
 msgstr "Не обнаружено vhost с маской %s"
@@ -4503,31 +4516,36 @@ msgstr "DELETE: %s из %s"
 msgid "DELETE: %s from %s"
 msgstr "DELETE (удаление): %s из %s"
 
-#: src/account.c:838
+#: src/account.c:839
 #, c-format
 msgid ""
 "Not restoring mark \"%s\" for account %s (name %s) which is already marked"
 msgstr "Не восстановлена пометка \"%s\" для аккаунта %s (имя %s) так как он уже помечен"
 
-#: src/account.c:839
+#: src/account.c:840
 #, c-format
 msgid "MARK:FORGET: \"%s\" for %s (%s) (already marked)"
 msgstr ":FORGET: \"%s\" для %s (%s) (уже помечено)"
 
-#: src/account.c:845
+#: src/account.c:846
 #, c-format
 msgid "MARK:RESTORE: \"%s\" for %s (%s)"
 msgstr "MARK:RESTORE: \"%s\" для %s (%s)"
 
-#: src/account.c:1610
+#: src/account.c:1623
 #, c-format
 msgid "EXPIRE: %s from %s "
 msgstr "EXPIRE: %s из %s "
 
-#: src/account.c:1664 src/account.c:1702
+#: src/account.c:1677 src/account.c:1715
 #, c-format
 msgid "EXPIRE: %s from %s"
 msgstr "EXPIRE: %s из %s"
+
+#: src/commandtree.c:128
+#, fuzzy, c-format
+msgid "You do not have the %s privilege."
+msgstr "У вас нет %s привилегии."
 
 #: src/commandtree.c:177 src/commandtree.c:236
 msgid "The following commands are available:"
@@ -4625,29 +4643,29 @@ msgstr "KLINE:EXPIRE: %s@%s установлено %s назад по инициативе %s"
 msgid "XLINE expired on %s, set by %s"
 msgstr "Срок действия AKILL истёк %s@%s, установлен %s"
 
-#: src/ptasks.c:696
+#: src/ptasks.c:712
 #, c-format
 msgid "Services kill fight (%s -> %s), shutting down!"
 msgstr "Сервисы передрались за kill (%s -> %s), производится прекращение работы!"
 
-#: src/ptasks.c:697
+#: src/ptasks.c:713
 #, c-format
 msgid "ERROR: Services kill fight (%s -> %s), shutting down!"
 msgstr "ОИШБКА: Сервисы передрались за kill (%s -> %s), производится прекращение работы!"
 
-#: src/ptasks.c:787
+#: src/ptasks.c:803
 msgid "You are on services ignore. You may not use any service."
 msgstr "Вы находитесь в списке игнорирования сервисов и не можете пользоваться их возможностями."
 
-#: src/ptasks.c:834 src/ptasks.c:849
+#: src/ptasks.c:850 src/ptasks.c:865
 msgid "You have triggered services flood protection."
 msgstr "Вы были настолько настойчивы, что активировали антифлуд-защиту сервисов."
 
-#: src/ptasks.c:835
+#: src/ptasks.c:851
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr "Это первое предупреждение, все ваши команды будут игнорироваться в течении последующих 30 секунд."
 
-#: src/ptasks.c:850
+#: src/ptasks.c:866
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr "Это последнее предупреждение, все ваши команды будут игнорироваться в течении последующих 30 секунд."
 
@@ -4684,27 +4702,27 @@ msgstr "Получена команда перезапуска от %s."
 msgid "Got SIGUSR2; restarting."
 msgstr "Получен сигнал SIGUSR2; перезапуск..."
 
-#: src/users.c:314
+#: src/users.c:318
 #, c-format
 msgid "user_find(): found user %s by nick!"
 msgstr "user_find(): пользователь %s найден по нику!"
 
-#: src/services.c:429
+#: src/services.c:432
 #, c-format
 msgid "Account %s dropped, forcing logout"
 msgstr "Аккаунт %s удален, автоматическая деавторизация пользователей..."
 
-#: src/services.c:449
+#: src/services.c:452
 #, c-format
 msgid "Login to account %s is stale, forcing logout"
 msgstr "Идентификация к аккаунту %s устарела, проводим принудительную деавторизацию..."
 
-#: src/services.c:460
+#: src/services.c:463
 #, c-format
 msgid "Login to account %s seems invalid, forcing logout"
 msgstr "Судя по всему идентификация к аккаунту %s невалидна, проводим принудительную деавторизацию..."
 
-#: src/services.c:741
+#: src/services.c:746
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
 msgstr "Лимит на вывод (%u) исчерпан, вывод приостановлен"
