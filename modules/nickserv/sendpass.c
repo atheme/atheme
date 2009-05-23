@@ -113,7 +113,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		else if (!has_priv(si, PRIV_MARK))
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
-			command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MARK);
+			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
 	}

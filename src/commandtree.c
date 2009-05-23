@@ -125,7 +125,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
-		command_fail(si, fault_noprivs, _("You do not have the %s privilege."), c->access);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, c->access);
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 	/*snoop(_("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/

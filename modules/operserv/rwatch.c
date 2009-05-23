@@ -307,7 +307,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (!has_priv(si, PRIV_MASS_AKILL))
 				{
-					command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MASS_AKILL);
+					command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MASS_AKILL);
 					return;
 				}
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
@@ -407,7 +407,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((addflags | removeflags) & RWACT_KLINE && !has_priv(si, PRIV_MASS_AKILL))
 	{
-		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MASS_AKILL);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MASS_AKILL);
 		return;
 	}
 

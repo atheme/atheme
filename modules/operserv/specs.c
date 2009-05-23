@@ -96,7 +96,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!has_priv(si, PRIV_VIEWPRIVS))
 		{
-			command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_VIEWPRIVS);
+			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_VIEWPRIVS);
 			return;
 		}
 		if (target == NULL)

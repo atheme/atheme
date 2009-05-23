@@ -96,12 +96,12 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
-		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_USER_AUSPEX);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_USER_AUSPEX);
 		return;
 	}
 	if (!has_priv(si, PRIV_SERVER_AUSPEX))
 	{
-		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_SERVER_AUSPEX);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_SERVER_AUSPEX);
 		return;
 	}
 

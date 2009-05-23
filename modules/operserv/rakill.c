@@ -59,7 +59,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	/* make sure they could have done RMATCH */
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
-		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_USER_AUSPEX);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_USER_AUSPEX);
 		return;
 	}
 
