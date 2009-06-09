@@ -95,10 +95,10 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	char *reason = parv[1];
 	svsignore_t *svsignore;
 
-	if (target == NULL)
+	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD <mask> <reason>"));
 		return;
 	}
 
