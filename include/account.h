@@ -393,7 +393,7 @@ E void db_check(void);
 E list_t svs_ignore_list;
 
 E svsignore_t *svsignore_find(user_t *user);
-E svsignore_t *svsignore_add(char *mask, char *reason);
+E svsignore_t *svsignore_add(const char *mask, const char *reason);
 E void svsignore_delete(svsignore_t *svsignore);
 
 #endif

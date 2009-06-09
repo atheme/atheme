@@ -26,7 +26,7 @@
 list_t svs_ignore_list;
 
 /*
- * svsignore_add(char *mask, char *reason)
+ * svsignore_add(const char *mask, const char *reason)
  *
  * Services ignore factory.
  *
@@ -43,7 +43,7 @@ list_t svs_ignore_list;
  * Bugs:
  *     - this function does not check for dupes
  */
-svsignore_t *svsignore_add(char *mask, char *reason)
+svsignore_t *svsignore_add(const char *mask, const char *reason)
 {
         svsignore_t *svsignore;
         node_t *n = node_create();
