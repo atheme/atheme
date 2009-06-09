@@ -793,7 +793,7 @@ int floodcheck(user_t *u, user_t *t)
 	}
 
 	/* Check if we match a services ignore */
-	if (svsignore_find(u))
+	if (svsignore_find(u) && !has_priv_user(u, PRIV_ADMIN))
 	{
 		if (u->msgs == 0 && last_ignore_notice != CURRTIME)
 		{
