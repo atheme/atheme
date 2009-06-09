@@ -102,7 +102,7 @@ general:metadata
 general:admin
 	restart/shutdown/rehash services, load modules, use raw/inject (if
 	globally allowed in atheme.conf), resetpass/sendpass on accounts
-	with operator{} blocks
+	with operator{} blocks, use /os ignore
 
 operserv:omode
 	use /os mode
