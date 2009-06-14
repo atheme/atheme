@@ -17,9 +17,11 @@ DECLARE_MODULE_V1
 );
 
 static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_klinechan = { "KLINECHAN", "Klines all users joining a channel.",
 			PRIV_MASS_AKILL, 3, os_cmd_klinechan };
+command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans };
 
 static void klinechan_check_join(void *vcu);
 static void klinechan_show_info(void *vdata);
@@ -33,19 +35,23 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_klinechan, os_cmdtree);
+	command_add(&os_listklinechans, os_cmdtree);
 	hook_add_event("channel_join");
 	hook_add_hook_first("channel_join", klinechan_check_join);
 	hook_add_event("channel_info");
 	hook_add_hook("channel_info", klinechan_show_info);
 	help_addentry(os_helptree, "KLINECHAN", "help/oservice/klinechan", NULL);
+	help_addentry(os_helptree, "LISTKLINECHANS", "help/oservice/listklinechans", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_klinechan, os_cmdtree);
+	command_delete(&os_listklinechans, os_cmdtree);
 	hook_del_hook("channel_join", klinechan_check_join);
 	hook_del_hook("channel_info", klinechan_show_info);
-	help_delentry(os_helptree, "KLINECHAN");
+	help_delentry(os_helptree, "KLINECHANS");
+	help_delentry(os_helptree, "LISTKLINECHANS");
 }
 
 static void klinechan_check_join(void *vdata)
@@ -180,4 +186,35 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "KLINECHAN");
 		command_fail(si, fault_badparams, "Usage: KLINECHAN <#channel> <ON|OFF> [reason]");
 	}
+}
+
+static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[])
+{
+	const char *pattern;
+	mowgli_patricia_iteration_state_t state;
+	mychan_t *mc;
+	metadata_t *md;
+	int matches = 0;
+
+	pattern = parc >= 1 ? parv[0] : "*";
+
+	snoop("LISTKLINECHANS: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+	{
+		md = metadata_find(mc, "private:klinechan:closer");
+		if (md == NULL)
+			continue;
+		if (!match(pattern, mc->name))
+		{
+			command_success_nodata(si, "- %-30s", mc->name);
+			matches++;
+		}
+	}
+
+	logcommand(si, CMDLOG_ADMIN, "LISTKLINECHANS %s (%d matches)", pattern, matches);
+	if (matches == 0)
+		command_success_nodata(si, _("No K:line channels matched pattern \2%s\2"), pattern);
+	else
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
+						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
