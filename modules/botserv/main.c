@@ -34,6 +34,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
 
 static void botserv_load_database(void);
 
+service_t *botsvs;
 list_t bs_cmdtree;
 list_t bs_helptree;
 list_t *cs_cmdtree;
@@ -327,12 +328,6 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 
 static void botserv_config_ready(void *unused)
 {
-	botsvs.disp = botsvs.me->disp;
-	botsvs.nick = botsvs.me->nick;
-	botsvs.user = botsvs.me->user;
-	botsvs.host = botsvs.me->host;
-	botsvs.real = botsvs.me->real;
-	
 	botserv_load_database();
 	if (me.connected)
 		bs_join_registered(!config_options.leave_chans);
@@ -864,7 +859,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", botserv_config_ready);
 	
-	botsvs.me = service_add("BotServ", botserv, &bs_cmdtree, &conf_bi_table);
+	botsvs = service_add("BotServ", botserv, &bs_cmdtree, &conf_bi_table);
 
 	command_add(&bs_bot, &bs_cmdtree); 
 	command_add(&bs_assign, &bs_cmdtree); 
@@ -893,10 +888,10 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	if (botsvs.me)
+	if (botsvs)
 	{
-		service_delete(botsvs.me);
-		botsvs.me = NULL;
+		service_delete(botsvs);
+		botsvs = NULL;
 	}
 	command_delete(&bs_bot, &bs_cmdtree); 
 	command_delete(&bs_assign, &bs_cmdtree); 
