@@ -89,13 +89,16 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if ((bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-	{
 		bot = user_find_named(bs->value);
-	} 
 	else
 		bot = NULL;
+	if (bot == NULL)
+	{
+		command_fail(si, fault_nosuch_key, _("\2%s\2 does not have a bot assigned."), mc->name);
+		return;
+	}
 
-	msg((bot)?bot->nick:chansvs.nick, channel, "%s", message);
+	msg(bot->nick, channel, "%s", message);
 }
 
 static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
@@ -139,13 +142,16 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if ((bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-	{
 		bot = user_find_named(bs->value);
-	} 
 	else
 		bot = NULL;
+	if (bot == NULL)
+	{
+		command_fail(si, fault_nosuch_key, _("\2%s\2 does not have a bot assigned."), mc->name);
+		return;
+	}
 
-	msg((bot)?bot->nick:chansvs.nick, channel, "\001ACTION %s\001", message);
+	msg(bot->nick, channel, "\001ACTION %s\001", message);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
