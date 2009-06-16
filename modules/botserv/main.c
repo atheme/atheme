@@ -888,10 +888,24 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
+	node_t *n, *tn;
+
 	if (botsvs)
 	{
 		service_delete(botsvs);
 		botsvs = NULL;
+	}
+	LIST_FOREACH_SAFE(n, tn, bs_bots.head)
+	{
+		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+
+		node_del(&bot->bnode, &bs_bots);
+		service_delete(bot->me);
+		free(bot->nick);
+		free(bot->user);
+		free(bot->real);
+		free(bot->host);
+		free(bot);
 	}
 	command_delete(&bs_bot, &bs_cmdtree); 
 	command_delete(&bs_assign, &bs_cmdtree); 
@@ -906,6 +920,7 @@ void _moddeinit(void)
 	hook_del_hook("channel_register", (void (*)(void *)) bs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) bs_newchan);
 	hook_del_hook("channel_can_change_topic", (void (*)(void *)) bs_topiccheck);
+	hook_del_hook("config_ready", botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;
 	modestack_mode_limit  = modestack_mode_limit_real;
