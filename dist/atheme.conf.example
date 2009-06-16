@@ -417,10 +417,12 @@ loadmodule "modules/global/main";
  * Core components				modules/botserv/main
  * HELP command					modules/botserv/help
  * INFO command					modules/botserv/info
+ * SET command					modules/botserv/set
  */
 loadmodule "modules/botserv/main";
 loadmodule "modules/botserv/help";
 loadmodule "modules/botserv/info";
+loadmodule "modules/botserv/set";
 
 /* Channel listing service.
  *

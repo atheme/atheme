@@ -17,5 +17,6 @@ BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/help.c	\
 	$(SRCDIR)/info.c	\
+	$(SRCDIR)/set.c		\
 
 include ../Makefile.common
