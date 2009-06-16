@@ -22,8 +22,8 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info };
 
+fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;
- 
 
 list_t *bs_cmdtree;
 list_t *bs_helptree;
@@ -33,6 +33,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
+	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 
 	command_add(&bs_info, bs_cmdtree);
 
@@ -44,26 +45,6 @@ void _moddeinit()
 	command_delete(&bs_info, bs_cmdtree);
 
 	help_delentry(bs_helptree, "INFO");
-}
-
-/* ******************************************************************** */
-
-botserv_bot_t* botserv_bot_find(char *name)
-{
-	node_t *n;
-
-	if(name == NULL)
-		return NULL;
-
-	LIST_FOREACH(n, bs_bots->head)
-	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
-
-		if (!irccasecmp(name, bot->nick))
-			return bot;
-	}
-
-	return NULL;
 }
 
 /* ******************************************************************** */ 

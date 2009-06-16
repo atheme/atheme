@@ -47,8 +47,8 @@ command_t *bs_set_commands[] = {
 	NULL
 };
 
+fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;
- 
 
 list_t *bs_cmdtree;
 list_t *bs_helptree;
@@ -59,6 +59,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
+	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 	
 	command_add(&bs_set, bs_cmdtree);
 	command_add_many(bs_set_commands, &bs_set_cmdtree);
@@ -84,26 +85,6 @@ void _moddeinit()
 	help_delentry(bs_helptree, "SET FANTASY");
 	help_delentry(bs_helptree, "SET NOBOT");
 	help_delentry(bs_helptree, "SET PRIVATE");
-}
-
-/* ******************************************************************** */
-
-botserv_bot_t* botserv_bot_find(char *name)
-{
-	node_t *n;
-
-	if(name == NULL)
-		return NULL;
-
-	LIST_FOREACH(n, bs_bots->head)
-	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
-
-		if (!irccasecmp(name, bot->nick))
-			return bot;
-	}
-
-	return NULL;
 }
 
 /* ******************************************************************** */ 

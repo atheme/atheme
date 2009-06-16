@@ -33,6 +33,9 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
 
 static void botserv_load_database(void);
 
+/* visible for other modules; use the typedef to enforce type checking */
+fn_botserv_bot_find botserv_bot_find;
+
 service_t *botsvs;
 list_t bs_cmdtree;
 list_t bs_helptree;
