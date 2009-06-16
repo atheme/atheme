@@ -408,6 +408,16 @@ loadmodule "modules/global/main";
 #loadmodule "modules/gameserv/help";
 #loadmodule "modules/gameserv/namegen";
 
+/* BotServ modules.
+ *
+ * Here you can disable or enable certain features of BotServ, by
+ * defining which modules are loaded. You can even disable BotServ
+ * entirely.
+ *
+ * Core components				modules/botserv/main
+ */
+loadmodule "modules/botserv/main";
+
 /* Channel listing service.
  *
  * Allows users to list channels with more flexibility than the /list
@@ -926,6 +936,34 @@ gameserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Game Services";
+};
+
+/* BotServ configuration.
+ *
+ * The botserv {} block contains settings specific to the BotServ modules.
+ *
+ * BotServ provides virtual channel bots.
+ */
+botserv {
+	/* (*)nick
+	 * The nickname we want GameServ to have.
+	 */
+	nick = "BotServ";
+
+	/* (*)user
+	 * Sets the username used for this client.
+	 */
+	user = "BotServ";
+
+	/* (*)host
+	 * The hostname used for this client.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The GECOS (real name) of the client.
+	 */
+	real = "Bot Services";
 };
 
 /* ALIS configuration.
