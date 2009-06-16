@@ -210,13 +210,16 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	mowgli_patricia_add(services_name, sptr->internal_name, sptr);
 	mowgli_patricia_add(services_nick, sptr->nick, sptr);
 
-	subblock = find_top_conf(name);
-	if (subblock == NULL)
-		add_top_conf(sptr->internal_name, conf_service);
-	add_conf_item("NICK", sptr->conf_table, conf_service_nick);
-	add_conf_item("USER", sptr->conf_table, conf_service_user);
-	add_conf_item("HOST", sptr->conf_table, conf_service_host);
-	add_conf_item("REAL", sptr->conf_table, conf_service_real);
+	if (sptr->conf_table != NULL)
+	{
+		subblock = find_top_conf(name);
+		if (subblock == NULL)
+			add_top_conf(sptr->internal_name, conf_service);
+		add_conf_item("NICK", sptr->conf_table, conf_service_nick);
+		add_conf_item("USER", sptr->conf_table, conf_service_user);
+		add_conf_item("HOST", sptr->conf_table, conf_service_host);
+		add_conf_item("REAL", sptr->conf_table, conf_service_real);
+	}
 
 	return sptr;
 }
@@ -251,6 +254,24 @@ void service_delete(service_t *sptr)
 	free(sptr->real);
 
 	BlockHeapFree(service_heap, sptr);
+}
+
+service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree)
+{
+	service_t *sptr;
+
+	sptr = service_add(name, handler, cmdtree, NULL);
+
+	free(sptr->user);
+	free(sptr->host);
+	free(sptr->real);
+	sptr->user = sstrndup(user, 10);
+	sptr->host = sstrdup(host);
+	sptr->real = sstrdup(real);
+
+	servtree_update(NULL);
+
+	return sptr;
 }
 
 service_t *service_find(const char *name)
