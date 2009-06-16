@@ -59,6 +59,60 @@ command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_
 
 /* ******************************************************************** */
 
+void
+bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	modestack_mode_simple_real(bot ? bot->nick : chansvs.nick, channel, dir, flags);	
+}
+
+void
+bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	modestack_mode_limit_real(bot ? bot->nick : chansvs.nick, channel, dir, limit);
+}
+
+void
+bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	modestack_mode_ext_real(bot ? bot->nick : chansvs.nick, channel, dir, i, value);
+}
+
+void
+bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	modestack_mode_param_real(bot ? bot->nick : chansvs.nick, channel, dir, type, value);
+}
+
+/* ******************************************************************** */
+
 static void
 bs_join_registered(bool all)
 {
@@ -826,6 +880,11 @@ void _modinit(module_t *m)
 	hook_add_hook("channel_register", (void (*)(void *)) bs_register);
 	hook_add_hook("channel_add", (void (*)(void *)) bs_newchan);
 	hook_add_hook("channel_can_change_topic", (void (*)(void *)) bs_topiccheck);
+
+	modestack_mode_simple = bs_modestack_mode_simple;
+	modestack_mode_limit  = bs_modestack_mode_limit;
+	modestack_mode_ext    = bs_modestack_mode_ext;
+	modestack_mode_param  = bs_modestack_mode_param;
 }
 
 void _moddeinit(void)
@@ -848,6 +907,11 @@ void _moddeinit(void)
 	hook_del_hook("channel_register", (void (*)(void *)) bs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) bs_newchan);
 	hook_del_hook("channel_can_change_topic", (void (*)(void *)) bs_topiccheck);
+
+	modestack_mode_simple = modestack_mode_simple_real;
+	modestack_mode_limit  = modestack_mode_limit_real;
+	modestack_mode_ext    = modestack_mode_ext_real;
+	modestack_mode_param  = modestack_mode_param_real;
 }
 
 /* ******************************************************************** */
