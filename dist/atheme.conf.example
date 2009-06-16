@@ -415,8 +415,10 @@ loadmodule "modules/global/main";
  * entirely.
  *
  * Core components				modules/botserv/main
+ * HELP command					modules/botserv/help
  */
 loadmodule "modules/botserv/main";
+loadmodule "modules/botserv/help";
 
 /* Channel listing service.
  *
