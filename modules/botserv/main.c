@@ -831,7 +831,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 	
 	if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "No bot assigned to \2%s\2.", parv[0]);
+		command_fail(si, fault_nosuch_key, _("\2%s\2 does not have a bot assigned."), mc->name);
 		return;
 	}
 
