@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "conf.h" /* XXX */
 #include "botserv.h"
 
 DECLARE_MODULE_V1
@@ -37,6 +36,7 @@ static void botserv_load_database(void);
 service_t *botsvs;
 list_t bs_cmdtree;
 list_t bs_helptree;
+list_t bs_conftable;
 list_t *cs_cmdtree;
 
 E list_t mychan;
@@ -859,7 +859,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", botserv_config_ready);
 	
-	botsvs = service_add("BotServ", botserv, &bs_cmdtree, &conf_bi_table);
+	botsvs = service_add("BotServ", botserv, &bs_cmdtree, &bs_conftable);
 
 	command_add(&bs_bot, &bs_cmdtree); 
 	command_add(&bs_assign, &bs_cmdtree); 

@@ -18,7 +18,6 @@ E void init_newconf(void);
 /* XXX */
 E list_t conf_ci_table;
 E list_t conf_ni_table;
-E list_t conf_bi_table;
 
 #endif
 
