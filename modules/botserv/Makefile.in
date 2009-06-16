@@ -16,5 +16,6 @@ CFLAGS		= -I../../include @CFLAGS@
 BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/help.c	\
+	$(SRCDIR)/info.c	\
 
 include ../Makefile.common
