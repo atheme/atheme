@@ -44,7 +44,7 @@ list_t *cs_cmdtree;
 
 E list_t mychan;
 
-list_t bs_bots = {};
+list_t bs_bots;
 
 command_t bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot };
 command_t bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign };
@@ -53,7 +53,7 @@ command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_
 
 /* ******************************************************************** */
 
-void
+static void
 bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
 {
 	mychan_t *mc;
@@ -66,7 +66,7 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 	modestack_mode_simple_real(bot ? bot->nick : chansvs.nick, channel, dir, flags);	
 }
 
-void
+static void
 bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit)
 {
 	mychan_t *mc;
@@ -79,7 +79,7 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 	modestack_mode_limit_real(bot ? bot->nick : chansvs.nick, channel, dir, limit);
 }
 
-void
+static void
 bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value)
 {
 	mychan_t *mc;
@@ -92,7 +92,7 @@ bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, co
 	modestack_mode_ext_real(bot ? bot->nick : chansvs.nick, channel, dir, i, value);
 }
 
-void
+static void
 bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value)
 {
 	mychan_t *mc;
@@ -112,7 +112,6 @@ bs_join_registered(bool all)
 {
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
-	channel_t *c;
 	chanuser_t *cu; 
 	metadata_t *md;
 	int cs = 0;
@@ -122,8 +121,6 @@ bs_join_registered(bool all)
 	
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		metadata_t *md;
-
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 			continue;
 		
@@ -389,7 +386,7 @@ static void botserv_save_database(void *unused)
 static void botserv_load_database(void)
 {
 	FILE *f;
-	char *item, *s, dBuf[BUFSIZE];
+	char *item, dBuf[BUFSIZE];
 	unsigned int linecnt;
 	int i;
 
@@ -428,7 +425,7 @@ static void botserv_load_database(void)
 			i = atoi(strtok(NULL, " "));
 			if (i > 1)
 			{
-				slog(LG_INFO, "botserv_load_database(): database version is %d; I only understand v1.");
+				slog(LG_INFO, "botserv_load_database(): database version is %d; I only understand v1.", i);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -437,7 +434,7 @@ static void botserv_load_database(void)
 		else if (!strcmp("COUNT", item))
 		{
 			i = atoi(strtok(NULL, " "));
-			if (i != bs_bots.count)
+			if ((unsigned int)i != LIST_LENGTH(&bs_bots))
 				slog(LG_INFO, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
 		}
 
@@ -575,8 +572,6 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	{
 		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 		{
-			metadata_t *md;
-
 			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 				continue;
 
@@ -700,8 +695,6 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		metadata_t *md;
-
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 			continue;
 
@@ -769,7 +762,6 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
-	node_t *n;
 
 	if (!parv[0] || !parv[1])
 	{
@@ -816,7 +808,6 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
-	node_t *n;
 	metadata_t *md;
 
 	if (!parv[0])
@@ -1296,14 +1287,16 @@ bs_part(hook_channel_joinpart_t *hdata)
 	* empty channel (MC_INHABIT). -- jilles
 	*/
 	if ((mc->flags & MC_GUARD)
-	&& config_options.leave_chans
-	&& !(mc->flags & MC_INHABIT)
-	&& (cu->chan->nummembers <= 2)
-	&& !is_internal_client(cu->user))
-		if(bot)
+			&& config_options.leave_chans
+			&& !(mc->flags & MC_INHABIT)
+			&& (cu->chan->nummembers <= 2)
+			&& !is_internal_client(cu->user))
+	{
+		if (bot)
 			part(cu->chan->name, bot->nick);
 		else
 			part(cu->chan->name, chansvs.nick);
+	}
 }
 
 static void bs_register(hook_channel_req_t *hdata)
@@ -1320,10 +1313,12 @@ static void bs_register(hook_channel_req_t *hdata)
 	if (mc->chan)
 	{
 		if (mc->flags & MC_GUARD)
+		{
 			if(bot)
 				join(mc->name, bot->nick);
 			else
 				join(mc->name, chansvs.nick);
+		}
 
 		check_modes(mc, true);
 	}
