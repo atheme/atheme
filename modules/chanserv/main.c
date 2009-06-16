@@ -38,6 +38,8 @@ static void join_registered(bool all)
 	{
 		if (!(mc->flags & MC_GUARD))
 			continue;
+		if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
+			continue;
 
 		if (all)
 		{
@@ -251,6 +253,8 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	/* first check if this is a registered channel at all */
 	mc = mychan_find(chan->name);
 	if (mc == NULL)
+		return;
+	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
 		return;
 
 	flags = chanacs_user_flags(mc, u);
@@ -483,6 +487,9 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	mc = mychan_find(cu->chan->name);
 	if (mc == NULL)
 		return;
+	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
+		return;
+
 	if (CURRTIME - mc->used >= 3600)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
@@ -512,6 +519,8 @@ static void cs_register(hook_channel_req_t *hdata)
 	{
 		if (mc->flags & MC_GUARD)
 			join(mc->name, chansvs.nick);
+		if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
+			return;
 
 		check_modes(mc, true);
 	}
@@ -608,6 +617,8 @@ static void cs_newchan(channel_t *c)
 	char str[21];
 
 	if (!(mc = mychan_find(c->name)))
+		return;
+	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
 		return;
 
 	/* schedule a mode lock check when we know the current modes
