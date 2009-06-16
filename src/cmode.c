@@ -694,7 +694,7 @@ void modestack_finalize_channel(channel_t *channel)
 }
 
 /* stack simple modes without parameters */
-void modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
+void modestack_mode_simple_real(const char *source, channel_t *channel, int dir, int flags)
 {
 	struct modestackdata *md;
 
@@ -705,9 +705,10 @@ void modestack_mode_simple(const char *source, channel_t *channel, int dir, int 
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
+void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags) = modestack_mode_simple_real;
 
 /* stack a limit */
-void modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit)
+void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, unsigned int limit)
 {
 	struct modestackdata *md;
 
@@ -716,9 +717,10 @@ void modestack_mode_limit(const char *source, channel_t *channel, int dir, unsig
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
+void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit) = modestack_mode_limit_real;
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value)
+void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, int i, const char *value)
 {
 	struct modestackdata *md;
 
@@ -733,9 +735,10 @@ void modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, 
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
+void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, int i, const char *value) = modestack_mode_ext_real;
 
 /* stack a type A, B or E mode */
-void modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value)
+void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value)
 {
 	struct modestackdata *md;
 
@@ -744,6 +747,7 @@ void modestack_mode_param(const char *source, channel_t *channel, int dir, char 
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
+void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value) = modestack_mode_param_real;
 
 /* Clear all simple modes (+imnpstkl etc) on a channel */
 void clear_simple_modes(channel_t *c)

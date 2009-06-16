@@ -121,11 +121,17 @@ E char *channel_modes(channel_t *c, bool doparams);
 E void modestack_flush_channel(channel_t *channel);
 E void modestack_forget_channel(channel_t *channel);
 E void modestack_finalize_channel(channel_t *channel);
-E void modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags);
-E void modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit);
-E void modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value);
-E void modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value);
 E void check_modes(mychan_t *mychan, bool sendnow);
+
+E void modestack_mode_simple_real(const char *source, channel_t *channel, int dir, int flags);
+E void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, unsigned int limit);
+E void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, int i, const char *value);
+E void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value);
+
+E void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags);
+E void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit);
+E void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, int i, const char *value);
+E void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value);
 
 /* channels.c */
 E mowgli_patricia_t *chanlist;
