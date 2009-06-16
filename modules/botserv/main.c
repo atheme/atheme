@@ -518,7 +518,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	bot2 = botserv_bot_find(parv[1]);
 	if ((bot2 != NULL) && (bot != bot2))
 	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] is already a bot->",
+		command_fail(si, fault_alreadyexists, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] is already a bot",
 		bot2->nick, bot2->user, bot2->host, bot2->real);
 		return;
 	}
