@@ -520,6 +520,7 @@ AC_OUTPUT([po/Makefile.in
 	modules/alis/Makefile
 	modules/auth/Makefile
 	modules/backend/Makefile
+	modules/botserv/Makefile
 	modules/chanserv/Makefile
 	modules/crypto/Makefile
 	modules/gameserv/Makefile
