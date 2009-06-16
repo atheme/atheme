@@ -17,6 +17,7 @@ typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
 typedef struct gamesvs_ gamesvs_t;
+typedef struct botsvs_  botsvs_t;
 
 /* The nick/user/host/real/disp strings in these structs simply point
  * to their counterparts in the service_t, and will probably be removed
@@ -75,6 +76,17 @@ struct opersvs_
 };
 
 struct memosvs_
+{
+  char   *nick;
+  char   *user;
+  char   *host;
+  char   *real;
+  char   *disp;
+
+  service_t *me;
+};
+
+struct botsvs_
 {
   char   *nick;
   char   *user;
@@ -146,6 +158,7 @@ E memosvs_t memosvs;
 E nicksvs_t nicksvs;
 E saslsvs_t saslsvs;
 E gamesvs_t gamesvs;
+E botsvs_t  botsvs;
 
 /* services.c */
 E int authservice_loaded;
