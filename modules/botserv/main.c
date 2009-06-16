@@ -699,15 +699,15 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		if (!irccasecmp(md->value, bot->nick))
+		{
+			join(mc->name, chansvs.nick);
 			part(mc->name, bot->nick);
+		}
 
 		metadata_delete(mc, "private:botserv:bot-assigned");
 		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 
 	}
-
-	/* join chanserv to guarded channels that no longer have botserv because it was deleted */
-	join_registered(!config_options.leave_chans);
 
 	node_del(&bot->bnode, &bs_bots);
 	service_delete(bot->me);
