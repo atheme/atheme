@@ -783,6 +783,13 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(parv[0]);
 	node_t *n;
 
+	if (!parv[0] || !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "ASSIGN");
+		command_fail(si, fault_needmoreparams, _("Syntax: ASSIGN <#channel> <nick>"));
+		return;
+	}
+
 	if (mc == NULL)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
@@ -823,6 +830,13 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(parv[0]);
 	node_t *n;
 	metadata_t *md;
+
+	if (!parv[0])
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "UNASSIGN");
+		command_fail(si, fault_needmoreparams, _("Syntax: UNASSIGN <#channel>"));
+		return;
+	}
 
 	if (mc == NULL)
 	{
