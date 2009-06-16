@@ -231,13 +231,16 @@ void service_delete(service_t *sptr)
 	mowgli_patricia_delete(services_name, sptr->internal_name);
 	mowgli_patricia_delete(services_nick, sptr->nick);
 
-	del_conf_item("REAL", sptr->conf_table);
-	del_conf_item("HOST", sptr->conf_table);
-	del_conf_item("USER", sptr->conf_table);
-	del_conf_item("NICK", sptr->conf_table);
-	subblock = find_top_conf(sptr->internal_name);
-	if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
-		del_top_conf(sptr->internal_name);
+	if (sptr->conf_table != NULL)
+	{
+		del_conf_item("REAL", sptr->conf_table);
+		del_conf_item("HOST", sptr->conf_table);
+		del_conf_item("USER", sptr->conf_table);
+		del_conf_item("NICK", sptr->conf_table);
+		subblock = find_top_conf(sptr->internal_name);
+		if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
+			del_top_conf(sptr->internal_name);
+	}
 
 	if (sptr->me != NULL)
 	{
