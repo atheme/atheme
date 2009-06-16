@@ -859,7 +859,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", botserv_config_ready);
 	
-	botsvs = service_add("BotServ", botserv, &bs_cmdtree, &bs_conftable);
+	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
 	command_add(&bs_bot, &bs_cmdtree); 
 	command_add(&bs_assign, &bs_cmdtree); 
