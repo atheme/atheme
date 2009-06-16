@@ -9,6 +9,7 @@
  */
 
 #include "atheme.h"
+#include "botserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -20,17 +21,6 @@ DECLARE_MODULE_V1
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info };
-
-typedef struct {
-	service_t *me;
-	char *nick;
-	char *user;
-	char *host;
-	char *real;
-	node_t bnode;
-	int private;
-	time_t registered;
-} botserv_bot_t; 
 
 list_t *bs_bots;
  

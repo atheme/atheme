@@ -9,6 +9,7 @@
 
 #include "atheme.h"
 #include "conf.h" /* XXX */
+#include "botserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -38,17 +39,6 @@ list_t bs_helptree;
 list_t *cs_cmdtree;
 
 E list_t mychan;
-
-typedef struct {
-	service_t *me;
-	char *nick;
-	char *user;
-	char *host;
-	char *real;
-	node_t bnode;
-	int private;
-	time_t registered;
-} botserv_bot_t;
 
 list_t bs_bots = {};
 

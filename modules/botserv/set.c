@@ -9,6 +9,7 @@
  */
 
 #include "atheme.h"
+#include "botserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -45,17 +46,6 @@ command_t *bs_set_commands[] = {
 	&bs_set_private,
 	NULL
 };
-
-typedef struct {
-	service_t *me;
-	char *nick;
-	char *user;
-	char *host;
-	char *real;
-	node_t bnode;
-	int private;
-	time_t registered;
-} botserv_bot_t; 
 
 list_t *bs_bots;
  
