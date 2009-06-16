@@ -1,0 +1,10 @@
+Help for SET NOBOT:
+
+This option makes a channel be unassignable. If a bot
+is already assigned to the channel, it is unassigned
+automatically when you enable the option.
+ 
+Syntax: SET <#channel> NOBOT {ON|OFF}
+  
+Examples:
+    /msg &nick& SET #help NOBOT ON

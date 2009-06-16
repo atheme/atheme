@@ -1,0 +1,9 @@
+Help for ACT:
+
+Makes the bot do the equivalent of a "/me" command
+on the given channel using the given text.
+
+Syntax: ACT <chan> <text>
+
+Examples:
+    /msg &nick& ACT #help yawns!

@@ -1,0 +1,8 @@
+Help for BOTLIST:
+
+Lists all available bots on this network.
+
+Syntax: BOTLIST
+
+Examples:
+    /msg &nick& BOTLIST

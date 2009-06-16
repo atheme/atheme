@@ -1,0 +1,9 @@
+Help for SET DONTKICKVOICES:
+
+Enables or disables ops protection mode on a channel.
+When it is enabled, voices won't be kicked by the bot.
+ 
+Syntax: SET <#channel> DONTKICKVOICES {ON|OFF}
+ 
+Examples:
+    /msg &nick& SET #help DONTKICKVOICES ON
