@@ -82,7 +82,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_AUTOOP) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!(chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -135,7 +135,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_AUTOOP) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!(chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
