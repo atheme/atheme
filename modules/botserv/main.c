@@ -105,6 +105,22 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 	modestack_mode_param_real(bot ? bot->nick : chansvs.nick, channel, dir, type, value);
 }
 
+static void 
+bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if (source != chansvs.me->me)
+		return try_kick_real(source, chan, target, reason);
+
+	if ((mc = mychan_find(chan->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	try_kick_real(bot ? bot : source, chan, target, reason);
+}
+
 /* ******************************************************************** */
 
 static void
@@ -878,6 +894,7 @@ void _modinit(module_t *m)
 	modestack_mode_limit  = bs_modestack_mode_limit;
 	modestack_mode_ext    = bs_modestack_mode_ext;
 	modestack_mode_param  = bs_modestack_mode_param;
+	try_kick              = bs_try_kick;
 }
 
 void _moddeinit(void)
@@ -920,6 +937,7 @@ void _moddeinit(void)
 	modestack_mode_limit  = modestack_mode_limit_real;
 	modestack_mode_ext    = modestack_mode_ext_real;
 	modestack_mode_param  = modestack_mode_param_real;
+	try_kick              = try_kick_real;
 }
 
 /* ******************************************************************** */
