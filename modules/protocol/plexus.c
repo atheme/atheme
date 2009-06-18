@@ -9,7 +9,7 @@
  */
 
 /* option: set the netadmin umode +N */
-/*#define USE_NETADMIN*/
+#define USE_NETADMIN
 
 #include "atheme.h"
 #include "uplink.h"
@@ -30,7 +30,7 @@ ircd_t PleXusIRCd = {
         true,                           /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	true,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY,			/* Oper-only cmodes */
+	(CMODE_OPERONLY | CMODE_PERM),	/* Oper-only cmodes */
         CSTATUS_OWNER,	                /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
         CSTATUS_HALFOP,                   /* Integer flag for halfops. */
@@ -38,7 +38,7 @@ ircd_t PleXusIRCd = {
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_PLEXUS,		/* Protocol type */
-	0,                              /* Permanent cmodes */
+	CMODE_PERM,                     /* Permanent cmodes */
 	0,                              /* Oper-immune cmode */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
@@ -59,7 +59,7 @@ struct cmode_ plexus_mode_list[] = {
   { 'S', CMODE_STRIP },
   { 'K', CMODE_NOKNOCK },
   { 'N', CMODE_STICKY },
-  { 'B', CMODE_BWSAVE },
+  { 'z', CMODE_PERM },
   { '\0', 0 }
 };
 
@@ -89,199 +89,11 @@ struct cmode_ plexus_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'N', UF_IMMUNE   },
   { '\0', 0 }
 };
 
 /* *INDENT-ON* */
-
-/* login to our uplink */
-static unsigned int plexus_server_login(void)
-{
-	int ret;
-
-	ret = sts("PASS %s :TS", curr_uplink->pass);
-	if (ret == 1)
-		return 1;
-
-	me.bursting = true;
-
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP SERVICES");
-	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
-
-	return 0;
-}
-
-/* introduce a client */
-static void plexus_introduce_nick(user_t *u)
-{
-	const char *omode = is_ircop(u) ? "o" : "";
-
-	sts("NICK %s 1 %lu +i%s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, omode, u->user, u->host, me.name, u->gecos);
-}
-
-/* invite a user to a channel */
-static void plexus_invite_sts(user_t *sender, user_t *target, channel_t *channel)
-{
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
-}
-
-static void plexus_quit_sts(user_t *u, const char *reason)
-{
-	if (!me.connected)
-		return;
-
-	sts(":%s QUIT :%s", u->nick, reason);
-}
-
-/* WALLOPS wrapper */
-static void plexus_wallops_sts(const char *text)
-{
-	sts(":%s WALLOPS :%s", me.name, text);
-}
-
-/* join a channel */
-static void plexus_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
-{
-	if (isnew)
-		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
-				c->name, modes, u->nick);
-	else
-		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
-				c->name, u->nick);
-}
-
-/* kicks a user from a channel */
-static void plexus_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
-{
-	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
-
-	chanuser_delete(c, u);
-}
-
-/* PRIVMSG wrapper */
-static void plexus_msg(const char *from, const char *target, const char *fmt, ...)
-{
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s PRIVMSG %s :%s", from, target, buf);
-}
-
-/* NOTICE wrapper */
-static void plexus_notice_user_sts(user_t *from, user_t *target, const char *text)
-{
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
-}
-
-static void plexus_notice_global_sts(user_t *from, const char *mask, const char *text)
-{
-	node_t *n;
-	tld_t *tld;
-
-	if (!strcmp(mask, "*"))
-	{
-		LIST_FOREACH(n, tldlist.head)
-		{
-			tld = n->data;
-			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
-		}
-	}
-	else
-		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
-}
-
-static void plexus_notice_channel_sts(user_t *from, channel_t *target, const char *text)
-{
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
-}
-
-static void plexus_wallchops(user_t *sender, channel_t *channel, const char *message)
-{
-	/* not sure if we need to be on channel, oh well */
-	if (chanuser_find(channel, sender))
-		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
-				message);
-	else /* do not join for this, everyone would see -- jilles */
-		generic_wallchops(sender, channel, message);
-}
-
-/* numeric wrapper */
-static void plexus_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
-{
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
-}
-
-/* KILL wrapper */
-static void plexus_kill_id_sts(user_t *killer, const char *id, const char *reason)
-{
-	if (killer != NULL)
-		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
-	else
-		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
-}
-
-/* PART wrapper */
-static void plexus_part_sts(channel_t *c, user_t *u)
-{
-	sts(":%s PART %s", u->nick, c->name);
-}
-
-/* server-to-server KLINE wrapper */
-static void plexus_kline_sts(char *server, char *user, char *host, long duration, char *reason)
-{
-	if (!me.connected)
-		return;
-
-	sts(":%s KLINE %s %ld %s %s :%s", me.name, server, duration, user, host, reason);
-}
-
-/* server-to-server UNKLINE wrapper */
-static void plexus_unkline_sts(char *server, char *user, char *host)
-{
-	if (!me.connected)
-		return;
-
-	sts(":%s UNKLINE %s %s %s", opersvs.nick, server, user, host);
-}
-
-/* topic wrapper */
-static void plexus_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
-{
-	if (!me.connected || !c)
-		return;
-
-	sts(":%s TOPIC %s :%s", chansvs.nick, c->name, topic);
-}
-
-/* mode wrapper */
-static void plexus_mode_sts(char *sender, channel_t *target, char *modes)
-{
-	if (!me.connected)
-		return;
-
-	sts(":%s MODE %s %s", sender, target->name, modes);
-}
-
-/* ping wrapper */
-static void plexus_ping_sts(void)
-{
-	if (!me.connected)
-		return;
-
-	sts("PING :%s", me.name);
-}
 
 /* protocol-specific stuff to do on login */
 static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost)
@@ -296,7 +108,7 @@ static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost
 		return;
 
 #ifdef USE_NETADMIN
-	if (has_priv(u, PRIV_ADMIN))
+	if (has_priv_user(u, PRIV_ADMIN))
 		sts(":%s ENCAP * SVSMODE %s %lu +rdN %lu", nicksvs.nick, u->nick, (unsigned long)u->ts, (unsigned long)CURRTIME);
 	else
 #endif
@@ -320,16 +132,6 @@ static bool plexus_on_logout(user_t *u, const char *account)
 	return false;
 }
 
-static void plexus_jupe(const char *server, const char *reason)
-{
-	if (!me.connected)
-		return;
-
-	server_delete(server);
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
-}
-
 static void plexus_sethost_sts(user_t *source, user_t *target, const char *host)
 {
 	if (!me.connected)
@@ -338,367 +140,11 @@ static void plexus_sethost_sts(user_t *source, user_t *target, const char *host)
 	if (irccasecmp(target->host, host))
 		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else
+	{
 		numeric_sts(me.me, 396, target, "%s :hostname reset by %s", host, source->nick);
-	sts(":%s ENCAP * CHGHOST %s :%s", ME, target->nick, host);
-}
-
-static void m_topic(sourceinfo_t *si, int parc, char *parv[])
-{
-	channel_t *c = channel_find(parv[0]);
-
-	if (!c)
-		return;
-
-	handle_topic_from(si, c, si->su->nick, CURRTIME, parv[1]);
-}
-
-static void m_ping(sourceinfo_t *si, int parc, char *parv[])
-{
-	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
-}
-
-static void m_pong(sourceinfo_t *si, int parc, char *parv[])
-{
-	server_t *s;
-
-	/* someone replied to our PING */
-	if (!parv[0])
-		return;
-	s = server_find(parv[0]);
-	if (s == NULL)
-		return;
-	handle_eob(s);
-
-	if (irccasecmp(me.actual, parv[0]))
-		return;
-
-	me.uplinkpong = CURRTIME;
-
-	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
-	if (me.bursting)
-	{
-#ifdef HAVE_GETTIMEOFDAY
-		e_time(burstime, &burstime);
-
-		slog(LG_INFO, "m_pong(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
-
-		wallops("Finished synching to network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
-#else
-		slog(LG_INFO, "m_pong(): finished synching with uplink");
-		wallops("Finished synching to network.");
-#endif
-
-		me.bursting = false;
+		sts(":%s ENCAP * SVSMODE %s %lu -x", CLIENT_NAME(source), CLIENT_NAME(target), (unsigned long)target->ts);
 	}
-}
-
-static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc != 2)
-		return;
-
-	handle_message(si, parv[0], false, parv[1]);
-}
-
-static void m_notice(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc != 2)
-		return;
-
-	handle_message(si, parv[0], true, parv[1]);
-}
-
-static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
-{
-	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
-
-	channel_t *c;
-	unsigned int userc;
-	char *userv[256];
-	unsigned int i;
-	time_t ts;
-
-	/* :origin SJOIN ts chan modestr [key or limits] :users */
-	c = channel_find(parv[1]);
-	ts = atol(parv[0]);
-
-	if (!c)
-	{
-		slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
-		c = channel_add(parv[1], ts, si->s);
-	}
-
-	if (ts < c->ts)
-	{
-		chanuser_t *cu;
-		node_t *n;
-
-		/* the TS changed.  a TS change requires the following things
-		 * to be done to the channel:  reset all modes to nothing, remove
-		 * all status modes on known users on the channel (including ours),
-		 * and set the new TS.
-		 */
-
-		clear_simple_modes(c);
-
-		LIST_FOREACH(n, c->members.head)
-		{
-			cu = (chanuser_t *)n->data;
-			cu->modes = 0;
-		}
-
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
-
-		c->ts = ts;
-		hook_call_event("channel_tschange", c);
-	}
-
-	channel_mode(NULL, c, parc - 3, parv + 2);
-
-	userc = sjtoken(parv[parc - 1], ' ', userv);
-
-	for (i = 0; i < userc; i++)
-		chanuser_add(c, userv[i]);
-
-	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-		channel_delete(c);
-}
-
-static void m_part(sourceinfo_t *si, int parc, char *parv[])
-{
-	int chanc;
-	char *chanv[256];
-	int i;
-
-	chanc = sjtoken(parv[0], ',', chanv);
-	for (i = 0; i < chanc; i++)
-	{
-		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, chanv[i]);
-
-		chanuser_delete(channel_find(chanv[i]), si->su);
-	}
-}
-
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
-{
-	user_t *u;
-	server_t *s;
-
-	/* got the right number of args for an introduction? */
-	if (parc == 10)
-	{
-		s = server_find(parv[6]);
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
-			return;
-		}
-
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
-
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[9], s, atoi(parv[2]));
-		if (u == NULL)
-			return;
-
-		user_mode(u, parv[3]);
-
-		handle_nickchange(u);
-	}
-
-	/* if it's only 2 then it's a nickname change */
-	else if (parc == 2)
-	{
-                if (!si->su)
-                {       
-                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
-                        return;
-                }
-
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
-
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
-			return;
-
-		handle_nickchange(si->su);
-	}
-	else
-	{
-		int i;
-		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
-
-		for (i = 0; i < parc; i++)
-			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
-	}
-}
-
-static void m_quit(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
-
-	/* user_delete() takes care of removing channels and so forth */
-	user_delete(si->su, parv[0]);
-}
-
-static void m_mode(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
-	else
-		user_mode(user_find(parv[0]), parv[1]);
-}
-
-static void m_kick(sourceinfo_t *si, int parc, char *parv[])
-{
-	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[0]);
-
-	/* -> :rakaur KICK #shrike rintaun :test */
-	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
-
-	if (!u)
-	{
-		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s", parv[1]);
-		return;
-	}
-
-	if (!c)
-	{
-		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
-		return;
-	}
-
-	if (!chanuser_find(c, u))
-	{
-		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", u->nick, c->name);
-		return;
-	}
-
-	chanuser_delete(c, u);
-
-	/* if they kicked us, let's rejoin */
-	if (is_internal_client(u))
-	{
-		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", si->su->nick, parv[0]);
-		join(parv[0], u->nick);
-	}
-}
-
-static void m_kill(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
-}
-
-static void m_squit(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
-	server_delete(parv[0]);
-}
-
-static void m_server(sourceinfo_t *si, int parc, char *parv[])
-{
-	server_t *s;
-
-	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	s = handle_server(si, parv[0], NULL, atoi(parv[1]), parv[2]);
-
-	if (s != NULL && s->uplink != me.me)
-	{
-		/* elicit PONG for EOB detection; pinging uplink is
-		 * already done elsewhere -- jilles
-		 */
-		sts(":%s PING %s %s", me.name, me.name, s->name);
-	}
-}
-
-static void m_stats(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_stats(si->su, parv[0][0]);
-}
-
-static void m_admin(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_admin(si->su);
-}
-
-static void m_version(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_version(si->su);
-}
-
-static void m_info(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_info(si->su);
-}
-
-static void m_whois(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_whois(si->su, parv[1]);
-}
-
-static void m_trace(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
-}
-
-static void m_away(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
-}
-
-static void m_join(sourceinfo_t *si, int parc, char *parv[])
-{
-	chanuser_t *cu;
-	node_t *n, *tn;
-
-	/* JOIN 0 is really a part from all channels */
-	if (parv[0][0] == '0')
-	{
-		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
-		{
-			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, si->su);
-		}
-	}
-}
-
-static void m_pass(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (strcmp(curr_uplink->pass, parv[0]))
-	{
-		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
-		runflags |= RF_SHUTDOWN;
-	}
-}
-
-static void m_error(sourceinfo_t *si, int parc, char *parv[])
-{
-	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
-}
-
-static void m_capab(sourceinfo_t *si, int parc, char *parv[])
-{
-	services_init();
-}
-
-static void m_encap(sourceinfo_t *si, int parc, char *parv[])
-{
-	user_t *u;
-
-	if (!irccasecmp("CHGHOST", parv[1]))
-	{
-		u = user_find(parv[2]);
-
-		if (!u)
-			return;
-
-		strlcpy(u->vhost, parv[3], HOSTLEN);
-	}
-}
-
-static void m_motd(sourceinfo_t *si, int parc, char *parv[])
-{
-	handle_motd(si->su);
+	sts(":%s ENCAP * CHGHOST %s :%s", ME, CLIENT_NAME(target), host);
 }
 
 static void nick_group(hook_user_req_t *hdata)
@@ -721,31 +167,12 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
+
 	/* Symbol relocation voodoo. */
-	server_login = &plexus_server_login;
-	introduce_nick = &plexus_introduce_nick;
-	quit_sts = &plexus_quit_sts;
-	wallops_sts = &plexus_wallops_sts;
-	join_sts = &plexus_join_sts;
-	kick = &plexus_kick;
-	msg = &plexus_msg;
-	notice_user_sts = &plexus_notice_user_sts;
-	notice_global_sts = &plexus_notice_global_sts;
-	notice_channel_sts = &plexus_notice_channel_sts;
-	wallchops = &plexus_wallchops;
-	numeric_sts = &plexus_numeric_sts;
-	kill_id_sts = &plexus_kill_id_sts;
-	part_sts = &plexus_part_sts;
-	kline_sts = &plexus_kline_sts;
-	unkline_sts = &plexus_unkline_sts;
-	topic_sts = &plexus_topic_sts;
-	mode_sts = &plexus_mode_sts;
-	ping_sts = &plexus_ping_sts;
 	ircd_on_login = &plexus_on_login;
 	ircd_on_logout = &plexus_on_logout;
-	jupe = &plexus_jupe;
 	sethost_sts = &plexus_sethost_sts;
-	invite_sts = &plexus_invite_sts;
 
 	mode_list = plexus_mode_list;
 	ignore_mode_list = plexus_ignore_mode_list;
@@ -754,34 +181,6 @@ void _modinit(module_t * m)
 	user_mode_list = plexus_user_mode_list;
 
 	ircd = &PleXusIRCd;
-
-	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
-	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
-	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
-	pcommand_add("SJOIN", m_sjoin, 4, MSRC_SERVER);
-	pcommand_add("PART", m_part, 1, MSRC_USER);
-	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
-	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("STATS", m_stats, 2, MSRC_USER);
-	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
-	pcommand_add("VERSION", m_version, 1, MSRC_USER);
-	pcommand_add("INFO", m_info, 1, MSRC_USER);
-	pcommand_add("WHOIS", m_whois, 2, MSRC_USER);
-	pcommand_add("TRACE", m_trace, 1, MSRC_USER);
-	pcommand_add("AWAY", m_away, 0, MSRC_USER);
-	pcommand_add("JOIN", m_join, 1, MSRC_USER);
-	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
-	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
-	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
-	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
 	hook_add_event("nick_group");
 	hook_add_hook("nick_group", (void (*)(void *))nick_group);
