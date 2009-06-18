@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"hostserv/vhost", FALSE, _modinit, _moddeinit,
+	"hostserv/vhost", false, _modinit, _moddeinit,
 	"$Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

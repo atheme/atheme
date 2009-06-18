@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"botserv/help", FALSE, _modinit, _moddeinit,
+	"botserv/help", false, _modinit, _moddeinit,
 	"$Id: help.c 7895 2009-01-24 02:40:03Z celestin $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -49,7 +49,7 @@ void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 allows users to request a custom bot for their channel."), si->service->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, bs_cmdtree);

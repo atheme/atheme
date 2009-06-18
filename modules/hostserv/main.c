@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"hostserv/main", FALSE, _modinit, _moddeinit,
+	"hostserv/main", false, _modinit, _moddeinit,
 	"$Id: main.c 7895 2009-01-24 02:40:03Z celestin $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
