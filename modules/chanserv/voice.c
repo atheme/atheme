@@ -83,12 +83,6 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_VOICE))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
 	/* figure out who we're going to voice */
 	if (!nick)
 		tu = si->su;
@@ -99,6 +93,17 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 			return;
 		}
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_VOICE) && tu != si->su)
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+	else if (!chanacs_source_has_flag(mc, si, CA_AUTOVOICE))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
 	}
 
 	if (is_internal_client(tu))
