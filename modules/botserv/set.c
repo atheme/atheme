@@ -418,13 +418,13 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 
 	if(!irccasecmp(option, "ON")) 
 	{
-		bot->private = 1; 
+		bot->private = true;
 		botserv_save_database(NULL);
 		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick); 
 	}
 	else if(!irccasecmp(option, "OFF")) 
 	{
-		bot->private = 0; 
+		bot->private = false;
 		botserv_save_database(NULL);
 		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick); 
 	}

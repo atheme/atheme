@@ -677,7 +677,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	bot->user = sstrdup(parv[1]);
 	bot->host = sstrdup(parv[2]);
 	bot->real = sstrdup(buf);
-	bot->private = 0;
+	bot->private = false;
 	bot->registered = CURRTIME;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
 	service_set_chanmsg(bot->me, true); 

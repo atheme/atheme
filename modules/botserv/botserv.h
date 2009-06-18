@@ -12,7 +12,7 @@ typedef struct {
 	char *host;
 	char *real;
 	node_t bnode;
-	int private;
+	bool private;
 	time_t registered;
 } botserv_bot_t; 
 
