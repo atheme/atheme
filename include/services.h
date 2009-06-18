@@ -172,7 +172,10 @@ E int use_limitflags;
 E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
-E void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason);
+
+E void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason);
+E void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason);
+
 E void kill_user(user_t *source, user_t *victim, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void introduce_enforcer(const char *nick);
 E void join(char *chan, char *nick);

@@ -93,7 +93,7 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
-void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
+void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason)
 {
 	return_if_fail(source != NULL);
 	return_if_fail(chan != NULL);
@@ -124,6 +124,7 @@ void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reaso
 	}
 	kick(source, chan, target, reason);
 }
+void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason) = try_kick_real;
 
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill
