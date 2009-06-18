@@ -48,6 +48,7 @@ command_t *bs_set_commands[] = {
 };
 
 fn_botserv_bot_find *botserv_bot_find;
+fn_botserv_save_database *botserv_save_database;
 list_t *bs_bots;
 
 list_t *bs_cmdtree;
@@ -60,6 +61,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
+	MODULE_USE_SYMBOL(botserv_save_database, "botserv/main", "botserv_save_database");
 	
 	command_add(&bs_set, bs_cmdtree);
 	command_add_many(bs_set_commands, &bs_set_cmdtree);
@@ -85,51 +87,6 @@ void _moddeinit()
 	help_delentry(bs_helptree, "SET FANTASY");
 	help_delentry(bs_helptree, "SET NOBOT");
 	help_delentry(bs_helptree, "SET PRIVATE");
-}
-
-/* ******************************************************************** */ 
-
-static void botserv_save_database(void *unused)
-{
-	FILE *f;
-	node_t *n;
-	int errno1;
-
-	if (!(f = fopen(DATADIR "/botserv.db.new", "w")))
-	{
-		errno1 = errno;
-		slog(LG_ERROR, "botserv_save_database(): cannot create botserv.db.new: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
-		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
-		return;
-	}
-
-	/* write database version */
-	fprintf(f, "DBV 1\n");
-
-	/* iterate through and write all the metadata */
-	LIST_FOREACH(n, bs_bots->head)
-	{
-		botserv_bot_t *bot = (botserv_bot_t *) n->data;
-
-		fprintf(f, "BOT %s %s %s %d %ld %s\n", bot->nick, bot->user, bot->host, bot->private, (long)bot->registered, bot->real);
-	}
-
-	fprintf(f, "COUNT %d\n", bs_bots->count);
-
-	fclose(f);
-
-	/* use an atomic rename */
-	unlink(DATADIR "/botserv.db");
-
-	if ((rename(DATADIR "/botserv.db.new", DATADIR "/botserv.db")) < 0)
-	{
-		errno1 = errno;
-		slog(LG_ERROR, "botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
-		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
-		return;
-	}
 }
 
 /* ******************************************************************** */

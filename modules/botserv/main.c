@@ -35,6 +35,7 @@ static void botserv_load_database(void);
 
 /* visible for other modules; use the typedef to enforce type checking */
 fn_botserv_bot_find botserv_bot_find;
+fn_botserv_save_database botserv_save_database;
 
 service_t *botsvs;
 list_t bs_cmdtree;
@@ -354,7 +355,7 @@ static void botserv_config_ready(void *unused)
 /* ******************************************************************** */
 
 /* TODO: merge this into backend/flatfile. --nenolod */
-static void botserv_save_database(void *unused)
+void botserv_save_database(void *unused)
 {
 	FILE *f;
 	node_t *n;
