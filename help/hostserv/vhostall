@@ -1,0 +1,13 @@
+Help for VHOSTALL:
+
+VHOSTALL allows operators to set a virtual host (also
+known as a spoof or cloak) on all account nicks. This vhost
+will be set on the user immediately and each time
+they identify to their account. If no vhost is 
+specified, clear all existing vhosts on account.
+
+Syntax: VHOSTALL <nickname> [<vhost>]
+
+Examples:
+    /msg &nick& VHOSTALL spb may.explode.on.impact
+    /msg &nick& VHOSTALL nenolod

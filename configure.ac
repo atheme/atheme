@@ -525,6 +525,7 @@ AC_OUTPUT([po/Makefile.in
 	modules/crypto/Makefile
 	modules/gameserv/Makefile
 	modules/global/Makefile
+	modules/hostserv/Makefile
 	modules/memoserv/Makefile
 	modules/misc/Makefile
 	modules/nickserv/Makefile

@@ -1,0 +1,13 @@
+Help for VHOST:
+
+VHOST allows operators to set a virtual host (also
+known as a spoof or cloak) on a nick. This vhost
+will be set on the user immediately and each time
+they identify when using said nick. If no vhost is 
+specified, clear any existing vhost.
+
+Syntax: VHOST <nickname> [<vhost>]
+
+Examples:
+    /msg &nick& VHOST spb may.explode.on.impact
+    /msg &nick& VHOST nenolod

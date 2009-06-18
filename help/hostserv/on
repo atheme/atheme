@@ -1,0 +1,10 @@
+Help for ON:
+
+Activates the vhost currently assigned to the nick in use.
+When you use this command any user who performs a /whois
+on you will see the vhost instead of your real IP address.
+
+Syntax: ON
+
+Examples:
+    /msg &nick& ON

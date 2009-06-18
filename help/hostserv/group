@@ -1,0 +1,11 @@
+Help for GROUP:
+
+This command will set the CURRENT nick's vhost as the
+vhost for all the nicks in the group.  This command must be
+reissued for new additions to the group if you wish the newly
+added nick to share the same vhost.
+
+Syntax: GROUP
+
+Examples:
+    /msg &nick& GROUP

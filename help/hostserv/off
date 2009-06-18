@@ -1,0 +1,12 @@
+Help for OFF:
+
+Deactivates the vhost currently assigned to the nick in use.
+When you use this command, any user who performs a /whois
+on your nick will see your real IP address.
+
+For permanent removal of your vhost, please see #services. 
+
+Syntax: OFF
+
+Examples:
+    /msg &nick& OFF

@@ -37,6 +37,7 @@ memosvs_t memosvs;
 nicksvs_t nicksvs;
 saslsvs_t saslsvs;
 gamesvs_t gamesvs;
+hostsvs_t hostsvs;
 
 me_t me;
 struct cnt cnt;

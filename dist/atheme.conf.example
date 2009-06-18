@@ -426,6 +426,27 @@ loadmodule "modules/botserv/info";
 loadmodule "modules/botserv/bottalk";
 loadmodule "modules/botserv/set";
 
+/* HostServ modules.
+ *
+ * Here you can disable or enable certain features of HostServ, by
+ * defining which modules are loaded. You can even disable HostServ
+ * entirely.
+ *
+ * HostServ is a more complex, and optional virtual host management service.
+ * Users wishing only to set vhosts need not use it (they can use the builtin
+ * vhost management of NickServ instead).  Also, please note that using HostServ
+ * and /ns vhost together may cause database contingency problems at this time.
+ *
+ * Core components				modules/hostserv/main
+ * HELP command					modules/hostserv/help
+ * REQUEST commands                             modules/hostserv/request
+ * VHOST commands                               modules/hostserv/vhost
+ */
+loadmodule "modules/hostserv/main";
+loadmodule "modules/hostserv/help";
+loadmodule "modules/hostserv/request";
+loadmodule "modules/hostserv/vhost";
+
 /* Channel listing service.
  *
  * Allows users to list channels with more flexibility than the /list
@@ -954,7 +975,7 @@ gameserv {
  */
 botserv {
 	/* (*)nick
-	 * The nickname we want GameServ to have.
+	 * The nickname we want BotServ to have.
 	 */
 	nick = "BotServ";
 
@@ -972,6 +993,34 @@ botserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Bot Services";
+};
+
+/* HostServ configuration.
+ *
+ * The hostserv {} block contains settings specific to the HostServ modules.
+ *
+ * HostServ provides advanced virtual host management.
+ */
+botserv {
+	/* (*)nick
+	 * The nickname we want HostServ to have.
+	 */
+	nick = "HostServ";
+
+	/* (*)user
+	 * Sets the username used for this client.
+	 */
+	user = "HostServ";
+
+	/* (*)host
+	 * The hostname used for this client.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The GECOS (real name) of the client.
+	 */
+	real = "Host Management Services";
 };
 
 /* ALIS configuration.
