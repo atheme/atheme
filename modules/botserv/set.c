@@ -18,15 +18,15 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://dev.rizon.net>"
 );
 
-static void bs_help_set(sourceinfo_t *si); 
+static void bs_help_set(sourceinfo_t *si);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[]); 
-static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]); 
+static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[]);
+static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set };
 
@@ -35,7 +35,7 @@ command_t bs_set_dontkickvoices = { "DONTKICKVOICES", N_("To protect voices agai
 command_t bs_set_greet          = { "GREET",          N_("Enable greet messages."),                                  AC_NONE, 2, bs_cmd_set_greet };
 command_t bs_set_fantasy        = { "FANTASY",        N_("Enable fantaisist commands."),                             AC_NONE, 2, bs_cmd_set_fantasy };
 command_t bs_set_nobot          = { "NOBOT",          N_("Prevent a bot from being assigned to a channel."),         PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot };
-command_t bs_set_private        = { "PRIVATE",        N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private }; 
+command_t bs_set_private        = { "PRIVATE",        N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private };
 
 command_t *bs_set_commands[] = {
 	&bs_set_dontkickops,
@@ -53,7 +53,7 @@ list_t *bs_bots;
 
 list_t *bs_cmdtree;
 list_t *bs_helptree;
-list_t bs_set_cmdtree; 
+list_t bs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
@@ -62,10 +62,10 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 	MODULE_USE_SYMBOL(botserv_save_database, "botserv/main", "botserv_save_database");
-	
+
 	command_add(&bs_set, bs_cmdtree);
 	command_add_many(bs_set_commands, &bs_set_cmdtree);
- 
+
 
 	help_addentry(bs_helptree, "SET", NULL, bs_help_set);
 	help_addentry(bs_helptree, "SET DONTKICKOPS", "help/botserv/set_dontkickops", NULL);
@@ -99,7 +99,7 @@ static void bs_help_set(sourceinfo_t *si)
 	command_success_nodata(si, " ");
 	command_help(si, &bs_set_cmdtree);
 	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp); 
+	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
 }
 
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
@@ -125,7 +125,7 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	parv[1] = dest;
-	command_exec(si->service, si, c, parc - 1, parv + 1); 
+	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
 static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[])
@@ -133,7 +133,7 @@ static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *option = parv[1];
 	mychan_t *mc;
- 
+
 	if (parc < 2 || !channel || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET DONTKICKOPS");
@@ -160,15 +160,15 @@ static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
-		metadata_add(mc, "private:botserv:bot-dontkick-ops", "ON"); 
-		command_success_nodata(si, _("Bot \2won't kick ops\2 on channel %s."), mc->name); 
+		metadata_add(mc, "private:botserv:bot-dontkick-ops", "ON");
+		command_success_nodata(si, _("Bot \2won't kick ops\2 on channel %s."), mc->name);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
-		metadata_delete(mc, "private:botserv:bot-dontkick-ops"); 
-		command_success_nodata(si, _("Bot \2will kick ops\2 on channel %s."), mc->name); 
+		metadata_delete(mc, "private:botserv:bot-dontkick-ops");
+		command_success_nodata(si, _("Bot \2will kick ops\2 on channel %s."), mc->name);
 	}
 	else
 	{
@@ -182,7 +182,7 @@ static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *option = parv[1];
 	mychan_t *mc;
- 
+
 	if (parc < 2 || !channel || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET DONTKICKVOICES");
@@ -209,15 +209,15 @@ static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
-		metadata_add(mc, "private:botserv:bot-dontkick-voices", "ON"); 
-		command_success_nodata(si, _("Bot \2won't kick voices\2 on channel %s."), mc->name); 
+		metadata_add(mc, "private:botserv:bot-dontkick-voices", "ON");
+		command_success_nodata(si, _("Bot \2won't kick voices\2 on channel %s."), mc->name);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
-		metadata_delete(mc, "private:botserv:bot-dontkick-voices"); 
-		command_success_nodata(si, _("Bot \2will kick voices\2 on channel %s."), mc->name); 
+		metadata_delete(mc, "private:botserv:bot-dontkick-voices");
+		command_success_nodata(si, _("Bot \2will kick voices\2 on channel %s."), mc->name);
 	}
 	else
 	{
@@ -231,7 +231,7 @@ static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *option = parv[1];
 	mychan_t *mc;
- 
+
 	if (parc < 2 || !channel || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET GREET");
@@ -258,15 +258,15 @@ static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
-		metadata_add(mc, "private:botserv:bot-handle-greet", "ON"); 
-		command_success_nodata(si, _("Greet mode is now \2ON\2 on channel %s."), mc->name); 
+		metadata_add(mc, "private:botserv:bot-handle-greet", "ON");
+		command_success_nodata(si, _("Greet mode is now \2ON\2 on channel %s."), mc->name);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
-		metadata_delete(mc, "private:botserv:bot-handle-greet"); 
-		command_success_nodata(si, _("Greet mode is now \2OFF\2 on channel %s."), mc->name); 
+		metadata_delete(mc, "private:botserv:bot-handle-greet");
+		command_success_nodata(si, _("Greet mode is now \2OFF\2 on channel %s."), mc->name);
 	}
 	else
 	{
@@ -280,7 +280,7 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *option = parv[1];
 	mychan_t *mc;
- 
+
 	if (parc < 2 || !channel || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET FANTASY");
@@ -307,15 +307,15 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
-		metadata_add(mc, "private:botserv:bot-handle-fantasy", "ON"); 
-		command_success_nodata(si, _("Fantasy mode is now \2ON\2 on channel %s."), mc->name); 
+		metadata_add(mc, "private:botserv:bot-handle-fantasy", "ON");
+		command_success_nodata(si, _("Fantasy mode is now \2ON\2 on channel %s."), mc->name);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
-		metadata_delete(mc, "private:botserv:bot-handle-fantasy"); 
-		command_success_nodata(si, _("Fantasy mode is now \2OFF\2 on channel %s."), mc->name); 
+		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+		command_success_nodata(si, _("Fantasy mode is now \2OFF\2 on channel %s."), mc->name);
 	}
 	else
 	{
@@ -330,7 +330,7 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 	char *option = parv[1];
 	mychan_t *mc;
 	metadata_t *md;
- 
+
 	if (parc < 2 || !channel || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NOBOT");
@@ -357,9 +357,9 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
-		metadata_add(mc, "private:botserv:no-bot", "ON"); 
+		metadata_add(mc, "private:botserv:no-bot", "ON");
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		{
 			part(mc->name, md->value);
@@ -368,14 +368,14 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 			if ((mc->flags & MC_GUARD) && (mc->chan != NULL && mc->chan->members.count != 0))
 			{
 				join(mc->name, chansvs.nick);
-			} 
+			}
 		}
-		command_success_nodata(si, _("No Bot mode is now \2ON\2 on channel %s."), mc->name); 
+		command_success_nodata(si, _("No Bot mode is now \2ON\2 on channel %s."), mc->name);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
-		metadata_delete(mc, "private:botserv:no-bot"); 
-		command_success_nodata(si, _("No Bot mode is now \2OFF\2 on channel %s."), mc->name); 
+		metadata_delete(mc, "private:botserv:no-bot");
+		command_success_nodata(si, _("No Bot mode is now \2OFF\2 on channel %s."), mc->name);
 	}
 	else
 	{
@@ -388,8 +388,8 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *botserv = parv[0];
 	char *option = parv[1];
-	botserv_bot_t *bot; 
- 
+	botserv_bot_t *bot;
+
 	if (parc < 2 || !botserv || !option)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET PRIVATE");
@@ -416,17 +416,17 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(!irccasecmp(option, "ON")) 
+	if (!irccasecmp(option, "ON"))
 	{
 		bot->private = true;
 		botserv_save_database(NULL);
-		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick); 
+		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick);
 	}
-	else if(!irccasecmp(option, "OFF")) 
+	else if(!irccasecmp(option, "OFF"))
 	{
 		bot->private = false;
 		botserv_save_database(NULL);
-		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick); 
+		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick);
 	}
 	else
 	{
@@ -439,6 +439,6 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
  * vim:ts=8
  * vim:sw=8
  * vim:noexpandtab
- */ 
- 
- 
+ */
+
+

@@ -56,7 +56,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(channel);
 	metadata_t *bs;
 	user_t *bot;
- 
+
 	if (!channel)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SAY");
@@ -109,7 +109,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(channel);
 	metadata_t *bs;
 	user_t *bot;
- 
+
 	if (!channel)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SAY");
@@ -158,6 +158,6 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
  * vim:ts=8
  * vim:sw=8
  * vim:noexpandtab
- */ 
- 
- 
+ */
+
+

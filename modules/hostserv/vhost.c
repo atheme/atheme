@@ -118,22 +118,22 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
-	
-	LIST_FOREACH(n, mu->nicks.head) 
+
+	LIST_FOREACH(n, mu->nicks.head)
 	{
-		if(!irccasecmp(((mynick_t *)(n->data))->nick, target))
+		if (!irccasecmp(((mynick_t *)(n->data))->nick, target))
 		{
 			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 			found++;
 		}
 	}
 
-	if(!found)
+	if (!found)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a valid target."), target);
 		return;
 	}
-	
+
 	/* deletion action */
 	if (!host)
 	{
@@ -182,7 +182,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 			target, host);
 	u = user_find_named(target);
 	if (u != NULL)
-		do_sethost(u, host); 
+		do_sethost(u, host);
 	return;
 }
 
@@ -194,7 +194,7 @@ static void hs_sethost_all(myuser_t *mu, char *host)
 	LIST_FOREACH(n, mu->nicks.head)
 	{
 		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-		if(!host)
+		if (!host)
 		{
 			metadata_delete(mu, buf);
 		}
@@ -226,7 +226,7 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
-	
+
 	/* deletion action */
 	if (!host)
 	{
@@ -271,7 +271,7 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 	snoop("VHOSTALL:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOSTALL ASSIGN %s %s",
 			target, host);
-	do_sethost_all(mu, host); 
+	do_sethost_all(mu, host);
 	return;
 }
 
@@ -290,7 +290,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
-		LIST_FOREACH(n, mu->nicks.head) 
+		LIST_FOREACH(n, mu->nicks.head)
 		{
 			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 			md = metadata_find(mu, buf);
@@ -319,7 +319,7 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char buf[BUFSIZE];
 	int found = 0;
-	
+
 	if (!si->smu)
 		command_success_nodata(si, _("You are not logged in."));
 	else
@@ -328,17 +328,17 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 			mn = mynick_find(si->su->nick);
 		if (mn != NULL)
 		{
-			if(mn->owner == si->smu)
+			if (mn->owner == si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head) 
+				LIST_FOREACH(n, si->smu->nicks.head)
 				{
-					if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 					{
 						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 						found++;
 					}
 				}
-				if((!found) || (!(md = metadata_find(si->smu, buf))))
+				if ((!found) || (!(md = metadata_find(si->smu, buf))))
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
@@ -348,17 +348,17 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else
 			{
-				if(myuser_access_verify(si->su, mn->owner))
+				if (myuser_access_verify(si->su, mn->owner))
 				{
-					LIST_FOREACH(n, mn->owner->nicks.head) 
+					LIST_FOREACH(n, mn->owner->nicks.head)
 					{
-						if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 						{
 							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 							found++;
 						}
 					}
-					if((!found) || (!(md = metadata_find(mn->owner, buf))))
+					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
 					{
 						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 						return;
@@ -367,11 +367,11 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
 				}
 				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name); 
+					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 			}
 		}
 		else
-			command_success_nodata(si, _("You are not logged in.")); 
+			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
@@ -382,7 +382,7 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char buf[BUFSIZE];
 	int found = 0;
-	
+
 	if (!si->smu)
 		command_success_nodata(si, _("You are not logged in."));
 	else
@@ -391,17 +391,17 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 			mn = mynick_find(si->su->nick);
 		if (mn != NULL)
 		{
-			if(mn->owner == si->smu)
+			if (mn->owner == si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head) 
+				LIST_FOREACH(n, si->smu->nicks.head)
 				{
-					if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 					{
 						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 						found++;
 					}
 				}
-				if((!found) || (!(md = metadata_find(si->smu, buf))))
+				if ((!found) || (!(md = metadata_find(si->smu, buf))))
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
@@ -411,17 +411,17 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else
 			{
-				if(myuser_access_verify(si->su, mn->owner))
+				if (myuser_access_verify(si->su, mn->owner))
 				{
-					LIST_FOREACH(n, mn->owner->nicks.head) 
+					LIST_FOREACH(n, mn->owner->nicks.head)
 					{
-						if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 						{
 							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 							found++;
 						}
 					}
-					if((!found) || (!(md = metadata_find(mn->owner, buf))))
+					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
 					{
 						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 						return;
@@ -430,11 +430,11 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
 				}
 				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name); 
+					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 			}
 		}
 		else
-			command_success_nodata(si, _("You are not logged in.")); 
+			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
@@ -445,7 +445,7 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char buf[BUFSIZE];
 	int found = 0;
-	
+
 	if (!si->smu)
 		command_success_nodata(si, _("You are not logged in."));
 	else
@@ -454,17 +454,17 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 			mn = mynick_find(si->su->nick);
 		if (mn != NULL)
 		{
-			if(mn->owner == si->smu)
+			if (mn->owner == si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head) 
+				LIST_FOREACH(n, si->smu->nicks.head)
 				{
-					if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 					{
 						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 						found++;
 					}
 				}
-				if((!found) || (!(md = metadata_find(si->smu, buf))))
+				if ((!found) || (!(md = metadata_find(si->smu, buf))))
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
@@ -476,17 +476,17 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else
 			{
-				if(myuser_access_verify(si->su, mn->owner))
+				if (myuser_access_verify(si->su, mn->owner))
 				{
-					LIST_FOREACH(n, mn->owner->nicks.head) 
+					LIST_FOREACH(n, mn->owner->nicks.head)
 					{
-						if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 						{
 							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 							found++;
 						}
 					}
-					if((!found) || (!(md = metadata_find(mn->owner, buf))))
+					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
 					{
 						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 						return;
@@ -497,11 +497,11 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), mn->owner->name, buf);
 				}
 				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name); 
+					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 			}
 		}
 		else
-			command_success_nodata(si, _("You are not logged in.")); 
+			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
@@ -517,15 +517,15 @@ static void vhost_on_identify(void *vptr)
 	if (mu != myuser_find_ext(u->nick))
 		return;
 
-	LIST_FOREACH(n, mu->nicks.head) 
+	LIST_FOREACH(n, mu->nicks.head)
 	{
-		if(!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
+		if (!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
 		{
 			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 			found++;
 		}
 	}
-	if(!found)
+	if (!found)
 		return;
 	/* NO CLOAK?!*$*%*&&$(!& */
 	if (!(md = metadata_find(mu, buf)))

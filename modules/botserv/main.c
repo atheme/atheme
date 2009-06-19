@@ -29,7 +29,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]); 
+static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
 
 static void botserv_load_database(void);
 
@@ -64,7 +64,7 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	modestack_mode_simple_real(bot ? bot->nick : chansvs.nick, channel, dir, flags);	
+	modestack_mode_simple_real(bot ? bot->nick : chansvs.nick, channel, dir, flags);
 }
 
 static void
@@ -106,7 +106,7 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 	modestack_mode_param_real(bot ? bot->nick : chansvs.nick, channel, dir, type, value);
 }
 
-static void 
+static void
 bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
 {
 	mychan_t *mc;
@@ -129,29 +129,29 @@ bs_join_registered(bool all)
 {
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
-	chanuser_t *cu; 
+	chanuser_t *cu;
 	metadata_t *md;
 	int cs = 0;
-	
-	if((chansvs.me != NULL) && (chansvs.me->me != NULL))
+
+	if ((chansvs.me != NULL) && (chansvs.me->me != NULL))
 		cs = 1;
-	
+
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 			continue;
-		
+
 		if (all)
 		{
 			join(mc->name, md->value);
-			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me))) 
+			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me)))
 				part(mc->name, chansvs.nick);
 			continue;
 		}
 		else if (mc->chan != NULL && mc->chan->members.count != 0)
 		{
 			join(mc->name, md->value);
-			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me))) 
+			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me)))
 				part(mc->name, chansvs.nick);
 			continue;
 		}
@@ -483,7 +483,7 @@ static void botserv_load_database(void)
 			bot->private = atoi(prv);
 			bot->registered = atoi(reg);
 			bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
-			service_set_chanmsg(bot->me, true); 
+			service_set_chanmsg(bot->me, true);
 
 			node_add(bot, &bot->bnode, &bs_bots);
 		}
@@ -498,7 +498,7 @@ botserv_bot_t* botserv_bot_find(char *name)
 {
 	node_t *n;
 
-	if(name == NULL)
+	if (name == NULL)
 		return NULL;
 
 	LIST_FOREACH(n, bs_bots.head)
@@ -523,10 +523,10 @@ static void bs_cmd_bot(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT DEL <nick>"));
-		return; 
+		return;
 	}
-	
-	if(!irccasecmp(parv[0], "ADD"))
+
+	if (!irccasecmp(parv[0], "ADD"))
 	{
 		bs_cmd_add(si, parc - 1, parv + 1);
 	}
@@ -561,9 +561,9 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-		return; 
+		return;
 	}
-	
+
 	bot = botserv_bot_find(parv[0]);
 	if (bot == NULL)
 	{
@@ -584,7 +584,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_alreadyexists, _("\2%s\2 is a registered nick."), parv[1]);
 		return;
 	}
-	
+
 	if (irccasecmp(bot->nick, parv[1]))
 	{
 		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
@@ -600,7 +600,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 
 		}
 	}
-	
+
 	service_delete(bot->me);
 	switch(parc)
 	{
@@ -620,12 +620,12 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		default:
 			command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT CHANGE");
 			command_fail(si, fault_needmoreparams, _("Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"));
-			return; 
+			return;
 	}
 	bot->registered = CURRTIME;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
-	service_set_chanmsg(bot->me, true); 
-	
+	service_set_chanmsg(bot->me, true);
+
 	if (!irccasecmp(parv[0], parv[1]))
 	{
 		/* join botserv back to guarded channels that have it assigned */
@@ -647,12 +647,12 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	botserv_bot_t *bot = botserv_bot_find(parv[0]);
 	char buf[BUFSIZE];
-	
-	if(parc < 4)
+
+	if (parc < 4)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT ADD");
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT ADD <nick> <user> <host> <real>"));
-		return; 
+		return;
 	}
 
 	if (bot != NULL)
@@ -668,7 +668,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if(parc > 4 && parv[4] != NULL)
+	if (parc > 4 && parv[4] != NULL)
 		snprintf(buf, sizeof(buf), "%s %s", parv[3], parv[4]);
 	else
 		snprintf(buf, sizeof(buf), "%s", parv[3]);
@@ -680,7 +680,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	bot->private = false;
 	bot->registered = CURRTIME;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
-	service_set_chanmsg(bot->me, true); 
+	service_set_chanmsg(bot->me, true);
 	node_add(bot, &bot->bnode, &bs_bots);
 
 	botserv_save_database(NULL);
@@ -697,11 +697,11 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	metadata_t *md;
 
-	if(parc < 1)
+	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "BOT DEL");
 		command_fail(si, fault_needmoreparams, _("Syntax: BOT DEL <nick>"));
-		return; 
+		return;
 	}
 
 	if (bot == NULL)
@@ -752,12 +752,12 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
-		if(!bot->private)
+		if (!bot->private)
 			command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 	}
 
 	command_success_nodata(si, "\2%d\2 bots available.", i);
-	if (si->su != NULL && is_ircop(si->su)) 
+	if (si->su != NULL && is_ircop(si->su))
 	{
 		i = 0;
 		command_success_nodata(si, "Listing of oper only bots available on \2%s\2:", me.netname);
@@ -765,7 +765,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 		{
 			botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
-			if(bot->private)
+			if (bot->private)
 				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 		}
 		command_success_nodata(si, "\2%d\2 oper only bots available.", i);
@@ -845,7 +845,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, "You are not authorised to unassign a bot on \2%s\2.", mc->name);
 		return;
 	}
-	
+
 	if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 	{
 		command_fail(si, fault_nosuch_key, _("\2%s\2 does not have a bot assigned."), mc->name);
@@ -866,20 +866,20 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree"); 
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", botserv_config_ready);
-	
+
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
-	command_add(&bs_bot, &bs_cmdtree); 
-	command_add(&bs_assign, &bs_cmdtree); 
-	command_add(&bs_unassign, &bs_cmdtree); 
-	command_add(&bs_botlist, &bs_cmdtree); 
+	command_add(&bs_bot, &bs_cmdtree);
+	command_add(&bs_assign, &bs_cmdtree);
+	command_add(&bs_unassign, &bs_cmdtree);
+	command_add(&bs_botlist, &bs_cmdtree);
 	help_addentry(&bs_helptree, "BOT", "help/botserv/bot", NULL);
 	help_addentry(&bs_helptree, "ASSIGN", "help/botserv/assign", NULL);
 	help_addentry(&bs_helptree, "UNASSIGN", "help/botserv/unassign", NULL);
-	help_addentry(&bs_helptree, "BOTLIST", "help/botserv/botlist", NULL); 
+	help_addentry(&bs_helptree, "BOTLIST", "help/botserv/botlist", NULL);
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
 	hook_add_event("channel_register");
@@ -919,14 +919,14 @@ void _moddeinit(void)
 		free(bot->host);
 		free(bot);
 	}
-	command_delete(&bs_bot, &bs_cmdtree); 
-	command_delete(&bs_assign, &bs_cmdtree); 
-	command_delete(&bs_unassign, &bs_cmdtree); 
-	command_delete(&bs_botlist, &bs_cmdtree); 
+	command_delete(&bs_bot, &bs_cmdtree);
+	command_delete(&bs_assign, &bs_cmdtree);
+	command_delete(&bs_unassign, &bs_cmdtree);
+	command_delete(&bs_botlist, &bs_cmdtree);
 	help_delentry(&bs_helptree, "BOT");
 	help_delentry(&bs_helptree, "ASSIGN");
 	help_delentry(&bs_helptree, "UNASSIGN");
-	help_delentry(&bs_helptree, "BOTLIST"); 
+	help_delentry(&bs_helptree, "BOTLIST");
 	hook_del_hook("channel_join", (void (*)(void *)) bs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) bs_part);
 	hook_del_hook("channel_register", (void (*)(void *)) bs_register);
@@ -997,7 +997,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
 			{
-				if(bot)
+				if (bot)
 					join(chan->name, bot->nick);
 				else
 					join(chan->name, chansvs.nick);
@@ -1007,7 +1007,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (!(chan->modes & CMODE_INVITE))
 				check_modes(mc, true);
-			if(bot)
+			if (bot)
 				remove_banlike(bot->me->me, chan, ircd->invex_mchar, u);
 			else
 				remove_banlike(chansvs.me->me, chan, ircd->invex_mchar, u);
@@ -1015,7 +1015,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		}
 		else
 		{
-			if(bot)
+			if (bot)
 			{
 				ban(bot->me->me, chan, u);
 				remove_ban_exceptions(bot->me->me, chan, u);
@@ -1026,7 +1026,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 				remove_ban_exceptions(chansvs.me->me, chan, u);
 			}
 		}
-		if(bot)
+		if (bot)
 		{
 			try_kick(bot->me->me, chan, u, "You are not authorized to be on this channel");
 		}
@@ -1046,7 +1046,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
 			{
-				if(bot)
+				if (bot)
 					join(chan->name, bot->nick);
 				else
 					join(chan->name, chansvs.nick);
@@ -1063,7 +1063,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 				chanban_add(chan, ca2->host, 'b');
 				snprintf(str, sizeof str, "+b %s", ca2->host);
 				/* ban immediately */
-				if(bot)
+				if (bot)
 					mode_sts(bot->nick, chan, str);
 				else
 					mode_sts(chansvs.nick, chan, str);
@@ -1073,12 +1073,12 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		{
 			/* XXX this could be done more efficiently */
 			ca2 = chanacs_find(mc, u->myuser, CA_AKICK);
-			if(bot)
+			if (bot)
 				ban(bot->me->me, chan, u);
 			else
 				ban(chansvs.me->me, chan, u);
 		}
-		if(bot)
+		if (bot)
 			remove_ban_exceptions(bot->me->me, chan, u);
 		else
 			remove_ban_exceptions(chansvs.me->me, chan, u);
@@ -1102,7 +1102,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 				p[1] = '\0';
 			}
 		}
-		if(bot)
+		if (bot)
 			try_kick(bot->me->me, chan, u, akickreason);
 		else
 			try_kick(chansvs.me->me, chan, u, akickreason);
@@ -1128,7 +1128,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
 			{
-				if(bot)
+				if (bot)
 					join(chan->name, bot->nick);
 				else
 					join(chan->name, chansvs.nick);
@@ -1137,7 +1137,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		if (!(chan->modes & CMODE_INVITE))
 		check_modes(mc, true);
 		modestack_flush_channel(chan);
-		if(bot)
+		if (bot)
 			try_kick(bot->me->me, chan, u, "Invite only channel");
 		else
 			try_kick(chansvs.me->me, chan, u, "Invite only channel");
@@ -1160,7 +1160,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
 			{
-				if(bot)
+				if (bot)
 					modestack_mode_param(bot->nick, chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 				else
 					modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
@@ -1169,7 +1169,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		}
 		else if (secure && (cu->modes & ircd->owner_mode))
 		{
-			if(bot)
+			if (bot)
 				modestack_mode_param(bot->nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
@@ -1184,7 +1184,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode))
 			{
-				if(bot)
+				if (bot)
 					modestack_mode_param(bot->nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 				else
 					modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
@@ -1193,7 +1193,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		}
 		else if (secure && (cu->modes & ircd->protect_mode))
 		{
-			if(bot)
+			if (bot)
 				modestack_mode_param(bot->nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
@@ -1205,7 +1205,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (!(noop || cu->modes & CSTATUS_OP))
 		{
-			if(bot)
+			if (bot)
 				modestack_mode_param(bot->nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
@@ -1214,7 +1214,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	}
 	else if (secure && (cu->modes & CSTATUS_OP) && !(flags & CA_OP))
 	{
-		if(bot)
+		if (bot)
 			modestack_mode_param(bot->nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
 		else
 			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
@@ -1227,7 +1227,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
 			{
-				if(bot)
+				if (bot)
 					modestack_mode_param(bot->nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
 				else
 					modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
@@ -1236,7 +1236,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		}
 		else if (secure && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
 		{
-			if(bot)
+			if (bot)
 				modestack_mode_param(bot->nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
@@ -1248,7 +1248,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (!(noop || cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
 		{
-			if(bot)
+			if (bot)
 				modestack_mode_param(bot->nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
@@ -1258,7 +1258,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 
 	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "private:entrymsg")))
 	{
-		if(bot)
+		if (bot)
 			notice(bot->nick, cu->user->nick, "[%s] %s", mc->name, md->value);
 		else
 			notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
@@ -1333,7 +1333,7 @@ static void bs_register(hook_channel_req_t *hdata)
 	{
 		if (mc->flags & MC_GUARD)
 		{
-			if(bot)
+			if (bot)
 				join(mc->name, bot->nick);
 			else
 				join(mc->name, chansvs.nick);

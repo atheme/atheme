@@ -47,7 +47,7 @@ void _moddeinit()
 	help_delentry(bs_helptree, "INFO");
 }
 
-/* ******************************************************************** */ 
+/* ******************************************************************** */
 
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -58,9 +58,9 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	int comma = 0, i;
 	char buf[BUFSIZE], strfbuf[32], *end;
 	time_t registered;
-	struct tm tm; 
+	struct tm tm;
 	node_t *n;
-	chanuser_t *cu; 
+	chanuser_t *cu;
 
 	if (parc < 1 || parv[0] == NULL)
 	{
@@ -69,11 +69,11 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: INFO <botnick>"));
 		return;
 	}
-	
+
 	if (parv[0][0] == '#')
 	{
 		mc = mychan_find(dest);
-	} 
+	}
 	else
 	{
 		bot = botserv_bot_find(dest);
@@ -81,10 +81,10 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (bot != NULL)
 	{
-		command_success_nodata(si, _("Information for bot \2%s\2:"), bot->nick); 
+		command_success_nodata(si, _("Information for bot \2%s\2:"), bot->nick);
 		command_success_nodata(si, _("     Mask : %s@%s"), bot->user, bot->host);
 		command_success_nodata(si, _("Real name : %s"), bot->real);
-		registered = bot->registered; 
+		registered = bot->registered;
 		tm = *localtime(&registered);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 		command_success_nodata(si, _("  Created : %s (%s ago)"), strfbuf, time_ago(registered));
@@ -93,14 +93,14 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_success_nodata(si, _("  Options : None"));
 		command_success_nodata(si, _("  Used on : %d channel(s)"), LIST_LENGTH(&bot->me->me->channels));
-		if(has_priv(si, PRIV_CHAN_AUSPEX))
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			i = 0;
 			LIST_FOREACH(n, bot->me->me->channels.head)
 			{
 				cu = (chanuser_t *)n->data;
 				command_success_nodata(si, _("%d: %s"), ++i, cu->chan->name);
-			} 
+			}
 		}
 	}
 	else if (mc != NULL)
@@ -111,71 +111,71 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		command_success_nodata(si, _("Information for channel \2%s\2:"), mc->name); 
+		command_success_nodata(si, _("Information for channel \2%s\2:"), mc->name);
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-			command_success_nodata(si, _("         Bot nick : %s"), md->value); 
+			command_success_nodata(si, _("         Bot nick : %s"), md->value);
 		else
-			command_success_nodata(si, _("         Bot nick : not assigned yet")); 
+			command_success_nodata(si, _("         Bot nick : not assigned yet"));
 		if ((md = metadata_find(mc, "private:botserv:kick-badwords")) != NULL)
-			command_success_nodata(si, _(" Bad words kicker : enabled")); 
+			command_success_nodata(si, _(" Bad words kicker : enabled"));
 		else
-			command_success_nodata(si, _(" Bad words kicker : disabled")); 
+			command_success_nodata(si, _(" Bad words kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-bolds")) != NULL)
-			command_success_nodata(si, _("     Bolds kicker : enabled")); 
+			command_success_nodata(si, _("     Bolds kicker : enabled"));
 		else
-			command_success_nodata(si, _("     Bolds kicker : disabled")); 
+			command_success_nodata(si, _("     Bolds kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-caps")) != NULL)
-			command_success_nodata(si, _("      Caps kicker : enabled")); 
+			command_success_nodata(si, _("      Caps kicker : enabled"));
 		else
-			command_success_nodata(si, _("      Caps kicker : disabled")); 
+			command_success_nodata(si, _("      Caps kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-colors")) != NULL)
-			command_success_nodata(si, _("    Colors kicker : enabled")); 
+			command_success_nodata(si, _("    Colors kicker : enabled"));
 		else
-			command_success_nodata(si, _("    Colors kicker : disabled")); 
+			command_success_nodata(si, _("    Colors kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-flood")) != NULL)
-			command_success_nodata(si, _("     Flood kicker : enabled")); 
+			command_success_nodata(si, _("     Flood kicker : enabled"));
 		else
-			command_success_nodata(si, _("     Flood kicker : disabled")); 
+			command_success_nodata(si, _("     Flood kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-repeat")) != NULL)
-			command_success_nodata(si, _("    Repeat kicker : enabled")); 
+			command_success_nodata(si, _("    Repeat kicker : enabled"));
 		else
-			command_success_nodata(si, _("    Repeat kicker : disabled")); 
+			command_success_nodata(si, _("    Repeat kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-reverses")) != NULL)
-			command_success_nodata(si, _("  Reverses kicker : enabled")); 
+			command_success_nodata(si, _("  Reverses kicker : enabled"));
 		else
-			command_success_nodata(si, _("  Reverses kicker : disabled")); 
+			command_success_nodata(si, _("  Reverses kicker : disabled"));
 		if ((md = metadata_find(mc, "private:botserv:kick-underlines")) != NULL)
-			command_success_nodata(si, _("Underlines kicker : enabled")); 
+			command_success_nodata(si, _("Underlines kicker : enabled"));
 		else
-			command_success_nodata(si, _("Underlines kicker : disabled")); 
+			command_success_nodata(si, _("Underlines kicker : disabled"));
 		end = buf;
 		*end = 0;
 		if ((md = metadata_find(mc, "private:botserv:bot-dontkick-ops")) != NULL)
 		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s", "Dont kick ops"); 
+			end += snprintf(end, sizeof(buf) - (end - buf), "%s", "Dont kick ops");
 			comma = 1;
 		}
 		if ((md = metadata_find(mc, "private:botserv:bot-dontkick-voices")) != NULL)
 		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Dont kick voices"); 
+			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Dont kick voices");
 			comma = 1;
 		}
 		if ((md = metadata_find(mc, "private:botserv:bot-handle-fantasy")) != NULL)
 		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Fantasy"); 
+			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Fantasy");
 			comma = 1;
 		}
 		if ((md = metadata_find(mc, "private:botserv:bot-handle-greet")) != NULL)
 		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Greet"); 
+			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Greet");
 			comma = 1;
 		}
 		if ((md = metadata_find(mc, "private:botserv:no-bot")) != NULL)
 		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", (comma) ? ", ":"", "No bot"); 
+			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", (comma) ? ", ":"", "No bot");
 			comma = 1;
 		}
-		command_success_nodata(si, _("          Options : %s"), (*buf) ? buf : "None"); 
+		command_success_nodata(si, _("          Options : %s"), (*buf) ? buf : "None");
 	}
 	else
 	{
@@ -189,6 +189,6 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
  * vim:ts=8
  * vim:sw=8
  * vim:noexpandtab
- */ 
- 
- 
+ */
+
+

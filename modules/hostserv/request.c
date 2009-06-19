@@ -67,8 +67,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_drop", account_drop_request); 
-	hook_del_hook("nick_ungroup", nick_drop_request); 
+	hook_del_hook("user_drop", account_drop_request);
+	hook_del_hook("nick_ungroup", nick_drop_request);
 	command_delete(&hs_request, hs_cmdtree);
 	command_delete(&hs_waiting, hs_cmdtree);
 	command_delete(&hs_reject, hs_cmdtree);
@@ -106,7 +106,7 @@ static void write_hsreqdb(void)
 		return;
 	}
 }
- 
+
 static void load_hsreqdb(void)
 {
 	FILE *f;
@@ -144,7 +144,7 @@ static void load_hsreqdb(void)
 			l->creator = sstrdup(creator);
 
 			n = node_create();
-			node_add(l, n, &hs_reqlist); 
+			node_add(l, n, &hs_reqlist);
 		}
 	}
 
@@ -163,9 +163,9 @@ static void nick_drop_request(void *vptr)
 	if (u != NULL)
 	{
 		mu = u->myuser;
-		LIST_FOREACH(n, mu->nicks.head) 
+		LIST_FOREACH(n, mu->nicks.head)
 		{
-			if(!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
+			if (!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
 			{
 				LIST_FOREACH(m, hs_reqlist.head)
 				{
@@ -189,7 +189,7 @@ static void nick_drop_request(void *vptr)
 			}
 		}
 	}
-} 
+}
 
 static void account_drop_request(void *vptr)
 {
@@ -217,7 +217,7 @@ static void account_drop_request(void *vptr)
 		}
 	}
 }
- 
+
 /* REQUEST <host> */
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -242,22 +242,22 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), si->su->nick);
 		return;
 	}
-	
-	LIST_FOREACH(n, mu->nicks.head) 
+
+	LIST_FOREACH(n, mu->nicks.head)
 	{
-		if(!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
+		if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
 		{
 			snprintf(buf, BUFSIZE, "%s", ((mynick_t *)(n->data))->nick);
 			found++;
 		}
 	}
 
-	if(!found)
+	if (!found)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a valid target."), si->su->nick);
 		return;
 	}
-	
+
 	/* Never ever allow @!?* as they have special meaning in all ircds */
 	/* Empty, space anywhere and colon at the start break the protocol */
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
@@ -304,7 +304,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_ADMIN, "VHOST REQUEST %s %s",	buf, host);
 			return;
 		}
-	} 
+	}
 
 	l = smalloc(sizeof(hsreq_t));
 	l->nick = sstrdup(buf);
@@ -314,13 +314,13 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	l->creator = sstrdup(buf);
 
 	n = node_create();
-	node_add(l, n, &hs_reqlist); 
+	node_add(l, n, &hs_reqlist);
 	write_hsreqdb();
-	
+
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 	snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", buf, host);
 	logcommand(si, CMDLOG_ADMIN, "VHOST REQUEST %s %s",	buf, host);
-	
+
 	return;
 }
 
@@ -332,7 +332,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	hsreq_t *l;
 	node_t *n;
-	
+
 	if (!nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "ACTIVATE");
@@ -361,7 +361,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			u = user_find_named(nick);
 			if (u != NULL)
 			{
-				if(memosvs.me)
+				if (memosvs.me)
 				{
 					snprintf(buf, BUFSIZE, "%s %s%s%s", nick, "[auto memo] Your requested vhost for nick \2", nick, "\2 has been approved.");
 					command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
@@ -388,7 +388,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	hsreq_t *l;
 	node_t *n;
-	
+
 	if (!nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "REJECT");
@@ -414,7 +414,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			u = user_find_named(nick);
 			if (u != NULL)
 			{
-				if(memosvs.me)
+				if (memosvs.me)
 				{
 					snprintf(buf, BUFSIZE, "%s %s%s%s", nick, "[auto memo] Your requested vhost for nick \2", nick, "\2 has been rejected.");
 					command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
@@ -441,20 +441,20 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 	int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;
-	
+
 	LIST_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 		x++;
-		
+
 		tm = *localtime(&l->vhost_ts);
 		strftime(buf, BUFSIZE, "%b %d %T %Y %Z", &tm);
-		if(!irccasecmp(l->vident, "(null)"))
-			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s\2 (%s - %s)", 
-				x, l->nick, l->vhost, l->creator, buf); 
+		if (!irccasecmp(l->vident, "(null)"))
+			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
+				x, l->nick, l->vhost, l->creator, buf);
 		else
-			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s@%s\2 (%s - %s)", 
-				x, l->nick, l->vident, l->vhost, l->creator, buf); 
+			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s@%s\2 (%s - %s)",
+				x, l->nick, l->vident, l->vhost, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "VHOST:WAITING: by \2%s\2", get_oper_name(si));

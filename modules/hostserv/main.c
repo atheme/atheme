@@ -66,7 +66,7 @@ void _modinit(module_t *m)
 {
 	hook_add_event("config_ready");
 	hook_add_hook("config_ready", hostserv_config_ready);
-	
+
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", on_user_identify);
 
@@ -101,7 +101,7 @@ static void on_user_identify(void *vptr)
 	if (!(md = metadata_find(mu, "private:usercloak")))
 		return;
 
-	do_sethost(u, md->value); 
+	do_sethost(u, md->value);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
