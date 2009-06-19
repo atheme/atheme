@@ -222,39 +222,34 @@ static void account_drop_request(void *vptr)
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *host = parv[0];
-	myuser_t *mu;
+	char *target;
+	mynick_t *mn;
 	char *p;
-	char buf[BUFSIZE];
 	node_t *n;
-	int found = 0;
 	hsreq_t *l;
 
 	if (!host)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "REQUEST");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REQUEST");
 		command_fail(si, fault_needmoreparams, _("Syntax: REQUEST <vhost>"));
 		return;
 	}
 
-	/* find the user... */
-	if (!(mu = myuser_find_ext(si->su->nick)))
+	if (si->smu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), si->su->nick);
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
-
-	LIST_FOREACH(n, mu->nicks.head)
+	target = si->su != NULL ? si->su->nick : "?";
+	mn = mynick_find(target);
+	if (mn == NULL)
 	{
-		if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-		{
-			snprintf(buf, BUFSIZE, "%s", ((mynick_t *)(n->data))->nick);
-			found++;
-		}
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
+		return;
 	}
-
-	if (!found)
+	if (mn->owner != si->smu)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a valid target."), si->su->nick);
+		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
 		return;
 	}
 
@@ -290,36 +285,40 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	{
 		l = n->data;
 
-		if (!irccasecmp(l->nick, buf))
+		if (!irccasecmp(l->nick, target))
 		{
-//			free(l->vident);
-//			l->vhost = sstrdup(ident);
+			if (!strcmp(host, l->vhost))
+			{
+				command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
+				return;
+			}
 			free(l->vhost);
 			l->vhost = sstrdup(host);
+			l->vhost_ts = CURRTIME;;
 
 			write_hsreqdb();
 
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
-			snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", buf, host);
-			logcommand(si, CMDLOG_ADMIN, "VHOST REQUEST %s %s",	buf, host);
+			snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", get_source_name(si), host);
+			logcommand(si, CMDLOG_SET, "REQUEST %s", host);
 			return;
 		}
 	}
 
 	l = smalloc(sizeof(hsreq_t));
-	l->nick = sstrdup(buf);
+	l->nick = sstrdup(target);
 	l->vident = sstrdup("(null)");
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;
-	l->creator = sstrdup(buf);
+	l->creator = sstrdup(get_source_name(si));
 
 	n = node_create();
 	node_add(l, n, &hs_reqlist);
 	write_hsreqdb();
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
-	snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", buf, host);
-	logcommand(si, CMDLOG_ADMIN, "VHOST REQUEST %s %s",	buf, host);
+	snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", get_source_name(si), host);
+	logcommand(si, CMDLOG_SET, "REQUEST %s", host);
 
 	return;
 }
@@ -335,7 +334,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!nick)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "ACTIVATE");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACTIVATE");
 		command_fail(si, fault_needmoreparams, _("Syntax: ACTIVATE <nick>"));
 		return;
 	}
@@ -346,6 +345,15 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
 		{
+			if (memosvs.me)
+			{
+				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", nick, l->vhost, nick);
+				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
+			}
+			else if ((u = user_find_named(nick)) != NULL)
+				notice(hostsvs.nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
+			/* VHOST command below will generate snoop */
+			logcommand(si, CMDLOG_ADMIN, "ACTIVATE %s for %s", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
 			node_del(n, &hs_reqlist);
@@ -358,25 +366,9 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 
 			write_hsreqdb();
 			command_exec_split(hostsvs.me, si, "VHOST", buf, hs_cmdtree);
-			u = user_find_named(nick);
-			if (u != NULL)
-			{
-				if (memosvs.me)
-				{
-					snprintf(buf, BUFSIZE, "%s %s%s%s", nick, "[auto memo] Your requested vhost for nick \2", nick, "\2 has been approved.");
-					command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
-				}
-				else
-				{
-					snprintf(buf, BUFSIZE, "%s%s%s", "[auto memo] Your requested vhost for nick \2", nick, "\2 has been approved.");
-					notice(hostsvs.nick, u->nick, "%s", buf);
-				}
-			}
-			logcommand(si, CMDLOG_ADMIN, "VHOST:ACTIVATE: \2%s\2 by \2%s\2", nick, get_oper_name(si));
 			return;
 		}
 	}
-	logcommand(si, CMDLOG_ADMIN, "VHOST:ACTIVATE: \2%s\2 not found in database by \2%s\2", nick, get_oper_name(si));
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
@@ -391,7 +383,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!nick)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "REJECT");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REJECT");
 		command_fail(si, fault_needmoreparams, _("Syntax: REJECT <nick>"));
 		return;
 	}
@@ -402,34 +394,27 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
 		{
-			node_del(n, &hs_reqlist);
+			if (memosvs.me)
+			{
+				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
+				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
+			}
+			else if ((u = user_find_named(nick)) != NULL)
+				notice(hostsvs.nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
+			snoop("VHOST:REJECT: \2%s\2 for \2%s\2 by \2%s\2",
+					l->vhost, nick, get_oper_name(si));
+			logcommand(si, CMDLOG_ADMIN, "REJECT %s for %s", l->vhost, nick);
 
+			node_del(n, &hs_reqlist);
 			free(l->nick);
 			free(l->vident);
 			free(l->vhost);
 			free(l->creator);
 			free(l);
-
 			write_hsreqdb();
-			u = user_find_named(nick);
-			if (u != NULL)
-			{
-				if (memosvs.me)
-				{
-					snprintf(buf, BUFSIZE, "%s %s%s%s", nick, "[auto memo] Your requested vhost for nick \2", nick, "\2 has been rejected.");
-					command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
-				}
-				else
-				{
-					snprintf(buf, BUFSIZE, "%s%s%s", "[auto memo] Your requested vhost for nick \2", nick, "\2 has been rejected.");
-					notice(hostsvs.nick, u->nick, "%s", buf);
-				}
-			}
-			logcommand(si, CMDLOG_ADMIN, "VHOST:REJECT: \2%s\2 by \2%s\2", nick, get_oper_name(si));
 			return;
 		}
 	}
-	logcommand(si, CMDLOG_ADMIN, "VHOST:REJECT: \2%s\2 not found in database by \2%s\2", nick, get_oper_name(si));
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
@@ -457,7 +442,7 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 				x, l->nick, l->vident, l->vhost, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");
-	logcommand(si, CMDLOG_GET, "VHOST:WAITING: by \2%s\2", get_oper_name(si));
+	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
