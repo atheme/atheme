@@ -172,7 +172,7 @@ static void nick_drop_request(void *vptr)
 					l = m->data;
 					if (!irccasecmp(l->nick, ((mynick_t *)(n->data))->nick))
 					{
-						slog(CMDLOG_ADMIN, "VHOSTREQ DROPNICK %s %s@%s", l->nick, l->vident, l->vhost);
+						slog(LG_REGISTER, "VHOSTREQ DROPNICK %s %s@%s", l->nick, l->vident, l->vhost);
 
 						node_del(m, &hs_reqlist);
 
@@ -202,7 +202,7 @@ static void account_drop_request(void *vptr)
 		l = n->data;
 		if (!irccasecmp(l->nick, mu->name))
 		{
-			slog(CMDLOG_ADMIN, "VHOSTREQ DROPACCOUNT %s %s@%s", l->nick, l->vident, l->vhost);
+			slog(LG_REGISTER, "VHOSTREQ DROPACCOUNT %s %s@%s", l->nick, l->vident, l->vhost);
 
 			node_del(n, &hs_reqlist);
 
