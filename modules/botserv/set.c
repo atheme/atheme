@@ -154,7 +154,7 @@ static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_SET) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -203,7 +203,7 @@ static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_SET) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -252,7 +252,7 @@ static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_SET) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -301,7 +301,7 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_SET) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
