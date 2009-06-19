@@ -141,7 +141,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), target);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
-		if(u = user_find_named(target))
+		u = user_find_named(target);
+		if (u != NULL)
 			do_sethost(u, NULL); // restore user vhost from user host
 		return;
 	}
@@ -179,7 +180,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
 			target, host);
-	if(u = user_find_named(target))
+	u = user_find_named(target);
+	if (u != NULL)
 		do_sethost(u, host); 
 	return;
 }
@@ -209,10 +211,7 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *host = parv[1];
 	myuser_t *mu;
-	user_t *u;
 	char *p;
-	char buf[BUFSIZE];
-	node_t *n;
 
 	if (!target)
 	{

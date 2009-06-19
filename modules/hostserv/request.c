@@ -358,7 +358,8 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 
 			write_hsreqdb();
 			command_exec_split(hostsvs.me, si, "VHOST", buf, hs_cmdtree);
-			if(u = user_find_named(nick)) 
+			u = user_find_named(nick);
+			if (u != NULL)
 			{
 				if(memosvs.me)
 				{
@@ -368,7 +369,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 				else
 				{
 					snprintf(buf, BUFSIZE, "%s%s%s", "[auto memo] Your requested vhost for nick \2", nick, "\2 has been approved.");
-					notice(hostsvs.nick, u->nick, buf);
+					notice(hostsvs.nick, u->nick, "%s", buf);
 				}
 			}
 			logcommand(si, CMDLOG_ADMIN, "VHOST:ACTIVATE: \2%s\2 by \2%s\2", nick, get_oper_name(si));
@@ -376,7 +377,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ACTIVATE: \2%s\2 not found in database by \2%s\2", nick, get_oper_name(si));
-	command_success_nodata(si, _("Nick \2%S\2 not found in vhost request database."), nick);
+	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
 /* REJECT <nick> */
@@ -410,7 +411,8 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			free(l);
 
 			write_hsreqdb();
-			if(u = user_find_named(nick)) 
+			u = user_find_named(nick);
+			if (u != NULL)
 			{
 				if(memosvs.me)
 				{
@@ -420,7 +422,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				else
 				{
 					snprintf(buf, BUFSIZE, "%s%s%s", "[auto memo] Your requested vhost for nick \2", nick, "\2 has been rejected.");
-					notice(hostsvs.nick, u->nick, buf);
+					notice(hostsvs.nick, u->nick, "%s", buf);
 				}
 			}
 			logcommand(si, CMDLOG_ADMIN, "VHOST:REJECT: \2%s\2 by \2%s\2", nick, get_oper_name(si));
@@ -428,7 +430,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	logcommand(si, CMDLOG_ADMIN, "VHOST:REJECT: \2%s\2 not found in database by \2%s\2", nick, get_oper_name(si));
-	command_success_nodata(si, _("Nick \2%S\2 not found in vhost request database."), nick);
+	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
 
 /* WAITING */
