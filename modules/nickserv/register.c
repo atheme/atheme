@@ -69,6 +69,9 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (si->smu)
 	{
 		command_fail(si, fault_already_authed, _("You are already logged in as \2%s\2."), si->smu->name);
+		if (si->su != NULL && !mynick_find(si->su->nick) &&
+				command_find(si->service->cmdtree, "GROUP"))
+			command_fail(si, fault_already_authed, _("Use %s to register %s to your account."), "GROUP", si->su->nick);
 		return;
 	}
 
