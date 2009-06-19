@@ -11462,7 +11462,7 @@ fi
 BUILDROOT=`pwd`
 
 
-ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
+ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -12089,6 +12089,7 @@ do
     "modules/crypto/Makefile") CONFIG_FILES="$CONFIG_FILES modules/crypto/Makefile" ;;
     "modules/gameserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/gameserv/Makefile" ;;
     "modules/global/Makefile") CONFIG_FILES="$CONFIG_FILES modules/global/Makefile" ;;
+    "modules/hostserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/hostserv/Makefile" ;;
     "modules/memoserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
     "modules/misc/Makefile") CONFIG_FILES="$CONFIG_FILES modules/misc/Makefile" ;;
     "modules/nickserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/nickserv/Makefile" ;;
