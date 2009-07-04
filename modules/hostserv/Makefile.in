@@ -16,6 +16,7 @@ CFLAGS		= @CFLAGS@ -I../../include
 BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/help.c	\
+	$(SRCDIR)/onoff.c	\
 	$(SRCDIR)/request.c	\
 	$(SRCDIR)/vhost.c	
 

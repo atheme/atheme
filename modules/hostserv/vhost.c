@@ -22,15 +22,11 @@ static void vhost_on_identify(void *vptr);
 static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_vhost = { "VHOST", N_("Manages user virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost };
 command_t hs_vhostall = { "VHOSTALL", N_("Manages all user virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostall };
 command_t hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost };
-command_t hs_on = { "ON", N_("Activates your assigned vhost."), AC_NONE, 1, hs_cmd_on };
-command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_NONE, 1, hs_cmd_off };
 command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group };
 
 void _modinit(module_t *m)
@@ -43,8 +39,6 @@ void _modinit(module_t *m)
 	command_add(&hs_vhost, hs_cmdtree);
 	command_add(&hs_vhostall, hs_cmdtree);
 	command_add(&hs_listvhost, hs_cmdtree);
-	command_add(&hs_on, hs_cmdtree);
-	command_add(&hs_off, hs_cmdtree);
 	command_add(&hs_group, hs_cmdtree);
 	help_addentry(hs_helptree, "VHOST", "help/hostserv/vhost", NULL);
 	help_addentry(hs_helptree, "VHOSTALL", "help/hostserv/vhostall", NULL);
@@ -60,8 +54,6 @@ void _moddeinit(void)
 	command_delete(&hs_vhost, hs_cmdtree);
 	command_delete(&hs_vhostall, hs_cmdtree);
 	command_delete(&hs_listvhost, hs_cmdtree);
-	command_delete(&hs_on, hs_cmdtree);
-	command_delete(&hs_off, hs_cmdtree);
 	command_delete(&hs_group, hs_cmdtree);
 	help_delentry(hs_helptree, "VHOST");
 	help_delentry(hs_helptree, "VHOSTALL");
@@ -310,132 +302,6 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
-}
-
-static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
-{
-	mynick_t *mn = NULL;
-	metadata_t *md;
-	node_t *n;
-	char buf[BUFSIZE];
-	int found = 0;
-
-	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
-	else
-	{
-		if (si->su != NULL)
-			mn = mynick_find(si->su->nick);
-		if (mn != NULL)
-		{
-			if (mn->owner == si->smu)
-			{
-				LIST_FOREACH(n, si->smu->nicks.head)
-				{
-					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-					{
-						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-						found++;
-					}
-				}
-				if ((!found) || (!(md = metadata_find(si->smu, buf))))
-				{
-					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-					return;
-				}
-				do_sethost(si->su, md->value);
-				command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
-			}
-			else
-			{
-				if (myuser_access_verify(si->su, mn->owner))
-				{
-					LIST_FOREACH(n, mn->owner->nicks.head)
-					{
-						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-						{
-							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-							found++;
-						}
-					}
-					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
-					{
-						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-						return;
-					}
-					do_sethost(si->su, md->value);
-					command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
-				}
-				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
-			}
-		}
-		else
-			command_success_nodata(si, _("You are not logged in."));
-	}
-}
-
-static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
-{
-	mynick_t *mn = NULL;
-	metadata_t *md;
-	node_t *n;
-	char buf[BUFSIZE];
-	int found = 0;
-
-	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
-	else
-	{
-		if (si->su != NULL)
-			mn = mynick_find(si->su->nick);
-		if (mn != NULL)
-		{
-			if (mn->owner == si->smu)
-			{
-				LIST_FOREACH(n, si->smu->nicks.head)
-				{
-					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-					{
-						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-						found++;
-					}
-				}
-				if ((!found) || (!(md = metadata_find(si->smu, buf))))
-				{
-					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-					return;
-				}
-				do_sethost(si->su, NULL);
-				command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
-			}
-			else
-			{
-				if (myuser_access_verify(si->su, mn->owner))
-				{
-					LIST_FOREACH(n, mn->owner->nicks.head)
-					{
-						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-						{
-							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-							found++;
-						}
-					}
-					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
-					{
-						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-						return;
-					}
-					do_sethost(si->su, NULL);
-					command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
-				}
-				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
-			}
-		}
-		else
-			command_success_nodata(si, _("You are not logged in."));
-	}
 }
 
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])

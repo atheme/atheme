@@ -439,11 +439,13 @@ loadmodule "modules/botserv/set";
  *
  * Core components				modules/hostserv/main
  * HELP command					modules/hostserv/help
+ * ON and OFF commands                          modules/hostserv/onoff
  * REQUEST commands                             modules/hostserv/request
  * VHOST commands                               modules/hostserv/vhost
  */
 loadmodule "modules/hostserv/main";
 loadmodule "modules/hostserv/help";
+loadmodule "modules/hostserv/onoff";
 loadmodule "modules/hostserv/request";
 loadmodule "modules/hostserv/vhost";
 
