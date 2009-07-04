@@ -443,11 +443,11 @@ loadmodule "modules/botserv/set";
  * REQUEST commands                             modules/hostserv/request
  * VHOST commands                               modules/hostserv/vhost
  */
-loadmodule "modules/hostserv/main";
-loadmodule "modules/hostserv/help";
-loadmodule "modules/hostserv/onoff";
-loadmodule "modules/hostserv/request";
-loadmodule "modules/hostserv/vhost";
+#loadmodule "modules/hostserv/main";
+#loadmodule "modules/hostserv/help";
+#loadmodule "modules/hostserv/onoff";
+#loadmodule "modules/hostserv/request";
+#loadmodule "modules/hostserv/vhost";
 
 /* Channel listing service.
  *
