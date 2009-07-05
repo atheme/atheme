@@ -306,45 +306,49 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 {
-	mynick_t *mn = NULL;
+	mynick_t *mn;
 	metadata_t *md;
-	node_t *n;
 	char buf[BUFSIZE];
-	int found = 0;
 
-	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
-	else
+	/* This is only because we need a nick to copy from. */
+	if (si->su == NULL)
 	{
-		if (si->su != NULL)
-			mn = mynick_find(si->su->nick);
-		if (mn != NULL)
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "GROUP");
+		return;
+	}
+
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+	{
+		mn = mynick_find(si->su->nick);
+		if (mn == NULL)
 		{
-			if (mn->owner == si->smu)
+			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+			return;
+		}
+		{
+			if (mn->owner != si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head)
-				{
-					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-					{
-						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-						found++;
-					}
-				}
-				if ((!found) || (!(md = metadata_find(si->smu, buf))))
+				command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
+				return;
+			}
+			{
+				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+				md = metadata_find(si->smu, buf);
+				if (md == NULL)
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
 				}
-				snprintf(buf, BUFSIZE, "%s", md->value);
+				strlcpy(buf, md->value, sizeof buf);
 				hs_sethost_all(si->smu, buf);
 				do_sethost_all(si->smu, buf);
 				command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
 			}
-			else
-				command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), mn->owner->name);
 		}
-		else
-			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
