@@ -70,44 +70,40 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	mn = mynick_find(si->su->nick);
+	if (mn == NULL)
 	{
-		mn = mynick_find(si->su->nick);
-		if (mn == NULL)
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		return;
+	}
+	if (mn->owner == si->smu)
+	{
+		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+		md = metadata_find(si->smu, buf);
+		if (md == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+			command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 			return;
 		}
+		do_sethost(si->su, md->value);
+		command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
+	}
+	else
+	{
+		if (myuser_access_verify(si->su, mn->owner))
 		{
-			if (mn->owner == si->smu)
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+			md = metadata_find(si->smu, buf);
+			if (md == NULL)
 			{
-				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-				md = metadata_find(si->smu, buf);
-				if (md == NULL)
-				{
-					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-					return;
-				}
-				do_sethost(si->su, md->value);
-				command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
+				command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
+				return;
 			}
-			else
-			{
-				if (myuser_access_verify(si->su, mn->owner))
-				{
-					snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-					md = metadata_find(si->smu, buf);
-					if (md == NULL)
-					{
-						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-						return;
-					}
-					do_sethost(si->su, md->value);
-					command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
-				}
-				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
-			}
+			do_sethost(si->su, md->value);
+			command_success_nodata(si, _("Your vhost of \2%s\2 is now activated."), md->value);
 		}
+		else
+			command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 	}
 }
 
@@ -129,44 +125,40 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	mn = mynick_find(si->su->nick);
+	if (mn == NULL)
 	{
-		mn = mynick_find(si->su->nick);
-		if (mn == NULL)
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		return;
+	}
+	if (mn->owner == si->smu)
+	{
+		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+		md = metadata_find(si->smu, buf);
+		if (md == NULL)
 		{
-			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+			command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 			return;
 		}
+		do_sethost(si->su, NULL);
+		command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
+	}
+	else
+	{
+		if (myuser_access_verify(si->su, mn->owner))
 		{
-			if (mn->owner == si->smu)
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+			md = metadata_find(si->smu, buf);
+			if (md == NULL)
 			{
-				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-				md = metadata_find(si->smu, buf);
-				if (md == NULL)
-				{
-					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-					return;
-				}
-				do_sethost(si->su, NULL);
-				command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
+				command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
+				return;
 			}
-			else
-			{
-				if (myuser_access_verify(si->su, mn->owner))
-				{
-					snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-					md = metadata_find(si->smu, buf);
-					if (md == NULL)
-					{
-						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-						return;
-					}
-					do_sethost(si->su, NULL);
-					command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
-				}
-				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
-			}
+			do_sethost(si->su, NULL);
+			command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
 		}
+		else
+			command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 	}
 }
 
