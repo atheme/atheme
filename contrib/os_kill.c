@@ -52,7 +52,7 @@ static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	kill_user(NULL, target, "%s", parv[1]);
+	kill_user(si->service->me, target, "Requested: %s", parv[1]);
 
 	snoop("KILL: \2%s\2 -> \2%s\2 (\2%s\2)", get_oper_name(si), target->nick, parv[1]);
 	command_success_nodata(si, "\2%s\2 has been killed.", target->nick);
