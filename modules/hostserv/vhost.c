@@ -341,30 +341,7 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
 			}
 			else
-			{
-				if (myuser_access_verify(si->su, mn->owner))
-				{
-					LIST_FOREACH(n, mn->owner->nicks.head)
-					{
-						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-						{
-							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-							found++;
-						}
-					}
-					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
-					{
-						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-						return;
-					}
-					snprintf(buf, BUFSIZE, "%s", md->value);
-					hs_sethost_all(mn->owner, buf);
-					do_sethost_all(mn->owner, buf);
-					command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), mn->owner->name, buf);
-				}
-				else
-					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
-			}
+				command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), mn->owner->name);
 		}
 		else
 			command_success_nodata(si, _("You are not logged in."));
