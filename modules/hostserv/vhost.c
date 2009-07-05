@@ -322,34 +322,28 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
+	mn = mynick_find(si->su->nick);
+	if (mn == NULL)
 	{
-		mn = mynick_find(si->su->nick);
-		if (mn == NULL)
-		{
-			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
-			return;
-		}
-		{
-			if (mn->owner != si->smu)
-			{
-				command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
-				return;
-			}
-			{
-				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-				md = metadata_find(si->smu, buf);
-				if (md == NULL)
-				{
-					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
-					return;
-				}
-				strlcpy(buf, md->value, sizeof buf);
-				hs_sethost_all(si->smu, buf);
-				do_sethost_all(si->smu, buf);
-				command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
-			}
-		}
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+		return;
 	}
+	if (mn->owner != si->smu)
+	{
+		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
+		return;
+	}
+	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+	md = metadata_find(si->smu, buf);
+	if (md == NULL)
+	{
+		command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
+		return;
+	}
+	strlcpy(buf, md->value, sizeof buf);
+	hs_sethost_all(si->smu, buf);
+	do_sethost_all(si->smu, buf);
+	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
 }
 
 static void vhost_on_identify(void *vptr)
