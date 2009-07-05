@@ -3,6 +3,11 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Kill users through services, requested by christel@freenode.
+ *
+ * This differs from the ircd /kill command in that it does not show to
+ * normal users who issued the kill, although the reason will usually be
+ * shown. This is useful in cases where a kline would normally be used,
+ * but would not remove the user, but the user cannot (fully) reconnect.
  */
 
 #include "atheme.h"
