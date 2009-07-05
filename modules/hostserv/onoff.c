@@ -56,29 +56,33 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn = NULL;
 	metadata_t *md;
-	node_t *n;
 	char buf[BUFSIZE];
-	int found = 0;
 
-	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
-	else
+	if (si->su == NULL)
 	{
-		if (si->su != NULL)
-			mn = mynick_find(si->su->nick);
-		if (mn != NULL)
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "ON");
+		return;
+	}
+
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	{
+		mn = mynick_find(si->su->nick);
+		if (mn == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+			return;
+		}
 		{
 			if (mn->owner == si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head)
-				{
-					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-					{
-						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-						found++;
-					}
-				}
-				if ((!found) || (!(md = metadata_find(si->smu, buf))))
+				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+				md = metadata_find(si->smu, buf);
+				if (md == NULL)
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
@@ -90,15 +94,9 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (myuser_access_verify(si->su, mn->owner))
 				{
-					LIST_FOREACH(n, mn->owner->nicks.head)
-					{
-						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-						{
-							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-							found++;
-						}
-					}
-					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
+					snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+					md = metadata_find(si->smu, buf);
+					if (md == NULL)
 					{
 						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 						return;
@@ -110,8 +108,6 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 			}
 		}
-		else
-			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
@@ -119,29 +115,33 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn = NULL;
 	metadata_t *md;
-	node_t *n;
 	char buf[BUFSIZE];
-	int found = 0;
 
-	if (!si->smu)
-		command_success_nodata(si, _("You are not logged in."));
-	else
+	if (si->su == NULL)
 	{
-		if (si->su != NULL)
-			mn = mynick_find(si->su->nick);
-		if (mn != NULL)
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "OFF");
+		return;
+	}
+
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	{
+		mn = mynick_find(si->su->nick);
+		if (mn == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), si->su->nick);
+			return;
+		}
 		{
 			if (mn->owner == si->smu)
 			{
-				LIST_FOREACH(n, si->smu->nicks.head)
-				{
-					if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-					{
-						snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-						found++;
-					}
-				}
-				if ((!found) || (!(md = metadata_find(si->smu, buf))))
+				snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+				md = metadata_find(si->smu, buf);
+				if (md == NULL)
 				{
 					command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 					return;
@@ -153,15 +153,9 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (myuser_access_verify(si->su, mn->owner))
 				{
-					LIST_FOREACH(n, mn->owner->nicks.head)
-					{
-						if (!irccasecmp(((mynick_t *)(n->data))->nick, si->su->nick))
-						{
-							snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-							found++;
-						}
-					}
-					if ((!found) || (!(md = metadata_find(mn->owner, buf))))
+					snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+					md = metadata_find(si->smu, buf);
+					if (md == NULL)
 					{
 						command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 						return;
@@ -173,8 +167,6 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("You are not recognized as \2%s\2."), mn->owner->name);
 			}
 		}
-		else
-			command_success_nodata(si, _("You are not logged in."));
 	}
 }
 
