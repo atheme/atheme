@@ -74,6 +74,7 @@ SRCS =					\
 	$(SRCDIR)/os_pingspam.c		\
 	$(SRCDIR)/os_testcmd.c		\
 	$(SRCDIR)/os_testproc.c		\
+	$(SRCDIR)/os_kill.c		\
 	$(SRCDIR)/os_klinechan.c	\
 	$(SRCDIR)/os_logonnews.c	\
 	$(SRCDIR)/os_logstream.c	\
