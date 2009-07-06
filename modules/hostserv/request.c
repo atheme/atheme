@@ -158,29 +158,23 @@ static void nick_drop_request(void *vptr)
 	node_t *m;
 	hsreq_t *l;
 
+	LIST_FOREACH(m, hs_reqlist.head)
 	{
+		l = m->data;
+		if (!irccasecmp(l->nick, hdata->mn->nick))
 		{
-			{
-				LIST_FOREACH(m, hs_reqlist.head)
-				{
-					l = m->data;
-					if (!irccasecmp(l->nick, hdata->mn->nick))
-					{
-						slog(LG_REGISTER, "VHOSTREQ DROPNICK %s %s@%s", l->nick, l->vident, l->vhost);
+			slog(LG_REGISTER, "VHOSTREQ DROPNICK %s %s@%s", l->nick, l->vident, l->vhost);
 
-						node_del(m, &hs_reqlist);
+			node_del(m, &hs_reqlist);
 
-						free(l->nick);
-						free(l->vident);
-						free(l->vhost);
-						free(l->creator);
-						free(l);
+			free(l->nick);
+			free(l->vident);
+			free(l->vhost);
+			free(l->creator);
+			free(l);
 
-						write_hsreqdb();
-						return;
-					}
-				}
-			}
+			write_hsreqdb();
+			return;
 		}
 	}
 }
