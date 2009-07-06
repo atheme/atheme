@@ -154,24 +154,17 @@ static void load_hsreqdb(void)
 
 static void nick_drop_request(void *vptr)
 {
-	user_t *u;
-	myuser_t *mu;
 	hook_user_req_t *hdata = vptr;
-	node_t *n, *m;
+	node_t *m;
 	hsreq_t *l;
 
-	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL)
 	{
-		mu = u->myuser;
-		LIST_FOREACH(n, mu->nicks.head)
 		{
-			if (!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
 			{
 				LIST_FOREACH(m, hs_reqlist.head)
 				{
 					l = m->data;
-					if (!irccasecmp(l->nick, ((mynick_t *)(n->data))->nick))
+					if (!irccasecmp(l->nick, hdata->mn->nick))
 					{
 						slog(LG_REGISTER, "VHOSTREQ DROPNICK %s %s@%s", l->nick, l->vident, l->vhost);
 
