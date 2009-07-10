@@ -18,7 +18,6 @@ DECLARE_MODULE_V1
 
 list_t *hs_cmdtree, *hs_helptree;
 
-static void vhost_on_identify(void *vptr);
 static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
@@ -34,8 +33,6 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 
-	hook_add_event("user_identify");
-	hook_add_hook("user_identify", vhost_on_identify);
 	command_add(&hs_vhost, hs_cmdtree);
 	command_add(&hs_vhostall, hs_cmdtree);
 	command_add(&hs_listvhost, hs_cmdtree);
@@ -48,8 +45,6 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_identify", vhost_on_identify);
-	command_delete(&hs_vhost, hs_cmdtree);
 	command_delete(&hs_vhostall, hs_cmdtree);
 	command_delete(&hs_listvhost, hs_cmdtree);
 	command_delete(&hs_group, hs_cmdtree);
@@ -88,6 +83,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	char *host = parv[1];
 	myuser_t *mu;
 	user_t *u;
+	metadata_t *md;
 	char *p;
 	char buf[BUFSIZE];
 	node_t *n;
@@ -131,7 +127,11 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
 		u = user_find_named(target);
 		if (u != NULL)
-			do_sethost(u, NULL); // restore user vhost from user host
+		{
+			/* Revert to account's vhost */
+			md = metadata_find(mu, "private:usercloak");
+			do_sethost(u, md ? md->value : NULL);
+		}
 		return;
 	}
 
@@ -174,23 +174,22 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void hs_sethost_all(myuser_t *mu, char *host)
+static void hs_sethost_all(myuser_t *mu, const char *host)
 {
 	node_t *n;
+	mynick_t *mn;
 	char buf[BUFSIZE];
 
 	LIST_FOREACH(n, mu->nicks.head)
 	{
-		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-		if (!host)
-		{
-			metadata_delete(mu, buf);
-		}
-		else
-		{
-			metadata_add(mu, buf, host);
-		}
+		mn = n->data;
+		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+		metadata_delete(mu, buf);
 	}
+	if (host != NULL)
+		metadata_add(mu, "private:usercloak", host);
+	else
+		metadata_delete(mu, "private:usercloak");
 }
 
 /* VHOSTALL <nick> [host] */
@@ -219,7 +218,7 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 	if (!host)
 	{
 		hs_sethost_all(mu, NULL);
-		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), target);
+		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), mu->name);
 		snoop("VHOSTALL:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOSTALL REMOVE %s", target);
 		do_sethost_all(mu, NULL); // restore user vhost from user host
@@ -255,7 +254,7 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 
 	hs_sethost_all(mu, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
-			host, target);
+			host, mu->name);
 	snoop("VHOSTALL:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOSTALL ASSIGN %s %s",
 			target, host);
@@ -278,6 +277,12 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
+		md = metadata_find(mu, "private:usercloak");
+		if (md != NULL && !match(pattern, md->value))
+		{
+			command_success_nodata(si, "- %-30s %s", mu->name, md->value);
+			matches++;
+		}
 		LIST_FOREACH(n, mu->nicks.head)
 		{
 			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
@@ -332,6 +337,8 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
 	md = metadata_find(si->smu, buf);
 	if (md == NULL)
+		md = metadata_find(si->smu, "private:usercloak");
+	if (md == NULL)
 	{
 		command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 		return;
@@ -340,35 +347,6 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	hs_sethost_all(si->smu, buf);
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
-}
-
-static void vhost_on_identify(void *vptr)
-{
-	user_t *u = vptr;
-	myuser_t *mu = u->myuser;
-	metadata_t *md;
-	node_t *n;
-	char buf[BUFSIZE];
-	int found = 0;
-
-	if (mu != myuser_find_ext(u->nick))
-		return;
-
-	LIST_FOREACH(n, mu->nicks.head)
-	{
-		if (!irccasecmp(((mynick_t *)(n->data))->nick, u->nick))
-		{
-			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
-			found++;
-		}
-	}
-	if (!found)
-		return;
-	/* NO CLOAK?!*$*%*&&$(!& */
-	if (!(md = metadata_find(mu, buf)))
-		return;
-
-	do_sethost(u, md->value);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

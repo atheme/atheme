@@ -96,9 +96,13 @@ static void on_user_identify(void *vptr)
 	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	metadata_t *md;
+	char buf[NICKLEN + 20];
 
-	/* NO CLOAK?!*$*%*&&$(!& */
-	if (!(md = metadata_find(mu, "private:usercloak")))
+	snprintf(buf, sizeof buf, "private:usercloak:%s", u->nick);
+	md = metadata_find(mu, buf);
+	if (md == NULL)
+		md = metadata_find(mu, "private:usercloak");
+	if (md == NULL)
 		return;
 
 	do_sethost(u, md->value);

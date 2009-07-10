@@ -84,6 +84,8 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
 	md = metadata_find(si->smu, buf);
 	if (md == NULL)
+		md = metadata_find(si->smu, "private:usercloak");
+	if (md == NULL)
 	{
 		command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 		return;
@@ -123,6 +125,8 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 	}
 	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
 	md = metadata_find(si->smu, buf);
+	if (md == NULL)
+		md = metadata_find(si->smu, "private:usercloak");
 	if (md == NULL)
 	{
 		command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));

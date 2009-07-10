@@ -434,8 +434,7 @@ loadmodule "modules/botserv/set";
  *
  * HostServ is a more complex, and optional virtual host management service.
  * Users wishing only to set vhosts need not use it (they can use the builtin
- * vhost management of NickServ instead).  Also, please note that using HostServ
- * and /ns vhost together may cause database contingency problems at this time.
+ * vhost management of NickServ instead).
  *
  * Core components				modules/hostserv/main
  * HELP command					modules/hostserv/help
