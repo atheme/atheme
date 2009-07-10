@@ -195,6 +195,7 @@ install: build
 			cd ..; \
 		fi; \
 	done)
+	-${RM} -f $(DESTDIR)$(SHAREDIR)/help/hostserv/vhostall
 	if [ @USE_NLS@ = yes ]; then \
 		$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/ru; \
 		(cd ../help-ru; for i in *; do \

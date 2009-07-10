@@ -18,13 +18,13 @@ DECLARE_MODULE_V1
 
 list_t *hs_cmdtree, *hs_helptree;
 
+static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_vhost = { "VHOST", N_("Manages user virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost };
-command_t hs_vhostall = { "VHOSTALL", N_("Manages all user virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostall };
+command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick };
+command_t hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost };
 command_t hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost };
 command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group };
 
@@ -33,23 +33,24 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 
+	command_add(&hs_vhostnick, hs_cmdtree);
 	command_add(&hs_vhost, hs_cmdtree);
-	command_add(&hs_vhostall, hs_cmdtree);
 	command_add(&hs_listvhost, hs_cmdtree);
 	command_add(&hs_group, hs_cmdtree);
+	help_addentry(hs_helptree, "VHOSTNICK", "help/hostserv/vhostnick", NULL);
 	help_addentry(hs_helptree, "VHOST", "help/hostserv/vhost", NULL);
-	help_addentry(hs_helptree, "VHOSTALL", "help/hostserv/vhostall", NULL);
 	help_addentry(hs_helptree, "LISTVHOST", "help/hostserv/listvhost", NULL);
 	help_addentry(hs_helptree, "GROUP", "help/hostserv/group", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&hs_vhostall, hs_cmdtree);
+	command_delete(&hs_vhostnick, hs_cmdtree);
+	command_delete(&hs_vhost, hs_cmdtree);
 	command_delete(&hs_listvhost, hs_cmdtree);
 	command_delete(&hs_group, hs_cmdtree);
+	help_delentry(hs_helptree, "VHOSTNICK");
 	help_delentry(hs_helptree, "VHOST");
-	help_delentry(hs_helptree, "VHOSTALL");
 	help_delentry(hs_helptree, "LISTVHOST");
 	help_delentry(hs_helptree, "GROUP");
 }
@@ -76,8 +77,8 @@ static void do_sethost_all(myuser_t *mu, char *host)
 	}
 }
 
-/* VHOST <nick> [host] */
-static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
+/* VHOSTNICK <nick> [host] */
+static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
@@ -91,8 +92,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
-		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <nick> [vhost]"));
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOSTNICK");
+		command_fail(si, fault_needmoreparams, _("Syntax: VHOSTNICK <nick> [vhost]"));
 		return;
 	}
 
@@ -123,8 +124,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_delete(mu, buf);
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), target);
-		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
+		snoop("VHOSTNICK:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "VHOSTNICK REMOVE %s", target);
 		u = user_find_named(target);
 		if (u != NULL)
 		{
@@ -165,8 +166,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mu, buf, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, target);
-	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
+	snoop("VHOSTNICK:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "VHOSTNICK ASSIGN %s %s",
 			target, host);
 	u = user_find_named(target);
 	if (u != NULL)
@@ -192,8 +193,8 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 		metadata_delete(mu, "private:usercloak");
 }
 
-/* VHOSTALL <nick> [host] */
-static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
+/* VHOST <nick> [host] */
+static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	char *host = parv[1];
@@ -202,8 +203,8 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOSTALL");
-		command_fail(si, fault_needmoreparams, _("Syntax: VHOSTALL <nick> [vhost]"));
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
+		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <nick> [vhost]"));
 		return;
 	}
 
@@ -219,8 +220,8 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 	{
 		hs_sethost_all(mu, NULL);
 		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), mu->name);
-		snoop("VHOSTALL:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOSTALL REMOVE %s", target);
+		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
 	}
@@ -255,8 +256,8 @@ static void hs_cmd_vhostall(sourceinfo_t *si, int parc, char *parv[])
 	hs_sethost_all(mu, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
 			host, mu->name);
-	snoop("VHOSTALL:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "VHOSTALL ASSIGN %s %s",
+	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
 			target, host);
 	do_sethost_all(mu, host);
 	return;

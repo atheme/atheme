@@ -340,7 +340,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else if ((u = user_find_named(nick)) != NULL)
 				notice(hostsvs.nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
-			/* VHOST command below will generate snoop */
+			/* VHOSTNICK command below will generate snoop */
 			logcommand(si, CMDLOG_ADMIN, "ACTIVATE %s for %s", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
@@ -353,7 +353,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l);
 
 			write_hsreqdb();
-			command_exec_split(hostsvs.me, si, "VHOST", buf, hs_cmdtree);
+			command_exec_split(hostsvs.me, si, "VHOSTNICK", buf, hs_cmdtree);
 			return;
 		}
 	}

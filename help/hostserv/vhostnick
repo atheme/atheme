@@ -1,0 +1,13 @@
+Help for VHOSTNICK:
+
+VHOSTNICK allows operators to set a virtual host (also
+known as a spoof or cloak) on a nick. This vhost
+will be set on the user immediately and each time
+they identify when using said nick. If no vhost is 
+specified, revert to the account's vhost.
+
+Syntax: VHOSTNICK <nickname> [<vhost>]
+
+Examples:
+    /msg &nick& VHOSTNICK spb may.explode.on.impact
+    /msg &nick& VHOSTNICK nenolod
