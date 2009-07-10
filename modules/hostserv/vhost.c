@@ -43,8 +43,6 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "VHOST", "help/hostserv/vhost", NULL);
 	help_addentry(hs_helptree, "VHOSTALL", "help/hostserv/vhostall", NULL);
 	help_addentry(hs_helptree, "LISTVHOST", "help/hostserv/listvhost", NULL);
-	help_addentry(hs_helptree, "ON", "help/hostserv/on", NULL);
-	help_addentry(hs_helptree, "OFF", "help/hostserv/off", NULL);
 	help_addentry(hs_helptree, "GROUP", "help/hostserv/group", NULL);
 }
 
@@ -58,8 +56,6 @@ void _moddeinit(void)
 	help_delentry(hs_helptree, "VHOST");
 	help_delentry(hs_helptree, "VHOSTALL");
 	help_delentry(hs_helptree, "LISTVHOST");
-	help_delentry(hs_helptree, "ON");
-	help_delentry(hs_helptree, "OFF");
 	help_delentry(hs_helptree, "GROUP");
 }
 
