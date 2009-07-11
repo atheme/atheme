@@ -1002,7 +1002,7 @@ botserv {
  *
  * HostServ provides advanced virtual host management.
  */
-botserv {
+hostserv {
 	/* (*)nick
 	 * The nickname we want HostServ to have.
 	 */
