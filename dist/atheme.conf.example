@@ -439,14 +439,18 @@ loadmodule "modules/botserv/set";
  * Core components				modules/hostserv/main
  * HELP command					modules/hostserv/help
  * ON and OFF commands                          modules/hostserv/onoff
- * REQUEST commands                             modules/hostserv/request
- * VHOST commands                               modules/hostserv/vhost
+ * REQUEST system                               modules/hostserv/request
+ * VHOST and LISTVHOST commands                 modules/hostserv/vhost
+ * VHOSTNICK command                            modules/hostserv/vhostnick
+ * GROUP command                                modules/hostserv/group
  */
 #loadmodule "modules/hostserv/main";
 #loadmodule "modules/hostserv/help";
 #loadmodule "modules/hostserv/onoff";
 #loadmodule "modules/hostserv/request";
 #loadmodule "modules/hostserv/vhost";
+#loadmodule "modules/hostserv/vhostnick";
+#loadmodule "modules/hostserv/group";
 
 /* Channel listing service.
  *

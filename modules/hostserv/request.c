@@ -49,7 +49,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/vhost");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/vhostnick");
 
 	hook_add_event("user_drop");
 	hook_add_hook("user_drop", account_drop_request);
