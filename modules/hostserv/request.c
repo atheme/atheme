@@ -28,9 +28,9 @@ static void write_hsreqdb(void);
 static void load_hsreqdb(void);
 
 command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_NONE, 2, hs_cmd_request };
-command_t hs_waiting = { "WAITING", N_("Activates your assigned vhost."), PRIV_USER_VHOST, 1, hs_cmd_waiting };
-command_t hs_reject = { "REJECT", N_("Deactivates your assigned vhost."), PRIV_USER_VHOST, 2, hs_cmd_reject };
-command_t hs_activate = { "ACTIVATE", N_("Syncs the vhost for all nicks in a group."), PRIV_USER_VHOST, 2, hs_cmd_activate };
+command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting };
+command_t hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject };
+command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate };
 
 struct hsreq_ {
 	char *nick;
