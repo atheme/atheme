@@ -107,6 +107,12 @@ void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
 
+	mode_list = hybrid_mode_list;
+	ignore_mode_list = hybrid_ignore_mode_list;
+	status_mode_list = hybrid_status_mode_list;
+	prefix_mode_list = hybrid_prefix_mode_list;
+	user_mode_list = hybrid_user_mode_list;
+
 	ircd = &Hybrid;
 
 	pcommand_add("TBURST", m_tburst, 5, MSRC_SERVER);
