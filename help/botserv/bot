@@ -22,6 +22,6 @@ Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]
 Syntax: BOT DEL <nick>
 
 Examples:
-    /msg &nick& BOT ADD Security Security security.rizon.net Security
-    /msg &nick& BOT CHANGE Security Rizon Rizon Services.Rizon.Net Rizon
+    /msg &nick& BOT ADD Security Security security.example.net Security
+    /msg &nick& BOT CHANGE Security NetBot NetBot Services.Example.Net MyNet
     /msg &nick& BOT DEL Security
