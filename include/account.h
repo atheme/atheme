@@ -14,6 +14,7 @@ typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct kline_ kline_t;
 typedef struct xline_ xline_t;
+typedef struct qline_ qline_t;
 typedef struct mymemo_ mymemo_t;
 typedef struct svsignore_ svsignore_t;
 
@@ -33,6 +34,18 @@ struct kline_ {
 /* xline list struct */
 struct xline_ {
   char *realname;
+  char *reason;
+  char *setby;
+
+  unsigned int number;
+  long duration;
+  time_t settime;
+  time_t expires;
+};
+
+/* qline list struct */
+struct qline_ {
+  char *mask;
   char *reason;
   char *setby;
 
@@ -321,6 +334,16 @@ E xline_t *xline_find(const char *realname);
 E xline_t *xline_find_num(unsigned int number);
 E xline_t *xline_find_user(user_t *u);
 E void xline_expire(void *arg);
+
+E list_t qlnlist;
+
+E qline_t *qline_add(char *mask, char *reason, long duration);
+E void qline_delete(const char *mask);
+E qline_t *qline_find(const char *mask);
+E qline_t *qline_find_num(unsigned int number);
+E qline_t *qline_find_user(user_t *u);
+E qline_t *qline_find_channel(channel_t *c);
+E void qline_expire(void *arg);
 
 /* account.c */
 E mowgli_patricia_t *mulist;

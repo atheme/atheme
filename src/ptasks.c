@@ -83,6 +83,7 @@ void handle_stats(user_t *u, char req)
 {
 	kline_t *k;
 	xline_t *x;
+	qline_t *q;
 	node_t *n;
 	uplink_t *uplink;
 	soper_t *soper;
@@ -241,6 +242,23 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.me, 249, u, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
 				  curr_uplink->name,
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
+		  break;
+
+	  case 'q':
+	  case 'Q':
+		  if (!has_priv_user(u, PRIV_MASS_AKILL))
+			  break;
+
+		  LIST_FOREACH(n, qlnlist.head)
+		  {
+			  q = (qline_t *)n->data;
+
+			  numeric_sts(me.me, 247, u, "%c %d %s :%s",
+					  q->duration ? 'q' : 'Q',
+					  0, /* hit count */
+					  q->mask, q->reason);
+		  }
+
 		  break;
 
 	  case 'x':

@@ -27,9 +27,11 @@
 
 list_t klnlist;
 list_t xlnlist;
+list_t qlnlist;
 
 static BlockHeap *kline_heap;	/* 16 */
 static BlockHeap *xline_heap;	/* 16 */
+static BlockHeap *qline_heap;	/* 16 */
 
 /*************
  * L I S T S *
@@ -39,8 +41,9 @@ void init_nodes(void)
 {
 	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
 	xline_heap = BlockHeapCreate(sizeof(xline_t), 16);
+	qline_heap = BlockHeapCreate(sizeof(qline_t), 16);
 
-	if (kline_heap == NULL || xline_heap == NULL)
+	if (kline_heap == NULL || xline_heap == NULL || qline_heap == NULL)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -377,6 +380,158 @@ void xline_expire(void *arg)
 				x->realname, x->setby);
 
 			xline_delete(x->realname);
+		}
+	}
+}
+
+/*************
+ * Q L I N E *
+ *************/
+
+qline_t *qline_add(char *mask, char *reason, long duration)
+{
+	qline_t *q;
+	node_t *n = node_create();
+	static unsigned int qcnt = 0;
+
+	slog(LG_DEBUG, "qline_add(): %s -> %s (%ld)", mask, reason, duration);
+
+	q = BlockHeapAlloc(qline_heap);
+	node_add(q, n, &qlnlist);
+
+	q->mask = sstrdup(mask);
+	q->reason = sstrdup(reason);
+	q->duration = duration;
+	q->settime = CURRTIME;
+	q->expires = CURRTIME + duration;
+	q->number = ++qcnt;
+
+	cnt.qline++;
+
+	qline_sts("*", mask, duration, reason);
+
+	return q;
+}
+
+void qline_delete(const char *mask)
+{
+	qline_t *q = qline_find(mask);
+	node_t *n;
+
+	if (!q)
+	{
+		slog(LG_DEBUG, "qline_delete(): called for nonexistant qline: %s", mask);
+		return;
+	}
+
+	slog(LG_DEBUG, "qline_delete(): %s -> %s", q->mask, q->reason);
+
+	/* only unqline if ircd has not already removed this -- jilles */
+	if (q->duration == 0 || q->expires > CURRTIME)
+		unqline_sts("*", q->mask);
+
+	n = node_find(q, &qlnlist);
+	node_del(n, &qlnlist);
+	node_free(n);
+
+	free(q->mask);
+	free(q->reason);
+	free(q->setby);
+
+	BlockHeapFree(qline_heap, q);
+
+	cnt.qline--;
+}
+
+qline_t *qline_find(const char *mask)
+{
+	qline_t *q;
+	node_t *n;
+
+	LIST_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (!match(q->mask, mask))
+			return q;
+	}
+
+	return NULL;
+}
+
+qline_t *qline_find_num(unsigned int number)
+{
+	qline_t *q;
+	node_t *n;
+
+	LIST_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (q->number == number)
+			return q;
+	}
+
+	return NULL;
+}
+
+qline_t *qline_find_user(user_t *u)
+{
+	qline_t *q;
+	node_t *n;
+
+	LIST_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (q->duration != 0 && q->expires <= CURRTIME)
+			continue;
+		if (!match(q->mask, u->nick))
+			return q;
+	}
+
+	return NULL;
+}
+
+qline_t *qline_find_channel(channel_t *c)
+{
+	qline_t *q;
+	node_t *n;
+
+	LIST_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (q->duration != 0 && q->expires <= CURRTIME)
+			continue;
+		if (!match(q->mask, c->name))
+			return q;
+	}
+
+	return NULL;
+}
+
+void qline_expire(void *arg)
+{
+	qline_t *q;
+	node_t *n, *tn;
+
+	LIST_FOREACH_SAFE(n, tn, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (q->duration == 0)
+			continue;
+
+		if (q->expires <= CURRTIME)
+		{
+			snoop(_("QLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+				q->mask, time_ago(q->settime), q->setby);
+
+			verbose_wallops(_("QLINE expired on \2%s\2, set by \2%s\2"),
+				q->mask, q->setby);
+
+			qline_delete(q->mask);
 		}
 	}
 }

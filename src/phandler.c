@@ -42,6 +42,8 @@ void (*kline_sts) (char *server, char *user, char *host, long duration, char *re
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
 void (*xline_sts) (char *server, char *realname, long duration, char *reason) = generic_xline_sts;
 void (*unxline_sts) (char *server, char *realname) = generic_unxline_sts;
+void (*qline_sts) (char *server, char *mask, long duration, char *reason) = generic_qline_sts;
+void (*unqline_sts) (char *server, char *mask) = generic_unqline_sts;
 void (*topic_sts) (channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic) = generic_topic_sts;
 void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
@@ -172,6 +174,16 @@ void generic_xline_sts(char *server, char *realname, long duration, char *reason
 }
 
 void generic_unxline_sts(char *server, char *realname)
+{
+	/* cant do anything here. bail. */
+}
+
+void generic_qline_sts(char *server, char *mask, long duration, char *reason)
+{
+	/* cant do anything here. bail. */
+}
+
+void generic_unqline_sts(char *server, char *mask)
 {
 	/* cant do anything here. bail. */
 }

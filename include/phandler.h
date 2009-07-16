@@ -152,6 +152,13 @@ E void (*xline_sts)(char *server, char *realname, long duration, char *reason);
 /* remove a xline on the servers matching the given mask
  * if the ircd requires unxlines to be sent from users, use opersvs */
 E void (*unxline_sts)(char *server, char *realname);
+/* add a qline on the servers matching the given mask
+ * duration is in seconds, 0 for a permanent qline
+ * if the ircd requires qlines to be sent from users, use opersvs */
+E void (*qline_sts)(char *server, char *mask, long duration, char *reason);
+/* remove a qline on the servers matching the given mask
+ * if the ircd requires unqlines to be sent from users, use opersvs */
+E void (*unqline_sts)(char *server, char *mask);
 /* make chanserv set a topic on a channel
  * setter and ts should be used if the ircd supports topics to be set
  * with a given topicsetter and topicts; ts is not a channelts
@@ -231,6 +238,8 @@ E void generic_kline_sts(char *server, char *user, char *host, long duration, ch
 E void generic_unkline_sts(char *server, char *user, char *host);
 E void generic_xline_sts(char *server, char *realname, long duration, char *reason);
 E void generic_unxline_sts(char *server, char *realname);
+E void generic_qline_sts(char *server, char *mask, long duration, char *reason);
+E void generic_unqline_sts(char *server, char *mask);
 E void generic_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic);
 E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
