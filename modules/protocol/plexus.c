@@ -95,6 +95,16 @@ struct cmode_ plexus_user_mode_list[] = {
 
 /* *INDENT-ON* */
 
+static void plexus_introduce_nick(user_t *u)
+{
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	if (ircd->uses_uid)
+		sts(":%s UID %s 1 %lu +i%s%s %s %s 127.0.0.1 %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->host, u->gecos);
+	else
+		sts("NICK %s 1 %lu +i%s%s %s %s %s :%s", u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, me.name, u->gecos);
+}
+
 /* protocol-specific stuff to do on login */
 static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
@@ -165,11 +175,45 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s ENCAP * SVSMODE %s %lu -r", nicksvs.nick, u->nick, (unsigned long)u->ts);
 }
 
+static void m_uid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+
+	/* got the right number of args for an introduction? */
+	if (parc == 11)
+	{
+		s = si->s;
+		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
+
+		u = user_add(parv[0], parv[4], parv[5], parv[9], parv[6], parv[7], parv[10], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
+
+		user_mode(u, parv[3]);
+
+		/* If server is not yet EOB we will do this later.
+		 * This avoids useless "please identify" -- jilles
+		 */
+		if (s->flags & SF_EOB)
+			handle_nickchange(user_find(parv[0]));
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
 
 	/* Symbol relocation voodoo. */
+	introduce_nick = &plexus_introduce_nick;
 	ircd_on_login = &plexus_on_login;
 	ircd_on_logout = &plexus_on_logout;
 	sethost_sts = &plexus_sethost_sts;
@@ -181,6 +225,9 @@ void _modinit(module_t * m)
 	user_mode_list = plexus_user_mode_list;
 
 	ircd = &PleXusIRCd;
+
+	pcommand_delete("UID");
+	pcommand_add("UID", m_uid, 11, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_hook("nick_group", (void (*)(void *))nick_group);
