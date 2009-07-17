@@ -339,7 +339,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
 			}
 			else if ((u = user_find_named(nick)) != NULL)
-				notice(hostsvs.nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
+				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
 			/* VHOSTNICK command below will generate snoop */
 			logcommand(si, CMDLOG_ADMIN, "ACTIVATE %s for %s", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
@@ -388,7 +388,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
 			}
 			else if ((u = user_find_named(nick)) != NULL)
-				notice(hostsvs.nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
+				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			snoop("VHOST:REJECT: \2%s\2 for \2%s\2 by \2%s\2",
 					l->vhost, nick, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "REJECT %s for %s", l->vhost, nick);
