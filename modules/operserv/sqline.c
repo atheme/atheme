@@ -231,19 +231,19 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 
 	if (*target != '#')
 	{
-	/* make sure there's at least 3 non-wildcards */
-	/* except if there are no wildcards at all */
-	for (p = target; *p; p++)
-	{
-		if (*p != '*' && *p != '?' && *p != '.')
-			i++;
-	}
+		/* make sure there's at least 3 non-wildcards */
+		/* except if there are no wildcards at all */
+		for (p = target; *p; p++)
+		{
+			if (*p != '*' && *p != '?' && *p != '.')
+				i++;
+		}
 
-	if (i < 3 && (strchr(target, '*') || strchr(target, '?')))
-	{
-		command_fail(si, fault_badparams, _("Invalid target: \2%s\2. At least three non-wildcard characters are required."), target);
-		return;
-	}
+		if (i < 3 && (strchr(target, '*') || strchr(target, '?')))
+		{
+			command_fail(si, fault_badparams, _("Invalid target: \2%s\2. At least three non-wildcard characters are required."), target);
+			return;
+		}
 	}
 
 	if ((q = qline_find(target)))
