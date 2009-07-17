@@ -253,7 +253,7 @@ void handle_stats(user_t *u, char req)
 		  {
 			  q = (qline_t *)n->data;
 
-			  numeric_sts(me.me, 247, u, "%c %d %s :%s",
+			  numeric_sts(me.me, 217, u, "%c %d %s :%s",
 					  q->duration ? 'q' : 'Q',
 					  0, /* hit count */
 					  q->mask, q->reason);
