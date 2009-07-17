@@ -313,6 +313,7 @@ loadmodule "modules/chanserv/why";
  * SHUTDOWN command				modules/operserv/shutdown
  * Non-config oper privileges (SOPER command)	modules/operserv/soper
  * Oper privilege display (SPECS command)	modules/operserv/specs
+ * SQLINE system                                modules/operserv/sqline
  * UPDATE command				modules/operserv/update
  * UPTIME command				modules/operserv/uptime
  */
@@ -342,6 +343,7 @@ loadmodule "modules/operserv/sgline";
 loadmodule "modules/operserv/shutdown";
 #loadmodule "modules/operserv/soper";
 loadmodule "modules/operserv/specs";
+loadmodule "modules/operserv/sqline";
 loadmodule "modules/operserv/update";
 loadmodule "modules/operserv/uptime";
 
