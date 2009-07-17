@@ -266,7 +266,7 @@ static void ts6_qline_sts(char *server, char *name, long duration, char *reason)
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s RESV %ld %s 2 :%s", CLIENT_NAME(opersvs.me->me), server, duration, name, reason);
+	sts(":%s ENCAP %s RESV %ld %s 0 :%s", CLIENT_NAME(opersvs.me->me), server, duration, name, reason);
 }
 
 /* server-to-server UNQLINE wrapper */
