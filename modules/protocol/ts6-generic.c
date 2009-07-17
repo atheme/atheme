@@ -260,6 +260,24 @@ static void ts6_unxline_sts(char *server, char *realname)
 	sts(":%s ENCAP %s UNXLINE %s", CLIENT_NAME(opersvs.me->me), server, realname);
 }
 
+/* server-to-server QLINE wrapper */
+static void ts6_qline_sts(char *server, char *name, long duration, char *reason)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s ENCAP %s RESV %ld %s 2 :%s", CLIENT_NAME(opersvs.me->me), server, duration, name, reason);
+}
+
+/* server-to-server UNQLINE wrapper */
+static void ts6_unqline_sts(char *server, char *name)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s ENCAP %s UNRESV %s", CLIENT_NAME(opersvs.me->me), server, name);
+}
+
 /* topic wrapper */
 static void ts6_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -1288,6 +1306,8 @@ void _modinit(module_t * m)
 	unkline_sts = &ts6_unkline_sts;
 	xline_sts = &ts6_xline_sts;
 	unxline_sts = &ts6_unxline_sts;
+	qline_sts = &ts6_qline_sts;
+	unqline_sts = &ts6_unqline_sts;
 	topic_sts = &ts6_topic_sts;
 	mode_sts = &ts6_mode_sts;
 	ping_sts = &ts6_ping_sts;
