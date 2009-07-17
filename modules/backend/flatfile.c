@@ -328,6 +328,7 @@ static void flatfile_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	xline_t *x;
+	qline_t *q;
 	svsignore_t *svsignore;
 	unsigned int versn = 0, i;
 	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0, qin = 0;
