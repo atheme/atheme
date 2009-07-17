@@ -452,7 +452,9 @@ qline_t *qline_find(const char *mask)
 	{
 		q = (qline_t *)n->data;
 
-		if (!match(q->mask, mask))
+		if (q->mask[0] != '#' && !match(q->mask, mask))
+			return q;
+		else if (q->mask[0] == '#' && !irccasecmp(q->mask, mask))
 			return q;
 	}
 
@@ -486,6 +488,8 @@ qline_t *qline_find_user(user_t *u)
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
+		if (q->mask[0] == '#')
+			continue;
 		if (!match(q->mask, u->nick))
 			return q;
 	}
@@ -504,7 +508,7 @@ qline_t *qline_find_channel(channel_t *c)
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
-		if (!match(q->mask, c->name))
+		if (!irccasecmp(q->mask, c->name))
 			return q;
 	}
 
