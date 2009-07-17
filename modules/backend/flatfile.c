@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 #define DB_ATHEME	2
 
 /* flatfile state */
-unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0;
+unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privdata)
 {
@@ -89,6 +89,7 @@ static void flatfile_db_save(void *arg)
 	chanacs_t *ca;
 	kline_t *k;
 	xline_t *x;
+	qline_t *q;
 	svsignore_t *svsignore;
 	soper_t *soper;
 	node_t *n, *tn, *tn2;
@@ -99,7 +100,7 @@ static void flatfile_db_save(void *arg)
 	errno = 0;
 
 	/* reset state */
-	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0;
+	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 	/* write to a temporary file first */
 	if (!(f = fopen(DATADIR "/atheme.db.new", "w")))
@@ -273,8 +274,20 @@ static void flatfile_db_save(void *arg)
 		xout++;
 	}
 
-	/* DE <muout> <mcout> <caout> <kout> <xout> */
-	fprintf(f, "DE %d %d %d %d %d\n", muout, mcout, caout, kout, xout);
+	fprintf(f, "QID %lu\n", me.qline_id);
+
+	LIST_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		/* QL <mask> <duration> <settime> <setby> <reason> */
+		fprintf(f, "QL %s %ld %ld %s %s\n", q->mask, q->duration, (long)q->settime, q->setby, q->reason);
+
+		qout++;
+	}
+
+	/* DE <muout> <mcout> <caout> <kout> <xout> <qout> */
+	fprintf(f, "DE %d %d %d %d %d %d\n", muout, mcout, caout, kout, xout, qout);
 
 	was_errored = ferror(f);
 	if (!was_errored)
@@ -317,7 +330,7 @@ static void flatfile_db_load(void)
 	xline_t *x;
 	svsignore_t *svsignore;
 	unsigned int versn = 0, i;
-	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0;
+	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0, qin = 0;
 	FILE *f;
 	char *item, *s, *buf;
 	size_t bufsize = BUFSIZE, n;
@@ -964,6 +977,37 @@ static void flatfile_db_load(void)
 
 			xin++;
 		}
+		else if (!strcmp("QID", item))
+		{
+			/* unique qline id */
+			char *id = strtok(NULL, " ");
+			me.qline_id = atol(id);
+		}
+		else if (!strcmp("QL", item))
+		{
+			char *mask, *reason, *setby, *tmp;
+			time_t settime;
+			long duration;
+
+			mask = strtok(NULL, " ");
+			tmp = strtok(NULL, " ");
+			duration = atol(tmp);
+			tmp = strtok(NULL, " ");
+			settime = atol(tmp);
+			setby = strtok(NULL, " ");
+			reason = strtok(NULL, "");
+
+			strip(reason);
+
+			q = qline_add(mask, reason, duration);
+			q->settime = settime;
+
+			/* XXX this is not nice, oh well -- jilles */
+			q->expires = q->settime + q->duration;
+			q->setby = sstrdup(setby);
+
+			qin++;
+		}
 		else if (!strcmp("DE", item))
 		{
 			/* end */
@@ -986,6 +1030,10 @@ static void flatfile_db_load(void)
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != xin)
 					slog(LG_ERROR, "db_load(): got %d xlines; expected %d", xin, i);
+
+			if ((s = strtok(NULL, " ")))
+				if ((i = atoi(s)) != qin)
+					slog(LG_ERROR, "db_load(): got %d qlines; expected %d", qin, i);
 		}
 	}
 
