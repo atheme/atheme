@@ -378,9 +378,9 @@ static void inspircd_qline_sts(char *server, char *name, long duration, char *re
 		return;
 
 	if (*name != '#')
-	sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
 	else if (*name = '#')
-	sts(":%s ADDLINE C %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+		sts(":%s ADDLINE C %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
 }
 
 /* server-to-server UNQLINE wrapper */
@@ -391,9 +391,9 @@ static void inspircd_unqline_sts(char *server, char *name)
 		return;
 
 	if (*name != '#')
-	sts(":%s QLINE %s", opersvs.me->me->uid, name);
+		sts(":%s QLINE %s", opersvs.me->me->uid, name);
 	else if (*name = '#')
-	sts(":%s CBAN %s", opersvs.me->me->uid, name);
+		sts(":%s CBAN %s", opersvs.me->me->uid, name);
 }	
 
 /* topic wrapper */
