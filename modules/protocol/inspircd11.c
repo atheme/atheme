@@ -388,6 +388,32 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 	sts(":%s GLINE %s@%s",opersvs.nick, user, host);
 }
 
+/* server-to-server QLINE wrapper */
+static void inspircd_qline_sts(char *server, char *name, long duration, char *reason)
+{
+
+	if (!me.connected)
+		return;
+
+	if (*name != '#')
+		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.name, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+	else
+		sts(":%s CBAN %s %ld :%s", opersvs.nick, name, duration, reason);
+}
+
+/* server-to-server UNQLINE wrapper */
+static void inspircd_unqline_sts(char *server, char *name)
+{
+
+	if (!me.connected)
+		return;
+
+	if (*name != '#')
+		sts(":%s QLINE %s", opersvs.nick, name);
+	else
+		sts(":%s CBAN %s", opersvs.nick, name);
+}
+
 /* topic wrapper */
 static void inspircd_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -1175,6 +1201,8 @@ void _modinit(module_t * m)
 	part_sts = &inspircd_part_sts;
 	kline_sts = &inspircd_kline_sts;
 	unkline_sts = &inspircd_unkline_sts;
+	qline_sts = &inspircd_qline_sts;
+	unqline_sts = &inspircd_unqline_sts;
 	topic_sts = &inspircd_topic_sts;
 	mode_sts = &inspircd_mode_sts;
 	ping_sts = &inspircd_ping_sts;
