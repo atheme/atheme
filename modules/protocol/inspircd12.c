@@ -379,7 +379,7 @@ static void inspircd_qline_sts(char *server, char *name, long duration, char *re
 
 	if (*name != '#')
 		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
-	else if (*name = '#')
+	else
 		sts(":%s CBAN %s %ld :%s", opersvs.me->me->uid, name, duration, reason);
 }
 
@@ -392,7 +392,7 @@ static void inspircd_unqline_sts(char *server, char *name)
 
 	if (*name != '#')
 		sts(":%s QLINE %s", opersvs.me->me->uid, name);
-	else if (*name = '#')
+	else
 		sts(":%s CBAN %s", opersvs.me->me->uid, name);
 }	
 
