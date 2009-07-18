@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_limitflags = { "LIMITFLAGS", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_limitflags };
+command_t cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags };
 
 list_t *cs_set_cmdtree;
 list_t *cs_helptree;
