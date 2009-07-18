@@ -109,6 +109,8 @@ struct cmode_ inspircd_user_mode_list[] = {
 /* CAPABilities */
 static bool has_servicesmod = false;
 static bool has_globopsmod = false;
+static bool has_chghostmod = false;
+static bool has_cbanmod = false;
 static bool has_svshold = false;
 static int has_protocol = 0;
 
@@ -379,8 +381,12 @@ static void inspircd_qline_sts(char *server, char *name, long duration, char *re
 
 	if (*name != '#')
 		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
-	else
+
+	if (has_cbanmod)
 		sts(":%s CBAN %s %ld :%s", opersvs.me->me->uid, name, duration, reason);
+
+	else
+		snoop("SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
 
 /* server-to-server UNQLINE wrapper */
@@ -392,8 +398,12 @@ static void inspircd_unqline_sts(char *server, char *name)
 
 	if (*name != '#')
 		sts(":%s QLINE %s", opersvs.me->me->uid, name);
-	else
+
+	if (has_cbanmod)
 		sts(":%s CBAN %s", opersvs.me->me->uid, name);
+
+	else
+		snoop("SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }	
 
 /* topic wrapper */
@@ -521,7 +531,11 @@ static void inspircd_sethost_sts(user_t *source, user_t *target, const char *hos
 	if (!me.connected)
 		return;
 
-	sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
+	if (has_chghostmod)
+		sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
+
+	else
+		snoop("VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
 }
 
 static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
@@ -1166,6 +1180,8 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		/* reset all our previously recieved CAPAB stuff */
 		has_servicesmod = false;
 		has_globopsmod = false;
+		has_chghostmod = false;
+		has_cbanmod = false;
 		has_svshold = false;
 		has_protocol = 0;
 	}
@@ -1189,6 +1205,14 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			has_globopsmod = true;
 		}
+		if (strstr(parv[1], "m_chghost.so"))
+		{
+			has_chghostmod = true;
+		}
+		if (strstr(parv[1], "m_cban.so"))
+		{
+			has_cbanmod = true;
+		}
 		if (strstr(parv[1], "m_svshold.so"))
 		{
 			has_svshold = true;
@@ -1205,6 +1229,16 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_ERROR, "m_capab(): you didn't load m_services_account into inspircd. atheme support requires this module. exiting.");
 			exit(EXIT_FAILURE);
+		}
+
+		if (has_chghostmod == false)
+		{
+			slog(LG_DEBUG, "m_capab(): you didn't load m_chghost into inspircd. vhost setting will not work.");
+		}
+
+		if (has_cbanmod == false)
+		{
+			slog(LG_DEBUG, "m_capab(): you didn't load m_cban into inspircd. sqlines on channels will not work.");
 		}
 
 		if (has_svshold == false)
