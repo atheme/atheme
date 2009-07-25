@@ -14,7 +14,8 @@
  * Good luck, and have fun!
  */
 
-#define WHERE_TO "/home/jilles/atheme.db"
+/* WHERE_TO is now a prefix which defines where atheme.db and botserv.db should be dumped. --nenolod */
+#define WHERE_TO "/home/jilles/atheme/etc/"
 
 /* define this if you use an anope that has everything in root, i.e. "pre CAPAB", 1.7.4 or lower. */
 /* anope 1.7.x before 1.7.13 will probably not work */
@@ -248,6 +249,7 @@ void write_channels(void)
 {
 	int i, j;
 	ChannelInfo *ci;
+	BotInfo *bi;
 	int athemeflags;
 	int athememon, athememoff;
 	char *flags;
@@ -358,6 +360,14 @@ void write_channels(void)
 				fprintf(f, "MD C %s private:close:reason %s\n", ci->name, ci->forbidreason);
 				fprintf(f, "MD C %s private:close:timestamp %lu\n", ci->name, (unsigned long)time(NULL));
 			}
+
+			/* if the channel has a botserv bot assigned, add botserv metadata */
+			bi = ci->bi;
+			if (bi != NULL)
+			{
+				fprintf(f, "MD C %s private:botserv:bot-assigned %s\n", ci->name, bi->nick);
+				fprintf(f, "MD C %s private:botserv:bot-handle-fantasy %s\n", ci->name, bi->nick);
+			}
 		}
 	}
 }
@@ -381,14 +391,34 @@ void write_akills(void)
 	}
 }
 
+/**
+ * Populate botserv.db with data.
+ *
+ * botserv.db contains lines of the following format:
+ *      BOT <nick> <user> <host> <private> <registerTS> <realname>
+ */
+void write_botserv_bots(void)
+{
+	int i;
+	BotInfo *bi;
+
+	for (i = 0; i < 256; i++) {
+		for (bi = botlists[i]; bi != NULL; bi = bi->next) {
+			int private = (bi->flags & BI_PRIVATE) ? 1 : 0;
+
+			fprintf(f, "BOT %s %s %s %d %ld %s\n", bi->nick, bi->user, bi->host, private, bi->created, bi->real);
+		}
+	}
+}
+
 int AnopeInit(int argc, char **argv)
 {
 	time_t ts;
 
-	f = fopen(WHERE_TO, "w");
+	f = fopen(WHERE_TO "atheme.db", "w");
 
 	if (!f)
-		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO, errno, strerror(errno));
+		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO "atheme.db", errno, strerror(errno));
 
 	time(&ts);
 	fprintf(f, "# Database converted at %s", ctime(&ts));
@@ -397,6 +427,18 @@ int AnopeInit(int argc, char **argv)
 	write_channels();
 	write_akills();
 	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, klnout);
+	fprintf(f, "# End conversion.\n");
+
+	fclose(f);
+
+	f = fopen(WHERE_TO "botserv.db", "w");
+
+	if (!f)
+		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO "botserv.db", errno, strerror(errno));
+
+	time(&ts);
+	fprintf(f, "# Database converted at %s\n", ctime(&ts));
+	write_botserv_bots();
 	fprintf(f, "# End conversion.\n");
 
 	fclose(f);
