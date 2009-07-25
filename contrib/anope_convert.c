@@ -77,6 +77,8 @@ void write_accounts(void)
 	if (!f)
 		return;
 
+	alog("[convert to atheme] converting accounts...");
+
 	/* NickCore is myuser_t, NickAlias is mynick_t */
 	for (i = 0; i < 1024; i++) {
 		for (nc = nclists[i]; nc; nc = nc->next) {
@@ -257,8 +259,13 @@ void write_channels(void)
 	if (!f)
 		return;
 
+	alog("[convert to atheme] converting channels...");
+
 	for (i = 0; i < 256; i++) {
 		for (ci = chanlists[i]; ci; ci = ci->next) {
+			/* this can happen... really... *sigh*. --nenolod */
+			int forbidden = (ci->flags & CI_VERBOTEN) || (ci->forbidby != NULL && ci->founder == NULL);
+
 			athemeflags = 0;
 			if (ci->flags & CI_NO_EXPIRE)
 				athemeflags |= 1; /* MC_HOLD */
@@ -273,12 +280,12 @@ void write_channels(void)
 			athememoff = convert_mlock(ci->mlock_off);
 
 #ifndef CONVERT_FORBIDS
-			if (ci->flags & CI_VERBOTEN)
+			if (forbidden)
 				continue;
 #endif
 
 			fprintf(f, "MC %s 0 %s %lu %lu %d %d %d %d %s\n", ci->name, 
-				(ci->flags & CI_VERBOTEN) ? 
+				(forbidden) ? 
 				ci->forbidby : ci->founder->display, 
 				(unsigned long)ci->time_registered,
 				(unsigned long)ci->last_used, athemeflags,
@@ -383,6 +390,8 @@ void write_akills(void)
 	if (!akills.count)
 		return;
 
+	alog("[convert to atheme] converting akills...");
+
 	for (i = 0; i < akills.count; i++) {
 		ak = akills.list[i];
 
@@ -401,6 +410,8 @@ void write_botserv_bots(void)
 {
 	int i;
 	BotInfo *bi;
+
+	alog("[convert to atheme] converting botserv bots...");
 
 	for (i = 0; i < 256; i++) {
 		for (bi = botlists[i]; bi != NULL; bi = bi->next) {
