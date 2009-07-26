@@ -75,8 +75,7 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, hostbuf))
 		{
-			kill_user(opersvs.me->me, u, "Operator access denied to hostmask: %s [%s] <%s@%s>",
-				np->target, np->reason, np->added_by, opersvs.nick);
+			kill_user(opersvs.me->me, u, "Operator access denied");
 			return;
 		}
 	}
@@ -87,8 +86,7 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, u->server->name))
 		{
-			kill_user(opersvs.me->me, u, "Operator access denied to server: %s [%s] <%s@%s>",
-				np->target, np->reason, np->added_by, opersvs.nick);
+			kill_user(opersvs.me->me, u, "Operator access denied");
 			return;
 		}
 	}
