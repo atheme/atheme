@@ -113,27 +113,33 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	noop_t *np;
 	char *action = parv[0];
-	char *type = parv[1];
+	enum { type_all, type_hostmask, type_server } type;
 	char *mask = parv[2];
 	char *reason = parv[3];
 
-	if (!action || !type)
+	if (parc < 1 || (strcasecmp(action, "LIST") && parc < 3))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
 		command_fail(si, fault_needmoreparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 		return;
 	}
+	if (parc < 2)
+		type = type_all;
+	else if (!strcasecmp(parv[1], "HOSTMASK"))
+		type = type_hostmask;
+	else if (!strcasecmp(parv[1], "SERVER"))
+		type = type_server;
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOOP");
+		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
+		return;
+	}
 
 	if (!strcasecmp(action, "ADD"))
 	{
-		if (!strcasecmp(type, "HOSTMASK"))
+		if (type == type_hostmask)
 		{
-			if (!mask)
-                        {
-				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-				command_fail(si, fault_needmoreparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
-				return;
-			}
 			if ((np = noop_find(mask, &noop_hostmask_list)))
 			{
 				command_fail(si, fault_nochange, _("There is already a NOOP entry covering this target."));
@@ -158,14 +164,8 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			return;
 		}
-		else if (!strcasecmp(type, "SERVER"))
+		else if (type == type_server)
 		{
-			if (!mask)
-			{
-				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-				command_fail(si, fault_needmoreparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
-				return;
-			}
 			if ((np = noop_find(mask, &noop_server_list)))
 			{
 				command_fail(si, fault_nochange, _("There is already a NOOP entry covering this target."));
@@ -190,22 +190,11 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			return;
 		}
-		else
-		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-			command_fail(si, fault_needmoreparams, _("Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]"));
-		}			
 	}
 	else if (!strcasecmp(action, "DEL"))
 	{
-		if (!strcasecmp(type, "HOSTMASK"))
+		if (type == type_hostmask)
 		{
-			if (!mask)
-			{
-				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-				command_fail(si, fault_needmoreparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
-				return;
-			}
 			if (!(np = noop_find(mask, &noop_hostmask_list)))
 			{
 				command_fail(si, fault_nosuch_target, _("There is no NOOP hostmask entry for this target."));
@@ -227,7 +216,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			return;
 		}
-		else if (!strcasecmp(type, "SERVER"))
+		else if (type == type_server)
 		{
 			if (!(np = noop_find(mask, &noop_server_list)))
 			{
@@ -250,18 +239,24 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			return;
 		}
-		else
-		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-			command_fail(si, fault_needmoreparams, _("Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>"));
-		}			
 	}
 	else if (!strcasecmp(action, "LIST"))
 	{
-		if (!strcasecmp(type, "HOSTMASK"))
+		switch (type)
+		{
+			case type_all: 
+				logcommand(si, CMDLOG_GET, "NOOP LIST");
+				break;
+			case type_hostmask: 
+				logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
+				break;
+			case type_server: 
+				logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
+				break;
+		}
+		if (type == type_all || type == type_hostmask)
 		{
 			unsigned int i = 1;
-			logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
 			command_success_nodata(si, _("Hostmask NOOP list (%d entries):"), noop_hostmask_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
@@ -278,10 +273,9 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 			command_success_nodata(si, _("End of Hostmask NOOP list."));
 		}
-		else if (!strcasecmp(type, "SERVER"))
+		if (type == type_all || type == type_server)
 		{
 			unsigned int i = 1;
-			logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
 			command_success_nodata(si, _("Server NOOP list (%d entries):"), noop_server_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
@@ -298,11 +292,11 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 			command_success_nodata(si, _("End of Server NOOP list."));
 		}
-		else
-		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
-			command_fail(si, fault_needmoreparams, _("Syntax: NOOP LIST <HOSTMASK|SERVER>"));
-		}			
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOOP");
+		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 	}
 }
 
