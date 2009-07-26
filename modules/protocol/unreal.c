@@ -274,7 +274,28 @@ static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, cons
 static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
+	{
+		if (nicksvs.me != NULL && killer == nicksvs.me->me)
+		{
+			sts(":%s SVSKILL %s :Killed (%s (%s))",
+					killer->nick, id,
+					killer->nick, reason);
+			/* We still send KILL too, for two reasons:
+			 * 1. SVSKILL does not do nick chase as KILL does,
+			 *    so the below KILL ensures the user is removed
+			 *    everywhere if kill and nick change cross.
+			 *    If this happens between two ircds, unrealircd's
+			 *    unknown prefix kills (nick(?) <- someserver)
+			 *    will fix it up, but we do not kill unknown
+			 *    prefixes.
+			 * 2. SVSKILL is ignored if we are not U:lined.
+			 *
+			 * If the SVSKILL is effective, the KILL will be
+			 * dropped.
+			 */
+		}
 		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	}
 	else
 		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
