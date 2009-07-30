@@ -1260,8 +1260,6 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (bot)
 			notice(bot->nick, cu->user->nick, "[%s] %s", mc->name, md->value);
-		else
-			notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
 	}
 
 	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "url")))
