@@ -262,8 +262,10 @@ void service_delete(service_t *sptr)
 service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree)
 {
 	service_t *sptr;
+	char internal_name[NICKLEN + 10];
 
-	sptr = service_add(name, handler, cmdtree, NULL);
+	snprintf(internal_name, sizeof internal_name, "static:%s", name);
+	sptr = service_add(internal_name, handler, cmdtree, NULL);
 
 	free(sptr->user);
 	free(sptr->host);
