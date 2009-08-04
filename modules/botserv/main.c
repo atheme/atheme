@@ -579,7 +579,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 
 	if (irccasecmp(bot->nick, parv[1]))
 	{
-		if (service_find(parv[1]) || service_find_nick(parv[1]))
+		if (botserv_bot_find(parv[1]) || service_find_nick(parv[1]))
 		{
 			command_fail(si, fault_alreadyexists,
 					_("\2%s\2 is already a bot or service."),
@@ -655,7 +655,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (service_find(parv[0]) || service_find_nick(parv[0]))
+	if (botserv_bot_find(parv[0]) || service_find_nick(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists,
 				_("\2%s\2 is already a bot or service."),
