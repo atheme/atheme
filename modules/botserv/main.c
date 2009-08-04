@@ -552,7 +552,7 @@ static void bs_cmd_bot(sourceinfo_t *si, int parc, char *parv[])
 /* CHANGE oldnick nick [user [host [real]]] */
 static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 {
-	botserv_bot_t *bot, *bot2;
+	botserv_bot_t *bot;
 	mowgli_patricia_iteration_state_t state;
 	mychan_t *mc;
 	metadata_t *md;
@@ -571,14 +571,6 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	bot2 = botserv_bot_find(parv[1]);
-	if ((bot2 != NULL) && (bot != bot2))
-	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] is already a bot",
-		bot2->nick, bot2->user, bot2->host, bot2->real);
-		return;
-	}
-
 	if (nicksvs.no_nick_ownership ? myuser_find(parv[1]) != NULL : mynick_find(parv[1]) != NULL)
 	{
 		command_fail(si, fault_alreadyexists, _("\2%s\2 is a registered nick."), parv[1]);
@@ -587,6 +579,14 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 
 	if (irccasecmp(bot->nick, parv[1]))
 	{
+		if (service_find(parv[1]) || service_find_nick(parv[1]))
+		{
+			command_fail(si, fault_alreadyexists,
+					_("\2%s\2 is already a bot or service."),
+					parv[1]);
+			return;
+		}
+
 		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 		{
 			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
@@ -645,7 +645,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 /* ADD nick user host real */
 static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	botserv_bot_t *bot = botserv_bot_find(parv[0]);
+	botserv_bot_t *bot;
 	char buf[BUFSIZE];
 
 	if (parc < 4)
@@ -655,10 +655,11 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (bot != NULL)
+	if (service_find(parv[0]) || service_find_nick(parv[0]))
 	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] is already a bot->",
-		bot->nick, bot->user, bot->host, bot->real);
+		command_fail(si, fault_alreadyexists,
+				_("\2%s\2 is already a bot or service."),
+				parv[0]);
 		return;
 	}
 
