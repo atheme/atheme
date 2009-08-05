@@ -655,7 +655,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (botserv_bot_find(parv[0]) || service_find_nick(parv[0]))
+	if (botserv_bot_find(parv[0]) || service_find(parv[0]) || service_find_nick(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists,
 				_("\2%s\2 is already a bot or service."),
@@ -673,6 +673,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		snprintf(buf, sizeof(buf), "%s %s", parv[3], parv[4]);
 	else
 		snprintf(buf, sizeof(buf), "%s", parv[3]);
+
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(parv[0]);
 	bot->user = sstrdup(parv[1]);
