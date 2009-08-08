@@ -147,7 +147,7 @@ bool conf_parse(const char *file)
 		exit(EXIT_FAILURE);
 	}
 
-	hook_call_event("config_ready", NULL);
+	hook_call_config_ready();
 	return true;
 }
 
@@ -899,7 +899,7 @@ bool conf_rehash(void)
 	log_open();
 	conf_process(cfp);
 	config_free(cfp);
-	hook_call_event("config_ready", NULL);
+	hook_call_config_ready();
 
 	/* now recheck */
 	if (!conf_check())

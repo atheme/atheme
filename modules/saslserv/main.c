@@ -25,11 +25,11 @@ sasl_session_t *find_session(char *uid);
 sasl_session_t *make_session(char *uid);
 void destroy_session(sasl_session_t *p);
 static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...);
-static void sasl_input(void *vptr);
+static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 int login_user(sasl_session_t *p);
-static void sasl_newuser(void *vptr);
+static void sasl_newuser(user_t *u);
 static void delete_stale(void *vptr);
 
 /* main services client routine */
@@ -78,11 +78,11 @@ static void saslserv_config_ready(void *unused)
 void _modinit(module_t *m)
 {
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", saslserv_config_ready);
+	hook_add_config_ready(saslserv_config_ready);
 	hook_add_event("sasl_input");
-	hook_add_hook("sasl_input", sasl_input);
+	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
-	hook_add_hook("user_add", sasl_newuser);
+	hook_add_user_add(sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
 	saslsvs.me = service_add("saslserv", saslserv, NULL, &saslserv_conftable);
@@ -93,8 +93,8 @@ void _moddeinit(void)
 {
 	node_t *n, *tn;
 
-	hook_del_hook("sasl_input", sasl_input);
-	hook_del_hook("user_add", sasl_newuser);
+	hook_del_sasl_input(sasl_input);
+	hook_del_user_add(sasl_newuser);
 	event_delete(delete_stale, NULL);
 
         if (saslsvs.me)
@@ -189,9 +189,8 @@ void destroy_session(sasl_session_t *p)
 }
 
 /* interpret an AUTHENTICATE message */
-static void sasl_input(void *vptr)
+static void sasl_input(sasl_message_t *smsg)
 {
-	sasl_message_t *smsg = vptr;
 	sasl_session_t *p = make_session(smsg->uid);
 	int len = strlen(smsg->buf);
 
@@ -438,9 +437,8 @@ int login_user(sasl_session_t *p)
 }
 
 /* clean up after a user who is finally on the net */
-static void sasl_newuser(void *vptr)
+static void sasl_newuser(user_t *u)
 {
-	user_t *u = vptr;
 	sasl_session_t *p = find_session(u->uid);
 	metadata_t *md_failnum;
 	char lau[BUFSIZE], lao[BUFSIZE];
