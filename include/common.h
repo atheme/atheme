@@ -126,6 +126,9 @@ typedef enum faultcode_ faultcode_t;
 #define SCANFLIKE(fmtarg, firstvararg)
 #endif /* defined(__INTEL_COMPILER) || defined(__GNUC__) */
 
+/* Causes a warning if value is not of type (or compatible), returning value. */
+#define ENSURE_TYPE(value, type) ((value) != 0 ? (value) : (type)0)
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
