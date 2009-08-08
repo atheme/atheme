@@ -127,7 +127,7 @@ typedef enum faultcode_ faultcode_t;
 #endif /* defined(__INTEL_COMPILER) || defined(__GNUC__) */
 
 /* Causes a warning if value is not of type (or compatible), returning value. */
-#define ENSURE_TYPE(value, type) ((value) != 0 ? (value) : (type)0)
+#define ENSURE_TYPE(value, type) (true ? (value) : (type)0)
 
 #endif
 
