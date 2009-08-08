@@ -45,6 +45,7 @@
 
 #include "atheme.h"
 #include <sys/stat.h>
+#include <limits.h>
 
 #define MAX_INCLUDE_NESTING 16
 
@@ -394,12 +395,18 @@ static config_file_t *config_load_internal(config_file_t *parent, const char *fi
 		fclose(fp);
 		return NULL;
 	}
+	if (sb.st_size > SSIZE_MAX - 1)
+	{
+		config_error(parent, "File too large: \"%s\"\n", filename);
+		fclose(fp);
+		return NULL;
+	}
 	buf = (char *)smalloc(sb.st_size + 1);
 	if (sb.st_size)
 	{
 		errno = 0;
 		ret = fread(buf, 1, sb.st_size, fp);
-		if (ret != sb.st_size)
+		if (ret != (size_t)sb.st_size)
 		{
 			config_error(parent, "Error reading \"%s\": %s\n", filename, strerror(errno ? errno : EFAULT));
 			free(buf);
