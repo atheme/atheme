@@ -524,7 +524,7 @@ static void sasl_newuser(user_t *u)
 	}
 
 	mu->lastlogin = CURRTIME;
-	hook_call_event("user_identify", u);
+	hook_call_user_identify(u);
 }
 
 /* This function is run approximately once every 30 seconds.

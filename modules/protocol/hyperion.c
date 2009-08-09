@@ -623,7 +623,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
-		hook_call_event("channel_tschange", c);
+		hook_call_channel_tschange(c);
 	}
 
 	channel_mode(NULL, c, parc - 3, parv + 2);

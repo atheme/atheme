@@ -128,7 +128,7 @@ static void nickserv_handle_nickchange(void *user_p)
 		(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp);
 	hdata.u = u;
 	hdata.mn = mn;
-	hook_call_event("nick_enforce", &hdata);
+	hook_call_nick_enforce(&hdata);
 }
 
 static void nickserv_config_ready(void *unused)

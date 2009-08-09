@@ -107,7 +107,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 
 	hdata.si = NULL; /* XXX we do not have this here */
 	hdata.mc = mc;
-	hook_call_event("channel_register", &hdata);
+	hook_call_channel_register(&hdata);
 
 	return 0;
 }

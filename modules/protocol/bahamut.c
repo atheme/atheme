@@ -510,7 +510,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (c->ts != 0)
 				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %lu to 0", si->s->name, c->name, (unsigned long)c->ts);
 			c->ts = 0;
-			hook_call_event("channel_tschange", c);
+			hook_call_channel_tschange(c);
 		}
 		else if (ts < c->ts)
 		{
@@ -545,7 +545,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 			c->ts = ts;
-			hook_call_event("channel_tschange", c);
+			hook_call_channel_tschange(c);
 		}
 		else if (ts > c->ts)
 			keep_new_modes = false;

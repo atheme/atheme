@@ -100,7 +100,7 @@ static void handle_verify_register(void *vptr)
 	LIST_FOREACH(n, mu->logins.head)
 	{
 		u = n->data;
-		hook_call_event("user_identify", u); /* XXX */
+		hook_call_user_identify(u); /* XXX */
 	}
 }
 

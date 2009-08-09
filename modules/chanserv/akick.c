@@ -156,7 +156,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (reason != NULL)
 				metadata_add(ca2, "reason", reason);
 
-			hook_call_event("channel_akick_add", ca2);
+			hook_call_channel_akick_add(ca2);
 			chanacs_close(ca2);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
@@ -189,7 +189,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (reason != NULL)
 				metadata_add(ca2, "reason", reason);
 
-			hook_call_event("channel_akick_add", ca2);
+			hook_call_channel_akick_add(ca2);
 			chanacs_close(ca2);
 
 			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mu->name, mc->name);

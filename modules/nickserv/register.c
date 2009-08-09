@@ -139,12 +139,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hdata.account = account;
 	hdata.email = email;
 	hdata.approved = 0;
-	hook_call_event("user_can_register", &hdata);
+	hook_call_user_can_register(&hdata);
 	if (hdata.approved != 0)
 		return;
 	if (!nicksvs.no_nick_ownership)
 	{
-		hook_call_event("nick_can_register", &hdata);
+		hook_call_nick_can_register(&hdata);
 		if (hdata.approved != 0)
 			return;
 	}
@@ -236,7 +236,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), mu->name, mu->email, pass);
-	hook_call_event("user_register", mu);
+	hook_call_user_register(mu);
 
 	if (si->su != NULL)
 	{
@@ -252,7 +252,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		req.si = si;
 		req.mu = mu;
 		req.mn = mn;
-		hook_call_event("user_verify_register", &req);
+		hook_call_user_verify_register(&req);
 	}
 }
 

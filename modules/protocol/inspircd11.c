@@ -698,7 +698,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		c->ts = ts;
-		hook_call_event("channel_tschange", c);
+		hook_call_channel_tschange(c);
 	}
 	else if (ts > c->ts)
 	{

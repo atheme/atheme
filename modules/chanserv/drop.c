@@ -144,7 +144,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("DROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 
-	hook_call_event("channel_drop", mc);
+	hook_call_channel_drop(mc);
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 		part(mc->name, chansvs.nick);
 	object_unref(mc);
@@ -194,7 +194,7 @@ static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("FDROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 
-	hook_call_event("channel_drop", mc);
+	hook_call_channel_drop(mc);
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 		part(mc->name, chansvs.nick);
 	object_unref(mc);

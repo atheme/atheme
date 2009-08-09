@@ -122,7 +122,7 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 
 	if (creator != me.me)
 	{
-		hook_call_event("channel_add", c);
+		hook_call_channel_add(c);
 
 		if (config_options.chan != NULL && !irccasecmp(config_options.chan, name))
 			joinall(config_options.chan);
@@ -174,7 +174,7 @@ void channel_delete(channel_t *c)
 	}
 	c->nummembers = 0;
 
-	hook_call_event("channel_delete", c);
+	hook_call_channel_delete(c);
 
 	mowgli_patricia_delete(chanlist, c->name);
 
@@ -411,7 +411,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	cnt.chanuser++;
 
 	hdata.cu = cu;
-	hook_call_event("channel_join", &hdata);
+	hook_call_channel_join(&hdata);
 
 	/* Return NULL if a hook function kicked the user out */
 	return hdata.cu;
@@ -460,7 +460,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 	/* this is called BEFORE we remove the user */
 	hdata.cu = cu;
-	hook_call_event("channel_part", &hdata);
+	hook_call_channel_part(&hdata);
 
 	slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 

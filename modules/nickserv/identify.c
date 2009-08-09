@@ -237,7 +237,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mu->flags & MU_WAITAUTH))
 			ircd_on_login(si->su, mu, NULL);
 
-		hook_call_event("user_identify", u);
+		hook_call_user_identify(u);
 
 		/* now we get to check for xOP */
 		/* we don't check for host access yet (could match different

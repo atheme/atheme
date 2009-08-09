@@ -225,7 +225,7 @@ void myuser_delete(myuser_t *mu)
 					mu->name,
 					LIST_LENGTH(&mc->chanacs));
 
-			hook_call_event("channel_drop", mc);
+			hook_call_channel_drop(mc);
 			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 				part(mc->name, chansvs.nick);
 			object_unref(mc);
@@ -1606,7 +1606,7 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 
 	req.data.mu = mu;
 	req.do_expire = 1;
-	hook_call_event("user_check_expire", &req);
+	hook_call_user_check_expire(&req);
 
 	if (!req.do_expire)
 		return 0;
@@ -1650,7 +1650,7 @@ void expire_check(void *arg)
 		req.do_expire = 1;
 		req.data.mn = mn;
 
-		hook_call_event("nick_check_expire", &req);
+		hook_call_nick_check_expire(&req);
 
 		if (!req.do_expire)
 			continue;
@@ -1687,7 +1687,7 @@ void expire_check(void *arg)
 		req.do_expire = 1;
 		req.data.mc = mc;
 
-		hook_call_event("channel_check_expire", &req);
+		hook_call_channel_check_expire(&req);
 
 		if (!req.do_expire)
 			continue;
@@ -1718,7 +1718,7 @@ void expire_check(void *arg)
 					mychan_founder_names(mc),
 					LIST_LENGTH(&mc->chanacs));
 
-			hook_call_event("channel_drop", mc);
+			hook_call_channel_drop(mc);
 			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 				part(mc->name, chansvs.nick);
 
