@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_sgline_newuser(void *vptr);
+static void os_sgline_newuser(user_t *u);
 
 static void os_cmd_sgline(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[]);
@@ -52,7 +52,7 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "SGLINE", "help/oservice/sgline", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", os_sgline_newuser);
+	hook_add_user_add(os_sgline_newuser);
 }
 
 void _moddeinit()
@@ -67,15 +67,13 @@ void _moddeinit()
 	
 	help_delentry(os_helptree, "SGLINE");
 
-	hook_del_hook("user_add", os_sgline_newuser);
+	hook_del_user_add(os_sgline_newuser);
 }
 
-static void os_sgline_newuser(void *vptr)
+static void os_sgline_newuser(user_t *u)
 {
-	user_t *u;
 	xline_t *x;
 
-	u = vptr;
 	if (is_internal_client(u))
 		return;
 	x = xline_find_user(u);

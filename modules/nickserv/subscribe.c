@@ -143,9 +143,8 @@ command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), A
 
 list_t *ns_cmdtree;
 
-static void hook_metadata_change(void *ptr)
+static void hook_metadata_change(hook_metadata_change_t *md)
 {
-	hook_metadata_change_t *md = (hook_metadata_change_t *) ptr;
 	myuser_t *mu;
 	node_t *n, *tn;
 
@@ -180,11 +179,11 @@ void _modinit(module_t *m)
 	command_add(&ns_subscribe, ns_cmdtree);
 
 	hook_add_event("metadata_change");
-	hook_add_hook("metadata_change", hook_metadata_change);
+	hook_add_metadata_change(hook_metadata_change);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&ns_subscribe, ns_cmdtree);
-	hook_del_hook("metadata_change", hook_metadata_change);
+	hook_del_metadata_change(hook_metadata_change);
 }

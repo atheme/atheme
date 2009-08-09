@@ -16,22 +16,21 @@ DECLARE_MODULE_V1
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
-static void check_registration(void *vptr);
+static void check_registration(hook_user_register_check_t *hdata);
 
 void _modinit(module_t *m)
 {
 	hook_add_event("user_can_register");
-	hook_add_hook("user_can_register", check_registration);
+	hook_add_user_can_register(check_registration);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_can_register", check_registration);
+	hook_del_user_can_register(check_registration);
 }
 
-static void check_registration(void *vptr)
+static void check_registration(hook_user_register_check_t *hdata)
 {
-	hook_user_register_check_t *hdata = vptr;
 	const char *bademails[] = { "*@hotmail.com", "*@msn.com",
 		"*@gmail.com", "*@yahoo.com", NULL };
 	int i;

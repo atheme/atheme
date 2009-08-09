@@ -188,13 +188,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", ajoin_on_identify);
+	hook_add_user_identify(ajoin_on_identify);
 	command_add(&ns_ajoin, ns_cmdtree);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_identify", ajoin_on_identify);
+	hook_del_user_identify(ajoin_on_identify);
 	command_delete(&ns_ajoin, ns_cmdtree);
 }
 

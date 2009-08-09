@@ -46,7 +46,7 @@ void servtree_init(void)
 	}
 
         hook_add_event("config_ready");
-	hook_add_hook("config_ready", servtree_update);
+	hook_add_config_ready(servtree_update);
 }
 
 static void me_me_init(void)

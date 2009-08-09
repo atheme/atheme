@@ -404,7 +404,7 @@ void _modinit(module_t *m)
 	/* This module needs a rehash to initialize fully if loaded
 	 * at run time */
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", httpd_config_ready);
+	hook_add_config_ready(httpd_config_ready);
 
 	add_subblock_top_conf("HTTPD", &conf_httpd_table);
 	add_dupstr_conf_item("HOST", &conf_httpd_table, &httpd_config.host);
@@ -415,7 +415,7 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	event_delete(httpd_checkidle, NULL);
-	hook_del_hook("config_ready", httpd_config_ready);
+	hook_del_config_ready(httpd_config_ready);
 	connection_close_soon_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);
 	del_conf_item("WWW_ROOT", &conf_httpd_table);

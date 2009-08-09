@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 list_t *ns_cmdtree, *ns_helptree;
 
-static void vhost_on_identify(void *vptr);
+static void vhost_on_identify(user_t *u);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -31,7 +31,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", vhost_on_identify);
+	hook_add_user_identify(vhost_on_identify);
 	command_add(&ns_vhost, ns_cmdtree);
 	command_add(&ns_listvhost, ns_cmdtree);
 	help_addentry(ns_helptree, "VHOST", "help/nickserv/vhost", NULL);
@@ -40,7 +40,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_identify", vhost_on_identify);
+	hook_del_user_identify(vhost_on_identify);
 	command_delete(&ns_vhost, ns_cmdtree);
 	command_delete(&ns_listvhost, ns_cmdtree);
 	help_delentry(ns_helptree, "VHOST");
@@ -266,9 +266,8 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
-static void vhost_on_identify(void *vptr)
+static void vhost_on_identify(user_t *u)
 {
-	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	metadata_t *md;
 

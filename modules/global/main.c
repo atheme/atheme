@@ -221,7 +221,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", global_config_ready);
+	hook_add_config_ready(global_config_ready);
 
 	globsvs.me = service_add("global", gservice, &gs_cmdtree, &gs_conftable);
 
@@ -265,7 +265,7 @@ void _moddeinit(void)
 
 	command_delete(&gs_help, &gs_cmdtree);
 
-	hook_del_hook("config_ready", global_config_ready);
+	hook_del_config_ready(global_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

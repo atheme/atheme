@@ -950,13 +950,13 @@ _modinit(module_t *m)
 	if (cold_start)
 	{
 		hook_add_event("config_ready");
-		hook_add_hook("config_ready", burst_the_wumpus);
+		hook_add_config_ready(burst_the_wumpus);
 	}
 	else
 		burst_the_wumpus(NULL);
 
 	hook_add_event("user_delete");
-	hook_add_hook("user_delete", user_deleted);
+	hook_add_user_delete(user_deleted);
 
 	command_add(&wumpus_help, &wumpus.cmdtree);
 	command_add(&wumpus_start, &wumpus.cmdtree);
@@ -977,7 +977,7 @@ _moddeinit(void)
 
 	del_service(wumpus.svs);
 
-	hook_del_hook("user_delete", user_deleted);
+	hook_del_user_delete(user_deleted);
 
 	command_delete(&wumpus_help, &wumpus.cmdtree);
 	command_delete(&wumpus_start, &wumpus.cmdtree);

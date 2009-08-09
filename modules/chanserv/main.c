@@ -187,7 +187,7 @@ static void chanserv_config_ready(void *unused)
 void _modinit(module_t *m)
 {
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", chanserv_config_ready);
+	hook_add_config_ready(chanserv_config_ready);
 
 	chansvs.me = service_add("chanserv", chanserv, &cs_cmdtree, &conf_ci_table);
 
@@ -221,7 +221,7 @@ void _moddeinit(void)
 		chansvs.me = NULL;
 	}
 
-	hook_del_hook("config_ready", chanserv_config_ready);
+	hook_del_config_ready(chanserv_config_ready);
 	hook_del_channel_join(cs_join);
 	hook_del_channel_part(cs_part);
 	hook_del_channel_register(cs_register);

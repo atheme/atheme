@@ -74,13 +74,10 @@ struct
 	{ NULL, NULL }
 };
 
-static void nickserv_handle_nickchange(void *user_p)
+static void nickserv_handle_nickchange(user_t *u)
 {
-	user_t *u;
 	mynick_t *mn;
 	hook_nick_enforce_t hdata;
-
-	u = (user_t *) user_p;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
 		return;
@@ -153,10 +150,10 @@ static void nickserv_config_ready(void *unused)
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
-        hook_add_hook("config_ready", nickserv_config_ready);
+        hook_add_config_ready(nickserv_config_ready);
 
         hook_add_event("nick_check");
-        hook_add_hook("nick_check", nickserv_handle_nickchange);
+        hook_add_nick_check(nickserv_handle_nickchange);
 
 	nicksvs.me = service_add("nickserv", nickserv, &ns_cmdtree, &conf_ni_table);
 	authservice_loaded++;
@@ -176,8 +173,8 @@ void _moddeinit(void)
 	}
 	authservice_loaded--;
 
-        hook_del_hook("config_ready", nickserv_config_ready);
-        hook_del_hook("nick_check", nickserv_handle_nickchange);
+        hook_del_config_ready(nickserv_config_ready);
+        hook_del_nick_check(nickserv_handle_nickchange);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

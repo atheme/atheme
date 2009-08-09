@@ -19,8 +19,8 @@ DECLARE_MODULE_V1
 #define DEFAULT_WARN_CLONES	3 /* IPs with more than this are warned about */
 #define EXEMPT_GRACE		10 /* exempt IPs exceeding their allowance by this are banned */
 
-static void clones_newuser(void *);
-static void clones_userquit(void *);
+static void clones_newuser(user_t *u);
+static void clones_userquit(user_t *u);
 
 static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[]);
@@ -90,9 +90,9 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "CLONES", "help/oservice/clones", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", clones_newuser);
+	hook_add_user_add(clones_newuser);
 	hook_add_event("user_delete");
-	hook_add_hook("user_delete", clones_userquit);
+	hook_add_user_delete(clones_userquit);
 
 	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
@@ -151,8 +151,8 @@ void _moddeinit(void)
 
 	help_delentry(os_helptree, "CLONES");
 
-	hook_del_hook("user_add", clones_newuser);
-	hook_del_hook("user_delete", clones_userquit);
+	hook_del_user_add(clones_newuser);
+	hook_del_user_delete(clones_userquit);
 }
 
 static void write_exemptdb(void)
@@ -505,10 +505,9 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLONES LISTEXEMPT");
 }
 
-static void clones_newuser(void *vptr)
+static void clones_newuser(user_t *u)
 {
 	unsigned int i;
-	user_t *u = vptr;
 	hostentry_t *he;
 	unsigned int allowed = 0;
 
@@ -556,9 +555,8 @@ static void clones_newuser(void *vptr)
 	}
 }
 
-static void clones_userquit(void *vptr)
+static void clones_userquit(user_t *u)
 {
-	user_t *u = vptr;
 	node_t *n;
 	hostentry_t *he;
 

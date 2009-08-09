@@ -28,12 +28,12 @@ static void handle_channel_register(void *vptr);
 void _modinit(module_t *m)
 {
 	hook_add_event("channel_register");
-	hook_add_hook_first("channel_register", handle_channel_register);
+	hook_add_first_channel_register(handle_channel_register);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("channel_register", handle_channel_register);
+	hook_del_channel_register(handle_channel_register);
 }
 
 static void handle_channel_register(void *vptr)

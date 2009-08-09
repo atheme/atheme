@@ -65,7 +65,7 @@ static void gameserv_config_ready(void *unused)
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
-        hook_add_hook("config_ready", gameserv_config_ready);
+        hook_add_config_ready(gameserv_config_ready);
 
 	gamesvs.me = service_add("gameserv", gameserv, &gs_cmdtree, &gs_conftable);
 }
@@ -82,7 +82,7 @@ void _moddeinit(void)
                 service_delete(gamesvs.me);
 		gamesvs.me = NULL;
 	}
-	hook_del_hook("config_ready", gameserv_config_ready);
+	hook_del_config_ready(gameserv_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

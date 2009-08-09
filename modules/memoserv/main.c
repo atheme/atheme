@@ -16,8 +16,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void on_user_identify(void *vptr);
-static void on_user_away(void *vptr);
+static void on_user_identify(user_t *u);
+static void on_user_away(user_t *u);
 
 list_t ms_cmdtree;
 list_t ms_helptree;
@@ -68,13 +68,13 @@ static void memoserv_config_ready(void *unused)
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
-        hook_add_hook("config_ready", memoserv_config_ready);
+        hook_add_config_ready(memoserv_config_ready);
 	
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", on_user_identify);
+	hook_add_user_identify(on_user_identify);
 
 	hook_add_event("user_away");
-	hook_add_hook("user_away", on_user_away);
+	hook_add_user_away(on_user_away);
 
 	memosvs.me = service_add("memoserv", memoserv, &ms_cmdtree, &ms_conftable);
 }
@@ -91,12 +91,11 @@ void _moddeinit(void)
                 service_delete(memosvs.me);
 		memosvs.me = NULL;
 	}
-	hook_del_hook("config_ready", memoserv_config_ready);
+	hook_del_config_ready(memoserv_config_ready);
 }
 
-static void on_user_identify(void *vptr)
+static void on_user_identify(user_t *u)
 {
-	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	
 	if (mu->memoct_new > 0)
@@ -109,9 +108,8 @@ static void on_user_identify(void *vptr)
 	}
 }
 
-static void on_user_away(void *vptr)
+static void on_user_away(user_t *u)
 {
-	user_t *u = vptr;
 	myuser_t *mu;
 	mynick_t *mn;
 

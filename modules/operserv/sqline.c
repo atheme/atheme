@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_sqline_newuser(void *vptr);
-static void os_sqline_chanjoin(void *vptr);
+static void os_sqline_newuser(user_t *u);
+static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata);
 
 static void os_cmd_sqline(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[]);
@@ -55,9 +55,9 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "SQLINE", "help/oservice/sqline", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", os_sqline_newuser);
+	hook_add_user_add(os_sqline_newuser);
 	hook_add_event("channel_join");
-	hook_add_hook("channel_join", os_sqline_chanjoin); 
+	hook_add_channel_join(os_sqline_chanjoin); 
 }
 
 void _moddeinit()
@@ -72,16 +72,14 @@ void _moddeinit()
 	
 	help_delentry(os_helptree, "SQLINE");
 
-	hook_del_hook("user_add", os_sqline_newuser);
-	hook_del_hook("channel_join", os_sqline_chanjoin);
+	hook_del_user_add(os_sqline_newuser);
+	hook_del_channel_join(os_sqline_chanjoin);
 }
 
-static void os_sqline_newuser(void *vptr)
+static void os_sqline_newuser(user_t *u)
 {
-	user_t *u;
 	qline_t *q;
 
-	u = vptr;
 	if (is_internal_client(u))
 		return;
 	q = qline_find_user(u);
@@ -94,9 +92,9 @@ static void os_sqline_newuser(void *vptr)
 	}
 }
 
-static void os_sqline_chanjoin(void *vptr)
+static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu = ((hook_channel_joinpart_t *)vptr)->cu;
+	chanuser_t *cu = hdata->cu;
 	qline_t *q;
 
 	if (cu == NULL)

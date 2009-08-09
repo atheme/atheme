@@ -17,8 +17,8 @@ DECLARE_MODULE_V1
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
-static void check_registration(void *vptr);
-static void handle_register(void *vptr);
+static void check_registration(hook_user_register_check_t *hdata);
+static void handle_register(myuser_t *mu);
 
 /* settings */
 unsigned int ratelimitreg_max = 5; /* allow this many account registrations */
@@ -40,8 +40,8 @@ void _modinit(module_t *m)
 	hook_add_event("user_can_register");
 	hook_add_event("user_register");
 
-	hook_add_hook("user_can_register", check_registration);
-	hook_add_hook("user_register", handle_register);
+	hook_add_user_can_register(check_registration);
+	hook_add_user_register(handle_register);
 
 	svs = service_find("nickserv");
 	conftable = svs != NULL ? svs->conf_table : NULL;
@@ -58,8 +58,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_can_register", check_registration);
-	hook_del_hook("user_register", handle_register);
+	hook_del_user_can_register(check_registration);
+	hook_del_user_register(handle_register);
 
 	if (conftable != NULL)
 	{
@@ -69,9 +69,8 @@ void _moddeinit(void)
 	}
 }
 
-static void check_registration(void *vptr)
+static void check_registration(hook_user_register_check_t *hdata)
 {
-	hook_user_register_check_t *hdata = vptr;
 	static time_t lastwallops;
 
 	if (hdata->approved)
@@ -97,9 +96,9 @@ static void check_registration(void *vptr)
 	}
 }
 
-static void handle_register(void *vptr)
+static void handle_register(myuser_t *mu)
 {
-	(void)vptr;
+	(void)mu;
 
 	if ((unsigned int)(CURRTIME - ratelimitreg_firsttime) > ratelimitreg_period)
 		ratelimitreg_count = 0, ratelimitreg_firsttime = CURRTIME;

@@ -97,7 +97,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
 
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", cs_set_config_ready);
+	hook_add_config_ready(cs_set_config_ready);
 }
 
 void _moddeinit()
@@ -120,7 +120,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET FANTASY");
 	help_delentry(cs_helptree, "SET GUARD");
 
-	hook_del_hook("config_ready", cs_set_config_ready);
+	hook_del_config_ready(cs_set_config_ready);
 }
 
 static void cs_set_config_ready(void *unused)

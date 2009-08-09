@@ -22,7 +22,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_close = { "CLOSE", N_("Closes a channel."),
 			PRIV_CHAN_ADMIN, 3, cs_cmd_close };
 
-static void close_check_join(void *vcu);
+static void close_check_join(hook_channel_joinpart_t *data);
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
@@ -34,21 +34,21 @@ void _modinit(module_t *m)
 
 	command_add(&cs_close, cs_cmdtree);
 	hook_add_event("channel_join");
-	hook_add_hook_first("channel_join", close_check_join);
+	hook_add_first_channel_join(close_check_join);
 	help_addentry(cs_helptree, "CLOSE", "help/cservice/close", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_close, cs_cmdtree);
-	hook_del_hook("channel_join", close_check_join);
+	hook_del_channel_join(close_check_join);
 	help_delentry(cs_helptree, "CLOSE");
 }
 
-static void close_check_join(void *vdata)
+static void close_check_join(hook_channel_joinpart_t *data)
 {
 	mychan_t *mc;
-	chanuser_t *cu = ((hook_channel_joinpart_t *)vdata)->cu;
+	chanuser_t *cu = data->cu;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
@@ -70,7 +70,7 @@ static void close_check_join(void *vdata)
 
 		/* clear the channel */
 		kick(chansvs.me->me, cu->chan, cu->user, "This channel has been closed");
-		((hook_channel_joinpart_t *)vdata)->cu = NULL;
+		data->cu = NULL;
 	}
 }
 

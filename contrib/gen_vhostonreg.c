@@ -21,15 +21,15 @@ DECLARE_MODULE_V1
 
 static int counter;
 
-static void handle_verify_register(void *vptr);
-static void hook_user_identify(void *vptr);
+static void handle_verify_register(hook_user_req_t *req);
+static void hook_user_identify(user_t *u);
 
 void _modinit(module_t *m)
 {
 	hook_add_event("user_verify_register");
-	hook_add_hook("user_verify_register", handle_verify_register);
+	hook_add_user_verify_register(handle_verify_register);
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", hook_user_identify);
+	hook_add_user_identify(hook_user_identify);
 	counter = (CURRTIME << 8) % 100000;
 	if (counter < 0)
 		counter += 100000;
@@ -37,8 +37,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_verify_register", handle_verify_register);
-	hook_del_hook("user_identify", hook_user_identify);
+	hook_del_user_verify_register(handle_verify_register);
+	hook_del_user_identify(hook_user_identify);
 }
 
 static void user_add_host(myuser_t *mu)
@@ -85,9 +85,8 @@ static void user_add_host(myuser_t *mu)
 	metadata_add(mu, "private:usercloak", newhost);
 }
 
-static void handle_verify_register(void *vptr)
+static void handle_verify_register(hook_user_req_t *req)
 {
-	hook_user_req_t *req = vptr;
 	myuser_t *mu = req->mu;
 	node_t *n;
 	user_t *u;
@@ -104,10 +103,8 @@ static void handle_verify_register(void *vptr)
 	}
 }
 
-static void hook_user_identify(void *vptr)
+static void hook_user_identify(user_t *u)
 {
-	user_t *u = vptr;
-
 	/* if they have an existing cloak, don't do anything */
 	if ((metadata_find(u->myuser, "private:usercloak")) || (me.hidehostsuffix == NULL))
 		return;	

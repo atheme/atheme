@@ -349,7 +349,7 @@ static void botserv_config_ready(void *unused)
 	if (me.connected)
 		bs_join_registered(!config_options.leave_chans);
 
-	hook_del_hook("config_ready", botserv_config_ready);
+	hook_del_config_ready(botserv_config_ready);
 }
 
 /* ******************************************************************** */
@@ -870,7 +870,7 @@ void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", botserv_config_ready);
+	hook_add_config_ready(botserv_config_ready);
 
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
@@ -934,7 +934,7 @@ void _moddeinit(void)
 	hook_del_channel_register(bs_register);
 	hook_del_channel_add(bs_newchan);
 	hook_del_channel_can_change_topic(bs_topiccheck);
-	hook_del_hook("config_ready", botserv_config_ready);
+	hook_del_config_ready(botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;
 	modestack_mode_limit  = modestack_mode_limit_real;

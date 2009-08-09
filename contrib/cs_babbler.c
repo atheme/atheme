@@ -85,12 +85,12 @@ on_channel_message(void *p)
 void _modinit(module_t *m)
 {
 	hook_add_event("channel_message");
-	hook_add_hook("channel_message", on_channel_message);
+	hook_add_channel_message(on_channel_message);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("channel_message", on_channel_message);
+	hook_del_channel_message(on_channel_message);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

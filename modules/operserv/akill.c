@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_akill_newuser(void *vptr);
+static void os_akill_newuser(user_t *u);
 
 static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[]);
@@ -54,7 +54,7 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", os_akill_newuser);
+	hook_add_user_add(os_akill_newuser);
 }
 
 void _moddeinit()
@@ -69,15 +69,13 @@ void _moddeinit()
 	
 	help_delentry(os_helptree, "AKILL");
 
-	hook_del_hook("user_add", os_akill_newuser);
+	hook_del_user_add(os_akill_newuser);
 }
 
-static void os_akill_newuser(void *vptr)
+static void os_akill_newuser(user_t *u)
 {
-	user_t *u;
 	kline_t *k;
 
-	u = vptr;
 	if (is_internal_client(u))
 		return;
 	k = kline_find_user(u);

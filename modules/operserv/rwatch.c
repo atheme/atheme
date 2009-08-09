@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void rwatch_newuser(void *);
+static void rwatch_newuser(user_t *u);
 
 static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[]);
@@ -68,7 +68,7 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "RWATCH", "help/oservice/rwatch", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", rwatch_newuser);
+	hook_add_user_add(rwatch_newuser);
 
 	load_rwatchdb();
 }
@@ -100,7 +100,7 @@ void _moddeinit(void)
 
 	help_delentry(os_helptree, "RWATCH");
 
-	hook_del_hook("user_add", rwatch_newuser);
+	hook_del_user_add(rwatch_newuser);
 }
 
 static void write_rwatchdb(void)
@@ -439,9 +439,8 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in regex watch list."), pattern);
 }
 
-static void rwatch_newuser(void *vptr)
+static void rwatch_newuser(user_t *u)
 {
-	user_t *u = vptr;
 	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	node_t *n;
 	rwatch_t *rw;
