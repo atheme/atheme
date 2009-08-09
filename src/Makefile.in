@@ -172,7 +172,7 @@ install: build
 	$(INSTALL) -m 600 -c ../dist/atheme.conf.operserv-example $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 644 -c ../dist/atheme.cron.example $(DESTDIR)$(sysconfdir)
 	[ -f ${DESTDIR}${bindir}/atheme ] && ${RM} ${DESTDIR}${bindir}/atheme || :
-	-${RM} -f $(DESTDIR)${DOCDIR}/HOOKS $(DESTDIR)${DOCDIR}/MODES $(DESTDIR)${DOCDIR}/XMLRPCLIB
+	-${RM} -f $(DESTDIR)${DOCDIR}/HOOKS $(DESTDIR)${DOCDIR}/MODES $(DESTDIR)${DOCDIR}/XMLRPCLIB $(DESTDIR)${DOCDIR}/technical/HOOKS
 	(cd ../doc; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); \
 		if [ -d $$i ]; then \
@@ -218,6 +218,9 @@ install: build
 $(SRCDIR)/version.c:
 	/bin/sh ./version.sh $(VERSION)
 
+../include/hooktypes.h: $(SRCDIR)/mkhooktypes.sh $(SRCDIR)/hooktypes.in
+	PATH=`getconf PATH` sh $(SRCDIR)/mkhooktypes.sh $(SRCDIR)/hooktypes.in >../include/hooktypes.h
+
 .c.o:
 	${CC} ${CFLAGS} ${CPPFLAGS} -c $< -o $@
 
@@ -227,7 +230,7 @@ depend:
 	${MKDEP} ${PICFLAGS} ${CFLAGS} ${CPPFLAGS} ${BASE_SRCS} | sed -e 's|\([^.]*\.o\):|$(SRCDIR)/\1:|' > .depend
 
 clean:
-	${RM} -f *.o *.exe *~ version.c atheme-services.core core atheme-services ../dist/atheme.conf.userserv-example
+	${RM} -f *.o *.exe *~ version.c atheme-services.core core atheme-services ../dist/atheme.conf.userserv-example ../include/hooktypes.h
 
 distclean: clean
 	${RM} -f Makefile version.c.last .depend

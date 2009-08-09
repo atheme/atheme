@@ -191,7 +191,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 			{
 				hdata.u = u;
 				hdata.mn = mn;
-				hook_call_event("nick_enforce", &hdata);
+				hook_call_nick_enforce(&hdata);
 			}
 		}
 	}

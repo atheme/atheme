@@ -183,7 +183,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	cnt.user++;
 
-	hook_call_event("user_add", u);
+	hook_call_user_add(u);
 
 	return u;
 }
@@ -229,7 +229,7 @@ void user_delete(user_t *u, const char *comment)
 
 	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s (%s)", u->nick, u->server->name, comment);
 
-	hook_call_event("user_delete", u);
+	hook_call_user_delete(u);
 
 	u->server->users--;
 	if (is_ircop(u))
@@ -560,14 +560,14 @@ void user_mode(user_t *user, const char *modes)
 		slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
 		snoop("OPER: %s (%s)", user->nick, user->server->name);
 		user->server->opers++;
-		hook_call_event("user_oper", user);
+		hook_call_user_oper(user);
 	}
 	else if (was_ircop && !is_ircop(user))
 	{
 		slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
 		snoop("DEOPER: %s (%s)", user->nick, user->server->name);
 		user->server->opers--;
-		hook_call_event("user_deoper", user);
+		hook_call_user_deoper(user);
 	}
 }
 

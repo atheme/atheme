@@ -103,7 +103,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", xmlrpc_config_ready);
+	hook_add_config_ready(xmlrpc_config_ready);
 
 	xmlrpc_config.path = sstrdup("/xmlrpc");
 
@@ -136,7 +136,7 @@ void _moddeinit(void)
 
 	free(xmlrpc_config.path);
 
-	hook_del_hook("config_ready", xmlrpc_config_ready);
+	hook_del_config_ready(xmlrpc_config_ready);
 }
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)

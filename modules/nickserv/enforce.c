@@ -39,9 +39,9 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
 
 static void enforce_timeout_check(void *arg);
-static void show_enforce(void *vdata);
-static void check_registration(void *vdata);
-static void check_enforce(void *vdata);
+static void show_enforce(hook_user_req_t *hdata);
+static void check_registration(hook_user_register_check_t *hdata);
+static void check_enforce(hook_nick_enforce_t *hdata);
 
 command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce }; 
 command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
@@ -287,18 +287,15 @@ void enforce_timeout_check(void *arg)
 	}
 }
 
-static void show_enforce(void *vdata)
+static void show_enforce(hook_user_req_t *hdata)
 {
-	hook_user_req_t *hdata = vdata;
 
 	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, "%s has enabled nick protection", hdata->mu->name);
 }
 
-static void check_registration(void *vdata)
+static void check_registration(hook_user_register_check_t *hdata)
 {
-	hook_user_register_check_t *hdata = vdata;
-
 	if (hdata->approved)
 		return;
 	if (!strncasecmp(hdata->account, "Guest", 5) && isdigit(hdata->account[5]))
@@ -308,9 +305,8 @@ static void check_registration(void *vdata)
 	}
 }
 
-static void check_enforce(void *vdata)
+static void check_enforce(hook_nick_enforce_t *hdata)
 {
-	hook_nick_enforce_t *hdata = vdata;
 	enforce_timeout_t *timeout, *timeout2;
 	node_t *n;
 
@@ -420,11 +416,11 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_info");
-	hook_add_hook("user_info", show_enforce);
+	hook_add_user_info(show_enforce);
 	hook_add_event("nick_can_register");
-	hook_add_hook("nick_can_register", check_registration);
+	hook_add_nick_can_register(check_registration);
 	hook_add_event("nick_enforce");
-	hook_add_hook("nick_enforce", check_enforce);
+	hook_add_nick_enforce(check_enforce);
 }
 
 void _moddeinit()
@@ -437,9 +433,9 @@ void _moddeinit()
 	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "SET ENFORCE");
-	hook_del_hook("user_info", show_enforce);
-	hook_del_hook("user_can_register", check_registration);
-	hook_del_hook("nick_enforce", check_enforce);
+	hook_del_user_info(show_enforce);
+	hook_del_user_can_register(check_registration);
+	hook_del_nick_enforce(check_enforce);
 	BlockHeapDestroy(enforce_timeout_heap);
 }
 

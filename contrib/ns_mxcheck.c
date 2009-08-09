@@ -11,23 +11,22 @@ DECLARE_MODULE_V1
     "Jamie L. Penman-Smithson <jamie@slacked.org>"
 );
 
-static void check_registration(void *vptr);
+static void check_registration(hook_user_register_check_t *hdata);
 int count_mx (const char *host);
 
 void _modinit(module_t *m)
 {
     hook_add_event("user_can_register");
-    hook_add_hook("user_can_register", check_registration);
+    hook_add_user_can_register(check_registration);
 }
 
 void _moddeinit(void)
 {
-    hook_del_hook("user_can_register", check_registration);
+    hook_del_user_can_register(check_registration);
 }
 
-static void check_registration(void *vptr)
+static void check_registration(hook_user_register_check_t *hdata)
 {
-    hook_user_register_check_t *hdata = vptr;
     char buf[1024];
     const char *user;
     const char *domain;

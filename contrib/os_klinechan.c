@@ -23,8 +23,8 @@ command_t os_klinechan = { "KLINECHAN", "Klines all users joining a channel.",
 			PRIV_MASS_AKILL, 3, os_cmd_klinechan };
 command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans };
 
-static void klinechan_check_join(void *vcu);
-static void klinechan_show_info(void *vdata);
+static void klinechan_check_join(hook_channel_joinpart_t *hdata);
+static void klinechan_show_info(hook_channel_req_t *hdata);
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -37,9 +37,9 @@ void _modinit(module_t *m)
 	command_add(&os_klinechan, os_cmdtree);
 	command_add(&os_listklinechans, os_cmdtree);
 	hook_add_event("channel_join");
-	hook_add_hook_first("channel_join", klinechan_check_join);
+	hook_add_first_channel_join(klinechan_check_join);
 	hook_add_event("channel_info");
-	hook_add_hook("channel_info", klinechan_show_info);
+	hook_add_channel_info(klinechan_show_info);
 	help_addentry(os_helptree, "KLINECHAN", "help/oservice/klinechan", NULL);
 	help_addentry(os_helptree, "LISTKLINECHANS", "help/oservice/listklinechans", NULL);
 }
@@ -48,16 +48,16 @@ void _moddeinit()
 {
 	command_delete(&os_klinechan, os_cmdtree);
 	command_delete(&os_listklinechans, os_cmdtree);
-	hook_del_hook("channel_join", klinechan_check_join);
-	hook_del_hook("channel_info", klinechan_show_info);
+	hook_del_channel_join(klinechan_check_join);
+	hook_del_channel_info(klinechan_show_info);
 	help_delentry(os_helptree, "KLINECHANS");
 	help_delentry(os_helptree, "LISTKLINECHANS");
 }
 
-static void klinechan_check_join(void *vdata)
+static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 {
 	mychan_t *mc;
-	chanuser_t *cu = ((hook_channel_joinpart_t *)vdata)->cu;
+	chanuser_t *cu = hdata->cu;
 	char reason[256];
 
 	if (cu == NULL || is_internal_client(cu->user))
@@ -85,9 +85,8 @@ static void klinechan_check_join(void *vdata)
 	}
 }
 
-static void klinechan_show_info(void *vdata)
+static void klinechan_show_info(hook_channel_req_t *hdata)
 {
-	hook_channel_req_t *hdata = vdata;
 	metadata_t *md;
 	const char *setter, *reason;
 	time_t ts;

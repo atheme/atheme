@@ -17,10 +17,8 @@ DECLARE_MODULE_V1
 );
 
 static void
-on_channel_message(void *p)
+on_channel_message(hook_cmessage_data_t *data)
 {
-	hook_cmessage_data_t *data = p;
-
 	if (data != NULL && data->msg != NULL && !strncmp(data->msg, "...", 3))
 	{
 		mychan_t *mc = mychan_find(data->c->name);
@@ -35,12 +33,12 @@ on_channel_message(void *p)
 void _modinit(module_t *m)
 {
 	hook_add_event("channel_message");
-	hook_add_hook("channel_message", on_channel_message);
+	hook_add_channel_message(on_channel_message);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("channel_message", on_channel_message);
+	hook_del_channel_message(on_channel_message);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

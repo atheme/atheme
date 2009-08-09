@@ -99,7 +99,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	hdata_reg.account = si->su->nick;
 	hdata_reg.email = si->smu->email;
 	hdata_reg.approved = 0;
-	hook_call_event("nick_can_register", &hdata_reg);
+	hook_call_nick_can_register(&hdata_reg);
 	if (hdata_reg.approved != 0)
 		return;
 
@@ -112,7 +112,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.mu = si->smu;
 	hdata.mn = mn;
-	hook_call_event("nick_group", &hdata);
+	hook_call_nick_group(&hdata);
 }
 
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
@@ -156,7 +156,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.mu = si->smu;
 	hdata.mn = mn;
-	hook_call_event("nick_ungroup", &hdata);
+	hook_call_nick_ungroup(&hdata);
 	command_success_nodata(si, _("Nick \2%s\2 has been removed from your account."), mn->nick);
 	object_unref(mn);
 }
@@ -246,7 +246,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.mu = mu;
 	hdata.mn = mn;
-	hook_call_event("nick_ungroup", &hdata);
+	hook_call_nick_ungroup(&hdata);
 	if (mn2 != NULL)
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, mu->name, mn2->nick);
 	else

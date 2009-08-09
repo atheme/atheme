@@ -528,7 +528,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (c->ts != 0)
 				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %lu to 0", si->s->name, c->name, (unsigned long)c->ts);
 			c->ts = 0;
-			hook_call_event("channel_tschange", c);
+			hook_call_channel_tschange(c);
 		}
 		else if (ts < c->ts)
 		{
@@ -563,7 +563,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 			c->ts = ts;
-			hook_call_event("channel_tschange", c);
+			hook_call_channel_tschange(c);
 		}
 		else if (ts > c->ts)
 			keep_new_modes = false;
@@ -964,9 +964,9 @@ void _modinit(module_t * m)
 	pcommand_add("SVHOST", m_svhost, 2, MSRC_USER | MSRC_SERVER);
 
 	hook_add_event("nick_group");
-	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
-	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
+	hook_add_nick_ungroup(nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

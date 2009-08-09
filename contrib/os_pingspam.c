@@ -47,7 +47,7 @@ char *phrases[] =
 };
 
 void pingspam(user_t *u);
-static void user_add_hook(void *vptr);
+static void user_add_hook(user_t *u);
 static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -66,19 +66,18 @@ void _modinit(module_t *m)
 	command_add(&os_autopingspam, os_cmdtree);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", user_add_hook);
+	hook_add_user_add(user_add_hook);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_pingspam, os_cmdtree);
 	command_delete(&os_autopingspam, os_cmdtree);
-	hook_del_hook("user_add", user_add_hook);
+	hook_del_user_add(user_add_hook);
 }
 
-static void user_add_hook(void *vptr)
+static void user_add_hook(user_t *u)
 {
-	user_t *u = vptr;
 	if(spamming)
 		pingspam(u);
 }

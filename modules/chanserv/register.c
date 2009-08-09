@@ -112,7 +112,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hdatac.name = name;
 	hdatac.chan = c;
 	hdatac.approved = 0;
-	hook_call_event("channel_can_register", &hdatac);
+	hook_call_channel_can_register(&hdatac);
 	if (hdatac.approved != 0)
 		return;
 
@@ -151,7 +151,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	hdata.si = si;
 	hdata.mc = mc;
-	hook_call_event("channel_register", &hdata);
+	hook_call_channel_register(&hdata);
 	/* Allow the hook to override this. */
 	fl = chanacs_source_flags(mc, si);
 	cu = chanuser_find(mc->chan, si->su);

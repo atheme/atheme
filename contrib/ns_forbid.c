@@ -79,7 +79,7 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 			notice(si->service->nick, u->nick,
 					_("The nick \2%s\2 is now forbidden."),
 					mu->name);
-			hook_call_event("nick_enforce", &(hook_nick_enforce_t){ .u = u, .mn = mn });
+			hook_call_nick_enforce((&(hook_nick_enforce_t){ .u = u, .mn = mn }));
 		}
 	}
 

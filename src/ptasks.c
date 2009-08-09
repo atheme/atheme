@@ -426,7 +426,7 @@ void handle_away(user_t *u, const char *message)
 		if (u->flags & UF_AWAY)
 		{
 			u->flags &= ~UF_AWAY;
-			hook_call_event("user_away", u);
+			hook_call_user_away(u);
 		}
 	}
 	else
@@ -434,7 +434,7 @@ void handle_away(user_t *u, const char *message)
 		if (!(u->flags & UF_AWAY))
 		{
 			u->flags |= UF_AWAY;
-			hook_call_event("user_away", u);
+			hook_call_user_away(u);
 		}
 	}
 }
@@ -455,7 +455,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	if (cdata.c == NULL)
 		return;
 
-	hook_call_event("channel_message", &cdata);
+	hook_call_channel_message(&cdata);
 
 	vec[0] = target;
 	vec[1] = message;
@@ -604,7 +604,7 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, 
 	if (topic != NULL ? c->topic == NULL || strcmp(topic, c->topic) : c->topic != NULL)
 	{
 		/* Only call the hook if the topic actually changed */
-		hook_call_event("channel_can_change_topic", &hdata);
+		hook_call_channel_can_change_topic(&hdata);
 	}
 	if (hdata.approved == 0)
 	{
@@ -662,7 +662,7 @@ void handle_topic(channel_t *c, const char *setter, time_t ts, const char *topic
 		c->topic = c->topic_setter = NULL;
 	c->topicts = ts;
 
-	hook_call_event("channel_topic", c);
+	hook_call_channel_topic(c);
 }
 
 static const char *skip_kill_path(const char *reason)
@@ -774,7 +774,7 @@ void handle_eob(server_t *s)
 		return;
 	slog(LG_NETWORK, "handle_eob(): end of burst from %s (%d users)",
 			s->name, s->users);
-	hook_call_event("server_eob", s);
+	hook_call_server_eob(s);
 	s->flags |= SF_EOB;
 	/* convert P10 style EOB to ircnet/ratbox style */
 	LIST_FOREACH(n, s->children.head)

@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 list_t *cs_cmdtree, *cs_helptree;
 
-static void userinfo_check_join(void *vptr);
+static void userinfo_check_join(hook_channel_joinpart_t *hdata);
 static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_userinfo = { "USERINFO", N_("Sets a userinfo message."),
@@ -30,14 +30,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	hook_add_event("channel_join");
-	hook_add_hook("channel_join", userinfo_check_join);
+	hook_add_channel_join(userinfo_check_join);
 	command_add(&cs_userinfo, cs_cmdtree);
 	help_addentry(cs_helptree, "USERINFO", "help/cservice/userinfo", NULL);
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("channel_join", userinfo_check_join);
+	hook_del_channel_join(userinfo_check_join);
 	command_delete(&cs_userinfo, cs_cmdtree);
 	help_delentry(cs_helptree, "USERINFO");
 }
@@ -140,9 +140,9 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-static void userinfo_check_join(void *vptr)
+static void userinfo_check_join(hook_channel_joinpart_t *hdata)
 {
-	chanuser_t *cu = ((hook_channel_joinpart_t *)vptr)->cu;
+	chanuser_t *cu = hdata->cu;
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;

@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void on_user_identify(void *vptr);
+static void on_user_identify(user_t *u);
 
 list_t hs_cmdtree;
 list_t hs_helptree;
@@ -59,16 +59,16 @@ static void hostserv_config_ready(void *unused)
 {
 	hostsvs.disp = hostsvs.me->disp;
 
-	hook_del_hook("config_ready", hostserv_config_ready);
+	hook_del_config_ready(hostserv_config_ready);
 }
 
 void _modinit(module_t *m)
 {
 	hook_add_event("config_ready");
-	hook_add_hook("config_ready", hostserv_config_ready);
+	hook_add_config_ready(hostserv_config_ready);
 
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", on_user_identify);
+	hook_add_user_identify(on_user_identify);
 
 	hostsvs.me = service_add("hostserv", hostserv, &hs_cmdtree, &conf_hs_table);
 }
@@ -80,7 +80,7 @@ void _moddeinit(void)
 		service_delete(hostsvs.me);
 		hostsvs.me = NULL;
 	}
-	hook_del_hook("user_identify", on_user_identify);
+	hook_del_user_identify(on_user_identify);
 }
 
 static void do_sethost(user_t *u, char *host)
@@ -91,9 +91,8 @@ static void do_sethost(user_t *u, char *host)
 	sethost_sts(hostsvs.me->me, u, u->vhost);
 }
 
-static void on_user_identify(void *vptr)
+static void on_user_identify(user_t *u)
 {
-	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	metadata_t *md;
 	char buf[NICKLEN + 20];

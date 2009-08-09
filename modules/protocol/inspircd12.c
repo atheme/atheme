@@ -746,7 +746,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		c->ts = ts;
-		hook_call_event("channel_tschange", c);
+		hook_call_channel_tschange(c);
 	}
 	else if (ts > c->ts)
 	{
@@ -1130,7 +1130,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		smsg.uid = parv[2];
 		smsg.mode = *parv[4];
 		smsg.buf = parv[5];
-		hook_call_event("sasl_input", &smsg);
+		hook_call_sasl_input(&smsg);
 	}
 }
 
@@ -1348,7 +1348,7 @@ void _modinit(module_t * m)
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 
 	hook_add_event("server_eob");
-	hook_add_hook("server_eob", (void (*)(void *))server_eob);
+	hook_add_server_eob(server_eob);
 
 	m->mflags = MODTYPE_CORE;
 

@@ -1,17 +1,17 @@
-Atheme hooks system
-
-hook_add_event("name")
-hook_call_event("name", argument)
-hook_add_hook("name", handler)
-hook_add_hook_first("name", handler)
-hook_del_hook("name", handler)
-
-Current list of hooks
-
-Name               Argument type                         
-(main)
-config_ready       <none>
-(ircd)
+# Atheme hooks system
+# 
+# hook_add_event("name")
+# hook_call_event("name", argument)
+# hook_add_hook("name", handler)
+# hook_add_hook_first("name", handler)
+# hook_del_hook("name", handler)
+# 
+# Current list of hooks
+# 
+# Name             Argument type                         
+# (main)
+config_ready       void
+# (ircd)
 channel_add        channel_t *
 channel_delete     channel_t *
 channel_tschange   channel_t *
@@ -19,17 +19,18 @@ channel_join       hook_channel_joinpart_t *
 channel_part       hook_channel_joinpart_t *
 channel_topic      channel_t *
 channel_can_change_topic  hook_channel_topic_check_t *
+channel_message    hook_cmessage_data_t *
 server_eob         server_t *
 user_add           user_t *
 user_delete        user_t *
+user_away          user_t *
 user_deoper        user_t *
 user_oper          user_t *
-(services)
+# (services)
 channel_akick_add  chanacs_t *
 channel_can_register hook_channel_register_check_t *
 channel_drop       mychan_t *
 channel_info       hook_channel_req_t *
-channel_message    hook_cmessage_data_t *
 channel_register   hook_channel_req_t *
 channel_check_expire  hook_expiry_req_t *
 nick_can_register  hook_user_register_check_t *

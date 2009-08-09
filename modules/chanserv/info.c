@@ -369,7 +369,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	req.mc = mc;
 	req.si = si;
-	hook_call_event("channel_info", &req);
+	hook_call_channel_info(&req);
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 	logcommand(si, CMDLOG_GET, "%s INFO", mc->name);

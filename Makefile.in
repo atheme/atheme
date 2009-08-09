@@ -39,7 +39,7 @@ CLEANDIRS = ${SUBDIRS}
 
 all: depend build
 
-build:
+build: include/hooktypes.h
 	-@if [ ! -f include/sysconf.h ] ; then \
 		echo "Hmm...doesn't look like you've run configure..."; \
 		echo "Doing so now."; \
@@ -80,7 +80,7 @@ maintainer-clean: distclean
 	${RM} -rf autom4te.cache
 	${RM} -f configure aclocal.m4
 
-depend:
+depend: include/hooktypes.h
 	@[ -f include/serno.h ] || echo '#define SERNO "unknown"' >include/serno.h
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
@@ -113,3 +113,6 @@ dist:
 	$(LN) -s . $(DISTNAME)
 	hg manifest | awk '{ print "$(DISTNAME)/"$$1; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; print "$(DISTNAME)/include/serno.h"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
+
+include/hooktypes.h: ${SRCDIR}/src/mkhooktypes.sh ${SRCDIR}/src/hooktypes.in
+	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)

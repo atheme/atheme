@@ -105,7 +105,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			req.si = si;
 			req.mu = mu;
 			req.mn = mynick_find(mu->name);
-			hook_call_event("user_verify_register", &req);
+			hook_call_user_verify_register(&req);
 
 			return;
 		}
@@ -207,7 +207,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		req.si = si;
 		req.mu = mu;
 		req.mn = mynick_find(mu->name);
-		hook_call_event("user_verify_register", &req);
+		hook_call_user_verify_register(&req);
 
 		return;
 	}

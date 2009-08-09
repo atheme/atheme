@@ -119,11 +119,11 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
-	hook_call_event("user_register", mu);
+	hook_call_user_register(mu);
 	req.si = si;
 	req.mu = mu;
 	req.mn = mn;
-	hook_call_event("user_verify_register", &req);
+	hook_call_user_verify_register(&req);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

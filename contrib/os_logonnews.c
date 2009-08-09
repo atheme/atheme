@@ -21,7 +21,7 @@ list_t *os_cmdtree;
 static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[]);
 static void write_newsdb(void);
 static void load_newsdb(void);
-static void display_news(void *vptr);
+static void display_news(user_t *u);
 
 command_t os_logonnews = { "LOGONNEWS", "Manages logon news.",
 		  	   PRIV_GLOBAL, 3, os_cmd_logonnews };
@@ -41,14 +41,14 @@ void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
 	hook_add_event("user_add");
-	hook_add_hook("user_add", display_news);
+	hook_add_user_add(display_news);
 	command_add(&os_logonnews, os_cmdtree);
 	load_newsdb();
 }
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_add", display_news);
+	hook_del_user_add(display_news);
 	command_delete(&os_logonnews, os_cmdtree);
 }
 
@@ -122,9 +122,8 @@ static void load_newsdb(void)
 	fclose(f);
 }
 
-static void display_news(void *vptr)
+static void display_news(user_t *u)
 {
-	user_t *u = vptr;
 	node_t *n;
 	logonnews_t *l;
 	char dBuf[BUFSIZE];

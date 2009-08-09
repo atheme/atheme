@@ -50,8 +50,6 @@ char *config_file;
 char *log_path;
 bool cold_start = false;
 
-extern char **environ;
-
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (void) = NULL;
 
@@ -385,7 +383,7 @@ int main(int argc, char *argv[])
 		slog(LG_INFO, "main(): restarting");
 
 #ifdef HAVE_EXECVE
-		execve(BINDIR "/atheme-services", argv, environ);
+		execv(BINDIR "/atheme-services", argv);
 #endif
 	}
 

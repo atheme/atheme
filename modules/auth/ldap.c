@@ -115,7 +115,7 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
-        hook_add_hook("config_ready", ldap_config_ready);
+        hook_add_config_ready(ldap_config_ready);
 
 	add_subblock_top_conf("LDAP", &conf_ldap_table);
 	add_dupstr_conf_item("URL", &conf_ldap_table, &ldap_config.url);
@@ -135,7 +135,7 @@ void _moddeinit(void)
 	if (ldap_conn != NULL)
 		ldap_unbind_ext_s(ldap_conn, NULL, NULL);
 
-	hook_del_hook("config_ready", ldap_config_ready);
+	hook_del_config_ready(ldap_config_ready);
 	del_conf_item("URL", &conf_ldap_table);
 	del_conf_item("DNFORMAT", &conf_ldap_table);
 	del_top_conf("LDAP");

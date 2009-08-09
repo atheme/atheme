@@ -399,7 +399,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	req.si = si;
 	req.mu = mu;
 	req.mn = mn;
-	hook_call_event("user_info", &req);
+	hook_call_user_info(&req);
 
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 

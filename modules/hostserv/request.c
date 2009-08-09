@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 
 list_t *hs_cmdtree, *hs_helptree, *ms_cmdtree;
 
-static void account_drop_request(void *vptr);
-static void nick_drop_request(void *vptr);
+static void account_drop_request(myuser_t *mu);
+static void nick_drop_request(hook_user_req_t *hdata);
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
@@ -52,9 +52,9 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/vhostnick");
 
 	hook_add_event("user_drop");
-	hook_add_hook("user_drop", account_drop_request);
+	hook_add_user_drop(account_drop_request);
 	hook_add_event("nick_ungroup");
-	hook_add_hook("nick_ungroup", nick_drop_request);
+	hook_add_nick_ungroup(nick_drop_request);
  	command_add(&hs_request, hs_cmdtree);
 	command_add(&hs_waiting, hs_cmdtree);
 	command_add(&hs_reject, hs_cmdtree);
@@ -68,8 +68,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_drop", account_drop_request);
-	hook_del_hook("nick_ungroup", nick_drop_request);
+	hook_del_user_drop(account_drop_request);
+	hook_del_nick_ungroup(nick_drop_request);
 	command_delete(&hs_request, hs_cmdtree);
 	command_delete(&hs_waiting, hs_cmdtree);
 	command_delete(&hs_reject, hs_cmdtree);
@@ -152,9 +152,8 @@ static void load_hsreqdb(void)
 	fclose(f);
 }
 
-static void nick_drop_request(void *vptr)
+static void nick_drop_request(hook_user_req_t *hdata)
 {
-	hook_user_req_t *hdata = vptr;
 	node_t *m;
 	hsreq_t *l;
 
@@ -179,9 +178,8 @@ static void nick_drop_request(void *vptr)
 	}
 }
 
-static void account_drop_request(void *vptr)
+static void account_drop_request(myuser_t *mu)
 {
-	myuser_t *mu = vptr;
 	node_t *n;
 	hsreq_t *l;
 

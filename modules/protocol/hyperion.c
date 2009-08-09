@@ -623,7 +623,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
-		hook_call_event("channel_tschange", c);
+		hook_call_channel_tschange(c);
 	}
 
 	channel_mode(NULL, c, parc - 3, parv + 2);
@@ -1089,9 +1089,9 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
 	hook_add_event("nick_group");
-	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
-	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
+	hook_add_nick_ungroup(nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

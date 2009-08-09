@@ -520,7 +520,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		mdchange.target = si->smu;
 		mdchange.name = md->name;
 		mdchange.value = md->value;
-		hook_call_event("metadata_change", &mdchange);
+		hook_call_metadata_change(&mdchange);
 
 		metadata_delete(si->smu, property);
 		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
@@ -554,7 +554,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		mdchange.target = si->smu;
 		mdchange.name = md->name;
 		mdchange.value = md->value;
-		hook_call_event("metadata_change", &mdchange);
+		hook_call_metadata_change(&mdchange);
 	}
 	logcommand(si, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
