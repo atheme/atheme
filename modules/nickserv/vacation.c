@@ -97,16 +97,16 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "VACATION", "help/nickserv/vacation", NULL);
 
 	hook_add_event("user_identify");
-	hook_add_hook("user_identify", (void (*)(void *))user_identify_hook);
+	hook_add_user_identify(user_identify_hook);
 
 	hook_add_event("user_check_expire");
-	hook_add_hook("user_check_expire", (void (*)(void *))user_expiry_hook);
+	hook_add_user_check_expire(user_expiry_hook);
 
 	hook_add_event("nick_check_expire");
-	hook_add_hook("nick_check_expire", (void (*)(void *))nick_expiry_hook);
+	hook_add_nick_check_expire(nick_expiry_hook);
 
 	hook_add_event("user_info");
-	hook_add_hook("user_info", (void (*)(void *))info_hook);
+	hook_add_user_info(info_hook);
 }
 
 void _moddeinit(void)
@@ -114,10 +114,10 @@ void _moddeinit(void)
 	command_delete(&ns_vacation, ns_cmdtree);
 	help_delentry(ns_helptree, "VACATION");
 
-	hook_del_hook("user_identify", (void (*)(void *))user_identify_hook);
-	hook_del_hook("user_check_expire", (void (*)(void *))user_expiry_hook);
-	hook_del_hook("nick_check_expire", (void (*)(void *))nick_expiry_hook);
-	hook_del_hook("user_info", (void (*)(void *))info_hook);
+	hook_del_user_identify(user_identify_hook);
+	hook_del_user_check_expire(user_expiry_hook);
+	hook_del_nick_check_expire(nick_expiry_hook);
+	hook_del_user_info(info_hook);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

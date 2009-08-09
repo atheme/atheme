@@ -712,9 +712,9 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
 	hook_add_event("nick_group");
-	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
-	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
+	hook_add_nick_ungroup(nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

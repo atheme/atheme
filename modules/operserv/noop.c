@@ -44,7 +44,7 @@ void _modinit(module_t *m)
 	command_add(&os_noop, os_cmdtree);
 	help_addentry(os_helptree, "NOOP", "help/oservice/noop", NULL);
 	hook_add_event("user_oper");
-	hook_add_hook("user_oper", (void (*)(void *)) check_user);
+	hook_add_user_oper(check_user);
 
 	noop_heap = BlockHeapCreate(sizeof(noop_t), 256);
 
@@ -59,7 +59,7 @@ void _moddeinit()
 {
 	command_delete(&os_noop, os_cmdtree);
 	help_delentry(os_helptree, "NOOP");
-	hook_del_hook("user_oper", (void (*)(void *)) check_user);
+	hook_del_user_oper(check_user);
 }
 
 static void check_user(user_t *u)

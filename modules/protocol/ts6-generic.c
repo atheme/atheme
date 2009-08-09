@@ -1360,7 +1360,7 @@ void _modinit(module_t * m)
 	pcommand_add("EUID", m_euid, 11, MSRC_SERVER);
 
 	hook_add_event("server_eob");
-	hook_add_hook("server_eob", (void (*)(void *))server_eob);
+	hook_add_server_eob(server_eob);
 
 	m->mflags = MODTYPE_CORE;
 }

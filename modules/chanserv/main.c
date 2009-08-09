@@ -198,13 +198,13 @@ void _modinit(module_t *m)
 	hook_add_event("channel_topic");
 	hook_add_event("channel_can_change_topic");
 	hook_add_event("channel_tschange");
-	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
-	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
-	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
-	hook_add_hook("channel_add", (void (*)(void *)) cs_newchan);
-	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
-	hook_add_hook("channel_can_change_topic", (void (*)(void *)) cs_topiccheck);
-	hook_add_hook("channel_tschange", (void (*)(void *)) cs_tschange);
+	hook_add_channel_join(cs_join);
+	hook_add_channel_part(cs_part);
+	hook_add_channel_register(cs_register);
+	hook_add_channel_add(cs_newchan);
+	hook_add_channel_topic(cs_keeptopic_topicset);
+	hook_add_channel_can_change_topic(cs_topiccheck);
+	hook_add_channel_tschange(cs_tschange);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
@@ -222,13 +222,13 @@ void _moddeinit(void)
 	}
 
 	hook_del_hook("config_ready", chanserv_config_ready);
-	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
-	hook_del_hook("channel_part", (void (*)(void *)) cs_part);
-	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
-	hook_del_hook("channel_add", (void (*)(void *)) cs_newchan);
-	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
-	hook_del_hook("channel_can_change_topic", (void (*)(void *)) cs_topiccheck);
-	hook_del_hook("channel_tschange", (void (*)(void *)) cs_tschange);
+	hook_del_channel_join(cs_join);
+	hook_del_channel_part(cs_part);
+	hook_del_channel_register(cs_register);
+	hook_del_channel_add(cs_newchan);
+	hook_del_channel_topic(cs_keeptopic_topicset);
+	hook_del_channel_can_change_topic(cs_topiccheck);
+	hook_del_channel_tschange(cs_tschange);
 	event_delete(cs_leave_empty, NULL);
 }
 

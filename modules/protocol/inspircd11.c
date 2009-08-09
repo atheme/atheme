@@ -1291,7 +1291,7 @@ void _modinit(module_t * m)
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
 
 	hook_add_event("server_eob");
-	hook_add_hook("server_eob", (void (*)(void *))server_eob);
+	hook_add_server_eob(server_eob);
 
 	m->mflags = MODTYPE_CORE;
 

@@ -827,9 +827,9 @@ void _modinit(module_t * m)
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 
 	hook_add_event("nick_group");
-	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
-	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
+	hook_add_nick_ungroup(nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

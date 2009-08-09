@@ -887,11 +887,11 @@ void _modinit(module_t *m)
 	hook_add_event("channel_register");
 	hook_add_event("channel_add");
 	hook_add_event("channel_can_change_topic");
-	hook_add_hook("channel_join", (void (*)(void *)) bs_join);
-	hook_add_hook("channel_part", (void (*)(void *)) bs_part);
-	hook_add_hook("channel_register", (void (*)(void *)) bs_register);
-	hook_add_hook("channel_add", (void (*)(void *)) bs_newchan);
-	hook_add_hook("channel_can_change_topic", (void (*)(void *)) bs_topiccheck);
+	hook_add_channel_join(bs_join);
+	hook_add_channel_part(bs_part);
+	hook_add_channel_register(bs_register);
+	hook_add_channel_add(bs_newchan);
+	hook_add_channel_can_change_topic(bs_topiccheck);
 
 	modestack_mode_simple = bs_modestack_mode_simple;
 	modestack_mode_limit  = bs_modestack_mode_limit;
@@ -929,11 +929,11 @@ void _moddeinit(void)
 	help_delentry(&bs_helptree, "ASSIGN");
 	help_delentry(&bs_helptree, "UNASSIGN");
 	help_delentry(&bs_helptree, "BOTLIST");
-	hook_del_hook("channel_join", (void (*)(void *)) bs_join);
-	hook_del_hook("channel_part", (void (*)(void *)) bs_part);
-	hook_del_hook("channel_register", (void (*)(void *)) bs_register);
-	hook_del_hook("channel_add", (void (*)(void *)) bs_newchan);
-	hook_del_hook("channel_can_change_topic", (void (*)(void *)) bs_topiccheck);
+	hook_del_channel_join(bs_join);
+	hook_del_channel_part(bs_part);
+	hook_del_channel_register(bs_register);
+	hook_del_channel_add(bs_newchan);
+	hook_del_channel_can_change_topic(bs_topiccheck);
 	hook_del_hook("config_ready", botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;
