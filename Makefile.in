@@ -115,4 +115,4 @@ dist:
 	$(RM) $(DISTNAME)
 
 include/hooktypes.h: ${SRCDIR}/src/mkhooktypes.sh ${SRCDIR}/src/hooktypes.in
-	(cd src && ${MAKE} ../include/hooktypes.h)
+	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)
