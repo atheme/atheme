@@ -231,18 +231,18 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (request_per_nick)
 	{
-	target = si->su != NULL ? si->su->nick : "?";
-	mn = mynick_find(target);
-	if (mn == NULL)
-	{
-		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
-		return;
-	}
-	if (mn->owner != si->smu)
-	{
-		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
-		return;
-	}
+		target = si->su != NULL ? si->su->nick : "?";
+		mn = mynick_find(target);
+		if (mn == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
+			return;
+		}
+		if (mn->owner != si->smu)
+		{
+			command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
+			return;
+		}
 	}
 	else
 		target = si->smu->name;
