@@ -29,7 +29,7 @@ static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 int login_user(sasl_session_t *p);
-static void sasl_newuser(user_t *u);
+static void sasl_newuser(hook_user_data_t *data);
 static void delete_stale(void *vptr);
 
 /* main services client routine */
@@ -437,15 +437,22 @@ int login_user(sasl_session_t *p)
 }
 
 /* clean up after a user who is finally on the net */
-static void sasl_newuser(user_t *u)
+static void sasl_newuser(hook_user_data_t *data)
 {
-	sasl_session_t *p = find_session(u->uid);
+	user_t *u = data->user;
+	sasl_session_t *p;
 	metadata_t *md_failnum;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
 	struct tm tm;
 	myuser_t *mu;
 	node_t *n;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
+
+	p = find_session(u->uid);
 
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)

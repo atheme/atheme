@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_sqline_newuser(user_t *u);
+static void os_sqline_newuser(hook_user_data_t *data);
 static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata);
 
 static void os_cmd_sqline(sourceinfo_t *si, int parc, char *parv[]);
@@ -76,9 +76,14 @@ void _moddeinit()
 	hook_del_channel_join(os_sqline_chanjoin);
 }
 
-static void os_sqline_newuser(user_t *u)
+static void os_sqline_newuser(hook_user_data_t *data)
 {
+	user_t *u = data->user;
 	qline_t *q;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
 
 	if (is_internal_client(u))
 		return;

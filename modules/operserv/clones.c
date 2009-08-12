@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 #define DEFAULT_WARN_CLONES	3 /* IPs with more than this are warned about */
 #define EXEMPT_GRACE		10 /* exempt IPs exceeding their allowance by this are banned */
 
-static void clones_newuser(user_t *u);
+static void clones_newuser(hook_user_data_t *data);
 static void clones_userquit(user_t *u);
 
 static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[]);
@@ -104,7 +104,8 @@ void _modinit(module_t *m)
 	/* add everyone to host hash */
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
-		clones_newuser(u);
+		hook_user_data_t data = { u };
+		clones_newuser(&data);
 	}
 }
 
@@ -505,11 +506,16 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLONES LISTEXEMPT");
 }
 
-static void clones_newuser(user_t *u)
+static void clones_newuser(hook_user_data_t *data)
 {
+	user_t *u = data->user;
 	unsigned int i;
 	hostentry_t *he;
 	unsigned int allowed = 0;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
 
 	/* User has no IP, ignore him */
 	if (is_internal_client(u) || *u->ip == '\0')

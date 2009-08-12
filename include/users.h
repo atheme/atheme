@@ -50,6 +50,10 @@ struct user_
 
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
+typedef struct {
+	user_t *user;	/* User in question. Write NULL here if you delete the user. */
+} hook_user_data_t;
+
 /* function.c */
 E bool is_ircop(user_t *user);
 E bool is_admin(user_t *user);

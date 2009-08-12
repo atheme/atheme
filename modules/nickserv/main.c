@@ -74,10 +74,15 @@ struct
 	{ NULL, NULL }
 };
 
-static void nickserv_handle_nickchange(user_t *u)
+static void nickserv_handle_nickchange(hook_user_data_t *data)
 {
+	user_t *u = data->user;
 	mynick_t *mn;
 	hook_nick_enforce_t hdata;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
 
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
 		return;
