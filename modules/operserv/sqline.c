@@ -56,6 +56,8 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_add");
 	hook_add_user_add(os_sqline_newuser);
+	hook_add_event("user_nickchange");
+	hook_add_user_nickchange(os_sqline_newuser);
 	hook_add_event("channel_join");
 	hook_add_channel_join(os_sqline_chanjoin); 
 }
@@ -73,6 +75,7 @@ void _moddeinit()
 	help_delentry(os_helptree, "SQLINE");
 
 	hook_del_user_add(os_sqline_newuser);
+	hook_del_user_nickchange(os_sqline_newuser);
 	hook_del_channel_join(os_sqline_chanjoin);
 }
 
