@@ -86,6 +86,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	server_t *server, time_t ts)
 {
 	user_t *u, *u2;
+	hook_user_data_t hdata;
 
 	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
 
@@ -183,9 +184,10 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	cnt.user++;
 
-	hook_call_user_add((&(hook_user_data_t){ .u = u }));
+	hdata.u = u;
+	hook_call_user_add(&hdata);
 
-	return u;
+	return hdata.u;
 }
 
 /*
