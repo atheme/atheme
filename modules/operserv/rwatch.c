@@ -441,7 +441,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 
 static void rwatch_newuser(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	node_t *n;
 	rwatch_t *rw;

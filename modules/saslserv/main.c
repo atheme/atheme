@@ -439,7 +439,7 @@ int login_user(sasl_session_t *p)
 /* clean up after a user who is finally on the net */
 static void sasl_newuser(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	sasl_session_t *p;
 	metadata_t *md_failnum;
 	char lau[BUFSIZE], lao[BUFSIZE];

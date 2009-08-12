@@ -104,8 +104,7 @@ void _modinit(module_t *m)
 	/* add everyone to host hash */
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
-		hook_user_data_t data = { u };
-		clones_newuser(&data);
+		clones_newuser(&(hook_user_data_t){ .u = u });
 	}
 }
 
@@ -508,7 +507,7 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 
 static void clones_newuser(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	unsigned int i;
 	hostentry_t *he;
 	unsigned int allowed = 0;

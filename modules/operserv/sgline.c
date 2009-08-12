@@ -72,7 +72,7 @@ void _moddeinit()
 
 static void os_sgline_newuser(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	xline_t *x;
 
 	/* If the user has been killed, don't do anything. */

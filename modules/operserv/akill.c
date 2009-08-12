@@ -74,8 +74,12 @@ void _moddeinit()
 
 static void os_akill_newuser(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	kline_t *k;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
 
 	if (is_internal_client(u))
 		return;
@@ -126,10 +130,6 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	long duration;
 	char *s;
 	kline_t *k;
-
-	/* If the user has been killed, don't do anything. */
-	if (!u)
-		return;
 
 	if (!target || !token)
 	{

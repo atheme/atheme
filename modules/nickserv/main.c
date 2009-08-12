@@ -76,7 +76,7 @@ struct
 
 static void nickserv_handle_nickchange(hook_user_data_t *data)
 {
-	user_t *u = data->user;
+	user_t *u = data->u;
 	mynick_t *mn;
 	hook_nick_enforce_t hdata;
 

@@ -183,8 +183,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	cnt.user++;
 
-	hook_user_data_t data = { u };
-	hook_call_user_add(&data);
+	hook_call_user_add((&(hook_user_data_t){ .u = u }));
 
 	return u;
 }
