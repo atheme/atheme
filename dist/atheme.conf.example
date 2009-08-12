@@ -1028,6 +1028,13 @@ hostserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Host Management Services";
+
+	/* (*)request_per_nick
+	 * Whether the request system should work per nick or per account.
+	 * The recommended setting is to leave this disabled, so that
+	 * vhosts work as consistently as possible.
+	 */
+	#request_per_nick;
 };
 
 /* ALIS configuration.

@@ -16,7 +16,8 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
-list_t *hs_cmdtree, *hs_helptree, *ms_cmdtree;
+list_t *hs_cmdtree, *hs_helptree, *conf_hs_table, *ms_cmdtree;
+bool request_per_nick;
 
 static void account_drop_request(myuser_t *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
@@ -48,8 +49,8 @@ void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
+	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/vhostnick");
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
@@ -64,6 +65,7 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
 	help_addentry(hs_helptree, "ACTIVATE", "help/hostserv/activate", NULL);
 	load_hsreqdb();
+	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, &request_per_nick);
 }
 
 void _moddeinit(void)
@@ -78,6 +80,7 @@ void _moddeinit(void)
 	help_delentry(hs_helptree, "WAITING");
 	help_delentry(hs_helptree, "REJECT");
 	help_delentry(hs_helptree, "ACTIVATE");
+	del_conf_item("REQUEST_PER_NICK", conf_hs_table);
 }
 
 static void write_hsreqdb(void)
@@ -226,6 +229,8 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
+	if (request_per_nick)
+	{
 	target = si->su != NULL ? si->su->nick : "?";
 	mn = mynick_find(target);
 	if (mn == NULL)
@@ -238,6 +243,9 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
 		return;
 	}
+	}
+	else
+		target = si->smu->name;
 
 	/* Never ever allow @!?* as they have special meaning in all ircds */
 	/* Empty, space anywhere and colon at the start break the protocol */
@@ -351,7 +359,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l);
 
 			write_hsreqdb();
-			command_exec_split(hostsvs.me, si, "VHOSTNICK", buf, hs_cmdtree);
+			command_exec_split(hostsvs.me, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
 			return;
 		}
 	}
