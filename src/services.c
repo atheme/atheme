@@ -389,7 +389,7 @@ void handle_nickchange(user_t *u)
 	if (runflags & RF_LIVE && log_debug_enabled())
 		notice(globsvs.me != NULL ? globsvs.nick : me.name, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
 
-	hook_call_nick_check((&(hook_user_data_t){ .u = u }));
+	hook_call_nick_check(u);
 }
 
 /* User u is bursted as being logged in to login (if not NULL) or as
