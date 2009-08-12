@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void rwatch_newuser(hook_user_data_t *data);
+static void rwatch_newuser(hook_user_nick_t *data);
 
 static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[]);
@@ -439,7 +439,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in regex watch list."), pattern);
 }
 
-static void rwatch_newuser(hook_user_data_t *data)
+static void rwatch_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];

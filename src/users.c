@@ -86,7 +86,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	server_t *server, time_t ts)
 {
 	user_t *u, *u2;
-	hook_user_data_t hdata;
+	hook_user_nick_t hdata;
 
 	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
 
@@ -185,6 +185,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	cnt.user++;
 
 	hdata.u = u;
+	hdata.oldnick = NULL;
 	hook_call_user_add(&hdata);
 
 	return hdata.u;
@@ -385,7 +386,7 @@ void user_changeuid(user_t *u, const char *uid)
  *
  * Side Effects:
  *     - a user object's nick and TS is changed.
- *     - in event of a collision, the user may be killed
+ *     - in event of a collision or a decision by a hook, the user may be killed
  */
 bool user_changenick(user_t *u, const char *nick, time_t ts)
 {
@@ -393,12 +394,13 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 	user_t *u2;
 	char oldnick[NICKLEN];
 	bool doenforcer = false;
+	hook_user_nick_t hdata;
 
+	strlcpy(oldnick, u->nick, sizeof oldnick);
 	u2 = user_find_named(nick);
 	if (u->flags & UF_DOENFORCE && u2 != u)
 	{
 		doenforcer = true;
-		strlcpy(oldnick, u->nick, sizeof oldnick);
 		u->flags &= ~UF_DOENFORCE;
 	}
 	if (u2 != NULL && u2 != u)
@@ -489,7 +491,11 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 	if (doenforcer)
 		introduce_enforcer(oldnick);
 
-	return false;
+	hdata.u = u;
+	hdata.oldnick = oldnick;
+	hook_call_user_nickchange(&hdata);
+
+	return hdata.u == NULL;
 }
 
 /*

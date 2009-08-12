@@ -29,7 +29,7 @@ static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 int login_user(sasl_session_t *p);
-static void sasl_newuser(hook_user_data_t *data);
+static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
 
 /* main services client routine */
@@ -437,7 +437,7 @@ int login_user(sasl_session_t *p)
 }
 
 /* clean up after a user who is finally on the net */
-static void sasl_newuser(hook_user_data_t *data)
+static void sasl_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	sasl_session_t *p;

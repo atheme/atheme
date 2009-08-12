@@ -51,8 +51,9 @@ struct user_
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
 typedef struct {
-	user_t *u;	/* User in question. Write NULL here if you delete the user. */
-} hook_user_data_t;
+	user_t *u;		/* User in question. Write NULL here if you delete the user. */
+	const char *oldnick;	/* Previous nick for nick changes. u->nick is the new nick. */
+} hook_user_nick_t;
 
 /* function.c */
 E bool is_ircop(user_t *user);

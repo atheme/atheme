@@ -21,8 +21,9 @@ channel_topic      channel_t *
 channel_can_change_topic  hook_channel_topic_check_t *
 channel_message    hook_cmessage_data_t *
 server_eob         server_t *
-user_add           hook_user_data_t *
+user_add           hook_user_nick_t *
 user_delete        user_t *
+user_nickchange    hook_user_nick_t *
 user_away          user_t *
 user_deoper        user_t *
 user_oper          user_t *
