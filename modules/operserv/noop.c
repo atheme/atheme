@@ -28,8 +28,10 @@ list_t noop_hostmask_list;
 list_t noop_server_list;
 
 static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
+static void noop_kill_users(void *dummy);
 static void check_user(user_t *u);
 static BlockHeap *noop_heap;
+static list_t noop_kill_queue;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop };
 
@@ -57,15 +59,46 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
+	node_t *n, *tn;
+
+	if (LIST_LENGTH(&noop_kill_queue) > 0)
+	{
+		/* Cannot safely delete users from here, so just forget
+		 * about them.
+		 */
+		event_delete(noop_kill_users, NULL);
+		LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
+		{
+			node_del(n, &noop_kill_queue);
+			node_free(n);
+		}
+	}
 	command_delete(&os_noop, os_cmdtree);
 	help_delentry(os_helptree, "NOOP");
 	hook_del_user_oper(check_user);
+}
+
+static void noop_kill_users(void *dummy)
+{
+	node_t *n, *tn;
+	user_t *u;
+
+	LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
+	{
+		u = n->data;
+		kill_user(opersvs.me->me, u, "Operator access denied");
+		node_del(n, &noop_kill_queue);
+		node_free(n);
+	}
 }
 
 static void check_user(user_t *u)
 {
 	node_t *n;
 	char hostbuf[BUFSIZE];
+
+	if (node_find(u, &noop_kill_queue))
+		return;
 
 	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
 
@@ -75,7 +108,11 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, hostbuf))
 		{
-			kill_user(opersvs.me->me, u, "Operator access denied");
+			if (LIST_LENGTH(&noop_kill_queue) == 0)
+				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
+			node_add(u, node_create(), &noop_kill_queue);
+			/* Prevent them using the privs in Atheme. */
+			u->flags &= ~UF_IRCOP;
 			return;
 		}
 	}
@@ -86,7 +123,11 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, u->server->name))
 		{
-			kill_user(opersvs.me->me, u, "Operator access denied");
+			if (LIST_LENGTH(&noop_kill_queue) == 0)
+				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
+			node_add(u, node_create(), &noop_kill_queue);
+			/* Prevent them using the privs in Atheme. */
+			u->flags &= ~UF_IRCOP;
 			return;
 		}
 	}
