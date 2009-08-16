@@ -1,14 +1,25 @@
 # Atheme hooks system
 # 
-# hook_add_event("name")
-# hook_call_event("name", argument)
-# hook_add_hook("name", handler)
-# hook_add_hook_first("name", handler)
-# hook_del_hook("name", handler)
+# hook_add_event("NAME")
+# hook_call_NAME(argument)
+# hook_add_NAME(handler)
+# hook_add_first_NAME(handler)
+# hook_del_NAME(handler)
 # 
+# Hooks that take a direct pointer to an object may not destroy that object.
+# If this is necessary it must be done in an event added from the hook.
+# Hooks with _can_ or _check_ in the name may fill in a field in the argument
+# structure to indicate what should happen. They are not allowed to destroy
+# the object.
+# channel_join, user_add and user_nickchange may destroy the object, by
+# setting the pointer in the argument structure to NULL, deleting the object
+# from Atheme's state and sending an appropriate message to ircd. Note that
+# channel_join may kick the user but may not clear the channel.
+# Most other hooks may not destroy the object or prevent the action.
+#
 # Current list of hooks
-# 
-# Name             Argument type                         
+#
+# Name             Argument type
 # (main)
 config_ready       void
 # (ircd)
