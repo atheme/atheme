@@ -31,7 +31,6 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);
 static void check_quit(user_t *u);
 static void check_user(user_t *u);
-static BlockHeap *noop_heap;
 static list_t noop_kill_queue;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop };
@@ -49,14 +48,6 @@ void _modinit(module_t *m)
 	hook_add_event("user_oper");
 	hook_add_user_oper(check_user);
 	hook_add_event("user_delete");
-
-	noop_heap = BlockHeapCreate(sizeof(noop_t), 256);
-
-	if (!noop_heap)
-	{
-		slog(LG_INFO, "os_noop: Block allocator failed.");
-		exit(EXIT_FAILURE);
-	}
 }
 
 void _moddeinit()
@@ -216,7 +207,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			np = BlockHeapAlloc(noop_heap);
+			np = smalloc(sizeof *np);
 
 			np->target = sstrdup(mask);
 			np->added_by = sstrdup(get_storage_oper_name(si));
@@ -242,7 +233,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			np = BlockHeapAlloc(noop_heap);
+			np = smalloc(sizeof *np);
 
 			np->target = sstrdup(mask);
 			np->added_by = sstrdup(get_storage_oper_name(si));
@@ -282,7 +273,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			node_del(n, &noop_hostmask_list);
 			node_free(n);
-			BlockHeapFree(noop_heap, np);
+			free(np);
 
 			return;
 		}
@@ -305,7 +296,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 
 			node_del(n, &noop_server_list);
 			node_free(n);
-			BlockHeapFree(noop_heap, np);
+			free(np);
 
 			return;
 		}
