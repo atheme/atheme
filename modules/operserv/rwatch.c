@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 );
 
 static void rwatch_newuser(hook_user_nick_t *data);
+static void rwatch_nickchange(hook_user_nick_t *data);
 
 static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[]);
@@ -69,6 +70,8 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_add");
 	hook_add_user_add(rwatch_newuser);
+	hook_add_event("user_nickchange");
+	hook_add_user_nickchange(rwatch_nickchange);
 
 	load_rwatchdb();
 }
@@ -472,6 +475,51 @@ static void rwatch_newuser(hook_user_nick_t *data)
 			{
 				slog(LG_INFO, "rwatch_newuser(): klining *@%s (user %s!%s@%s matches %s %s)",
 						u->host, u->nick, u->user, u->host,
+						rw->regex, rw->reason);
+				kline_sts("*", "*", u->host, 86400, rw->reason);
+			}
+		}
+	}
+}
+
+static void rwatch_nickchange(hook_user_nick_t *data)
+{
+	user_t *u = data->u;
+	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
+	char oldusermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
+	node_t *n;
+	rwatch_t *rw;
+
+	/* If the user has been killed, don't do anything. */
+	if (!u)
+		return;
+
+	if (is_internal_client(u))
+		return;
+
+	snprintf(usermask, sizeof usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+	snprintf(oldusermask, sizeof oldusermask, "%s!%s@%s %s", data->oldnick, u->user, u->host, u->gecos);
+
+	LIST_FOREACH(n, rwatch_list.head)
+	{
+		rw = n->data;
+		if (!rw->re)
+			continue;
+		if (regex_match(rw->re, usermask))
+		{
+			/* Only process if they did not match before. */
+			if (regex_match(rw->re, oldusermask))
+				continue;
+			if (rw->actions & RWACT_SNOOP)
+			{
+				snoop("RWATCH:NICKCHANGE:%s %s -> %s matches \2%s\2 (%s)",
+						rw->actions & RWACT_KLINE ? "KLINE:" : "",
+						data->oldnick, usermask, rw->regex, rw->reason);
+			}
+			if (rw->actions & RWACT_KLINE)
+			{
+				slog(LG_INFO, "rwatch_nickchange(): klining *@%s (user %s -> %s!%s@%s matches %s %s)",
+						u->host, data->oldnick, u->nick, u->user, u->host,
 						rw->regex, rw->reason);
 				kline_sts("*", "*", u->host, 86400, rw->reason);
 			}
