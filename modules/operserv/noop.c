@@ -29,6 +29,7 @@ list_t noop_server_list;
 
 static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);
+static void check_quit(user_t *u);
 static void check_user(user_t *u);
 static BlockHeap *noop_heap;
 static list_t noop_kill_queue;
@@ -47,6 +48,7 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "NOOP", "help/oservice/noop", NULL);
 	hook_add_event("user_oper");
 	hook_add_user_oper(check_user);
+	hook_add_event("user_delete");
 
 	noop_heap = BlockHeapCreate(sizeof(noop_t), 256);
 
@@ -72,6 +74,7 @@ void _moddeinit()
 			node_del(n, &noop_kill_queue);
 			node_free(n);
 		}
+		hook_del_user_delete(check_quit);
 	}
 	command_delete(&os_noop, os_cmdtree);
 	help_delentry(os_helptree, "NOOP");
@@ -83,12 +86,30 @@ static void noop_kill_users(void *dummy)
 	node_t *n, *tn;
 	user_t *u;
 
+	hook_del_user_delete(check_quit);
 	LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 	{
 		u = n->data;
 		kill_user(opersvs.me->me, u, "Operator access denied");
 		node_del(n, &noop_kill_queue);
 		node_free(n);
+	}
+}
+
+static void check_quit(user_t *u)
+{
+	node_t *n;
+
+	n = node_find(u, &noop_kill_queue);
+	if (n != NULL)
+	{
+		node_del(n, &noop_kill_queue);
+		node_free(n);
+		if (LIST_LENGTH(&noop_kill_queue) == 0)
+		{
+			event_delete(noop_kill_users, NULL);
+			hook_del_user_delete(check_quit);
+		}
 	}
 }
 
@@ -109,8 +130,12 @@ static void check_user(user_t *u)
 		if (!match(np->target, hostbuf))
 		{
 			if (LIST_LENGTH(&noop_kill_queue) == 0)
+			{
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
-			node_add(u, node_create(), &noop_kill_queue);
+				hook_add_user_delete(check_quit);
+			}
+			if (!node_find(u, &noop_kill_queue))
+				node_add(u, node_create(), &noop_kill_queue);
 			/* Prevent them using the privs in Atheme. */
 			u->flags &= ~UF_IRCOP;
 			return;
@@ -124,8 +149,12 @@ static void check_user(user_t *u)
 		if (!match(np->target, u->server->name))
 		{
 			if (LIST_LENGTH(&noop_kill_queue) == 0)
+			{
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
-			node_add(u, node_create(), &noop_kill_queue);
+				hook_add_user_delete(check_quit);
+			}
+			if (!node_find(u, &noop_kill_queue))
+				node_add(u, node_create(), &noop_kill_queue);
 			/* Prevent them using the privs in Atheme. */
 			u->flags &= ~UF_IRCOP;
 			return;
