@@ -1,10 +1,16 @@
 Atheme Services 4.1 Release Notes
 =================================
+[MERGED] indicates items merged to the 4.0 branch
 ircd protocol
-- inspircd12: fix UID parsing and rejoining services after kicks.
+- inspircd12: fix UID parsing and rejoining services after kicks. [MERGED]
 - TS6: allow nicer topic setting using charybdis 3.2's ETB.
 - hyperion: fix a bug that could cause the hostnames of services clients
-  to be overwritten.
+  to be overwritten. [MERGED]
+- plexus: port to ts6-generic, add UF_IMMUNE for +N, add support for
+  permanent channels.
+- hybrid: fix a crash.
+- unreal: use SVSKILL for kills from NickServ. This reduces excessive server
+  notices.
 nickserv
 - Matching a nickname access list entry no longer resets last used time.
 - Allow authentication via an LDAP server.
@@ -12,25 +18,53 @@ nickserv
 - Start the enforce timer on /ns set enforce on.
 - Add a per-account language setting. This currently does not work very well.
 - Prepend "(restored) " to marks restored from previously deleted accounts.
+- Change VHOST syntax, adding an ON/OFF keyword and requiring a FORCE keyword
+  to set a vhost on a marked account. The old syntax still works for vhosts
+  containing a dot, colon or slash.
+- Add ns_listlogins contrib module. This allows logged in users to see real
+  hosts of their other logins.
 chanserv
 - Set owner/protect on the founder of a new channel, if appropriate.
 - Do not set protect status if the user already has owner.
-- Rework successor selection for channels to respect flags more.
+- Rework successor selection for channels to respect flags more. [MERGED]
+- Allow users with +V to voice themselves.
+botserv
+- New service. This allows users to have a "bot" join their channel instead
+  of ChanServ.
+hostserv
+- New service. This adds per-nick vhosts and a request system to what
+  /ns vhost provides. As long as per-nick vhosts are not used it interoperates
+  with /ns vhost.
 alis
 - Add -maxmatches option which xmlrpc and chan:auspex may set to higher than
   the default.
 oper
-- Fix a possible crash with /os greplog.
+- Fix a possible crash with /os greplog. [MERGED]
 - Add SGLINE system for bans by realname (TS6 xline).
+- Services ignores no longer apply to users with general:admin privilege.
+- Add /os listklinechan to the os_klinechan contrib module.
+- Add os_kill contrib module. This allows opers to kill users while hiding
+  their identity. (This was added earlier, but not linked to the build.)
+- Add SQLINE system to disallow nick and channel names (TS6 resv).
+- Fix possible crash with /os noop.
+- RWATCH now also watches nick changes.
 xmlrpc
-- Remove 4K limitation on length of xmlrpc command output.
+- Remove 4K limitation on length of xmlrpc command output. [MERGED]
 code
 - Remove select() support and code to allow multiple "socket engines".
   poll() is sufficient.
 - Rework the network connection code to be cleaner and more flexible.
 - Close all connection_t fds in child processes.
 - Allow using sourceinfo_t.v with IRC sources.
+- Some tweaks to the build system.
+- Add type checking to the hook system. See src/hooktypes.in. It may be
+  necessary to specify --enable-warnings to configure to enable the checks.
 other
+- Try to detect MacOS X crypt(3) breakage in crypto/posix and generate a DES
+  based hash.
+- Allow the user_add hook to remove the user from the network safely.
+- Add user_nickchange hook for nick changes, which is also allowed to remove
+  the user from the network.
 
 Atheme Services 4.0 Release Notes
 =================================
