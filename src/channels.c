@@ -215,7 +215,6 @@ void channel_delete(channel_t *c)
 chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
-	node_t *n;
 
 	if (mask == NULL)
 	{
@@ -239,14 +238,13 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 
 	slog(LG_DEBUG, "chanban_add(): %s +%c %s", chan->name, type, mask);
 
-	n = node_create();
 	c = BlockHeapAlloc(chanban_heap);
 
 	c->chan = chan;
 	c->mask = sstrdup(mask);
 	c->type = type;
 
-	node_add(c, n, &chan->bans);
+	node_add(c, &c->node, &chan->bans);
 
 	return c;
 }
@@ -267,17 +265,13 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
  */
 void chanban_delete(chanban_t * c)
 {
-	node_t *n;
-
 	if (!c)
 	{
 		slog(LG_DEBUG, "chanban_delete(): called for nonexistant ban");
 		return;
 	}
 
-	n = node_find(c, &c->chan->bans);
-	node_del(n, &c->chan->bans);
-	node_free(n);
+	node_del(&c->node, &c->chan->bans);
 
 	free(c->mask);
 	BlockHeapFree(chanban_heap, c);

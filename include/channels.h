@@ -48,6 +48,7 @@ struct chanban_
   channel_t *chan;
   char *mask;
   int type; /* 'b', 'e', 'I', etc -- jilles */
+  node_t node; /* for channel_t.bans */
 };
 
 #define CMODE_INVITE    0x00000001
