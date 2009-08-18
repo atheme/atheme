@@ -38,6 +38,8 @@
 # define PROT_WRITE 0
 #endif
 
+#define BALLOC_MAGIC		0x3d3a3c3d
+
 struct MemBlock;
 typedef struct MemBlock MemBlock;
 struct Block;

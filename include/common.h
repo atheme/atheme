@@ -38,10 +38,6 @@
 
 #undef DEBUG_BALLOC
 
-#ifdef DEBUG_BALLOC
-#define BALLOC_MAGIC		0x3d3a3c3d
-#endif
-
 #ifdef LARGE_NETWORK
 #define HEAP_NODE		1024
 #define HEAP_CHANNEL		1024
