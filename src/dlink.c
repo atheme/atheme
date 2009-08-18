@@ -45,8 +45,9 @@ node_t *node_create(void)
         /* allocate it */
         n = BlockHeapAlloc(node_heap);
 
-        /* initialize */
-        n->next = n->prev = n->data = NULL;
+        /* make it crash if you try to traverse or node_del() before adding */
+        n->next = n->prev = (void *)-1;
+        n->data = NULL;
 
         /* up the count */
         claro_state.node++;
@@ -169,6 +170,9 @@ void node_del(node_t *n, list_t *l)
 
         /* down the count */
         l->count--;
+
+	/* make it crash if you try to delete twice */
+	n->prev = n->next = (void *)-1;
 }
 
 /* finds a node by `data' */
