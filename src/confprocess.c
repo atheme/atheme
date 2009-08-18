@@ -56,6 +56,7 @@ struct ConfTable
 		bool *bool_val;
 		list_t *subblock;
 	} un;
+	node_t node;
 };
 
 static BlockHeap *conftable_heap;
@@ -347,7 +348,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	ct->type = CONF_HANDLER;
 	ct->un.handler = handler;
 
-	node_add(ct, node_create(), &confblocks);
+	node_add(ct, &ct->node, &confblocks);
 	conf_need_rehash = true;
 }
 
@@ -367,7 +368,7 @@ void add_subblock_top_conf(const char *name, list_t *list)
 	ct->type = CONF_SUBBLOCK;
 	ct->un.subblock = list;
 
-	node_add(ct, node_create(), &confblocks);
+	node_add(ct, &ct->node, &confblocks);
 	conf_need_rehash = true;
 }
 
@@ -387,7 +388,7 @@ void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_en
 	ct->type = CONF_HANDLER;
 	ct->un.handler = handler;
 
-	node_add(ct, node_create(), conflist);
+	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -409,7 +410,7 @@ void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, u
 	ct->un.uint_val.min = min;
 	ct->un.uint_val.max = max;
 
-	node_add(ct, node_create(), conflist);
+	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -430,7 +431,7 @@ void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *va
 	ct->un.duration_val.var = var;
 	ct->un.duration_val.defunit = defunit;
 
-	node_add(ct, node_create(), conflist);
+	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -450,7 +451,7 @@ void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
 	ct->type = CONF_DUPSTR;
 	ct->un.dupstr_val = var;
 
-	node_add(ct, node_create(), conflist);
+	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -470,7 +471,7 @@ void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
 	ct->type = CONF_BOOL;
 	ct->un.bool_val = var;
 
-	node_add(ct, node_create(), conflist);
+	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -485,8 +486,7 @@ void del_top_conf(const char *name)
 		return;
 	}
 
-	n = node_find(ct, &confblocks);
-	node_del(n, &confblocks);
+	node_del(&ct->node, &confblocks);
 
 	free(ct->name);
 
@@ -504,8 +504,7 @@ void del_conf_item(const char *name, list_t *conflist)
 		return;
 	}
 
-	n = node_find(ct, conflist);
-	node_del(n, conflist);
+	node_del(&ct->node, conflist);
 
 	free(ct->name);
 
