@@ -39,6 +39,7 @@
 #endif
 
 #define BALLOC_MAGIC		0x3d3a3c3d
+#define BALLOC_BLOCK_MAGIC	0x4d4a4c4d
 
 struct MemBlock;
 typedef struct MemBlock MemBlock;
@@ -63,6 +64,7 @@ struct Block
   void *elems;            /* Points to allocated memory */
   MemBlock *firstfree;
   int used;
+  unsigned long magic;
 };
 
 /* information for the root node of the heap */
@@ -208,6 +210,8 @@ static int newblock(BlockHeap *bh)
 
 	if (b->elems == NULL)
 		return (1);
+
+	b->magic = BALLOC_BLOCK_MAGIC;
 
 	offset = b->elems;
 	pprev = &b->firstfree;
@@ -394,16 +398,21 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 	if (memblock->magic != BALLOC_MAGIC)
 	{
 		blockheap_fail("memblock->magic != BALLOC_MAGIC");
-		runflags |= RF_SHUTDOWN;
+		return 1;
 	}
 #endif
-	if (memblock->un.block == NULL)
+	block = memblock->un.block;
+	if (block == NULL)
 	{
-		blockheap_fail("memblock->block == NULL, not a valid block?");
-		runflags |= RF_SHUTDOWN;
+		blockheap_fail("memblock->block == NULL, invalid allocation?");
+		return 1;
+	}
+	if (block->magic != BALLOC_BLOCK_MAGIC)
+	{
+		blockheap_fail("memblock->block is invalid, invalid allocation or double free?");
+		return 1;
 	}
 
-	block = memblock->un.block;
 	bh->freeElems++;
 	block->used--;
 	memblock->un.next = block->firstfree;
