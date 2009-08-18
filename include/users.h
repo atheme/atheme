@@ -32,6 +32,8 @@ struct user_
 	unsigned int flags;
 
 	time_t ts;
+
+	node_t snode; /* for server_t.userlist */
 };
 
 #define FLOOD_MSGS_FACTOR 256

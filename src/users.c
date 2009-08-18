@@ -173,7 +173,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	u->server = server;
 	u->server->users++;
-	node_add(u, node_create(), &u->server->userlist);
+	node_add(u, &u->snode, &u->server->userlist);
 
 	if (ts)
 		u->ts = ts;
@@ -253,9 +253,7 @@ void user_delete(user_t *u, const char *comment)
 	if (*u->uid)
 		mowgli_patricia_delete(uidlist, u->uid);
 
-	n = node_find(u, &u->server->userlist);
-	node_del(n, &u->server->userlist);
-	node_free(n);
+	node_del(&u->snode, &u->server->userlist);
 
 	if (u->myuser)
 	{
