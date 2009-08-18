@@ -59,7 +59,6 @@ struct MemBlock
 
 struct Block
 {
-  size_t alloc_size;
   Block *next;            /* Next in our chain of blocks */
   void *elems;            /* Points to allocated memory */
   MemBlock *firstfree;
@@ -74,6 +73,7 @@ struct BlockHeap
   unsigned long elemsPerBlock;    /* Number of elements per block */
   unsigned long blocksAllocated;  /* Number of blocks allocated */
   unsigned long freeElems;                /* Number of free elements */
+  size_t allocSize;               /* Size of each block */
   Block *base;            /* Pointer to first block */
 };
 static int newblock(BlockHeap *bh);
@@ -202,8 +202,7 @@ static int newblock(BlockHeap *bh)
 	b = (Block *)scalloc(1, sizeof(Block));
 
 	b->next = bh->base;
-	b->alloc_size = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
-	b->elems = get_block(b->alloc_size);
+	b->elems = get_block(bh->allocSize);
 	b->firstfree = NULL;
 	b->used = 0;
 
@@ -275,6 +274,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	bh->elemsPerBlock = elemsperblock;
 	bh->blocksAllocated = 0;
 	bh->freeElems = 0;
+	bh->allocSize = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
 	bh->base = NULL;
 
 #ifndef NOBALLOC
@@ -446,7 +446,7 @@ static int BlockHeapGarbageCollect(BlockHeap *bh)
 	{
 		if (walker->used == 0)
 		{
-			free_block(walker->elems, walker->alloc_size);
+			free_block(walker->elems, bh->allocSize);
 			if (last != NULL)
 			{
 				last->next = walker->next;
@@ -497,7 +497,7 @@ int BlockHeapDestroy(BlockHeap *bh)
 	for (walker = bh->base; walker != NULL; walker = next)
 	{
 		next = walker->next;
-		free_block(walker->elems, walker->alloc_size);
+		free_block(walker->elems, bh->allocSize);
 		if (walker != NULL)
 			free(walker);
 	}
