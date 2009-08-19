@@ -113,22 +113,10 @@ static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata)
 	q = qline_find_channel(cu->chan);
 	if (q != NULL)
 	{
-		if(!is_ircop(cu->user))
-		{
 		/* Server didn't have that qline, send it again.
 		 * To ensure qline exempt works on sqlines too, do
-		 * not send a KILL. -- jilles */
-			char hostbuf[BUFSIZE];
-
-			hostbuf[0] = '\0';
-			strlcat(hostbuf, "*!*@", BUFSIZE);
-			strlcat(hostbuf, cu->user->vhost, BUFSIZE);
-
-			modestack_mode_param(opersvs.nick, cu->chan, MTYPE_ADD, 'b', hostbuf);
-			chanban_add(cu->chan, hostbuf, 'b');
-			kick(opersvs.me->me, cu->chan, cu->user, "Channel access is forbidden by network policy.");
-			qline_sts("*", q->mask, q->duration ? q->expires - CURRTIME : 0, q->reason);
-		}
+		 * not send a KICK. -- jilles */
+		qline_sts("*", q->mask, q->duration ? q->expires - CURRTIME : 0, q->reason);
 	}
 }
 
