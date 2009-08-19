@@ -235,7 +235,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 	char *p;
 	int i = 0;
 
-	if (*target != '#')
+	if (*target != '#' && *target != '&')
 	{
 		/* make sure there's at least 3 non-wildcards */
 		/* except if there are no wildcards at all */

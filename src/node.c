@@ -447,14 +447,16 @@ qline_t *qline_find(const char *mask)
 {
 	qline_t *q;
 	node_t *n;
+	bool ischan;
 
 	LIST_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
-		if (q->mask[0] != '#' && !match(q->mask, mask))
+		ischan = q->mask[0] == '#' || q->mask[0] == '&';
+		if (!ischan && !match(q->mask, mask))
 			return q;
-		else if (q->mask[0] == '#' && !irccasecmp(q->mask, mask))
+		else if (ischan && !irccasecmp(q->mask, mask))
 			return q;
 	}
 
@@ -488,7 +490,7 @@ qline_t *qline_find_user(user_t *u)
 
 		if (q->duration != 0 && q->expires <= CURRTIME)
 			continue;
-		if (q->mask[0] == '#')
+		if (q->mask[0] == '#' || q->mask[0] == '&')
 			continue;
 		if (!match(q->mask, u->nick))
 			return q;
