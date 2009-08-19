@@ -28,7 +28,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;
 
 list_t connection_list;
@@ -36,9 +35,8 @@ list_t connection_list;
 void init_netio(void)
 {
 	connection_heap = BlockHeapCreate(sizeof(connection_t), 16);
-	sa_heap = BlockHeapCreate(sizeof(struct sockaddr_in), 16);
 
-	if (!connection_heap || !sa_heap)
+	if (!connection_heap)
 	{
 		slog(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
