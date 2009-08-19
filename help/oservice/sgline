@@ -26,7 +26,7 @@ The third example adds a permanent SGLINE on foo for "foo reason."
 The fourth example adds a SGLINE on foo for the duration specified
 in the configuration file for "foo reason."
 
-Syntax: SGLINE DEL <hostmask|number>
+Syntax: SGLINE DEL <gecos|number>
 
 If number is specified it correlates with the number on SGLINE LIST.
 You may specify multiple numbers by separating with commas.
