@@ -72,7 +72,9 @@ specified to change the default behavior:
   -c </path/to/file> - specify the configuration file
   -d                 - start in debugging mode
   -h                 - print the help message and exit
+  -l </path/to/file> - specify the main log file
   -n                 - do not fork into the background
+  -p </path/to/file> - specify the PID file
   -v                 - print the version information and exit
 
 Services also handles the following signals:
@@ -101,4 +103,4 @@ If you find a bug in services, you must report it via the bugtracker;
 our developers have a tendency to forget things. Your bug is not 
 actually a bug until it's reported.
 
-Report bugs at http://bugzilla.atheme.org/.
+Report bugs at http://jira.atheme.org/.

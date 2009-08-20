@@ -100,7 +100,7 @@ All custom modules should be recompiled as well. Loading old modules can
 cause services to crash.
 
 Sometimes upgrading requires more than recompiling and reinstalling. Be sure to
-read doc/RELEASE for important notes concerning the release. This file will
+read NEWS for important notes concerning the release. This file will
 let you know if you need to change your configuration or convert your database
 to a new format.
 

@@ -34,7 +34,7 @@ if [ -f doc/RELEASE ] ; then
     if read INPUT ; then : ; else echo "" ; exit 1 ; fi
       if [ ! "$INPUT" ] ; then
         echo ""
-        $PAGER doc/RELEASE
+        $PAGER NEWS
         echo ""
         echo "-----"
         ok=1
@@ -42,7 +42,7 @@ if [ -f doc/RELEASE ] ; then
       case $INPUT in
         [Yy]*)
           echo ""
-          $PAGER doc/RELEASE
+          $PAGER NEWS
           ok=1
           ;;
         [Nn]*)

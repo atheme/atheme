@@ -5,7 +5,6 @@ command aliases
 interruptible commands (so as to make ns_mxcheck lookup async)
 
 vhost request system
-1. allow users to request vhosts, opers approve/deny
 2. allow opers to offer vhosts, users approve/deny
 
 cidr limits in /os clones
@@ -24,6 +23,3 @@ disconnect any user logged in to the same account as you); however, it would be
 bad to check the same password against two accounts (nick/login). new syntax?
 
 make sendpass/setpass codes expire after some time
-
-show realhost/ip of other users logged in to same account?
-
