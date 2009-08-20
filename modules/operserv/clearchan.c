@@ -45,7 +45,7 @@ void _moddeinit(void)
 static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu = NULL;
-	node_t *n = NULL;
+	node_t *n, *tn;
 	channel_t *c = NULL;
 	int action;
 	char *actionstr = parv[0];
@@ -101,7 +101,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Clearing \2%s\2 with \2%s\2"), targchan, actionstr);
 
 	/* iterate over the users in channel */
-	LIST_FOREACH(n, c->members.head)
+	LIST_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
 
