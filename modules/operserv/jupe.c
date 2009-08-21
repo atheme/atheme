@@ -70,6 +70,10 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_ADMIN, "JUPE %s %s", server, reason);
+	wallops(_("%s jupitered server \2%s\2 (%s)."), get_oper_name(si),
+			server, reason);
+	snoop(_("JUPE: \2%s\2 by \2%s\2 for \2%s\2"), server,
+			get_oper_name(si), reason);
 
 	snprintf(reasonbuf, BUFSIZE, "[%s] %s", get_oper_name(si), reason);
 	jupe(server, reasonbuf);
