@@ -42,10 +42,8 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	mychan_t *mc;
-	node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
-	bool noop;
 
 	if (!name)
 	{
@@ -148,10 +146,8 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	mychan_t *mc;
-	node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
-	bool noop;
 
 	if (!name)
 	{

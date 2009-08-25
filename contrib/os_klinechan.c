@@ -116,9 +116,6 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 	char *action = parv[1];
 	char *reason = parv[2];
 	mychan_t *mc;
-	channel_t *c;
-	chanuser_t *cu;
-	node_t *n;
 
 	if (!target || !action)
 	{
