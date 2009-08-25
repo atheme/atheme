@@ -21,7 +21,7 @@ list_t *os_cmdtree;
 static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[]);
 static void write_newsdb(void);
 static void load_newsdb(void);
-static void display_news(user_t *u);
+static void display_news(hook_user_nick_t *data);
 
 command_t os_logonnews = { "LOGONNEWS", "Manages logon news.",
 		  	   PRIV_GLOBAL, 3, os_cmd_logonnews };
@@ -122,13 +122,18 @@ static void load_newsdb(void)
 	fclose(f);
 }
 
-static void display_news(user_t *u)
+static void display_news(hook_user_nick_t *data)
 {
+	user_t *u;
 	node_t *n;
 	logonnews_t *l;
 	char dBuf[BUFSIZE];
 	struct tm tm;
 	int count = 0;
+
+	u = data->u;
+	if (u == NULL)
+		return;
 
 	/* abort if it's an internal client */
 	if (is_internal_client(u))

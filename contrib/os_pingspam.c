@@ -47,7 +47,7 @@ char *phrases[] =
 };
 
 void pingspam(user_t *u);
-static void user_add_hook(user_t *u);
+static void user_add_hook(hook_user_nick_t *data);
 static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -76,9 +76,16 @@ void _moddeinit()
 	hook_del_user_add(user_add_hook);
 }
 
-static void user_add_hook(user_t *u)
+static void user_add_hook(hook_user_nick_t *data)
 {
-	if(spamming)
+	user_t *u;
+
+	u = data->u;
+	if (u == NULL)
+		return;
+	if (is_internal_client(u))
+		return;
+	if (spamming)
 		pingspam(u);
 }
 
