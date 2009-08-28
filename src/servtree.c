@@ -69,7 +69,7 @@ static void create_unique_service_nick(char *dest, size_t len)
 static int conf_service_nick(config_entry_t *ce)
 {
 	service_t *sptr;
-	char newnick[9 + 1];
+	char newnick[30 + 1];
 
 	if (!ce->ce_vardata)
 		return -1;
@@ -162,7 +162,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	service_t *sptr;
 	struct ConfTable *subblock;
 	const char *nick;
-	char newnick[9 + 1];
+	char newnick[30 + 1];
 
 	if (name == NULL)
 	{
