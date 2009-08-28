@@ -644,6 +644,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 	user_t *u;
 	bool realchange;
+	const char *vhost;
 
 	if (parc == 10)
 	{
@@ -656,7 +657,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[3], parv[4], parv[8], NULL, NULL, parv[9], s, atoi(parv[2]));
+		vhost = strcmp(parv[8], "*") ? parv[8] : NULL;
+		u = user_add(parv[0], parv[3], parv[4], vhost, NULL, NULL, parv[9], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -717,17 +719,38 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
+static void unreal_user_mode(user_t *u, const char *changes)
+{
+	const char *p;
+	int dir;
+
+	if (u == NULL)
+		return;
+	user_mode(u, changes);
+	dir = MTYPE_ADD;
+	for (p = changes; *p != '\0'; p++)
+		switch (*p)
+		{
+			case '-': dir = MTYPE_DEL; break;
+			case '+': dir = MTYPE_ADD; break;
+			case 'x':
+				  if (dir == MTYPE_DEL)
+					  strlcpy(u->vhost, u->host, HOSTLEN);
+				  break;
+		}
+}
+
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
-		user_mode(user_find(parv[0]), parv[1]);
+		unreal_user_mode(user_find(parv[0]), parv[1]);
 }
 
 static void m_umode(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_mode(si->su, parv[0]);
+	unreal_user_mode(si->su, parv[0]);
 }
 
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
@@ -863,6 +886,11 @@ static void m_error(sourceinfo_t *si, int parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
+static void m_sethost(sourceinfo_t *si, int parc, char *parv[])
+{
+	strlcpy(si->su->vhost, parv[0], HOSTLEN);
+}
+
 static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
@@ -959,6 +987,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 4, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
@@ -997,6 +1026,7 @@ void _modinit(module_t * m)
 	pcommand_add("<", m_pass, 1, MSRC_UNREG);
 	pcommand_add("5", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add(")", m_topic, 4, MSRC_USER | MSRC_SERVER);
+	pcommand_add("AA", m_sethost, 1, MSRC_USER);
 	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("F", m_motd, 1, MSRC_USER);
 
