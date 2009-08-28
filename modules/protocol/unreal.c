@@ -162,7 +162,7 @@ static unsigned int unreal_server_login(void)
 
 	me.bursting = true;
 
-	sts("PROTOCTL TOKEN NICKv2 VHP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT");
+	sts("PROTOCTL TOKEN NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
 	services_init();
@@ -645,8 +645,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	bool realchange;
 	const char *vhost;
+	const char *ipb64;
+	char ipstring[64];
+	int af;
+	size_t iplen;
+	char ipdata[16];
 
-	if (parc == 10)
+	if (parc == 10 || parc == 11)
 	{
 		s = server_find(parv[5]);
 		if (!s)
@@ -658,7 +663,34 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		vhost = strcmp(parv[8], "*") ? parv[8] : NULL;
-		u = user_add(parv[0], parv[3], parv[4], vhost, NULL, NULL, parv[9], s, atoi(parv[2]));
+		iplen = 0;
+		if (parc == 11 && strcmp(parv[parc - 2], "*"))
+		{
+			ipb64 = parv[parc - 2];
+			af = AF_INET;
+			if (strlen(ipb64) == 8)
+			{
+				iplen = 4;
+				if (!base64_decode(ipb64, 8, ipdata, &iplen) ||
+						iplen != 4)
+					iplen = 0;
+				af = AF_INET;
+			}
+#ifdef AF_INET6
+			else if (strlen(ipb64) == 24)
+			{
+				iplen = 16;
+				if (!base64_decode(ipb64, 24, ipdata, &iplen) ||
+						iplen != 16)
+					iplen = 0;
+				af = AF_INET6;
+			}
+#endif
+			if (iplen != 0)
+				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
+					iplen = 0;
+		}
+		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, NULL, parv[parc - 1], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 
