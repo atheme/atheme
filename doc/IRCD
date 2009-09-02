@@ -59,10 +59,8 @@ You will need a service{} block on all servers.
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
 
-Atheme supports both TS5 and TS6 protocol. It is recommended to use TS6
-as it reduces ghosts/desyncs and propagates user IP addresses. Although
-Atheme does not support IPv6 connections itself, user IPv6 addresses will
-be properly stored and logged.
+Although Atheme does not support IPv6 connections itself, user IPv6 addresses
+will be properly stored and logged.
 
 dreamforge
 ----------
@@ -236,10 +234,8 @@ etc. You will need a service{} block on all servers.
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.
 
-Atheme supports both TS5 and TS6 protocol. It is recommended to use TS6
-as it reduces ghosts/desyncs and propagates user IP addresses. Although
-Atheme does not support IPv6 connections itself, user IPv6 addresses will
-be properly stored and logged.
+Although Atheme does not support IPv6 connections itself, user IPv6 addresses
+will be properly stored and logged.
 
 shadowircd
 ----------
