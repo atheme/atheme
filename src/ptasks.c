@@ -444,7 +444,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 {
 	char *vec[3];
 	hook_cmessage_data_t cdata;
-	node_t *n;
+	node_t *n, *tn;
 
 	/* Call hook here */
 	cdata.u = si->su;
@@ -461,7 +461,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	vec[1] = message;
 	vec[2] = NULL;
 
-	LIST_FOREACH(n, cdata.c->members.head)
+	LIST_FOREACH_SAFE(n, tn, cdata.c->members.head)
 	{
 		chanuser_t *cu = (chanuser_t *) n->data;
 
