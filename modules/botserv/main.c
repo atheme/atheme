@@ -781,6 +781,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
+	metadata_t *md;
 
 	if (!parv[0] || !parv[1])
 	{
@@ -807,16 +808,23 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	md = metadata_find(mc, "private:botserv:bot-assigned");
+
 	if (botserv_bot_find(parv[1]) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[1]);
 		return;
 	}
 
+	if (irccasecmp(md->value, parv[1]))
+	{
+		join(mc->name, parv[1]);
+		if (md != NULL)
+			part(mc->name, md->value);
+	}
+	part(mc->name, chansvs.nick);
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
-	part(mc->name, chansvs.nick);
-	join(mc->name, parv[1]);
 
 	command_success_nodata(si, "Assigned the bot \2%s\2 to \2%s\2.", parv[1], parv[0]);
 }
