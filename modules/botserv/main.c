@@ -816,7 +816,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (irccasecmp(md->value, parv[1]))
+	if (md == NULL || irccasecmp(md->value, parv[1]))
 	{
 		join(mc->name, parv[1]);
 		if (md != NULL)
