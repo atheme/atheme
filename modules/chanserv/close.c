@@ -82,7 +82,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	channel_t *c;
 	chanuser_t *cu;
-	node_t *n;
+	node_t *n, *tn;
 
 	if (!target || !action)
 	{
@@ -134,7 +134,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			channel_mode_va(chansvs.me->me, c, 3, "+isbl", "*!*@*", "1");
 
 			/* clear the channel */
-			LIST_FOREACH(n, c->members.head)
+			LIST_FOREACH_SAFE(n, tn, c->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 
