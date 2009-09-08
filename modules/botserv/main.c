@@ -759,10 +759,10 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "\2%d\2 bots available.", i);
-	if (si->su != NULL && is_ircop(si->su))
+	if (si->su != NULL && has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		i = 0;
-		command_success_nodata(si, "Listing of oper only bots available on \2%s\2:", me.netname);
+		command_success_nodata(si, "Listing of private bots available on \2%s\2:", me.netname);
 		LIST_FOREACH(n, bs_bots.head)
 		{
 			botserv_bot_t *bot = (botserv_bot_t *) n->data;
@@ -770,7 +770,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 			if (bot->private)
 				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 		}
-		command_success_nodata(si, "\2%d\2 oper only bots available.", i);
+		command_success_nodata(si, "\2%d\2 private bots available.", i);
 	}
 	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
 }
@@ -782,6 +782,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
 	metadata_t *md;
+	botserv_bot_t *bot;
 
 	if (!parv[0] || !parv[1])
 	{
@@ -810,9 +811,15 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 
 	md = metadata_find(mc, "private:botserv:bot-assigned");
 
-	if (botserv_bot_find(parv[1]) == NULL)
+	bot = botserv_bot_find(parv[1]);
+	if (bot == NULL)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[1]);
+		return;
+	}
+	if (bot->private && !has_priv(si, PRIV_CHAN_ADMIN))
+	{
+		command_fail(si, fault_noprivs, "You are not authorised to assign the bot \2%s\2 to a channel.", bot->nick);
 		return;
 	}
 
