@@ -445,6 +445,8 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	char *vec[3];
 	hook_cmessage_data_t cdata;
 	node_t *n, *tn;
+	list_t l = { NULL, NULL, 0 };
+	service_t *svs;
 
 	/* Call hook here */
 	cdata.u = si->su;
@@ -461,25 +463,35 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	vec[1] = message;
 	vec[2] = NULL;
 
-	LIST_FOREACH_SAFE(n, tn, cdata.c->members.head)
+	LIST_FOREACH(n, cdata.c->members.head)
 	{
 		chanuser_t *cu = (chanuser_t *) n->data;
 
 		if (!is_internal_client(cu->user))
 			continue;
 
-		si->service = service_find_nick(cu->user->nick);
+		svs = service_find_nick(cu->user->nick);
 
-		if (si->service == NULL)
+		if (svs == NULL)
 			continue;
 
-		if (si->service->chanmsg == false)
+		if (svs->chanmsg == false)
 			continue;
 
+		node_add(svs, node_create(), &l);
+	}
+	/* Note: this assumes a fantasy command will not remove another
+	 * service.
+	 */
+	LIST_FOREACH_SAFE(n, tn, l.head)
+	{
+		si->service = n->data;
 		if (is_notice)
 			si->service->notice_handler(si, 2, vec);
 		else
 			si->service->handler(si, 2, vec);
+		node_del(n, &l);
+		node_free(n);
 	}
 }
 
