@@ -386,8 +386,6 @@ void botserv_save_database(void *unused)
 	fclose(f);
 
 	/* use an atomic rename */
-	unlink(DATADIR "/botserv.db");
-
 	if ((rename(DATADIR "/botserv.db.new", DATADIR "/botserv.db")) < 0)
 	{
 		errno1 = errno;
