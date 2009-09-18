@@ -434,7 +434,7 @@ void _moddeinit()
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_user_info(show_enforce);
-	hook_del_user_can_register(check_registration);
+	hook_del_nick_can_register(check_registration);
 	hook_del_nick_enforce(check_enforce);
 	BlockHeapDestroy(enforce_timeout_heap);
 }
