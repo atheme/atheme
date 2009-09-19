@@ -204,6 +204,52 @@ static void p10_unkline_sts(char *server, char *user, char *host)
 	sts("%s GL * -%s@%s", me.numeric, user, host);
 }
 
+static void p10_xline_sts(char *server, char *realname, long duration, char *reason)
+{
+	if (!me.connected)
+		return;
+
+	/* hold permanent sglines for four weeks -- jilles */
+	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : 2419200, reason);
+}
+
+static void p10_unxline_sts(char *server, char *realname)
+{
+	if (!me.connected)
+		return;
+
+	sts("%s GL * -$R%s", me.numeric, realname);
+}
+
+static void p10_qline_sts(char *server, char *name, long duration, char *reason)
+{
+	if (!me.connected)
+		return;
+
+	if (*name != '#' && *name != '&')
+	{
+		snoop("SQLINE: Could not set SQLINE on \2%s\2, not supported by ircu.", name);
+		return;
+	}
+
+	/* hold permanent sqlines for four weeks -- jilles */
+	sts("%s GL * +%s %ld :%s", me.numeric, name, duration > 0 ? duration : 2419200, reason);
+}
+
+static void p10_unqline_sts(char *server, char *name)
+{
+	if (!me.connected)
+		return;
+
+	if (*name != '#' && *name != '&')
+	{
+		snoop("SQLINE: Could not remove SQLINE on \2%s\2, not supported by ircu.", name);
+		return;
+	}
+
+	sts("%s GL * -%s", me.numeric, name);
+}
+
 /* topic wrapper */
 static void p10_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -951,6 +997,10 @@ void _modinit(module_t * m)
 	part_sts = &p10_part_sts;
 	kline_sts = &p10_kline_sts;
 	unkline_sts = &p10_unkline_sts;
+	xline_sts = &p10_xline_sts;
+	unxline_sts = &p10_unxline_sts;
+	qline_sts = &p10_qline_sts;
+	unqline_sts = &p10_unqline_sts;
 	topic_sts = &p10_topic_sts;
 	mode_sts = &p10_mode_sts;
 	ping_sts = &p10_ping_sts;
