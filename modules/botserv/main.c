@@ -575,7 +575,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (irccasecmp(bot->nick, parv[1]))
+	if (irccasecmp(parv[0], parv[1]))
 	{
 		if (botserv_bot_find(parv[1]) || service_find_nick(parv[1]))
 		{
@@ -583,19 +583,6 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 					_("\2%s\2 is already a bot or service."),
 					parv[1]);
 			return;
-		}
-
-		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-		{
-			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-				continue;
-
-			if (!irccasecmp(md->value, bot->nick))
-				part(mc->name, bot->nick);
-
-			metadata_delete(mc, "private:botserv:bot-assigned");
-			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-
 		}
 	}
 
@@ -626,13 +613,30 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!irccasecmp(parv[0], parv[1]))
 	{
-		/* join botserv back to guarded channels that have it assigned */
-		bs_join_registered(!config_options.leave_chans);
+		/* join this bot back to channels that have it assigned */
+		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+		{
+			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+				continue;
+
+			if (!irccasecmp(md->value, parv[0]))
+				join(mc->name, parv[1]);
+		}
 	}
 	else
 	{
-		/* join chanserv to guarded channels that no longer have botserv because it was deleted */
-		join_registered(!config_options.leave_chans);
+		/* join it back and also update the metadata */
+		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+		{
+			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+				continue;
+
+			if (!irccasecmp(md->value, parv[0]))
+			{
+				metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
+				join(mc->name, parv[1]);
+			}
+		}
 	}
 	botserv_save_database(NULL);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
