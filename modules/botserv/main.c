@@ -158,33 +158,6 @@ bs_join_registered(bool all)
 	}
 }
 
-static void join_registered(bool all)
-{
-	mychan_t *mc;
-	mowgli_patricia_iteration_state_t state;
-	metadata_t *md;
-
-	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-	{
-		if (!(mc->flags & MC_GUARD))
-			continue;
-
-		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-			continue;
-
-		if (all)
-		{
-			join(mc->name, chansvs.nick);
-			continue;
-		}
-		else if (mc->chan != NULL && mc->chan->members.count != 0)
-		{
-			join(mc->name, chansvs.nick);
-			continue;
-		}
-	}
-}
-
 /* ******************************************************************** */
 
 /* botserv: command handler */
