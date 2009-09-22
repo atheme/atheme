@@ -362,13 +362,14 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, "private:botserv:no-bot", "ON");
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		{
+			if (mc->flags & MC_GUARD &&
+					(!config_options.leave_chans ||
+					 (mc->chan != NULL &&
+					  LIST_LENGTH(&mc->chan->members) > 1)))
+				join(mc->name, chansvs.nick);
 			part(mc->name, md->value);
 			metadata_delete(mc, "private:botserv:bot-assigned");
 			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-			if ((mc->flags & MC_GUARD) && (mc->chan != NULL && mc->chan->members.count != 0))
-			{
-				join(mc->name, chansvs.nick);
-			}
 		}
 		command_success_nodata(si, _("No Bot mode is now \2ON\2 on channel %s."), mc->name);
 	}

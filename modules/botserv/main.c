@@ -619,7 +619,10 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
 				continue;
 
-			if (!irccasecmp(md->value, parv[0]))
+			if (!irccasecmp(md->value, parv[0]) &&
+					(!config_options.leave_chans ||
+					 (mc->chan != NULL &&
+					  LIST_LENGTH(&mc->chan->members) > 0)))
 				join(mc->name, parv[1]);
 		}
 	}
@@ -634,7 +637,10 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			if (!irccasecmp(md->value, parv[0]))
 			{
 				metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
-				join(mc->name, parv[1]);
+				if (!config_options.leave_chans ||
+						(mc->chan != NULL &&
+						 LIST_LENGTH(&mc->chan->members) > 0))
+					join(mc->name, parv[1]);
 			}
 		}
 	}
@@ -721,13 +727,15 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!irccasecmp(md->value, bot->nick))
 		{
-			join(mc->name, chansvs.nick);
-			part(mc->name, bot->nick);
+			if (mc->flags & MC_GUARD &&
+					(!config_options.leave_chans ||
+					 (mc->chan != NULL &&
+					  LIST_LENGTH(&mc->chan->members) > 1)))
+				join(mc->name, chansvs.nick);
+
+			metadata_delete(mc, "private:botserv:bot-assigned");
+			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 		}
-
-		metadata_delete(mc, "private:botserv:bot-assigned");
-		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-
 	}
 
 	node_del(&bot->bnode, &bs_bots);
@@ -871,13 +879,13 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (mc->flags & MC_GUARD && (!config_options.leave_chans ||
+				(mc->chan != NULL &&
+				 LIST_LENGTH(&mc->chan->members) > 1)))
+		join(mc->name, chansvs.nick);
 	part(mc->name, md->value);
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-	if ((mc->flags & MC_GUARD) && (mc->chan != NULL && mc->chan->members.count != 0))
-	{
-		join(mc->name, chansvs.nick);
-	}
 	command_success_nodata(si, "Unassigned the bot from \2%s\2.", parv[0]);
 }
 
