@@ -149,7 +149,7 @@ void check_signals(void)
 
 		wallops(_("Got SIGHUP; reloading \2%s\2."), config_file);
 
-		if (db_save)
+		if (db_save && !readonly)
 		{
 			snoop("UPDATE: \2%s\2", "system console");
 			wallops(_("Updating database by request of \2%s\2."), "system console");

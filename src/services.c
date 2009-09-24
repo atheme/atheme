@@ -389,6 +389,9 @@ void handle_nickchange(user_t *u)
 	if (runflags & RF_LIVE && log_debug_enabled())
 		notice(globsvs.me != NULL ? globsvs.nick : me.name, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
 
+	if (readonly)
+		notice(globsvs.me != NULL ? globsvs.nick : me.name, u->nick, "Services are presently running in readonly mode.  Any changes you make will not be saved.");
+
 	hook_call_nick_check(u);
 }
 

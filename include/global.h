@@ -154,6 +154,7 @@ E void remove_illegals(void);
 
 /* atheme.c */
 E bool cold_start;
+E bool readonly;
 E char *config_file;
 
 /* conf.c */

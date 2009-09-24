@@ -49,6 +49,7 @@ int runflags;
 char *config_file;
 char *log_path;
 bool cold_start = false;
+bool readonly = false;
 
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (void) = NULL;
@@ -131,7 +132,7 @@ int main(int argc, char *argv[])
 #endif
 	
 	/* do command-line options */
-	while ((r = getopt(argc, argv, "c:dhl:np:v")) != -1)
+	while ((r = getopt(argc, argv, "c:dhrl:np:v")) != -1)
 	{
 		switch (r)
 		{
@@ -145,6 +146,9 @@ int main(int argc, char *argv[])
 		  case 'h':
 			  print_help();
 			  exit(EXIT_SUCCESS);
+			  break;
+		  case 'r':
+			  readonly = true;
 			  break;
 		  case 'l':
 			  log_path = sstrdup(optarg);
@@ -161,7 +165,7 @@ int main(int argc, char *argv[])
 			  exit(EXIT_SUCCESS);
 			  break;
 		  default:
-			  printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n");
+			  printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_SUCCESS);
 			  break;
 		}
@@ -339,7 +343,7 @@ int main(int argc, char *argv[])
 	me.maxfd = 3;
 
 	/* DB commit interval is configurable */
-	if (db_save)
+	if (db_save && !readonly)
 		event_add("db_save", db_save, NULL, config_options.commit_interval);
 
 	/* check expires every hour */
@@ -363,7 +367,7 @@ int main(int argc, char *argv[])
 	io_loop();
 
 	/* we're shutting down */
-	if (db_save)
+	if (db_save && !readonly)
 		db_save(NULL);
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
