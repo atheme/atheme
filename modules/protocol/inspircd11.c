@@ -111,6 +111,7 @@ static bool has_servicesmod = false;
 static bool has_globopsmod = false;
 static bool has_chghostmod = false;
 static bool has_cbanmod = false;
+static bool has_hidechansmod = false;
 static bool has_svshold = false;
 static int has_protocol = 0;
 
@@ -221,7 +222,7 @@ static void inspircd_introduce_nick(user_t *u)
 	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts(":%s NICK %lu %s %s %s %s +i%s 0.0.0.0 :%s", me.name, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, omode, u->gecos);
+	sts(":%s NICK %lu %s %s %s %s +%si%s 0.0.0.0 :%s", me.name, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, has_hidechansmod ? "I" : "", omode, u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPERTYPE Services", u->nick);
 }
@@ -1129,6 +1130,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		has_globopsmod = false;
 		has_chghostmod = false;
 		has_cbanmod = false;
+		has_hidechansmod = false;
 		has_svshold = false;
 		has_protocol = 0;
 	}
@@ -1159,6 +1161,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_cban.so"))
 		{
 			has_cbanmod = true;
+		}
+		if (strstr(parv[1], "m_hidechans.so"))
+		{
+			has_hidechansmod = true;
 		}
 		if (strstr(parv[1], "m_svshold.so"))
 		{

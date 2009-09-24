@@ -158,33 +158,6 @@ bs_join_registered(bool all)
 	}
 }
 
-static void join_registered(bool all)
-{
-	mychan_t *mc;
-	mowgli_patricia_iteration_state_t state;
-	metadata_t *md;
-
-	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-	{
-		if (!(mc->flags & MC_GUARD))
-			continue;
-
-		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-			continue;
-
-		if (all)
-		{
-			join(mc->name, chansvs.nick);
-			continue;
-		}
-		else if (mc->chan != NULL && mc->chan->members.count != 0)
-		{
-			join(mc->name, chansvs.nick);
-			continue;
-		}
-	}
-}
-
 /* ******************************************************************** */
 
 /* botserv: command handler */
@@ -386,8 +359,6 @@ void botserv_save_database(void *unused)
 	fclose(f);
 
 	/* use an atomic rename */
-	unlink(DATADIR "/botserv.db");
-
 	if ((rename(DATADIR "/botserv.db.new", DATADIR "/botserv.db")) < 0)
 	{
 		errno1 = errno;
@@ -577,7 +548,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (irccasecmp(bot->nick, parv[1]))
+	if (irccasecmp(parv[0], parv[1]))
 	{
 		if (botserv_bot_find(parv[1]) || service_find_nick(parv[1]))
 		{
@@ -585,19 +556,6 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 					_("\2%s\2 is already a bot or service."),
 					parv[1]);
 			return;
-		}
-
-		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-		{
-			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-				continue;
-
-			if (!irccasecmp(md->value, bot->nick))
-				part(mc->name, bot->nick);
-
-			metadata_delete(mc, "private:botserv:bot-assigned");
-			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-
 		}
 	}
 
@@ -628,13 +586,36 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!irccasecmp(parv[0], parv[1]))
 	{
-		/* join botserv back to guarded channels that have it assigned */
-		bs_join_registered(!config_options.leave_chans);
+		/* join this bot back to channels that have it assigned */
+		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+		{
+			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+				continue;
+
+			if (!irccasecmp(md->value, parv[0]) &&
+					(!config_options.leave_chans ||
+					 (mc->chan != NULL &&
+					  LIST_LENGTH(&mc->chan->members) > 0)))
+				join(mc->name, parv[1]);
+		}
 	}
 	else
 	{
-		/* join chanserv to guarded channels that no longer have botserv because it was deleted */
-		join_registered(!config_options.leave_chans);
+		/* join it back and also update the metadata */
+		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+		{
+			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+				continue;
+
+			if (!irccasecmp(md->value, parv[0]))
+			{
+				metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
+				if (!config_options.leave_chans ||
+						(mc->chan != NULL &&
+						 LIST_LENGTH(&mc->chan->members) > 0))
+					join(mc->name, parv[1]);
+			}
+		}
 	}
 	botserv_save_database(NULL);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
@@ -719,13 +700,15 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!irccasecmp(md->value, bot->nick))
 		{
-			join(mc->name, chansvs.nick);
-			part(mc->name, bot->nick);
+			if (mc->flags & MC_GUARD &&
+					(!config_options.leave_chans ||
+					 (mc->chan != NULL &&
+					  LIST_LENGTH(&mc->chan->members) > 1)))
+				join(mc->name, chansvs.nick);
+
+			metadata_delete(mc, "private:botserv:bot-assigned");
+			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 		}
-
-		metadata_delete(mc, "private:botserv:bot-assigned");
-		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-
 	}
 
 	node_del(&bot->bnode, &bs_bots);
@@ -759,10 +742,10 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "\2%d\2 bots available.", i);
-	if (si->su != NULL && is_ircop(si->su))
+	if (si->su != NULL && has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		i = 0;
-		command_success_nodata(si, "Listing of oper only bots available on \2%s\2:", me.netname);
+		command_success_nodata(si, "Listing of private bots available on \2%s\2:", me.netname);
 		LIST_FOREACH(n, bs_bots.head)
 		{
 			botserv_bot_t *bot = (botserv_bot_t *) n->data;
@@ -770,7 +753,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 			if (bot->private)
 				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 		}
-		command_success_nodata(si, "\2%d\2 oper only bots available.", i);
+		command_success_nodata(si, "\2%d\2 private bots available.", i);
 	}
 	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
 }
@@ -781,6 +764,8 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc = mychan_find(parv[0]);
+	metadata_t *md;
+	botserv_bot_t *bot;
 
 	if (!parv[0] || !parv[1])
 	{
@@ -807,16 +792,29 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (botserv_bot_find(parv[1]) == NULL)
+	md = metadata_find(mc, "private:botserv:bot-assigned");
+
+	bot = botserv_bot_find(parv[1]);
+	if (bot == NULL)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[1]);
 		return;
 	}
+	if (bot->private && !has_priv(si, PRIV_CHAN_ADMIN))
+	{
+		command_fail(si, fault_noprivs, "You are not authorised to assign the bot \2%s\2 to a channel.", bot->nick);
+		return;
+	}
 
+	if (md == NULL || irccasecmp(md->value, parv[1]))
+	{
+		join(mc->name, parv[1]);
+		if (md != NULL)
+			part(mc->name, md->value);
+	}
+	part(mc->name, chansvs.nick);
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
-	part(mc->name, chansvs.nick);
-	join(mc->name, parv[1]);
 
 	command_success_nodata(si, "Assigned the bot \2%s\2 to \2%s\2.", parv[1], parv[0]);
 }
@@ -854,13 +852,13 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (mc->flags & MC_GUARD && (!config_options.leave_chans ||
+				(mc->chan != NULL &&
+				 LIST_LENGTH(&mc->chan->members) > 1)))
+		join(mc->name, chansvs.nick);
 	part(mc->name, md->value);
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-	if ((mc->flags & MC_GUARD) && (mc->chan != NULL && mc->chan->members.count != 0))
-	{
-		join(mc->name, chansvs.nick);
-	}
 	command_success_nodata(si, "Unassigned the bot from \2%s\2.", parv[0]);
 }
 

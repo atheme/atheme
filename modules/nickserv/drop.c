@@ -106,7 +106,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 	command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_REGISTER, "DROP %s", mu->name);
 	hook_call_user_drop(mu);

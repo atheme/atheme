@@ -324,6 +324,59 @@ static void unreal_unkline_sts(char *server, char *user, char *host)
 	sts(":%s TKL - G %s %s %s", me.name, user, host, opersvs.nick);
 }
 
+static void unreal_xline_sts(char *server, char *realname, long duration, char *reason)
+{
+	char escapedreason[512], *p;
+
+	if (!me.connected)
+		return;
+
+	if (duration > 0)
+	{
+		snoop("SGLINE: Could not set temporary SGLINE on \2%s\2, not supported by unrealircd.", realname);
+		return;
+	}
+
+	strlcpy(escapedreason, reason, sizeof escapedreason);
+	for (p = escapedreason; *p != '\0'; p++)
+		if (*p == ' ')
+			*p = '_';
+	if (*escapedreason == ':')
+		*escapedreason = ';';
+
+	sts(":%s BR + %s :%s", me.name, escapedreason, realname);
+}
+
+static void unreal_unxline_sts(char *server, char *realname)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s BR - :%s", me.name, realname);
+}
+
+static void unreal_qline_sts(char *server, char *name, long duration, char *reason)
+{
+	if (!me.connected)
+		return;
+
+	if (*name == '#' || *name == '&')
+	{
+		snoop("SQLINE: Could not set SQLINE on \2%s\2, not supported by unrealircd.", name);
+		return;
+	}
+
+	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, opersvs.nick, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+}
+
+static void unreal_unqline_sts(char *server, char *name)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s TKL - Q * %s %s", me.name, name, opersvs.nick);
+}
+
 /* topic wrapper */
 static void unreal_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -975,6 +1028,10 @@ void _modinit(module_t * m)
 	part_sts = &unreal_part_sts;
 	kline_sts = &unreal_kline_sts;
 	unkline_sts = &unreal_unkline_sts;
+	xline_sts = &unreal_xline_sts;
+	unxline_sts = &unreal_unxline_sts;
+	qline_sts = &unreal_qline_sts;
+	unqline_sts = &unreal_unqline_sts;
 	topic_sts = &unreal_topic_sts;
 	mode_sts = &unreal_mode_sts;
 	ping_sts = &unreal_ping_sts;

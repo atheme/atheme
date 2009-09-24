@@ -105,8 +105,6 @@ static void write_channels_dot_file(void *arg)
 	}
 
 	/* now, replace the old database with the new one, using an atomic rename */
-	unlink(DATADIR "/channels.dot" );
-	
 	if ((rename(DATADIR "/channels.dot.new", DATADIR "/channels.dot")) < 0)
 	{
 		errno1 = errno;
@@ -167,8 +165,6 @@ static void write_uchannels_dot_file(void *arg)
 	}
 
 	/* now, replace the old database with the new one, using an atomic rename */
-	unlink(DATADIR "/uchannels.dot" );
-	
 	if ((rename(DATADIR "/uchannels.dot.new", DATADIR "/uchannels.dot")) < 0)
 	{
 		errno1 = errno;
