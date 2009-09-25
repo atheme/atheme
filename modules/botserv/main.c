@@ -158,6 +158,28 @@ bs_join_registered(bool all)
 	}
 }
 
+static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
+{
+	metadata_t *md;
+	botserv_bot_t *bot;
+
+	md = metadata_find(mc, "private:botserv:bot-assigned");
+	bot = md != NULL ? botserv_bot_find(md->value) : NULL;
+	if (bot != NULL && !user_find_named(bot->nick))
+		bot = NULL;
+	if (bot == NULL && md != NULL)
+	{
+		slog(LG_INFO, "bs_mychan_find_bot(): unassigning invalid bot %s from %s",
+				md->value, mc->name);
+		if (mc->chan != NULL)
+			notice(botsvs->nick, mc->name, "Unassigning invalid bot %s",
+					md->value);
+		metadata_delete(mc, "private:botserv:bot-assigned");
+		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+	}
+	return bot;
+}
+
 /* ******************************************************************** */
 
 /* botserv: command handler */
@@ -952,7 +974,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	unsigned int flags;
 	bool noop;
 	bool secure;
-	metadata_t *md, *bs;
+	metadata_t *md;
 	chanacs_t *ca2;
 	char akickreason[120] = "User is banned from this channel", *p;
 	botserv_bot_t *bot;
@@ -967,15 +989,18 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	if ((bs = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+	/* chanserv's function handles those */
+	if (metadata_find(mc, "private:botserv:bot-assigned") == NULL)
+		return;
+
+	bot = bs_mychan_find_bot(mc);
+	if (bot == NULL)
 	{
-		bot = NULL;
 		if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 			join(chan->name, chansvs.nick);
 	}
 	else
 	{
-		bot = botserv_bot_find(bs->value);
 		if (chan->nummembers == 1)
 			join(chan->name, bot->nick);
 	}
@@ -1273,7 +1298,6 @@ bs_part(hook_channel_joinpart_t *hdata)
 {
 	chanuser_t *cu;
 	mychan_t *mc;
-	metadata_t *bs;
 	botserv_bot_t *bot;
 
 	cu = hdata->cu;
@@ -1284,10 +1308,11 @@ bs_part(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	if ((bs = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-		bot = NULL;
-	else
-		bot = botserv_bot_find(bs->value);
+	/* chanserv's function handles those */
+	if (metadata_find(mc, "private:botserv:bot-assigned") == NULL)
+		return;
+
+	bot = bs_mychan_find_bot(mc);
 	if (CURRTIME - mc->used >= 3600)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
