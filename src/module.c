@@ -27,7 +27,7 @@
 #include <dlfcn.h>
 
 static BlockHeap *module_heap;
-list_t modules;
+list_t modules, modules_inprogress;
 
 module_t *modtarget = NULL;
 
@@ -146,6 +146,9 @@ module_t *module_load(const char *filespec)
 	m->address = handle;
 #endif
 
+	n = node_create();
+	node_add(m, n, &modules_inprogress);
+
 	/* set the module target for module dependencies */
 	old_modtarget = modtarget;
 	modtarget = m;
@@ -156,16 +159,18 @@ module_t *module_load(const char *filespec)
 	/* we won't be loading symbols outside the init code */
 	modtarget = old_modtarget;
 
+	node_del(n, &modules_inprogress);
+
 	if (m->mflags & MODTYPE_FAIL)
 	{
 		slog(LG_ERROR, "module_load(): module %s init failed", filespec);
 		if (me.connected)
 			snoop(_("MODLOAD:ERROR: Init failed while loading module \2%s\2"), filespec);
+		node_free(n);
 		module_unload(m);
 		return NULL;
 	}
 
-	n = node_create();
 	node_add(m, n, &modules);
 
 	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, (unsigned long)m->address, h->abi_ver);
@@ -418,10 +423,24 @@ module_t *module_find_published(const char *name)
 bool module_request(const char *name)
 {
 	module_t *m;
+	node_t *n;
 	char path[BUFSIZE];
 
 	if ((m = module_find_published(name)) != NULL)
 		return true;
+
+	LIST_FOREACH(n, modules_inprogress.head)
+	{
+		m = n->data;
+
+		if (!strcasecmp(m->header->name, name))
+		{
+			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
+					modtarget != NULL ? modtarget->header->name : "?",
+					m->header->name);
+			return false;
+		}
+	}
 
 	snprintf(path, BUFSIZE, "%s/modules/%s", MODDIR, name);
 	if ((m = module_load(path)) == NULL)
