@@ -61,10 +61,13 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 	metadata_t *bs;
 	user_t *bot = NULL;
 
-	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+	if (source != NULL && chansvs.nick != NULL &&
+			!strcmp(source, chansvs.nick) &&
+			(mc = mychan_find(channel->name)) != NULL &&
+			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	modestack_mode_simple_real(bot ? bot->nick : chansvs.nick, channel, dir, flags);
+	modestack_mode_simple_real(bot ? bot->nick : source, channel, dir, flags);
 }
 
 static void
@@ -74,10 +77,13 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 	metadata_t *bs;
 	user_t *bot = NULL;
 
-	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+	if (source != NULL && chansvs.nick != NULL &&
+			!strcmp(source, chansvs.nick) &&
+			(mc = mychan_find(channel->name)) != NULL &&
+			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	modestack_mode_limit_real(bot ? bot->nick : chansvs.nick, channel, dir, limit);
+	modestack_mode_limit_real(bot ? bot->nick : source, channel, dir, limit);
 }
 
 static void
@@ -87,10 +93,13 @@ bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, co
 	metadata_t *bs;
 	user_t *bot = NULL;
 
-	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+	if (source != NULL && chansvs.nick != NULL &&
+			!strcmp(source, chansvs.nick) &&
+			(mc = mychan_find(channel->name)) != NULL &&
+			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	modestack_mode_ext_real(bot ? bot->nick : chansvs.nick, channel, dir, i, value);
+	modestack_mode_ext_real(bot ? bot->nick : source, channel, dir, i, value);
 }
 
 static void
@@ -100,10 +109,13 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 	metadata_t *bs;
 	user_t *bot = NULL;
 
-	if ((mc = mychan_find(channel->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+	if (source != NULL && chansvs.nick != NULL &&
+			!strcmp(source, chansvs.nick) &&
+			(mc = mychan_find(channel->name)) != NULL &&
+			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
-	modestack_mode_param_real(bot ? bot->nick : chansvs.nick, channel, dir, type, value);
+	modestack_mode_param_real(bot ? bot->nick : source, channel, dir, type, value);
 }
 
 static void
