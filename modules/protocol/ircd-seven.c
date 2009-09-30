@@ -133,8 +133,9 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 			 * their nick may have been ungrouped, they may have changed nicks, or their account
 			 * may have been dropped.
 			 */
-			sts(":%s ENCAP * IDENTIFIED %s %s %s", ME, CLIENT_NAME(u), u->nick,
-					should_reg_umode(u) ? "" : "OFF");
+			if (authservice_loaded)
+				sts(":%s ENCAP * IDENTIFIED %s %s %s", ME, CLIENT_NAME(u), u->nick,
+						should_reg_umode(u) ? "" : "OFF");
 		}
 
 		/* server_eob() cannot know if a user was introduced
@@ -201,7 +202,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		/* fix up +e if necessary -- jilles */
-		if (realchange && should_reg_umode(si->su))
+		if (realchange && authservice_loaded && should_reg_umode(si->su))
 			/* changed nick to registered one, reset +e */
 			sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(si->su), si->su->nick);
 
