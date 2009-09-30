@@ -202,7 +202,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		/* fix up +e if necessary -- jilles */
-		if (realchange && authservice_loaded && should_reg_umode(si->su))
+		if (realchange && should_reg_umode(si->su))
 			/* changed nick to registered one, reset +e */
 			sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(si->su), si->su->nick);
 
