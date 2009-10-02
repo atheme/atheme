@@ -228,10 +228,6 @@ static unsigned int inspircd_server_login(void)
 		return 1;
 
 	me.bursting = true;
-	sts(":%s BURST", me.numeric);
-        sts(":%s VERSION :atheme-%s. %s %s",me.name, version, me.numeric, get_conf_opts());
-	services_init();
-	sts(":%s ENDBURST", me.numeric);
 	return 0;
 }
 
@@ -1008,6 +1004,14 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+	if (si->s == NULL)
+	{
+		sts(":%s BURST", me.numeric);
+		sts(":%s VERSION :atheme-%s. %s %s",
+				me.name, version, me.numeric, get_conf_opts());
+		services_init();
+		sts(":%s ENDBURST", me.numeric);
+	}
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 
 	if (s != NULL)
