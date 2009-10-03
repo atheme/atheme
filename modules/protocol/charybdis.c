@@ -238,11 +238,24 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	return NULL;
 }
 
+static bool charybdis_is_valid_host(const char *host)
+{
+	const char *p;
+
+	for (p = host; *p != '\0'; p++)
+		if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+					(*p >= 'a' && *p <= 'z') || *p == '.'
+					|| *p == ':' || *p == '-' || *p == '/'))
+			return false;
+	return true;
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
 
 	next_matching_ban = &charybdis_next_matching_ban;
+	is_valid_host = &charybdis_is_valid_host;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;
