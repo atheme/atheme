@@ -358,13 +358,13 @@ static void do_listen(connection_t *cptr)
 
 static void httpd_checkidle(void *arg)
 {
-	node_t *n;
+	node_t *n, *tn;
 	connection_t *cptr;
 
 	(void)arg;
 	if (listener == NULL)
 		return;
-	LIST_FOREACH(n, connection_list.head)
+	LIST_FOREACH_SAFE(n, tn, connection_list.head)
 	{
 		cptr = n->data;
 		if (cptr->listener == listener && cptr->last_recv + 300 < CURRTIME)
