@@ -103,7 +103,7 @@ const char *infotext[] =
   "the following developers in nick-alphabetical order:",
   "  madragoran, Mike Campbell <madragoran@avendesora.net>",
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
-  "  rakaur, Eric Will <ericw@ericw.org>",
+  "  rakaur, Eric Will <rakaur@malkier.net>",
   "  rintaun, Matt Lanigan <rintaun@projectxero.net>",
   "  sycobuny, Stephen Belcher <sycobuny@malkier.net>",
   " ",
