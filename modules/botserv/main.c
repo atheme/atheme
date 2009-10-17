@@ -641,6 +641,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(md->value, parv[0]))
 		{
 			metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
+			metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
 			if (!config_options.leave_chans || (mc->chan != NULL && LIST_LENGTH(&mc->chan->members) > 0))
 				join(mc->name, parv[1]);
 		}
