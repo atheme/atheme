@@ -390,7 +390,7 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 
 	prevtopicts = c->topicts;
 	handle_topic(c, parv[1], CURRTIME, parv[3]);
-	topic_sts(c, chansvs.me, parv[1], CURRTIME, prevtopicts, parv[3]);
+	topic_sts(c, chansvs.me->me, parv[1], CURRTIME, prevtopicts, parv[3]);
  
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPIC %s", mc->name, parv[2]);
  
@@ -475,7 +475,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 
 	prevtopicts = c->topicts;
 	handle_topic(c, parv[1], CURRTIME, topicbuf);
-	topic_sts(c, chansvs.me, parv[1], CURRTIME, prevtopicts, topicbuf);
+	topic_sts(c, chansvs.me->me, parv[1], CURRTIME, prevtopicts, topicbuf);
  
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPICAPPEND %s", mc->name, parv[2]);
  

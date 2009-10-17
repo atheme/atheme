@@ -159,14 +159,14 @@ E void (*qline_sts)(char *server, char *mask, long duration, char *reason);
 /* remove a qline on the servers matching the given mask
  * if the ircd requires unqlines to be sent from users, use opersvs */
 E void (*unqline_sts)(char *server, char *mask);
-/* make chanserv set a topic on a channel
+/* make the given service set a topic on a channel
  * setter and ts should be used if the ircd supports topics to be set
  * with a given topicsetter and topicts; ts is not a channelts
  * prevts is the topicts of the old topic or 0 if there was no topic,
  * useful in optimizing which form of topic change to use
  * if the given topicts was not set and topicts is used on the ircd,
  * set c->topicts to the value used */
-E void (*topic_sts)(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+E void (*topic_sts)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 /* set modes on a channel by the given sender; sender must be a client
  * on the services server; sender may or may not be on channel */
 E void (*mode_sts)(char *sender, channel_t *target, char *modes);
@@ -240,7 +240,7 @@ E void generic_xline_sts(char *server, char *realname, long duration, char *reas
 E void generic_unxline_sts(char *server, char *realname);
 E void generic_qline_sts(char *server, char *mask, long duration, char *reason);
 E void generic_unqline_sts(char *server, char *mask);
-E void generic_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+E void generic_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost);

@@ -683,7 +683,7 @@ static void cs_newchan(channel_t *c)
 	topicts = atol(md->value);
 
 	handle_topic(c, setter, topicts, text);
-	topic_sts(c, chansvs.me, setter, topicts, 0, text);
+	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);
 }
 
 static void cs_tschange(channel_t *c)

@@ -251,19 +251,19 @@ static void p10_unqline_sts(char *server, char *name)
 }
 
 /* topic wrapper */
-static void p10_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void p10_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
 
 	if (ts > prevts || prevts == 0)
-		sts("%s T %s %lu %lu :%s", source->me->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
+		sts("%s T %s %lu %lu :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
 	else
 	{
 		ts = CURRTIME;
 		if (ts < prevts)
 			ts = prevts + 1;
-		sts("%s T %s %lu %lu :%s", source->me->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
+		sts("%s T %s %lu %lu :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 }

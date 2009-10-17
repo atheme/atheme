@@ -426,7 +426,7 @@ static void inspircd_unqline_sts(char *server, char *name)
 }
 
 /* topic wrapper */
-static void inspircd_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -438,18 +438,18 @@ static void inspircd_topic_sts(channel_t *c, service_t *source, const char *sett
 	/* Restoring old topic */
 	if (ts > prevts + 60 || prevts == 0)
 	{
-		sts(":%s FTOPIC %s %lu %s :%s", source->me->nick, c->name, (unsigned long)ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %s :%s", source->nick, c->name, (unsigned long)ts, setter, topic);
 		return;
 	}
 	/* Tweaking a topic */
 	else if (ts == prevts)
 	{
 		ts += 60;
-		sts(":%s FTOPIC %s %lu %s :%s", source->me->nick, c->name, (unsigned long)ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %s :%s", source->nick, c->name, (unsigned long)ts, setter, topic);
 		c->topicts = ts;
 		return;
 	}
-	sts(":%s TOPIC %s :%s", source->me->nick, c->name, topic);
+	sts(":%s TOPIC %s :%s", source->nick, c->name, topic);
 	c->topicts = CURRTIME;
 }
 

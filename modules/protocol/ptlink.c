@@ -262,12 +262,12 @@ static void ptlink_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void ptlink_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void ptlink_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %lu :%s", source->me->nick, c->name, setter, (unsigned long)ts, topic);
+	sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
 }
 
 /* mode wrapper */

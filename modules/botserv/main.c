@@ -78,18 +78,18 @@ static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 
 /* ******************************************************************** */
 
-static void (*topic_sts_real)(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
+static void (*topic_sts_real)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
-bs_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+bs_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	mychan_t *mc;
 	botserv_bot_t *bot = NULL;
 
-	if (source == chansvs.me && (mc = mychan_find(c->name)) != NULL)
+	if (source == chansvs.me->me && (mc = mychan_find(c->name)) != NULL)
 		bot = bs_mychan_find_bot(mc);
 
-	topic_sts_real(c, bot ? bot->me : source, setter, ts, prevts, topic);
+	topic_sts_real(c, bot ? bot->me->me : source, setter, ts, prevts, topic);
 }
 
 static void
@@ -1529,7 +1529,7 @@ static void bs_newchan(channel_t *c)
 	topicts = atol(md->value);
 
 	handle_topic(c, setter, topicts, text);
-	topic_sts(c, bot ? bot->me : chansvs.me, setter, topicts, 0, text);
+	topic_sts(c, bot ? bot->me->me : chansvs.me->me, setter, topicts, 0, text);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -279,7 +279,7 @@ static void ts6_unqline_sts(char *server, char *name)
 }
 
 /* topic wrapper */
-static void ts6_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -290,7 +290,7 @@ static void ts6_topic_sts(channel_t *c, service_t *source, const char *setter, t
 	if (use_eopmod && (c->ts > 0 || ts > prevts))
 	{
 		sts(":%s ETB 0 %s %lu %s :%s",
-				CLIENT_NAME(source->me),
+				CLIENT_NAME(source),
 				c->name, (unsigned long)ts, setter, topic);
 		return;
 	}
@@ -325,15 +325,15 @@ static void ts6_topic_sts(channel_t *c, service_t *source, const char *setter, t
 	 * us to specify an older topicts.
 	 * -- jilles
 	 */
-	if (!chanuser_find(c, source->me))
+	if (!chanuser_find(c, source))
 	{
-		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts, c->name, CLIENT_NAME(source->me));
+		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts, c->name, CLIENT_NAME(source));
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s", CLIENT_NAME(source->me), c->name, topic);
+	sts(":%s TOPIC %s :%s", CLIENT_NAME(source), c->name, topic);
 	if (joined)
 		sts(":%s PART %s :Topic set for %s",
-				CLIENT_NAME(source->me), c->name, setter);
+				CLIENT_NAME(source), c->name, setter);
 	c->topicts = CURRTIME;
 }
 

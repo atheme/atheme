@@ -627,18 +627,18 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, 
 		{
 			/* Allowed, but topic tweaked */
 			handle_topic(c, setter, ts, hdata.topic);
-			topic_sts(c, chansvs.me, setter, ts, ts, hdata.topic);
+			topic_sts(c, chansvs.me->me, setter, ts, ts, hdata.topic);
 		}
 	}
 	else
 	{
 		/* Not allowed, change it back */
 		if (c->topic != NULL)
-			topic_sts(c, chansvs.me, c->topic_setter, c->topicts, ts, c->topic);
+			topic_sts(c, chansvs.me->me, c->topic_setter, c->topicts, ts, c->topic);
 		else
 		{
 			/* Ick, there was no topic */
-			topic_sts(c, chansvs.me, chansvs.nick != NULL ? chansvs.nick : me.name, ts - 1, ts, "");
+			topic_sts(c, chansvs.me->me, chansvs.nick != NULL ? chansvs.nick : me.name, ts - 1, ts, "");
 		}
 	}
 }
