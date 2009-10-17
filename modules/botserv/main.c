@@ -54,6 +54,24 @@ command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_
 
 /* ******************************************************************** */
 
+static void (*topic_sts_real)(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic);
+
+static void
+bs_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+{
+	mychan_t *mc;
+	metadata_t *bs;
+	user_t *bot = NULL;
+
+	if (setter != NULL && chansvs.nick != NULL &&
+			!strcmp(setter, chansvs.nick) &&
+			(mc = mychan_find(c->name)) != NULL &&
+			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+		bot = user_find_named(bs->value);
+
+	topic_sts_real(c, bot ? bot->nick : setter, ts, prevts, topic);
+}
+
 static void
 bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
 {
@@ -937,6 +955,8 @@ void _modinit(module_t *m)
 	modestack_mode_ext    = bs_modestack_mode_ext;
 	modestack_mode_param  = bs_modestack_mode_param;
 	try_kick              = bs_try_kick;
+	topic_sts_real        = topic_sts;
+	topic_sts             = bs_topic_sts;
 }
 
 void _moddeinit(void)
@@ -981,6 +1001,7 @@ void _moddeinit(void)
 	modestack_mode_ext    = modestack_mode_ext_real;
 	modestack_mode_param  = modestack_mode_param_real;
 	try_kick              = try_kick_real;
+	topic_sts             = topic_sts_real;
 }
 
 /* ******************************************************************** */
