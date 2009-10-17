@@ -336,7 +336,7 @@ void reintroduce_user(user_t *u)
 			chanban_clear(c);
 			join_sts(c, u, 1, channel_modes(c, true));
 			if (c->topic != NULL)
-				topic_sts(c, c->topic_setter, c->topicts, 0, c->topic);
+				topic_sts(c, chansvs.me, c->topic_setter, c->topicts, 0, c->topic);
 		}
 	}
 }

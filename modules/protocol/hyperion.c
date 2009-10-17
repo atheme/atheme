@@ -383,13 +383,13 @@ static void hyperion_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void hyperion_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void hyperion_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
 
 	/* Send 0 channelts so this will always be accepted */
-	sts(":%s STOPIC %s %s %lu 0 :%s", chansvs.nick, c->name, setter,
+	sts(":%s STOPIC %s %s %lu 0 :%s", source->me->nick, c->name, setter,
 			(unsigned long)ts, topic);
 }
 

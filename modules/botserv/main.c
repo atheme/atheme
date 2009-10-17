@@ -54,22 +54,42 @@ command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_
 
 /* ******************************************************************** */
 
-static void (*topic_sts_real)(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic);
+static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
+{
+	metadata_t *md;
+	botserv_bot_t *bot;
+
+	md = metadata_find(mc, "private:botserv:bot-assigned");
+	bot = md != NULL ? botserv_bot_find(md->value) : NULL;
+	if (bot != NULL && !user_find_named(bot->nick))
+		bot = NULL;
+	if (bot == NULL && md != NULL)
+	{
+		slog(LG_INFO, "bs_mychan_find_bot(): unassigning invalid bot %s from %s",
+				md->value, mc->name);
+		if (mc->chan != NULL)
+			notice(botsvs->nick, mc->name, "Unassigning invalid bot %s",
+					md->value);
+		metadata_delete(mc, "private:botserv:bot-assigned");
+		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+	}
+	return bot;
+}
+
+/* ******************************************************************** */
+
+static void (*topic_sts_real)(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
-bs_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+bs_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	mychan_t *mc;
-	metadata_t *bs;
-	user_t *bot = NULL;
+	botserv_bot_t *bot = NULL;
 
-	if (setter != NULL && chansvs.nick != NULL &&
-			!strcmp(setter, chansvs.nick) &&
-			(mc = mychan_find(c->name)) != NULL &&
-			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
-		bot = user_find_named(bs->value);
+	if (source == chansvs.me && (mc = mychan_find(c->name)) != NULL)
+		bot = bs_mychan_find_bot(mc);
 
-	topic_sts_real(c, bot ? bot->nick : setter, ts, prevts, topic);
+	topic_sts_real(c, bot ? bot->me : source, setter, ts, prevts, topic);
 }
 
 static void
@@ -186,28 +206,6 @@ bs_join_registered(bool all)
 			continue;
 		}
 	}
-}
-
-static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
-{
-	metadata_t *md;
-	botserv_bot_t *bot;
-
-	md = metadata_find(mc, "private:botserv:bot-assigned");
-	bot = md != NULL ? botserv_bot_find(md->value) : NULL;
-	if (bot != NULL && !user_find_named(bot->nick))
-		bot = NULL;
-	if (bot == NULL && md != NULL)
-	{
-		slog(LG_INFO, "bs_mychan_find_bot(): unassigning invalid bot %s from %s",
-				md->value, mc->name);
-		if (mc->chan != NULL)
-			notice(botsvs->nick, mc->name, "Unassigning invalid bot %s",
-					md->value);
-		metadata_delete(mc, "private:botserv:bot-assigned");
-		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-	}
-	return bot;
 }
 
 /* ******************************************************************** */
@@ -1531,7 +1529,7 @@ static void bs_newchan(channel_t *c)
 	topicts = atol(md->value);
 
 	handle_topic(c, setter, topicts, text);
-	topic_sts(c, setter, topicts, 0, text);
+	topic_sts(c, bot ? bot->me : chansvs.me, setter, topicts, 0, text);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

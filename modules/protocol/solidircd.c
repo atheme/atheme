@@ -310,12 +310,12 @@ static void solidircd_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void solidircd_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void solidircd_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
+	sts(":%s TOPIC %s %s %lu :%s", source->me->nick, c->name, setter, (unsigned long)ts, topic);
 }
 
 /* mode wrapper */

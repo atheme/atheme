@@ -239,22 +239,22 @@ static void dreamforge_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void dreamforge_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void dreamforge_topic_sts(channel_t *c, service_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected)
 		return;
 
 	if (ts < prevts || prevts == 0)
-		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", source->me->nick, c->name, setter, (unsigned long)ts, topic);
 	else if (prevts > 1)
 	{
 		ts = prevts - 1;
-		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", source->me->nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 	else
 	{
-		notice(chansvs.nick, c->name, "Unable to change topic to: %s", topic);
+		notice(source->me->nick, c->name, "Unable to change topic to: %s", topic);
 		c->topicts = 1;
 	}
 }
