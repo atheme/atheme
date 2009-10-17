@@ -477,7 +477,6 @@ void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
 
 void del_top_conf(const char *name)
 {
-	node_t *n;
 	struct ConfTable *ct;
 
 	if (!(ct = find_top_conf(name)))
@@ -495,7 +494,6 @@ void del_top_conf(const char *name)
 
 void del_conf_item(const char *name, list_t *conflist)
 {
-	node_t *n;
 	struct ConfTable *ct;
 
 	if (!(ct = find_conf_item(name, conflist)))
