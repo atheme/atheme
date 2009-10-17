@@ -276,7 +276,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	md = metadata_find(mc, "private:botserv:bot-handle-fantasy");
-	if (md == NULL)
+	if (md == NULL || irccmp(si->service->me->nick, md->value))
 		return;
 
 	/* make a copy of the original for debugging */
@@ -834,6 +834,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[1]);
 		return;
 	}
+
 	if (bot->private && !has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		command_fail(si, fault_noprivs, "You are not authorised to assign the bot \2%s\2 to a channel.", bot->nick);
@@ -846,6 +847,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		if (md != NULL)
 			part(mc->name, md->value);
 	}
+
 	part(mc->name, chansvs.nick);
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
