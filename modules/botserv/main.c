@@ -618,41 +618,22 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
 	service_set_chanmsg(bot->me, true);
 
-	if (!irccasecmp(parv[0], parv[1]))
+	/* join it back and also update the metadata */
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		/* join this bot back to channels that have it assigned */
-		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-		{
-			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-				continue;
+		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
+			continue;
 
-			if (!irccasecmp(md->value, parv[0]) &&
-					(!config_options.leave_chans ||
-					 (mc->chan != NULL &&
-					  LIST_LENGTH(&mc->chan->members) > 0)))
+		if (!irccasecmp(md->value, parv[0]))
+		{
+			metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
+			if (!config_options.leave_chans || (mc->chan != NULL && LIST_LENGTH(&mc->chan->members) > 0))
 				join(mc->name, parv[1]);
 		}
 	}
-	else
-	{
-		/* join it back and also update the metadata */
-		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-		{
-			if ((md = metadata_find(mc, "private:botserv:bot-assigned")) == NULL)
-				continue;
 
-			if (!irccasecmp(md->value, parv[0]))
-			{
-				metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
-				if (!config_options.leave_chans ||
-						(mc->chan != NULL &&
-						 LIST_LENGTH(&mc->chan->members) > 0))
-					join(mc->name, parv[1]);
-			}
-		}
-	}
 	botserv_save_database(NULL);
-	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
+	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
 }
 
 /* ******************************************************************** */
