@@ -194,6 +194,20 @@ static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 
 /* ******************************************************************** */
 
+static void bs_channel_drop(mychan_t *mc)
+{
+	botserv_bot_t *bot;
+
+	if ((bot = bs_mychan_find_bot(mc)) == NULL)
+		return;	
+
+	metadata_delete(mc, "private:botserv:bot-assigned");
+	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+	part(mc->name, bot->nick);
+}
+
+/* ******************************************************************** */
+
 /* botserv: command handler */
 static void botserv(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -276,7 +290,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	md = metadata_find(mc, "private:botserv:bot-handle-fantasy");
-	if (md == NULL || irccmp(si->service->me->nick, md->value))
+	if (md == NULL || irccasecmp(si->service->me->nick, md->value))
 		return;
 
 	/* make a copy of the original for debugging */
@@ -887,6 +901,9 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
 
+	hook_add_event("channel_drop");
+	hook_add_channel_drop(bs_channel_drop);
+
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
 	command_add(&bs_bot, &bs_cmdtree);
@@ -949,6 +966,7 @@ void _moddeinit(void)
 	hook_del_channel_register(bs_register);
 	hook_del_channel_add(bs_newchan);
 	hook_del_channel_can_change_topic(bs_topiccheck);
+	hook_del_channel_drop(bs_channel_drop);
 	hook_del_config_ready(botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;
