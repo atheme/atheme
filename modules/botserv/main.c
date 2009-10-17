@@ -838,7 +838,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (md != NULL && !irccasecmp(md->value, parv[1]))
 	{
-		command_fail(si, fault_nosuchtarget, "\2%s\2 is already assigned to \2%s\2.", bot->nick, parv[0]);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is already assigned to \2%s\2.", bot->nick, parv[0]);
 		return;
 	}
 
