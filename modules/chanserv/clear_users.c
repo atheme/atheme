@@ -49,6 +49,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	node_t *n, *tn;
 	int oldlimit;
+	unsigned int nmembers;
 
 	if (parc >= 2)
 		snprintf(fullreason, sizeof fullreason, "CLEAR USERS used by %s: %s", get_source_name(si), parv[1]);
@@ -95,7 +96,22 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		if (cu->user == si->su || is_internal_client(cu->user))
 			continue;
 
+		nmembers = LIST_LENGTH(&c->members);
 		try_kick(chansvs.me->me, c, cu->user, fullreason);
+		/* If there are only two users remaining before the kick,
+		 * it is possible that the last user is chanserv which will
+		 * part if leave_chans is enabled. If it is a permanent
+		 * channel this will leave an empty channel, otherwise the
+		 * channel will have been destroyed. In either case, it is
+		 * not safe to continue.
+		 *
+		 * Kicking the last user is safe, tn will be NULL and
+		 * LIST_FOREACH_SAFE will stop without touching any part
+		 * of the channel structure.
+		 */
+		if (nmembers == 2 && ((c = channel_find(channel)) == NULL ||
+					LIST_LENGTH(&c->members) == 0))
+			break;
 	}
 
 	/* the channel may be empty now, so our pointer may be bogus! */
