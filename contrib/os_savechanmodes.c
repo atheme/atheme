@@ -148,7 +148,7 @@ static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[])
 			prevtopicts = c->topicts;
 			ts = strtoul(tsstr, NULL, 10);
 			handle_topic(c, setter, ts, topic);
-			topic_sts(c, setter, ts, prevtopicts, topic);
+			topic_sts(c, opersvs.me->me, setter, ts, prevtopicts, topic);
 		}
 		else if (!strcmp(item, "ban"))
 		{
