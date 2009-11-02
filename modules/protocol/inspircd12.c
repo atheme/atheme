@@ -1160,7 +1160,12 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		if (u == NULL)
 			return;
 
-		handle_burstlogin(u, parv[2], 0);
+		if (parv[2][0] == '\0')
+			handle_clearlogin(si, u);
+		else if (si->s->flags & SF_EOB)
+			handle_setlogin(si, u, parv[2], 0);
+		else
+			handle_burstlogin(u, parv[2], 0);
 	}
 }
 
