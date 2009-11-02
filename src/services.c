@@ -469,6 +469,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 		return;
 	}
 	u->myuser = mu;
+	u->flags &= ~UF_SOPER_PASS;
 	n = node_create();
 	node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
@@ -538,6 +539,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 		mu->registered = ts;
 	}
 	u->myuser = mu;
+	u->flags &= ~UF_SOPER_PASS;
 	n = node_create();
 	node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_setlogin(): %s set %s logged in as %s",
