@@ -630,11 +630,18 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			free(bot->real);
 			bot->real = sstrdup(parv[4]);
 		case 4:
-			free(bot->host);
-			bot->host = sstrdup(parv[3]);
+			if (is_valid_host(parv[3])) {
+				free(bot->host);
+				bot->host = sstrdup(parv[3]);
+			} else
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid hostname, not changing it."), parv[3]);
 		case 3:
-			free(bot->user);
-			bot->user = sstrdup(parv[2]);
+			/* XXX: we really need an is_valid_user(), but this is close enough. --nenolod */
+			if (is_valid_host(parv[2])) {
+				free(bot->user);
+				bot->user = sstrdup(parv[2]);
+			} else
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid username, not changing it."), parv[2]);
 		case 2:
 			free(bot->nick);
 			bot->nick = sstrdup(parv[1]);
@@ -700,6 +707,18 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 		snprintf(buf, sizeof(buf), "%s %s", parv[3], parv[4]);
 	else
 		snprintf(buf, sizeof(buf), "%s", parv[3]);
+
+	if (!is_valid_host(parv[2]))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid username."), parv[2]);
+		return;
+	}
+
+	if (!is_valid_host(parv[3]))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid hostname."), parv[3]);
+		return;
+	}
 
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(parv[0]);
