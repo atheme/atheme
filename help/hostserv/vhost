@@ -4,7 +4,7 @@ VHOST allows operators to set a virtual host (also
 known as a spoof or cloak) on an account. This vhost
 will be set on the user immediately and each time
 they identify to their account. If no vhost is 
-specified, clear all existing vhosts on account.
+specified, it will clear all existing vhosts on the account.
 
 Syntax: VHOST <nickname> [<vhost>]
 

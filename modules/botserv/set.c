@@ -33,7 +33,7 @@ command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_se
 command_t bs_set_dontkickops    = { "DONTKICKOPS",    N_("To protect ops against bot kicks."),                       AC_NONE, 2, bs_cmd_set_dontkickops };
 command_t bs_set_dontkickvoices = { "DONTKICKVOICES", N_("To protect voices against bot kicks."),                    AC_NONE, 2, bs_cmd_set_dontkickvoices };
 command_t bs_set_greet          = { "GREET",          N_("Enable greet messages."),                                  AC_NONE, 2, bs_cmd_set_greet };
-command_t bs_set_fantasy        = { "FANTASY",        N_("Enable fantaisist commands."),                             AC_NONE, 2, bs_cmd_set_fantasy };
+command_t bs_set_fantasy        = { "FANTASY",        N_("Enable fantasy commands."),                                AC_NONE, 2, bs_cmd_set_fantasy };
 command_t bs_set_nobot          = { "NOBOT",          N_("Prevent a bot from being assigned to a channel."),         PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot };
 command_t bs_set_private        = { "PRIVATE",        N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private };
 

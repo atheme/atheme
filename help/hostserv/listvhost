@@ -1,8 +1,8 @@
 Help for LISTVHOST:
 
 LISTVHOST allows operators to see virtual hosts (also
-known as spoofs or cloaks) matching given pattern. 
-If no pattern is specified, lists all existing vhosts.
+known as spoofs or cloaks) matching a given pattern. 
+If no pattern is specified, it lists all existing vhosts.
 
 Syntax: LISTVHOST [<pattern>]
 
