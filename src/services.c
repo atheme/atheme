@@ -929,6 +929,43 @@ void verbose_wallops(const char *fmt, ...)
 		slog(LG_ERROR, "verbose_wallops(): unable to send: %s", buf);
 }
 
+/* Check validity of a vhost against both general and protocol-specific rules.
+ * Returns true if it is ok, false if not; command_fail() will have been called
+ * as well.
+ */
+bool check_vhost_validity(sourceinfo_t *si, const char *host)
+{
+	const char *p;
+
+	/* Never ever allow @!?* as they have special meaning in all ircds */
+	/* Empty, space anywhere and colon at the start break the protocol */
+	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
+			strchr(host, '*') || strchr(host, ' ') ||
+			*host == ':' || *host == '\0')
+	{
+		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
+		return false;
+	}
+	if (strlen(host) >= HOSTLEN)
+	{
+		command_fail(si, fault_badparams, _("The vhost provided is too long."));
+		return false;
+	}
+	p = strrchr(host, '/');
+	if (p != NULL && isdigit(p[1]))
+	{
+		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
+		return false;
+	}
+	if (!is_valid_host(host))
+	{
+		/* This can be stuff like missing dots too. */
+		command_fail(si, fault_badparams, _("The vhost provided is invalid."));
+		return false;
+	}
+	return true;
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

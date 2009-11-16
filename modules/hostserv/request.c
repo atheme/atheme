@@ -213,7 +213,6 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	char *host = parv[0];
 	char *target;
 	mynick_t *mn;
-	char *p;
 	node_t *n;
 	hsreq_t *l;
 
@@ -247,32 +246,8 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	else
 		target = si->smu->name;
 
-	/* Never ever allow @!?* as they have special meaning in all ircds */
-	/* Empty, space anywhere and colon at the start break the protocol */
-	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
-			strchr(host, '*') || strchr(host, ' ') ||
-			*host == ':' || *host == '\0')
-	{
-		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
+	if (!check_vhost_validity(si, host))
 		return;
-	}
-	if (strlen(host) >= HOSTLEN)
-	{
-		command_fail(si, fault_badparams, _("The vhost provided is too long."));
-		return;
-	}
-	p = strrchr(host, '/');
-	if (p != NULL && isdigit(p[1]))
-	{
-		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
-		return;
-	}
-	if (!is_valid_host(host))
-	{
-		/* This can be stuff like missing dots too. */
-		command_fail(si, fault_badparams, _("The vhost provided is invalid."));
-		return;
-	}
 
 	/* search for it */
 	LIST_FOREACH(n, hs_reqlist.head)
