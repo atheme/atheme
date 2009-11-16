@@ -519,10 +519,10 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_INFO, "m_pong(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 
-		wallops("Finished synching to network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
+		wallops("Finished synchronizing with network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 #else
 		slog(LG_INFO, "m_pong(): finished synching with uplink");
-		wallops("Finished synching to network.");
+		wallops("Finished synchronizing with network.");
 #endif
 
 		me.bursting = false;
