@@ -43,7 +43,7 @@ void _modinit(module_t *m)
 	kq_conn = connection_add("procwatch kqueue", kq, 0, procwatch_readhandler, NULL);
 
 	command_add(&os_procwatch, os_cmdtree);
-	help_addentry(os_helptree, "PROCWATCH", "help/operserv/procwatch", NULL);
+	help_addentry(os_helptree, "PROCWATCH", "help/contrib/procwatch", NULL);
 }
 
 void _moddeinit()

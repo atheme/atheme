@@ -28,12 +28,16 @@ list_t *os_cmdtree;
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
+
 	command_add(&os_kill, os_cmdtree);
+	help_addentry(os_helptree, "KILL", "help/contrib/kill", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_kill, os_cmdtree);
+	help_delentry(os_helptree, "KILL");
 }
 
 static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[])

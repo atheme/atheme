@@ -17,13 +17,16 @@ list_t *cs_cmdtree;
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_ping, cs_cmdtree);
+	help_addentry(cs_helptree, "PING", "help/contrib/cs_ping", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_ping, cs_cmdtree);
+	help_delentry(cs_helptree, "PING");
 }
 
 static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[])

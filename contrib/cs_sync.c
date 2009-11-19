@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_sync, cs_cmdtree);
-	help_addentry(cs_helptree, "SYNC", "help/cservice/sync", NULL);
+	help_addentry(cs_helptree, "SYNC", "help/contrib/sync", NULL);
 }
 
 void _moddeinit()

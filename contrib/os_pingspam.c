@@ -62,8 +62,12 @@ void _modinit(module_t *m)
 	spamming = 0;
 
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 	command_add(&os_pingspam, os_cmdtree);
 	command_add(&os_autopingspam, os_cmdtree);
+
+	help_addentry(os_helptree, "PINGSPAM", "help/contrib/pingspam", NULL);
+	help_addentry(os_helptree, "AUTOPINGSPAM", "help/contrib/autopingspam", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(user_add_hook);
@@ -73,6 +77,8 @@ void _moddeinit()
 {
 	command_delete(&os_pingspam, os_cmdtree);
 	command_delete(&os_autopingspam, os_cmdtree);
+	help_delentry(os_helptree, "PINGSPAM");
+	help_delentry(os_helptree, "AUTOPINGSPAM");
 	hook_del_user_add(user_add_hook);
 }
 

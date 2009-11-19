@@ -30,8 +30,10 @@ list_t irc_logstreams = { NULL, NULL, 0 };
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
         command_add(&os_logstream, os_cmdtree);
+	help_addentry(os_helptree, "LOGSTREAM", "help/contrib/logstream", NULL);
 }
 
 void _moddeinit(void)
@@ -39,6 +41,7 @@ void _moddeinit(void)
 	node_t *n, *tn;
 
 	command_delete(&os_logstream, os_cmdtree);
+	help_delentry(os_helptree, "LOGSTREAM");
 
 	LIST_FOREACH_SAFE(n, tn, irc_logstreams.head)
 	{

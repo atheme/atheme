@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_generatepass, ns_cmdtree);
-	help_addentry(ns_helptree, "GENERATEPASS", "help/nickserv/generatepass", NULL);
+	help_addentry(ns_helptree, "GENERATEPASS", "help/contrib/generatepass", NULL);
 	
 	/* You'll need to create a helpfile and put in help/nickserv */
 }

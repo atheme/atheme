@@ -40,8 +40,8 @@ void _modinit(module_t *m)
 	hook_add_first_channel_join(klinechan_check_join);
 	hook_add_event("channel_info");
 	hook_add_channel_info(klinechan_show_info);
-	help_addentry(os_helptree, "KLINECHAN", "help/oservice/klinechan", NULL);
-	help_addentry(os_helptree, "LISTKLINECHANS", "help/oservice/listklinechans", NULL);
+	help_addentry(os_helptree, "KLINECHAN", "help/contrib/klinechan", NULL);
+	help_addentry(os_helptree, "LISTKLINECHANS", "help/contrib/listklinechans", NULL);
 }
 
 void _moddeinit()

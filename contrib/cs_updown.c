@@ -27,14 +27,20 @@ list_t *cs_cmdtree;
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
+
 	command_add(&cs_up, cs_cmdtree);
 	command_add(&cs_down, cs_cmdtree);
+	help_addentry(cs_helptree, "UP", "help/contrib/up", NULL);
+	help_addentry(cs_helptree, "DOWN", "help/contrib/down", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_up, cs_cmdtree);
 	command_delete(&cs_down, cs_cmdtree);
+	help_delentry(cs_helptree, "UP");
+	help_delentry(cs_helptree, "DOWN");
 }
 
 

@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_fregister, ns_cmdtree);
-	help_addentry(ns_helptree, "FREGISTER", "help/nickserv/fregister", NULL);
+	help_addentry(ns_helptree, "FREGISTER", "help/contrib/fregister", NULL);
 }
 
 void _moddeinit()

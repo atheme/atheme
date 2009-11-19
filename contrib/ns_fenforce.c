@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/enforce");
 
 	command_add(&ns_fenforce, ns_cmdtree);
-	help_addentry(ns_helptree, "FENFORCE", "help/nickserv/fenforce", NULL);
+	help_addentry(ns_helptree, "FENFORCE", "help/contrib/fenforce", NULL);
 }
 
 void _moddeinit()

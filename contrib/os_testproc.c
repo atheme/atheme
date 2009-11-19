@@ -37,7 +37,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_testproc, os_cmdtree);
-	help_addentry(os_helptree, "TESTPROC", "help/operserv/testproc", NULL);
+	help_addentry(os_helptree, "TESTPROC", "help/contrib/testproc", NULL);
 }
 
 void _moddeinit()

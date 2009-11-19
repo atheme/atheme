@@ -186,16 +186,19 @@ command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
+	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(ajoin_on_identify);
 	command_add(&ns_ajoin, ns_cmdtree);
+	help_addentry(ns_helptree, "AJOIN", "help/contrib/ajoin", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_user_identify(ajoin_on_identify);
 	command_delete(&ns_ajoin, ns_cmdtree);
+	help_delentry(ns_helptree, "AJOIN");
 }
 
 static void ajoin_on_identify(void *vptr)

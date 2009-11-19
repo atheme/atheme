@@ -26,7 +26,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_listlogins, ns_cmdtree);
-	help_addentry(ns_helptree, "LISTLOGINS", "help/nickserv/listlogins", NULL);
+	help_addentry(ns_helptree, "LISTLOGINS", "help/contrib/listlogins", NULL);
 }
 
 void _moddeinit()

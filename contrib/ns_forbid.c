@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_forbid, ns_cmdtree);
-	help_addentry(ns_helptree, "FORBID", "help/nickserv/forbid", NULL);
+	help_addentry(ns_helptree, "FORBID", "help/contrib/forbid", NULL);
 }
 
 void _moddeinit()

@@ -40,9 +40,12 @@ list_t logon_news;
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
 	hook_add_event("user_add");
 	hook_add_user_add(display_news);
 	command_add(&os_logonnews, os_cmdtree);
+	help_addentry(os_helptree, "LOGONNEWS", "help/contrib/logonnews", NULL);
 	load_newsdb();
 }
 
@@ -50,6 +53,7 @@ void _moddeinit(void)
 {
 	hook_del_user_add(display_news);
 	command_delete(&os_logonnews, os_cmdtree);
+	help_delentry(os_helptree, "LOGONNEWS");
 }
 
 static void write_newsdb(void)

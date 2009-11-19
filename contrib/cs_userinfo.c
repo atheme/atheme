@@ -32,7 +32,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_join");
 	hook_add_channel_join(userinfo_check_join);
 	command_add(&cs_userinfo, cs_cmdtree);
-	help_addentry(cs_helptree, "USERINFO", "help/cservice/userinfo", NULL);
+	help_addentry(cs_helptree, "USERINFO", "help/contrib/userinfo", NULL);
 }
 
 void _moddeinit(void)
