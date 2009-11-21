@@ -104,9 +104,7 @@ static struct Token logflags[] = {
 list_t conf_si_table;
 list_t conf_ci_table;
 list_t conf_ni_table;
-list_t conf_bi_table;
 list_t conf_gi_table;
-list_t conf_ms_table;
 list_t conf_la_table;
 
 /* *INDENT-ON* */
