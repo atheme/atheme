@@ -15,9 +15,12 @@ E bool conf_check(void);
 
 E void init_newconf(void);
 
-/* XXX */
-E list_t conf_ci_table;
-E list_t conf_ni_table;
+/* XXX Unstable module api to add things to the standard conf blocks */
+E list_t conf_si_table; /* serverinfo{} */
+E list_t conf_ci_table; /* chanserv{} */
+E list_t conf_ni_table; /* nickserv{} */
+E list_t conf_gi_table; /* general{} */
+E list_t conf_la_table; /* language{} */
 
 #endif
 
