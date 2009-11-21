@@ -24,6 +24,7 @@ static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[]);
 command_t os_kill = { "KILL", "Kill a user with Services.", PRIV_OMODE, 2, os_cmd_kill };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {

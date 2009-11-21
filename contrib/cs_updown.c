@@ -23,6 +23,7 @@ command_t cs_up = { "UP", "Grants all access you have permission to on a given c
 command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {

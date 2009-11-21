@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 );
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[]);
 static void write_newsdb(void);

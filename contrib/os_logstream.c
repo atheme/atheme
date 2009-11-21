@@ -12,6 +12,7 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[]);
 command_t os_logstream = { "LOGSTREAM", "Creates and manipulates logstreams.", PRIV_ADMIN, 2, os_cmd_logstream };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 #ifdef NOTYET
 typedef struct logstream_token_ {

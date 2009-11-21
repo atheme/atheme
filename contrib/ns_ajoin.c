@@ -19,6 +19,7 @@ DECLARE_MODULE_V1
 );
 
 list_t *ns_cmdtree;
+list_t *ns_helptree;
 
 static void ajoin_on_identify(void *vptr);
 

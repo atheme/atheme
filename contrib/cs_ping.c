@@ -13,6 +13,7 @@ command_t cs_ping = { "PING", "Verifies network connectivity by responding with 
 			AC_NONE, 0, cs_cmd_ping };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {

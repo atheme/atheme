@@ -56,6 +56,7 @@ command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings 
 
 int spamming;
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
