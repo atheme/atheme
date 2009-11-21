@@ -1,0 +1,11 @@
+Help for LOGONNEWS:
+
+LOGONNEWS manages logon news sent by Services to users when they connect.
+
+Syntax: LOGONNEWS ADD|DEL|LIST [target] [message]
+
+Examples:
+	/msg &nick& LOGONNEWS ADD * Some logonnews for all users.
+	/msg &nick& LOGONNEWS ADD webchat* Some logonnews for webchat users only.
+	/msg &nick& LOGONNEWS LIST
+	/msh &nick& LOGONNEWS DEL 2

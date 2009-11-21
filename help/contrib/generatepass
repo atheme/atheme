@@ -1,0 +1,9 @@
+Help for GENERATEPASS:
+
+GENERATEPASS generates a random password. It does not automatically
+insert it into any fields.
+
+Syntax: GENERATEPASS
+
+Examples:
+	/msg &nick& GENERATEPASS

@@ -1,0 +1,10 @@
+Help for AJOIN:
+
+AJOIN allows you to manage an automatic-join on identify channel list.
+
+Syntax: AJOIN ADD|DEL|LIST [#channel]
+
+Examples:
+	/msg &nick& AJOIN LIST
+	/msg &nick& AJOIN ADD #foo
+	/msg &nick& AJOIN DEL #foo
