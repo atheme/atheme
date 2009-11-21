@@ -318,6 +318,8 @@ static void flatfile_db_save(void *arg)
 		snoop(_("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
 		return;
 	}
+
+	hook_call_db_saved();
 }
 
 /* loads atheme.db */

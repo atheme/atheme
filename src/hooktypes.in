@@ -22,6 +22,7 @@
 # Name             Argument type
 # (main)
 config_ready       void
+db_saved           void
 # (ircd)
 channel_add        channel_t *
 channel_delete     channel_t *
