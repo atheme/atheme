@@ -9,15 +9,15 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static char *command = 0;
+static char *command = NULL;
 
-static void on_db_save();
+static void on_db_save(void *unused);
 
 static struct update_command_state {
 	connection_t *out, *err;
 	pid_t pid;
 	int running;
-} update_command_proc = { 0, 0, 0 };
+} update_command_proc;
 
 void _modinit(module_t *m)
 {
@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 	add_dupstr_conf_item("db_update_command", &conf_gi_table, &command);
 }
 
-void _moddeinit()
+void _moddeinit(void)
 {
 	hook_del_db_saved(on_db_save);
 
@@ -46,7 +46,6 @@ static void update_command_recvq_handler(connection_t *cptr, int err)
 {
 	char buf[BUFSIZE];
 	int count;
-	user_t *u;
 
 	count = recvq_getline(cptr, buf, sizeof(buf) - 1);
 	if (count <= 0)
@@ -76,7 +75,7 @@ static void update_command_stderr_handler(connection_t *cptr)
 	update_command_recvq_handler(cptr, 1);
 }
 
-static void on_db_save()
+static void on_db_save(void *unused)
 {
 	int stdout_pipes[2], stderr_pipes[2];
 	pid_t pid;
