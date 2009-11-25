@@ -175,7 +175,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	n = remove_ban_exceptions(si->service->me, mc->chan, tu);
 	if (n > 0)
 		command_success_nodata(si, _("To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, mc->name);
-	kick(chansvs.me->me, mc->chan, tu, reasonbuf);
+	try_kick(chansvs.me->me, mc->chan, tu, reasonbuf);
 	logcommand(si, CMDLOG_DO, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
