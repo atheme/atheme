@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, "$Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, "$Id: inspircd12.c 8361 2007-06-02 22:03:28Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -26,7 +26,7 @@ ircd_t InspIRCd = {
         true,                           /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	true,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY,			/* Oper-only cmodes */
+	CMODE_OPERONLY | CMODE_PERM,			/* Oper-only cmodes */
         CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
         CSTATUS_HALFOP,                   /* Integer flag for halfops. */
@@ -34,7 +34,7 @@ ircd_t InspIRCd = {
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_INSPIRCD,		/* Protocol type */
-	0,                              /* Permanent cmodes */
+	CMODE_PERM,                              /* Permanent cmodes */
 	0,                              /* Oper-immune cmode */
 	"beIg",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
@@ -55,11 +55,12 @@ struct cmode_ inspircd_mode_list[] = {
   { 'O', CMODE_OPERONLY },
   { 'S', CMODE_STRIP    },
   { 'K', CMODE_NOKNOCK  },
-  { 'V', CMODE_NOINVITE },
+  { 'A', CMODE_NOINVITE },
   { 'C', CMODE_NOCTCP   },
   { 'N', CMODE_STICKY   },
   { 'G', CMODE_CENSOR   },
-  { 'P', CMODE_NOCAPS   },
+  { 'P', CMODE_PERM     },
+  { 'B', CMODE_NOCAPS	},
   { 'z', CMODE_SSLONLY	},
   { 'T', CMODE_NONOTICE },
   { 'u', CMODE_HIDING   },

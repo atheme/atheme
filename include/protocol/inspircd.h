@@ -27,5 +27,6 @@
 #define CMODE_STICKY	0x01000000	/* unreal +N */
 #define CMODE_CENSOR    0x02000000	/* Censor +G */
 #define CMODE_NOCAPS    0x04000000	/* No capitals */
+#define CMODE_PERM		0x08000000	/* chary +P */
 
 #endif
