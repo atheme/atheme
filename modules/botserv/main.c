@@ -1236,7 +1236,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 
 	if (ircd->uses_owner)
 	{
-		if (flags & CA_FOUNDER)
+		if (flags & CA_USEOWNER)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
 			{
