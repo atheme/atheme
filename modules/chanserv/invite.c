@@ -50,6 +50,13 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* This command is not useful if the user is already in the channel,
+	 * ignore it if it is a fantasy command so users can program bots to
+	 * react on it without interference from ChanServ.
+	 */
+	if (si->c != NULL)
+		return;
+
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INVITE");

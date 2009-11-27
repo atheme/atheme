@@ -50,6 +50,13 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hook_channel_req_t hdata;
 	unsigned int fl;
 
+	/* This command is not useful on registered channels, ignore it if
+	 * it is a fantasy command so users can program bots to react on
+	 * it without interference from ChanServ.
+	 */
+	if (si->c != NULL)
+		return;
+
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
