@@ -21,26 +21,17 @@ DECLARE_MODULE_V1
 static void bs_help_set(sourceinfo_t *si);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[]);
-static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set };
 
-command_t bs_set_dontkickops    = { "DONTKICKOPS",    N_("To protect ops against bot kicks."),                       AC_NONE, 2, bs_cmd_set_dontkickops };
-command_t bs_set_dontkickvoices = { "DONTKICKVOICES", N_("To protect voices against bot kicks."),                    AC_NONE, 2, bs_cmd_set_dontkickvoices };
-command_t bs_set_greet          = { "GREET",          N_("Enable greet messages."),                                  AC_NONE, 2, bs_cmd_set_greet };
 command_t bs_set_fantasy        = { "FANTASY",        N_("Enable fantasy commands."),                                AC_NONE, 2, bs_cmd_set_fantasy };
 command_t bs_set_nobot          = { "NOBOT",          N_("Prevent a bot from being assigned to a channel."),         PRIV_CHAN_ADMIN, 2, bs_cmd_set_nobot };
 command_t bs_set_private        = { "PRIVATE",        N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private };
 
 command_t *bs_set_commands[] = {
-	&bs_set_dontkickops,
-	&bs_set_dontkickvoices,
-	&bs_set_greet,
 	&bs_set_fantasy,
 	&bs_set_nobot,
 	&bs_set_private,
@@ -68,9 +59,6 @@ void _modinit(module_t *m)
 
 
 	help_addentry(bs_helptree, "SET", NULL, bs_help_set);
-	help_addentry(bs_helptree, "SET DONTKICKOPS", "help/botserv/set_dontkickops", NULL);
-	help_addentry(bs_helptree, "SET DONTKICKVOICES", "help/botserv/set_dontkickvoices", NULL);
-	help_addentry(bs_helptree, "SET GREET", "help/botserv/set_greet", NULL);
 	help_addentry(bs_helptree, "SET FANTASY", "help/botserv/set_fantasy", NULL);
 	help_addentry(bs_helptree, "SET NOBOT", "help/botserv/set_nobot", NULL);
 	help_addentry(bs_helptree, "SET PRIVATE", "help/botserv/set_private", NULL);
@@ -81,9 +69,6 @@ void _moddeinit()
 	command_delete(&bs_set, bs_cmdtree);
 
 	help_delentry(bs_helptree, "SET");
-	help_delentry(bs_helptree, "SET DONTKICKOPS");
-	help_delentry(bs_helptree, "SET DONTKICKVOICES");
-	help_delentry(bs_helptree, "SET GREET");
 	help_delentry(bs_helptree, "SET FANTASY");
 	help_delentry(bs_helptree, "SET NOBOT");
 	help_delentry(bs_helptree, "SET PRIVATE");
@@ -126,153 +111,6 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = dest;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void bs_cmd_set_dontkickops(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *channel = parv[0];
-	char *option = parv[1];
-	mychan_t *mc;
-
-	if (parc < 2 || !channel || !option)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET DONTKICKOPS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <#channel> DONTKICKOPS {ON|OFF}"));
-		return;
-	}
-
-	mc = mychan_find(channel);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
-	if (!irccasecmp(option, "ON"))
-	{
-		metadata_add(mc, "private:botserv:bot-dontkick-ops", "ON");
-		command_success_nodata(si, _("Bot \2won't kick ops\2 on channel %s."), mc->name);
-	}
-	else if(!irccasecmp(option, "OFF"))
-	{
-		metadata_delete(mc, "private:botserv:bot-dontkick-ops");
-		command_success_nodata(si, _("Bot \2will kick ops\2 on channel %s."), mc->name);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET DONTKICKOPS");
-		command_fail(si, fault_badparams, _("Syntax: SET <#channel> DONTKICKOPS {ON|OFF}"));
-	}
-}
-
-static void bs_cmd_set_dontkickvoices(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *channel = parv[0];
-	char *option = parv[1];
-	mychan_t *mc;
-
-	if (parc < 2 || !channel || !option)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET DONTKICKVOICES");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <#channel> DONTKICKVOICES {ON|OFF}"));
-		return;
-	}
-
-	mc = mychan_find(channel);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
-	if (!irccasecmp(option, "ON"))
-	{
-		metadata_add(mc, "private:botserv:bot-dontkick-voices", "ON");
-		command_success_nodata(si, _("Bot \2won't kick voices\2 on channel %s."), mc->name);
-	}
-	else if(!irccasecmp(option, "OFF"))
-	{
-		metadata_delete(mc, "private:botserv:bot-dontkick-voices");
-		command_success_nodata(si, _("Bot \2will kick voices\2 on channel %s."), mc->name);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET DONTKICKVOICES");
-		command_fail(si, fault_badparams, _("Syntax: SET <#channel> DONTKICKVOICES {ON|OFF}"));
-	}
-}
-
-static void bs_cmd_set_greet(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *channel = parv[0];
-	char *option = parv[1];
-	mychan_t *mc;
-
-	if (parc < 2 || !channel || !option)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET GREET");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <#channel> GREET {ON|OFF}"));
-		return;
-	}
-
-	mc = mychan_find(channel);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
-	if (!irccasecmp(option, "ON"))
-	{
-		metadata_add(mc, "private:botserv:bot-handle-greet", "ON");
-		command_success_nodata(si, _("Greet mode is now \2ON\2 on channel %s."), mc->name);
-	}
-	else if(!irccasecmp(option, "OFF"))
-	{
-		metadata_delete(mc, "private:botserv:bot-handle-greet");
-		command_success_nodata(si, _("Greet mode is now \2OFF\2 on channel %s."), mc->name);
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET GREET");
-		command_fail(si, fault_badparams, _("Syntax: SET <#channel> GREET {ON|OFF}"));
-	}
 }
 
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
