@@ -118,6 +118,7 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 	char *channel = parv[0];
 	char *option = parv[1];
 	mychan_t *mc;
+	metadata_t *md;
 
 	if (parc < 2 || !channel || !option)
 	{
