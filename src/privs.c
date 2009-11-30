@@ -309,6 +309,11 @@ bool has_priv_user(user_t *u, const char *priv)
 		return true;
 	if (u == NULL)
 		return false;
+
+	operclass = operclass_find("user");
+	if (operclass != NULL && string_in_list(operclass->privs, priv))
+		return true;
+
 	if (is_ircop(u))
 	{
 		operclass = operclass_find("ircop");

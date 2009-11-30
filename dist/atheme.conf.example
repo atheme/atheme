@@ -1384,6 +1384,17 @@ operclass "ircop" {
 	};
 };
 
+/* The "user" operclass can be used to grant privileges to normal users,
+ * such as the ability to use the sendpass command.
+ *
+ * This may be empty in which case, users get no privileges.
+ */
+operclass "user" {
+	privs = {
+		user:sendpass;
+	};
+};
+
 /* (*) Operator blocks specify accounts with certain privileges
  * Oper classes must be defined before they are used in operator blocks.
  */
