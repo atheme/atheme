@@ -367,7 +367,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to recieve memos."), AC_NONE, 1, _ns_setnomemo };
+command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, _ns_setnomemo };
 
 static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 {
