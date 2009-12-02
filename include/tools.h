@@ -17,7 +17,7 @@ typedef struct email_t_ email_t;
 struct email_t_
 {
 	char *sender;
-	char *reciever;
+	char *receiver;
 	char *subject;
 	char *body;
 	char **headers;

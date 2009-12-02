@@ -1189,7 +1189,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strcasecmp(parv[0], "START") == 0)
 	{
-		/* reset all our previously recieved CAPAB stuff */
+		/* reset all our previously received CAPAB stuff */
 		has_servicesmod = false;
 		has_globopsmod = false;
 		has_chghostmod = false;
