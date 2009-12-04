@@ -42,6 +42,7 @@
 #define PRIV_NOOP            "operserv:noop"
 #define PRIV_GLOBAL          "operserv:global"
 #define PRIV_GRANT           "operserv:grant"
+#define PRIV_OVERRIDE        "operserv:override"
 
 /* other access levels */
 #define AC_NONE NULL /* anyone */
