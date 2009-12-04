@@ -811,6 +811,9 @@ const char *get_source_name(sourceinfo_t *si)
 {
 	static char result[NICKLEN+NICKLEN+10];
 
+	if (si->v != NULL && si->v->get_source_name != NULL)
+		return si->v->get_source_name(si);
+
 	if (si->su != NULL)
 	{
 		if (si->smu && !irccasecmp(si->su->nick, si->smu->name))
@@ -833,6 +836,9 @@ const char *get_source_mask(sourceinfo_t *si)
 {
 	static char result[NICKLEN+USERLEN+HOSTLEN+10];
 
+	if (si->v != NULL && si->v->get_source_mask != NULL)
+		return si->v->get_source_mask(si);
+
 	if (si->su != NULL)
 	{
 		snprintf(result, sizeof result, "%s!%s@%s", si->su->nick,
@@ -851,6 +857,9 @@ const char *get_source_mask(sourceinfo_t *si)
 const char *get_oper_name(sourceinfo_t *si)
 {
 	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+10];
+
+	if (si->v != NULL && si->v->get_oper_name != NULL)
+		return si->v->get_oper_name(si);
 
 	if (si->su != NULL)
 	{
@@ -877,6 +886,9 @@ const char *get_oper_name(sourceinfo_t *si)
 const char *get_storage_oper_name(sourceinfo_t *si)
 {
 	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+10];
+
+	if (si->v != NULL && si->v->get_storage_oper_name != NULL)
+		return si->v->get_storage_oper_name(si);
 
 	if (si->smu != NULL)
 		snprintf(result, sizeof result, "%s", si->smu->name);

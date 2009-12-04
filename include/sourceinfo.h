@@ -16,6 +16,10 @@ struct sourceinfo_vtable
 	void (*cmd_fail)(sourceinfo_t *si, faultcode_t code, const char *message);
 	void (*cmd_success_nodata)(sourceinfo_t *si, const char *message);
 	void (*cmd_success_string)(sourceinfo_t *si, const char *result, const char *message);
+	const char *(*get_source_name)(sourceinfo_t *si);
+	const char *(*get_source_mask)(sourceinfo_t *si);
+	const char *(*get_oper_name)(sourceinfo_t *si);
+	const char *(*get_storage_oper_name)(sourceinfo_t *si);
 };
 
 /* structure describing data about a protocol message or service command */
