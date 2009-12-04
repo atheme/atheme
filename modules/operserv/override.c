@@ -38,6 +38,45 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "OVERRIDE");
 }
 
+typedef struct {
+	sourceinfo_t si;
+	sourceinfo_t *parent_si;
+} cooked_sourceinfo_t;
+
+static void override_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_if_fail(csi != NULL);
+
+	command_fail(csi->parent_si, code, "%s", message);
+}
+
+static void override_command_success_nodata(sourceinfo_t *si, const char *message)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_if_fail(csi != NULL);
+
+	command_success_nodata(csi->parent_si, "%s", message);
+}
+
+static void override_command_success_string(sourceinfo_t *si, const char *result, const char *message)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_if_fail(csi != NULL);
+
+	command_success_string(csi->parent_si, result, "%s", message);
+}
+
+struct sourceinfo_vtable override_vtable = {
+	"override",
+	override_command_fail,
+	override_command_success_nodata,
+	override_command_success_string
+};
+
 static int text_to_parv(char *text, int maxparc, char **parv)
 {
 	int count = 0;
@@ -78,17 +117,17 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 {
-	sourceinfo_t o_si;
+	cooked_sourceinfo_t o_si;
 	myuser_t *mu;
 	service_t *svs;
 	command_t *cmd;
 	int newparc, i;
 	char *newparv[20];
 
-	if (!parv[0])
+	if (!parv[0] || !parv[1] || !parv[2])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OVERRIDE");
-		command_fail(si, fault_needmoreparams, _("Syntax: OVERRIDE <account> <service> <command> <params>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: OVERRIDE <account> <service> <command> [params]"));
 		return;
 	}
 
@@ -112,16 +151,22 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	o_si.su = si->su;
-	o_si.smu = mu;
-	o_si.service = svs;
+	memset(&o_si, '\0', sizeof(cooked_sourceinfo_t));
+	o_si.si.su = NULL;
+	o_si.si.smu = mu;
+	o_si.si.service = svs;
+	o_si.si.v = &override_vtable;
+	o_si.si.connection = NULL;
+	o_si.parent_si = si;
 
-	newparc = text_to_parv(parv[3], cmd->maxparc, newparv);
-	for (i = 0; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)
+	logcommand(si, CMDLOG_ADMIN, "OVERRIDE %s %s %s [%s]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
+	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
+	snoop("OVERRIDE: \2%s\2 -> \2%s\2 (\2%s\2) (\2%s\2) [%s]", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
+
+	newparc = text_to_parv(parv[3] != NULL ? parv[3] : "", cmd->maxparc, newparv);
+	for (i = newparc; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)
 		newparv[i] = NULL;
-	command_exec(svs, &o_si, cmd, newparc, newparv);
-
-	logcommand(si, CMDLOG_ADMIN, "OVERRIDE %s %s %s [%s]", parv[0], parv[1], parv[2], parv[3]);
+	command_exec(svs, (sourceinfo_t *) &o_si, cmd, newparc, newparv);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
