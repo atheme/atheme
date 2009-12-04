@@ -70,11 +70,51 @@ static void override_command_success_string(sourceinfo_t *si, const char *result
 	command_success_string(csi->parent_si, result, "%s", message);
 }
 
+static const char *override_get_source_name(sourceinfo_t *si)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_val_if_fail(csi != NULL, NULL);
+
+	return get_source_name(csi->parent_si);
+}
+
+static const char *override_get_source_mask(sourceinfo_t *si)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_val_if_fail(csi != NULL, NULL);
+
+	return get_source_mask(csi->parent_si);
+}
+
+static const char *override_get_oper_name(sourceinfo_t *si)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_val_if_fail(csi != NULL, NULL);
+
+	return get_oper_name(csi->parent_si);
+}
+
+static const char *override_get_storage_oper_name(sourceinfo_t *si)
+{
+	cooked_sourceinfo_t *csi = (cooked_sourceinfo_t *) si;
+
+	return_val_if_fail(csi != NULL, NULL);
+
+	return get_storage_oper_name(csi->parent_si);
+}
+
 struct sourceinfo_vtable override_vtable = {
 	"override",
 	override_command_fail,
 	override_command_success_nodata,
-	override_command_success_string
+	override_command_success_string,
+	override_get_source_name,
+	override_get_source_mask,
+	override_get_oper_name,
+	override_get_storage_oper_name,
 };
 
 static int text_to_parv(char *text, int maxparc, char **parv)
