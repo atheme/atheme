@@ -171,10 +171,43 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mu = myuser_find(parv[0])))
+	if (*parv[0] == '#')
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[0]);
-		return;
+		mychan_t *mc;
+		node_t *n;
+
+		if (!(mc = mychan_find(parv[0])))
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered channel."), parv[0]);
+			return;
+		}
+
+		LIST_FOREACH(n, mc->chanacs.head)
+		{
+			chanacs_t *ca = (chanacs_t *) n->data;
+
+			if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			{
+				mu = ca->myuser;
+				break;
+			}
+		}
+
+		/* this should never happen, but we'll check anyway. */
+		if (mu == NULL)
+		{
+			slog(LG_DEBUG, "override: couldn't find a founder for %s!", parv[0]);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 doesn't have any founders."), parv[0]);
+			return;
+		}
+	}
+	else
+	{
+		if (!(mu = myuser_find(parv[0])))
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[0]);
+			return;
+		}
 	}
 
 	svs = service_find_nick(parv[1]);
