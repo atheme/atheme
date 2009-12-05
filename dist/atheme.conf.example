@@ -143,6 +143,7 @@ loadmodule "modules/backend/flatfile";
  * Password reset (RESETPASS command)		modules/nickserv/resetpass
  * Password return (RETURN command)		modules/nickserv/return
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
+ * Password retrieval allowed to normal users	modules/nickserv/sendpass_user
  * SET command					modules/nickserv/set
  * Change primary nickname (SET ACCOUNTNAME)    modules/nickserv/set_accountname
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
@@ -176,7 +177,8 @@ loadmodule "modules/nickserv/listchans";
 loadmodule "modules/nickserv/register";
 loadmodule "modules/nickserv/resetpass";
 loadmodule "modules/nickserv/return";
-loadmodule "modules/nickserv/sendpass";
+#loadmodule "modules/nickserv/sendpass";
+loadmodule "modules/nickserv/sendpass_user";
 loadmodule "modules/nickserv/set";
 loadmodule "modules/nickserv/set_accountname";
 #loadmodule "modules/nickserv/set_privmsg";
@@ -1384,17 +1386,6 @@ operclass "ircop" {
 		operserv:akill;
 		operserv:jupe;
 		operserv:global;
-	};
-};
-
-/* The "user" operclass can be used to grant privileges to normal users,
- * such as the ability to use the sendpass command.
- *
- * This may be empty in which case, users get no privileges.
- */
-operclass "user" {
-	privs = {
-		user:sendpass;
 	};
 };
 

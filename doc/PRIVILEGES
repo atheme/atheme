@@ -63,7 +63,8 @@ user:auspex
 user:admin
 	administer users
 user:sendpass
-	send user passwords to their email addresses
+	send user passwords to their email addresses, or in case of
+	nickserv/sendpass_user, use the CLEAR option
 user:vhost
 	set vhosts
 user:fregister

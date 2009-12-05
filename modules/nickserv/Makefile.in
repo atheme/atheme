@@ -35,6 +35,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/resetpass.c	\
 	$(SRCDIR)/return.c	\
 	$(SRCDIR)/sendpass.c	\
+	$(SRCDIR)/sendpass_user.c \
 	$(SRCDIR)/set.c		\
 	$(SRCDIR)/set_accountname.c \
 	$(SRCDIR)/set_privmsg.c	\
