@@ -117,6 +117,12 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mu, "private:freeze:freezer"))
+	{
+		command_success_nodata(si, _("%s has been frozen by the %s administration."), mu->name, me.netname);
+		return;
+	}
+
 	if (metadata_find(mu, "private:setpass:key"))
 	{
 		command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);

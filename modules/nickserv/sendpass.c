@@ -138,6 +138,12 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(mu, "private:freeze:freezer"))
+	{
+		command_success_nodata(si, _("%s has been frozen by the %s administration."), mu->name, me.netname);
+		return;
+	}
+
 	/* alternative, safer method? */
 	if (command_find(si->service->cmdtree, "SETPASS"))
 	{
