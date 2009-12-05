@@ -132,6 +132,12 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (LIST_LENGTH(&mu->logins) > 0)
+	{
+		command_fail(si, fault_noprivs, _("This operation cannot be performed on %s, because someone is logged in to it."), mu->name);
+		return;
+	}
+
 	/* alternative, safer method? */
 	if (command_find(si->service->cmdtree, "SETPASS"))
 	{
