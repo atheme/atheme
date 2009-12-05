@@ -59,10 +59,6 @@ SRCS =					\
 	$(SRCDIR)/gen_vhostonreg.c	\
 	$(SRCDIR)/graphtastical.c	\
 	$(SRCDIR)/ircd_catserv.c	\
-	$(SRCDIR)/ircd_nohalfops.c	\
-	$(SRCDIR)/ircd_noholdnick.c	\
-	$(SRCDIR)/ircd_noowner.c	\
-	$(SRCDIR)/ircd_noprotect.c	\
 	$(SRCDIR)/ns_fenforce.c		\
 	$(SRCDIR)/ns_fregister.c	\
 	$(SRCDIR)/ns_forbid.c		\

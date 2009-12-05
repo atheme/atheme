@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"ircd_noowner", false, _modinit, _moddeinit,
+	"protocol/mixin_noowner", false, _modinit, _moddeinit,
 	"$Id: ircd_noowner.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -212,8 +212,8 @@ server; write a module if you want to use those.
 
 By default, Atheme assumes cmode +a (channel admin/protect, AdminWithDot in
 network.dconf) and cmode +h (halfops, compile time option) are enabled. If
-this is not the case, compile and load the ircd_noprotect and/or
-ircd_nohalfops modules from contrib.
+this is not the case, load the protocol/mixin_noprotect and/or
+protocol/mixin_nohalfops modules.
 
 Although Atheme does not support IPv6 connections itself, user IPv6 addresses
 will be properly stored and logged.

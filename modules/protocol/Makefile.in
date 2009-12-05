@@ -25,6 +25,10 @@ BASE_SRCS =			\
 	$(SRCDIR)/inspircd12.c	\
         $(SRCDIR)/ircd-seven.c  \
 	$(SRCDIR)/ircnet.c	\
+	$(SRCDIR)/mixin_nohalfops.c	\
+	$(SRCDIR)/mixin_noholdnick.c	\
+	$(SRCDIR)/mixin_noowner.c	\
+	$(SRCDIR)/mixin_noprotect.c	\
 	$(SRCDIR)/nefarious.c	\
 	$(SRCDIR)/officeirc.c	\
 	$(SRCDIR)/p10-generic.c	\

@@ -57,6 +57,22 @@
  */
 loadmodule "modules/protocol/charybdis";
 
+/* Protocol mixins.
+ *
+ * These should be used if you do not have/want certain features on your
+ * network that your ircd normally has. If you do not know what this means,
+ * you do not need any of them.
+ *
+ * Disable halfops				modules/protocol/mixin_nohalfops
+ * Disable holdnick (use enforcer clients)     modules/protocol/mixin_noholdnick
+ * Disable "protect" mode on channels		modules/protocol/mixin_noprotect
+ * Disable "owner" mode on channels		modules/protocol/mixin_noowner
+ */
+#loadmodule "modules/protocol/mixin_nohalfops";
+#loadmodule "modules/protocol/mixin_noholdnick";
+#loadmodule "modules/protocol/mixin_noprotect";
+#loadmodule "modules/protocol/mixin_noowner";
+
 /* Database backend module.
  * 
  * Please select a database backend module. Different backends allow for

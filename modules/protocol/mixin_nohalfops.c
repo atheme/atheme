@@ -2,19 +2,22 @@
  * Copyright (c) 2006 Jilles Tjoelker
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Module to disable protect (+a) mode.
+ * Module to disable halfop (+h) mode.
  * This will stop Atheme setting this mode by itself, but it can still
  * be used via OperServ MODE etc.
  *
- * $Id: ircd_noprotect.c 7785 2007-03-03 15:54:32Z pippijn $
+ * Note: this module does not work with the halfops autodetection
+ * in the charybdis protocol module.
+ *
+ * $Id: ircd_nohalfops.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"ircd_noprotect", false, _modinit, _moddeinit,
-	"$Id: ircd_noprotect.c 7785 2007-03-03 15:54:32Z pippijn $",
+	"protocol/mixin_nohalfops", false, _modinit, _moddeinit,
+	"$Id: ircd_nohalfops.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,15 +32,15 @@ void _modinit(module_t *m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
-	oldflag = ircd->uses_protect;
-	ircd->uses_protect = false;
+	oldflag = ircd->uses_halfops;
+	ircd->uses_halfops = false;
 	update_chanacs_flags();
 }
 
 void _moddeinit()
 {
 
-	ircd->uses_protect = oldflag;
+	ircd->uses_halfops = oldflag;
 	update_chanacs_flags();
 }
 
