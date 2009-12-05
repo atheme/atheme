@@ -111,27 +111,26 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-		if (metadata_find(mu, "private:setpass:key"))
-		{
-			command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);
-			if (has_priv(si, PRIV_USER_SENDPASS))
-				command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), mu->name);
-			return;
-		}
-		key = gen_pw(12);
-		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
-		{
-			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
-			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), mu->name);
-			if (ismarked)
-				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
-		}
-		else
-			command_fail(si, fault_emailfail, _("Email send failed."));
-		free(key);
+	if (metadata_find(mu, "private:setpass:key"))
+	{
+		command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);
+		if (has_priv(si, PRIV_USER_SENDPASS))
+			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), mu->name);
 		return;
+	}
+	key = gen_pw(12);
+	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
+	{
+		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
+		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), mu->name);
+		if (ismarked)
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
+	}
+	else
+		command_fail(si, fault_emailfail, _("Email send failed."));
+	free(key);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
