@@ -584,6 +584,21 @@ static void bs_cmd_bot(sourceinfo_t *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
+static bool valid_misc_field(const char *field, size_t maxlen)
+{
+	if (strlen(field) > maxlen)
+		return false;
+
+	/* Never ever allow @!?* as they have special meaning in all ircds */
+	/* Empty, space anywhere and colon at the start break the protocol */
+	if (strchr(field, '@') || strchr(field, '!') || strchr(field, '?') ||
+			strchr(field, '*') || strchr(field, ' ') ||
+			*field == ':' || *field == '\0')
+		return false;
+
+	return true;
+}
+
 /* CHANGE oldnick nick [user [host [real]]] */
 static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -623,6 +638,13 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	if (parc >= 2 && (!valid_misc_field(parv[1], NICKLEN - 1) ||
+				strchr(parv[1], '.')))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[1]);
+		return;
+	}
+
 	if (parc >= 4 && !check_vhost_validity(si, parv[3]))
 		return;
 
@@ -630,14 +652,19 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	switch(parc)
 	{
 		case 5:
-			free(bot->real);
-			bot->real = sstrdup(parv[4]);
+			if (strlen(parv[4]) < GECOSLEN)
+			{
+				free(bot->real);
+				bot->real = sstrdup(parv[4]);
+			}
+			else
+				command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname, not changing it"), parv[4]);
 		case 4:
 			free(bot->host);
 			bot->host = sstrdup(parv[3]);
 		case 3:
 			/* XXX: we really need an is_valid_user(), but this is close enough. --nenolod */
-			if (is_valid_host(parv[2])) {
+			if (valid_misc_field(parv[2], USERLEN - 1)) {
 				free(bot->user);
 				bot->user = sstrdup(parv[2]);
 			} else
@@ -708,14 +735,26 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		snprintf(buf, sizeof(buf), "%s", parv[3]);
 
-	if (!is_valid_host(parv[2]))
+	if (!valid_misc_field(parv[0], NICKLEN - 1) || strchr(parv[0], '.'))
 	{
-		command_fail(si, fault_badparams, _("\2%s\2 is an invalid username."), parv[2]);
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[0]);
 		return;
 	}
 
-	if (!check_vhost_validity(si, parv[3]))
+	if (!valid_misc_field(parv[1], USERLEN - 1))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid username."), parv[1]);
 		return;
+	}
+
+	if (!check_vhost_validity(si, parv[2]))
+		return;
+
+	if (strlen(parv[3]) >= GECOSLEN)
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is an invalid realname."), parv[3]);
+		return;
+	}
 
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(parv[0]);
