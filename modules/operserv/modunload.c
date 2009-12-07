@@ -67,7 +67,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_INFO, "%s tried to unload a permanent module",
 				get_oper_name(si));
-			command_fail(si, fault_noprivs, _("\2%s\2 is an permanent module; it cannot be unloaded."), module);
+			command_fail(si, fault_noprivs, _("\2%s\2 is a permanent module; it cannot be unloaded."), module);
 			continue;
 		}
 
