@@ -591,9 +591,11 @@ static bool valid_misc_field(const char *field, size_t maxlen)
 
 	/* Never ever allow @!?* as they have special meaning in all ircds */
 	/* Empty, space anywhere and colon at the start break the protocol */
+	/* Also disallow ASCII 1-31 */
 	if (strchr(field, '@') || strchr(field, '!') || strchr(field, '?') ||
 			strchr(field, '*') || strchr(field, ' ') ||
-			*field == ':' || *field == '\0')
+			*field == ':' || *field == '\0' ||
+			has_ctrl_chars(field))
 		return false;
 
 	return true;

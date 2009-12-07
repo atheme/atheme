@@ -951,9 +951,11 @@ bool check_vhost_validity(sourceinfo_t *si, const char *host)
 
 	/* Never ever allow @!?* as they have special meaning in all ircds */
 	/* Empty, space anywhere and colon at the start break the protocol */
+	/* Also disallow ASCII 1-31 */
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
 			strchr(host, '*') || strchr(host, ' ') ||
-			*host == ':' || *host == '\0')
+			*host == ':' || *host == '\0' ||
+			has_ctrl_chars(host))
 	{
 		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
 		return false;
