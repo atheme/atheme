@@ -1,0 +1,9 @@
+Help for ^BMODRELOAD^B:
+
+MODRELOAD reloads a currently loaded module. If the command fails,
+the module in question will be unloaded until errors are corrected.
+
+Syntax: MODRELOAD <name...>
+
+Example:
+    /msg &nick& MODRELOAD chanserv/register
