@@ -74,6 +74,12 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Exit point : %p"), m->header->deinit);
 	command_success_nodata(si, _("Version    : %s"), m->header->version);
 	command_success_nodata(si, _("Vendor     : %s"), m->header->vendor);
+
+	if (m->header->norestart)
+		command_success_nodata(si, _("Permanent     : Yes"));
+	else
+		command_success_nodata(si, _("Permanent     : No"));
+
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
 
