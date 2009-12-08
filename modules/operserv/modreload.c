@@ -39,6 +39,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *module = parv[0];
 	module_t *t, *m;
+	char buf[BUFSIZE + 1];
 
 	if (parc < 1)
         {
@@ -66,7 +67,14 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	module_unload(m);
-	t = module_load(module);
+
+	if (*module != '/')
+	{
+		snprintf(buf, BUFSIZE, "%s/%s", MODDIR "/modules", module);
+		t = module_load(buf);
+	}
+	else
+		t = module_load(module);
 
 	if (t != NULL)
 	{
