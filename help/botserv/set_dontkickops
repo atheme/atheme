@@ -1,9 +1,0 @@
-Help for SET DONTKICKOPS:
-
-Enables or disables ops protection mode on a channel.
-When it is enabled, ops won't be kicked by the bot.
- 
-Syntax: SET <#channel> DONTKICKOPS {ON|OFF}
- 
-Examples:
-    /msg &nick& SET #help DONTKICKOPS ON
