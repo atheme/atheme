@@ -78,6 +78,38 @@ static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 
 /* ******************************************************************** */
 
+static void (*msg_real)(const char *from, const char *target, const char *fmt, ...);
+
+static void
+bs_msg(const char *from, const char *target, const char *fmt, ...)
+{
+	va_list ap;
+	char *buf;
+	const char *real_source = from;
+
+	va_start(ap, fmt);
+	vasprintf(&buf, fmt, ap);
+	va_end(ap);
+
+	if (*target == '#' && !strcmp(from, chansvs.nick))
+	{
+		mychan_t *mc;
+		botserv_bot_t *bot = NULL;
+
+		mc = mychan_find(target);
+		if (mc == NULL)
+			real_source = from;
+		else
+		{
+			bot = bs_mychan_find_bot(mc);
+			real_source = bot->nick;
+		}
+	}
+
+	msg_real(real_source, target, "%s", buf);
+	free(buf);
+}
+
 static void (*topic_sts_real)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 
 static void
@@ -1013,6 +1045,8 @@ void _modinit(module_t *m)
 	try_kick              = bs_try_kick;
 	topic_sts_real        = topic_sts;
 	topic_sts             = bs_topic_sts;
+	msg_real              = msg;
+	msg                   = bs_msg;
 }
 
 void _moddeinit(void)
@@ -1058,6 +1092,7 @@ void _moddeinit(void)
 	modestack_mode_param  = modestack_mode_param_real;
 	try_kick              = try_kick_real;
 	topic_sts             = topic_sts_real;
+	msg                   = msg_real;
 }
 
 /* ******************************************************************** */
