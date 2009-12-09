@@ -369,6 +369,9 @@ int main(int argc, char *argv[])
 	/* we're shutting down */
 	if (db_save && !readonly)
 		db_save(NULL);
+
+	hook_call_shutting_down();
+
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
 
