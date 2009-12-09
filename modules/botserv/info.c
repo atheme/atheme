@@ -116,58 +116,9 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("         Bot nick : %s"), md->value);
 		else
 			command_success_nodata(si, _("         Bot nick : not assigned yet"));
-		if ((md = metadata_find(mc, "private:botserv:kick-badwords")) != NULL)
-			command_success_nodata(si, _(" Bad words kicker : enabled"));
-		else
-			command_success_nodata(si, _(" Bad words kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-bolds")) != NULL)
-			command_success_nodata(si, _("     Bolds kicker : enabled"));
-		else
-			command_success_nodata(si, _("     Bolds kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-caps")) != NULL)
-			command_success_nodata(si, _("      Caps kicker : enabled"));
-		else
-			command_success_nodata(si, _("      Caps kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-colors")) != NULL)
-			command_success_nodata(si, _("    Colors kicker : enabled"));
-		else
-			command_success_nodata(si, _("    Colors kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-flood")) != NULL)
-			command_success_nodata(si, _("     Flood kicker : enabled"));
-		else
-			command_success_nodata(si, _("     Flood kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-repeat")) != NULL)
-			command_success_nodata(si, _("    Repeat kicker : enabled"));
-		else
-			command_success_nodata(si, _("    Repeat kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-reverses")) != NULL)
-			command_success_nodata(si, _("  Reverses kicker : enabled"));
-		else
-			command_success_nodata(si, _("  Reverses kicker : disabled"));
-		if ((md = metadata_find(mc, "private:botserv:kick-underlines")) != NULL)
-			command_success_nodata(si, _("Underlines kicker : enabled"));
-		else
-			command_success_nodata(si, _("Underlines kicker : disabled"));
-		end = buf;
-		*end = 0;
-		if ((md = metadata_find(mc, "private:botserv:bot-dontkick-ops")) != NULL)
-		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s", "Dont kick ops");
-			comma = 1;
-		}
-		if ((md = metadata_find(mc, "private:botserv:bot-dontkick-voices")) != NULL)
-		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Dont kick voices");
-			comma = 1;
-		}
 		if ((md = metadata_find(mc, "private:botserv:bot-handle-fantasy")) != NULL)
 		{
 			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Fantasy");
-			comma = 1;
-		}
-		if ((md = metadata_find(mc, "private:botserv:bot-handle-greet")) != NULL)
-		{
-			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", comma?", ":"", "Greet");
 			comma = 1;
 		}
 		if ((md = metadata_find(mc, "private:botserv:no-bot")) != NULL)
