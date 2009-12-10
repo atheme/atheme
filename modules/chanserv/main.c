@@ -25,6 +25,7 @@ static void cs_keeptopic_topicset(channel_t *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
 static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
+static void on_shutdown(void);
 
 list_t cs_cmdtree;
 list_t cs_helptree;
@@ -198,6 +199,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_topic");
 	hook_add_event("channel_can_change_topic");
 	hook_add_event("channel_tschange");
+	hook_add_event("shutting_down");
 	hook_add_channel_join(cs_join);
 	hook_add_channel_part(cs_part);
 	hook_add_channel_register(cs_register);
@@ -205,6 +207,7 @@ void _modinit(module_t *m)
 	hook_add_channel_topic(cs_keeptopic_topicset);
 	hook_add_channel_can_change_topic(cs_topiccheck);
 	hook_add_channel_tschange(cs_tschange);
+	hook_add_shutting_down(on_shutdown);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
@@ -229,6 +232,7 @@ void _moddeinit(void)
 	hook_del_channel_topic(cs_keeptopic_topicset);
 	hook_del_channel_can_change_topic(cs_topiccheck);
 	hook_del_channel_tschange(cs_tschange);
+	hook_del_shutting_down(on_shutdown);
 	event_delete(cs_leave_empty, NULL);
 }
 
@@ -701,6 +705,12 @@ static void cs_tschange(channel_t *c)
 	/* schedule a mode lock check when we know the new modes
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
+}
+
+static void on_shutdown(void)
+{
+	if (chansvs.me != NULL && chansvs.me->me != NULL)
+		quit_sts(chansvs.me->me, "shutting down");
 }
 
 static void cs_leave_empty(void *unused)
