@@ -25,7 +25,7 @@ static void cs_keeptopic_topicset(channel_t *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
 static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
-static void on_shutdown(void);
+static void on_shutdown(void *unused);
 
 list_t cs_cmdtree;
 list_t cs_helptree;
@@ -707,7 +707,7 @@ static void cs_tschange(channel_t *c)
 	mc->flags |= MC_MLOCK_CHECK;
 }
 
-static void on_shutdown(void)
+static void on_shutdown(void *unused)
 {
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
