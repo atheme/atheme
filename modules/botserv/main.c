@@ -30,6 +30,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
+static void on_shutdown(void *unused);
 
 static void botserv_load_database(void);
 
@@ -1017,6 +1018,9 @@ void _modinit(module_t *m)
 	hook_add_event("channel_drop");
 	hook_add_channel_drop(bs_channel_drop);
 
+	hook_add_event("shutting_down");
+	hook_add_shutting_down(on_shutdown);
+
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
 	command_add(&bs_bot, &bs_cmdtree);
@@ -1084,6 +1088,7 @@ void _moddeinit(void)
 	hook_del_channel_add(bs_newchan);
 	hook_del_channel_can_change_topic(bs_topiccheck);
 	hook_del_channel_drop(bs_channel_drop);
+	hook_del_shutting_down(on_shutdown);
 	hook_del_config_ready(botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;
@@ -1096,6 +1101,17 @@ void _moddeinit(void)
 }
 
 /* ******************************************************************** */
+
+static void on_shutdown(void *unused)
+{
+	node_t *n;
+
+	LIST_FOREACH(n, bs_bots.head)
+	{
+		botserv_bot_t *bot = (botserv_bot_t *) n->data;
+		quit_sts(bot->me->me, "shutting down");
+	}
+}
 
 static void bs_join(hook_channel_joinpart_t *hdata)
 {
