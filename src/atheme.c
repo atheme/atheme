@@ -372,9 +372,6 @@ int main(int argc, char *argv[])
 	if (db_save && !readonly)
 		db_save(NULL);
 
-	if (chansvs.me != NULL && chansvs.me->me != NULL)
-		quit_sts(chansvs.me->me, "shutting down");
-
 	remove(pidfilename);
 	errno = 0;
 	if (curr_uplink != NULL && curr_uplink->conn != NULL)
