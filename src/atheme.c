@@ -367,7 +367,7 @@ int main(int argc, char *argv[])
 	io_loop();
 
 	/* we're shutting down */
-	hook_call_shutting_down();
+	hook_call_shutdown();
 
 	if (db_save && !readonly)
 		db_save(NULL);

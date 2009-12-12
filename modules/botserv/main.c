@@ -1018,8 +1018,8 @@ void _modinit(module_t *m)
 	hook_add_event("channel_drop");
 	hook_add_channel_drop(bs_channel_drop);
 
-	hook_add_event("shutting_down");
-	hook_add_shutting_down(on_shutdown);
+	hook_add_event("shutdown");
+	hook_add_shutdown(on_shutdown);
 
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
@@ -1088,7 +1088,7 @@ void _moddeinit(void)
 	hook_del_channel_add(bs_newchan);
 	hook_del_channel_can_change_topic(bs_topiccheck);
 	hook_del_channel_drop(bs_channel_drop);
-	hook_del_shutting_down(on_shutdown);
+	hook_del_shutdown(on_shutdown);
 	hook_del_config_ready(botserv_config_ready);
 
 	modestack_mode_simple = modestack_mode_simple_real;

@@ -199,7 +199,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_topic");
 	hook_add_event("channel_can_change_topic");
 	hook_add_event("channel_tschange");
-	hook_add_event("shutting_down");
+	hook_add_event("shutdown");
 	hook_add_channel_join(cs_join);
 	hook_add_channel_part(cs_part);
 	hook_add_channel_register(cs_register);
@@ -207,7 +207,7 @@ void _modinit(module_t *m)
 	hook_add_channel_topic(cs_keeptopic_topicset);
 	hook_add_channel_can_change_topic(cs_topiccheck);
 	hook_add_channel_tschange(cs_tschange);
-	hook_add_shutting_down(on_shutdown);
+	hook_add_shutdown(on_shutdown);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
@@ -232,7 +232,7 @@ void _moddeinit(void)
 	hook_del_channel_topic(cs_keeptopic_topicset);
 	hook_del_channel_can_change_topic(cs_topiccheck);
 	hook_del_channel_tschange(cs_tschange);
-	hook_del_shutting_down(on_shutdown);
+	hook_del_shutdown(on_shutdown);
 	event_delete(cs_leave_empty, NULL);
 }
 
