@@ -73,6 +73,7 @@ struct
 	{ PRIV_NOOP, NULL, NULL, NULL, "NOOP access" },
 	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },
 	{ PRIV_GRANT, NULL, NULL, NULL, "edit oper privileges" },
+	{ PRIV_OVERRIDE, NULL, NULL, NULL, "perform actions as any other user" },
 	/* -- */
 	{ NULL, NULL, NULL, NULL, NULL }
 };
