@@ -1,3 +1,11 @@
+Atheme Services 5.0.1 Release Notes
+===================================
+botserv
+- When kicking users from an otherwise empty channel, set INHABIT, so that
+  the bot leaves the channel after a short delay.
+code
+- Remove legacy .disp field from core services structures.
+
 Atheme Services 5.0 Release Notes
 =================================
 [MERGED] indicates items merged to the 4.0 branch
