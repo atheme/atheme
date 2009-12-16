@@ -1165,7 +1165,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= 1)
+		if (chan->nummembers <= 2)
 		{
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
@@ -1214,7 +1214,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	if (flags & CA_AKICK && !(flags & CA_REMOVE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= 1)
+		if (chan->nummembers <= 2)
 		{
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
@@ -1296,7 +1296,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me) || (bot && chanuser_find(chan, bot->me->me))))) &&
 	(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
 	{
-		if (chan->nummembers <= 1)
+		if (chan->nummembers <= 2)
 		{
 			mc->flags |= MC_INHABIT;
 			if (!(mc->flags & MC_GUARD))
