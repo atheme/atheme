@@ -99,7 +99,7 @@ static void nickserv_handle_nickchange(user_t *u)
 		{
 			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
 			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
-			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == false) ? "msg " : "", chansvs.disp);
+			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp, (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 
 			u->flags |= UF_SEENINFO;
 		}
@@ -117,12 +117,12 @@ static void nickserv_handle_nickchange(user_t *u)
 	if (myuser_access_verify(u, mn->owner))
 	{
 		notice(nicksvs.nick, u->nick, _("Please identify via \2/%s%s identify <password>\2."),
-			(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp);
+			(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp);
 		return;
 	}
 
 	notice(nicksvs.nick, u->nick, _("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
-		(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.disp);
+		(ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp);
 	hdata.u = u;
 	hdata.mn = mn;
 	hook_call_nick_enforce(&hdata);
@@ -136,7 +136,6 @@ static void nickserv_config_ready(void *unused)
 	nicksvs.user = nicksvs.me->user;
 	nicksvs.host = nicksvs.me->host;
 	nicksvs.real = nicksvs.me->real;
-	nicksvs.disp = nicksvs.me->disp;
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
@@ -167,7 +166,6 @@ void _moddeinit(void)
 		nicksvs.user = NULL;
 		nicksvs.host = NULL;
 		nicksvs.real = NULL;
-		nicksvs.disp = NULL;
                 service_delete(nicksvs.me);
 		nicksvs.me = NULL;
 	}

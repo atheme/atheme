@@ -57,8 +57,6 @@ static void hostserv(sourceinfo_t *si, int parc, char *parv[])
 
 static void hostserv_config_ready(void *unused)
 {
-	hostsvs.disp = hostsvs.me->disp;
-
 	hook_del_config_ready(hostserv_config_ready);
 }
 

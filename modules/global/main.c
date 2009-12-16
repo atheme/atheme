@@ -212,7 +212,6 @@ static void global_config_ready(void *unused)
 	globsvs.user = globsvs.me->user;
 	globsvs.host = globsvs.me->host;
 	globsvs.real = globsvs.me->real;
-	globsvs.disp = globsvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -247,7 +246,6 @@ void _moddeinit(void)
 		globsvs.user = NULL;
 		globsvs.host = NULL;
 		globsvs.real = NULL;
-		globsvs.disp = NULL;
 		service_delete(globsvs.me);
 		globsvs.me = NULL;
 	}

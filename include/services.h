@@ -19,7 +19,7 @@ typedef struct saslsvs_ saslsvs_t;
 typedef struct gamesvs_ gamesvs_t;
 typedef struct hostsvs_ hostsvs_t;
 
-/* The nick/user/host/real/disp strings in these structs simply point
+/* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the service_t, and will probably be removed
  * at some point.
  */
@@ -30,7 +30,6 @@ struct chansvs_
   char *user;                   /* the IRC client's username  */
   char *host;                   /* the IRC client's hostname  */
   char *real;                   /* the IRC client's realname  */
-  char *disp;			/* the IRC client's dispname  */
 
   bool fantasy;		/* enable fantasy commands    */
 
@@ -59,7 +58,6 @@ struct globsvs_
   char *user;
   char *host;
   char *real;
-  char *disp;			/* the IRC client's dispname  */
    
   service_t *me;
 };
@@ -70,7 +68,6 @@ struct opersvs_
   char *user;
   char *host;
   char *real;
-  char *disp;			/* the IRC client's dispname  */
    
   service_t *me;
 };
@@ -81,7 +78,6 @@ struct memosvs_
   char   *user;
   char   *host;
   char   *real;
-  char   *disp;
 
   service_t *me;
 };
@@ -96,7 +92,6 @@ struct nicksvs_
   char   *user;
   char   *host;
   char   *real;
-  char   *disp;			/* the IRC client's dispname  */
 
   service_t *me;
 
@@ -111,7 +106,6 @@ struct saslsvs_
   char   *user;
   char   *host;
   char   *real;
-  char   *disp;			/* the IRC client's dispname  */
 
   service_t *me;
 };
@@ -122,7 +116,6 @@ struct gamesvs_
   char   *user;
   char   *host;
   char   *real;
-  char   *disp;			/* the IRC client's dispname  */
 
   service_t *me;
 };
@@ -133,7 +126,6 @@ struct hostsvs_
   char   *user;
   char   *host;
   char   *real;
-  char   *disp;			/* the IRC client's dispname  */
 
   service_t *me;
 };

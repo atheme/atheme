@@ -59,7 +59,7 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 				opersvs.nick, opersvs.nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", opersvs.disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, os_cmdtree);

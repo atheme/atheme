@@ -177,7 +177,6 @@ static void chanserv_config_ready(void *unused)
 	chansvs.user = chansvs.me->user;
 	chansvs.host = chansvs.me->host;
 	chansvs.real = chansvs.me->real;
-	chansvs.disp = chansvs.me->disp;
 
 	service_set_chanmsg(chansvs.me, true);
 
@@ -219,7 +218,6 @@ void _moddeinit(void)
 		chansvs.user = NULL;
 		chansvs.host = NULL;
 		chansvs.real = NULL;
-		chansvs.disp = NULL;
 		service_delete(chansvs.me);
 		chansvs.me = NULL;
 	}

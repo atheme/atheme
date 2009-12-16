@@ -62,7 +62,6 @@ static void memoserv_config_ready(void *unused)
 	memosvs.user = memosvs.me->user;
 	memosvs.host = memosvs.me->host;
 	memosvs.real = memosvs.me->real;
-	memosvs.disp = memosvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -87,7 +86,6 @@ void _moddeinit(void)
 		memosvs.user = NULL;
 		memosvs.host = NULL;
 		memosvs.real = NULL;
-		memosvs.disp = NULL;
                 service_delete(memosvs.me);
 		memosvs.me = NULL;
 	}
@@ -104,7 +102,7 @@ static void on_user_identify(user_t *u)
 						       N_("You have %d new memos."),
 						       mu->memoct_new), mu->memoct_new);
 		notice(memosvs.nick, u->nick, _("To read them, type /%s%s READ NEW"),
-					ircd->uses_rcommand ? "" : "msg ", memosvs.disp);
+					ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp);
 	}
 }
 
@@ -130,7 +128,7 @@ static void on_user_away(user_t *u)
 						       N_("You have %d new memos."),
 						       mu->memoct_new), mu->memoct_new);
 		notice(memosvs.nick, u->nick, _("To read them, type /%s%s READ NEW"),
-					ircd->uses_rcommand ? "" : "msg ", memosvs.disp);
+					ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp);
 	}
 }
 

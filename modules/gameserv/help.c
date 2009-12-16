@@ -49,7 +49,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 provides games and tools for playing games to the network."), gamesvs.nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", gamesvs.disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", gamesvs.me->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, gs_cmdtree);

@@ -72,7 +72,6 @@ static void saslserv_config_ready(void *unused)
 	saslsvs.user = saslsvs.me->user;
 	saslsvs.host = saslsvs.me->host;
 	saslsvs.real = saslsvs.me->real;
-	saslsvs.disp = saslsvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -103,7 +102,6 @@ void _moddeinit(void)
 		saslsvs.user = NULL;
 		saslsvs.host = NULL;
 		saslsvs.real = NULL;
-		saslsvs.disp = NULL;
                 service_delete(saslsvs.me);
 		saslsvs.me = NULL;
 	}

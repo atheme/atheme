@@ -192,7 +192,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		else
 			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", si->smu->name, si->su->nick, LIST_LENGTH(&tmu->memos));
 		myuser_notice(memosvs.nick, tmu, _("To read it, type /%s%s READ %d"),
-					ircd->uses_rcommand ? "" : "msg ", memosvs.disp, LIST_LENGTH(&tmu->memos));
+					ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp, LIST_LENGTH(&tmu->memos));
 
 		/* Tell user memo sent */
 		command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);

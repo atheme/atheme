@@ -59,7 +59,6 @@ static void operserv_config_ready(void *unused)
 	opersvs.user = opersvs.me->user;
 	opersvs.host = opersvs.me->host;
 	opersvs.real = opersvs.me->real;
-	opersvs.disp = opersvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -78,7 +77,6 @@ void _moddeinit(void)
 		opersvs.user = NULL;
 		opersvs.host = NULL;
 		opersvs.real = NULL;
-		opersvs.disp = NULL;
 		service_delete(opersvs.me);
 		opersvs.me = NULL;
 	}

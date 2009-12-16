@@ -125,7 +125,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			create_challenge(si, mc->name, 0, key0);
 			snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s",
 					(ircd->uses_rcommand == false) ? "msg " : "",
-					chansvs.disp, mc->name, key0);
+					chansvs.me->disp, mc->name, key0);
 			command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
 					fullcmd);
 			return;

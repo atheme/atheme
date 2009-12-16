@@ -59,7 +59,6 @@ static void gameserv_config_ready(void *unused)
 	gamesvs.user = gamesvs.me->user;
 	gamesvs.host = gamesvs.me->host;
 	gamesvs.real = gamesvs.me->real;
-	gamesvs.disp = gamesvs.me->disp;
 }
 
 void _modinit(module_t *m)
@@ -78,7 +77,6 @@ void _moddeinit(void)
 		gamesvs.user = NULL;
 		gamesvs.host = NULL;
 		gamesvs.real = NULL;
-		gamesvs.disp = NULL;
                 service_delete(gamesvs.me);
 		gamesvs.me = NULL;
 	}
