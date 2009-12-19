@@ -26,7 +26,7 @@ echo "                     version $VERSION"
 
 echo ""
 
-if [ -f doc/RELEASE ] ; then
+if [ -f NEWS ] ; then
   ok=0
   echo "Would you like to read the release notes (recommended)?"
   while [ $ok -eq 0 ] ; do
