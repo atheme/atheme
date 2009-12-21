@@ -8,4 +8,4 @@ Examples:
 	/msg &nick& LOGONNEWS ADD * Some logonnews for all users.
 	/msg &nick& LOGONNEWS ADD webchat* Some logonnews for webchat users only.
 	/msg &nick& LOGONNEWS LIST
-	/msh &nick& LOGONNEWS DEL 2
+	/msg &nick& LOGONNEWS DEL 2
