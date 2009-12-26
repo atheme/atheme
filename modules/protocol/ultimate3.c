@@ -221,7 +221,7 @@ static void ultimate3_part_sts(channel_t *c, user_t *u)
 }
 
 /* server-to-server KLINE wrapper */
-static void ultimate3_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+static void ultimate3_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -230,7 +230,7 @@ static void ultimate3_kline_sts(char *server, char *user, char *host, long durat
 }
 
 /* server-to-server UNKLINE wrapper */
-static void ultimate3_unkline_sts(char *server, char *user, char *host)
+static void ultimate3_unkline_sts(const char *server, const char *user, const char *host)
 {
 	if (!me.connected)
 		return;

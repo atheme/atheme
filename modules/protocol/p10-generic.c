@@ -186,7 +186,7 @@ static void p10_part_sts(channel_t *c, user_t *u)
 }
 
 /* server-to-server KLINE wrapper */
-static void p10_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+static void p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -196,7 +196,7 @@ static void p10_kline_sts(char *server, char *user, char *host, long duration, c
 }
 
 /* server-to-server UNKLINE wrapper */
-static void p10_unkline_sts(char *server, char *user, char *host)
+static void p10_unkline_sts(const char *server, const char *user, const char *host)
 {
 	if (!me.connected)
 		return;
@@ -204,7 +204,7 @@ static void p10_unkline_sts(char *server, char *user, char *host)
 	sts("%s GL * -%s@%s", me.numeric, user, host);
 }
 
-static void p10_xline_sts(char *server, char *realname, long duration, char *reason)
+static void p10_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -213,7 +213,7 @@ static void p10_xline_sts(char *server, char *realname, long duration, char *rea
 	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : 2419200, reason);
 }
 
-static void p10_unxline_sts(char *server, char *realname)
+static void p10_unxline_sts(const char *server, const char *realname)
 {
 	if (!me.connected)
 		return;
@@ -221,7 +221,7 @@ static void p10_unxline_sts(char *server, char *realname)
 	sts("%s GL * -$R%s", me.numeric, realname);
 }
 
-static void p10_qline_sts(char *server, char *name, long duration, char *reason)
+static void p10_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -236,7 +236,7 @@ static void p10_qline_sts(char *server, char *name, long duration, char *reason)
 	sts("%s GL * +%s %ld :%s", me.numeric, name, duration > 0 ? duration : 2419200, reason);
 }
 
-static void p10_unqline_sts(char *server, char *name)
+static void p10_unqline_sts(const char *server, const char *name)
 {
 	if (!me.connected)
 		return;

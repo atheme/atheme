@@ -38,12 +38,12 @@ void (*wallchops) (user_t *source, channel_t *target, const char *message) = gen
 void (*numeric_sts) (server_t *from, int numeric, user_t *target, const char *fmt, ...) = generic_numeric_sts;
 void (*kill_id_sts) (user_t *killer, const char *id, const char *reason) = generic_kill_id_sts;
 void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
-void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
-void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
-void (*xline_sts) (char *server, char *realname, long duration, char *reason) = generic_xline_sts;
-void (*unxline_sts) (char *server, char *realname) = generic_unxline_sts;
-void (*qline_sts) (char *server, char *mask, long duration, char *reason) = generic_qline_sts;
-void (*unqline_sts) (char *server, char *mask) = generic_unqline_sts;
+void (*kline_sts) (const char *server, const char *user, const char *host, long duration, const char *reason) = generic_kline_sts;
+void (*unkline_sts) (const char *server, const char *user, const char *host) = generic_unkline_sts;
+void (*xline_sts) (const char *server, const char *realname, long duration, const char *reason) = generic_xline_sts;
+void (*unxline_sts) (const char *server, const char *realname) = generic_unxline_sts;
+void (*qline_sts) (const char *server, const char *mask, long duration, const char *reason) = generic_qline_sts;
+void (*unqline_sts) (const char *server, const char *mask) = generic_unqline_sts;
 void (*topic_sts) (channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic) = generic_topic_sts;
 void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
@@ -158,32 +158,32 @@ void generic_part_sts(channel_t *c, user_t *u)
 	/* cant do anything here. bail. */
 }
 
-void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unkline_sts(char *server, char *user, char *host)
+void generic_unkline_sts(const char *server, const char *user, const char *host)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_xline_sts(char *server, char *realname, long duration, char *reason)
+void generic_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unxline_sts(char *server, char *realname)
+void generic_unxline_sts(const char *server, const char *realname)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_qline_sts(char *server, char *mask, long duration, char *reason)
+void generic_qline_sts(const char *server, const char *mask, long duration, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
 
-void generic_unqline_sts(char *server, char *mask)
+void generic_unqline_sts(const char *server, const char *mask)
 {
 	/* cant do anything here. bail. */
 }

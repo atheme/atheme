@@ -225,7 +225,7 @@ static void ts6_part_sts(channel_t *c, user_t *u)
 }
 
 /* server-to-server KLINE wrapper */
-static void ts6_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+static void ts6_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -234,7 +234,7 @@ static void ts6_kline_sts(char *server, char *user, char *host, long duration, c
 }
 
 /* server-to-server UNKLINE wrapper */
-static void ts6_unkline_sts(char *server, char *user, char *host)
+static void ts6_unkline_sts(const char *server, const char *user, const char *host)
 {
 	if (!me.connected)
 		return;
@@ -243,7 +243,7 @@ static void ts6_unkline_sts(char *server, char *user, char *host)
 }
 
 /* server-to-server XLINE wrapper */
-static void ts6_xline_sts(char *server, char *realname, long duration, char *reason)
+static void ts6_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -252,7 +252,7 @@ static void ts6_xline_sts(char *server, char *realname, long duration, char *rea
 }
 
 /* server-to-server UNXLINE wrapper */
-static void ts6_unxline_sts(char *server, char *realname)
+static void ts6_unxline_sts(const char *server, const char *realname)
 {
 	if (!me.connected)
 		return;
@@ -261,7 +261,7 @@ static void ts6_unxline_sts(char *server, char *realname)
 }
 
 /* server-to-server QLINE wrapper */
-static void ts6_qline_sts(char *server, char *name, long duration, char *reason)
+static void ts6_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -270,7 +270,7 @@ static void ts6_qline_sts(char *server, char *name, long duration, char *reason)
 }
 
 /* server-to-server UNQLINE wrapper */
-static void ts6_unqline_sts(char *server, char *name)
+static void ts6_unqline_sts(const char *server, const char *name)
 {
 	if (!me.connected)
 		return;

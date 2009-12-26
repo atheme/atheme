@@ -307,7 +307,7 @@ static void unreal_part_sts(channel_t *c, user_t *u)
 }
 
 /* server-to-server KLINE wrapper */
-static void unreal_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+static void unreal_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -316,7 +316,7 @@ static void unreal_kline_sts(char *server, char *user, char *host, long duration
 }
 
 /* server-to-server UNKLINE wrapper */
-static void unreal_unkline_sts(char *server, char *user, char *host)
+static void unreal_unkline_sts(const char *server, const char *user, const char *host)
 {
 	if (!me.connected)
 		return;
@@ -324,7 +324,7 @@ static void unreal_unkline_sts(char *server, char *user, char *host)
 	sts(":%s TKL - G %s %s %s", me.name, user, host, opersvs.nick);
 }
 
-static void unreal_xline_sts(char *server, char *realname, long duration, char *reason)
+static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	char escapedreason[512], *p;
 
@@ -347,7 +347,7 @@ static void unreal_xline_sts(char *server, char *realname, long duration, char *
 	sts(":%s BR + %s :%s", me.name, escapedreason, realname);
 }
 
-static void unreal_unxline_sts(char *server, char *realname)
+static void unreal_unxline_sts(const char *server, const char *realname)
 {
 	if (!me.connected)
 		return;
@@ -355,7 +355,7 @@ static void unreal_unxline_sts(char *server, char *realname)
 	sts(":%s BR - :%s", me.name, realname);
 }
 
-static void unreal_qline_sts(char *server, char *name, long duration, char *reason)
+static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -369,7 +369,7 @@ static void unreal_qline_sts(char *server, char *name, long duration, char *reas
 	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, opersvs.nick, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
-static void unreal_unqline_sts(char *server, char *name)
+static void unreal_unqline_sts(const char *server, const char *name)
 {
 	if (!me.connected)
 		return;

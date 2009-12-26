@@ -141,24 +141,24 @@ E void (*part_sts)(channel_t *c, user_t *u);
 /* add a kline on the servers matching the given mask
  * duration is in seconds, 0 for a permanent kline
  * if the ircd requires klines to be sent from users, use opersvs */
-E void (*kline_sts)(char *server, char *user, char *host, long duration, char *reason);
+E void (*kline_sts)(const char *server, const char *user, const char *host, long duration, const char *reason);
 /* remove a kline on the servers matching the given mask
  * if the ircd requires unklines to be sent from users, use opersvs */
-E void (*unkline_sts)(char *server, char *user, char *host);
+E void (*unkline_sts)(const char *server, const char *user, const char *host);
 /* add a xline on the servers matching the given mask
  * duration is in seconds, 0 for a permanent xline
  * if the ircd requires xlines to be sent from users, use opersvs */
-E void (*xline_sts)(char *server, char *realname, long duration, char *reason);
+E void (*xline_sts)(const char *server, const char *realname, long duration, const char *reason);
 /* remove a xline on the servers matching the given mask
  * if the ircd requires unxlines to be sent from users, use opersvs */
-E void (*unxline_sts)(char *server, char *realname);
+E void (*unxline_sts)(const char *server, const char *realname);
 /* add a qline on the servers matching the given mask
  * duration is in seconds, 0 for a permanent qline
  * if the ircd requires qlines to be sent from users, use opersvs */
-E void (*qline_sts)(char *server, char *mask, long duration, char *reason);
+E void (*qline_sts)(const char *server, const char *mask, long duration, const char *reason);
 /* remove a qline on the servers matching the given mask
  * if the ircd requires unqlines to be sent from users, use opersvs */
-E void (*unqline_sts)(char *server, char *mask);
+E void (*unqline_sts)(const char *server, const char *mask);
 /* make the given service set a topic on a channel
  * setter and ts should be used if the ircd supports topics to be set
  * with a given topicsetter and topicts; ts is not a channelts
@@ -234,12 +234,12 @@ E void generic_wallchops(user_t *source, channel_t *target, const char *message)
 E void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...);
 E void generic_kill_id_sts(user_t *killer, const char *id, const char *reason);
 E void generic_part_sts(channel_t *c, user_t *u);
-E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
-E void generic_unkline_sts(char *server, char *user, char *host);
-E void generic_xline_sts(char *server, char *realname, long duration, char *reason);
-E void generic_unxline_sts(char *server, char *realname);
-E void generic_qline_sts(char *server, char *mask, long duration, char *reason);
-E void generic_unqline_sts(char *server, char *mask);
+E void generic_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason);
+E void generic_unkline_sts(const char *server, const char *user, const char *host);
+E void generic_xline_sts(const char *server, const char *realname, long duration, const char *reason);
+E void generic_unxline_sts(const char *server, const char *realname);
+E void generic_qline_sts(const char *server, const char *mask, long duration, const char *reason);
+E void generic_unqline_sts(const char *server, const char *mask);
 E void generic_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
 E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
