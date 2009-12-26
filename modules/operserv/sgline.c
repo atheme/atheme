@@ -228,8 +228,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	x = xline_add(target, reason, duration);
-	x->setby = sstrdup(get_storage_oper_name(si));
+	x = xline_add(target, reason, duration, get_storage_oper_name(si));
 
 	if (duration)
 		command_success_nodata(si, _("Timed SGLINE on \2%s\2 was successfully added and will expire in %s."), x->realname, timediff(duration));

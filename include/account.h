@@ -319,7 +319,7 @@ E bool is_founder(mychan_t *mychan, myuser_t *myuser);
 /* node.c */
 E list_t klnlist;
 
-E kline_t *kline_add(char *user, char *host, char *reason, long duration);
+E kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
 E void kline_delete(kline_t *k);
 E kline_t *kline_find(const char *user, const char *host);
 E kline_t *kline_find_num(unsigned long number);
@@ -328,7 +328,7 @@ E void kline_expire(void *arg);
 
 E list_t xlnlist;
 
-E xline_t *xline_add(char *realname, char *reason, long duration);
+E xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby);
 E void xline_delete(const char *realname);
 E xline_t *xline_find(const char *realname);
 E xline_t *xline_find_num(unsigned int number);
@@ -337,7 +337,7 @@ E void xline_expire(void *arg);
 
 E list_t qlnlist;
 
-E qline_t *qline_add(char *mask, char *reason, long duration);
+E qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
 E void qline_delete(const char *mask);
 E qline_t *qline_find(const char *mask);
 E qline_t *qline_find_num(unsigned int number);

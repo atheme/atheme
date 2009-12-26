@@ -285,8 +285,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	k = kline_add(kuser, khost, reason, duration);
-	k->setby = sstrdup(get_storage_oper_name(si));
+	k = kline_add(kuser, khost, reason, duration, get_storage_oper_name(si));
 
 	if (duration)
 		command_success_nodata(si, _("Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s."), k->user, k->host, timediff(duration));

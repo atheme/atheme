@@ -254,8 +254,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	q = qline_add(target, reason, duration);
-	q->setby = sstrdup(get_storage_oper_name(si));
+	q = qline_add(target, reason, duration, get_storage_oper_name(si));
 
 	if (duration)
 		command_success_nodata(si, _("Timed SQLINE on \2%s\2 was successfully added and will expire in %s."), q->mask, timediff(duration));

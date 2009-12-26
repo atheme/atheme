@@ -118,7 +118,7 @@ void remove_illegals()
  * K L I N E *
  *************/
 
-kline_t *kline_add(char *user, char *host, char *reason, long duration)
+kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
 {
 	kline_t *k;
 	node_t *n = node_create();
@@ -132,6 +132,7 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 	k->user = sstrdup(user);
 	k->host = sstrdup(host);
 	k->reason = sstrdup(reason);
+	k->setby = sstrdup(setby);
 	k->duration = duration;
 	k->settime = CURRTIME;
 	k->expires = CURRTIME + duration;
@@ -252,7 +253,7 @@ void kline_expire(void *arg)
  * X L I N E *
  *************/
 
-xline_t *xline_add(char *realname, char *reason, long duration)
+xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby)
 {
 	xline_t *x;
 	node_t *n = node_create();
@@ -266,6 +267,7 @@ xline_t *xline_add(char *realname, char *reason, long duration)
 
 	x->realname = sstrdup(realname);
 	x->reason = sstrdup(reason);
+	x->setby = sstrdup(setby);
 	x->duration = duration;
 	x->settime = CURRTIME;
 	x->expires = CURRTIME + duration;
@@ -388,7 +390,7 @@ void xline_expire(void *arg)
  * Q L I N E *
  *************/
 
-qline_t *qline_add(char *mask, char *reason, long duration)
+qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby)
 {
 	qline_t *q;
 	node_t *n = node_create();
@@ -401,6 +403,7 @@ qline_t *qline_add(char *mask, char *reason, long duration)
 
 	q->mask = sstrdup(mask);
 	q->reason = sstrdup(reason);
+	q->setby = sstrdup(setby);
 	q->duration = duration;
 	q->settime = CURRTIME;
 	q->expires = CURRTIME + duration;

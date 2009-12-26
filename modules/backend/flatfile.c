@@ -941,11 +941,10 @@ static void flatfile_db_load(void)
 
 			strip(reason);
 
-			k = kline_add(user, host, reason, duration);
+			k = kline_add(user, host, reason, duration, setby);
 			k->settime = settime;
 			/* XXX this is not nice, oh well -- jilles */
 			k->expires = k->settime + k->duration;
-			k->setby = sstrdup(setby);
 
 			kin++;
 		}
@@ -971,12 +970,11 @@ static void flatfile_db_load(void)
 
 			strip(reason);
 
-			x = xline_add(realname, reason, duration);
+			x = xline_add(realname, reason, duration, setby);
 			x->settime = settime;
 
 			/* XXX this is not nice, oh well -- jilles */
 			x->expires = x->settime + x->duration;
-			x->setby = sstrdup(setby);
 
 			xin++;
 		}
@@ -1002,12 +1000,11 @@ static void flatfile_db_load(void)
 
 			strip(reason);
 
-			q = qline_add(mask, reason, duration);
+			q = qline_add(mask, reason, duration, setby);
 			q->settime = settime;
 
 			/* XXX this is not nice, oh well -- jilles */
 			q->expires = q->settime + q->duration;
-			q->setby = sstrdup(setby);
 
 			qin++;
 		}

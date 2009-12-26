@@ -905,8 +905,7 @@ int floodcheck(user_t *u, user_t *t)
 				kline_t *k;
 
 				/* kline them the third time */
-				k = kline_add("*", u->host, "ten minute ban - flooding services", 600);
-				k->setby = sstrdup(chansvs.nick);
+				k = kline_add("*", u->host, "ten minute ban - flooding services", 600, chansvs.nick);
 
 				snoop("FLOOD:KLINE: \2%s\2", u->nick);
 
