@@ -51,7 +51,9 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strchr(server, '.'))
+	/* Disallow * in a jupe as a minimal sanity check; it makes it hard to
+	 * squit safely. */
+	if (!strchr(server, '.') || strchr(server, '*') || strchr(server, '?'))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid server name."), server);
 		return;
