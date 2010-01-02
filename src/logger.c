@@ -48,7 +48,7 @@ static void logfile_delete_channel(void *vdata)
 	logfile_unregister(lf);
 
 	if (opersvs.nick != NULL)
-		part(opersvs.nick, lf->log_path);
+		part(lf->log_path, opersvs.nick);
 
 	free(lf->log_path);
 	metadata_delete_all(lf);
@@ -188,17 +188,19 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 #ifdef FD_CLOEXEC
 		fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
+		lf->log_path = sstrdup(path);
 		lf->write_func = logfile_write;
 	}
 	else if (opersvs.nick != NULL)
 	{
 		object_init(object(lf), path, logfile_delete_channel);
 
+		lf->log_path = sstrdup(path);
 		lf->write_func = logfile_write_irc;
-		join(opersvs.nick, path);
+
+		join(lf->log_path, opersvs.nick);
 	}
 
-	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
 
 	logfile_register(lf);
