@@ -29,13 +29,27 @@ int log_force;
 static list_t log_files = { NULL, NULL, 0 };
 
 /* private destructor function for logfile_t. */
-static void logfile_delete(void *vdata)
+static void logfile_delete_file(void *vdata)
 {
 	logfile_t *lf = (logfile_t *) vdata;
 
 	logfile_unregister(lf);
 
 	fclose(lf->log_file);
+	free(lf->log_path);
+	metadata_delete_all(lf);
+	free(lf);
+}
+
+static void logfile_delete_channel(void *vdata)
+{
+	logfile_t *lf = (logfile_t *) vdata;
+
+	logfile_unregister(lf);
+
+	if (opersvs.nick != NULL)
+		part(opersvs.nick, lf->log_path);
+
 	free(lf->log_path);
 	metadata_delete_all(lf);
 	free(lf);
@@ -72,6 +86,30 @@ void logfile_write(logfile_t *lf, const char *buf)
 
 	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, buf);
 	fflush((FILE *) lf->log_file);
+}
+
+/*
+ * logfile_write_irc(logfile_t *lf, const char *buf)
+ *
+ * Writes an I/O stream to an IRC target.
+ *
+ * Inputs:
+ *       - logfile_t representing the I/O stream.
+ *       - data to write to the IRC target
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - none
+ */
+void logfile_write_irc(logfile_t *lf, const char *buf)
+{
+	return_if_fail(lf != NULL);
+	return_if_fail(lf->log_path != NULL);
+	return_if_fail(buf != NULL);
+
+	msg(opersvs.nick, lf->log_path, "%s", buf);
 }
 
 /*
@@ -132,25 +170,36 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 	static time_t lastfail = 0;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
-	object_init(object(lf), path, logfile_delete);
-	if ((lf->log_file = fopen(path, "a")) == NULL)
+	if (*path != '#')
 	{
-		free(lf);
-
-		if (me.connected && lastfail + 3600 < CURRTIME)
+		object_init(object(lf), path, logfile_delete_file);
+		if ((lf->log_file = fopen(path, "a")) == NULL)
 		{
-			lastfail = CURRTIME;
-			wallops(_("Could not open log file (%s), log entries will be missing!"), strerror(errno));
-		}
+			free(lf);
 
-		return NULL;
-	}
+			if (me.connected && lastfail + 3600 < CURRTIME)
+			{
+				lastfail = CURRTIME;
+				wallops(_("Could not open log file (%s), log entries will be missing!"), strerror(errno));
+			}
+
+			return NULL;
+		}
 #ifdef FD_CLOEXEC
-	fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
+		fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
+		lf->write_func = logfile_write;
+	}
+	else if (opersvs.nick != NULL)
+	{
+		object_init(object(lf), path, logfile_delete_channel);
+
+		lf->write_func = logfile_write_irc;
+		join(opersvs.nick, path);
+	}
+
 	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
-	lf->write_func = logfile_write;
 
 	logfile_register(lf);
 
