@@ -136,7 +136,8 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
 
-	msg(opersvs.nick, lf->log_path, "%s", buf);
+	if (lf->channel_joined == false)
+		msg(opersvs.nick, lf->log_path, "%s", buf);
 }
 
 /*
