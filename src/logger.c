@@ -55,6 +55,33 @@ static void logfile_delete_channel(void *vdata)
 	free(lf);
 }
 
+static void logfile_join_channels(hook_channel_joinpart_t *hdata)
+{
+	channel_t *c;
+	node_t *n;
+
+	return_if_fail(hdata != NULL);
+	return_if_fail(hdata->cu != NULL);
+
+	c = hdata->cu->chan;
+
+	if (opersvs.nick == NULL)
+		return;
+
+	LIST_FOREACH(n, log_files.head)
+	{
+		logfile_t *lf = n->data;
+
+		if (!irccasecmp(c->name, lf->log_path))
+		{
+			if (lf->channel_joined)
+				return;
+
+			join(lf->log_path, opersvs.nick);
+		}
+	}
+}
+
 /*
  * logfile_write(logfile_t *lf, const char *buf)
  *
@@ -167,6 +194,7 @@ void logfile_unregister(logfile_t *lf)
  */
 logfile_t *logfile_new(const char *path, unsigned int log_mask)
 {
+	static bool hooked = false;
 	static time_t lastfail = 0;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
@@ -191,14 +219,19 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		lf->log_path = sstrdup(path);
 		lf->write_func = logfile_write;
 	}
-	else if (opersvs.nick != NULL)
+	else
 	{
 		object_init(object(lf), path, logfile_delete_channel);
 
 		lf->log_path = sstrdup(path);
 		lf->write_func = logfile_write_irc;
 
-		join(lf->log_path, opersvs.nick);
+		if (!hooked)
+		{
+			hook_add_event("channel_join");
+			hook_add_channel_join(logfile_join_channels);
+			hooked = true;
+		}
 	}
 
 	lf->log_mask = log_mask;

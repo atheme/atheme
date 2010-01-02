@@ -57,6 +57,8 @@ struct logfile_ {
 	unsigned int log_mask;
 
 	log_write_func_t write_func;
+
+	bool channel_joined;
 };
 
 E char *log_path; /* contains path to default log. */
