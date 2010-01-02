@@ -84,6 +84,47 @@ static void logfile_join_channels(hook_channel_joinpart_t *hdata)
 }
 
 /*
+ * logfile_strip_control_codes(const char *buf)
+ *
+ * Duplicates a string, stripping control codes in the
+ * process.
+ *
+ * Inputs:
+ *       - buffer to strip
+ *
+ * Outputs:
+ *       - duplicated buffer without control codes
+ *
+ * Side Effects:
+ *       - none
+ */
+static const char *
+logfile_strip_control_codes(const char *buf)
+{
+	static char outbuf[BUFSIZE];
+	const char *in = buf;
+	char *out = outbuf;
+
+	for (; *in != '\0'; in++)
+	{
+		if (*in > 31)
+		{
+			*out++ = *in;
+			continue;
+		}
+		else if (*in == 3)
+		{
+			in++;
+			while (isdigit(*in))
+				in++;
+		}
+	}
+
+	*out = '\0';
+	return outbuf;
+}
+
+/*
  * logfile_write(logfile_t *lf, const char *buf)
  *
  * Writes an I/O stream to a static file.
@@ -112,7 +153,7 @@ void logfile_write(logfile_t *lf, const char *buf)
 	tm = *localtime(&t);
 	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
 
-	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, buf);
+	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, logfile_strip_control_codes(buf));
 	fflush((FILE *) lf->log_file);
 }
 
