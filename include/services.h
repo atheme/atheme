@@ -175,7 +175,7 @@ E void joinall(char *name);
 E void part(char *chan, char *nick);
 E void partall(char *name);
 E void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
-E void snoop(const char *fmt, ...) PRINTFLIKE(1, 2);
+E void snoop(const char *fmt, ...) PRINTFLIKE(1, 2) DEPRECATED;
 E void notice(const char *from, const char *to, const char *message, ...) PRINTFLIKE(3, 4);
 E void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
 E bool bad_password(sourceinfo_t *si, myuser_t *mu);
