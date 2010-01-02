@@ -78,6 +78,7 @@ static void logfile_join_channels(hook_channel_joinpart_t *hdata)
 				return;
 
 			join(lf->log_path, opersvs.nick);
+			lf->channel_joined = true;
 		}
 	}
 }
