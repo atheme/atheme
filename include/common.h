@@ -117,9 +117,12 @@ typedef enum faultcode_ faultcode_t;
 	__attribute__((__format__ (__printf__, fmtarg, firstvararg)))
 #define SCANFLIKE(fmtarg, firstvararg) \
 	__attribute__((__format__ (__scanf__, fmtarg, firstvararg)))
+#define DEPRECATED \
+	__attribute__((deprecated))
 #else
 #define PRINTFLIKE(fmtarg, firstvararg)
 #define SCANFLIKE(fmtarg, firstvararg)
+#define DEPRECATED
 #endif /* defined(__INTEL_COMPILER) || defined(__GNUC__) */
 
 /* Causes a warning if value is not of type (or compatible), returning value. */
