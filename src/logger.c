@@ -234,6 +234,12 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 			hook_add_channel_join(logfile_join_channels);
 			hooked = true;
 		}
+
+		if (me.connected)
+		{
+			join(lf->log_path, opersvs.nick);
+			lf->channel_joined = true;
+		}
 	}
 
 	lf->log_mask = log_mask;
