@@ -302,7 +302,7 @@ build_maze(int size)
 		if (wumpus.rmemctx[j].exits.count < 3)
 		{
 			slog(LG_DEBUG, "wumpus: sanity checking failed");
-			return;
+			return false;
 		}
 
 	slog(LG_DEBUG, "wumpus: built maze");
@@ -449,7 +449,7 @@ shoot_player(player_t *p, int target_id)
 
 	if (adjacent_room(p, target_id) == false)
 	{
-		notice(wumpus_cfg.nick, p->u->nick, "You can't shoot into room %d from here.");
+		notice(wumpus_cfg.nick, p->u->nick, "You can't shoot into room %d from here.", target_id);
 		return;
 	}
 
@@ -740,16 +740,16 @@ move_player(player_t *p, int id)
 
 /* ------------------------------ -*-atheme-*- code */
 
-void cmd_start(char *origin)
+void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (wumpus.running || wumpus.starting)
 	{
-		notice(wumpus_cfg.nick, origin, "A game is already in progress. Sorry.");
+		notice(wumpus_cfg.nick, si->su->nick, "A game is already in progress. Sorry.");
 		return;
 	}
 
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has started the game! Use \2/msg Wumpus JOIN\2 to play! You have\2 60 seconds\2.",
-		origin);
+		si->su->nick);
 
 	wumpus.starting = true;
 
@@ -757,95 +757,95 @@ void cmd_start(char *origin)
 }
 
 /* reference tuple for the above code: cmd_start */
-command_t wumpus_start = { "START", "Starts the game.", AC_NONE, cmd_start };
+command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 0, cmd_start };
 
-void cmd_join(char *origin)
+void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p;
 
 	if (!wumpus.starting || wumpus.running)
 	{
-		notice(wumpus_cfg.nick, origin, "You cannot use this command right now. Sorry.");
+		notice(wumpus_cfg.nick, si->su->nick, "You cannot use this command right now. Sorry.");
 		return;
 	}
 
-	p = create_player(user_find_named(origin));
+	p = create_player(si->su);
 
 	if (p)
-		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", origin);
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", si->su->nick);
 }
 
-command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, cmd_join };
+command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, 0, cmd_join };
 
-void cmd_move(char *origin)
+void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 {
-	player_t *p = find_player(user_find_named(origin));
-	char *id = strtok(NULL, " ");
+	player_t *p = find_player(si->su);
+	char *id = parv[0];
 
 	if (!p)
 	{
-		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "You must be playing the game in order to use this command.");
 		return;
 	}
 
 	if (!id)
 	{
-		notice(wumpus_cfg.nick, origin, "You must provide a room to move to.");
+		notice(wumpus_cfg.nick, si->su->nick, "You must provide a room to move to.");
 		return;
 	}
 
 	if (!wumpus.running)
 	{
-		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "The game must be running in order to use this command.");
 		return;
 	}
 
 	move_player(p, atoi(id));
 }
 
-command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, cmd_move };
+command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, 1, cmd_move };
 
-void cmd_shoot(char *origin)
+void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
 {
-	player_t *p = find_player(user_find_named(origin));
-	char *id = strtok(NULL, " ");
+	player_t *p = find_player(si->su);
+	char *id = parv[0];
 
 	if (!p)
 	{
-		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "You must be playing the game in order to use this command.");
 		return;
 	}
 
 	if (!id)
 	{
-		notice(wumpus_cfg.nick, origin, "You must provide a room to shoot at.");
+		notice(wumpus_cfg.nick, si->su->nick, "You must provide a room to shoot at.");
 		return;
 	}
 
 	if (!wumpus.running)
 	{
-		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "The game must be running in order to use this command.");
 		return;
 	}
 
 	shoot_player(p, atoi(id));
 }
 
-command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, cmd_shoot };
+command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, 1, cmd_shoot };
 
-void cmd_resign(char *origin)
+void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
 {
-	player_t *p = find_player(user_find_named(origin));
+	player_t *p = find_player(si->su);
 
 	if (!p)
 	{
-		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "You must be playing the game in order to use this command.");
 		return;
 	}
 
 	if (!wumpus.running)
 	{
-		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
+		notice(wumpus_cfg.nick, si->su->nick, "The game must be running in order to use this command.");
 		return;
 	}
 
@@ -854,13 +854,13 @@ void cmd_resign(char *origin)
 	resign_player(p);
 }
 
-command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, cmd_resign };
+command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, 0, cmd_resign };
 
-void cmd_reset(char *origin)
+void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (wumpus.running)
 	{
-		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has ended the game.", origin);
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has ended the game.", si->su->nick);
 
 		end_game();
 
@@ -869,36 +869,35 @@ void cmd_reset(char *origin)
 	}
 }
 
-command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, cmd_reset };
+command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset };
 
-void cmd_help(char *origin)
+void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
-	command_help(wumpus.svs->name, origin, &wumpus.cmdtree);
+	command_help(si, &wumpus.cmdtree);
 }
 
-command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, cmd_help };
+command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help };
 
-void cmd_who(char *origin)
+void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 
-	notice(wumpus_cfg.nick, origin, "The following people are playing:");
+	notice(wumpus_cfg.nick, si->su->nick, "The following people are playing:");
 
 	LIST_FOREACH(n, wumpus.players.head)
 	{
 		player_t *p = (player_t *) n->data;
 
-		notice(wumpus_cfg.nick, origin, "- %s", p->u->nick);
+		notice(wumpus_cfg.nick, si->su->nick, "- %s", p->u->nick);
 	}
 }
 
-command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, cmd_who };
+command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, 0, cmd_who };
 
 /* removes quitting players */
 void
-user_deleted(void *vptr)
+user_deleted(user_t *u)
 {
-	user_t *u = (user_t *) vptr;
 	player_t *p;
 
 	if ((p = find_player(u)) != NULL)
@@ -909,9 +908,10 @@ user_deleted(void *vptr)
 }
 
 void
-_handler(char *origin, int parc, char *parv[])
+_handler(sourceinfo_t *si, int parc, char *parv[])
 {
         char *cmd;
+	char *text;
         char orig[BUFSIZE];
 
         /* this should never happen */
@@ -926,19 +926,20 @@ _handler(char *origin, int parc, char *parv[])
 
         /* lets go through this to get the command */
         cmd = strtok(parv[parc - 1], " ");
+	text = strtok(NULL, "");
 
         if (!cmd)
                 return;
 
         /* take the command through the hash table */
-        command_exec(wumpus.svs, origin, cmd, &wumpus.cmdtree);
+        command_exec_split(wumpus.svs, si, cmd, text, &wumpus.cmdtree);
 }
 
 void
 burst_the_wumpus(void *unused)
 {
 	if (!wumpus.svs)
-		wumpus.svs = add_service(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, _handler);
+		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, _handler, &wumpus.cmdtree);
 	
 	join(wumpus_cfg.chan, wumpus_cfg.nick);	/* what if we're not ready? then this is a NOOP */
 }
@@ -975,7 +976,7 @@ _moddeinit(void)
 	if (wumpus.running)
 		end_game();
 
-	del_service(wumpus.svs);
+	service_delete(wumpus.svs);
 
 	hook_del_user_delete(user_deleted);
 

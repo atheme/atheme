@@ -76,7 +76,8 @@ SRCS =					\
 	$(SRCDIR)/os_logonnews.c	\
 	$(SRCDIR)/os_logstream.c	\
 	$(SRCDIR)/os_savechanmodes.c	\
-	$(SRCDIR)/os_tabletest.c
+	$(SRCDIR)/os_tabletest.c	\
+	$(SRCDIR)/wumpus.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
 # Note: anope_convert.c cannot be compiled with this Makefile as it is
