@@ -789,6 +789,15 @@ void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, 0, cmd_join };
 
+void cmd_look(sourceinfo_t *si, int parc, char *parv[])
+{
+	player_t *p = find_player(si->su);
+
+	look_player(p);
+}
+
+command_t wumpus_look = { "LOOK", "View surroundings.", AC_NONE, 0, cmd_look };
+
 void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
@@ -979,6 +988,7 @@ _modinit(module_t *m)
 	command_add(&wumpus_resign, &wumpus.cmdtree);
 	command_add(&wumpus_reset, &wumpus.cmdtree);
 	command_add(&wumpus_who, &wumpus.cmdtree);
+	command_add(&wumpus_look, &wumpus.cmdtree);
 }
 
 void
@@ -1000,6 +1010,7 @@ _moddeinit(void)
 	command_delete(&wumpus_resign, &wumpus.cmdtree);
 	command_delete(&wumpus_reset, &wumpus.cmdtree);
 	command_delete(&wumpus_who, &wumpus.cmdtree);
+	command_delete(&wumpus_look, &wumpus.cmdtree);
 
 	event_delete(move_wumpus, NULL);
 	event_delete(start_game, NULL);
