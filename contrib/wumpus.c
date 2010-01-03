@@ -230,7 +230,19 @@ build_maze(int size)
 
 			/* make sure this isn't a tunnel to itself */
 			while (t == r->id)
+			{
+				node_t *rn;
 				t = rand() % size;
+
+				/* also check that this path doesn't already exist. */
+				LIST_FOREACH(rn, r->exits.head)
+				{
+					room_t *rm = (room_t *) rn->data;
+
+					if (rm->id == t)
+						t = r->id;
+				}
+			}
 
 			slog(LG_DEBUG, "wumpus: creating link for route %d -> %d", i, t);
 			node_add(&wumpus.rmemctx[t], node_create(), &r->exits);
