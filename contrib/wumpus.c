@@ -173,6 +173,8 @@ create_player(user_t *u)
 	p->hp = 30;
 
 	node_add(p, node_create(), &wumpus.players);
+
+	return p;
 }
 
 /* destroys a player object and removes them from the game */
