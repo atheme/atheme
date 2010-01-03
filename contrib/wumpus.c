@@ -793,6 +793,12 @@ void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 
+	if (!p)
+	{
+		notice(wumpus_cfg.nick, si->su->nick, "You must be playing the game in order to use this command.");
+		return;
+	}
+
 	look_player(p);
 }
 
