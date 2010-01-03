@@ -540,6 +540,25 @@ shoot_player(player_t *p, int target_id)
 /* move_wumpus depends on this */
 void regen_obj(int);
 
+/* check for last-man-standing win condition. */
+void
+check_last_person_alive(void)
+{
+	if (wumpus.players.count == 1)
+	{
+		player_t *p = (player_t *) wumpus.players.head->data;
+
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "%s won the game! Congratulations!", p->u->nick);
+
+		end_game();
+	}
+	else if (wumpus.players.count == 0)
+	{	
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Everyone lost. Sucks. :(");
+		end_game();
+	}
+}
+
 /* move the wumpus, the wumpus moves every 60 seconds */
 void
 move_wumpus(void *unused)
@@ -621,19 +640,7 @@ move_wumpus(void *unused)
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "You hear the screams of %d surprised adventurer%s.", w_kills,
 			w_kills != 1 ? "s" : "");
 
-	if (wumpus.players.count == 1)
-	{
-		player_t *p = (player_t *) wumpus.players.head->data;
-
-		msg(wumpus_cfg.nick, wumpus_cfg.chan, "%s won the game! Congratulations!", p->u->nick);
-
-		end_game();
-	}
-	else if (wumpus.players.count == 0)
-	{	
-		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Everyone lost. Sucks. :(");
-		end_game();
-	}
+	check_last_person_alive();
 }
 
 /* regenerates objects */
@@ -681,6 +688,7 @@ move_player(player_t *p, int id)
 
 		/* player_t *p has been killed by the wumpus, remove him from the game */
 		resign_player(p);
+		check_last_person_alive();
 		return;
 	}
 
@@ -692,6 +700,7 @@ move_player(player_t *p, int id)
 
 		/* player_t *p has fallen down a hole, remove him from the game */
 		resign_player(p);
+		check_last_person_alive();
 		return;
 	}
 
@@ -717,7 +726,7 @@ move_player(player_t *p, int id)
 	{
 		notice(wumpus_cfg.nick, p->u->nick, "You find a strange pulsating crystal ball. You examine it, and it shows room %d with the wumpus in it.",
 			wumpus.wumpus);
-		notice(wumpus_cfg.nick, p->u->nick, "The crystal ball then vanishes into the misama.");
+		notice(wumpus_cfg.nick, p->u->nick, "The crystal ball then vanishes into the miasma.");
 
 		wumpus.rmemctx[id].contents = E_NOTHING;
 		wumpus.rmemctx[rand() % wumpus.mazesize].contents = E_CRYSTALBALL;
