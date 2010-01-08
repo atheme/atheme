@@ -61,7 +61,9 @@ static void logfile_join_channels(hook_channel_joinpart_t *hdata)
 	node_t *n;
 
 	return_if_fail(hdata != NULL);
-	return_if_fail(hdata->cu != NULL);
+
+	if (hdata->cu == NULL)
+		return;
 
 	c = hdata->cu->chan;
 
