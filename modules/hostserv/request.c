@@ -269,7 +269,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 			snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", get_source_name(si), host);
-			logcommand(si, CMDLOG_SET, "REQUEST %s", host);
+			logcommand(si, CMDLOG_REQUEST, "REQUEST %s", host);
 			return;
 		}
 	}
@@ -287,7 +287,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 	snoop("VHOST:REQUEST: \2%s\2 requested \2%s\2", get_source_name(si), host);
-	logcommand(si, CMDLOG_SET, "REQUEST %s", host);
+	logcommand(si, CMDLOG_REQUEST, "REQUEST %s", host);
 
 	return;
 }
@@ -322,7 +322,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			else if ((u = user_find_named(nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
 			/* VHOSTNICK command below will generate snoop */
-			logcommand(si, CMDLOG_ADMIN, "ACTIVATE %s for %s", l->vhost, nick);
+			logcommand(si, CMDLOG_REQUEST, "ACTIVATE %s for %s", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
 			node_del(n, &hs_reqlist);
@@ -372,7 +372,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			snoop("VHOST:REJECT: \2%s\2 for \2%s\2 by \2%s\2",
 					l->vhost, nick, get_oper_name(si));
-			logcommand(si, CMDLOG_ADMIN, "REJECT %s for %s", l->vhost, nick);
+			logcommand(si, CMDLOG_REQUEST, "REJECT %s for %s", l->vhost, nick);
 
 			node_del(n, &hs_reqlist);
 			free(l->nick);

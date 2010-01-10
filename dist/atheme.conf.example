@@ -598,6 +598,7 @@ serverinfo {
 	 *	admin		- administrative command use
 	 *	register	- account and channel registrations
 	 *	set		- changes of account or channel settings
+	 *  request		- user requests (currently only vhosts)
 	 *	network		- log notices related to network status
 	 *	rawdata		- log raw data sent and received by services
 	 *	wallops		- <not yet used>
@@ -1151,6 +1152,7 @@ ldap {
  *	admin			- administrative command use
  *	register		- account and channel registrations
  *	set			- changes of account or channel settings
+ *	request			- user requests (currently only vhosts)
  *	network			- log notices related to network status
  *	rawdata			- log raw data sent and received by services
  *	wallops			- <not yet used>
@@ -1172,7 +1174,7 @@ logfile "var/commands.log" { commands; };
  * This entry provides roughly the same functionality as the old snoop
  * feature.
  */
-logfile "#services" { error; info; admin; network; commands; };
+logfile "#services" { error; info; admin; network; request; commands; };
 
 /******************************************************************************
  * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *

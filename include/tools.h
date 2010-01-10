@@ -82,6 +82,7 @@ E void logfile_unregister(logfile_t *lf);
 #define LG_CMD_DO       0x00000800 /* change properties of dynamic data */
 #define LG_CMD_LOGIN    0x00001000 /* login/logout */
 #define LG_CMD_GET      0x00002000 /* query information */
+#define LG_CMD_REQUEST	0x00004000 /* requests made by users */
 /* other */
 #define LG_NETWORK      0x00010000 /* netsplit/netjoin */
 #define LG_WALLOPS      0x00020000 /* NOTYET wallops from opers/other servers */
@@ -97,6 +98,7 @@ E void logfile_unregister(logfile_t *lf);
 #define CMDLOG_ADMIN    LG_CMD_ADMIN
 #define CMDLOG_REGISTER (LG_CMD_REGISTER | LG_REGISTER)
 #define CMDLOG_SET      LG_CMD_SET
+#define CMDLOG_REQUEST	LG_CMD_REQUEST
 #define CMDLOG_DO       LG_CMD_DO
 #define CMDLOG_LOGIN    LG_CMD_LOGIN
 #define CMDLOG_GET      LG_CMD_GET

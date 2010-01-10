@@ -95,6 +95,7 @@ static struct Token logflags[] = {
   { "ADMIN",       LG_CMD_ADMIN                                                                               },
   { "REGISTER",    LG_CMD_REGISTER | LG_REGISTER                                                              },
   { "SET",         LG_CMD_SET                                                                                 },
+  { "REQUEST",     LG_CMD_REQUEST									      },
   { "NETWORK",     LG_NETWORK                                                                                 },
   { "WALLOPS",     LG_WALLOPS                                                                                 },
   { "RAWDATA",     LG_RAWDATA                                                                                 },
