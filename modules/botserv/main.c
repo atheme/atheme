@@ -434,7 +434,7 @@ void botserv_save_database(void *unused)
 	if (!(f = fopen(DATADIR "/botserv.db.new", "w")))
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "botserv_save_database(): cannot create botserv.db.new: %s", strerror(errno1));
+		slog(LG_INFO, "botserv_save_database(): cannot create botserv.db.new: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
 		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
 		return;
@@ -459,7 +459,7 @@ void botserv_save_database(void *unused)
 	if ((rename(DATADIR "/botserv.db.new", DATADIR "/botserv.db")) < 0)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s", strerror(errno1));
+		slog(LG_INFO, "botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
 		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
 		return;
@@ -510,7 +510,7 @@ static void botserv_load_database(void)
 			i = atoi(strtok(NULL, " "));
 			if (i > 1)
 			{
-				slog(LG_INFO, "botserv_load_database(): database version is %d; I only understand v1.", i);
+				slog(LG_ERROR, "botserv_load_database(): database version is %d; I only understand v1.", i);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -520,7 +520,7 @@ static void botserv_load_database(void)
 		{
 			i = atoi(strtok(NULL, " "));
 			if ((unsigned int)i != LIST_LENGTH(&bs_bots))
-				slog(LG_INFO, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
+				slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
 		}
 
 		/* a botserv bot */
@@ -538,7 +538,7 @@ static void botserv_load_database(void)
 
 			if (nick == NULL || user == NULL || host == NULL || prv == NULL || reg == NULL || real == NULL)
 			{
-				slog(LG_INFO, "botserv_load_database(): missing metadata for bot, skipping");
+				slog(LG_ERROR, "botserv_load_database(): missing metadata for bot, skipping");
 				continue;
 			}
 
