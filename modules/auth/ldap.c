@@ -53,7 +53,7 @@ static void ldap_config_ready(void *unused)
 				ldap_config.url, ldap_err2string(res));
 		if (CURRTIME > lastwarning + 300)
 		{
-			snoop("LDAP:ERROR: %s", ldap_err2string(res));
+			slog(LG_INFO, "LDAP:ERROR: \2%s\2", ldap_err2string(res));
 			wallops("Problem with LDAP server: %s", ldap_err2string(res));
 			lastwarning = CURRTIME;
 		}
@@ -105,7 +105,7 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 			dn, ldap_err2string(res));
 	if (CURRTIME > lastwarning + 300)
 	{
-		snoop("LDAP:ERROR: %s", ldap_err2string(res));
+		slog(LG_INFO, "LDAP:ERROR: %s", ldap_err2string(res));
 		wallops("Problem with LDAP server: %s", ldap_err2string(res));
 		lastwarning = CURRTIME;
 	}
