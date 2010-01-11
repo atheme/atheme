@@ -84,7 +84,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", chanpattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 by \2%s\2 (%d matches)", chanpattern, get_oper_name(si), matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No channel matched pattern \2%s\2"), chanpattern);
 	else

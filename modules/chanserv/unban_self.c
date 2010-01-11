@@ -111,7 +111,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			tn = n->next;
 			cb = n->data;
 
-			logcommand(si, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
+			logcommand(si, CMDLOG_DO, "UNBAN: \2%s\2 \2%s\2 (for user \2%s\2)", mc->name, cb->mask, hostbuf2);
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 			count++;

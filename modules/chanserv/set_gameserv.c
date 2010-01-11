@@ -82,7 +82,7 @@ static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("\2%s\2 is already set to %s for \2%s\2."), "GAMESERV", val, mc->name);
 			return;
 		}
-		logcommand(si, CMDLOG_SET, "%s SET GAMESERV %s", mc->name, val);
+		logcommand(si, CMDLOG_SET, "SET:GAMESERV: \2%s\2 to \2%s\2", mc->name, val);
 
 		metadata_add(mc, "gameserv", val);
 
@@ -98,7 +98,7 @@ static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET GAMESERV OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:GAMESERV:OFF: \2%s\2", mc->name);
 
 		metadata_delete(mc, "gameserv");
 

@@ -139,7 +139,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	wallops("\2%s\2 is forcing flags change \2%s\2 on \2%s\2 in \2%s\2.", get_oper_name(si), flagstr, target, mc->name);
 	snoop("FFLAGS: \2%s\2 \2%s\2 \2%s\2 by \2%s\2", channel, target, flagstr, get_oper_name(si));
 	command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
-	logcommand(si, CMDLOG_ADMIN, "%s FFLAGS %s %s", mc->name, target, flagstr);
+	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 \2%s\2 \2%s\2 by \2%s\2", mc->name, target, flagstr, get_oper_name(si));
 	verbose(mc, "\2%s\2 forced flags change \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 }
 

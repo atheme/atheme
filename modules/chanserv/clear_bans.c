@@ -107,8 +107,8 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	if (hits > 4)
 		command_add_flood(si, FLOOD_MODERATE);
 
-	logcommand(si, CMDLOG_DO, "%s CLEAR BANS %s",
-			mc->name, item);
+	logcommand(si, CMDLOG_DO, "CLEAR:BANS: \2%s\2 on \2%s\2",
+			item, mc->name);
 
 	command_success_nodata(si, _("Cleared %s modes on \2%s\2 (%d removed)."),
 			item, parv[0], hits);

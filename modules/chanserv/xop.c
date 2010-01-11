@@ -272,13 +272,13 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		if (!isnew)
 		{
 			/* they have access? change it! */
-			logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
+			logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), target, mc->name, leveldesc);
 			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), target, leveldesc);
 		}
 		else
 		{
-			logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
+			logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), target, leveldesc, mc->name);
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
 		}
@@ -395,14 +395,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	if (!isnew)
 	{
 		/* they have access? change it! */
-		logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, mu->name);
 		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mu->name, mc->name, leveldesc);
 		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mu->name, leveldesc);
 	}
 	else
 	{
 		/* they have no access, add */
-		logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, mu->name);
 		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
 	}
@@ -485,7 +485,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 		object_unref(ca);
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
-		logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
+		logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, target);
 		command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), target, leveldesc, mc->name);
 		return;
 	}
@@ -498,7 +498,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	object_unref(ca);
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
-	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
+	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mu->name);
 	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mu->name, leveldesc);
 }
 
@@ -526,9 +526,9 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 	/* XXX */
 	command_success_nodata(si, _("Total of \2%d\2 %s in %s list of \2%s\2."), i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
+		logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 \2%s\2 (oper override)", mc->name, leveldesc);
 	else
-		logcommand(si, CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
+		logcommand(si, CMDLOG_GET, "LIST: \2%s\2 \2%s\2", mc->name, leveldesc);
 }
 
 static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
@@ -615,7 +615,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
 	if (changes > 0)
 		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", get_source_name(si), changes);
-	logcommand(si, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);
+	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

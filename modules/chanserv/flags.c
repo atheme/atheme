@@ -158,9 +158,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
 		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", mc->name);
 		else
-			logcommand(si, CMDLOG_GET, "%s FLAGS", mc->name);
+			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", mc->name);
 	}
 	else
 	{
@@ -202,7 +202,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				command_success_string(si, "", _("No flags for \2%s\2 in \2%s\2."),
 						target, channel);
-			logcommand(si, CMDLOG_GET, "%s FLAGS %s", mc->name, target);
+			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2 on \2%s\2", mc->name, target);
 			return;
 		}
 
@@ -348,7 +348,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
-		logcommand(si, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
+		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 	}
 }

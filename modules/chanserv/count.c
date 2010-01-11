@@ -128,9 +128,9 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, "%s", str);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "%s COUNT (oper override)", mc->name);
+		logcommand(si, CMDLOG_ADMIN, "COUNT: \2%s\2 (oper override)", mc->name);
 	else
-		logcommand(si, CMDLOG_GET, "%s COUNT", mc->name);
+		logcommand(si, CMDLOG_GET, "COUNT: \2%s\2", mc->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

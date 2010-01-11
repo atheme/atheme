@@ -70,9 +70,9 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (isoper)
-		logcommand(si, CMDLOG_ADMIN, "%s TAXONOMY (oper)", mc->name);
+		logcommand(si, CMDLOG_ADMIN, "TAXONOMY: \2%s\2 (oper)", mc->name);
 	else
-		logcommand(si, CMDLOG_GET, "%s TAXONOMY", mc->name);
+		logcommand(si, CMDLOG_GET, "TAXONOMY: \2%s\2", mc->name);
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), target);
 
 	LIST_FOREACH(n, object(mc)->metadata.head)

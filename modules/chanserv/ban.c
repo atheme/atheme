@@ -98,7 +98,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 	{
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', target);
 		chanban_add(c, target, 'b');
-		logcommand(si, CMDLOG_DO, "%s BAN %s", mc->name, target);
+		logcommand(si, CMDLOG_DO, "BAN: \2%s\2 on \2%s\2", target, mc->name);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Banned \2%s\2 on \2%s\2."), target, channel);
 		return;
@@ -114,7 +114,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');
-		logcommand(si, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
+		logcommand(si, CMDLOG_DO, "BAN: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Banned \2%s\2 on \2%s\2."), target, channel);
 		return;
@@ -190,7 +190,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			tn = n->next;
 			cb = n->data;
 
-			logcommand(si, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
+			logcommand(si, CMDLOG_DO, "UNBAN: \2%s\2 on \2%s\2 (for user \2%s\2)", cb->mask, mc->name, hostbuf2);
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 			count++;
@@ -208,7 +208,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 		{
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'b', target);
 			chanban_delete(cb);
-			logcommand(si, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
+			logcommand(si, CMDLOG_DO, "UNBAN: \2%s\2 on \2%s\2", target, mc->name);
 			if (!chanuser_find(mc->chan, si->su))
 				command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2."), target, channel);
 		}

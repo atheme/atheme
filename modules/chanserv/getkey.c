@@ -81,7 +81,7 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_key, _("\2%s\2 is not keyed."), mc->name);
 		return;
 	}
-	logcommand(si, CMDLOG_GET, "%s GETKEY", mc->name);
+	logcommand(si, CMDLOG_GET, "GETKEY: \2%s\2", mc->name);
 	command_success_string(si, mc->chan->key, _("Channel \2%s\2 key is: %s"),
 			mc->name, mc->chan->key);
 }

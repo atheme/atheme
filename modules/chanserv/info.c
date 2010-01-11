@@ -372,7 +372,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	hook_call_channel_info(&req);
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
-	logcommand(si, CMDLOG_GET, "%s INFO", mc->name);
+	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mc->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

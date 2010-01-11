@@ -160,7 +160,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_close(ca2);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
-			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
+			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", uname, mc->name);
 
 			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), uname, mc->name);
 
@@ -195,7 +195,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mu->name, mc->name);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mu->name);
-			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
+			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mu->name, mc->name);
 
 			return;
 		}
@@ -227,7 +227,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_close(ca);
 
 			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
-			logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
+			logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", uname, mc->name);
 
 			command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), uname, mc->name);
 
@@ -244,7 +244,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		chanacs_close(ca);
 
 		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mu->name, mc->name);
-		logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
+		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", mu->name, mc->name);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mu->name);
 
@@ -292,9 +292,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("Total of \2%d\2 %s in \2%s\2's AKICK list."), i, (i == 1) ? "entry" : "entries", mc->name);
 		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "AKICK:LIST: \2%s\2 (oper override)", mc->name);
 		else
-			logcommand(si, CMDLOG_GET, "%s AKICK LIST", mc->name);
+			logcommand(si, CMDLOG_GET, "AKICK:LIST: \2%s\2", mc->name);
 	}
 	else
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

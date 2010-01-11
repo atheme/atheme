@@ -185,7 +185,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', target);
 		cb = chanban_add(c, target, 'q');
 		notify_victims(si, c, cb, MTYPE_ADD);
-		logcommand(si, CMDLOG_DO, "%s QUIET %s", mc->name, target);
+		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", target, mc->name);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
 		return;
@@ -202,7 +202,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
 		cb = chanban_add(c, hostbuf, 'q');
 		notify_victims(si, c, cb, MTYPE_ADD);
-		logcommand(si, CMDLOG_DO, "%s QUIET %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
+		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
 		return;
@@ -278,7 +278,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			tn = n->next;
 			cb = n->data;
 
-			logcommand(si, CMDLOG_DO, "%s UNQUIET %s (for user %s)", mc->name, cb->mask, hostbuf2);
+			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2 (for user \2%s\2)", cb->mask, mc->name, hostbuf2);
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 			count++;
@@ -302,7 +302,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'q', target);
 			notify_victims(si, c, cb, MTYPE_DEL);
 			chanban_delete(cb);
-			logcommand(si, CMDLOG_DO, "%s UNQUIET %s", mc->name, target);
+			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target, mc->name);
 			if (!chanuser_find(mc->chan, si->su))
 				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2."), target, channel);
 		}

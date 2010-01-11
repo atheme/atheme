@@ -107,7 +107,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
-		logcommand(si, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
+		logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2 failed to drop (closed)", mc->name);
 		command_fail(si, fault_noprivs, _("The channel \2%s\2 is closed; it cannot be dropped."), mc->name);
 		return;
 	}
@@ -140,7 +140,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_REGISTER, "%s DROP", mc->name);
+	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 
 	snoop("DROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 
@@ -189,7 +189,7 @@ static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "%s FDROP", mc->name);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 	wallops("%s dropped the channel \2%s\2", get_oper_name(si), name);
 
 	snoop("FDROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));

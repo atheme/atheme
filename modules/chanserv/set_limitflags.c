@@ -69,7 +69,7 @@ static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET LIMITFLAGS ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:LIMITFLAGS:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_LIMITFLAGS;
 
@@ -86,7 +86,7 @@ static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET LIMITFLAGS OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:LIMITFLAGS:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_LIMITFLAGS;
 

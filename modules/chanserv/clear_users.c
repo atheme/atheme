@@ -136,7 +136,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_DO, "%s CLEAR USERS", mc->name);
+	logcommand(si, CMDLOG_DO, "CLEAR:USERS: \2%s\2", mc->name);
 
 	command_success_nodata(si, _("Cleared users from \2%s\2."), channel);
 }

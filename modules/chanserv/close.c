@@ -145,7 +145,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s closed the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
 		snoop("CLOSE:ON: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
-		logcommand(si, CMDLOG_ADMIN, "%s CLOSE ON %s", target, reason);
+		logcommand(si, CMDLOG_ADMIN, "CLOSE:ON: \2%s\2 by \2%s\2  (reason: %s)", target, get_oper_name(si), reason);
 		command_success_nodata(si, _("\2%s\2 is now closed."), target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -174,7 +174,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s reopened the channel \2%s\2.", get_oper_name(si), target);
 		snoop("CLOSE:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "%s CLOSE OFF", target);
+		logcommand(si, CMDLOG_ADMIN, "CLOSE:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		command_success_nodata(si, _("\2%s\2 has been reopened."), target);
 	}
 	else

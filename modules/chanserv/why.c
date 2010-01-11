@@ -96,9 +96,9 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "%s WHY %s!%s@%s (oper override)", mc->name, u->nick, u->user, u->vhost);
+		logcommand(si, CMDLOG_ADMIN, "WHY: \2%s!%s@%s\2 on \2%s\2 (oper override)", u->nick, u->user, u->vhost, mc->name);
 	else
-		logcommand(si, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
+		logcommand(si, CMDLOG_GET, "WHY: \2%s!%s@%s\2 on \2%s\2", u->nick, u->user, u->vhost, mc->name);
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{

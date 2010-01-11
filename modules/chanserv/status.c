@@ -60,7 +60,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_GET, "%s STATUS", mc->name);
+		logcommand(si, CMDLOG_GET, "STATUS: \2%s\2", mc->name);
 		
 		if (metadata_find(mc, "private:close:closer"))
 		{

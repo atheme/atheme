@@ -207,7 +207,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_delete(mc, "email");
 			command_success_nodata(si, _("The e-mail address for channel \2%s\2 was deleted."), mc->name);
-			logcommand(si, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
+			logcommand(si, CMDLOG_SET, "SET:EMAIL:NONE: \2%s\2", mc->name);
 			return;
 		}
 
@@ -224,7 +224,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, "email", mail);
 
-	logcommand(si, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
+	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", mc->name, mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
@@ -254,7 +254,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mc, "url"))
 		{
 			metadata_delete(mc, "url");
-			logcommand(si, CMDLOG_SET, "%s SET URL NONE", mc->name);
+			logcommand(si, CMDLOG_SET, "SET:URL:NONE: \2%s\2", mc->name);
 			command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
@@ -266,7 +266,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, "url", url);
 
-	logcommand(si, CMDLOG_SET, "%s SET URL %s", mc->name, url);
+	logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", mc->name, url);
 	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
@@ -295,7 +295,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mc, "private:entrymsg"))
 		{
 			metadata_delete(mc, "private:entrymsg");
-			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name);
+			logcommand(si, CMDLOG_SET, "SET:ENTRYMSG:NONE: \2%s\2", mc->name);
 			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
@@ -307,7 +307,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, "private:entrymsg", parv[1]);
 
-	logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, parv[1]);
+	logcommand(si, CMDLOG_SET, "SET:ENTRYMSG: \2%s\2 \2%s\2", mc->name, parv[1]);
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
 
@@ -381,7 +381,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mychan_founder_names(mc));
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, tmu->name, mychan_founder_names(mc));
 			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), tmu->name);
 
 			/* add target as founder... */
@@ -423,7 +423,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
-			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling transfer)", mc->name, tmu->name);
 			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
 
 			return;
@@ -455,11 +455,11 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 	{
-		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
 		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
 	}
 	else
-		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, tmu->name);
 
 	metadata_add(mc, "private:verify:founderchg:newfounder", tmu->name);
 	metadata_add(mc, "private:verify:founderchg:timestamp", itoa(time(NULL)));
@@ -740,12 +740,12 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (*modebuf)
 	{
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been set to \2%s\2."), mc->name, modebuf);
-		logcommand(si, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
+		logcommand(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2", mc->name, modebuf);
 	}
 	else
 	{
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been removed."), mc->name);
-		logcommand(si, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:MLOCK:NONE: \2%s\2", mc->name);
 	}
 	if (changed & ircd->oper_only_modes)
 		snoop(_("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
@@ -779,7 +779,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:KEEPTOPIC:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_KEEPTOPIC;
 
@@ -794,7 +794,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:KEEPTOPIC:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
@@ -832,7 +832,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
@@ -848,7 +848,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_TOPICLOCK;
 
@@ -886,7 +886,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET SECURE ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:SECURE:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_SECURE;
 
@@ -901,7 +901,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:SECURE:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_SECURE;
 
@@ -939,7 +939,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:VERBOSE:ON: \2%s\2", mc->name);
 
  		mc->flags &= ~MC_VERBOSE_OPS;
  		mc->flags |= MC_VERBOSE;
@@ -957,7 +957,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:VERBOSE:OPS: \2%s\2", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
 		{
@@ -982,7 +982,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:VERBOSE:OFF: \2%s\2", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
 			verbose(mc, "\2%s\2 disabled the VERBOSE flag", get_source_name(si));
@@ -1028,7 +1028,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_delete(mc, "disable_fantasy");
 
-		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:FANTASY:ON: \2%s\2", mc->name);
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
@@ -1044,7 +1044,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_add(mc, "disable_fantasy", "on");
 
-		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:FANTASY:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
@@ -1085,7 +1085,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET GUARD ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:GUARD:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_GUARD;
 
@@ -1103,7 +1103,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET GUARD OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:GUARD:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_GUARD;
 
@@ -1144,7 +1144,7 @@ static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET RESTRICTED ON", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:RESTRICTED:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_RESTRICTED;
 
@@ -1159,7 +1159,7 @@ static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "%s SET RESTRICTED OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "SET:RESTRICTED:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_RESTRICTED;
 
@@ -1221,7 +1221,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		metadata_delete(mc, property);
-		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
+		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 \2%s\2 (deleted)", mc->name, property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
@@ -1247,7 +1247,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	metadata_add(mc, property, value);
-	logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
+	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 on \2%s\2 to \2%s\2", property, mc->name, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 

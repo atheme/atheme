@@ -128,9 +128,9 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_success_nodata(si, _("No templates set on channel \2%s\2."), mc->name);
 		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "TEMPLATE: \2%s\2 (oper override)", mc->name);
 		else
-			logcommand(si, CMDLOG_GET, "%s TEMPLATE", mc->name);
+			logcommand(si, CMDLOG_GET, "TEMPLATE: \2%s\2", mc->name);
 	}
 	else
 	{
@@ -361,7 +361,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_modify_simple(ca, newflags, ~newflags);
 				chanacs_close(ca);
 			}
-			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s !%s (%d changes)", mc->name, target, flagstr, changes);
+			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, target, flagstr, changes);
 			strlcpy(flagstr2, flagstr, sizeof flagstr2);
 			if (changes > 0)
 				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags, chanacs_flags));
@@ -370,7 +370,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("Not updating %d access entries involving founder status. Please do it manually."), founderskipped);
 		}
 		else
-			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
+			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }
