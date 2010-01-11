@@ -281,8 +281,8 @@ void module_unload(module_t * m)
 		return;
 
 	/* unload modules which depend on us */
-	LIST_FOREACH_SAFE(n, tn, m->dephost.head)
-		module_unload((module_t *) n->data);
+	while (m->dephost.head != NULL)
+		module_unload((module_t *) m->dephost.head->data);
 
 	/* let modules that we depend on know that we no longer exist */
 	LIST_FOREACH_SAFE(n, tn, m->deplist.head)
