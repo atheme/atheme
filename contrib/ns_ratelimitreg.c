@@ -84,7 +84,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 	{
 		command_fail(hdata->si, fault_toomany, "The system is currently too busy to process your registration, please try again later.");
 		hdata->approved = 1;
-		snoop("REGISTER:THROTTLED: %s by \2%s\2", hdata->account,
+		slog(LG_INFO, "REGISTER:THROTTLED: %s by \2%s\2", hdata->account,
 				hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
 		if ((unsigned int)(CURRTIME - lastwallops) >= ratelimitreg_wallops_period)
 		{

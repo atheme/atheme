@@ -43,7 +43,7 @@ static void check_registration(hook_user_register_check_t *hdata)
     if (count > 0)
     {
         /* there are MX records for this domain */
-        snoop("REGISTER: mxcheck: %d MX records for %s", count, domain);
+        slog(LG_INFO, "REGISTER: mxcheck: %d MX records for %s", count, domain);
     }
     else
     {
@@ -53,7 +53,7 @@ static void check_registration(hook_user_register_check_t *hdata)
         /* attempt to resolve host (fallback to A) */
         if((host = gethostbyname(domain)) == NULL)
         {
-            snoop("REGISTER: mxcheck: no A/MX records for %s - " 
+            slog(LG_INFO, "REGISTER: mxcheck: no A/MX records for %s - " 
                 "REGISTER failed", domain);
             command_fail(hdata->si, fault_noprivs, "Sorry, \2%s\2 does not exist, "
                 "I can't send mail there. Please check and try again.", domain);

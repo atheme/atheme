@@ -66,7 +66,6 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			wallops("%s enabled ENFORCE on the account \2%s\2.", get_oper_name(si), mu->name);
-			snoop("FENFORCE:ON: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "FENFORCE:ON: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			metadata_add(mu, "private:doenforce", "1");
 			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", mu->name);
@@ -77,7 +76,6 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 		if ((md = metadata_find(mu, "private:doenforce")) != NULL)
 		{
 			wallops("%s disabled ENFORCE on the account \2%s\2.", get_oper_name(si), mu->name);
-			snoop("FENFORCE:OFF: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "FENFORCE:OFF: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			metadata_delete(mu, "private:doenforce");
 			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", mu->name);

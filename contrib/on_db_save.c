@@ -37,7 +37,7 @@ void _moddeinit(void)
 static void update_command_finished(pid_t pid, int status, void *data)
 {
 	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
-		snoop("ERROR: Database update command failed with error %d", WEXITSTATUS(status));
+		slog(LG_ERROR, "ERROR: Database update command failed with error %d", WEXITSTATUS(status));
 
 	update_command_proc.running = 0;
 }
@@ -58,7 +58,6 @@ static void update_command_recvq_handler(connection_t *cptr, int err)
 
 	if (err)
 	{
-		snoop("ERROR: database update command said: %s", buf);
 		slog(LG_ERROR, "ERROR: database update command said: %s", buf);
 	}
 	else
@@ -86,7 +85,6 @@ static void on_db_save(void *unused)
 
 	if (update_command_proc.running)
 	{
-		snoop("ERROR: database update command is still running");
 		slog(LG_ERROR, "ERROR: database update command is still running");
 		return;
 	}
@@ -94,7 +92,6 @@ static void on_db_save(void *unused)
 	if (pipe(stdout_pipes) == -1)
 	{
 		int err = errno;
-		snoop("ERROR: Couldn't create pipe for database update command: %s", strerror(err));
 		slog(LG_ERROR, "ERROR: Couldn't create pipe for database update command: %s", strerror(err));
 		return;
 	}
@@ -102,7 +99,6 @@ static void on_db_save(void *unused)
 	if (pipe(stderr_pipes) == -1)
 	{
 		int err = errno;
-		snoop("ERROR: Couldn't create pipe for database update command: %s", strerror(err));
 		slog(LG_ERROR, "ERROR: Couldn't create pipe for database update command: %s", strerror(err));
 		close(stdout_pipes[0]);
 		close(stdout_pipes[1]);
@@ -115,7 +111,7 @@ static void on_db_save(void *unused)
 	{
 		case -1:
 			errno1 = errno;
-			snoop("Failed to fork for database update command: %s", strerror(errno1));
+			slog(LG_ERROR, "Failed to fork for database update command: %s", strerror(errno1));
 			return;
 		case 0:
 			connection_close_all_fds();

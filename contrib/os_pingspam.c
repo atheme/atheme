@@ -115,7 +115,7 @@ static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[])
 
 	pingspam(u);
 	notice(opersvs.nick, si->su->nick, "\2%s\2 has been pwned.", target);
-	snoop("PINGSPAM: \2%s\2 -> \2%s\2", get_oper_name(si), target);
+	logcommand(si, CMDLOG_ADMIN, "PINGSPAM: \2%s\2 by \2%s\2", target, get_oper_name(si));
 }
 
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[])

@@ -66,7 +66,7 @@ static void procwatch_readhandler(connection_t *cptr)
 
 	while (kevent(cptr->fd, NULL, 0, &ev, 1, &(const struct timespec){ 0, 0 }) > 0)
 	{
-		snoop("PROCWATCH: %ld exited with status %x",
+		slog(LG_INFO, "PROCWATCH: %ld exited with status %x",
 				(long)ev.ident, (unsigned)ev.data);
 	}
 }

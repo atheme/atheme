@@ -45,7 +45,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 		{
 			command_fail(hdata->si, fault_noprivs, "Sorry, we do not accept registrations with email addresses from that domain. Use another address.");
 			hdata->approved = 1;
-			snoop("REGISTER:BADEMAIL: %s to \2%s\2 by \2%s\2",
+			slog(LG_INFO, "REGISTER:BADEMAIL: %s to \2%s\2 by \2%s\2",
 					hdata->account, hdata->email,
 					hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
 			return;

@@ -156,7 +156,6 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, "private:klinechan:timestamp", itoa(CURRTIME));
 
 		wallops("%s enabled automatic klines on the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
-		snoop("KLINECHAN:ON: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
 		logcommand(si, CMDLOG_ADMIN, "KLINECHAN:ON: \2%s\2 by \2%s\2 (reason: \2%s\2)", target, get_oper_name(si), reason);
 		command_success_nodata(si, "Klining all users joining \2%s\2.", target);
 	}
@@ -173,7 +172,6 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, "private:klinechan:timestamp");
 
 		wallops("%s disabled automatic klines on the channel \2%s\2.", get_oper_name(si), target);
-		snoop("KLINECHAN:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "KLINECHAN:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		command_success_nodata(si, "No longer klining users joining \2%s\2.", target);
 	}
@@ -194,7 +192,6 @@ static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[])
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
-	snoop("LISTKLINECHANS: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		md = metadata_find(mc, "private:klinechan:closer");

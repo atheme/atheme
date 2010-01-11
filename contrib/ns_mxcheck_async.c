@@ -61,7 +61,7 @@ static void childproc_cb(pid_t pid, int status, void *data)
 
 	if (WEXITSTATUS(status) == 1)
 	{
-		snoop("REGISTER: mxcheck: no A/MX records for %s - " 
+		slog(LG_INFO, "REGISTER: mxcheck: no A/MX records for %s - " 
 				"REGISTER failed", domain);
 		myuser_notice(nicksvs.nick, mu, "Sorry, \2%s\2 does not exist, "
 				"I can't send mail there. Please check and try again.", domain);
@@ -69,7 +69,7 @@ static void childproc_cb(pid_t pid, int status, void *data)
 	}
 	else if (WEXITSTATUS(status) == 0)
 	{
-        	snoop("REGISTER: mxcheck: valid MX records for %s", domain);
+        	slog(LG_INFO, "REGISTER: mxcheck: valid MX records for %s", domain);
 	}
 }
 
