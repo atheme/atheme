@@ -393,7 +393,7 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	if (!parse_alis(si, parc - 1, parv + 1, &query))
 		return;
 
-	logcommand(si, CMDLOG_GET, "LIST %s", query.mask);
+	logcommand(si, CMDLOG_GET, "LIST \2%s\2", query.mask);
 
 	maxmatch = query.maxmatches;
 	command_success_nodata(si,
