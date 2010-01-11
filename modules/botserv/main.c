@@ -436,7 +436,6 @@ void botserv_save_database(void *unused)
 		errno1 = errno;
 		slog(LG_INFO, "botserv_save_database(): cannot create botserv.db.new: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
-		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
 		return;
 	}
 
@@ -461,7 +460,6 @@ void botserv_save_database(void *unused)
 		errno1 = errno;
 		slog(LG_INFO, "botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
-		snoop(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
 		return;
 	}
 }
