@@ -401,7 +401,6 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
 			/* done! */
-			snoop("SET:FOUNDER: \2%s\2 -> \2%s\2", mc->name, tmu->name);
 			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), tmu->name, mc->name);
 
 			return;
@@ -748,7 +747,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET:MLOCK:NONE: \2%s\2", mc->name);
 	}
 	if (changed & ircd->oper_only_modes)
-		snoop(_("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
+		logcommand(_(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
 
 	check_modes(mc, true);
 
@@ -1208,7 +1207,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (strchr(property, ':'))
-		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
+		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
 
 	if (!value)
 	{

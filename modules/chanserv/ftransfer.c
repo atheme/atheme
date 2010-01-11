@@ -77,7 +77,6 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 
 	/* no maxchans check (intentional -- this is an oper command) */
 
-	snoop("FTRANSFER: %s transferred %s from %s to %s", get_oper_name(si), name, oldfndr, tmu->name);
 	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, tmu->name);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FTRANSFER: \2%s\2 transferred \2%s\2 from \2%s\2 to \2%s\2", get_oper_name(si), mc->name, oldfndr, tmu->name);
 	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", oldfndr, tmu->name, me.netname);

@@ -53,7 +53,6 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, get_oper_name(si));
 	command_success_nodata(si, _("Channels matching pattern \2%s\2:"), chanpattern);
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
