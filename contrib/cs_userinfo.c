@@ -97,7 +97,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "------------------- ---------------");
 		command_success_nodata(si, _("End of \2%s\2 USERINFO listing."), mc->name);
-		logcommand(si, CMDLOG_GET, "%s USERINFO", mc->name);
+		logcommand(si, CMDLOG_GET, "USERINFO for \2%s\2 listed", mc->name);
 	}
 	else
 	{
@@ -128,14 +128,14 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(ca, "userinfo");
 			command_success_nodata(si, _("Deleted userinfo for \2%s\2 on \2%s\2."),
 						mu->name, mc->name);
-			logcommand(si, CMDLOG_SET, "%s USERINFO %s", mc->name, mu->name);
+			logcommand(si, CMDLOG_SET, "USERINFO on \2%s\2 for \2%s\2 deleted", mc->name, mu->name);
 			return;
 		}
 
 		metadata_add(ca, "userinfo", parv[2]);
 		command_success_nodata(si, _("Added userinfo for \2%s\2 on \2%s\2."),
 					mu->name, mc->name);
-		logcommand(si, CMDLOG_SET, "%s USERINFO %s %s", mc->name, mu->name, parv[2]);
+		logcommand(si, CMDLOG_SET, "USERINFO on \2%s\2 for \2%s\2 added (\2%s\2)", mc->name, mu->name, parv[2]);
 	}
 	return;
 }

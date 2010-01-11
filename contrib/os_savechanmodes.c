@@ -60,7 +60,7 @@ static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snoop("SAVECHANMODES: \2%s\2", get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "SAVECHANMODES");
+	logcommand(si, CMDLOG_ADMIN, "SAVECHANMODES: \2%s\2", get_oper_name(si));
 	wallops("\2%s\2 is dumping channel modes", get_oper_name(si));
 
 	MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
@@ -116,7 +116,7 @@ static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snoop("LOADCHANMODES: \2%s\2", get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "LOADCHANMODES");
+	logcommand(si, CMDLOG_ADMIN, "LOADCHANMODES: \2%s\2", get_oper_name(si));
 	wallops("\2%s\2 is restoring channel modes", get_oper_name(si));
 
 	line = 0;

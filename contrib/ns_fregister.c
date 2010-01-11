@@ -111,7 +111,7 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("FREGISTER: \2%s\2 to \2%s\2 by \2%s\2", account, email,
 			get_oper_name(si));
-	logcommand(si, CMDLOG_REGISTER, "FREGISTER %s to %s", account, email);
+	logcommand(si, CMDLOG_REGISTER, "FREGISTER \2%s\2 to \2%s\2 by \2%s\2", account, email, get_oper_name(si));
 	if (is_soper(mu))
 	{
 		wallops("%s used FREGISTER on account \2%s\2 with services operator privileges.", get_oper_name(si), mu->name);

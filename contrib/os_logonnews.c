@@ -203,7 +203,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 		write_newsdb();
 
 		command_success_nodata(si, "Added entry to logon news.");
-		logcommand(si, CMDLOG_ADMIN, "LOGONNEWS ADD %s %s", target, story);
+		logcommand(si, CMDLOG_ADMIN, "LOGONNEWS ADDed for \2%s\2, \2%s\2", target, story);
 		return;
 	}
 	else if (!strcasecmp(action, "DEL"))
@@ -235,7 +235,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 
 			if (x == id)
 			{
-				logcommand(si, CMDLOG_ADMIN, "LOGONNEWS DEL %s %s", l->target, l->story);
+				logcommand(si, CMDLOG_ADMIN, "LOGONNEWS DELeted from \2%s\2, \2%s\2", l->target, l->story);
 
 				node_del(n, &logon_news);
 

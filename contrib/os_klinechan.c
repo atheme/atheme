@@ -76,7 +76,7 @@ static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 		{
 			snprintf(reason, sizeof reason, "Joining %s",
 					cu->chan->name);
-			slog(LG_INFO, "klinechan_check_join(): klining *@%s (user %s!%s@%s joined %s)",
+			slog(LG_INFO, "klinechan_check_join(): klining \2*@%s\2 (user \2%s!%s@%s\2 joined \2%s\2)",
 					cu->user->host, cu->user->nick,
 					cu->user->user, cu->user->host,
 					cu->chan->name);
@@ -157,7 +157,7 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s enabled automatic klines on the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
 		snoop("KLINECHAN:ON: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
-		logcommand(si, CMDLOG_ADMIN, "%s KLINECHAN ON %s", target, reason);
+		logcommand(si, CMDLOG_ADMIN, "\2%s\2 set KLINECHAN ON \2%s\2 (reason: \2%s\2)", get_oper_name(si), target, reason);
 		command_success_nodata(si, "Klining all users joining \2%s\2.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -174,7 +174,7 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s disabled automatic klines on the channel \2%s\2.", get_oper_name(si), target);
 		snoop("KLINECHAN:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "%s KLINECHAN OFF", target);
+		logcommand(si, CMDLOG_ADMIN, "\2%s\2 set KLINECHAN OFF for \2%s\2", get_oper_name(si), target);
 		command_success_nodata(si, "No longer klining users joining \2%s\2.", target);
 	}
 	else
@@ -207,7 +207,7 @@ static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LISTKLINECHANS %s (%d matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "\2%s\2 did a LISTKLINECHANS on \2%s\2 (\2%d\2 matches)", get_oper_name(si), pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No K:line channels matched pattern \2%s\2"), pattern);
 	else
