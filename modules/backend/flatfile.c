@@ -106,7 +106,7 @@ static void flatfile_db_save(void *arg)
 	if (!(f = fopen(DATADIR "/atheme.db.new", "w")))
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot create atheme.db.new: %s", strerror(errno1));
+		slog(LG_INFO, "db_save(): cannot create atheme.db.new: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s"), strerror(errno1));
 		snoop(_("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s"), strerror(errno1));
 		return;
@@ -299,7 +299,7 @@ static void flatfile_db_save(void *arg)
 	if (was_errored)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
+		slog(LG_INFO, "db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
 		snoop(_("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
 		return;
@@ -313,7 +313,7 @@ static void flatfile_db_save(void *arg)
 	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
+		slog(LG_INFO, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
 		snoop(_("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
 		return;
