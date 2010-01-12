@@ -509,7 +509,7 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 				continue;
 			if (rw->actions & RWACT_SNOOP)
 			{
-				slog(LG_INFO, "RWATCH:NICKCHANGE:%s %s -> %s matches \2%s\2 (%s)",
+				slog(LG_INFO, "RWATCH:NICKCHANGE: \2%s\2 \2%s\2 -> \2%s\2 matches \2%s\2 (reason: \2%s\2)",
 						rw->actions & RWACT_KLINE ? "KLINE:" : "",
 						data->oldnick, usermask, rw->regex, rw->reason);
 			}
