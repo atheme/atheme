@@ -540,16 +540,14 @@ static void clones_newuser(hook_user_nick_t *data)
 				he->lastaction_clones = i;
 			he->lastaction = CURRTIME;
 			if (allowed == 0 && i < config_options.default_clone_limit)
-				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
 			else if (allowed != 0 && i < allowed + EXEMPT_GRACE)
-				snoop("CLONES: %d clones on %s (%s!%s@%s) (%d allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (\2%d\2 allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
 			else if (!kline_enabled)
-				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
 			else
 			{
-				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
-				slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
-						u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
 				kline_sts("*", "*", u->ip, kline_duration, "Excessive clones");
 			}
 		}

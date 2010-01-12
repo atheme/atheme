@@ -503,7 +503,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (strchr(property, ':'))
-		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
+		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
 
 	if (!value)
 	{

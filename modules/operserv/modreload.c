@@ -57,7 +57,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	if (m->header->norestart)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is a permanent module; it cannot be reloaded."), module);
-		snoop("MODRELOAD:ERROR: \2%s\2 tried to reload permanent module \2%s\2", get_oper_name(si), module);
+		slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload permanent module \2%s\2", get_oper_name(si), module);
 		return;
 	}
 
@@ -84,7 +84,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_nosuch_target, _("Module \2%s\2 failed to reload."), module);
-		snoop("MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2, operation failed.", get_oper_name(si), module);
+		slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2, operation failed.", get_oper_name(si), module);
 		return;
 	}
 }

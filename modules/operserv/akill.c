@@ -408,7 +408,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 				verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 					get_oper_name(si), k->user, k->host, k->reason);
 
-				snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
+				logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
 				kline_delete(k);
 			}
 
