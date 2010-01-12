@@ -199,9 +199,9 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 			if (svs->me == NULL)
 				continue;
 
-			namelen = strlen(svs->internal_name);
+			namelen = strlen(svs->nick);
 
-			if (!strncmp(svs->internal_name, buf, namelen))
+			if (!strncmp(svs->nick, buf, namelen))
 			{
 				msg(svs->me->nick, lf->log_path, "%s", buf + (namelen + 1));
 				return;
