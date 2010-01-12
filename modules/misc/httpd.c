@@ -258,7 +258,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 			{
 				if (in != -1)
 					close(in);
-				slog(LG_INFO, "httpd_recvqhandler(): 404 for %s", hd->filename);
+				slog(LG_INFO, "httpd_recvqhandler(): 404 for \2%s\2", hd->filename);
 				send_error(cptr, 404, "Not Found", is_get);
 				check_close(cptr);
 				return;
