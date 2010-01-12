@@ -109,8 +109,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		hs_sethost_all(mu, NULL);
 		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), mu->name);
-		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
+		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", target);
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
 	}
@@ -121,9 +120,8 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	hs_sethost_all(mu, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
 			host, mu->name);
-	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
-			target, host);
+	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
+			host, target);
 	do_sethost_all(mu, host);
 	return;
 }
@@ -140,7 +138,6 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
-	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
 		md = metadata_find(mu, "private:usercloak");
@@ -163,7 +160,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LISTVHOST %s (%d matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTVHOST \2%s\2 (\2%d\2 matches)", pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No vhosts matched pattern \2%s\2"), pattern);
 	else

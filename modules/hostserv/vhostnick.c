@@ -92,8 +92,7 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_delete(mu, buf);
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), target);
-		snoop("VHOSTNICK:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOSTNICK REMOVE %s", target);
+		logcommand(si, CMDLOG_ADMIN, "VHOSTNICK:REMOVE: \2%s\2", target);
 		u = user_find_named(target);
 		if (u != NULL)
 		{
@@ -110,9 +109,8 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mu, buf, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, target);
-	snoop("VHOSTNICK:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "VHOSTNICK ASSIGN %s %s",
-			target, host);
+	logcommand(si, CMDLOG_ADMIN, "VHOSTNICK ASSIGN \2%s\2 to \2%s\2",
+			host, target);
 	u = user_find_named(target);
 	if (u != NULL)
 		do_sethost(u, host);
