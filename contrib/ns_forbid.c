@@ -83,7 +83,7 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:ON: \2%s\2 by \2%s\2 (reason: %s)", account, get_oper_name(si), reason);
+	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:ON: \2%s\2 (reason: \2%s\2)", account, reason);
 	wallops("%s forbade the nickname \2%s\2 (%s).", get_oper_name(si), account, reason);
 	command_success_nodata(si, "\2%s\2 is now forbidden.", mu->name);
 	/* don't call hooks, hmm */
@@ -109,7 +109,7 @@ static void destroy_forbid(sourceinfo_t *si, const char *account)
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a forbidden nickname."), account);
 		return;
 	}
-	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:OFF: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:OFF: \2%s\2", mu->name);
 	wallops("%s unforbade the nickname \2%s\2.", get_oper_name(si), account);
 	command_success_nodata(si, "\2%s\2 is no longer forbidden.", mu->name);
 	/* no hooks here either, hmm */

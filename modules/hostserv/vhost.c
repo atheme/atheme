@@ -160,7 +160,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LISTVHOST \2%s\2 (\2%d\2 matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTVHOST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No vhosts matched pattern \2%s\2"), pattern);
 	else

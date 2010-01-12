@@ -85,7 +85,7 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, "private:mark:timestamp", itoa(CURRTIME));
 
 		wallops("%s marked the channel \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 by \2%s\2 for \2%s\2", mc->name, get_oper_name(si), info);
+		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", mc->name, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -101,7 +101,7 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, "private:mark:timestamp");
 
 		wallops("%s unmarked the channel \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 	}
 	else

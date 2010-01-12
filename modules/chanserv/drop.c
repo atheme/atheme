@@ -140,7 +140,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
+	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", mc->name);
 
 	hook_call_channel_drop(mc);
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
@@ -187,7 +187,7 @@ static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", mc->name);
 	wallops("%s dropped the channel \2%s\2", get_oper_name(si), name);
 
 	hook_call_channel_drop(mc);

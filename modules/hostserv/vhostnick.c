@@ -109,7 +109,7 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mu, buf, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, target);
-	logcommand(si, CMDLOG_ADMIN, "VHOSTNICK ASSIGN \2%s\2 to \2%s\2",
+	logcommand(si, CMDLOG_ADMIN, "VHOSTNICK:ASSIGN: \2%s\2 to \2%s\2",
 			host, target);
 	u = user_find_named(target);
 	if (u != NULL)

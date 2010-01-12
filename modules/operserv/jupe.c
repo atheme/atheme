@@ -71,7 +71,7 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "JUPE: \2%s\2 (reason: \2%s\2", server, reason);
+	logcommand(si, CMDLOG_ADMIN, "JUPE: \2%s\2 (reason: \2%s\2)", server, reason);
 	wallops(_("%s jupitered server \2%s\2 (%s)."), get_oper_name(si),
 			server, reason);
 
