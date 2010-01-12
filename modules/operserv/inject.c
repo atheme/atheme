@@ -56,7 +56,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "INJECT %s", inject);
+	logcommand(si, CMDLOG_ADMIN, "INJECT: \2%s\2", inject);
 
 	/* looks like someone INJECT'd an INJECT command.
 	 * this is probably a bad thing.

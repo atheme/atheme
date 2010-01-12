@@ -274,7 +274,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		if (unsafe)
 		{
 			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. This mask is unsafe."), kuser, khost);
-			logcommand(si, CMDLOG_ADMIN, "failed AKILL ADD %s@%s (unsafe mask)", kuser, khost);
+			logcommand(si, CMDLOG_ADMIN, "failed AKILL ADD \2%s@%s\2 (unsafe mask)", kuser, khost);
 			return;
 		}
 	}
@@ -292,11 +292,9 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("AKILL on \2%s@%s\2 was successfully added."), k->user, k->host);
 
-	snoop("AKILL:ADD: \2%s@%s\2 by \2%s\2 for \2%s\2", k->user, k->host, get_oper_name(si), k->reason);
-
 	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", get_oper_name(si), k->user, k->host, 
 		k->reason);
-	logcommand(si, CMDLOG_SET, "AKILL ADD %s@%s %s", k->user, k->host, k->reason);
+	logcommand(si, CMDLOG_ADMIN, "AKILL:ADD: \2%s@%s\2 (reason: \2%s\2)", k->user, k->host, k->reason);
 }
 
 static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
@@ -351,8 +349,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 					verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 						get_oper_name(si), k->user, k->host, k->reason);
 
-					snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
-					logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+					logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
 					kline_delete(k);
 				}
 
@@ -371,8 +368,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 			verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 				get_oper_name(si), k->user, k->host, k->reason);
 
-			snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
-			logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+			logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
 			kline_delete(k);
 		} while ((s = strtok(NULL, ",")));
 
@@ -432,8 +428,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 		verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 			get_oper_name(si), k->user, k->host, k->reason);
 
-		snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
-		logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+		logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
 		kline_delete(k);
 		return;
 	}
@@ -452,8 +447,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 	verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 		get_oper_name(si), k->user, k->host, k->reason);
 
-	snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
-	logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+	logcommand(si, CMDLOG_ADMIN, "AKILL:DEL: \2%s@%s\2", k->user, k->host);
 	kline_delete(k);
 }
 
@@ -524,11 +518,11 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
 	if (user || host)
-		logcommand(si, CMDLOG_GET, "AKILL LIST %s@%s", user ? user : "*", host ? host : "*");
+		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%s@%s\2", user ? user : "*", host ? host : "*");
 	else if (num)
-		logcommand(si, CMDLOG_GET, "AKILL LIST %lu", num);
+		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%lu\2", num);
 	else
-		logcommand(si, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
+		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%s\2", full ? " FULL" : "");
 }
 
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
@@ -536,8 +530,7 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	kline_t *k;
 
-	logcommand(si, CMDLOG_DO, "AKILL SYNC");
-	snoop("AKILL:SYNC: \2%s\2", get_oper_name(si));
+	logcommand(si, CMDLOG_DO, "AKILL:SYNC");
 
 	LIST_FOREACH(n, klnlist.head)
 	{

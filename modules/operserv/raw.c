@@ -53,8 +53,7 @@ static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("RAW: \"%s\" by \2%s\2", s, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "RAW %s", s);
+	logcommand(si, CMDLOG_ADMIN, "RAW: \2%s\2", s);
 	sts("%s", s);
 }
 

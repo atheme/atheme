@@ -238,9 +238,8 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	o_si.si.connection = NULL;
 	o_si.parent_si = si;
 
-	logcommand(si, CMDLOG_ADMIN, "OVERRIDE %s %s %s [%s]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
+	logcommand(si, CMDLOG_ADMIN, "OVERRIDE: (account: \2%s\2) (service: \2%s\2) (command: \2%s\2) [parameters: \2%s\2]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
-	snoop("OVERRIDE: \2%s\2 -> \2%s\2 (\2%s\2) (\2%s\2) [%s]", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 
 	newparc = text_to_parv(parv[3] != NULL ? parv[3] : "", cmd->maxparc, newparv);
 	for (i = newparc; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)

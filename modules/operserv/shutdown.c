@@ -41,7 +41,6 @@ void _moddeinit()
 static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "SHUTDOWN");
-	snoop("SHUTDOWN: \2%s\2", get_oper_name(si));
 	wallops("Shutting down by request of \2%s\2.", get_oper_name(si));
 
 	runflags |= RF_SHUTDOWN;

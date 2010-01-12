@@ -124,8 +124,7 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 		node_free(n1);
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "RNC %d", count);
-	snoop("RNC: by \2%s\2", get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

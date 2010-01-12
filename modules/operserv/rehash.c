@@ -42,13 +42,12 @@ void _moddeinit()
 /* REHASH */
 void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 {
-	snoop("UPDATE: \2%s\2", get_oper_name(si));
+	slog(LG_INFO, "UPDATE (due to REHASH): \2%s\2", get_oper_name(si));
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
 	expire_check(NULL);
 	if (db_save)
 		db_save(NULL);
 
-	snoop("REHASH: \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "REHASH");
 	wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, get_oper_name(si));
 

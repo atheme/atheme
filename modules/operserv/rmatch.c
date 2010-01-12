@@ -112,8 +112,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	
 	regex_destroy(regex);
 	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
-	logcommand(si, CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
-	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -94,7 +94,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 	soper_t *soper;
 	const char *typestr;
 
-	logcommand(si, CMDLOG_GET, "SOPER LIST");
+	logcommand(si, CMDLOG_GET, "SOPER:LIST");
 	command_success_nodata(si, "%-20s %-5s %-20s", _("Account"), _("Type"), _("Operclass"));
 	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
 	LIST_FOREACH(n, soperlist.head)
@@ -120,7 +120,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	operclass_t *operclass;
 
-	logcommand(si, CMDLOG_GET, "SOPER LISTCLASS");
+	logcommand(si, CMDLOG_GET, "SOPER:LISTCLASS");
 	command_success_nodata(si, _("Oper class list:"));
 	LIST_FOREACH(n, operclasslist.head)
 	{
@@ -184,8 +184,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("\2%s\2 is changing oper class for \2%s\2 to \2%s\2",
 		get_oper_name(si), mu->name, operclass->name);
-	snoop("SOPER:ADD: \2%s\2 to \2%s\2 by \2%s\2", mu->name, operclass->name, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "SOPER ADD %s %s", mu->name, operclass->name);
+	logcommand(si, CMDLOG_ADMIN, "SOPER:ADD: \2%s\2 \2%s\2", mu->name, operclass->name);
 	if (is_soper(mu))
 		soper_delete(mu->soper);
 	soper_add(mu->name, operclass->name, 0, NULL);
@@ -230,8 +229,7 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("\2%s\2 is removing oper class for \2%s\2",
 		get_oper_name(si), mu->name);
-	snoop("SOPER:DELETE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "SOPER DEL %s", mu->name);
+	logcommand(si, CMDLOG_ADMIN, "SOPER:DELETE: \2%s\2", mu->name);
 	soper_delete(mu->soper);
 	command_success_nodata(si, _("Removed class for \2%s\2."), mu->name);
 }
@@ -285,8 +283,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 		}
 		wallops("\2%s\2 is changing services operator password for \2%s\2",
 				get_oper_name(si), mu->name);
-		snoop("SOPER:SETPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "SOPER SETPASS %s (set)", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (set)", mu->name);
 		if (mu->soper->password)
 			free(mu->soper->password);
 		mu->soper->password = sstrdup(parv[1]);
@@ -305,8 +302,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		wallops("\2%s\2 is clearing services operator password for \2%s\2",
 				get_oper_name(si), mu->name);
-		snoop("SOPER:SETPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "SOPER SETPASS %s (clear)", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (clear)", mu->name);
 		if (mu->soper->password)
 			free(mu->soper->password);
 		mu->soper->password = NULL;

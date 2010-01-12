@@ -78,9 +78,8 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 
 	if (t != NULL)
 	{
-		logcommand(si, CMDLOG_ADMIN, "MODRELOAD %s", module);
+		logcommand(si, CMDLOG_ADMIN, "MODRELOAD: \2%s\2", module);
 		command_success_nodata(si, _("Module \2%s\2 reloaded."), module);
-		snoop("MODRELOAD: \2%s\2 by \2%s\2", module, get_oper_name(si));
 	}
 	else
 	{

@@ -220,7 +220,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			n = node_create();
 			node_add(np, n, &noop_hostmask_list);
 
-			logcommand(si, CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
+			logcommand(si, CMDLOG_ADMIN, "NOOP:ADD:HOSTMASK: \2%s\2 (reason: \2%s\2)", np->target, np->reason);
 			command_success_nodata(si, _("Added \2%s\2 to the hostmask NOOP list."), mask);
 
 			return;
@@ -246,7 +246,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			n = node_create();
 			node_add(np, n, &noop_server_list);
 
-			logcommand(si, CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
+			logcommand(si, CMDLOG_ADMIN, "NOOP:ADD:SERVER: \2%s\2 (reason: \2%s\2)", np->target, np->reason);
 			command_success_nodata(si, _("Added \2%s\2 to the server NOOP list."), mask);
 
 			return;
@@ -262,7 +262,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
+			logcommand(si, CMDLOG_ADMIN, "NOOP:DEL:HOSTMASK: \2%s\2", np->target);
 			command_success_nodata(si, _("Removed \2%s\2 from the hostmask NOOP list."), np->target);
 
 			n = node_find(np, &noop_hostmask_list);
@@ -285,7 +285,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
+			logcommand(si, CMDLOG_ADMIN, "NOOP:DEL:SERVER: \2%s\2", np->target);
 			command_success_nodata(si, _("Removed \2%s\2 from the server NOOP list."), np->target);
 
 			n = node_find(np, &noop_server_list);
@@ -306,13 +306,13 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		switch (type)
 		{
 			case type_all: 
-				logcommand(si, CMDLOG_GET, "NOOP LIST");
+				logcommand(si, CMDLOG_GET, "NOOP:LIST");
 				break;
 			case type_hostmask: 
-				logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
+				logcommand(si, CMDLOG_GET, "NOOP:LIST:HOSTMASK");
 				break;
 			case type_server: 
-				logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
+				logcommand(si, CMDLOG_GET, "NOOP:LIST:SERVER");
 				break;
 		}
 		if (type == type_all || type == type_hostmask)

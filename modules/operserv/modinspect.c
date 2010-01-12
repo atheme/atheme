@@ -50,7 +50,7 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_GET, "MODINSPECT %s", mname);
+	logcommand(si, CMDLOG_GET, "MODINSPECT: \2%s\2", mname);
 
 	m = module_find_published(mname);
 

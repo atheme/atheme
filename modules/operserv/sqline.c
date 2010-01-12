@@ -261,11 +261,9 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SQLINE on \2%s\2 was successfully added."), q->mask);
 
-	snoop("SQLINE:ADD: \2%s\2 by \2%s\2 for \2%s\2", q->mask, get_oper_name(si), q->reason);
-
 	verbose_wallops("\2%s\2 is \2adding\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), q->mask, 
 		q->reason);
-	logcommand(si, CMDLOG_SET, "SQLINE ADD %s %s", q->mask, q->reason);
+	logcommand(si, CMDLOG_SET, "SQLINE:ADD: \2%s\2 (reason: \2%s\2)", q->mask, q->reason);
 }
 
 static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
@@ -319,8 +317,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 					verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 						get_oper_name(si), q->mask, q->reason);
 
-					snoop("SQLINE:DEL: \2%s\2 by \2%s\2", q->mask, get_oper_name(si));
-					logcommand(si, CMDLOG_SET, "SQLINE DEL %s", q->mask);
+					logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", q->mask);
 					qline_delete(q->mask);
 				}
 
@@ -339,8 +336,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 			verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 				get_oper_name(si), q->mask, q->reason);
 
-			snoop("SQLINE:DEL: \2%s\2 by \2%s\2", q->mask, get_oper_name(si));
-			logcommand(si, CMDLOG_SET, "SQLINE DEL %s", q->mask);
+			logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", q->mask);
 			qline_delete(q->mask);
 		} while ((s = strtok(NULL, ",")));
 
@@ -358,8 +354,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 	verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 		get_oper_name(si), q->mask, q->reason);
 
-	snoop("SQLINE:DEL: \2%s\2 by \2%s\2", q->mask, get_oper_name(si));
-	logcommand(si, CMDLOG_SET, "SQLINE DEL %s", target);
+	logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", target);
 	qline_delete(target);
 }
 
@@ -393,7 +388,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Total of \2%d\2 %s in SQLINE list."), qlnlist.count, (qlnlist.count == 1) ? "entry" : "entries");
-	logcommand(si, CMDLOG_GET, "SQLINE LIST%s", full ? " FULL" : "");
+	logcommand(si, CMDLOG_GET, "SQLINE:LIST: \2%s\2", full ? " FULL" : "");
 }
 
 static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
@@ -401,8 +396,7 @@ static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	qline_t *q;
 
-	logcommand(si, CMDLOG_DO, "SQLINE SYNC");
-	snoop("SQLINE:SYNC: \2%s\2", get_oper_name(si));
+	logcommand(si, CMDLOG_DO, "SQLINE:SYNC");
 
 	LIST_FOREACH(n, qlnlist.head)
 	{

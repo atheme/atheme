@@ -41,7 +41,6 @@ void _moddeinit()
 static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_ADMIN, "RESTART");
-	snoop("RESTART: \2%s\2", get_oper_name(si));
 	wallops("Restarting by request of \2%s\2.", get_oper_name(si));
 
 	runflags |= RF_RESTART;

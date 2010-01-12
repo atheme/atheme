@@ -97,7 +97,6 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("\2%s\2 is clearing channel %s with %s",
 			get_oper_name(si), targchan, actionstr);
-	snoop("CLEARCHAN: %s on \2%s\2 by \2%s\2", actionstr, targchan, get_oper_name(si));
 	command_success_nodata(si, _("Clearing \2%s\2 with \2%s\2"), targchan, actionstr);
 
 	/* iterate over the users in channel */
@@ -132,7 +131,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
-	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN %s %s %s (%d matches, %d ignores)", actionstr, targchan, treason, matches, ignores);
+	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

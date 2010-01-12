@@ -193,9 +193,9 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	if (targettype == NULL)
 		logcommand(si, CMDLOG_ADMIN, "SPECS");
 	else if (tu)
-		logcommand(si, CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
+		logcommand(si, CMDLOG_ADMIN, "SPECS:USER: \2%s!%s@%s\2", tu->nick, tu->user, tu->vhost);
 	else
-		logcommand(si, CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
+		logcommand(si, CMDLOG_ADMIN, "SPECS:OPERCLASS: \2%s\2", cl->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

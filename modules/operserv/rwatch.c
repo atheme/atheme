@@ -273,8 +273,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 
 	node_add(rw, node_create(), &rwatch_list);
 	command_success_nodata(si, _("Added \2%s\2 to regex watch list."), pattern);
-	snoop("RWATCH:ADD: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
+	logcommand(si, CMDLOG_ADMIN, "RWATCH:ADD: \2%s\2 (reason: \2%s\2)", pattern, reason);
 	write_rwatchdb();
 }
 
@@ -323,8 +322,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 			node_del(n, &rwatch_list);
 			node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from regex watch list."), pattern);
-			snoop("RWATCH:DEL: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
-			logcommand(si, CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
+			logcommand(si, CMDLOG_ADMIN, "RWATCH:DEL: \2%s\2", pattern);
 			write_rwatchdb();
 			return;
 		}
@@ -350,7 +348,7 @@ static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 				rw->reason);
 	}
 	command_success_nodata(si, _("End of RWATCH LIST"));
-	logcommand(si, CMDLOG_GET, "RWATCH LIST");
+	logcommand(si, CMDLOG_GET, "RWATCH:LIST");
 }
 
 static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
@@ -428,12 +426,11 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 			rw->actions |= addflags;
 			rw->actions &= ~removeflags;
 			command_success_nodata(si, _("Set options \2%s\2 on \2%s\2."), opts, pattern);
-			snoop("RWATCH:SET: \2%s\2 \2%s\2 by \2%s\2", pattern, opts, get_oper_name(si));
 			if (addflags & RWACT_KLINE)
 				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			if (removeflags & RWACT_KLINE)
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
-			logcommand(si, CMDLOG_ADMIN, "RWATCH SET %s %s", pattern, opts);
+			logcommand(si, CMDLOG_ADMIN, "RWATCH:SET: \2%s\2 \2%s\2", pattern, opts);
 			write_rwatchdb();
 			return;
 		}
@@ -467,7 +464,7 @@ static void rwatch_newuser(hook_user_nick_t *data)
 		{
 			if (rw->actions & RWACT_SNOOP)
 			{
-				snoop("RWATCH:%s %s matches \2%s\2 (%s)",
+				snoop("RWATCH: %s %s matches \2%s\2 (%s)",
 						rw->actions & RWACT_KLINE ? "KLINE:" : "",
 						usermask, rw->regex, rw->reason);
 			}

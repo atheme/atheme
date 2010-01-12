@@ -127,9 +127,8 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2%s\2 has been added to the services ignore list."), target);
 
-	logcommand(si, CMDLOG_ADMIN, "IGNORE ADD %s %s", target, reason);
+	logcommand(si, CMDLOG_ADMIN, "IGNORE:ADD: \2%s\2 (reason: \2%s\2)", target, reason);
 	wallops("%s added a services ignore for \2%s\2 (%s).", get_oper_name(si), target, reason);
-	snoop("IGNORE:ADD: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
 
 	return;
 }
@@ -158,8 +157,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 			svsignore_delete(svsignore);
 
 			wallops("%s removed \2%s\2 from the services ignore list.", get_oper_name(si), target);
-			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, get_oper_name(si));
-			logcommand(si, CMDLOG_ADMIN, "IGNORE DEL %s", target);
+			logcommand(si, CMDLOG_ADMIN, "IGNORE:DEL: \2%s\2", target);
 
 			return;
 		}
@@ -196,8 +194,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Services ignore list has been wiped!"));
 
 	wallops("\2%s\2 wiped the services ignore list.", get_oper_name(si));
-	snoop("IGNORE:CLEAR: by \2%s\2", get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "IGNORE CLEAR");
+	logcommand(si, CMDLOG_ADMIN, "IGNORE:CLEAR");
 
 	return;
 }
@@ -233,7 +230,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "-------------------------");
 
-	logcommand(si, CMDLOG_ADMIN, "IGNORE LIST");
+	logcommand(si, CMDLOG_ADMIN, "IGNORE:LIST");
 
 	return;
 }

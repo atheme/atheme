@@ -235,11 +235,9 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SGLINE on \2%s\2 was successfully added."), x->realname);
 
-	snoop("SGLINE:ADD: \2%s\2 by \2%s\2 for \2%s\2", x->realname, get_oper_name(si), x->reason);
-
 	verbose_wallops("\2%s\2 is \2adding\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), x->realname, 
 		x->reason);
-	logcommand(si, CMDLOG_SET, "SGLINE ADD %s %s", x->realname, x->reason);
+	logcommand(si, CMDLOG_ADMIN, "SGLINE:ADD: \2%s\2 (reason: \2%s\2)", x->realname, x->reason);
 }
 
 static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
@@ -293,8 +291,7 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 					verbose_wallops("\2%s\2 is \2removing\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2",
 						get_oper_name(si), x->realname, x->reason);
 
-					snoop("SGLINE:DEL: \2%s\2 by \2%s\2", x->realname, get_oper_name(si));
-					logcommand(si, CMDLOG_SET, "SGLINE DEL %s", x->realname);
+					logcommand(si, CMDLOG_ADMIN, "SGLINE:DEL: \2%s\2", x->realname);
 					xline_delete(x->realname);
 				}
 
@@ -313,8 +310,7 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 			verbose_wallops("\2%s\2 is \2removing\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2",
 				get_oper_name(si), x->realname, x->reason);
 
-			snoop("SGLINE:DEL: \2%s\2 by \2%s\2", x->realname, get_oper_name(si));
-			logcommand(si, CMDLOG_SET, "SGLINE DEL %s", x->realname);
+			logcommand(si, CMDLOG_ADMIN, "SGLINE:DEL: \2%s\2", x->realname);
 			xline_delete(x->realname);
 		} while ((s = strtok(NULL, ",")));
 
@@ -332,8 +328,7 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 	verbose_wallops("\2%s\2 is \2removing\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2",
 		get_oper_name(si), x->realname, x->reason);
 
-	snoop("SGLINE:DEL: \2%s\2 by \2%s\2", x->realname, get_oper_name(si));
-	logcommand(si, CMDLOG_SET, "SGLINE DEL %s", target);
+	logcommand(si, CMDLOG_ADMIN, "SGLINE:DEL: \2%s\2", target);
 	xline_delete(target);
 }
 
@@ -367,7 +362,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Total of \2%d\2 %s in SGLINE list."), xlnlist.count, (xlnlist.count == 1) ? "entry" : "entries");
-	logcommand(si, CMDLOG_GET, "SGLINE LIST%s", full ? " FULL" : "");
+	logcommand(si, CMDLOG_GET, "SGLINE:LIST: \2%s\2", full ? " FULL" : "");
 }
 
 static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
@@ -375,8 +370,7 @@ static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	xline_t *x;
 
-	logcommand(si, CMDLOG_DO, "SGLINE SYNC");
-	snoop("SGLINE:SYNC: \2%s\2", get_oper_name(si));
+	logcommand(si, CMDLOG_DO, "SGLINE:SYNC");
 
 	LIST_FOREACH(n, xlnlist.head)
 	{

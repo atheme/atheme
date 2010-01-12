@@ -62,7 +62,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		logcommand(si, CMDLOG_ADMIN, "MODLOAD %s", module);
+		logcommand(si, CMDLOG_ADMIN, "MODLOAD: \2%s\2", module);
 		if (*module != '/')
 		{
 			snprintf(pbuf, BUFSIZE, "%s/%s", MODDIR "/modules",
@@ -79,7 +79,6 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (conf_need_rehash)
 	{
-		snoop("REHASH:MODLOAD: \2%s\2", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "REHASH (MODLOAD)");
 		wallops("Rehashing \2%s\2 to complete module load by request of \2%s\2.", config_file, get_oper_name(si));
 		if (!conf_rehash())

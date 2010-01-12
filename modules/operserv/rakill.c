@@ -105,14 +105,11 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	{
 		regex_destroy(regex);
 		command_fail(si, fault_noprivs, _("The provided regex matches you, refusing RAKILL."));
-		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, get_oper_name(si), reason);
 		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
 				get_oper_name(si), pattern);
-		logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
+		logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (refused, matches self)", pattern, reason);
 		return;
 	}
-
-	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, get_oper_name(si), reason);
 
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
@@ -129,7 +126,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	
 	regex_destroy(regex);
 	command_success_nodata(si, _("\2%d\2 matches for %s akilled."), matches, pattern);
-	logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (%d matches)", pattern, reason, matches);
+	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

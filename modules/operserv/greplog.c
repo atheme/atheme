@@ -135,8 +135,6 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("GREPLOG: \2%s\2 \2%s\2 by \2%s\2", service, pattern, get_oper_name(si));
-
 	for (day = 0; day <= days; day++)
 	{
 		if (day == 0)
@@ -211,7 +209,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "GREPLOG %s %s (%d matches)", service, pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "GREPLOG: \2%s\2 \2%s\2 (\2%d\2 matches)", service, pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No lines matched pattern \2%s\2"), pattern);
 	else if (matches > 0)

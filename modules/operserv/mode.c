@@ -62,8 +62,7 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("\2%s\2 is using MODE on \2%s\2 (set: \2%s\2)",
 		get_oper_name(si), channel, mode);
-	snoop("MODE: \2%s\2 \2%s\2 by \2%s\2", channel, mode, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "MODE %s %s", channel, mode);
+	logcommand(si, CMDLOG_ADMIN, "MODE: \2%s\2 on \2%s\2", mode, channel);
 
 	modeparc = sjtoken(mode, ' ', modeparv);
 

@@ -65,7 +65,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 		if (m->header->norestart)
 		{
-			slog(LG_INFO, "%s tried to unload a permanent module",
+			slog(LG_INFO, "\2%s\2 tried to unload a permanent module",
 				get_oper_name(si));
 			command_fail(si, fault_noprivs, _("\2%s\2 is a permanent module; it cannot be unloaded."), module);
 			continue;
@@ -78,7 +78,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD %s", module);
+		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD: \2%s\2", module);
 
 		module_unload(m);
 
