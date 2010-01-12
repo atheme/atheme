@@ -203,7 +203,7 @@ void myuser_delete(myuser_t *mu)
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, successor->name, mu->name);
-			slog(LG_DEBUG, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, successor->name,
 					(long)(CURRTIME - mc->used),
 					mu->name,
@@ -220,7 +220,7 @@ void myuser_delete(myuser_t *mu)
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
-			slog(LG_DEBUG, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mu->name,
 					LIST_LENGTH(&mc->chanacs));
@@ -264,7 +264,7 @@ void myuser_delete(myuser_t *mu)
 		mn = n->data;
 		if (irccasecmp(mn->nick, mu->name))
 		{
-			slog(LG_DEBUG, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
+			slog(LG_VERBOSE, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
 					mn->nick,
 					(long)(CURRTIME - mn->lastseen),
 					mu->name);
@@ -838,13 +838,13 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	{
 		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, mu->name, name);
 		slog(LG_INFO, _("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, mu->name);
-		slog(LG_DEBUG, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
+		slog(LG_VERBOSE, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
 				md2->value, mu->name, name);
 	}
 	else if (md == NULL && md2 != NULL)
 	{
 		slog(LG_INFO, _("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, mu->name);
-		slog(LG_DEBUG, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
+		slog(LG_VERBOSE, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
 				md2->value, mu->name, name);
 	}
 
@@ -1621,7 +1621,7 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 			return 0;
 
 		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
-		slog(LG_DEBUG, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
+		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				mu->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
 				LIST_LENGTH(&mu->chanacs));
@@ -1675,7 +1675,7 @@ void expire_check(void *arg)
 			}
 
 			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-			slog(LG_DEBUG, "expire_check(): expiring nick %s (unused %lds, account %s)",
+			slog(LG_VERBOSE, "expire_check(): expiring nick %s (unused %lds, account %s)",
 					mn->nick, (long)(CURRTIME - mn->lastseen),
 					mn->owner->name);
 			object_unref(mn);
@@ -1713,7 +1713,7 @@ void expire_check(void *arg)
 				continue;
 
 			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
-			slog(LG_DEBUG, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_VERBOSE, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),
 					LIST_LENGTH(&mc->chanacs));
