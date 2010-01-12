@@ -92,7 +92,7 @@ void handle_stats(user_t *u, char req)
 
 	if (floodcheck(u, NULL))
 		return;
-	logcommand_user(NULL, u, CMDLOG_GET, "STATS %c", req);
+	logcommand_user(NULL, u, CMDLOG_GET, "STATS: \2%c\2", req);
 
 	switch (req)
 	{
@@ -738,9 +738,8 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 			reintroduce_user(u);
 		else
 		{
-			slog(LG_ERROR, "handle_kill(): services kill fight (%s -> %s), shutting down", source, u->nick);
+			slog(LG_ERROR, "handle_kill(): services kill fight (\2%s\2 -> \2%s\2), shutting down", source, u->nick);
 			wallops(_("Services kill fight (%s -> %s), shutting down!"), source, u->nick);
-			snoop(_("ERROR: Services kill fight (%s -> %s), shutting down!"), source, u->nick);
 			runflags |= RF_SHUTDOWN;
 		}
 	}
@@ -880,7 +879,7 @@ int floodcheck(user_t *u, user_t *t)
 				notice(from, u->nick, _("You have triggered services flood protection."));
 				notice(from, u->nick, _("This is your first offense. You will be ignored for 30 seconds."));
 
-				snoop("FLOOD: \2%s\2", u->nick);
+				slog(LG_INFO, "FLOOD: \2%s\2", u->nick);
 
 				return 1;
 			}
@@ -895,7 +894,7 @@ int floodcheck(user_t *u, user_t *t)
 				notice(from, u->nick, _("You have triggered services flood protection."));
 				notice(from, u->nick, _("This is your last warning. You will be ignored for 30 seconds."));
 
-				snoop("FLOOD: \2%s\2", u->nick);
+				slog(LG_INFO, "FLOOD: \2%s\2", u->nick);
 
 				return 1;
 			}
@@ -907,7 +906,7 @@ int floodcheck(user_t *u, user_t *t)
 				/* kline them the third time */
 				k = kline_add("*", u->host, "ten minute ban - flooding services", 600, chansvs.nick);
 
-				snoop("FLOOD:KLINE: \2%s\2", u->nick);
+				slog(LG_INFO, "FLOOD:KLINE: \2%s\2", u->nick);
 
 				return 1;
 			}

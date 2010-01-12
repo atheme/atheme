@@ -685,7 +685,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
 	if (is_soper(mu))
-		snoop("SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), mu->name);
+		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), mu->name);
 
 	if (atoi(md_failnum->value) == 10)
 	{

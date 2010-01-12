@@ -66,7 +66,7 @@ module_t *module_load(const char *filespec)
 
 	if ((m = module_find(filespec)))
 	{
-		slog(LG_INFO, "module_load(): module %s is already loaded [at 0x%lx]", filespec, (unsigned long)m->address);
+		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at 0x%lx]", filespec, (unsigned long)m->address);
 		return NULL;
 	}
 
@@ -75,9 +75,7 @@ module_t *module_load(const char *filespec)
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_ERROR, "module_load(): error: %s", errp);
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: loading module \2%s\2: %s"), filespec, errp);
+		slog(LG_ERROR, "module_load(): error: \2%s\2", errp);
 		free(errp);
 		return NULL;
 	}
@@ -86,10 +84,7 @@ module_t *module_load(const char *filespec)
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_ERROR, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
-
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module."), filespec);
+		slog(LG_ERROR, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", filespec);
 
 		linker_close(handle);
 		return NULL;
@@ -97,10 +92,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_ver != MAPI_ATHEME_V2)
 	{
-		slog(LG_ERROR, "module_load(): %s: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V2);
-
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: Module \2%s\2 has wrong MAPI version (%u != %u), please recompile it."), filespec, h->abi_ver, MAPI_ATHEME_V2);
+		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V2);
 
 		linker_close(handle);
 		return NULL;
@@ -108,10 +100,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
-		slog(LG_ERROR, "module_load(): %s: ABI revision mismatch (%u != %u), please recompile.", filespec, h->abi_rev, CURRENT_ABI_REVISION);
-
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: Module \2%s\2 has wrong ABI revision (%u != %u), please recompile it."), filespec, h->abi_rev, CURRENT_ABI_REVISION);
+		slog(LG_ERROR, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", filespec, h->abi_rev, CURRENT_ABI_REVISION);
 
 		linker_close(handle);
 		return NULL;
@@ -119,10 +108,7 @@ module_t *module_load(const char *filespec)
 
 	if (module_find_published(h->name))
 	{
-		slog(LG_INFO, "module_load(): %s: Published name %s already exists.", filespec, h->name);
-
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: Module \2%s\2 already exists while loading \2%s\2."), h->name, filespec);
+		slog(LG_INFO, "module_load(): \2%s\2: Published name \2%s\2 already exists.", filespec, h->name);
 
 		linker_close(handle);
 		return NULL;
@@ -163,9 +149,7 @@ module_t *module_load(const char *filespec)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		slog(LG_ERROR, "module_load(): module %s init failed", filespec);
-		if (me.connected)
-			snoop(_("MODLOAD:ERROR: Init failed while loading module \2%s\2"), filespec);
+		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", filespec);
 		node_free(n);
 		module_unload(m);
 		return NULL;
@@ -178,7 +162,7 @@ module_t *module_load(const char *filespec)
 	if (me.connected && !cold_start)
 	{
 		wallops(_("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
-		snoop(_("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
+		slog(LG_INFO, _("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
 	}
 
 	return m;
@@ -299,11 +283,10 @@ void module_unload(module_t * m)
 	n = node_find(m, &modules);
 	if (n != NULL)
 	{
-		slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
+		slog(LG_INFO, "module_unload(): unloaded \2%s\2", m->header->name);
 		if (me.connected)
 		{
 			wallops(_("Module %s unloaded."), m->header->name);
-			snoop("MODUNLOAD: \2%s\2", m->header->name);
 		}
 
 		if (m->header->deinit)

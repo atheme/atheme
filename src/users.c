@@ -564,14 +564,14 @@ void user_mode(user_t *user, const char *modes)
 	if (!was_ircop && is_ircop(user))
 	{
 		slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
-		snoop("OPER: %s (%s)", user->nick, user->server->name);
+		slog(LG_INFO, "OPER: \2%s\2 (\2%s\2)", user->nick, user->server->name);
 		user->server->opers++;
 		hook_call_user_oper(user);
 	}
 	else if (was_ircop && !is_ircop(user))
 	{
 		slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
-		snoop("DEOPER: %s (%s)", user->nick, user->server->name);
+		slog(LG_INFO, "DEOPER: \2%s\2 (\2%s\2)", user->nick, user->server->name);
 		user->server->opers--;
 		hook_call_user_deoper(user);
 	}

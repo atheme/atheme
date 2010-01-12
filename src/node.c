@@ -238,7 +238,7 @@ void kline_expire(void *arg)
 
 		if (k->expires <= CURRTIME)
 		{
-			snoop(_("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2"),
+			slog(LG_INFO, _("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2"),
 				k->user, k->host, time_ago(k->settime), k->setby);
 
 			verbose_wallops(_("AKILL expired on \2%s@%s\2, set by \2%s\2"),
@@ -375,7 +375,7 @@ void xline_expire(void *arg)
 
 		if (x->expires <= CURRTIME)
 		{
-			snoop(_("XLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+			slog(LG_INFO, _("XLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
 				x->realname, time_ago(x->settime), x->setby);
 
 			verbose_wallops(_("XLINE expired on \2%s\2, set by \2%s\2"),
@@ -534,7 +534,7 @@ void qline_expire(void *arg)
 
 		if (q->expires <= CURRTIME)
 		{
-			snoop(_("QLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
+			slog(LG_INFO, _("QLINE:EXPIRE: \2%s\2 set \2%s\2 ago by \2%s\2"),
 				q->mask, time_ago(q->settime), q->setby);
 
 			verbose_wallops(_("QLINE expired on \2%s\2, set by \2%s\2"),

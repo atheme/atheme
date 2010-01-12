@@ -145,18 +145,18 @@ void check_signals(void)
 	if (got_sighup)
 	{
 		got_sighup = 0;
-		slog(LG_INFO, "sighandler(): got SIGHUP, rehashing %s", config_file);
+		slog(LG_INFO, "sighandler(): got SIGHUP, rehashing \2%s\2", config_file);
 
 		wallops(_("Got SIGHUP; reloading \2%s\2."), config_file);
 
 		if (db_save && !readonly)
 		{
-			snoop("UPDATE: \2%s\2", "system console");
+			slog(LG_INFO, "UPDATE: \2%s\2", "system console");
 			wallops(_("Updating database by request of \2%s\2."), "system console");
 			db_save(NULL);
 		}
 
-		snoop("REHASH: \2%s\2", "system console");
+		slog(LG_INFO, "REHASH: \2%s\2", "system console");
 		wallops(_("Rehashing \2%s\2 by request of \2%s\2."), config_file, "system console");
 
 		/* reload the config, opening other logs besides the core log if needed. */
@@ -182,10 +182,9 @@ void check_signals(void)
 		got_sigint = 0;
 		wallops(_("Got SIGINT; restarting."));
 
-		snoop("RESTART: \2%s\2", "system console");
+		slog(LG_INFO, "RESTART: \2%s\2", "system console");
 		wallops(_("Restarting by request of \2%s\2."), "system console");
 
-		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
 	}
 
@@ -202,10 +201,9 @@ void check_signals(void)
 		got_sigusr2 = 0;
 		wallops(_("Got SIGUSR2; restarting."));
 
-		snoop("RESTART: \2%s\2", "system console");
+		slog(LG_INFO, "RESTART: \2%s\2", "system console");
 		wallops(_("Restarting by request of \2%s\2."), "system console");
 
-		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
 	}
 
