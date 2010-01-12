@@ -124,9 +124,9 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			notice_global_sts(globsvs.me->me, "*", buf);
 			isfirst = false;
 			/* log everything */
-			logcommand(si, CMDLOG_ADMIN, "GLOBAL %s", global->text);
+			logcommand(si, CMDLOG_ADMIN, "GLOBAL \2%s\2 by \2%s\2", global->text, get_oper_name(si));
 		}
-		logcommand(si, CMDLOG_ADMIN, "GLOBAL (%d lines sent)", LIST_LENGTH(&globlist));
+		logcommand(si, CMDLOG_ADMIN, "GLOBAL (\2%d\2 lines sent)", LIST_LENGTH(&globlist));
 
 		/* destroy the list we made */
 		LIST_FOREACH_SAFE(n, tn, globlist.head)
@@ -142,8 +142,6 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		glob_heap = NULL;
 		free(sender);
 		sender = NULL;
-
-		snoop("GLOBAL: \2%s\2", get_oper_name(si));
 
 		command_success_nodata(si, "The global notice has been sent.");
 
