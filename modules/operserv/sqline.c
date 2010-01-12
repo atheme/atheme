@@ -263,7 +263,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 
 	verbose_wallops("\2%s\2 is \2adding\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), q->mask, 
 		q->reason);
-	logcommand(si, CMDLOG_SET, "SQLINE:ADD: \2%s\2 (reason: \2%s\2)", q->mask, q->reason);
+	logcommand(si, CMDLOG_ADMIN, "SQLINE:ADD: \2%s\2 (reason: \2%s\2)", q->mask, q->reason);
 }
 
 static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
@@ -317,7 +317,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 					verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 						get_oper_name(si), q->mask, q->reason);
 
-					logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", q->mask);
+					logcommand(si, CMDLOG_ADMIN, "SQLINE:DEL: \2%s\2", q->mask);
 					qline_delete(q->mask);
 				}
 
@@ -336,7 +336,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 			verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 				get_oper_name(si), q->mask, q->reason);
 
-			logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", q->mask);
+			logcommand(si, CMDLOG_ADMIN, "SQLINE:DEL: \2%s\2", q->mask);
 			qline_delete(q->mask);
 		} while ((s = strtok(NULL, ",")));
 
@@ -354,7 +354,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 	verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 		get_oper_name(si), q->mask, q->reason);
 
-	logcommand(si, CMDLOG_SET, "SQLINE:DEL: \2%s\2", target);
+	logcommand(si, CMDLOG_ADMIN, "SQLINE:DEL: \2%s\2", target);
 	qline_delete(target);
 }
 
