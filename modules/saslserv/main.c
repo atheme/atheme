@@ -473,7 +473,7 @@ static void sasl_newuser(hook_user_nick_t *data)
 
 	if (is_soper(mu))
 	{
-		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
 	}
 
 	myuser_notice(saslsvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
