@@ -67,19 +67,26 @@ static void logfile_join_channels(hook_channel_joinpart_t *hdata)
 
 	c = hdata->cu->chan;
 
-	if (opersvs.nick == NULL)
-		return;
-
 	LIST_FOREACH(n, log_files.head)
 	{
 		logfile_t *lf = n->data;
 
 		if (!irccasecmp(c->name, lf->log_path))
 		{
+			mowgli_patricia_iteration_state_t state;
+			service_t *svs;
+
 			if (lf->channel_joined)
 				return;
 
-			join(lf->log_path, opersvs.nick);
+			MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
+			{
+				if (svs->me == NULL)
+					continue;
+
+				join(lf->log_path, svs->me->nick);
+			}
+
 			lf->channel_joined = true;
 		}
 	}
@@ -180,8 +187,32 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
 
+	if (me.connected == false)
+		return;
+
 	if (lf->channel_joined == true)
+	{
+		mowgli_patricia_iteration_state_t state;
+		service_t *svs;
+
+		MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
+		{
+			size_t namelen;
+
+			if (svs->me == NULL)
+				continue;
+
+			namelen = strlen(svs->nick);
+
+			if (!strncmp(svs->nick, buf, namelen))
+			{
+				msg(svs->me->nick, lf->log_path, "%s", buf + (namelen + 1));
+				return;
+			}
+		}
+
 		msg(opersvs.nick, lf->log_path, "%s", buf);
+	}
 }
 
 /*
