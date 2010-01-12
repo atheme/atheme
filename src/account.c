@@ -202,8 +202,8 @@ void myuser_delete(myuser_t *mu)
 		/* attempt succession */
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mu->name);
-			slog(LG_REGISTER, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, successor->name, mu->name);
+			slog(LG_DEBUG, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, successor->name,
 					(long)(CURRTIME - mc->used),
 					mu->name,
@@ -219,8 +219,8 @@ void myuser_delete(myuser_t *mu)
 		/* no successor found */
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
-			snoop(_("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
-			slog(LG_REGISTER, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
+			slog(LG_DEBUG, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mu->name,
 					LIST_LENGTH(&mc->chanacs));
@@ -264,13 +264,13 @@ void myuser_delete(myuser_t *mu)
 		mn = n->data;
 		if (irccasecmp(mn->nick, mu->name))
 		{
-			slog(LG_REGISTER, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
+			slog(LG_DEBUG, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
 					mn->nick,
 					(long)(CURRTIME - mn->lastseen),
 					mu->name);
 			if (strlen(nicks) + strlen(mn->nick) + 3 >= sizeof nicks)
 			{
-				snoop(_("DELETE: %s from \2%s\2"), nicks, mu->name);
+				slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, mu->name);
 				nicks[0] = '\0';
 			}
 			if (nicks[0] != '\0')
@@ -282,7 +282,7 @@ void myuser_delete(myuser_t *mu)
 		object_unref(mn);
 	}
 	if (nicks[0] != '\0')
-		snoop(_("DELETE: %s from \2%s\2"), nicks, mu->name);
+		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, mu->name);
 
 	/* mu->name is the index for this dtree */
 	mowgli_patricia_delete(mulist, mu->name);
@@ -837,14 +837,14 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	if (md != NULL && md2 != NULL && strcmp(md->value, md2->value))
 	{
 		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, mu->name, name);
-		snoop(_("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, mu->name);
-		slog(LG_INFO, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
+		slog(LG_INFO, _("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, mu->name);
+		slog(LG_DEBUG, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
 				md2->value, mu->name, name);
 	}
 	else if (md == NULL && md2 != NULL)
 	{
-		snoop(_("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, mu->name);
-		slog(LG_INFO, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
+		slog(LG_INFO, _("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, mu->name);
+		slog(LG_DEBUG, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
 				md2->value, mu->name, name);
 	}
 
@@ -1620,8 +1620,8 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 		if (is_conf_soper(mu))
 			return 0;
 
-		snoop(_("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
-		slog(LG_REGISTER, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
+		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
+		slog(LG_DEBUG, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				mu->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
 				LIST_LENGTH(&mu->chanacs));
@@ -1674,8 +1674,8 @@ void expire_check(void *arg)
 				continue;
 			}
 
-			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-			slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %lds, account %s)",
+			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
+			slog(LG_DEBUG, "expire_check(): expiring nick %s (unused %lds, account %s)",
 					mn->nick, (long)(CURRTIME - mn->lastseen),
 					mn->owner->name);
 			object_unref(mn);
@@ -1712,8 +1712,8 @@ void expire_check(void *arg)
 			if (MC_HOLD & mc->flags)
 				continue;
 
-			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
-			slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
+			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
+			slog(LG_DEBUG, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),
 					LIST_LENGTH(&mc->chanacs));
