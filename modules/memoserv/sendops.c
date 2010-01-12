@@ -195,7 +195,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		command_add_flood(si, FLOOD_HEAVY);
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_SET, "SENDOPS to %s (%d/%d sent)", mc->name, sent, tried);
+	logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
 	return;
 }	

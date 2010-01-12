@@ -131,7 +131,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		if (tmu->memos.count >= me.mdlimit)
 		{
 			command_fail(si, fault_toomany, _("%s's inbox is full"), target);
-			logcommand(si, CMDLOG_SET, "failed SEND to %s (target inbox full)", tmu->name);
+			logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (target inbox full)", tmu->name);
 			return;
 		}
 
@@ -151,12 +151,12 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (mu == si->smu)
 			{
-				logcommand(si, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
+				logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (on ignore list)", tmu->name);
 				command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);
 				return;
 			}
 		}
-		logcommand(si, CMDLOG_SET, "SEND to %s", tmu->name);
+		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", tmu->name);
 	
 		/* Malloc and populate struct */
 		memo = smalloc(sizeof(mymemo_t));

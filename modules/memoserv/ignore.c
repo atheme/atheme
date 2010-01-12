@@ -146,7 +146,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	/* Add to ignore list */
 	temp = sstrdup(newnick);
 	node_add(temp, node_create(), &si->smu->memo_ignores);
-	logcommand(si, CMDLOG_SET, "IGNORE ADD %s", newnick);
+	logcommand(si, CMDLOG_SET, "IGNORE:ADD: \2%s\2", newnick);
 	command_success_nodata(si, _("Account \2%s\2 added to your ignore list."), newnick);
 	return;
 }
@@ -172,7 +172,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		/* Not using list or clear, but we've found our target in the ignore list */
 		if (!irccasecmp(temp, parv[0]))
 		{
-			logcommand(si, CMDLOG_SET, "IGNORE DEL %s", temp);
+			logcommand(si, CMDLOG_SET, "IGNORE:DEL: \2%s\2", temp);
 			command_success_nodata(si, _("Account \2%s\2 removed from ignore list."), temp);
 			node_del(n, &si->smu->memo_ignores);
 			node_free(n);
@@ -205,7 +205,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Let them know list is clear */
 	command_success_nodata(si, _("Ignore list cleared."));
-	logcommand(si, CMDLOG_SET, "IGNORE CLEAR");
+	logcommand(si, CMDLOG_SET, "IGNORE:CLEAR");
 	return;
 }
 

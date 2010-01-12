@@ -127,7 +127,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Target inbox is full."));
-		logcommand(si, CMDLOG_SET, "failed FORWARD to %s (target inbox full)", tmu->name);
+		logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (target inbox full)", tmu->name);
 		return;
 	}
 
@@ -158,12 +158,12 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		if (mu == si->smu)
 		{
 			/* Lie... change this if you want it to fail silent */
-			logcommand(si, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);
+			logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (on ignore list)", tmu->name);
 			command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 			return;
 		}
 	}
-	logcommand(si, CMDLOG_SET, "FORWARD to %s", tmu->name);
+	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", tmu->name);
 	
 	/* Go to forwarding memos */
 	LIST_FOREACH(n, si->smu->memos.head)
