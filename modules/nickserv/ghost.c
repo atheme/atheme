@@ -87,7 +87,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		if(target_u->myuser && target_u->myuser == si->smu)
 			mu = target_u->myuser;
 
-		logcommand(si, CMDLOG_DO, "GHOST %s!%s@%s", target_u->nick, target_u->user, target_u->vhost);
+		logcommand(si, CMDLOG_DO, "GHOST: \2%s!%s@%s\2", target_u->nick, target_u->user, target_u->vhost);
 
 		kill_user(si->service->me, target_u, "GHOST command used by %s",
 				si->su != NULL && !strcmp(si->su->user, target_u->user) && !strcmp(si->su->vhost, target_u->vhost) ? si->su->nick : get_source_mask(si));
@@ -102,13 +102,13 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (password && mu)
 	{
-		logcommand(si, CMDLOG_DO, "failed GHOST %s (bad password)", target);
+		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
 		bad_password(si, mu);
 	}
 	else
 	{
-		logcommand(si, CMDLOG_DO, "failed GHOST %s (invalid login)", target);
+		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (invalid login)", target);
 		command_fail(si, fault_noprivs, _("You may not ghost \2%s\2."), target);
 	}
 }

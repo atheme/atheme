@@ -83,8 +83,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu != si->smu)
 	{	/* must have been an oper */
-		snoop("LISTCHANS: \2%s\2 on \2%s\2", get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "LISTCHANS %s", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "LISTCHANS: \2%s\2", mu->name);
 	}
 	else
 	{	/* just a user, or oper is listing himself */

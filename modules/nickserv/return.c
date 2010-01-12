@@ -63,7 +63,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu))
 	{
-		logcommand(si, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
+		logcommand(si, CMDLOG_ADMIN, "failed RETURN \2%s\2 to \2%s\2 (is SOPER)", target, newmail);
 		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; it cannot be returned."), target);
 		return;
 	}
@@ -110,8 +110,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	authcookie_destroy_all(mu);
 
 	wallops("%s returned the account \2%s\2 to \2%s\2", get_oper_name(si), target, newmail);
-	snoop("RETURN: \2%s\2 to \2%s\2 by \2%s\2", target, newmail, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "RETURN %s to %s", target, newmail);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "RETURN: \2%s\2 to \2%s\2", target, newmail);
 	command_success_nodata(si, _("The e-mail address for \2%s\2 has been set to \2%s\2"),
 						target, newmail);
 	command_success_nodata(si, _("A random password has been set; it has been sent to \2%s\2."),

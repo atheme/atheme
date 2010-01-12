@@ -87,11 +87,11 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 
 	if (is_soper(si->smu))
-		snoop("DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->smu->name);
+		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->smu->name);
 
 	if (si->su != u)
 	{
-		logcommand(si, CMDLOG_LOGIN, "LOGOUT %s", u->nick);
+		logcommand(si, CMDLOG_LOGIN, "LOGOUT: \2%s\2", u->nick);
 		command_success_nodata(si, _("\2%s\2 has been logged out."), si->su->nick);
 	}
 	else

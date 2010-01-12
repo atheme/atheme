@@ -85,7 +85,7 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 	state.origin = si;
 	mowgli_patricia_foreach(mulist, listmail_foreach_cb, &state);
 
-	logcommand(si, CMDLOG_GET, "LISTOWNMAIL %s (%d matches)", si->smu->email, state.matches);
+	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%d\2 matches)", si->smu->email, state.matches);
 	command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
 					    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, si->smu->email);
 }

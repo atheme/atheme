@@ -140,7 +140,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!force)
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed VHOST %s (marked by %s)", mu->name, markmd->value);
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", mu->name, markmd->value);
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, markmd->value);
 			if (has_priv(si, PRIV_MARK))
 			{
@@ -158,7 +158,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (!has_priv(si, PRIV_MARK))
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed VHOST %s (marked by %s)", mu->name, markmd->value);
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", mu->name, markmd->value);
 			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
@@ -174,8 +174,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		}
 		metadata_delete(mu, "private:usercloak");
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
-		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", mu->name);
 		if (markmd)
 		{
 			wallops("%s deleted vhost from the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
@@ -198,9 +197,8 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mu, "private:usercloak", host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, mu->name);
-	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, mu->name, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
-			mu->name, host);
+	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
+			host, mu->name);
 	if (markmd)
 	{
 		wallops("%s set vhost %s on the \2MARKED\2 account %s.", get_oper_name(si), host, mu->name);
@@ -220,7 +218,6 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
-	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
 		md = metadata_find(mu, "private:usercloak");
@@ -233,7 +230,7 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LISTVHOST %s (%d matches)", pattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTVHOST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No vhosts matched pattern \2%s\2"), pattern);
 	else

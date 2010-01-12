@@ -112,7 +112,6 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (nicksvs.no_nick_ownership)
 	{
-		snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
 		MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 		{
 			if (nickpattern && match(nickpattern, mu->name))
@@ -135,7 +134,6 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		snoop("LIST:NICKS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
 		MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 		{
 			if (nickpattern && match(nickpattern, mn->nick))
@@ -158,7 +156,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", parv[0], matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", parv[0], matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No nicknames matched pattern \2%s\2"), parv[0]);
 	else

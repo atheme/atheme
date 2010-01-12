@@ -103,8 +103,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	if (hdata_reg.approved != 0)
 		return;
 
-	logcommand(si, CMDLOG_REGISTER, "GROUP");
-	snoop("GROUP: \2%s\2 to \2%s\2", si->su->nick, si->smu->name);
+	logcommand(si, CMDLOG_REGISTER, "GROUP: \2%s\2 to \2%s\2", si->su->nick, si->smu->name);
 	mn = mynick_add(si->smu, si->su->nick);
 	mn->registered = CURRTIME;
 	mn->lastseen = CURRTIME;
@@ -151,8 +150,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_REGISTER, "UNGROUP %s", mn->nick);
-	snoop("UNGROUP: \2%s\2 by \2%s\2", target, get_source_name(si));
+	logcommand(si, CMDLOG_REGISTER, "UNGROUP: \2%s\2", mn->nick);
 	hdata.si = si;
 	hdata.mu = si->smu;
 	hdata.mn = mn;
@@ -226,22 +224,17 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mn2 != NULL)
 	{
-		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s (new account name: %s)", mn->nick, mn2->nick);
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2 (new account name: \2%s\2)", mn->nick, mu->name, mn2->nick);
 		wallops("%s dropped the nick \2%s\2 from %s, changing account name to \2%s\2",
 				get_oper_name(si), mn->nick, mu->name,
-				mn2->nick);
-		snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2, new name \2%s\2",
-				mn->nick, mu->name, get_source_name(si),
 				mn2->nick);
 		myuser_rename(mu, mn2->nick);
 	}
 	else
 	{
-		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s", mn->nick);
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2", mn->nick, mu->name);
 		wallops("%s dropped the nick \2%s\2 from %s",
 				get_oper_name(si), mn->nick, mu->name);
-		snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",
-				mn->nick, mu->name, get_source_name(si));
 	}
 	hdata.si = si;
 	hdata.mu = mu;

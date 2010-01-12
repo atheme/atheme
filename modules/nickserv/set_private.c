@@ -38,7 +38,7 @@ static void _ns_set_private(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET PRIVATE ON");
+		logcommand(si, CMDLOG_SET, "SET:PRIVATE:ON");
 
 		si->smu->flags |= MU_PRIVATE;
 		si->smu->flags |= MU_HIDEMAIL;
@@ -55,7 +55,7 @@ static void _ns_set_private(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET PRIVATE OFF");
+		logcommand(si, CMDLOG_SET, "SET:PRIVATE:OFF");
 
 		si->smu->flags &= ~MU_PRIVATE;
 

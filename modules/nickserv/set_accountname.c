@@ -82,8 +82,7 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_REGISTER, "SET ACCOUNTNAME %s", newname);
-	snoop("SET:ACCOUNTNAME: \2%s\2 by \2%s\2", newname, get_source_name(si));
+	logcommand(si, CMDLOG_REGISTER, "SET:ACCOUNTNAME: \2%s\2", newname);
 	command_success_nodata(si, _("Your account name is now set to \2%s\2."), newname);
 	myuser_rename(si->smu, newname);
 	return;

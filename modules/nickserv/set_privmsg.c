@@ -38,7 +38,7 @@ static void _ns_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET PRIVMSG ON");
+		logcommand(si, CMDLOG_SET, "SET:PRIVMSG:ON");
 
 		si->smu->flags |= MU_USE_PRIVMSG;
 
@@ -54,7 +54,7 @@ static void _ns_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET PRIVMSG OFF");
+		logcommand(si, CMDLOG_SET, "SET:PRIVMSG:OFF");
 
 		si->smu->flags &= ~MU_USE_PRIVMSG;
 

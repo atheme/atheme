@@ -59,8 +59,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		{
 			object_unref(mun);
 			wallops("%s unmarked the name \2%s\2.", get_oper_name(si), target);
-			snoop("MARK:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
-			logcommand(si, CMDLOG_ADMIN, "MARK %s OFF (old name)", target);
+			logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", target);
 			command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 			return;
 		}
@@ -88,8 +87,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, "private:mark:timestamp", itoa(time(NULL)));
 
 		wallops("%s marked the account \2%s\2.", get_oper_name(si), mu->name);
-		snoop("MARK:ON: \2%s\2 by \2%s\2 for \2%s\2", mu->name, get_oper_name(si), info);
-		logcommand(si, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", mu->name, info);
+		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", mu->name, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), mu->name);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -105,8 +103,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, "private:mark:timestamp");
 
 		wallops("%s unmarked the account \2%s\2.", get_oper_name(si), mu->name);
-		snoop("MARK:OFF: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "MARK %s OFF", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", mu->name);
 		command_success_nodata(si, _("\2%s\2 is now unmarked."), mu->name);
 	}
 	else

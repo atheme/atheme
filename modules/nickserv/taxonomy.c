@@ -61,9 +61,9 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	isoper = has_priv(si, PRIV_USER_AUSPEX);
 	if (isoper)
-		logcommand(si, CMDLOG_ADMIN, "TAXONOMY %s (oper)", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "TAXONOMY: \2%s\2 (oper)", mu->name);
 	else
-		logcommand(si, CMDLOG_GET, "TAXONOMY %s", mu->name);
+		logcommand(si, CMDLOG_GET, "TAXONOMY: \2%s\2", mu->name);
 
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), mu->name);
 

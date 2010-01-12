@@ -240,9 +240,9 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (mu != si->smu)
-			logcommand(si, CMDLOG_ADMIN, "ACCESS LIST %s", mu->name);
+			logcommand(si, CMDLOG_ADMIN, "ACCESS:LIST: \2%s\2", mu->name);
 		else
-			logcommand(si, CMDLOG_GET, "ACCESS LIST");
+			logcommand(si, CMDLOG_GET, "ACCESS:LIST");
 
 		command_success_nodata(si, _("Access list for \2%s\2:"), mu->name);
 
@@ -382,7 +382,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		if (myuser_access_add(mu, mask))
 		{
 			command_success_nodata(si, _("Added mask \2%s\2 to your access list."), mask);
-			logcommand(si, CMDLOG_SET, "ACCESS ADD %s", mask);
+			logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2", mask);
 		}
 		else
 			command_fail(si, fault_toomany, _("Your access list is full."));
@@ -407,7 +407,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		command_success_nodata(si, _("Deleted mask \2%s\2 from your access list."), mask);
-		logcommand(si, CMDLOG_SET, "ACCESS DEL %s", mask);
+		logcommand(si, CMDLOG_SET, "ACCESS:DEL: \2%s\2", mask);
 		myuser_access_delete_enforce(mu, mask);
 	}
 	else

@@ -59,27 +59,26 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu) && !has_priv(si, PRIV_ADMIN))
 	{
-		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (is SOPER)", name);
+		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS \2%s\2 (is SOPER)", name);
 		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; you need %s privilege to reset the password."), name, PRIV_ADMIN);
 		return;
 	}
 
 	if ((md = metadata_find(mu, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
-		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
+		logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2 (overriding mark by \2%s\2)", name, md->value);
 		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, name);
 		newpass = gen_pw(12);
 		command_success_nodata(si, _("The password for the account %s has been changed to %s."), name, newpass);
 		set_password(mu, newpass);
 		free(newpass);
 		wallops("%s reset the password for the \2MARKED\2 account %s.", get_oper_name(si), name);
-		snoop("RESETPASS: \2%s\2 by \2%s\2", name, get_oper_name(si));
 		return;
 	}
 
 	if ((md = metadata_find(mu, "private:mark:setter")))
 	{
-		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
+		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS \2%s\2 (marked by \2%s\2)", name, md->value);
 		command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), name, md->value);
 		return;
 	}
@@ -91,8 +90,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, "private:setpass:key");
 
 	wallops("%s reset the password for the account %s", get_oper_name(si), name);
-	snoop("RESETPASS: \2%s\2 by \2%s\2", name, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "RESETPASS %s", name);
+	logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

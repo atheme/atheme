@@ -85,8 +85,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mu, "private:setpass:key");
 	if (md != NULL && crypt_verify_password(key, md->value))
 	{
-		snoop("SETPASS:VS: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
-		logcommand(si, CMDLOG_SET, "SETPASS %s", mu->name);
+		logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", mu->name);
 		set_password(mu, password);
 		metadata_delete(mu, "private:setpass:key");
 
@@ -97,7 +96,6 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (md != NULL)
 	{
-		snoop("SETPASS:VF: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed SETPASS (invalid key)");
 	}
 	command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 

@@ -38,7 +38,6 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(si->smu, "private:vacation", tsbuf);
 
 	logcommand(si, CMDLOG_SET, "VACATION");
-	snoop("VACATION: \2%s\2", get_source_name(si));
 
 	command_success_nodata(si, _("Your account is now marked as being on vacation.\n"
 				"Please be aware that this will be automatically removed the next time you identify to \2%s\2."),

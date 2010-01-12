@@ -102,8 +102,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mu, "private:setpass:key"))
 		{
 			metadata_delete(mu, "private:setpass:key");
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s CLEAR", mu->name);
-			snoop("SENDPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", mu->name);
 			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), mu->name);
 		}
 		else
@@ -134,8 +133,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
 	{
 		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
-		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), mu->name);
 		if (ismarked)
 			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);

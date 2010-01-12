@@ -118,7 +118,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
-		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (frozen)", mu->name);
+		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (frozen)", mu->name);
 		return;
 	}
 
@@ -151,7 +151,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 				strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
 			}
 			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
-			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
+			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (too many logins)", mu->name);
 			return;
 		}
 
@@ -173,7 +173,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 		if (is_soper(mu))
 		{
-			snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+			logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
 		}
 
 		myuser_notice(nicksvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
@@ -305,7 +305,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
+	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (bad password)", mu->name);
 
 	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
 	bad_password(si, mu);

@@ -106,9 +106,8 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 	command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_REGISTER, "DROP %s", mu->name);
+	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 	hook_call_user_drop(mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
 	object_unref(mu);
@@ -155,8 +154,7 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
-	snoop("FDROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP %s", mu->name);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 	hook_call_user_drop(mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
 	object_unref(mu);

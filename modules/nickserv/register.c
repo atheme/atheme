@@ -222,17 +222,17 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 			ircd_on_login(si->su, mu, NULL);
 	}
 
-	if (!nicksvs.no_nick_ownership && si->su != NULL)
-		snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
-	else
-		snoop("REGISTER: \2%s\2 to \2%s\2 by \2%s\2", account, email,
-				si->su != NULL ? si->su->nick : get_source_name(si));
 	command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_REGISTER, "REGISTER to %s", email);
+
+	if (!nicksvs.no_nick_ownership && si->su != NULL)
+		logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2 to \2%s\2", account, email);
+	else
+		logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2 to \2%s\2 by \2%s\2", account, email, si->su != NULL ? si->su->nick : get_source_name(si));
+
 	if (is_soper(mu))
 	{
 		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", get_oper_name(si), mu->name);
-		snoop("SOPER: \2%s\2 as \2%s\2", get_oper_name(si), mu->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", get_oper_name(si), mu->name);
 	}
 
 	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), mu->name, mu->email, pass);

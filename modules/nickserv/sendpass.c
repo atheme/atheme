@@ -84,7 +84,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu) && !has_priv(si, PRIV_ADMIN))
 	{
-		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
+		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (is SOPER)", name);
 		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; you need %s privilege to send the password."), name, PRIV_ADMIN);
 		return;
 	}
@@ -100,7 +100,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		ismarked = true;
 		if (op == op_none)
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", mu->name, md->value);
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, md->value);
 			if (has_priv(si, PRIV_MARK))
 			{
@@ -112,7 +112,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (!has_priv(si, PRIV_MARK))
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", mu->name, md->value);
 			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
@@ -123,8 +123,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mu, "private:setpass:key"))
 		{
 			metadata_delete(mu, "private:setpass:key");
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s CLEAR", mu->name);
-			snoop("SENDPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", mu->name);
 			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), mu->name);
 		}
 		else
@@ -157,8 +156,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
 		{
 			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
-			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
 			if (ismarked)
 			{
@@ -182,8 +180,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s", name);
-		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
 		if (ismarked)
 		{

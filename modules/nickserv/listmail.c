@@ -74,14 +74,12 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("LISTMAIL: \2%s\2 by \2%s\2", email, get_oper_name(si));
-
 	state.matches = 0;
 	state.pattern = email;
 	state.origin = si;
 	mowgli_patricia_foreach(mulist, listmail_foreach_cb, &state);
 
-	logcommand(si, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
+	logcommand(si, CMDLOG_ADMIN, "LISTMAIL: \2%s\2 (\2%d\2 matches)", email, state.matches);
 	if (state.matches == 0)
 		command_success_nodata(si, _("No accounts matched e-mail address \2%s\2"), email);
 	else

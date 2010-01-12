@@ -109,7 +109,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			logcommand(si, CMDLOG_SET, "SET ENFORCE ON");
+			logcommand(si, CMDLOG_SET, "SET:ENFORCE:ON");
 			metadata_add(si->smu, "private:doenforce", "1");
 			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
 			check_enforce_all(si->smu);
@@ -119,7 +119,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
 		{
-			logcommand(si, CMDLOG_SET, "SET ENFORCE OFF");
+			logcommand(si, CMDLOG_SET, "SET:ENFORCE:OFF");
 			metadata_delete(si->smu, "private:doenforce");
 			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
@@ -191,7 +191,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (u == NULL || is_internal_client(u))
 		{
-			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
+			logcommand(si, CMDLOG_DO, "RELEASE: \2%s\2", target);
 			holdnick_sts(si->service->me, 0, target, mn->owner);
 			if (u != NULL && u->flags & UF_ENFORCER)
 			{
@@ -209,7 +209,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			else
 				u->flags |= UF_DOENFORCE;
 			command_success_nodata(si, _("%s has been released."), target);
-			logcommand(si, CMDLOG_DO, "RELEASE %s!%s@%s", u->nick, u->user, u->vhost);
+			logcommand(si, CMDLOG_DO, "RELEASE: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
 		}
 		return;
 	}
@@ -221,7 +221,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
+		logcommand(si, CMDLOG_DO, "failed RELEASE \2%s\2 (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
 		bad_password(si, mn->owner);
 	}

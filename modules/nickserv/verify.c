@@ -87,8 +87,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mu->flags &= ~MU_WAITAUTH;
 
-			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
-			logcommand(si, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
+			logcommand(si, CMDLOG_SET, "VERIFY:REGISTER: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
 
 			metadata_delete(mu, "private:verify:register:key");
 			metadata_delete(mu, "private:verify:register:timestamp");
@@ -110,8 +109,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
-		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
+		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
 			mu->name);
 
@@ -131,8 +129,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 			myuser_set_email(mu, md->value);
 
-			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
-			logcommand(si, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
+			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
 
 			metadata_delete(mu, "private:verify:emailchg:key");
 			metadata_delete(mu, "private:verify:emailchg:newemail");
@@ -143,8 +140,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
-		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
+		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
 			mu->name);
 
@@ -190,8 +186,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_WAITAUTH;
 
-		snoop("REGISTER:VS: \2%s\2 for \2%s\2 by \2%s\2", mu->email, mu->name, get_source_name(si));
-		logcommand(si, CMDLOG_REGISTER, "FVERIFY REGISTER %s (email: %s)", mu->name, mu->email);
+		logcommand(si, CMDLOG_REGISTER, "FVERIFY:REGISTER: \2%s\2 (email: \2%s\2)", mu->name, mu->email);
 
 		metadata_delete(mu, "private:verify:register:key");
 		metadata_delete(mu, "private:verify:register:timestamp");
@@ -223,8 +218,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 		myuser_set_email(mu, md->value);
 
-		snoop("SET:EMAIL:VS: \2%s\2 for \2%s\2 by \2%s\2", mu->email, mu->name, get_source_name(si));
-		logcommand(si, CMDLOG_REGISTER, "FVERIFY EMAILCHG %s (email: %s)", mu->name, mu->email);
+		logcommand(si, CMDLOG_REGISTER, "FVERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", mu->name, mu->email);
 
 		metadata_delete(mu, "private:verify:emailchg:key");
 		metadata_delete(mu, "private:verify:emailchg:newemail");

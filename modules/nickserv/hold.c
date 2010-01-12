@@ -68,7 +68,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 		mu->flags |= MU_HOLD;
 
 		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "HOLD %s ON", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "HOLD:ON: \2%s\2", mu->name);
 		command_success_nodata(si, _("\2%s\2 is now held."), mu->name);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -82,7 +82,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 		mu->flags &= ~MU_HOLD;
 
 		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "HOLD %s OFF", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "HOLD:OFF: \2%s\2", mu->name);
 		command_success_nodata(si, _("\2%s\2 is no longer held."), mu->name);
 	}
 	else

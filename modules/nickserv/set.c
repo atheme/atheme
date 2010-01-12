@@ -116,8 +116,6 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", si->smu->name, si->smu->email, email);
-
 	if (me.auth == AUTH_EMAIL)
 	{
 		unsigned long key = makekey();
@@ -135,7 +133,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET EMAIL %s (awaiting verification)", email);
+		logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2) (awaiting verification)", si->smu->name, si->smu->email, email);
 		command_success_nodata(si, _("An email containing email changing instructions has been sent to \2%s\2."), email);
 		command_success_nodata(si, _("Your email address will not be changed until you follow these instructions."));
 
@@ -144,7 +142,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 	myuser_set_email(si->smu, email);
 
-	logcommand(si, CMDLOG_SET, "SET EMAIL %s", email);
+	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", si->smu->name, si->smu->email, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
 }
 
@@ -172,7 +170,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET HIDEMAIL ON");
+		logcommand(si, CMDLOG_SET, "SET:HIDEMAIL:ON");
 
 		si->smu->flags |= MU_HIDEMAIL;
 
@@ -188,7 +186,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET HIDEMAIL OFF");
+		logcommand(si, CMDLOG_SET, "SET:HIDEMAIL:OFF");
 
 		si->smu->flags &= ~MU_HIDEMAIL;
 
@@ -227,7 +225,7 @@ static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET QUIETCHG ON");
+		logcommand(si, CMDLOG_SET, "SET:QUIETCHG:ON");
 
 		si->smu->flags |= MU_QUIETCHG;
 
@@ -243,7 +241,7 @@ static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET QUIETCHG OFF");
+		logcommand(si, CMDLOG_SET, "SET:QUIETCHG:OFF");
 
 		si->smu->flags &= ~MU_QUIETCHG;
 
@@ -292,7 +290,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS ON");
+		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:ON");
 		si->smu->flags |= MU_EMAILMEMOS;
 		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
@@ -306,7 +304,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS OFF");
+		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:OFF");
 		si->smu->flags &= ~MU_EMAILMEMOS;
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
@@ -341,7 +339,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOMEMO ON");
+		logcommand(si, CMDLOG_SET, "SET:NOMEMO:ON");
 		si->smu->flags |= MU_NOMEMO;
 		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NOMEMO", si->smu->name);
 		return;
@@ -355,7 +353,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOMEMO OFF");
+		logcommand(si, CMDLOG_SET, "SET:NOMEMO:OFF");
 		si->smu->flags &= ~MU_NOMEMO;
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOMEMO", si->smu->name);
 		return;
@@ -390,7 +388,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NEVEROP ON");
+		logcommand(si, CMDLOG_SET, "SET:NEVEROP:ON");
 
 		si->smu->flags |= MU_NEVEROP;
 
@@ -407,7 +405,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NEVEROP OFF");
+		logcommand(si, CMDLOG_SET, "SET:NEVEROP:OFF");
 
 		si->smu->flags &= ~MU_NEVEROP;
 
@@ -446,7 +444,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOOP ON");
+		logcommand(si, CMDLOG_SET, "SET:NOOP:ON");
 
 		si->smu->flags |= MU_NOOP;
 
@@ -462,7 +460,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOOP OFF");
+		logcommand(si, CMDLOG_SET, "SET:NOOP:OFF");
 
 		si->smu->flags &= ~MU_NOOP;
 
@@ -523,7 +521,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_metadata_change(&mdchange);
 
 		metadata_delete(si->smu, property);
-		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
+		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 (deleted)", property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
@@ -556,7 +554,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		mdchange.value = md->value;
 		hook_call_metadata_change(&mdchange);
 	}
-	logcommand(si, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
+	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 to \2%s\2", property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
@@ -595,7 +593,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/*snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", si->su->user, si->smu->name, si->smu->name);*/
-	logcommand(si, CMDLOG_SET, "SET PASSWORD");
+	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
 
 	set_password(si->smu, password);
 
@@ -632,7 +630,7 @@ static void _ns_setlanguage(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_SET, "SET LANGUAGE %s", language_get_name(lang));
+	logcommand(si, CMDLOG_SET, "SET:LANGUAGE: \2%s\2", language_get_name(lang));
 
 	si->smu->language = lang;
 
