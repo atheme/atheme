@@ -127,7 +127,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 	{
 		if (!strcasecmp((char *)n->data, mu->name))
 		{
-			logcommand_external(memosvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
+			logcommand_external(memosvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "failed SEND to \2%s\2 (on ignore list)", tmu->name);
 			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
@@ -136,7 +136,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 	xmlrpc_string(buf, "Memo sent successfully.");
 	xmlrpc_send(1, buf);
 
-	logcommand_external(memosvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "SEND to %s", tmu->name);
+	logcommand_external(memosvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "SEND: to \2%s\2", tmu->name);
 
 	memo = smalloc(sizeof(mymemo_t));
 	memo->sent = CURRTIME;
@@ -264,13 +264,13 @@ static int memo_forward(void *conn, int parc, char *parv[])
 	{
 		if (!strcasecmp((char *)n->data, mu->name))
 		{
-			logcommand_external(memosvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
+			logcommand_external(memosvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "failed SEND to \2%s\2 (on ignore list)", tmu->name);
 			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
 	}
 
-	logcommand_external(memosvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "FORWARD to %s", tmu->name);
+	logcommand_external(memosvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "FORWARD: to \2%s\2", tmu->name);
 
 	LIST_FOREACH(n, mu->memos.head)
 	{

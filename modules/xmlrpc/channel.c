@@ -89,8 +89,6 @@ static int channel_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	snoop("REGISTER: \2%s\2 to \2%s\2 (via \2xmlrpc\2)", parv[2], parv[1]);
-
 	mc = mychan_add(parv[2]);
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
@@ -103,7 +101,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 	xmlrpc_string(buf, "Registration successful.");
 	xmlrpc_send(1, buf);
 
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_REGISTER, "%s REGISTER", mc->name);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_REGISTER, "\2%s\2 REGISTER", mc->name);
 
 	hdata.si = NULL; /* XXX we do not have this here */
 	hdata.mc = mc;
@@ -184,7 +182,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	metadata_add(mc, parv[3], parv[4]);
 
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, parv[3], parv[4]);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "SET:PROPERTY: \2%s\2, \2%s\2 to \2%s\2", mc->name, parv[3], parv[4]);
 
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
@@ -261,7 +259,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	metadata_delete(mc, parv[3]);
 
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, parv[3]);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "SET:PROPERTY: \2%s\2, \2%s\2 (deleted)", mc->name, parv[3]);
 
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
@@ -316,7 +314,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, NULL, CMDLOG_GET, "%s GET PROPERTY %s", mc->name, parv[3]);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, NULL, CMDLOG_GET, "GET:PROPERTY: \2%s\2 \2%s\2", mc->name, parv[3]);
 
 	xmlrpc_string(buf, md->value);
 	xmlrpc_send(1, buf);
@@ -392,7 +390,7 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 	handle_topic(c, parv[1], CURRTIME, parv[3]);
 	topic_sts(c, chansvs.me->me, parv[1], CURRTIME, prevtopicts, parv[3]);
  
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPIC %s", mc->name, parv[2]);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "TOPIC: \2%s\2 \2%s\2", mc->name, parv[2]);
  
 	xmlrpc_string(buf, "Topic Changed.");
 	xmlrpc_send(1, buf);
@@ -477,7 +475,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 	handle_topic(c, parv[1], CURRTIME, topicbuf);
 	topic_sts(c, chansvs.me->me, parv[1], CURRTIME, prevtopicts, topicbuf);
  
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPICAPPEND %s", mc->name, parv[2]);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_SET, "TOPICAPPEND: \2%s\2 \2%s\2", mc->name, parv[2]);
  
 	xmlrpc_string(buf, "Topic Changed.");
 	xmlrpc_send(1, buf);
@@ -531,7 +529,7 @@ static int do_access_get(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, NULL, CMDLOG_GET, "%s GET ACCESS", mc->name);
+	logcommand_external(chansvs.me, "\2xmlrpc\2", conn, NULL, NULL, CMDLOG_GET, "GET:ACCESS: \2%s\2", mc->name);
 
 	ca = chanacs_find(mc, mu, 0);
 
