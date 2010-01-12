@@ -333,7 +333,7 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 
 	if (duration > 0)
 	{
-		snoop("SGLINE: Could not set temporary SGLINE on \2%s\2, not supported by unrealircd.", realname);
+		slog(LG_INFO, "SGLINE: Could not set temporary SGLINE on \2%s\2, not supported by unrealircd.", realname);
 		return;
 	}
 
@@ -362,7 +362,7 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 
 	if (*name == '#' || *name == '&')
 	{
-		snoop("SQLINE: Could not set SQLINE on \2%s\2, not supported by unrealircd.", name);
+		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2, not supported by unrealircd.", name);
 		return;
 	}
 

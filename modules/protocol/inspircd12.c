@@ -385,7 +385,7 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 		sts(":%s CBAN %s %ld :%s", opersvs.me->me->uid, name, duration, reason);
 
 	else
-		snoop("SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
+		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
 
 /* server-to-server UNQLINE wrapper */
@@ -402,7 +402,7 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 		sts(":%s CBAN %s", opersvs.me->me->uid, name);
 
 	else
-		snoop("SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
+		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }	
 
 /* topic wrapper */
@@ -534,7 +534,7 @@ static void inspircd_sethost_sts(user_t *source, user_t *target, const char *hos
 		sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
 
 	else
-		snoop("VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
+		slog(LG_INFO, "VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
 }
 
 static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
