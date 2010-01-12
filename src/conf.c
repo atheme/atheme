@@ -90,6 +90,7 @@ static struct Token logflags[] = {
   { "NOTICE",      LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_NETWORK | LG_REGISTER             },
   { "ALL",         LG_ALL                                                                                     },
   { "INFO",        LG_INFO                                                                                    },
+  { "VERBOSE"	   LG_VERBOSE										      },
   { "ERROR",       LG_ERROR                                                                                   },
   { "COMMANDS",    LG_CMD_ALL                                                                                 },
   { "ADMIN",       LG_CMD_ADMIN                                                                               },

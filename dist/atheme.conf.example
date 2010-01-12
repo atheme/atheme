@@ -594,6 +594,7 @@ serverinfo {
 	 * ------------------------------------------------------------------------------
 	 *	error		- critical errors
 	 *	info		- miscillaneous log notices
+	 *	verbose		- A bit more verbose than info, not quite as spammy as debug
 	 *	commands	- all command use
 	 *	admin		- administrative command use
 	 *	register	- account and channel registrations
@@ -1148,6 +1149,7 @@ ldap {
  * ------------------------------------------------------------------------------
  *	error			- critical errors
  *	info			- miscillaneous log notices
+ *	verbose			- A bit more verbose than info, not quite as spammy as debug
  *	commands		- all command use
  *	admin			- administrative command use
  *	register		- account and channel registrations
