@@ -418,13 +418,13 @@ int login_user(sasl_session_t *p)
 
  	if ((md = metadata_find(mu, "private:freeze:freezer")))
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", mu->name);
 		return 0;
 	}
 
 	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (too many logins)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", mu->name);
 		return 0;
 	}
 
@@ -473,7 +473,7 @@ static void sasl_newuser(hook_user_nick_t *data)
 
 	if (is_soper(mu))
 	{
-		snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
 	}
 
 	myuser_notice(saslsvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
