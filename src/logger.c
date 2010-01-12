@@ -187,6 +187,9 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
 
+	if (me.connected == false)
+		return;
+
 	if (lf->channel_joined == true)
 	{
 		mowgli_patricia_iteration_state_t state;
