@@ -151,11 +151,14 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		if ((md = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 			metadata_add(mc, "private:botserv:bot-handle-fantasy", md->value);
 
+		logcommand(si, CMDLOG_SET, "SET:FANTASY:ON: \2%s\2", mc->name);
+
 		command_success_nodata(si, _("Fantasy mode is now \2ON\2 on channel %s."), mc->name);
 	}
 	else if(!irccasecmp(option, "OFF"))
 	{
 		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+		logcommand(si, CMDLOG_SET, "SET:FANTASY:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("Fantasy mode is now \2OFF\2 on channel %s."), mc->name);
 	}
 	else
@@ -212,11 +215,13 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:botserv:bot-assigned");
 			metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 		}
+		logcommand(si, CMDLOG_SET, "SET:NOBOT:ON: \2%s\2", mc->name);
 		command_success_nodata(si, _("No Bot mode is now \2ON\2 on channel %s."), mc->name);
 	}
 	else if(!irccasecmp(option, "OFF"))
 	{
 		metadata_delete(mc, "private:botserv:no-bot");
+		logcommand(si, CMDLOG_SET, "SET:NOBOT:OFF: \2%s\2", mc->name);
 		command_success_nodata(si, _("No Bot mode is now \2OFF\2 on channel %s."), mc->name);
 	}
 	else
@@ -262,12 +267,14 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 	{
 		bot->private = true;
 		botserv_save_database(NULL);
+		logcommand(si, CMDLOG_SET, "SET:PRIVATE:ON: \2%s\2", bot->nick);
 		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick);
 	}
 	else if(!irccasecmp(option, "OFF"))
 	{
 		bot->private = false;
 		botserv_save_database(NULL);
+		logcommand(si, CMDLOG_SET, "SET:PRIVATE:OFF: \2%s\2", bot->nick);
 		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick);
 	}
 	else
