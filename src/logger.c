@@ -205,6 +205,9 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 
 			svs = service_find_nick(targetbuf);
 			targetlen++;
+
+			if (svs == NULL)
+				targetlen = 0;
 		}
 		else
 			targetlen = 0;
