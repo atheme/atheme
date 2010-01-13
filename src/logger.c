@@ -192,26 +192,24 @@ void logfile_write_irc(logfile_t *lf, const char *buf)
 
 	if (lf->channel_joined == true)
 	{
-		mowgli_patricia_iteration_state_t state;
-		service_t *svs;
+		size_t targetlen;
+		char targetbuf[NICKLEN];
+		service_t *svs = NULL;
 
-		MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
+		*targetbuf = '\0';
+		targetlen = (strchr(buf, ' ') - buf);
+
+		if (targetlen < NICKLEN)
 		{
-			size_t namelen;
+			strncpy(targetbuf, buf, targetlen);
 
-			if (svs->me == NULL)
-				continue;
-
-			namelen = strlen(svs->nick);
-
-			if (!strncmp(svs->nick, buf, namelen))
-			{
-				msg(svs->me->nick, lf->log_path, "%s", buf + (namelen + 1));
-				return;
-			}
+			svs = service_find_nick(targetbuf);
+			targetlen++;
 		}
+		else
+			targetlen = 0;
 
-		msg(opersvs.nick, lf->log_path, "%s", buf);
+		msg(svs != NULL ? svs->me->nick : opersvs.nick, lf->log_path, "%s", (buf + targetlen));
 	}
 }
 
