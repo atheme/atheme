@@ -98,14 +98,11 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 		botserv_bot_t *bot = NULL;
 
 		mc = mychan_find(target);
-		if (mc == NULL)
-			real_source = from;
-		else
+		if (mc != NULL)
 		{
 			bot = bs_mychan_find_bot(mc);
 
-			if (bot != NULL)
-				real_source = bot->nick;
+			real_source = bot != NULL ? bot->nick : from;
 		}
 	}
 
