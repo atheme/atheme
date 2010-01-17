@@ -685,6 +685,12 @@ uplink "irc.example.net" {
 	port = 6667;
 };
 
+/* Services configuration.
+ *
+ * Each of these blocks can contain a nick, user, host, real and aliases.
+ * Several of them also have options specific to the service.
+ */
+
 /* NickServ configuration.
  *
  * The nickserv {} block contains settings specific to the NickServ modules.
@@ -728,6 +734,14 @@ nickserv {
 	 * The realname (gecos) information we want NickServ to have.
 	 */
 	real = "Nickname Services";
+
+	/* (*)aliases
+	 * Command aliases for NickServ.
+	 */
+	aliases {
+		"ID" = "IDENTIFY";
+		"MYACCESS" = "LISTCHANS";
+	};
 
 	/* (*)expire
 	 * The number of days before inactive registrations are expired.
@@ -774,6 +788,12 @@ chanserv {
 	 * The GECOS of the client.
 	 */
 	real = "Channel Services";
+
+	/* (*)aliases
+	 * Command aliases for ChanServ.
+	 */
+	aliases {
+	};
 
 	/* fantasy
 	 * Do you want to enable fantasy commands? This can
@@ -910,6 +930,12 @@ operserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Operator Services";
+
+	/* (*)aliases
+	 * Command aliases for OperServ.
+	 */
+	aliases {
+	};
 };
 
 /* SaslServ configuration.
@@ -968,6 +994,12 @@ memoserv {
 	 * The realname (gecos) information we want MemoServ to have.
 	 */
 	real = "Memo Services";
+
+	/* (*)aliases
+	 * Command aliases for MemoServ.
+	 */
+	aliases {
+	};
 };
 
 /* GameServ configuration.
@@ -996,6 +1028,12 @@ gameserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Game Services";
+
+	/* (*)aliases
+	 * Command aliases for GameServ.
+	 */
+	aliases {
+	};
 };
 
 /* BotServ configuration.

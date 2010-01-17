@@ -116,11 +116,11 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		if (strlen(cmd) > 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
+		if (strlen(cmd) >= 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
 		{
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
-			if (command_find(&cs_cmdtree, cmd) == NULL)
+			if (command_find(&cs_cmdtree, service_resolve_alias(si->service, NULL, cmd)) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -154,7 +154,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 				*pptr = '\0';
 			}
 
-			if (command_find(&cs_cmdtree, cmd) == NULL)
+			if (command_find(&cs_cmdtree, service_resolve_alias(si->service, NULL, cmd)) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
