@@ -1097,6 +1097,12 @@ hostserv {
 	 * vhosts work as consistently as possible.
 	 */
 	#request_per_nick;
+
+	aliases
+	{
+		"APPROVE" = "ACTIVATE";
+		"DENY" = "REJECT";
+	};
 };
 
 /* ALIS configuration.
