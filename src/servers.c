@@ -79,18 +79,17 @@ void init_servers(void)
  * Side Effects:
  *     - the new server object is added to the server and sid DTree.
  */
-server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc)
+server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc)
 {
-	server_t *s, *u = NULL;
+	server_t *s;
 	const char *tld;
 
 	if (uplink)
 	{
 		if (id != NULL)
-			slog(LG_NETWORK, "server_add(): %s (%s), uplink %s", name, id, uplink);
+			slog(LG_NETWORK, "server_add(): %s (%s), uplink %s", name, id, uplink->name);
 		else
-			slog(LG_NETWORK, "server_add(): %s, uplink %s", name, uplink);
-		u = server_find(uplink);
+			slog(LG_NETWORK, "server_add(): %s, uplink %s", name, uplink->name);
 	}
 	else
 		slog(LG_DEBUG, "server_add(): %s, root", name);
@@ -119,10 +118,10 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 
 	mowgli_patricia_add(servlist, s->name, s);
 
-	if (u)
+	if (uplink)
 	{
-		s->uplink = u;
-		node_add(s, node_create(), &u->children);
+		s->uplink = uplink;
+		node_add(s, node_create(), &uplink->children);
 	}
 
 	/* tld list for global noticer */

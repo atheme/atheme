@@ -758,14 +758,14 @@ server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
 	if (si->s != NULL)
 	{
 		/* A server introducing another server */
-		s = server_add(name, hops, si->s->name, sid, desc);
+		s = server_add(name, hops, si->s, sid, desc);
 	}
 	else if (cnt.server == 1)
 	{
 		/* Our uplink introducing itself */
 		if (irccasecmp(name, curr_uplink->name))
 			slog(LG_ERROR, "handle_server(): uplink %s actually has name %s, continuing anyway", curr_uplink->name, name);
-		s = server_add(name, hops, me.name, sid, desc);
+		s = server_add(name, hops, me.me, sid, desc);
 		me.actual = s->name;
 		me.recvsvr = true;
 	}

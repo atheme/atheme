@@ -57,7 +57,7 @@ E tld_t *tld_add(const char *name);
 E void tld_delete(const char *name);
 E tld_t *tld_find(const char *name);
 
-E server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc);
+E server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
 E void server_delete(const char *name);
 E server_t *server_find(const char *name);
 
