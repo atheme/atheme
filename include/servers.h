@@ -38,6 +38,7 @@ struct server_
 #define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
 #define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
 #define SF_JUPE_PENDING 0x00000008 /* Sent SQUIT request, will introduce jupe when it dies (unconnect semantics) */
+#define SF_MASKED      0x00000010 /* Is masked, has no own name (for ircnet) */
 
 /* tld list struct */
 struct tld_ {
