@@ -31,7 +31,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login };
 #else
 command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login };
-command_t ns_id = { "ID", N_("Alias for IDENTIFY"), AC_NONE, 2, ns_cmd_login };
 #endif
 
 list_t *ns_cmdtree, *ns_helptree;
@@ -46,9 +45,7 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "LOGIN", "help/nickserv/login", NULL);
 #else
 	command_add(&ns_identify, ns_cmdtree);
-	command_add(&ns_id, ns_cmdtree);
 	help_addentry(ns_helptree, "IDENTIFY", "help/nickserv/identify", NULL);
-	help_addentry(ns_helptree, "ID", "help/nickserv/identify", NULL);
 #endif
 }
 
@@ -59,9 +56,7 @@ void _moddeinit()
 	help_delentry(ns_helptree, "LOGIN");
 #else
 	command_delete(&ns_identify, ns_cmdtree);
-	command_delete(&ns_id, ns_cmdtree);
 	help_delentry(ns_helptree, "IDENTIFY");
-	help_delentry(ns_helptree, "ID");
 #endif
 }
 
