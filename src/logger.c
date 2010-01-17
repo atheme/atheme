@@ -133,7 +133,7 @@ logfile_strip_control_codes(const char *buf)
  * Side Effects:
  *       - none
  */
-void logfile_write(logfile_t *lf, const char *buf)
+static void logfile_write(logfile_t *lf, const char *buf)
 {
 	char datetime[64];
 	time_t t;
@@ -166,7 +166,7 @@ void logfile_write(logfile_t *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-void logfile_write_irc(logfile_t *lf, const char *buf)
+static void logfile_write_irc(logfile_t *lf, const char *buf)
 {
 	return_if_fail(lf != NULL);
 	return_if_fail(lf->log_path != NULL);
