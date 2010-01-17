@@ -32,8 +32,6 @@ command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for curren
 command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting };
 command_t hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject };
 command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate };
-command_t hs_deny = { "DENY", N_("Alias for REJECT"), PRIV_USER_VHOST, 2, hs_cmd_reject };
-command_t hs_approve = { "APPROVE", N_("Alias for ACTIVATE"), PRIV_USER_VHOST, 2, hs_cmd_activate };
 
 struct hsreq_ {
 	char *nick;
@@ -62,14 +60,10 @@ void _modinit(module_t *m)
 	command_add(&hs_waiting, hs_cmdtree);
 	command_add(&hs_reject, hs_cmdtree);
 	command_add(&hs_activate, hs_cmdtree);
-	command_add(&hs_deny, hs_cmdtree);
-	command_add(&hs_approve, hs_cmdtree);
 	help_addentry(hs_helptree, "REQUEST", "help/hostserv/request", NULL);
 	help_addentry(hs_helptree, "WAITING", "help/hostserv/waiting", NULL);
 	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
 	help_addentry(hs_helptree, "ACTIVATE", "help/hostserv/activate", NULL);
-	help_addentry(hs_helptree, "DENY", "help/hostserv/reject", NULL);
-	help_addentry(hs_helptree, "APPROVE", "help/hostserv/activate", NULL);
 	load_hsreqdb();
 	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, &request_per_nick);
 }
@@ -82,14 +76,10 @@ void _moddeinit(void)
 	command_delete(&hs_waiting, hs_cmdtree);
 	command_delete(&hs_reject, hs_cmdtree);
 	command_delete(&hs_activate, hs_cmdtree);
-	command_delete(&hs_deny, hs_cmdtree);
-	command_delete(&hs_approve, hs_cmdtree);
 	help_delentry(hs_helptree, "REQUEST");
 	help_delentry(hs_helptree, "WAITING");
 	help_delentry(hs_helptree, "REJECT");
 	help_delentry(hs_helptree, "ACTIVATE");
-	help_delentry(hs_helptree, "DENY");
-	help_delentry(hs_helptree, "APPROVE");
 	del_conf_item("REQUEST_PER_NICK", conf_hs_table);
 }
 
