@@ -1220,7 +1220,7 @@ logfile "var/commands.log" { commands; };
  * This entry provides roughly the same functionality as the old snoop
  * feature.
  */
-logfile "#services" { error; info; admin; network; request; register; };
+logfile "#services" { error; info; admin; request; register; };
 
 /******************************************************************************
  * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *
