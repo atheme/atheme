@@ -181,7 +181,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		char targetbuf[NICKLEN];
 		service_t *svs = NULL;
 
-		*targetbuf = '\0';
+		memset(targetbuf, '\0', sizeof targetbuf);
 		targetlen = (strchr(buf, ' ') - buf);
 
 		slog(LG_DEBUG, "check targetlen < NICKLEN: %d < %d", targetlen, NICKLEN);
