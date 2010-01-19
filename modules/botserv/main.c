@@ -360,7 +360,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	{
 		/* XXX not really nice to look up the command twice
 		* -- jilles */
-		if (command_find(cs_cmdtree, cmd) == NULL)
+		if (command_find(cs_cmdtree, service_resolve_alias(chansvs.me, NULL, cmd)) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
