@@ -20,7 +20,6 @@ DECLARE_MODULE_V1
 static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans };
-command_t ns_myaccess = { "MYACCESS", N_("Alias for LISTCHANS"), AC_NONE, 1, ns_cmd_listchans };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -29,18 +28,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_myaccess, ns_cmdtree);
-	help_addentry(ns_helptree, "MYACCESS", "help/nickserv/listchans", NULL);
-
 	command_add(&ns_listchans, ns_cmdtree);
 	help_addentry(ns_helptree, "LISTCHANS", "help/nickserv/listchans", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_myaccess, ns_cmdtree);
-	help_delentry(ns_helptree, "MYACCESS");
-
 	command_delete(&ns_listchans, ns_cmdtree);
 	help_delentry(ns_helptree, "LISTCHANS");
 }

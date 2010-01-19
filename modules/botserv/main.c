@@ -730,6 +730,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	botserv_save_database(NULL);
+	logcommand(si, CMDLOG_ADMIN, "BOT:CHANGE: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
 }
 
@@ -801,6 +802,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	node_add(bot, &bot->bnode, &bs_bots);
 
 	botserv_save_database(NULL);
+	logcommand(si, CMDLOG_ADMIN, "BOT:ADD: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
 }
 
@@ -853,7 +855,8 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	free(bot->host);
 	free(bot);
 
-	botserv_save_database(NULL);
+	botserv_save_database(NULL);	
+	logcommand(si, CMDLOG_ADMIN, "BOT:DEL: \2%s\2", parv[0]);
 	command_success_nodata(si, "Bot \2%s\2 has been deleted.", parv[0]);
 }
 
@@ -958,6 +961,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
 
+	logcommand(si, CMDLOG_ADMIN, "BOT:ASSIGN: \2%s\2 to \2%s\2", parv[1], parv[0]);
 	command_success_nodata(si, "Assigned the bot \2%s\2 to \2%s\2.", parv[1], parv[0]);
 }
 
@@ -1001,6 +1005,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 	part(mc->name, md->value);
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
+	logcommand(si, CMDLOG_ADMIN, "BOT:UNASSIGN: \2%s\2", parv[0]);
 	command_success_nodata(si, "Unassigned the bot from \2%s\2.", parv[0]);
 }
 

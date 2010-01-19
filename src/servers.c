@@ -30,6 +30,8 @@ list_t tldlist;
 static BlockHeap *serv_heap;
 static BlockHeap *tld_heap;
 
+static void server_delete_serv(server_t *s);
+
 /*
  * init_servers()
  *
@@ -67,7 +69,7 @@ void init_servers(void)
  * Server object factory.
  *
  * Inputs:
- *     - name of server object to create
+ *     - name of server object to create or NULL if it's a masked server
  *     - amount of hops server has from services
  *     - name of server's uplink or NULL if it's us
  *     - SID of uplink if applicable otherwise NULL
@@ -79,18 +81,24 @@ void init_servers(void)
  * Side Effects:
  *     - the new server object is added to the server and sid DTree.
  */
-server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc)
+server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc)
 {
-	server_t *s, *u = NULL;
+	server_t *s;
 	const char *tld;
+
+	/* Masked servers must have a SID */
+	return_val_if_fail(name != NULL || id != NULL, NULL);
+	/* Masked servers must be behind something else */
+	return_val_if_fail(name != NULL || uplink != NULL, NULL);
 
 	if (uplink)
 	{
-		if (id != NULL)
-			slog(LG_NETWORK, "server_add(): %s (%s), uplink %s", name, id, uplink);
+		if (name == NULL)
+			slog(LG_NETWORK, "server_add(): %s (%s), masked", uplink->name, id);
+		else if (id != NULL)
+			slog(LG_NETWORK, "server_add(): %s (%s), uplink %s", name, id, uplink->name);
 		else
-			slog(LG_NETWORK, "server_add(): %s, uplink %s", name, uplink);
-		u = server_find(uplink);
+			slog(LG_NETWORK, "server_add(): %s, uplink %s", name, uplink->name);
 	}
 	else
 		slog(LG_DEBUG, "server_add(): %s, root", name);
@@ -112,21 +120,24 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 			desc++;
 	}
 
-	s->name = sstrdup(name);
+	s->name = sstrdup(name != NULL ? name : uplink->name);
 	s->desc = sstrdup(desc);
 	s->hops = hops;
 	s->connected_since = CURRTIME;
 
-	mowgli_patricia_add(servlist, s->name, s);
+	if (name != NULL)
+		mowgli_patricia_add(servlist, s->name, s);
+	else
+		s->flags |= SF_MASKED;
 
-	if (u)
+	if (uplink)
 	{
-		s->uplink = u;
-		node_add(s, node_create(), &u->children);
+		s->uplink = uplink;
+		node_add(s, node_create(), &uplink->children);
 	}
 
 	/* tld list for global noticer */
-	tld = strrchr(name, '.');
+	tld = strrchr(s->name, '.');
 
 	if (tld != NULL)
 	{
@@ -156,9 +167,6 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 void server_delete(const char *name)
 {
 	server_t *s = server_find(name);
-	server_t *child;
-	user_t *u;
-	node_t *n, *tn;
 
 	if (!s)
 	{
@@ -166,6 +174,15 @@ void server_delete(const char *name)
 
 		return;
 	}
+	server_delete_serv(s);
+}
+
+static void server_delete_serv(server_t *s)
+{
+	server_t *child;
+	user_t *u;
+	node_t *n, *tn;
+
 	if (s == me.me)
 	{
 		/* Deleting this would cause confusion, so let's not do it.
@@ -176,9 +193,15 @@ void server_delete(const char *name)
 		return;
 	}
 
-	slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
-			s->name, s->uplink != NULL ? s->uplink->name : "<none>",
-			s->users);
+	if (s->sid)
+		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s (%s), uplink %s (%d users)",
+				s->name, s->sid,
+				s->uplink != NULL ? s->uplink->name : "<none>",
+				s->users);
+	else
+		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
+				s->name, s->uplink != NULL ? s->uplink->name : "<none>",
+				s->users);
 
 	/* first go through it's users and kill all of them */
 	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
@@ -195,11 +218,12 @@ void server_delete(const char *name)
 	LIST_FOREACH_SAFE(n, tn, s->children.head)
 	{
 		child = n->data;
-		server_delete(child->name);
+		server_delete_serv(child);
 	}
 
 	/* now remove the server */
-	mowgli_patricia_delete(servlist, s->name);
+	if (!(s->flags & SF_MASKED))
+		mowgli_patricia_delete(servlist, s->name);
 
 	if (s->sid)
 		mowgli_patricia_delete(sidlist, s->sid);

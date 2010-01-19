@@ -645,6 +645,13 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[parc - 1]);
 }
 
+static void m_smask(sourceinfo_t *si, int parc, char *parv[])
+{
+	slog(LG_DEBUG, "m_smask(): new masked server: %s (%s)",
+			si->s->name, parv[0]);
+	handle_server(si, NULL, parv[0], si->s->hops + 1, si->s->desc);
+}
+
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
@@ -761,6 +768,7 @@ void _modinit(module_t * m)
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SMASK", m_smask, 2, MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
 	pcommand_add("VERSION", m_version, 1, MSRC_USER);

@@ -139,6 +139,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
 	char *parv[20];
         command_t *c;
 
+	cmd = service_resolve_alias(svs, commandtree == svs->cmdtree ? NULL : "unknown", cmd);
 	if ((c = command_find(commandtree, cmd)))
 	{
 		parc = text_to_parv(text, c->maxparc, parv);

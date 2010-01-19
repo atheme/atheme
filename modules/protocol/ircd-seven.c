@@ -41,7 +41,7 @@ ircd_t Seven = {
 	"beIq",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
+	IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR  /* Flags */
 };
 
 struct cmode_ seven_mode_list[] = {

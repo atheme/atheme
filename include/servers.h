@@ -38,6 +38,7 @@ struct server_
 #define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
 #define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
 #define SF_JUPE_PENDING 0x00000008 /* Sent SQUIT request, will introduce jupe when it dies (unconnect semantics) */
+#define SF_MASKED      0x00000010 /* Is masked, has no own name (for ircnet) */
 
 /* tld list struct */
 struct tld_ {
@@ -57,7 +58,7 @@ E tld_t *tld_add(const char *name);
 E void tld_delete(const char *name);
 E tld_t *tld_find(const char *name);
 
-E server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc);
+E server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
 E void server_delete(const char *name);
 E server_t *server_find(const char *name);
 

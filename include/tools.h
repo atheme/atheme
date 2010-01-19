@@ -65,7 +65,6 @@ E char *log_path; /* contains path to default log. */
 E int log_force;
 
 E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
-E void logfile_write(logfile_t *lf, const char *buf);
 E void logfile_register(logfile_t *lf);
 E void logfile_unregister(logfile_t *lf);
 

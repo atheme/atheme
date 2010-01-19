@@ -148,6 +148,10 @@ that cause Atheme to kick as much as possible.
 Jupes will use SIDs numerically following services's SID, make sure to
 leave plenty of space.
 
+Server hostmasking mostly works, but Atheme will not mask itself (this would
+not be useful anyway). Messages from masked servers which have the server
+name as prefix are not recognized. This may affect KILL in particular.
+
 nefarious
 ---------
 

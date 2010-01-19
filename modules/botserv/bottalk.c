@@ -99,6 +99,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	msg(bot->nick, channel, "%s", message);
+	logcommand(si, CMDLOG_DO, "SAY: \2%s\2", message);
 }
 
 static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
@@ -152,6 +153,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	msg(bot->nick, channel, "\001ACTION %s\001", message);
+	logcommand(si, CMDLOG_DO, "ACT: \2%s\2", message);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -55,17 +55,11 @@ static void logfile_delete_channel(void *vdata)
 	free(lf);
 }
 
-static void logfile_join_channels(hook_channel_joinpart_t *hdata)
+static void logfile_join_channels(channel_t *c)
 {
-	channel_t *c;
 	node_t *n;
 
-	return_if_fail(hdata != NULL);
-
-	if (hdata->cu == NULL)
-		return;
-
-	c = hdata->cu->chan;
+	return_if_fail(c != NULL);
 
 	LIST_FOREACH(n, log_files.head)
 	{
@@ -73,21 +67,12 @@ static void logfile_join_channels(hook_channel_joinpart_t *hdata)
 
 		if (!irccasecmp(c->name, lf->log_path))
 		{
-			mowgli_patricia_iteration_state_t state;
-			service_t *svs;
-
-			if (lf->channel_joined)
-				return;
-
-			MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
+			if (!lf->channel_joined)
 			{
-				if (svs->me == NULL)
-					continue;
-
-				join(lf->log_path, svs->me->nick);
+				joinall(lf->log_path);
+				lf->channel_joined = true;
 			}
-
-			lf->channel_joined = true;
+			return;
 		}
 	}
 }
@@ -148,7 +133,7 @@ logfile_strip_control_codes(const char *buf)
  * Side Effects:
  *       - none
  */
-void logfile_write(logfile_t *lf, const char *buf)
+static void logfile_write(logfile_t *lf, const char *buf)
 {
 	char datetime[64];
 	time_t t;
@@ -181,7 +166,7 @@ void logfile_write(logfile_t *lf, const char *buf)
  * Side Effects:
  *       - none
  */
-void logfile_write_irc(logfile_t *lf, const char *buf)
+static void logfile_write_irc(logfile_t *lf, const char *buf)
 {
 	return_if_fail(lf != NULL);
 	return_if_fail(lf->log_path != NULL);
@@ -309,14 +294,14 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 
 		if (!hooked)
 		{
-			hook_add_event("channel_join");
-			hook_add_channel_join(logfile_join_channels);
+			hook_add_event("channel_add");
+			hook_add_channel_add(logfile_join_channels);
 			hooked = true;
 		}
 
 		if (me.connected)
 		{
-			join(lf->log_path, opersvs.nick);
+			joinall(lf->log_path);
 			lf->channel_joined = true;
 		}
 	}

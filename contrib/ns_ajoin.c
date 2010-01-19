@@ -21,7 +21,7 @@ DECLARE_MODULE_V1
 list_t *ns_cmdtree;
 list_t *ns_helptree;
 
-static void ajoin_on_identify(void *vptr);
+static void ajoin_on_identify(user_t *u);
 
 static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -123,7 +123,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 
 		// Thanks to John Brooks for his help with this.
 		char *list = md->value;
-		char *remove = parv[1];
+		char *remove1 = parv[1];
 
 		int listlen = 0;
 		int rmlen = 0;
@@ -135,7 +135,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			if (!rmlen)
 			{
 				// We have not found the string yet
-				if (tolower(list[i]) == tolower(remove[j]))
+				if (tolower(list[i]) == tolower(remove1[j]))
 				{
 					if (j == 0)
 					{
@@ -144,7 +144,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 					}
 		 
 					j++;
-					if (!remove[j])
+					if (!remove1[j])
 					{
 						// Found the entire string
 						rmlen = j;
@@ -155,9 +155,9 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		 
-		if (remove[j])
+		if (remove1[j])
 		{
-			// No match
+			command_fail(si, fault_badparams, "%s is not on your AJOIN list.", parv[1]);
 			return;
 		}
 		 
@@ -167,7 +167,13 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		if (!list[itempos + rmlen])
 		{
 			// This item is the last item in the list, so we can simply truncate
-			metadata_delete(si->smu, "private:autojoin");
+			if (itempos > 0)
+			{
+				itempos--;
+				list[itempos] = '\0';
+			}
+			else
+				metadata_delete(si->smu, "private:autojoin");
 		}
 		else
 		{
@@ -202,9 +208,8 @@ void _moddeinit(void)
 	help_delentry(ns_helptree, "AJOIN");
 }
 
-static void ajoin_on_identify(void *vptr)
+static void ajoin_on_identify(user_t *u)
 {
-	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	metadata_t *md;
 	char buf[512];
