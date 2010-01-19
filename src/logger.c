@@ -184,8 +184,6 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		memset(targetbuf, '\0', sizeof targetbuf);
 		targetlen = (strchr(buf, ' ') - buf);
 
-		slog(LG_DEBUG, "check targetlen < NICKLEN: %d < %d", targetlen, NICKLEN);
-
 		if (targetlen < NICKLEN)
 		{
 			strncpy(targetbuf, buf, targetlen);
@@ -198,8 +196,6 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		}
 		else
 			targetlen = 0;
-
-		slog(LG_DEBUG, "check svs(%s) != NULL: %p", targetbuf, svs);
 
 		msg(svs != NULL ? svs->me->nick : opersvs.nick, lf->log_path, "%s", (buf + targetlen));
 	}
