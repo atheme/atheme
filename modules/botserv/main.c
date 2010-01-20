@@ -358,9 +358,11 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	/* take the command through the hash table, handling both !prefix and Bot, ... styles */
 	if (strlen(cmd) > 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
 	{
+		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
+
 		/* XXX not really nice to look up the command twice
 		* -- jilles */
-		if (command_find(cs_cmdtree, service_resolve_alias(chansvs.me, NULL, cmd)) == NULL)
+		if (command_find(cs_cmdtree, realcmd) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
@@ -378,7 +380,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		* (a little ugly but this way we can !set verbose)
 		*/
 		mc->flags |= MC_FORCEVERBOSE;
-		command_exec_split(si->service, si, cmd, newargs, cs_cmdtree);
+		command_exec_split(si->service, si, realcmd, newargs, cs_cmdtree);
 		mc->flags &= ~MC_FORCEVERBOSE;
 	}
 	else if (!strncasecmp(cmd, si->service->me->nick, strlen(si->service->me->nick)) && (cmd = strtok(NULL, "")) != NULL)
