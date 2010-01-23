@@ -418,6 +418,9 @@ look_player(player_t *p)
 {
 	node_t *n;
 
+	return_if_fail(p != NULL);
+	return_if_fail(p->location != NULL);
+
 	notice(wumpus_cfg.nick, p->u->nick, "You are in room %d.", p->location->id);
 
 	LIST_FOREACH(n, p->location->exits.head)
@@ -804,9 +807,15 @@ void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 
-	if (!p)
+	if (p == NULL)
 	{
 		notice(wumpus_cfg.nick, si->su->nick, "You must be playing the game in order to use this command.");
+		return;
+	}
+
+	if (!wumpus.running)
+	{
+		notice(wumpus_cfg.nick, si->su->nick, "You cannot use this command right now. Sorry.");
 		return;
 	}
 
