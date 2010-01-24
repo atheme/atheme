@@ -26,7 +26,7 @@ ircd_t InspIRCd = {
         true,                           /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	true,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY | CMODE_PERM,			/* Oper-only cmodes */
+	CMODE_OPERONLY | CMODE_PERM | CMODE_IMMUNE,	    /* Oper-only cmodes */
         CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
         CSTATUS_HALFOP,                   /* Integer flag for halfops. */
@@ -35,7 +35,7 @@ ircd_t InspIRCd = {
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_INSPIRCD,		/* Protocol type */
 	CMODE_PERM,                              /* Permanent cmodes */
-	0,                              /* Oper-immune cmode */
+	CMODE_IMMUNE,                              /* Oper-immune cmode */
 	"beIg",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
@@ -65,6 +65,7 @@ struct cmode_ inspircd_mode_list[] = {
   { 'T', CMODE_NONOTICE },
   { 'u', CMODE_HIDING   },
   { 'Q', CMODE_PEACE    },
+  { 'Y', CMODE_IMMUNE	},
   { '\0', 0 }
 };
 
