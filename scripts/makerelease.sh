@@ -30,7 +30,7 @@ if [ "x$2" = "x--automatic" ]; then
 	AUTOMATIC="yes"
 fi
 
-TIP=`hg tip --template "#rev#:#node|short#"`
+TIP=`hg tip --template "{rev}:{node|short}"`
 
 WRKDIR=`pwd`
 
