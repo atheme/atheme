@@ -162,11 +162,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	strlcpy(u->user, user, USERLEN);
 	strlcpy(u->host, host, HOSTLEN);
 	strlcpy(u->gecos, gecos, GECOSLEN);
-
-	if (vhost)
-		strlcpy(u->vhost, vhost, HOSTLEN);
-	else
-		strlcpy(u->vhost, host, HOSTLEN);
+	strlcpy(u->vhost, vhost ? vhost : host, HOSTLEN);
 
 	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
 		strlcpy(u->ip, ip, HOSTIPLEN);
@@ -175,10 +171,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	u->server->users++;
 	node_add(u, &u->snode, &u->server->userlist);
 
-	if (ts)
-		u->ts = ts;
-	else
-		u->ts = CURRTIME;
+	u->ts = ts ? ts : CURRTIME;
 
 	mowgli_patricia_add(userlist, u->nick, u);
 
