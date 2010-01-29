@@ -21,8 +21,10 @@ for d in $helpdir/*; do
 	service="${d##*/}"
 	case "$service" in
 		alis) service=ALIS ;;
+		botserv) service=BotServ ;;
 		cservice) service=ChanServ ;;
 		gservice) service=Global ;;
+		hostserv) service=HostServ ;;
 		memoserv) service=MemoServ ;;
 		nickserv) service=NickServ ;;
 		oservice) service=OperServ ;;
