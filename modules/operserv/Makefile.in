@@ -45,6 +45,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/soper.c	\
 	$(SRCDIR)/specs.c	\
 	$(SRCDIR)/sqline.c	\
+	$(SRCDIR)/trace.c	\
 	$(SRCDIR)/uptime.c	\
 	$(SRCDIR)/update.c
 
