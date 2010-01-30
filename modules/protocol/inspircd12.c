@@ -17,7 +17,7 @@ DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, "$Id: inspircd12.c 
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-        "InspIRCd 1.2.x", /* IRCd name */
+        "InspIRCd 1.2.x/2.0.x", /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
         true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
