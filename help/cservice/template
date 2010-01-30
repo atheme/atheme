@@ -4,7 +4,12 @@ The TEMPLATE command allows definition of sets of flags,
 simplifying the use of the FLAGS command.
 
 Without arguments, network wide templates are shown.
+#if halfops
 These include at least SOP/AOP/HOP/VOP.
+#endif
+#if !halfops
+These include at least SOP/AOP/VOP.
+#endif
 
 Syntax: TEMPLATE
 

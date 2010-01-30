@@ -13,4 +13,9 @@ Only a founder can execute this command.
 
 Syntax: FORCEXOP <#channel>
 
+#if halfops
 See also: SOP, AOP, HOP, VOP
+#endif
+#if !halfops
+See also: SOP, AOP, VOP
+#endif
