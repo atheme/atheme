@@ -256,7 +256,10 @@ static void inspircd_quit_sts(user_t *u, const char *reason)
 /* WALLOPS wrapper */
 static void inspircd_wallops_sts(const char *text)
 {
-	sts(":%s WALLOPS :%s", me.numeric, text);
+	if (has_globopsmod)
+		sts(":%s SNONOTICE g :%s", me.numeric, text);
+	else
+		sts(":%s SNONOTICE A :%s", me.numeric, text);
 }
 
 /* join a channel */
