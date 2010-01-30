@@ -80,31 +80,6 @@ TOPICLOCK can be used, however.
 Dreamforge is a dated IRCd, you should probably upgrade to a more
 modern one.
 
-hyperion
---------
-
-The channel mode +D is not supported and will be ignored.
-
-There are two methods to allow services to remember users after a netsplit or
-restart and to enable things like channels only accessible for registered
-users. The traditional dancer method is umode +e; it only works if the user is
-logged in to the nick they are currently using. The new hyperion method using
-SVSLOGIN and SIGNON does not have this restriction. It also allows changing
-nick/ident/host at the same time, but Atheme does not use that yet.
-Consequently, NOIDPREFIX is not supported in a useful way.
-
-Atheme will always set +e appropriately; if SVSLOGIN support is available, it
-will be used (this assumes the whole network has it). SVSLOGIN support can
-also be disabled with a simple source file change.
-
-The wallops option will report via +s server notices.
-
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
-
-I:line spoofs of spoof.host and cloaked.fn will be treated as no spoof at
-all, and should not be used.
-
 inspircd
 --------
 

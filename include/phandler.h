@@ -47,7 +47,7 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_BAHAMUT		2
 #define PROTOCOL_CHARYBDIS		3
 #define PROTOCOL_DREAMFORGE		4
-#define PROTOCOL_HYPERION		5
+#define PROTOCOL_HYPERION		5 /* obsolete */
 #define PROTOCOL_INSPIRCD		6
 #define PROTOCOL_IRCNET			7
 #define PROTOCOL_MONKEY			8 /* obsolete */
