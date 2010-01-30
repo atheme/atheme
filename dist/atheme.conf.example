@@ -35,7 +35,6 @@
  * Bahamut 1.8.x				modules/protocol/bahamut
  * Beware IRCd (bircd)				modules/protocol/bircd
  * Charybdis IRCd				modules/protocol/charybdis
- * dancer-ircd/hyperion				modules/protocol/hyperion
  * DreamForge 4.6.7 or later			modules/protocol/dreamforge
  * Hybrid 7.1.2 and later			modules/protocol/hybrid
  * ircd-ratbox 2.0 and later			modules/protocol/ratbox
