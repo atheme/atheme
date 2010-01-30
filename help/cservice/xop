@@ -28,7 +28,12 @@ The privileges required to execute these commands are
 the same as those required for the corresponding
 FLAGS commands.
 
+#if halfops
 Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
+#endif
+#if !halfops
+Syntax: VOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
+#endif
 
 Examples:
     /msg &nick& VOP #foo ADD bar
