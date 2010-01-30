@@ -60,6 +60,7 @@ struct cmode_ seven_mode_list[] = {
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
   { 'M', CMODE_IMMUNE },
+  { 'C', CMODE_NOCTCP },
   { '\0', 0 }
 };
 
