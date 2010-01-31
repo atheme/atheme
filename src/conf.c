@@ -311,7 +311,7 @@ static int c_loadmodule(config_entry_t *ce)
 	char pathbuf[4096];
 	char *name;
 
-	if (cold_start == false)
+	if (!cold_start)
 		return 0;
 
 	if (ce->ce_vardata == NULL)

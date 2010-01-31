@@ -171,10 +171,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (have_conf == false)
+	if (!have_conf)
 		config_file = sstrdup(SYSCONFDIR "/atheme.conf");
 
-	if (have_log == false)
+	if (!have_log)
 		log_path = sstrdup(LOGDIR "/atheme.log");
 
 	cold_start = true;

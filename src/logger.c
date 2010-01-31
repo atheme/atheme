@@ -172,10 +172,10 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
 
-	if (me.connected == false || me.bursting)
+	if (!me.connected || me.bursting)
 		return;
 
-	if (lf->channel_joined == true)
+	if (lf->channel_joined)
 	{
 		size_t targetlen;
 		char targetbuf[NICKLEN];
