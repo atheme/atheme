@@ -98,10 +98,7 @@ static void *trace_server_prepare(char **args)
 	return_val_if_fail(*args != NULL, NULL);
 
 	/* split out the next space */
-	server = *args;
-	while (**args && **args != ' ')
-		*args++;
-	**args = '\0';
+	server = strtok(*args, " ");
 
 	domain = scalloc(sizeof(trace_query_server_domain_t), 1);
 	domain->server = server_find(server);
@@ -137,20 +134,17 @@ typedef struct {
 
 static void *trace_channel_prepare(char **args)
 {
-	char *server;
+	char *channel;
 	trace_query_channel_domain_t *domain;
 
 	return_val_if_fail(args != NULL, NULL);
 	return_val_if_fail(*args != NULL, NULL);
 
 	/* split out the next space */
-	server = *args;
-	while (**args && **args != ' ')
-		*args++;
-	**args = '\0';
+	channel = strtok(*args, " ");
 
 	domain = scalloc(sizeof(trace_query_channel_domain_t), 1);
-	domain->channel = channel_find(server);
+	domain->channel = channel_find(channel);
 
 	return domain;
 }
