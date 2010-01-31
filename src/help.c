@@ -162,6 +162,12 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 						ifnest--;
 					continue;
 				}
+				else if (!strncmp(buf, "#else", 5))
+				{
+					if (ifnest > 0 && ifnest_false <= 1)
+						ifnest_false ^= 1;
+					continue;
+				}
 				if (ifnest_false > 0)
 					continue;
 

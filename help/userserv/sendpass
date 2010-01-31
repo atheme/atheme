@@ -3,8 +3,7 @@ Help for SENDPASS:
 #if !module nickserv/setpass
 SENDPASS emails the password for the specified
 account to the corresponding email address.
-#endif
-#if module nickserv/setpass
+#else
 SENDPASS emails a key to the email address
 corresponding to the specified account
 that can be used to set a new password

@@ -6,9 +6,14 @@ registered accounts or hostmasks (nick!user@host).
 
 The exact meanings of the access levels may differ
 per network, use /msg &nick& TEMPLATE to check. As
+#if halfops
 a hint, VOP stands for VOice People, HOP stands for
 HalfOP, AOP stands for AutoOP, SOP stands for
 SuperOP.
+#else
+a hint, VOP stands for VOice People, AOP stands
+for AutoOP, SOP stands for SuperOP.
+#endif
 
 Not all channel access entries can be edited
 with these commands, see the FLAGS and FORCEXOP
@@ -22,7 +27,11 @@ The privileges required to execute these commands are
 the same as those required for the corresponding
 FLAGS commands.
 
+#if halfops
 Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
+#else
+Syntax: VOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
+#endif
 
 Examples:
     /msg &nick& VOP #foo ADD bar

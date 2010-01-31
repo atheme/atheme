@@ -1336,7 +1336,7 @@ void _modinit(module_t * m)
 
 	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
-	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
+	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);

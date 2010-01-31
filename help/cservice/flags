@@ -19,15 +19,13 @@ If you are not a founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
 don't have. For this purpose, +v grants +V, +o grants +O
 and +r grants +b.
-
-#endif
-#if halfops
+#else
 If you are not a founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
 don't have. For this purpose, +v grants +V, +h grants +H,
 +o grants +O and +r grants +b.
-
 #endif
+
 #if module chanserv/set_limitflags
 If the LIMITFLAGS option is set for the channel, this is
 restricted further, see help for SET LIMITFLAGS.
@@ -58,12 +56,10 @@ Permissions:
     +i - Enables use of the invite and getkey commands.
 #if module chanserv/kick
     +r - Enables use of the kick, kickban, ban and unban commands.
-#endif
-#if !module chanserv/kick
+#else
 #if !module chanserv/unban_self
     +r - Enables use of the ban and unban commands.
-#endif
-#if module chanserv/unban_self
+#else
     +r - Enables use of the unban command.
 #endif
 #endif

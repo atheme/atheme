@@ -60,6 +60,7 @@ struct cmode_ seven_mode_list[] = {
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
   { 'M', CMODE_IMMUNE },
+  { 'C', CMODE_NOCTCP },
   { '\0', 0 }
 };
 
@@ -93,6 +94,14 @@ static bool seven_is_valid_hostslash(const char *host)
         if (dot && p[-1] == '/')
                 return false;
         return dot;
+}
+
+static void seven_wallops_sts(const char *reason)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s ENCAP * SNOTE s :%s", ME, reason);
 }
 
 /* The following m_functions are copied from generic_ts6, with additions to handle the
@@ -269,6 +278,7 @@ void _modinit(module_t * m)
 	mode_list = seven_mode_list;
 	user_mode_list = seven_user_mode_list;
 
+	wallops_sts = &seven_wallops_sts;
 	ircd_on_login = &seven_on_login;
 	ircd_on_logout = &seven_on_logout;
 	is_valid_host = &seven_is_valid_hostslash;

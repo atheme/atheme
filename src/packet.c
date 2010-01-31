@@ -87,11 +87,11 @@ void irc_handle_connect(connection_t *cptr)
 		cptr->flags = CF_UPLINK;
 		cptr->recvq_handler = irc_recvq_handler;
 		connection_setselect_read(cptr, recvq_put);
+		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 		me.connected = true;
 		/* no SERVER message received */
 		me.recvsvr = false;
 
-		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 
 		server_login();
 

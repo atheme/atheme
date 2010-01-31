@@ -7,8 +7,7 @@ from the account it is registered to.
 If you are ungrouping an account name, you need to
 specify a new name for the account. This must be
 another nick registered to it.
-#endif
-#if !module nickserv/set_accountname
+#else
 You cannot ungroup account names.
 #endif
 
