@@ -247,8 +247,10 @@ static trace_action_t *trace_count_prepare(sourceinfo_t *si, char **args)
 	return (trace_action_t *) a;
 }
 
-static void trace_count_exec(user_t *u, trace_action_t *a)
+static void trace_count_exec(user_t *u, trace_action_t *act)
 {
+	trace_action_count_t *a = (trace_action_count_t *) act;
+
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
 
@@ -261,7 +263,7 @@ static void trace_count_cleanup(trace_action_t *act)
 
 	return_if_fail(a != NULL);
 
-	command_success_nodata(a->si, _("\2%d\2 matches"), a->matches);
+	command_success_nodata(act->si, _("\2%d\2 matches"), a->matches);
 
 	free(a);
 }
