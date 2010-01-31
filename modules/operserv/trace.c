@@ -228,6 +228,46 @@ static void trace_print_cleanup(trace_action_t *a)
 
 trace_action_constructor_t trace_print = { trace_print_prepare, trace_print_exec, trace_print_cleanup };
 
+typedef struct {
+	trace_action_t base;
+	int matches;
+} trace_action_count_t;
+
+static trace_action_t *trace_count_prepare(sourceinfo_t *si, char **args)
+{
+	trace_action_count_t *a;
+
+	return_val_if_fail(si != NULL, NULL);
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	a = scalloc(sizeof(trace_action_count_t), 1);
+	trace_action_init(&a->base, si);
+
+	return (trace_action_t *) a;
+}
+
+static void trace_count_exec(user_t *u, trace_action_t *a)
+{
+	return_if_fail(u != NULL);
+	return_if_fail(a != NULL);
+
+	a->matches++;
+}
+
+static void trace_count_cleanup(trace_action_t *act)
+{
+	trace_action_count_t *a = (trace_action_count_t *) act;
+
+	return_if_fail(a != NULL);
+
+	command_success_nodata(a->si, _("\2%d\2 matches"), a->matches);
+
+	free(a);
+}
+
+trace_action_constructor_t trace_count = { trace_count_prepare, trace_count_exec, trace_count_cleanup };
+
 /*
  * Add-on interface.
  *
@@ -255,6 +295,7 @@ void _modinit(module_t *m)
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
+	mowgli_patricia_add(trace_acttree, "COUNT", &trace_count);
 }
 
 void _moddeinit(void)
