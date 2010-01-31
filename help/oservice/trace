@@ -1,0 +1,22 @@
+Help for TRACE:
+
+TRACE allows you to match users by any number of criteria and possibly act on it.
+
+Current criteria are:
+CHANNEL - All users in a given channel.
+SERVER - All users on a given server.
+REGEXP - All users matching a given regex pattern. This is very similar to
+		RMATCH/RWATCH.
+
+Current actions are:
+PRINT - Prints the nick!user@host and some other information about every user
+		matching the given criteria.
+COUNT - Gives the number of users who atch the given criteria.
+KILL - KILLs all users matching the given criteria.
+
+Syntax: TRACE <action> <parameters>
+
+Examples:
+	/msg &nick& TRACE print channel #foo
+	/msg &nick& TRACE print server irc.dereferenced.org
+	/msg &nick& TRACE kill reason server alfred.staticbox.net
