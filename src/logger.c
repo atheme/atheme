@@ -172,7 +172,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
 
-	if (me.connected == false)
+	if (me.connected == false || me.bursting)
 		return;
 
 	if (lf->channel_joined == true)
