@@ -225,8 +225,43 @@ static void trace_print_cleanup(trace_action_t *a)
 
 	free(a);
 }
-
 trace_action_constructor_t trace_print = { trace_print_prepare, trace_print_exec, trace_print_cleanup };
+
+static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
+{
+	trace_action_t *a;
+
+	char *reason;
+
+	return_val_if_fail(si != NULL, NULL);
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	reason = strtok(*args, " ");
+
+	a = scalloc(sizeof(trace_action_t), 1);
+	trace_action_init(a, si);
+
+	return a;
+}
+
+static void trace_kill_exec(user_t *u, trace_action_t *a)
+{
+	return_if_fail(u != NULL);
+	return_if_fail(a != NULL);
+
+	char reason;
+	kill_user(opersvs.me->me, u, "%s", reason); 
+	command_success_nodata(a->si, _("\2%s\2 has been killed."), u->nick);
+}
+
+static void trace_kill_cleanup(trace_action_t *a)
+{
+	return_if_fail(a != NULL);
+
+	free(a);
+}
+trace_action_constructor_t trace_kill = { trace_kill_prepare, trace_kill_exec, trace_kill_cleanup };
 
 typedef struct {
 	trace_action_t base;
@@ -297,6 +332,7 @@ void _modinit(module_t *m)
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
+	mowgli_patricia_add(trace_acttree, "KILL", &trace_kill);
 	mowgli_patricia_add(trace_acttree, "COUNT", &trace_count);
 }
 
@@ -396,7 +432,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 		q->cons->cleanup(q);		
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "TRACE %s %s", parv[0], params);
+	logcommand(si, CMDLOG_ADMIN, "TRACE: \2%s\2 \2%s\2", parv[0], params);
 	free(params);
 }
 
