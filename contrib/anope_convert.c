@@ -63,7 +63,7 @@ static void ATHEME_CONVERT_write_accounts(void)
 	time_t registered;
 	int athemeflags;
 #if VERSION_BUILD >= 1185
-	char decr_pass[PASSMAX];
+	char decr_pass[PASSMAX * 3 + 1];
 #endif
 	char passwdbuf[PASSMAX * 3 + 1];
 	char *passwd;
