@@ -242,7 +242,7 @@ static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
 	return_val_if_fail(*args != NULL, NULL);
 
 	a = scalloc(sizeof(trace_action_kill_t), 1);
-	trace_action_init(a, si);
+	trace_action_init(&a->base, si);
 
 	a->reason = strtok(*args, " ");
 
