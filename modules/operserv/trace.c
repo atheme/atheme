@@ -103,6 +103,9 @@ static void *trace_server_prepare(char **args)
 	domain = scalloc(sizeof(trace_query_server_domain_t), 1);
 	domain->server = server_find(server);
 
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
+
 	return domain;
 }
 
@@ -145,6 +148,9 @@ static void *trace_channel_prepare(char **args)
 
 	domain = scalloc(sizeof(trace_query_channel_domain_t), 1);
 	domain->channel = channel_find(channel);
+
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
 
 	return domain;
 }
