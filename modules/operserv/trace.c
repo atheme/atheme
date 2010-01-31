@@ -323,6 +323,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 		q = cons->prepare(&args);
 		slog(LG_DEBUG, "operserv/trace: new args position [%s]", args);
 
+		q->cons = cons;
 		node_add(q, &q->node, &crit);
 	}
 
