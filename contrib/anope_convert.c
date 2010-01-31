@@ -55,7 +55,7 @@ extern SList akills;
 int muout = 0, mcout = 0, caout = 0, klnout = 0;
 FILE *f;
 
-void write_accounts(void)
+static void ATHEME_CONVERT_write_accounts(void)
 {
 	int i, ii;
 	NickCore *nc;
@@ -247,7 +247,7 @@ convert_mlock(int modes)
 }
 #endif
 
-void write_channels(void)
+static void ATHEME_CONVERT_write_channels(void)
 {
 	int i, j;
 	ChannelInfo *ci;
@@ -379,7 +379,7 @@ void write_channels(void)
 	}
 }
 
-void write_akills(void)
+static void ATHEME_CONVERT_write_akills(void)
 {
 	int i;
 	Akill *ak;
@@ -406,7 +406,7 @@ void write_akills(void)
  * botserv.db contains lines of the following format:
  *      BOT <nick> <user> <host> <private> <registerTS> <realname>
  */
-void write_botserv_bots(void)
+static void ATHEME_CONVERT_write_botserv_bots(void)
 {
 	int i;
 	BotInfo *bi;
@@ -434,9 +434,9 @@ int AnopeInit(int argc, char **argv)
 	time(&ts);
 	fprintf(f, "# Database converted at %s", ctime(&ts));
 	fprintf(f, "DBV 4\n");
-	write_accounts();
-	write_channels();
-	write_akills();
+	ATHEME_CONVERT_write_accounts();
+	ATHEME_CONVERT_write_channels();
+	ATHEME_CONVERT_write_akills();
 	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, klnout);
 	fprintf(f, "# End conversion.\n");
 
@@ -449,7 +449,7 @@ int AnopeInit(int argc, char **argv)
 
 	time(&ts);
 	fprintf(f, "# Database converted at %s\n", ctime(&ts));
-	write_botserv_bots();
+	ATHEME_CONVERT_write_botserv_bots();
 	fprintf(f, "# End conversion.\n");
 
 	fclose(f);
