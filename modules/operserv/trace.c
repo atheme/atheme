@@ -254,7 +254,7 @@ void _modinit(module_t *m)
 	mowgli_patricia_add(trace_cmdtree, "CHANNEL", &trace_channel);
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
-	mowgli_patricia_add(trace_cmdtree, "PRINT", &trace_print);
+	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
 }
 
 void _moddeinit(void)
@@ -269,72 +269,91 @@ void _moddeinit(void)
 
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 {
-	atheme_regex_t *regex;
-	char usermask[512];
-	unsigned int matches = 0, maxmatches;
+	list_t crit = { NULL, NULL, 0 };
+	trace_action_t *act;
+	trace_action_constructor_t *actcons;
 	mowgli_patricia_iteration_state_t state;
 	user_t *u;
-	char *args = parv[0];
-	char *pattern;
+	char *args = parv[1];
 	int flags = 0;
+	node_t *n, *tn;
+	char *params;
 
 	if (args == NULL)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "trace");
-		command_fail(si, fault_needmoreparams, _("Syntax: trace /<regex>/[i] [FORCE]"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TRACE");
+		command_fail(si, fault_needmoreparams, _("Syntax: TRACE <action> <params>"));
 		return;
 	}
 
-	pattern = regex_extract(args, &args, &flags);
-	if (pattern == NULL)
+	actcons = mowgli_patricia_retrieve(trace_acttree, parv[0]);
+	if (actcons == NULL)
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "trace");
-		command_fail(si, fault_badparams, _("Syntax: trace /<regex>/[i] [FORCE]"));
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TRACE");
+		command_fail(si, fault_badparams, _("Syntax: TRACE <action> <params>"));
 		return;
 	}
 
-	while (*args == ' ')
-		args++;
+	params = sstrdup(args);
 
-	if (!strcasecmp(args, "FORCE"))
-		maxmatches = UINT_MAX;
-	else if (*args == '\0')
-		maxmatches = MAXMATCHES_DEF;
-	else
+	act = actcons->prepare(si, &args);
+	if (act == NULL)
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "trace");
-		command_fail(si, fault_badparams, _("Syntax: trace /<regex>/[i] [FORCE]"));
+		command_fail(si, fault_nosuch_target, _("Action compilation failed."));
+		free(params);
 		return;
 	}
 
-	regex = regex_create(pattern, flags);
-	
-	if (regex == NULL)
+	while (true)
 	{
-		command_fail(si, fault_badparams, _("The provided regex \2%s\2 is invalid."), pattern);
-		return;
+		trace_query_constructor_t *cons;
+		trace_query_domain_t *q;
+		char *cmd = strtok(args, " ");
+
+		if (cmd == NULL)
+			break;
+
+		cons = mowgli_patricia_retrieve(trace_cmdtree, cmd);
+
+		args = strtok(NULL, "");
+		if (args == NULL)
+			break;
+
+		slog(LG_DEBUG, "operserv/trace: adding criteria %p(%s) to list [remain: %s]", q, cmd, args);
+		q = cons->prepare(&args);
+		slog(LG_DEBUG, "operserv/trace: new args position [%s]", args);
+
+		node_add(q, &q->node, &crit);
 	}
-		
+
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
-		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+		bool doit = true;
 
-		if (regex_match(regex, usermask))
+		LIST_FOREACH(n, crit.head)
 		{
-			matches++;
-			if (matches <= maxmatches)
-				command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s"), u->nick, u->user, u->host, u->gecos);
-			else if (matches == maxmatches + 1)
+			trace_query_domain_t *q = (trace_query_domain_t *) n->data;
+
+			if (!q->cons->exec(u, q))
 			{
-				command_success_nodata(si, _("Too many matches, not displaying any more"));
-				command_success_nodata(si, _("Add the FORCE keyword to see them all"));
+				doit = false;
+				break;
 			}
 		}
+
+		if (doit)
+			actcons->exec(u, act);
 	}
-	
-	regex_destroy(regex);
-	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
-	logcommand(si, CMDLOG_ADMIN, "trace: \2%s\2 (\2%d\2 matches)", pattern, matches);
+
+	LIST_FOREACH_SAFE(n, tn, crit.head)
+	{
+		trace_query_domain_t *q = (trace_query_domain_t *) n->data;
+
+		q->cons->cleanup(q);		
+	}
+
+	logcommand(si, CMDLOG_ADMIN, "TRACE %s %s", parv[0], params);
+	free(params);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
