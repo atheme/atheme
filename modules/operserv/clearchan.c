@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 #define CLEAR_KICK 1
 #define CLEAR_KILL 2
-#define CLEAR_GLINE 3
+#define CLEAR_AKILL 3
 
 static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -58,7 +58,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	if (!actionstr || !targchan || !treason)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEARCHAN");
-		command_fail(si, fault_needmoreparams, _("Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>"));
  		return;
 	}
 
@@ -75,8 +75,8 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 		action = CLEAR_KICK;
 	else if (!strcasecmp(actionstr, "KILL"))
 		action = CLEAR_KILL;
-	else if (!strcasecmp(actionstr, "GLINE") || !strcasecmp(actionstr, "KLINE"))
-		action = CLEAR_GLINE;
+	else if (!strcasecmp(actionstr, "AKILL") || !strcasecmp(actionstr, "GLINE") || !strcasecmp(actionstr, "KLINE"))
+		action = CLEAR_AKILL;
 	else
 	{
 		/* not valid! */
@@ -124,7 +124,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 				case CLEAR_KILL:
 					kill_user(si->service->me, cu->user, "%s", reason);
 					break;
-				case CLEAR_GLINE:
+				case CLEAR_AKILL:
 					kline_sts("*", "*", cu->user->host, 604800, reason);
 			}
 		}
