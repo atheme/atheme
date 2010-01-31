@@ -225,34 +225,42 @@ static void trace_print_cleanup(trace_action_t *a)
 
 	free(a);
 }
+
 trace_action_constructor_t trace_print = { trace_print_prepare, trace_print_exec, trace_print_cleanup };
+
+typedef struct {
+	trace_action_t base;
+	char *reason;
+} trace_action_kill_t;
 
 static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
 {
-	trace_action_t *a;
-
-	char *reason;
+	trace_action_kill_t *a;
 
 	return_val_if_fail(si != NULL, NULL);
 	return_val_if_fail(args != NULL, NULL);
 	return_val_if_fail(*args != NULL, NULL);
 
-	reason = strtok(*args, " ");
-
-	a = scalloc(sizeof(trace_action_t), 1);
+	a = scalloc(sizeof(trace_action_kill_t), 1);
 	trace_action_init(a, si);
+
+	a->reason = strtok(*args, " ");
+
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
 
 	return a;
 }
 
-static void trace_kill_exec(user_t *u, trace_action_t *a)
+static void trace_kill_exec(user_t *u, trace_action_t *act)
 {
+	trace_action_kill_t *a = (trace_action_kill_t *) act;
+
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
 
-	char reason;
-	kill_user(opersvs.me->me, u, "%s", reason); 
-	command_success_nodata(a->si, _("\2%s\2 has been killed."), u->nick);
+	kill_user(opersvs.me->me, u, "%s", a->reason);
+	command_success_nodata(act->si, _("\2%s\2 has been killed."), u->nick);
 }
 
 static void trace_kill_cleanup(trace_action_t *a)
@@ -261,6 +269,7 @@ static void trace_kill_cleanup(trace_action_t *a)
 
 	free(a);
 }
+
 trace_action_constructor_t trace_kill = { trace_kill_prepare, trace_kill_exec, trace_kill_cleanup };
 
 typedef struct {
