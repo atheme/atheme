@@ -74,6 +74,7 @@ struct
 	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },
 	{ PRIV_GRANT, NULL, NULL, NULL, "edit oper privileges" },
 	{ PRIV_OVERRIDE, NULL, NULL, NULL, "perform actions as any other user" },
+	{ PRIV_TRACE, NULL, NULL, NULL, "look for users and perform actions on them" },
 	/* -- */
 	{ NULL, NULL, NULL, NULL, NULL }
 };
