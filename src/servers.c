@@ -147,6 +147,8 @@ server_t *server_add(const char *name, unsigned int hops, server_t *uplink, cons
 
 	cnt.server++;
 
+	hook_call_server_add(s);
+
 	return s;
 }
 
@@ -202,6 +204,8 @@ static void server_delete_serv(server_t *s)
 		slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
 				s->name, s->uplink != NULL ? s->uplink->name : "<none>",
 				s->users);
+
+	hook_call_server_delete((&(hook_server_delete_t){ .s = s }));
 
 	/* first go through it's users and kill all of them */
 	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
