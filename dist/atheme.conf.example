@@ -1351,6 +1351,13 @@ general {
 	 * for users.
 	 */
 	language = "en";
+
+	/* exempts
+	 * This block contains a list of hostmasks. Users matching any
+	 * of these will not be automatically K:lined by services.
+	 */
+	exempts {
+	};
 };
 
 /******************************************************************************
