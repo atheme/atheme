@@ -1097,8 +1097,10 @@ hostserv {
 	 */
 	#request_per_nick;
 
-	aliases
-	{
+	/* (*)aliases
+	 * Command aliases for HostServ.
+	 */
+	aliases {
 		"APPROVE" = "ACTIVATE";
 		"DENY" = "REJECT";
 	};
