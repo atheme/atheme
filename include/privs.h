@@ -43,7 +43,6 @@
 #define PRIV_GLOBAL          "operserv:global"
 #define PRIV_GRANT           "operserv:grant"
 #define PRIV_OVERRIDE        "operserv:override"
-#define PRIV_TRACE	     "operserv:trace"
 
 /* other access levels */
 #define AC_NONE NULL /* anyone */

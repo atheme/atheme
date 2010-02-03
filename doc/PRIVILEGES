@@ -125,5 +125,3 @@ operserv:grant
 	use /os soper add/del
 operserv:override
 	use /os override to run services commands as other users
-operserv:trace
-	use /os trace to look up users and perform actions on them
