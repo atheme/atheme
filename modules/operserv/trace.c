@@ -20,7 +20,7 @@ list_t *os_helptree;
 
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace };
+command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_TRACE, 2, os_cmd_trace };
 
 typedef struct {
 	void /* trace_query_domain_t */ *(*prepare)(char **args);
