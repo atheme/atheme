@@ -94,6 +94,8 @@ struct ConfOption
   unsigned int uplink_sendq_limit;
 
   char *language;		/* default language */
+
+  list_t exempts;		/* List of masks never to automatically kline */
 } config_options;
 
 /* keep track of how many of what we have */

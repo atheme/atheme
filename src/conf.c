@@ -52,6 +52,7 @@ static int c_ci_sop(config_entry_t *);
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
+static int c_gi_exempts(config_entry_t *);
 
 /* *INDENT-OFF* */
 
@@ -280,6 +281,7 @@ void init_newconf(void)
 	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
 	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, &config_options.uplink_sendq_limit, 10240, INT_MAX);
 	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, &config_options.language);
+	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
 
 	/* chanserv{} block */
 	add_bool_conf_item("FANTASY", &conf_ci_table, &chansvs.fantasy);
@@ -809,6 +811,33 @@ static int c_gi_expire(config_entry_t *ce)
 
 	return 0;
 }
+
+static int c_gi_exempts(config_entry_t *ce)
+{
+	config_entry_t *subce;
+	node_t *n, *tn;
+
+	if (!ce->ce_entries)
+		return 0;
+
+	LIST_FOREACH_SAFE(n, tn, config_options.exempts.head)
+	{
+		free(n->data);
+		node_del(n, &config_options.exempts);
+		node_free(n);
+	}
+
+	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+	{
+		if (subce->ce_entries != NULL)
+		{
+			conf_report_warning(ce, "Invalid exempt entry");
+			continue;
+		}
+		node_add(sstrdup(subce->ce_varname), node_create(), &config_options.exempts);
+	}
+}
+
 
 static int c_logfile(config_entry_t *ce)
 {

@@ -590,6 +590,20 @@ bool is_admin(user_t *user)
 	return false;
 }
 
+bool is_autokline_exempt(user_t *user)
+{
+	node_t *n;
+	char buf[BUFSIZE];
+
+	snprintf(buf, sizeof(buf), "%s!%s@%s", user->nick, user->user, user->host);
+	LIST_FOREACH(n, config_options.exempts.head)
+	{
+		if (0 == match(n->data, buf))
+			return true;
+	}
+	return false;
+}
+
 char *sbytes(float x)
 {
 	if (x > 1073741824.0)

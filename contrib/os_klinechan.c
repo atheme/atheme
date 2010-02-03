@@ -72,6 +72,14 @@ static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 			notice(opersvs.nick, cu->user->nick,
 					"Warning: %s klines normal users",
 					cu->chan->name);
+		else if (is_autokline_exempt(cu->user))
+		{
+			char buf[BUFSIZE];
+			snprintf(buf, sizeof(buf), "Not klining *@%s due to klinechan %s (user %s!%s@%s is exempt)",
+					cu->user->host, cu->chan->name,
+					cu->user->nick, cu->user->user, cu->user->host);
+			wallops_sts(buf);
+		}
 		else
 		{
 			snprintf(reason, sizeof reason, "Joining %s",
