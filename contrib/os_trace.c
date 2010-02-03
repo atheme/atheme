@@ -332,7 +332,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_trace, os_cmdtree);
-	help_addentry(os_helptree, "TRACE", "help/oservice/trace", NULL);
+	help_addentry(os_helptree, "TRACE", "help/contrib/trace", NULL);
 
 	trace_cmdtree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_cmdtree, "REGEXP", &trace_regexp);
