@@ -558,7 +558,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	slog(level, "%s %s:%s!%s@%s[%s] %s",
+	slog(level, "%s %s:\2%s\2!%s@%s[%s] %s",
 			svs != NULL ? svs->nick : me.name,
 			source->myuser != NULL ? source->myuser->name : "",
 			source->nick, source->user, source->vhost,
