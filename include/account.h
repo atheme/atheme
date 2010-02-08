@@ -10,6 +10,7 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+typedef struct mycertfp_ mycertfp_t;
 typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct kline_ kline_t;
@@ -97,6 +98,8 @@ struct myuser_
   list_t subscriptions; /* presence subscriptors */
   
   language_t *language;
+
+  list_t cert_fingerprints;
 };
 
 #define MU_HOLD        0x00000001
@@ -140,6 +143,15 @@ struct myuser_name_
   object_t parent;
 
   char name[NICKLEN];
+};
+
+struct mycertfp_
+{
+  myuser_t *owner;
+
+  char *certfp;
+  
+  node_t node;
 };
 
 struct mychan_
