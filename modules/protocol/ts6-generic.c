@@ -1182,6 +1182,17 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		snprintf(dest, sizeof dest, "%s@%s", parv[2], me.name);
 		handle_message(si, dest, false, buf);
 	}
+	else if (!irccasecmp(parv[1], "CERTFP"))
+	{
+		if (parc < 3)
+			return;
+
+		u = si->su;
+		if (u == NULL)
+			return;
+
+		u->certfp = sstrdup(parv[2]);
+	}
 }
 
 static void m_signon(sourceinfo_t *si, int parc, char *parv[])
