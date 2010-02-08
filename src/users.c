@@ -233,6 +233,9 @@ void user_delete(user_t *u, const char *comment)
 	if (u->flags & UF_INVIS)
 		u->server->invis--;
 
+	if (u->certfp != NULL)
+		free(u->certfp);
+
 	/* remove the user from each channel */
 	LIST_FOREACH_SAFE(n, tn, u->channels.head)
 	{
