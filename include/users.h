@@ -34,6 +34,8 @@ struct user_
 	time_t ts;
 
 	node_t snode; /* for server_t.userlist */
+
+	char *certfp; /* client certificate fingerprint */
 };
 
 #define FLOOD_MSGS_FACTOR 256
