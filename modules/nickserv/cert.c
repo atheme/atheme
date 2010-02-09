@@ -1,10 +1,9 @@
 /*
- * Copyright (c) 2006-2007 Atheme Development Group
+ * Copyright (c) 2006-2010 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Changes and shows nickname CertFP authentication lists.
  *
- * $Id: access.c 8239 2007-05-09 20:05:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +11,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/cert", false, _modinit, _moddeinit,
-	"$Id: access.c 8239 2007-05-09 20:05:03Z jilles $",
+	"$Id: cert.c 8239 2010-02-09 04:40:03E jdhore $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
