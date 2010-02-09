@@ -1169,22 +1169,29 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		else
 			handle_burstlogin(u, parv[2], 0);
 	}
-	if (!irccasecmp(parv[1], "ssl_cert"))
+	else if (!irccasecmp(parv[1], "ssl_cert"))
 	{
 		// :419 METADATA 419AAAAAB ssl_cert :vTrse abcdef0123456789abcdef CN=danieldg
+		char *fpstr, *end;
+		size_t len;
+
 		u = user_find(parv[0]);
 
 		if (u == NULL)
 			return;
-		char* fpstr = strchr(parv[2], ' ');
+
+		fpstr = strchr(parv[2], ' ');
 		if (!fpstr++)
 			return;
-		char* end = strchr(fpstr, ' ');
-		int len = end ? end - fpstr : strlen(fpstr);
+		end = strchr(fpstr, ' ');
+
+		len = end ? end - fpstr : strlen(fpstr);
 
 		u->certfp = smalloc(len + 1);
 		memcpy(u->certfp, fpstr, len);
 		u->certfp[len] = '\0';
+
+		handle_certfp(si, u, u->certfp);
 	}
 }
 
