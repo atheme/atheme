@@ -439,12 +439,7 @@ static void sasl_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	sasl_session_t *p;
-	metadata_t *md_failnum;
-	char lau[BUFSIZE], lao[BUFSIZE];
-	char strfbuf[BUFSIZE];
-	struct tm tm;
 	myuser_t *mu;
-	node_t *n;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -471,65 +466,9 @@ static void sasl_newuser(hook_user_nick_t *data)
 	}
 	destroy_session(p);
 
-	if (is_soper(mu))
-	{
-		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
-	}
-
-	myuser_notice(saslsvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
-
-	u->myuser = mu;
-	n = node_create();
-	node_add(u, n, &mu->logins);
-
-	/* keep track of login address for users */
-	strlcpy(lau, u->user, BUFSIZE);
-	strlcat(lau, "@", BUFSIZE);
-	strlcat(lau, u->vhost, BUFSIZE);
-	metadata_add(mu, "private:host:vhost", lau);
-
-	/* and for opers */
-	strlcpy(lao, u->user, BUFSIZE);
-	strlcat(lao, "@", BUFSIZE);
-	/* Hack for charybdis before 2.1: store IP instead of vhost
-	 * (real host is not known at this time) -- jilles */
-	slog(LG_DEBUG, "nick %s host %s vhost %s ip %s",
-			u->nick, u->host, u->vhost, u->ip);
-	if (!strcmp(u->host, u->vhost) && *u->ip != '\0' &&
-			metadata_find(mu, "private:usercloak"))
-		strlcat(lao, u->ip, BUFSIZE);
-	else
-		strlcat(lao, u->host, BUFSIZE);
-	metadata_add(mu, "private:host:actual", lao);
+	myuser_login(saslsvs.me, u, mu, false);
 
 	logcommand_user(saslsvs.me, u, CMDLOG_LOGIN, "LOGIN");
-
-	/* check for failed attempts and let them know */
-	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
-	{
-		metadata_t *md_failtime, *md_failaddr;
-		time_t ts;
-
-		notice(saslsvs.nick, u->nick, "\2%d\2 failed %s since last login.",
-			atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins");
-
-		md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
-		ts = atol(md_failtime->value);
-		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
-
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-
-		notice(saslsvs.nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
-			md_failaddr->value, strfbuf);
-
-		metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
-		metadata_delete(mu, "private:loginfail:lastfailtime");
-		metadata_delete(mu, "private:loginfail:lastfailaddr");
-	}
-
-	mu->lastlogin = CURRTIME;
-	hook_call_user_identify(u);
 }
 
 /* This function is run approximately once every 30 seconds.

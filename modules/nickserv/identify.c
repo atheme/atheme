@@ -70,10 +70,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	char *target = parv[0];
 	char *password = parv[1];
-	char strfbuf[32];
-	char lau[BUFSIZE], lao[BUFSIZE];
-	struct tm tm;
-	metadata_t *md_failnum;
+	char lau[BUFSIZE];
 
 	if (si->su == NULL)
 	{
@@ -166,73 +163,10 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		        u->myuser = NULL;
 		}
 
-		if (is_soper(mu))
-		{
-			logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
-		}
+		command_success_nodata(si, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), mu->name);
 
-		myuser_notice(nicksvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
-
-		u->myuser = mu;
-		n = node_create();
-		node_add(u, n, &mu->logins);
-
-		/* keep track of login address for users */
-		strlcpy(lau, u->user, BUFSIZE);
-		strlcat(lau, "@", BUFSIZE);
-		strlcat(lau, u->vhost, BUFSIZE);
-		metadata_add(mu, "private:host:vhost", lau);
-
-		/* and for opers */
-		strlcpy(lao, u->user, BUFSIZE);
-		strlcat(lao, "@", BUFSIZE);
-		strlcat(lao, u->host, BUFSIZE);
-		metadata_add(mu, "private:host:actual", lao);
-
-		/* They have not entered the services operator password. */
-		u->flags &= ~UF_SOPER_PASS;
-
+		myuser_login(si->service, u, mu, true);
 		logcommand(si, CMDLOG_LOGIN, COMMAND_UC);
-
-		command_success_nodata(si, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), u->myuser->name);
-
-		/* check for failed attempts and let them know */
-		md_failnum = metadata_find(mu, "private:loginfail:failnum");
-		if (md_failnum && (atoi(md_failnum->value) > 0))
-		{
-			metadata_t *md_failtime, *md_failaddr;
-			time_t ts;
-
-			command_success_nodata(si, _("\2%d\2 failed %s since last login."),
-				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins");
-
-			md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
-			ts = atol(md_failtime->value);
-			md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
-
-			tm = *localtime(&ts);
-			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-
-			command_success_nodata(si, _("Last failed attempt from: \2%s\2 on %s."),
-				md_failaddr->value, strfbuf);
-
-			metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
-			metadata_delete(mu, "private:loginfail:lastfailtime");
-			metadata_delete(mu, "private:loginfail:lastfailaddr");
-		}
-
-		mu->lastlogin = CURRTIME;
-		mn = mynick_find(u->nick);
-		if (mn != NULL && mn->owner == mu)
-			mn->lastseen = CURRTIME;
-
-		/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
-		/* don't allow them to join regonly chans until their
-		 * email is verified */
-		if (!(mu->flags & MU_WAITAUTH))
-			ircd_on_login(si->su, mu, NULL);
-
-		hook_call_user_identify(u);
 
 		/* now we get to check for xOP */
 		/* we don't check for host access yet (could match different

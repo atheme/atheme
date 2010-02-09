@@ -579,7 +579,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 {
 	myuser_t *mu;
 	mycertfp_t *mcfp;
-	node_t *n;
+	service_t *svs;
 
 	free(u->certfp);
 	u->certfp = sstrdup(certfp);
@@ -592,12 +592,79 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 
 	mu = mcfp->mu;
 
+	svs = nicksvs.me; /* XXX */
+	myuser_login(svs, u, mu, true);
+	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
+}
+
+void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
+{
+	char lau[BUFSIZE], lao[BUFSIZE];
+	char strfbuf[BUFSIZE];
+	metadata_t *md_failnum;
+	struct tm tm;
+	mynick_t *mn;
+
+	return_if_fail(svs != NULL && svs->me != NULL);
+	return_if_fail(u->myuser == NULL);
+
+	if (is_soper(mu))
+		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+
+	myuser_notice(svs->me->nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
+
 	u->myuser = mu;
+	node_add(u, node_create(), &mu->logins);
 	u->flags &= ~UF_SOPER_PASS;
-	n = node_create();
-	node_add(u, n, &mu->logins);
-	slog(LG_DEBUG, "handle_certfp(): %s logged in as %s with certificate %s",
-			u->nick, mu->name, certfp);
+
+	/* keep track of login address for users */
+	strlcpy(lau, u->user, BUFSIZE);
+	strlcat(lau, "@", BUFSIZE);
+	strlcat(lau, u->vhost, BUFSIZE);
+	metadata_add(mu, "private:host:vhost", lau);
+
+	/* and for opers */
+	strlcpy(lao, u->user, BUFSIZE);
+	strlcat(lao, "@", BUFSIZE);
+	strlcat(lao, u->host, BUFSIZE);
+	metadata_add(mu, "private:host:actual", lao);
+
+	/* check for failed attempts and let them know */
+	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
+	{
+		metadata_t *md_failtime, *md_failaddr;
+		time_t ts;
+
+		notice(svs->me->nick, u->nick, "\2%d\2 failed %s since last login.",
+			atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins");
+
+		md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
+		ts = atol(md_failtime->value);
+		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
+
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+		notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
+			md_failaddr->value, strfbuf);
+
+		metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
+		metadata_delete(mu, "private:loginfail:lastfailtime");
+		metadata_delete(mu, "private:loginfail:lastfailaddr");
+	}
+
+	mu->lastlogin = CURRTIME;
+	mn = mynick_find(u->nick);
+	if (mn != NULL && mn->owner == mu)
+		mn->lastseen = CURRTIME;
+
+	/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
+	/* don't allow them to join regonly chans until their
+	 * email is verified */
+	if (sendaccount && !(mu->flags & MU_WAITAUTH))
+		ircd_on_login(u, mu, NULL);
+
+	hook_call_user_identify(u);
 }
 
 /* this could be done with more finesse, but hey! */
