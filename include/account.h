@@ -147,7 +147,7 @@ struct myuser_name_
 
 struct mycertfp_
 {
-  myuser_t *owner;
+  myuser_t *mu;
 
   char *certfp;
   
