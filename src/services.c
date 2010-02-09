@@ -481,7 +481,6 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 
 void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 {
-	mynick_t *mn;
 	myuser_t *mu;
 	mycertfp_t *mcfp;
 	node_t *n;
@@ -493,13 +492,6 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 		return;
 
 	mu = mcfp->mu;
-
-	mn = mynick_find(u->nick);
-	if (mn == NULL)
-		return;
-
-	if (mu != mn->owner)
-		return;
 
 	u->myuser = mu;
 	u->flags &= ~UF_SOPER_PASS;
