@@ -1152,6 +1152,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
+	char *certfp;
 
 	if (!irccasecmp(parv[1], "accountname"))
 	{
@@ -1186,11 +1187,12 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 
 		len = end ? end - fpstr : strlen(fpstr);
 
-		u->certfp = smalloc(len + 1);
-		memcpy(u->certfp, fpstr, len);
-		u->certfp[len] = '\0';
+		certfp = smalloc(len + 1);
+		memcpy(certfp, fpstr, len);
+		certfp[len] = '\0';
 
-		handle_certfp(si, u, u->certfp);
+		handle_certfp(si, u, certfp);
+		free(certfp);
 	}
 }
 

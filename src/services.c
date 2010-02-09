@@ -485,6 +485,9 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	mycertfp_t *mcfp;
 	node_t *n;
 
+	free(u->certfp);
+	u->certfp = sstrdup(certfp);
+
 	if (u->myuser != NULL)
 		return;
 
