@@ -591,8 +591,23 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 		return;
 
 	mu = mcfp->mu;
-
 	svs = nicksvs.me; /* XXX */
+
+	if (metadata_find(mu, "private:freeze:freezer"))
+	{
+		notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		logcommand_user(svs, u, CMDLOG_LOGIN, "failed LOGIN to %s (frozen) via CERTFP (%s)", mu->name, certfp);
+		return;
+	}
+
+	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
+	{
+		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+		return;
+	}
+
+	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), mu->name);
+
 	myuser_login(svs, u, mu, true);
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
