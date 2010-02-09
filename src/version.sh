@@ -86,6 +86,7 @@ const char *infotext[] =
   "  alambert, Alex Lambert <alambert@quickfire.org>",
   "  beu, Elfyn McBratney <elfyn.mcbratney@gmail.com>",
   "  Dianora, Diane Bruce <db@db.net>",
+  "  danieldg, Daniel De Graaf <danieldegraaf@gmail.com>",
   "  dKingston, Michael Rodriguez <dkingston@dkingston.net>",
   "  gxti, Michael Tharp <gxti@partiallystapled.com>",
   "  jdhore, JD Horelick <jdhore1@gmail.com>",
