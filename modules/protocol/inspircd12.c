@@ -882,8 +882,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		/* No TS here for some reason, hmm */
-		if (user_changenick(si->su, parv[0], si->su->ts))
+		if (user_changenick(si->su, parv[0], parc == 2 ? atoi(parv[1]) : CURRTIME))
 			return;
 
 		/* It could happen that our PING arrived late and the
