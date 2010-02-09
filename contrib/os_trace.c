@@ -272,7 +272,64 @@ static void trace_nickage_cleanup(void *q)
 
 trace_query_constructor_t trace_nickage = { trace_nickage_prepare, trace_nickage_exec, trace_nickage_cleanup };
 
+typedef struct {
+	trace_query_domain_t domain;
+	int numchan;
+	int comparison;
+} trace_query_numchan_domain_t;
 
+static void *trace_numchan_prepare(char **args)
+{
+	char *numchan_string;
+	trace_query_numchan_domain_t *domain;
+
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	/* split out the next space */
+	numchan_string = strtok(*args, " ");
+	return_val_if_fail(numchan_string != NULL, NULL);
+
+	domain = scalloc(sizeof(trace_query_numchan_domain_t), 1);
+	domain->comparison = read_comparison_operator(&numchan_string, 0);
+	domain->numchan = atoi(numchan_string);
+
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
+
+	return domain;
+}
+
+static bool trace_numchan_exec(user_t *u, void *q)
+{
+	trace_query_numchan_domain_t *domain = (trace_query_numchan_domain_t *) q;
+
+	return_val_if_fail(domain != NULL, false);
+	return_val_if_fail(u != NULL, false);
+
+	int numchan = u->channels.count;
+	if (domain->comparison == 1)
+		return (numchan < domain->numchan);
+	else if (domain->comparison == 2)
+		return (numchan <= domain->numchan);
+	else if (domain->comparison == 3)
+		return (numchan > domain->numchan);
+	else if (domain->comparison == 4)
+		return (numchan >= domain->numchan);
+	else
+		return (numchan == domain->numchan);
+}
+
+static void trace_numchan_cleanup(void *q)
+{
+	trace_query_numchan_domain_t *domain = (trace_query_numchan_domain_t *) q;
+
+	return_if_fail(domain != NULL);
+
+	free(domain);
+}
+
+trace_query_constructor_t trace_numchan = { trace_numchan_prepare, trace_numchan_exec, trace_numchan_cleanup };
 
 /****************************************************************************************************/
 
@@ -437,6 +494,7 @@ void _modinit(module_t *m)
 	mowgli_patricia_add(trace_cmdtree, "SERVER", &trace_server);
 	mowgli_patricia_add(trace_cmdtree, "CHANNEL", &trace_channel);
 	mowgli_patricia_add(trace_cmdtree, "NICKAGE", &trace_nickage);
+	mowgli_patricia_add(trace_cmdtree, "NUMCHAN", &trace_numchan);
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
