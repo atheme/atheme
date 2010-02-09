@@ -1192,6 +1192,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		u->certfp = sstrdup(parv[2]);
+		handle_certfp(si, u, u->certfp);
 	}
 }
 
