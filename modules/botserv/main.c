@@ -963,7 +963,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
 
-	logcommand(si, CMDLOG_ADMIN, "BOT:ASSIGN: \2%s\2 to \2%s\2", parv[1], parv[0]);
+	logcommand(si, CMDLOG_SET, "BOT:ASSIGN: \2%s\2 to \2%s\2", parv[1], parv[0]);
 	command_success_nodata(si, "Assigned the bot \2%s\2 to \2%s\2.", parv[1], parv[0]);
 }
 
@@ -1007,7 +1007,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 	part(mc->name, md->value);
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
-	logcommand(si, CMDLOG_ADMIN, "BOT:UNASSIGN: \2%s\2", parv[0]);
+	logcommand(si, CMDLOG_SET, "BOT:UNASSIGN: \2%s\2", parv[0]);
 	command_success_nodata(si, "Unassigned the bot from \2%s\2.", parv[0]);
 }
 
