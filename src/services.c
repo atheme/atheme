@@ -479,31 +479,6 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
-void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
-{
-	myuser_t *mu;
-	mycertfp_t *mcfp;
-	node_t *n;
-
-	free(u->certfp);
-	u->certfp = sstrdup(certfp);
-
-	if (u->myuser != NULL)
-		return;
-
-	if ((mcfp = mycertfp_find(certfp)) == NULL)
-		return;
-
-	mu = mcfp->mu;
-
-	u->myuser = mu;
-	u->flags &= ~UF_SOPER_PASS;
-	n = node_create();
-	node_add(u, n, &mu->logins);
-	slog(LG_DEBUG, "handle_certfp(): %s logged in as %s with certificate %s",
-			u->nick, mu->name, certfp);
-}
-
 void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 {
 	mynick_t *mn;
@@ -598,6 +573,31 @@ void handle_clearlogin(sourceinfo_t *si, user_t *u)
 		node_free(n);
 	}
 	u->myuser = NULL;
+}
+
+void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
+{
+	myuser_t *mu;
+	mycertfp_t *mcfp;
+	node_t *n;
+
+	free(u->certfp);
+	u->certfp = sstrdup(certfp);
+
+	if (u->myuser != NULL)
+		return;
+
+	if ((mcfp = mycertfp_find(certfp)) == NULL)
+		return;
+
+	mu = mcfp->mu;
+
+	u->myuser = mu;
+	u->flags &= ~UF_SOPER_PASS;
+	n = node_create();
+	node_add(u, n, &mu->logins);
+	slog(LG_DEBUG, "handle_certfp(): %s logged in as %s with certificate %s",
+			u->nick, mu->name, certfp);
 }
 
 /* this could be done with more finesse, but hey! */
