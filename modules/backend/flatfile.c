@@ -77,6 +77,13 @@ static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privda
 		fprintf(f, "MN %s %s %ld %ld\n", mu->name, mn->nick, (long)mn->registered, (long)mn->lastseen);
 	}
 
+	LIST_FOREACH(tn, mu->cert_fingerprints.head)
+	{
+		mycertfp_t *mcfp = tn->data;
+
+		fprintf(f, "MCFP %s %s\n", mu->name, mcfp->certfp);
+	}
+
 	return 0; 
 }
 
@@ -588,6 +595,24 @@ static void flatfile_db_load(void)
 			mn = mynick_add(mu, nick);
 			mn->registered = atoi(treg);
 			mn->lastseen = atoi(tseen);
+		}
+		else if (!strcmp("MCFP", item))
+		{
+			/* certfp */
+			char *user, *certfp;
+			mycertfp_t *mcfp;
+
+			user = strtok(NULL, " ");
+			certfp = strtok(NULL, " ");
+
+			mu = myuser_find(user);
+			if (mu == NULL || certfp == NULL)
+			{
+				slog(LG_DEBUG, "db_load(): invalid certfp<%s> for user<%s>", certfp, user);
+				continue;
+			}
+
+			mcfp = mycertfp_add(mu, certfp);
 		}
 		else if (!strcmp("SU", item))
 		{
