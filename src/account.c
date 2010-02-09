@@ -31,9 +31,11 @@ mowgli_patricia_t *mulist;
 mowgli_patricia_t *nicklist;
 mowgli_patricia_t *oldnameslist;
 mowgli_patricia_t *mclist;
+mowgli_patricia_t *certfplist;
 
-static BlockHeap *myuser_heap;  /* HEAP_USER */
-static BlockHeap *mynick_heap;  /* HEAP_USER */
+static BlockHeap *myuser_heap;   /* HEAP_USER */
+static BlockHeap *mynick_heap;   /* HEAP_USER */
+static BlockHeap *mycertfp_heap; /* HEAP_USER */
 static BlockHeap *myuser_name_heap;	/* HEAP_USER / 2 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
@@ -59,9 +61,10 @@ void init_accounts(void)
 	myuser_name_heap = BlockHeapCreate(sizeof(myuser_name_t), HEAP_USER / 2);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
+	mycertfp_heap = BlockHeapCreate(sizeof(mycertfp_t), HEAP_USER);
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
-			|| chanacs_heap == NULL)
+			|| chanacs_heap == NULL || mycertfp_heap == NULL)
 	{
 		slog(LG_ERROR, "init_accounts(): block allocator failure.");
 		exit(EXIT_FAILURE);
@@ -71,6 +74,7 @@ void init_accounts(void)
 	nicklist = mowgli_patricia_create(irccasecanon);
 	oldnameslist = mowgli_patricia_create(irccasecanon);
 	mclist = mowgli_patricia_create(irccasecanon);
+	certfplist = mowgli_patricia_create(strcasecanon);
 }
 
 /*
@@ -871,6 +875,47 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	object_unref(mun);
 
 	return;
+}
+
+/*******************
+ * M Y C E R T F P *
+ *******************/
+
+mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp)
+{
+	mycertfp_t *mcfp;
+
+	return_val_if_fail(mu != NULL, NULL);
+	return_val_if_fail(certfp != NULL, NULL);
+
+	mcfp = BlockHeapAlloc(mycertfp_heap);
+	mcfp->mu = mu;
+	mcfp->certfp = sstrdup(certfp);
+
+	node_add(mcfp, &mcfp->node, &mu->cert_fingerprints);
+	mowgli_patricia_add(certfplist, mcfp->certfp, mcfp);
+
+	return mcfp;
+}
+
+void mycertfp_delete(mycertfp_t *mcfp)
+{
+	return_if_fail(mcfp != NULL);
+	return_if_fail(mcfp->mu != NULL);
+	return_if_fail(mcfp->certfp != NULL);
+
+	node_del(&mcfp->node, &mcfp->mu->cert_fingerprints);
+	mowgli_patricia_delete(certfplist, mcfp->certfp);
+
+	free(mcfp->certfp);
+	BlockHeapFree(mycertfp_heap, mcfp);
+}
+
+mycertfp_t *mycertfp_find(const char *certfp)
+{
+	return_val_if_fail(certfp != NULL, NULL);
+
+	return mowgli_patricia_retrieve(certfplist, certfp);
 }
 
 /***************
