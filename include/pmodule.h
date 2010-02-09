@@ -63,6 +63,7 @@ E void reintroduce_user(user_t *u);
 E void handle_nickchange(user_t *u);
 E void handle_burstlogin(user_t *u, char *login, time_t ts);
 E void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts);
+E void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp);
 E void handle_clearlogin(sourceinfo_t *si, user_t *u);
 
 #endif
