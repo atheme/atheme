@@ -16,6 +16,7 @@ CFLAGS		= -I../../include @CFLAGS@
 BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/access.c	\
+	$(SRCDIR)/cert.c	\
 	$(SRCDIR)/drop.c	\
 	$(SRCDIR)/enforce.c	\
 	$(SRCDIR)/freeze.c	\
