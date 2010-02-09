@@ -33,6 +33,43 @@ typedef struct {
 	node_t node;
 } trace_query_domain_t;
 
+static int read_comparison_operator(char** string, int default_comparison)
+{
+	if (**string == '<')
+	{
+		if (*((*string)+1) == '=')
+		{
+			*string += 2;
+			return 2;
+		}
+		else
+		{
+			*string += 1;
+			return 1;
+		}
+	}
+	else if (**string == '>')
+	{
+		if (*((*string)+1) == '=')
+		{
+			*string += 2;
+			return 4;
+		}
+		else
+		{
+			*string += 1;
+			return 3;
+		}
+	}
+	else if (**string == '=')
+	{
+		*string += 1;
+		return 0;
+	}
+	else
+		return default_comparison;
+}
+
 typedef struct {
 	trace_query_domain_t domain;
 	atheme_regex_t *regex;
@@ -175,6 +212,67 @@ static void trace_channel_cleanup(void *q)
 }
 
 trace_query_constructor_t trace_channel = { trace_channel_prepare, trace_channel_exec, trace_channel_cleanup };
+
+typedef struct {
+	trace_query_domain_t domain;
+	int nickage;
+	int comparison;
+} trace_query_nickage_domain_t;
+
+static void *trace_nickage_prepare(char **args)
+{
+	char *nickage_string;
+	trace_query_nickage_domain_t *domain;
+
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	/* split out the next space */
+	nickage_string = strtok(*args, " ");
+	return_val_if_fail(nickage_string != NULL, NULL);
+
+	domain = scalloc(sizeof(trace_query_nickage_domain_t), 1);
+	domain->comparison = read_comparison_operator(&nickage_string, 2);
+	domain->nickage = atoi(nickage_string);
+
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
+
+	return domain;
+}
+
+static bool trace_nickage_exec(user_t *u, void *q)
+{
+	trace_query_nickage_domain_t *domain = (trace_query_nickage_domain_t *) q;
+
+	return_val_if_fail(domain != NULL, false);
+	return_val_if_fail(u != NULL, false);
+
+	int nickage = CURRTIME - u->ts;
+	if (domain->comparison == 1)
+		return (nickage < domain->nickage);
+	else if (domain->comparison == 2)
+		return (nickage <= domain->nickage);
+	else if (domain->comparison == 3)
+		return (nickage > domain->nickage);
+	else if (domain->comparison == 4)
+		return (nickage >= domain->nickage);
+	else
+		return (nickage == domain->nickage);
+}
+
+static void trace_nickage_cleanup(void *q)
+{
+	trace_query_nickage_domain_t *domain = (trace_query_nickage_domain_t *) q;
+
+	return_if_fail(domain != NULL);
+
+	free(domain);
+}
+
+trace_query_constructor_t trace_nickage = { trace_nickage_prepare, trace_nickage_exec, trace_nickage_cleanup };
+
+
 
 /****************************************************************************************************/
 
@@ -338,6 +436,7 @@ void _modinit(module_t *m)
 	mowgli_patricia_add(trace_cmdtree, "REGEXP", &trace_regexp);
 	mowgli_patricia_add(trace_cmdtree, "SERVER", &trace_server);
 	mowgli_patricia_add(trace_cmdtree, "CHANNEL", &trace_channel);
+	mowgli_patricia_add(trace_cmdtree, "NICKAGE", &trace_nickage);
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
