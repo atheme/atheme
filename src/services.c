@@ -484,6 +484,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	mynick_t *mn;
 	myuser_t *mu;
 	mycertfp_t *mcfp;
+	node_t *n;
 
 	if (u->myuser != NULL)
 		return;
@@ -505,7 +506,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	n = node_create();
 	node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_certfp(): %s logged in as %s with certificate %s",
-			u->nick, login, certfp);
+			u->nick, mu->name, certfp);
 }
 
 void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
