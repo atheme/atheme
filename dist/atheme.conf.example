@@ -139,6 +139,7 @@ loadmodule "modules/backend/flatfile";
  *
  * Core components				modules/nickserv/main
  * Nickname access lists			modules/nickserv/access
+ * CertFP fingerprint managment			modules/nickserv/cert
  * DROP command					modules/nickserv/drop
  * GHOST command				modules/nickserv/ghost
  * GROUP and UNGROUP commands			modules/nickserv/group
@@ -174,6 +175,7 @@ loadmodule "modules/backend/flatfile";
  */
 loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
+#loadmodule "modules/nickserv/cert";
 loadmodule "modules/nickserv/drop";
 loadmodule "modules/nickserv/ghost";
 loadmodule "modules/nickserv/group";
