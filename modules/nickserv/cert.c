@@ -86,9 +86,9 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("Fingerprint list for \2%s\2:"), mu->name);
 
-		LIST_FOREACH(n, mu->access_list.head)
+		LIST_FOREACH(n, mu->cert_fingerprints.head)
 		{
-			mcfp = n->data;
+			mcfp = ((mycertfp_t*)n->data)->certfp;
 			command_success_nodata(si, "- %s", mcfp);
 		}
 
@@ -106,6 +106,12 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			mcfp = parv[1];
+		}
+
+		if (mu == NULL)
+		{
+			command_fail(si, fault_noprivs, _("You are not logged in."));
+			return;
 		}
 		
 		if (mycertfp_find(mcfp))
