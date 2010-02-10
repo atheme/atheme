@@ -1477,8 +1477,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 	* Do not part if we're enforcing an akick/close in an otherwise
 	* empty channel (MC_INHABIT). -- jilles
 	*/
-	if ((mc->flags & MC_GUARD)
-			&& config_options.leave_chans
+	if (config_options.leave_chans
 			&& !(mc->flags & MC_INHABIT)
 			&& (cu->chan->nummembers <= 2)
 			&& !is_internal_client(cu->user))
