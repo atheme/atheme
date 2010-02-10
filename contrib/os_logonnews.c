@@ -178,7 +178,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 	if (!action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGONNEWS");
-		command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD|DEL|LIST [target] [message]");
+		command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD|DEL|LIST [title] [message]");
 		return;
 	}
 
@@ -187,7 +187,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 		if (!target || !story)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGONNEWS ADD");
-			command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD <target> <message>");
+			command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD <title> <message>");
 			return;
 		}
 
@@ -274,7 +274,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "LOGONNEWS");
-		command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD|DEL|LIST [target] [message]");
+		command_fail(si, fault_needmoreparams, "Syntax: LOGONNEWS ADD|DEL|LIST [title] [message]");
 		return;
 	}
 }
