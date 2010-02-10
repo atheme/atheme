@@ -146,9 +146,9 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
 		}
-		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), mcfp);
+		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), parv[1]);
 		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", mcfp);
-		mycertfp_delete(*mcfp);
+		mycertfp_delete(mcfp);
 	}
 	else
 	{
