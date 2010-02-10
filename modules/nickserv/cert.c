@@ -29,7 +29,6 @@ void _modinit(module_t *m)
 	command_add(&ns_cert, ns_cmdtree);
 	help_addentry(ns_helptree, "CERT", "help/nickserv/cert", NULL);
 
-	/* use_mycertfp++; */
 }
 
 void _moddeinit()
@@ -37,7 +36,6 @@ void _moddeinit()
 	command_delete(&ns_cert, ns_cmdtree);
 	help_delentry(ns_helptree, "CERT");
 
-	/* use_mycertfp--; */
 }
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
