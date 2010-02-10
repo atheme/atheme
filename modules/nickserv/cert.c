@@ -124,6 +124,12 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mcfp = parv[1];
 		}
+
+		if (mu == NULL)
+		{
+			command_fail(si, fault_noprivs, _("You are not logged in."));
+			return;
+		}
 		
 		if (mycertfp_find(mcfp))
 		{
