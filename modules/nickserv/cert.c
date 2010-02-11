@@ -43,6 +43,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	node_t *n;
 	char *mcfp;
+	mycertfp_t *cert;
 
 	if (parc < 1)
 	{
@@ -156,14 +157,14 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
-		if ((mcfp = mycertfp_find(parv[1])) == NULL)
+		if ((cert = mycertfp_find(parv[1])) == NULL)
 		{
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
 		}
 		command_success_nodata(si, _("Deleted fingerprint \2%s\2 from your fingerprint list."), parv[1]);
-		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", mcfp);
-		mycertfp_delete(mcfp);
+		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", parv[1]);
+		mycertfp_delete(cert);
 	}
 	else
 	{
