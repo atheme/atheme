@@ -3,6 +3,8 @@ Help for CERT:
 CERT maintains a list of CertFP fingerprints that will allow
 &nick& to recognize you and authenticate you automatically.
 
+You cannot add the same fingerprint to multiple accounts.
+
 Syntax: CERT LIST
 Syntax: CERT ADD [fingerprint]
 Syntax: CERT DEL <fingerprint>
