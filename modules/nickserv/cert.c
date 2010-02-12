@@ -117,10 +117,18 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
-		
-		if (mycertfp_find(mcfp))
+
+		cert = mycertfp_find(mcfp);
+		if (cert == NULL)
+			;
+		else if (cert->mu == mu)
 		{
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on your fingerprint list."), mcfp);
+			return;
+		}
+		else
+		{
+			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is already on another user's fingerprint list."), mcfp);
 			return;
 		}
 		if (mycertfp_add(mu, mcfp))
