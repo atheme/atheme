@@ -230,7 +230,7 @@ void myuser_delete(myuser_t *mu)
 					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
-			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
 			object_unref(mc);
 		}
@@ -1764,7 +1764,7 @@ void expire_check(void *arg)
 					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
-			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
 
 			object_unref(mc);

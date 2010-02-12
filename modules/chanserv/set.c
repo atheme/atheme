@@ -1106,7 +1106,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_GUARD;
 
-		if (!(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)))
+		if (mc->chan != NULL && !(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)) && !(mc->chan->flags & CHAN_LOG))
 			part(mc->name, chansvs.nick);
 
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "GUARD", mc->name);

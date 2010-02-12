@@ -1329,7 +1329,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	if (mc->flags & MC_INHABIT)
 	{
 		mc->flags &= ~MC_INHABIT;
-		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccasecmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
+		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccasecmp(chan->name, config_options.chan)) && !(chan->flags & CHAN_LOG) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
 
