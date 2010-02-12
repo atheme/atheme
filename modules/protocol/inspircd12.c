@@ -1172,6 +1172,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	else if (!irccasecmp(parv[1], "ssl_cert"))
 	{
 		// :419 METADATA 419AAAAAB ssl_cert :vTrse abcdef0123456789abcdef CN=danieldg
+		// :419 METADATA 419AAAAAC ssl_cert :vtrsE Error message for certificate
 		char *fpstr, *end;
 		size_t len;
 
@@ -1182,6 +1183,10 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 
 		fpstr = strchr(parv[2], ' ');
 		if (!fpstr++)
+			return;
+		// first, check for lack of valid certificate
+		end = strchr(parv[2], 'E');
+		if (end && end < fpstr)
 			return;
 		end = strchr(fpstr, ' ');
 
