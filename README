@@ -72,7 +72,7 @@ specified to change the default behavior:
   -c </path/to/file> - specify the configuration file
   -d                 - start in debugging mode
   -h                 - print the help message and exit
-  -r				 - start atheme in read-only mode
+  -r                 - start atheme in read-only mode
   -l </path/to/file> - specify the main log file
   -n                 - do not fork into the background
   -p </path/to/file> - specify the PID file
