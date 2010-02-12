@@ -1094,7 +1094,7 @@ static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		// we've already killed the colliding user in user_add/user_changenick
 		// XXX this could cause a services fight if we get desynced and haven't killed the camper
-		sts(":%s NICK %s %ld", si->su->uid, si->su->nick, si->su, (unsigned long)si->su->ts);
+		sts(":%s NICK %s %lu", si->su->uid, si->su->nick, (unsigned long)si->su->ts);
 	}
 	else
 	{
