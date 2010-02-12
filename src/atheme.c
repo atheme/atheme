@@ -57,10 +57,11 @@ void (*db_load) (void) = NULL;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-	printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
+	printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n\n"
 	       "-c <file>    Specify the config file\n"
 	       "-d           Start in debugging mode\n"
 	       "-h           Print this message and exit\n"
+	       "-r	     Start in read-only mode\n"
 	       "-l <file>    Specify the log file\n"
 	       "-n           Don't fork into the background (log screen + log file)\n"
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
