@@ -98,7 +98,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		mu = si->smu;
 		if (parc < 2)
 		{
-			mcfp = si->su->certfp;
+			mcfp = si->su != NULL ? si->su->certfp : NULL;
 			
 			if (mcfp == NULL)
 			{
@@ -106,18 +106,6 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD <fingerprint>"));
 				return;
 			}
-			else
-			{
-				if (mycertfp_add(mu, mcfp))
-				{
-					command_success_nodata(si, _("Added fingerprint \2%s\2 to your fingerprint list."), mcfp);
-					logcommand(si, CMDLOG_SET, "CERT:ADD: \2%s\2", mcfp);
-				}
-				else
-					command_fail(si, fault_toomany, _("Your fingerprint list is full."));
-			}
-
-
 		}
 		else
 		{
