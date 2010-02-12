@@ -86,6 +86,13 @@ AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
 AC_SUBST(POSIX_CRYPTC)
 
+AC_ARG_WITH([ldap],
+	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
+	[],
+	[with_ldap="auto"])
+
+AS_IF([test "x$with_ldap" != "xno"],
+[
 # Thank autoconf and openldap developers for making me do all this stuff.
 LDAP_CFLAGS=""
 LDAP_LIBS=""
@@ -108,6 +115,11 @@ AC_CHECK_LIB(ldap, ldap_initialize, [
 	CFLAGS="$saveCFLAGS"
 	LIBS="$saveLIBS"
 ])
+dnl with_ldap != no
+])
+
+AS_IF([test "x$with_ldap" = "xyes" && test "x$LDAP_AUTHC" = "x"],
+[AC_MSG_ERROR([LDAP support was explicitly requested but could not be found.])])
 
 AC_SUBST(LDAP_CFLAGS)
 AC_SUBST(LDAP_LIBS)
