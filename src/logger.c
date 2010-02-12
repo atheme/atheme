@@ -67,10 +67,10 @@ static void logfile_join_channels(channel_t *c)
 
 		if (!irccasecmp(c->name, lf->log_path))
 		{
-			if (!lf->channel_joined)
+			if (!(c->flags & CHAN_LOG))
 			{
+				c->flags |= CHAN_LOG;
 				joinall(lf->log_path);
-				lf->channel_joined = true;
 			}
 			return;
 		}
@@ -168,6 +168,8 @@ static void logfile_write(logfile_t *lf, const char *buf)
  */
 static void logfile_write_irc(logfile_t *lf, const char *buf)
 {
+	channel_t *c;
+
 	return_if_fail(lf != NULL);
 	return_if_fail(lf->log_path != NULL);
 	return_if_fail(buf != NULL);
@@ -175,7 +177,8 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 	if (!me.connected || me.bursting)
 		return;
 
-	if (lf->channel_joined)
+	c = channel_find(lf->log_path);
+	if (c != NULL && c->flags & CHAN_LOG)
 	{
 		size_t targetlen;
 		char targetbuf[NICKLEN];
@@ -197,7 +200,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		else
 			targetlen = 0;
 
-		msg(svs != NULL ? svs->me->nick : opersvs.nick, lf->log_path, "%s", (buf + targetlen));
+		msg(svs != NULL ? svs->me->nick : opersvs.nick, c->name, "%s", (buf + targetlen));
 	}
 }
 
@@ -258,6 +261,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 {
 	static bool hooked = false;
 	static time_t lastfail = 0;
+	channel_t *c;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
 	if (*path != '#')
@@ -288,17 +292,18 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		lf->log_path = sstrdup(path);
 		lf->write_func = logfile_write_irc;
 
-		if (!hooked)
+		c = channel_find(lf->log_path);
+
+		if (me.connected && c != NULL)
+		{
+			joinall(lf->log_path);
+			c->flags |= CHAN_LOG;
+		}
+		else if (!hooked)
 		{
 			hook_add_event("channel_add");
 			hook_add_channel_add(logfile_join_channels);
 			hooked = true;
-		}
-
-		if (me.connected)
-		{
-			joinall(lf->log_path);
-			lf->channel_joined = true;
 		}
 	}
 

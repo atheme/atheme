@@ -31,6 +31,8 @@ struct channel_
 
   list_t members;
   list_t bans;
+
+  unsigned int flags;
 };
 
 /* struct for channel memberships */
@@ -51,6 +53,7 @@ struct chanban_
   node_t node; /* for channel_t.bans */
 };
 
+/* channel_t.modes */
 #define CMODE_INVITE    0x00000001
 #define CMODE_KEY       0x00000002
 #define CMODE_LIMIT     0x00000004
@@ -60,6 +63,10 @@ struct chanban_
 #define CMODE_SEC       0x00000080
 #define CMODE_TOPIC     0x00000100
 
+/* channel_t.flags */
+#define CHAN_LOG        0x00000001 /* logs sent to here */
+
+/* chanuser_t.modes */
 #define CSTATUS_OP      0x00000001
 #define CSTATUS_VOICE   0x00000002
 #define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
