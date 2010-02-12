@@ -1159,11 +1159,11 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 
 	flags = chanacs_user_flags(mc, u);
 	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
-	u->myuser->flags & MU_NOOP);
+			u->myuser->flags & MU_NOOP);
 	/* attempt to deop people recreating channels, if the more
-	* sophisticated mechanism is disabled */
+	 * sophisticated mechanism is disabled */
 	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
-	chan->nummembers == 1 && chan->ts > CURRTIME - 300);
+			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
 
 	/* auto stuff */
 	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
@@ -1265,17 +1265,17 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 			if (md != NULL && *md->value != '|')
 			{
 				snprintf(akickreason, sizeof akickreason,
-				"Banned: %s", md->value);
+						"Banned: %s", md->value);
 				p = strchr(akickreason, '|');
 				if (p != NULL)
-				*p = '\0';
+					*p = '\0';
 				else
-				p = akickreason + strlen(akickreason);
+					p = akickreason + strlen(akickreason);
 				/* strip trailing spaces, so as not to
-				* disclose the existence of an oper reason */
+				 * disclose the existence of an oper reason */
 				p--;
 				while (p > akickreason && *p == ' ')
-				p--;
+					p--;
 				p[1] = '\0';
 			}
 		}
@@ -1288,17 +1288,17 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	}
 
 	/* Kick out users who may be recreating channels mlocked +i.
-	* Users with +i flag are allowed to join, as are users matching
-	* an invite exception (the latter only works if the channel already
-	* exists because members are sent before invite exceptions).
-	* Because most networks do not use kick_on_split_riding or
-	* no_create_on_split, do not trust users coming back from splits.
-	* Unfortunately, this kicks users who have been invited by a channel
-	* operator, after a split or services restart.
-	*/
+	 * Users with +i flag are allowed to join, as are users matching
+	 * an invite exception (the latter only works if the channel already
+	 * exists because members are sent before invite exceptions).
+	 * Because most networks do not use kick_on_split_riding or
+	 * no_create_on_split, do not trust users coming back from splits.
+	 * Unfortunately, this kicks users who have been invited by a channel
+	 * operator, after a split or services restart.
+	 */
 	if (mc->mlock_on & CMODE_INVITE && !(flags & CA_INVITE) &&
-	(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me) || (bot && chanuser_find(chan, bot->me->me))))) &&
-	(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
+			(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me) || (bot && chanuser_find(chan, bot->me->me))))) &&
+			(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
 	{
 		if (chan->nummembers <= 2)
 		{
@@ -1312,7 +1312,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 			}
 		}
 		if (!(chan->modes & CMODE_INVITE))
-		check_modes(mc, true);
+			check_modes(mc, true);
 		modestack_flush_channel(chan);
 		if (bot)
 			try_kick(bot->me->me, chan, u, "Invite only channel");
@@ -1323,7 +1323,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	}
 
 	/* A user joined and was not kicked; we do not need
-	* to stay on the channel artificially. */
+	 * to stay on the channel artificially. */
 	if (mc->flags & MC_INHABIT)
 	{
 		mc->flags &= ~MC_INHABIT;
@@ -1417,7 +1417,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 				modestack_mode_param(bot->nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
 			else
 				modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
-		cu->modes &= ~ircd->halfops_mode;
+			cu->modes &= ~ircd->halfops_mode;
 		}
 	}
 
