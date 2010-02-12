@@ -595,7 +595,7 @@ bool is_autokline_exempt(user_t *user)
 	node_t *n;
 	char buf[BUFSIZE];
 
-	snprintf(buf, sizeof(buf), "%s!%s@%s", user->nick, user->user, user->host);
+	snprintf(buf, sizeof(buf), "%s@%s", user->user, user->host);
 	LIST_FOREACH(n, config_options.exempts.head)
 	{
 		if (0 == match(n->data, buf))
