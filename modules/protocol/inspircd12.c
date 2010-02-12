@@ -1085,6 +1085,23 @@ static void m_sanick(sourceinfo_t *si, int parc, char *parv[])
 	m_nick(si, 1, &parv[1]);
 }
 
+static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
+{
+	si->su = user_find(parv[0]);
+	if (si->su == NULL || si->su->ts != atoi(parv[2]))
+		return;
+	if (is_internal_client(si->su))
+	{
+		// we've already killed the colliding user in user_add/user_changenick
+		// XXX this could cause a services fight if we get desynced and haven't killed the camper
+		sts(":%s NICK %s %ld", si->su->uid, si->su->nick, si->su, (unsigned long)si->su->ts);
+	}
+	else
+	{
+		m_nick(si, 2, &parv[1]);
+	}
+}
+
 static void m_samode(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* note that SAMODE is not checked in any way before propagation,
@@ -1380,6 +1397,7 @@ void _modinit(module_t * m)
 	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
 	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);
 	pcommand_add("SAQUIT", m_saquit, 1, MSRC_USER);
+	pcommand_add("SVSNICK", m_svsnick, 3, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
