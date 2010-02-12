@@ -481,8 +481,9 @@ PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.7.0],
 	if test "x$enablerpath" = "xyes"; then
 		RPATH="-Wl,-rpath,${libdir}"
 	fi
-	AC_CONFIG_SUBDIRS([libmowgli])
 ])
+AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
+	[ AC_CONFIG_SUBDIRS([libmowgli]) ])
 
 CFLAGS="$CFLAGS $MOWGLI_CFLAGS"
 LIBS="$LIBS $MOWGLI_LIBS"
