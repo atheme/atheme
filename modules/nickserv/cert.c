@@ -145,7 +145,8 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
-		if ((cert = mycertfp_find(parv[1])) == NULL)
+		cert = mycertfp_find(parv[1]);
+		if (cert == NULL || cert->mu != mu)
 		{
 			command_fail(si, fault_nochange, _("Fingerprint \2%s\2 is not on your fingerprint list."), parv[1]);
 			return;
