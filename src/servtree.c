@@ -391,6 +391,7 @@ static void servtree_update(void *dummy)
 				/* if the snoop channel already exists, join it now */
 				if (config_options.chan != NULL && channel_find(config_options.chan) != NULL)
 					join(config_options.chan, sptr->nick);
+				hook_call_service_introduce(sptr);
 			}
 		}
 	}

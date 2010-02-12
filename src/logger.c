@@ -77,6 +77,30 @@ static void logfile_join_channels(channel_t *c)
 	}
 }
 
+static void logfile_join_service(service_t *svs)
+{
+	node_t *n;
+	channel_t *c;
+
+	return_if_fail(svs != NULL && svs->me != NULL);
+
+	/* no botserv bots */
+	if (svs->conf_table == NULL)
+		return;
+
+	LIST_FOREACH(n, log_files.head)
+	{
+		logfile_t *lf = n->data;
+
+		if (*lf->log_path != '#')
+			continue;
+		c = channel_find(lf->log_path);
+		if (c == NULL || !(c->flags & CHAN_LOG))
+			continue;
+		join(c->name, svs->me->nick);
+	}
+}
+
 /*
  * logfile_strip_control_codes(const char *buf)
  *
@@ -299,10 +323,12 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 			joinall(lf->log_path);
 			c->flags |= CHAN_LOG;
 		}
-		else if (!hooked)
+		if (!hooked)
 		{
 			hook_add_event("channel_add");
 			hook_add_channel_add(logfile_join_channels);
+			hook_add_event("service_introduce");
+			hook_add_service_introduce(logfile_join_service);
 			hooked = true;
 		}
 	}
