@@ -47,9 +47,6 @@ static void logfile_delete_channel(void *vdata)
 
 	logfile_unregister(lf);
 
-	if (opersvs.nick != NULL)
-		part(lf->log_path, opersvs.nick);
-
 	free(lf->log_path);
 	metadata_delete_all(lf);
 	free(lf);
@@ -98,6 +95,36 @@ static void logfile_join_service(service_t *svs)
 		if (c == NULL || !(c->flags & CHAN_LOG))
 			continue;
 		join(c->name, svs->me->nick);
+	}
+}
+
+static void logfile_part_removed(void *unused)
+{
+	channel_t *c;
+	mowgli_patricia_iteration_state_t state;
+	node_t *n;
+	bool valid;
+
+	MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
+	{
+		if (!(c->flags & CHAN_LOG))
+			continue;
+		valid = false;
+		LIST_FOREACH(n, log_files.head)
+		{
+			logfile_t *lf = n->data;
+
+			if (!irccasecmp(c->name, lf->log_path))
+			{
+				valid = true;
+				break;
+			}
+		}
+		if (!valid)
+		{
+			c->flags &= ~CHAN_LOG;
+			partall(c->name);
+		}
 	}
 }
 
@@ -329,6 +356,8 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 			hook_add_channel_add(logfile_join_channels);
 			hook_add_event("service_introduce");
 			hook_add_service_introduce(logfile_join_service);
+			hook_add_event("config_ready");
+			hook_add_config_ready(logfile_part_removed);
 			hooked = true;
 		}
 	}
