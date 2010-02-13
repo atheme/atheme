@@ -265,10 +265,6 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	/* check our config file */
-	if (!conf_check())
-		exit(EXIT_FAILURE);
-
 	/* we've done the critical startup steps now */
 	cold_start = false;
 

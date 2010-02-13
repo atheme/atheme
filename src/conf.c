@@ -145,8 +145,10 @@ bool conf_parse(const char *file)
 	if (!pmodule_loaded)
 	{
 		slog(LG_ERROR, "No protocol module loaded, aborting");
-		exit(EXIT_FAILURE);
+		return false;
 	}
+	if (!conf_check())
+		return false;
 
 	hook_call_config_ready();
 	return true;
@@ -928,7 +930,6 @@ bool conf_rehash(void)
 	log_open();
 	conf_process(cfp);
 	config_free(cfp);
-	hook_call_config_ready();
 
 	/* now recheck */
 	if (!conf_check())
@@ -951,6 +952,8 @@ bool conf_rehash(void)
 		runflags &= ~RF_REHASHING;
 		return false;
 	}
+
+	hook_call_config_ready();
 
 	if (oldsnoop != NULL || config_options.chan != NULL)
 	{
