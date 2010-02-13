@@ -838,6 +838,7 @@ static int c_gi_exempts(config_entry_t *ce)
 		}
 		node_add(sstrdup(subce->ce_varname), node_create(), &config_options.exempts);
 	}
+	return 0;
 }
 
 
