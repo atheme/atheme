@@ -22,5 +22,5 @@ BASE_SRCS =				\
 
 include ../Makefile.common
 
-ldap.so: ldap.c
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} ${LDAP_CFLAGS} ${LDAP_LIBS} ${SRCDIR}/ldap.c -o ldap.so
+ldap.so: $(SRCDIR)/ldap.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${LDFLAGS} -o $@ ${SRCDIR}/ldap.c ${LDAP_CFLAGS} ${LDAP_LIBS}
