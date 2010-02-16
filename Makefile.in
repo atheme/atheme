@@ -35,11 +35,11 @@ DISTNAME	= @PACKAGE_NAME@-@PACKAGE_VERSION@
 SUBDIRS=@LIBMOWGLI@ modules src po
 CLEANDIRS = ${SUBDIRS}
 
-.PHONY: dist
+.PHONY: dist depend
 
-all: depend build
+all: build
 
-build: include/hooktypes.h
+build: depend
 	-@if [ ! -f include/sysconf.h ] ; then \
 		echo "Hmm...doesn't look like you've run configure..."; \
 		echo "Doing so now."; \
