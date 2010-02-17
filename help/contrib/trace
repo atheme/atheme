@@ -14,7 +14,7 @@ IDENTIFIED - Identified status of users matching a specific criteria.
 Current actions are:
 PRINT - Prints the nick!user@host and some other information about every user
 		matching the given criteria.
-COUNT - Gives the number of users who atch the given criteria.
+COUNT - Gives the number of users who match the given criteria.
 KILL - KILLs all users matching the given criteria.
 AKILL - AKILLs all users matching the given criteria.
 
