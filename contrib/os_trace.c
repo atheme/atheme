@@ -18,6 +18,7 @@ DECLARE_MODULE_V1
 list_t *os_cmdtree;
 list_t *os_helptree;
 
+static char *reason_extract(char **args);
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace };
@@ -68,6 +69,53 @@ static int read_comparison_operator(char** string, int default_comparison)
 	}
 	else
 		return default_comparison;
+}
+
+char *reason_extract(char **args)
+{
+	char *start = *args;
+	bool quotes = false;
+
+	while (**args == ' ')
+	{
+		(*args)++;
+	}
+	if (**args == '"')
+	{
+		start = ++(*args);
+		quotes = true;
+	}
+	else
+		start = *args;
+
+	while (**args)
+	{
+		if (quotes && **args == '"')
+		{
+			quotes = false;
+			**args = 0;
+			(*args)++;
+			break;
+		}
+		else if (!quotes && **args == ' ')
+		{
+			**args = 0;
+			(*args)++;
+			break;
+		}
+		
+		(*args)++;
+	}
+
+	if (!(**args))
+		*args = NULL;
+
+	if (start == *args)
+		return NULL;  /* No reason found. */
+	if (quotes)
+		return NULL;  /* Unclosed quotes. */
+
+	return start;
 }
 
 typedef struct {
@@ -331,17 +379,73 @@ static void trace_numchan_cleanup(void *q)
 
 trace_query_constructor_t trace_numchan = { trace_numchan_prepare, trace_numchan_exec, trace_numchan_cleanup };
 
+typedef struct {
+	trace_query_domain_t domain;
+	bool identified;
+} trace_query_identified_domain_t;
+
+static void *trace_identified_prepare(char **args)
+{
+	char *yesno;
+	bool identified;
+	trace_query_identified_domain_t *domain;
+
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	yesno = strtok(*args, " ");
+
+	if (!strcasecmp(yesno, "yes"))
+		identified = true;
+	else if (!strcasecmp(yesno, "no"))
+		identified = false;
+	else
+		return NULL;
+
+	domain = scalloc(sizeof(trace_query_identified_domain_t), 1);
+	domain->identified = identified;
+
+	/* advance *args to next token */
+	*args = strtok(NULL, "");
+
+	return domain;
+}
+
+static bool trace_identified_exec(user_t *u, void *q)
+{
+	trace_query_identified_domain_t *domain = (trace_query_identified_domain_t *) q;
+
+	return_val_if_fail(domain != NULL, false);
+	return_val_if_fail(u != NULL, false);
+
+	return (domain->identified == (u->myuser != NULL));
+}
+
+static void trace_identified_cleanup(void *q)
+{
+	trace_query_identified_domain_t *domain = (trace_query_identified_domain_t *) q;
+
+	return_if_fail(domain != NULL);
+
+	free(domain);
+}
+
+trace_query_constructor_t trace_identified = { trace_identified_prepare, trace_identified_exec, trace_identified_cleanup };
+
 /****************************************************************************************************/
 
 typedef struct {
 	sourceinfo_t *si;
+	bool matched;
 } trace_action_t;
 
 typedef struct {
 	trace_action_t *(*prepare)(sourceinfo_t *si, char **args);
 	void (*exec)(user_t *u, trace_action_t *a);
-	void (*cleanup)(trace_action_t *a);
+	void (*cleanup)(trace_action_t *a, bool succeeded);
 } trace_action_constructor_t;
+
+static void trace_action_init(trace_action_t *a, sourceinfo_t *si);
 
 /* initializes common fields for trace action object. */
 void trace_action_init(trace_action_t *a, sourceinfo_t *si)
@@ -350,6 +454,7 @@ void trace_action_init(trace_action_t *a, sourceinfo_t *si)
 	return_if_fail(si != NULL);
 
 	a->si = si;
+	a->matched = false;
 }
 
 static trace_action_t *trace_print_prepare(sourceinfo_t *si, char **args)
@@ -357,8 +462,6 @@ static trace_action_t *trace_print_prepare(sourceinfo_t *si, char **args)
 	trace_action_t *a;
 
 	return_val_if_fail(si != NULL, NULL);
-	return_val_if_fail(args != NULL, NULL);
-	return_val_if_fail(*args != NULL, NULL);
 
 	a = scalloc(sizeof(trace_action_t), 1);
 	trace_action_init(a, si);
@@ -370,14 +473,18 @@ static void trace_print_exec(user_t *u, trace_action_t *a)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
+	return_if_fail(!is_internal_client(u));
 
+	a->matched = true;
 	command_success_nodata(a->si, _("\2Match:\2  %s!%s@%s %s {%s}"), u->nick, u->user, u->host, u->gecos, u->server->name);
 }
 
-static void trace_print_cleanup(trace_action_t *a)
+static void trace_print_cleanup(trace_action_t *a, bool succeeded)
 {
 	return_if_fail(a != NULL);
 
+	if (!a->matched && succeeded)
+		command_success_nodata(a->si, _("No matches."));
 	free(a);
 }
 
@@ -391,20 +498,20 @@ typedef struct {
 static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
 {
 	trace_action_kill_t *a;
+	char *reason;
 
 	return_val_if_fail(si != NULL, NULL);
 	return_val_if_fail(args != NULL, NULL);
 	return_val_if_fail(*args != NULL, NULL);
 
+	reason = reason_extract(args);
+	return_val_if_fail(reason != NULL, NULL);
+
 	a = scalloc(sizeof(trace_action_kill_t), 1);
 	trace_action_init(&a->base, si);
+	a->reason = reason;
 
-	a->reason = strtok(*args, " ");
-
-	/* advance *args to next token */
-	*args = strtok(NULL, "");
-
-	return a;
+	return (trace_action_t*) a;
 }
 
 static void trace_kill_exec(user_t *u, trace_action_t *act)
@@ -413,19 +520,138 @@ static void trace_kill_exec(user_t *u, trace_action_t *act)
 
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
+	return_if_fail(!is_internal_client(u));
+	return_if_fail(!is_ircop(u));
+	return_if_fail(!u->myuser || !is_soper(u->myuser));
 
+	act->matched = true;
 	kill_user(opersvs.me->me, u, "%s", a->reason);
 	command_success_nodata(act->si, _("\2%s\2 has been killed."), u->nick);
 }
 
-static void trace_kill_cleanup(trace_action_t *a)
+static void trace_kill_cleanup(trace_action_t *a, bool succeeded)
 {
 	return_if_fail(a != NULL);
 
+	if (!a->matched && succeeded)
+		command_success_nodata(a->si, _("No matches."));
 	free(a);
 }
 
 trace_action_constructor_t trace_kill = { trace_kill_prepare, trace_kill_exec, trace_kill_cleanup };
+
+typedef struct {
+	trace_action_t base;
+	long duration;
+	char *reason;
+} trace_action_akill_t;
+
+static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
+{
+	trace_action_akill_t *a;
+	char *s, *reason;
+	long duration = config_options.kline_time;
+	char token;
+
+	return_val_if_fail(si != NULL, NULL);
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	while (**args == ' ')
+		(*args)++;
+
+	/* Extract a token, but only if there's one to remove.
+	 * Otherwise, this would clip a word off the reason. */
+	token = 0;
+	s = *args; 
+	if (!strncasecmp(s, "!T", 2) || !strncasecmp(s, "!P", 2))
+	{
+		if (s[2] == ' ')
+		{
+			token = tolower(s[1]);
+			s[2] = '\0';
+			*args += 3;
+		}
+		else if (s[2] == '\0')
+		{
+			token = tolower(s[1]);
+			*args += 2;
+		}
+	}
+
+	if (token == 't')
+	{
+		s = strtok(*args, " ");
+		*args = strtok(NULL, "");
+		return_val_if_fail(*args != NULL, NULL);
+
+		duration = (atol(s) * 60);
+		while (isdigit(*s))
+		s++;
+		if (*s == 'h' || *s == 'H')
+			duration *= 60;
+		else if (*s == 'd' || *s == 'D')
+			duration *= 1440;
+		else if (*s == 'w' || *s == 'W')
+			duration *= 10080;
+		else if (*s == '\0')
+			;
+		else
+			duration = 0;
+		
+		return_val_if_fail(duration != 0, NULL);
+	}
+	else if (token == 'p')
+		duration = 0;
+	
+	reason = reason_extract(args);
+	return_val_if_fail(reason != NULL, NULL);
+	
+	a = scalloc(sizeof(trace_action_akill_t), 1);
+	trace_action_init(&a->base, si);
+	a->duration = duration;
+	a->reason = reason;
+
+
+	return (trace_action_t*) a;
+}
+
+static void trace_akill_exec(user_t *u, trace_action_t *act)
+{
+	char *kuser, *khost;
+	trace_action_akill_t *a = (trace_action_akill_t *) act;
+
+	return_if_fail(u != NULL);
+	return_if_fail(a != NULL);
+	return_if_fail(!is_internal_client(u));
+	return_if_fail(!is_ircop(u));
+	return_if_fail(!u->myuser || !is_soper(u->myuser));
+
+	kuser = "*";
+	khost = u->host;
+
+	if (!match(khost, "127.0.0.1") || !match_ips(khost, "127.0.0.1"))
+		return;
+	if (me.vhost != NULL && (!match(khost, me.vhost) || !match_ips(khost, me.vhost)))
+		return;
+	if (kline_find(kuser, khost))
+		return;
+
+	act->matched = true;
+	kline_add(kuser, khost, a->reason, a->duration, get_storage_oper_name(act->si));
+	command_success_nodata(act->si, _("\2%s\2 has been akilled."), u->nick);
+}
+
+static void trace_akill_cleanup(trace_action_t *a, bool succeeded)
+{
+	return_if_fail(a != NULL);
+
+	if (!a->matched && succeeded)
+		command_success_nodata(a->si, _("No matches."));
+	free(a);
+}
+
+trace_action_constructor_t trace_akill = { trace_akill_prepare, trace_akill_exec, trace_akill_cleanup };
 
 typedef struct {
 	trace_action_t base;
@@ -437,8 +663,6 @@ static trace_action_t *trace_count_prepare(sourceinfo_t *si, char **args)
 	trace_action_count_t *a;
 
 	return_val_if_fail(si != NULL, NULL);
-	return_val_if_fail(args != NULL, NULL);
-	return_val_if_fail(*args != NULL, NULL);
 
 	a = scalloc(sizeof(trace_action_count_t), 1);
 	trace_action_init(&a->base, si);
@@ -452,17 +676,20 @@ static void trace_count_exec(user_t *u, trace_action_t *act)
 
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
+	return_if_fail(!is_internal_client(u));
 
+	act->matched = true;
 	a->matches++;
 }
 
-static void trace_count_cleanup(trace_action_t *act)
+static void trace_count_cleanup(trace_action_t *act, bool succeeded)
 {
 	trace_action_count_t *a = (trace_action_count_t *) act;
 
 	return_if_fail(a != NULL);
 
-	command_success_nodata(act->si, _("\2%d\2 matches"), a->matches);
+	if (succeeded)
+		command_success_nodata(act->si, _("\2%d\2 matches"), a->matches);
 
 	free(a);
 }
@@ -495,10 +722,12 @@ void _modinit(module_t *m)
 	mowgli_patricia_add(trace_cmdtree, "CHANNEL", &trace_channel);
 	mowgli_patricia_add(trace_cmdtree, "NICKAGE", &trace_nickage);
 	mowgli_patricia_add(trace_cmdtree, "NUMCHAN", &trace_numchan);
+	mowgli_patricia_add(trace_cmdtree, "IDENTIFIED", &trace_identified);
 
 	trace_acttree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_acttree, "PRINT", &trace_print);
 	mowgli_patricia_add(trace_acttree, "KILL", &trace_kill);
+	mowgli_patricia_add(trace_acttree, "AKILL", &trace_akill);
 	mowgli_patricia_add(trace_acttree, "COUNT", &trace_count);
 }
 
@@ -512,24 +741,17 @@ void _moddeinit(void)
 
 #define MAXMATCHES_DEF 1000
 
+static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, list_t *crit, char *args);
+
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 {
 	list_t crit = { NULL, NULL, 0 };
-	trace_action_t *act;
 	trace_action_constructor_t *actcons;
-	mowgli_patricia_iteration_state_t state;
-	user_t *u;
+	trace_action_t* act;
 	char *args = parv[1];
-	int flags = 0;
 	node_t *n, *tn;
 	char *params;
-
-	if (args == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TRACE");
-		command_fail(si, fault_needmoreparams, _("Syntax: TRACE <action> <params>"));
-		return;
-	}
+	bool succeeded;
 
 	actcons = mowgli_patricia_retrieve(trace_acttree, parv[0]);
 	if (actcons == NULL)
@@ -539,14 +761,40 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	params = sstrdup(args);
-
 	act = actcons->prepare(si, &args);
 	if (act == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("Action compilation failed."));
-		free(params);
 		return;
+	}
+
+	params = sstrdup(args);
+	succeeded = os_cmd_trace_run(si, actcons, act, &crit, args);
+
+	LIST_FOREACH_SAFE(n, tn, crit.head)
+	{
+		trace_query_domain_t *q = (trace_query_domain_t *) n->data;
+		q->cons->cleanup(q);		
+	}
+	actcons->cleanup(act, succeeded);
+
+	if (succeeded)
+		logcommand(si, CMDLOG_ADMIN, "TRACE: \2%s\2 \2%s\2", parv[0], params);
+
+	free(params);
+}
+
+static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, list_t *crit, char *args)
+{
+	user_t *u;
+	mowgli_patricia_iteration_state_t state;
+	node_t *n;
+
+	if (args == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TRACE");
+		command_fail(si, fault_needmoreparams, _("Syntax: TRACE <action> <params>"));
+		return false;
 	}
 
 	while (true)
@@ -559,24 +807,37 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 			break;
 
 		cons = mowgli_patricia_retrieve(trace_cmdtree, cmd);
+		if (cons == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Invalid criteria specified."));
+			return false;
+		}
 
 		args = strtok(NULL, "");
 		if (args == NULL)
-			break;
+		{
+			command_fail(si, fault_nosuch_target, _("Invalid criteria specified."));
+			return false;
+		}
 
 		slog(LG_DEBUG, "operserv/trace: adding criteria %p(%s) to list [remain: %s]", q, cmd, args);
 		q = cons->prepare(&args);
+		if (q == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Invalid criteria specified."));
+			return false;
+		}
 		slog(LG_DEBUG, "operserv/trace: new args position [%s]", args);
 
 		q->cons = cons;
-		node_add(q, &q->node, &crit);
+		node_add(q, &q->node, crit);
 	}
 
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
 		bool doit = true;
 
-		LIST_FOREACH(n, crit.head)
+		LIST_FOREACH(n, crit->head)
 		{
 			trace_query_domain_t *q = (trace_query_domain_t *) n->data;
 
@@ -591,15 +852,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 			actcons->exec(u, act);
 	}
 
-	LIST_FOREACH_SAFE(n, tn, crit.head)
-	{
-		trace_query_domain_t *q = (trace_query_domain_t *) n->data;
-
-		q->cons->cleanup(q);		
-	}
-
-	logcommand(si, CMDLOG_ADMIN, "TRACE: \2%s\2 \2%s\2", parv[0], params);
-	free(params);
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
