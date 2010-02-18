@@ -42,7 +42,7 @@ sub load_database
 }
 
 load_database($ARGV[0], 1);
-load_database($ARGV[1], 1);
+load_database($ARGV[1], 2);
 
 print "Checking for collisions...\n";
 
