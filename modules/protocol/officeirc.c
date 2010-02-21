@@ -103,10 +103,10 @@ static unsigned int officeirc_server_login(void)
 static void officeirc_introduce_nick(user_t *u)
 {
 	/* NICK nenolod 1 1171690800 ~nenolod 69.60.119.15[69.60.119.15] ircxserver01 0 :Unknown */
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
 	sts("NICK %s 1 %lu %s %s[0.0.0.0] %s 0 :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, u->gecos);
-	sts(":%s MODE %s +i%s", u->nick, u->nick, omode);
+	sts(":%s MODE %s %s", u->nick, u->nick, umode);
 }
 
 /* invite a user to a channel */

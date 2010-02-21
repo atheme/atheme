@@ -69,14 +69,14 @@ static unsigned int ts6_server_login(void)
 /* introduce a client */
 static void ts6_introduce_nick(user_t *u)
 {
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
 	if (ircd->uses_uid && use_euid)
-		sts(":%s EUID %s 1 %lu +i%s%sS %s %s 0 %s * * :%s", me.numeric, u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
+		sts(":%s EUID %s 1 %lu %sS %s %s 0 %s * * :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
 	else if (ircd->uses_uid)
-		sts(":%s UID %s 1 %lu +i%s%sS %s %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
+		sts(":%s UID %s 1 %lu %sS %s %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
 	else
-		sts("NICK %s 1 %lu +i%s%sS %s %s %s :%s", u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, me.name, u->gecos);
+		sts("NICK %s 1 %lu %sS %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

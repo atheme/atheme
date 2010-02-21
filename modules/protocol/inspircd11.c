@@ -221,9 +221,9 @@ static unsigned int inspircd_server_login(void)
 static void inspircd_introduce_nick(user_t *u)
 {
 	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
-	sts(":%s NICK %lu %s %s %s %s +%si%s 0.0.0.0 :%s", me.name, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, has_hidechansmod ? "I" : "", omode, u->gecos);
+	sts(":%s NICK %lu %s %s %s %s %s%s 0.0.0.0 :%s", me.name, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, umode, has_hidechansmod ? "I" : "", u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPERTYPE Services", u->nick);
 }

@@ -41,9 +41,9 @@ static unsigned int p10_server_login(void)
 /* introduce a client */
 static void p10_introduce_nick(user_t *u)
 {
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
-	sts("%s N %s 1 %lu %s %s +i%s%sk ]]]]]] %s :%s", me.numeric, u->nick, (unsigned long)u->ts, u->user, u->host, omode, chansvs.fantasy ? "" : "d", u->uid, u->gecos);
+	sts("%s N %s 1 %lu %s %s %sk ]]]]]] %s :%s", me.numeric, u->nick, (unsigned long)u->ts, u->user, u->host, umode, u->uid, u->gecos);
 }
 
 /* invite a user to a channel */

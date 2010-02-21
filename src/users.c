@@ -573,6 +573,21 @@ void user_mode(user_t *user, const char *modes)
 	}
 }
 
+const char *user_get_umodestr(user_t *u)
+{
+	static char result[34];
+	int iter;
+	int i;
+
+	i = 0;
+	result[i++] = '+';
+	for (iter = 0; user_mode_list[iter].mode != '\0'; iter++)
+		if (u->flags & user_mode_list[iter].value)
+			result[i++] = user_mode_list[iter].mode;
+	result[i] = '\0';
+	return result;
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

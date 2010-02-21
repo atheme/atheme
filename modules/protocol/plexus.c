@@ -98,12 +98,12 @@ struct cmode_ plexus_user_mode_list[] = {
 
 static void plexus_introduce_nick(user_t *u)
 {
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
 	if (ircd->uses_uid)
-		sts(":%s UID %s 1 %lu +i%s%s %s %s 127.0.0.1 %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->host, u->gecos);
+		sts(":%s UID %s 1 %lu %s %s %s 127.0.0.1 %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->host, u->gecos);
 	else
-		sts("NICK %s 1 %lu +i%s%s %s %s %s :%s", u->nick, (unsigned long)u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, me.name, u->gecos);
+		sts("NICK %s 1 %lu %s %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
 /* protocol-specific stuff to do on login */

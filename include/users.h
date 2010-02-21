@@ -79,6 +79,7 @@ E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
 E bool user_changenick(user_t *u, const char *nick, time_t ts);
 E void user_mode(user_t *user, const char *modes);
+E const char *user_get_umodestr(user_t *u);
 
 /* uid.c */
 E void init_uid(void);

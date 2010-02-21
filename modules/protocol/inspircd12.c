@@ -239,9 +239,9 @@ static unsigned int inspircd_server_login(void)
 static void inspircd_introduce_nick(user_t *u)
 {
 	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
-	sts(":%s UID %s %lu %s %s %s %s 0.0.0.0 %lu +%si%s%s :%s", me.numeric, u->uid, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, (unsigned long)u->ts, has_hidechansmod ? "I" : "", has_servprotectmod ? "k" : "", omode, u->gecos);
+	sts(":%s UID %s %lu %s %s %s %s 0.0.0.0 %lu %s%s%s :%s", me.numeric, u->uid, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, (unsigned long)u->ts, umode, has_hidechansmod ? "I" : "", has_servprotectmod ? "k" : "", u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPERTYPE Services", u->uid);
 }

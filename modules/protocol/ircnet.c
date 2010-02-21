@@ -101,9 +101,9 @@ static unsigned int ircnet_server_login(void)
 /* introduce a client */
 static void ircnet_introduce_nick(user_t *u)
 {
-	const char *omode = is_ircop(u) ? "o" : "";
+	const char *umode = user_get_umodestr(u);
 
-	sts(":%s UNICK %s %s %s %s 0.0.0.0 +i%s :%s", me.numeric, u->nick, u->uid, u->user, u->host, omode, u->gecos);
+	sts(":%s UNICK %s %s %s %s 0.0.0.0 %s :%s", me.numeric, u->nick, u->uid, u->user, u->host, umode, u->gecos);
 }
 
 /* invite a user to a channel */
