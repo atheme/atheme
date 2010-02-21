@@ -77,6 +77,7 @@ struct cmode_ asuka_prefix_mode_list[] = {
 struct cmode_ asuka_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'd', UF_DEAF     },
   { '\0', 0 }
 };
 

@@ -90,6 +90,7 @@ struct cmode_ plexus_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'N', UF_IMMUNE   },
+  { 'D', UF_DEAF     },
   { '\0', 0 }
 };
 

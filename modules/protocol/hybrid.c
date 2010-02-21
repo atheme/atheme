@@ -72,6 +72,7 @@ struct cmode_ hybrid_user_mode_list[] = {
   { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'D', UF_DEAF     },
   { '\0', 0 }
 };
 

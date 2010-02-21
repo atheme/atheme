@@ -74,6 +74,7 @@ struct cmode_ undernet_prefix_mode_list[] = {
 struct cmode_ undernet_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'd', UF_DEAF     },
   { '\0', 0 }
 };
 

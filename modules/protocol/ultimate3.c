@@ -80,6 +80,7 @@ struct cmode_ ultimate3_user_mode_list[] = {
   { 'A', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'd', UF_DEAF     },
   { '\0', 0 }
 };
 

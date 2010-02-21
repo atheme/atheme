@@ -101,6 +101,7 @@ struct cmode_ shadowircd_user_mode_list[] = {
   { 'm', UF_IMMUNE   },			/* immune.c */
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'D', UF_DEAF     },
   { '\0', 0 }
 };
 
