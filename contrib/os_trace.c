@@ -277,7 +277,6 @@ static void *trace_nickage_prepare(char **args)
 
 	/* split out the next space */
 	nickage_string = strtok(*args, " ");
-	return_val_if_fail(nickage_string != NULL, NULL);
 
 	domain = scalloc(sizeof(trace_query_nickage_domain_t), 1);
 	domain->comparison = read_comparison_operator(&nickage_string, 2);
@@ -336,7 +335,6 @@ static void *trace_numchan_prepare(char **args)
 
 	/* split out the next space */
 	numchan_string = strtok(*args, " ");
-	return_val_if_fail(numchan_string != NULL, NULL);
 
 	domain = scalloc(sizeof(trace_query_numchan_domain_t), 1);
 	domain->comparison = read_comparison_operator(&numchan_string, 0);
@@ -473,7 +471,8 @@ static void trace_print_exec(user_t *u, trace_action_t *a)
 {
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
-	return_if_fail(!is_internal_client(u));
+	if(is_internal_client(u))
+		return;
 
 	a->matched = true;
 	command_success_nodata(a->si, _("\2Match:\2  %s!%s@%s %s {%s}"), u->nick, u->user, u->host, u->gecos, u->server->name);
@@ -502,10 +501,12 @@ static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
 
 	return_val_if_fail(si != NULL, NULL);
 	return_val_if_fail(args != NULL, NULL);
-	return_val_if_fail(*args != NULL, NULL);
+	if (*args == NULL)
+		return NULL;
 
 	reason = reason_extract(args);
-	return_val_if_fail(reason != NULL, NULL);
+	if (reason == NULL)
+		return NULL;
 
 	a = scalloc(sizeof(trace_action_kill_t), 1);
 	trace_action_init(&a->base, si);
@@ -520,9 +521,12 @@ static void trace_kill_exec(user_t *u, trace_action_t *act)
 
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
-	return_if_fail(!is_internal_client(u));
-	return_if_fail(!is_ircop(u));
-	return_if_fail(!u->myuser || !is_soper(u->myuser));
+	if (is_internal_client(u))
+		return;
+	if (is_ircop(u))
+		return;
+	if (u->myuser && is_soper(u->myuser))
+		return;
 
 	act->matched = true;
 	kill_user(opersvs.me->me, u, "%s", a->reason);
@@ -555,7 +559,8 @@ static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
 
 	return_val_if_fail(si != NULL, NULL);
 	return_val_if_fail(args != NULL, NULL);
-	return_val_if_fail(*args != NULL, NULL);
+	if (*args == NULL)
+		return NULL;
 
 	while (**args == ' ')
 		(*args)++;
@@ -583,7 +588,8 @@ static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
 	{
 		s = strtok(*args, " ");
 		*args = strtok(NULL, "");
-		return_val_if_fail(*args != NULL, NULL);
+		if (*args == NULL)
+			return NULL;
 
 		duration = (atol(s) * 60);
 		while (isdigit(*s))
@@ -599,13 +605,15 @@ static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
 		else
 			duration = 0;
 		
-		return_val_if_fail(duration != 0, NULL);
+		if (duration == 0)
+			return NULL;
 	}
 	else if (token == 'p')
 		duration = 0;
 	
 	reason = reason_extract(args);
-	return_val_if_fail(reason != NULL, NULL);
+	if (reason == NULL)
+		return NULL;
 	
 	a = scalloc(sizeof(trace_action_akill_t), 1);
 	trace_action_init(&a->base, si);
@@ -623,9 +631,12 @@ static void trace_akill_exec(user_t *u, trace_action_t *act)
 
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
-	return_if_fail(!is_internal_client(u));
-	return_if_fail(!is_ircop(u));
-	return_if_fail(!u->myuser || !is_soper(u->myuser));
+	if (is_internal_client(u))
+		return;
+	if (is_ircop(u))
+		return;
+	if (u->myuser && is_soper(u->myuser))
+		return;
 
 	kuser = "*";
 	khost = u->host;
@@ -676,7 +687,8 @@ static void trace_count_exec(user_t *u, trace_action_t *act)
 
 	return_if_fail(u != NULL);
 	return_if_fail(a != NULL);
-	return_if_fail(!is_internal_client(u));
+	if (is_internal_client(u))
+		return;
 
 	act->matched = true;
 	a->matches++;
