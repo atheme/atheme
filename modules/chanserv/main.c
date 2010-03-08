@@ -686,6 +686,7 @@ static void cs_newchan(channel_t *c)
 
 	handle_topic(c, setter, topicts, text);
 	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);
+	mlock_sts(c);
 }
 
 static void cs_tschange(channel_t *c)
@@ -703,6 +704,9 @@ static void cs_tschange(channel_t *c)
 	/* schedule a mode lock check when we know the new modes
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
+
+	/* reset the mlock if needed */
+	mlock_sts(c);
 }
 
 static void on_shutdown(void *unused)
