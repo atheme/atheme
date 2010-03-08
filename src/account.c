@@ -1125,6 +1125,113 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 	return mychan_pick_candidate(mc, 0);
 }
 
+const char *mychan_get_mlock(mychan_t *mc)
+{
+	char buf[BUFSIZE];
+	char params[BUFSIZE];
+	metadata_t *md;
+	char *p, *q, *qq;
+	int dir;
+
+	*buf = 0;
+	*params = 0;
+
+	md = metadata_find(mc, "private:mlockext");
+	if (md != NULL && strlen(md->value) > 450)
+		md = NULL;
+
+	dir = MTYPE_NUL;
+
+	if (mc->mlock_on)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, strcat(buf, "+");
+		strcat(buf, flags_to_string(mc->mlock_on));
+	}
+
+	if (mc->mlock_limit)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, strcat(buf, "+");
+		strcat(buf, "l");
+		strcat(params, " ");
+		strcat(params, itoa(mc->mlock_limit));
+	}
+
+	if (mc->mlock_key)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, strcat(buf, "+");
+		strcat(buf, "k");
+		strcat(params, " *");
+	}
+
+	if (md)
+	{
+		p = md->value;
+		q = buf + strlen(buf);
+		while (*p != '\0')
+		{
+			if (p[1] != ' ' && p[1] != '\0')
+			{
+				if (dir != MTYPE_ADD)
+					dir = MTYPE_ADD, *q++ = '+';
+				*q++ = *p++;
+				strcat(params, " ");
+				qq = params + strlen(params);
+				while (*p != '\0' && *p != ' ')
+					*qq++ = *p++;
+				*qq = '\0';
+			}
+			else
+			{
+				p++;
+				while (*p != '\0' && *p != ' ')
+					p++;
+			}
+			while (*p == ' ')
+				p++;
+		}
+		*q = '\0';
+	}
+
+	if (mc->mlock_off)
+	{
+		if (dir != MTYPE_DEL)
+			dir = MTYPE_DEL, strcat(buf, "-");
+		strcat(buf, flags_to_string(mc->mlock_off));
+		if (mc->mlock_off & CMODE_LIMIT)
+			strcat(buf, "l");
+		if (mc->mlock_off & CMODE_KEY)
+			strcat(buf, "k");
+	}
+
+	if (md)
+	{
+		p = md->value;
+		q = buf + strlen(buf);
+		while (*p != '\0')
+		{
+			if (p[1] == ' ' || p[1] == '\0')
+			{
+				if (dir != MTYPE_DEL)
+					dir = MTYPE_DEL, *q++ = '-';
+				*q++ = *p;
+			}
+			p++;
+			while (*p != '\0' && *p != ' ')
+				p++;
+			while (*p == ' ')
+				p++;
+		}
+		*q = '\0';
+	}
+
+	strlcat(buf, params, BUFSIZE);
+
+	return buf;
+}
+
 /*****************
  * C H A N A C S *
  *****************/
