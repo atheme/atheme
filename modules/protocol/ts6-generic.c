@@ -16,6 +16,7 @@ static bool use_rserv_support = false;
 static bool use_tb = false;
 static bool use_euid = false;
 static bool use_eopmod = false;
+static bool use_mlock = false;
 
 static void server_eob(server_t *s);
 static server_t *sid_find(char *name);
@@ -460,6 +461,19 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 				nick, source->nick,
 				account != NULL ? account->name : nick);
 	}
+}
+
+static void ts6_mlock_sts(channel_t *c)
+{
+	mychan_t *mc = c->mychan;
+
+	if (use_mlock == false)
+		return;
+
+	if (mc == NULL)
+		return;
+
+	sts(":%s MLOCK %ld %s %s", ME, c->channelts, c->name, mychan_get_mlock(mc));
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -1231,6 +1245,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	use_rserv_support = false;
 	use_tb = false;
 	use_eopmod = false;
+	use_mlock = false;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "EUID"))
@@ -1252,6 +1267,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink supports EOPMOD, enabling support.");
 			use_eopmod = true;
+		}
+		if (!irccasecmp(p, "MLOCK"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink supports MLOCK, enabling support.");
+			use_mlock = true;
 		}
 	}
 
@@ -1332,6 +1352,7 @@ void _modinit(module_t * m)
 	svslogin_sts = &ts6_svslogin_sts;
 	sasl_sts = &ts6_sasl_sts;
 	is_valid_host = &ts6_is_valid_host;
+	mlock_sts = &ts6_mlock_sts;
 
 	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
