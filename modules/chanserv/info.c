@@ -118,8 +118,6 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mc, "private:mlockext");
 	if (mc->mlock_on || mc->mlock_off || mc->mlock_limit || mc->mlock_key || md)
 	{
-		char params[BUFSIZE];
-
 		if (md != NULL && strlen(md->value) > 450)
 		{
 			/* Be safe */
@@ -127,98 +125,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			md = NULL;
 		}
 
-		*buf = 0;
-		*params = 0;
-		dir = MTYPE_NUL;
-
-		if (mc->mlock_on)
-		{
-			if (dir != MTYPE_ADD)
-				dir = MTYPE_ADD, strcat(buf, "+");
-			strcat(buf, flags_to_string(mc->mlock_on));
-
-		}
-
-		if (mc->mlock_limit)
-		{
-			if (dir != MTYPE_ADD)
-				dir = MTYPE_ADD, strcat(buf, "+");
-			strcat(buf, "l");
-			strcat(params, " ");
-			strcat(params, itoa(mc->mlock_limit));
-		}
-
-		if (mc->mlock_key)
-		{
-			if (dir != MTYPE_ADD)
-				dir = MTYPE_ADD, strcat(buf, "+");
-			strcat(buf, "k");
-			strcat(params, " *");
-		}
-
-		if (md)
-		{
-			p = md->value;
-			q = buf + strlen(buf);
-			while (*p != '\0')
-			{
-				if (p[1] != ' ' && p[1] != '\0')
-				{
-					if (dir != MTYPE_ADD)
-						dir = MTYPE_ADD, *q++ = '+';
-					*q++ = *p++;
-					strcat(params, " ");
-					qq = params + strlen(params);
-					while (*p != '\0' && *p != ' ')
-						*qq++ = *p++;
-					*qq = '\0';
-				}
-				else
-				{
-					p++;
-					while (*p != '\0' && *p != ' ')
-						p++;
-				}
-				while (*p == ' ')
-					p++;
-			}
-			*q = '\0';
-		}
-
-		if (mc->mlock_off)
-		{
-			if (dir != MTYPE_DEL)
-				dir = MTYPE_DEL, strcat(buf, "-");
-			strcat(buf, flags_to_string(mc->mlock_off));
-			if (mc->mlock_off & CMODE_LIMIT)
-				strcat(buf, "l");
-			if (mc->mlock_off & CMODE_KEY)
-				strcat(buf, "k");
-		}
-
-		if (md)
-		{
-			p = md->value;
-			q = buf + strlen(buf);
-			while (*p != '\0')
-			{
-				if (p[1] == ' ' || p[1] == '\0')
-				{
-					if (dir != MTYPE_DEL)
-						dir = MTYPE_DEL, *q++ = '-';
-					*q++ = *p;
-				}
-				p++;
-				while (*p != '\0' && *p != ' ')
-					p++;
-				while (*p == ' ')
-					p++;
-			}
-			*q = '\0';
-		}
-
-		if (*buf)
-			command_success_nodata(si, _("Mode lock  : %s%s"), buf, params);
+		command_success_nodata(si, _("Mode lock  : %s"), mychan_get_mlock(mc));
 	}
 
 
