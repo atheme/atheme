@@ -1,16 +1,13 @@
 /*
  * Copyright (c) 2003-2004 E. Will et al.
  * Copyright (c) 2005-2008 Atheme Development Group
- * Copyright (c) 2008 ShadowIRCd Development Group
+ * Copyright (c) 2008-2010 ShadowIRCd Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for shadowircd.
  *
  * $Id$
  */
-
-/* option: enable hosts with slashes ('/') */
-/* #define HOSTSLASH */
 
 #include "atheme.h"
 #include "uplink.h"
@@ -23,20 +20,20 @@ DECLARE_MODULE_V1("protocol/shadowircd", true, _modinit, NULL, "$Id$", "ShadowIR
 /* *INDENT-OFF* */
 
 ircd_t ShadowIRCd = {
-        "ShadowIRCd 5+",		/* IRCd name */
+        "ShadowIRCd 6+",		/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
         true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
-        true,                           /* Whether or not we support channel owners. */
+        false,                           /* Whether or not we support channel owners. */
         true,                           /* Whether or not we support channel protection. */
         true,                           /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-        CSTATUS_PROTECT,                  /* Integer flag for owner channel flag. */
+        0,                  /* Integer flag for owner channel flag. */
         CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
         CSTATUS_HALFOP,                   /* Integer flag for halfops. */
-        "+a",                           /* Mode we set for owner. */
+        "+",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_SHADOWIRCD,		/* Protocol type */
@@ -69,10 +66,7 @@ struct cmode_ shadowircd_mode_list[] = {
   { 'O', CMODE_OPERONLY },		/* cmodes/operonly */
   { 'Z', CMODE_SSLONLY },		/* cmodes/sslonly */
   { 'D', CMODE_NOACTIONS },		/* cmodes/noactions */
-  { 'X', CMODE_NOSPAM },		/* cmodes/nospam */
-  { 'S', CMODE_SCOLOR },		/* cmodes/stripcolour */
   { 'T', CMODE_NONOTICE },		/* cmodes/nonotice */
-  { 'R', CMODE_MODNOREG },		/* cmodes/quietunreg */
   { 'G', CMODE_NOCAPS },		/* cmodes/nocaps */
   { 'E', CMODE_NOKICKS },		/* cmodes/nokicks */
   { 'N', CMODE_NONICKS },		/* cmodes/nonicks */
@@ -98,7 +92,6 @@ struct cmode_ shadowircd_prefix_mode_list[] = {
 
 struct cmode_ shadowircd_user_mode_list[] = {
   { 'a', UF_ADMIN    },
-  { 'm', UF_IMMUNE   },			/* immune.c */
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'D', UF_DEAF     },
@@ -106,30 +99,6 @@ struct cmode_ shadowircd_user_mode_list[] = {
 };
 
 /* *INDENT-ON* */
-
-#ifdef HOSTSLASH
-static bool shadowircd_is_valid_hostslash(const char *host)
-{
-        const char *p;
-        bool dot = false;
-
-        if (*host == '.' || *host == '/' || *host == ':')
-                return false;
-
-        for (p = host; *p != '\0'; p++)
-        {
-                if (*p == '.' || *p == ':' || *p == '/')
-                        dot = true;
-                else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
-                                        (*p >= 'a' && *p <= 'z') || *p == '-'))
-                        return false;
-        }
-        /* hyperion allows a trailing / but RichiH does not want it, whatever */
-        if (dot && p[-1] == '/')
-                return false;
-        return dot;
-}
-#endif
 
 void _modinit(module_t * m)
 {
@@ -139,10 +108,6 @@ void _modinit(module_t * m)
 	user_mode_list = shadowircd_user_mode_list;
 	status_mode_list = shadowircd_status_mode_list;
 	prefix_mode_list = shadowircd_prefix_mode_list;
-
-#ifdef HOSTSLASH
-	is_valid_host = &shadowircd_is_valid_hostslash;
-#endif
 
 	ircd = &ShadowIRCd;
 
