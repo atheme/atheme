@@ -24,5 +24,6 @@
 #define CMODE_NOKICKS	0x10000000	/* shadowircd +E */
 #define CMODE_NONICKS	0x20000000	/* shadowircd +N */
 #define CMODE_NOREPEAT	0x40000000	/* shadowircd +K */
+#define CMODE_KICKNOREJOIN 0x80000000 /* shadowircd +J */
 
 #endif
