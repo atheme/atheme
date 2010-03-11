@@ -19,13 +19,11 @@
 #define CMODE_OPERONLY  0x00800000      /* shadowircd +O */
 #define CMODE_SSLONLY   0x01000000      /* shadowircd +Z */
 #define CMODE_NOACTIONS 0x02000000      /* shadowircd +D */
-#define CMODE_NOSPAM	0x04000000	/* shadowircd +X */
-#define CMODE_SCOLOR	0x08000000	/* shadowircd +S */
-#define CMODE_NONOTICE	0x10000000	/* shadowircd +T */
-#define CMODE_MODNOREG	0x20000000	/* shadowircd +R */
-#define CMODE_NOCAPS	0x40000000	/* shadowircd +G */
-#define CMODE_NOKICKS	0x80000000	/* shadowircd +E */
-#define CMODE_NONICKS	0x00000020	/* shadowircd +N */
-#define CMODE_NOREPEAT	0x00000200	/* shadowircd +K */
+#define CMODE_NONOTICE	0x04000000	/* shadowircd +T */
+#define CMODE_NOCAPS	0x08000000	/* shadowircd +G */
+#define CMODE_NOKICKS	0x10000000	/* shadowircd +E */
+#define CMODE_NONICKS	0x20000000	/* shadowircd +N */
+#define CMODE_NOREPEAT	0x40000000	/* shadowircd +K */
+#define CMODE_KICKNOREJOIN 0x80000000 /* shadowircd +J */
 
 #endif

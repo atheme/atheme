@@ -30,7 +30,8 @@ Services should compile and run on most POSIX compliant systems. The current
 version is known to work on:
 	FreeBSD 6.3              (i386, amd64)
 	FreeBSD 7.0              (i386, amd64)
-	Linux (glibc) 2.6.x      (i386, amd64)
+	FreeBSD 8.0              (i386, amd64)
+	Linux (glibc) 2.6.x, 2.7.x, 2.8.x, 2.10.x, 2.11.x   (i386, amd64)
 	MacOS 10.5               (intel) (*)
 
 Older versions have been tested on:
@@ -57,7 +58,7 @@ will not be able to run services. However, most systems include a runtime
 linker these days.
 
 IRCd's known to be supported by Services are listed in the example 
-config (dist/example.conf). The recommended ones are charybdis, ratbox, 
+config (dist/atheme.conf.example). The recommended ones are charybdis, ratbox, 
 inspircd, asuka, beware ircd (bircd), nefarious and undernet-ircu 
 (undernet).
 
@@ -166,7 +167,7 @@ When this is done, you'll have to add the crontab entry. Type "crontab -e"
 This will open the default text editor with the crontab file. Enter the
 following (with correct path):
 
-*/5 * * * * /home/nenolod/atheme/etc/atheme.chk >/dev/null 2>&1
+*/5 * * * * /home/nenolod/atheme/etc/atheme.cron.example >/dev/null 2>&1
 
 The */5 at the beginning means "check every 5 minutes." You may replace
 the 5 with other another number if you want (but less than 60). Save and exit,
