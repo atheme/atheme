@@ -465,7 +465,7 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 
 static void ts6_mlock_sts(channel_t *c)
 {
-	mychan_t *mc = c->mychan;
+	mychan_t *mc = mychan_find(c->name);
 
 	if (use_mlock == false)
 		return;
@@ -473,7 +473,7 @@ static void ts6_mlock_sts(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	sts(":%s MLOCK %ld %s %s", ME, c->channelts, c->name, mychan_get_mlock(mc));
+	sts(":%s MLOCK %ld %s %s", ME, c->ts, c->name, mychan_get_mlock(mc));
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
