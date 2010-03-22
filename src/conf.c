@@ -116,9 +116,10 @@ const char *get_conf_opts(void)
 {
 	static char opts[53];
 
-	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s%s",
 			match_mapping ? "A" : "",
 			auth_module_loaded ? "a" : "",
+			crypto_module_loaded ? "c" : "",
 			log_debug_enabled() ? "d" : "",
 			me.auth ? "e" : "",
 			config_options.flood_msgs ? "F" : "",

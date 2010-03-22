@@ -1,3 +1,11 @@
+Atheme Services 5.1 Release Notes
+=================================
+[MERGED] indicates items merged to the 5.0 branch
+ircd protocol
+- inspircd: give this ircd an ethical backbone, even though the authors won't
+chanserv
+- announce when users are being spied upon by unethical operators
+
 Atheme Services 5.0.1 Release Notes
 ===================================
 botserv

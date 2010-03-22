@@ -81,15 +81,17 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 		  case '*':
 			  if (status == FLAGS_ADD)
 			  {
-				  *addflags = 0xFFFFFFFF;
-				  *removeflags = 0;
-
 				  /* If this is chanacs_flags[], remove the ban flag. */
 				  if (table == chanacs_flags)
 				  {
-					  *addflags &= CA_ALLPRIVS;
-					  *addflags &= ~CA_FOUNDER;
+					  *addflags |= CA_ALLPRIVS & ~CA_FOUNDER;
+					  *addflags &= ~CA_AKICK;
 					  *removeflags |= CA_AKICK;
+				  }
+				  else
+				  {
+					  *addflags = 0xFFFFFFFF;
+					  *removeflags = 0;
 				  }
 			  }
 			  else if (status == FLAGS_DEL)
@@ -154,11 +156,11 @@ unsigned int flags_to_bitmask(const char *string, struct flags_table table[], un
 		  case '*':
 			  if (status == FLAGS_ADD)
 			  {
-				  bitmask = 0xFFFFFFFF;
-
 				  /* If this is chanacs_flags[], do privs only */
 				  if (table == chanacs_flags)
-					  bitmask &= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
+					  bitmask |= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
+				  else
+					  bitmask = 0xFFFFFFFF;
 			  }
 			  else if (status == FLAGS_DEL)
 				  bitmask = 0;
