@@ -106,7 +106,6 @@ struct cmode_ inspircd_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'd', UF_DEAF     },
-  { 'Q', UF_DOUCHEBAG },
   { '\0', 0 }
 };
 
