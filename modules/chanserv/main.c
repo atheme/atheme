@@ -270,9 +270,6 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 		join(chan->name, chansvs.nick);
 
-	if (u->flags & UF_DOUCHEBAG)
-		notice(chansvs.nick, chan->name, "Channel security has been compromised - %s has joined who is invisible", u->nick);
-
 	/*
 	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
 	 * or special privs to join restricted chans, boot them. -- w00t
