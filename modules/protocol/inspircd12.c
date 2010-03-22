@@ -1294,6 +1294,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			ircd->uses_owner = true;
 			ircd->uses_protect = true;
 		}
+		if (strstr(parv[1], "m_invisible.so"))
+		{
+			slog(LG_ERROR, "m_capab(): the authors of atheme request that you do not use atheme and m_invisible at the same time.  exiting.");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{

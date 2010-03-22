@@ -1167,6 +1167,9 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
 			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
 
+	if (u->flags & UF_DOUCHEBAG)
+		notice(bot->nick, chan->name, "Channel security has been compromised - %s has joined who is invisible", u->nick); 
+
 	/* auto stuff */
 	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
