@@ -68,6 +68,7 @@ SRCS =					\
 	$(SRCDIR)/ns_mxcheck_async.c	\
 	$(SRCDIR)/ns_ratelimitreg.c	\
 	$(SRCDIR)/on_db_save.c		\
+	$(SRCDIR)/os_akillnicklist.c	\
 	$(SRCDIR)/os_pingspam.c		\
 	$(SRCDIR)/os_testcmd.c		\
 	$(SRCDIR)/os_testproc.c		\
