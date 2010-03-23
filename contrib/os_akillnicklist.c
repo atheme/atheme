@@ -47,6 +47,8 @@ add_contents_of_file_to_list(const char *filename, mowgli_patricia_t *list)
 	FILE *f;
 
 	f = fopen(filename, "r");
+	if (!f)
+		return;
 
 	while (fgets(value, BUFSIZE, f) != NULL)
 	{
