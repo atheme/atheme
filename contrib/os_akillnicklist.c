@@ -100,6 +100,7 @@ aknl_nickhook(hook_user_nick_t *data)
 {
 	user_t *u;
 	bool doit = false;
+	char *username;
 
 	return_if_fail(data != NULL);
 	return_if_fail(data->u != NULL);
@@ -112,15 +113,19 @@ aknl_nickhook(hook_user_nick_t *data)
 	if (is_autokline_exempt(u))
 		return;
 
+	username = u->user;
+	if (*username == '~')
+		username++;
+
 	if (mowgli_patricia_retrieve(akillalllist, u->nick) != NULL && 
-	    mowgli_patricia_retrieve(akillalllist, u->user) != NULL &&
+	    mowgli_patricia_retrieve(akillalllist, username) != NULL &&
 	    mowgli_patricia_retrieve(akillalllist, u->gecos) != NULL)
 		doit = true;
 
 	if (mowgli_patricia_retrieve(akillnicklist, u->nick) != NULL)
 		doit = true;
 
-	if (mowgli_patricia_retrieve(akilluserlist, u->user) != NULL)
+	if (mowgli_patricia_retrieve(akilluserlist, username) != NULL)
 		doit = true;
 
 	if (mowgli_patricia_retrieve(akillreallist, u->gecos) != NULL)
