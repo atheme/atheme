@@ -33,6 +33,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static mowgli_patricia_t *akillalllist = NULL;
 static mowgli_patricia_t *akillnicklist = NULL;
 static mowgli_patricia_t *akilluserlist = NULL;
 static mowgli_patricia_t *akillreallist = NULL;
@@ -63,9 +64,7 @@ add_contents_of_file_to_list(const char *filename, mowgli_patricia_t *list)
 static int
 nicklist_config_handler_all(config_entry_t *entry)
 {
-	add_contents_of_file_to_list(entry->ce_vardata, akillnicklist);
-	add_contents_of_file_to_list(entry->ce_vardata, akilluserlist);
-	add_contents_of_file_to_list(entry->ce_vardata, akillreallist);
+	add_contents_of_file_to_list(entry->ce_vardata, akillalllist);
 
 	return 0;
 }
@@ -111,6 +110,11 @@ aknl_nickhook(hook_user_nick_t *data)
 	if (is_autokline_exempt(u))
 		return;
 
+	if (mowgli_patricia_retrieve(akillalllist, u->nick) != NULL && 
+	    mowgli_patricia_retrieve(akillalllist, u->user) != NULL &&
+	    mowgli_patricia_retrieve(akillalllist, u->gecos) != NULL)
+		doit = true;
+
 	if (mowgli_patricia_retrieve(akillnicklist, u->nick) != NULL)
 		doit = true;
 
@@ -136,6 +140,7 @@ _modinit(module_t *m)
 	add_conf_item("USER", &conft, nicklist_config_handler_user);
 	add_conf_item("REAL", &conft, nicklist_config_handler_real);
 
+	akillalllist = mowgli_patricia_create(strcasecanon);
 	akillnicklist = mowgli_patricia_create(strcasecanon);
 	akilluserlist = mowgli_patricia_create(strcasecanon);
 	akillreallist = mowgli_patricia_create(strcasecanon);
