@@ -152,6 +152,8 @@ bool conf_parse(const char *file)
 	if (!conf_check())
 		return false;
 
+	TAINT_ON(config_options.raw, "raw can be used to cause network desyncs and therefore is unsupported.");
+
 	hook_call_config_ready();
 	return true;
 }
