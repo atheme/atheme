@@ -1360,6 +1360,13 @@ general {
 	 */
 	exempts {
 	};
+
+	/* allow_taint
+	 * By enabling this option, Atheme will run in configurations where
+	 * the upstream will not provide support.  By enabling this feature,
+	 * you void any perceived rights to support.
+	 */
+	#allow_taint;
 };
 
 /******************************************************************************
