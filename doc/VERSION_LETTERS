@@ -16,3 +16,4 @@ t - changets is enabled (shown as of 2.1)
 R - RFC1459 casemapping is used
 r - operserv raw can be used
 n - services is attached to a terminal
+T - services is tainted (running an unsupported configuration)
