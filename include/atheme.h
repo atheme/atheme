@@ -53,6 +53,7 @@
 #include "users.h"
 #include "sourceinfo.h"
 #include "symbolmatrix.h"
+#include "taint.h"
 
 #include "inline/account.h"
 #include "inline/channels.h"
