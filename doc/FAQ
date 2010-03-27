@@ -34,4 +34,13 @@ also generally known as "assholes."
 If you want a more interactive experience, use ./setup which prompts
 you if you want internationalization support or not.
 
+5. Atheme exits complaining that it is 'tainted'.
+
+You have configured your network in a way that is not supported
+correctly by Atheme at this time.  In order to use this configuration,
+you must acknowledge that you are using an unsupported configuration.
+
+To do this, you enable the allow_taint directive in the config, but
+do note that if you come asking us for help with your installation,
+we will not provide you with support.
 
