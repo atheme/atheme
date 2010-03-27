@@ -116,7 +116,7 @@ const char *get_conf_opts(void)
 {
 	static char opts[53];
 
-	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
 			match_mapping ? "A" : "",
 			auth_module_loaded ? "a" : "",
 			crypto_module_loaded ? "c" : "",
@@ -128,7 +128,8 @@ const char *get_conf_opts(void)
 			chansvs.changets ? "t" : "",
 			!match_mapping ? "R" : "",
 			config_options.raw ? "r" : "",
-			runflags & RF_LIVE ? "n" : "");
+			runflags & RF_LIVE ? "n" : "",
+			IS_TAINTED ? "T" : "");
 	return opts;
 }
 
@@ -269,6 +270,7 @@ void init_newconf(void)
 	/* general{} block */
 	add_dupstr_conf_item("CHAN", &conf_gi_table, &config_options.chan);
 	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, &config_options.verbose_wallops);
+	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, &config_options.allow_taint);
 	add_bool_conf_item("SILENT", &conf_gi_table, &config_options.silent);
 	add_bool_conf_item("JOIN_CHANS", &conf_gi_table, &config_options.join_chans);
 	add_bool_conf_item("LEAVE_CHANS", &conf_gi_table, &config_options.leave_chans);
