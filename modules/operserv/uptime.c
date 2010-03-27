@@ -49,6 +49,23 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
         	command_success_nodata(si, _("Registered nicknames: %d"), cnt.mynick);
         command_success_nodata(si, _("Registered channels: %d"), cnt.mychan);
         command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
+
+	if (IS_TAINTED)
+	{
+		node_t *n;
+
+		command_success_nodata(si, _("Services is presently \2TAINTED\2, no support will be given for this configuration."));
+		command_success_nodata(si, _("List of active taints:"));
+
+		LIST_FOREACH(n, taint_list.head)
+		{
+			taint_reason_t *tr = n->data;
+
+			command_success_nodata(si, _("Taint Condition: %s"), tr->cond);
+			command_success_nodata(si, _("Taint Location: %s:%d"), tr->file, tr->line);
+			command_success_nodata(si, _("Taint Explanation: %s"), tr->buf);
+		}
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
