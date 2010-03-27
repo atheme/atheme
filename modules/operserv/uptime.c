@@ -61,7 +61,7 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 		{
 			taint_reason_t *tr = n->data;
 
-			command_success_nodata(si, _("Taint Condition: %s"), tr->cond);
+			command_success_nodata(si, _("Taint Condition: %s"), tr->condition);
 			command_success_nodata(si, _("Taint Location: %s:%d"), tr->file, tr->line);
 			command_success_nodata(si, _("Taint Explanation: %s"), tr->buf);
 		}

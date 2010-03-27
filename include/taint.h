@@ -9,7 +9,7 @@
 #define __TAINT_H__
 
 typedef struct {
-	char cond[BUFSIZE];
+	char condition[BUFSIZE];
 	char file[BUFSIZE];
 	int line;
 	char buf[BUFSIZE];
@@ -24,11 +24,11 @@ E list_t taint_list;
 	{							\
 		taint_reason_t *tr;				\
 		tr = scalloc(sizeof(taint_reason_t), 1);	\
-		strlcpy(tr->cond, ##cond, BUFSIZE);		\
+		strlcpy(tr->condition, #cond, BUFSIZE);		\
 		strlcpy(tr->file, __FILE__, BUFSIZE);		\
 		tr->line = __LINE__;				\
 		strlcpy(tr->buf, (reason), BUFSIZE);		\
-		node_add(&taint_list, &tr->node, tr);		\
+		node_add(tr, &tr->node, &taint_list);		\
 		slog(LG_ERROR, "TAINTED: %s", (reason));	\
 		if (!config_options.allow_taint)		\
 		{						\
