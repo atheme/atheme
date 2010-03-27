@@ -39,6 +39,8 @@ saslsvs_t saslsvs;
 gamesvs_t gamesvs;
 hostsvs_t hostsvs;
 
+list_t taint_list = { NULL, NULL, 0 };
+
 me_t me;
 struct cnt cnt;
 
