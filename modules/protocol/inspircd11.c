@@ -1181,7 +1181,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			ircd->uses_owner = true;
 			ircd->uses_protect = true;
 		}
-		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible is presently supported correctly in atheme, and won't be due to ethical obligations");
+		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
