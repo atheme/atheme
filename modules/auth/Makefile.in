@@ -9,8 +9,7 @@ MODULE = auth
 include ../Makefile.defs
 
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-# XXX ldap stuff is only needed by ldap.c
-CFLAGS		= -I../../include @CFLAGS@ @LDAP_CFLAGS@
+CFLAGS		= -I../../include @CFLAGS@
 LDFLAGS		= @LDFLAGS@
 LDAP_CFLAGS	= @LDAP_CFLAGS@
 LDAP_LIBS	= @LDAP_LIBS@
