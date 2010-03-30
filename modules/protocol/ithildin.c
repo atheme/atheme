@@ -67,10 +67,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* -> NICK jilles 1 1136143909 ~jilles 192.168.1.5 jaguar.test :Jilles Tjoelker */
 	if (parc == 7)
 	{
-		s = server_find(parv[6]);
+		s = server_find(parv[5]);
 		if (!s)
 		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[5]);
 			return;
 		}
 
