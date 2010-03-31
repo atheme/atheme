@@ -6,6 +6,34 @@
  * This file contains protocol support for TS6-based ircd.
  */
 
+/*
+ * protocol/ts6-generic
+ *
+ * This module is not very useful on it's own.  It implements
+ * the basis of the TS6 extended linking profile, which is used
+ * by hybrid, charybdis, ratbox (--enable-services), weircd
+ * and others.
+ *
+ * Everything in this module can be subclassed.  To do so, we
+ * recommend either directly subclassing this module, or subclassing
+ * the module your ircd is based on.  You can override (or redirect)
+ * IRC messages to your protocol and leave the bulk of the command
+ * processing and message sending in this module, which should
+ * "just work" unless your IRCd is broken.
+ *
+ * A note to IRCd developers:
+ *
+ * If you are working with TS6 as your linking protocol, it is
+ * important that you follow the TS6 standards exactly.  If you are
+ * confused on what you should do, look at this module.  This
+ * module describes all of the hardcoded requirements of the
+ * extended linking profile.
+ *
+ * This module is designed where it can downgrade to TS6 strict, or
+ * TS5/TS3.  Earlier link protocol versions than TS3 will likely not
+ * work.
+ */
+
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
