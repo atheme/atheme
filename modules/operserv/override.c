@@ -158,7 +158,7 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 {
 	cooked_sourceinfo_t o_si;
-	myuser_t *mu;
+	myuser_t *mu = NULL;
 	service_t *svs;
 	command_t *cmd;
 	int newparc, i;
