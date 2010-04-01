@@ -20,6 +20,7 @@ AC_CONFIG_HEADER(include/sysconf.h)
 AC_PREFIX_DEFAULT(~/atheme)
 
 AC_GNU_SOURCE
+AC_SYS_LARGEFILE
 
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
