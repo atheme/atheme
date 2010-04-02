@@ -1127,7 +1127,7 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 
 const char *mychan_get_mlock(mychan_t *mc)
 {
-	char buf[BUFSIZE];
+	static char buf[BUFSIZE];
 	char params[BUFSIZE];
 	metadata_t *md;
 	char *p, *q, *qq;
