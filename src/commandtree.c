@@ -119,6 +119,9 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 	if (has_priv(si, c->access))
 	{
+		if (si->force_language != NULL)
+			language_set_active(si->force_language);
+
 		c->cmd(si, parc, parv);
 		language_set_active(NULL);
 		return;
