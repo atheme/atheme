@@ -16,6 +16,7 @@ CFLAGS		= -I../../include @CFLAGS@
 BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/plain.c	\
+	$(SRCDIR)/authcookie.c	\
 	$(SRCDIR)/crypt.c	\
 	$(SRCDIR)/dh-blowfish.c
 
