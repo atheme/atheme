@@ -399,6 +399,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
 	si.connection = conn;
 	si.v = &xmlrpc_vtable;
+	si.force_language = "en";
 	command_exec(svs, &si, cmd, newparc, newparv);
 	if (!hd->sent_reply)
 	{
