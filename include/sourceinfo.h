@@ -50,7 +50,7 @@ struct sourceinfo_
 	unsigned int output_limit; /* if not 0, limit lines of output */
 	unsigned int output_count; /* lines of output upto now */
 
-	const char *force_language; /* locale to force replies to be in, could be NULL */
+	language_t *force_language; /* locale to force replies to be in, could be NULL */
 };
 
 #endif
