@@ -55,16 +55,8 @@ static void hostserv(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, cmd, text, &hs_cmdtree);
 }
 
-static void hostserv_config_ready(void *unused)
-{
-	hook_del_config_ready(hostserv_config_ready);
-}
-
 void _modinit(module_t *m)
 {
-	hook_add_event("config_ready");
-	hook_add_config_ready(hostserv_config_ready);
-
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
 
