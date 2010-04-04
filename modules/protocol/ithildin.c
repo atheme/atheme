@@ -54,7 +54,7 @@ static void ithildin_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts("NICK %s 1 %lu %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu %s %s %s :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, u->gecos);
 	sts(":%s MODE %s %s", u->nick, u->nick, umode);
 }
 
@@ -123,10 +123,24 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void ith_server_login(void) {
+	int ret;
+	ret = sts("PASS %s :TS", curr_uplink->pass);
+	if (ret == 1) { return 1; }
+
+	me.bursting = true;
+
+	sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
+
+	services_init();
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/bahamut");
 
+	server_login = &ith_server_login;
 	introduce_nick = &ithildin_introduce_nick;
 
 	ignore_mode_list = ithildin_ignore_mode_list;
