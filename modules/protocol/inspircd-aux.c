@@ -381,7 +381,10 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 		return;
 
 	if (*name != '#')
+	{
 		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+		return;
+	}
 
 	if (has_cbanmod)
 		sts(":%s CBAN %s %ld :%s", opersvs.me->me->uid, name, duration, reason);
