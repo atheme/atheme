@@ -420,7 +420,10 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 		return;
 
 	if (*name != '#')
+	{
 		sts(":%s QLINE %s", opersvs.nick, name);
+		return;
+	}
 
 	if (has_cbanmod)
 		sts(":%s CBAN %s", opersvs.nick, name);
