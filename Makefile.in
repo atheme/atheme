@@ -39,7 +39,8 @@ CLEANDIRS = ${SUBDIRS}
 
 all: build
 
-build: depend
+build: depend build-nodeps
+build-nodeps:
 	-@if [ ! -f include/sysconf.h ] ; then \
 		echo "Hmm...doesn't look like you've run configure..."; \
 		echo "Doing so now."; \
