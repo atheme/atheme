@@ -1,0 +1,5 @@
+Help for INFO:
+
+INFO allows you to see &nick& information about a channel or a bot.
+
+Syntax: INFO <#channel|botnick>
