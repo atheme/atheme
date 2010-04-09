@@ -2,9 +2,24 @@ Atheme Services 5.1 Release Notes
 =================================
 [MERGED] indicates items merged to the 5.0 branch
 ircd protocol
-- inspircd: give this ircd an ethical backbone, even though the authors won't
-chanserv
-- announce when users are being spied upon by unethical operators
+- inspircd: common code has been merged into inspircd-aux, this will continue
+  in the next version with inspircd 1.1 support.
+- inspircd: several unsupported module configurations are now programatically
+  marked as such.
+- inspircd: permanent channels are now tracked in 1.2 and later. (SRV-29)
+botserv
+- add missing helpfiles
+- botserv bots are now cleanly removed from the network (SRV-12)
+hostserv
+- add missing helpfiles
+saslserv
+- add AUTHCOOKIE SASL method which allows for integration with Iris
+code
+- add taint subsystem which allows developers to programatically define
+  unsupportable conditions.
+other
+- logging system entirely reworked.  snoop() is deprecated and will be
+  removed in the next version.
 
 Atheme Services 5.0.1 Release Notes
 ===================================
