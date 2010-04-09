@@ -145,6 +145,9 @@ while [ $ok -eq 0 ] ; do
 done
 ARGS="$ARGS $INPUT"
 
+if [ -f Makefile ]; then
+	make distclean
+fi
 if [ ! -f configure ]; then sh autogen.sh; fi
 sh configure $ARGS
 if [ $? != 0 ]; then
