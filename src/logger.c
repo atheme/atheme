@@ -503,6 +503,65 @@ logfile_t *logfile_find_mask(unsigned int log_mask)
 	return NULL;
 }
 
+enum log_type
+{
+	LOG_ANY = 0,
+	LOG_INTERACTIVE = 1, /* IRC channels */
+	LOG_NONINTERACTIVE = 2 /* files */
+};
+
+static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
+		va_list args)
+{
+	char buf[BUFSIZE];
+	node_t *n;
+	char datetime[64];
+	time_t t;
+	struct tm tm;
+
+	vsnprintf(buf, BUFSIZE, fmt, args);
+
+	time(&t);
+	tm = *localtime(&t);
+	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
+
+	LIST_FOREACH(n, log_files.head)
+	{
+		logfile_t *lf = (logfile_t *) n->data;
+
+		if (type == LOG_INTERACTIVE &&
+				lf->write_func != logfile_write_irc)
+			continue;
+		if (type == LOG_NONINTERACTIVE &&
+				lf->write_func == logfile_write_irc)
+			continue;
+		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
+			continue;
+
+		return_if_fail(lf->write_func != NULL);
+
+		lf->write_func(lf, buf);
+	}
+
+	/* 
+	 * if the event is in the default loglevel, and we are starting, then
+	 * display it in the controlling terminal.
+	 */
+	if (((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
+		((runflags & RF_LIVE) && log_force))
+		fprintf(stderr, "%s %s\n", datetime, buf);
+}
+
+static PRINTFLIKE(3, 4) void slog_ext(enum log_type type, unsigned int level,
+		const char *fmt, ...)
+{
+	va_list args;
+
+	va_start(args, fmt);
+	vslog_ext(type, level, fmt, args);
+	va_end(args);
+}
+
 /*
  * slog(unsigned int level, const char *fmt, ...)
  *
@@ -524,39 +583,10 @@ logfile_t *logfile_find_mask(unsigned int log_mask)
 void slog(unsigned int level, const char *fmt, ...)
 {
 	va_list args;
-	char buf[BUFSIZE];
-	node_t *n;
-	char datetime[64];
-	time_t t;
-	struct tm tm;
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, args);
+	vslog_ext(LOG_ANY, level, fmt, args);
 	va_end(args);
-
-	time(&t);
-	tm = *localtime(&t);
-	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
-
-	LIST_FOREACH(n, log_files.head)
-	{
-		logfile_t *lf = (logfile_t *) n->data;
-
-		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
-			continue;
-
-		return_if_fail(lf->write_func != NULL);
-
-		lf->write_func(lf, buf);
-	}
-
-	/* 
-	 * if the event is in the default loglevel, and we are starting, then
-	 * display it in the controlling terminal.
-	 */
-	if (((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
-		((runflags & RF_LIVE) && log_force))
-		fprintf(stderr, "%s %s\n", datetime, buf);
 }
 
 /*
@@ -613,16 +643,25 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 {
 	va_list args;
 	char lbuf[BUFSIZE];
+	bool showaccount;
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	slog(level, "%s %s:\2%s\2!%s@%s[%s] %s",
+	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s!%s@%s[%s] %s",
 			svs != NULL ? svs->nick : me.name,
 			source->myuser != NULL ? source->myuser->name : "",
 			source->nick, source->user, source->vhost,
 			source->ip[0] != '\0' ? source->ip : source->host,
+			lbuf);
+	showaccount = source->myuser == NULL || irccasecmp(source->myuser->name, source->nick);
+	slog_ext(LOG_INTERACTIVE, level, "%s %s%s%s%s %s",
+			svs != NULL ? svs->nick : me.name,
+			source->nick,
+			showaccount ? " (" : "",
+			showaccount ? (source->myuser ? source->myuser->name : "") : "",
+			showaccount ? ")" : "",
 			lbuf);
 }
 
@@ -657,12 +696,17 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	slog(level, "%s %s:%s(%s)[%s] %s",
+	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s(%s)[%s] %s",
 			svs != NULL ? svs->nick : me.name,
 			login != NULL ? login->name : "",
 			type,
 			source != NULL ? source->hbuf : "<noconn>",
 			sourcedesc != NULL ? sourcedesc : "<unknown>",
+			lbuf);
+	slog_ext(LOG_INTERACTIVE, level, "%s <%s>%s %s",
+			svs != NULL ? svs->nick : me.name,
+			type,
+			login != NULL ? login->name : "",
 			lbuf);
 }
 
