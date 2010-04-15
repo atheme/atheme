@@ -7,19 +7,30 @@ ircd protocol
 - inspircd: several unsupported module configurations are now programatically
   marked as such.
 - inspircd: permanent channels are now tracked in 1.2 and later. (SRV-29)
+- inspircd: add support for SVSNICK
 botserv
 - add missing helpfiles
 - botserv bots are now cleanly removed from the network (SRV-12)
+chanserv
+- FLAGS: do not overwrite an earlier +F with a +*
 hostserv
 - add missing helpfiles
+nickserv
+- add support for CERTFP (CERT command)
+operserv
+- reject jupes with names containing wildcards.
 saslserv
 - add AUTHCOOKIE SASL method which allows for integration with Iris
 code
 - add taint subsystem which allows developers to programatically define
   unsupportable conditions.
+- constify *line_sts() protocol module functions.
 other
 - logging system entirely reworked.  snoop() is deprecated and will be
   removed in the next version.
+- add general::exempts config block, for masks that will never be
+  automatically klined.
+- add configurable command aliases to the services blocks
 
 Atheme Services 5.0.1 Release Notes
 ===================================
