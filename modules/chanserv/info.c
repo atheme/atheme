@@ -49,8 +49,6 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md;
 	node_t *n;
 	hook_channel_req_t req;
-	char *p, *q, *qq;
-	int dir;
 	bool hide_info;
 
 	if (!name)
