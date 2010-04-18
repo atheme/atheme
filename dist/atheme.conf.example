@@ -667,7 +667,7 @@ serverinfo {
  * being a tree shaped network).
  */
 uplink "irc.example.net" {
-	// the server name goes above
+	// The server name of the ircd you're linking to goes above.
 
 	// host
 	// The hostname to connect to.
