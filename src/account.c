@@ -1229,6 +1229,9 @@ const char *mychan_get_mlock(mychan_t *mc)
 
 	strlcat(buf, params, BUFSIZE);
 
+	if (*buf == '\0')
+		strlcpy(buf, "+", BUFSIZE);
+
 	return buf;
 }
 
