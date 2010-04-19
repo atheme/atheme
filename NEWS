@@ -8,7 +8,12 @@ ircd protocol
   marked as such.
 - inspircd: permanent channels are now tracked in 1.2 and later. (SRV-29)
 - inspircd: add support for SVSNICK
+- inspircd: add support for m_ojoin
+- TS6: add support for MLOCK
+- shadowircd: updated module to shadowircd6
 - hyperion: removed
+- Added support for ithildin1. This is still a bit experimental.
+- ircnet: support added for server hostmasking.
 botserv
 - add missing helpfiles
 - botserv bots are now cleanly removed from the network (SRV-12)
@@ -22,6 +27,10 @@ operserv
 - reject jupes with names containing wildcards.
 - add os_trace contrib module. This module looks up users by many different
   criteria and lets you perform actions on them.
+- add os_akillnicklist contrib module. Automatically AKILLs a list of clients, 
+  given their operating parameters.
+- change CLEARCHAN GLINE action to AKILL to be more consistent with the rest
+  of Atheme. GLINE still exists as a alias to AKILL.
 saslserv
 - add AUTHCOOKIE SASL method which allows for integration with Iris
 code
@@ -29,6 +38,13 @@ code
   unsupportable conditions.
 - constify *line_sts() protocol module functions.
 - track deaf umode and set it on services clients if fantasy is disabled.
+- allow #else in helpfiles
+- startup flag -r (read-only) added.
+- enable large file support.
+- Add 'force_language' to sourceinfo_t, which forces the locale 
+  to be reset to the language specified by the sourceinfo structure.
+  Useful for forcing XMLRPC responses to be in English.
+- add build-nodeps which allows skipping dependency calculation for subsequent builds.
 other
 - logging system entirely reworked.  snoop() is deprecated and will be
   removed in the next version.
@@ -36,6 +52,9 @@ other
   automatically klined.
 - add configurable command aliases to the services blocks
 - helpfiles added for all contrib modules.
+- make the wumpus contrib module compile and work again.
+- anope_convert: support newer 1.8.x Anope versions and made anope_convert
+  a bit more robust in handling encrypted passwords.
 
 Atheme Services 5.0.1 Release Notes
 ===================================
