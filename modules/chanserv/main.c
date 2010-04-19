@@ -524,6 +524,7 @@ static void cs_register(hook_channel_req_t *hdata)
 		if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
 			return;
 
+		mlock_sts(mc->chan);
 		check_modes(mc, true);
 	}
 }
@@ -627,6 +628,9 @@ static void cs_newchan(channel_t *c)
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
 
+	/* ...and send the MLOCK to the ircd to do its bit. */
+	mlock_sts(c);
+
 	md = metadata_find(mc, "private:channelts");
 	if (md != NULL)
 		channelts = atol(md->value);
@@ -686,7 +690,6 @@ static void cs_newchan(channel_t *c)
 
 	handle_topic(c, setter, topicts, text);
 	topic_sts(c, chansvs.me->me, setter, topicts, 0, text);
-	mlock_sts(c);
 }
 
 static void cs_tschange(channel_t *c)

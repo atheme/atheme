@@ -1512,6 +1512,7 @@ static void bs_register(hook_channel_req_t *hdata)
 				join(mc->name, chansvs.nick);
 		}
 
+		mlock_sts(mc->chan);
 		check_modes(mc, true);
 	}
 }
@@ -1584,6 +1585,7 @@ static void bs_newchan(channel_t *c)
 	/* schedule a mode lock check when we know the current modes
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
+	mlock_sts(c);
 
 	md = metadata_find(mc, "private:channelts");
 	if (md != NULL)

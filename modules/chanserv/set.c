@@ -750,6 +750,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, _("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
 
 	check_modes(mc, true);
+	mlock_sts(mc->chan);
 
 	return;
 }
