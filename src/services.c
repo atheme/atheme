@@ -207,7 +207,6 @@ void join(char *chan, char *nick)
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		if (mc != NULL)
 		{
-			mlock_sts(mc->chan);
 			check_modes(mc, false);
 		}
 		isnew = true;
