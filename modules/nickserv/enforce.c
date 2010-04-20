@@ -55,17 +55,21 @@ static void guest_nickname(user_t *u)
 	int tries;
 
 	/* Generate a new guest nickname and check if it already exists
-	 * This will try to generate a new nickname 30 different times
-	 * if nicks are in use. If it runs into 30 nicks in use, maybe 
-	 * you shouldn't use this module. */
-	for (tries = 0; tries < 30; tries++)
+	 * This will try to generate a new nickname 10 different times
+	 * if nicks are in use. If it runs into 10 nicks in use, the user
+	 * will be killed.
+	 */
+	for (tries = 0; tries < 10; tries++)
 	{
 		snprintf(gnick, sizeof gnick, "%s%d", nicksvs.enforce_prefix, arc4random()%100000);
 
 		if (!user_find_named(gnick))
-			break;
+		{
+			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
+			return;
+		}
 	}
-	fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
+	kill_user(nicksvs.me->me, u, "Enforcement enabled for this nick and no suitable nick found to change them to");
 }
 
 static void check_enforce_all(myuser_t *mu)
