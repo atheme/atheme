@@ -6,7 +6,7 @@
  *
  * This does nickserv enforcement on registered nicks if the ENFORCE option
  * has been enabled. Users who do not identify within 30-60 seconds have
- * their nick changed to Guest<num>.
+ * their nick changed to <guest prefix><num>.
  * If the ircd or protocol module do not support forced nick changes,
  * they are killed instead.
  * Enforcement of the nick uses holdnick_sts() style enforcers if supported
@@ -60,7 +60,8 @@ static void guest_nickname(user_t *u)
 	 * you shouldn't use this module. */
 	for (tries = 0; tries < 30; tries++)
 	{
-		snprintf(gnick, sizeof gnick, "Guest%d", arc4random()%100000);
+		snprintf(gnick, sizeof gnick, "%s%d", nicksvs.enforce_prefix, arc4random()%100000);
+
 		if (!user_find_named(gnick))
 			break;
 	}
@@ -296,9 +297,12 @@ static void show_enforce(hook_user_req_t *hdata)
 
 static void check_registration(hook_user_register_check_t *hdata)
 {
+	int prefixlen = strlen(nicksvs.enforce_prefix);
+
 	if (hdata->approved)
 		return;
-	if (!strncasecmp(hdata->account, "Guest", 5) && isdigit(hdata->account[5]))
+	
+	if (!strncasecmp(hdata->account, nicksvs.enforce_prefix, prefixlen) && isdigit(hdata->account[prefixlen]))
 	{
 		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);
 		hdata->approved = 1;

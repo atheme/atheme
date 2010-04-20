@@ -760,6 +760,11 @@ nickserv {
 	 * on nicks.
 	 */
 	#enforce_delay = 30;
+	
+	/* (*)enforce_prefix
+	 * The prefix to use when changing the user's nick on enforcement
+	 */
+	#enforce_prefix = "Guest";
 };
 
 /* ChanServ configuration.
