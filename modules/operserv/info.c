@@ -63,6 +63,22 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Maximum number of entries allowed in a channel access list (if 0, unlimited): %d", chansvs.maxchanacs);
 	command_success_nodata(si, "Maximum number of founders allowed per channel: %d", chansvs.maxfounders);
 
+	if (IS_TAINTED)
+	{
+		node_t *n;
+
+		command_success_nodata(si, _("Services is presently \2TAINTED\2, no support will be given for this configuration."));
+		command_success_nodata(si, _("List of active taints:"));
+
+		LIST_FOREACH(n, taint_list.head)
+		{
+			taint_reason_t *tr = n->data;
+
+			command_success_nodata(si, _("Taint Condition: %s"), tr->condition);
+			command_success_nodata(si, _("Taint Location: %s:%d"), tr->file, tr->line);
+			command_success_nodata(si, _("Taint Explanation: %s"), tr->buf);
+		}
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
