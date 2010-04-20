@@ -23,6 +23,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/help.c	\
 	$(SRCDIR)/identify.c	\
 	$(SRCDIR)/ignore.c	\
+	$(SRCDIR)/info.c	\
 	$(SRCDIR)/inject.c	\
 	$(SRCDIR)/jupe.c	\
 	$(SRCDIR)/mode.c	\
