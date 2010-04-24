@@ -206,9 +206,7 @@ void join(char *chan, char *nick)
 		c = channel_add(chan, ts, me.me);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		if (mc != NULL)
-		{
 			check_modes(mc, false);
-		}
 		isnew = true;
 	}
 	else if ((cu = chanuser_find(c, u)))
