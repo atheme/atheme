@@ -7,7 +7,7 @@ ircd protocol
 - inspircd: several unsupported module configurations are now programatically
   marked as such.
 - inspircd: permanent channels are now tracked in 1.2 and later. (SRV-29)
-- inspircd: add support for SVSNICK
+- inspircd: add support for receiving SVSNICK (nick collisions)
 - inspircd: add support for m_ojoin
 - TS6: add support for MLOCK
 - shadowircd: updated module to shadowircd6
@@ -16,17 +16,18 @@ ircd protocol
 - ircnet: support added for server hostmasking.
 botserv
 - add missing helpfiles
-- botserv bots are now cleanly removed from the network (SRV-12)
+- botserv bots now quit instead of splitting when terminating/restarting
+  services (SRV-12)
 chanserv
-- FLAGS: do not overwrite an earlier +F with a +*
+- FLAGS: allow +F* as well as +*F
 hostserv
 - add missing helpfiles
 nickserv
 - add support for CERTFP (CERT command)
 operserv
 - reject jupes with names containing wildcards.
-- add os_trace contrib module. This module looks up users by many different
-  criteria and lets you perform actions on them.
+- add os_trace contrib module. This module looks up users by various criteria
+  and lets you perform actions on them.
 - add os_akillnicklist contrib module. Automatically AKILLs a list of clients, 
   given their operating parameters.
 - change CLEARCHAN GLINE action to AKILL to be more consistent with the rest
@@ -44,7 +45,9 @@ code
 - Add 'force_language' to sourceinfo_t, which forces the locale 
   to be reset to the language specified by the sourceinfo structure.
   Useful for forcing XMLRPC responses to be in English.
-- add build-nodeps which allows skipping dependency calculation for subsequent builds.
+- force dependency calculation before most targets to fix -j problems; there
+  is a new target build-nodeps to skip this for subsequent builds (like the
+  old behaviour of build).
 other
 - logging system entirely reworked.  snoop() is deprecated and will be
   removed in the next version.
