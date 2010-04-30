@@ -1,0 +1,11 @@
+Help for HELPME:
+
+Marks you as a network helper by setting user mode +h. This is only useful if
+your IRCd supports user mode +h and you have support staff who are not
+operators. Requires the OPERSERV:HELPME privilege.
+
+Syntax: HELPME
+
+Examples:
+    /msg &nick& HELPME
+
