@@ -493,6 +493,8 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 
 static void ts6_mlock_sts(channel_t *c)
 {
+	char mlock[BUFSIZE];
+	metadata_t *md;
 	mychan_t *mc = mychan_find(c->name);
 
 	if (use_mlock == false)
@@ -501,7 +503,33 @@ static void ts6_mlock_sts(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	sts(":%s MLOCK %ld %s %s", ME, c->ts, c->name, mychan_get_mlock(mc));
+	mlock[0] = '\0';
+
+	if (mc->mlock_on)
+		strlcat(mlock, flags_to_string(mc->mlock_on), sizeof(mlock));
+	if (mc->mlock_off)
+		strlcat(mlock, flags_to_string(mc->mlock_off), sizeof(mlock));
+	if (mc->mlock_limit || mc->mlock_off & CMODE_LIMIT)
+		strlcat(mlock, "l", sizeof(mlock));
+	if (mc->mlock_key || mc->mlock_off & CMODE_KEY)
+		strlcat(mlock, "k", sizeof(mlock));
+	if ((md = metadata_find(mc, "private:mlockext")))
+	{
+		char *p = md->value;
+		char *q = mlock + strlen(mlock);
+		while (*p != '\0')
+		{
+			*q++ = *p++;
+			while (*p != ' ' && *p != '\0')
+				p++;
+			while (*p == ' ')
+				p++;
+		}
+		*q = '\0';
+	}
+
+	if (mlock[0] != '\0')
+		sts(":%s MLOCK %ld %s :%s", ME, c->ts, c->name, mlock);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
