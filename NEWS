@@ -31,7 +31,7 @@ operserv
 - add os_akillnicklist contrib module. Automatically AKILLs a list of clients, 
   given their operating parameters.
 - change CLEARCHAN GLINE action to AKILL to be more consistent with the rest
-  of Atheme. GLINE still exists as a alias to AKILL.
+  of Atheme. GLINE still exists as an alias to AKILL.
 saslserv
 - add AUTHCOOKIE SASL method which allows for integration with Iris
 code
