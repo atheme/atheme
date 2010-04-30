@@ -1386,59 +1386,6 @@ general {
  * to send a signal (killall -HUP atheme-services) to regain control.
  */
 /* (*) Operclasses specify groups of services operator privileges */
-operclass "sra" {
-	/* You can have multiple privs {} blocks in an oper class.
-	 * This example uses multiple privs {} blocks to organize the privileges
-	 * granted to the operclass by category.
-	 */
-	privs = {
-		special:ircop;
-	};
-
-	privs = {
-		user:auspex;
-		user:admin;
-		user:sendpass;
-		user:vhost;
-		user:mark;
-		user:hold;
-		user:regnolimit;
-	};
-
-	privs = {
-		chan:auspex;
-		chan:admin;
-		chan:cmodes;
-		chan:joinstaffonly;
-	};
-
-	privs = {
-		general:auspex;
-		general:viewprivs;
-		general:flood;
-		general:metadata;
-		general:admin;
-	};
-
-	privs = {
-		operserv:omode;
-		operserv:akill;
-		#operserv:massakill;
-		#operserv:akill-anymask;
-		operserv:jupe;
-		operserv:noop;
-		operserv:global;
-		operserv:grant;
-		#operserv:override;
-	};
-
-	/* needoper
-	 * Only grant privileges to IRC users in this oper class if they
-	 * are opered; other use of privilege (channel succession, XMLRPC,
-	 * etc.) is unaffected by this.
-	 */
-	needoper;
-};
 
 /* The "ircop" operclass specifies privileges all IRCops get.
  * This may be empty in which case IRCops get no privs.
@@ -1477,6 +1424,37 @@ operclass "ircop" {
 		operserv:global;
 	};
 };
+
+operclass "sra" {
+	/* You can inherit privileges from a lower operclass. */
+	extends "ircop";
+
+	privs = {
+		user:hold;
+		user:regnolimit;
+	};
+
+	privs = {
+		general:metadata;
+		general:admin;
+	};
+
+	privs = {
+		#operserv:massakill;
+		#operserv:akill-anymask;
+		operserv:noop;
+		operserv:grant;
+		#operserv:override;
+	};
+
+	/* needoper
+	 * Only grant privileges to IRC users in this oper class if they
+	 * are opered; other use of privilege (channel succession, XMLRPC,
+	 * etc.) is unaffected by this.
+	 */
+	needoper;
+};
+
 
 /* (*) Operator blocks specify accounts with certain privileges
  * Oper classes must be defined before they are used in operator blocks.

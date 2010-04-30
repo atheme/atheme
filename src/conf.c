@@ -480,6 +480,29 @@ static int c_operclass(config_entry_t *ce)
 				}
 			}
 		}
+		else if (!strcasecmp("EXTENDS", ce->ce_varname))
+		{
+			if (!ce->ce_vardata) {
+				conf_report_warning(ce, "EXTENDS directive without name.");
+				continue;
+			}
+			operclass_t *parent = operclass_find(ce->ce_vardata);
+			if (!parent) {
+				conf_report_warning(ce, "EXTENDS nonexistent operclass.");
+				continue;
+			}
+
+			if (privs == NULL) {
+				privs = sstrdup(parent->privs);
+			} else {
+				newprivs = smalloc(strlen(privs) + 1 + strlen(parent->privs) + 1);
+				strcpy(newprivs, privs);
+				strcat(newprivs, " ");
+				strcat(newprivs, parent->privs);
+				free(privs);
+				privs = newprivs;
+			}
+		}
 		else if (!strcasecmp("NEEDOPER", ce->ce_varname))
 			flags |= OPERCLASS_NEEDOPER;
 		else
