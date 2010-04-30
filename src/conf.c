@@ -482,19 +482,22 @@ static int c_operclass(config_entry_t *ce)
 		}
 		else if (!strcasecmp("EXTENDS", ce->ce_varname))
 		{
-			if (!ce->ce_vardata) {
-				conf_report_warning(ce, "EXTENDS directive without name.");
+			if (ce->ce_vardata == NULL)
+			{
+				conf_report_warning(ce, "no parameter for configuration option");
 				continue;
 			}
 			operclass_t *parent = operclass_find(ce->ce_vardata);
-			if (!parent) {
-				conf_report_warning(ce, "EXTENDS nonexistent operclass.");
+			if (parent == NULL)
+			{
+				conf_report_warning(ce, "nonexistent extends operclass %s for operclass %s", ce->ce_vardata, name);
 				continue;
 			}
 
-			if (privs == NULL) {
+			if (privs == NULL)
 				privs = sstrdup(parent->privs);
-			} else {
+			else
+			{
 				newprivs = smalloc(strlen(privs) + 1 + strlen(parent->privs) + 1);
 				strcpy(newprivs, privs);
 				strcat(newprivs, " ");
