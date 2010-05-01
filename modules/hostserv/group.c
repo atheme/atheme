@@ -2,7 +2,7 @@
  * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Allows syncing the chost for all nicks in a group.
+ * Allows syncing the vhost for all nicks in a group.
  *
  * $Id: group.c 8195 2007-04-25 16:27:08Z jilles $
  */
