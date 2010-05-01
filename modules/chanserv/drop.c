@@ -191,7 +191,7 @@ static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	wallops("%s dropped the channel \2%s\2", get_oper_name(si), name);
 
 	hook_call_channel_drop(mc);
-	if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
+	if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 		part(mc->name, chansvs.nick);
 	object_unref(mc);
 	command_success_nodata(si, _("The channel \2%s\2 has been dropped."), name);
