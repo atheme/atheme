@@ -1392,11 +1392,11 @@ general {
  * At least chan:cmodes, chan:joinstaffonly and general:auspex are suggested.
  */
 operclass "ircop" {
-	privs = {
+	privs {
 		special:ircop;
 	};
 
-	privs = {
+	privs {
 		user:auspex;
 		user:admin;
 		user:sendpass;
@@ -1404,20 +1404,20 @@ operclass "ircop" {
 		user:mark;
 	};
 
-	privs = {
+	privs {
 		chan:auspex;
 		chan:admin;
 		chan:cmodes;
 		chan:joinstaffonly;
 	};
 
-	privs = {
+	privs {
 		general:auspex;
 		general:viewprivs;
 		general:flood;
 	};
 
-	privs = {
+	privs {
 		operserv:omode;
 		operserv:akill;
 		operserv:jupe;
@@ -1429,17 +1429,17 @@ operclass "sra" {
 	/* You can inherit privileges from a lower operclass. */
 	extends "ircop";
 
-	privs = {
+	privs {
 		user:hold;
 		user:regnolimit;
 	};
 
-	privs = {
+	privs {
 		general:metadata;
 		general:admin;
 	};
 
-	privs = {
+	privs {
 		#operserv:massakill;
 		#operserv:akill-anymask;
 		operserv:noop;
