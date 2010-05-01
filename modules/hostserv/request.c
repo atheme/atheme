@@ -2,7 +2,7 @@
  * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Allows request a vhost on a nick
+ * Allows requesting a vhost for a nick/account
  *
  * $Id: request.c 8195 2007-04-25 16:27:08Z celestin $
  */
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"hostserv/request", false, _modinit, _moddeinit,
-	"$Id: vhost.c 8195 2007-04-25 16:27:08Z celestin $",
+	"$Id: request.c 8195 2007-04-25 16:27:08Z celestin $",
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
@@ -258,7 +258,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!strcmp(host, l->vhost))
 			{
-				command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
+				command_success_nodata(si, _("You have already requested vhost \2%s\2."), host);
 				return;
 			}
 			free(l->vhost);

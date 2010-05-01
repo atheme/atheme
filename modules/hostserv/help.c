@@ -2,7 +2,7 @@
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains routines to handle the MemoServ HELP command.
+ * This file contains routines to handle the HostServ HELP command.
  *
  * $Id: help.c 7895 2009-01-24 02:40:03Z celestin $
  */
