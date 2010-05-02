@@ -87,7 +87,7 @@ static unsigned int ts6_server_login(void)
 
 	me.bursting = true;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
 			(unsigned long)CURRTIME);
@@ -503,6 +503,31 @@ static void ts6_mlock_sts(channel_t *c)
 
 	sts(":%s MLOCK %ld %s :%s", ME, c->ts, c->name, mychan_get_sts_mlock(mc));
 }
+
+static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
+{
+	channel_t *c;
+	mychan_t *mc;
+	const char *mlock;
+
+	if (!(c = channel_find(parv[1])))
+		return;
+
+	if (!(mc = mychan_find(c->name)))
+		return;
+
+	time_t ts = atol(parv[0]);
+	if (ts > c->ts)
+		return;
+
+	mlock = mychan_get_sts_mlock(mc);
+	if (0 != strcmp(parv[2], mlock))
+	{
+		/* MLOCK is changing, with the same TS. Bounce back the correct one. */
+		sts(":%s MLOCK %ld %s :%s", ME, c->ts, c->name, mlock);
+	}
+}
+
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -1418,6 +1443,7 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("SIGNON", m_signon, 5, MSRC_USER);
 	pcommand_add("EUID", m_euid, 11, MSRC_SERVER);
+	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
 	hook_add_event("server_eob");
 	hook_add_server_eob(server_eob);
