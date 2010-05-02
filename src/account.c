@@ -1235,6 +1235,39 @@ const char *mychan_get_mlock(mychan_t *mc)
 	return buf;
 }
 
+const char *mychan_get_sts_mlock(mychan_t *mc)
+{
+	static char mlock[BUFSIZE];
+	metadata_t *md;
+
+	mlock[0] = '\0';
+
+	if (mc->mlock_on)
+		strlcat(mlock, flags_to_string(mc->mlock_on), sizeof(mlock));
+	if (mc->mlock_off)
+		strlcat(mlock, flags_to_string(mc->mlock_off), sizeof(mlock));
+	if (mc->mlock_limit || mc->mlock_off & CMODE_LIMIT)
+		strlcat(mlock, "l", sizeof(mlock));
+	if (mc->mlock_key || mc->mlock_off & CMODE_KEY)
+		strlcat(mlock, "k", sizeof(mlock));
+	if ((md = metadata_find(mc, "private:mlockext")))
+	{
+		char *p = md->value;
+		char *q = mlock + strlen(mlock);
+		while (*p != '\0')
+		{
+			*q++ = *p++;
+			while (*p != ' ' && *p != '\0')
+				p++;
+			while (*p == ' ')
+				p++;
+		}
+		*q = '\0';
+	}
+
+	return mlock;
+}
+
 /*****************
  * C H A N A C S *
  *****************/
