@@ -1365,6 +1365,19 @@ static void server_eob(server_t *s)
 	}
 }
 
+/* Channel drop hook: clear MLOCK when a channel becomes unregistered. */
+static void channel_drop(mychan_t *mc)
+{
+	if (use_mlock == false)
+		return;
+
+	/* Don't reset it if the channel doesn't exist. */
+	if (!mc->chan)
+		return;
+
+	sts(":%s MLOCK %ld %s :", ME, mc->chan->ts, mc->chan->name);
+}
+
 static server_t *sid_find(char *name)
 {
 	char sid[4];
@@ -1450,7 +1463,9 @@ void _modinit(module_t * m)
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
 	hook_add_event("server_eob");
+	hook_add_event("channel_drop");
 	hook_add_server_eob(server_eob);
+	hook_add_channel_drop(channel_drop);
 
 	m->mflags = MODTYPE_CORE;
 }
