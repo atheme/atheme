@@ -514,7 +514,11 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	if (!(mc = mychan_find(c->name)))
+	{
+		/* Unregistered channel. Clear the MLOCK. */
+		sts(":%s MLOCK %ld %s :", ME, c->ts, c->name);
 		return;
+	}
 
 	time_t ts = atol(parv[0]);
 	if (ts > c->ts)
