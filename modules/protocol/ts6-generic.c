@@ -510,6 +510,10 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	const char *mlock;
 
+	/* Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions */
+	if (si->s->flags & SF_EOB)
+		return;
+
 	if (!(c = channel_find(parv[1])))
 		return;
 
