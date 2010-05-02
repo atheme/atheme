@@ -1386,48 +1386,63 @@ general {
  * to send a signal (killall -HUP atheme-services) to regain control.
  */
 /* (*) Operclasses specify groups of services operator privileges */
-operclass "sra" {
-	/* You can have multiple privs {} blocks in an oper class.
-	 * This example uses multiple privs {} blocks to organize the privileges
-	 * granted to the operclass by category.
-	 */
-	privs = {
+
+/* The "ircop" operclass specifies privileges all IRCops get.
+ * This may be empty in which case IRCops get no privs.
+ * At least chan:cmodes, chan:joinstaffonly and general:auspex are suggested.
+ */
+operclass "ircop" {
+	privs {
 		special:ircop;
 	};
 
-	privs = {
+	privs {
 		user:auspex;
 		user:admin;
 		user:sendpass;
 		user:vhost;
 		user:mark;
-		user:hold;
-		user:regnolimit;
 	};
 
-	privs = {
+	privs {
 		chan:auspex;
 		chan:admin;
 		chan:cmodes;
 		chan:joinstaffonly;
 	};
 
-	privs = {
+	privs {
 		general:auspex;
 		general:viewprivs;
 		general:flood;
+	};
+
+	privs {
+		operserv:omode;
+		operserv:akill;
+		operserv:jupe;
+		operserv:global;
+	};
+};
+
+operclass "sra" {
+	/* You can inherit privileges from a lower operclass. */
+	extends "ircop";
+
+	privs {
+		user:hold;
+		user:regnolimit;
+	};
+
+	privs {
 		general:metadata;
 		general:admin;
 	};
 
-	privs = {
-		operserv:omode;
-		operserv:akill;
+	privs {
 		#operserv:massakill;
 		#operserv:akill-anymask;
-		operserv:jupe;
 		operserv:noop;
-		operserv:global;
 		operserv:grant;
 		#operserv:override;
 	};
@@ -1440,43 +1455,6 @@ operclass "sra" {
 	needoper;
 };
 
-/* The "ircop" operclass specifies privileges all IRCops get.
- * This may be empty in which case IRCops get no privs.
- * At least chan:cmodes, chan:joinstaffonly and general:auspex are suggested.
- */
-operclass "ircop" {
-	privs = {
-		special:ircop;
-	};
-
-	privs = {
-		user:auspex;
-		user:admin;
-		user:sendpass;
-		user:vhost;
-		user:mark;
-	};
-
-	privs = {
-		chan:auspex;
-		chan:admin;
-		chan:cmodes;
-		chan:joinstaffonly;
-	};
-
-	privs = {
-		general:auspex;
-		general:viewprivs;
-		general:flood;
-	};
-
-	privs = {
-		operserv:omode;
-		operserv:akill;
-		operserv:jupe;
-		operserv:global;
-	};
-};
 
 /* (*) Operator blocks specify accounts with certain privileges
  * Oper classes must be defined before they are used in operator blocks.

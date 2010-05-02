@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Allows setting a vhost on an account
+ * Allows syncing the vhost for all nicks in a group.
  *
- * $Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $
+ * $Id: group.c 8195 2007-04-25 16:27:08Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"hostserv/group", false, _modinit, _moddeinit,
-	"$Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $",
+	"$Id: group.c 8195 2007-04-25 16:27:08Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
