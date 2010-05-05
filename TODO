@@ -1,11 +1,6 @@
 Some ideas concerning things that we may eventually work on.
 
-command aliases
-
 interruptible commands (so as to make ns_mxcheck lookup async)
-
-vhost request system
-2. allow opers to offer vhosts, users approve/deny
 
 cidr limits in /os clones
 
