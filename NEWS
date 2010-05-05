@@ -1,3 +1,14 @@
+Atheme Services 5.1.1 Release Notes
+===================================
+ircd protocol
+- TS6: Rework MLOCK a bit to make it more robust and support more modes.
+operserv
+- add os_helpme contrib module. Thist module marks a user as a network helper.
+  This will only work on ircd's with the helpop (usually +h) user mode.
+other
+- add extends directive to operclasses so one operclass can inherit privledges
+  from another. See the example config for details. Note, you can have two
+  operclasses with the same privledges, so extending is not forced.
 Atheme Services 5.1 Release Notes
 =================================
 [MERGED] indicates items merged to the 5.0 branch
