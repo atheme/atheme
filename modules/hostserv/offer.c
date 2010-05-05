@@ -297,7 +297,6 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	int x = 0;
 	char buf[BUFSIZE];
-	char host[BUFSIZE];
 	struct tm tm;
 
 	LIST_FOREACH(n, hs_offeredlist.head)
