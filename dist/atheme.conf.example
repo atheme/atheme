@@ -465,6 +465,7 @@ loadmodule "modules/botserv/set";
  *
  * Core components				modules/hostserv/main
  * HELP command					modules/hostserv/help
+ * OFFER system									modules/hostserv/offer
  * ON and OFF commands                          modules/hostserv/onoff
  * REQUEST system                               modules/hostserv/request
  * VHOST and LISTVHOST commands                 modules/hostserv/vhost
@@ -474,6 +475,7 @@ loadmodule "modules/botserv/set";
 #loadmodule "modules/hostserv/main";
 #loadmodule "modules/hostserv/help";
 #loadmodule "modules/hostserv/onoff";
+#loadmodule "modules/hostserv/offer";
 #loadmodule "modules/hostserv/request";
 #loadmodule "modules/hostserv/vhost";
 #loadmodule "modules/hostserv/vhostnick";

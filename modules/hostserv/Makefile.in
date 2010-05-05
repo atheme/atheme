@@ -17,6 +17,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/main.c	\
 	$(SRCDIR)/group.c	\
 	$(SRCDIR)/help.c	\
+	$(SRCDIR)/offer.c	\
 	$(SRCDIR)/onoff.c	\
 	$(SRCDIR)/request.c	\
 	$(SRCDIR)/vhost.c	\
