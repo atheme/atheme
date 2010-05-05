@@ -935,7 +935,6 @@ static void free_cstructs(struct me *mesrc)
 bool conf_rehash(void)
 {
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
-	char *oldsnoop;
 	config_file_t *cfp;
 
 	/* we're rehashing */
@@ -951,9 +950,6 @@ bool conf_rehash(void)
 	}
 
 	copy_me(&me, hold_me);
-
-	oldsnoop = config_options.chan != NULL ? sstrdup(config_options.chan) :
-		NULL;
 
 	/* reset everything */
 	conf_init();
@@ -981,26 +977,12 @@ bool conf_rehash(void)
 
 		free_cstructs(hold_me);
 		free(hold_me);
-		free(oldsnoop);
 
 		runflags &= ~RF_REHASHING;
 		return false;
 	}
 
 	hook_call_config_ready();
-
-	if (oldsnoop != NULL || config_options.chan != NULL)
-	{
-		if (config_options.chan == NULL)
-			partall(oldsnoop);
-		else if (oldsnoop == NULL)
-			joinall(config_options.chan);
-		else if (strcmp(oldsnoop, config_options.chan))
-		{
-			partall(oldsnoop);
-			joinall(config_options.chan);
-		}
-	}
 
 	if (curr_uplink && curr_uplink->conn)
 		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
@@ -1009,7 +991,6 @@ bool conf_rehash(void)
 
 	free_cstructs(hold_me);
 	free(hold_me);
-	free(oldsnoop);
 
 	runflags &= ~RF_REHASHING;
 	return true;
