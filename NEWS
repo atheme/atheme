@@ -9,6 +9,7 @@ other
 - add extends directive to operclasses so one operclass can inherit privledges
   from another. See the example config for details. Note, you can have two
   operclasses with the same privledges, so extending is not forced.
+
 Atheme Services 5.1 Release Notes
 =================================
 [MERGED] indicates items merged to the 5.0 branch
