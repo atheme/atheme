@@ -2,7 +2,9 @@ Help for OFFER:
 
 OFFER allows you to offer a list of vhosts to the users
 of your network that they can accept at will without needing
-an oper to set the vhost.
+an oper to set the vhost. Depending on the network configuration,
+users' accountname may be appended or prepended to the host when
+it is taken.
 
 Syntax: OFFER <vhost>
 

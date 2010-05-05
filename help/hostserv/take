@@ -1,7 +1,9 @@
 Help for TAKE:
 
 TAKE allows you to set a vhost that the network staff
-has offered and use it on your account
+has offered and use it on your account. Depending on
+network configuration, your accountname may be appended
+or prepended to the taken host. 
 
 Syntax: TAKE <vhost>
 
