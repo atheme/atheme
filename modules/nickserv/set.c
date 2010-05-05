@@ -592,7 +592,6 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/*snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", si->su->user, si->smu->name, si->smu->name);*/
 	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
 
 	set_password(si->smu, password);

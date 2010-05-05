@@ -364,27 +364,6 @@ void verbose(mychan_t *mychan, const char *fmt, ...)
 		wallchops(chansvs.me->me, mychan->chan, buf);
 }
 
-void snoop(const char *fmt, ...)
-{
-	va_list ap;
-	char buf[BUFSIZE];
-
-	if (!config_options.chan)
-		return;
-
-	if (me.bursting)
-		return;
-
-	if (!channel_find(config_options.chan))
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	msg(opersvs.nick, config_options.chan, "%s", buf);
-}
-
 /* protocol wrapper for nickchange/nick burst */
 void handle_nickchange(user_t *u)
 {
