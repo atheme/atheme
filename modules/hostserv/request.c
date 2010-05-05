@@ -312,12 +312,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
 		{
-			if (memosvs.me)
-			{
-				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", nick, l->vhost, nick);
-				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
-			}
-			else if ((u = user_find_named(nick)) != NULL)
+			if ((u = user_find_named(nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, nick);
 			/* VHOSTNICK command below will generate snoop */
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, nick);
