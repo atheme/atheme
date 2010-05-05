@@ -1,3 +1,19 @@
+5.2 TODO
+
+[x] hostserv OFFER system (jdhore)
+[x] snoop() removal (jdhore)
+[ ] Split tracking (datamine STATS c to make/apply routing suggestions?)
+  [ ] log splits cleanly to log channels
+  [ ] if we datamine, use this information to make suggestions
+[ ] Statistics
+  [ ] Basic StatServ nonsense (mainly interesting for xmlrpc)
+  [ ] rrdtool support for fancy graphs
+  [ ] work ^^^ into atheme-web
+[ ] IPv6 linking support
+
+
+---
+
 Some ideas concerning things that we may eventually work on.
 
 interruptible commands (so as to make ns_mxcheck lookup async)
