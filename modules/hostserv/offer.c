@@ -278,6 +278,12 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 			else
 				snprintf(buf, BUFSIZE, "%s", host);
 
+			if (!check_vhost_validity(si, buf))
+			{
+				command_fail(si, fault_nochange, _("Your accountname (%s) contains characters invalid for a vHost. Please contact a network operator for help getting this vHost."), si->smu->name);
+				return;
+			}
+
 			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", buf, si->smu->name);
 
 			command_success_nodata(si, _("You have taken vhost \2%s\2."), buf);
