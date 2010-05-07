@@ -194,8 +194,6 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
-	if (!check_vhost_validity(si, host))
-		return;
 
 	l = smalloc(sizeof(hsoffered_t));
 	l->vhost = sstrdup(host);
@@ -267,6 +265,12 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->vhost, host))
 		{
+			if (strstr(host, "$account"))
+				replace(host, BUFSIZE, "$account", si->smu->name);
+
+			if (!check_vhost_validity(si, host))
+				return;
+
 			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, si->smu->name);
 
 			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
@@ -294,6 +298,7 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 		x++;
 
 		tm = *localtime(&l->vhost_ts);
+
 		strftime(buf, BUFSIZE, "%b %d %T %Y %Z", &tm);
 			command_success_nodata(si, "#%d vhost:\2%s\2, creator:\2%s\2 (%s)",
 				x, l->vhost, l->creator, buf);
@@ -307,4 +312,3 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
  * vim:sw=8
  * vim:noexpandtab
  */
-
