@@ -1178,9 +1178,6 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char *certfp;
 
-	TAINT_ON(!irccasecmp(parv[1], "filter") && strstr(parv[2], "ADD") != NULL, "Using filter in this way will cause unsupportable conditions in Atheme.");
-	TAINT_ON(!irccasecmp(parv[1], "filter") && strstr(parv[2], "FLAGS") != NULL, "Using filter in this way will cause unsupportable conditions in Atheme.");
-
 	if (!irccasecmp(parv[1], "accountname"))
 	{
 		/* find user */
