@@ -17,7 +17,6 @@ DECLARE_MODULE_V1
 );
 
 list_t *hs_cmdtree, *hs_helptree, *conf_hs_table;
-char *offer_accountname;
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -56,7 +55,6 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "OFFERLIST", "help/hostserv/offerlist", NULL);
 	help_addentry(hs_helptree, "TAKE", "help/hostserv/take", NULL);
 	load_hsofferdb();
-	add_dupstr_conf_item("OFFER_ACCOUNTNAME", conf_hs_table, &offer_accountname);
 }
 
 void _moddeinit(void)
@@ -69,7 +67,6 @@ void _moddeinit(void)
 	help_delentry(hs_helptree, "UNOFFER");
 	help_delentry(hs_helptree, "OFFERLIST");
 	help_delentry(hs_helptree, "TAKE");
-	del_conf_item("OFFER_ACCOUNTNAME", conf_hs_table);
 }
 
 static void do_sethost(user_t *u, char *host)
@@ -197,8 +194,6 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
-	if (!check_vhost_validity(si, host))
-		return;
 
 	l = smalloc(sizeof(hsoffered_t));
 	l->vhost = sstrdup(host);
@@ -254,7 +249,6 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *host = parv[0];
-	char buf[BUFSIZE];
 	hsoffered_t *l;
 	node_t *n;
 
@@ -271,24 +265,17 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		if (!irccasecmp(l->vhost, host))
 		{
-			if (!irccasecmp(offer_accountname, "PREPEND"))
-				snprintf(buf, BUFSIZE, "%s.%s", si->smu->name, host);
-			else if (!irccasecmp(offer_accountname, "APPEND"))
-				snprintf(buf, BUFSIZE, "%s.%s", host, si->smu->name);
-			else
-				snprintf(buf, BUFSIZE, "%s", host);
+			if (strstr(host, "$account"))
+				replace(host, BUFSIZE, "$account", si->smu->name);
 
-			if (!check_vhost_validity(si, buf))
-			{
-				command_fail(si, fault_nochange, _("Your accountname (%s) contains characters invalid for a vHost. Please contact a network operator for help getting this vHost."), si->smu->name);
+			if (!check_vhost_validity(si, host))
 				return;
-			}
 
-			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", buf, si->smu->name);
+			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, si->smu->name);
 
-			command_success_nodata(si, _("You have taken vhost \2%s\2."), buf);
-			hs_sethost_all(si->smu, buf);
-			do_sethost_all(si->smu, buf);
+			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
+			hs_sethost_all(si->smu, host);
+			do_sethost_all(si->smu, host);
 			
 			return;
 		}
