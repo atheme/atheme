@@ -62,6 +62,7 @@ SRCS =					\
 	$(SRCDIR)/ns_fenforce.c		\
 	$(SRCDIR)/ns_fregister.c	\
 	$(SRCDIR)/ns_forbid.c		\
+	$(SRCDIR)/ns_generatehash	\
 	$(SRCDIR)/ns_generatepass.c	\
 	$(SRCDIR)/ns_listlogins.c	\
 	$(SRCDIR)/ns_mxcheck.c		\
