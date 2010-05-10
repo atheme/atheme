@@ -105,7 +105,7 @@ foreach ($nicks as $id => $data)
 		substr(bin2hex(de_ircs($data['pass'],false)),0,16),	// My god, what were they smoking?!
 									// Atheme's IRCservices compatibility module had to be edited.
 									// IRCservices database dump gives custom-encoded md5()+remainder_of_buffer
-		$data['email'],
+		$data['email'] ? $data['email'] : 'nomail',
 		$first_reg,
 		$last_login,
 		1280 | ( $nick_noexpire ? 0x1 : 0 ) | ( $data['hide-email'] ? 0x10 : 0 )
