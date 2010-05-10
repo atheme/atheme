@@ -111,7 +111,7 @@ foreach ($nicks as $id => $data)
 		$data['email'] ? $data['email'] : 'nomail',
 		$first_reg,
 		$last_login,
-		1280 | ( $nick_noexpire ? 0x1 : 0 ) | ( $data['hide-email'] ? 0x10 : 0 )
+		(1280 | ( $nick_noexpire ? 0x1 : 0 ) | ( $data['hide-email'] ? 0x10 : 0 )) & ~0x100
 	      );
 	$MUout++;
 
