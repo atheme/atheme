@@ -100,9 +100,12 @@ foreach ($nicks as $id => $data)
 		}
 		$nick_noexpire = $nick_noexpire || $nick['noexpire'];
 	}
+	$password = substr(bin2hex(de_ircs($data['pass'],false)),0,16);
+	if (!$password)
+		$password = "nopass";
 	printf("MU %s %s %s %u %u 0 0 0 %u\n",
 		$data['mainnick'],
-		substr(bin2hex(de_ircs($data['pass'],false)),0,16),	// My god, what were they smoking?!
+		$password,						// My god, what were they smoking?!
 									// Atheme's IRCservices compatibility module had to be edited.
 									// IRCservices database dump gives custom-encoded md5()+remainder_of_buffer
 		$data['email'] ? $data['email'] : 'nomail',
