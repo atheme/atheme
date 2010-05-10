@@ -58,6 +58,8 @@ static void ns_cmd_generatehash(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 		command_success_nodata(si, "No crypto module loaded so could not hash anything.");
+
+	logcommand(si, CMDLOG_GET, "GENERATEHASH");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
