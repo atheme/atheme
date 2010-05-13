@@ -56,6 +56,7 @@ static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_string(si, newpass, "Randomly generated password: %s", newpass);
 	free(newpass);
+	logcommand(si, CMDLOG_GET, "GENERATEPASS");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
