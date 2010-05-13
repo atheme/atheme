@@ -604,6 +604,7 @@ PLUGIN_SUFFIX
 PLUGIN_LDFLAGS
 PLUGIN_CFLAGS
 PLUGIN_CPPFLAGS
+LDFLAGS_RPATH
 LIB_SUFFIX
 LIB_PREFIX
 LIB_LDFLAGS
@@ -611,6 +612,9 @@ LIB_CFLAGS
 LIB_CPPFLAGS
 PACKAGE
 SET_MAKE
+INSTALL_DATA
+INSTALL_SCRIPT
+INSTALL_PROGRAM
 LN_S
 OBJEXT
 EXEEXT
@@ -3011,6 +3015,99 @@ else
 $as_echo "no, using $LN_S" >&6; }
 fi
 
+# Find a good install program.  We prefer a C program (faster),
+# so one script is as good as another.  But avoid the broken or
+# incompatible versions:
+# SysV /etc/install, /usr/sbin/install
+# SunOS /usr/etc/install
+# IRIX /sbin/install
+# AIX /bin/install
+# AmigaOS /C/install, which installs bootblocks on floppy discs
+# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
+# AFS /usr/afsws/bin/install, which mishandles nonexistent args
+# SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# OS/2's system install, which has a completely different semantic
+# ./install, which can be erroneously created by make from ./install.sh.
+# Reject install programs that cannot install multiple files.
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a BSD-compatible install" >&5
+$as_echo_n "checking for a BSD-compatible install... " >&6; }
+if test -z "$INSTALL"; then
+if test "${ac_cv_path_install+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    # Account for people who put trailing slashes in PATH elements.
+case $as_dir/ in #((
+  ./ | .// | /[cC]/* | \
+  /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+  ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
+  /usr/ucb/* ) ;;
+  *)
+    # OSF1 and SCO ODT 3.0 have their own names for install.
+    # Don't use installbsd from OSF since it installs stuff as root
+    # by default.
+    for ac_prog in ginstall scoinst install; do
+      for ac_exec_ext in '' $ac_executable_extensions; do
+	if { test -f "$as_dir/$ac_prog$ac_exec_ext" && $as_test_x "$as_dir/$ac_prog$ac_exec_ext"; }; then
+	  if test $ac_prog = install &&
+	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # AIX install.  It has an incompatible calling convention.
+	    :
+	  elif test $ac_prog = install &&
+	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # program-specific install script used by HP pwplus--don't use.
+	    :
+	  else
+	    rm -rf conftest.one conftest.two conftest.dir
+	    echo one > conftest.one
+	    echo two > conftest.two
+	    mkdir conftest.dir
+	    if "$as_dir/$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir" &&
+	      test -s conftest.one && test -s conftest.two &&
+	      test -s conftest.dir/conftest.one &&
+	      test -s conftest.dir/conftest.two
+	    then
+	      ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
+	      break 3
+	    fi
+	  fi
+	fi
+      done
+    done
+    ;;
+esac
+
+  done
+IFS=$as_save_IFS
+
+rm -rf conftest.one conftest.two conftest.dir
+
+fi
+  if test "${ac_cv_path_install+set}" = set; then
+    INSTALL=$ac_cv_path_install
+  else
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for INSTALL within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the value is a relative name.
+    INSTALL=$ac_install_sh
+  fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $INSTALL" >&5
+$as_echo "$INSTALL" >&6; }
+
+# Use test -z because SunOS4 sh mishandles braces in ${var-val}.
+# It thinks the first close brace ends the variable substitution.
+test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
+
+test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
+
+test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
 set x ${MAKE-make}
@@ -3108,49 +3205,36 @@ PACKAGE="libmowgli"
 
 # Checks for libraries.
 
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shared library system" >&5
 $as_echo_n "checking for shared library system... " >&6; }
-	case "$target" in
-		intel-apple-*)
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Mac OS X (Intel)" >&5
-$as_echo "Mac OS X (Intel)" >&6; }
+	case "$host_os" in
+		darwin*)
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Darwin" >&5
+$as_echo "Darwin" >&6; }
 			LIB_CPPFLAGS='-DPIC'
 			LIB_CFLAGS='-fPIC'
-			LIB_LDFLAGS='-dynamiclib -fPIC -install_name ${libdir}/${LIB}'
+			LIB_LDFLAGS='-dynamiclib -flat_namespace'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.dylib'
-			PLUGIN_CPPFLAGS=''
-			PLUGIN_CFLAGS=''
-			PLUGIN_LDFLAGS='-bundle -fno-common -flat_namespace -undefined suppress'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
+			PLUGIN_CPPFLAGS='-DPIC'
+			PLUGIN_CFLAGS='-fPIC'
+			PLUGIN_LDFLAGS='-bundle -flat_namespace -undefined suppress'
 			PLUGIN_SUFFIX='.impl'
 			INSTALL_LIB='${INSTALL} -m 755 $$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$$i'
 			UNINSTALL_LIB='rm -f ${DESTDIR}${libdir}/$$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib'
 			CLEAN_LIB=''
 			;;
-		*-apple-*)
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Mac OS X" >&5
-$as_echo "Mac OS X" >&6; }
-			LIB_CPPFLAGS='-DPIC'
-			LIB_CFLAGS=''
-			LIB_LDFLAGS='-dynamiclib -fPIC -install_name ${libdir}/${LIB}'
-			LIB_PREFIX='lib'
-			LIB_SUFFIX='.dylib'
-			PLUGIN_CPPFLAGS=''
-			PLUGIN_CFLAGS=''
-			PLUGIN_LDFLAGS='-bundle -fno-common -flat_namespace -undefined suppress'
-			PLUGIN_SUFFIX='.impl'
-			INSTALL_LIB='${INSTALL} -m 755 $$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$$i'
-			UNINSTALL_LIB='rm -f ${DESTDIR}${libdir}/$$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib'
-			CLEAN_LIB=''
-			;;
-		*-*-solaris* | *-openbsd-* | *-mirbsd-*)
+		solaris*)
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Solaris" >&5
 $as_echo "Solaris" >&6; }
 			LIB_CPPFLAGS='-DPIC'
 			LIB_CFLAGS='-fPIC'
-			LIB_LDFLAGS='-shared -fPIC -Wl,-soname=${LIB}.${LIB_MAJOR}'
+			LIB_LDFLAGS='-shared -fPIC -Wl,-soname=${LIB}.${LIB_MAJOR}.${LIB_MINOR}'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.so'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
 			PLUGIN_CPPFLAGS='-DPIC'
 			PLUGIN_CFLAGS='-fPIC'
 			PLUGIN_LDFLAGS='-shared -fPIC'
@@ -3159,7 +3243,24 @@ $as_echo "Solaris" >&6; }
 			UNINSTALL_LIB='rm -f ${DESTDIR}${libdir}/$$i ${DESTDIR}${libdir}/$$i.${LIB_MAJOR}.${LIB_MINOR}'
 			CLEAN_LIB=''
 			;;
-		*-*-cygwin | *-*-mingw32)
+		openbsd* | mirbsd*)
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenBSD" >&5
+$as_echo "OpenBSD" >&6; }
+			LIB_CPPFLAGS='-DPIC'
+			LIB_CFLAGS='-fPIC'
+			LIB_LDFLAGS='-shared -fPIC'
+			LIB_PREFIX='lib'
+			LIB_SUFFIX='.so.${LIB_MAJOR}.${LIB_MINOR}'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
+			PLUGIN_CPPFLAGS='-DPIC'
+			PLUGIN_CFLAGS='-fPIC'
+			PLUGIN_LDFLAGS='-shared -fPIC'
+			PLUGIN_SUFFIX='.so'
+			INSTALL_LIB='${INSTALL} -m 755 $$i ${DESTDIR}${libdir}/$$i'
+			UNINSTALL_LIB='rm -f ${DESTDIR}${libdir}/$$i'
+			CLEAN_LIB=''
+			;;
+		cygwin* | mingw*)
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Win32" >&5
 $as_echo "Win32" >&6; }
 			LIB_CPPFLAGS='-DPIC'
@@ -3167,22 +3268,24 @@ $as_echo "Win32" >&6; }
 			LIB_LDFLAGS='-shared -Wl,--out-implib,${LIB}.a'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.dll'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
 			PLUGIN_CPPFLAGS=''
 			PLUGIN_CFLAGS=''
 			PLUGIN_LDFLAGS='-shared'
 			PLUGIN_SUFFIX='.dll'
-			INSTALL_LIB='${INSTALL} -m 755 $$i ${DESTDIR}${bindir}/$$i && ${INSTALL} -m 755 $$i.a ${DESTDIR}${libdir}/$$i.a'
+			INSTALL_LIB='${MKDIR_P} ${DESTDIR}${bindir} && ${INSTALL} -m 755 $$i ${DESTDIR}${bindir}/$$i && ${INSTALL} -m 755 $$i.a ${DESTDIR}${libdir}/$$i.a'
 			UNINSTALL_LIB='rm -f ${DESTDIR}${bindir}/$$i ${DESTDIR}${libdir}/$$i.a'
 			CLEAN_LIB='${LIB}.a'
 			;;
 		*)
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: POSIX" >&5
-$as_echo "POSIX" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: GNU" >&5
+$as_echo "GNU" >&6; }
 			LIB_CPPFLAGS='-DPIC'
 			LIB_CFLAGS='-fPIC'
 			LIB_LDFLAGS='-shared -fPIC -Wl,-soname=${LIB}.${LIB_MAJOR}'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.so'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
 			PLUGIN_CPPFLAGS='-DPIC'
 			PLUGIN_CFLAGS='-fPIC'
 			PLUGIN_LDFLAGS='-shared -fPIC'
@@ -3192,6 +3295,7 @@ $as_echo "POSIX" >&6; }
 			CLEAN_LIB=''
 			;;
 	esac
+
 
 
 
@@ -4099,6 +4203,15 @@ fi
 
 
 
+
+	${as_echo:="echo"} "${as_me:="configure"}: touching .deps files"
+	for i in $(find . -name Makefile); do
+		DEPSFILE="$(dirname $i)/.deps"
+		test -f "$DEPSFILE" && rm "$DEPSFILE"
+		touch -t 0001010000 "$DEPSFILE"
+	done
+
+
 ac_config_files="$ac_config_files buildsys.mk extra.mk libmowgli.pc"
 
 cat >confcache <<\_ACEOF
@@ -4676,6 +4789,7 @@ gives unlimited permission to copy, distribute and modify it."
 
 ac_pwd='$ac_pwd'
 srcdir='$srcdir'
+INSTALL='$INSTALL'
 test -n "\$AWK" || AWK=awk
 _ACEOF
 
@@ -5216,6 +5330,10 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
   # CONFIG_FILE
   #
 
+  case $INSTALL in
+  [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
+  esac
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
@@ -5269,6 +5387,7 @@ s&@abs_top_srcdir@&$ac_abs_top_srcdir&;t t
 s&@builddir@&$ac_builddir&;t t
 s&@abs_builddir@&$ac_abs_builddir&;t t
 s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
+s&@INSTALL@&$ac_INSTALL&;t t
 $ac_datarootdir_hack
 "
 eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$tmp/subs.awk" >$tmp/out \
