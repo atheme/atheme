@@ -26,6 +26,10 @@
 
 typedef void (*mowgli_log_cb_t)(const char *);
 
+#ifdef WIN32_MSC
+# define __func__ __FUNCTION__
+#endif
+
 #ifdef __GNUC__
 # define mowgli_log(...) mowgli_log_real(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 #else

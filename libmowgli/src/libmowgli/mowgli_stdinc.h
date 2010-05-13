@@ -47,6 +47,8 @@
 # include <sys/socket.h>
 # include <fcntl.h>
 # include <arpa/inet.h>
+# include <libgen.h>
+# include <dirent.h>
 #else
 # include <windows.h>
 # include <winsock.h>
@@ -54,14 +56,14 @@
 # include <direct.h>
 # include <io.h>
 # include <fcntl.h>
+# include "win32_support.h"
 #endif
 
 #include <sys/types.h>
 
-#ifndef _WIN32
-#include <libgen.h>
+#ifdef _MSC_VER
+# pragma warning (disable: 4996)
 #endif
-#include <dirent.h>
 
 #ifdef FALSE
 # undef FALSE

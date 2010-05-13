@@ -130,6 +130,7 @@ extern void *mowgli_patricia_retrieve(mowgli_patricia_t *dtree, const char *key)
  */
 extern void *mowgli_patricia_delete(mowgli_patricia_t *dtree, const char *key);
 
+unsigned int mowgli_patricia_size(mowgli_patricia_t *dict);
 void mowgli_patricia_stats(mowgli_patricia_t *dict, void (*cb)(const char *line, void *privdata), void *privdata);
 
 #endif

@@ -133,8 +133,9 @@ void * mowgli_object_ref(void *object)
  */
 void mowgli_object_unref(void *object)
 {
-	return_if_fail(object != NULL);
 	mowgli_object_t *obj = mowgli_object(object);
+
+	return_if_fail(object != NULL);
 
 	obj->refcount--;
 

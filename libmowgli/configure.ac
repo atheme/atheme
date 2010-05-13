@@ -12,6 +12,7 @@ AC_CANONICAL_TARGET
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_LN_S
+AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_ISC_POSIX
 
@@ -54,6 +55,8 @@ if test "x$enable_examples" = "xyes"; then
 fi
 
 AC_SUBST(EXAMPLES_BUILD)
+
+BUILDSYS_TOUCH_DEPS
 
 AC_CONFIG_FILES([buildsys.mk extra.mk libmowgli.pc])
 AC_OUTPUT

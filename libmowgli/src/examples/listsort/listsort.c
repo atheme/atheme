@@ -43,7 +43,7 @@ int str_comparator(mowgli_node_t *n, mowgli_node_t *n2, void *opaque)
 
 void test_strings(void)
 {
-	mowgli_list_t l = {};
+	mowgli_list_t l = { NULL, NULL, 0 };
 	mowgli_node_t *n, *tn;
 
 	mowgli_node_add("foo", mowgli_node_create(), &l);
@@ -84,7 +84,7 @@ int int_comparator(mowgli_node_t *n, mowgli_node_t *n2, void *opaque)
 
 void test_integers(void)
 {
-	mowgli_list_t l = {};
+	mowgli_list_t l = { NULL, NULL, 0 };
 	mowgli_node_t *n, *tn;
 	
 	mowgli_node_add((void *) 3, mowgli_node_create(), &l);

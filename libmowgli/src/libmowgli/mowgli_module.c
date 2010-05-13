@@ -26,7 +26,7 @@
 #ifndef _WIN32
 #include <dlfcn.h>
 #else
-#include <win32_dlfcn.h>
+#include "win32_dlfcn.h"
 #endif
 
 #ifndef RTLD_NOW

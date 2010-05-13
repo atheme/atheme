@@ -1,5 +1,7 @@
 #
-#  Copyright (c) 2007, Jonathan Schleifer <js-buildsys@webkeks.org>
+#  Copyright (c) 2007 - 2009, Jonathan Schleifer <js@webkeks.org>
+#
+#  https://webkeks.org/hg/buildsys/
 #
 #  Permission to use, copy, modify, and/or distribute this software for any
 #  purpose with or without fee is hereby granted, provided that the above
@@ -19,22 +21,29 @@
 #
 
 PACKAGE = @PACKAGE@
+AS = @AS@
 CC = @CC@
 CXX = @CXX@
 CPP = @CPP@
 DC = @DC@
 ERLC = @ERLC@
 OBJC = @OBJC@
+OBJCXX = @OBJCXX@
 AR = @AR@
 LD = ${CC}
+RANLIB = @RANLIB@
+PYTHON = @PYTHON@
+ASFLAGS = @ASFLAGS@
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
 DFLAGS = @DFLAGS@
 ERLCFLAGS = @ERLCFLAGS@
 OBJCFLAGS = @OBJCFLAGS@
+OBJCXXFLAGS = @OBJCXXFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+PYTHON_FLAGS = @PYTHON_FLAGS@
 PROG_IMPLIB_NEEDED = @PROG_IMPLIB_NEEDED@
 PROG_IMPLIB_LDFLAGS = @PROG_IMPLIB_LDFLAGS@
 PROG_SUFFIX = @EXEEXT@
@@ -47,13 +56,15 @@ PLUGIN_CPPFLAGS = @PLUGIN_CPPFLAGS@
 PLUGIN_CFLAGS = @PLUGIN_CFLAGS@
 PLUGIN_LDFLAGS = @PLUGIN_LDFLAGS@
 PLUGIN_SUFFIX = @PLUGIN_SUFFIX@
+RPATH_LDFLAGS = @RPATH_LDFLAGS@
 INSTALL_LIB = @INSTALL_LIB@
 UNINSTALL_LIB = @UNINSTALL_LIB@
 CLEAN_LIB = @CLEAN_LIB@
 LN_S = @LN_S@
 MKDIR_P = mkdir -p
-INSTALL = install
+INSTALL = @INSTALL@
 SHELL = @SHELL@
+MSGFMT = @MSGFMT@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
@@ -66,18 +77,23 @@ includesubdir ?= ${PACKAGE}
 mandir = @mandir@
 mansubdir ?= man1
 
-OBJS1 = ${SRCS:.c=.o}
-OBJS2 = ${OBJS1:.cc=.o}
-OBJS3 = ${OBJS2:.cxx=.o}
-OBJS4 = ${OBJS3:.d=.o}
-OBJS5 = ${OBJS4:.erl=.beam}
-OBJS += ${OBJS5:.m=.o}
+OBJS1  = ${SRCS:.c=.o}
+OBJS2  = ${OBJS1:.cc=.o}
+OBJS3  = ${OBJS2:.cxx=.o}
+OBJS4  = ${OBJS3:.d=.o}
+OBJS5  = ${OBJS4:.erl=.beam}
+OBJS6  = ${OBJS5:.m=.o}
+OBJS7  = ${OBJS6:.mm=.o}
+OBJS8  = ${OBJS7:.py=.pyc}
+OBJS9  = ${OBJS8:.xpm=.o}
+OBJS10 = ${OBJS9:.S=.o}
+OBJS  += ${OBJS10:.po=.gmo}
 
 .SILENT:
-.SUFFIXES: .beam .c .cc .cxx .d .erl .m
+.SUFFIXES:
+.SUFFIXES: .beam .c .cc .cxx .d .dep .erl .gmo .m .mm .o .po .py .pyc .xpm .S
 .PHONY: all subdirs pre-depend depend install install-extra uninstall uninstall-extra clean distclean
 
-build: all
 all:
 	for i in subdirs depend ${STATIC_LIB} ${STATIC_LIB_NOINST} ${LIB} ${LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST}; do \
 		${MAKE} ${MFLAGS} $$i || exit 1; \
@@ -92,26 +108,53 @@ subdirs:
 
 depend: pre-depend ${SRCS}
 	regen=0; \
+	deps=""; \
 	test -f .deps || regen=1; \
-	for i in ${SRCS}; do test $$i -nt .deps && regen=1; done; \
-	if test x"$$regen" = x"1"; then \
-		list=""; \
-		${DEPEND_STATUS}; \
-		for i in ${SRCS}; do \
-			case $${i##*.} in \
-			c|cc|cxx|m) \
-				list="$$list $$i"; \
+	for i in ${SRCS}; do \
+		case $$i in \
+			*.c) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.c}.dep"; \
 				;; \
-			esac; \
-		done; \
-		if test x"$$list" != "x"; then \
-			if ${CPP} ${CPPFLAGS} -M $$list >.deps; then \
-				${DEPEND_OK}; \
-			else \
-				${DEPEND_FAILED}; \
-			fi; \
+			*.cc) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.cc}.dep"; \
+				;; \
+			*.cxx) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.cxx}.dep"; \
+				;; \
+			*.m) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.m}.dep"; \
+				;; \
+			*.mm) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.mm}.dep"; \
+				;; \
+			*.S) \
+				test $$i -nt .deps && regen=1; \
+				deps="$$deps $${i%.S}.dep"; \
+				;; \
+		esac; \
+	done; \
+	if test x"$$regen" = x"1" -a x"$$deps" != "x"; then \
+		${DEPEND_STATUS}; \
+		if ${MAKE} ${MFLAGS} $$deps && cat $$deps >.deps; then \
+			rm -f $$deps; \
+			${DEPEND_OK}; \
+		else \
+			:> .deps; \
+			touch -t 0001010000 .deps; \
+			${DEPEND_FAILED}; \
 		fi; \
 	fi
+
+.c.dep .cc.dep .cxx.dep .m.dep .mm.dep .S.dep:
+	${CPP} ${CPPFLAGS} -M $< >$@ || (rm -f $@; exit 1)
+
+.d.dep:
+.xpm.dep:
 
 pre-depend:
 
@@ -124,14 +167,21 @@ ${PROG} ${PROG_NOINST}: ${EXT_DEPS} ${OBJS}
 	fi
 
 ${LIB} ${LIB_NOINST}: ${EXT_DEPS} ${OBJS}
-	${LINK_STATUS}
-	if ${LD} -o $@ ${OBJS} ${LIB_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
-		${LINK_OK}; \
-	else \
-		${LINK_FAILED}; \
-	fi
+	case $@ in \
+		*.a) \
+			${MAKE} ${MFLAGS} STATIC_LIB=${LIB} LIB= $@ || exit 1 \
+			;; \
+		*) \
+			${LINK_STATUS}; \
+			if ${LD} -o $@ ${OBJS} ${LIB_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
+				${LINK_OK}; \
+			else \
+				${LINK_FAILED}; \
+			fi \
+			;; \
+	esac
 
-${PLUGIN} ${PLUGIN_NONST}: ${EXT_DEPS} ${OBJS}
+${PLUGIN} ${PLUGIN_NOINST}: ${EXT_DEPS} ${OBJS}
 	${LINK_STATUS}
 	if ${LD} -o $@ ${OBJS} ${PLUGIN_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
 		${LINK_OK}; \
@@ -141,10 +191,11 @@ ${PLUGIN} ${PLUGIN_NONST}: ${EXT_DEPS} ${OBJS}
 
 ${STATIC_LIB} ${STATIC_LIB_NOINST}: ${EXT_DEPS} ${OBJS}
 	${LINK_STATUS}
-	if ${AR} cr $@ ${OBJS}; then \
+	if ${AR} cr $@ ${OBJS} && ${RANLIB} $@; then \
 		${LINK_OK}; \
 	else \
 		${LINK_FAILED}; \
+		rm -f $@; \
 	fi
 
 .c.o:
@@ -190,6 +241,46 @@ ${STATIC_LIB} ${STATIC_LIB_NOINST}: ${EXT_DEPS} ${OBJS}
 .m.o:
 	${COMPILE_STATUS}
 	if ${OBJC} ${OBJCFLAGS} ${CPPFLAGS} -c -o $@ $<; then \
+		${COMPILE_OK}; \
+	else \
+		${COMPILE_FAILED}; \
+	fi
+
+.mm.o:
+	${COMPILE_STATUS}
+	if ${OBJCXX} ${OBJCXXFLAGS} ${OBJCFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<; then \
+		${COMPILE_OK}; \
+	else \
+		${COMPILE_FAILED}; \
+	fi
+
+.po.gmo:
+	${COMPILE_STATUS}
+	if ${MSGFMT} -c -o $@ $<; then \
+		${COMPILE_OK}; \
+	else \
+		${COMPILE_FAILED}; \
+	fi
+
+.py.pyc:
+	${COMPILE_STATUS}
+	if ${PYTHON} ${PYTHON_FLAGS} -c "import py_compile; py_compile.compile('$<')"; then \
+		${COMPILE_OK}; \
+	else \
+		${COMPILE_FAILED}; \
+	fi
+
+.xpm.o:
+	${COMPILE_STATUS}
+	if ${CC} ${CFLAGS} ${CPPFLAGS} -x c -c -o $@ $<; then \
+		${COMPILE_OK}; \
+	else \
+		${COMPILE_FAILED}; \
+	fi
+
+.S.o:
+	${COMPILE_STATUS}
+	if ${AS} ${ASFLAGS} ${CPPFLAGS} -c -o $@ $<; then \
 		${COMPILE_OK}; \
 	else \
 		${COMPILE_FAILED}; \
@@ -354,8 +445,8 @@ clean:
 		${MAKE} ${MFLAGS} clean || exit 1; \
 		${DIR_LEAVE}; \
 	done
-	
-	for i in ${OBJS} ${CLEAN} ${CLEAN_LIB} .deps; do \
+
+	for i in ${DEPS} ${OBJS} ${PROG} ${PROG_NOINST} ${LIB} ${LIB_NOINST} ${STATIC_LIB} ${STATIC_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${CLEAN} ${CLEAN_LIB}; do \
 		if test -f $$i -o -d $$i; then \
 			if rm -fr $$i; then \
 				${DELETE_OK}; \
@@ -371,8 +462,8 @@ distclean: clean
 		${MAKE} ${MFLAGS} distclean || exit 1; \
 		${DIR_LEAVE}; \
 	done
-	
-	for i in ${PROG} ${PROG_NOINST} ${LIB} ${LIB_NOINST} ${STATIC_LIB} ${STATIC_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${DISTCLEAN} *~; do \
+
+	for i in ${DISTCLEAN} .deps *~; do \
 		if test -f $$i -o -d $$i; then \
 			if rm -fr $$i; then \
 				${DELETE_OK}; \
@@ -399,4 +490,4 @@ INSTALL_FAILED = printf "\033[K\033[0;31mFailed to install \033[1;31m$$i\033[0;3
 DELETE_OK = printf "\033[K\033[0;34mDeleted \033[1;34m$$i\033[0;34m.\033[0m\n"
 DELETE_FAILED = printf "\033[K\033[0;31mFailed to delete \033[1;31m$$i\033[0;31m!\033[0m\n"; exit 1
 
--include .deps
+include .deps

@@ -90,6 +90,8 @@ void test_patricia(void)
 	ADD("new");
 	ADD("delete");
 
+	printf("size: %u\n", mowgli_patricia_size(dtree));
+
 	MOWGLI_PATRICIA_FOREACH(elem, &state, dtree)
 	{
 		printf("element -> %s\n", (const char *)elem);

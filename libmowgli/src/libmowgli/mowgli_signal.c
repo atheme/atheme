@@ -21,7 +21,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 
 #include "mowgli.h"
 
