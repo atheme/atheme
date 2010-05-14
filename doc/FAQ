@@ -44,3 +44,5 @@ To do this, you enable the allow_taint directive in the config, but
 do note that if you come asking us for help with your installation,
 we will not provide you with support.
 
+Also note that we do not provide support for enabling allow_taint.
+
