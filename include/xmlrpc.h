@@ -75,6 +75,7 @@ E void xmlrpc_send_string(const char *value);
 E int xmlrpc_about(void *userdata, int ac, char **av);
 E void xmlrpc_char_encode(char *outbuffer, const char *s1);
 E char *xmlrpc_decode_string(char *buf);
+E char *xmlrpc_normalizeBuffer(const char *buf);
 
 #endif
 
