@@ -43,7 +43,6 @@ struct xmlrpc_settings {
 
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
-static char *xmlrpc_normalizeBuffer(char *buf);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
@@ -696,7 +695,7 @@ char *xmlrpc_array(int argc, ...)
 
 /*************************************************************************/
 
-static char *xmlrpc_normalizeBuffer(char *buf)
+char *xmlrpc_normalizeBuffer(const char *buf)
 {
 	char *newbuf;
 	int i, len, j = 0;

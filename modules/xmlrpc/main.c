@@ -143,21 +143,13 @@ static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *
 {
 	connection_t *cptr;
 	struct httpddata *hd;
-	char newmessage[256];
-	int i;
-	const char *p;
+	const char *newmessage;
 
 	cptr = si->connection;
 	hd = cptr->userdata;
 	if (hd->sent_reply)
 		return;
-	i = 0, p = message;
-	while (i < 255 && *p != '\0')
-		if (*p > '\0' && *p < ' ')
-			p++;
-		else
-			newmessage[i++] = *p, p++;
-	newmessage[i] = '\0';
+	newmessage = xmlrpc_normalizeBuffer(message);
 	xmlrpc_generic_error(code, newmessage);
 	hd->sent_reply = true;
 }
@@ -166,8 +158,10 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
+	const char *newmessage;
 	char *p;
-	const char *q;
+
+	newmessage = xmlrpc_normalizeBuffer(message);
 
 	cptr = si->connection;
 	hd = cptr->userdata;
@@ -175,22 +169,16 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 		return;
 	if (hd->replybuf != NULL)
 	{
-		hd->replybuf = srealloc(hd->replybuf, strlen(hd->replybuf) + strlen(message) + 2);
+		hd->replybuf = srealloc(hd->replybuf, strlen(hd->replybuf) + strlen(newmessage) + 2);
 		p = hd->replybuf + strlen(hd->replybuf);
 		*p++ = '\n';
 	}
 	else
 	{
-		hd->replybuf = smalloc(strlen(message) + 1);
+		hd->replybuf = smalloc(strlen(newmessage) + 1);
 		p = hd->replybuf;
 	}
-	q = message;
-	while (*q != '\0')
-		if (*q > '\0' && *q < ' ')
-			q++;
-		else
-			*p++ = *q++;
-	*p = '\0';
+        strcpy(p, newmessage);
 }
 
 static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message)
