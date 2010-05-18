@@ -1,0 +1,13 @@
+Ayuda para KICK:
+
+El comando KICK permite expulsar a un usuario de un canal.
+El usuario puede reunirse inmediatamente.
+
+El nick de quién ejecuta el comando es agregado a la razón
+de expulsión.
+
+Sintaxis: KICK <#canal> <nick> [razón]
+
+Ejemplos:
+    /msg &nick& KICK #abc abusador
+    /msg &nick& KICK #abc abusador por favor deja de hacer eso

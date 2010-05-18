@@ -1,0 +1,11 @@
+Ayuda para REHASH:
+
+REHASH actualiza la base de datos y relee el archivo
+de configuración. Ud. puede ejecutar un REHASH desde el
+host de servicios con un comando kill -HUP en una
+consola.
+
+Sintaxis: REHASH
+
+Ejemplo:
+    /msg &nick& REHASH

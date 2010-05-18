@@ -1,0 +1,9 @@
+Ayuda para HOLD:
+
+HOLD reserva una cuenta y todos los nicks registrados en ella
+impidiendo así su expiración.
+
+Sintaxis: HOLD <nick> ON|OFF
+
+Ejemplos:
+    /msg &nick& HOLD jilles ON

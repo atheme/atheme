@@ -1,0 +1,13 @@
+Ayuda para SET PROPERTY:
+
+SET PROPERTY manipula metadatos asociados con
+un canal.
+
+Para eliminar una entrada de metadatos, especifique
+el nombre y deje el valor en blanco.
+
+Sintaxis: SET <#canal> PROPERTY <nombre> [valor]
+
+Ejemplo:
+    /msg &nick& SET #atheme PROPERTY URL http://www.atheme.org/
+    /msg &nick& SET #carne PROPERTY VEGETALES

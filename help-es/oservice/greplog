@@ -1,0 +1,26 @@
+Ayuda para GREPLOG:
+
+GREPLOG busca en los registros de eventos de servicios
+y muestra líneas coincidentes.
+
+El primer parámetro puede ser un nombre de servicio
+(para buscar todos los comandos dados a áquel servicio)
+o un asterisco (para buscar cualquier modificación de
+datos de servicios).
+
+El segundo parámetro es el patrón de búsqueda. Puede
+contener comodines * y ? y generalmente comienza y
+termina en *.
+
+El tercer parámetro es opcional y especifica el número
+de días previos entre los cuales buscar además de hoy.
+
+Note que este comando sólo funcionará si se almacena
+suficiente información en los archivos de registro.
+
+Sintaxis: GREPLOG <servicio> <patrón> [días]
+Sintaxis: GREPLOG * <patrón> [días]
+
+Ejemplos:
+    /msg &nick& GREPLOG ChanServ *#uncanal* 7
+    /msg &nick& GREPLOG * *#uncanal* 60

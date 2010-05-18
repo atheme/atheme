@@ -1,0 +1,10 @@
+Ayuda para INFO:
+
+INFO muestra información del canal tal como
+fecha y hora de registro, opciones y otros
+detalles.
+
+Sintaxis: INFO <#canal>
+
+Ejemplos:
+    /msg &nick& INFO #abc

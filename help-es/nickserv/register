@@ -1,0 +1,22 @@
+Ayuda para REGISTER:
+
+Esto registrará su nick actual con &nick&. Esto le
+permite asegurar cierto nivel de identidad en la red
+y ser agregado a listas de acceso. Además, &nick&
+avisará a usuarios que utilicen su nick sin
+identificarse y le permitirá desconectar sesiones
+muertas (fantasmas). La contraseña que Ud. cree
+conserva y respeta mayúsculas y minúsculas. ¡Por
+favor escriba o memorice su contraseña! La necesitará
+posteriormente para cambiar sus ajustes.
+#if auth
+
+Debe confirmar la dirección de e-mail. Para hacer
+esto, siga las instrucciones en el mensaje enviado
+a la dirección de e-mail.
+#endif
+
+Sintaxis: REGISTER <contraseña> <dirección de e-mail>
+
+Ejemplo:
+    /msg &nick& REGISTER sésamo john@ejemplo.com

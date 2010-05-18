@@ -1,0 +1,19 @@
+Ayuda para SENDPASS:
+
+SENDPASS envía una clave a la dirección de
+e-mail correspondiente al nick especificado
+que puede ser utilizada para establecer una
+nueva contraseña con SETPASS.
+
+Sintaxis: SENDPASS <nick>
+#if priv user:sendpass
+
+Si una clave ha sido enviada pero no
+utilizada aún, es posible anularla mediante
+el parámetro CLEAR.
+
+Sintaxis: SENDPASS <nick> CLEAR
+#endif
+
+Ejemplos:
+    /msg &nick& SENDPASS abc

@@ -1,0 +1,18 @@
+Ayuda para SET FOUNDER:
+
+SET FOUNDER le permite establecer un nuevo
+fundador para el canal. El nuevo fundador
+ha de ejecutar el mismo comando para confirmar
+la transferencia.
+
+Sintaxis: SET <#canal> FOUNDER <nuevonick>
+
+Si el nuevo fundador no ha confirmado la
+transferencia aún, es posible cancerlarla
+especificando su propio nick como el nuevo
+fundador.
+
+Sintaxis: SET <#canal> FOUNDER <sunick>
+
+Ejemplo:
+    /msg &nick& SET #abc FOUNDER xyz

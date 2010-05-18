@@ -1,0 +1,9 @@
+Ayuda para RESETPASS:
+
+RESETPASS establece una contraseña aleatoria para
+la cuenta especificada.
+
+Sintaxis: RESETPASS <cuenta>
+
+Ejemplos:
+    /msg &nick& RESETPASS pfish

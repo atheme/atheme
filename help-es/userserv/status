@@ -1,0 +1,10 @@
+Ayuda para STATUS:
+
+STATUS entrega información sobre su estado
+actual, incluyendo su cuenta, estado de
+operador de IRC y SRA.
+
+Sintaxis: STATUS
+
+Ejemplo:
+    /msg &nick& STATUS

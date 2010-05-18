@@ -1,0 +1,14 @@
+Ayuda para SPECS:
+
+SPECS muestra los privilegios que Ud. posee en servicios.
+
+Sintaxis: SPECS
+
+También es posible ver los privilegios de otros usuarios
+en línea, o de clases de operador.
+
+Sintaxis: SPECS USER <nick>
+Sintaxis: SPECS OPERCLASS <nombredeclase>
+
+Ejemplo:
+    /msg &nick& SPECS USER w00t

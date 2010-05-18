@@ -1,0 +1,12 @@
+Ayuda para JUPE:
+
+JUPE introduce un servidor falso con el nombre dado para
+que el servidor real no pueda conectarse. Jupes sólo duran
+por tanto tiempo como los servicios estén conectados a su
+servidor padre y pueden (en la mayoría de los ircds) ser
+eliminadas con un simple comando /squit.
+
+Sintaxis: JUPE <servidor> <razón>
+
+Ejemplo:
+    /msg &nick& JUPE irc.tnt.explosivos.net Servidor muy inestable

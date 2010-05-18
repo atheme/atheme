@@ -1,0 +1,9 @@
+Ayuda para HOLD:
+
+HOLD reserva una cuenta impidiendo la expiración de ésta
+y todos los canales registrados con ella.
+
+Sintaxis: HOLD <cuenta> ON|OFF
+
+Ejemplos:
+    /msg &nick& HOLD jilles ON

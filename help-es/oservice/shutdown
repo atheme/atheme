@@ -1,0 +1,9 @@
+Ayuda para SHUTDOWN:
+
+SHUTDOWN cierra y termina los servicios, sin
+reconectarlos o reiniciarlos.
+
+Sintaxis: SHUTDOWN
+
+Ejemplo:
+    /msg &nick& SHUTDOWN

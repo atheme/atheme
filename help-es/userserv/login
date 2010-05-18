@@ -1,0 +1,10 @@
+Ayuda para LOGIN:
+
+LOGIN le identifica con servicios de modo que
+pueda utilizar comandos que requieran que haya
+iniciado sesión.
+
+Sintaxis: LOGIN <cuenta> <contraseña>
+
+Ejemplo:
+    /msg &nick& LOGIN PotatoHead patatasfritas

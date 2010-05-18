@@ -1,0 +1,10 @@
+Ayuda para GENERATEPASS:
+
+GENERATEPASS genera una contraseña aleatoria. No la inserta automáticamente en
+ninguna configuración.
+
+Sintaxis: GENERATEPASS [longitud]
+
+Ejemplos:
+	/msg &nick& GENERATEPASS
+	/msg &nick& GENERATEPASS 12

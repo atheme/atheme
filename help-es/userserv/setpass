@@ -1,0 +1,12 @@
+Ayuda para SETPASS:
+
+SETPASS le permite establecer una nueva contraseña
+utilizando una clave que le haya sido enviada. Esta
+clave sólo es válida por una oportunidad, y deja de
+ser válida la siguiente vez que se identifique con
+su contraseña antigua.
+
+Para cambiar su contraseña si ya conoce la actual,
+utilice SET PASSWORD en vez de SETPASS.
+
+Sintaxis: SETPASS <cuenta> <clave> <contraseña>

@@ -1,0 +1,9 @@
+Ayuda para KLINECHAN:
+
+KLINECHAN aplica k:lines a todo usuario que se une a canales específicos.
+Es útil contra canales ilícitos de botnets y similares.
+
+Sintaxis: KLINECHAN <#canal> <ON|OFF> [razón]
+
+Ejemplos:
+	/msg &nick& KLINECHAN #lamers ON Canal de Lamers.

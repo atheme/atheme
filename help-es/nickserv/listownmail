@@ -1,0 +1,10 @@
+Ayuda para LISTOWNMAIL:
+
+LISTOWNMAIL muestra cuentas registradas
+con la misma dirección de e-mail de su
+cuenta.
+
+Sintaxis: LISTOWNMAIL
+
+Ejemplos:
+    /msg &nick& LISTOWNMAIL

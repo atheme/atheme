@@ -1,0 +1,12 @@
+Ayuda para SET FANTASY:
+
+SET FANTASY le permite activar o desactivar comandos
+de fantasía de ChanServ (!op, !deop, etc.) en su canal.
+
+GUARD también debe estar activado para que los comandos
+de fantasía funcionen.
+
+Sintaxis: SET <#canal> FANTASY ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #chatspike FANTASY ON

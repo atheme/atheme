@@ -1,0 +1,16 @@
+Ayuda para IDENTIFY:
+
+IDENTIFY le identifica con servicios de modo que
+pueda utilizar comandos que requieran que haya
+iniciado sesión.
+
+Sintaxis: IDENTIFY <contraseña>
+
+También puede identificarse para otro nick en vez
+del que está usando actualmente.
+
+Sintaxis: IDENTIFY <nick> <contraseña>
+
+Ejemplo:
+    /msg &nick& IDENTIFY patatasfritas
+    /msg &nick& IDENTIFY PotatoHead patatasfritas

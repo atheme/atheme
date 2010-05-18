@@ -1,0 +1,10 @@
+Ayuda para ^BMODRELOAD^B:
+
+MODRELOAD recarga un módulo actualmente cargado. Si falla el comando,
+el módulo en cuestión permanecerá descargado hasta que los errores
+sean corregidos.
+
+Sintaxis: MODRELOAD <nombre...>
+
+Ejemplo:
+    /msg &nick& MODRELOAD chanserv/register

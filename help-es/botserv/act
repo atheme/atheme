@@ -1,0 +1,9 @@
+Ayuda para ACT:
+
+Hace que el bot haga el equivalente de un comando
+"/me" en el canal especificado con el texto dado.
+
+Sintaxis: ACT <canal> <texto>
+
+Ejemplos:
+    /msg &nick& ACT #help quiere galleta!

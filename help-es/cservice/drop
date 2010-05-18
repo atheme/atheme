@@ -1,0 +1,15 @@
+Ayuda para DROP:
+
+DROP le permite cancelar el registro de un canal.
+
+Una vez que elimine un canal, todos los datos asociados
+a él (listas de acceso, etc.) son eliminados y no es
+posible restaurarlos.
+
+Vea la ayuda sobre SET FOUNDER y FLAGS para la
+transferencia de un canal a otro usuario.
+
+Sintaxis: DROP <#canal>
+
+Ejemplos:
+    /msg &nick& DROP #abc

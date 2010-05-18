@@ -1,0 +1,79 @@
+Ayuda para FLAGS:
+
+El comando FLAGS permite conceder o quitar privilegios de
+canal de un modo más específico y menos generalizado.
+Admite tanto nicks como máscaras de host como objetos.
+
+Si sólo se especifica el nombre del canal, se mostrará
+la lista de permisos concedidos en él.
+
+Sintaxis: FLAGS <#canal>
+
+De otro modo, se utiliza para modificar entradas de acceso.
+Una modificación puede ser especificada usando un nombre
+de plantilla (cambia el acceso a los correspondientes a la
+plantilla) o un cambio de opciones (comienza con + o -). Vea
+la ayuda sobre TEMPLATE para más información sobre plantillas.
+
+Si Ud. no es un fundador, sólo puede manipular opciones a las
+ya que tenga acceso, y no puede modificar usuarios que tengan
+opciones que Ud. no. Para este propósito, +v permite +V,
+#if !halfops
++o permite +O, y +r permite +b.
+#else
++h permite +H, +o permite +O, y +r permite +b.
+#endif
+
+#if module chanserv/set_limitflags
+Si la opción LIMITFLAGS está activada para el canal, se
+aplican más restricciones; vea la ayuda sobre SET LIMITFLAGS.
+
+#endif
+Si Ud. no tiene +f aún puede quitar su propio acceso con -*.
+
+Sintaxis: FLAGS <#canal> [nick|máscara_de_host plantilla]
+Sintaxis: FLAGS <#canal> [nick|máscara_de_host cambios_de_opciones]
+
+Permisos:
+    +v - Permite el uso de VOICE y DEVOICE.
+    +V - Concede voz automáticamente.
+#if halfops
+    +h - Permite el uso de HALFOP y DEHALFOP.
+    +H - Concede halfop automáticamente.
+#endif
+    +o - Permite el uso de OP y DEOP.
+    +O - Concede op automáticamente.
+#if protect
+    +a - Permite el uso de PROTECT y DEPROTECT.
+#endif
+#if owner
+    +q - Permite el uso de OWNER y DEOWNER.
+#endif
+    +s - Permite el uso del comando SET.
+    +i - Permite el uso de los comandos INVITE y GETKEY.
+#if module chanserv/kick
+    +r - Permite el uso de KICK, KICKBAN, BAN y UNBAN.
+#else
+#if !module chanserv/unban_self
+    +r - Permite el uso de BAN y UNBAN.
+#else
+    +r - Permite el uso de UNBAN.
+#endif
+#endif
+    +R - Permite el uso de RECOVER y CLEAR.
+    +f - Permite la modificación de las listas de acceso del canal.
+    +t - Permite el uso de TOPIC y TOPICAPPEND.
+    +A - Permite ver las listas de acceso del canal.
+    +F - Concede acceso completo como fundador del canal.
+    +b - Activa la expulsión y veto automáticos.
+
+El permiso especial +* agrega todos los permisos salvo +b y +F
+Utilice -* para quitar todos los permisos incluyendo +b y +F.
+
+Ejemplos:
+    /msg &nick& FLAGS #abc
+    /msg &nick& FLAGS #abc abc!*@xyz.com VOP
+    /msg &nick& FLAGS #abc abc!*@xyz.com -V+oO
+    /msg &nick& FLAGS #abc abc!*@xyz.com -*
+    /msg &nick& FLAGS #abc abc +oOtsi
+    /msg &nick& FLAGS #abc UsuarioProblema!*@*.ispproblema.net +b

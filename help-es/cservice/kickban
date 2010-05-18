@@ -1,0 +1,13 @@
+Ayuda para KICKBAN:
+
+El comando KICKBAN permite expulsar a un usuario de un canal
+aplicándole un veto al mismo tiempo.
+
+Cualquier exención de veto que coincida con el usuario será
+removida.
+
+Sintaxis: KICKBAN <#canal> <nick> [razón]
+
+Ejemplos:
+    /msg &nick& KICKBAN #abc abusador
+    /msg &nick& KICKBAN #abc abusador ándate

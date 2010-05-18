@@ -1,0 +1,12 @@
+Ayuda para GHOST:
+
+GHOST desconecta una antigua sesión de usuario, o a
+otra persona intentando utilizar su nick sin autorización.
+
+Si se encuentra actualmente identificado con la cuenta
+del nick, Ud. no necesita especificar una contraseña.
+
+Sintaxis: GHOST <nick> [contraseña]
+
+Ejemplo:
+    /msg &nick& GHOST Pasta ContaseñaSecreta

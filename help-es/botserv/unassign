@@ -1,0 +1,11 @@
+Ayuda para UNASSIGN:
+
+Desasigna un bot de un canal. Al utilizar este comando, el bot
+dejará de unirse al canal. Sin embargo, la configuración del
+canal no es eliminada, así que Ud. puede posteriormente reasignar
+un bot sin tener que reconfigurarlo por completo.
+
+Sintaxis: UNASSIGN <canal>
+
+Ejemplos:
+    /msg &nick& UNASSIGN #ayuda

@@ -1,0 +1,22 @@
+Ayuda para NOOP:
+
+NOOP le permite denegar acceso de operador por máscara de host o
+por servidor. Si un usuario que coincide con el criterio especificado
+adquiere estado de operador será desconectado.
+
+Sintaxis: NOOP ADD HOSTMASK <nick!usuario@host> [razón]
+Sintaxis: NOOP ADD SERVER <máscara> [razón]
+
+Ejemplos:
+    /msg &nick& NOOP ADD HOSTMASK *!*@shadow.master Operador abusivo
+    /msg &nick& NOOP ADD SERVER mal.servidor.net Administrador abusivo
+
+Sintaxis: NOOP DEL HOSTMASK <nick!usuario@host>
+Sintaxis: NOOP DEL SERVER <máscara>
+
+Ejemplos:
+    /msg &nick& NOOP DEL HOSTMASK *!un@operator.host
+    /msg &nick& NOOP DEL SERVER mal.servidor.net
+
+Sintaxis: NOOP LIST HOSTMASK
+Sintaxis: NOOP LIST SERVER

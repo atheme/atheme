@@ -1,0 +1,13 @@
+Ayuda para LIST:
+
+LIST muestra sus memos de su bandeja de
+entrada, incluyendo quién envío cada uno y
+cuando. Para leer un memo, utilice el
+comando READ. También puede utilizar DELETE
+para eliminar un memo, o FORWARD para
+redirigirlo.
+
+Sintaxis: LIST
+
+Ejemplos:
+    /msg &nick& LIST

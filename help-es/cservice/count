@@ -1,0 +1,13 @@
+Ayuda para COUNT:
+
+Muestra el número de entradas en cada una de las listas xOP
+del canal y cuántas entradas de la lista de acceso no
+coinciden con un valor xOP.
+
+La segunda línea muestra cuántas entradas de acceso poseen
+cada opción.
+
+Sintaxis: COUNT <#canal>
+
+Ejemplos:
+    /msg &nick& COUNT #oscn

@@ -1,0 +1,37 @@
+Help for SOPER:
+
+SOPER allows manipulation of services operator privileges.
+
+SOPER LIST shows all accounts with services operator
+privileges, both from the configuration file and
+this command. It is similar to /stats o &nick&.
+
+SOPER LISTCLASS shows all defined oper classes. Use
+the SPECS command to view the privileges associated
+with an oper class.
+
+SOPER ADD grants services operator privileges to an
+account. The granted privileges are described by an
+oper class.
+
+SOPER DEL removes services operator privileges from
+an account.
+
+SOPER SETPASS sets or clears a password for services
+operator privileges on an account. The password must
+be already encrypted. The target user needs to enter
+the password using IDENTIFY.
+
+It is not possible to modify accounts with
+operator{} blocks in the configuration file.
+
+Syntax: SOPER LIST|LISTCLASS
+Syntax: SOPER ADD <account> <operclass>
+Syntax: SOPER DEL <account>
+Syntax: SOPER SETPASS <account> [password]
+
+Examples:
+    /msg &nick& SOPER LIST
+    /msg &nick& SOPER ADD anoper sra
+    /msg &nick& SOPER DEL abusiveoper
+    /msg &nick& SOPER SETPASS anoper $1$vHFzU0jC$ePfKvERVwaDRdnHOnZZ6h.

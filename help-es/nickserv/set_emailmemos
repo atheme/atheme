@@ -1,0 +1,10 @@
+Ayuda para SET EMAILMEMOS:
+
+Esto enviará una copia de los memos enviados a su
+cuenta a la dirección de e-mail asociada a su
+registro de cuenta.
+
+Sintaxis: SET EMAILMEMOS [ON|OFF]
+
+Ejemplo:
+    /msg &nick& SET EMAILMEMOS ON

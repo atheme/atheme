@@ -1,0 +1,13 @@
+Ayuda para FFLAGS:
+
+El comando FFLAGS permite a un operador forzar un cambio
+de opciones de acceso a un canal. La sintaxis es la misma
+de FLAGS, salvo que el objeto y cambios de opciones son
+obligatorios. Utilice FLAGS para ver la lista de acceso
+de un canal.
+
+Sintaxis: FFLAGS <#canal> <nick|máscara de host> <plantilla>
+Sintaxis: FFLAGS <#canal> <nick|máscara de host> <cambios_de_opciones>
+
+Ejemplos:
+    /msg &nick& FFLAGS #abc PedroPablo AOP

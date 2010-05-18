@@ -1,0 +1,13 @@
+Ayuda para MARK:
+
+MARK permite a operadores marcar un canal añadiendo
+una nota. Por ejemplo, un operador podría marcar el canal
+de un spammer para que otros sepan que ha sido previamente
+advertido acerca de sus acciones.
+
+La información de MARK es visualizada en la salida de INFO.
+
+Sintaxis: MARK <#canal> ON|OFF <razón>
+
+Ejemplos:
+    /msg &nick& MARK #lobby ON Toma de canal: regresado a jorge

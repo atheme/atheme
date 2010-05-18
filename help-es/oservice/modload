@@ -1,0 +1,16 @@
+Ayuda para MODLOAD:
+
+MODLOAD carga uno o más módulos.
+
+Si la ruta no comienza con un slash, se asume relativa a
+PREFIJO/modules o PREFIJO/lib/atheme/modules (dependiendo
+de como fue compilado Atheme). La especificación de un
+sufijo como .so es opcional.
+
+Si cualquiera de los módulos requieren un rehash tras ser
+cargados, esto se realizará automáticamente.
+
+Sintaxis: MODLOAD <ruta...>
+
+Ejemplo:
+    /msg &nick& MODLOAD ../contrib/fc_dice

@@ -1,0 +1,17 @@
+Ayuda para RAKILL:
+
+RAKILL permite aplicar akills en base
+a expresiones regulares, lo cual es
+útil contra clones o botnets. Las
+akills no son agregadas a la lista de
+&nick& y duran una semana.
+
+Sea cuidadoso, puesto que es fácil
+cometer errores con expresiones regulares.
+Utilice RMATCH primero. La sintaxis de
+expresiones regulares es la misma.
+
+Sintaxis: RAKILL /<patrón>/[i][p] <razón>
+
+Ejemplo:
+    /msg &nick& RAKILL /^m[oo|00]cow/i No se permiten moocows.

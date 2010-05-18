@@ -1,0 +1,6 @@
+Ayuda para MODLIST:
+
+MODLIST muestra una lista de todos los módulos cargados y
+sus direcciones en memoria.
+
+Sintaxis: MODLIST

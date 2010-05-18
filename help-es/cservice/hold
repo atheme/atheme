@@ -1,0 +1,10 @@
+Ayuda para HOLD:
+
+HOLD reserva un canal de modo que no pueda expirar por
+inactividad. Observe que los canales reservados aun
+pueden expirar si se quedan sin fundadores y sucesores.
+
+Ayuda: HOLD <#canal> ON|OFF
+
+Ejemplos:
+    /msg &nick& HOLD #atheme ON

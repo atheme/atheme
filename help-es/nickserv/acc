@@ -1,0 +1,23 @@
+Ayuda para ACC:
+
+ACC muestra información sobre el estado de sesión de un
+usuario para ser analizada automáticamente. Note que en
+muchas redes, /whois muestra información similar más
+rápido y con mayor confiabilidad. La respuesta es de la
+forma <nick> ACC <dígito>:
+    0 - la cuenta o usuario no existe
+    1 - la cuenta existe pero el usuario no tiene una sesión activa
+    2 - el usuario no está identificado pero es reconocido (vea ACCESS)
+    3 - el usuario tiene una sesión activa
+
+Si la cuenta es omitida, el nick del usuario es utilizado. La
+cuenta * corresponde a la cuenta con la cual el usuario está
+identificado actualmente.
+
+Sintaxis: ACC
+Sintaxis: ACC <nick>
+Sintaxis: ACC <nick> <cuenta>
+Sintaxis: ACC <nick> *
+
+Ejemplo:
+    /msg &nick& ACC jilles *

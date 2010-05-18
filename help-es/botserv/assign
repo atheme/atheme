@@ -1,0 +1,10 @@
+Ayuda para ASSIGN:
+
+Asigna un bot con el nick especificado a un canal. Ud.
+puede luego configurar el bot para satisfacer sus
+necesidades en el canal.
+
+Sintaxis: ASSIGN <canal> <nick>
+
+Ejemplos:
+    /msg &nick& ASSIGN #ayuda Seguridad

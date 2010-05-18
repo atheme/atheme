@@ -1,0 +1,11 @@
+Ayuda para SET PRIVATE:
+
+SET PRIVATE oculta cierta información acerca de su cuenta
+a otros usuarios.
+
+SET PRIVATE ON activa HIDEMAIL automáticamente.
+
+Sintaxis: SET PRIVATE ON|OFF
+
+Ejemplo:
+    /msg &nick& SET PRIVATE ON

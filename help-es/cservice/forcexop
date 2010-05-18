@@ -1,0 +1,22 @@
+Ayuda para FORCEXOP:
+
+FORCEXOP restablece todos los nivels de acceso
+del canal a valores compatibles con xOP. Así,
+luego de la operación, los fundadores tendrán
+todos los permisos y autoop, y todos los demás
+que tengan acceso se encontrarán en una de las
+listas de xOP. Este comando es útil en caso de
+que las definiciones de las opciones de cada
+nivel de xOP cambian y el fundador desea emplear
+sólo comandos xOP.
+
+Este comando sólo puede ser utilizado por un
+fundador.
+
+Sintaxis: FORCEXOP <#canal>
+
+#if halfops
+Vea también: SOP, AOP, HOP, VOP
+#else
+Vea también: SOP, AOP, VOP
+#endif

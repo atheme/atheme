@@ -208,6 +208,17 @@ install: build
 			done; \
 			cd ..; \
 		fi; \
+		$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/es; \
+		(cd ../help-es; for i in *; do \
+		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/es; \
+		if [ -d $$i ]; then \
+			cd $$i; \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/es/$$i; \
+			for j in *; do \
+				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/es/$$i; \
+			done; \
+			cd ..; \
+		fi; \
 	done); fi
 
 #deinstall:

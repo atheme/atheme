@@ -1,0 +1,10 @@
+Ayuda para INVITE:
+
+INVITE solicita a servicios invitarlo al canal
+especificado. Esto es útil si el modo de canal
++i está en efecto.
+
+Sintaxis: INVITE <#canal>
+
+Ejemplos:
+    /msg &nick& INVITE #abc

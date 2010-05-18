@@ -1,0 +1,14 @@
+Ayuda para PKEY:
+
+PKEY establece o muestra la huella de su clave DSA o
+RSA. Ud. debería inciar sesión inmediatamente tras
+cambiar este ajuste para actualizar otra información de
+seguridad almacenada. La huella puede ser ingresada
+como hexadecimal con o sin dobles puntos ':'.
+
+Sintaxis: PKEY <hash>
+
+Ejemplos:
+    /msg &nick& PKEY 0123456789ABCDEF0123
+    /msg &nick& PKEY 32:10:FE:DC:BA:98:76:54:32:10
+    /msg &nick& PKEY

@@ -1,0 +1,12 @@
+Ayuda para REGISTER:
+
+REGISTER le permite registrar un canal para
+tener un mejor control de éste. El registro le
+permite mantener listas de acceso del canal
+y otras funciones normalmente implementadas
+por bots de IRC.
+
+Sintaxis: REGISTER <#canal>
+
+Ejemplos:
+    /msg &nick& REGISTER #atheme

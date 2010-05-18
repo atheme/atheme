@@ -1,0 +1,10 @@
+Ayuda para SET LANGUAGE:
+
+SET LANGUAGE cambia el idioma que los servicios
+usan para comunicarse con Ud.
+
+Sintaxis: SET LANGUAGE <código de idioma>
+
+Ejemplos:
+    /msg &nick& SET LANGUAGE en
+    /msg &nick& SET LANGUAGE es

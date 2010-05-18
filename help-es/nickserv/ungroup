@@ -1,0 +1,14 @@
+Ayuda para UNGROUP:
+
+UNGROUP quita el nick especificado del registro de su
+cuenta. El nick se hace así disponible para ser registrado
+por otros. Esto no afecta sus memos o acceso a canales.
+
+Si no especifica un nick, su nick actual es desagrupado.
+Ud. no puede quitar el nick correspondiente a su nombre
+de cuenta.
+
+Sintaxis: UNGROUP [nick]
+
+Ejemplos:
+    /msg &nick& UNGROUP Pasta

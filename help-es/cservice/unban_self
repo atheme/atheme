@@ -1,0 +1,9 @@
+Ayuda para UNBAN:
+
+UNBAN le permite quitar todos los vetos que coinciden
+con Ud. en un canal.
+
+Sintaxis: UNBAN <#canal>
+
+Ejemplos:
+    /msg &nick& UNBAN #chat

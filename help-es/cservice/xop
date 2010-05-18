@@ -1,0 +1,41 @@
+Ayuda para xOP:
+
+Los comandos xOP le permiten mantener listas de
+acceso de canales. Las listas de acceso pueden
+contener cuentas registradas o máscaras de host
+(nick!usuario@host).
+
+Los significados exactos de los niveles de acceso
+varían en cada red; use /msg &nick& TEMPLATE para
+comprobarlos. Como ayuda, VOP se refiere a VOice
+#if halfops
+People (gente con voz), HOP a HalfOP, AOP a AutoOP,
+y SOP a SúperOP.
+#else
+People (gente con voz), AOP a AutoOP, y SOP a
+SúperOP.
+#endif
+
+No todas las entradas de acceso pueden ser
+modificadas con estos canales; vea la información
+de ayuda para FLAGS y FORCEXOP. Observe que el
+uso de FORCEXOP puede destruir mucha información.
+El sistema de plantillas con TEMPLATE puede
+proveer la mayoría de las facilidades de uso de
+estos comandos sin sus restricciones.
+
+Los privilegios requeridos para ejecutar estos
+comandos son los mismos que se aplican a los
+cambios correspondientes con FLAGS.
+
+#if halfops
+Sintaxis: VOP|HOP|AOP|SOP <#canal> ADD|DEL|LIST <nick|máscara de host>
+#else
+Sintaxis: VOP|AOP|SOP <#canal> ADD|DEL|LIST <nick|máscara de host>
+#endif
+
+Ejemplos:
+    /msg &nick& VOP #foo ADD xyz
+    /msg &nick& VOP #foo ADD abc!*@xyz.com
+    /msg &nick& AOP #foo DEL xyz
+    /msg &nick& SOP #foo LIST

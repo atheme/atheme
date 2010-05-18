@@ -1,0 +1,16 @@
+Ayuda para SET TOPICLOCK:
+
+SET TOPICLOCK hace que &nick& revierta
+cambios de tema realizados por usuarios sin
+la opción +t. Los cambios de tema hechos
+durante rupturas de red (netsplits) o caídas
+de servicios siempre serán revertidos.
+
+TOPICLOCK requiere KEEPTOPIC y lo activará
+automáticamente. La desactivación de KEEPTOPIC
+también anula TOPICLOCK.
+
+Sintaxis: SET <#canal> TOPICLOCK ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc TOPICLOCK ON

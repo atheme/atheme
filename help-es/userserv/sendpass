@@ -1,0 +1,30 @@
+Ayuda para SENDPASS:
+
+#if !module nickserv/setpass
+SENDPASS envía la contraseña para la cuenta
+especificada a la dirección de e-mail que
+le corresponde.
+#else
+SENDPASS envía una clave a la dirección de
+e-mail correspondiente a la cuenta especificada
+que puede ser utilizada para establecer una
+nueva contraseña con SETPASS.
+#endif
+
+Sintaxis: SENDPASS <cuenta>
+
+Si la cuenta está marcada, puede ignorar esta
+restricción usando el parámetro FORCE.
+
+Sintaxis: SENDPASS <cuenta> FORCE
+#if module nickserv/setpass
+
+Si una clave ha sido enviada pero no
+utilizada aún, es posible anularla mediante
+el parámetro CLEAR.
+
+Sintaxis: SENDPASS <cuenta> CLEAR
+#endif
+
+Ejemplos:
+    /msg &nick& SENDPASS abc

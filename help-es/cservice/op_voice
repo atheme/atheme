@@ -1,0 +1,17 @@
+Ayuda para OP|DEOP|VOICE|DEVOICE:
+
+Estos comandos realizan cambios de modo de estado en un
+canal.
+
+Aquellos usuarios afectados son notificados de quién
+realiza los cambios.
+
+Si el último parámetro es omitido, la acción se realiza
+sobre la persona que ejecuta el comando.
+
+Sintaxis: OP|DEOP <#canal> [nick]
+Sintaxis: VOICE|DEVOICE <#canal> [nick]
+
+Ejemplos:
+    /msg &nick& OP #abc xyz
+    /msg &nick& DEVOICE #abc

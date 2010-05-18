@@ -1,0 +1,13 @@
+Ayuda para MODUNLOAD:
+
+MODUNLOAD descarga uno o más módulos. No todos los módulos
+pueden ser descargados.
+
+El comando MODLIST provee una lista de nombres, que no
+son necesariamente idénticos a las rutas de acceso para
+cargar módulos con MODLOAD.
+
+Sintaxis: MODUNLOAD <nombre...>
+
+Ejemplo:
+    /msg &nick& MODUNLOAD chanserv/register

@@ -1,0 +1,11 @@
+Ayuda para SET NOOP:
+
+SET NOOP impide que los servicios le concedan
+op automáticamente en canales a los cuales tenga
+acceso. Aun así puede elegir otorgarse op o voz
+manualmente usando los comandos OP y VOICE.
+
+Sintaxis: SET NOOP ON|OFF
+
+Ejemplo:
+    /msg &nick& SET NOOP ON

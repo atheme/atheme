@@ -1,0 +1,9 @@
+Ayuda para DOWN:
+
+DOWN quita todo el acceso que tiene Ud. en un canal especificado.
+No elimina las opciones de acceso o xOP que tenga, sólo los modos.
+
+Sintaxis: DOWN <#canal>
+
+Ejemplos:
+	/msg &nick& DOWN #abc

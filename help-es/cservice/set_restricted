@@ -1,0 +1,15 @@
+Ayuda para SET RESTRICTED:
+
+SET RESTRICTED designa un canal con acceso restringido.
+Áquellos usuarios que no se encuentren en la lista de
+acceso del canal o que no tengan el privilegio
+chan:joinstaffonly serán expulsados y vetados del canal
+al intentar unirse, automáticamente quitando cualquier
+excepción de vetos que se les aplique. Si el canal es +i,
+no se establecerán vetos y cualquier excepción de
+invitación que se aplique será removida.
+
+Sintaxis: SET <#canal> RESTRICTED ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #snoop RESTRICTED ON

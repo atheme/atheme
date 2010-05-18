@@ -1,0 +1,17 @@
+Ayuda para DROP:
+
+El uso de este comando hace que &nick& quite su cuenta
+y deje de proteger su nick. Si el registro de un nick
+es anulado, queda libre para ser registrado por otros.
+También perderá todos sus memos y permisos de acceso
+a canales.
+
+Al anular y re-registrar una cuenta durante una ruptura
+de red (netsplit), es posible que usuarios al otro lado
+de la ruptura sean reconocidos como identificados a la nueva
+cuenta.
+
+Sintaxis: DROP <nick> <contraseña>
+
+Ejemplos:
+    /msg &nick& DROP abc xyz123456

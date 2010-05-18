@@ -1,0 +1,14 @@
+Ayuda para UNQUIET:
+
+El comando UNQUIET le permite quitar silencio para un
+usuario o máscara de host en un canal. Si no especifica
+un nick o máscara, se le quita silencio a Ud. mismo.
+
+Aquellos usuarios afectados son notificados de quién
+realiza los cambios.
+
+Sintaxis: UNQUIET <#canal> [nick|máscara de host]
+
+Ejemplos:
+    /msg &nick& UNQUIET #chat Diablo-D3
+    /msg &nick& UNQUIET #chat *!*@*.trilug.org

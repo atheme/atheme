@@ -1,0 +1,10 @@
+Ayuda para VERIFY:
+
+VERIFY confirma un cambio asociado con su registro
+de cuenta.
+
+Sintaxis: VERIFY <operación> <nick> <clave>
+
+Ejemplo:
+    /msg &nick& VERIFY REGISTER jenny 161803399
+    /msg &nick& VERIFY EMAILCHG Aeriana 271828183

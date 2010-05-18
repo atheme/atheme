@@ -1,0 +1,17 @@
+Ayuda para SET EMAIL:
+
+SET EMAIL cambia la dirección de e-mail
+asociada con el registro de una cuenta.
+La dirección de e-mail es utilizada para
+la recuperación de contraseñas.
+
+Podría ser necesario confirmar la nueva
+dirección de e-mail. Para confirmar los
+cambios, vea las instrucciones en el
+mensaje que le será enviado a la nueva
+dirección.
+
+Sintaxis: SET EMAIL <nueva dirección>
+
+Ejemplo:
+    /msg &nick& SET EMAIL dan@ejemplo.com

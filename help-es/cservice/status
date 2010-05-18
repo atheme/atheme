@@ -1,0 +1,14 @@
+Ayuda para STATUS:
+
+STATUS muestra información sobre su estado
+actual. Mostrará información sobre su nick,
+estado de operador de IRC y SRA.
+
+Si un nombre de canal es especificado, su
+acceso al canal dado será mostrado.
+
+Sintaxis: STATUS [#canal]
+
+Ejemplos:
+    /msg &nick& STATUS
+    /msg &nick& STATUS #abc

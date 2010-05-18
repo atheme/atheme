@@ -1,0 +1,7 @@
+Ayuda para TAXONOMY:
+
+El comando TAXONOMY muestra información de metadatos asociados
+con usuarios registrados.
+
+Ejemplos:
+    /msg &nick& TAXONOMY blah

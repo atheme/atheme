@@ -1,0 +1,11 @@
+Ayuda para REQUEST:
+
+REQUEST solicita la activación de un vhost. Ud. deberá estar
+identificado con un nick registrado para emplear este comando.
+Por favor sea paciente mientras su solicitud es revisada por el
+equipo de soporte de la red.
+
+Sintaxis: REQUEST <vhost>
+
+Ejemplos:
+    /msg &nick& REQUEST gaaa.tos

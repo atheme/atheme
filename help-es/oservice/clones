@@ -1,0 +1,65 @@
+Ayuda para CLONES:
+
+CLONES maintiene un seguimiento del número
+de clientes por cada dirección IP. Se muestran
+alertan en el canal snoop sobre IPs con más de
+3 clientes, y opcionalmente pueden aplicarse
+vetos de red sobre IPs con más de 5 clientes.
+
+CLONES sólo funciona con clientes cuya IP es
+conocida por Atheme. Si el ircd no soporta la
+propagación de direcciones IP, entonces CLONES
+es inútil; si no se envían direcciones IP por
+clientes con hosts falseados (spoof), entonces
+tales están exentos de la comprobación de CLONES.
+
+Sintaxis: CLONES KLINE ON|OFF
+
+Activa/desactiva el veto de direcciones IP con más
+de 5 clientes en la red por una hora (estos vetos
+no son agregados a la lista AKILL). Este ajuste es
+almacenado en etc/exempts.db y tiene un valor
+predeterminado OFF.
+
+Sintaxis: CLONES LIST
+
+Muestra todas las direcciones IP con más de 3 clientes
+con el número de clientes y si la IP es exenta o no.
+
+Sintaxis: CLONES ADDEXEMPT <ip> <clones> <razón>
+
+Agrega una IP a la lista de exención de clones. La
+dirección debe coincidir exactamente con la forma
+utilizada por el ircd (preocúpese de la contracción
+de '::' con IPv6). La dirección IP también puede ser
+una máscara CIDR, por ej. 192.168.1.0/24. IPs
+individuales tienen prioridad sobre CIDRs. <clones>
+corresponde al número de clones permitidos; debe ser
+al menos 4. Se producen alertas si este número es
+excedido, y un veto puede ser aplicado si el número
+es excedido por 10 o más.
+La razón es mostrada en LISTEXEMPT.
+La lista de exención de clones es almacenada en
+etc/exempts.db y actualizada tras cada modificación.
+
+Sintaxis: CLONES DELEXEMPT <ip>
+
+Quita una dirección IP de la lista de exención de clones.
+
+Sintaxis: CLONES LISTEXEMPT
+
+Muestra la lista de exención de clones con razones.
+
+Ejemplo:
+    /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
+    /msg &nick& CLONES DELEXEMPT 192.168.1.2
+
+Sintaxis: CLONES DURATION
+
+Permite modificar la duración de vetos aplicados sobre
+hosts de clones. El valor predeterminado es una hora.
+Este ajuste es conservado tras reinicios.
+
+Ejemplo:
+    /msg &nick& CLONES DURATION 30m
+

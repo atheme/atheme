@@ -1,0 +1,10 @@
+Ayuda para ROLL:
+
+ROLL le permite lanzar una serie de dados
+virtuales y mostrarle el resultado a Ud. o
+a un canal.
+
+Sintaxis: ROLL <núm. dados>d<núm. lados>
+
+Ejemplo:
+    /msg GameServ ROLL 2d16

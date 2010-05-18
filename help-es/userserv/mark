@@ -1,0 +1,14 @@
+Ayuda para MARK:
+
+MARK permite a operadores marcar una cuenta añadiendo
+una nota. Por ejemplo, un operador podría marcar la cuenta
+de un spammer para que otros sepan que el usuario ya ha
+sido previamente advertido acerca de su comportamiento.
+
+La información de MARK es visualizada en la salida de INFO.
+
+Sintaxis: MARK <cuenta> ON|OFF <razón>
+
+Ejemplos:
+    /msg &nick& MARK game_boy ON Spammer persistente
+    /msg &nick& MARK nenolod OFF

@@ -1,0 +1,9 @@
+Ayuda para TOPICAPPEND:
+
+TOPICAPPEND permite agregar información al final del tema
+de un canal.
+
+Sintaxis: TOPICAPPEND <#canal> <tema>
+
+Ejemplos:
+    /msg &nick& TOPICAPPEND #abc xyz

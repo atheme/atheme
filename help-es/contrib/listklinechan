@@ -1,0 +1,10 @@
+Ayuda para LISTKLINECHAN
+
+LISTKLINECHAN muestra una lista (posiblemente siguiendo un patrón específico)
+de canales con la opción KLINECHAN activada.
+
+Sintaxis: LISTKLINECHAN [patrón]
+
+Ejemplos:
+	/msg &nick& LISTKLINECHAN
+	/msg &nick& LISTKLINECHAN #lame*

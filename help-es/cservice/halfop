@@ -1,0 +1,15 @@
+Ayuda para HALFOP|DEHALFOP:
+
+Estos comandos realizan cambios de modo de estado en un
+canal.
+
+Aquellos usuarios afectados son notificados de quién
+realiza los cambios.
+
+Si el último parámetro es omitido, la acción se realiza
+sobre la persona que ejecuta el comando.
+
+Sintaxis: HALFOP|DEHALFOP <#canal> [nick]
+
+Ejemplos:
+    /msg &nick& HALFOP #abc

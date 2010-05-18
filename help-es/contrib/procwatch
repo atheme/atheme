@@ -1,0 +1,9 @@
+Ayuda para PROCWATCH:
+
+PROCWATCH notifica al canal snoop de la salida de un proceso. Este módulo
+sólo puede ser compilado y utilizado con FreeBSD 4.1 y versiones posteriores.
+
+Sintaxis: PROCWATCH <id. de proceso>
+
+Ejemplos:
+	/msg &nick& PROCWATCH 1234

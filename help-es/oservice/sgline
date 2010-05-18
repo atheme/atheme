@@ -1,0 +1,51 @@
+Ayuda para SGLINE:
+
+SGLINE le permite administrar vetos a nivel de red para nombres
+reales (gecos). Funciona de forma similar a AKILL.
+
+Sintaxis: SGLINE ADD <gecos> [!P|!T <minutos>] <razón>
+
+Si el indicador !P es especificado, la SGLINE no expirará (permanente).
+Si especifica !T el tiempo de expiración debe seguirle, en minutos,
+horas ("h"), días ("d") o semanas ("w").
+
+Ejemplos:
+    /msg &nick& SGLINE ADD abc !T 5 razón xyz
+    /msg &nick& SGLINE ADD abc !T 3d razón xyz
+    /msg &nick& SGLINE ADD abc !P razón abc
+    /msg &nick& SGLINE ADD abc razón abc
+
+El primer ejemplo busca al usuario con un gecos "abc" y agrega una
+SGLINE por 5 minutos con "razón xyz". El segundo ejemplo es similar
+pero agrega la SGLINE por tres días en vez de 5 minutos.
+
+El tercer ejemplo agrega una SGLINE permanente sobre abc por "razón abc".
+
+El cuarto ejemplo agrega una SGLINE sobre abc por la duración
+especificada en el archivo de configuración por "razón abc".
+
+Sintaxis: SGLINE DEL <gecos|número>
+
+Si un número es especificado entonces corresponde a la entrada en SGLINE LIST.
+Puede especificar múltiples números separados con comas, o un rango con dos
+puntos.
+
+Ejemplos:
+    /msg &nick& SGLINE DEL abc
+    /msg &nick& SGLINE DEL 5
+    /msg &nick& SGLINE DEL 1,2,5,10
+    /msg &nick& SGLINE DEL 1:5,7,9:11
+
+Sintaxis: SGLINE LIST [FULL]
+
+Si se especifica FULL, entonces las razones de SGLINE son mostradas.
+
+Ejemplos:
+    /msg &nick& SGLINE LIST
+    /msg &nick& SGLINE LIST FULL
+
+Sintaxis: SGLINE SYNC
+
+Envía todas las sglines a los servidores. Esto puede ser útil si
+los servicios van a ser suspendidos o no reconocen a un usuario
+que coincide con una sgline en particular.

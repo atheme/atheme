@@ -1,0 +1,14 @@
+Ayuda para FREEZE:
+
+FREEZE permite a operadores "congelar" la cuenta de un
+usuario abusivo. Esto cancela todas las sesiones identificadas
+a la cuenta e impide nuevos inicios de sesión. Así, los
+usuarios no pueden obtener el acceso asociado a la cuenta.
+
+La información de FREEZE es visualizada en la salida de INFO.
+
+Sintaxis: FREEZE <nick> ON|OFF <razón>
+
+Ejemplos:
+    /msg &nick& FREEZE pfish ON Spammer persistente
+    /msg &nick& FREEZE alambert OFF

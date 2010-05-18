@@ -1,0 +1,8 @@
+Ayuda para UNOFFER:
+
+Quita un vhost ofrecido de la lista OFFER.
+
+Sintaxis: UNOFFER <vhost>
+
+Ejemplos:
+    /msg &nick& UNOFFER usuarios.ejemplo.net

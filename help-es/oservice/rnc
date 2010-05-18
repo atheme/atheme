@@ -1,0 +1,8 @@
+Ayuda para RNC:
+
+RNC muestra los nombres reales más comunes en la red.
+
+Sintaxis: RNC [número]
+
+Ejemplo:
+    /msg &nick& RNC 10

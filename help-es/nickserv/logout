@@ -1,0 +1,8 @@
+Ayuda para LOGOUT:
+
+LOGOUT cierra su sesión con su cuenta actual.
+
+Sintaxis: LOGOUT
+
+Ejemplo:
+    /msg &nick& LOGOUT

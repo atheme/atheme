@@ -1,0 +1,11 @@
+Ayuda para IDENTIFY:
+
+IDENTIFY autentica a un usuario para acceder a
+sus privilegios de operador de servicios, si el
+operador o clase de operador en cuestión requiere
+una contraseña adicional.
+
+Necesitará iniciar sesión con su cuenta de servicios
+de antemano.
+
+Sintaxis: IDENTIFY <contraseña>

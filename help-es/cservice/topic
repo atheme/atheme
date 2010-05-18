@@ -1,0 +1,8 @@
+Ayuda para TOPIC:
+
+TOPIC permite cambiar el tema de un canal.
+
+Sintaxis: TOPIC <#canal> <tema>
+
+Ejemplos:
+    /msg &nick& TOPIC #abc xyz

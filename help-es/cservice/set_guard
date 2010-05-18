@@ -1,0 +1,8 @@
+Ayuda para SET GUARD:
+
+SET GUARD permite que &nick& se una al canal.
+
+Sintaxis: SET <#canal> GUARD ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #atheme GUARD ON

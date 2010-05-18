@@ -1,0 +1,10 @@
+Ayuda para RAW:
+
+RAW inyecta datos en el servidor padre. Este comando
+sólo tiene propósitos de depuración y no debería ser
+utilizado salvo que sepa lo que hace.
+
+Sintaxis: RAW <parámetros>
+
+Ejemplo:
+    /msg &nick& RAW :&nick& OPERWALL :Mi administrador es un idiota

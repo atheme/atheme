@@ -1,0 +1,9 @@
+Ayuda para WHY:
+
+WHY muestra las entradas de acceso que se aplican
+a un usuario conectado.
+
+Sintaxis: WHY <#canal> <nick>
+
+Ejemplos:
+    /msg &nick& WHY #atheme jilles^

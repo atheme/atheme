@@ -1,0 +1,15 @@
+Ayuda para VHOSTNICK:
+
+VHOSTNICK permite a operadores establecer un host
+virtual (también conocido como spoof o cloak)
+para un nick. Este vhost es aplicado al
+usuario inmediatamente y cada vez que se
+identifica a servicios utilizando tal nick. Si no
+se especifica un vhost, entonces se revierte al
+vhost de la cuenta.
+
+Sintaxis: VHOSTNICK <nick> [<vhost>]
+
+Ejemplos:
+    /msg &nick& VHOSTNICK shadowm gaaa.tos
+    /msg &nick& VHOSTNICK joepino

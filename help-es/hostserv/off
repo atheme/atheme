@@ -1,0 +1,13 @@
+Ayuda para OFF:
+
+Desactiva el vhost asignado actualmente al nick en uso. Cuando
+utilice este comando, cualquier usuario que ejecute /whois con
+su nick verá su dirección IP real.
+
+Para quitar su vhost permanentemente, consulte con el soporte
+de la red.
+
+Sintaxis: OFF
+
+Ejemplos:
+    /msg &nick& OFF

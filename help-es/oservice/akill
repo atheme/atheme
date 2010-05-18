@@ -1,0 +1,65 @@
+Ayuda para AKILL:
+
+AKILL le permite administrar vetos a nivel de red de forma similar a
+la característica AKILL de DALnet. Los servicios almacenan sus AKILLs
+y le permiten administrarlas con facilidad.
+
+Sintaxis: AKILL ADD <nick|máscara de host> [!P|!T <minutos>] <razón>
+
+Si el indicador !P es especificado, la AKILL no expirará (permanente).
+Si especifica !T el tiempo de expiración debe seguirle, en minutos,
+horas ("h"), días ("d") o semanas ("w").
+
+Ejemplos:
+    /msg &nick& AKILL ADD abc !T 5 razón xyz
+    /msg &nick& AKILL ADD abc !T 3d razón xyz
+    /msg &nick& AKILL ADD abc@xyz.com !P razón abc
+    /msg &nick& AKILL ADD abc@xyz.com razón abc
+
+El primer ejemplo busca al usuario con el nick "abc" y agrega una AKILL
+por 5 minutos con "razón xyz". El segundo ejemplo es similar pero agrega
+la AKILL por tres días en vez de 5 minutos.
+
+El tercer ejemplo agrega una AKILL permanente sobre abc@xyz.com por "razón abc".
+
+El cuarto ejemplo agrega una AKILL sobre abc@xyz.com con la duración
+especificada en el archivo de configuración por "razón abc".
+
+Sintaxis: AKILL DEL <máscara de host|número>
+
+Si un número es especificado entonces corresponde a la entrada en AKILL LIST.
+Puede especificar múltiples números separados con comas, o un rango con dos
+puntos.
+
+Ejemplos:
+    /msg &nick& AKILL DEL abc@xyz.com
+    /msg &nick& AKILL DEL 5
+    /msg &nick& AKILL DEL 1,2,5,10
+    /msg &nick& AKILL DEL 1:5,7,9:11
+
+Sintaxis: AKILL LIST [FULL]
+
+Especificando FULL, las razones de AKILL son mostradas.
+
+Ejemplos:
+    /msg &nick& AKILL LIST
+    /msg &nick& AKILL LIST FULL
+
+Sintaxis: AKILL LIST <máscara de host>
+
+Muestra AKILLs coincidentes con la máscara especificada, con
+razones. Este comando no realiza consultas DNS en un host,
+así que es recomendable repetirlo con host y dirección IP.
+
+Ejemplos:
+    /msg &nick& AKILL LIST test@192.168.1.1
+
+Sintaxis: AKILL LIST <número>
+
+Muestra la AKILL especificada, con su razón.
+
+Sintaxis: AKILL SYNC
+
+Envía todas las AKILLs a los servidores. Esto puede ser útil si
+los servicios van a ser suspendidos o no reconocen a un usuario
+que cumple con los criterios de una AKILL en particular.

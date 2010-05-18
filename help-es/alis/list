@@ -1,0 +1,19 @@
+Ayuda para LIST:
+
+LIST entrega una lista de canales según el
+patrón y criterios dados.
+
+El patrón puede contener los comodines * y ?.
+
+Las opciones son:
+    -min <n>: usuarios mínimos en un canal
+    -max <n>: usuarios máximos en un canal
+    -skip <n>: omitir los primeros <n> resultados
+    -show [m][t]: mostrar modos/quién estableció temas
+    -mode <+|-|=><modos>: modos activados/no activados/idénticos
+    -topic <patrón>: compara temas con un patrón
+
+Sintaxis: LIST <patrón> [opciones]
+
+Ejemplos:
+    /msg &nick& LIST * -min 50

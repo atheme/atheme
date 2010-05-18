@@ -1,0 +1,9 @@
+Ayuda para LOGSTREAM:
+
+LOGSTREAM le permite "canalizar" los registros de eventos de Atheme en un
+canal, similar al canal snoop.
+
+Sintaxis: LOGSTREAM <#canal>
+
+Ejemplos:
+	/msg &nick& LOGSTREAM #servicios

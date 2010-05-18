@@ -1,0 +1,23 @@
+Ayuda para INFO:
+
+INFO muestra información de cuenta tal como
+fecha y hora de registro, opciones y otros
+detalles. Adicionalmente mostrará la fecha
+y hora de registro y última sesión del nick
+especificado.
+
+Puede solicitar detalles del nick con el cual
+está identificado un usuario especificando un
+signo igual antes de su nick. Esta convención
+con '=' funciona con la mayoría de los
+comandos.
+
+Sintaxis: INFO <nick>
+Sintaxis: INFO =<usuario en línea>
+
+Ejemplos:
+    /msg &nick& INFO w00t
+Muestra información sobre el nick registrado w00t.
+    /msg &nick& INFO =w00tie[home]
+Muestra información sobre el nick registrado con
+el cual el usuario w00tie[hogar] ha iniciado sesión.

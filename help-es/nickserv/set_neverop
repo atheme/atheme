@@ -1,0 +1,9 @@
+Ayuda para SET NEVEROP:
+
+SET NEVEROP impide que otros le agreguen a listas de
+acceso de canales.
+
+Sintaxis: SET NEVEROP ON|OFF
+
+Ejemplo:
+    /msg &nick& SET NEVEROP ON

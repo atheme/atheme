@@ -1,0 +1,11 @@
+Ayuda para OFFER:
+
+OFFER le permite ofrecer una lista de vhosts a los usuarios de su
+red que pueden aceptar a voluntad sin la ayuda de un operador.
+La cadena $account en el vhost ofrecido será reemplazada por el
+nombre de cuenta de un usuario cuando lo acepten con TAKE.
+
+Sintaxis: OFFER <vhost>
+
+Ejemplos:
+    /msg &nick& OFFER gaaa.tos

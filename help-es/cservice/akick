@@ -1,0 +1,29 @@
+Ayuda para AKICK:
+
+El comando AKICK le permite administrar listas de
+denegación de acceso a canales. Los usuarios en
+la lista AKICK son vetados y expulsados automáticamente
+al unirse al canal, quitando cualquier exención de
+veto que se les aplique primero. Aquellos usuarios con
+la opción de acceso +r no son afectados.
+
+También es posible especificar una máscara de host
+(nick!usuario@host) para la lista AKICK.
+
+Los vetos de canal introducidos por una entrada de
+AKICK no son quitados automáticamente cuando una
+entrada es borrada de la lista.
+
+La razón es utilizada al expulsar a un usuario y es
+visible en la salida de AKICK LIST. Si la razón
+contiene un carácter '|', toda la información luego
+de éste no aparece en las razones de expulsión pero
+sí en AKICK LIST.
+
+Sintaxis: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]
+
+Ejemplos:
+    /msg &nick& AKICK #abc ADD xyz eres molesto | información privada para ops aquí
+    /msg &nick& AKICK #abc ADD *!*abc@xyz.com
+    /msg &nick& AKICK #abc DEL xyz
+    /msg &nick& AKICK #abc LIST

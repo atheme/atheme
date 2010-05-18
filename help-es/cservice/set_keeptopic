@@ -1,0 +1,13 @@
+Ayuda para SET KEEPTOPIC:
+
+SET KEEPTOPIC permite la restauración del tema
+anterior luego de el canal quede vacío. En
+algunos casos, podría revertir cambios de tema
+tras rupturas de red (netsplits) o caídas de
+servicios, así que es recomendable no activar
+esto si su canal tiende a no estar nunca vacío.
+
+Sintaxis: SET <#canal> KEEPTOPIC ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc KEEPTOPIC ON

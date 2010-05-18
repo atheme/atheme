@@ -1,0 +1,21 @@
+Ayuda para RECOVER:
+
+RECOVER le permite recuperar control de su
+canal en caso de una toma.
+
+Todos los miembros del canal dejan de ser ops,
+los límites y la clave son borrados, todos los
+vetos que coincidan con Ud. son quitados, una
+excepción de veto es agregada para Ud. (en caso
+de que haya vetos que Atheme no puede detectar),
+el canal se adquiere modos +im de sólo invitación
+y moderación y Ud. es invitado.
+
+Si se encuentra en el canal actualmente, Ud.
+adquirirá op y no se agregará una excepción de
+veto.
+
+Sintaxis: RECOVER <#canal>
+
+Ejemplo:
+    /msg &nick& RECOVER #abc

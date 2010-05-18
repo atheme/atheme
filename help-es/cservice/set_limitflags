@@ -1,0 +1,13 @@
+Ayuda para SET LIMITFLAGS:
+
+SET LIMITFLAGS limita el poder de la opción +f.
+
+Los usuarios con +f que no tengan +s ni +R sólo
+pueden agregar +b (akick), y aquellos usuarios
+que no tengan tanto +s como +R no pueden otorgar
++s, +R y +f.
+
+Sintaxis: SET <#canal> LIMITFLAGS ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc LIMITFLAGS ON

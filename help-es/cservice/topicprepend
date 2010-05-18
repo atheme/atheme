@@ -1,0 +1,9 @@
+Ayuda para TOPICPREPEND:
+
+TOPICPREPEND permite agregar información al inicio del tema
+de un canal.
+
+Sintaxis: TOPICPREPEND <#canal> <tema>
+
+Ejemplos:
+    /msg &nick& TOPICPREPEND #abc xyz

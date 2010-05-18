@@ -1,0 +1,28 @@
+Ayuda para CLEAR BANS:
+
+CLEAR BANS le permite quitar todos los vetos encontrados
+en un canal dado. Si su ircd soporta otras listas
+asociadas a un canal (por ej. exenciones de veto), es
+posible también borrar éstas especificando las letras de
+modo. Especifique un asterisco para borrar todas las
+listas.
+
+Sintaxis: CLEAR <#canal> BANS [tipos]
+
+Ejemplos:
+    /msg &nick& CLEAR #soporte BANS
+
+Limpia la lista de vetos de #soporte.
+
+    /msg &nick& CLEAR #soporte BANS eI
+
+Limpia las listas de exención de vetos e invitacón
+en #soporte (si su ircd las soporta).
+
+    /msg &nick& CLEAR #soporte BANS *
+
+Limpia todas las listas de #soporte.
+
+    /msg &nick& CLEAR #soporte BANS +
+
+Muestras las letras de modos aceptadas.

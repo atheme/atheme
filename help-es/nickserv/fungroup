@@ -1,0 +1,23 @@
+Ayuda para FUNGROUP:
+
+FUNGROUP forza la desasociación del nick especificado
+de la cuenta con la cual está registrado.
+
+#if module nickserv/set_accountname
+Si está desagrupando un nombre de cuenta, necesitará
+especificar un nuevo nombre para la cuenta. Éste
+debe ser otro nick registrada con ella.
+#else
+No es posible desagrupar nombres de cuenta
+#endif
+
+Sintaxis: FUNGROUP <nick>
+#if module nickserv/set_accountname
+Sintaxis: FUNGROUP <cuenta> <nuevonombre>
+#endif
+
+Ejemplos:
+    /msg &nick& FUNGROUP UnNick
+#if module nickserv/set_accountname
+    /msg &nick& FUNGROUP UnNombre UnNick
+#endif

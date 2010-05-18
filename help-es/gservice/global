@@ -1,0 +1,12 @@
+Ayuda para GLOBAL:
+
+GLOBAL permite a un operador de IRC almacenar múltiples líneas
+en un búfer y enviarlas una a la vez a cada usuario de la red.
+
+Sintaxis: GLOBAL <parámetros>|SEND|CLEAR
+
+Ejemplos:
+    /msg &nick& GLOBAL ésta es la línea 1
+    /msg &nick& GLOBAL ésta es la línea 2
+    /msg &nick& GLOBAL SEND
+    /msg &nick& GLOBAL CLEAR

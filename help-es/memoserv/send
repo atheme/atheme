@@ -1,0 +1,14 @@
+Ayuda para SEND:
+
+SEND le permite enviar un memo a un nick que
+se encuentra actualmente desconectado. Cuando
+inicie sesión, el destinatario será notificado
+de que tiene mensajes en espera y podrán leer
+su memo.
+
+Su memo no puede ser más largo que 300 caracteres.
+
+Sintaxis: SEND <usuario|nick> texto
+
+Ejemplos:
+    /msg &nick& SEND Kog paga las cuentas

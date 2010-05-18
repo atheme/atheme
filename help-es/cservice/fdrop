@@ -1,0 +1,13 @@
+Ayuda paraFDROP:
+
+FDROP permite eliminar cualquier canal registrado
+que no esté reservado (vea la ayuda sobre HOLD).
+
+Una vez que elimine un canal, todos los datos asociados
+a él (listas de acceso, etc.) son eliminados y no es
+posible restaurarlos.
+
+Sintaxis: FDROP <#canal>
+
+Ejemplos:
+    /msg &nick& FDROP #abc

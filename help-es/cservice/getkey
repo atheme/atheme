@@ -1,0 +1,9 @@
+Ayuda para GETKEY:
+
+GETKEY muestra la clave de acceso (+k, contraseña para
+unirse) del canal especificado: /join #canal clave
+
+Sintaxis: GETKEY <#canal>
+
+Ejemplos:
+    /msg &nick& GETKEY #abc

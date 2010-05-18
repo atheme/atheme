@@ -1,0 +1,10 @@
+Ayuda para GROUP:
+
+Este comando establece el vhost del nick actual como el
+vhost para todos los nicks del grupo, incluyendo nicks
+que sean agregados posteriormente.
+
+Sintaxis: GROUP
+
+Ejemplos:
+    /msg &nick& GROUP

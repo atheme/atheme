@@ -1,0 +1,10 @@
+Ayuda para SYNC:
+
+El comando SYNC forzará todos los estados del canal a reflejar los permisos
+de acceso, quitando y dando ops, voz y similares según sea necesario. Ud.
+debe tener el permiso de acceso +R al canal para ejecutar este comando.
+
+Sintaxis: SYNC <#canal>
+
+Ejemplos:
+	/msg &nick& SYNC #xyz

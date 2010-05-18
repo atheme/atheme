@@ -1,0 +1,9 @@
+Ayuda para SET PRIVATE:
+
+Esta opción impide que un bot sea asignado a un canal
+por usuarios que no tengan el privilegio chan:admin.
+ 
+Sintaxis: SET <botnick> PRIVATE {ON|OFF}
+  
+Ejemplos:
+    /msg &nick& SET Seguridad PRIVATE ON

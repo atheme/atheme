@@ -1,0 +1,8 @@
+Ayuda para SET ACCOUNTNAME:
+
+SET ACCOUNTNAME le permite cambiar su nombre de
+cuenta a cualquier nick agrupado en ella. Su nombre
+de cuenta es utilizado en varias opciones como un
+nombre para Ud.
+
+Sintaxis: SET ACCOUNTNAME <nick>

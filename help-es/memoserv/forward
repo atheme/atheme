@@ -1,0 +1,12 @@
+Ayuda para FORWARD:
+
+FORWARD le permite redirigir un memo a otra cuenta.
+Esto es útil por varias razones.
+
+También puede usar SEND, DELETE, READ y LIST con
+memos.
+
+Sintaxis: FORWARD <usuario|nick> <núm de memo>
+
+Ejemplos:
+    /msg &nick& FORWARD kog 1

@@ -1,0 +1,32 @@
+Ayuda para ACCESS:
+
+ACCESS mantiene una lista de máscaras usuario@host desde
+las cuales &nick& le reconocerá, y no le solicitará
+cambiar de nick. Aun así es necesario identificarse para
+impedir la expiración, obtener acceso a canales o
+cambiar las opciones del nick.
+
+Las entradas de la lista de acceso consisten en nombres
+de host con comodines opcionales, direcciones IP y
+máscaras CIDR. Hay restricciones sobre la cantidad de
+comodines que puede utilizar. Si omite la máscara,
+&nick& intentará generar una que coincida con su host
+actual.
+
+Sintaxis: ACCESS LIST
+Sintaxis: ACCESS ADD [mask]
+Sintaxis: ACCESS DEL <mask>
+#if priv user:auspex
+
+Operadores con el privilegio user:auspex también pueden
+ver la lista de acceso de otro usuario.
+
+Sintaxis: ACCESS LIST <nick>
+#endif
+
+Ejemplos:
+    /msg &nick& ACCESS LIST
+    /msg &nick& ACCESS ADD jorge@host.ejemplo.com
+    /msg &nick& ACCESS ADD usuario@10.0.0.8
+    /msg &nick& ACCESS ADD jilles@192.168.1.0/24
+    /msg &nick& ACCESS DEL *alguien@*.area.antiguo.ejemplo.net

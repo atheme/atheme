@@ -1,0 +1,29 @@
+Ayuda para RMATCH:
+
+RMATCH muestra todos los usuarios cuyo
+nick!usuario@host nombre real
+coincide con la expresión regular dada..
+
+En vez de un slash, cualquier caracter que
+no sea una letra, dígito, espacio o
+backslash y no se presenta en el patrón puede
+ser utilizado. Una i tras el patrón permite
+ignorar mayúsculas y minúsculas.
+
+Por defecto, el patrón es una regex estilo
+extendido POSIX. Si se ha compilado con soporte
+de PCRE, puede agregar una p tras el patrón
+para utilizarlo.
+
+El número de coincidencias es limitado por
+defecto. Para ignorar este límite, añada
+el parámetro FORCE. En cualquier caso, el
+número real de coincidencias es mostrado.
+
+Sintaxis: RMATCH /<patrón>/[i][p] [FORCE]
+
+Ejemplos:
+    /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
+    /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
+    /msg &nick& RMATCH /^[^ ]* [^ ]*$/
+    /msg &nick& RMATCH /\d\d\d/p

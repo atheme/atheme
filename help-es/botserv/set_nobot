@@ -1,0 +1,10 @@
+Ayuda para SET NOBOT:
+
+Esta opción hace que no se puedan asignar bots a un canal.
+Si ya hay un bot asignado al canal, este será automáticamente
+desasignado al activar esta opción.
+ 
+Sintaxis: SET <#canal> NOBOT {ON|OFF}
+  
+Ejemplos:
+    /msg &nick& SET #ayuda NOBOT ON

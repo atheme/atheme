@@ -1,0 +1,11 @@
+Ayuda para SET FANTASY:
+
+Activa o desactiva el modo de fantasía en un canal.
+Al encontrarse activado, los usuarios podrán utilizar
+comandos de chanserv como !op, !deop, !voice, !devoice,
+!kick, !kb, !unban, !akick, !info en un canal.
+ 
+Sintaxis: SET <#canal> FANTASY {ON|OFF}
+  
+Ejemplos:
+    /msg &nick& SET #ayuda FANTASY ON

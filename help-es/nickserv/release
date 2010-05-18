@@ -1,0 +1,16 @@
+Ayuda para RELEASE:
+
+RELEASE quita una protección para su nick o cambia el
+nick de un usuario que lo está utilizando.
+
+Las protecciones son aplicadas cuando alguien utiliza
+su nick sin identificarse e impiden cualquier uso de
+éste.
+
+Si Ud. ya está identificado para el nick, no necesita
+especificar una contraseña.
+
+Sintaxis: RELEASE <nick> [contraseña]
+
+Ejemplo:
+    /msg &nick& RELEASE smith sésamo

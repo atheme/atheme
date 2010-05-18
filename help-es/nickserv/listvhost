@@ -1,0 +1,12 @@
+Ayuda para LISTVHOST:
+
+LISTVHOST muestra cuentas que tienen un vhost
+asociado. Si un patrón es especificado, sólo
+aquellas cuentas con vhosts que cumplan con
+el patrón son mostradas.
+
+Sintaxis: LISTVHOST [patrón]
+
+Ejemplos:
+    /msg &nick& LISTVHOST
+    /msg &nick& LISTVHOST *staff*

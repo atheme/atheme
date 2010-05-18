@@ -1,0 +1,12 @@
+Ayuda para SET ENFORCE:
+
+SET ENFORCE le permite activar mayor protección
+para los nicks registrados en su cuenta.
+
+Esto automáticamente cambiará el nick de alguien
+que intente utilizar los suyos sin identificarse
+a tiempo, y bloquear su uso temporalmente,
+permitiéndole a Ud. liberarlos cuando considere
+necesario. Vea la ayuda sobre RELEASE.
+
+Sintaxis: SET ENFORCE ON|OFF

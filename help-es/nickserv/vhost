@@ -1,0 +1,20 @@
+Ayuda para VHOST:
+
+VHOST permite a operadores establecer un host
+virtual (también conocido como spoof o cloak)
+para una cuenta. Este vhost es aplicado al
+usuario inmediatamente y cada vez que se
+identifica a servicios.
+
+Sintaxis: VHOST <nick> ON <vhost>
+Sintaxis: VHOST <nick> OFF
+
+Si el nick está marcado, puede ignorar esta
+restricción usando el parámetro FORCE.
+
+Sintaxis: VHOST <nick> ON <vhost> FORCE
+Sintaxis: VHOST <nick> OFF FORCE
+
+Ejemplos:
+    /msg &nick& VHOST shadowm ON gaaa.tos
+    /msg &nick& VHOST joepino OFF

@@ -1,0 +1,10 @@
+Ayuda para BAN:
+
+BAN le permite vetar a un usuario o máscara de host de
+un canal.
+
+Sintaxis: BAN <#canal> <nick|máscara de host>
+
+Ejemplos:
+    /msg &nick& BAN #chat carnell
+    /msg &nick& BAN #chat *!*@*.ipt.aol.com

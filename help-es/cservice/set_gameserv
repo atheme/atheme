@@ -1,0 +1,19 @@
+Ayuda para SET GAMESERV:
+
+SET GAMESERV permite a los servicios de juego
+ser utilizados para enviar al canal usando
+/msg GameServ <comando> <canal> <parámetros>.
+
+Puede decidir quién puede utilizar GameServ:
+    ALL   - todos los miembros del canal
+    VOICE - sólo ops/usuarios con voz
+    OP    - sólo ops
+    OFF   - nadie
+
+Para OP y VOICE, tanto estado de canal como
+opciones de acceso de &nick& se aplican.
+
+Sintaxis: SET <#canal> GAMESERV ALL|VOICE|OP|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc GAMESERV VOICE

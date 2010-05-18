@@ -1,0 +1,9 @@
+Ayuda para FORBID:
+
+FORBID prohíbe el uso de un nick especificado, similar a RESV o QLINE de su IRCd.
+
+Sintaxis: FORBID <nick> ON|OFF [razón]
+
+Ejemplos:
+	/msg &nick& FORBID spb ON Ninguna razón en particular.
+	/msg &nick& FORBID spb OFF

@@ -1,0 +1,12 @@
+Ayuda para TAKE:
+
+TAKE le permite establecer un vhost que el equipo de
+soporte de la red le haya ofrecido para utilizarlo en
+su cuenta. Si la cadena $account es parte del vhost,
+será reemplazada con el nombre de su cuenta.
+
+Sintaxis: TAKE <vhost>
+
+Ejemplo:
+	/msg &nick& TAKE $account.usuarios.ejemplo.net
+	/msg &nick& TAKE ejemplo.net

@@ -1,0 +1,11 @@
+Ayuda para LISTMAIL:
+
+LISTMAIL muestra cuentas registradas con una
+misma dirección de e-mail especificada. Se
+permiten comodines.
+
+Sintaxis: LISTMAIL <e-mail>
+
+Ejemplos:
+    /msg &nick& LISTMAIL patricio@ejemplo.com
+    /msg &nick& LISTMAIL *@cam.ac.uk

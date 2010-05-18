@@ -1,0 +1,11 @@
+Ayuda para INJECT:
+
+INJECT falsea o simula datos del servidor padre. Este
+comando sólo tiene propósitos de depuración y no
+debería ser utilizado salvo que sepa lo que hace.
+
+Sintaxis: INJECT <parámetros>
+
+Examples:
+    /msg &nick& INJECT :maestro.red.com PING :esclavo.red.com
+    /msg &nick& INJECT :usuarioJoe PRIVMSG &nick& :HELP INJECT

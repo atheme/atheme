@@ -1,0 +1,19 @@
+Ayuda para DELETE:
+
+DELETE le permite eliminar memos de su bandeja
+de entrada. Puede eliminar todos los memos con
+el parámetro ALL, todos los memos leídos con
+OLD, o especificar un número de memo.
+
+Puede obtener un número de memo usando el comando
+LIST. Una vez que elimine un memo, los números
+de los memos siguientes cambian.
+
+También puede usar SEND, READ, LIST y FORWARD con
+memos.
+
+Sintaxis: DELETE ALL|OLD|<núm de memo>
+
+Ejemplos:
+    /msg &nick& DELETE OLD
+    /msg &nick& DELETE 1

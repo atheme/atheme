@@ -1,0 +1,9 @@
+Ayuda para REJECT:
+
+Rechaza el vHost solicitado para el nick especificado.
+Un memo será también enviado notificando al usuario.
+
+Sintaxis: REJECT <nick>
+
+Ejemplos:
+    /msg &nick& REJECT nenolod

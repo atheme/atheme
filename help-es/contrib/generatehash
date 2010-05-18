@@ -1,0 +1,9 @@
+Ayuda para GENERATEHASH:
+
+GENERATEHASH genera un hash de contraseña para Atheme. Esto es
+útil para generar fácilmente una contraseña de operador de servicios.
+
+Sintaxis: GENERATEHASH <contraseña>
+
+Ejemplos:
+	/msg &nick& GENERATEHASH EsTaC0ntras3ña

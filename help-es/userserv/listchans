@@ -1,0 +1,20 @@
+Ayuda para LISTCHANS:
+
+LISTCHANS muestra los canales a los cuales Ud.
+tiene acceso, incluyendo áquellos que haya
+creado Ud. mismo.
+
+Entradas de AKICK y entradas de acceso basadas
+en hosts no serán mostradas.
+
+Sintaxis: LISTCHANS
+#if priv chan:auspex
+
+Operadores con el privilegio chan:auspex pueden
+también comprobar al acceso de otro usuario.
+
+Sintaxis: LISTCHANS <cuenta>
+#endif
+
+Ejemplo:
+    /msg &nick& LISTCHANS

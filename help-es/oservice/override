@@ -1,0 +1,8 @@
+Ayuda para OVERRIDE:
+
+OVERRIDE es utilizado para ejecutar un comando como otro usuario.
+
+Sintaxis: OVERRIDE <objeto> <servicio> <comando> [parámetros]
+
+Ejemplos:
+    /msg &nick& OVERRIDE dotslasher ChanServ FLAGS #cows nenolod +*

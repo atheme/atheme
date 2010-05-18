@@ -1,0 +1,15 @@
+Ayuda para OWNER|DEOWNER:
+
+Estos comandos realizan cambios de modo de estado en un
+canal.
+
+Aquellos usuarios afectados son notificados de quién
+realiza los cambios.
+
+Si el último parámetro es omitido, la acción se realiza
+sobre la persona que ejecuta el comando.
+
+Sintaxis: OWNER|DEOWNER <#canal> [nick]
+
+Ejemplos:
+    /msg &nick& OWNER #abc

@@ -1,0 +1,11 @@
+Ayuda para FVERIFY:
+
+FVERIFY permite a administradores confirmar un
+cambio asociado con el registro de una cuenta sin
+tener el e-mail de verificación.
+
+Sintaxis: FVERIFY <operación> <nick>
+
+Ejemplo:
+    /msg &nick& FVERIFY REGISTER jenny
+    /msg &nick& FVERIFY EMAILCHG Aeriana

@@ -1,0 +1,9 @@
+Ayuda para PING:
+
+PING le permite a un usuario verificar su conexión de red "pingueando" &nick& y
+recibiendo una respuesta "Pong!".
+
+Sintaxis: PING
+
+Ejemplos:
+	/msg &nick& PING

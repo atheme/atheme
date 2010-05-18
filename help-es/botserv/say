@@ -1,0 +1,8 @@
+Ayuda para SAY:
+
+Hace a un bot hablar en el canal especificado.
+
+Sintaxis: SAY <canal> <texto>
+
+Ejemplos:
+    /msg &nick& SAY #ayuda Bienvenido a #ayuda!

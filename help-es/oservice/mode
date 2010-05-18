@@ -1,0 +1,11 @@
+Ayuda para MODE:
+
+MODE permite editar los modos de un canal. Algunas redes
+probablemente considerarán el uso de este comando una
+práctica inaceptable.
+
+Sintaxis: MODE <#canal> <modo> [parámetros]
+
+Ejemplos:
+    /msg &nick& MODE #canal -m
+    /msg &nick& MODE #canal +o irmorelle

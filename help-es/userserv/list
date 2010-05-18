@@ -1,0 +1,16 @@
+Ayuda para LIST:
+
+LIST muestra cuentas de acuerdo a un patrón
+especificado. Se permiten comodines.
+
+Si una máscara usuario@host es también
+especificada, sólo se mostrarán cuentas cuyos
+últimos hosts utilizados coincidan.
+
+Sintaxis: LIST <patrón>
+Sintaxis: LIST <patrón>!<usuario@host>
+
+Ejemplos:
+    /msg &nick& LIST jorge*
+    /msg &nick& LIST *a?ambert*
+    /msg &nick& LIST *!*@*.de

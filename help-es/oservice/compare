@@ -1,0 +1,14 @@
+Ayuda para COMPARE:
+
+COMPARE permite a operadores con el privilegio
+chan:auspex ver información coincidente entre dos
+usuarios o dos canales.
+
+Es útil para ayudar en la detección de clones,
+entre otras situaciones.
+
+Sintaxis: COMPARE <#canal|usuario> <#canal|usuario>
+
+Ejemplo:
+    /msg &nick& COMPARE #warez #dcc
+    /msg &nick& COMPARE w00t Brik

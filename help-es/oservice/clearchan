@@ -1,0 +1,16 @@
+Ayuda para CLEARCHAN:
+
+CLEARCHAN permite a operadores vaciar un canal
+por uno de tres medios: KICK, que expulsa a todos
+los usuarios del canal, KILL, que desconecta a
+todos los usuarios del canal de la red, o AKILL,
+que establece un veto de red por una semana sobre
+los hosts de cada usuario del canal.
+
+Este comando no debe ser utilizado a la ligera.
+
+Sintaxis: CLEARCHAN KICK|KILL|AKILL <#canal> <razón>
+
+Ejemplo:
+    /msg &nick& CLEARCHAN KICK #warez el warez es malo, ok?
+    /msg &nick& CLEARCHAN AKILL #warez les advertí!

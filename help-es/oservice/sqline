@@ -1,0 +1,48 @@
+Ayuda para SQLINE:
+
+SQLINE le permite denegar el uso de ciertos nicks o canales
+en la red.
+
+Una sqline de nicks puede contener comodines *, ?, # (cualquier
+dígito) y @ (cualquier letra). Una sqline de canal debe ser
+una coincidencia exacta que comience con # o &.
+
+Sintaxis: SQLINE ADD <máscara> [!P|!T <minutos>] <razón>
+
+Si el indicador !P es especificado, la SQLINE no expirará (permanente).
+Si especifica !T el tiempo de expiración debe seguirle, en minutos,
+horas ("h"), días ("d") o semanas ("w").
+
+Ejemplos:
+    /msg &nick& SQLINE ADD spambot* !T 7d xyz razón
+    /msg &nick& SQLINE ADD spam??? !P abc razón
+
+El primer ejemplo denega el uso de nicks comenzando con "spambot" por
+7 días. El segundo ejemplo añade una SQLINE permanente sobre "spam???"
+por "abc razón".
+
+Sintaxis: SQLINE DEL <máscara|número>
+
+Si un número es especificado entonces corresponde a la entrada en SQLINE LIST.
+Puede especificar múltiples números separados con comas, o un rango con dos
+puntos.
+
+Ejemplos:
+    /msg &nick& SQLINE DEL abc
+    /msg &nick& SQLINE DEL 5
+    /msg &nick& SQLINE DEL 1,2,5,10
+    /msg &nick& SQLINE DEL 1:5,7,9:11
+
+Sintaxis: SQLINE LIST [FULL]
+
+Si se especifica FULL, entonces las razones de SQLINE son mostradas.
+
+Ejemplos:
+    /msg &nick& SQLINE LIST
+    /msg &nick& SQLINE LIST FULL
+
+Sintaxis: SQLINE SYNC
+
+Envía todas las sqlines a todos los servidores. Esto es útil pues
+las sqlines deben estar presentes antes de que el nick o canal sean
+utilizados para ser realmente efectivas.

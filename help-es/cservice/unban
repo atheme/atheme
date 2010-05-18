@@ -1,0 +1,11 @@
+Ayuda para UNBAN:
+
+UNBAN le permite quitar un veto sobre un usuario o
+máscara de host en un canal. Si no especifica un nick
+o máscara, se le quitan vetos a Ud. mismo.
+
+Sintaxis: UNBAN <#canal> [nick|máscara de host]
+
+Ejemplos:
+    /msg &nick& UNBAN #chat pfish
+    /msg &nick& UNBAN #chat *!*@*.ucdavis.edu

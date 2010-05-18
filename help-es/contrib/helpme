@@ -1,0 +1,10 @@
+Ayuda para HELPME:
+
+Le marca como asistente de red estableciendo el modo de usuario +h. Esto sólo
+es útil si su IRCd soporta el modo de usuario +h y tiene miembros del equipo
+de soporte que no son operadores. Requiere el privilegio OPERSERV:HELPME.
+
+Sintaxis: HELPME
+
+Ejemplos:
+    /msg &nick& HELPME

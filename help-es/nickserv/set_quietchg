@@ -1,0 +1,12 @@
+Ayuda para SET QUIETCHG:
+
+SET QUIETCHG impide que servicios le notifiquen
+automáticamente cuando ChanServ es utilizado para
+afectar su estado en canales. Al ajustarlo como
+ON, los servicios no le seguirán enviando
+mensajes de este tipo.
+
+Sintaxis: SET QUIETCHG ON|OFF
+
+Ejemplo:
+    /msg &nick& SET QUIETCHG ON

@@ -1,0 +1,12 @@
+Ayuda para RETURN:
+
+RETURN restablece la contraseña de la cuenta
+especificada, la envía a la dirección de
+e-mail dada y establece esta última como la
+dirección de la cuenta. Si hay sesiones
+activas con la cuenta, éstas serán cerradas.
+
+Sintaxis: RETURN <nick> <e-mail>
+
+Ejemplos:
+    /msg &nick& RETURN jdoe john@ejemplo.com

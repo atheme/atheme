@@ -1,0 +1,11 @@
+Ayuda para SET SECURE:
+
+SET SECURE impide que cualquiera que no se
+encuentre en las listas de acceso del canal
+obtenga estado de operador o halfop en el
+canal. Esto es útil para los paranoicos.
+
+Sintaxis: SET <#canal> SECURE ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc SECURE ON

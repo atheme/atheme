@@ -1,0 +1,10 @@
+Ayuda para HELP:
+
+HELP muestra información de ayuda acerca
+de todos los comandos de servicios.
+
+Sintaxis: HELP <comando> [parámetros]
+
+Ejemplos:
+    /msg &nick& HELP REGISTER
+    /msg &nick& HELP SET PASSWORD

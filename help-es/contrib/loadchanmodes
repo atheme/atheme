@@ -1,0 +1,11 @@
+Ayuda para LOADCHANMODES:
+
+LOADCHANMODES carga todos los modos de canal, temas y vetos para cada canal
+de la red de acuerdo a su estado al momento de usar SAVECHANMODES. LOADCHANMODES
+busca los datos almacenados en DATADIR/chanmodes.txt . Esta ruta generalmente
+es ~/atheme/etc/chanmodes.txt , pero puede variar en su instalación.
+
+Sintaxis: LOADCHANMODES
+
+Ejemplos:
+	/msg &nick& LOADCHANMODES

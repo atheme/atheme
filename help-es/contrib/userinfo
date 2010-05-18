@@ -1,0 +1,22 @@
+Help for USERINFO:
+
+The USERINFO command allows the definition of info lines
+to be shown to the channel when a user joins.
+
+When only the channel argument is given, a listing of
+users with info lines will be displayed.
+
+Syntax: USERINFO <#channel>
+
+Otherwise, an info line is modified or deleted.
+
+Syntax: USERINFO <#channel> <nickname> [newinfo]
+
+The given nickname must be on the channel access list
+and you must have permission to modify the entry (+f
+plus the entry's flags).
+
+Examples:
+    /msg &nick& USERINFO #foo
+    /msg &nick& USERINFO #foo foouser
+    /msg &nick& USERINFO #foo foouser An info line.

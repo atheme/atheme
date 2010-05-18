@@ -1,0 +1,15 @@
+Ayuda para SET VERBOSE:
+
+SET VERBOSE ON envía anuncios al canal cada vez que alguien
+modifique las listas de acceso.
+
+SET VERBOSE OPS envía anuncios a los operadores de un canal
+cada vez que alguien modifique las listas de acceso.
+
+Los comandos de fantasía siempre son ejecutados como si
+SET VERBOSE ON estuviera en efecto.
+
+Sintaxis: SET <#canal> VERBOSE ON|OPS|OFF
+
+Ejemplo:
+    /msg &nick& SET #abc VERBOSE ON

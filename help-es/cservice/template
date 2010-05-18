@@ -1,0 +1,54 @@
+Ayuda para TEMPLATE:
+
+EL comando TEMPLATE permite la definición de conjuntos
+de opciones de acceso, simplificando el uso de FLAGS.
+
+Sin argumentos permite ver la lista de plantillas de
+acceso definidas por la red. Éstas incluyen al menos
+#if halfops
+SOP/AOP/HOP/VOP.
+#else
+SOP/AOP/VOP.
+#endif
+
+Sintaxis: TEMPLATE
+
+Especificando sólo un nombre de canal, la lista de
+plantillas del canal son mostradas.
+
+Sintaxis: TEMPLATE <#canal>
+
+De otro modo, se utiliza para modificar plantillas.
+Se pueden especificar nombres con nombres de plantilla
+(para copiar plantillas) o con cambios de opciones
+(que comienzan con + o -, opcionalmente precedidas por
+!). No se pueden crear plantillas con conjuntos vacíos;
+si una plantilla se hace vacía, deja de existir.
+
+Utilizando ! se actualizan automáticamente todas las
+entradas de acceso que coinciden con la plantilla.
+Esto no es posible si la plantilla incluye o incluía
+acceso de fundador (+F).
+
+Hay un límite para la longitud de todas las plantillas
+de un canal.
+
+Si Ud. no es fundador, se le aplican restricciones
+similares a las de FLAGS.
+
+Sintaxis: TEMPLATE <#canal> [plantilla plantillaanterior]
+Sintaxis: TEMPLATE <#canal> [plantilla cambios_de_opciones]
+Sintaxis: TEMPLATE <#canal> [plantilla !cambios_de_opciones]
+
+Ejemplos:
+    /msg &nick& TEMPLATE #abc
+    /msg &nick& TEMPLATE #abc usuario VOP
+    /msg &nick& TEMPLATE #abc usuario !+A
+#if halfops
+    /msg &nick& TEMPLATE #abc co-fundador +*-OH
+    /msg &nick& TEMPLATE #abc op -*+vVhoti
+#else
+    /msg &nick& TEMPLATE #abc co-fundador +*-O
+    /msg &nick& TEMPLATE #abc op -*+vVoti
+#endif
+    /msg &nick& TEMPLATE #abc plantillaobsoleta -*

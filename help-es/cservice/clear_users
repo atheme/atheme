@@ -1,0 +1,13 @@
+Ayuda para CLEAR USERS:
+
+CLEAR USERS expulsa a todos los usuarios del canal,
+salvo Ud. El canal será recreado si Ud. no se encuentra
+en él.
+
+Si especifica una razón, ésta será incluída en los
+mensajes de expulsión.
+
+Sintaxis: CLEAR <#canal> USERS [razón]
+
+Ejemplos:
+    /msg &nick& CLEAR #ZonaChat USERS

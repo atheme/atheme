@@ -1,0 +1,16 @@
+Ayuda para VACATION:
+
+VACATION extiende el tiempo de expiración de
+su cuenta y nicks (pero no sus canales) a tres
+veces el tiempo normal. Sólo puede utilizar
+esta opción si su cuenta ha estado registrada
+por suficiente tiempo.
+
+El modo de vacaciones es automáticamente
+desactivado la siguiente vez que se identifica
+con &nick&.
+
+Sintaxis: VACATION
+
+Ejemplos:
+    /msg &nick& VACATION

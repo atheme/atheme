@@ -1,0 +1,8 @@
+Ayuda para UPDATE:
+
+UPDATE sincroniza la base de datos en disco.
+
+Sintaxis: UPDATE
+
+Ejemplo:
+    /msg &nick& UPDATE

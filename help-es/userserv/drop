@@ -1,0 +1,17 @@
+Ayuda para DROP:
+
+El uso de este comando quita su cuenta de la base de datos
+de servicios. Perderá todos sus memos y permisos de acceso
+a canales. Si una cuenta es eliminada, cualquiera puede
+volver a registrarla. Deberá identificarse a servicios antes
+de hacer esto.
+
+Al anular y re-registrar una cuenta durante una ruptura
+de red (netsplit), es posible que usuarios al otro lado
+de la ruptura sean reconocidos como identificados a la nueva
+cuenta.
+
+Sintaxis: DROP <cuenta> <contraseña>
+
+Ejemplos:
+    /msg &nick& DROP abc xyz123456

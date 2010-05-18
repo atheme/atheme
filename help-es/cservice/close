@@ -1,0 +1,18 @@
+Ayuda para CLOSE:
+
+CLOSE impide la utilización de un canal. Cualquiera
+que entre a áquel será vetado y expulsado de
+immediato. El canal no puede ser eliminado y deja
+de ser posible transferir su fundador.
+
+La activación de CLOSE expulsa a todos los usuarios
+que se encuentren en el canal en el momento.
+
+Utilice CLOSE OFF para reabrir un canal. Note que
+los canales cerrados también pueden expirar.
+
+Sintaxis: CLOSE <#canal> ON|OFF [razón]
+
+Ejemplos:
+    /msg &nick& CLOSE #lamers ON Spammers
+    /msg &nick& CLOSE #spiderslair OFF

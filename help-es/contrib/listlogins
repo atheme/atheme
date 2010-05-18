@@ -1,0 +1,9 @@
+Ayuda para LISTLOGINS:
+
+LISTLOGINS muestra detalles de todos los clientes actualmente identificados
+como Ud. incluyendo su máscara nick!usuario@host y su host real.
+
+Sintaxis: LISTLOGINS
+
+Ejemplos:
+	/msg &nick& LISTLOGINS

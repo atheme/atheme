@@ -1,0 +1,11 @@
+Ayuda para QUIET:
+
+El comando QUIET le permite silenciar a un usuario o máscara
+de host en un canal. Aquellos usuarios afectados son notificados
+de quién realiza los cambios.
+
+Sintaxis: QUIET <#canal> <nick|máscara de host>
+
+Ejemplos:
+    /msg &nick& QUIET #chat AfterDeath
+    /msg &nick& QUIET #chat *!*@*.ipt.aol.com

@@ -1,0 +1,9 @@
+Ayuda para SAVECHANMODES:
+
+SAVECHANMODES almacena todos los modos de canal, temas y vetos de cada canal de
+la red a un archivo que puede ser restaurado posteriormente con LOADCHANMODES.
+
+Sintaxis: SAVECHANMODES
+
+Ejemplos:
+	/msg &nick& SAVECHANMODES

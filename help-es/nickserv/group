@@ -1,0 +1,19 @@
+Ayuda para GROUP:
+
+GROUP registra su nick actual a su cuenta. Esto significa
+que &nick& protege este nick del mismo modo que
+protege su nombre de cuenta. La mayoría de los comandos
+de servicios aceptan el nuevo nick como equivalente a
+su nombre de cuenta.
+
+Por favor note que los nicks agrupados expiran por
+separado de las cuentas. Para evitar esto debe utilizarlos
+regularmente. Aparte de esto, todas las propiedades de
+la cuenta son compartidas por los nicks agrupados en
+ella.
+
+Sintaxis: GROUP
+
+Ejemplos:
+    /msg &nick& IDENTIFY NickAntiguo ContraseñaSecreta
+    /msg &nick& GROUP

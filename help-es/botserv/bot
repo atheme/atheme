@@ -1,0 +1,28 @@
+Ayuda para BOT:
+
+Permite a operadores crear, modificar y eliminar bots
+que pueden ser utilizados por los usuarios en sus
+propios canales.
+
+BOT ADD agrega un bot con el nick, nombre de usuario,
+host y nombre real especificados. Ya que no se verifica
+la validez de estos valores, deberá Ud. tener cuidado al
+asignarlos.
+
+BOT CHANGE le permite cambiar el nick, nombre de usuario,
+host y nombre real de un bot existente sin eliminarlo.
+
+BOT DEL elimina un bot de la lista.
+
+Nota: Ud. no puede crear un bot que tenga un nick actualmente
+registrado. Si un usuario no registrado se encuentra utilizando
+el nick, será desconectado.
+
+Sintaxis: BOT ADD <nick> <usuario> <host> <real>
+Sintaxis: BOT CHANGE <nick antiguo> <nick nuevo> [<usuario> [<host> [<real>]]]
+Sintaxis: BOT DEL <nick>
+
+Ejemplos:
+    /msg &nick& BOT ADD Seguridad Seguridad seguridad.ejemplo.net Seguridad
+    /msg &nick& BOT CHANGE Seguridad NetBot NetBot Servicios.Ejemplo.Net MyRed
+    /msg &nick& BOT DEL Seguridad

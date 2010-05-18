@@ -1,0 +1,22 @@
+Ayuda para CERT:
+
+CERT maintiene una lista de huellas CertFP que le permitirán
+a &nick& identificarlo a Ud. y autenticarlo automáticamente.
+
+No es posible agregar la misma huellas a cuentas distintas.
+
+Sintaxis: CERT LIST
+Sintaxis: CERT ADD [huella]
+Sintaxis: CERT DEL <huella>
+#if priv user:auspex
+
+Operadores con el privilegio user:auspex también pueden
+ver la lista de huellas de otro usuario.
+
+Sintaxis: CERT LIST <cuenta>
+#endif
+
+Ejemplos:
+    /msg &nick& CERT LIST
+    /msg &nick& CERT ADD f3a1aad46ca88e180c25c9c7021a4b3a
+    /msg &nick& CERT DEL f3a1aad46ca88e180c25c9c7021a4b3a

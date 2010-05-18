@@ -1,0 +1,6 @@
+Ayuda para FENFORCE:
+
+FENFORCE permite a operadores activar o desactivar la protección automática de nicks
+para cualquier cuenta.
+
+Sintaxis: FENFORCE <cuenta> ON|OFF

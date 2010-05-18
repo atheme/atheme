@@ -1,0 +1,11 @@
+Ayuda para KILL:
+
+KILL mata (desconecta) a un usuario a través de Servicios. Esto es
+ligeramente distinto del comando KILL de su IRCd ya que muchos
+clientes no se reconectan automáticamente tras ser desconectados
+por Servicios.
+
+Sintaxis: KILL <objeto> <razón>
+
+Ejemplos:
+	/msg &nick& KILL jdhore Buu!
