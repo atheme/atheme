@@ -37,6 +37,7 @@ LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
 RPATH		= @RPATH@
 CPPFLAGS	= @CPPFLAGS@
+HELP_LINGUAS	= es ru
 
 # Want absolute paths?
 SRCDIR		= .
@@ -184,7 +185,7 @@ install: build
 			cd ..; \
 		fi; \
 	done; install -m 644 ../NEWS $(DESTDIR)$(DOCDIR)/RELEASE)
-	(cd ../help; for i in *; do \
+	(cd ../help/default; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
 		if [ -d $$i ]; then \
 			cd $$i; \
@@ -197,29 +198,21 @@ install: build
 	done)
 	-${RM} -f $(DESTDIR)$(SHAREDIR)/help/hostserv/vhostall
 	if [ @USE_NLS@ = yes ]; then \
-		$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/ru; \
-		(cd ../help-ru; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/ru; \
-		if [ -d $$i ]; then \
-			cd $$i; \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/ru/$$i; \
-			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/ru/$$i; \
-			done; \
-			cd ..; \
-		fi; \
-		$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/es; \
-		(cd ../help-es; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/es; \
-		if [ -d $$i ]; then \
-			cd $$i; \
-			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/es/$$i; \
-			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/es/$$i; \
-			done; \
-			cd ..; \
-		fi; \
-	done); fi
+		for lingua in $(HELP_LINGUAS); do \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$lingua; \
+			(cd ../help/$$lingua; for i in *; do \
+				[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help/$$lingua; \
+				if [ -d $$i ]; then \
+					cd $$i; \
+					$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$lingua/$$i; \
+					for j in *; do \
+						[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/$$lingua/$$i; \
+					done; \
+					cd ..; \
+				fi; \
+			done); \
+		done; \
+	fi
 
 #deinstall:
 #	if [ -d ${prefix} ] ; then \
