@@ -8861,8 +8861,9 @@ LDFLAGS=${ac_save_LDFLAGS}
 fi
 
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-CFLAGS=${ac_save_CFLAGS}
+ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
+CPPFLAGS=${ac_save_CPPFLAGS}
+
 
 enablerpath="yes"
 # Check whether --enable-rpath was given.
@@ -9082,7 +9083,7 @@ if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
 
 fi
 
-CFLAGS="$CFLAGS $MOWGLI_CFLAGS"
+CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
 LIBS="$LIBS $MOWGLI_LIBS"
 
 
@@ -9191,7 +9192,7 @@ BUILDROOT=`pwd`
 	done
 
 
-ac_config_files="$ac_config_files extra.mk Makefile contrib/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile"
+ac_config_files="$ac_config_files buildsys.mk extra.mk contrib/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -9889,8 +9890,8 @@ do
   case $ac_config_target in
     "include/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
     "default-1") CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
+    "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "contrib/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
     "modules/Makefile.common") CONFIG_FILES="$CONFIG_FILES modules/Makefile.common" ;;
     "modules/Makefile.defs") CONFIG_FILES="$CONFIG_FILES modules/Makefile.defs" ;;

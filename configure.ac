@@ -477,8 +477,9 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-CFLAGS=${ac_save_CFLAGS}
+ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
+CPPFLAGS=${ac_save_CPPFLAGS}
+AC_SUBST(CPPFLAGS)
 dnl export CFLAGS
 
 enablerpath="yes"
@@ -502,7 +503,7 @@ PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.7.0],
 AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
 	[ AC_CONFIG_SUBDIRS([libmowgli]) ])
 
-CFLAGS="$CFLAGS $MOWGLI_CFLAGS"
+CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
 LIBS="$LIBS $MOWGLI_LIBS"
 
 AC_SUBST(MOWGLI_CFLAGS)
@@ -532,8 +533,8 @@ AC_SUBST(BUILDROOT)
 BUILDSYS_TOUCH_DEPS
 
 AC_OUTPUT([
+	buildsys.mk
 	extra.mk
-	Makefile
 	contrib/Makefile
 	modules/Makefile.common
 	modules/Makefile.defs
