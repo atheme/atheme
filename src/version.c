@@ -43,6 +43,7 @@ const char *infotext[] =
   "  Dianora, Diane Bruce <db@db.net>",
   "  danieldg, Daniel De Graaf <danieldegraaf@gmail.com>",
   "  dKingston, Michael Rodriguez <dkingston@dkingston.net>",
+  "  elly, Elly <elly@leptoquark.net>",
   "  gxti, Michael Tharp <gxti@partiallystapled.com>",
   "  jdhore, JD Horelick <jdhore1@gmail.com>",
   "  kog, Greg Feigenson <kog@epiphanic.org>",
