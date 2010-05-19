@@ -533,7 +533,6 @@ BUILDSYS_TOUCH_DEPS
 
 AC_OUTPUT([
 	extra.mk
-	po/Makefile.in
 	Makefile
 	contrib/Makefile
 	modules/Makefile
