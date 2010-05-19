@@ -76,6 +76,10 @@ AC_SUBST(MKDEP)
 dnl Checks for header files.
 AC_CHECK_HEADERS(link.h,,,[-])
 
+dnl Buildsys module stuff
+BUILDSYS_SHARED_LIB
+LIBS="$LIBS $DYNAMIC_LD_LIBS"
+
 dnl Checks for library functions.
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([strdup strlcpy strlcat inet_pton inet_ntop gettimeofday umask mmap arc4random getrlimit fork getpid execve])
@@ -525,7 +529,11 @@ fi
 BUILDROOT=`pwd`
 AC_SUBST(BUILDROOT)
 
-AC_OUTPUT([po/Makefile.in
+BUILDSYS_TOUCH_DEPS
+
+AC_OUTPUT([
+	extra.mk
+	po/Makefile.in
 	Makefile
 	contrib/Makefile
 	modules/Makefile
