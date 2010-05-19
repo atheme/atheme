@@ -127,7 +127,7 @@ static void send_error(connection_t *cptr, int errorcode, const char *text, bool
 			"Server: Atheme/%s\r\n"
 			"Content-Type: text/plain\r\n"
 			"Content-Length: %lu\r\n\r\n%s",
-			errorcode, text, version, (unsigned long)strlen(buf2),
+			errorcode, text, PACKAGE_VERSION, (unsigned long)strlen(buf2),
 			sendentity ? buf2 : "");
 	sendq_add(cptr, buf1, strlen(buf1));
 }
@@ -266,7 +266,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 			slog(LG_INFO, "httpd_recvqhandler(): 200 for %s", hd->filename);
 			snprintf(outbuf, sizeof outbuf,
 					"HTTP/1.1 200 OK\r\nServer: Atheme/%s\r\nContent-Type: %s\r\nContent-Length: %lu\r\n\r\n",
-					version,
+					PACKAGE_VERSION,
 					content_type(hd->filename),
 					(unsigned long)sb.st_size);
 			sendq_add(cptr, outbuf, strlen(outbuf));
@@ -315,7 +315,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 			{
 				snprintf(outbuf, sizeof outbuf,
 						"HTTP/1.1 100 Continue\r\nServer: Atheme/%s\r\n\r\n",
-						version);
+						PACKAGE_VERSION);
 				sendq_add(cptr, outbuf, strlen(outbuf));
 			}
 			hd->requestbuf = smalloc(hd->length + 1);

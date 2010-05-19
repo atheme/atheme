@@ -63,7 +63,7 @@ static char *dump_buffer(char *buf, int length)
 			"Content-Type: text/xml\r\n"
 			"Content-Length: %d\r\n\r\n",
 			hd->connection_close ? "Connection: close\r\n" : "",
-			version, length);
+			PACKAGE_VERSION, length);
 	sendq_add(current_cptr, buf1, strlen(buf1));
 	sendq_add(current_cptr, buf, length);
 	if (hd->connection_close)

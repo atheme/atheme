@@ -1017,7 +1017,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	{
 		sts(":%s BURST", me.numeric);
 		sts(":%s VERSION :atheme-%s. %s %s",
-				me.name, version, me.numeric, get_conf_opts());
+				me.name, PACKAGE_VERSION, me.numeric, get_conf_opts());
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
