@@ -555,7 +555,6 @@ AC_OUTPUT([
 	modules/protocol/Makefile
 	modules/saslserv/Makefile
 	modules/xmlrpc/Makefile
-	src/Makefile
 ])
 
 d=`eval echo ${MODDIR}`
