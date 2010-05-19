@@ -1,43 +1,3 @@
-#!/bin/sh
-#
-# Copyright (c) 2005-2006 Atheme Development Group
-# Rights to this code are documented in doc/LICENSE.
-#
-# This file generates version.c.
-# Stolen from ircd-ratbox.
-#
-# $Id: version.sh 8031 2007-04-02 10:55:00Z nenolod $
-#
-
-spitshell=cat
-package=atheme
-
-echo "Extracting $package/src/version.c..."
-
-if test -r version.c.last
-then
-   generation=`sed -n 's/^const char \*generation = \"\(.*\)\";/\1/p' < version.c.last`
-   if test ! "$generation" ; then generation=0; fi
-else
-   generation=0
-fi
-
-generation=`expr $generation + 1`
-
-uname=`uname`
-
-osinfo=`uname -a`;
-
-creation=`date | \
-awk '{if (NF == 6) \
-         { print $1 " "  $2 " " $3 " "  $6 " at " $4 " " $5 } \
-else \
-         { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
-
-buildid=`echo "\$Revision: 8031 $" | \
-	awk '{ print $2 }'`;
-
-$spitshell >version.c <<!SUB!THIS!
 /*
  * Copyright (c) 2005-2010 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
@@ -48,12 +8,7 @@ $spitshell >version.c <<!SUB!THIS!
 
 #include "serno.h"
 
-const char *generation = "$generation";
-const char *creation = "$creation";
-const char *platform = "$uname";
-const char *version = "$1";
 const char *revision = SERNO;
-const char *osinfo = "$osinfo";
 
 const char *infotext[] =
 {
@@ -112,4 +67,3 @@ const char *infotext[] =
   "Visit our website at http://www.atheme.net",
   0,
 };
-!SUB!THIS!

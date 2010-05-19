@@ -68,10 +68,6 @@ include ../extra.mk
 CPPFLAGS	+= $(MOWGLI_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 LIBS		+= $(MOWGLI_LIBS)
 
-pre-depend:
-	-$(RM) -f version.c
-	/bin/sh ./version.sh $(VERSION)
-
 build: all
 
 ../dist/atheme.conf.userserv-example: ../dist/atheme.conf.example

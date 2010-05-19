@@ -42,7 +42,7 @@ static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsn
 {
 	notice(svsnick, origin,
 		"\001VERSION atheme-%s. %s %s %s [%s]\001",
-		version, revision, me.name, get_conf_opts(), ircd->ircdname);
+		PACKAGE_VERSION, revision, me.name, get_conf_opts(), ircd->ircdname);
 }
 
 static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)

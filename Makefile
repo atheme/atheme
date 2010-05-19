@@ -5,7 +5,6 @@ SUBDIRS=$(LIBMOWGLI) modules src po
 CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h
-	(cd src && ${MAKE} pre-depend)
 	@if [ -d .hg ] ; then \
 		revh=`hg tip --template '#define SERNO "#rev#:#node|short#"\n' 2>/dev/null`;\
 		[ -z "$$revh" ] || echo "$$revh" >include/serno.h ; \
