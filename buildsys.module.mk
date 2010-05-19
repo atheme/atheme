@@ -7,7 +7,7 @@ PLUGIN=${SRCS:.c=.so}
 
 .c$(PLUGIN_SUFFIX):
 	${COMPILE_STATUS}
-	if ${CC} ${CFLAGS} ${CPPFLAGS} -c -o $@ $< ${PLUGIN_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
+	if ${CC} ${PLUGIN_CFLAGS} ${PLUGIN_LDFLAGS} ${CFLAGS} ${CPPFLAGS} -o $@ $<; then \
 		${COMPILE_OK}; \
 	else \
 		${COMPILE_FAILED}; \
