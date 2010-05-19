@@ -1,5 +1,5 @@
-include extra.mk
-include buildsys.mk
+-include extra.mk
+-include buildsys.mk
 
 SUBDIRS=$(LIBMOWGLI) modules src po
 CLEANDIRS = ${SUBDIRS}
@@ -29,3 +29,7 @@ dist:
 
 include/hooktypes.h: ${SRCDIR}/src/mkhooktypes.sh ${SRCDIR}/src/hooktypes.in
 	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)
+
+buildsys.mk:
+	@echo "Run ./configure first you idiot."
+	@exit 1
