@@ -66,7 +66,7 @@ include ../buildsys.mk
 include ../extra.mk
 
 CPPFLAGS	+= $(MOWGLI_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
-LIBS		+= $(MOWGLI_LIBS)
+LIBS		+= $(MOWGLI_LIBS) $(RPATH)
 
 build: all
 
