@@ -535,7 +535,6 @@ BUILDSYS_TOUCH_DEPS
 AC_OUTPUT([
 	buildsys.mk
 	extra.mk
-	contrib/Makefile
 ])
 
 d=`eval echo ${MODDIR}`
