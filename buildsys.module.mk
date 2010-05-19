@@ -1,6 +1,6 @@
 # Additional extensions for building single-file modules.
 
-.SUFFIXES: .so
+.SUFFIXES: $(PLUGIN_SUFFIX)
 
 plugindir = ${MODDIR}/modules/$(MODULE)
 PLUGIN=${SRCS:.c=$(PLUGIN_SUFFIX)}
