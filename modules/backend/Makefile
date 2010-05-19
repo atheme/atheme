@@ -8,12 +8,11 @@
 
 MODULE = backend
 
-include ../Makefile.defs
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
-MKDEP		= @MKDEP@
-CFLAGS		= -I../../include @CFLAGS@
+SRCS = flatfile.c
 
-BASE_SRCS =			\
-	$(SRCDIR)/flatfile.c
-
-include ../Makefile.common
+CPPFLAGS	+= -I../../include
+CFLAGS		+= ${PLUGIN_CFLAGS}
