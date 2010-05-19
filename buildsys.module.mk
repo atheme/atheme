@@ -5,7 +5,7 @@
 plugindir = ${MODDIR}/modules/$(MODULE)
 PLUGIN=${SRCS:.c=.so}
 
-.c.so:
+.c$(PLUGIN_SUFFIX):
 	${COMPILE_STATUS}
 	if ${CC} ${CFLAGS} ${CPPFLAGS} -c -o $@ $< ${PLUGIN_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
 		${COMPILE_OK}; \
