@@ -3,7 +3,7 @@
 .SUFFIXES: .so
 
 plugindir = ${MODDIR}/modules/$(MODULE)
-PLUGIN=${SRCS:.c=.so}
+PLUGIN=${SRCS:.c=$(PLUGIN_SUFFIX)}
 
 .c$(PLUGIN_SUFFIX):
 	${COMPILE_STATUS}
