@@ -112,6 +112,15 @@ build: all
 	  -e 's/port = 8080/port = 8081/' ../dist/atheme.conf.example) >../dist/atheme.conf.operserv-example
 
 install-extra: ../dist/atheme.conf.userserv-example ../dist/atheme.conf.operserv-example
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(bindir)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(localstatedir)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(LOGDIR)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(RUNDIR)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(DATADIR)
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
 	$(INSTALL) -m 600 -c ../dist/atheme.conf.example $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 644 -c ../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)
 	[ -r $(DESTDIR)$(sysconfdir)/atheme.motd ] || $(INSTALL) -m 644 -c ../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)/atheme.motd || :
