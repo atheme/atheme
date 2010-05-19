@@ -74,6 +74,8 @@ datarootdir = @datarootdir@
 datadir = @datadir@
 includedir = @includedir@
 includesubdir ?= ${PACKAGE}
+localedir = @localedir@
+localename ?= ${PACKAGE}
 mandir = @mandir@
 mansubdir ?= man1
 
