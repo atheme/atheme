@@ -538,10 +538,7 @@ AC_OUTPUT([
 	contrib/Makefile
 	modules/Makefile.common
 	modules/Makefile.defs
-	modules/chanserv/Makefile
-	modules/crypto/Makefile
 	modules/gameserv/Makefile
-	modules/global/Makefile
 	modules/hostserv/Makefile
 	modules/memoserv/Makefile
 	modules/misc/Makefile
