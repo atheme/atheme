@@ -4,7 +4,7 @@ include buildsys.mk
 SUBDIRS=$(LIBMOWGLI) modules src po
 CLEANDIRS = ${SUBDIRS}
 
-pre-depend:
+pre-depend: include/hooktypes.h
 	@if [ -d .hg ] ; then \
 		revh=`hg tip --template '#define SERNO "#rev#:#node|short#"\n' 2>/dev/null`;\
 		[ -z "$$revh" ] || echo "$$revh" >include/serno.h ; \
