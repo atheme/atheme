@@ -9192,7 +9192,7 @@ BUILDROOT=`pwd`
 	done
 
 
-ac_config_files="$ac_config_files buildsys.mk extra.mk contrib/Makefile modules/Makefile.common modules/Makefile.defs modules/auth/Makefile modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile"
+ac_config_files="$ac_config_files buildsys.mk extra.mk contrib/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -9893,22 +9893,6 @@ do
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
     "contrib/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
-    "modules/Makefile.common") CONFIG_FILES="$CONFIG_FILES modules/Makefile.common" ;;
-    "modules/Makefile.defs") CONFIG_FILES="$CONFIG_FILES modules/Makefile.defs" ;;
-    "modules/auth/Makefile") CONFIG_FILES="$CONFIG_FILES modules/auth/Makefile" ;;
-    "modules/backend/Makefile") CONFIG_FILES="$CONFIG_FILES modules/backend/Makefile" ;;
-    "modules/chanserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/chanserv/Makefile" ;;
-    "modules/crypto/Makefile") CONFIG_FILES="$CONFIG_FILES modules/crypto/Makefile" ;;
-    "modules/gameserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/gameserv/Makefile" ;;
-    "modules/global/Makefile") CONFIG_FILES="$CONFIG_FILES modules/global/Makefile" ;;
-    "modules/hostserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/hostserv/Makefile" ;;
-    "modules/memoserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
-    "modules/misc/Makefile") CONFIG_FILES="$CONFIG_FILES modules/misc/Makefile" ;;
-    "modules/nickserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/nickserv/Makefile" ;;
-    "modules/operserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/operserv/Makefile" ;;
-    "modules/protocol/Makefile") CONFIG_FILES="$CONFIG_FILES modules/protocol/Makefile" ;;
-    "modules/saslserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/saslserv/Makefile" ;;
-    "modules/xmlrpc/Makefile") CONFIG_FILES="$CONFIG_FILES modules/xmlrpc/Makefile" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
