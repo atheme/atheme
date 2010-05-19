@@ -31,5 +31,5 @@ include/hooktypes.h: ${SRCDIR}/src/mkhooktypes.sh ${SRCDIR}/src/hooktypes.in
 	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)
 
 buildsys.mk:
-	@echo "Run ./configure first you idiot."
+	@echo "Run ./setup or at least ./configure first you idiot."
 	@exit 1
