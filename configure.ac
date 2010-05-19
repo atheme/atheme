@@ -547,11 +547,6 @@ AC_OUTPUT([
 	modules/hostserv/Makefile
 	modules/memoserv/Makefile
 	modules/misc/Makefile
-	modules/nickserv/Makefile
-	modules/operserv/Makefile
-	modules/protocol/Makefile
-	modules/saslserv/Makefile
-	modules/xmlrpc/Makefile
 ])
 
 d=`eval echo ${MODDIR}`
