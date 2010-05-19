@@ -536,12 +536,6 @@ AC_OUTPUT([
 	buildsys.mk
 	extra.mk
 	contrib/Makefile
-	modules/Makefile.common
-	modules/Makefile.defs
-	modules/gameserv/Makefile
-	modules/hostserv/Makefile
-	modules/memoserv/Makefile
-	modules/misc/Makefile
 ])
 
 d=`eval echo ${MODDIR}`
