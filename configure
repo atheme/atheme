@@ -9191,7 +9191,7 @@ BUILDROOT=`pwd`
 	done
 
 
-ac_config_files="$ac_config_files extra.mk Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile"
+ac_config_files="$ac_config_files extra.mk Makefile contrib/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/auth/Makefile modules/backend/Makefile modules/botserv/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/hostserv/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -9892,7 +9892,6 @@ do
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "contrib/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
-    "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
     "modules/Makefile.common") CONFIG_FILES="$CONFIG_FILES modules/Makefile.common" ;;
     "modules/Makefile.defs") CONFIG_FILES="$CONFIG_FILES modules/Makefile.defs" ;;
     "modules/alis/Makefile") CONFIG_FILES="$CONFIG_FILES modules/alis/Makefile" ;;

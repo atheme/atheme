@@ -535,7 +535,6 @@ AC_OUTPUT([
 	extra.mk
 	Makefile
 	contrib/Makefile
-	modules/Makefile
 	modules/Makefile.common
 	modules/Makefile.defs
 	modules/alis/Makefile
