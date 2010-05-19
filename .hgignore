@@ -42,3 +42,5 @@ tools/createtestdb
 tools/htmlhelp
 buildsys.mk
 extra.mk
+.deps
+aclocal.m4
