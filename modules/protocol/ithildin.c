@@ -123,7 +123,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ith_server_login(void) {
+static unsigned int ith_server_login(void) {
 	int ret;
 	ret = sts("PASS %s :TS", curr_uplink->pass);
 	if (ret == 1) { return 1; }
@@ -134,6 +134,7 @@ static void ith_server_login(void) {
 	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
 
 	services_init();
+	return 0;
 }
 
 void _modinit(module_t * m)
