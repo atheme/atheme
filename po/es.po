@@ -812,9 +812,9 @@ msgid "Mode lock is too long, not entirely shown"
 msgstr "Bloqueo de modos demasiado largo, no mostrado completamente"
 
 #: modules/chanserv/info.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Mode lock  : %s"
-msgstr "Modos bloqueados: %s%s"
+msgstr "Modos bloqueados: %s"
 
 #: modules/chanserv/info.c:149 modules/nickserv/info.c:262
 #, c-format
@@ -1339,6 +1339,8 @@ msgid ""
 "Channel %s already has a BotServ bot assigned to it.  You need to unassign "
 "it first."
 msgstr ""
+"El canal %s ya tiene un bot de BotServ asignado. Necesitará desasignarlo "
+"primero."
 
 #: modules/chanserv/set.c:1187
 msgid "Syntax: SET <#channel> PROPERTY <property> [value]"
@@ -2944,9 +2946,9 @@ msgid "Registers a nickname."
 msgstr "Registra un nick."
 
 #: modules/nickserv/register.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "Use %s to register %s to your account."
-msgstr "El nick %s ahora está registrado en su cuenta."
+msgstr "Utilice %s para registrar %s en su cuenta."
 
 #: modules/nickserv/register.c:87 modules/nickserv/register.c:125
 msgid "Syntax: REGISTER <account> <password> <email>"
@@ -3116,12 +3118,12 @@ msgid "%s did not have a password change key outstanding."
 msgstr "%s no tenía una clave de cambio de contraseña en espera."
 
 #: modules/nickserv/sendpass.c:136
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This operation cannot be performed on %s, because someone is logged in to it."
 msgstr ""
-"Esta operación no puede ser realizada en %s, puesto que la cuenta ha sido "
-"marcada por %s."
+"Esta operación no puede ser realizada en %s, puesto que alguien tiene una "
+"sesión activa con ella."
 
 #: modules/nickserv/sendpass.c:151
 #, c-format
@@ -3262,7 +3264,6 @@ msgid "Forwards incoming memos to your e-mail address."
 msgstr "Envía memos entrantes a su dirección de e-mail."
 
 #: modules/nickserv/set.c:368
-#, fuzzy
 msgid "Disables the ability to receive memos."
 msgstr "Desactiva la capacidad de recibir memos."
 
@@ -3645,9 +3646,8 @@ msgid "Clears a channel via KICK, KILL or GLINE"
 msgstr "Limpia un canal a través de KICK, KILL o GLINE"
 
 #: modules/operserv/clearchan.c:61
-#, fuzzy
 msgid "Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>"
-msgstr "Sintaxis: CLEARCHAN KICK|KILL|GLINE <#canal> <razón>"
+msgstr "Sintaxis: CLEARCHAN KICK|KILL|AKILL <#canal> <razón>"
 
 #: modules/operserv/clearchan.c:69 modules/operserv/mode.c:59
 #, c-format
@@ -3675,9 +3675,9 @@ msgid "CLEARCHAN: %s hit %s!%s@%s {%s}"
 msgstr "CLEARCHAN: %s afecta %s!%s@%s {%s}"
 
 #: modules/operserv/clearchan.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "CLEARCHAN: Not klining exempt user %s!%s@%s"
-msgstr "CLEARCHAN: ignorando operador de IRC %s!%s@%s {%s}"
+msgstr "CLEARCHAN: no aplicando kline en el usuario exento %s!%s@%s"
 
 #: modules/operserv/clearchan.c:137
 #, c-format
@@ -3880,9 +3880,8 @@ msgid "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"
 msgstr "Sintaxis: IGNORE ADD|DEL|LIST|CLEAR <máscara>"
 
 #: modules/operserv/ignore.c:101
-#, fuzzy
 msgid "Syntax: IGNORE ADD <mask> <reason>"
-msgstr "Sintaxis: ACCESS ADD <máscara>"
+msgstr "Sintaxis: IGNORE ADD <máscara> <razón>"
 
 #: modules/operserv/ignore.c:107
 #, c-format
@@ -3968,7 +3967,7 @@ msgstr "%s es el servidor padre actual y no puede ser desconectado!"
 #: modules/operserv/jupe.c:75
 #, c-format
 msgid "%s jupitered server %s (%s)."
-msgstr ""
+msgstr "%s ha jupeado al servidor %s (%s)."
 
 #: modules/operserv/jupe.c:81
 #, c-format
@@ -4037,9 +4036,9 @@ msgid "Vendor     : %s"
 msgstr "Proveedor       : %s"
 
 #: modules/operserv/modinspect.c:77
-#, fuzzy, c-format
+#, c-format
 msgid "Permanent  : %s"
-msgstr "Idioma       : %s"
+msgstr "Permanente      : %s"
 
 #: modules/operserv/modlist.c:21
 msgid "Lists loaded modules."
@@ -4104,7 +4103,7 @@ msgid "%s is not loaded; it cannot be unloaded."
 msgstr "%s no está cargado; no puede ser descargado."
 
 #: modules/operserv/modunload.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "%s is a permanent module; it cannot be unloaded."
 msgstr "%s es un módulo permanente; no puede ser descargado."
 
@@ -4583,9 +4582,9 @@ msgid "You do not have the %s privilege."
 msgstr "Ud. no tiene el privilegio %s."
 
 #: src/account.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "SUCCESSION: %s to %s from %s"
-msgstr "SUCESIÓN: %s -> %s de %s"
+msgstr "SUCESIÓN: %s a %s de %s"
 
 #: src/account.c:226 src/account.c:277 src/account.c:289
 #, c-format
@@ -4685,14 +4684,14 @@ msgid "XLINE expired on %s, set by %s"
 msgstr "XLINE sobre %s expirada, establecida por %s"
 
 #: src/node.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "QLINE:EXPIRE: %s set %s ago by %s"
-msgstr "XLINE:EXPIRE: %s establecida hace %s por %s"
+msgstr "QLINE:EXPIRE: %s establecida hace %s por %s"
 
 #: src/node.c:540
-#, fuzzy, c-format
+#, c-format
 msgid "QLINE expired on %s, set by %s"
-msgstr "XLINE sobre %s expirada, establecida por %s"
+msgstr "QLINE sobre %s expirada, establecida por %s"
 
 #: src/ptasks.c:741
 #, c-format
