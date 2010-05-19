@@ -1,5 +1,5 @@
-include ../extra.mk
-include ../buildsys.mk
+include extra.mk
+include buildsys.mk
 
 SUBDIRS=$(LIBMOWGLI) modules src po
 CLEANDIRS = ${SUBDIRS}
