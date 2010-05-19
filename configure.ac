@@ -530,6 +530,12 @@ fi
 BUILDROOT=`pwd`
 AC_SUBST(BUILDROOT)
 
+PODIR=""
+if test "x$USE_NLS" = "xyes"; then
+	PODIR="po"
+fi
+AC_SUBST(PODIR)
+
 BUILDSYS_TOUCH_DEPS
 
 AC_OUTPUT([

@@ -7,9 +7,9 @@
 #   have been introduced, and then continue with 'make update-po' or
 #   'make update-pot' respectively.
 #
-LOCALES = es.po ru.po
 
-include ../extra.mk
+LOCALES=es.po ru.po
+
 include ../buildsys.mk
 
 POTTEMPLATE=$(PACKAGE).pot

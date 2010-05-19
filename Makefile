@@ -1,7 +1,7 @@
 -include extra.mk
 -include buildsys.mk
 
-SUBDIRS=$(LIBMOWGLI) modules src po
+SUBDIRS=$(LIBMOWGLI) modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h

@@ -596,6 +596,7 @@ ac_includes_default="\
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+PODIR
 BUILDROOT
 PCRE_LIBS
 PCRE_CFLAGS
@@ -9181,6 +9182,12 @@ $as_echo "#define HAVE_PCRE 1" >>confdefs.h
 fi
 
 BUILDROOT=`pwd`
+
+
+PODIR=""
+if test "x$USE_NLS" = "xyes"; then
+	PODIR="po"
+fi
 
 
 
