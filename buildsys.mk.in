@@ -20,7 +20,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
-PACKAGE = libmowgli
+PACKAGE = @PACKAGE@
 AS = @AS@
 CC = gcc
 CXX = @CXX@
