@@ -40,3 +40,5 @@ src/version.c
 src/version.c.last
 tools/createtestdb
 tools/htmlhelp
+buildsys.mk
+extra.mk
