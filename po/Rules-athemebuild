@@ -1,4 +1,0 @@
-# Tiny wrapper for our build system
-build: all
-depend:
-.PHONY: build depend
