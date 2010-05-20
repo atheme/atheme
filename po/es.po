@@ -46,6 +46,8 @@ msgid ""
 "%s allows searching for channels with more\n"
 "flexibility than the /list command."
 msgstr ""
+"%s permite buscar canales con mayor flexibilidad\n"
+"que con el comando /list."
 
 #: modules/alis/main.c:448 modules/botserv/help.c:51
 #: modules/chanserv/help.c:85 modules/gameserv/help.c:51
@@ -65,16 +67,15 @@ msgstr "***** Fin de la Ayuda *****"
 
 #: modules/botserv/bottalk.c:23
 msgid "Makes the bot say the given text on the given channel."
-msgstr ""
+msgstr "Hace que el bot diga el texto especificado en el canal especificado."
 
 #: modules/botserv/bottalk.c:24
 msgid "Makes the bot do the equivalent of a \"/me\" command."
-msgstr ""
+msgstr "Hace que el bot realice el equivalente de un comando \"/me\"."
 
 #: modules/botserv/bottalk.c:63
-#, fuzzy
 msgid "Syntax: SAY <#channel> <msg>"
-msgstr "Sintaxis: WHY <canal> <usuario>"
+msgstr "Sintaxis: SAY <#canal> <mensaje>"
 
 #: modules/botserv/bottalk.c:69 modules/botserv/bottalk.c:123
 #: modules/botserv/set.c:133 modules/botserv/set.c:188
@@ -182,14 +183,13 @@ msgstr "Ud. no está autorizado a realizar esta operación."
 
 #: modules/botserv/bottalk.c:97 modules/botserv/bottalk.c:151
 #: modules/botserv/main.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not have a bot assigned."
-msgstr "%s no tiene un vhost asignado."
+msgstr "%s no tiene un bot asignado."
 
 #: modules/botserv/bottalk.c:117
-#, fuzzy
 msgid "Syntax: ACT <#channel> <msg>"
-msgstr "Sintaxis: COUNT <#canal>"
+msgstr "Sintaxis: ACT <#canal> <mensaje>"
 
 #: modules/botserv/help.c:24 modules/chanserv/help.c:21
 #: modules/gameserv/help.c:24 modules/global/main.c:33
@@ -199,13 +199,14 @@ msgid "Displays contextual help information."
 msgstr "Muestra información de ayuda contextual."
 
 #: modules/botserv/help.c:49
-#, fuzzy, c-format
+#, c-format
 msgid "%s allows users to request a custom bot for their channel."
-msgstr "%s permite a los usuarios 'registrar' una cuenta para su uso con %s."
+msgstr ""
+"%s permite a los usuarios solicitar un bot personalizado para su canal."
 
 #: modules/botserv/info.c:23
 msgid "Allows you to see BotServ information about a channel or a bot."
-msgstr ""
+msgstr "Le permite ver información de BotServ acerca de un canal o bot."
 
 #: modules/botserv/info.c:68 modules/botserv/info.c:136
 #: modules/chanserv/info.c:57 modules/chanserv/info.c:64
@@ -213,161 +214,158 @@ msgid "Syntax: INFO <#channel>"
 msgstr "Sintaxis: INFO <#canal>"
 
 #: modules/botserv/info.c:69 modules/botserv/info.c:137
-#, fuzzy
 msgid "Syntax: INFO <botnick>"
-msgstr "Sintaxis: INFO <nick>"
+msgstr "Sintaxis: INFO <botnick>"
 
 #: modules/botserv/info.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "Information for bot %s:"
-msgstr "Información sobre %s:"
+msgstr "Información sobre el bot %s:"
 
 #: modules/botserv/info.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "     Mask : %s@%s"
-msgstr "E-mail       : %s%s"
+msgstr "    Máscara : %s@%s"
 
 #: modules/botserv/info.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Real name : %s"
-msgstr "Dir. real    : %s"
+msgstr "Nombre real : %s"
 
 #: modules/botserv/info.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "  Created : %s (%s ago)"
-msgstr "Registrado      : %s (hace %s)"
+msgstr "     Creado : %s (hace %s)"
 
 #: modules/botserv/info.c:92
 msgid "  Options : Private"
-msgstr ""
+msgstr " Opciones : Privado"
 
 #: modules/botserv/info.c:94
 msgid "  Options : None"
-msgstr ""
+msgstr " Opciones : Ninguna"
 
 #: modules/botserv/info.c:95
 #, c-format
 msgid "  Used on : %d channel(s)"
-msgstr ""
+msgstr "Utilizado : %d canal(es)"
 
 #: modules/botserv/info.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s"
-msgstr "%d de %s"
+msgstr "%d: %s"
 
 #: modules/botserv/info.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Information for channel %s:"
-msgstr "Información sobre %s:"
+msgstr "Información para el canal %s:"
 
 #: modules/botserv/info.c:116
 #, c-format
 msgid "         Bot nick : %s"
-msgstr ""
+msgstr "     Nick del bot : %s"
 
 #: modules/botserv/info.c:118
 msgid "         Bot nick : not assigned yet"
-msgstr ""
+msgstr "     Nick del bot : no asignado aún"
 
 #: modules/botserv/info.c:131
 #, c-format
 msgid "          Options : %s"
-msgstr ""
+msgstr "         Opciones : %s"
 
 #: modules/botserv/main.c:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "DATABASE ERROR: botserv_save_database(): cannot create botserv.db.new: %s"
-msgstr "ERROR DE BASE DE DATOS: db_save(): no se pudo crear atheme.db.new: %s"
+msgstr ""
+"ERROR DE BASE DE DATOS: botserv_save_database(): no se pudo crear botserv.db."
+"new: %s"
 
 #: modules/botserv/main.c:463
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "DATABASE ERROR: botserv_save_database(): cannot rename botserv.db.new to "
 "botserv.db: %s"
 msgstr ""
-"ERROR DE BASE DE DATOS: db_save(): no se pudo renombrar atheme.db.new a "
-"atheme.db: %s"
+"ERROR DE BASE DE DATOS: botserv_save_database(): no se pudo renombrar "
+"botserv.db.new a botserv.db: %s"
 
 #: modules/botserv/main.c:590 modules/botserv/main.c:611
 #: modules/botserv/main.c:750
-#, fuzzy
 msgid "Syntax: BOT ADD <nick> <user> <host> <real>"
-msgstr "Sintaxis: AKILL ADD <usuario>@<host> [opciones] <razón>"
+msgstr "Sintaxis: BOT ADD <nick> <usuario> <host> <nombre real>"
 
 #: modules/botserv/main.c:591 modules/botserv/main.c:612
 #: modules/botserv/main.c:647 modules/botserv/main.c:712
 msgid "Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"
 msgstr ""
+"Sintaxis: BOT CHANGE <nickantiguo> <nicknuevo> [<usuario> [<host> [<nombre "
+"real>]]]"
 
 #: modules/botserv/main.c:592 modules/botserv/main.c:613
 #: modules/botserv/main.c:824
-#, fuzzy
 msgid "Syntax: BOT DEL <nick>"
-msgstr "Sintaxis: DF <dados>"
+msgstr "Sintaxis: BOT DEL <nick>"
 
 #: modules/botserv/main.c:660 modules/botserv/main.c:764
-#, fuzzy, c-format
+#, c-format
 msgid "%s is a registered nick."
-msgstr "%s no es un nick registrado."
+msgstr "%s es un nick registrado."
 
 #: modules/botserv/main.c:669 modules/botserv/main.c:757
-#, fuzzy, c-format
+#, c-format
 msgid "%s is already a bot or service."
-msgstr "%s ya se encuentra registrado."
+msgstr "%s ya es un bot o servicio."
 
 #: modules/botserv/main.c:678 modules/botserv/main.c:776
-#, fuzzy, c-format
+#, c-format
 msgid "%s is an invalid nickname."
-msgstr "%s no es un nick registrado."
+msgstr "%s no es un nick válido."
 
 #: modules/botserv/main.c:695
 #, c-format
 msgid "%s is an invalid realname, not changing it"
-msgstr ""
+msgstr "%s no es un nombre real válido, no será cambiado"
 
 #: modules/botserv/main.c:705
-#, fuzzy, c-format
+#, c-format
 msgid "%s is an invalid username, not changing it."
-msgstr "%s es un cliente interno."
+msgstr "%s no es un nombre de usuario válido, no será cambiado."
 
 #: modules/botserv/main.c:782
-#, fuzzy, c-format
+#, c-format
 msgid "%s is an invalid username."
-msgstr "%s no es un nombre de servidor válido."
+msgstr "%s no es un nombre de usuario válido."
 
 #: modules/botserv/main.c:791
-#, fuzzy, c-format
+#, c-format
 msgid "%s is an invalid realname."
-msgstr "%s no es un nombre de servidor válido."
+msgstr "%s no es un nombre real válido."
 
 #: modules/botserv/main.c:912
-#, fuzzy
 msgid "Syntax: ASSIGN <#channel> <nick>"
-msgstr "Sintaxis: TOPIC <#canal> <tema>"
+msgstr "Sintaxis: ASSIGN <#canal> <nick>"
 
 #: modules/botserv/main.c:983
-#, fuzzy
 msgid "Syntax: UNASSIGN <#channel>"
-msgstr "Sintaxis: INFO <#canal>"
+msgstr "Sintaxis: UNASSIGN <#canal>"
 
 #: modules/botserv/set.c:28
 msgid "Configures bot options."
-msgstr ""
+msgstr "Configura opciones de un bot."
 
 #: modules/botserv/set.c:30
 msgid "Enable fantasy commands."
-msgstr ""
+msgstr "Activa comandos de fantasía."
 
 #: modules/botserv/set.c:31
-#, fuzzy
 msgid "Prevent a bot from being assigned to a channel."
-msgstr "Previene que Ud. sea agregado a listas de acceso."
+msgstr "Previene que un bot sea asignado a un canal."
 
 #: modules/botserv/set.c:32
-#, fuzzy
 msgid "Prevent a bot from being assigned by non IRC operators."
-msgstr "Previene que Ud. sea agregado a listas de acceso."
+msgstr "Previene que un bot sea asignado salvo por operadores de IRC."
 
 #: modules/botserv/set.c:81 modules/chanserv/set.c:140
 #: modules/nickserv/set.c:30
@@ -376,7 +374,7 @@ msgstr "Ayuda para SET:"
 
 #: modules/botserv/set.c:83
 msgid "Configures different botserv bot options."
-msgstr ""
+msgstr "Configura varias opciones de bot de botserv."
 
 #: modules/botserv/set.c:87 modules/chanserv/set.c:148
 #, c-format
@@ -384,9 +382,8 @@ msgid "For more specific help use /msg %s HELP SET command."
 msgstr "Para ayuda más específica vea /msg %s HELP SET comando."
 
 #: modules/botserv/set.c:99
-#, fuzzy
 msgid "Syntax: SET <destination> <setting> <parameters>"
-msgstr "Sintaxis: SET <#canal> <ajuste> <parámetros>"
+msgstr "Sintaxis: SET <destino> <ajuste> <parámetros>"
 
 #: modules/botserv/set.c:108 modules/chanserv/akick.c:300
 #: modules/chanserv/clear.c:83 modules/chanserv/set.c:179
@@ -400,54 +397,51 @@ msgid "Invalid command. Use /%s%s help for a command listing."
 msgstr "Comando no válido. Use /%s%s help para ver una lista de comandos."
 
 #: modules/botserv/set.c:126 modules/botserv/set.c:167
-#, fuzzy
 msgid "Syntax: SET <#channel> FANTASY {ON|OFF}"
-msgstr "Sintaxis: GETKEY <#canal>"
+msgstr "Sintaxis: SET <#canal> FANTASY {ON|OFF}"
 
 #: modules/botserv/set.c:156
-#, fuzzy, c-format
+#, c-format
 msgid "Fantasy mode is now ON on channel %s."
-msgstr "Cambia modos de canal."
+msgstr "El modo de fantasía se encuentra ahora ACTIVADO para el canal %s."
 
 #: modules/botserv/set.c:162
-#, fuzzy, c-format
+#, c-format
 msgid "Fantasy mode is now OFF on channel %s."
-msgstr "Cambia modos de canal."
+msgstr "El modo de fantasía se encuentra ahora DESACTIVADO para el canal %s."
 
 #: modules/botserv/set.c:181 modules/botserv/set.c:230
-#, fuzzy
 msgid "Syntax: SET <#channel> NOBOT {ON|OFF}"
-msgstr "Sintaxis: GETKEY <#canal>"
+msgstr "Sintaxis: SET <#canal> NOBOT {ON|OFF}"
 
 #: modules/botserv/set.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "No Bot mode is now ON on channel %s."
-msgstr "No hay plantillas en el canal %s."
+msgstr "El modo NOBOT se encuentra ahora ACTIVADO para el canal %s."
 
 #: modules/botserv/set.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "No Bot mode is now OFF on channel %s."
-msgstr "No hay plantillas en el canal %s."
+msgstr "El modo NOBOT se encuentra ahora DESACTIVADO para el canal %s."
 
 #: modules/botserv/set.c:243 modules/botserv/set.c:283
-#, fuzzy
 msgid "Syntax: SET <botnick> PRIVATE {ON|OFF}"
-msgstr "Sintaxis: SET ENFORCE ON|OFF"
+msgstr "Sintaxis: SET <botnick> PRIVATE {ON|OFF}"
 
 #: modules/botserv/set.c:250
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a bot."
-msgstr "%s no está cerrado."
+msgstr "%s no es un bot."
 
 #: modules/botserv/set.c:271
 #, c-format
 msgid "Private mode of bot %s is now ON."
-msgstr ""
+msgstr "El modo privado del bot %s está ahora ACTIVADO."
 
 #: modules/botserv/set.c:278
 #, c-format
 msgid "Private mode of bot %s is now OFF."
-msgstr ""
+msgstr "El modo privado del bot %s está ahora DESACTIVADO."
 
 #: modules/chanserv/akick.c:21
 msgid "Manipulates a channel's AKICK list."
@@ -931,11 +925,11 @@ msgstr "La clave de acceso del canal %s es: %s"
 
 #: modules/chanserv/halfop.c:22
 msgid "Gives channel halfops to a user."
-msgstr "Da poderes de halfop a un usuario."
+msgstr "Otorga el estado de halfop a un usuario."
 
 #: modules/chanserv/halfop.c:24
 msgid "Removes channel halfops from a user."
-msgstr "Quita poderes de halfop de un usuario."
+msgstr "Quita el estado de halfop de un usuario."
 
 #: modules/chanserv/halfop.c:68 modules/chanserv/halfop.c:149
 msgid "Your IRC server does not support halfops."
@@ -1292,11 +1286,11 @@ msgstr "%s ya no se encuentra marcado."
 
 #: modules/chanserv/op.c:22
 msgid "Gives channel ops to a user."
-msgstr "Da poderes de chanop a un usuario"
+msgstr "Otorga el estado de chanop a un usuario"
 
 #: modules/chanserv/op.c:24
 msgid "Removes channel ops from a user."
-msgstr "Quita poderes de chanop de un usuario."
+msgstr "Quita el estado de chanop de un usuario."
 
 #: modules/chanserv/op.c:62
 msgid "Syntax: OP <#channel> [nickname]"
@@ -1317,119 +1311,106 @@ msgid "%s has been deopped on %s."
 msgstr "%s ya no es op de %s."
 
 #: modules/chanserv/owner.c:22
-#, fuzzy
 msgid "Gives channel owner flag to a user."
-msgstr "Otorga voz en el canal a un usuario."
+msgstr "Otorga el estado de dueño del canal a un usuario."
 
 #: modules/chanserv/owner.c:24
-#, fuzzy
 msgid "Removes channel owner flag from a user."
-msgstr "Quita voz en el canal a un usuario."
+msgstr "Quita el estado de dueño del canal de un usuario."
 
 #: modules/chanserv/owner.c:68 modules/chanserv/owner.c:149
 #: modules/chanserv/protect.c:68 modules/chanserv/protect.c:149
 msgid "The IRCd software you are running does not support this feature."
-msgstr ""
+msgstr "El software IRCd que está ejecutando no soporta esta característica."
 
 #: modules/chanserv/owner.c:75
-#, fuzzy
 msgid "Syntax: OWNER <#channel> [nickname]"
-msgstr "Sintaxis: OP <#canal> [nick]"
+msgstr "Sintaxis: OWNER <#canal> [nick]"
 
 #: modules/chanserv/owner.c:136
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been set as owner on %s."
-msgstr "%s ya no es op de %s."
+msgstr "%s ha sido establecido como el dueño de %s."
 
 #: modules/chanserv/owner.c:156
-#, fuzzy
 msgid "Syntax: DEOWNER <#channel> [nickname]"
-msgstr "Sintaxis: DEOP <#canal> [nick]"
+msgstr "Sintaxis: DEOWNER <#canal> [nick]"
 
 #: modules/chanserv/owner.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been unset as owner on %s."
-msgstr "%s ya no es op de %s."
+msgstr "%s ya no es el dueño de %s."
 
 #: modules/chanserv/protect.c:22
-#, fuzzy
 msgid "Gives channel protection flag to a user."
-msgstr "Otorga voz en el canal a un usuario."
+msgstr "Otorga el estado de protección del canal a un usuario."
 
 #: modules/chanserv/protect.c:24
-#, fuzzy
 msgid "Removes channel protection flag from a user."
-msgstr "Quita voz en el canal a un usuario."
+msgstr "Quita el estado de protección del canal a un usuario."
 
 #: modules/chanserv/protect.c:75
-#, fuzzy
 msgid "Syntax: PROTECT <#channel> [nickname]"
-msgstr "Sintaxis: OP <#canal> [nick]"
+msgstr "Sintaxis: PROTECT <#canal> [nick]"
 
 #: modules/chanserv/protect.c:136
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been set as protected on %s."
-msgstr "%s ha perdido voz en %s."
+msgstr "%s ha sido establecido como protegido en %s."
 
 #: modules/chanserv/protect.c:156
-#, fuzzy
 msgid "Syntax: DEPROTECT <#channel> [nickname]"
-msgstr "Sintaxis: DEOP <#canal> [nick]"
+msgstr "Sintaxis: DEPROTECT <#canal> [nick]"
 
 #: modules/chanserv/protect.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been unset as protected on %s."
-msgstr "%s ha perdido voz en %s."
+msgstr "%s ya no es protegido en %s."
 
 #: modules/chanserv/quiet.c:22
-#, fuzzy
 msgid "Sets a quiet on a channel."
-msgstr "Establece el tema en un canal."
+msgstr "Silencia a un usuario del canal."
 
 #: modules/chanserv/quiet.c:24
-#, fuzzy
 msgid "Removes a quiet on a channel."
-msgstr "Quita un veto en un canal."
+msgstr "Desilencia a un usuario del canal."
 
 #: modules/chanserv/quiet.c:149 modules/chanserv/quiet.c:213
-#, fuzzy
 msgid "Syntax: QUIET <#channel> <nickname|hostmask>"
-msgstr "Sintaxis: UNBAN <#canal> <nick|máscara de host>"
+msgstr "Sintaxis: QUIET <#canal> <nick|máscara de host>"
 
 #: modules/chanserv/quiet.c:190 modules/chanserv/quiet.c:207
-#, fuzzy, c-format
+#, c-format
 msgid "Quieted %s on %s."
-msgstr "%s ha sido vetado de %s."
+msgstr "%s ha sido silenciado en %s."
 
 #: modules/chanserv/quiet.c:230 modules/chanserv/quiet.c:239
-#, fuzzy
 msgid "Syntax: UNQUIET <#channel> <nickname|hostmask>"
-msgstr "Sintaxis: UNBAN <#canal> <nick|máscara de host>"
+msgstr "Sintaxis: UNQUIET <#canal> <nick|máscara de host>"
 
 #: modules/chanserv/quiet.c:291
-#, fuzzy, c-format
+#, c-format
 msgid "Unquieted %s on %s (%d ban%s removed)."
-msgstr "El veto para %s fue quitado de %s (%d veto%s eliminados)."
+msgstr "El silencio para %s fue quitado de %s (%d silencio%s eliminados)."
 
 #: modules/chanserv/quiet.c:295
-#, fuzzy, c-format
+#, c-format
 msgid "No quiets found matching %s on %s."
-msgstr "No se encontraron vetos correspondientes a %s en %s."
+msgstr "No se encontraron silencios correspondientes a %s en %s."
 
 #: modules/chanserv/quiet.c:307
-#, fuzzy, c-format
+#, c-format
 msgid "Unquieted %s on %s."
-msgstr "El veto para %s fue quitado de %s."
+msgstr "El silencio para %s fue quitado de %s."
 
 #: modules/chanserv/quiet.c:310
-#, fuzzy, c-format
+#, c-format
 msgid "No such quiet %s on %s."
-msgstr "No se encontró el veto %s en %s."
+msgstr "No se encontró el silencio %s en %s."
 
 #: modules/chanserv/quiet.c:317
-#, fuzzy
 msgid "Syntax: UNQUIET <#channel> [nickname|hostmask]"
-msgstr "Sintaxis: UNBAN <#canal> [nick|máscara de host]"
+msgstr "Sintaxis: UNQUIET <#canal> [nick|máscara de host]"
 
 #: modules/chanserv/recover.c:21
 msgid "Regain control of your channel."
@@ -1803,62 +1784,60 @@ msgid "Metadata entry %s added."
 msgstr "La entrada de metadatos %s ha sido agregada."
 
 #: modules/chanserv/set_gameserv.c:22
-#, fuzzy
 msgid "Allows or disallows gaming services."
-msgstr "Activa o desactiva comandos dentro del canal."
+msgstr "Activa o desactiva servicios de juego."
 
 #: modules/chanserv/set_gameserv.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "%s is already set to %s for %s."
-msgstr "%s ya se encuentra en la lista %s para %s."
+msgstr "%s ya está establecido como %s para %s."
 
 #: modules/chanserv/set_gameserv.c:89
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been set to %s for %s."
-msgstr "%s ha sido agregado a la lista %s para %s."
+msgstr "%s ha sido establecido como %s para %s."
 
 #: modules/chanserv/set_gameserv.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "%s was not set for %s."
-msgstr "%s no se encuentra en %s."
+msgstr "%s no se encontraba establecido para %s."
 
 #: modules/chanserv/set_gameserv.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been disabled for %s."
-msgstr "%s ha sido expulsado de %s."
+msgstr "%s ha sido desactivado para %s."
 
 #: modules/chanserv/set_limitflags.c:22
 msgid "Limits the power of the +f flag."
-msgstr ""
+msgstr "Limita el poder del permiso +f."
 
 #: modules/chanserv/set_limitflags.c:68 modules/chanserv/set_private.c:68
 #: modules/nickserv/set_private.c:37 modules/nickserv/set_privmsg.c:37
-#, fuzzy, c-format
+#, c-format
 msgid "The %s flag is already set for %s."
-msgstr "La opción %s ya está activada para el canal %s."
+msgstr "La opción %s ya está activada para %s."
 
 #: modules/chanserv/set_limitflags.c:76 modules/chanserv/set_private.c:76
 #: modules/nickserv/set_private.c:46 modules/nickserv/set_privmsg.c:45
-#, fuzzy, c-format
+#, c-format
 msgid "The %s flag has been set for %s."
-msgstr "La opción %s ha sido activada para el canal %s."
+msgstr "La opción %s ha sido activada para %s."
 
 #: modules/chanserv/set_limitflags.c:85 modules/chanserv/set_private.c:85
 #: modules/nickserv/set_private.c:54 modules/nickserv/set_privmsg.c:53
-#, fuzzy, c-format
+#, c-format
 msgid "The %s flag is not set for %s."
-msgstr "La opción %s no está activada para el canal %s."
+msgstr "La opción %s no está activada para %s."
 
 #: modules/chanserv/set_limitflags.c:93 modules/chanserv/set_private.c:93
 #: modules/nickserv/set_private.c:62 modules/nickserv/set_privmsg.c:61
-#, fuzzy, c-format
+#, c-format
 msgid "The %s flag has been removed for %s."
-msgstr "La opción %s ha sido quitada del canal %s."
+msgstr "La opción %s ha sido quitada de %s."
 
 #: modules/chanserv/set_private.c:22
-#, fuzzy
 msgid "Hides information about a channel."
-msgstr "Muestra información acerca de los módulos actualmente cargados."
+msgstr "Oculta información sobre un canal."
 
 #: modules/chanserv/status.c:21
 msgid "Displays your status in services."
@@ -2056,24 +2035,22 @@ msgid "Syntax: TOPICPREPEND <#channel> <topic>"
 msgstr "Sintaxis: TOPICPREPEND <#canal> <tema>"
 
 #: modules/chanserv/unban_self.c:23
-#, fuzzy
 msgid "Unbans you on a channel."
-msgstr "Permite invitarse a Ud. mismo a un canal."
+msgstr "Le quita un veto a sí mismo de un canal."
 
 #: modules/chanserv/unban_self.c:65
-#, fuzzy
 msgid "Syntax: UNBAN <#channel>"
-msgstr "Sintaxis: COUNT <#canal>"
+msgstr "Sintaxis: UNBAN <#canal>"
 
 #: modules/chanserv/unban_self.c:71
-#, fuzzy, c-format
+#, c-format
 msgid "You may only unban yourself via %s."
-msgstr "Ud. no puede desconectarse a sí mismo."
+msgstr "Ud. sólo puede quitarse vetos a sí mismo mediante %s."
 
 #: modules/chanserv/unban_self.c:73
-#, fuzzy, c-format
+#, c-format
 msgid "Try /mode %s -b %s"
-msgstr "Modos %s establecidos en %s."
+msgstr "Pruebe /mode %s -b %s"
 
 #: modules/chanserv/version.c:12
 msgid "Displays version information of the services."
@@ -2456,7 +2433,7 @@ msgstr "Ya hay un GLOBAL en curso por %s."
 
 #: modules/hostserv/group.c:23
 msgid "Syncs the vhost for all nicks in a group."
-msgstr ""
+msgstr "Sincroniza el vhost para todos los nicks de un grupo."
 
 #: modules/hostserv/group.c:101 modules/hostserv/onoff.c:76
 #: modules/hostserv/onoff.c:118 modules/hostserv/request.c:237
@@ -2475,165 +2452,153 @@ msgstr "El nick %s no está registrado en su cuenta."
 #: modules/hostserv/group.c:115 modules/hostserv/onoff.c:90
 #: modules/hostserv/onoff.c:132
 msgid "Please contact an Operator to get a vhost assigned to this nick."
-msgstr ""
+msgstr "Por favor contacte a un Operador para asignar un vhost a este nick."
 
 #: modules/hostserv/group.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "All vhosts in the group %s have been set to %s."
-msgstr "La URL para %s ha sido cambiada a %s."
+msgstr "Todos los vhosts del grupo %s han cambiado a %s."
 
 #: modules/hostserv/help.c:49
-#, fuzzy, c-format
+#, c-format
 msgid "%s allows users to request a virtual hostname."
-msgstr "%s permite a los usuarios enviar memos a otros usuarios registrados."
+msgstr "%s permite a los usuarios solicitar un nombre de host virtual."
 
 #: modules/hostserv/offer.c:28
 msgid "Sets vhosts available for users to take."
-msgstr ""
+msgstr "Establece vhosts disponibles pare ser aceptados por usuarios."
 
 #: modules/hostserv/offer.c:29
-#, fuzzy
 msgid "Removes a vhost from the list that users can take."
-msgstr "Quita poderes de chanop de un usuario."
+msgstr "Quita un vhost de la lista de vhosts que pueden aceptar los usuarios."
 
 #: modules/hostserv/offer.c:30
-#, fuzzy
 msgid "Lists all available vhosts."
-msgstr "Muestra listas de hosts virtuales de usuarios."
+msgstr "Muestra todos los vhosts disponibles."
 
 #: modules/hostserv/offer.c:31
-#, fuzzy
 msgid "Take an offered vhost for use."
-msgstr "Se quitó el vhost de %s."
+msgstr "Acepta un vhost ofrecido para su uso."
 
 #: modules/hostserv/offer.c:188
-#, fuzzy
 msgid "Syntax: OFFER <vhost>"
-msgstr "Sintaxis: FDROP <cuenta>"
+msgstr "Sintaxis: OFFER <vhost>"
 
 #: modules/hostserv/offer.c:207
-#, fuzzy, c-format
+#, c-format
 msgid "You have offered vhost %s."
-msgstr "Ud. no puede desconectar a %s."
+msgstr "Ud. ha ofrecido el vhost %s."
 
 #: modules/hostserv/offer.c:223
-#, fuzzy
 msgid "Syntax: UNOFFER <vhost>"
-msgstr "Sintaxis: INFO <cuenta>"
+msgstr "Sintaxis: UNOFFER <vhost>"
 
 #: modules/hostserv/offer.c:241
-#, fuzzy, c-format
+#, c-format
 msgid "You have unoffered vhost %s."
-msgstr "Ud. no puede desconectar a %s."
+msgstr "Ud. ha dejado de ofrecer el vhost %s."
 
 #: modules/hostserv/offer.c:245 modules/hostserv/offer.c:283
-#, fuzzy, c-format
+#, c-format
 msgid "vhost %s not found in vhost offer database."
-msgstr "No se encontró %s en la lista regex de observación."
+msgstr "No se encontró %s en la lista de vhosts ofrecidos."
 
 #: modules/hostserv/offer.c:258
-#, fuzzy
 msgid "Syntax: TAKE <vhost>"
-msgstr "Sintaxis: AKILL DEL <máscara de host>"
+msgstr "Sintaxis: TAKE <vhost>"
 
 #: modules/hostserv/offer.c:276
-#, fuzzy, c-format
+#, c-format
 msgid "You have taken vhost %s."
-msgstr "Ud. no puede desconectar a %s."
+msgstr "Ud. ha aceptado el vhost %s."
 
 #: modules/hostserv/onoff.c:24
 msgid "Activates your assigned vhost."
-msgstr ""
+msgstr "Activa su vhost asignado."
 
 #: modules/hostserv/onoff.c:25
 msgid "Deactivates your assigned vhost."
-msgstr ""
+msgstr "Desactiva su vhost asignado."
 
 #: modules/hostserv/onoff.c:81 modules/hostserv/onoff.c:123
-#, fuzzy, c-format
+#, c-format
 msgid "You are not recognized as %s."
-msgstr "Ud. está reconocido como %s."
+msgstr "Ud. no está reconocido como %s."
 
 #: modules/hostserv/onoff.c:94
 #, c-format
 msgid "Your vhost of %s is now activated."
-msgstr ""
+msgstr "Su vhost de %s está ahora activado."
 
 #: modules/hostserv/onoff.c:136
 #, c-format
 msgid "Your vhost of %s is now deactivated."
-msgstr ""
+msgstr "Su vhost de %s está ahora desactivado."
 
 #: modules/hostserv/request.c:31
 msgid "Requests new virtual hostname for current nick."
-msgstr ""
+msgstr "Solicita un nuevo nombre de host virtual para el nick actual."
 
 #: modules/hostserv/request.c:32
 msgid "Lists vhosts currently waiting for activation."
-msgstr ""
+msgstr "Muestra la lista de vhosts actualmente en espera de activación."
 
 #: modules/hostserv/request.c:33
 msgid "Reject the requested vhost for the given nick."
-msgstr ""
+msgstr "Rechaza la solicitud de vhost para el nick especificado."
 
 #: modules/hostserv/request.c:34
 msgid "Activate the requested vhost for a given nick."
-msgstr ""
+msgstr "Activa el vhost solicitado para el nick especificado."
 
 #: modules/hostserv/request.c:222
-#, fuzzy
 msgid "Syntax: REQUEST <vhost>"
-msgstr "Sintaxis: RESETPASS <cuenta>"
+msgstr "Sintaxis: REQUEST <vhost>"
 
 #: modules/hostserv/request.c:261
-#, fuzzy, c-format
+#, c-format
 msgid "You have already requested vhost %s."
-msgstr "Ud. ya ha iniciado sesión como %s."
+msgstr "Ud. ya ha solicitado el vhost %s."
 
 #: modules/hostserv/request.c:270 modules/hostserv/request.c:287
-#, fuzzy, c-format
+#, c-format
 msgid "You have requested vhost %s."
-msgstr "Ud. ha sido invitado a %s."
+msgstr "Ud. ha solicitado el vhost %s."
 
 #: modules/hostserv/request.c:305
-#, fuzzy
 msgid "Syntax: ACTIVATE <nick>"
-msgstr "Sintaxis: TAXONOMY <nick>"
+msgstr "Sintaxis: ACTIVATE <nick>"
 
 #: modules/hostserv/request.c:334 modules/hostserv/request.c:378
-#, fuzzy, c-format
+#, c-format
 msgid "Nick %s not found in vhost request database."
-msgstr "No se encontró %s en la lista regex de observación."
+msgstr "No se encontró el nick %s en la lista de solicitudes de vhosts."
 
 #: modules/hostserv/request.c:349
-#, fuzzy
 msgid "Syntax: REJECT <nick>"
-msgstr "Sintaxis: TAXONOMY <nick>"
+msgstr "Sintaxis: REJECT <nick>"
 
 #: modules/hostserv/vhost.c:24
-#, fuzzy
 msgid "Manages per-account virtual hosts."
-msgstr "Administra hosts virtuales para usuarios."
+msgstr "Administra hosts virtuales sobre cuentas de usuarios."
 
 #: modules/hostserv/vhost.c:25
-#, fuzzy
 msgid "Lists user virtual hosts."
 msgstr "Muestra listas de hosts virtuales de usuarios."
 
 #: modules/hostserv/vhost.c:96
-#, fuzzy
 msgid "Syntax: VHOST <nick> [vhost]"
-msgstr "Sintaxis: VHOST <cuenta> ON|OFF [vhost]"
+msgstr "Sintaxis: VHOST <nick> [vhost]"
 
 #: modules/hostserv/vhost.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Deleted all vhosts for %s."
-msgstr "Se quitó el vhost de %s."
+msgstr "Se quitaron todos los vhosts de %s."
 
 #: modules/hostserv/vhost.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned vhost %s to all nicks in account %s."
-msgstr "Se ha asignado el vhost %s a %s."
+msgstr "Se ha asignado el vhost %s a todos los nicks en la cuenta %s."
 
 #: modules/hostserv/vhost.c:165 modules/nickserv/vhost.c:235
 #, c-format
@@ -2641,19 +2606,17 @@ msgid "No vhosts matched pattern %s"
 msgstr "No se encontraron vhosts para el patrón %s"
 
 #: modules/hostserv/vhostnick.c:23
-#, fuzzy
 msgid "Manages per-nick virtual hosts."
-msgstr "Administra hosts virtuales para usuarios."
+msgstr "Administra hosts virtuales sobre nicks individuales."
 
 #: modules/hostserv/vhostnick.c:64
-#, fuzzy
 msgid "Syntax: VHOSTNICK <nick> [vhost]"
-msgstr "Sintaxis: VHOST <cuenta> ON|OFF [vhost]"
+msgstr "Sintaxis: VHOSTNICK <nick> [vhost]"
 
 #: modules/hostserv/vhostnick.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a valid target."
-msgstr "%s no es una acción válida"
+msgstr "%s no es un objeto válido."
 
 #: modules/hostserv/vhostnick.c:94 modules/nickserv/vhost.c:176
 #, c-format
@@ -2927,14 +2890,13 @@ msgid "Channel memos are administratively disabled."
 msgstr "Los memos de canal han sido desactivados por la administración."
 
 #: modules/memoserv/sendops.c:21
-#, fuzzy
 msgid "Sends a memo to all ops on a channel."
-msgstr "Establece el tema en un canal."
+msgstr "Envia un memo a todos los operadores de un canal."
 
 #: modules/memoserv/sendops.c:199
-#, fuzzy, c-format
+#, c-format
 msgid "The memo has been successfully sent to %d ops on %s."
-msgstr "El memo ha sido enviado a %s con éxito."
+msgstr "El memo ha sido enviado a %d operadores de %s con éxito."
 
 #: modules/nickserv/access.c:21
 msgid "Changes and shows your nickname access list."
@@ -3007,64 +2969,59 @@ msgid "Deleted mask %s from your access list."
 msgstr "Se ha quitado la máscara %s de su lista de acceso."
 
 #: modules/nickserv/cert.c:20
-#, fuzzy
 msgid "Changes and shows your nickname CertFP authentication list."
-msgstr "Cambia y muestra su lista de acceso de nick."
+msgstr "Cambia y muestra su lista de autenticación de nick CertFP."
 
 #: modules/nickserv/cert.c:51 modules/nickserv/cert.c:169
-#, fuzzy
 msgid "Syntax: CERT ADD|DEL|LIST [fingerprint]"
-msgstr "Sintaxis: ACCESS ADD|DEL|LIST [máscara]"
+msgstr "Sintaxis: CERT ADD|DEL|LIST [huella]"
 
 #: modules/nickserv/cert.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Fingerprint list for %s:"
-msgstr "Lista %s para %s:"
+msgstr "Lista de huellas para %s:"
 
 #: modules/nickserv/cert.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "End of %s fingerprint list."
-msgstr "Fin de la lista de acceso de %s."
+msgstr "Fin de la lista de huellas de %s."
 
 #: modules/nickserv/cert.c:106
-#, fuzzy
 msgid "Syntax: CERT ADD <fingerprint>"
-msgstr "Sintaxis: ACCESS ADD <máscara>"
+msgstr "Sintaxis: CERT ADD <huella>"
 
 #: modules/nickserv/cert.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Fingerprint %s is already on your fingerprint list."
-msgstr "La cuenta %s ya se encuentra en su lista de ignorados."
+msgstr "La huella %s ya se encuentra en su lista de huellas."
 
 #: modules/nickserv/cert.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "Fingerprint %s is already on another user's fingerprint list."
-msgstr "La cuenta %s ya se encuentra en su lista de ignorados."
+msgstr "La huella %s ya se encuentra en la lista de huellas de otro usuario."
 
 #: modules/nickserv/cert.c:136
-#, fuzzy, c-format
+#, c-format
 msgid "Added fingerprint %s to your fingerprint list."
-msgstr "Se ha agregado la máscara %s a su lista de acceso."
+msgstr "Se ha agregado la huella %s a su lista de huellas."
 
 #: modules/nickserv/cert.c:140
-#, fuzzy
 msgid "Your fingerprint list is full."
-msgstr "Su lista de acceso está llena."
+msgstr "Su lista de huellas está llena."
 
 #: modules/nickserv/cert.c:147
-#, fuzzy
 msgid "Syntax: CERT DEL <fingerprint>"
-msgstr "Sintaxis: SOPER DEL <cuenta>"
+msgstr "Sintaxis: CERT DEL <huella>"
 
 #: modules/nickserv/cert.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Fingerprint %s is not on your fingerprint list."
-msgstr "%s no se encuentra en su lista de ignorados."
+msgstr "%s no se encuentra en su lista de huellas."
 
 #: modules/nickserv/cert.c:162
-#, fuzzy, c-format
+#, c-format
 msgid "Deleted fingerprint %s from your fingerprint list."
-msgstr "Se ha quitado la máscara %s de su lista de acceso."
+msgstr "Se ha quitado la huella %s de su lista de huellas."
 
 #: modules/nickserv/drop.c:22
 msgid "Drops an account registration."
@@ -3626,17 +3583,16 @@ msgid "%d matches for e-mail address %s"
 msgstr "%d coincidencias para la dirección de e-mail %s"
 
 #: modules/nickserv/listownmail.c:21
-#, fuzzy
 msgid "Lists accounts registered to your e-mail address."
-msgstr "Muestra una lista de cuentas registradas por una dirección de e-mail."
+msgstr ""
+"Muestra una lista de cuentas registradas por su propia dirección de e-mail."
 
 #: modules/nickserv/listownmail.c:77
-#, fuzzy
 msgid ""
 "You have to verify your email address before you can perform this operation."
 msgstr ""
-"Ud. tiene que verificar su dirección de e-mail antes de poder activar el "
-"envío de memos por e-mail."
+"Ud. tiene que verificar su dirección de e-mail antes de poder realizar esta "
+"operación."
 
 #: modules/nickserv/logout.c:21
 msgid "Logs your services session out."
@@ -3952,11 +3908,13 @@ msgid "The password for %s has been sent to %s."
 msgstr "La contraseña para %s ha sido enviada a %s."
 
 #: modules/nickserv/sendpass_user.c:137
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The password change key for %s has been sent to the corresponding email "
 "address."
-msgstr "La clave de cambio de contraseña para %s ha sido enviada a %s."
+msgstr ""
+"La clave de cambio de contraseña para %s ha sido enviada a la dirección de e-"
+"mail correspondiente."
 
 #: modules/nickserv/set.c:33
 msgid ""
@@ -4119,42 +4077,38 @@ msgid "Changes the language services uses to talk to you."
 msgstr "Cambia el idioma que los servicios usan para comunicarse con Ud."
 
 #: modules/nickserv/set_accountname.c:25
-#, fuzzy
 msgid "Changes your account name."
-msgstr "Cambia su dirección de e-mail."
+msgstr "Cambia su nombre de cuenta."
 
 #: modules/nickserv/set_accountname.c:51
-#, fuzzy
 msgid "Syntax: SET ACCOUNTNAME <nick>"
-msgstr "Sintaxis: TAXONOMY <nick>"
+msgstr "Sintaxis: SET ACCOUNTNAME <nick>"
 
 #: modules/nickserv/set_accountname.c:63
-#, fuzzy
 msgid ""
 "You may not modify your account name because your operclass is defined in "
 "the configuration file."
 msgstr ""
-"Ud. no puede modificar el nombre de cuenta de %s porque su clase de operador "
-"está definida en el archivo de configuración."
+"Ud. no puede modificar su nombre de cuenta porque su clase de operador está "
+"definida en el archivo de configuración."
 
 #: modules/nickserv/set_accountname.c:81
-#, fuzzy, c-format
+#, c-format
 msgid "Your account name is already set to %s."
-msgstr "La dirección de e-mail de la cuenta %s ya es %s."
+msgstr "Su nombre de cuenta ya es %s."
 
 #: modules/nickserv/set_accountname.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Your account name is now set to %s."
-msgstr "Ud. no se encuentra en %s."
+msgstr "Su nombre de cuenta ha cambiado a %s."
 
 #: modules/nickserv/set_private.c:73
-#, fuzzy
 msgid "Hides information about you from other users."
-msgstr "Muestra información acerca de los módulos actualmente cargados."
+msgstr "Oculta información acerca de Ud. a otros usuarios."
 
 #: modules/nickserv/set_privmsg.c:72
 msgid "Uses private messages instead of notices if enabled."
-msgstr ""
+msgstr "Utiliza mensajes privados en vez de anuncios si es activada."
 
 #: modules/nickserv/setpass.c:22
 msgid "Changes a password using an authcode."
@@ -4191,30 +4145,30 @@ msgstr "%s%s%s ACC 0 (no registrado)"
 
 #: modules/nickserv/subscribe.c:53
 msgid "Syntax: SUBSCRIBE [-]username [tags]"
-msgstr ""
+msgstr "Sintaxis: SUBSCRIBE [-]nombredeusuario [marcas]"
 
 #: modules/nickserv/subscribe.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been removed from your subscriptions."
-msgstr "El nick %s ha sido quitado de su cuenta."
+msgstr "%s ha sido quitado de sus suscripciones."
 
 #: modules/nickserv/subscribe.c:115
-#, fuzzy, c-format
+#, c-format
 msgid "%s was not found on your subscription list."
-msgstr "%s no se encontró en la lista de ignoración de servicios."
+msgstr "%s no se encontró en su lista de suscripciones."
 
 #: modules/nickserv/subscribe.c:123
 msgid "Syntax: SUBSCRIBE [-]username tags"
-msgstr ""
+msgstr "Sintaxis: SUBSCRIBE [-]nombredeusuario marcas"
 
 #: modules/nickserv/subscribe.c:139
-#, fuzzy, c-format
+#, c-format
 msgid "%s has been added to your subscriptions."
-msgstr "%s ha sido agregado a la lista %s para %s."
+msgstr "%s ha sido agregado a su lista de suscripciones."
 
 #: modules/nickserv/subscribe.c:142
 msgid "Manages your subscription list."
-msgstr ""
+msgstr "Administra su lista de suscripciones."
 
 #: modules/nickserv/taxonomy.c:21
 msgid "Displays a user's metadata."
@@ -4687,26 +4641,25 @@ msgstr "%d coincidencias al comparar %s y %s"
 
 #: modules/operserv/greplog.c:23
 msgid "Searches through the logs."
-msgstr ""
+msgstr "Busca en los registros de eventos."
 
 #: modules/operserv/greplog.c:111
-#, fuzzy
 msgid "Syntax: GREPLOG <service> <pattern> [days]"
-msgstr "Sintaxis: LIST <patrón de canales>"
+msgstr "Sintaxis: GREPLOG <servicio> <patrón> [días]"
 
 #: modules/operserv/greplog.c:124
 #, c-format
 msgid "Too many days, maximum is %d."
-msgstr ""
+msgstr "Demasiados días, el máximo es %d."
 
 #: modules/operserv/greplog.c:134
 msgid "There is no log file matching your request."
-msgstr ""
+msgstr "No hay un archivo de registro que coincida con su solicitud."
 
 #: modules/operserv/greplog.c:214
-#, fuzzy, c-format
+#, c-format
 msgid "No lines matched pattern %s"
-msgstr "No hay nicks que coincidan con el patrón %s"
+msgstr "No hay líneas que coincidan con el patrón %s"
 
 #: modules/operserv/help.c:49 modules/operserv/specs.c:92
 #, c-format
@@ -4729,41 +4682,37 @@ msgid "For information on a command, type:"
 msgstr "Para más información acerca de un comando, escriba:"
 
 #: modules/operserv/identify.c:20
-#, fuzzy
 msgid "Authenticate for services operator privileges."
-msgstr "Cambia una contraseña para privilegios de operador de servicios."
+msgstr "Autenticación para privilegios de operador de servicios."
 
 #: modules/operserv/identify.c:21
 msgid "Alias for IDENTIFY"
 msgstr "Sinónimo para IDENTIFY"
 
 #: modules/operserv/identify.c:66
-#, fuzzy
 msgid "Syntax: IDENTIFY <password>"
-msgstr "Sintaxis: REGISTER <contraseña> <e-mail>"
+msgstr "Sintaxis: IDENTIFY <contraseña>"
 
 #: modules/operserv/identify.c:78
-#, fuzzy
 msgid "You do not have a services operator account."
-msgstr "Ud. es un operador de servicios de clase %s."
+msgstr "Ud. no tiene una cuenta de operador de servicios."
 
 #: modules/operserv/identify.c:84
-#, fuzzy
 msgid "Your services operator account does not have a password set."
-msgstr "Ud. es un operador de servicios de clase %s."
+msgstr ""
+"Su cuenta de operador de servicios no tiene una contraseña establecida."
 
 #: modules/operserv/identify.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "You are already identified to %s."
-msgstr "Ud. ahora está identificado para %s."
+msgstr "Ud. ya está identificado para %s."
 
 #: modules/operserv/identify.c:96
-#, fuzzy
 msgid "Invalid password."
-msgstr "Contraseña no válida para %s."
+msgstr "Contraseña no válida."
 
 #: modules/operserv/identify.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "You are now identified to %s."
 msgstr "Ud. ahora está identificado para %s."
 
@@ -4844,31 +4793,34 @@ msgstr "%d: %s por %s en %s (Razón: %s)"
 #: modules/operserv/info.c:21
 msgid "Shows some useful information about the current settings of services."
 msgstr ""
+"Muestra algo de información útil sobre los ajustes actuales de servicios."
 
 #: modules/operserv/info.c:70
 msgid ""
 "Services is presently TAINTED, no support will be given for this "
 "configuration."
 msgstr ""
+"La marca TAINTED afecta a los servicios actualmente; no se dará soporte a "
+"esta configuración."
 
 #: modules/operserv/info.c:71
 msgid "List of active taints:"
-msgstr ""
+msgstr "Lista de violaciones activas:"
 
 #: modules/operserv/info.c:77
 #, c-format
 msgid "Taint Condition: %s"
-msgstr ""
+msgstr "Condición de violación: %s"
 
 #: modules/operserv/info.c:78
 #, c-format
 msgid "Taint Location: %s:%d"
-msgstr ""
+msgstr "Ubicación de violación: %s:%d"
 
 #: modules/operserv/info.c:79
 #, c-format
 msgid "Taint Explanation: %s"
-msgstr ""
+msgstr "Explicación de violación: %s"
 
 #: modules/operserv/inject.c:23
 msgid "Fakes data from the uplink (debugging tool)."
@@ -5031,34 +4983,32 @@ msgstr ""
 "nuevamente."
 
 #: modules/operserv/modreload.c:15
-#, fuzzy
 msgid "Reloads a module."
-msgstr "Descarga un módulo."
+msgstr "Recarga un módulo."
 
 #: modules/operserv/modreload.c:47
-#, fuzzy
 msgid "Syntax: MODRELOAD <module...>"
-msgstr "Sintaxis: MODLOAD <módulo...>"
+msgstr "Sintaxis: MODRELOAD <módulo...>"
 
 #: modules/operserv/modreload.c:59
-#, fuzzy, c-format
+#, c-format
 msgid "%s is a permanent module; it cannot be reloaded."
-msgstr "%s es un módulo permanente; no puede ser descargado."
+msgstr "%s es un módulo permanente; no puede ser recargado."
 
 #: modules/operserv/modreload.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "Refusing to reload %s."
-msgstr "Rehusando a descargar %s."
+msgstr "Rehusando a recargar %s."
 
 #: modules/operserv/modreload.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Module %s reloaded."
-msgstr "Módulo %s cargado."
+msgstr "Módulo %s recargado."
 
 #: modules/operserv/modreload.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Module %s failed to reload."
-msgstr "No se pudo cargar el módulo %s."
+msgstr "No se pudo recargar el módulo %s."
 
 #: modules/operserv/modunload.c:21
 msgid "Unloads a module."
@@ -5153,32 +5103,31 @@ msgstr "Fin de la Lista NOOP de servidores."
 
 #: modules/operserv/override.c:21
 msgid "Perform a transaction on another user's account"
-msgstr ""
+msgstr "Realiza una operación sobre la cuenta de otro usuario."
 
 #: modules/operserv/override.c:170
-#, fuzzy
 msgid "Syntax: OVERRIDE <account> <service> <command> [params]"
-msgstr "Sintaxis: CLEAR <#canal> <comando> [parámetros]"
+msgstr "Sintaxis: OVERRIDE <cuenta> <servicio> <comando> [parámetros]"
 
 #: modules/operserv/override.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't have any founders."
-msgstr "%s no tiene una clase de operador establecida."
+msgstr "%s no tiene fundadores."
 
 #: modules/operserv/override.c:216
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a valid service."
-msgstr "%s no es un nombre de servidor válido."
+msgstr "%s no es un servicio válido."
 
 #: modules/operserv/override.c:222
-#, fuzzy, c-format
+#, c-format
 msgid "%s cannot be used as an override service."
-msgstr "%s no puede ser inspeccionado."
+msgstr "%s no puede ser utilizado como servicio con OVERRIDE"
 
 #: modules/operserv/override.c:229
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a valid command."
-msgstr "%s no es una acción válida"
+msgstr "%s no es un comando válido."
 
 #: modules/operserv/rakill.c:29
 msgid "Sets a group of AKILLs against users matching a specific regex pattern."
@@ -5348,128 +5297,116 @@ msgid "Shuts down services."
 msgstr "Cierra los servicios."
 
 #: modules/operserv/sgline.c:28
-#, fuzzy
 msgid "Manages network realname bans."
-msgstr "Administra vetos de red."
+msgstr "Administra vetos de red sobre nombres reales."
 
 #: modules/operserv/sgline.c:30
-#, fuzzy
 msgid "Adds a network realname ban"
-msgstr "Añade un veto de red"
+msgstr "Añade un veto de red sobre nombres reales"
 
 #: modules/operserv/sgline.c:31
-#, fuzzy
 msgid "Deletes a network realname ban"
-msgstr "Quita un veto de red"
+msgstr "Quita un veto de red sobre nombres reales"
 
 #: modules/operserv/sgline.c:32
-#, fuzzy
 msgid "Lists all network realname bans"
-msgstr "Muestra la lista de vetos de red"
+msgstr "Muestra la lista de vetos de red sobre nombres reales"
 
 #: modules/operserv/sgline.c:33
-#, fuzzy
 msgid "Synchronises network realname bans to servers"
-msgstr "Sincroniza los vetos de red entre los servidores"
+msgstr "Sincroniza los vetos de red sobre nombre reales entre los servidores"
 
 #: modules/operserv/sgline.c:112
-#, fuzzy
 msgid "Syntax: SGLINE ADD|DEL|LIST"
-msgstr "Sintaxis: AKILL ADD|DEL|LIST"
+msgstr "Sintaxis: SGLINE ADD|DEL|LIST"
 
 #: modules/operserv/sgline.c:138 modules/operserv/sgline.c:178
 #: modules/operserv/sgline.c:184
-#, fuzzy
 msgid "Syntax: SGLINE ADD <gecos> [!P|!T <minutes>] <reason>"
-msgstr "Sintaxis: AKILL ADD <nick|máscara de host> [!P|!T <minutos>] <razón>"
+msgstr "Sintaxis: SGLINE ADD <gecos> [!P|!T <minutos>] <razón>"
 
 #: modules/operserv/sgline.c:215
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid gecos: %s. At least three non-wildcard characters are required."
 msgstr ""
-"El usuario@host especificado no es válido: %s@%s. Se requieren al menos "
-"cuatro caracteres que no sean comodines."
+"El gecos specificado no es válido: %s. Se requieren al menos tres caracteres "
+"que no sean comodines."
 
 #: modules/operserv/sgline.c:221
-#, fuzzy
 msgid "The mask provided is too long."
-msgstr "El vhost solicitado es demasiado largo."
+msgstr "La máscara especificada es demasiado larga."
 
 #: modules/operserv/sgline.c:227
-#, fuzzy, c-format
+#, c-format
 msgid "SGLINE %s is already matched in the database."
-msgstr "AKILL %s@%s ya coincide en la base de datos."
+msgstr "SGLINE %s ya coincide en la base de datos."
 
 #: modules/operserv/sgline.c:234
-#, fuzzy, c-format
+#, c-format
 msgid "Timed SGLINE on %s was successfully added and will expire in %s."
-msgstr "AKILL temporal sobre %s@%s añadida con éxito; expirará en %s."
+msgstr "SGLINE temporal sobre %s añadida con éxito; expirará en %s."
 
 #: modules/operserv/sgline.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "SGLINE on %s was successfully added."
-msgstr "AKILL sobre %s@%s añadida con éxito."
+msgstr "SGLINE sobre %s añadida con éxito."
 
 #: modules/operserv/sgline.c:253
-#, fuzzy
 msgid "Syntax: SGLINE DEL <gecos>"
-msgstr "Sintaxis: SOPER DEL <cuenta>"
+msgstr "Sintaxis: SGLINE DEL <gecos>"
 
 #: modules/operserv/sgline.c:286 modules/operserv/sgline.c:305
-#, fuzzy, c-format
+#, c-format
 msgid "No such SGLINE with number %d."
-msgstr "No hay tal AKILL con número %d."
+msgstr "No hay tal SGLINE con número %d."
 
 #: modules/operserv/sgline.c:290 modules/operserv/sgline.c:309
 #: modules/operserv/sgline.c:326
-#, fuzzy, c-format
+#, c-format
 msgid "SGLINE on %s has been successfully removed."
-msgstr "La entrada AKILL sobre %s@%s ha sido quitada con éxito."
+msgstr "La entrada SGLINE sobre %s ha sido quitada con éxito."
 
 #: modules/operserv/sgline.c:322
-#, fuzzy, c-format
+#, c-format
 msgid "No such SGLINE: %s."
-msgstr "No hay tal AKILL: %s@%s."
+msgstr "No hay tal SGLINE: %s."
 
 #: modules/operserv/sgline.c:346
-#, fuzzy
 msgid "SGLINE list (with reasons):"
-msgstr "Lista AKILL (con razones):"
+msgstr "Lista SGLINE (con razones):"
 
 #: modules/operserv/sgline.c:348
-#, fuzzy
 msgid "SGLINE list:"
-msgstr "Lista AKILL:"
+msgstr "Lista SGLINE:"
 
 #: modules/operserv/sgline.c:355 modules/operserv/sqline.c:381
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s - by %s - expires in %s - (%s)"
-msgstr "%lu: %s@%s - por %s - expira en %s - (%s)"
+msgstr "%d: %s - por %s - expira en %s - (%s)"
 
 #: modules/operserv/sgline.c:357 modules/operserv/sqline.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s - by %s - expires in %s"
-msgstr "%lu: %s@%s - por %s - expira en %s"
+msgstr "%d: %s - por %s - expira en %s"
 
 #: modules/operserv/sgline.c:359 modules/operserv/sqline.c:385
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s - by %s - permanent - (%s)"
-msgstr "%lu: %s@%s - por %s - permanente - (%s)"
+msgstr "%d: %s - por %s - permanente - (%s)"
 
 #: modules/operserv/sgline.c:361 modules/operserv/sqline.c:387
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s - by %s - permanent"
-msgstr "%lu: %s@%s - por %s - permanente"
+msgstr "%d: %s - por %s - permanente"
 
 #: modules/operserv/sgline.c:364
-#, fuzzy, c-format
+#, c-format
 msgid "Total of %d %s in SGLINE list."
-msgstr "Total de %d %s en la lista AKILL."
+msgstr "Total de %d %s en la lista SGLINE."
 
 #: modules/operserv/sgline.c:385
-#, fuzzy
 msgid "SGLINE list synchronized to servers."
-msgstr "Lista AKILL sincronizada entre servidores."
+msgstr "Lista SGLINE sincronizada entre servidores."
 
 #: modules/operserv/soper.c:26
 msgid "Shows and changes services operator privileges."
@@ -5652,104 +5589,93 @@ msgid "End of privileges"
 msgstr "Fin de privilegios"
 
 #: modules/operserv/sqline.c:31
-#, fuzzy
 msgid "Manages network name bans."
-msgstr "Administra vetos de red."
+msgstr "Administra vetos de red sobre nombres."
 
 #: modules/operserv/sqline.c:33
-#, fuzzy
 msgid "Adds a network name ban"
-msgstr "Añade un veto de red"
+msgstr "Añade un veto de red sobre nombres"
 
 #: modules/operserv/sqline.c:34
-#, fuzzy
 msgid "Deletes a network name ban"
-msgstr "Quita un veto de red"
+msgstr "Quita un veto de red sobre nombres"
 
 #: modules/operserv/sqline.c:35
-#, fuzzy
 msgid "Lists all network name bans"
-msgstr "Muestra la lista de vetos de red"
+msgstr "Muestra la lista de vetos de red sobre nombres"
 
 #: modules/operserv/sqline.c:36
-#, fuzzy
 msgid "Synchronises network name bans to servers"
-msgstr "Sincroniza los vetos de red entre los servidores"
+msgstr "Sincroniza los vetos de red sobre nombres entre los servidores"
 
 #: modules/operserv/sqline.c:141
-#, fuzzy
 msgid "Syntax: SQLINE ADD|DEL|LIST"
-msgstr "Sintaxis: AKILL ADD|DEL|LIST"
+msgstr "Sintaxis: SQLINE ADD|DEL|LIST"
 
 #: modules/operserv/sqline.c:167 modules/operserv/sqline.c:207
 #: modules/operserv/sqline.c:213
-#, fuzzy
 msgid "Syntax: SQLINE ADD <nick|chan> [!P|!T <minutes>] <reason>"
-msgstr "Sintaxis: AKILL ADD <nick|máscara de host> [!P|!T <minutos>] <razón>"
+msgstr "Sintaxis: SQLINE ADD <nick|canal> [!P|!T <minutos>] <razón>"
 
 #: modules/operserv/sqline.c:246
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid target: %s. At least three non-wildcard characters are required."
 msgstr ""
-"El usuario@host especificado no es válido: %s@%s. Se requieren al menos "
-"cuatro caracteres que no sean comodines."
+"El objeto especificado no es válido: %s. Se requieren al menos tres "
+"caracteres que no sean comodines."
 
 #: modules/operserv/sqline.c:253
-#, fuzzy, c-format
+#, c-format
 msgid "SQLINE %s is already matched in the database."
-msgstr "AKILL %s@%s ya coincide en la base de datos."
+msgstr "SQLINE %s ya coincide en la base de datos."
 
 #: modules/operserv/sqline.c:260
-#, fuzzy, c-format
+#, c-format
 msgid "Timed SQLINE on %s was successfully added and will expire in %s."
-msgstr "AKILL temporal sobre %s@%s añadida con éxito; expirará en %s."
+msgstr "SQLINE temporal sobre %s añadida con éxito; expirará en %s."
 
 #: modules/operserv/sqline.c:262
-#, fuzzy, c-format
+#, c-format
 msgid "SQLINE on %s was successfully added."
-msgstr "AKILL sobre %s@%s añadida con éxito."
+msgstr "SQLINE sobre %s añadida con éxito."
 
 #: modules/operserv/sqline.c:279
-#, fuzzy
 msgid "Syntax: SQLINE DEL <nick|chan>"
-msgstr "Sintaxis: SOPER DEL <cuenta>"
+msgstr "Sintaxis: SQLINE DEL <nick|canal>"
 
 #: modules/operserv/sqline.c:312 modules/operserv/sqline.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "No such SQLINE with number %d."
-msgstr "No hay tal AKILL con número %d."
+msgstr "No hay tal SQLINE con número %d."
 
 #: modules/operserv/sqline.c:316 modules/operserv/sqline.c:335
 #: modules/operserv/sqline.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "SQLINE on %s has been successfully removed."
-msgstr "La entrada AKILL sobre %s@%s ha sido quitada con éxito."
+msgstr "La entrada SQLINE sobre %s ha sido quitada con éxito."
 
 #: modules/operserv/sqline.c:348
-#, fuzzy, c-format
+#, c-format
 msgid "No such SQLINE: %s."
-msgstr "No hay tal AKILL: %s@%s."
+msgstr "No hay tal SQLINE: %s."
 
 #: modules/operserv/sqline.c:372
-#, fuzzy
 msgid "SQLINE list (with reasons):"
-msgstr "Lista AKILL (con razones):"
+msgstr "Lista SQLINE (con razones):"
 
 #: modules/operserv/sqline.c:374
-#, fuzzy
 msgid "SQLINE list:"
-msgstr "Lista AKILL:"
+msgstr "Lista SQLINE:"
 
 #: modules/operserv/sqline.c:390
-#, fuzzy, c-format
+#, c-format
 msgid "Total of %d %s in SQLINE list."
-msgstr "Total de %d %s en la lista AKILL."
+msgstr "Total de %d %s en la lista SQLINE."
 
 #: modules/operserv/sqline.c:411
-#, fuzzy
 msgid "SQLINE list synchronized to servers."
-msgstr "Lista AKILL sincronizada entre servidores."
+msgstr "Lista SQLINE sincronizada entre servidores."
 
 #: modules/operserv/update.c:21
 msgid "Flushes services database to disk."
@@ -5876,6 +5802,7 @@ msgstr "No se pudo obtener el archivo de ayuda para %s."
 #, c-format
 msgid "Could not open log file (%s), log entries will be missing!"
 msgstr ""
+"No se pudo abrir el archivo de registro (%s), faltarán entradas de eventos."
 
 #: src/module.c:164
 #, c-format
