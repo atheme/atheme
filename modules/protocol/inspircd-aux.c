@@ -194,7 +194,9 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 		ch++;
 	}
 
-	if (atoi(value) <= 0)
+	/* don't allow mlocking a rejoin delay mode greater than 5 seconds.
+	   it's extremely rude. --nenolod */
+	if (atoi(value) <= 0 || atoi(value) >= 5)
 	{
 		return false;
 	}

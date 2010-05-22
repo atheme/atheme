@@ -3,6 +3,16 @@
 # Storage backend.
 modules/backend/flatfile.c
 
+# IRC - ALIS
+modules/alis/main.c
+
+# IRC - BotServ
+modules/botserv/bottalk.c
+modules/botserv/help.c
+modules/botserv/info.c
+modules/botserv/main.c
+modules/botserv/set.c
+
 # IRC - ChanServ
 modules/chanserv/akick.c
 modules/chanserv/ban.c
@@ -26,13 +36,20 @@ modules/chanserv/list.c
 modules/chanserv/main.c
 modules/chanserv/mark.c
 modules/chanserv/op.c
+modules/chanserv/owner.c
+modules/chanserv/protect.c
+modules/chanserv/quiet.c
 modules/chanserv/recover.c
 modules/chanserv/register.c
 modules/chanserv/set.c
+modules/chanserv/set_gameserv.c
+modules/chanserv/set_limitflags.c
+modules/chanserv/set_private.c
 modules/chanserv/status.c
 modules/chanserv/taxonomy.c
 modules/chanserv/template.c
 modules/chanserv/topic.c
+modules/chanserv/unban_self.c
 modules/chanserv/version.c
 modules/chanserv/voice.c
 modules/chanserv/why.c
@@ -49,6 +66,15 @@ modules/gameserv/rps.c
 # IRC - Global
 modules/global/main.c
 
+# IRC - HostServ
+modules/hostserv/group.c
+modules/hostserv/help.c
+modules/hostserv/offer.c
+modules/hostserv/onoff.c
+modules/hostserv/request.c
+modules/hostserv/vhost.c
+modules/hostserv/vhostnick.c
+
 # IRC - MemoServ
 modules/memoserv/delete.c
 modules/memoserv/forward.c
@@ -58,9 +84,11 @@ modules/memoserv/list.c
 modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/send.c
+modules/memoserv/sendops.c
 
 # IRC - NickServ
 modules/nickserv/access.c
+modules/nickserv/cert.c
 modules/nickserv/drop.c
 modules/nickserv/enforce.c
 modules/nickserv/freeze.c
@@ -73,6 +101,7 @@ modules/nickserv/info.c
 modules/nickserv/list.c
 modules/nickserv/listchans.c
 modules/nickserv/listmail.c
+modules/nickserv/listownmail.c
 modules/nickserv/logout.c
 modules/nickserv/main.c
 modules/nickserv/mark.c
@@ -80,9 +109,14 @@ modules/nickserv/register.c
 modules/nickserv/resetpass.c
 modules/nickserv/return.c
 modules/nickserv/sendpass.c
+modules/nickserv/sendpass_user.c
 modules/nickserv/set.c
+modules/nickserv/set_accountname.c
+modules/nickserv/set_private.c
+modules/nickserv/set_privmsg.c
 modules/nickserv/setpass.c
 modules/nickserv/status.c
+modules/nickserv/subscribe.c
 modules/nickserv/taxonomy.c
 modules/nickserv/vacation.c
 modules/nickserv/verify.c
@@ -93,8 +127,11 @@ modules/operserv/akill.c
 modules/operserv/clearchan.c
 modules/operserv/clones.c
 modules/operserv/compare.c
+modules/operserv/greplog.c
 modules/operserv/help.c
+modules/operserv/identify.c
 modules/operserv/ignore.c
+modules/operserv/info.c
 modules/operserv/inject.c
 modules/operserv/jupe.c
 modules/operserv/main.c
@@ -102,8 +139,10 @@ modules/operserv/mode.c
 modules/operserv/modinspect.c
 modules/operserv/modlist.c
 modules/operserv/modload.c
+modules/operserv/modreload.c
 modules/operserv/modunload.c
 modules/operserv/noop.c
+modules/operserv/override.c
 modules/operserv/rakill.c
 modules/operserv/raw.c
 modules/operserv/rehash.c
@@ -112,8 +151,10 @@ modules/operserv/rmatch.c
 modules/operserv/rnc.c
 modules/operserv/rwatch.c
 modules/operserv/shutdown.c
+modules/operserv/sgline.c
 modules/operserv/soper.c
 modules/operserv/specs.c
+modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
 
@@ -123,6 +164,7 @@ src/account.c
 src/commandtree.c
 src/function.c
 src/help.c
+src/logger.c
 src/module.c
 src/node.c
 src/ptasks.c
