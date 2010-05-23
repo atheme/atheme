@@ -19,18 +19,15 @@ DECLARE_MODULE_V1
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", N_("Sets various control flags."),
                         AC_NONE, 3, cs_cmd_set };
 
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
-command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"),   AC_NONE, 2, cs_cmd_set_restricted  };
 
 command_t *cs_set_commands[] = {
 	&cs_set_property,
-	&cs_set_restricted,
 	NULL
 };
 
@@ -48,7 +45,6 @@ void _modinit(module_t *m)
 
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
-	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
 }
 
 void _moddeinit()
@@ -58,7 +54,6 @@ void _moddeinit()
 
 	help_delentry(cs_helptree, "SET");
 	help_delentry(cs_helptree, "SET PROPERTY");
-	help_delentry(cs_helptree, "SET RESTRICTED");
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -108,59 +103,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
-	}
-
-	if (!strcasecmp("ON", parv[1]))
-	{
-		if (MC_RESTRICTED & mc->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "RESTRICTED", mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:RESTRICTED:ON: \2%s\2", mc->name);
-
-		mc->flags |= MC_RESTRICTED;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "RESTRICTED", mc->name);
-		return;
-	}
-	else if (!strcasecmp("OFF", parv[1]))
-	{
-		if (!(MC_RESTRICTED & mc->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "RESTRICTED", mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:RESTRICTED:OFF: \2%s\2", mc->name);
-
-		mc->flags &= ~MC_RESTRICTED;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "RESTRICTED", mc->name);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RESTRICTED");
-		return;
-	}
 }
 
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
