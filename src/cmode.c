@@ -377,8 +377,8 @@ static struct modestackdata {
 	unsigned int modes_on;
 	unsigned int modes_off;
 	unsigned int limit;
-	char extmodes[MAXMODES][512];
-	bool limitused, extmodesused[MAXMODES];
+	char extmodes[256][512];
+	bool limitused, extmodesused[256];
 	char pmodes[2*MAXMODES+2];
 	char params[512]; /* includes leading space */
 	int totalparamslen; /* includes leading space */
