@@ -21,7 +21,6 @@ static void cs_set_config_ready(void *unused);
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[]);
@@ -41,7 +40,6 @@ command_t cs_set_secure    = { "SECURE",    N_("Prevents unauthorized users from
 command_t cs_set_verbose   = { "VERBOSE",   N_("Notifies channel about access list modifications."),            AC_NONE, 2, cs_cmd_set_verbose    };
 command_t cs_set_entrymsg  = { "ENTRYMSG",  N_("Sets the channel's entry message."),                            AC_NONE, 2, cs_cmd_set_entrymsg   };
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
-command_t cs_set_email     = { "EMAIL",     N_("Sets the channel e-mail address."),                             AC_NONE, 2, cs_cmd_set_email      };
 command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."),                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
 command_t cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."),                          AC_NONE, 2, cs_cmd_set_topiclock  };
 command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
@@ -54,7 +52,6 @@ command_t *cs_set_commands[] = {
 	&cs_set_verbose,
 	&cs_set_entrymsg,
 	&cs_set_property,
-	&cs_set_email,
 	&cs_set_keeptopic,
 	&cs_set_topiclock,
 	&cs_set_guard,
@@ -79,7 +76,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 	help_addentry(cs_helptree, "SET SECURE", "help/cservice/set_secure", NULL);
 	help_addentry(cs_helptree, "SET VERBOSE", "help/cservice/set_verbose", NULL);
-	help_addentry(cs_helptree, "SET EMAIL", "help/cservice/set_email", NULL);
 	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
@@ -101,7 +97,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET MLOCK");
 	help_delentry(cs_helptree, "SET SECURE");
 	help_delentry(cs_helptree, "SET VERBOSE");
-	help_delentry(cs_helptree, "SET EMAIL");
 	help_delentry(cs_helptree, "SET ENTRYMSG");
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET RESTRICTED");
@@ -172,50 +167,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-	char *mail = parv[1];
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
-		return;
-	}
-
-	if (!mail || !strcasecmp(mail, "NONE") || !strcasecmp(mail, "OFF"))
-	{
-		if (metadata_find(mc, "email"))
-		{
-			metadata_delete(mc, "email");
-			command_success_nodata(si, _("The e-mail address for channel \2%s\2 was deleted."), mc->name);
-			logcommand(si, CMDLOG_SET, "SET:EMAIL:NONE: \2%s\2", mc->name);
-			return;
-		}
-
-		command_fail(si, fault_nochange, _("The e-mail address for channel \2%s\2 was not set."), mc->name);
-		return;
-	}
-
-	if (!validemail(mail))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), mail);
-		return;
-	}
-
-	/* we'll overwrite any existing metadata */
-	metadata_add(mc, "email", mail);
-
-	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", mc->name, mail);
-	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
