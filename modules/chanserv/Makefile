@@ -46,6 +46,7 @@ SRCS =			\
 	set_fantasy.c	\
 	set_founder.c	\
 	set_gameserv.c \
+	set_guard.c	\
 	set_keeptopic.c	\
 	set_limitflags.c \
 	set_mlock.c	\

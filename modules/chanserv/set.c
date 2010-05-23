@@ -16,25 +16,20 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_set_config_ready(void *unused);
-
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", N_("Sets various control flags."),
                         AC_NONE, 3, cs_cmd_set };
 
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
-command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
 command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"),   AC_NONE, 2, cs_cmd_set_restricted  };
 
 command_t *cs_set_commands[] = {
 	&cs_set_property,
-	&cs_set_guard,
 	&cs_set_restricted,
 	NULL
 };
@@ -54,10 +49,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
-	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
-
-	hook_add_event("config_ready");
-	hook_add_config_ready(cs_set_config_ready);
 }
 
 void _moddeinit()
@@ -68,17 +59,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET");
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET RESTRICTED");
-	help_delentry(cs_helptree, "SET GUARD");
-
-	hook_del_config_ready(cs_set_config_ready);
-}
-
-static void cs_set_config_ready(void *unused)
-{
-	if (config_options.join_chans)
-		cs_set_guard.access = NULL;
-	else
-		cs_set_guard.access = PRIV_ADMIN;
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -128,71 +108,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
-	}
-
-	if (!strcasecmp("ON", parv[1]))
-	{
-		if (MC_GUARD & mc->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "GUARD", mc->name);
-			return;
-		}
-		if (metadata_find(mc, "private:botserv:bot-assigned") &&
-				module_find_published("botserv/main"))
-		{
-			command_fail(si, fault_noprivs, _("Channel \2%s\2 already has a BotServ bot assigned to it.  You need to unassign it first."), mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:GUARD:ON: \2%s\2", mc->name);
-
-		mc->flags |= MC_GUARD;
-
-		if (!(mc->flags & MC_INHABIT))
-			join(mc->name, chansvs.nick);
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "GUARD", mc->name);
-		return;
-	}
-	else if (!strcasecmp("OFF", parv[1]))
-	{
-		if (!(MC_GUARD & mc->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "GUARD", mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:GUARD:OFF: \2%s\2", mc->name);
-
-		mc->flags &= ~MC_GUARD;
-
-		if (mc->chan != NULL && !(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)) && !(mc->chan->flags & CHAN_LOG))
-			part(mc->name, chansvs.nick);
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "GUARD", mc->name);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GUARD");
-		return;
-	}
 }
 
 static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
