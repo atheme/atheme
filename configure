@@ -9053,7 +9053,7 @@ $as_echo "no" >&6; }
 
 	MOWGLI_SOURCE="internal"
 	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -lmowgli"
+	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
 	LIBMOWGLI="libmowgli"
 	if test "x$enablerpath" = "xyes"; then
 		RPATH="-Wl,-rpath,${libdir}"
@@ -9063,7 +9063,7 @@ elif test $pkg_failed = untried; then
 
 	MOWGLI_SOURCE="internal"
 	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -lmowgli"
+	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
 	LIBMOWGLI="libmowgli"
 	if test "x$enablerpath" = "xyes"; then
 		RPATH="-Wl,-rpath,${libdir}"
