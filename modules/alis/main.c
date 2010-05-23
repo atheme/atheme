@@ -78,7 +78,7 @@ struct alis_query
 	int mode_dir;
 	int mode_key;
 	int mode_limit;
-	int mode_ext[MAXMODES];
+	int mode_ext[256];
 	int skip;
 	int maxmatches;
 };
@@ -270,8 +270,6 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
-	char modestr[MAXMODES+60];
-	int i, j;
 
         /* cant show a topicwho, when a channel has no topic. */
         if(!chptr->topic)
@@ -279,34 +277,20 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
                 show_topicwho = 0;
 		show_topic = 0;
 	}
-	if (query->show_mode)
-	{
-		j = 0;
-		modestr[j++] = '+';
-		for (i = 0; i < MAXMODES; i++)
-			if (chptr->extmodes[i] != NULL)
-				modestr[j++] = ignore_mode_list[i].mode;
-		if (chptr->limit != 0)
-			modestr[j++] = 'l';
-		if (chptr->key != NULL)
-			modestr[j++] = 'k';
-		modestr[j] = '\0';
-		strlcat(modestr, flags_to_string(chptr->modes & ~ircd->oimmune_mode), sizeof modestr);
-	}
 
 	if(query->show_mode && show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3d :%s (%s)",
-			chptr->name, modestr,
+			chptr->name, channel_modes(chptr, false),
 			LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
 	else if(query->show_mode && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3d :%s",
-			chptr->name, modestr,
+			chptr->name, channel_modes(chptr, false),
 			LIST_LENGTH(&chptr->members),
 			chptr->topic);
 	else if(query->show_mode)
 		command_success_nodata(si, "%-50s %-8s %3d",
-			chptr->name, modestr,
+			chptr->name, channel_modes(chptr, false),
 			LIST_LENGTH(&chptr->members));
 	else if(show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %3d :%s (%s)",
