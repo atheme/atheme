@@ -2,7 +2,7 @@
  * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for spanning tree 1.2 branch inspircd.
+ * The People's Democratic Republic of InspIRCd common (across all protocols) support.
  *
  * $Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $
  */
