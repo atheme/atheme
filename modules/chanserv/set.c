@@ -21,7 +21,6 @@ static void cs_set_config_ready(void *unused);
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
@@ -31,13 +30,11 @@ command_t cs_set = { "SET", N_("Sets various control flags."),
 
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
 command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
-command_t cs_set_fantasy   = { "FANTASY",   N_("Allows or disallows in-channel commands."),                     AC_NONE, 2, cs_cmd_set_fantasy    };
 command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"),   AC_NONE, 2, cs_cmd_set_restricted  };
 
 command_t *cs_set_commands[] = {
 	&cs_set_property,
 	&cs_set_guard,
-	&cs_set_fantasy,
 	&cs_set_restricted,
 	NULL
 };
@@ -57,7 +54,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
-	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
 
 	hook_add_event("config_ready");
@@ -72,7 +68,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET");
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET RESTRICTED");
-	help_delentry(cs_helptree, "SET FANTASY");
 	help_delentry(cs_helptree, "SET GUARD");
 
 	hook_del_config_ready(cs_set_config_ready);
@@ -84,10 +79,6 @@ static void cs_set_config_ready(void *unused)
 		cs_set_guard.access = NULL;
 	else
 		cs_set_guard.access = PRIV_ADMIN;
-	if (chansvs.fantasy)
-		cs_set_fantasy.access = NULL;
-	else
-		cs_set_fantasy.access = AC_DISABLED;
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -137,61 +128,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
-	}
-
-	if (!strcasecmp("ON", parv[1]))
-	{
-		metadata_t *md = metadata_find(mc, "disable_fantasy");
-
-		if (!md)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "FANTASY", mc->name);
-			return;
-		}
-
-		metadata_delete(mc, "disable_fantasy");
-
-		logcommand(si, CMDLOG_SET, "SET:FANTASY:ON: \2%s\2", mc->name);
-		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "FANTASY", mc->name);
-		return;
-	}
-	else if (!strcasecmp("OFF", parv[1]))
-	{
-		metadata_t *md = metadata_find(mc, "disable_fantasy");
-
-		if (md)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "FANTASY", mc->name);
-			return;
-		}
-
-		metadata_add(mc, "disable_fantasy", "on");
-
-		logcommand(si, CMDLOG_SET, "SET:FANTASY:OFF: \2%s\2", mc->name);
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "FANTASY", mc->name);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
-		return;
-	}
 }
 
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])

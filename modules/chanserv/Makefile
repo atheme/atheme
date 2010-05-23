@@ -43,6 +43,7 @@ SRCS =			\
 	set.c		\
 	set_email.c	\
 	set_entrymsg.c	\
+	set_fantasy.c	\
 	set_founder.c	\
 	set_gameserv.c \
 	set_keeptopic.c	\
