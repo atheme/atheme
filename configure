@@ -9170,9 +9170,6 @@ $as_echo "yes" >&6; }
 	:
 fi
 
-	CFLAGS="$CFLAGS $PCRE_CFLAGS"
-	LIBS="$LIBS $PCRE_LIBS"
-
 
 
 

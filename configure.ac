@@ -518,9 +518,6 @@ if test "x$with_pcre" != xno; then
 	PKG_CHECK_MODULES(PCRE, [libpcre], [], [
 		AC_ERROR([PCRE requested, but not found.])])
 
-	CFLAGS="$CFLAGS $PCRE_CFLAGS"
-	LIBS="$LIBS $PCRE_LIBS"
-
 	AC_SUBST(PCRE_CFLAGS)
 	AC_SUBST(PCRE_LIBS)
 	AC_DEFINE([HAVE_PCRE], [1], [Define if you want to use PCRE])
