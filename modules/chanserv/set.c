@@ -21,7 +21,6 @@ static void cs_set_config_ready(void *unused);
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
@@ -35,7 +34,6 @@ command_t cs_set = { "SET", N_("Sets various control flags."),
 command_t cs_set_secure    = { "SECURE",    N_("Prevents unauthorized users from gaining operator status."),    AC_NONE, 2, cs_cmd_set_secure     };
 command_t cs_set_verbose   = { "VERBOSE",   N_("Notifies channel about access list modifications."),            AC_NONE, 2, cs_cmd_set_verbose    };
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
-command_t cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."),                          AC_NONE, 2, cs_cmd_set_topiclock  };
 command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
 command_t cs_set_fantasy   = { "FANTASY",   N_("Allows or disallows in-channel commands."),                     AC_NONE, 2, cs_cmd_set_fantasy    };
 command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"),   AC_NONE, 2, cs_cmd_set_restricted  };
@@ -44,7 +42,6 @@ command_t *cs_set_commands[] = {
 	&cs_set_secure,
 	&cs_set_verbose,
 	&cs_set_property,
-	&cs_set_topiclock,
 	&cs_set_guard,
 	&cs_set_fantasy,
 	&cs_set_restricted,
@@ -68,7 +65,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET VERBOSE", "help/cservice/set_verbose", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
-	help_addentry(cs_helptree, "SET TOPICLOCK", "help/cservice/set_topiclock", NULL);
 	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
 
@@ -86,7 +82,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET VERBOSE");
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET RESTRICTED");
-	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
 	help_delentry(cs_helptree, "SET GUARD");
 
@@ -152,60 +147,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
-	}
-
-	if (!strcasecmp("ON", parv[1]))
-	{
-		if (MC_TOPICLOCK & mc->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "TOPICLOCK", mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:ON: \2%s\2", mc->name);
-
-		mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "TOPICLOCK", mc->name);
-		return;
-	}
-
-	else if (!strcasecmp("OFF", parv[1]))
-	{
-		if (!(MC_TOPICLOCK & mc->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "TOPICLOCK", mc->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:OFF: \2%s\2", mc->name);
-
-		mc->flags &= ~MC_TOPICLOCK;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "TOPICLOCK", mc->name);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TOPICLOCK");
-		return;
-	}
 }
 
 static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])

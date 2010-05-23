@@ -49,6 +49,7 @@ SRCS =			\
 	set_limitflags.c \
 	set_mlock.c	\
 	set_private.c	\
+	set_topiclock.c	\
 	set_url.c	\
 	status.c	\
 	taxonomy.c	\
