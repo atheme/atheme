@@ -30,23 +30,6 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	/* Here's all the MODULE_TRY_REQUEST_DEPENDENCY out the ass
-	 * stuff to make easy upgrades.
-	 */
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_email");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_entrymsg");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_fantasy");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_founder");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_guard");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_keeptopic");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_mlock");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_property");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_restricted");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_secure");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_topiclock");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_url");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_verbose");
-
         command_add(&cs_set, cs_cmdtree);
 
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);

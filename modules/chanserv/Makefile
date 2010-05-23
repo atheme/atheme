@@ -41,6 +41,7 @@ SRCS =			\
 	recover.c	\
 	register.c	\
 	set.c		\
+	set_core.c	\
 	set_email.c	\
 	set_entrymsg.c	\
 	set_fantasy.c	\
