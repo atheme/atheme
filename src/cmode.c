@@ -392,7 +392,7 @@ static void modestack_calclen(struct modestackdata *md);
 
 static void modestack_debugprint(struct modestackdata *md)
 {
-	int i;
+	size_t i;
 
 	slog(LG_DEBUG, "modestack_debugprint(): %s MODE %s", md->source, md->channel->name);
 	slog(LG_DEBUG, "simple %x/%x", md->modes_on, md->modes_off);
@@ -409,7 +409,7 @@ static void modestack_debugprint(struct modestackdata *md)
 /* calculates the length fields */
 static void modestack_calclen(struct modestackdata *md)
 {
-	int i;
+	size_t i;
 	const char *p;
 
 	md->totallen = strlen(md->source) + USERLEN + HOSTLEN + 1 + 4 + 1 +
@@ -437,7 +437,7 @@ static void modestack_calclen(struct modestackdata *md)
 /* clears the data */
 static void modestack_clear(struct modestackdata *md)
 {
-	int i;
+	size_t i;
 
 	md->modes_on = 0;
 	md->modes_off = 0;
@@ -457,7 +457,7 @@ static void modestack_flush(struct modestackdata *md)
 	char buf[512];
 	char *end, *p;
 	int dir = MTYPE_NUL;
-	int i;
+	size_t i;
 
 	p = buf;
 	end = buf + sizeof buf;
@@ -610,7 +610,8 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, const ch
 static void modestack_add_param(struct modestackdata *md, int dir, char type, const char *value)
 {
 	char *p;
-	int n = 0, i;
+	int n = 0;
+	size_t i;
 	char dir2 = MTYPE_NUL;
 	char str[3];
 
@@ -752,7 +753,7 @@ void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, ch
 /* Clear all simple modes (+imnpstkl etc) on a channel */
 void clear_simple_modes(channel_t *c)
 {
-	int i;
+	size_t i;
 
 	if (c == NULL)
 		return;
