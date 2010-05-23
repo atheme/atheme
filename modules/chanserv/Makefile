@@ -52,6 +52,7 @@ SRCS =			\
 	set_secure.c	\
 	set_topiclock.c	\
 	set_url.c	\
+	set_verbose.c	\
 	status.c	\
 	taxonomy.c	\
 	template.c	\
