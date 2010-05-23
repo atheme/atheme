@@ -41,9 +41,12 @@ SRCS =			\
 	recover.c	\
 	register.c	\
 	set.c		\
+	set_email.c	\
+	set_founder.c	\
 	set_gameserv.c \
 	set_limitflags.c \
 	set_private.c	\
+	set_url.c	\
 	status.c	\
 	taxonomy.c	\
 	template.c	\
