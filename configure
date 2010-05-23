@@ -7104,7 +7104,6 @@ fi
 
 $as_echo "#define HAVE_OPENSSL /**/" >>confdefs.h
 
-		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
 
