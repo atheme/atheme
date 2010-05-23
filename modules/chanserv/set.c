@@ -483,7 +483,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	bool newlock_ext_off[MAXMODES];
 	char newext[512];
 	char ext_plus[MAXMODES + 1], ext_minus[MAXMODES + 1];
-	int i;
+	size_t i;
 	char *letters = strtok(parv[1], " ");
 	char *arg;
 	metadata_t *md;
