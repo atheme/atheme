@@ -29,6 +29,7 @@ BlockHeap *pcommand_heap;
 BlockHeap *messagetree_heap;
 struct cmode_ *mode_list;
 struct extmode *ignore_mode_list;
+size_t ignore_mode_list_size = 0;
 struct cmode_ *status_mode_list;
 struct cmode_ *prefix_mode_list;
 struct cmode_ *user_mode_list;
