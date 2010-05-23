@@ -175,7 +175,7 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 		ch++;
 	}
 
-	if (atoi(value) <= 0)
+	if (atoi(value) <= 0 || atoi(value) >= 5)
 	{
 		return false;
 	}
