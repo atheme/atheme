@@ -78,7 +78,7 @@ struct alis_query
 	int mode_dir;
 	int mode_key;
 	int mode_limit;
-	int mode_ext[MAXEXTMODES];
+	int mode_ext[MAXMODES];
 	int skip;
 	int maxmatches;
 };
@@ -270,7 +270,7 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
-	char modestr[MAXEXTMODES+60];
+	char modestr[MAXMODES+60];
 	int i, j;
 
         /* cant show a topicwho, when a channel has no topic. */
@@ -283,7 +283,7 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 	{
 		j = 0;
 		modestr[j++] = '+';
-		for (i = 0; i < MAXEXTMODES; i++)
+		for (i = 0; i < MAXMODES; i++)
 			if (chptr->extmodes[i] != NULL)
 				modestr[j++] = ignore_mode_list[i].mode;
 		if (chptr->limit != 0)

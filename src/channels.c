@@ -109,6 +109,9 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 	c->topic = NULL;
 	c->topic_setter = NULL;
 
+	if (ignore_mode_list_size != 0)
+		c->extmodes = scalloc(sizeof(char *), ignore_mode_list_size);
+
 	c->bans.head = NULL;
 	c->bans.tail = NULL;
 	c->bans.count = 0;
@@ -183,6 +186,9 @@ void channel_delete(channel_t *c)
 
 	clear_simple_modes(c);
 	chanban_clear(c);
+
+	if (c->extmodes != NULL)
+		free(c->extmodes);
 
 	free(c->name);
 	if (c->topic != NULL)
