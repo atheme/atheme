@@ -9084,7 +9084,7 @@ if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
 fi
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
-LIBS="$LIBS $MOWGLI_LIBS"
+LIBS="$LIBS $MOWGLI_LIBS $PATH"
 
 
 
