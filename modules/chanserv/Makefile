@@ -45,6 +45,7 @@ SRCS =			\
 	set_entrymsg.c	\
 	set_founder.c	\
 	set_gameserv.c \
+	set_keeptopic.c	\
 	set_limitflags.c \
 	set_mlock.c	\
 	set_private.c	\
