@@ -1388,6 +1388,7 @@ void _modinit(module_t * m)
 	status_mode_list = inspircd_status_mode_list;
 	prefix_mode_list = inspircd_prefix_mode_list;
 	user_mode_list = inspircd_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(inspircd_ignore_mode_list);
 
 	ircd = &InspIRCd;
 
