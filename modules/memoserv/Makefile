@@ -15,4 +15,3 @@ include ../../buildsys.module.mk
 SRCS = delete.c  forward.c  help.c  ignore.c  list.c  main.c  read.c  send.c  sendops.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

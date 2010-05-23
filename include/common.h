@@ -128,6 +128,9 @@ typedef enum faultcode_ faultcode_t;
 /* Causes a warning if value is not of type (or compatible), returning value. */
 #define ENSURE_TYPE(value, type) (true ? (value) : (type)0)
 
+/* Returns the size of an array. */
+#define ARRAY_SIZE(array) sizeof((array)) / sizeof(*(array))
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

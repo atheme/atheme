@@ -749,6 +749,7 @@ void _modinit(module_t * m)
 	status_mode_list = ircnet_status_mode_list;
 	prefix_mode_list = ircnet_prefix_mode_list;
 	user_mode_list = ircnet_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(ircnet_ignore_mode_list);
 
 	ircd = &IRCNet;
 

@@ -479,10 +479,10 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int mask, changed;
 	bool mask_ext;
 	char newlock_key[KEYLEN];
-	char newlock_ext[MAXEXTMODES][512];
-	bool newlock_ext_off[MAXEXTMODES];
+	char newlock_ext[MAXMODES][512];
+	bool newlock_ext_off[MAXMODES];
 	char newext[512];
-	char ext_plus[MAXEXTMODES + 1], ext_minus[MAXEXTMODES + 1];
+	char ext_plus[MAXMODES + 1], ext_minus[MAXMODES + 1];
 	int i;
 	char *letters = strtok(parv[1], " ");
 	char *arg;
@@ -519,7 +519,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	}
 
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < MAXMODES; i++)
 	{
 		newlock_ext[i][0] = '\0';
 		newlock_ext_off[i] = false;
@@ -690,7 +690,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			{
 				modebuf[0] = *arg;
 				modebuf[1] = '\0';
-				strlcat(arg[1] == ' ' || arg[1] == '\0' ? ext_minus : ext_plus, modebuf, MAXEXTMODES + 1);
+				strlcat(arg[1] == ' ' || arg[1] == '\0' ? ext_minus : ext_plus, modebuf, MAXMODES + 1);
 				arg++;
 				while (*arg != ' ' && *arg != '\0')
 					arg++;
@@ -702,7 +702,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		newext[0] = '\0';
-		for (i = 0; i < MAXEXTMODES; i++)
+		for (i = 0; i < ignore_mode_list_size; i++)
 		{
 			if (newlock_ext[i][0] != '\0' || newlock_ext_off[i])
 			{
@@ -716,7 +716,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 				modebuf[1] = '\0';
 				strlcat(newext, modebuf, sizeof newext);
 				strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
-						modebuf, MAXEXTMODES + 1);
+						modebuf, MAXMODES + 1);
 				if (!newlock_ext_off[i])
 					strlcat(newext, newlock_ext[i], sizeof newext);
 			}

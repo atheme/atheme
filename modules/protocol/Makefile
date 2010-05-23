@@ -43,4 +43,3 @@ SRCS = \
 	unreal.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

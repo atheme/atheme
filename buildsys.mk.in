@@ -156,7 +156,7 @@ depend: pre-depend ${SRCS}
 	fi
 
 .c.dep .cc.dep .cxx.dep .m.dep .mm.dep .S.dep:
-	${CPP} ${CPPFLAGS} -M $< >$@ || (rm -f $@; exit 1)
+	${CPP} ${CFLAGS} ${CPPFLAGS} -M $< >$@ || (rm -f $@; exit 1)
 
 .d.dep:
 .xpm.dep:

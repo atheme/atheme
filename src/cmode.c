@@ -377,8 +377,8 @@ static struct modestackdata {
 	unsigned int modes_on;
 	unsigned int modes_off;
 	unsigned int limit;
-	char extmodes[MAXEXTMODES][512];
-	bool limitused, extmodesused[MAXEXTMODES];
+	char extmodes[MAXMODES][512];
+	bool limitused, extmodesused[MAXMODES];
 	char pmodes[2*MAXMODES+2];
 	char params[512]; /* includes leading space */
 	int totalparamslen; /* includes leading space */
@@ -398,7 +398,7 @@ static void modestack_debugprint(struct modestackdata *md)
 	slog(LG_DEBUG, "simple %x/%x", md->modes_on, md->modes_off);
 	if (md->limitused)
 		slog(LG_DEBUG, "limit %u", (unsigned)md->limit);
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 		if (md->extmodesused[i])
 			slog(LG_DEBUG, "ext %d %s", i, md->extmodes[i]);
 	slog(LG_DEBUG, "pmodes %s%s", md->pmodes, md->params);
@@ -419,7 +419,7 @@ static void modestack_calclen(struct modestackdata *md)
 	md->paramcount = (md->limitused != 0);
 	if (md->limitused && md->limit != 0)
 		md->totalparamslen += 11;
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 		if (md->extmodesused[i])
 		{
 			md->paramcount++;
@@ -442,7 +442,7 @@ static void modestack_clear(struct modestackdata *md)
 	md->modes_on = 0;
 	md->modes_off = 0;
 	md->limitused = 0;
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 		md->extmodesused[i] = 0, *md->extmodes[i] = '\0';
 	md->pmodes[0] = '\0';
 	md->params[0] = '\0';
@@ -476,7 +476,7 @@ static void modestack_flush(struct modestackdata *md)
 			dir = MTYPE_DEL, *p++ = '-';
 		*p++ = 'l';
 	}
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 	{
 		if (md->extmodesused[i] && *md->extmodes[i] == '\0')
 		{
@@ -498,7 +498,7 @@ static void modestack_flush(struct modestackdata *md)
 			dir = MTYPE_ADD, *p++ = '+';
 		*p++ = 'l';
 	}
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 	{
 		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
 		{
@@ -530,7 +530,7 @@ static void modestack_flush(struct modestackdata *md)
 		snprintf(p, end - p, " %u", (unsigned)md->limit);
 		p += strlen(p);
 	}
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 	{
 		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
 		{
@@ -626,7 +626,7 @@ static void modestack_add_param(struct modestackdata *md, int dir, char type, co
 		p++;
 	}
 	n += (md->limitused != 0);
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 		n += (md->extmodesused[i] != 0);
 	modestack_calclen(md);
 	if (n >= MAXMODES || md->totallen + (dir != dir2) + 2 + strlen(value) > 512 || (type == 'k' && strchr(md->pmodes, 'k')))
@@ -725,7 +725,7 @@ void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, in
 	struct modestackdata *md;
 
 	md = modestack_init(source, channel);
-	if (i < 0 || i >= MAXEXTMODES)
+	if (i < 0 || i >= ignore_mode_list_size)
 	{
 		slog(LG_ERROR, "modestack_mode_ext(): i=%d out of range (value=\"%s\")",
 				i, value);
@@ -761,7 +761,7 @@ void clear_simple_modes(channel_t *c)
 	if (c->key != NULL)
 		free(c->key);
 	c->key = NULL;
-	for (i = 0; i < MAXEXTMODES; i++)
+	for (i = 0; i < ignore_mode_list_size; i++)
 		if (c->extmodes[i] != NULL)
 		{
 			free(c->extmodes[i]);

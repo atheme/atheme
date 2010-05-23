@@ -20,4 +20,5 @@ SRCS = \
 	plain.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}
+# Only dh-blowfish.so needs this, oh well.
+LIBS		+= ${SSL_LIBS}

@@ -657,6 +657,7 @@ void _modinit(module_t * m)
 	status_mode_list = nefarious_status_mode_list;
 	prefix_mode_list = nefarious_prefix_mode_list;
 	user_mode_list = nefarious_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(nefarious_ignore_mode_list);
 
 	ircd = &Nefarious;
 

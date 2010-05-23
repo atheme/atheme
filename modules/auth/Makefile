@@ -17,4 +17,4 @@ SRCS =			\
 	$(LDAP_AUTHC)
 
 CPPFLAGS	+= -I../../include $(LDAP_CFLAGS)
-CFLAGS		+= ${PLUGIN_CFLAGS} $(LDAP_LIBS)
+LIBS		+= $(LDAP_LIBS)

@@ -65,8 +65,8 @@ SRCS = ${BASE_SRCS} version.c
 include ../buildsys.mk
 include ../extra.mk
 
-CPPFLAGS	+= $(MOWGLI_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
-LIBS		+= $(MOWGLI_LIBS) $(RPATH)
+CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
+LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH)
 
 build: all
 

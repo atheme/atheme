@@ -7,7 +7,7 @@ PLUGIN=${SRCS:.c=$(PLUGIN_SUFFIX)}
 
 .c$(PLUGIN_SUFFIX):
 	${COMPILE_STATUS}
-	if ${CC} ${PLUGIN_CFLAGS} ${PLUGIN_LDFLAGS} ${CFLAGS} ${CPPFLAGS} -o $@ $<; then \
+	if ${CC} ${PLUGIN_CFLAGS} ${PLUGIN_LDFLAGS} ${CFLAGS} ${CPPFLAGS} ${LIBS} -o $@ $<; then \
 		${COMPILE_OK}; \
 	else \
 		${COMPILE_FAILED}; \

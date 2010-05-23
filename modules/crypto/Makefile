@@ -20,4 +20,5 @@ SRCS =			\
 	sorservices.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}
+# Only rawsha1.so needs this, oh well.
+LIBS		+= ${SSL_LIBS}

@@ -145,6 +145,7 @@ void _modinit(module_t * m)
 	introduce_nick = &ithildin_introduce_nick;
 
 	ignore_mode_list = ithildin_ignore_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(ithildin_ignore_mode_list);
 
 	ircd = &ithildin;
 

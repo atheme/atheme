@@ -249,7 +249,6 @@ if test "$enable_ssl" = "yes"; then
 		],, -lcrypto)
 	if test "$SSL" = "yes"; then
 		AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
-		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
 
@@ -494,7 +493,7 @@ PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.7.0],
 	[MOWGLI_SOURCE="system"], [
 	MOWGLI_SOURCE="internal"
 	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -lmowgli"
+	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
 	LIBMOWGLI="libmowgli"
 	if test "x$enablerpath" = "xyes"; then
 		RPATH="-Wl,-rpath,${libdir}"
@@ -518,9 +517,6 @@ AC_HELP_STRING([--with-pcre],[ Enable PCRE regular expression support]),
 if test "x$with_pcre" != xno; then
 	PKG_CHECK_MODULES(PCRE, [libpcre], [], [
 		AC_ERROR([PCRE requested, but not found.])])
-
-	CFLAGS="$CFLAGS $PCRE_CFLAGS"
-	LIBS="$LIBS $PCRE_LIBS"
 
 	AC_SUBST(PCRE_CFLAGS)
 	AC_SUBST(PCRE_LIBS)

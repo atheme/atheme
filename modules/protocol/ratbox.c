@@ -88,6 +88,7 @@ void _modinit(module_t * m)
 	status_mode_list = ratbox_status_mode_list;
 	prefix_mode_list = ratbox_prefix_mode_list;
 	user_mode_list = ratbox_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(ratbox_ignore_mode_list);
 
 	ircd = &Ratbox;
 

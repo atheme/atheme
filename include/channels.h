@@ -10,8 +10,6 @@
 #ifndef CHANNELS_H
 #define CHANNELS_H
 
-#define MAXEXTMODES 5
-
 struct channel_
 {
   char *name;
@@ -19,7 +17,7 @@ struct channel_
   unsigned int modes;
   char *key;
   unsigned int limit;
-  char *extmodes[MAXEXTMODES]; /* non-standard simple modes with param eg +j */
+  char **extmodes; /* non-standard simple modes with param eg +j */
 
   unsigned int nummembers;
 
