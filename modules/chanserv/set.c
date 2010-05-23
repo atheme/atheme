@@ -22,7 +22,6 @@ static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
@@ -42,7 +41,6 @@ command_t cs_set_founder   = { "FOUNDER",   N_("Transfers foundership of a chann
 command_t cs_set_mlock     = { "MLOCK",     N_("Sets channel mode lock."),                                      AC_NONE, 2, cs_cmd_set_mlock      };
 command_t cs_set_secure    = { "SECURE",    N_("Prevents unauthorized users from gaining operator status."),    AC_NONE, 2, cs_cmd_set_secure     };
 command_t cs_set_verbose   = { "VERBOSE",   N_("Notifies channel about access list modifications."),            AC_NONE, 2, cs_cmd_set_verbose    };
-command_t cs_set_url       = { "URL",       N_("Sets the channel URL."),                                        AC_NONE, 2, cs_cmd_set_url        };
 command_t cs_set_entrymsg  = { "ENTRYMSG",  N_("Sets the channel's entry message."),                            AC_NONE, 2, cs_cmd_set_entrymsg   };
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
 command_t cs_set_email     = { "EMAIL",     N_("Sets the channel e-mail address."),                             AC_NONE, 2, cs_cmd_set_email      };
@@ -57,7 +55,6 @@ command_t *cs_set_commands[] = {
 	&cs_set_mlock,
 	&cs_set_secure,
 	&cs_set_verbose,
-	&cs_set_url,
 	&cs_set_entrymsg,
 	&cs_set_property,
 	&cs_set_email,
@@ -86,7 +83,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 	help_addentry(cs_helptree, "SET SECURE", "help/cservice/set_secure", NULL);
 	help_addentry(cs_helptree, "SET VERBOSE", "help/cservice/set_verbose", NULL);
-	help_addentry(cs_helptree, "SET URL", "help/cservice/set_url", NULL);
 	help_addentry(cs_helptree, "SET EMAIL", "help/cservice/set_email", NULL);
 	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
@@ -110,7 +106,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET MLOCK");
 	help_delentry(cs_helptree, "SET SECURE");
 	help_delentry(cs_helptree, "SET VERBOSE");
-	help_delentry(cs_helptree, "SET URL");
 	help_delentry(cs_helptree, "SET EMAIL");
 	help_delentry(cs_helptree, "SET ENTRYMSG");
 	help_delentry(cs_helptree, "SET PROPERTY");
@@ -226,48 +221,6 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", mc->name, mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
-}
-
-static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-	char *url = parv[1];
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
-		return;
-	}
-
-	/* XXX: I'd like to be able to use /CS SET #channel URL to clear but CS SET won't let me... */
-	if (!url || !strcasecmp("OFF", url) || !strcasecmp("NONE", url))
-	{
-		/* not in a namespace to allow more natural use of SET PROPERTY.
-		 * they may be able to introduce spaces, though. c'est la vie.
-		 */
-		if (metadata_find(mc, "url"))
-		{
-			metadata_delete(mc, "url");
-			logcommand(si, CMDLOG_SET, "SET:URL:NONE: \2%s\2", mc->name);
-			command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), parv[0]);
-			return;
-		}
-
-		command_fail(si, fault_nochange, _("The URL for \2%s\2 was not set."), parv[0]);
-		return;
-	}
-
-	/* we'll overwrite any existing metadata */
-	metadata_add(mc, "url", url);
-
-	logcommand(si, CMDLOG_SET, "SET:URL: \2%s\2 \2%s\2", mc->name, url);
-	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])

@@ -44,6 +44,7 @@ SRCS =			\
 	set_gameserv.c \
 	set_limitflags.c \
 	set_private.c	\
+	set_url.c	\
 	status.c	\
 	taxonomy.c	\
 	template.c	\
