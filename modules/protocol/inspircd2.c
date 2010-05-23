@@ -75,6 +75,7 @@ static bool check_nickflood(const char *, channel_t *, mychan_t *, user_t *, myu
 static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_delaymsg(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
@@ -82,6 +83,7 @@ struct extmode inspircd_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
   { 'L', check_forward },
   { 'J', check_rejoindelay },
+  { 'd', check_delaymsg },
   { '\0', 0 }
 };
 
@@ -177,6 +179,27 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 	}
 
 	if (atoi(value) <= 0 || atoi(value) >= 5)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+static bool check_delaymsg(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *ch = value;
+
+	while (*ch)
+	{
+		if (!isdigit(*ch))
+			return false;
+		ch++;
+	}
+
+	if (atoi(value) <= 0)
 	{
 		return false;
 	}
