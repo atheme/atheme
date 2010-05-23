@@ -20,4 +20,3 @@ SRCS =			\
 	sorservices.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

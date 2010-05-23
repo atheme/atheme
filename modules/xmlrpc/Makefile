@@ -15,4 +15,3 @@ include ../../buildsys.module.mk
 SRCS = account.c channel.c main.c memo.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

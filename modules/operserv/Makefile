@@ -49,4 +49,3 @@ SRCS = \
 	update.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

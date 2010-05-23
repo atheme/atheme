@@ -15,4 +15,3 @@ include ../../buildsys.module.mk
 SRCS = httpd.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}

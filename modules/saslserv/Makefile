@@ -20,4 +20,3 @@ SRCS = \
 	plain.c
 
 CPPFLAGS	+= -I../../include
-CFLAGS		+= ${PLUGIN_CFLAGS}
