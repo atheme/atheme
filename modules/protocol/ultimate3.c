@@ -797,6 +797,7 @@ void _modinit(module_t * m)
 	status_mode_list = ultimate3_status_mode_list;
 	prefix_mode_list = ultimate3_prefix_mode_list;
 	user_mode_list = ultimate3_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(ultimate3_ignore_mode_list);
 
 	ircd = &ultimate3;
 

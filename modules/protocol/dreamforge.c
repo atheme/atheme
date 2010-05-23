@@ -683,6 +683,7 @@ void _modinit(module_t * m)
 	status_mode_list = dreamforge_status_mode_list;
 	prefix_mode_list = dreamforge_prefix_mode_list;
 	user_mode_list = dreamforge_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(dreamforge_ignore_mode_list);
 
 	ircd = &DreamForge;
 

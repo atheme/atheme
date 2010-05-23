@@ -932,6 +932,7 @@ void _modinit(module_t * m)
 	status_mode_list = solidircd_status_mode_list;
 	prefix_mode_list = solidircd_prefix_mode_list;
 	user_mode_list = solidircd_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(solidircd_ignore_mode_list);
 
 	ircd = &Solidircd;
 

@@ -324,6 +324,7 @@ void _modinit(module_t * m)
 	status_mode_list = asuka_status_mode_list;
 	prefix_mode_list = asuka_prefix_mode_list;
 	user_mode_list = asuka_user_mode_list;
+	ignore_mode_list_size = ARRAY_SIZE(asuka_ignore_mode_list);
 
 	ircd = &Asuka;
 
