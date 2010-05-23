@@ -21,7 +21,6 @@ static void cs_set_config_ready(void *unused);
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[]);
@@ -38,7 +37,6 @@ command_t cs_set = { "SET", N_("Sets various control flags."),
 command_t cs_set_mlock     = { "MLOCK",     N_("Sets channel mode lock."),                                      AC_NONE, 2, cs_cmd_set_mlock      };
 command_t cs_set_secure    = { "SECURE",    N_("Prevents unauthorized users from gaining operator status."),    AC_NONE, 2, cs_cmd_set_secure     };
 command_t cs_set_verbose   = { "VERBOSE",   N_("Notifies channel about access list modifications."),            AC_NONE, 2, cs_cmd_set_verbose    };
-command_t cs_set_entrymsg  = { "ENTRYMSG",  N_("Sets the channel's entry message."),                            AC_NONE, 2, cs_cmd_set_entrymsg   };
 command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
 command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."),                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
 command_t cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."),                          AC_NONE, 2, cs_cmd_set_topiclock  };
@@ -50,7 +48,6 @@ command_t *cs_set_commands[] = {
 	&cs_set_mlock,
 	&cs_set_secure,
 	&cs_set_verbose,
-	&cs_set_entrymsg,
 	&cs_set_property,
 	&cs_set_keeptopic,
 	&cs_set_topiclock,
@@ -76,7 +73,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 	help_addentry(cs_helptree, "SET SECURE", "help/cservice/set_secure", NULL);
 	help_addentry(cs_helptree, "SET VERBOSE", "help/cservice/set_verbose", NULL);
-	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
@@ -97,7 +93,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET MLOCK");
 	help_delentry(cs_helptree, "SET SECURE");
 	help_delentry(cs_helptree, "SET VERBOSE");
-	help_delentry(cs_helptree, "SET ENTRYMSG");
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET RESTRICTED");
 	help_delentry(cs_helptree, "SET KEEPTOPIC");
@@ -167,47 +162,6 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
-}
-
-static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-
-	if (!(mc = mychan_find(parv[0])))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_SET))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
-		return;
-	}
-
-	/* XXX: I'd like to be able to use /CS SET #channel ENTRYMSG to clear but CS SET won't let me... */
-	if (!parv[1] || !strcasecmp("OFF", parv[1]) || !strcasecmp("NONE", parv[1]))
-	{
-		/* entrymsg is private because users won't see it if they're AKICKED,
-		 * if the channel is +i, or if the channel is RESTRICTED
-		 */
-		if (metadata_find(mc, "private:entrymsg"))
-		{
-			metadata_delete(mc, "private:entrymsg");
-			logcommand(si, CMDLOG_SET, "SET:ENTRYMSG:NONE: \2%s\2", mc->name);
-			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
-			return;
-		}
-
-		command_fail(si, fault_nochange, _("The entry message for \2%s\2 was not set."), parv[0]);
-		return;
-	}
-
-	/* we'll overwrite any existing metadata */
-	metadata_add(mc, "private:entrymsg", parv[1]);
-
-	logcommand(si, CMDLOG_SET, "SET:ENTRYMSG: \2%s\2 \2%s\2", mc->name, parv[1]);
-	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
