@@ -25,7 +25,11 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidemail");
+
+#ifdef ENABLE_NLS
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_language");
+#endif
+
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_neverop");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_nomemo");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_noop");
