@@ -160,10 +160,20 @@ loadmodule "modules/backend/flatfile";
  * Password return (RETURN command)		modules/nickserv/return
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
  * Password retrieval allowed to normal users	modules/nickserv/sendpass_user
- * SET command					modules/nickserv/set
+ * SET command (required for SET commands below)		modules/nickserv/set_core
  * Change primary nickname (SET ACCOUNTNAME)    modules/nickserv/set_accountname
+ * SET EMAIL command			modules/nickserv/set_email
+ * SET EMAILMEMOS command		modules/nickserv/set_emailmemos
+ * SET HIDEMAIL command			modules/nickserv/set_hidemail
+ * SET LANGUAGE command			modules/nickserv/set_language
+ * SET NEVEROP command			modules/nickserv/set_neverop
+ * SET NOMEMO command			modules/nickserv/set_nomemo
+ * SET NOOP command				modules/nickserv/set_noop
+ * SET PASSWORD command			modules/nickserv/set_password
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
  * Account info hiding (SET PRIVATE command)	modules/nickserv/set_private
+ * SET PROPERTY command			modules/nickserv/set_property
+ * SET QUIETCHG command			modules/nickserv/set_quietchg
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
  * Presence notifications (EXPERIMENTAL)        modules/nickserv/subscribe
  * Nickname enforcement				modules/nickserv/enforce
@@ -199,8 +209,18 @@ loadmodule "modules/nickserv/setpass";
 loadmodule "modules/nickserv/sendpass_user";
 loadmodule "modules/nickserv/set";
 loadmodule "modules/nickserv/set_accountname";
+loadmodule "modules/nickserv/set_email";
+loadmodule "modules/nickserv/set_emailmemos";
+loadmodule "modules/nickserv/set_hidemail";
+loadmodule "modules/nickserv/set_language";
+loadmodule "modules/nickserv/set_neverop";
+loadmodule "modules/nickserv/set_nomemo";
+loadmodule "modules/nickserv/set_noop";
+loadmodule "modules/nickserv/set_password";
 #loadmodule "modules/nickserv/set_privmsg";
 #loadmodule "modules/nickserv/set_private";
+loadmodule "modules/nickserv/set_property";
+loadmodule "modules/nickserv/set_quietchg";
 #loadmodule "modules/nickserv/subscribe";
 #loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/status";
