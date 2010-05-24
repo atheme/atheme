@@ -26,7 +26,7 @@ command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries assoc
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set", "ns_set_cmdtree");
+	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_set_property, ns_set_cmdtree);
