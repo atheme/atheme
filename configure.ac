@@ -91,6 +91,10 @@ AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
 AC_SUBST(POSIX_CRYPTC)
 
+CRACKLIB_C=""
+AC_SEARCH_LIBS(FascistCheck, crack, [CRACKLIB_C="cracklib.c"])
+AC_SUBST(CRACKLIB_C)
+
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
 	[],

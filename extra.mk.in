@@ -122,3 +122,4 @@ LIBINTL ?= @LIBINTL@
 EGREP ?= @EGREP@
 VERSION ?= @VERSION@
 prefix ?= @prefix@
+CRACKLIB_C ?= @CRACKLIB_C@
