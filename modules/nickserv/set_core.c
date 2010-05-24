@@ -79,20 +79,6 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	command_add(&ns_set, ns_cmdtree);
 
-	/* MODULE_TRY_REQUEST_DEPENDENCY stuff so this acts like a meta-
-	 * module like chanserv/set.c .
-	 */
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidemail");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_language");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_neverop");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_nomemo");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_noop");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_password");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_property");
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_quietchg");
-
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 }
 

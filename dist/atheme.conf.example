@@ -207,7 +207,7 @@ loadmodule "modules/nickserv/return";
 loadmodule "modules/nickserv/setpass";
 #loadmodule "modules/nickserv/sendpass";
 loadmodule "modules/nickserv/sendpass_user";
-loadmodule "modules/nickserv/set";
+loadmodule "modules/nickserv/set_core";
 loadmodule "modules/nickserv/set_accountname";
 loadmodule "modules/nickserv/set_email";
 loadmodule "modules/nickserv/set_emailmemos";
