@@ -73,88 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *property = strtok(parv[0], " ");
-	char *value = strtok(NULL, "");
-	unsigned int count;
-	node_t *n;
-	metadata_t *md;
-	hook_metadata_change_t mdchange;
-
-	if (si->smu == NULL)
-		return;
-
-	if (!property)
-	{
-		command_fail(si, fault_needmoreparams, _("Syntax: SET PROPERTY <property> [value]"));
-		return;
-	}
-
-	if (strchr(property, ':') && !has_priv(si, PRIV_METADATA))
-	{
-		command_fail(si, fault_badparams, _("Invalid property name."));
-		return;
-	}
-
-	if (strchr(property, ':'))
-		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
-
-	if (!value)
-	{
-		md = metadata_find(si->smu, property);
-
-		if (!md)
-		{
-			command_fail(si, fault_nosuch_target, _("Metadata entry \2%s\2 was not set."), property);
-			return;
-		}
-
-		mdchange.target = si->smu;
-		mdchange.name = md->name;
-		mdchange.value = md->value;
-		hook_call_metadata_change(&mdchange);
-
-		metadata_delete(si->smu, property);
-		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 (deleted)", property);
-		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
-		return;
-	}
-
-	count = 0;
-	LIST_FOREACH(n, object(si->smu)->metadata.head)
-	{
-		md = n->data;
-		if (strchr(property, ':') ? md->private : !md->private)
-			count++;
-	}
-	if (count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-					property, si->smu->name);
-		return;
-	}
-
-	if (strlen(property) > 32 || strlen(value) > 300 || has_ctrl_chars(property))
-	{
-		command_fail(si, fault_badparams, _("Parameters are too long. Aborting."));
-		return;
-	}
-
-	md = metadata_add(si->smu, property, value);
-	if (md != NULL)
-	{
-		mdchange.target = si->smu;
-		mdchange.name = md->name;
-		mdchange.value = md->value;
-		hook_call_metadata_change(&mdchange);
-	}
-	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 to \2%s\2", property, value);
-	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
-}
-
-command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setproperty };
-
 static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *password = strtok(parv[0], " ");
@@ -237,7 +155,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 
 command_t *ns_set_commands[] = {
 	&ns_set_password,
-	&ns_set_property,
 #ifdef ENABLE_NLS
 	&ns_set_language,
 #endif
@@ -252,7 +169,6 @@ void _modinit(module_t *m)
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
-	help_addentry(ns_helptree, "SET PROPERTY", "help/nickserv/set_property", NULL);
 #ifdef ENABLE_NLS
 	help_addentry(ns_helptree, "SET LANGUAGE", "help/nickserv/set_language", NULL);
 #endif
@@ -266,7 +182,6 @@ void _moddeinit()
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
 	help_delentry(ns_helptree, "SET PASSWORD");
-	help_delentry(ns_helptree, "SET PROPERTY");
 #ifdef ENABLE_NLS
 	help_delentry(ns_helptree, "SET LANGUAGE");
 #endif
