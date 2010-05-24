@@ -73,50 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-#ifdef ENABLE_NLS
-static void _ns_setlanguage(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *language = strtok(parv[0], " ");
-	language_t *lang;
-
-	if (si->smu == NULL)
-		return;
-
-	if (language == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LANGUAGE");
-		command_fail(si, fault_needmoreparams, _("Valid languages are: %s"), language_names());
-		return;
-	}
-
-	lang = language_find(language);
-
-	if (strcmp(language, "default") &&
-			(lang == NULL || !language_is_valid(lang)))
-	{
-		command_fail(si, fault_badparams, _("Invalid language \2%s\2."), language);
-		command_fail(si, fault_badparams, _("Valid languages are: %s"), language_names());
-		return;
-	}
-
-	logcommand(si, CMDLOG_SET, "SET:LANGUAGE: \2%s\2", language_get_name(lang));
-
-	si->smu->language = lang;
-
-	command_success_nodata(si, _("The language for \2%s\2 has been changed to \2%s\2."), si->smu->name, language_get_name(lang));
-
-	return;
-}
-command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, _ns_setlanguage };
-#endif /* ENABLE_NLS */
-
-command_t *ns_set_commands[] = {
-#ifdef ENABLE_NLS
-	&ns_set_language,
-#endif
-	NULL
-};
-
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
@@ -124,24 +80,12 @@ void _modinit(module_t *m)
 	command_add(&ns_set, ns_cmdtree);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
-#ifdef ENABLE_NLS
-	help_addentry(ns_helptree, "SET LANGUAGE", "help/nickserv/set_language", NULL);
-#endif
-
-	/* populate ns_set_cmdtree */
-	command_add_many(ns_set_commands, &ns_set_cmdtree);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
-#ifdef ENABLE_NLS
-	help_delentry(ns_helptree, "SET LANGUAGE");
-#endif
-
-	/* clear ns_set_cmdtree */
-	command_delete_many(ns_set_commands, &ns_set_cmdtree);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
