@@ -16,6 +16,7 @@ BASE_SRCS =			\
 	main.c	\
 	access.c	\
 	cert.c	\
+	$(CRACKLIB_C)	\
 	drop.c	\
 	enforce.c	\
 	freeze.c	\
