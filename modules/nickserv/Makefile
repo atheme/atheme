@@ -39,6 +39,7 @@ BASE_SRCS =			\
 	sendpass_user.c \
 	set.c		\
 	set_accountname.c \
+	set_email.c	\
 	set_privmsg.c	\
 	set_private.c	\
 	setpass.c	\

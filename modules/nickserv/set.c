@@ -73,81 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* SET EMAIL <new address> */
-static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *email = parv[0];
-	metadata_t *md;
-
-	if (si->smu == NULL)
-		return;
-
-	if (email == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAIL");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET EMAIL <new e-mail>"));
-		return;
-	}
-
-	if (si->smu->flags & MU_WAITAUTH)
-	{
-		command_fail(si, fault_noprivs, _("Please verify your original registration before changing your e-mail address."));
-		return;
-	}
-
-	if (!strcasecmp(si->smu->email, email))
-	{
-		md = metadata_find(si->smu, "private:verify:emailchg:newemail");
-		if (md != NULL)
-		{
-			command_success_nodata(si, _("The email address change to \2%s\2 has been cancelled."), md->value);
-			metadata_delete(si->smu, "private:verify:emailchg:key");
-			metadata_delete(si->smu, "private:verify:emailchg:newemail");
-			metadata_delete(si->smu, "private:verify:emailchg:timestamp");
-		}
-		else
-			command_fail(si, fault_nochange, _("The email address for account \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
-		return;
-	}
-
-	if (!validemail(email))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
-		return;
-	}
-
-	if (me.auth == AUTH_EMAIL)
-	{
-		unsigned long key = makekey();
-
-		metadata_add(si->smu, "private:verify:emailchg:key", itoa(key));
-		metadata_add(si->smu, "private:verify:emailchg:newemail", email);
-		metadata_add(si->smu, "private:verify:emailchg:timestamp", itoa(time(NULL)));
-
-		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETEMAIL, si->smu, itoa(key)))
-		{
-			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Your email address is unchanged."));
-			metadata_delete(si->smu, "private:verify:emailchg:key");
-			metadata_delete(si->smu, "private:verify:emailchg:newemail");
-			metadata_delete(si->smu, "private:verify:emailchg:timestamp");
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2) (awaiting verification)", si->smu->name, si->smu->email, email);
-		command_success_nodata(si, _("An email containing email changing instructions has been sent to \2%s\2."), email);
-		command_success_nodata(si, _("Your email address will not be changed until you follow these instructions."));
-
-		return;
-	}
-
-	myuser_set_email(si->smu, email);
-
-	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", si->smu->name, si->smu->email, email);
-	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
-}
-
-command_t ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, _ns_setemail };
-
 /* SET HIDEMAIL [ON|OFF] */
 static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -641,7 +566,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 #endif /* ENABLE_NLS */
 
 command_t *ns_set_commands[] = {
-	&ns_set_email,
 	&ns_set_emailmemos,
 	&ns_set_hidemail,
 	&ns_set_quietchg,
@@ -663,7 +587,6 @@ void _modinit(module_t *m)
 	command_add(&ns_set, ns_cmdtree);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
-	help_addentry(ns_helptree, "SET EMAIL", "help/nickserv/set_email", NULL);
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
@@ -684,7 +607,6 @@ void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
-	help_delentry(ns_helptree, "SET EMAIL");
 	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET HIDEMAIL");
 	help_delentry(ns_helptree, "SET NOMEMO");
