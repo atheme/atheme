@@ -138,6 +138,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hdata.si = si;
 	hdata.account = account;
 	hdata.email = email;
+	hdata.password = pass;
 	hdata.approved = 0;
 	hook_call_user_can_register(&hdata);
 	if (hdata.approved != 0)
