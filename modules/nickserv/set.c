@@ -73,62 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NEVEROP");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_NEVEROP & si->smu->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NEVEROP", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:NEVEROP:ON");
-
-		si->smu->flags |= MU_NEVEROP;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NEVEROP", si->smu->name);
-
-		return;
-	}
-
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_NEVEROP & si->smu->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NEVEROP", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:NEVEROP:OFF");
-
-		si->smu->flags &= ~MU_NEVEROP;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NEVEROP", si->smu->name);
-
-		return;
-	}
-
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NEVEROP");
-		return;
-	}
-}
-
-command_t ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, _ns_setneverop };
-
 static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
@@ -348,7 +292,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 
 command_t *ns_set_commands[] = {
 	&ns_set_noop,
-	&ns_set_neverop,
 	&ns_set_password,
 	&ns_set_property,
 #ifdef ENABLE_NLS
@@ -364,7 +307,6 @@ void _modinit(module_t *m)
 	command_add(&ns_set, ns_cmdtree);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
-	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
 	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 	help_addentry(ns_helptree, "SET PROPERTY", "help/nickserv/set_property", NULL);
@@ -380,7 +322,6 @@ void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
-	help_delentry(ns_helptree, "SET NEVEROP");
 	help_delentry(ns_helptree, "SET NOOP");
 	help_delentry(ns_helptree, "SET PASSWORD");
 	help_delentry(ns_helptree, "SET PROPERTY");
