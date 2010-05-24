@@ -73,61 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* SET HIDEMAIL [ON|OFF] */
-static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "QUIETCHG");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_QUIETCHG & si->smu->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "QUIETCHG", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:QUIETCHG:ON");
-
-		si->smu->flags |= MU_QUIETCHG;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "QUIETCHG" ,si->smu->name);
-
-		return;
-	}
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_QUIETCHG & si->smu->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "QUIETCHG", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:QUIETCHG:OFF");
-
-		si->smu->flags &= ~MU_QUIETCHG;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "QUIETCHG", si->smu->name);
-
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "QUIETCHG");
-		return;
-	}
-}
-
-command_t ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, _ns_setquietchg };
-
 static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
@@ -512,7 +457,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 
 command_t *ns_set_commands[] = {
 	&ns_set_emailmemos,
-	&ns_set_quietchg,
 	&ns_set_nomemo,
 	&ns_set_noop,
 	&ns_set_neverop,
@@ -534,7 +478,6 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
-	help_addentry(ns_helptree, "SET QUIETCHG", "help/nickserv/set_quietchg", NULL);
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
 	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 	help_addentry(ns_helptree, "SET PROPERTY", "help/nickserv/set_property", NULL);

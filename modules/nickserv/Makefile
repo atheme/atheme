@@ -43,6 +43,7 @@ BASE_SRCS =			\
 	set_hidemail.c	\
 	set_privmsg.c	\
 	set_private.c	\
+	set_quietchg.c	\
 	setpass.c	\
 	status.c	\
 	subscribe.c	\
