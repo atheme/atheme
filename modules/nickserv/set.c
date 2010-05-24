@@ -73,49 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *password = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (auth_module_loaded)
-	{
-		command_fail(si, fault_noprivs, _("You must change the password in the external system."));
-		return;
-	}
-
-	if (password == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PASSWORD");
-		return;
-	}
-
-	if (strlen(password) > 32)
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PASSWORD");
-		return;
-	}
-
-	if (!strcasecmp(password, si->smu->name))
-	{
-		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
-		command_fail(si, fault_badparams, _("Syntax: SET PASSWORD <new password>"));
-		return;
-	}
-
-	logcommand(si, CMDLOG_SET, "SET:PASSWORD");
-
-	set_password(si->smu, password);
-
-	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), si->smu->name, password);
-
-	return;
-}
-
-command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, _ns_setpassword };
-
 #ifdef ENABLE_NLS
 static void _ns_setlanguage(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -154,7 +111,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 #endif /* ENABLE_NLS */
 
 command_t *ns_set_commands[] = {
-	&ns_set_password,
 #ifdef ENABLE_NLS
 	&ns_set_language,
 #endif
@@ -168,7 +124,6 @@ void _modinit(module_t *m)
 	command_add(&ns_set, ns_cmdtree);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
-	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 #ifdef ENABLE_NLS
 	help_addentry(ns_helptree, "SET LANGUAGE", "help/nickserv/set_language", NULL);
 #endif
@@ -181,7 +136,6 @@ void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
-	help_delentry(ns_helptree, "SET PASSWORD");
 #ifdef ENABLE_NLS
 	help_delentry(ns_helptree, "SET LANGUAGE");
 #endif
