@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/set", false, _modinit, _moddeinit,
+	"nickserv/set_core", false, _modinit, _moddeinit,
 	"$Id: set.c 7907 2007-03-06 23:10:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

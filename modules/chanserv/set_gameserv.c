@@ -26,7 +26,7 @@ list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set", "cs_set_cmdtree");
+	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_set_gameserv, cs_set_cmdtree);
