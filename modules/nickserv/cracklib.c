@@ -6,6 +6,7 @@
  */
 
 #include "atheme.h"
+#include "conf.h"
 #include <crack.h>
 
 DECLARE_MODULE_V1
@@ -24,7 +25,7 @@ cracklib_hook(hook_user_register_check_t *hdata)
 	return_if_fail(hdata->si != NULL);
 	return_if_fail(hdata->password != NULL);
 
-	if ((cracklib_reason = FascistCheck(hdata->password, NULL)) != NULL)
+	if ((cracklib_reason = FascistCheck(hdata->password, nicksvs.cracklib_dict)) != NULL)
 	{
 		command_fail(hdata->si, fault_badparams, _("The password provided is insecure: %s"), cracklib_reason);
 		hdata->approved++;

@@ -190,6 +190,7 @@ void conf_init(void)
 	nicksvs.expiry = nicksvs.enforce_expiry = chansvs.expiry = 0;
 	nicksvs.enforce_delay = 30;
 	nicksvs.enforce_prefix = sstrdup("Guest");
+	nicksvs.cracklib_dict = sstrdup("/var/cache/cracklib/cracklib_dict");
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
@@ -311,6 +312,7 @@ void init_newconf(void)
 	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, &nicksvs.enforce_expiry, "d");
 	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, "s");
 	add_dupstr_conf_item("ENFORCE_PREFIX", &conf_ni_table, &nicksvs.enforce_prefix);
+	add_dupstr_conf_item("CRACKLIB_DICT", &conf_ni_table, &nicksvs.cracklib_dict);
 
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, &me.language_name);

@@ -820,6 +820,12 @@ nickserv {
 	 * The prefix to use when changing the user's nick on enforcement
 	 */
 	#enforce_prefix = "Guest";
+
+	/* (*)cracklib_dict
+	 * The location and filename prefix of the cracklib dictionaries
+	 * for use with nickserv/cracklib.
+	 */
+	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 };
 
 /* ChanServ configuration.
