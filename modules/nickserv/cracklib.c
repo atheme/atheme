@@ -16,6 +16,8 @@ DECLARE_MODULE_V1
         "Atheme Development Group <http://www.atheme.org>"
 );
 
+bool cracklib_warn;
+
 void
 cracklib_hook(hook_user_register_check_t *hdata)
 {
@@ -27,8 +29,13 @@ cracklib_hook(hook_user_register_check_t *hdata)
 
 	if ((cracklib_reason = FascistCheck(hdata->password, nicksvs.cracklib_dict)) != NULL)
 	{
-		command_fail(hdata->si, fault_badparams, _("The password provided is insecure: %s"), cracklib_reason);
-		hdata->approved++;
+		if (cracklib_warn)
+			command_fail(hdata->si, fault_badparams, _("The password provided is insecure because %s. You may want to set a different password with /msg %s set password <password> ."), cracklib_reason, nicksvs.nick);
+		else
+		{
+			command_fail(hdata->si, fault_badparams, _("The password provided is insecure: %s"), cracklib_reason);
+			hdata->approved++;
+		}
 	}
 }
 
@@ -37,10 +44,14 @@ _modinit(module_t *m)
 {
 	hook_add_event("user_can_register");
 	hook_add_user_can_register(cracklib_hook);
+
+	add_bool_conf_item("CRACKLIB_WARN", &conf_ni_table, &cracklib_warn);
 }
 
 void
 _moddeinit(void)
 {
 	hook_del_user_can_register(cracklib_hook);
+
+	del_conf_item("CRACKLIB_WARN", &conf_ni_table);
 }
