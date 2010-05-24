@@ -44,6 +44,7 @@ BASE_SRCS =			\
 	set_hidemail.c	\
 	set_neverop.c	\
 	set_nomemo.c	\
+	set_noop.c	\
 	set_privmsg.c	\
 	set_private.c	\
 	set_quietchg.c	\
