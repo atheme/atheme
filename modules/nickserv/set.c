@@ -73,66 +73,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (si->smu->flags & MU_WAITAUTH)
-	{
-		command_fail(si, fault_noprivs, _("You have to verify your email address before you can enable emailing memos."));
-		return;
-	}
-
-	if (params == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (me.mta == NULL)
-		{
-			command_fail(si, fault_emailfail, _("Sending email is administratively disabled."));
-			return;
-		}
-		if (MU_EMAILMEMOS & si->smu->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:ON");
-		si->smu->flags |= MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
-		return;
-	}
-
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_EMAILMEMOS & si->smu->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:EMAILMEMOS:OFF");
-		si->smu->flags &= ~MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "EMAILMEMOS", si->smu->name);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAILMEMOS");
-		return;
-	}
-}
-
-command_t ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos to your e-mail address."), AC_NONE, 1, _ns_setemailmemos };
-
 static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
@@ -456,7 +396,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 #endif /* ENABLE_NLS */
 
 command_t *ns_set_commands[] = {
-	&ns_set_emailmemos,
 	&ns_set_nomemo,
 	&ns_set_noop,
 	&ns_set_neverop,
@@ -475,7 +414,6 @@ void _modinit(module_t *m)
 	command_add(&ns_set, ns_cmdtree);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
-	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
@@ -493,7 +431,6 @@ void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
-	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET NOMEMO");
 	help_delentry(ns_helptree, "SET NEVEROP");
 	help_delentry(ns_helptree, "SET NOOP");
