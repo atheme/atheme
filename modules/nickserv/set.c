@@ -74,61 +74,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* SET HIDEMAIL [ON|OFF] */
-static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_HIDEMAIL & si->smu->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "HIDEMAIL", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:HIDEMAIL:ON");
-
-		si->smu->flags |= MU_HIDEMAIL;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "HIDEMAIL" ,si->smu->name);
-
-		return;
-	}
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_HIDEMAIL & si->smu->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "HIDEMAIL", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET:HIDEMAIL:OFF");
-
-		si->smu->flags &= ~MU_HIDEMAIL;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "HIDEMAIL", si->smu->name);
-
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HIDEMAIL");
-		return;
-	}
-}
-
-command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, _ns_sethidemail };
-
-/* SET HIDEMAIL [ON|OFF] */
 static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
@@ -567,7 +512,6 @@ command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses
 
 command_t *ns_set_commands[] = {
 	&ns_set_emailmemos,
-	&ns_set_hidemail,
 	&ns_set_quietchg,
 	&ns_set_nomemo,
 	&ns_set_noop,
@@ -588,7 +532,6 @@ void _modinit(module_t *m)
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
-	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 	help_addentry(ns_helptree, "SET QUIETCHG", "help/nickserv/set_quietchg", NULL);
@@ -608,7 +551,6 @@ void _moddeinit()
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET");
 	help_delentry(ns_helptree, "SET EMAILMEMOS");
-	help_delentry(ns_helptree, "SET HIDEMAIL");
 	help_delentry(ns_helptree, "SET NOMEMO");
 	help_delentry(ns_helptree, "SET NEVEROP");
 	help_delentry(ns_helptree, "SET NOOP");

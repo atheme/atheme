@@ -40,6 +40,7 @@ BASE_SRCS =			\
 	set.c		\
 	set_accountname.c \
 	set_email.c	\
+	set_hidemail.c	\
 	set_privmsg.c	\
 	set_private.c	\
 	setpass.c	\
