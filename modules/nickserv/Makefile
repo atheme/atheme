@@ -42,6 +42,7 @@ BASE_SRCS =			\
 	set_email.c	\
 	set_emailmemos.c  \
 	set_hidemail.c	\
+	set_nomemo.c	\
 	set_privmsg.c	\
 	set_private.c	\
 	set_quietchg.c	\
