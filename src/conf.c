@@ -190,7 +190,7 @@ void conf_init(void)
 	nicksvs.expiry = nicksvs.enforce_expiry = chansvs.expiry = 0;
 	nicksvs.enforce_delay = 30;
 	nicksvs.enforce_prefix = sstrdup("Guest");
-	nicksvs.cracklib_dict = sstrdup("/var/cache/cracklib/cracklib_dict");
+	nicksvs.cracklib_dict = NULL;
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
