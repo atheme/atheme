@@ -16,6 +16,7 @@ BASE_SRCS =			\
 	main.c	\
 	access.c	\
 	cert.c	\
+	$(CRACKLIB_C)	\
 	drop.c	\
 	enforce.c	\
 	freeze.c	\
@@ -38,9 +39,20 @@ BASE_SRCS =			\
 	sendpass.c	\
 	sendpass_user.c \
 	set.c		\
+	set_core.c	\
 	set_accountname.c \
+	set_email.c	\
+	set_emailmemos.c  \
+	set_hidemail.c	\
+	set_language.c	\
+	set_neverop.c	\
+	set_nomemo.c	\
+	set_noop.c	\
+	set_password.c	\
 	set_privmsg.c	\
 	set_private.c	\
+	set_property.c	\
+	set_quietchg.c	\
 	setpass.c	\
 	status.c	\
 	subscribe.c	\

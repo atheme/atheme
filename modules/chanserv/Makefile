@@ -41,9 +41,23 @@ SRCS =			\
 	recover.c	\
 	register.c	\
 	set.c		\
+	set_core.c	\
+	set_email.c	\
+	set_entrymsg.c	\
+	set_fantasy.c	\
+	set_founder.c	\
 	set_gameserv.c \
+	set_guard.c	\
+	set_keeptopic.c	\
 	set_limitflags.c \
+	set_mlock.c	\
 	set_private.c	\
+	set_property.c	\
+	set_restricted.c  \
+	set_secure.c	\
+	set_topiclock.c	\
+	set_url.c	\
+	set_verbose.c	\
 	status.c	\
 	taxonomy.c	\
 	template.c	\

@@ -91,6 +91,10 @@ AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
 AC_SUBST(POSIX_CRYPTC)
 
+CRACKLIB_C=""
+AC_SEARCH_LIBS(FascistCheck, crack, [CRACKLIB_C="cracklib.c"])
+AC_SUBST(CRACKLIB_C)
+
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
 	[],
@@ -503,7 +507,7 @@ AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
 	[ AC_CONFIG_SUBDIRS([libmowgli]) ])
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
-LIBS="$LIBS $MOWGLI_LIBS"
+LIBS="$LIBS $MOWGLI_LIBS $RPATH"
 
 AC_SUBST(MOWGLI_CFLAGS)
 AC_SUBST(MOWGLI_LIBS)

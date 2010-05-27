@@ -99,6 +99,7 @@ struct nicksvs_
   unsigned int enforce_expiry;  /* expiry time                */
   unsigned int enforce_delay;   /* delay for nickname enforce */
   char         *enforce_prefix; /* prefix for enforcement */
+  char	       *cracklib_dict; /* cracklib dictionary path */
 };
 
 struct saslsvs_

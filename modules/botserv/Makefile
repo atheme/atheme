@@ -18,5 +18,9 @@ SRCS =			\
 	help.c	\
 	info.c	\
 	set.c		\
+	set_core.c	\
+	set_fantasy.c	\
+	set_nobot.c	\
+	set_private.c	\
 
 CPPFLAGS	+= -I../../include

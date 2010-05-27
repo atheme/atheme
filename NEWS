@@ -1,3 +1,32 @@
+Atheme Services 5.2 Release Notes
+=================================
+ircd protocol
+- inspircd: track channelmodes +D (delayjoin) and +d (delaymsg).
+- inspircd: disallow mlocking of +J with values of 5 seconds or higher.
+chanserv
+- split out SET into seperate modules for each SET command. chanserv/set
+  is now a "meta-module" that depends on all the set_* modules.
+hostserv
+- added OFFER module that allows opers to offer vhosts to users.
+- made the request system (specifically the ACTIVATE command) not send
+  a memo to the user.
+nickserv
+- split out SET into seperate modules for each SET command. nickserv/set
+  is now a "meta-module" that depends on all the set_* modules.
+- added cracklib module that checks users' passwords on REGISTER and lets
+  them know if the password is secure or not. You can have it just warn
+  the user or disallow them from registering with a configuration option.
+- added ns_generatehash contrib module to generate a password hash for
+  a soper if you have crypto enabled.
+code
+- replace the atheme-services build system with the ACBS used by many other 
+  Atheme projects.
+- rework the colour and special character stripping for xmlrpc.
+- remove snoop(). any modules still using snoop() will fail to compile on
+  atheme 5.2. please replace it in your code with logcommand() or slog().
+other
+- ircservtoatheme: generally make a bit more robust.
+
 Atheme Services 5.1.1 Release Notes
 ===================================
 ircd protocol

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 list_t *ns_set_cmdtree, *ns_helptree;
 
 /* SET PRIVATE ON|OFF */
-static void _ns_set_private(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
 
@@ -70,11 +70,11 @@ static void _ns_set_private(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_private = { "PRIVATE", N_("Hides information about you from other users."), AC_NONE, 1, _ns_set_private };
+command_t ns_set_private = { "PRIVATE", N_("Hides information about you from other users."), AC_NONE, 1, ns_cmd_set_private };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set", "ns_set_cmdtree");
+	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	command_add(&ns_set_private, ns_set_cmdtree);
 

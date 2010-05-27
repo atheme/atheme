@@ -145,6 +145,8 @@ void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
 	{
 		n->data = data;
 		n->prev = before->prev;
+		if (before->prev)
+			before->prev->next = n;
 		n->next = before;
 		if (before->prev)
 			before->prev->next = n;
