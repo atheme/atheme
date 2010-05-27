@@ -20,6 +20,8 @@ DECLARE_MODULE_V1
 
 list_t *bs_set_cmdtree, *bs_helptree;
 
+static void bs_set_fantasy_config_ready(void *unused);
+
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_NONE, 2, bs_cmd_set_fantasy };
@@ -31,12 +33,25 @@ void _modinit(module_t *m)
 
 	command_add(&bs_set_fantasy, bs_set_cmdtree);
 	help_addentry(bs_helptree, "SET FANTASY", "help/botserv/set_fantasy", NULL);
+
+	hook_add_event("config_ready");
+	hook_add_config_ready(bs_set_fantasy_config_ready);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&bs_set_fantasy, bs_set_cmdtree);
 	help_delentry(bs_helptree, "SET FANTASY");
+
+	hook_del_config_ready(bs_set_fantasy_config_ready);
+}
+
+static void bs_set_fantasy_config_ready(void *unused)
+{
+	if (chansvs.fantasy)
+		bs_set_fantasy.access = NULL;
+	else
+		bs_set_fantasy.access = AC_DISABLED;
 }
 
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
