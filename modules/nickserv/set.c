@@ -2,7 +2,8 @@
  * Copyright (c) 2006 William Pitcock, et al.
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains routines to handle the CService SET command.
+ * This file is a meta-module for compatibility with old
+ * setups pre-SET split.
  *
  * $Id: set.c 7907 2007-03-06 23:10:26Z pippijn $
  */

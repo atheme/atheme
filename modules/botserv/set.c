@@ -2,8 +2,8 @@
  * Copyright (c) 2009 Celestin, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains a BService SET which can change
- * botserv settings on channel or bot.
+ * This file is a meta-module for compatibility with old
+ * setups pre-SET split.
  *
  * $Id: set.c 7969 2009-04-09 19:19:38Z celestin $
  */
