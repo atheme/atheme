@@ -834,7 +834,7 @@ nickserv {
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
 	/* (*)cracklib_warn
-	 * If this option is set and nickserv/cracklib is lobaded, nickserv will just 
+	 * If this option is set and nickserv/cracklib is loaded, nickserv will just 
 	 * warn users that their password is insecure, recommend they change it and 
 	 * still register the nick. If this option is unset, it will refuse to
 	 * register the nick at all until the user chooses a better password.
