@@ -515,24 +515,6 @@ loadmodule "modules/botserv/set_private";
  * Here you can disable or enable certain features of HostServ, by
  * defining which modules are loaded. You can even disable HostServ
  * entirely.
-
-/* HostServ modules.
- *
- * Here you can disable or enable certain features of HostServ, by
- * defining which modules are loaded. You can even disable HostServ
- * entirely.
-
-/* HostServ modules.
- *
- * Here you can disable or enable certain features of HostServ, by
- * defining which modules are loaded. You can even disable HostServ
- * entirely.
-
-/* HostServ modules.
- *
- * Here you can disable or enable certain features of HostServ, by
- * defining which modules are loaded. You can even disable HostServ
- * entirely.
  *
  * HostServ is a more complex, and optional virtual host management service.
  * Users wishing only to set vhosts need not use it (they can use the builtin
