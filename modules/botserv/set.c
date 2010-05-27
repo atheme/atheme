@@ -18,69 +18,18 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://dev.rizon.net>"
 );
 
-static void bs_help_set(sourceinfo_t *si);
-static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
-
-command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set };
-
-list_t *bs_cmdtree;
-list_t *bs_helptree;
-list_t bs_set_cmdtree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
+	/* Some MODULE_TRY_REQUEST_DEPENDENCY gubbins */
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_core");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_fantasy");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_nobot");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_private");
 
-	command_add(&bs_set, bs_cmdtree);
-
-	help_addentry(bs_helptree, "SET", NULL, bs_help_set);
 }
 
 void _moddeinit()
 {
-	command_delete(&bs_set, bs_cmdtree);
-
-	help_delentry(bs_helptree, "SET");
-}
-
-/* ******************************************************************** */
-
-static void bs_help_set(sourceinfo_t *si)
-{
-	command_success_nodata(si, _("Help for \2SET\2:"));
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("Configures different botserv bot options."));
-	command_success_nodata(si, " ");
-	command_help(si, &bs_set_cmdtree);
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
-}
-
-static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *dest;
-	char *cmd;
-	command_t *c;
-
-	if (parc < 3)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <destination> <setting> <parameters>"));
-		return;
-	}
-
-	dest = parv[0];
-	cmd = parv[1];
-	c = command_find(&bs_set_cmdtree, cmd);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	parv[1] = dest;
-	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

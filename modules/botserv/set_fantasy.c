@@ -26,7 +26,7 @@ command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_NONE,
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set", "bs_set_cmdtree");
+	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
 	command_add(&bs_set_fantasy, bs_set_cmdtree);
