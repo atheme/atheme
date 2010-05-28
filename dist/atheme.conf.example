@@ -465,10 +465,12 @@ loadmodule "modules/global/main";
  * Core components				modules/saslserv/main
  * PLAIN mechanism				modules/saslserv/plain
  * DH-BLOWFISH mechanism			modules/saslserv/dh-blowfish
+ * AUTHCOOKIE mechanism (for IRIS)  modules/saslserv/authcookie
  */
 #loadmodule "modules/saslserv/main";
 #loadmodule "modules/saslserv/plain";
 #loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL */
+#loadmodule "modules/saslserv/authcookie";
 
 /* GameServ modules.
  *
