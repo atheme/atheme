@@ -1,5 +1,9 @@
 Atheme Services 5.2 Release Notes
 =================================
+Note: We are looking for additional developers to help with maintenance of
+Services.  After almost 7 years of development, many of the programmers have
+moved on.
+
 ircd protocol
 - inspircd: track channelmodes +D (delayjoin) and +d (delaymsg).
 chanserv
