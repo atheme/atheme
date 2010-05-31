@@ -2,7 +2,6 @@ Atheme Services 5.2 Release Notes
 =================================
 ircd protocol
 - inspircd: track channelmodes +D (delayjoin) and +d (delaymsg).
-- inspircd: disallow mlocking of +J with values of 5 seconds or higher.
 chanserv
 - split out SET into seperate modules for each SET command. chanserv/set
   is now a "meta-module" that depends on all the set_* modules.
