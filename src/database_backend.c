@@ -151,6 +151,27 @@ db_write_format(database_handle_t *db, const char *fmt, ...)
 	return db_write_word(db, buf);
 }
 
+bool
+db_write(database_handle_t *db, ...)
+{
+	va_list va;
+	const char *fmtarg;
+	void *valarg;
+	bool ret = true;
+
+	va_start(va, db);
+
+	for (fmtarg = va_arg(va, const char *); fmtarg != NULL && ret != false; fmtarg = va_arg(va, const char *))
+	{
+		valarg = va_arg(va, void *);
+		ret = db_write_format(db, fmtarg, valarg);
+	}
+
+	va_end(va);
+
+	return ret;
+}
+
 void
 db_init(void)
 {
