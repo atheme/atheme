@@ -24,29 +24,20 @@
 #include "atheme.h"
 #include "internal.h"
 
-list_t hooks;
+mowgli_patricia_t *hooks;
 static BlockHeap *hook_heap;
 static hook_t *find_hook(const char *name);
 
 void hooks_init()
 {
+	hooks = mowgli_patricia_create(strcasecanon);
 	hook_heap = BlockHeapCreate(sizeof(hook_t), 1024);
 
-	if (!hook_heap)
+	if (!hook_heap || !hooks)
 	{
 		slog(LG_INFO, "hooks_init(): block allocator failed.");
 		exit(EXIT_SUCCESS);
 	}
-}
-
-static hook_t *new_hook(const char *name)
-{
-	hook_t *h;
-
-	h = BlockHeapAlloc(hook_heap);
-	h->name = sstrdup(name);
-
-	return h;
 }
 
 hook_t *hook_add_event(const char *name)
@@ -54,49 +45,39 @@ hook_t *hook_add_event(const char *name)
 	hook_t *nh;
 	node_t *n;
 
-	if(find_hook(name))
-		return;
+	if((nh = find_hook(name)) != NULL)
+		return nh;
 
-	nh = new_hook(name);
-	n = node_create();
+	nh = BlockHeapAlloc(hook_heap);
+	nh->name = sstrdup(name);
 
-	node_add(nh, n, &hooks);
+	mowgli_patricia_add(hooks, name, nh);
 
 	return nh;
 }
 
 void hook_del_event(const char *name)
 {
-	node_t *n;
 	hook_t *h;
 
-	LIST_FOREACH(n, hooks.head)
+	if ((h = find_hook(name)) != NULL)
 	{
-		h = n->data;
+		node_t *n, *tn;
 
-		if (!strcmp(h->name, name))
+		LIST_FOREACH_SAFE(n, tn, h->hooks.head)
 		{
-			node_del(n, &hooks);
-			BlockHeapFree(hook_heap, h);
-			return;
+			node_del(n, &h->hooks);
+			node_free(n);
 		}
+
+		BlockHeapFree(hook_heap, h);
+		return;
 	}
 }
 
 static hook_t *find_hook(const char *name)
 {
-	node_t *n;
-	hook_t *h;
-
-	LIST_FOREACH(n, hooks.head)
-	{
-		h = n->data;
-
-		if (!strcmp(h->name, name))
-			return h;
-	}
-
-	return NULL;
+	return mowgli_patricia_retrieve(hooks, name);
 }
 
 void hook_del_hook(const char *event, void (*handler)(void *data))
@@ -126,7 +107,6 @@ void hook_add_hook(const char *event, void (*handler)(void *data))
 		h = hook_add_event(event);
 
 	n = node_create();
-
 	node_add((void *) handler, n, &h->hooks);
 }
 
@@ -139,7 +119,6 @@ void hook_add_hook_first(const char *event, void (*handler)(void *data))
 		h = hook_add_event(event);
 
 	n = node_create();
-
 	node_add_head((void *) handler, n, &h->hooks);
 }
 
