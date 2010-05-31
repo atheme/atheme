@@ -581,7 +581,7 @@ loadmodule "modules/xmlrpc/main";
  * is relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme
  * was compiled.
  */
-#loadmodule "contrib/fc_dice";
+#loadmodule "modules/contrib/ns_listlogins";
 
 /******************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
