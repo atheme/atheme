@@ -42,7 +42,7 @@ typedef struct {
 	void (*db_close)(database_handle_t *db);
 } database_module_t;
 
-E database_handle_t *db_open(void);
+E database_handle_t *db_open(database_transaction_t txn);
 E void db_close(database_handle_t *db);
 
 E const char *db_read_word(database_handle_t *db);
@@ -57,8 +57,9 @@ E bool db_commit_row(database_handle_t *db);
 
 typedef void (*database_handler_f)(database_handle_t *db, const char *type);
 
-E void db_register_type_handler(database_handle_t *db, const char *type, database_handler_f fun);
-E void db_unregister_type_handler(database_handle_t *db, const char *type);
+E void db_register_type_handler(const char *type, database_handler_f fun);
+E void db_unregister_type_handler(const char *type);
+E void db_process(database_handle_t *db, const char *type);
 E void db_init(void);
 
 #endif

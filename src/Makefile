@@ -20,6 +20,7 @@ BASE_SRCS =				\
 	connection.c		\
 	crypto.c		\
 	culture.c		\
+	database_backend.c	\
 	datastream.c		\
 	dlink.c		\
 	event.c		\
