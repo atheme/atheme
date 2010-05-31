@@ -49,7 +49,7 @@ static hook_t *new_hook(const char *name)
 	return h;
 }
 
-void hook_add_event(const char *name)
+hook_t *hook_add_event(const char *name)
 {
 	hook_t *nh;
 	node_t *n;
@@ -61,6 +61,8 @@ void hook_add_event(const char *name)
 	n = node_create();
 
 	node_add(nh, n, &hooks);
+
+	return nh;
 }
 
 void hook_del_event(const char *name)
@@ -121,7 +123,7 @@ void hook_add_hook(const char *event, void (*handler)(void *data))
 	node_t *n;
 
 	if (!(h = find_hook(event)))
-		return;
+		h = hook_add_event(event);
 
 	n = node_create();
 
@@ -134,7 +136,7 @@ void hook_add_hook_first(const char *event, void (*handler)(void *data))
 	node_t *n;
 
 	if (!(h = find_hook(event)))
-		return;
+		h = hook_add_event(event);
 
 	n = node_create();
 

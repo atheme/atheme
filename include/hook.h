@@ -16,7 +16,7 @@ struct hook_ {
 	list_t hooks;
 };
 
-E void hook_add_event(const char *);
+E hook_t *hook_add_event(const char *);
 E void hook_del_event(const char *);
 E void hook_del_hook(const char *, void (*)(void *));
 E void hook_add_hook(const char *, void (*)(void *));
