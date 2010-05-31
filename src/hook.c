@@ -123,7 +123,7 @@ void hook_add_hook(const char *event, void (*handler)(void *data))
 	node_t *n;
 
 	if (!(h = find_hook(event)))
-		nh = hook_add_event(event);
+		h = hook_add_event(event);
 
 	n = node_create();
 
@@ -136,7 +136,7 @@ void hook_add_hook_first(const char *event, void (*handler)(void *data))
 	node_t *n;
 
 	if (!(h = find_hook(event)))
-		nh = hook_add_event(event);
+		h = hook_add_event(event);
 
 	n = node_create();
 
