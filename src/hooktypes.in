@@ -22,6 +22,7 @@
 # Name             Argument type
 # (main)
 config_ready       void
+db_write           database_handle_t *
 db_saved           void
 shutdown           void
 # (ircd)
