@@ -226,6 +226,7 @@ int main(int argc, char *argv[])
         hooks_init();
         init_netio();
         init_socket_queues();
+	db_init();
 
 	translation_init();
 #ifdef ENABLE_NLS
