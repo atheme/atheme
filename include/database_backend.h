@@ -27,15 +27,16 @@ typedef struct {
 	bool (*commit_row)(database_handle_t *hdl);
 } database_vtable_t;
 
-struct database_handle_ {
-	void *priv;
-	database_vtable_t *vt;
-};
-
 typedef enum {
 	DB_READ,
 	DB_WRITE
 } database_transaction_t;
+
+struct database_handle_ {
+	void *priv;
+	database_vtable_t *vt;
+	database_transaction_t txn;
+};
 
 typedef struct {
 	database_handle_t *(*db_open)(database_transaction_t txn);
@@ -53,6 +54,7 @@ E bool db_start_row(database_handle_t *db, const char *type);
 E bool db_write_word(database_handle_t *db, const char *word);
 E bool db_write_multiword(database_handle_t *db, const char *str);
 E bool db_write_int(database_handle_t *db, int num);
+E bool db_write_format(database_handle_t *db, const char *str, ...);
 E bool db_commit_row(database_handle_t *db);
 
 typedef void (*database_handler_f)(database_handle_t *db, const char *type);
@@ -61,5 +63,6 @@ E void db_register_type_handler(const char *type, database_handler_f fun);
 E void db_unregister_type_handler(const char *type);
 E void db_process(database_handle_t *db, const char *type);
 E void db_init(void);
+E database_module_t *db_mod;
 
 #endif
