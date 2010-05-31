@@ -1062,6 +1062,8 @@ opensex_begin_row(database_handle_t *db, const char *type)
 	f = (FILE *) db->priv;
 
 	fprintf(f, "%s ", type);
+
+	return true;
 }
 
 bool
@@ -1075,6 +1077,8 @@ opensex_write_word(database_handle_t *db, const char *word)
 	f = (FILE *) db->priv;
 
 	fprintf(f, "%s ", word);
+
+	return true;
 }
 
 bool
@@ -1088,6 +1092,8 @@ opensex_write_multiword(database_handle_t *db, const char *word)
 	f = (FILE *) db->priv;
 
 	fprintf(f, "%s", word);
+
+	return true;
 }
 
 bool
@@ -1100,6 +1106,8 @@ opensex_write_int(database_handle_t *db, int num)
 	f = (FILE *) db->priv;
 
 	fprintf(f, "%d ", num);
+
+	return true;
 }
 
 bool
@@ -1112,6 +1120,8 @@ opensex_commit_row(database_handle_t *db)
 	f = (FILE *) db->priv;
 
 	fprintf(f, "\n");
+
+	return true;
 }
 
 database_vtable_t opensex_vt = {
