@@ -1,23 +1,19 @@
-# List of source files which contain translatable strings.
-
-# Storage backend.
-modules/backend/flatfile.c
-
-# IRC - ALIS
+# Please don't update this file manually - use ./update-potfiles.sh instead!
 modules/alis/main.c
-
-# IRC - BotServ
+modules/backend/flatfile.c
+modules/backend/opensex.c
 modules/botserv/bottalk.c
 modules/botserv/help.c
 modules/botserv/info.c
 modules/botserv/main.c
-modules/botserv/set.c
-
-# IRC - ChanServ
+modules/botserv/set_core.c
+modules/botserv/set_fantasy.c
+modules/botserv/set_nobot.c
+modules/botserv/set_private.c
 modules/chanserv/akick.c
 modules/chanserv/ban.c
-modules/chanserv/clear.c
 modules/chanserv/clear_bans.c
+modules/chanserv/clear.c
 modules/chanserv/clear_users.c
 modules/chanserv/close.c
 modules/chanserv/count.c
@@ -33,7 +29,6 @@ modules/chanserv/info.c
 modules/chanserv/invite.c
 modules/chanserv/kick.c
 modules/chanserv/list.c
-modules/chanserv/main.c
 modules/chanserv/mark.c
 modules/chanserv/op.c
 modules/chanserv/owner.c
@@ -41,10 +36,23 @@ modules/chanserv/protect.c
 modules/chanserv/quiet.c
 modules/chanserv/recover.c
 modules/chanserv/register.c
-modules/chanserv/set.c
+modules/chanserv/set_core.c
+modules/chanserv/set_email.c
+modules/chanserv/set_entrymsg.c
+modules/chanserv/set_fantasy.c
+modules/chanserv/set_founder.c
 modules/chanserv/set_gameserv.c
+modules/chanserv/set_guard.c
+modules/chanserv/set_keeptopic.c
 modules/chanserv/set_limitflags.c
+modules/chanserv/set_mlock.c
 modules/chanserv/set_private.c
+modules/chanserv/set_property.c
+modules/chanserv/set_restricted.c
+modules/chanserv/set_secure.c
+modules/chanserv/set_topiclock.c
+modules/chanserv/set_url.c
+modules/chanserv/set_verbose.c
 modules/chanserv/status.c
 modules/chanserv/taxonomy.c
 modules/chanserv/template.c
@@ -54,19 +62,12 @@ modules/chanserv/version.c
 modules/chanserv/voice.c
 modules/chanserv/why.c
 modules/chanserv/xop.c
-
-# IRC - GameServ
 modules/gameserv/dice.c
 modules/gameserv/eightball.c
 modules/gameserv/help.c
-modules/gameserv/main.c
 modules/gameserv/namegen.c
 modules/gameserv/rps.c
-
-# IRC - Global
 modules/global/main.c
-
-# IRC - HostServ
 modules/hostserv/group.c
 modules/hostserv/help.c
 modules/hostserv/offer.c
@@ -74,8 +75,6 @@ modules/hostserv/onoff.c
 modules/hostserv/request.c
 modules/hostserv/vhost.c
 modules/hostserv/vhostnick.c
-
-# IRC - MemoServ
 modules/memoserv/delete.c
 modules/memoserv/forward.c
 modules/memoserv/help.c
@@ -85,10 +84,9 @@ modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/send.c
 modules/memoserv/sendops.c
-
-# IRC - NickServ
 modules/nickserv/access.c
 modules/nickserv/cert.c
+modules/nickserv/cracklib.c
 modules/nickserv/drop.c
 modules/nickserv/enforce.c
 modules/nickserv/freeze.c
@@ -110,19 +108,27 @@ modules/nickserv/resetpass.c
 modules/nickserv/return.c
 modules/nickserv/sendpass.c
 modules/nickserv/sendpass_user.c
-modules/nickserv/set.c
 modules/nickserv/set_accountname.c
+modules/nickserv/set_core.c
+modules/nickserv/set_email.c
+modules/nickserv/set_emailmemos.c
+modules/nickserv/set_hidemail.c
+modules/nickserv/set_language.c
+modules/nickserv/set_neverop.c
+modules/nickserv/set_nomemo.c
+modules/nickserv/set_noop.c
+modules/nickserv/setpass.c
+modules/nickserv/set_password.c
 modules/nickserv/set_private.c
 modules/nickserv/set_privmsg.c
-modules/nickserv/setpass.c
+modules/nickserv/set_property.c
+modules/nickserv/set_quietchg.c
 modules/nickserv/status.c
 modules/nickserv/subscribe.c
 modules/nickserv/taxonomy.c
 modules/nickserv/vacation.c
 modules/nickserv/verify.c
 modules/nickserv/vhost.c
-
-# IRC - OperServ
 modules/operserv/akill.c
 modules/operserv/clearchan.c
 modules/operserv/clones.c
@@ -134,7 +140,6 @@ modules/operserv/ignore.c
 modules/operserv/info.c
 modules/operserv/inject.c
 modules/operserv/jupe.c
-modules/operserv/main.c
 modules/operserv/mode.c
 modules/operserv/modinspect.c
 modules/operserv/modlist.c
@@ -150,16 +155,13 @@ modules/operserv/restart.c
 modules/operserv/rmatch.c
 modules/operserv/rnc.c
 modules/operserv/rwatch.c
-modules/operserv/shutdown.c
 modules/operserv/sgline.c
+modules/operserv/shutdown.c
 modules/operserv/soper.c
 modules/operserv/specs.c
 modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
-
-# Atheme Core
-include/services.h
 src/account.c
 src/commandtree.c
 src/function.c
@@ -168,6 +170,6 @@ src/logger.c
 src/module.c
 src/node.c
 src/ptasks.c
+src/services.c
 src/signal.c
 src/users.c
-src/services.c
