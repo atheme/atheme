@@ -294,7 +294,11 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", get_oper_name(si), k->user, k->host, 
 		k->reason);
-	logcommand(si, CMDLOG_ADMIN, "AKILL:ADD: \2%s@%s\2 (reason: \2%s\2)", k->user, k->host, k->reason);
+
+	if (duration)
+		logcommand(si, CMDLOG_ADMIN, "AKILL:ADD: \2%s@%s\2 (reason: \2%s\2) (duration: \2%s\2)", k->user, k->host, k->reason, timediff(k->duration));
+	else
+		logcommand(si, CMDLOG_ADMIN, "AKILL:ADD: \2%s@%s\2 (reason: \2%s\2) (duration: \2Permanent\2)", k->user, k->host, k->reason);
 }
 
 static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
