@@ -48,6 +48,7 @@ static void check_all_retrievable(mowgli_patricia_t *dtree)
 {
 	mowgli_patricia_iteration_state_t state;
 	void *elem, *elem2;
+	unsigned int n1 = 0, n2;
 
 	printf("Checking consistency...");
 	fflush(stdout);
@@ -61,7 +62,11 @@ static void check_all_retrievable(mowgli_patricia_t *dtree)
 		else
 			printf(".");
 		fflush(stdout);
+		n1++;
 	}
+	n2 = mowgli_patricia_size(dtree);
+	if (n1 != n2)
+		printf("number of iterated elements %u != size %u\n", n1, n2);
 	printf("\n");
 }
 
@@ -89,8 +94,6 @@ void test_patricia(void)
 	ADD("moon");
 	ADD("new");
 	ADD("delete");
-
-	printf("size: %u\n", mowgli_patricia_size(dtree));
 
 	MOWGLI_PATRICIA_FOREACH(elem, &state, dtree)
 	{
