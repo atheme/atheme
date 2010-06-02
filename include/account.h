@@ -319,6 +319,11 @@ typedef struct {
 	char *value;
 } hook_metadata_change_t;
 
+typedef struct {
+	myuser_t *mu;
+	const char *oldname;
+} hook_user_rename_t;
+
 /* pmodule.c XXX */
 E bool backend_loaded;
 

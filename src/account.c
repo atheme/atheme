@@ -75,6 +75,8 @@ void init_accounts(void)
 	oldnameslist = mowgli_patricia_create(irccasecanon);
 	mclist = mowgli_patricia_create(irccasecanon);
 	certfplist = mowgli_patricia_create(strcasecanon);
+
+	hook_add_event("user_rename");
 }
 
 /*
@@ -319,6 +321,10 @@ void myuser_rename(myuser_t *mu, const char *name)
 {
 	node_t *n, *tn;
 	user_t *u;
+	hook_user_rename_t data;
+
+	char nb[NICKLEN];
+	strlcpy(nb, mu->name, NICKLEN);
 
 	if (authservice_loaded)
 	{
@@ -339,6 +345,10 @@ void myuser_rename(myuser_t *mu, const char *name)
 			ircd_on_login(u, mu, NULL);
 		}
 	}
+
+	data.mu = mu;
+	data.oldname = nb;
+	hook_call_user_rename(&data);
 }
 
 /*
