@@ -508,7 +508,7 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 	/* Avoid bit 0 as it's already used by the magic root node,
 	 * but may still be distinct. A special case for "\1" is
 	 * needed. */
-	if (delem == dict->root && ckey[0] == '\1')
+	if (delem == dict->root && !strcmp(ckey, "\1"))
 		i = 1;
 	else
 		for (i = 1; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)

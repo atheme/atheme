@@ -92,6 +92,7 @@ void test_patricia(void)
 
 	dtree = mowgli_patricia_create(str_canon);
 #define ADD(x) mowgli_patricia_add(dtree, x, x); check_all_retrievable(dtree)
+	ADD("\1\1");
 	ADD("alias");
 	ADD("foo");
 	ADD("bar");
