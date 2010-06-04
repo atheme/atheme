@@ -75,8 +75,6 @@ void init_accounts(void)
 	oldnameslist = mowgli_patricia_create(irccasecanon);
 	mclist = mowgli_patricia_create(irccasecanon);
 	certfplist = mowgli_patricia_create(strcasecanon);
-
-	hook_add_event("user_rename");
 }
 
 /*
