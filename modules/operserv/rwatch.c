@@ -104,6 +104,7 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "RWATCH");
 
 	hook_del_user_add(rwatch_newuser);
+	hook_del_user_nickchange(rwatch_nickchange);
 }
 
 static void write_rwatchdb(void)
