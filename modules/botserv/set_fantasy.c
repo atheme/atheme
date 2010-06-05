@@ -5,7 +5,6 @@
  *
  * Enable fantasy commands.
  *
- * $Id$
  */
 
 #include "atheme.h"

@@ -5,7 +5,6 @@
  *
  * Changes your e-mail address.
  *
- * $Id$
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for OS INFO
  *
- * $Id: info.c 7895 2010-04-17 02:40:03Z jdhore $
  */
 
 #include "atheme.h"

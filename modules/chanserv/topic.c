@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 8019 2007-04-02 09:27:15Z jilles $
  */
 
 #include "atheme.h"

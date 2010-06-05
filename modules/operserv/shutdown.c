@@ -4,7 +4,6 @@
  *
  * This file contains functionality which implements the OService SHUTDOWN command.
  *
- * $Id: shutdown.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"

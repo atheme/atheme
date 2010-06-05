@@ -4,7 +4,6 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7795 2007-03-04 15:54:18Z jilles $
  */
 
 #ifndef PRIVS_H

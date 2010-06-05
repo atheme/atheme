@@ -6,7 +6,6 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

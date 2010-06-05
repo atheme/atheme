@@ -4,7 +4,6 @@
  *
  * Predefined flags collections
  *
- * $Id: template.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef TEMPLATE_H

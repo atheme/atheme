@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ircnet ircd.
  *
- * $Id: nefarious.h 4813 2006-02-10 15:02:54Z nenolod $
  */
 
 #ifndef RATBOX_H

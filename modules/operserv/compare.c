@@ -4,7 +4,6 @@
  *
  * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

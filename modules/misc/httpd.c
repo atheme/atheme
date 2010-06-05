@@ -4,7 +4,6 @@
  *
  * Generic HTTPd
  *
- * $Id$
  */
 
 #include "atheme.h"

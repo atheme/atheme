@@ -26,7 +26,6 @@
 /*
  * $FreeBSD: /usr/local/www/cvsroot/FreeBSD/src/lib/libc/gen/arc4random.c,v 1.10.8.1 2006/11/18 21:35:13 ache Exp $
  * Modified for Atheme by Jilles Tjoelker
- * $Id: arc4random.c 8039 2007-04-02 11:04:24Z nenolod $
  */
 
 #include "atheme.h"

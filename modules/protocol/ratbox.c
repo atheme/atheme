@@ -5,7 +5,6 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 8239 2007-05-09 20:05:03Z jilles $
  */
 
 #include "atheme.h"

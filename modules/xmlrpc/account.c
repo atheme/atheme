@@ -4,7 +4,6 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 8389 2007-06-03 20:36:51Z pippijn $
  */
 
 #include "atheme.h"

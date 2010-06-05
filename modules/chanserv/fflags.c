@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

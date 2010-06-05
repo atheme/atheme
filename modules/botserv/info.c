@@ -5,7 +5,6 @@
  * This file contains a BService INFO which can show
  * botserv settings on channel or bot.
  *
- * $Id: info.c 7969 2009-04-08 19:19:38Z celestin $
  */
 
 #include "atheme.h"

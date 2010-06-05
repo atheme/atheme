@@ -4,7 +4,6 @@
  *
  * This file contains code for the NickServ FREGISTER function.
  *
- * $Id: ns_fregister.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"

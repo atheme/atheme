@@ -4,7 +4,6 @@
  *
  * An echo server. (proof of concept for integrated XMLRPC HTTPD)
  *
- * $Id: gen_echoserver.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

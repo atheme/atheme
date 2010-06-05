@@ -4,7 +4,6 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef COMMANDLIST_H

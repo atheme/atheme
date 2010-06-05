@@ -4,7 +4,6 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 8423 2007-06-09 19:58:46Z jilles $
  */
 
 #ifndef ACCOUNT_H

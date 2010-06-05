@@ -4,7 +4,6 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 7913 2007-03-06 23:39:47Z jilles $
  */
 
 #include "atheme.h"

@@ -5,7 +5,6 @@
  *
  * Allows you to opt-out of channel change messages.
  *
- * $Id$
  */
 
 #include "atheme.h"

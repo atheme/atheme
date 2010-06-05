@@ -6,7 +6,6 @@
  * user, not others.
  * Do not load chanserv/ban and chanserv/unban_self together.
  *
- * $Id: ban.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"

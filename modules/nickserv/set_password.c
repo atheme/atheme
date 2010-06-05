@@ -5,7 +5,6 @@
  *
  * Changes the password associated with your account.
  *
- * $Id$
  */
 
 #include "atheme.h"

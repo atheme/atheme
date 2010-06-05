@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: hybrid.h 4747 2006-02-01 14:22:48Z nenolod $
  */
 
 #ifndef RATBOX_H

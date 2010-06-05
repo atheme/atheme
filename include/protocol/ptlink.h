@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: ptlink.h 5570 2006-06-28 13:16:40Z jilles $
  */
 
 #ifndef RATBOX_H

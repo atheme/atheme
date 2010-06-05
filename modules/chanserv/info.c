@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 8423 2007-06-09 19:58:46Z jilles $
  */
 
 #include "atheme.h"

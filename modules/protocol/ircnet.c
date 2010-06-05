@@ -6,7 +6,6 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"

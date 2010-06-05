@@ -4,7 +4,6 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 8317 2007-05-24 20:02:59Z jilles $
  */
 
 #include "atheme.h"

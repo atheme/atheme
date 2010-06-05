@@ -5,7 +5,6 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 8263 2007-05-17 22:31:56Z jilles $
  */
 
 #ifndef PMODULE_H

@@ -4,7 +4,6 @@
  *
  * Headers for service selection tree.
  *
- * $Id: servtree.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef SERVTREE_H

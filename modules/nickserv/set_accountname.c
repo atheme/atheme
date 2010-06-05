@@ -5,7 +5,6 @@
  *
  * Changes the account name to another registered nick
  *
- * $Id$
  */
 
 #include "atheme.h"

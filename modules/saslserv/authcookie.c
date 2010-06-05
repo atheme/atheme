@@ -4,7 +4,6 @@
  *
  * AUTHCOOKIE mechanism provider
  *
- * $Id: authcookie.c 2010 JBeshir $
  */
 
 #include "atheme.h"

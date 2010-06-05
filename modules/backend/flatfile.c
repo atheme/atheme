@@ -5,7 +5,6 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"

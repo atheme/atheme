@@ -4,7 +4,6 @@
  *
  * Jupiters a server.
  *
- * $Id: jupe.c 8105 2007-04-05 16:02:05Z nenolod $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * Data structures for news information.
  *
- * $Id: news.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef NEWS_H

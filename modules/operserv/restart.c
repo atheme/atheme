@@ -4,7 +4,6 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: restart.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 8425 2007-06-09 21:15:26Z jilles $
  */
 
 #include "atheme.h"

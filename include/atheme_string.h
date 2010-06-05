@@ -4,7 +4,6 @@
  *
  * String stuff.
  *
- * $Id: atheme_string.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef __CLAROSTRING

@@ -6,7 +6,6 @@
  * This file contains functionality which implements
  * the OperServ SQLINE command.
  *
- * $Id: sqline.c 8027 2007-04-02 10:47:18Z celestin $
  */
 
 #include "atheme.h"

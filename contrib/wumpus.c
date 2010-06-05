@@ -7,7 +7,6 @@
  *
  * Hunt the Wumpus game implementation.
  *
- * $Id$
  */
 
 #include "atheme.h"

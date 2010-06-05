@@ -5,7 +5,6 @@
  *
  * Prevents you from being added to access lists.
  *
- * $Id$
  */
 
 #include "atheme.h"

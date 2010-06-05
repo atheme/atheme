@@ -5,7 +5,6 @@
  *
  * Prevent a bot from being assigned by non IRC operators.
  *
- * $Id$
  */
 
 #include "atheme.h"

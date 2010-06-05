@@ -4,7 +4,6 @@
  *
  * This file contains routines to handle the MemoServ HELP command.
  *
- * $Id: help.c 6593 2006-10-01 18:51:45Z jilles $
  */
 
 #include "atheme.h"

@@ -9,7 +9,6 @@
  * Note: this module does not work with the halfops autodetection
  * in the charybdis protocol module.
  *
- * $Id: ircd_nohalfops.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

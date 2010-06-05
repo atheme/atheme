@@ -31,7 +31,6 @@
  * 
  * ALIS, based on the ratbox-services implementation.
  *
- * $Id$
  */
 
 #include "atheme.h"

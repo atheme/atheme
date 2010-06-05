@@ -4,7 +4,6 @@
  *
  * Generates a new password, either n digits long (w/ nickserv arg), or 7 digits
  *
- * $Id: ns_generatepass.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

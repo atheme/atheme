@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 8309 2007-05-22 20:37:44Z nenolod $
  */
 
 #include "atheme.h"

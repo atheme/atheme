@@ -4,7 +4,6 @@
  *
  * Allows syncing the vhost for all nicks in a group.
  *
- * $Id: group.c 8195 2007-04-25 16:27:08Z jilles $
  */
 
 #include "atheme.h"

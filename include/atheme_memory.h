@@ -4,7 +4,6 @@
  *
  * Memory stuff.
  *
- * $Id: atheme_memory.h 8429 2007-06-10 18:51:23Z pippijn $
  */
 
 #ifndef __CLAROBASEMEMORY

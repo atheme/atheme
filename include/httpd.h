@@ -4,7 +4,6 @@
  *
  * Generic HTTP server
  *
- * $Id$
  */
 
 #ifndef HTTPD_H

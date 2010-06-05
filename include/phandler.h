@@ -4,7 +4,6 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #ifndef PHANDLER_H

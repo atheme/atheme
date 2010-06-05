@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ircnet ircd.
  *
- * $Id: undernet.h 4781 2006-02-05 00:05:03Z jilles $
  */
 
 #ifndef RATBOX_H

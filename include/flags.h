@@ -4,7 +4,6 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: flags.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef FLAGS_H

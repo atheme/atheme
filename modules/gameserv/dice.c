@@ -6,7 +6,6 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8339 2007-05-29 22:13:10Z jilles $
  */
 
 #include "atheme.h"

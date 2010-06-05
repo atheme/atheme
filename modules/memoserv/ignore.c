@@ -4,7 +4,6 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"

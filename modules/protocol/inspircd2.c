@@ -4,7 +4,6 @@
  *
  * The People's Democratic Republic of InspIRCd 2.0/2.1 support.
  *
- * $Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $
  */
 
 #include "atheme.h"

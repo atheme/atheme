@@ -4,7 +4,6 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #ifndef MODULE_H

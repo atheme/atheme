@@ -4,7 +4,6 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

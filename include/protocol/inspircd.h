@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for InspIRCd.
  *
- * $Id: inspircd.h 5420 2006-06-18 19:02:46Z jilles $
  */
 
 #ifndef RATBOX_H

@@ -4,7 +4,6 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #ifndef SERVICES_H

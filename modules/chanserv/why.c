@@ -4,7 +4,6 @@
  *
  * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 8209 2007-04-30 00:14:52Z jilles $
  */
 
 #include "atheme.h"

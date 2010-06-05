@@ -5,7 +5,6 @@
  *
  * Forwards incoming memos to your e-mail address.
  *
- * $Id$
  */
 
 #include "atheme.h"

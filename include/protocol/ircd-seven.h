@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ircd-seven.
  *
- * $Id: charybdis.h 4899 2006-03-14 02:36:14Z nenolod $
  */
 
 #ifndef IRCD_SEVEN_H

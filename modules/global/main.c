@@ -4,7 +4,6 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"

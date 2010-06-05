@@ -5,7 +5,6 @@
  *
  * This file contains functionality which implements the OService INJECT command.
  *
- * $Id: inject.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"

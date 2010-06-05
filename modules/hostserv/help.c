@@ -4,7 +4,6 @@
  *
  * This file contains routines to handle the HostServ HELP command.
  *
- * $Id: help.c 7895 2009-01-24 02:40:03Z celestin $
  */
 
 #include "atheme.h"

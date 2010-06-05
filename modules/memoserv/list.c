@@ -4,7 +4,6 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 8331 2007-05-27 14:13:44Z jilles $
  */
 
 #include "atheme.h"

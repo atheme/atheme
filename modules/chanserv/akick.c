@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 8211 2007-04-30 00:42:27Z jilles $
  */
 
 #include "atheme.h"

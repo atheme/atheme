@@ -4,7 +4,6 @@
  *
  * Table rendering class.
  *
- * $Id: table.h 7941 2007-03-13 07:16:52Z nenolod $
  */
 
 #ifndef ATHEME_TABLE_H

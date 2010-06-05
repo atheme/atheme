@@ -4,7 +4,6 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

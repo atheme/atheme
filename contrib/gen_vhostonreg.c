@@ -4,7 +4,6 @@
  *
  * Sets usercloak metadata on register.
  *
- * $Id: gen_vhostonreg.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

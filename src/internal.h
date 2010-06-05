@@ -4,7 +4,6 @@
  *
  * Stuff for internal use in Atheme.
  *
- * $Id: internal.h 8007 2007-03-29 22:36:47Z jilles $
  */
 
 #ifndef INTERNAL_H

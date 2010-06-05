@@ -4,7 +4,6 @@
  *
  * Data structures for SASL plugin use.
  *
- * $Id: sasl.h 8243 2007-05-10 20:18:42Z jilles $
  */
 
 #ifndef SASL_H

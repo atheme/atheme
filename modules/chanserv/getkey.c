@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService GETKEY functions.
  *
- * $Id: getkey.c 7905 2007-03-06 23:02:59Z jilles $
  */
 
 #include "atheme.h"

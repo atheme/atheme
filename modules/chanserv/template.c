@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 8319 2007-05-24 20:09:37Z jilles $
  */
 
 #include "atheme.h"

@@ -5,7 +5,6 @@
  * Data structures related to our uplink.
  * Modules usually don't need this.
  *
- * $Id: uplink.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef _UPLINK_H

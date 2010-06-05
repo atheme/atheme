@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 8251 2007-05-12 21:10:06Z jilles $
  */
 
 #include "atheme.h"

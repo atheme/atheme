@@ -5,7 +5,6 @@
  *
  * Changes the language services uses to talk to you.
  *
- * $Id$
  */
 
 #include "atheme.h"

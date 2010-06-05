@@ -4,7 +4,6 @@
  *
  * Generates a hash for use as a operserv "password".
  *
- * $Id: ns_generatehash.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

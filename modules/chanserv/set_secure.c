@@ -5,7 +5,6 @@
  *
  * This file contains routines to handle the CService SET SECURE command.
  *
- * $Id$
  */
 
 #include "atheme.h"

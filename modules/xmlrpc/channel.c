@@ -4,7 +4,6 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 8425 2007-06-09 21:15:26Z jilles $
  */
 
 #include "atheme.h"

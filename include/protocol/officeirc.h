@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: officeirc.h 7687 2007-02-18 00:47:15Z nenolod $
  */
 
 #ifndef RATBOX_H

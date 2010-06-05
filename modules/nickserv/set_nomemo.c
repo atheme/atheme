@@ -5,7 +5,6 @@
  *
  * Disables the ability to receive memos.
  *
- * $Id$
  */
 
 #include "atheme.h"

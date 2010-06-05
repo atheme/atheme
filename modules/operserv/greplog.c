@@ -4,7 +4,6 @@
  *
  * Searches through the logs.
  *
- * $Id: os_greplog.c 54 2008-09-30 23:07:51Z jilles $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the NickServ LISTOWNMAIL function.
  *
- * $Id$
  */
 
 #include "atheme.h"

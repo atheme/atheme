@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: count.c 7929 2007-03-08 18:50:21Z jilles $
  */
 
 #include "atheme.h"

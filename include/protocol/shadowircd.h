@@ -5,7 +5,6 @@
  *
  * This code contains the channel mode definitions for shadowircd.
  *
- * $Id$
  */
 
 #ifndef SHADOWIRCD_H

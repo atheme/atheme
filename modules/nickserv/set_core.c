@@ -4,7 +4,6 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7907 2007-03-06 23:10:26Z pippijn $
  */
 
 #include "atheme.h"

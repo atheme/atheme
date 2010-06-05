@@ -4,7 +4,6 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 7959 2007-03-20 12:25:45Z jilles $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 8103 2007-04-04 22:51:10Z jilles $
  */
 
 #include "atheme.h"

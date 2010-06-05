@@ -5,7 +5,6 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 #include "atheme.h"

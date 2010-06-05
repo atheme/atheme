@@ -4,7 +4,6 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 8405 2007-06-03 21:40:48Z pippijn $
  */
 
 #include "atheme.h"

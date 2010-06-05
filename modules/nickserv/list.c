@@ -5,7 +5,6 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

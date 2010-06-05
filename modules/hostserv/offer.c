@@ -4,7 +4,6 @@
  *
  * Allows opers to offer vhosts to users
  *
- * $Id: offer.c 8195 2007-04-25 16:27:08Z jdhore $
  */
 
 #include "atheme.h"

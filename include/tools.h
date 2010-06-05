@@ -5,7 +5,6 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8363 2007-06-02 22:17:28Z jilles $
  */
 
 #ifndef _TOOLS_H

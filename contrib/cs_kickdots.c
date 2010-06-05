@@ -4,7 +4,6 @@
  *
  * Kicks people saying "..." on channels with "kickdots" metadata set.
  *
- * $Id: cs_kickdots.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7985 2007-03-25 20:13:20Z jilles $
  */
 
 #include "atheme.h"

@@ -5,7 +5,6 @@
  *
  * Global data
  *
- * $Id: global.h 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #ifndef _GLOBAL_H

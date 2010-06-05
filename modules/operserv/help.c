@@ -5,7 +5,6 @@
  *
  * This file contains routines to handle the OService HELP command.
  *
- * $Id: help.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

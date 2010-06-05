@@ -4,7 +4,6 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #ifndef CHANNELS_H

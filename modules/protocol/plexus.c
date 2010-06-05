@@ -5,7 +5,6 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 /* option: set the netadmin umode +N */

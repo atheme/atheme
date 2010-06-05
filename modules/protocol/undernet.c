@@ -6,7 +6,6 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"

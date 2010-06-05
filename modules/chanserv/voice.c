@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"

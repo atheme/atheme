@@ -4,7 +4,6 @@
  *
  * Autokline channels.
  *
- * $Id$
  */
 
 #include "atheme.h"

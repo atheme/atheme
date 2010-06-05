@@ -4,7 +4,6 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 8391 2007-06-03 20:38:50Z jilles $
  */
 
 #include "atheme.h"

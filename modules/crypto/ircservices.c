@@ -4,7 +4,6 @@
  *
  * IRCServices's weird password encryption thingy, taken from Anope 1.6.3.
  *
- * $Id: ircservices.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 /* Include file for high-level encryption routines.
  *

@@ -4,7 +4,6 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef SERVERS_H

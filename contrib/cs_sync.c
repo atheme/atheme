@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService SYNC functions.
  *
- * $Id: cs_sync.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

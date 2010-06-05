@@ -4,7 +4,6 @@
  *
  * mlocktweaker.c: A module which tweaks mlock on registration.
  *
- * $Id$
  */
 
 #include "atheme.h"

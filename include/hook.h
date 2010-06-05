@@ -4,7 +4,6 @@
  *
  * A hook system.
  *
- * $Id: hook.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 #ifndef HOOK_H
 #define HOOK_H

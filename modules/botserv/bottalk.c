@@ -5,7 +5,6 @@
  * This file contains a BService SAY and ACT which can make
  * botserv bot talk in channel.
  *
- * $Id: bottalk.c 7969 2009-04-08 19:19:38Z celestin $
  */
 
 #include "atheme.h"

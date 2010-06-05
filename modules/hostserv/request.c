@@ -4,7 +4,6 @@
  *
  * Allows requesting a vhost for a nick/account
  *
- * $Id: request.c 8195 2007-04-25 16:27:08Z celestin $
  */
 
 #include "atheme.h"

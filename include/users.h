@@ -4,7 +4,6 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 8235 2007-05-06 22:54:53Z jilles $
  */
 
 #ifndef USERS_H

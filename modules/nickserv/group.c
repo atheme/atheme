@@ -4,7 +4,6 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 8299 2007-05-20 12:43:02Z jilles $
  */
 
 #include "atheme.h"

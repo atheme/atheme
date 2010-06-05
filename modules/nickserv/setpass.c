@@ -4,7 +4,6 @@
  *
  * This file contains code for the NickServ SETPASS function.
  *
- * $Id: setpass.c 7947 2007-03-15 18:47:51Z jilles $
  */
 
 #include "atheme.h"

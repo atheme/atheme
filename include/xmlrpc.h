@@ -4,7 +4,6 @@
  *
  * XMLRPC library header, hacked up for Atheme.
  *
- * $Id: xmlrpc.h 8427 2007-06-10 18:49:02Z pippijn $
  */
 #ifndef XMLRPC_H
 #define XMLRPC_H

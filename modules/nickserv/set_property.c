@@ -5,7 +5,6 @@
  *
  * Manipulates metadata entries associated with an account.
  *
- * $Id$
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #ifndef COMMON_H

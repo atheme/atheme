@@ -4,7 +4,6 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $
  */
 
 #include "atheme.h"

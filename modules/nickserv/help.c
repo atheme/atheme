@@ -4,7 +4,6 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #include "atheme.h"

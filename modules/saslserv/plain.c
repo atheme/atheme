@@ -4,7 +4,6 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #include "atheme.h"

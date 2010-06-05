@@ -5,7 +5,6 @@
  * This file is a meta-module for compatibility with 
  * old setups pre-SET split.
  *
- * $Id: set.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

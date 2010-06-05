@@ -5,7 +5,6 @@
  *
  * Services-side autojoin using SVSJOIN
  *
- * $Id$
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #ifndef STDINC_H

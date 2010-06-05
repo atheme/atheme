@@ -4,7 +4,6 @@
  *
  * Rate limits account registrations.
  *
- * $Id: ns_ratelimitreg.c 8325 2007-05-26 03:42:03Z nenolod $
  */
 
 #include "atheme.h"

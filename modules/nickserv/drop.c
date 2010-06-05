@@ -4,7 +4,6 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 8321 2007-05-24 20:10:59Z jilles $
  */
 
 #include "atheme.h"

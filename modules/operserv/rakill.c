@@ -4,7 +4,6 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 /*

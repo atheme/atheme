@@ -4,7 +4,6 @@
  *
  * Object management.
  *
- * $Id: object.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef __ATHEME_OBJECT_H__

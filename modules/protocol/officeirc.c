@@ -5,7 +5,6 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 #include "atheme.h"

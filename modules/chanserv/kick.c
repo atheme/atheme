@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"

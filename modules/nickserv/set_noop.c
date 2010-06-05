@@ -5,7 +5,6 @@
  *
  * Prevents services from setting modes upon you automatically.
  *
- * $Id$
  */
 
 #include "atheme.h"

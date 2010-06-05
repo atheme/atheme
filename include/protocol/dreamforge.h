@@ -4,7 +4,6 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: dreamforge.h 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #ifndef RATBOX_H

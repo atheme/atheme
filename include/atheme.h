@@ -4,7 +4,6 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #ifndef ATHEME_H

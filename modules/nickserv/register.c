@@ -4,7 +4,6 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 8279 2007-05-20 06:47:41Z nenolod $
  */
 
 #include "atheme.h"

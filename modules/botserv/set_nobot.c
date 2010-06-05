@@ -5,7 +5,6 @@
  *
  * Prevent a bot from being assigned to a channel.
  *
- * $Id$
  */
 
 #include "atheme.h"

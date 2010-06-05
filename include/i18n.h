@@ -4,7 +4,6 @@
  *
  * This is the header which includes all of the internationalization stuff.
  *
- * $Id: i18n.h 8005 2007-03-29 22:27:21Z jilles $
  */
 
 #ifndef __ATHEME_INTL_H__

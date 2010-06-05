@@ -4,7 +4,6 @@
  *
  * Name generator.
  *
- * $Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $
  */
 
 #include "atheme.h"

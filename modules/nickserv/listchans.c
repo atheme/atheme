@@ -5,7 +5,6 @@
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"

@@ -4,7 +4,6 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 8257 2007-05-13 14:09:51Z jilles $
  */
 
 #include "atheme.h"

@@ -6,7 +6,6 @@
  *
  * This file contains protocol support for shadowircd.
  *
- * $Id$
  */
 
 #include "atheme.h"
