@@ -11,7 +11,7 @@
 DECLARE_MODULE_V1
 (
 	"auth/dummy", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

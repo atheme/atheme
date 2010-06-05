@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", false, _modinit, _moddeinit,
-	"$Id: flags.c 8103 2007-04-04 22:51:10Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/help", false, _modinit, _moddeinit,
-	"$Id: help.c 6593 2006-10-01 18:51:45Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

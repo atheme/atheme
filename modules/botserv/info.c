@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"botserv/info", false, _modinit, _moddeinit,
-	"$Id: info.c 7969 2009-04-08 19:19:38Z celestin $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://atheme.org/>"
 );
 

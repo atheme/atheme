@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", false, _modinit, _moddeinit,
-	"$Id: account.c 8389 2007-06-03 20:36:51Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", false, _modinit, _moddeinit,
-	"$Id: compare.c 7895 2007-03-06 02:40:03Z pippijn $",
+	PACKAGE_STRING,
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/sgline", false, _modinit, _moddeinit,
-	"$Id: sgline.c 8027 2007-04-02 10:47:18Z celestin $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", false, _modinit, _moddeinit,
-	"$Id: access.c 8239 2007-05-09 20:05:03Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

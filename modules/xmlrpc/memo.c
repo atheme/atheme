@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", false, _modinit, _moddeinit,
-	"$Id: memo.c 8391 2007-06-03 20:38:50Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

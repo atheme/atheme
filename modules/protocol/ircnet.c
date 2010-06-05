@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", true, _modinit, NULL, "$Id: ircnet.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

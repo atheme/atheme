@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"botserv/bottalk", false, _modinit, _moddeinit,
-	"$Id: bottalk.c 7969 2009-04-08 19:19:38Z celestin $",
+	PACKAGE_STRING,
 	"Rizon Development Group <http://dev.rizon.net>"
 );
 

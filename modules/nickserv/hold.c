@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", false, _modinit, _moddeinit,
-	"$Id: hold.c 8317 2007-05-24 20:02:59Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"hostserv/offer", false, _modinit, _moddeinit,
-	"$Id: offer.c 8195 2007-04-25 16:27:08Z jdhore $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.net>"
 );
 

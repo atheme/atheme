@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", false, _modinit, _moddeinit,
-	"$Id: help.c 8417 2007-06-08 00:48:04Z nenolod $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

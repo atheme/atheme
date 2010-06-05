@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"hostserv/group", false, _modinit, _moddeinit,
-	"$Id: group.c 8195 2007-04-25 16:27:08Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

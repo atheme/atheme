@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", false, _modinit, _moddeinit,
-	"$Id: halfop.c 8251 2007-05-12 21:10:06Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

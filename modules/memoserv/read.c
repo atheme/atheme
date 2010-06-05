@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", false, _modinit, _moddeinit,
-	"$Id: read.c 8331 2007-05-27 14:13:44Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

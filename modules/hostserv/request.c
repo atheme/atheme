@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"hostserv/request", false, _modinit, _moddeinit,
-	"$Id: request.c 8195 2007-04-25 16:27:08Z celestin $",
+	PACKAGE_STRING,
 	"Rizon Development Group <http://www.rizon.net>"
 );
 

@@ -18,7 +18,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",false, _modinit, _moddeinit,
-	"$Id: enforce.c 8375 2007-06-03 20:03:26Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

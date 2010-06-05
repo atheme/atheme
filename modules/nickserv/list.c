@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", false, _modinit, _moddeinit,
-	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

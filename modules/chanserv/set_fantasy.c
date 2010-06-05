@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set_fantasy", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/kill", false, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 7785 2007-03-03 15:54:32Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

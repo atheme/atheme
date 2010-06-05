@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/rps", false, _modinit, _moddeinit,
-	"$Id: rps.c 8339 2007-05-29 22:13:10Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

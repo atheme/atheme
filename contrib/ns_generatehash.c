@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/generatehash", false, _modinit, _moddeinit,
-	"$Id: ns_generatehash.c 7785 2007-03-03 15:54:32Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme development group"
 );
 

@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/mixin_nohalfops", true, _modinit, _moddeinit,
-	"$Id: ircd_nohalfops.c 7785 2007-03-03 15:54:32Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

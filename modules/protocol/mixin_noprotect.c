@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/mixin_noprotect", true, _modinit, _moddeinit,
-	"$Id: ircd_noprotect.c 7785 2007-03-03 15:54:32Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

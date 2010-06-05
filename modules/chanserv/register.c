@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", false, _modinit, _moddeinit,
-	"$Id: register.c 8425 2007-06-09 21:15:26Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

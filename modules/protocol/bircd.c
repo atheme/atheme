@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", true, _modinit, NULL, "$Id: bircd.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", true, _modinit, NULL, PACKAGE_VERSION, "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

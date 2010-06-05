@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", false, _modinit, _moddeinit,
-	"$Id: recover.c 8257 2007-05-13 14:09:51Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

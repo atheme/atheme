@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/namegen", false, _modinit, _moddeinit,
-	"$Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

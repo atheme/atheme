@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"botserv/main", false, _modinit, _moddeinit,
-	"$Id: main.c 7895 2009-01-24 02:40:03Z celestin $",
+	PACKAGE_STRING,
 	"Rizon Development Group <http://www.atheme.org>"
 );
 

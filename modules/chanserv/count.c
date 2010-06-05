@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", false, _modinit, _moddeinit,
-	"$Id: count.c 7929 2007-03-08 18:50:21Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

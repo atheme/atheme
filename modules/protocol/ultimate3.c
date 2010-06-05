@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", true, _modinit, NULL, "$Id: ultimate3.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

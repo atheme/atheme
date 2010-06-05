@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/mlocktweaker", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"William Pitcock <nenolod@atheme.org>"
 );
 
