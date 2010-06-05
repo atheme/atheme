@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logstream", false, _modinit, _moddeinit,
-	"$Id: os_logstream.c 8163 2007-04-07 00:28:09Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

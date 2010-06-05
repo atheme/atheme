@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/setpass", false, _modinit, _moddeinit,
-	"$Id: setpass.c 7947 2007-03-15 18:47:51Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

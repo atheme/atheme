@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/info", false, _modinit, _moddeinit,
-	"$Id: info.c 7895 2010-04-17 02:40:03Z jdhore $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

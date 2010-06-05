@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/klinechan", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Jilles Tjoelker <http://www.stack.nl/~jilles/irc/>"
 );
 

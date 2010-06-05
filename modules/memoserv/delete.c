@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", false, _modinit, _moddeinit,
-	"$Id: delete.c 8329 2007-05-27 13:31:59Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

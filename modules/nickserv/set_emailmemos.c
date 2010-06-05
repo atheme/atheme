@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set_emailmemos", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

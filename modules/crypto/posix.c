@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"crypto/posix", false, _modinit, _moddeinit,
-	"$Id: posix.c 7779 2007-03-03 13:55:42Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", false, _modinit, _moddeinit,
-	"$Id: set.c 8027 2007-04-02 10:47:18Z nenolod $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

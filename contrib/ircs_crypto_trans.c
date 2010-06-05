@@ -118,7 +118,7 @@ static int check_password(const char *plaintext, const char *password)
 DECLARE_MODULE_V1
 (
 	"crypto/ircservices", false, _modinit, _moddeinit,
-	"$Id: ircservices.c 7877 2007-03-06 01:43:05Z pippijn $",
+	PACKAGE_STRING,
 	"Jilles Tjoelker <jilles@stack.nl>"
 );
 

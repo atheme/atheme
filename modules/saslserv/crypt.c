@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", false, _modinit, _moddeinit,
-	"$Id: crypt.c 7981 2007-03-25 15:17:17Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

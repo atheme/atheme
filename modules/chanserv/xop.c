@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", false, _modinit, _moddeinit,
-	"$Id: xop.c 8309 2007-05-22 20:37:44Z nenolod $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", false, _modinit, _moddeinit,
-	"$Id: drop.c 8321 2007-05-24 20:10:59Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

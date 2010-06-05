@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/restart", false, _modinit, _moddeinit,
-	"$Id: restart.c 7855 2007-03-06 00:43:08Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

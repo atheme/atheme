@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", false, _modinit, _moddeinit,
-	"$Id: main.c 7877 2007-03-06 01:43:05Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

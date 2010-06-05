@@ -10,7 +10,7 @@
 DECLARE_MODULE_V1
 (
 	"crypto/sorservices", false, _modinit, _moddeinit,
-	"$Id: sorservices.c 7779 2007-03-03 13:55:42Z pippijn $",
+	PACKAGE_STRING,
 	"OpenServices devel team, http://openservices.sorcery.net"
 );
 

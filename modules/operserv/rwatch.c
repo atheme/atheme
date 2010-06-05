@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", false, _modinit, _moddeinit,
-	"$Id: rwatch.c 7959 2007-03-20 12:25:45Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

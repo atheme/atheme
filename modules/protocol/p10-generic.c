@@ -13,7 +13,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("protocol/p10-generic", true, _modinit, NULL, "$Id: p10.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/p10-generic", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 static void check_hidehost(user_t *u);
 

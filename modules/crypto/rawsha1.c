@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"crypto/rawsha1", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

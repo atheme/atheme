@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/version", false, _modinit, _moddeinit,
-	"$Id: version.c 7855 2007-03-06 00:43:08Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

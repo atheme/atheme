@@ -11,7 +11,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/cert", false, _modinit, _moddeinit,
-	"$Id: cert.c 8239 2010-02-09 04:40:03E jdhore $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

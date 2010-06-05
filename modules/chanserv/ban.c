@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", false, _modinit, _moddeinit,
-	"$Id: ban.c 7969 2007-03-23 19:19:38Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

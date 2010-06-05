@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", false, _modinit, _moddeinit,
-	"$Id: inject.c 7877 2007-03-06 01:43:05Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

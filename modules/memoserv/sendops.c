@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/sendops", false, _modinit, _moddeinit,
-	"$Id: sendops.c 8375 2007-06-03 20:03:26Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

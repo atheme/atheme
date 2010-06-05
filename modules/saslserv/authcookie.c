@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/authcookie", false, _modinit, _moddeinit,
-	"$Id: authcookie.c 2010 JBeshir $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

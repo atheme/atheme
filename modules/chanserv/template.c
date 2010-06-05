@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", false, _modinit, _moddeinit,
-	"$Id: template.c 8319 2007-05-24 20:09:37Z jilles $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -4,7 +4,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modreload", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);

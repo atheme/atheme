@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", false, _modinit, _moddeinit,
-	"$Id: register.c 8279 2007-05-20 06:47:41Z nenolod $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

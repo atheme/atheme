@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", false, _modinit, _moddeinit,
-	"$Id: return.c 7895 2007-03-06 02:40:03Z pippijn $",
+	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

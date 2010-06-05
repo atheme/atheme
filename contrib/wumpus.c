@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/wumpus", false, _modinit, _moddeinit,
-	"$Id$",
+	PACKAGE_STRING,
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
