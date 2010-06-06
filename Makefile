@@ -6,7 +6,7 @@ CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h
 	@if [ -d .hg ] ; then \
-		revh=`hg tip --template '#define SERNO "#rev#:#node|short#"\n' 2>/dev/null`;\
+		revh=`hg parent --template '#define SERNO "{rev}:{node|short}"\n' 2>/dev/null`;\
 		[ -z "$$revh" ] || echo "$$revh" >include/serno.h ; \
 	fi
 
@@ -20,7 +20,7 @@ dist:
 		echo "make dist only works from a mercurial tree"; \
 		false; \
 	fi
-	hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h
+	hg parent --template '#define SERNO "{rev}:{node|short}"\n' >include/serno.h
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
