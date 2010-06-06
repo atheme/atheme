@@ -61,9 +61,12 @@ while [ $ok -eq 0 ] ; do
   if read INPUT ; then : ; else echo "" ; exit 1 ; fi
   if [ ! "$INPUT" ] ; then
     INPUT=$PREFIX
-    ok=1
-  else
-    ok=1
+  fi
+  ok=1
+  if [ -r "$INPUT/src/atheme.c" ]; then
+    echo "That looks like an Atheme source directory."
+    echo "Please choose another."
+    ok=0
   fi
 done
 PREFIX=$INPUT
