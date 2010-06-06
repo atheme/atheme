@@ -5,10 +5,15 @@ SUBDIRS=$(LIBMOWGLI) modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h
-	@if [ -d .hg ] ; then \
-		revh=`hg parent --template '#define SERNO "{rev}:{node|short}"\n' 2>/dev/null`;\
-		[ -z "$$revh" ] || echo "$$revh" >include/serno.h ; \
-	fi
+	@revh=; \
+	if [ -d .hg ]; then \
+		revh=`hg parent --template '{rev}:{node|short}' 2>/dev/null` || :; \
+	fi; \
+	if [ -z "$$revh" ] && [ ! -r include/serno.h ]; then \
+		revh=`sed -ne 's/^node: \(............\).*/\1/p' .hg_archival.txt 2>/dev/null` || :; \
+		[ -n "$$revh" ] || revh=unknown; \
+	fi; \
+	[ -z "$$revh" ] || echo "#define SERNO \"$$revh\"" >include/serno.h
 
 install-extra:
 	@echo "----------------------------------------------------------------"
