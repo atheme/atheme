@@ -745,7 +745,7 @@ uplink "irc.example.net" {
 	password = "linkage";
 
 	// port
-	// The port used for linking.
+	// The port to connect to.
 	port = 6667;
 };
 
