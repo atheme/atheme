@@ -769,8 +769,12 @@ char *xmlrpc_normalizeBuffer(const char *buf)
 			  break;
 			  /* A valid char gets copied into the new buffer */
 		  default:
-			  newbuf[j] = buf[i];
-			  j++;
+			  /* All valid <32 characters are handled above. */
+			  if (buf[i] > 31)
+			  {
+				newbuf[j] = buf[i];
+				j++;
+			  }
 		}
 	}
 
