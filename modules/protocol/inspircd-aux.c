@@ -1040,8 +1040,8 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	if (si->s == NULL)
 	{
 		sts(":%s BURST", me.numeric);
-		sts(":%s VERSION :atheme-%s. %s %s",
-				me.name, PACKAGE_VERSION, me.numeric, get_conf_opts());
+		sts(":%s VERSION :%s. %s %s",
+				me.name, PACKAGE_STRING, me.numeric, get_conf_opts());
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}

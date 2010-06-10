@@ -49,8 +49,8 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "atheme-%s. %s %s :%s [%s]",
-		    PACKAGE_VERSION, me.name, revision, get_conf_opts(), ircd->ircdname);
+	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s]",
+		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname);
 }
 
 void handle_admin(user_t *u)
@@ -64,7 +64,7 @@ void handle_admin(user_t *u)
 
 	numeric_sts(me.me, 256, u, ":Administrative info about %s", me.name);
 	numeric_sts(me.me, 257, u, ":%s", me.adminname);
-	numeric_sts(me.me, 258, u, ":Atheme IRC Services (atheme-%s)", PACKAGE_VERSION);
+	numeric_sts(me.me, 258, u, ":Atheme IRC Services (%s)", PACKAGE_STRING);
 	numeric_sts(me.me, 259, u, ":<%s>", me.adminemail);
 }
 
