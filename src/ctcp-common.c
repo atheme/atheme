@@ -41,8 +41,8 @@ static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick
 static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsnick)
 {
 	notice(svsnick, origin,
-		"\001VERSION atheme-%s. %s %s %s [%s]\001",
-		PACKAGE_VERSION, revision, me.name, get_conf_opts(), ircd->ircdname);
+		"\001VERSION %s. %s %s %s [%s]\001",
+		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname);
 }
 
 static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)

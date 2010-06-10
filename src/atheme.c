@@ -75,7 +75,7 @@ static void print_version(void)
 {
 	int i;
 
-	printf("Atheme IRC Services (atheme-%s), build-id %s\n", PACKAGE_VERSION, revision);
+	printf("Atheme IRC Services (%s), build-id %s\n", PACKAGE_STRING, revision);
 
 	for (i = 0; infotext[i] != NULL; i++)
 		printf("%s\n", infotext[i]);
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 	log_open();
 	mowgli_log_set_cb(process_mowgli_log);
 
-	printf("atheme: version atheme-%s\n", PACKAGE_VERSION);
+	printf("atheme: version %s\n", PACKAGE_STRING);
 
 	/* check for pid file */
 	if ((pid_file = fopen(pidfilename, "r")))
