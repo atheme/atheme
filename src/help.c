@@ -47,6 +47,15 @@ static helpentry_t *help_cmd_find(sourceinfo_t *si, const char *cmd, list_t *lis
 	}
 
 	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), cmd);
+
+	/* Fun for helpchan/helpurl. */
+	if (config_options.helpchan && config_options.helpurl)
+		command_fail(si, fault_nosuch_target, _("If you're having trouble, you may want to join the help channel %s or visit the help webpage %s"), config_options.helpchan, config_options.helpurl);
+	else if (config_options.helpchan && !config_options.helpurl)
+		command_fail(si, fault_nosuch_target, _("If you're having trouble, you may want to join the help channel %s"), config_options.helpchan);
+	else if (!config_options.helpchan && config_options.helpurl)
+		command_fail(si, fault_nosuch_target, _("If you're having trouble, you may want to visit the help webpage %s"), config_options.helpurl);
+
 	return NULL;
 }
 

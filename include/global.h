@@ -69,6 +69,9 @@ struct ConfOption
 {
   char *chan;                   /* channel we join/msg        */
 
+  char *helpchan;		/* official help channel    */
+  char *helpurl;		/* official help URL	    */
+
   unsigned int flood_msgs;          /* messages determining flood */
   unsigned int flood_time;          /* time determining flood     */
   unsigned int kline_time;          /* default expire for klines  */

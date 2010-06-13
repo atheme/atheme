@@ -1313,6 +1313,19 @@ logfile "#services" { error; info; admin; request; register; };
 
 /* The general {} block defines general configuration options. */
 general {
+
+	/* (*)helpchan
+	 * Network help channel. Shown to users when they request
+	 * help for a command that doesn't exist.
+	 */
+	#helpchan = "#help";
+
+	/* (*)helpurl
+	 * Network webpage for services help. Shown to users when they
+	 * request help for a command that doesn't exist.
+	 */
+	#helpurl = "http://www.stack.nl/~jilles/irc/atheme-help/";
+
 	/* (*)silent
 	 * If you want to prevent services from sending
 	 * WALLOPS/GLOBOPS about things uncomment this.

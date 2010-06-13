@@ -172,6 +172,10 @@ void conf_init(void)
 		free(me.mta);
 	if (config_options.chan)
 		free(config_options.chan);
+	if (config_options.helpchan)
+		free(config_options.helpchan);
+	if (config_options.helpurl)
+		free(config_options.helpurl);
 	if (config_options.global)
 		free(config_options.global);
 	if (config_options.languagefile)
@@ -179,8 +183,8 @@ void conf_init(void)
 	if (config_options.language)
 		free(config_options.language);
 
-	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = config_options.chan = 
-		config_options.global = config_options.languagefile = NULL;
+	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = config_options.chan = config_options.helpchan =
+		config_options.helpurl = config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
 		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.default_clone_limit = 0;
@@ -273,6 +277,8 @@ void init_newconf(void)
 
 	/* general{} block */
 	add_dupstr_conf_item("CHAN", &conf_gi_table, &config_options.chan);
+	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, &config_options.helpchan);
+	add_dupstr_conf_item("HELPURL", &conf_gi_table, &config_options.helpurl);
 	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, &config_options.verbose_wallops);
 	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, &config_options.allow_taint);
 	add_bool_conf_item("SILENT", &conf_gi_table, &config_options.silent);
