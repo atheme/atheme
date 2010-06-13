@@ -555,12 +555,18 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 {
 	if (duration == 0)
 	{
-		/* remove SVSHOLD */
-		sts(":%s SVSHOLD %s", source->nick, nick);
+		if (has_svshold)
+			/* remove SVSHOLD */
+			sts(":%s SVSHOLD %s", source->nick, nick);
+		else
+			sts(":%s QLINE %s", opersvs.me->me->uid, nick);
 	}
 	else
 	{
-		sts(":%s SVSHOLD %s %ds :Registered nickname.", source->nick, nick, duration);
+		if (has_svshold)
+			sts(":%s SVSHOLD %s %ds :Registered nickname.", source->nick, nick, duration);
+		else
+			sts(":%s ADDLINE Q %s %s %lu %d :%s", me.numeric, nick, opersvs.nick, (unsigned long)CURRTIME, duration, "Nickname Enforcer");
 	}
 }
 
