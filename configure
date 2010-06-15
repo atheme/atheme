@@ -624,6 +624,8 @@ LDAP_LIBS
 LDAP_CFLAGS
 CRACKLIB_C
 POSIX_CRYPTC
+PROG_IMPLIB_LDFLAGS
+PROG_IMPLIB_NEEDED
 CLEAN_LIB
 UNINSTALL_LIB
 INSTALL_LIB
@@ -6550,6 +6552,28 @@ $as_echo "GNU" >&6; }
 
 
 
+
+
+
+
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we need an implib" >&5
+$as_echo_n "checking whether we need an implib... " >&6; }
+	case "$host_os" in
+		cygwin* | mingw*)
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			PROG_IMPLIB_NEEDED='yes'
+			PROG_IMPLIB_LDFLAGS='-Wl,-export-all-symbols,--out-implib,lib${PROG}.a'
+			;;
+		*)
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+			PROG_IMPLIB_NEEDED='no'
+			PROG_IMPLIB_LDFLAGS=''
+			;;
+	esac
 
 
 
