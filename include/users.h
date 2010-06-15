@@ -15,6 +15,7 @@ struct user_
 	char user[USERLEN];
 	char host[HOSTLEN]; /* Real host */
 	char gecos[GECOSLEN];
+	char chost[HOSTLEN]; /* Cloaked host */
 	char vhost[HOSTLEN]; /* Visible host */
 	char uid[IDLEN]; /* Used for TS6, P10, IRCNet ircd. */
 	char ip[HOSTIPLEN];

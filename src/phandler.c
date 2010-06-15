@@ -261,10 +261,12 @@ node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fir
 	chanban_t *cb;
 	node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char cloakbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(cloakbuf, sizeof cloakbuf, "%s!%s@%s", u->nick, u->user, u->chost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
@@ -273,7 +275,7 @@ node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fir
 		cb = n->data;
 
 		if (cb->type == type &&
-				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(cb->mask, ipbuf))))
+				(!match(cb->mask, hostbuf) || !match(cb->mask, cloakbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(cb->mask, ipbuf))))
 			return n;
 	}
 	return NULL;
@@ -284,9 +286,11 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 	chanacs_t *ca;
 	node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char hostbuf2[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(hostbuf2, sizeof hostbuf2, "%s!%s@%s", u->nick, u->user, u->chost);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
@@ -296,7 +300,7 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 
 		if (ca->myuser != NULL)
 		       continue;
-		if (!match(ca->host, hostbuf) || !match(ca->host, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(ca->host, ipbuf)))
+		if (!match(ca->host, hostbuf) || !match(ca->host, hostbuf2) || !match(ca->host, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(ca->host, ipbuf)))
 			return n;
 	}
 	return NULL;

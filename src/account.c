@@ -484,6 +484,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	char buf[USERLEN+HOSTLEN];
 	char buf2[USERLEN+HOSTLEN];
 	char buf3[USERLEN+HOSTLEN];
+	char buf4[USERLEN+HOSTLEN];
 
 	if (u == NULL || mu == NULL)
 	{
@@ -500,12 +501,13 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	snprintf(buf, sizeof buf, "%s@%s", u->user, u->vhost);
 	snprintf(buf2, sizeof buf2, "%s@%s", u->user, u->host);
 	snprintf(buf3, sizeof buf3, "%s@%s", u->user, u->ip);
+	snprintf(buf4, sizeof buf4, "%s@%s", u->user, u->chost);
 
 	LIST_FOREACH(n, mu->access_list.head)
 	{
 		char *entry = (char *) n->data;
 
-		if (!match(entry, buf) || !match(entry, buf2) || !match(entry, buf3) || !match_cidr(entry, buf3))
+		if (!match(entry, buf) || !match(entry, buf2) || !match(entry, buf3) || !match(entry, buf4) || !match_cidr(entry, buf3))
 			return true;
 	}
 

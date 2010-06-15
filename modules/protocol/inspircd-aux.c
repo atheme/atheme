@@ -946,6 +946,42 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
+static void inspircd_user_mode(user_t *u, const char *modes)
+{
+	int dir;
+	const char *p;
+
+	return_if_fail(u != NULL);
+
+	user_mode(u, modes);
+	dir = 0;
+	for (p = modes; *p; ++p)
+		switch (*p)
+		{
+			case '-':
+				dir = MTYPE_DEL;
+				break;
+			case '+':
+				dir = MTYPE_ADD;
+				break;
+			case 'x':
+				/* If +x is set then the users vhost is set to their cloaked host
+				 * Note that -x etc works OK here, InspIRCd is nice enough to tell us
+				 * everytime a users host changes. - Adam
+				 */
+				if (dir == MTYPE_ADD)
+				{
+					/* It is possible for the users vhost to not be their cloaked host after +x.
+					 * This only occurs when a user is introduced after a netmerge with their
+					 * vhost instead of their cloaked host. - Adam
+					 */
+					if (strcmp(u->vhost, u->chost))
+						strlcpy(u->chost, u->vhost, HOSTLEN);
+				}
+				break;
+		}
+}
+
 static void m_saquit(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
@@ -961,7 +997,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
-		user_mode(user_find(parv[0]), parv[1]);
+		inspircd_user_mode(user_find(parv[0]), parv[1]);
 }
 
 static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
@@ -988,7 +1024,7 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 		channel_mode(NULL, c, parc - 2, &parv[2]);
 	}
 	else
-		user_mode(user_find(parv[0]), parv[2]);
+		inspircd_user_mode(user_find(parv[0]), parv[2]);
 }
 
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])

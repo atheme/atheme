@@ -162,6 +162,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	strlcpy(u->user, user, USERLEN);
 	strlcpy(u->host, host, HOSTLEN);
 	strlcpy(u->gecos, gecos, GECOSLEN);
+	strlcpy(u->chost, vhost ? vhost : host, HOSTLEN);
 	strlcpy(u->vhost, vhost ? vhost : host, HOSTLEN);
 
 	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))

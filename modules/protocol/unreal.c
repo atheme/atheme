@@ -812,16 +812,26 @@ static void unreal_user_mode(user_t *u, const char *changes)
 	if (u == NULL)
 		return;
 	user_mode(u, changes);
-	dir = MTYPE_ADD;
+	dir = 0;
 	for (p = changes; *p != '\0'; p++)
 		switch (*p)
 		{
 			case '-': dir = MTYPE_DEL; break;
 			case '+': dir = MTYPE_ADD; break;
 			case 'x':
-				  if (dir == MTYPE_DEL)
-					  strlcpy(u->vhost, u->host, HOSTLEN);
-				  break;
+				/* If +x is set then the users vhost is set to their cloaked host - Adam */
+				if (dir == MTYPE_ADD)
+				{
+					/* It is possible for the users vhost to not be their cloaked host after +x.
+					 * This only occurs when a user is introduced after a netmerge with their
+					 * vhost instead of their cloaked host. - Adam
+					 */
+					if (strcmp(u->vhost, u->chost))
+						strlcpy(u->chost, u->vhost, HOSTLEN);
+				}
+				else if (dir == MTYPE_DEL)
+					strlcpy(u->vhost, u->host, HOSTLEN);
+				break;
 		}
 }
 
