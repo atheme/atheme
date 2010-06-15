@@ -18,7 +18,7 @@
  */
 static inline channel_t *channel_find(const char *name)
 {
-	return mowgli_patricia_retrieve(chanlist, name);
+	return name ? mowgli_patricia_retrieve(chanlist, name) : NULL;
 }
 
 /*
