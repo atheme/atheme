@@ -78,6 +78,7 @@ AC_CHECK_HEADERS(link.h,,,[-])
 
 dnl Buildsys module stuff
 BUILDSYS_SHARED_LIB
+BUILDSYS_PROG_IMPLIB
 LIBS="$LIBS $DYNAMIC_LD_LIBS"
 
 dnl Checks for library functions.
