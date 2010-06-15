@@ -139,7 +139,7 @@ char *replace(char *s, int size, const char *old, const char *new)
 char *itoa(int num)
 {
 	static char ret[32];
-	sprintf(ret, "%d", num);
+	snprintf(ret, 32, "%d", num);
 	return ret;
 }
 
@@ -490,7 +490,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		strlcat(subject, "New memo", sizeof subject);
 	
 	/* now set up the email */
-	sprintf(cmdbuf, "%s %s", me.mta, email);
+	snprintf(cmdbuf, 512, "%s %s", me.mta, email);
 	if (pipe(pipfds) < 0)
 		return 0;
 	switch (pid = fork())
