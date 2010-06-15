@@ -57,7 +57,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	len -= strlen(message) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
-	strcpy(auth, message);
+	strlcpy(auth, message, 256);
 	message += strlen(message) + 1;
 
 	/* Copy the password */
