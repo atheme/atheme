@@ -97,6 +97,22 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		{
 			node_t *n;
 			chanacs_t *ca;
+	
+			/* Duplicates the check below. We check below for user
+			 * convenience, but we need to check here as well to
+			 * avoid a verify/use bug that can cause us to make the
+			 * access list too big. */
+			if (!chanacs_find(mc, tmu, 0))
+			{
+				ca = chanacs_open(mc, tmu, NULL, true);
+				if (ca->level == 0 && chanacs_is_table_full(ca))
+				{
+					command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+					chanacs_close(ca);
+					return;
+				}
+				chanacs_close(ca);
+			}
 
 			if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
