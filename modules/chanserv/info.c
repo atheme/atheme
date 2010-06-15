@@ -208,9 +208,14 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			strcat(buf, " ");
 
 		strcat(buf, "GUARD");
+	}
 
-		if (chansvs.fantasy && !metadata_find(mc, "disable_fantasy"))
-			strcat(buf, " FANTASY");
+	if (chansvs.fantasy && !metadata_find(mc, "disable_fantasy"))
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, " FANTASY");
 	}
 
 	if (use_channel_private && MC_PRIVATE & mc->flags)
