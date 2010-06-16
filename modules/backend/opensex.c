@@ -25,7 +25,7 @@ unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 /* write atheme.db (core fields) */
 static void
-flatfile_db_save(database_handle_t *db)
+opensex_db_save(database_handle_t *db)
 {
 	myuser_t *mu;
 	myuser_name_t *mun;
@@ -47,11 +47,11 @@ flatfile_db_save(database_handle_t *db)
 	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 	/* write the database version */
-	db_begin_row(db, "DBV");
+	db_start_row(db, "DBV");
 	db_write_int(db, 7);
 	db_commit_row(db);
 
-	db_begin_row(db, "CF");
+	db_start_row(db, "CF");
 	db_write_word(db, bitmask_to_flags(ca_all, chanacs_flags));
 	db_commit_row(db);
 
@@ -64,7 +64,7 @@ flatfile_db_save(database_handle_t *db)
 		 *
 		 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 		 */
-		db_begin_row(db, "MU");
+		db_start_row(db, "MU");
 		db_write(db, "%s", mu->name, "%s", mu->pass, "%s", mu->email, "%ld", mu->registered, "%ld", mu->lastlogin, "%ld",
 			 LIST_LENGTH(&mu->logins) > 0 ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags,
 			 "%s", language_get_name(mu->language), NULL);
@@ -76,8 +76,8 @@ flatfile_db_save(database_handle_t *db)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
-			db_begin_row(db, "MD");
-			db_write(db, "%s", U, "%s", mu->name, "%s", md->name, "%s", md->value, NULL);
+			db_start_row(db, "MDU");
+			db_write(db, "%s", mu->name, "%s", md->name, "%s", md->value, NULL);
 			db_commit_row(db);
 		}
 
@@ -85,21 +85,21 @@ flatfile_db_save(database_handle_t *db)
 		{
 			mymemo_t *mz = (mymemo_t *)tn->data;
 
-			db_begin_row(db, "ME");
+			db_start_row(db, "ME");
 			db_write(db, "%s", mu->name, "%s", mz->sender, "%lu", mz->sent, "%lu", mz->status, "%s", mz->text, NULL);
 			db_commit_row(db);
 		}
 
 		LIST_FOREACH(tn, mu->memo_ignores.head)
 		{
-			db_begin_row(db, "MI");
+			db_start_row(db, "MI");
 			db_write(db, "%s", mu->name, "%s", (char *) tn->data, NULL);
 			db_commit_row(db);
 		}
 
 		LIST_FOREACH(tn, mu->access_list.head)
 		{
-			db_begin_row(db, "AC");
+			db_start_row(db, "AC");
 			db_write(db, "%s", mu->name, "%s", (char *) tn->data, NULL);
 			db_commit_row(db);
 		}
@@ -108,7 +108,7 @@ flatfile_db_save(database_handle_t *db)
 		{
 			mynick_t *mn = tn->data;
 
-			db_begin_row(db, "MN");
+			db_start_row(db, "MN");
 			db_write(db, "%s", mu->name, "%s", mn->nick, "%ld", mn->registered, "%ld", mn->lastseen, NULL);
 			db_commit_row(db);
 		}
@@ -117,7 +117,7 @@ flatfile_db_save(database_handle_t *db)
 		{
 			mycertfp_t *mcfp = tn->data;
 
-			db_begin_row(db, "MCFP");
+			db_start_row(db, "MCFP");
 			db_write(db, "%s", mu->name, "%s", mcfp->certfp, NULL);
 			db_commit_row(db);
 		}
@@ -142,9 +142,9 @@ flatfile_db_save(database_handle_t *db)
 		 * <mlock_on> <mlock_off> <mlock_limit> [mlock_key]
 		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
 		 */
-		db_begin_row(db, "MC");
+		db_start_row(db, "MC");
 		db_write(db, "%s", mc->name, "%s", mu != NULL ? mu->name : "*", "%ld", mc->registered, "%ld", mc->used,
-			 "%d", mc->flags, "%d", mc->mlock_on, "%d", mc->mlock_off, "%d", mlock_limit, "%s", mc->mlock_key ? mc->mlock_key : "", NULL);
+			 "%d", mc->flags, "%d", mc->mlock_on, "%d", mc->mlock_off, "%d", mc->mlock_limit, "%s", mc->mlock_key ? mc->mlock_key : "", NULL);
 		db_commit_row(db);
 		mcout++;
 
@@ -152,15 +152,21 @@ flatfile_db_save(database_handle_t *db)
 		{
 			ca = (chanacs_t *)tn->data;
 
-			fprintf(f, "CA %s %s %s %ld\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
-					bitmask_to_flags(ca->level, chanacs_flags), (long)ca->tmodified);
+			db_start_row(db, "CA");
+			db_write(db, "%s", ca->mychan->name, "%s", ca->myuser ? ca->myuser->name : ca->host,
+					"%s", bitmask_to_flags(ca->level, chanacs_flags), "%ld", (long)ca->tmodified, NULL);
+			db_commit_row(db);
 
 			LIST_FOREACH(tn2, object(ca)->metadata.head)
 			{
+				char buf[BUFSIZE];
 				metadata_t *md = (metadata_t *)tn2->data;
 
-				fprintf(f, "MD A %s:%s %s %s\n", ca->mychan->name,
-					(ca->myuser) ? ca->myuser->name : ca->host, md->name, md->value);
+				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->myuser) ? ca->myuser->name : ca->host);
+
+				db_start_row(db, "MDA");
+				db_write(db, "%s", buf, "%s", md->name, "%s", md->value, NULL);
+				db_commit_row(db);
 			}
 
 			caout++;
@@ -170,19 +176,26 @@ flatfile_db_save(database_handle_t *db)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
-			fprintf(f, "MD C %s %s %s\n", mc->name, md->name, md->value);
+			db_start_row(db, "MDC");
+			db_write(db, "%s", mc->name, "%s", md->name, "%s", md->value, NULL);
+			db_commit_row(db);
 		}
 	}
 
 	/* Old names */
 	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
-		fprintf(f, "NAM %s\n", mun->name);
+		db_start_row(db, "NAM");
+		db_write(db, "%s", mun->name, NULL);
+		db_commit_row(db);
+
 		LIST_FOREACH(tn, object(mun)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
-			fprintf(f, "MD N %s %s %s\n", mun->name, md->name, md->value);
+			db_start_row(db, "MDN");
+			db_write(db, "%s", mun->name, "%s", md->name, "%s", md->value, NULL);
+			db_commit_row(db);
 		}
 	}
 
@@ -194,7 +207,9 @@ flatfile_db_save(database_handle_t *db)
 		svsignore = (svsignore_t *)n->data;
 
 		/* SI <mask> <settime> <setby> <reason> */
-		fprintf(f, "SI %s %ld %s %s\n", svsignore->mask, (long)svsignore->settime, svsignore->setby, svsignore->reason);
+		db_start_row(db, "SI");
+		db_write(db, "%s", svsignore->mask, "%ld", (long)svsignore->settime, "%s", svsignore->setby, "%s", svsignore->reason, NULL);
+		db_commit_row(db);
 	}
 
 	/* Services operators */
@@ -208,15 +223,20 @@ flatfile_db_save(database_handle_t *db)
 			continue;
 
 		/* SO <account> <operclass> <flags> [password] */
+		db_start_row(db, "SO");
+		db_write(db, "%s", soper->myuser->name, "%s", soper->classname, "%d", soper->flags, NULL);
+
 		if (soper->password != NULL)
-			fprintf(f, "SO %s %s %d %s\n", soper->myuser->name, soper->classname, soper->flags, soper->password);
-		else
-			fprintf(f, "SO %s %s %d\n", soper->myuser->name, soper->classname, soper->flags);
+			db_write(db, "%s", soper->password, NULL);
+
+		db_commit_row(db);
 	}
 
 	slog(LG_DEBUG, "db_save(): saving klines");
 
-	fprintf(f, "KID %lu\n", me.kline_id);
+	db_start_row(db, "KID");
+	db_write(db, "%lu", me.kline_id, NULL);
+	db_commit_row(db);
 
 	LIST_FOREACH(n, klnlist.head)
 	{
@@ -230,7 +250,9 @@ flatfile_db_save(database_handle_t *db)
 
 	slog(LG_DEBUG, "db_save(): saving xlines");
 
-	fprintf(f, "XID %lu\n", me.xline_id);
+	db_start_row(db, "XID");
+	db_write(db, "%lu", me.xline_id, NULL);
+	db_commit_row(db);
 
 	LIST_FOREACH(n, xlnlist.head)
 	{
@@ -242,7 +264,9 @@ flatfile_db_save(database_handle_t *db)
 		xout++;
 	}
 
-	fprintf(f, "QID %lu\n", me.qline_id);
+	db_start_row(db, "QID");
+	db_write(db, "%lu", me.qline_id, NULL);
+	db_commit_row(db);
 
 	LIST_FOREACH(n, qlnlist.head)
 	{
@@ -255,41 +279,13 @@ flatfile_db_save(database_handle_t *db)
 	}
 
 	/* DE <muout> <mcout> <caout> <kout> <xout> <qout> */
-	fprintf(f, "DE %d %d %d %d %d %d\n", muout, mcout, caout, kout, xout, qout);
-
-	was_errored = ferror(f);
-	if (!was_errored)
-		was_errored = fflush(f);
-	/* fsync it before deleting the old */
-	if (!was_errored)
-		was_errored = fsync(fileno(f));
-	was_errored |= fclose(f);
-	if (was_errored)
-	{
-		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
-		return;
-	}
-
-	/* now, replace the old database with the new one, using an atomic rename */
-#ifdef _WIN32
-	unlink(DATADIR "/atheme.db" );
-#endif
-	
-	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
-	{
-		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
-		return;
-	}
-
-	hook_call_db_saved();
+	db_start_row(db, "DE");
+	db_write(db, "%d", muout, "%d", mcout, "%d", caout, "%d", kout, "%d", xout, "%d", qout, NULL);
+	db_commit_row(db);
 }
 
 /* loads atheme.db */
-static void flatfile_db_load(void)
+static void opensex_db_parse(database_handle_t *db)
 {
 	myuser_t *mu, *founder = NULL;
 	myuser_name_t *mun;
@@ -306,21 +302,7 @@ static void flatfile_db_load(void)
 	int c;
 	unsigned int their_ca_all = 0;
 
-	f = fopen(DATADIR "/atheme.db", "r");
-	if (f == NULL)
-	{
-		if (errno == ENOENT)
-		{
-			slog(LG_ERROR, "db_load(): %s does not exist, creating it", DATADIR "/atheme.db");
-			return;
-		}
-		else
-		{
-			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", DATADIR "/atheme.db", strerror(errno));
-			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
-			exit(1);
-		}
-	}
+	f = (FILE *) db->priv;
 
 	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
 
@@ -360,11 +342,13 @@ static void flatfile_db_load(void)
 		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
 			continue;
 
+		db_process(db, item);
+
 		/* database version */
 		if (!strcmp("DBV", item))
 		{
 			versn = atoi(strtok(NULL, " "));
-			if (versn > 6)
+			if (versn > 7)
 			{
 				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
 					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", versn);
@@ -418,9 +402,6 @@ static void flatfile_db_load(void)
 
 				registered = atoi(strtok(NULL, " "));
 				lastlogin = atoi(strtok(NULL, " "));
-				failnum = strtok(NULL, " ");
-				lastfailaddr = strtok(NULL, " ");
-				lastfailtime = strtok(NULL, " ");
 				flagstr = strtok(NULL, " ");
 				language = strtok(NULL, " ");
 
@@ -428,27 +409,6 @@ static void flatfile_db_load(void)
 
 				mu->registered = registered;
 				mu->lastlogin = lastlogin;
-
-				if (strcmp(failnum, "0"))
-					metadata_add(mu, "private:loginfail:failnum", failnum);
-				if (strcmp(lastfailaddr, "0"))
-					metadata_add(mu, "private:loginfail:lastfailaddr", lastfailaddr);
-				if (strcmp(lastfailtime, "0"))
-					metadata_add(mu, "private:loginfail:lastfailtime", lastfailtime);
-
-				/* Verification keys were moved to metadata,
-				 * but we'll still accept them from legacy
-				 * databases. Note that we only transfer over
-				 * initial registration keys -- I don't think
-				 * we saved mu->temp, so we can't transition
-				 * e-mail change keys anyway.     --alambert
-				 */
-				if ((s = strtok(NULL, " ")))
-				{
-					strip(s);
-					metadata_add(mu, "private:verify:register:key", s);
-					metadata_add(mu, "private:verify:register:timestamp", "0");
-				}
 
 				/* Create entries for languages in the db
 				 * even if we do not have catalogs for them.
@@ -1199,9 +1159,34 @@ opensex_db_close(database_handle_t *db)
 			slog(LG_ERROR, "db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
 			wallops(_("\2DATABASE ERROR\2: db_save(): cannot rename services.db.new to services.db: %s"), strerror(errno1));
 		}
+
+		hook_call_db_saved();
 	}
 
 	free(db);
+}
+
+void
+opensex_db_load(void)
+{
+	database_handle_t *db;
+
+	db = db_open(DB_READ);
+	opensex_db_parse(db);
+	db_close(db);
+}
+
+void
+opensex_db_write(void *arg)
+{
+	database_handle_t *db;
+
+	db = db_open(DB_WRITE);
+
+	opensex_db_save(db);
+	hook_call_db_write(db);
+
+	db_close(db);
 }
 
 database_module_t opensex_mod = {
@@ -1214,8 +1199,8 @@ void _modinit(module_t *m)
 	m->mflags = MODTYPE_CORE;
 
 	db_mod = &opensex_mod;
-	db_load = &flatfile_db_load;
-	db_save = &flatfile_db_save;
+	db_load = &opensex_db_load;
+	db_save = &opensex_db_write;
 
 	backend_loaded = true;
 }

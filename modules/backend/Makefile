@@ -12,6 +12,6 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-SRCS = flatfile.c
+SRCS = flatfile.c opensex.c
 
 CPPFLAGS	+= -I../../include
