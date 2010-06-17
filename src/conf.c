@@ -187,7 +187,7 @@ void conf_init(void)
 		config_options.helpurl = config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
-		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.default_clone_limit = 0;
+		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.clone_time = config_options.commit_interval = config_options.default_clone_limit = 0;
 
 	config_options.uplink_sendq_limit = 1048576;
 
@@ -291,6 +291,7 @@ void init_newconf(void)
 	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, &config_options.flood_msgs, 0, INT_MAX);
 	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, "s");
 	add_duration_conf_item("KLINE_TIME", &conf_gi_table, &config_options.kline_time, "d");
+	add_duration_conf_item("CLONE_TIME", &conf_gi_table, &config_options.clone_time, "m");
 	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, &config_options.commit_interval, "m");
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
 	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);

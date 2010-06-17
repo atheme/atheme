@@ -1425,6 +1425,12 @@ general {
 	 */
 	kline_time = 7;
 
+	/* (*)clone_time
+	 * This is the default expiry time for CLONE exemptions in minutes.
+	 * Setting this to 0 makes all CLONE exemptions permanent.
+	 */
+	clone_time = 0;
+
 	/* commit_interval
 	 * The time between database writes in minutes.
 	 */

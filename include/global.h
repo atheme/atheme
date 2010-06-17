@@ -75,6 +75,7 @@ struct ConfOption
   unsigned int flood_msgs;          /* messages determining flood */
   unsigned int flood_time;          /* time determining flood     */
   unsigned int kline_time;          /* default expire for klines  */
+  unsigned int clone_time;          /* default expire for clone exemptions */
   unsigned int commit_interval;     /* interval between commits   */
 
   bool silent;             /* stop sending WALLOPS?      */

@@ -48,6 +48,7 @@ struct cexcept_
 	char *ip;
 	unsigned int clones;
 	char *reason;
+	long expires;
 };
 
 typedef struct hostentry_ hostentry_t;
@@ -59,8 +60,14 @@ struct hostentry_
 	unsigned int lastaction_clones;
 };
 
+static inline bool cexempt_expired(cexcept_t *c)
+{
+	if (c && c->expires && CURRTIME > c->expires)
+		return true;
+	return false;
+}
 
-command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 4, os_cmd_clones };
+command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones };
 
 command_t os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline };
 command_t os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list };
@@ -157,7 +164,7 @@ void _moddeinit(void)
 static void write_exemptdb(void)
 {
 	FILE *f;
-	node_t *n;
+	node_t *n, *tn;
 	cexcept_t *c;
 	int was_errored;
 
@@ -169,10 +176,21 @@ static void write_exemptdb(void)
 
 	fprintf(f, "CK %d\n", kline_enabled ? 1 : 0);
 	fprintf(f, "CD %ld\n", kline_duration);
-	LIST_FOREACH(n, clone_exempts.head)
+	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		c = n->data;
-		fprintf(f, "EX %s %d %s\n", c->ip, c->clones, c->reason);
+		if (cexempt_expired(c))
+		{
+			free(c->ip);
+			free(c->reason);
+			free(c);
+			node_del(n, &clone_exempts);
+			node_free(n);
+		}
+		else
+		{
+			fprintf(f, "EX %s %d %ld %s\n", c->ip, c->clones, c->expires, c->reason);
+		}
 	}
 
 	was_errored = ferror(f);
@@ -198,7 +216,7 @@ static void write_exemptdb(void)
 static void load_exemptdb(void)
 {
 	FILE *f;
-	char *item, rBuf[BUFSIZE * 2], *p;
+	char *item, rBuf[BUFSIZE * 2];
 
 	if (!(f = fopen(DATADIR "/exempts.db", "r")))
 	{
@@ -221,20 +239,33 @@ static void load_exemptdb(void)
 		{
 			char *ip = strtok(NULL, " ");
 			int clones = atoi(strtok(NULL, " "));
+			char *expires = strtok(NULL, " ");
 			char *reason = strtok(NULL, "");
+			strip(expires);
+			strip(reason);
 
-			if (!ip || clones <= 0 || !reason)
+			if (!ip || clones <= 0 || !expires)
 				; /* erroneous, don't add */
 			else
 			{
+				char realreason[BUFSIZE];
+				/* Expires isn't a time, may be from an older database */
+				if (!isdigit(*expires))
+				{
+					if (reason)
+						snprintf(realreason, sizeof(realreason), "%s %s", expires, reason);
+					else
+						snprintf(realreason, sizeof(realreason), "%s", expires);
+				}
+				else
+					snprintf(realreason, sizeof(realreason), "%s", reason);
+
 				cexcept_t *c = (cexcept_t *)malloc(sizeof(cexcept_t));
 
 				c->ip = sstrdup(ip);
 				c->clones = clones;
-				p = strchr(reason, '\n');
-				if (p != NULL)
-					*p = '\0';
-				c->reason = sstrdup(reason);
+				c->expires = atol(expires);
+				c->reason = sstrdup(realreason);
 				node_add(c, node_create(), &clone_exempts);
 			}
 		}
@@ -368,13 +399,16 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	char *ip = parv[0];
 	char *clonesstr = parv[1];
 	int clones;
-	char *reason = parv[2];
+	char *expiry = parv[2];
+	char *reason = parv[3];
+	char rreason[BUFSIZE];
 	cexcept_t *c = NULL;
+	long duration;
 
 	if (!ip || !clonesstr)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-		command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
 		return;
 	}
 
@@ -383,6 +417,62 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_badparams, _("Allowed clones count must be more than %d"), DEFAULT_WARN_CLONES);
 		return;
+	}
+
+	if (expiry && !strcasecmp(expiry, "!P"))
+	{
+		duration = 0;
+		strlcpy(rreason, reason, BUFSIZE);
+	}
+	else if (expiry && !strcasecmp(expiry, "!T"))
+	{
+		reason = strchr(reason, ' ');
+		if (reason)
+			*reason++ = '\0';
+		expiry += 3;
+
+		if (expiry)
+		{
+			duration = (atol(expiry) * 60);
+			while (isdigit(*expiry))
+				++expiry;
+			if (*expiry == 'h' || *expiry == 'H')
+				duration *= 60;
+			else if (*expiry == 'd' || *expiry == 'D')
+				duration *= 1440;
+			else if (*expiry == 'w' || *expiry == 'W')
+				duration *= 10080;
+			else if (*expiry == '\0')
+				;
+			else
+				duration = 0;
+
+			if (duration == 0)
+			{
+				command_fail(si, fault_badparams, _("Invalid duration given."));
+				command_fail(si, fault_badparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
+				return;
+			}
+		}
+		else
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"));
+			return;
+		}
+
+		strlcpy(rreason, reason, BUFSIZE);
+	}
+	else
+	{
+		duration = config_options.clone_time;
+
+		strlcpy(rreason, expiry, BUFSIZE);
+		if (reason)
+		{
+			strlcat(rreason, " ", BUFSIZE);
+			strlcat(rreason, reason, BUFSIZE);
+		}
 	}
 
 	LIST_FOREACH(n, clone_exempts.head)
@@ -395,30 +485,31 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	if (c == NULL)
 	{
-		if (!reason)
+		if (!*rreason)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>"));
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
 			return;
 		}
 		c = smalloc(sizeof(cexcept_t));
 		c->ip = sstrdup(ip);
-		c->reason = sstrdup(reason);
+		c->reason = sstrdup(rreason);
 		node_add(c, node_create(), &clone_exempts);
 		command_success_nodata(si, _("Added \2%s\2 to clone exempt list."), ip);
 	}
 	else
 	{
-		if (reason)
+		if (*rreason)
 		{
 			free(c->reason);
-			c->reason = sstrdup(reason);
+			c->reason = sstrdup(rreason);
 		}
 		command_success_nodata(si, _("Updated \2%s\2 in clone exempt list."), ip);
 	}
 	c->clones = clones;
+	c->expires = duration ? (CURRTIME + duration) : 0;
 
-	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2)", ip, clones, c->reason);
+	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
 	write_exemptdb();
 }
 
@@ -434,7 +525,15 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 	{
 		cexcept_t *c = n->data;
 
-		if (!strcmp(c->ip, arg))
+		if (cexempt_expired(c))
+		{
+			free(c->ip);
+			free(c->reason);
+			free(c);
+			node_del(n, &clone_exempts);
+			node_free(n);
+		}
+		else if (!strcmp(c->ip, arg))
 		{
 			free(c->ip);
 			free(c->reason);
@@ -488,13 +587,24 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	node_t *n, *tn;
 
-	LIST_FOREACH(n, clone_exempts.head)
+	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
-		command_success_nodata(si, "%s (%d, %s)", c->ip, c->clones, c->reason);
+		if (cexempt_expired(c))
+		{
+			free(c->ip);
+			free(c->reason);
+			free(c);
+			node_del(n, &clone_exempts);
+			node_free(n);
+		}
+		else if (c->expires)
+			command_success_nodata(si, "%s - limit %d - expires in %s - \2%s\2", c->ip, c->clones, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
+		else
+			command_success_nodata(si, "%s - limit %d - \2permanent\2 - \2%s\2", c->ip, c->clones, c->reason);
 	}
 	command_success_nodata(si, _("End of CLONES LISTEXEMPT"));
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LISTEXEMPT");

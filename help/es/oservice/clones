@@ -26,7 +26,7 @@ Sintaxis: CLONES LIST
 Muestra todas las direcciones IP con más de 3 clientes
 con el número de clientes y si la IP es exenta o no.
 
-Sintaxis: CLONES ADDEXEMPT <ip> <clones> <razón>
+Sintaxis: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <razón>
 
 Agrega una IP a la lista de exención de clones. La
 dirección debe coincidir exactamente con la forma

@@ -28,7 +28,7 @@ Shows all IP addresses with more than 3 clients
 with the number of clients and whether the IP
 address is exempt.
 
-Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>
+Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>
 
 Adds an IP address to the clone exemption list.
 The IP address must match exactly with the form

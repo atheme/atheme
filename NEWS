@@ -21,6 +21,8 @@ nickserv
   the user or disallow them from registering with a configuration option.
 - added ns_generatehash contrib module to generate a password hash for
   a soper if you have crypto enabled.
+operserv
+- added expiry time to clone exempt
 code
 - replace the atheme-services build system with the ACBS used by many other 
   Atheme projects.
