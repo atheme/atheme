@@ -99,6 +99,7 @@ void test_patricia(void)
 	ADD("baz");
 	ADD("splork");
 	ADD("rabbit");
+	ADD("\1");
 	ADD("meow");
 	ADD("hi");
 	ADD("konnichiwa");

@@ -68,9 +68,6 @@ static mowgli_heap_t *elem_heap = NULL;
 struct mowgli_patricia_
 {
 	void (*canonize_cb)(char *key);
-	/* root node of the tree; this is a magic node with an
-	 * empty string as key
-	 */
 	mowgli_patricia_elem_t *root;
 	/* head and tail of linked list */
 	mowgli_patricia_elem_t *head, *tail;
@@ -118,15 +115,9 @@ mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key))
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_patricia_elem_t), 1024, BH_NOW);
 
-	/* Magic root node to reduce special cases. Not in the linked list. */
-	dtree->root = mowgli_heap_alloc(elem_heap);
-	dtree->root->bitnum = 0;
-	dtree->root->zero = dtree->root;
-	dtree->root->one = dtree->root;
-	dtree->root->next = NULL;
-	dtree->root->prev = NULL;
-	dtree->root->data = NULL;
-	dtree->root->key = strdup("");
+	dtree->root = NULL;
+	dtree->head = NULL;
+	dtree->tail = NULL;
 
 	return dtree;
 }
@@ -161,14 +152,9 @@ mowgli_patricia_t *mowgli_patricia_create_named(const char *name,
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_patricia_elem_t), 1024, BH_NOW);
 
-	dtree->root = mowgli_heap_alloc(elem_heap);
-	dtree->root->bitnum = 0;
-	dtree->root->zero = dtree->root;
-	dtree->root->one = dtree->root;
-	dtree->root->next = NULL;
-	dtree->root->prev = NULL;
-	dtree->root->data = NULL;
-	dtree->root->key = strdup("");
+	dtree->root = NULL;
+	dtree->head = NULL;
+	dtree->tail = NULL;
 
 	return dtree;
 }
@@ -211,10 +197,6 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
 		mowgli_free(n->key);
 		mowgli_heap_free(elem_heap, n);
 	}
-
-	/* Free magic root node. */
-	free(dtree->root->key);
-	mowgli_heap_free(elem_heap, dtree->root);
 
 	mowgli_free(dtree);
 }
@@ -417,6 +399,9 @@ static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, con
 	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
 
+	if (dict->root == NULL)
+		return NULL;
+
 	keylen = strlen(key);
 	if (keylen >= sizeof ckey_store)
 		ckey = strdup(key);
@@ -436,9 +421,9 @@ static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, con
 		else
 			bitval = 0;
 		delem = bitval ? delem->one : delem->zero;
-	} while (prev->bitnum < delem->bitnum);
+	} while (delem != NULL && prev->bitnum < delem->bitnum);
 	/* Now, if the key is in the tree, delem contains it. */
-	if (strcmp(delem->key, ckey))
+	if (delem != NULL && strcmp(delem->key, ckey))
 		delem = NULL;
 
 	if (ckey != ckey_store)
@@ -484,6 +469,33 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 	}
 	dict->canonize_cb(ckey);
 
+	if (dict->root == NULL)
+	{
+		return_val_if_fail(dict->count == 0, FALSE);
+		return_val_if_fail(dict->head == NULL, FALSE);
+		return_val_if_fail(dict->tail == NULL, FALSE);
+		dict->root = mowgli_heap_alloc(elem_heap);
+		dict->root->bitnum = 0;
+		if (ckey[0] & 1)
+		{
+			dict->root->zero = NULL;
+			dict->root->one = dict->root;
+		}
+		else
+		{
+			dict->root->zero = dict->root;
+			dict->root->one = NULL;
+		}
+		dict->root->next = NULL;
+		dict->root->prev = NULL;
+		dict->root->data = data;
+		dict->root->key = ckey;
+		dict->head = dict->root;
+		dict->tail = dict->root;
+		dict->count++;
+		return TRUE;
+	}
+
 	delem = dict->root;
 	do
 	{
@@ -493,9 +505,9 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 		else
 			bitval = 0;
 		delem = bitval ? delem->one : delem->zero;
-	} while (prev->bitnum < delem->bitnum);
+	} while (delem != NULL && prev->bitnum < delem->bitnum);
 	/* Now, if the key is in the tree, delem contains it. */
-	if (!strcmp(delem->key, ckey))
+	if (delem != NULL && !strcmp(delem->key, ckey))
 	{
 		mowgli_log("Key is already in dict, ignoring duplicate");
 		free(ckey);
@@ -505,17 +517,16 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 
 	/* Find the first bit position where they differ */
 	/* XXX perhaps look up differing byte first, then bit */
-	/* Avoid bit 0 as it's already used by the magic root node,
-	 * but may still be distinct. A special case for "\1" is
-	 * needed. */
-	if (delem == dict->root && !strcmp(ckey, "\1"))
-		i = 1;
+	if (place == NULL)
+		i = prev->bitnum + 1;
 	else
-		for (i = 1; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)
+		for (i = 0; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)
 			;
 	/* Find where to insert the new node */
+	prev = NULL;
 	delem = dict->root;
-	do
+	while ((prev == NULL || prev->bitnum < delem->bitnum) &&
+			delem->bitnum < i)
 	{
 		prev = delem;
 		if (delem->bitnum / 8 < keylen)
@@ -523,15 +534,22 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 		else
 			bitval = 0;
 		delem = bitval ? delem->one : delem->zero;
-		soft_assert(delem->bitnum != i);
-	} while (prev->bitnum < delem->bitnum && delem->bitnum < i);
+		if (delem == NULL)
+			break;
+	}
+	soft_assert(delem == NULL || delem->bitnum != i);
 
 	/* Insert new element between prev and delem */
 	newelem = mowgli_heap_alloc(elem_heap);
 	newelem->bitnum = i;
 	newelem->key = ckey;
 	newelem->data = data;
-	if (bitval)
+	if (prev == NULL)
+	{
+		soft_assert(dict->root == delem);
+		dict->root = newelem;
+	}
+	else if (bitval)
 	{
 		soft_assert(prev->one == delem);
 		prev->one = newelem;
@@ -548,7 +566,7 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 		newelem->zero = newelem, newelem->one = delem;
 
 	/* linked list - XXX still needed? */
-	if (place != NULL && place != dict->root && place->next != NULL)
+	if (place != NULL && place->next != NULL)
 	{
 		newelem->next = place->next;
 		newelem->prev = place;
@@ -557,6 +575,7 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 	}
 	else
 	{
+		/* XXX head or tail? */
 		newelem->next = NULL;
 		newelem->prev = dict->tail;
 		if (dict->tail != NULL)
@@ -601,9 +620,10 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
 
+	if (dict->root == NULL)
+		return NULL;
+
 	keylen = strlen(key);
-	/* Do not allow removing the root */
-	return_val_if_fail(keylen > 0, NULL);
 
 	if (keylen >= sizeof ckey_store)
 		ckey = strdup(key);
@@ -625,9 +645,9 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 		else
 			bitval = 0;
 		delem = bitval ? delem->one : delem->zero;
-	} while (prev->bitnum < delem->bitnum);
+	} while (delem != NULL && prev->bitnum < delem->bitnum);
 	/* Now, if the key is in the tree, delem contains it. */
-	if (strcmp(delem->key, ckey))
+	if (delem != NULL && strcmp(delem->key, ckey))
 		delem = NULL;
 
 	if (ckey != ckey_store)
@@ -650,10 +670,15 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 		/* Get the other pointer of the node to be removed. */
 		temp2 = bitval ? prev->zero : prev->one;
 		/* Disconnect it. */
-		if (pprev->zero == prev)
-			pprev->zero = temp2;
-		if (pprev->one == prev)
-			pprev->one = temp2;
+		if (pprev == NULL)
+			dict->root = temp2;
+		else
+		{
+			if (pprev->zero == prev)
+				pprev->zero = temp2;
+			if (pprev->one == prev)
+				pprev->one = temp2;
+		}
 	}
 	else
 	{
@@ -663,8 +688,9 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 		 * break. We will put it on delem's place.
 		 */
 
+		pdelem = NULL;
 		temp2 = dict->root;
-		do
+		while (temp2 != delem)
 		{
 			pdelem = temp2;
 			if (temp2->bitnum / 8 < keylen)
@@ -672,22 +698,34 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 			else
 				pbitval = 0;
 			temp2 = pbitval ? temp2->one : temp2->zero;
-		} while (temp2 != delem);
-		/* pdelem = node with downward link to delem */
+		}
+		/* pdelem = node containing downward link to delem or
+		 *          NULL if delem == dict->root
+		 */
 
 		soft_assert((bitval ? prev->one : prev->zero) == delem);
 		/* Get the other pointer of the node to be removed. */
 		temp2 = bitval ? prev->zero : prev->one;
 		/* Disconnect it. */
-		if (pprev->zero == prev)
-			pprev->zero = temp2;
-		if (pprev->one == prev)
-			pprev->one = temp2;
-		/* Make prev take delem's place in the tree. */
-		if (pbitval)
-			pdelem->one = prev;
+		if (pprev == NULL)
+			dict->root = temp2;
 		else
-			pdelem->zero = prev;
+		{
+			if (pprev->zero == prev)
+				pprev->zero = temp2;
+			if (pprev->one == prev)
+				pprev->one = temp2;
+		}
+		/* Make prev take delem's place in the tree. */
+		if (pdelem == NULL)
+			dict->root = prev;
+		else
+		{
+			if (pdelem->zero == delem)
+				pdelem->zero = prev;
+			if (pdelem->one == delem)
+				pdelem->one = prev;
+		}
 		prev->one = delem->one;
 		prev->zero = delem->zero;
 		prev->bitnum = delem->bitnum;
@@ -717,6 +755,11 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	mowgli_heap_free(elem_heap, delem);
 
 	dict->count--;
+	if (dict->count == 0)
+	{
+		soft_assert(dict->root == NULL);
+		dict->root = NULL;
+	}
 
 	return data;
 }
