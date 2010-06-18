@@ -18,6 +18,9 @@ DECLARE_MODULE_V1
 list_t *hs_cmdtree, *hs_helptree, *conf_hs_table, *ms_cmdtree;
 bool request_per_nick;
 
+unsigned int ratelimit_count = 0;
+time_t ratelimit_firsttime = 0;
+
 static void account_drop_request(myuser_t *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
@@ -227,6 +230,10 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
+
+	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
+		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
+
 	if (request_per_nick)
 	{
 		target = si->su != NULL ? si->su->nick : "?";
@@ -260,6 +267,12 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("You have already requested vhost \2%s\2."), host);
 				return;
 			}
+			if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
+			{
+				command_fail(si, fault_toomany, "The system is currently busy to process your vHost request; please try again later");
+				slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
+				return;
+			}
 			free(l->vhost);
 			l->vhost = sstrdup(host);
 			l->vhost_ts = CURRTIME;;
@@ -268,10 +281,18 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 			logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
+			if (config_options.ratelimit_uses && config_options.ratelimit_period)
+				ratelimit_count++;
 			return;
 		}
 	}
 
+	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
+	{
+		command_fail(si, fault_toomany, "The system is currently busy to process your vHost request; please try again later");
+		slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
+		return;
+	}
 	l = smalloc(sizeof(hsreq_t));
 	l->nick = sstrdup(target);
 	l->vident = sstrdup("(null)");
@@ -285,7 +306,8 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
-
+	if (config_options.ratelimit_uses && config_options.ratelimit_period)
+		ratelimit_count++;
 	return;
 }
 

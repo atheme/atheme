@@ -1419,6 +1419,24 @@ general {
 	 */
 	flood_time = 10;
 
+	/* (*)ratelimit_uses
+	 * After how many uses of a command will users be throttled.
+	 * After `ratelimit_uses' of a command within `ratelimit_period', users
+	 * will not be able to run that ratelimited command until the period is up.
+	 * Comment this, ratelimit_period below or both options out to disable rate limiting.
+	 * Currently only used in hostserv/request.
+	 */
+	ratelimit_uses = 5;
+
+	/* (*)ratelimit_period
+	 * After how much time (in seconds) will the ratelimit_uses counter reset.
+	 * After `ratelimit_uses' of a command within `ratelimit_period', users
+	 * will not be able to run that ratelimited command until the period is up.
+	 * Comment this, ratelimit_uses above or both options out to disable rate limiting.
+	 * Currently only used in hostserv/request.
+	 */
+	ratelimit_period = 60;
+
 	/* (*)kline_time
 	 * The default expire time for KLINE's in days.
 	 * Setting this to 0 makes all KLINE's permanent.
