@@ -269,7 +269,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
 			{
-				command_fail(si, fault_toomany, "The system is currently busy to process your vHost request; please try again later");
+				command_fail(si, fault_toomany, _("The system is currently busy to process your vHost request; please try again later"));
 				slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
 				return;
 			}
@@ -289,7 +289,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
 	{
-		command_fail(si, fault_toomany, "The system is currently busy to process your vHost request; please try again later");
+		command_fail(si, fault_toomany, _("The system is currently busy to process your vHost request; please try again later"));
 		slog(LG_INFO, "VHOSTREQUEST:THROTTLED: %s", si->su->nick);
 		return;
 	}

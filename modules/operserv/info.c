@@ -41,26 +41,28 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "INFO");
 
-	command_success_nodata(si, "How often services writes changes to the database: %d minutes", config_options.commit_interval / 60);
-	command_success_nodata(si, "Default kline time: %d days", config_options.kline_time / 86400);
-	command_success_nodata(si, "Will services be sending WALLOPS/GLOBOPS about various things: %s", config_options.silent ? "no" : "yes");
-	command_success_nodata(si, "How many messages before a flood is triggered, (if 0, flood protection is disabled): %d", config_options.flood_msgs);
-	command_success_nodata(si, "How long before the flood counter resets: %d seconds", config_options.flood_time);
-	command_success_nodata(si, "No nick ownership enabled: %s", nicksvs.no_nick_ownership ? "yes" : "no");
-        command_success_nodata(si, "Nickname expiration time: %d days", nicksvs.expiry / 86400);
-	command_success_nodata(si, "Nickname enforce expiry time: %d days", nicksvs.enforce_expiry / 86400);
-	command_success_nodata(si, "Nickname enforce delay: %d seconds", nicksvs.enforce_delay);
-	command_success_nodata(si, "Nickname enforce prefix: %s", nicksvs.enforce_prefix);
-	command_success_nodata(si, "Maximum number of logins allowed per username: %d", me.maxlogins);
-	command_success_nodata(si, "Maximum number of usernames that can be registered to one email address: %d", me.maxusers);
+	command_success_nodata(si, _("How often services writes changes to the database: %d minutes"), config_options.commit_interval / 60);
+	command_success_nodata(si, _("Default kline time: %d days"), config_options.kline_time / 86400);
+	command_success_nodata(si, _("Will services be sending WALLOPS/GLOBOPS about various things: %s"), config_options.silent ? "no" : "yes");
+	command_success_nodata(si, _("How many messages before a flood is triggered, (if 0, flood protection is disabled): %d"), config_options.flood_msgs);
+	command_success_nodata(si, _("How long before the flood counter resets: %d seconds"), config_options.flood_time);
+	command_success_nodata(si, _("Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %d"), config_options.ratelimit_uses);
+	command_success_nodata(si, _("How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %d seconds"), config_options.ratelimit_period);
+	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? "yes" : "no");
+        command_success_nodata(si, _("Nickname expiration time: %d days"), nicksvs.expiry / 86400);
+	command_success_nodata(si, _("Nickname enforce expiry time: %d days"), nicksvs.enforce_expiry / 86400);
+	command_success_nodata(si, _("Nickname enforce delay: %d seconds"), nicksvs.enforce_delay);
+	command_success_nodata(si, _("Nickname enforce prefix: %s"), nicksvs.enforce_prefix);
+	command_success_nodata(si, _("Maximum number of logins allowed per username: %d"), me.maxlogins);
+	command_success_nodata(si, _("Maximum number of usernames that can be registered to one email address: %d"), me.maxusers);
 	if (!nicksvs.no_nick_ownership)
-		command_success_nodata(si, "Maximum number of nicknames that one user can own: %d", me.maxnicks);
-	command_success_nodata(si, "Maximum number of channels that one user can own: %d", me.maxchans);
-        command_success_nodata(si, "Channel expiration time: %d days", chansvs.expiry / 86400);
+		command_success_nodata(si, _("Maximum number of nicknames that one user can own: %d"), me.maxnicks);
+	command_success_nodata(si, _("Maximum number of channels that one user can own: %d"), me.maxchans);
+        command_success_nodata(si, _("Channel expiration time: %d days"), chansvs.expiry / 86400);
 	if (chansvs.fantasy)
-		command_success_nodata(si, "Channel fantasy trigger: %s", chansvs.trigger);
-	command_success_nodata(si, "Maximum number of entries allowed in a channel access list (if 0, unlimited): %d", chansvs.maxchanacs);
-	command_success_nodata(si, "Maximum number of founders allowed per channel: %d", chansvs.maxfounders);
+		command_success_nodata(si, _("Channel fantasy trigger: %s"), chansvs.trigger);
+	command_success_nodata(si, _("Maximum number of entries allowed in a channel access list (if 0, unlimited): %d"), chansvs.maxchanacs);
+	command_success_nodata(si, _("Maximum number of founders allowed per channel: %d"), chansvs.maxfounders);
 
 	if (IS_TAINTED)
 	{
