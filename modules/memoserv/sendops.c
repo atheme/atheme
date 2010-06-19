@@ -46,7 +46,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo;
 	mychan_t *mc;
 	int sent = 0, tried = 0;
-	bool ignored;
+	bool ignored, operoverride = false;
 
 	/* Grab args */
 	char *target = parv[0];
@@ -112,10 +112,15 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW) && !has_priv(si, PRIV_CHAN_ADMIN))
+	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
+		if (has_priv(si, PRIV_CHAN_ADMIN))
+			operoverride = true;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
 	}
 
 	si->smu->memo_ratelimit_num++;
@@ -194,7 +199,10 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		command_add_flood(si, FLOOD_HEAVY);
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%d/%d sent) (oper override)", mc->name, send, tried);
+	else
+		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
 	return;
 }	
