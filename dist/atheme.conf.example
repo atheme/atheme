@@ -1424,7 +1424,7 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_period below or both options out to disable rate limiting.
-	 * Currently used in hostserv/request and nickserv/register.
+	 * Currently used in hostserv/request, nickserv/register and chanserv/register.
 	 */
 	ratelimit_uses = 5;
 
@@ -1433,7 +1433,7 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_uses above or both options out to disable rate limiting.
-	 * Currently used in hostserv/request and nickserv/register.
+	 * Currently used in hostserv/request, nickserv/register and chanserv/register.
 	 */
 	ratelimit_period = 60;
 

@@ -15,6 +15,9 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+unsigned int ratelimit_count = 0;
+time_t ratelimit_firsttime = 0;
+
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_register = { "REGISTER", N_("Registers a channel."),
@@ -114,6 +117,16 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
+		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
+
+	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
+	{
+		command_fail(si, fault_toomany, _("The system is currently too busy to process your registration, please try again later."));
+		slog(LG_INFO, "CHANSERV:REGISTER:THROTTLED: \2%s\2 by \2%s\2", name, si->smu->name);
+		return;
+	}
+
 	hdatac.si = si;
 	hdatac.name = name;
 	hdatac.chan = c;
@@ -127,6 +140,9 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_toomany, _("You have too many channels registered."));
 		return;
 	}
+
+	if (config_options.ratelimit_uses && config_options.ratelimit_period)
+		ratelimit_count++;
 
 	logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2", name);
 

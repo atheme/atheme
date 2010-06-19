@@ -21,6 +21,8 @@ nickserv
   the user or disallow them from registering with a configuration option.
 - added ns_generatehash contrib module to generate a password hash for
   a soper if you have crypto enabled.
+- removed ns_ratelimitreg contrib modules as its functionality is now in
+  core.
 operserv
 - added expiry time to clone exempt
 code
@@ -31,6 +33,8 @@ code
   atheme 5.2. please replace it in your code with logcommand() or slog().
 other
 - ircservtoatheme: generally make a bit more robust.
+- added ratelimiting support to hostserv/request, chanserv/register and
+  nickserv/register.
 
 Atheme Services 5.1.1 Release Notes
 ===================================
