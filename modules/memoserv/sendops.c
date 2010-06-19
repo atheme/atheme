@@ -112,7 +112,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW) && !has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
