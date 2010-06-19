@@ -200,7 +200,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%d/%d sent) (oper override)", mc->name, send, tried);
+		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%d/%d sent) (oper override)", mc->name, sent, tried);
 	else
 		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
