@@ -197,6 +197,11 @@ static void ptlink_msg(const char *from, const char *target, const char *fmt, ..
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
+static void ptlink_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void ptlink_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -760,6 +765,7 @@ void _modinit(module_t * m)
 	join_sts = &ptlink_join_sts;
 	kick = &ptlink_kick;
 	msg = &ptlink_msg;
+	msg_global_sts = &ptlink_msg_global_sts;
 	notice_user_sts = &ptlink_notice_user_sts;
 	notice_global_sts = &ptlink_notice_global_sts;
 	notice_channel_sts = &ptlink_notice_channel_sts;

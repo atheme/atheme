@@ -165,6 +165,23 @@ static void ultimate3_msg(const char *from, const char *target, const char *fmt,
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
+static void ultimate3_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void ultimate3_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -774,6 +791,7 @@ void _modinit(module_t * m)
 	join_sts = &ultimate3_join_sts;
 	kick = &ultimate3_kick;
 	msg = &ultimate3_msg;
+	msg_global_sts = &ultimate3_msg_global_sts;
 	notice_user_sts = &ultimate3_notice_user_sts;
 	notice_global_sts = &ultimate3_notice_global_sts;
 	notice_channel_sts = &ultimate3_notice_channel_sts;

@@ -185,6 +185,23 @@ static void ts6_msg(const char *from, const char *target, const char *fmt, ...)
 	sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
 }
 
+static void ts6_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s PRIVMSG %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void ts6_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -1400,6 +1417,7 @@ void _modinit(module_t * m)
 	chan_lowerts = &ts6_chan_lowerts;
 	kick = &ts6_kick;
 	msg = &ts6_msg;
+	msg_global_sts = &ts6_msg_global_sts;
 	notice_user_sts = &ts6_notice_user_sts;
 	notice_global_sts = &ts6_notice_global_sts;
 	notice_channel_sts = &ts6_notice_channel_sts;

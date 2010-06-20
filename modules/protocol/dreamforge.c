@@ -164,6 +164,23 @@ static void dreamforge_msg(const char *from, const char *target, const char *fmt
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
+static void dreamforge_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void dreamforge_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -661,6 +678,7 @@ void _modinit(module_t * m)
 	join_sts = &dreamforge_join_sts;
 	kick = &dreamforge_kick;
 	msg = &dreamforge_msg;
+	msg_global_sts = &dreamforge_msg_global_sts;
 	notice_user_sts = &dreamforge_notice_user_sts;
 	notice_global_sts = &dreamforge_notice_global_sts;
 	notice_channel_sts = &dreamforge_notice_channel_sts;
