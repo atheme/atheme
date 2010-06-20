@@ -22,8 +22,6 @@ command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 0, command_rps
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;
 
-static bool cs_registered;
-
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
@@ -31,19 +29,14 @@ void _modinit(module_t * m)
 
 	command_add(&cmd_rps, gs_cmdtree);
 
-	if (chansvs.fantasy)
-	{
-		command_add(&cmd_rps, cs_cmdtree);
-		cs_registered = true;
-	}
+	command_add(&cmd_rps, cs_cmdtree);
 }
 
 void _moddeinit()
 {
 	command_delete(&cmd_rps, gs_cmdtree);
 
-	if (cs_registered)
-		command_delete(&cmd_rps, cs_cmdtree);
+	command_delete(&cmd_rps, cs_cmdtree);
 }
 
 /*

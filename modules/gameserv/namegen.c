@@ -26,8 +26,6 @@ list_t *cs_cmdtree;
 list_t *gs_helptree;
 list_t *cs_helptree;
 
-static bool cs_registered;
-
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
@@ -38,12 +36,8 @@ void _modinit(module_t * m)
 	command_add(&cmd_namegen, gs_cmdtree);
 	help_addentry(gs_helptree, "NAMEGEN", "help/gameserv/namegen", NULL);
 
-	if (chansvs.fantasy)
-	{
-		command_add(&cmd_namegen, cs_cmdtree);
-		help_addentry(cs_helptree, "NAMEGEN", "help/gameserv/namegen", NULL);
-		cs_registered = true;
-	}
+	command_add(&cmd_namegen, cs_cmdtree);
+	help_addentry(cs_helptree, "NAMEGEN", "help/gameserv/namegen", NULL);
 }
 
 void _moddeinit()
@@ -51,11 +45,8 @@ void _moddeinit()
 	command_delete(&cmd_namegen, gs_cmdtree);
 	help_delentry(gs_helptree, "NAMEGEN");
 
-	if (cs_registered)
-	{
-		command_delete(&cmd_namegen, cs_cmdtree);
-		help_delentry(cs_helptree, "NAMEGEN");
-	}
+	command_delete(&cmd_namegen, cs_cmdtree);
+	help_delentry(cs_helptree, "NAMEGEN");
 }
 
 /*

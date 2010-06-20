@@ -31,8 +31,6 @@ list_t *cs_cmdtree;
 list_t *gs_helptree;
 list_t *cs_helptree;
 
-static bool cs_registered;
-
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
@@ -46,14 +44,10 @@ void _modinit(module_t * m)
 	command_add(&cmd_df, gs_cmdtree);
 	help_addentry(gs_helptree, "ROLL", "help/gameserv/roll", NULL);
 
-	if (chansvs.fantasy)
-	{
-		command_add(&cmd_dice, cs_cmdtree);
-		command_add(&cmd_wod, cs_cmdtree);
-		command_add(&cmd_df, cs_cmdtree);
-		help_addentry(cs_helptree, "ROLL", "help/gameserv/roll", NULL);
-		cs_registered = true;
-	}
+	command_add(&cmd_dice, cs_cmdtree);
+	command_add(&cmd_wod, cs_cmdtree);
+	command_add(&cmd_df, cs_cmdtree);
+	help_addentry(cs_helptree, "ROLL", "help/gameserv/roll", NULL);
 }
 
 void _moddeinit()
@@ -63,13 +57,10 @@ void _moddeinit()
 	command_delete(&cmd_df, gs_cmdtree);
 	help_delentry(gs_helptree, "ROLL");
 
-	if (cs_registered)
-	{
-		command_delete(&cmd_dice, cs_cmdtree);
-		command_delete(&cmd_wod, cs_cmdtree);
-		command_delete(&cmd_df, cs_cmdtree);
-		help_delentry(cs_helptree, "ROLL");
-	}
+	command_delete(&cmd_dice, cs_cmdtree);
+	command_delete(&cmd_wod, cs_cmdtree);
+	command_delete(&cmd_df, cs_cmdtree);
+	help_delentry(cs_helptree, "ROLL");
 }
 
 /*

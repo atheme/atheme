@@ -25,8 +25,6 @@ list_t *cs_cmdtree;
 list_t *gs_helptree;
 list_t *cs_helptree;
 
-static bool cs_registered;
-
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
@@ -38,12 +36,8 @@ void _modinit(module_t * m)
 	command_add(&cmd_eightball, gs_cmdtree);
 	help_addentry(gs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
 
-	if (chansvs.fantasy)
-	{
-		command_add(&cmd_eightball, cs_cmdtree);
-		help_addentry(cs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
-		cs_registered = true;
-	}
+	command_add(&cmd_eightball, cs_cmdtree);
+	help_addentry(cs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
 }
 
 void _moddeinit()
@@ -51,11 +45,8 @@ void _moddeinit()
 	command_delete(&cmd_eightball, gs_cmdtree);
 	help_delentry(gs_helptree, "EIGHTBALL");
 
-	if (cs_registered)
-	{
-		command_delete(&cmd_eightball, cs_cmdtree);
-		help_delentry(cs_helptree, "EIGHTBALL");
-	}
+	command_delete(&cmd_eightball, cs_cmdtree);
+	help_delentry(cs_helptree, "EIGHTBALL");
 }
 
 /*
