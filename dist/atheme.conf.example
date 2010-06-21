@@ -457,7 +457,7 @@ loadmodule "modules/memoserv/ignore";
  */
 loadmodule "modules/global/main";
 
-/* InfoServ modules.
+/* InfoServ module.
  *
  * Like the other services, InfoServ is a module. You can disable or
  * enable it to your liking below.
