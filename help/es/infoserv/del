@@ -1,0 +1,9 @@
+Ayuda para DEL:
+
+DEL permite eliminar mensajes de información que ya no sea
+necesario mostrar a los usuarios al conectarse.
+
+Sintaxis: DEL <id>
+
+Ejemplo:
+	/msg &nick& DEL 1
