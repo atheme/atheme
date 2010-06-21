@@ -120,23 +120,6 @@ static void p10_msg(const char *from, const char *target, const char *fmt, ...)
 	sts("%s P %s :%s", u->uid, target, buf);
 }
 
-static void p10_msg_global_sts(user_t *from, const char *mask, const char *text)
-{
-	node_t *n;
-	tld_t *tld;
-
-	if (!strcmp(mask, "*"))
-	{
-		LIST_FOREACH(n, tldlist.head)
-		{
-			tld = n->data;
-			sts("%s P %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
-		}
-	}
-	else
-		sts("%s P %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
-}
-
 /* NOTICE wrapper */
 static void p10_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -1004,7 +987,6 @@ void _modinit(module_t * m)
 	chan_lowerts = &p10_chan_lowerts;
 	kick = &p10_kick;
 	msg = &p10_msg;
-	msg_global_sts = &p10_msg_global_sts;
 	notice_user_sts = &p10_notice_user_sts;
 	notice_global_sts = &p10_notice_global_sts;
 	notice_channel_sts = &p10_notice_channel_sts;

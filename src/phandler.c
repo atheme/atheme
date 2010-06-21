@@ -31,7 +31,6 @@ void (*join_sts) (channel_t *c, user_t *u, bool isnew, char *modes) = generic_jo
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (user_t *source, channel_t *c, user_t *u, const char *reason) = generic_kick;
 void (*msg) (const char *from, const char *target, const char *fmt, ...) = generic_msg;
-void (*msg_global_sts) (user_t *from, const char *mask, const char *text) = generic_msg_global_sts;
 void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = generic_notice_user_sts;
 void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = generic_notice_global_sts;
 void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) = generic_notice_channel_sts;
@@ -106,11 +105,6 @@ void generic_msg(const char *from, const char *target, const char *fmt, ...)
 
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
 	free(buf);
-}
-
-void generic_msg_global_sts(user_t *from, const char *mask, const char *text)
-{
-	slog(LG_INFO, "Cannot send global message to %s (%s): don't know how. Load a protocol module perhaps?", mask, text);
 }
 
 void generic_notice_user_sts(user_t *from, user_t *target, const char *text)

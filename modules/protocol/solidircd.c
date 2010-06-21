@@ -230,23 +230,6 @@ static void solidircd_msg(const char *from, const char *target, const char *fmt,
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
-static void solidircd_msg_global_sts(user_t *from, const char *mask, const char *text)
-{
-	node_t *n;
-	tld_t *tld;
-
-	if (!strcmp(mask, "*"))
-	{
-		LIST_FOREACH(n, tldlist.head)
-		{
-			tld = n->data;
-			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
-		}
-	}
-	else
-		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
-}
-
 /* NOTICE wrapper */
 static void solidircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -923,7 +906,6 @@ void _modinit(module_t * m)
 	chan_lowerts = &solidircd_chan_lowerts;
 	kick = &solidircd_kick;
 	msg = &solidircd_msg;
-	msg_global_sts = &solidircd_msg_global_sts;
 	notice_user_sts = &solidircd_notice_user_sts;
 	notice_global_sts = &solidircd_notice_global_sts;
 	notice_channel_sts = &solidircd_notice_channel_sts;
