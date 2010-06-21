@@ -25,7 +25,6 @@ SRCS =			\
 	gen_vhostonreg.c	\
 	graphtastical.c	\
 	ircd_catserv.c	\
-	ns_ajoin.c		\
 	ns_fenforce.c		\
 	ns_fregister.c	\
 	ns_forbid.c		\
