@@ -39,9 +39,9 @@ static void load_infodb(void);
 static void display_info(hook_user_nick_t *data);
 
 command_t is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help };
-command_t is_post = { "POST", "Post news items for users to view.", PRIV_GLOBAL, 3, is_cmd_post };
-command_t is_del = { "DEL", "Delete news items.", PRIV_GLOBAL, 1, is_cmd_del };
-command_t is_list = { "LIST", "List previously posted news items.", AC_NONE, 1, is_cmd_list };
+command_t is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post };
+command_t is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del };
+command_t is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list };
 
 /* HELP <command> [params] */
 void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
@@ -190,7 +190,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (!subject || !story || !importance)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "POST");
-		command_fail(si, fault_needmoreparams, "Syntax: POST <importance> <subject> <message>");
+		command_fail(si, fault_needmoreparams, _("Syntax: POST <importance> <subject> <message>"));
 		return;
 	}
 
@@ -198,7 +198,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((imp <= 0) || (imp >=5))
 	{
-		command_fail(si, fault_badparams, "Importance must be a digit between 1 and 4");
+		command_fail(si, fault_badparams, _("Importance must be a digit between 1 and 4"));
 		return;
 	}
 
@@ -206,7 +206,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	{
 		snprintf(buf, sizeof buf, "[CRITICAL NETWORK NOTICE] %s - [%s] %s", get_source_name(si), subject, story);
 		msg_global_sts(globsvs.me->me, "*", buf);
-		command_success_nodata(si, "The InfoServ message has been sent");
+		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
 	}
@@ -215,7 +215,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	{
 		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
 		notice_global_sts(globsvs.me->me, "*", buf);
-		command_success_nodata(si, "The InfoServ message has been sent");
+		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
 	}
@@ -231,7 +231,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 
 	write_infodb();
 
-	command_success_nodata(si, "Added entry to logon info");
+	command_success_nodata(si, _("Added entry to logon info"));
 	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 
 	if (imp == 3)
@@ -286,12 +286,12 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 
 			write_infodb();
 
-			command_success_nodata(si, "Deleted entry %d from logon info.", id);
+			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
 			return;
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, "Entry %d not found in logon info.", id);
+	command_fail(si, fault_nosuch_target, _("Entry %d not found in logon info."), id);
 	return;
 }
 
@@ -315,7 +315,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			x, l->subject, l->nick, dBuf, l->story);
 	}
 
-	command_success_nodata(si, "End of list.");
+	command_success_nodata(si, _("End of list."));
 	logcommand(si, CMDLOG_GET, "LIST");
 	return;
 }
