@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-14 19:48-0400\n"
+"POT-Creation-Date: 2010-06-21 03:19-0400\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -50,24 +50,24 @@ msgstr "***** Конец справочной информации *****"
 msgid "DATABASE ERROR: db_save(): cannot create atheme.db.new: %s"
 msgstr "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможно создать atheme.db.new: %s"
 
-#: modules/backend/flatfile.c:308 modules/backend/opensex.c:271
+#: modules/backend/flatfile.c:308
 #, c-format
 msgid "DATABASE ERROR: db_save(): cannot write to atheme.db.new: %s"
 msgstr "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможна запись в atheme.db.new: %s"
 
-#: modules/backend/flatfile.c:321 modules/backend/opensex.c:284
+#: modules/backend/flatfile.c:321
 #, c-format
 msgid "DATABASE ERROR: db_save(): cannot rename atheme.db.new to atheme.db: %s"
 msgstr ""
 "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможно переименовать atheme.db.new в "
 "atheme.db: %s"
 
-#: modules/backend/opensex.c:1166
+#: modules/backend/opensex.c:1126
 #, fuzzy, c-format
 msgid "DATABASE ERROR: db_save(): cannot create services.db.new: %s"
 msgstr "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможно создать atheme.db.new: %s"
 
-#: modules/backend/opensex.c:1200
+#: modules/backend/opensex.c:1160
 #, fuzzy, c-format
 msgid ""
 "DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
@@ -118,7 +118,7 @@ msgstr "Синтаксис: WHY <#канал> <ник>"
 #: modules/chanserv/topic.c:215 modules/chanserv/unban_self.c:79
 #: modules/chanserv/voice.c:75 modules/chanserv/voice.c:143
 #: modules/chanserv/why.c:75 modules/chanserv/xop.c:120
-#: modules/chanserv/xop.c:553 modules/gameserv/dice.c:112
+#: modules/chanserv/xop.c:553 modules/gameserv/dice.c:103
 #, c-format
 msgid "Channel %s is not registered."
 msgstr "Канал %s не зарегистрирован."
@@ -130,7 +130,7 @@ msgstr "Канал %s не зарегистрирован."
 #: modules/chanserv/quiet.c:160 modules/chanserv/quiet.c:252
 #: modules/chanserv/recover.c:89 modules/chanserv/topic.c:83
 #: modules/chanserv/topic.c:147 modules/chanserv/topic.c:222
-#: modules/chanserv/unban_self.c:85 modules/gameserv/dice.c:117
+#: modules/chanserv/unban_self.c:85 modules/gameserv/dice.c:108
 #, c-format
 msgid "%s is currently empty."
 msgstr "Канал %s на данный момент не существует (пуст)."
@@ -140,12 +140,12 @@ msgstr "Канал %s на данный момент не существует (пуст)."
 #: modules/botserv/set_private.c:71 modules/chanserv/akick.c:90
 #: modules/chanserv/ban.c:80 modules/chanserv/ban.c:170
 #: modules/chanserv/flags.c:171 modules/chanserv/quiet.c:166
-#: modules/chanserv/quiet.c:258 modules/chanserv/register.c:76
+#: modules/chanserv/quiet.c:258 modules/chanserv/register.c:79
 #: modules/chanserv/set_founder.c:68 modules/chanserv/status.c:85
 #: modules/chanserv/template.c:140 modules/chanserv/unban_self.c:91
 #: modules/chanserv/xop.c:112 modules/hostserv/group.c:94
 #: modules/hostserv/offer.c:193 modules/hostserv/onoff.c:68
-#: modules/hostserv/onoff.c:110 modules/hostserv/request.c:227
+#: modules/hostserv/onoff.c:110 modules/hostserv/request.c:230
 #: modules/memoserv/delete.c:69 modules/memoserv/forward.c:71
 #: modules/memoserv/ignore.c:80 modules/memoserv/list.c:56
 #: modules/memoserv/read.c:69 modules/memoserv/send.c:69
@@ -186,8 +186,8 @@ msgstr "Вы не идентифицированы."
 #: modules/chanserv/why.c:86 modules/chanserv/xop.c:150
 #: modules/chanserv/xop.c:156 modules/chanserv/xop.c:174
 #: modules/chanserv/xop.c:180 modules/chanserv/xop.c:194
-#: modules/chanserv/xop.c:565 modules/gameserv/dice.c:153
-#: modules/memoserv/sendops.c:117 modules/nickserv/sendpass_user.c:66
+#: modules/chanserv/xop.c:565 modules/gameserv/dice.c:144
+#: modules/memoserv/sendops.c:121 modules/nickserv/sendpass_user.c:66
 #: modules/operserv/soper.c:69 src/commandtree.c:133
 msgid "You are not authorized to perform this operation."
 msgstr "У вас недостаточно прав для использования данной команды."
@@ -391,7 +391,7 @@ msgstr "Синтаксис: SET <#канал> <опция> <параметры>"
 #: modules/botserv/set_core.c:77 modules/chanserv/akick.c:299
 #: modules/chanserv/clear.c:82 modules/chanserv/set_core.c:85
 #: modules/memoserv/ignore.c:87 modules/operserv/akill.c:114
-#: modules/operserv/clones.c:293 modules/operserv/ignore.c:82
+#: modules/operserv/clones.c:324 modules/operserv/ignore.c:82
 #: modules/operserv/rwatch.c:207 modules/operserv/sgline.c:119
 #: modules/operserv/soper.c:83 modules/operserv/sqline.c:147
 #: src/commandtree.c:158
@@ -515,8 +515,8 @@ msgstr "Более широкая маска вида %s уже содержится в AKICK-списке канала %s"
 
 #: modules/chanserv/akick.c:150 modules/chanserv/akick.c:183
 #: modules/chanserv/flags.c:307 modules/chanserv/flags.c:330
-#: modules/chanserv/set_founder.c:176 modules/chanserv/xop.c:259
-#: modules/chanserv/xop.c:381
+#: modules/chanserv/set_founder.c:110 modules/chanserv/set_founder.c:192
+#: modules/chanserv/xop.c:259 modules/chanserv/xop.c:381
 #, c-format
 msgid "Channel %s access list is full."
 msgstr "Список доступа канала %s переполнен."
@@ -901,7 +901,7 @@ msgstr "Вы не можете снять флаг +f с ника владельца канала."
 msgid "Only %d founders allowed per channel."
 msgstr "Список владельцев канала не может превышать %d"
 
-#: modules/chanserv/flags.c:286 modules/chanserv/set_founder.c:103
+#: modules/chanserv/flags.c:286 modules/chanserv/set_founder.c:119
 #, c-format
 msgid "%s has too many channels registered."
 msgstr ""
@@ -923,7 +923,7 @@ msgstr "Позволяет принудительно передать права на владение каналом."
 msgid "Syntax: FTRANSFER <#channel> <newfounder>"
 msgstr "Синтаксис: FTRANSFER <#канал> <новый_владелец>"
 
-#: modules/chanserv/ftransfer.c:73 modules/chanserv/set_founder.c:160
+#: modules/chanserv/ftransfer.c:73 modules/chanserv/set_founder.c:176
 #, c-format
 msgid "%s is already the founder of %s."
 msgstr "Пользователь %s уже является владельцем канала %s."
@@ -1182,27 +1182,27 @@ msgstr "Блокировка режимов  : %s%s"
 msgid "Metadata   : %s = %s"
 msgstr "Метаданные   : %s = %s"
 
-#: modules/chanserv/info.c:233 modules/nickserv/info.c:314
+#: modules/chanserv/info.c:238 modules/nickserv/info.c:314
 #, c-format
 msgid "Flags      : %s"
 msgstr "Флаги      : %s"
 
-#: modules/chanserv/info.c:250 modules/nickserv/info.c:378
+#: modules/chanserv/info.c:255 modules/nickserv/info.c:378
 #, c-format
 msgid "%s was MARKED by %s on %s (%s)"
 msgstr "Статус: пометка для %s была поставлена %s в %s (%s)"
 
-#: modules/chanserv/info.c:254
+#: modules/chanserv/info.c:259
 #, c-format
 msgid "%s is temporarily holding this channel."
 msgstr "Статус: %s временно удерживает данный канал от использования."
 
-#: modules/chanserv/info.c:271
+#: modules/chanserv/info.c:276
 #, c-format
 msgid "%s was CLOSED by %s on %s (%s)"
 msgstr "Статус: канал %s был закрыт %s в %s (%s)"
 
-#: modules/chanserv/info.c:278
+#: modules/chanserv/info.c:283
 msgid "*** End of Info ***"
 msgstr "*** Конец информации о канале ***"
 
@@ -1497,55 +1497,61 @@ msgstr ""
 msgid "Recover complete for %s."
 msgstr "Восстановление канала %s завершено"
 
-#: modules/chanserv/register.c:20
+#: modules/chanserv/register.c:23
 msgid "Registers a channel."
 msgstr "Позволяет зарегистрировать канал"
 
-#: modules/chanserv/register.c:62
+#: modules/chanserv/register.c:65
 msgid "To register a channel: REGISTER <#channel>"
 msgstr "Для регистрации канала наберите: REGISTER <#канал>"
 
-#: modules/chanserv/register.c:69
+#: modules/chanserv/register.c:72
 msgid "Syntax: REGISTER <#channel>"
 msgstr "Синтаксис: REGISTER <#канал>"
 
-#: modules/chanserv/register.c:82
+#: modules/chanserv/register.c:85
 msgid "You need to verify your email address before you may register channels."
 msgstr ""
 "Прежде чем вы сможете регистрировать каналы, Вам необходимо пройти проверку "
 "вашего email-адреса."
 
-#: modules/chanserv/register.c:90
+#: modules/chanserv/register.c:93
 #, c-format
 msgid "%s is already registered to %s."
 msgstr "Канал %s уже зарегистрирован на пользователя %s."
 
-#: modules/chanserv/register.c:92 modules/nickserv/register.c:133
+#: modules/chanserv/register.c:95 modules/nickserv/register.c:136
 #, c-format
 msgid "%s is already registered."
 msgstr "Канал %s уже зарегистрирован другим пользователем."
 
-#: modules/chanserv/register.c:99
+#: modules/chanserv/register.c:102
 #, c-format
 msgid "The channel %s must exist in order to register it."
 msgstr "Вы не можете зарегистрировать несуществующий канал %s"
 
-#: modules/chanserv/register.c:106
+#: modules/chanserv/register.c:109
 #, c-format
 msgid "You must be in %s in order to register it."
 msgstr "Чтобы зарегистрировать канал %s, вы должны находиться на нем."
 
-#: modules/chanserv/register.c:113
+#: modules/chanserv/register.c:116
 #, c-format
 msgid "You must be a channel operator in %s in order to register it."
 msgstr "Чтобы зарегистрировать канал %s, вы должны быть его оператором."
 
-#: modules/chanserv/register.c:127
+#: modules/chanserv/register.c:125 modules/nickserv/register.c:146
+msgid ""
+"The system is currently too busy to process your registration, please try "
+"again later."
+msgstr ""
+
+#: modules/chanserv/register.c:140
 msgid "You have too many channels registered."
 msgstr ""
 "На ваш ник уже зарегистрировано максимально допустимое количество каналов."
 
-#: modules/chanserv/register.c:155
+#: modules/chanserv/register.c:171
 #, c-format
 msgid "%s is now registered to %s."
 msgstr "Канал %s успешно зарегистрирован на ник %s."
@@ -1660,51 +1666,51 @@ msgstr "Режим %s на канале %s теперь отключен."
 msgid "Transfers foundership of a channel."
 msgstr "Позволяет передать права на владение каналом"
 
-#: modules/chanserv/set_founder.c:109
+#: modules/chanserv/set_founder.c:125
 #, c-format
 msgid "%s is closed; it cannot be transferred."
 msgstr "Канал %s закрыт, вы не можете переназначить права на владение им."
 
-#: modules/chanserv/set_founder.c:133
+#: modules/chanserv/set_founder.c:149
 #, c-format
 msgid "Transfer complete: %s has been set as founder for %s."
 msgstr ""
 "Передача прав завершена: с этого момента %s является владельцем канала %s."
 
-#: modules/chanserv/set_founder.c:138
+#: modules/chanserv/set_founder.c:154
 #, c-format
 msgid "You are not the founder of %s."
 msgstr "Вы не являетесь владельцем канала %s."
 
-#: modules/chanserv/set_founder.c:155
+#: modules/chanserv/set_founder.c:171
 #, c-format
 msgid "The transfer of %s has been cancelled."
 msgstr "Передача прав для канала %s успешно отменена."
 
-#: modules/chanserv/set_founder.c:187
+#: modules/chanserv/set_founder.c:203
 #, c-format
 msgid "The previous transfer request for %s has been cancelled."
 msgstr "Предыдущая процедура передачи прав владения каналом %s была отменена."
 
-#: modules/chanserv/set_founder.c:195
+#: modules/chanserv/set_founder.c:211
 #, c-format
 msgid "%s can now take ownership of %s."
 msgstr "Начата процедура передачи прав. Новый владалец: %s. Канал: %s."
 
-#: modules/chanserv/set_founder.c:196
+#: modules/chanserv/set_founder.c:212
 #, c-format
 msgid ""
 "In order to complete the transfer, %s must perform the following command:"
 msgstr ""
 "Для завершения процесса передачи прав, %s должен выполнить следующую команду:"
 
-#: modules/chanserv/set_founder.c:198
+#: modules/chanserv/set_founder.c:214
 msgid "After that command is issued, the channel will be transferred."
 msgstr ""
 "После выполнения данной команды, права на владение каналом перейдут к новому "
 "владельцу."
 
-#: modules/chanserv/set_founder.c:199
+#: modules/chanserv/set_founder.c:215
 #, c-format
 msgid "To cancel the transfer, use /msg %s SET %s FOUNDER %s"
 msgstr ""
@@ -2292,39 +2298,39 @@ msgstr "WOD-стиль генерации костей."
 msgid "Fudge-style dice generation."
 msgstr "Fudge-стиль генерации костей."
 
-#: modules/gameserv/dice.c:125 modules/gameserv/dice.c:148
+#: modules/gameserv/dice.c:116 modules/gameserv/dice.c:139
 #, c-format
 msgid "%s is not enabled on %s."
 msgstr "%s не активирован для канала %s."
 
-#: modules/gameserv/dice.c:131
+#: modules/gameserv/dice.c:122
 #, c-format
 msgid "You are not on %s."
 msgstr ""
 "Для отображения публичного результата вашей игры вы должны находиться на %s."
 
-#: modules/gameserv/dice.c:178
+#: modules/gameserv/dice.c:169
 msgid "Syntax: ROLL [dice]d<sides>"
 msgstr "Синтаксис: ROLL [кость]d<граней>"
 
-#: modules/gameserv/dice.c:255
+#: modules/gameserv/dice.c:246
 msgid "Syntax: WOD <dice> <difficulty>"
 msgstr "Синтаксис: WOD <кость> <уровень_сложности>"
 
-#: modules/gameserv/dice.c:271 modules/gameserv/dice.c:346
+#: modules/gameserv/dice.c:262 modules/gameserv/dice.c:337
 msgid "Only 1-30 dice may be thrown at one time."
 msgstr "За один раз можно бросить только от 1 до 30 костей."
 
-#: modules/gameserv/dice.c:276
+#: modules/gameserv/dice.c:267
 msgid "Difficulty setting must be between 1 and 10."
 msgstr "Уровень сложности должен быть числом от 1 до 10 включительно."
 
-#: modules/gameserv/dice.c:306
+#: modules/gameserv/dice.c:297
 #, c-format
 msgid "%s rolls %d dice at difficulty %d: %s"
 msgstr "%s бросает %d костей на уровне %d сложности; результат: %s"
 
-#: modules/gameserv/dice.c:309
+#: modules/gameserv/dice.c:300
 #, c-format
 msgid ""
 "Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d if "
@@ -2333,16 +2339,16 @@ msgstr ""
 "Удачно: %d, Неудачно: %d, Испорчено: %d, Всего: %d. Если желаете, вы можете "
 "перебросить еще %d."
 
-#: modules/gameserv/dice.c:312
+#: modules/gameserv/dice.c:303
 #, c-format
 msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d."
 msgstr "Удачно: %d, Неудачно: %d, Испорчено: %d, Всего: %d."
 
-#: modules/gameserv/dice.c:336
+#: modules/gameserv/dice.c:327
 msgid "Syntax: DF <dice>"
 msgstr "Синтаксис: DF <кость>"
 
-#: modules/gameserv/dice.c:360
+#: modules/gameserv/dice.c:351
 #, c-format
 msgid "Result: %s"
 msgstr "Результат: %s"
@@ -2351,115 +2357,115 @@ msgstr "Результат: %s"
 msgid "Ask the 8-Ball a question."
 msgstr "Задать вопрос магическому шару."
 
-#: modules/gameserv/eightball.c:84
+#: modules/gameserv/eightball.c:75
 msgid "Absolutely yes!"
 msgstr "Конечно да!"
 
-#: modules/gameserv/eightball.c:85
+#: modules/gameserv/eightball.c:76
 msgid "Prospect looks hopeful."
 msgstr "Перпектива вырисовывается достаточно обнадеживающая."
 
-#: modules/gameserv/eightball.c:86
+#: modules/gameserv/eightball.c:77
 msgid "I'd like to think so."
 msgstr "Думаю так оно и есть."
 
-#: modules/gameserv/eightball.c:87
+#: modules/gameserv/eightball.c:78
 msgid "Yes, yes, yes, and yes again."
 msgstr "Да, да, да и еще раз да."
 
-#: modules/gameserv/eightball.c:88
+#: modules/gameserv/eightball.c:79
 msgid "Most likely."
 msgstr "Скорее всего."
 
-#: modules/gameserv/eightball.c:89
+#: modules/gameserv/eightball.c:80
 msgid "All signs point to yes."
 msgstr "Все указывает на то, что да."
 
-#: modules/gameserv/eightball.c:90
+#: modules/gameserv/eightball.c:81
 msgid "Yes."
 msgstr "Ага."
 
-#: modules/gameserv/eightball.c:91
+#: modules/gameserv/eightball.c:82
 msgid "Without a doubt."
 msgstr "Вне всякого сомнения."
 
-#: modules/gameserv/eightball.c:92
+#: modules/gameserv/eightball.c:83
 msgid "Sometime in the near future."
 msgstr "Где-то в ближайшем будущем."
 
-#: modules/gameserv/eightball.c:93
+#: modules/gameserv/eightball.c:84
 msgid "Of course!"
 msgstr "Ну конечно!"
 
-#: modules/gameserv/eightball.c:94
+#: modules/gameserv/eightball.c:85
 msgid "Definitely."
 msgstr "Определенно."
 
-#: modules/gameserv/eightball.c:95
+#: modules/gameserv/eightball.c:86
 msgid "Answer hazy."
 msgstr "Ответ какой-то смутный..."
 
-#: modules/gameserv/eightball.c:96
+#: modules/gameserv/eightball.c:87
 msgid "Prospect looks bleak."
 msgstr "Перспектива вырисовывается мрачноватая..."
 
-#: modules/gameserv/eightball.c:97
+#: modules/gameserv/eightball.c:88
 msgid "That's a question you should ask yourself."
 msgstr "Этот вопрос ты должен задать самому себе."
 
-#: modules/gameserv/eightball.c:98
+#: modules/gameserv/eightball.c:89
 msgid "Maybe."
 msgstr "Возможно..."
 
-#: modules/gameserv/eightball.c:99
+#: modules/gameserv/eightball.c:90
 msgid "That question is better remained unanswered."
 msgstr "Этот вопрос лучше оставить без ответа..."
 
-#: modules/gameserv/eightball.c:100
+#: modules/gameserv/eightball.c:91
 msgid "The stars would have to align for that to happen."
 msgstr "Нууу... если звезды соизволят расположиться в нужном порядке..."
 
-#: modules/gameserv/eightball.c:101
+#: modules/gameserv/eightball.c:92
 msgid "No."
 msgstr "Не-а."
 
-#: modules/gameserv/eightball.c:102
+#: modules/gameserv/eightball.c:93
 msgid "Not even on a GOOD day."
 msgstr "Нет. И даже в самый удачный день - нет."
 
-#: modules/gameserv/eightball.c:103
+#: modules/gameserv/eightball.c:94
 msgid "It would take a disturbed person to even ask."
 msgstr "Даже ненормальный и тот бы постеснялся спрашивать такое."
 
-#: modules/gameserv/eightball.c:104
+#: modules/gameserv/eightball.c:95
 msgid "You wish."
 msgstr "Мечтай больше."
 
-#: modules/gameserv/eightball.c:105
+#: modules/gameserv/eightball.c:96
 msgid "Not bloody likely."
 msgstr "Да нифига подобного."
 
-#: modules/gameserv/eightball.c:106
+#: modules/gameserv/eightball.c:97
 msgid "No way."
 msgstr "Ни за что."
 
-#: modules/gameserv/eightball.c:107
+#: modules/gameserv/eightball.c:98
 msgid "Never."
 msgstr "Никогда."
 
-#: modules/gameserv/eightball.c:108
+#: modules/gameserv/eightball.c:99
 msgid "NO!"
 msgstr "НЕТ!"
 
-#: modules/gameserv/eightball.c:109
+#: modules/gameserv/eightball.c:100
 msgid "Over my dead body."
 msgstr "Только через мой труп."
 
-#: modules/gameserv/eightball.c:110
+#: modules/gameserv/eightball.c:101
 msgid "We won't go there"
 msgstr "Ну уж нет."
 
-#: modules/gameserv/eightball.c:111
+#: modules/gameserv/eightball.c:102
 msgid "No chance at all!"
 msgstr "Совершенно никаких шансов."
 
@@ -2477,15 +2483,15 @@ msgstr "Генерирует различные имена потехи ради."
 msgid "Rock Paper Scissors."
 msgstr "Камень, Ножницы, Бумага."
 
-#: modules/gameserv/rps.c:72
+#: modules/gameserv/rps.c:65
 msgid "Rock"
 msgstr "Камень"
 
-#: modules/gameserv/rps.c:73
+#: modules/gameserv/rps.c:66
 msgid "Paper"
 msgstr "Бумага"
 
-#: modules/gameserv/rps.c:74
+#: modules/gameserv/rps.c:67
 msgid "Scissors"
 msgstr "Ножницы"
 
@@ -2515,14 +2521,14 @@ msgid "Syncs the vhost for all nicks in a group."
 msgstr ""
 
 #: modules/hostserv/group.c:100 modules/hostserv/onoff.c:75
-#: modules/hostserv/onoff.c:117 modules/hostserv/request.c:236
+#: modules/hostserv/onoff.c:117 modules/hostserv/request.c:243
 #: modules/nickserv/group.c:138 modules/nickserv/group.c:177
 #: modules/nickserv/group.c:204 modules/nickserv/set_accountname.c:69
 #, c-format
 msgid "Nick %s is not registered."
 msgstr "Ник %s не зарегистрирован."
 
-#: modules/hostserv/group.c:105 modules/hostserv/request.c:241
+#: modules/hostserv/group.c:105 modules/hostserv/request.c:248
 #: modules/nickserv/group.c:143 modules/nickserv/set_accountname.c:74
 #, c-format
 msgid "Nick %s is not registered to your account."
@@ -2623,48 +2629,54 @@ msgstr ""
 msgid "Your vhost of %s is now deactivated."
 msgstr ""
 
-#: modules/hostserv/request.c:30
+#: modules/hostserv/request.c:33
 msgid "Requests new virtual hostname for current nick."
 msgstr ""
 
-#: modules/hostserv/request.c:31
+#: modules/hostserv/request.c:34
 msgid "Lists vhosts currently waiting for activation."
 msgstr ""
 
-#: modules/hostserv/request.c:32
+#: modules/hostserv/request.c:35
 msgid "Reject the requested vhost for the given nick."
 msgstr ""
 
-#: modules/hostserv/request.c:33
+#: modules/hostserv/request.c:36
 msgid "Activate the requested vhost for a given nick."
 msgstr ""
 
-#: modules/hostserv/request.c:221
+#: modules/hostserv/request.c:224
 #, fuzzy
 msgid "Syntax: REQUEST <vhost>"
 msgstr "Синтаксис: RESETPASS <аккаунт>"
 
-#: modules/hostserv/request.c:260
+#: modules/hostserv/request.c:267
 #, fuzzy, c-format
 msgid "You have already requested vhost %s."
 msgstr "Вы уже авторизованы как %s."
 
-#: modules/hostserv/request.c:269 modules/hostserv/request.c:286
+#: modules/hostserv/request.c:272 modules/hostserv/request.c:292
+msgid ""
+"The system is currently too busy to process your vHost request, please try "
+"again later."
+msgstr ""
+
+#: modules/hostserv/request.c:282 modules/hostserv/request.c:307
 #, fuzzy, c-format
 msgid "You have requested vhost %s."
 msgstr "Вы были приглашены на канал %s."
 
-#: modules/hostserv/request.c:304
+#: modules/hostserv/request.c:326
 #, fuzzy
 msgid "Syntax: ACTIVATE <nick>"
 msgstr "Синтаксис: TAXONOMY <ник>"
 
-#: modules/hostserv/request.c:333 modules/hostserv/request.c:377
+#: modules/hostserv/request.c:355 modules/hostserv/request.c:399
 #, fuzzy, c-format
 msgid "Nick %s not found in vhost request database."
 msgstr "%s не найден в списке regex watch."
 
-#: modules/hostserv/request.c:348
+#: modules/hostserv/request.c:370
 #, fuzzy
 msgid "Syntax: REJECT <nick>"
 msgstr "Синтаксис: TAXONOMY <ник>"
@@ -2807,7 +2819,7 @@ msgstr ""
 "напрямую..."
 
 #: modules/memoserv/forward.c:207 modules/memoserv/send.c:193
-#: modules/memoserv/sendops.c:188
+#: modules/memoserv/sendops.c:193
 #, c-format
 msgid "To read it, type /%s%s READ %d"
 msgstr "Чтобы прочитать их, введите /%s%s READ %d"
@@ -2999,7 +3011,7 @@ msgstr "Канальные мемо-сообщения запрещены администрацией."
 msgid "Sends a memo to all ops on a channel."
 msgstr "Позволяет установить топик на канале."
 
-#: modules/memoserv/sendops.c:198
+#: modules/memoserv/sendops.c:206
 #, fuzzy, c-format
 msgid "The memo has been successfully sent to %d ops on %s."
 msgstr "Мемо-сообщение для %s успешно отправлено."
@@ -3270,7 +3282,7 @@ msgid "Syntax: RELEASE <nickname> [password]"
 msgstr "Синтаксис: RELEASE <ник> [пароль]"
 
 #: modules/nickserv/enforce.c:226 modules/nickserv/ghost.c:105
-#: modules/nickserv/identify.c:238 modules/nickserv/register.c:185
+#: modules/nickserv/identify.c:238 modules/nickserv/register.c:201
 #, c-format
 msgid "Invalid password for %s."
 msgstr "Неверный пароль для %s."
@@ -3366,7 +3378,7 @@ msgstr "Ник %s уже зарегистрирован на ваш аккаунт."
 msgid "Nick %s is already registered to %s."
 msgstr "Ник %s уже зарегистрирован на аккаунт %s."
 
-#: modules/nickserv/group.c:93 modules/nickserv/register.c:106
+#: modules/nickserv/group.c:93 modules/nickserv/register.c:109
 msgid "For security reasons, you can't register your UID."
 msgstr "По соображениям безопаности вы не можете зарегистрировать ваш UID."
 
@@ -3494,7 +3506,7 @@ msgid "Identifies to services for a nickname."
 msgstr "Идентифицирует никнейм для сервисов."
 
 #: modules/nickserv/identify.c:118 modules/nickserv/identify.c:125
-#: modules/nickserv/register.c:70
+#: modules/nickserv/register.c:73
 #, c-format
 msgid "You are already logged in as %s."
 msgstr "Вы уже авторизованы как %s."
@@ -3819,62 +3831,62 @@ msgstr "Синтаксис: MARK <аккаунт> <ON|OFF> [заметка]"
 msgid "Usage: MARK <target> ON <note>"
 msgstr "Синтаксис: MARK <аккаунт> ON <заметка>"
 
-#: modules/nickserv/register.c:20
+#: modules/nickserv/register.c:23
 msgid "Registers a nickname."
 msgstr "Регистрирует ник."
 
-#: modules/nickserv/register.c:73
+#: modules/nickserv/register.c:76
 #, fuzzy, c-format
 msgid "Use %s to register %s to your account."
 msgstr "Ник %s зарегистрирован на ваш аккаунт."
 
-#: modules/nickserv/register.c:86 modules/nickserv/register.c:124
+#: modules/nickserv/register.c:89 modules/nickserv/register.c:127
 msgid "Syntax: REGISTER <account> <password> <email>"
 msgstr "Синтаксис: REGISTER <аккаунт> <пароль> <email>"
 
-#: modules/nickserv/register.c:88 modules/nickserv/register.c:126
+#: modules/nickserv/register.c:91 modules/nickserv/register.c:129
 msgid "Syntax: REGISTER <password> <email>"
 msgstr "Синтаксис: REGISTER <пароль> <email>"
 
-#: modules/nickserv/register.c:100
+#: modules/nickserv/register.c:103
 msgid "A user matching this account is already on IRC."
 msgstr "Пользователь этого аккаунта уже в IRC."
 
-#: modules/nickserv/register.c:107
+#: modules/nickserv/register.c:110
 msgid "Please change to a real nickname, and try again."
 msgstr "Пожалуйста, смените ник на действительный и попробуйте еще раз."
 
-#: modules/nickserv/register.c:115
+#: modules/nickserv/register.c:118
 #, c-format
 msgid "The account name %s is invalid."
 msgstr "Аккаунт %s недействителен."
 
-#: modules/nickserv/register.c:122 modules/nickserv/setpass.c:79
+#: modules/nickserv/register.c:125 modules/nickserv/setpass.c:79
 #: modules/nickserv/set_password.c:69
 msgid "You cannot use your nickname as a password."
 msgstr "Вы не можете использовать ваш ник в качестве пароля."
 
-#: modules/nickserv/register.c:154 modules/nickserv/set_email.c:80
+#: modules/nickserv/register.c:168 modules/nickserv/set_email.c:80
 #, c-format
 msgid "%s is not a valid email address."
 msgstr "%s неверный адрес email."
 
-#: modules/nickserv/register.c:166
+#: modules/nickserv/register.c:180
 #, c-format
 msgid "%s has too many accounts registered."
 msgstr "%s имеет слишком большое количество зарегистрированных аккаунтов."
 
-#: modules/nickserv/register.c:202
+#: modules/nickserv/register.c:218
 msgid "Sending email failed, sorry! Registration aborted."
 msgstr "Отправка email завершилась неудачей. Регистрация отменена."
 
-#: modules/nickserv/register.c:208
+#: modules/nickserv/register.c:224
 #, c-format
 msgid ""
 "An email containing nickname activation instructions has been sent to %s."
 msgstr "Email, содержащий инструкции по активации аккаунта был послан на %s."
 
-#: modules/nickserv/register.c:209
+#: modules/nickserv/register.c:225
 msgid ""
 "If you do not complete registration within one day, your nickname will "
 "expire."
@@ -3882,7 +3894,7 @@ msgstr ""
 "Если вы не завершите процедуру регистрации в течении одного дня, ваш аккаунт "
 "будет удален."
 
-#: modules/nickserv/register.c:238
+#: modules/nickserv/register.c:254
 #, c-format
 msgid "%s is now registered to %s, with the password %s."
 msgstr "%s зарегистрирован для %s, с паролем %s."
@@ -4463,12 +4475,12 @@ msgid "Syntax: AKILL ADD|DEL|LIST"
 msgstr "Синтаксис: AKILL ADD|DEL|LIST"
 
 #: modules/operserv/akill.c:136 modules/operserv/akill.c:176
-#: modules/operserv/akill.c:182
+#: modules/operserv/akill.c:182 modules/operserv/clones.c:460
 msgid "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"
 msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
 
-#: modules/operserv/akill.c:175 modules/operserv/sgline.c:177
-#: modules/operserv/sqline.c:205
+#: modules/operserv/akill.c:175 modules/operserv/clones.c:452
+#: modules/operserv/sgline.c:177 modules/operserv/sqline.c:205
 msgid "Invalid duration given."
 msgstr "Указана неверная длительность."
 
@@ -4629,117 +4641,119 @@ msgstr "CLEARCHAN: Не трогаем IRC Оператора %s!%s@%s {%s}"
 msgid "%d matches, %d ignores for %s on %s"
 msgstr "%d совпадает, %d игнорируем для %s на %s"
 
-#: modules/operserv/clones.c:63
+#: modules/operserv/clones.c:70
 msgid "Manages network wide clones."
 msgstr "Управляет клонами в масштабе сети."
 
-#: modules/operserv/clones.c:65
+#: modules/operserv/clones.c:72
 msgid "Enables/disables klines for excessive clones."
 msgstr "Включает/выключает KLINE для клонов, которых слишком много."
 
-#: modules/operserv/clones.c:66
+#: modules/operserv/clones.c:73
 msgid "Lists clones on the network."
 msgstr "Выдаёт список клонов в сети."
 
-#: modules/operserv/clones.c:67
+#: modules/operserv/clones.c:74
 msgid "Adds a clones exemption."
 msgstr "Добавляет исключение для клонов."
 
-#: modules/operserv/clones.c:68
+#: modules/operserv/clones.c:75
 msgid "Deletes a clones exemption."
 msgstr "Удаляет исключение для клонов."
 
-#: modules/operserv/clones.c:69
+#: modules/operserv/clones.c:76
 msgid "Lists clones exemptions."
 msgstr "Выдаёт список исключений для клонов."
 
-#: modules/operserv/clones.c:70
+#: modules/operserv/clones.c:77
 msgid "Sets a custom duration to ban clones for."
 msgstr "Задаёт нестандартное время бана для клонов."
 
-#: modules/operserv/clones.c:286
+#: modules/operserv/clones.c:317
 msgid "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]"
 msgstr ""
 "Синтаксис: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [параметры]"
 
-#: modules/operserv/clones.c:311
+#: modules/operserv/clones.c:342
 msgid "CLONES klines are already enabled."
 msgstr "CLONES kline уже включены."
 
-#: modules/operserv/clones.c:315
+#: modules/operserv/clones.c:346
 msgid "Enabled CLONES klines."
 msgstr "CLONES kline включены."
 
-#: modules/operserv/clones.c:324
+#: modules/operserv/clones.c:355
 msgid "CLONES klines are already disabled."
 msgstr "CLONES kline уже выключены."
 
-#: modules/operserv/clones.c:328
+#: modules/operserv/clones.c:359
 msgid "Disabled CLONES klines."
 msgstr "CLONES kline выключены."
 
-#: modules/operserv/clones.c:336
+#: modules/operserv/clones.c:367
 msgid "CLONES klines are currently enabled."
 msgstr "CLONES kline на данный момент включены."
 
-#: modules/operserv/clones.c:338
+#: modules/operserv/clones.c:369
 msgid "CLONES klines are currently disabled."
 msgstr "CLONES kline на данный момент выключены."
 
-#: modules/operserv/clones.c:356
+#: modules/operserv/clones.c:387
 #, c-format
 msgid "%d from %s (EXEMPT; allowed %d)"
 msgstr "%d из %s (EXEMPT; разрешены %d)"
 
-#: modules/operserv/clones.c:358
+#: modules/operserv/clones.c:389
 #, c-format
 msgid "%d from %s"
 msgstr "%d из %s"
 
-#: modules/operserv/clones.c:361
+#: modules/operserv/clones.c:392
 msgid "End of CLONES LIST"
 msgstr "Конец списка CLONES LIST"
 
-#: modules/operserv/clones.c:377 modules/operserv/clones.c:401
-msgid "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>"
+#: modules/operserv/clones.c:411 modules/operserv/clones.c:453
+#: modules/operserv/clones.c:491
+#, fuzzy
+msgid "Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"
 msgstr "Синтаксис: CLONES ADDEXEMPT <ip> <клоны> <причина>"
 
-#: modules/operserv/clones.c:384
+#: modules/operserv/clones.c:418
 #, c-format
 msgid "Allowed clones count must be more than %d"
 msgstr "Число разрешённых клонов должно быть больше %d"
 
-#: modules/operserv/clones.c:408
+#: modules/operserv/clones.c:498
 #, c-format
 msgid "Added %s to clone exempt list."
 msgstr "Добавлено %s в список исключений для клонов."
 
-#: modules/operserv/clones.c:417
+#: modules/operserv/clones.c:507
 #, c-format
 msgid "Updated %s in clone exempt list."
 msgstr "Обновлено %s в списке исключений для клонов."
 
-#: modules/operserv/clones.c:444
+#: modules/operserv/clones.c:543
 #, c-format
 msgid "Removed %s from clone exempt list."
 msgstr "Удалено %s из списка исключений для клонов."
 
-#: modules/operserv/clones.c:451
+#: modules/operserv/clones.c:550
 #, c-format
 msgid "%s not found in clone exempt list."
 msgstr "%s не найдено в списке исключений для клонов."
 
-#: modules/operserv/clones.c:461
+#: modules/operserv/clones.c:560
 #, c-format
 msgid "Clone ban duration set to %ld (%ld seconds)"
 msgstr "Продолжительность бана для клонов установлена в %ld (%ld секунд)"
 
-#: modules/operserv/clones.c:486
+#: modules/operserv/clones.c:585
 #, c-format
 msgid "Clone ban duration set to %s (%ld seconds)"
 msgstr "Продолжительность бана для клонов установлена в %s (%ld секунд)"
 
-#: modules/operserv/clones.c:499
+#: modules/operserv/clones.c:609
 msgid "End of CLONES LISTEXEMPT"
 msgstr "Конец списка CLONES LISTEXEMPT"
 
@@ -4941,27 +4955,136 @@ msgstr "%d: %s добавлен %s на %s (Причина: %s)"
 msgid "Shows some useful information about the current settings of services."
 msgstr ""
 
-#: modules/operserv/info.c:69
+#: modules/operserv/info.c:44
+#, c-format
+msgid "How often services writes changes to the database: %d minutes"
+msgstr ""
+
+#: modules/operserv/info.c:45
+#, c-format
+msgid "Default kline time: %d days"
+msgstr ""
+
+#: modules/operserv/info.c:46
+#, c-format
+msgid "Will services be sending WALLOPS/GLOBOPS about various things: %s"
+msgstr ""
+
+#: modules/operserv/info.c:47
+#, c-format
+msgid ""
+"How many messages before a flood is triggered, (if 0, flood protection is "
+"disabled): %d"
+msgstr ""
+
+#: modules/operserv/info.c:48
+#, c-format
+msgid "How long before the flood counter resets: %d seconds"
+msgstr ""
+
+#: modules/operserv/info.c:49
+#, c-format
+msgid ""
+"Number of commands used before ratelimiting starts, (if 0, ratelimiting is "
+"disabled): %d"
+msgstr ""
+
+#: modules/operserv/info.c:50
+#, c-format
+msgid ""
+"How long before ratelimiting counter resets, (if 0, ratelimiting is "
+"disabled): %d seconds"
+msgstr ""
+
+#: modules/operserv/info.c:51
+#, fuzzy, c-format
+msgid "No nick ownership enabled: %s"
+msgstr "Возможность закрепления ника за собой отключена."
+
+#: modules/operserv/info.c:52
+#, c-format
+msgid "Nickname expiration time: %d days"
+msgstr ""
+
+#: modules/operserv/info.c:53
+#, c-format
+msgid "Nickname enforce expiry time: %d days"
+msgstr ""
+
+#: modules/operserv/info.c:54
+#, c-format
+msgid "Nickname enforce delay: %d seconds"
+msgstr ""
+
+#: modules/operserv/info.c:55
+#, c-format
+msgid "Nickname enforce prefix: %s"
+msgstr ""
+
+#: modules/operserv/info.c:56
+#, c-format
+msgid "Maximum number of logins allowed per username: %d"
+msgstr ""
+
+#: modules/operserv/info.c:57
+#, fuzzy, c-format
+msgid ""
+"Maximum number of usernames that can be registered to one email address: %d"
+msgstr "Показывает список аккаунтов зарегистрированных на данный адрес e-mail."
+
+#: modules/operserv/info.c:59
+#, c-format
+msgid "Maximum number of nicknames that one user can own: %d"
+msgstr ""
+
+#: modules/operserv/info.c:60
+#, c-format
+msgid "Maximum number of channels that one user can own: %d"
+msgstr ""
+
+#: modules/operserv/info.c:61
+#, c-format
+msgid "Channel expiration time: %d days"
+msgstr ""
+
+#: modules/operserv/info.c:63
+#, fuzzy, c-format
+msgid "Channel fantasy trigger: %s"
+msgstr "Ключ-пароль канала %s - %s"
+
+#: modules/operserv/info.c:64
+#, c-format
+msgid ""
+"Maximum number of entries allowed in a channel access list (if 0, "
+"unlimited): %d"
+msgstr ""
+
+#: modules/operserv/info.c:65
+#, fuzzy, c-format
+msgid "Maximum number of founders allowed per channel: %d"
+msgstr "Список владельцев канала не может превышать %d"
+
+#: modules/operserv/info.c:71
 msgid ""
 "Services is presently TAINTED, no support will be given for this "
 "configuration."
 msgstr ""
 
-#: modules/operserv/info.c:70
+#: modules/operserv/info.c:72
 msgid "List of active taints:"
 msgstr ""
 
-#: modules/operserv/info.c:76
+#: modules/operserv/info.c:78
 #, c-format
 msgid "Taint Condition: %s"
 msgstr ""
 
-#: modules/operserv/info.c:77
+#: modules/operserv/info.c:79
 #, c-format
 msgid "Taint Location: %s:%d"
 msgstr ""
 
-#: modules/operserv/info.c:78
+#: modules/operserv/info.c:80
 #, c-format
 msgid "Taint Explanation: %s"
 msgstr ""
@@ -5892,7 +6015,7 @@ msgstr "SUCCESSION: %s -> %s от %s"
 msgid "DELETE: %s from %s"
 msgstr "DELETE: %s из %s"
 
-#: src/account.c:851
+#: src/account.c:853
 #, c-format
 msgid ""
 "Not restoring mark \"%s\" for account %s (name %s) which is already marked"
@@ -5900,22 +6023,22 @@ msgstr ""
 "Не восстановлена пометка \"%s\" для аккаунта %s (имя %s) так как он уже "
 "помечен"
 
-#: src/account.c:852
+#: src/account.c:854
 #, c-format
 msgid "MARK:FORGET: \"%s\" for %s (%s) (already marked)"
 msgstr ":FORGET: \"%s\" для %s (%s) (уже помечено)"
 
-#: src/account.c:858
+#: src/account.c:860
 #, c-format
 msgid "MARK:RESTORE: \"%s\" for %s (%s)"
 msgstr "MARK:RESTORE: \"%s\" для %s (%s)"
 
-#: src/account.c:1819
+#: src/account.c:1821
 #, c-format
 msgid "EXPIRE: %s from %s "
 msgstr "EXPIRE: %s из %s "
 
-#: src/account.c:1873 src/account.c:1911
+#: src/account.c:1875 src/account.c:1913
 #, c-format
 msgid "EXPIRE: %s from %s"
 msgstr "EXPIRE: %s из %s"
@@ -6118,7 +6241,7 @@ msgstr "Получена команда перезапуска от %s."
 msgid "Got SIGUSR2; restarting."
 msgstr "Получен сигнал SIGUSR2; перезапуск..."
 
-#: src/users.c:315
+#: src/users.c:316
 #, c-format
 msgid "user_find(): found user %s by nick!"
 msgstr "user_find(): пользователь %s найден по нику!"
