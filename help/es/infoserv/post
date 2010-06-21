@@ -15,7 +15,7 @@ IMPORTANCIA:
 			sea absolutamente necesario.
 
 
-Sintaxis: POST <importancia> <tema> <mensaje>
+Sintaxis: POST <importancia> <asunto> <mensaje>
 
 Ejemplo:
 	/msg &nick& 2 Info1 Algo de información importante para los usuarios.
