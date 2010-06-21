@@ -1518,6 +1518,8 @@ msgid ""
 "The system is currently too busy to process your registration, please try "
 "again later."
 msgstr ""
+"El sistema se encuentra muy ocupado actualmente y no puede procesar su "
+"registro, por favor intente después."
 
 #: modules/chanserv/register.c:140
 msgid "You have too many channels registered."
@@ -2612,6 +2614,8 @@ msgid ""
 "The system is currently too busy to process your vHost request, please try "
 "again later."
 msgstr ""
+"El sistema se encuentra muy ocupado actualmente y no puede procesar su "
+"solicitud de vHost, por favor intente después."
 
 #: modules/hostserv/request.c:282 modules/hostserv/request.c:307
 #, c-format
@@ -4628,9 +4632,8 @@ msgstr "Fin de la lista de CLONES"
 
 #: modules/operserv/clones.c:411 modules/operserv/clones.c:453
 #: modules/operserv/clones.c:491
-#, fuzzy
 msgid "Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"
-msgstr "Sintaxis: CLONES ADDEXEMPT <ip> <clones> <razón>"
+msgstr "Sintaxis: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutos>] <razón>"
 
 #: modules/operserv/clones.c:418
 #, c-format
@@ -4868,16 +4871,17 @@ msgstr ""
 #, c-format
 msgid "How often services writes changes to the database: %d minutes"
 msgstr ""
+"Frecuencia con que servicios guardan cambios en la base de datos: %d minutos"
 
 #: modules/operserv/info.c:45
 #, c-format
 msgid "Default kline time: %d days"
-msgstr ""
+msgstr "Duración predeterminada de kline: %d días"
 
 #: modules/operserv/info.c:46
 #, c-format
 msgid "Will services be sending WALLOPS/GLOBOPS about various things: %s"
-msgstr ""
+msgstr "Servicios envían WALLOPS/GLOBOPS acerca de varios eventos: %s"
 
 #: modules/operserv/info.c:47
 #, c-format
@@ -4885,11 +4889,14 @@ msgid ""
 "How many messages before a flood is triggered, (if 0, flood protection is "
 "disabled): %d"
 msgstr ""
+"Cuántos mensajes antes de activar la protección de flood (0 = desactivada): %"
+"d"
 
 #: modules/operserv/info.c:48
 #, c-format
 msgid "How long before the flood counter resets: %d seconds"
 msgstr ""
+"Cuánto tiempo antes de que el contador de flood se reestablece: %d segundos"
 
 #: modules/operserv/info.c:49
 #, c-format
@@ -4897,6 +4904,8 @@ msgid ""
 "Number of commands used before ratelimiting starts, (if 0, ratelimiting is "
 "disabled): %d"
 msgstr ""
+"Número de comandos utilizados antes de limitar la frecuencia (0 = límite "
+"desactivado): %d"
 
 #: modules/operserv/info.c:50
 #, c-format
@@ -4904,62 +4913,66 @@ msgid ""
 "How long before ratelimiting counter resets, (if 0, ratelimiting is "
 "disabled): %d seconds"
 msgstr ""
+"Cuánto tiempo antes de que el contador de límite de frecuencia se desactiva "
+"(0 = límite desactivado): %d segundos"
 
 #: modules/operserv/info.c:51
-#, fuzzy, c-format
+#, c-format
 msgid "No nick ownership enabled: %s"
-msgstr "Posesión de nicks desactivada."
+msgstr "Posesión de nicks desactivada: %s"
 
 #: modules/operserv/info.c:52
 #, c-format
 msgid "Nickname expiration time: %d days"
-msgstr ""
+msgstr "Tiempo de expiración de nicks: %d días"
 
 #: modules/operserv/info.c:53
 #, c-format
 msgid "Nickname enforce expiry time: %d days"
-msgstr ""
+msgstr "Tiempo de expiración de la protección de nicks: %d días"
 
 #: modules/operserv/info.c:54
 #, c-format
 msgid "Nickname enforce delay: %d seconds"
-msgstr ""
+msgstr "Intervalo de espera de la protección de nicks: %d segundos"
 
 #: modules/operserv/info.c:55
 #, c-format
 msgid "Nickname enforce prefix: %s"
-msgstr ""
+msgstr "Prefijo de protección de nicks: %s"
 
 #: modules/operserv/info.c:56
 #, c-format
 msgid "Maximum number of logins allowed per username: %d"
-msgstr ""
+msgstr "Número máximo de sesiones permitidas por usuario: %d"
 
 #: modules/operserv/info.c:57
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Maximum number of usernames that can be registered to one email address: %d"
-msgstr "Muestra una lista de cuentas registradas por una dirección de e-mail."
+msgstr ""
+"Máximo número de usuarios que pueden ser registrados por una misma dirección "
+"de email: %d"
 
 #: modules/operserv/info.c:59
 #, c-format
 msgid "Maximum number of nicknames that one user can own: %d"
-msgstr ""
+msgstr "Número máximo de nicks que pueden pertenecer a un usuario: %d"
 
 #: modules/operserv/info.c:60
 #, c-format
 msgid "Maximum number of channels that one user can own: %d"
-msgstr ""
+msgstr "Número máximo de canales que pueden pertenecer a un usuario: %d"
 
 #: modules/operserv/info.c:61
 #, c-format
 msgid "Channel expiration time: %d days"
-msgstr ""
+msgstr "Tiempo de expiración de canales: %d días"
 
 #: modules/operserv/info.c:63
-#, fuzzy, c-format
+#, c-format
 msgid "Channel fantasy trigger: %s"
-msgstr "La clave de acceso del canal %s es: %s"
+msgstr "Prefijo de comandos de fantasía: %s"
 
 #: modules/operserv/info.c:64
 #, c-format
@@ -4967,11 +4980,13 @@ msgid ""
 "Maximum number of entries allowed in a channel access list (if 0, "
 "unlimited): %d"
 msgstr ""
+"Número máximo de entradas permitidas en listas de acceso de canales (0 = "
+"ilimitadas): %d"
 
 #: modules/operserv/info.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of founders allowed per channel: %d"
-msgstr "Sólo se permiten %d fundadores por canal."
+msgstr "Número máximo de fundadores permitidos por canal: %d"
 
 #: modules/operserv/info.c:71
 msgid ""
