@@ -64,7 +64,7 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, command, &is_helptree);
+	help_display(si, si->service, command, &is_helptree);
 }
 
 static void write_infodb(void)

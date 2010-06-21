@@ -50,7 +50,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, command, &gs_helptree);
+	help_display(si, si->service, command, &gs_helptree);
 }
 
 /* GLOBAL <parameters>|SEND|CLEAR */

@@ -51,7 +51,7 @@ static void cs_help_set(sourceinfo_t *si)
 	command_success_nodata(si, " ");
 	command_help(si, &cs_set_cmdtree);
 	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
+	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), chansvs.me->disp);
 }
 
 /* SET <#channel> <setting> <parameters> */
@@ -82,7 +82,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&cs_set_cmdtree, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 		return;
 	}
 

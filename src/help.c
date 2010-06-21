@@ -104,7 +104,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return false;
 }
 
-void help_display(sourceinfo_t *si, const char *command, list_t *list)
+void help_display(sourceinfo_t *si, service_t *service, const char *command, list_t *list)
 {
 	helpentry_t *c;
 	FILE *help_file = NULL;
@@ -148,14 +148,14 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 				return;
 			}
 
-			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
+			command_success_nodata(si, _("***** \2%s Help\2 *****"), service->nick);
 
 			ifnest = ifnest_false = 0;
 			while (fgets(buf, BUFSIZE, help_file))
 			{
 				strip(buf);
 
-				replace(buf, sizeof(buf), "&nick&", si->service->disp);
+				replace(buf, sizeof(buf), "&nick&", service->disp);
 				if (!strncmp(buf, "#if", 3))
 				{
 					if (ifnest_false > 0 || !evaluate_condition(si, buf + 3))
@@ -192,7 +192,7 @@ void help_display(sourceinfo_t *si, const char *command, list_t *list)
 		}
 		else if (c->func)
 		{
-			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
+			command_success_nodata(si, _("***** \2%s Help\2 *****"), service->nick);
 
 			c->func(si);
 
