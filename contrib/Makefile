@@ -35,15 +35,14 @@ SRCS =			\
 	ns_mxcheck_async.c	\
 	on_db_save.c		\
 	os_akillnicklist.c	\
-	os_pingspam.c		\
-	os_testcmd.c		\
-	os_testproc.c		\
 	os_kill.c		\
 	os_klinechan.c	\
-	os_logonnews.c	\
 	os_logstream.c	\
+	os_pingspam.c		\
 	os_savechanmodes.c	\
 	os_tabletest.c	\
+	os_testcmd.c		\
+	os_testproc.c		\
 	os_trace.c		\
 	wumpus.c
 
