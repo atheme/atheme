@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 03:19-0400\n"
+"POT-Creation-Date: 2010-06-21 16:41-0400\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team:  <shadowm2006@gmail.com>\n"
@@ -15,9 +15,9 @@ msgstr ""
 #: modules/alis/main.c:426 modules/botserv/help.c:47
 #: modules/chanserv/help.c:55 modules/chanserv/help.c:108
 #: modules/gameserv/help.c:47 modules/hostserv/help.c:47
-#: modules/memoserv/help.c:47 modules/nickserv/help.c:46
-#: modules/nickserv/help.c:95 modules/operserv/help.c:54 src/help.c:151
-#: src/help.c:195
+#: modules/infoserv/main.c:53 modules/memoserv/help.c:47
+#: modules/nickserv/help.c:46 modules/nickserv/help.c:95
+#: modules/operserv/help.c:54 src/help.c:151 src/help.c:195
 #, c-format
 msgid "***** %s Help *****"
 msgstr "***** Ayuda de %s *****"
@@ -33,17 +33,17 @@ msgstr ""
 
 #: modules/alis/main.c:431 modules/botserv/help.c:50
 #: modules/chanserv/help.c:84 modules/gameserv/help.c:50
-#: modules/hostserv/help.c:50 modules/memoserv/help.c:50
-#: modules/nickserv/help.c:71
+#: modules/hostserv/help.c:50 modules/infoserv/main.c:56
+#: modules/memoserv/help.c:50 modules/nickserv/help.c:71
 msgid "For more information on a command, type:"
 msgstr "Para más información sobre un comando, escriba:"
 
 #: modules/alis/main.c:435 modules/botserv/help.c:56
 #: modules/chanserv/help.c:92 modules/chanserv/help.c:110
 #: modules/gameserv/help.c:56 modules/hostserv/help.c:56
-#: modules/memoserv/help.c:56 modules/nickserv/help.c:79
-#: modules/nickserv/help.c:97 modules/operserv/help.c:66 src/help.c:191
-#: src/help.c:199
+#: modules/infoserv/main.c:62 modules/memoserv/help.c:56
+#: modules/nickserv/help.c:79 modules/nickserv/help.c:97
+#: modules/operserv/help.c:66 src/help.c:191 src/help.c:199
 msgid "***** End of Help *****"
 msgstr "***** Fin de la Ayuda *****"
 
@@ -207,8 +207,9 @@ msgstr "Sintaxis: ACT <#canal> <mensaje>"
 
 #: modules/botserv/help.c:23 modules/chanserv/help.c:20
 #: modules/gameserv/help.c:23 modules/global/main.c:32
-#: modules/hostserv/help.c:23 modules/memoserv/help.c:23
-#: modules/nickserv/help.c:22 modules/operserv/help.c:21
+#: modules/hostserv/help.c:23 modules/infoserv/main.c:41
+#: modules/memoserv/help.c:23 modules/nickserv/help.c:22
+#: modules/operserv/help.c:21
 msgid "Displays contextual help information."
 msgstr "Muestra información de ayuda contextual."
 
@@ -2684,6 +2685,58 @@ msgstr "Se quitó el vhost de %s."
 #, c-format
 msgid "Assigned vhost %s to %s."
 msgstr "Se ha asignado el vhost %s a %s."
+
+#: modules/infoserv/main.c:42
+#, fuzzy
+msgid "Post news items for users to view."
+msgstr "Establece vhosts disponibles pare ser aceptados por usuarios."
+
+#: modules/infoserv/main.c:43
+#, fuzzy
+msgid "Delete news items."
+msgstr "Elimina memos."
+
+#: modules/infoserv/main.c:44
+msgid "List previously posted news items."
+msgstr ""
+
+#: modules/infoserv/main.c:54
+#, fuzzy, c-format
+msgid "%s allows users to view informational messages."
+msgstr "%s permite a los usuarios solicitar un nombre de host virtual."
+
+#: modules/infoserv/main.c:193
+#, fuzzy
+msgid "Syntax: POST <importance> <subject> <message>"
+msgstr "Sintaxis: SET <#canal> <ajuste> <parámetros>"
+
+#: modules/infoserv/main.c:201
+msgid "Importance must be a digit between 1 and 4"
+msgstr ""
+
+#: modules/infoserv/main.c:209 modules/infoserv/main.c:218
+#, fuzzy
+msgid "The InfoServ message has been sent"
+msgstr "El mensaje de ingreso para %s ha sido cambiado a %s"
+
+#: modules/infoserv/main.c:234
+msgid "Added entry to logon info"
+msgstr ""
+
+#: modules/infoserv/main.c:289
+#, c-format
+msgid "Deleted entry %d from logon info."
+msgstr ""
+
+#: modules/infoserv/main.c:294
+#, fuzzy, c-format
+msgid "Entry %d not found in logon info."
+msgstr "No se encontró %s en la lista de exención de clones."
+
+#: modules/infoserv/main.c:318
+#, fuzzy
+msgid "End of list."
+msgstr "Fin de la lista AKILL."
 
 #: modules/memoserv/delete.c:20
 msgid "Deletes memos."

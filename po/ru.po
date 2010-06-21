@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 03:19-0400\n"
+"POT-Creation-Date: 2010-06-21 16:41-0400\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -15,9 +15,9 @@ msgstr ""
 #: modules/alis/main.c:426 modules/botserv/help.c:47
 #: modules/chanserv/help.c:55 modules/chanserv/help.c:108
 #: modules/gameserv/help.c:47 modules/hostserv/help.c:47
-#: modules/memoserv/help.c:47 modules/nickserv/help.c:46
-#: modules/nickserv/help.c:95 modules/operserv/help.c:54 src/help.c:151
-#: src/help.c:195
+#: modules/infoserv/main.c:53 modules/memoserv/help.c:47
+#: modules/nickserv/help.c:46 modules/nickserv/help.c:95
+#: modules/operserv/help.c:54 src/help.c:151 src/help.c:195
 #, c-format
 msgid "***** %s Help *****"
 msgstr "***** Система помощи %s *****"
@@ -31,17 +31,17 @@ msgstr ""
 
 #: modules/alis/main.c:431 modules/botserv/help.c:50
 #: modules/chanserv/help.c:84 modules/gameserv/help.c:50
-#: modules/hostserv/help.c:50 modules/memoserv/help.c:50
-#: modules/nickserv/help.c:71
+#: modules/hostserv/help.c:50 modules/infoserv/main.c:56
+#: modules/memoserv/help.c:50 modules/nickserv/help.c:71
 msgid "For more information on a command, type:"
 msgstr "Для получения более подробной информации см.:"
 
 #: modules/alis/main.c:435 modules/botserv/help.c:56
 #: modules/chanserv/help.c:92 modules/chanserv/help.c:110
 #: modules/gameserv/help.c:56 modules/hostserv/help.c:56
-#: modules/memoserv/help.c:56 modules/nickserv/help.c:79
-#: modules/nickserv/help.c:97 modules/operserv/help.c:66 src/help.c:191
-#: src/help.c:199
+#: modules/infoserv/main.c:62 modules/memoserv/help.c:56
+#: modules/nickserv/help.c:79 modules/nickserv/help.c:97
+#: modules/operserv/help.c:66 src/help.c:191 src/help.c:199
 msgid "***** End of Help *****"
 msgstr "***** Конец справочной информации *****"
 
@@ -205,8 +205,9 @@ msgstr "Синтаксис: COUNT <#канал>"
 
 #: modules/botserv/help.c:23 modules/chanserv/help.c:20
 #: modules/gameserv/help.c:23 modules/global/main.c:32
-#: modules/hostserv/help.c:23 modules/memoserv/help.c:23
-#: modules/nickserv/help.c:22 modules/operserv/help.c:21
+#: modules/hostserv/help.c:23 modules/infoserv/main.c:41
+#: modules/memoserv/help.c:23 modules/nickserv/help.c:22
+#: modules/operserv/help.c:21
 msgid "Displays contextual help information."
 msgstr "Выводит контекстуальную справочную информацию."
 
@@ -2735,6 +2736,60 @@ msgstr "Удален vhost для %s."
 #, c-format
 msgid "Assigned vhost %s to %s."
 msgstr "Установлен vhost %s для %s."
+
+#: modules/infoserv/main.c:42
+msgid "Post news items for users to view."
+msgstr ""
+
+#: modules/infoserv/main.c:43
+#, fuzzy
+msgid "Delete news items."
+msgstr "Удаляет указанные мемо-сообщения."
+
+#: modules/infoserv/main.c:44
+msgid "List previously posted news items."
+msgstr ""
+
+#: modules/infoserv/main.c:54
+#, fuzzy, c-format
+msgid "%s allows users to view informational messages."
+msgstr ""
+"%s - это сервис, позволяющий зарегистрированным пользователям посылать друг "
+"другу короткие мемо-сообщения (от английского \"memo\" - записка, памятка), "
+"которые могу храниться достаточно длительный период времени."
+
+#: modules/infoserv/main.c:193
+#, fuzzy
+msgid "Syntax: POST <importance> <subject> <message>"
+msgstr "Синтаксис: SET <#канал> <опция> <параметры>"
+
+#: modules/infoserv/main.c:201
+msgid "Importance must be a digit between 1 and 4"
+msgstr ""
+
+#: modules/infoserv/main.c:209 modules/infoserv/main.c:218
+#, fuzzy
+msgid "The InfoServ message has been sent"
+msgstr "Сообщение при входе для канала %s изменено на: %s"
+
+#: modules/infoserv/main.c:234
+msgid "Added entry to logon info"
+msgstr ""
+
+#: modules/infoserv/main.c:289
+#, c-format
+msgid "Deleted entry %d from logon info."
+msgstr ""
+
+#: modules/infoserv/main.c:294
+#, fuzzy, c-format
+msgid "Entry %d not found in logon info."
+msgstr "%s не найдено в списке исключений для клонов."
+
+#: modules/infoserv/main.c:318
+#, fuzzy
+msgid "End of list."
+msgstr "Конец AKILL-списка."
 
 #: modules/memoserv/delete.c:20
 msgid "Deletes memos."
