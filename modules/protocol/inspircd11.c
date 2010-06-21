@@ -328,6 +328,11 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
+static void inspircd_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void inspircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -1251,6 +1256,7 @@ void _modinit(module_t * m)
 	chan_lowerts = &inspircd_chan_lowerts;
 	kick = &inspircd_kick;
 	msg = &inspircd_msg;
+	msg_global_sts = &inspircd_msg_global_sts;
 	notice_user_sts = &inspircd_notice_user_sts;
 	notice_global_sts = &inspircd_notice_global_sts;
 	notice_channel_sts = &inspircd_notice_channel_sts;

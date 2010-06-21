@@ -109,6 +109,10 @@ E void (*kick)(user_t *source, channel_t *c, user_t *u, const char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
 E void (*msg)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
+/* send a global privmsg to all users on servers matching the mask
+ * from is a client on the services server
+ * mask is either "*" or it has a non-wildcard TLD */
+E void (*msg_global_sts)(user_t *from, const char *mask, const char *text);
 /* send a notice to a user
  * from can be a client on the services server or the services server
  * itself (NULL) */
@@ -228,6 +232,7 @@ E void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes);
 E void generic_chan_lowerts(channel_t *c, user_t *u);
 E void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason);
 E void generic_msg(const char *from, const char *target, const char *fmt, ...);
+E void generic_msg_global_sts(user_t *from, const char *mask, const char *text);
 E void generic_notice_user_sts(user_t *from, user_t *target, const char *text);
 E void generic_notice_global_sts(user_t *from, const char *mask, const char *text);
 E void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text);

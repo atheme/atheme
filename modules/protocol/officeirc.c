@@ -165,6 +165,23 @@ static void officeirc_msg(const char *from, const char *target, const char *fmt,
 	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
+static void officeirc_msg_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
 /* NOTICE wrapper */
 static void officeirc_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
@@ -771,6 +788,7 @@ void _modinit(module_t * m)
 	join_sts = &officeirc_join_sts;
 	kick = &officeirc_kick;
 	msg = &officeirc_msg;
+	msg_global_sts = &officeirc_msg_global_sts;
 	notice_user_sts = &officeirc_notice_user_sts;
 	notice_global_sts = &officeirc_notice_global_sts;
 	notice_channel_sts = &officeirc_notice_channel_sts;
