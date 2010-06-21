@@ -10,7 +10,7 @@ IMPORTANCE:
 	2 - Send a notice to all users now.
 	3 - Display message to all users upon connect AND send a notice to
 			all users now.
-	4. Send a privmsg/query to all users now. It is important to note that this
+	4 - Send a privmsg/query to all users now. It is important to note that this
 			may annoy users and should only be used when absolutely necessary.
 
 
