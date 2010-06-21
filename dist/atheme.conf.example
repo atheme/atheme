@@ -457,6 +457,13 @@ loadmodule "modules/memoserv/ignore";
  */
 loadmodule "modules/global/main";
 
+/* InfoServ modules.
+ *
+ * Like the other services, InfoServ is a module. You can disable or
+ * enable it to your liking below.
+ */
+loadmodule "modules/infoserv/main";
+
 /* SASL agent module.
  *
  * Allows clients to authenticate to services via SASL with an appropriate
@@ -960,9 +967,9 @@ chanserv {
 
 /* Global noticing configuration.
  *
- * The global {} block contains settings specific to the Global notice modules.
+ * The global {} block contains settings specific to the Global notice module.
  *
- * The Global notice modules provide the ability to mass-notify a network.
+ * The Global notice module provides the ability to mass-notify a network.
  */
 global {
 	/* (*)nick
@@ -984,6 +991,35 @@ global {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Network Announcements";
+};
+
+/* InfoServ configuration
+ *
+ * The infoserv {} block contains settings specific to the InfoServ module.
+ *
+ * The InfoServ modules provides the ability to mass-notify a network and send
+ * news to users when they connect to the network.
+ */
+infoserv {
+	/* (*)nick
+	 * Sets the nick used for InfoServ and sending out informational messages.
+	 */
+	nick = "InfoServ";
+
+	/* (*)user
+	 * Sets the username used for this client.
+	 */
+	user = "InfoServ";
+
+	/* (*)host
+	 * The hostname used for this client,
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The GECOS (real name) of the client.
+	 */
+	real = "Information Service";
 };
 
 /* OperServ configuration.

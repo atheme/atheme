@@ -38,6 +38,7 @@ nicksvs_t nicksvs;
 saslsvs_t saslsvs;
 gamesvs_t gamesvs;
 hostsvs_t hostsvs;
+infosvs_t infosvs;
 
 list_t taint_list = { NULL, NULL, 0 };
 
