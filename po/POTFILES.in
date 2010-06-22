@@ -75,6 +75,7 @@ modules/hostserv/onoff.c
 modules/hostserv/request.c
 modules/hostserv/vhost.c
 modules/hostserv/vhostnick.c
+modules/infoserv/main.c
 modules/memoserv/delete.c
 modules/memoserv/forward.c
 modules/memoserv/help.c
