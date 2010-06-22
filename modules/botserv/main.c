@@ -652,7 +652,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 	bot = botserv_bot_find(parv[0]);
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
 		return;
 	}
 
@@ -828,7 +828,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[0]);
 		return;
 	}
 
@@ -871,7 +871,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 	int i = 0;
 	node_t *n;
 
-	command_success_nodata(si, "Listing of bots available on \2%s\2:", me.netname);
+	command_success_nodata(si, _("Listing of bots available on \2%s\2:"), me.netname);
 
 	LIST_FOREACH(n, bs_bots.head)
 	{
@@ -881,11 +881,11 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 	}
 
-	command_success_nodata(si, "\2%d\2 bots available.", i);
+	command_success_nodata(si, _("\2%d\2 bots available."), i);
 	if (si->su != NULL && has_priv(si, PRIV_CHAN_ADMIN))
 	{
 		i = 0;
-		command_success_nodata(si, "Listing of private bots available on \2%s\2:", me.netname);
+		command_success_nodata(si, _("Listing of private bots available on \2%s\2:"), me.netname);
 		LIST_FOREACH(n, bs_bots.head)
 		{
 			botserv_bot_t *bot = (botserv_bot_t *) n->data;
@@ -893,7 +893,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 			if (bot->private)
 				command_success_nodata(si, "\2%d:\2 %s (%s@%s) [%s]", ++i, bot->nick, bot->user, bot->host, bot->real);
 		}
-		command_success_nodata(si, "\2%d\2 private bots available.", i);
+		command_success_nodata(si, _("\2%d\2 private bots available."), i);
 	}
 	command_success_nodata(si, "Use \2/msg %s ASSIGN #chan botnick\2 to assign one to your channel.", si->service->me->nick);
 }
@@ -918,25 +918,25 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
 	if (c->members.count < min_users)
 	{
-		command_fail(si, fault_noprivs, "There are not enough users in \2%s\2 to be able to assign a bot.", mc->name);
+		command_fail(si, fault_noprivs, _("There are not enough users in \2%s\2 to be able to assign a bot."), mc->name);
 		return;
 	}
 
 	if (metadata_find(mc, "private:botserv:no-bot") != NULL)
 	{
-		command_fail(si, fault_noprivs, "You cannot assign bots to \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, _("You cannot assign bots to \2%s\2."), mc->name);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		command_fail(si, fault_noprivs, "You are not authorised to assign bots on \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorised to assign bots on \2%s\2."), mc->name);
 		return;
 	}
 
@@ -945,19 +945,19 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	bot = botserv_bot_find(parv[1]);
 	if (bot == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a bot", parv[1]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a bot"), parv[1]);
 		return;
 	}
 
 	if (bot->private && !has_priv(si, PRIV_CHAN_ADMIN))
 	{
-		command_fail(si, fault_noprivs, "You are not authorised to assign the bot \2%s\2 to a channel.", bot->nick);
+		command_fail(si, fault_noprivs, _("You are not authorised to assign the bot \2%s\2 to a channel."), bot->nick);
 		return;
 	}
 
 	if (md != NULL && !irccasecmp(md->value, parv[1]))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is already assigned to \2%s\2.", bot->nick, parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is already assigned to \2%s\2."), bot->nick, parv[0]);
 		return;
 	}
 
@@ -975,7 +975,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
 
 	logcommand(si, CMDLOG_SET, "BOT:ASSIGN: \2%s\2 to \2%s\2", parv[1], parv[0]);
-	command_success_nodata(si, "Assigned the bot \2%s\2 to \2%s\2.", parv[1], parv[0]);
+	command_success_nodata(si, _("Assigned the bot \2%s\2 to \2%s\2."), parv[1], parv[0]);
 }
 
 /* ******************************************************************** */
@@ -995,13 +995,13 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		command_fail(si, fault_noprivs, "You are not authorised to unassign a bot on \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorised to unassign a bot on \2%s\2."), mc->name);
 		return;
 	}
 
@@ -1019,7 +1019,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 	logcommand(si, CMDLOG_SET, "BOT:UNASSIGN: \2%s\2", parv[0]);
-	command_success_nodata(si, "Unassigned the bot from \2%s\2.", parv[0]);
+	command_success_nodata(si, _("Unassigned the bot from \2%s\2."), parv[0]);
 }
 
 /* ******************************************************************** */
