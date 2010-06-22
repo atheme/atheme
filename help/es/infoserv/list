@@ -7,4 +7,4 @@ al conectarse.
 Sintaxis: LIST
 
 Ejemplo:
-	/msg &nick& LIST
+    /msg &nick& LIST

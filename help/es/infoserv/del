@@ -6,4 +6,4 @@ necesario mostrar a los usuarios al conectarse.
 Sintaxis: DEL <id>
 
 Ejemplo:
-	/msg &nick& DEL 1
+    /msg &nick& DEL 1
