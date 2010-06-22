@@ -1181,6 +1181,14 @@ botserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Bot Services";
+
+	/* (*)min_users
+	 * Minimum number of users a channel must have before a Bot is allowed
+	 * to be assigned to that channel.
+	 * NOTE: Set this to 0 rather than commenting it out to disable
+	 * this functionality.
+	 */
+	min_users = 0;
 };
 
 /* HostServ configuration.

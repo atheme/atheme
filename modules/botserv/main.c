@@ -43,6 +43,8 @@ list_t bs_helptree;
 list_t bs_conftable;
 list_t *cs_cmdtree;
 
+unsigned int min_users = 0;
+
 E list_t mychan;
 
 list_t bs_bots;
@@ -901,7 +903,9 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 /* ASSIGN #channel nick */
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
-	mychan_t *mc = mychan_find(parv[0]);
+	char *channel = parv[0];
+	mychan_t *mc = mychan_find(channel);
+	channel_t *c = channel_find(channel);
 	metadata_t *md;
 	botserv_bot_t *bot;
 
@@ -915,6 +919,12 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 	if (mc == NULL)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		return;
+	}
+
+	if (c->members.count < min_users)
+	{
+		command_fail(si, fault_noprivs, "There are not enough users in \2%s\2 to be able to assign a bot.", mc->name);
 		return;
 	}
 
@@ -1028,6 +1038,7 @@ void _modinit(module_t *m)
 
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
+	add_uint_conf_item("MIN_USERS", &bs_conftable, &min_users, 0, 65535);
 	command_add(&bs_bot, &bs_cmdtree);
 	command_add(&bs_assign, &bs_cmdtree);
 	command_add(&bs_unassign, &bs_cmdtree);
@@ -1087,6 +1098,7 @@ void _moddeinit(void)
 	help_delentry(&bs_helptree, "ASSIGN");
 	help_delentry(&bs_helptree, "UNASSIGN");
 	help_delentry(&bs_helptree, "BOTLIST");
+	del_conf_item("MIN_USERS", &bs_conftable);
 	hook_del_channel_join(bs_join);
 	hook_del_channel_part(bs_part);
 	hook_del_channel_register(bs_register);
