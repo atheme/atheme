@@ -205,7 +205,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 4)
 	{
 		snprintf(buf, sizeof buf, "[CRITICAL NETWORK NOTICE] %s - [%s] %s", get_source_name(si), subject, story);
-		msg_global_sts(globsvs.me->me, "*", buf);
+		msg_global_sts(infosvs.me->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
@@ -214,7 +214,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 2)
 	{
 		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
-		notice_global_sts(globsvs.me->me, "*", buf);
+		notice_global_sts(infosvs.me->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
@@ -237,7 +237,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 3)
 	{
 		snprintf(buf, sizeof buf, "Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
-		notice_global_sts(globsvs.me->me, "*", buf);
+		notice_global_sts(infosvs.me->me, "*", buf);
 	}
 
 	return;
