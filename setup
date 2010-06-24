@@ -11,6 +11,7 @@ PREFIX="$HOME/atheme"
 LARGENET="no"
 NLS="yes"
 SASL="yes"
+CONTRIB="no"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
 if [ "x$PAGER" = "x" ]; then
@@ -90,13 +91,7 @@ LARGENET=$INPUT
 ARGS="--prefix=$PREFIX"
 
 case "$LARGENET" in
-  [Yy])
-    ARGS="$ARGS --enable-large-net"
-    ;;
-  Yes)
-    ARGS="$ARGS --enable-large-net"
-    ;;
-  yes)
+  [Yy]*)
     ARGS="$ARGS --enable-large-net"
     ;;
 esac
@@ -120,15 +115,34 @@ done
 NLS=$INPUT
 
 case "$NLS" in
-  [Yy])
+  [Yy]*)
     ARGS="$ARGS --disable-nls"
     ;;
-  Yes)
-    ARGS="$ARGS --disable-nls"
-    ;;
-  yes)
-    ARGS="$ARGS --disable-nls"
-    ;;
+esac
+
+echo ""
+
+ok=0
+echo "Would you like to compile the modules in the contrib directory?"
+echo "This contains modules that may be useful."
+echo "There is no support for them and no guarantee that they will work."
+while [ $ok -eq 0 ] ; do
+	echo -n "[$CONTRIB] "
+	if read INPUT ; then : ; else echo "" ; exit 1 ; fi
+	if [ ! "$INPUT" ] ; then
+		INPUT=$CONTRIB
+		ok=1
+	  else
+		ok=1
+	  fi
+done
+CONTRIB=$INPUT
+
+# Yeah, I know sed and escaping everything is probably not the cleanest way to do this, but it works...
+case "$CONTRIB" in
+	[Yy]*)
+	  sed -i s/\$\(PODIR\)/contrib\ \$\(PODIR\)/ Makefile
+	  ;;
 esac
 
 echo ""
