@@ -17,7 +17,6 @@ typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
 typedef struct gamesvs_ gamesvs_t;
 typedef struct hostsvs_ hostsvs_t;
-typedef struct infosvs_ infosvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the service_t, and will probably be removed
@@ -132,16 +131,6 @@ struct hostsvs_
   service_t *me;
 };
 
-struct infosvs_
-{
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-
-  service_t *me;
-};
-
 /* help us keep consistent messages */
 #define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
 #define STR_INVALID_PARAMS _("Invalid parameters for \2%s\2.")
@@ -163,7 +152,6 @@ E nicksvs_t nicksvs;
 E saslsvs_t saslsvs;
 E gamesvs_t gamesvs;
 E hostsvs_t hostsvs;
-E infosvs_t infosvs;
 
 /* services.c */
 E int authservice_loaded;

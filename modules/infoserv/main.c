@@ -26,6 +26,7 @@ typedef struct logoninfo_ logoninfo_t;
 
 list_t logon_info;
 
+service_t *infoserv;
 list_t is_cmdtree;
 list_t is_helptree;
 list_t is_conftable;
@@ -54,7 +55,7 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 allows users to view informational messages."), si->service->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", infosvs.me->disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", infoserv->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, &is_cmdtree);
@@ -156,16 +157,16 @@ static void display_info(hook_user_nick_t *data)
 
 	if (logon_info.count > 0)
 	{
-		notice(infosvs.nick, u->nick, "*** \2Message(s) of the Day\2 ***");
+		notice(infoserv->nick, u->nick, "*** \2Message(s) of the Day\2 ***");
 
 		LIST_FOREACH_PREV(n, logon_info.tail)
 		{
 			l = n->data;
 			tm = *localtime(&l->info_ts);
 			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
-			notice(infosvs.nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
+			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				l->subject, l->nick, dBuf);
-			notice(infosvs.nick, u->nick, "%s", l->story);
+			notice(infoserv->nick, u->nick, "%s", l->story);
 			count++;
 
 			/* only display three latest entries, max. */
@@ -173,7 +174,7 @@ static void display_info(hook_user_nick_t *data)
 				break;
 		}
 
-		notice(infosvs.nick, u->nick, "*** \2End of Message(s) of the Day\2 ***");
+		notice(infoserv->nick, u->nick, "*** \2End of Message(s) of the Day\2 ***");
 	}
 }
 
@@ -205,7 +206,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 4)
 	{
 		snprintf(buf, sizeof buf, "[CRITICAL NETWORK NOTICE] %s - [%s] %s", get_source_name(si), subject, story);
-		msg_global_sts(infosvs.me->me, "*", buf);
+		msg_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
@@ -214,7 +215,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 2)
 	{
 		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
-		notice_global_sts(infosvs.me->me, "*", buf);
+		notice_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 		return;
@@ -237,7 +238,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 3)
 	{
 		snprintf(buf, sizeof buf, "Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
-		notice_global_sts(infosvs.me->me, "*", buf);
+		notice_global_sts(infoserv, "*", buf);
 	}
 
 	return;
@@ -321,7 +322,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* main services client routine */
-static void infoserv(sourceinfo_t *si, int parc, char *parv[])
+static void infoserv_handler(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
         char *text;
@@ -353,20 +354,10 @@ static void infoserv(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, cmd, text, &is_cmdtree);
 }
 
-static void infoserv_config_ready(void *unused)
-{
-        infosvs.nick = infosvs.me->nick;
-        infosvs.user = infosvs.me->user;
-        infosvs.host = infosvs.me->host;
-        infosvs.real = infosvs.me->real;
-}
-
 void _modinit(module_t *m)
 {
-	infosvs.me = service_add("infoserv", infoserv, &is_cmdtree, &is_conftable);
+	infoserv = service_add("infoserv", infoserv_handler, &is_cmdtree, &is_conftable);
 
-        hook_add_event("config_ready");
-        hook_add_config_ready(infoserv_config_ready);
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
 
@@ -384,14 +375,10 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	if (infosvs.me)
+	if (infoserv)
 	{
-		infosvs.nick = NULL;
-		infosvs.user = NULL;
-		infosvs.host = NULL;
-		infosvs.real = NULL;
-		service_delete(infosvs.me);
-		infosvs.me = NULL;
+		service_delete(infoserv);
+		infoserv = NULL;
 	}
 	
 	hook_del_user_add(display_info);
@@ -405,9 +392,6 @@ void _moddeinit(void)
 	help_delentry(&is_helptree, "POST");
 	help_delentry(&is_helptree, "DEL");
 	help_delentry(&is_helptree, "LIST");
-
-	hook_del_config_ready(infoserv_config_ready);
-
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
