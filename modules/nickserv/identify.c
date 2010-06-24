@@ -125,9 +125,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), u->myuser->name);
 		return;
 	}
-	else if (u->myuser != NULL && ircd_on_logout(u, u->myuser->name))
-		/* logout killed the user... */
-		return;
 
 	if (verify_password(mu, password))
 	{
@@ -149,6 +146,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		/* if they are identified to another account, nuke their session first */
 		if (u->myuser)
 		{
+			if (ircd_on_logout(u, u->myuser->name))
+				/* logout killed the user... */
+				return;
 		        u->myuser->lastlogin = CURRTIME;
 		        LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		        {
