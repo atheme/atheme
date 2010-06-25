@@ -384,9 +384,13 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		return;
 	}
 
-	/* A user joined and was not kicked; we do not need
-	 * to stay on the channel artificially. */
-	if (mc->flags & MC_INHABIT)
+	/* A second user joined and was not kicked; we do not need
+	 * to stay on the channel artificially.
+	 * If there is only one user, stay in the channel to avoid
+	 * triggering autocycle-for-ops scripts and immediately
+	 * destroying channels with kick on split riding.
+	 */
+	if (mc->flags & MC_INHABIT && chan->nummembers >= 3)
 	{
 		mc->flags &= ~MC_INHABIT;
 		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccasecmp(chan->name, config_options.chan)) && !(chan->flags & CHAN_LOG) && chanuser_find(chan, chansvs.me->me))
@@ -726,6 +730,9 @@ static void cs_leave_empty(void *unused)
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if (!(mc->flags & MC_INHABIT))
+			continue;
+		/* If there is only one user, stay indefinitely. */
+		if (mc->chan != NULL && mc->chan->nummembers == 2)
 			continue;
 		mc->flags &= ~MC_INHABIT;
 		if (mc->chan != NULL &&
