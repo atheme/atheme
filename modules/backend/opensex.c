@@ -20,6 +20,24 @@ DECLARE_MODULE_V1
 #define DB_SHRIKE	1
 #define DB_ATHEME	2
 
+typedef struct opensex_ {
+	/* Lexing state */
+	char *buf;
+	unsigned int bufsize;
+	char *token;
+	FILE *f;
+
+	/* Interpreting state */
+	unsigned int dbv;
+
+	unsigned int nmu;
+	unsigned int nmc;
+	unsigned int nca;
+	unsigned int nkl;
+	unsigned int nxl;
+	unsigned int nql;
+} opensex_t;
+
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
@@ -138,13 +156,10 @@ opensex_db_save(database_handle_t *db)
 				break;
 			}
 		}
-		/* MC <name> <pass> <founder> <registered> <used> <flags>
-		 * <mlock_on> <mlock_off> <mlock_limit> [mlock_key]
-		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
-		 */
+		/* MC <name> <registered> <used> <flags> <mlock_on> <mlock_off> <mlock_limit> [mlock_key] */
 		db_start_row(db, "MC");
-		db_write(db, "%s", mc->name, "%s", mu != NULL ? mu->name : "*", "%ld", mc->registered, "%ld", mc->used,
-			 "%d", mc->flags, "%d", mc->mlock_on, "%d", mc->mlock_off, "%d", mc->mlock_limit, "%s", mc->mlock_key ? mc->mlock_key : "", NULL);
+		db_write(db, "%s", mc->name, "%ld", mc->registered, "%ld", mc->used, "%d", mc->flags, "%d", mc->mlock_on,
+		         "%d", mc->mlock_off, "%d", mc->mlock_limit, "%s", mc->mlock_key ? mc->mlock_key : "", NULL);
 		db_commit_row(db);
 		mcout++;
 
@@ -284,867 +299,708 @@ opensex_db_save(database_handle_t *db)
 	db_commit_row(db);
 }
 
-/* loads atheme.db */
 static void opensex_db_parse(database_handle_t *db)
 {
-	myuser_t *mu, *founder = NULL;
-	myuser_name_t *mun;
-	mychan_t *mc;
-	kline_t *k;
-	xline_t *x;
-	qline_t *q;
-	svsignore_t *svsignore;
-	unsigned int versn = 0, i;
-	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0, xin = 0, qin = 0;
-	FILE *f;
-	char *item, *s, *buf;
-	size_t bufsize = BUFSIZE, n;
-	int c;
-	unsigned int their_ca_all = 0;
-
-	f = (FILE *) db->priv;
-
-	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
-
-	buf = smalloc(bufsize);
-
-	/* start reading it, one line at a time */
-	for (;;)
+	const char *cmd;
+	while (db_read_next_row(db))
 	{
-		n = 0;
-		while ((c = getc(f)) != EOF && c != '\n')
-		{
-			buf[n++] = c;
-			if (n == bufsize)
-			{
-				bufsize *= 2;
-				buf = srealloc(buf, bufsize);
-			}
-		}
-		buf[n] = '\0';
-
-		if (c == EOF && ferror(f))
-		{
-			slog(LG_ERROR, "db_load(): error while reading %s: %s", DATADIR "/atheme.db", strerror(errno));
-			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
-			exit(1);
-		}
-
-		if (c == EOF && n == 0)
-			break;
-
-		linecnt++;
-
-		/* check for unimportant lines */
-		item = strtok(buf, " ");
-		strip(item);
-
-		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
-			continue;
-
-		db_process(db, item);
-
-		/* database version */
-		if (!strcmp("DBV", item))
-		{
-			versn = atoi(strtok(NULL, " "));
-			if (versn > 7)
-			{
-				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
-					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", versn);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else if (!strcmp("CF", item))
-		{
-			/* enabled chanacs flags */
-			s = strtok(NULL, " ");
-			if (s == NULL)
-				slog(LG_INFO, "db_load(): missing param to CF");
-			else
-			{
-				their_ca_all = flags_to_bitmask(s, chanacs_flags, 0);
-				if (their_ca_all & ~ca_all)
-				{
-					slog(LG_ERROR, "db_load(): losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
-				}
-				if (~their_ca_all & ca_all)
-				{
-					slog(LG_ERROR, "db_load(): making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
-				}
-			}
-		}
-		else if (!strcmp("MU", item))
-		{
-			/* myusers */
-			char *muname, *mupass, *muemail;
-
-			if ((s = strtok(NULL, " ")))
-			{
-				/* We need to know the flags before we myuser_add,
-				 * so we need a few temporary places to put stuff.
-				 */
-				unsigned int registered, lastlogin;
-				char *failnum, *lastfailaddr, *lastfailtime;
-				char *flagstr, *language;
-
-				if (myuser_find(s))
-				{
-					slog(LG_INFO, "db_load(): skipping duplicate account %s (line %d)", s, linecnt);
-					continue;
-				}
-
-				muin++;
-
-				muname = s;
-				mupass = strtok(NULL, " ");
-				muemail = strtok(NULL, " ");
-
-				registered = atoi(strtok(NULL, " "));
-				lastlogin = atoi(strtok(NULL, " "));
-				flagstr = strtok(NULL, " ");
-				language = strtok(NULL, " ");
-
-				mu = myuser_add(muname, mupass, muemail, atol(flagstr));
-
-				mu->registered = registered;
-				mu->lastlogin = lastlogin;
-
-				/* Create entries for languages in the db
-				 * even if we do not have catalogs for them.
-				 */
-				if (language != NULL)
-					mu->language = language_add(language);
-			}
-		}
-		else if (!strcmp("ME", item))
-		{
-			/* memo */
-			char *sender, *text;
-			time_t mtime;
-			unsigned int status;
-			mymemo_t *mz;
-
-			mu = myuser_find(strtok(NULL, " "));
-			sender = strtok(NULL, " ");
-			mtime = atoi(strtok(NULL, " "));
-			status = atoi(strtok(NULL, " "));
-			text = strtok(NULL, "\n");
-
-			if (!mu)
-			{
-				slog(LG_DEBUG, "db_load(): memo for unknown account");
-				continue;
-			}
-
-			if (!sender || !mtime || !text)
-				continue;
-
-			mz = smalloc(sizeof(mymemo_t));
-
-			strlcpy(mz->sender, sender, NICKLEN);
-			strlcpy(mz->text, text, MEMOLEN);
-			mz->sent = mtime;
-			mz->status = status;
-
-			if (!(mz->status & MEMO_READ))
-				mu->memoct_new++;
-
-			node_add(mz, node_create(), &mu->memos);
-		}
-		else if (!strcmp("MI", item))
-		{
-			/* memo ignore */
-			char *user, *target, *strbuf;
-
-			user = strtok(NULL, " ");
-			target = strtok(NULL, "\n");
-
-			mu = myuser_find(user);
-			
-			if (!mu)
-			{
-				slog(LG_DEBUG, "db_load(): invalid ignore (MI %s %s)", user,target);
-				continue;
-			}
-			
-			strbuf = sstrdup(target);
-			
-			node_add(strbuf, node_create(), &mu->memo_ignores);
-		}
-		else if (!strcmp("AC", item))
-		{
-			/* myuser access list */
-			char *user, *mask;
-
-			user = strtok(NULL, " ");
-			mask = strtok(NULL, "\n");
-
-			mu = myuser_find(user);
-
-			if (mu == NULL)
-			{
-				slog(LG_DEBUG, "db_load(): invalid access entry<%s> for unknown user<%s>", mask, user);
-				continue;
-			}
-
-			myuser_access_add(mu, mask);
-		}
-		else if (!strcmp("MN", item))
-		{
-			/* registered nick */
-			char *user, *nick, *treg, *tseen;
-			mynick_t *mn;
-
-			user = strtok(NULL, " ");
-			nick = strtok(NULL, " ");
-			treg = strtok(NULL, " ");
-			tseen = strtok(NULL, " ");
-
-			mu = myuser_find(user);
-			if (mu == NULL || nick == NULL || tseen == NULL)
-			{
-				slog(LG_DEBUG, "db_load(): invalid registered nick<%s> for user<%s>", nick, user);
-				continue;
-			}
-
-			if (mynick_find(nick))
-			{
-				slog(LG_INFO, "db_load(): skipping duplicate nick %s (account %s) (line %d)", nick, user, linecnt);
-				continue;
-			}
-
-			mn = mynick_add(mu, nick);
-			mn->registered = atoi(treg);
-			mn->lastseen = atoi(tseen);
-		}
-		else if (!strcmp("MCFP", item))
-		{
-			/* certfp */
-			char *user, *certfp;
-			mycertfp_t *mcfp;
-
-			user = strtok(NULL, " ");
-			certfp = strtok(NULL, " ");
-
-			mu = myuser_find(user);
-			if (mu == NULL || certfp == NULL)
-			{
-				slog(LG_DEBUG, "db_load(): invalid certfp<%s> for user<%s>", certfp, user);
-				continue;
-			}
-
-			mcfp = mycertfp_add(mu, certfp);
-		}
-		else if (!strcmp("SU", item))
-		{
-			/* subscriptions */
-			char *user, *sub_user, *tags, *tag;
-			myuser_t *subscriptor;
-			metadata_subscription_t *md;
-
-			user = strtok(NULL, " ");
-			sub_user = strtok(NULL, " ");
-			tags = strtok(NULL, "\n");
-			if (!user || !sub_user || !tags)
-			{
-				slog(LG_INFO, "db_load(): invalid subscription (line %d)", linecnt);
-				continue;
-			}
-
-			strip(tags);
-
-			mu = myuser_find(user);
-			subscriptor = myuser_find(sub_user);
-			if (!mu || !subscriptor)
-			{
-				slog(LG_INFO, "db_load(): invalid subscription <%s,%s> (line %d)", user, sub_user, linecnt);
-				continue;
-			}
-
-			md = smalloc(sizeof(metadata_subscription_t));
-			md->mu = subscriptor;
-
-			tag = strtok(tags, ",");
-			do
-			{
-				node_add(sstrdup(tag), node_create(), &md->taglist);
-			} while ((tag = strtok(NULL, ",")) != NULL);
-
-			node_add(md, node_create(), &mu->subscriptions);
-		}
-		else if (!strcmp("NAM", item))
-		{
-			/* formerly registered name (created by a marked account being dropped) */
-			char *user;
-
-			user = strtok(NULL, " \n");
-			if (!user)
-			{
-				slog(LG_INFO, "db_load(): invalid old name (line %d)", linecnt);
-				continue;
-			}
-			myuser_name_add(user);
-		}
-		else if (!strcmp("SO", item))
-		{
-			/* services oper */
-			char *user, *class, *flagstr, *password;
-
-			user = strtok(NULL, " ");
-			class = strtok(NULL, " ");
-			flagstr = strtok(NULL, " \n");
-			password = strtok(NULL, "\n");
-
-			mu = myuser_find(user);
-
-			if (!mu || !class || !flagstr)
-			{
-				slog(LG_DEBUG, "db_load(): invalid services oper (SO %s %s %s)", user, class, flagstr);
-				continue;
-			}
-			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF, password);
-		}
-		else if (!strcmp("MC", item))
-		{
-			/* mychans */
-			char *mcname;
-
-			if ((s = strtok(NULL, " ")))
-			{
-				if (mychan_find(s))
-				{
-					slog(LG_INFO, "db_load(): skipping duplicate channel %s (line %d)", s, linecnt);
-					continue;
-				}
-
-				mcin++;
-
-				mcname = s;
-				/* unused (old password) */
-				(void)strtok(NULL, " ");
-
-				mc = mychan_add(mcname);
-
-				founder = myuser_find(strtok(NULL, " "));
-
-				mc->registered = atoi(strtok(NULL, " "));
-				mc->used = atoi(strtok(NULL, " "));
-				mc->flags = atoi(strtok(NULL, " "));
-
-				mc->mlock_on = atoi(strtok(NULL, " "));
-				mc->mlock_off = atoi(strtok(NULL, " "));
-				mc->mlock_limit = atoi(strtok(NULL, " "));
-
-				if ((s = strtok(NULL, " ")))
-				{
-					strip(s);
-					if (*s != '\0' && *s != ':' && !strchr(s, ','))
-						mc->mlock_key = sstrdup(s);
-				}
-
-				if (versn < 5 && config_options.join_chans)
-					mc->flags |= MC_GUARD;
-			}
-		}
-		else if (!strcmp("MD", item))
-		{
-			/* Metadata entry */
-			char *type = strtok(NULL, " ");
-			char *name = strtok(NULL, " ");
-			char *property = strtok(NULL, " ");
-			char *value = strtok(NULL, "");
-
-			if (!type || !name || !property || !value)
-				continue;
-
-			strip(value);
-
-			if (type[0] == 'U')
-			{
-				mu = myuser_find(name);
-				if (mu != NULL)
-					metadata_add(mu, property, value);
-			}
-			else if (type[0] == 'C')
-			{
-				mc = mychan_find(name);
-				if (mc != NULL)
-					metadata_add(mc, property, value);
-			}
-			else if (type[0] == 'A')
-			{
-				chanacs_t *ca;
-				char *mask;
-
-				mask = strrchr(name, ':');
-				if (mask != NULL)
-				{
-					*mask++ = '\0';
-					ca = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
-					if (ca != NULL)
-						metadata_add(ca, property, value);
-				}
-			}
-			else if (type[0] == 'N')
-			{
-				mun = myuser_name_find(name);
-				if (mun != NULL)
-					metadata_add(mun, property, value);
-			}
-			else
-				slog(LG_DEBUG, "db_load(): unknown metadata type %s", type);
-		}
-		else if (!strcmp("UR", item))
-		{
-			/* Channel URLs (obsolete) */
-			char *chan, *url;
-
-			chan = strtok(NULL, " ");
-			url = strtok(NULL, " ");
-
-			strip(url);
-
-			if (chan && url)
-			{
-				mc = mychan_find(chan);
-
-				if (mc)
-					metadata_add(mc, "url", url);
-			}
-		}
-		else if (!strcmp("EM", item))
-		{
-			/* Channel entry messages (obsolete) */
-			char *chan, *message;
-
-			chan = strtok(NULL, " ");
-			message = strtok(NULL, "");
-
-			strip(message);
-
-			if (chan && message)
-			{
-				mc = mychan_find(chan);
-
-				if (mc)
-					metadata_add(mc, "private:entrymsg", message);
-			}
-		}
-		else if (!strcmp("CA", item))
-		{
-			/* chanacs */
-			chanacs_t *ca;
-			char *cachan, *causer;
-
-			cachan = strtok(NULL, " ");
-			causer = strtok(NULL, " ");
-
-			if (cachan && causer)
-			{
-				mc = mychan_find(cachan);
-				mu = myuser_find(causer);
-
-				if (mc == NULL || (mu == NULL && !validhostmask(causer)))
-				{
-					slog(LG_ERROR, "db_load(): invalid chanacs (line %d)", linecnt);
-					continue;
-				}
-
-				cain++;
-
-				if (versn >= DB_ATHEME)
-				{
-					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
-					const char *tsstr;
-					time_t ts = 0;
-
-					/* Compatibility with oldworld Atheme db's. --nenolod */
-					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
-					if (fl == OLD_CA_AOP && versn < 4)
-						fl = CA_AOP_DEF;
-
-					/* 
-					 * If the database revision is version 6 or newer, CA entries are
-					 * timestamped... otherwise we use 0 as the last modified TS
-					 *    --nenolod/jilles
-					 */
-					tsstr = strtok(NULL, " ");
-					if (tsstr != NULL)
-						ts = atoi(tsstr);
-
-					/* previous to CA_ACLVIEW, everyone could view
-					 * access lists. If they aren't AKICKed, upgrade
-					 * them. This keeps us from breaking old XOPs.
-					 */
-					if (versn < 4)
-						if (!(fl & CA_AKICK))
-							fl |= CA_ACLVIEW;
-
-					if (their_ca_all == 0)
-					{
-						their_ca_all = CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_AKICK;
-						slog(LG_INFO, "db_load(): old database, making up flags %s", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
-					}
-
-					/* Grant +h if they have +o,
-					 * the file does not have +h enabled
-					 * and we currently have +h enabled.
-					 * This preserves AOP, SOP and +*.
-					 */
-					if (fl & CA_OP && !(their_ca_all & CA_HALFOP) && ca_all & CA_HALFOP)
-						fl |= CA_HALFOP;
-
-					/* Set new-style founder flag */
-					if (founder != NULL && mu == founder && !(their_ca_all & CA_FOUNDER))
-						fl |= CA_FOUNDER;
-
-					/* Set new-style +q and +a flags */
-					if (fl & CA_SET && fl & CA_OP && !(their_ca_all & CA_USEPROTECT) && ca_all & CA_USEPROTECT)
-						fl |= CA_USEPROTECT;
-					if (fl & CA_FOUNDER && !(their_ca_all & CA_USEOWNER) && ca_all & CA_USEOWNER)
-						fl |= CA_USEOWNER;
-
-					if ((!mu) && (validhostmask(causer)))
-						ca = chanacs_add_host(mc, causer, fl, ts);
-					else
-						ca = chanacs_add(mc, mu, fl, ts);
-				}
-				else if (versn == DB_SHRIKE)	/* DB_SHRIKE */
-				{
-					unsigned int fl = atol(strtok(NULL, " "));
-					unsigned int fl2 = 0x0;
-					time_t ts = CURRTIME;
-
-					switch (fl)
-					{
-					  case SHRIKE_CA_VOP:
-						  fl2 = chansvs.ca_vop;
-						  break;
-					  case SHRIKE_CA_AOP:
-						  fl2 = chansvs.ca_aop;
-						  break;
-					  case SHRIKE_CA_SOP:
-						  fl2 = chansvs.ca_sop;
-						  break;
-					  case SHRIKE_CA_SUCCESSOR:
-						  fl2 = CA_SUCCESSOR_0;
-						  break;
-					  case SHRIKE_CA_FOUNDER:
-						  fl2 = CA_FOUNDER_0;
-						  break;
-					}
-
-					if ((!mu) && (validhostmask(causer)))
-						ca = chanacs_add_host(mc, causer, fl2, ts);
-					else
-						ca = chanacs_add(mc, mu, fl2, ts);
-				}
-			}
-		}
-		else if (!strcmp("SI", item))
-		{
-				/* Services ignores */
-			char *mask, *setby, *reason, *tmp;
-			time_t settime;
-
-			mask = strtok(NULL, " ");
-                        tmp = strtok(NULL, " ");
-			settime = atol(tmp);
-			setby = strtok(NULL, " ");
-			reason = strtok(NULL, "");
-
-			strip(reason);
-
-			svsignore = svsignore_add(mask, reason);
-			svsignore->settime = settime;
-			svsignore->setby = sstrdup(setby);
-
-		}
-		else if (!strcmp("KID", item))
-		{
-			/* unique kline id */
-			char *id = strtok(NULL, " ");
-			me.kline_id = atol(id);
-		}
-		else if (!strcmp("KL", item))
-		{
-			/* klines */
-			char *user, *host, *reason, *setby, *tmp;
-			time_t settime;
-			long duration;
-
-			user = strtok(NULL, " ");
-			host = strtok(NULL, " ");
-			tmp = strtok(NULL, " ");
-			duration = atol(tmp);
-			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
-			setby = strtok(NULL, " ");
-			reason = strtok(NULL, "");
-
-			strip(reason);
-
-			k = kline_add(user, host, reason, duration, setby);
-			k->settime = settime;
-			/* XXX this is not nice, oh well -- jilles */
-			k->expires = k->settime + k->duration;
-
-			kin++;
-		}
-		else if (!strcmp("XID", item))
-		{
-			/* unique xline id */
-			char *id = strtok(NULL, " ");
-			me.xline_id = atol(id);
-		}
-		else if (!strcmp("XL", item))
-		{
-			char *realname, *reason, *setby, *tmp;
-			time_t settime;
-			long duration;
-
-			realname = strtok(NULL, " ");
-			tmp = strtok(NULL, " ");
-			duration = atol(tmp);
-			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
-			setby = strtok(NULL, " ");
-			reason = strtok(NULL, "");
-
-			strip(reason);
-
-			x = xline_add(realname, reason, duration, setby);
-			x->settime = settime;
-
-			/* XXX this is not nice, oh well -- jilles */
-			x->expires = x->settime + x->duration;
-
-			xin++;
-		}
-		else if (!strcmp("QID", item))
-		{
-			/* unique qline id */
-			char *id = strtok(NULL, " ");
-			me.qline_id = atol(id);
-		}
-		else if (!strcmp("QL", item))
-		{
-			char *mask, *reason, *setby, *tmp;
-			time_t settime;
-			long duration;
-
-			mask = strtok(NULL, " ");
-			tmp = strtok(NULL, " ");
-			duration = atol(tmp);
-			tmp = strtok(NULL, " ");
-			settime = atol(tmp);
-			setby = strtok(NULL, " ");
-			reason = strtok(NULL, "");
-
-			strip(reason);
-
-			q = qline_add(mask, reason, duration, setby);
-			q->settime = settime;
-
-			/* XXX this is not nice, oh well -- jilles */
-			q->expires = q->settime + q->duration;
-
-			qin++;
-		}
-		else if (!strcmp("DE", item))
-		{
-			/* end */
-			i = atoi(strtok(NULL, " "));
-			if (i != muin)
-				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);
-
-			i = atoi(strtok(NULL, " "));
-			if (i != mcin)
-				slog(LG_ERROR, "db_load(): got %d mychans; expected %d", mcin, i);
-
-			i = atoi(strtok(NULL, " "));
-			if (i != cain)
-				slog(LG_ERROR, "db_load(): got %d chanacs; expected %d", cain, i);
-
-			if ((s = strtok(NULL, " ")))
-				if ((i = atoi(s)) != kin)
-					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
-
-			if ((s = strtok(NULL, " ")))
-				if ((i = atoi(s)) != xin)
-					slog(LG_ERROR, "db_load(): got %d xlines; expected %d", xin, i);
-
-			if ((s = strtok(NULL, " ")))
-				if ((i = atoi(s)) != qin)
-					slog(LG_ERROR, "db_load(): got %d qlines; expected %d", qin, i);
-		}
+		cmd = db_read_word(db);
+		if (!cmd || !*cmd || strchr("#\n\t \r", *cmd)) continue;
+		db_process(db, cmd);
+	}
+}
+
+static void opensex_h_unknown(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	slog(LG_INFO, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
+}
+
+static void opensex_h_dbv(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	rs->dbv = db_sread_int(db);
+	slog(LG_INFO, "db-h-dbv: version %d", rs->dbv);
+}
+
+static void opensex_h_cf(database_handle_t *db, const char *type)
+{
+	unsigned int their_ca_all;
+	opensex_t *rs = (opensex_t *)db->priv;
+	const char *flags = db_sread_word(db);
+
+	their_ca_all = flags_to_bitmask(flags, chanacs_flags, 0);
+	if (their_ca_all & ~ca_all)
+	{
+		slog(LG_ERROR, "db-h-cf: losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
+	}
+	if (~their_ca_all & ca_all)
+	{
+		slog(LG_ERROR, "db-h-cf: making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+	}
+}
+
+static void opensex_h_mu(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	const char *name = db_sread_word(db);
+	const char *pass, *email, *language;
+	unsigned int reg, login, flags;
+	myuser_t *mu;
+
+	if (myuser_find(name))
+	{
+		slog(LG_INFO, "db-h-mu: line %d: skipping duplicate account %s", db->line, name);
+		return;
 	}
 
-	fclose(f);
+	pass = db_sread_word(db);
+	email = db_sread_word(db);
+	reg = db_sread_int(db);
+	login = db_sread_int(db);
+	flags = db_sread_int(db);
+	language = db_read_word(db);
 
-	free(buf);
+	mu = myuser_add(name, pass, email, flags);
+	mu->registered = reg;
+	mu->lastlogin = login;
+	if (language)
+		mu->language = language_add(language);
+	rs->nmu++;
+}
 
-	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
+static void opensex_h_me(database_handle_t *db, const char *type)
+{
+	const char *dest, *src, *text;
+	unsigned int time, status;
+	myuser_t *mu;
+	mymemo_t *mz;
+
+	dest = db_sread_word(db);
+	src = db_sread_word(db);
+	time = db_sread_int(db);
+	status = db_sread_int(db);
+	text = db_sread_multiword(db);
+
+	if (!(mu = myuser_find(dest)))
+	{
+		slog(LG_DEBUG, "db-h-me: line %d: memo for unknown account %s", db->line, dest);
+		return;
+	}
+
+	mz = smalloc(sizeof *mz);
+	strlcpy(mz->sender, src, NICKLEN);
+	strlcpy(mz->text, text, MEMOLEN);
+	mz->sent = time;
+	mz->status = status;
+
+	if (!(mz->status & MEMO_READ))
+		mu->memoct_new++;
+
+	node_add(mz, node_create(), &mu->memos);
+}
+
+static void opensex_h_mi(database_handle_t *db, const char *type)
+{
+	myuser_t *mu;
+	const char *user, *target;
+
+	user = db_sread_word(db);
+	target = db_sread_word(db);
+
+	mu = myuser_find(user);
+	if (!mu)
+	{
+		slog(LG_DEBUG, "db-h-mi: line %d: ignore for unknown account %s", db->line, user);
+		return;
+	}
+
+	node_add(sstrdup(target), node_create(), &mu->memo_ignores);
+}
+
+static void opensex_h_ac(database_handle_t *db, const char *type)
+{
+	myuser_t *mu;
+	const char *user, *mask;
+
+	user = db_sread_word(db);
+	mask = db_sread_multiword(db);
+
+	mu = myuser_find(user);
+	if (!mu)
+	{
+		slog(LG_DEBUG, "db-h-ac: line %d: access entry for unknown account %s", db->line, user);
+		return;
+	}
+
+	myuser_access_add(mu, mask);
+}
+
+static void opensex_h_mn(database_handle_t *db, const char *type)
+{
+	myuser_t *mu;
+	mynick_t *mn;
+	const char *user, *nick;
+	unsigned int reg, seen;
+
+	user = db_sread_word(db);
+	nick = db_sread_word(db);
+	reg = db_sread_int(db);
+	seen = db_sread_int(db);
+
+	mu = myuser_find(user);
+	if (!mu)
+	{
+		slog(LG_DEBUG, "db-h-mn: line %d: registered nick %s for unknown account %s", db->line, nick, user);
+		return;
+	}
+
+	if (mynick_find(nick))
+	{
+		slog(LG_INFO, "db-h-mn: line %d: skipping duplicate nick %s for account %s", db->line, nick, user);
+		return;
+	}
+
+	mn = mynick_add(mu, nick);
+	mn->registered = reg;
+	mn->lastseen = seen;
+}
+
+static void opensex_h_mcfp(database_handle_t *db, const char *type)
+{
+	const char *user, *certfp;
+	myuser_t *mu;
+
+	user = db_sread_word(db);
+	certfp = db_sread_word(db);
+
+	mu = myuser_find(user);
+	if (!mu)
+	{
+		slog(LG_DEBUG, "db-h-mcfp: certfp %s for unknown account %s", certfp, user);
+		return;
+	}
+
+	mycertfp_add(mu, certfp);
+}
+
+static void opensex_h_su(database_handle_t *db, const char *type)
+{
+	char buf[4096];
+	const char *user, *sub_user, *tags, *tag;
+	myuser_t *mu;
+	metadata_subscription_t *ms;
+
+	user = db_sread_word(db);
+	sub_user = db_sread_word(db);
+	tags = db_sread_word(db);
+
+	if (!(mu = myuser_find(user)))
+	{
+		slog(LG_INFO, "dh-h-su: line %d: subscription to %s:%s for unknown account %s", db->line,
+		     sub_user, tags, user);
+		return;
+	}
+
+	ms = smalloc(sizeof *ms);
+	ms->mu = mu;
+
+	strlcpy(buf, tags, sizeof buf);
+	tag = strtok(buf, ",");
+	do
+	{
+		node_add(sstrdup(tag), node_create(), &ms->taglist);
+	} while ((tag = strtok(NULL, ",")));
+
+	node_add(ms, node_create(), &mu->subscriptions);
+}
+
+static void opensex_h_nam(database_handle_t *db, const char *type)
+{
+	const char *user = db_sread_word(db);
+	myuser_name_add(user);
+}
+
+static void opensex_h_so(database_handle_t *db, const char *type)
+{
+	const char *user, *class, *pass;
+	unsigned int flags;
+	myuser_t *mu;
+
+	user = db_sread_word(db);
+	class = db_sread_word(db);
+	flags = db_sread_int(db);
+	pass = db_sread_word(db);
+
+	if (!(mu = myuser_find(user)))
+	{
+		slog(LG_INFO, "db-h-so: soper for nonexistent account %s", user);
+		return;
+	}
+
+	soper_add(mu->name, class, flags & ~SOPER_CONF, pass);
+}
+
+static void opensex_h_mc(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	char buf[4096];
+	const char *name = db_sread_word(db);
+	const char *key;
+
+	strlcpy(buf, name, sizeof buf);
+	mychan_t *mc = mychan_add(buf);
+
+	mc->registered = db_sread_int(db);
+	mc->used = db_sread_int(db);
+	mc->flags = db_sread_int(db);
+
+	mc->mlock_on = db_sread_int(db);
+	mc->mlock_off = db_sread_int(db);
+	mc->mlock_limit = db_sread_int(db);
+
+	if ((key = db_read_word(db)))
+	{
+		strlcpy(buf, key, sizeof buf);
+		strip(buf);
+		if (buf[0] && buf[0] != ':' && !strchr(buf, ','))
+			mc->mlock_key = sstrdup(buf);
+	}
+
+	rs->nmc++;
+}
+
+static void opensex_h_md(database_handle_t *db, const char *type)
+{
+	const char *name = db_sread_word(db);
+	const char *prop = db_sread_word(db);
+	const char *value = db_sread_multiword(db);
+	void *obj;
+
+	if (!strcmp(type, "MDU"))
+	{
+		obj = myuser_find(name);
+	}
+	else if (!strcmp(type, "MDC"))
+	{
+		obj = mychan_find(name);
+	}
+	else if (!strcmp(type, "MDA"))
+	{
+		char *mask = strrchr(name, ':');
+		if (mask != NULL)
+		{
+			*mask++ = '\0';
+			obj = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
+		}
+	}
+	else if (!strcmp(type, "MDN"))
+	{
+		obj = myuser_name_find(name);
+	}
+
+	metadata_add(obj, prop, value);
+}
+
+static void opensex_h_ca(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	const char *chan, *user;
+	unsigned int tmod, flags;
+	mychan_t *mc;
+	myuser_t *mu;
+	chanacs_t *ca;
+
+	chan = db_sread_word(db);
+	user = db_sread_word(db);
+	flags = flags_to_bitmask(db_sread_word(db), chanacs_flags, 0);
+	tmod = db_sread_int(db);
+
+	mc = mychan_find(chan);
+	mu = myuser_find(user);
+
+	if (!mc)
+	{
+		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent channel %s", db->line, chan);
+		return;
+	}
+
+	if (!mu && !validhostmask(user))
+	{
+		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent user %s", db->line, user);
+		return;
+	}
+
+	if (!mu && validhostmask(user))
+	{
+		chanacs_add_host(mc, user, flags, tmod);
+	}
+	else
+	{
+		chanacs_add(mc, mu, flags, tmod);
+	}
+	rs->nca++;
+}
+
+static void opensex_h_si(database_handle_t *db, const char *type)
+{
+	char buf[4096];
+	const char *mask, *setby, *reason;
+	time_t settime;
+	svsignore_t *svsignore;
+
+	mask = db_sread_word(db);
+	settime = db_sread_int(db);
+	setby = db_sread_word(db);
+	reason = db_sread_multiword(db);
+	strlcpy(buf, reason, sizeof buf);
+
+	strip(buf);
+	svsignore = svsignore_add(mask, reason);
+	svsignore->settime = settime;
+	svsignore->setby = strdup(setby);
+}
+
+static void opensex_h_kid(database_handle_t *db, const char *type)
+{
+	me.kline_id = db_sread_int(db);
+}
+
+static void opensex_h_kl(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	char buf[4096];
+	const char *user, *host, *reason, *setby;
+	time_t settime;
+	long duration;
+	kline_t *k;
+
+	user = db_sread_word(db);
+	host = db_sread_word(db);
+	duration = db_sread_int(db);
+	settime = db_sread_int(db);
+	setby = db_sread_word(db);
+	reason = db_sread_multiword(db);
+
+	strlcpy(buf, reason, sizeof buf);
+	strip(buf);
+
+	k = kline_add(user, host, buf, duration, setby);
+	k->settime = settime;
+	k->expires = k->settime + k->duration;
+	rs->nkl++;
+}
+
+static void opensex_h_xid(database_handle_t *db, const char *type)
+{
+	me.xline_id = db_sread_int(db);
+}
+
+static void opensex_h_xl(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	char buf[4096];
+	const char *realname, *reason, *setby, *tmp;
+	time_t settime;
+	long duration;
+	xline_t *x;
+
+	realname = db_sread_word(db);
+	duration = db_sread_int(db);
+	settime = db_sread_int(db);
+	setby = db_sread_word(db);
+	reason = db_sread_multiword(db);
+
+	strlcpy(buf, reason, sizeof buf);
+	strip(buf);
+
+	x = xline_add(realname, buf, duration, setby);
+	x->settime = settime;
+	x->expires = x->settime + x->duration;
+	rs->nxl++;
+}
+
+static void opensex_h_qid(database_handle_t *db, const char *type)
+{
+	me.qline_id = db_sread_int(db);
+}
+
+static void opensex_h_ql(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	char buf[4096];
+	const char *mask, *reason, *setby;
+	time_t settime;
+	long duration;
+	qline_t *q;
+
+	mask = db_sread_word(db);
+	duration = db_sread_int(db);
+	settime = db_sread_int(db);
+	reason = db_sread_multiword(db);
+
+	strlcpy(buf, reason, sizeof buf);
+	strip(buf);
+
+	q = qline_add(mask, buf, duration, setby);
+	q->settime = settime;
+	q->expires = q->settime + q->duration;
+	rs->nql++;
+}
+
+static void opensex_h_de(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	unsigned int nmu, nmc, nca, nkl, nxl, nql;
+
+	nmu = db_sread_int(db);
+	nmc = db_sread_int(db);
+	nca = db_sread_int(db);
+	nkl = db_sread_int(db);
+	nxl = db_sread_int(db);
+	nql = db_sread_int(db);
+
+	if (nmu != rs->nmu)
+		slog(LG_ERROR, "db-h-de: got %d myusers; expected %d", rs->nmu, nmu);
+	if (nmc != rs->nmc)
+		slog(LG_ERROR, "db-h-de: got %d mychans; expected %d", rs->nmc, nmc);
+	if (nca != rs->nca)
+		slog(LG_ERROR, "db-h-de: got %d chanacs; expected %d", rs->nca, nca);
+	if (nkl != rs->nkl)
+		slog(LG_ERROR, "db-h-de: got %d klines; expected %d", rs->nkl, nkl);
+	if (nxl != rs->nxl)
+		slog(LG_ERROR, "db-h-de: got %d xlines; expected %d", rs->nxl, nxl);
+	if (nql != rs->nql)
+		slog(LG_ERROR, "db-h-de: got %d qlines; expected %d", rs->nql, nql);
 }
 
 /***************************************************************************************************/
 
-const char *
-opensex_read_word(database_handle_t *db)
+bool opensex_read_next_row(database_handle_t *hdl)
 {
-	return strtok(NULL, " ");
+	int c = 0;
+	int n = 0;
+	opensex_t *rs = (opensex_t *)hdl->priv;
+
+	rs->token = NULL;
+
+	while ((c = getc(rs->f)) != EOF && c != '\n')
+	{
+		rs->buf[n++] = c;
+		if (n == rs->bufsize)
+		{
+			rs->bufsize *= 2;
+			rs->buf = srealloc(rs->buf, rs->bufsize);
+		}
+	}
+	rs->buf[n] = '\0';
+
+	if (c == EOF && ferror(rs->f))
+	{
+		slog(LG_ERROR, "opensex-read-next-row: error at %s line %d: %s", hdl->file, hdl->line, strerror(errno));
+		slog(LG_ERROR, "opensex-read-next-row: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+
+	if (c == EOF && n == 0)
+		return false;
+
+	hdl->line++;
+	hdl->token = 0;
+	return true;
 }
 
-const char *
-opensex_read_multiword(database_handle_t *db)
+const char *opensex_read_word(database_handle_t *db)
 {
-	return strtok(NULL, "");
+	opensex_t *rs = (opensex_t *)db->priv;
+	char *res = strtok_r((db->token ? NULL : rs->buf), " ", &rs->token);
+	db->token++;
+	return res;
 }
 
-int
-opensex_read_int(database_handle_t *db)
+const char *opensex_read_multiword(database_handle_t *db)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	char *res = strtok_r((db->token ? NULL : rs->buf), "", &rs->token);
+	db->token++;
+	return res;
+}
+
+bool opensex_read_int(database_handle_t *db, int *res)
 {
 	const char *s = db_read_word(db);
 
-	return atoi(s);
+	if (!s) return false;
+
+	*res = atoi(s);
+	return true;
 }
 
-bool
-opensex_begin_row(database_handle_t *db, const char *type)
+bool opensex_begin_row(database_handle_t *db, const char *type)
 {
-	FILE *f;
+	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(type != NULL, false);
+	rs = (opensex_t *)db->priv;
 
-	f = (FILE *) db->priv;
-
-	fprintf(f, "%s ", type);
+	fprintf(rs->f, "%s ", type);
 
 	return true;
 }
 
-bool
-opensex_write_word(database_handle_t *db, const char *word)
+bool opensex_write_word(database_handle_t *db, const char *word)
 {
-	FILE *f;
+	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(word != NULL, false);
+	rs = (opensex_t *)db->priv;
 
-	f = (FILE *) db->priv;
-
-	fprintf(f, "%s ", word);
+	fprintf(rs->f, "%s ", word);
 
 	return true;
 }
 
-bool
-opensex_write_multiword(database_handle_t *db, const char *word)
+bool opensex_write_multiword(database_handle_t *db, const char *word)
 {
-	FILE *f;
+	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(word != NULL, false);
+	rs = (opensex_t *)db->priv;
 
-	f = (FILE *) db->priv;
-
-	fprintf(f, "%s", word);
-
-	return true;
-}
-
-bool
-opensex_write_int(database_handle_t *db, int num)
-{
-	FILE *f;
-
-	return_val_if_fail(db != NULL, false);
-
-	f = (FILE *) db->priv;
-
-	fprintf(f, "%d ", num);
+	fprintf(rs->f, "%s", word);
 
 	return true;
 }
 
-bool
-opensex_commit_row(database_handle_t *db)
+bool opensex_write_int(database_handle_t *db, int num)
 {
-	FILE *f;
+	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
 
-	f = (FILE *) db->priv;
+	fprintf(rs->f, "%d ", num);
 
-	fprintf(f, "\n");
+	return true;
+}
+
+bool opensex_commit_row(database_handle_t *db)
+{
+	opensex_t *rs;
+
+	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
+
+	fprintf(rs->f, "\n");
 
 	return true;
 }
 
 database_vtable_t opensex_vt = {
-	"opensex",
+	.name = "opensex",
 
-	opensex_read_word,
-	opensex_read_multiword,
-	opensex_read_int,
+	.read_next_row = opensex_read_next_row,
 
-	opensex_begin_row,
-	opensex_write_word,
-	opensex_write_multiword,
-	opensex_write_int,
-	opensex_commit_row
+	.read_word = opensex_read_word,
+	.read_multiword = opensex_read_multiword,
+	.read_int = opensex_read_int,
+
+	.sread_word = NULL,
+	.sread_multiword = NULL,
+	.sread_int = NULL,
+
+	.start_row = opensex_begin_row,
+	.write_word = opensex_write_word,
+	.write_multiword = opensex_write_multiword,
+	.write_int = opensex_write_int,
+	.commit_row = opensex_commit_row
 };
 
-database_handle_t *
-opensex_db_open(database_transaction_t txn)
+static database_handle_t *opensex_db_open_read(void)
 {
 	database_handle_t *db;
+	opensex_t *rs;
 	FILE *f;
-	const char *fopen_flags;
-	const char *fopen_path;
+	static const char *path = DATADIR "/services.db";
 	int errno1;
 
-	switch (txn) {
-	case DB_WRITE:
-		fopen_path = DATADIR "/services.db.new";
-		fopen_flags = "w";
-		break;
-	default:
-	case DB_READ:
-		fopen_path = DATADIR "/services.db";
-		fopen_flags = "r";
-		break;
-	};
-
-	f = fopen(fopen_path, fopen_flags);
-	if (f == NULL)
+	f = fopen(path, "r");
+	if (!f)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot create services.db.new: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: db_save(): cannot create services.db.new: %s"), strerror(errno1));
+		slog(LG_ERROR, "db-open-read: cannot open '%s' for reading: %s", path, strerror(errno1));
+		wallops(_("\2DATABASE ERROR\2: db-open-read: cannot open '%s' for reading: %s"), path, strerror(errno1));
 		return NULL;
 	}
 
-	db = scalloc(sizeof(database_handle_t), 1);
+	rs = scalloc(sizeof(opensex_t), 1);
+	rs->buf = scalloc(512, 1);
+	rs->bufsize = 512;
+	rs->token = NULL;
+	rs->f = f;
 
-	db->txn = txn;
-	db->priv = f;
+	db = scalloc(sizeof(database_handle_t), 1);
+	db->priv = rs;
 	db->vt = &opensex_vt;
+	db->txn = DB_READ;
+	db->file = path;
+	db->line = 0;
+	db->token = 0;
 
 	return db;
+}
+
+static database_handle_t *opensex_db_open_write(void)
+{
+	database_handle_t *db;
+	opensex_t *rs;
+	FILE *f;
+	static const char *path = DATADIR "/services.db.new";
+	int errno1;
+
+	f = fopen(path, "w");
+	if (!f)
+	{
+		errno1 = errno;
+		slog(LG_ERROR, "db-open-write: cannot open '%s' for writing: %s", path, strerror(errno1));
+		wallops(_("\2DATABASE ERROR\2: db-open-write: cannot open '%s' for writing: %s"), path, strerror(errno1));
+		return NULL;
+	}
+
+	rs = scalloc(sizeof(opensex_t), 1);
+	rs->f = f;
+
+	db = scalloc(sizeof(database_handle_t), 1);
+	db->priv = rs;
+	db->vt = &opensex_vt;
+	db->txn = DB_WRITE;
+	db->file = path;
+	db->line = 0;
+	db->token = 0;
+
+	return db;
+}
+
+database_handle_t *opensex_db_open(database_transaction_t txn)
+{
+	if (txn == DB_WRITE)
+		return opensex_db_open_write();
+	return opensex_db_open_read();
 }
 
 void
 opensex_db_close(database_handle_t *db)
 {
-	FILE *f;
+	opensex_t *rs;
 	int errno1;
 
 	return_if_fail(db != NULL);
+	rs = db->priv;
 
-	fclose(f);
+	fclose(rs->f);
 
 	if (db->txn == DB_WRITE)
 	{
@@ -1163,6 +1019,7 @@ opensex_db_close(database_handle_t *db)
 		hook_call_db_saved();
 	}
 
+	free(db->priv);
 	free(db);
 }
 
@@ -1201,6 +1058,36 @@ void _modinit(module_t *m)
 	db_mod = &opensex_mod;
 	db_load = &opensex_db_load;
 	db_save = &opensex_db_write;
+
+	db_register_type_handler("DBV", opensex_h_dbv);
+	db_register_type_handler("CF", opensex_h_cf);
+	db_register_type_handler("MU", opensex_h_mu);
+	db_register_type_handler("ME", opensex_h_me);
+	db_register_type_handler("MI", opensex_h_mi);
+	db_register_type_handler("AC", opensex_h_ac);
+	db_register_type_handler("MN", opensex_h_mn);
+	db_register_type_handler("MCFP", opensex_h_mcfp);
+	db_register_type_handler("SU", opensex_h_su);
+	db_register_type_handler("NAM", opensex_h_nam);
+	db_register_type_handler("SO", opensex_h_so);
+	db_register_type_handler("MC", opensex_h_mc);
+	db_register_type_handler("MDU", opensex_h_md);
+	db_register_type_handler("MDC", opensex_h_md);
+	db_register_type_handler("MDA", opensex_h_md);
+	db_register_type_handler("MDN", opensex_h_md);
+	db_register_type_handler("CA", opensex_h_ca);
+	db_register_type_handler("SI", opensex_h_si);
+
+	db_register_type_handler("KID", opensex_h_kid);
+	db_register_type_handler("KL", opensex_h_kl);
+	db_register_type_handler("XID", opensex_h_xid);
+	db_register_type_handler("XL", opensex_h_xl);
+	db_register_type_handler("QID", opensex_h_qid);
+	db_register_type_handler("QL", opensex_h_ql);
+
+	db_register_type_handler("DE", opensex_h_de);
+
+	db_register_type_handler("???", opensex_h_unknown);
 
 	backend_loaded = true;
 }

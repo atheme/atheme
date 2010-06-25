@@ -26,6 +26,16 @@ db_close(database_handle_t *db)
 	return db_mod->db_close(db);
 }
 
+bool
+db_read_next_row(database_handle_t *db)
+{
+	return_val_if_fail(db != NULL, NULL);
+	return_val_if_fail(db->vt != NULL, NULL);
+	return_val_if_fail(db->vt->read_next_row != NULL, NULL);
+
+	return db->vt->read_next_row(db);
+}
+
 const char *
 db_read_word(database_handle_t *db)
 {
@@ -46,14 +56,55 @@ db_read_multiword(database_handle_t *db)
 	return db->vt->read_multiword(db);
 }
 
-int
-db_read_int(database_handle_t *db)
+bool
+db_read_int(database_handle_t *db, int *r)
 {
 	return_val_if_fail(db != NULL, 0);
 	return_val_if_fail(db->vt != NULL, 0);
 	return_val_if_fail(db->vt->read_int != NULL, 0);
 
-	return db->vt->read_int(db);
+	return db->vt->read_int(db, r);
+}
+
+const char *
+db_sread_word(database_handle_t *db)
+{
+	const char *w = db_read_word(db);
+	if (!w)
+	{
+		slog(LG_ERROR, "db-sread-word: needed word at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-sread-word: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+	return w;
+}
+
+const char *
+db_sread_multiword(database_handle_t *db)
+{
+	const char *w = db_read_multiword(db);
+	if (!w)
+	{
+		slog(LG_ERROR, "db-sread-multiword: needed multiword at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-sread-multiword: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+	return w;
+}
+
+int
+db_sread_int(database_handle_t *db)
+{
+	int r;
+	bool ok = db_read_int(db, &r);
+
+	if (!ok)
+	{
+		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+	return r;
 }
 
 bool
@@ -135,6 +186,12 @@ db_process(database_handle_t *db, const char *type)
 	return_if_fail(type != NULL);
 
 	fun = mowgli_patricia_retrieve(db_types, type);
+
+	if (!fun)
+	{
+		fun = mowgli_patricia_retrieve(db_types, "???");
+	}
+
 	fun(db, type);
 }
 

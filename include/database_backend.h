@@ -16,10 +16,18 @@ typedef struct database_handle_ database_handle_t;
 typedef struct {
 	const char *name;
 
+	/* Reading stuff. */
+	bool (*read_next_row)(database_handle_t *hdl);
+
 	const char *(*read_word)(database_handle_t *hdl);
 	const char *(*read_multiword)(database_handle_t *hdl);
-	int (*read_int)(database_handle_t *hdl);
+	bool (*read_int)(database_handle_t *hdl, int *res);
 
+	const char *(*sread_word)(database_handle_t *hdl);
+	const char *(*sread_multiword)(database_handle_t *hdl);
+	int (*sread_int)(database_handle_t *hdl);
+
+	/* Writing stuff. */
 	bool (*start_row)(database_handle_t *hdl, const char *type);
 	bool (*write_word)(database_handle_t *hdl, const char *word);
 	bool (*write_multiword)(database_handle_t *hdl, const char *str);
@@ -36,6 +44,9 @@ struct database_handle_ {
 	void *priv;
 	database_vtable_t *vt;
 	database_transaction_t txn;
+	const char *file;
+	unsigned int line;
+	unsigned int token;
 };
 
 typedef struct {
@@ -46,9 +57,13 @@ typedef struct {
 E database_handle_t *db_open(database_transaction_t txn);
 E void db_close(database_handle_t *db);
 
+E bool db_read_next_row(database_handle_t *db);
 E const char *db_read_word(database_handle_t *db);
 E const char *db_read_multiword(database_handle_t *db);
-E int db_read_int(database_handle_t *db);
+E bool db_read_int(database_handle_t *db, int *r);
+E const char *db_sread_word(database_handle_t *db);
+E const char *db_sread_multiword(database_handle_t *db);
+E int db_sread_int(database_handle_t *db);
 
 E bool db_start_row(database_handle_t *db, const char *type);
 E bool db_write_word(database_handle_t *db, const char *word);
