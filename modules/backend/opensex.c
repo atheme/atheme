@@ -2,23 +2,20 @@
  * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains the implementation of the Atheme 0.1
- * flatfile database format, with metadata extensions.
- *
+ * This file contains the OpenSEX (Open Services Exchange) database backend for
+ * Atheme. The purpose of OpenSEX is to destroy the old DB format, subjugate its
+ * peoples, burn its cities to the ground, and salt the earth so that nothing
+ * ever grows there again.
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"backend/flatfile", true, _modinit, NULL,
+	"backend/opensex", true, _modinit, NULL,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
-
-/* database versions */
-#define DB_SHRIKE	1
-#define DB_ATHEME	2
 
 typedef struct opensex_ {
 	/* Lexing state */
