@@ -43,7 +43,6 @@ void hooks_init()
 hook_t *hook_add_event(const char *name)
 {
 	hook_t *nh;
-	node_t *n;
 
 	if((nh = find_hook(name)) != NULL)
 		return nh;
