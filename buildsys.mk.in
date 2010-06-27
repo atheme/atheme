@@ -100,7 +100,9 @@ MO_FILES = ${LOCALES:.po=.mo}
 build: all
 
 all:
-	for i in depend subdirs ${STATIC_LIB} ${STATIC_LIB_NOINST} ${LIB} ${LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} locales; do \
+	for i in depend subdirs "${STATIC_LIB} ${STATIC_LIB_NOINST} ${LIB} ${LIB_NOINST}" "${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} locales"; do \
+		set -- $$i; \
+		[ "$$#" -gt 0 ] || continue; \
 		${MAKE} ${MFLAGS} $$i || exit 1; \
 	done
 
