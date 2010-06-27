@@ -52,7 +52,6 @@ opensex_db_save(database_handle_t *db)
 	svsignore_t *svsignore;
 	soper_t *soper;
 	node_t *n, *tn, *tn2;
-	FILE *f;
 	int errno1, was_errored = 0;
 	mowgli_patricia_iteration_state_t state;
 
@@ -255,7 +254,9 @@ opensex_db_save(database_handle_t *db)
 		k = (kline_t *)n->data;
 
 		/* KL <user> <host> <duration> <settime> <setby> <reason> */
-		fprintf(f, "KL %s %s %ld %ld %s %s\n", k->user, k->host, k->duration, (long)k->settime, k->setby, k->reason);
+		db_start_row(db, "KL");
+		db_write(db, "%s", k->user, "%s", k->host, "%lu", k->duration, "%lu", (long)k->settime, "%s", k->setby, "%s", k->reason);
+		db_commit_row(db);
 
 		kout++;
 	}
@@ -271,7 +272,9 @@ opensex_db_save(database_handle_t *db)
 		x = (xline_t *)n->data;
 
 		/* XL <gecos> <duration> <settime> <setby> <reason> */
-		fprintf(f, "XL %s %ld %ld %s %s\n", x->realname, x->duration, (long)x->settime, x->setby, x->reason);
+		db_start_row(db, "XL");
+		db_write(db, "%s", x->realname, "%lu", x->duration, "%lu", (long)x->settime, "%s", x->setby, "%s", x->reason);
+		db_commit_row(db);
 
 		xout++;
 	}
@@ -285,7 +288,9 @@ opensex_db_save(database_handle_t *db)
 		q = (qline_t *)n->data;
 
 		/* QL <mask> <duration> <settime> <setby> <reason> */
-		fprintf(f, "QL %s %ld %ld %s %s\n", q->mask, q->duration, (long)q->settime, q->setby, q->reason);
+		db_start_row(db, "QL");
+		db_write(db, "%s", q->mask, "%lu", q->duration, "%lu", (long)q->settime, "%s", q->setby, "%s", q->reason);
+		db_commit_row(db);
 
 		qout++;
 	}
