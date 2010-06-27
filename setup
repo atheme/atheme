@@ -141,7 +141,8 @@ CONTRIB=$INPUT
 # Yeah, I know sed and escaping everything is probably not the cleanest way to do this, but it works...
 case "$CONTRIB" in
 	[Yy]*)
-	  sed -i s/\$\(PODIR\)/contrib\ \$\(PODIR\)/ Makefile
+          cp Makefile Makefile.bak
+	  sed 's/$(PODIR)/contrib &/' Makefile.bak >Makefile
 	  ;;
 esac
 
