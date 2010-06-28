@@ -2,11 +2,9 @@ Ayuda para SET ENTRYMSG:
 
 SET ENTRYMSG le permite cambiar o establecer
 un mensaje enviado a todos los usuarios que se
-unan al canal. Especifique NONE para quitar el
-mensaje.
+unan al canal.
 
-Sintaxis: SET <#canal> ENTRYMSG <mensaje>
-Sintaxis: SET <#canal> ENTRYMSG NONE
+Sintaxis: SET <#canal> ENTRYMSG [mensaje]
 
 Ejemplo:
     /msg &nick& SET #soporte ENTRYMSG Bienvenido a #soporte. Por favor no pastee más de 5 líneas.

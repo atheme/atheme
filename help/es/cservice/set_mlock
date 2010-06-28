@@ -7,7 +7,7 @@ las cosas contra bots malvados, así que tenga cuidado.
 Los modos bloqueados pueden ser vistos por cualquiera que
 recree el canal (esto incluye la clave de acceso).
 
-Sintaxis: SET <#canal> MLOCK <modos>
+Sintaxis: SET <#canal> MLOCK [modos]
 
 Ejemplos: (algunos podrían usar modos que su ircd no soporta)
     /msg &nick& SET #abc MLOCK +nt-lk
@@ -16,4 +16,3 @@ Ejemplos: (algunos podrían usar modos que su ircd no soporta)
     /msg &nick& SET #abc MLOCK +ntcjf-kl 2:30 #desborde
     /msg &nick& SET #desborde MLOCK +mntF-kljf
     /msg &nick& SET #abc1 MLOCK +ntlL 40 #abc2
-    /msg &nick& SET #abc MLOCK OFF

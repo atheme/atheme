@@ -4,7 +4,7 @@ SET EMAIL le permite cambiar o establecer la
 dirección de e-mail asociada con un canal. Ésta
 es mostrada a todos los usuarios en INFO.
 
-Sintaxis: SET <#canal> EMAIL <e-mail>
+Sintaxis: SET <#canal> EMAIL [e-mail]
 
 Al usar el comando de este modo se asocia una
 dirección de e-mail al canal.
@@ -12,10 +12,3 @@ dirección de e-mail al canal.
 Ejemplo:
     /msg &nick& SET #chat EMAIL una@dir.de.email
 
-Sintaxis: SET <#canal> EMAIL NONE
-
-Al usar el comando de este modo se quita la
-dirección de e-mail del canal.
-
-Ejemplo:
-    /msg &nick& SET #chat EMAIL none

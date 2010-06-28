@@ -14,7 +14,7 @@ MLOCK ("блокировка режимов") позволяет вам установить
 на канал первым, может увидеть список режимов и их
 параметры (например заблокированный режим +k и его пароль)
 
-Синтаксис: SET <#канал> MLOCK <режимы>
+Синтаксис: SET <#канал> MLOCK [режимы]
 
 Примеры:
     /msg &nick& SET #foo MLOCK +nt-lk
@@ -23,5 +23,4 @@ MLOCK ("блокировка режимов") позволяет вам установить
     /msg &nick& SET #foo MLOCK +ntcjf-kl 2:30 #overflow
     /msg &nick& SET #overflow MLOCK +mntF-kljf
     /msg &nick& SET #foo1 MLOCK +ntlL 40 #foo2
-    /msg &nick& SET #foo MLOCK OFF
 (в примере могут быть режимы, которые не поддерживает ваш IRCD)

@@ -29,7 +29,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set, cs_cmdtree);
+	command_add(&cs_set, cs_cmdtree);
 
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 }
@@ -61,10 +61,10 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	char *cmd;
 	command_t *c;
 
-	if (parc < 3)
+	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <#channel> <setting> <parameters>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: SET <#channel> <setting> [parameters]"));
 		return;
 	}
 
@@ -75,7 +75,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET");
-		command_fail(si, fault_badparams, _("Syntax: SET <#channel> <setting> <parameters>"));
+		command_fail(si, fault_badparams, _("Syntax: SET <#channel> <setting> [parameters]"));
 		return;
 	}
 

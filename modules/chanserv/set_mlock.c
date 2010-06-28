@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_mlock, cs_set_cmdtree);
+	command_add(&cs_set_mlock, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 }
@@ -58,12 +58,6 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	char *letters = strtok(parv[1], " ");
 	char *arg;
 	metadata_t *md;
-
-	if (!letters)
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MLOCK");
-		return;
-	}
 
 	if (!(mc = mychan_find(parv[0])))
 	{
@@ -97,7 +91,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	}
 	newlock_key[0] = '\0';
 
-	while (*letters)
+	while (letters && *letters)
 	{
 		if (*letters != '+' && *letters != '-' && dir == MTYPE_NUL)
 		{

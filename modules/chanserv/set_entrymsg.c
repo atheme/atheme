@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_entrymsg, cs_set_cmdtree);
+	command_add(&cs_set_entrymsg, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 }
@@ -56,7 +56,6 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* XXX: I'd like to be able to use /CS SET #channel ENTRYMSG to clear but CS SET won't let me... */
 	if (!parv[1] || !strcasecmp("OFF", parv[1]) || !strcasecmp("NONE", parv[1]))
 	{
 		/* entrymsg is private because users won't see it if they're AKICKED,

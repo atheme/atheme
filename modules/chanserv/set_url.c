@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_url, cs_set_cmdtree);
+	command_add(&cs_set_url, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET URL", "help/cservice/set_url", NULL);
 }
@@ -57,7 +57,6 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* XXX: I'd like to be able to use /CS SET #channel URL to clear but CS SET won't let me... */
 	if (!url || !strcasecmp("OFF", url) || !strcasecmp("NONE", url))
 	{
 		/* not in a namespace to allow more natural use of SET PROPERTY.

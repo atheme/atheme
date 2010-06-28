@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_email, cs_set_cmdtree);
+	command_add(&cs_set_email, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET EMAIL", "help/cservice/set_email", NULL);
 }

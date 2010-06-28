@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_founder, cs_set_cmdtree);
+	command_add(&cs_set_founder, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 }
@@ -66,6 +66,12 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	if (!si->smu)
 	{
 		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if (!newfounder)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET FOUNDER");
 		return;
 	}
 

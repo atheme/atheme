@@ -4,7 +4,7 @@ SET EMAIL allows you to change or set the email
 address associated with a channel. This is shown
 to all users in INFO.
 
-Syntax: SET <#channel> EMAIL <email>
+Syntax: SET <#channel> EMAIL [email]
 
 Using the command in this way results in an email
 address being associated with the channel.
@@ -12,10 +12,3 @@ address being associated with the channel.
 Example:
     /msg &nick& SET #chat EMAIL some@email.address
 
-Syntax: SET <#channel> EMAIL NONE
-
-Using the command in this way results in an email
-address being removed from the channel.
-
-Example:
-    /msg &nick& SET #chat EMAIL none

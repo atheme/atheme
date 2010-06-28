@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_set_limitflags, cs_set_cmdtree);
+	command_add(&cs_set_limitflags, cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET LIMITFLAGS", "help/cservice/set_limitflags", NULL);
 
@@ -51,6 +51,12 @@ static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mc = mychan_find(parv[0])))
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
+		return;
+	}
+
+	if (!parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET LIMITFLAGS");
 		return;
 	}
 
