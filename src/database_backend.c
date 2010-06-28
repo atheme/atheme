@@ -47,23 +47,43 @@ db_read_word(database_handle_t *db)
 }
 
 const char *
-db_read_multiword(database_handle_t *db)
+db_read_str(database_handle_t *db)
 {
 	return_val_if_fail(db != NULL, NULL);
 	return_val_if_fail(db->vt != NULL, NULL);
-	return_val_if_fail(db->vt->read_multiword != NULL, NULL);
+	return_val_if_fail(db->vt->read_str != NULL, NULL);
 
-	return db->vt->read_multiword(db);
+	return db->vt->read_str(db);
 }
 
 bool
 db_read_int(database_handle_t *db, int *r)
 {
-	return_val_if_fail(db != NULL, 0);
-	return_val_if_fail(db->vt != NULL, 0);
-	return_val_if_fail(db->vt->read_int != NULL, 0);
+	return_val_if_fail(db != NULL, false);
+	return_val_if_fail(db->vt != NULL, false);
+	return_val_if_fail(db->vt->read_int != NULL, false);
 
 	return db->vt->read_int(db, r);
+}
+
+bool
+db_read_uint(database_handle_t *db, unsigned int *r)
+{
+	return_val_if_fail(db != NULL, false);
+	return_val_if_fail(db->vt != NULL, false);
+	return_val_if_fail(db->vt->read_uint != NULL, false);
+
+	return db->vt->read_uint(db, r);
+}
+
+bool
+db_read_time(database_handle_t *db, time_t *r)
+{
+	return_val_if_fail(db != NULL, false);
+	return_val_if_fail(db->vt != NULL, false);
+	return_val_if_fail(db->vt->read_time != NULL, false);
+
+	return db->vt->read_time(db, r);
 }
 
 const char *
@@ -80,9 +100,9 @@ db_sread_word(database_handle_t *db)
 }
 
 const char *
-db_sread_multiword(database_handle_t *db)
+db_sread_str(database_handle_t *db)
 {
-	const char *w = db_read_multiword(db);
+	const char *w = db_read_str(db);
 	if (!w)
 	{
 		slog(LG_ERROR, "db-sread-multiword: needed multiword at file %s line %d token %d", db->file, db->line, db->token);
@@ -97,6 +117,36 @@ db_sread_int(database_handle_t *db)
 {
 	int r;
 	bool ok = db_read_int(db, &r);
+
+	if (!ok)
+	{
+		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+	return r;
+}
+
+unsigned int
+db_sread_uint(database_handle_t *db)
+{
+	unsigned int r;
+	bool ok = db_read_int(db, &r);
+
+	if (!ok)
+	{
+		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
+		exit(EXIT_FAILURE);
+	}
+	return r;
+}
+
+time_t
+db_sread_time(database_handle_t *db)
+{
+	time_t r;
+	bool ok = db_read_time(db, &r);
 
 	if (!ok)
 	{
@@ -128,13 +178,13 @@ db_write_word(database_handle_t *db, const char *word)
 }
 
 bool
-db_write_multiword(database_handle_t *db, const char *str)
+db_write_str(database_handle_t *db, const char *str)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
-	return_val_if_fail(db->vt->write_multiword != NULL, false);
+	return_val_if_fail(db->vt->write_str != NULL, false);
 
-	return db->vt->write_multiword(db, str);
+	return db->vt->write_str(db, str);
 }
 
 bool
@@ -145,6 +195,26 @@ db_write_int(database_handle_t *db, int num)
 	return_val_if_fail(db->vt->write_int != NULL, false);
 
 	return db->vt->write_int(db, num);
+}
+
+bool
+db_write_uint(database_handle_t *db, unsigned int num)
+{
+	return_val_if_fail(db != NULL, false);
+	return_val_if_fail(db->vt != NULL, false);
+	return_val_if_fail(db->vt->write_uint != NULL, false);
+
+	return db->vt->write_uint(db, num);
+}
+
+bool
+db_write_time(database_handle_t *db, time_t time)
+{
+	return_val_if_fail(db != NULL, false);
+	return_val_if_fail(db->vt != NULL, false);
+	return_val_if_fail(db->vt->write_time != NULL, false);
+
+	return db->vt->write_time(db, time);
 }
 
 bool

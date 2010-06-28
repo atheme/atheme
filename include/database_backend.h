@@ -20,18 +20,18 @@ typedef struct {
 	bool (*read_next_row)(database_handle_t *hdl);
 
 	const char *(*read_word)(database_handle_t *hdl);
-	const char *(*read_multiword)(database_handle_t *hdl);
+	const char *(*read_str)(database_handle_t *hdl);
 	bool (*read_int)(database_handle_t *hdl, int *res);
-
-	const char *(*sread_word)(database_handle_t *hdl);
-	const char *(*sread_multiword)(database_handle_t *hdl);
-	int (*sread_int)(database_handle_t *hdl);
+	bool (*read_uint)(database_handle_t *hdl, unsigned int *res);
+	bool (*read_time)(database_handle_t *hdl, time_t *res);
 
 	/* Writing stuff. */
 	bool (*start_row)(database_handle_t *hdl, const char *type);
 	bool (*write_word)(database_handle_t *hdl, const char *word);
-	bool (*write_multiword)(database_handle_t *hdl, const char *str);
+	bool (*write_str)(database_handle_t *hdl, const char *str);
 	bool (*write_int)(database_handle_t *hdl, int num);
+	bool (*write_uint)(database_handle_t *hdl, unsigned int num);
+	bool (*write_time)(database_handle_t *hdl, time_t time);
 	bool (*commit_row)(database_handle_t *hdl);
 } database_vtable_t;
 
@@ -58,25 +58,27 @@ E database_handle_t *db_open(database_transaction_t txn);
 E void db_close(database_handle_t *db);
 
 E bool db_read_next_row(database_handle_t *db);
+
 E const char *db_read_word(database_handle_t *db);
-E const char *db_read_multiword(database_handle_t *db);
+E const char *db_read_str(database_handle_t *db);
 E bool db_read_int(database_handle_t *db, int *r);
+E bool db_read_uint(database_handle_t *db, unsigned int *r);
+E bool db_read_time(database_handle_t *db, time_t *t);
+
 E const char *db_sread_word(database_handle_t *db);
-E const char *db_sread_multiword(database_handle_t *db);
+E const char *db_sread_str(database_handle_t *db);
 E int db_sread_int(database_handle_t *db);
+E unsigned int db_sread_uint(database_handle_t *db);
+E time_t db_sread_time(database_handle_t *db);
 
 E bool db_start_row(database_handle_t *db, const char *type);
 E bool db_write_word(database_handle_t *db, const char *word);
-E bool db_write_multiword(database_handle_t *db, const char *str);
+E bool db_write_str(database_handle_t *db, const char *str);
 E bool db_write_int(database_handle_t *db, int num);
+E bool db_write_uint(database_handle_t *db, unsigned int num);
+E bool db_write_time(database_handle_t *db, time_t time);
 E bool db_write_format(database_handle_t *db, const char *str, ...);
 E bool db_commit_row(database_handle_t *db);
-
-/*
- * Write multiple columns at the same time to the DB.
- * Terminate with NULL.
- */
-E bool db_write(database_handle_t *db, ...);
 
 typedef void (*database_handler_f)(database_handle_t *db, const char *type);
 

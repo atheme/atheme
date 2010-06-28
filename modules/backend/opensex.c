@@ -79,9 +79,13 @@ opensex_db_save(database_handle_t *db)
 		 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 		 */
 		db_start_row(db, "MU");
-		db_write(db, "%s", mu->name, "%s", mu->pass, "%s", mu->email, "%ld", mu->registered, "%ld", mu->lastlogin, "%ld",
-			 LIST_LENGTH(&mu->logins) > 0 ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags,
-			 "%s", language_get_name(mu->language), NULL);
+		db_write_word(db, mu->name);
+		db_write_word(db, mu->pass);
+		db_write_word(db, mu->email);
+		db_write_time(db, mu->registered);
+		db_write_time(db, mu->lastlogin);
+		db_write_uint(db, LIST_LENGTH(&mu->logins) > 0 ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
+		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
 
 		muout++;
@@ -91,7 +95,9 @@ opensex_db_save(database_handle_t *db)
 			metadata_t *md = (metadata_t *)tn->data;
 
 			db_start_row(db, "MDU");
-			db_write(db, "%s", mu->name, "%s", md->name, "%s", md->value, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, md->name);
+			db_write_str(db, md->value);
 			db_commit_row(db);
 		}
 
@@ -100,21 +106,27 @@ opensex_db_save(database_handle_t *db)
 			mymemo_t *mz = (mymemo_t *)tn->data;
 
 			db_start_row(db, "ME");
-			db_write(db, "%s", mu->name, "%s", mz->sender, "%lu", mz->sent, "%lu", mz->status, "%s", mz->text, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, mz->sender);
+			db_write_time(db, mz->sent);
+			db_write_uint(db, mz->status);
+			db_write_str(db, mz->text);
 			db_commit_row(db);
 		}
 
 		LIST_FOREACH(tn, mu->memo_ignores.head)
 		{
 			db_start_row(db, "MI");
-			db_write(db, "%s", mu->name, "%s", (char *) tn->data, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, (char *)tn->data);
 			db_commit_row(db);
 		}
 
 		LIST_FOREACH(tn, mu->access_list.head)
 		{
 			db_start_row(db, "AC");
-			db_write(db, "%s", mu->name, "%s", (char *) tn->data, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, (char *)tn->data);
 			db_commit_row(db);
 		}
 
@@ -123,7 +135,10 @@ opensex_db_save(database_handle_t *db)
 			mynick_t *mn = tn->data;
 
 			db_start_row(db, "MN");
-			db_write(db, "%s", mu->name, "%s", mn->nick, "%ld", mn->registered, "%ld", mn->lastseen, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, mn->nick);
+			db_write_time(db, mn->registered);
+			db_write_time(db, mn->lastseen);
 			db_commit_row(db);
 		}
 
@@ -132,7 +147,8 @@ opensex_db_save(database_handle_t *db)
 			mycertfp_t *mcfp = tn->data;
 
 			db_start_row(db, "MCFP");
-			db_write(db, "%s", mu->name, "%s", mcfp->certfp, NULL);
+			db_write_word(db, mu->name);
+			db_write_word(db, mcfp->certfp);
 			db_commit_row(db);
 		}
 	}
@@ -154,8 +170,14 @@ opensex_db_save(database_handle_t *db)
 		}
 		/* MC <name> <registered> <used> <flags> <mlock_on> <mlock_off> <mlock_limit> [mlock_key] */
 		db_start_row(db, "MC");
-		db_write(db, "%s", mc->name, "%ld", mc->registered, "%ld", mc->used, "%d", mc->flags, "%d", mc->mlock_on,
-		         "%d", mc->mlock_off, "%d", mc->mlock_limit, "%s", mc->mlock_key ? mc->mlock_key : "", NULL);
+		db_write_word(db, mc->name);
+		db_write_time(db, mc->registered);
+		db_write_time(db, mc->used);
+		db_write_uint(db, mc->flags);
+		db_write_uint(db, mc->mlock_on);
+		db_write_uint(db, mc->mlock_off);
+		db_write_uint(db, mc->mlock_limit);
+		db_write_word(db, mc->mlock_key ? mc->mlock_key : "");
 		db_commit_row(db);
 		mcout++;
 
@@ -164,8 +186,10 @@ opensex_db_save(database_handle_t *db)
 			ca = (chanacs_t *)tn->data;
 
 			db_start_row(db, "CA");
-			db_write(db, "%s", ca->mychan->name, "%s", ca->myuser ? ca->myuser->name : ca->host,
-					"%s", bitmask_to_flags(ca->level, chanacs_flags), "%ld", (long)ca->tmodified, NULL);
+			db_write_word(db, ca->mychan->name);
+			db_write_word(db, ca->myuser ? ca->myuser->name : ca->host);
+			db_write_word(db, bitmask_to_flags(ca->level, chanacs_flags));
+			db_write_time(db, ca->tmodified);
 			db_commit_row(db);
 
 			LIST_FOREACH(tn2, object(ca)->metadata.head)
@@ -176,7 +200,9 @@ opensex_db_save(database_handle_t *db)
 				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->myuser) ? ca->myuser->name : ca->host);
 
 				db_start_row(db, "MDA");
-				db_write(db, "%s", buf, "%s", md->name, "%s", md->value, NULL);
+				db_write_word(db, buf);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
 				db_commit_row(db);
 			}
 
@@ -188,7 +214,9 @@ opensex_db_save(database_handle_t *db)
 			metadata_t *md = (metadata_t *)tn->data;
 
 			db_start_row(db, "MDC");
-			db_write(db, "%s", mc->name, "%s", md->name, "%s", md->value, NULL);
+			db_write_word(db, mc->name);
+			db_write_word(db, md->name);
+			db_write_str(db, md->value);
 			db_commit_row(db);
 		}
 	}
@@ -197,7 +225,7 @@ opensex_db_save(database_handle_t *db)
 	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
 		db_start_row(db, "NAM");
-		db_write(db, "%s", mun->name, NULL);
+		db_write_word(db, mun->name);
 		db_commit_row(db);
 
 		LIST_FOREACH(tn, object(mun)->metadata.head)
@@ -205,7 +233,9 @@ opensex_db_save(database_handle_t *db)
 			metadata_t *md = (metadata_t *)tn->data;
 
 			db_start_row(db, "MDN");
-			db_write(db, "%s", mun->name, "%s", md->name, "%s", md->value, NULL);
+			db_write_word(db, mun->name);
+			db_write_word(db, md->name);
+			db_write_str(db, md->value);
 			db_commit_row(db);
 		}
 	}
@@ -219,7 +249,10 @@ opensex_db_save(database_handle_t *db)
 
 		/* SI <mask> <settime> <setby> <reason> */
 		db_start_row(db, "SI");
-		db_write(db, "%s", svsignore->mask, "%ld", (long)svsignore->settime, "%s", svsignore->setby, "%s", svsignore->reason, NULL);
+		db_write_word(db, svsignore->mask);
+		db_write_time(db, svsignore->settime);
+		db_write_word(db, svsignore->setby);
+		db_write_str(db, svsignore->reason);
 		db_commit_row(db);
 	}
 
@@ -235,10 +268,12 @@ opensex_db_save(database_handle_t *db)
 
 		/* SO <account> <operclass> <flags> [password] */
 		db_start_row(db, "SO");
-		db_write(db, "%s", soper->myuser->name, "%s", soper->classname, "%d", soper->flags, NULL);
+		db_write_word(db, soper->myuser->name);
+		db_write_word(db, soper->classname);
+		db_write_uint(db, soper->flags);
 
 		if (soper->password != NULL)
-			db_write(db, "%s", soper->password, NULL);
+			db_write_word(db, soper->password);
 
 		db_commit_row(db);
 	}
@@ -246,7 +281,7 @@ opensex_db_save(database_handle_t *db)
 	slog(LG_DEBUG, "db_save(): saving klines");
 
 	db_start_row(db, "KID");
-	db_write(db, "%lu", me.kline_id, NULL);
+	db_write_uint(db, me.kline_id);
 	db_commit_row(db);
 
 	LIST_FOREACH(n, klnlist.head)
@@ -255,7 +290,12 @@ opensex_db_save(database_handle_t *db)
 
 		/* KL <user> <host> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "KL");
-		db_write(db, "%s", k->user, "%s", k->host, "%lu", k->duration, "%lu", (long)k->settime, "%s", k->setby, "%s", k->reason);
+		db_write_word(db, k->user);
+		db_write_word(db, k->host);
+		db_write_uint(db, k->duration);
+		db_write_time(db, k->settime);
+		db_write_word(db, k->setby);
+		db_write_str(db, k->reason);
 		db_commit_row(db);
 
 		kout++;
@@ -264,7 +304,7 @@ opensex_db_save(database_handle_t *db)
 	slog(LG_DEBUG, "db_save(): saving xlines");
 
 	db_start_row(db, "XID");
-	db_write(db, "%lu", me.xline_id, NULL);
+	db_write_uint(db, me.xline_id);
 	db_commit_row(db);
 
 	LIST_FOREACH(n, xlnlist.head)
@@ -273,14 +313,18 @@ opensex_db_save(database_handle_t *db)
 
 		/* XL <gecos> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "XL");
-		db_write(db, "%s", x->realname, "%lu", x->duration, "%lu", (long)x->settime, "%s", x->setby, "%s", x->reason);
+		db_write_word(db, x->realname);
+		db_write_uint(db, x->duration);
+		db_write_time(db, x->settime);
+		db_write_word(db, x->setby);
+		db_write_str(db, x->reason);
 		db_commit_row(db);
 
 		xout++;
 	}
 
 	db_start_row(db, "QID");
-	db_write(db, "%lu", me.qline_id, NULL);
+	db_write_uint(db, me.qline_id);
 	db_commit_row(db);
 
 	LIST_FOREACH(n, qlnlist.head)
@@ -289,7 +333,11 @@ opensex_db_save(database_handle_t *db)
 
 		/* QL <mask> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "QL");
-		db_write(db, "%s", q->mask, "%lu", q->duration, "%lu", (long)q->settime, "%s", q->setby, "%s", q->reason);
+		db_write_word(db, q->mask);
+		db_write_uint(db, q->duration);
+		db_write_time(db, q->settime);
+		db_write_word(db, q->setby);
+		db_write_str(db, q->reason);
 		db_commit_row(db);
 
 		qout++;
@@ -297,7 +345,12 @@ opensex_db_save(database_handle_t *db)
 
 	/* DE <muout> <mcout> <caout> <kout> <xout> <qout> */
 	db_start_row(db, "DE");
-	db_write(db, "%d", muout, "%d", mcout, "%d", caout, "%d", kout, "%d", xout, "%d", qout, NULL);
+	db_write_uint(db, muout);
+	db_write_uint(db, mcout);
+	db_write_uint(db, caout);
+	db_write_uint(db, kout);
+	db_write_uint(db, xout);
+	db_write_uint(db, qout);
 	db_commit_row(db);
 }
 
@@ -347,7 +400,8 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	const char *name = db_sread_word(db);
 	const char *pass, *email, *language;
-	unsigned int reg, login, flags;
+	time_t reg, login;
+	unsigned int flags;
 	myuser_t *mu;
 
 	if (myuser_find(name))
@@ -358,9 +412,9 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 
 	pass = db_sread_word(db);
 	email = db_sread_word(db);
-	reg = db_sread_int(db);
-	login = db_sread_int(db);
-	flags = db_sread_int(db);
+	reg = db_sread_time(db);
+	login = db_sread_time(db);
+	flags = db_sread_uint(db);
 	language = db_read_word(db);
 
 	mu = myuser_add(name, pass, email, flags);
@@ -374,15 +428,16 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 static void opensex_h_me(database_handle_t *db, const char *type)
 {
 	const char *dest, *src, *text;
-	unsigned int time, status;
+	time_t time;
+	unsigned int status;
 	myuser_t *mu;
 	mymemo_t *mz;
 
 	dest = db_sread_word(db);
 	src = db_sread_word(db);
-	time = db_sread_int(db);
+	time = db_sread_time(db);
 	status = db_sread_int(db);
-	text = db_sread_multiword(db);
+	text = db_sread_str(db);
 
 	if (!(mu = myuser_find(dest)))
 	{
@@ -426,7 +481,7 @@ static void opensex_h_ac(database_handle_t *db, const char *type)
 	const char *user, *mask;
 
 	user = db_sread_word(db);
-	mask = db_sread_multiword(db);
+	mask = db_sread_str(db);
 
 	mu = myuser_find(user);
 	if (!mu)
@@ -443,12 +498,12 @@ static void opensex_h_mn(database_handle_t *db, const char *type)
 	myuser_t *mu;
 	mynick_t *mn;
 	const char *user, *nick;
-	unsigned int reg, seen;
+	time_t reg, seen;
 
 	user = db_sread_word(db);
 	nick = db_sread_word(db);
-	reg = db_sread_int(db);
-	seen = db_sread_int(db);
+	reg = db_sread_time(db);
+	seen = db_sread_time(db);
 
 	mu = myuser_find(user);
 	if (!mu)
@@ -553,13 +608,13 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 	strlcpy(buf, name, sizeof buf);
 	mychan_t *mc = mychan_add(buf);
 
-	mc->registered = db_sread_int(db);
-	mc->used = db_sread_int(db);
-	mc->flags = db_sread_int(db);
+	mc->registered = db_sread_time(db);
+	mc->used = db_sread_time(db);
+	mc->flags = db_sread_uint(db);
 
-	mc->mlock_on = db_sread_int(db);
-	mc->mlock_off = db_sread_int(db);
-	mc->mlock_limit = db_sread_int(db);
+	mc->mlock_on = db_sread_uint(db);
+	mc->mlock_off = db_sread_uint(db);
+	mc->mlock_limit = db_sread_uint(db);
 
 	if ((key = db_read_word(db)))
 	{
@@ -576,7 +631,7 @@ static void opensex_h_md(database_handle_t *db, const char *type)
 {
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);
-	const char *value = db_sread_multiword(db);
+	const char *value = db_sread_str(db);
 	void *obj;
 
 	if (!strcmp(type, "MDU"))
@@ -608,7 +663,8 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	const char *chan, *user;
-	unsigned int tmod, flags;
+	time_t tmod;
+	unsigned int flags;
 	mychan_t *mc;
 	myuser_t *mu;
 	chanacs_t *ca;
@@ -616,7 +672,7 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 	chan = db_sread_word(db);
 	user = db_sread_word(db);
 	flags = flags_to_bitmask(db_sread_word(db), chanacs_flags, 0);
-	tmod = db_sread_int(db);
+	tmod = db_sread_time(db);
 
 	mc = mychan_find(chan);
 	mu = myuser_find(user);
@@ -652,9 +708,9 @@ static void opensex_h_si(database_handle_t *db, const char *type)
 	svsignore_t *svsignore;
 
 	mask = db_sread_word(db);
-	settime = db_sread_int(db);
+	settime = db_sread_time(db);
 	setby = db_sread_word(db);
-	reason = db_sread_multiword(db);
+	reason = db_sread_str(db);
 	strlcpy(buf, reason, sizeof buf);
 
 	strip(buf);
@@ -679,10 +735,10 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 
 	user = db_sread_word(db);
 	host = db_sread_word(db);
-	duration = db_sread_int(db);
-	settime = db_sread_int(db);
+	duration = db_sread_uint(db);
+	settime = db_sread_time(db);
 	setby = db_sread_word(db);
-	reason = db_sread_multiword(db);
+	reason = db_sread_str(db);
 
 	strlcpy(buf, reason, sizeof buf);
 	strip(buf);
@@ -708,10 +764,10 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 	xline_t *x;
 
 	realname = db_sread_word(db);
-	duration = db_sread_int(db);
-	settime = db_sread_int(db);
+	duration = db_sread_uint(db);
+	settime = db_sread_time(db);
 	setby = db_sread_word(db);
-	reason = db_sread_multiword(db);
+	reason = db_sread_str(db);
 
 	strlcpy(buf, reason, sizeof buf);
 	strip(buf);
@@ -737,9 +793,9 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	qline_t *q;
 
 	mask = db_sread_word(db);
-	duration = db_sread_int(db);
-	settime = db_sread_int(db);
-	reason = db_sread_multiword(db);
+	duration = db_sread_uint(db);
+	settime = db_sread_time(db);
+	reason = db_sread_str(db);
 
 	strlcpy(buf, reason, sizeof buf);
 	strip(buf);
@@ -755,12 +811,12 @@ static void opensex_h_de(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	unsigned int nmu, nmc, nca, nkl, nxl, nql;
 
-	nmu = db_sread_int(db);
-	nmc = db_sread_int(db);
-	nca = db_sread_int(db);
-	nkl = db_sread_int(db);
-	nxl = db_sread_int(db);
-	nql = db_sread_int(db);
+	nmu = db_sread_uint(db);
+	nmc = db_sread_uint(db);
+	nca = db_sread_uint(db);
+	nkl = db_sread_uint(db);
+	nxl = db_sread_uint(db);
+	nql = db_sread_uint(db);
 
 	if (nmu != rs->nmu)
 		slog(LG_ERROR, "db-h-de: got %d myusers; expected %d", rs->nmu, nmu);
@@ -820,7 +876,7 @@ const char *opensex_read_word(database_handle_t *db)
 	return res;
 }
 
-const char *opensex_read_multiword(database_handle_t *db)
+const char *opensex_read_str(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	char *res = strtok_r((db->token ? NULL : rs->buf), "", &rs->token);
@@ -831,14 +887,37 @@ const char *opensex_read_multiword(database_handle_t *db)
 bool opensex_read_int(database_handle_t *db, int *res)
 {
 	const char *s = db_read_word(db);
+	char *rp;
 
 	if (!s) return false;
 
-	*res = atoi(s);
-	return true;
+	*res = strtol(s, &rp, 0);
+	return *s && !*rp;
 }
 
-bool opensex_begin_row(database_handle_t *db, const char *type)
+bool opensex_read_uint(database_handle_t *db, unsigned int *res)
+{
+	const char *s = db_read_word(db);
+	char *rp;
+
+	if (!s) return false;
+
+	*res = strtoul(s, &rp, 0);
+	return *s && !*rp;
+}
+
+bool opensex_read_time(database_handle_t *db, time_t *res)
+{
+	const char *s = db_read_word(db);
+	char *rp;
+
+	if (!s) return false;
+
+	*res = strtoul(s, &rp, 0);
+	return *s && !*rp;
+}
+
+bool opensex_start_row(database_handle_t *db, const char *type)
 {
 	opensex_t *rs;
 
@@ -864,7 +943,7 @@ bool opensex_write_word(database_handle_t *db, const char *word)
 	return true;
 }
 
-bool opensex_write_multiword(database_handle_t *db, const char *word)
+bool opensex_write_str(database_handle_t *db, const char *word)
 {
 	opensex_t *rs;
 
@@ -889,6 +968,29 @@ bool opensex_write_int(database_handle_t *db, int num)
 	return true;
 }
 
+bool opensex_write_uint(database_handle_t *db, unsigned int num)
+{
+	opensex_t *rs;
+
+	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
+
+	fprintf(rs->f, "%u ", num);
+
+	return true;
+}
+
+bool opensex_write_time(database_handle_t *db, time_t time)
+{
+	opensex_t *rs;
+	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
+
+	fprintf(rs->f, "%lu ", time);
+
+	return true;
+}
+
 bool opensex_commit_row(database_handle_t *db)
 {
 	opensex_t *rs;
@@ -907,17 +1009,17 @@ database_vtable_t opensex_vt = {
 	.read_next_row = opensex_read_next_row,
 
 	.read_word = opensex_read_word,
-	.read_multiword = opensex_read_multiword,
+	.read_str = opensex_read_str,
 	.read_int = opensex_read_int,
+	.read_uint = opensex_read_uint,
+	.read_time = opensex_read_time,
 
-	.sread_word = NULL,
-	.sread_multiword = NULL,
-	.sread_int = NULL,
-
-	.start_row = opensex_begin_row,
+	.start_row = opensex_start_row,
 	.write_word = opensex_write_word,
-	.write_multiword = opensex_write_multiword,
+	.write_str = opensex_write_str,
 	.write_int = opensex_write_int,
+	.write_uint = opensex_write_uint,
+	.write_time = opensex_write_time,
 	.commit_row = opensex_commit_row
 };
 
