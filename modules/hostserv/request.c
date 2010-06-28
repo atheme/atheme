@@ -37,7 +37,6 @@ command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a giv
 
 struct hsreq_ {
 	char *nick;
-	char *vident;
 	char *vhost;
 	time_t vhost_ts;
 	char *creator;
@@ -100,7 +99,7 @@ static void write_hsreqdb(void)
 	LIST_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
-		fprintf(f, "HR %s %s %s %ld %s\n", l->nick, l->vident, l->vhost,
+		fprintf(f, "HR %s %s %ld %s\n", l->nick, l->vhost,
 			(long)l->vhost_ts, l->creator);
 	}
 
@@ -134,17 +133,15 @@ static void load_hsreqdb(void)
 		if (!strcmp(item, "HR"))
 		{
 			char *nick = strtok(NULL, " ");
-			char *vident = strtok(NULL, " ");
 			char *vhost = strtok(NULL, " ");
 			char *vhost_ts = strtok(NULL, " ");
 			char *creator = strtok(NULL, "\n");
 
-			if (!nick || !vident || !vhost || !vhost_ts || !creator)
+			if (!nick || !vhost || !vhost_ts || !creator)
 				continue;
 
 			l = smalloc(sizeof(hsreq_t));
 			l->nick = sstrdup(nick);
-			l->vident = sstrdup(vident);
 			l->vhost = sstrdup(vhost);
 			l->vhost_ts = atol(vhost_ts);
 			l->creator = sstrdup(creator);
@@ -167,12 +164,11 @@ static void nick_drop_request(hook_user_req_t *hdata)
 		l = m->data;
 		if (!irccasecmp(l->nick, hdata->mn->nick))
 		{
-			slog(LG_REGISTER, "VHOSTREQ:DROPNICK: \2%s\2 \2%s@%s\2", l->nick, l->vident, l->vhost);
+			slog(LG_REGISTER, "VHOSTREQ:DROPNICK: \2%s\2 \2%s\2", l->nick, l->vhost);
 
 			node_del(m, &hs_reqlist);
 
 			free(l->nick);
-			free(l->vident);
 			free(l->vhost);
 			free(l->creator);
 			free(l);
@@ -193,12 +189,11 @@ static void account_drop_request(myuser_t *mu)
 		l = n->data;
 		if (!irccasecmp(l->nick, mu->name))
 		{
-			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s@%s\2", l->nick, l->vident, l->vhost);
+			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->vhost);
 
 			node_del(n, &hs_reqlist);
 
 			free(l->nick);
-			free(l->vident);
 			free(l->vhost);
 			free(l->creator);
 			free(l);
@@ -295,7 +290,6 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	}
 	l = smalloc(sizeof(hsreq_t));
 	l->nick = sstrdup(target);
-	l->vident = sstrdup("(null)");
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;
 	l->creator = sstrdup(get_source_name(si));
@@ -342,7 +336,6 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			node_del(n, &hs_reqlist);
 
 			free(l->nick);
-			free(l->vident);
 			free(l->vhost);
 			free(l->creator);
 			free(l);
@@ -388,7 +381,6 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 
 			node_del(n, &hs_reqlist);
 			free(l->nick);
-			free(l->vident);
 			free(l->vhost);
 			free(l->creator);
 			free(l);
@@ -415,12 +407,8 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 
 		tm = *localtime(&l->vhost_ts);
 		strftime(buf, BUFSIZE, "%b %d %T %Y %Z", &tm);
-		if (!irccasecmp(l->vident, "(null)"))
-			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
-				x, l->nick, l->vhost, l->creator, buf);
-		else
-			command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s@%s\2 (%s - %s)",
-				x, l->nick, l->vident, l->vhost, l->creator, buf);
+		command_success_nodata(si, "#%d Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
+			x, l->nick, l->vhost, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "WAITING");
