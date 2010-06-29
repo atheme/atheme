@@ -83,9 +83,9 @@ loadmodule "modules/protocol/charybdis";
  * Atheme 0.1 flatfile database format		modules/backend/flatfile
  * Open Services Exchange database format	modules/backend/opensex
  * 
- * Most networks will want flatfile.
+ * Most networks will want opensex.
  */
-loadmodule "modules/backend/flatfile";
+loadmodule "modules/backend/opensex";
 
 /* Crypto module.
  *
