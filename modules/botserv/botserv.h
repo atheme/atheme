@@ -17,4 +17,3 @@ typedef struct {
 } botserv_bot_t; 
 
 typedef botserv_bot_t *fn_botserv_bot_find(char *name);
-typedef void fn_botserv_save_database(void *unused);

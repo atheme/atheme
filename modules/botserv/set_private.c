@@ -20,7 +20,6 @@ DECLARE_MODULE_V1
 list_t *bs_set_cmdtree, *bs_helptree;
 
 fn_botserv_bot_find *botserv_bot_find;
-fn_botserv_save_database *botserv_save_database;
 list_t *bs_bots;
 
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
@@ -34,7 +33,6 @@ void _modinit(module_t *m)
 
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
-	MODULE_USE_SYMBOL(botserv_save_database, "botserv/main", "botserv_save_database");
 
 	command_add(&bs_set_private, bs_set_cmdtree);
 	help_addentry(bs_helptree, "SET PRIVATE", "help/botserv/set_private", NULL);
@@ -81,14 +79,12 @@ static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 	if (!irccasecmp(option, "ON"))
 	{
 		bot->private = true;
-		botserv_save_database(NULL);
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:ON: \2%s\2", bot->nick);
 		command_success_nodata(si, _("Private mode of bot %s is now \2ON\2."), bot->nick);
 	}
 	else if(!irccasecmp(option, "OFF"))
 	{
 		bot->private = false;
-		botserv_save_database(NULL);
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:OFF: \2%s\2", bot->nick);
 		command_success_nodata(si, _("Private mode of bot %s is now \2OFF\2."), bot->nick);
 	}

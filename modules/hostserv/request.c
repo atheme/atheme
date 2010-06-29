@@ -27,8 +27,9 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
-static void write_hsreqdb(void);
-static void load_hsreqdb(void);
+
+static void write_hsreqdb(database_handle_t *db);
+static void db_h_hr(database_handle_t *db, const char *type);
 
 command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_NONE, 2, hs_cmd_request };
 command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting };
@@ -57,6 +58,10 @@ void _modinit(module_t *m)
 	hook_add_user_drop(account_drop_request);
 	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_drop_request);
+	hook_add_db_write(write_hsreqdb);
+
+	db_register_type_handler("HR", db_h_hr);
+
  	command_add(&hs_request, hs_cmdtree);
 	command_add(&hs_waiting, hs_cmdtree);
 	command_add(&hs_reject, hs_cmdtree);
@@ -65,7 +70,6 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "WAITING", "help/hostserv/waiting", NULL);
 	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
 	help_addentry(hs_helptree, "ACTIVATE", "help/hostserv/activate", NULL);
-	load_hsreqdb();
 	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, &request_per_nick);
 }
 
@@ -73,6 +77,10 @@ void _moddeinit(void)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_nick_ungroup(nick_drop_request);
+	hook_del_db_write(write_hsreqdb);
+
+	db_unregister_type_handler("HR");
+
 	command_delete(&hs_request, hs_cmdtree);
 	command_delete(&hs_waiting, hs_cmdtree);
 	command_delete(&hs_reject, hs_cmdtree);
@@ -84,74 +92,36 @@ void _moddeinit(void)
 	del_conf_item("REQUEST_PER_NICK", conf_hs_table);
 }
 
-static void write_hsreqdb(void)
+static void write_hsreqdb(database_handle_t *db)
 {
-	FILE *f;
 	node_t *n;
-	hsreq_t *l;
-
-	if (!(f = fopen(DATADIR "/hsreq.db.new", "w")))
-	{
-		slog(LG_DEBUG, "write_hsreqdb(): cannot write vhost requests database: %s", strerror(errno));
-		return;
-	}
 
 	LIST_FOREACH(n, hs_reqlist.head)
 	{
-		l = n->data;
-		fprintf(f, "HR %s %s %ld %s\n", l->nick, l->vhost,
-			(long)l->vhost_ts, l->creator);
-	}
+		hsreq_t *l = n->data;
 
-	fclose(f);
-
-	if ((rename(DATADIR "/hsreq.db.new", DATADIR "/hsreq.db")) < 0)
-	{
-		slog(LG_DEBUG, "write_hsreqdb(): couldn't rename vhost requests database.");
-		return;
+		db_start_row(db, "HR");
+		db_write_word(db, l->nick);
+		db_write_word(db, l->vhost);
+		db_write_time(db, l->vhost_ts);
+		db_write_word(db, l->creator);
+		db_commit_row(db);
 	}
 }
 
-static void load_hsreqdb(void)
+static void db_h_hr(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	node_t *n;
-	hsreq_t *l;
-	char *item, rBuf[BUFSIZE];
+	const char *nick = db_sread_word(db);
+	const char *vhost = db_sread_word(db);
+	time_t vhost_ts = db_sread_time(db);
+	const char *creator = db_sread_word(db);
 
-	if (!(f = fopen(DATADIR "/hsreq.db", "r")))
-	{
-		slog(LG_DEBUG, "load_hsreqdb(): cannot open vhost requests database: %s", strerror(errno));
-		return;
-	}
-
-	while (fgets(rBuf, BUFSIZE, f))
-	{
-		item = strtok(rBuf, " ");
-		strip(item);
-
-		if (!strcmp(item, "HR"))
-		{
-			char *nick = strtok(NULL, " ");
-			char *vhost = strtok(NULL, " ");
-			char *vhost_ts = strtok(NULL, " ");
-			char *creator = strtok(NULL, "\n");
-
-			if (!nick || !vhost || !vhost_ts || !creator)
-				continue;
-
-			l = smalloc(sizeof(hsreq_t));
-			l->nick = sstrdup(nick);
-			l->vhost = sstrdup(vhost);
-			l->vhost_ts = atol(vhost_ts);
-			l->creator = sstrdup(creator);
-
-			n = node_create();
-			node_add(l, n, &hs_reqlist);
-		}
-	}
-
-	fclose(f);
+	hsreq_t *l = smalloc(sizeof(hsreq_t));
+	l->nick = sstrdup(nick);
+	l->vhost = sstrdup(vhost);
+	l->vhost_ts = vhost_ts;
+	l->creator = sstrdup(creator);
+	node_add(l, node_create(), &hs_reqlist);
 }
 
 static void nick_drop_request(hook_user_req_t *hdata)
@@ -173,7 +143,6 @@ static void nick_drop_request(hook_user_req_t *hdata)
 			free(l->creator);
 			free(l);
 
-			write_hsreqdb();
 			return;
 		}
 	}
@@ -198,7 +167,6 @@ static void account_drop_request(myuser_t *mu)
 			free(l->creator);
 			free(l);
 
-			write_hsreqdb();
 			return;
 		}
 	}
@@ -272,8 +240,6 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 			l->vhost = sstrdup(host);
 			l->vhost_ts = CURRTIME;;
 
-			write_hsreqdb();
-
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 			logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
 			if (config_options.ratelimit_uses && config_options.ratelimit_period)
@@ -296,7 +262,6 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 	n = node_create();
 	node_add(l, n, &hs_reqlist);
-	write_hsreqdb();
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
@@ -340,7 +305,6 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 
-			write_hsreqdb();
 			command_exec_split(hostsvs.me, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
 			return;
 		}
@@ -384,7 +348,6 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			free(l->vhost);
 			free(l->creator);
 			free(l);
-			write_hsreqdb();
 			return;
 		}
 	}

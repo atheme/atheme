@@ -21,8 +21,9 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[]);
-static void write_hsofferdb(void);
-static void load_hsofferdb(void);
+
+static void write_hsofferdb(database_handle_t *db);
+static void db_h_ho(database_handle_t *db, const char *type);
 
 command_t hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer };
 command_t hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer };
@@ -45,6 +46,9 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 
+	hook_add_db_write(write_hsofferdb);
+	db_register_type_handler("HO", db_h_ho);
+
  	command_add(&hs_offer, hs_cmdtree);
 	command_add(&hs_unoffer, hs_cmdtree);
 	command_add(&hs_offerlist, hs_cmdtree);
@@ -53,11 +57,13 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "UNOFFER", "help/hostserv/unoffer", NULL);
 	help_addentry(hs_helptree, "OFFERLIST", "help/hostserv/offerlist", NULL);
 	help_addentry(hs_helptree, "TAKE", "help/hostserv/take", NULL);
-	load_hsofferdb();
 }
 
 void _moddeinit(void)
 {
+	hook_del_db_write(write_hsofferdb);
+	db_unregister_type_handler("HO");
+
 	command_delete(&hs_offer, hs_cmdtree);
 	command_delete(&hs_unoffer, hs_cmdtree);
 	command_delete(&hs_offerlist, hs_cmdtree);
@@ -107,71 +113,34 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 		metadata_delete(mu, "private:usercloak");
 }
 
-static void write_hsofferdb(void)
+static void write_hsofferdb(database_handle_t *db)
 {
-	FILE *f;
 	node_t *n;
-	hsoffered_t *l;
-
-	if (!(f = fopen(DATADIR "/hsoffer.db.new", "w")))
-	{
-		slog(LG_DEBUG, "write_hsofferdb(): cannot write vhost offer database: %s", strerror(errno));
-		return;
-	}
 
 	LIST_FOREACH(n, hs_offeredlist.head)
 	{
-		l = n->data;
-		fprintf(f, "HO %s %ld %s\n", l->vhost, (long)l->vhost_ts, l->creator);
+		hsoffered_t *l = n->data;
+
+		db_start_row(db, "HO");
+		db_write_word(db, l->vhost);
+		db_write_time(db, l->vhost_ts);
+		db_write_word(db, l->creator);
+		db_commit_row(db);
 	}
 
-	fclose(f);
-
-	if ((rename(DATADIR "/hsoffer.db.new", DATADIR "/hsoffer.db")) < 0)
-	{
-		slog(LG_DEBUG, "write_hsofferdb(): couldn't rename vhost offer database.");
-		return;
-	}
 }
 
-static void load_hsofferdb(void)
+static void db_h_ho(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	node_t *n;
-	hsoffered_t *l;
-	char *item, rBuf[BUFSIZE];
+	const char *vhost = db_sread_word(db);
+	time_t vhost_ts = db_sread_time(db);
+	const char *creator = db_sread_word(db);
 
-	if (!(f = fopen(DATADIR "/hsoffer.db", "r")))
-	{
-		slog(LG_DEBUG, "load_hsofferdb(): cannot open vhost offer database: %s", strerror(errno));
-		return;
-	}
-
-	while (fgets(rBuf, BUFSIZE, f))
-	{
-		item = strtok(rBuf, " ");
-		strip(item);
-
-		if (!strcmp(item, "HO"))
-		{
-			char *vhost = strtok(NULL, " ");
-			char *vhost_ts = strtok(NULL, " ");
-			char *creator = strtok(NULL, "\n");
-
-			if (!vhost || !vhost_ts || !creator)
-				continue;
-
-			l = smalloc(sizeof(hsoffered_t));
-			l->vhost = sstrdup(vhost);
-			l->vhost_ts = atol(vhost_ts);
-			l->creator = sstrdup(creator);
-
-			n = node_create();
-			node_add(l, n, &hs_offeredlist);
-		}
-	}
-
-	fclose(f);
+	hsoffered_t *l = smalloc(sizeof(hsoffered_t));
+	l->vhost = sstrdup(vhost);
+	l->vhost_ts = vhost_ts;
+	l->creator = sstrdup(creator);
+	node_add(l, node_create(), &hs_offeredlist);
 }
 
 /* OFFER <host> */
@@ -201,7 +170,6 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 
 	n = node_create();
 	node_add(l, n, &hs_offeredlist);
-	write_hsofferdb();
 
 	command_success_nodata(si, _("You have offered vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_ADMIN, "OFFER: \2%s\2", host);
@@ -236,7 +204,6 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 
-			write_hsofferdb();
 			command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
 			return;
 		}

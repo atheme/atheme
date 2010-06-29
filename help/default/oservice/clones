@@ -19,7 +19,7 @@ Syntax: CLONES KLINE ON|OFF
 Enables/disables banning IP addresses with more
 than 5 clients from the network for one hour
 (these bans are not added to the AKILL list).
-This setting is saved in etc/exempts.db and
+This setting is saved in etc/services.db and
 defaults to off.
 
 Syntax: CLONES LIST
@@ -40,8 +40,7 @@ at least 4. Warnings are sent if this number is
 exceeded, and a network ban may be set if the number
 is exceeded by 10 or more.
 The reason is shown in LISTEXEMPT.
-The clone exemption list is stored in etc/exempts.db
-and saved whenever it is modified.
+The clone exemption list is stored in etc/services.db.
 
 Syntax: CLONES DELEXEMPT <ip>
 

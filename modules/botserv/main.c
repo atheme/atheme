@@ -31,11 +31,12 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
 static void on_shutdown(void *unused);
 
-static void botserv_load_database(void);
+static void botserv_save_database(database_handle_t *db);
+static void db_h_bot(database_handle_t *db, const char *type);
+static void db_h_bot_count(database_handle_t *db, const char *type);
 
 /* visible for other modules; use the typedef to enforce type checking */
 fn_botserv_bot_find botserv_bot_find;
-fn_botserv_save_database botserv_save_database;
 
 service_t *botsvs;
 list_t bs_cmdtree;
@@ -417,7 +418,6 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 
 static void botserv_config_ready(void *unused)
 {
-	botserv_load_database();
 	if (me.connected)
 		bs_join_registered(!config_options.leave_chans);
 
@@ -426,138 +426,58 @@ static void botserv_config_ready(void *unused)
 
 /* ******************************************************************** */
 
-/* TODO: merge this into backend/flatfile. --nenolod */
-void botserv_save_database(void *unused)
+void botserv_save_database(database_handle_t *db)
 {
-	FILE *f;
 	node_t *n;
-	int errno1;
-
-	if (!(f = fopen(DATADIR "/botserv.db.new", "w")))
-	{
-		errno1 = errno;
-		slog(LG_INFO, "botserv_save_database(): cannot create botserv.db.new: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot create botserv.db.new: %s"), strerror(errno1));
-		return;
-	}
-
-	/* write database version */
-	fprintf(f, "DBV 1\n");
 
 	/* iterate through and write all the metadata */
 	LIST_FOREACH(n, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
-		fprintf(f, "BOT %s %s %s %d %ld %s\n", bot->nick, bot->user, bot->host, bot->private, (long)bot->registered, bot->real);
+		db_start_row(db, "BOT");
+		db_write_word(db, bot->nick);
+		db_write_word(db, bot->user);
+		db_write_word(db, bot->host);
+		db_write_uint(db, bot->private);
+		db_write_time(db, bot->registered);
+		db_write_str(db, bot->real);
+		db_commit_row(db);
 	}
 
-	fprintf(f, "COUNT %d\n", bs_bots.count);
-
-	fclose(f);
-
-	/* use an atomic rename */
-	if ((rename(DATADIR "/botserv.db.new", DATADIR "/botserv.db")) < 0)
-	{
-		errno1 = errno;
-		slog(LG_INFO, "botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s", strerror(errno1));
-		wallops(_("\2DATABASE ERROR\2: botserv_save_database(): cannot rename botserv.db.new to botserv.db: %s"), strerror(errno1));
-		return;
-	}
+	db_start_row(db, "BOT-COUNT");
+	db_write_uint(db, bs_bots.count);
+	db_commit_row(db);
 }
 
-/* ******************************************************************** */
-
-static void botserv_load_database(void)
+static void db_h_bot(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	char *item, dBuf[BUFSIZE];
-	unsigned int linecnt;
-	int i;
+	const char *nick = db_sread_word(db);
+	const char *user = db_sread_word(db);
+	const char *host = db_sread_word(db);
+	int private = db_sread_int(db);
+	time_t registered = db_sread_time(db);
+	const char *real = db_sread_str(db);
+	botserv_bot_t *bot;
+	
+	bot = scalloc(sizeof(botserv_bot_t), 1);
+	bot->nick = sstrdup(nick);
+	bot->user = sstrdup(user);
+	bot->host = sstrdup(host);
+	bot->real = sstrdup(real);
+	bot->private = private;
+	bot->registered = registered;
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
+	service_set_chanmsg(bot->me, true);
+	node_add(bot, &bot->bnode, &bs_bots);
+}
 
-	f = fopen(DATADIR "/botserv.db", "r");
-	if (f == NULL)
-	{
-		if (errno == ENOENT)
-		{
-			slog(LG_ERROR, "botserv_load_database(): %s does not exist, creating it", DATADIR "/botserv.db");
-			return;
-		}
-		else
-		{
-			slog(LG_ERROR, "botserv_load_database(): can't open %s for reading: %s", DATADIR "/botserv.db", strerror(errno));
-			slog(LG_ERROR, "botserv_load_database(): exiting to avoid data loss");
-			exit(1);
-		}
-	}
+static void db_h_bot_count(database_handle_t *db, const char *type)
+{
+	unsigned int i = db_sread_uint(db);
 
-	slog(LG_DEBUG, "botserv_load_database(): ----------------------- loading ------------------------");
-
-	while (fgets(dBuf, BUFSIZE, f))
-	{
-		linecnt++;
-
-		/* check for unimportant lines */
-		item = strtok(dBuf, " ");
-		strip(item);
-
-		if (*item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r' || !*item)
-			continue;
-
-		/* database version */
-		if (!strcmp("DBV", item))
-		{
-			i = atoi(strtok(NULL, " "));
-			if (i > 1)
-			{
-				slog(LG_ERROR, "botserv_load_database(): database version is %d; I only understand v1.", i);
-				exit(EXIT_FAILURE);
-			}
-		}
-
-		/* count */
-		else if (!strcmp("COUNT", item))
-		{
-			i = atoi(strtok(NULL, " "));
-			if ((unsigned int)i != LIST_LENGTH(&bs_bots))
-				slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
-		}
-
-		/* a botserv bot */
-		else if (!strcmp("BOT", item))
-		{
-			char *nick, *user, *host, *prv, *reg, *real;
-			botserv_bot_t *bot;
-
-			nick = strtok(NULL, " ");
-			user = strtok(NULL, " ");
-			host = strtok(NULL, " ");
-			prv = strtok(NULL, " ");
-			reg = strtok(NULL, " ");
-			real = strtok(NULL, "\n");
-
-			if (nick == NULL || user == NULL || host == NULL || prv == NULL || reg == NULL || real == NULL)
-			{
-				slog(LG_ERROR, "botserv_load_database(): missing metadata for bot, skipping");
-				continue;
-			}
-
-			strip(real);
-			bot = scalloc(sizeof(botserv_bot_t), 1);
-			bot->nick = sstrdup(nick);
-			bot->user = sstrdup(user);
-			bot->host = sstrdup(host);
-			bot->real = sstrdup(real);
-			bot->private = atoi(prv);
-			bot->registered = atoi(reg);
-			bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
-			service_set_chanmsg(bot->me, true);
-
-			node_add(bot, &bot->bnode, &bs_bots);
-		}
-	}
-
-	fclose(f);
+	if (i != LIST_LENGTH(&bs_bots))
+		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
 }
 
 /* ******************************************************************** */
@@ -732,7 +652,6 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	botserv_save_database(NULL);
 	logcommand(si, CMDLOG_ADMIN, "BOT:CHANGE: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] changed.", bot->nick, bot->user, bot->host, bot->real);
 }
@@ -804,7 +723,6 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	service_set_chanmsg(bot->me, true);
 	node_add(bot, &bot->bnode, &bs_bots);
 
-	botserv_save_database(NULL);
 	logcommand(si, CMDLOG_ADMIN, "BOT:ADD: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
 }
@@ -858,7 +776,6 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	free(bot->host);
 	free(bot);
 
-	botserv_save_database(NULL);	
 	logcommand(si, CMDLOG_ADMIN, "BOT:DEL: \2%s\2", parv[0]);
 	command_success_nodata(si, "Bot \2%s\2 has been deleted.", parv[0]);
 }
@@ -1030,6 +947,10 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
 
+	hook_add_db_write(botserv_save_database);
+	db_register_type_handler("BOT", db_h_bot);
+	db_register_type_handler("BOT-COUNT", db_h_bot_count);
+
 	hook_add_event("channel_drop");
 	hook_add_channel_drop(bs_channel_drop);
 
@@ -1107,6 +1028,10 @@ void _moddeinit(void)
 	hook_del_channel_drop(bs_channel_drop);
 	hook_del_shutdown(on_shutdown);
 	hook_del_config_ready(botserv_config_ready);
+
+	hook_del_db_write(botserv_save_database);
+	db_unregister_type_handler("BOT");
+	db_unregister_type_handler("BOT-COUNT");
 
 	modestack_mode_simple = modestack_mode_simple_real;
 	modestack_mode_limit  = modestack_mode_limit_real;

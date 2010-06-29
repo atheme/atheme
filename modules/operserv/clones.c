@@ -29,8 +29,11 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[]);
 
-static void write_exemptdb(void);
-static void load_exemptdb(void);
+static void write_exemptdb(database_handle_t *db);
+
+static void db_h_ck(database_handle_t *db, const char *type);
+static void db_h_cd(database_handle_t *db, const char *type);
+static void db_h_ex(database_handle_t *db, const char *type);
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -99,13 +102,16 @@ void _modinit(module_t *m)
 	hook_add_user_add(clones_newuser);
 	hook_add_event("user_delete");
 	hook_add_user_delete(clones_userquit);
+	hook_add_db_write(write_exemptdb);
+
+	db_register_type_handler("CLONES-CK", db_h_ck);
+	db_register_type_handler("CLONES-CD", db_h_cd);
+	db_register_type_handler("CLONES-EX", db_h_ex);
 
 	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
 
 	kline_duration = 3600; // set a default
-
-	load_exemptdb();
 
 	/* add everyone to host hash */
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
@@ -159,26 +165,27 @@ void _moddeinit(void)
 
 	hook_del_user_add(clones_newuser);
 	hook_del_user_delete(clones_userquit);
+	hook_del_db_write(write_exemptdb);
+
+	db_unregister_type_handler("CLONES-CK");
+	db_unregister_type_handler("CLONES-CD");
+	db_unregister_type_handler("CLONES-EX");
 }
 
-static void write_exemptdb(void)
+static void write_exemptdb(database_handle_t *db)
 {
-	FILE *f;
 	node_t *n, *tn;
-	cexcept_t *c;
-	int was_errored;
 
-	if (!(f = fopen(DATADIR "/exempts.db.new", "w")))
-	{
-		slog(LG_ERROR, "write_exemptdb(): cannot open exempts database for writing: %s", strerror(errno));
-		return;
-	}
+	db_start_row(db, "CLONES-CK");
+	db_write_uint(db, kline_enabled);
+	db_commit_row(db);
+	db_start_row(db, "CLONES-CD");
+	db_write_uint(db, kline_duration);
+	db_commit_row(db);
 
-	fprintf(f, "CK %d\n", kline_enabled ? 1 : 0);
-	fprintf(f, "CD %ld\n", kline_duration);
 	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
-		c = n->data;
+		cexcept_t *c = n->data;
 		if (cexempt_expired(c))
 		{
 			free(c->ip);
@@ -189,96 +196,39 @@ static void write_exemptdb(void)
 		}
 		else
 		{
-			fprintf(f, "EX %s %d %ld %s\n", c->ip, c->clones, c->expires, c->reason);
+			db_start_row(db, "CLONES-EX");
+			db_write_word(db, c->ip);
+			db_write_uint(db, c->clones);
+			db_write_time(db, c->expires);
+			db_write_str(db, c->reason);
+			db_commit_row(db);
 		}
-	}
-
-	was_errored = ferror(f);
-	if (!was_errored)
-		was_errored = fflush(f);
-	/* fsync it before deleting the old */
-	if (!was_errored)
-		was_errored = fsync(fileno(f));
-	was_errored |= fclose(f);
-	if (was_errored)
-	{
-		slog(LG_ERROR, "write_exemptdb(): couldn't write exempts database: %s", strerror(errno));
-		return;
-	}
-
-	if ((rename(DATADIR "/exempts.db.new", DATADIR "/exempts.db")) < 0)
-	{
-		slog(LG_ERROR, "write_exemptdb(): couldn't rename exempts database: %s", strerror(errno));
-		return;
 	}
 }
 
-static void load_exemptdb(void)
+static void db_h_ck(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	char *item, rBuf[BUFSIZE * 2];
+	kline_enabled = db_sread_int(db) != 0;
+}
 
-	if (!(f = fopen(DATADIR "/exempts.db", "r")))
-	{
-		slog(LG_DEBUG, "load_exemptdb(): cannot open exempt database: %s", strerror(errno));
-		return;
-	}
+static void db_h_cd(database_handle_t *db, const char *type)
+{
+	kline_duration = db_sread_uint(db);
+}
 
-	while (fgets(rBuf, BUFSIZE * 2, f))
-	{
-		item = strtok(rBuf, " ");
-		strip(item);
+static void db_h_ex(database_handle_t *db, const char *type)
+{
+	const char *ip = db_sread_word(db);
+	unsigned int clones = db_sread_uint(db);
+	time_t expires = db_sread_time(db);
+	const char *reason = db_sread_str(db);
 
-		if (!strcmp(item, "CD"))
-		{
-			char *s = strtok(NULL, " ");
-			if (s)
-				kline_duration = atol(s);
-		}
-		if (!strcmp(item, "EX"))
-		{
-			char *ip = strtok(NULL, " ");
-			int clones = atoi(strtok(NULL, " "));
-			char *expires = strtok(NULL, " ");
-			char *reason = strtok(NULL, "");
-			strip(expires);
-			strip(reason);
-
-			if (!ip || clones <= 0 || !expires)
-				; /* erroneous, don't add */
-			else
-			{
-				char realreason[BUFSIZE];
-				/* Expires isn't a time, may be from an older database */
-				if (!isdigit(*expires))
-				{
-					if (reason)
-						snprintf(realreason, sizeof(realreason), "%s %s", expires, reason);
-					else
-						snprintf(realreason, sizeof(realreason), "%s", expires);
-				}
-				else
-					snprintf(realreason, sizeof(realreason), "%s", reason);
-
-				cexcept_t *c = (cexcept_t *)malloc(sizeof(cexcept_t));
-
-				c->ip = sstrdup(ip);
-				c->clones = clones;
-				c->expires = atol(expires);
-				c->reason = sstrdup(realreason);
-				node_add(c, node_create(), &clone_exempts);
-			}
-		}
-		else if (!strcmp(item, "CK"))
-		{
-			char *enable = strtok(NULL, " ");
-
-			if (enable != NULL)
-				kline_enabled = atoi(enable) != 0;
-		}
-	}
-
-	fclose(f);
+	cexcept_t *c = (cexcept_t *)smalloc(sizeof(cexcept_t));
+	c->ip = sstrdup(ip);
+	c->clones = clones;
+	c->expires = expires;
+	c->reason = sstrdup(reason);
+	node_add(c, node_create(), &clone_exempts);
 }
 
 static unsigned int is_exempt(const char *ip)
@@ -346,7 +296,6 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Enabled CLONES klines."));
 		wallops("\2%s\2 enabled CLONES klines", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON");
-		write_exemptdb();
 	}
 	else if (!strcasecmp(arg, "OFF"))
 	{
@@ -359,7 +308,6 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Disabled CLONES klines."));
 		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:OFF");
-		write_exemptdb();
 	}
 	else
 	{
@@ -510,7 +458,6 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	c->expires = duration ? (CURRTIME + duration) : 0;
 
 	logcommand(si, CMDLOG_ADMIN, "CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
-	write_exemptdb();
 }
 
 static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
@@ -542,7 +489,6 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 			node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from clone exempt list."), arg);
 			logcommand(si, CMDLOG_ADMIN, "CLONES:DELEXEMPT: \2%s\2", arg);
-			write_exemptdb();
 			return;
 		}
 	}

@@ -35,9 +35,10 @@ static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);
 static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[]);
 static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
-static void write_infodb(void);
-static void load_infodb(void);
 static void display_info(hook_user_nick_t *data);
+
+static void write_infodb(database_handle_t *db);
+static void db_h_li(database_handle_t *db, const char *type);
 
 command_t is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help };
 command_t is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post };
@@ -68,74 +69,37 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, &is_helptree);
 }
 
-static void write_infodb(void)
+static void write_infodb(database_handle_t *db)
 {
-	FILE *f;
 	node_t *n;
-	logoninfo_t *l;
-
-	if (!(f = fopen(DATADIR "/info.db.new", "w")))
-	{
-		slog(LG_DEBUG, "write_infodb(): cannot write info database: %s", strerror(errno));
-		return;
-	}
 
 	LIST_FOREACH(n, logon_info.head)
 	{
-		l = n->data;
-		fprintf(f, "LI %s %s %ld %s\n", l->nick, l->subject,
-			(long)l->info_ts, l->story);
+		logoninfo_t *l = n->data;
+
+		db_start_row(db, "LI");
+		db_write_word(db, l->nick);
+		db_write_word(db, l->subject);
+		db_write_time(db, l->info_ts);
+		db_write_str(db, l->story);
+		db_commit_row(db);
 	}
 
-	fclose(f);
-
-	if ((rename(DATADIR "/info.db.new", DATADIR "/info.db")) < 0)
-	{
-		slog(LG_DEBUG, "write_infodb(): couldn't rename info database.");
-		return;
-	}
 }
 
-static void load_infodb(void)
+static void db_h_li(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	node_t *n;
-	logoninfo_t *l;
-	char *item, rBuf[BUFSIZE];
+	const char *nick = db_sread_word(db);
+	const char *subject = db_sread_word(db);
+	time_t info_ts = db_sread_time(db);
+	const char *story = db_sread_str(db);
 
-	if (!(f = fopen(DATADIR "/info.db", "r")))
-	{
-		slog(LG_DEBUG, "read_infodb(): cannot open info database: %s", strerror(errno));
-		return;
-	}
-
-	while (fgets(rBuf, BUFSIZE, f))
-	{
-		item = strtok(rBuf, " ");
-		strip(item);
-
-		if (!strcmp(item, "LI"))
-		{
-			char *nick = strtok(NULL, " ");
-			char *subject = strtok(NULL, " ");
-			char *info_ts = strtok(NULL, " ");
-			char *story = strtok(NULL, "\n");
-
-			if (!nick || !subject || !info_ts || !story)
-				continue;
-
-			l = smalloc(sizeof(logoninfo_t));
-			l->nick = sstrdup(nick);
-			l->subject = sstrdup(subject);
-			l->info_ts = atol(info_ts);
-			l->story = sstrdup(story);
-
-			n = node_create();
-			node_add(l, n, &logon_info); 
-		}
-	}
-
-	fclose(f);
+	logoninfo_t *l = smalloc(sizeof(logoninfo_t));
+	l->nick = sstrdup(nick);
+	l->subject = sstrdup(subject);
+	l->info_ts = info_ts;
+	l->story = sstrdup(story);
+	node_add(l, node_create(), &logon_info);
 }
 
 static void display_info(hook_user_nick_t *data)
@@ -230,8 +194,6 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	n = node_create();
 	node_add(l, n, &logon_info);
 
-	write_infodb();
-
 	command_success_nodata(si, _("Added entry to logon info"));
 	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
 
@@ -284,8 +246,6 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 			free(l->subject);
 			free(l->story);
 			free(l);
-
-			write_infodb();
 
 			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
 			return;
@@ -360,6 +320,9 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
+	hook_add_db_write(write_infodb);
+
+	db_register_type_handler("LI", db_h_li);
 
 	command_add(&is_help, &is_cmdtree);
 	command_add(&is_post, &is_cmdtree);
@@ -370,7 +333,6 @@ void _modinit(module_t *m)
 	help_addentry(&is_helptree, "POST", "help/infoserv/post", NULL);
 	help_addentry(&is_helptree, "DEL", "help/infoserv/del", NULL);
 	help_addentry(&is_helptree, "LIST", "help/infoserv/list", NULL);
-	load_infodb();
 }
 
 void _moddeinit(void)
@@ -382,6 +344,9 @@ void _moddeinit(void)
 	}
 	
 	hook_del_user_add(display_info);
+	hook_del_db_write(write_infodb);
+
+	db_unregister_type_handler("LI");
 
 	command_delete(&is_help, &is_cmdtree);
 	command_delete(&is_post, &is_cmdtree);
