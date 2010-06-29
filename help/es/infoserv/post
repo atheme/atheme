@@ -1,0 +1,21 @@
+Ayuda para POST:
+
+POST le permite enviar mensajes a todos los usuarios una sola vez (enviados al
+ejecutar el comando) o cada vez que se conecten.
+
+IMPORTANCIA:
+    El nivel de importancia define el tipo de mensaje que será enviado.
+
+    1 - Sólo mostrar a los usuarios al conectarse.
+    2 - Enviar una notificación a todos los usuarios de inmediato.
+    3 - Monstrar el mensaje a los usuarios al conectarse Y enviar una
+        notificación a todos los usuarios ahora.
+	4 - Enviar un mensaje personal a todos los usuarios ahora. Notar que esto
+        puede resultar molesto a los usuarios y sólo debería usarse cuando
+        sea absolutamente necesario.
+
+
+Sintaxis: POST <importancia> <asunto> <mensaje>
+
+Ejemplo:
+    /msg &nick& 2 Info1 Algo de información importante para los usuarios.
