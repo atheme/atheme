@@ -110,7 +110,7 @@ loadmodule "modules/backend/flatfile";
  *
  * The rawsha1 module requires OpenSSL.
  */
-#loadmodule "modules/crypto/posix";
+loadmodule "modules/crypto/posix";
 
 /* Authentication module.
  *
