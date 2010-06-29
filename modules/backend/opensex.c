@@ -52,7 +52,6 @@ opensex_db_save(database_handle_t *db)
 	svsignore_t *svsignore;
 	soper_t *soper;
 	node_t *n, *tn, *tn2;
-	int errno1, was_errored = 0;
 	mowgli_patricia_iteration_state_t state;
 
 	errno = 0;
@@ -367,7 +366,6 @@ static void opensex_db_parse(database_handle_t *db)
 
 static void opensex_h_unknown(database_handle_t *db, const char *type)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
 	slog(LG_INFO, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
 }
 
@@ -381,7 +379,6 @@ static void opensex_h_dbv(database_handle_t *db, const char *type)
 static void opensex_h_cf(database_handle_t *db, const char *type)
 {
 	unsigned int their_ca_all;
-	opensex_t *rs = (opensex_t *)db->priv;
 	const char *flags = db_sread_word(db);
 
 	their_ca_all = flags_to_bitmask(flags, chanacs_flags, 0);
@@ -428,14 +425,14 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 static void opensex_h_me(database_handle_t *db, const char *type)
 {
 	const char *dest, *src, *text;
-	time_t time;
+	time_t sent;
 	unsigned int status;
 	myuser_t *mu;
 	mymemo_t *mz;
 
 	dest = db_sread_word(db);
 	src = db_sread_word(db);
-	time = db_sread_time(db);
+	sent = db_sread_time(db);
 	status = db_sread_int(db);
 	text = db_sread_str(db);
 
@@ -448,7 +445,7 @@ static void opensex_h_me(database_handle_t *db, const char *type)
 	mz = smalloc(sizeof *mz);
 	strlcpy(mz->sender, src, NICKLEN);
 	strlcpy(mz->text, text, MEMOLEN);
-	mz->sent = time;
+	mz->sent = sent;
 	mz->status = status;
 
 	if (!(mz->status & MEMO_READ))
@@ -632,7 +629,7 @@ static void opensex_h_md(database_handle_t *db, const char *type)
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);
 	const char *value = db_sread_str(db);
-	void *obj;
+	void *obj = NULL;
 
 	if (!strcmp(type, "MDU"))
 	{
@@ -655,6 +652,11 @@ static void opensex_h_md(database_handle_t *db, const char *type)
 	{
 		obj = myuser_name_find(name);
 	}
+	else
+	{
+		slog(LG_INFO, "db-h-md: unknown metadata type '%s'; name %s, prop %s", type, name, prop);
+		return;
+	}
 
 	metadata_add(obj, prop, value);
 }
@@ -667,7 +669,6 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 	unsigned int flags;
 	mychan_t *mc;
 	myuser_t *mu;
-	chanacs_t *ca;
 
 	chan = db_sread_word(db);
 	user = db_sread_word(db);
@@ -758,7 +759,7 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	char buf[4096];
-	const char *realname, *reason, *setby, *tmp;
+	const char *realname, *reason, *setby;
 	time_t settime;
 	long duration;
 	xline_t *x;
@@ -795,6 +796,7 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	mask = db_sread_word(db);
 	duration = db_sread_uint(db);
 	settime = db_sread_time(db);
+	setby = db_sread_word(db);
 	reason = db_sread_str(db);
 
 	strlcpy(buf, reason, sizeof buf);
@@ -834,10 +836,10 @@ static void opensex_h_de(database_handle_t *db, const char *type)
 
 /***************************************************************************************************/
 
-bool opensex_read_next_row(database_handle_t *hdl)
+static bool opensex_read_next_row(database_handle_t *hdl)
 {
 	int c = 0;
-	int n = 0;
+	unsigned int n = 0;
 	opensex_t *rs = (opensex_t *)hdl->priv;
 
 	rs->token = NULL;
@@ -868,7 +870,7 @@ bool opensex_read_next_row(database_handle_t *hdl)
 	return true;
 }
 
-const char *opensex_read_word(database_handle_t *db)
+static const char *opensex_read_word(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	char *res = strtok_r((db->token ? NULL : rs->buf), " ", &rs->token);
@@ -876,7 +878,7 @@ const char *opensex_read_word(database_handle_t *db)
 	return res;
 }
 
-const char *opensex_read_str(database_handle_t *db)
+static const char *opensex_read_str(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	char *res = strtok_r((db->token ? NULL : rs->buf), "", &rs->token);
@@ -884,7 +886,7 @@ const char *opensex_read_str(database_handle_t *db)
 	return res;
 }
 
-bool opensex_read_int(database_handle_t *db, int *res)
+static bool opensex_read_int(database_handle_t *db, int *res)
 {
 	const char *s = db_read_word(db);
 	char *rp;
@@ -895,7 +897,7 @@ bool opensex_read_int(database_handle_t *db, int *res)
 	return *s && !*rp;
 }
 
-bool opensex_read_uint(database_handle_t *db, unsigned int *res)
+static bool opensex_read_uint(database_handle_t *db, unsigned int *res)
 {
 	const char *s = db_read_word(db);
 	char *rp;
@@ -906,7 +908,7 @@ bool opensex_read_uint(database_handle_t *db, unsigned int *res)
 	return *s && !*rp;
 }
 
-bool opensex_read_time(database_handle_t *db, time_t *res)
+static bool opensex_read_time(database_handle_t *db, time_t *res)
 {
 	const char *s = db_read_word(db);
 	char *rp;
@@ -917,7 +919,7 @@ bool opensex_read_time(database_handle_t *db, time_t *res)
 	return *s && !*rp;
 }
 
-bool opensex_start_row(database_handle_t *db, const char *type)
+static bool opensex_start_row(database_handle_t *db, const char *type)
 {
 	opensex_t *rs;
 
@@ -930,7 +932,7 @@ bool opensex_start_row(database_handle_t *db, const char *type)
 	return true;
 }
 
-bool opensex_write_word(database_handle_t *db, const char *word)
+static bool opensex_write_word(database_handle_t *db, const char *word)
 {
 	opensex_t *rs;
 
@@ -943,7 +945,7 @@ bool opensex_write_word(database_handle_t *db, const char *word)
 	return true;
 }
 
-bool opensex_write_str(database_handle_t *db, const char *word)
+static bool opensex_write_str(database_handle_t *db, const char *word)
 {
 	opensex_t *rs;
 
@@ -956,7 +958,7 @@ bool opensex_write_str(database_handle_t *db, const char *word)
 	return true;
 }
 
-bool opensex_write_int(database_handle_t *db, int num)
+static bool opensex_write_int(database_handle_t *db, int num)
 {
 	opensex_t *rs;
 
@@ -968,7 +970,7 @@ bool opensex_write_int(database_handle_t *db, int num)
 	return true;
 }
 
-bool opensex_write_uint(database_handle_t *db, unsigned int num)
+static bool opensex_write_uint(database_handle_t *db, unsigned int num)
 {
 	opensex_t *rs;
 
@@ -980,18 +982,18 @@ bool opensex_write_uint(database_handle_t *db, unsigned int num)
 	return true;
 }
 
-bool opensex_write_time(database_handle_t *db, time_t time)
+static bool opensex_write_time(database_handle_t *db, time_t tm)
 {
 	opensex_t *rs;
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%lu ", time);
+	fprintf(rs->f, "%lu ", tm);
 
 	return true;
 }
 
-bool opensex_commit_row(database_handle_t *db)
+static bool opensex_commit_row(database_handle_t *db)
 {
 	opensex_t *rs;
 
@@ -1088,15 +1090,14 @@ static database_handle_t *opensex_db_open_write(void)
 	return db;
 }
 
-database_handle_t *opensex_db_open(database_transaction_t txn)
+static database_handle_t *opensex_db_open(database_transaction_t txn)
 {
 	if (txn == DB_WRITE)
 		return opensex_db_open_write();
 	return opensex_db_open_read();
 }
 
-void
-opensex_db_close(database_handle_t *db)
+static void opensex_db_close(database_handle_t *db)
 {
 	opensex_t *rs;
 	int errno1;
@@ -1127,8 +1128,7 @@ opensex_db_close(database_handle_t *db)
 	free(db);
 }
 
-void
-opensex_db_load(void)
+static void opensex_db_load(void)
 {
 	database_handle_t *db;
 
@@ -1137,8 +1137,7 @@ opensex_db_load(void)
 	db_close(db);
 }
 
-void
-opensex_db_write(void *arg)
+static void opensex_db_write(void *arg)
 {
 	database_handle_t *db;
 

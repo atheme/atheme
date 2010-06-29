@@ -131,12 +131,12 @@ unsigned int
 db_sread_uint(database_handle_t *db)
 {
 	unsigned int r;
-	bool ok = db_read_int(db, &r);
+	bool ok = db_read_uint(db, &r);
 
 	if (!ok)
 	{
-		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
-		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
+		slog(LG_ERROR, "db-read-uint: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-uint: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
 	return r;
@@ -150,8 +150,8 @@ db_sread_time(database_handle_t *db)
 
 	if (!ok)
 	{
-		slog(LG_ERROR, "db-read-int: needed int at file %s line %d token %d", db->file, db->line, db->token);
-		slog(LG_ERROR, "db-read-int: exiting to avoid data loss");
+		slog(LG_ERROR, "db-read-time: needed int at file %s line %d token %d", db->file, db->line, db->token);
+		slog(LG_ERROR, "db-read-time: exiting to avoid data loss");
 		exit(EXIT_FAILURE);
 	}
 	return r;
@@ -208,13 +208,13 @@ db_write_uint(database_handle_t *db, unsigned int num)
 }
 
 bool
-db_write_time(database_handle_t *db, time_t time)
+db_write_time(database_handle_t *db, time_t tm)
 {
 	return_val_if_fail(db != NULL, false);
 	return_val_if_fail(db->vt != NULL, false);
 	return_val_if_fail(db->vt->write_time != NULL, false);
 
-	return db->vt->write_time(db, time);
+	return db->vt->write_time(db, tm);
 }
 
 bool
@@ -276,27 +276,6 @@ db_write_format(database_handle_t *db, const char *fmt, ...)
 	va_end(va);
 
 	return db_write_word(db, buf);
-}
-
-bool
-db_write(database_handle_t *db, ...)
-{
-	va_list va;
-	const char *fmtarg;
-	void *valarg;
-	bool ret = true;
-
-	va_start(va, db);
-
-	for (fmtarg = va_arg(va, const char *); fmtarg != NULL && ret != false; fmtarg = va_arg(va, const char *))
-	{
-		valarg = va_arg(va, void *);
-		ret = db_write_format(db, fmtarg, valarg);
-	}
-
-	va_end(va);
-
-	return ret;
 }
 
 void
