@@ -81,11 +81,9 @@ loadmodule "modules/protocol/charybdis";
  * The following backends are available:
  * 
  * Atheme 0.1 flatfile database format		modules/backend/flatfile
+ * Open Services Exchange database format	modules/backend/opensex
  * 
- * Most networks will want flatfile. The PostgreSQL backend requires
- * PostgreSQL to be installed on the machine.
- *
- * As of Atheme 2.2, the PostgreSQL backend is no longer supported.
+ * Most networks will want flatfile.
  */
 loadmodule "modules/backend/flatfile";
 

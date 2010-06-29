@@ -13,6 +13,9 @@ hostserv
 - added OFFER module that allows opers to offer vhosts to users.
 - made the request system (specifically the ACTIVATE command) not send
   a memo to the user.
+infoserv
+- new service. infoserv allows opers to send notices to users when they
+  connect or at the time of running the command (like Global).
 nickserv
 - split out SET into seperate modules for each SET command. nickserv/set
   is now a "meta-module" that depends on all the set_* modules.
@@ -35,6 +38,7 @@ other
 - ircservtoatheme: generally make a bit more robust.
 - added ratelimiting support to hostserv/request, chanserv/register and
   nickserv/register.
+- add a new database format called opensex.
 
 Atheme Services 5.1.1 Release Notes
 ===================================
