@@ -18,7 +18,7 @@ Sintaxis: CLONES KLINE ON|OFF
 Activa/desactiva el veto de direcciones IP con más
 de 5 clientes en la red por una hora (estos vetos
 no son agregados a la lista AKILL). Este ajuste es
-almacenado en etc/exempts.db y tiene un valor
+almacenado en etc/services.db y tiene un valor
 predeterminado OFF.
 
 Sintaxis: CLONES LIST
@@ -40,7 +40,7 @@ excedido, y un veto puede ser aplicado si el número
 es excedido por 10 o más.
 La razón es mostrada en LISTEXEMPT.
 La lista de exención de clones es almacenada en
-etc/exempts.db y actualizada tras cada modificación.
+etc/services.db y actualizada tras cada modificación.
 
 Sintaxis: CLONES DELEXEMPT <ip>
 
