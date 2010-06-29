@@ -38,7 +38,8 @@ other
 - ircservtoatheme: generally make a bit more robust.
 - added ratelimiting support to hostserv/request, chanserv/register and
   nickserv/register.
-- add a new database format called opensex.
+- add a new database format called opensex.  This is available in 5.2 as a
+  "technology preview" and will be mandatory in 6.0.
 
 Atheme Services 5.1.1 Release Notes
 ===================================
