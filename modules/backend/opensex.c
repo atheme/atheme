@@ -584,7 +584,7 @@ static void opensex_h_so(database_handle_t *db, const char *type)
 	user = db_sread_word(db);
 	class = db_sread_word(db);
 	flags = db_sread_int(db);
-	pass = db_sread_word(db);
+	pass = db_read_word(db);
 
 	if (!(mu = myuser_find(user)))
 	{
