@@ -199,7 +199,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 
 	if (imp == 3)
 	{
-		snprintf(buf, sizeof buf, "Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
+		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
 		notice_global_sts(infoserv->me, "*", buf);
 	}
 
