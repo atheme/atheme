@@ -336,7 +336,7 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 
 static void inspircd_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
-	sts(":%s NOTICE %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
+	sts(":%s PRIVMSG %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
