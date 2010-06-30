@@ -112,7 +112,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!channel || !message)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SAY");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACT");
 		command_fail(si, fault_needmoreparams, _("Syntax: ACT <#channel> <msg>"));
 		return;
 	}
