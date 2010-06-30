@@ -54,6 +54,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
 	hook_add_event("nick_ungroup");

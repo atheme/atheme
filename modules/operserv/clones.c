@@ -87,6 +87,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	command_add(&os_clones, os_cmdtree);
 
 	command_add(&os_clones_kline, &os_clones_cmds);

@@ -946,6 +946,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
+	
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
 
 	hook_add_db_write(botserv_save_database);
 	db_register_type_handler("BOT", db_h_bot);

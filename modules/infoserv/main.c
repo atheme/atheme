@@ -318,6 +318,13 @@ void _modinit(module_t *m)
 {
 	infoserv = service_add("infoserv", infoserv_handler, &is_cmdtree, &is_conftable);
 
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
 	hook_add_db_write(write_infodb);
