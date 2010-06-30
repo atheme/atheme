@@ -56,7 +56,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *bs;
 	user_t *bot;
 
-	if (!channel)
+	if (!channel || !message)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SAY");
 		command_fail(si, fault_needmoreparams, _("Syntax: SAY <#channel> <msg>"));
