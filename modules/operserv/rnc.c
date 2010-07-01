@@ -25,7 +25,7 @@ list_t *os_helptree;
 typedef struct rnc_t_ rnc_t;
 struct rnc_t_
 {
-	char gecos[GECOSLEN];
+	const char *gecos;
 	int count;
 };
 
@@ -48,80 +48,57 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	int count = param ? atoi(param) : 20;
-	node_t *n1, *n2, *biggest = NULL;
 	user_t *u;
-	rnc_t *rnc;
-	list_t realnames;
+	rnc_t *rnc, *biggest;
+	mowgli_patricia_t *realnames;
 	int i, found = 0;
 	mowgli_patricia_iteration_state_t state;
 
-	realnames.head = NULL;
-	realnames.tail = NULL;
-	realnames.count = 0;
+	realnames = mowgli_patricia_create(noopcanon);
 
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
-		LIST_FOREACH(n2, realnames.head)
+		rnc = mowgli_patricia_retrieve(realnames, u->gecos);
+		if (rnc != NULL)
+			rnc->count++;
+		else
 		{
-			rnc = n2->data;
-
-			if (strcmp(rnc->gecos, u->gecos) == 0)
-			{
-				/* existing match */
-				rnc->count++;
-				found = 1;
-			}
-		}
-
-		if (found == 0)
-		{
-			/* new realname */
-			rnc = (rnc_t *)malloc(sizeof(rnc_t));
-			sprintf(rnc->gecos, "%s", u->gecos);
+			rnc = malloc(sizeof(rnc_t));
+			rnc->gecos = u->gecos;
 			rnc->count = 1;
-			node_add(rnc, node_create(), &realnames);
+			mowgli_patricia_add(realnames, rnc->gecos, rnc);
 		}
-
-		found = 0;
 	}
-
-	found = 0;
 
 	/* this is ugly to the max :P */
 	for (i = 1; i <= count; i++)
 	{
-		LIST_FOREACH(n1, realnames.head)
+		found = 0;
+		biggest = NULL;
+		MOWGLI_PATRICIA_FOREACH(rnc, &state, realnames)
 		{
-			rnc = n1->data;
-
 			if (rnc->count > found)
 			{
 				found = rnc->count;
-				biggest = n1;
+				biggest = rnc;
 			}
 		}
 
 		if (biggest == NULL)
 			break;
 
-		command_success_nodata(si, _("\2%d\2: \2%d\2 matches for realname \2%s\2"), i, ((rnc_t *)(biggest->data))->count, ((rnc_t *)biggest->data)->gecos);
-		free(biggest->data);
-		node_del(biggest, &realnames);
-		node_free(biggest);
-
-		found = 0;
-		biggest = NULL;
+		command_success_nodata(si, _("\2%d\2: \2%d\2 matches for realname \2%s\2"), i, biggest->count, biggest->gecos);
+		mowgli_patricia_delete(realnames, biggest->gecos);
+		free(biggest);
 	}
 
-	/* cleanup*/
-	LIST_FOREACH_SAFE(n1, n2, realnames.head)
+	/* cleanup */
+	MOWGLI_PATRICIA_FOREACH(rnc, &state, realnames)
 	{
-		rnc = n1->data;
-
+		mowgli_patricia_delete(realnames, rnc->gecos);
 		free(rnc);
-		node_del(n1, &realnames);
-		node_free(n1);
 	}
+	mowgli_patricia_destroy(realnames, NULL, NULL);
 
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
