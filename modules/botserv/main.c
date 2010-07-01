@@ -943,10 +943,6 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
-	hook_add_event("config_ready");
-	hook_add_config_ready(botserv_config_ready);
-	
 	if (!module_find_published("backend/opensex"))
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
@@ -954,6 +950,10 @@ void _modinit(module_t *m)
 		return;
 	}
 
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	hook_add_event("config_ready");
+	hook_add_config_ready(botserv_config_ready);
+	
 	hook_add_db_write(botserv_save_database);
 	db_register_type_handler("BOT", db_h_bot);
 	db_register_type_handler("BOT-COUNT", db_h_bot_count);

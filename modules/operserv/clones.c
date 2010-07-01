@@ -84,15 +84,15 @@ void _modinit(module_t *m)
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;
 
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	if (!module_find_published("backend/opensex"))
 	{
 		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
+
+	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_clones, os_cmdtree);
 
