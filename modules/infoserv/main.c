@@ -118,6 +118,9 @@ static void display_info(hook_user_nick_t *data)
 	/* abort if it's an internal client */
 	if (is_internal_client(u))
 		return;
+	/* abort if user is coming back from split */
+	if (!(u->server->flags & SF_EOB))
+		return;
 
 	if (logon_info.count > 0)
 	{
