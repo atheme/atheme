@@ -45,7 +45,7 @@ _modinit(module_t *m)
 	hook_add_event("user_can_register");
 	hook_add_user_can_register(cracklib_hook);
 
-	add_bool_conf_item("CRACKLIB_WARN", &conf_ni_table, &cracklib_warn);
+	add_bool_conf_item("CRACKLIB_WARN", &conf_ni_table, 0, &cracklib_warn, false);
 }
 
 void

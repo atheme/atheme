@@ -37,8 +37,6 @@ static int c_language(config_entry_t *);
 static int c_string(config_entry_t *);
 static int c_logfile(config_entry_t *);
 
-static int c_si_name(config_entry_t *);
-static int c_si_numeric(config_entry_t *);
 static int c_si_loglevel(config_entry_t *);
 static int c_si_auth(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
@@ -51,7 +49,6 @@ static int c_ci_sop(config_entry_t *);
 
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
-static int c_gi_expire(config_entry_t *);
 static int c_gi_exempts(config_entry_t *);
 
 /* *INDENT-OFF* */
@@ -160,78 +157,17 @@ bool conf_parse(const char *file)
 
 void conf_init(void)
 {
-	if (me.netname)
-		free(me.netname);
-	if (me.hidehostsuffix)
-		free(me.hidehostsuffix);
-	if (me.adminname)
-		free(me.adminname);
-	if (me.adminemail)
-		free(me.adminemail);
-	if (me.mta)
-		free(me.mta);
-	if (config_options.chan)
-		free(config_options.chan);
-	if (config_options.helpchan)
-		free(config_options.helpchan);
-	if (config_options.helpurl)
-		free(config_options.helpurl);
-	if (config_options.global)
-		free(config_options.global);
-	if (config_options.languagefile)
-		free(config_options.languagefile);
-	if (config_options.language)
-		free(config_options.language);
-
-	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = config_options.chan = config_options.helpchan =
-		config_options.helpurl = config_options.global = config_options.languagefile = NULL;
-
-	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
-		config_options.flood_msgs = config_options.flood_time = config_options.ratelimit_uses = config_options.ratelimit_period = config_options.kline_time = config_options.clone_time = config_options.commit_interval = config_options.default_clone_limit = 0;
-
-	config_options.uplink_sendq_limit = 1048576;
-
-	nicksvs.expiry = nicksvs.enforce_expiry = chansvs.expiry = 0;
-	nicksvs.enforce_delay = 30;
-	nicksvs.enforce_prefix = sstrdup("Guest");
-	nicksvs.cracklib_dict = NULL;
-
 	config_options.defuflags = config_options.defcflags = 0x00000000;
-
-	config_options.silent = config_options.join_chans = config_options.leave_chans = config_options.raw = false;
-
-	config_options.language = sstrdup("en");
 
 	me.auth = AUTH_NONE;
 
-	me.mdlimit = 30;
-
-	chansvs.fantasy = false;
 	chansvs.ca_vop = CA_VOP_DEF & ca_all;
 	chansvs.ca_hop = CA_HOP_DEF & ca_all;
 	chansvs.ca_aop = CA_AOP_DEF & ca_all;
 	chansvs.ca_sop = CA_SOP_DEF & ca_all;
-	chansvs.changets = false;
-	if (chansvs.trigger != NULL)
-		free(chansvs.trigger);
-	chansvs.trigger = sstrdup("!");
-	chansvs.maxchanacs = 0;
-	chansvs.maxfounders = 4;
-	if (chansvs.deftemplates != NULL)
-		free(chansvs.deftemplates);
-	chansvs.deftemplates = NULL;
 
 	if (!(runflags & RF_REHASHING))
 	{
-		if (me.name)
-			free(me.name);
-		if (me.desc)
-			free(me.desc);
-		if (me.vhost)
-			free(me.vhost);
-
-		me.name = me.desc = me.vhost = NULL;
-
 		set_match_mapping(MATCH_RFC1459);	/* default to RFC compliancy */
 	}
 }
@@ -252,80 +188,78 @@ void init_newconf(void)
 	add_top_conf("LOGFILE", c_logfile);
 
 	/* serverinfo{} block */
-	add_conf_item("NAME", &conf_si_table, c_si_name);
-	add_dupstr_conf_item("DESC", &conf_si_table, &me.desc);
-	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
-	add_dupstr_conf_item("VHOST", &conf_si_table, &me.vhost);
-	add_duration_conf_item("RECONTIME", &conf_si_table, &me.recontime, "s");
-	add_duration_conf_item("RESTARTTIME", &conf_si_table, &me.restarttime, "s");
-	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
-	add_dupstr_conf_item("NETNAME", &conf_si_table, &me.netname);
-	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, &me.hidehostsuffix);
-	add_dupstr_conf_item("ADMINNAME", &conf_si_table, &me.adminname);
-	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, &me.adminemail);
-	add_dupstr_conf_item("MTA", &conf_si_table, &me.mta);
+	add_dupstr_conf_item("NAME", &conf_si_table, CONF_NO_REHASH, &me.name, NULL);
+	add_dupstr_conf_item("DESC", &conf_si_table, CONF_NO_REHASH, &me.desc, NULL);
+	add_dupstr_conf_item("NUMERIC", &conf_si_table, CONF_NO_REHASH, &me.numeric, NULL);
+	add_dupstr_conf_item("VHOST", &conf_si_table, CONF_NO_REHASH, &me.vhost, NULL);
+	add_duration_conf_item("RECONTIME", &conf_si_table, 0, &me.recontime, "s", 10);
+	add_duration_conf_item("RESTARTTIME", &conf_si_table, 0, &me.restarttime, "s", 0);
+	add_dupstr_conf_item("NETNAME", &conf_si_table, 0, &me.netname, NULL);
+	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, 0, &me.hidehostsuffix, NULL);
+	add_dupstr_conf_item("ADMINNAME", &conf_si_table, 0, &me.adminname, NULL);
+	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, 0, &me.adminemail, NULL);
+	add_dupstr_conf_item("MTA", &conf_si_table, 0, &me.mta, NULL);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
-	add_uint_conf_item("MAXLOGINS", &conf_si_table, &me.maxlogins, 3, INT_MAX);
-	add_uint_conf_item("MAXUSERS", &conf_si_table, &me.maxusers, 0, INT_MAX);
-	add_uint_conf_item("MAXNICKS", &conf_si_table, &me.maxnicks, 1, INT_MAX);
-	add_uint_conf_item("MAXCHANS", &conf_si_table, &me.maxchans, 1, INT_MAX);
-	add_uint_conf_item("EMAILLIMIT", &conf_si_table, &me.emaillimit, 1, INT_MAX);
-	add_duration_conf_item("EMAILTIME", &conf_si_table, &me.emailtime, "s");
+	add_uint_conf_item("MAXLOGINS", &conf_si_table, 0, &me.maxlogins, 3, INT_MAX, 5);
+	add_uint_conf_item("MAXUSERS", &conf_si_table, 0, &me.maxusers, 0, INT_MAX, 0);
+	add_uint_conf_item("MAXNICKS", &conf_si_table, 9, &me.maxnicks, 1, INT_MAX, 5);
+	add_uint_conf_item("MAXCHANS", &conf_si_table, 0, &me.maxchans, 1, INT_MAX, 5);
+	add_uint_conf_item("EMAILLIMIT", &conf_si_table, 0, &me.emaillimit, 1, INT_MAX, 10);
+	add_duration_conf_item("EMAILTIME", &conf_si_table, 0, &me.emailtime, "s", 300);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
-	add_uint_conf_item("MDLIMIT", &conf_si_table, &me.mdlimit, 0, INT_MAX);
+	add_uint_conf_item("MDLIMIT", &conf_si_table, 0, &me.mdlimit, 0, INT_MAX, 30);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
 
 	/* general{} block */
-	add_dupstr_conf_item("CHAN", &conf_gi_table, &config_options.chan);
-	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, &config_options.helpchan);
-	add_dupstr_conf_item("HELPURL", &conf_gi_table, &config_options.helpurl);
-	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, &config_options.verbose_wallops);
-	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, &config_options.allow_taint);
-	add_bool_conf_item("SILENT", &conf_gi_table, &config_options.silent);
-	add_bool_conf_item("JOIN_CHANS", &conf_gi_table, &config_options.join_chans);
-	add_bool_conf_item("LEAVE_CHANS", &conf_gi_table, &config_options.leave_chans);
+	add_dupstr_conf_item("CHAN", &conf_gi_table, 0, &config_options.chan, NULL);
+	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, 0, &config_options.helpchan, NULL);
+	add_dupstr_conf_item("HELPURL", &conf_gi_table, 0, &config_options.helpurl, NULL);
+	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, 0, &config_options.verbose_wallops, false);
+	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, 0, &config_options.allow_taint, false);
+	add_bool_conf_item("SILENT", &conf_gi_table, 0, &config_options.silent, false);
+	add_bool_conf_item("JOIN_CHANS", &conf_gi_table, 0, &config_options.join_chans, false);
+	add_bool_conf_item("LEAVE_CHANS", &conf_gi_table, 0, &config_options.leave_chans, false);
 	add_conf_item("UFLAGS", &conf_gi_table, c_gi_uflags);
 	add_conf_item("CFLAGS", &conf_gi_table, c_gi_cflags);
-	add_bool_conf_item("RAW", &conf_gi_table, &config_options.raw);
-	add_bool_conf_item("SECURE", &conf_gi_table, &config_options.secure);
-	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, &config_options.flood_msgs, 0, INT_MAX);
-	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, &config_options.flood_time, "s");
-	add_uint_conf_item("RATELIMIT_USES", &conf_gi_table, &config_options.ratelimit_uses, 0, INT_MAX);
-	add_duration_conf_item("RATELIMIT_PERIOD", &conf_gi_table, &config_options.ratelimit_period, "s");
-	add_duration_conf_item("KLINE_TIME", &conf_gi_table, &config_options.kline_time, "d");
-	add_duration_conf_item("CLONE_TIME", &conf_gi_table, &config_options.clone_time, "m");
-	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, &config_options.commit_interval, "m");
-	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
-	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, &config_options.default_clone_limit, 1, INT_MAX);
-	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, &config_options.uplink_sendq_limit, 10240, INT_MAX);
-	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, &config_options.language);
+	add_bool_conf_item("RAW", &conf_gi_table, 0, &config_options.raw, false);
+	add_bool_conf_item("SECURE", &conf_gi_table, 0, &config_options.secure, false);
+	add_uint_conf_item("FLOOD_MSGS", &conf_gi_table, 0, &config_options.flood_msgs, 0, INT_MAX, 0);
+	add_duration_conf_item("FLOOD_TIME", &conf_gi_table, 0, &config_options.flood_time, "s", 10);
+	add_uint_conf_item("RATELIMIT_USES", &conf_gi_table, 0, &config_options.ratelimit_uses, 0, INT_MAX, 0);
+	add_duration_conf_item("RATELIMIT_PERIOD", &conf_gi_table, 0, &config_options.ratelimit_period, "s", 0);
+	add_duration_conf_item("KLINE_TIME", &conf_gi_table, 0, &config_options.kline_time, "d", 0);
+	add_duration_conf_item("CLONE_TIME", &conf_gi_table, 0, &config_options.clone_time, "m", 0);
+	add_duration_conf_item("COMMIT_INTERVAL", &conf_gi_table, 0, &config_options.commit_interval, "m", 300);
+	add_uint_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, 0, &config_options.default_clone_limit, 1, INT_MAX, 6);
+	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, 0, &config_options.uplink_sendq_limit, 10240, INT_MAX, 1048576);
+	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, 0, &config_options.language, "en");
 	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
 
 	/* chanserv{} block */
-	add_bool_conf_item("FANTASY", &conf_ci_table, &chansvs.fantasy);
+	add_bool_conf_item("FANTASY", &conf_ci_table, 0, &chansvs.fantasy, false);
 	add_conf_item("VOP", &conf_ci_table, c_ci_vop);
 	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
 	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
-	add_bool_conf_item("CHANGETS", &conf_ci_table, &chansvs.changets);
-	add_dupstr_conf_item("TRIGGER", &conf_ci_table, &chansvs.trigger);
-	add_duration_conf_item("EXPIRE", &conf_ci_table, &chansvs.expiry, "d");
-	add_uint_conf_item("MAXCHANACS", &conf_ci_table, &chansvs.maxchanacs, 0, INT_MAX);
-	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2)); /* fit on a line */
-	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, &chansvs.deftemplates);
+	add_bool_conf_item("CHANGETS", &conf_ci_table, 0, &chansvs.changets, false);
+	add_dupstr_conf_item("TRIGGER", &conf_ci_table, 0, &chansvs.trigger, "!");
+	add_duration_conf_item("EXPIRE", &conf_ci_table, 0, &chansvs.expiry, "d", 0);
+	add_uint_conf_item("MAXCHANACS", &conf_ci_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
+	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
+	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, 0, &chansvs.deftemplates, NULL);
 
 	/* nickserv{} block */
-	add_bool_conf_item("SPAM", &conf_ni_table, &nicksvs.spam);
-	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, &nicksvs.no_nick_ownership);
-	add_duration_conf_item("EXPIRE", &conf_ni_table, &nicksvs.expiry, "d");
-	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, &nicksvs.enforce_expiry, "d");
-	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, &nicksvs.enforce_delay, "s");
-	add_dupstr_conf_item("ENFORCE_PREFIX", &conf_ni_table, &nicksvs.enforce_prefix);
-	add_dupstr_conf_item("CRACKLIB_DICT", &conf_ni_table, &nicksvs.cracklib_dict);
+	add_bool_conf_item("SPAM", &conf_ni_table, 0, &nicksvs.spam, false);
+	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, 0, &nicksvs.no_nick_ownership, false);
+	add_duration_conf_item("EXPIRE", &conf_ni_table, 0, &nicksvs.expiry, "d", 0);
+	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, 0, &nicksvs.enforce_expiry, "d", 0);
+	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, 0, &nicksvs.enforce_delay, "s", 30);
+	add_dupstr_conf_item("ENFORCE_PREFIX", &conf_ni_table, 0, &nicksvs.enforce_prefix, "Guest");
+	add_dupstr_conf_item("CRACKLIB_DICT", &conf_ni_table, 0, &nicksvs.cracklib_dict, NULL);
 
 	/* language:: stuff */
-	add_dupstr_conf_item("NAME", &conf_la_table, &me.language_name);
-	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, &me.language_translator);
+	add_dupstr_conf_item("NAME", &conf_la_table, 0, &me.language_name, NULL);
+	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, 0, &me.language_translator, NULL);
 }
 
 static int c_loadmodule(config_entry_t *ce)
@@ -656,34 +590,6 @@ static int c_string(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_name(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	if (!(runflags & RF_REHASHING))
-		me.name = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_numeric(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	if (!(runflags & RF_REHASHING))
-		me.numeric = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
 static int c_si_loglevel(config_entry_t *ce)
 {
 	config_entry_t *flce;
@@ -838,22 +744,6 @@ static int c_gi_cflags(config_entry_t *ce)
 
 	if (config_options.defcflags & MC_TOPICLOCK)
 		config_options.defcflags |= MC_KEEPTOPIC;
-
-	return 0;
-}
-
-static int c_gi_expire(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	conf_report_warning(ce, "general::expire has been deprecated. please use nickserv::expire and chanserv::expire respectively.");
-
-	process_duration_configentry(ce, &nicksvs.expiry, "d");
-	process_duration_configentry(ce, &chansvs.expiry, "d");
 
 	return 0;
 }
@@ -1029,12 +919,6 @@ bool conf_check(void)
 	if (!me.desc)
 		me.desc = sstrdup("Atheme IRC Services");
 
-	if ((!me.recontime) || (me.recontime < 10))
-	{
-		slog(LG_INFO, "conf_check(): invalid `recontime' set in %s; " "defaulting to 10", config_file);
-		me.recontime = 10;
-	}
-
 	if (!me.netname)
 	{
 		slog(LG_INFO, "conf_check(): no `netname' set in %s", config_file);
@@ -1057,37 +941,6 @@ bool conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `mta' set in %s (but `auth' is email)", config_file);
 		return false;
-	}
-
-	if (!me.maxlogins)
-	{
-		slog(LG_INFO, "conf_check(): no `maxlogins' set in %s; " "defaulting to 5", config_file);
-		me.maxlogins = 5;
-	}
-
-	if (!me.maxnicks)
-	{
-		if (!nicksvs.no_nick_ownership)
-			slog(LG_INFO, "conf_check(): no `maxnicks' set in %s; " "defaulting to 5", config_file);
-		me.maxnicks = 5;
-	}
-
-	if (!me.maxchans)
-	{
-		slog(LG_INFO, "conf_check(): no `maxchans' set in %s; " "defaulting to 5", config_file);
-		me.maxchans = 5;
-	}
-
-	if (!me.emaillimit)
-	{
-		slog(LG_INFO, "conf_check(): no `emaillimit' set in %s; " "defaulting to 10", config_file);
-		me.emaillimit = 10;
-	}
-
-	if (!me.emailtime)
-	{
-		slog(LG_INFO, "conf_check(): no `emailtime' set in %s; " "defaulting to 300", config_file);
-		me.emailtime = 300;
 	}
 
 	if (me.auth != 0 && me.auth != 1)
@@ -1117,14 +970,7 @@ bool conf_check(void)
 		chansvs.ca_sop = CA_SOP_DEF & ca_all;
 	}
 
-	if (config_options.flood_msgs && !config_options.flood_time)
-		config_options.flood_time = 10;
-
-	if (!config_options.default_clone_limit)
-		config_options.default_clone_limit = 6;
-
-	/* recall that commit_interval is in seconds */
-	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
+	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
 	{
 		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; " "defaulting to 5 minutes", config_file);
 		config_options.commit_interval = 300;

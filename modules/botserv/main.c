@@ -966,7 +966,7 @@ void _modinit(module_t *m)
 
 	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
 
-	add_uint_conf_item("MIN_USERS", &bs_conftable, &min_users, 0, 65535);
+	add_uint_conf_item("MIN_USERS", &bs_conftable, 0, &min_users, 0, 65535, 0);
 	command_add(&bs_bot, &bs_cmdtree);
 	command_add(&bs_assign, &bs_cmdtree);
 	command_add(&bs_unassign, &bs_cmdtree);

@@ -107,7 +107,7 @@ void _modinit(module_t *m)
 	xmlrpc_config.path = sstrdup("/xmlrpc");
 
 	add_subblock_top_conf("XMLRPC", &conf_xmlrpc_table);
-	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, &xmlrpc_config.path);
+	add_dupstr_conf_item("PATH", &conf_xmlrpc_table, 0, &xmlrpc_config.path, NULL);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);

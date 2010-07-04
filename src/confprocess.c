@@ -38,22 +38,35 @@ struct ConfTable
 {
 	char *name;
 	enum conftype type;
+	unsigned int flags;
 	union
 	{
 		int (*handler) (config_entry_t *);
+
 		struct
 		{
 			unsigned int *var;
 			unsigned int min;
 			unsigned int max;
+			unsigned int def;
 		} uint_val;
 		struct
 		{
 			unsigned int *var;
 			const char *defunit;
+			unsigned int def;
 		} duration_val;
-		char **dupstr_val;
-		bool *bool_val;
+		struct
+		{
+			char **var;
+			char *def;
+		} dupstr_val;
+		struct
+		{
+			bool *var;
+			bool def;
+		} bool_val;
+
 		list_t *subblock;
 	} un;
 	node_t node;
@@ -194,8 +207,38 @@ bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 	return true;
 }
 
+static void set_default(struct ConfTable *ct)
+{
+	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
+		return;
+	
+	switch (ct->type)
+	{
+		case CONF_UINT:
+			*ct->un.uint_val.var = ct->un.uint_val.def;
+			break;
+		case CONF_DURATION:
+			*ct->un.duration_val.var = ct->un.duration_val.def;
+			break;
+		case CONF_DUPSTR:
+			if (*ct->un.dupstr_val.var)
+				free(*ct->un.dupstr_val.var);
+			*ct->un.dupstr_val.var = ct->un.dupstr_val.def ? sstrdup(ct->un.dupstr_val.def) : NULL;
+			break;
+		case CONF_BOOL:
+			*ct->un.bool_val.var = ct->un.bool_val.def;
+			break;
+		case CONF_HANDLER:
+		case CONF_SUBBLOCK:
+			break;
+	}
+}
+
 static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 {
+	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
+		return;
+
 	switch (ct->type)
 	{
 		case CONF_HANDLER:
@@ -215,12 +258,13 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 			break;
 		case CONF_DUPSTR:
 			if (ce->ce_vardata == NULL)
-			{
 				conf_report_warning(ce, "no parameter for configuration option");
-				return;
+			else
+			{
+				if (*ct->un.dupstr_val.var)
+					free(*ct->un.dupstr_val.var);
+				*ct->un.dupstr_val.var = sstrdup(ce->ce_vardata);
 			}
-			free(*ct->un.dupstr_val);
-			*ct->un.dupstr_val = sstrdup(ce->ce_vardata);
 			break;
 		case CONF_BOOL:
 			if (ce->ce_vardata == NULL ||
@@ -228,19 +272,15 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 					!strcasecmp(ce->ce_vardata, "on") ||
 					!strcasecmp(ce->ce_vardata, "true") ||
 					!strcmp(ce->ce_vardata, "1"))
-				*ct->un.bool_val = true;
+				*ct->un.bool_val.var = true;
 			else if (!strcasecmp(ce->ce_vardata, "no") ||
 					!strcasecmp(ce->ce_vardata, "off") ||
 					!strcasecmp(ce->ce_vardata, "false") ||
 					!strcmp(ce->ce_vardata, "0"))
-				*ct->un.bool_val = false;
+				*ct->un.bool_val.var = false;
 			else
-			{
-				conf_report_warning(ce, "invalid boolean \"%s\", assuming true for now",
-						ce->ce_vardata);
-				*ct->un.bool_val = true;
-				return;
-			}
+				conf_report_warning(ce, "invalid boolean \"%s\"", ce->ce_vardata);
+			break;
 		case CONF_SUBBLOCK:
 			subblock_handler(ce, ct->un.subblock);
 			break;
@@ -253,6 +293,14 @@ void conf_process(config_file_t *cfp)
 	config_entry_t *ce;
 	node_t *tn;
 	struct ConfTable *ct = NULL;
+
+	LIST_FOREACH(tn, confblocks.head)
+	{
+		ct = tn->data;
+
+		set_default(ct);
+	}
+
 
 	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
 	{
@@ -280,6 +328,13 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 {
 	node_t *tn;
 	struct ConfTable *ct = NULL;
+
+	LIST_FOREACH(tn, entries->head)
+	{
+		ct = tn->data;
+
+		set_default(ct);
+	}
 
 	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
 	{
@@ -346,6 +401,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_HANDLER;
+	ct->flags = 0;
 	ct->un.handler = handler;
 
 	node_add(ct, &ct->node, &confblocks);
@@ -366,6 +422,7 @@ void add_subblock_top_conf(const char *name, list_t *list)
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_SUBBLOCK;
+	ct->flags = 0;
 	ct->un.subblock = list;
 
 	node_add(ct, &ct->node, &confblocks);
@@ -386,13 +443,14 @@ void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_en
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_HANDLER;
+	ct->flags = 0;
 	ct->un.handler = handler;
 
 	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
-void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, unsigned int min, unsigned int max)
+void add_uint_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def)
 {
 	struct ConfTable *ct;
 
@@ -406,15 +464,17 @@ void add_uint_conf_item(const char *name, list_t *conflist, unsigned int *var, u
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_UINT;
+	ct->flags = flags;
 	ct->un.uint_val.var = var;
 	ct->un.uint_val.min = min;
 	ct->un.uint_val.max = max;
+	ct->un.uint_val.def = def;
 
 	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
-void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *var, const char *defunit)
+void add_duration_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
 {
 	struct ConfTable *ct;
 
@@ -428,14 +488,16 @@ void add_duration_conf_item(const char *name, list_t *conflist, unsigned int *va
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_DURATION;
+	ct->flags = flags;
 	ct->un.duration_val.var = var;
 	ct->un.duration_val.defunit = defunit;
+	ct->un.duration_val.def = def;
 
 	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
-void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
+void add_dupstr_conf_item(const char *name, list_t *conflist, unsigned int flags, char **var, const char *def)
 {
 	struct ConfTable *ct;
 
@@ -449,13 +511,15 @@ void add_dupstr_conf_item(const char *name, list_t *conflist, char **var)
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_DUPSTR;
-	ct->un.dupstr_val = var;
+	ct->flags = flags;
+	ct->un.dupstr_val.var = var;
+	ct->un.dupstr_val.def = sstrdup(def);
 
 	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
-void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
+void add_bool_conf_item(const char *name, list_t *conflist, unsigned int flags, bool *var, bool def)
 {
 	struct ConfTable *ct;
 
@@ -469,7 +533,9 @@ void add_bool_conf_item(const char *name, list_t *conflist, bool *var)
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_BOOL;
-	ct->un.bool_val = var;
+	ct->flags = flags;
+	ct->un.bool_val.var = var;
+	ct->un.bool_val.def = def;
 
 	node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
@@ -503,6 +569,11 @@ void del_conf_item(const char *name, list_t *conflist)
 	}
 
 	node_del(&ct->node, conflist);
+
+	if (ct->type == CONF_DUPSTR && ct->un.dupstr_val.def)
+	{
+		free(ct->un.dupstr_val.def);
+	}
 
 	free(ct->name);
 

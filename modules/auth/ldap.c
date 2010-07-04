@@ -118,8 +118,8 @@ void _modinit(module_t *m)
         hook_add_config_ready(ldap_config_ready);
 
 	add_subblock_top_conf("LDAP", &conf_ldap_table);
-	add_dupstr_conf_item("URL", &conf_ldap_table, &ldap_config.url);
-	add_dupstr_conf_item("DNFORMAT", &conf_ldap_table, &ldap_config.dnformat);
+	add_dupstr_conf_item("URL", &conf_ldap_table, 0, &ldap_config.url, NULL);
+	add_dupstr_conf_item("DNFORMAT", &conf_ldap_table, 0, &ldap_config.dnformat, NULL);
 
 	auth_user_custom = &ldap_auth_user;
 

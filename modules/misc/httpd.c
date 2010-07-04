@@ -406,9 +406,9 @@ void _modinit(module_t *m)
 	hook_add_config_ready(httpd_config_ready);
 
 	add_subblock_top_conf("HTTPD", &conf_httpd_table);
-	add_dupstr_conf_item("HOST", &conf_httpd_table, &httpd_config.host);
-	add_dupstr_conf_item("WWW_ROOT", &conf_httpd_table, &httpd_config.www_root);
-	add_uint_conf_item("PORT", &conf_httpd_table, &httpd_config.port, 1, 65535);
+	add_dupstr_conf_item("HOST", &conf_httpd_table, 0, &httpd_config.host, NULL);
+	add_dupstr_conf_item("WWW_ROOT", &conf_httpd_table, 0, &httpd_config.www_root, NULL);
+	add_uint_conf_item("PORT", &conf_httpd_table, 0, &httpd_config.port, 1, 65535, 0);
 }
 
 void _moddeinit(void)

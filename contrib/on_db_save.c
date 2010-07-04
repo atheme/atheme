@@ -24,7 +24,7 @@ void _modinit(module_t *m)
 	hook_add_event("db_saved");
 	hook_add_db_saved(on_db_save);
 
-	add_dupstr_conf_item("db_update_command", &conf_gi_table, &command);
+	add_dupstr_conf_item("db_update_command", &conf_gi_table, 0, &command, NULL);
 }
 
 void _moddeinit(void)

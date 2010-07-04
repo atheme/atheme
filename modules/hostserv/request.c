@@ -77,7 +77,7 @@ void _modinit(module_t *m)
 	help_addentry(hs_helptree, "WAITING", "help/hostserv/waiting", NULL);
 	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
 	help_addentry(hs_helptree, "ACTIVATE", "help/hostserv/activate", NULL);
-	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, &request_per_nick);
+	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, 0, &request_per_nick, false);
 }
 
 void _moddeinit(void)
