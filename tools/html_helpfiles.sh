@@ -5,7 +5,7 @@
 # Script to create simple HTML from the help files
 
 htmldir=${1:-tools/htmlhelp}
-helpdir=${2:-help}
+helpdir=${2:-help/default}
 
 mkdir -p "$htmldir"
 
@@ -30,6 +30,7 @@ for d in $helpdir/*; do
 		oservice) service=OperServ ;;
 		userserv) service=UserServ ;;
 		gameserv) service=GameServ ;;
+		infoserv) service=InfoServ ;;
 		*) continue ;;
 	esac
 	echo "<li><a href=\"$service.html\">$service</a>"
