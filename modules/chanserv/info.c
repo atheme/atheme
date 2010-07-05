@@ -215,7 +215,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (*buf)
 			strcat(buf, " ");
 
-		strcat(buf, " FANTASY");
+		strcat(buf, "FANTASY");
 	}
 
 	if (use_channel_private && MC_PRIVATE & mc->flags)
