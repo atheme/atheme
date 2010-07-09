@@ -758,7 +758,7 @@ static void flatfile_db_load(void)
 	free(buf);
 
 	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
-	db_save();
+	db_save(NULL);
 
 	slog(LG_INFO, "Your database has been converted to the new OpenSEX format automatically.");
 	slog(LG_INFO, "You must now change the backend module in the config file to ensure that the OpenSEX database is loaded.");
@@ -774,7 +774,6 @@ void _modinit(module_t *m)
 	m->mflags = MODTYPE_CORE;
 
 	db_load = &flatfile_db_load;
-	db_save(NULL);
 
 	backend_loaded = true;
 }
