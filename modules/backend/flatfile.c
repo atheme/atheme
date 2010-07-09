@@ -774,7 +774,7 @@ void _modinit(module_t *m)
 	m->mflags = MODTYPE_CORE;
 
 	db_load = &flatfile_db_load;
-	db_save();
+	db_save(NULL);
 
 	backend_loaded = true;
 }
