@@ -373,7 +373,7 @@ static void opensex_h_dbv(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	rs->dbv = db_sread_int(db);
-	slog(LG_INFO, "db-h-dbv: version %d", rs->dbv);
+	slog(LG_INFO, "opensex: data format version is %d.", rs->dbv);
 }
 
 static void opensex_h_cf(database_handle_t *db, const char *type)
