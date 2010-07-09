@@ -12,6 +12,6 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-SRCS = account.c channel.c main.c memo.c
+SRCS = main.c
 
 CPPFLAGS	+= -I../../include

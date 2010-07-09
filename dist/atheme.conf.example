@@ -571,14 +571,8 @@ loadmodule "modules/misc/httpd";
  * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
  *
  * XMLRPC handler for the httpd			modules/xmlrpc/main
- * Legacy account management			modules/xmlrpc/account
- * Legacy channel management			modules/xmlrpc/channel
- * Legacy memo management			modules/xmlrpc/memo
  */
 loadmodule "modules/xmlrpc/main";
-#loadmodule "modules/xmlrpc/account";
-#loadmodule "modules/xmlrpc/channel";
-#loadmodule "modules/xmlrpc/memo";
 
 /* Other modules.
  *
