@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 		else if (i != 0)
 		{
 			slog(LG_INFO, "pid %d", i);
-			slog(LG_INFO, running in background mode from %s", PREFIX);
+			slog(LG_INFO, "running in background mode from %s", PREFIX);
 			exit(EXIT_SUCCESS);
 		}
 
