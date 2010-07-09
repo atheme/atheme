@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 	log_open();
 	mowgli_log_set_cb(process_mowgli_log);
 
-	printf("atheme: version %s\n", PACKAGE_STRING);
+	slog(LG_INFO, "version %s is starting up...", PACKAGE_STRING);
 
 	/* check for pid file */
 	if ((pid_file = fopen(pidfilename, "r")))
@@ -286,12 +286,12 @@ int main(int argc, char *argv[])
 		close(0);
 		if (open("/dev/null", O_RDWR) != 0)
 		{
-			slog(LG_ERROR, "atheme: unable to open /dev/null??");
+			slog(LG_ERROR, "unable to open /dev/null??");
 			exit(EXIT_FAILURE);
 		}
 		if ((i = fork()) < 0)
 		{
-			slog(LG_ERROR, "atheme: can't fork into the background");
+			slog(LG_ERROR, "can't fork into the background");
 			exit(EXIT_FAILURE);
 		}
 
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
 		/* parent is gone, just us now */
 		if (setsid() < 0)
 		{
-			slog(LG_ERROR, "atheme: unable to create new session");
+			slog(LG_ERROR, "unable to create new session: %s", strerror(errno));
 			exit(EXIT_FAILURE);
 		}
 		dup2(0, 1);
