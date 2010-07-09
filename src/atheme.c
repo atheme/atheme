@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 
 	if (!backend_loaded && authservice_loaded)
 	{
-		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
+		slog(LG_ERROR, "atheme: no backend modules loaded, see your configuration file.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 		db_load();
 	else if (backend_loaded)
 	{
-		fprintf(stderr, "atheme: backend module does not provide db_load()!\n");
+		slog(LG_ERROR, "atheme: backend module does not provide db_load()!");
 		exit(EXIT_FAILURE);
 	}
 	db_check();
@@ -286,27 +286,27 @@ int main(int argc, char *argv[])
 		close(0);
 		if (open("/dev/null", O_RDWR) != 0)
 		{
-			fprintf(stderr, "atheme: unable to open /dev/null??\n");
+			slog(LG_ERROR, "atheme: unable to open /dev/null??");
 			exit(EXIT_FAILURE);
 		}
 		if ((i = fork()) < 0)
 		{
-			fprintf(stderr, "atheme: can't fork into the background\n");
+			slog(LG_ERROR, "atheme: can't fork into the background");
 			exit(EXIT_FAILURE);
 		}
 
 		/* parent */
 		else if (i != 0)
 		{
-			printf("atheme: pid %d\n", i);
-			printf("atheme: running in background mode from %s\n", PREFIX);
+			slog(LG_INFO, "pid %d", i);
+			slog(LG_INFO, running in background mode from %s", PREFIX);
 			exit(EXIT_SUCCESS);
 		}
 
 		/* parent is gone, just us now */
 		if (setsid() < 0)
 		{
-			fprintf(stderr, "atheme: unable to create new session\n");
+			slog(LG_ERROR, "atheme: unable to create new session");
 			exit(EXIT_FAILURE);
 		}
 		dup2(0, 1);
@@ -314,11 +314,11 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("atheme: pid %d\n", getpid());
-		printf("atheme: running in foreground mode from %s\n", PREFIX);
+		slog(LG_INFO, "pid %d", getpid());
+		slog(LG_INFO, "running in foreground mode from %s", PREFIX);
 	}
 #else
-	printf("atheme: running in foreground mode from %s\n", PREFIX);
+	slog(LG_INFO, "running in foreground mode from %s", PREFIX);
 #endif
 
 #ifdef HAVE_GETPID
