@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 	log_open();
 	mowgli_log_set_cb(process_mowgli_log);
 
-	slog(LG_INFO, "version %s is starting up...", PACKAGE_STRING);
+	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 
 	/* check for pid file */
 	if ((pid_file = fopen(pidfilename, "r")))
