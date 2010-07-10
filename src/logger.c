@@ -549,7 +549,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	 */
 	if (((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
 		((runflags & RF_LIVE) && log_force))
-		fprintf(stderr, "%s %s\n", datetime, buf);
+		fprintf(stderr, "%s %s\n", datetime, logfile_strip_control_codes(buf));
 }
 
 static PRINTFLIKE(3, 4) void slog_ext(enum log_type type, unsigned int level,
