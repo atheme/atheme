@@ -21,7 +21,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or GLINE"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan };
+command_t os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
