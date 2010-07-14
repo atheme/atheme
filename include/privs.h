@@ -30,6 +30,7 @@
 #define PRIV_SERVER_AUSPEX   "general:auspex"
 #define PRIV_VIEWPRIVS       "general:viewprivs"
 #define PRIV_FLOOD           "general:flood"
+#define PRIV_HELPER	     "general:helper"
 #define PRIV_METADATA        "general:metadata"
 #define PRIV_ADMIN           "general:admin"
 /* operserv */

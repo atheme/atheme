@@ -5,7 +5,6 @@
 #include "atheme.h"
 #include "uplink.h"		/* sts() */
 
-#define PRIV_HELPME			"operserv:helpme"
 
 DECLARE_MODULE_V1
 (
@@ -17,7 +16,7 @@ DECLARE_MODULE_V1
 static void os_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_helpme = { "HELPME", N_("Makes you into a network helper."),
-                        PRIV_HELPME, 0, os_cmd_helpme };
+                        PRIV_HELPER, 0, os_cmd_helpme };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

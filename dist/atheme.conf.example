@@ -1559,6 +1559,7 @@ operclass "ircop" {
 
 	privs {
 		general:auspex;
+		general:helper;
 		general:viewprivs;
 		general:flood;
 	};
