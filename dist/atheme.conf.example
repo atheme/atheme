@@ -545,6 +545,20 @@ loadmodule "modules/botserv/set_private";
 #loadmodule "modules/hostserv/vhostnick";
 #loadmodule "modules/hostserv/group";
 
+/* HelpServ modules.
+ * HelpServ allows users to request help from network staff in a few different ways.
+ *
+ * Core components				modules/helpserv/main
+ * HELPME command				modules/helpserv/helpme
+ * Help Ticket system			modules/helpserv/ticket
+ *
+ * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
+ * works like a one-time alert. You should probably only load one of the two systems.
+ */
+loadmodule "modules/helpserv/main";
+#loadmodule "modules/helpserv/helpme";
+loadmodule "modules/helpserv/ticket";
+
 /* Channel listing service.
  *
  * Allows users to list channels with more flexibility than the /list
@@ -1224,6 +1238,34 @@ hostserv {
 	};
 };
 
+/* HelpServ configuration
+ *
+ * The helpserv {} block contains settings specific to the HelpServ modules.
+ *
+ * HelpServ adds a few different ways for users to request help from network staff.
+ */
+helpserv {
+	/* (*)nick
+	 * The nickname we want HelpServ to have.
+	 */
+	nick = "HelpServ";
+
+	/* (*)user
+	 * The username we want HelpServ to have.
+	 */
+	user = "HelpServ";
+
+	/* (*)host
+	 * The hostname we want HelpServ to have.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The realname (gecos) information we want HelpServ to have.
+	 */
+	real = "Help Services";
+};
+
 /* ALIS configuration.
  *
  * The alis {} block contains settings specific to the ALIS modules.
@@ -1458,7 +1500,8 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_period below or both options out to disable rate limiting.
-	 * Currently used in hostserv/request, nickserv/register and chanserv/register.
+	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
+	 * nickserv/register and chanserv/register.
 	 */
 	ratelimit_uses = 5;
 
@@ -1467,7 +1510,8 @@ general {
 	 * After `ratelimit_uses' of a command within `ratelimit_period', users
 	 * will not be able to run that ratelimited command until the period is up.
 	 * Comment this, ratelimit_uses above or both options out to disable rate limiting.
-	 * Currently used in hostserv/request, nickserv/register and chanserv/register.
+	 * Currently used in helpserv/helpme, helpserv/ticket, hostserv/request, 
+	 * nickserv/register and chanserv/register.
 	 */
 	ratelimit_period = 60;
 
