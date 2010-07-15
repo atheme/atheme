@@ -146,6 +146,7 @@ bool conf_parse(const char *file)
 		slog(LG_ERROR, "No protocol module loaded, aborting");
 		return false;
 	}
+	update_chanacs_flags();
 	if (!conf_check())
 		return false;
 

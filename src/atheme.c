@@ -258,7 +258,6 @@ int main(int argc, char *argv[])
 
 	authcookie_init();
 	common_ctcp_init();
-	update_chanacs_flags();
 
 	if (!backend_loaded && authservice_loaded)
 	{
