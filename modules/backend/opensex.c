@@ -366,7 +366,9 @@ static void opensex_db_parse(database_handle_t *db)
 
 static void opensex_h_unknown(database_handle_t *db, const char *type)
 {
-	slog(LG_INFO, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
+	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
+	slog(LG_ERROR, "opensex_h_unknown: exiting to avoid data loss");
+	exit(EXIT_FAILURE);
 }
 
 static void opensex_h_dbv(database_handle_t *db, const char *type)
