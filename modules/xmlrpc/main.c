@@ -233,14 +233,14 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (metadata_find(mu, "private:freeze:freezer") != NULL)
 	{
-		logcommand_external(nicksvs.me, "\2xmlrpc\2", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", mu->name);
 		xmlrpc_generic_error(fault_noprivs, "The account has been frozen.");
 		return 0;
 	}
 
 	if (!verify_password(mu, parv[1]))
 	{
-		logcommand_external(nicksvs.me, "\2xmlrpc\2", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", mu->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 		return 0;
 	}
@@ -249,7 +249,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	ac = authcookie_create(mu);
 
-	logcommand_external(nicksvs.me, "\2xmlrpc\2", conn, sourceip, mu, CMDLOG_LOGIN, "LOGIN");
+	logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, mu, CMDLOG_LOGIN, "LOGIN");
 
 	xmlrpc_send_string(ac->ticket);
 
@@ -294,7 +294,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	logcommand_external(nicksvs.me, "\2xmlrpc\2", conn, NULL, mu, CMDLOG_LOGIN, "LOGOUT");
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_LOGIN, "LOGOUT");
 
 	ac = authcookie_find(parv[0], mu);
 	authcookie_destroy(ac);
