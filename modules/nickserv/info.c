@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info };
+cmd_t ns_info = { N_("Displays information on registrations."), AC_NONE, "help/nickserv/info", 2, ns_cmd_info };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +26,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_info, ns_cmdtree);
-	help_addentry(ns_helptree, "INFO", "help/nickserv/info", NULL);
+	cmd_add("nickserv:info", &ns_info);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_info, ns_cmdtree);
-	help_delentry(ns_helptree, "INFO");
+	cmd_del("nickserv:info");
 }
 
 static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])

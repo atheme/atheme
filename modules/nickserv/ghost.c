@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost };
+cmd_t ns_ghost = { N_("Reclaims use of a nickname."), AC_NONE, "help/nickserv/ghost", .2, ns_cmd_ghost };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +26,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_ghost, ns_cmdtree);
-	help_addentry(ns_helptree, "GHOST", "help/nickserv/ghost", NULL);
+	cmd_add("nickserv:ghost", &ns_ghost);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_ghost, ns_cmdtree);
-	help_delentry(ns_helptree, "GHOST");
+	cmd_del("nickserv:ghost");
 }
 
 void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout };
+cmd_t ns_logout = { N_("Logs your services session out."), AC_NONE, "help/nickserv/logout", 2, ns_cmd_logout };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +26,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_logout, ns_cmdtree);
-	help_addentry(ns_helptree, "LOGOUT", "help/nickserv/logout", NULL);
+	cmd_add("nickserv:logout", &ns_logout);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_logout, ns_cmdtree);
-	help_delentry(ns_helptree, "LOGOUT");
+	cmd_del("nickserv:logout");
 }
 
 static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])

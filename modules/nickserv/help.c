@@ -19,21 +19,19 @@ list_t *ns_cmdtree, *ns_helptree;
 
 static void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help };
+cmd_t ns_help = { N_("Displays contextual help information."), AC_NONE, "help/help", 1, ns_cmd_help };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_help, ns_cmdtree);
-	help_addentry(ns_helptree, "HELP", "help/help", NULL);
+	cmd_add("nickserv:help", &ns_help);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_help, ns_cmdtree);
-	help_delentry(ns_helptree, "HELP");
+	cmd_del("nickserv:help");
 }
 
 /* HELP <command> [params] */

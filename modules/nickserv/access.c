@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access };
+cmd_t ns_access = { N_("Changes and shows your nickname access list."), AC_NONE, "help/nickserv/access", 2, ns_cmd_access };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,17 +26,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_access, ns_cmdtree);
-	help_addentry(ns_helptree, "ACCESS", "help/nickserv/access", NULL);
-
+	cmd_add("nickserv:access", &ns_access);
 	use_myuser_access++;
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_access, ns_cmdtree);
-	help_delentry(ns_helptree, "ACCESS");
-
+	cmd_del("nickserv:access");
 	use_myuser_access--;
 }
 

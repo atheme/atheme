@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert };
+cmd_t ns_cert = { N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, "help/nickserv/cert", 2, ns_cmd_cert };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,16 +26,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_cert, ns_cmdtree);
-	help_addentry(ns_helptree, "CERT", "help/nickserv/cert", NULL);
+	cmd_add("nickserv:cert", &ns_cert);
 
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_cert, ns_cmdtree);
-	help_delentry(ns_helptree, "CERT");
-
+	cmd_del("nickserv:cert");
 }
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])

@@ -43,8 +43,8 @@ static void show_enforce(hook_user_req_t *hdata);
 static void check_registration(hook_user_register_check_t *hdata);
 static void check_enforce(hook_nick_enforce_t *hdata);
 
-command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce }; 
-command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
+cmd_t ns_set_enforce = { N_("Enables or disables automatic protection of a nickname."), AC_NONE, "help/nickserv/set_enforce", 1, ns_cmd_set_enforce }; 
+cmd_t ns_release = { N_("Releases a services enforcer."), AC_NONE, "help/nickserv/release", 2, ns_cmd_release };
 
 list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
 
@@ -415,10 +415,8 @@ void _modinit(module_t *m)
 	}
 
 	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
-	command_add(&ns_release, ns_cmdtree);
-	command_add(&ns_set_enforce, ns_set_cmdtree);
-	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
-	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
+	cmd_add("nickserv:release", &ns_release);
+	cmd_add("nickserv:set:enforce", &ns_set_enforce);
 	hook_add_event("user_info");
 	hook_add_user_info(show_enforce);
 	hook_add_event("nick_can_register");
@@ -433,10 +431,8 @@ void _moddeinit()
 	event_delete(enforce_remove_enforcers, NULL);
 	if (enforce_next)
 		event_delete(enforce_timeout_check, NULL);
-	command_delete(&ns_release, ns_cmdtree);
-	command_delete(&ns_set_enforce, ns_set_cmdtree);
-	help_delentry(ns_helptree, "RELEASE");
-	help_delentry(ns_helptree, "SET ENFORCE");
+	cmd_del("nickserv:release");
+	cmd_del("nickserv:set:enforce");
 	hook_del_user_info(show_enforce);
 	hook_del_nick_can_register(check_registration);
 	hook_del_nick_enforce(check_enforce);

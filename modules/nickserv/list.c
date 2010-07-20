@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 1, ns_cmd_list };
+cmd_t ns_list = { N_("Lists nicknames registered given a matching pattern."), PRIV_USER_AUSPEX, "help/nickserv/list", 1, ns_cmd_list };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -27,14 +27,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_list, ns_cmdtree);
-	help_addentry(ns_helptree, "LIST", "help/nickserv/list", NULL);
+	cmd_add("nickserv:list", &ns_list);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_list, ns_cmdtree);
-	help_delentry(ns_helptree, "LIST");
+	cmd_del("nickserv:list");
 }
 
 static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)

@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 2, ns_cmd_drop };
-command_t ns_fdrop = { "FDROP", N_("Forces dropping an account registration."), PRIV_USER_ADMIN, 1, ns_cmd_fdrop };
+cmd_t ns_drop = { N_("Drops an account registration."), AC_NONE, "help/nickserv/drop", 2, ns_cmd_drop };
+cmd_t ns_fdrop = { N_("Forces dropping an account registration."), AC_NONE, "help/nickserv/fdrop", 1, ns_cmd_fdrop };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -28,18 +28,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_drop, ns_cmdtree);
-	command_add(&ns_fdrop, ns_cmdtree);
-	help_addentry(ns_helptree, "DROP", "help/nickserv/drop", NULL);
-	help_addentry(ns_helptree, "FDROP", "help/nickserv/fdrop", NULL);
+	cmd_add("nickserv:drop", &ns_drop);
+	cmd_add("nickserv:fdrop", &ns_fdrop);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_drop, ns_cmdtree);
-	command_delete(&ns_fdrop, ns_cmdtree);
-	help_delentry(ns_helptree, "DROP");
-	help_delentry(ns_helptree, "FDROP");
+	cmd_del("nickserv:drop");
+	cmd_del("nickserv:fdrop");
 }
 
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])

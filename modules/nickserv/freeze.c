@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
-command_t ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze };
+cmd_t ns_freeze = { N_("Freezes an account."), PRIV_USER_ADMIN, "help/nickserv/freeze", 3, ns_cmd_freeze };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -28,14 +28,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_freeze, ns_cmdtree);
-	help_addentry(ns_helptree, "FREEZE", "help/nickserv/freeze", NULL);
+	cmd_add("nickserv:freeze", &ns_freeze);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_freeze, ns_cmdtree);
-	help_delentry(ns_helptree, "FREEZE");
+	cmd_del("nickserv:freeze");
 }
 
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
