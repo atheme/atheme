@@ -4,6 +4,9 @@
  *
  * This file contains code for the NickServ FREGISTER function.
  *
+ * Remember to give the user:fregister priv to any soper you want
+ * to be able to use this command.
+ *
  */
 
 #include "atheme.h"
@@ -17,7 +20,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_fregister = { "FREGISTER", "Registers a nickname on behalf of another user.", PRIV_USER_FREGISTER, 20, ns_cmd_fregister };
+cmd_t ns_fregister = { "Registers a nickname on behalf of another user.", PRIV_USER_FREGISTER, "help/contrib/fregister", 20, ns_cmd_fregister };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +29,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_fregister, ns_cmdtree);
-	help_addentry(ns_helptree, "FREGISTER", "help/contrib/fregister", NULL);
+	cmd_add("nickserv:fregister", &ns_fregister);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_fregister, ns_cmdtree);
-	help_delentry(ns_helptree, "FREGISTER");
+	cmd_del("nickserv:fregister");
 }
 
 static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])

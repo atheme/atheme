@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_forbid(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_forbid = { "FORBID", "Disallows use of a nickname.", PRIV_USER_ADMIN, 3, ns_cmd_forbid };
+cmd_t ns_forbid = { "Disallows use of a nickname.", PRIV_USER_ADMIN, "help/contrib/forbid", 3, ns_cmd_forbid };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -27,14 +27,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_forbid, ns_cmdtree);
-	help_addentry(ns_helptree, "FORBID", "help/contrib/forbid", NULL);
+	cmd_add("nickserv:forbid", &ns_forbid);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_forbid, ns_cmdtree);
-	help_delentry(ns_helptree, "FORBID");
+	cmd_del("nickserv:forbid");
 }
 
 static void make_forbid(sourceinfo_t *si, const char *account, const char *reason)

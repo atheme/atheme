@@ -17,8 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_generatepass = { "GENERATEPASS", "Generates a random password.",
-                        AC_NONE, 1, ns_cmd_generatepass };
+cmd_t ns_generatepass = { "Generates a random password.", AC_NONE, "help/contrib/generatepass", 1, ns_cmd_generatepass };
                                                                                    
 list_t *ns_cmdtree;
 list_t *ns_helptree;
@@ -28,16 +27,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_generatepass, ns_cmdtree);
-	help_addentry(ns_helptree, "GENERATEPASS", "help/contrib/generatepass", NULL);
-	
-	/* You'll need to create a helpfile and put in help/nickserv */
+	cmd_add("nickserv:generatepass", &ns_generatepass);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_generatepass, ns_cmdtree);
-	help_delentry(ns_helptree, "GENERATEPASS");
+	cmd_del("nickserv:generatepass");
 }
 
 static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
