@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_NONE, 1, ns_cmd_listownmail };
+cmd_t ns_listownmail = { N_("Lists accounts registered to your e-mail address."), AC_NONE, "help/nickserv/listownmail", 1, ns_cmd_listownmail };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +26,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_listownmail, ns_cmdtree);
-	help_addentry(ns_helptree, "LISTOWNMAIL", "help/nickserv/listownmail", NULL);
+	cmd_add("nickserv:listownmail", &ns_listownmail);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_listownmail, ns_cmdtree);
-	help_delentry(ns_helptree, "LISTOWNMAIL");
+	cmd_del("nickserv:listownmail");
 }
 
 struct listmail_state

@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void clear_setpass_key(user_t *u);
 static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass };
+cmd_t ns_setpass = { N_("Changes a password using an authcode."), AC_NONE, "help/nickserv/setpass", 3, ns_cmd_setpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -29,15 +29,13 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);
-	command_add(&ns_setpass, ns_cmdtree);
-	help_addentry(ns_helptree, "SETPASS", "help/nickserv/setpass", NULL);
+	cmd_add("nickserv:setpass", &ns_setpass);
 }
 
 void _moddeinit()
 {
 	hook_del_user_identify(clear_setpass_key);
-	command_delete(&ns_setpass, ns_cmdtree);
-	help_delentry(ns_helptree, "SETPASS");
+	cmd_del("nickserv:setpass");
 }
 
 static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])

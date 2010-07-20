@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
+cmd_t ns_resetpass = { N_("Resets an account password."), PRIV_USER_ADMIN, "help/nickserv/resetpass", 1, ns_cmd_resetpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,14 +26,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_resetpass, ns_cmdtree);
-	help_addentry(ns_helptree, "RESETPASS", "help/nickserv/resetpass", NULL);
+	cmd_add("nickserv:resetpass", &ns_resetpass);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_resetpass, ns_cmdtree);
-	help_delentry(ns_helptree, "RESETPASS");
+	cmd_del("nickserv:resetpass");
 }
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
