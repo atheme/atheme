@@ -820,6 +820,14 @@ nickserv {
 		"MYACCESS" = "LISTCHANS";
 	};
 
+	commands replace {
+		"register" = "nickserv:register";
+	};
+
+	commands {
+		"lol" = "nickserv:register";
+	};
+
 	/* (*)expire
 	 * The number of days before inactive registrations are expired.
 	 */

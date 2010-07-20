@@ -11,6 +11,7 @@ BASE_SRCS =				\
 	base64.c		\
 	channels.c		\
 	cidr.c		\
+	cmd.c \
 	cmode.c		\
 	commandtree.c		\
 	ctcp-common.c		\
