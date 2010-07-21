@@ -812,20 +812,45 @@ nickserv {
 	 */
 	real = "Nickname Services";
 
-	/* (*)aliases
-	 * Command aliases for NickServ.
-	 */
-	aliases {
-		"ID" = "IDENTIFY";
-		"MYACCESS" = "LISTCHANS";
-	};
-
-	commands replace {
-		"register" = "nickserv:register";
-	};
-
+	/* Command map. This maps nickserv commands to canonical commands, which are
+	 * provided by modules. */
 	commands {
-		"lol" = "nickserv:register";
+		acc         = nickserv:acc;
+		access      = nickserv:access;
+		cert        = nickserv:cert;
+		drop        = nickserv:drop;
+		fdrop       = nickserv:fdrop;
+		freeze      = nickserv:freeze;
+		fungroup    = nickserv:fungroup;
+		fverify     = nickserv:fverify;
+		ghost       = nickserv:ghost;
+		group       = nickserv:group;
+		help        = nickserv:help;
+		hold        = nickserv:hold;
+		id          = nickserv:identify;
+		identify    = nickserv:identify;
+		info        = nickserv:info;
+		list        = nickserv:list;
+		listchans   = nickserv:listchans;
+		listnicks   = nickserv:listnicks;
+		listownmail = nickserv:listownmail;
+		listvhost   = nickserv:listvhost;
+		login       = nickserv:login;
+		logout      = nickserv:logout;
+		mark        = nickserv:mark;
+		myaccess    = nickserv:listchans;
+		register    = nickserv:register;
+		release     = nickserv:release;
+		resetpass   = nickserv:resetpass;
+		return      = nickserv:return;
+		sendpass    = nickserv:sendpass;
+		setpass     = nickserv:setpass;
+		status      = nickserv:status;
+		taxonomy    = nickserv:taxonomy;
+		ungroup     = nickserv:ungroup;
+		vacation    = nickserv:vacation;
+		verify      = nickserv:verify;
+		vhost       = nickserv:vhost;
 	};
 
 	/* (*)expire
