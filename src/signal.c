@@ -111,19 +111,20 @@ signal_usr2_handler(int signum)
 static void
 signal_usr1_handler(int signum)
 {
+	int n;
 	if (me.connected && curr_uplink != NULL &&
 		curr_uplink->conn != NULL)
 	{
 		if (chansvs.nick != NULL)
 		{
-			write(curr_uplink->conn->fd, ":", 1);
-			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
-			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+			n = write(curr_uplink->conn->fd, ":", 1);
+			n = write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
+			n = write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
 		}
-		write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
+		n = write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
 	}
 	if (runflags & (RF_LIVE | RF_STARTING))
-		write(2, "Out of memory!\n", 15);
+		n = write(2, "Out of memory!\n", 15);
 	abort();
 }
 

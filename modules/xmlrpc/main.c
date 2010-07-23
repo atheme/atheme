@@ -44,10 +44,10 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 list_t conf_xmlrpc_table;
 
 struct sourceinfo_vtable xmlrpc_vtable = {
-	"xmlrpc",
-	xmlrpc_command_fail,
-	xmlrpc_command_success_nodata,
-	xmlrpc_command_success_string
+	.description = "xmlrpc",
+	.cmd_fail = xmlrpc_command_fail,
+	.cmd_success_nodata = xmlrpc_command_success_nodata,
+	.cmd_success_string = xmlrpc_command_success_string
 };
 
 static char *dump_buffer(char *buf, int length)

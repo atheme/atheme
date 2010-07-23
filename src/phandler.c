@@ -101,7 +101,11 @@ void generic_msg(const char *from, const char *target, const char *fmt, ...)
 	char *buf;
 
 	va_start(ap, fmt);
-	vasprintf(&buf, fmt, ap);
+	if (vasprintf(&buf, fmt, ap) < 0)
+	{
+		va_end(ap);
+		return;
+	}
 	va_end(ap);
 
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
@@ -148,7 +152,11 @@ void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char
 	char *buf;
 
 	va_start(va, fmt);
-	vasprintf(&buf, fmt, va);
+	if (vasprintf(&buf, fmt, va) < 0)
+	{
+		va_end(va);
+		return;
+	}
 	va_end(va);
 
 	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
