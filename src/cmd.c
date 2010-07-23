@@ -57,9 +57,9 @@ cmd_t *cmd_find(const char *name)
 	return mowgli_patricia_retrieve(canoncmds, name);
 }
 
-void cmd_split(cmd_t *c, char *m, int *parc, char **parv)
+void cmd_split(cmd_t *c, char *msg, int *parc, char **parv)
 {
-	*parc = text_to_parv(m, c->maxparc, parv);
+	*parc = text_to_parv(msg, c->maxparc, parv);
 }
 
 void cmd_exec(sourceinfo_t *si, cmd_t *c, int parc, char *parv[])
