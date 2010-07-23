@@ -47,7 +47,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
-cmd_t ns_vacation = { N_("Sets an account as being on vacation."), AC_NONE, "help/nickserv/vacation", 1, ns_cmd_vacation };
+command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation };
 
 static void user_identify_hook(user_t *u)
 {
@@ -92,7 +92,8 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:vacation", &ns_vacation);
+	command_add(&ns_vacation, ns_cmdtree);
+	help_addentry(ns_helptree, "VACATION", "help/nickserv/vacation", NULL);
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(user_identify_hook);
@@ -109,7 +110,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	cmd_del("nickserv:vacation");
+	command_delete(&ns_vacation, ns_cmdtree);
+	help_delentry(ns_helptree, "VACATION");
 
 	hook_del_user_identify(user_identify_hook);
 	hook_del_user_check_expire(user_expiry_hook);

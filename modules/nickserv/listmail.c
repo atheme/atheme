@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_listmail = { N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, "help/nickserv/listmail", 1, ns_cmd_listmail };
+command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,12 +26,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:listmail", &ns_listmail);
+	command_add(&ns_listmail, ns_cmdtree);
+	help_addentry(ns_helptree, "LISTMAIL", "help/nickserv/listmail", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:listmail");
+	command_delete(&ns_listmail, ns_cmdtree);
+	help_delentry(ns_helptree, "LISTMAIL");
 }
 
 struct listmail_state

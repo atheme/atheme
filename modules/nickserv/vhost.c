@@ -21,8 +21,8 @@ static void vhost_on_identify(user_t *u);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_vhost = { N_("Manages user virtualhosts."), PRIV_USER_VHOST, "help/nickserv/vhost", 4, ns_cmd_vhost };
-cmd_t ns_listvhost = { N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, "help/nickserv/listvhost", 1, ns_cmd_listvhost };
+command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost };
+command_t ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost };
 
 void _modinit(module_t *m)
 {
@@ -31,17 +31,19 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(vhost_on_identify);
-
-	cmd_add("nickserv:vhost", &ns_vhost);
-	cmd_add("nickserv:listvhost", &ns_listvhost);
+	command_add(&ns_vhost, ns_cmdtree);
+	command_add(&ns_listvhost, ns_cmdtree);
+	help_addentry(ns_helptree, "VHOST", "help/nickserv/vhost", NULL);
+	help_addentry(ns_helptree, "LISTVHOST", "help/nickserv/listvhost", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_user_identify(vhost_on_identify);
-
-	cmd_del("nickserv:vhost");
-	cmd_del("nickserv:listvhost");
+	command_delete(&ns_vhost, ns_cmdtree);
+	command_delete(&ns_listvhost, ns_cmdtree);
+	help_delentry(ns_helptree, "VHOST");
+	help_delentry(ns_helptree, "LISTVHOST");
 }
 
 

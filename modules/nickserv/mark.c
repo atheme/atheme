@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_mark = { N_("Adds a note to a user."), PRIV_MARK, "help/nickserv/mark", 3, ns_cmd_mark };
+command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,12 +26,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:mark", &ns_mark);
+	command_add(&ns_mark, ns_cmdtree);
+	help_addentry(ns_helptree, "MARK", "help/nickserv/mark", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:mark");
+	command_delete(&ns_mark, ns_cmdtree);
+	help_delentry(ns_helptree, "MARK");
 }
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])

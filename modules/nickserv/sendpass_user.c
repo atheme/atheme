@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_sendpass = { N_("Email registration passwords."), AC_NONE, "help/nickserv/sendpass_user", 2, ns_cmd_sendpass };
+command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), AC_NONE, 2, ns_cmd_sendpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -27,12 +27,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass");
 
-	cmd_add("nickserv:sendpass", &ns_sendpass);
+	command_add(&ns_sendpass, ns_cmdtree);
+	help_addentry(ns_helptree, "SENDPASS", "help/nickserv/sendpass_user", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:sendpass");
+	command_delete(&ns_sendpass, ns_cmdtree);
+	help_delentry(ns_helptree, "SENDPASS");
 }
 
 enum specialoperation

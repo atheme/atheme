@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_return = { N_("Returns an account to its owner."), PRIV_USER_ADMIN, "help/nickserv/return", 2, ns_cmd_return };
+command_t ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -27,12 +27,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:return", &ns_return);
+	command_add(&ns_return, ns_cmdtree);
+	help_addentry(ns_helptree, "RETURN", "help/nickserv/return", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:return");
+	command_delete(&ns_return, ns_cmdtree);
+	help_delentry(ns_helptree, "RETURN");
 }
 
 static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_taxonomy = { N_("Displays a user's metadata."), AC_NONE, "help/nickserv/taxonomy", 1, ns_cmd_taxonomy };
+command_t ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -26,12 +26,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:taxonomy", &ns_taxonomy);
+	command_add(&ns_taxonomy, ns_cmdtree);
+	help_addentry(ns_helptree, "TAXONOMY", "help/nickserv/taxonomy", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:taxonomy");
+	command_delete(&ns_taxonomy, ns_cmdtree);
+	help_delentry(ns_helptree, "TAXONOMY");
 }
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])

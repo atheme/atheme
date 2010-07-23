@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
-cmd_t ns_status = { N_("Displays session information."), AC_NONE, "help/nickserv/status", 0, ns_cmd_status };
-cmd_t ns_acc = { N_("Displays parsable session information"), AC_NONE, "help/nickserv/acc", 2, ns_cmd_acc };
+command_t ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status };
+command_t ns_acc = { "ACC", N_("Displays parsable session information"), AC_NONE, 2, ns_cmd_acc };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -28,14 +28,18 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:acc", &ns_acc);
-	cmd_add("nickserv:status", &ns_status);
+	command_add(&ns_acc, ns_cmdtree);
+	help_addentry(ns_helptree, "ACC", "help/nickserv/acc", NULL);
+	command_add(&ns_status, ns_cmdtree);
+	help_addentry(ns_helptree, "STATUS", "help/nickserv/status", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:acc");
-	cmd_del("nickserv:status");
+	command_delete(&ns_acc, ns_cmdtree);
+	help_delentry(ns_helptree, "ACC");
+	command_delete(&ns_status, ns_cmdtree);
+	help_delentry(ns_helptree, "STATUS");
 }
 
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
