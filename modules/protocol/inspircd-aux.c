@@ -1285,7 +1285,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		end = strchr(fpstr, ' ');
 
-		len = end ? end - fpstr : strlen(fpstr);
+		len = end ? (unsigned int)(end - fpstr) : strlen(fpstr);
 
 		certfp = smalloc(len + 1);
 		memcpy(certfp, fpstr, len);

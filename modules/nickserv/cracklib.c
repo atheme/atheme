@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 bool cracklib_warn;
 
-void
+static void
 cracklib_hook(hook_user_register_check_t *hdata)
 {
 	const char *cracklib_reason;

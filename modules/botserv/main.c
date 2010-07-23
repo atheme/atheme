@@ -91,7 +91,11 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 	const char *real_source = from;
 
 	va_start(ap, fmt);
-	vasprintf(&buf, fmt, ap);
+	if (vasprintf(&buf, fmt, ap) < 0)
+	{
+		va_end(ap);
+		return;
+	}
 	va_end(ap);
 
 	if (*target == '#' && !strcmp(from, chansvs.nick))
@@ -159,7 +163,7 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 }
 
 static void
-bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value)
+bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, unsigned int i, const char *value)
 {
 	mychan_t *mc;
 	metadata_t *bs;
