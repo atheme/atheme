@@ -54,7 +54,6 @@
 #include "symbolmatrix.h"
 #include "taint.h"
 #include "database_backend.h"
-#include "cmd.h"
 
 #include "inline/account.h"
 #include "inline/channels.h"

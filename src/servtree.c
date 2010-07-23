@@ -179,38 +179,6 @@ static int conf_service_aliases(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_commands(config_entry_t *ce)
-{
-	service_t *sptr;
-	config_entry_t *subce;
-
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
-	if (!sptr)
-		return -1;
-
-	if (ce->ce_vardata && !strcasecmp(ce->ce_vardata, "replace"))
-	{
-		if (sptr->cmds)
-			cmdmap_free(sptr->cmds);
-		sptr->cmds = NULL;
-		if (!ce->ce_entries)
-			return 0;
-	}
-	if (!sptr->cmds)
-		sptr->cmds = cmdmap_new();
-	for (subce = ce->ce_entries; subce; subce = subce->ce_next)
-	{
-		if (subce->ce_vardata == NULL || subce->ce_entries != NULL)
-		{
-			conf_report_warning(subce, "Invalid command entry");
-			continue;
-		}
-		cmdmap_add(sptr->cmds, subce->ce_varname, subce->ce_vardata);
-	}
-
-	return 0;
-}
-
 static int conf_service(config_entry_t *ce)
 {
 	service_t *sptr;
@@ -287,7 +255,6 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		add_conf_item("HOST", sptr->conf_table, conf_service_host);
 		add_conf_item("REAL", sptr->conf_table, conf_service_real);
 		add_conf_item("ALIASES", sptr->conf_table, conf_service_aliases);
-		add_conf_item("COMMANDS", sptr->conf_table, conf_service_commands);
 	}
 
 	return sptr;
@@ -302,7 +269,6 @@ void service_delete(service_t *sptr)
 
 	if (sptr->conf_table != NULL)
 	{
-		del_conf_item("COMMANDS", sptr->conf_table);
 		del_conf_item("ALIASES", sptr->conf_table);
 		del_conf_item("REAL", sptr->conf_table);
 		del_conf_item("HOST", sptr->conf_table);
@@ -320,8 +286,6 @@ void service_delete(service_t *sptr)
 		sptr->me = NULL;
 	}
 	sptr->handler = NULL;
-	if (sptr->cmds)
-		cmdmap_free(sptr->cmds);
 	if (sptr->aliases)
 		mowgli_patricia_destroy(sptr->aliases, free_alias_string, NULL);
 	free(sptr->disp);	/* service_name() does a malloc() */

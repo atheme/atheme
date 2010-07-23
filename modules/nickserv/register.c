@@ -21,7 +21,6 @@ time_t ratelimit_firsttime = 0;
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register };
-cmd_t _ns_register = { N_("Registers a nickname."), AC_NONE, "help/nickserv/register", 3, ns_cmd_register };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -32,14 +31,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	cmd_add("nickserv:register", &_ns_register);
 	command_add(&ns_register, ns_cmdtree);
 	help_addentry(ns_helptree, "REGISTER", "help/nickserv/register", NULL);
 }
 
 void _moddeinit()
 {
-	cmd_del("nickserv:register");
 	command_delete(&ns_register, ns_cmdtree);
 	help_delentry(ns_helptree, "REGISTER");
 }

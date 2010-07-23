@@ -26,11 +26,6 @@ static void nickserv(sourceinfo_t *si, int parc, char *parv[])
         char *text;
 	char orig[BUFSIZE];
 
-	int nparc;
-	char *nparv[MAX_CMD_PARC];
-	const char *ncz;
-	cmd_t *cz;
-
 	/* this should never happen */
 	if (parv[0][0] == '&')
 	{
@@ -50,18 +45,6 @@ static void nickserv(sourceinfo_t *si, int parc, char *parv[])
 	if (*cmd == '\001')
 	{
 		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	ncz = cmdmap_resolve(si->service->cmds, cmd);
-	cz = cmd_find(ncz);
-	slog(LG_INFO, "nickserv(): resolved %s -> %s -> %p", cmd, ncz, cz);
-	if (cz)
-	{
-		int nparc;
-		char *nparv[MAX_CMD_PARC];
-		cmd_split(cz, text, &nparc, nparv);
-		cmd_exec(si, cz, nparc, nparv);
 		return;
 	}
 
