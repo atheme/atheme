@@ -89,7 +89,7 @@ arc4_stir(struct arc4_stream *as)
 	rdat.pid = getpid();
 	fd = open(RANDOMDEV, O_RDONLY, 0);
 	if (fd >= 0) {
-		(void) read(fd, rdat.rnd, sizeof(rdat.rnd));
+		n = read(fd, rdat.rnd, sizeof(rdat.rnd));
 		close(fd);
 	} 
 	/* fd < 0?  Ah, what the heck. We'll just take whatever was on the
