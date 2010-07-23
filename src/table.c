@@ -85,7 +85,11 @@ table_t *table_new(const char *fmt, ...)
 	return_val_if_fail(fmt != NULL, NULL);
 
 	va_start(vl, fmt);
-	vasprintf(&buf, fmt, vl);
+	if (vasprintf(&buf, fmt, vl) < 0)
+	{
+		va_end(vl);
+		return NULL;
+	}
 	va_end(vl);
 
 	out = scalloc(sizeof(table_t), 1);
