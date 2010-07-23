@@ -917,12 +917,12 @@ void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset };
 
-void wumpus_cmd_help(sourceinfo_t *si, int parc, char *parv[])
+void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
 	command_help(si, &wumpus.cmdtree);
 }
 
-command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, wumpus_cmd_help };
+command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help };
 
 void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {
