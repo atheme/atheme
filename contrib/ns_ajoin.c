@@ -187,7 +187,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-cmd_t ns_ajoin = { "Manages automatic-join on identify.", AC_NONE, "help/contrib/ajoin", 2, ns_cmd_ajoin };
+command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin };
 
 void _modinit(module_t *m)
 {
@@ -196,15 +196,15 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(ajoin_on_identify);
-
-	cmd_add("nickserv:ajoin", &ns_ajoin);
+	command_add(&ns_ajoin, ns_cmdtree);
+	help_addentry(ns_helptree, "AJOIN", "help/contrib/ajoin", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_user_identify(ajoin_on_identify);
-
-	cmd_del("nickserv:ajoin");
+	command_delete(&ns_ajoin, ns_cmdtree);
+	help_delentry(ns_helptree, "AJOIN");
 }
 
 static void ajoin_on_identify(user_t *u)
