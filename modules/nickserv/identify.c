@@ -27,9 +27,9 @@ DECLARE_MODULE_V1
 static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
-cmd_t ns_login = { N_("Authenticates to a services account."), AC_NONE, "help/nickserv/login", 2, ns_cmd_login };
+command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login };
 #else
-cmd_t ns_identify = { N_("Identifies to services for a nickname."), AC_NONE, "help/nickserv/identify", 2, ns_cmd_login };
+command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login };
 #endif
 
 list_t *ns_cmdtree, *ns_helptree;
@@ -40,18 +40,22 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 #ifdef NICKSERV_LOGIN
-	cmd_add("nickserv:login", &ns_login);
+	command_add(&ns_login, ns_cmdtree);
+	help_addentry(ns_helptree, "LOGIN", "help/nickserv/login", NULL);
 #else
-	cmd_add("nickserv:identify", &ns_identify);
+	command_add(&ns_identify, ns_cmdtree);
+	help_addentry(ns_helptree, "IDENTIFY", "help/nickserv/identify", NULL);
 #endif
 }
 
 void _moddeinit()
 {
 #ifdef NICKSERV_LOGIN
-	cmd_del("nickserv:login");
+	command_delete(&ns_login, ns_cmdtree);
+	help_delentry(ns_helptree, "LOGIN");
 #else
-	cmd_del("nickserv:identify");
+	command_delete(&ns_identify, ns_cmdtree);
+	help_delentry(ns_helptree, "IDENTIFY");
 #endif
 }
 
