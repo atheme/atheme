@@ -189,7 +189,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	l = smalloc(sizeof(logoninfo_t));
-	l->nick = sstrdup(get_source_name(si));
+	l->nick = sstrdup(si->smu->name);
 	l->info_ts = CURRTIME;
 	l->story = sstrdup(story);
 	l->subject = sstrdup(subject);

@@ -17,4 +17,4 @@ IMPORTANCE:
 Syntax: POST <importance> <subject> <message>
 
 Example:
-    /msg &nick& 2 Info1 Some important information for users.
+    /msg &nick& POST 2 Info1 Some important information for users.
