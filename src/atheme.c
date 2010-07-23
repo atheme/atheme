@@ -236,7 +236,6 @@ int main(int argc, char *argv[])
 	init_confprocess();
 	init_newconf();
 	servtree_init();
-	cmd_init();
 
 	modules_init();
 	pcommand_init();

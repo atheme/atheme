@@ -9,8 +9,6 @@
 #ifndef SERVTREE_H
 #define SERVTREE_H
 
-#include "cmd.h"
-
 struct service_ {
 	char *internal_name;
 
@@ -25,7 +23,6 @@ struct service_ {
 	void (*handler)(sourceinfo_t *, int, char **);
 	void (*notice_handler)(sourceinfo_t *, int, char **);
 
-	cmdmap_t *cmds;
 	list_t *cmdtree;
 	mowgli_patricia_t *aliases;
 
