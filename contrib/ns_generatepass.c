@@ -30,8 +30,6 @@ void _modinit(module_t *m)
 
 	command_add(&ns_generatepass, ns_cmdtree);
 	help_addentry(ns_helptree, "GENERATEPASS", "help/contrib/generatepass", NULL);
-	
-	/* You'll need to create a helpfile and put in help/nickserv */
 }
 
 void _moddeinit()

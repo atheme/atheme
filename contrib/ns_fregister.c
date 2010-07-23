@@ -4,6 +4,9 @@
  *
  * This file contains code for the NickServ FREGISTER function.
  *
+ * Remember to give the user:fregister priv to any soper you want
+ * to be able to use this command.
+ *
  */
 
 #include "atheme.h"
