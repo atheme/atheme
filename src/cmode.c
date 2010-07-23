@@ -400,7 +400,7 @@ static void modestack_debugprint(struct modestackdata *md)
 		slog(LG_DEBUG, "limit %u", (unsigned)md->limit);
 	for (i = 0; i < ignore_mode_list_size; i++)
 		if (md->extmodesused[i])
-			slog(LG_DEBUG, "ext %d %s", i, md->extmodes[i]);
+			slog(LG_DEBUG, "ext %d %s", (int)i, md->extmodes[i]);
 	slog(LG_DEBUG, "pmodes %s%s", md->pmodes, md->params);
 	modestack_calclen(md);
 	slog(LG_DEBUG, "totallen %d/%d", md->totalparamslen, md->totallen);
@@ -721,12 +721,12 @@ void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, 
 void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit) = modestack_mode_limit_real;
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, int i, const char *value)
+void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, unsigned int i, const char *value)
 {
 	struct modestackdata *md;
 
 	md = modestack_init(source, channel);
-	if (i < 0 || i >= ignore_mode_list_size)
+	if (i >= ignore_mode_list_size)
 	{
 		slog(LG_ERROR, "modestack_mode_ext(): i=%d out of range (value=\"%s\")",
 				i, value);
@@ -736,7 +736,7 @@ void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, in
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
-void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, int i, const char *value) = modestack_mode_ext_real;
+void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value) = modestack_mode_ext_real;
 
 /* stack a type A, B or E mode */
 void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value)
