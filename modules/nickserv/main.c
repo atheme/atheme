@@ -23,11 +23,9 @@ list_t ns_helptree;
 static void nickserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
-        char *text;
+	char *text;
 	char orig[BUFSIZE];
 
-	int nparc;
-	char *nparv[MAX_CMD_PARC];
 	const char *ncz;
 	cmd_t *cz;
 
