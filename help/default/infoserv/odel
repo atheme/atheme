@@ -1,0 +1,10 @@
+Help for ODEL:
+
+ODEL is used to delete informational messages that you no longer
+want opers to see upon oper-up. This will not allow you to delete
+user &nick& messages.
+
+Syntax: ODEL <id>
+
+Example:
+    /msg &nick& ODEL 1

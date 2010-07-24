@@ -4,6 +4,11 @@
  *
  * This file contains the main() routine.
  *
+ * We're basically re-implementing everything to support
+ * oper info messages. Yes, I know this is a bit ugly, but 
+ * I can't think of a saner way that is efficient, avoids a
+ * few bugs and doesn't break people's existing InfoServ DB entries.
+ *
  */
 
 #include "atheme.h"
@@ -26,6 +31,17 @@ typedef struct logoninfo_ logoninfo_t;
 
 list_t logon_info;
 
+struct operlogoninfo_ {
+        char *nick;
+        char *subject;
+        time_t info_ts;
+        char *story;
+};
+
+typedef struct operlogoninfo_ operlogoninfo_t;
+
+list_t operlogon_info;
+
 service_t *infoserv;
 list_t is_cmdtree;
 list_t is_helptree;
@@ -34,8 +50,11 @@ list_t is_conftable;
 static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);
 static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[]);
+static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[]);
 static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[]);
 static void display_info(hook_user_nick_t *data);
+static void display_oper_info(user_t *u);
 
 static void write_infodb(database_handle_t *db);
 static void db_h_li(database_handle_t *db, const char *type);
@@ -43,7 +62,10 @@ static void db_h_li(database_handle_t *db, const char *type);
 command_t is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help };
 command_t is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post };
 command_t is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del };
+command_t is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel };
 command_t is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list };
+/* Should prolly change the priv for this. What would be a better priv for it though? */
+command_t is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist };
 
 /* HELP <command> [params] */
 void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
@@ -85,6 +107,18 @@ static void write_infodb(database_handle_t *db)
 		db_commit_row(db);
 	}
 
+	LIST_FOREACH(n, operlogon_info.head)
+	{
+		operlogoninfo_t *o = n->data;
+
+		db_start_row(db, "LIO");
+		db_write_word(db, o->nick);
+		db_write_word(db, o->subject);
+		db_write_time(db, o->info_ts);
+		db_write_str(db, o->story);
+		db_commit_row(db);
+	}
+
 }
 
 static void db_h_li(database_handle_t *db, const char *type)
@@ -100,6 +134,21 @@ static void db_h_li(database_handle_t *db, const char *type)
 	l->info_ts = info_ts;
 	l->story = sstrdup(story);
 	node_add(l, node_create(), &logon_info);
+}
+
+static void db_h_lio(database_handle_t *db, const char *type)
+{
+	const char *nick = db_sread_word(db);
+	const char *subject = db_sread_word(db);
+	time_t info_ts = db_sread_time(db);
+	const char *story = db_sread_str(db);
+
+	operlogoninfo_t *o = smalloc(sizeof(operlogoninfo_t));
+	o->nick = sstrdup(nick);
+	o->subject = sstrdup(subject);
+	o->info_ts = info_ts;
+	o->story = sstrdup(story);
+	node_add(o, node_create(), &operlogon_info);
 }
 
 static void display_info(hook_user_nick_t *data)
@@ -145,6 +194,47 @@ static void display_info(hook_user_nick_t *data)
 	}
 }
 
+static void display_oper_info(user_t *u)
+{
+	node_t *n;
+	operlogoninfo_t *o;
+	char dBuf[BUFSIZE];
+	struct tm tm;
+	int count = 0;
+
+	if (u == NULL)
+		return;
+
+	/* abort if it's an internal client */
+	if (is_internal_client(u))
+		return;
+	/* abort if user is coming back from split */
+	if (!(u->server->flags & SF_EOB))
+		return;
+
+	if (operlogon_info.count > 0)
+	{
+		notice(infoserv->nick, u->nick, "*** \2Oper Message(s) of the Day\2 ***");
+
+		LIST_FOREACH_PREV(n, operlogon_info.tail)
+		{
+			o = n->data;
+			tm = *localtime(&o->info_ts);
+			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
+				o->subject, o->nick, dBuf);
+			notice(infoserv->nick, u->nick, "%s", o->story);
+			count++;
+
+			/* only display three latest entries, max. */
+			if (count == 3)
+				break;
+		}
+
+		notice(infoserv->nick, u->nick, "*** \2End of Oper Message(s) of the Day\2 ***");
+	}
+}
+
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *importance = parv[0];
@@ -152,6 +242,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	char *story = parv[2];
 	int imp;
 	logoninfo_t *l;
+	operlogoninfo_t *o;
 	node_t *n;
 	char buf[BUFSIZE];
 
@@ -164,9 +255,9 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 
 	imp = atoi(importance);
 
-	if ((imp <= 0) || (imp >=5))
+	if ((imp < 0) || (imp >=5))
 	{
-		command_fail(si, fault_badparams, _("Importance must be a digit between 1 and 4"));
+		command_fail(si, fault_badparams, _("Importance must be a digit between 0 and 4"));
 		return;
 	}
 
@@ -188,14 +279,29 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	l = smalloc(sizeof(logoninfo_t));
-	l->nick = sstrdup(si->smu->name);
-	l->info_ts = CURRTIME;
-	l->story = sstrdup(story);
-	l->subject = sstrdup(subject);
+	if (imp == 0)
+	{
+		o = smalloc(sizeof(operlogoninfo_t));
+		o->nick = sstrdup(si->smu->name);
+		o->info_ts = CURRTIME;
+		o->story = sstrdup(story);
+		o->subject = sstrdup(subject);
 
-	n = node_create();
-	node_add(l, n, &logon_info);
+		n = node_create();
+		node_add(o, n, &operlogon_info);
+	}
+
+	if (imp > 0)
+	{
+		l = smalloc(sizeof(logoninfo_t));
+		l->nick = sstrdup(si->smu->name);
+		l->info_ts = CURRTIME;
+		l->story = sstrdup(story);
+		l->subject = sstrdup(subject);
+
+		n = node_create();
+		node_add(l, n, &logon_info);
+	}
 
 	command_success_nodata(si, _("Added entry to logon info"));
 	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
@@ -250,6 +356,56 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 			free(l->story);
 			free(l);
 
+			command_success_nodata(si, _("Deleted entry %d from oper logon info."), id);
+			return;
+		}
+	}
+
+	command_fail(si, fault_nosuch_target, _("Entry %d not found in oper logon info."), id);
+	return;
+}
+
+static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *target = parv[0];
+	int x = 0;
+	int id;
+	operlogoninfo_t *o;
+	node_t *n;
+
+	if (!target)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ODEL");
+		command_fail(si, fault_needmoreparams, "Syntax: ODEL <id>");
+		return;
+	}
+
+	id = atoi(target);
+
+	if (id <= 0)
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ODEL");
+		command_fail(si, fault_badparams, "Syntax: ODEL <id>");
+		return;
+	}
+
+	/* search for it */
+	LIST_FOREACH(n, operlogon_info.head)
+	{
+		o = n->data;
+		x++;
+
+		if (x == id)
+		{
+			logcommand(si, CMDLOG_ADMIN, "INFO:ODEL: \2%s\2, \2%s\2", o->subject, o->story);
+
+			node_del(n, &operlogon_info);
+
+			free(o->nick);
+			free(o->subject);
+			free(o->story);
+			free(o);
+
 			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
 			return;
 		}
@@ -281,6 +437,31 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("End of list."));
 	logcommand(si, CMDLOG_GET, "LIST");
+	return;
+}
+
+static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
+{
+	operlogoninfo_t *o;
+	node_t *n;
+	struct tm tm;
+	char dBuf[BUFSIZE];
+	int x = 0;
+
+	LIST_FOREACH(n, operlogon_info.head)
+	{
+		o = n->data;
+		x++;
+
+
+		tm = *localtime(&o->info_ts);
+		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
+		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
+			x, o->subject, o->nick, dBuf, o->story);
+	}
+
+	command_success_nodata(si, _("End of list."));
+	logcommand(si, CMDLOG_GET, "OLIST");
 	return;
 }
 
@@ -330,19 +511,26 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
+	hook_add_event("user_oper");
+	hook_add_user_oper(display_oper_info);
 	hook_add_db_write(write_infodb);
 
 	db_register_type_handler("LI", db_h_li);
+	db_register_type_handler("LIO", db_h_lio);
 
 	command_add(&is_help, &is_cmdtree);
 	command_add(&is_post, &is_cmdtree);
 	command_add(&is_del, &is_cmdtree);
+	command_add(&is_odel, &is_cmdtree);
 	command_add(&is_list, &is_cmdtree);
+	command_add(&is_olist, &is_cmdtree);
 
 	help_addentry(&is_helptree, "HELP", "help/help", NULL);
 	help_addentry(&is_helptree, "POST", "help/infoserv/post", NULL);
 	help_addentry(&is_helptree, "DEL", "help/infoserv/del", NULL);
+	help_addentry(&is_helptree, "ODEL", "help/infoserv/odel", NULL);
 	help_addentry(&is_helptree, "LIST", "help/infoserv/list", NULL);
+	help_addentry(&is_helptree, "OLIST", "help/infoserv/olist", NULL);
 }
 
 void _moddeinit(void)
@@ -354,19 +542,25 @@ void _moddeinit(void)
 	}
 	
 	hook_del_user_add(display_info);
+	hook_del_user_oper(display_oper_info);
 	hook_del_db_write(write_infodb);
 
 	db_unregister_type_handler("LI");
+	db_unregister_type_handler("LIO");
 
 	command_delete(&is_help, &is_cmdtree);
 	command_delete(&is_post, &is_cmdtree);
 	command_delete(&is_del, &is_cmdtree);
+	command_delete(&is_odel, &is_cmdtree);
 	command_delete(&is_list, &is_cmdtree);
+	command_delete(&is_olist, &is_cmdtree);
 
 	help_delentry(&is_helptree, "HELP");
 	help_delentry(&is_helptree, "POST");
 	help_delentry(&is_helptree, "DEL");
+	help_delentry(&is_helptree, "ODEL");
 	help_delentry(&is_helptree, "LIST");
+	help_delentry(&is_helptree, "OLIST");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
