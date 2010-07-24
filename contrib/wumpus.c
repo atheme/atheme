@@ -88,7 +88,6 @@ struct __wumpusconfig
 static int
 distance_to_wumpus(player_t *player)
 {
-	int i;
 	node_t *n, *tn;
 	
 	LIST_FOREACH(n, player->location->exits.head)
@@ -177,7 +176,7 @@ create_player(user_t *u)
 }
 
 /* destroys a player object and removes them from the game */
-void
+static void
 resign_player(player_t *player)
 {
 	node_t *n;
@@ -202,7 +201,7 @@ resign_player(player_t *player)
 /* ------------------------------ game functions */
 
 /* builds the maze, and returns false if the maze is too small */
-bool
+static bool
 build_maze(int size)
 {
 	int i, j;
@@ -329,7 +328,7 @@ void look_player(player_t *p);
 void end_game(void);
 
 /* sets the game up */
-void
+static void
 init_game(void)
 {
 	node_t *n;
@@ -363,7 +362,7 @@ init_game(void)
 }
 
 /* starts the game */
-void
+static void
 start_game(void *unused)
 {
 	wumpus.starting = false;
@@ -449,7 +448,7 @@ look_player(player_t *p)
 }
 
 /* shoot and kill other players */
-void
+static void
 shoot_player(player_t *p, int target_id)
 {
 	room_t *r;
@@ -543,7 +542,7 @@ shoot_player(player_t *p, int target_id)
 void regen_obj(int);
 
 /* check for last-man-standing win condition. */
-void
+static void
 check_last_person_alive(void)
 {
 	if (wumpus.players.count == 1)
@@ -653,7 +652,7 @@ regen_obj(int obj)
 }
 
 /* handles movement requests from players */
-void
+static void
 move_player(player_t *p, int id)
 {
 	node_t *n;
@@ -765,7 +764,7 @@ move_player(player_t *p, int id)
 
 /* ------------------------------ -*-atheme-*- code */
 
-void cmd_start(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (wumpus.running || wumpus.starting)
 	{
@@ -784,7 +783,7 @@ void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 /* reference tuple for the above code: cmd_start */
 command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 0, cmd_start };
 
-void cmd_join(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p;
 
@@ -802,7 +801,7 @@ void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, 0, cmd_join };
 
-void cmd_look(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 
@@ -823,7 +822,7 @@ void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_look = { "LOOK", "View surroundings.", AC_NONE, 0, cmd_look };
 
-void cmd_move(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 	char *id = parv[0];
@@ -851,7 +850,7 @@ void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, 1, cmd_move };
 
-void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 	char *id = parv[0];
@@ -879,7 +878,7 @@ void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, 1, cmd_shoot };
 
-void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
 {
 	player_t *p = find_player(si->su);
 
@@ -902,7 +901,7 @@ void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, 0, cmd_resign };
 
-void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (wumpus.running)
 	{
@@ -917,14 +916,14 @@ void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 
 command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset };
 
-void cmd_help(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
 	command_help(si, &wumpus.cmdtree);
 }
 
 command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help };
 
-void cmd_who(sourceinfo_t *si, int parc, char *parv[])
+static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 
@@ -941,7 +940,7 @@ void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, 0, cmd_who };
 
 /* removes quitting players */
-void
+static void
 user_deleted(user_t *u)
 {
 	player_t *p;
@@ -953,7 +952,7 @@ user_deleted(user_t *u)
 	}
 }
 
-void
+static void
 _handler(sourceinfo_t *si, int parc, char *parv[])
 {
         char *cmd;
@@ -981,7 +980,7 @@ _handler(sourceinfo_t *si, int parc, char *parv[])
         command_exec_split(wumpus.svs, si, cmd, text, &wumpus.cmdtree);
 }
 
-void
+static void
 burst_the_wumpus(void *unused)
 {
 	if (!wumpus.svs)
