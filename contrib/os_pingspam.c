@@ -150,7 +150,7 @@ void pingspam(user_t *u)
 	LIST_FOREACH(n, me.me->userlist.head)
 	{
 		sptr = n->data;
-		msg(sptr->nick, u->nick, "\001PING %d%s\001",
+		msg(sptr->nick, u->nick, "\001PING %ld%s\001",
 				time(NULL),
 				phrases[rand() % sizeof(phrases) / sizeof(char*)]
 		   );
