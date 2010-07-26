@@ -246,6 +246,13 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char buf[BUFSIZE];
 
+	/* make sure they're logged in */
+	if (!si->smu)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
 	if (!subject || !story || !importance)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "POST");
