@@ -232,6 +232,11 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
 
 	LIST_FOREACH(n, hs_offeredlist.head)
 	{
