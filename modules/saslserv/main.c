@@ -334,7 +334,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			else
 				cloak = "*";
 
-			svslogin_sts(p->uid, "*", "*", cloak, mu->name);
+			if (!(mu->flags & MU_WAITAUTH))
+				svslogin_sts(p->uid, "*", "*", cloak, mu->name);
 			sasl_sts(p->uid, 'D', "S");
 		}
 		else
