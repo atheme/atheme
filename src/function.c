@@ -395,7 +395,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
 	char *email, *date = NULL;
-	char cmdbuf[512], timebuf[256], to[128], from[128], subject[128];
+	char timebuf[256], to[128], from[128], subject[128];
 	FILE *out;
 	time_t t;
 	struct tm tm;
@@ -490,7 +490,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		strlcat(subject, "New memo", sizeof subject);
 	
 	/* now set up the email */
-	snprintf(cmdbuf, 512, "%s %s", me.mta, email);
 	if (pipe(pipfds) < 0)
 		return 0;
 	switch (pid = fork())
@@ -501,7 +500,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 			connection_close_all_fds();
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
-			execl("/bin/sh", "sh", "-c", cmdbuf, NULL);
+			execl(me.mta, me.mta, "-t", NULL);
 			_exit(255);
 	}
 	close(pipfds[0]);
