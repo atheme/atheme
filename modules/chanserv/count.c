@@ -104,10 +104,10 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 			othercnt++;
 	}
 	if (ca_hop == ca_vop)
-		command_success_nodata(si, _("%s: VOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d"),
+		command_success_nodata(si, _("%s: VOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"),
 				chan, vopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	else
-		command_success_nodata(si, _("%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d"),
+		command_success_nodata(si, _("%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"),
 				chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; chanacs_flags[i].flag; i++)
