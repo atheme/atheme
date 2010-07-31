@@ -91,6 +91,19 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, &is_helptree);
 }
 
+static char underscores_to_spaces(char *z)
+{
+	char *s = z;
+
+	do 
+	{
+		if(*z == '_')
+			*z = ' ';
+	} while(*z++);
+
+	return *s;
+}
+
 static void write_infodb(database_handle_t *db)
 {
 	node_t *n;
@@ -178,10 +191,15 @@ static void display_info(hook_user_nick_t *data)
 		LIST_FOREACH_PREV(n, logon_info.tail)
 		{
 			l = n->data;
+			
+			char *y = l->subject;
+			char *z = y;
+			*z = underscores_to_spaces(z);
+
 			tm = *localtime(&l->info_ts);
 			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
-				l->subject, l->nick, dBuf);
+				y, l->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", l->story);
 			count++;
 
@@ -219,10 +237,15 @@ static void display_oper_info(user_t *u)
 		LIST_FOREACH_PREV(n, operlogon_info.tail)
 		{
 			o = n->data;
+			
+			char *y = o->subject;
+			char *z = y;
+			*z = underscores_to_spaces(z);
+
 			tm = *localtime(&o->info_ts);
 			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
-				o->subject, o->nick, dBuf);
+				y, o->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", o->story);
 			count++;
 
@@ -267,22 +290,26 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Importance must be a digit between 0 and 4"));
 		return;
 	}
+	
+	char *y = subject;
+	char *z = y;
+	*z = underscores_to_spaces(z);
 
 	if (imp == 4)
 	{
-		snprintf(buf, sizeof buf, "[CRITICAL NETWORK NOTICE] %s - [%s] %s", get_source_name(si), subject, story);
+		snprintf(buf, sizeof buf, "[CRITICAL NETWORK NOTICE] %s - [%s] %s", get_source_name(si), y, story);
 		msg_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
-		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
+		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
 		return;
 	}
 
 	if (imp == 2)
 	{
-		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
+		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), y, story);
 		notice_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
-		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
+		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
 		return;
 	}
 
@@ -311,11 +338,11 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Added entry to logon info"));
-	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, subject, story);
+	logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
 
 	if (imp == 3)
 	{
-		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), subject, story);
+		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), y, story);
 		notice_global_sts(infoserv->me, "*", buf);
 	}
 
@@ -435,11 +462,14 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		x++;
 
+		char *y = l->subject;
+		char *z = y;
+		*z = underscores_to_spaces(z);
 
 		tm = *localtime(&l->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
-			x, l->subject, l->nick, dBuf, l->story);
+			x, y, l->nick, dBuf, l->story);
 	}
 
 	command_success_nodata(si, _("End of list."));
@@ -460,11 +490,14 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 		o = n->data;
 		x++;
 
+		char *y = o->subject;
+		char *z = y;
+		*z = underscores_to_spaces(z);
 
 		tm = *localtime(&o->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
-			x, o->subject, o->nick, dBuf, o->story);
+			x, y, o->nick, dBuf, o->story);
 	}
 
 	command_success_nodata(si, _("End of list."));

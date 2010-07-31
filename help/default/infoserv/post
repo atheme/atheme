@@ -4,6 +4,8 @@ POST allows you to post one-time messages to all users (that will be sent when
 you run the command) or messages that all users will see upon connect or
 messages only opers will see when they oper-up.
 
+Underscores ("_") in the subject will be replaced by spaces.
+
 IMPORTANCE:
     Importance defines the type of message that will be sent.
 
@@ -20,3 +22,4 @@ Syntax: POST <importance> <subject> <message>
 
 Example:
     /msg &nick& POST 2 Info1 Some important information for users.
+    /msg &nick& POST 1 Multi_Word_Subject Some more information.
