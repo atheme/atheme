@@ -31,6 +31,9 @@ code
 - the flags code is now extendable by modules.
 other
 - added an anope 1.9.2 flatfile DB to OpenSEX DB conversion script.
+- mail sending has been changed, likely causing serverinfo::mta scripts to
+  break. The command is now passed "-t" rather than the email address and
+  the shell is no longer used.
 
 Atheme Services 5.2 Release Notes
 =================================
