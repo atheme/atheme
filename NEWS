@@ -7,25 +7,27 @@ opensex
   convert your flatfile database to opensex and exit.
 - converted many modules that use external databases to using opensex.
 chanserv
-- new module: chanserv/successor_acl.  this adds a +S channel acl flag which will
-  weight a user as a successor.
+- new module: chanserv/successor_acl.  this adds a +S channel acl flag which
+  will weight a user as a successor.
 helpserv
-- new service that allows users to request oper help in different ways. Currently
-  either via a ticket system or by "pinging" the opers with a request for help.
+- new service that allows users to request oper help in different ways.
+  Currently either via a ticket system or by "pinging" the opers with a
+  request for help.
 infoserv
-- oper-only message support. You can now give messages an importance where they will only
-  be sent to opers upon oper-up.
-- in infoserv message subjects, underscores will now be replaced with spaces so you can
-  have multi-word subjects.
+- oper-only message support. You can now give messages an importance where
+  they will only be sent to opers upon oper-up.
+- in infoserv message subjects, underscores will now be replaced with spaces
+  so you can have multi-word subjects.
 xmlrpc
-- the legacy xmlrpc/account, xmlrpc/channel and xmlrpc/memo modules have been removed.
-  These have been deprecated for over 4 years and you should be using xmlrpc/main and
-  atheme.command for all your xmlrpc uses.
+- the legacy xmlrpc/account, xmlrpc/channel and xmlrpc/memo modules have been
+  removed. These have been deprecated for over 4 years and you should be
+  using xmlrpc/main and atheme.command for all your xmlrpc uses.
 code
 - default values in config options are now supported. This is particularly
   useful in modules and cleans up the config code a bit.
 - many bugfixes and compile warning fixes.
-- the flags code has been cleaned up to assume that there is only one flags table.
+- the flags code has been cleaned up to assume that there is only one flags
+  table.
 - the flags code is now extendable by modules.
 other
 - added an anope 1.9.2 flatfile DB to OpenSEX DB conversion script.
