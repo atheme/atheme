@@ -67,6 +67,9 @@ Permissions:
     +f - Enables modification of channel access lists.
     +t - Enables use of the topic and topicappend commands.
     +A - Enables viewing of channel access lists.
+#if module chanserv/successor_acl
+    +S - Marks the user as a successor.
+#endif
     +F - Grants full founder access.
     +b - Enables automatic kickban.
 
