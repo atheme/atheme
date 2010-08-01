@@ -267,23 +267,23 @@ loadmodule "modules/nickserv/vhost";
  * QUIET command (+q support)			modules/chanserv/quiet
  * Channel takeover recovery (RECOVER command)	modules/chanserv/recover
  * REGISTER command				modules/chanserv/register
- * SET command (required for SET commands below)	modules/chanserv/set_core
- * SET EMAIL command			modules/chanserv/set_email
- * SET ENTRYMSG command			modules/chanserv/set_entrymsg
- * SET FANTASY command			modules/chanserv/set_fantasy
- * SET FOUNDER command			modules/chanserv/set_founder
+ * SET command (required for SET commands)      modules/chanserv/set_core
+ * SET EMAIL command	                        modules/chanserv/set_email
+ * SET ENTRYMSG command	                        modules/chanserv/set_entrymsg
+ * SET FANTASY command	                        modules/chanserv/set_fantasy
+ * SET FOUNDER command	                        modules/chanserv/set_founder
  * SET GAMESERV command				modules/chanserv/set_gameserv
- * SET GUARD command			modules/chanserv/set_guard
- * SET KEEPTOPIC command		modules/chanserv/set_keeptopic
- * SET LIMITFLAGS command			modules/chanserv/set_limitflags
- * SET MLOCK command			modules/chanserv/set_mlock
- * Channel info hiding (SET PRIVATE command)	modules/chanserv/set_private
- * SET PROPERTY command			modules/chanserv/set_property
- * SET RESTRICTED command		modules/chanserv/set_restricted
- * SET SECURE command			modules/chanserv/set_secure
- * SET TOPICLOCK command		modules/chanserv/set_topiclock
- * SET URL command				modules/chanserv/set_url
- * SET VERBOSE command			modules/chanserv/set_verbose
+ * SET GUARD command	                        modules/chanserv/set_guard
+ * SET KEEPTOPIC command                        modules/chanserv/set_keeptopic
+ * SET LIMITFLAGS command                       modules/chanserv/set_limitflags
+ * SET MLOCK command                            modules/chanserv/set_mlock
+ * Channel info hiding (SET PRIVATE command)    modules/chanserv/set_private
+ * SET PROPERTY command                         modules/chanserv/set_property
+ * SET RESTRICTED command                       modules/chanserv/set_restricted
+ * SET SECURE command                           modules/chanserv/set_secure
+ * SET TOPICLOCK command                        modules/chanserv/set_topiclock
+ * SET URL command                              modules/chanserv/set_url
+ * SET VERBOSE command                          modules/chanserv/set_verbose
  * STATUS command				modules/chanserv/status
  * Channel metadata viewer (TAXONOMY command)	modules/chanserv/taxonomy
  * TEMPLATE command				modules/chanserv/template
