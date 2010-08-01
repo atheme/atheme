@@ -19,7 +19,7 @@ struct flags_table
 E unsigned int ca_all;
 E struct flags_table chanacs_flags[255];
 
-E void flags_associate(unsigned char flag, unsigned int value, unsigned int restrictflags, bool def);
+E unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def);
 E void flags_clear(unsigned char flag);
 E unsigned int flags_find_slot(void);
 

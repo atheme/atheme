@@ -50,6 +50,38 @@ struct flags_table chanacs_flags[255] = {
 	['b'] = {CA_AKICK, 0, false},
 };
 
+unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def)
+{
+	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)
+		return 0;
+
+	chanacs_flags[flag].value = flags_find_slot();
+	chanacs_flags[flag].restrictflags = restrictflags;
+	chanacs_flags[flag].def = def;
+
+	return chanacs_flags[flag].value;
+}
+
+void flags_clear(unsigned char flag)
+{
+	/* 0xFFFFFFFF = orphaned flag */
+	chanacs_flags[flag].value = 0xFFFFFFFF;
+	chanacs_flags[flag].restrictflags = 0;
+	chanacs_flags[flag].def = false;
+}
+
+unsigned int flags_find_slot(void)
+{
+	unsigned int all_flags, flag, i;
+
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+		all_flags |= chanacs_flags[i].value;
+
+	for (flag = 1; flag && (all_flags & flag); flag <<= 1);
+
+	return flag;
+}
+
 /* Construct bitmasks to be added and removed
  * Postcondition *addflags & *removeflags == 0
  * -- jilles */
