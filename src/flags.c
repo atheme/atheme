@@ -59,6 +59,8 @@ unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, boo
 	chanacs_flags[flag].restrictflags = restrictflags;
 	chanacs_flags[flag].def = def;
 
+	update_chanacs_flags();
+
 	return chanacs_flags[flag].value;
 }
 
