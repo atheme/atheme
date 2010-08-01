@@ -132,6 +132,17 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	if (fl & (CA_AUTOOP | CA_AUTOHALFOP | CA_AUTOVOICE))
+	{
+		if (mc->flags & MC_NOOP)
+			command_success_nodata(si, _("The \2%s\2 flag is set for \2%s\2, therefore no status will be given."),
+					"NOOP",
+					mc->name);
+		else if (mu != NULL && mu->flags & MU_NOOP)
+			command_success_nodata(si, _("The \2%s\2 flag is set for \2%s\2, therefore no status will be given."),
+					"NOOP",
+					mu->name);
+	}
 	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
 		command_success_nodata(si, _("+r exempts from +b."));
 	else if (fl == 0)
