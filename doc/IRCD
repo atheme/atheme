@@ -83,7 +83,8 @@ modern one.
 inspircd
 --------
 
-You should use inspircd11 for inspircd 1.1.x and inspircd12 for inspircd 1.2.x.
+You should use inspircd11 for inspircd 1.1.x and inspircd12 for inspircd 1.2.x
+and inspircd 2.0.x.
 InspIRCd 1.0.x support (inspircd10) has been dropped.
 
 You need <uline> tags for services on all servers on the network.
@@ -95,11 +96,16 @@ loaded at all times on your inspircd servers if you wish to use this version of
 atheme. If the servers are protocol 1102 or newer, m_globops.so is not
 required, although it will be used if loaded.
 
+Using the m_invisible module on inspircd with Atheme connected is an unsupported
+condition and will result in your Atheme installation being "tainted".
+
+Currently, using m_customprefix from inspircd 2.0.x for channel prefixes +q, +a
+and +h is broken. If you have these prefixes enabled with m_customprefix, Atheme
+will not see them and not set them on users. Please use m_chanprotect and
+m_halfop instead.
+
 For inspircd12, jupes will use SIDs numerically following services's SID, make
 sure to leave plenty of space.
-
-The inspircd support is developed in cooperation with the inspircd
-developers.
 
 ircnet
 ------
