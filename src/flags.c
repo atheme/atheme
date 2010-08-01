@@ -268,7 +268,12 @@ unsigned int allow_flags(mychan_t *mc, unsigned int theirflags)
 
 void update_chanacs_flags(void)
 {
-	ca_all = CA_ALL_ALL;
+	unsigned int i;
+
+	ca_all = 0;
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+		ca_all |= chanacs_flags[i].value;	
+
 	if (!ircd->uses_halfops)
 		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
 	if (!ircd->uses_protect)
