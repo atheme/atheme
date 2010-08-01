@@ -275,7 +275,7 @@ void update_chanacs_flags(void)
 	{
 		ca_all |= chanacs_flags[i].value;	
 		if (chanacs_flags[i].def == true)
-			ca_all_enable |= channel_flags[i].value;
+			ca_all_enable |= chanacs_flags[i].value;
 	}
 
 	if (!ircd->uses_halfops)
