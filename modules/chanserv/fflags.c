@@ -65,7 +65,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 	{
-		flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+		flags_make_bitmasks(flagstr, &addflags, &removeflags);
 		if (addflags == 0 && removeflags == 0)
 		{
 			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP FLAGS for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
@@ -110,7 +110,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), tmu->name, mc->name);
 			return;
 		}
 	}
@@ -124,7 +124,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);
 			return;
 		}
 	}
@@ -134,7 +134,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nochange, _("Channel access to \2%s\2 for \2%s\2 unchanged."), channel, target);
 		return;
 	}
-	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
+	flagstr = bitmask_to_flags2(addflags, removeflags);
 	wallops("\2%s\2 is forcing flags change \2%s\2 on \2%s\2 in \2%s\2.", get_oper_name(si), flagstr, target, mc->name);
 	command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);

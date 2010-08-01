@@ -63,7 +63,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		{
 			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,\n"
 						"or if there are no eligible channel successors.\n"
-						"Activity is defined as a user with one of %s being on the channel."), (chansvs.expiry / 86400), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0, chanacs_flags));
+						"Activity is defined as a user with one of %s being on the channel."), (chansvs.expiry / 86400), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0));
 		}
 		else
 		{

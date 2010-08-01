@@ -65,7 +65,7 @@ opensex_db_save(database_handle_t *db)
 	db_commit_row(db);
 
 	db_start_row(db, "CF");
-	db_write_word(db, bitmask_to_flags(ca_all, chanacs_flags));
+	db_write_word(db, bitmask_to_flags(ca_all));
 	db_commit_row(db);
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
@@ -187,7 +187,7 @@ opensex_db_save(database_handle_t *db)
 			db_start_row(db, "CA");
 			db_write_word(db, ca->mychan->name);
 			db_write_word(db, ca->myuser ? ca->myuser->name : ca->host);
-			db_write_word(db, bitmask_to_flags(ca->level, chanacs_flags));
+			db_write_word(db, bitmask_to_flags(ca->level));
 			db_write_time(db, ca->tmodified);
 			db_commit_row(db);
 
@@ -383,14 +383,14 @@ static void opensex_h_cf(database_handle_t *db, const char *type)
 	unsigned int their_ca_all;
 	const char *flags = db_sread_word(db);
 
-	their_ca_all = flags_to_bitmask(flags, chanacs_flags, 0);
+	their_ca_all = flags_to_bitmask(flags, 0);
 	if (their_ca_all & ~ca_all)
 	{
-		slog(LG_ERROR, "db-h-cf: losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
+		slog(LG_ERROR, "db-h-cf: losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all));
 	}
 	if (~their_ca_all & ca_all)
 	{
-		slog(LG_ERROR, "db-h-cf: making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+		slog(LG_ERROR, "db-h-cf: making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all));
 	}
 }
 
@@ -674,7 +674,7 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 
 	chan = db_sread_word(db);
 	user = db_sread_word(db);
-	flags = flags_to_bitmask(db_sread_word(db), chanacs_flags, 0);
+	flags = flags_to_bitmask(db_sread_word(db), 0);
 	tmod = db_sread_time(db);
 
 	mc = mychan_find(chan);

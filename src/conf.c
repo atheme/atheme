@@ -662,7 +662,7 @@ static int c_ci_vop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_vop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+	chansvs.ca_vop = flags_to_bitmask(ce->ce_vardata, 0);
 
 	return 0;
 }
@@ -675,7 +675,7 @@ static int c_ci_hop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_hop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+	chansvs.ca_hop = flags_to_bitmask(ce->ce_vardata, 0);
 
 	return 0;
 }
@@ -688,7 +688,7 @@ static int c_ci_aop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_aop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+	chansvs.ca_aop = flags_to_bitmask(ce->ce_vardata, 0);
 
 	return 0;
 }
@@ -701,7 +701,7 @@ static int c_ci_sop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, 0);
 
 	return 0;
 }

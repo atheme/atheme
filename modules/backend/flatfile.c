@@ -111,14 +111,14 @@ static void flatfile_db_load(void)
 				slog(LG_INFO, "db_load(): missing param to CF");
 			else
 			{
-				their_ca_all = flags_to_bitmask(s, chanacs_flags, 0);
+				their_ca_all = flags_to_bitmask(s, 0);
 				if (their_ca_all & ~ca_all)
 				{
-					slog(LG_ERROR, "db_load(): losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
+					slog(LG_ERROR, "db_load(): losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all));
 				}
 				if (~their_ca_all & ca_all)
 				{
-					slog(LG_ERROR, "db_load(): making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+					slog(LG_ERROR, "db_load(): making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all));
 				}
 			}
 		}
@@ -527,7 +527,7 @@ static void flatfile_db_load(void)
 
 				if (versn >= DB_ATHEME)
 				{
-					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
+					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), 0);
 					const char *tsstr;
 					time_t ts = 0;
 
@@ -556,7 +556,7 @@ static void flatfile_db_load(void)
 					if (their_ca_all == 0)
 					{
 						their_ca_all = CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_AKICK;
-						slog(LG_INFO, "db_load(): old database, making up flags %s", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+						slog(LG_INFO, "db_load(): old database, making up flags %s", bitmask_to_flags(~their_ca_all & ca_all));
 					}
 
 					/* Grant +h if they have +o,

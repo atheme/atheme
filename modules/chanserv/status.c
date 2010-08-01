@@ -72,7 +72,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("You are banned from \2%s\2."), mc->name);
 		else if (flags != 0)
 		{
-			command_success_nodata(si, _("You have access flags \2%s\2 on \2%s\2."), bitmask_to_flags(flags, chanacs_flags), mc->name);
+			command_success_nodata(si, _("You have access flags \2%s\2 on \2%s\2."), bitmask_to_flags(flags), mc->name);
 		}
 		else
 			command_success_nodata(si, _("You have no special access to \2%s\2."), mc->name);

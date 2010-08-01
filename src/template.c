@@ -65,7 +65,7 @@ unsigned int get_template_flags(mychan_t *mc, const char *name)
 		{
 			d = getitem(md->value, name);
 			if (d != NULL)
-				return flags_to_bitmask(d, chanacs_flags, 0);
+				return flags_to_bitmask(d, 0);
 		}
 	}
 	if (*name != '\0' && !strcasecmp(name + 1, "op"))

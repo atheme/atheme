@@ -108,7 +108,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 			fl |= ca->level;
 			command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
-				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, mu->name);
+				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, mu->name);
 			if (ca->level & CA_AKICK)
 			{
 				md = metadata_find(ca, "reason");
@@ -123,7 +123,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		fl |= ca->level;
 		command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2.",
-				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, ca->host);
+				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->host);
 		if (ca->level & CA_AKICK)
 		{
 			md = metadata_find(ca, "reason");

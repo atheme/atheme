@@ -110,7 +110,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s: VOP: %d, HOP: %d, AOP: %d, SOP: %d, AKick: %d, Other: %d"),
 				chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	snprintf(str, sizeof str, "%s: ", chan);
-	for (i = 0; chanacs_flags[i].flag; i++)
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
 	{
 		if (!(ca_all & chanacs_flags[i].value))
 			continue;
@@ -123,7 +123,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 				othercnt++;
 		}
 		snprintf(str + strlen(str), sizeof str - strlen(str),
-				"%c:%d ", chanacs_flags[i].flag, othercnt);
+				"%c:%d ", (char) i, othercnt);
 	}
 	command_success_nodata(si, "%s", str);
 	if (operoverride)

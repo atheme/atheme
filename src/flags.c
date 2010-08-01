@@ -2,7 +2,7 @@
  * atheme-services: A collection of minimalist IRC services   
  * flags.c: Functions to convert a flags table into a bitmask.
  *
- * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)           
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -31,30 +31,29 @@ unsigned int ca_all = CA_ALL_ALL;
 static char flags_buf[128];
 
 struct flags_table chanacs_flags[] = {
-	{'v', CA_VOICE},
-	{'V', CA_AUTOVOICE},
-	{'o', CA_OP},
-	{'O', CA_AUTOOP},
-	{'t', CA_TOPIC},
-	{'s', CA_SET},
-	{'r', CA_REMOVE},
-	{'i', CA_INVITE},
-	{'R', CA_RECOVER},
-	{'f', CA_FLAGS},
-	{'h', CA_HALFOP},
-	{'H', CA_AUTOHALFOP},
-	{'A', CA_ACLVIEW},
-	{'F', CA_FOUNDER},
-	{'q', CA_USEOWNER},
-	{'a', CA_USEPROTECT},
-	{'b', CA_AKICK},
-	{0, 0}
+	['v'] = {CA_VOICE, 0, true},
+	['V'] = {CA_AUTOVOICE, 0, true},
+	['o'] = {CA_OP, 0, true},
+	['O'] = {CA_AUTOOP, 0, true},
+	['t'] = {CA_TOPIC, 0, true},
+	['s'] = {CA_SET, 0, true},
+	['r'] = {CA_REMOVE, 0, true},
+	['i'] = {CA_INVITE, 0, true},
+	['R'] = {CA_RECOVER, 0, true},
+	['f'] = {CA_FLAGS, 0, true},
+	['h'] = {CA_HALFOP, 0, true},
+	['H'] = {CA_AUTOHALFOP, 0, true},
+	['A'] = {CA_ACLVIEW, 0, true},
+	['F'] = {CA_FOUNDER, 0, false},
+	['q'] = {CA_USEOWNER, 0, true},
+	['a'] = {CA_USEPROTECT, 0, true},
+	['b'] = {CA_AKICK, 0, false},
 };
 
 /* Construct bitmasks to be added and removed
  * Postcondition *addflags & *removeflags == 0
  * -- jilles */
-void flags_make_bitmasks(const char *string, struct flags_table table[], unsigned int *addflags, unsigned int *removeflags)
+void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags)
 {
 	int status = FLAGS_ADD;
 	short i = 0;
@@ -81,18 +80,9 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 		  case '*':
 			  if (status == FLAGS_ADD)
 			  {
-				  /* If this is chanacs_flags[], remove the ban flag. */
-				  if (table == chanacs_flags)
-				  {
-					  *addflags |= CA_ALLPRIVS & ~CA_FOUNDER;
-					  *addflags &= ~CA_AKICK;
-					  *removeflags |= CA_AKICK;
-				  }
-				  else
-				  {
-					  *addflags = 0xFFFFFFFF;
-					  *removeflags = 0;
-				  }
+				  *addflags |= CA_ALLPRIVS & ~CA_FOUNDER;
+				  *addflags &= ~CA_AKICK;
+				  *removeflags |= CA_AKICK;
 			  }
 			  else if (status == FLAGS_DEL)
 			  {
@@ -102,35 +92,31 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 			  break;
 
 		  default:
-			  for (i = 0; table[i].flag; i++)
-				  if (table[i].flag == *string)
+			  if (chanacs_flags[*string].value)
+			  {
+				  if (status == FLAGS_ADD)
 				  {
-					  if (status == FLAGS_ADD)
-					  {
-						  *addflags |= table[i].value;
-						  *removeflags &= ~table[i].value;
-					  }
-					  else if (status == FLAGS_DEL)
-					  {
-						  *addflags &= ~table[i].value;
-						  *removeflags |= table[i].value;
-					  }
+					  *addflags |= chanacs_flags[*string].value;
+					  *removeflags &= ~chanacs_flags[*string].value;
 				  }
+				  else if (status == FLAGS_DEL)
+				  {
+					  *addflags &= ~chanacs_flags[*string].value;
+					  *removeflags |= chanacs_flags[*string].value;
+				  }
+			  }
 		}
 
 		string++;
 	}
 
-	if (table == chanacs_flags)
-	{
-		*addflags &= ca_all;
-		*removeflags &= ca_all;
-	}
+	*addflags &= ca_all;
+	*removeflags &= ca_all;
 
 	return;
 }
 
-unsigned int flags_to_bitmask(const char *string, struct flags_table table[], unsigned int flags)
+unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 {
 	int bitmask = (flags ? flags : 0x0);
 	int status = FLAGS_ADD;
@@ -155,26 +141,19 @@ unsigned int flags_to_bitmask(const char *string, struct flags_table table[], un
 
 		  case '*':
 			  if (status == FLAGS_ADD)
-			  {
-				  /* If this is chanacs_flags[], do privs only */
-				  if (table == chanacs_flags)
-					  bitmask |= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
-				  else
-					  bitmask = 0xFFFFFFFF;
-			  }
+				  bitmask |= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
 			  else if (status == FLAGS_DEL)
 				  bitmask = 0;
 			  break;
 
 		  default:
-			  for (i = 0; table[i].flag; i++)
-				  if (table[i].flag == *string)
-				  {
-					  if (status == FLAGS_ADD)
-						  bitmask |= table[i].value;
-					  else if (status == FLAGS_DEL)
-						  bitmask &= ~table[i].value;
-				  }
+			  if (chanacs_flags[*string].value)
+			  {
+				  if (status == FLAGS_ADD)
+					  bitmask |= chanacs_flags[*string].value;
+				  else if (status == FLAGS_DEL)
+					  bitmask &= ~chanacs_flags[*string].value;
+			  }
 		}
 
 		string++;
@@ -183,25 +162,25 @@ unsigned int flags_to_bitmask(const char *string, struct flags_table table[], un
 	return bitmask;
 }
 
-char *bitmask_to_flags(unsigned int flags, struct flags_table table[])
+char *bitmask_to_flags(unsigned int flags)
 {
 	char *bptr;
-	short i = 0;
+	unsigned char i = 0;
 
 	bptr = flags_buf;
 
 	*bptr++ = '+';
 
-	for (i = 0; table[i].flag; i++)
-		if (table[i].value & flags)
-			*bptr++ = table[i].flag;
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+		if (chanacs_flags[i].value & flags)
+			*bptr++ = (char) i;
 
 	*bptr++ = '\0';
 
 	return flags_buf;
 }
 
-char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags, struct flags_table table[])
+char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 {
 	char *bptr;
 	short i = 0;
@@ -211,16 +190,16 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags, struct 
 	if (removeflags)
 	{
 		*bptr++ = '-';
-		for (i = 0; table[i].flag; i++)
-			if (table[i].value & removeflags)
-				*bptr++ = table[i].flag;
+		for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+			if (chanacs_flags[i].value & removeflags)
+				*bptr++ = (char) i;
 	}
 	if (addflags)
 	{
 		*bptr++ = '+';
-		for (i = 0; table[i].flag; i++)
-			if (table[i].value & addflags)
-				*bptr++ = table[i].flag;
+		for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+			if (chanacs_flags[i].value & addflags)
+				*bptr++ = (char) i;
 	}
 
 	*bptr++ = '\0';

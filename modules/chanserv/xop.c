@@ -608,7 +608,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (newlevel == ca->level)
 			continue;
 		changes++;
-		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
+		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel);
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);

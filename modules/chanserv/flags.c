@@ -66,7 +66,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			{
 				ss[r - q] = '\0';
 			}
-			if (level == flags_to_bitmask(ss, chanacs_flags, 0))
+			if (level == flags_to_bitmask(ss, 0))
 			{
 				strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
@@ -146,10 +146,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			str1 = get_template_name(mc, ca->level);
 			str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
 			if (str1 != NULL)
-				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), str1,
+				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level), str1,
 					str2);
 			else
-				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags),
+				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level),
 					str2);
 			i++;
 		}
@@ -193,7 +193,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (ca != NULL)
 			{
-				str1 = bitmask_to_flags2(ca->level, 0, chanacs_flags);
+				str1 = bitmask_to_flags2(ca->level, 0);
 				command_success_string(si, str1, _("Flags for \2%s\2 in \2%s\2 are \2%s\2."),
 						target, channel,
 						str1);
@@ -230,7 +230,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 		{
-			flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+			flags_make_bitmasks(flagstr, &addflags, &removeflags);
 			if (addflags == 0 && removeflags == 0)
 			{
 				command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP FLAGS for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
@@ -311,7 +311,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
-				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), tmu->name, mc->name);
 				chanacs_close(ca);
 				return;
 			}
@@ -333,7 +333,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
-		                command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+		                command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);
 				chanacs_close(ca);
 				return;
 			}
@@ -345,7 +345,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("Channel access to \2%s\2 for \2%s\2 unchanged."), channel, target);
 			return;
 		}
-		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
+		flagstr = bitmask_to_flags2(addflags, removeflags);
 		command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);

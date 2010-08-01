@@ -132,7 +132,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->level & CA_AKICK)
 					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), uname, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), uname, bitmask_to_flags(ca->level), mc->name);
 				return;
 			}
 
@@ -172,7 +172,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->level & CA_AKICK)
 					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mu->name, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mu->name, bitmask_to_flags(ca->level), mc->name);
 				return;
 			}
 
