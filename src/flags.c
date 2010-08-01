@@ -27,6 +27,7 @@
 #define FLAGS_DEL       0x2
 
 unsigned int ca_all = CA_ALL_ALL;
+unsigned int ca_all_enable = CA_ALL_ALL;
 
 static char flags_buf[128];
 
@@ -114,8 +115,7 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 		  case '*':
 			  if (status == FLAGS_ADD)
 			  {
-				  *addflags |= CA_ALLPRIVS & ~CA_FOUNDER;
-				  *addflags &= ~CA_AKICK;
+				  *addflags |= ca_all_enable;
 				  *removeflags |= CA_AKICK;
 			  }
 			  else if (status == FLAGS_DEL)
@@ -175,7 +175,7 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 
 		  case '*':
 			  if (status == FLAGS_ADD)
-				  bitmask |= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
+				  bitmask |= CA_ALLPRIVS & ca_all_enable & ~CA_FOUNDER;
 			  else if (status == FLAGS_DEL)
 				  bitmask = 0;
 			  break;
@@ -270,9 +270,13 @@ void update_chanacs_flags(void)
 {
 	unsigned int i;
 
-	ca_all = 0;
+	ca_all = ca_all_enable = 0;
 	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+	{
 		ca_all |= chanacs_flags[i].value;	
+		if (chanacs_flags[i].def == true)
+			ca_all_enable |= channel_flags[i].value;
+	}
 
 	if (!ircd->uses_halfops)
 		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
