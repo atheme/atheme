@@ -285,6 +285,7 @@ loadmodule "modules/nickserv/vhost";
  * SET URL command                              modules/chanserv/set_url
  * SET VERBOSE command                          modules/chanserv/set_verbose
  * STATUS command				modules/chanserv/status
+ * Named Successor ACL flag                     modules/chanserv/successor_acl
  * Channel metadata viewer (TAXONOMY command)	modules/chanserv/taxonomy
  * TEMPLATE command				modules/chanserv/template
  * TOPIC/TOPICAPPEND commands			modules/chanserv/topic
@@ -341,6 +342,7 @@ loadmodule "modules/chanserv/set_topiclock";
 loadmodule "modules/chanserv/set_url";
 loadmodule "modules/chanserv/set_verbose";
 loadmodule "modules/chanserv/status";
+#loadmodule "modules/chanserv/successor_acl";
 loadmodule "modules/chanserv/taxonomy";
 loadmodule "modules/chanserv/template";
 loadmodule "modules/chanserv/topic";
