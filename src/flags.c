@@ -75,7 +75,8 @@ void flags_clear(unsigned char flag)
 
 unsigned int flags_find_slot(void)
 {
-	unsigned int all_flags, flag, i;
+	unsigned int flag, i;
+	unsigned int all_flags = 0;
 
 	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
 		all_flags |= chanacs_flags[i].value;
@@ -91,7 +92,6 @@ unsigned int flags_find_slot(void)
 void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags)
 {
 	int status = FLAGS_ADD;
-	short i = 0;
 
 	*addflags = *removeflags = 0;
 	while (*string)
@@ -126,17 +126,17 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 			  break;
 
 		  default:
-			  if (chanacs_flags[*string].value)
+			  if (chanacs_flags[(unsigned int)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
 				  {
-					  *addflags |= chanacs_flags[*string].value;
-					  *removeflags &= ~chanacs_flags[*string].value;
+					  *addflags |= chanacs_flags[(unsigned int)*string].value;
+					  *removeflags &= ~chanacs_flags[(unsigned int)*string].value;
 				  }
 				  else if (status == FLAGS_DEL)
 				  {
-					  *addflags &= ~chanacs_flags[*string].value;
-					  *removeflags |= chanacs_flags[*string].value;
+					  *addflags &= ~chanacs_flags[(unsigned int)*string].value;
+					  *removeflags |= chanacs_flags[(unsigned int)*string].value;
 				  }
 			  }
 		}
@@ -154,7 +154,6 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 {
 	int bitmask = (flags ? flags : 0x0);
 	int status = FLAGS_ADD;
-	short i = 0;
 
 	while (*string)
 	{
@@ -181,12 +180,12 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 			  break;
 
 		  default:
-			  if (chanacs_flags[*string].value)
+			  if (chanacs_flags[(unsigned int)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
-					  bitmask |= chanacs_flags[*string].value;
+					  bitmask |= chanacs_flags[(unsigned int)*string].value;
 				  else if (status == FLAGS_DEL)
-					  bitmask &= ~chanacs_flags[*string].value;
+					  bitmask &= ~chanacs_flags[(unsigned int)*string].value;
 			  }
 		}
 
@@ -217,7 +216,7 @@ char *bitmask_to_flags(unsigned int flags)
 char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 {
 	char *bptr;
-	short i = 0;
+	unsigned int i = 0;
 
 	bptr = flags_buf;
 

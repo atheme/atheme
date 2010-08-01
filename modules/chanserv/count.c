@@ -46,7 +46,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
 	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	int othercnt = 0;
-	int i;
+	unsigned int i;
 	node_t *n;
 	char str[512];
 	int operoverride = 0;
