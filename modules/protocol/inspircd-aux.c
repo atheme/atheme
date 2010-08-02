@@ -1370,6 +1370,15 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			ircd->uses_owner = true;
 			ircd->uses_protect = true;
 		}
+		if (strstr(parv[1], "m_customprefix.so"))
+		{
+			/* Custom prefix...prefixes can be...custom, but most
+			 * people are using it as a replacement for m_chanprotect
+			 * so have it set these to true
+			 */
+			ircd->uses_owner = true;
+			ircd->uses_protect = true;
+		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}
 	else if (strcasecmp(parv[0], "END") == 0)

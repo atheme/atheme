@@ -99,11 +99,6 @@ required, although it will be used if loaded.
 Using the m_invisible module on inspircd with Atheme connected is an unsupported
 condition and will result in your Atheme installation being "tainted".
 
-Currently, using m_customprefix from inspircd 2.0.x for channel prefixes +q, +a
-and +h is broken. If you have these prefixes enabled with m_customprefix, Atheme
-will not see them and not set them on users. Please use m_chanprotect and
-m_halfop instead.
-
 For inspircd12, jupes will use SIDs numerically following services's SID, make
 sure to leave plenty of space.
 
