@@ -51,7 +51,7 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? "yes" : "no");
         command_success_nodata(si, _("Nickname expiration time: %d days"), nicksvs.expiry / 86400);
 	command_success_nodata(si, _("Nickname enforce expiry time: %d days"), nicksvs.enforce_expiry / 86400);
-	command_success_nodata(si, _("Nickname enforce delay: %d seconds"), nicksvs.enforce_delay);
+	command_success_nodata(si, _("Default nickname enforce delay: %d seconds"), nicksvs.enforce_delay);
 	command_success_nodata(si, _("Nickname enforce prefix: %s"), nicksvs.enforce_prefix);
 	command_success_nodata(si, _("Maximum number of logins allowed per username: %d"), me.maxlogins);
 	command_success_nodata(si, _("Maximum number of usernames that can be registered to one email address: %d"), me.maxusers);

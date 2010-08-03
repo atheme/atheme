@@ -1,0 +1,15 @@
+Help for SET ENFORCETIME:
+
+SET ENFORCETIME sets how long (in seconds) after someone attempts 
+to use one of your nicks they will automatically have their nick
+changed.
+
+This can be set to DEFAULT to return to the network default
+or a number value between 1-180 (seconds).
+
+Syntax: SET ENFORCETIME TIME|DEFAULT
+
+Example:
+    /msg &nick& SET ENFORCETIME DEFAULT
+    /msg &nick& SET ENFORCETIME 90
+    /msg &nick& SET ENFORCETIME 3

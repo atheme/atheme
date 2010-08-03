@@ -43,7 +43,7 @@ static void show_enforce(hook_user_req_t *hdata);
 static void check_registration(hook_user_register_check_t *hdata);
 static void check_enforce(hook_nick_enforce_t *hdata);
 
-command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce }; 
+command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce };
 command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
 
 list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
@@ -313,6 +313,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 {
 	enforce_timeout_t *timeout, *timeout2;
 	node_t *n;
+	metadata_t *md;
 
 	/* nick is a service, ignore it */
 	if (is_internal_client(hdata->u))
@@ -348,7 +349,15 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 		strlcpy(timeout->nick, hdata->mn->nick, sizeof timeout->nick);
 		strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
 
-		timeout->timelimit = CURRTIME + nicksvs.enforce_delay;
+		if (!metadata_find(hdata->mn->owner, "private:enforcetime"))
+			timeout->timelimit = CURRTIME + nicksvs.enforce_delay;
+		else
+		{
+			md = metadata_find(hdata->mn->owner, "private:enforcetime");
+			int enforcetime = atoi(md->value);
+			timeout->timelimit = CURRTIME + enforcetime;
+		}
+
 		/* insert in sorted order */
 		LIST_FOREACH_PREV(n, enforce_list.tail)
 		{
