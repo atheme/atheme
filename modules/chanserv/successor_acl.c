@@ -14,16 +14,30 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static unsigned int successor_flag = 0;
+
+static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
+{
+	return_if_fail(req != NULL);
+	return_if_fail(req->mc != NULL);
+
+	/* maybe some other module already chose a new successor. */
+	if (req->mu != NULL)
+		return;
+
+	req->mu = mychan_pick_candidate(req->mc, successor_flag);
+}
+
 void _modinit(module_t *m)
 {
-	unsigned int flag;
 	m->mflags = MODTYPE_CORE;
 
-	if ((flag = flags_associate('S', 0, false)) == 0)
+	if ((successor_flag = flags_associate('S', 0, false)) == 0)
 	{
 		slog(LG_ERROR, "chanserv/successor_acl: Inserting +S into flagset failed.");
 		exit(EXIT_FAILURE);
 	}
 
-	slog(LG_INFO, "chanserv/successor_acl: +S has been inserted with bitmask 0x%x", flag);
+	slog(LG_DEBUG, "chanserv/successor_acl: +S has been inserted with bitmask 0x%x", successor_flag);
+	hook_add_first_channel_pick_successor(channel_pick_successor_hook);
 }
