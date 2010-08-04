@@ -47,8 +47,7 @@ static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsn
 
 static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)
 {
-	/* easter egg :X */
-	notice(svsnick, origin, "\001CLIENTINFO 114 97 107 97 117 114\001");
+	notice(svsnick, origin, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
 void common_ctcp_init(void)
