@@ -278,6 +278,11 @@ typedef struct {
 } hook_channel_req_t;
 
 typedef struct {
+	mychan_t *mc;
+	myuser_t *mu;
+} hook_channel_succession_req_t;
+
+typedef struct {
 	union {
 		mychan_t *mc;
 		myuser_t *mu;

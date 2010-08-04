@@ -1109,6 +1109,14 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 myuser_t *mychan_pick_successor(mychan_t *mc)
 {
 	myuser_t *mu;
+	hook_channel_succession_req_t req;
+
+	/* allow a hook to override/augment the succession. */
+	req.mc = mc;
+	req.mu = NULL;
+	hook_call_channel_pick_successor(&req);
+	if (req.mu != NULL)
+		return mu;
 
 	/* value +R higher than other flags
 	 * (old successor has this, but not sop, and help file mentions this)
