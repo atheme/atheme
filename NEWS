@@ -9,6 +9,8 @@ opensex
 chanserv
 - new module: chanserv/successor_acl.  this adds a +S channel acl flag which
   will weight a user as a successor.
+- modules may now override the succession process using the new
+  channel_pick_successor hook.
 helpserv
 - new service that allows users to request oper help in different ways.
   Currently either via a ticket system or by "pinging" the opers with a
@@ -29,6 +31,7 @@ code
 - the flags code has been cleaned up to assume that there is only one flags
   table.
 - the flags code is now extendable by modules.
+- mychan_pick_candidate() is now in the public API.
 other
 - added an anope 1.9.2 flatfile DB to OpenSEX DB conversion script.
 - mail sending has been changed, likely causing serverinfo::mta scripts to
