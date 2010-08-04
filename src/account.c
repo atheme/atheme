@@ -1052,7 +1052,7 @@ static unsigned int add_auto_flags(unsigned int flags)
 #define RECENTLY_SEEN (7 * 86400)
 
 /* Find a user fulfilling the conditions who can take another channel */
-static myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
+myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	node_t *n;
 	chanacs_t *ca;
