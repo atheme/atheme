@@ -192,7 +192,7 @@ static void display_info(hook_user_nick_t *data)
 		{
 			l = n->data;
 			
-			char *y = l->subject;
+			char *y = sstrdup(l->subject);
 			char *z = y;
 			*z = underscores_to_spaces(z);
 
@@ -238,7 +238,7 @@ static void display_oper_info(user_t *u)
 		{
 			o = n->data;
 			
-			char *y = o->subject;
+			char *y = sstrdup(o->subject);
 			char *z = y;
 			*z = underscores_to_spaces(z);
 
@@ -291,7 +291,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	char *y = subject;
+	char *y = sstrdup(subject);
 	char *z = y;
 	*z = underscores_to_spaces(z);
 
@@ -462,7 +462,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		x++;
 
-		char *y = l->subject;
+		char *y = sstrdup(l->subject);
 		char *z = y;
 		*z = underscores_to_spaces(z);
 
@@ -490,7 +490,7 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 		o = n->data;
 		x++;
 
-		char *y = o->subject;
+		char *y = sstrdup(o->subject);
 		char *z = y;
 		*z = underscores_to_spaces(z);
 
