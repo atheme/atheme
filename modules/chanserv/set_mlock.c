@@ -214,12 +214,6 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (strlen(newext) > 450)
-	{
-		command_fail(si, fault_badparams, _("Mode lock is too long."));
-		return;
-	}
-
 	/* note: the following does not treat +lk and extmodes correctly */
 	changed = ((newlock_on ^ mc->mlock_on) | (newlock_off ^ mc->mlock_off));
 	changed &= ~mask;
