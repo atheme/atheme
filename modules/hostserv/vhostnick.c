@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "hostserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -34,15 +35,6 @@ void _moddeinit(void)
 {
 	command_delete(&hs_vhostnick, hs_cmdtree);
 	help_delentry(hs_helptree, "VHOSTNICK");
-}
-
-
-static void do_sethost(user_t *u, char *host)
-{
-	if (!strcmp(u->vhost, host ? host : u->host))
-		return;
-	strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
-	sethost_sts(hostsvs.me->me, u, u->vhost);
 }
 
 /* VHOSTNICK <nick> [host] */

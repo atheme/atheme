@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "hostserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -70,14 +71,6 @@ void _moddeinit(void)
 		hostsvs.me = NULL;
 	}
 	hook_del_user_identify(on_user_identify);
-}
-
-static void do_sethost(user_t *u, char *host)
-{
-	if (!strcmp(u->vhost, host))
-		return;
-	strlcpy(u->vhost, host, HOSTLEN);
-	sethost_sts(hostsvs.me->me, u, u->vhost);
 }
 
 static void on_user_identify(user_t *u)

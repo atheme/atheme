@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "hostserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -79,27 +80,6 @@ void _moddeinit(void)
 	help_delentry(hs_helptree, "UNOFFER");
 	help_delentry(hs_helptree, "OFFERLIST");
 	help_delentry(hs_helptree, "TAKE");
-}
-
-static void do_sethost(user_t *u, char *host)
-{
-	if (!strcmp(u->vhost, host ? host : u->host))
-		return;
-	strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
-	sethost_sts(hostsvs.me->me, u, u->vhost);
-}
-
-static void do_sethost_all(myuser_t *mu, char *host)
-{
-	node_t *n;
-	user_t *u;
-
-	LIST_FOREACH(n, mu->logins.head)
-	{
-		u = n->data;
-
-		do_sethost(u, host);
-	}
 }
 
 static void hs_sethost_all(myuser_t *mu, const char *host)
