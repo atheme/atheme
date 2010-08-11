@@ -201,6 +201,7 @@ static void display_info(hook_user_nick_t *data)
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, l->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", l->story);
+			free(y);
 			count++;
 
 			/* only display three latest entries, max. */
@@ -247,6 +248,7 @@ static void display_oper_info(user_t *u)
 			notice(infoserv->nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				y, o->nick, dBuf);
 			notice(infoserv->nick, u->nick, "%s", o->story);
+			free(y);
 			count++;
 
 			/* only display three latest entries, max. */
@@ -301,6 +303,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		msg_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
+		free(y);
 		return;
 	}
 
@@ -310,6 +313,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		notice_global_sts(infoserv->me, "*", buf);
 		command_success_nodata(si, _("The InfoServ message has been sent"));
 		logcommand(si, CMDLOG_ADMIN, "INFO:POST: Importance: \2%s\2, Subject: \2%s\2, Message: \2%s\2", importance, y, story);
+		free(y);
 		return;
 	}
 
@@ -345,6 +349,8 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		snprintf(buf, sizeof buf, "[Network Notice] %s - [%s] %s", get_source_name(si), y, story);
 		notice_global_sts(infoserv->me, "*", buf);
 	}
+
+	free(y);
 
 	return;
 }
@@ -470,6 +476,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
 			x, y, l->nick, dBuf, l->story);
+		free(y);
 	}
 
 	command_success_nodata(si, _("End of list."));
@@ -498,6 +505,7 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
 			x, y, o->nick, dBuf, o->story);
+		free(y);
 	}
 
 	command_success_nodata(si, _("End of list."));
