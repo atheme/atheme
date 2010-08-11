@@ -91,17 +91,13 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, &is_helptree);
 }
 
-static char underscores_to_spaces(char *z)
+static void underscores_to_spaces(char *y)
 {
-	char *s = z;
-
 	do 
 	{
-		if(*z == '_')
-			*z = ' ';
-	} while(*z++);
-
-	return *s;
+		if(*y == '_')
+			*y = ' ';
+	} while(*y++);
 }
 
 static void write_infodb(database_handle_t *db)
@@ -193,8 +189,7 @@ static void display_info(hook_user_nick_t *data)
 			l = n->data;
 			
 			char *y = sstrdup(l->subject);
-			char *z = y;
-			*z = underscores_to_spaces(z);
+			underscores_to_spaces(y);
 
 			tm = *localtime(&l->info_ts);
 			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
@@ -240,8 +235,7 @@ static void display_oper_info(user_t *u)
 			o = n->data;
 			
 			char *y = sstrdup(o->subject);
-			char *z = y;
-			*z = underscores_to_spaces(z);
+			underscores_to_spaces(y);
 
 			tm = *localtime(&o->info_ts);
 			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
@@ -294,8 +288,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	char *y = sstrdup(subject);
-	char *z = y;
-	*z = underscores_to_spaces(z);
+	underscores_to_spaces(y);
 
 	if (imp == 4)
 	{
@@ -396,12 +389,12 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 			free(l->story);
 			free(l);
 
-			command_success_nodata(si, _("Deleted entry %d from oper logon info."), id);
+			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
 			return;
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %d not found in oper logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry %d not found in logon info."), id);
 	return;
 }
 
@@ -446,12 +439,12 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 			free(o->story);
 			free(o);
 
-			command_success_nodata(si, _("Deleted entry %d from logon info."), id);
+			command_success_nodata(si, _("Deleted entry %d from oper logon info."), id);
 			return;
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("Entry %d not found in logon info."), id);
+	command_fail(si, fault_nosuch_target, _("Entry %d not found in oper logon info."), id);
 	return;
 }
 
@@ -469,8 +462,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		x++;
 
 		char *y = sstrdup(l->subject);
-		char *z = y;
-		*z = underscores_to_spaces(z);
+		underscores_to_spaces(y);
 
 		tm = *localtime(&l->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
@@ -498,8 +490,7 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 		x++;
 
 		char *y = sstrdup(o->subject);
-		char *z = y;
-		*z = underscores_to_spaces(z);
+		underscores_to_spaces(y);
 
 		tm = *localtime(&o->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
