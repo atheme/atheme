@@ -340,15 +340,33 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 {
 	connection_t *cptr;
 	char buf[BUFSIZE];
-	struct hostent *hp;
-	struct sockaddr_in sa;
-	struct in_addr *in;
-	int s;
+	struct addrinfo *addr = NULL;
+	int s, error;
 	unsigned int optval;
 
-	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
+	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
+
+	/* resolve it */
+	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
+	{
+		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
+		close(s);
+		return NULL;
+	}
+
+	/* some getaddrinfo() do this... */
+	if (addr->ai_addr == NULL)
+	{
+		slog(LG_ERROR, "connection_open_tcp(): host %s is not resolveable.", vhost);
+		close(s);
+		freeaddrinfo(addr);
+		return NULL;
+	}
+	
+	if (!(s = socket(addr->ai_family, SOCK_STREAM, 0)))
 	{
 		slog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
+		freeaddrinfo(addr);
 		return NULL;
 	}
 
@@ -356,52 +374,56 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	if (s > claro_state.maxfd)
 		claro_state.maxfd = s;
 
-	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
-
-	if (vhost)
+	if (vhost != NULL)
 	{
-		memset(&sa, 0, sizeof(sa));
-		sa.sin_family = AF_INET;
+		struct addrinfo *bind_addr = NULL;
 
-		if ((hp = gethostbyname(vhost)) == NULL)
+		if ((error = getaddrinfo(vhost, NULL, NULL, &bind_addr)))
 		{
-			slog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
+			slog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s: %s", vhost, gai_strerror(error));
 			close(s);
+			freeaddrinfo(addr);
 			return NULL;
 		}
 
-		in = (struct in_addr *)(hp->h_addr_list[0]);
-		sa.sin_addr.s_addr = in->s_addr;
-		sa.sin_port = 0;
+		/* some getaddrinfo() do this... */
+		if (bind_addr->ai_addr == NULL)
+		{
+			slog(LG_ERROR, "connection_open_tcp(): vhost %s is not resolveable.", vhost);
+			close(s);
+			freeaddrinfo(addr);
+			freeaddrinfo(bind_addr);
+			return NULL;
+		}
 
 		optval = 1;
 		setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 
-		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
+		if (bind(s, bind_addr->ai_addr, bind_addr->ai_addrlen) < 0)
 		{
 			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(errno));
 			close(s);
+			freeaddrinfo(addr);
+			freeaddrinfo(bind_addr);
 			return NULL;
 		}
-	}
 
-	/* resolve it */
-	if ((hp = gethostbyname(host)) == NULL)
-	{
-		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s", host);
-		close(s);
-		return NULL;
+		freeaddrinfo(bind_addr);
 	}
-
-	memset(&sa, '\0', sizeof(sa));
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(port);
-	memcpy(&sa.sin_addr, hp->h_addr, hp->h_length);
 
 	socket_setnonblocking(s);
 
-	if (connect(s, (struct sockaddr *)&sa, sizeof(sa)) == -1 &&
-			errno != EINPROGRESS && errno != EINTR)
+	switch(addr->ai_family)
+	{
+	case AF_INET:
+		((struct sockaddr_in *) addr->ai_addr)->sin_port = htons(port);
+		break;
+	case AF_INET6:
+		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
+		break;	
+	}
+
+	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && errno != EINPROGRESS && errno != EINTR)
 	{
 		if (vhost)
 			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %s", host, vhost, strerror(errno));
@@ -435,15 +457,31 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 {
 	connection_t *cptr;
 	char buf[BUFSIZE];
-	struct hostent *hp;
-	struct sockaddr_in sa;
-	struct in_addr *in;
-	int s;
+	struct addrinfo *addr;
+	int s, error;
 	unsigned int optval;
 
-	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
+	/* resolve it */
+	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
+	{
+		slog(LG_ERROR, "connection_open_listener_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
+		close(s);
+		return NULL;
+	}
+
+	/* some getaddrinfo() do this... */
+	if (addr->ai_addr == NULL)
+	{
+		slog(LG_ERROR, "connection_open_listener_tcp(): host %s is not resolveable.", host);
+		close(s);
+		freeaddrinfo(addr);
+		return NULL;
+	}
+	
+	if (!(s = socket(addr->ai_family, SOCK_STREAM, 0)))
 	{
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
+		freeaddrinfo(addr);
 		return NULL;
 	}
 
@@ -453,29 +491,25 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 
 	snprintf(buf, BUFSIZE, "listener: %s[%d]", host, port);
 
-	memset(&sa, 0, sizeof(sa));
-	sa.sin_family = AF_INET;
-
-	if ((hp = gethostbyname(host)) == NULL)
-	{
-		slog(LG_ERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
-		close(s);
-		return NULL;
-	}
-
-	in = (struct in_addr *)(hp->h_addr_list[0]);
-	sa.sin_family = AF_INET;
-	sa.sin_addr.s_addr = in->s_addr;
-	sa.sin_port = htons(port);
-
 	optval = 1;
 	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 
-	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
+	switch(addr->ai_family)
+	{
+	case AF_INET:
+		((struct sockaddr_in *) addr->ai_addr)->sin_port = htons(port);
+		break;
+	case AF_INET6:
+		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
+		break;	
+	}
+
+	if (bind(s, addr->ai_addr, addr->ai_addrlen) < 0)
 	{
 		close(s);
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
 			errno);
+		freeaddrinfo(addr);
 		return NULL;
 	}
 
