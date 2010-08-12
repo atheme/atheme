@@ -32,6 +32,8 @@ code
   table.
 - the flags code is now extendable by modules.
 - mychan_pick_candidate() is now in the public API.
+- the core now lives in an ipv6 world.  it's 2010 - if your operating system
+  doesn't support ipv6 - you suck.
 other
 - added an anope 1.9.2 flatfile DB to OpenSEX DB conversion script.
 - mail sending has been changed, likely causing serverinfo::mta scripts to
