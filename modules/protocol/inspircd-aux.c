@@ -601,7 +601,7 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 	else
 	{
 		if (has_svshold)
-			sts(":%s SVSHOLD %s %ds :Registered nickname.", source->uid, nick, duration);
+			sts(":%s SVSHOLD %s %d :Registered nickname.", source->uid, nick, duration);
 		else
 			sts(":%s ADDLINE Q %s %s %lu %d :%s", me.numeric, nick, opersvs.nick, (unsigned long)CURRTIME, duration, "Nickname Enforcer");
 	}
