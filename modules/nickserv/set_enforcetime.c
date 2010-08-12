@@ -40,7 +40,6 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 {
 	metadata_t *md;
 	char *setting = parv[0];
-	int enforcetime = atoi(parv[0]);
 
 	if (!setting)
 	{
@@ -54,6 +53,8 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
+
+	int enforcetime = atoi(parv[0]);
 
 	if (strcasecmp(setting, "DEFAULT") == 0)
 	{
