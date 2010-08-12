@@ -1317,6 +1317,12 @@ httpd {
 	 */
 	host = "0.0.0.0";
 
+	/* host (ipv6)
+	 * If you want, you can have Atheme listen on an IPv6 host too.
+	 * Use :: if you want to listen on all available IPv6 hosts.
+	 */
+	#host = "::";
+
 	/* www_root
 	 * The directory that contains the files that should be served by the httpd.
 	 */
