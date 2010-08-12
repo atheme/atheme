@@ -9,6 +9,19 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+typedef union sockaddr_any_ sockaddr_any_t;
+
+union sockaddr_any_
+{
+	struct sockaddr sa;
+	struct sockaddr_in sin;
+	struct sockaddr_in6 sin6;
+};
+
+#define SOCKADDR(foo) 		(struct sockaddr 	*) &(foo)
+#define SOCKADDR_IN(foo) 	(struct sockaddr_in	*) &(foo)
+#define SOCKADDR_IN6(foo) 	(struct sockaddr_in6	*) &(foo)
+
 typedef struct connection_ connection_t;
 
 struct connection_
@@ -27,8 +40,7 @@ struct connection_
 
 	size_t sendq_limit;
 
-	struct sockaddr_in *sa;
-	struct sockaddr saddr;
+	sockaddr_any_t saddr;
 	socklen_t saddr_size;
 
 	void (*read_handler)(connection_t *);
