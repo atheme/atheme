@@ -766,6 +766,13 @@ uplink "irc.example.net" {
 	port = 6667;
 };
 
+/* this is an example for using an IPv6 address as an uplink */
+uplink "irc6.example.net" {
+	host = "::1";
+	password = "linkage";
+	port = 6667;
+};
+
 /* Services configuration.
  *
  * Each of these blocks can contain a nick, user, host, real and aliases.
