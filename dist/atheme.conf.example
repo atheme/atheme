@@ -855,7 +855,8 @@ nickserv {
 
 	/* (*)cracklib_dict
 	 * The location and filename prefix of the cracklib dictionaries
-	 * for use with nickserv/cracklib.
+	 * for use with nickserv/cracklib. This must be provided if you are
+	 * going to be using nickserv/cracklib.
 	 */
 	#cracklib_dict = "/var/cache/cracklib/cracklib_dict";
 
