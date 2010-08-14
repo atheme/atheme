@@ -49,7 +49,7 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s]",
+	numeric_sts(me.me, 351, u, "%s-Anope2.0. %s %s :%s [%s]",
 		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname);
 }
 
