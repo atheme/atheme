@@ -204,6 +204,7 @@ static unsigned int inspircd_server_login(void)
 	/* will be determined in CAPAB. */
 	ircd->uses_owner = false;
 	ircd->uses_protect = false;
+	ircd->uses_halfops = false;
 
 	ret = sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	if (ret == 1)
@@ -1163,7 +1164,22 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!strncmp(varv[i], "PROTOCOL=", 9))
 				has_protocol = atoi(varv[i] + 9);
-			/* XXX check/store HALFOP/CHANMAX/IDENTMAX */
+			if(!strncmp(varv[i], "PREFIX=", 7))
+			{
+				if (strstr(varv[i] + 7, "q"))
+				{
+					ircd->uses_owner = true;
+				}
+				if (strstr(varv[i] + 7, "a"))
+				{
+					ircd->uses_protect = true;
+				}
+				if (strstr(varv[i] + 7, "h"))
+				{
+					ircd->uses_halfops = true;
+				}
+			}
+			/* XXX check/store /CHANMAX/IDENTMAX */
 		}
 	}
 	else if (strcasecmp(parv[0], "MODULES") == 0 && parc > 1)
@@ -1191,11 +1207,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_svshold.so"))
 		{
 			has_svshold = true;
-		}
-		if (strstr(parv[1], "m_chanprotect.so"))
-		{
-			ircd->uses_owner = true;
-			ircd->uses_protect = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}

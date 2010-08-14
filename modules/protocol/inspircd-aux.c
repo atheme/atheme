@@ -1348,7 +1348,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 					ircd->uses_halfops = true;
 				}
 			}
-			/* XXX check/store HALFOP/CHANMAX/IDENTMAX */
+			/* XXX check/store CHANMAX/IDENTMAX */
 		}
 	}
 	else if (strcasecmp(parv[0], "MODULES") == 0 && parc > 1)
