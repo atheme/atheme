@@ -17,10 +17,14 @@
  */
 static inline void do_sethost(user_t *u, char *host)
 {
+	service_t *svs;
+
         if (!strcmp(u->vhost, host ? host : u->host))
                 return;
+
+	svs = service_find("hostserv");
         strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
-        sethost_sts(hostsvs.me->me, u, u->vhost);
+        sethost_sts(svs->me, u, u->vhost);
 }
 
 /*
