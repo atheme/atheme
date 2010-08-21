@@ -310,10 +310,13 @@ static void solidircd_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void solidircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, opersvs.nick, (unsigned long)CURRTIME, reason);
+	svs = service_find("operserv");
+	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -379,11 +382,14 @@ static bool solidircd_on_logout(user_t *u, const char *account)
 static void solidircd_jupe(const char *server, const char *reason)
 {
 	server_t *s;
+	service_t *svs;
 
 	if (!me.connected)
 		return;
 
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	svs = service_find("operserv");
+
+	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : me.name, server, reason);
 	s = server_find(server);
 	/* If the server is not directly connected to our uplink, we
 	 * need to wait for its uplink to process the SQUIT :(

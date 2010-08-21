@@ -20,7 +20,6 @@ SRCS = \
 	dreamforge.c	\
 	hybrid.c	\
 	inspircd-aux.c	\
-	inspircd11.c	\
 	inspircd12.c	\
         ircd-seven.c  \
 	ircnet.c	\
@@ -30,7 +29,6 @@ SRCS = \
 	mixin_noowner.c	\
 	mixin_noprotect.c	\
 	nefarious.c	\
-	officeirc.c	\
 	p10-generic.c	\
 	plexus.c	\
 	ptlink.c	\
@@ -38,7 +36,6 @@ SRCS = \
 	shadowircd.c	\
 	solidircd.c	\
 	ts6-generic.c	\
-	ultimate3.c	\
 	undernet.c	\
 	unreal.c
 

@@ -386,39 +386,47 @@ static void inspircd_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void inspircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
-	sts(":%s ADDLINE G %s@%s %s %lu %ld :%s", me.numeric, user, host, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+	svs = service_find("operserv");
+	sts(":%s ADDLINE G %s@%s %s %lu %ld :%s", me.numeric, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void inspircd_unkline_sts(const char *server, const char *user, const char *host)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	/* I know this looks wrong, but it's really not. Trust me. --w00t */
-	sts(":%s GLINE %s@%s", opersvs.me->me->uid, user, host);
+	svs = service_find("operserv");
+	sts(":%s GLINE %s@%s", svs != NULL ? svs->me->uid : ME, user, host);
 }
 
 /* server-to-server QLINE wrapper */
 static void inspircd_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
+	service_t *svs;
 
 	if (!me.connected)
 		return;
 
+	svs = service_find("operserv");
+
 	if (*name != '#')
 	{
-		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
+		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
 		return;
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s %ld :%s", opersvs.me->me->uid, name, duration, reason);
-
+		sts(":%s CBAN %s %ld :%s", svs != NULL ? svs->me->uid : ME, name, duration, reason);
 	else
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
@@ -426,19 +434,19 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 /* server-to-server UNQLINE wrapper */
 static void inspircd_unqline_sts(const char *server, const char *name)
 {
+	service_t *svs;
 
 	if (!me.connected)
 		return;
 
 	if (*name != '#')
 	{
-		sts(":%s QLINE %s", opersvs.me->me->uid, name);
+		sts(":%s QLINE %s", ME, name);
 		return;
 	}
 
 	if (has_cbanmod)
-		sts(":%s CBAN %s", opersvs.me->me->uid, name);
-
+		sts(":%s CBAN %s", ME, name);
 	else
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }	
@@ -518,6 +526,7 @@ static bool inspircd_on_logout(user_t *u, const char *account)
 
 static void inspircd_jupe(const char *server, const char *reason)
 {
+	service_t *svs;
 	static char sid[3+1];
 	int i;
 	server_t *s;
@@ -525,11 +534,13 @@ static void inspircd_jupe(const char *server, const char *reason)
 	if (!me.connected)
 		return;
 
+	svs = service_find("operserv");
+
 	s = server_find(server);
 	if (s != NULL)
 	{
 		/* We need to wait for the RSQUIT to be processed -- jilles */
-		sts(":%s RSQUIT :%s", opersvs.me->me->uid, server);
+		sts(":%s RSQUIT :%s", svs != NULL ? svs->me->uid : ME, server);
 		s->flags |= SF_JUPE_PENDING;
 		return;
 	}
@@ -591,20 +602,23 @@ static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *chann
 
 static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
+	service_t *svs;
+
+	svs = service_find("operserv");
 	if (duration == 0)
 	{
 		if (has_svshold)
 			/* remove SVSHOLD */
 			sts(":%s SVSHOLD %s", source->uid, nick);
 		else
-			sts(":%s QLINE %s", opersvs.me->me->uid, nick);
+			sts(":%s QLINE %s", svs != NULL ? svs->me->uid : ME, nick);
 	}
 	else
 	{
 		if (has_svshold)
 			sts(":%s SVSHOLD %s %d :Registered nickname.", source->uid, nick, duration);
 		else
-			sts(":%s ADDLINE Q %s %s %lu %d :%s", me.numeric, nick, opersvs.nick, (unsigned long)CURRTIME, duration, "Nickname Enforcer");
+			sts(":%s ADDLINE Q %s %s %lu %d :%s", me.numeric, nick, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, "Nickname Enforcer");
 	}
 }
 
@@ -625,12 +639,16 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 
 static void inspircd_sasl_sts(char *target, char mode, char *data)
 {
+	service_t *svs;
 	server_t *s = sid_find(target);
 
 	return_if_fail(s != NULL);
-	return_if_fail(saslsvs.me != NULL);
 
-	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, saslsvs.me->me->uid, target, mode, data);
+	svs = service_find("saslserv");
+	if (svs == NULL)
+		return;
+
+	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, svs->me->uid, target, mode, data);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
