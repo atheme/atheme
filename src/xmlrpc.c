@@ -10,12 +10,13 @@
  *
  */
 
+#include <mowgli.h>
+#include "atheme.h"
 #include "xmlrpc.h"
 
 static int xmlrpc_error_code;
 
 typedef struct XMLRPCCmd_ XMLRPCCmd;
-typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
 
 struct XMLRPCCmd_ {
 	XMLRPCMethodFunc func;
@@ -25,13 +26,7 @@ struct XMLRPCCmd_ {
 	XMLRPCCmd *next;
 };
 
-struct XMLRPCCmdHash_ {
-	char *name;
-	XMLRPCCmd *xml;
-	XMLRPCCmdHash *next;
-};
-
-static XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
+mowgli_patricia_t *XMLRPCCMD = NULL;
 
 struct xmlrpc_settings {
 	char *(*setbuffer)(char *buffer, int len);
@@ -47,8 +42,8 @@ static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
-static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
-static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
+static XMLRPCCmd *findXMLRPCCommand(const char *name);
+static int addXMLCommand(XMLRPCCmd * xml);
 static void destroyXMLRPCCommand(XMLRPCCmd * xml);
 static char *xmlrpc_write_header(int length);
 
@@ -85,7 +80,7 @@ void xmlrpc_process(char *buffer, void *userdata)
 		name = xmlrpc_method(tmp);
 		if (name)
 		{
-			xml = findXMLRPCCommand(XMLRPCCMD, name);
+			xml = mowgli_patricia_retrieve(XMLRPCCMD, name);
 			if (xml)
 			{
 				ac = xmlrpc_split_buf(tmp, &av);
@@ -148,10 +143,12 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml;
+
 	return_val_if_fail(name != NULL, XMLRPC_ERR_PARAMS);
 	return_val_if_fail(func != NULL, XMLRPC_ERR_PARAMS);
 	xml = createXMLCommand(name, func);
-	return addXMLCommand(XMLRPCCMD, xml);
+
+	return addXMLCommand(xml);
 }
 
 /*************************************************************************/
@@ -170,58 +167,13 @@ static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
+static int addXMLCommand(XMLRPCCmd * xml)
 {
-	int idx;
-	XMLRPCCmdHash *current = NULL;
+	if (XMLRPCCMD == NULL)
+		XMLRPCCMD = mowgli_patricia_create(strcasecanon);
 
-	return_val_if_fail(hookEvtTable != NULL, NULL);
-	return_val_if_fail(name != NULL, NULL);
+	mowgli_patricia_add(XMLRPCCMD, xml->name, xml);
 
-	idx = CMD_HASH(name);
-
-	for (current = hookEvtTable[idx]; current; current = current->next)
-	{
-		if (stricmp(name, current->name) == 0)
-		{
-			return current->xml;
-		}
-	}
-	return NULL;
-}
-
-/*************************************************************************/
-
-static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
-{
-	/* We can assume both param's have been checked by this point.. */
-	int idx = 0;
-	XMLRPCCmdHash *current = NULL;
-	XMLRPCCmdHash *newHash = NULL;
-	XMLRPCCmdHash *lastHash = NULL;
-
-	idx = CMD_HASH(xml->name);
-
-	for (current = hookEvtTable[idx]; current; current = current->next)
-	{
-		if (stricmp(xml->name, current->name) == 0)
-		{
-			xml->next = current->xml;
-			current->xml = xml;
-			return XMLRPC_ERR_OK;
-		}
-		lastHash = current;
-	}
-
-	newHash = smalloc(sizeof(XMLRPCCmdHash));
-	newHash->next = NULL;
-	newHash->name = sstrdup(xml->name);
-	newHash->xml = xml;
-
-	if (lastHash == NULL)
-		hookEvtTable[idx] = newHash;
-	else
-		lastHash->next = newHash;
 	return XMLRPC_ERR_OK;
 }
 
@@ -229,36 +181,11 @@ static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 
 int xmlrpc_unregister_method(const char *method)
 {
-	int idx = 0;
-	XMLRPCCmdHash *current = NULL;
-	XMLRPCCmdHash *lastHash = NULL;
-	XMLRPCCmd *xml, *xml2;
-
 	return_val_if_fail(method != NULL, XMLRPC_ERR_PARAMS);
 
-	idx = CMD_HASH(method);
+	mowgli_patricia_delete(XMLRPCCMD, method);
 
-	for (current = XMLRPCCMD[idx]; current; current = current->next)
-	{
-		if (stricmp(method, current->name) == 0)
-		{
-			if (lastHash)
-				lastHash->next = current->next;
-			else
-				XMLRPCCMD[idx] = current->next;
-			for (xml = current->xml; xml; xml = xml2)
-			{
-				xml2 = xml->next;
-				destroyXMLRPCCommand(xml);
-			}
-			free(current->name);
-			free(current);
-			return XMLRPC_ERR_OK;
-		}
-		lastHash = current;
-	}
-
-	return XMLRPC_ERR_NOEXIST;
+	return XMLRPC_ERR_OK;
 }
 
 /*************************************************************************/
