@@ -31,7 +31,6 @@
 #include <sys/resource.h>
 
 chansvs_t chansvs;
-globsvs_t globsvs;
 opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
