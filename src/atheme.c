@@ -31,7 +31,6 @@
 #include <sys/resource.h>
 
 chansvs_t chansvs;
-opersvs_t opersvs;
 nicksvs_t nicksvs;
 
 list_t taint_list = { NULL, NULL, 0 };

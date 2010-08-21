@@ -144,7 +144,7 @@ static void os_cmd_sqline(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&os_sqline_cmds, cmd);
 	if(c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
 		return;
 	}
 
