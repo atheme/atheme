@@ -36,7 +36,6 @@ opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
 saslsvs_t saslsvs;
-gamesvs_t gamesvs;
 hostsvs_t hostsvs;
 
 list_t taint_list = { NULL, NULL, 0 };

@@ -15,6 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+service_t *gs;
 list_t gs_cmdtree;
 list_t gs_helptree;
 list_t gs_conftable;
@@ -52,34 +53,15 @@ static void gameserv(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
 }
 
-static void gameserv_config_ready(void *unused)
-{
-	gamesvs.nick = gamesvs.me->nick;
-	gamesvs.user = gamesvs.me->user;
-	gamesvs.host = gamesvs.me->host;
-	gamesvs.real = gamesvs.me->real;
-}
-
 void _modinit(module_t *m)
 {
-        hook_add_event("config_ready");
-        hook_add_config_ready(gameserv_config_ready);
-
-	gamesvs.me = service_add("gameserv", gameserv, &gs_cmdtree, &gs_conftable);
+	gs = service_add("gameserv", gameserv, &gs_cmdtree, &gs_conftable);
 }
 
 void _moddeinit(void)
 {
-        if (gamesvs.me)
-	{
-		gamesvs.nick = NULL;
-		gamesvs.user = NULL;
-		gamesvs.host = NULL;
-		gamesvs.real = NULL;
-                service_delete(gamesvs.me);
-		gamesvs.me = NULL;
-	}
-	hook_del_config_ready(gameserv_config_ready);
+        if (gs != NULL)
+                service_delete(gs);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
