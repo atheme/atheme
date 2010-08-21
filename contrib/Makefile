@@ -33,6 +33,7 @@ SRCS =			\
 	ns_listlogins.c	\
 	ns_mxcheck.c		\
 	ns_mxcheck_async.c	\
+	ns_waitreg.c	\
 	on_db_save.c		\
 	os_akillnicklist.c	\
 	os_kill.c		\
