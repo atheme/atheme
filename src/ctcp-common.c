@@ -27,7 +27,7 @@
 
 mowgli_patricia_t *ctcptree;
 
-static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick)
+static void ctcp_ping_handler(sourceinfo_t *si, sourceinfo_t *si, char *cmd, char *args)
 {
 	char *s;
 
@@ -35,24 +35,24 @@ static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick
 	if (s != NULL)
 		strip(s);
 
-	notice(svsnick, origin, "\001PING %.100s\001", s != NULL ? s : "pong!");
+	notice(si->service->nick, si->u->nick, "\001PING %.100s\001", s != NULL ? s : "pong!");
 }
 
-static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsnick)
+static void ctcp_version_handler(sourceinfo_t *si, char *cmd, char *args)
 {
-	notice(svsnick, origin,
+	notice(si->service->nick, si->u->nick,
 		"\001VERSION %s. %s %s %s [%s]\001",
 		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname);
 }
 
-static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)
+static void ctcp_clientinfo_handler(sourceinfo_t *si, char *cmd, char *args)
 {
-	notice(svsnick, origin, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
+	notice(si->service->nick, si->u->nick, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
-static void ctcp_machinegod_handler(chat *cmd, char *args, char *origin, char *svsnick)
+static void ctcp_machinegod_handler(chat *cmd, char *args)
 {
-	notice(svsnick, origin, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
+	notice(si->service->nick, si->u->nick, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
 }
 
 void common_ctcp_init(void)
@@ -67,11 +67,11 @@ void common_ctcp_init(void)
 
 unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 {
-	void (*handler)(char *, char *, char *, char *);
+	void (*handler)(sourceinfo_t *si, char *, char *);
 
 	if ((handler = mowgli_patricia_retrieve(ctcptree, cmd)) != NULL)
 	{
-		handler(cmd, args, si->su->nick, si->service->nick);
+		handler(si, cmd, args);
 		return 1;
 	}
 
