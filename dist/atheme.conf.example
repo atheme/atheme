@@ -1211,6 +1211,16 @@ botserv {
 	min_users = 0;
 };
 
+/* GroupServ configuration.
+ * GroupServ provides features for managing a collection of channels at once.
+ */
+groupserv {
+ 	nick = "GroupServ";
+	user = "groupserv";
+	host = "services.int";
+	real = "Group Management Services";
+};
+
 /* HostServ configuration.
  *
  * The hostserv {} block contains settings specific to the HostServ modules.
