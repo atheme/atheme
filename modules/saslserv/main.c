@@ -65,25 +65,17 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 			"public interface.");
 }
 
-static void saslserv_config_ready(void *unused)
-{
-	saslsvs.nick = saslsvs.me->nick;
-	saslsvs.user = saslsvs.me->user;
-	saslsvs.host = saslsvs.me->host;
-	saslsvs.real = saslsvs.me->real;
-}
+service_t *saslsvs = NULL;
 
 void _modinit(module_t *m)
 {
-	hook_add_event("config_ready");
-	hook_add_config_ready(saslserv_config_ready);
 	hook_add_event("sasl_input");
 	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
 	hook_add_user_add(sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
-	saslsvs.me = service_add("saslserv", saslserv, NULL, &saslserv_conftable);
+	saslsvs = service_add("saslserv", saslserv, NULL, &saslserv_conftable);
 	authservice_loaded++;
 }
 
@@ -95,15 +87,9 @@ void _moddeinit(void)
 	hook_del_user_add(sasl_newuser);
 	event_delete(delete_stale, NULL);
 
-        if (saslsvs.me)
-	{
-		saslsvs.nick = NULL;
-		saslsvs.user = NULL;
-		saslsvs.host = NULL;
-		saslsvs.real = NULL;
-                service_delete(saslsvs.me);
-		saslsvs.me = NULL;
-	}
+        if (saslsvs != NULL)
+		service_delete(saslsvs);
+
 	authservice_loaded--;
 
 	LIST_FOREACH_SAFE(n, tn, sessions.head)
@@ -402,7 +388,7 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 	
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-	slog(level, "%s %s:%s %s", saslsvs.nick, mu ? entity(mu)->name : "", p->uid, lbuf);
+	slog(level, "%s %s:%s %s", saslsvs->internal_name, mu ? entity(mu)->name : "", p->uid, lbuf);
 	va_end(args);
 }
 
@@ -457,7 +443,7 @@ static void sasl_newuser(hook_user_nick_t *data)
 	mu = p->username ? myuser_find(p->username) : NULL;
 	if (mu == NULL)
 	{
-		notice(saslsvs.nick, u->nick, "Account %s dropped, login cancelled",
+		notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
 				p->username ? p->username : "??");
 		destroy_session(p);
 		/* We'll remove their ircd login in handle_burstlogin() */
@@ -465,9 +451,9 @@ static void sasl_newuser(hook_user_nick_t *data)
 	}
 	destroy_session(p);
 
-	myuser_login(saslsvs.me, u, mu, false);
+	myuser_login(saslsvs, u, mu, false);
 
-	logcommand_user(saslsvs.me, u, CMDLOG_LOGIN, "LOGIN");
+	logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN");
 }
 
 /* This function is run approximately once every 30 seconds.

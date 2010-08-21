@@ -14,7 +14,6 @@ typedef struct globsvs_ globsvs_t;
 typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
-typedef struct saslsvs_ saslsvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
  * to their counterparts in the service_t, and will probably be removed
@@ -99,16 +98,6 @@ struct nicksvs_
   char	       *cracklib_dict; /* cracklib dictionary path */
 };
 
-struct saslsvs_
-{
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-
-  service_t *me;
-};
-
 /* help us keep consistent messages */
 #define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
 #define STR_INVALID_PARAMS _("Invalid parameters for \2%s\2.")
@@ -127,7 +116,6 @@ E globsvs_t globsvs;
 E opersvs_t opersvs;
 E memosvs_t memosvs;
 E nicksvs_t nicksvs;
-E saslsvs_t saslsvs;
 
 /* services.c */
 E int authservice_loaded;
