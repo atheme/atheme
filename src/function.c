@@ -388,7 +388,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (me.mta == NULL)
 	{
 		if (type != EMAIL_MEMO && !is_internal_client(u))
-			notice(opersvs.me ? opersvs.nick : me.name, u->nick, "Sending email is administratively disabled.");
+		{
+			service_t *svs = service_find("operserv");
+			notice(svs ? svs->nick : me.name, u->nick, "Sending email is administratively disabled.");
+		}
 		return 0;
 	}
 
@@ -411,7 +414,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (!validemail(email))
 	{
 		if (type != EMAIL_MEMO && !is_internal_client(u))
-			notice(opersvs.me ? opersvs.nick : me.name, u->nick, "The email address is considered invalid.");
+		{
+			service_t *svs = service_find("operserv");
+			notice(svs ? svs->nick : me.name, u->nick, "The email address is considered invalid.");
+		}
 		return 0;
 	}
 

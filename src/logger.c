@@ -251,7 +251,10 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		else
 			targetlen = 0;
 
-		msg(svs != NULL ? svs->me->nick : opersvs.nick, c->name, "%s", (buf + targetlen));
+		if (svs == NULL)
+			svs = service_find("operserv");
+
+		msg(svs->me->nick, c->name, "%s", (buf + targetlen));
 	}
 }
 
