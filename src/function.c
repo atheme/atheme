@@ -79,29 +79,6 @@ void tb2sp(char *line)
 		*c = ' ';
 }
 
-/*
- * This generates a hash value, based on chongo's hash algo,
- * located at http://www.isthe.com/chongo/tech/comp/fnv/
- *
- * The difference between FNV and Atheme's hash algorithm is
- * that FNV uses a random key for toasting, we just use
- * 16 instead.
- */
-unsigned int shash(const unsigned char *p)
-{
-	unsigned int hval = HASHINIT;
-
-	if (!p)
-		return (0);
-	for (; *p != '\0'; ++p)
-	{
-		hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
-		hval ^= (ToLower(*p) ^ 16);
-	}
-
-	return ((hval >> HASHBITS) ^ (hval & ((1 << HASHBITS) - 1)) % HASHSIZE);
-}
-
 /* replace all occurances of 'old' with 'new' */
 char *replace(char *s, int size, const char *old, const char *new)
 {

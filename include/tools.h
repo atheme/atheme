@@ -125,9 +125,6 @@ E float bytes(float x);
 
 E unsigned long makekey(void);
 
-/* the hash function */
-E unsigned int shash(const unsigned char *text);
-
 /* time stuff */
 #if HAVE_GETTIMEOFDAY
 E void s_time(struct timeval *sttime);
