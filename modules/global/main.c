@@ -20,6 +20,8 @@ struct global_ {
 	char *text;
 };
 
+service_t *globsvs = NULL;
+
 list_t gs_cmdtree;
 list_t *os_cmdtree;
 list_t gs_helptree;
@@ -202,8 +204,6 @@ static void gservice(sourceinfo_t *si, int parc, char *parv[])
 
 	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
 }
-
-service_t *globsvs = NULL;
 
 void _modinit(module_t *m)
 {
