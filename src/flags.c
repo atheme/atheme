@@ -82,6 +82,11 @@ struct gflags mc_flags[] = {
 	{ 0, 0 },
 };
 
+struct gflags soper_flags[] = {
+	{ 'c', SOPER_CONF },
+	{ 0, 0 },
+};
+
 unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def)
 {
 	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)

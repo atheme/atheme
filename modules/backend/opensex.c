@@ -262,6 +262,7 @@ opensex_db_save(database_handle_t *db)
 
 	LIST_FOREACH(n, soperlist.head)
 	{
+		const char *flags = gflags_tostr(soper_flags, soper->flags);
 		soper = n->data;
 
 		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
@@ -271,7 +272,7 @@ opensex_db_save(database_handle_t *db)
 		db_start_row(db, "SO");
 		db_write_word(db, entity(soper->myuser)->name);
 		db_write_word(db, soper->classname);
-		db_write_uint(db, soper->flags);
+		db_write_word(db, flags);
 
 		if (soper->password != NULL)
 			db_write_word(db, soper->password);
@@ -589,13 +590,23 @@ static void opensex_h_nam(database_handle_t *db, const char *type)
 
 static void opensex_h_so(database_handle_t *db, const char *type)
 {
+	opensex_t *rs = (opensex_t *)db->priv;
 	const char *user, *class, *pass;
-	unsigned int flags;
+	unsigned int flags = 0;
 	myuser_t *mu;
+	const char *sflags;
 
 	user = db_sread_word(db);
 	class = db_sread_word(db);
-	flags = db_sread_int(db);
+	if (rs->dbv >= 8)
+	{
+		sflags = db_sread_word(db);
+		if (!gflags_fromstr(soper_flags, sflags, &flags))
+			slog(LG_INFO, "db-h-so: line %d: confused by flags %s",
+			     db->line, sflags);
+	} else {
+		flags = db_sread_int(db);
+	}
 	pass = db_read_word(db);
 
 	if (!(mu = myuser_find(user)))
