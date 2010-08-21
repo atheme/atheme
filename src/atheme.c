@@ -35,7 +35,6 @@ globsvs_t globsvs;
 opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
-saslsvs_t saslsvs;
 
 list_t taint_list = { NULL, NULL, 0 };
 
