@@ -44,11 +44,11 @@ void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!command)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), memosvs.nick);
-		command_success_nodata(si, _("\2%s\2 allows users to send memos to registered users."), memosvs.nick);
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
+		command_success_nodata(si, _("\2%s\2 allows users to send memos to registered users."), si->service->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", memosvs.me->disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, ms_cmdtree);

@@ -112,18 +112,18 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				/* but not for channel memos */
 				if (memo->status & MEMO_CHANNEL)
 					;
-				else if (strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
-					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
+				else if (strcasecmp(si->service->nick, memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
+					myuser_notice(si->service->me->nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
 				else
 				{
 					/* If they have an account, their inbox is not full and they aren't memoserv */
-					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick,memo->sender))
+					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(si->service->nick, memo->sender))
 					{
 						/* Malloc and populate memo struct */
 						receipt = smalloc(sizeof(mymemo_t));
 						receipt->sent = CURRTIME;
 						receipt->status = 0;
-						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
+						strlcpy(receipt->sender, si->service->nick, NICKLEN);
 						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 						
 						/* Attach to their linked list */

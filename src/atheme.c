@@ -32,7 +32,6 @@
 
 chansvs_t chansvs;
 opersvs_t opersvs;
-memosvs_t memosvs;
 nicksvs_t nicksvs;
 
 list_t taint_list = { NULL, NULL, 0 };
