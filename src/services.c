@@ -667,12 +667,11 @@ void notice(const char *from, const char *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	const char *str = translation_get(fmt);
 	user_t *u;
 	channel_t *c;
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, str, args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
 	if (*to == '#')
@@ -794,10 +793,9 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	const char *str = translation_get(fmt);
 
 	va_start(args, fmt);
-	vsnprintf(buf, sizeof buf, str, args);
+	vsnprintf(buf, sizeof buf, fmt, args);
 	va_end(args);
 
 	if (si->v != NULL && si->v->cmd_fail)
@@ -818,7 +816,6 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	const char *str = translation_get(fmt);
 	char *p, *q;
 	char space[] = " ";
 
@@ -827,7 +824,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	si->output_count++;
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, str, args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
 	if (si->v != NULL && si->v->cmd_fail)
@@ -868,10 +865,9 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 {
 	va_list args;
 	char buf[BUFSIZE];
-	const char *str = translation_get(fmt);
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, str, args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
 	if (si->v != NULL && si->v->cmd_fail)
@@ -1005,7 +1001,7 @@ void wallops(const char *fmt, ...)
 		return;
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
 	if (me.me != NULL && me.connected)
@@ -1023,7 +1019,7 @@ void verbose_wallops(const char *fmt, ...)
 		return;
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
 	if (me.me != NULL && me.connected)
