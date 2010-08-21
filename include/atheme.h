@@ -53,6 +53,7 @@
 #include "sourceinfo.h"
 #include "taint.h"
 #include "database_backend.h"
+#include "entity.h"
 
 #include "inline/account.h"
 #include "inline/channels.h"

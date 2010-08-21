@@ -102,7 +102,7 @@ void handle_stats(user_t *u, char req)
 		  mowgli_patricia_stats(userlist, dictionary_stats_cb, u);
 		  mowgli_patricia_stats(chanlist, dictionary_stats_cb, u);
 		  mowgli_patricia_stats(servlist, dictionary_stats_cb, u);
-		  mowgli_patricia_stats(mulist, dictionary_stats_cb, u);
+		  myentity_stats(dictionary_stats_cb, u);
 		  mowgli_patricia_stats(nicklist, dictionary_stats_cb, u);
 		  mowgli_patricia_stats(mclist, dictionary_stats_cb, u);
 		  break;

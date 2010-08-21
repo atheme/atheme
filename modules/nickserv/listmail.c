@@ -43,10 +43,10 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(const char *key, void *data, void *privdata)
+static int listmail_foreach_cb(myentity_t *me, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = (myuser_t *)data;
+	myuser_t *mu = user(me);
 
 	if (!match(state->pattern, mu->email))
 	{
@@ -76,7 +76,7 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 	state.matches = 0;
 	state.pattern = email;
 	state.origin = si;
-	mowgli_patricia_foreach(mulist, listmail_foreach_cb, &state);
+	myentity_foreach_t(ENT_USER, listmail_foreach_cb, &state);
 
 	logcommand(si, CMDLOG_ADMIN, "LISTMAIL: \2%s\2 (\2%d\2 matches)", email, state.matches);
 	if (state.matches == 0)

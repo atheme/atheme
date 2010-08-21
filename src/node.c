@@ -53,6 +53,7 @@ void init_nodes(void)
 	init_servers();
 	init_metadata();
 	init_accounts();
+	init_entities();
 	init_users();
 	init_channels();
 	init_privs();

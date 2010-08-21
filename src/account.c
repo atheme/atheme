@@ -27,7 +27,6 @@
 #include "privs.h"
 #include "authcookie.h"
 
-mowgli_patricia_t *mulist;
 mowgli_patricia_t *nicklist;
 mowgli_patricia_t *oldnameslist;
 mowgli_patricia_t *mclist;
@@ -70,7 +69,6 @@ void init_accounts(void)
 		exit(EXIT_FAILURE);
 	}
 
-	mulist = mowgli_patricia_create(irccasecanon);
 	nicklist = mowgli_patricia_create(irccasecanon);
 	oldnameslist = mowgli_patricia_create(irccasecanon);
 	mclist = mowgli_patricia_create(irccasecanon);
@@ -114,6 +112,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	mu = BlockHeapAlloc(myuser_heap);
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
 
+	entity(mu)->type = ENT_USER;
 	strlcpy(entity(mu)->name, name, NICKLEN);
 	mu->email = sstrdup(email);
 
@@ -137,7 +136,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	else
 		set_password(mu, pass);
 
-	mowgli_patricia_add(mulist, entity(mu)->name, mu);
+	myentity_put(entity(mu));
 
 	if ((soper = soper_find_named(entity(mu)->name)) != NULL)
 	{
@@ -289,7 +288,7 @@ void myuser_delete(myuser_t *mu)
 		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
 
 	/* entity(mu)->name is the index for this dtree */
-	mowgli_patricia_delete(mulist, entity(mu)->name);
+	myentity_del(entity(mu));
 
 	free(mu->email);
 
@@ -332,9 +331,9 @@ void myuser_rename(myuser_t *mu, const char *name)
 			ircd_on_logout(u, entity(mu)->name);
 		}
 	}
-	mowgli_patricia_delete(mulist, entity(mu)->name);
+	myentity_del(entity(mu));
 	strlcpy(entity(mu)->name, name, NICKLEN);
-	mowgli_patricia_add(mulist, entity(mu)->name, mu);
+	myentity_put(entity(mu));
 	if (authservice_loaded)
 	{
 		LIST_FOREACH(n, mu->logins.head)
@@ -1791,10 +1790,12 @@ bool chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask,
 	return chanacs_change(mychan, mu, hostmask, &a, &r, ca_all);
 }
 
-static int expire_myuser_cb(const char *key, void *data, void *unused)
+static int expire_myuser_cb(myentity_t *me, void *unused)
 {
-	hook_expiry_req_t req; 
-	myuser_t *mu = (myuser_t *) data;
+	hook_expiry_req_t req;
+	myuser_t *mu = user(me);
+
+	return_val_if_fail(isuser(me), 0);
 
 	/* If they're logged in, update lastlogin time.
 	 * To decrease db traffic, may want to only do
@@ -1849,7 +1850,7 @@ void expire_check(void *arg)
 	 * right away -- jilles */
 	sendq_flush(curr_uplink->conn);
 
-	mowgli_patricia_foreach(mulist, expire_myuser_cb, NULL);
+	myentity_foreach_t(ENT_USER, expire_myuser_cb, NULL);
 
 	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
@@ -1933,11 +1934,13 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(const char *key, void *data, void *unused)
+static int check_myuser_cb(myentity_t *me, void *unused)
 {
-	myuser_t *mu = (myuser_t *) data;
+	myuser_t *mu = user(me);
 	node_t *n;
 	mynick_t *mn, *mn1;
+
+	return_val_if_fail(isuser(me), 0);
 
 	if (!nicksvs.no_nick_ownership)
 	{
@@ -1975,7 +1978,7 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 
 void db_check(void)
 {
-	mowgli_patricia_foreach(mulist, check_myuser_cb, NULL);
+	myentity_foreach_t(ENT_USER, check_myuser_cb, NULL);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
