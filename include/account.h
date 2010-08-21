@@ -119,7 +119,6 @@ struct myuser_
 #define MU_NOOP        0x00000004
 #define MU_WAITAUTH    0x00000008
 #define MU_HIDEMAIL    0x00000010
-#define MU_OLD_ALIAS   0x00000020 /* obsolete */
 #define MU_NOMEMO      0x00000040
 #define MU_EMAILMEMOS  0x00000080
 #define MU_CRYPTPASS   0x00000100

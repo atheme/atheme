@@ -1939,13 +1939,6 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 	node_t *n;
 	mynick_t *mn, *mn1;
 
-	if (MU_OLD_ALIAS & mu->flags)
-	{
-		slog(LG_REGISTER, "db_check(): converting previously linked nick %s to a standalone nick", entity(mu)->name);
-		mu->flags &= ~MU_OLD_ALIAS;
-		metadata_delete(mu, "private:alias:parent");
-	}
-
 	if (!nicksvs.no_nick_ownership)
 	{
 		mn1 = NULL;
