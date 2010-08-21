@@ -406,7 +406,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 	{
 		mn = mynick_find(u->nick);
 		mu = mn != NULL ? mn->owner : NULL;
-		login = mu != NULL ? mu->name : u->nick;
+		login = mu != NULL ? entity(mu)->name : u->nick;
 	}
 	if (mu == NULL)
 	{
@@ -472,7 +472,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 	{
 		mn = mynick_find(u->nick);
 		mu = mn != NULL ? mn->owner : NULL;
-		login = mu != NULL ? mu->name : u->nick;
+		login = mu != NULL ? entity(mu)->name : u->nick;
 	}
 
 	if (authservice_loaded)
@@ -518,7 +518,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 		if (LIST_LENGTH(&mu->logins))
 			slog(LG_INFO, "handle_setlogin(): account %s with changing registration time has logins", login);
 		slog(LG_DEBUG, "handle_setlogin(): changing registration time for %s from %lu to %lu",
-				mu->name, (unsigned long)mu->registered,
+				entity(mu)->name, (unsigned long)mu->registered,
 				(unsigned long)ts);
 		mu->registered = ts;
 	}
@@ -545,7 +545,7 @@ void handle_clearlogin(sourceinfo_t *si, user_t *u)
 		return;
 
 	slog(LG_DEBUG, "handle_clearlogin(): %s cleared login for %s (%s)",
-			get_oper_name(si), u->nick, u->myuser->name);
+			get_oper_name(si), u->nick, entity(u->myuser)->name);
 	n = node_find(u, &u->myuser->logins);
 	if (n != NULL)
 	{
@@ -575,18 +575,18 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
-		notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
-		logcommand_user(svs, u, CMDLOG_LOGIN, "failed LOGIN to %s (frozen) via CERTFP (%s)", mu->name, certfp);
+		notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", entity(mu)->name);
+		logcommand_user(svs, u, CMDLOG_LOGIN, "failed LOGIN to %s (frozen) via CERTFP (%s)", entity(mu)->name, certfp);
 		return;
 	}
 
 	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 		return;
 	}
 
-	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), mu->name);
+	notice(svs->me->nick, u->nick, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), entity(mu)->name);
 
 	myuser_login(svs, u, mu, true);
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
@@ -604,9 +604,9 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	return_if_fail(u->myuser == NULL);
 
 	if (is_soper(mu))
-		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, entity(mu)->name);
 
-	myuser_notice(svs->me->nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
+	myuser_notice(svs->me->nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, entity(mu)->name);
 
 	u->myuser = mu;
 	node_add(u, node_create(), &mu->logins);
@@ -776,7 +776,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
 	if (is_soper(mu))
-		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), mu->name);
+		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), entity(mu)->name);
 
 	if (atoi(md_failnum->value) == 10)
 	{
@@ -784,7 +784,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", mu->name, mask, strfbuf);
+		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", entity(mu)->name, mask, strfbuf);
 	}
 
 	return false;
@@ -907,18 +907,18 @@ const char *get_source_name(sourceinfo_t *si)
 
 	if (si->su != NULL)
 	{
-		if (si->smu && !irccasecmp(si->su->nick, si->smu->name))
+		if (si->smu && !irccasecmp(si->su->nick, entity(si->smu)->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
 			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
-					si->smu ? si->smu->name : "");
+					si->smu ? entity(si->smu)->name : "");
 	}
 	else if (si->s != NULL)
 		snprintf(result, sizeof result, "%s", si->s->name);
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
-				si->smu ? si->smu->name : "");
+				si->smu ? entity(si->smu)->name : "");
 	}
 	return result;
 }
@@ -940,7 +940,7 @@ const char *get_source_mask(sourceinfo_t *si)
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
-				si->smu ? si->smu->name : "");
+				si->smu ? entity(si->smu)->name : "");
 	}
 	return result;
 }
@@ -958,18 +958,18 @@ const char *get_oper_name(sourceinfo_t *si)
 			snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,
 					si->su->user, si->su->vhost,
 					si->su->server->name);
-		else if (!irccasecmp(si->su->nick, si->smu->name))
+		else if (!irccasecmp(si->su->nick, entity(si->smu)->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
 			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
-					si->smu ? si->smu->name : "");
+					si->smu ? entity(si->smu)->name : "");
 	}
 	else if (si->s != NULL)
 		snprintf(result, sizeof result, "%s", si->s->name);
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
-				si->smu ? si->smu->name : "");
+				si->smu ? entity(si->smu)->name : "");
 	}
 	return result;
 }
@@ -982,7 +982,7 @@ const char *get_storage_oper_name(sourceinfo_t *si)
 		return si->v->get_storage_oper_name(si);
 
 	if (si->smu != NULL)
-		snprintf(result, sizeof result, "%s", si->smu->name);
+		snprintf(result, sizeof result, "%s", entity(si->smu)->name);
 	else if (si->su != NULL)
 	{
 		snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,

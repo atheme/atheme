@@ -139,7 +139,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 			return NULL;
 		}
 	}
-	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
+	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? entity(mu)->name : name, operclass ? operclass->name : "<null>");
 
 	soper = BlockHeapAlloc(soper_heap);
 	n = node_create();
@@ -178,7 +178,7 @@ void soper_delete(soper_t *soper)
 		return;
 	}
 
-	slog(LG_DEBUG, "soper_delete(): %s", (soper->myuser) ? soper->myuser->name : soper->name);
+	slog(LG_DEBUG, "soper_delete(): %s", (soper->myuser) ? entity(soper->myuser)->name : soper->name);
 
 	n = node_find(soper, &soperlist);
 	node_del(n, &soperlist);

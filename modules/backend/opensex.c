@@ -78,7 +78,7 @@ opensex_db_save(database_handle_t *db)
 		 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 		 */
 		db_start_row(db, "MU");
-		db_write_word(db, mu->name);
+		db_write_word(db, entity(mu)->name);
 		db_write_word(db, mu->pass);
 		db_write_word(db, mu->email);
 		db_write_time(db, mu->registered);
@@ -94,7 +94,7 @@ opensex_db_save(database_handle_t *db)
 			metadata_t *md = (metadata_t *)tn->data;
 
 			db_start_row(db, "MDU");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, md->name);
 			db_write_str(db, md->value);
 			db_commit_row(db);
@@ -105,7 +105,7 @@ opensex_db_save(database_handle_t *db)
 			mymemo_t *mz = (mymemo_t *)tn->data;
 
 			db_start_row(db, "ME");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, mz->sender);
 			db_write_time(db, mz->sent);
 			db_write_uint(db, mz->status);
@@ -116,7 +116,7 @@ opensex_db_save(database_handle_t *db)
 		LIST_FOREACH(tn, mu->memo_ignores.head)
 		{
 			db_start_row(db, "MI");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, (char *)tn->data);
 			db_commit_row(db);
 		}
@@ -124,7 +124,7 @@ opensex_db_save(database_handle_t *db)
 		LIST_FOREACH(tn, mu->access_list.head)
 		{
 			db_start_row(db, "AC");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, (char *)tn->data);
 			db_commit_row(db);
 		}
@@ -134,7 +134,7 @@ opensex_db_save(database_handle_t *db)
 			mynick_t *mn = tn->data;
 
 			db_start_row(db, "MN");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, mn->nick);
 			db_write_time(db, mn->registered);
 			db_write_time(db, mn->lastseen);
@@ -146,7 +146,7 @@ opensex_db_save(database_handle_t *db)
 			mycertfp_t *mcfp = tn->data;
 
 			db_start_row(db, "MCFP");
-			db_write_word(db, mu->name);
+			db_write_word(db, entity(mu)->name);
 			db_write_word(db, mcfp->certfp);
 			db_commit_row(db);
 		}
@@ -186,7 +186,7 @@ opensex_db_save(database_handle_t *db)
 
 			db_start_row(db, "CA");
 			db_write_word(db, ca->mychan->name);
-			db_write_word(db, ca->myuser ? ca->myuser->name : ca->host);
+			db_write_word(db, ca->myuser ? entity(ca->myuser)->name : ca->host);
 			db_write_word(db, bitmask_to_flags(ca->level));
 			db_write_time(db, ca->tmodified);
 			db_commit_row(db);
@@ -196,7 +196,7 @@ opensex_db_save(database_handle_t *db)
 				char buf[BUFSIZE];
 				metadata_t *md = (metadata_t *)tn2->data;
 
-				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->myuser) ? ca->myuser->name : ca->host);
+				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->myuser) ? entity(ca->myuser)->name : ca->host);
 
 				db_start_row(db, "MDA");
 				db_write_word(db, buf);
@@ -267,7 +267,7 @@ opensex_db_save(database_handle_t *db)
 
 		/* SO <account> <operclass> <flags> [password] */
 		db_start_row(db, "SO");
-		db_write_word(db, soper->myuser->name);
+		db_write_word(db, entity(soper->myuser)->name);
 		db_write_word(db, soper->classname);
 		db_write_uint(db, soper->flags);
 
@@ -594,7 +594,7 @@ static void opensex_h_so(database_handle_t *db, const char *type)
 		return;
 	}
 
-	soper_add(mu->name, class, flags & ~SOPER_CONF, pass);
+	soper_add(entity(mu)->name, class, flags & ~SOPER_CONF, pass);
 }
 
 static void opensex_h_mc(database_handle_t *db, const char *type)

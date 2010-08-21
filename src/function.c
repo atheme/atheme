@@ -427,11 +427,11 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		{
 			wallops(_("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)"),
 					u->nick, u->user, u->vhost,
-					type, mu->name, email);
+					type, entity(mu)->name, email);
 			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",
 					u->nick, u->user, u->vhost,
 					u->ip[0] ? u->ip : u->host,
-					type, mu->name, email);
+					type, entity(mu)->name, email);
 			lastwallops = CURRTIME;
 		}
 		return 0;
@@ -439,7 +439,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 
 	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>",
 			u->nick, u->user, u->vhost, u->ip[0] ? u->ip : u->host,
-			type, mu->name, email);
+			type, entity(mu)->name, email);
 
 	/* set up the email headers */
 	time(&t);
@@ -450,7 +450,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 
 	snprintf(from, sizeof from, "%s automailer <noreply.%s>",
 			me.netname, me.adminemail);
-	snprintf(to, sizeof to, "%s <%s>", mu->name, email);
+	snprintf(to, sizeof to, "%s <%s>", entity(mu)->name, email);
 
 	strlcpy(subject, me.netname, sizeof subject);
 	strlcat(subject, " ", sizeof subject);
@@ -489,29 +489,29 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	fprintf(out, "Subject: %s\n", subject);
 	fprintf(out, "Date: %s\n\n", date);
 
-	fprintf(out, "%s,\n\n", mu->name);
+	fprintf(out, "%s,\n\n", entity(mu)->name);
 
 	if (type == EMAIL_REGISTER)
 	{
 		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
-		fprintf(out, "/msg %s VERIFY REGISTER %s %s\n\n", nicksvs.me->disp, mu->name, param);
+		fprintf(out, "/msg %s VERIFY REGISTER %s %s\n\n", nicksvs.me->disp, entity(mu)->name, param);
 		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
 				(nicksvs.no_nick_ownership ? "account" : "nickname"), me.netname);
 	}
 	else if (type == EMAIL_SENDPASS)
 	{
-		fprintf(out, "Someone has requested the password for %s be sent to the\n" "corresponding email address. If you did not request this action\n" "please let us know.\n\n", mu->name);
-		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n\n", mu->name, param);
+		fprintf(out, "Someone has requested the password for %s be sent to the\n" "corresponding email address. If you did not request this action\n" "please let us know.\n\n", entity(mu)->name);
+		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n\n", entity(mu)->name, param);
 	}
 	else if (type == EMAIL_SETEMAIL)
 	{
 		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/msg %s VERIFY EMAILCHG %s %s\n\n", nicksvs.me->disp, mu->name, param);
+		fprintf(out, "/msg %s VERIFY EMAILCHG %s %s\n\n", nicksvs.me->disp, entity(mu)->name, param);
 	}
 	else if (type == EMAIL_MEMO)
 	{
 		if (u->myuser != NULL)
-			fprintf(out,"You have a new memo from %s.\n\n", u->myuser->name);
+			fprintf(out,"You have a new memo from %s.\n\n", entity(u->myuser)->name);
 		else
 			/* shouldn't happen */
 			fprintf(out,"You have a new memo from %s (unregistered?).\n\n", u->nick);
@@ -520,7 +520,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else if (type == EMAIL_SETPASS)
 	{
 		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/msg %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.me->disp, mu->name, param);
+		fprintf(out, "/msg %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.me->disp, entity(mu)->name, param);
 	}
 
 	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);

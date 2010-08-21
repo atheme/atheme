@@ -375,7 +375,7 @@ static void flatfile_db_load(void)
 				slog(LG_DEBUG, "db_load(): invalid services oper (SO %s %s %s)", user, class, flagstr);
 				continue;
 			}
-			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF, password);
+			soper_add(entity(mu)->name, class, atoi(flagstr) & ~SOPER_CONF, password);
 		}
 		else if (!strcmp("MC", item))
 		{

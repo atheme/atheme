@@ -114,7 +114,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	mu = BlockHeapAlloc(myuser_heap);
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
 
-	strlcpy(mu->name, name, NICKLEN);
+	strlcpy(entity(mu)->name, name, NICKLEN);
 	mu->email = sstrdup(email);
 
 	mu->registered = CURRTIME;
@@ -137,16 +137,16 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	else
 		set_password(mu, pass);
 
-	mowgli_patricia_add(mulist, mu->name, mu);
+	mowgli_patricia_add(mulist, entity(mu)->name, mu);
 
-	if ((soper = soper_find_named(mu->name)) != NULL)
+	if ((soper = soper_find_named(entity(mu)->name)) != NULL)
 	{
-		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as soper, activating privileges.", mu->name);
+		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as soper, activating privileges.", entity(mu)->name);
 		soper->myuser = mu;
 		mu->soper = soper;
 	}
 
-	myuser_name_restore(mu->name, mu);
+	myuser_name_restore(entity(mu)->name, mu);
 
 	cnt.myuser++;
 
@@ -181,15 +181,15 @@ void myuser_delete(myuser_t *mu)
 	return_if_fail(mu != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
+		slog(LG_DEBUG, "myuser_delete(): %s", entity(mu)->name);
 
-	myuser_name_remember(mu->name, mu);
+	myuser_name_remember(entity(mu)->name, mu);
 
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
-		if (!authservice_loaded || !ircd_on_logout(u, mu->name))
+		if (!authservice_loaded || !ircd_on_logout(u, entity(mu)->name))
 		{
 			u->myuser = NULL;
 			node_del(n, &mu->logins);
@@ -206,27 +206,27 @@ void myuser_delete(myuser_t *mu)
 		/* attempt succession */
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, successor->name, mu->name);
+			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
-					mc->name, successor->name,
+					mc->name, entity(successor)->name,
 					(long)(CURRTIME - mc->used),
-					mu->name,
+					entity(mu)->name,
 					LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
-				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mu->name);
+				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mu)->name);
 
 			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0);
 			if (chansvs.me != NULL)
-				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, successor->name);
+				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
 			object_unref(ca);
 		}
 		/* no successor found */
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
-			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
+			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
-					mu->name,
+					entity(mu)->name,
 					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
@@ -266,15 +266,15 @@ void myuser_delete(myuser_t *mu)
 	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)
 	{
 		mn = n->data;
-		if (irccasecmp(mn->nick, mu->name))
+		if (irccasecmp(mn->nick, entity(mu)->name))
 		{
 			slog(LG_VERBOSE, "myuser_delete(): deleting nick %s (unused %lds, owner %s)",
 					mn->nick,
 					(long)(CURRTIME - mn->lastseen),
-					mu->name);
+					entity(mu)->name);
 			if (strlen(nicks) + strlen(mn->nick) + 3 >= sizeof nicks)
 			{
-				slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, mu->name);
+				slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
 				nicks[0] = '\0';
 			}
 			if (nicks[0] != '\0')
@@ -286,10 +286,10 @@ void myuser_delete(myuser_t *mu)
 		object_unref(mn);
 	}
 	if (nicks[0] != '\0')
-		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, mu->name);
+		slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), nicks, entity(mu)->name);
 
-	/* mu->name is the index for this dtree */
-	mowgli_patricia_delete(mulist, mu->name);
+	/* entity(mu)->name is the index for this dtree */
+	mowgli_patricia_delete(mulist, entity(mu)->name);
 
 	free(mu->email);
 
@@ -322,19 +322,19 @@ void myuser_rename(myuser_t *mu, const char *name)
 	hook_user_rename_t data;
 
 	char nb[NICKLEN];
-	strlcpy(nb, mu->name, NICKLEN);
+	strlcpy(nb, entity(mu)->name, NICKLEN);
 
 	if (authservice_loaded)
 	{
 		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = n->data;
-			ircd_on_logout(u, mu->name);
+			ircd_on_logout(u, entity(mu)->name);
 		}
 	}
-	mowgli_patricia_delete(mulist, mu->name);
-	strlcpy(mu->name, name, NICKLEN);
-	mowgli_patricia_add(mulist, mu->name, mu);
+	mowgli_patricia_delete(mulist, entity(mu)->name);
+	strlcpy(entity(mu)->name, name, NICKLEN);
+	mowgli_patricia_add(mulist, entity(mu)->name, mu);
 	if (authservice_loaded)
 	{
 		LIST_FOREACH(n, mu->logins.head)
@@ -541,7 +541,7 @@ myuser_access_add(myuser_t *mu, const char *mask)
 
 	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
-		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", mu->name);
+		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", entity(mu)->name);
 		return false;
 	}
 
@@ -656,7 +656,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	return_val_if_fail((mn = mynick_find(name)) == NULL, mn);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
+		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, entity(mu)->name);
 
 	mn = BlockHeapAlloc(mynick_heap);
 	object_init(object(mn), NULL, (destructor_t) mynick_delete);
@@ -850,16 +850,16 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 	md2 = metadata_find(mun, "private:mark:reason");
 	if (md != NULL && md2 != NULL && strcmp(md->value, md2->value))
 	{
-		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, mu->name, name);
-		slog(LG_INFO, _("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, mu->name);
+		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, entity(mu)->name, name);
+		slog(LG_INFO, _("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, entity(mu)->name);
 		slog(LG_VERBOSE, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
-				md2->value, mu->name, name);
+				md2->value, entity(mu)->name, name);
 	}
 	else if (md == NULL && md2 != NULL)
 	{
-		slog(LG_INFO, _("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, mu->name);
+		slog(LG_INFO, _("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, entity(mu)->name);
 		slog(LG_VERBOSE, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
-				md2->value, mu->name, name);
+				md2->value, entity(mu)->name, name);
 	}
 
 	LIST_FOREACH(n, object(mun)->metadata.head)
@@ -1031,7 +1031,7 @@ const char *mychan_founder_names(mychan_t *mc)
 		{
 			if (names[0] != '\0')
 				strlcat(names, ", ", sizeof names);
-			strlcat(names, ca->myuser->name, sizeof names);
+			strlcat(names, entity(ca->myuser)->name, sizeof names);
 		}
 	}
 	return names;
@@ -1300,7 +1300,7 @@ static void chanacs_delete(chanacs_t *ca)
 
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
-			ca->myuser != NULL ? ca->myuser->name : ca->host);
+			ca->myuser != NULL ? entity(ca->myuser)->name : ca->host);
 	node_del(&ca->cnode, &ca->mychan->chanacs);
 
 	if (ca->myuser != NULL)
@@ -1350,7 +1350,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	}
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, myuser->name);
+		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, entity(myuser)->name);
 
 	n = node_create();
 
@@ -1826,9 +1826,9 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 		if (is_conf_soper(mu))
 			return 0;
 
-		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
+		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), entity(mu)->name, mu->email);
 		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
-				mu->name, (int)(CURRTIME - mu->lastlogin),
+				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
 				LIST_LENGTH(&mu->chanacs));
 		object_unref(mu);
@@ -1868,7 +1868,7 @@ void expire_check(void *arg)
 				continue;
 
 			/* do not drop main nick like this */
-			if (!irccasecmp(mn->nick, mn->owner->name))
+			if (!irccasecmp(mn->nick, entity(mn->owner)->name))
 				continue;
 
 			u = user_find_named(mn->nick);
@@ -1880,10 +1880,10 @@ void expire_check(void *arg)
 				continue;
 			}
 
-			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
+			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, entity(mn->owner)->name);
 			slog(LG_VERBOSE, "expire_check(): expiring nick %s (unused %lds, account %s)",
 					mn->nick, (long)(CURRTIME - mn->lastseen),
-					mn->owner->name);
+					entity(mn->owner)->name);
 			object_unref(mn);
 		}
 	}
@@ -1941,7 +1941,7 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 
 	if (MU_OLD_ALIAS & mu->flags)
 	{
-		slog(LG_REGISTER, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
+		slog(LG_REGISTER, "db_check(): converting previously linked nick %s to a standalone nick", entity(mu)->name);
 		mu->flags &= ~MU_OLD_ALIAS;
 		metadata_delete(mu, "private:alias:parent");
 	}
@@ -1956,22 +1956,22 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 				mu->registered = mn->registered;
 			if (mn->lastseen > mu->lastlogin)
 				mu->lastlogin = mn->lastseen;
-			if (!irccasecmp(mu->name, mn->nick))
+			if (!irccasecmp(entity(mu)->name, mn->nick))
 				mn1 = mn;
 		}
-		mn = mn1 != NULL ? mn1 : mynick_find(mu->name);
+		mn = mn1 != NULL ? mn1 : mynick_find(entity(mu)->name);
 		if (mn == NULL)
 		{
-			slog(LG_REGISTER, "db_check(): adding missing nick %s", mu->name);
-			mn = mynick_add(mu, mu->name);
+			slog(LG_REGISTER, "db_check(): adding missing nick %s", entity(mu)->name);
+			mn = mynick_add(mu, entity(mu)->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;
 		}
 		else if (mn->owner != mu)
 		{
-			slog(LG_REGISTER, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
+			slog(LG_REGISTER, "db_check(): replacing nick %s owned by %s with %s", mn->nick, entity(mn->owner)->name, entity(mu)->name);
 			object_unref(mn);
-			mn = mynick_add(mu, mu->name);
+			mn = mynick_add(mu, entity(mu)->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;
 		}

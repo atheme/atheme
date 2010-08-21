@@ -65,12 +65,25 @@ struct svsignore_ {
   char *reason;
 };
 
+typedef enum {
+	ENT_USER = 0,
+	ENT_GROUP,
+} myentity_type_t;
+
+#define entity(x)	((myentity_t *)(x))
+#define user(x)		((myuser_t *)(x))
+#define group(x)	((mygroup_t *)(x))
+
+typedef struct {
+	object_t parent;
+	myentity_type_t type;
+	char name[NICKLEN];
+} myentity_t;
+
 /* services accounts */
 struct myuser_
 {
-  object_t parent;
-
-  char name[NICKLEN];
+  myentity_t ent;
   char pass[PASSLEN];
   char *email;
 

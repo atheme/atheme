@@ -651,16 +651,16 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 
 	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s!%s@%s[%s] %s",
 			svs != NULL ? svs->nick : me.name,
-			source->myuser != NULL ? source->myuser->name : "",
+			source->myuser != NULL ? entity(source->myuser)->name : "",
 			source->nick, source->user, source->host,
 			source->ip[0] != '\0' ? source->ip : source->host,
 			lbuf);
-	showaccount = source->myuser == NULL || irccasecmp(source->myuser->name, source->nick);
+	showaccount = source->myuser == NULL || irccasecmp(entity(source->myuser)->name, source->nick);
 	slog_ext(LOG_INTERACTIVE, level, "%s %s%s%s%s %s",
 			svs != NULL ? svs->nick : me.name,
 			source->nick,
 			showaccount ? " (" : "",
-			showaccount ? (source->myuser ? source->myuser->name : "") : "",
+			showaccount ? (source->myuser ? entity(source->myuser)->name : "") : "",
 			showaccount ? ")" : "",
 			lbuf);
 }
@@ -687,7 +687,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
  * Side Effects:
  *       - qualifying logfile_t objects in log_files are updated.
  */
-void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
+void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
@@ -698,7 +698,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 
 	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s(%s)[%s] %s",
 			svs != NULL ? svs->nick : me.name,
-			login != NULL ? login->name : "",
+			mu != NULL ? entity(mu)->name : "",
 			type,
 			source != NULL ? source->hbuf : "<noconn>",
 			sourcedesc != NULL ? sourcedesc : "<unknown>",
@@ -706,7 +706,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 	slog_ext(LOG_INTERACTIVE, level, "%s <%s>%s %s",
 			svs != NULL ? svs->nick : me.name,
 			type,
-			login != NULL ? login->name : "",
+			mu != NULL ? entity(mu)->name : "",
 			lbuf);
 }
 

@@ -194,7 +194,7 @@ void handle_stats(user_t *u, char req)
 				  fl[j++] = '*';
 			  fl[j] = '\0';
 			  numeric_sts(me.me, 243, u, "O *@* %s %s %s %s",
-					  fl, soper->myuser ? soper->myuser->name : soper->name,
+					  fl, soper->myuser ? entity(soper->myuser)->name : soper->name,
 					  soper->operclass ? soper->operclass->name : soper->classname, "-1");
 		  }
 		  break;
@@ -312,7 +312,7 @@ void handle_whois(user_t *u, const char *target)
 		if (is_ircop(t))
 			numeric_sts(me.me, 313, u, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
 		if (t->myuser && !(t->myuser->flags & MU_WAITAUTH))
-			numeric_sts(me.me, 330, u, "%s %s :is logged in as", t->nick, t->myuser->name);
+			numeric_sts(me.me, 330, u, "%s %s :is logged in as", t->nick, entity(t->myuser)->name);
 	}
 	else
 		numeric_sts(me.me, 401, u, "%s :No such nick", target);
