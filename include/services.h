@@ -10,7 +10,6 @@
 #define SERVICES_H
 
 typedef struct chansvs_ chansvs_t;
-typedef struct globsvs_ globsvs_t;
 typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
@@ -46,16 +45,6 @@ struct chansvs_
   unsigned int maxfounders;	/* max founders per channel    */
 
   char *deftemplates;		/* default templates          */
-};
-
-struct globsvs_
-{
-  char *nick;
-  char *user;
-  char *host;
-  char *real;
-   
-  service_t *me;
 };
 
 struct opersvs_
@@ -112,7 +101,6 @@ struct nicksvs_
 
 /* atheme.c */
 E chansvs_t chansvs;
-E globsvs_t globsvs;
 E opersvs_t opersvs;
 E memosvs_t memosvs;
 E nicksvs_t nicksvs;

@@ -120,7 +120,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			/* Cannot use si->service->me here, global notices
 			 * should come from global even if /os global was
 			 * used. */
-			notice_global_sts(globsvs.me->me, "*", buf);
+			notice_global_sts(globsvs->me, "*", buf);
 			isfirst = false;
 			/* log everything */
 			logcommand(si, CMDLOG_ADMIN, "GLOBAL: \2%s\2", global->text);
@@ -203,23 +203,14 @@ static void gservice(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
 }
 
-static void global_config_ready(void *unused)
-{
-	globsvs.nick = globsvs.me->nick;
-	globsvs.user = globsvs.me->user;
-	globsvs.host = globsvs.me->host;
-	globsvs.real = globsvs.me->real;
-}
+service_t *globsvs = NULL;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	hook_add_event("config_ready");
-	hook_add_config_ready(global_config_ready);
-
-	globsvs.me = service_add("global", gservice, &gs_cmdtree, &gs_conftable);
+	globsvs = service_add("global", gservice, &gs_cmdtree, &gs_conftable);
 
 	command_add(&gs_global, &gs_cmdtree);
 
@@ -237,15 +228,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	if (globsvs.me)
-	{
-		globsvs.nick = NULL;
-		globsvs.user = NULL;
-		globsvs.host = NULL;
-		globsvs.real = NULL;
-		service_delete(globsvs.me);
-		globsvs.me = NULL;
-	}
+	if (globsvs != NULL)
+		service_delete(globsvs);
 
 	command_delete(&gs_global, &gs_cmdtree);
 
@@ -259,8 +243,6 @@ void _moddeinit(void)
 	help_delentry(&gs_helptree, "HELP");
 
 	command_delete(&gs_help, &gs_cmdtree);
-
-	hook_del_config_ready(global_config_ready);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
