@@ -239,10 +239,13 @@ static void dreamforge_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void dreamforge_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, opersvs.nick, (unsigned long)CURRTIME, reason);
+	svs = service_find("operserv");
+	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -324,7 +327,7 @@ static void dreamforge_jupe(const char *server, const char *reason)
 		return;
 
 	server_delete(server);
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	sts(":%s SQUIT %s :%s", me.name, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 

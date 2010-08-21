@@ -248,6 +248,8 @@ static void ircnet_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ircnet_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
@@ -255,18 +257,24 @@ static void ircnet_kline_sts(const char *server, const char *user, const char *h
 	 * you'll need some bot/service on each server to do that */
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
 		wallops("Missed a tkline");
-	sts(":%s TKLINE %lds %s@%s :%s", opersvs.nick, duration, user, host, reason);
+
+	svs = service_find("operserv");
+	sts(":%s TKLINE %lds %s@%s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void ircnet_unkline_sts(const char *server, const char *user, const char *host)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
 		wallops("Missed an untkline");
-	sts(":%s UNTKLINE %s@%s", opersvs.nick, user, host);
+
+	svs = service_find("operserv");
+	sts(":%s UNTKLINE %s@%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, user, host);
 }
 
 /* topic wrapper */
@@ -329,6 +337,7 @@ static bool ircnet_on_logout(user_t *u, const char *account)
 
 static void ircnet_jupe(const char *server, const char *reason)
 {
+	service_t *svs;
 	static char sid[4+1];
 	int i;
 	server_t *s;
@@ -336,7 +345,9 @@ static void ircnet_jupe(const char *server, const char *reason)
 	if (!me.connected)
 		return;
 
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	svs = service_find("operserv");
+	sts(":%s SQUIT %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, server, reason);
+
 	s = server_find(server);
 	/* We need to wait for the SQUIT to be processed -- jilles */
 	if (s != NULL)

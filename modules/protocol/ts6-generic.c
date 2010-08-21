@@ -273,55 +273,73 @@ static void ts6_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ts6_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s KLINE %ld %s %s :%s", CLIENT_NAME(opersvs.me->me), server, duration, user, host, reason);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s KLINE %ld %s %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void ts6_unkline_sts(const char *server, const char *user, const char *host)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s UNKLINE %s %s", CLIENT_NAME(opersvs.me->me), server, user, host);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s UNKLINE %s %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, user, host);
 }
 
 /* server-to-server XLINE wrapper */
 static void ts6_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s XLINE %ld %s 2 :%s", CLIENT_NAME(opersvs.me->me), server, duration, realname, reason);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s XLINE %ld %s 2 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, realname, reason);
 }
 
 /* server-to-server UNXLINE wrapper */
 static void ts6_unxline_sts(const char *server, const char *realname)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s UNXLINE %s", CLIENT_NAME(opersvs.me->me), server, realname);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s UNXLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, realname);
 }
 
 /* server-to-server QLINE wrapper */
 static void ts6_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s RESV %ld %s 0 :%s", CLIENT_NAME(opersvs.me->me), server, duration, name, reason);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s RESV %ld %s 0 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, name, reason);
 }
 
 /* server-to-server UNQLINE wrapper */
 static void ts6_unqline_sts(const char *server, const char *name)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s ENCAP %s UNRESV %s", CLIENT_NAME(opersvs.me->me), server, name);
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s UNRESV %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, name);
 }
 
 /* topic wrapper */
@@ -431,11 +449,15 @@ static bool ts6_on_logout(user_t *u, const char *account)
  */
 static void ts6_jupe(const char *server, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	server_delete(server);
-	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
+
+	svs = service_find("operserv");
+	sts(":%s SQUIT %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, reason);
 	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
@@ -475,19 +497,21 @@ static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, c
 
 static void ts6_sasl_sts(char *target, char mode, char *data)
 {
+	service_t *svs;
 	server_t *s = sid_find(target);
 
 	if(s == NULL)
 		return;
 
-	if (saslsvs.me == NULL)
+	svs = service_find("saslserv");
+	if (svs == NULL)
 	{
 		slog(LG_ERROR, "ts6_sasl_sts(): saslserv does not exist!");
 		return;
 	}
 
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->name,
-			saslsvs.me->me->uid,
+			svs->me->uid,
 			target,
 			mode,
 			data);

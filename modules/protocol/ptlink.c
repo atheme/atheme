@@ -249,20 +249,26 @@ static void ptlink_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ptlink_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	/* we don't know the real setter here :( */
-	sts(":%s GLINE %s@%s %ld %s :%s", opersvs.nick, user, host, duration, opersvs.nick, reason);
+	svs = service_find("operserv");
+	sts(":%s GLINE %s@%s %ld %s :%s", svs != NULL ? svs->nick : me.name, user, host, duration, svs != NULL ? svs->nick : me.name, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void ptlink_unkline_sts(const char *server, const char *user, const char *host)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s UNGLINE %s@%s", opersvs.nick, user, host);
+	svs = service_find("operserv");
+	sts(":%s UNGLINE %s@%s", svs != NULL ? svs->nick : me.name, user, host);
 }
 
 /* topic wrapper */
@@ -319,11 +325,15 @@ static bool ptlink_on_logout(user_t *u, const char *account)
 
 static void ptlink_jupe(const char *server, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
+	svs = service_find("operserv");
+
 	server_delete(server);
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : me.name, server, reason);
 	sts(":%s SERVER %s 2 Atheme-%s-jupe :%s", me.name, server, version, reason);
 }
 

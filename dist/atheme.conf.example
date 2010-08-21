@@ -41,14 +41,11 @@
  * IRCNet ircd (ircd 2.11)			modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
  * ircu 2.10.11.07 or later			modules/protocol/undernet
- * IRCXPRO 1.2/OfficeIRC			modules/protocol/officeirc
- * InspIRCd 1.1		 			modules/protocol/inspircd11
  * InspIRCd 1.2/2.0				modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * PleXusIRCd 3.x				modules/protocol/plexus
  * PTlink IRCd					modules/protocol/ptlink
  * ShadowIRCd 5.0 or later			modules/protocol/shadowircd
- * UltimateIRCd 3.0 or later			modules/protocol/ultimate3
  * UnrealIRCd 3.1/3.2				modules/protocol/unreal
  *
  * If your IRCd vendor has supplied a module file, build it and load it here

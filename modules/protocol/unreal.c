@@ -326,19 +326,25 @@ static void unreal_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void unreal_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, opersvs.nick, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	svs = service_find("operserv");
+	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void unreal_unkline_sts(const char *server, const char *user, const char *host)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s TKL - G %s %s %s", me.name, user, host, opersvs.nick);
+	svs = service_find("operserv");
+	sts(":%s TKL - G %s %s %s", me.name, user, host, svs != NULL ? svs->nick : me.name);
 }
 
 static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
@@ -374,6 +380,8 @@ static void unreal_unxline_sts(const char *server, const char *realname)
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
@@ -383,15 +391,19 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 		return;
 	}
 
-	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, opersvs.nick, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	svs = service_find("operserv");
+	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 static void unreal_unqline_sts(const char *server, const char *name)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
-	sts(":%s TKL - Q * %s %s", me.name, name, opersvs.nick);
+	svs = service_find("operserv");
+	sts(":%s TKL - Q * %s %s", me.name, name, svs != NULL ? svs->nick : me.name);
 }
 
 /* topic wrapper */
@@ -449,11 +461,15 @@ static bool unreal_on_logout(user_t *u, const char *account)
 
 static void unreal_jupe(const char *server, const char *reason)
 {
+	service_t *svs;
+
 	if (!me.connected)
 		return;
 
 	server_delete(server);
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+
+	svs = service_find("operserv");
+	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : me.name, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
