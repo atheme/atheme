@@ -17,7 +17,7 @@
  */
 static inline myuser_t *myuser_find(const char *name)
 {
-	return name ? mowgli_patricia_retrieve(mulist, name) : NULL;
+	return name ? user(myentity_find(name)) : NULL;
 }
 
 /*

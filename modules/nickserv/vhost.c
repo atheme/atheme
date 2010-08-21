@@ -210,15 +210,17 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	const char *pattern;
-	mowgli_patricia_iteration_state_t state;
+	myentity_iteration_state_t state;
+	myentity_t *me;
 	myuser_t *mu;
 	metadata_t *md;
 	int matches = 0;
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
-	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
+	MYENTITY_FOREACH_T(me, &state, ENT_USER)
 	{
+		mu = user(me);
 		md = metadata_find(mu, "private:usercloak");
 		if (md == NULL)
 			continue;

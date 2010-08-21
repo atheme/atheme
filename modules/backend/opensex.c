@@ -43,6 +43,7 @@ static void
 opensex_db_save(database_handle_t *db)
 {
 	myuser_t *mu;
+	myentity_t *ment;
 	myuser_name_t *mun;
 	mychan_t *mc;
 	chanacs_t *ca;
@@ -53,6 +54,7 @@ opensex_db_save(database_handle_t *db)
 	soper_t *soper;
 	node_t *n, *tn, *tn2;
 	mowgli_patricia_iteration_state_t state;
+	myentity_iteration_state_t mestate;
 
 	errno = 0;
 
@@ -70,8 +72,9 @@ opensex_db_save(database_handle_t *db)
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
-	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
+	MYENTITY_FOREACH_T(ment, &mestate, ENT_USER)
 	{
+		mu = user(ment);
 		/* MU <name> <pass> <email> <registered> <lastlogin> <failnum*> <lastfail*>
 		 * <lastfailon*> <flags> <language>
 		 *
@@ -262,8 +265,9 @@ opensex_db_save(database_handle_t *db)
 
 	LIST_FOREACH(n, soperlist.head)
 	{
-		const char *flags = gflags_tostr(soper_flags, soper->flags);
+		const char *flags;
 		soper = n->data;
+		flags = gflags_tostr(soper_flags, soper->flags);
 
 		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
 			continue;

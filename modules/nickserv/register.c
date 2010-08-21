@@ -41,10 +41,10 @@ void _moddeinit()
 	help_delentry(ns_helptree, "REGISTER");
 }
 
-static int register_foreach_cb(const char *key, void *data, void *privdata)
+static int register_foreach_cb(myentity_t *ment, void *privdata)
 {
 	char *email = (char *) privdata;
-	myuser_t *tmu = (myuser_t *) data;
+	myuser_t *tmu = user(ment);
 
 	if (!strcasecmp(email, tmu->email))
 		tcnt++;
@@ -173,7 +173,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (me.maxusers > 0)
 	{
 		tcnt = 0;
-		mowgli_patricia_foreach(mulist, register_foreach_cb, email);
+		myentity_foreach_t(ENT_USER, register_foreach_cb, email);
 
 		if (tcnt >= me.maxusers)
 		{

@@ -384,9 +384,9 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
 }
 
-static int idcheck_foreach_cb(const char *key, void *data, void *privdata)
+static int idcheck_foreach_cb(myentity_t *me, void *privdata)
 {
-	myuser_t *mu = (myuser_t *) data;
+	myuser_t *mu = user(me);
 
 	if (metadata_find(mu, "private:idcheck"))
 		metadata_delete(mu, "private:idcheck");
@@ -405,7 +405,7 @@ void _modinit(module_t *m)
 	/* Leave this for compatibility with old versions of this code
 	 * -- jilles
 	 */
-	mowgli_patricia_foreach(mulist, idcheck_foreach_cb, NULL);
+	myentity_foreach_t(ENT_USER, idcheck_foreach_cb, NULL);
 
 	/* Absolutely do not do anything like this if nicks
 	 * are not considered owned */

@@ -43,10 +43,10 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(const char *key, void *data, void *privdata)
+static int listmail_foreach_cb(myentity_t *me, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = (myuser_t *)data;
+	myuser_t *mu = user(me);
 
 	if (!strcasecmp(state->pattern, mu->email))
 	{
@@ -82,7 +82,7 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 	state.matches = 0;
 	state.pattern = si->smu->email;
 	state.origin = si;
-	mowgli_patricia_foreach(mulist, listmail_foreach_cb, &state);
+	myentity_foreach_t(ENT_USER, listmail_foreach_cb, &state);
 
 	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%d\2 matches)", si->smu->email, state.matches);
 	command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),

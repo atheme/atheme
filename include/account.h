@@ -9,6 +9,8 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+#include "entity.h"
+
 typedef struct mycertfp_ mycertfp_t;
 typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
@@ -64,21 +66,6 @@ struct svsignore_ {
   char *setby;
   char *reason;
 };
-
-typedef enum {
-	ENT_USER = 0,
-	ENT_GROUP,
-} myentity_type_t;
-
-#define entity(x)	((myentity_t *)(x))
-#define user(x)		((myuser_t *)(x))
-#define group(x)	((mygroup_t *)(x))
-
-typedef struct {
-	object_t parent;
-	myentity_type_t type;
-	char name[NICKLEN];
-} myentity_t;
 
 /* services accounts */
 struct myuser_
@@ -379,12 +366,15 @@ E qline_t *qline_find_channel(channel_t *c);
 E void qline_expire(void *arg);
 
 /* account.c */
-E mowgli_patricia_t *mulist;
 E mowgli_patricia_t *nicklist;
 E mowgli_patricia_t *oldnameslist;
 E mowgli_patricia_t *mclist;
 
 E void init_accounts(void);
+
+E void myentity_put(myentity_t *me);
+E void myentity_del(myentity_t *me);
+E myentity_t *myentity_find(const char *name);
 
 E myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
