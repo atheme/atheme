@@ -27,7 +27,7 @@
 
 mowgli_patricia_t *ctcptree;
 
-static void ctcp_ping_handler(sourceinfo_t *si, sourceinfo_t *si, char *cmd, char *args)
+static void ctcp_ping_handler(sourceinfo_t *si, char *cmd, char *args)
 {
 	char *s;
 
@@ -50,7 +50,7 @@ static void ctcp_clientinfo_handler(sourceinfo_t *si, char *cmd, char *args)
 	notice(si->service->nick, si->u->nick, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
-static void ctcp_machinegod_handler(chat *cmd, char *args)
+static void ctcp_machinegod_handler(sourceinfo_t *si, char *cmd, char *args)
 {
 	notice(si->service->nick, si->u->nick, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
 }
