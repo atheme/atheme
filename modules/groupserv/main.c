@@ -47,10 +47,14 @@ void _modinit(module_t *m)
 {
 	mygroups_init();
 	groupsvs = service_add("groupserv", groupserv, &gs_cmdtree, &conf_gs_table);
+
+	basecmds_init();
 }
 
 void _moddeinit(void)
 {
+	basecmds_deinit();
+
 	if (groupsvs)
 		service_delete(groupsvs);
 }

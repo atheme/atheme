@@ -20,4 +20,13 @@ E void mygroups_init(void);
 E mygroup_t *mygroup_add(myuser_t *owner, const char *name);
 E mygroup_t *mygroup_find(const char *name);
 
+E void basecmds_init(void);
+E void basecmds_deinit(void);
+
+/* services plumbing */
+E service_t *groupsvs;
+E list_t gs_cmdtree;
+E list_t gs_helptree;
+E list_t conf_gs_table;
+
 #endif /* !GROUPSERV_H */
