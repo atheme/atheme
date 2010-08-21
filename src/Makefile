@@ -57,8 +57,7 @@ BASE_SRCS =				\
 	ubase64.c		\
 	users.c		\
 	uid.c			\
-	uplink.c		\
-	xmlrpc.c
+	uplink.c
 
 SRCS = ${BASE_SRCS} version.c
 

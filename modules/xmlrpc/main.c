@@ -8,7 +8,7 @@
 
 #include "atheme.h"
 #include "httpd.h"
-#include "xmlrpc.h"
+#include "xmlrpclib.h"
 #include "datastream.h"
 #include "authcookie.h"
 
