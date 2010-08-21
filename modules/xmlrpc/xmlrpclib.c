@@ -12,7 +12,7 @@
 
 #include <mowgli.h>
 #include "atheme.h"
-#include "xmlrpc.h"
+#include "xmlrpclib.h"
 
 static int xmlrpc_error_code;
 
