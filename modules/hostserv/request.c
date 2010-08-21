@@ -312,7 +312,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 
-			command_exec_split(hostsvs.me, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
+			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
 			return;
 		}
 	}
@@ -338,13 +338,15 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 
 	LIST_FOREACH(n, hs_reqlist.head)
 	{
+		service_t *svs;
+
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
 		{
-			if (memosvs.me)
+			if ((svs = service_find("memoserv")) != NULL)
 			{
 				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
-				command_exec_split(memosvs.me, si, "SEND", buf, ms_cmdtree);
+				command_exec_split(svs, si, "SEND", buf, ms_cmdtree);
 			}
 			else if ((u = user_find_named(nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);

@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void on_user_identify(user_t *u);
 
-service_t *hs;
+service_t *hostsvs;
 list_t hs_cmdtree;
 list_t hs_helptree;
 list_t conf_hs_table;
@@ -61,13 +61,13 @@ void _modinit(module_t *m)
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
 
-	service_add("hostserv", hostserv, &hs_cmdtree, &conf_hs_table);
+	hostsvs = service_add("hostserv", hostserv, &hs_cmdtree, &conf_hs_table);
 }
 
 void _moddeinit(void)
 {
-	if (hs != NULL)
-		service_delete(hostsvs.me);
+	if (hostsvs != NULL)
+		service_delete(hostsvs);
 
 	hook_del_user_identify(on_user_identify);
 }
