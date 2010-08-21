@@ -91,7 +91,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mu, "private:verify:register:key");
 			metadata_delete(mu, "private:verify:register:timestamp");
 
-			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
+			command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
 			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
 			LIST_FOREACH(n, mu->logins.head)
 			{
@@ -102,7 +102,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			/* XXX should this indeed be after ircd_on_login? */
 			req.si = si;
 			req.mu = mu;
-			req.mn = mynick_find(mu->name);
+			req.mn = mynick_find(entity(mu)->name);
 			hook_call_user_verify_register(&req);
 
 			return;
@@ -110,7 +110,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
-			mu->name);
+			entity(mu)->name);
 
 		return;
 	}
@@ -141,7 +141,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
 		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
-			mu->name);
+			entity(mu)->name);
 
 		return;
 	}
@@ -185,12 +185,12 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_WAITAUTH;
 
-		logcommand(si, CMDLOG_REGISTER, "FVERIFY:REGISTER: \2%s\2 (email: \2%s\2)", mu->name, mu->email);
+		logcommand(si, CMDLOG_REGISTER, "FVERIFY:REGISTER: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
 
 		metadata_delete(mu, "private:verify:register:key");
 		metadata_delete(mu, "private:verify:register:timestamp");
 
-		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
+		command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			user_t *u = n->data;
@@ -200,7 +200,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		/* XXX should this indeed be after ircd_on_login? */
 		req.si = si;
 		req.mu = mu;
-		req.mn = mynick_find(mu->name);
+		req.mn = mynick_find(entity(mu)->name);
 		hook_call_user_verify_register(&req);
 
 		return;
@@ -217,7 +217,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 		myuser_set_email(mu, md->value);
 
-		logcommand(si, CMDLOG_REGISTER, "FVERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", mu->name, mu->email);
+		logcommand(si, CMDLOG_REGISTER, "FVERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", entity(mu)->name, mu->email);
 
 		metadata_delete(mu, "private:verify:emailchg:key");
 		metadata_delete(mu, "private:verify:emailchg:newemail");

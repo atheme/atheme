@@ -407,12 +407,12 @@ static void ts6_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void ts6_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void ts6_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
 	if (!me.connected || !use_rserv_support || u == NULL)
 		return;
 
-	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), account->name);
+	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), entity(mu)->name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -493,7 +493,7 @@ static void ts6_sasl_sts(char *target, char mode, char *data)
 			data);
 }
 
-static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
 {
 	if (use_euid)
 		sts(":%s ENCAP * NICKDELAY %d %s", ME, duration, nick);
@@ -504,7 +504,7 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 		sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner (%s)",
 				CLIENT_NAME(source), duration > 300 ? 300 : duration,
 				nick, source->nick,
-				account != NULL ? account->name : nick);
+				mu ? entity(mu)->name : nick);
 	}
 }
 

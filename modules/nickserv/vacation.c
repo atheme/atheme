@@ -84,7 +84,7 @@ static void nick_expiry_hook(hook_expiry_req_t *req)
 static void info_hook(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, "private:vacation"))
-		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", hdata->mu->name);
+		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", entity(hdata->mu)->name);
 }
 
 void _modinit(module_t *m)

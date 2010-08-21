@@ -313,7 +313,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 0)
 	{
 		o = smalloc(sizeof(operlogoninfo_t));
-		o->nick = sstrdup(si->smu->name);
+		o->nick = sstrdup(entity(si->smu)->name);
 		o->info_ts = CURRTIME;
 		o->story = sstrdup(story);
 		o->subject = sstrdup(subject);
@@ -325,7 +325,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp > 0)
 	{
 		l = smalloc(sizeof(logoninfo_t));
-		l->nick = sstrdup(si->smu->name);
+		l->nick = sstrdup(entity(si->smu)->name);
 		l->info_ts = CURRTIME;
 		l->story = sstrdup(story);
 		l->subject = sstrdup(subject);

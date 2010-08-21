@@ -126,7 +126,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Target inbox is full."));
-		logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (target inbox full)", tmu->name);
+		logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (target inbox full)", entity(tmu)->name);
 		return;
 	}
 
@@ -157,12 +157,12 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		if (mu == si->smu)
 		{
 			/* Lie... change this if you want it to fail silent */
-			logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (on ignore list)", tmu->name);
+			logcommand(si, CMDLOG_SET, "failed FORWARD to \2%s\2 (on ignore list)", entity(tmu)->name);
 			command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 			return;
 		}
 	}
-	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", tmu->name);
+	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", entity(tmu)->name);
 	
 	/* Go to forwarding memos */
 	LIST_FOREACH(n, si->smu->memos.head)
@@ -176,7 +176,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			/* Create memo */
 			newmemo->sent = CURRTIME;
 			newmemo->status = 0;
-			strlcpy(newmemo->sender,si->smu->name,NICKLEN);
+			strlcpy(newmemo->sender,entity(si->smu)->name,NICKLEN);
 			strlcpy(newmemo->text,memo->text,MEMOLEN);
 			
 			/* Create node, add to their linked list of memos */
@@ -200,10 +200,10 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 	}
-	if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
-		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (%d).", si->smu->name, LIST_LENGTH(&tmu->memos));
+	if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (%d).", entity(si->smu)->name, LIST_LENGTH(&tmu->memos));
 	else
-		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s) (%d).", si->smu->name, si->su->nick, LIST_LENGTH(&tmu->memos));
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s) (%d).", entity(si->smu)->name, si->su->nick, LIST_LENGTH(&tmu->memos));
 	myuser_notice(memosvs.nick, tmu, _("To read it, type /%s%s READ %d"),
 				ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp, LIST_LENGTH(&tmu->memos));
 

@@ -108,7 +108,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* User attempting to ignore themself? */
-	if (!irccasecmp(parv[0], si->smu->name))
+	if (!irccasecmp(parv[0], entity(si->smu)->name))
 	{
 		command_fail(si, fault_badparams, _("Silly wabbit, you can't ignore yourself."));
 		return;
@@ -120,7 +120,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
-	newnick = tmu->name;
+	newnick = entity(tmu)->name;
 
 	/* Ignore list is full */
 	if (si->smu->memo_ignores.count >= MAXMSIGNORES)

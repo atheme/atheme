@@ -108,21 +108,21 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
-		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (frozen)", mu->name);
+		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", entity(mu)->name);
+		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (frozen)", entity(mu)->name);
 		return;
 	}
 
 	if (u->myuser == mu)
 	{
-		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), u->myuser->name);
+		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
 		if (mu->flags & MU_WAITAUTH)
 			command_fail(si, fault_nochange, _("Please check your email for instructions to complete your registration."));
 		return;
 	}
 	else if (u->myuser != NULL && !command_find(si->service->cmdtree, "LOGOUT"))
 	{
-		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), u->myuser->name);
+		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), entity(u->myuser)->name);
 		return;
 	}
 
@@ -130,7 +130,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 			lau[0] = '\0';
 			LIST_FOREACH(n, mu->logins.head)
 			{
@@ -139,14 +139,14 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 				strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
 			}
 			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
-			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (too many logins)", mu->name);
+			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (too many logins)", entity(mu)->name);
 			return;
 		}
 
 		/* if they are identified to another account, nuke their session first */
 		if (u->myuser)
 		{
-			if (ircd_on_logout(u, u->myuser->name))
+			if (ircd_on_logout(u, entity(u->myuser)->name))
 				/* logout killed the user... */
 				return;
 		        u->myuser->lastlogin = CURRTIME;
@@ -162,7 +162,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		        u->myuser = NULL;
 		}
 
-		command_success_nodata(si, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), mu->name);
+		command_success_nodata(si, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), entity(mu)->name);
 
 		myuser_login(si->service, u, mu, true);
 		logcommand(si, CMDLOG_LOGIN, COMMAND_UC);
@@ -233,9 +233,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (bad password)", mu->name);
+	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (bad password)", entity(mu)->name);
 
-	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
+	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 	bad_password(si, mu);
 }
 

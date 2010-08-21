@@ -84,7 +84,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		if (mn->owner == si->smu)
 			command_fail(si, fault_nochange, _("Nick \2%s\2 is already registered to your account."), mn->nick);
 		else
-			command_fail(si, fault_alreadyexists, _("Nick \2%s\2 is already registered to \2%s\2."), mn->nick, mn->owner->name);
+			command_fail(si, fault_alreadyexists, _("Nick \2%s\2 is already registered to \2%s\2."), mn->nick, entity(mn->owner)->name);
 		return;
 	}
 
@@ -102,7 +102,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	if (hdata_reg.approved != 0)
 		return;
 
-	logcommand(si, CMDLOG_REGISTER, "GROUP: \2%s\2 to \2%s\2", si->su->nick, si->smu->name);
+	logcommand(si, CMDLOG_REGISTER, "GROUP: \2%s\2 to \2%s\2", si->su->nick, entity(si->smu)->name);
 	mn = mynick_add(si->smu, si->su->nick);
 	mn->registered = CURRTIME;
 	mn->lastseen = CURRTIME;
@@ -143,7 +143,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
 		return;
 	}
-	if (!irccasecmp(mn->nick, si->smu->name))
+	if (!irccasecmp(mn->nick, entity(si->smu)->name))
 	{
 		command_fail(si, fault_noprivs, _("Nick \2%s\2 is your account name; you may not remove it."), mn->nick);
 		return;
@@ -178,7 +178,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	mu = mn->owner;
-	if (!irccasecmp(mn->nick, mu->name))
+	if (!irccasecmp(mn->nick, entity(mu)->name))
 	{
 		if (LIST_LENGTH(&mu->nicks) <= 1 ||
 			       !module_find_published("nickserv/set_accountname"))
@@ -189,12 +189,12 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 		if (is_conf_soper(mu))
 		{
 			command_fail(si, fault_noprivs, _("You may not modify \2%s\2's account name because their operclass is defined in the configuration file."),
-					mu->name);
+					entity(mu)->name);
 			return;
 		}
 		if (parc < 2)
 		{
-			command_fail(si, fault_needmoreparams, _("Please specify a new account name for \2%s\2."), mu->name);
+			command_fail(si, fault_needmoreparams, _("Please specify a new account name for \2%s\2."), entity(mu)->name);
 			command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <nickname> <newaccountname>"));
 			return;
 		}
@@ -211,7 +211,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (mn2->owner != mu)
 		{
-			command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to \2%s\2."), mn2->nick, mu->name);
+			command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to \2%s\2."), mn2->nick, entity(mu)->name);
 			return;
 		}
 	}
@@ -223,26 +223,26 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mn2 != NULL)
 	{
-		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2 (new account name: \2%s\2)", mn->nick, mu->name, mn2->nick);
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2 (new account name: \2%s\2)", mn->nick, entity(mu)->name, mn2->nick);
 		wallops("%s dropped the nick \2%s\2 from %s, changing account name to \2%s\2",
-				get_oper_name(si), mn->nick, mu->name,
+				get_oper_name(si), mn->nick, entity(mu)->name,
 				mn2->nick);
 		myuser_rename(mu, mn2->nick);
 	}
 	else
 	{
-		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2", mn->nick, mu->name);
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP: \2%s\2 from \2%s\2", mn->nick, entity(mu)->name);
 		wallops("%s dropped the nick \2%s\2 from %s",
-				get_oper_name(si), mn->nick, mu->name);
+				get_oper_name(si), mn->nick, entity(mu)->name);
 	}
 	hdata.si = si;
 	hdata.mu = mu;
 	hdata.mn = mn;
 	hook_call_nick_ungroup(&hdata);
 	if (mn2 != NULL)
-		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, mu->name, mn2->nick);
+		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, entity(mu)->name, mn2->nick);
 	else
-		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, mu->name);
+		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, entity(mu)->name);
 	object_unref(mn);
 }
 

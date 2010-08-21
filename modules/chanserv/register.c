@@ -123,7 +123,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
 	{
 		command_fail(si, fault_toomany, _("The system is currently too busy to process your registration, please try again later."));
-		slog(LG_INFO, "CHANSERV:REGISTER:THROTTLED: \2%s\2 by \2%s\2", name, si->smu->name);
+		slog(LG_INFO, "CHANSERV:REGISTER:THROTTLED: \2%s\2 by \2%s\2", name, entity(si->smu)->name);
 		return;
 	}
 
@@ -168,7 +168,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, "private:templates",
 				chansvs.deftemplates);
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, si->smu->name);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, entity(si->smu)->name);
 
 	hdata.si = si;
 	hdata.mc = mc;

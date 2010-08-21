@@ -70,7 +70,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu)
 	{
-		command_fail(si, fault_already_authed, _("You are already logged in as \2%s\2."), si->smu->name);
+		command_fail(si, fault_already_authed, _("You are already logged in as \2%s\2."), entity(si->smu)->name);
 		if (si->su != NULL && !mynick_find(si->su->nick) &&
 				command_find(si->service->cmdtree, "GROUP"))
 			command_fail(si, fault_already_authed, _("Use %s to register %s to your account."), "GROUP", si->su->nick);
@@ -187,7 +187,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mu->lastlogin = CURRTIME;
 	if (!nicksvs.no_nick_ownership)
 	{
-		mn = mynick_add(mu, mu->name);
+		mn = mynick_add(mu, entity(mu)->name);
 		mn->registered = CURRTIME;
 		mn->lastseen = CURRTIME;
 	}
@@ -198,7 +198,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!verify_password(mu, pass))
 		{
-			command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
+			command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 			bad_password(si, mu);
 			object_unref(mu);
 			return;
@@ -247,11 +247,11 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu))
 	{
-		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", get_oper_name(si), mu->name);
+		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", get_oper_name(si), entity(mu)->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", get_oper_name(si), entity(mu)->name);
 	}
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), mu->name, mu->email, pass);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), entity(mu)->name, mu->email, pass);
 	hook_call_user_register(mu);
 
 	if (si->su != NULL)

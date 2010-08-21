@@ -348,13 +348,13 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (ca->level & CA_FOUNDER)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), mu->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), entity(mu)->name, mc->name, leveldesc);
 		return;
 	}
 
 	if (ca->level == level)
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
 		return;
 	}
 
@@ -363,7 +363,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	 * -- jilles */
 	if (MU_NEVEROP & mu->flags && (ca->level == 0 || ca->level == CA_AKICK))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mu->name);
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), entity(mu)->name);
 		chanacs_close(ca);
 		return;
 	}
@@ -385,7 +385,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), entity(mu)->name, mc->name);
 		chanacs_close(ca);
 		return;
 	}
@@ -394,16 +394,16 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	if (!isnew)
 	{
 		/* they have access? change it! */
-		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, mu->name);
-		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mu->name, mc->name, leveldesc);
-		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mu->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, entity(mu)->name);
+		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), entity(mu)->name, mc->name, leveldesc);
+		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), entity(mu)->name, leveldesc);
 	}
 	else
 	{
 		/* they have no access, add */
-		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, mu->name);
-		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
-		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, entity(mu)->name);
+		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
+		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), entity(mu)->name, leveldesc);
 	}
 
 	/* run through the channel's user list and do it */
@@ -491,14 +491,14 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (!(ca = chanacs_find(mc, mu, level)) || ca->level != level)
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
 		return;
 	}
 
 	object_unref(ca);
-	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
-	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mu->name);
-	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mu->name, leveldesc);
+	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
+	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, entity(mu)->name);
+	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), entity(mu)->name, leveldesc);
 }
 
 
@@ -517,9 +517,9 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 			if (!ca->myuser)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
 			else if (LIST_LENGTH(&ca->myuser->logins))
-				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->myuser->name);
+				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, entity(ca->myuser)->name);
 			else
-				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->myuser->name);
+				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, entity(ca->myuser)->name);
 		}
 	}
 	/* XXX */
@@ -608,7 +608,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (newlevel == ca->level)
 			continue;
 		changes++;
-		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level), desc);
+		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel);
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);

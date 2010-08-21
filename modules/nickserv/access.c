@@ -239,11 +239,11 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (mu != si->smu)
-			logcommand(si, CMDLOG_ADMIN, "ACCESS:LIST: \2%s\2", mu->name);
+			logcommand(si, CMDLOG_ADMIN, "ACCESS:LIST: \2%s\2", entity(mu)->name);
 		else
 			logcommand(si, CMDLOG_GET, "ACCESS:LIST");
 
-		command_success_nodata(si, _("Access list for \2%s\2:"), mu->name);
+		command_success_nodata(si, _("Access list for \2%s\2:"), entity(mu)->name);
 
 		LIST_FOREACH(n, mu->access_list.head)
 		{
@@ -251,7 +251,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "- %s", mask);
 		}
 
-		command_success_nodata(si, _("End of \2%s\2 access list."), mu->name);
+		command_success_nodata(si, _("End of \2%s\2 access list."), entity(mu)->name);
 	}
 	else if (!strcasecmp(parv[0], "ADD"))
 	{

@@ -106,7 +106,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 		else
 			typestr = "Conf*";
 		command_success_nodata(si, "%-20s %-5s %-20s",
-				soper->myuser != NULL ? soper->myuser->name : soper->name,
+				soper->myuser != NULL ? entity(soper->myuser)->name : soper->name,
 				typestr,
 				soper->classname);
 	}
@@ -153,7 +153,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_conf_soper(mu))
 	{
-		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), entity(mu)->name);
 		return;
 	}
 
@@ -165,7 +165,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (mu->soper != NULL && mu->soper->operclass == operclass)
 	{
-		command_fail(si, fault_nochange, _("Oper class for \2%s\2 is already set to \2%s\2."), mu->name, operclass->name);
+		command_fail(si, fault_nochange, _("Oper class for \2%s\2 is already set to \2%s\2."), entity(mu)->name, operclass->name);
 		return;
 	}
 
@@ -177,17 +177,17 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	else if (mu->soper != NULL && mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
 	{
 		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
-				mu->name, mu->soper->operclass->name);
+				entity(mu)->name, mu->soper->operclass->name);
 		return;
 	}
 
 	wallops("\2%s\2 is changing oper class for \2%s\2 to \2%s\2",
-		get_oper_name(si), mu->name, operclass->name);
-	logcommand(si, CMDLOG_ADMIN, "SOPER:ADD: \2%s\2 \2%s\2", mu->name, operclass->name);
+		get_oper_name(si), entity(mu)->name, operclass->name);
+	logcommand(si, CMDLOG_ADMIN, "SOPER:ADD: \2%s\2 \2%s\2", entity(mu)->name, operclass->name);
 	if (is_soper(mu))
 		soper_delete(mu->soper);
-	soper_add(mu->name, operclass->name, 0, NULL);
-	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), mu->name, operclass->name);
+	soper_add(entity(mu)->name, operclass->name, 0, NULL);
+	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), entity(mu)->name, operclass->name);
 }
 
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
@@ -210,27 +210,27 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_conf_soper(mu))
 	{
-		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), entity(mu)->name);
 		return;
 	}
 
 	if (!is_soper(mu))
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), mu->name);
+		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), entity(mu)->name);
 		return;
 	}
 	else if (mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
 	{
 		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
-				mu->name, mu->soper->operclass->name);
+				entity(mu)->name, mu->soper->operclass->name);
 		return;
 	}
 
 	wallops("\2%s\2 is removing oper class for \2%s\2",
-		get_oper_name(si), mu->name);
-	logcommand(si, CMDLOG_ADMIN, "SOPER:DELETE: \2%s\2", mu->name);
+		get_oper_name(si), entity(mu)->name);
+	logcommand(si, CMDLOG_ADMIN, "SOPER:DELETE: \2%s\2", entity(mu)->name);
 	soper_delete(mu->soper);
-	command_success_nodata(si, _("Removed class for \2%s\2."), mu->name);
+	command_success_nodata(si, _("Removed class for \2%s\2."), entity(mu)->name);
 }
 
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
@@ -255,20 +255,20 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_conf_soper(mu))
 	{
-		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), entity(mu)->name);
 		return;
 	}
 
 	if (!is_soper(mu))
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), mu->name);
+		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), entity(mu)->name);
 		return;
 	}
 
 	if (mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
 	{
 		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
-				mu->name, mu->soper->operclass->name);
+				entity(mu)->name, mu->soper->operclass->name);
 		return;
 	}
 
@@ -281,12 +281,12 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		wallops("\2%s\2 is changing services operator password for \2%s\2",
-				get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (set)", mu->name);
+				get_oper_name(si), entity(mu)->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (set)", entity(mu)->name);
 		if (mu->soper->password)
 			free(mu->soper->password);
 		mu->soper->password = sstrdup(parv[1]);
-		command_success_nodata(si, _("Set password for \2%s\2 to \2%s\2."), mu->name, parv[1]);
+		command_success_nodata(si, _("Set password for \2%s\2 to \2%s\2."), entity(mu)->name, parv[1]);
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			u = n->data;
@@ -300,12 +300,12 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		wallops("\2%s\2 is clearing services operator password for \2%s\2",
-				get_oper_name(si), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (clear)", mu->name);
+				get_oper_name(si), entity(mu)->name);
+		logcommand(si, CMDLOG_ADMIN, "SOPER:SETPASS: \2%s\2 (clear)", entity(mu)->name);
 		if (mu->soper->password)
 			free(mu->soper->password);
 		mu->soper->password = NULL;
-		command_success_nodata(si, _("Cleared password for \2%s\2."), mu->name);
+		command_success_nodata(si, _("Cleared password for \2%s\2."), entity(mu)->name);
 	}
 }
 

@@ -74,7 +74,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp(password, mu->name))
+	if (!strcasecmp(password, entity(mu)->name))
 	{
 		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
 		command_fail(si, fault_badparams, _("Syntax: SETPASS <account> <key> <newpass>"));
@@ -84,11 +84,11 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mu, "private:setpass:key");
 	if (md != NULL && crypt_verify_password(key, md->value))
 	{
-		logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", mu->name);
+		logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
 		set_password(mu, password);
 		metadata_delete(mu, "private:setpass:key");
 
-		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), mu->name, password);
+		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, password);
 
 		return;
 	}
@@ -98,7 +98,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "failed SETPASS (invalid key)");
 	}
 	command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
-		mu->name);
+		entity(mu)->name);
 
 	return;
 }

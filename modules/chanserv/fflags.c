@@ -94,7 +94,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 			return;
 		}
-		target = tmu->name;
+		target = entity(tmu)->name;
 
 		/* XXX this should be more like flags.c */
 		if (removeflags & CA_FLAGS)
@@ -110,7 +110,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), tmu->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), entity(tmu)->name, mc->name);
 			return;
 		}
 	}

@@ -34,7 +34,7 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_USE_PRIVMSG & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "PRIVMSG", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "PRIVMSG", entity(si->smu)->name);
 			return;
 		}
 
@@ -42,7 +42,7 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_USE_PRIVMSG;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "PRIVMSG" ,si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "PRIVMSG" ,entity(si->smu)->name);
 
 		return;
 	}
@@ -50,7 +50,7 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_USE_PRIVMSG & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "PRIVMSG", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "PRIVMSG", entity(si->smu)->name);
 			return;
 		}
 
@@ -58,7 +58,7 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_USE_PRIVMSG;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "PRIVMSG", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "PRIVMSG", entity(si->smu)->name);
 
 		return;
 	}

@@ -56,7 +56,7 @@ static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NEVEROP & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NEVEROP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NEVEROP", entity(si->smu)->name);
 			return;
 		}
 
@@ -64,7 +64,7 @@ static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NEVEROP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NEVEROP", entity(si->smu)->name);
 
 		return;
 	}
@@ -73,7 +73,7 @@ static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NEVEROP & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NEVEROP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NEVEROP", entity(si->smu)->name);
 			return;
 		}
 
@@ -81,7 +81,7 @@ static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NEVEROP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NEVEROP", entity(si->smu)->name);
 
 		return;
 	}

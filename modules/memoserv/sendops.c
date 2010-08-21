@@ -171,7 +171,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = MEMO_CHANNEL;
-		strlcpy(memo->sender,si->smu->name,NICKLEN);
+		strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
 		snprintf(memo->text, MEMOLEN, "%s %s", mc->name, m);
 
 		/* Create a linked list node and add to memos */
@@ -186,10 +186,10 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* Is the user online? If so, tell them about the new memo. */
-		if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (%d).", si->smu->name, LIST_LENGTH(&tmu->memos));
+		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (%d).", entity(si->smu)->name, LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", si->smu->name, si->su->nick, LIST_LENGTH(&tmu->memos));
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", entity(si->smu)->name, si->su->nick, LIST_LENGTH(&tmu->memos));
 		myuser_notice(memosvs.nick, tmu, _("To read it, type /%s%s READ %d"),
 					ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp, LIST_LENGTH(&tmu->memos));
 	}

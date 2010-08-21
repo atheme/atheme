@@ -113,7 +113,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				if (memo->status & MEMO_CHANNEL)
 					;
 				else if (strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
-					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", si->smu->name, strfbuf);
+					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
 				else
 				{
 					/* If they have an account, their inbox is not full and they aren't memoserv */
@@ -124,7 +124,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						receipt->sent = CURRTIME;
 						receipt->status = 0;
 						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
-						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", si->smu->name, strfbuf);
+						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 						
 						/* Attach to their linked list */
 						n = node_create();

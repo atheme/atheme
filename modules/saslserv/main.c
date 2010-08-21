@@ -335,7 +335,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 				cloak = "*";
 
 			if (!(mu->flags & MU_WAITAUTH))
-				svslogin_sts(p->uid, "*", "*", cloak, mu->name);
+				svslogin_sts(p->uid, "*", "*", cloak, entity(mu)->name);
 			sasl_sts(p->uid, 'D', "S");
 		}
 		else
@@ -395,15 +395,14 @@ static void sasl_write(char *target, char *data, int length)
 		sasl_sts(target, 'C', "+");
 }
 
-static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...)
+static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const char *fmt, ...)
 {
 	va_list args;
 	char lbuf[BUFSIZE];
 	
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-	slog(level, "%s %s:%s %s", saslsvs.nick, login ? login->name : "",
-			p->uid, lbuf);
+	slog(level, "%s %s:%s %s", saslsvs.nick, mu ? entity(mu)->name : "", p->uid, lbuf);
 	va_end(args);
 }
 
@@ -418,13 +417,13 @@ int login_user(sasl_session_t *p)
 
  	if ((md = metadata_find(mu, "private:freeze:freezer")))
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);
 		return 0;
 	}
 
 	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(mu)->name);
 		return 0;
 	}
 

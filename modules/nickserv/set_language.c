@@ -70,7 +70,7 @@ static void ns_cmd_set_language(sourceinfo_t *si, int parc, char *parv[])
 
 	si->smu->language = lang;
 
-	command_success_nodata(si, _("The language for \2%s\2 has been changed to \2%s\2."), si->smu->name, language_get_name(lang));
+	command_success_nodata(si, _("The language for \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, language_get_name(lang));
 
 	return;
 }

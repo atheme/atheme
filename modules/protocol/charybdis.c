@@ -200,7 +200,7 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 			switch (exttype)
 			{
 				case 'a':
-					matched = u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && (p == NULL || !match(p, u->myuser->name));
+					matched = u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && (p == NULL || !match(p, entity(u->myuser)->name));
 					break;
 				case 'c':
 					if (p == NULL)

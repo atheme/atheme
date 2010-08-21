@@ -233,14 +233,14 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (metadata_find(mu, "private:freeze:freezer") != NULL)
 	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);
 		xmlrpc_generic_error(fault_noprivs, "The account has been frozen.");
 		return 0;
 	}
 
 	if (!verify_password(mu, parv[1]))
 	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 		return 0;
 	}

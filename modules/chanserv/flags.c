@@ -146,10 +146,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			str1 = get_template_name(mc, ca->level);
 			str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
 			if (str1 != NULL)
-				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level), str1,
+				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level), str1,
 					str2);
 			else
-				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level),
+				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level),
 					str2);
 			i++;
 		}
@@ -188,7 +188,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 					return;
 				}
-				target = tmu->name;
+				target = entity(tmu)->name;
 				ca = chanacs_find(mc, tmu, 0);
 			}
 			if (ca != NULL)
@@ -217,14 +217,14 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				 * even without +f */
 				if (restrictflags & CA_AKICK ||
 						si->smu == NULL ||
-						irccasecmp(target, si->smu->name) ||
+						irccasecmp(target, entity(si->smu)->name) ||
 						strcmp(flagstr, "-*"))
 				{
 					command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 					return;
 				}
 			}
-			if (irccasecmp(target, si->smu->name))
+			if (irccasecmp(target, entity(si->smu)->name))
 				restrictflags = allow_flags(mc, restrictflags);
 		}
 
@@ -259,7 +259,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 				return;
 			}
-			target = tmu->name;
+			target = entity(tmu)->name;
 
 			ca = chanacs_open(mc, tmu, NULL, true);
 
@@ -283,7 +283,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				}
 				if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 				{
-					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
+					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), entity(tmu)->name);
 					chanacs_close(ca);
 					return;
 				}
@@ -297,7 +297,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			 * -- jilles */
 			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && (ca->level == 0 || ca->level == CA_AKICK))
 			{
-				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), tmu->name);
+				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), entity(tmu)->name);
 				chanacs_close(ca);
 				return;
 			}
@@ -311,7 +311,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
-				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), tmu->name, mc->name);
+				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), entity(tmu)->name, mc->name);
 				chanacs_close(ca);
 				return;
 			}

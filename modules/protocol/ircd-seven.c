@@ -232,12 +232,12 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* protocol-specific stuff to do on login */
-static void seven_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void seven_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
 	if (!me.connected || u == NULL)
 		return;
 
-	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), account->name);
+	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), entity(mu)->name);
 
 	if (should_reg_umode(u))
 		sts(":%s ENCAP * IDENTIFIED %s %s", ME, CLIENT_NAME(u), u->nick);

@@ -170,9 +170,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if ((ca = chanacs_find(mc, mu, 0x0)))
 			{
 				if (ca->level & CA_AKICK)
-					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mu->name, mc->name);
+					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), entity(mu)->name, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mu->name, bitmask_to_flags(ca->level), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), entity(mu)->name, bitmask_to_flags(ca->level), mc->name);
 				return;
 			}
 
@@ -191,10 +191,10 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			hook_call_channel_akick_add(ca2);
 			chanacs_close(ca2);
 
-			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mu->name, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mu->name);
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mu->name, mc->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), entity(mu)->name);
+			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", entity(mu)->name, mc->name);
 
 			return;
 		}
@@ -235,17 +235,17 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!(ca = chanacs_find(mc, mu, CA_AKICK)))
 		{
-			command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), mu->name, mc->name);
+			command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
 			return;
 		}
 
 		chanacs_modify_simple(ca, 0, CA_AKICK);
 		chanacs_close(ca);
 
-		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mu->name, mc->name);
-		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", mu->name, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
+		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", entity(mu)->name, mc->name);
 
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mu->name);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), entity(mu)->name);
 
 		return;
 	}
@@ -279,11 +279,11 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 							md ? md->value : "", ago);
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
 					command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [modified: %s ago]"),
-							++i, ca->myuser->name,
+							++i, entity(ca->myuser)->name,
 							md ? md->value : "", ago);
 				else
 					command_success_nodata(si, _("%d: \2%s\2 (not logged in)  %s [modified: %s ago]"),
-							++i, ca->myuser->name,
+							++i, entity(ca->myuser)->name,
 							md ? md->value : "", ago);
 			}
 

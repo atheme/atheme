@@ -108,7 +108,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 			fl |= ca->level;
 			command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
-				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, mu->name);
+				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, entity(mu)->name);
 			if (ca->level & CA_AKICK)
 			{
 				md = metadata_find(ca, "reason");
@@ -141,7 +141,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		else if (mu != NULL && mu->flags & MU_NOOP)
 			command_success_nodata(si, _("The \2%s\2 flag is set for \2%s\2, therefore no status will be given."),
 					"NOOP",
-					mu->name);
+					entity(mu)->name);
 	}
 	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
 		command_success_nodata(si, _("+r exempts from +b."));

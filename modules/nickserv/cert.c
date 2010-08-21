@@ -79,11 +79,11 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (mu != si->smu)
-			logcommand(si, CMDLOG_ADMIN, "CERT:LIST: \2%s\2", mu->name);
+			logcommand(si, CMDLOG_ADMIN, "CERT:LIST: \2%s\2", entity(mu)->name);
 		else
 			logcommand(si, CMDLOG_GET, "CERT:LIST");
 
-		command_success_nodata(si, _("Fingerprint list for \2%s\2:"), mu->name);
+		command_success_nodata(si, _("Fingerprint list for \2%s\2:"), entity(mu)->name);
 
 		LIST_FOREACH(n, mu->cert_fingerprints.head)
 		{
@@ -91,7 +91,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "- %s", mcfp);
 		}
 
-		command_success_nodata(si, _("End of \2%s\2 fingerprint list."), mu->name);
+		command_success_nodata(si, _("End of \2%s\2 fingerprint list."), entity(mu)->name);
 	}
 	else if (!strcasecmp(parv[0], "ADD"))
 	{

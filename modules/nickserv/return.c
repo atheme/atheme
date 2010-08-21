@@ -81,7 +81,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	{
 		myuser_set_email(mu, oldmail);
 		command_fail(si, fault_emailfail, _("Sending email failed, account \2%s\2 remains with \2%s\2."),
-				mu->name, mu->email);
+				entity(mu)->name, mu->email);
 		return;
 	}
 
@@ -98,7 +98,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
-		if (!ircd_on_logout(u, mu->name))
+		if (!ircd_on_logout(u, entity(mu)->name))
 		{
 			u->myuser = NULL;
 			node_del(n, &mu->logins);

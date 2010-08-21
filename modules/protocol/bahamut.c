@@ -395,11 +395,11 @@ static void bahamut_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void bahamut_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+static void bahamut_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
 {
 	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
 			source->nick, nick, duration, source->nick,
-			account != NULL ? account->name : nick);
+			mu ? entity(mu)->name : nick);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])

@@ -86,7 +86,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!host)
 	{
 		hs_sethost_all(mu, NULL);
-		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), mu->name);
+		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", target);
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
@@ -97,7 +97,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	hs_sethost_all(mu, host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
-			host, mu->name);
+			host, entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
 			host, target);
 	do_sethost_all(mu, host);
@@ -121,7 +121,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 		md = metadata_find(mu, "private:usercloak");
 		if (md != NULL && !match(pattern, md->value))
 		{
-			command_success_nodata(si, "- %-30s %s", mu->name, md->value);
+			command_success_nodata(si, "- %-30s %s", entity(mu)->name, md->value);
 			matches++;
 		}
 		LIST_FOREACH(n, mu->nicks.head)

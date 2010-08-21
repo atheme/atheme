@@ -73,13 +73,13 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", entity(mu)->name);
 		return;
 	}
 
 	if (!verify_password(mu, pass))
 	{
-		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
+		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), entity(mu)->name);
 		bad_password(si, mu);
 		return;
 	}
@@ -89,7 +89,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			command_find(si->service->cmdtree, "UNGROUP"))
 	{
 		command_fail(si, fault_noprivs, _("Account \2%s\2 has %d other nick(s) grouped to it, remove those first."),
-				mu->name, LIST_LENGTH(&mu->nicks) - 1);
+				entity(mu)->name, LIST_LENGTH(&mu->nicks) - 1);
 		return;
 	}
 
@@ -106,9 +106,9 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", mu->name);
+	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
-	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
+	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
 	object_unref(mu);
 }
 
@@ -152,10 +152,10 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", mu->name);
+	wallops("%s dropped the account \2%s\2", get_oper_name(si), entity(mu)->name);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
-	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
+	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
 	object_unref(mu);
 }
 

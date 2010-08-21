@@ -130,7 +130,7 @@ static void account_drop_request(myuser_t *mu)
         LIST_FOREACH(n, helpserv_reqlist.head)
         {
                 l = n->data;
-                if (!irccasecmp(l->nick, mu->name))
+                if (!irccasecmp(l->nick, entity(mu)->name))
                 {
                         slog(LG_REGISTER, "HELP:REQUEST:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->topic);
 
@@ -170,7 +170,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
 		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
 
-	target = si->smu->name;
+	target = entity(si->smu)->name;
 
 	/* search for it */
 	LIST_FOREACH(n, helpserv_reqlist.head)
@@ -299,7 +299,7 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-        target = si->smu->name;
+        target = entity(si->smu)->name;
 
         LIST_FOREACH(n, helpserv_reqlist.head)
         {

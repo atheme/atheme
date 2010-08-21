@@ -70,10 +70,10 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 		strlcat(buf, "\2[unverified]\2", BUFSIZE);
 	}
 
-	if (mn == NULL || !irccasecmp(mn->nick, mu->name))
-		command_success_nodata(si, "- %s (%s) %s", mu->name, mu->email, buf);
+	if (mn == NULL || !irccasecmp(mn->nick, entity(mu)->name))
+		command_success_nodata(si, "- %s (%s) %s", entity(mu)->name, mu->email, buf);
 	else
-		command_success_nodata(si, "- %s (%s) (%s) %s", mn->nick, mu->email, mu->name, buf);
+		command_success_nodata(si, "- %s (%s) (%s) %s", mn->nick, mu->email, entity(mu)->name, buf);
 }
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
@@ -113,7 +113,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	{
 		MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 		{
-			if (nickpattern && match(nickpattern, mu->name))
+			if (nickpattern && match(nickpattern, entity(mu)->name))
 				continue;
 			if (hostpattern)
 			{

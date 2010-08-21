@@ -102,7 +102,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	if (password && mu)
 	{
 		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (bad password)", target);
-		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
+		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 		bad_password(si, mu);
 	}
 	else

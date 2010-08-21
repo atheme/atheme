@@ -64,7 +64,7 @@ static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp(password, si->smu->name))
+	if (!strcasecmp(password, entity(si->smu)->name))
 	{
 		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
 		command_fail(si, fault_badparams, _("Syntax: SET PASSWORD <new password>"));
@@ -75,7 +75,7 @@ static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 
 	set_password(si->smu, password);
 
-	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), si->smu->name, password);
+	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, password);
 
 	return;
 }

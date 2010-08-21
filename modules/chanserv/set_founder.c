@@ -97,7 +97,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		/* XXX is it portable to compare times like that? */
 		if ((si->smu == tmu)
 			&& (md = metadata_find(mc, "private:verify:founderchg:newfounder"))
-			&& !irccasecmp(md->value, si->smu->name)
+			&& !irccasecmp(md->value, entity(si->smu)->name)
 			&& (md = metadata_find(mc, "private:verify:founderchg:timestamp"))
 			&& (atol(md->value) >= si->smu->registered))
 		{
@@ -122,7 +122,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 
 			if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
-				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
+				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), entity(tmu)->name);
 				return;
 			}
 
@@ -132,8 +132,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, tmu->name, mychan_founder_names(mc));
-			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), tmu->name);
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, entity(tmu)->name, mychan_founder_names(mc));
+			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), entity(tmu)->name);
 
 			/* add target as founder... */
 			LIST_FOREACH(n, mc->chanacs.head)
@@ -152,7 +152,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
 			/* done! */
-			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), tmu->name, mc->name);
+			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), entity(tmu)->name, mc->name);
 
 			return;
 		}
@@ -173,13 +173,13 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
-			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling transfer)", mc->name, tmu->name);
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling transfer)", mc->name, entity(tmu)->name);
 			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
 
 			return;
 		}
 
-		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), tmu->name, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), entity(tmu)->name, mc->name);
 		return;
 	}
 
@@ -205,20 +205,20 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 	{
-		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, entity(tmu)->name);
 		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
 	}
 	else
-		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, entity(tmu)->name);
 
-	metadata_add(mc, "private:verify:founderchg:newfounder", tmu->name);
+	metadata_add(mc, "private:verify:founderchg:newfounder", entity(tmu)->name);
 	metadata_add(mc, "private:verify:founderchg:timestamp", itoa(time(NULL)));
 
-	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), tmu->name, mc->name);
-	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), tmu->name);
-	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
+	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), entity(tmu)->name, mc->name);
+	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), entity(tmu)->name);
+	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, entity(tmu)->name);
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
-	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, si->smu->name);
+	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

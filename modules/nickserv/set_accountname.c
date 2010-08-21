@@ -75,7 +75,7 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcmp(si->smu->name, newname))
+	if (!strcmp(entity(si->smu)->name, newname))
 	{
 		command_fail(si, fault_nochange, _("Your account name is already set to \2%s\2."), newname);
 		return;

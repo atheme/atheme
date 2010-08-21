@@ -70,7 +70,7 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (mn->owner != si->smu && !myuser_access_verify(si->su, mn->owner))
 	{
-		command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), mn->owner->name);
+		command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), entity(mn->owner)->name);
 		return;
 	}
 	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
@@ -112,7 +112,7 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (mn->owner != si->smu && !myuser_access_verify(si->su, mn->owner))
 	{
-		command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), mn->owner->name);
+		command_fail(si, fault_noprivs, _("You are not recognized as \2%s\2."), entity(mn->owner)->name);
 		return;
 	}
 	snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);

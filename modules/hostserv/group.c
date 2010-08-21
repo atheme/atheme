@@ -96,7 +96,7 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(buf, md->value, sizeof buf);
 	hs_sethost_all(si->smu, buf);
 	do_sethost_all(si->smu, buf);
-	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), si->smu->name, buf);
+	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

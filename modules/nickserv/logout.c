@@ -68,7 +68,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
+			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), entity(mu)->name);
 			bad_password(si, mu);
 			return;
 		}
@@ -86,7 +86,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 
 	if (is_soper(si->smu))
-		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->smu->name);
+		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", si->su->nick, entity(si->smu)->name);
 
 	if (si->su != u)
 	{
@@ -105,7 +105,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner == si->smu)
 			mn->lastseen = CURRTIME;
-		if (!ircd_on_logout(si->su, si->smu->name))
+		if (!ircd_on_logout(si->su, entity(si->smu)->name))
 		{
 			LIST_FOREACH_SAFE(n, tn, si->smu->logins.head)
 			{

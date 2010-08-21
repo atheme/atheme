@@ -78,12 +78,12 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (u->myuser == mu)
-		command_success_nodata(si, "%s%s%s ACC 3", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
+		command_success_nodata(si, "%s%s%s ACC 3", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
 	else if ((mn = mynick_find(u->nick)) != NULL && mn->owner == mu &&
 			myuser_access_verify(u, mu))
-		command_success_nodata(si, "%s%s%s ACC 2", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
+		command_success_nodata(si, "%s%s%s ACC 2", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
 	else
-		command_success_nodata(si, "%s%s%s ACC 1", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
+		command_success_nodata(si, "%s%s%s ACC 1", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
 }
 
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
@@ -94,7 +94,7 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("You are not logged in."));
 	else
 	{
-		command_success_nodata(si, _("You are logged in as \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("You are logged in as \2%s\2."), entity(si->smu)->name);
 
 		if (is_soper(si->smu))
 		{
@@ -111,7 +111,7 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner != si->smu &&
 				myuser_access_verify(si->su, mn->owner))
-			command_success_nodata(si, _("You are recognized as \2%s\2."), mn->owner->name);
+			command_success_nodata(si, _("You are recognized as \2%s\2."), entity(mn->owner)->name);
 	}
 
 	if (si->su != NULL && is_admin(si->su))

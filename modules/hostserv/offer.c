@@ -224,12 +224,12 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(l->vhost, host))
 		{
 			if (strstr(host, "$account"))
-				replace(host, BUFSIZE, "$account", si->smu->name);
+				replace(host, BUFSIZE, "$account", entity(si->smu)->name);
 
 			if (!check_vhost_validity(si, host))
 				return;
 
-			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, si->smu->name);
+			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, entity(si->smu)->name);
 
 			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
 			hs_sethost_all(si->smu, host);

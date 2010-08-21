@@ -475,7 +475,7 @@ static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 			(unsigned long)(CURRTIME - 60));
 }
 
-static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
 {
 	if (duration > 0)
 		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
@@ -483,7 +483,7 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 				(unsigned long)(CURRTIME + duration),
 				(unsigned long)CURRTIME,
 				source->nick,
-				account != NULL ? account->name : nick);
+				mu ? entity(mu)->name : nick);
 	else
 		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
 }

@@ -163,7 +163,7 @@ static void account_drop_request(myuser_t *mu)
 	LIST_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
-		if (!irccasecmp(l->nick, mu->name))
+		if (!irccasecmp(l->nick, entity(mu)->name))
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->vhost);
 
@@ -220,7 +220,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	else
-		target = si->smu->name;
+		target = entity(si->smu)->name;
 
 	if (!check_vhost_validity(si, host))
 		return;

@@ -308,13 +308,13 @@ static void p10_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void p10_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void p10_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
 	if (!me.connected || u == NULL)
 		return;
 
-	sts("%s AC %s %s %lu", me.numeric, u->uid, account->name,
-			(unsigned long)account->registered);
+	sts("%s AC %s %s %lu", me.numeric, u->uid, entity(mu)->name,
+			(unsigned long)mu->registered);
 	check_hidehost(u);
 }
 
@@ -988,7 +988,7 @@ static void check_hidehost(user_t *u)
 		}
 		return;
 	}
-	snprintf(u->vhost, sizeof u->vhost, "%s.%s", u->myuser->name,
+	snprintf(u->vhost, sizeof u->vhost, "%s.%s", entity(u->myuser)->name,
 			me.hidehostsuffix);
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }

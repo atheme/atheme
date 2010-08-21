@@ -130,7 +130,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		if (tmu->memos.count >= me.mdlimit)
 		{
 			command_fail(si, fault_toomany, _("%s's inbox is full"), target);
-			logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (target inbox full)", tmu->name);
+			logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (target inbox full)", entity(tmu)->name);
 			return;
 		}
 
@@ -150,18 +150,18 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (mu == si->smu)
 			{
-				logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (on ignore list)", tmu->name);
+				logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (on ignore list)", entity(tmu)->name);
 				command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);
 				return;
 			}
 		}
-		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", tmu->name);
+		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", entity(tmu)->name);
 	
 		/* Malloc and populate struct */
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = 0;
-		strlcpy(memo->sender,si->smu->name,NICKLEN);
+		strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
 		strlcpy(memo->text,m,MEMOLEN);
 	
 		/* Create a linked list node and add to memos */
@@ -186,10 +186,10 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		if (tu != NULL && tu->myuser == tmu)
 			command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 
-		if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (%d).", si->smu->name, LIST_LENGTH(&tmu->memos));
+		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (%d).", entity(si->smu)->name, LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", si->smu->name, si->su->nick, LIST_LENGTH(&tmu->memos));
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s) (%d).", entity(si->smu)->name, si->su->nick, LIST_LENGTH(&tmu->memos));
 		myuser_notice(memosvs.nick, tmu, _("To read it, type /%s%s READ %d"),
 					ircd->uses_rcommand ? "" : "msg ", memosvs.me->disp, LIST_LENGTH(&tmu->memos));
 

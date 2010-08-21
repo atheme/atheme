@@ -167,7 +167,7 @@ static void hook_metadata_change(hook_metadata_change_t *md)
 		{
 			if (!match(tn->data, md->name) && md->value != NULL)
 				myuser_notice(nicksvs.nick, mds->mu, "\2%s\2 has changed \2%s\2 to \2%s\2.",
-					mu->name, md->name, md->value);
+					entity(mu)->name, md->name, md->value);
 		}
 	}
 }

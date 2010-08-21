@@ -498,12 +498,12 @@ static void inspircd_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void inspircd_on_login(user_t *u, myuser_t *account, const char *wantedhost)
+static void inspircd_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, account->name);
+	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
 
 /* protocol-specific stuff to do on logout */

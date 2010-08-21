@@ -93,7 +93,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	{
 		mu = mychan_pick_successor(mc);
 		if (mu != NULL)
-			command_success_nodata(si, _("Successor  : %s"), mu->name);
+			command_success_nodata(si, _("Successor  : %s"), entity(mu)->name);
 		else
 			command_success_nodata(si, _("Successor  : (none)"));
 	}

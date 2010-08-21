@@ -64,7 +64,7 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (strchr(property, ':'))
-		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
+		logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", entity(si->smu)->name, property, value);
 
 	if (!value)
 	{
@@ -97,7 +97,7 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	if (count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-					property, si->smu->name);
+					property, entity(si->smu)->name);
 		return;
 	}
 

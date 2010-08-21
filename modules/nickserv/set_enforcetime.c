@@ -62,11 +62,11 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCETIME:DEFAULT");
 			metadata_delete(si->smu, "private:enforcetime");
-			command_success_nodata(si, _("The \2%s\2 for account \2%s\2 has been reset to default, which is \2%d\2 seconds."), "ENFORCETIME", si->smu->name, nicksvs.enforce_delay);
+			command_success_nodata(si, _("The \2%s\2 for account \2%s\2 has been reset to default, which is \2%d\2 seconds."), "ENFORCETIME", entity(si->smu)->name, nicksvs.enforce_delay);
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
 	}
 	else if (enforcetime > 0 && enforcetime <= 180)
@@ -75,11 +75,11 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCETIME: %d", enforcetime);
 			metadata_add(si->smu, "private:enforcetime", setting);
-			command_success_nodata(si, _("The \2%s\2 for account \2%s\2 has been set to \2%d\2 seconds."), "ENFORCETIME", si->smu->name, enforcetime);
+			command_success_nodata(si, _("The \2%s\2 for account \2%s\2 has been set to \2%d\2 seconds."), "ENFORCETIME", entity(si->smu)->name, enforcetime);
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
 	}
 	else

@@ -85,7 +85,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("You are not logged in."));
 	else
 	{
-		command_success_nodata(si, _("You are logged in as \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("You are logged in as \2%s\2."), entity(si->smu)->name);
 
 		if (is_soper(si->smu))
 		{
@@ -102,7 +102,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner != si->smu &&
 				myuser_access_verify(si->su, mn->owner))
-			command_success_nodata(si, _("You are recognized as \2%s\2."), mn->owner->name);
+			command_success_nodata(si, _("You are recognized as \2%s\2."), entity(mn->owner)->name);
 	}
 
 	if (si->su != NULL && is_admin(si->su))

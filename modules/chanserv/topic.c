@@ -105,7 +105,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL)
 		topicsetter = si->su->nick;
 	else if (si->smu != NULL)
-		topicsetter = si->smu->name;
+		topicsetter = entity(si->smu)->name;
 	else
 		topicsetter = "unknown";
 	prevtopicts = c->topicts;
@@ -180,7 +180,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL)
 		topicsetter = si->su->nick;
 	else if (si->smu != NULL)
-		topicsetter = si->smu->name;
+		topicsetter = entity(si->smu)->name;
 	else
 		topicsetter = "unknown";
 	prevtopicts = c->topicts;
@@ -255,7 +255,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL)
 		topicsetter = si->su->nick;
 	else if (si->smu != NULL)
-		topicsetter = si->smu->name;
+		topicsetter = entity(si->smu)->name;
 	else
 		topicsetter = "unknown";
 	prevtopicts = c->topicts;

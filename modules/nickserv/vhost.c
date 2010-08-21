@@ -139,25 +139,25 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!force)
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", mu->name, markmd->value);
-			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, markmd->value);
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", entity(mu)->name, markmd->value);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), entity(mu)->name, markmd->value);
 			if (has_priv(si, PRIV_MARK))
 			{
 				if (host)
 					snprintf(cmdtext, sizeof cmdtext,
 							"VHOST %s ON %s FORCE",
-							mu->name, host);
+							entity(mu)->name, host);
 				else
 					snprintf(cmdtext, sizeof cmdtext,
 							"VHOST %s OFF FORCE",
-							mu->name);
+							entity(mu)->name);
 				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
 			}
 			return;
 		}
 		else if (!has_priv(si, PRIV_MARK))
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", mu->name, markmd->value);
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", entity(mu)->name, markmd->value);
 			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
@@ -168,16 +168,16 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!metadata_find(mu, "private:usercloak"))
 		{
-			command_fail(si, fault_nochange, _("\2%s\2 does not have a vhost set."), mu->name);
+			command_fail(si, fault_nochange, _("\2%s\2 does not have a vhost set."), entity(mu)->name);
 			return;
 		}
 		metadata_delete(mu, "private:usercloak");
-		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
-		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", mu->name);
+		command_success_nodata(si, _("Deleted vhost for \2%s\2."), entity(mu)->name);
+		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", entity(mu)->name);
 		if (markmd)
 		{
-			wallops("%s deleted vhost from the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
-			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, mu->name);
+			wallops("%s deleted vhost from the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
 		}
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
@@ -189,19 +189,19 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mu, "private:usercloak");
 	if (md != NULL && !strcmp(md->value, host))
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 already has the given vhost set."), mu->name);
+		command_fail(si, fault_nochange, _("\2%s\2 already has the given vhost set."), entity(mu)->name);
 		return;
 	}
 
 	metadata_add(mu, "private:usercloak", host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
-			host, mu->name);
+			host, entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
-			host, mu->name);
+			host, entity(mu)->name);
 	if (markmd)
 	{
-		wallops("%s set vhost %s on the \2MARKED\2 account %s.", get_oper_name(si), host, mu->name);
-		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, mu->name);
+		wallops("%s set vhost %s on the \2MARKED\2 account %s.", get_oper_name(si), host, entity(mu)->name);
+		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
 	}
 	do_sethost_all(mu, host);
 	return;
@@ -224,7 +224,7 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		if (!match(pattern, md->value))
 		{
-			command_success_nodata(si, "- %-30s %s", mu->name, md->value);
+			command_success_nodata(si, "- %-30s %s", entity(mu)->name, md->value);
 			matches++;
 		}
 	}

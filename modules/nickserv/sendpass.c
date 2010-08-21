@@ -90,7 +90,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not verified."), mu->name);
+		command_fail(si, fault_badparams, _("\2%s\2 is not verified."), entity(mu)->name);
 		return;
 	}
 
@@ -99,19 +99,19 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		ismarked = true;
 		if (op == op_none)
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", mu->name, md->value);
-			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, md->value);
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", entity(mu)->name, md->value);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), entity(mu)->name, md->value);
 			if (has_priv(si, PRIV_MARK))
 			{
 				snprintf(cmdtext, sizeof cmdtext,
-						"SENDPASS %s FORCE", mu->name);
+						"SENDPASS %s FORCE", entity(mu)->name);
 				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
 			}
 			return;
 		}
 		else if (!has_priv(si, PRIV_MARK))
 		{
-			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", mu->name, md->value);
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked by \2%s\2)", entity(mu)->name, md->value);
 			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
@@ -122,23 +122,23 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mu, "private:setpass:key"))
 		{
 			metadata_delete(mu, "private:setpass:key");
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", mu->name);
-			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), mu->name);
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", entity(mu)->name);
+			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), entity(mu)->name);
 		}
 		else
-			command_fail(si, fault_nochange, _("\2%s\2 did not have a password change key outstanding."), mu->name);
+			command_fail(si, fault_nochange, _("\2%s\2 did not have a password change key outstanding."), entity(mu)->name);
 		return;
 	}
 
 	if (LIST_LENGTH(&mu->logins) > 0)
 	{
-		command_fail(si, fault_noprivs, _("This operation cannot be performed on %s, because someone is logged in to it."), mu->name);
+		command_fail(si, fault_noprivs, _("This operation cannot be performed on %s, because someone is logged in to it."), entity(mu)->name);
 		return;
 	}
 
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
-		command_success_nodata(si, _("%s has been frozen by the %s administration."), mu->name, me.netname);
+		command_success_nodata(si, _("%s has been frozen by the %s administration."), entity(mu)->name, me.netname);
 		return;
 	}
 
@@ -147,8 +147,8 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (metadata_find(mu, "private:setpass:key"))
 		{
-			command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);
-			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), mu->name);
+			command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), entity(mu)->name);
+			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), entity(mu)->name);
 			return;
 		}
 		key = gen_pw(12);
@@ -156,11 +156,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
-			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
+			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 			if (ismarked)
 			{
-				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
-				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
+				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
 			}
 		}
 		else
@@ -180,11 +180,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
-		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
+		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 		if (ismarked)
 		{
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
-			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
 		}
 	}
 	else

@@ -60,8 +60,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!nicksvs.no_nick_ownership)
 			name = si->su->nick;
-		else if (si->su->myuser)
-			name = si->su->myuser->name;
+		else if (si->smu)
+			name = entity(si->smu)->name;
 	}
 
 	if (!name)
@@ -105,7 +105,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (mn != NULL && mn->owner != mu)
 			mn = NULL;
 		if (mn == NULL)
-			mn = mynick_find(mu->name);
+			mn = mynick_find(entity(mu)->name);
 		u = user_find_named(mn->nick);
 		if (u != NULL && u->myuser != mu)
 		{
@@ -116,9 +116,9 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (mn != NULL)
-		command_success_nodata(si, _("Information on \2%s\2 (account \2%s\2):"), mn->nick, mu->name);
+		command_success_nodata(si, _("Information on \2%s\2 (account \2%s\2):"), mn->nick, entity(mu)->name);
 	else
-		command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
+		command_success_nodata(si, _("Information on \2%s\2:"), entity(mu)->name);
 
 	registered = mn != NULL ? mn->registered : mu->registered;
 	tm = *localtime(&registered);
@@ -355,10 +355,10 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
 	else if (metadata_find(mu, "private:freeze:freezer"))
-		command_success_nodata(si, _("%s has been frozen by the %s administration."), mu->name, me.netname);
+		command_success_nodata(si, _("%s has been frozen by the %s administration."), entity(mu)->name, me.netname);
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:mark:setter")))
 	{
@@ -375,11 +375,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
 
 	if (MU_WAITAUTH & mu->flags)
-		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), mu->name);
+		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), entity(mu)->name);
 
 	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
 			(md = metadata_find(mu, "private:verify:emailchg:newemail")))
@@ -392,7 +392,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), mu->name, newemail, strfbuf);
+		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), entity(mu)->name, newemail, strfbuf);
 	}
 
 	req.si = si;
@@ -402,7 +402,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
-	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mn != NULL ? mn->nick : mu->name);
+	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mn != NULL ? mn->nick : entity(mu)->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

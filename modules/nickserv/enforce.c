@@ -106,13 +106,13 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
 		else
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCE:ON");
 			metadata_add(si->smu, "private:doenforce", "1");
-			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 			check_enforce_all(si->smu);
 		}
 	}
@@ -122,11 +122,11 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCE:OFF");
 			metadata_delete(si->smu, "private:doenforce");
-			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
 	}
 	else
@@ -153,7 +153,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (!target && si->smu != NULL)
-		target = si->smu->name;
+		target = entity(si->smu)->name;
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RELEASE");
@@ -292,7 +292,7 @@ static void show_enforce(hook_user_req_t *hdata)
 {
 
 	if (metadata_find(hdata->mu, "private:doenforce"))
-		command_success_nodata(hdata->si, "%s has enabled nick protection", hdata->mu->name);
+		command_success_nodata(hdata->si, "%s has enabled nick protection", entity(hdata->mu)->name);
 }
 
 static void check_registration(hook_user_register_check_t *hdata)

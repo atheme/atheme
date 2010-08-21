@@ -54,7 +54,7 @@ static int listmail_foreach_cb(const char *key, void *data, void *privdata)
 		if (state->matches == 0)
 			command_success_nodata(state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
 
-		command_success_nodata(state->origin, "- %s (%s)", mu->name, mu->email);
+		command_success_nodata(state->origin, "- %s (%s)", entity(mu)->name, mu->email);
 		state->matches++;
 	}
 

@@ -75,7 +75,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu != si->smu)
 	{	/* must have been an oper */
-		logcommand(si, CMDLOG_ADMIN, "LISTCHANS: \2%s\2", mu->name);
+		logcommand(si, CMDLOG_ADMIN, "LISTCHANS: \2%s\2", entity(mu)->name);
 	}
 	else
 	{	/* just a user, or oper is listing himself */
@@ -84,7 +84,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu->chanacs.count == 0)
 	{
-		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), mu->name);
+		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);
 		return;
 	}
 
@@ -102,11 +102,11 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	i = mu->chanacs.count - akicks;
 
 	if (i == 0)
-		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), mu->name);
+		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);
 	else
 		command_success_nodata(si, ngettext(N_("\2%d\2 channel access match for the nickname \2%s\2"),
 						    N_("\2%d\2 channel access matches for the nickname \2%s\2"), i),
-						    i, mu->name);
+						    i, entity(mu)->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

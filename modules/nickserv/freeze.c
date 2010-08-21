@@ -90,7 +90,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = (user_t *)n->data;
-			if (!ircd_on_logout(u, mu->name))
+			if (!ircd_on_logout(u, entity(mu)->name))
 			{
 				u->myuser = NULL;
 				node_del(n, &mu->logins);
