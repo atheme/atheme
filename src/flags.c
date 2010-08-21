@@ -68,6 +68,20 @@ struct gflags mu_flags[] = {
 	{ 0, 0 },
 };
 
+struct gflags mc_flags[] = {
+	{ 'h', MC_HOLD },
+	{ 'o', MC_NOOP },
+	{ 'l', MC_LIMITFLAGS },
+	{ 'z', MC_SECURE },
+	{ 'v', MC_VERBOSE },
+	{ 'r', MC_RESTRICTED },
+	{ 'k', MC_KEEPTOPIC },
+	{ 't', MC_TOPICLOCK },
+	{ 'g', MC_GUARD },
+	{ 'p', MC_PRIVATE },
+	{ 0, 0 },
+};
+
 unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def)
 {
 	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)

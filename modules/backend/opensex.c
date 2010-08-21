@@ -157,6 +157,7 @@ opensex_db_save(database_handle_t *db)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
+		char *flags = gflags_tostr(mc_flags, mc->flags);
 		/* find a founder */
 		mu = NULL;
 		LIST_FOREACH(tn, mc->chanacs.head)
@@ -173,7 +174,7 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, mc->name);
 		db_write_time(db, mc->registered);
 		db_write_time(db, mc->used);
-		db_write_uint(db, mc->flags);
+		db_write_word(db, flags);
 		db_write_uint(db, mc->mlock_on);
 		db_write_uint(db, mc->mlock_off);
 		db_write_uint(db, mc->mlock_limit);
@@ -612,14 +613,24 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 	char buf[4096];
 	const char *name = db_sread_word(db);
 	const char *key;
+	const char *sflags;
+	unsigned int flags = 0;
 
 	strlcpy(buf, name, sizeof buf);
 	mychan_t *mc = mychan_add(buf);
 
 	mc->registered = db_sread_time(db);
 	mc->used = db_sread_time(db);
-	mc->flags = db_sread_uint(db);
+	if (rs->dbv >= 8) {
+		sflags = db_sread_word(db);
+		if (!gflags_fromstr(mc_flags, sflags, &flags))
+			slog(LG_INFO, "db-h-mc: line %d: confused by flags %s",
+			     db->line, sflags);
+	} else {
+		flags = db_sread_uint(db);
+	}
 
+	mc->flags = flags;
 	mc->mlock_on = db_sread_uint(db);
 	mc->mlock_off = db_sread_uint(db);
 	mc->mlock_limit = db_sread_uint(db);
