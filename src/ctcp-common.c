@@ -50,6 +50,11 @@ static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *s
 	notice(svsnick, origin, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
+static void ctcp_machinegod_handler(chat *cmd, char *args, char *origin, char *svsnick)
+{
+	notice(svsnick, origin, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
+}
+
 void common_ctcp_init(void)
 {
 	ctcptree = mowgli_patricia_create(noopcanon);
@@ -57,15 +62,14 @@ void common_ctcp_init(void)
 	mowgli_patricia_add(ctcptree, "\001PING", ctcp_ping_handler);
 	mowgli_patricia_add(ctcptree, "\001VERSION\001", ctcp_version_handler);
 	mowgli_patricia_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
+	mowgli_patricia_add(ctcptree, "\001MACHINEGOD\001", ctcp_machinegod_handler);
 }
 
 unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 {
 	void (*handler)(char *, char *, char *, char *);
 
-	handler = mowgli_patricia_retrieve(ctcptree, cmd);
-
-	if (handler != NULL)
+	if ((handler = mowgli_patricia_retrieve(ctcptree, cmd)) != NULL)
 	{
 		handler(cmd, args, si->su->nick, si->service->nick);
 		return 1;
