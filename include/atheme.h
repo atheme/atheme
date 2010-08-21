@@ -51,7 +51,6 @@
 #include "commandtree.h"
 #include "users.h"
 #include "sourceinfo.h"
-#include "symbolmatrix.h"
 #include "taint.h"
 #include "database_backend.h"
 

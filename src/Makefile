@@ -51,7 +51,6 @@ BASE_SRCS =				\
 	string.c		\
 	strshare.c		\
 	svsignore.c		\
-	symbolmatrix.c	\
 	table.c		\
 	template.c		\
 	tokenize.c		\
