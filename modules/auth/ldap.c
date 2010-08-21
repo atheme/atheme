@@ -75,11 +75,11 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	if (ldap_conn == NULL || ldap_config.dnformat == NULL)
 		return false;
 
-	if (strchr(mu->name, ' ') || strchr(mu->name, ',') ||
-			strchr(mu->name, '/'))
+	if (strchr(entity(mu)->name, ' ') || strchr(entity(mu)->name, ',') ||
+			strchr(entity(mu)->name, '/'))
 		return false;
 
-	snprintf(dn, sizeof dn, ldap_config.dnformat, mu->name);
+	snprintf(dn, sizeof dn, ldap_config.dnformat, entity(mu)->name);
 	res = ldap_simple_bind_s(ldap_conn, dn, password);
 	switch (res)
 	{
