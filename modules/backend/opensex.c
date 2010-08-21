@@ -265,8 +265,9 @@ opensex_db_save(database_handle_t *db)
 
 	LIST_FOREACH(n, soperlist.head)
 	{
-		const char *flags = gflags_tostr(soper_flags, soper->flags);
+		const char *flags;
 		soper = n->data;
+		flags = gflags_tostr(soper_flags, soper->flags);
 
 		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
 			continue;
