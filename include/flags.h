@@ -30,6 +30,16 @@ E char *bitmask_to_flags2(unsigned int, unsigned int);
 E unsigned int allow_flags(mychan_t *mc, unsigned int flags);
 E void update_chanacs_flags(void);
 
+typedef struct gflags {
+	char ch;
+	unsigned int value;
+} gflags_t;
+
+E struct gflags mu_flags[];
+
+E char *gflags_tostr(gflags_t *gflags, unsigned int flags);
+E bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res);
+E bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

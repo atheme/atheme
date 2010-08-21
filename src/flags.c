@@ -51,6 +51,23 @@ struct flags_table chanacs_flags[255] = {
 	['b'] = {CA_AKICK, 0, false},
 };
 
+struct gflags mu_flags[] = {
+	{ 'h', MU_HOLD },
+	{ 'n', MU_NEVEROP },
+	{ 'o', MU_NOOP },
+	{ 'W', MU_WAITAUTH },
+	{ 's', MU_HIDEMAIL },
+	{ 'm', MU_NOMEMO },
+	{ 'e', MU_EMAILMEMOS },
+	{ 'C', MU_CRYPTPASS },
+	{ 'b', MU_NOBURSTLOGIN },
+	{ 'E', MU_ENFORCE },
+	{ 'P', MU_USE_PRIVMSG },
+	{ 'p', MU_PRIVATE },
+	{ 'Q', MU_QUIETCHG },
+	{ 0, 0 },
+};
+
 unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def)
 {
 	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)
@@ -283,6 +300,41 @@ void update_chanacs_flags(void)
 		ca_all &= ~CA_USEPROTECT;
 	if (!ircd->uses_owner)
 		ca_all &= ~CA_USEOWNER;
+}
+
+
+char *gflags_tostr(gflags_t *gflags, unsigned int flags)
+{
+	static char buf[257];
+	char *p = buf;
+	int i;
+	*p++ = '+';
+	for (i = 0; gflags[i].ch; i++)
+		if (flags & gflags[i].value)
+			*p++ = gflags[i].ch;
+	*p = '\0';
+	return buf;
+}
+
+bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
+{
+	int i;
+	if (f == '+') return true;
+	for (i = 0; gflags[i].ch; i++)
+	{
+		if (gflags[i].ch != f) continue;
+		*res |= gflags[i].value;
+		return true;
+	}
+	return false;
+}
+
+bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res)
+{
+	while (*f)
+		if (!gflag_fromchar(gflags, *f++, res))
+			return false;
+	return true;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -61,7 +61,7 @@ opensex_db_save(database_handle_t *db)
 
 	/* write the database version */
 	db_start_row(db, "DBV");
-	db_write_int(db, 7);
+	db_write_int(db, 8);
 	db_commit_row(db);
 
 	db_start_row(db, "CF");
@@ -77,13 +77,14 @@ opensex_db_save(database_handle_t *db)
 		 *
 		 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 		 */
+		char *flags = gflags_tostr(mu_flags, LIST_LENGTH(&mu->logins) ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
 		db_start_row(db, "MU");
 		db_write_word(db, entity(mu)->name);
 		db_write_word(db, mu->pass);
 		db_write_word(db, mu->email);
 		db_write_time(db, mu->registered);
 		db_write_time(db, mu->lastlogin);
-		db_write_uint(db, LIST_LENGTH(&mu->logins) > 0 ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
+		db_write_word(db, flags);
 		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
 
@@ -400,7 +401,8 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	const char *name = db_sread_word(db);
 	const char *pass, *email, *language;
 	time_t reg, login;
-	unsigned int flags;
+	const char *sflags;
+	unsigned int flags = 0;
 	myuser_t *mu;
 
 	if (myuser_find(name))
@@ -413,8 +415,15 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	email = db_sread_word(db);
 	reg = db_sread_time(db);
 	login = db_sread_time(db);
-	flags = db_sread_uint(db);
+	if (rs->dbv >= 8) {
+		sflags = db_sread_word(db);
+		if (!gflags_fromstr(mu_flags, sflags, &flags))
+			slog(LG_INFO, "db-h-mu: line %d: confused by flags: %s", db->line, sflags);
+	} else {
+		flags = db_sread_uint(db);
+	}
 	language = db_read_word(db);
+
 
 	mu = myuser_add(name, pass, email, flags);
 	mu->registered = reg;

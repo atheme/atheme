@@ -122,7 +122,6 @@ struct myuser_
 #define MU_NOMEMO      0x00000040
 #define MU_EMAILMEMOS  0x00000080
 #define MU_CRYPTPASS   0x00000100
-#define MU_OLD_SASL    0x00000200 /* obsolete */
 #define MU_NOBURSTLOGIN 0x00000400
 #define MU_ENFORCE     0x00000800 /* XXX limited use at this time */
 #define MU_USE_PRIVMSG 0x00001000 /* use PRIVMSG */
