@@ -45,20 +45,20 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), opersvs.nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), si->service->nick);
 		return;
 	}
 
 	if (!command)
 	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), opersvs.nick);
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
 		command_success_nodata(si, _("\2%s\2 provides essential network management services, such as\n"
 					"routing manipulation and access restriction. Please do not abuse\n"
 					"your access to \2%s\2!"),
-				opersvs.nick, opersvs.nick);
+				si->service->nick, si->service->nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
 		command_help(si, os_cmdtree);

@@ -88,7 +88,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), opersvs.nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), si->service->nick);
 		return;
 	}
 

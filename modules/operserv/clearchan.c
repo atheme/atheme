@@ -118,7 +118,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 			switch (action)
 			{
 				case CLEAR_KICK:
-					kick(opersvs.me->me, c, cu->user, reason);
+					kick(si->service->me, c, cu->user, reason);
 					break;
 				case CLEAR_KILL:
 					kill_user(si->service->me, cu->user, "%s", reason);

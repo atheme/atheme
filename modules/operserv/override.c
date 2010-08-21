@@ -159,6 +159,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	cooked_sourceinfo_t o_si;
 	myuser_t *mu = NULL;
 	service_t *svs;
+	service_t *memosvs;
 	command_t *cmd;
 	int newparc, i;
 	char *newparv[20];
@@ -216,7 +217,8 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!irccasecmp(parv[1], memosvs.nick))
+	memosvs = service_find("memoserv");
+	if (!irccasecmp(parv[1], memosvs->nick))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 cannot be used as an override service."), parv[1]);
 		return;

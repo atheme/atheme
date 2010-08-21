@@ -10,7 +10,6 @@
 #define SERVICES_H
 
 typedef struct chansvs_ chansvs_t;
-typedef struct opersvs_ opersvs_t;
 typedef struct nicksvs_ nicksvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
@@ -44,16 +43,6 @@ struct chansvs_
   unsigned int maxfounders;	/* max founders per channel    */
 
   char *deftemplates;		/* default templates          */
-};
-
-struct opersvs_
-{
-  char *nick;
-  char *user;
-  char *host;
-  char *real;
-   
-  service_t *me;
 };
 
 /* authentication services */
@@ -90,7 +79,6 @@ struct nicksvs_
 
 /* atheme.c */
 E chansvs_t chansvs;
-E opersvs_t opersvs;
 E nicksvs_t nicksvs;
 
 /* services.c */

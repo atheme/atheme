@@ -73,14 +73,17 @@ void _moddeinit()
 
 static void noop_kill_users(void *dummy)
 {
+	service_t *service;
 	node_t *n, *tn;
 	user_t *u;
 
 	hook_del_user_delete(check_quit);
+
+	service = service_find("operserv");
 	LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 	{
 		u = n->data;
-		kill_user(opersvs.me->me, u, "Operator access denied");
+		kill_user(service->me, u, "Operator access denied");
 		node_del(n, &noop_kill_queue);
 		node_free(n);
 	}

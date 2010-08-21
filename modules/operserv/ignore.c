@@ -79,7 +79,7 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
         c = command_find(&os_ignore_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		return;
 	}
 

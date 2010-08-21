@@ -52,34 +52,17 @@ static void oservice(sourceinfo_t *si, int parc, char *parv[])
 	command_exec_split(si->service, si, cmd, text, &os_cmdtree);
 }
 
-static void operserv_config_ready(void *unused)
-{
-	opersvs.nick = opersvs.me->nick;
-	opersvs.user = opersvs.me->user;
-	opersvs.host = opersvs.me->host;
-	opersvs.real = opersvs.me->real;
-}
+service_t *opersvs = NULL;
 
 void _modinit(module_t *m)
 {
-        hook_add_event("config_ready");
-        hook_add_config_ready(operserv_config_ready);
-
-        opersvs.me = service_add("operserv", oservice, &os_cmdtree, &os_conftable);
+        opersvs = service_add("operserv", oservice, &os_cmdtree, &os_conftable);
 }
 
 void _moddeinit(void)
 {
-	if (opersvs.me)
-	{
-		opersvs.nick = NULL;
-		opersvs.user = NULL;
-		opersvs.host = NULL;
-		opersvs.real = NULL;
-		service_delete(opersvs.me);
-		opersvs.me = NULL;
-	}
-        hook_del_config_ready(operserv_config_ready);
+	if (opersvs != NULL)
+		service_delete(opersvs);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
