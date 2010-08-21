@@ -11,7 +11,6 @@
 
 typedef struct chansvs_ chansvs_t;
 typedef struct opersvs_ opersvs_t;
-typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
 
 /* The nick/user/host/real strings in these structs simply point
@@ -57,16 +56,6 @@ struct opersvs_
   service_t *me;
 };
 
-struct memosvs_
-{
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-
-  service_t *me;
-};
-
 /* authentication services */
 struct nicksvs_
 {
@@ -102,7 +91,6 @@ struct nicksvs_
 /* atheme.c */
 E chansvs_t chansvs;
 E opersvs_t opersvs;
-E memosvs_t memosvs;
 E nicksvs_t nicksvs;
 
 /* services.c */
