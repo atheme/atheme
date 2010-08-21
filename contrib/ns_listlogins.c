@@ -53,7 +53,7 @@ static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_success_nodata(si, "Clients identified to account \2%s\2", si->smu->name);
+	command_success_nodata(si, "Clients identified to account \2%s\2", entity(si->smu)->name);
 	LIST_FOREACH(n, si->smu->logins.head)
 	{
 		u = n->data;

@@ -50,7 +50,7 @@ static void user_add_host(myuser_t *mu)
 	maxlen1 = HOSTLEN - 2 - strlen(me.hidehostsuffix);
 	if (maxlen1 < 9)
 		return;
-	p = mu->name;
+	p = entity(mu)->name;
 	i = 0;
 	while (i < maxlen1 && *p != '\0')
 	{
@@ -73,7 +73,7 @@ static void user_add_host(myuser_t *mu)
 			myuser_notice(nicksvs.nick, mu, "Your account name cannot be used in a vhost directly. To ensure uniqueness, a number was added.");
 			myuser_notice(nicksvs.nick, mu, "To avoid this, register an account name containing only letters, digits and %s.", VALID_SPECIALS);
 			if (!nicksvs.no_nick_ownership && command_find(nicksvs.me->cmdtree, "GROUP"))
-				myuser_notice(nicksvs.nick, mu, "If you drop %s you can group it to your new account.", mu->name);
+				myuser_notice(nicksvs.nick, mu, "If you drop %s you can group it to your new account.", entity(mu)->name);
 		}
 	}
 	else

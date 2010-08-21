@@ -70,22 +70,22 @@ static void make_forbid(sourceinfo_t *si, const char *account, const char *reaso
 	metadata_add(mu, "private:freeze:timestamp", itoa(CURRTIME));
 	if (!nicksvs.no_nick_ownership)
 	{
-		mn = mynick_add(mu, mu->name);
+		mn = mynick_add(mu, entity(mu)->name);
 		mn->registered = CURRTIME;
 		mn->lastseen = CURRTIME;
-		u = user_find_named(mu->name);
+		u = user_find_named(entity(mu)->name);
 		if (u != NULL)
 		{
 			notice(si->service->nick, u->nick,
 					_("The nick \2%s\2 is now forbidden."),
-					mu->name);
+					entity(mu)->name);
 			hook_call_nick_enforce((&(hook_nick_enforce_t){ .u = u, .mn = mn }));
 		}
 	}
 
 	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:ON: \2%s\2 (reason: \2%s\2)", account, reason);
 	wallops("%s forbade the nickname \2%s\2 (%s).", get_oper_name(si), account, reason);
-	command_success_nodata(si, "\2%s\2 is now forbidden.", mu->name);
+	command_success_nodata(si, "\2%s\2 is now forbidden.", entity(mu)->name);
 	/* don't call hooks, hmm */
 }
 
@@ -109,9 +109,9 @@ static void destroy_forbid(sourceinfo_t *si, const char *account)
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a forbidden nickname."), account);
 		return;
 	}
-	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:OFF: \2%s\2", mu->name);
+	logcommand(si, CMDLOG_ADMIN | CMDLOG_REGISTER, "FORBID:OFF: \2%s\2", entity(mu)->name);
 	wallops("%s unforbade the nickname \2%s\2.", get_oper_name(si), account);
-	command_success_nodata(si, "\2%s\2 is no longer forbidden.", mu->name);
+	command_success_nodata(si, "\2%s\2 is no longer forbidden.", entity(mu)->name);
 	/* no hooks here either, hmm */
 	object_unref(mu);
 }

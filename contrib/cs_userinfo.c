@@ -91,7 +91,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 			md = metadata_find(ca, "userinfo");
 			if (md == NULL)
 				continue;
-			command_success_nodata(si, "%-19s %s", ca->myuser->name, md->value);
+			command_success_nodata(si, "%-19s %s", entity(ca->myuser)->name, md->value);
 		}
 
 		command_success_nodata(si, "------------------- ---------------");
@@ -114,27 +114,27 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 		ca = chanacs_find(mc, mu, 0);
 		if (ca == NULL || ca->level & CA_AKICK)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 has no access to \2%s\2."), mu->name, mc->name);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 has no access to \2%s\2."), entity(mu)->name, mc->name);
 			return;
 		}
 		if (ca->level & ~allow_flags(mc, restrictflags))
 		{
-			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), entity(mu)->name, mc->name);
 			return;
 		}
 		if (parc == 2)
 		{
 			metadata_delete(ca, "userinfo");
 			command_success_nodata(si, _("Deleted userinfo for \2%s\2 on \2%s\2."),
-						mu->name, mc->name);
-			logcommand(si, CMDLOG_SET, "USERINFO:DEL: \2%s\2 on \2%s\2", mu->name, mc->name);
+						entity(mu)->name, mc->name);
+			logcommand(si, CMDLOG_SET, "USERINFO:DEL: \2%s\2 on \2%s\2", entity(mu)->name, mc->name);
 			return;
 		}
 
 		metadata_add(ca, "userinfo", parv[2]);
 		command_success_nodata(si, _("Added userinfo for \2%s\2 on \2%s\2."),
-					mu->name, mc->name);
-		logcommand(si, CMDLOG_SET, "USERINFO:ADD: \2%s\2 on \2%s\2 (\2%s\2)", mu->name, mc->name, parv[2]);
+					entity(mu)->name, mc->name);
+		logcommand(si, CMDLOG_SET, "USERINFO:ADD: \2%s\2 on \2%s\2 (\2%s\2)", entity(mu)->name, mc->name, parv[2]);
 	}
 	return;
 }

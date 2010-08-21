@@ -106,7 +106,7 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 	mu->lastlogin = CURRTIME;
 	if (!nicksvs.no_nick_ownership)
 	{
-		mn = mynick_add(mu, mu->name);
+		mn = mynick_add(mu, entity(mu)->name);
 		mn->registered = CURRTIME;
 		mn->lastseen = CURRTIME;
 	}
@@ -114,11 +114,11 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_REGISTER, "FREGISTER: \2%s\2 to \2%s\2", account, email);
 	if (is_soper(mu))
 	{
-		wallops("%s used FREGISTER on account \2%s\2 with services operator privileges.", get_oper_name(si), mu->name);
-		slog(LG_INFO, "SOPER: \2%s\2", mu->name);
+		wallops("%s used FREGISTER on account \2%s\2 with services operator privileges.", get_oper_name(si), entity(mu)->name);
+		slog(LG_INFO, "SOPER: \2%s\2", entity(mu)->name);
 	}
 
-	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
+	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", entity(mu)->name, mu->email);
 	hook_call_user_register(mu);
 	req.si = si;
 	req.mu = mu;

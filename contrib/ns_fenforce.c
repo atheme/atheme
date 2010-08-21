@@ -61,28 +61,28 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(mu, "private:doenforce")) != NULL)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", mu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", entity(mu)->name);
 		}
 		else
 		{
-			wallops("%s enabled ENFORCE on the account \2%s\2.", get_oper_name(si), mu->name);
-			logcommand(si, CMDLOG_ADMIN, "FENFORCE:ON: \2%s\2", mu->name);
+			wallops("%s enabled ENFORCE on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+			logcommand(si, CMDLOG_ADMIN, "FENFORCE:ON: \2%s\2", entity(mu)->name);
 			metadata_add(mu, "private:doenforce", "1");
-			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", mu->name);
+			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", entity(mu)->name);
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
 	{
 		if ((md = metadata_find(mu, "private:doenforce")) != NULL)
 		{
-			wallops("%s disabled ENFORCE on the account \2%s\2.", get_oper_name(si), mu->name);
-			logcommand(si, CMDLOG_ADMIN, "FENFORCE:OFF: \2%s\2", mu->name);
+			wallops("%s disabled ENFORCE on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+			logcommand(si, CMDLOG_ADMIN, "FENFORCE:OFF: \2%s\2", entity(mu)->name);
 			metadata_delete(mu, "private:doenforce");
-			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", mu->name);
+			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", entity(mu)->name);
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", mu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", entity(mu)->name);
 		}
 	}
 	else
