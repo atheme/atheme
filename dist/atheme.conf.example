@@ -1038,6 +1038,13 @@ infoserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Information Service";
+
+	/* (*)logoninfo_count
+	 * The number of InfoServ messages a user will see upon connect.
+	 * If there are more than this number, the user will be able to
+	 * see the rest with /msg infoserv list .
+	 */
+	logoninfo_count = 3;
 };
 
 /* OperServ configuration.

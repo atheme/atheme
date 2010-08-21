@@ -12,6 +12,7 @@
  */
 
 #include "atheme.h"
+#include <limits.h>
 
 DECLARE_MODULE_V1
 (
@@ -41,6 +42,7 @@ struct operlogoninfo_ {
 typedef struct operlogoninfo_ operlogoninfo_t;
 
 list_t operlogon_info;
+unsigned int logoninfo_count = 0;
 
 service_t *infoserv;
 list_t is_cmdtree;
@@ -167,7 +169,7 @@ static void display_info(hook_user_nick_t *data)
 	logoninfo_t *l;
 	char dBuf[BUFSIZE];
 	struct tm tm;
-	int count = 0;
+	unsigned int count = 0;
 
 	u = data->u;
 	if (u == NULL)
@@ -200,7 +202,7 @@ static void display_info(hook_user_nick_t *data)
 			count++;
 
 			/* only display three latest entries, max. */
-			if (count == 3)
+			if (count == logoninfo_count)
 				break;
 		}
 
@@ -214,7 +216,7 @@ static void display_oper_info(user_t *u)
 	operlogoninfo_t *o;
 	char dBuf[BUFSIZE];
 	struct tm tm;
-	int count = 0;
+	unsigned int count = 0;
 
 	if (u == NULL)
 		return;
@@ -246,7 +248,7 @@ static void display_oper_info(user_t *u)
 			count++;
 
 			/* only display three latest entries, max. */
-			if (count == 3)
+			if (count == logoninfo_count)
 				break;
 		}
 
@@ -547,6 +549,7 @@ void _modinit(module_t *m)
 	}
 
 	infoserv = service_add("infoserv", infoserv_handler, &is_cmdtree, &is_conftable);
+	add_uint_conf_item("LOGONINFO_COUNT", &is_conftable, 0, &logoninfo_count, 0, INT_MAX, 3);
 
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
@@ -574,6 +577,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
+	del_conf_item("LOGONINFO_COUNT", &is_conftable);
+
 	if (infoserv)
 	{
 		service_delete(infoserv);
