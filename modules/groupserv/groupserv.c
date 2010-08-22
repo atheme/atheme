@@ -35,9 +35,13 @@ mygroup_t *mygroup_add(myuser_t *owner, const char *name)
 
 mygroup_t *mygroup_find(const char *name)
 {
-	myentity_t *me = myentity_find(name);
+	myentity_t *mg = myentity_find(name);
 
-	return_val_if_fail(isgroup(me), NULL);
+	if (mg == NULL)
+		return NULL;
 
-	return group(me);
+	if (!isgroup(mg))
+		return NULL;
+
+	return group(mg);
 }
