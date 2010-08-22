@@ -12,7 +12,7 @@ void mygroups_init(void)
 	mygroup_heap = BlockHeapCreate(sizeof(mygroup_t), HEAP_USER);
 }
 
-void mygroup_delete(mygroup_t *mg)
+static void mygroup_delete(mygroup_t *mg)
 {
 	metadata_delete_all(mg);
 	/* XXX nothing */
