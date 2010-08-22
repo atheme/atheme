@@ -2,6 +2,11 @@ Atheme Services 6.0 Release Notes
 =================================
 All bugfixes from the 5.2 branch of Atheme are also in 6.0.
 
+ircd protocol
+- inspircd: Support for owner, halfops and admin are now dynamically
+  enabled by what modes exist instead of being enabled by what modules
+  you have loaded in inspircd.
+- support for InspIRCd 1.1, OfficeIRC and UltimateIRCd 3 has been removed.
 opensex
 - opensex is now the required database format. All flatfile will do is
   convert your flatfile database to opensex and exit.
@@ -20,6 +25,10 @@ infoserv
   they will only be sent to opers upon oper-up.
 - in infoserv message subjects, underscores will now be replaced with spaces
   so you can have multi-word subjects.
+- allow customizing the number of infoserv messages shown to users on connect.
+nickserv
+- new contrib module, ns_waitreg that allows you to specify how long a user must
+  be connected before they can register a nick.
 xmlrpc
 - the legacy xmlrpc/account, xmlrpc/channel and xmlrpc/memo modules have been
   removed. These have been deprecated for over 4 years and you should be
@@ -27,6 +36,7 @@ xmlrpc
 - the xmlrpc core has been rewritten a little bit to use mowgli's patricia tree
   code.  this should bring a performance improvement over the hashtable code it
   was using.
+- xmlrpc has been completely moved out of core
 code
 - default values in config options are now supported. This is particularly
   useful in modules and cleans up the config code a bit.
