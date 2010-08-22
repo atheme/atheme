@@ -1055,11 +1055,11 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
 	node_t *n;
 	chanacs_t *ca;
-	myuser_t *mu, *hi_mu;
+	myentity_t *mt, *hi_mt;
 	unsigned int level, hi_level;
 	bool recent_ok, hi_recent_ok;
 
-	hi_mu = NULL;
+	hi_mt = NULL;
 	hi_level = 0;
 	hi_recent_ok = false;
 	LIST_FOREACH(n, mc->chanacs.head)
@@ -1067,20 +1067,23 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 		ca = n->data;
 		if (ca->level & CA_AKICK)
 			continue;
-		mu = ca->entity;
-		if (mu == NULL || ca->level & CA_FOUNDER)
+		mt = ca->entity;
+		if (mt == NULL || ca->level & CA_FOUNDER)
 			continue;
 		if ((ca->level & minlevel) != minlevel)
 			continue;
+
 		/* now have a user with requested flags */
-		recent_ok = LIST_LENGTH(&mu->logins) > 0 ||
-			CURRTIME - mu->lastlogin < RECENTLY_SEEN;
+		if (isuser(mt))
+			recent_ok = LIST_LENGTH(&user(mt)->logins) > 0 ||
+				CURRTIME - user(mt)->lastlogin < RECENTLY_SEEN;
+
 		level = add_auto_flags(ca->level);
 		/* compare with previous candidate, this user must be
 		 * "better" to beat the previous. this means that ties
 		 * are broken in favour of the user added first.
 		 */
-		if (hi_mu != NULL)
+		if (hi_mt != NULL)
 		{
 			/* previous candidate has flags this user doesn't? */
 			if (hi_level & ~level)
@@ -1089,15 +1092,15 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 			if (hi_level == level && (!recent_ok || hi_recent_ok))
 				continue;
 		}
-		if (has_priv_myuser(mu, PRIV_REG_NOLIMIT) ||
-				myuser_num_channels(mu) < me.maxchans)
+		if (isuser(mt) && has_priv_myuser(user(mt), PRIV_REG_NOLIMIT) ||
+				myuser_num_channels(user(mt)) < me.maxchans)
 		{
-			hi_mu = mu;
+			hi_mt = mt;
 			hi_level = level;
 			hi_recent_ok = recent_ok;
 		}
 	}
-	return hi_mu;
+	return user(hi_mt);
 }
 
 /* Pick a suitable successor
@@ -1335,12 +1338,12 @@ static void chanacs_delete(chanacs_t *ca)
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts)
+chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
 	node_t *n;
 
-	return_val_if_fail(mychan != NULL && myuser != NULL, NULL);
+	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
 	if (*mychan->name != '#')
 	{
@@ -1349,7 +1352,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	}
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, entity(myuser)->name);
+		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, mt->name);
 
 	n = node_create();
 
@@ -1357,13 +1360,13 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->entity = myuser;
+	ca->entity = mt;
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
 
 	node_add(ca, &ca->cnode, &mychan->chanacs);
-	node_add(ca, n, &entity(myuser)->chanacs);
+	node_add(ca, n, &mt->chanacs);
 
 	cnt.chanacs++;
 
@@ -1418,12 +1421,12 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	return ca;
 }
 
-chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
+chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
 
-	return_val_if_fail(mychan != NULL && myuser != NULL, NULL);
+	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
@@ -1431,10 +1434,10 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 
 		if (level != 0x0)
 		{
-			if ((ca->entity == myuser) && ((ca->level & level) == level))
+			if ((ca->entity == mt) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if (ca->entity == myuser)
+		else if (ca->entity == mt)
 			return ca;
 	}
 
@@ -1543,16 +1546,15 @@ unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 
 chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)
 {
-	myuser_t *mu;
+	myentity_t *mt;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && mask != NULL, NULL);
 
-	mu = myuser_find(mask);
-
-	if (mu != NULL)
+	mt = myentity_find(mask);
+	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, mu, level);
+		ca = chanacs_find(mychan, mt, level);
 
 		if (ca)
 			return ca;
@@ -1563,14 +1565,14 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int
 
 bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 {
-	myuser_t *mu;
+	myentity_t *mt;
 
 	return_val_if_fail(mychan != NULL && u != NULL, false);
 
-	mu = u->myuser;
-	if (mu != NULL)
+	mt = entity(u->myuser);
+	if (mt != NULL)
 	{
-		if (chanacs_find(mychan, mu, level))
+		if (chanacs_find(mychan, mt, level))
 			return true;
 	}
 
@@ -1582,16 +1584,16 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 
 unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 {
-	myuser_t *mu;
+	myentity_t *mt;
 	chanacs_t *ca;
 	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
-	mu = u->myuser;
-	if (mu != NULL)
+	mt = entity(u->myuser);
+	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, mu, 0);
+		ca = chanacs_find(mychan, mt, 0);
 		if (ca != NULL)
 			result |= ca->level;
 	}
@@ -1611,7 +1613,7 @@ unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 	}
 	else
 	{
-		ca = chanacs_find(mychan, si->smu, 0);
+		ca = chanacs_find(mychan, entity(si->smu), 0);
 		return ca != NULL ? ca->level : 0;
 	}
 }
@@ -1630,11 +1632,11 @@ chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bo
 
 	if (mu != NULL)
 	{
-		ca = chanacs_find(mychan, mu, 0);
+		ca = chanacs_find(mychan, entity(mu), 0);
 		if (ca != NULL)
 			return ca;
 		else if (create)
-			return chanacs_add(mychan, mu, 0, CURRTIME);
+			return chanacs_add(mychan, entity(mu), 0, CURRTIME);
 	}
 	else
 	{
@@ -1707,7 +1709,7 @@ bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsign
 
 	if (mu != NULL)
 	{
-		ca = chanacs_find(mychan, mu, 0);
+		ca = chanacs_find(mychan, entity(mu), 0);
 		if (ca == NULL)
 		{
 			*removeflags = 0;
@@ -1717,7 +1719,7 @@ bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsign
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return false;
-			chanacs_add(mychan, mu, *addflags, CURRTIME);
+			chanacs_add(mychan, entity(mu), *addflags, CURRTIME);
 		}
 		else
 		{

@@ -408,10 +408,10 @@ E myuser_t *mychan_pick_successor(mychan_t *mc);
 E const char *mychan_get_mlock(mychan_t *mc);
 E const char *mychan_get_sts_mlock(mychan_t *mc);
 
-E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts);
+E chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts);
 
-E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level);
+E chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
 E unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
 E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);

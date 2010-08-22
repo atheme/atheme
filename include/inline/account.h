@@ -66,7 +66,7 @@ static inline mychan_t *mychan_find(const char *name)
 static inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
 {
 	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
-		chanacs_find(mychan, si->smu, level) != NULL;
+		chanacs_find(mychan, entity(si->smu), level) != NULL;
 }
 
 /* Destroy a chanacs if it has no flags */
