@@ -312,7 +312,7 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 	{
 		ca = n->data;
 
-		if (ca->myuser != NULL)
+		if (ca->entity != NULL)
 		       continue;
 		if (!match(ca->host, hostbuf) || !match(ca->host, hostbuf2) || !match(ca->host, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(ca->host, ipbuf)))
 			return n;

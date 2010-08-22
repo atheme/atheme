@@ -273,17 +273,17 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				md = metadata_find(ca, "reason");
 				ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
-				if (ca->myuser == NULL)
+				if (ca->entity == NULL)
 					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),
 							++i, ca->host,
 							md ? md->value : "", ago);
-				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
+				else if (isuser(ca->entity) && LIST_LENGTH(&user(ca->entity)->logins) > 0)
 					command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [modified: %s ago]"),
-							++i, entity(ca->myuser)->name,
+							++i, ca->entity->name,
 							md ? md->value : "", ago);
 				else
 					command_success_nodata(si, _("%d: \2%s\2 (not logged in)  %s [modified: %s ago]"),
-							++i, entity(ca->myuser)->name,
+							++i, ca->entity->name,
 							md ? md->value : "", ago);
 			}
 

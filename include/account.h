@@ -78,7 +78,6 @@ struct myuser_
   time_t registered;
   time_t lastlogin;
 
-  list_t chanacs;
   soper_t *soper;
 
   unsigned int flags;
@@ -195,7 +194,7 @@ struct chanacs_
 {
 	object_t parent;
 
-	myuser_t *myuser;
+	myentity_t *entity;
 	mychan_t *mychan;
 	char     *host;
 	unsigned int  level;

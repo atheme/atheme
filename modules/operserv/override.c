@@ -186,9 +186,9 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		{
 			chanacs_t *ca = (chanacs_t *) n->data;
 
-			if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			if (ca->entity != NULL && isuser(ca->entity) && ca->level & CA_FOUNDER)
 			{
-				mu = ca->myuser;
+				mu = user(ca->entity);
 				break;
 			}
 		}

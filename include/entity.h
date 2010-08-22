@@ -15,6 +15,8 @@ typedef struct {
 	object_t parent;
 	myentity_type_t type;
 	char name[NICKLEN];
+
+	list_t chanacs;
 } myentity_t;
 
 #define entity(x)	((myentity_t *)(x))

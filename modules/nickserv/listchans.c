@@ -82,13 +82,13 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "LISTCHANS");
 	}
 
-	if (mu->chanacs.count == 0)
+	if (LIST_LENGTH(&entity(mu)->chanacs) == 0)
 	{
 		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);
 		return;
 	}
 
-	LIST_FOREACH(n, mu->chanacs.head)
+	LIST_FOREACH(n, entity(mu)->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -99,7 +99,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 			akicks++;
 	}
 
-	i = mu->chanacs.count - akicks;
+	i = LIST_LENGTH(&entity(mu)->chanacs) - akicks;
 
 	if (i == 0)
 		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);

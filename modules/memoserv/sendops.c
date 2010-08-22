@@ -129,7 +129,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(tn, mc->chanacs.head)
 	{
 		chanacs_t *ca = (chanacs_t *) tn->data;
-		tmu = ca->myuser;
+		tmu = isuser(ca->entity) ? user(ca->entity) : NULL;	/* XXX */
 
 		if (!(ca->level & (CA_OP | CA_AUTOOP)) || tmu == NULL || tmu == si->smu)
 			continue;

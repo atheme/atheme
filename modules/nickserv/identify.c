@@ -170,7 +170,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		/* now we get to check for xOP */
 		/* we don't check for host access yet (could match different
 		 * entries because of services cloaks) */
-		LIST_FOREACH(n, mu->chanacs.head)
+		LIST_FOREACH(n, entity(mu)->chanacs.head)
 		{
 			ca = (chanacs_t *)n->data;
 

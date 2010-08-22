@@ -329,7 +329,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		chanacs_t *ca;
 		int founder = 0, other = 0;
 
-		LIST_FOREACH(n, mu->chanacs.head)
+		LIST_FOREACH(n, entity(mu)->chanacs.head)
 		{
 			ca = n->data;
 			if (ca->level & CA_FOUNDER)

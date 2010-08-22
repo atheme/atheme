@@ -103,12 +103,12 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	{
        	        ca = (chanacs_t *)n->data;
 
-		if (ca->myuser != NULL && ca->myuser == mu)
+		if (ca->entity != NULL)
 		{
 			fl |= ca->level;
 			command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
-				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, entity(mu)->name);
+				u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
 			if (ca->level & CA_AKICK)
 			{
 				md = metadata_find(ca, "reason");

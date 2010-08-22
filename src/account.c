@@ -197,7 +197,7 @@ void myuser_delete(myuser_t *mu)
 	}
 
 	/* kill all their channels and chanacs */
-	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
+	LIST_FOREACH_SAFE(n, tn, entity(mu)->chanacs.head)
 	{
 		ca = n->data;
 		mc = ca->mychan;
@@ -454,7 +454,7 @@ myuser_num_channels(myuser_t *mu)
 	chanacs_t *ca;
 	unsigned int count = 0;
 
-	LIST_FOREACH(n, mu->chanacs.head)
+	LIST_FOREACH(n, entity(mu)->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->level & CA_FOUNDER)
@@ -1010,7 +1010,7 @@ unsigned int mychan_num_founders(mychan_t *mc)
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
-		if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+		if (ca->entity != NULL && ca->level & CA_FOUNDER)
 			count++;
 	}
 	return count;
@@ -1026,11 +1026,11 @@ const char *mychan_founder_names(mychan_t *mc)
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
-		if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+		if (ca->entity != NULL && ca->level & CA_FOUNDER)
 		{
 			if (names[0] != '\0')
 				strlcat(names, ", ", sizeof names);
-			strlcat(names, entity(ca->myuser)->name, sizeof names);
+			strlcat(names, entity(ca->entity)->name, sizeof names);
 		}
 	}
 	return names;
@@ -1067,7 +1067,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 		ca = n->data;
 		if (ca->level & CA_AKICK)
 			continue;
-		mu = ca->myuser;
+		mu = ca->entity;
 		if (mu == NULL || ca->level & CA_FOUNDER)
 			continue;
 		if ((ca->level & minlevel) != minlevel)
@@ -1299,13 +1299,13 @@ static void chanacs_delete(chanacs_t *ca)
 
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
-			ca->myuser != NULL ? entity(ca->myuser)->name : ca->host);
+			ca->entity != NULL ? entity(ca->entity)->name : ca->host);
 	node_del(&ca->cnode, &ca->mychan->chanacs);
 
-	if (ca->myuser != NULL)
+	if (ca->entity != NULL)
 	{
-		n = node_find(ca, &ca->myuser->chanacs);
-		node_del(n, &ca->myuser->chanacs);
+		n = node_find(ca, &ca->entity->chanacs);
+		node_del(n, &ca->entity->chanacs);
 		node_free(n);
 	}
 
@@ -1357,13 +1357,13 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->myuser = myuser;
+	ca->entity = myuser;
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
 
 	node_add(ca, &ca->cnode, &mychan->chanacs);
-	node_add(ca, n, &myuser->chanacs);
+	node_add(ca, n, &entity(myuser)->chanacs);
 
 	cnt.chanacs++;
 
@@ -1406,7 +1406,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->myuser = NULL;
+	ca->entity = NULL;
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
@@ -1431,10 +1431,10 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 
 		if (level != 0x0)
 		{
-			if ((ca->myuser == myuser) && ((ca->level & level) == level))
+			if ((ca->entity == myuser) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if (ca->myuser == myuser)
+		else if (ca->entity == myuser)
 			return ca;
 	}
 
@@ -1454,10 +1454,10 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 
 		if (level != 0x0)
 		{
-			if ((ca->myuser == NULL) && (!match(ca->host, host)) && ((ca->level & level) == level))
+			if ((ca->entity == NULL) && (!match(ca->host, host)) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if ((ca->myuser == NULL) && (!match(ca->host, host)))
+		else if ((ca->entity == NULL) && (!match(ca->host, host)))
 			return ca;
 	}
 
@@ -1476,7 +1476,7 @@ unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 	{
 		ca = (chanacs_t *)n->data;
 
-		if (ca->myuser == NULL && !match(ca->host, host))
+		if (ca->entity == NULL && !match(ca->host, host))
 			result |= ca->level;
 	}
 
@@ -1497,10 +1497,10 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 
 		if (level != 0x0)
 		{
-			if ((ca->myuser == NULL) && (!strcasecmp(ca->host, host)) && ((ca->level & level) == level))
+			if ((ca->entity == NULL) && (!strcasecmp(ca->host, host)) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if ((ca->myuser == NULL) && (!strcasecmp(ca->host, host)))
+		else if ((ca->entity == NULL) && (!strcasecmp(ca->host, host)))
 			return ca;
 	}
 
@@ -1831,7 +1831,7 @@ static int expire_myuser_cb(myentity_t *me, void *unused)
 		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
-				LIST_LENGTH(&mu->chanacs));
+				LIST_LENGTH(&entity(mu)->chanacs));
 		object_unref(mu);
 	}
 

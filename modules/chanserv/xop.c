@@ -514,12 +514,12 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 		ca = (chanacs_t *)n->data;
 		if (ca->level == level)
 		{
-			if (!ca->myuser)
+			if (ca->entity == NULL)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
-			else if (LIST_LENGTH(&ca->myuser->logins))
-				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, entity(ca->myuser)->name);
+			else if (isuser(ca->entity) && LIST_LENGTH(&user(ca->entity)->logins))
+				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->entity->name);
 			else
-				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, entity(ca->myuser)->name);
+				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->entity->name);
 		}
 	}
 	/* XXX */
@@ -608,7 +608,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (newlevel == ca->level)
 			continue;
 		changes++;
-		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level), desc);
+		command_success_nodata(si, "%s: %s -> %s", ca->entity != NULL ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), desc);
 		chanacs_modify_simple(ca, newlevel, ~newlevel);
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);

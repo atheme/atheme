@@ -166,9 +166,9 @@ opensex_db_save(database_handle_t *db)
 		LIST_FOREACH(tn, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)tn->data;
-			if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			if (ca->entity != NULL && ca->level & CA_FOUNDER)
 			{
-				mu = ca->myuser;
+				mu = user(ca->entity);
 				break;
 			}
 		}
@@ -191,7 +191,7 @@ opensex_db_save(database_handle_t *db)
 
 			db_start_row(db, "CA");
 			db_write_word(db, ca->mychan->name);
-			db_write_word(db, ca->myuser ? entity(ca->myuser)->name : ca->host);
+			db_write_word(db, ca->entity ? ca->entity->name : ca->host);
 			db_write_word(db, bitmask_to_flags(ca->level));
 			db_write_time(db, ca->tmodified);
 			db_commit_row(db);
@@ -201,7 +201,7 @@ opensex_db_save(database_handle_t *db)
 				char buf[BUFSIZE];
 				metadata_t *md = (metadata_t *)tn2->data;
 
-				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->myuser) ? entity(ca->myuser)->name : ca->host);
+				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->entity) ? ca->entity->name : ca->host);
 
 				db_start_row(db, "MDA");
 				db_write_word(db, buf);

@@ -146,10 +146,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			str1 = get_template_name(mc, ca->level);
 			str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
 			if (str1 != NULL)
-				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level), str1,
+				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), str1,
 					str2);
 			else
-				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? entity(ca->myuser)->name : ca->host, bitmask_to_flags(ca->level),
+				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level),
 					str2);
 			i++;
 		}
