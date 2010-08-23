@@ -20,8 +20,8 @@ typedef struct {
 } myentity_t;
 
 #define entity(x)	((myentity_t *)(x))
-#define user(x)		((myuser_t *)(x))
-#define group(x)	((mygroup_t *)(x))
+#define user(x)		(isuser(x) ? (myuser_t *)(x) : NULL)
+#define group(x)	(isgroup(x) ? (mygroup_t *)(x) : NULL)
 #define isuser(x)	(entity(x)->type == ENT_USER)
 #define isgroup(x)	(entity(x)->type == ENT_GROUP)
 
