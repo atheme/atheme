@@ -163,7 +163,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		myuser_t *tmu;
+		myentity_t *mt;
 		char *flagstr = parv[2];
 
 		if (!si->smu)
@@ -183,13 +183,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				ca = chanacs_find_host_literal(mc, target, 0);
 			else
 			{
-				if (!(tmu = myuser_find_ext(target)))
+				if (!(mt = myentity_find(target)))
 				{
 					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 					return;
 				}
-				target = entity(tmu)->name;
-				ca = chanacs_find(mc, tmu, 0);
+				target = mt->name;
+				ca = chanacs_find(mc, mt, 0);
 			}
 			if (ca != NULL)
 			{
@@ -254,14 +254,14 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!validhostmask(target))
 		{
-			if (!(tmu = myuser_find_ext(target)))
+			if (!(mt = myentity_find(target)))
 			{
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 				return;
 			}
-			target = entity(tmu)->name;
+			target = mt->name;
 
-			ca = chanacs_open(mc, tmu, NULL, true);
+			ca = chanacs_open(mc, mt, NULL, true);
 
 			if (ca->level & CA_FOUNDER && removeflags & CA_FLAGS && !(removeflags & CA_FOUNDER))
 			{
@@ -281,9 +281,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					chanacs_close(ca);
 					return;
 				}
-				if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
+				if (isuser(mt) && (myuser_num_channels(user(mt)) >= me.maxchans) && !has_priv_myuser(user(mt), PRIV_REG_NOLIMIT))
 				{
-					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), entity(tmu)->name);
+					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
 					chanacs_close(ca);
 					return;
 				}
@@ -295,9 +295,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			 * except sole +b. Adding flags if the current level
 			 * is +b counts as adding an entry.
 			 * -- jilles */
-			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && (ca->level == 0 || ca->level == CA_AKICK))
+			/* XXX: not all entities are users */
+			if (isuser(mt) && (MU_NEVEROP & user(mt)->flags && addflags != CA_AKICK && addflags != 0 && (ca->level == 0 || ca->level == CA_AKICK)))
 			{
-				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), entity(tmu)->name);
+				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mt->name);
 				chanacs_close(ca);
 				return;
 			}
@@ -311,7 +312,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
-				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), entity(tmu)->name, mc->name);
+				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
 				chanacs_close(ca);
 				return;
 			}
