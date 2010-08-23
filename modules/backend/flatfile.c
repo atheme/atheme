@@ -580,7 +580,7 @@ static void flatfile_db_load(void)
 					if ((!mu) && (validhostmask(causer)))
 						ca = chanacs_add_host(mc, causer, fl, ts);
 					else
-						ca = chanacs_add(mc, mu, fl, ts);
+						ca = chanacs_add(mc, entity(mu), fl, ts);
 				}
 				else if (versn == DB_SHRIKE)	/* DB_SHRIKE */
 				{
@@ -610,7 +610,7 @@ static void flatfile_db_load(void)
 					if ((!mu) && (validhostmask(causer)))
 						ca = chanacs_add_host(mc, causer, fl2, ts);
 					else
-						ca = chanacs_add(mc, mu, fl2, ts);
+						ca = chanacs_add(mc, entity(mu), fl2, ts);
 				}
 			}
 		}

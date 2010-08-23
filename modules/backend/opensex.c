@@ -701,40 +701,41 @@ static void opensex_h_md(database_handle_t *db, const char *type)
 static void opensex_h_ca(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	const char *chan, *user;
+	const char *chan, *target;
 	time_t tmod;
 	unsigned int flags;
 	mychan_t *mc;
-	myuser_t *mu;
+	myentity_t *mt;
 
 	chan = db_sread_word(db);
-	user = db_sread_word(db);
+	target = db_sread_word(db);
 	flags = flags_to_bitmask(db_sread_word(db), 0);
 	tmod = db_sread_time(db);
 
 	mc = mychan_find(chan);
-	mu = myuser_find(user);
+	mt = myentity_find(target);
 
-	if (!mc)
+	if (mc == NULL)
 	{
 		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent channel %s", db->line, chan);
 		return;
 	}
 
-	if (!mu && !validhostmask(user))
+	if (mt == NULL && !validhostmask(target))
 	{
-		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent user %s", db->line, user);
+		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent target %s", db->line, target);
 		return;
 	}
 
-	if (!mu && validhostmask(user))
+	if (mt == NULL && validhostmask(target))
 	{
-		chanacs_add_host(mc, user, flags, tmod);
+		chanacs_add_host(mc, target, flags, tmod);
 	}
 	else
 	{
-		chanacs_add(mc, mu, flags, tmod);
+		chanacs_add(mc, mt, flags, tmod);
 	}
+
 	rs->nca++;
 }
 
