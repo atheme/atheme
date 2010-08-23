@@ -333,7 +333,7 @@ E void (*db_save)(void *arg);
 E void (*db_load)(void);
 
 /* function.c */
-E bool is_founder(mychan_t *mychan, myuser_t *myuser);
+E bool is_founder(mychan_t *mychan, myentity_t *myuser);
 
 /* node.c */
 E list_t klnlist;
@@ -423,15 +423,15 @@ E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 //inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
 E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
-E chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bool create);
+E chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create);
 //inline void chanacs_close(chanacs_t *ca);
 E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
 
 //inline bool chanacs_is_table_full(chanacs_t *ca);
 
-E bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-E bool chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags);
+E bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+E bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags);
 
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

@@ -214,7 +214,7 @@ void myuser_delete(myuser_t *mu)
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mu)->name);
 
-			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0);
+			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0);
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
 			object_unref(ca);
@@ -1622,21 +1622,21 @@ unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
  * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bool create)
+chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create)
 {
 	chanacs_t *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), false); 
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false); 
 
-	if (mu != NULL)
+	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, entity(mu), 0);
+		ca = chanacs_find(mychan, mt, 0);
 		if (ca != NULL)
 			return ca;
 		else if (create)
-			return chanacs_add(mychan, entity(mu), 0, CURRTIME);
+			return chanacs_add(mychan, mt, 0, CURRTIME);
 	}
 	else
 	{
@@ -1698,18 +1698,18 @@ bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int re
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), false); 
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false); 
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
 
-	if (mu != NULL)
+	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, entity(mu), 0);
+		ca = chanacs_find(mychan, mt, 0);
 		if (ca == NULL)
 		{
 			*removeflags = 0;
@@ -1719,7 +1719,7 @@ bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsign
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return false;
-			chanacs_add(mychan, entity(mu), *addflags, CURRTIME);
+			chanacs_add(mychan, mt, *addflags, CURRTIME);
 		}
 		else
 		{
@@ -1783,13 +1783,13 @@ bool chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsign
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags)
+bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags)
 {
 	unsigned int a, r;
 
 	a = addflags & ca_all;
 	r = removeflags & ca_all;
-	return chanacs_change(mychan, mu, hostmask, &a, &r, ca_all);
+	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all);
 }
 
 static int expire_myuser_cb(myentity_t *me, void *unused)

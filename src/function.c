@@ -545,12 +545,11 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 }
 
 /* various access level checkers */
-bool is_founder(mychan_t *mychan, myuser_t *myuser)
+bool is_founder(mychan_t *mychan, myentity_t *mt)
 {
-	if (!myuser)
-		return false;
+	return_val_if_fail(mt != NULL, false);
 
-	if (chanacs_find(mychan, myuser, CA_FOUNDER))
+	if (chanacs_find(mychan, mt, CA_FOUNDER))
 		return true;
 
 	return false;
