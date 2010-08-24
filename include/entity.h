@@ -22,8 +22,8 @@ typedef struct {
 #define entity(x)	((myentity_t *)(x))
 #define user(x)		(isuser(x) ? (myuser_t *)(x) : NULL)
 #define group(x)	(isgroup(x) ? (mygroup_t *)(x) : NULL)
-#define isuser(x)	(entity(x)->type == ENT_USER)
-#define isgroup(x)	(entity(x)->type == ENT_GROUP)
+#define isuser(x)	(x != NULL && entity(x)->type == ENT_USER)
+#define isgroup(x)	(x != NULL && entity(x)->type == ENT_GROUP)
 
 void init_entities(void);
 void myentity_put(myentity_t *me);
