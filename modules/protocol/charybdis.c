@@ -120,7 +120,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 			return true;
 	}
 	else if (mu != NULL)
-		if (chanacs_find(target_mc, mu, CA_SET))
+		if (chanacs_find(target_mc, entity(mu), CA_SET))
 			return true;
 	return false;
 }
