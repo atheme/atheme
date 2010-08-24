@@ -28,8 +28,7 @@ const char *last_event_ran = NULL;
 struct ev_entry event_table[MAX_EVENTS];
 static time_t event_time_min = -1;
 
-/* add an event to the table to be continually ran */
-unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
+static unsigned int event_add_real(const char *name, EVH *func, void *arg, time_t when, time_t frequency)
 {
 	unsigned int i;
 
@@ -42,13 +41,13 @@ unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
 			event_table[i].name = name;
 			event_table[i].arg = arg;
 			event_table[i].when = CURRTIME + when;
-			event_table[i].frequency = when;
+			event_table[i].frequency = frequency;
 			event_table[i].active = true;
 
 			if (event_table[i].when < event_time_min && event_time_min != -1)
 				event_time_min = event_table[i].when;
 
-			slog(LG_DEBUG, "event_add(): \"%s\"", name);
+			slog(LG_DEBUG, "event_add_real(): added %s to event table", name);
 
 			claro_state.event++;
 
@@ -57,43 +56,21 @@ unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
 	}
 
 	/* failed to add it... */
-	slog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
+	slog(LG_DEBUG, "event_add_real(): failed to add %s to event table", name);
 
 	return -1;
+}
+
+/* add an event to the table to be continually ran */
+unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
+{
+	return event_add_real(name, func, arg, when, when);
 }
 
 /* adds an event to the table to be ran only once */
 unsigned int event_add_once(const char *name, EVH *func, void *arg, time_t when)
 {
-	unsigned int i;
-
-	/* find the first inactive index */
-	for (i = 0; i < MAX_EVENTS; i++)
-	{
-		if (!event_table[i].active)
-		{
-			event_table[i].func = func;
-			event_table[i].name = name;
-			event_table[i].arg = arg;
-			event_table[i].when = CURRTIME + when;
-			event_table[i].frequency = 0;
-			event_table[i].active = true;
-
-			if (event_table[i].when < event_time_min && event_time_min != -1)
-				event_time_min = event_table[i].when;
-
-			slog(LG_DEBUG, "event_add_once(): \"%s\"", name);
-
-			claro_state.event++;
-
-			return i;
-		}
-	}
-
-	/* failed to add it... */
-	slog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
-
-	return -1;
+	return event_add_real(name, func, arg, when, 0);
 }
 
 /* delete an event from the table */
