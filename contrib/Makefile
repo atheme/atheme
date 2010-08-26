@@ -38,7 +38,6 @@ SRCS =			\
 	os_akillnicklist.c	\
 	os_kill.c		\
 	os_klinechan.c	\
-	os_logstream.c	\
 	os_pingspam.c		\
 	os_savechanmodes.c	\
 	os_tabletest.c	\

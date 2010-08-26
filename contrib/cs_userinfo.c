@@ -86,12 +86,12 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
 			ca = n->data;
-			if (ca->myuser == NULL)
+			if (ca->entity == NULL)
 				continue;
 			md = metadata_find(ca, "userinfo");
 			if (md == NULL)
 				continue;
-			command_success_nodata(si, "%-19s %s", entity(ca->myuser)->name, md->value);
+			command_success_nodata(si, "%-19s %s", ca->entity->name, md->value);
 		}
 
 		command_success_nodata(si, "------------------- ---------------");
@@ -111,7 +111,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[1]);
 			return;
 		}
-		ca = chanacs_find(mc, mu, 0);
+		ca = chanacs_find(mc, entity(mu), 0);
 		if (ca == NULL || ca->level & CA_AKICK)
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 has no access to \2%s\2."), entity(mu)->name, mc->name);
@@ -155,7 +155,7 @@ static void userinfo_check_join(hook_channel_joinpart_t *hdata)
 	mc = mychan_find(cu->chan->name);
 	if (mu == NULL || mc == NULL)
 		return;
-	ca = chanacs_find(mc, mu, 0);
+	ca = chanacs_find(mc, entity(mu), 0);
 	if (ca == NULL || ca->level & CA_AKICK)
 		return;
 	if (!(md = metadata_find(ca, "userinfo")))

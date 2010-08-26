@@ -57,7 +57,12 @@ static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 {
 	mychan_t *mc;
 	chanuser_t *cu = hdata->cu;
+	service_t *svs;
 	char reason[256];
+
+	svs = service_find("operserv");
+	if (svs == NULL)
+		return;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
@@ -68,7 +73,7 @@ static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 	if (metadata_find(mc, "private:klinechan:closer"))
 	{
 		if (has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
-			notice(opersvs.nick, cu->user->nick,
+			notice(svs->me->nick, cu->user->nick,
 					"Warning: %s klines normal users",
 					cu->chan->name);
 		else if (is_autokline_exempt(cu->user))

@@ -72,7 +72,7 @@ static void testproc_recvqhandler(connection_t *cptr)
 	buf[count] = '\0';
 	u = user_find(procdata.dest);
 	if (u != NULL)
-		notice(opersvs.nick, u->nick, "%s", buf);
+		notice(service_find("operserv")->me->nick, u->nick, "%s", buf);
 }
 
 static void testproc_closehandler(connection_t *cptr)

@@ -47,13 +47,13 @@ static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[])
 
 	if(!parv[0] || !parv[1])
 	{
-		notice(opersvs.nick, si->su->nick, "Usage: \2KILL\2 <target> <reason>");
+		command_fail(si, fault_badparams, "Usage: \2KILL\2 <target> <reason>");
 		return;
 	}
 
 	if(!(target = user_find_named(parv[0])))
 	{
-		notice(opersvs.nick, si->su->nick, "\2%s\2 is not on the network", parv[0]);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on the network", parv[0]);
 		return;
 	}
 

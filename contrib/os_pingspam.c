@@ -102,18 +102,18 @@ static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[])
 
 	if(!target)
 	{
-		notice(opersvs.nick, si->su->nick, "Usage: \2PINGSPAM\2 <target>");
+		command_fail(si, fault_badparams, "Usage: \2PINGSPAM\2 <target>");
 		return;
 	}
 
 	if(!(u = user_find_named(target)))
 	{
-		notice(opersvs.nick, si->su->nick, "\2%s\2 is not on the network", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on the network", target);
 		return;
 	}
 
 	pingspam(u);
-	notice(opersvs.nick, si->su->nick, "\2%s\2 has been pwned.", target);
+	command_success_nodata(si, "\2%s\2 has been pwned.", target);
 	logcommand(si, CMDLOG_ADMIN, "PINGSPAM: \2%s\2", target);
 }
 
@@ -123,17 +123,17 @@ static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[])
 
 	if(!mode)
 	{
-		notice(opersvs.nick, si->su->nick, "Auto-pingspam is currently \2%s\2", spamming ? "ON" : "OFF");
+		command_success_nodata(si, "Auto-pingspam is currently \2%s\2", spamming ? "ON" : "OFF");
 		return;
 	}
 
 	if(strcasecmp(mode, "on") == 0 || atoi(mode))
 	{
 		spamming = 1;
-		notice(opersvs.nick, si->su->nick, "Auto-pingspam is now \2ON\2");
+		command_success_nodata(si, "Auto-pingspam is now \2ON\2");
 	}else{
 		spamming = 0;
-		notice(opersvs.nick, si->su->nick, "Auto-pingspam is now \2OFF\2");
+		command_success_nodata(si, "Auto-pingspam is now \2OFF\2");
 	}
 }
 
@@ -142,10 +142,11 @@ void pingspam(user_t *u)
 	user_t *sptr;
 	node_t *n;
 	int i;
+	service_t *svs;
 
-	if(*globsvs.nick)
+	if((svs = service_find("global")) != NULL)
 		for(i = 0;i < 6;i++)
-			notice(globsvs.nick, u->nick, "%s", notices[rand() % sizeof(notices) / sizeof(char*)]);
+			notice(svs->me->nick, u->nick, "%s", notices[rand() % sizeof(notices) / sizeof(char*)]);
 
 	LIST_FOREACH(n, me.me->userlist.head)
 	{

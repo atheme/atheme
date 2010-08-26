@@ -517,6 +517,7 @@ static trace_action_t *trace_kill_prepare(sourceinfo_t *si, char **args)
 
 static void trace_kill_exec(user_t *u, trace_action_t *act)
 {
+	service_t *svs;
 	trace_action_kill_t *a = (trace_action_kill_t *) act;
 
 	return_if_fail(u != NULL);
@@ -527,9 +528,11 @@ static void trace_kill_exec(user_t *u, trace_action_t *act)
 		return;
 	if (u->myuser && is_soper(u->myuser))
 		return;
+	if ((svs = service_find("operserv")) != NULL)
+		return;
 
 	act->matched = true;
-	kill_user(opersvs.me->me, u, "%s", a->reason);
+	kill_user(svs->me, u, "%s", a->reason);
 	command_success_nodata(act->si, _("\2%s\2 has been killed."), u->nick);
 }
 

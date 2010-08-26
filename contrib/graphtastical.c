@@ -89,7 +89,7 @@ static void write_channels_dot_file(void *arg)
 			if (ca->level & CA_AKICK)
 				continue;
 
-			fprintf(f, "\"%s\" -- \"%s\" [fontname=\"Verdana\" fontsize=8]\n", ca->myuser ? entity(ca->myuser)->name : ca->host, mc->name);
+			fprintf(f, "\"%s\" -- \"%s\" [fontname=\"Verdana\" fontsize=8]\n", ca->entity ? ca->entity->name : ca->host, mc->name);
 		}
 	}
 

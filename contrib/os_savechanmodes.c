@@ -87,13 +87,18 @@ static channel_t *restore_channel(char *name, char *modes)
 	channel_t *c;
 	int modeparc;
 	char *modeparv[256];
+	service_t *svs;
+
+	svs = service_find("operserv");
+	if (svs == NULL)
+		svs = chansvs.me;
 
 	join(name, chansvs.nick);
 	c = channel_find(name);
 	if (c != NULL)
 	{
 		modeparc = sjtoken(modes, ' ', modeparv);
-		channel_mode(opersvs.me->me, c, modeparc, modeparv);
+		channel_mode(svs->me, c, modeparc, modeparv);
 	}
 	return c;
 }
@@ -153,7 +158,7 @@ static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[])
 			prevtopicts = c->topicts;
 			ts = strtoul(tsstr, NULL, 10);
 			handle_topic(c, setter, ts, topic);
-			topic_sts(c, opersvs.me->me, setter, ts, prevtopicts, topic);
+			topic_sts(c, chansvs.me->me, setter, ts, prevtopicts, topic);
 		}
 		else if (!strcmp(item, "ban"))
 		{
@@ -165,7 +170,7 @@ static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[])
 
 			if (type == NULL || mask == NULL)
 				continue;
-			modestack_mode_param(opersvs.nick, c, MTYPE_ADD, type[0], mask);
+			modestack_mode_param(chansvs.nick, c, MTYPE_ADD, type[0], mask);
 			chanban_add(c, mask, type[0]);
 		}
 	}
