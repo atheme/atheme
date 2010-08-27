@@ -17,6 +17,7 @@ typedef struct {
 	char name[NICKLEN];
 
 	list_t chanacs;
+	void *chanacs_validate;	/* vtable for validating chanacs entries */
 } myentity_t;
 
 #define entity(x)	((myentity_t *)(x))
