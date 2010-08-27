@@ -58,6 +58,8 @@ mygroup_t *mygroup_add(const char *name)
 
 	mygroup_set_chanacs_validator(entity(mg));
 
+	mg->regtime = CURRTIME;
+
 	return mg;
 }
 
