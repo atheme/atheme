@@ -1198,7 +1198,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		else
 		{
 			/* XXX this could be done more efficiently */
-			ca2 = chanacs_find(mc, u->myuser, CA_AKICK);
+			ca2 = chanacs_find(mc, entity(u->myuser), CA_AKICK);
 			if (bot)
 				ban(bot->me->me, chan, u);
 			else
