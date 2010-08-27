@@ -98,7 +98,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!is_founder(mc, si->smu))
+	if (!is_founder(mc, entity(si->smu)))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;

@@ -40,7 +40,7 @@ void _moddeinit()
 
 static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 {
-	myuser_t *tmu;
+	myentity_t *mt;
 	mychan_t *mc;
 	node_t *n;
 	chanacs_t *ca;
@@ -55,7 +55,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(tmu = myuser_find_ext(newfndr)))
+	if (!(mt = myentity_find(newfndr)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfndr);
 		return;
@@ -68,19 +68,18 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	oldfndr = mychan_founder_names(mc);
-	if (!strcmp(entity(tmu)->name, oldfndr))
+	if (!strcmp(mt->name, oldfndr))
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), entity(tmu)->name, name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), mt->name, name);
 		return;
 	}
 
 	/* no maxchans check (intentional -- this is an oper command) */
-
-	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, entity(tmu)->name);
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FTRANSFER: \2%s\2 transferred from \2%s\2 to \2%s\2", mc->name, oldfndr, entity(tmu)->name);
-	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", oldfndr, entity(tmu)->name, me.netname);
+	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, mt->name);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FTRANSFER: \2%s\2 transferred from \2%s\2 to \2%s\2", mc->name, oldfndr, mt->name);
+	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", oldfndr, mt->name, me.netname);
 	command_success_nodata(si, _("Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2."),
-		name, oldfndr, entity(tmu)->name);
+		name, oldfndr, mt->name);
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
@@ -92,7 +91,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
 	}
 	mc->used = CURRTIME;
-	chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
+	chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0);
 
 	/* delete transfer metadata -- prevents a user from stealing it back */
 	metadata_delete(mc, "private:verify:founderchg:newfounder");

@@ -325,7 +325,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		else
 		{
 			/* XXX this could be done more efficiently */
-			ca2 = chanacs_find(mc, u->myuser, CA_AKICK);
+			ca2 = chanacs_find(mc, entity(u->myuser), CA_AKICK);
 			ban(chansvs.me->me, chan, u);
 		}
 		remove_ban_exceptions(chansvs.me->me, chan, u);

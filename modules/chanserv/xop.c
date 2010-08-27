@@ -17,8 +17,8 @@ DECLARE_MODULE_V1
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, const char *leveldesc);
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
 static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, int operoverride);
 
 static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
@@ -77,7 +77,7 @@ void _moddeinit()
 
 static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *leveldesc)
 {
-	myuser_t *mu;
+	myentity_t *mt;
 	mychan_t *mc;
 	int operoverride = 0;
 	unsigned int restrictflags;
@@ -137,7 +137,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		mu = myuser_find_ext(uname);
+		mt = myentity_find(uname);
 
 		/* As in /cs flags, allow founder to do anything */
 		restrictflags = chanacs_source_flags(mc, si);
@@ -156,16 +156,16 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
-		cs_xop_do_add(si, mc, mu, uname, level, leveldesc, restrictflags);
+		cs_xop_do_add(si, mc, mt, uname, level, leveldesc, restrictflags);
 	}
 
 	else if (!strcasecmp("DEL", cmd))
 	{
-		mu = myuser_find_ext(uname);
+		mt = myentity_find(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
 		restrictflags = chanacs_source_flags(mc, si);
-		if (restrictflags & CA_FOUNDER || mu == si->smu)
+		if (restrictflags & CA_FOUNDER || user(mt) == si->smu)
 			restrictflags = ca_all;
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
@@ -180,7 +180,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
-		cs_xop_do_del(si, mc, mu, uname, level, leveldesc);
+		cs_xop_do_del(si, mc, mt, uname, level, leveldesc);
 	}
 
 	else if (!strcasecmp("LIST", cmd))
@@ -227,7 +227,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
 	char hostbuf[BUFSIZE];
 	chanuser_t *cu;
@@ -236,7 +236,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	unsigned int addflags = level, removeflags = ~level;
 	bool isnew;
 
-	if (!mu)
+	if (!mt)
 	{
 		/* we might be adding a hostmask */
 		if (!validhostmask(target))
@@ -344,26 +344,26 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	ca = chanacs_open(mc, mu, NULL, true);
+	ca = chanacs_open(mc, mt, NULL, true);
 
 	if (ca->level & CA_FOUNDER)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), entity(mu)->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), mt->name, mc->name, leveldesc);
 		return;
 	}
 
 	if (ca->level == level)
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 		return;
 	}
 
 	/* NEVEROP logic moved here
 	 * Allow changing access level, but not adding
 	 * -- jilles */
-	if (MU_NEVEROP & mu->flags && (ca->level == 0 || ca->level == CA_AKICK))
+	if (isuser(mt) && MU_NEVEROP & user(mt)->flags && (ca->level == 0 || ca->level == CA_AKICK))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), entity(mu)->name);
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mt->name);
 		chanacs_close(ca);
 		return;
 	}
@@ -385,7 +385,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), entity(mu)->name, mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mt->name, mc->name);
 		chanacs_close(ca);
 		return;
 	}
@@ -394,16 +394,16 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	if (!isnew)
 	{
 		/* they have access? change it! */
-		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, entity(mu)->name);
-		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), entity(mu)->name, mc->name, leveldesc);
-		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), entity(mu)->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, mt->name);
+		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mt->name, mc->name, leveldesc);
+		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mt->name, leveldesc);
 	}
 	else
 	{
 		/* they have no access, add */
-		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, entity(mu)->name);
-		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
-		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), entity(mu)->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, mt->name);
+		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
+		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mt->name, leveldesc);
 	}
 
 	/* run through the channel's user list and do it */
@@ -414,7 +414,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	{
 		cu = (chanuser_t *)n->data;
 
-		if (cu->user->myuser != mu)
+		if (cu->user->myuser != user(mt))
 			continue;
 
 		if (ircd->uses_owner && level & CA_USEOWNER)
@@ -461,12 +461,12 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	}
 }
 
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, const char *leveldesc)
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	chanacs_t *ca;
 	
 	/* let's finally make this sane.. --w00t */
-	if (!mu)
+	if (!mt)
 	{
 		/* we might be deleting a hostmask */
 		if (!validhostmask(target))
@@ -489,16 +489,16 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, mu, level)) || ca->level != level)
+	if (!(ca = chanacs_find(mc, mt, level)) || ca->level != level)
 	{
-		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 		return;
 	}
 
 	object_unref(ca);
-	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), entity(mu)->name, leveldesc, mc->name);
-	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, entity(mu)->name);
-	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), entity(mu)->name, leveldesc);
+	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
+	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mt->name);
+	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mt->name, leveldesc);
 }
 
 
@@ -560,7 +560,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!is_founder(mc, si->smu))
+	if (!is_founder(mc, entity(si->smu)))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;

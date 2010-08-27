@@ -60,7 +60,7 @@ void _moddeinit()
 static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *newfounder = parv[1];
-	myuser_t *tmu;
+	myentity_t *mt;
 	mychan_t *mc;
 
 	if (!si->smu)
@@ -75,7 +75,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(tmu = myuser_find_ext(newfounder)))
+	if (!(mt = myentity_find(newfounder)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfounder);
 		return;
@@ -87,7 +87,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!is_founder(mc, si->smu))
+	if (!is_founder(mc, entity(si->smu)))
 	{
 		/* User is not currently the founder.
 		 * Maybe he is trying to complete a transfer?
@@ -95,7 +95,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		metadata_t *md;
 
 		/* XXX is it portable to compare times like that? */
-		if ((si->smu == tmu)
+		if ((entity(si->smu) == mt)
 			&& (md = metadata_find(mc, "private:verify:founderchg:newfounder"))
 			&& !irccasecmp(md->value, entity(si->smu)->name)
 			&& (md = metadata_find(mc, "private:verify:founderchg:timestamp"))
@@ -108,9 +108,9 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			 * convenience, but we need to check here as well to
 			 * avoid a verify/use bug that can cause us to make the
 			 * access list too big. */
-			if (!chanacs_find(mc, tmu, 0))
+			if (!chanacs_find(mc, mt, 0))
 			{
-				ca = chanacs_open(mc, tmu, NULL, true);
+				ca = chanacs_open(mc, mt, NULL, true);
 				if (ca->level == 0 && chanacs_is_table_full(ca))
 				{
 					command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -120,9 +120,9 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 			}
 
-			if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
+			if (isuser(mt) && (myuser_num_channels(user(mt)) >= me.maxchans) && !has_priv_myuser(user(mt), PRIV_REG_NOLIMIT))
 			{
-				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), entity(tmu)->name);
+				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
 				return;
 			}
 
@@ -132,8 +132,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, entity(tmu)->name, mychan_founder_names(mc));
-			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), entity(tmu)->name);
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (completing transfer from \2%s\2)", mc->name, mt->name, mychan_founder_names(mc));
+			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), mt->name);
 
 			/* add target as founder... */
 			LIST_FOREACH(n, mc->chanacs.head)
@@ -145,14 +145,14 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->entity != NULL && ca->level & CA_FOUNDER)
 					chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
 			}
-			chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
+			chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0);
 
 			/* delete transfer metadata */
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
 			/* done! */
-			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), entity(tmu)->name, mc->name);
+			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), mt->name, mc->name);
 
 			return;
 		}
@@ -161,7 +161,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (is_founder(mc, tmu))
+	if (is_founder(mc, mt))
 	{
 		/* User is currently the founder and
 		 * trying to transfer back to himself.
@@ -173,13 +173,13 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, "private:verify:founderchg:timestamp");
 
-			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling transfer)", mc->name, entity(tmu)->name);
+			logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling transfer)", mc->name, mt->name);
 			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
 
 			return;
 		}
 
-		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), entity(tmu)->name, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), mt->name, mc->name);
 		return;
 	}
 
@@ -188,11 +188,11 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	 * for users.
 	 * -- jilles
 	 */
-	if (!chanacs_find(mc, tmu, 0))
+	if (!chanacs_find(mc, mt, 0))
 	{
 		chanacs_t *ca;
 
-		ca = chanacs_open(mc, tmu, NULL, true);
+		ca = chanacs_open(mc, mt, NULL, true);
 		if (ca->level == 0 && chanacs_is_table_full(ca))
 		{
 			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -205,18 +205,18 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, "private:verify:founderchg:newfounder"))
 	{
-		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, entity(tmu)->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (cancelling old transfer and initializing transfer)", mc->name, mt->name);
 		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
 	}
 	else
-		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, entity(tmu)->name);
+		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, mt->name);
 
-	metadata_add(mc, "private:verify:founderchg:newfounder", entity(tmu)->name);
+	metadata_add(mc, "private:verify:founderchg:newfounder", mt->name);
 	metadata_add(mc, "private:verify:founderchg:timestamp", itoa(time(NULL)));
 
-	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), entity(tmu)->name, mc->name);
-	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), entity(tmu)->name);
-	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, entity(tmu)->name);
+	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), mt->name, mc->name);
+	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), mt->name);
+	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, mt->name);
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }

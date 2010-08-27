@@ -41,7 +41,7 @@ void _moddeinit()
 
 void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	myentity_t *mt;
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;
 	metadata_t *md;
@@ -114,8 +114,8 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		mu = myuser_find_ext(uname);
-		if (!mu)
+		mt = myentity_find(uname);
+		if (!mt)
 		{
 			/* we might be adding a hostmask */
 			if (!validhostmask(uname))
@@ -167,17 +167,17 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			if ((ca = chanacs_find(mc, mu, 0x0)))
+			if ((ca = chanacs_find(mc, mt, 0x0)))
 			{
 				if (ca->level & CA_AKICK)
-					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), entity(mu)->name, mc->name);
+					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mt->name, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), entity(mu)->name, bitmask_to_flags(ca->level), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mt->name, bitmask_to_flags(ca->level), mc->name);
 				return;
 			}
 
 			/* new entry */
-			ca2 = chanacs_open(mc, mu, NULL, true);
+			ca2 = chanacs_open(mc, mt, NULL, true);
 			if (chanacs_is_table_full(ca2))
 			{
 				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -191,10 +191,10 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			hook_call_channel_akick_add(ca2);
 			chanacs_close(ca2);
 
-			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mt->name, mc->name);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), entity(mu)->name);
-			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", entity(mu)->name, mc->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mt->name);
+			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mt->name, mc->name);
 
 			return;
 		}
@@ -207,8 +207,8 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		mu = myuser_find_ext(uname);
-		if (!mu)
+		mt = myentity_find(uname);
+		if (!mt)
 		{
 			/* we might be deleting a hostmask */
 			ca = chanacs_find_host_literal(mc, uname, CA_AKICK);
@@ -233,19 +233,19 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (!(ca = chanacs_find(mc, mu, CA_AKICK)))
+		if (!(ca = chanacs_find(mc, mt, CA_AKICK)))
 		{
-			command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
+			command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), mt->name, mc->name);
 			return;
 		}
 
 		chanacs_modify_simple(ca, 0, CA_AKICK);
 		chanacs_close(ca);
 
-		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), entity(mu)->name, mc->name);
-		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", entity(mu)->name, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mt->name, mc->name);
+		logcommand(si, CMDLOG_SET, "AKICK:DEL: \2%s\2 on \2%s\2", mt->name, mc->name);
 
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), entity(mu)->name);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mt->name);
 
 		return;
 	}

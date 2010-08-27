@@ -46,7 +46,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[1];
 	char *flagstr = parv[2];
 	mychan_t *mc;
-	myuser_t *tmu;
+	myentity_t *mt;
 	unsigned int addflags, removeflags;
 
 	if (parc < 3)
@@ -89,28 +89,28 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validhostmask(target))
 	{
-		if (!(tmu = myuser_find_ext(target)))
+		if (!(mt = myentity_find(target)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 			return;
 		}
-		target = entity(tmu)->name;
+		target = mt->name;
 
 		/* XXX this should be more like flags.c */
 		if (removeflags & CA_FLAGS)
 			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 		else if (addflags & CA_FOUNDER)
 			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
-		if (is_founder(mc, tmu) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
+		if (is_founder(mc, mt) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;
 		}
 
-		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, ca_all))
+		if (!chanacs_change(mc, mt, NULL, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), entity(tmu)->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
 			return;
 		}
 	}
