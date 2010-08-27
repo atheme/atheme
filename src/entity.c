@@ -37,6 +37,8 @@ myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state)
 	myentity_t *mt;
 
 	mt = mowgli_patricia_foreach_cur(entities, &state->st);
+	if (mt == NULL)
+		return NULL;
 
 	if (state->type == ENT_ANY)
 		return mt;
