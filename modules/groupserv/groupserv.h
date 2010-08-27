@@ -18,6 +18,12 @@ struct mygroup_ {
 
 typedef struct groupacs_ groupacs_t;
 
+#define GA_FOUNDER		0x00000001
+#define GA_FLAGS		0x00000002
+#define GA_CHANACS		0x00000004
+#define GA_MEMOS		0x00000008
+#define GA_ALL			0xFFFFFFFF
+
 struct groupacs_ {
 	object_t parent;
 
@@ -35,6 +41,7 @@ E mygroup_t *mygroup_find(const char *name);
 
 E groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags);
 E groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags);
+E void groupacs_delete(mygroup_t *mg, myuser_t *mu);
 
 E void basecmds_init(void);
 E void basecmds_deinit(void);
@@ -49,5 +56,6 @@ E service_t *groupsvs;
 E list_t gs_cmdtree;
 E list_t gs_helptree;
 E list_t conf_gs_table;
+E struct gflags ga_flags[];
 
 #endif /* !GROUPSERV_H */

@@ -5,6 +5,15 @@
 #include "atheme.h"
 #include "groupserv.h"
 
+struct gflags ga_flags[] = {
+	{ 'F', GA_FOUNDER },
+	{ 'f', GA_FLAGS },
+	{ 'c', GA_CHANACS },
+	{ 'm', GA_MEMOS },
+	{ '*', GA_ALL },
+	{ 0, 0 }
+};
+
 static BlockHeap *mygroup_heap, *groupacs_heap;
 
 void mygroups_init(void)
@@ -55,7 +64,7 @@ mygroup_t *mygroup_find(const char *name)
 	return group(mg);
 }
 
-static void groupacs_delete(groupacs_t *ga)
+static void groupacs_des(groupacs_t *ga)
 {
 	metadata_delete_all(ga);
 	/* XXX nothing */
@@ -69,7 +78,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	return_val_if_fail(mu != NULL, NULL);
 
 	ga = BlockHeapAlloc(groupacs_heap);
-	object_init(object(ga), NULL, (destructor_t) groupacs_delete);
+	object_init(object(ga), NULL, (destructor_t) groupacs_des);
 
 	ga->mg = mg;
 	ga->mu = mu;
@@ -99,4 +108,12 @@ groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	}
 
 	return NULL;
+}
+
+void groupacs_delete(mygroup_t *mg, myuser_t *mu)
+{
+	groupacs_t *ga;
+
+	ga = groupacs_find(mg, mu, 0);
+	node_del(&ga->node, &mg->acs);
 }

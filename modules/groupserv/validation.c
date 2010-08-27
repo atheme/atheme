@@ -11,8 +11,11 @@ static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 	mg = group(ca->entity);
 
 	return_val_if_fail(mg != NULL, NULL);
+	
+	if (!isuser(mt))
+		return NULL;
 
-	return node_find(mt, &mg->acs) != NULL ? ca : NULL;
+	return groupacs_find(mg, user(mt), GA_CHANACS) != NULL ? ca : NULL;
 }
 
 static entity_chanacs_validation_vtable_t mygroup_chanacs_validate = {

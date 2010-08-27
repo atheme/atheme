@@ -98,7 +98,7 @@ static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	node_add(mu, node_create(), &mg->acs);
+	groupacs_add(mg, mu, GA_ALL);
 
 	command_success_nodata(si, _("\2%s\2 has been added to \2%s\2."), entity(mu)->name, entity(mg)->name);
 }
@@ -132,9 +132,7 @@ static void gs_cmd_deluser(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	n = node_find(mu, &mg->acs);
-	node_del(n, &mg->acs);
-	node_free(n);
+	groupacs_delete(mg, mu);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
 }

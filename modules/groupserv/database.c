@@ -4,7 +4,7 @@
 
 #include "groupserv.h"
 
-#define GDBV_VERSION	1
+#define GDBV_VERSION	2
 
 static unsigned int loading_gdbv = -1;
 
@@ -31,13 +31,13 @@ static void write_groupdb(database_handle_t *db)
 
 		LIST_FOREACH(n, mg->acs.head)
 		{
-			myuser_t *mu = user(n->data);
-
-			continue_if_fail(mu != NULL);
+			groupacs_t *ga = n->data;
+			char *flags = gflags_tostr(ga_flags, ga->flags);
 
 			db_start_row(db, "GACL");
 			db_start_row(db, entity(mg)->name);
-			db_start_row(db, entity(mu)->name);
+			db_start_row(db, entity(ga->mu)->name);
+			db_start_row(db, flags);
 			db_commit_row(db);
 		}
 	}
@@ -63,9 +63,11 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 {
 	mygroup_t *mg;
 	myuser_t *mu;
+	unsigned int flags = GA_ALL;	/* GDBV 1 entires had full access */
 
 	const char *name = db_sread_word(db);
 	const char *user = db_sread_word(db);
+	const char *flagset;
 
 	mg = mygroup_find(name);
 	mu = myuser_find(user);
@@ -76,7 +78,15 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 	if (mu == NULL)
 		return;
 
-	node_add(mu, node_create(), &mg->acs);
+	if (loading_gdbv >= 2)
+	{
+		flagset = db_sread_word(db);
+
+		if (!gflags_fromstr(ga_flags, flagset, &flags))
+			slog(LG_INFO, "db-h-gacl: line %d: confused by flags: %s", db->line, flagset);
+	}
+
+	groupacs_add(mg, mu, flags);
 }
 
 void gs_db_init(void)
