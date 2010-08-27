@@ -16,6 +16,14 @@ struct mygroup_ {
 	time_t regtime;
 };
 
+typedef struct groupacs_ groupacs_t;
+
+struct groupacs_ {
+	object_t parent;
+	myuser_t *mu;
+	unsigned int flags;
+};
+
 E void mygroups_init(void);
 E void mygroups_deinit(void);
 E mygroup_t *mygroup_add(const char *name);
