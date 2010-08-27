@@ -83,7 +83,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int dir;
 	char *c;
 
-	if (!parv[0] || !parv[1] || !parv[2])
+	if (!parv[0] || !parv[1])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
 		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <user> <changes>"));
@@ -105,6 +105,29 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if ((mu = myuser_find_ext(parv[1])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
+		return;
+	}
+
+	if (!parv[2])
+	{
+		node_t *n;
+		int i = 1;
+
+		command_success_nodata(si, _("Entry Account                Flags"));
+		command_success_nodata(si, "----- ---------------------- -----");
+
+		LIST_FOREACH(n, mg->acs.head)
+		{
+			ga = n->data;
+
+			command_success_nodata(si, "%-5d %-22s %s", i, entity(ga->mu)->name,
+					       gflags_tostr(ga_flags, ga->flags));
+
+			i++;
+		}
+
+		command_success_nodata(si, "----- ---------------------- -----");
+		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
 		return;
 	}
 
