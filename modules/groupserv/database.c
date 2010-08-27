@@ -22,6 +22,7 @@ static void write_groupdb(database_handle_t *db)
 		node_t *n;
 		mygroup_t *mg = group(me);
 
+		continue_if_fail(me != NULL);
 		continue_if_fail(mg != NULL);
 
 		db_start_row(db, "GRP");
