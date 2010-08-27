@@ -20,14 +20,21 @@ typedef struct groupacs_ groupacs_t;
 
 struct groupacs_ {
 	object_t parent;
+
+	mygroup_t *mg;
 	myuser_t *mu;
 	unsigned int flags;
+
+	node_t node;
 };
 
 E void mygroups_init(void);
 E void mygroups_deinit(void);
 E mygroup_t *mygroup_add(const char *name);
 E mygroup_t *mygroup_find(const char *name);
+
+E groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags);
+E groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags);
 
 E void basecmds_init(void);
 E void basecmds_deinit(void);
