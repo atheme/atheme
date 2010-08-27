@@ -227,6 +227,30 @@ AC_HELP_STRING([--enable-large-net],[ Enable large network support.]),
 ])
 AC_MSG_RESULT($LARGENET)
 
+CONTRIB="no"
+AC_MSG_CHECKING(if you want contrib modules)
+AC_ARG_ENABLE(contrib,
+AC_HELP_STRING([--enable-contrib],[ Enable contrib modules.]),
+[
+  case "$enableval" in
+  yes)
+    CONTRIB="yes"
+    ;;
+  no)
+    CONTRIB="no"
+    ;;
+  esac
+])
+AC_MSG_RESULT($CONTRIB)
+
+if test "$CONTRIB" = "yes"; then
+	CONTRIB_ENABLE="contrib"
+else
+	CONTRIB_ENABLE=""
+fi
+
+AC_SUBST(CONTRIB_ENABLE)
+
 balloc="no"
 AC_MSG_CHECKING(if you want to enable the block allocator)
 AC_ARG_ENABLE(balloc,
@@ -557,6 +581,7 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Large network support: ${LARGENET}
 	OpenSSL SASL support : ${SSL}
+	Contrib modules      : ${CONTRIB}
 	Block Allocator      : ${balloc}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
