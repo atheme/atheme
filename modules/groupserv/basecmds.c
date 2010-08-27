@@ -67,6 +67,7 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mg = mygroup_add(parv[0]);
 	groupacs_add(mg, si->smu, GA_ALL | GA_FOUNDER);
 
+	logcommand(si, CMDLOG_REGISTER, "REGISTER: \2%s\2", entity(mg)->name); 
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
 
