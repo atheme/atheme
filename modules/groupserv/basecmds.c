@@ -96,9 +96,15 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+
 	if ((mu = myuser_find_ext(parv[1])) == NULL)
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is not a registered account."), parv[1]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
 		return;
 	}
 
