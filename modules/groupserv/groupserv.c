@@ -41,6 +41,7 @@ static void mygroup_delete(mygroup_t *mg)
 	}
 
 	metadata_delete_all(mg);
+	BlockHeapFree(mygroup_heap, mg);
 }
 
 mygroup_t *mygroup_add(const char *name)
@@ -76,7 +77,7 @@ mygroup_t *mygroup_find(const char *name)
 static void groupacs_des(groupacs_t *ga)
 {
 	metadata_delete_all(ga);
-	/* XXX nothing */
+	BlockHeapFree(groupacs_heap, ga);
 }
 
 groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
