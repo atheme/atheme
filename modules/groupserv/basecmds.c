@@ -79,7 +79,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	mygroup_t *mg;
 	myuser_t *mu;
 	groupacs_t *ga;
-	unsigned int flags;
+	unsigned int flags = 0;
 	unsigned int dir;
 	char *c;
 
@@ -169,7 +169,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
 		return;
 	}
-	else
+	else 
 		ga = groupacs_add(mg, mu, flags);
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
