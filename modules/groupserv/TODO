@@ -1,0 +1,15 @@
+milestone 1:
+
+- handle myuser expiration gracefully
+  (clean up our mess basically)
+
+- hook into NS INFO
+  (group list)
+
+- expiration of groups?
+
+milestone 2:
+
+- automated vhost offering
+
+- memos
