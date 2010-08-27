@@ -9,4 +9,6 @@ typedef struct {
 	chanacs_t *(*match_entity)(chanacs_t *ca, myentity_t *mt);
 } entity_chanacs_validation_vtable_t;
 
+E entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt);
+
 #endif

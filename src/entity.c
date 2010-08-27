@@ -66,3 +66,18 @@ void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata
 {
 	mowgli_patricia_stats(entities, cb, privdata);
 }
+
+/* validation */
+static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
+{
+	return ca->entity == mt ? ca : NULL;
+}
+
+entity_chanacs_validation_vtable_t linear_chanacs_validate = {
+	.match_entity = linear_chanacs_match_entity,
+};
+
+entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt)
+{
+	return mt->chanacs_validate != NULL ? mt->chanacs_validate : &linear_chanacs_validate;
+}

@@ -1430,14 +1430,20 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
+		entity_chanacs_validation_vtable_t *vt;
+
 		ca = (chanacs_t *)n->data;
 
+		if (ca->entity == NULL)
+			continue;
+
+		vt = ca->entity->chanacs_validate;
 		if (level != 0x0)
 		{
-			if ((ca->entity == mt) && ((ca->level & level) == level))
+			if ((vt->match_entity(ca, mu) != NULL) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if (ca->entity == mt)
+		else if (vt->match_entity(ca, mu) != NULL)
 			return ca;
 	}
 
