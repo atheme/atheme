@@ -4,6 +4,23 @@
 
 #include "groupserv.h"
 
+static void mygroup_expire(void *unused)
+{
+	myentity_t *mt;
+	myentity_iteration_state_t state;
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	{
+		mygroup_t *mg = group(mt);
+
+		continue_if_fail(mt != NULL);
+		continue_if_fail(mg != NULL);
+
+		if (!mygroup_count_flag(mg, GA_FOUNDER))
+			object_unref(mg);
+	}
+}
+
 static void user_info_hook(hook_user_req_t *req)
 {
 	static char buf[BUFSIZE];
@@ -46,12 +63,16 @@ static void myuser_delete_hook(myuser_t *mu)
 
 void gs_hooks_init(void)
 {
+	event_add("mygroup_expire", mygroup_expire, NULL, 3600);
+
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
 }
 
 void gs_hooks_deinit(void)
 {
+	event_delete(mygroup_expire, NULL);
+
 	hook_del_user_info(user_info_hook);
 	hook_del_myuser_delete(myuser_delete_hook);
 }
