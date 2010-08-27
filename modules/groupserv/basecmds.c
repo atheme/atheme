@@ -70,19 +70,23 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
 
-static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_adduser = { "ADDUSER", N_("Adds a user to a group."), AC_NONE, 2, gs_cmd_adduser };
+command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags };
 
-static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[])
+static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	myuser_t *mu;
+	groupacs_t *ga;
+	unsigned int flags;
+	unsigned int dir;
+	char *c;
 
-	if (!parv[0] || !parv[1])
+	if (!parv[0] || !parv[1] || !parv[2])
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ADDUSER");
-		command_fail(si, fault_needmoreparams, _("To add a user to a group: ADDUSER <!groupname> <user>"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <user> <changes>"));
 		return;
 	}
 
@@ -98,51 +102,78 @@ static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	groupacs_add(mg, mu, GA_ALL);
+	ga = groupacs_find(mg, mu, 0);
+	if (ga != NULL)
+		flags = ga->flags;
 
-	command_success_nodata(si, _("\2%s\2 has been added to \2%s\2."), entity(mu)->name, entity(mg)->name);
-}
-
-static void gs_cmd_deluser(sourceinfo_t *si, int parc, char *parv[]);
-
-command_t gs_deluser = { "DELUSER", N_("Removes a user from a group."), AC_NONE, 2, gs_cmd_deluser };
-
-static void gs_cmd_deluser(sourceinfo_t *si, int parc, char *parv[])
-{
-	mygroup_t *mg;
-	myuser_t *mu;
-	node_t *n;
-
-	if (!parv[0] || !parv[1])
+	/* XXX: this sucks. :< */
+	c = parv[2];
+	while (*c)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ADDUSER");
-		command_fail(si, fault_needmoreparams, _("To add a user to a group: ADDUSER <!groupname> <user>"));
-		return;
+		switch(*c)
+		{
+		case '+':
+			dir = 0;
+			break;
+		case '-':
+			dir = 1;
+			break;
+		case '*':
+			if (dir)
+				flags = 0;
+			else
+				flags = GA_ALL & ~GA_FOUNDER;
+			break;
+		case 'F':
+			if (dir)
+				flags &= ~GA_FOUNDER;
+			else
+				flags |= GA_FOUNDER;
+			break;
+		case 'f':
+			if (dir)
+				flags &= ~GA_FLAGS;
+			else
+				flags |= GA_FLAGS;
+			break;
+		case 'c':
+			if (dir)
+				flags &= ~GA_CHANACS;
+			else
+				flags |= GA_CHANACS;
+			break;
+		case 'm':
+			if (dir)
+				flags &= ~GA_MEMOS;
+			else
+				flags |= GA_MEMOS;
+			break;
+		default:
+			break;
+		}
+
+		c++;
 	}
 
-	if ((mg = mygroup_find(parv[0])) == NULL)
+	if (ga != NULL && flags != 0)
+		ga->flags = flags;
+	else if (ga != NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		groupacs_delete(mg, mu);
+		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
 		return;
 	}
+	else
+		ga = groupacs_add(mg, mu, flags);
 
-	if ((mu = myuser_find_ext(parv[1])) == NULL)
-	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is not a registered account."), parv[1]);
-		return;
-	}
-
-	groupacs_delete(mg, mu);
-
-	command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
+	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 }
 
 void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
 	command_add(&gs_register, &gs_cmdtree);
-	command_add(&gs_adduser, &gs_cmdtree);
-	command_add(&gs_deluser, &gs_cmdtree);
+	command_add(&gs_flags, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 }
@@ -151,8 +182,7 @@ void basecmds_deinit(void)
 {
 	command_delete(&gs_help, &gs_cmdtree);
 	command_delete(&gs_register, &gs_cmdtree);
-	command_delete(&gs_adduser, &gs_cmdtree);
-	command_delete(&gs_deluser, &gs_cmdtree);
+	command_delete(&gs_flags, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 }
