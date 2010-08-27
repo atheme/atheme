@@ -2,7 +2,7 @@ Help for FLAGS:
 
 The FLAGS command allows for the granting/removal of channel
 privileges on a more specific, non-generalized level. It
-supports both nicknames and hostmasks as targets.
+supports nicknames, groups and hostmasks as targets.
 
 When only the channel argument is given, a listing of
 permissions granted to users will be displayed.
@@ -34,8 +34,8 @@ restricted further, see help for SET LIMITFLAGS.
 If you do not have +f you may still remove your own access
 with -*.
 
-Syntax: FLAGS <#channel> [nickname|hostmask template]
-Syntax: FLAGS <#channel> [nickname|hostmask flag_changes]
+Syntax: FLAGS <#channel> [nickname|hostmask|group template]
+Syntax: FLAGS <#channel> [nickname|hostmask|group flag_changes]
 
 Permissions:
     +v - Enables use of the voice/devoice commands.
@@ -83,3 +83,4 @@ Examples:
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi
     /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
+	/msg &nick& FLAGS #foo !baz +*
