@@ -196,7 +196,7 @@ void myuser_delete(myuser_t *mu)
 		}
 	}
 
-	hook_call_user_delete(mu);
+	hook_call_myuser_delete(mu);
 
 	/* kill all their channels and chanacs */
 	LIST_FOREACH_SAFE(n, tn, entity(mu)->chanacs.head)
