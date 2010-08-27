@@ -70,10 +70,81 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
 
+static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_adduser = { "ADDUSER", N_("Adds a user to a group."), AC_NONE, 2, gs_cmd_adduser };
+
+static void gs_cmd_adduser(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	myuser_t *mu;
+
+	if (!parv[0] || !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ADDUSER");
+		command_fail(si, fault_needmoreparams, _("To add a user to a group: ADDUSER <!groupname> <user>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+
+	if ((mu = myuser_find_ext(parv[1])) == NULL)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is not a registered account."), parv[1]);
+		return;
+	}
+
+	node_add(mu, node_create(), &mg->acs);
+
+	command_success_nodata(si, _("\2%s\2 has been added to \2%s\2."), entity(mu)->name, entity(mg)->name);
+}
+
+static void gs_cmd_deluser(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_deluser = { "DELUSER", N_("Removes a user from a group."), AC_NONE, 2, gs_cmd_deluser };
+
+static void gs_cmd_deluser(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	myuser_t *mu;
+	node_t *n;
+
+	if (!parv[0] || !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ADDUSER");
+		command_fail(si, fault_needmoreparams, _("To add a user to a group: ADDUSER <!groupname> <user>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+
+	if ((mu = myuser_find_ext(parv[1])) == NULL)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is not a registered account."), parv[1]);
+		return;
+	}
+
+	n = node_find(mu, &mg->acs);
+	node_del(n, &mg->acs);
+	node_free(n);
+
+	command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
+}
+
 void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
 	command_add(&gs_register, &gs_cmdtree);
+	command_add(&gs_adduser, &gs_cmdtree);
+	command_add(&gs_deluser, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 }
@@ -82,6 +153,8 @@ void basecmds_deinit(void)
 {
 	command_delete(&gs_help, &gs_cmdtree);
 	command_delete(&gs_register, &gs_cmdtree);
+	command_delete(&gs_adduser, &gs_cmdtree);
+	command_delete(&gs_deluser, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 }
