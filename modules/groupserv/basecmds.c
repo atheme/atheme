@@ -128,7 +128,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			if (dir)
 				flags = 0;
 			else
-				flags = GA_ALL & ~GA_FOUNDER;
+				flags = GA_ALL;
 			break;
 		case 'F':
 			if (dir)
