@@ -70,6 +70,37 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
 
+static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info };
+
+static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	struct tm tm;
+	char strfbuf[32];
+
+	if (!parv[0])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
+		command_fail(si, fault_needmoreparams, _("Syntax: INFO <!groupname>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_alreadyexists, _("Group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+
+	tm = *localtime(&mg->regtime);
+	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+	command_success_nodata(si, _("Information on \2%s\2:"), parv[0]);
+	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
+	command_success_nodata(si, _("Founder : %s"), mygroup_founder_names(mg));
+}
+
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags };
@@ -202,6 +233,7 @@ void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
 	command_add(&gs_register, &gs_cmdtree);
+	command_add(&gs_info, &gs_cmdtree);
 	command_add(&gs_flags, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
@@ -213,6 +245,7 @@ void basecmds_deinit(void)
 {
 	command_delete(&gs_help, &gs_cmdtree);
 	command_delete(&gs_register, &gs_cmdtree);
+	command_delete(&gs_info, &gs_cmdtree);
 	command_delete(&gs_flags, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");

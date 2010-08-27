@@ -60,6 +60,8 @@ E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
 
 E list_t *myuser_get_membership_list(myuser_t *mu);
 
+E const char *mygroup_founder_names(mygroup_t *mg);
+
 /* services plumbing */
 E service_t *groupsvs;
 E list_t gs_cmdtree;

@@ -183,3 +183,22 @@ list_t *myuser_get_membership_list(myuser_t *mu)
 	return l;	
 }
 
+const char *mygroup_founder_names(mygroup_t *mg)
+{
+        node_t *n;
+        groupacs_t *ga;
+        static char names[512];
+
+        names[0] = '\0';
+        LIST_FOREACH(n, mg->acs.head)
+        {
+                ga = n->data;
+                if (ga->mu != NULL && ga->flags & GA_FOUNDER)
+                {
+                        if (names[0] != '\0')
+                                strlcat(names, ", ", sizeof names);
+                        strlcat(names, entity(ga->mu)->name, sizeof names);
+                }
+        }
+        return names;
+}
