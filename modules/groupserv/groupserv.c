@@ -116,7 +116,8 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 	groupacs_t *ga;
 
 	ga = groupacs_find(mg, mu, 0);
-	node_del(&ga->node, &mg->acs);
+	if (ga != NULL)
+		node_del(&ga->node, &mg->acs);
 }
 
 bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
