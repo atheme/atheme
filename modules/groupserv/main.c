@@ -49,12 +49,14 @@ void _modinit(module_t *m)
 	groupsvs = service_add("groupserv", groupserv, &gs_cmdtree, &conf_gs_table);
 
 	gs_db_init();
+	gs_hooks_init();
 	basecmds_init();
 }
 
 void _moddeinit(void)
 {
 	gs_db_deinit();
+	gs_hooks_deinit();
 	basecmds_deinit();
 
 	if (groupsvs)

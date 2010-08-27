@@ -3,7 +3,7 @@
 
 PLUGIN = main$(PLUGIN_SUFFIX)
 
-SRCS = main.c basecmds.c database.c groupserv.c validation.c
+SRCS = main.c basecmds.c database.c groupserv.c hooks.c validation.c
 
 include ../../extra.mk
 include ../../buildsys.mk

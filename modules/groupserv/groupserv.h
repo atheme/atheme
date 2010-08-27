@@ -50,6 +50,9 @@ E void basecmds_deinit(void);
 E void gs_db_init(void);
 E void gs_db_deinit(void);
 
+E void gs_hooks_init(void);
+E void gs_hooks_deinit(void);
+
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 
 /* services plumbing */
