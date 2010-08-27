@@ -7,28 +7,21 @@
 static void user_info_hook(hook_user_req_t *req)
 {
 	static char buf[BUFSIZE];
-	myentity_t *mt;
-	myentity_iteration_state_t state;
+	node_t *n;
+	list_t *l;
 
 	*buf = 0;
 
-	/* XXX: we need a way to stash a list in myuser showing the list of
-	 * groups we're in.  it would speed this up dramatically.  --nenolod
-	 */
-	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	l = myuser_get_membership_list(req->mu);
+
+	LIST_FOREACH(n, l->head)
 	{
-		mygroup_t *mg;
-
-		mg = group(mt);
-		continue_if_fail(mg != NULL);
-
-		if (groupacs_find(mg, req->mu, 0) == NULL)
-			continue;
+		groupacs_t *ga = n->data;
 
 		if (*buf != 0)
 			strlcat(buf, ", ", BUFSIZE);
 
-		strlcat(buf, entity(mg)->name, BUFSIZE);
+		strlcat(buf, entity(ga->mg)->name, BUFSIZE);
 	}
 
 	command_success_nodata(req->si, _("Groups     : %s"), buf);
@@ -36,21 +29,19 @@ static void user_info_hook(hook_user_req_t *req)
 
 static void myuser_delete_hook(myuser_t *mu)
 {
-	myentity_t *mt;
-	myentity_iteration_state_t state;
+	node_t *n;
+	list_t *l;
 
-	/* XXX: we need a way to stash a list in myuser showing the list of
-	 * groups we're in.  it would speed this up dramatically.  --nenolod
-	 */
-	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	l = myuser_get_membership_list(mu);
+
+	LIST_FOREACH(n, l->head)
 	{
-		mygroup_t *mg;
+		groupacs_t *ga = n->data;
 
-		mg = group(mt);
-		continue_if_fail(mg != NULL);
-
-		groupacs_delete(mg, mu);
+		groupacs_delete(ga->mg, ga->mu);
 	}
+
+	list_free(l);
 }
 
 void gs_hooks_init(void)

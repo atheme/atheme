@@ -31,7 +31,8 @@ struct groupacs_ {
 	myuser_t *mu;
 	unsigned int flags;
 
-	node_t node;
+	node_t gnode;
+	node_t unode;
 };
 
 E void mygroups_init(void);
@@ -54,6 +55,8 @@ E void gs_hooks_init(void);
 E void gs_hooks_deinit(void);
 
 E void mygroup_set_chanacs_validator(myentity_t *mt);
+
+E list_t *myuser_get_membership_list(myuser_t *mu);
 
 /* services plumbing */
 E service_t *groupsvs;

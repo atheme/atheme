@@ -83,7 +83,8 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	ga->mu = mu;
 	ga->flags = flags;
 
-	node_add(ga, &ga->node, &mg->acs);
+	node_add(ga, &ga->gnode, &mg->acs);
+	node_add(ga, &ga->unode, myuser_get_membership_list(mu));
 
 	return ga;
 }
@@ -117,10 +118,31 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 
 	ga = groupacs_find(mg, mu, 0);
 	if (ga != NULL)
-		node_del(&ga->node, &mg->acs);
+	{
+		node_del(&ga->gnode, &mg->acs);
+		node_del(&ga->unode, myuser_get_membership_list(mu));
+		object_unref(ga);
+	}
 }
 
 bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
 {
 	return groupacs_find(mg, si->smu, flag) != NULL;
 }
+
+list_t *myuser_get_membership_list(myuser_t *mu)
+{
+	list_t *l;
+
+	return_val_if_fail(isuser(mu), NULL);
+
+	l = privatedata_get(mu, "groupserv:membership");
+	if (l != NULL)
+		return l;
+
+	l = list_create();
+	privatedata_set(mu, "groupserv:membership", l);
+
+	return l;	
+}
+
