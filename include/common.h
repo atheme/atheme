@@ -125,6 +125,13 @@ typedef enum faultcode_ faultcode_t;
 /* Returns the size of an array. */
 #define ARRAY_SIZE(array) sizeof((array)) / sizeof(*(array))
 
+/* Continue if an assertion fails. */
+#define	continue_if_fail(x)						\
+	if (!(x)) { 							\
+		mowgli_log("critical: Assertion '%s' failed.", #x);	\
+		continue;						\
+	}
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
