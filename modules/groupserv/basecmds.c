@@ -83,10 +83,10 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int dir;
 	char *c;
 
-	if (!parv[0] || !parv[1])
+	if (!parv[0])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <user> <changes>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [user] [changes]"));
 		return;
 	}
 
@@ -102,13 +102,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mu = myuser_find_ext(parv[1])) == NULL)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
-		return;
-	}
-
-	if (!parv[2])
+	if (!parv[1])
 	{
 		node_t *n;
 		int i = 1;
@@ -128,6 +122,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
+		return;
+	}
+
+	if ((mu = myuser_find_ext(parv[1])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
 		return;
 	}
 
