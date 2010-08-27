@@ -10,19 +10,19 @@ static unsigned int loading_gdbv = -1;
 
 static void write_groupdb(database_handle_t *db)
 {
-	myentity_t *me;
+	myentity_t *mt;
 	myentity_iteration_state_t state;
 
 	db_start_row(db, "GDBV");
 	db_write_uint(db, GDBV_VERSION);
 	db_commit_row(db);
 
-	MYENTITY_FOREACH_T(me, &state, ENT_GROUP)
+	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
 		node_t *n;
-		mygroup_t *mg = group(me);
+		mygroup_t *mg = group(mt);
 
-		continue_if_fail(me != NULL);
+		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);
 
 		db_start_row(db, "GRP");
