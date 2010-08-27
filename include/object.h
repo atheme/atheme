@@ -32,6 +32,7 @@ typedef struct {
 #endif
 	destructor_t destructor;
 	list_t metadata;
+	mowgli_patricia_t *privatedata;
 } object_t;
 
 E void init_metadata(void);
@@ -46,6 +47,9 @@ E metadata_t *metadata_add(void *target, const char *name, const char *value);
 E void metadata_delete(void *target, const char *name);
 E metadata_t *metadata_find(void *target, const char *name);
 E void metadata_delete_all(void *target);
+
+E void *privatedata_get(void *target, const char *key);
+E void privatedata_set(void *target, const char *key, void *data);
 
 #define object(x) ((object_t *) x)
 

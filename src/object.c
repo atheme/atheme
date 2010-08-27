@@ -120,6 +120,9 @@ void object_unref(void *object)
 		if (obj->name != NULL)
 			free(obj->name);
 
+		if (obj->privatedata != NULL)
+			mowgli_patricia_destroy(obj->privatedata, NULL, NULL);
+
 		if (obj->destructor != NULL)
 			obj->destructor(obj);
 		else
@@ -207,6 +210,28 @@ void metadata_delete_all(void *target)
 		md = n->data;
 		metadata_delete(obj, md->name);
 	}
+}
+
+void *privatedata_get(void *target, const char *key)
+{
+	object_t *obj;
+
+	obj = object(target);
+	if (obj->privatedata == NULL)
+		return NULL;
+
+	return mowgli_patricia_retrieve(obj->privatedata, key);
+}
+
+void privatedata_set(void *target, const char *key, void *data)
+{
+	object_t *obj;
+
+	obj = object(target);
+	if (obj->privatedata == NULL)
+		obj->privatedata = mowgli_patricia_create(noopcanon);
+
+	mowgli_patricia_add(obj->privatedata, key, data);	
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
