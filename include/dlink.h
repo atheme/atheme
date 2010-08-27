@@ -35,6 +35,9 @@ struct list_
   unsigned int count;                    /* how many entries in the list */
 };
 
+E list_t *list_create(void);
+E void list_free(list_t *l);
+
 E node_t *node_create(void);
 E void node_free(node_t *n);
 E void node_add(void *data, node_t *n, list_t *l);

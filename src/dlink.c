@@ -25,16 +25,36 @@
 #include "internal.h"
 
 static BlockHeap *node_heap;
+static BlockHeap *list_heap;
 
 void init_dlink_nodes(void)
 {
         node_heap = BlockHeapCreate(sizeof(node_t), HEAP_NODE);
+	list_heap = BlockHeapCreate(sizeof(list_t), HEAP_NODE);
 
-	if (!node_heap)
+	if (!node_heap || !list_heap)
 	{
 		slog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
+}
+
+/* creates a new list */
+list_t *list_create(void)
+{
+	list_t *l;
+
+	l = BlockHeapAlloc(list_heap);
+
+	return l;
+}
+
+/* frees a list */
+void list_free(list_t *l)
+{
+	return_if_fail(l != NULL);
+
+	BlockHeapFree(list_heap, l);
 }
 
 /* creates a new node */
