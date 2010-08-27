@@ -30,6 +30,8 @@ mygroup_t *mygroup_add(const char *name)
 	mg = BlockHeapAlloc(mygroup_heap);
 	object_init(object(mg), NULL, (destructor_t) mygroup_delete);
 
+	entity(mg)->type = ENT_GROUP;
+
 	strlcpy(entity(mg)->name, name, sizeof(entity(mg)->name));
 	myentity_put(entity(mg));
 
