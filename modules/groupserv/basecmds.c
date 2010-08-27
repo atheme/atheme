@@ -205,6 +205,8 @@ void basecmds_init(void)
 	command_add(&gs_flags, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
+	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
+	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 }
 
 void basecmds_deinit(void)
@@ -214,5 +216,7 @@ void basecmds_deinit(void)
 	command_delete(&gs_flags, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
+	help_delentry(&gs_helptree, "REGISTER");
+	help_delentry(&gs_helptree, "FLAGS");
 }
 
