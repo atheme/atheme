@@ -83,4 +83,4 @@ Examples:
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi
     /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
-	/msg &nick& FLAGS #foo !baz +*
+    /msg &nick& FLAGS #foo !baz +*
