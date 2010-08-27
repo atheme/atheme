@@ -11,17 +11,21 @@ typedef struct mygroup_ mygroup_t;
 
 struct mygroup_ {
 	myentity_t ent;
-	list_t acs;
 
-	myuser_t *owner;
+	list_t acs;
+	time_t regtime;
 };
 
 E void mygroups_init(void);
-E mygroup_t *mygroup_add(myuser_t *owner, const char *name);
+E void mygroups_deinit(void);
+E mygroup_t *mygroup_add(const char *name);
 E mygroup_t *mygroup_find(const char *name);
 
 E void basecmds_init(void);
 E void basecmds_deinit(void);
+
+E void gs_db_init(void);
+E void gs_db_deinit(void);
 
 /* services plumbing */
 E service_t *groupsvs;

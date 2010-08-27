@@ -12,13 +12,18 @@ void mygroups_init(void)
 	mygroup_heap = BlockHeapCreate(sizeof(mygroup_t), HEAP_USER);
 }
 
+void mygroups_deinit(void)
+{
+	BlockHeapDestroy(mygroup_heap);
+}
+
 static void mygroup_delete(mygroup_t *mg)
 {
 	metadata_delete_all(mg);
 	/* XXX nothing */
 }
 
-mygroup_t *mygroup_add(myuser_t *owner, const char *name)
+mygroup_t *mygroup_add(const char *name)
 {
 	mygroup_t *mg;
 
@@ -27,8 +32,6 @@ mygroup_t *mygroup_add(myuser_t *owner, const char *name)
 
 	strlcpy(entity(mg)->name, name, sizeof(entity(mg)->name));
 	myentity_put(entity(mg));
-
-	mg->owner = owner;
 
 	return mg;
 }

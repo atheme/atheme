@@ -64,7 +64,8 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* XXX: need to check registration limits here. */
-	mg = mygroup_add(si->smu, parv[0]);
+	mg = mygroup_add(parv[0]);
+	node_add(si->smu, node_create(), &mg->acs);
 
 	command_success_nodata(si, _("The group \2%s\2 has been registered to \2%s\2."), entity(mg)->name, entity(si->smu)->name);
 }
