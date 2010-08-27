@@ -8,9 +8,9 @@
 
 MODULE = contrib
 
-include ../extra.mk
-include ../buildsys.mk
-include ../buildsys.module.mk
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 SRCS =			\
 	cs_kickdots.c		\
@@ -46,5 +46,5 @@ SRCS =			\
 	os_trace.c		\
 	wumpus.c
 
-CPPFLAGS	+= -I../include
+CPPFLAGS	+= -I../../include
 CFLAGS		+= ${PLUGIN_CFLAGS}
