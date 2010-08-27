@@ -10,7 +10,6 @@ struct gflags ga_flags[] = {
 	{ 'f', GA_FLAGS },
 	{ 'c', GA_CHANACS },
 	{ 'm', GA_MEMOS },
-	{ '*', GA_ALL },
 	{ 0, 0 }
 };
 
