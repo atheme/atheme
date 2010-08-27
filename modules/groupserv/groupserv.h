@@ -27,6 +27,8 @@ E void basecmds_deinit(void);
 E void gs_db_init(void);
 E void gs_db_deinit(void);
 
+E void mygroup_set_chanacs_validator(myentity_t *mt);
+
 /* services plumbing */
 E service_t *groupsvs;
 E list_t gs_cmdtree;

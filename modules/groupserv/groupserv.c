@@ -33,6 +33,8 @@ mygroup_t *mygroup_add(const char *name)
 	strlcpy(entity(mg)->name, name, sizeof(entity(mg)->name));
 	myentity_put(entity(mg));
 
+	mygroup_set_chanacs_validator(entity(mg));
+
 	return mg;
 }
 
