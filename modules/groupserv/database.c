@@ -81,7 +81,7 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 
 void gs_db_init(void)
 {
-	hook_add_db_write(write_groupdb);
+	hook_add_db_write_pre_ca(write_groupdb);
 
 	db_register_type_handler("GDBV", db_h_gdbv);
 	db_register_type_handler("GRP", db_h_grp);
@@ -90,7 +90,7 @@ void gs_db_init(void)
 
 void gs_db_deinit(void)
 {
-	hook_del_db_write(write_groupdb);
+	hook_del_db_write_pre_ca(write_groupdb);
 
 	db_unregister_type_handler("GDBV");
 	db_unregister_type_handler("GRP");

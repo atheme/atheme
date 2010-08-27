@@ -23,6 +23,10 @@
 # (main)
 config_ready       void
 db_write           database_handle_t *
+
+# XXX: for groupserv.  remove when we have proper dependency resolution in opensex.
+db_write_pre_ca    database_handle_t *
+
 db_saved           void
 shutdown           void
 # (ircd)

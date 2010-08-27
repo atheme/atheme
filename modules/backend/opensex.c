@@ -156,6 +156,9 @@ opensex_db_save(database_handle_t *db)
 		}
 	}
 
+	/* XXX: groupserv hack.  remove when we have proper dependency resolution. --nenolod */
+	hook_call_db_write_pre_ca(db);
+
 	slog(LG_DEBUG, "db_save(): saving mychans");
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
