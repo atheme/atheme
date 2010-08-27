@@ -1437,7 +1437,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 		if (ca->entity == NULL)
 			continue;
 
-		vt = ca->entity->chanacs_validate;
+		vt = myentity_get_chanacs_validator(ca->entity);
 		if (level != 0x0)
 		{
 			if ((vt->match_entity(ca, mt) != NULL) && ((ca->level & level) == level))
