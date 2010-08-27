@@ -99,6 +99,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information on \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 	command_success_nodata(si, _("Founder : %s"), mygroup_founder_names(mg));
+	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
@@ -238,6 +239,7 @@ void basecmds_init(void)
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
+	help_addentry(&gs_helptree, "INFO", "help/groupserv/info", NULL);
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 }
 
@@ -250,6 +252,7 @@ void basecmds_deinit(void)
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
+	help_delentry(&gs_helptree, "INFO");
 	help_delentry(&gs_helptree, "FLAGS");
 }
 
