@@ -36,7 +36,7 @@ static void mygroup_delete(mygroup_t *mg)
 		groupacs_t *ga = n->data;
 
 		node_del(&ga->gnode, &mg->acs);
-		node_del(&ga->unode, myuser_get_membership_list(mu));
+		node_del(&ga->unode, myuser_get_membership_list(ga->mu));
 		object_unref(ga);
 	}
 
@@ -138,6 +138,30 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
 {
 	return groupacs_find(mg, si->smu, flag) != NULL;
+}
+
+unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
+{
+	node_t *n;
+	unsigned int count = 0;
+
+	return_val_if_fail(mg != NULL, 0);
+
+	/* optimization: if flags = 0, then that means select everyone, so just
+	 * return the list length.
+	 */
+	if (flag == 0)
+		return LIST_LENGTH(&mg->acs);
+
+	LIST_FOREACH(n, mg->acs.head)
+	{
+		groupacs_t *ga = n->data;
+
+		if (ga->flags & flag)
+			count++;
+	}
+
+	return count;
 }
 
 list_t *myuser_get_membership_list(myuser_t *mu)

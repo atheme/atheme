@@ -55,6 +55,8 @@ E void gs_hooks_init(void);
 E void gs_hooks_deinit(void);
 
 E void mygroup_set_chanacs_validator(myentity_t *mt);
+E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
+
 
 E list_t *myuser_get_membership_list(myuser_t *mu);
 
