@@ -84,6 +84,8 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	ga->flags = flags;
 
 	node_add(ga, &ga->node, &mg->acs);
+
+	return ga;
 }
 
 groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
