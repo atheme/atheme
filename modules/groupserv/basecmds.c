@@ -7,6 +7,26 @@
 /* This should probably be moved to privs.h or at least groupserv.h at some point */
 #define PRIV_GROUP "group:admin"
 
+/* I don't like this here, but it works --jdhore */
+static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
+{
+	char buf[256];
+	int digest[4];
+	md5_state_t ctx;
+
+	snprintf(buf, sizeof buf, "%lu:%s:%s",
+			(unsigned long)(CURRTIME / 300) - v,
+			get_source_name(si),
+			name);
+	md5_init(&ctx);
+	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
+	md5_finish(&ctx, (unsigned char *)digest);
+	/* note: this depends on byte order, but that's ok because
+	 * it's only going to work in the same atheme instance anyway
+	 */
+	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
+}
+
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help };
@@ -137,6 +157,73 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("\2*** End of List ***\2"));
 }
+
+static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_NONE, 2, gs_cmd_drop };
+
+static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	char *name = parv[0];
+	char *key = parv[1];
+	char fullcmd[512];
+	char key0[80], key1[80];
+
+	if (!name)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
+		command_fail(si, fault_needmoreparams, _("Syntax: DROP <!group>"));
+		return;
+	}
+
+	if (*name != '!')
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DROP");
+		command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
+		return;
+	}
+
+	if (!(mg = mygroup_find(name)))
+	{
+		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
+		return;
+	}
+
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
+	if (si->su != NULL)
+	{
+		if (!key)
+		{
+			create_challenge(si, entity(mg)->name, 0, key0);
+			snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s",
+					(ircd->uses_rcommand == false) ? "msg " : "",
+					si->service->disp, entity(mg)->name, key0);
+			command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
+					fullcmd);
+			return;
+		}
+		/* accept current and previous key */
+		create_challenge(si, entity(mg)->name, 0, key0);
+		create_challenge(si, entity(mg)->name, 1, key1);
+		if (strcmp(key, key0) && strcmp(key, key1))
+		{
+			command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
+			return;
+		}
+	}
+
+	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mg)->name);
+	object_unref(mg);
+	command_success_nodata(si, _("The group \2%s\2 has been dropped."), name);
+	return;
+}
+
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags };
@@ -277,12 +364,14 @@ void basecmds_init(void)
 	command_add(&gs_register, &gs_cmdtree);
 	command_add(&gs_info, &gs_cmdtree);
 	command_add(&gs_list, &gs_cmdtree);
+	command_add(&gs_drop, &gs_cmdtree);
 	command_add(&gs_flags, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
 	help_addentry(&gs_helptree, "INFO", "help/groupserv/info", NULL);
 	help_addentry(&gs_helptree, "LIST", "help/groupserv/list", NULL);
+	help_addentry(&gs_helptree, "DROP", "help/groupserv/drop", NULL);
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 }
 
@@ -292,12 +381,14 @@ void basecmds_deinit(void)
 	command_delete(&gs_register, &gs_cmdtree);
 	command_delete(&gs_info, &gs_cmdtree);
 	command_delete(&gs_list, &gs_cmdtree);
+	command_delete(&gs_drop, &gs_cmdtree);
 	command_delete(&gs_flags, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
 	help_delentry(&gs_helptree, "INFO");
 	help_delentry(&gs_helptree, "LIST");
+	help_delentry(&gs_helptree, "DROP");
 	help_delentry(&gs_helptree, "FLAGS");
 }
 
