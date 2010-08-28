@@ -41,6 +41,17 @@ static void write_groupdb(database_handle_t *db)
 			db_start_row(db, flags);
 			db_commit_row(db);
 		}
+
+		LIST_FOREACH(n, object(mg)->metadata.head)
+		{
+			metadata_t *md = (metadata_t *)n->data;
+
+			db_start_row(db, "MDG");
+			db_write_word(db, entity(mg)->name);
+			db_write_word(db, md->name);
+			db_write_str(db, md->value);
+			db_commit_row(db);
+		}
 	}
 }
 
@@ -90,6 +101,17 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 	groupacs_add(mg, mu, flags);
 }
 
+static void db_h_mdg(database_handle_t *db, const char *type)
+{
+	const char *name = db_sread_word(db);
+	const char *prop = db_sread_word(db);
+	const char *value = db_sread_str(db);
+	void *obj = NULL;
+
+	obj = mygroup_find(name);
+	metadata_add(obj, prop, value);
+}
+
 void gs_db_init(void)
 {
 	hook_add_db_write_pre_ca(write_groupdb);
@@ -97,6 +119,7 @@ void gs_db_init(void)
 	db_register_type_handler("GDBV", db_h_gdbv);
 	db_register_type_handler("GRP", db_h_grp);
 	db_register_type_handler("GACL", db_h_gacl);
+	db_register_type_handler("MDG", db_h_mdg);
 }
 
 void gs_db_deinit(void)
@@ -106,4 +129,5 @@ void gs_db_deinit(void)
 	db_unregister_type_handler("GDBV");
 	db_unregister_type_handler("GRP");
 	db_unregister_type_handler("GACL");
+	db_unregister_type_handler("MDG");
 }
