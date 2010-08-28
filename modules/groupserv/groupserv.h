@@ -22,7 +22,8 @@ typedef struct groupacs_ groupacs_t;
 #define GA_FLAGS		0x00000002
 #define GA_CHANACS		0x00000004
 #define GA_MEMOS		0x00000008
-#define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS)
+#define GA_SET			0x00000010
+#define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET)
 
 struct groupacs_ {
 	object_t parent;
@@ -53,6 +54,9 @@ E void gs_db_deinit(void);
 
 E void gs_hooks_init(void);
 E void gs_hooks_deinit(void);
+
+E void set_init(void);
+E void set_deinit(void);
 
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);

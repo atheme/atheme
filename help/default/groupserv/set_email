@@ -1,0 +1,14 @@
+Help for SET EMAIL:
+
+SET EMAIL allows you to change or set the email
+address associated with a group. This is shown
+to all users in INFO.
+
+Syntax: SET <!group> EMAIL [email]
+
+Using the command in this way results in an email
+address being associated with the group.
+
+Example:
+    /msg &nick& SET !bar EMAIL some@email.address
+

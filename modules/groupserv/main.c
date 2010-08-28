@@ -51,6 +51,7 @@ void _modinit(module_t *m)
 	gs_db_init();
 	gs_hooks_init();
 	basecmds_init();
+	set_init();
 }
 
 void _moddeinit(void)
@@ -58,6 +59,7 @@ void _moddeinit(void)
 	gs_db_deinit();
 	gs_hooks_deinit();
 	basecmds_deinit();
+	set_deinit();
 
 	if (groupsvs)
 		service_delete(groupsvs);

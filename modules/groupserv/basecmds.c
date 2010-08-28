@@ -223,6 +223,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				flags |= GA_FLAGS;
 			break;
+		case 's':
+			if (dir)
+				flags &= ~GA_SET;
+			else
+				flags |= GA_SET;
+			break;
 		case 'c':
 			if (dir)
 				flags &= ~GA_CHANACS;

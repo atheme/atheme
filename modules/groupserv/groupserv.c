@@ -8,6 +8,7 @@
 struct gflags ga_flags[] = {
 	{ 'F', GA_FOUNDER },
 	{ 'f', GA_FLAGS },
+	{ 's', GA_SET },
 	{ 'c', GA_CHANACS },
 	{ 'm', GA_MEMOS },
 	{ 0, 0 }
