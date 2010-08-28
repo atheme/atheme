@@ -50,7 +50,7 @@ static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s"), sptr->nick);
 	}
 
-	command_success_nodata(si, _("More information on each services is available by messaging it like so: /msg service help"));
+	command_success_nodata(si, _("More information on each service is available by messaging it like so: /msg service help"));
 
         return;
 }
