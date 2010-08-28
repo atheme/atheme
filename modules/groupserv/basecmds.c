@@ -88,7 +88,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mg = mygroup_find(parv[0]))
+	if (!(mg = mygroup_find(parv[0])))
 	{
 		command_fail(si, fault_alreadyexists, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
