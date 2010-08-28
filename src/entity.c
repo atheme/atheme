@@ -28,26 +28,22 @@ myentity_t *myentity_find(const char *name)
 
 void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t type)
 {
+	myentity_t *e;
+
 	state->type = type;
 	mowgli_patricia_foreach_start(entities, &state->st);
+
+	e = mowgli_patricia_foreach_cur(entities, &state->st);
+	while (e && state->type != ENT_ANY && state->type != e->type)
+	{
+		mowgli_patricia_foreach_next(entities, &state->st);
+		e = mowgli_patricia_foreach_cur(entities, &state->st);
+	} 
 }
 
 myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state)
 {
-#ifdef NOTYET
-	myentity_t *mt;
-
-	mt = mowgli_patricia_foreach_cur(entities, &state->st);
-	if (mt == NULL)
-		return NULL;
-
-	if (state->type == ENT_ANY)
-		return mt;
-
-	return state->type == mt->type ? mt : NULL;
-#else
 	return mowgli_patricia_foreach_cur(entities, &state->st);
-#endif
 }
 
 void myentity_foreach_next(myentity_iteration_state_t *state)
