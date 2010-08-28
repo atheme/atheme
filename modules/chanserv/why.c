@@ -51,12 +51,15 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	int operoverride = 0;
 	int fl = 0;
 
-	if (!chan || !targ)
+	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "WHY");
-		command_fail(si, fault_needmoreparams, _("Syntax: WHY <channel> <user>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: WHY <channel> [user]"));
 		return;
 	}
+
+	if (!targ)
+		targ = si->su->nick;
 
 	mc = mychan_find(chan);
 	u = user_find_named(targ);
