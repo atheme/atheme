@@ -11,6 +11,6 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-SRCS = main.c helpme.c ticket.c
+SRCS = main.c helpme.c services.c ticket.c
 
 CPPFLAGS	+= -I../../include

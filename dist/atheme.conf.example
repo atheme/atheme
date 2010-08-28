@@ -552,6 +552,7 @@ loadmodule "modules/botserv/set_private";
  * Core components				modules/helpserv/main
  * HELPME command				modules/helpserv/helpme
  * Help Ticket system			modules/helpserv/ticket
+ * Service List					modules/helpserv/services
  *
  * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
  * works like a one-time alert. You should probably only load one of the two systems.
@@ -559,6 +560,7 @@ loadmodule "modules/botserv/set_private";
 loadmodule "modules/helpserv/main";
 #loadmodule "modules/helpserv/helpme";
 loadmodule "modules/helpserv/ticket";
+loadmodule "modules/helpserv/services";
 
 /* Channel listing service.
  *
