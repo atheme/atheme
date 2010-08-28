@@ -59,6 +59,7 @@ static struct Token uflags[] = {
   { "NOOP",      MU_NOOP         },
   { "HIDEMAIL",  MU_HIDEMAIL     },
   { "NOMEMO",    MU_NOMEMO       },
+  { "EMAILMEMOS",MU_EMAILMEMOS   },
   { "ENFORCE",   MU_ENFORCE      },
   { "PRIVMSG",   MU_USE_PRIVMSG  },
   { "PRIVATE",   MU_PRIVATE      },

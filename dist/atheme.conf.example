@@ -1491,8 +1491,8 @@ general {
 
 	/* (*)uflags
 	 * The default flags to set for usernames upon registration.
-	 * Valid values are: hold, neverop, noop, hidemail, nomemo, enforce,
-	 * privmsg, private and none.
+	 * Valid values are: hold, neverop, noop, hidemail, nomemo, emailmemos,
+	 * enforce, privmsg, private, quietchg and none.
 	 */
 	uflags = { hidemail; };
 
