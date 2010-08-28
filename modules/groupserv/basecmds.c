@@ -29,7 +29,7 @@ static void create_challenge(sourceinfo_t *si, const char *name, int v, char *de
 
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help };
+command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help };
 
 void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
