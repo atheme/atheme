@@ -1648,6 +1648,10 @@ operclass "ircop" {
 		operserv:jupe;
 		operserv:global;
 	};
+
+	privs {
+		group:admin;
+	};
 };
 
 operclass "sra" {

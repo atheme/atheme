@@ -1,0 +1,8 @@
+Help for LIST:
+
+LIST shows all groups currently registered.
+
+Syntax: LIST
+
+Examples:
+    /msg &nick& LIST

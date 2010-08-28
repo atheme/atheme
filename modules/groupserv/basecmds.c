@@ -4,6 +4,9 @@
 
 #include "groupserv.h"
 
+/* This should probably be moved to privs.h or at least groupserv.h at some point */
+#define PRIV_GROUP "group:admin"
+
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help };
@@ -103,6 +106,28 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
+static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_list = { "LIST", N_("List all registered groups."), AC_NONE, 1, gs_cmd_list };
+
+static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+{
+	myentity_t *mt;
+	myentity_iteration_state_t state;
+
+	command_success_nodata(si, _("Groups currently registered:"));
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
+	{
+		mygroup_t *mg = group(mt);
+		continue_if_fail(mt != NULL);
+		continue_if_fail(mg != NULL);
+
+		command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
+	}
+
+	command_success_nodata(si, _("\2*** End of List ***\2"));
+}
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags };
@@ -236,11 +261,13 @@ void basecmds_init(void)
 	command_add(&gs_help, &gs_cmdtree);
 	command_add(&gs_register, &gs_cmdtree);
 	command_add(&gs_info, &gs_cmdtree);
+	command_add(&gs_list, &gs_cmdtree);
 	command_add(&gs_flags, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
 	help_addentry(&gs_helptree, "INFO", "help/groupserv/info", NULL);
+	help_addentry(&gs_helptree, "LIST", "help/groupserv/list", NULL);
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 }
 
@@ -249,11 +276,13 @@ void basecmds_deinit(void)
 	command_delete(&gs_help, &gs_cmdtree);
 	command_delete(&gs_register, &gs_cmdtree);
 	command_delete(&gs_info, &gs_cmdtree);
+	command_delete(&gs_list, &gs_cmdtree);
 	command_delete(&gs_flags, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
 	help_delentry(&gs_helptree, "INFO");
+	help_delentry(&gs_helptree, "LIST");
 	help_delentry(&gs_helptree, "FLAGS");
 }
 
