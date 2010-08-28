@@ -83,6 +83,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	mygroup_t *mg;
 	struct tm tm;
 	char strfbuf[32];
+	metadata_t *md;
 
 	if (!parv[0])
 	{
@@ -103,6 +104,14 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information on \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 	command_success_nodata(si, _("Founder : %s"), mygroup_founder_names(mg));
+
+	if ((md = metadata_find(mg, "description")))
+		command_success_nodata(si, _("Description : %s"), md->value);
+	if ((md = metadata_find(mg, "url")))
+		command_success_nodata(si, _("URL : %s"), md->value);
+	if ((md = metadata_find(mg, "email")))
+		command_success_nodata(si, _("Email : %s"), md->value);
+
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
