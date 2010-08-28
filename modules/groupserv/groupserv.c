@@ -31,6 +31,8 @@ static void mygroup_delete(mygroup_t *mg)
 {
 	node_t *n, *tn;
 
+	myentity_del(entity(mg));
+
 	LIST_FOREACH_SAFE(n, tn, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
