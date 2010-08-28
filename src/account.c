@@ -1094,8 +1094,8 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 			if (hi_level == level && (!recent_ok || hi_recent_ok))
 				continue;
 		}
-		if (isuser(mt) && has_priv_myuser(user(mt), PRIV_REG_NOLIMIT) ||
-				myuser_num_channels(user(mt)) < me.maxchans)
+		if (isuser(mt) && (has_priv_myuser(user(mt), PRIV_REG_NOLIMIT) ||
+				myuser_num_channels(user(mt)) < me.maxchans))
 		{
 			hi_mt = mt;
 			hi_level = level;
