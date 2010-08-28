@@ -108,7 +108,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	const char *pattern;
 	myentity_iteration_state_t state;
-	myentity_t *me;
+	myentity_t *mt;
 	myuser_t *mu;
 	metadata_t *md;
 	node_t *n;
@@ -117,9 +117,9 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 
 	pattern = parc >= 1 ? parv[0] : "*";
 
-	MYENTITY_FOREACH_T(me, &state, ENT_USER)
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		mu = user(me);
+		mu = user(mt);
 		md = metadata_find(mu, "private:usercloak");
 		if (md != NULL && !match(pattern, md->value))
 		{

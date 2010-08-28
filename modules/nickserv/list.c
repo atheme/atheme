@@ -83,7 +83,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 	myuser_t *mu;
-	myentity_t *me;
+	myentity_t *mt;
 	mynick_t *mn;
 	metadata_t *md;
 	int matches = 0;
@@ -113,9 +113,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (nicksvs.no_nick_ownership)
 	{
-		MYENTITY_FOREACH_T(me, &mestate, ENT_USER)
+		MYENTITY_FOREACH_T(mt, &mestate, ENT_USER)
 		{
-			mu = user(me);
+			mu = user(mt);
 			if (nickpattern && match(nickpattern, entity(mu)->name))
 				continue;
 			if (hostpattern)

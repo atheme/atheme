@@ -43,10 +43,10 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(myentity_t *me, void *privdata)
+static int listmail_foreach_cb(myentity_t *mt, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = user(me);
+	myuser_t *mu = user(mt);
 
 	if (!strcasecmp(state->pattern, mu->email))
 	{

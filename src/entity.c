@@ -11,14 +11,14 @@ void init_entities(void)
 	entities = mowgli_patricia_create(irccasecanon);
 }
 
-void myentity_put(myentity_t *me)
+void myentity_put(myentity_t *mt)
 {
-	mowgli_patricia_add(entities, me->name, me);
+	mowgli_patricia_add(entities, mt->name, mt);
 }
 
-void myentity_del(myentity_t *me)
+void myentity_del(myentity_t *mt)
 {
-	mowgli_patricia_delete(entities, me->name);
+	mowgli_patricia_delete(entities, mt->name);
 }
 
 myentity_t *myentity_find(const char *name)
@@ -55,18 +55,18 @@ void myentity_foreach_next(myentity_iteration_state_t *state)
 	} while (e && state->type != ENT_ANY && state->type != e->type);
 }
 
-void myentity_foreach(int (*cb)(myentity_t *me, void *privdata), void *privdata)
+void myentity_foreach(int (*cb)(myentity_t *mt, void *privdata), void *privdata)
 {
 	myentity_foreach_t(ENT_ANY, cb, privdata);
 }
 
-void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *me, void *privdata), void *privdata)
+void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *mt, void *privdata), void *privdata)
 {
 	myentity_iteration_state_t state;
-	myentity_t *me;
-	MYENTITY_FOREACH_T(me, &state, type)
+	myentity_t *mt;
+	MYENTITY_FOREACH_T(mt, &state, type)
 	{
-		if (cb(me, privdata))
+		if (cb(mt, privdata))
 			return;
 	}
 }

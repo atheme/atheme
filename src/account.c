@@ -1800,12 +1800,12 @@ bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmas
 	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all);
 }
 
-static int expire_myuser_cb(myentity_t *me, void *unused)
+static int expire_myuser_cb(myentity_t *mt, void *unused)
 {
 	hook_expiry_req_t req;
-	myuser_t *mu = user(me);
+	myuser_t *mu = user(mt);
 
-	return_val_if_fail(isuser(me), 0);
+	return_val_if_fail(isuser(mt), 0);
 
 	/* If they're logged in, update lastlogin time.
 	 * To decrease db traffic, may want to only do
@@ -1944,13 +1944,13 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(myentity_t *me, void *unused)
+static int check_myuser_cb(myentity_t *mt, void *unused)
 {
-	myuser_t *mu = user(me);
+	myuser_t *mu = user(mt);
 	node_t *n;
 	mynick_t *mn, *mn1;
 
-	return_val_if_fail(isuser(me), 0);
+	return_val_if_fail(isuser(mt), 0);
 
 	if (!nicksvs.no_nick_ownership)
 	{

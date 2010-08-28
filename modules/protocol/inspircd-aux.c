@@ -434,8 +434,6 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 /* server-to-server UNQLINE wrapper */
 static void inspircd_unqline_sts(const char *server, const char *name)
 {
-	service_t *svs;
-
 	if (!me.connected)
 		return;
 
