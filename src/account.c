@@ -1666,7 +1666,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
 
 	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, mt, 0);
+		ca = chanacs_find_literal(mychan, mt, 0);
 		if (ca != NULL)
 			return ca;
 		else if (create)
