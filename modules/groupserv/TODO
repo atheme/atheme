@@ -2,3 +2,4 @@ alpha4:
 
 - automated vhost offering
 
+- group limits (max_groups) and (?) group access list limits
