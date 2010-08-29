@@ -1430,6 +1430,21 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
+	/* ok, first try a linear match. */
+	LIST_FOREACH(n, mychan->chanacs.head)
+	{
+		ca = (chanacs_t *)n->data;
+
+		if (level != 0x0)
+		{
+			if (ca->entity == mt && ((ca->level & level) == level))
+				return ca;
+		}
+		else if (ca->entity == mt)
+			return ca;
+	}
+
+	/* now try using a validator. */
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
 		entity_chanacs_validation_vtable_t *vt;
