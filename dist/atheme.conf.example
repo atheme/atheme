@@ -571,6 +571,15 @@ loadmodule "modules/helpserv/services";
  */
 #loadmodule "modules/alis/main";
 
+/* GroupServ module.
+ * GroupServ allows users to create and assing other to groups to be able to easily
+ * mass-manage channel access and more.
+ *
+ * Core components				modules/groupserv/main
+ *
+ */
+loadmodule "modules/groupserv/main";
+
 /*
  * Various modules.
  *
@@ -1214,13 +1223,38 @@ botserv {
 };
 
 /* GroupServ configuration.
+ *
+ * The groupserv {} block contains settings specific to the GroupServ modules.
+ *
  * GroupServ provides features for managing a collection of channels at once.
+ *
  */
 groupserv {
- 	nick = "GroupServ";
-	user = "groupserv";
+	/* (*)nick
+	 * The nickname we want GroupServ to have.
+	 */
+	nick = "GroupServ";
+
+	/* (*)user
+	 * The username we want GroupServ to have.
+	 */
+	user = "GroupServ";
+
+	/* (*)host
+	 * The hostname we want GroupServ to have.
+	 */
 	host = "services.int";
-	real = "Group Management Services";
+
+	/* (*)real
+	 * The realname (gecos) information we want GroupServ to have.
+	 */
+	real = "Group Managment Services";
+
+	/* (*)aliases
+	 * Command aliases for GroupServ.
+	 */
+	aliases {
+	};
 };
 
 /* HostServ configuration.
