@@ -432,6 +432,7 @@ loadmodule "modules/operserv/uptime";
  * HELP command					modules/memoserv/help
  * SEND command					modules/memoserv/send
  * Channel memos (SENDOPS command)		modules/memoserv/sendops
+ * Group memos (SENDGROUP command)              modules/memoserv/sendgroup
  * LIST command					modules/memoserv/list
  * READ command					modules/memoserv/read
  * FORWARD command				modules/memoserv/forward
@@ -442,6 +443,7 @@ loadmodule "modules/memoserv/main";
 loadmodule "modules/memoserv/help";
 loadmodule "modules/memoserv/send";
 loadmodule "modules/memoserv/sendops";
+loadmodule "modules/memoserv/sendgroup";
 loadmodule "modules/memoserv/list";
 loadmodule "modules/memoserv/read";
 loadmodule "modules/memoserv/forward";
