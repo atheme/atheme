@@ -106,7 +106,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	{
        	        ca = (chanacs_t *)n->data;
 
-		if (ca->entity != NULL)
+		if (ca->entity == entity(u->myuser))
 		{
 			fl |= ca->level;
 			command_success_nodata(si,
@@ -117,6 +117,25 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 				md = metadata_find(ca, "reason");
 				if (md != NULL)
 					command_success_nodata(si, "Ban reason: %s", md->value);
+			}
+		}
+		else if (isgroup(ca->entity))
+		{
+			entity_chanacs_validation_vtable_t *vt;
+
+			vt = myentity_get_chanacs_validator(ca->entity);
+			if (vt->match_entity(ca, entity(u->myuser)) != NULL)
+			{
+				fl |= ca->level;
+				command_success_nodata(si,
+					"\2%s\2 has flags \2%s\2 in \2%s\2 because they are a member of \2%s\2.",
+					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
+				if (ca->level & CA_AKICK)
+				{
+					md = metadata_find(ca, "reason");
+					if (md != NULL)
+						command_success_nodata(si, "Ban reason: %s", md->value);
+				}
 			}
 		}
 	}
