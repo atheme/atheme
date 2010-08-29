@@ -123,6 +123,12 @@ static int conf_service_host(config_entry_t *ce)
 	if (!ce->ce_vardata)
 		return -1;
 
+	if (!is_valid_host(ce->ce_vardata))
+	{
+		conf_report_warning(ce, "invalid hostname: %s", ce->ce_vardata);
+		return -1;
+	}
+
 	sptr = service_find(ce->ce_prevlevel->ce_varname);
 	if (!sptr)
 		return -1;
