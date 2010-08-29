@@ -103,7 +103,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (*target != '#')
+	if (*target != '#' && *target != '!')
 	{
 		/* See if target is valid */
 		if (!(tmu = myuser_find_ext(target))) 
@@ -196,13 +196,21 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		/* Tell user memo sent */
 		command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);
 	}
-	else
+	else if (*target == '#')
 	{
 		cmd = command_find(si->service->cmdtree, "SENDOPS");
 		if (cmd != NULL)
 			command_exec(si->service, si, cmd, parc, parv);
 		else
 			command_fail(si, fault_nosuch_target, _("Channel memos are administratively disabled."));
+	}
+	else
+	{
+		cmd = command_find(si->service->cmdtree, "SENDGROUP");
+		if (cmd != NULL)
+			command_exec(si->service, si, cmd, parc, parv);
+		else
+			command_fail(si, fault_nosuch_target, _("Group memos are administratively disabled."));
 	}
 
 	return;
