@@ -2,7 +2,7 @@
  * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the Memoserv SENDOPS function
+ * This file contains code for the Memoserv SENDGROUP function
  *
  */
 
@@ -57,10 +57,10 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !m)
 	{
 		command_fail(si, fault_needmoreparams, 
-			STR_INSUFFICIENT_PARAMS, "SENDOPS");
+			STR_INSUFFICIENT_PARAMS, "SENDGROUP");
 		
 		command_fail(si, fault_needmoreparams, 
-			"Syntax: SENDOPS <channel> <memo>");
+			_("Syntax: SENDGROUP <group> <memo>"));
 		
 		return;
 	}
@@ -189,9 +189,9 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
 	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "SENDOPS: to \2%s\2 (%d/%d sent) (oper override)", entity(mg)->name, sent, tried);
+		logcommand(si, CMDLOG_ADMIN, "SENDGROUP: to \2%s\2 (%d/%d sent) (oper override)", entity(mg)->name, sent, tried);
 	else
-		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", entity(mg)->name, sent, tried);
+		logcommand(si, CMDLOG_SET, "SENDGROUP: to \2%s\2 (%d/%d sent)", entity(mg)->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d members on \2%s\2."), sent, entity(mg)->name);
 	return;
 }	
