@@ -282,65 +282,6 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
 		}
 
-		/* run through the channel's user list and do it */
-		/* make sure the channel exists */
-		if (mc->chan == NULL)
-			return;
-		LIST_FOREACH(n, mc->chan->members.head)
-		{
-			cu = (chanuser_t *)n->data;
-
-			strlcpy(hostbuf, cu->user->nick, BUFSIZE);
-			strlcat(hostbuf, "!", BUFSIZE);
-			strlcat(hostbuf, cu->user->user, BUFSIZE);
-			strlcat(hostbuf, "@", BUFSIZE);
-			strlcat(hostbuf, cu->user->vhost, BUFSIZE);
-
-			if (match(target, hostbuf))
-				continue;
-
-			if (ircd->uses_owner && level & CA_USEOWNER)
-			{
-				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_OWNER))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
-					cu->modes |= CSTATUS_OWNER;
-				}
-			}
-			if (ircd->uses_protect && level & CA_USEPROTECT)
-			{
-				if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT) && !(ircd->uses_owner && cu->modes & CSTATUS_OWNER))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
-					cu->modes |= CSTATUS_PROTECT;
-				}
-			}
-			if (level & CA_AUTOOP)
-			{
-				if (!(cu->modes & CSTATUS_OP))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-					cu->modes |= CSTATUS_OP;
-				}
-			}
-			else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
-			{
-				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
-					cu->modes |= ircd->halfops_mode;
-				}
-			}
-			else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
-			{
-				/* XXX HOP should have +V */
-				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-					cu->modes |= CSTATUS_VOICE;
-				}
-			}
-		}
 		return;
 	}
 
@@ -404,60 +345,6 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, mt->name);
 		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mt->name, leveldesc);
-	}
-
-	/* run through the channel's user list and do it */
-	/* make sure the channel exists */
-	if (mc->chan == NULL)
-		return;
-	LIST_FOREACH(n, mc->chan->members.head)
-	{
-		cu = (chanuser_t *)n->data;
-
-		if (cu->user->myuser != user(mt))
-			continue;
-
-		if (ircd->uses_owner && level & CA_USEOWNER)
-		{
-			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_OWNER))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes |= CSTATUS_OWNER;
-			}
-		}
-		if (ircd->uses_protect && level & CA_USEPROTECT)
-		{
-			if (level & CA_AUTOOP && !(cu->modes & CSTATUS_PROTECT) && !(ircd->uses_owner && cu->modes & CSTATUS_OWNER))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes |= CSTATUS_PROTECT;
-			}
-		}
-		if (level & CA_AUTOOP)
-		{
-			if (!(cu->modes & CSTATUS_OP))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-				cu->modes |= CSTATUS_OP;
-			}
-		}
-		else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
-		{
-			if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode)))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes |= ircd->halfops_mode;
-			}
-		}
-		else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
-		{
-			/* XXX HOP should have +V */
-			if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-				cu->modes |= CSTATUS_VOICE;
-			}
-		}
 	}
 }
 
