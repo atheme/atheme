@@ -122,17 +122,17 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
-	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
-	command_success_nodata(si, _("Founder : %s"), mygroup_founder_names(mg));
+	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
+	command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 
 	if ((md = metadata_find(mg, "description")))
 		command_success_nodata(si, _("Description : %s"), md->value);
 	if ((md = metadata_find(mg, "channel")))
-		command_success_nodata(si, _("Channel : %s"), md->value);
+		command_success_nodata(si, _("Channel     : %s"), md->value);
 	if ((md = metadata_find(mg, "url")))
-		command_success_nodata(si, _("URL : %s"), md->value);
+		command_success_nodata(si, _("URL         : %s"), md->value);
 	if ((md = metadata_find(mg, "email")))
-		command_success_nodata(si, _("Email : %s"), md->value);
+		command_success_nodata(si, _("Email       : %s"), md->value);
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
