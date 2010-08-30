@@ -127,6 +127,8 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((md = metadata_find(mg, "description")))
 		command_success_nodata(si, _("Description : %s"), md->value);
+	if ((md = metadata_find(mg, "channel")))
+		command_success_nodata(si, _("Channel : %s"), md->value);
 	if ((md = metadata_find(mg, "url")))
 		command_success_nodata(si, _("URL : %s"), md->value);
 	if ((md = metadata_find(mg, "email")))

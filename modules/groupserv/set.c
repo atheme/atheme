@@ -16,11 +16,13 @@ static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set };
 command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email };
 command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url };
 command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description };
+command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel };
 
 list_t gs_set_cmdtree;
 
@@ -30,11 +32,13 @@ void set_init(void)
 	command_add(&gs_set_email, &gs_set_cmdtree);
 	command_add(&gs_set_url, &gs_set_cmdtree);
 	command_add(&gs_set_description, &gs_set_cmdtree);
+	command_add(&gs_set_channel, &gs_set_cmdtree);
 
 	help_addentry(&gs_helptree, "SET", NULL, gs_help_set);
 	help_addentry(&gs_helptree, "SET EMAIL", "help/groupserv/set_email", NULL); 
 	help_addentry(&gs_helptree, "SET URL", "help/groupserv/set_url", NULL); 
 	help_addentry(&gs_helptree, "SET DESCRIPTION", "help/groupserv/set_description", NULL); 
+	help_addentry(&gs_helptree, "SET CHANNEL", "help/groupserv/set_channel", NULL); 
 }
 
 void set_deinit(void)
@@ -43,11 +47,13 @@ void set_deinit(void)
 	command_delete(&gs_set_email, &gs_set_cmdtree);
 	command_delete(&gs_set_url, &gs_set_cmdtree);
 	command_delete(&gs_set_description, &gs_set_cmdtree);
+	command_delete(&gs_set_channel, &gs_set_cmdtree);
 
 	help_delentry(&gs_helptree, "SET");
 	help_delentry(&gs_helptree, "SET EMAIL");
 	help_delentry(&gs_helptree, "SET URL");
 	help_delentry(&gs_helptree, "SET DESCRIPTION");
+	help_delentry(&gs_helptree, "SET CHANNEL");
 }
 
 static void gs_help_set(sourceinfo_t *si)
@@ -223,6 +229,47 @@ static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_SET, "SET:DESCRIPTION: \2%s\2 \2%s\2", entity(mg)->name, desc);
 	command_success_nodata(si, _("The description of \2%s\2 has been set to \2%s\2."), parv[0], desc);
+}
+
+static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	char *chan = parv[1];
+
+	if (!(mg = mygroup_find(parv[0])))
+	{
+		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
+	if (!chan || !strcasecmp("OFF", chan) || !strcasecmp("NONE", chan))
+	{
+		/* not in a namespace to allow more natural use of SET PROPERTY.
+		 * they may be able to introduce spaces, though. c'est la vie.
+		 */
+		if (metadata_find(mg, "channel"))
+		{
+			metadata_delete(mg, "channel");
+			logcommand(si, CMDLOG_SET, "SET:CHANNEL:NONE: \2%s\2", entity(mg)->name);
+			command_success_nodata(si, _("The official channel for \2%s\2 has been cleared."), parv[0]);
+			return;
+		}
+
+		command_fail(si, fault_nochange, _("A official channel for \2%s\2 was not set."), parv[0]);
+		return;
+	}
+
+	/* we'll overwrite any existing metadata */
+	metadata_add(mg, "channel", chan);
+
+	logcommand(si, CMDLOG_SET, "SET:CHANNEL: \2%s\2 \2%s\2", entity(mg)->name, chan);
+	command_success_nodata(si, _("The official channel of \2%s\2 has been set to \2%s\2."), parv[0], chan);
 }
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
