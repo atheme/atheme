@@ -229,10 +229,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags)
 {
-	char hostbuf[BUFSIZE];
-	chanuser_t *cu;
 	chanacs_t *ca;
-	node_t *n;
 	unsigned int addflags = level, removeflags = ~level;
 	bool isnew;
 
