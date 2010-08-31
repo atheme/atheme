@@ -42,9 +42,7 @@ static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
-static XMLRPCCmd *findXMLRPCCommand(const char *name);
 static int addXMLCommand(XMLRPCCmd * xml);
-static void destroyXMLRPCCommand(XMLRPCCmd * xml);
 static char *xmlrpc_write_header(int length);
 
 /*************************************************************************/
@@ -186,24 +184,6 @@ int xmlrpc_unregister_method(const char *method)
 	mowgli_patricia_delete(XMLRPCCMD, method);
 
 	return XMLRPC_ERR_OK;
-}
-
-/*************************************************************************/
-
-/**
- * Destory a message, freeing its memory.
- * @param m the message to be destroyed
- * @return XMLRPC_ERR_SUCCESS on success
- **/
-static void destroyXMLRPCCommand(XMLRPCCmd * xml)
-{
-	return_if_fail(xml != NULL);
-
-	free(xml->name);
-	xml->func = NULL;
-	free(xml->mod_name);
-	xml->next = NULL;
-	free(xml);
 }
 
 /*************************************************************************/
