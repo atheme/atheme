@@ -135,11 +135,13 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email       : %s"), md->value);
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
+
+	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", parv[0]);
 }
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_list = { "LIST", N_("List all registered groups."), AC_NONE, 1, gs_cmd_list };
+command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP, 1, gs_cmd_list };
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -158,6 +160,7 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("\2*** End of List ***\2"));
+	logcommand(si, CMDLOG_GET, "LIST");
 }
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
@@ -278,6 +281,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
+		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
 		return;
 	}
 
@@ -352,12 +356,16 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		groupacs_delete(mg, mu);
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
+		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
 		return;
 	}
 	else 
 		ga = groupacs_add(mg, mu, flags);
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
+
+	/* XXX */
+	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
 void basecmds_init(void)
