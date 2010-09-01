@@ -1,6 +1,6 @@
 Help for SENDGROUP:
 
-SENDOPS allows you to send a memo to all members
+SENDGROUP allows you to send a memo to all members
 of a group who have the +m flag.
 
 Syntax: SENDGROUP <!group> <text>
