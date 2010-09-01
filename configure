@@ -7451,7 +7451,7 @@ $as_echo "yes" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Tru64: -shared -expect_unresolved '*'" >&5
 $as_echo "Tru64: -shared -expect_unresolved '*'" >&6; }
 		PICFLAGS="-shared -expect_unresolved '*' "
-		LDFLAGS="-call_shared"
+		LDFLAGS="${hold_ldflags} -call_shared"
 	fi
 
 	if test "$CC" = tcc -a "$TenDRA" = no; then
