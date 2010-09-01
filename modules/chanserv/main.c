@@ -471,8 +471,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		}
 	}
 
-	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "private:entrymsg")))
-		notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
+	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "private:entrymsg"))) {
+		if (!u->myuser || !(u->myuser->flags & MU_NOGREET))
+			notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
+	}
 
 	if (u->server->flags & SF_EOB && (md = metadata_find(mc, "url")))
 		numeric_sts(me.me, 328, cu->user, "%s :%s", mc->name, md->value);

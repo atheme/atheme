@@ -47,6 +47,7 @@ BASE_SRCS =			\
 	set_hidemail.c	\
 	set_language.c	\
 	set_neverop.c	\
+	set_nogreet.c   \
 	set_nomemo.c	\
 	set_noop.c	\
 	set_password.c	\

@@ -113,6 +113,7 @@ struct myuser_
 #define MU_USE_PRIVMSG 0x00001000 /* use PRIVMSG */
 #define MU_PRIVATE     0x00002000
 #define MU_QUIETCHG    0x00004000
+#define MU_NOGREET     0x00008000
 
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5
