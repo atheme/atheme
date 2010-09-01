@@ -363,7 +363,7 @@ if test "$shared_modules" = yes; then
 	if test "$Tru" = yes -a "$CC" != gcc; then
 		AC_MSG_RESULT([Tru64: -shared -expect_unresolved '*'])
 		PICFLAGS="-shared -expect_unresolved '*' "
-		LDFLAGS="-call_shared"
+		LDFLAGS="${hold_ldflags} -call_shared"
 	fi
 
 	if test "$CC" = tcc -a "$TenDRA" = no; then
