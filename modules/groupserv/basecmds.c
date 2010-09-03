@@ -291,6 +291,13 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!parv[2])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> <user> <changes>"));
+		return;
+	}
+
 	ga = groupacs_find(mg, mu, 0);
 	if (ga != NULL)
 		flags = ga->flags;
