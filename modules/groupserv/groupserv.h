@@ -27,7 +27,8 @@ typedef struct groupacs_ groupacs_t;
 #define GA_CHANACS		0x00000004
 #define GA_MEMOS		0x00000008
 #define GA_SET			0x00000010
-#define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET)
+#define GA_VHOST		0x00000020
+#define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST)
 
 struct groupacs_ {
 	object_t parent;
