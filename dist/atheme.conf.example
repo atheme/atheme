@@ -1269,6 +1269,12 @@ groupserv {
 	 * Maximum number of access entries you may have in a group.
 	 */
 	maxgroupacs = 100;
+
+	/* (*)enable_open_groups
+	 * Setting this option will allow any group founder to mark
+	 * their group as "anyone can join".
+	 */
+	enable_open_groups;
 };
 
 /* HostServ configuration.

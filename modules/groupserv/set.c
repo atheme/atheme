@@ -294,9 +294,15 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
 	}
-	
+
 	if (!strcasecmp(parv[1], "ON"))
 	{
+		if (!enable_open_groups)
+		{
+			command_fail(si, fault_nochange, _("Setting groups as open has been administratively disabled."));
+			return;
+		}
+
 		if (mg->flags & MG_OPEN)
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is already open to anyone joining."), entity(mg)->name);
