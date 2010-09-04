@@ -1,6 +1,4 @@
-alpha4:
-
-- group limits (max_groups) and (?) group access list limits
+before 6.0.0 release:
 
 - audit core (src/*.c) to ensure there's no more codepaths assuming myuser_t which
   should be using entities instead.  this includes all recasts to entities (e.g.
