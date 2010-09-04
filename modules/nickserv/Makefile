@@ -34,6 +34,7 @@ BASE_SRCS =			\
 	logout.c	\
 	mark.c	\
 	register.c	\
+	regnolimit.c	\
 	resetpass.c	\
 	return.c	\
 	sendpass.c	\

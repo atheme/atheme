@@ -84,10 +84,15 @@ static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 
 static bool linear_can_register_channel(myentity_t *mt)
 {
-	if (!isuser(mt))
+	myuser_t *mu;
+
+	if ((mu = user(mt)) == NULL)
 		return false;
 
-	return has_priv_myuser(user(mt), PRIV_REG_NOLIMIT);
+	if (mu->flags & MU_REGNOLIMIT)
+		return true;
+
+	return has_priv_myuser(mu, PRIV_REG_NOLIMIT);
 }
 
 entity_chanacs_validation_vtable_t linear_chanacs_validate = {
