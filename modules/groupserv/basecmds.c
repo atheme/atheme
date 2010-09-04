@@ -5,7 +5,7 @@
 #include "groupserv.h"
 
 /* This should probably be moved to privs.h or at least groupserv.h at some point */
-#define PRIV_GROUP "group:admin"
+#define PRIV_GROUP_ADMIN "group:admin"
 
 /* I don't like this here, but it works --jdhore */
 static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
@@ -141,7 +141,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP, 1, gs_cmd_list };
+command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_ADMIN, 1, gs_cmd_list };
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
