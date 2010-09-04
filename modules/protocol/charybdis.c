@@ -169,7 +169,8 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
-	const char *p;
+	char strippedmask[NICKLEN+USERLEN+HOSTLEN+CHANNELLEN+2];
+	char *p;
 	bool negate, matched;
 	int exttype;
 	channel_t *target_c;
@@ -178,16 +179,29 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+
+	/*
+	 * strip any banforwards from the mask. (SRV-73)
+	 * charybdis itself doesn't support banforward but i don't feel like copying
+	 * this stuff into ircd-seven and it is possible that charybdis may support them
+	 * one day.
+	 *   --nenolod
+	 */
+	strlcpy(strippedmask, cb->mask, sizeof strippedmask);
+	p = strrchr(strippedmask, '$');
+	if (p != NULL && p != strippedmask)
+		*p = 0;
+
 	LIST_FOREACH(n, first)
 	{
 		cb = n->data;
 
 		if (cb->type == type &&
-				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || !match_cidr(cb->mask, ipbuf)))
+				(!match(strippedmask, hostbuf) || !match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
 			return n;
-		if (cb->type == type && cb->mask[0] == '$')
+		if (cb->type == type && strippedmask[0] == '$')
 		{
-			p = cb->mask + 1;
+			p = strippedmask + 1;
 			negate = *p == '~';
 			if (negate)
 				p++;
