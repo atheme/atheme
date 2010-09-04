@@ -1259,6 +1259,11 @@ groupserv {
 	 */
 	aliases {
 	};
+
+	/* (*)maxgroups
+	 * Maximum number of groups one username can be founder of.
+	 */
+	maxgroups = 5;
 };
 
 /* HostServ configuration.

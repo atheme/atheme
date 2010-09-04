@@ -47,6 +47,7 @@ void _modinit(module_t *m)
 {
 	mygroups_init();
 	groupsvs = service_add("groupserv", groupserv, &gs_cmdtree, &conf_gs_table);
+	add_uint_conf_item("MAXGROUPS", &conf_gs_table, 0, &maxgroups, 0, 65535, 0);
 
 	gs_db_init();
 	gs_hooks_init();
@@ -60,6 +61,7 @@ void _moddeinit(void)
 	gs_hooks_deinit();
 	basecmds_deinit();
 	set_deinit();
+	del_conf_item("MAXGROUPS", &conf_gs_table);
 
 	if (groupsvs)
 		service_delete(groupsvs);
