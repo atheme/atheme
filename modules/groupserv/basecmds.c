@@ -423,7 +423,7 @@ static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s set the REGNOLIMIT option on the group \2%s\2.", get_oper_name(si), entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:ON: \2%s\2", entity(mg)->name);
-		command_success_nodata(si, _("\2%s\2 is now held."), entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 can now bypass registration limits."), entity(mg)->name);
 	}
 	else if (!strcasecmp(parv[1], "OFF"))
 	{
@@ -437,7 +437,7 @@ static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s removed the REGNOLIMIT option from the group \2%s\2.", get_oper_name(si), entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:OFF: \2%s\2", entity(mg)->name);
-		command_success_nodata(si, _("\2%s\2 is no longer held."), entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 cannot bypass registration limits anymore."), entity(mg)->name);
 	}
 	else
 	{
