@@ -375,6 +375,62 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
+static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_ADMIN, 2, gs_cmd_regnolimit };
+
+static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+
+	if (!parv[0] && !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGNOLIMIT");
+		command_fail(si, fault_needmoreparams, _("Syntax: REGNOLIMIT <!group> <ON|OFF>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (!strcasecmp(parv[1], "ON"))
+	{
+		if (mg->flags & MG_REGNOLIMIT)
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 can already bypass registration limits."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags |= MG_REGNOLIMIT;
+
+		wallops("%s set the REGNOLIMIT option on the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:ON: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 is now held."), entity(mg)->name);
+	}
+	else if (!strcasecmp(parv[1], "OFF"))
+	{
+		if (!(mg->flags & MG_REGNOLIMIT))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 cannot bypass registration limits."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags &= ~MG_REGNOLIMIT;
+
+		wallops("%s removed the REGNOLIMIT option from the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "REGNOLIMIT:OFF: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 is no longer held."), entity(mg)->name);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGNOLIMIT");
+		command_fail(si, fault_badparams, _("Syntax: REGNOLIMIT <!group> <ON|OFF>"));
+	}
+}
+
 void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
@@ -383,6 +439,7 @@ void basecmds_init(void)
 	command_add(&gs_list, &gs_cmdtree);
 	command_add(&gs_drop, &gs_cmdtree);
 	command_add(&gs_flags, &gs_cmdtree);
+	command_add(&gs_regnolimit, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
@@ -390,6 +447,7 @@ void basecmds_init(void)
 	help_addentry(&gs_helptree, "LIST", "help/groupserv/list", NULL);
 	help_addentry(&gs_helptree, "DROP", "help/groupserv/drop", NULL);
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
+	help_addentry(&gs_helptree, "REGNOLIMIT", "help/groupserv/regnolimit", NULL);
 }
 
 void basecmds_deinit(void)
@@ -400,6 +458,7 @@ void basecmds_deinit(void)
 	command_delete(&gs_list, &gs_cmdtree);
 	command_delete(&gs_drop, &gs_cmdtree);
 	command_delete(&gs_flags, &gs_cmdtree);
+	command_delete(&gs_regnolimit, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
@@ -407,5 +466,6 @@ void basecmds_deinit(void)
 	help_delentry(&gs_helptree, "LIST");
 	help_delentry(&gs_helptree, "DROP");
 	help_delentry(&gs_helptree, "FLAGS");
+	help_delentry(&gs_helptree, "REGNOLIMIT");
 }
 
