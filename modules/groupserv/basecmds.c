@@ -388,7 +388,15 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	else 
+	{
+		/* XXX: do we want a separate limit for this? --nenolod */
+		if (LIST_LENGTH(&mg->acs) > chansvs.maxchanacs)
+		{
+			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
+			return;
+		}
 		ga = groupacs_add(mg, mu, flags);
+	}
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
