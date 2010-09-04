@@ -1078,8 +1078,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 			if (hi_level == level && (!recent_ok || hi_recent_ok))
 				continue;
 		}
-		if ((isuser(mt) && has_priv_myuser(user(mt), PRIV_REG_NOLIMIT)) ||
-				myentity_count_channels_with_flagset(mt, CA_FOUNDER) < me.maxchans)
+		if (myentity_can_register_channel(mt))
 		{
 			hi_mt = mt;
 			hi_level = level;

@@ -281,8 +281,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					chanacs_close(ca);
 					return;
 				}
-				if (myentity_count_channels_with_flagset(mt, CA_FOUNDER) >= me.maxchans && 
-					(isuser(mt) && !has_priv_myuser(user(mt), PRIV_REG_NOLIMIT)))
+				if (myentity_can_register_channel(mt))
 				{
 					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
 					chanacs_close(ca);
