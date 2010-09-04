@@ -120,7 +120,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 			}
 
-			if (isuser(mt) && (myuser_num_channels(user(mt)) >= me.maxchans) && !has_priv_myuser(user(mt), PRIV_REG_NOLIMIT))
+			if (myentity_count_channels_with_flagset(mt, CA_FOUNDER) >= me.maxchans && 
+				(isuser(mt) && !has_priv_myuser(user(mt), PRIV_REG_NOLIMIT)))
 			{
 				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
 				return;

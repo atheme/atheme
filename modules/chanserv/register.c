@@ -135,7 +135,8 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (hdatac.approved != 0)
 		return;
 
-	if ((myuser_num_channels(si->smu) >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
+	if (myentity_count_channels_with_flagset(entity(si->smu), CA_FOUNDER) >= me.maxchans
+		 && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_toomany, _("You have too many channels registered."));
 		return;

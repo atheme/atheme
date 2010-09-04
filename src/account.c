@@ -449,22 +449,6 @@ void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 	}
 }
 
-unsigned int
-myuser_num_channels(myuser_t *mu)
-{
-	node_t *n;
-	chanacs_t *ca;
-	unsigned int count = 0;
-
-	LIST_FOREACH(n, entity(mu)->chanacs.head)
-	{
-		ca = n->data;
-		if (ca->level & CA_FOUNDER)
-			count++;
-	}
-	return count;
-}
-
 /*
  * myuser_access_verify()
  *
@@ -1094,8 +1078,8 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 			if (hi_level == level && (!recent_ok || hi_recent_ok))
 				continue;
 		}
-		if (isuser(mt) && (has_priv_myuser(user(mt), PRIV_REG_NOLIMIT) ||
-				myuser_num_channels(user(mt)) < me.maxchans))
+		if ((isuser(mt) && has_priv_myuser(user(mt), PRIV_REG_NOLIMIT)) ||
+				myentity_count_channels_with_flagset(mt, CA_FOUNDER) < me.maxchans)
 		{
 			hi_mt = mt;
 			hi_level = level;
