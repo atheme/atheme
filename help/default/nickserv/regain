@@ -1,0 +1,13 @@
+Help for REGAIN:
+
+RELEASE regains access to your nickname from
+a user that is using your nick.
+
+If you are logged in to the account associated with
+the nickname, you need not specify a password,
+otherwise you have to.
+
+Syntax: REGAIN <nick> [password]
+
+Example:
+    /msg &nick& REGAIN Dave2 goats

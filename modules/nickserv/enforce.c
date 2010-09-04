@@ -37,6 +37,7 @@ static void guest_nickname(user_t *u);
 
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[]);
 
 static void enforce_timeout_check(void *arg);
 static void show_enforce(hook_user_req_t *hdata);
@@ -45,6 +46,7 @@ static void check_enforce(hook_nick_enforce_t *hdata);
 
 command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce };
 command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
+command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain };
 
 list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
 
@@ -223,6 +225,96 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		logcommand(si, CMDLOG_DO, "failed RELEASE \2%s\2 (bad password)", target);
+		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
+		bad_password(si, mn->owner);
+	}
+}
+
+static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
+{
+	mynick_t *mn;
+	char *target = parv[0];
+	char *password = parv[1];
+	user_t *u;
+	node_t *n, *tn;
+	enforce_timeout_t *timeout;
+
+	/* Absolutely do not do anything like this if nicks
+	 * are not considered owned */
+	if (nicksvs.no_nick_ownership)
+	{
+		command_fail(si, fault_noprivs, _("RELEASE is disabled."));
+		return;
+	}
+
+	if (!target && si->smu != NULL)
+		target = entity(si->smu)->name;
+	if (!target)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGAIN");
+		command_fail(si, fault_needmoreparams, _("Syntax: REGAIN <nick> [password]"));
+		return;
+	}
+
+	u = user_find_named(target);
+	mn = mynick_find(target);
+	
+	if (!mn)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
+		return;
+	}
+	
+	if (u == si->su)
+	{
+		command_fail(si, fault_noprivs, _("You cannot REGAIN yourself."));
+		return;
+	}
+	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
+	{
+		/* if this (nick, host) is waiting to be enforced, remove it */
+		if (si->su != NULL)
+		{
+			LIST_FOREACH_SAFE(n, tn, enforce_list.head)
+			{
+				timeout = n->data;
+				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
+				{
+					node_del(&timeout->node, &enforce_list);
+					BlockHeapFree(enforce_timeout_heap, timeout);
+				}
+			}
+		}
+		if (u == NULL || is_internal_client(u))
+		{
+			logcommand(si, CMDLOG_DO, "REGAIN: \2%s\2", target);
+			holdnick_sts(si->service->me, 0, target, mn->owner);
+			if (u != NULL && u->flags & UF_ENFORCER)
+			{
+				quit_sts(u, "REGAIN command");
+				user_delete(u, "REGAIN command");
+			}
+			fnc_sts(nicksvs.me->me, u, target, FNC_FORCE);
+			command_success_nodata(si, _("\2%s\2 has been regained."), target);
+		}
+		else
+		{
+			notice(nicksvs.nick, target, "\2%s\2 has regained your nickname.", get_source_mask(si));
+			fnc_sts(nicksvs.me->me, u, target, FNC_FORCE);
+			command_success_nodata(si, _("\2%s\2 has been regained."), target);
+			logcommand(si, CMDLOG_DO, "REGAIN: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
+		}
+		return;
+	}
+	if (!password)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGAIN");
+		command_fail(si, fault_needmoreparams, _("Syntax: REGAIN <nickname> [password]"));
+		return;
+	}
+	else
+	{
+		logcommand(si, CMDLOG_DO, "failed REGAIN \2%s\2 (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
 		bad_password(si, mn->owner);
 	}
@@ -425,8 +517,10 @@ void _modinit(module_t *m)
 
 	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
 	command_add(&ns_release, ns_cmdtree);
+	command_add(&ns_regain, ns_cmdtree);
 	command_add(&ns_set_enforce, ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
+	help_addentry(ns_helptree, "REGAIN", "help/nickserv/regain", NULL);
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_info");
 	hook_add_user_info(show_enforce);
@@ -443,8 +537,10 @@ void _moddeinit()
 	if (enforce_next)
 		event_delete(enforce_timeout_check, NULL);
 	command_delete(&ns_release, ns_cmdtree);
+	command_delete(&ns_regain, ns_cmdtree);
 	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
+	help_delentry(ns_helptree, "REGAIN");
 	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_user_info(show_enforce);
 	hook_del_nick_can_register(check_registration);
