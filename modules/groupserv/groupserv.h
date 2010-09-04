@@ -65,6 +65,7 @@ E void set_deinit(void);
 
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
+E unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset);
 
 
 E list_t *myuser_get_membership_list(myuser_t *mu);

@@ -211,3 +211,21 @@ const char *mygroup_founder_names(mygroup_t *mg)
         }
         return names;
 }
+
+unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
+{
+	list_t *l;
+	node_t *n;
+	unsigned int count = 0;
+
+	l = myuser_get_membership_list(mu);
+	LIST_FOREACH(n, l->head)
+	{
+		groupacs_t *ga = n->data;
+
+		if (ga->mu == mu && ga->flags & flagset)
+			count++;
+	}
+
+	return count;
+}

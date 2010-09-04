@@ -86,7 +86,12 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* XXX: need to check registration limits here. */
+	if (myuser_count_group_flag(si->smu, GA_FOUNDER) > me.maxchans)
+	{
+		command_fail(si, fault_toomany, _("You have too many groups registered."));
+		return;
+	}
+
 	mg = mygroup_add(parv[0]);
 	groupacs_add(mg, si->smu, GA_ALL | GA_FOUNDER);
 
