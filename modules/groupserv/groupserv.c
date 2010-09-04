@@ -17,6 +17,7 @@ struct gflags ga_flags[] = {
 
 struct gflags mg_flags[] = {
 	{ 'r', MG_REGNOLIMIT },
+	{ 'a', MG_ACSNOLIMIT },
 	{ 0, 0 }
 };
 

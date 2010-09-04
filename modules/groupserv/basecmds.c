@@ -394,7 +394,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else 
 	{
-		if (LIST_LENGTH(&mg->acs) > maxgroupacs)
+		if (LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
 			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
 			return;
@@ -464,6 +464,62 @@ static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit };
+
+static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+
+	if (!parv[0] && !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACSNOLIMIT");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACSNOLIMIT <!group> <ON|OFF>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (!strcasecmp(parv[1], "ON"))
+	{
+		if (mg->flags & MG_ACSNOLIMIT)
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 can already bypass access list limits."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags |= MG_ACSNOLIMIT;
+
+		wallops("%s set the ACSNOLIMIT option on the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "ACSNOLIMIT:ON: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 can now bypass access list limits."), entity(mg)->name);
+	}
+	else if (!strcasecmp(parv[1], "OFF"))
+	{
+		if (!(mg->flags & MG_ACSNOLIMIT))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 cannot bypass access list limits."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags &= ~MG_ACSNOLIMIT;
+
+		wallops("%s removed the ACSNOLIMIT option from the group \2%s\2.", get_oper_name(si), entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "ACSNOLIMIT:OFF: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 cannot bypass access list limits anymore."), entity(mg)->name);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ACSNOLIMIT");
+		command_fail(si, fault_badparams, _("Syntax: ACSNOLIMIT <!group> <ON|OFF>"));
+	}
+}
+
 void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
@@ -473,6 +529,7 @@ void basecmds_init(void)
 	command_add(&gs_drop, &gs_cmdtree);
 	command_add(&gs_flags, &gs_cmdtree);
 	command_add(&gs_regnolimit, &gs_cmdtree);
+	command_add(&gs_acsnolimit, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
@@ -481,6 +538,7 @@ void basecmds_init(void)
 	help_addentry(&gs_helptree, "DROP", "help/groupserv/drop", NULL);
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 	help_addentry(&gs_helptree, "REGNOLIMIT", "help/groupserv/regnolimit", NULL);
+	help_addentry(&gs_helptree, "ACSNOLIMIT", "help/groupserv/acsnolimit", NULL);
 }
 
 void basecmds_deinit(void)
@@ -492,6 +550,7 @@ void basecmds_deinit(void)
 	command_delete(&gs_drop, &gs_cmdtree);
 	command_delete(&gs_flags, &gs_cmdtree);
 	command_delete(&gs_regnolimit, &gs_cmdtree);
+	command_delete(&gs_acsnolimit, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
@@ -500,5 +559,6 @@ void basecmds_deinit(void)
 	help_delentry(&gs_helptree, "DROP");
 	help_delentry(&gs_helptree, "FLAGS");
 	help_delentry(&gs_helptree, "REGNOLIMIT");
+	help_delentry(&gs_helptree, "ACSNOLIMIT");
 }
 
