@@ -120,7 +120,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 			}
 
-			if (myentity_can_register_channel(mt))
+			if (!myentity_can_register_channel(mt))
 			{
 				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
 				return;

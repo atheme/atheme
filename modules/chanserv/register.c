@@ -135,7 +135,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (hdatac.approved != 0)
 		return;
 
-	if (myentity_can_register_channel(entity(si->smu)))
+	if (!myentity_can_register_channel(entity(si->smu)))
 	{
 		command_fail(si, fault_toomany, _("You have too many channels registered."));
 		return;
