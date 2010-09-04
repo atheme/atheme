@@ -102,7 +102,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	struct tm tm;
-	char strfbuf[32];
+	char buf[BUFSIZE], strfbuf[32];
 	metadata_t *md;
 
 	if (!parv[0])
@@ -133,6 +133,14 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("URL         : %s"), md->value);
 	if ((md = metadata_find(mg, "email")))
 		command_success_nodata(si, _("Email       : %s"), md->value);
+
+	*buf = '\0';
+
+	if (mg->flags & MG_REGNOLIMIT)
+		strcat(buf, "REGNOLIMIT");
+
+	if (*buf)
+		command_success_nodata(si, _("Flags       : %s"), buf);
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 
