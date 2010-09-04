@@ -301,7 +301,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 	 * -- jilles */
 	if (isuser(mt) && MU_NEVEROP & user(mt)->flags && (ca->level == 0 || ca->level == CA_AKICK))
 	{
-		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mt->name);
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), mt->name);
 		chanacs_close(ca);
 		return;
 	}
