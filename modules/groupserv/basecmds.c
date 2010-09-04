@@ -377,7 +377,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_ADMIN, 2, gs_cmd_regnolimit };
+command_t gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit };
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 {
