@@ -294,13 +294,14 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 				quit_sts(u, "REGAIN command");
 				user_delete(u, "REGAIN command");
 			}
-			fnc_sts(nicksvs.me->me, u, target, FNC_FORCE);
+			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
 			command_success_nodata(si, _("\2%s\2 has been regained."), target);
 		}
 		else
 		{
 			notice(nicksvs.nick, target, "\2%s\2 has regained your nickname.", get_source_mask(si));
-			fnc_sts(nicksvs.me->me, u, target, FNC_FORCE);
+			guest_nickname(u);
+			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
 			command_success_nodata(si, _("\2%s\2 has been regained."), target);
 			logcommand(si, CMDLOG_DO, "REGAIN: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
 		}
