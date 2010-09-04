@@ -90,3 +90,20 @@ entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *m
 {
 	return mt->chanacs_validate != NULL ? mt->chanacs_validate : &linear_chanacs_validate;
 }
+
+/* chanacs */
+unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset)
+{
+	node_t *n;
+	chanacs_t *ca;
+	unsigned int count = 0;
+
+	LIST_FOREACH(n, mt->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->level & flagset)
+			count++;
+	}
+
+	return count;
+}

@@ -47,4 +47,7 @@ E myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state);
 
 E void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata);
 
+/* chanacs */
+E unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset);
+
 #endif /* !ENTITY_H */
