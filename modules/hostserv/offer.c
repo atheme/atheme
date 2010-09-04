@@ -236,7 +236,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("vhost \2%s\2 not found in vhost offer database."), host);
 }
 
-bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
+static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 {
 	mygroup_t *mg;
 	node_t *n;
