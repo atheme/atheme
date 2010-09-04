@@ -182,7 +182,7 @@ void connection_close(connection_t *cptr)
 #endif
 
 	if (errno1)
-		slog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
+		slog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_DEBUG,
 				"connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
