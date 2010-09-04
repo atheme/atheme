@@ -1,0 +1,9 @@
+Help for REGNOLIMIT:
+
+REGNOLIMIT allows a user to maintain an
+unlimited amount of channel registrations.
+
+Syntax: REGNOLIMIT <user> ON|OFF
+
+Examples:
+    /msg &nick& REGNOLIMIT nenolod ON
