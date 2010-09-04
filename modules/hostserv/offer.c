@@ -8,6 +8,7 @@
 
 #include "atheme.h"
 #include "hostserv.h"
+#include "../groupserv/groupserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -153,8 +154,7 @@ static void db_h_ho(database_handle_t *db, const char *type)
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *group = parv[0];
-	char *host
-	node_t *n;
+	char *host;
 	hsoffered_t *l;
 
 	if (!group)
@@ -194,8 +194,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 	l->vhost_ts = CURRTIME;;
 	l->creator = sstrdup(entity(si->smu)->name);
 
-	n = node_create();
-	node_add(l, n, &hs_offeredlist);
+	node_add(l, node_create(), &hs_offeredlist);
 
 	command_success_nodata(si, _("You have offered vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_ADMIN, "OFFER: \2%s\2", host);
@@ -237,6 +236,26 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("vhost \2%s\2 not found in vhost offer database."), host);
 }
 
+bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
+{
+	mygroup_t *mg;
+	node_t *n;
+
+	return_val_if_fail(mu != NULL, false);
+	return_val_if_fail(mt != NULL, false);
+	return_val_if_fail((mg = group(mt)) != NULL, false);
+
+	LIST_FOREACH(n, mg->acs.head)
+	{
+		groupacs_t *ga = n->data;
+
+		if (ga->mu == mu && ga->flags & GA_VHOST)
+			return true;
+	}
+
+	return false;
+}
+
 /* TAKE <vhost> */
 static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -260,6 +279,10 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
+
+		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group))
+			continue;
+
 		if (!irccasecmp(l->vhost, host))
 		{
 			if (strstr(host, "$account"))
@@ -277,6 +300,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
+
 	command_success_nodata(si, _("vhost \2%s\2 not found in vhost offer database."), host);
 }
 
@@ -294,11 +318,15 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 		x++;
 
+		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group))
+			continue;
+
 		tm = *localtime(&l->vhost_ts);
 
 		strftime(buf, BUFSIZE, "%b %d %T %Y %Z", &tm);
-			command_success_nodata(si, "#%d vhost:\2%s\2, creator:\2%s\2 (%s)",
-				x, l->vhost, l->creator, buf);
+
+		command_success_nodata(si, "#%d vhost:\2%s\2, creator:\2%s\2 (%s)",
+				       x, l->vhost, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
