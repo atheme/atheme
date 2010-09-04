@@ -20,6 +20,15 @@ static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 
 static bool mygroup_can_register_channel(myentity_t *mt)
 {
+	mygroup_t *mg;
+
+	mg = group(mt);
+
+	return_val_if_fail(mg != NULL, false);
+
+	if (mg->flags & MG_REGNOLIMIT)
+		return true;
+
 	return false;
 }
 

@@ -9,11 +9,15 @@
 
 typedef struct mygroup_ mygroup_t;
 
+#define MG_REGNOLIMIT		0x00000001
+
 struct mygroup_ {
 	myentity_t ent;
 
 	list_t acs;
 	time_t regtime;
+
+	unsigned int flags;
 };
 
 typedef struct groupacs_ groupacs_t;
