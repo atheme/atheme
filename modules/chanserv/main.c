@@ -255,8 +255,6 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	mc = mychan_find(chan->name);
 	if (mc == NULL)
 		return;
-	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
-		return;
 
 	flags = chanacs_user_flags(mc, u);
 	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
@@ -266,7 +264,8 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
 			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
 
-	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
+	if (chan->nummembers == 1 && mc->flags & MC_GUARD &&
+		metadata_find(mc, "private:botserv:bot-assigned") == NULL)
 		join(chan->name, chansvs.nick);
 
 	/*
@@ -625,8 +624,6 @@ static void cs_newchan(channel_t *c)
 	char str[21];
 
 	if (!(mc = mychan_find(c->name)))
-		return;
-	if (metadata_find(mc, "private:botserv:bot-assigned") != NULL)
 		return;
 
 	/* schedule a mode lock check when we know the current modes
