@@ -82,8 +82,17 @@ static chanacs_t *linear_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 	return ca->entity == mt ? ca : NULL;
 }
 
+static bool linear_can_register_channel(myentity_t *mt)
+{
+	if (!isuser(mt))
+		return false;
+
+	return has_priv_myuser(user(mt), PRIV_REG_NOLIMIT);
+}
+
 entity_chanacs_validation_vtable_t linear_chanacs_validate = {
 	.match_entity = linear_chanacs_match_entity,
+	.can_register_channel = linear_can_register_channel,
 };
 
 entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt)
@@ -107,3 +116,17 @@ unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int f
 
 	return count;
 }
+
+bool myentity_can_register_channel(myentity_t *mt)
+{
+	entity_chanacs_validation_vtable_t *vt;
+
+	return_val_if_fail(mt != NULL, false);
+
+	vt = myentity_get_chanacs_validator(mt);
+	if (vt->can_register_channel(mt))
+		return true;
+
+	return (myentity_count_channels_with_flagset(mt, CA_FOUNDER) < me.maxchans);
+}
+
