@@ -35,6 +35,7 @@ struct hsoffered_ {
 	char *vhost;
 	time_t vhost_ts;
 	char *creator;
+	myentity_t *group;
 };
 
 typedef struct hsoffered_ hsoffered_t;
@@ -109,6 +110,10 @@ static void write_hsofferdb(database_handle_t *db)
 		hsoffered_t *l = n->data;
 
 		db_start_row(db, "HO");
+
+		if (l->group != NULL)
+			db_write_word(db, l->group->name);
+
 		db_write_word(db, l->vhost);
 		db_write_time(db, l->vhost_ts);
 		db_write_word(db, l->creator);
@@ -119,14 +124,28 @@ static void write_hsofferdb(database_handle_t *db)
 
 static void db_h_ho(database_handle_t *db, const char *type)
 {
-	const char *vhost = db_sread_word(db);
-	time_t vhost_ts = db_sread_time(db);
-	const char *creator = db_sread_word(db);
+	hsoffered_t *l;
+	const char *buf;
+	time_t vhost_ts;
+	const char *creator;
+	myentity_t *mt = NULL;
 
-	hsoffered_t *l = smalloc(sizeof(hsoffered_t));
-	l->vhost = sstrdup(vhost);
+	buf = db_sread_word(db);
+	if (*buf == '!')
+	{
+		mt = myentity_find(buf);
+		buf = db_sread_word(db);
+	}
+
+	vhost_ts = db_sread_time(db);
+	creator = db_sread_word(db);
+
+	l = smalloc(sizeof(hsoffered_t));
+	l->group = mt;
+	l->vhost = sstrdup(buf);
 	l->vhost_ts = vhost_ts;
 	l->creator = sstrdup(creator);
+
 	node_add(l, node_create(), &hs_offeredlist);
 }
 
