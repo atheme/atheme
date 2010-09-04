@@ -22,6 +22,7 @@ struct mygroup_ {
 
 typedef struct groupacs_ groupacs_t;
 unsigned int maxgroups;
+unsigned int maxgroupacs;
 
 #define GA_FOUNDER		0x00000001
 #define GA_FLAGS		0x00000002

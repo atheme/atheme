@@ -394,8 +394,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else 
 	{
-		/* XXX: do we want a separate limit for this? --nenolod */
-		if (LIST_LENGTH(&mg->acs) > chansvs.maxchanacs)
+		if (LIST_LENGTH(&mg->acs) > maxgroupacs)
 		{
 			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
 			return;

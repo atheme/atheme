@@ -1264,6 +1264,11 @@ groupserv {
 	 * Maximum number of groups one username can be founder of.
 	 */
 	maxgroups = 5;
+
+	/* (*)maxgroupacs
+	 * Maximum number of access entries you may have in a group.
+	 */
+	maxgroupacs = 100;
 };
 
 /* HostServ configuration.
