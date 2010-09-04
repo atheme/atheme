@@ -151,6 +151,14 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "ACSNOLIMIT");
 	}
+	
+	if (mg->flags & MG_OPEN)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "OPEN");
+	}
 
 	if (*buf)
 		command_success_nodata(si, _("Flags       : %s"), buf);
