@@ -350,7 +350,14 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			if (dir)
 				flags &= ~GA_CHANACS;
 			else
+			{
+				if (mu->flags & MU_NEVEROP)
+				{
+					command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), entity(mu)->name);
+					return;
+				}
 				flags |= GA_CHANACS;
+			}
 			break;
 		case 'm':
 			if (dir)
