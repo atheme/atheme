@@ -1,11 +1,5 @@
-/*
- * Copyright (c) 2003-2004 E. Will et al.
- * Rights to this code are documented in doc/LICENSE.
- *
- * This file contains routines to handle the GroupServ SET commands.
- * For now, don't split out till i can figure out how to create multiple modules
- * in GroupServ.
- *
+/* groupserv.c - group services
+ * Copyright (C) 2010 Atheme Development Group
  */
 
 #include "atheme.h"
