@@ -276,7 +276,7 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 
-	if (!parv[0] && !parv[1])
+	if (!parv[0] || !parv[1])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OPEN");
 		command_fail(si, fault_needmoreparams, _("Syntax: OPEN <!group> <ON|OFF>"));

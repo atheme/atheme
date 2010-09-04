@@ -432,7 +432,7 @@ static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 
-	if (!parv[0] && !parv[1])
+	if (!parv[0] || !parv[1])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGNOLIMIT");
 		command_fail(si, fault_needmoreparams, _("Syntax: REGNOLIMIT <!group> <ON|OFF>"));
@@ -488,7 +488,7 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 
-	if (!parv[0] && !parv[1])
+	if (!parv[0] || !parv[1])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACSNOLIMIT");
 		command_fail(si, fault_needmoreparams, _("Syntax: ACSNOLIMIT <!group> <ON|OFF>"));
