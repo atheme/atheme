@@ -528,6 +528,59 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_join = { "JOIN", N_("Join a open group."), AC_NONE, 2, gs_cmd_join };
+
+static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	groupacs_t *ga;
+
+	if (!parv[0])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "JOIN");
+		command_fail(si, fault_needmoreparams, _("Syntax: JOIN <!groupname>"));
+		return;
+	}
+
+	if (!(mg = mygroup_find(parv[0])))
+	{
+		command_fail(si, fault_alreadyexists, _("Group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if (!(mg->flags & MG_OPEN))
+	{
+		command_fail(si, fault_noprivs, _("Group \2%s\2 is not open to anyone joining."), parv[0]);
+		return;
+	}
+
+	if (groupacs_sourceinfo_has_flag(mg, si, 0))
+	{
+		command_fail(si, fault_nochange, _("You are already a member of group \2%s\2."), parv[0]);
+		return;
+	}
+
+	ga = groupacs_find(mg, si->smu, 0);
+
+	if (LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+        {
+                command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
+                return;
+        }
+        
+	ga = groupacs_add(mg, si->smu, 0);
+
+	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
+}
+
 void basecmds_init(void)
 {
 	command_add(&gs_help, &gs_cmdtree);
@@ -538,6 +591,7 @@ void basecmds_init(void)
 	command_add(&gs_flags, &gs_cmdtree);
 	command_add(&gs_regnolimit, &gs_cmdtree);
 	command_add(&gs_acsnolimit, &gs_cmdtree);
+	command_add(&gs_join, &gs_cmdtree);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
@@ -547,6 +601,7 @@ void basecmds_init(void)
 	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
 	help_addentry(&gs_helptree, "REGNOLIMIT", "help/groupserv/regnolimit", NULL);
 	help_addentry(&gs_helptree, "ACSNOLIMIT", "help/groupserv/acsnolimit", NULL);
+	help_addentry(&gs_helptree, "JOIN", "help/groupserv/join", NULL);
 }
 
 void basecmds_deinit(void)
@@ -559,6 +614,7 @@ void basecmds_deinit(void)
 	command_delete(&gs_flags, &gs_cmdtree);
 	command_delete(&gs_regnolimit, &gs_cmdtree);
 	command_delete(&gs_acsnolimit, &gs_cmdtree);
+	command_delete(&gs_join, &gs_cmdtree);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
@@ -568,5 +624,6 @@ void basecmds_deinit(void)
 	help_delentry(&gs_helptree, "FLAGS");
 	help_delentry(&gs_helptree, "REGNOLIMIT");
 	help_delentry(&gs_helptree, "ACSNOLIMIT");
+	help_delentry(&gs_helptree, "JOIN");
 }
 

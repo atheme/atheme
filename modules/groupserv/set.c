@@ -11,12 +11,14 @@ static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set };
 command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email };
 command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url };
 command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description };
 command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel };
+command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open };
 
 list_t gs_set_cmdtree;
 
@@ -27,12 +29,14 @@ void set_init(void)
 	command_add(&gs_set_url, &gs_set_cmdtree);
 	command_add(&gs_set_description, &gs_set_cmdtree);
 	command_add(&gs_set_channel, &gs_set_cmdtree);
+	command_add(&gs_set_open, &gs_set_cmdtree);
 
 	help_addentry(&gs_helptree, "SET", NULL, gs_help_set);
 	help_addentry(&gs_helptree, "SET EMAIL", "help/groupserv/set_email", NULL); 
 	help_addentry(&gs_helptree, "SET URL", "help/groupserv/set_url", NULL); 
 	help_addentry(&gs_helptree, "SET DESCRIPTION", "help/groupserv/set_description", NULL); 
 	help_addentry(&gs_helptree, "SET CHANNEL", "help/groupserv/set_channel", NULL); 
+	help_addentry(&gs_helptree, "SET OPEN", "help/groupserv/set_open", NULL); 
 }
 
 void set_deinit(void)
@@ -42,12 +46,14 @@ void set_deinit(void)
 	command_delete(&gs_set_url, &gs_set_cmdtree);
 	command_delete(&gs_set_description, &gs_set_cmdtree);
 	command_delete(&gs_set_channel, &gs_set_cmdtree);
+	command_delete(&gs_set_open, &gs_set_cmdtree);
 
 	help_delentry(&gs_helptree, "SET");
 	help_delentry(&gs_helptree, "SET EMAIL");
 	help_delentry(&gs_helptree, "SET URL");
 	help_delentry(&gs_helptree, "SET DESCRIPTION");
 	help_delentry(&gs_helptree, "SET CHANNEL");
+	help_delentry(&gs_helptree, "SET OPEN");
 }
 
 static void gs_help_set(sourceinfo_t *si)
@@ -264,6 +270,62 @@ static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_SET, "SET:CHANNEL: \2%s\2 \2%s\2", entity(mg)->name, chan);
 	command_success_nodata(si, _("The official channel of \2%s\2 has been set to \2%s\2."), parv[0], chan);
+}
+
+static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+
+	if (!parv[0] && !parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OPEN");
+		command_fail(si, fault_needmoreparams, _("Syntax: OPEN <!group> <ON|OFF>"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+	
+	if (!strcasecmp(parv[1], "ON"))
+	{
+		if (mg->flags & MG_OPEN)
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 is already open to anyone joining."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags |= MG_OPEN;
+
+		logcommand(si, CMDLOG_SET, "OPEN:ON: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 is now open to anyone joining."), entity(mg)->name);
+	}
+	else if (!strcasecmp(parv[1], "OFF"))
+	{
+		if (!(mg->flags & MG_OPEN))
+		{
+			command_fail(si, fault_nochange, _("Members must be added by an existing group member in \2%s\2."), entity(mg)->name);
+			return;
+		}
+
+		mg->flags &= ~MG_OPEN;
+
+		logcommand(si, CMDLOG_SET, "OPEN:OFF: \2%s\2", entity(mg)->name);
+		command_success_nodata(si, _("\2%s\2 is no longer open to anyone joining."), entity(mg)->name);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "OPEN");
+		command_fail(si, fault_badparams, _("Syntax: OPEN <!group> <ON|OFF>"));
+	}
 }
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
