@@ -76,5 +76,6 @@ E list_t gs_cmdtree;
 E list_t gs_helptree;
 E list_t conf_gs_table;
 E struct gflags ga_flags[];
+E struct gflags mg_flags[];
 
 #endif /* !GROUPSERV_H */

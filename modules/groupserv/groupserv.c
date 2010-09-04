@@ -14,6 +14,11 @@ struct gflags ga_flags[] = {
 	{ 0, 0 }
 };
 
+struct gflags mg_flags[] = {
+	{ 'r', MG_REGNOLIMIT },
+	{ 0, 0 }
+};
+
 static BlockHeap *mygroup_heap, *groupacs_heap;
 
 void mygroups_init(void)

@@ -4,7 +4,7 @@
 
 #include "groupserv.h"
 
-#define GDBV_VERSION	2
+#define GDBV_VERSION	3
 
 static unsigned int loading_gdbv = -1;
 
@@ -21,6 +21,7 @@ static void write_groupdb(database_handle_t *db)
 	{
 		node_t *n;
 		mygroup_t *mg = group(mt);
+		char *mgflags = gflags_tostr(mg_flags, mg->flags);
 
 		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);
@@ -28,6 +29,7 @@ static void write_groupdb(database_handle_t *db)
 		db_start_row(db, "GRP");
 		db_write_word(db, entity(mg)->name);
 		db_write_time(db, mg->regtime);
+		db_write_word(db, mgflags);
 		db_commit_row(db);
 
 		LIST_FOREACH(n, mg->acs.head)
@@ -66,9 +68,18 @@ static void db_h_grp(database_handle_t *db, const char *type)
 	mygroup_t *mg;
 	const char *name = db_sread_word(db);
 	time_t regtime = db_sread_time(db);
+	const char *flagset;
 
 	mg = mygroup_add(name);
 	mg->regtime = regtime;
+
+	if (loading_gdbv >= 3)
+	{
+		flagset = db_sread_word(db);
+
+		if (!gflags_fromstr(mg_flags, flagset, &mg->flags))
+			slog(LG_INFO, "db-h-grp: line %d: confused by flags: %s", db->line, flagset);
+	}
 }
 
 static void db_h_gacl(database_handle_t *db, const char *type)
