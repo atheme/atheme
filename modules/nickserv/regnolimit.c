@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."),
+command_t ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
 		      PRIV_ADMIN, 2, ns_cmd_regnolimit };
 
 list_t *ns_cmdtree, *ns_helptree;
