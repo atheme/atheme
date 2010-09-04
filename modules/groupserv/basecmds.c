@@ -144,6 +144,14 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (mg->flags & MG_REGNOLIMIT)
 		strcat(buf, "REGNOLIMIT");
 
+	if (mg->flags & MG_ACSNOLIMIT)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "ACSNOLIMIT");
+	}
+
 	if (*buf)
 		command_success_nodata(si, _("Flags       : %s"), buf);
 
