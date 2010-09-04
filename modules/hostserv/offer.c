@@ -152,14 +152,30 @@ static void db_h_ho(database_handle_t *db, const char *type)
 /* OFFER <host> */
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *host = parv[0];
+	char *group = parv[0];
+	char *host
 	node_t *n;
 	hsoffered_t *l;
+
+	if (!group)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OFFER");
+		command_fail(si, fault_needmoreparams, _("Syntax: OFFER [!group] <vhost>"));
+		return;
+	}
+
+	if (*group != '!')
+	{
+		host = group;
+		group = NULL;
+	}
+	else
+		host = parv[1];
 
 	if (!host)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OFFER");
-		command_fail(si, fault_needmoreparams, _("Syntax: OFFER <vhost>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: OFFER [!group] <vhost>"));
 		return;
 	}
 
@@ -170,9 +186,13 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	l = smalloc(sizeof(hsoffered_t));
+
+	if (group != NULL)
+		l->group = myentity_find(group);
+
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;
-	l->creator = sstrdup(get_source_name(si));
+	l->creator = sstrdup(entity(si->smu)->name);
 
 	n = node_create();
 	node_add(l, n, &hs_offeredlist);
