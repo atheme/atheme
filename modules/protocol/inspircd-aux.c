@@ -1401,6 +1401,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services are not compatible with atheme");
 		TAINT_ON(strstr(parv[1], "m_chanacl.so") != NULL, "inspircd built-in services are not compatible with atheme");
 		TAINT_ON(strstr(parv[1], "m_chanregister.so") != NULL, "inspircd built-in services are not compatible with atheme");
+		TAINT_ON(strstr(parv[1], "m_nickregister.so") != NULL, "inspircd built-in services are not compatible with atheme");
 		TAINT_ON(strstr(parv[1], "m_namedmodes.so") != NULL, "namedmodes are unsupported in Atheme due to the fact that any network can change modes around thus possibly breaking mlocks");
 		TAINT_ON(strstr(parv[1], "m_opflags.so") != NULL, "inspircd built-in services are not compatible with atheme");
 	}
