@@ -11,7 +11,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd2", true, _modinit, NULL, PACKAGE_STRING, "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd2", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
 
 /* *INDENT-OFF* */
 

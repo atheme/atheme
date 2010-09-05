@@ -41,7 +41,7 @@
  * IRCNet ircd (ircd 2.11)			modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
  * ircu 2.10.11.07 or later			modules/protocol/undernet
- * InspIRCd 1.2/2.0				modules/protocol/inspircd12
+ * InspIRCd 1.2+				modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * PleXusIRCd 3.x				modules/protocol/plexus
  * PTlink IRCd					modules/protocol/ptlink

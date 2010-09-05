@@ -11,12 +11,12 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
 
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-        "InspIRCd 1.2.x/2.0.x", /* IRCd name */
+        "InspIRCd 1.2+", /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
         true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
