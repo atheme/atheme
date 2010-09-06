@@ -191,7 +191,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (closed && !metadata_find(mc, "private:close:closer"))
 			continue;
 
-		if (flagset && !(mc->flags & flagset))
+		if (flagset && (mc->flags & flagset) != flagset)
 			continue;
 
 		if (aclsize && LIST_LENGTH(&mc->chanacs) < aclsize)
