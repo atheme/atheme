@@ -118,18 +118,34 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
 	unsigned int flagset = 0;
+	unsigned int aclsize = 0;
 	bool closed = false, marked = false;
 	mowgli_patricia_iteration_state_t state;
 	list_option_t optstable[] = {
 		{"pattern",	OPT_STRING,	{.strval = &chanpattern}},
-		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
-		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
-		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
+		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
+		{"held",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
+		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
+		{"noop",	OPT_FLAG,	{.flagval = &flagset}, MC_NOOP},
+		{"limitflags",	OPT_FLAG,	{.flagval = &flagset}, MC_LIMITFLAGS},
+		{"secure",	OPT_FLAG,	{.flagval = &flagset}, MC_SECURE},
+		{"verbose",	OPT_FLAG,	{.flagval = &flagset}, MC_VERBOSE},
+		{"restricted",	OPT_FLAG,	{.flagval = &flagset}, MC_RESTRICTED},
+		{"keeptopic",	OPT_FLAG,	{.flagval = &flagset}, MC_KEEPTOPIC},
+		{"verbose-ops",	OPT_FLAG,	{.flagval = &flagset}, MC_VERBOSE_OPS},
+		{"topiclock",	OPT_FLAG,	{.flagval = &flagset}, MC_TOPICLOCK},
+		{"guard",	OPT_FLAG,	{.flagval = &flagset}, MC_GUARD},
+		{"private",	OPT_FLAG,	{.flagval = &flagset}, MC_PRIVATE},
 		{"closed",	OPT_BOOL,	{.boolval = &closed}},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}},
+		{"aclsize",	OPT_INT,	{.intval = &aclsize}},
 	};
 
-	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	if (parc > 1)
+		process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	else
+		chanpattern = parv[0];
+
 	build_criteriastr(criteriastr, parc, parv);
 
 	command_success_nodata(si, _("Channels matching \2%s\2:"), criteriastr);
@@ -146,6 +162,9 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		if (flagset && !(mc->flags & flagset))
+			continue;
+
+		if (aclsize && LIST_LENGTH(&mc->chanacs) < aclsize)
 			continue;
 
 		/* in the future we could add a LIMIT parameter */
