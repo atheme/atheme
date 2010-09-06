@@ -2,7 +2,7 @@
  * Copyright (c) 2010 William Pitcock <nenolod@atheme.org>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Sends a customized welcome message on nickname registration.
+ * Sends a customized welcome message on channel registration.
  */
 
 #include "atheme.h"
@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/regnotice", false, _modinit, _moddeinit,
+	"chanserv/regnotice", false, _modinit, _moddeinit,
         PACKAGE_STRING,
         "Atheme Development Group <http://www.atheme.org>"
 );
