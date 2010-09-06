@@ -159,6 +159,8 @@ bool conf_parse(const char *file)
 
 void conf_init(void)
 {
+	hook_call_config_purge();
+
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
 	me.auth = AUTH_NONE;
