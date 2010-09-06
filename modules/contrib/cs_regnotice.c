@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
         "Atheme Development Group <http://www.atheme.org>"
 );
 
-static list_t regnotices = {};
+static list_t regnotices = { NULL, NULL, 0 };
 
 static void regnotice_hook(hook_channel_req_t *hdata)
 {
@@ -36,7 +36,6 @@ static void regnotice_hook(hook_channel_req_t *hdata)
 
 static int regnotice_config_handler(config_entry_t *ce)
 {
-	node_t *n;
 	config_entry_t *cce;
 
 	for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)

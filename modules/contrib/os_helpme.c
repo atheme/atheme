@@ -38,6 +38,10 @@ void _moddeinit(void)
 
 static void os_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
 {
-	sts(":%s MODE %s :+h", opersvs.nick, si->su->nick);
+	service_t *svs;
+
+	svs = service_find("operserv");
+
+	sts(":%s MODE %s :+h", svs->nick, si->su->nick);
 	command_success_nodata(si, _("You are now a network helper."));
 }
