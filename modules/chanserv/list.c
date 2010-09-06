@@ -42,6 +42,7 @@ typedef enum {
 	OPT_INT,
 	OPT_STRING,
 	OPT_FLAG,
+	OPT_AGE,
 } list_opttype_t;
 
 typedef struct {
@@ -52,9 +53,32 @@ typedef struct {
 		int *intval;
 		char **strval;
 		unsigned int *flagval;
+		time_t *ageval;
 	} optval;
 	unsigned int flag;
 } list_option_t;
+
+static time_t parse_age(char *s)
+{
+	time_t duration;
+
+	duration = (atol(s) * 60);
+	while (isdigit(*s))
+		s++;
+
+	if (*s == 'h' || *s == 'H')
+		duration *= 60;
+	else if (*s == 'd' || *s == 'D')
+		duration *= 1440;
+	else if (*s == 'w' || *s == 'W')
+		duration *= 10080;
+	else if (*s == '\0')
+		;
+	else
+		duration = 0;
+
+	return duration;
+}
 
 static void process_parvarray(list_option_t *opts, size_t optsize, int parc, char *parv[])
 {
@@ -88,6 +112,13 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 				case OPT_FLAG:
 					*opts[j].optval.flagval |= opts[j].flag;
 					break;
+				case OPT_AGE:
+					if (i + 1 < parc)
+					{
+						*opts[j].optval.ageval = parse_age(parv[i + 1]);
+						i++;
+					}
+					break;					
 				default:
 					break;
 				}
@@ -119,6 +150,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int matches = 0;
 	unsigned int flagset = 0;
 	unsigned int aclsize = 0;
+	time_t age = 0, lastused = 0;
 	bool closed = false, marked = false;
 	mowgli_patricia_iteration_state_t state;
 	list_option_t optstable[] = {
@@ -139,6 +171,8 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"closed",	OPT_BOOL,	{.boolval = &closed}},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}},
 		{"aclsize",	OPT_INT,	{.intval = &aclsize}},
+		{"registered",	OPT_AGE,	{.ageval = &age}},
+		{"lastused",	OPT_AGE,	{.ageval = &lastused}},
 	};
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
@@ -161,6 +195,12 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		if (aclsize && LIST_LENGTH(&mc->chanacs) < aclsize)
+			continue;
+
+		if (age && (CURRTIME - mc->registered) < age)
+			continue;
+
+		if (lastused && (CURRTIME - mc->used) < lastused)
 			continue;
 
 		/* in the future we could add a LIMIT parameter */
