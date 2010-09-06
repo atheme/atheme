@@ -141,7 +141,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"aclsize",	OPT_INT,	{.intval = &aclsize}},
 	};
 
-	if (parc > 1)
+	if (parc > 1 || *parv[0] != '#')
 		process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
 	else
 		chanpattern = parv[0];
