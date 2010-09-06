@@ -1,10 +1,15 @@
 Help for LIST:
 
 LIST shows channels that match a given
-pattern. Wildcards are allowed.
+pattern. Wildcards are allowed. Different criteria
+are also accepted and multiple criteria may be 
+specified. Valid criteria are:
+hold, closed, marked.
 
 Syntax: LIST <pattern>
 
 Examples:
     /msg &nick& LIST #*foo*
     /msg &nick& LIST #x*
+    /msg &nick& LIST hold
+    /msg &nick& LIST closed #x*
