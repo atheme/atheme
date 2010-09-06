@@ -267,7 +267,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
 				continue;
 
-			if (flagset && !(mu->flags & flagset))
+			if (flagset && (mu->flags & flagset) != flagset)
 				continue;
 
 			if (age && (CURRTIME - mu->registered) < age)
@@ -306,7 +306,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
 				continue;
 
-			if (flagset && !(mu->flags & flagset))
+			if (flagset && (mu->flags & flagset) != flagset)
 				continue;
 
 			if (age && (CURRTIME - mu->registered) < age)
