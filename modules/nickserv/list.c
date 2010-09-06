@@ -183,7 +183,7 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
-	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p;
+	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL;
 	bool hostmatch;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
@@ -198,6 +198,8 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	list_option_t optstable[] = {
 		{"pattern",	OPT_STRING,	{.strval = &pattern}},
+		{"email",	OPT_STRING,	{.strval = &email}},
+		{"mail",	OPT_STRING,	{.strval = &email}},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
@@ -261,6 +263,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 			}
 
+			if (email && strcasecmp(mu->email, email))
+				continue;
+
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;
 
@@ -299,6 +304,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				if (!hostmatch)
 					continue;
 			}
+
+			if (email && strcasecmp(mu->email, email))
+				continue;
 
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;
