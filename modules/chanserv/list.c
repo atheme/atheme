@@ -64,12 +64,8 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 	{
 		for (j = 0; j < optsize; j++)
 		{
-			slog(LG_INFO, "i: %s i+1: %s j: %s <TEST>", parv[i], parv[i + 1], opts[j].option);
-
 			if (!strcasecmp(opts[j].option, parv[i]))
 			{
-				slog(LG_INFO, "i: %s i+1: %s j: %s <MATCH>", parv[i], parv[i + 1], opts[j].option);
-
 				switch(opts[j].opttype)
 				{
 				case OPT_BOOL:
@@ -100,11 +96,26 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 	}
 }
 
+static void build_criteriastr(char *buf, int parc, char *parv[])
+{
+	int i;
+
+	return_if_fail(buf != NULL);
+
+	*buf = 0;
+	for (i = 0; i < parc; i++)
+	{
+		strlcat(buf, parv[i], BUFSIZE);
+		strlcat(buf, " ", BUFSIZE);
+	}
+}
+
 static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *chanpattern;
 	char buf[BUFSIZE];
+	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
 	unsigned int flagset = 0;
 	bool closed = false, marked = false;
@@ -112,14 +123,16 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	list_option_t optstable[] = {
 		{"pattern",	OPT_STRING,	{.strval = &chanpattern}},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
+		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"closed",	OPT_BOOL,	{.boolval = &closed}},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}},
 	};
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	build_criteriastr(criteriastr, parc, parv);
 
-	command_success_nodata(si, _("Channels matching specified criteria:"));
+	command_success_nodata(si, _("Channels matching \2%s\2:"), criteriastr);
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
@@ -158,11 +171,11 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		matches++;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (%d matches)", chanpattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (%d matches)", criteriastr, matches);
 	if (matches == 0)
-		command_success_nodata(si, _("No channel matched pattern \2%s\2"), chanpattern);
+		command_success_nodata(si, _("No channel matched criteria \2%s\2"), criteriastr);
 	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"), N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, chanpattern);
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
