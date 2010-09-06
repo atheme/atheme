@@ -113,7 +113,7 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	char *chanpattern;
+	char *chanpattern = NULL;
 	char buf[BUFSIZE];
 	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
