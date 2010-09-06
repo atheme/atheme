@@ -183,7 +183,7 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
-	char pat[512], *pattern, *nickpattern = NULL, *hostpattern = NULL, *p;
+	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p;
 	bool hostmatch;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
@@ -223,7 +223,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (pattern != NULL)
 	{
-		strlcpy(pat, parv[0], sizeof pat);
+		strlcpy(pat, pattern, sizeof pat);
 		p = strrchr(pat, ' ');
 		if (p == NULL)
 			p = strrchr(pat, '!');
