@@ -82,7 +82,8 @@ static time_t parse_age(char *s)
 
 static void process_parvarray(list_option_t *opts, size_t optsize, int parc, char *parv[])
 {
-	int i, j;
+	int i;
+	size_t j;
 
 	for (i = 0; i < parc; i++)
 	{
@@ -197,9 +198,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	time_t age = 0, lastlogin = 0;
 
 	list_option_t optstable[] = {
-		{"pattern",	OPT_STRING,	{.strval = &pattern}},
-		{"email",	OPT_STRING,	{.strval = &email}},
-		{"mail",	OPT_STRING,	{.strval = &email}},
+		{"pattern",	OPT_STRING,	{.strval = &pattern}, 0},
+		{"email",	OPT_STRING,	{.strval = &email}, 0},
+		{"mail",	OPT_STRING,	{.strval = &email}, 0},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
@@ -214,10 +215,10 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"quietchg",	OPT_FLAG,	{.flagval = &flagset}, MU_QUIETCHG},
 		{"nogreet",	OPT_FLAG,	{.flagval = &flagset}, MU_NOGREET},
 		{"regnolimit",	OPT_FLAG,	{.flagval = &flagset}, MU_REGNOLIMIT},
-		{"frozen",	OPT_BOOL,	{.boolval = &frozen}},
-		{"marked",	OPT_BOOL,	{.boolval = &marked}},
-		{"registered",	OPT_AGE,	{.ageval = &age}},
-		{"lastlogin",	OPT_AGE,	{.ageval = &lastlogin}},
+		{"frozen",	OPT_BOOL,	{.boolval = &frozen}, 0},
+		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
+		{"registered",	OPT_AGE,	{.ageval = &age}, 0},
+		{"lastlogin",	OPT_AGE,	{.ageval = &lastlogin}, 0},
 	};
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);

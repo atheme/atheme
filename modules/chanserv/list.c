@@ -82,7 +82,8 @@ static time_t parse_age(char *s)
 
 static void process_parvarray(list_option_t *opts, size_t optsize, int parc, char *parv[])
 {
-	int i, j;
+	int i;
+	size_t j;
 
 	for (i = 0; i < parc; i++)
 	{
@@ -149,12 +150,12 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
 	unsigned int flagset = 0;
-	unsigned int aclsize = 0;
+	int aclsize = 0;
 	time_t age = 0, lastused = 0;
 	bool closed = false, marked = false;
 	mowgli_patricia_iteration_state_t state;
 	list_option_t optstable[] = {
-		{"pattern",	OPT_STRING,	{.strval = &chanpattern}},
+		{"pattern",	OPT_STRING,	{.strval = &chanpattern}, 0},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
@@ -168,11 +169,11 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"topiclock",	OPT_FLAG,	{.flagval = &flagset}, MC_TOPICLOCK},
 		{"guard",	OPT_FLAG,	{.flagval = &flagset}, MC_GUARD},
 		{"private",	OPT_FLAG,	{.flagval = &flagset}, MC_PRIVATE},
-		{"closed",	OPT_BOOL,	{.boolval = &closed}},
-		{"marked",	OPT_BOOL,	{.boolval = &marked}},
-		{"aclsize",	OPT_INT,	{.intval = &aclsize}},
-		{"registered",	OPT_AGE,	{.ageval = &age}},
-		{"lastused",	OPT_AGE,	{.ageval = &lastused}},
+		{"closed",	OPT_BOOL,	{.boolval = &closed}, 0},
+		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
+		{"aclsize",	OPT_INT,	{.intval = &aclsize}, 0},
+		{"registered",	OPT_AGE,	{.ageval = &age}, 0},
+		{"lastused",	OPT_AGE,	{.ageval = &lastused}, 0},
 	};
 
 	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
@@ -194,7 +195,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (flagset && (mc->flags & flagset) != flagset)
 			continue;
 
-		if (aclsize && LIST_LENGTH(&mc->chanacs) < aclsize)
+		if (aclsize && LIST_LENGTH(&mc->chanacs) < (unsigned int)aclsize)
 			continue;
 
 		if (age && (CURRTIME - mc->registered) < age)

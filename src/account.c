@@ -1043,11 +1043,11 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 	chanacs_t *ca;
 	myentity_t *mt, *hi_mt;
 	unsigned int level, hi_level;
-	bool recent_ok, hi_recent_ok;
+	bool recent_ok = false;
+	bool hi_recent_ok = false;
 
 	hi_mt = NULL;
 	hi_level = 0;
-	hi_recent_ok = false;
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
@@ -1103,7 +1103,7 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 	req.mu = NULL;
 	hook_call_channel_pick_successor(&req);
 	if (req.mu != NULL)
-		return mu;
+		return req.mu;
 
 	/* value +R higher than other flags
 	 * (old successor has this, but not sop, and help file mentions this)

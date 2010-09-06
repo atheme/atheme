@@ -268,7 +268,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	groupacs_t *ga;
 	unsigned int flags = 0;
-	unsigned int dir;
+	unsigned int dir = 0;
 	char *c;
 
 	if (!parv[0])

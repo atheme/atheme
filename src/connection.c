@@ -350,7 +350,6 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
 	{
 		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
-		close(s);
 		return NULL;
 	}
 
@@ -358,7 +357,6 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	if (addr->ai_addr == NULL)
 	{
 		slog(LG_ERROR, "connection_open_tcp(): host %s is not resolveable.", vhost);
-		close(s);
 		freeaddrinfo(addr);
 		return NULL;
 	}
@@ -465,7 +463,6 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	if ((error = getaddrinfo(host, NULL, NULL, &addr)))
 	{
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to resolve %s: %s", host, gai_strerror(error));
-		close(s);
 		return NULL;
 	}
 
@@ -473,7 +470,6 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	if (addr->ai_addr == NULL)
 	{
 		slog(LG_ERROR, "connection_open_listener_tcp(): host %s is not resolveable.", host);
-		close(s);
 		freeaddrinfo(addr);
 		return NULL;
 	}
