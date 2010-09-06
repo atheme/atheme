@@ -115,8 +115,14 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		if (strlen(cmd) >= 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
+		metadata_t *md = metadata_find(mc, "prefix");
+		const char *prefix = (md ? md->value : chansvs.trigger);
+		unsigned int lpfx = strlen(prefix);
+
+		if (strlen(cmd) > lpfx && !strncasecmp(prefix, cmd, lpfx) && isalpha(cmd[lpfx]))
 		{
+			cmd += lpfx;
+
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
 			if (command_find(&cs_cmdtree, service_resolve_alias(si->service, NULL, cmd)) == NULL)

@@ -359,8 +359,14 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table, handling both !prefix and Bot, ... styles */
-	if (strlen(cmd) > 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
+	metadata_t *mdp = metadata_find(mc, "prefix");
+	const char *prefix = (mdp ? mdp->value : chansvs.trigger);
+	unsigned int lpfx = strlen(prefix);
+
+	if (strlen(cmd) > lpfx && !strncasecmp(prefix, cmd, lpfx) && isalpha(cmd[lpfx]))
 	{
+		cmd += lpfx;
+
 		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
 
 		/* XXX not really nice to look up the command twice

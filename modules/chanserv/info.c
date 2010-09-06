@@ -237,6 +237,11 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
 
+	if ((md = metadata_find(mc, "prefix")))
+		command_success_nodata(si, _("Prefix     : %s"), md->value);
+	else
+		command_success_nodata(si, _("Prefix     : %s (default)"), chansvs.trigger);
+
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, "private:mark:setter")))
 	{
 		const char *setter = md->value;

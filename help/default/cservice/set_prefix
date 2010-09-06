@@ -1,0 +1,15 @@
+Help for SET PREFIX:
+
+PREFIX allows you to customize the channel fantasy trigger
+for your channel. This is particularly useful if you have
+channel bots that conflict with ChanServ's default fantasy
+prefix. Providing no prefix argument (or DEFAULT) resets
+the channel fantasy prefix to the network default prefix.
+
+Syntax: SET <#channel> PREFIX [prefix]
+
+Examples: 
+    /msg &nick& SET #foo PREFIX
+    /msg &nick& SET #foo PREFIX '
+    /msg &nick& SET #c PREFIX %
+    /msg &nick& SET #c PREFIX default
