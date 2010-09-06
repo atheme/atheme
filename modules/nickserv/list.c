@@ -264,7 +264,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 			}
 
-			if (email && strcasecmp(mu->email, email))
+			if (email && match(email, mu->email))
 				continue;
 
 			if (marked && !metadata_find(mu, "private:mark:setter"))
@@ -306,7 +306,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 			}
 
-			if (email && strcasecmp(mu->email, email))
+			if (email && match(email, mu->email))
 				continue;
 
 			if (marked && !metadata_find(mu, "private:mark:setter"))
