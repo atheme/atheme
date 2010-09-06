@@ -64,8 +64,12 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 	{
 		for (j = 0; j < optsize; j++)
 		{
+			slog(LG_INFO, "i: %s i+1: %s j: %s <TEST>", parv[i], parv[i + 1], opts[j].option);
+
 			if (!strcasecmp(opts[j].option, parv[i]))
 			{
+				slog(LG_INFO, "i: %s i+1: %s j: %s <MATCH>", parv[i], parv[i + 1], opts[j].option);
+
 				switch(opts[j].opttype)
 				{
 				case OPT_BOOL:
