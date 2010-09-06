@@ -35,23 +35,15 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_topic, cs_cmdtree);
-        command_add(&cs_topicappend, cs_cmdtree);
-        command_add(&cs_topicprepend, cs_cmdtree);
 
 	help_addentry(cs_helptree, "TOPIC", "help/cservice/topic", NULL);
-	help_addentry(cs_helptree, "TOPICAPPEND", "help/cservice/topicappend", NULL);
-	help_addentry(cs_helptree, "TOPICPREPEND", "help/cservice/topicprepend", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_topic, cs_cmdtree);
-	command_delete(&cs_topicappend, cs_cmdtree);
-	command_delete(&cs_topicprepend, cs_cmdtree);
 
 	help_delentry(cs_helptree, "TOPIC");
-	help_delentry(cs_helptree, "TOPICAPPEND");
-	help_delentry(cs_helptree, "TOPICPREPEND");
 }
 
 static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
