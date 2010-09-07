@@ -3,19 +3,19 @@ Help for TRACE:
 TRACE allows you to match users by any number of criteria and possibly act on it.
 
 Current criteria are:
-CHANNEL - All users in a given channel.
-SERVER - All users on a given server.
-REGEXP - All users matching a given regex pattern. This is very similar to
-		RMATCH/RWATCH.
-NICKAGE - How long (in seconds) a user has been connected to the network.
-NUMCHAN - Number of channels a user is in.
+CHANNEL    - All users in a given channel.
+SERVER     - All users on a given server.
+REGEXP     - All users matching a given regex pattern. This is very similar to
+		     RMATCH/RWATCH.
+NICKAGE    - How long (in seconds) a user has been connected to the network.
+NUMCHAN    - Number of channels a user is in.
 IDENTIFIED - Identified status of users matching a specific criteria.
 
 Current actions are:
 PRINT - Prints the nick!user@host and some other information about every user
 		matching the given criteria.
 COUNT - Gives the number of users who match the given criteria.
-KILL - KILLs all users matching the given criteria.
+KILL  - KILLs all users matching the given criteria.
 AKILL - AKILLs all users matching the given criteria.
 
 Syntax: TRACE <action> <parameters>

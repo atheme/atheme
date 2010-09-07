@@ -12,7 +12,7 @@ SECURE      - All channels with the SECURE flag set.
 VERBOSE     - All channels with the VERBOSE flag set.
 RESTRICTED  - All channels with the RESTRICTED flag set.
 KEEPTOPIC   - All channels with the KEEPTOPIC flag set.
-VERBOSE_OPS - All channels set to only be verbose to ops.
+VERBOSE-OPS - All channels set to only be verbose to ops.
 TOPICLOCK   - All channels with the TOPICLOCK flag set.
 GUARD       - All channels with the GUARD flag set.
 PRIVATE     - All channels with the PRIVATE flag set.
