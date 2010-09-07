@@ -1,15 +1,34 @@
 Help for LIST:
 
-LIST shows channels that match a given
-pattern. Wildcards are allowed. Different criteria
-are also accepted and multiple criteria may be 
-specified. Valid criteria are:
-hold, closed, marked.
+LIST shows channels that match a given criteria.
+Multiple criteria may be used in the same command.
 
-Syntax: LIST <pattern>
+Current Criteria are:
+PATTERN     - All channels that match a given pattern.
+HOLD        - All channels with the HOLD flag set.
+NOOP        - All channels with the NOOP flag set.
+LIMITFLAGS  - All channels with the LIMITFLAGS flag set.
+SECURE      - All channels with the SECURE flag set.
+VERBOSE     - All channels with the VERBOSE flag set.
+RESTRICTED  - All channels with the RESTRICTED flag set.
+KEEPTOPIC   - All channels with the KEEPTOPIC flag set.
+VERBOSE_OPS - All channels set to only be verbose to ops.
+TOPICLOCK   - All channels with the TOPICLOCK flag set.
+GUARD       - All channels with the GUARD flag set.
+PRIVATE     - All channels with the PRIVATE flag set.
+
+CLOSED      - All channels closed by network staff.
+MARKED      - All channels marked by network staff.
+ACLSIZE     - Channels with an access list larger than a given size.
+REGISTERED  - Channels registered longer ago than a given age.
+LASTUSED    - Channels last used longer ago than a given age.
+
+Syntax: LIST <criteria>
 
 Examples:
-    /msg &nick& LIST #*foo*
-    /msg &nick& LIST #x*
+    /msg &nick& LIST pattern #*foo*
     /msg &nick& LIST hold
-    /msg &nick& LIST closed #x*
+    /msg &nick& LIST closed pattern #x*
+    /msg &nick& LIST aclsize 10
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST aclsize 20 registered 7d pattern #bar*
