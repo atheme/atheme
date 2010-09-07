@@ -1470,6 +1470,9 @@ logfile "var/commands.log" { commands; };
  * You can log to IRC channels, and even split it by category, too.
  * This entry provides roughly the same functionality as the old snoop
  * feature.
+ *
+ * Under no circumstances, should you log rawdata to IRC.  If you think
+ * about it, you should realize that it will cause an infinite loop.
  */
 logfile "#services" { error; info; admin; request; register; };
 
