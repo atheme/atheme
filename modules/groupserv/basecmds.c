@@ -142,22 +142,22 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	*buf = '\0';
 
 	if (mg->flags & MG_REGNOLIMIT)
-		strcat(buf, "REGNOLIMIT");
+		strlcat(buf, "REGNOLIMIT", BUFSIZE);
 
 	if (mg->flags & MG_ACSNOLIMIT)
 	{
 		if (*buf)
-			strcat(buf, " ");
+			strlcat(buf, " ", BUFSIZE);
 
-		strcat(buf, "ACSNOLIMIT");
+		strlcat(buf, "ACSNOLIMIT", BUFSIZE);
 	}
 	
 	if (mg->flags & MG_OPEN)
 	{
 		if (*buf)
-			strcat(buf, " ");
+			strlcat(buf, " ", BUFSIZE);
 
-		strcat(buf, "OPEN");
+		strlcat(buf, "OPEN", BUFSIZE);
 	}
 
 	if (*buf)
