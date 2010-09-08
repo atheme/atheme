@@ -92,7 +92,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_ver != MAPI_ATHEME_V3)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V2);
+		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V3);
 
 		linker_close(handle);
 		return NULL;
