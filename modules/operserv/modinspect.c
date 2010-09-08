@@ -71,6 +71,7 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Address    : %p"), m->address);
 	command_success_nodata(si, _("Entry point: %p"), m->header->modinit);
 	command_success_nodata(si, _("Exit point : %p"), m->header->deinit);
+	command_success_nodata(si, _("SDK Serial : %s"), m->header->serial);
 	command_success_nodata(si, _("Version    : %s"), m->header->version);
 	command_success_nodata(si, _("Vendor     : %s"), m->header->vendor);
 	command_success_nodata(si, _("Permanent  : %s"), m->header->norestart ? "Yes" : "No");
