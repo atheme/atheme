@@ -11,14 +11,15 @@
 
 #include "privs.h"
 #include "abirev.h"
+#include "serno.h"
 
 typedef struct module_ module_t;
-typedef struct v2_moduleheader_ v2_moduleheader_t;
+typedef struct v3_moduleheader_ v3_moduleheader_t;
 
 struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	v2_moduleheader_t *header;
+	v3_moduleheader_t *header;
 
 	unsigned int mflags;
 
@@ -40,10 +41,11 @@ struct module_ {
 
 #define MAX_CMD_PARC		20
 
-struct v2_moduleheader_ {
+struct v3_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
 	unsigned int abi_rev;
+	const char *serial;
 	const char *name;
 	bool norestart;
 	void (*modinit)(module_t *m);
@@ -53,9 +55,9 @@ struct v2_moduleheader_ {
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	v2_moduleheader_t _header = { \
+	v3_moduleheader_t _header = { \
 		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V2, \
-		CURRENT_ABI_REVISION, \
+		CURRENT_ABI_REVISION, SERNO, \
 		name, norestart, modinit, deinit, ven, ver \
 	}
 

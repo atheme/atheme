@@ -58,7 +58,7 @@ module_t *module_load(const char *filespec)
 {
 	node_t *n;
 	module_t *m, *old_modtarget;
-	v2_moduleheader_t *h;
+	v3_moduleheader_t *h;
 	void *handle = NULL;
 #ifdef HAVE_DLINFO
 	struct link_map *map;
@@ -80,7 +80,7 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	h = (v2_moduleheader_t *) linker_getsym(handle, "_header");
+	h = (v3_moduleheader_t *) linker_getsym(handle, "_header");
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
