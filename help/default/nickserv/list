@@ -7,6 +7,8 @@ Current Criteria are:
 PATTERN     - All users that match a given pattern.
 EMAIL       - All accounts registered with an email address
               that matches a given pattern.
+MARK-REASON - All accounts whose mark reason matches a
+              given pattern.
 HOLD        - All users with the HOLD flag set.
 NOOP        - All users with the NOOP flag set.
 NEVEROP     - All users with the NEVEROP flag set.
@@ -34,3 +36,4 @@ Examples:
     /msg &nick& LIST registered 30d
     /msg &nick& LIST marked registered 7d pattern bar
     /msg &nick& LIST email *@gmail.com
+    /msg &nick& LIST mark-reason *lamer*
