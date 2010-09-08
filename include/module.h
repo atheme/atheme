@@ -37,7 +37,7 @@ struct module_ {
 #define MODTYPE_FAIL		0x8000 /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
-#define MAPI_ATHEME_V2		2
+#define MAPI_ATHEME_V3		3
 
 #define MAX_CMD_PARC		20
 
@@ -56,7 +56,7 @@ struct v3_moduleheader_ {
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
 	v3_moduleheader_t _header = { \
-		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V2, \
+		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V3, \
 		CURRENT_ABI_REVISION, SERNO, \
 		name, norestart, modinit, deinit, ven, ver \
 	}
