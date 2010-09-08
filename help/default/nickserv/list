@@ -4,28 +4,30 @@ LIST shows registered users that match a given criteria.
 Multiple criteria may be used in the same command.
 
 Current Criteria are:
-PATTERN     - All users that match a given pattern.
-EMAIL       - All accounts registered with an email address
-              that matches a given pattern.
-MARK-REASON - All accounts whose mark reason matches a
-              given pattern.
-HOLD        - All users with the HOLD flag set.
-NOOP        - All users with the NOOP flag set.
-NEVEROP     - All users with the NEVEROP flag set.
-WAITAUTH    - All users with the WAITAUTH flag set.
-HIDEMAIL    - All users with the HIDEMAIL flag set.
-NOMEMO      - All users with the NOMEMO flag set.
-EMAILMEMOS  - All users with the EMAILMEMOS flag set.
-USE-PRIVMSG - All users with the USEPRIVMSG flag set.
-QUIETCHG    - All users with the QUIETCHG flag set.
-NOGREET     - All users with the NOGREET flag set.
-PRIVATE     - All users with the PRIVATE flag set.
-REGNOLIMIT  - All users with the REGNOLIMIT flag set.
+PATTERN       - All users that match a given pattern.
+EMAIL         - All accounts registered with an email address
+                that matches a given pattern.
+MARK-REASON   - All accounts whose mark reason matches a
+                given pattern.
+FROZEN-REASON - All frozen accounts whose freeze reason matches
+                a given pattern.
+HOLD          - All users with the HOLD flag set.
+NOOP          - All users with the NOOP flag set.
+NEVEROP       - All users with the NEVEROP flag set.
+WAITAUTH      - All users with the WAITAUTH flag set.
+HIDEMAIL      - All users with the HIDEMAIL flag set.
+NOMEMO        - All users with the NOMEMO flag set.
+EMAILMEMOS    - All users with the EMAILMEMOS flag set.
+USE-PRIVMSG   - All users with the USEPRIVMSG flag set.
+QUIETCHG      - All users with the QUIETCHG flag set.
+NOGREET       - All users with the NOGREET flag set.
+PRIVATE       - All users with the PRIVATE flag set.
+REGNOLIMIT    - All users with the REGNOLIMIT flag set.
 
-FROZEN      - All users frozen by network staff.
-MARKED      - All users marked by network staff.
-REGISTERED  - User accounts registered longer ago than a given age.
-LASTUSED    - User accounts last used longer ago than a given age.
+FROZEN        - All users frozen by network staff.
+MARKED        - All users marked by network staff.
+REGISTERED    - User accounts registered longer ago than a given age.
+LASTUSED      - User accounts last used longer ago than a given age.
 
 Syntax: LIST <criteria>
 

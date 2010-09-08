@@ -4,26 +4,28 @@ LIST shows channels that match a given criteria.
 Multiple criteria may be used in the same command.
 
 Current Criteria are:
-PATTERN     - All channels that match a given pattern.
-MARK-REASON - All channels whose mark reason matches 
-              a given pattern.
-HOLD        - All channels with the HOLD flag set.
-NOOP        - All channels with the NOOP flag set.
-LIMITFLAGS  - All channels with the LIMITFLAGS flag set.
-SECURE      - All channels with the SECURE flag set.
-VERBOSE     - All channels with the VERBOSE flag set.
-RESTRICTED  - All channels with the RESTRICTED flag set.
-KEEPTOPIC   - All channels with the KEEPTOPIC flag set.
-VERBOSE-OPS - All channels set to only be verbose to ops.
-TOPICLOCK   - All channels with the TOPICLOCK flag set.
-GUARD       - All channels with the GUARD flag set.
-PRIVATE     - All channels with the PRIVATE flag set.
+PATTERN      - All channels that match a given pattern.
+MARK-REASON  - All channels whose mark reason matches 
+               a given pattern.
+CLOSE-REASON - All channels which are closed whose close
+               reason matches a given pattern.
+HOLD         - All channels with the HOLD flag set.
+NOOP         - All channels with the NOOP flag set.
+LIMITFLAGS   - All channels with the LIMITFLAGS flag set.
+SECURE       - All channels with the SECURE flag set.
+VERBOSE      - All channels with the VERBOSE flag set.
+RESTRICTED   - All channels with the RESTRICTED flag set.
+KEEPTOPIC    - All channels with the KEEPTOPIC flag set.
+VERBOSE-OPS  - All channels set to only be verbose to ops.
+TOPICLOCK    - All channels with the TOPICLOCK flag set.
+GUARD        - All channels with the GUARD flag set.
+PRIVATE      - All channels with the PRIVATE flag set.
 
-CLOSED      - All channels closed by network staff.
-MARKED      - All channels marked by network staff.
-ACLSIZE     - Channels with an access list larger than a given size.
-REGISTERED  - Channels registered longer ago than a given age.
-LASTUSED    - Channels last used longer ago than a given age.
+CLOSED       - All channels closed by network staff.
+MARKED       - All channels marked by network staff.
+ACLSIZE      - Channels with an access list larger than a given size.
+REGISTERED   - Channels registered longer ago than a given age.
+LASTUSED     - Channels last used longer ago than a given age.
 
 Syntax: LIST <criteria>
 

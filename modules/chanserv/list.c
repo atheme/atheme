@@ -145,19 +145,20 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	metadata_t *md;
-	char *chanpattern = NULL, *mark = NULL;
+	metadata_t *md, *mdclosed;
+	char *chanpattern = NULL, *markpattern = NULL, *closedpattern = NULL;
 	char buf[BUFSIZE];
 	char criteriastr[BUFSIZE];
 	unsigned int matches = 0;
 	unsigned int flagset = 0;
 	int aclsize = 0;
 	time_t age = 0, lastused = 0;
-	bool closed = false, marked = false, markmatch;
+	bool closed = false, marked = false, markmatch, closedmatch;
 	mowgli_patricia_iteration_state_t state;
 	list_option_t optstable[] = {
 		{"pattern",	OPT_STRING,	{.strval = &chanpattern}, 0},
-		{"mark-reason", OPT_STRING,	{.strval = &mark}, 0},
+		{"mark-reason", OPT_STRING,	{.strval = &markpattern}, 0},
+		{"close-reason", OPT_STRING,    {.strval = &closedpattern}, 0},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MC_HOLD},
@@ -188,14 +189,25 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (chanpattern != NULL && match(chanpattern, mc->name))
 			continue;
 
-		if (mark)
+		if (markpattern)
 		{
 			markmatch = false;
 			md = metadata_find(mc, "private:mark:reason");
-			if (md != NULL && !match(mark, md->value))
+			if (md != NULL && !match(markpattern, md->value))
 				markmatch = true;
 
 			if (!markmatch)
+				continue;
+		}
+
+		if (closedpattern)
+		{
+			closedmatch = false;
+			mdclosed = metadata_find(mc, "private:close:reason");
+			if (mdclosed != NULL && !match(closedpattern, mdclosed->value))
+				closedmatch = true;
+
+			if (!closedmatch)
 				continue;
 		}
 
