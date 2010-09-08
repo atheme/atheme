@@ -16,6 +16,12 @@ chanserv
   will weight a user as a successor.
 - modules may now override the succession process using the new
   channel_pick_successor hook.
+- chanserv/list: Enhance by adding many possible criteria to match channels
+  against.
+- new set_prefix module. This module allows channels to define a channel-specific 
+  fantasy prefix. The channel-specific prefix is displayed in the INFO for the
+  channel. This is particularly useful if the channel uses an external bot that
+  conflicts with the services default fantasy prefix.
 groupserv
 - new service that allows users to form groups of accounts and apply the
   same ACL entries to them, send memos to them and other features.
@@ -32,6 +38,9 @@ infoserv
 nickserv
 - new contrib module, ns_waitreg that allows you to specify how long a user must
   be connected before they can register a nick.
+- new regnolimit module. Allows opers to set users as able to be exempt from channel
+  registration limits. (how many channels may be registered to one account)
+- nickserv/list: Enhance by adding many possible criteria to match users against.
 xmlrpc
 - the legacy xmlrpc/account, xmlrpc/channel and xmlrpc/memo modules have been
   removed. These have been deprecated for over 4 years and you should be
