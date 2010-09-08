@@ -184,14 +184,14 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
-	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL;
-	bool hostmatch;
+	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL, *mark = NULL;
+	bool hostmatch, markmatch;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 	myuser_t *mu;
 	myentity_t *mt;
 	mynick_t *mn;
-	metadata_t *md;
+	metadata_t *md, *mdmark;
 	int matches = 0;
 	bool frozen = false, marked = false;
 	unsigned int flagset = 0;
@@ -201,6 +201,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"pattern",	OPT_STRING,	{.strval = &pattern}, 0},
 		{"email",	OPT_STRING,	{.strval = &email}, 0},
 		{"mail",	OPT_STRING,	{.strval = &email}, 0},
+		{"mark-reason", OPT_STRING,	{.strval = &mark}, 0},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
@@ -267,6 +268,17 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			if (email && match(email, mu->email))
 				continue;
 
+			if (mark)
+			{
+				markmatch = false;
+				mdmark = metadata_find(mu, "private:mark:reason");
+				if (mdmark != NULL && !match(mark, mdmark->value))
+					markmatch = true;
+
+				if (!markmatch)
+					continue;
+			}
+
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;
 
@@ -308,6 +320,17 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 			if (email && match(email, mu->email))
 				continue;
+
+			if (mark)
+			{
+				markmatch = false;
+				mdmark = metadata_find(mu, "private:mark:reason");
+				if (mdmark != NULL && !match(mark, mdmark->value))
+					markmatch = true;
+
+				if (!markmatch)
+					continue;
+			}
 
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;

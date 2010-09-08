@@ -5,6 +5,8 @@ Multiple criteria may be used in the same command.
 
 Current Criteria are:
 PATTERN     - All channels that match a given pattern.
+MARK-REASON - All channels whose mark reason matches 
+              a given pattern.
 HOLD        - All channels with the HOLD flag set.
 NOOP        - All channels with the NOOP flag set.
 LIMITFLAGS  - All channels with the LIMITFLAGS flag set.
@@ -32,3 +34,4 @@ Examples:
     /msg &nick& LIST aclsize 10
     /msg &nick& LIST registered 30d
     /msg &nick& LIST aclsize 20 registered 7d pattern #bar*
+    /msg &nick& LIST mark-reason lamers?here
