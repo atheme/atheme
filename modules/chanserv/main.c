@@ -117,11 +117,9 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_t *md = metadata_find(mc, "private:prefix");
 		const char *prefix = (md ? md->value : chansvs.trigger);
-		unsigned int lpfx = strlen(prefix);
 
-		if (strlen(cmd) > lpfx && !strncasecmp(prefix, cmd, lpfx) && isalpha(cmd[lpfx]))
+		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
 		{
-			cmd += lpfx;
 
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
