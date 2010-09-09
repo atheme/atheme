@@ -359,7 +359,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table, handling both !prefix and Bot, ... styles */
-	metadata_t *mdp = metadata_find(mc, "prefix");
+	metadata_t *mdp = metadata_find(mc, "private:prefix");
 	const char *prefix = (mdp ? mdp->value : chansvs.trigger);
 	unsigned int lpfx = strlen(prefix);
 

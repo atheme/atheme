@@ -87,7 +87,7 @@ static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (!prefix || !strcasecmp(prefix, "DEFAULT")) 
 	{
-		metadata_delete(mc, "cmdprefix");
+		metadata_delete(mc, "private:prefix");
 		logcommand(si, CMDLOG_SET, "SET:PREFIX: \2%s\2 reset", mc->name);
 		command_success_nodata(si, _("The fantasy prefix for channel \2%s\2 has been reset."), parv[0]);
 		return;
@@ -101,7 +101,7 @@ static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	metadata_add(mc, "prefix", prefix);
+	metadata_add(mc, "private:prefix", prefix);
 	logcommand(si, CMDLOG_SET, "SET:PREFIX: \2%s\2 \2%s\2", mc->name, prefix);
 	command_success_nodata(si, _("The fantasy prefix for channel \2%s\2 has been set to \2%s\2."),
                                parv[0], prefix);

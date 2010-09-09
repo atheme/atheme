@@ -115,7 +115,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		metadata_t *md = metadata_find(mc, "prefix");
+		metadata_t *md = metadata_find(mc, "private:prefix");
 		const char *prefix = (md ? md->value : chansvs.trigger);
 		unsigned int lpfx = strlen(prefix);
 
