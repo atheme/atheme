@@ -429,7 +429,7 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 		}
 	}
 
-	if (parc < 3)
+	if (parc < 2)
 	{
 		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
 		return 0;
