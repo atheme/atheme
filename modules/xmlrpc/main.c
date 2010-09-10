@@ -39,6 +39,7 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
 static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
+static int xmlrpcmethod_privset(void *conn, int parc, char *parv[]);
 
 /* Configuration */
 list_t conf_xmlrpc_table;
@@ -114,6 +115,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.login", xmlrpcmethod_login);
 	xmlrpc_register_method("atheme.logout", xmlrpcmethod_logout);
 	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
+	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
 }
 
 void _moddeinit(void)
@@ -123,6 +125,7 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.login");
 	xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.command");
+	xmlrpc_unregister_method("atheme.privset");
 
 	if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
 	{
@@ -395,6 +398,66 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 		else
 			xmlrpc_generic_error(fault_unimplemented, "Command did not return a result.");
 	}
+
+	return 0;
+}
+
+/*
+ * atheme.privset
+ *
+ * XML inputs:
+ *       authcookie, account name, source ip
+ *
+ * XML outputs:
+ *       depends on command
+ *
+ * Side Effects:
+ *       command is executed
+ */
+static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
+{
+	myuser_t *mu;
+	struct httpddata *hd = ((connection_t *)conn)->userdata;
+	int i;
+
+	for (i = 0; i < parc; i++)
+	{
+		if (strchr(parv[i], '\r') || strchr(parv[i], '\n'))
+		{
+			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
+			return 0;
+		}
+	}
+
+	if (parc < 3)
+	{
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (*parv[1] != '\0' && strlen(parv[0]) > 1)
+	{
+		if ((mu = myuser_find(parv[1])) == NULL)
+		{
+			xmlrpc_generic_error(fault_nosuch_source, "Unknown user.");
+			return 0;
+		}
+
+		if (authcookie_validate(parv[0], mu) == false)
+		{
+			xmlrpc_generic_error(fault_badauthcookie, "Invalid authcookie for this account.");
+			return 0;
+		}
+	}
+	else
+		mu = NULL;
+
+	if (!is_soper(mu))
+	{
+		/* no privileges */
+		xmlrpc_send_string("");
+	}
+	xmlrpc_send_string(mu->soper->operclass->privs);
 
 	return 0;
 }
