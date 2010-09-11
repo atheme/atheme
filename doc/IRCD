@@ -88,7 +88,7 @@ You need <uline> tags for services on all servers on the network.
 
 Several of the modes supported by Atheme are in optional modules. It should
 usually not be a problem if those modules are not loaded. The exception to
-this is the m_services_account.so modules, which must be loaded at all times 
+this is the m_services_account.so module, which must be loaded at all times 
 on your inspircd servers if you wish to use this version of atheme.
 
 Using the m_invisible module on inspircd with Atheme connected is an unsupported
@@ -189,9 +189,6 @@ network.dconf) and cmode +h (halfops, compile time option) are enabled. If
 this is not the case, load the protocol/mixin_noprotect and/or
 protocol/mixin_nohalfops modules.
 
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
-
 ratbox
 ------
 
@@ -207,9 +204,6 @@ etc. You will need a service{} block on all servers.
 
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.
-
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
 
 shadowircd
 ----------
@@ -241,9 +235,6 @@ Users dropping their account will be killed; this cannot be avoided.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
-
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
 
 Atheme does not support oplevels; they should be disabled.
 
