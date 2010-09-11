@@ -91,7 +91,7 @@ static void xmlrpc_config_ready(void *vptr)
 	{
 		if (node_find(&handle_xmlrpc, httpd_path_handlers))
 			return;
-		
+
 		node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
 	}
 	else
