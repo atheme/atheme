@@ -59,9 +59,6 @@ You will need a service{} block on all servers.
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
 
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
-
 dreamforge
 ----------
 
@@ -83,24 +80,22 @@ modern one.
 inspircd
 --------
 
-You should use inspircd11 for inspircd 1.1.x and inspircd12 for inspircd 1.2.x
-and inspircd 2.0.x.
-InspIRCd 1.0.x support (inspircd10) has been dropped.
+You should use inspircd12 for inspircd 1.2.x, inspircd 2.0.x and inspircd 2.1.x.
+InspIRCd 1.0.x support (inspircd10) and InspIRCd 1.1.x support (inspircd11)
+have been dropped.
 
 You need <uline> tags for services on all servers on the network.
 
 Several of the modes supported by Atheme are in optional modules. It should
-usually not be a problem if those modules are not loaded. The exceptions to
-this are the m_globops.so and m_services_account.so modules, which must be
-loaded at all times on your inspircd servers if you wish to use this version of
-atheme. If the servers are protocol 1102 or newer, m_globops.so is not
-required, although it will be used if loaded.
+usually not be a problem if those modules are not loaded. The exception to
+this is the m_services_account.so modules, which must be loaded at all times 
+on your inspircd servers if you wish to use this version of atheme.
 
 Using the m_invisible module on inspircd with Atheme connected is an unsupported
 condition and will result in your Atheme installation being "tainted".
 
-For inspircd12, jupes will use SIDs numerically following services's SID, make
-sure to leave plenty of space.
+Jupes will use SIDs numerically following services's SID, make sure to leave 
+plenty of space.
 
 ircnet
 ------
@@ -155,9 +150,8 @@ versions have bugs where they are not sent properly.
 officeirc
 ---------
 
-Unlike other IRCds, OfficeIRC server names do not necessarily have a period in
-them; this may cause some warnings about the config file which can safely be
-ignored.
+Support for OfficeIRC has been discontinued as of Atheme 6.0. We suggest
+switching to another IRCd.
 
 plexus
 ------
@@ -228,13 +222,11 @@ You will need a service{} block on all servers.
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
 
-Although Atheme does not support IPv6 connections itself, user IPv6 addresses
-will be properly stored and logged.
-
 ultimate3
 ---------
 
-You will need U:lines for services on all services on the network.
+Support for UltimateIRCd 3 has been discontinued as of Atheme 6.0. We suggest
+switching to another IRCd that's still being developed.
 
 undernet
 --------
