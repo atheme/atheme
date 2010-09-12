@@ -247,6 +247,7 @@ loadmodule "modules/nickserv/vhost";
  * CLOSE command				modules/chanserv/close
  * CLEAR command				modules/chanserv/clear
  * CLEAR BANS command				modules/chanserv/clear_bans
+ * CLEAR FLAGS command				modules/chanserv/clear_flags
  * CLEAR USERS command				modules/chanserv/clear_users
  * COUNT command				modules/chanserv/count
  * DROP command					modules/chanserv/drop
@@ -305,6 +306,7 @@ loadmodule "modules/chanserv/ban";
 loadmodule "modules/chanserv/close";
 loadmodule "modules/chanserv/clear";
 loadmodule "modules/chanserv/clear_bans";
+loadmodule "modules/chanserv/clear_flags";
 loadmodule "modules/chanserv/clear_users";
 loadmodule "modules/chanserv/count";
 loadmodule "modules/chanserv/drop";
