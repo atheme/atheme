@@ -382,6 +382,7 @@ loadmodule "modules/chanserv/why";
  * Override access (OVERRIDE command)           modules/operserv/override
  * Regex mass akill (RAKILL command)		modules/operserv/rakill
  * RAW command					modules/operserv/raw
+ * READONLY command				modules/operserv/readonly
  * REHASH command				modules/operserv/rehash
  * RESTART command				modules/operserv/restart
  * Display regex matching (RMATCH command)	modules/operserv/rmatch
@@ -415,6 +416,7 @@ loadmodule "modules/operserv/modreload";
 loadmodule "modules/operserv/noop";
 #loadmodule "modules/operserv/override";
 #loadmodule "modules/operserv/rakill";
+loadmodule "modules/operserv/readonly";
 loadmodule "modules/operserv/rehash";
 loadmodule "modules/operserv/restart";
 loadmodule "modules/operserv/rmatch";

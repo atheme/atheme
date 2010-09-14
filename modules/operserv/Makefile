@@ -35,6 +35,7 @@ SRCS = \
 	override.c	\
 	raw.c		\
 	rakill.c	\
+	readonly.c	\
 	rmatch.c	\
 	rehash.c	\
 	restart.c	\
