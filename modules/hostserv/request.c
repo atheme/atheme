@@ -284,7 +284,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
-	node_t *n;
+	node_t *n, *tn;
 
 	if (!nick)
 	{
@@ -294,9 +294,10 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	LIST_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		l = n->data;
+
 		if (!irccasecmp(l->nick, nick))
 		{
 			if ((u = user_find_named(nick)) != NULL)
@@ -315,6 +316,28 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
 			return;
 		}
+
+		if (!irccasecmp("*", nick))
+		{
+			if ((u = user_find_named(l->nick)) != NULL)
+				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been approved.", l->vhost, l->nick);
+			/* VHOSTNICK command below will generate snoop */
+			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, l->nick);
+			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
+
+			node_del(n, &hs_reqlist);
+
+			free(l->nick);
+			free(l->vhost);
+			free(l->creator);
+			free(l);
+
+			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
+
+			if (hs_reqlist.count == 0)
+				return;
+		}
+
 	}
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
 }
@@ -326,7 +349,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
-	node_t *n;
+	node_t *n, *tn;
 
 	if (!nick)
 	{
@@ -336,7 +359,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	LIST_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		service_t *svs;
 
@@ -358,6 +381,29 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 			return;
+		}
+		
+		if (!irccasecmp("*", nick))
+		{
+			if ((svs = service_find("memoserv")) != NULL)
+			{
+				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->nick, l->vhost, l->nick);
+				command_exec_split(svs, si, "SEND", buf, ms_cmdtree);
+			}
+			else if ((u = user_find_named(l->nick)) != NULL)
+				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, l->nick);
+			/* VHOSTNICK command below will generate snoop */
+			logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, l->nick);
+
+			node_del(n, &hs_reqlist);
+
+			free(l->nick);
+			free(l->vhost);
+			free(l->creator);
+			free(l);
+
+			if (hs_reqlist.count == 0)
+				return;
 		}
 	}
 	command_success_nodata(si, _("Nick \2%s\2 not found in vhost request database."), nick);
