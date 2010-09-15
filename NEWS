@@ -80,7 +80,7 @@ other
 - mail sending has been changed, likely causing serverinfo::mta scripts to
   break. The command is now passed "-t" rather than the email address and
   the shell is no longer used.
-- the hg revision of modules in now shown in MODINSPECT.
+- the SDK hg revision of modules in now shown in MODINSPECT.
 
 Atheme Services 5.2 Release Notes
 =================================
