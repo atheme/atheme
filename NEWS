@@ -22,6 +22,8 @@ chanserv
   fantasy prefix. The channel-specific prefix is displayed in the INFO for the
   channel. This is particularly useful if the channel uses an external bot that
   conflicts with the services default fantasy prefix.
+- new clear_flags module. This allows founders to remove all entries from the
+  channel access list except other founders.
 groupserv
 - new service that allows users to form groups of accounts and apply the
   same ACL entries to them, send memos to them and other features.
@@ -29,6 +31,9 @@ helpserv
 - new service that allows users to request oper help in different ways.
   Currently either via a ticket system or by "pinging" the opers with a
   request for help.
+hostserv
+- allow activating or rejecting all waiting vhosts by using '*' instead of
+  a nick.
 infoserv
 - oper-only message support. You can now give messages an importance where
   they will only be sent to opers upon oper-up.
@@ -41,6 +46,8 @@ nickserv
 - new regnolimit module. Allows opers to set users as able to be exempt from channel
   registration limits. (how many channels may be registered to one account)
 - nickserv/list: Enhance by adding many possible criteria to match users against.
+operserv
+- new readonly module. This allows changing the readonly state at runtime.
 xmlrpc
 - the legacy xmlrpc/account, xmlrpc/channel and xmlrpc/memo modules have been
   removed. These have been deprecated for over 4 years and you should be
@@ -49,6 +56,7 @@ xmlrpc
   code.  this should bring a performance improvement over the hashtable code it
   was using.
 - xmlrpc has been completely moved out of core
+- a new command, atheme.privset has been added to get the soper privs of a user.
 code
 - default values in config options are now supported. This is particularly
   useful in modules and cleans up the config code a bit.
@@ -72,6 +80,7 @@ other
 - mail sending has been changed, likely causing serverinfo::mta scripts to
   break. The command is now passed "-t" rather than the email address and
   the shell is no longer used.
+- the hg revision of modules in now shown in MODINSPECT.
 
 Atheme Services 5.2 Release Notes
 =================================
