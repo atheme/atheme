@@ -417,7 +417,6 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
-	struct httpddata *hd = ((connection_t *)conn)->userdata;
 	int i;
 
 	for (i = 0; i < parc; i++)
@@ -452,10 +451,11 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 	else
 		mu = NULL;
 
-	if (!is_soper(mu))
+	if (mu == NULL || !is_soper(mu))
 	{
 		/* no privileges */
 		xmlrpc_send_string("");
+		return 0;
 	}
 	xmlrpc_send_string(mu->soper->operclass->privs);
 
