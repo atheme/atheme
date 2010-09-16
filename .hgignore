@@ -10,6 +10,7 @@ core
 *.o
 *.so
 *.so.*
+*.d
 .depend
 .depend-done
 autom4te.cache
