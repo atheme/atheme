@@ -35,13 +35,13 @@ static void user_info_hook(hook_user_req_t *req)
 	{
 		groupacs_t *ga = n->data;
 
-		if ((!(ga->mg->flags & MG_OPEN)) && !has_priv(req->si, PRIV_USER_AUSPEX))
-			continue;
+		if ((ga->mg->flags & MG_OPEN) || (req->si->smu == req->mu || has_priv(req->si, PRIV_USER_AUSPEX)))
+		{
+			if (*buf != 0)
+				strlcat(buf, ", ", BUFSIZE);
 
-		if (*buf != 0)
-			strlcat(buf, ", ", BUFSIZE);
-
-		strlcat(buf, entity(ga->mg)->name, BUFSIZE);
+			strlcat(buf, entity(ga->mg)->name, BUFSIZE);
+		}
 	}
 
 	if (*buf != 0)
