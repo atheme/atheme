@@ -30,10 +30,13 @@ static void user_info_hook(hook_user_req_t *req)
 	*buf = 0;
 
 	l = myuser_get_membership_list(req->mu);
-
+		
 	LIST_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;
+
+		if ((!(ga->mg->flags & MG_OPEN)) && !has_priv(req->si, PRIV_USER_AUSPEX))
+			continue;
 
 		if (*buf != 0)
 			strlcat(buf, ", ", BUFSIZE);
@@ -41,7 +44,8 @@ static void user_info_hook(hook_user_req_t *req)
 		strlcat(buf, entity(ga->mg)->name, BUFSIZE);
 	}
 
-	command_success_nodata(req->si, _("Groups     : %s"), buf);
+	if (*buf != 0)
+		command_success_nodata(req->si, _("Groups     : %s"), buf);
 }
 
 static void myuser_delete_hook(myuser_t *mu)
