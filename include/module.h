@@ -11,7 +11,6 @@
 
 #include "privs.h"
 #include "abirev.h"
-#include "serno.h"
 
 typedef struct module_ module_t;
 typedef struct v3_moduleheader_ v3_moduleheader_t;
@@ -57,7 +56,7 @@ struct v3_moduleheader_ {
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
 	v3_moduleheader_t _header = { \
 		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V3, \
-		CURRENT_ABI_REVISION, SERNO, \
+		CURRENT_ABI_REVISION, "unknown", \
 		name, norestart, modinit, deinit, ven, ver \
 	}
 
