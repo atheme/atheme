@@ -12,6 +12,7 @@ typedef struct mygroup_ mygroup_t;
 #define MG_REGNOLIMIT		0x00000001
 #define MG_ACSNOLIMIT		0x00000002
 #define MG_OPEN			0x00000004
+#define MG_PUBLIC			0x00000008
 
 struct mygroup_ {
 	myentity_t ent;

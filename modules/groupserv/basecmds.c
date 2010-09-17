@@ -128,7 +128,9 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
-	command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
+
+	if ((mg->flags & MG_PUBLIC) || (groupacs_sourceinfo_has_flag(mg, si, 0) || has_priv(si, PRIV_GROUP_ADMIN)))
+		command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 
 	if ((md = metadata_find(mg, "description")))
 		command_success_nodata(si, _("Description : %s"), md->value);
@@ -158,6 +160,14 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			strlcat(buf, " ", BUFSIZE);
 
 		strlcat(buf, "OPEN", BUFSIZE);
+	}
+
+	if (mg->flags & MG_PUBLIC)
+	{
+		if (*buf)
+			strlcat(buf, " ", BUFSIZE);
+
+		strlcat(buf, "PUBLIC", BUFSIZE);
 	}
 
 	if (*buf)
