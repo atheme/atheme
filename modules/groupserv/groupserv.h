@@ -36,6 +36,9 @@ bool enable_open_groups;
 #define GA_VHOST		0x00000020
 #define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST)
 
+#define PRIV_GROUP_ADMIN "group:admin"
+#define PRIV_GROUP_AUSPEX "group:auspex"
+
 struct groupacs_ {
 	object_t parent;
 

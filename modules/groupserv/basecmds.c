@@ -4,9 +4,6 @@
 
 #include "groupserv.h"
 
-/* This should probably be moved to privs.h or at least groupserv.h at some point */
-#define PRIV_GROUP_ADMIN "group:admin"
-
 /* I don't like this here, but it works --jdhore */
 static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
 {
@@ -129,7 +126,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 
-	if ((mg->flags & MG_PUBLIC) || (groupacs_sourceinfo_has_flag(mg, si, 0) || has_priv(si, PRIV_GROUP_ADMIN)))
+	if ((mg->flags & MG_PUBLIC) || (groupacs_sourceinfo_has_flag(mg, si, 0) || has_priv(si, PRIV_GROUP_AUSPEX)))
 		command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 
 	if ((md = metadata_find(mg, "description")))
@@ -180,7 +177,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_ADMIN, 1, gs_cmd_list };
+command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list };
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {

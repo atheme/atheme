@@ -1713,6 +1713,7 @@ operclass "ircop" {
 	};
 
 	privs {
+		group:auspex;
 		group:admin;
 	};
 };
