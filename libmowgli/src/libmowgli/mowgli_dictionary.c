@@ -59,6 +59,9 @@ mowgli_dictionary_t *mowgli_dictionary_create(mowgli_dictionary_comparator_func_
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
 
+	mowgli_log("mowgli_dictionary is deprecated and pending removal in Mowgli 1.0 series.");
+	mowgli_log("Consider replacing this code with mowgli_patricia.");
+
 	return dtree;
 }
 
@@ -89,6 +92,9 @@ mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name,
 
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
+
+	mowgli_log("mowgli_dictionary is deprecated and pending removal in Mowgli 1.0 series.");
+	mowgli_log("Consider replacing this code with mowgli_patricia.");
 
 	return dtree;
 }

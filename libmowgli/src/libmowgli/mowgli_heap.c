@@ -290,6 +290,9 @@ mowgli_heap_free(mowgli_heap_t *heap, void *data)
 	return_if_fail(b->heap == heap);
 	return_if_fail(b->num_allocated > 0);
 
+	/* memset the element before returning it to the heap. */
+	memset(data, 0, b->heap->elem_size);
+
 	/* mark it as free */
 	h->un.next = b->first_free;
 	b->first_free = h;

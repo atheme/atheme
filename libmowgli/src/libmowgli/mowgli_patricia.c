@@ -3,7 +3,7 @@
  * mowgli_patricia.c: Dictionary-based information storage.
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
- * Copyright (c) 2007-2008 Jilles Tjoelker <jilles -at- stack.nl>
+ * Copyright (c) 2007-2010 Jilles Tjoelker <jilles -at- stack.nl>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -34,7 +34,8 @@
 
 #include "mowgli.h"
 
-static mowgli_heap_t *elem_heap = NULL;
+static mowgli_heap_t *leaf_heap = NULL;
+static mowgli_heap_t *node_heap = NULL;
 
 /*
  * Patricia tree.
@@ -42,52 +43,93 @@ static mowgli_heap_t *elem_heap = NULL;
  * A radix trie that avoids one-way branching and redundant nodes.
  *
  * To find a node, the tree is traversed starting from the root. The
- * bitnum in each node indicates which bit of the key needs to be
- * tested, and the appropriate branch is taken. The keys in the nodes
- * are not used during this descent.
+ * nibnum in each node indicates which nibble of the key needs to be
+ * tested, and the appropriate branch is taken.
  *
- * The bitnum values are strictly increasing while going down the tree.
- * If the node pointed to has a lower or equal bitnum (an upward link),
- * the key in this node is the only one that could match the requested key.
- *
- * When adding an entry, a node is inserted at the lowest bitnum where
- * the key in the found node and the requested key differ. The new node
- * contains the requested key and has an upward link to itself, while its
- * other branch leads to the found node. Note that any other keys in that
- * subtree will be equal on the new node's bitnum.
- *
- * When removing an entry, the node that has the upward link to the
- * node with the requested key needs to be removed from the tree, because
- * that bit test is no longer needed. If these two are the same node, it is
- * simple; otherwise the node with the upward link needs to be moved to the
- * node with the requested key.
+ * The nibnum values are strictly increasing while going down the tree.
  *
  * -- jilles
  */
 
+union patricia_elem;
+
 struct mowgli_patricia_
 {
 	void (*canonize_cb)(char *key);
-	mowgli_patricia_elem_t *root;
-	/* head and tail of linked list */
-	mowgli_patricia_elem_t *head, *tail;
+	union patricia_elem *root;
 	unsigned int count;
 	char *id;
 };
 
-struct mowgli_patricia_elem_
+#define POINTERS_PER_NODE 16
+#define NIBBLE_VAL(key, nibnum) (((key)[(nibnum) / 2] >> ((nibnum) & 1 ? 0 : 4)) & 0xF)
+
+struct patricia_node
 {
-	/* bit number to test on (bit NUM%8 of byte NUM/8) */
-	int bitnum;
+	/* nibble to test (nibble NUM%2 of byte NUM/2) */
+	int nibnum;
 	/* branches of the tree */
-	mowgli_patricia_elem_t *zero, *one;
-	/* linked list */
-	mowgli_patricia_elem_t *next, *prev;
+	union patricia_elem *down[POINTERS_PER_NODE];
+	union patricia_elem *parent;
+	char parent_val;
+};
+
+struct patricia_leaf
+{
+	/* -1 to indicate this is a leaf, not a node */
+	int nibnum;
 	/* data associated with the key */
 	void *data;
 	/* key (canonized copy) */
 	char *key;
+	union patricia_elem *parent;
+	char parent_val;
 };
+
+union patricia_elem
+{
+	int nibnum;
+	struct patricia_node node;
+	struct patricia_leaf leaf;
+};
+
+#define IS_LEAF(elem) ((elem)->nibnum == -1)
+
+/* Preserve compatibility with the old mowgli_patricia.h */
+#define STATE_CUR(state) ((state)->pspare[0])
+#define STATE_NEXT(state) ((state)->pspare[1])
+
+/*
+ * first_leaf()
+ *
+ * Find the smallest leaf hanging off a subtree.
+ *
+ * Inputs:
+ *     - element (may be leaf or node) heading subtree
+ *
+ * Outputs:
+ *     - lowest leaf in subtree
+ *
+ * Side Effects:
+ *     - none
+ */
+static union patricia_elem *first_leaf(union patricia_elem *delem)
+{
+	int val;
+
+	while (!IS_LEAF(delem))
+	{
+		for (val = 0; val < POINTERS_PER_NODE; val++)
+		{
+			if (delem->node.down[val] != NULL)
+			{
+				delem = delem->node.down[val];
+				break;
+			}
+		}
+	}
+	return delem;
+}
 
 /*
  * mowgli_patricia_create(void (*canonize_cb)(char *key))
@@ -112,12 +154,12 @@ mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key))
 
 	dtree->canonize_cb = canonize_cb;
 
-	if (!elem_heap)
-		elem_heap = mowgli_heap_create(sizeof(mowgli_patricia_elem_t), 1024, BH_NOW);
+	if (!leaf_heap)
+		leaf_heap = mowgli_heap_create(sizeof(struct patricia_leaf), 1024, BH_NOW);
+	if (!node_heap)
+		node_heap = mowgli_heap_create(sizeof(struct patricia_node), 128, BH_NOW);
 
 	dtree->root = NULL;
-	dtree->head = NULL;
-	dtree->tail = NULL;
 
 	return dtree;
 }
@@ -149,12 +191,12 @@ mowgli_patricia_t *mowgli_patricia_create_named(const char *name,
 	dtree->canonize_cb = canonize_cb;
 	dtree->id = strdup(name);
 
-	if (!elem_heap)
-		elem_heap = mowgli_heap_create(sizeof(mowgli_patricia_elem_t), 1024, BH_NOW);
+	if (!leaf_heap)
+		leaf_heap = mowgli_heap_create(sizeof(struct patricia_leaf), 1024, BH_NOW);
+	if (!node_heap)
+		node_heap = mowgli_heap_create(sizeof(struct patricia_node), 128, BH_NOW);
 
 	dtree->root = NULL;
-	dtree->head = NULL;
-	dtree->tail = NULL;
 
 	return dtree;
 }
@@ -185,17 +227,19 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
 	void (*destroy_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
-	mowgli_patricia_elem_t *n, *tn;
+	mowgli_patricia_iteration_state_t state;
+	union patricia_elem *delem;
+	void *entry;
 
 	return_if_fail(dtree != NULL);
 
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
+	MOWGLI_PATRICIA_FOREACH(entry, &state, dtree)
 	{
+		delem = STATE_CUR(&state);
 		if (destroy_cb != NULL)
-			(*destroy_cb)(n->key, n->data, privdata);
-
-		mowgli_free(n->key);
-		mowgli_heap_free(elem_heap, n);
+			(*destroy_cb)(delem->leaf.key, delem->leaf.data,
+					privdata);
+		mowgli_patricia_delete(dtree, delem->leaf.key);
 	}
 
 	mowgli_free(dtree);
@@ -223,15 +267,49 @@ void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
 	int (*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
-	mowgli_patricia_elem_t *delem, *tn;
+	union patricia_elem *delem, *next;
+	int val;
 
 	return_if_fail(dtree != NULL);
 
-	MOWGLI_LIST_FOREACH_SAFE(delem, tn, dtree->head)
+	delem = dtree->root;
+	if (delem == NULL)
+		return;
+	/* Only one element in the tree */
+	if (IS_LEAF(delem))
 	{
 		if (foreach_cb != NULL)
-			(*foreach_cb)(delem->key, delem->data, privdata);
+			(*foreach_cb)(delem->leaf.key, delem->leaf.data, privdata);
+		return;
 	}
+	val = 0;
+	do
+	{
+		do
+			next = delem->node.down[val++];
+		while (next == NULL && val < POINTERS_PER_NODE);
+		if (next != NULL)
+		{
+			if (IS_LEAF(next))
+			{
+				if (foreach_cb != NULL)
+					(*foreach_cb)(next->leaf.key, next->leaf.data, privdata);
+			}
+			else
+			{
+				delem = next;
+				val = 0;
+			}
+		}
+		while (val >= POINTERS_PER_NODE)
+		{
+			val = delem->node.parent_val;
+			delem = delem->node.parent;
+			if (delem == NULL)
+				break;
+			val++;
+		}
+	} while (delem != NULL);
 }
 
 /*
@@ -257,20 +335,52 @@ void *mowgli_patricia_search(mowgli_patricia_t *dtree,
 	void *(*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
-	mowgli_patricia_elem_t *delem, *tn;
+	union patricia_elem *delem, *next;
+	int val;
 	void *ret = NULL;
 
 	return_val_if_fail(dtree != NULL, NULL);
 
-	MOWGLI_LIST_FOREACH_SAFE(delem, tn, dtree->head)
+	delem = dtree->root;
+	if (delem == NULL)
+		return NULL;
+	/* Only one element in the tree */
+	if (IS_LEAF(delem))
 	{
 		if (foreach_cb != NULL)
-			ret = (*foreach_cb)(delem->key, delem->data, privdata);
-
-		if (ret)
-			break;
+			return (*foreach_cb)(delem->leaf.key, delem->leaf.data, privdata);
+		return NULL;
 	}
-
+	val = 0;
+	for (;;)
+	{
+		do
+			next = delem->node.down[val++];
+		while (next == NULL && val < POINTERS_PER_NODE);
+		if (next != NULL)
+		{
+			if (IS_LEAF(next))
+			{
+				if (foreach_cb != NULL)
+					ret = (*foreach_cb)(next->leaf.key, next->leaf.data, privdata);
+				if (ret != NULL)
+					break;
+			}
+			else
+			{
+				delem = next;
+				val = 0;
+			}
+		}
+		while (val >= POINTERS_PER_NODE)
+		{
+			val = delem->node.parent_val;
+			delem = delem->node.parent;
+			if (delem == NULL)
+				break;
+			val++;
+		}
+	}
 	return ret;
 }
 
@@ -296,18 +406,17 @@ void mowgli_patricia_foreach_start(mowgli_patricia_t *dtree,
 	return_if_fail(dtree != NULL);
 	return_if_fail(state != NULL);
 
-	state->cur = NULL;
-	state->next = NULL;
+	if (dtree->root != NULL)
+		STATE_NEXT(state) = first_leaf(dtree->root);
+	else
+		STATE_NEXT(state) = NULL;
+	STATE_CUR(state) = STATE_NEXT(state);
 
-	/* find first item */
-	state->cur = dtree->head;
-
-	if (state->cur == NULL)
+	if (STATE_NEXT(state) == NULL)
 		return;
 
-	/* make state->cur point to first item and state->next point to
+	/* make STATE_CUR point to first item and STATE_NEXT point to
 	 * second item */
-	state->next = state->cur;
 	mowgli_patricia_foreach_next(dtree, state);
 }
 
@@ -334,7 +443,8 @@ void *mowgli_patricia_foreach_cur(mowgli_patricia_t *dtree,
 	return_val_if_fail(dtree != NULL, NULL);
 	return_val_if_fail(state != NULL, NULL);
 
-	return state->cur != NULL ? state->cur->data : NULL;
+	return STATE_CUR(state) != NULL ?
+		((struct patricia_leaf *)STATE_CUR(state))->data : NULL;
 }
 
 /*
@@ -356,21 +466,66 @@ void *mowgli_patricia_foreach_cur(mowgli_patricia_t *dtree,
 void mowgli_patricia_foreach_next(mowgli_patricia_t *dtree,
 	mowgli_patricia_iteration_state_t *state)
 {
+	struct patricia_leaf *leaf;
+	union patricia_elem *delem, *next;
+	int val;
+
 	return_if_fail(dtree != NULL);
 	return_if_fail(state != NULL);
 
-	if (state->cur == NULL)
+	if (STATE_CUR(state) == NULL)
 	{
 		mowgli_log("mowgli_patricia_foreach_next(): called again after iteration finished on dtree<%p>", dtree);
 		return;
 	}
 
-	state->cur = state->next;
+	STATE_CUR(state) = STATE_NEXT(state);
 
-	if (state->next == NULL)
+	if (STATE_NEXT(state) == NULL)
 		return;
 
-	state->next = state->next->next;
+	leaf = STATE_NEXT(state);
+	delem = leaf->parent;
+	val = leaf->parent_val;
+
+	while (delem != NULL)
+	{
+		do
+			next = delem->node.down[val++];
+		while (next == NULL && val < POINTERS_PER_NODE);
+		if (next != NULL)
+		{
+			if (IS_LEAF(next))
+			{
+				/* We will find the original leaf first. */
+				if (&next->leaf != leaf)
+				{
+					if (strcmp(next->leaf.key, leaf->key) < 0)
+					{
+						mowgli_log("mowgli_patricia_foreach_next(): iteration went backwards (libmowgli bug) on dtree<%p>", dtree);
+						STATE_NEXT(state) = NULL;
+						return;
+					}
+					STATE_NEXT(state) = next;
+					return;
+				}
+			}
+			else
+			{
+				delem = next;
+				val = 0;
+			}
+		}
+		while (val >= POINTERS_PER_NODE)
+		{
+			val = delem->node.parent_val;
+			delem = delem->node.parent;
+			if (delem == NULL)
+				break;
+			val++;
+		}
+	}
+	STATE_NEXT(state) = NULL;
 }
 
 /*
@@ -389,18 +544,15 @@ void mowgli_patricia_foreach_next(mowgli_patricia_t *dtree,
  * Side Effects:
  *     - none
  */
-static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, const char *key)
+static struct patricia_leaf *mowgli_patricia_find(mowgli_patricia_t *dict, const char *key)
 {
 	char ckey_store[256];
 	char *ckey;
-	mowgli_patricia_elem_t *delem, *prev;
-	int bitval, keylen;
+	union patricia_elem *delem;
+	int val, keylen;
 
 	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
-
-	if (dict->root == NULL)
-		return NULL;
 
 	keylen = strlen(key);
 	if (keylen >= sizeof ckey_store)
@@ -413,23 +565,22 @@ static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, con
 	dict->canonize_cb(ckey);
 
 	delem = dict->root;
-	do
+	while (delem != NULL && !IS_LEAF(delem))
 	{
-		prev = delem;
-		if (delem->bitnum / 8 < keylen)
-			bitval = (ckey[delem->bitnum / 8] & (1 << (delem->bitnum & 7))) != 0;
+		if (delem->nibnum / 2 < keylen)
+			val = NIBBLE_VAL(ckey, delem->nibnum);
 		else
-			bitval = 0;
-		delem = bitval ? delem->one : delem->zero;
-	} while (delem != NULL && prev->bitnum < delem->bitnum);
+			val = 0;
+		delem = delem->node.down[val];
+	}
 	/* Now, if the key is in the tree, delem contains it. */
-	if (delem != NULL && strcmp(delem->key, ckey))
+	if (delem != NULL && strcmp(delem->leaf.key, ckey))
 		delem = NULL;
 
 	if (ckey != ckey_store)
 		free(ckey);
 
-	return delem;
+	return &delem->leaf;
 }
 
 /*
@@ -452,9 +603,10 @@ static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, con
 mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, void *data)
 {
 	char *ckey;
-	mowgli_patricia_elem_t *delem, *prev, *place, *newelem;
-	int bitval, keylen;
-	int i;
+	union patricia_elem *delem, *prev, *newnode;
+	union patricia_elem **place1;
+	int val, keylen;
+	int i, j;
 
 	return_val_if_fail(dict != NULL, FALSE);
 	return_val_if_fail(key != NULL, FALSE);
@@ -469,121 +621,112 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 	}
 	dict->canonize_cb(ckey);
 
-	if (dict->root == NULL)
-	{
-		return_val_if_fail(dict->count == 0, FALSE);
-		return_val_if_fail(dict->head == NULL, FALSE);
-		return_val_if_fail(dict->tail == NULL, FALSE);
-		dict->root = mowgli_heap_alloc(elem_heap);
-		dict->root->bitnum = 0;
-		if (ckey[0] & 1)
-		{
-			dict->root->zero = NULL;
-			dict->root->one = dict->root;
-		}
-		else
-		{
-			dict->root->zero = dict->root;
-			dict->root->one = NULL;
-		}
-		dict->root->next = NULL;
-		dict->root->prev = NULL;
-		dict->root->data = data;
-		dict->root->key = ckey;
-		dict->head = dict->root;
-		dict->tail = dict->root;
-		dict->count++;
-		return TRUE;
-	}
-
+	prev = NULL;
+	val = POINTERS_PER_NODE + 2; /* trap value */
 	delem = dict->root;
-	do
+	while (delem != NULL && !IS_LEAF(delem))
 	{
 		prev = delem;
-		if (delem->bitnum / 8 < keylen)
-			bitval = (ckey[delem->bitnum / 8] & (1 << (delem->bitnum & 7))) != 0;
+		if (delem->nibnum / 2 < keylen)
+			val = NIBBLE_VAL(ckey, delem->nibnum);
 		else
-			bitval = 0;
-		delem = bitval ? delem->one : delem->zero;
-	} while (delem != NULL && prev->bitnum < delem->bitnum);
+			val = 0;
+		delem = delem->node.down[val];
+	}
 	/* Now, if the key is in the tree, delem contains it. */
-	if (delem != NULL && !strcmp(delem->key, ckey))
+	if (delem != NULL && !strcmp(delem->leaf.key, ckey))
 	{
 		mowgli_log("Key is already in dict, ignoring duplicate");
 		free(ckey);
 		return FALSE;
 	}
-	place = delem;
 
-	/* Find the first bit position where they differ */
-	/* XXX perhaps look up differing byte first, then bit */
-	if (place == NULL)
-		i = prev->bitnum + 1;
-	else
-		for (i = 0; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)
-			;
-	/* Find where to insert the new node */
-	prev = NULL;
-	delem = dict->root;
-	while ((prev == NULL || prev->bitnum < delem->bitnum) &&
-			delem->bitnum < i)
+	if (delem == NULL && prev != NULL)
 	{
-		prev = delem;
-		if (delem->bitnum / 8 < keylen)
-			bitval = (ckey[delem->bitnum / 8] & (1 << (delem->bitnum & 7))) != 0;
+		/* Get a leaf to compare with. */
+		delem = first_leaf(prev);
+	}
+
+	if (delem == NULL)
+	{
+		soft_assert(prev == NULL);
+		soft_assert(dict->count == 0);
+		place1 = &dict->root;
+		*place1 = mowgli_heap_alloc(leaf_heap);
+		(*place1)->nibnum = -1;
+		(*place1)->leaf.data = data;
+		(*place1)->leaf.key = ckey;
+		(*place1)->leaf.parent = prev;
+		(*place1)->leaf.parent_val = val;
+		dict->count++;
+		return TRUE;
+	}
+
+	/* Find the first nibble where they differ. */
+	for (i = 0; NIBBLE_VAL(ckey, i) == NIBBLE_VAL(delem->leaf.key, i); i++)
+		;
+	/* Find where to insert the new node. */
+	while (prev != NULL && prev->nibnum > i)
+	{
+		val = prev->node.parent_val;
+		prev = prev->node.parent;
+	}
+	if (prev == NULL || prev->nibnum < i)
+	{
+		/* Insert new node below prev */
+		newnode = mowgli_heap_alloc(node_heap);
+		newnode->nibnum = i;
+		newnode->node.parent = prev;
+		newnode->node.parent_val = val;
+		for (j = 0; j < POINTERS_PER_NODE; j++)
+			newnode->node.down[j] = NULL;
+		if (prev == NULL)
+		{
+			newnode->node.down[NIBBLE_VAL(delem->leaf.key, i)] = dict->root;
+			if (IS_LEAF(dict->root))
+			{
+				dict->root->leaf.parent = newnode;
+				dict->root->leaf.parent_val = NIBBLE_VAL(delem->leaf.key, i);
+			}
+			else
+			{
+				soft_assert(dict->root->nibnum > i);
+				dict->root->node.parent = newnode;
+				dict->root->node.parent_val = NIBBLE_VAL(delem->leaf.key, i);
+			}
+			dict->root = newnode;
+		}
 		else
-			bitval = 0;
-		delem = bitval ? delem->one : delem->zero;
-		if (delem == NULL)
-			break;
-	}
-	soft_assert(delem == NULL || delem->bitnum != i);
-
-	/* Insert new element between prev and delem */
-	newelem = mowgli_heap_alloc(elem_heap);
-	newelem->bitnum = i;
-	newelem->key = ckey;
-	newelem->data = data;
-	if (prev == NULL)
-	{
-		soft_assert(dict->root == delem);
-		dict->root = newelem;
-	}
-	else if (bitval)
-	{
-		soft_assert(prev->one == delem);
-		prev->one = newelem;
+		{
+			newnode->node.down[NIBBLE_VAL(delem->leaf.key, i)] = prev->node.down[val];
+			if (IS_LEAF(prev->node.down[val]))
+			{
+				prev->node.down[val]->leaf.parent = newnode;
+				prev->node.down[val]->leaf.parent_val = NIBBLE_VAL(delem->leaf.key, i);
+			}
+			else
+			{
+				prev->node.down[val]->node.parent = newnode;
+				prev->node.down[val]->node.parent_val = NIBBLE_VAL(delem->leaf.key, i);
+			}
+			prev->node.down[val] = newnode;
+		}
 	}
 	else
 	{
-		soft_assert(prev->zero == delem);
-		prev->zero = newelem;
+		/* This nibble is already checked. */
+		soft_assert(prev->nibnum == i);
+		newnode = prev;
 	}
-	bitval = (ckey[i / 8] & (1 << (i & 7))) != 0;
-	if (bitval)
-		newelem->one = newelem, newelem->zero = delem;
-	else
-		newelem->zero = newelem, newelem->one = delem;
-
-	/* linked list - XXX still needed? */
-	if (place != NULL && place->next != NULL)
-	{
-		newelem->next = place->next;
-		newelem->prev = place;
-		place->next->prev = newelem;
-		place->next = newelem;
-	}
-	else
-	{
-		/* XXX head or tail? */
-		newelem->next = NULL;
-		newelem->prev = dict->tail;
-		if (dict->tail != NULL)
-			dict->tail->next = newelem;
-		dict->tail = newelem;
-		if (dict->head == NULL)
-			dict->head = newelem;
-	}
+	val = NIBBLE_VAL(ckey, i);
+	place1 = &newnode->node.down[val];
+	soft_assert(*place1 == NULL);
+	*place1 = mowgli_heap_alloc(leaf_heap);
+	(*place1)->nibnum = -1;
+	(*place1)->leaf.data = data;
+	(*place1)->leaf.key = ckey;
+	(*place1)->leaf.parent = newnode;
+	(*place1)->leaf.parent_val = val;
 
 	dict->count++;
 
@@ -614,14 +757,11 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	void *data;
 	char ckey_store[256];
 	char *ckey;
-	mowgli_patricia_elem_t *delem, *prev, *pprev, *pdelem, *temp2;
-	int bitval, pbitval, keylen;
+	union patricia_elem *delem, *prev, *next;
+	int val, i, keylen, used;
 
 	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
-
-	if (dict->root == NULL)
-		return NULL;
 
 	keylen = strlen(key);
 
@@ -634,20 +774,18 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	}
 	dict->canonize_cb(ckey);
 
-	prev = NULL;
+	val = POINTERS_PER_NODE + 2; /* trap value */
 	delem = dict->root;
-	do
+	while (delem != NULL && !IS_LEAF(delem))
 	{
-		pprev = prev;
-		prev = delem;
-		if (delem->bitnum / 8 < keylen)
-			bitval = (ckey[delem->bitnum / 8] & (1 << (delem->bitnum & 7))) != 0;
+		if (delem->nibnum / 2 < keylen)
+			val = NIBBLE_VAL(ckey, delem->nibnum);
 		else
-			bitval = 0;
-		delem = bitval ? delem->one : delem->zero;
-	} while (delem != NULL && prev->bitnum < delem->bitnum);
+			val = 0;
+		delem = delem->node.down[val];
+	}
 	/* Now, if the key is in the tree, delem contains it. */
-	if (delem != NULL && strcmp(delem->key, ckey))
+	if (delem != NULL && strcmp(delem->leaf.key, ckey))
 		delem = NULL;
 
 	if (ckey != ckey_store)
@@ -656,103 +794,51 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	if (delem == NULL)
 		return NULL;
 
-	data = delem->data;
+	data = delem->leaf.data;
 
-	/* delem = node with requested key in it
-	 * prev = node with upward link to delem
-	 * pprev = node with downward link to prev
-	 */
-	if (delem == prev)
-	{
-		/* The node with the requested key is also the node
-		 * that needs to be removed from the tree.
-		 */
-		/* Get the other pointer of the node to be removed. */
-		temp2 = bitval ? prev->zero : prev->one;
-		/* Disconnect it. */
-		if (pprev == NULL)
-			dict->root = temp2;
-		else
-		{
-			if (pprev->zero == prev)
-				pprev->zero = temp2;
-			if (pprev->one == prev)
-				pprev->one = temp2;
-		}
-	}
-	else
-	{
-		/* Now we need to remove prev from the tree.
-		 * However, the node *prev must remain valid and containing
-		 * the same key and data, otherwise iterations doing removal
-		 * break. We will put it on delem's place.
-		 */
+	val = delem->leaf.parent_val;
+	prev = delem->leaf.parent;
 
-		pdelem = NULL;
-		temp2 = dict->root;
-		while (temp2 != delem)
+	mowgli_free(delem->leaf.key);
+	mowgli_heap_free(leaf_heap, delem);
+
+	if (prev != NULL)
+	{
+		prev->node.down[val] = NULL;
+
+		/* Leaf is gone, now consider the node it was in. */
+		delem = prev;
+
+		used = -1;
+		for (i = 0; i < POINTERS_PER_NODE; i++)
+			if (delem->node.down[i] != NULL)
+				used = used == -1 ? i : -2;
+		soft_assert(used == -2 || used >= 0);
+		if (used >= 0)
 		{
-			pdelem = temp2;
-			if (temp2->bitnum / 8 < keylen)
-				pbitval = (ckey[temp2->bitnum / 8] & (1 << (temp2->bitnum & 7))) != 0;
+			/* Only one pointer in this node, remove it.
+			 * Replace the pointer that pointed to it by
+			 * the sole pointer in it.
+			 */
+			next = delem->node.down[used];
+			val = delem->node.parent_val;
+			prev = delem->node.parent;
+			if (prev != NULL)
+				prev->node.down[val] = next;
 			else
-				pbitval = 0;
-			temp2 = pbitval ? temp2->one : temp2->zero;
+				dict->root = next;
+			if (IS_LEAF(next))
+				next->leaf.parent = prev, next->leaf.parent_val = val;
+			else
+				next->node.parent = prev, next->node.parent_val = val;
+			mowgli_heap_free(node_heap, delem);
 		}
-		/* pdelem = node containing downward link to delem or
-		 *          NULL if delem == dict->root
-		 */
-
-		soft_assert((bitval ? prev->one : prev->zero) == delem);
-		/* Get the other pointer of the node to be removed. */
-		temp2 = bitval ? prev->zero : prev->one;
-		/* Disconnect it. */
-		if (pprev == NULL)
-			dict->root = temp2;
-		else
-		{
-			if (pprev->zero == prev)
-				pprev->zero = temp2;
-			if (pprev->one == prev)
-				pprev->one = temp2;
-		}
-		/* Make prev take delem's place in the tree. */
-		if (pdelem == NULL)
-			dict->root = prev;
-		else
-		{
-			if (pdelem->zero == delem)
-				pdelem->zero = prev;
-			if (pdelem->one == delem)
-				pdelem->one = prev;
-		}
-		prev->one = delem->one;
-		prev->zero = delem->zero;
-		prev->bitnum = delem->bitnum;
 	}
-
-	/* linked list */
-#if 0
-	if (dict->head == delem)
-		dict->head = delem->next;
 	else
-		delem->prev->next = delem->next;
-	if (dict->tail == delem)
-		dict->tail = delem->prev;
-	else
-		delem->next->prev = delem->prev;
-#endif
-	if (delem->prev == NULL)
-		dict->head = delem->next;
-	else
-		delem->prev->next = delem->next;
-	if (delem->next == NULL)
-		dict->tail = delem->prev;
-	else
-		delem->next->prev = delem->prev;
-
-	mowgli_free(delem->key);
-	mowgli_heap_free(elem_heap, delem);
+	{
+		/* This was the last leaf. */
+		dict->root = NULL;
+	}
 
 	dict->count--;
 	if (dict->count == 0)
@@ -782,7 +868,7 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
  */
 void *mowgli_patricia_retrieve(mowgli_patricia_t *dtree, const char *key)
 {
-	mowgli_patricia_elem_t *delem = mowgli_patricia_find(dtree, key);
+	struct patricia_leaf *delem = mowgli_patricia_find(dtree, key);
 
 	if (delem != NULL)
 		return delem->data;
@@ -812,26 +898,46 @@ unsigned int mowgli_patricia_size(mowgli_patricia_t *dict)
 }
 
 /* returns the sum of the depths of the subtree rooted in delem at depth depth */
+/* there is no need for this to be recursive, but it is easier... */
 static int
-stats_recurse(mowgli_patricia_elem_t *delem, int depth, int *pmaxdepth)
+stats_recurse(union patricia_elem *delem, int depth, int *pmaxdepth)
 {
 	int result = 0;
+	int val;
+	union patricia_elem *next;
 
 	if (depth > *pmaxdepth)
 		*pmaxdepth = depth;
-	if (delem->zero)
+	if (depth == 0)
 	{
-		if (delem->zero->bitnum > delem->bitnum)
-			result += stats_recurse(delem->zero, depth + 1, pmaxdepth);
-		else if (delem->zero->key[0] != '\0')
-			result += depth + 1;
+		if (IS_LEAF(delem))
+		{
+			soft_assert(delem->leaf.parent == NULL);
+		}
+		else
+		{
+			soft_assert(delem->node.parent == NULL);
+		}
 	}
-	if (delem->one)
+	if (IS_LEAF(delem))
+		return depth;
+	for (val = 0; val < POINTERS_PER_NODE; val++)
 	{
-		if (delem->one->bitnum > delem->bitnum)
-			result += stats_recurse(delem->one, depth + 1, pmaxdepth);
-		else if (delem->one->key[0] != '\0')
-			result += depth + 1;
+		next = delem->node.down[val];
+		if (next == NULL)
+			continue;
+		result += stats_recurse(next, depth + 1, pmaxdepth);
+		if (IS_LEAF(next))
+		{
+			soft_assert(next->leaf.parent == delem);
+			soft_assert(next->leaf.parent_val == val);
+		}
+		else
+		{
+			soft_assert(next->node.parent == delem);
+			soft_assert(next->node.parent_val == val);
+			soft_assert(next->node.nibnum > delem->node.nibnum);
+		}
 	}
 	return result;
 }

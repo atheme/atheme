@@ -1,8 +1,8 @@
 /*
  * libmowgli: A collection of useful routines for programming.
- * mowgli_logger.c: Event and debugging message logging.
+ * win32_support.c: Support functions and values for Win32 platform.
  *
- * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
+ * Copyright (c) 2009 SystemInPlace, Inc.
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,40 +23,43 @@
 
 #include "mowgli.h"
 
-void mowgli_log_cb_default(const char *buf)
+#ifdef _MSC_EXTENSIONS
+# define EPOCH_TIME_IN_MICROSECS	11644473600000000Ui64
+#else
+# define EPOCH_TIME_IN_MICROSECS	11644473600000000ULL
+#endif
+
+int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
-	fprintf(stderr, "%s\n", buf);
-}
+	FILETIME ft;
+	unsigned int tmpres = 0;
+	static mowgli_boolean_t tz_init_done = FALSE;
 
-static mowgli_log_cb_t mowgli_log_cb = mowgli_log_cb_default;
+	if (tv != NULL)
+	{
+		GetSystemTimeAsFileTime(&ft);
 
-void mowgli_log_real(const char *file, int line, const char *func, const char *fmt, ...)
-{
-	char buf[65535];
-	char snbuf[65535];
-	va_list va;
+		tmpres |= ft.dwHighDateTime;
+		tmpres <<= 32;
+		tmpres |= ft.dwLowDateTime;
 
-	va_start(va, fmt);
-	vsnprintf(snbuf, 65535, fmt, va);
-	va_end(va);
+		tmpres /= 10;
+		tmpres -= EPOCH_TIME_IN_MICROSECS;
+		tv->tv_sec = (long) (tmpres / 1000000UL);
+		tv->tv_usec = (long) (tmpres % 1000000UL);
+	}
 
-	snprintf(buf, 65535, "(%s:%d) [%s]: %s", file, line, func, snbuf);
+	if (tz != NULL)
+	{
+		if (!tz_init_done)
+		{
+			_tzset();
+			tz_init_done = TRUE;
+		}
 
-	mowgli_log_cb(buf);
-}
+		tz->tz_minuteswest = _timezone / 60;
+		tz->tz_dsttime = _daylight;
+	}
 
-void mowgli_log_set_cb(mowgli_log_cb_t callback)
-{
-	return_if_fail(callback != NULL);
-
-	mowgli_log_cb = callback;
-}
-
-void mowgli_soft_assert_log(const char *asrt, const char *file, int line, const char *function)
-{
-	char buf[65535];
-
-	snprintf(buf, sizeof buf, "(%s:%d) [%s]: critical: Assertion '%s' failed.", file, line, function, asrt);
-
-	mowgli_log_cb(buf);
+	return 0;
 }

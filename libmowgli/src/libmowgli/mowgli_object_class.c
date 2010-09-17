@@ -24,13 +24,22 @@
 
 #include "mowgli.h"
 
-static mowgli_dictionary_t *mowgli_object_class_dict = NULL;
+static mowgli_patricia_t *mowgli_object_class_dict = NULL;
+
+static void _object_key_canon(char *str)
+{
+	while (*str)
+	{
+		*str = toupper(*str);
+		str++;
+	}
+}
 
 void mowgli_object_class_init(mowgli_object_class_t *klass, const char *name, mowgli_destructor_t des, mowgli_boolean_t dynamic)
 {
 	/* if the object_class dictionary has not yet been initialized, we will want to do that. */
 	if (mowgli_object_class_dict == NULL)
-		mowgli_object_class_dict = mowgli_dictionary_create(strcasecmp);
+		mowgli_object_class_dict = mowgli_patricia_create(_object_key_canon);
 
 	if (klass == NULL)
 		mowgli_throw_exception_fatal(mowgli.object_class.invalid_object_class_exception);
@@ -53,7 +62,7 @@ void mowgli_object_class_init(mowgli_object_class_t *klass, const char *name, mo
 	klass->dynamic = dynamic;
 
 	/* add to the object_class index */
-	mowgli_dictionary_add(mowgli_object_class_dict, klass->name, klass);
+	mowgli_patricia_add(mowgli_object_class_dict, klass->name, klass);
 }
 
 int mowgli_object_class_check_cast(mowgli_object_class_t *klass1, mowgli_object_class_t *klass2)
@@ -99,7 +108,7 @@ void *mowgli_object_class_reinterpret_impl(/* mowgli_object_t */ void *opdata, m
 
 mowgli_object_class_t *mowgli_object_class_find_by_name(const char *name)
 {
-	return mowgli_dictionary_retrieve(mowgli_object_class_dict, name);
+	return mowgli_patricia_retrieve(mowgli_object_class_dict, name);
 }
 
 void mowgli_object_class_destroy(mowgli_object_class_t *klass)

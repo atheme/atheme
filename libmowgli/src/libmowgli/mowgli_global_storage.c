@@ -23,13 +23,18 @@
 
 #include "mowgli.h"
 
-static mowgli_dictionary_t *mowgli_global_storage_dict = NULL;
+static mowgli_patricia_t *mowgli_global_storage_dict = NULL;
 static mowgli_spinlock_t *mowgli_global_storage_lock = NULL;
+
+static void _storage_key_canon(char *key)
+{
+
+}
 
 void
 mowgli_global_storage_init(void)
 {
-	mowgli_global_storage_dict = mowgli_dictionary_create(strcasecmp);
+	mowgli_global_storage_dict = mowgli_patricia_create(_storage_key_canon);
 	mowgli_global_storage_lock = mowgli_spinlock_create();
 }
 
@@ -40,7 +45,7 @@ mowgli_global_storage_get(char *name)
 
 	/* name serves as lock token */
 	mowgli_spinlock_lock(mowgli_global_storage_lock, name, NULL);
-	ret = mowgli_dictionary_retrieve(mowgli_global_storage_dict, name);
+	ret = mowgli_patricia_retrieve(mowgli_global_storage_dict, name);
 	mowgli_spinlock_unlock(mowgli_global_storage_lock, name, NULL);
 
 	return ret;
@@ -50,7 +55,7 @@ void
 mowgli_global_storage_put(char *name, void *value)
 {
 	mowgli_spinlock_lock(mowgli_global_storage_lock, NULL, name);
-	mowgli_dictionary_add(mowgli_global_storage_dict, name, value);
+	mowgli_patricia_add(mowgli_global_storage_dict, name, value);
 	mowgli_spinlock_unlock(mowgli_global_storage_lock, NULL, name);
 }
 
@@ -58,6 +63,6 @@ void
 mowgli_global_storage_free(char *name)
 {
 	mowgli_spinlock_lock(mowgli_global_storage_lock, name, name);
-	mowgli_dictionary_delete(mowgli_global_storage_dict, name);
+	mowgli_patricia_delete(mowgli_global_storage_dict, name);
 	mowgli_spinlock_unlock(mowgli_global_storage_lock, name, name);
 }

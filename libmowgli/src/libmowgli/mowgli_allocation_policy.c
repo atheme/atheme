@@ -24,12 +24,17 @@
 #include "mowgli.h"
 
 static mowgli_object_class_t klass;
-static mowgli_dictionary_t *mowgli_allocation_policy_dict = NULL;
+static mowgli_patricia_t *mowgli_allocation_policy_dict = NULL;
+
+static void _allocation_policy_key_canon(char *str)
+{
+
+}
 
 void
 mowgli_allocation_policy_init(void)
 {
-	mowgli_allocation_policy_dict = mowgli_dictionary_create(strcasecmp);
+	mowgli_allocation_policy_dict = mowgli_patricia_create(_allocation_policy_key_canon);
 
 	mowgli_object_class_init(&klass, "mowgli.allocation_policy", NULL, FALSE);
 }
@@ -41,9 +46,9 @@ mowgli_allocation_policy_create(const char *name, mowgli_allocation_func_t alloc
 	mowgli_allocation_policy_t *policy;
 
 	if (mowgli_allocation_policy_dict == NULL)
-		mowgli_allocation_policy_dict = mowgli_dictionary_create(strcasecmp);
+		mowgli_allocation_policy_dict = mowgli_patricia_create(_allocation_policy_key_canon);
 
-	if ((policy = mowgli_dictionary_retrieve(mowgli_allocation_policy_dict, name)))
+	if ((policy = mowgli_patricia_retrieve(mowgli_allocation_policy_dict, name)))
 		return policy;
 
 	policy = mowgli_alloc(sizeof(mowgli_allocation_policy_t));
@@ -59,7 +64,7 @@ mowgli_allocation_policy_t *
 mowgli_allocation_policy_lookup(const char *name)
 {
 	if (mowgli_allocation_policy_dict == NULL)
-		mowgli_allocation_policy_dict = mowgli_dictionary_create(strcasecmp);
+		mowgli_allocation_policy_dict = mowgli_patricia_create(_allocation_policy_key_canon);
 
-	return mowgli_dictionary_retrieve(mowgli_allocation_policy_dict, name);
+	return mowgli_patricia_retrieve(mowgli_allocation_policy_dict, name);
 }

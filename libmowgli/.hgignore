@@ -11,6 +11,8 @@ src/examples/dicttest/dicttest
 src/examples/formattertest/formattertest
 src/examples/listsort/listsort
 src/examples/randomtest/randomtest
+src/examples/patriciatest/patriciatest
+src/examples/patriciatest2/patriciatest2
 src/libmowgli/mowgli_config.h
 src/libmowgli/mowgli_config.h.in
 .deps
@@ -19,3 +21,5 @@ src/libmowgli/mowgli_config.h.in
 *.so
 *.so.*
 *~
+*.core
+core

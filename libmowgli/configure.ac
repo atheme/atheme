@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([libmowgli], [0.7.0], [bugs+libmowgli@atheme.org])
+AC_INIT([libmowgli], [0.7.1], [bugs+libmowgli@atheme.org])
 AC_CONFIG_SRCDIR([src/libmowgli/mowgli_alloc.c])
 AC_CONFIG_HEADER([src/libmowgli/mowgli_config.h])
 

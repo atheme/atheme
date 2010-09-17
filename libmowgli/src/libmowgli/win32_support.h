@@ -1,8 +1,8 @@
 /*
  * libmowgli: A collection of useful routines for programming.
- * mowgli_logger.c: Event and debugging message logging.
+ * win32_support.h: Support functions and values for Win32 platform.
  *
- * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
+ * Copyright (c) 2009 SystemInPlace, Inc.
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,42 +21,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "mowgli.h"
+#ifndef __LIBMOWGLI_SRC_LIBMOWGLI_WIN32_SUPPORT_H__GUARD
+#define __LIBMOWGLI_SRC_LIBMOWGLI_WIN32_SUPPORT_H__GUARD
 
-void mowgli_log_cb_default(const char *buf)
-{
-	fprintf(stderr, "%s\n", buf);
-}
+#ifdef _WIN32
 
-static mowgli_log_cb_t mowgli_log_cb = mowgli_log_cb_default;
+#include <time.h>
 
-void mowgli_log_real(const char *file, int line, const char *func, const char *fmt, ...)
-{
-	char buf[65535];
-	char snbuf[65535];
-	va_list va;
+#ifdef _MSC_VER
+# define WIN32_MSC
+#endif
 
-	va_start(va, fmt);
-	vsnprintf(snbuf, 65535, fmt, va);
-	va_end(va);
+#define strcasecmp			stricmp
+#define snprintf			sprintf_s
+#define vsnprintf			vsprintf_s
+#define usleep				Sleep
 
-	snprintf(buf, 65535, "(%s:%d) [%s]: %s", file, line, func, snbuf);
+struct timezone {
+	int tz_minuteswest;
+	int tz_dsttime;
+};
 
-	mowgli_log_cb(buf);
-}
+extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 
-void mowgli_log_set_cb(mowgli_log_cb_t callback)
-{
-	return_if_fail(callback != NULL);
+#endif
 
-	mowgli_log_cb = callback;
-}
-
-void mowgli_soft_assert_log(const char *asrt, const char *file, int line, const char *function)
-{
-	char buf[65535];
-
-	snprintf(buf, sizeof buf, "(%s:%d) [%s]: critical: Assertion '%s' failed.", file, line, function, asrt);
-
-	mowgli_log_cb(buf);
-}
+#endif

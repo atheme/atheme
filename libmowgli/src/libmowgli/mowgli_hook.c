@@ -24,20 +24,29 @@
 
 #include "mowgli.h"
 
-static mowgli_dictionary_t *mowgli_hooks = NULL;
+static mowgli_patricia_t *mowgli_hooks = NULL;
 static mowgli_heap_t *mowgli_hook_item_heap;
+
+static void _hook_key_canon(char *str)
+{
+	while (*str)
+	{
+		*str = toupper(*str);
+		str++;
+	}
+}
 
 void
 mowgli_hook_init(void)
 {
-	mowgli_hooks = mowgli_dictionary_create(strcasecmp);
+	mowgli_hooks = mowgli_patricia_create(_hook_key_canon);
 	mowgli_hook_item_heap = mowgli_heap_create(sizeof(mowgli_hook_item_t), 64, BH_NOW);
 }
 
 static mowgli_hook_t *
 mowgli_hook_find(const char *name)
 {
-	return mowgli_dictionary_retrieve(mowgli_hooks, name);
+	return mowgli_patricia_retrieve(mowgli_hooks, name);
 }
 
 void
@@ -51,7 +60,7 @@ mowgli_hook_register(const char *name)
 	hook = mowgli_alloc(sizeof(mowgli_hook_t));
 	hook->name = strdup(name);
 
-	mowgli_dictionary_add(mowgli_hooks, hook->name, hook);
+	mowgli_patricia_add(mowgli_hooks, hook->name, hook);
 }
 
 int
