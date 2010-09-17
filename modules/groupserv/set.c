@@ -324,7 +324,7 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(mg->flags & MG_OPEN))
 		{
-			command_fail(si, fault_nochange, _("Members must be added by an existing group member in \2%s\2."), entity(mg)->name);
+			command_fail(si, fault_nochange, _("\2%s\2 is already not open to anyone joining."), entity(mg)->name);
 			return;
 		}
 
