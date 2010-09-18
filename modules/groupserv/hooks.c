@@ -69,6 +69,7 @@ void gs_hooks_init(void)
 {
 	event_add("mygroup_expire", mygroup_expire, NULL, 3600);
 
+	hook_add_event("myuser_delete");
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
 }
