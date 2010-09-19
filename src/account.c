@@ -184,6 +184,8 @@ void myuser_delete(myuser_t *mu)
 
 	myuser_name_remember(entity(mu)->name, mu);
 
+	hook_call_myuser_delete(mu);
+
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
@@ -195,8 +197,6 @@ void myuser_delete(myuser_t *mu)
 			node_free(n);
 		}
 	}
-
-	hook_call_myuser_delete(mu);
 
 	/* kill all their channels and chanacs */
 	LIST_FOREACH_SAFE(n, tn, entity(mu)->chanacs.head)
