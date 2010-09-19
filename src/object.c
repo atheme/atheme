@@ -107,9 +107,11 @@ void * object_ref(void *object)
 void object_unref(void *object)
 {
 	object_t *obj;
+	mowgli_patricia_t *privatedata;
 
 	return_if_fail(object != NULL);
 	obj = object(object);
+	privatedata = obj->privatedata;
 
 #ifdef USE_OBJECT_REF
 	obj->refcount--;
@@ -120,9 +122,6 @@ void object_unref(void *object)
 		if (obj->name != NULL)
 			free(obj->name);
 
-		if (obj->privatedata != NULL)
-			mowgli_patricia_destroy(obj->privatedata, NULL, NULL);
-
 		if (obj->destructor != NULL)
 			obj->destructor(obj);
 		else
@@ -130,6 +129,9 @@ void object_unref(void *object)
 			metadata_delete_all(obj);
 			free(obj);
 		}
+
+		if (privatedata != NULL)
+			mowgli_patricia_destroy(privatedata, NULL, NULL);
 	}
 }
 
