@@ -30,7 +30,7 @@ static void user_info_hook(hook_user_req_t *req)
 	*buf = 0;
 
 	l = myuser_get_membership_list(req->mu);
-		
+
 	LIST_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;
@@ -50,12 +50,12 @@ static void user_info_hook(hook_user_req_t *req)
 
 static void myuser_delete_hook(myuser_t *mu)
 {
-	node_t *n;
+	node_t *n, *tn;
 	list_t *l;
 
 	l = myuser_get_membership_list(mu);
 
-	LIST_FOREACH(n, l->head)
+	LIST_FOREACH_SAFE(n, tn, l->head)
 	{
 		groupacs_t *ga = n->data;
 
