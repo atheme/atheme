@@ -21,9 +21,7 @@ struct commandentry_ {
 
 /* commandtree.c */
 E void command_add(command_t *cmd, list_t *commandtree);
-E void command_add_many(command_t **cmd, list_t *commandtree);
 E void command_delete(command_t *cmd, list_t *commandtree);
-E void command_delete_many(command_t **cmd, list_t *commandtree);
 E command_t *command_find(list_t *commandtree, const char *command);
 E void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[]);
 E void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree);

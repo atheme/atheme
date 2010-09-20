@@ -40,27 +40,6 @@ void command_add(command_t *cmd, list_t *commandtree)
 	node_add(cmd, n, commandtree);
 }
 
-/*
- * command_add_many()
- *
- * Inputs:
- *       array of commands to add, list to add them to.
- *
- * Output:
- *       none
- *
- * Side Effects:
- *       adds an array of commands to a command list,
- *       via command_add().
- */
-void command_add_many(command_t **cmd, list_t *commandtree)
-{
-	unsigned int i;
-
-	for (i = 0; cmd[i] != NULL; i++)
-		command_add(cmd[i], commandtree);
-}
-
 void command_delete(command_t *cmd, list_t *commandtree)
 {
 	node_t *n;
@@ -73,27 +52,6 @@ void command_delete(command_t *cmd, list_t *commandtree)
 
 	node_del(n, commandtree);
 	node_free(n);
-}
-
-/*
- * command_delete_many()
- *
- * Inputs:
- *       array of commands to delete, list to delete them from.
- *
- * Output:
- *       none
- *
- * Side Effects:
- *       deletes an array of commands from a command list,
- *       via command_delete().
- */
-void command_delete_many(command_t **cmd, list_t *commandtree)
-{
-	unsigned int i;
-
-	for (i = 0; cmd[i] != NULL; i++)
-		command_delete(cmd[i], commandtree);
 }
 
 command_t *command_find(list_t *commandtree, const char *command)
