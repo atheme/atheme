@@ -197,7 +197,7 @@ static int conf_service(config_entry_t *ce)
 	return 0;
 }
 
-service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree, list_t *conf_table)
+service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *conf_table)
 {
 	service_t *sptr;
 	struct ConfTable *subblock;
@@ -240,8 +240,6 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
-
-	sptr->cmdtree = cmdtree;
 	sptr->aliases = NULL;
 	sptr->chanmsg = false;
 	sptr->conf_table = conf_table;
@@ -250,6 +248,8 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 
 	mowgli_patricia_add(services_name, sptr->internal_name, sptr);
 	mowgli_patricia_add(services_nick, sptr->nick, sptr);
+
+	sptr->commands = mowgli_patricia_create(strcasecanon);
 
 	if (sptr->conf_table != NULL)
 	{
@@ -294,6 +294,8 @@ void service_delete(service_t *sptr)
 	sptr->handler = NULL;
 	if (sptr->aliases)
 		mowgli_patricia_destroy(sptr->aliases, free_alias_string, NULL);
+	if (sptr->commands)
+		mowgli_patricia_destroy(sptr->commands, NULL, NULL);
 	free(sptr->disp);	/* service_name() does a malloc() */
 	free(sptr->internal_name);
 	free(sptr->nick);
@@ -304,13 +306,13 @@ void service_delete(service_t *sptr)
 	BlockHeapFree(service_heap, sptr);
 }
 
-service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *cmdtree)
+service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
 {
 	service_t *sptr;
 	char internal_name[NICKLEN + 10];
 
 	snprintf(internal_name, sizeof internal_name, "static:%s", name);
-	sptr = service_add(internal_name, handler, cmdtree, NULL);
+	sptr = service_add(internal_name, handler, NULL);
 
 	free(sptr->user);
 	free(sptr->host);
@@ -444,6 +446,22 @@ const char *service_resolve_alias(service_t *sptr, const char *context, const ch
 	strlcat(fullname, cmd, sizeof fullname);
 	alias = mowgli_patricia_retrieve(sptr->aliases, fullname);
 	return alias != NULL ? alias : cmd;
+}
+
+void service_bind_command(service_t *sptr, command_t *cmd)
+{
+	return_if_fail(sptr != NULL);
+	return_if_fail(cmd != NULL);
+
+	command_add(cmd, sptr->commands);
+}
+
+void service_unbind_command(service_t *sptr, command_t *cmd)
+{
+	return_if_fail(sptr != NULL);
+	return_if_fail(cmd != NULL);
+
+	command_delete(cmd, sptr->commands);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

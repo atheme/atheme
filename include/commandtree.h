@@ -20,13 +20,13 @@ struct commandentry_ {
 };
 
 /* commandtree.c */
-E void command_add(command_t *cmd, list_t *commandtree);
-E void command_delete(command_t *cmd, list_t *commandtree);
-E command_t *command_find(list_t *commandtree, const char *command);
+E void command_add(command_t *cmd, mowgli_patricia_t *commandtree);
+E void command_delete(command_t *cmd, mowgli_patricia_t *commandtree);
+E command_t *command_find(mowgli_patricia_t *commandtree, const char *command);
 E void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[]);
-E void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree);
-E void command_help(sourceinfo_t *si, list_t *commandtree);
-E void command_help_short(sourceinfo_t *si, list_t *commandtree, const char *maincmds);
+E void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
+E void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree);
+E void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds);
 
 /* help.c */
 E void help_display(sourceinfo_t *si, service_t *service, const char *command, list_t *list);

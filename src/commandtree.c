@@ -2,7 +2,7 @@
  * atheme-services: A collection of minimalist IRC services   
  * commandtree.c: Management of services commands.
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)           
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -26,48 +26,28 @@
 
 static int text_to_parv(char *text, int maxparc, char **parv);
 
-void command_add(command_t *cmd, list_t *commandtree)
+void command_add(command_t *cmd, mowgli_patricia_t *commandtree)
 {
-	node_t *n;
+	return_if_fail(cmd != NULL);
+	return_if_fail(commandtree != NULL);
 
-	if ((n = node_find(cmd, commandtree)))
-	{
-		slog(LG_INFO, "command_add(): command %s already in the list", cmd->name);
-		return;
-	}
-
-	n = node_create();
-	node_add(cmd, n, commandtree);
+	mowgli_patricia_add(commandtree, cmd->name, cmd);
 }
 
-void command_delete(command_t *cmd, list_t *commandtree)
+void command_delete(command_t *cmd, mowgli_patricia_t *commandtree)
 {
-	node_t *n;
+	return_if_fail(cmd != NULL);
+	return_if_fail(commandtree != NULL);
 
-	if (!(n = node_find(cmd, commandtree)))
-	{
-		slog(LG_INFO, "command_delete(): command %s was not registered.", cmd->name);
-		return;
-	}
-
-	node_del(n, commandtree);
-	node_free(n);
+	mowgli_patricia_delete(commandtree, cmd->name);
 }
 
-command_t *command_find(list_t *commandtree, const char *command)
+command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
 {
-	node_t *n;
+	return_val_if_fail(commandtree != NULL, NULL);
+	return_val_if_fail(command != NULL, NULL);
 
-	LIST_FOREACH(n, commandtree->head)
-	{
-		command_t *c = n->data;
-
-		if (!strcasecmp(command, c->name))
-		{
-			return c;
-		}
-	}
-	return NULL;
+	return mowgli_patricia_retrieve(commandtree, command);
 }
 
 void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
@@ -94,13 +74,13 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 		language_set_active(NULL);
 }
 
-void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree)
+void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree)
 {
 	int parc, i;
 	char *parv[20];
         command_t *c;
 
-	cmd = service_resolve_alias(svs, commandtree == svs->cmdtree ? NULL : "unknown", cmd);
+	cmd = service_resolve_alias(svs, commandtree == svs->commands ? NULL : "unknown", cmd);
 	if ((c = command_find(commandtree, cmd)))
 	{
 		parc = text_to_parv(text, c->maxparc, parv);
@@ -131,19 +111,18 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
  * outputs -
  *     A list of available commands.
  */
-void command_help(sourceinfo_t *si, list_t *commandtree)
+void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree)
 {
-	node_t *n;
+	mowgli_patricia_iteration_state_t state;
+	command_t *c;
 
-	if (si->service == NULL || si->service->cmdtree == commandtree)
+	if (si->service == NULL || si->service->commands == commandtree)
 		command_success_nodata(si, _("The following commands are available:"));
 	else
 		command_success_nodata(si, _("The following subcommands are available:"));
 
-	LIST_FOREACH(n, commandtree->head)
+	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
 	{
-		command_t *c = n->data;
-
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
@@ -188,21 +167,20 @@ static bool string_in_list(const char *str, const char *name)
  * outputs -
  *     A list of available commands.
  */
-void command_help_short(sourceinfo_t *si, list_t *commandtree, const char *maincmds)
+void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds)
 {
-	node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	unsigned int l, lv;
 	char buf[256], *p;
+	command_t *c;
 
-	if (si->service == NULL || si->service->cmdtree == commandtree)
+	if (si->service == NULL || si->service->commands == commandtree)
 		command_success_nodata(si, _("The following commands are available:"));
 	else
 		command_success_nodata(si, _("The following subcommands are available:"));
 
-	LIST_FOREACH(n, commandtree->head)
+	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
 	{
-		command_t *c = n->data;
-
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
@@ -219,10 +197,9 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, const char *mainc
 		if (!(*p >= '\1' && *p < ' '))
 			lv++;
 	}
-	LIST_FOREACH(n, commandtree->head)
-	{
-		command_t *c = n->data;
 
+	MOWGLI_PATRICIA_FOREACH(c, &state, commandtree)
+	{
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
