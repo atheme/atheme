@@ -38,7 +38,6 @@ fn_botserv_bot_find botserv_bot_find;
 service_t *botsvs;
 list_t bs_helptree;
 list_t bs_conftable;
-list_t *cs_cmdtree;
 
 unsigned int min_users = 0;
 
@@ -957,7 +956,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
 	
