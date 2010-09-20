@@ -36,7 +36,6 @@ static void db_h_bot_count(database_handle_t *db, const char *type);
 fn_botserv_bot_find botserv_bot_find;
 
 service_t *botsvs;
-list_t bs_cmdtree;
 list_t bs_helptree;
 list_t bs_conftable;
 list_t *cs_cmdtree;

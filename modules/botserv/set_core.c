@@ -22,13 +22,11 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set };
 
-list_t *bs_cmdtree;
 list_t *bs_helptree;
 mowgli_patricia_t *bs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
 	service_named_bind_command("botserv", &bs_set);
