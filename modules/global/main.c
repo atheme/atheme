@@ -22,8 +22,6 @@ struct global_ {
 
 service_t *globsvs = NULL;
 
-list_t gs_cmdtree;
-list_t *os_cmdtree;
 list_t gs_helptree;
 list_t *os_helptree;
 list_t gs_conftable;
@@ -45,7 +43,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 
 	if (!command)
 	{
-		command_help(si, &gs_cmdtree);
+		command_help(si, si->service->commands);
 		command_success_nodata(si, "For more specific help use \2HELP \37command\37\2.");
 
 		return;
@@ -202,20 +200,17 @@ static void gservice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	globsvs = service_add("global", gservice, &gs_cmdtree, &gs_conftable);
+	globsvs = service_add("global", gservice, &gs_conftable);
 
-	command_add(&gs_global, &gs_cmdtree);
-
-	if (os_cmdtree)
-		command_add(&gs_global, os_cmdtree);
+	service_bind_command(globsvs, &gs_global);
+	service_named_bind_command("operserv", &gs_global);
 
 	if (os_helptree)
 		help_addentry(os_helptree, "GLOBAL", "help/gservice/global", NULL);
@@ -223,26 +218,23 @@ void _modinit(module_t *m)
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "GLOBAL", "help/gservice/global", NULL);
 
-	command_add(&gs_help, &gs_cmdtree);
+	service_bind_command(globsvs, &gs_help);
 }
 
 void _moddeinit(void)
 {
+	service_unbind_command(globsvs, &gs_help);
+	service_unbind_command(globsvs, &gs_global);
+	service_named_unbind_command("operserv", &gs_global);
+
 	if (globsvs != NULL)
 		service_delete(globsvs);
-
-	command_delete(&gs_global, &gs_cmdtree);
-
-	if (os_cmdtree)
-		command_delete(&gs_global, os_cmdtree);
 
 	if (os_helptree)
 		help_delentry(os_helptree, "GLOBAL");
 
 	help_delentry(&gs_helptree, "GLOBAL");
 	help_delentry(&gs_helptree, "HELP");
-
-	command_delete(&gs_help, &gs_cmdtree);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
