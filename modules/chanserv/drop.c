@@ -23,12 +23,10 @@ command_t cs_drop = { "DROP", N_("Drops a channel registration."),
 command_t cs_fdrop = { "FDROP", N_("Forces dropping of a channel registration."),
                         PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_drop);

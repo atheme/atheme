@@ -26,12 +26,10 @@ command_t cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."),
 command_t cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel."),
                         AC_NONE, 2, cs_cmd_topicprepend };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_topic);

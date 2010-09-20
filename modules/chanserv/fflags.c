@@ -21,12 +21,10 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_fflags);

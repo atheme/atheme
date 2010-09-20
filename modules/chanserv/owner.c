@@ -23,7 +23,6 @@ command_t cs_owner = { "OWNER", N_("Gives channel owner flag to a user."),
 command_t cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."),
                         AC_NONE, 2, cs_cmd_deowner };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
@@ -35,7 +34,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_owner);

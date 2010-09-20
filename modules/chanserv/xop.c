@@ -38,11 +38,10 @@ command_t cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
 command_t cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
                          AC_NONE, 1, cs_cmd_forcexop };
 
-list_t *cs_cmdtree, *cs_helptree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	service_named_bind_command("chanserv", &cs_aop);

@@ -20,12 +20,10 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_mark = { "MARK", N_("Adds a note to a channel."),
 			PRIV_MARK, 3, cs_cmd_mark };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	service_named_bind_command("chanserv", &cs_mark);

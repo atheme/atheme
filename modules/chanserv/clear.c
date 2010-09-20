@@ -21,13 +21,11 @@ static void cs_help_clear(sourceinfo_t *si);
 command_t cs_clear = { "CLEAR", N_("Channel removal toolkit."),
                         AC_NONE, 3, cs_cmd_clear };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 mowgli_patricia_t *cs_clear_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_clear);

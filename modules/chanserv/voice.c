@@ -23,12 +23,10 @@ command_t cs_voice = { "VOICE", N_("Gives channel voice to a user."),
 command_t cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
                          AC_NONE, 2, cs_cmd_devoice };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_voice);

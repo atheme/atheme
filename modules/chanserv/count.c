@@ -21,12 +21,10 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_count = { "COUNT", N_("Shows number of entries in access lists."),
                          AC_NONE, 1, cs_cmd_count };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 	help_addentry(cs_helptree, "COUNT", "help/cservice/count", NULL);
         service_named_bind_command("chanserv", &cs_count);

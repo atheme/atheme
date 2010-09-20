@@ -12,12 +12,8 @@ static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_version = { "VERSION", N_("Displays version information of the services."),
                         AC_NONE, 0, cs_cmd_version };
 
-list_t *cs_cmdtree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
-
         service_named_bind_command("chanserv", &cs_version);
 }
 

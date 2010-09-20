@@ -23,12 +23,10 @@ command_t cs_kick = { "KICK", N_("Removes a user from a channel."),
 command_t cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
 			AC_NONE, 3, cs_cmd_kickban };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         service_named_bind_command("chanserv", &cs_kick);

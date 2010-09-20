@@ -22,13 +22,10 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_unban = { "UNBAN", N_("Unbans you on a channel."),
 			AC_NONE, 2, cs_cmd_unban };
 
-
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	service_named_bind_command("chanserv", &cs_unban);
