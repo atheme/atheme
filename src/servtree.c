@@ -464,6 +464,28 @@ void service_unbind_command(service_t *sptr, command_t *cmd)
 	command_delete(cmd, sptr->commands);
 }
 
+void service_named_bind_command(const char *svs, command_t *cmd)
+{
+	service_t *sptr = NULL;
+
+	return_if_fail(svs != NULL);
+	return_if_fail(cmd != NULL);
+
+	sptr = service_find(svs);
+	service_bind_command(sptr, cmd);
+}
+
+void service_named_unbind_command(const char *svs, command_t *cmd)
+{
+	service_t *sptr = NULL;
+
+	return_if_fail(svs != NULL);
+	return_if_fail(cmd != NULL);
+
+	sptr = service_find(svs);
+	service_unbind_command(sptr, cmd);
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

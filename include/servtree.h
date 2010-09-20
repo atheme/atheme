@@ -47,6 +47,9 @@ E const char *service_resolve_alias(service_t *sptr, const char *context, const 
 E void service_bind_command(service_t *, command_t *);
 E void service_unbind_command(service_t *, command_t *);
 
+E void service_named_bind_command(const char *, command_t *);
+E void service_named_unbind_command(const char *, command_t *);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
