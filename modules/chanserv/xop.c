@@ -45,11 +45,11 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        service_named_bind_command("chanserv", &cs_aop);
-        service_named_bind_command("chanserv", &cs_sop);
+	service_named_bind_command("chanserv", &cs_aop);
+	service_named_bind_command("chanserv", &cs_sop);
 	if (ircd != NULL && ircd->uses_halfops)
 		service_named_bind_command("chanserv", &cs_hop);
-        service_named_bind_command("chanserv", &cs_vop);
+	service_named_bind_command("chanserv", &cs_vop);
 	service_named_bind_command("chanserv", &cs_forcexop);
 
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
