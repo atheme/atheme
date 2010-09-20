@@ -39,7 +39,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
-		command_help(si, &gs_cmdtree);
+		command_help(si, si->service->commands);
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
@@ -598,15 +598,15 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 
 void basecmds_init(void)
 {
-	command_add(&gs_help, &gs_cmdtree);
-	command_add(&gs_register, &gs_cmdtree);
-	command_add(&gs_info, &gs_cmdtree);
-	command_add(&gs_list, &gs_cmdtree);
-	command_add(&gs_drop, &gs_cmdtree);
-	command_add(&gs_flags, &gs_cmdtree);
-	command_add(&gs_regnolimit, &gs_cmdtree);
-	command_add(&gs_acsnolimit, &gs_cmdtree);
-	command_add(&gs_join, &gs_cmdtree);
+	service_bind_command(groupsvs, &gs_help);
+	service_bind_command(groupsvs, &gs_register);
+	service_bind_command(groupsvs, &gs_info);
+	service_bind_command(groupsvs, &gs_list);
+	service_bind_command(groupsvs, &gs_drop);
+	service_bind_command(groupsvs, &gs_flags);
+	service_bind_command(groupsvs, &gs_regnolimit);
+	service_bind_command(groupsvs, &gs_acsnolimit);
+	service_bind_command(groupsvs, &gs_join);
 
 	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
@@ -621,15 +621,15 @@ void basecmds_init(void)
 
 void basecmds_deinit(void)
 {
-	command_delete(&gs_help, &gs_cmdtree);
-	command_delete(&gs_register, &gs_cmdtree);
-	command_delete(&gs_info, &gs_cmdtree);
-	command_delete(&gs_list, &gs_cmdtree);
-	command_delete(&gs_drop, &gs_cmdtree);
-	command_delete(&gs_flags, &gs_cmdtree);
-	command_delete(&gs_regnolimit, &gs_cmdtree);
-	command_delete(&gs_acsnolimit, &gs_cmdtree);
-	command_delete(&gs_join, &gs_cmdtree);
+	service_unbind_command(groupsvs, &gs_help);
+	service_unbind_command(groupsvs, &gs_register);
+	service_unbind_command(groupsvs, &gs_info);
+	service_unbind_command(groupsvs, &gs_list);
+	service_unbind_command(groupsvs, &gs_drop);
+	service_unbind_command(groupsvs, &gs_flags);
+	service_unbind_command(groupsvs, &gs_regnolimit);
+	service_unbind_command(groupsvs, &gs_acsnolimit);
+	service_unbind_command(groupsvs, &gs_join);
 
 	help_delentry(&gs_helptree, "HELP");
 	help_delentry(&gs_helptree, "REGISTER");
