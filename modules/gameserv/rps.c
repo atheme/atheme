@@ -19,24 +19,19 @@ static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 0, command_rps };
 
-list_t *gs_cmdtree;
-list_t *cs_cmdtree;
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
+	service_named_bind_command("gameserv", &cmd_rps);
 
-	command_add(&cmd_rps, gs_cmdtree);
-
-	command_add(&cmd_rps, cs_cmdtree);
+	service_named_bind_command("chanserv", &cmd_rps);
 }
 
 void _moddeinit()
 {
-	command_delete(&cmd_rps, gs_cmdtree);
+	service_named_unbind_command("gameserv", &cmd_rps);
 
-	command_delete(&cmd_rps, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cmd_rps);
 }
 
 /*

@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *gs;
-list_t gs_cmdtree;
 list_t gs_helptree;
 list_t gs_conftable;
 
@@ -50,12 +49,12 @@ static void gameserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 void _modinit(module_t *m)
 {
-	gs = service_add("gameserv", gameserv, &gs_cmdtree, &gs_conftable);
+	gs = service_add("gameserv", gameserv, &gs_conftable);
 }
 
 void _moddeinit(void)

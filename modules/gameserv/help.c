@@ -24,16 +24,15 @@ command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NO
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
 	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
 
-	command_add(&gs_help, gs_cmdtree);
+	service_named_bind_command("gameserv", &gs_help);
 	help_addentry(gs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&gs_help, gs_cmdtree);
+	service_named_unbind_command("gameserv", &gs_help);
 	help_delentry(gs_helptree, "HELP");
 }
 
@@ -51,7 +50,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
-		command_help(si, gs_cmdtree);
+		command_help(si, si->service->commands);
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;

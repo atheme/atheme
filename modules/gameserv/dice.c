@@ -25,41 +25,35 @@ command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, comman
 command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod };
 command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df };
 
-list_t *gs_cmdtree;
-list_t *cs_cmdtree;
-
 list_t *gs_helptree;
 list_t *cs_helptree;
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
-
 	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
 
-	command_add(&cmd_dice, gs_cmdtree);
-	command_add(&cmd_wod, gs_cmdtree);
-	command_add(&cmd_df, gs_cmdtree);
+	service_named_bind_command("gameserv", &cmd_dice);
+	service_named_bind_command("gameserv", &cmd_wod);
+	service_named_bind_command("gameserv", &cmd_df);
 	help_addentry(gs_helptree, "ROLL", "help/gameserv/roll", NULL);
 
-	command_add(&cmd_dice, cs_cmdtree);
-	command_add(&cmd_wod, cs_cmdtree);
-	command_add(&cmd_df, cs_cmdtree);
+	service_named_bind_command("chanserv", &cmd_dice);
+	service_named_bind_command("chanserv", &cmd_wod);
+	service_named_bind_command("chanserv", &cmd_df);
 	help_addentry(cs_helptree, "ROLL", "help/gameserv/roll", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cmd_dice, gs_cmdtree);
-	command_delete(&cmd_wod, gs_cmdtree);
-	command_delete(&cmd_df, gs_cmdtree);
+	service_named_unbind_command("gameserv", &cmd_dice);
+	service_named_unbind_command("gameserv", &cmd_wod);
+	service_named_unbind_command("gameserv", &cmd_df);
 	help_delentry(gs_helptree, "ROLL");
 
-	command_delete(&cmd_dice, cs_cmdtree);
-	command_delete(&cmd_wod, cs_cmdtree);
-	command_delete(&cmd_df, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cmd_dice);
+	service_named_unbind_command("chanserv", &cmd_wod);
+	service_named_unbind_command("chanserv", &cmd_df);
 	help_delentry(cs_helptree, "ROLL");
 }
 
