@@ -52,7 +52,6 @@ DECLARE_MODULE_V1
 #define DIR_EQUAL	2
 
 service_t *alis;
-list_t alis_cmdtree;
 list_t alis_helptree;
 list_t alis_conftable;
 
@@ -84,19 +83,18 @@ struct alis_query
 
 void _modinit(module_t *m)
 {
-	command_add(&alis_list, &alis_cmdtree);
-	command_add(&alis_help, &alis_cmdtree);
-
 	help_addentry(&alis_helptree, "HELP", "help/help", NULL);
 	help_addentry(&alis_helptree, "LIST", "help/alis/list", NULL);
 
-	alis = service_add("alis", alis_handler, &alis_cmdtree, &alis_conftable);
+	alis = service_add("alis", alis_handler, &alis_conftable);
+	service_bind_command(alis, &alis_list);
+	service_bind_command(alis, &alis_help);
 }
 
 void _moddeinit()
 {
-	command_delete(&alis_list, &alis_cmdtree);
-	command_delete(&alis_help, &alis_cmdtree);
+	service_unbind_command(alis, &alis_list);
+	service_unbind_command(alis, &alis_help);
 
 	help_delentry(&alis_helptree, "HELP");
 	help_delentry(&alis_helptree, "LIST");
@@ -431,7 +429,7 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("For more information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", alis->disp);
 		command_success_nodata(si, " ");
-		command_help(si, &alis_cmdtree);
+		command_help(si, alis->commands);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}
@@ -468,5 +466,5 @@ static void alis_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
         /* take the command through the hash table */
-        command_exec_split(alis, si, cmd, text, &alis_cmdtree);
+        command_exec_split(alis, si, cmd, text, alis->commands);
 }
