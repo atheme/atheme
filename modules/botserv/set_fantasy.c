@@ -17,7 +17,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *bs_set_cmdtree, *bs_helptree;
+mowgli_patricia_t *bs_set_cmdtree;
+list_t *bs_helptree;
 
 static void bs_set_fantasy_config_ready(void *unused);
 

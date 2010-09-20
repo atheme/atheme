@@ -24,24 +24,22 @@ command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a 
 fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;
 
-list_t *bs_cmdtree;
 list_t *bs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 
-	command_add(&bs_info, bs_cmdtree);
+	service_named_bind_command("botserv", &bs_info);
 
 	help_addentry(bs_helptree, "INFO", "help/botserv/info", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&bs_info, bs_cmdtree);
+	service_named_unbind_command("botserv", &bs_info);
 
 	help_delentry(bs_helptree, "INFO");
 }

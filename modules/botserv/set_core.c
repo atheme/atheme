@@ -24,23 +24,27 @@ command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_se
 
 list_t *bs_cmdtree;
 list_t *bs_helptree;
-list_t bs_set_cmdtree;
+mowgli_patricia_t *bs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
-	command_add(&bs_set, bs_cmdtree);
+	service_named_bind_command("botserv", &bs_set);
 
 	help_addentry(bs_helptree, "SET", NULL, bs_help_set);
+
+	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
 void _moddeinit()
 {
-	command_delete(&bs_set, bs_cmdtree);
+	service_named_unbind_command("botserv", &bs_set);
 
 	help_delentry(bs_helptree, "SET");
+
+	mowgli_patricia_destroy(bs_set_cmdtree, NULL, NULL);
 }
 
 /* ******************************************************************** */
@@ -51,7 +55,7 @@ static void bs_help_set(sourceinfo_t *si)
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("Configures different botserv bot options."));
 	command_success_nodata(si, " ");
-	command_help(si, &bs_set_cmdtree);
+	command_help(si, bs_set_cmdtree);
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
 }
@@ -71,7 +75,7 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	dest = parv[0];
 	cmd = parv[1];
-	c = command_find(&bs_set_cmdtree, cmd);
+	c = command_find(bs_set_cmdtree, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

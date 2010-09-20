@@ -17,7 +17,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *bs_set_cmdtree, *bs_helptree;
+mowgli_patricia_t *bs_set_cmdtree;
+list_t *bs_helptree;
 
 fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;

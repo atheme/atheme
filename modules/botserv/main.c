@@ -289,7 +289,7 @@ static void botserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &bs_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 /* botserv: bot handler: channel commands only. */
@@ -302,6 +302,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	char newargs[BUFSIZE];
 	char *cmd;
 	char *args;
+	service_t *sptr = NULL;
 
 	/* this should never happen */
 	if (parv[parc - 2][0] == '&')
@@ -362,14 +363,16 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *mdp = metadata_find(mc, "private:prefix");
 	const char *prefix = (mdp ? mdp->value : chansvs.trigger);
 
+	if ((sptr = service_find("chanserv")) == NULL)
+		return;
+
 	if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
 	{
-
 		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
 
 		/* XXX not really nice to look up the command twice
 		* -- jilles */
-		if (command_find(cs_cmdtree, realcmd) == NULL)
+		if (command_find(sptr->commands, realcmd) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
@@ -387,7 +390,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		* (a little ugly but this way we can !set verbose)
 		*/
 		mc->flags |= MC_FORCEVERBOSE;
-		command_exec_split(si->service, si, realcmd, newargs, cs_cmdtree);
+		command_exec_split(si->service, si, realcmd, newargs, sptr->commands);
 		mc->flags &= ~MC_FORCEVERBOSE;
 	}
 	else if (!strncasecmp(cmd, si->service->me->nick, strlen(si->service->me->nick)) && (cmd = strtok(NULL, "")) != NULL)
@@ -403,7 +406,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 			strlcat(newargs, ++pptr, sizeof newargs);
 		}
 
-		if (command_find(cs_cmdtree, cmd) == NULL)
+		if (command_find(sptr->commands, cmd) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
@@ -414,7 +417,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		* (a little ugly but this way we can !set verbose)
 		*/
 		mc->flags |= MC_FORCEVERBOSE;
-		command_exec_split(si->service, si, cmd, newargs, cs_cmdtree);
+		command_exec_split(si->service, si, cmd, newargs, sptr->commands);
 		mc->flags &= ~MC_FORCEVERBOSE;
 	}
 }
@@ -464,7 +467,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	time_t registered = db_sread_time(db);
 	const char *real = db_sread_str(db);
 	botserv_bot_t *bot;
-	
+
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(nick);
 	bot->user = sstrdup(user);
@@ -472,7 +475,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	bot->real = sstrdup(real);
 	bot->private = private;
 	bot->registered = registered;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
 	service_set_chanmsg(bot->me, true);
 	node_add(bot, &bot->bnode, &bs_bots);
 }
@@ -639,7 +642,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			return;
 	}
 	bot->registered = CURRTIME;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
 	service_set_chanmsg(bot->me, true);
 
 	/* join it back and also update the metadata */
@@ -724,7 +727,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	bot->real = sstrdup(buf);
 	bot->private = false;
 	bot->registered = CURRTIME;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, cs_cmdtree);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
 	service_set_chanmsg(bot->me, true);
 	node_add(bot, &bot->bnode, &bs_bots);
 
@@ -969,13 +972,13 @@ void _modinit(module_t *m)
 	hook_add_event("shutdown");
 	hook_add_shutdown(on_shutdown);
 
-	botsvs = service_add("botserv", botserv, &bs_cmdtree, &bs_conftable);
+	botsvs = service_add("botserv", botserv, &bs_conftable);
 
 	add_uint_conf_item("MIN_USERS", &bs_conftable, 0, &min_users, 0, 65535, 0);
-	command_add(&bs_bot, &bs_cmdtree);
-	command_add(&bs_assign, &bs_cmdtree);
-	command_add(&bs_unassign, &bs_cmdtree);
-	command_add(&bs_botlist, &bs_cmdtree);
+	service_bind_command(botsvs, &bs_bot);
+	service_bind_command(botsvs, &bs_assign);
+	service_bind_command(botsvs, &bs_unassign);
+	service_bind_command(botsvs, &bs_botlist);
 	help_addentry(&bs_helptree, "BOT", "help/botserv/bot", NULL);
 	help_addentry(&bs_helptree, "ASSIGN", "help/botserv/assign", NULL);
 	help_addentry(&bs_helptree, "UNASSIGN", "help/botserv/unassign", NULL);
@@ -1020,10 +1023,10 @@ void _moddeinit(void)
 		free(bot->host);
 		free(bot);
 	}
-	command_delete(&bs_bot, &bs_cmdtree);
-	command_delete(&bs_assign, &bs_cmdtree);
-	command_delete(&bs_unassign, &bs_cmdtree);
-	command_delete(&bs_botlist, &bs_cmdtree);
+	service_unbind_command(botsvs, &bs_bot);
+	service_unbind_command(botsvs, &bs_assign);
+	service_unbind_command(botsvs, &bs_unassign);
+	service_unbind_command(botsvs, &bs_botlist);
 	help_delentry(&bs_helptree, "BOT");
 	help_delentry(&bs_helptree, "ASSIGN");
 	help_delentry(&bs_helptree, "UNASSIGN");

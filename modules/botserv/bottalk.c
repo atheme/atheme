@@ -23,16 +23,14 @@ command_t bs_say = { "SAY", N_("Makes the bot say the given text on the given ch
 command_t bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_NONE, 2, bs_cmd_act };
 
 
-list_t *bs_cmdtree;
 list_t *bs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_cmdtree, "botserv/main", "bs_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
-	command_add(&bs_say, bs_cmdtree);
-	command_add(&bs_act, bs_cmdtree);
+	service_named_bind_command("botserv", &bs_say);
+	service_named_bind_command("botserv", &bs_act);
 
 	help_addentry(bs_helptree, "SAY", "help/botserv/say", NULL);
 	help_addentry(bs_helptree, "ACT", "help/botserv/act", NULL);
@@ -40,8 +38,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&bs_say, bs_cmdtree);
-	command_delete(&bs_act, bs_cmdtree);
+	service_named_unbind_command("botserv", &bs_say);
+	service_named_unbind_command("botserv", &bs_act);
 
 	help_delentry(bs_helptree, "SAY");
 	help_delentry(bs_helptree, "ACT");
