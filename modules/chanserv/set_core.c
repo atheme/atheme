@@ -20,25 +20,27 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
-list_t cs_set_cmdtree;
+mowgli_patricia_t *cs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_set, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_set);
 
 	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
+
+	cs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_set, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_set);
 
 	help_delentry(cs_helptree, "SET");
+
+	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -49,7 +51,7 @@ static void cs_help_set(sourceinfo_t *si)
 				"for channels that change the way certain\n"
 				"operations are performed on them."));
 	command_success_nodata(si, " ");
-	command_help(si, &cs_set_cmdtree);
+	command_help(si, cs_set_cmdtree);
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), chansvs.me->disp);
 }
@@ -79,7 +81,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&cs_set_cmdtree, cmd);
+	c = command_find(cs_set_cmdtree, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);

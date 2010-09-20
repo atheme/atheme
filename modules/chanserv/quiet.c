@@ -39,8 +39,8 @@ void _modinit(module_t *m)
 		return;
 	}
 
-        command_add(&cs_quiet, cs_cmdtree);
-	command_add(&cs_unquiet, cs_cmdtree);
+        service_named_unbind_command("chanserv", &cs_quiet);
+	service_named_unbind_command("chanserv", &cs_unquiet);
 
 	help_addentry(cs_helptree, "QUIET", "help/cservice/quiet", NULL);
 	help_addentry(cs_helptree, "UNQUIET", "help/cservice/unquiet", NULL);
@@ -48,8 +48,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_quiet, cs_cmdtree);
-	command_delete(&cs_unquiet, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_quiet);
+	service_named_bind_command("chanserv", &cs_unquiet);
 
 	help_delentry(cs_helptree, "QUIET");
 	help_delentry(cs_helptree, "UNQUIET");

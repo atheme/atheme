@@ -19,7 +19,7 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags };
 
-list_t *cs_clear_cmds;
+mowgli_patricia_t *cs_clear_cmds;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)

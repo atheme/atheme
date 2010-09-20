@@ -23,22 +23,26 @@ command_t cs_clear = { "CLEAR", N_("Channel removal toolkit."),
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
-list_t cs_clear_cmds;
+mowgli_patricia_t *cs_clear_cmds;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_clear, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_clear);
 	help_addentry(cs_helptree, "CLEAR", NULL, cs_help_clear);
+
+	cs_clear_cmds = mowgli_patricia_create(strcasecanon);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_clear, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_clear);
 
 	help_delentry(cs_helptree,  "CLEAR");
+
+	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
 }
 
 static void cs_help_clear(sourceinfo_t *si)
@@ -47,7 +51,7 @@ static void cs_help_clear(sourceinfo_t *si)
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("CLEAR allows you to clear various aspects of a channel."));
 	command_success_nodata(si, " ");
-	command_help(si, &cs_clear_cmds);
+	command_help(si, cs_clear_cmds);
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("For more information, use \2/msg %s HELP CLEAR \37command\37\2."), chansvs.me->disp);
 }
@@ -76,7 +80,7 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&cs_clear_cmds, cmd);
+	c = command_find(cs_clear_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);

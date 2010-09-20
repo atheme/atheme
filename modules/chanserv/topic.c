@@ -34,9 +34,9 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_topic, cs_cmdtree);
-        command_add(&cs_topicappend, cs_cmdtree);
-        command_add(&cs_topicprepend, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_topic);
+        service_named_bind_command("chanserv", &cs_topicappend);
+        service_named_bind_command("chanserv", &cs_topicprepend);
 
 	help_addentry(cs_helptree, "TOPIC", "help/cservice/topic", NULL);
 	help_addentry(cs_helptree, "TOPICAPPEND", "help/cservice/topicappend", NULL);
@@ -45,9 +45,9 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_topic, cs_cmdtree);
-	command_delete(&cs_topicappend, cs_cmdtree);
-	command_delete(&cs_topicprepend, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_topic);
+	service_named_unbind_command("chanserv", &cs_topicappend);
+	service_named_unbind_command("chanserv", &cs_topicprepend);
 
 	help_delentry(cs_helptree, "TOPIC");
 	help_delentry(cs_helptree, "TOPICAPPEND");

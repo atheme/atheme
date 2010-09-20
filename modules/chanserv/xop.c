@@ -45,12 +45,12 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_aop, cs_cmdtree);
-        command_add(&cs_sop, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_aop);
+        service_named_bind_command("chanserv", &cs_sop);
 	if (ircd != NULL && ircd->uses_halfops)
-		command_add(&cs_hop, cs_cmdtree);
-        command_add(&cs_vop, cs_cmdtree);
-	command_add(&cs_forcexop, cs_cmdtree);
+		service_named_bind_command("chanserv", &cs_hop);
+        service_named_bind_command("chanserv", &cs_vop);
+	service_named_bind_command("chanserv", &cs_forcexop);
 
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
@@ -62,11 +62,11 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_aop, cs_cmdtree);
-	command_delete(&cs_sop, cs_cmdtree);
-	command_delete(&cs_hop, cs_cmdtree);
-	command_delete(&cs_vop, cs_cmdtree);
-	command_delete(&cs_forcexop, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_aop);
+	service_named_unbind_command("chanserv", &cs_sop);
+	service_named_unbind_command("chanserv", &cs_hop);
+	service_named_unbind_command("chanserv", &cs_vop);
+	service_named_unbind_command("chanserv", &cs_forcexop);
 
 	help_delentry(cs_helptree, "SOP");
 	help_delentry(cs_helptree, "AOP");

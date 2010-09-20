@@ -31,8 +31,8 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_voice, cs_cmdtree);
-        command_add(&cs_devoice, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_voice);
+        service_named_bind_command("chanserv", &cs_devoice);
 
 	help_addentry(cs_helptree, "VOICE", "help/cservice/op_voice", NULL);
 	help_addentry(cs_helptree, "DEVOICE", "help/cservice/op_voice", NULL);
@@ -40,8 +40,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_voice, cs_cmdtree);
-	command_delete(&cs_devoice, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_voice);
+	service_named_unbind_command("chanserv", &cs_devoice);
 
 	help_delentry(cs_helptree, "VOICE");
 	help_delentry(cs_helptree, "DEVOICE");

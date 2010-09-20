@@ -20,7 +20,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_clear_users = { "USERS", N_("Kicks all users from a channel."),
 	AC_NONE, 2, cs_cmd_clear_users };
 
-list_t *cs_clear_cmds;
+mowgli_patricia_t *cs_clear_cmds;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)

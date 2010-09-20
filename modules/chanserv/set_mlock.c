@@ -20,7 +20,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock };
 
-list_t *cs_set_cmdtree;
+mowgli_patricia_t *cs_set_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)

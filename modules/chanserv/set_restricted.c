@@ -20,7 +20,7 @@ static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"), AC_NONE, 2, cs_cmd_set_restricted };
 
-list_t *cs_set_cmdtree;
+mowgli_patricia_t *cs_set_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)

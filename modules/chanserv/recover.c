@@ -28,13 +28,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_recover, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_recover);
 	help_addentry(cs_helptree, "RECOVER", "help/cservice/recover", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_recover, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_recover);
 	help_delentry(cs_helptree, "RECOVER");
 }
 

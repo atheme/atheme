@@ -38,8 +38,8 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_halfop, cs_cmdtree);
-        command_add(&cs_dehalfop, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_halfop);
+        service_named_bind_command("chanserv", &cs_dehalfop);
 
 	help_addentry(cs_helptree, "HALFOP", "help/cservice/halfop", NULL);
 	help_addentry(cs_helptree, "DEHALFOP", "help/cservice/halfop", NULL);
@@ -47,8 +47,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_halfop, cs_cmdtree);
-	command_delete(&cs_dehalfop, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_halfop);
+	service_named_unbind_command("chanserv", &cs_dehalfop);
 
 	help_delentry(cs_helptree, "HALFOP");
 	help_delentry(cs_helptree, "DEHALFOP");

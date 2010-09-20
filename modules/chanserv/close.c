@@ -31,7 +31,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_close, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_close);
 	hook_add_event("channel_join");
 	hook_add_first_channel_join(close_check_join);
 	help_addentry(cs_helptree, "CLOSE", "help/cservice/close", NULL);
@@ -39,7 +39,7 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_close, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_close);
 	hook_del_channel_join(close_check_join);
 	help_delentry(cs_helptree, "CLOSE");
 }

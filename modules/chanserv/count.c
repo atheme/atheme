@@ -29,13 +29,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 	help_addentry(cs_helptree, "COUNT", "help/cservice/count", NULL);
-        command_add(&cs_count, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_count);
 }
 
 void _moddeinit()
 {
 	help_delentry(cs_helptree, "COUNT");
-	command_delete(&cs_count, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_count);
 }
 
 static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])

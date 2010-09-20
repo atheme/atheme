@@ -38,8 +38,8 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_protect, cs_cmdtree);
-        command_add(&cs_deprotect, cs_cmdtree);
+        service_named_unbind_command("chanserv", &cs_protect);
+        service_named_unbind_command("chanserv", &cs_deprotect);
 
 	help_addentry(cs_helptree, "PROTECT", "help/cservice/protect", NULL);
 	help_addentry(cs_helptree, "DEPROTECT", "help/cservice/protect", NULL);
@@ -47,8 +47,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_protect, cs_cmdtree);
-	command_delete(&cs_deprotect, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_protect);
+	service_named_bind_command("chanserv", &cs_deprotect);
 
 	help_delentry(cs_helptree, "PROTECT");
 	help_delentry(cs_helptree, "DEPROTECT");

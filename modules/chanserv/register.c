@@ -31,13 +31,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_register, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_register);
 	help_addentry(cs_helptree, "REGISTER", "help/cservice/register", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_register, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_register);
 	help_delentry(cs_helptree, "REGISTER");
 }
 

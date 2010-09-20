@@ -26,7 +26,6 @@ static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
 static void on_shutdown(void *unused);
 
-list_t cs_cmdtree;
 list_t cs_helptree;
 
 static void join_registered(bool all)
@@ -112,7 +111,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 	/* take the command through the hash table */
 	if (mc == NULL)
-		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
+		command_exec_split(si->service, si, cmd, strtok(NULL, ""), si->service->commands);
 	else
 	{
 		metadata_t *md = metadata_find(mc, "private:prefix");
@@ -123,7 +122,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
-			if (command_find(&cs_cmdtree, service_resolve_alias(si->service, NULL, cmd)) == NULL)
+			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -141,7 +140,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, &cs_cmdtree);
+			command_exec_split(si->service, si, cmd, newargs, si->service->commands);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
@@ -157,7 +156,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 				*pptr = '\0';
 			}
 
-			if (command_find(&cs_cmdtree, service_resolve_alias(si->service, NULL, cmd)) == NULL)
+			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -168,7 +167,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, &cs_cmdtree);
+			command_exec_split(si->service, si, cmd, newargs, si->service->commands);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
@@ -192,7 +191,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);
 
-	chansvs.me = service_add("chanserv", chanserv, &cs_cmdtree, &conf_ci_table);
+	chansvs.me = service_add("chanserv", chanserv, &conf_ci_table);
 
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");

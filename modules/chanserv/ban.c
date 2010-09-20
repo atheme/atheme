@@ -32,8 +32,8 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_ban, cs_cmdtree);
-	command_add(&cs_unban, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_ban);
+	service_named_bind_command("chanserv", &cs_unban);
 
 	help_addentry(cs_helptree, "BAN", "help/cservice/ban", NULL);
 	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban", NULL);
@@ -41,8 +41,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_ban, cs_cmdtree);
-	command_delete(&cs_unban, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_ban);
+	service_named_unbind_command("chanserv", &cs_unban);
 
 	help_delentry(cs_helptree, "BAN");
 	help_delentry(cs_helptree, "UNBAN");

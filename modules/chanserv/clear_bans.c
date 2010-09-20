@@ -20,7 +20,7 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."),
 	AC_NONE, 2, cs_cmd_clear_bans };
 
-list_t *cs_clear_cmds;
+mowgli_patricia_t *cs_clear_cmds;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)

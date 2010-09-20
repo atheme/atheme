@@ -20,20 +20,19 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_help = { "HELP", N_("Displays contextual help information."),
                         AC_NONE, 1, cs_cmd_help };
 
-list_t *cs_cmdtree, *cs_helptree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_help, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_help);
 	help_addentry(cs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_help, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_help);
 	help_delentry(cs_helptree, "HELP");
 }
 
@@ -87,7 +86,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(si, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FDROP FFLAGS FTRANSFER");
+		command_help_short(si, si->service->commands, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FDROP FFLAGS FTRANSFER");
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 
@@ -106,7 +105,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp("COMMANDS", command))
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.nick);
-		command_help(si, cs_cmdtree);
+		command_help(si, si->service->commands);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}

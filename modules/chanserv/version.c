@@ -18,12 +18,12 @@ void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 
-        command_add(&cs_version, cs_cmdtree);
+        service_named_bind_command("chanserv", &cs_version);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_version, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_version);
 }
 
 static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[])
