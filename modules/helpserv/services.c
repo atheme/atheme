@@ -20,21 +20,19 @@ static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services };
 
-list_t *helpserv_cmdtree;
 list_t *helpserv_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(helpserv_cmdtree, "helpserv/main", "helpserv_cmdtree");
 	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
 
-        command_add(&helpserv_services, helpserv_cmdtree);
+        service_named_bind_command("helpserv", &helpserv_services);
 	help_addentry(helpserv_helptree, "SERVICES", "help/helpserv/services", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&helpserv_services, helpserv_cmdtree);
+        service_named_unbind_command("helpserv", &helpserv_services);
 	help_delentry(helpserv_helptree, "SERVICES");
 }
 

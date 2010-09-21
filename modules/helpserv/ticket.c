@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-list_t *helpserv_cmdtree, *helpserv_helptree;
+list_t *helpserv_helptree;
 
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
@@ -54,7 +54,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(helpserv_cmdtree, "helpserv/main", "helpserv_cmdtree");
 	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
 
 	hook_add_event("user_drop");
@@ -63,10 +62,10 @@ void _modinit(module_t *m)
 
 	db_register_type_handler("HE", db_h_he);
 
- 	command_add(&helpserv_request, helpserv_cmdtree);
-	command_add(&helpserv_list, helpserv_cmdtree);
-	command_add(&helpserv_close, helpserv_cmdtree);
-	command_add(&helpserv_cancel, helpserv_cmdtree);
+ 	service_named_bind_command("helpserv", &helpserv_request);
+	service_named_bind_command("helpserv", &helpserv_list);
+	service_named_bind_command("helpserv", &helpserv_close);
+	service_named_bind_command("helpserv", &helpserv_cancel);
 	help_addentry(helpserv_helptree, "REQUEST", "help/helpserv/request", NULL);
 	help_addentry(helpserv_helptree, "LIST", "help/helpserv/list", NULL);
 	help_addentry(helpserv_helptree, "CLOSE", "help/helpserv/close", NULL);
@@ -80,10 +79,10 @@ void _moddeinit(void)
 
 	db_unregister_type_handler("HE");
 
-	command_delete(&helpserv_request, helpserv_cmdtree);
-	command_delete(&helpserv_list, helpserv_cmdtree);
-	command_delete(&helpserv_close, helpserv_cmdtree);
-	command_delete(&helpserv_cancel, helpserv_cmdtree);
+	service_named_unbind_command("helpserv", &helpserv_request);
+	service_named_unbind_command("helpserv", &helpserv_list);
+	service_named_unbind_command("helpserv", &helpserv_close);
+	service_named_unbind_command("helpserv", &helpserv_cancel);
 	help_delentry(helpserv_helptree, "REQUEST");
 	help_delentry(helpserv_helptree, "LIST");
 	help_delentry(helpserv_helptree, "CLOSE");

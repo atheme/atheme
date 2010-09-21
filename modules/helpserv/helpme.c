@@ -23,21 +23,19 @@ static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme };
 
-list_t *helpserv_cmdtree;
 list_t *helpserv_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(helpserv_cmdtree, "helpserv/main", "helpserv_cmdtree");
 	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
 
-        command_add(&helpserv_helpme, helpserv_cmdtree);
+        service_named_bind_command("helpserv", &helpserv_helpme);
 	help_addentry(helpserv_helptree, "HELPME", "help/helpserv/helpme", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&helpserv_helpme, helpserv_cmdtree);
+        service_named_unbind_command("helpserv", &helpserv_helpme);
 	help_delentry(helpserv_helptree, "HELPME");
 }
 

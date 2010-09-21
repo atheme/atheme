@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *helpserv;
-list_t helpserv_cmdtree;
 list_t helpserv_helptree;
 list_t helpserv_conftable;
 
@@ -38,14 +37,14 @@ void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", helpserv->disp);
 		command_success_nodata(si, " ");
 
-		command_help(si, &helpserv_cmdtree);
+		command_help(si, si->service->commands);
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}
 
 	/* take the command through the hash table */
-	help_display(si, si->service, command, &helpserv_helptree);
+	help_display(si, si->service, command, si->service->commands);
 }
 
 /* main services client routine */
@@ -78,28 +77,28 @@ static void helpserv_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &helpserv_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 void _modinit(module_t *m)
 {
 	/* Gotta use long-form here because hs already is in use for HostServ */
-	helpserv = service_add("helpserv", helpserv_handler, &helpserv_cmdtree, &helpserv_conftable);
+	helpserv = service_add("helpserv", helpserv_handler, &helpserv_conftable);
 
-	command_add(&helpserv_help, &helpserv_cmdtree);
+	service_bind_command(helpserv, &helpserv_help);
 
 	help_addentry(&helpserv_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit(void)
 {
+	service_unbind_command(helpserv, &helpserv_help);
+
 	if (helpserv)
 	{
 		service_delete(helpserv);
 		helpserv = NULL;
 	}
-	
-	command_delete(&helpserv_help, &helpserv_cmdtree);
 
 	help_delentry(&helpserv_helptree, "HELP");
 }
