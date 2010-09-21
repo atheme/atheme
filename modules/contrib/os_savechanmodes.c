@@ -14,7 +14,6 @@ DECLARE_MODULE_V1
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[]);
@@ -27,19 +26,18 @@ command_t os_loadchanmodes = { "LOADCHANMODES", "Restores channel modes from a f
 
 void _modinit(module_t *m)
 {
-	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
 	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
-	command_add(&os_savechanmodes, os_cmdtree);
-	command_add(&os_loadchanmodes, os_cmdtree);
+	service_named_bind_command("operserv", &os_savechanmodes);
+	service_named_bind_command("operserv", &os_loadchanmodes);
 	help_addentry(os_helptree, "SAVECHANMODES", "help/contrib/savechanmodes", NULL);
 	help_addentry(os_helptree, "LOADCHANMODES", "help/contrib/loadchanmodes", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_savechanmodes, os_cmdtree);
-	command_delete(&os_loadchanmodes, os_cmdtree);
+	service_named_unbind_command("operserv", &os_savechanmodes);
+	service_named_unbind_command("operserv", &os_loadchanmodes);
 	help_delentry(os_helptree, "SAVECHANMODES");
 	help_delentry(os_helptree, "LOADCHANMODES");
 }

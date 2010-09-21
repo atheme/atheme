@@ -28,15 +28,13 @@ static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[]);
 command_t os_testproc = { "TESTPROC", "Does something with child processes.",
                         AC_NONE, 0, os_cmd_testproc };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_testproc, os_cmdtree);
+	service_named_bind_command("operserv", &os_testproc);
 	help_addentry(os_helptree, "TESTPROC", "help/contrib/testproc", NULL);
 }
 
@@ -44,7 +42,7 @@ void _moddeinit()
 {
 	if (procdata.pip != NULL)
 		connection_close_soon(procdata.pip);
-	command_delete(&os_testproc, os_cmdtree);
+	service_named_unbind_command("operserv", &os_testproc);
 	help_delentry(os_helptree, "TESTPROC");
 }
 

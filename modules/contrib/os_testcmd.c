@@ -30,7 +30,6 @@ static void testcmd_command_success_string(sourceinfo_t *si, const char *result,
 command_t os_testcmd = { "TESTCMD", "Executes a command without a user_t.",
                         AC_NONE, 3, os_cmd_testcmd };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 struct sourceinfo_vtable testcmd_vtable = { 
@@ -42,16 +41,15 @@ struct sourceinfo_vtable testcmd_vtable = {
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_testcmd, os_cmdtree);
+	service_named_bind_command("operserv", &os_testcmd);
 	help_addentry(os_helptree, "TESTCMD", "help/contrib/testcmd", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_testcmd, os_cmdtree);
+	service_named_unbind_command("operserv", &os_testcmd);
 	help_delentry(os_helptree, "TESTCMD");
 }
 

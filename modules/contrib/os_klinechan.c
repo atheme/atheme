@@ -25,16 +25,14 @@ command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels."
 static void klinechan_check_join(hook_channel_joinpart_t *hdata);
 static void klinechan_show_info(hook_channel_req_t *hdata);
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_klinechan, os_cmdtree);
-	command_add(&os_listklinechans, os_cmdtree);
+	service_named_bind_command("operserv", &os_klinechan);
+	service_named_bind_command("operserv", &os_listklinechans);
 	hook_add_event("channel_join");
 	hook_add_first_channel_join(klinechan_check_join);
 	hook_add_event("channel_info");
@@ -45,8 +43,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_klinechan, os_cmdtree);
-	command_delete(&os_listklinechans, os_cmdtree);
+	service_named_unbind_command("operserv", &os_klinechan);
+	service_named_unbind_command("operserv", &os_listklinechans);
 	hook_del_channel_join(klinechan_check_join);
 	hook_del_channel_info(klinechan_show_info);
 	help_delentry(os_helptree, "KLINECHANS");

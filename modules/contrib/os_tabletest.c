@@ -11,18 +11,14 @@ static void os_cmd_tabletest(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_tabletest = { "TABLETEST", "Table test.", AC_NONE, 0, os_cmd_tabletest };
 
-list_t *os_cmdtree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
-
-        command_add(&os_tabletest, os_cmdtree);
+        service_named_bind_command("operserv", &os_tabletest);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_tabletest, os_cmdtree);
+	service_named_unbind_command("operserv", &os_tabletest);
 }
 
 static void os_cmd_tabletest(sourceinfo_t *si, int parc, char *parv[])

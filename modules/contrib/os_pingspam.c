@@ -54,17 +54,15 @@ command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service
 command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam };
 
 int spamming;
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	spamming = 0;
 
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-	command_add(&os_pingspam, os_cmdtree);
-	command_add(&os_autopingspam, os_cmdtree);
+	service_named_bind_command("operserv", &os_pingspam);
+	service_named_bind_command("operserv", &os_autopingspam);
 
 	help_addentry(os_helptree, "PINGSPAM", "help/contrib/pingspam", NULL);
 	help_addentry(os_helptree, "AUTOPINGSPAM", "help/contrib/autopingspam", NULL);
@@ -75,8 +73,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_pingspam, os_cmdtree);
-	command_delete(&os_autopingspam, os_cmdtree);
+	service_named_unbind_command("operserv", &os_pingspam);
+	service_named_unbind_command("operserv", &os_autopingspam);
 	help_delentry(os_helptree, "PINGSPAM");
 	help_delentry(os_helptree, "AUTOPINGSPAM");
 	hook_del_user_add(user_add_hook);

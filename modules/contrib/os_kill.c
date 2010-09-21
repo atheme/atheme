@@ -23,21 +23,19 @@ static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_kill = { "KILL", "Kill a user with Services.", PRIV_OMODE, 2, os_cmd_kill };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_kill, os_cmdtree);
+	service_named_bind_command("operserv", &os_kill);
 	help_addentry(os_helptree, "KILL", "help/contrib/kill", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_kill, os_cmdtree);
+	service_named_unbind_command("operserv", &os_kill);
 	help_delentry(os_helptree, "KILL");
 }
 

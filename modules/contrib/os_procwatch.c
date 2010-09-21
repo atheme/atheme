@@ -23,7 +23,6 @@ static void os_cmd_procwatch(sourceinfo_t *si, int parc, char *parv[]);
 command_t os_procwatch = { "PROCWATCH", "Notifies snoop channel on process exit.",
                         PRIV_ADMIN, 1, os_cmd_procwatch };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 static connection_t *kq_conn;
@@ -32,7 +31,6 @@ void _modinit(module_t *m)
 {
 	int kq;
 
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 	kq = kqueue();
 	if (kq == -1)
@@ -42,7 +40,7 @@ void _modinit(module_t *m)
 	}
 	kq_conn = connection_add("procwatch kqueue", kq, 0, procwatch_readhandler, NULL);
 
-	command_add(&os_procwatch, os_cmdtree);
+	service_named_bind_command("operserv", &os_procwatch);
 	help_addentry(os_helptree, "PROCWATCH", "help/contrib/procwatch", NULL);
 }
 
@@ -50,7 +48,7 @@ void _moddeinit()
 {
 	if (kq_conn != NULL)
 		connection_close_soon(kq_conn);
-	command_delete(&os_procwatch, os_cmdtree);
+	service_named_unbind_command("operserv", &os_procwatch);
 	help_delentry(os_helptree, "PROCWATCH");
 }
 

@@ -15,7 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 static char *reason_extract(char **args);
@@ -725,10 +724,9 @@ mowgli_patricia_t *trace_acttree = NULL;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_trace, os_cmdtree);
+	service_named_bind_command("operserv", &os_trace);
 	help_addentry(os_helptree, "TRACE", "help/contrib/trace", NULL);
 
 	trace_cmdtree = mowgli_patricia_create(strcasecanon);
@@ -750,7 +748,7 @@ void _moddeinit(void)
 {
 	mowgli_patricia_destroy(trace_cmdtree, NULL, NULL);
 
-	command_delete(&os_trace, os_cmdtree);
+	service_named_unbind_command("operserv", &os_trace);
 	help_delentry(os_helptree, "TRACE");
 }
 
