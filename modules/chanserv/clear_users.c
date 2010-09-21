@@ -20,7 +20,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_clear_users = { "USERS", N_("Kicks all users from a channel."),
 	AC_NONE, 2, cs_cmd_clear_users };
 
-mowgli_patricia_t *cs_clear_cmds;
+mowgli_patricia_t **cs_clear_cmds;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
@@ -28,13 +28,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_clear_users, cs_clear_cmds);
+	command_add(&cs_clear_users, *cs_clear_cmds);
 	help_addentry(cs_helptree, "CLEAR USERS", "help/cservice/clear_users", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_clear_users, cs_clear_cmds);
+	command_delete(&cs_clear_users, *cs_clear_cmds);
 
 	help_delentry(cs_helptree, "CLEAR USERS");
 }

@@ -20,7 +20,7 @@ static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags };
 
-mowgli_patricia_t *cs_set_cmdtree;
+mowgli_patricia_t **cs_set_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_set_limitflags, cs_set_cmdtree);
+	command_add(&cs_set_limitflags, *cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET LIMITFLAGS", "help/cservice/set_limitflags", NULL);
 
@@ -37,7 +37,7 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&cs_set_limitflags, cs_set_cmdtree);
+	command_delete(&cs_set_limitflags, *cs_set_cmdtree);
 
 	help_delentry(cs_helptree, "SET LIMITFLAGS");
 

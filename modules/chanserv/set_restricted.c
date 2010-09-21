@@ -20,7 +20,7 @@ static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"), AC_NONE, 2, cs_cmd_set_restricted };
 
-mowgli_patricia_t *cs_set_cmdtree;
+mowgli_patricia_t **cs_set_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
@@ -28,14 +28,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_set_restricted, cs_set_cmdtree);
+	command_add(&cs_set_restricted, *cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_set_restricted, cs_set_cmdtree);
+	command_delete(&cs_set_restricted, *cs_set_cmdtree);
 
 	help_delentry(cs_helptree, "SET RESTRICTED");
 }

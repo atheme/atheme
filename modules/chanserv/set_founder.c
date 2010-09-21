@@ -20,7 +20,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder };
 
-mowgli_patricia_t *cs_set_cmdtree;
+mowgli_patricia_t **cs_set_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
@@ -28,14 +28,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_set_founder, cs_set_cmdtree);
+	command_add(&cs_set_founder, *cs_set_cmdtree);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_set_founder, cs_set_cmdtree);
+	command_delete(&cs_set_founder, *cs_set_cmdtree);
 
 	help_delentry(cs_helptree, "SET FOUNDER");
 }
