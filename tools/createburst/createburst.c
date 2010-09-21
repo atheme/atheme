@@ -88,22 +88,33 @@ const char *uid_get(void)
 }
 
 int
-main(int argc, char *argv[])
+do_burst_ts5(int count, time_t now)
 {
-	int count, i;
+	int i;
 	char nick[20];
-	time_t now;
 
-	init_uid();
+	printf("PASS linkit TS\r\n");
+	printf("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK\r\n");
+	printf("SERVER irc.uplink.com 1 :Test file\r\n");
+	printf("SVINFO 5 3 0 :%lu\r\n", (unsigned long) now);
 
-	if (argc != 2)
+	for (i = 0; i < count; i++)
 	{
-		fprintf(stderr, "Usage: %s count\n", argv[0]);
-		return 1;
+		snprintf(nick, sizeof nick, "a%010d", i);
+		printf("NICK %s 1 %lu +i ~Guest moo.cows.go.moo irc.uplink.com :Grazing cow #%ld\r\n",
+				nick, (unsigned long) now, i);
 	}
 
-	count = atoi(argv[1]);
-	now = time(NULL);
+	printf(":irc.uplink.com PONG irc.uplink.com :irc.uplink.com\r\n");
+
+	return 0;
+}
+
+int
+do_burst_ts6(int count, time_t now)
+{
+	int i;
+	char nick[20];
 
 	printf("PASS linkit TS 6 :%s\r\n", SID);
 	printf("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK\r\n");
@@ -117,7 +128,30 @@ main(int argc, char *argv[])
 				SID, nick, (unsigned long) now, uid_get(), i);
 	}
 
-	printf(":%s PONG irc.uplink.com :irc.uplink.com\r\n", SID);
+	printf(":%s PONG %s :%s\r\n", SID, SID, SID);
 
 	return 0;
+}
+
+int
+main(int argc, char *argv[])
+{
+	int count;
+	time_t now;
+
+	init_uid();
+
+	if (argc < 2)
+	{
+		fprintf(stderr, "Usage: %s count\n", argv[0]);
+		return 1;
+	}
+
+	count = atoi(argv[1]);
+	now = time(NULL);
+
+	if (argc > 2)
+		return do_burst_ts5(count, now);
+
+	return do_burst_ts6(count, now);
 }
