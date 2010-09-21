@@ -9,7 +9,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
 
-AC_INIT(atheme, 6.0.0-alpha6, bugs@atheme.org)
+AC_INIT(atheme, 6.0.0-alpha7, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
 AC_COPYRIGHT([$Id: configure.ac 8407 2007-06-03 22:35:28Z jilles $])
