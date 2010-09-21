@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_patricia_t *bs_set_cmdtree;
+mowgli_patricia_t **bs_set_cmdtree;
 list_t *bs_helptree;
 
 static void bs_set_fantasy_config_ready(void *unused);
@@ -31,7 +31,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
-	command_add(&bs_set_fantasy, bs_set_cmdtree);
+	command_add(&bs_set_fantasy, *bs_set_cmdtree);
 	help_addentry(bs_helptree, "SET FANTASY", "help/botserv/set_fantasy", NULL);
 
 	hook_add_event("config_ready");
@@ -40,7 +40,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	command_delete(&bs_set_fantasy, bs_set_cmdtree);
+	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
 	help_delentry(bs_helptree, "SET FANTASY");
 
 	hook_del_config_ready(bs_set_fantasy_config_ready);

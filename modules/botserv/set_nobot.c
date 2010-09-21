@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_patricia_t *bs_set_cmdtree;
+mowgli_patricia_t **bs_set_cmdtree;
 list_t *bs_helptree;
 
 static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[]);
@@ -29,13 +29,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
-	command_add(&bs_set_nobot, bs_set_cmdtree);
+	command_add(&bs_set_nobot, *bs_set_cmdtree);
 	help_addentry(bs_helptree, "SET NOBOT", "help/botserv/set_nobot", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&bs_set_nobot, bs_set_cmdtree);
+	command_delete(&bs_set_nobot, *bs_set_cmdtree);
 	help_delentry(bs_helptree, "SET NOBOT");
 }
 

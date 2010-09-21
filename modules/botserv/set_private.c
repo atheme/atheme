@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_patricia_t *bs_set_cmdtree;
+mowgli_patricia_t **bs_set_cmdtree;
 list_t *bs_helptree;
 
 fn_botserv_bot_find *botserv_bot_find;
@@ -35,13 +35,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 
-	command_add(&bs_set_private, bs_set_cmdtree);
+	command_add(&bs_set_private, *bs_set_cmdtree);
 	help_addentry(bs_helptree, "SET PRIVATE", "help/botserv/set_private", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&bs_set_private, bs_set_cmdtree);
+	command_delete(&bs_set_private, *bs_set_cmdtree);
 	help_delentry(bs_helptree, "SET PRIVATE");
 }
 
