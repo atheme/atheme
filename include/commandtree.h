@@ -17,6 +17,10 @@ struct commandentry_ {
 	const char *access;
         const int maxparc;
 	void (*cmd)(sourceinfo_t *, const int parc, char *parv[]);
+	struct {
+		const char *path;
+		void (*func)(sourceinfo_t *);
+	} help;
 };
 
 /* commandtree.c */
