@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
-list_t *hs_cmdtree, *hs_helptree, *conf_hs_table, *ms_cmdtree;
+list_t *hs_helptree, *conf_hs_table;
 bool request_per_nick;
 
 unsigned int ratelimit_count = 0;
@@ -56,10 +56,8 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
@@ -69,10 +67,10 @@ void _modinit(module_t *m)
 
 	db_register_type_handler("HR", db_h_hr);
 
- 	command_add(&hs_request, hs_cmdtree);
-	command_add(&hs_waiting, hs_cmdtree);
-	command_add(&hs_reject, hs_cmdtree);
-	command_add(&hs_activate, hs_cmdtree);
+ 	service_named_bind_command("hostserv", &hs_request);
+	service_named_bind_command("hostserv", &hs_waiting);
+	service_named_bind_command("hostserv", &hs_reject);
+	service_named_bind_command("hostserv", &hs_activate);
 	help_addentry(hs_helptree, "REQUEST", "help/hostserv/request", NULL);
 	help_addentry(hs_helptree, "WAITING", "help/hostserv/waiting", NULL);
 	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
@@ -88,10 +86,10 @@ void _moddeinit(void)
 
 	db_unregister_type_handler("HR");
 
-	command_delete(&hs_request, hs_cmdtree);
-	command_delete(&hs_waiting, hs_cmdtree);
-	command_delete(&hs_reject, hs_cmdtree);
-	command_delete(&hs_activate, hs_cmdtree);
+ 	service_named_unbind_command("hostserv", &hs_request);
+	service_named_unbind_command("hostserv", &hs_waiting);
+	service_named_unbind_command("hostserv", &hs_reject);
+	service_named_unbind_command("hostserv", &hs_activate);
 	help_delentry(hs_helptree, "REQUEST");
 	help_delentry(hs_helptree, "WAITING");
 	help_delentry(hs_helptree, "REJECT");
@@ -313,7 +311,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 
-			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
+			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 			return;
 		}
 
@@ -332,7 +330,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			free(l->creator);
 			free(l);
 
-			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, hs_cmdtree);
+			command_exec_split(si->service, si, request_per_nick ? "VHOSTNICK" : "VHOST", buf, si->service->commands);
 
 			if (hs_reqlist.count == 0)
 				return;
@@ -369,7 +367,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			if ((svs = service_find("memoserv")) != NULL)
 			{
 				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
-				command_exec_split(svs, si, "SEND", buf, ms_cmdtree);
+				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
 			else if ((u = user_find_named(nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
@@ -388,7 +386,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			if ((svs = service_find("memoserv")) != NULL)
 			{
 				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->nick, l->vhost, l->nick);
-				command_exec_split(svs, si, "SEND", buf, ms_cmdtree);
+				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
 			else if ((u = user_find_named(l->nick)) != NULL)
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, l->nick);

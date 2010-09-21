@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_cmdtree, *hs_helptree;
+list_t *hs_helptree;
 
 static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
@@ -26,19 +26,18 @@ command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_NONE, 1, 
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 
-	command_add(&hs_on, hs_cmdtree);
-	command_add(&hs_off, hs_cmdtree);
+	service_named_bind_command("hostserv", &hs_on);
+	service_named_bind_command("hostserv", &hs_off);
 	help_addentry(hs_helptree, "ON", "help/hostserv/on", NULL);
 	help_addentry(hs_helptree, "OFF", "help/hostserv/off", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&hs_on, hs_cmdtree);
-	command_delete(&hs_off, hs_cmdtree);
+	service_named_unbind_command("hostserv", &hs_on);
+	service_named_unbind_command("hostserv", &hs_off);
 	help_delentry(hs_helptree, "ON");
 	help_delentry(hs_helptree, "OFF");
 }

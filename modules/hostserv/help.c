@@ -15,7 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_cmdtree;
 list_t *hs_helptree;
 
 static void hs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -24,16 +23,15 @@ command_t hs_help = { "HELP", N_(N_("Displays contextual help information.")), A
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 
-	command_add(&hs_help, hs_cmdtree);
+	service_named_bind_command("hostserv", &hs_help);
 	help_addentry(hs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&hs_help, hs_cmdtree);
+	service_named_unbind_command("hostserv", &hs_help);
 	help_delentry(hs_helptree, "HELP");
 }
 
@@ -51,7 +49,7 @@ void hs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
 		command_success_nodata(si, " ");
 
-		command_help(si, hs_cmdtree);
+		command_help(si, si->service->commands);
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-list_t *hs_cmdtree, *hs_helptree, *conf_hs_table;
+list_t *hs_helptree, *conf_hs_table;
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -52,17 +52,16 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(hs_cmdtree, "hostserv/main", "hs_cmdtree");
 	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 
 	hook_add_db_write(write_hsofferdb);
 	db_register_type_handler("HO", db_h_ho);
 
- 	command_add(&hs_offer, hs_cmdtree);
-	command_add(&hs_unoffer, hs_cmdtree);
-	command_add(&hs_offerlist, hs_cmdtree);
-	command_add(&hs_take, hs_cmdtree);
+ 	service_named_bind_command("hostserv", &hs_offer);
+	service_named_bind_command("hostserv", &hs_unoffer);
+	service_named_bind_command("hostserv", &hs_offerlist);
+	service_named_bind_command("hostserv", &hs_take);
 	help_addentry(hs_helptree, "OFFER", "help/hostserv/offer", NULL);
 	help_addentry(hs_helptree, "UNOFFER", "help/hostserv/unoffer", NULL);
 	help_addentry(hs_helptree, "OFFERLIST", "help/hostserv/offerlist", NULL);
@@ -74,10 +73,10 @@ void _moddeinit(void)
 	hook_del_db_write(write_hsofferdb);
 	db_unregister_type_handler("HO");
 
-	command_delete(&hs_offer, hs_cmdtree);
-	command_delete(&hs_unoffer, hs_cmdtree);
-	command_delete(&hs_offerlist, hs_cmdtree);
-	command_delete(&hs_take, hs_cmdtree);
+ 	service_named_unbind_command("hostserv", &hs_offer);
+	service_named_unbind_command("hostserv", &hs_unoffer);
+	service_named_unbind_command("hostserv", &hs_offerlist);
+	service_named_unbind_command("hostserv", &hs_take);
 	help_delentry(hs_helptree, "OFFER");
 	help_delentry(hs_helptree, "UNOFFER");
 	help_delentry(hs_helptree, "OFFERLIST");
