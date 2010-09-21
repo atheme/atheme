@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 );
 
 list_t *ns_helptree;
-mowgli_patricia_t *ns_set_cmdtree;
+mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[]);
 
