@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *catserv;
-list_t catserv_cmdtree;
 list_t catserv_conftable;
 
 static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[]);
@@ -30,16 +29,16 @@ command_t catserv_help = { "HELP", "Displays contextual help information.",
 
 void _modinit(module_t *m)
 {
-	catserv = service_add("catserv", catserv_handler, &catserv_cmdtree, &catserv_conftable);
+	catserv = service_add("catserv", catserv_handler, &catserv_conftable);
 
-	command_add(&catserv_meow, &catserv_cmdtree);
-	command_add(&catserv_help, &catserv_cmdtree);
+	service_bind_command(catserv, &catserv_meow);
+	service_bind_command(catserv, &catserv_help);
 }
 
 void _moddeinit()
 {
-	command_delete(&catserv_meow, &catserv_cmdtree);
-	command_delete(&catserv_help, &catserv_cmdtree);
+	service_unbind_command(catserv, &catserv_meow);
+	service_unbind_command(catserv, &catserv_help);
 
 	service_delete(catserv);
 }
@@ -51,7 +50,7 @@ static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[])
 
 static void catserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
-	command_help(si, &catserv_cmdtree);
+	command_help(si, si->service->commands);
 }
 
 static void catserv_handler(sourceinfo_t *si, int parc, char *parv[])
@@ -83,7 +82,7 @@ static void catserv_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
         /* take the command through the hash table */
-        command_exec_split(catserv, si, cmd, text, &catserv_cmdtree);
+        command_exec_split(catserv, si, cmd, text, si->service->commands);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

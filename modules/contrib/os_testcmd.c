@@ -104,12 +104,12 @@ static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, "No such service \2%s\2", parv[0]);
 		return;
 	}
-	if (svs->cmdtree == NULL)
+	if (svs->commands == NULL)
 	{
 		command_fail(si, fault_noprivs, "Service \2%s\2 has no commands", svs->nick);
 		return;
 	}
-	cmd = command_find(svs->cmdtree, parv[1]);
+	cmd = command_find(svs->commands, parv[1]);
 	if (cmd == NULL)
 	{
 		command_fail(si, fault_nosuch_key, "No such command \2%s\2 in service \2%s\2", parv[1], svs->nick);

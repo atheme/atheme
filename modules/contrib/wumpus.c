@@ -58,7 +58,6 @@ struct game_ {
 
 	room_t *rmemctx;	/* memory page context */
 	service_t *svs;
-	list_t cmdtree;
 	int wump_hp;
 	int speed;
 };
@@ -918,7 +917,7 @@ command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset }
 
 static void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
-	command_help(si, &wumpus.cmdtree);
+	command_help(si, si->service->commands);
 }
 
 command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help };
@@ -977,14 +976,14 @@ _handler(sourceinfo_t *si, int parc, char *parv[])
                 return;
 
         /* take the command through the hash table */
-        command_exec_split(wumpus.svs, si, cmd, text, &wumpus.cmdtree);
+        command_exec_split(wumpus.svs, si, cmd, text, si->service->commands);
 }
 
 static void
 burst_the_wumpus(void *unused)
 {
 	if (!wumpus.svs)
-		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, _handler, &wumpus.cmdtree);
+		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, _handler);
 	
 	join(wumpus_cfg.chan, wumpus_cfg.nick);	/* what if we're not ready? then this is a NOOP */
 }
@@ -1004,15 +1003,15 @@ _modinit(module_t *m)
 	hook_add_event("user_delete");
 	hook_add_user_delete(user_deleted);
 
-	command_add(&wumpus_help, &wumpus.cmdtree);
-	command_add(&wumpus_start, &wumpus.cmdtree);
-	command_add(&wumpus_join, &wumpus.cmdtree);
-	command_add(&wumpus_move, &wumpus.cmdtree);
-	command_add(&wumpus_shoot, &wumpus.cmdtree);
-	command_add(&wumpus_resign, &wumpus.cmdtree);
-	command_add(&wumpus_reset, &wumpus.cmdtree);
-	command_add(&wumpus_who, &wumpus.cmdtree);
-	command_add(&wumpus_look, &wumpus.cmdtree);
+	service_bind_command(wumpus.svs, &wumpus_help);
+	service_bind_command(wumpus.svs, &wumpus_start);
+	service_bind_command(wumpus.svs, &wumpus_join);
+	service_bind_command(wumpus.svs, &wumpus_move);
+	service_bind_command(wumpus.svs, &wumpus_shoot);
+	service_bind_command(wumpus.svs, &wumpus_resign);
+	service_bind_command(wumpus.svs, &wumpus_reset);
+	service_bind_command(wumpus.svs, &wumpus_who);
+	service_bind_command(wumpus.svs, &wumpus_look);
 }
 
 void
@@ -1026,15 +1025,15 @@ _moddeinit(void)
 
 	hook_del_user_delete(user_deleted);
 
-	command_delete(&wumpus_help, &wumpus.cmdtree);
-	command_delete(&wumpus_start, &wumpus.cmdtree);
-	command_delete(&wumpus_join, &wumpus.cmdtree);
-	command_delete(&wumpus_move, &wumpus.cmdtree);
-	command_delete(&wumpus_shoot, &wumpus.cmdtree);
-	command_delete(&wumpus_resign, &wumpus.cmdtree);
-	command_delete(&wumpus_reset, &wumpus.cmdtree);
-	command_delete(&wumpus_who, &wumpus.cmdtree);
-	command_delete(&wumpus_look, &wumpus.cmdtree);
+	service_unbind_command(wumpus.svs, &wumpus_help);
+	service_unbind_command(wumpus.svs, &wumpus_start);
+	service_unbind_command(wumpus.svs, &wumpus_join);
+	service_unbind_command(wumpus.svs, &wumpus_move);
+	service_unbind_command(wumpus.svs, &wumpus_shoot);
+	service_unbind_command(wumpus.svs, &wumpus_resign);
+	service_unbind_command(wumpus.svs, &wumpus_reset);
+	service_unbind_command(wumpus.svs, &wumpus_who);
+	service_unbind_command(wumpus.svs, &wumpus_look);
 
 	event_delete(move_wumpus, NULL);
 	event_delete(start_game, NULL);
