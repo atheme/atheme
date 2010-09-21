@@ -44,7 +44,7 @@ void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, si->service, command, si->service->commands);
+	help_display(si, si->service, command, &helpserv_helptree);
 }
 
 /* main services client routine */
