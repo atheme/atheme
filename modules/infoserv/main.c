@@ -45,7 +45,6 @@ list_t operlogon_info;
 unsigned int logoninfo_count = 0;
 
 service_t *infoserv;
-list_t is_cmdtree;
 list_t is_helptree;
 list_t is_conftable;
 
@@ -83,7 +82,7 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", infoserv->disp);
 		command_success_nodata(si, " ");
 
-		command_help(si, &is_cmdtree);
+		command_help(si, si->service->commands);
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
@@ -536,7 +535,7 @@ static void infoserv_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &is_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 void _modinit(module_t *m)
@@ -548,7 +547,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	infoserv = service_add("infoserv", infoserv_handler, &is_cmdtree, &is_conftable);
+	infoserv = service_add("infoserv", infoserv_handler, &is_conftable);
 	add_uint_conf_item("LOGONINFO_COUNT", &is_conftable, 0, &logoninfo_count, 0, INT_MAX, 3);
 
 	hook_add_event("user_add");
@@ -560,12 +559,12 @@ void _modinit(module_t *m)
 	db_register_type_handler("LI", db_h_li);
 	db_register_type_handler("LIO", db_h_lio);
 
-	command_add(&is_help, &is_cmdtree);
-	command_add(&is_post, &is_cmdtree);
-	command_add(&is_del, &is_cmdtree);
-	command_add(&is_odel, &is_cmdtree);
-	command_add(&is_list, &is_cmdtree);
-	command_add(&is_olist, &is_cmdtree);
+	service_bind_command(infoserv, &is_help);
+	service_bind_command(infoserv, &is_post);
+	service_bind_command(infoserv, &is_del);
+	service_bind_command(infoserv, &is_odel);
+	service_bind_command(infoserv, &is_list);
+	service_bind_command(infoserv, &is_olist);
 
 	help_addentry(&is_helptree, "HELP", "help/help", NULL);
 	help_addentry(&is_helptree, "POST", "help/infoserv/post", NULL);
@@ -592,12 +591,12 @@ void _moddeinit(void)
 	db_unregister_type_handler("LI");
 	db_unregister_type_handler("LIO");
 
-	command_delete(&is_help, &is_cmdtree);
-	command_delete(&is_post, &is_cmdtree);
-	command_delete(&is_del, &is_cmdtree);
-	command_delete(&is_odel, &is_cmdtree);
-	command_delete(&is_list, &is_cmdtree);
-	command_delete(&is_olist, &is_cmdtree);
+	service_unbind_command(infoserv, &is_help);
+	service_unbind_command(infoserv, &is_post);
+	service_unbind_command(infoserv, &is_del);
+	service_unbind_command(infoserv, &is_odel);
+	service_unbind_command(infoserv, &is_list);
+	service_unbind_command(infoserv, &is_olist);
 
 	help_delentry(&is_helptree, "HELP");
 	help_delentry(&is_helptree, "POST");
