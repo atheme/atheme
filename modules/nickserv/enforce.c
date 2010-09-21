@@ -49,7 +49,7 @@ command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE
 command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain };
 
 list_t *ns_helptree;
-mowgli_patricia_t *ns_set_cmdtree;
+mowgli_patricia_t **ns_set_cmdtree;
 
 /* sends an FNC for the given user */
 static void guest_nickname(user_t *u)
@@ -519,7 +519,7 @@ void _modinit(module_t *m)
 	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
 	service_named_bind_command("nickserv", &ns_release);
 	service_named_bind_command("nickserv", &ns_regain);
-	command_add(&ns_set_enforce, ns_set_cmdtree);
+	command_add(&ns_set_enforce, *ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
 	help_addentry(ns_helptree, "REGAIN", "help/nickserv/regain", NULL);
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
@@ -539,7 +539,7 @@ void _moddeinit()
 		event_delete(enforce_timeout_check, NULL);
 	service_named_unbind_command("nickserv", &ns_release);
 	service_named_unbind_command("nickserv", &ns_regain);
-	command_delete(&ns_set_enforce, ns_set_cmdtree);
+	command_delete(&ns_set_enforce, *ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "REGAIN");
 	help_delentry(ns_helptree, "SET ENFORCE");
