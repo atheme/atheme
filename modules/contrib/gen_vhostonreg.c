@@ -72,7 +72,7 @@ static void user_add_host(myuser_t *mu)
 		{
 			myuser_notice(nicksvs.nick, mu, "Your account name cannot be used in a vhost directly. To ensure uniqueness, a number was added.");
 			myuser_notice(nicksvs.nick, mu, "To avoid this, register an account name containing only letters, digits and %s.", VALID_SPECIALS);
-			if (!nicksvs.no_nick_ownership && command_find(nicksvs.me->cmdtree, "GROUP"))
+			if (!nicksvs.no_nick_ownership && command_find(nicksvs.me->commands, "GROUP"))
 				myuser_notice(nicksvs.nick, mu, "If you drop %s you can group it to your new account.", entity(mu)->name);
 		}
 	}

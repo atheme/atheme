@@ -20,21 +20,19 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_sync, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_sync);
 	help_addentry(cs_helptree, "SYNC", "help/contrib/sync", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_sync, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_sync);
 	help_delentry(cs_helptree, "SYNC");
 }
 

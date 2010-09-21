@@ -21,24 +21,22 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_up = { "UP", "Grants all access you have permission to on a given channel.", AC_NONE, 1, cs_cmd_up };
 command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down };
 
-list_t *cs_cmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	command_add(&cs_up, cs_cmdtree);
-	command_add(&cs_down, cs_cmdtree);
+	service_named_bind_command("chanserv", &cs_up);
+	service_named_bind_command("chanserv", &cs_down);
 	help_addentry(cs_helptree, "UP", "help/contrib/up", NULL);
 	help_addentry(cs_helptree, "DOWN", "help/contrib/down", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&cs_up, cs_cmdtree);
-	command_delete(&cs_down, cs_cmdtree);
+	service_named_unbind_command("chanserv", &cs_up);
+	service_named_unbind_command("chanserv", &cs_down);
 	help_delentry(cs_helptree, "UP");
 	help_delentry(cs_helptree, "DOWN");
 }

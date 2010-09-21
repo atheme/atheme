@@ -18,21 +18,20 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_fenforce = { "FENFORCE", "Enables or disables protection of another user's nicknames.", PRIV_USER_ADMIN, 2, ns_cmd_fenforce };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/enforce");
 
-	command_add(&ns_fenforce, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_fenforce);
 	help_addentry(ns_helptree, "FENFORCE", "help/contrib/fenforce", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_fenforce, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_fenforce);
 	help_delentry(ns_helptree, "FENFORCE");
 }
 
