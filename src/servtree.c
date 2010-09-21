@@ -33,6 +33,38 @@ static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 {
 }
 
+static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *cmd;
+        char *text;
+	char orig[BUFSIZE];
+
+	/* this should never happen */
+	if (parv[0][0] == '&')
+	{
+		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
+		return;
+	}
+
+	/* make a copy of the original for debugging */
+	strlcpy(orig, parv[parc - 1], BUFSIZE);
+
+	/* lets go through this to get the command */
+	cmd = strtok(parv[parc - 1], " ");
+	text = strtok(NULL, "");
+
+	if (!cmd)
+		return;
+	if (*cmd == '\001')
+	{
+		handle_ctcp_common(si, cmd, text);
+		return;
+	}
+
+	/* take the command through the hash table */
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
+}
+
 void servtree_init(void)
 {
 	service_heap = BlockHeapCreate(sizeof(service_t), 12);
@@ -238,7 +270,11 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	sptr->real = sstrndup(name, 50);
 	sptr->disp = sstrdup(sptr->nick);
 
-	sptr->handler = handler;
+	if (handler != NULL)
+		sptr->handler = handler;
+	else
+		sptr->handler = service_default_handler;
+
 	sptr->notice_handler = dummy_handler;
 	sptr->aliases = NULL;
 	sptr->chanmsg = false;
