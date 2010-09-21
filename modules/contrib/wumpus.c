@@ -952,38 +952,10 @@ user_deleted(user_t *u)
 }
 
 static void
-_handler(sourceinfo_t *si, int parc, char *parv[])
-{
-        char *cmd;
-	char *text;
-        char orig[BUFSIZE];
-
-        /* this should never happen */
-        if (parv[0][0] == '&')
-        {
-                slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-                return;
-        }
-
-        /* make a copy of the original for debugging */
-        strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-        /* lets go through this to get the command */
-        cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-        if (!cmd)
-                return;
-
-        /* take the command through the hash table */
-        command_exec_split(wumpus.svs, si, cmd, text, si->service->commands);
-}
-
-static void
 burst_the_wumpus(void *unused)
 {
 	if (!wumpus.svs)
-		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, _handler);
+		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, NULL);
 	
 	join(wumpus_cfg.chan, wumpus_cfg.nick);	/* what if we're not ready? then this is a NOOP */
 }

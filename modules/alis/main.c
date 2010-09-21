@@ -57,7 +57,6 @@ list_t alis_conftable;
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
-static void alis_handler(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t alis_list = { "LIST", "Lists channels matching given parameters.",
 				AC_NONE, ALIS_MAX_PARC, alis_cmd_list };
@@ -86,7 +85,7 @@ void _modinit(module_t *m)
 	help_addentry(&alis_helptree, "HELP", "help/help", NULL);
 	help_addentry(&alis_helptree, "LIST", "help/alis/list", NULL);
 
-	alis = service_add("alis", alis_handler, &alis_conftable);
+	alis = service_add("alis", NULL, &alis_conftable);
 	service_bind_command(alis, &alis_list);
 	service_bind_command(alis, &alis_help);
 }
@@ -435,36 +434,4 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	help_display(si, si->service, command, &alis_helptree);
-}
-
-static void alis_handler(sourceinfo_t *si, int parc, char *parv[])
-{
-        char orig[BUFSIZE];
-	char *cmd;
-	char *text;
-
-        /* this should never happen */
-        if (parv[0][0] == '&')
-        {
-                slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-                return;
-        }
-
-        /* make a copy of the original for debugging */
-        strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-        text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-        /* take the command through the hash table */
-        command_exec_split(alis, si, cmd, text, alis->commands);
 }

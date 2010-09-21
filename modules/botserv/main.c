@@ -257,39 +257,6 @@ static void bs_channel_drop(mychan_t *mc)
 
 /* ******************************************************************** */
 
-/* botserv: command handler */
-static void botserv(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *cmd;
-	char *text;
-	char orig[BUFSIZE];
-
-	/* this should never happen */
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
-
 /* botserv: bot handler: channel commands only. */
 static void
 botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
@@ -969,7 +936,7 @@ void _modinit(module_t *m)
 	hook_add_event("shutdown");
 	hook_add_shutdown(on_shutdown);
 
-	botsvs = service_add("botserv", botserv, &bs_conftable);
+	botsvs = service_add("botserv", NULL, &bs_conftable);
 
 	add_uint_conf_item("MIN_USERS", &bs_conftable, 0, &min_users, 0, 65535, 0);
 	service_bind_command(botsvs, &bs_bot);

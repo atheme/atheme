@@ -505,39 +505,6 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* main services client routine */
-static void infoserv_handler(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *cmd;
-        char *text;
-	char orig[BUFSIZE];
-
-	/* this should never happen */
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
-
 void _modinit(module_t *m)
 {
 	if (!module_find_published("backend/opensex"))
@@ -547,7 +514,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	infoserv = service_add("infoserv", infoserv_handler, &is_conftable);
+	infoserv = service_add("infoserv", NULL, &is_conftable);
 	add_uint_conf_item("LOGONINFO_COUNT", &is_conftable, 0, &logoninfo_count, 0, INT_MAX, 3);
 
 	hook_add_event("user_add");

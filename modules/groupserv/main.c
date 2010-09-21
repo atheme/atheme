@@ -13,40 +13,13 @@ DECLARE_MODULE_V1
 );
 
 service_t *groupsvs;
-list_t gs_cmdtree;
 list_t gs_helptree;
 list_t conf_gs_table;
-
-static void groupserv(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *cmd;
-	char *text;
-	char orig[BUFSIZE];
-
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-	if (!cmd) return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
 
 void _modinit(module_t *m)
 {
 	mygroups_init();
-	groupsvs = service_add("groupserv", groupserv, &conf_gs_table);
+	groupsvs = service_add("groupserv", NULL, &conf_gs_table);
 	add_uint_conf_item("MAXGROUPS", &conf_gs_table, 0, &maxgroups, 0, 65535, 5);
 	add_uint_conf_item("MAXGROUPACS", &conf_gs_table, 0, &maxgroupacs, 0, 65535, 0);
 	add_bool_conf_item("ENABLE_OPEN_GROUPS", &conf_gs_table, 0, &enable_open_groups, false);

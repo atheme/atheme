@@ -171,43 +171,11 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "or \2GLOBAL\2 to store additional lines.", globlist.count);
 }
 
-/* main services client routine */
-static void gservice(sourceinfo_t *si, int parc, char *parv[])
-{
-	char orig[BUFSIZE];
-	char *cmd;
-        char *text;
-
-	/* this should never happen */
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-        text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
-
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	globsvs = service_add("global", gservice, &gs_conftable);
+	globsvs = service_add("global", NULL, &gs_conftable);
 
 	service_bind_command(globsvs, &gs_global);
 	service_named_bind_command("operserv", &gs_global);

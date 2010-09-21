@@ -21,39 +21,6 @@ static void on_user_away(user_t *u);
 list_t ms_helptree;
 list_t ms_conftable;
 
-/* main services client routine */
-static void memoserv(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *cmd;
-        char *text;
-	char orig[BUFSIZE];
-
-	/* this should never happen */
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
-
 service_t *memosvs = NULL;
 
 void _modinit(module_t *m)
@@ -64,7 +31,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_away");
 	hook_add_user_away(on_user_away);
 
-	memosvs = service_add("memoserv", memoserv, &ms_conftable);
+	memosvs = service_add("memoserv", NULL, &ms_conftable);
 }
 
 void _moddeinit(void)

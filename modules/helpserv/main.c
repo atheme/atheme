@@ -47,43 +47,10 @@ void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, &helpserv_helptree);
 }
 
-/* main services client routine */
-static void helpserv_handler(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *cmd;
-        char *text;
-	char orig[BUFSIZE];
-
-	/* this should never happen */
-	if (parv[0][0] == '&')
-	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-		return;
-	}
-
-	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
-
-	if (!cmd)
-		return;
-	if (*cmd == '\001')
-	{
-		handle_ctcp_common(si, cmd, text);
-		return;
-	}
-
-	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, si->service->commands);
-}
-
 void _modinit(module_t *m)
 {
 	/* Gotta use long-form here because hs already is in use for HostServ */
-	helpserv = service_add("helpserv", helpserv_handler, &helpserv_conftable);
+	helpserv = service_add("helpserv", NULL, &helpserv_conftable);
 
 	service_bind_command(helpserv, &helpserv_help);
 
