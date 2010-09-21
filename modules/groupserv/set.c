@@ -28,6 +28,8 @@ void set_init(void)
 {
 	service_bind_command(groupsvs, &gs_set);
 
+	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
+
 	command_add(&gs_set_email, gs_set_cmdtree);
 	command_add(&gs_set_url, gs_set_cmdtree);
 	command_add(&gs_set_description, gs_set_cmdtree);
@@ -42,8 +44,6 @@ void set_init(void)
 	help_addentry(&gs_helptree, "SET CHANNEL", "help/groupserv/set_channel", NULL); 
 	help_addentry(&gs_helptree, "SET OPEN", "help/groupserv/set_open", NULL); 
 	help_addentry(&gs_helptree, "SET PUBLIC", "help/groupserv/set_public", NULL); 
-
-	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
 void set_deinit(void)
