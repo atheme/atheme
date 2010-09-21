@@ -23,28 +23,27 @@ command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE,
 command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup };
 command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_group, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_group);
+	service_named_bind_command("nickserv", &ns_ungroup);
+	service_named_bind_command("nickserv", &ns_fungroup);
 	help_addentry(ns_helptree, "GROUP", "help/nickserv/group", NULL);
-	command_add(&ns_ungroup, ns_cmdtree);
 	help_addentry(ns_helptree, "UNGROUP", "help/nickserv/ungroup", NULL);
-	command_add(&ns_fungroup, ns_cmdtree);
 	help_addentry(ns_helptree, "FUNGROUP", "help/nickserv/fungroup", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_group, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_group);
+	service_named_unbind_command("nickserv", &ns_ungroup);
+	service_named_unbind_command("nickserv", &ns_fungroup);
 	help_delentry(ns_helptree, "GROUP");
-	command_delete(&ns_ungroup, ns_cmdtree);
 	help_delentry(ns_helptree, "UNGROUP");
-	command_delete(&ns_fungroup, ns_cmdtree);
 	help_delentry(ns_helptree, "FUNGROUP");
 }
 

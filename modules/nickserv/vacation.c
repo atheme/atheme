@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -89,10 +89,9 @@ static void info_hook(hook_user_req_t *hdata)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_vacation, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_vacation);
 	help_addentry(ns_helptree, "VACATION", "help/nickserv/vacation", NULL);
 
 	hook_add_event("user_identify");
@@ -110,7 +109,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	command_delete(&ns_vacation, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_vacation);
 	help_delentry(ns_helptree, "VACATION");
 
 	hook_del_user_identify(user_identify_hook);

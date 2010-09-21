@@ -17,11 +17,11 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set };
 
-list_t ns_set_cmdtree;
+mowgli_patricia_t *ns_set_cmdtree;
 
 /* HELP SET */
 static void ns_help_set(sourceinfo_t *si)
@@ -37,7 +37,7 @@ static void ns_help_set(sourceinfo_t *si)
 					"for nicknames that change the way certain\n"
 					"operations are performed on them."));
 	command_success_nodata(si, " ");
-	command_help(si, &ns_set_cmdtree);
+	command_help(si, ns_set_cmdtree);
 	command_success_nodata(si, " ");
 	command_success_nodata(si, _("For more information, use \2/msg %s HELP SET \37command\37\2."), nicksvs.nick);
 }
@@ -62,7 +62,7 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-        if ((c = command_find(&ns_set_cmdtree, setting)))
+        if ((c = command_find(ns_set_cmdtree, setting)))
 	{
 		command_exec(si->service, si, c, parc - 1, parv + 1);
 	}
@@ -74,17 +74,18 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-	command_add(&ns_set, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_set);
 
 	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
+	ns_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_set, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_set);
 	help_delentry(ns_helptree, "SET");
+	mowgli_patricia_destroy(ns_set_cmdtree, NULL, NULL);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

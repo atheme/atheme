@@ -174,9 +174,8 @@ static void hook_metadata_change(hook_metadata_change_t *md)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 
-	command_add(&ns_subscribe, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_subscribe);
 
 	hook_add_event("metadata_change");
 	hook_add_metadata_change(hook_metadata_change);
@@ -184,6 +183,6 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	command_delete(&ns_subscribe, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_subscribe);
 	hook_del_metadata_change(hook_metadata_change);
 }

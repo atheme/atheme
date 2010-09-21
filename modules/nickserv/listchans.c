@@ -20,20 +20,19 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_listchans, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_listchans);
 	help_addentry(ns_helptree, "LISTCHANS", "help/nickserv/listchans", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_listchans, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_listchans);
 	help_delentry(ns_helptree, "LISTCHANS");
 }
 

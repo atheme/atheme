@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t ns_cmdtree;
 list_t ns_helptree;
 
 /* main services client routine */
@@ -49,7 +48,7 @@ static void nickserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &ns_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 struct
@@ -153,7 +152,7 @@ void _modinit(module_t *m)
         hook_add_event("nick_check");
         hook_add_nick_check(nickserv_handle_nickchange);
 
-	nicksvs.me = service_add("nickserv", nickserv, &ns_cmdtree, &conf_ni_table);
+	nicksvs.me = service_add("nickserv", nickserv, &conf_ni_table);
 	authservice_loaded++;
 }
 

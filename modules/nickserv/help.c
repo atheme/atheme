@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 static void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -23,16 +23,15 @@ command_t ns_help = { "HELP", N_("Displays contextual help information."), AC_NO
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_help, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_help);
 	help_addentry(ns_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_help, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_help);
 	help_delentry(ns_helptree, "HELP");
 }
 
@@ -74,7 +73,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(si, ns_cmdtree, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP FDROP FUNGROUP MARK FREEZE SENDPASS VHOST");
+		command_help_short(si, si->service->commands, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP FDROP FUNGROUP MARK FREEZE SENDPASS VHOST");
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		
@@ -93,7 +92,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp("COMMANDS", command))
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), nicksvs.nick);
-		command_help(si, ns_cmdtree);
+		command_help(si, si->service->commands);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}

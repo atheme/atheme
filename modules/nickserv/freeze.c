@@ -21,20 +21,19 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
 command_t ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_freeze, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_freeze);
 	help_addentry(ns_helptree, "FREEZE", "help/nickserv/freeze", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_freeze, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_freeze);
 	help_delentry(ns_helptree, "FREEZE");
 }
 

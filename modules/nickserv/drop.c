@@ -21,23 +21,22 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 2, ns_cmd_drop };
 command_t ns_fdrop = { "FDROP", N_("Forces dropping an account registration."), PRIV_USER_ADMIN, 1, ns_cmd_fdrop };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_drop, ns_cmdtree);
-	command_add(&ns_fdrop, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_drop);
+	service_named_bind_command("nickserv", &ns_fdrop);
 	help_addentry(ns_helptree, "DROP", "help/nickserv/drop", NULL);
 	help_addentry(ns_helptree, "FDROP", "help/nickserv/fdrop", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_drop, ns_cmdtree);
-	command_delete(&ns_fdrop, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_drop);
+	service_named_unbind_command("nickserv", &ns_fdrop);
 	help_delentry(ns_helptree, "DROP");
 	help_delentry(ns_helptree, "FDROP");
 }
@@ -61,7 +60,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		if (!nicksvs.no_nick_ownership)
 		{
 			mn = mynick_find(acc);
-			if (mn != NULL && command_find(si->service->cmdtree, "UNGROUP"))
+			if (mn != NULL && command_find(si->service->commands, "UNGROUP"))
 			{
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use %s to remove it."), acc, "UNGROUP");
 				return;
@@ -86,7 +85,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!nicksvs.no_nick_ownership &&
 			LIST_LENGTH(&mu->nicks) > 1 &&
-			command_find(si->service->cmdtree, "UNGROUP"))
+			command_find(si->service->commands, "UNGROUP"))
 	{
 		command_fail(si, fault_noprivs, _("Account \2%s\2 has %d other nick(s) grouped to it, remove those first."),
 				entity(mu)->name, LIST_LENGTH(&mu->nicks) - 1);
@@ -130,7 +129,7 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 		if (!nicksvs.no_nick_ownership)
 		{
 			mn = mynick_find(acc);
-			if (mn != NULL && command_find(si->service->cmdtree, "FUNGROUP"))
+			if (mn != NULL && command_find(si->service->commands, "FUNGROUP"))
 			{
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use %s to remove it."), acc, "FUNGROUP");
 				return;

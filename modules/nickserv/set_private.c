@@ -14,7 +14,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_set_cmdtree, *ns_helptree;
+list_t *ns_helptree;
+mowgli_patricia_t *ns_set_cmdtree;
 
 /* SET PRIVATE ON|OFF */
 static void ns_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])

@@ -22,22 +22,21 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 unsigned int tcnt = 0;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_register, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_register);
 	help_addentry(ns_helptree, "REGISTER", "help/nickserv/register", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_register, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_register);
 	help_delentry(ns_helptree, "REGISTER");
 }
 
@@ -72,7 +71,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_already_authed, _("You are already logged in as \2%s\2."), entity(si->smu)->name);
 		if (si->su != NULL && !mynick_find(si->su->nick) &&
-				command_find(si->service->cmdtree, "GROUP"))
+				command_find(si->service->commands, "GROUP"))
 			command_fail(si, fault_already_authed, _("Use %s to register %s to your account."), "GROUP", si->su->nick);
 		return;
 	}

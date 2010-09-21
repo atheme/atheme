@@ -21,24 +21,23 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify };
 command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_verify, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_verify);
+	service_named_bind_command("nickserv", &ns_fverify);
 	help_addentry(ns_helptree, "VERIFY", "help/nickserv/verify", NULL);
-	command_add(&ns_fverify, ns_cmdtree);
 	help_addentry(ns_helptree, "FVERIFY", "help/nickserv/fverify", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_verify, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_verify);
+	service_named_unbind_command("nickserv", &ns_fverify);
 	help_delentry(ns_helptree, "VERIFY");
-	command_delete(&ns_fverify, ns_cmdtree);
 	help_delentry(ns_helptree, "FVERIFY");
 }
 

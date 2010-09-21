@@ -19,20 +19,19 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_resetpass, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_resetpass);
 	help_addentry(ns_helptree, "RESETPASS", "help/nickserv/resetpass", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_resetpass, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_resetpass);
 	help_delentry(ns_helptree, "RESETPASS");
 }
 

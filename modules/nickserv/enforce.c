@@ -48,7 +48,8 @@ command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protec
 command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
 command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain };
 
-list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
+list_t *ns_helptree;
+mowgli_patricia_t *ns_set_cmdtree;
 
 /* sends an FNC for the given user */
 static void guest_nickname(user_t *u)
@@ -491,7 +492,6 @@ static int idcheck_foreach_cb(myentity_t *mt, void *privdata)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
@@ -517,8 +517,8 @@ void _modinit(module_t *m)
 	}
 
 	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
-	command_add(&ns_release, ns_cmdtree);
-	command_add(&ns_regain, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_release);
+	service_named_bind_command("nickserv", &ns_regain);
 	command_add(&ns_set_enforce, ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
 	help_addentry(ns_helptree, "REGAIN", "help/nickserv/regain", NULL);
@@ -537,8 +537,8 @@ void _moddeinit()
 	event_delete(enforce_remove_enforcers, NULL);
 	if (enforce_next)
 		event_delete(enforce_timeout_check, NULL);
-	command_delete(&ns_release, ns_cmdtree);
-	command_delete(&ns_regain, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_release);
+	service_named_unbind_command("nickserv", &ns_regain);
 	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "REGAIN");

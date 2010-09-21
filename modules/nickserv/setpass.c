@@ -20,23 +20,22 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);
-	command_add(&ns_setpass, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_setpass);
 	help_addentry(ns_helptree, "SETPASS", "help/nickserv/setpass", NULL);
 }
 
 void _moddeinit()
 {
 	hook_del_user_identify(clear_setpass_key);
-	command_delete(&ns_setpass, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_setpass);
 	help_delentry(ns_helptree, "SETPASS");
 }
 

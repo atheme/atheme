@@ -19,20 +19,19 @@ static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
 		      PRIV_ADMIN, 2, ns_cmd_regnolimit };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_regnolimit, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_regnolimit);
 	help_addentry(ns_helptree, "REGNOLIMIT", "help/nickserv/regnolimit", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_regnolimit, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_regnolimit);
 	help_delentry(ns_helptree, "REGNOLIMIT");
 }
 

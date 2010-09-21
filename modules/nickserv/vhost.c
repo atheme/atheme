@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 static void vhost_on_identify(user_t *u);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
@@ -26,13 +26,12 @@ command_t ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USE
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(vhost_on_identify);
-	command_add(&ns_vhost, ns_cmdtree);
-	command_add(&ns_listvhost, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_vhost);
+	service_named_bind_command("nickserv", &ns_listvhost);
 	help_addentry(ns_helptree, "VHOST", "help/nickserv/vhost", NULL);
 	help_addentry(ns_helptree, "LISTVHOST", "help/nickserv/listvhost", NULL);
 }
@@ -40,8 +39,8 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	hook_del_user_identify(vhost_on_identify);
-	command_delete(&ns_vhost, ns_cmdtree);
-	command_delete(&ns_listvhost, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_vhost);
+	service_named_unbind_command("nickserv", &ns_listvhost);
 	help_delentry(ns_helptree, "VHOST");
 	help_delentry(ns_helptree, "LISTVHOST");
 }

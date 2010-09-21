@@ -19,20 +19,19 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_listmail, ns_cmdtree);
+	service_named_bind_command("nickserv", &ns_listmail);
 	help_addentry(ns_helptree, "LISTMAIL", "help/nickserv/listmail", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_listmail, ns_cmdtree);
+	service_named_unbind_command("nickserv", &ns_listmail);
 	help_delentry(ns_helptree, "LISTMAIL");
 }
 
