@@ -75,7 +75,7 @@ void _modinit(module_t *m)
 	hook_add_user_add(sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
-	saslsvs = service_add("saslserv", saslserv, NULL, &saslserv_conftable);
+	saslsvs = service_add("saslserv", saslserv, &saslserv_conftable);
 	authservice_loaded++;
 }
 
