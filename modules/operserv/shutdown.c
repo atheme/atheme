@@ -19,21 +19,19 @@ static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_shutdown, os_cmdtree);
+        service_named_bind_command("operserv", &os_shutdown);
 	help_addentry(os_helptree, "SHUTDOWN", "help/oservice/shutdown", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_shutdown, os_cmdtree);
+	service_named_unbind_command("operserv", &os_shutdown);
 	help_delentry(os_helptree, "SHUTDOWN");
 }
 

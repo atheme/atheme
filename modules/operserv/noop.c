@@ -34,15 +34,13 @@ static list_t noop_kill_queue;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_noop, os_cmdtree);
+	service_named_bind_command("operserv", &os_noop);
 	help_addentry(os_helptree, "NOOP", "help/oservice/noop", NULL);
 	hook_add_event("user_oper");
 	hook_add_user_oper(check_user);
@@ -66,7 +64,7 @@ void _moddeinit()
 		}
 		hook_del_user_delete(check_quit);
 	}
-	command_delete(&os_noop, os_cmdtree);
+	service_named_unbind_command("operserv", &os_noop);
 	help_delentry(os_helptree, "NOOP");
 	hook_del_user_oper(check_user);
 }

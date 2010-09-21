@@ -27,41 +27,43 @@ command_t os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, 
 command_t os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list };
 command_t os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_ignore_cmds;
+mowgli_patricia_t *os_ignore_cmds;
 list_t svs_ignore_list;
 
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_ignore, os_cmdtree);
+        service_named_bind_command("operserv", &os_ignore);
 	help_addentry(os_helptree, "IGNORE", "help/oservice/ignore", NULL);
 
+	os_ignore_cmds = mowgli_patricia_create(strcasecanon);
+
 	/* Sub-commands */
-	command_add(&os_ignore_add, &os_ignore_cmds);
-	command_add(&os_ignore_del, &os_ignore_cmds);
-	command_add(&os_ignore_clear, &os_ignore_cmds);
-	command_add(&os_ignore_list, &os_ignore_cmds);
+	command_add(&os_ignore_add, os_ignore_cmds);
+	command_add(&os_ignore_del, os_ignore_cmds);
+	command_add(&os_ignore_clear, os_ignore_cmds);
+	command_add(&os_ignore_list, os_ignore_cmds);
 
 	use_svsignore++;
 }
 
 void _moddeinit()
 {
-	command_delete(&os_ignore, os_cmdtree);
+	service_named_unbind_command("operserv", &os_ignore);
 	help_delentry(os_helptree, "IGNORE");
 
 	/* Sub-commands */
-	command_delete(&os_ignore_add, &os_ignore_cmds);
-	command_delete(&os_ignore_del, &os_ignore_cmds);
-	command_delete(&os_ignore_list, &os_ignore_cmds);
-	command_delete(&os_ignore_clear, &os_ignore_cmds);
+	command_delete(&os_ignore_add, os_ignore_cmds);
+	command_delete(&os_ignore_del, os_ignore_cmds);
+	command_delete(&os_ignore_list, os_ignore_cmds);
+	command_delete(&os_ignore_clear, os_ignore_cmds);
 
 	use_svsignore--;
+
+	mowgli_patricia_destroy(os_ignore_cmds, NULL, NULL);
 }
 
 static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
@@ -76,7 +78,7 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-        c = command_find(&os_ignore_cmds, cmd);
+        c = command_find(os_ignore_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

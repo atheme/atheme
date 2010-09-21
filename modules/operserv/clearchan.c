@@ -23,21 +23,19 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_clearchan, os_cmdtree);
+	service_named_bind_command("operserv", &os_clearchan);
 	help_addentry(os_helptree, "CLEARCHAN", "help/oservice/clearchan", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_clearchan, os_cmdtree);
+	service_named_unbind_command("operserv", &os_clearchan);
 	help_delentry(os_helptree, "CLEARCHAN");
 }
 

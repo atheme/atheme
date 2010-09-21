@@ -17,21 +17,20 @@ command_t os_modreload =
 	20,
 	os_cmd_modreload
 };
-list_t *os_cmdtree;
+
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_modreload, os_cmdtree);
+	service_named_bind_command("operserv", &os_modreload);
 	help_addentry(os_helptree, "MODRELOAD", "help/oservice/modreload", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_modreload, os_cmdtree);
+	service_named_unbind_command("operserv", &os_modreload);
 	help_delentry(os_helptree, "MODRELOAD");
 }
 

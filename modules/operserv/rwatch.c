@@ -29,7 +29,7 @@ static void load_rwatchdb(void);
 
 list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_rwatch_cmds;
+mowgli_patricia_t *os_rwatch_cmds;
 
 list_t rwatch_list;
 
@@ -55,15 +55,16 @@ command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex 
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_rwatch, os_cmdtree);
+	service_named_bind_command("operserv", &os_rwatch);
 
-	command_add(&os_rwatch_add, &os_rwatch_cmds);
-	command_add(&os_rwatch_del, &os_rwatch_cmds);
-	command_add(&os_rwatch_list, &os_rwatch_cmds);
-	command_add(&os_rwatch_set, &os_rwatch_cmds);
+	os_rwatch_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_rwatch_add, os_rwatch_cmds);
+	command_add(&os_rwatch_del, os_rwatch_cmds);
+	command_add(&os_rwatch_list, os_rwatch_cmds);
+	command_add(&os_rwatch_set, os_rwatch_cmds);
 
 	help_addentry(os_helptree, "RWATCH", "help/oservice/rwatch", NULL);
 
@@ -93,17 +94,19 @@ void _moddeinit(void)
 		node_free(n);
 	}
 
-	command_delete(&os_rwatch, os_cmdtree);
+	service_named_unbind_command("operserv", &os_rwatch);
 
-	command_delete(&os_rwatch_add, &os_rwatch_cmds);
-	command_delete(&os_rwatch_del, &os_rwatch_cmds);
-	command_delete(&os_rwatch_list, &os_rwatch_cmds);
-	command_delete(&os_rwatch_set, &os_rwatch_cmds);
+	command_delete(&os_rwatch_add, os_rwatch_cmds);
+	command_delete(&os_rwatch_del, os_rwatch_cmds);
+	command_delete(&os_rwatch_list, os_rwatch_cmds);
+	command_delete(&os_rwatch_set, os_rwatch_cmds);
 
 	help_delentry(os_helptree, "RWATCH");
 
 	hook_del_user_add(rwatch_newuser);
 	hook_del_user_nickchange(rwatch_nickchange);
+
+	mowgli_patricia_destroy(os_rwatch_cmds, NULL, NULL);
 }
 
 static void write_rwatchdb(void)
@@ -201,7 +204,7 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&os_rwatch_cmds, cmd);
+	c = command_find(os_rwatch_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

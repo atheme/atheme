@@ -19,21 +19,19 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_compare, os_cmdtree);
+	service_named_bind_command("operserv", &os_compare);
 	help_addentry(os_helptree, "COMPARE", "help/oservice/compare", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_compare, os_cmdtree);
+	service_named_unbind_command("operserv", &os_compare);
 	help_delentry(os_helptree, "COMPARE");
 }
 

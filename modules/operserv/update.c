@@ -19,21 +19,19 @@ static void os_cmd_update(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_update, os_cmdtree);
+        service_named_bind_command("operserv", &os_update);
 	help_addentry(os_helptree, "UPDATE", "help/oservice/update", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_update, os_cmdtree);
+	service_named_unbind_command("operserv", &os_update);
 	help_delentry(os_helptree, "UPDATE");
 }
 

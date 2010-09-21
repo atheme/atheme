@@ -33,22 +33,22 @@ command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cm
 command_t os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list };
 command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_akill_cmds;
+mowgli_patricia_t *os_akill_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_akill, os_cmdtree);
+        service_named_bind_command("operserv", &os_akill);
+
+	os_akill_cmds = mowgli_patricia_create(strcasecanon);
 
 	/* Add sub-commands */
-	command_add(&os_akill_add, &os_akill_cmds);
-	command_add(&os_akill_del, &os_akill_cmds);
-	command_add(&os_akill_list, &os_akill_cmds);
-	command_add(&os_akill_sync, &os_akill_cmds);
+	command_add(&os_akill_add, os_akill_cmds);
+	command_add(&os_akill_del, os_akill_cmds);
+	command_add(&os_akill_list, os_akill_cmds);
+	command_add(&os_akill_sync, os_akill_cmds);
 
 	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
 
@@ -58,17 +58,19 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_akill, os_cmdtree);
+	service_named_unbind_command("operserv", &os_akill);
 
 	/* Delete sub-commands */
-	command_delete(&os_akill_add, &os_akill_cmds);
-	command_delete(&os_akill_del, &os_akill_cmds);
-	command_delete(&os_akill_list, &os_akill_cmds);
-	command_delete(&os_akill_sync, &os_akill_cmds);
+	command_delete(&os_akill_add, os_akill_cmds);
+	command_delete(&os_akill_del, os_akill_cmds);
+	command_delete(&os_akill_list, os_akill_cmds);
+	command_delete(&os_akill_sync, os_akill_cmds);
 	
 	help_delentry(os_helptree, "AKILL");
 
 	hook_del_user_add(os_akill_newuser);
+
+	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
 }
 
 static void os_akill_newuser(hook_user_nick_t *data)
@@ -108,7 +110,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&os_akill_cmds, cmd);
+	c = command_find(os_akill_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

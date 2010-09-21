@@ -20,21 +20,19 @@ static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_raw, os_cmdtree);
+        service_named_bind_command("operserv", &os_raw);
 	help_addentry(os_helptree, "RAW", "help/oservice/raw", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_raw, os_cmdtree);
+	service_named_unbind_command("operserv", &os_raw);
 	help_delentry(os_helptree, "RAW");
 }
 

@@ -17,23 +17,21 @@ DECLARE_MODULE_V1
 
 static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[]);
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 command_t os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_modinspect, os_cmdtree);
+	service_named_bind_command("operserv", &os_modinspect);
 	help_addentry(os_helptree, "MODINSPECT", "help/oservice/modinspect", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_modinspect, os_cmdtree);
+	service_named_unbind_command("operserv", &os_modinspect);
 	help_delentry(os_helptree, "MODINSPECT");
 }
 

@@ -19,22 +19,20 @@ static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 extern list_t modules;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_modlist, os_cmdtree);
+	service_named_bind_command("operserv", &os_modlist);
 	help_addentry(os_helptree, "MODLIST", "help/oservice/modlist", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_modlist, os_cmdtree);
+	service_named_unbind_command("operserv", &os_modlist);
 	help_delentry(os_helptree, "MODLIST");
 }
 

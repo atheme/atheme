@@ -19,21 +19,19 @@ static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_restart, os_cmdtree);
+        service_named_bind_command("operserv", &os_restart);
 	help_addentry(os_helptree, "RESTART", "help/oservice/restart", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_restart, os_cmdtree);
+	service_named_unbind_command("operserv", &os_restart);
 	help_delentry(os_helptree, "RESTART");
 }
 

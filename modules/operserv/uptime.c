@@ -19,21 +19,19 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_uptime, os_cmdtree);
+        service_named_bind_command("operserv", &os_uptime);
 	help_addentry(os_helptree, "UPTIME", "help/oservice/uptime", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_uptime, os_cmdtree);
+	service_named_unbind_command("operserv", &os_uptime);
 	help_delentry(os_helptree, "UPTIME");
 }
 

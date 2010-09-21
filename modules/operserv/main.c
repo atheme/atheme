@@ -15,7 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t os_cmdtree;
 list_t os_helptree;
 list_t os_conftable;
 
@@ -49,14 +48,14 @@ static void oservice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &os_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 service_t *opersvs = NULL;
 
 void _modinit(module_t *m)
 {
-        opersvs = service_add("operserv", oservice, &os_cmdtree, &os_conftable);
+        opersvs = service_add("operserv", oservice, &os_conftable);
 }
 
 void _moddeinit(void)

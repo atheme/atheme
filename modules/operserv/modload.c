@@ -20,21 +20,19 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");	
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");	
 
-	command_add(&os_modload, os_cmdtree);
+	service_named_bind_command("operserv", &os_modload);
 	help_addentry(os_helptree, "MODLOAD", "help/oservice/modload", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_modload, os_cmdtree);
+	service_named_unbind_command("operserv", &os_modload);
 	help_delentry(os_helptree, "MODLOAD");
 }
 

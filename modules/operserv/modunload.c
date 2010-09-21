@@ -19,22 +19,20 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 extern list_t modules;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");	
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");	
 
-	command_add(&os_modunload, os_cmdtree);
+	service_named_bind_command("operserv", &os_modunload);
 	help_addentry(os_helptree, "MODUNLOAD", "help/oservice/modunload", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_modunload, os_cmdtree);
+	service_named_unbind_command("operserv", &os_modunload);
 	help_delentry(os_helptree, "MODUNLOAD");
 }
 

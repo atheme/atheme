@@ -19,21 +19,19 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_mode, os_cmdtree);
+        service_named_bind_command("operserv", &os_mode);
 	help_addentry(os_helptree, "MODE", "help/oservice/mode", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_mode, os_cmdtree);
+	service_named_unbind_command("operserv", &os_mode);
 	help_delentry(os_helptree, "MODE");
 }
 

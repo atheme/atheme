@@ -20,7 +20,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
@@ -29,16 +28,15 @@ command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a spe
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_rmatch, os_cmdtree);
+	service_named_bind_command("operserv", &os_rmatch);
 	help_addentry(os_helptree, "RMATCH", "help/oservice/rmatch", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_rmatch, os_cmdtree);
+	service_named_unbind_command("operserv", &os_rmatch);
 	help_delentry(os_helptree, "RMATCH");
 }
 

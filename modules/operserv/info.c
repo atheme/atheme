@@ -19,21 +19,19 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_info, os_cmdtree);
+        service_named_bind_command("operserv", &os_info);
 	help_addentry(os_helptree, "INFO", "help/oservice/info", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_info, os_cmdtree);
+	service_named_unbind_command("operserv", &os_info);
 	help_delentry(os_helptree, "INFO");
 }
 

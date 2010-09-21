@@ -19,21 +19,19 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-        command_add(&os_override, os_cmdtree);
+        service_named_bind_command("operserv", &os_override);
 	help_addentry(os_helptree, "OVERRIDE", "help/oservice/override", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_override, os_cmdtree);
+	service_named_unbind_command("operserv", &os_override);
 	help_delentry(os_helptree, "OVERRIDE");
 }
 
@@ -211,7 +209,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	svs = service_find_nick(parv[1]);
-	if (svs == NULL || svs->cmdtree == NULL)
+	if (svs == NULL || svs->commands == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a valid service."), parv[1]);
 		return;
@@ -224,7 +222,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	cmd = command_find(svs->cmdtree, parv[2]);
+	cmd = command_find(svs->commands, parv[2]);
 	if (cmd == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a valid command."), parv[2]);

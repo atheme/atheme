@@ -20,7 +20,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[]);
@@ -29,16 +28,15 @@ command_t os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users match
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_rakill, os_cmdtree);
+	service_named_bind_command("operserv", &os_rakill);
 	help_addentry(os_helptree, "RAKILL", "help/oservice/rakill", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_rakill, os_cmdtree);
+	service_named_unbind_command("operserv", &os_rakill);
 	help_delentry(os_helptree, "RAKILL");
 }
 

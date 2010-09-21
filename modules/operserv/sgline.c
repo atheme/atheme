@@ -32,13 +32,11 @@ command_t os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE
 command_t os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list };
 command_t os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_sgline_cmds;
+mowgli_patricia_t *os_sgline_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	if (ircd != NULL && xline_sts == generic_xline_sts)
@@ -49,13 +47,15 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	command_add(&os_sgline, os_cmdtree);
+	service_named_bind_command("operserv", &os_sgline);
+
+	os_sgline_cmds = mowgli_patricia_create(strcasecanon);
 
 	/* Add sub-commands */
-	command_add(&os_sgline_add, &os_sgline_cmds);
-	command_add(&os_sgline_del, &os_sgline_cmds);
-	command_add(&os_sgline_list, &os_sgline_cmds);
-	command_add(&os_sgline_sync, &os_sgline_cmds);
+	command_add(&os_sgline_add, os_sgline_cmds);
+	command_add(&os_sgline_del, os_sgline_cmds);
+	command_add(&os_sgline_list, os_sgline_cmds);
+	command_add(&os_sgline_sync, os_sgline_cmds);
 
 	help_addentry(os_helptree, "SGLINE", "help/oservice/sgline", NULL);
 
@@ -65,17 +65,19 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_sgline, os_cmdtree);
+	service_named_unbind_command("operserv", &os_sgline);
 
 	/* Delete sub-commands */
-	command_delete(&os_sgline_add, &os_sgline_cmds);
-	command_delete(&os_sgline_del, &os_sgline_cmds);
-	command_delete(&os_sgline_list, &os_sgline_cmds);
-	command_delete(&os_sgline_sync, &os_sgline_cmds);
+	command_delete(&os_sgline_add, os_sgline_cmds);
+	command_delete(&os_sgline_del, os_sgline_cmds);
+	command_delete(&os_sgline_list, os_sgline_cmds);
+	command_delete(&os_sgline_sync, os_sgline_cmds);
 	
 	help_delentry(os_helptree, "SGLINE");
 
 	hook_del_user_add(os_sgline_newuser);
+
+	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
 }
 
 static void os_sgline_newuser(hook_user_nick_t *data)
@@ -113,7 +115,7 @@ static void os_cmd_sgline(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&os_sgline_cmds, cmd);
+	c = command_find(os_sgline_cmds, cmd);
 	if(c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_cmdtree, *os_helptree;
+list_t *os_helptree;
 
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -23,16 +23,15 @@ command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_greplog, os_cmdtree);
+	service_named_bind_command("operserv", &os_greplog);
 	help_addentry(os_helptree, "GREPLOG", "help/oservice/greplog", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_greplog, os_cmdtree);
+	service_named_unbind_command("operserv", &os_greplog);
 	help_delentry(os_helptree, "GREPLOG");
 }
 

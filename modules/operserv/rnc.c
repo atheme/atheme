@@ -19,7 +19,6 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
 
 typedef struct rnc_t_ rnc_t;
@@ -31,16 +30,15 @@ struct rnc_t_
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_rnc, os_cmdtree);
+	service_named_bind_command("operserv", &os_rnc);
 	help_addentry(os_helptree, "RNC", "help/oservice/rnc", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&os_rnc, os_cmdtree);
+	service_named_unbind_command("operserv", &os_rnc);
 	help_delentry(os_helptree, "RNC");
 }
 

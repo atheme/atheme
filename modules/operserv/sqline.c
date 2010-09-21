@@ -34,13 +34,11 @@ command_t os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1,
 command_t os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list };
 command_t os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_sqline_cmds;
+mowgli_patricia_t *os_sqline_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	if (ircd != NULL && qline_sts == generic_qline_sts)
@@ -51,13 +49,15 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	command_add(&os_sqline, os_cmdtree);
+	service_named_bind_command("operserv", &os_sqline);
+
+	os_sqline_cmds = mowgli_patricia_create(strcasecanon);
 
 	/* Add sub-commands */
-	command_add(&os_sqline_add, &os_sqline_cmds);
-	command_add(&os_sqline_del, &os_sqline_cmds);
-	command_add(&os_sqline_list, &os_sqline_cmds);
-	command_add(&os_sqline_sync, &os_sqline_cmds);
+	command_add(&os_sqline_add, os_sqline_cmds);
+	command_add(&os_sqline_del, os_sqline_cmds);
+	command_add(&os_sqline_list, os_sqline_cmds);
+	command_add(&os_sqline_sync, os_sqline_cmds);
 
 	help_addentry(os_helptree, "SQLINE", "help/oservice/sqline", NULL);
 
@@ -71,19 +71,21 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_sqline, os_cmdtree);
+	service_named_unbind_command("operserv", &os_sqline);
 
 	/* Delete sub-commands */
-	command_delete(&os_sqline_add, &os_sqline_cmds);
-	command_delete(&os_sqline_del, &os_sqline_cmds);
-	command_delete(&os_sqline_list, &os_sqline_cmds);
-	command_delete(&os_sqline_sync, &os_sqline_cmds);
+	command_delete(&os_sqline_add, os_sqline_cmds);
+	command_delete(&os_sqline_del, os_sqline_cmds);
+	command_delete(&os_sqline_list, os_sqline_cmds);
+	command_delete(&os_sqline_sync, os_sqline_cmds);
 	
 	help_delentry(os_helptree, "SQLINE");
 
 	hook_del_user_add(os_sqline_newuser);
 	hook_del_user_nickchange(os_sqline_newuser);
 	hook_del_channel_join(os_sqline_chanjoin);
+
+	mowgli_patricia_destroy(os_sqline_cmds, NULL, NULL);
 }
 
 static void os_sqline_newuser(hook_user_nick_t *data)
@@ -141,7 +143,7 @@ static void os_cmd_sqline(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&os_sqline_cmds, cmd);
+	c = command_find(os_sqline_cmds, cmd);
 	if(c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);

@@ -30,34 +30,37 @@ command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an 
 command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del };
 command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass };
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_soper_cmds;
+mowgli_patricia_t *os_soper_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_soper, os_cmdtree);
-	command_add(&os_soper_list, &os_soper_cmds);
-	command_add(&os_soper_listclass, &os_soper_cmds);
-	command_add(&os_soper_add, &os_soper_cmds);
-	command_add(&os_soper_del, &os_soper_cmds);
-	command_add(&os_soper_setpass, &os_soper_cmds);
+	service_named_bind_command("operserv", &os_soper);
+
+	os_soper_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_soper_list, os_soper_cmds);
+	command_add(&os_soper_listclass, os_soper_cmds);
+	command_add(&os_soper_add, os_soper_cmds);
+	command_add(&os_soper_del, os_soper_cmds);
+	command_add(&os_soper_setpass, os_soper_cmds);
 
 	help_addentry(os_helptree, "SOPER", "help/oservice/soper", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&os_soper, os_cmdtree);
-	command_delete(&os_soper_list, &os_soper_cmds);
-	command_delete(&os_soper_listclass, &os_soper_cmds);
-	command_delete(&os_soper_add, &os_soper_cmds);
-	command_delete(&os_soper_del, &os_soper_cmds);
+	service_named_unbind_command("operserv", &os_soper);
+	command_delete(&os_soper_list, os_soper_cmds);
+	command_delete(&os_soper_listclass, os_soper_cmds);
+	command_delete(&os_soper_add, os_soper_cmds);
+	command_delete(&os_soper_del, os_soper_cmds);
 
 	help_delentry(os_helptree, "SOPER");
+
+	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
 }
 
 static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
@@ -77,7 +80,7 @@ static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&os_soper_cmds, parv[0]);
+	c = command_find(os_soper_cmds, parv[0]);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
@@ -275,7 +278,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 	if (parc >= 2)
 	{
 		if (mu->soper->password == NULL &&
-				!command_find(si->service->cmdtree, "IDENTIFY"))
+				!command_find(si->service->commands, "IDENTIFY"))
 		{
 			command_fail(si, fault_noprivs, _("Refusing to set a services operator password if %s IDENTIFY is not loaded."), si->service->nick);
 			return;

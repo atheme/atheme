@@ -35,9 +35,8 @@ static void db_h_ck(database_handle_t *db, const char *type);
 static void db_h_cd(database_handle_t *db, const char *type);
 static void db_h_ex(database_handle_t *db, const char *type);
 
-list_t *os_cmdtree;
 list_t *os_helptree;
-list_t os_clones_cmds;
+mowgli_patricia_t *os_clones_cmds;
 
 static list_t clone_exempts;
 bool kline_enabled;
@@ -91,17 +90,18 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
-	command_add(&os_clones, os_cmdtree);
+	service_named_bind_command("operserv", &os_clones);
 
-	command_add(&os_clones_kline, &os_clones_cmds);
-	command_add(&os_clones_list, &os_clones_cmds);
-	command_add(&os_clones_addexempt, &os_clones_cmds);
-	command_add(&os_clones_delexempt, &os_clones_cmds);
-	command_add(&os_clones_listexempt, &os_clones_cmds);
-	command_add(&os_clones_duration, &os_clones_cmds);
+	os_clones_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&os_clones_kline, os_clones_cmds);
+	command_add(&os_clones_list, os_clones_cmds);
+	command_add(&os_clones_addexempt, os_clones_cmds);
+	command_add(&os_clones_delexempt, os_clones_cmds);
+	command_add(&os_clones_listexempt, os_clones_cmds);
+	command_add(&os_clones_duration, os_clones_cmds);
 
 	help_addentry(os_helptree, "CLONES", "help/oservice/clones", NULL);
 
@@ -159,14 +159,14 @@ void _moddeinit(void)
 		node_free(n);
 	}
 
-	command_delete(&os_clones, os_cmdtree);
+	service_named_unbind_command("operserv", &os_clones);
 
-	command_delete(&os_clones_kline, &os_clones_cmds);
-	command_delete(&os_clones_list, &os_clones_cmds);
-	command_delete(&os_clones_addexempt, &os_clones_cmds);
-	command_delete(&os_clones_delexempt, &os_clones_cmds);
-	command_delete(&os_clones_listexempt, &os_clones_cmds);
-	command_delete(&os_clones_duration, &os_clones_cmds);
+	command_delete(&os_clones_kline, os_clones_cmds);
+	command_delete(&os_clones_list, os_clones_cmds);
+	command_delete(&os_clones_addexempt, os_clones_cmds);
+	command_delete(&os_clones_delexempt, os_clones_cmds);
+	command_delete(&os_clones_listexempt, os_clones_cmds);
+	command_delete(&os_clones_duration, os_clones_cmds);
 
 	help_delentry(os_helptree, "CLONES");
 
@@ -177,6 +177,8 @@ void _moddeinit(void)
 	db_unregister_type_handler("CLONES-CK");
 	db_unregister_type_handler("CLONES-CD");
 	db_unregister_type_handler("CLONES-EX");
+
+	mowgli_patricia_destroy(os_clones_cmds, NULL, NULL);
 }
 
 static void write_exemptdb(database_handle_t *db)
@@ -275,7 +277,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	c = command_find(&os_clones_cmds, cmd);
+	c = command_find(os_clones_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
