@@ -32,6 +32,7 @@
 
 #include	<stdio.h>
 #include	<time.h>
+#include	<stdlib.h>
 
 #define MUFLAGS 0x100 /* MU_CRYPTPASS */
 
