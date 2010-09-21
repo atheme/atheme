@@ -29,13 +29,13 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
-	command_add(&ns_set_neverop, ns_set_cmdtree);
+	command_add(&ns_set_neverop, *ns_set_cmdtree);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 }
 
 void _moddeinit(void)
 {
-	command_delete(&ns_set_neverop, ns_set_cmdtree);
+	command_delete(&ns_set_neverop, *ns_set_cmdtree);
 	help_delentry(ns_helptree, "SET NEVEROP");
 }
 
