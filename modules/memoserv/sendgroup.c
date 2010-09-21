@@ -21,21 +21,19 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
 command_t ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
                            AC_NONE, 2, ms_cmd_sendgroup };
 
-list_t *ms_cmdtree;
 list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
 
-        command_add(&ms_sendgroup, ms_cmdtree);
+        service_named_bind_command("memoserv", &ms_sendgroup);
 	help_addentry(ms_helptree, "SENDGROUP", "help/memoserv/sendgroup", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ms_sendgroup, ms_cmdtree);
+	service_named_unbind_command("memoserv", &ms_sendgroup);
 	help_delentry(ms_helptree, "SENDGROUP");
 }
 

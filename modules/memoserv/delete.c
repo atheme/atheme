@@ -22,23 +22,21 @@ command_t ms_delete = { "DELETE", N_("Deletes memos."),
 command_t ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_NONE, 1, ms_cmd_delete };
 
-list_t *ms_cmdtree;
 list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
 
-        command_add(&ms_delete, ms_cmdtree);
-	command_add(&ms_del, ms_cmdtree);
+        service_named_bind_command("memoserv", &ms_delete);
+	service_named_bind_command("memoserv", &ms_del);
 	help_addentry(ms_helptree, "DELETE", "help/memoserv/delete", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ms_delete, ms_cmdtree);
-	command_delete(&ms_del, ms_cmdtree);
+	service_named_unbind_command("memoserv", &ms_delete);
+	service_named_unbind_command("memoserv", &ms_del);
 	help_delentry(ms_helptree, "DELETE");
 }
 

@@ -20,21 +20,19 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[]);
 command_t ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_NONE, 2, ms_cmd_forward };
 
-list_t *ms_cmdtree;
 list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
 
-        command_add(&ms_forward, ms_cmdtree);
+        service_named_bind_command("memoserv", &ms_forward);
 	help_addentry(ms_helptree, "forward", "help/memoserv/forward", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ms_forward, ms_cmdtree);
+	service_named_unbind_command("memoserv", &ms_forward);
 	help_delentry(ms_helptree, "FORWARD");
 }
 

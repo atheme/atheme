@@ -18,7 +18,6 @@ DECLARE_MODULE_V1
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
 
-list_t ms_cmdtree;
 list_t ms_helptree;
 list_t ms_conftable;
 
@@ -52,7 +51,7 @@ static void memoserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	command_exec_split(si->service, si, cmd, text, &ms_cmdtree);
+	command_exec_split(si->service, si, cmd, text, si->service->commands);
 }
 
 service_t *memosvs = NULL;
@@ -65,7 +64,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_away");
 	hook_add_user_away(on_user_away);
 
-	memosvs = service_add("memoserv", memoserv, &ms_cmdtree, &ms_conftable);
+	memosvs = service_add("memoserv", memoserv, &ms_conftable);
 }
 
 void _moddeinit(void)

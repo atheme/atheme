@@ -27,35 +27,37 @@ command_t ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), 
 command_t ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_NONE, 1, ms_cmd_ignore_clear };
 command_t ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_NONE, 1, ms_cmd_ignore_list };
 
-list_t *ms_cmdtree;
 list_t *ms_helptree;
-list_t ms_ignore_cmds;
+mowgli_patricia_t *ms_ignore_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
 
-	command_add(&ms_ignore, ms_cmdtree);
+	service_named_bind_command("memoserv", &ms_ignore);
 	help_addentry(ms_helptree, "IGNORE", "help/memoserv/ignore", NULL);
 
+	ms_ignore_cmds = mowgli_patricia_create(strcasecanon);
+
 	/* Add sub-commands */
-	command_add(&ms_ignore_add, &ms_ignore_cmds);
-	command_add(&ms_ignore_del, &ms_ignore_cmds);
-	command_add(&ms_ignore_clear, &ms_ignore_cmds);
-	command_add(&ms_ignore_list, &ms_ignore_cmds);
+	command_add(&ms_ignore_add, ms_ignore_cmds);
+	command_add(&ms_ignore_del, ms_ignore_cmds);
+	command_add(&ms_ignore_clear, ms_ignore_cmds);
+	command_add(&ms_ignore_list, ms_ignore_cmds);
 }
 
 void _moddeinit()
 {
-	command_delete(&ms_ignore, ms_cmdtree);
+	service_named_unbind_command("memoserv", &ms_ignore);
 	help_delentry(ms_helptree, "IGNORE");
 
 	/* Delete sub-commands */
-	command_delete(&ms_ignore_add, &ms_ignore_cmds);
-	command_delete(&ms_ignore_del, &ms_ignore_cmds);
-	command_delete(&ms_ignore_clear, &ms_ignore_cmds);
-	command_delete(&ms_ignore_list, &ms_ignore_cmds);
+	command_delete(&ms_ignore_add, ms_ignore_cmds);
+	command_delete(&ms_ignore_del, ms_ignore_cmds);
+	command_delete(&ms_ignore_clear, ms_ignore_cmds);
+	command_delete(&ms_ignore_list, ms_ignore_cmds);
+
+	mowgli_patricia_destroy(ms_ignore_cmds, NULL, NULL);
 }
 
 static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
@@ -81,7 +83,7 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = command_find(&ms_ignore_cmds, cmd);
+	c = command_find(ms_ignore_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);

@@ -20,21 +20,19 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[]);
 command_t ms_send = { "SEND", N_("Sends a memo to a user."),
                         AC_NONE, 2, ms_cmd_send };
 
-list_t *ms_cmdtree;
 list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
 	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
 
-        command_add(&ms_send, ms_cmdtree);
+        service_named_bind_command("memoserv", &ms_send);
 	help_addentry(ms_helptree, "SEND", "help/memoserv/send", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ms_send, ms_cmdtree);
+	service_named_unbind_command("memoserv", &ms_send);
 	help_delentry(ms_helptree, "SEND");
 }
 
@@ -198,7 +196,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (*target == '#')
 	{
-		cmd = command_find(si->service->cmdtree, "SENDOPS");
+		cmd = command_find(si->service->commands, "SENDOPS");
 		if (cmd != NULL)
 			command_exec(si->service, si, cmd, parc, parv);
 		else
@@ -206,7 +204,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		cmd = command_find(si->service->cmdtree, "SENDGROUP");
+		cmd = command_find(si->service->commands, "SENDGROUP");
 		if (cmd != NULL)
 			command_exec(si->service, si, cmd, parc, parv);
 		else
