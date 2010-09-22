@@ -52,7 +52,6 @@ DECLARE_MODULE_V1
 #define DIR_EQUAL	2
 
 service_t *alis;
-list_t alis_helptree;
 list_t alis_conftable;
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
