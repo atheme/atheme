@@ -84,7 +84,6 @@ E const char *mygroup_founder_names(mygroup_t *mg);
 /* services plumbing */
 E service_t *groupsvs;
 E list_t gs_cmdtree;
-E list_t gs_helptree;
 E list_t conf_gs_table;
 E struct gflags ga_flags[];
 E struct gflags mg_flags[];

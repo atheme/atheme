@@ -14,13 +14,13 @@ static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set };
-command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email };
-command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url };
-command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description };
-command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel };
-command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open };
-command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public };
+command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set, { .func = gs_help_set } };
+command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email, { .path = "help/groupserv/set_email" } };
+command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url, { .path = "help/groupserv/set_url" } };
+command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description, { .path = "help/groupserv/set_description" } };
+command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel, { .path = "help/groupserv/set_channel" } };
+command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open, { .path = "help/groupserv/set_open" } };
+command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public, { .path = "help/groupserv/set_public" } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 
@@ -36,14 +36,6 @@ void set_init(void)
 	command_add(&gs_set_channel, gs_set_cmdtree);
 	command_add(&gs_set_open, gs_set_cmdtree);
 	command_add(&gs_set_public, gs_set_cmdtree);
-
-	help_addentry(&gs_helptree, "SET", NULL, gs_help_set);
-	help_addentry(&gs_helptree, "SET EMAIL", "help/groupserv/set_email", NULL); 
-	help_addentry(&gs_helptree, "SET URL", "help/groupserv/set_url", NULL); 
-	help_addentry(&gs_helptree, "SET DESCRIPTION", "help/groupserv/set_description", NULL); 
-	help_addentry(&gs_helptree, "SET CHANNEL", "help/groupserv/set_channel", NULL); 
-	help_addentry(&gs_helptree, "SET OPEN", "help/groupserv/set_open", NULL); 
-	help_addentry(&gs_helptree, "SET PUBLIC", "help/groupserv/set_public", NULL); 
 }
 
 void set_deinit(void)
@@ -56,14 +48,6 @@ void set_deinit(void)
 	command_delete(&gs_set_channel, gs_set_cmdtree);
 	command_delete(&gs_set_open, gs_set_cmdtree);
 	command_delete(&gs_set_public, gs_set_cmdtree);
-
-	help_delentry(&gs_helptree, "SET");
-	help_delentry(&gs_helptree, "SET EMAIL");
-	help_delentry(&gs_helptree, "SET URL");
-	help_delentry(&gs_helptree, "SET DESCRIPTION");
-	help_delentry(&gs_helptree, "SET CHANNEL");
-	help_delentry(&gs_helptree, "SET OPEN");
-	help_delentry(&gs_helptree, "SET PUBLIC");
 
 	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
 }

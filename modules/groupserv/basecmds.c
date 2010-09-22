@@ -26,7 +26,7 @@ static void create_challenge(sourceinfo_t *si, const char *name, int v, char *de
 
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help };
+command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help, { .path = "help/help" } };
 
 void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -51,7 +51,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_register = { "REGISTER", N_("Registers a group."), AC_NONE, 2, gs_cmd_register };
+command_t gs_register = { "REGISTER", N_("Registers a group."), AC_NONE, 2, gs_cmd_register, { .path = "help/groupserv/register" } };
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -98,7 +98,7 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info };
+command_t gs_info = { "INFO", N_("Displays information about registered groups."), AC_NONE, 2, gs_cmd_info, { .path = "help/groupserv/info" } };
 
 static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -177,7 +177,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list };
+command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "help/groupserv/list" } };
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -201,7 +201,7 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_NONE, 2, gs_cmd_drop };
+command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_NONE, 2, gs_cmd_drop, { .path = "help/groupserv/drop" } };
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -267,7 +267,7 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags };
+command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags, { .path = "help/groupserv/flags" } };
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -433,7 +433,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit };
+command_t gs_regnolimit = { "REGNOLIMIT", N_("Allow a group to bypass registration limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_regnolimit, { .path = "help/groupserv/regnolimit" } };
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -489,7 +489,7 @@ static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit };
+command_t gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "help/groupserv/acsnolimit" } };
 
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -545,7 +545,7 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_join = { "JOIN", N_("Join a open group."), AC_NONE, 2, gs_cmd_join };
+command_t gs_join = { "JOIN", N_("Join a open group."), AC_NONE, 2, gs_cmd_join, { .path = "help/groupserv/join" } };
 
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -607,16 +607,6 @@ void basecmds_init(void)
 	service_bind_command(groupsvs, &gs_regnolimit);
 	service_bind_command(groupsvs, &gs_acsnolimit);
 	service_bind_command(groupsvs, &gs_join);
-
-	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
-	help_addentry(&gs_helptree, "REGISTER", "help/groupserv/register", NULL);
-	help_addentry(&gs_helptree, "INFO", "help/groupserv/info", NULL);
-	help_addentry(&gs_helptree, "LIST", "help/groupserv/list", NULL);
-	help_addentry(&gs_helptree, "DROP", "help/groupserv/drop", NULL);
-	help_addentry(&gs_helptree, "FLAGS", "help/groupserv/flags", NULL);
-	help_addentry(&gs_helptree, "REGNOLIMIT", "help/groupserv/regnolimit", NULL);
-	help_addentry(&gs_helptree, "ACSNOLIMIT", "help/groupserv/acsnolimit", NULL);
-	help_addentry(&gs_helptree, "JOIN", "help/groupserv/join", NULL);
 }
 
 void basecmds_deinit(void)
@@ -630,15 +620,5 @@ void basecmds_deinit(void)
 	service_unbind_command(groupsvs, &gs_regnolimit);
 	service_unbind_command(groupsvs, &gs_acsnolimit);
 	service_unbind_command(groupsvs, &gs_join);
-
-	help_delentry(&gs_helptree, "HELP");
-	help_delentry(&gs_helptree, "REGISTER");
-	help_delentry(&gs_helptree, "INFO");
-	help_delentry(&gs_helptree, "LIST");
-	help_delentry(&gs_helptree, "DROP");
-	help_delentry(&gs_helptree, "FLAGS");
-	help_delentry(&gs_helptree, "REGNOLIMIT");
-	help_delentry(&gs_helptree, "ACSNOLIMIT");
-	help_delentry(&gs_helptree, "JOIN");
 }
 

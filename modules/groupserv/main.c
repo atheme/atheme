@@ -13,7 +13,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *groupsvs;
-list_t gs_helptree;
 list_t conf_gs_table;
 
 void _modinit(module_t *m)
