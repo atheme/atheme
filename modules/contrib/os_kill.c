@@ -21,7 +21,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_kill = { "KILL", "Kill a user with Services.", PRIV_OMODE, 2, os_cmd_kill, { .path = "help/contrib/kill" } };
+command_t os_kill = { "KILL", "Kill a user with Services.", PRIV_OMODE, 2, os_cmd_kill, { .path = "contrib/kill" } };
 
 void _modinit(module_t *m)
 {

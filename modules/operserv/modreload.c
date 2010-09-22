@@ -9,7 +9,7 @@ DECLARE_MODULE_V1
 );
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "help/oservice/modreload" } };
+command_t os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
 
 void _modinit(module_t *m)
 {

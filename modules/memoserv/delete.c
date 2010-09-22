@@ -18,9 +18,9 @@ DECLARE_MODULE_V1
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_delete = { "DELETE", N_("Deletes memos."),
-                        AC_NONE, 1, ms_cmd_delete, { .path = "help/memoserv/delete" } };
+                        AC_NONE, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 command_t ms_del = { "DEL", N_("Alias for DELETE"),
-			AC_NONE, 1, ms_cmd_delete, { .path = "help/memoserv/delete" } };
+			AC_NONE, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
 void _modinit(module_t *m)
 {

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 0, command_eightball, { .path = "help/gameserv/eightball" } };
+command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 0, command_eightball, { .path = "gameserv/eightball" } };
 
 void _modinit(module_t * m)
 {

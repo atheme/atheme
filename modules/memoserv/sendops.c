@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
-                          AC_NONE, 2, ms_cmd_sendops, { .path = "help/memoserv/sendops" } };
+                          AC_NONE, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
 
 void _modinit(module_t *m)
 {

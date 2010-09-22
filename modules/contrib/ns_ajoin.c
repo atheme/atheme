@@ -184,7 +184,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin, { .path = "help/contrib/ajoin" } };
+command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin, { .path = "contrib/ajoin" } };
 
 void _modinit(module_t *m)
 {

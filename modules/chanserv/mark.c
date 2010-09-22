@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_mark = { "MARK", N_("Adds a note to a channel."),
-			PRIV_MARK, 3, cs_cmd_mark, { .path = "help/cservice/mark" } };
+			PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
 
 void _modinit(module_t *m)
 {

@@ -19,9 +19,9 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_kick = { "KICK", N_("Removes a user from a channel."),
-                        AC_NONE, 3, cs_cmd_kick, { .path = "help/cservice/kick" } };
+                        AC_NONE, 3, cs_cmd_kick, { .path = "cservice/kick" } };
 command_t cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
-			AC_NONE, 3, cs_cmd_kickban, { .path = "help/cservice/kickban" } };
+			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
 void _modinit(module_t *m)
 {

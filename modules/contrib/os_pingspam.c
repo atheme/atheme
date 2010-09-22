@@ -50,8 +50,8 @@ static void user_add_hook(hook_user_nick_t *data);
 static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, 1, os_cmd_pingspam, { .path = "help/contrib/pingspam" } };
-command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam, { .path = "help/contrib/autopingspam" } };
+command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, 1, os_cmd_pingspam, { .path = "contrib/pingspam" } };
+command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam, { .path = "contrib/autopingspam" } };
 
 int spamming;
 

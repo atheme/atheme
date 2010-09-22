@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void hs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, hs_cmd_help, { .path = "help/help" } };
+command_t hs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, hs_cmd_help, { .path = "help" } };
 
 void _modinit(module_t *m)
 {

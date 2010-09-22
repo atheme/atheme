@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "help/cservice/set_url" } };
+command_t cs_set_url = { "URL", N_("Sets the channel URL."), AC_NONE, 2, cs_cmd_set_url, { .path = "cservice/set_url" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

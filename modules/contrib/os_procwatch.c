@@ -21,7 +21,7 @@ static void procwatch_readhandler(connection_t *cptr);
 static void os_cmd_procwatch(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_procwatch = { "PROCWATCH", "Notifies snoop channel on process exit.",
-                        PRIV_ADMIN, 1, os_cmd_procwatch, { .path = "help/contrib/procwatch" } };
+                        PRIV_ADMIN, 1, os_cmd_procwatch, { .path = "contrib/procwatch" } };
 
 static connection_t *kq_conn;
 

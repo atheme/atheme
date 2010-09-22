@@ -27,9 +27,9 @@ DECLARE_MODULE_V1
 static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
-command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "help/nickserv/login" } };
+command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/login" } };
 #else
-command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "help/nickserv/identify" } };
+command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/identify" } };
 #endif
 
 void _modinit(module_t *m)

@@ -21,7 +21,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_nomemo(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, ns_cmd_set_nomemo, { .path = "help/nickserv/set_noop" } };
+command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, ns_cmd_set_nomemo, { .path = "nickserv/set_noop" } };
 
 void _modinit(module_t *m)
 {

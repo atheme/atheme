@@ -22,7 +22,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper, { .path = "help/oservice/soper" } };
+command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper, { .path = "oservice/soper" } };
 
 command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
 command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };

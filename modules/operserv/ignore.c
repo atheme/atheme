@@ -21,7 +21,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "help/oservice/ignore" } };
+command_t os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore, { .path = "oservice/ignore" } };
 command_t os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add, { .path = "" } };
 command_t os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del, { .path = "" } };
 command_t os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list, { .path = "" } };

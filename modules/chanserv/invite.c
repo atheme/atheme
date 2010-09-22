@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_invite = { "INVITE", N_("Invites you to a channel."),
-                        AC_NONE, 1, cs_cmd_invite, { .path = "help/cservice/invite" } };
+                        AC_NONE, 1, cs_cmd_invite, { .path = "cservice/invite" } };
                                                                                    
 void _modinit(module_t *m)
 {

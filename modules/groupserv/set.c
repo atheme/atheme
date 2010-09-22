@@ -15,12 +15,12 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set, { .func = gs_help_set } };
-command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email, { .path = "help/groupserv/set_email" } };
-command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url, { .path = "help/groupserv/set_url" } };
-command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description, { .path = "help/groupserv/set_description" } };
-command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel, { .path = "help/groupserv/set_channel" } };
-command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open, { .path = "help/groupserv/set_open" } };
-command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public, { .path = "help/groupserv/set_public" } };
+command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
+command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
+command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
+command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
+command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
+command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 

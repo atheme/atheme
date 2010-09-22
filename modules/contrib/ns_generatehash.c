@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ns_cmd_generatehash(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_generatehash = { "GENERATEHASH", "Generates a hash for SOPER.",
-                        AC_NONE, 1, ns_cmd_generatehash, { .path = "help/contrib/generatehash" } };
+                        AC_NONE, 1, ns_cmd_generatehash, { .path = "contrib/generatehash" } };
                                                                                    
 void _modinit(module_t *m)
 {

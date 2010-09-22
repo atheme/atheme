@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_limitflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "help/cservice/set_limitflags" } };
+command_t cs_set_limitflags = { "LIMITFLAGS", N_("Limits the power of the +f flag."), AC_NONE, 2, cs_cmd_set_limitflags, { .path = "cservice/set_limitflags" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

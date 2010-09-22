@@ -19,8 +19,8 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_klinechan = { "KLINECHAN", "Klines all users joining a channel.",
-			PRIV_MASS_AKILL, 3, os_cmd_klinechan, { .path = "help/contrib/klinechan" } };
-command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans, { .path = "help/contrib/listklinechans" } };
+			PRIV_MASS_AKILL, 3, os_cmd_klinechan, { .path = "contrib/klinechan" } };
+command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans, { .path = "contrib/listklinechans" } };
 
 static void klinechan_check_join(hook_channel_joinpart_t *hdata);
 static void klinechan_show_info(hook_channel_req_t *hdata);

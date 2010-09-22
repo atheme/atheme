@@ -26,7 +26,7 @@ static struct testprocdata procdata;
 static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_testproc = { "TESTPROC", "Does something with child processes.",
-                        AC_NONE, 0, os_cmd_testproc, { .path = "help/contrib/testproc" } };
+                        AC_NONE, 0, os_cmd_testproc, { .path = "contrib/testproc" } };
 
 void _modinit(module_t *m)
 {

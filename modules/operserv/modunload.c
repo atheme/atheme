@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "help/oservice/modunload" } };
+command_t os_modunload = { "MODUNLOAD", N_("Unloads a module."), PRIV_ADMIN, 20, os_cmd_modunload, { .path = "oservice/modunload" } };
 
 extern list_t modules;
 

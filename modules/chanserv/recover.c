@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_recover = { "RECOVER", N_("Regain control of your channel."),
-                        AC_NONE, 1, cs_cmd_recover, { .path = "help/cservice/recover" } };
+                        AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
 void _modinit(module_t *m)
 {

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "help/nickserv/listmail" } };
+command_t ns_listmail = { "LISTMAIL", N_("Lists accounts registered to an e-mail address."), PRIV_USER_AUSPEX, 1, ns_cmd_listmail, { .path = "nickserv/listmail" } };
 
 void _modinit(module_t *m)
 {

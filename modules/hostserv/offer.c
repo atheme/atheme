@@ -27,10 +27,10 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[]);
 static void write_hsofferdb(database_handle_t *db);
 static void db_h_ho(database_handle_t *db, const char *type);
 
-command_t hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "help/hostserv/offer" } };
-command_t hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "help/hostserv/unoffer" } };
-command_t hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "help/hostserv/offerlist" } };
-command_t hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_NONE, 2, hs_cmd_take, { .path = "help/hostserv/take" } };
+command_t hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "hostserv/offer" } };
+command_t hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "hostserv/unoffer" } };
+command_t hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "hostserv/offerlist" } };
+command_t hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_NONE, 2, hs_cmd_take, { .path = "hostserv/take" } };
 
 struct hsoffered_ {
 	char *vhost;

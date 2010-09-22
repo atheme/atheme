@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
-			PRIV_HOLD, 2, cs_cmd_hold, { .path = "help/cservice/hold" } };
+			PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
 
 void _modinit(module_t *m)
 {

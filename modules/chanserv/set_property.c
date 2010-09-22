@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "help/cservice/set_property" } };
+command_t cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "cservice/set_property" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

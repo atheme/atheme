@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_clear_users = { "USERS", N_("Kicks all users from a channel."),
-	AC_NONE, 2, cs_cmd_clear_users, { .path = "help/cservice/clear_users" } };
+	AC_NONE, 2, cs_cmd_clear_users, { .path = "cservice/clear_users" } };
 
 mowgli_patricia_t **cs_clear_cmds;
 

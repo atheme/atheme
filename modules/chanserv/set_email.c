@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "help/cservice/set_email" } };
+command_t cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

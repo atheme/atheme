@@ -19,9 +19,9 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_op = { "OP", N_("Gives channel ops to a user."),
-                        AC_NONE, 2, cs_cmd_op, { .path = "help/cservice/op_voice" } };
+                        AC_NONE, 2, cs_cmd_op, { .path = "cservice/op_voice" } };
 command_t cs_deop = { "DEOP", N_("Removes channel ops from a user."),
-                        AC_NONE, 2, cs_cmd_deop, { .path = "help/cservice/op_voice" } };
+                        AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
 
 void _modinit(module_t *m)
 {

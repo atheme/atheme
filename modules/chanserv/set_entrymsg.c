@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "help/cservice/set_entrymsg" } };
+command_t cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "cservice/set_entrymsg" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

@@ -21,7 +21,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_NONE, 2, ms_cmd_ignore, { .path = "help/memoserv/ignore" } };
+command_t ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_NONE, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
 command_t ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_NONE, 1, ms_cmd_ignore_add, { .path = "" } };
 command_t ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_NONE, 1, ms_cmd_ignore_del, { .path = "" } };
 command_t ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_NONE, 1, ms_cmd_ignore_clear, { .path = "" } };

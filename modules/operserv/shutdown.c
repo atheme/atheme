@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown, { .path = "help/oservice/shutdown" } };
+command_t os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown, { .path = "oservice/shutdown" } };
 
 void _modinit(module_t *m)
 {

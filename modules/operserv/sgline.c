@@ -24,7 +24,7 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "help/oservice/sgline" } };
+command_t os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "oservice/sgline" } };
 
 command_t os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
 command_t os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };

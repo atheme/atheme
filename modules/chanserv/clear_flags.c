@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "help/cservice/clear_flags" } };
+command_t cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
 
 mowgli_patricia_t **cs_clear_cmds;
 

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_update(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "help/oservice/update" } };
+command_t os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "oservice/update" } };
 
 void _modinit(module_t *m)
 {

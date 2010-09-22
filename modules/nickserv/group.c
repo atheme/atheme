@@ -19,9 +19,9 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group, { .path = "help/nickserv/group" } };
-command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup, { .path = "help/nickserv/ungroup" } };
-command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "help/nickserv/fungroup" } };
+command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group, { .path = "nickserv/group" } };
+command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
+command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 void _modinit(module_t *m)
 {

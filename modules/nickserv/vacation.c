@@ -45,7 +45,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
-command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation, { .path = "help/nickserv/vacation" } };
+command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
 
 static void user_identify_hook(user_t *u)
 {

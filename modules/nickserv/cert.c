@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "help/nickserv/cert" } };
+command_t ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
 void _modinit(module_t *m)
 {

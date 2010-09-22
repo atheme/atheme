@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "help/helpserv/services" } };
+command_t helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "helpserv/services" } };
 
 void _modinit(module_t *m)
 {

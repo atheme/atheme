@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
-                        PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "help/cservice/fflags" } };
+                        PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
 void _modinit(module_t *m)
 {

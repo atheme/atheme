@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "help/oservice/jupe" } };
+command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
 void _modinit(module_t *m)
 {

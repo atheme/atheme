@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_fregister = { "FREGISTER", "Registers a nickname on behalf of another user.", PRIV_USER_FREGISTER, 20, ns_cmd_fregister, { .path = "help/contrib/fregister" } };
+command_t ns_fregister = { "FREGISTER", "Registers a nickname on behalf of another user.", PRIV_USER_FREGISTER, 20, ns_cmd_fregister, { .path = "contrib/fregister" } };
 
 void _modinit(module_t *m)
 {

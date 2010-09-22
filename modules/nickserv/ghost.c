@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "help/nickserv/ghost" } };
+command_t ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
 void _modinit(module_t *m)
 {

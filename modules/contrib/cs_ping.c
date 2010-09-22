@@ -10,7 +10,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ping = { "PING", "Verifies network connectivity by responding with pong.",
-			AC_NONE, 0, cs_cmd_ping, { .path = "help/contrib/cs_ping" } };
+			AC_NONE, 0, cs_cmd_ping, { .path = "contrib/cs_ping" } };
 
 void _modinit(module_t *m)
 {

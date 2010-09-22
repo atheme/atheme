@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
-                        AC_NONE, 3, cs_cmd_flags, { .path = "help/cservice/flags" } };
+                        AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
 
 void _modinit(module_t *m)
 {

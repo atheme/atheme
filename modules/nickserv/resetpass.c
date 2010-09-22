@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "help/nickserv/resetpass" } };
+command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
 void _modinit(module_t *m)
 {

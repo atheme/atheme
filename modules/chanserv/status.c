@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_status = { "STATUS", N_("Displays your status in services."),
-                         AC_NONE, 1, cs_cmd_status, { .path = "help/cservice/status" } };
+                         AC_NONE, 1, cs_cmd_status, { .path = "cservice/status" } };
 
 void _modinit(module_t *m)
 {

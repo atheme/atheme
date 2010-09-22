@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "help/nickserv/access" } };
+command_t ns_access = { "ACCESS", N_("Changes and shows your nickname access list."), AC_NONE, 2, ns_cmd_access, { .path = "nickserv/access" } };
 
 void _modinit(module_t *m)
 {

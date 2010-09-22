@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."), AC_NONE, 2, cs_cmd_set_keeptopic, { .path = "help/cservice/set_keeptopic" } };
+command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."), AC_NONE, 2, cs_cmd_set_keeptopic, { .path = "cservice/set_keeptopic" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

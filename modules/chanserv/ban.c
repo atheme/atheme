@@ -19,9 +19,9 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ban = { "BAN", N_("Sets a ban on a channel."),
-                        AC_NONE, 2, cs_cmd_ban, { .path = "help/cservice/ban" } };
+                        AC_NONE, 2, cs_cmd_ban, { .path = "cservice/ban" } };
 command_t cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
-			AC_NONE, 2, cs_cmd_unban, { .path = "help/cservice/unban" } };
+			AC_NONE, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 void _modinit(module_t *m)
 {

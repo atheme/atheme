@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_secure = { "SECURE", N_("Prevents unauthorized users from gaining operator status."), AC_NONE, 2, cs_cmd_set_secure, { .path = "help/cservice/set_secure" } };
+command_t cs_set_secure = { "SECURE", N_("Prevents unauthorized users from gaining operator status."), AC_NONE, 2, cs_cmd_set_secure, { .path = "cservice/set_secure" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

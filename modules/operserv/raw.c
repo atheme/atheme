@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "help/oservice/raw" } };
+command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "oservice/raw" } };
 
 void _modinit(module_t *m)
 {

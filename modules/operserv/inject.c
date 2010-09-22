@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "help/oservice/inject" } };
+command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
 void _modinit(module_t *m)
 {

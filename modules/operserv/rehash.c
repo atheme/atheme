@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "help/oservice/rehash" } };
+command_t os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "oservice/rehash" } };
 
 void _modinit(module_t *m)
 {

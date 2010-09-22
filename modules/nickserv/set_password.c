@@ -21,7 +21,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "help/nickserv/set_password" } };
+command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "nickserv/set_password" } };
 
 void _modinit(module_t *m)
 {

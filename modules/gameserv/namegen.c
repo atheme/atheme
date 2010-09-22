@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void command_namegen(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 0, command_namegen, { .path = "help/gameserv/namegen" } };
+command_t cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 0, command_namegen, { .path = "gameserv/namegen" } };
 
 void _modinit(module_t * m)
 {

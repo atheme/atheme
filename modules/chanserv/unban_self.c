@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_unban = { "UNBAN", N_("Unbans you on a channel."),
-			AC_NONE, 2, cs_cmd_unban, { .path = "help/cservice/unban_self" } };
+			AC_NONE, 2, cs_cmd_unban, { .path = "cservice/unban_self" } };
 
 void _modinit(module_t *m)
 {

@@ -19,7 +19,7 @@ static void userinfo_check_join(hook_channel_joinpart_t *hdata);
 static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_userinfo = { "USERINFO", N_("Sets a userinfo message."),
-			AC_NONE, 3, cs_cmd_userinfo, { .path = "help/contrib/userinfo" } };
+			AC_NONE, 3, cs_cmd_userinfo, { .path = "contrib/userinfo" } };
 
 void _modinit(module_t *m)
 {

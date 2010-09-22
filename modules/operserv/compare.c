@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "help/oservice/compare" } };
+command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
 void _modinit(module_t *m)
 {

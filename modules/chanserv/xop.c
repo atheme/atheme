@@ -28,15 +28,15 @@ static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_sop = { "SOP", N_("Manipulates a channel SOP list."),
-                        AC_NONE, 3, cs_cmd_sop, { .path = "help/cservice/xop" } };
+                        AC_NONE, 3, cs_cmd_sop, { .path = "cservice/xop" } };
 command_t cs_aop = { "AOP", N_("Manipulates a channel AOP list."),
-                        AC_NONE, 3, cs_cmd_aop, { .path = "help/cservice/xop" } };
+                        AC_NONE, 3, cs_cmd_aop, { .path = "cservice/xop" } };
 command_t cs_hop = { "HOP", N_("Manipulates a channel HOP list."),
-			AC_NONE, 3, cs_cmd_hop, { .path = "help/cservice/xop" } };
+			AC_NONE, 3, cs_cmd_hop, { .path = "cservice/xop" } };
 command_t cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
-                        AC_NONE, 3, cs_cmd_vop, { .path = "help/cservice/xop" } };
+                        AC_NONE, 3, cs_cmd_vop, { .path = "cservice/xop" } };
 command_t cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
-                         AC_NONE, 1, cs_cmd_forcexop, { .path = "help/cservice/forcexop" } };
+                         AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
 void _modinit(module_t *m)
 {

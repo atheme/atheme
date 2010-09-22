@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "help/oservice/override" } };
+command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
 void _modinit(module_t *m)
 {

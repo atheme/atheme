@@ -19,9 +19,9 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_protect = { "PROTECT", N_("Gives channel protection flag to a user."),
-                        AC_NONE, 2, cs_cmd_protect, { .path = "help/cservice/protect" } };
+                        AC_NONE, 2, cs_cmd_protect, { .path = "cservice/protect" } };
 command_t cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."),
-                        AC_NONE, 2, cs_cmd_deprotect, { .path = "help/cservice/protect" } };
+                        AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
 
 void _modinit(module_t *m)
 {

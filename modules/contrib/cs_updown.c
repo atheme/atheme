@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_up = { "UP", "Grants all access you have permission to on a given channel.", AC_NONE, 1, cs_cmd_up, { .path = "help/contrib/up" } };
-command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down, { .path = "help/contrib/down" } };
+command_t cs_up = { "UP", "Grants all access you have permission to on a given channel.", AC_NONE, 1, cs_cmd_up, { .path = "contrib/up" } };
+command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down, { .path = "contrib/down" } };
 
 void _modinit(module_t *m)
 {

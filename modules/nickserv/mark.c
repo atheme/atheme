@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "help/nickserv/mark" } };
+command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
 void _modinit(module_t *m)
 {

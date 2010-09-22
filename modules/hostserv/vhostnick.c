@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "help/hostserv/vhostnick" } };
+command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
 void _modinit(module_t *m)
 {

@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_read = { "READ", N_("Reads a memo."),
-                        AC_NONE, 2, ms_cmd_read, { .path = "help/memoserv/read" } };
+                        AC_NONE, 2, ms_cmd_read, { .path = "memoserv/read" } };
 
 void _modinit(module_t *m)
 {

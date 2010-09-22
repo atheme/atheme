@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_forbid(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_forbid = { "FORBID", "Disallows use of a nickname.", PRIV_USER_ADMIN, 3, ns_cmd_forbid, { .path = "help/contrib/forbid" } };
+command_t ns_forbid = { "FORBID", "Disallows use of a nickname.", PRIV_USER_ADMIN, 3, ns_cmd_forbid, { .path = "contrib/forbid" } };
 
 void _modinit(module_t *m)
 {

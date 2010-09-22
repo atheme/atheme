@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "help/oservice/info" } };
+command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
 
 void _modinit(module_t *m)
 {

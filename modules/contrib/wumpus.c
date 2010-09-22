@@ -920,7 +920,7 @@ static void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	command_help(si, si->service->commands);
 }
 
-command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help, { .path = "help/help" } };
+command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help, { .path = "help" } };
 
 static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {

@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
-                           AC_NONE, 2, ms_cmd_sendgroup, { .path = "help/memoserv/sendgroup" } };
+                           AC_NONE, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
 
 void _modinit(module_t *m)
 {

@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 );
 
 command_t cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
-                        AC_NONE, 4, cs_cmd_akick, { .path = "help/cservice/akick" } };
+                        AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
 
 void _modinit(module_t *m)
 {

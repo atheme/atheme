@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static char *reason_extract(char **args);
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace, { .path = "help/contrib/trace" } };
+command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace, { .path = "contrib/trace" } };
 
 typedef struct {
 	void /* trace_query_domain_t */ *(*prepare)(char **args);

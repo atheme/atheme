@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
-                        AC_NONE, 2, ms_cmd_forward, { .path = "help/memoserv/forward" } };
+                        AC_NONE, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
 void _modinit(module_t *m)
 {

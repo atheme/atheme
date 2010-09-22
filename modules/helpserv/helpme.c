@@ -21,7 +21,7 @@ time_t ratelimit_firsttime = 0;
 
 static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "help/helpserv/helpme" } };
+command_t helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "helpserv/helpme" } };
 
 void _modinit(module_t *m)
 {

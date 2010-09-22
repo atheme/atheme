@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "help/nickserv/sendpass" } };
+command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
 
 void _modinit(module_t *m)
 {

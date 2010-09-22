@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group, { .path = "help/hostserv/group" } };
+command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
 void _modinit(module_t *m)
 {

@@ -21,7 +21,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "help/nickserv/set_accountname" } };
+command_t ns_set_accountname = { "ACCOUNTNAME", N_("Changes your account name."), AC_NONE, 1, ns_cmd_set_accountname, { .path = "nickserv/set_accountname" } };
 
 void _modinit(module_t *m)
 {

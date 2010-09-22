@@ -21,9 +21,9 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_df(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice, { .path = "help/gameserv/roll" } };
-command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "help/gameserv/roll" } };
-command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "help/gameserv/roll" } };
+command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice, { .path = "gameserv/roll" } };
+command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
+command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 void _modinit(module_t * m)
 {

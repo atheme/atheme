@@ -69,7 +69,7 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "help/nickserv/set_privmsg" } };
+command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "nickserv/set_privmsg" } };
 
 void _modinit(module_t *m)
 {

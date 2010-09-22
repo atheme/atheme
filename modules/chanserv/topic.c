@@ -20,11 +20,11 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_topic = { "TOPIC", N_("Sets a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topic, { .path = "help/cservice/topic" } };
+                        AC_NONE, 2, cs_cmd_topic, { .path = "cservice/topic" } };
 command_t cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topicappend, { .path = "help/cservice/topicappend" } };
+                        AC_NONE, 2, cs_cmd_topicappend, { .path = "cservice/topicappend" } };
 command_t cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel."),
-                        AC_NONE, 2, cs_cmd_topicprepend, { .path = "help/cservice/topicprepend" } };
+                        AC_NONE, 2, cs_cmd_topicprepend, { .path = "cservice/topicprepend" } };
 
 void _modinit(module_t *m)
 {

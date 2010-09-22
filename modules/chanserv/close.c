@@ -19,7 +19,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
 
 /* CLOSE ON|OFF -- don't pollute the root with REOPEN */
 command_t cs_close = { "CLOSE", N_("Closes a channel."),
-			PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "help/cservice/close" }};
+			PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "cservice/close" }};
 
 static void close_check_join(hook_channel_joinpart_t *data);
 

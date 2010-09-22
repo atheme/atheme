@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_generatepass = { "GENERATEPASS", "Generates a random password.",
-                        AC_NONE, 1, ns_cmd_generatepass, { .path = "help/contrib/generatepass" } };
+                        AC_NONE, 1, ns_cmd_generatepass, { .path = "contrib/generatepass" } };
                                                                                    
 void _modinit(module_t *m)
 {

@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_fenforce = { "FENFORCE", "Enables or disables protection of another user's nicknames.", PRIV_USER_ADMIN, 2, ns_cmd_fenforce, { .path = "help/contrib/fenforce" } };
+command_t ns_fenforce = { "FENFORCE", "Enables or disables protection of another user's nicknames.", PRIV_USER_ADMIN, 2, ns_cmd_fenforce, { .path = "contrib/fenforce" } };
 
 void _modinit(module_t *m)
 {

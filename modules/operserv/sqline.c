@@ -27,7 +27,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "help/oservice/sqline" } };
+command_t os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "oservice/sqline" } };
 
 command_t os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
 command_t os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };

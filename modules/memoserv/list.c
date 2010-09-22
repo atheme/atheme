@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_list = { "LIST", N_(N_("Lists all of your memos.")),
-                        AC_NONE, 0, ms_cmd_list, { .path = "help/memoserv/list" } };
+                        AC_NONE, 0, ms_cmd_list, { .path = "memoserv/list" } };
 
 void _modinit(module_t *m)
 {

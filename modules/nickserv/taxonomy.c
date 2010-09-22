@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "help/nickserv/taxonomy" } };
+command_t ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy, { .path = "nickserv/taxonomy" } };
 
 void _modinit(module_t *m)
 {

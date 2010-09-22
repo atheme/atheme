@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "help/oservice/modload" } };
+command_t os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
 void _modinit(module_t *m)
 {

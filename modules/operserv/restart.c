@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "help/oservice/restart" } };
+command_t os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
 void _modinit(module_t *m)
 {

@@ -20,7 +20,7 @@ list_t helpserv_conftable;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
-command_t helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help, { .path = "help/help" } };
+command_t helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help, { .path = "help" } };
 
 /* HELP <command> [params] */
 void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])

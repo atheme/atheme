@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 static void os_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_helpme = { "HELPME", N_("Makes you into a network helper."),
-                        PRIV_HELPER, 0, os_cmd_helpme, { .path = "help/contrib/helpme" } };
+                        PRIV_HELPER, 0, os_cmd_helpme, { .path = "contrib/helpme" } };
 
 void _modinit(module_t *m)
 {

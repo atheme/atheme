@@ -19,9 +19,9 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_drop = { "DROP", N_("Drops a channel registration."),
-                        AC_NONE, 2, cs_cmd_drop, { .path = "help/cservice/drop" } };
+                        AC_NONE, 2, cs_cmd_drop, { .path = "cservice/drop" } };
 command_t cs_fdrop = { "FDROP", N_("Forces dropping of a channel registration."),
-                        PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop, { .path = "help/cservice/fdrop" } };
+                        PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop, { .path = "cservice/fdrop" } };
 
 void _modinit(module_t *m)
 {

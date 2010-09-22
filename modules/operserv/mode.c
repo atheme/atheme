@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "help/oservice/mode" } };
+command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
 void _modinit(module_t *m)
 {

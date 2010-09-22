@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "help/oservice/greplog" } };
+command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
 void _modinit(module_t *m)
 {

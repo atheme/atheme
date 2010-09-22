@@ -24,7 +24,7 @@ list_t *bs_bots;
 
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "help/botserv/set_private" } };
+command_t bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "botserv/set_private" } };
 
 void _modinit(module_t *m)
 {

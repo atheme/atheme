@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "help/botserv/info" } };
+command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
 
 fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;

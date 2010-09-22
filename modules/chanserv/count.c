@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_count = { "COUNT", N_("Shows number of entries in access lists."),
-                         AC_NONE, 1, cs_cmd_count, { .path = "help/cservice/count" } };
+                         AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
 void _modinit(module_t *m)
 {

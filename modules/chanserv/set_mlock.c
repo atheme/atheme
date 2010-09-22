@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "help/cservice/set_mlock" } };
+command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 

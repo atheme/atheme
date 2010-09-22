@@ -21,7 +21,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_quietchg(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, ns_cmd_set_quietchg, { .path = "help/nickserv/set_quietchg" } };
+command_t ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, ns_cmd_set_quietchg, { .path = "nickserv/set_quietchg" } };
 
 void _modinit(module_t *m)
 {

@@ -19,9 +19,9 @@ static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_owner = { "OWNER", N_("Gives channel owner flag to a user."),
-                        AC_NONE, 2, cs_cmd_owner, { .path = "help/cservice/owner" } };
+                        AC_NONE, 2, cs_cmd_owner, { .path = "cservice/owner" } };
 command_t cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."),
-                        AC_NONE, 2, cs_cmd_deowner, { .path = "help/cservice/owner" } };
+                        AC_NONE, 2, cs_cmd_deowner, { .path = "cservice/owner" } };
 
 void _modinit(module_t *m)
 {

@@ -26,7 +26,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "help/oservice/akill" } };
+command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "oservice/akill" } };
 
 command_t os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
 command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };

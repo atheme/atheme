@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "help/oservice/uptime" } };
+command_t os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
 void _modinit(module_t *m)
 {

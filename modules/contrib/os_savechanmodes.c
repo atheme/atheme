@@ -18,9 +18,9 @@ static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_savechanmodes = { "SAVECHANMODES", "Dumps channel modes to a file.",
-		  	   PRIV_ADMIN, 1, os_cmd_savechanmodes, { .path = "help/contrib/savechanmodes" } };
+		  	   PRIV_ADMIN, 1, os_cmd_savechanmodes, { .path = "contrib/savechanmodes" } };
 command_t os_loadchanmodes = { "LOADCHANMODES", "Restores channel modes from a file.",
-		  	   PRIV_ADMIN, 1, os_cmd_loadchanmodes, { .path = "help/contrib/loadchanmodes" } };
+		  	   PRIV_ADMIN, 1, os_cmd_loadchanmodes, { .path = "contrib/loadchanmodes" } };
 
 void _modinit(module_t *m)
 {

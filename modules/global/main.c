@@ -28,9 +28,9 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
 command_t gs_help = { "HELP", N_("Displays contextual help information."),
-		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help/help" } };
+		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
 command_t gs_global = { "GLOBAL", N_("Sends a global notice."),
-			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "help/gservice/global" } };
+			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
 
 /* *INDENT-ON* */
 

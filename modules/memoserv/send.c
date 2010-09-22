@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_send = { "SEND", N_("Sends a memo to a user."),
-                        AC_NONE, 2, ms_cmd_send, { .path = "help/memoserv/send" } };
+                        AC_NONE, 2, ms_cmd_send, { .path = "memoserv/send" } };
 
 void _modinit(module_t *m)
 {
