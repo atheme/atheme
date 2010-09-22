@@ -16,22 +16,16 @@ DECLARE_MODULE_V1
 static void os_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_helpme = { "HELPME", N_("Makes you into a network helper."),
-                        PRIV_HELPER, 0, os_cmd_helpme };
-
-list_t *os_helptree;
+                        PRIV_HELPER, 0, os_cmd_helpme, { .path = "help/contrib/helpme" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_helpme);
-	help_addentry(os_helptree, "HELPME", "help/contrib/helpme", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_helpme);
-	help_delentry(os_helptree, "HELPME");
 }
 
 static void os_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])

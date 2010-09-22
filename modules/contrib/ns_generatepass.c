@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_generatepass = { "GENERATEPASS", "Generates a random password.",
-                        AC_NONE, 1, ns_cmd_generatepass };
+                        AC_NONE, 1, ns_cmd_generatepass, { .path = "help/contrib/generatepass" } };
                                                                                    
-list_t *ns_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_generatepass);
-	help_addentry(ns_helptree, "GENERATEPASS", "help/contrib/generatepass", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_generatepass);
-	help_delentry(ns_helptree, "GENERATEPASS");
 }
 
 static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])

@@ -780,7 +780,7 @@ static void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* reference tuple for the above code: cmd_start */
-command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 0, cmd_start };
+command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 0, cmd_start, { .path = "" } };
 
 static void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -798,7 +798,7 @@ static void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", si->su->nick);
 }
 
-command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, 0, cmd_join };
+command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, 0, cmd_join, { .path = "" } };
 
 static void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -819,7 +819,7 @@ static void cmd_look(sourceinfo_t *si, int parc, char *parv[])
 	look_player(p);
 }
 
-command_t wumpus_look = { "LOOK", "View surroundings.", AC_NONE, 0, cmd_look };
+command_t wumpus_look = { "LOOK", "View surroundings.", AC_NONE, 0, cmd_look, { .path = "" } };
 
 static void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -847,7 +847,7 @@ static void cmd_move(sourceinfo_t *si, int parc, char *parv[])
 	move_player(p, atoi(id));
 }
 
-command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, 1, cmd_move };
+command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, 1, cmd_move, { .path = "" } };
 
 static void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -875,7 +875,7 @@ static void cmd_shoot(sourceinfo_t *si, int parc, char *parv[])
 	shoot_player(p, atoi(id));
 }
 
-command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, 1, cmd_shoot };
+command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, 1, cmd_shoot, { .path = "" } };
 
 static void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -898,7 +898,7 @@ static void cmd_resign(sourceinfo_t *si, int parc, char *parv[])
 	resign_player(p);
 }
 
-command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, 0, cmd_resign };
+command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, 0, cmd_resign, { .path = "" } };
 
 static void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -913,14 +913,14 @@ static void cmd_reset(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset };
+command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, 0, cmd_reset, { .path = "" } };
 
 static void cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
 	command_help(si, si->service->commands);
 }
 
-command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help };
+command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, cmd_help, { .path = "help/help" } };
 
 static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -936,7 +936,7 @@ static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, 0, cmd_who };
+command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, 0, cmd_who, { .path = "" } };
 
 /* removes quitting players */
 static void

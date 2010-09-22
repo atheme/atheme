@@ -18,27 +18,19 @@ DECLARE_MODULE_V1
 static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_up = { "UP", "Grants all access you have permission to on a given channel.", AC_NONE, 1, cs_cmd_up };
-command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down };
-
-list_t *cs_helptree;
+command_t cs_up = { "UP", "Grants all access you have permission to on a given channel.", AC_NONE, 1, cs_cmd_up, { .path = "help/contrib/up" } };
+command_t cs_down = { "DOWN", "Removes all current access you posess on a given channel.", AC_NONE, 1, cs_cmd_down, { .path = "help/contrib/down" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_up);
 	service_named_bind_command("chanserv", &cs_down);
-	help_addentry(cs_helptree, "UP", "help/contrib/up", NULL);
-	help_addentry(cs_helptree, "DOWN", "help/contrib/down", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_up);
 	service_named_unbind_command("chanserv", &cs_down);
-	help_delentry(cs_helptree, "UP");
-	help_delentry(cs_helptree, "DOWN");
 }
 
 

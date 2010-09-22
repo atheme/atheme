@@ -22,9 +22,9 @@ static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[]);
 static void catserv_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t catserv_meow = { "MEOW", "Makes the cute little kitty-cat meow!",
-				AC_NONE, 0, catserv_cmd_meow };
+				AC_NONE, 0, catserv_cmd_meow, { .path = "" } };
 command_t catserv_help = { "HELP", "Displays contextual help information.",
-				AC_NONE, 1, catserv_cmd_help };
+				AC_NONE, 1, catserv_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {

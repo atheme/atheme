@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ns_cmd_generatehash(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_generatehash = { "GENERATEHASH", "Generates a hash for SOPER.",
-                        AC_NONE, 1, ns_cmd_generatehash };
+                        AC_NONE, 1, ns_cmd_generatehash, { .path = "help/contrib/generatehash" } };
                                                                                    
-list_t *ns_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_generatehash);
-	help_addentry(ns_helptree, "GENERATEHASH", "help/contrib/generatehash", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_generatehash);
-	help_delentry(ns_helptree, "GENERATEHASH");
 }
 
 static void ns_cmd_generatehash(sourceinfo_t *si, int parc, char *parv[])

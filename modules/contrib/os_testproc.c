@@ -26,16 +26,11 @@ static struct testprocdata procdata;
 static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_testproc = { "TESTPROC", "Does something with child processes.",
-                        AC_NONE, 0, os_cmd_testproc };
-
-list_t *os_helptree;
+                        AC_NONE, 0, os_cmd_testproc, { .path = "help/contrib/testproc" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_testproc);
-	help_addentry(os_helptree, "TESTPROC", "help/contrib/testproc", NULL);
 }
 
 void _moddeinit()
@@ -43,7 +38,6 @@ void _moddeinit()
 	if (procdata.pip != NULL)
 		connection_close_soon(procdata.pip);
 	service_named_unbind_command("operserv", &os_testproc);
-	help_delentry(os_helptree, "TESTPROC");
 }
 
 static void testproc_recvqhandler(connection_t *cptr)

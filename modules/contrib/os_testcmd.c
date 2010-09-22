@@ -28,9 +28,7 @@ static void testcmd_command_success_nodata(sourceinfo_t *si, const char *message
 static void testcmd_command_success_string(sourceinfo_t *si, const char *result, const char *message);
 
 command_t os_testcmd = { "TESTCMD", "Executes a command without a user_t.",
-                        AC_NONE, 3, os_cmd_testcmd };
-
-list_t *os_helptree;
+                        AC_NONE, 3, os_cmd_testcmd, { .path = "help/contrib/testcmd" } };
 
 struct sourceinfo_vtable testcmd_vtable = { 
 	.description = "testcmd", 
@@ -41,16 +39,12 @@ struct sourceinfo_vtable testcmd_vtable = {
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_testcmd);
-	help_addentry(os_helptree, "TESTCMD", "help/contrib/testcmd", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_testcmd);
-	help_delentry(os_helptree, "TESTCMD");
 }
 
 static void testcmd_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)

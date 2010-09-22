@@ -19,26 +19,20 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_listklinechans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_klinechan = { "KLINECHAN", "Klines all users joining a channel.",
-			PRIV_MASS_AKILL, 3, os_cmd_klinechan };
-command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans };
+			PRIV_MASS_AKILL, 3, os_cmd_klinechan, { .path = "help/contrib/klinechan" } };
+command_t os_listklinechans = { "LISTKLINECHAN", "Lists active K:line channels.", PRIV_MASS_AKILL, 1, os_cmd_listklinechans, { .path = "help/contrib/listklinechans" } };
 
 static void klinechan_check_join(hook_channel_joinpart_t *hdata);
 static void klinechan_show_info(hook_channel_req_t *hdata);
 
-list_t *os_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_klinechan);
 	service_named_bind_command("operserv", &os_listklinechans);
 	hook_add_event("channel_join");
 	hook_add_first_channel_join(klinechan_check_join);
 	hook_add_event("channel_info");
 	hook_add_channel_info(klinechan_show_info);
-	help_addentry(os_helptree, "KLINECHAN", "help/contrib/klinechan", NULL);
-	help_addentry(os_helptree, "LISTKLINECHANS", "help/contrib/listklinechans", NULL);
 }
 
 void _moddeinit()
@@ -47,8 +41,6 @@ void _moddeinit()
 	service_named_unbind_command("operserv", &os_listklinechans);
 	hook_del_channel_join(klinechan_check_join);
 	hook_del_channel_info(klinechan_show_info);
-	help_delentry(os_helptree, "KLINECHANS");
-	help_delentry(os_helptree, "LISTKLINECHANS");
 }
 
 static void klinechan_check_join(hook_channel_joinpart_t *hdata)

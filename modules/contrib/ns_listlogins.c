@@ -16,22 +16,16 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listlogins = { "LISTLOGINS", N_("Lists details of clients authenticated as you."), AC_NONE, 1, ns_cmd_listlogins };
-
-list_t *ns_helptree;
+command_t ns_listlogins = { "LISTLOGINS", N_("Lists details of clients authenticated as you."), AC_NONE, 1, ns_cmd_listlogins, { .path = "help/contrib/listlogins" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_listlogins);
-	help_addentry(ns_helptree, "LISTLOGINS", "help/contrib/listlogins", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_listlogins);
-	help_delentry(ns_helptree, "LISTLOGINS");
 }
 
 static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[])

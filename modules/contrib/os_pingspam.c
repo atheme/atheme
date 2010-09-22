@@ -50,22 +50,17 @@ static void user_add_hook(hook_user_nick_t *data);
 static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, 1, os_cmd_pingspam };
-command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam };
+command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, 1, os_cmd_pingspam, { .path = "help/contrib/pingspam" } };
+command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam, { .path = "help/contrib/autopingspam" } };
 
 int spamming;
-list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	spamming = 0;
 
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 	service_named_bind_command("operserv", &os_pingspam);
 	service_named_bind_command("operserv", &os_autopingspam);
-
-	help_addentry(os_helptree, "PINGSPAM", "help/contrib/pingspam", NULL);
-	help_addentry(os_helptree, "AUTOPINGSPAM", "help/contrib/autopingspam", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(user_add_hook);
@@ -75,8 +70,6 @@ void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_pingspam);
 	service_named_unbind_command("operserv", &os_autopingspam);
-	help_delentry(os_helptree, "PINGSPAM");
-	help_delentry(os_helptree, "AUTOPINGSPAM");
 	hook_del_user_add(user_add_hook);
 }
 

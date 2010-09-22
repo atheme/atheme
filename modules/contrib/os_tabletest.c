@@ -9,7 +9,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_tabletest(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_tabletest = { "TABLETEST", "Table test.", AC_NONE, 0, os_cmd_tabletest };
+command_t os_tabletest = { "TABLETEST", "Table test.", AC_NONE, 0, os_cmd_tabletest, { .path = "" } };
 
 void _modinit(module_t *m)
 {

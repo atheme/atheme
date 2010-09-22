@@ -15,12 +15,10 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_helptree;
-
 static char *reason_extract(char **args);
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace };
+command_t os_trace = { "TRACE", N_("Looks for users and performs actions on them."), PRIV_USER_AUSPEX, 2, os_cmd_trace, { .path = "help/contrib/trace" } };
 
 typedef struct {
 	void /* trace_query_domain_t */ *(*prepare)(char **args);
@@ -724,10 +722,7 @@ mowgli_patricia_t *trace_acttree = NULL;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_trace);
-	help_addentry(os_helptree, "TRACE", "help/contrib/trace", NULL);
 
 	trace_cmdtree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_cmdtree, "REGEXP", &trace_regexp);
@@ -749,7 +744,6 @@ void _moddeinit(void)
 	mowgli_patricia_destroy(trace_cmdtree, NULL, NULL);
 
 	service_named_unbind_command("operserv", &os_trace);
-	help_delentry(os_helptree, "TRACE");
 }
 
 #define MAXMATCHES_DEF 1000

@@ -14,32 +14,24 @@ DECLARE_MODULE_V1
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
-list_t *os_helptree;
-
 static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_loadchanmodes(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_savechanmodes = { "SAVECHANMODES", "Dumps channel modes to a file.",
-		  	   PRIV_ADMIN, 1, os_cmd_savechanmodes };
+		  	   PRIV_ADMIN, 1, os_cmd_savechanmodes, { .path = "help/contrib/savechanmodes" } };
 command_t os_loadchanmodes = { "LOADCHANMODES", "Restores channel modes from a file.",
-		  	   PRIV_ADMIN, 1, os_cmd_loadchanmodes };
+		  	   PRIV_ADMIN, 1, os_cmd_loadchanmodes, { .path = "help/contrib/loadchanmodes" } };
 
 void _modinit(module_t *m)
 {
-	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_savechanmodes);
 	service_named_bind_command("operserv", &os_loadchanmodes);
-	help_addentry(os_helptree, "SAVECHANMODES", "help/contrib/savechanmodes", NULL);
-	help_addentry(os_helptree, "LOADCHANMODES", "help/contrib/loadchanmodes", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_savechanmodes);
 	service_named_unbind_command("operserv", &os_loadchanmodes);
-	help_delentry(os_helptree, "SAVECHANMODES");
-	help_delentry(os_helptree, "LOADCHANMODES");
 }
 
 static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[])

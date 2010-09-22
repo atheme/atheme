@@ -17,8 +17,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
-
 static void ajoin_on_identify(user_t *u);
 
 static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
@@ -186,23 +184,19 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin };
+command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin, { .path = "help/contrib/ajoin" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	hook_add_event("user_identify");
 	hook_add_user_identify(ajoin_on_identify);
 	service_named_bind_command("nickserv", &ns_ajoin);
-	help_addentry(ns_helptree, "AJOIN", "help/contrib/ajoin", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_user_identify(ajoin_on_identify);
 	service_named_unbind_command("nickserv", &ns_ajoin);
-	help_delentry(ns_helptree, "AJOIN");
 }
 
 static void ajoin_on_identify(user_t *u)
