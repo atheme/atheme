@@ -110,7 +110,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	help_display(si, chansvs.me, command, cs_helptree);
+	help_display(si, chansvs.me, command, si->service->commands);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

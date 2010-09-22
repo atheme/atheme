@@ -89,7 +89,7 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, si->service, command, &is_helptree);
+	help_display(si, si->service, command, si->service->commands);
 }
 
 static void underscores_to_spaces(char *y)

@@ -46,7 +46,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, si->service, parv[0], &gs_helptree);
+	help_display(si, si->service, parv[0], si->service->commands);
 }
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);

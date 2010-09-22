@@ -433,5 +433,5 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	help_display(si, si->service, command, &alis_helptree);
+	help_display(si, si->service, command, alis->commands);
 }
