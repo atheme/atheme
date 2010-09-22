@@ -45,7 +45,6 @@ list_t operlogon_info;
 unsigned int logoninfo_count = 0;
 
 service_t *infoserv;
-list_t is_helptree;
 list_t is_conftable;
 
 static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
@@ -60,13 +59,13 @@ static void display_oper_info(user_t *u);
 static void write_infodb(database_handle_t *db);
 static void db_h_li(database_handle_t *db, const char *type);
 
-command_t is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help };
-command_t is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post };
-command_t is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del };
-command_t is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel };
-command_t is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list };
+command_t is_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, is_cmd_help, { .path = "help/help" } };
+command_t is_post = { "POST", N_("Post news items for users to view."), PRIV_GLOBAL, 3, is_cmd_post, { .path = "help/infoserv/post" } };
+command_t is_del = { "DEL", N_("Delete news items."), PRIV_GLOBAL, 1, is_cmd_del, { .path = "help/infoserv/del" } };
+command_t is_odel = { "ODEL", N_("Delete oper news items."), PRIV_GLOBAL, 1, is_cmd_odel, { .path = "help/infoserv/odel" } };
+command_t is_list = { "LIST", N_("List previously posted news items."), AC_NONE, 1, is_cmd_list, { .path = "help/infoserv/list" } };
 /* Should prolly change the priv for this. What would be a better priv for it though? */
-command_t is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist };
+command_t is_olist = { "OLIST", N_("List previously posted oper news items."), PRIV_GLOBAL, 1, is_cmd_olist, { .path = "help/infoserv/olist" } };
 
 /* HELP <command> [params] */
 void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
@@ -532,13 +531,6 @@ void _modinit(module_t *m)
 	service_bind_command(infoserv, &is_odel);
 	service_bind_command(infoserv, &is_list);
 	service_bind_command(infoserv, &is_olist);
-
-	help_addentry(&is_helptree, "HELP", "help/help", NULL);
-	help_addentry(&is_helptree, "POST", "help/infoserv/post", NULL);
-	help_addentry(&is_helptree, "DEL", "help/infoserv/del", NULL);
-	help_addentry(&is_helptree, "ODEL", "help/infoserv/odel", NULL);
-	help_addentry(&is_helptree, "LIST", "help/infoserv/list", NULL);
-	help_addentry(&is_helptree, "OLIST", "help/infoserv/olist", NULL);
 }
 
 void _moddeinit(void)
@@ -564,13 +556,6 @@ void _moddeinit(void)
 	service_unbind_command(infoserv, &is_odel);
 	service_unbind_command(infoserv, &is_list);
 	service_unbind_command(infoserv, &is_olist);
-
-	help_delentry(&is_helptree, "HELP");
-	help_delentry(&is_helptree, "POST");
-	help_delentry(&is_helptree, "DEL");
-	help_delentry(&is_helptree, "ODEL");
-	help_delentry(&is_helptree, "LIST");
-	help_delentry(&is_helptree, "OLIST");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
