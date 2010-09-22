@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_taxonomy = { "TAXONOMY", N_("Displays a channel's metadata."),
-                        AC_NONE, 1, cs_cmd_taxonomy };
+                        AC_NONE, 1, cs_cmd_taxonomy, { .path = "help/cservice/taxonomy" } };
                                                                                    
-list_t *cs_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_taxonomy);
-	help_addentry(cs_helptree, "TAXONOMY", "help/cservice/taxonomy", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_taxonomy);
-	help_delentry(cs_helptree, "TAXONOMY");
 }
 
 void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])

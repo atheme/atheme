@@ -10,7 +10,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_version = { "VERSION", N_("Displays version information of the services."),
-                        AC_NONE, 0, cs_cmd_version };
+                        AC_NONE, 0, cs_cmd_version, { .path = "" } };
 
 void _modinit(module_t *m)
 {

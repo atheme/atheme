@@ -21,22 +21,16 @@ static void list_generic_flags(sourceinfo_t *si);
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
-                        AC_NONE, 3, cs_cmd_template };
-
-list_t *cs_helptree;
+                        AC_NONE, 3, cs_cmd_template, { .path = "help/cservice/template" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_flags);
-	help_addentry(cs_helptree, "TEMPLATE", "help/cservice/template", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_flags);
-	help_delentry(cs_helptree, "TEMPLATE");
 }
 
 static void list_generic_flags(sourceinfo_t *si)

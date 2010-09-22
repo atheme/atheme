@@ -19,27 +19,21 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
 
 /* CLOSE ON|OFF -- don't pollute the root with REOPEN */
 command_t cs_close = { "CLOSE", N_("Closes a channel."),
-			PRIV_CHAN_ADMIN, 3, cs_cmd_close };
+			PRIV_CHAN_ADMIN, 3, cs_cmd_close , { .path = "help/cservice/close" }};
 
 static void close_check_join(hook_channel_joinpart_t *data);
 
-list_t *cs_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_close);
 	hook_add_event("channel_join");
 	hook_add_first_channel_join(close_check_join);
-	help_addentry(cs_helptree, "CLOSE", "help/cservice/close", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_close);
 	hook_del_channel_join(close_check_join);
-	help_delentry(cs_helptree, "CLOSE");
 }
 
 static void close_check_join(hook_channel_joinpart_t *data)

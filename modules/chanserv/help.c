@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_help = { "HELP", N_("Displays contextual help information."),
-                        AC_NONE, 1, cs_cmd_help };
-
-list_t *cs_helptree;
+                        AC_NONE, 1, cs_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_help);
-	help_addentry(cs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_help);
-	help_delentry(cs_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

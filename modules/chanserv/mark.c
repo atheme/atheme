@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_mark = { "MARK", N_("Adds a note to a channel."),
-			PRIV_MARK, 3, cs_cmd_mark };
-
-list_t *cs_helptree;
+			PRIV_MARK, 3, cs_cmd_mark, { .path = "help/cservice/mark" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_mark);
-	help_addentry(cs_helptree, "MARK", "help/cservice/mark", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_mark);
-	help_delentry(cs_helptree, "MARK");
 }
 
 static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])

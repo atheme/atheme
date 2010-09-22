@@ -19,11 +19,9 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
-                        AC_NONE, 2, cs_cmd_halfop };
+                        AC_NONE, 2, cs_cmd_halfop, { .path = "help/cservice/halfop" } };
 command_t cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
-                        AC_NONE, 2, cs_cmd_dehalfop };
-
-list_t *cs_helptree;
+                        AC_NONE, 2, cs_cmd_dehalfop, { .path = "help/cservice/halfop" } };
 
 void _modinit(module_t *m)
 {
@@ -34,22 +32,14 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_halfop);
         service_named_bind_command("chanserv", &cs_dehalfop);
-
-	help_addentry(cs_helptree, "HALFOP", "help/cservice/halfop", NULL);
-	help_addentry(cs_helptree, "DEHALFOP", "help/cservice/halfop", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_halfop);
 	service_named_unbind_command("chanserv", &cs_dehalfop);
-
-	help_delentry(cs_helptree, "HALFOP");
-	help_delentry(cs_helptree, "DEHALFOP");
 }
 
 static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])

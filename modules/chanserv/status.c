@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_status = { "STATUS", N_("Displays your status in services."),
-                         AC_NONE, 1, cs_cmd_status };
-
-list_t *cs_helptree;
+                         AC_NONE, 1, cs_cmd_status, { .path = "help/cservice/status" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_status);
-	help_addentry(cs_helptree, "STATUS", "help/cservice/status", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_status);
-	help_delentry(cs_helptree, "STATUS");
 }
 
 static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])

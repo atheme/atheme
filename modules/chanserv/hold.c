@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
-			PRIV_HOLD, 2, cs_cmd_hold };
-
-list_t *cs_helptree;
+			PRIV_HOLD, 2, cs_cmd_hold, { .path = "help/cservice/hold" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_hold);
-	help_addentry(cs_helptree, "HOLD", "help/cservice/hold", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_hold);
-	help_delentry(cs_helptree, "HOLD");
 }
 
 static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])

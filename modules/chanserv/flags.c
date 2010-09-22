@@ -19,22 +19,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
-                        AC_NONE, 3, cs_cmd_flags };
-
-list_t *cs_helptree;
+                        AC_NONE, 3, cs_cmd_flags, { .path = "help/cservice/flags" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_flags);
-	help_addentry(cs_helptree, "FLAGS", "help/cservice/flags", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_flags);
-	help_delentry(cs_helptree, "FLAGS");
 }
 
 static const char *get_template_name(mychan_t *mc, unsigned int level)

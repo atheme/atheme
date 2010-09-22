@@ -18,19 +18,15 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_private = { "PRIVATE", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_private };
+command_t cs_set_private = { "PRIVATE", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_private, { .path = "help/cservice/set_private" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
-list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	command_add(&cs_set_private, *cs_set_cmdtree);
-
-	help_addentry(cs_helptree, "SET PRIVATE", "help/cservice/set_private", NULL);
 
 	use_channel_private++;
 }
@@ -38,8 +34,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_set_private, *cs_set_cmdtree);
-
-	help_delentry(cs_helptree, "SET PRIVATE");
 
 	use_channel_private--;
 }

@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_info = { "INFO", N_("Displays information on registrations."),
-                        AC_NONE, 2, cs_cmd_info };
-
-list_t *cs_helptree;
+                        AC_NONE, 2, cs_cmd_info, { .path = "help/cservice/info" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_info);
-	help_addentry(cs_helptree, "INFO", "help/cservice/info", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_info);
-	help_delentry(cs_helptree, "INFO");
 }
 
 static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])

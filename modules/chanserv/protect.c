@@ -19,11 +19,9 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_protect = { "PROTECT", N_("Gives channel protection flag to a user."),
-                        AC_NONE, 2, cs_cmd_protect };
+                        AC_NONE, 2, cs_cmd_protect, { .path = "help/cservice/protect" } };
 command_t cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."),
-                        AC_NONE, 2, cs_cmd_deprotect };
-
-list_t *cs_helptree;
+                        AC_NONE, 2, cs_cmd_deprotect, { .path = "help/cservice/protect" } };
 
 void _modinit(module_t *m)
 {
@@ -34,22 +32,14 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_unbind_command("chanserv", &cs_protect);
         service_named_unbind_command("chanserv", &cs_deprotect);
-
-	help_addentry(cs_helptree, "PROTECT", "help/cservice/protect", NULL);
-	help_addentry(cs_helptree, "DEPROTECT", "help/cservice/protect", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_bind_command("chanserv", &cs_protect);
 	service_named_bind_command("chanserv", &cs_deprotect);
-
-	help_delentry(cs_helptree, "PROTECT");
-	help_delentry(cs_helptree, "DEPROTECT");
 }
 
 static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])

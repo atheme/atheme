@@ -26,8 +26,6 @@ static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
 static void on_shutdown(void *unused);
 
-list_t cs_helptree;
-
 static void join_registered(bool all)
 {
 	mychan_t *mc;

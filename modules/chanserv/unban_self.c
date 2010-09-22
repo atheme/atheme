@@ -20,24 +20,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_unban = { "UNBAN", N_("Unbans you on a channel."),
-			AC_NONE, 2, cs_cmd_unban };
-
-list_t *cs_helptree;
+			AC_NONE, 2, cs_cmd_unban, { .path = "help/cservice/unban_self" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_unban);
-
-	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban_self", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_unban);
-
-	help_delentry(cs_helptree, "UNBAN");
 }
 
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])

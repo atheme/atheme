@@ -19,30 +19,20 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_op = { "OP", N_("Gives channel ops to a user."),
-                        AC_NONE, 2, cs_cmd_op };
+                        AC_NONE, 2, cs_cmd_op, { .path = "help/cservice/op_voice" } };
 command_t cs_deop = { "DEOP", N_("Removes channel ops from a user."),
-                        AC_NONE, 2, cs_cmd_deop };
-
-list_t *cs_helptree;
+                        AC_NONE, 2, cs_cmd_deop, { .path = "help/cservice/op_voice" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_op);
         service_named_bind_command("chanserv", &cs_deop);
-
-	help_addentry(cs_helptree, "OP", "help/cservice/op_voice", NULL);
-	help_addentry(cs_helptree, "DEOP", "help/cservice/op_voice", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_op);
 	service_named_unbind_command("chanserv", &cs_deop);
-
-	help_delentry(cs_helptree, "OP");
-	help_delentry(cs_helptree, "DEOP");
 }
 
 static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])

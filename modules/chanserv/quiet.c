@@ -19,16 +19,12 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
-                        AC_NONE, 2, cs_cmd_quiet };
+                        AC_NONE, 2, cs_cmd_quiet, { .path = "help/cservice/quiet" } };
 command_t cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
-			AC_NONE, 2, cs_cmd_unquiet };
-
-list_t *cs_helptree;
+			AC_NONE, 2, cs_cmd_unquiet, { .path = "help/cservice/unquiet" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	if (ircd != NULL && !strchr(ircd->ban_like_modes, 'q'))
 	{
 		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->header->name);
@@ -38,18 +34,12 @@ void _modinit(module_t *m)
 
         service_named_unbind_command("chanserv", &cs_quiet);
 	service_named_unbind_command("chanserv", &cs_unquiet);
-
-	help_addentry(cs_helptree, "QUIET", "help/cservice/quiet", NULL);
-	help_addentry(cs_helptree, "UNQUIET", "help/cservice/unquiet", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_bind_command("chanserv", &cs_quiet);
 	service_named_bind_command("chanserv", &cs_unquiet);
-
-	help_delentry(cs_helptree, "QUIET");
-	help_delentry(cs_helptree, "UNQUIET");
 }
 
 /* Notify at most this many users in private notices, otherwise channel */

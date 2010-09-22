@@ -19,30 +19,20 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ban = { "BAN", N_("Sets a ban on a channel."),
-                        AC_NONE, 2, cs_cmd_ban };
+                        AC_NONE, 2, cs_cmd_ban, { .path = "help/cservice/ban" } };
 command_t cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
-			AC_NONE, 2, cs_cmd_unban };
-
-list_t *cs_helptree;
+			AC_NONE, 2, cs_cmd_unban, { .path = "help/cservice/unban" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_ban);
 	service_named_bind_command("chanserv", &cs_unban);
-
-	help_addentry(cs_helptree, "BAN", "help/cservice/ban", NULL);
-	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_ban);
 	service_named_unbind_command("chanserv", &cs_unban);
-
-	help_delentry(cs_helptree, "BAN");
-	help_delentry(cs_helptree, "UNBAN");
 }
 
 static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])

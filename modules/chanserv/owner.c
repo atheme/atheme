@@ -19,11 +19,9 @@ static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_owner = { "OWNER", N_("Gives channel owner flag to a user."),
-                        AC_NONE, 2, cs_cmd_owner };
+                        AC_NONE, 2, cs_cmd_owner, { .path = "help/cservice/owner" } };
 command_t cs_deowner = { "DEOWNER", N_("Removes channel owner flag from a user."),
-                        AC_NONE, 2, cs_cmd_deowner };
-
-list_t *cs_helptree;
+                        AC_NONE, 2, cs_cmd_deowner, { .path = "help/cservice/owner" } };
 
 void _modinit(module_t *m)
 {
@@ -34,22 +32,14 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_owner);
         service_named_bind_command("chanserv", &cs_deowner);
-
-	help_addentry(cs_helptree, "OWNER", "help/cservice/owner", NULL);
-	help_addentry(cs_helptree, "DEOWNER", "help/cservice/owner", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_owner);
 	service_named_unbind_command("chanserv", &cs_deowner);
-
-	help_delentry(cs_helptree, "OWNER");
-	help_delentry(cs_helptree, "DEOWNER");
 }
 
 static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[])

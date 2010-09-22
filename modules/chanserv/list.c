@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list };
-
-list_t *cs_helptree;
+command_t cs_list = { "LIST", N_("Lists channels registered matching a given pattern."), PRIV_CHAN_AUSPEX, 10, cs_cmd_list, { .path = "help/cservice/list" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_list);
-	help_addentry(cs_helptree, "LIST", "help/cservice/list", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_list);
-	help_delentry(cs_helptree, "LIST");
 }
 
 typedef enum {

@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_why = { "WHY", N_("Explains channel access logic."),
-		     AC_NONE, 2, cs_cmd_why };
-
-list_t *cs_helptree;
+		     AC_NONE, 2, cs_cmd_why, { .path = "help/cservice/why" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_why);
-	help_addentry(cs_helptree, "WHY", "help/cservice/why", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_why);
-	help_delentry(cs_helptree, "WHY");
 }
 
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])

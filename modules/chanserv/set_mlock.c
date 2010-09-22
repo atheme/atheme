@@ -18,26 +18,20 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock };
+command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "help/cservice/set_mlock" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
-list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	command_add(&cs_set_mlock, *cs_set_cmdtree);
-
-	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_set_mlock, *cs_set_cmdtree);
-
-	help_delentry(cs_helptree, "SET MLOCK");
 }
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])

@@ -18,23 +18,16 @@ DECLARE_MODULE_V1
 );
 
 command_t cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
-                        AC_NONE, 4, cs_cmd_akick };
-
-list_t *cs_helptree;
+                        AC_NONE, 4, cs_cmd_akick, { .path = "help/cservice/akick" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_akick);
-
-	help_addentry(cs_helptree, "AKICK", "help/cservice/akick", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_akick);
-	help_delentry(cs_helptree, "AKICK");
 }
 
 void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])

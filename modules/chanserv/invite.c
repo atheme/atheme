@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_invite = { "INVITE", N_("Invites you to a channel."),
-                        AC_NONE, 1, cs_cmd_invite };
+                        AC_NONE, 1, cs_cmd_invite, { .path = "help/cservice/invite" } };
                                                                                    
-list_t *cs_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_invite);
-	help_addentry(cs_helptree, "INVITE", "help/cservice/invite", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_invite);
-	help_delentry(cs_helptree, "INVITE");
 }
 
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])

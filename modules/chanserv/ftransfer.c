@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
-                           PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer };
+                           PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "help/cservice/ftransfer" } };
                                                                                    
-list_t *cs_helptree;
-
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_ftransfer);
-	help_addentry(cs_helptree, "FTRANSFER", "help/cservice/ftransfer", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_ftransfer);
-	help_delentry(cs_helptree, "FTRANSFER");
 }
 
 static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])

@@ -19,28 +19,20 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_drop = { "DROP", N_("Drops a channel registration."),
-                        AC_NONE, 2, cs_cmd_drop };
+                        AC_NONE, 2, cs_cmd_drop, { .path = "help/cservice/drop" } };
 command_t cs_fdrop = { "FDROP", N_("Forces dropping of a channel registration."),
-                        PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop };
-
-list_t *cs_helptree;
+                        PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop, { .path = "help/cservice/fdrop" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_drop);
         service_named_bind_command("chanserv", &cs_fdrop);
-	help_addentry(cs_helptree, "DROP", "help/cservice/drop", NULL);
-	help_addentry(cs_helptree, "FDROP", "help/cservice/fdrop", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_drop);
 	service_named_unbind_command("chanserv", &cs_fdrop);
-	help_delentry(cs_helptree, "DROP");
-	help_delentry(cs_helptree, "FDROP");
 }
 
 static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)

@@ -21,22 +21,16 @@ time_t ratelimit_firsttime = 0;
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_register = { "REGISTER", N_("Registers a channel."),
-                           AC_NONE, 3, cs_cmd_register };
-
-list_t *cs_helptree;
+                           AC_NONE, 3, cs_cmd_register, { .path = "help/cservice/register" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_register);
-	help_addentry(cs_helptree, "REGISTER", "help/cservice/register", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_register);
-	help_delentry(cs_helptree, "REGISTER");
 }
 
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])

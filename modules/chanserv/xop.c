@@ -28,35 +28,24 @@ static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_sop = { "SOP", N_("Manipulates a channel SOP list."),
-                        AC_NONE, 3, cs_cmd_sop };
+                        AC_NONE, 3, cs_cmd_sop, { .path = "help/cservice/xop" } };
 command_t cs_aop = { "AOP", N_("Manipulates a channel AOP list."),
-                        AC_NONE, 3, cs_cmd_aop };
+                        AC_NONE, 3, cs_cmd_aop, { .path = "help/cservice/xop" } };
 command_t cs_hop = { "HOP", N_("Manipulates a channel HOP list."),
-			AC_NONE, 3, cs_cmd_hop };
+			AC_NONE, 3, cs_cmd_hop, { .path = "help/cservice/xop" } };
 command_t cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
-                        AC_NONE, 3, cs_cmd_vop };
+                        AC_NONE, 3, cs_cmd_vop, { .path = "help/cservice/xop" } };
 command_t cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
-                         AC_NONE, 1, cs_cmd_forcexop };
-
-list_t *cs_helptree;
+                         AC_NONE, 1, cs_cmd_forcexop, { .path = "help/cservice/forcexop" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_aop);
 	service_named_bind_command("chanserv", &cs_sop);
 	if (ircd != NULL && ircd->uses_halfops)
 		service_named_bind_command("chanserv", &cs_hop);
 	service_named_bind_command("chanserv", &cs_vop);
 	service_named_bind_command("chanserv", &cs_forcexop);
-
-	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
-	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
-	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
-	if (ircd != NULL && ircd->uses_halfops)
-		help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
-	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
 
 void _moddeinit()
@@ -66,12 +55,6 @@ void _moddeinit()
 	service_named_unbind_command("chanserv", &cs_hop);
 	service_named_unbind_command("chanserv", &cs_vop);
 	service_named_unbind_command("chanserv", &cs_forcexop);
-
-	help_delentry(cs_helptree, "SOP");
-	help_delentry(cs_helptree, "AOP");
-	help_delentry(cs_helptree, "VOP");
-	help_delentry(cs_helptree, "HOP");
-	help_delentry(cs_helptree, "FORCEXOP");
 }
 
 static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *leveldesc)

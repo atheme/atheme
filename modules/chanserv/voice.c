@@ -19,30 +19,20 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_voice = { "VOICE", N_("Gives channel voice to a user."),
-                         AC_NONE, 2, cs_cmd_voice };
+                         AC_NONE, 2, cs_cmd_voice, { .path = "help/cservice/op_voice" } };
 command_t cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
-                         AC_NONE, 2, cs_cmd_devoice };
-
-list_t *cs_helptree;
+                         AC_NONE, 2, cs_cmd_devoice, { .path = "help/cservice/op_voice" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_voice);
         service_named_bind_command("chanserv", &cs_devoice);
-
-	help_addentry(cs_helptree, "VOICE", "help/cservice/op_voice", NULL);
-	help_addentry(cs_helptree, "DEVOICE", "help/cservice/op_voice", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_voice);
 	service_named_unbind_command("chanserv", &cs_devoice);
-
-	help_delentry(cs_helptree, "VOICE");
-	help_delentry(cs_helptree, "DEVOICE");
 }
 
 static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])

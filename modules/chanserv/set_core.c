@@ -18,18 +18,13 @@ DECLARE_MODULE_V1
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set };
+command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
 
-list_t *cs_helptree;
 mowgli_patricia_t *cs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
 	service_named_bind_command("chanserv", &cs_set);
-
-	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 
 	cs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
@@ -37,8 +32,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_set);
-
-	help_delentry(cs_helptree, "SET");
 
 	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }

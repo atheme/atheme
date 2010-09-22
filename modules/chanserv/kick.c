@@ -19,30 +19,20 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_kick = { "KICK", N_("Removes a user from a channel."),
-                        AC_NONE, 3, cs_cmd_kick };
+                        AC_NONE, 3, cs_cmd_kick, { .path = "help/cservice/kick" } };
 command_t cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
-			AC_NONE, 3, cs_cmd_kickban };
-
-list_t *cs_helptree;
+			AC_NONE, 3, cs_cmd_kickban, { .path = "help/cservice/kickban" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_kick);
 	service_named_bind_command("chanserv", &cs_kickban);
-
-	help_addentry(cs_helptree, "KICK", "help/cservice/kick", NULL);
-	help_addentry(cs_helptree, "KICKBAN", "help/cservice/kickban", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_kick);
 	service_named_unbind_command("chanserv", &cs_kickban);
-
-	help_delentry(cs_helptree, "KICK");
-	help_delentry(cs_helptree, "KICKBAN");
 }
 
 static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])

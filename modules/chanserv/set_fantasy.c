@@ -20,19 +20,15 @@ static void cs_set_fantasy_config_ready(void *unused);
 
 static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy };
+command_t cs_set_fantasy = { "FANTASY", N_("Allows or disallows in-channel commands."), AC_NONE, 2, cs_cmd_set_fantasy, { .path = "help/cservice/set_fantasy" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
-list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	command_add(&cs_set_fantasy, *cs_set_cmdtree);
-
-	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 
 	hook_add_event("config_ready");
 	hook_add_config_ready(cs_set_fantasy_config_ready);
@@ -41,8 +37,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_set_fantasy, *cs_set_cmdtree);
-
-	help_delentry(cs_helptree, "SET FANTASY");
 
 	hook_del_config_ready(cs_set_fantasy_config_ready);
 }

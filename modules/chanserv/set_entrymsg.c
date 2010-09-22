@@ -18,26 +18,20 @@ DECLARE_MODULE_V1
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg };
+command_t cs_set_entrymsg = { "ENTRYMSG", N_("Sets the channel's entry message."), AC_NONE, 2, cs_cmd_set_entrymsg, { .path = "help/cservice/set_entrymsg" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
-list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	command_add(&cs_set_entrymsg, *cs_set_cmdtree);
-
-	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_set_entrymsg, *cs_set_cmdtree);
-
-	help_delentry(cs_helptree, "SET ENTRYMSG");
 }
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])

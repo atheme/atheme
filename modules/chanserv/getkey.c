@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
-                        AC_NONE, 1, cs_cmd_getkey };
-
-list_t *cs_helptree;
+                        AC_NONE, 1, cs_cmd_getkey, { .path = "help/cservice/getkey" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_getkey);
-	help_addentry(cs_helptree, "GETKEY", "help/cservice/getkey", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_getkey);
-	help_delentry(cs_helptree, "GETKEY");
 }
 
 static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])

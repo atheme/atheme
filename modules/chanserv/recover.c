@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_recover = { "RECOVER", N_("Regain control of your channel."),
-                        AC_NONE, 1, cs_cmd_recover };
-
-list_t *cs_helptree;
+                        AC_NONE, 1, cs_cmd_recover, { .path = "help/cservice/recover" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
-
         service_named_bind_command("chanserv", &cs_recover);
-	help_addentry(cs_helptree, "RECOVER", "help/cservice/recover", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_recover);
-	help_delentry(cs_helptree, "RECOVER");
 }
 
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
