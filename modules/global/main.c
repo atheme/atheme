@@ -22,17 +22,15 @@ struct global_ {
 
 service_t *globsvs = NULL;
 
-list_t gs_helptree;
-list_t *os_helptree;
 list_t gs_conftable;
 
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
 command_t gs_help = { "HELP", N_("Displays contextual help information."),
-		      PRIV_GLOBAL, 1, gs_cmd_help };
+		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help/help" } };
 command_t gs_global = { "GLOBAL", N_("Sends a global notice."),
-			PRIV_GLOBAL, 1, gs_cmd_global };
+			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "help/gservice/global" } };
 
 /* *INDENT-ON* */
 
@@ -50,7 +48,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(si, si->service, command, &gs_helptree);
+	help_display(si, si->service, command, si->service->commands);
 }
 
 /* GLOBAL <parameters>|SEND|CLEAR */
@@ -173,18 +171,10 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	globsvs = service_add("global", NULL, &gs_conftable);
 
 	service_bind_command(globsvs, &gs_global);
 	service_named_bind_command("operserv", &gs_global);
-
-	if (os_helptree)
-		help_addentry(os_helptree, "GLOBAL", "help/gservice/global", NULL);
-
-	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
-	help_addentry(&gs_helptree, "GLOBAL", "help/gservice/global", NULL);
 
 	service_bind_command(globsvs, &gs_help);
 }
@@ -197,12 +187,6 @@ void _moddeinit(void)
 
 	if (globsvs != NULL)
 		service_delete(globsvs);
-
-	if (os_helptree)
-		help_delentry(os_helptree, "GLOBAL");
-
-	help_delentry(&gs_helptree, "GLOBAL");
-	help_delentry(&gs_helptree, "HELP");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
