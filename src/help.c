@@ -23,28 +23,20 @@
 
 #include "atheme.h"
 
-/* struct for help command hash table */
-struct help_command_
+static bool command_has_help(command_t *cmd)
 {
-  char *name;
-  const char *access;
-  char *file;
-  void (*func)(sourceinfo_t *si);
-};
-typedef struct help_command_ helpentry_t;
+	return_val_if_fail(cmd != NULL, false);
 
-static helpentry_t *help_cmd_find(sourceinfo_t *si, const char *cmd, list_t *list)
+	return (cmd->help.func != NULL || cmd->help.path != NULL);
+}
+
+static command_t *help_cmd_find(sourceinfo_t *si, const char *cmd, mowgli_patricia_t *list)
 {
 	node_t *n;
-	helpentry_t *c;
+	command_t *c;
 
-	LIST_FOREACH(n, list->head)
-	{
-		c = n->data;
-
-		if (!strcasecmp(c->name, cmd))
-			return c;
-	}
+	if ((c = mowgli_patricia_retrieve(list, cmd)) != NULL && command_has_help(c))
+		return c;
 
 	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), cmd);
 
@@ -104,9 +96,9 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return false;
 }
 
-void help_display(sourceinfo_t *si, service_t *service, const char *command, list_t *list)
+void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list)
 {
-	helpentry_t *c;
+	command_t *c;
 	FILE *help_file = NULL;
 	char subname[BUFSIZE], buf[BUFSIZE];
 	const char *langname = NULL;
@@ -115,13 +107,13 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, lis
 	/* take the command through the hash table */
 	if ((c = help_cmd_find(si, command, list)))
 	{
-		if (c->file)
+		if (c->help.path)
 		{
-			if (*c->file == '/')
-				help_file = fopen(c->file, "r");
+			if (*c->help.path == '/')
+				help_file = fopen(c->help.path, "r");
 			else
 			{
-				strlcpy(subname, c->file, sizeof subname);
+				strlcpy(subname, c->help.path, sizeof subname);
 				if (nicksvs.no_nick_ownership && !strncmp(subname, "nickserv/", 9))
 					memcpy(subname, "userserv", 8);
 				if (si->smu != NULL)
@@ -190,11 +182,11 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, lis
 
 			command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		}
-		else if (c->func)
+		else if (c->help.func)
 		{
 			command_success_nodata(si, _("***** \2%s Help\2 *****"), service->nick);
 
-			c->func(si);
+			c->help.func(si);
 
 			command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		}
@@ -206,53 +198,12 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, lis
 void help_addentry(list_t *list, const char *topic, const char *fname,
 	void (*func)(sourceinfo_t *si))
 {
-	helpentry_t *he;
-	node_t *n;
-
-	return_if_fail(list != NULL);
-	return_if_fail(topic != NULL);
-	return_if_fail(func != NULL || fname != NULL);
-
-	he = smalloc(sizeof(helpentry_t));
-	he->name = sstrdup(topic);
-
-	if (func != NULL)
-		he->func = func;
-	else if (fname != NULL)
-	{
-		if (!strncmp(fname, "help/", 5))
-			fname += 5;
-		he->file = sstrdup(fname);
-	}
-
-	n = node_create();
-
-	node_add(he, n, list);
+	slog(LG_DEBUG, "help_addentry(): unimplemented stub, port to new command framework");
 }
 
 void help_delentry(list_t *list, const char *name)
 {
-	node_t *n, *tn;
-	helpentry_t *he;
-
-	LIST_FOREACH_SAFE(n, tn, list->head)
-	{
-		he = n->data;
-
-		if (!strcasecmp(he->name, name))
-		{
-			free(he->name);
-
-			if (he->file != NULL)
-				free(he->file);
-
-			he->func = NULL;
-			free(he);
-
-			node_del(n, list);
-			node_free(n);
-		}
-	}
+	slog(LG_DEBUG, "help_delentry(): unimplemented stub, port to new command framework");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

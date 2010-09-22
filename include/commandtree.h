@@ -33,10 +33,10 @@ E void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree);
 E void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds);
 
 /* help.c */
-E void help_display(sourceinfo_t *si, service_t *service, const char *command, list_t *list);
+E void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);
 E void help_addentry(list_t *list, const char *topic, const char *fname,
-	void (*func)(sourceinfo_t *si));
-E void help_delentry(list_t *list, const char *name);
+	void (*func)(sourceinfo_t *si)) DEPRECATED;
+E void help_delentry(list_t *list, const char *name) DEPRECATED;
 
 #endif
 
