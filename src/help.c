@@ -32,7 +32,6 @@ static bool command_has_help(command_t *cmd)
 
 static command_t *help_cmd_find(sourceinfo_t *si, const char *cmd, mowgli_patricia_t *list)
 {
-	node_t *n;
 	command_t *c;
 
 	if ((c = mowgli_patricia_retrieve(list, cmd)) != NULL && command_has_help(c))
