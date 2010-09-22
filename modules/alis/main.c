@@ -59,9 +59,9 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t alis_list = { "LIST", "Lists channels matching given parameters.",
-				AC_NONE, ALIS_MAX_PARC, alis_cmd_list };
+				AC_NONE, ALIS_MAX_PARC, alis_cmd_list, { .path = "help/alis/list" } };
 command_t alis_help = { "HELP", "Displays contextual help information.",
-				AC_NONE, 1, alis_cmd_help };
+				AC_NONE, 1, alis_cmd_help, { .path = "help/help" } };
 
 struct alis_query
 {
@@ -82,9 +82,6 @@ struct alis_query
 
 void _modinit(module_t *m)
 {
-	help_addentry(&alis_helptree, "HELP", "help/help", NULL);
-	help_addentry(&alis_helptree, "LIST", "help/alis/list", NULL);
-
 	alis = service_add("alis", NULL, &alis_conftable);
 	service_bind_command(alis, &alis_list);
 	service_bind_command(alis, &alis_help);
@@ -94,9 +91,6 @@ void _moddeinit()
 {
 	service_unbind_command(alis, &alis_list);
 	service_unbind_command(alis, &alis_help);
-
-	help_delentry(&alis_helptree, "HELP");
-	help_delentry(&alis_helptree, "LIST");
 
 	service_delete(alis);
 }
