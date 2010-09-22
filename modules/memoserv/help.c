@@ -19,20 +19,16 @@ list_t *ms_helptree;
 
 static void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, ms_cmd_help };
+command_t ms_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, ms_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
 	service_named_bind_command("memoserv", &ms_help);
-	help_addentry(ms_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_help);
-	help_delentry(ms_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

@@ -18,26 +18,20 @@ DECLARE_MODULE_V1
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_delete = { "DELETE", N_("Deletes memos."),
-                        AC_NONE, 1, ms_cmd_delete };
+                        AC_NONE, 1, ms_cmd_delete, { .path = "help/memoserv/delete" } };
 command_t ms_del = { "DEL", N_("Alias for DELETE"),
-			AC_NONE, 1, ms_cmd_delete };
-
-list_t *ms_helptree;
+			AC_NONE, 1, ms_cmd_delete, { .path = "help/memoserv/delete" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_delete);
 	service_named_bind_command("memoserv", &ms_del);
-	help_addentry(ms_helptree, "DELETE", "help/memoserv/delete", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_delete);
 	service_named_unbind_command("memoserv", &ms_del);
-	help_delentry(ms_helptree, "DELETE");
 }
 
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])

@@ -19,22 +19,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
-                           AC_NONE, 2, ms_cmd_sendgroup };
-
-list_t *ms_helptree;
+                           AC_NONE, 2, ms_cmd_sendgroup, { .path = "help/memoserv/sendgroup" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_sendgroup);
-	help_addentry(ms_helptree, "SENDGROUP", "help/memoserv/sendgroup", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_sendgroup);
-	help_delentry(ms_helptree, "SENDGROUP");
 }
 
 static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])

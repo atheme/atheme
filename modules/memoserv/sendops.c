@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
-                          AC_NONE, 2, ms_cmd_sendops };
-
-list_t *ms_helptree;
+                          AC_NONE, 2, ms_cmd_sendops, { .path = "help/memoserv/sendops" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_sendops);
-	help_addentry(ms_helptree, "SENDOPS", "help/memoserv/sendops", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_sendops);
-	help_delentry(ms_helptree, "SENDOPS");
 }
 
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])

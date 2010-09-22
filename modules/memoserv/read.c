@@ -20,22 +20,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_read = { "READ", N_("Reads a memo."),
-                        AC_NONE, 2, ms_cmd_read };
-
-list_t *ms_helptree;
+                        AC_NONE, 2, ms_cmd_read, { .path = "help/memoserv/read" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_read);
-	help_addentry(ms_helptree, "READ", "help/memoserv/read", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_read);
-	help_delentry(ms_helptree, "READ");
 }
 
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])

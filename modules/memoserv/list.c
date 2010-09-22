@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_list = { "LIST", N_(N_("Lists all of your memos.")),
-                        AC_NONE, 0, ms_cmd_list };
-
-list_t *ms_helptree;
+                        AC_NONE, 0, ms_cmd_list, { .path = "help/memoserv/list" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_list);
-	help_addentry(ms_helptree, "LIST", "help/memoserv/list", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_list);
-	help_delentry(ms_helptree, "LIST");
 }
 
 static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])

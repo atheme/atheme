@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
-                        AC_NONE, 2, ms_cmd_forward };
-
-list_t *ms_helptree;
+                        AC_NONE, 2, ms_cmd_forward, { .path = "help/memoserv/forward" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_forward);
-	help_addentry(ms_helptree, "forward", "help/memoserv/forward", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_forward);
-	help_delentry(ms_helptree, "FORWARD");
 }
 
 static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])

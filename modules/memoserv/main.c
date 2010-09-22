@@ -18,7 +18,6 @@ DECLARE_MODULE_V1
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
 
-list_t ms_helptree;
 list_t ms_conftable;
 
 service_t *memosvs = NULL;

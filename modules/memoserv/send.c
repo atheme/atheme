@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_send = { "SEND", N_("Sends a memo to a user."),
-                        AC_NONE, 2, ms_cmd_send };
-
-list_t *ms_helptree;
+                        AC_NONE, 2, ms_cmd_send, { .path = "help/memoserv/send" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
-
         service_named_bind_command("memoserv", &ms_send);
-	help_addentry(ms_helptree, "SEND", "help/memoserv/send", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("memoserv", &ms_send);
-	help_delentry(ms_helptree, "SEND");
 }
 
 static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
