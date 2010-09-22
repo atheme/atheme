@@ -22,21 +22,18 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper };
+command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper, { .path = "help/oservice/soper" } };
 
-command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list };
-command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass };
-command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 2, os_cmd_soper_add };
-command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del };
-command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass };
+command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
+command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };
+command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 2, os_cmd_soper_add, { .path = "" } };
+command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
+command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
 
-list_t *os_helptree;
 mowgli_patricia_t *os_soper_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_soper);
 
 	os_soper_cmds = mowgli_patricia_create(strcasecanon);
@@ -46,8 +43,6 @@ void _modinit(module_t *m)
 	command_add(&os_soper_add, os_soper_cmds);
 	command_add(&os_soper_del, os_soper_cmds);
 	command_add(&os_soper_setpass, os_soper_cmds);
-
-	help_addentry(os_helptree, "SOPER", "help/oservice/soper", NULL);
 }
 
 void _moddeinit()
@@ -57,8 +52,6 @@ void _moddeinit()
 	command_delete(&os_soper_listclass, os_soper_cmds);
 	command_delete(&os_soper_add, os_soper_cmds);
 	command_delete(&os_soper_del, os_soper_cmds);
-
-	help_delentry(os_helptree, "SOPER");
 
 	mowgli_patricia_destroy(os_soper_cmds, NULL, NULL);
 }

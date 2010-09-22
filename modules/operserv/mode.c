@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode };
-
-list_t *os_helptree;
+command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "help/oservice/mode" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_mode);
-	help_addentry(os_helptree, "MODE", "help/oservice/mode", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_mode);
-	help_delentry(os_helptree, "MODE");
 }
 
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])

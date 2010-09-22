@@ -28,7 +28,6 @@ static void write_rwatchdb(void);
 static void load_rwatchdb(void);
 
 list_t *os_cmdtree;
-list_t *os_helptree;
 mowgli_patricia_t *os_rwatch_cmds;
 
 list_t rwatch_list;
@@ -46,17 +45,15 @@ struct rwatch_
 	atheme_regex_t *re;
 };
 
-command_t os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
+command_t os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch, { .path = "help/oservice/rwatch" } };
 
-command_t os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add };
-command_t os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del };
-command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list };
-command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set };
+command_t os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add, { .path = "" } };
+command_t os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del, { .path = "" } };
+command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
+command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_rwatch);
 
 	os_rwatch_cmds = mowgli_patricia_create(strcasecanon);
@@ -65,8 +62,6 @@ void _modinit(module_t *m)
 	command_add(&os_rwatch_del, os_rwatch_cmds);
 	command_add(&os_rwatch_list, os_rwatch_cmds);
 	command_add(&os_rwatch_set, os_rwatch_cmds);
-
-	help_addentry(os_helptree, "RWATCH", "help/oservice/rwatch", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(rwatch_newuser);
@@ -100,8 +95,6 @@ void _moddeinit(void)
 	command_delete(&os_rwatch_del, os_rwatch_cmds);
 	command_delete(&os_rwatch_list, os_rwatch_cmds);
 	command_delete(&os_rwatch_set, os_rwatch_cmds);
-
-	help_delentry(os_helptree, "RWATCH");
 
 	hook_del_user_add(rwatch_newuser);
 	hook_del_user_nickchange(rwatch_nickchange);

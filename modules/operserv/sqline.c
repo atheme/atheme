@@ -27,20 +27,17 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline };
+command_t os_sqline = { "SQLINE", N_("Manages network name bans."), PRIV_MASS_AKILL, 3, os_cmd_sqline, { .path = "help/oservice/sqline" } };
 
-command_t os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add };
-command_t os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del };
-command_t os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list };
-command_t os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync };
+command_t os_sqline_add = { "ADD", N_("Adds a network name ban"), AC_NONE, 2, os_cmd_sqline_add, { .path = "" } };
+command_t os_sqline_del = { "DEL", N_("Deletes a network name ban"), AC_NONE, 1, os_cmd_sqline_del, { .path = "" } };
+command_t os_sqline_list = { "LIST", N_("Lists all network name bans"), AC_NONE, 1, os_cmd_sqline_list, { .path = "" } };
+command_t os_sqline_sync = { "SYNC", N_("Synchronises network name bans to servers"), AC_NONE, 0, os_cmd_sqline_sync, { .path = "" } };
 
-list_t *os_helptree;
 mowgli_patricia_t *os_sqline_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	if (ircd != NULL && qline_sts == generic_qline_sts)
 	{
 		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
@@ -58,8 +55,6 @@ void _modinit(module_t *m)
 	command_add(&os_sqline_del, os_sqline_cmds);
 	command_add(&os_sqline_list, os_sqline_cmds);
 	command_add(&os_sqline_sync, os_sqline_cmds);
-
-	help_addentry(os_helptree, "SQLINE", "help/oservice/sqline", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(os_sqline_newuser);
@@ -79,8 +74,6 @@ void _moddeinit()
 	command_delete(&os_sqline_list, os_sqline_cmds);
 	command_delete(&os_sqline_sync, os_sqline_cmds);
 	
-	help_delentry(os_helptree, "SQLINE");
-
 	hook_del_user_add(os_sqline_newuser);
 	hook_del_user_nickchange(os_sqline_newuser);
 	hook_del_channel_join(os_sqline_chanjoin);

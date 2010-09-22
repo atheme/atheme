@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw };
-
-list_t *os_helptree;
+command_t os_raw = { "RAW", N_("Sends data to the uplink."), PRIV_ADMIN, 1, os_cmd_raw, { .path = "help/oservice/raw" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_raw);
-	help_addentry(os_helptree, "RAW", "help/oservice/raw", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_raw);
-	help_delentry(os_helptree, "RAW");
 }
 
 static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[])

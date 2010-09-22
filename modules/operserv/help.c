@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help };
-
-list_t *os_helptree;
+command_t os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_help);
-	help_addentry(os_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_help);
-	help_delentry(os_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

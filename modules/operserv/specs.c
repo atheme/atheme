@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs };
-
-list_t *os_helptree;
+command_t os_specs = { "SPECS", N_("Shows oper flags."), AC_NONE, 2, os_cmd_specs, { .path = "help/oservice/specs" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_specs);
-	help_addentry(os_helptree, "SPECS", "help/oservice/specs", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_specs);
-	help_delentry(os_helptree, "SPECS");
 }
 
 struct

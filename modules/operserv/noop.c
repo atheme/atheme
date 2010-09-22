@@ -32,16 +32,11 @@ static void check_quit(user_t *u);
 static void check_user(user_t *u);
 static list_t noop_kill_queue;
 
-command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop };
-
-list_t *os_helptree;
+command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "help/oservice/noop" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_noop);
-	help_addentry(os_helptree, "NOOP", "help/oservice/noop", NULL);
 	hook_add_event("user_oper");
 	hook_add_user_oper(check_user);
 	hook_add_event("user_delete");
@@ -65,7 +60,6 @@ void _moddeinit()
 		hook_del_user_delete(check_quit);
 	}
 	service_named_unbind_command("operserv", &os_noop);
-	help_delentry(os_helptree, "NOOP");
 	hook_del_user_oper(check_user);
 }
 

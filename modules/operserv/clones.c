@@ -35,7 +35,6 @@ static void db_h_ck(database_handle_t *db, const char *type);
 static void db_h_cd(database_handle_t *db, const char *type);
 static void db_h_ex(database_handle_t *db, const char *type);
 
-list_t *os_helptree;
 mowgli_patricia_t *os_clones_cmds;
 
 static list_t clone_exempts;
@@ -69,14 +68,14 @@ static inline bool cexempt_expired(cexcept_t *c)
 	return false;
 }
 
-command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones };
+command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 5, os_cmd_clones, { .path = "help/oservice/clones" } };
 
-command_t os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline };
-command_t os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list };
-command_t os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt };
-command_t os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt };
-command_t os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt };
-command_t os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration };
+command_t os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline, { .path = "" } };
+command_t os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list, { .path = "" } };
+command_t os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt, { .path = "" } };
+command_t os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt, { .path = "" } };
+command_t os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt, { .path = "" } };
+command_t os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration, { .path = "" } };
 
 void _modinit(module_t *m)
 {
@@ -90,8 +89,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_clones);
 
 	os_clones_cmds = mowgli_patricia_create(strcasecanon);
@@ -102,8 +99,6 @@ void _modinit(module_t *m)
 	command_add(&os_clones_delexempt, os_clones_cmds);
 	command_add(&os_clones_listexempt, os_clones_cmds);
 	command_add(&os_clones_duration, os_clones_cmds);
-
-	help_addentry(os_helptree, "CLONES", "help/oservice/clones", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(clones_newuser);
@@ -167,8 +162,6 @@ void _moddeinit(void)
 	command_delete(&os_clones_delexempt, os_clones_cmds);
 	command_delete(&os_clones_listexempt, os_clones_cmds);
 	command_delete(&os_clones_duration, os_clones_cmds);
-
-	help_delentry(os_helptree, "CLONES");
 
 	hook_del_user_add(clones_newuser);
 	hook_del_user_delete(clones_userquit);

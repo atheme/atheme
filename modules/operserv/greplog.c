@@ -15,24 +15,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_helptree;
-
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog };
+command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "help/oservice/greplog" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_greplog);
-	help_addentry(os_helptree, "GREPLOG", "help/oservice/greplog", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_greplog);
-	help_delentry(os_helptree, "GREPLOG");
 }
 
 #define MAXMATCHES 100

@@ -26,20 +26,17 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill };
+command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill, { .path = "help/oservice/akill" } };
 
-command_t os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add };
-command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del };
-command_t os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list };
-command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync };
+command_t os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add, { .path = "" } };
+command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del, { .path = "" } };
+command_t os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list, { .path = "" } };
+command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync, { .path = "" } };
 
-list_t *os_helptree;
 mowgli_patricia_t *os_akill_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_akill);
 
 	os_akill_cmds = mowgli_patricia_create(strcasecanon);
@@ -49,8 +46,6 @@ void _modinit(module_t *m)
 	command_add(&os_akill_del, os_akill_cmds);
 	command_add(&os_akill_list, os_akill_cmds);
 	command_add(&os_akill_sync, os_akill_cmds);
-
-	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
 
 	hook_add_event("user_add");
 	hook_add_user_add(os_akill_newuser);
@@ -66,8 +61,6 @@ void _moddeinit()
 	command_delete(&os_akill_list, os_akill_cmds);
 	command_delete(&os_akill_sync, os_akill_cmds);
 	
-	help_delentry(os_helptree, "AKILL");
-
 	hook_del_user_add(os_akill_newuser);
 
 	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);

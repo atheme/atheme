@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe };
-
-list_t *os_helptree;
+command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "help/oservice/jupe" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_jupe);
-	help_addentry(os_helptree, "JUPE", "help/oservice/jupe", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_jupe);
-	help_delentry(os_helptree, "JUPE");
 }
 
 static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])

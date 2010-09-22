@@ -17,23 +17,18 @@ DECLARE_MODULE_V1
 
 static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist };
+command_t os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "help/oservice/modlist" } };
 
-list_t *os_helptree;
 extern list_t modules;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_modlist);
-	help_addentry(os_helptree, "MODLIST", "help/oservice/modlist", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_modlist);
-	help_delentry(os_helptree, "MODLIST");
 }
 
 static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])

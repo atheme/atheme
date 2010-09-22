@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
-		      PRIV_ADMIN, 1, os_cmd_readonly };
-
-list_t *os_helptree;
+		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "help/oservice/readonly" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_readonly);
-	help_addentry(os_helptree, "READONLY", "help/oservice/readonly", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_readonly);
-	help_delentry(os_helptree, "READONLY");
 }
 
 static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[])

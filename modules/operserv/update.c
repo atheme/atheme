@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_update(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update };
-
-list_t *os_helptree;
+command_t os_update = { "UPDATE", N_("Flushes services database to disk."), PRIV_ADMIN, 0, os_cmd_update, { .path = "help/oservice/update" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_update);
-	help_addentry(os_helptree, "UPDATE", "help/oservice/update", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_update);
-	help_delentry(os_helptree, "UPDATE");
 }
 
 void os_cmd_update(sourceinfo_t *si, int parc, char *parv[])

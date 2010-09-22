@@ -17,9 +17,7 @@ DECLARE_MODULE_V1
 
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc };
-
-list_t *os_helptree;
+command_t os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "help/oservice/rnc" } };
 
 typedef struct rnc_t_ rnc_t;
 struct rnc_t_
@@ -30,16 +28,12 @@ struct rnc_t_
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_rnc);
-	help_addentry(os_helptree, "RNC", "help/oservice/rnc", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_rnc);
-	help_delentry(os_helptree, "RNC");
 }
 
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])

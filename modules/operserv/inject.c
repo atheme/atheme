@@ -19,22 +19,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject };
-
-list_t *os_helptree;
+command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "help/oservice/inject" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_inject);
-	help_addentry(os_helptree, "INJECT", "help/oservice/inject", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_inject);
-	help_delentry(os_helptree, "INJECT");
 }
 
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])

@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override };
-
-list_t *os_helptree;
+command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "help/oservice/override" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_override);
-	help_addentry(os_helptree, "OVERRIDE", "help/oservice/override", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_override);
-	help_delentry(os_helptree, "OVERRIDE");
 }
 
 typedef struct {

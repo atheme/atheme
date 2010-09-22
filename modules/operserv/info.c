@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info };
-
-list_t *os_helptree;
+command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "help/oservice/info" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_info);
-	help_addentry(os_helptree, "INFO", "help/oservice/info", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_info);
-	help_delentry(os_helptree, "INFO");
 }
 
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])

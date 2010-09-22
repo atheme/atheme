@@ -24,21 +24,17 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[]);
 
+command_t os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline, { .path = "help/oservice/sgline" } };
 
-command_t os_sgline = { "SGLINE", N_("Manages network realname bans."), PRIV_MASS_AKILL, 3, os_cmd_sgline };
+command_t os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add, { .path = "" } };
+command_t os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del, { .path = "" } };
+command_t os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list, { .path = "" } };
+command_t os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync, { .path = "" } };
 
-command_t os_sgline_add = { "ADD", N_("Adds a network realname ban"), AC_NONE, 2, os_cmd_sgline_add };
-command_t os_sgline_del = { "DEL", N_("Deletes a network realname ban"), AC_NONE, 1, os_cmd_sgline_del };
-command_t os_sgline_list = { "LIST", N_("Lists all network realname bans"), AC_NONE, 1, os_cmd_sgline_list };
-command_t os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to servers"), AC_NONE, 0, os_cmd_sgline_sync };
-
-list_t *os_helptree;
 mowgli_patricia_t *os_sgline_cmds;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	if (ircd != NULL && xline_sts == generic_xline_sts)
 	{
 		slog(LG_INFO, "Module %s requires xline support, refusing to load.",
@@ -57,8 +53,6 @@ void _modinit(module_t *m)
 	command_add(&os_sgline_list, os_sgline_cmds);
 	command_add(&os_sgline_sync, os_sgline_cmds);
 
-	help_addentry(os_helptree, "SGLINE", "help/oservice/sgline", NULL);
-
 	hook_add_event("user_add");
 	hook_add_user_add(os_sgline_newuser);
 }
@@ -73,8 +67,6 @@ void _moddeinit()
 	command_delete(&os_sgline_list, os_sgline_cmds);
 	command_delete(&os_sgline_sync, os_sgline_cmds);
 	
-	help_delentry(os_helptree, "SGLINE");
-
 	hook_del_user_add(os_sgline_newuser);
 
 	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);

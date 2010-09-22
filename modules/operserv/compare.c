@@ -17,22 +17,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare };
-
-list_t *os_helptree;
+command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "help/oservice/compare" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_compare);
-	help_addentry(os_helptree, "COMPARE", "help/oservice/compare", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_compare);
-	help_delentry(os_helptree, "COMPARE");
 }
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])

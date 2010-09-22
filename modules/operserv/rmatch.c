@@ -20,24 +20,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *os_helptree;
-
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch };
+command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "help/oservice/rmatch" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_rmatch);
-	help_addentry(os_helptree, "RMATCH", "help/oservice/rmatch", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_rmatch);
-	help_delentry(os_helptree, "RMATCH");
 }
 
 #define MAXMATCHES_DEF 1000

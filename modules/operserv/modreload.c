@@ -9,29 +9,16 @@ DECLARE_MODULE_V1
 );
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modreload =
-{
-	"MODRELOAD",
-	N_("Reloads a module."),
-	PRIV_ADMIN,
-	20,
-	os_cmd_modreload
-};
-
-list_t *os_helptree;
+command_t os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "help/oservice/modreload" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
 	service_named_bind_command("operserv", &os_modreload);
-	help_addentry(os_helptree, "MODRELOAD", "help/oservice/modreload", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("operserv", &os_modreload);
-	help_delentry(os_helptree, "MODRELOAD");
 }
 
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])

@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 
 static void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash };
-
-list_t *os_helptree;
+command_t os_rehash = { "REHASH", N_("Reload the configuration data."), PRIV_ADMIN, 0, os_cmd_rehash, { .path = "help/oservice/rehash" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
-
         service_named_bind_command("operserv", &os_rehash);
-	help_addentry(os_helptree, "REHASH", "help/oservice/rehash", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("operserv", &os_rehash);
-	help_delentry(os_helptree, "REHASH");
 }
 
 /* REHASH */
