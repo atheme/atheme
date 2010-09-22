@@ -36,7 +36,6 @@ static void db_h_bot_count(database_handle_t *db, const char *type);
 fn_botserv_bot_find botserv_bot_find;
 
 service_t *botsvs;
-list_t bs_helptree;
 list_t bs_conftable;
 
 unsigned int min_users = 0;
@@ -45,10 +44,10 @@ E list_t mychan;
 
 list_t bs_bots;
 
-command_t bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot };
-command_t bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign };
-command_t bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign };
-command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist };
+command_t bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "help/botserv/bot" } };
+command_t bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "help/botserv/assign" } };
+command_t bs_unassign = { "UNASSIGN", "Unassigns a bot from a channel.", AC_NONE, 1, bs_cmd_unassign, { .path = "help/botserv/unassign" } };
+command_t bs_botlist = { "BOTLIST", "Lists available bots.", AC_NONE, 0, bs_cmd_botlist, { .path = "help/botserv/botlist" } };
 
 /* ******************************************************************** */
 
@@ -943,10 +942,6 @@ void _modinit(module_t *m)
 	service_bind_command(botsvs, &bs_assign);
 	service_bind_command(botsvs, &bs_unassign);
 	service_bind_command(botsvs, &bs_botlist);
-	help_addentry(&bs_helptree, "BOT", "help/botserv/bot", NULL);
-	help_addentry(&bs_helptree, "ASSIGN", "help/botserv/assign", NULL);
-	help_addentry(&bs_helptree, "UNASSIGN", "help/botserv/unassign", NULL);
-	help_addentry(&bs_helptree, "BOTLIST", "help/botserv/botlist", NULL);
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
 	hook_add_event("channel_register");
@@ -991,10 +986,6 @@ void _moddeinit(void)
 	service_unbind_command(botsvs, &bs_assign);
 	service_unbind_command(botsvs, &bs_unassign);
 	service_unbind_command(botsvs, &bs_botlist);
-	help_delentry(&bs_helptree, "BOT");
-	help_delentry(&bs_helptree, "ASSIGN");
-	help_delentry(&bs_helptree, "UNASSIGN");
-	help_delentry(&bs_helptree, "BOTLIST");
 	del_conf_item("MIN_USERS", &bs_conftable);
 	hook_del_channel_join(bs_join);
 	hook_del_channel_part(bs_part);

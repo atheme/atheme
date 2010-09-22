@@ -18,21 +18,18 @@ DECLARE_MODULE_V1
 );
 
 mowgli_patricia_t **bs_set_cmdtree;
-list_t *bs_helptree;
 
 static void bs_set_fantasy_config_ready(void *unused);
 
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_NONE, 2, bs_cmd_set_fantasy };
+command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_NONE, 2, bs_cmd_set_fantasy, { .path = "help/botserv/set_fantasy" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
 	command_add(&bs_set_fantasy, *bs_set_cmdtree);
-	help_addentry(bs_helptree, "SET FANTASY", "help/botserv/set_fantasy", NULL);
 
 	hook_add_event("config_ready");
 	hook_add_config_ready(bs_set_fantasy_config_ready);
@@ -41,7 +38,6 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
-	help_delentry(bs_helptree, "SET FANTASY");
 
 	hook_del_config_ready(bs_set_fantasy_config_ready);
 }

@@ -18,31 +18,27 @@ DECLARE_MODULE_V1
 );
 
 mowgli_patricia_t **bs_set_cmdtree;
-list_t *bs_helptree;
 
 fn_botserv_bot_find *botserv_bot_find;
 list_t *bs_bots;
 
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private };
+command_t bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by non IRC operators."), PRIV_CHAN_ADMIN, 2, bs_cmd_set_private, { .path = "help/botserv/set_private" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
 
 	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
 	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
 
 	command_add(&bs_set_private, *bs_set_cmdtree);
-	help_addentry(bs_helptree, "SET PRIVATE", "help/botserv/set_private", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&bs_set_private, *bs_set_cmdtree);
-	help_delentry(bs_helptree, "SET PRIVATE");
 }
 
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])

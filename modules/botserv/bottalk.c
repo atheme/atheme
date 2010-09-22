@@ -19,30 +19,19 @@ DECLARE_MODULE_V1
 static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_NONE, 2, bs_cmd_say };
-command_t bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_NONE, 2, bs_cmd_act };
-
-
-list_t *bs_helptree;
+command_t bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_NONE, 2, bs_cmd_say, { .path = "help/botserv/say" } };
+command_t bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_NONE, 2, bs_cmd_act, { .path = "help/botserv/act" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
-
 	service_named_bind_command("botserv", &bs_say);
 	service_named_bind_command("botserv", &bs_act);
-
-	help_addentry(bs_helptree, "SAY", "help/botserv/say", NULL);
-	help_addentry(bs_helptree, "ACT", "help/botserv/act", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("botserv", &bs_say);
 	service_named_unbind_command("botserv", &bs_act);
-
-	help_delentry(bs_helptree, "SAY");
-	help_delentry(bs_helptree, "ACT");
 }
 
 static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])

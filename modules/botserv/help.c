@@ -15,24 +15,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *bs_helptree;
-
 static void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, bs_cmd_help };
+command_t bs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, bs_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
-
 	service_named_bind_command("botserv", &bs_help);
-	help_addentry(bs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("botserv", &bs_help);
-	help_delentry(bs_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

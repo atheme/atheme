@@ -20,18 +20,13 @@ DECLARE_MODULE_V1
 static void bs_help_set(sourceinfo_t *si);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set };
+command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
 
-list_t *bs_helptree;
 mowgli_patricia_t *bs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_helptree, "botserv/main", "bs_helptree");
-
 	service_named_bind_command("botserv", &bs_set);
-
-	help_addentry(bs_helptree, "SET", NULL, bs_help_set);
 
 	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
@@ -39,8 +34,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	service_named_unbind_command("botserv", &bs_set);
-
-	help_delentry(bs_helptree, "SET");
 
 	mowgli_patricia_destroy(bs_set_cmdtree, NULL, NULL);
 }
