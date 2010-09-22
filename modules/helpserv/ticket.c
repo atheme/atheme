@@ -15,8 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-list_t *helpserv_helptree;
-
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
@@ -29,10 +27,10 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[]);
 static void write_ticket_db(database_handle_t *db);
 static void db_h_he(database_handle_t *db, const char *type);
 
-command_t helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_request };
-command_t helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list };
-command_t helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close };
-command_t helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_NONE, 1, helpserv_cmd_cancel };
+command_t helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_request, { .path = "help/helpserv/request" } };
+command_t helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "help/helpserv/list" } };
+command_t helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "help/helpserv/close" } };
+command_t helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_NONE, 1, helpserv_cmd_cancel, { .path = "help/helpserv/cancel" } };
 
 struct ticket_ {
 	char *nick;
@@ -54,8 +52,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
-
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
 	hook_add_db_write(write_ticket_db);
@@ -66,10 +62,6 @@ void _modinit(module_t *m)
 	service_named_bind_command("helpserv", &helpserv_list);
 	service_named_bind_command("helpserv", &helpserv_close);
 	service_named_bind_command("helpserv", &helpserv_cancel);
-	help_addentry(helpserv_helptree, "REQUEST", "help/helpserv/request", NULL);
-	help_addentry(helpserv_helptree, "LIST", "help/helpserv/list", NULL);
-	help_addentry(helpserv_helptree, "CLOSE", "help/helpserv/close", NULL);
-	help_addentry(helpserv_helptree, "CANCEL", "help/helpserv/cancel", NULL);
 }
 
 void _moddeinit(void)
@@ -83,10 +75,6 @@ void _moddeinit(void)
 	service_named_unbind_command("helpserv", &helpserv_list);
 	service_named_unbind_command("helpserv", &helpserv_close);
 	service_named_unbind_command("helpserv", &helpserv_cancel);
-	help_delentry(helpserv_helptree, "REQUEST");
-	help_delentry(helpserv_helptree, "LIST");
-	help_delentry(helpserv_helptree, "CLOSE");
-	help_delentry(helpserv_helptree, "CANCEL");
 }
 
 static void write_ticket_db(database_handle_t *db)

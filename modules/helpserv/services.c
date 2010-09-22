@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services };
-
-list_t *helpserv_helptree;
+command_t helpserv_services = { "SERVICES", N_("List all services currently running on the network."), AC_NONE, 1, helpserv_cmd_services, { .path = "help/helpserv/services" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
-
         service_named_bind_command("helpserv", &helpserv_services);
-	help_addentry(helpserv_helptree, "SERVICES", "help/helpserv/services", NULL);
 }
 
 void _moddeinit()
 {
         service_named_unbind_command("helpserv", &helpserv_services);
-	help_delentry(helpserv_helptree, "SERVICES");
 }
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])

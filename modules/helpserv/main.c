@@ -16,12 +16,11 @@ DECLARE_MODULE_V1
 );
 
 service_t *helpserv;
-list_t helpserv_helptree;
 list_t helpserv_conftable;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
-command_t helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help };
+command_t helpserv_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, helpserv_cmd_help, { .path = "help/help" } };
 
 /* HELP <command> [params] */
 void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
@@ -53,8 +52,6 @@ void _modinit(module_t *m)
 	helpserv = service_add("helpserv", NULL, &helpserv_conftable);
 
 	service_bind_command(helpserv, &helpserv_help);
-
-	help_addentry(&helpserv_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit(void)
@@ -66,8 +63,6 @@ void _moddeinit(void)
 		service_delete(helpserv);
 		helpserv = NULL;
 	}
-
-	help_delentry(&helpserv_helptree, "HELP");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

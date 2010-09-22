@@ -21,22 +21,16 @@ time_t ratelimit_firsttime = 0;
 
 static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme };
-
-list_t *helpserv_helptree;
+command_t helpserv_helpme = { "HELPME", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_helpme, { .path = "help/helpserv/helpme" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(helpserv_helptree, "helpserv/main", "helpserv_helptree");
-
         service_named_bind_command("helpserv", &helpserv_helpme);
-	help_addentry(helpserv_helptree, "HELPME", "help/helpserv/helpme", NULL);
 }
 
 void _moddeinit()
 {
         service_named_unbind_command("helpserv", &helpserv_helpme);
-	help_delentry(helpserv_helptree, "HELPME");
 }
 
 static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
