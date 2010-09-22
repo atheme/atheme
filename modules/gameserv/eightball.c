@@ -17,30 +17,20 @@ DECLARE_MODULE_V1
 
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 0, command_eightball };
-
-list_t *gs_helptree;
-list_t *cs_helptree;
+command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 0, command_eightball, { .path = "help/gameserv/eightball" } };
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
-
 	service_named_bind_command("gameserv", &cmd_eightball);
-	help_addentry(gs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
 
 	service_named_bind_command("chanserv", &cmd_eightball);
-	help_addentry(cs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("gameserv", &cmd_eightball);
-	help_delentry(gs_helptree, "EIGHTBALL");
 
 	service_named_unbind_command("chanserv", &cmd_eightball);
-	help_delentry(cs_helptree, "EIGHTBALL");
 }
 
 /*

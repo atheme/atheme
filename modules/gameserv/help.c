@@ -16,24 +16,19 @@ DECLARE_MODULE_V1
 );
 
 list_t *gs_cmdtree;
-list_t *gs_helptree;
 
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help };
+command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
-
 	service_named_bind_command("gameserv", &gs_help);
-	help_addentry(gs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("gameserv", &gs_help);
-	help_delentry(gs_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

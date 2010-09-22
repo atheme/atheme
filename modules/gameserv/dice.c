@@ -21,27 +21,19 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_df(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice };
-command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod };
-command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df };
-
-list_t *gs_helptree;
-list_t *cs_helptree;
+command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice, { .path = "help/gameserv/roll" } };
+command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "help/gameserv/roll" } };
+command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "help/gameserv/roll" } };
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
-
 	service_named_bind_command("gameserv", &cmd_dice);
 	service_named_bind_command("gameserv", &cmd_wod);
 	service_named_bind_command("gameserv", &cmd_df);
-	help_addentry(gs_helptree, "ROLL", "help/gameserv/roll", NULL);
 
 	service_named_bind_command("chanserv", &cmd_dice);
 	service_named_bind_command("chanserv", &cmd_wod);
 	service_named_bind_command("chanserv", &cmd_df);
-	help_addentry(cs_helptree, "ROLL", "help/gameserv/roll", NULL);
 }
 
 void _moddeinit()
@@ -49,12 +41,10 @@ void _moddeinit()
 	service_named_unbind_command("gameserv", &cmd_dice);
 	service_named_unbind_command("gameserv", &cmd_wod);
 	service_named_unbind_command("gameserv", &cmd_df);
-	help_delentry(gs_helptree, "ROLL");
 
 	service_named_unbind_command("chanserv", &cmd_dice);
 	service_named_unbind_command("chanserv", &cmd_wod);
 	service_named_unbind_command("chanserv", &cmd_df);
-	help_delentry(cs_helptree, "ROLL");
 }
 
 /*
