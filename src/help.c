@@ -112,6 +112,9 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 				help_file = fopen(c->help.path, "r");
 			else
 			{
+				if (!strncmp(c->help.path, "help/", 5))
+					c->help.path += 5;
+
 				strlcpy(subname, c->help.path, sizeof subname);
 				if (nicksvs.no_nick_ownership && !strncmp(subname, "nickserv/", 9))
 					memcpy(subname, "userserv", 8);
