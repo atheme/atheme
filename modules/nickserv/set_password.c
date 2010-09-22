@@ -17,26 +17,22 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password };
+command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "help/nickserv/set_password" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_set_password, *ns_set_cmdtree);
-	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&ns_set_password, *ns_set_cmdtree);
-	help_delentry(ns_helptree, "SET PASSWORD");
 }
 
 /* SET PASSWORD <password> */

@@ -18,27 +18,19 @@ DECLARE_MODULE_V1
 static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify };
-command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify };
-
-list_t *ns_helptree;
+command_t ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify, { .path = "help/nickserv/verify" } };
+command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify, { .path = "help/nickserv/fverify" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_verify);
 	service_named_bind_command("nickserv", &ns_fverify);
-	help_addentry(ns_helptree, "VERIFY", "help/nickserv/verify", NULL);
-	help_addentry(ns_helptree, "FVERIFY", "help/nickserv/fverify", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_verify);
 	service_named_unbind_command("nickserv", &ns_fverify);
-	help_delentry(ns_helptree, "VERIFY");
-	help_delentry(ns_helptree, "FVERIFY");
 }
 
 static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])

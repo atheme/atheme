@@ -44,11 +44,10 @@ static void show_enforce(hook_user_req_t *hdata);
 static void check_registration(hook_user_register_check_t *hdata);
 static void check_enforce(hook_nick_enforce_t *hdata);
 
-command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce };
-command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
-command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain };
+command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protection of a nickname."), AC_NONE, 1, ns_cmd_set_enforce, { .path = "help/nickserv/set_enforce" } };
+command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release, { .path = "help/nickserv/release" } };
+command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2, ns_cmd_regain, { .path = "help/nickserv/regain" } };
 
-list_t *ns_helptree;
 mowgli_patricia_t **ns_set_cmdtree;
 
 /* sends an FNC for the given user */
@@ -244,7 +243,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 	 * are not considered owned */
 	if (nicksvs.no_nick_ownership)
 	{
-		command_fail(si, fault_noprivs, _("RELEASE is disabled."));
+		command_fail(si, fault_noprivs, _("REGAIN is disabled."));
 		return;
 	}
 
@@ -492,7 +491,6 @@ static int idcheck_foreach_cb(myentity_t *mt, void *privdata)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	/* Leave this for compatibility with old versions of this code
@@ -520,9 +518,6 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_release);
 	service_named_bind_command("nickserv", &ns_regain);
 	command_add(&ns_set_enforce, *ns_set_cmdtree);
-	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
-	help_addentry(ns_helptree, "REGAIN", "help/nickserv/regain", NULL);
-	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_info");
 	hook_add_user_info(show_enforce);
 	hook_add_event("nick_can_register");
@@ -540,9 +535,6 @@ void _moddeinit()
 	service_named_unbind_command("nickserv", &ns_release);
 	service_named_unbind_command("nickserv", &ns_regain);
 	command_delete(&ns_set_enforce, *ns_set_cmdtree);
-	help_delentry(ns_helptree, "RELEASE");
-	help_delentry(ns_helptree, "REGAIN");
-	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_user_info(show_enforce);
 	hook_del_nick_can_register(check_registration);
 	hook_del_nick_enforce(check_enforce);

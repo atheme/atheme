@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_hold = { "HOLD", N_("Prevents an account from expiring."),
-		      PRIV_HOLD, 2, ns_cmd_hold };
-
-list_t *ns_helptree;
+		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "help/nickserv/hold" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_hold);
-	help_addentry(ns_helptree, "HOLD", "help/nickserv/hold", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_hold);
-	help_delentry(ns_helptree, "HOLD");
 }
 
 static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])

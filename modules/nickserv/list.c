@@ -18,22 +18,16 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list };
-
-list_t *ns_helptree;
+command_t ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "help/nickserv/list" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_list);
-	help_addentry(ns_helptree, "LIST", "help/nickserv/list", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_list);
-	help_delentry(ns_helptree, "LIST");
 }
 
 typedef enum {

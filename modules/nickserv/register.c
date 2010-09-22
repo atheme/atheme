@@ -20,24 +20,18 @@ time_t ratelimit_firsttime = 0;
 
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register };
-
-list_t *ns_helptree;
+command_t ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "help/nickserv/register" } };
 
 unsigned int tcnt = 0;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_register);
-	help_addentry(ns_helptree, "REGISTER", "help/nickserv/register", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_register);
-	help_delentry(ns_helptree, "REGISTER");
 }
 
 static int register_foreach_cb(myentity_t *ment, void *privdata)

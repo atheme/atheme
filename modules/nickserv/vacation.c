@@ -15,8 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
-
 static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 {
 	char tsbuf[BUFSIZE];
@@ -47,7 +45,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
-command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation };
+command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation, { .path = "help/nickserv/vacation" } };
 
 static void user_identify_hook(user_t *u)
 {
@@ -89,10 +87,7 @@ static void info_hook(hook_user_req_t *hdata)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_vacation);
-	help_addentry(ns_helptree, "VACATION", "help/nickserv/vacation", NULL);
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(user_identify_hook);
@@ -110,7 +105,6 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	service_named_unbind_command("nickserv", &ns_vacation);
-	help_delentry(ns_helptree, "VACATION");
 
 	hook_del_user_identify(user_identify_hook);
 	hook_del_user_check_expire(user_expiry_hook);

@@ -16,8 +16,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t ns_helptree;
-
 struct
 {
 	const char *nickstring, *accountstring;

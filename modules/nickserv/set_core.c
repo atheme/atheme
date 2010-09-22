@@ -15,11 +15,10 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static void ns_help_set(sourceinfo_t *si);
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-list_t *ns_helptree;
-
-command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set };
+command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set, { .func = ns_help_set } };
 
 mowgli_patricia_t *ns_set_cmdtree;
 
@@ -74,17 +73,14 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	service_named_bind_command("nickserv", &ns_set);
 
-	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 	ns_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_set);
-	help_delentry(ns_helptree, "SET");
 	mowgli_patricia_destroy(ns_set_cmdtree, NULL, NULL);
 }
 

@@ -15,24 +15,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
-
 static void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help };
+command_t ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_help);
-	help_addentry(ns_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("nickserv", &ns_help);
-	help_delentry(ns_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

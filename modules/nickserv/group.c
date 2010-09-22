@@ -19,22 +19,15 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group };
-command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup };
-command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup };
-
-list_t *ns_helptree;
+command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group, { .path = "help/nickserv/group" } };
+command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup, { .path = "help/nickserv/ungroup" } };
+command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "help/nickserv/fungroup" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
-
 	service_named_bind_command("nickserv", &ns_group);
 	service_named_bind_command("nickserv", &ns_ungroup);
 	service_named_bind_command("nickserv", &ns_fungroup);
-	help_addentry(ns_helptree, "GROUP", "help/nickserv/group", NULL);
-	help_addentry(ns_helptree, "UNGROUP", "help/nickserv/ungroup", NULL);
-	help_addentry(ns_helptree, "FUNGROUP", "help/nickserv/fungroup", NULL);
 }
 
 void _moddeinit()
@@ -42,9 +35,6 @@ void _moddeinit()
 	service_named_unbind_command("nickserv", &ns_group);
 	service_named_unbind_command("nickserv", &ns_ungroup);
 	service_named_unbind_command("nickserv", &ns_fungroup);
-	help_delentry(ns_helptree, "GROUP");
-	help_delentry(ns_helptree, "UNGROUP");
-	help_delentry(ns_helptree, "FUNGROUP");
 }
 
 static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])

@@ -139,7 +139,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been added to your subscriptions."), name);
 }
 
-command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_NONE, 2, cmd_subscribe };
+command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_NONE, 2, cmd_subscribe, { .path = "" } };
 
 list_t *ns_cmdtree;
 

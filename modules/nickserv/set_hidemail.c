@@ -17,26 +17,22 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_hidemail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail };
+command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "help/nickserv/set_hidemail" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_set_hidemail, *ns_set_cmdtree);
-	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&ns_set_hidemail, *ns_set_cmdtree);
-	help_delentry(ns_helptree, "SET HIDEMAIL");
 }
 
 /* SET HIDEMAIL [ON|OFF] */

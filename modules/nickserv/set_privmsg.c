@@ -14,7 +14,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
 mowgli_patricia_t **ns_set_cmdtree;
 
 /* SET PRIVMSG ON|OFF */
@@ -70,15 +69,12 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg };
+command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "help/nickserv/set_privmsg" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	command_add(&ns_set_privmsg, *ns_set_cmdtree);
-
-	help_addentry(ns_helptree, "SET PRIVMSG", "help/nickserv/set_privmsg", NULL);
 
 	use_privmsg++;
 }
@@ -86,7 +82,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&ns_set_privmsg, *ns_set_cmdtree);
-	help_delentry(ns_helptree, "SET PRIVMSG");
 
 	use_privmsg--;
 }

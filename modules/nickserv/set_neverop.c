@@ -17,26 +17,22 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_helptree;
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop };
+command_t ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop, { .path = "help/nickserv/set_neverop" } };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
-	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_set_neverop, *ns_set_cmdtree);
-	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&ns_set_neverop, *ns_set_cmdtree);
-	help_delentry(ns_helptree, "SET NEVEROP");
 }
 
 /* SET NEVEROP [ON|OFF] */
