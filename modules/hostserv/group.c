@@ -16,24 +16,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_helptree;
-
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group };
+command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_NONE, 1, hs_cmd_group, { .path = "help/hostserv/group" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
-
 	service_named_bind_command("hostserv", &hs_group);
-	help_addentry(hs_helptree, "GROUP", "help/hostserv/group", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("hostserv", &hs_group);
-	help_delentry(hs_helptree, "GROUP");
 }
 
 static void hs_sethost_all(myuser_t *mu, const char *host)

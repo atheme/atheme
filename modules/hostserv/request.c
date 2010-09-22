@@ -31,10 +31,10 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
 static void write_hsreqdb(database_handle_t *db);
 static void db_h_hr(database_handle_t *db, const char *type);
 
-command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_NONE, 2, hs_cmd_request };
-command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting };
-command_t hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject };
-command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate };
+command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_NONE, 2, hs_cmd_request, { .path = "help/hostserv/request" } };
+command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "help/hostserv/waiting" } };
+command_t hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "help/hostserv/reject" } };
+command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "help/hostserv/activate" } };
 
 struct hsreq_ {
 	char *nick;
@@ -56,7 +56,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 
 	hook_add_event("user_drop");
@@ -71,10 +70,6 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_waiting);
 	service_named_bind_command("hostserv", &hs_reject);
 	service_named_bind_command("hostserv", &hs_activate);
-	help_addentry(hs_helptree, "REQUEST", "help/hostserv/request", NULL);
-	help_addentry(hs_helptree, "WAITING", "help/hostserv/waiting", NULL);
-	help_addentry(hs_helptree, "REJECT", "help/hostserv/reject", NULL);
-	help_addentry(hs_helptree, "ACTIVATE", "help/hostserv/activate", NULL);
 	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, 0, &request_per_nick, false);
 }
 
@@ -90,10 +85,6 @@ void _moddeinit(void)
 	service_named_unbind_command("hostserv", &hs_waiting);
 	service_named_unbind_command("hostserv", &hs_reject);
 	service_named_unbind_command("hostserv", &hs_activate);
-	help_delentry(hs_helptree, "REQUEST");
-	help_delentry(hs_helptree, "WAITING");
-	help_delentry(hs_helptree, "REJECT");
-	help_delentry(hs_helptree, "ACTIVATE");
 	del_conf_item("REQUEST_PER_NICK", conf_hs_table);
 }
 

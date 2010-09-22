@@ -19,7 +19,6 @@ DECLARE_MODULE_V1
 static void on_user_identify(user_t *u);
 
 service_t *hostsvs;
-list_t hs_helptree;
 list_t conf_hs_table;
 
 void _modinit(module_t *m)

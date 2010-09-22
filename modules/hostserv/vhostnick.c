@@ -16,24 +16,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_helptree;
-
 static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick };
+command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "help/hostserv/vhostnick" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
-
 	service_named_bind_command("hostserv", &hs_vhostnick);
-	help_addentry(hs_helptree, "VHOSTNICK", "help/hostserv/vhostnick", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("hostserv", &hs_vhostnick);
-	help_delentry(hs_helptree, "VHOSTNICK");
 }
 
 /* VHOSTNICK <nick> [host] */

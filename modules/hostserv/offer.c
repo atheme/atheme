@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-list_t *hs_helptree, *conf_hs_table;
+list_t *conf_hs_table;
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -27,10 +27,10 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[]);
 static void write_hsofferdb(database_handle_t *db);
 static void db_h_ho(database_handle_t *db, const char *type);
 
-command_t hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer };
-command_t hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer };
-command_t hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist };
-command_t hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_NONE, 2, hs_cmd_take };
+command_t hs_offer = { "OFFER", N_("Sets vhosts available for users to take."), PRIV_USER_VHOST, 2, hs_cmd_offer, { .path = "help/hostserv/offer" } };
+command_t hs_unoffer = { "UNOFFER", N_("Removes a vhost from the list that users can take."), PRIV_USER_VHOST, 2, hs_cmd_unoffer, { .path = "help/hostserv/unoffer" } };
+command_t hs_offerlist = { "OFFERLIST", N_("Lists all available vhosts."), AC_NONE, 1, hs_cmd_offerlist, { .path = "help/hostserv/offerlist" } };
+command_t hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_NONE, 2, hs_cmd_take, { .path = "help/hostserv/take" } };
 
 struct hsoffered_ {
 	char *vhost;
@@ -52,7 +52,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
 	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
 
 	hook_add_db_write(write_hsofferdb);
@@ -62,10 +61,6 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_unoffer);
 	service_named_bind_command("hostserv", &hs_offerlist);
 	service_named_bind_command("hostserv", &hs_take);
-	help_addentry(hs_helptree, "OFFER", "help/hostserv/offer", NULL);
-	help_addentry(hs_helptree, "UNOFFER", "help/hostserv/unoffer", NULL);
-	help_addentry(hs_helptree, "OFFERLIST", "help/hostserv/offerlist", NULL);
-	help_addentry(hs_helptree, "TAKE", "help/hostserv/take", NULL);
 }
 
 void _moddeinit(void)
@@ -77,10 +72,6 @@ void _moddeinit(void)
 	service_named_unbind_command("hostserv", &hs_unoffer);
 	service_named_unbind_command("hostserv", &hs_offerlist);
 	service_named_unbind_command("hostserv", &hs_take);
-	help_delentry(hs_helptree, "OFFER");
-	help_delentry(hs_helptree, "UNOFFER");
-	help_delentry(hs_helptree, "OFFERLIST");
-	help_delentry(hs_helptree, "TAKE");
 }
 
 static void hs_sethost_all(myuser_t *mu, const char *host)

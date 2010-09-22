@@ -16,30 +16,22 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_helptree;
-
 static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost };
-command_t hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost };
+command_t hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "help/hostserv/vhost" } };
+command_t hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "help/hostserv/listvhost" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
-
 	service_named_bind_command("hostserv", &hs_vhost);
 	service_named_bind_command("hostserv", &hs_listvhost);
-	help_addentry(hs_helptree, "VHOST", "help/hostserv/vhost", NULL);
-	help_addentry(hs_helptree, "LISTVHOST", "help/hostserv/listvhost", NULL);
 }
 
 void _moddeinit(void)
 {
 	service_named_unbind_command("hostserv", &hs_vhost);
 	service_named_unbind_command("hostserv", &hs_listvhost);
-	help_delentry(hs_helptree, "VHOST");
-	help_delentry(hs_helptree, "LISTVHOST");
 }
 
 static void hs_sethost_all(myuser_t *mu, const char *host)

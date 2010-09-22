@@ -15,24 +15,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *hs_helptree;
-
 static void hs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, hs_cmd_help };
+command_t hs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, hs_cmd_help, { .path = "help/help" } };
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(hs_helptree, "hostserv/main", "hs_helptree");
-
 	service_named_bind_command("hostserv", &hs_help);
-	help_addentry(hs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("hostserv", &hs_help);
-	help_delentry(hs_helptree, "HELP");
 }
 
 /* HELP <command> [params] */
