@@ -19,6 +19,7 @@ unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
 static void account_drop_request(myuser_t *mu);
+static void account_delete_request(myuser_t *mu);
 static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
 static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[]);
@@ -54,6 +55,8 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
+	hook_add_event("myuser_delete");
+	hook_add_myuser_delete(account_delete_request);
 	hook_add_db_write(write_ticket_db);
 
 	db_register_type_handler("HE", db_h_he);
@@ -67,6 +70,7 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	hook_del_user_drop(account_drop_request);
+	hook_del_myuser_delete(account_delete_request);
 	hook_del_db_write(write_ticket_db);
 
 	db_unregister_type_handler("HE");
@@ -120,6 +124,30 @@ static void account_drop_request(myuser_t *mu)
                 if (!irccasecmp(l->nick, entity(mu)->name))
                 {
                         slog(LG_REGISTER, "HELP:REQUEST:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->topic);
+
+                        node_del(n, &helpserv_reqlist);
+
+                        free(l->nick);
+                        free(l->creator);
+                        free(l->topic);
+                        free(l);
+
+                        return;
+                }
+        }
+}
+
+static void account_delete_request(myuser_t *mu)
+{
+        node_t *n;
+        ticket_t *l;
+
+        LIST_FOREACH(n, helpserv_reqlist.head)
+        {
+                l = n->data;
+                if (!irccasecmp(l->nick, entity(mu)->name))
+                {
+                        slog(LG_REGISTER, "HELP:REQUEST:EXPIRE: \2%s\2 \2%s\2", l->nick, l->topic);
 
                         node_del(n, &helpserv_reqlist);
 

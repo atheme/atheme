@@ -23,6 +23,7 @@ time_t ratelimit_firsttime = 0;
 
 static void account_drop_request(myuser_t *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
+static void account_delete_request(myuser_t *mu);
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
@@ -62,6 +63,8 @@ void _modinit(module_t *m)
 	hook_add_user_drop(account_drop_request);
 	hook_add_event("nick_ungroup");
 	hook_add_nick_ungroup(nick_drop_request);
+	hook_add_event("myuser_delete");
+	hook_add_myuser_delete(account_delete_request);
 	hook_add_db_write(write_hsreqdb);
 
 	db_register_type_handler("HR", db_h_hr);
@@ -77,6 +80,7 @@ void _moddeinit(void)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_nick_ungroup(nick_drop_request);
+	hook_del_myuser_delete(account_delete_request);
 	hook_del_db_write(write_hsreqdb);
 
 	db_unregister_type_handler("HR");
@@ -155,6 +159,30 @@ static void account_drop_request(myuser_t *mu)
 		if (!irccasecmp(l->nick, entity(mu)->name))
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->vhost);
+
+			node_del(n, &hs_reqlist);
+
+			free(l->nick);
+			free(l->vhost);
+			free(l->creator);
+			free(l);
+
+			return;
+		}
+	}
+}
+
+static void account_delete_request(myuser_t *mu)
+{
+	node_t *n;
+	hsreq_t *l;
+
+	LIST_FOREACH(n, hs_reqlist.head)
+	{
+		l = n->data;
+		if (!irccasecmp(l->nick, entity(mu)->name))
+		{
+			slog(LG_REGISTER, "VHOSTREQ:EXPIRE: \2%s\2 \2%s\2", l->nick, l->vhost);
 
 			node_del(n, &hs_reqlist);
 
