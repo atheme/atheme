@@ -5,7 +5,7 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_help_set(sourceinfo_t *si);
+static void gs_help_set(sourceinfo_t *si, char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
@@ -52,17 +52,30 @@ void set_deinit(void)
 	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
 }
 
-static void gs_help_set(sourceinfo_t *si)
+static void gs_help_set(sourceinfo_t *si, char *subcmd)
 {
-	command_success_nodata(si, _("Help for \2SET\2:"));
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("SET allows you to set various control flags\n"
-				"for groups that change the way certain\n"
-				"operations are performed on them."));
-	command_success_nodata(si, " ");
-	command_help(si, gs_set_cmdtree);
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
+	command_t *c;
+
+	if (!subcmd)
+	{
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->disp);
+		command_success_nodata(si, _("Help for \2SET\2:"));
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("SET allows you to set various control flags\n"
+					"for groups that change the way certain\n"
+					"operations are performed on them."));
+		command_success_nodata(si, " ");
+		command_help(si, gs_set_cmdtree);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		return;
+	}
+
+	if ((c = command_find(gs_set_cmdtree, subcmd)))
+	{
+		help_display(si, si->service, subcmd, gs_set_cmdtree);
+	}
 }
 
 /* SET <!group> <setting> <parameters> */

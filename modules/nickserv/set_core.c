@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_help_set(sourceinfo_t *si);
+static void ns_help_set(sourceinfo_t *si, char *subcmd);
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set, { .func = ns_help_set } };
@@ -23,22 +23,35 @@ command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cm
 mowgli_patricia_t *ns_set_cmdtree;
 
 /* HELP SET */
-static void ns_help_set(sourceinfo_t *si)
+static void ns_help_set(sourceinfo_t *si, char *subcmd)
 {
-	command_success_nodata(si, _("Help for \2SET\2:"));
-	command_success_nodata(si, " ");
-	if (nicksvs.no_nick_ownership)
-		command_success_nodata(si, _("SET allows you to set various control flags\n"
-					"for accounts that change the way certain\n"
-					"operations are performed on them."));
-	else
-		command_success_nodata(si, _("SET allows you to set various control flags\n"
-					"for nicknames that change the way certain\n"
-					"operations are performed on them."));
-	command_success_nodata(si, " ");
-	command_help(si, ns_set_cmdtree);
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more information, use \2/msg %s HELP SET \37command\37\2."), nicksvs.nick);
+	command_t *c;
+
+	if (!subcmd)
+	{
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), nicksvs.nick);
+		command_success_nodata(si, _("Help for \2SET\2:"));
+		command_success_nodata(si, " ");
+		if (nicksvs.no_nick_ownership)
+			command_success_nodata(si, _("SET allows you to set various control flags\n"
+						"for accounts that change the way certain\n"
+						"operations are performed on them."));
+		else
+			command_success_nodata(si, _("SET allows you to set various control flags\n"
+						"for nicknames that change the way certain\n"
+						"operations are performed on them."));
+		command_success_nodata(si, " ");
+		command_help(si, ns_set_cmdtree);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("For more information, use \2/msg %s HELP SET \37command\37\2."), nicksvs.nick);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		return;
+	}
+
+	if ((c = command_find(ns_set_cmdtree, subcmd)))
+	{
+		help_display(si, si->service, subcmd, ns_set_cmdtree);
+	}
 }
 
 /* SET <setting> <parameters> */

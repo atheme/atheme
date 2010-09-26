@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_help_set(sourceinfo_t *si);
+static void cs_help_set(sourceinfo_t *si, char *subcmd);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
@@ -36,17 +36,30 @@ void _moddeinit()
 	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
-static void cs_help_set(sourceinfo_t *si)
+static void cs_help_set(sourceinfo_t *si, char *subcmd)
 {
-	command_success_nodata(si, _("Help for \2SET\2:"));
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("SET allows you to set various control flags\n"
-				"for channels that change the way certain\n"
-				"operations are performed on them."));
-	command_success_nodata(si, " ");
-	command_help(si, cs_set_cmdtree);
-	command_success_nodata(si, " ");
-	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), chansvs.me->disp);
+	command_t *c;
+
+	if (!subcmd)
+	{
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.me->disp);
+		command_success_nodata(si, _("Help for \2SET\2:"));
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("SET allows you to set various control flags\n"
+					"for channels that change the way certain\n"
+					"operations are performed on them."));
+		command_success_nodata(si, " ");
+		command_help(si, cs_set_cmdtree);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), chansvs.me->disp);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		return;
+	}
+
+	if ((c = command_find(cs_set_cmdtree, subcmd)))
+	{
+		help_display(si, si->service, subcmd, cs_set_cmdtree);
+	}
 }
 
 /* SET <#channel> <setting> <parameters> */

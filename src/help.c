@@ -103,8 +103,13 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 	const char *langname = NULL;
 	int ifnest, ifnest_false;
 
+
+	char *ccommand = sstrdup(command);
+	char *subcmd = strtok(ccommand, " ");
+	subcmd = strtok(NULL, "");
+
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(si, command, list)))
+	if ((c = help_cmd_find(si, ccommand, list)))
 	{
 		if (c->help.path)
 		{
@@ -183,15 +188,16 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 		}
 		else if (c->help.func)
 		{
-			command_success_nodata(si, _("***** \2%s Help\2 *****"), service->nick);
-
-			c->help.func(si);
-
-			command_success_nodata(si, _("***** \2End of Help\2 *****"));
+			/* I removed the "***** Help" stuff from here because everything
+			 * that uses a help function now calls help_display so they'll
+			 * display on that and not show the message twice. --JD
+			 */
+			c->help.func(si, subcmd);
 		}
 		else
 			command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), command);
 	}
+	free(ccommand);
 }
 
 void help_addentry(list_t *list, const char *topic, const char *fname,
