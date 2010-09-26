@@ -39,8 +39,6 @@ void _moddeinit()
 
 static void cs_help_clear(sourceinfo_t *si, char *subcmd)
 {
-	command_t *c;
-
 	if (!subcmd)
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.me->disp);
@@ -52,13 +50,9 @@ static void cs_help_clear(sourceinfo_t *si, char *subcmd)
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information, use \2/msg %s HELP CLEAR \37command\37\2."), chansvs.me->disp);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-		return;
 	}
-
-	if ((c = command_find(cs_clear_cmds, subcmd)))
-	{
+	else
 		help_display(si, si->service, subcmd, cs_clear_cmds);
-	}
 }
 
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])

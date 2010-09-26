@@ -42,8 +42,6 @@ void _moddeinit()
 
 static void bs_help_set(sourceinfo_t *si, char *subcmd)
 {
-	command_t *c;
-
 	if (!subcmd)
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->disp);
@@ -55,13 +53,9 @@ static void bs_help_set(sourceinfo_t *si, char *subcmd)
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-		return;
 	}
-
-	if ((c = command_find(bs_set_cmdtree, subcmd)))
-	{
+	else
 		help_display(si, si->service, subcmd, bs_set_cmdtree);
-	}
 }
 
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
