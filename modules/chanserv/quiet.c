@@ -32,14 +32,14 @@ void _modinit(module_t *m)
 		return;
 	}
 
-        service_named_unbind_command("chanserv", &cs_quiet);
-	service_named_unbind_command("chanserv", &cs_unquiet);
+        service_named_bind_command("chanserv", &cs_quiet);
+	service_named_bind_command("chanserv", &cs_unquiet);
 }
 
 void _moddeinit()
 {
-	service_named_bind_command("chanserv", &cs_quiet);
-	service_named_bind_command("chanserv", &cs_unquiet);
+	service_named_unbind_command("chanserv", &cs_quiet);
+	service_named_unbind_command("chanserv", &cs_unquiet);
 }
 
 /* Notify at most this many users in private notices, otherwise channel */
