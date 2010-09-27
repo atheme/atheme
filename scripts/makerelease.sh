@@ -55,11 +55,11 @@ fi
 
 cd ..
 
-echo "Building $RELEASENAME.tgz from $RELEASENAME/"
-tar zcf $RELEASENAME.tgz $RELEASENAME/
+echo "Building $RELEASENAME.tar.gz from $RELEASENAME/"
+tar zcf $RELEASENAME.tar.gz $RELEASENAME/
 
-echo "Building $RELEASENAME.tbz2 from $RELEASENAME/"
-tar jcf $RELEASENAME.tbz2 $RELEASENAME/
+echo "Building $RELEASENAME.tar.bz2 from $RELEASENAME/"
+tar jcf $RELEASENAME.tar.bz2 $RELEASENAME/
 
 PUBLISH="yes"
 
@@ -85,8 +85,8 @@ if [ "x$AUTOMATIC" != "xyes" ]; then
 fi
 
 if [ "x$PUBLISH" = "xyes" ]; then
-	scp $RELEASENAME.tgz hg.atheme.org:/srv/distfiles
-	scp $RELEASENAME.tbz2 hg.atheme.org:/srv/distfiles
+	scp $RELEASENAME.tar.gz hg.atheme.org:/srv/distfiles
+	scp $RELEASENAME.tar.bz2 hg.atheme.org:/srv/distfiles
 
 	echo
 	echo "The releases have been published, and will be available to the entire"
