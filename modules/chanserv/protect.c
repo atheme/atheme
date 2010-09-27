@@ -32,14 +32,14 @@ void _modinit(module_t *m)
 		return;
 	}
 
-        service_named_unbind_command("chanserv", &cs_protect);
-        service_named_unbind_command("chanserv", &cs_deprotect);
+        service_named_bind_command("chanserv", &cs_protect);
+        service_named_bind_command("chanserv", &cs_deprotect);
 }
 
 void _moddeinit()
 {
-	service_named_bind_command("chanserv", &cs_protect);
-	service_named_bind_command("chanserv", &cs_deprotect);
+	service_named_unbind_command("chanserv", &cs_protect);
+	service_named_unbind_command("chanserv", &cs_deprotect);
 }
 
 static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
