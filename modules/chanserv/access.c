@@ -21,6 +21,11 @@ static void cs_help_access(sourceinfo_t *si, char *subcmd);
 command_t cs_access = { "ACCESS", N_("Manage channel access."),
                         AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
+static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_access_list = { "LIST", N_("List channel access entries."),
+                             AC_NONE, 3, cs_cmd_access_list, { .path = "cservice/access_list" } };
+
 mowgli_patricia_t *cs_access_cmds;
 
 void _modinit(module_t *m)
@@ -28,6 +33,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("chanserv", &cs_access);
 
 	cs_access_cmds = mowgli_patricia_create(strcasecanon);
+
+	command_add(&cs_access_list, cs_access_cmds);
 }
 
 void _moddeinit()
@@ -206,6 +213,69 @@ static const char *get_role_name(mychan_t *mc, unsigned int level)
 		return role;
 
 	return get_template_name_fuzzy(mc, level);
+}
+
+/***********************************************************************************************/
+
+/*
+ * Syntax: ACCESS #channel LIST
+ *
+ * Output:
+ *
+ * Entry Nickname/Host          Role
+ * ----- ---------------------- ----
+ * 1     nenolod                founder
+ * 2     jdhore                 channel-staffer
+ */
+static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
+{
+	chanacs_t *ca;
+	node_t *n;
+	mychan_t *mc;
+	const char *channel = parv[0];
+	int operoverride = 0;
+	unsigned int i = 1;
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	{
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+	}
+
+	command_success_nodata(si, _("Entry Nickname/Host          Role"));
+	command_success_nodata(si, "----- ---------------------- ----");
+
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		const char *role;
+
+		ca = n->data;
+		role = get_role_name(mc, ca->level);
+
+		command_success_nodata(si, _("%-5d %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
+
+		i++;
+	}
+
+	command_success_nodata(si, "----- ---------------------- ----");
+	command_success_nodata(si, _("End of \2%s\2 ACCESS listing."), channel);
+
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "ACCESS:LIST: \2%s\2 (oper override)", mc->name);
+	else
+		logcommand(si, CMDLOG_GET, "ACCESS:LIST: \2%s\2", mc->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
