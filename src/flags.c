@@ -110,6 +110,7 @@ void flags_clear(unsigned char flag)
 	chanacs_flags[flag].value = 0xFFFFFFFF;
 	chanacs_flags[flag].restrictflags = 0;
 	chanacs_flags[flag].def = false;
+	chanacs_flags[flag].name = NULL;
 }
 
 unsigned int flags_find_slot(void)
