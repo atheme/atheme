@@ -32,23 +32,23 @@ unsigned int ca_all_enable = CA_ALL_ALL;
 static char flags_buf[128];
 
 struct flags_table chanacs_flags[255] = {
-	['v'] = {CA_VOICE, 0, true},
-	['V'] = {CA_AUTOVOICE, 0, true},
-	['o'] = {CA_OP, 0, true},
-	['O'] = {CA_AUTOOP, 0, true},
-	['t'] = {CA_TOPIC, 0, true},
-	['s'] = {CA_SET, 0, true},
-	['r'] = {CA_REMOVE, 0, true},
-	['i'] = {CA_INVITE, 0, true},
-	['R'] = {CA_RECOVER, 0, true},
-	['f'] = {CA_FLAGS, 0, true},
-	['h'] = {CA_HALFOP, 0, true},
-	['H'] = {CA_AUTOHALFOP, 0, true},
-	['A'] = {CA_ACLVIEW, 0, true},
-	['F'] = {CA_FOUNDER, 0, false},
-	['q'] = {CA_USEOWNER, 0, true},
-	['a'] = {CA_USEPROTECT, 0, true},
-	['b'] = {CA_AKICK, 0, false},
+	['v'] = {CA_VOICE, 0, true,      "voice"},
+	['V'] = {CA_AUTOVOICE, 0, true,  "autovoice"},
+	['o'] = {CA_OP, 0, true,         "op"},
+	['O'] = {CA_AUTOOP, 0, true,     "autoop"},
+	['t'] = {CA_TOPIC, 0, true,      "topic"},
+	['s'] = {CA_SET, 0, true,        "set"},
+	['r'] = {CA_REMOVE, 0, true,     "remove"},
+	['i'] = {CA_INVITE, 0, true,     "invite"},
+	['R'] = {CA_RECOVER, 0, true,    "recover"},
+	['f'] = {CA_FLAGS, 0, true,      "flags"},
+	['h'] = {CA_HALFOP, 0, true,     "halfop"},
+	['H'] = {CA_AUTOHALFOP, 0, true, "autohalfop"},
+	['A'] = {CA_ACLVIEW, 0, true,    "aclview"},
+	['F'] = {CA_FOUNDER, 0, false,   "founder"},
+	['q'] = {CA_USEOWNER, 0, true,   "owner"},
+	['a'] = {CA_USEPROTECT, 0, true, "protect"},
+	['b'] = {CA_AKICK, 0, false,     "banned"},
 };
 
 struct gflags mu_flags[] = {
@@ -89,7 +89,7 @@ struct gflags soper_flags[] = {
 	{ 0, 0 },
 };
 
-unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def)
+unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name)
 {
 	if (chanacs_flags[flag].value && chanacs_flags[flag].value != 0xFFFFFFFF)
 		return 0;
@@ -97,6 +97,7 @@ unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, boo
 	chanacs_flags[flag].value = flags_find_slot();
 	chanacs_flags[flag].restrictflags = restrictflags;
 	chanacs_flags[flag].def = def;
+	chanacs_flags[flag].name = name;
 
 	update_chanacs_flags();
 

@@ -32,7 +32,7 @@ void _modinit(module_t *m)
 {
 	m->mflags = MODTYPE_CORE;
 
-	if ((successor_flag = flags_associate('S', 0, false)) == 0)
+	if ((successor_flag = flags_associate('S', 0, false, "successor")) == 0)
 	{
 		slog(LG_ERROR, "chanserv/successor_acl: Inserting +S into flagset failed.");
 		exit(EXIT_FAILURE);
