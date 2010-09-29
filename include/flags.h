@@ -43,6 +43,10 @@ E struct gflags soper_flags[];
 E char *gflags_tostr(gflags_t *gflags, unsigned int flags);
 E bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res);
 E bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
+
+E unsigned int xflag_lookup(const char *name);
+E unsigned int xflag_apply(unsigned int in, const char *name);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

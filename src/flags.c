@@ -325,6 +325,50 @@ void update_chanacs_flags(void)
 		ca_all &= ~CA_USEOWNER;
 }
 
+unsigned int xflag_lookup(const char *name)
+{
+	unsigned int i;
+
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+	{
+		if (chanacs_flags[i].name == NULL)
+			continue;
+
+		if (!strcasecmp(chanacs_flags[i].name, name))
+			return chanacs_flags[i].value;
+	}
+
+	return 0;
+}
+
+unsigned int xflag_apply(unsigned int in, const char *name)
+{
+	unsigned int out, flag;
+	int status = FLAGS_ADD;
+
+	out = in;
+
+	switch (*name)
+	{
+	case '+':
+		status = FLAGS_ADD;
+		name++;
+		break;
+	case '-':
+		status = FLAGS_DEL;
+		name++;
+		break;
+	}
+
+	flag = xflag_lookup(name);
+
+	if (status == FLAGS_ADD)
+		out |= flag;
+	else
+		out &= ~flag;	
+
+	return out;
+}
 
 char *gflags_tostr(gflags_t *gflags, unsigned int flags)
 {
