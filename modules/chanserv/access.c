@@ -315,6 +315,13 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!target)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS INFO");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS <#channel> INFO <account|hostmask>"));
+		return;
+	}
+
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
