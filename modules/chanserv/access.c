@@ -140,6 +140,16 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return NULL;
 }
 
+static const char *get_role_name(mychan_t *mc, unsigned int level)
+{
+	const char *role;
+
+	if ((role = get_template_name(mc, level)) != NULL)
+		return role;
+
+	return get_template_name_fuzzy(mc, level);
+}
+
 static void cs_help_access(sourceinfo_t *si, char *subcmd)
 {
 	if (!subcmd)
