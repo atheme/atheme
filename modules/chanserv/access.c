@@ -6,6 +6,7 @@
  */
 
 #include "atheme.h"
+#include "template.h"
 
 DECLARE_MODULE_V1
 (
@@ -34,6 +35,109 @@ void _moddeinit()
 	service_named_unbind_command("chanserv", &cs_access);
 
 	mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
+}
+
+static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
+{
+	metadata_t *md;
+	const char *p, *q, *r;
+	char *s;
+	char ss[40];
+	static char flagname[400];
+
+	md = metadata_find(mc, "private:templates");
+	if (md != NULL)
+	{
+		p = md->value;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			if (r != NULL && r < q)
+				break;
+			strlcpy(ss, q, sizeof ss);
+			if (r != NULL && r - q < (int)(sizeof ss - 1))
+			{
+				ss[r - q] = '\0';
+			}
+			if (level & flags_to_bitmask(ss, 0))
+			{
+				strlcpy(flagname, p, sizeof flagname);
+				s = strchr(flagname, '=');
+				if (s != NULL)
+					*s = '\0';
+				return flagname;
+			}
+			p = r;
+		}
+	}
+
+	if (level & chansvs.ca_sop || level & get_template_flags(mc, "SOP"))
+		return "SOP";
+	if (level & chansvs.ca_aop || level & get_template_flags(mc, "AOP"))
+		return "AOP";
+	/* if vop==hop, prefer vop */
+	if (level & chansvs.ca_vop || level & get_template_flags(mc, "VOP"))
+		return "VOP";
+	if (chansvs.ca_hop != chansvs.ca_vop && (level & chansvs.ca_hop ||
+			level & get_template_flags(mc, "HOP")))
+		return "HOP";
+	return NULL;
+}
+
+static const char *get_template_name(mychan_t *mc, unsigned int level)
+{
+	metadata_t *md;
+	const char *p, *q, *r;
+	char *s;
+	char ss[40];
+	static char flagname[400];
+
+	md = metadata_find(mc, "private:templates");
+	if (md != NULL)
+	{
+		p = md->value;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			if (r != NULL && r < q)
+				break;
+			strlcpy(ss, q, sizeof ss);
+			if (r != NULL && r - q < (int)(sizeof ss - 1))
+			{
+				ss[r - q] = '\0';
+			}
+			if (level == flags_to_bitmask(ss, 0))
+			{
+				strlcpy(flagname, p, sizeof flagname);
+				s = strchr(flagname, '=');
+				if (s != NULL)
+					*s = '\0';
+				return flagname;
+			}
+			p = r;
+		}
+	}
+	if (level == chansvs.ca_sop && level == get_template_flags(mc, "SOP"))
+		return "SOP";
+	if (level == chansvs.ca_aop && level == get_template_flags(mc, "AOP"))
+		return "AOP";
+	/* if vop==hop, prefer vop */
+	if (level == chansvs.ca_vop && level == get_template_flags(mc, "VOP"))
+		return "VOP";
+	if (chansvs.ca_hop != chansvs.ca_vop && level == chansvs.ca_hop &&
+			level == get_template_flags(mc, "HOP"))
+		return "HOP";
+	return NULL;
 }
 
 static void cs_help_access(sourceinfo_t *si, char *subcmd)
