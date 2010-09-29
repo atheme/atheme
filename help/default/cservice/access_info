@@ -1,0 +1,11 @@
+Help for ACCESS INFO:
+
+ACCESS INFO displays what level of access a given user has
+in a given channel. It will display role, long-form flags
+and short-form flags along with the last date the user's
+access was modified.
+
+Syntax: ACCESS <#channel> INFO <user>
+
+Examples:
+    /msg &nick& ACCESS #atheme INFO nenolod

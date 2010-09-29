@@ -1,0 +1,11 @@
+Help for ACCESS LIST:
+
+ACCESS LIST lists all users with channel access and their 
+roles in the channel. It uses fuzzy matching so if a user 
+does not exactly match any role, they will be listed as 
+the closest role they match.
+
+Syntax: ACCESS <#channel> LIST
+
+Examples:
+    /msg &nick& ACCESS #atheme LIST

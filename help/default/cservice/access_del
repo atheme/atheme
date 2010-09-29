@@ -1,0 +1,8 @@
+Help for ACCESS DEL:
+
+ACCESS DEL will remove all channel access from a given user.
+
+Syntax: ACCESS <#channel> DEL <user>
+
+Examples:
+    /msg &nick& ACCESS #atheme DEL stitch
