@@ -129,7 +129,7 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 			{
 				ss[r - q] = '\0';
 			}
-			if (level & flags_to_bitmask(ss, 0))
+			if ((level & flags_to_bitmask(ss, 0)) == level)
 			{
 				strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
@@ -141,15 +141,15 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 		}
 	}
 
-	if (level & chansvs.ca_sop || level & get_template_flags(mc, "SOP"))
+	if (level & chansvs.ca_sop || (level & get_template_flags(mc, "SOP")) == level)
 		return "SOP";
-	if (level & chansvs.ca_aop || level & get_template_flags(mc, "AOP"))
+	if (level & chansvs.ca_aop || (level & get_template_flags(mc, "AOP")) == level)
 		return "AOP";
 	/* if vop==hop, prefer vop */
-	if (level & chansvs.ca_vop || level & get_template_flags(mc, "VOP"))
+	if (level & chansvs.ca_vop || (level & get_template_flags(mc, "VOP")) == level)
 		return "VOP";
 	if (chansvs.ca_hop != chansvs.ca_vop && (level & chansvs.ca_hop ||
-			level & get_template_flags(mc, "HOP")))
+			(level & get_template_flags(mc, "HOP")) == level))
 		return "HOP";
 	return NULL;
 }
