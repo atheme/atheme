@@ -19,7 +19,7 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_help_access(sourceinfo_t *si, char *subcmd);
 
 command_t cs_access = { "ACCESS", N_("Manage channel access."),
-                        AC_NONE, 20, cs_cmd_access, { .func = cs_help_access } };
+                        AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
 mowgli_patricia_t *cs_access_cmds;
 
@@ -58,6 +58,7 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	char *chan;
 	char *cmd;
 	command_t *c;
+	char buf[BUFSIZE];
 
 	if (parc < 2)
 	{
@@ -84,8 +85,12 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	parv[1] = chan;
-	command_exec(si->service, si, c, parc - 1, parv + 1);
+	if (parc > 2)
+		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
+	else
+		strlcpy(buf, chan, BUFSIZE);
+
+	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
 }
 
 /***********************************************************************************************/
