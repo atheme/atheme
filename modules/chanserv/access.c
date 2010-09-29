@@ -24,7 +24,12 @@ command_t cs_access = { "ACCESS", N_("Manage channel access."),
 static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_access_list = { "LIST", N_("List channel access entries."),
-                             AC_NONE, 3, cs_cmd_access_list, { .path = "cservice/access_list" } };
+                             AC_NONE, 1, cs_cmd_access_list, { .path = "cservice/access_list" } };
+
+static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_access_info = { "INFO", N_("Display information on an access list entry."),
+                             AC_NONE, 2, cs_cmd_access_info, { .path = "cservice/access_info" } };
 
 mowgli_patricia_t *cs_access_cmds;
 
@@ -35,6 +40,7 @@ void _modinit(module_t *m)
 	cs_access_cmds = mowgli_patricia_create(strcasecanon);
 
 	command_add(&cs_access_list, cs_access_cmds);
+	command_add(&cs_access_info, cs_access_cmds);
 }
 
 void _moddeinit()
@@ -276,6 +282,90 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "ACCESS:LIST: \2%s\2 (oper override)", mc->name);
 	else
 		logcommand(si, CMDLOG_GET, "ACCESS:LIST: \2%s\2", mc->name);
+}
+
+/*
+ * Syntax: ACCESS #channel INFO user
+ *
+ * Output:
+ *
+ * Access for nenolod in #atheme:
+ * Role       : Founder
+ * Flags      : aclview, ...
+ * Modified   : Aug 18 21:41:31 2005 (5 years, 6 weeks, 0 days, 05:57:21 ago)
+ * *** End of Info ***
+ */
+static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
+{
+	chanacs_t *ca;
+	myentity_t *mt;
+	mychan_t *mc;
+	const char *channel = parv[0];
+	const char *target = parv[1];
+	int operoverride = 0;
+	unsigned int i = 1;
+	const char *role;
+	struct tm tm;
+	char strfbuf[BUFSIZE];
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	{
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+	}
+
+	if (validhostmask(target))
+		ca = chanacs_find_host_literal(mc, target, 0);
+	else
+	{
+		if (!(mt = myentity_find(target)))
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			return;
+		}
+		target = mt->name;
+		ca = chanacs_find(mc, mt, 0);
+	}
+
+	if (ca == NULL)
+	{
+		command_success_nodata(si, _("No ACL entry for \2%s\2 in \2%s\2 was found."), target, channel);
+
+		if (operoverride)
+			logcommand(si, CMDLOG_ADMIN, "ACCESS:INFO: \2%s\2 on \2%s\2 (oper override)", mc->name, target);
+		else
+			logcommand(si, CMDLOG_GET, "ACCESS:INFO: \2%s\2 on \2%s\2", mc->name, target);
+
+		return;
+	}
+
+	role = get_role_name(mc, ca->level);
+
+	tm = *localtime(&ca->tmodified);
+	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
+	command_success_nodata(si, _("Role       : %s"), role);
+	command_success_nodata(si, _("Flags      : %s"), xflag_tostr(ca->level));
+	command_success_nodata(si, _("Modified   : %s (%s ago)"), strfbuf, time_ago(ca->tmodified));
+	command_success_nodata(si, _("*** \2End of Info\2 ***"));
+
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "ACCESS:INFO: \2%s\2 on \2%s\2 (oper override)", mc->name, target);
+	else
+		logcommand(si, CMDLOG_GET, "ACCESS:INFO: \2%s\2 on \2%s\2", mc->name, target);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
