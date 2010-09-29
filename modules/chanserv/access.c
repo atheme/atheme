@@ -364,7 +364,12 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
 	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
-	command_success_nodata(si, _("Role       : %s"), role);
+
+	if (ca->entity && strcasecmp(target, ca->entity->name))
+		command_success_nodata(si, _("Role       : %s (inherited from \2%s\2)"), role, ca->entity->name);
+	else
+		command_success_nodata(si, _("Role       : %s"), role);
+
 	command_success_nodata(si, _("Flags      : %s (%s)"), xflag_tostr(ca->level), bitmask_to_flags2(ca->level, 0));
 	command_success_nodata(si, _("Modified   : %s (%s ago)"), strfbuf, time_ago(ca->tmodified));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
