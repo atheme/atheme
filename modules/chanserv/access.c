@@ -41,6 +41,11 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_access_add =  { "ADD", N_("Display information on an access list entry."),
                              AC_NONE, 2, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
+static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_access_roles = { "ROLES", N_("List available roles."),
+                              AC_NONE, 1, cs_cmd_access_roles, { .path = "cservice/access_roles" } };
+
 mowgli_patricia_t *cs_access_cmds;
 
 void _modinit(module_t *m)
@@ -53,6 +58,7 @@ void _modinit(module_t *m)
 	command_add(&cs_access_info, cs_access_cmds);
 	command_add(&cs_access_del, cs_access_cmds);
 	command_add(&cs_access_add, cs_access_cmds);
+	command_add(&cs_access_roles, cs_access_cmds);
 }
 
 void _moddeinit()
@@ -231,6 +237,23 @@ static const char *get_role_name(mychan_t *mc, unsigned int level)
 		return role;
 
 	return get_template_name_fuzzy(mc, level);
+}
+
+static void list_netwide_roles(sourceinfo_t *si, mychan_t *mc)
+{
+	command_success_nodata(si, _("List of network-wide roles:"));
+
+	if (get_template_flags(mc, "SOP") == chansvs.ca_sop)
+		command_success_nodata(si, "%-20s: %s (%s)", "SOP", xflag_tostr(chansvs.ca_sop), bitmask_to_flags2(chansvs.ca_sop, 0));
+
+	if (get_template_flags(mc, "AOP") == chansvs.ca_aop)
+		command_success_nodata(si, "%-20s: %s (%s)", "AOP", xflag_tostr(chansvs.ca_aop), bitmask_to_flags2(chansvs.ca_aop, 0));
+
+	if (chansvs.ca_hop != chansvs.ca_vop && get_template_flags(mc, "HOP") == chansvs.ca_hop)
+		command_success_nodata(si, "%-20s: %s (%s)", "HOP", xflag_tostr(chansvs.ca_hop), bitmask_to_flags2(chansvs.ca_hop, 0));
+
+	if (get_template_flags(mc, "VOP") == chansvs.ca_vop)
+	        command_success_nodata(si, "%-20s: %s (%s)", "VOP", xflag_tostr(chansvs.ca_vop), bitmask_to_flags2(chansvs.ca_vop, 0));
 }
 
 /***********************************************************************************************/
@@ -539,6 +562,59 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
+}
+
+/*
+ * Syntax: ACCESS #channel ROLES
+ *
+ * Output:
+ *
+ * List of network-wide roles:
+ * SOP          : ...
+ * AOP          : ...
+ * HOP          : ...
+ * VOP          : ...
+ *
+ * List of channel-defined roles:
+ * Founder      : ...
+ */
+static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
+{
+	chanacs_t *ca;
+	mychan_t *mc;
+	const char *channel = parv[0];
+	const char *p, *q, *r;
+	metadata_t *md;
+	unsigned int i = 1;
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+
+	list_netwide_roles(si, mc);
+
+	md = metadata_find(mc, "private:templates");
+	if (md != NULL)
+	{
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("List of channel-defined roles:"));
+
+		p = md->value;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			command_success_nodata(si, "%-20s: %s (%s)", p, xflag_tostr(flags_to_bitmask(q + 1, 0)), q + 1);
+			p = r;
+		}
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
