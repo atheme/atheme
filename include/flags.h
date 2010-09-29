@@ -46,6 +46,7 @@ E bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
 
 E unsigned int xflag_lookup(const char *name);
 E unsigned int xflag_apply(unsigned int in, const char *name);
+E const char *xflag_tostr(unsigned int flags);
 
 #endif
 

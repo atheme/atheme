@@ -370,6 +370,30 @@ unsigned int xflag_apply(unsigned int in, const char *name)
 	return out;
 }
 
+const char *xflag_tostr(unsigned int flags)
+{
+	unsigned int i;
+	static char buf[BUFSIZE];
+
+	*buf = '\0';
+
+	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
+	{
+		if (chanacs_flags[i].name == NULL)
+			continue;
+
+		if (!(flags & chanacs_flags[i].value))
+			continue;
+
+		if (*buf != '\0')
+			strlcat(buf, ", ", sizeof buf);
+
+		strlcat(buf, chanacs_flags[i].name, sizeof buf);
+	}
+
+	return buf;
+}
+
 char *gflags_tostr(gflags_t *gflags, unsigned int flags)
 {
 	static char buf[257];
