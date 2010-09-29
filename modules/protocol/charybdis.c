@@ -57,6 +57,7 @@ struct cmode_ charybdis_mode_list[] = {
   { 'P', CMODE_PERM   },
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
+  { 'C', CMODE_NOCTCP },
   { '\0', 0 }
 };
 

@@ -3,7 +3,7 @@
  * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for charybdis-based ircd.
+ * This file contains protocol support for ircd-seven.
  *
  */
 
@@ -59,7 +59,6 @@ struct cmode_ seven_mode_list[] = {
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
   { 'M', CMODE_IMMUNE },
-  { 'C', CMODE_NOCTCP },
   { '\0', 0 }
 };
 

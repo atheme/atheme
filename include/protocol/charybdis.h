@@ -19,5 +19,6 @@
 #define CMODE_PERM      0x00020000      /* charybdis +P */
 #define CMODE_FTARGET   0x00040000      /* charybdis +F */
 #define CMODE_DISFWD    0x00080000      /* charybdis +Q */
+#define CMODE_NOCTCP    0x00100000      /* charybdis +C */
 
 #endif

@@ -9,7 +9,6 @@
 #ifndef IRCD_SEVEN_H
 #define IRCD_SEVEN_H
 
-#define CMODE_IMMUNE    0x00100000      /* seven +M */
-#define CMODE_NOCTCP    0x00200000      /* seven +C */
+#define CMODE_IMMUNE    0x00200000      /* seven +M */
 
 #endif
