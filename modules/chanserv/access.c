@@ -34,7 +34,12 @@ command_t cs_access_info = { "INFO", N_("Display information on an access list e
 static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_access_del =  { "DEL", N_("Display information on an access list entry."),
-                             AC_NONE, 2, cs_cmd_access_info, { .path = "cservice/access_del" } };
+                             AC_NONE, 2, cs_cmd_access_del, { .path = "cservice/access_del" } };
+
+static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_access_add =  { "ADD", N_("Display information on an access list entry."),
+                             AC_NONE, 2, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
 mowgli_patricia_t *cs_access_cmds;
 
@@ -46,6 +51,8 @@ void _modinit(module_t *m)
 
 	command_add(&cs_access_list, cs_access_cmds);
 	command_add(&cs_access_info, cs_access_cmds);
+	command_add(&cs_access_del, cs_access_cmds);
+	command_add(&cs_access_add, cs_access_cmds);
 }
 
 void _moddeinit()
@@ -462,6 +469,76 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 was removed from the \2%s\2 role in \2%s\2."), target, role, channel);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:DEL: \2%s\2 from \2%s\2", target, mc->name);
+}
+
+/*
+ * Syntax: ACCESS #channel ADD user role
+ *
+ * Output:
+ *
+ * nenolod was added with the Founder role in #atheme.
+ */
+static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
+{
+	chanacs_t *ca;
+	myentity_t *mt;
+	mychan_t *mc;
+	const char *channel = parv[0];
+	const char *target = parv[1];
+	unsigned int i = 1;
+	const char *role = parv[2];
+	struct tm tm;
+	char strfbuf[BUFSIZE];
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+
+	if (!target || !role)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS ADD");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS <#channel> ADD <account|hostmask> <role>"));
+		return;
+	}
+
+	/* allow a user to resign their access even without FLAGS access. this is
+	 * consistent with the other commands. --nenolod
+	 */
+	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+
+	if (validhostmask(target))
+		ca = chanacs_open(mc, NULL, target, true);
+	else
+	{
+		if (!(mt = myentity_find(target)))
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+			return;
+		}
+		target = mt->name;
+		ca = chanacs_open(mc, mt, NULL, true);
+	}
+
+	if (ca->level == 0 && chanacs_is_table_full(ca))
+	{
+		chanacs_close(ca);
+		command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+		return;
+	}
+
+	ca->level = get_template_flags(mc, role);
+	chanacs_close(ca);
+
+	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
+
+	logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
