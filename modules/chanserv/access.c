@@ -365,7 +365,8 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
 	command_success_nodata(si, _("Role       : %s"), role);
-	command_success_nodata(si, _("Flags      : %s"), xflag_tostr(ca->level));
+	command_success_nodata(si, _("Privileges : %s"), xflag_tostr(ca->level));
+	command_success_nodata(si, _("Flags      : %s"), bitmask_to_flags2(ca->level, 0));
 	command_success_nodata(si, _("Modified   : %s (%s ago)"), strfbuf, time_ago(ca->tmodified));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
