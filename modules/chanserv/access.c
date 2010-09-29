@@ -611,7 +611,7 @@ static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
 			if (q == NULL)
 				break;
 			r = strchr(q, ' ');
-			command_success_nodata(si, "%-20s: %s (%s)", p, xflag_tostr(flags_to_bitmask(q + 1, 0)), q + 1);
+			command_success_nodata(si, "%-20.*s: %s (%s)", (int)(q - p), p, xflag_tostr(flags_to_bitmask(q + 1, 0)), q + 1);
 			p = r;
 		}
 	}
