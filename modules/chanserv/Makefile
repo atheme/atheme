@@ -14,6 +14,7 @@ include ../../buildsys.module.mk
 
 SRCS =			\
 	main.c	\
+	access.c \
 	akick.c	\
 	ban.c		\
 	clear.c	\

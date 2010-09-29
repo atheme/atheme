@@ -241,6 +241,7 @@ loadmodule "modules/nickserv/vhost";
  * service, either NickServ or UserServ will do.
  *
  * Core components				modules/chanserv/main
+ * ACCESS command (simplified ACL editing)	modules/chanserv/access
  * AKICK command				modules/chanserv/akick
  * BAN/UNBAN commands				modules/chanserv/ban
  * UNBAN self only (load ban or this not both)	modules/chanserv/unban_self
