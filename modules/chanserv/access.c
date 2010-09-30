@@ -279,11 +279,13 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 		goto got_a_flag;
 	}
 
+	return NULL;
+
 got_a_flag:
 	strlcat(flagname, " + ", sizeof flagname);
 	strlcat(flagname, xflag_tostr(level & ~matchlev), sizeof flagname);
 
-	return NULL;
+	return flagname;
 }
 
 static const char *get_template_name(mychan_t *mc, unsigned int level)
