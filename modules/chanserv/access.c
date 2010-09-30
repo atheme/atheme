@@ -21,6 +21,12 @@ static void cs_help_access(sourceinfo_t *si, char *subcmd);
 command_t cs_access = { "ACCESS", N_("Manage channel access."),
                         AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
+static void cs_cmd_roles(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_help_roles(sourceinfo_t *si, char *subcmd);
+
+command_t cs_roles =  { "ROLES", N_("Manage channel roles."),
+                        AC_NONE, 3, cs_cmd_roles, { .func = cs_help_roles } };
+
 static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_access_list = { "LIST", N_("List channel access entries."),
@@ -41,35 +47,43 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_access_add =  { "ADD", N_("Display information on an access list entry."),
                              AC_NONE, 3, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
-static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_roles_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_access_roles = { "ROLES", N_("List available roles."),
-                              AC_NONE, 1, cs_cmd_access_roles, { .path = "cservice/access_roles" } };
+command_t cs_roles_list = { "ROLES", N_("List available roles."),
+                            AC_NONE, 1, cs_cmd_roles_list, { .path = "cservice/roles_list" } };
 
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_access_set = { "SET", N_("Set permissions on roles."),
-                              AC_NONE, 20, cs_cmd_access_set, { .path = "cservice/access_set" } };
+command_t cs_roles_add =  { "ADD", N_("Add a role."),
+                            AC_NONE, 20, cs_cmd_roles_add, { .path = "cservice/roles_add" } };
+
+command_t cs_roles_set =  { "SET", N_("Change flags on a role."),
+                            AC_NONE, 20, cs_cmd_roles_add, { .path = "cservice/roles_add" } };
 
 mowgli_patricia_t *cs_access_cmds;
+mowgli_patricia_t *cs_roles_cmds;
 
 void _modinit(module_t *m)
 {
 	service_named_bind_command("chanserv", &cs_access);
+	service_named_bind_command("chanserv", &cs_roles);
 
 	cs_access_cmds = mowgli_patricia_create(strcasecanon);
+	cs_roles_cmds  = mowgli_patricia_create(strcasecanon);
 
 	command_add(&cs_access_list, cs_access_cmds);
 	command_add(&cs_access_info, cs_access_cmds);
 	command_add(&cs_access_del, cs_access_cmds);
 	command_add(&cs_access_add, cs_access_cmds);
-	command_add(&cs_access_roles, cs_access_cmds);
-	command_add(&cs_access_set, cs_access_cmds);
+
+	command_add(&cs_roles_list, cs_roles_cmds);
+	command_add(&cs_roles_set, cs_roles_cmds);
 }
 
 void _moddeinit()
 {
 	service_named_unbind_command("chanserv", &cs_access);
+	service_named_unbind_command("chanserv", &cs_roles);
 
 	mowgli_patricia_destroy(cs_access_cmds, NULL, NULL);
 }
@@ -88,6 +102,22 @@ static void cs_help_access(sourceinfo_t *si, char *subcmd)
 	}
 	else
 		help_display(si, si->service, subcmd, cs_access_cmds);
+}
+
+static void cs_help_roles(sourceinfo_t *si, char *subcmd)
+{
+	if (!subcmd)
+	{
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.me->disp);
+		command_success_nodata(si, _("Help for \2ROLES\2:"));
+		command_success_nodata(si, " ");
+		command_help(si, cs_roles_cmds);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("For more information, use \2/msg %s HELP ACCESS \37command\37\2."), chansvs.me->disp);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+	}
+	else
+		help_display(si, si->service, subcmd, cs_roles_cmds);
 }
 
 static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
@@ -128,6 +158,46 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		strlcpy(buf, chan, BUFSIZE);
 
 	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
+}
+
+static void cs_cmd_roles(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *chan;
+	char *cmd;
+	command_t *c;
+	char buf[BUFSIZE];
+
+	if (parc < 2)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLES");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLES <#channel> <command> [parameters]"));
+		return;
+	}
+	
+	if (parv[0][0] == '#')
+		chan = parv[0], cmd = parv[1];
+	else if (parv[1][0] == '#')
+		cmd = parv[0], chan = parv[1];
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ROLES");
+		command_fail(si, fault_badparams, _("Syntax: ROLES <#channel> <command> [parameters]"));
+		return;
+	}
+
+	c = command_find(cs_roles_cmds, cmd);
+	if (c == NULL)
+	{
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
+		return;
+	}
+
+	if (parc > 2)
+		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
+	else
+		strlcpy(buf, chan, BUFSIZE);
+
+	command_exec_split(si->service, si, c->name, buf, cs_roles_cmds);
 }
 
 /***********************************************************************************************/
@@ -699,7 +769,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
  * List of channel-defined roles:
  * Founder      : ...
  */
-static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_roles_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -743,7 +813,7 @@ static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
  *
  * Flags for role channel-helper were changed to: ...
  */
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *channel = parv[0];
