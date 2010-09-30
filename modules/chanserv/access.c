@@ -912,7 +912,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /*
- * Syntax: ACCESS #channel ROLES
+ * Syntax: ROLES #channel LIST
  *
  * Output:
  *
@@ -968,11 +968,11 @@ static void cs_cmd_roles_list(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /*
- * Syntax: ACCESS #channel SET role [flags-changes]
+ * Syntax: ROLES #channel ADD <role> [flags-changes]
  *
  * Output:
  *
- * Flags for role channel-helper were changed to: ...
+ * Creates a new role with the given flags.
  */
 static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[])
 {
