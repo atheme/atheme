@@ -987,6 +987,13 @@ static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
+	
+	if (!role)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLES ADD");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLES <#channel> ADD <role>"));
+		return;
+	}
 
 	restrictflags = chanacs_source_flags(mc, si);
 	oldflags = get_template_flags(mc, role);
