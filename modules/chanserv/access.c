@@ -80,6 +80,7 @@ void _modinit(module_t *m)
 	command_add(&cs_access_info, cs_access_cmds);
 	command_add(&cs_access_del, cs_access_cmds);
 	command_add(&cs_access_add, cs_access_cmds);
+	command_add(&cs_access_set, cs_access_cmds);
 
 	command_add(&cs_roles_list, cs_roles_cmds);
 	command_add(&cs_roles_set, cs_roles_cmds);
