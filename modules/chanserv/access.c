@@ -950,13 +950,18 @@ static void cs_cmd_roles_list(sourceinfo_t *si, int parc, char *parv[])
 		p = md->value;
 		while (p != NULL)
 		{
+			char flagstr[BUFSIZE];
+
 			while (*p == ' ')
 				p++;
 			q = strchr(p, '=');
 			if (q == NULL)
 				break;
 			r = strchr(q, ' ');
-			command_success_nodata(si, "%-20.*s: %s (%s)", (int)(q - p), p, xflag_tostr(flags_to_bitmask(q + 1, 0)), q + 1);
+
+			snprintf(flagstr, BUFSIZE, "%.*s", (int)(r - (q + 1)), q + 1);
+			command_success_nodata(si, "%-20.*s: %s (%s)", (int)(q - p), p, xflag_tostr(flags_to_bitmask(flagstr, 0)), flagstr);
+
 			p = r;
 		}
 	}
