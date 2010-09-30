@@ -208,6 +208,19 @@ static void cs_cmd_roles(sourceinfo_t *si, int parc, char *parv[])
 
 /***********************************************************************************************/
 
+static inline unsigned int count_bits(unsigned int bits)
+{
+	unsigned int i = 1, count = 0;
+
+	for (i = 1; i < sizeof(bits) * 8; i++)
+	{
+		if (bits & (1 << i))
+			count++;
+	}
+
+	return count;
+}
+
 static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 {
 	metadata_t *md;
@@ -215,7 +228,7 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 	char *s;
 	char ss[40];
 	static char flagname[400];
-	unsigned int matchlev;
+	unsigned int matchlev, matchbits, matchbits2;
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
@@ -238,54 +251,85 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 			}
 
 			matchlev = flags_to_bitmask(ss, 0);
-			if ((level & matchlev) == matchlev)
+			if ((level & matchlev) == matchlev || (matchlev & level) == level)
 			{
+				if (matchbits  < count_bits(level & ~matchlev) &&
+				    matchbits2 < count_bits(matchlev & ~level))
+					continue;
+					
 				strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
 				if (s != NULL)
 					*s = '\0';
-				goto got_a_flag;
+
+				matchbits  = count_bits(level & ~matchlev);
+				matchbits2 = count_bits(matchlev & ~level);
 			}
 			p = r;
 		}
 	}
 
 	matchlev = get_template_flags(mc, "SOP");
-	if ((level & matchlev) == matchlev)
+	if ((level & matchlev) == matchlev || (matchlev & level) == level)
 	{
-		strlcpy(flagname, "SOP", sizeof flagname);
-		goto got_a_flag;
+		if (matchbits  > count_bits(level & ~matchlev) &&
+		    matchbits2 > count_bits(matchlev & ~level))
+		{
+			strlcpy(flagname, "SOP", sizeof flagname);
+
+			matchbits  = count_bits(level & ~matchlev);
+			matchbits2 = count_bits(matchlev & ~level);
+		}			
 	}
 
 	matchlev = get_template_flags(mc, "AOP");
-	if ((level & matchlev) == matchlev)
+	if ((level & matchlev) == matchlev || (matchlev & level) == level)
 	{
-		strlcpy(flagname, "AOP", sizeof flagname);
-		goto got_a_flag;
+		if (matchbits  > count_bits(level & ~matchlev) &&
+		    matchbits2 > count_bits(matchlev & ~level))
+		{
+			strlcpy(flagname, "AOP", sizeof flagname);
+
+			matchbits  = count_bits(level & ~matchlev);
+			matchbits2 = count_bits(matchlev & ~level);
+		}			
 	}
 
 	/* if vop==hop, prefer vop */
 	matchlev = get_template_flags(mc, "VOP");
-	if ((level & matchlev) == matchlev)
+	if ((level & matchlev) == matchlev || (matchlev & level) == level)
 	{
-		strlcpy(flagname, "VOP", sizeof flagname);
-		goto got_a_flag;
+		if (matchbits  > count_bits(level & ~matchlev) &&
+		    matchbits2 > count_bits(matchlev & ~level))
+		{
+			strlcpy(flagname, "VOP", sizeof flagname);
+
+			matchbits  = count_bits(level & ~matchlev);
+			matchbits2 = count_bits(matchlev & ~level);
+		}			
 	}
 
 	matchlev = get_template_flags(mc, "HOP");
 	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev) == matchlev))
 	{
-		strlcpy(flagname, "VOP", sizeof flagname);
-		goto got_a_flag;
+		if (matchbits  < count_bits(level & ~matchlev) &&
+		    matchbits2 < count_bits(matchlev & ~level))
+		{
+			strlcpy(flagname, "HOP", sizeof flagname);
+
+			matchbits  = count_bits(level & ~matchlev);
+			matchbits2 = count_bits(matchlev & ~level);
+		}			
 	}
 
+	if (matchbits > matchbits2)
+		strlcat(flagname, "-", sizeof flagname);
+	else
+		strlcat(flagname, "+", sizeof flagname);
+
+//	strlcat(flagname, xflag_tostr(level & ~matchlev), sizeof flagname);
+
 	return NULL;
-
-got_a_flag:
-	strlcat(flagname, " + ", sizeof flagname);
-	strlcat(flagname, xflag_tostr(level & ~matchlev), sizeof flagname);
-
-	return flagname;
 }
 
 static const char *get_template_name(mychan_t *mc, unsigned int level)
