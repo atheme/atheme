@@ -46,6 +46,11 @@ static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_access_roles = { "ROLES", N_("List available roles."),
                               AC_NONE, 1, cs_cmd_access_roles, { .path = "cservice/access_roles" } };
 
+static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_access_set = { "SET", N_("Set permissions on roles."),
+                              AC_NONE, 20, cs_cmd_access_set, { .path = "cservice/access_set" } };
+
 mowgli_patricia_t *cs_access_cmds;
 
 void _modinit(module_t *m)
@@ -59,6 +64,7 @@ void _modinit(module_t *m)
 	command_add(&cs_access_del, cs_access_cmds);
 	command_add(&cs_access_add, cs_access_cmds);
 	command_add(&cs_access_roles, cs_access_cmds);
+	command_add(&cs_access_set, cs_access_cmds);
 }
 
 void _moddeinit()
@@ -254,6 +260,128 @@ static void list_netwide_roles(sourceinfo_t *si, mychan_t *mc)
 
 	if (get_template_flags(mc, "VOP") == chansvs.ca_vop)
 	        command_success_nodata(si, "%-20s: %s (%s)", "VOP", xflag_tostr(chansvs.ca_vop), bitmask_to_flags2(chansvs.ca_vop, 0));
+}
+
+/*
+ * Update a role entry and synchronize the changes with the access list.
+ */
+static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, unsigned int flags)
+{
+	metadata_t *md;
+	int changechanacs = 1;
+	size_t l;
+	char *p, *q, *r;
+	char ss[40], newstr[400];
+	bool found, denied;
+	unsigned int oldflags;
+	char *flagstr;
+	node_t *n, *tn;
+	chanacs_t *ca;
+	int changes = 0;
+
+	flagstr = bitmask_to_flags2(flags, 0);
+	oldflags = get_template_flags(mc, role);
+
+	md = metadata_find(mc, "private:templates");
+	if (md != NULL)
+	{
+		p = md->value;
+		strlcpy(newstr, p, sizeof newstr);
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			if (r != NULL && r < q)
+				break;
+			strlcpy(ss, q, sizeof ss);
+			if (r != NULL && r - q < (int)(sizeof ss - 1))
+			{
+				ss[r - q] = '\0';
+			}
+			if ((size_t)(q - p) == l && !strncasecmp(role, p, l))
+			{
+				found = true;
+
+				if (flags == 0)
+				{
+					if (p == md->value)
+						strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
+					else
+					{
+						/* otherwise, zap the space before it */
+						p--;
+						strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
+					}
+				}
+				else
+					snprintf(newstr + (p - md->value), sizeof newstr - (p - md->value), "%s=%s%s", role, flagstr, r != NULL ? r : "");
+				break;
+			}
+			p = r;
+		}
+	}
+
+	if (!found)
+	{
+		if (md != NULL)
+			snprintf(newstr + strlen(newstr), sizeof newstr - strlen(newstr), " %s=%s", role, flagstr);
+		else
+			snprintf(newstr, sizeof newstr, "%s=%s", role, flagstr);
+	}
+
+	if (oldflags == 0 && has_ctrl_chars(role))
+	{
+		command_fail(si, fault_badparams, _("Invalid template name \2%s\2."), role);
+		return;
+	}
+
+	if (strlen(newstr) >= 300)
+	{
+		command_fail(si, fault_toomany, _("Sorry, too many templates on \2%s\2."), mc->name);
+		return;
+	}
+
+	if (newstr[0] == '\0')
+		metadata_delete(mc, "private:templates");
+	else
+		metadata_add(mc, "private:templates", newstr);
+
+	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->level != oldflags)
+			continue;
+
+		changes++;
+		chanacs_modify_simple(ca, flags, ~flags);
+		chanacs_close(ca);
+	}
+
+	logcommand(si, CMDLOG_SET, "ACCESS:SET: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
+	command_success_nodata(si, _("%d access entries updated accordingly."), changes);
+}
+
+static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], unsigned int restrictflags)
+{
+	unsigned int i, out, flag;
+
+	out = in;
+	for (i = 0; i < parc; i++)
+	{
+#ifdef NOTYET
+		flag = xflag_apply(0, parv[i]);
+		if (flag & restrictflags)
+			continue;
+#endif
+
+		out = xflag_apply(out, parv[i]);
+	}
+
+	return out;
 }
 
 /***********************************************************************************************/
@@ -615,6 +743,35 @@ static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
 			p = r;
 		}
 	}
+}
+
+/*
+ * Syntax: ACCESS #channel SET role [flags-changes]
+ *
+ * Output:
+ *
+ * Flags for role channel-helper were changed to: ...
+ */
+static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+	const char *channel = parv[0];
+	const char *role = parv[1];
+	unsigned int oldflags, newflags, restrictflags;
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+
+	restrictflags = chanacs_source_flags(mc, si);
+	oldflags = get_template_flags(mc, role);
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+
+	command_success_nodata(si, _("Flags for role \2%s\2 were changed to: \2%s\2."), role, xflag_tostr(newflags));
+	update_role_entry(si, mc, role, newflags);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
