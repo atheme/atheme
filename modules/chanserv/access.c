@@ -268,11 +268,10 @@ static void list_netwide_roles(sourceinfo_t *si, mychan_t *mc)
 static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, unsigned int flags)
 {
 	metadata_t *md;
-	int changechanacs = 1;
 	size_t l;
 	char *p, *q, *r;
 	char ss[40], newstr[400];
-	bool found, denied;
+	bool found = false;
 	unsigned int oldflags;
 	char *flagstr;
 	node_t *n, *tn;
@@ -281,6 +280,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 
 	flagstr = bitmask_to_flags2(flags, 0);
 	oldflags = get_template_flags(mc, role);
+	l = strlen(role);
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
@@ -466,7 +466,6 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	int operoverride = 0;
-	unsigned int i = 1;
 	const char *role;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
@@ -557,10 +556,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
-	unsigned int i = 1;
 	const char *role;
-	struct tm tm;
-	char strfbuf[BUFSIZE];
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -636,10 +632,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
-	unsigned int i = 1;
 	const char *role = parv[2];
-	struct tm tm;
-	char strfbuf[BUFSIZE];
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -708,12 +701,10 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
  */
 static void cs_cmd_access_roles(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
 	mychan_t *mc;
 	const char *channel = parv[0];
 	const char *p, *q, *r;
 	metadata_t *md;
-	unsigned int i = 1;
 
 	mc = mychan_find(channel);
 	if (!mc)
