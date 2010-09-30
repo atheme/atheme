@@ -238,61 +238,50 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 			}
 
 			matchlev = flags_to_bitmask(ss, 0);
-			if (level & matchlev)
+			if ((level & matchlev) == matchlev)
 			{
 				strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
 				if (s != NULL)
-				{
-					if ((level & matchlev) == matchlev)
-						*s = '+';
-					else if ((matchlev & level) == level)
-						*s = '-';
-
-					*(s + 1) = '\0';
-				}
-				return flagname;
+					*s = '\0';
+				goto got_a_flag;
 			}
 			p = r;
 		}
 	}
 
 	matchlev = get_template_flags(mc, "SOP");
-	if (level & matchlev)
+	if ((level & matchlev) == matchlev)
 	{
-		if ((level & matchlev) == matchlev)
-			return "SOP+";
-		else if ((matchlev & level) == level)
-			return "SOP-";
+		strlcpy(flagname, "SOP", sizeof flagname);
+		goto got_a_flag;
 	}
 
 	matchlev = get_template_flags(mc, "AOP");
-	if (level & matchlev)
+	if ((level & matchlev) == matchlev)
 	{
-		if ((level & matchlev) == matchlev)
-			return "AOP+";
-		else if ((matchlev & level) == level)
-			return "AOP-";
+		strlcpy(flagname, "AOP", sizeof flagname);
+		goto got_a_flag;
 	}
 
 	/* if vop==hop, prefer vop */
 	matchlev = get_template_flags(mc, "VOP");
-	if (level & matchlev)
+	if ((level & matchlev) == matchlev)
 	{
-		if ((level & matchlev) == matchlev)
-			return "VOP+";
-		else if ((matchlev & level) == level)
-			return "VOP-";
+		strlcpy(flagname, "VOP", sizeof flagname);
+		goto got_a_flag;
 	}
 
 	matchlev = get_template_flags(mc, "HOP");
-	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev)))
+	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev) == matchlev))
 	{
-		if ((level & matchlev) == matchlev)
-			return "HOP+";
-		else if ((matchlev & level) == level)
-			return "HOP-";
+		strlcpy(flagname, "VOP", sizeof flagname);
+		goto got_a_flag;
 	}
+
+got_a_flag:
+	strlcat(flagname, " + ", sizeof flagname);
+	strlcat(flagname, xflag_tostr(level & ~matchlev), sizeof flagname);
 
 	return NULL;
 }
