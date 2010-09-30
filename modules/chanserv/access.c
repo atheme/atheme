@@ -54,7 +54,7 @@ command_t cs_access_set =  { "SET", N_("Change an access list entry."),
 
 static void cs_cmd_roles_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_roles_list = { "ROLES", N_("List available roles."),
+command_t cs_roles_list = { "LIST", N_("List available roles."),
                             AC_NONE, 1, cs_cmd_roles_list, { .path = "cservice/roles_list" } };
 
 static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[]);
@@ -83,6 +83,7 @@ void _modinit(module_t *m)
 	command_add(&cs_access_set, cs_access_cmds);
 
 	command_add(&cs_roles_list, cs_roles_cmds);
+	command_add(&cs_roles_add, cs_roles_cmds);
 	command_add(&cs_roles_set, cs_roles_cmds);
 }
 
@@ -322,7 +323,7 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 		}			
 	}
 
-	if (matchbits > matchbits2)
+	if (matchbits < matchbits2)
 		strlcat(flagname, "-", sizeof flagname);
 	else
 		strlcat(flagname, "+", sizeof flagname);
