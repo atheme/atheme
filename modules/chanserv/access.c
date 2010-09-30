@@ -34,7 +34,7 @@ command_t cs_access_info = { "INFO", N_("Display information on an access list e
 static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_access_del =  { "DEL", N_("Display information on an access list entry."),
-                             AC_NONE, 3, cs_cmd_access_del, { .path = "cservice/access_del" } };
+                             AC_NONE, 2, cs_cmd_access_del, { .path = "cservice/access_del" } };
 
 static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
 
