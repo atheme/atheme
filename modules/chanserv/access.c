@@ -254,8 +254,8 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 			matchlev = flags_to_bitmask(ss, 0);
 			if ((level & matchlev) == matchlev || (matchlev & level) == level)
 			{
-				if (matchbits  < count_bits(level & ~matchlev) &&
-				    matchbits2 < count_bits(matchlev & ~level))
+				if (matchbits  > count_bits(level & ~matchlev) &&
+				    matchbits2 > count_bits(matchlev & ~level))
 					continue;
 					
 				strlcpy(flagname, p, sizeof flagname);
@@ -313,8 +313,8 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 	matchlev = get_template_flags(mc, "HOP");
 	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev) == matchlev))
 	{
-		if (matchbits  < count_bits(level & ~matchlev) &&
-		    matchbits2 < count_bits(matchlev & ~level))
+		if (matchbits  > count_bits(level & ~matchlev) &&
+		    matchbits2 > count_bits(matchlev & ~level))
 		{
 			strlcpy(flagname, "HOP", sizeof flagname);
 
