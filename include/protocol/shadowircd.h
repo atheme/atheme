@@ -12,8 +12,7 @@
 
 /* Extended channel modes will eventually go here. */
 /* Note that these are involved in atheme.db file format */
-#define CMODE_IMMUNE    0x00100000      /* shadowircd +M */
-#define CMODE_NOCTCP    0x00200000      /* shadowircd +C */
+#define CMODE_IMMUNE    0x00200000      /* shadowircd +M */
 #define CMODE_ADMINONLY 0x00400000      /* shadowircd +A */
 #define CMODE_OPERONLY  0x00800000      /* shadowircd +O */
 #define CMODE_SSLONLY   0x01000000      /* shadowircd +Z */
