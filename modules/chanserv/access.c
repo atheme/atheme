@@ -214,6 +214,7 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 	char *s;
 	char ss[40];
 	static char flagname[400];
+	unsigned int matchlev;
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
@@ -234,28 +235,64 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 			{
 				ss[r - q] = '\0';
 			}
-			if ((level & flags_to_bitmask(ss, 0)) == flags_to_bitmask(ss, 0))
+
+			matchlev = flags_to_bitmask(ss, 0);
+			if (level & matchlev)
 			{
 				strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
 				if (s != NULL)
-					*s = '\0';
+				{
+					if ((level & matchlev) == matchlev)
+						*s = '+';
+					else if ((matchlev & level) == level)
+						*s = '-';
+
+					*(s + 1) = '\0';
+				}
 				return flagname;
 			}
 			p = r;
 		}
 	}
 
-	if ((level & chansvs.ca_sop) == chansvs.ca_sop || (level & get_template_flags(mc, "SOP")) == get_template_flags(mc, "SOP"))
-		return "SOP";
-	if ((level & chansvs.ca_aop) == chansvs.ca_aop || (level & get_template_flags(mc, "AOP")) == get_template_flags(mc, "AOP"))
-		return "AOP";
+	matchlev = get_template_flags(mc, "SOP");
+	if (level & matchlev)
+	{
+		if ((level & matchlev) == matchlev)
+			return "SOP+";
+		else if ((matchlev & level) == level)
+			return "SOP-";
+	}
+
+	matchlev = get_template_flags(mc, "AOP");
+	if (level & matchlev)
+	{
+		if ((level & matchlev) == matchlev)
+			return "AOP+";
+		else if ((matchlev & level) == level)
+			return "AOP-";
+	}
+
 	/* if vop==hop, prefer vop */
-	if ((level & chansvs.ca_vop) == chansvs.ca_vop || (level & get_template_flags(mc, "VOP")) == get_template_flags(mc, "VOP"))
-		return "VOP";
-	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop ||
-			(level & get_template_flags(mc, "HOP")) == get_template_flags(mc, "HOP")))
-		return "HOP";
+	matchlev = get_template_flags(mc, "VOP");
+	if (level & matchlev)
+	{
+		if ((level & matchlev) == matchlev)
+			return "VOP+";
+		else if ((matchlev & level) == level)
+			return "VOP-";
+	}
+
+	matchlev = get_template_flags(mc, "HOP");
+	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev))
+	{
+		if ((level & matchlev) == matchlev)
+			return "HOP+";
+		else if ((matchlev & level) == level)
+			return "HOP-";
+	}
+
 	return NULL;
 }
 
