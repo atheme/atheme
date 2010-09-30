@@ -285,7 +285,7 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 	}
 
 	matchlev = get_template_flags(mc, "HOP");
-	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev))
+	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev)))
 	{
 		if ((level & matchlev) == matchlev)
 			return "HOP+";
