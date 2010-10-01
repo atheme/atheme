@@ -516,12 +516,14 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 
 static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], unsigned int restrictflags)
 {
-	unsigned int i, out, flag;
+	unsigned int out;
+	int i;
 
 	out = in;
 	for (i = 0; i < parc; i++)
 	{
 #ifdef NOTYET
+		unsigned int flag;
 		flag = xflag_apply(0, parv[i]);
 		if (flag & restrictflags)
 			continue;
