@@ -6,14 +6,14 @@ Current criteria are:
 CHANNEL    - All users in a given channel.
 SERVER     - All users on a given server.
 REGEXP     - All users matching a given regex pattern. This is very similar to
-		     RMATCH/RWATCH.
+             RMATCH/RWATCH.
 NICKAGE    - How long (in seconds) a user has been connected to the network.
 NUMCHAN    - Number of channels a user is in.
 IDENTIFIED - Identified status of users matching a specific criteria.
 
 Current actions are:
 PRINT - Prints the nick!user@host and some other information about every user
-		matching the given criteria.
+        matching the given criteria.
 COUNT - Gives the number of users who match the given criteria.
 KILL  - KILLs all users matching the given criteria.
 AKILL - AKILLs all users matching the given criteria.
@@ -21,10 +21,10 @@ AKILL - AKILLs all users matching the given criteria.
 Syntax: TRACE <action> <parameters>
 
 Examples:
-	/msg &nick& TRACE print channel #foo
-	/msg &nick& TRACE print server irc.dereferenced.org
-	/msg &nick& TRACE kill "reason" server alfred.staticbox.net
-	/msg &nick& TRACE kill "three word reason" channel #test nickage <60
-	/msg &nick& TRACE print numchan 0 nickage <180
-	/msg &nick& TRACE count numchan >10 identified no
-	/msg &nick& TRACE akill !P "join a channel next time" numchan 0
+    /msg &nick& TRACE print channel #foo
+    /msg &nick& TRACE print server irc.dereferenced.org
+    /msg &nick& TRACE kill "reason" server alfred.staticbox.net
+    /msg &nick& TRACE kill "three word reason" channel #test nickage <60
+    /msg &nick& TRACE print numchan 0 nickage <180
+    /msg &nick& TRACE count numchan >10 identified no
+    /msg &nick& TRACE akill !P "join a channel next time" numchan 0
