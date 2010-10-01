@@ -63,7 +63,7 @@ command_t cs_roles_add =  { "ADD", N_("Add a role."),
                             AC_NONE, 20, cs_cmd_roles_add, { .path = "cservice/roles_add" } };
 
 command_t cs_roles_set =  { "SET", N_("Change flags on a role."),
-                            AC_NONE, 20, cs_cmd_roles_add, { .path = "cservice/roles_add" } };
+                            AC_NONE, 20, cs_cmd_roles_add, { .path = "cservice/roles_set" } };
 
 mowgli_patricia_t *cs_access_cmds;
 mowgli_patricia_t *cs_roles_cmds;
@@ -910,7 +910,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 
 	chanacs_close(ca);
 
-	logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
+	logcommand(si, CMDLOG_SET, "ACCESS:SET: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
 }
 
 /*
@@ -992,8 +992,8 @@ static void cs_cmd_roles_add(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (!role)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLES ADD");
-		command_fail(si, fault_needmoreparams, _("Syntax: ROLES <#channel> ADD <role>"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLES ADD|SET");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLES <#channel> ADD|SET <role> [flags]"));
 		return;
 	}
 
