@@ -589,6 +589,10 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 		const char *role;
 
 		ca = n->data;
+
+		if (ca->level == CA_AKICK)
+			continue;
+
 		role = get_role_name(mc, ca->level);
 
 		command_success_nodata(si, _("%-5d %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
