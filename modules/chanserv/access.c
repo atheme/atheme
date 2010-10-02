@@ -631,6 +631,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	const char *role;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
+	metadata_t *md;
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -689,7 +690,14 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
 
-	if (ca->entity && strcasecmp(target, ca->entity->name))
+	if (ca->level == CA_AKICK)
+	{
+		md = metadata_find(ca, "reason");
+		if (md != NULL)
+			command_success_nodata(si, _("Ban reason : %s"),
+					md->value);
+	}
+	else if (ca->entity && strcasecmp(target, ca->entity->name))
 		command_success_nodata(si, _("Role       : %s (inherited from \2%s\2)"), role, ca->entity->name);
 	else
 		command_success_nodata(si, _("Role       : %s"), role);
