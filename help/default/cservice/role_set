@@ -1,0 +1,14 @@
+Help for ROLE SET:
+
+ROLE SET allows you to modify the flags of a role that
+already exists. All users in the given role will recieve
+the effects of the changes. Multiple flags should be
+seperated by a space and have the modifier (+ or -) before
+each flag.
+
+Syntax: ROLE <#channel> SET <role> <flags>
+
+Examples:
+    /msg &nick& ROLE #atheme SET channel-ops +acl-change +set +recover
+    /msg &nick& ROLE #atheme SET helpers +invite
+    /msg &nick& ROLE #foo SET helpers -topic -invite

@@ -1,0 +1,9 @@
+Help for ROLE LIST:
+
+ROLE LIST lists all channel-specific and network-wide roles
+and the flags that each role has.
+
+Syntax: ROLE <#channel> LIST
+
+Examples:
+    /msg &nick& ROLE #baz LIST

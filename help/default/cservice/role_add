@@ -1,0 +1,9 @@
+Help for ROLE ADD:
+
+ROLE ADD will create a channel role with the given
+flags. Multiple flags should be seperated by a space.
+
+Syntax: ROLE <#channel> ADD <role> [flags]
+
+Examples:
+    /msg &nick& ROLE #atheme ADD helpers topic autovoice

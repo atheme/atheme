@@ -1,0 +1,9 @@
+Help for ACCESS ADD:
+
+ACCESS ADD will assign the given user to the given
+channel role.
+
+Syntax: ACCESS <#channel> ADD <user> <role>
+
+Examples:
+    /msg &nick& ACCESS #atheme ADD stitch helpers
