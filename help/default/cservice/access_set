@@ -3,7 +3,7 @@ Help for ACCESS SET:
 ACCESS SET allows you to set specific flags on a user
 above or below a certain role or lets you change the
 role a user is in. Multiple flags should be seperated
-by a space and have the modifiere (+ or -) in front
+by a space and have the modifier (+ or -) in front
 of each flag.
 
 Syntax: ACCESS <#channel> SET <user> <role|flags>
