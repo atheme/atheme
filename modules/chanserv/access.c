@@ -65,6 +65,11 @@ command_t cs_role_add =  { "ADD", N_("Add a role."),
 command_t cs_role_set =  { "SET", N_("Change flags on a role."),
                             AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_set" } };
 
+static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_role_del =  { "DEL", N_("Delete a role."),
+                            AC_NONE, 2, cs_cmd_role_del, { .path = "cservice/role_del" } };
+
 mowgli_patricia_t *cs_access_cmds;
 mowgli_patricia_t *cs_role_cmds;
 
@@ -85,6 +90,7 @@ void _modinit(module_t *m)
 	command_add(&cs_role_list, cs_role_cmds);
 	command_add(&cs_role_add, cs_role_cmds);
 	command_add(&cs_role_set, cs_role_cmds);
+	command_add(&cs_role_del, cs_role_cmds);
 }
 
 void _moddeinit()
@@ -1010,6 +1016,43 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Flags for role \2%s\2 were changed to: \2%s\2."), role, xflag_tostr(newflags));
 	update_role_entry(si, mc, role, newflags);
+}
+
+/*
+ * Syntax: ROLE #channel DEL <role>
+ *
+ * Output:
+ *
+ * Deletes a role.
+ */
+static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+	const char *channel = parv[0];
+	const char *role = parv[1];
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+	
+	if (!role)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE DEL");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> DEL <role>"));
+		return;
+	}
+	
+	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+
+	command_success_nodata(si, _("Role \2%s\2 has been deleted."), role);
+	update_role_entry(si, mc, role, 0);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
