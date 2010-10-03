@@ -74,3 +74,4 @@ user_rename        hook_user_rename_t *
 myuser_delete      myuser_t *
 metadata_change    hook_metadata_change_t *
 channel_pick_successor	hook_channel_succession_req_t *
+grant_channel_access	user_t *

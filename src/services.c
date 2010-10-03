@@ -662,6 +662,8 @@ void grant_channel_access(user_t *u, myuser_t *mu)
 			}
 		}
 	}
+
+	hook_call_grant_channel_access(u);
 }
 
 void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
