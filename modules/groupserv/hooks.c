@@ -23,14 +23,14 @@ static void mygroup_expire(void *unused)
 
 static void grant_channel_access_hook(user_t *u)
 {
-	node_t *n;
+	node_t *n, *tn;
 	list_t *l;
 
 	return_if_fail(u->myuser != NULL);
 
 	l = myuser_get_membership_list(u->myuser);
 
-	LIST_FOREACH(n, l->head)
+	LIST_FOREACH_SAFE(n, tn, l->head)
 	{
 		groupacs_t *ga = n->data;
 
