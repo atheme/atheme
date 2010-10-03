@@ -21,6 +21,84 @@ static void mygroup_expire(void *unused)
 	}
 }
 
+static void grant_channel_access_hook(user_t *u)
+{
+	node_t *n;
+	list_t *l;
+
+	return_if_fail(u->myuser != NULL);
+
+	l = myuser_get_membership_list(u->myuser);
+
+	LIST_FOREACH(n, l->head)
+	{
+		groupacs_t *ga = n->data;
+
+		LIST_FOREACH(n, entity(ga->mg)->chanacs.head)
+		{
+			chanacs_t *ca;
+			chanuser_t *cu;
+
+			ca = (chanacs_t *)n->data;
+
+			cu = chanuser_find(ca->mychan->chan, u);
+			if (cu && chansvs.me != NULL)
+			{
+				if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
+				{
+					/* Stay on channel if this would empty it -- jilles */
+					if (ca->mychan->chan->nummembers <= (ca->mychan->flags & MC_GUARD ? 2 : 1))
+					{
+						ca->mychan->flags |= MC_INHABIT;
+						if (!(ca->mychan->flags & MC_GUARD))
+							join(cu->chan->name, chansvs.nick);
+					}
+					ban(chansvs.me->me, ca->mychan->chan, u);
+					remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
+					kick(chansvs.me->me, ca->mychan->chan, u, "User is banned from this channel");
+					continue;
+				}
+
+				if (ca->level & CA_USEDUPDATE)
+					ca->mychan->used = CURRTIME;
+
+				if (ca->mychan->flags & MC_NOOP || u->myuser->flags & MU_NOOP)
+					continue;
+
+				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEOWNER)
+				{
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+					cu->modes |= ircd->owner_mode;
+				}
+
+				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && !(ircd->uses_owner && cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
+				{
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+					cu->modes |= ircd->protect_mode;
+				}
+
+				if (!(cu->modes & CSTATUS_OP) && ca->level & CA_AUTOOP)
+				{
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
+					cu->modes |= CSTATUS_OP;
+				}
+
+				if (ircd->uses_halfops && !(cu->modes & (CSTATUS_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
+				{
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
+					cu->modes |= ircd->halfops_mode;
+				}
+
+				if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)) && ca->level & CA_AUTOVOICE)
+				{
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
+					cu->modes |= CSTATUS_VOICE;
+				}
+			}
+		}
+	}
+}
+
 static void user_info_hook(hook_user_req_t *req)
 {
 	static char buf[BUFSIZE];
@@ -70,8 +148,12 @@ void gs_hooks_init(void)
 	event_add("mygroup_expire", mygroup_expire, NULL, 3600);
 
 	hook_add_event("myuser_delete");
+	hook_add_event("user_info");
+	hook_add_event("grant_channel_access");
+
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
+	hook_add_grant_channel_access(grant_channel_access_hook);
 }
 
 void gs_hooks_deinit(void)
@@ -80,4 +162,5 @@ void gs_hooks_deinit(void)
 
 	hook_del_user_info(user_info_hook);
 	hook_del_myuser_delete(myuser_delete_hook);
+	hook_del_grant_channel_access(grant_channel_access_hook);
 }
