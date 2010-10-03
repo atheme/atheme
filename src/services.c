@@ -596,6 +596,74 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	logcommand_user(svs, u, CMDLOG_LOGIN, "LOGIN via CERTFP (%s)", certfp);
 }
 
+void grant_channel_access(user_t *u, myuser_t *mu)
+{
+	node_t *n;
+
+	LIST_FOREACH(n, entity(mu)->chanacs.head)
+	{
+		chanacs_t *ca;
+		chanuser_t *cu;
+
+		ca = (chanacs_t *)n->data;
+
+		cu = chanuser_find(ca->mychan->chan, u);
+		if (cu && chansvs.me != NULL)
+		{
+			if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
+			{
+				/* Stay on channel if this would empty it -- jilles */
+				if (ca->mychan->chan->nummembers <= (ca->mychan->flags & MC_GUARD ? 2 : 1))
+				{
+					ca->mychan->flags |= MC_INHABIT;
+					if (!(ca->mychan->flags & MC_GUARD))
+						join(cu->chan->name, chansvs.nick);
+				}
+				ban(chansvs.me->me, ca->mychan->chan, u);
+				remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
+				kick(chansvs.me->me, ca->mychan->chan, u, "User is banned from this channel");
+				continue;
+			}
+
+			if (ca->level & CA_USEDUPDATE)
+				ca->mychan->used = CURRTIME;
+
+			if (ca->mychan->flags & MC_NOOP || mu->flags & MU_NOOP)
+				continue;
+
+			if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEOWNER)
+			{
+				modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+				cu->modes |= ircd->owner_mode;
+			}
+
+			if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && !(ircd->uses_owner && cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEPROTECT)
+			{
+				modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+				cu->modes |= ircd->protect_mode;
+			}
+
+			if (!(cu->modes & CSTATUS_OP) && ca->level & CA_AUTOOP)
+			{
+				modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
+				cu->modes |= CSTATUS_OP;
+			}
+
+			if (ircd->uses_halfops && !(cu->modes & (CSTATUS_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
+			{
+				modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
+				cu->modes |= ircd->halfops_mode;
+			}
+
+			if (!(cu->modes & (CSTATUS_OP | ircd->halfops_mode | CSTATUS_VOICE)) && ca->level & CA_AUTOVOICE)
+			{
+				modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
+				cu->modes |= CSTATUS_VOICE;
+			}
+		}
+	}
+}
+
 void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 {
 	char lau[BUFSIZE], lao[BUFSIZE];
