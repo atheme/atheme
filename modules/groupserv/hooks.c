@@ -34,6 +34,9 @@ static void grant_channel_access_hook(user_t *u)
 	{
 		groupacs_t *ga = n->data;
 
+		if (!(ga->flags & GA_CHANACS))
+			continue;
+
 		LIST_FOREACH(n, entity(ga->mg)->chanacs.head)
 		{
 			chanacs_t *ca;
