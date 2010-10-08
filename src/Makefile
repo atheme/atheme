@@ -92,8 +92,13 @@ build: all
 	  -e '/modules\/operserv\/soper/d' \
 	  -e '/modules\/operserv\/update/d' \
 	  -e '/^\/\* MemoServ module/,/^$$/d' \
+	  -e '/modules\/infoserv\//s/^/#/' \
 	  -e '/^\/\* SASL agent module/,/^$$/d' \
 	  -e '/^\/\* GameServ module/,/^$$/d' \
+	  -e '/^\/\* BotServ module/,/^$$/d' \
+	  -e '/^\/\* HostServ module/,/^$$/d' \
+	  -e '/^\/\* HelpServ module/,/^$$/d' \
+	  -e '/^\/\* GroupServ module/,/^$$/d' \
 	  -e '/modules\/xmlrpc\/account/d' \
 	  -e '/modules\/xmlrpc\/channel/d' \
 	  -e '/modules\/xmlrpc\/memo/d' \
@@ -104,6 +109,7 @@ build: all
 	  -e 's/expire = .*;/expire = 1;/' \
 	  -e 's/nick = "OperServ";/nick = "OperServ2";/' \
 	  -e 's/nick = "Global";/nick = "Global2";/' \
+	  -e 's/nick = "InfoServ";/nick = "InfoServ2";/' \
 	  -e 's/spam;/#spam;/' \
 	  -e 's/port = 8080/port = 8081/' ../dist/atheme.conf.example) >../dist/atheme.conf.operserv-example
 
