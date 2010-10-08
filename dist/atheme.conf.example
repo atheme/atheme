@@ -520,14 +520,14 @@ loadmodule "modules/infoserv/main";
  * SET NOBOT command				modules/botserv/set_nobot
  * SET PRIVATE command				modules/botserv/set_private
  */
-loadmodule "modules/botserv/main";
-loadmodule "modules/botserv/help";
-loadmodule "modules/botserv/info";
-loadmodule "modules/botserv/bottalk";
-loadmodule "modules/botserv/set_core";
-loadmodule "modules/botserv/set_fantasy";
-loadmodule "modules/botserv/set_nobot";
-loadmodule "modules/botserv/set_private";
+#loadmodule "modules/botserv/main";
+#loadmodule "modules/botserv/help";
+#loadmodule "modules/botserv/info";
+#loadmodule "modules/botserv/bottalk";
+#loadmodule "modules/botserv/set_core";
+#loadmodule "modules/botserv/set_fantasy";
+#loadmodule "modules/botserv/set_nobot";
+#loadmodule "modules/botserv/set_private";
 
 /* HostServ modules.
  *
@@ -568,10 +568,10 @@ loadmodule "modules/botserv/set_private";
  * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
  * works like a one-time alert. You should probably only load one of the two systems.
  */
-loadmodule "modules/helpserv/main";
+#loadmodule "modules/helpserv/main";
 #loadmodule "modules/helpserv/helpme";
-loadmodule "modules/helpserv/ticket";
-loadmodule "modules/helpserv/services";
+#loadmodule "modules/helpserv/ticket";
+#loadmodule "modules/helpserv/services";
 
 /* Channel listing service.
  *
