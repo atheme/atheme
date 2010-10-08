@@ -280,7 +280,7 @@ loadmodule "modules/nickserv/vhost";
  * SET KEEPTOPIC command                        modules/chanserv/set_keeptopic
  * SET LIMITFLAGS command                       modules/chanserv/set_limitflags
  * SET MLOCK command                            modules/chanserv/set_mlock
- * SET PREFIX command							modules/chanserv/set_prefix
+ * SET PREFIX command				modules/chanserv/set_prefix
  * Channel info hiding (SET PRIVATE command)    modules/chanserv/set_private
  * SET PROPERTY command                         modules/chanserv/set_property
  * SET RESTRICTED command                       modules/chanserv/set_restricted
@@ -482,7 +482,7 @@ loadmodule "modules/infoserv/main";
  * Core components				modules/saslserv/main
  * PLAIN mechanism				modules/saslserv/plain
  * DH-BLOWFISH mechanism			modules/saslserv/dh-blowfish
- * AUTHCOOKIE mechanism (for IRIS)  modules/saslserv/authcookie
+ * AUTHCOOKIE mechanism (for IRIS)		modules/saslserv/authcookie
  */
 #loadmodule "modules/saslserv/main";
 #loadmodule "modules/saslserv/plain";
@@ -515,10 +515,10 @@ loadmodule "modules/infoserv/main";
  * HELP command					modules/botserv/help
  * INFO command					modules/botserv/info
  * NPC commands (SAY, ACT)			modules/botserv/bottalk
- * SET command (required for SET commands below)		modules/botserv/set_core
- * SET FANTASY command			modules/botserv/set_fantasy
- * SET NOBOT command			modules/botserv/set_nobot
- * SET PRIVATE command			modules/botserv/set_private
+ * SET command (required for SET commands)	modules/botserv/set_core
+ * SET FANTASY command				modules/botserv/set_fantasy
+ * SET NOBOT command				modules/botserv/set_nobot
+ * SET PRIVATE command				modules/botserv/set_private
  */
 loadmodule "modules/botserv/main";
 loadmodule "modules/botserv/help";
@@ -541,7 +541,7 @@ loadmodule "modules/botserv/set_private";
  *
  * Core components				modules/hostserv/main
  * HELP command					modules/hostserv/help
- * OFFER system									modules/hostserv/offer
+ * OFFER system					modules/hostserv/offer
  * ON and OFF commands                          modules/hostserv/onoff
  * REQUEST system                               modules/hostserv/request
  * VHOST and LISTVHOST commands                 modules/hostserv/vhost
@@ -562,7 +562,7 @@ loadmodule "modules/botserv/set_private";
  *
  * Core components				modules/helpserv/main
  * HELPME command				modules/helpserv/helpme
- * Help Ticket system			modules/helpserv/ticket
+ * Help Ticket system				modules/helpserv/ticket
  * Service List					modules/helpserv/services
  *
  * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
@@ -583,8 +583,8 @@ loadmodule "modules/helpserv/services";
 #loadmodule "modules/alis/main";
 
 /* GroupServ module.
- * GroupServ allows users to create and assing other to groups to be able to easily
- * mass-manage channel access and more.
+ * GroupServ allows users to create groups to easily mass-manage channel
+ * access and more.
  *
  * Core components				modules/groupserv/main
  *
