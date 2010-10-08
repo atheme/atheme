@@ -38,6 +38,7 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Will services be sending WALLOPS/GLOBOPS about various things: %s"), config_options.silent ? "no" : "yes");
 	command_success_nodata(si, _("How many messages before a flood is triggered, (if 0, flood protection is disabled): %d"), config_options.flood_msgs);
 	command_success_nodata(si, _("How long before the flood counter resets: %d seconds"), config_options.flood_time);
+	command_success_nodata(si, _("Default clone limit: %d"), config_options.default_clone_limit);
 	command_success_nodata(si, _("Number of commands used before ratelimiting starts, (if 0, ratelimiting is disabled): %d"), config_options.ratelimit_uses);
 	command_success_nodata(si, _("How long before ratelimiting counter resets, (if 0, ratelimiting is disabled): %d seconds"), config_options.ratelimit_period);
 	command_success_nodata(si, _("No nick ownership enabled: %s"), nicksvs.no_nick_ownership ? "yes" : "no");
