@@ -381,6 +381,8 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	}
 	else if (lesser_t != NULL)
 		snprintf(flagname, sizeof flagname, "%s+", lesser_t->name);
+	else if (greater_t != NULL)
+		snprintf(flagname, sizeof flagname, "%s-", greater_t->name);
 
 	free_template_list(l);
 
