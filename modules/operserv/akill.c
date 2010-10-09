@@ -514,7 +514,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	if (user || host || num)
 		command_success_nodata(si, _("End of AKILL list."));
 	else
-		command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
+		command_success_nodata(si, _("Total of \2%ld\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
 	if (user || host)
 		logcommand(si, CMDLOG_GET, "AKILL:LIST: \2%s@%s\2", user ? user : "*", host ? host : "*");
 	else if (num)

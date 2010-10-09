@@ -223,7 +223,7 @@ build_maze(int size)
 		r->id = i;
 
 		/* rooms have 3 exit points, exits are one-way */
-		for (j = 0; j < 3, r->exits.count < 3; j++)
+		for (j = 0; j < 3 && r->exits.count < 3; j++)
 		{
 			int t = rand() % size;
 

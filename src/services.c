@@ -586,7 +586,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 
 	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+		notice(svs->me->nick, u->nick, _("There are already \2%ld\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 		return;
 	}
 

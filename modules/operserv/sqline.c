@@ -381,7 +381,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("%d: %s - by \2%s\2 - \2permanent\2"), q->number, q->mask, q->setby);
 	}
 
-	command_success_nodata(si, _("Total of \2%d\2 %s in SQLINE list."), qlnlist.count, (qlnlist.count == 1) ? "entry" : "entries");
+	command_success_nodata(si, _("Total of \2%ld\2 %s in SQLINE list."), qlnlist.count, (qlnlist.count == 1) ? "entry" : "entries");
 	logcommand(si, CMDLOG_GET, "SQLINE:LIST: \2%s\2", full ? " FULL" : "");
 }
 

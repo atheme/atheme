@@ -312,7 +312,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		if (type == type_all || type == type_hostmask)
 		{
 			unsigned int i = 1;
-			command_success_nodata(si, _("Hostmask NOOP list (%d entries):"), noop_hostmask_list.count);
+			command_success_nodata(si, _("Hostmask NOOP list (%ld entries):"), noop_hostmask_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
@@ -331,7 +331,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		if (type == type_all || type == type_server)
 		{
 			unsigned int i = 1;
-			command_success_nodata(si, _("Server NOOP list (%d entries):"), noop_server_list.count);
+			command_success_nodata(si, _("Server NOOP list (%ld entries):"), noop_server_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
