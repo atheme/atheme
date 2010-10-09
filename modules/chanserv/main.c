@@ -517,6 +517,25 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 		part(cu->chan->name, chansvs.nick);
 }
 
+static user_t *get_changets_user(mychan_t *mc)
+{
+	metadata_t *md;
+	
+	return_val_if_fail(mc != NULL, chansvs.me->me);
+
+	md = metadata_find(mc, "private:botserv:bot-assigned");
+	if (md != NULL)
+	{
+		user_t *u = user_find(md->value);
+
+		return_val_if_fail(is_internal_client(u), chansvs.me->me);
+
+		return u;
+	}
+
+	return chansvs.me->me;
+}
+
 static void cs_register(hook_channel_req_t *hdata)
 {
 	mychan_t *mc;
@@ -647,14 +666,18 @@ static void cs_newchan(channel_t *c)
 
 	if (chansvs.changets && c->ts > channelts && channelts > 0)
 	{
+		user_t *u;
+
+		u = get_changets_user(mc);
+
 		/* Stop the splitrider -- jilles */
 		c->ts = channelts;
 		clear_simple_modes(c);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		check_modes(mc, false);
 		/* No ops to clear */
-		chan_lowerts(c, chansvs.me->me);
-		cu = chanuser_add(c, CLIENT_NAME(chansvs.me->me));
+		chan_lowerts(c, u);
+		cu = chanuser_add(c, CLIENT_NAME(u));
 		cu->modes |= CSTATUS_OP;
 		/* make sure it parts again sometime (empty SJOIN etc) */
 		mc->flags |= MC_INHABIT;
