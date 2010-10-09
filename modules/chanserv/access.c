@@ -389,23 +389,6 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return flagname;
 }
 
-static void list_netwide_roles(sourceinfo_t *si, mychan_t *mc)
-{
-	command_success_nodata(si, _("List of network-wide roles:"));
-
-	if (get_template_flags(mc, "SOP") == chansvs.ca_sop)
-		command_success_nodata(si, "%-20s: %s (%s)", "SOP", xflag_tostr(chansvs.ca_sop), bitmask_to_flags2(chansvs.ca_sop, 0));
-
-	if (get_template_flags(mc, "AOP") == chansvs.ca_aop)
-		command_success_nodata(si, "%-20s: %s (%s)", "AOP", xflag_tostr(chansvs.ca_aop), bitmask_to_flags2(chansvs.ca_aop, 0));
-
-	if (chansvs.ca_hop != chansvs.ca_vop && get_template_flags(mc, "HOP") == chansvs.ca_hop)
-		command_success_nodata(si, "%-20s: %s (%s)", "HOP", xflag_tostr(chansvs.ca_hop), bitmask_to_flags2(chansvs.ca_hop, 0));
-
-	if (get_template_flags(mc, "VOP") == chansvs.ca_vop)
-	        command_success_nodata(si, "%-20s: %s (%s)", "VOP", xflag_tostr(chansvs.ca_vop), bitmask_to_flags2(chansvs.ca_vop, 0));
-}
-
 /*
  * Update a role entry and synchronize the changes with the access list.
  */
@@ -938,8 +921,7 @@ static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	const char *channel = parv[0];
-	const char *p, *q, *r;
-	metadata_t *md;
+	mowgli_list_t *l;
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -948,31 +930,22 @@ static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	list_netwide_roles(si, mc);
-
-	md = metadata_find(mc, "private:templates");
-	if (md != NULL)
+	l = build_template_list(mc);
+	if (l != NULL)
 	{
+		mowgli_node_t *n;
+
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("List of channel-defined roles:"));
 
-		p = md->value;
-		while (p != NULL)
+		MOWGLI_ITER_FOREACH(n, l->head)
 		{
-			char flagstr[BUFSIZE];
+			template_t *t = n->data;
 
-			while (*p == ' ')
-				p++;
-			q = strchr(p, '=');
-			if (q == NULL)
-				break;
-			r = strchr(q, ' ');
-
-			snprintf(flagstr, BUFSIZE, "%.*s", (int)(r - (q + 1)), q + 1);
-			command_success_nodata(si, "%-20.*s: %s (%s)", (int)(q - p), p, xflag_tostr(flags_to_bitmask(flagstr, 0)), flagstr);
-
-			p = r;
+			command_success_nodata(si, "%-20s: %s (%s)", t->name, xflag_tostr(t->level), bitmask_to_flags(t->level));
 		}
+
+		free_template_list(l);
 	}
 }
 
