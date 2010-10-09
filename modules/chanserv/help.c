@@ -80,7 +80,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(si, si->service->commands, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FDROP FFLAGS FTRANSFER");
+		command_help_short(si, chansvs.me->commands, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FDROP FFLAGS FTRANSFER");
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 
@@ -99,12 +99,12 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp("COMMANDS", command))
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.nick);
-		command_help(si, si->service->commands);
+		command_help(si, chansvs.me->commands);
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}
 
-	help_display(si, chansvs.me, command, si->service->commands);
+	help_display(si, chansvs.me, command, chansvs.me->commands);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
