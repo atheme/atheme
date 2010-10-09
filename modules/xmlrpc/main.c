@@ -145,7 +145,7 @@ static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *
 {
 	connection_t *cptr;
 	struct httpddata *hd;
-	const char *newmessage;
+	char *newmessage;
 
 	cptr = si->connection;
 	hd = cptr->userdata;
@@ -153,6 +153,7 @@ static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *
 		return;
 	newmessage = xmlrpc_normalizeBuffer(message);
 	xmlrpc_generic_error(code, newmessage);
+	free(newmessage);
 	hd->sent_reply = true;
 }
 
@@ -160,7 +161,7 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
-	const char *newmessage;
+	char *newmessage;
 	char *p;
 
 	newmessage = xmlrpc_normalizeBuffer(message);
@@ -181,6 +182,7 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 		p = hd->replybuf;
 	}
         strcpy(p, newmessage);
+	free(newmessage);
 }
 
 static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, const char *message)

@@ -1165,7 +1165,8 @@ static void opensex_db_close(database_handle_t *db)
 		hook_call_db_saved();
 	}
 
-	free(db->priv);
+	free(rs->buf);
+	free(rs);
 	free(db);
 }
 

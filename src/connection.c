@@ -431,6 +431,8 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		return NULL;
 	}
 
+	freeaddrinfo(addr);
+
 	cptr = connection_add(buf, s, CF_CONNECTING, read_handler, write_handler);
 
 	return cptr;
@@ -508,6 +510,8 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 		freeaddrinfo(addr);
 		return NULL;
 	}
+
+	freeaddrinfo(addr);
 
 	socket_setnonblocking(s);
 
