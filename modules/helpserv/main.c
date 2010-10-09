@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *helpserv;
-list_t helpserv_conftable;
+mowgli_list_t helpserv_conftable;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 

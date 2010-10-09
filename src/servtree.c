@@ -229,7 +229,7 @@ static int conf_service(config_entry_t *ce)
 	return 0;
 }
 
-service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), list_t *conf_table)
+service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), mowgli_list_t *conf_table)
 {
 	service_t *sptr;
 	struct ConfTable *subblock;

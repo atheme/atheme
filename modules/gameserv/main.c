@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *gs;
-list_t gs_conftable;
+mowgli_list_t gs_conftable;
 
 void _modinit(module_t *m)
 {

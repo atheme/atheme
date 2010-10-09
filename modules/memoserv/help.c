@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ms_helptree;
+mowgli_list_t *ms_helptree;
 
 static void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 

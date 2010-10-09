@@ -30,7 +30,7 @@ static BlockHeap *list_heap;
 void init_dlink_nodes(void)
 {
         node_heap = BlockHeapCreate(sizeof(node_t), HEAP_NODE);
-	list_heap = BlockHeapCreate(sizeof(list_t), HEAP_NODE);
+	list_heap = BlockHeapCreate(sizeof(mowgli_list_t), HEAP_NODE);
 
 	if (!node_heap || !list_heap)
 	{
@@ -40,9 +40,9 @@ void init_dlink_nodes(void)
 }
 
 /* creates a new list */
-list_t *list_create(void)
+mowgli_list_t *list_create(void)
 {
-	list_t *l;
+	mowgli_list_t *l;
 
 	l = BlockHeapAlloc(list_heap);
 
@@ -50,7 +50,7 @@ list_t *list_create(void)
 }
 
 /* frees a list */
-void list_free(list_t *l)
+void list_free(mowgli_list_t *l)
 {
 	return_if_fail(l != NULL);
 
@@ -89,7 +89,7 @@ void node_free(node_t *n)
 }
 
 /* adds a node to the end of a list */
-void node_add(void *data, node_t *n, list_t *l)
+void node_add(void *data, node_t *n, mowgli_list_t *l)
 {
         node_t *tn;
 
@@ -125,7 +125,7 @@ void node_add(void *data, node_t *n, list_t *l)
 }
 
 /* adds a node to the head of a list */
-void node_add_head(void *data, node_t *n, list_t *l)
+void node_add_head(void *data, node_t *n, mowgli_list_t *l)
 {
 	node_t *tn;
 
@@ -152,7 +152,7 @@ void node_add_head(void *data, node_t *n, list_t *l)
 }
 
 /* adds a node to a list before another node, or to the end */
-void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
+void node_add_before(void *data, node_t *n, mowgli_list_t *l, node_t *before)
 {
 	return_if_fail(n != NULL);
 	return_if_fail(l != NULL);
@@ -175,7 +175,7 @@ void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
 	}
 }
 
-void node_del(node_t *n, list_t *l)
+void node_del(node_t *n, mowgli_list_t *l)
 {
 	return_if_fail(n != NULL);
 	return_if_fail(l != NULL);
@@ -200,7 +200,7 @@ void node_del(node_t *n, list_t *l)
 }
 
 /* finds a node by `data' */
-node_t *node_find(void *data, list_t *l)
+node_t *node_find(void *data, mowgli_list_t *l)
 {
         node_t *n;
 
@@ -212,7 +212,7 @@ node_t *node_find(void *data, list_t *l)
         return NULL;
 }
 
-void node_move(node_t *m, list_t *oldlist, list_t *newlist)
+void node_move(node_t *m, mowgli_list_t *oldlist, mowgli_list_t *newlist)
 {
 	return_if_fail(m != NULL);
 	return_if_fail(oldlist != NULL);

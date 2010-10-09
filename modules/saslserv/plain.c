@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *mechanisms;
+mowgli_list_t *mechanisms;
 node_t *mnode;
 static int mech_start(sasl_session_t *p, char **out, int *out_len);
 static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len);

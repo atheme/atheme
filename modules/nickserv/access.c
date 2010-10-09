@@ -154,7 +154,7 @@ static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen
 
 static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 {
-	list_t l = {NULL, NULL, 0};
+	mowgli_list_t l = {NULL, NULL, 0};
 	node_t *n, *tn;
 	mynick_t *mn;
 	user_t *u;

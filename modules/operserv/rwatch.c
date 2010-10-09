@@ -27,10 +27,10 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[]);
 static void write_rwatchdb(void);
 static void load_rwatchdb(void);
 
-list_t *os_cmdtree;
+mowgli_list_t *os_cmdtree;
 mowgli_patricia_t *os_rwatch_cmds;
 
-list_t rwatch_list;
+mowgli_list_t rwatch_list;
 
 #define RWACT_SNOOP 1
 #define RWACT_KLINE 2

@@ -17,7 +17,7 @@ typedef struct mygroup_ mygroup_t;
 struct mygroup_ {
 	myentity_t ent;
 
-	list_t acs;
+	mowgli_list_t acs;
 	time_t regtime;
 
 	unsigned int flags;
@@ -77,14 +77,14 @@ E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
 E unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset);
 
 
-E list_t *myuser_get_membership_list(myuser_t *mu);
+E mowgli_list_t *myuser_get_membership_list(myuser_t *mu);
 
 E const char *mygroup_founder_names(mygroup_t *mg);
 
 /* services plumbing */
 E service_t *groupsvs;
-E list_t gs_cmdtree;
-E list_t conf_gs_table;
+E mowgli_list_t gs_cmdtree;
+E mowgli_list_t conf_gs_table;
 E struct gflags ga_flags[];
 E struct gflags mg_flags[];
 

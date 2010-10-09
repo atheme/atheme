@@ -748,11 +748,11 @@ void _moddeinit(void)
 
 #define MAXMATCHES_DEF 1000
 
-static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, list_t *crit, char *args);
+static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, mowgli_list_t *crit, char *args);
 
 static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 {
-	list_t crit = { NULL, NULL, 0 };
+	mowgli_list_t crit = { NULL, NULL, 0 };
 	trace_action_constructor_t *actcons;
 	trace_action_t* act;
 	char *args = parv[1];
@@ -791,7 +791,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 	free(params);
 }
 
-static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, list_t *crit, char *args)
+static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actcons, trace_action_t* act, mowgli_list_t *crit, char *args)
 {
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;

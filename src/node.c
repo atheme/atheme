@@ -25,9 +25,9 @@
 #include "uplink.h"
 #include "privs.h"
 
-list_t klnlist;
-list_t xlnlist;
-list_t qlnlist;
+mowgli_list_t klnlist;
+mowgli_list_t xlnlist;
+mowgli_list_t qlnlist;
 
 static BlockHeap *kline_heap;	/* 16 */
 static BlockHeap *xline_heap;	/* 16 */

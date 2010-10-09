@@ -74,7 +74,7 @@ struct myuser_
   char pass[PASSLEN];
   char *email;
 
-  list_t logins; /* user_t's currently logged in to this */
+  mowgli_list_t logins; /* user_t's currently logged in to this */
   time_t registered;
   time_t lastlogin;
 
@@ -82,22 +82,22 @@ struct myuser_
 
   unsigned int flags;
   
-  list_t memos; /* store memos */
+  mowgli_list_t memos; /* store memos */
   unsigned short memoct_new;
   unsigned short memo_ratelimit_num; /* memos sent recently */
   time_t memo_ratelimit_time; /* last time a memo was sent */
-  list_t memo_ignores;
+  mowgli_list_t memo_ignores;
 
   /* openservices patch */
-  list_t access_list;
+  mowgli_list_t access_list;
 
-  list_t nicks; /* registered nicks, must include mu->name if nonempty */
+  mowgli_list_t nicks; /* registered nicks, must include mu->name if nonempty */
 
-  list_t subscriptions; /* presence subscriptors */
+  mowgli_list_t subscriptions; /* presence subscriptors */
   
   language_t *language;
 
-  list_t cert_fingerprints;
+  mowgli_list_t cert_fingerprints;
 };
 
 #define MU_HOLD        0x00000001
@@ -159,7 +159,7 @@ struct mychan_
   char *name;
 
   channel_t *chan;
-  list_t chanacs;
+  mowgli_list_t chanacs;
   time_t registered;
   time_t used;
 
@@ -338,7 +338,7 @@ E void (*db_load)(void);
 E bool is_founder(mychan_t *mychan, myentity_t *myuser);
 
 /* node.c */
-E list_t klnlist;
+E mowgli_list_t klnlist;
 
 E kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
 E void kline_delete(kline_t *k);
@@ -347,7 +347,7 @@ E kline_t *kline_find_num(unsigned long number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
-E list_t xlnlist;
+E mowgli_list_t xlnlist;
 
 E xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby);
 E void xline_delete(const char *realname);
@@ -356,7 +356,7 @@ E xline_t *xline_find_num(unsigned int number);
 E xline_t *xline_find_user(user_t *u);
 E void xline_expire(void *arg);
 
-E list_t qlnlist;
+E mowgli_list_t qlnlist;
 
 E qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
 E void qline_delete(const char *mask);
@@ -440,7 +440,7 @@ E void expire_check(void *arg);
 E void db_check(void);
 
 /* svsignore.c */
-E list_t svs_ignore_list;
+E mowgli_list_t svs_ignore_list;
 
 E svsignore_t *svsignore_find(user_t *user);
 E svsignore_t *svsignore_add(const char *mask, const char *reason);

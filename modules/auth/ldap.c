@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t conf_ldap_table;
+mowgli_list_t conf_ldap_table;
 struct
 {
 	char *url;

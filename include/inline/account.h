@@ -80,7 +80,7 @@ static inline void chanacs_close(chanacs_t *ca)
 static inline bool chanacs_is_table_full(chanacs_t *ca)
 {
 	return chansvs.maxchanacs > 0 &&
-		LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;
+		MOWGLI_LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;
 }
 
 #endif

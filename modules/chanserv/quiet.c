@@ -70,7 +70,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 {
 	node_t *n;
 	chanuser_t *cu;
-	list_t ban_l = { NULL, NULL, 0 };
+	mowgli_list_t ban_l = { NULL, NULL, 0 };
 	node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;

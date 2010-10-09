@@ -20,10 +20,10 @@ DECLARE_MODULE_V1
 );
 
 connection_t *listener;
-list_t httpd_path_handlers;
+mowgli_list_t httpd_path_handlers;
 
 /* conf stuff */
-list_t conf_httpd_table;
+mowgli_list_t conf_httpd_table;
 struct httpd_configuration
 {
 	char *host;

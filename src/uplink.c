@@ -25,7 +25,7 @@
 #include "datastream.h"
 #include "uplink.h"
 
-list_t uplinks;
+mowgli_list_t uplinks;
 uplink_t *curr_uplink;
 
 static BlockHeap *uplink_heap;

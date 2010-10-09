@@ -195,7 +195,7 @@ struct language_
 	node_t node;
 };
 
-static list_t language_list;
+static mowgli_list_t language_list;
 
 void
 language_init(void)

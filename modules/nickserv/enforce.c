@@ -29,7 +29,7 @@ typedef struct {
 	node_t node;
 } enforce_timeout_t;
 
-list_t enforce_list;
+mowgli_list_t enforce_list;
 BlockHeap *enforce_timeout_heap;
 time_t enforce_next;
 

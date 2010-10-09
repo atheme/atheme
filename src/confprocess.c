@@ -67,14 +67,14 @@ struct ConfTable
 			bool def;
 		} bool_val;
 
-		list_t *subblock;
+		mowgli_list_t *subblock;
 	} un;
 	node_t node;
 };
 
 static BlockHeap *conftable_heap;
 
-list_t confblocks;
+mowgli_list_t confblocks;
 bool conf_need_rehash;
 
 /* *INDENT-ON* */
@@ -324,7 +324,7 @@ void conf_process(config_file_t *cfp)
 	conf_need_rehash = false;
 }
 
-int subblock_handler(config_entry_t *ce, list_t *entries)
+int subblock_handler(config_entry_t *ce, mowgli_list_t *entries)
 {
 	node_t *tn;
 	struct ConfTable *ct = NULL;
@@ -371,7 +371,7 @@ struct ConfTable *find_top_conf(const char *name)
 	return NULL;
 }
 
-struct ConfTable *find_conf_item(const char *name, list_t *conflist)
+struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -408,7 +408,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	conf_need_rehash = true;
 }
 
-void add_subblock_top_conf(const char *name, list_t *list)
+void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 {
 	struct ConfTable *ct;
 
@@ -429,7 +429,7 @@ void add_subblock_top_conf(const char *name, list_t *list)
 	conf_need_rehash = true;
 }
 
-void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_entry_t *ce))
+void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (config_entry_t *ce))
 {
 	struct ConfTable *ct;
 
@@ -450,7 +450,7 @@ void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_en
 	conf_need_rehash = true;
 }
 
-void add_uint_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def)
+void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def)
 {
 	struct ConfTable *ct;
 
@@ -474,7 +474,7 @@ void add_uint_conf_item(const char *name, list_t *conflist, unsigned int flags, 
 	conf_need_rehash = true;
 }
 
-void add_duration_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
+void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def)
 {
 	struct ConfTable *ct;
 
@@ -497,7 +497,7 @@ void add_duration_conf_item(const char *name, list_t *conflist, unsigned int fla
 	conf_need_rehash = true;
 }
 
-void add_dupstr_conf_item(const char *name, list_t *conflist, unsigned int flags, char **var, const char *def)
+void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, char **var, const char *def)
 {
 	struct ConfTable *ct;
 
@@ -519,7 +519,7 @@ void add_dupstr_conf_item(const char *name, list_t *conflist, unsigned int flags
 	conf_need_rehash = true;
 }
 
-void add_bool_conf_item(const char *name, list_t *conflist, unsigned int flags, bool *var, bool def)
+void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, bool *var, bool def)
 {
 	struct ConfTable *ct;
 
@@ -558,7 +558,7 @@ void del_top_conf(const char *name)
 	BlockHeapFree(conftable_heap, ct);
 }
 
-void del_conf_item(const char *name, list_t *conflist)
+void del_conf_item(const char *name, mowgli_list_t *conflist)
 {
 	struct ConfTable *ct;
 

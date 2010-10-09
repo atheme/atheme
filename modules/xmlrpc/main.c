@@ -30,7 +30,7 @@ struct
 
 connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
-list_t *httpd_path_handlers;
+mowgli_list_t *httpd_path_handlers;
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message);
 static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message);
@@ -42,7 +42,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_privset(void *conn, int parc, char *parv[]);
 
 /* Configuration */
-list_t conf_xmlrpc_table;
+mowgli_list_t conf_xmlrpc_table;
 
 struct sourceinfo_vtable xmlrpc_vtable = {
 	.description = "xmlrpc",

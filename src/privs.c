@@ -24,8 +24,8 @@
 #include "atheme.h"
 #include "privs.h"
 
-list_t operclasslist;
-list_t soperlist;
+mowgli_list_t operclasslist;
+mowgli_list_t soperlist;
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;

@@ -22,7 +22,7 @@ struct global_ {
 
 service_t *globsvs = NULL;
 
-list_t gs_conftable;
+mowgli_list_t gs_conftable;
 
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
@@ -56,7 +56,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 {
 	static BlockHeap *glob_heap = NULL;
 	struct global_ *global;
-	static list_t globlist;
+	static mowgli_list_t globlist;
 	node_t *n, *tn;
 	char *params = parv[0];
 	static char *sender = NULL;

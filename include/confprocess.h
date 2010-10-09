@@ -20,17 +20,17 @@ struct ConfTable;
 
 E void init_confprocess(void);
 E struct ConfTable *find_top_conf(const char *name);
-E struct ConfTable *find_conf_item(const char *name, list_t *conflist);
+E struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist);
 E void add_top_conf(const char *name, int (*handler)(config_entry_t *ce));
-E void add_subblock_top_conf(const char *name, list_t *list);
-E void add_conf_item(const char *name, list_t *conflist, int (*handler)(config_entry_t *ce));
-E void add_uint_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def);
-E void add_duration_conf_item(const char *name, list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def);
-E void add_dupstr_conf_item(const char *name, list_t *conflist, unsigned int flags, char **var, const char *def);
-E void add_bool_conf_item(const char *name, list_t *conflist, unsigned int flags, bool *var, bool def);
+E void add_subblock_top_conf(const char *name, mowgli_list_t *list);
+E void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler)(config_entry_t *ce));
+E void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, unsigned int min, unsigned int max, unsigned int def);
+E void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, unsigned int *var, const char *defunit, unsigned int def);
+E void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, char **var, const char *def);
+E void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int flags, bool *var, bool def);
 E void del_top_conf(const char *name);
-E void del_conf_item(const char *name, list_t *conflist);
-E int subblock_handler(config_entry_t *ce, list_t *entries);
+E void del_conf_item(const char *name, mowgli_list_t *conflist);
+E int subblock_handler(config_entry_t *ce, mowgli_list_t *entries);
 E bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
 		unsigned int min, unsigned int max);
 E bool process_duration_configentry(config_entry_t *ce, unsigned int *var,

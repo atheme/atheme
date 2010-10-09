@@ -12,7 +12,7 @@ typedef struct hook_ hook_t;
 
 struct hook_ {
 	char *name;
-	list_t hooks;
+	mowgli_list_t hooks;
 };
 
 E hook_t *hook_add_event(const char *);

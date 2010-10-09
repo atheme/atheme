@@ -42,7 +42,7 @@ struct ticket_ {
 
 typedef struct ticket_ ticket_t;
 
-list_t helpserv_reqlist;
+mowgli_list_t helpserv_reqlist;
 
 void _modinit(module_t *m)
 {

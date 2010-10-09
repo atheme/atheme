@@ -20,7 +20,7 @@ struct user_
 	char uid[IDLEN]; /* Used for TS6, P10, IRCNet ircd. */
 	char ip[HOSTIPLEN];
 
-	list_t channels;
+	mowgli_list_t channels;
 
 	server_t *server;
 	myuser_t *myuser;

@@ -23,14 +23,14 @@ struct noop_ {
 	char *reason;
 };
 
-list_t noop_hostmask_list;
-list_t noop_server_list;
+mowgli_list_t noop_hostmask_list;
+mowgli_list_t noop_server_list;
 
 static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
 static void noop_kill_users(void *dummy);
 static void check_quit(user_t *u);
 static void check_user(user_t *u);
-static list_t noop_kill_queue;
+static mowgli_list_t noop_kill_queue;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
@@ -147,7 +147,7 @@ static void check_user(user_t *u)
 	}
 }
 
-static noop_t *noop_find(char *target, list_t *list)
+static noop_t *noop_find(char *target, mowgli_list_t *list)
 {
 	node_t *n;
 

@@ -36,13 +36,13 @@ static void db_h_bot_count(database_handle_t *db, const char *type);
 fn_botserv_bot_find botserv_bot_find;
 
 service_t *botsvs;
-list_t bs_conftable;
+mowgli_list_t bs_conftable;
 
 unsigned int min_users = 0;
 
-E list_t mychan;
+E mowgli_list_t mychan;
 
-list_t bs_bots;
+mowgli_list_t bs_bots;
 
 command_t bs_bot = { "BOT", "Maintains network bot list.", PRIV_USER_ADMIN, 6, bs_cmd_bot, { .path = "botserv/bot" } };
 command_t bs_assign = { "ASSIGN", "Assigns a bot to a channel.", AC_NONE, 2, bs_cmd_assign, { .path = "botserv/assign" } };

@@ -26,8 +26,8 @@ struct channel_
   char *topic_setter;
   time_t topicts;
 
-  list_t members;
-  list_t bans;
+  mowgli_list_t members;
+  mowgli_list_t bans;
 
   unsigned int flags;
 };

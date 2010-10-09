@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
-list_t *hs_helptree, *conf_hs_table;
+mowgli_list_t *hs_helptree, *conf_hs_table;
 bool request_per_nick;
 
 unsigned int ratelimit_count = 0;
@@ -46,7 +46,7 @@ struct hsreq_ {
 
 typedef struct hsreq_ hsreq_t;
 
-list_t hs_reqlist;
+mowgli_list_t hs_reqlist;
 
 void _modinit(module_t *m)
 {

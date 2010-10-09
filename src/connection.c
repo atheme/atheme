@@ -30,7 +30,7 @@
 
 static BlockHeap *connection_heap;
 
-list_t connection_list;
+mowgli_list_t connection_list;
 
 void init_netio(void)
 {

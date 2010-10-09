@@ -15,7 +15,7 @@
  */
 static inline int connection_count(void)
 {
-	return LIST_LENGTH(&connection_list);
+	return MOWGLI_LIST_LENGTH(&connection_list);
 }
 
 #endif

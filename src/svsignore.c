@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-list_t svs_ignore_list;
+mowgli_list_t svs_ignore_list;
 
 /*
  * svsignore_add(const char *mask, const char *reason)

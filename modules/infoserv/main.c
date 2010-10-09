@@ -30,7 +30,7 @@ struct logoninfo_ {
 
 typedef struct logoninfo_ logoninfo_t;
 
-list_t logon_info;
+mowgli_list_t logon_info;
 
 struct operlogoninfo_ {
         char *nick;
@@ -41,11 +41,11 @@ struct operlogoninfo_ {
 
 typedef struct operlogoninfo_ operlogoninfo_t;
 
-list_t operlogon_info;
+mowgli_list_t operlogon_info;
 unsigned int logoninfo_count = 0;
 
 service_t *infoserv;
-list_t is_conftable;
+mowgli_list_t is_conftable;
 
 static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);

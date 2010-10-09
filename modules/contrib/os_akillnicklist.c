@@ -38,7 +38,7 @@ static mowgli_patricia_t *akillnicklist = NULL;
 static mowgli_patricia_t *akilluserlist = NULL;
 static mowgli_patricia_t *akillreallist = NULL;
 
-static list_t conft = { NULL, NULL, 0 };
+static mowgli_list_t conft = { NULL, NULL, 0 };
 
 static void
 add_contents_of_file_to_list(const char *filename, mowgli_patricia_t *list)

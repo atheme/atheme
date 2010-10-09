@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *loveserv;
-list_t ls_cmdtree;
+mowgli_list_t ls_cmdtree;
 
 static void _ls_admirer(char *origin)
 {

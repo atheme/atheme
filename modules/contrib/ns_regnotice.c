@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
         "Atheme Development Group <http://www.atheme.org>"
 );
 
-static list_t regnotices = { NULL, NULL, 0 };
+static mowgli_list_t regnotices = { NULL, NULL, 0 };
 
 static void regnotice_hook(myuser_t *mu)
 {

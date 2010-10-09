@@ -24,7 +24,7 @@ static void mygroup_expire(void *unused)
 static void grant_channel_access_hook(user_t *u)
 {
 	node_t *n, *tn;
-	list_t *l;
+	mowgli_list_t *l;
 
 	return_if_fail(u->myuser != NULL);
 
@@ -106,7 +106,7 @@ static void user_info_hook(hook_user_req_t *req)
 {
 	static char buf[BUFSIZE];
 	node_t *n;
-	list_t *l;
+	mowgli_list_t *l;
 
 	*buf = 0;
 
@@ -132,7 +132,7 @@ static void user_info_hook(hook_user_req_t *req)
 static void myuser_delete_hook(myuser_t *mu)
 {
 	node_t *n, *tn;
-	list_t *l;
+	mowgli_list_t *l;
 
 	l = myuser_get_membership_list(mu);
 

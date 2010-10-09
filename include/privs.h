@@ -72,8 +72,8 @@ struct soper_ {
 #define SOPER_CONF	0x1 /* oper is listed in atheme.conf */
 
 /* privs.c */
-E list_t operclasslist;
-E list_t soperlist;
+E mowgli_list_t operclasslist;
+E mowgli_list_t soperlist;
 
 E void init_privs(void);
 

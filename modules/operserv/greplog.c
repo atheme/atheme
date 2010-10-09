@@ -80,7 +80,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	char logfile[256];
 	time_t t;
 	struct tm tm;
-	list_t loglines = { NULL, NULL, 0 };
+	mowgli_list_t loglines = { NULL, NULL, 0 };
 	node_t *n, *tn;
 
 	/* require user, channel and server auspex

@@ -11,12 +11,12 @@
 
 typedef struct {
 	object_t parent;
-	list_t rows;
+	mowgli_list_t rows;
 } table_t;
 
 typedef struct {
 	int id;
-	list_t cells;
+	mowgli_list_t cells;
 } table_row_t;
 
 typedef struct {

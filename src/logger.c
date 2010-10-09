@@ -26,7 +26,7 @@
 static logfile_t *log_file;
 int log_force;
 
-static list_t log_files = { NULL, NULL, 0 };
+static mowgli_list_t log_files = { NULL, NULL, 0 };
 
 /* private destructor function for logfile_t. */
 static void logfile_delete_file(void *vdata)

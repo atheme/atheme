@@ -141,7 +141,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_NONE, 2, cmd_subscribe, { .path = "" } };
 
-list_t *ns_cmdtree;
+mowgli_list_t *ns_cmdtree;
 
 static void hook_metadata_change(hook_metadata_change_t *md)
 {

@@ -33,7 +33,7 @@
 chansvs_t chansvs;
 nicksvs_t nicksvs;
 
-list_t taint_list = { NULL, NULL, 0 };
+mowgli_list_t taint_list = { NULL, NULL, 0 };
 
 me_t me;
 struct cnt cnt;

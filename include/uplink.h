@@ -31,7 +31,7 @@ struct uplink_
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
 
 /* uplink.c */
-E list_t uplinks;
+E mowgli_list_t uplinks;
 E uplink_t *curr_uplink;
 
 E void init_uplinks(void);

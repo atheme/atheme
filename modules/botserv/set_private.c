@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 mowgli_patricia_t **bs_set_cmdtree;
 
 fn_botserv_bot_find *botserv_bot_find;
-list_t *bs_bots;
+mowgli_list_t *bs_bots;
 
 static void bs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 

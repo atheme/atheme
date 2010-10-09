@@ -24,7 +24,7 @@
 #include "atheme.h"
 #include "authcookie.h"
 
-list_t authcookie_list;
+mowgli_list_t authcookie_list;
 static BlockHeap *authcookie_heap;
 
 void authcookie_init(void)

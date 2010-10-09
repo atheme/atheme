@@ -15,10 +15,10 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t saslserv_conftable;
+mowgli_list_t saslserv_conftable;
 
-list_t sessions;
-list_t sasl_mechanisms;
+mowgli_list_t sessions;
+mowgli_list_t sasl_mechanisms;
 
 sasl_session_t *find_session(char *uid);
 sasl_session_t *make_session(char *uid);

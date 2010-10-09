@@ -31,9 +31,9 @@ enum {
 /* room_t: Describes a room that the wumpus or players could be in. */
 struct room_ {
 	int id;			/* room 3 or whatever */
-	list_t exits;		/* old int count == exits.count */
+	mowgli_list_t exits;		/* old int count == exits.count */
 	int contents;
-	list_t players;		/* player_t players */
+	mowgli_list_t players;		/* player_t players */
 };
 
 typedef struct room_ room_t;
@@ -52,7 +52,7 @@ typedef struct player_ player_t;
 struct game_ {
 	int wumpus;
 	int mazesize;
-	list_t players;
+	mowgli_list_t players;
 	bool running;
 	bool starting;
 

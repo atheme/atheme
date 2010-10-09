@@ -9,34 +9,19 @@
 #ifndef NODE_H
 #define NODE_H
 
-typedef struct node_ node_t;
-typedef struct list_ list_t;
+typedef mowgli_node_t node_t;
 
-/* list node struct */
-struct node_
-{
-  node_t *next, *prev; 
-  void *data;                   /* pointer to real structure */
-};
-
-/* node list struct */
-struct list_
-{
-  node_t *head, *tail;
-  unsigned int count;                    /* how many entries in the list */
-};
-
-E list_t *list_create(void);
-E void list_free(list_t *l);
+E mowgli_list_t *list_create(void);
+E void list_free(mowgli_list_t *l);
 
 E node_t *node_create(void);
 E void node_free(node_t *n);
-E void node_add(void *data, node_t *n, list_t *l);
-E void node_add_head(void *data, node_t *n, list_t *l);
-E void node_add_before(void *data, node_t *n, list_t *l, node_t *before);
-E void node_del(node_t *n, list_t *l);
-E node_t *node_find(void *data, list_t *l);
-E void node_move(node_t *m, list_t *oldlist, list_t *newlist);
+E void node_add(void *data, node_t *n, mowgli_list_t *l);
+E void node_add_head(void *data, node_t *n, mowgli_list_t *l);
+E void node_add_before(void *data, node_t *n, mowgli_list_t *l, node_t *before);
+E void node_del(node_t *n, mowgli_list_t *l);
+E node_t *node_find(void *data, mowgli_list_t *l);
+E void node_move(node_t *m, mowgli_list_t *oldlist, mowgli_list_t *newlist);
 
 #endif
 

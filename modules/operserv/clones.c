@@ -37,7 +37,7 @@ static void db_h_ex(database_handle_t *db, const char *type);
 
 mowgli_patricia_t *os_clones_cmds;
 
-static list_t clone_exempts;
+static mowgli_list_t clone_exempts;
 bool kline_enabled;
 mowgli_patricia_t *hostlist;
 BlockHeap *hostentry_heap;
@@ -56,7 +56,7 @@ typedef struct hostentry_ hostentry_t;
 struct hostentry_
 {
 	char ip[HOSTIPLEN];
-	list_t clients;
+	mowgli_list_t clients;
 	time_t lastaction;
 	unsigned int lastaction_clones;
 };

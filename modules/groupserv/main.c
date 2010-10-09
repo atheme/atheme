@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *groupsvs;
-list_t conf_gs_table;
+mowgli_list_t conf_gs_table;
 
 void _modinit(module_t *m)
 {

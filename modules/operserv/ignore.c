@@ -28,7 +28,7 @@ command_t os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0,
 command_t os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear, { .path = "" } };
 
 mowgli_patricia_t *os_ignore_cmds;
-list_t svs_ignore_list;
+mowgli_list_t svs_ignore_list;
 
 
 void _modinit(module_t *m)

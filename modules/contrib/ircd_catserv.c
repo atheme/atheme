@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *catserv;
-list_t catserv_conftable;
+mowgli_list_t catserv_conftable;
 
 static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[]);
 static void catserv_cmd_help(sourceinfo_t *si, int parc, char *parv[]);

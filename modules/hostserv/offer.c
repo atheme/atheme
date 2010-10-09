@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-list_t *conf_hs_table;
+mowgli_list_t *conf_hs_table;
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -41,7 +41,7 @@ struct hsoffered_ {
 
 typedef struct hsoffered_ hsoffered_t;
 
-list_t hs_offeredlist;
+mowgli_list_t hs_offeredlist;
 
 void _modinit(module_t *m)
 {

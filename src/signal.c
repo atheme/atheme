@@ -215,7 +215,7 @@ void check_signals(void)
 	}
 }
 
-list_t childproc_list;
+mowgli_list_t childproc_list;
 
 struct childproc
 {

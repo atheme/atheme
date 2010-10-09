@@ -29,8 +29,8 @@ struct server_
 	unsigned int flags;
 
 	server_t *uplink; /* uplink server */
-	list_t children;  /* children linked to me */
-	list_t userlist;  /* users attached to me */
+	mowgli_list_t children;  /* children linked to me */
+	mowgli_list_t userlist;  /* users attached to me */
 };
 
 #define SF_HIDE        0x00000001
@@ -55,7 +55,7 @@ typedef struct {
 
 /* servers.c */
 E mowgli_patricia_t *servlist;
-E list_t tldlist;
+E mowgli_list_t tldlist;
 
 E void init_servers(void);
 

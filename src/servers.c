@@ -25,7 +25,7 @@
 
 mowgli_patricia_t *sidlist;
 mowgli_patricia_t *servlist;
-list_t tldlist;
+mowgli_list_t tldlist;
 
 static BlockHeap *serv_heap;
 static BlockHeap *tld_heap;

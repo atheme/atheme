@@ -16,9 +16,9 @@ typedef struct {
 	node_t node;
 } taint_reason_t;
 
-E list_t taint_list;
+E mowgli_list_t taint_list;
 
-#define IS_TAINTED	LIST_LENGTH(&taint_list)
+#define IS_TAINTED	MOWGLI_LIST_LENGTH(&taint_list)
 #define TAINT_ON(cond, reason) \
 	if ((cond))						\
 	{							\

@@ -444,7 +444,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	char *vec[3];
 	hook_cmessage_data_t cdata;
 	node_t *n, *tn;
-	list_t l = { NULL, NULL, 0 };
+	mowgli_list_t l = { NULL, NULL, 0 };
 	service_t *svs;
 
 	/* Call hook here */

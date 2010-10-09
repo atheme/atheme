@@ -81,7 +81,7 @@ struct BlockHeap
 static int newblock(BlockHeap *bh);
 static int BlockHeapGarbageCollect(BlockHeap *);
 static void block_heap_gc(void *unused);
-static list_t heap_lists;
+static mowgli_list_t heap_lists;
 
 #define blockheap_fail(x) _blockheap_fail(x, __FILE__, __LINE__)
 

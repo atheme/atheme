@@ -100,7 +100,7 @@ struct ConfOption
 
   char *language;		/* default language */
 
-  list_t exempts;		/* List of masks never to automatically kline */
+  mowgli_list_t exempts;		/* List of masks never to automatically kline */
 
   bool allow_taint;		/* allow tainted operation */
 } config_options;

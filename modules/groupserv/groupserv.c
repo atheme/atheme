@@ -179,9 +179,9 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 	return count;
 }
 
-list_t *myuser_get_membership_list(myuser_t *mu)
+mowgli_list_t *myuser_get_membership_list(myuser_t *mu)
 {
-	list_t *l;
+	mowgli_list_t *l;
 
 	return_val_if_fail(isuser(mu), NULL);
 
@@ -217,7 +217,7 @@ const char *mygroup_founder_names(mygroup_t *mg)
 
 unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 {
-	list_t *l;
+	mowgli_list_t *l;
 	node_t *n;
 	unsigned int count = 0;
 

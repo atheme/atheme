@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t os_conftable;
+mowgli_list_t os_conftable;
 
 service_t *opersvs = NULL;
 

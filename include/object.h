@@ -20,7 +20,7 @@ typedef struct metadata_ metadata_t;
 
 typedef struct {
 	myuser_t *mu;
-	list_t taglist;
+	mowgli_list_t taglist;
 } metadata_subscription_t;
 
 typedef void (*destructor_t)(void *);
@@ -31,7 +31,7 @@ typedef struct {
 	int refcount;
 #endif
 	destructor_t destructor;
-	list_t metadata;
+	mowgli_list_t metadata;
 	mowgli_patricia_t *privatedata;
 } object_t;
 

@@ -29,8 +29,8 @@ struct connection_
 	char name[HOSTLEN];
 	char hbuf[BUFSIZE + 1];
 
-	list_t recvq;
-	list_t sendq;
+	mowgli_list_t recvq;
+	mowgli_list_t sendq;
 
 	int fd;
 	int pollslot;
@@ -98,7 +98,7 @@ extern connection_t *connection_find(int);
 extern void connection_select(int delay);
 //inline int connection_count(void);
 
-extern list_t connection_list;
+extern mowgli_list_t connection_list;
 
 #endif
 

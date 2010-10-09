@@ -27,7 +27,7 @@
 #include <dlfcn.h>
 
 static BlockHeap *module_heap;
-list_t modules, modules_inprogress;
+mowgli_list_t modules, modules_inprogress;
 
 module_t *modtarget = NULL;
 
