@@ -355,7 +355,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 		else if ((t->level & level) == level)
 			lesser_t = t;
 
-		else if ((level & t->level) == t->level)
+		else if ((level & t->level) == t->level && greater_t == NULL)
 			greater_t = t;
 	}
 
@@ -935,7 +935,6 @@ static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
 	{
 		mowgli_node_t *n;
 
-		command_success_nodata(si, " ");
 		command_success_nodata(si, _("List of channel-defined roles:"));
 
 		MOWGLI_ITER_FOREACH(n, l->head)
