@@ -1029,7 +1029,7 @@ static bool opensex_write_time(database_handle_t *db, time_t tm)
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%lu ", tm);
+	fprintf(rs->f, "%lu ", (unsigned long)tm);
 
 	return true;
 }
