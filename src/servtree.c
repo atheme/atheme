@@ -25,7 +25,7 @@
 
 mowgli_patricia_t *services_name;
 mowgli_patricia_t *services_nick;
-static BlockHeap *service_heap;
+mowgli_heap_t *service_heap;
 
 static void servtree_update(void *dummy);
 
@@ -67,7 +67,7 @@ static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
 
 void servtree_init(void)
 {
-	service_heap = BlockHeapCreate(sizeof(service_t), 12);
+	service_heap = mowgli_heap_create(sizeof(service_t), 12, BH_NOW);
 	services_name = mowgli_patricia_create(strcasecanon);
 	services_nick = mowgli_patricia_create(strcasecanon);
 
@@ -248,7 +248,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		return NULL;
 	}
 
-	sptr = BlockHeapAlloc(service_heap);
+	sptr = mowgli_heap_alloc(service_heap);
 
 	sptr->internal_name = sstrdup(name);
 	/* default these, to reasonably safe values */
@@ -339,7 +339,7 @@ void service_delete(service_t *sptr)
 	free(sptr->host);
 	free(sptr->real);
 
-	BlockHeapFree(service_heap, sptr);
+	mowgli_heap_free(service_heap, sptr);
 }
 
 service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))

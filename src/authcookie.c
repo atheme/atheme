@@ -25,11 +25,11 @@
 #include "authcookie.h"
 
 mowgli_list_t authcookie_list;
-static BlockHeap *authcookie_heap;
+mowgli_heap_t *authcookie_heap;
 
 void authcookie_init(void)
 {
-	authcookie_heap = BlockHeapCreate(sizeof(authcookie_t), 1024);
+	authcookie_heap = mowgli_heap_create(sizeof(authcookie_t), 1024, BH_NOW);
 
 	if (!authcookie_heap)
 	{
@@ -52,7 +52,7 @@ void authcookie_init(void)
  */
 authcookie_t *authcookie_create(myuser_t *mu)
 {
-	authcookie_t *au = BlockHeapAlloc(authcookie_heap);
+	authcookie_t *au = mowgli_heap_alloc(authcookie_heap);
 
 	au->ticket = gen_pw(20);
 	au->myuser = mu;
@@ -136,7 +136,7 @@ void authcookie_destroy(authcookie_t * ac)
 
 	mowgli_node_delete(&ac->node, &authcookie_list);
 	free(ac->ticket);
-	BlockHeapFree(authcookie_heap, ac);
+	mowgli_heap_free(authcookie_heap, ac);
 }
 
 /*

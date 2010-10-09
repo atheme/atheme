@@ -25,9 +25,9 @@
 
 mowgli_patricia_t *chanlist;
 
-static BlockHeap *chan_heap;
-static BlockHeap *chanuser_heap;
-static BlockHeap *chanban_heap;
+mowgli_heap_t *chan_heap;
+mowgli_heap_t *chanuser_heap;
+mowgli_heap_t *chanban_heap;
 
 /*
  * init_channels()
@@ -45,9 +45,9 @@ static BlockHeap *chanban_heap;
  */
 void init_channels(void)
 {
-	chan_heap = BlockHeapCreate(sizeof(channel_t), HEAP_CHANNEL);
-	chanuser_heap = BlockHeapCreate(sizeof(chanuser_t), HEAP_CHANUSER);
-	chanban_heap = BlockHeapCreate(sizeof(chanban_t), HEAP_CHANUSER);
+	chan_heap = mowgli_heap_create(sizeof(channel_t), HEAP_CHANNEL, BH_NOW);
+	chanuser_heap = mowgli_heap_create(sizeof(chanuser_t), HEAP_CHANUSER, BH_NOW);
+	chanban_heap = mowgli_heap_create(sizeof(chanban_t), HEAP_CHANUSER, BH_NOW);
 
 	if (chan_heap == NULL || chanuser_heap == NULL || chanban_heap == NULL)
 	{
@@ -101,7 +101,7 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 
 	slog(LG_DEBUG, "channel_add(): %s by %s", name, creator->name);
 
-	c = BlockHeapAlloc(chan_heap);
+	c = mowgli_heap_alloc(chan_heap);
 
 	c->name = sstrdup(name);
 	c->ts = ts;
@@ -172,7 +172,7 @@ void channel_delete(channel_t *c)
 		soft_assert(is_internal_client(cu->user) && !me.connected);
 		mowgli_node_delete(&cu->cnode, &c->members);
 		mowgli_node_delete(&cu->unode, &cu->user->channels);
-		BlockHeapFree(chanuser_heap, cu);
+		mowgli_heap_free(chanuser_heap, cu);
 		cnt.chanuser--;
 	}
 	c->nummembers = 0;
@@ -196,7 +196,7 @@ void channel_delete(channel_t *c)
 	if (c->topic_setter != NULL)
 		free(c->topic_setter);
 
-	BlockHeapFree(chan_heap, c);
+	mowgli_heap_free(chan_heap, c);
 
 	cnt.chan--;
 }
@@ -244,7 +244,7 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 
 	slog(LG_DEBUG, "chanban_add(): %s +%c %s", chan->name, type, mask);
 
-	c = BlockHeapAlloc(chanban_heap);
+	c = mowgli_heap_alloc(chanban_heap);
 
 	c->chan = chan;
 	c->mask = sstrdup(mask);
@@ -280,7 +280,7 @@ void chanban_delete(chanban_t * c)
 	mowgli_node_delete(&c->node, &c->chan->bans);
 
 	free(c->mask);
-	BlockHeapFree(chanban_heap, c);
+	mowgli_heap_free(chanban_heap, c);
 }
 
 /*
@@ -397,7 +397,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	slog(LG_DEBUG, "chanuser_add(): %s -> %s", chan->name, u->nick);
 
-	cu = BlockHeapAlloc(chanuser_heap);
+	cu = mowgli_heap_alloc(chanuser_heap);
 
 	cu->chan = chan;
 	cu->user = u;
@@ -467,7 +467,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 	mowgli_node_delete(&cu->cnode, &chan->members);
 	mowgli_node_delete(&cu->unode, &user->channels);
 
-	BlockHeapFree(chanuser_heap, cu);
+	mowgli_heap_free(chanuser_heap, cu);
 
 	chan->nummembers--;
 	cnt.chanuser--;

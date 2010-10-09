@@ -54,7 +54,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 /* GLOBAL <parameters>|SEND|CLEAR */
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 {
-	static BlockHeap *glob_heap = NULL;
+	static mowgli_heap_t *glob_heap = NULL;
 	struct global_ *global;
 	static mowgli_list_t globlist;
 	mowgli_node_t *n, *tn;
@@ -85,10 +85,10 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			mowgli_node_delete(n, &globlist);
 			mowgli_node_free(n);
 			free(global->text);
-			BlockHeapFree(glob_heap, global);
+			mowgli_heap_free(glob_heap, global);
 		}
 
-		BlockHeapDestroy(glob_heap);
+		mowgli_heap_destroy(glob_heap);
 		glob_heap = NULL;
 		free(sender);
 		sender = NULL;
@@ -132,10 +132,10 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			mowgli_node_delete(n, &globlist);
 			mowgli_node_free(n);
 			free(global->text);
-			BlockHeapFree(glob_heap, global);
+			mowgli_heap_free(glob_heap, global);
 		}
 
-		BlockHeapDestroy(glob_heap);
+		mowgli_heap_destroy(glob_heap);
 		glob_heap = NULL;
 		free(sender);
 		sender = NULL;
@@ -146,7 +146,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	}
 
 	if (!glob_heap)
-		glob_heap = BlockHeapCreate(sizeof(struct global_), 5);
+		glob_heap = mowgli_heap_create(sizeof(struct global_), 5, BH_NOW);
 
 	if (!sender)
 		sender = sstrdup(get_source_name(si));
@@ -157,7 +157,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		return;
 	}
 
-	global = BlockHeapAlloc(glob_heap);
+	global = mowgli_heap_alloc(glob_heap);
 
 	global->text = sstrdup(params);
 

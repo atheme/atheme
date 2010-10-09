@@ -27,8 +27,8 @@ struct pcommand_ {
 #define MAXPARC		35 /* max # params to protocol command */
 
 /* pmodule.c */
-E BlockHeap *pcommand_heap;
-E BlockHeap *messagetree_heap;
+E mowgli_heap_t *pcommand_heap;
+E mowgli_heap_t *messagetree_heap;
 E mowgli_patricia_t *pcommands;
 
 E bool pmodule_loaded;

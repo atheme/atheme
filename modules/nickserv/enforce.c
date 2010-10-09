@@ -30,7 +30,7 @@ typedef struct {
 } enforce_timeout_t;
 
 mowgli_list_t enforce_list;
-BlockHeap *enforce_timeout_heap;
+mowgli_heap_t *enforce_timeout_heap;
 time_t enforce_next;
 
 static void guest_nickname(user_t *u);
@@ -188,7 +188,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
 				{
 					mowgli_node_delete(&timeout->node, &enforce_list);
-					BlockHeapFree(enforce_timeout_heap, timeout);
+					mowgli_heap_free(enforce_timeout_heap, timeout);
 				}
 			}
 		}
@@ -281,7 +281,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
 				{
 					mowgli_node_delete(&timeout->node, &enforce_list);
-					BlockHeapFree(enforce_timeout_heap, timeout);
+					mowgli_heap_free(enforce_timeout_heap, timeout);
 				}
 			}
 		}
@@ -359,7 +359,7 @@ void enforce_timeout_check(void *arg)
 		mn = mynick_find(timeout->nick);
 		valid = u != NULL && mn != NULL && (!strcmp(u->host, timeout->host) || !strcmp(u->vhost, timeout->host));
 		mowgli_node_delete(&timeout->node, &enforce_list);
-		BlockHeapFree(enforce_timeout_heap, timeout);
+		mowgli_heap_free(enforce_timeout_heap, timeout);
 		if (!valid)
 			continue;
 		if (is_internal_client(u))
@@ -438,7 +438,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 
 	if (timeout == NULL)
 	{
-		timeout = BlockHeapAlloc(enforce_timeout_heap);
+		timeout = mowgli_heap_alloc(enforce_timeout_heap);
 		strlcpy(timeout->nick, hdata->mn->nick, sizeof timeout->nick);
 		strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
 
@@ -507,7 +507,7 @@ void _modinit(module_t *m)
 		return;
 	}
 	
-	enforce_timeout_heap = BlockHeapCreate(sizeof(enforce_timeout_t), 128);
+	enforce_timeout_heap = mowgli_heap_create(sizeof(enforce_timeout_t), 128, BH_NOW);
 	if (enforce_timeout_heap == NULL)
 	{
 		m->mflags = MODTYPE_FAIL;
@@ -538,7 +538,7 @@ void _moddeinit()
 	hook_del_user_info(show_enforce);
 	hook_del_nick_can_register(check_registration);
 	hook_del_nick_enforce(check_enforce);
-	BlockHeapDestroy(enforce_timeout_heap);
+	mowgli_heap_destroy(enforce_timeout_heap);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

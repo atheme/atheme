@@ -40,7 +40,7 @@ mowgli_patricia_t *os_clones_cmds;
 static mowgli_list_t clone_exempts;
 bool kline_enabled;
 mowgli_patricia_t *hostlist;
-BlockHeap *hostentry_heap;
+mowgli_heap_t *hostentry_heap;
 static long kline_duration;
 
 typedef struct cexcept_ cexcept_t;
@@ -111,7 +111,7 @@ void _modinit(module_t *m)
 	db_register_type_handler("CLONES-EX", db_h_ex);
 
 	hostlist = mowgli_patricia_create(noopcanon);
-	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
+	hostentry_heap = mowgli_heap_create(sizeof(hostentry_t), HEAP_USER, BH_NOW);
 
 	kline_duration = 3600; // set a default
 
@@ -132,7 +132,7 @@ static void free_hostentry(const char *key, void *data, void *privdata)
 		mowgli_node_delete(n, &he->clients);
 		mowgli_node_free(n);
 	}
-	BlockHeapFree(hostentry_heap, he);
+	mowgli_heap_free(hostentry_heap, he);
 }
 
 void _moddeinit(void)
@@ -140,7 +140,7 @@ void _moddeinit(void)
 	mowgli_node_t *n, *tn;
 
 	mowgli_patricia_destroy(hostlist, free_hostentry, NULL);
-	BlockHeapDestroy(hostentry_heap);
+	mowgli_heap_destroy(hostentry_heap);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
@@ -576,7 +576,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	he = mowgli_patricia_retrieve(hostlist, u->ip);
 	if (he == NULL)
 	{
-		he = BlockHeapAlloc(hostentry_heap);
+		he = mowgli_heap_alloc(hostentry_heap);
 		strlcpy(he->ip, u->ip, sizeof he->ip);
 		mowgli_patricia_add(hostlist, he->ip, he);
 	}
@@ -636,7 +636,7 @@ static void clones_userquit(user_t *u)
 		if (MOWGLI_LIST_LENGTH(&he->clients) == 0)
 		{
 			mowgli_patricia_delete(hostlist, he->ip);
-			BlockHeapFree(hostentry_heap, he);
+			mowgli_heap_free(hostentry_heap, he);
 		}
 	}
 }

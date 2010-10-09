@@ -27,13 +27,13 @@
 mowgli_list_t operclasslist;
 mowgli_list_t soperlist;
 
-static BlockHeap *operclass_heap;
-static BlockHeap *soper_heap;
+mowgli_heap_t *operclass_heap;
+mowgli_heap_t *soper_heap;
 
 void init_privs(void)
 {
-	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
-	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
+	operclass_heap = mowgli_heap_create(sizeof(operclass_t), 2, BH_NOW);
+	soper_heap = mowgli_heap_create(sizeof(soper_t), 2, BH_NOW);
 	if (!operclass_heap || !soper_heap)
 	{
 		slog(LG_INFO, "init_privs(): block allocator failed.");
@@ -56,7 +56,7 @@ operclass_t *operclass_add(const char *name, const char *privs)
 		return NULL;
 	}
 	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
-	operclass = BlockHeapAlloc(operclass_heap);
+	operclass = mowgli_heap_alloc(operclass_heap);
 	mowgli_node_add(operclass, n, &operclasslist);
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
@@ -89,7 +89,7 @@ void operclass_delete(operclass_t *operclass)
 	}
 	free(operclass->name);
 	free(operclass->privs);
-	BlockHeapFree(operclass_heap, operclass);
+	mowgli_heap_free(operclass_heap, operclass);
 	cnt.operclass--;
 }
 
@@ -141,7 +141,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 	}
 	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? entity(mu)->name : name, operclass ? operclass->name : "<null>");
 
-	soper = BlockHeapAlloc(soper_heap);
+	soper = mowgli_heap_alloc(soper_heap);
 	n = mowgli_node_create();
 
 	mowgli_node_add(soper, n, &soperlist);
@@ -193,7 +193,7 @@ void soper_delete(soper_t *soper)
 	free(soper->classname);
 	free(soper->password);
 
-	BlockHeapFree(soper_heap, soper);
+	mowgli_heap_free(soper_heap, soper);
 
 	cnt.soper--;
 }

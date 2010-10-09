@@ -32,12 +32,12 @@ mowgli_patricia_t *oldnameslist;
 mowgli_patricia_t *mclist;
 mowgli_patricia_t *certfplist;
 
-static BlockHeap *myuser_heap;   /* HEAP_USER */
-static BlockHeap *mynick_heap;   /* HEAP_USER */
-static BlockHeap *mycertfp_heap; /* HEAP_USER */
-static BlockHeap *myuser_name_heap;	/* HEAP_USER / 2 */
-static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
-static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
+mowgli_heap_t *myuser_heap;   /* HEAP_USER */
+mowgli_heap_t *mynick_heap;   /* HEAP_USER */
+mowgli_heap_t *mycertfp_heap; /* HEAP_USER */
+mowgli_heap_t *myuser_name_heap;	/* HEAP_USER / 2 */
+mowgli_heap_t *mychan_heap;	/* HEAP_CHANNEL */
+mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
 
 /*
  * init_accounts()
@@ -55,12 +55,12 @@ static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
  */
 void init_accounts(void)
 {
-	myuser_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
-	mynick_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
-	myuser_name_heap = BlockHeapCreate(sizeof(myuser_name_t), HEAP_USER / 2);
-	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
-	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
-	mycertfp_heap = BlockHeapCreate(sizeof(mycertfp_t), HEAP_USER);
+	myuser_heap = mowgli_heap_create(sizeof(myuser_t), HEAP_USER, BH_NOW);
+	mynick_heap = mowgli_heap_create(sizeof(myuser_t), HEAP_USER, BH_NOW);
+	myuser_name_heap = mowgli_heap_create(sizeof(myuser_name_t), HEAP_USER / 2, BH_NOW);
+	mychan_heap = mowgli_heap_create(sizeof(mychan_t), HEAP_CHANNEL, BH_NOW);
+	chanacs_heap = mowgli_heap_create(sizeof(chanacs_t), HEAP_CHANUSER, BH_NOW);
+	mycertfp_heap = mowgli_heap_create(sizeof(mycertfp_t), HEAP_USER, BH_NOW);
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
 			|| chanacs_heap == NULL || mycertfp_heap == NULL)
@@ -109,7 +109,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
-	mu = BlockHeapAlloc(myuser_heap);
+	mu = mowgli_heap_alloc(myuser_heap);
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
@@ -294,7 +294,7 @@ void myuser_delete(myuser_t *mu)
 
 	free(mu->email);
 
-	BlockHeapFree(myuser_heap, mu);
+	mowgli_heap_free(myuser_heap, mu);
 
 	cnt.myuser--;
 }
@@ -643,7 +643,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, entity(mu)->name);
 
-	mn = BlockHeapAlloc(mynick_heap);
+	mn = mowgli_heap_alloc(mynick_heap);
 	object_init(object(mn), NULL, (destructor_t) mynick_delete);
 
 	strlcpy(mn->nick, name, NICKLEN);
@@ -686,7 +686,7 @@ void mynick_delete(mynick_t *mn)
 	mowgli_patricia_delete(nicklist, mn->nick);
 	mowgli_node_delete(&mn->node, &mn->owner->nicks);
 
-	BlockHeapFree(mynick_heap, mn);
+	mowgli_heap_free(mynick_heap, mn);
 
 	cnt.mynick--;
 }
@@ -721,7 +721,7 @@ myuser_name_t *myuser_name_add(const char *name)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "myuser_name_add(): %s", name);
 
-	mun = BlockHeapAlloc(myuser_name_heap);
+	mun = mowgli_heap_alloc(myuser_name_heap);
 	object_init(object(mun), NULL, (destructor_t) myuser_name_delete);
 
 	strlcpy(mun->name, name, NICKLEN);
@@ -758,7 +758,7 @@ static void myuser_name_delete(myuser_name_t *mun)
 
 	metadata_delete_all(mun);
 
-	BlockHeapFree(myuser_name_heap, mun);
+	mowgli_heap_free(myuser_name_heap, mun);
 
 	cnt.myuser_name--;
 }
@@ -883,7 +883,7 @@ mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp)
 	return_val_if_fail(mu != NULL, NULL);
 	return_val_if_fail(certfp != NULL, NULL);
 
-	mcfp = BlockHeapAlloc(mycertfp_heap);
+	mcfp = mowgli_heap_alloc(mycertfp_heap);
 	mcfp->mu = mu;
 	mcfp->certfp = sstrdup(certfp);
 
@@ -903,7 +903,7 @@ void mycertfp_delete(mycertfp_t *mcfp)
 	mowgli_patricia_delete(certfplist, mcfp->certfp);
 
 	free(mcfp->certfp);
-	BlockHeapFree(mycertfp_heap, mcfp);
+	mowgli_heap_free(mycertfp_heap, mcfp);
 }
 
 mycertfp_t *mycertfp_find(const char *certfp)
@@ -937,7 +937,7 @@ static void mychan_delete(mychan_t *mc)
 
 	free(mc->name);
 
-	BlockHeapFree(mychan_heap, mc);
+	mowgli_heap_free(mychan_heap, mc);
 
 	cnt.mychan--;
 }
@@ -951,7 +951,7 @@ mychan_t *mychan_add(char *name)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "mychan_add(): %s", name);
 
-	mc = BlockHeapAlloc(mychan_heap);
+	mc = mowgli_heap_alloc(mychan_heap);
 
 	object_init(object(mc), NULL, (destructor_t) mychan_delete);
 	mc->name = sstrdup(name);
@@ -1301,7 +1301,7 @@ static void chanacs_delete(chanacs_t *ca)
 
 	free(ca->host);
 
-	BlockHeapFree(chanacs_heap, ca);
+	mowgli_heap_free(chanacs_heap, ca);
 
 	cnt.chanacs--;
 }
@@ -1341,7 +1341,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 
 	n = mowgli_node_create();
 
-	ca = BlockHeapAlloc(chanacs_heap);
+	ca = mowgli_heap_alloc(chanacs_heap);
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
@@ -1390,7 +1390,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_add_host(): %s -> %s", mychan->name, host);
 
-	ca = BlockHeapAlloc(chanacs_heap);
+	ca = mowgli_heap_alloc(chanacs_heap);
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;

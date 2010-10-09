@@ -29,9 +29,9 @@ mowgli_list_t klnlist;
 mowgli_list_t xlnlist;
 mowgli_list_t qlnlist;
 
-static BlockHeap *kline_heap;	/* 16 */
-static BlockHeap *xline_heap;	/* 16 */
-static BlockHeap *qline_heap;	/* 16 */
+mowgli_heap_t *kline_heap;	/* 16 */
+mowgli_heap_t *xline_heap;	/* 16 */
+mowgli_heap_t *qline_heap;	/* 16 */
 
 /*************
  * L I S T S *
@@ -39,9 +39,9 @@ static BlockHeap *qline_heap;	/* 16 */
 
 void init_nodes(void)
 {
-	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
-	xline_heap = BlockHeapCreate(sizeof(xline_t), 16);
-	qline_heap = BlockHeapCreate(sizeof(qline_t), 16);
+	kline_heap = mowgli_heap_create(sizeof(kline_t), 16, BH_NOW);
+	xline_heap = mowgli_heap_create(sizeof(xline_t), 16, BH_NOW);
+	qline_heap = mowgli_heap_create(sizeof(qline_t), 16, BH_NOW);
 
 	if (kline_heap == NULL || xline_heap == NULL || qline_heap == NULL)
 	{
@@ -126,7 +126,7 @@ kline_t *kline_add(const char *user, const char *host, const char *reason, long 
 
 	slog(LG_DEBUG, "kline_add(): %s@%s -> %s (%ld)", user, host, reason, duration);
 
-	k = BlockHeapAlloc(kline_heap);
+	k = mowgli_heap_alloc(kline_heap);
 
 	mowgli_node_add(k, n, &klnlist);
 
@@ -170,7 +170,7 @@ void kline_delete(kline_t *k)
 	free(k->reason);
 	free(k->setby);
 
-	BlockHeapFree(kline_heap, k);
+	mowgli_heap_free(kline_heap, k);
 
 	cnt.kline--;
 }
@@ -262,7 +262,7 @@ xline_t *xline_add(const char *realname, const char *reason, long duration, cons
 
 	slog(LG_DEBUG, "xline_add(): %s -> %s (%ld)", realname, reason, duration);
 
-	x = BlockHeapAlloc(xline_heap);
+	x = mowgli_heap_alloc(xline_heap);
 
 	mowgli_node_add(x, n, &xlnlist);
 
@@ -306,7 +306,7 @@ void xline_delete(const char *realname)
 	free(x->reason);
 	free(x->setby);
 
-	BlockHeapFree(xline_heap, x);
+	mowgli_heap_free(xline_heap, x);
 
 	cnt.xline--;
 }
@@ -399,7 +399,7 @@ qline_t *qline_add(const char *mask, const char *reason, long duration, const ch
 
 	slog(LG_DEBUG, "qline_add(): %s -> %s (%ld)", mask, reason, duration);
 
-	q = BlockHeapAlloc(qline_heap);
+	q = mowgli_heap_alloc(qline_heap);
 	mowgli_node_add(q, n, &qlnlist);
 
 	q->mask = sstrdup(mask);
@@ -442,7 +442,7 @@ void qline_delete(const char *mask)
 	free(q->reason);
 	free(q->setby);
 
-	BlockHeapFree(qline_heap, q);
+	mowgli_heap_free(qline_heap, q);
 
 	cnt.qline--;
 }

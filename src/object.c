@@ -23,11 +23,12 @@
 
 #include "atheme.h"
 
-static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
+mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
 
 void init_metadata(void)
 {
-	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
+	metadata_heap = mowgli_heap_create(sizeof(metadata_t), HEAP_CHANUSER, BH_NOW);
+
 	if (metadata_heap == NULL)
 	{
 		slog(LG_ERROR, "init_metadata(): block allocator failure.");
@@ -148,7 +149,7 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	if ((md = metadata_find(target, name)))
 		metadata_delete(target, name);
 
-	md = BlockHeapAlloc(metadata_heap);
+	md = mowgli_heap_alloc(metadata_heap);
 
 	md->name = strshare_get(name);
 	md->value = sstrdup(value);
@@ -176,7 +177,7 @@ void metadata_delete(void *target, const char *name)
 	strshare_unref(md->name);
 	free(md->value);
 
-	BlockHeapFree(metadata_heap, md);
+	mowgli_heap_free(metadata_heap, md);
 }
 
 metadata_t *metadata_find(void *target, const char *name)

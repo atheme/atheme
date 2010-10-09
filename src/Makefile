@@ -7,7 +7,6 @@ BASE_SRCS =				\
 	arc4random.c		\
 	auth.c		\
 	authcookie.c		\
-	balloc.c		\
 	base64.c		\
 	channels.c		\
 	cidr.c		\

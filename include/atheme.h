@@ -20,7 +20,6 @@
 #include "common.h"
 #include "object.h"
 #include "event.h"
-#include "balloc.h"
 #include "connection.h"
 #include "hook.h"
 #include "hooktypes.h"

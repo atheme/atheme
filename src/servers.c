@@ -27,8 +27,8 @@ mowgli_patricia_t *sidlist;
 mowgli_patricia_t *servlist;
 mowgli_list_t tldlist;
 
-static BlockHeap *serv_heap;
-static BlockHeap *tld_heap;
+mowgli_heap_t *serv_heap;
+mowgli_heap_t *tld_heap;
 
 static void server_delete_serv(server_t *s);
 
@@ -49,8 +49,8 @@ static void server_delete_serv(server_t *s);
  */
 void init_servers(void)
 {
-	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
-	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
+	serv_heap = mowgli_heap_create(sizeof(server_t), HEAP_SERVER, BH_NOW);
+	tld_heap = mowgli_heap_create(sizeof(tld_t), 4, BH_NOW);
 
 	if (serv_heap == NULL || tld_heap == NULL)
 	{
@@ -103,7 +103,7 @@ server_t *server_add(const char *name, unsigned int hops, server_t *uplink, cons
 	else
 		slog(LG_DEBUG, "server_add(): %s, root", name);
 
-	s = BlockHeapAlloc(serv_heap);
+	s = mowgli_heap_alloc(serv_heap);
 
 	if (id != NULL)
 	{
@@ -250,7 +250,7 @@ static void server_delete_serv(server_t *s)
 	if (s->sid)
 		free(s->sid);
 
-	BlockHeapFree(serv_heap, s);
+	mowgli_heap_free(serv_heap, s);
 
 	cnt.server--;
 }
@@ -306,7 +306,7 @@ tld_t *tld_add(const char *name)
 
         slog(LG_DEBUG, "tld_add(): %s", name);
 
-        tld = BlockHeapAlloc(tld_heap);
+        tld = mowgli_heap_alloc(tld_heap);
 
         mowgli_node_add(tld, n, &tldlist);
 
@@ -350,7 +350,7 @@ void tld_delete(const char *name)
         mowgli_node_free(n);
 
         free(tld->name);
-        BlockHeapFree(tld_heap, tld);
+        mowgli_heap_free(tld_heap, tld);
 
         cnt.tld--;
 }

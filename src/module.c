@@ -26,14 +26,14 @@
 
 #include <dlfcn.h>
 
-static BlockHeap *module_heap;
+mowgli_heap_t *module_heap;
 mowgli_list_t modules, modules_inprogress;
 
 module_t *modtarget = NULL;
 
 void modules_init(void)
 {
-	module_heap = BlockHeapCreate(sizeof(module_t), 256);
+	module_heap = mowgli_heap_create(sizeof(module_t), 256, BH_NOW);
 
 	if (!module_heap)
 	{
@@ -114,7 +114,7 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	m = BlockHeapAlloc(module_heap);
+	m = mowgli_heap_alloc(module_heap);
 
 	strlcpy(m->modpath, filespec, BUFSIZE);
 	m->handle = handle;
@@ -296,7 +296,7 @@ void module_unload(module_t * m)
 	}
 	/* else unloaded in embryonic state */
 	linker_close(m->handle);
-	BlockHeapFree(module_heap, m);
+	mowgli_heap_free(module_heap, m);
 }
 
 /*

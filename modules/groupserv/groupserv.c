@@ -23,18 +23,18 @@ struct gflags mg_flags[] = {
 	{ 0, 0 }
 };
 
-static BlockHeap *mygroup_heap, *groupacs_heap;
+static mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
 void mygroups_init(void)
 {
-	mygroup_heap = BlockHeapCreate(sizeof(mygroup_t), HEAP_USER);
-	groupacs_heap = BlockHeapCreate(sizeof(groupacs_t), HEAP_CHANACS);
+	mygroup_heap = mowgli_heap_create(sizeof(mygroup_t), HEAP_USER, BH_NOW);
+	groupacs_heap = mowgli_heap_create(sizeof(groupacs_t), HEAP_CHANACS, BH_NOW);
 }
 
 void mygroups_deinit(void)
 {
-	BlockHeapDestroy(mygroup_heap);
-	BlockHeapDestroy(groupacs_heap);
+	mowgli_heap_destroy(mygroup_heap);
+	mowgli_heap_destroy(groupacs_heap);
 }
 
 static void mygroup_delete(mygroup_t *mg)
@@ -53,14 +53,14 @@ static void mygroup_delete(mygroup_t *mg)
 	}
 
 	metadata_delete_all(mg);
-	BlockHeapFree(mygroup_heap, mg);
+	mowgli_heap_free(mygroup_heap, mg);
 }
 
 mygroup_t *mygroup_add(const char *name)
 {
 	mygroup_t *mg;
 
-	mg = BlockHeapAlloc(mygroup_heap);
+	mg = mowgli_heap_alloc(mygroup_heap);
 	object_init(object(mg), NULL, (destructor_t) mygroup_delete);
 
 	entity(mg)->type = ENT_GROUP;
@@ -91,7 +91,7 @@ mygroup_t *mygroup_find(const char *name)
 static void groupacs_des(groupacs_t *ga)
 {
 	metadata_delete_all(ga);
-	BlockHeapFree(groupacs_heap, ga);
+	mowgli_heap_free(groupacs_heap, ga);
 }
 
 groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
@@ -101,7 +101,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mu != NULL, NULL);
 
-	ga = BlockHeapAlloc(groupacs_heap);
+	ga = mowgli_heap_alloc(groupacs_heap);
 	object_init(object(ga), NULL, (destructor_t) groupacs_des);
 
 	ga->mg = mg;

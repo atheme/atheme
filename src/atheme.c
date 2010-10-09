@@ -214,7 +214,6 @@ int main(int argc, char *argv[])
 #endif
 
         event_init();
-        initBlockHeap();
 	strshare_init();
         hooks_init();
         init_netio();

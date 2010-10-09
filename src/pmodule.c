@@ -25,8 +25,10 @@
 #include "pmodule.h"
 
 mowgli_patricia_t *pcommands;
-BlockHeap *pcommand_heap;
-BlockHeap *messagetree_heap;
+
+mowgli_heap_t *pcommand_heap;
+mowgli_heap_t *messagetree_heap;
+
 struct cmode_ *mode_list;
 struct extmode *ignore_mode_list;
 size_t ignore_mode_list_size = 0;
@@ -39,7 +41,7 @@ bool backend_loaded = false;
 
 void pcommand_init(void)
 {
-	pcommand_heap = BlockHeapCreate(sizeof(pcommand_t), 64);
+	pcommand_heap = mowgli_heap_create(sizeof(pcommand_t), 64, BH_NOW);
 
 	if (!pcommand_heap)
 	{
@@ -60,7 +62,7 @@ void pcommand_add(const char *token, void (*handler) (sourceinfo_t *si, int parc
 		return;
 	}
 	
-	pcmd = BlockHeapAlloc(pcommand_heap);
+	pcmd = mowgli_heap_alloc(pcommand_heap);
 	pcmd->token = sstrdup(token);
 	pcmd->handler = handler;
 	pcmd->minparc = minparc;
@@ -83,7 +85,7 @@ void pcommand_delete(const char *token)
 
 	free(pcmd->token);
 	pcmd->handler = NULL;
-	BlockHeapFree(pcommand_heap, pcmd);
+	mowgli_heap_free(pcommand_heap, pcmd);
 }
 
 pcommand_t *pcommand_find(const char *token)

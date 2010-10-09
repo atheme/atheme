@@ -72,7 +72,7 @@ struct ConfTable
 	mowgli_node_t node;
 };
 
-static BlockHeap *conftable_heap;
+mowgli_heap_t *conftable_heap;
 
 mowgli_list_t confblocks;
 bool conf_need_rehash;
@@ -397,7 +397,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_HANDLER;
@@ -418,7 +418,7 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_SUBBLOCK;
@@ -439,7 +439,7 @@ void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (co
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_HANDLER;
@@ -460,7 +460,7 @@ void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_UINT;
@@ -484,7 +484,7 @@ void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned 
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_DURATION;
@@ -507,7 +507,7 @@ void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned in
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_DUPSTR;
@@ -529,7 +529,7 @@ void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 		return;
 	}
 
-	ct = BlockHeapAlloc(conftable_heap);
+	ct = mowgli_heap_alloc(conftable_heap);
 
 	ct->name = sstrdup(name);
 	ct->type = CONF_BOOL;
@@ -555,7 +555,7 @@ void del_top_conf(const char *name)
 
 	free(ct->name);
 
-	BlockHeapFree(conftable_heap, ct);
+	mowgli_heap_free(conftable_heap, ct);
 }
 
 void del_conf_item(const char *name, mowgli_list_t *conflist)
@@ -577,7 +577,7 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 
 	free(ct->name);
 
-	BlockHeapFree(conftable_heap, ct);
+	mowgli_heap_free(conftable_heap, ct);
 }
 
 conf_handler_t conftable_get_conf_handler(struct ConfTable *ct)
@@ -609,7 +609,7 @@ int token_to_value(struct Token token_table[], const char *token)
 
 void init_confprocess(void)
 {
-	conftable_heap = BlockHeapCreate(sizeof(struct ConfTable), 32);
+	conftable_heap = mowgli_heap_create(sizeof(struct ConfTable), 32, BH_NOW);
 
 	if (!conftable_heap)
 	{

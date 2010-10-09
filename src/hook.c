@@ -25,13 +25,13 @@
 #include "internal.h"
 
 mowgli_patricia_t *hooks;
-static BlockHeap *hook_heap;
+mowgli_heap_t *hook_heap;
 static hook_t *find_hook(const char *name);
 
 void hooks_init()
 {
 	hooks = mowgli_patricia_create(strcasecanon);
-	hook_heap = BlockHeapCreate(sizeof(hook_t), 1024);
+	hook_heap = mowgli_heap_create(sizeof(hook_t), 1024, BH_NOW);
 
 	if (!hook_heap || !hooks)
 	{
@@ -47,7 +47,7 @@ hook_t *hook_add_event(const char *name)
 	if((nh = find_hook(name)) != NULL)
 		return nh;
 
-	nh = BlockHeapAlloc(hook_heap);
+	nh = mowgli_heap_alloc(hook_heap);
 	nh->name = sstrdup(name);
 
 	mowgli_patricia_add(hooks, name, nh);
@@ -69,7 +69,7 @@ void hook_del_event(const char *name)
 			mowgli_node_free(n);
 		}
 
-		BlockHeapFree(hook_heap, h);
+		mowgli_heap_free(hook_heap, h);
 		return;
 	}
 }

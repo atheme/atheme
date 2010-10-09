@@ -28,13 +28,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-static BlockHeap *connection_heap;
+mowgli_heap_t *connection_heap;
 
 mowgli_list_t connection_list;
 
 void init_netio(void)
 {
-	connection_heap = BlockHeapCreate(sizeof(connection_t), 16);
+	connection_heap = mowgli_heap_create(sizeof(connection_t), 16, BH_NOW);
 
 	if (!connection_heap)
 	{
@@ -84,7 +84,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 
 	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
-	cptr = BlockHeapAlloc(connection_heap);
+	cptr = mowgli_heap_alloc(connection_heap);
 
 	cptr->fd = fd;
 	cptr->pollslot = -1;
@@ -197,7 +197,7 @@ void connection_close(connection_t *cptr)
 
 	sendqrecvq_free(cptr);
 
-	BlockHeapFree(connection_heap, cptr);
+	mowgli_heap_free(connection_heap, cptr);
 }
 
 /* This one is only safe for use by connection_close_soon(),

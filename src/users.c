@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-static BlockHeap *user_heap;
+mowgli_heap_t *user_heap;
 
 mowgli_patricia_t *userlist;
 mowgli_patricia_t *uidlist;
@@ -44,7 +44,7 @@ mowgli_patricia_t *uidlist;
  */
 void init_users(void)
 {
-	user_heap = BlockHeapCreate(sizeof(user_t), HEAP_USER);
+	user_heap = mowgli_heap_create(sizeof(user_t), HEAP_USER, BH_NOW);
 
 	if (user_heap == NULL)
 	{
@@ -150,7 +150,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 		}
 	}
 
-	u = BlockHeapAlloc(user_heap);
+	u = mowgli_heap_alloc(user_heap);
 
 	if (uid != NULL)
 	{
@@ -270,7 +270,7 @@ void user_delete(user_t *u, const char *comment)
 		u->myuser = NULL;
 	}
 
-	BlockHeapFree(user_heap, u);
+	mowgli_heap_free(user_heap, u);
 
 	cnt.user--;
 

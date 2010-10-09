@@ -28,13 +28,13 @@
 mowgli_list_t uplinks;
 uplink_t *curr_uplink;
 
-static BlockHeap *uplink_heap;
+mowgli_heap_t *uplink_heap;
 
 static void uplink_close(connection_t *cptr);
 
 void init_uplinks(void)
 {
-	uplink_heap = BlockHeapCreate(sizeof(uplink_t), 4);
+	uplink_heap = mowgli_heap_create(sizeof(uplink_t), 4, BH_NOW);
 	if (!uplink_heap)
 	{
 		slog(LG_INFO, "init_uplinks(): block allocator failed.");
@@ -67,7 +67,7 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 	}
 	else
 	{
-		u = BlockHeapAlloc(uplink_heap);
+		u = mowgli_heap_alloc(uplink_heap);
 		n = mowgli_node_create();
 		u->node = n;
 		mowgli_node_add(u, n, &uplinks);
@@ -98,7 +98,7 @@ void uplink_delete(uplink_t * u)
 	mowgli_node_delete(n, &uplinks);
 	mowgli_node_free(n);
 
-	BlockHeapFree(uplink_heap, u);
+	mowgli_heap_free(uplink_heap, u);
 	cnt.uplink--;
 }
 
