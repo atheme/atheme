@@ -23,6 +23,12 @@ void myentity_del(myentity_t *mt)
 
 myentity_t *myentity_find(const char *name)
 {
+	myentity_t *me;
+
+	me = entity(myuser_find_ext(name));
+	if (me != NULL)
+		return me;
+
 	return mowgli_patricia_retrieve(entities, name);
 }
 
