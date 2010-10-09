@@ -384,7 +384,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			}
 		}
 
-		else if ((level & t->level) == t->level && greater_t == NULL)
+		else if ((level & t->level) == t->level)
 			lesser_t = t;
 	}
 
