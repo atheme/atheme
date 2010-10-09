@@ -12,9 +12,6 @@
 typedef struct node_ node_t;
 typedef struct list_ list_t;
 
-/* macros for linked lists */
-#define LIST_LENGTH(list) (list)->count
-
 /* list node struct */
 struct node_
 {
