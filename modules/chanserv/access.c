@@ -253,9 +253,9 @@ mowgli_list_t *build_template_list(mychan_t *mc)
 	mowgli_list_t *l;
 	template_t *t;
 
-	return_if_fail(mc != NULL);
-
 	l = mowgli_list_create();
+
+	return_val_if_fail(mc != NULL, l);
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
