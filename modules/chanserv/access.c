@@ -235,7 +235,7 @@ typedef struct {
 	mowgli_node_t node;
 } template_t;
 
-int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
+static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 {
 	template_t *ta = a->data;
 	template_t *tb = b->data;
@@ -243,7 +243,7 @@ int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 	return count_bits(tb->level) - count_bits(ta->level);
 }
 
-mowgli_list_t *build_template_list(mychan_t *mc)
+static mowgli_list_t *build_template_list(mychan_t *mc)
 {
 	const char *p, *q, *r;
 	char *s;
@@ -319,7 +319,7 @@ mowgli_list_t *build_template_list(mychan_t *mc)
 	return l;	
 }
 
-void free_template_list(mowgli_list_t *l)
+static void free_template_list(mowgli_list_t *l)
 {
 	mowgli_node_t *n, *tn;
 
@@ -355,7 +355,7 @@ void free_template_list(mowgli_list_t *l)
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
 	mowgli_list_t *l;
-	mowgli_node_t *n, *tn;
+	mowgli_node_t *n;
 	static char flagname[400];
 	template_t *exact_t = NULL, *lesser_t = NULL, *greater_t = NULL;
 	unsigned int flagcount = count_bits(level);
