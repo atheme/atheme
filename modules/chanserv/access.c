@@ -395,6 +395,8 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	 *      name with + or -.
 	 * if we have only a lesser match (lesser_t):
 	 *      return that name with +.
+	 * if we have only a greater match (greater_t):
+	 *      return that name with -.
 	 */
 	if (exact_t != NULL)
 		strlcpy(flagname, exact_t->name, sizeof flagname);
