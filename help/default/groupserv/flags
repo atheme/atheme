@@ -20,7 +20,7 @@ Permissions:
     +F - Grants full founder access.
     +m - Read memos sent to the group.
     +c - Have channel access in channels where the group has sufficient
-         privledges.
+         priviledges.
     +v - Take vhosts offered to the group through HostServ.
 
 The special permission +* adds all permissions except +F.
