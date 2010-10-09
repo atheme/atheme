@@ -75,6 +75,8 @@ code
   instead long ago.
 - myuser_t is now a child of myentity_t which describes an entity that can have
   channel membership.
+- list_t/node_t have been removed in preference of mowgli.list.
+- balloc has been removed in preference of mowgli.heap.
 other
 - added an anope 1.9.2 flatfile DB to OpenSEX DB conversion script.
 - mail sending has been changed, likely causing serverinfo::mta scripts to
