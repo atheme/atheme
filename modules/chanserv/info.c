@@ -127,7 +127,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!hide_info)
 	{
-		LIST_FOREACH(n, object(mc)->metadata.head)
+		MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
 		{
 			md = n->data;
 			if (md->private)

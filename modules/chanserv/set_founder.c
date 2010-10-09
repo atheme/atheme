@@ -130,7 +130,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), mt->name);
 
 			/* add target as founder... */
-			LIST_FOREACH(n, mc->chanacs.head)
+			MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 			{
 				ca = n->data;
 				/* CA_FLAGS is always on if CA_FOUNDER is on, this just

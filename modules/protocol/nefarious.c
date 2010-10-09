@@ -260,7 +260,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		clear_simple_modes(c);
 		chanban_clear(c);
 		handle_topic_from(si, c, "", 0, "");
-		LIST_FOREACH(n, c->members.head)
+		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 			if (cu->user->server == me.me)
@@ -510,7 +510,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (c == 'b')
 		{
-			LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 			{
 				if (((chanban_t *)n->data)->type == 'b')
 					chanban_delete(n->data);
@@ -518,7 +518,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (c == 'e')
 		{
-			LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 			{
 				if (((chanban_t *)n->data)->type == 'e')
 					chanban_delete(n->data);
@@ -534,7 +534,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 			chan->limit = 0;
 		else if (c == 'o')
 		{
-			LIST_FOREACH(n, chan->members.head)
+			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				if (cu->user->server == me.me)
@@ -550,7 +550,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (c == 'h')
 		{
-			LIST_FOREACH(n, chan->members.head)
+			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				cu->modes &= ~CSTATUS_HALFOP;
@@ -558,7 +558,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (c == 'v')
 		{
-			LIST_FOREACH(n, chan->members.head)
+			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				cu->modes &= ~CSTATUS_VOICE;

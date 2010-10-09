@@ -256,7 +256,7 @@ void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 	node_t *n, *tn;
 	struct childproc *p;
 
-	LIST_FOREACH_SAFE(n, tn, childproc_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, childproc_list.head)
 	{
 		p = n->data;
 		if (p->cb == cb)
@@ -276,7 +276,7 @@ static void childproc_check(void)
 
 	while ((pid = waitpid(-1, &status, WNOHANG)) > 0)
 	{
-		LIST_FOREACH(n, childproc_list.head)
+		MOWGLI_ITER_FOREACH(n, childproc_list.head)
 		{
 			p = n->data;
 			if (p->pid == pid)

@@ -75,7 +75,7 @@ static nfds_t update_poll_fds(void)
 	connection_t *cptr;
 	nfds_t slot = 0;
 
-	LIST_FOREACH(n, connection_list.head)
+	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
 
@@ -124,7 +124,7 @@ void connection_select(int delay)
 		/* Iterate twice, so we don't touch freed memory if
 		 * a connection is closed.
 		 * -- jilles */
-		LIST_FOREACH_SAFE(n, tn, connection_list.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 		{
 			cptr = n->data;
 			slot = cptr->pollslot;
@@ -139,7 +139,7 @@ void connection_select(int delay)
 			}
 		}
 
-		LIST_FOREACH_SAFE(n, tn, connection_list.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 		{
 			cptr = n->data;
 			slot = cptr->pollslot;
@@ -153,7 +153,7 @@ void connection_select(int delay)
 			}
 		}
 
-		LIST_FOREACH_SAFE(n, tn, connection_list.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 		{
 			cptr = n->data;
 			if (cptr->flags & CF_DEAD)

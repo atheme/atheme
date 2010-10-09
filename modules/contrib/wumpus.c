@@ -89,14 +89,14 @@ distance_to_wumpus(player_t *player)
 {
 	node_t *n, *tn;
 	
-	LIST_FOREACH(n, player->location->exits.head)
+	MOWGLI_ITER_FOREACH(n, player->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
 
 		if (r->contents == E_WUMPUS)
 			return 1;
 
-		LIST_FOREACH(tn, r->exits.head)
+		MOWGLI_ITER_FOREACH(tn, r->exits.head)
 		{
 			room_t *r2 = (room_t *) tn->data;
 
@@ -116,7 +116,7 @@ adjacent_room(player_t *p, int id)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, p->location->exits.head)
+	MOWGLI_ITER_FOREACH(n, p->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
 
@@ -133,7 +133,7 @@ find_player(user_t *u)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, wumpus.players.head)
+	MOWGLI_ITER_FOREACH(n, wumpus.players.head)
 	{
 		player_t *p = n->data;
 
@@ -234,7 +234,7 @@ build_maze(int size)
 				t = rand() % size;
 
 				/* also check that this path doesn't already exist. */
-				LIST_FOREACH(rn, r->exits.head)
+				MOWGLI_ITER_FOREACH(rn, r->exits.head)
 				{
 					room_t *rm = (room_t *) rn->data;
 
@@ -340,7 +340,7 @@ init_game(void)
 	}
 
 	/* place players in random positions */
-	LIST_FOREACH(n, wumpus.players.head)
+	MOWGLI_ITER_FOREACH(n, wumpus.players.head)
 	{
 		player_t *p = (player_t *) n->data;
 
@@ -383,7 +383,7 @@ end_game(void)
 	int i;
 
 	/* destroy players */
-	LIST_FOREACH_SAFE(n, tn, wumpus.players.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, wumpus.players.head)
 		resign_player((player_t *) n->data);
 
 	/* free memory vector */
@@ -394,7 +394,7 @@ end_game(void)
 		{
 			room_t *r = &wumpus.rmemctx[i];
 
-			LIST_FOREACH_SAFE(n, tn, r->exits.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, r->exits.head)
 				node_del(n, &r->exits);
 		}
 		free(wumpus.rmemctx);
@@ -420,7 +420,7 @@ look_player(player_t *p)
 
 	notice(wumpus_cfg.nick, p->u->nick, "You are in room %d.", p->location->id);
 
-	LIST_FOREACH(n, p->location->exits.head)
+	MOWGLI_ITER_FOREACH(n, p->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
 
@@ -431,7 +431,7 @@ look_player(player_t *p)
 		notice(wumpus_cfg.nick, p->u->nick, "You smell a wumpus!");
 
 	/* provide warnings */
-	LIST_FOREACH(n, p->location->exits.head)
+	MOWGLI_ITER_FOREACH(n, p->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
 
@@ -586,7 +586,7 @@ move_wumpus(void *unused)
 
 	while (!moved)
 	{
-		LIST_FOREACH(n, r->exits.head)
+		MOWGLI_ITER_FOREACH(n, r->exits.head)
 		{
 			room_t *tr = (room_t *) n->data;
 
@@ -610,7 +610,7 @@ move_wumpus(void *unused)
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "On my next turn, I can move to:");
 	r = &wumpus.rmemctx[wumpus.wumpus];
 
-	LIST_FOREACH(n, r->exits.head)
+	MOWGLI_ITER_FOREACH(n, r->exits.head)
 	{
 		room_t *tr = (room_t *) n->data;
 
@@ -618,7 +618,7 @@ move_wumpus(void *unused)
 	}
 #endif
 
-	LIST_FOREACH_SAFE(n, tn, wumpus.players.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, wumpus.players.head)
 	{
 		player_t *p = (player_t *) n->data;
 
@@ -746,7 +746,7 @@ move_player(player_t *p, int id)
 	/* tell players about joins. */
 	if (p->location->players.count > 1)
 	{
-		LIST_FOREACH(n, p->location->players.head)
+		MOWGLI_ITER_FOREACH(n, p->location->players.head)
 		{
 			if (n->data != p)
 			{
@@ -928,7 +928,7 @@ static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 
 	notice(wumpus_cfg.nick, si->su->nick, "The following people are playing:");
 
-	LIST_FOREACH(n, wumpus.players.head)
+	MOWGLI_ITER_FOREACH(n, wumpus.players.head)
 	{
 		player_t *p = (player_t *) n->data;
 

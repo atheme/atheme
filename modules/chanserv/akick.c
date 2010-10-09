@@ -256,7 +256,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("AKICK list for \2%s\2:"), mc->name);
 
-		LIST_FOREACH(n, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)n->data;
 

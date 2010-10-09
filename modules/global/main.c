@@ -79,7 +79,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		}
 
 		/* destroy the list we made */
-		LIST_FOREACH_SAFE(n, tn, globlist.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
 			node_del(n, &globlist);
@@ -107,7 +107,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		}
 
 		isfirst = true;
-		LIST_FOREACH(n, globlist.head)
+		MOWGLI_ITER_FOREACH(n, globlist.head)
 		{
 			global = (struct global_ *)n->data;
 
@@ -126,7 +126,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%d\2 lines sent)", LIST_LENGTH(&globlist));
 
 		/* destroy the list we made */
-		LIST_FOREACH_SAFE(n, tn, globlist.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
 			node_del(n, &globlist);

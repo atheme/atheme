@@ -178,7 +178,7 @@ static void block_heap_gc(void *unused)
 {
 	node_t *ptr, *tptr;
 
-	LIST_FOREACH_SAFE(ptr, tptr, heap_lists.head)
+	MOWGLI_ITER_FOREACH_SAFE(ptr, tptr, heap_lists.head)
 		BlockHeapGarbageCollect(ptr->data);
 }
 

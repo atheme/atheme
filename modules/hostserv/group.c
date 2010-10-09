@@ -36,7 +36,7 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 	mynick_t *mn;
 	char buf[BUFSIZE];
 
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
 		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);

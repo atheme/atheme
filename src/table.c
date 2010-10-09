@@ -33,14 +33,14 @@ static void table_destroy(void *obj)
 
 	return_if_fail(table != NULL);
 
-	LIST_FOREACH_SAFE(n, tn, table->rows.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, table->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
 		node_t *n2, *tn2;
 
 		return_if_fail(r != NULL);
 
-		LIST_FOREACH_SAFE(n2, tn2, r->cells.head)
+		MOWGLI_ITER_FOREACH_SAFE(n2, tn2, r->cells.head)
 		{
 			table_cell_t *c = (table_cell_t *) n2->data;
 
@@ -187,7 +187,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 
 	f = (table_row_t *) t->rows.head->data;
 
-	LIST_FOREACH(n, t->rows.head)
+	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
 		node_t *n2, *rn;
@@ -211,7 +211,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	}
 
 	/* now total up the result. */
-	LIST_FOREACH(n, f->cells.head)
+	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
 		bufsz += c->width + 1;
@@ -222,7 +222,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 
 	/* start outputting the header. */
 	callback(object(t)->name, data);
-	LIST_FOREACH(n, f->cells.head)
+	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
 		char buf2[1024];
@@ -235,7 +235,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 
 	/* separator line */
 	p = buf;
-	LIST_FOREACH(n, f->cells.head)
+	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
 
@@ -253,7 +253,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	callback(buf, data);
 	*buf = '\0';
 
-	LIST_FOREACH(n, t->rows.head)
+	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
 		node_t *n2, *rn;
@@ -276,7 +276,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 
 	/* separator line */
 	p = buf;
-	LIST_FOREACH(n, f->cells.head)
+	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
 

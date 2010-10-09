@@ -269,7 +269,7 @@ void module_unload(module_t * m)
 		module_unload((module_t *) m->dephost.head->data);
 
 	/* let modules that we depend on know that we no longer exist */
-	LIST_FOREACH_SAFE(n, tn, m->deplist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
 	{
 		module_t *hm = (module_t *) n->data;
 		node_t *hn = node_find(m, &hm->dephost);
@@ -353,7 +353,7 @@ module_t *module_find(const char *name)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, modules.head)
+	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
 		module_t *m = n->data;
 
@@ -380,7 +380,7 @@ module_t *module_find_published(const char *name)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, modules.head)
+	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
 		module_t *m = n->data;
 
@@ -412,7 +412,7 @@ bool module_request(const char *name)
 	if ((m = module_find_published(name)) != NULL)
 		return true;
 
-	LIST_FOREACH(n, modules_inprogress.head)
+	MOWGLI_ITER_FOREACH(n, modules_inprogress.head)
 	{
 		m = n->data;
 

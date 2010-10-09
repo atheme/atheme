@@ -37,7 +37,7 @@ static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i = 0;
 	command_success_nodata(si, _("Loaded modules:"));
 
-	LIST_FOREACH(n, modules.head)
+	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
 		module_t *m = n->data;
 

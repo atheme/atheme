@@ -138,7 +138,7 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 	node_t *n;
 	chanuser_t *cu;
 
-	LIST_FOREACH(n, channel->members.head)
+	MOWGLI_ITER_FOREACH(n, channel->members.head)
 	{
 		cu = (chanuser_t *)n->data;
 		if (cu->user->server != me.me && cu->modes & CSTATUS_OP)
@@ -284,7 +284,7 @@ node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fir
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
-	LIST_FOREACH(n, first)
+	MOWGLI_ITER_FOREACH(n, first)
 	{
 		cb = n->data;
 
@@ -308,7 +308,7 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
-	LIST_FOREACH(n, first)
+	MOWGLI_ITER_FOREACH(n, first)
 	{
 		ca = n->data;
 

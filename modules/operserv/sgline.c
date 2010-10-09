@@ -341,7 +341,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SGLINE list:"));
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -366,7 +366,7 @@ static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_DO, "SGLINE:SYNC");
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 

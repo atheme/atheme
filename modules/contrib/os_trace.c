@@ -778,7 +778,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 	params = sstrdup(args);
 	succeeded = os_cmd_trace_run(si, actcons, act, &crit, args);
 
-	LIST_FOREACH_SAFE(n, tn, crit.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, crit.head)
 	{
 		trace_query_domain_t *q = (trace_query_domain_t *) n->data;
 		q->cons->cleanup(q);		
@@ -844,7 +844,7 @@ static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actco
 	{
 		bool doit = true;
 
-		LIST_FOREACH(n, crit->head)
+		MOWGLI_ITER_FOREACH(n, crit->head)
 		{
 			trace_query_domain_t *q = (trace_query_domain_t *) n->data;
 

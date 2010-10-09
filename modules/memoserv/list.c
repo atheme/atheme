@@ -61,7 +61,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	/* Go to listing memos */
 	command_success_nodata(si, " ");
 	
-	LIST_FOREACH(n, si->smu->memos.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		i++;
 		memo = (mymemo_t *)n->data;

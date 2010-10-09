@@ -238,7 +238,7 @@ void user_delete(user_t *u, const char *comment)
 		free(u->certfp);
 
 	/* remove the user from each channel */
-	LIST_FOREACH_SAFE(n, tn, u->channels.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->channels.head)
 	{
 		cu = (chanuser_t *)n->data;
 
@@ -254,7 +254,7 @@ void user_delete(user_t *u, const char *comment)
 
 	if (u->myuser)
 	{
-		LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		{
 			if (n->data == u)
 			{

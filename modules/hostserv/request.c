@@ -96,7 +96,7 @@ static void write_hsreqdb(database_handle_t *db)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		hsreq_t *l = n->data;
 
@@ -129,7 +129,7 @@ static void nick_drop_request(hook_user_req_t *hdata)
 	node_t *m;
 	hsreq_t *l;
 
-	LIST_FOREACH(m, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(m, hs_reqlist.head)
 	{
 		l = m->data;
 		if (!irccasecmp(l->nick, hdata->mn->nick))
@@ -153,7 +153,7 @@ static void account_drop_request(myuser_t *mu)
 	node_t *n;
 	hsreq_t *l;
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 		if (!irccasecmp(l->nick, entity(mu)->name))
@@ -177,7 +177,7 @@ static void account_delete_request(myuser_t *mu)
 	node_t *n;
 	hsreq_t *l;
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 		if (!irccasecmp(l->nick, entity(mu)->name))
@@ -243,7 +243,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* search for it */
-	LIST_FOREACH(n, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 
@@ -311,7 +311,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH_SAFE(n, tn, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		l = n->data;
 
@@ -376,7 +376,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH_SAFE(n, tn, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
 		service_t *svs;
 
@@ -435,7 +435,7 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	struct tm tm;
 
-	LIST_FOREACH(n, hs_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
 		l = n->data;
 		x++;

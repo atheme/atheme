@@ -75,7 +75,7 @@ void _moddeinit(void)
 {
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, rwatch_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
 		rwatch_t *rw = n->data;
 
@@ -114,7 +114,7 @@ static void write_rwatchdb(void)
 		return;
 	}
 
-	LIST_FOREACH(n, rwatch_list.head)
+	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
 		rw = n->data;
 		fprintf(f, "RW %d %s\n", rw->reflags, rw->regex);
@@ -242,7 +242,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH(n, rwatch_list.head)
+	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
 		rwatch_t *t = n->data;
 
@@ -295,7 +295,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, rwatch_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
 		rwatch_t *rw = n->data;
 
@@ -331,7 +331,7 @@ static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 
-	LIST_FOREACH(n, rwatch_list.head)
+	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
 		rwatch_t *rw = n->data;
 
@@ -408,7 +408,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, rwatch_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
 		rwatch_t *rw = n->data;
 
@@ -451,7 +451,7 @@ static void rwatch_newuser(hook_user_nick_t *data)
 
 	snprintf(usermask, sizeof usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-	LIST_FOREACH(n, rwatch_list.head)
+	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
 		rw = n->data;
 		if (!rw->re)
@@ -500,7 +500,7 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 	snprintf(usermask, sizeof usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 	snprintf(oldusermask, sizeof oldusermask, "%s!%s@%s %s", data->oldnick, u->user, u->host, u->gecos);
 
-	LIST_FOREACH(n, rwatch_list.head)
+	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
 		rw = n->data;
 		if (!rw->re)

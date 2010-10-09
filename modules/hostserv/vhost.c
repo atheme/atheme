@@ -40,7 +40,7 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 	mynick_t *mn;
 	char buf[BUFSIZE];
 
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
 		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
@@ -117,7 +117,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "- %-30s %s", entity(mu)->name, md->value);
 			matches++;
 		}
-		LIST_FOREACH(n, mu->nicks.head)
+		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 		{
 			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
 			md = metadata_find(mu, buf);

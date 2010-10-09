@@ -189,7 +189,7 @@ metadata_t *metadata_find(void *target, const char *name)
 
 	obj = object(target);
 
-	LIST_FOREACH(n, obj->metadata.head)
+	MOWGLI_ITER_FOREACH(n, obj->metadata.head)
 	{
 		md = n->data;
 
@@ -207,7 +207,7 @@ void metadata_delete_all(void *target)
 	metadata_t *md;
 
 	obj = object(target);
-	LIST_FOREACH_SAFE(n, tn, obj->metadata.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, obj->metadata.head)
 	{
 		md = n->data;
 		metadata_delete(obj, md->name);

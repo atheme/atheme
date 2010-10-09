@@ -128,7 +128,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 
 	
 		/* Make sure we're not on ignore */
-		LIST_FOREACH(n, tmu->memo_ignores.head)
+		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
 			myuser_t *mu;

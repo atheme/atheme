@@ -367,7 +367,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SQLINE list:"));
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
@@ -392,7 +392,7 @@ static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_DO, "SQLINE:SYNC");
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 

@@ -254,7 +254,7 @@ static void httpd_checkidle(void *arg)
 	(void)arg;
 	if (listener == NULL)
 		return;
-	LIST_FOREACH(n, connection_list.head)
+	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
 		if (cptr->listener == listener && cptr->last_recv + 300 < CURRTIME)

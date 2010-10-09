@@ -94,7 +94,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_GET, "WHY: \2%s!%s@%s\2 on \2%s\2", u->nick, u->user, u->vhost, mc->name);
 
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
        	        ca = (chanacs_t *)n->data;
 

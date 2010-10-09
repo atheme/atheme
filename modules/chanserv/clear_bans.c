@@ -88,7 +88,7 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	hits = 0;
-	LIST_FOREACH_SAFE(n, tn, c->bans.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->bans.head)
 	{
 		cb = n->data;
 		if (!strchr(item, cb->type))

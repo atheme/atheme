@@ -127,7 +127,7 @@ static void free_hostentry(const char *key, void *data, void *privdata)
 	node_t *n, *tn;
 	hostentry_t *he = data;
 
-	LIST_FOREACH_SAFE(n, tn, he->clients.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, he->clients.head)
 	{
 		node_del(n, &he->clients);
 		node_free(n);
@@ -142,7 +142,7 @@ void _moddeinit(void)
 	mowgli_patricia_destroy(hostlist, free_hostentry, NULL);
 	BlockHeapDestroy(hostentry_heap);
 
-	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
@@ -185,7 +185,7 @@ static void write_exemptdb(database_handle_t *db)
 	db_write_uint(db, kline_duration);
 	db_commit_row(db);
 
-	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 		if (cexempt_expired(c))
@@ -238,7 +238,7 @@ static unsigned int is_exempt(const char *ip)
 	node_t *n;
 
 	/* first check for an exact match */
-	LIST_FOREACH(n, clone_exempts.head)
+	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
@@ -246,7 +246,7 @@ static unsigned int is_exempt(const char *ip)
 			return c->clones;
 	}
 	/* then look for cidr */
-	LIST_FOREACH(n, clone_exempts.head)
+	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
@@ -425,7 +425,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	LIST_FOREACH(n, clone_exempts.head)
+	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
 	{
 		cexcept_t *t = n->data;
 
@@ -470,7 +470,7 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 	if (!arg)
 		return;
 
-	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
@@ -537,7 +537,7 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 

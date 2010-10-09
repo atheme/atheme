@@ -104,7 +104,7 @@ static void write_infodb(database_handle_t *db)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, logon_info.head)
+	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
 		logoninfo_t *l = n->data;
 
@@ -116,7 +116,7 @@ static void write_infodb(database_handle_t *db)
 		db_commit_row(db);
 	}
 
-	LIST_FOREACH(n, operlogon_info.head)
+	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
 		operlogoninfo_t *o = n->data;
 
@@ -184,7 +184,7 @@ static void display_info(hook_user_nick_t *data)
 	{
 		notice(infoserv->nick, u->nick, "*** \2Message(s) of the Day\2 ***");
 
-		LIST_FOREACH_PREV(n, logon_info.tail)
+		MOWGLI_ITER_FOREACH_PREV(n, logon_info.tail)
 		{
 			l = n->data;
 			
@@ -230,7 +230,7 @@ static void display_oper_info(user_t *u)
 	{
 		notice(infoserv->nick, u->nick, "*** \2Oper Message(s) of the Day\2 ***");
 
-		LIST_FOREACH_PREV(n, operlogon_info.tail)
+		MOWGLI_ITER_FOREACH_PREV(n, operlogon_info.tail)
 		{
 			o = n->data;
 			
@@ -373,7 +373,7 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* search for it */
-	LIST_FOREACH(n, logon_info.head)
+	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
 		l = n->data;
 		x++;
@@ -423,7 +423,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* search for it */
-	LIST_FOREACH(n, operlogon_info.head)
+	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
 		o = n->data;
 		x++;
@@ -456,7 +456,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char dBuf[BUFSIZE];
 	int x = 0;
 
-	LIST_FOREACH(n, logon_info.head)
+	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
 		l = n->data;
 		x++;
@@ -484,7 +484,7 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 	char dBuf[BUFSIZE];
 	int x = 0;
 
-	LIST_FOREACH(n, operlogon_info.head)
+	MOWGLI_ITER_FOREACH(n, operlogon_info.head)
 	{
 		o = n->data;
 		x++;

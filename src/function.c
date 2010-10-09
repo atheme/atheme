@@ -577,7 +577,7 @@ bool is_autokline_exempt(user_t *user)
 	char buf[BUFSIZE];
 
 	snprintf(buf, sizeof(buf), "%s@%s", user->user, user->host);
-	LIST_FOREACH(n, config_options.exempts.head)
+	MOWGLI_ITER_FOREACH(n, config_options.exempts.head)
 	{
 		if (0 == match(n->data, buf))
 			return true;

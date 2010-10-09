@@ -82,7 +82,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		modestack_mode_limit(chansvs.nick, c, MTYPE_ADD, 1);
 	modestack_flush_channel(c);
 
-	LIST_FOREACH_SAFE(n, tn, c->members.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
 
@@ -100,7 +100,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		 * not safe to continue.
 		 *
 		 * Kicking the last user is safe, tn will be NULL and
-		 * LIST_FOREACH_SAFE will stop without touching any part
+		 * MOWGLI_ITER_FOREACH_SAFE will stop without touching any part
 		 * of the channel structure.
 		 */
 		if (nmembers == 2 && ((c = channel_find(channel)) == NULL ||

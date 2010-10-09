@@ -66,7 +66,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "TAXONOMY: \2%s\2", mc->name);
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), target);
 
-	LIST_FOREACH(n, object(mc)->metadata.head)
+	MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
 	{
 		metadata_t *md = n->data;
 

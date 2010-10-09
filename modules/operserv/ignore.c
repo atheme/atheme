@@ -105,7 +105,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Are we already ignoring this mask? */
-	LIST_FOREACH(n, svs_ignore_list.head)
+	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
 		svsignore = (svsignore_t *)n->data;
 
@@ -142,7 +142,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, svs_ignore_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
 		svsignore = (svsignore_t *)n->data;
 
@@ -174,7 +174,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, svs_ignore_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
 		svsignore = (svsignore_t *)n->data;
 
@@ -213,7 +213,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Current Ignore list entries:"));
 	command_success_nodata(si, "-------------------------");
 
-	LIST_FOREACH(n, svs_ignore_list.head)
+	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
 		svsignore = (svsignore_t *)n->data;
 

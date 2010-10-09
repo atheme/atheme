@@ -64,7 +64,7 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Services is presently \2TAINTED\2, no support will be given for this configuration."));
 		command_success_nodata(si, _("List of active taints:"));
 
-		LIST_FOREACH(n, taint_list.head)
+		MOWGLI_ITER_FOREACH(n, taint_list.head)
 		{
 			taint_reason_t *tr = n->data;
 

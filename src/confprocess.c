@@ -294,7 +294,7 @@ void conf_process(config_file_t *cfp)
 	node_t *tn;
 	struct ConfTable *ct = NULL;
 
-	LIST_FOREACH(tn, confblocks.head)
+	MOWGLI_ITER_FOREACH(tn, confblocks.head)
 	{
 		ct = tn->data;
 
@@ -306,7 +306,7 @@ void conf_process(config_file_t *cfp)
 	{
 		for (ce = cfptr->cf_entries; ce; ce = ce->ce_next)
 		{
-			LIST_FOREACH(tn, confblocks.head)
+			MOWGLI_ITER_FOREACH(tn, confblocks.head)
 			{
 				ct = tn->data;
 
@@ -329,7 +329,7 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 	node_t *tn;
 	struct ConfTable *ct = NULL;
 
-	LIST_FOREACH(tn, entries->head)
+	MOWGLI_ITER_FOREACH(tn, entries->head)
 	{
 		ct = tn->data;
 
@@ -338,7 +338,7 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 
 	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
 	{
-		LIST_FOREACH(tn, entries->head)
+		MOWGLI_ITER_FOREACH(tn, entries->head)
 		{
 			ct = tn->data;
 
@@ -360,7 +360,7 @@ struct ConfTable *find_top_conf(const char *name)
 	node_t *n;
 	struct ConfTable *ct;
 
-	LIST_FOREACH(n, confblocks.head)
+	MOWGLI_ITER_FOREACH(n, confblocks.head)
 	{
 		ct = n->data;
 
@@ -376,7 +376,7 @@ struct ConfTable *find_conf_item(const char *name, list_t *conflist)
 	node_t *n;
 	struct ConfTable *ct;
 
-	LIST_FOREACH(n, conflist->head)
+	MOWGLI_ITER_FOREACH(n, conflist->head)
 	{
 		ct = n->data;
 

@@ -187,7 +187,7 @@ void myuser_delete(myuser_t *mu)
 	hook_call_myuser_delete(mu);
 
 	/* log them out */
-	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
 		if (!authservice_loaded || !ircd_on_logout(u, entity(mu)->name))
@@ -199,7 +199,7 @@ void myuser_delete(myuser_t *mu)
 	}
 
 	/* kill all their channels and chanacs */
-	LIST_FOREACH_SAFE(n, tn, entity(mu)->chanacs.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, entity(mu)->chanacs.head)
 	{
 		ca = n->data;
 		mc = ca->mychan;
@@ -249,7 +249,7 @@ void myuser_delete(myuser_t *mu)
 	authcookie_destroy_all(mu);
 
 	/* delete memos */
-	LIST_FOREACH_SAFE(n, tn, mu->memos.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->memos.head)
 	{
 		memo = (mymemo_t *)n->data;
 
@@ -259,12 +259,12 @@ void myuser_delete(myuser_t *mu)
 	}
 
 	/* delete access entries */
-	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->access_list.head)
 		myuser_access_delete(mu, (char *)n->data);
 
 	/* delete their nicks and report them */
 	nicks[0] = '\0';
-	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->nicks.head)
 	{
 		mn = n->data;
 		if (irccasecmp(mn->nick, entity(mu)->name))
@@ -327,7 +327,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 
 	if (authservice_loaded)
 	{
-		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{
 			u = n->data;
 			ircd_on_logout(u, entity(mu)->name);
@@ -338,7 +338,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 	myentity_put(entity(mu));
 	if (authservice_loaded)
 	{
-		LIST_FOREACH(n, mu->logins.head)
+		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
 			u = n->data;
 			ircd_on_login(u, mu, NULL);
@@ -442,7 +442,7 @@ void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	LIST_FOREACH(n, target->logins.head)
+	MOWGLI_ITER_FOREACH(n, target->logins.head)
 	{
 		u = (user_t *)n->data;
 		notice(from, u->nick, "%s", buf);
@@ -488,7 +488,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	snprintf(buf3, sizeof buf3, "%s@%s", u->user, u->ip);
 	snprintf(buf4, sizeof buf4, "%s@%s", u->user, u->chost);
 
-	LIST_FOREACH(n, mu->access_list.head)
+	MOWGLI_ITER_FOREACH(n, mu->access_list.head)
 	{
 		char *entry = (char *) n->data;
 
@@ -562,7 +562,7 @@ myuser_access_find(myuser_t *mu, const char *mask)
 		return NULL;
 	}
 
-	LIST_FOREACH(n, mu->access_list.head)
+	MOWGLI_ITER_FOREACH(n, mu->access_list.head)
 	{
 		char *entry = (char *) n->data;
 
@@ -595,7 +595,7 @@ myuser_access_delete(myuser_t *mu, const char *mask)
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->access_list.head)
 	{
 		char *entry = (char *) n->data;
 
@@ -847,7 +847,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 				md2->value, entity(mu)->name, name);
 	}
 
-	LIST_FOREACH(n, object(mun)->metadata.head)
+	MOWGLI_ITER_FOREACH(n, object(mun)->metadata.head)
 	{
 		md = n->data;
 		/* prefer current metadata to saved */
@@ -928,7 +928,7 @@ static void mychan_delete(mychan_t *mc)
 		slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
 
 	/* remove the chanacs shiz */
-	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		object_unref(n->data);
 
 	metadata_delete_all(mc);
@@ -978,7 +978,7 @@ bool mychan_isused(mychan_t *mc)
 	c = mc->chan;
 	if (c == NULL)
 		return false;
-	LIST_FOREACH(n, c->members.head)
+	MOWGLI_ITER_FOREACH(n, c->members.head)
 	{
 		cu = n->data;
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
@@ -993,7 +993,7 @@ unsigned int mychan_num_founders(mychan_t *mc)
 	chanacs_t *ca;
 	unsigned int count = 0;
 
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->entity != NULL && ca->level & CA_FOUNDER)
@@ -1009,7 +1009,7 @@ const char *mychan_founder_names(mychan_t *mc)
 	static char names[512];
 
 	names[0] = '\0';
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->entity != NULL && ca->level & CA_FOUNDER)
@@ -1048,7 +1048,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 
 	hi_mt = NULL;
 	hi_level = 0;
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->level & CA_AKICK)
@@ -1416,7 +1416,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 	if ((ca = chanacs_find_literal(mychan, mt, level)) != NULL)
 		return ca;
 
-	LIST_FOREACH(n, mychan->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		entity_chanacs_validation_vtable_t *vt;
 
@@ -1445,7 +1445,7 @@ chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *mt, unsigned int l
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
-	LIST_FOREACH(n, mychan->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -1468,7 +1468,7 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 
 	return_val_if_fail(mychan != NULL && host != NULL, NULL);
 
-	LIST_FOREACH(n, mychan->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -1492,7 +1492,7 @@ unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 
 	return_val_if_fail(mychan != NULL && host != NULL, 0);
 
-	LIST_FOREACH(n, mychan->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -1511,7 +1511,7 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 	if ((!mychan) || (!host))
 		return NULL;
 
-	LIST_FOREACH(n, mychan->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -1964,7 +1964,7 @@ static int check_myuser_cb(myentity_t *mt, void *unused)
 	if (!nicksvs.no_nick_ownership)
 	{
 		mn1 = NULL;
-		LIST_FOREACH(n, mu->nicks.head)
+		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 		{
 			mn = n->data;
 			if (mn->registered < mu->registered)

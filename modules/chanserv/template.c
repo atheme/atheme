@@ -338,7 +338,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			int changes = 0, founderskipped = 0;
 			char flagstr2[128];
 
-			LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 			{
 				ca = n->data;
 				if (ca->level != oldflags)

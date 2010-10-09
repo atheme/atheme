@@ -123,7 +123,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		{
 			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 			lau[0] = '\0';
-			LIST_FOREACH(n, mu->logins.head)
+			MOWGLI_ITER_FOREACH(n, mu->logins.head)
 			{
 				if (lau[0] != '\0')
 					strlcat(lau, ", ", sizeof lau);
@@ -141,7 +141,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 				/* logout killed the user... */
 				return;
 		        u->myuser->lastlogin = CURRTIME;
-		        LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		        MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		        {
 			        if (n->data == u)
 		                {

@@ -403,7 +403,7 @@ void botserv_save_database(database_handle_t *db)
 	node_t *n;
 
 	/* iterate through and write all the metadata */
-	LIST_FOREACH(n, bs_bots.head)
+	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
@@ -461,7 +461,7 @@ botserv_bot_t* botserv_bot_find(char *name)
 	if (name == NULL)
 		return NULL;
 
-	LIST_FOREACH(n, bs_bots.head)
+	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
@@ -762,7 +762,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Listing of bots available on \2%s\2:"), me.netname);
 
-	LIST_FOREACH(n, bs_bots.head)
+	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
@@ -775,7 +775,7 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 	{
 		i = 0;
 		command_success_nodata(si, _("Listing of private bots available on \2%s\2:"), me.netname);
-		LIST_FOREACH(n, bs_bots.head)
+		MOWGLI_ITER_FOREACH(n, bs_bots.head)
 		{
 			botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
@@ -970,7 +970,7 @@ void _moddeinit(void)
 		service_delete(botsvs);
 		botsvs = NULL;
 	}
-	LIST_FOREACH_SAFE(n, tn, bs_bots.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
@@ -1012,7 +1012,7 @@ static void on_shutdown(void *unused)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, bs_bots.head)
+	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 		quit_sts(bot->me->me, "shutting down");

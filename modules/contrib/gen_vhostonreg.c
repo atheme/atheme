@@ -95,7 +95,7 @@ static void handle_verify_register(hook_user_req_t *req)
 
 	user_add_host(mu);
 
-	LIST_FOREACH(n, mu->logins.head)
+	MOWGLI_ITER_FOREACH(n, mu->logins.head)
 	{
 		u = n->data;
 		hook_call_user_identify(u); /* XXX */

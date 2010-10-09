@@ -118,7 +118,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	si->smu->memo_ratelimit_num++;
 	si->smu->memo_ratelimit_time = CURRTIME;
 
-	LIST_FOREACH(tn, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 	{
 		chanacs_t *ca = (chanacs_t *) tn->data;
 		tmu = isuser(ca->entity) ? user(ca->entity) : NULL;	/* XXX */
@@ -141,7 +141,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Make sure we're not on ignore */
 		ignored = false;
-		LIST_FOREACH(n, tmu->memo_ignores.head)
+		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
 			myuser_t *mu;

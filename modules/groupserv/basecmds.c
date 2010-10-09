@@ -305,7 +305,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Entry Account                Flags"));
 		command_success_nodata(si, "----- ---------------------- -----");
 
-		LIST_FOREACH(n, mg->acs.head)
+		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
 			ga = n->data;
 

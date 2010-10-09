@@ -490,7 +490,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("AKILL list:"));
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -530,7 +530,7 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_DO, "AKILL:SYNC");
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 

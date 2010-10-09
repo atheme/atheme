@@ -107,7 +107,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 	si->smu->memo_ratelimit_num++;
 	si->smu->memo_ratelimit_time = CURRTIME;
 
-	LIST_FOREACH(tn, mg->acs.head)
+	MOWGLI_ITER_FOREACH(tn, mg->acs.head)
 	{
 		groupacs_t *ga = (groupacs_t *) tn->data;
 		tmu = ga->mu;
@@ -130,7 +130,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Make sure we're not on ignore */
 		ignored = false;
-		LIST_FOREACH(n, tmu->memo_ignores.head)
+		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
 			mynick_t *mn;
 			myuser_t *mu;

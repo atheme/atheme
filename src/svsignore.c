@@ -91,7 +91,7 @@ svsignore_t *svsignore_find(user_t *source)
         strlcat(host, "@", BUFSIZE);
         strlcat(host, source->host, BUFSIZE);
                 
-        LIST_FOREACH(n, svs_ignore_list.head)
+        MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
         {
                 svsignore = (svsignore_t *)n->data;
         

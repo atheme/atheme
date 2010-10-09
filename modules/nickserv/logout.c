@@ -100,7 +100,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 			mn->lastseen = CURRTIME;
 		if (!ircd_on_logout(si->su, entity(si->smu)->name))
 		{
-			LIST_FOREACH_SAFE(n, tn, si->smu->logins.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
 			{
 				if (n->data == si->su)
 				{

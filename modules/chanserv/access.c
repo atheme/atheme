@@ -504,7 +504,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	else
 		metadata_add(mc, "private:templates", newstr);
 
-	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->level != oldflags)
@@ -582,7 +582,7 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Entry Nickname/Host          Role"));
 	command_success_nodata(si, "----- ---------------------- ----");
 
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		const char *role;
 

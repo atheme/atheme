@@ -127,7 +127,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Iterate through list, make sure target not in it, if last node append */
-	LIST_FOREACH(n, si->smu->memo_ignores.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 
@@ -161,7 +161,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Iterate through list, make sure they're not in it, if last node append */
-	LIST_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 
@@ -192,7 +192,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
 	{
 		free(n->data);
 		node_del(n,&si->smu->memo_ignores);
@@ -215,7 +215,7 @@ static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "-------------------------");
 
 	/* Iterate through list, make sure they're not in it, if last node append */
-	LIST_FOREACH(n, si->smu->memo_ignores.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->memo_ignores.head)
 	{
 		command_success_nodata(si, "%d - %s", i, (char *)n->data);
 		i++;

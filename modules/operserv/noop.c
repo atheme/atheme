@@ -52,7 +52,7 @@ void _moddeinit()
 		 * about them.
 		 */
 		event_delete(noop_kill_users, NULL);
-		LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 		{
 			node_del(n, &noop_kill_queue);
 			node_free(n);
@@ -72,7 +72,7 @@ static void noop_kill_users(void *dummy)
 	hook_del_user_delete(check_quit);
 
 	service = service_find("operserv");
-	LIST_FOREACH_SAFE(n, tn, noop_kill_queue.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 	{
 		u = n->data;
 		kill_user(service->me, u, "Operator access denied");
@@ -108,7 +108,7 @@ static void check_user(user_t *u)
 
 	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
 
-	LIST_FOREACH(n, noop_hostmask_list.head)
+	MOWGLI_ITER_FOREACH(n, noop_hostmask_list.head)
 	{
 		noop_t *np = n->data;
 
@@ -127,7 +127,7 @@ static void check_user(user_t *u)
 		}
 	}
 
-	LIST_FOREACH(n, noop_server_list.head)
+	MOWGLI_ITER_FOREACH(n, noop_server_list.head)
 	{
 		noop_t *np = n->data;
 
@@ -151,7 +151,7 @@ static noop_t *noop_find(char *target, list_t *list)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, list->head)
+	MOWGLI_ITER_FOREACH(n, list->head)
 	{
 		noop_t *np = n->data;
 
@@ -317,7 +317,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 
-			LIST_FOREACH(n, noop_hostmask_list.head)
+			MOWGLI_ITER_FOREACH(n, noop_hostmask_list.head)
 			{
 				np = n->data;
 
@@ -336,7 +336,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 
-			LIST_FOREACH(n, noop_server_list.head)
+			MOWGLI_ITER_FOREACH(n, noop_server_list.head)
 			{
 				np = n->data;
 

@@ -174,7 +174,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		LIST_FOREACH(n, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
 			chanacs_t *ca = (chanacs_t *) n->data;
 

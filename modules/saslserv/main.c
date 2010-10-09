@@ -92,7 +92,7 @@ void _moddeinit(void)
 
 	authservice_loaded--;
 
-	LIST_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		destroy_session(n->data);
 		node_del(n, &sessions);
@@ -110,7 +110,7 @@ sasl_session_t *find_session(char *uid)
 	sasl_session_t *p;
 	node_t *n;
 
-	LIST_FOREACH(n, sessions.head)
+	MOWGLI_ITER_FOREACH(n, sessions.head)
 	{
 		p = n->data;
 		if(!strcmp(p->uid, uid))
@@ -152,7 +152,7 @@ void destroy_session(sasl_session_t *p)
 			sasl_logcommand(p, mu, CMDLOG_LOGIN, "LOGIN (session timed out)");
 	}
 
-	LIST_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		if(n->data == p)
 		{
@@ -226,7 +226,7 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	node_t *n;
 	sasl_mechanism_t *mptr;
 
-	LIST_FOREACH(n, sasl_mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
 		mptr = n->data;
 		if(!strcmp(mptr->name, name))
@@ -274,7 +274,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			int l = 0;
 			node_t *n;
 
-			LIST_FOREACH(n, sasl_mechanisms.head)
+			MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 			{
 				sasl_mechanism_t *mptr = n->data;
 				if(l + strlen(mptr->name) > 510)
@@ -466,7 +466,7 @@ static void delete_stale(void *vptr)
 	sasl_session_t *p;
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, sessions.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		p = n->data;
 		if(p->flags & ASASL_MARKED_FOR_DELETION)

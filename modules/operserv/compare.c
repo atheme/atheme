@@ -70,12 +70,12 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Common users in \2%s\2 and \2%s\2"), object1, object2);
 
 			/* iterate over the users in channel 1 */
-			LIST_FOREACH(n1, c1->members.head)
+			MOWGLI_ITER_FOREACH(n1, c1->members.head)
 			{
 				cu1 = n1->data;
 
 				/* now iterate over each of channel 2's members, and compare them to the current user from ch1 */
-				LIST_FOREACH(n2, c2->members.head)
+				MOWGLI_ITER_FOREACH(n2, c2->members.head)
 				{
 					cu2 = n2->data;
 
@@ -131,12 +131,12 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Common channels for \2%s\2 and \2%s\2"), object1, object2);
 
 			/* iterate over the channels of user 1 */
-			LIST_FOREACH(n1, u1->channels.head)
+			MOWGLI_ITER_FOREACH(n1, u1->channels.head)
 			{
 				cu1 = n1->data;
 
 				/* now iterate over each of user 2's channels to the current channel from user 1 */
-				LIST_FOREACH(n2, u2->channels.head)
+				MOWGLI_ITER_FOREACH(n2, u2->channels.head)
 				{
 					cu2 = n2->data;
 

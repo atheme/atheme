@@ -192,7 +192,7 @@ static void ts6_msg_global_sts(user_t *from, const char *mask, const char *text)
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts(":%s PRIVMSG %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
@@ -215,7 +215,7 @@ static void ts6_notice_global_sts(user_t *from, const char *mask, const char *te
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
@@ -731,7 +731,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (si->s->sid != NULL)
 			chanban_clear(c);
 
-		LIST_FOREACH(n, c->members.head)
+		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 			if (cu->user->server == me.me)
@@ -790,7 +790,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	/* be sure to allow joins to TS 0 channels -- jilles */
 	if (parv[0][0] == '0' && parc <= 2)
 	{
-		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
 			chanuser_delete(cu->chan, si->su);
@@ -824,7 +824,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 		 */
 		clear_simple_modes(c);
 
-		LIST_FOREACH(n, c->members.head)
+		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 			if (cu->user->server == me.me)
@@ -1404,7 +1404,7 @@ static void server_eob(server_t *s)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, s->userlist.head)
+	MOWGLI_ITER_FOREACH(n, s->userlist.head)
 	{
 		handle_nickchange((user_t *)n->data);
 	}

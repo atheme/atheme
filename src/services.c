@@ -329,7 +329,7 @@ void reintroduce_user(user_t *u)
 			kill_id_sts(NULL, u->nick, "Service nick");
 	}
 	introduce_nick(u);
-	LIST_FOREACH(n, u->channels.head)
+	MOWGLI_ITER_FOREACH(n, u->channels.head)
 	{
 		c = ((chanuser_t *)n->data)->chan;
 		if (LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
@@ -600,7 +600,7 @@ void grant_channel_access(user_t *u, myuser_t *mu)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, entity(mu)->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 	{
 		chanacs_t *ca;
 		chanuser_t *cu;

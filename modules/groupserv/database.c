@@ -32,7 +32,7 @@ static void write_groupdb(database_handle_t *db)
 		db_write_word(db, mgflags);
 		db_commit_row(db);
 
-		LIST_FOREACH(n, mg->acs.head)
+		MOWGLI_ITER_FOREACH(n, mg->acs.head)
 		{
 			groupacs_t *ga = n->data;
 			char *flags = gflags_tostr(ga_flags, ga->flags);
@@ -44,7 +44,7 @@ static void write_groupdb(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(n, object(mg)->metadata.head)
+		MOWGLI_ITER_FOREACH(n, object(mg)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)n->data;
 

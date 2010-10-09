@@ -760,7 +760,7 @@ static int c_gi_exempts(config_entry_t *ce)
 	if (!ce->ce_entries)
 		return 0;
 
-	LIST_FOREACH_SAFE(n, tn, config_options.exempts.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, config_options.exempts.head)
 	{
 		free(n->data);
 		node_del(n, &config_options.exempts);

@@ -166,7 +166,7 @@ void channel_delete(channel_t *c)
 	 * in the channel. Remove them. Calling chanuser_delete() could lead
 	 * to a recursive call, so don't do that.
 	 * -- jilles */
-	LIST_FOREACH_SAFE(n, tn, c->members.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
 		soft_assert(is_internal_client(cu->user) && !me.connected);
@@ -305,7 +305,7 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 	chanban_t *c;
 	node_t *n;
 
-	LIST_FOREACH(n, chan->bans.head)
+	MOWGLI_ITER_FOREACH(n, chan->bans.head)
 	{
 		c = n->data;
 
@@ -508,7 +508,7 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 	/* choose shortest list to search -- jilles */
 	if (LIST_LENGTH(&user->channels) < LIST_LENGTH(&chan->members))
 	{
-		LIST_FOREACH(n, user->channels.head)
+		MOWGLI_ITER_FOREACH(n, user->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
 
@@ -518,7 +518,7 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 	}
 	else
 	{
-		LIST_FOREACH(n, chan->members.head)
+		MOWGLI_ITER_FOREACH(n, chan->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 

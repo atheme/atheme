@@ -88,7 +88,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "RECOVER: \2%s\2", mc->name);
 
 	/* deop everyone */
-	LIST_FOREACH(n, mc->chan->members.head)
+	MOWGLI_ITER_FOREACH(n, mc->chan->members.head)
 	{
 		cu = (chanuser_t *)n->data;
 

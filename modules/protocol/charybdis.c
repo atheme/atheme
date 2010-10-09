@@ -182,7 +182,7 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
 
-	LIST_FOREACH(n, first)
+	MOWGLI_ITER_FOREACH(n, first)
 	{
 		cb = n->data;
 		

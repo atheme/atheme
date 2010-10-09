@@ -161,7 +161,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 	hook_nick_enforce_t hdata;
 
 	/* find users who get access via the access list */
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
 		u = user_find_named(mn->nick);
@@ -171,7 +171,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 	/* remove mask */
 	myuser_access_delete(mu, mask);
 	/* check if those users still have access */
-	LIST_FOREACH_SAFE(n, tn, l.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l.head)
 	{
 		u = n->data;
 		node_del(n, &l);
@@ -238,7 +238,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("Access list for \2%s\2:"), entity(mu)->name);
 
-		LIST_FOREACH(n, mu->access_list.head)
+		MOWGLI_ITER_FOREACH(n, mu->access_list.head)
 		{
 			mask = n->data;
 			command_success_nodata(si, "- %s", mask);

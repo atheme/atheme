@@ -112,7 +112,7 @@ unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int f
 	chanacs_t *ca;
 	unsigned int count = 0;
 
-	LIST_FOREACH(n, mt->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mt->chanacs.head)
 	{
 		ca = n->data;
 		if (ca->level & flagset)

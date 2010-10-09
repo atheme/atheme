@@ -208,7 +208,7 @@ static void server_delete_serv(server_t *s)
 	hook_call_server_delete((&(hook_server_delete_t){ .s = s }));
 
 	/* first go through it's users and kill all of them */
-	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, s->userlist.head)
 	{
 		u = (user_t *)n->data;
 		/* This user split, allow bursted logins for the account.
@@ -219,7 +219,7 @@ static void server_delete_serv(server_t *s)
 		user_delete(u, "*.net *.split");
 	}
 
-	LIST_FOREACH_SAFE(n, tn, s->children.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, s->children.head)
 	{
 		child = n->data;
 		server_delete_serv(child);
@@ -378,7 +378,7 @@ tld_t *tld_find(const char *name)
 	if (name == NULL)
 		return NULL;
 
-        LIST_FOREACH(n, tldlist.head)
+        MOWGLI_ITER_FOREACH(n, tldlist.head)
         {
                 tld = (tld_t *)n->data;
 

@@ -85,7 +85,7 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 
 	if (!myuser)		/* must have ticket */
 	{
-		LIST_FOREACH(n, authcookie_list.head)
+		MOWGLI_ITER_FOREACH(n, authcookie_list.head)
 		{
 			ac = n->data;
 
@@ -95,7 +95,7 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 	}
 	else if (!ticket)	/* must have myuser */
 	{
-		LIST_FOREACH(n, authcookie_list.head)
+		MOWGLI_ITER_FOREACH(n, authcookie_list.head)
 		{
 			ac = n->data;
 
@@ -105,7 +105,7 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 	}
 	else			/* must have both */
 	{
-		LIST_FOREACH(n, authcookie_list.head)
+		MOWGLI_ITER_FOREACH(n, authcookie_list.head)
 		{
 			ac = n->data;
 
@@ -156,7 +156,7 @@ void authcookie_destroy_all(myuser_t *mu)
 	node_t *n, *tn;
 	authcookie_t *ac;
 
-	LIST_FOREACH_SAFE(n, tn, authcookie_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, authcookie_list.head)
 	{
 		ac = n->data;
 
@@ -183,7 +183,7 @@ void authcookie_expire(void *arg)
 	node_t *n, *tn;
 
 	(void)arg;
-        LIST_FOREACH_SAFE(n, tn, authcookie_list.head)
+        MOWGLI_ITER_FOREACH_SAFE(n, tn, authcookie_list.head)
 	{
 		ac = n->data;
 

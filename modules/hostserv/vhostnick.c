@@ -56,7 +56,7 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		if (!irccasecmp(((mynick_t *)(n->data))->nick, target))
 		{

@@ -76,7 +76,7 @@ static void check_enforce_all(myuser_t *mu)
 	mynick_t *mn;
 	user_t *u;
 
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
 		u = user_find(mn->nick);
@@ -182,7 +182,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		/* if this (nick, host) is waiting to be enforced, remove it */
 		if (si->su != NULL)
 		{
-			LIST_FOREACH_SAFE(n, tn, enforce_list.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, enforce_list.head)
 			{
 				timeout = n->data;
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
@@ -275,7 +275,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 		/* if this (nick, host) is waiting to be enforced, remove it */
 		if (si->su != NULL)
 		{
-			LIST_FOREACH_SAFE(n, tn, enforce_list.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, enforce_list.head)
 			{
 				timeout = n->data;
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
@@ -326,7 +326,7 @@ static void enforce_remove_enforcers(void *arg)
 	node_t *n, *tn;
 	user_t *u;
 
-	LIST_FOREACH_SAFE(n, tn, me.me->userlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, me.me->userlist.head)
 	{
 		u = n->data;
 		if (u->flags & UF_ENFORCER)
@@ -346,7 +346,7 @@ void enforce_timeout_check(void *arg)
 	bool valid;
 
 	enforce_next = 0;
-	LIST_FOREACH_SAFE(n, tn, enforce_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, enforce_list.head)
 	{
 		timeout = n->data;
 		if (timeout->timelimit > CURRTIME)
@@ -425,7 +425,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 #ifdef SHOW_CORRECT_TIMEOUT_BUT_BE_SLOW
 	/* don't do this now, it's O(n^2) in the number of users using
 	 * a nick without access at a time */
-	LIST_FOREACH(n, enforce_list.head)
+	MOWGLI_ITER_FOREACH(n, enforce_list.head)
 	{
 		timeout2 = n->data;
 		if (!irccasecmp(hdata->mn->nick, timeout2->nick) && (!strcmp(hdata->u->host, timeout2->host) || !strcmp(hdata->u->vhost, timeout2->host)))
@@ -452,7 +452,7 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 		}
 
 		/* insert in sorted order */
-		LIST_FOREACH_PREV(n, enforce_list.tail)
+		MOWGLI_ITER_FOREACH_PREV(n, enforce_list.tail)
 		{
 			timeout2 = n->data;
 			if (timeout2->timelimit <= timeout->timelimit)

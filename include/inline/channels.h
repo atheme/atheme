@@ -40,7 +40,7 @@ static inline void chanban_clear(channel_t *chan)
 {
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 	{
 		/* inefficient but avoids code duplication -- jilles */
 		chanban_delete(n->data);

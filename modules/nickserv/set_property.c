@@ -85,7 +85,7 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	LIST_FOREACH(n, object(si->smu)->metadata.head)
+	MOWGLI_ITER_FOREACH(n, object(si->smu)->metadata.head)
 	{
 		md = n->data;
 		if (strchr(property, ':') ? md->private : !md->private)

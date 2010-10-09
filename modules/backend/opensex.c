@@ -93,7 +93,7 @@ opensex_db_save(database_handle_t *db)
 
 		muout++;
 
-		LIST_FOREACH(tn, object(mu)->metadata.head)
+		MOWGLI_ITER_FOREACH(tn, object(mu)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
@@ -104,7 +104,7 @@ opensex_db_save(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(tn, mu->memos.head)
+		MOWGLI_ITER_FOREACH(tn, mu->memos.head)
 		{
 			mymemo_t *mz = (mymemo_t *)tn->data;
 
@@ -117,7 +117,7 @@ opensex_db_save(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(tn, mu->memo_ignores.head)
+		MOWGLI_ITER_FOREACH(tn, mu->memo_ignores.head)
 		{
 			db_start_row(db, "MI");
 			db_write_word(db, entity(mu)->name);
@@ -125,7 +125,7 @@ opensex_db_save(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(tn, mu->access_list.head)
+		MOWGLI_ITER_FOREACH(tn, mu->access_list.head)
 		{
 			db_start_row(db, "AC");
 			db_write_word(db, entity(mu)->name);
@@ -133,7 +133,7 @@ opensex_db_save(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(tn, mu->nicks.head)
+		MOWGLI_ITER_FOREACH(tn, mu->nicks.head)
 		{
 			mynick_t *mn = tn->data;
 
@@ -145,7 +145,7 @@ opensex_db_save(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		LIST_FOREACH(tn, mu->cert_fingerprints.head)
+		MOWGLI_ITER_FOREACH(tn, mu->cert_fingerprints.head)
 		{
 			mycertfp_t *mcfp = tn->data;
 
@@ -166,7 +166,7 @@ opensex_db_save(database_handle_t *db)
 		char *flags = gflags_tostr(mc_flags, mc->flags);
 		/* find a founder */
 		mu = NULL;
-		LIST_FOREACH(tn, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)tn->data;
 			if (ca->entity != NULL && ca->level & CA_FOUNDER)
@@ -188,7 +188,7 @@ opensex_db_save(database_handle_t *db)
 		db_commit_row(db);
 		mcout++;
 
-		LIST_FOREACH(tn, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)tn->data;
 
@@ -199,7 +199,7 @@ opensex_db_save(database_handle_t *db)
 			db_write_time(db, ca->tmodified);
 			db_commit_row(db);
 
-			LIST_FOREACH(tn2, object(ca)->metadata.head)
+			MOWGLI_ITER_FOREACH(tn2, object(ca)->metadata.head)
 			{
 				char buf[BUFSIZE];
 				metadata_t *md = (metadata_t *)tn2->data;
@@ -216,7 +216,7 @@ opensex_db_save(database_handle_t *db)
 			caout++;
 		}
 
-		LIST_FOREACH(tn, object(mc)->metadata.head)
+		MOWGLI_ITER_FOREACH(tn, object(mc)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
@@ -235,7 +235,7 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, mun->name);
 		db_commit_row(db);
 
-		LIST_FOREACH(tn, object(mun)->metadata.head)
+		MOWGLI_ITER_FOREACH(tn, object(mun)->metadata.head)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 
@@ -250,7 +250,7 @@ opensex_db_save(database_handle_t *db)
 	/* Services ignores */
 	slog(LG_DEBUG, "db_save(): saving svsignores");
 
-	LIST_FOREACH(n, svs_ignore_list.head)
+	MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
 	{
 		svsignore = (svsignore_t *)n->data;
 
@@ -266,7 +266,7 @@ opensex_db_save(database_handle_t *db)
 	/* Services operators */
 	slog(LG_DEBUG, "db_save(): saving sopers");
 
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		const char *flags;
 		soper = n->data;
@@ -293,7 +293,7 @@ opensex_db_save(database_handle_t *db)
 	db_write_uint(db, me.kline_id);
 	db_commit_row(db);
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -316,7 +316,7 @@ opensex_db_save(database_handle_t *db)
 	db_write_uint(db, me.xline_id);
 	db_commit_row(db);
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -336,7 +336,7 @@ opensex_db_save(database_handle_t *db)
 	db_write_uint(db, me.qline_id);
 	db_commit_row(db);
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 

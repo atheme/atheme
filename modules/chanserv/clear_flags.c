@@ -72,7 +72,7 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 	{
 		ca = n->data;
 

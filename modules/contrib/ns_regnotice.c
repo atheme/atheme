@@ -23,7 +23,7 @@ static void regnotice_hook(myuser_t *mu)
 
 	return_if_fail(mu != NULL);
 
-	LIST_FOREACH(n, regnotices.head)
+	MOWGLI_ITER_FOREACH(n, regnotices.head)
 	{
 		char *line = n->data;
 
@@ -48,7 +48,7 @@ static void regnotice_config_purge(void *unused)
 {
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, regnotices.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, regnotices.head)
 	{
 		char *line = n->data;
 

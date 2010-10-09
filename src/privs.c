@@ -61,7 +61,7 @@ operclass_t *operclass_add(const char *name, const char *privs)
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
 	cnt.operclass++;
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper_t *soper = n->data;
 		if (soper->operclass == NULL &&
@@ -81,7 +81,7 @@ void operclass_delete(operclass_t *operclass)
 	n = node_find(operclass, &operclasslist);
 	node_del(n, &operclasslist);
 	node_free(n);
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper_t *soper = n->data;
 		if (soper->operclass == operclass)
@@ -98,7 +98,7 @@ operclass_t *operclass_find(const char *name)
 	operclass_t *operclass;
 	node_t *n;
 
-	LIST_FOREACH(n, operclasslist.head)
+	MOWGLI_ITER_FOREACH(n, operclasslist.head)
 	{
 		operclass = (operclass_t *)n->data;
 
@@ -203,7 +203,7 @@ soper_t *soper_find(myuser_t *myuser)
 	soper_t *soper;
 	node_t *n;
 
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper = (soper_t *)n->data;
 
@@ -219,7 +219,7 @@ soper_t *soper_find_named(const char *name)
 	soper_t *soper;
 	node_t *n;
 
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper = (soper_t *)n->data;
 

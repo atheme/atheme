@@ -59,7 +59,7 @@ static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[])
 			fprintf(out, "topic %s %lu %s\n", c->topic_setter,
 					(unsigned long)c->topicts,
 					c->topic);
-		LIST_FOREACH(n, c->bans.head)
+		MOWGLI_ITER_FOREACH(n, c->bans.head)
 		{
 			cb = n->data;
 			fprintf(out, "ban %c %s\n", cb->type, cb->mask);

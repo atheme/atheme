@@ -85,7 +85,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Go to reading memos */	
-	LIST_FOREACH(n, si->smu->memos.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		memo = (mymemo_t *)n->data;
 		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))

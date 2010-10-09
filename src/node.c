@@ -67,21 +67,21 @@ void mark_all_illegal()
 	soper_t *soper;
 	operclass_t *operclass;
 
-	LIST_FOREACH(n, uplinks.head)
+	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
 		u = (uplink_t *)n->data;
 		u->flags |= UPF_ILLEGAL;
 	}
 
 	/* just delete these, we can survive without for a while */
-	LIST_FOREACH_SAFE(n, tn, soperlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, soperlist.head)
 	{
 		soper = (soper_t *)n->data;
 		if (soper->flags & SOPER_CONF)
 			soper_delete(soper);
 	}
 	/* no sopers pointing to these anymore */
-	LIST_FOREACH_SAFE(n, tn, operclasslist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, operclasslist.head)
 	{
 		operclass = (operclass_t *)n->data;
 		operclass_delete(operclass);
@@ -94,7 +94,7 @@ void unmark_all_illegal()
 	node_t *n;
 	uplink_t *u;
 
-	LIST_FOREACH(n, uplinks.head)
+	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
 		u = (uplink_t *)n->data;
 		u->flags &= ~UPF_ILLEGAL;
@@ -107,7 +107,7 @@ void remove_illegals()
 	node_t *n, *tn;
 	uplink_t *u;
 
-	LIST_FOREACH_SAFE(n, tn, uplinks.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, uplinks.head)
 	{
 		u = (uplink_t *)n->data;
 		if (u->flags & UPF_ILLEGAL && u != curr_uplink)
@@ -180,7 +180,7 @@ kline_t *kline_find(const char *user, const char *host)
 	kline_t *k;
 	node_t *n;
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -196,7 +196,7 @@ kline_t *kline_find_num(unsigned long number)
 	kline_t *k;
 	node_t *n;
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -212,7 +212,7 @@ kline_t *kline_find_user(user_t *u)
 	kline_t *k;
 	node_t *n;
 
-	LIST_FOREACH(n, klnlist.head)
+	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -230,7 +230,7 @@ void kline_expire(void *arg)
 	kline_t *k;
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, klnlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
@@ -316,7 +316,7 @@ xline_t *xline_find(const char *realname)
 	xline_t *x;
 	node_t *n;
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -332,7 +332,7 @@ xline_t *xline_find_num(unsigned int number)
 	xline_t *x;
 	node_t *n;
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -348,7 +348,7 @@ xline_t *xline_find_user(user_t *u)
 	xline_t *x;
 	node_t *n;
 
-	LIST_FOREACH(n, xlnlist.head)
+	MOWGLI_ITER_FOREACH(n, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -367,7 +367,7 @@ void xline_expire(void *arg)
 	xline_t *x;
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, xlnlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, xlnlist.head)
 	{
 		x = (xline_t *)n->data;
 
@@ -453,7 +453,7 @@ qline_t *qline_find(const char *mask)
 	node_t *n;
 	bool ischan;
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
@@ -472,7 +472,7 @@ qline_t *qline_find_num(unsigned int number)
 	qline_t *q;
 	node_t *n;
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
@@ -488,7 +488,7 @@ qline_t *qline_find_user(user_t *u)
 	qline_t *q;
 	node_t *n;
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
@@ -508,7 +508,7 @@ qline_t *qline_find_channel(channel_t *c)
 	qline_t *q;
 	node_t *n;
 
-	LIST_FOREACH(n, qlnlist.head)
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
@@ -526,7 +526,7 @@ void qline_expire(void *arg)
 	qline_t *q;
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, qlnlist.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 

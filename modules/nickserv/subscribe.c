@@ -80,7 +80,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 		node_t *n;
 		bool found = false;
 
-		LIST_FOREACH(n, tmu->subscriptions.head)
+		MOWGLI_ITER_FOREACH(n, tmu->subscriptions.head)
 		{
 			md = (metadata_subscription_t *) n->data;
 
@@ -95,7 +95,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 		{
 			node_t *tn;
 
-			LIST_FOREACH_SAFE(n, tn, md->taglist.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, md->taglist.head)
 			{
 				free(n->data);
 
@@ -159,11 +159,11 @@ static void hook_metadata_change(hook_metadata_change_t *md)
 
 	mu = (myuser_t *) md->target;
 
-	LIST_FOREACH(n, mu->subscriptions.head)
+	MOWGLI_ITER_FOREACH(n, mu->subscriptions.head)
 	{
 		metadata_subscription_t *mds = n->data;
 
-		LIST_FOREACH(tn, mds->taglist.head)
+		MOWGLI_ITER_FOREACH(tn, mds->taglist.head)
 		{
 			if (!match(tn->data, md->name) && md->value != NULL)
 				myuser_notice(nicksvs.nick, mds->mu, "\2%s\2 has changed \2%s\2 to \2%s\2.",

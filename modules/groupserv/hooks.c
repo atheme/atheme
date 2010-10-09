@@ -30,14 +30,14 @@ static void grant_channel_access_hook(user_t *u)
 
 	l = myuser_get_membership_list(u->myuser);
 
-	LIST_FOREACH_SAFE(n, tn, l->head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
 		groupacs_t *ga = n->data;
 
 		if (!(ga->flags & GA_CHANACS))
 			continue;
 
-		LIST_FOREACH(n, entity(ga->mg)->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, entity(ga->mg)->chanacs.head)
 		{
 			chanacs_t *ca;
 			chanuser_t *cu;
@@ -112,7 +112,7 @@ static void user_info_hook(hook_user_req_t *req)
 
 	l = myuser_get_membership_list(req->mu);
 
-	LIST_FOREACH(n, l->head)
+	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;
 
@@ -136,7 +136,7 @@ static void myuser_delete_hook(myuser_t *mu)
 
 	l = myuser_get_membership_list(mu);
 
-	LIST_FOREACH_SAFE(n, tn, l->head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
 		groupacs_t *ga = n->data;
 

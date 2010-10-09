@@ -51,7 +51,7 @@ static void do_sethost_all(myuser_t *mu, char *host)
 	node_t *n;
 	user_t *u;
 
-	LIST_FOREACH(n, mu->logins.head)
+	MOWGLI_ITER_FOREACH(n, mu->logins.head)
 	{
 		u = n->data;
 

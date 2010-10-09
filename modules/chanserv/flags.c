@@ -132,7 +132,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Entry Nickname/Host          Flags"));
 		command_success_nodata(si, "----- ---------------------- -----");
 
-		LIST_FOREACH(n, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
 			ca = n->data;
 			str1 = get_template_name(mc, ca->level);

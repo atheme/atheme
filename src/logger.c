@@ -58,7 +58,7 @@ static void logfile_join_channels(channel_t *c)
 
 	return_if_fail(c != NULL);
 
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		logfile_t *lf = n->data;
 
@@ -85,7 +85,7 @@ static void logfile_join_service(service_t *svs)
 	if (svs->conf_table == NULL)
 		return;
 
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		logfile_t *lf = n->data;
 
@@ -110,7 +110,7 @@ static void logfile_part_removed(void *unused)
 		if (!(c->flags & CHAN_LOG))
 			continue;
 		valid = false;
-		LIST_FOREACH(n, log_files.head)
+		MOWGLI_ITER_FOREACH(n, log_files.head)
 		{
 			logfile_t *lf = n->data;
 
@@ -410,7 +410,7 @@ void log_shutdown(void)
 {
 	node_t *n, *tn;
 
-	LIST_FOREACH_SAFE(n, tn, log_files.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, log_files.head)
 		object_unref(n->data);
 }
 
@@ -435,7 +435,7 @@ bool log_debug_enabled(void)
 
 	if (log_force)
 		return true;
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		lf = n->data;
 		if (lf->log_mask & (LG_DEBUG | LG_RAWDATA))
@@ -487,7 +487,7 @@ logfile_t *logfile_find_mask(unsigned int log_mask)
 	node_t *n;
 	logfile_t *lf;
 
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		lf = n->data;
 		if (lf->write_func != logfile_write)
@@ -495,7 +495,7 @@ logfile_t *logfile_find_mask(unsigned int log_mask)
 		if (lf->log_mask == log_mask)
 			return lf;
 	}
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		lf = n->data;
 		if (lf->write_func != logfile_write)
@@ -528,7 +528,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	tm = *localtime(&t);
 	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
 
-	LIST_FOREACH(n, log_files.head)
+	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
 		logfile_t *lf = (logfile_t *) n->data;
 

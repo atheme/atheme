@@ -247,7 +247,7 @@ language_find(const char *name)
 	node_t *n;
 	language_t *lang;
 
-	LIST_FOREACH(n, language_list.head)
+	MOWGLI_ITER_FOREACH(n, language_list.head)
 	{
 		lang = n->data;
 		if (!strcmp(lang->name, name))
@@ -264,7 +264,7 @@ language_names(void)
 	language_t *lang;
 
 	names[0] = '\0';
-	LIST_FOREACH(n, language_list.head)
+	MOWGLI_ITER_FOREACH(n, language_list.head)
 	{
 		lang = n->data;
 		if (lang->flags & LANG_VALID)

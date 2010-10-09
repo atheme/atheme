@@ -206,7 +206,7 @@ node_t *node_find(void *data, list_t *l)
 
 	return_val_if_fail(l != NULL, NULL);
 
-        LIST_FOREACH(n, l->head) if (n->data == data)
+        MOWGLI_ITER_FOREACH(n, l->head) if (n->data == data)
                 return n;
 
         return NULL;

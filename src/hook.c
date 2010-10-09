@@ -63,7 +63,7 @@ void hook_del_event(const char *name)
 	{
 		node_t *n, *tn;
 
-		LIST_FOREACH_SAFE(n, tn, h->hooks.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, h->hooks.head)
 		{
 			node_del(n, &h->hooks);
 			node_free(n);
@@ -87,7 +87,7 @@ void hook_del_hook(const char *event, void (*handler)(void *data))
 	if (!(h = find_hook(event)))
 		return;
 
-	LIST_FOREACH_SAFE(n, n2, h->hooks.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, n2, h->hooks.head)
 	{
 		if (handler == (void (*)(void *)) n->data)
 		{
@@ -130,7 +130,7 @@ void hook_call_event(const char *event, void *dptr)
 	if (!(h = find_hook(event)))
 		return;
 
-	LIST_FOREACH_SAFE(n, tn, h->hooks.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, h->hooks.head)
 	{
 		func = (void (*)(void *)) n->data;
 		func(dptr);

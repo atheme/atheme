@@ -80,7 +80,7 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 	mynick_t *mn;
 	char buf[BUFSIZE];
 
-	LIST_FOREACH(n, mu->nicks.head)
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 	{
 		mn = n->data;
 		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
@@ -96,7 +96,7 @@ static void write_hsofferdb(database_handle_t *db)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, hs_offeredlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		hsoffered_t *l = n->data;
 
@@ -206,7 +206,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH(n, hs_offeredlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
 		if (!irccasecmp(l->vhost, host))
@@ -235,7 +235,7 @@ static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 	return_val_if_fail(mt != NULL, false);
 	return_val_if_fail((mg = group(mt)) != NULL, false);
 
-	LIST_FOREACH(n, mg->acs.head)
+	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
 
@@ -266,7 +266,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH(n, hs_offeredlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
 
@@ -303,7 +303,7 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	struct tm tm;
 
-	LIST_FOREACH(n, hs_offeredlist.head)
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
 		x++;

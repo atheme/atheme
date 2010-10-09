@@ -171,7 +171,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 
 	hd = cptr->userdata;
 
-	LIST_FOREACH(n, httpd_path_handlers.head)
+	MOWGLI_ITER_FOREACH(n, httpd_path_handlers.head)
 	{
 		ph = (path_handler_t *)n->data;
 		handling_done = !strcmp(hd->filename, ph->path);
@@ -363,7 +363,7 @@ static void httpd_checkidle(void *arg)
 	(void)arg;
 	if (listener == NULL)
 		return;
-	LIST_FOREACH_SAFE(n, tn, connection_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 	{
 		cptr = n->data;
 		if (cptr->listener == listener && cptr->last_recv + 300 < CURRTIME)

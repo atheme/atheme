@@ -43,7 +43,7 @@ static void mygroup_delete(mygroup_t *mg)
 
 	myentity_del(entity(mg));
 
-	LIST_FOREACH_SAFE(n, tn, mg->acs.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
 
@@ -121,7 +121,7 @@ groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mu != NULL, NULL);
 
-	LIST_FOREACH(n, mg->acs.head)
+	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
 
@@ -168,7 +168,7 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 	if (flag == 0)
 		return LIST_LENGTH(&mg->acs);
 
-	LIST_FOREACH(n, mg->acs.head)
+	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
 
@@ -202,7 +202,7 @@ const char *mygroup_founder_names(mygroup_t *mg)
         static char names[512];
 
         names[0] = '\0';
-        LIST_FOREACH(n, mg->acs.head)
+        MOWGLI_ITER_FOREACH(n, mg->acs.head)
         {
                 ga = n->data;
                 if (ga->mu != NULL && ga->flags & GA_FOUNDER)
@@ -222,7 +222,7 @@ unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 	unsigned int count = 0;
 
 	l = myuser_get_membership_list(mu);
-	LIST_FOREACH(n, l->head)
+	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;
 

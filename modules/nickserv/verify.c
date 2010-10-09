@@ -84,7 +84,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 			command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
 			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
-			LIST_FOREACH(n, mu->logins.head)
+			MOWGLI_ITER_FOREACH(n, mu->logins.head)
 			{
 				user_t *u = n->data;
 				ircd_on_login(u, mu, NULL);
@@ -182,7 +182,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, "private:verify:register:timestamp");
 
 		command_success_nodata(si, _("\2%s\2 has now been verified."), entity(mu)->name);
-		LIST_FOREACH(n, mu->logins.head)
+		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
 			user_t *u = n->data;
 			ircd_on_login(u, mu, NULL);

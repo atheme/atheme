@@ -92,7 +92,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "SOPER:LIST");
 	command_success_nodata(si, "%-20s %-5s %-20s", _("Account"), _("Type"), _("Operclass"));
 	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
-	LIST_FOREACH(n, soperlist.head)
+	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper = n->data;
 		if (!(soper->flags & SOPER_CONF))
@@ -117,7 +117,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "SOPER:LISTCLASS");
 	command_success_nodata(si, _("Oper class list:"));
-	LIST_FOREACH(n, operclasslist.head)
+	MOWGLI_ITER_FOREACH(n, operclasslist.head)
 	{
 		operclass = n->data;
 		command_success_nodata(si, "%c%c %s",
@@ -283,7 +283,7 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 			free(mu->soper->password);
 		mu->soper->password = sstrdup(parv[1]);
 		command_success_nodata(si, _("Set password for \2%s\2 to \2%s\2."), entity(mu)->name, parv[1]);
-		LIST_FOREACH(n, mu->logins.head)
+		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
 			u = n->data;
 			if (u->flags & UF_SOPER_PASS)

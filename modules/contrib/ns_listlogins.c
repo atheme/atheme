@@ -47,7 +47,7 @@ static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "Clients identified to account \2%s\2", entity(si->smu)->name);
-	LIST_FOREACH(n, si->smu->logins.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->logins.head)
 	{
 		u = n->data;
 		command_success_nodata(si, "- %s!%s@%s (real host: %s)", u->nick, u->user, u->vhost, u->host);

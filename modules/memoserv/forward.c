@@ -134,7 +134,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	si->smu->memo_ratelimit_time = CURRTIME;
 
 	/* Make sure we're not on ignore */
-	LIST_FOREACH(n, tmu->memo_ignores.head)
+	MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 	{
 		mynick_t *mn;
 		myuser_t *mu;
@@ -157,7 +157,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", entity(tmu)->name);
 	
 	/* Go to forwarding memos */
-	LIST_FOREACH(n, si->smu->memos.head)
+	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		if (i == memonum)
 		{

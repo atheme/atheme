@@ -114,7 +114,7 @@ void sendq_flush(connection_t * cptr)
 
 	return_if_fail(cptr != NULL);
 
-        LIST_FOREACH_SAFE(n, tn, cptr->sendq.head)
+        MOWGLI_ITER_FOREACH_SAFE(n, tn, cptr->sendq.head)
         {
                 sq = (struct sendq *)n->data;
 
@@ -189,7 +189,7 @@ int recvq_length(connection_t *cptr)
 	node_t *n;
 	struct sendq *sq;
 
-	LIST_FOREACH(n, cptr->recvq.head)
+	MOWGLI_ITER_FOREACH(n, cptr->recvq.head)
 	{
 		sq = n->data;
 		l += sq->firstfree - sq->firstused;
@@ -271,7 +271,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 
 	return_val_if_fail(cptr != NULL, 0);
 
-	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, cptr->recvq.head)
 	{
 		sq = (struct sendq *)n->data;
 
@@ -313,7 +313,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 
 	return_val_if_fail(cptr != NULL, 0);
 
-	LIST_FOREACH(n, cptr->recvq.head)
+	MOWGLI_ITER_FOREACH(n, cptr->recvq.head)
 	{
 		sq2 = n->data;
 		l += sq2->firstfree - sq2->firstused;
@@ -325,7 +325,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 		return 0;
 
 	cptr->flags |= CF_NONEWLINE;
-	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, cptr->recvq.head)
 	{
 		sq = (struct sendq *)n->data;
 
@@ -364,7 +364,7 @@ void sendqrecvq_free(connection_t *cptr)
 	node_t *nptr, *nptr2;
 	struct sendq *sq;
 
-	LIST_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
+	MOWGLI_ITER_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
 	{
 		sq = nptr->data;
 
@@ -372,7 +372,7 @@ void sendqrecvq_free(connection_t *cptr)
 		free(sq);
 	}
 
-	LIST_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
+	MOWGLI_ITER_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
 	{
 		sq = nptr->data;
 

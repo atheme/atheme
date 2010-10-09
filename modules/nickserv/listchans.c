@@ -81,7 +81,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	LIST_FOREACH(n, entity(mu)->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 

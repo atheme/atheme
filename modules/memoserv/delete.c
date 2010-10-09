@@ -100,7 +100,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	delcount = 0;
 	
 	/* Iterate through memos, doing deletion */
-	LIST_FOREACH_SAFE(n, tn, si->smu->memos.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
 		memo = (mymemo_t*) n->data;

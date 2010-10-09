@@ -194,7 +194,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
-		LIST_FOREACH(n, mu->logins.head)
+		MOWGLI_ITER_FOREACH(n, mu->logins.head)
 		{
 			if (strlen(buf) > 80)
 			{
@@ -225,7 +225,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 		{
 			buf[0] = '\0';
-			LIST_FOREACH(n, mu->nicks.head)
+			MOWGLI_ITER_FOREACH(n, mu->nicks.head)
 			{
 				if (strlen(buf) > 80)
 				{
@@ -246,7 +246,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
-	LIST_FOREACH(n, object(mu)->metadata.head)
+	MOWGLI_ITER_FOREACH(n, object(mu)->metadata.head)
 	{
 		md = n->data;
 		if (md->private)
@@ -322,7 +322,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		chanacs_t *ca;
 		int founder = 0, other = 0;
 
-		LIST_FOREACH(n, entity(mu)->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 		{
 			ca = n->data;
 			if (ca->level & CA_FOUNDER)

@@ -73,7 +73,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2."),
 		name, oldfndr, mt->name);
 
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
 		/* CA_FLAGS is always on if CA_FOUNDER is on, this just

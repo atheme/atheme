@@ -183,7 +183,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 		}
 		fclose(in);
 		matches = matches1;
-		LIST_FOREACH_SAFE(n, tn, loglines.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, loglines.head)
 		{
 			p = n->data;
 			matches++;

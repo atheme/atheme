@@ -139,7 +139,7 @@ void pingspam(user_t *u)
 		for(i = 0;i < 6;i++)
 			notice(svs->me->nick, u->nick, "%s", notices[rand() % sizeof(notices) / sizeof(char*)]);
 
-	LIST_FOREACH(n, me.me->userlist.head)
+	MOWGLI_ITER_FOREACH(n, me.me->userlist.head)
 	{
 		sptr = n->data;
 		msg(sptr->nick, u->nick, "\001PING %ld%s\001",

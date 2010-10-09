@@ -79,7 +79,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	ca_hop = get_template_flags(mc, "HOP");
 	ca_vop = get_template_flags(mc, "VOP");
 
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
@@ -108,7 +108,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 		if (!(ca_all & chanacs_flags[i].value))
 			continue;
 		othercnt = 0;
-		LIST_FOREACH(n, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)n->data;
 

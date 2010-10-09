@@ -127,7 +127,7 @@ connection_t *connection_find(int fd)
 	connection_t *cptr;
 	node_t *nptr;
 
-	LIST_FOREACH(nptr, connection_list.head)
+	MOWGLI_ITER_FOREACH(nptr, connection_list.head)
 	{
 		cptr = nptr->data;
 
@@ -259,7 +259,7 @@ void connection_close_soon_children(connection_t *cptr)
 
 	if (CF_IS_LISTENING(cptr))
 	{
-		LIST_FOREACH(n, connection_list.head)
+		MOWGLI_ITER_FOREACH(n, connection_list.head)
 		{
 			cptr2 = n->data;
 			if (cptr2->listener == cptr)
@@ -286,7 +286,7 @@ void connection_close_all(void)
 	node_t *n, *tn;
 	connection_t *cptr;
 
-	LIST_FOREACH_SAFE(n, tn, connection_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 	{
 		cptr = n->data;
 		connection_close(cptr);
@@ -313,7 +313,7 @@ void connection_close_all_fds(void)
 	node_t *n, *tn;
 	connection_t *cptr;
 
-	LIST_FOREACH_SAFE(n, tn, connection_list.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
 	{
 		cptr = n->data;
 		close(cptr->fd);
@@ -619,7 +619,7 @@ void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 	char buf[160];
 	char buf2[20];
 
-	LIST_FOREACH(n, connection_list.head)
+	MOWGLI_ITER_FOREACH(n, connection_list.head)
 	{
 		connection_t *c = (connection_t *) n->data;
 

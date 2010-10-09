@@ -127,7 +127,7 @@ static void p10_msg_global_sts(user_t *from, const char *mask, const char *text)
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts("%s P %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
@@ -150,7 +150,7 @@ static void p10_notice_global_sts(user_t *from, const char *mask, const char *te
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts("%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
@@ -468,7 +468,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	/* JOIN 0 is really a part from all channels */
 	if (!strcmp(parv[0], "0"))
 	{
-		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *) n->data;
 			chanuser_delete(cu->chan, si->su);
@@ -532,7 +532,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		clear_simple_modes(c);
 		chanban_clear(c);
 		handle_topic_from(si, c, "", 0, "");
-		LIST_FOREACH(n, c->members.head)
+		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 			if (cu->user->server == me.me)
@@ -794,7 +794,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 			chan->limit = 0;
 		else if (c == 'o')
 		{
-			LIST_FOREACH(n, chan->members.head)
+			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				if (cu->user->server == me.me)
@@ -810,7 +810,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (c == 'v')
 		{
-			LIST_FOREACH(n, chan->members.head)
+			MOWGLI_ITER_FOREACH(n, chan->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				cu->modes &= ~CSTATUS_VOICE;

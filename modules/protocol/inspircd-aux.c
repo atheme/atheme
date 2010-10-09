@@ -791,7 +791,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		/*
 		 * Also reop services, and remove status from others.
 		 */
-		LIST_FOREACH(n, c->members.head)
+		MOWGLI_ITER_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
 			if (cu->user->server == me.me)
@@ -1445,7 +1445,7 @@ static void server_eob(server_t *s)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, s->userlist.head)
+	MOWGLI_ITER_FOREACH(n, s->userlist.head)
 	{
 		handle_nickchange((user_t *)n->data);
 	}

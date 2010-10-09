@@ -73,7 +73,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, "\2%s\2 used SYNC.", get_source_name(si));
 	logcommand(si, CMDLOG_SET, "SYNC: \2%s\2", mc->name);
 
-	LIST_FOREACH_SAFE(n, tn, mc->chan->members.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
 	{
 		cu = (chanuser_t *)n->data;
 

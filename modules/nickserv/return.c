@@ -88,7 +88,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, "private:verify:emailchg:timestamp");
 	metadata_delete(mu, "private:setpass:key");
 	/* log them out */
-	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
 		if (!ircd_on_logout(u, entity(mu)->name))

@@ -85,7 +85,7 @@ static void write_ticket_db(database_handle_t *db)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, helpserv_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		ticket_t *l = n->data;
 
@@ -118,7 +118,7 @@ static void account_drop_request(myuser_t *mu)
         node_t *n;
         ticket_t *l;
 
-        LIST_FOREACH(n, helpserv_reqlist.head)
+        MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
                 l = n->data;
                 if (!irccasecmp(l->nick, entity(mu)->name))
@@ -142,7 +142,7 @@ static void account_delete_request(myuser_t *mu)
         node_t *n;
         ticket_t *l;
 
-        LIST_FOREACH(n, helpserv_reqlist.head)
+        MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
                 l = n->data;
                 if (!irccasecmp(l->nick, entity(mu)->name))
@@ -188,7 +188,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	target = entity(si->smu)->name;
 
 	/* search for it */
-	LIST_FOREACH(n, helpserv_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		l = n->data;
 
@@ -255,7 +255,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	LIST_FOREACH(n, helpserv_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		l = n->data;
 		if (!irccasecmp(l->nick, nick))
@@ -287,7 +287,7 @@ static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	struct tm tm;
 
-	LIST_FOREACH(n, helpserv_reqlist.head)
+	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		l = n->data;
 		x++;
@@ -316,7 +316,7 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
 
         target = entity(si->smu)->name;
 
-        LIST_FOREACH(n, helpserv_reqlist.head)
+        MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
                 l = n->data;
 

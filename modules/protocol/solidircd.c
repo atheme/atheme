@@ -237,7 +237,7 @@ static void solidircd_msg_global_sts(user_t *from, const char *mask, const char 
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
@@ -260,7 +260,7 @@ static void solidircd_notice_global_sts(user_t *from, const char *mask, const ch
 
 	if (!strcmp(mask, "*"))
 	{
-		LIST_FOREACH(n, tldlist.head)
+		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
 			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
@@ -568,7 +568,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			chanban_clear(c);
 			handle_topic_from(si, c, "", 0, "");
 
-			LIST_FOREACH(n, c->members.head)
+			MOWGLI_ITER_FOREACH(n, c->members.head)
 			{
 				cu = (chanuser_t *)n->data;
 				if (cu->user->server == me.me)
@@ -863,7 +863,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')
 	{
-		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
 			chanuser_delete(cu->chan, si->su);

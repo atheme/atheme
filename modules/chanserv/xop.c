@@ -375,7 +375,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 	node_t *n;
 
 	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 		if (ca->level == level)
@@ -438,7 +438,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	ca_vop = get_template_flags(mc, "VOP");
 
 	changes = 0;
-	LIST_FOREACH(n, mc->chanacs.head)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 

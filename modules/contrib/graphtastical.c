@@ -82,7 +82,7 @@ static void write_channels_dot_file(void *arg)
 
 		fprintf(f, "[fontname=\"Verdana\" fontsize=8]\n");
 
-		LIST_FOREACH(tn, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)tn->data;
 
@@ -145,7 +145,7 @@ static void write_uchannels_dot_file(void *arg)
 
 		fprintf(f, "[fontname=\"Verdana\" fontsize=8]\n");
 
-		LIST_FOREACH(tn, c->members.head)
+		MOWGLI_ITER_FOREACH(tn, c->members.head)
 		{
 			cu = (chanuser_t *)tn->data;
 

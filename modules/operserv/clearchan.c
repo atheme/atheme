@@ -91,7 +91,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Clearing \2%s\2 with \2%s\2"), targchan, actionstr);
 
 	/* iterate over the users in channel */
-	LIST_FOREACH_SAFE(n, tn, c->members.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
 

@@ -64,7 +64,7 @@ static void reop_service(channel_t *chan, user_t *victim, user_t **pfirst_deoppe
 		else
 		{
 			slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", victim->nick, chan->name);
-			LIST_FOREACH(n, me.me->userlist.head)
+			MOWGLI_ITER_FOREACH(n, me.me->userlist.head)
 			{
 				if (n->data != victim)
 				{

@@ -76,7 +76,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Nickname            Info"));
 		command_success_nodata(si, "------------------- ---------------");
 
-		LIST_FOREACH(n, mc->chanacs.head)
+		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 		{
 			ca = n->data;
 			if (ca->entity == NULL)

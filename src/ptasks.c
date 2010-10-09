@@ -112,7 +112,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  LIST_FOREACH(n, uplinks.head)
+		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
 			  numeric_sts(me.me, 213, u, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
@@ -148,7 +148,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  LIST_FOREACH(n, uplinks.head)
+		  MOWGLI_ITER_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
 			  numeric_sts(me.me, 244, u, "H * * %s", uplink->name);
@@ -165,7 +165,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_AKILL))
 			  break;
 
-		  LIST_FOREACH(n, klnlist.head)
+		  MOWGLI_ITER_FOREACH(n, klnlist.head)
 		  {
 			  k = (kline_t *)n->data;
 
@@ -181,7 +181,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_VIEWPRIVS))
 			  break;
 
-		  LIST_FOREACH(n, soperlist.head)
+		  MOWGLI_ITER_FOREACH(n, soperlist.head)
 		  {
 			  soper = n->data;
 
@@ -248,7 +248,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_MASS_AKILL))
 			  break;
 
-		  LIST_FOREACH(n, qlnlist.head)
+		  MOWGLI_ITER_FOREACH(n, qlnlist.head)
 		  {
 			  q = (qline_t *)n->data;
 
@@ -265,7 +265,7 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_MASS_AKILL))
 			  break;
 
-		  LIST_FOREACH(n, xlnlist.head)
+		  MOWGLI_ITER_FOREACH(n, xlnlist.head)
 		  {
 			  x = (xline_t *)n->data;
 
@@ -346,7 +346,7 @@ void handle_trace(user_t *u, const char *target, const char *dest)
 	if (!match(target, me.name) || !irccasecmp(target, ME))
 	{
 		nusers = cnt.user;
-		LIST_FOREACH(n, me.me->userlist.head)
+		MOWGLI_ITER_FOREACH(n, me.me->userlist.head)
 		{
 			t = n->data;
 			if (is_ircop(t))
@@ -462,7 +462,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	vec[1] = message;
 	vec[2] = NULL;
 
-	LIST_FOREACH(n, cdata.c->members.head)
+	MOWGLI_ITER_FOREACH(n, cdata.c->members.head)
 	{
 		chanuser_t *cu = (chanuser_t *) n->data;
 
@@ -482,7 +482,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 	/* Note: this assumes a fantasy command will not remove another
 	 * service.
 	 */
-	LIST_FOREACH_SAFE(n, tn, l.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l.head)
 	{
 		si->service = n->data;
 		if (is_notice)
@@ -529,7 +529,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 			if (si->service == NULL)
 			{
 				target_u = NULL;
-				LIST_FOREACH(n, me.me->userlist.head)
+				MOWGLI_ITER_FOREACH(n, me.me->userlist.head)
 				{
 					u = n->data;
 					/* don't leak info about enforcers */
@@ -787,7 +787,7 @@ void handle_eob(server_t *s)
 	hook_call_server_eob(s);
 	s->flags |= SF_EOB;
 	/* convert P10 style EOB to ircnet/ratbox style */
-	LIST_FOREACH(n, s->children.head)
+	MOWGLI_ITER_FOREACH(n, s->children.head)
 	{
 		s2 = n->data;
 		if (s2->flags & SF_EOB2)

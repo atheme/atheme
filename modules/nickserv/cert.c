@@ -77,7 +77,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("Fingerprint list for \2%s\2:"), entity(mu)->name);
 
-		LIST_FOREACH(n, mu->cert_fingerprints.head)
+		MOWGLI_ITER_FOREACH(n, mu->cert_fingerprints.head)
 		{
 			mcfp = ((mycertfp_t*)n->data)->certfp;
 			command_success_nodata(si, "- %s", mcfp);

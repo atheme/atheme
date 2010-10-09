@@ -87,7 +87,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	/* only check the newly added/removed quiet */
 	node_add(cb, &ban_n, &ban_l);
 
-	LIST_FOREACH(n, c->members.head)
+	MOWGLI_ITER_FOREACH(n, c->members.head)
 	{
 		cu = n->data;
 		if (cu->modes & (CSTATUS_OP | CSTATUS_VOICE))

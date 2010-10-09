@@ -106,7 +106,7 @@ uplink_t *uplink_find(const char *name)
 {
 	node_t *n;
 
-	LIST_FOREACH(n, uplinks.head)
+	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{
 		uplink_t *u = n->data;
 

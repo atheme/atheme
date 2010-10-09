@@ -86,7 +86,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			i = 0;
-			LIST_FOREACH(n, bot->me->me->channels.head)
+			MOWGLI_ITER_FOREACH(n, bot->me->me->channels.head)
 			{
 				cu = (chanuser_t *)n->data;
 				command_success_nodata(si, _("%d: %s"), ++i, cu->chan->name);
