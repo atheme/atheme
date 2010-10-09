@@ -301,6 +301,7 @@ loadmodule "modules/nickserv/vhost";
  *  ACLs. This is intentional.
  */
 loadmodule "modules/chanserv/main";
+loadmodule "modules/chanserv/access";
 loadmodule "modules/chanserv/akick";
 loadmodule "modules/chanserv/ban";
 #loadmodule "modules/chanserv/unban_self";
