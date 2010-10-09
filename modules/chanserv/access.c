@@ -359,7 +359,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			else
 			{
 				unsigned int a = count_bits(greater_t->level);
-				unsigned int a = count_bits(t->level);
+				unsigned int b = count_bits(t->level);
 
 				if (a < b && b > flagcount)
 					greater_t = t;
