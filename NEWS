@@ -12,6 +12,8 @@ opensex
   convert your flatfile database to opensex and exit.
 - converted many modules that use external databases to using opensex.
 chanserv
+- new module: chanserv/access.  this adds role-based channel acl via the
+  ACCESS and ROLE commands.
 - new module: chanserv/successor_acl.  this adds a +S channel acl flag which
   will weight a user as a successor.
 - modules may now override the succession process using the new
