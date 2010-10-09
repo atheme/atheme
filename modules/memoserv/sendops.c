@@ -179,11 +179,11 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Is the user online? If so, tell them about the new memo. */
 		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%d).", entity(si->smu)->name, LIST_LENGTH(&tmu->memos));
+			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%d).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%d).", entity(si->smu)->name, si->su->nick, LIST_LENGTH(&tmu->memos));
+			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%d).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
 		myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %d"),
-					ircd->uses_rcommand ? "" : "msg ", si->service->disp, LIST_LENGTH(&tmu->memos));
+					ircd->uses_rcommand ? "" : "msg ", si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 	}
 
 	/* Tell user memo sent, return */

@@ -89,7 +89,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	source = si->su;
 	/* try to find them on IRC, otherwise use operserv */
 	if (source == NULL)
-		source = si->smu != NULL && LIST_LENGTH(&si->smu->logins) > 0 ?
+		source = si->smu != NULL && MOWGLI_LIST_LENGTH(&si->smu->logins) > 0 ?
 			si->smu->logins.head->data : si->service->me;
 	sprintf(usermask, "%s!%s@%s %s", source->nick, source->user, source->host, source->gecos);
 	if (regex_match(regex, usermask))

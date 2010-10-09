@@ -76,11 +76,11 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (!nicksvs.no_nick_ownership &&
-			LIST_LENGTH(&mu->nicks) > 1 &&
+			MOWGLI_LIST_LENGTH(&mu->nicks) > 1 &&
 			command_find(si->service->commands, "UNGROUP"))
 	{
 		command_fail(si, fault_noprivs, _("Account \2%s\2 has %d other nick(s) grouped to it, remove those first."),
-				entity(mu)->name, LIST_LENGTH(&mu->nicks) - 1);
+				entity(mu)->name, MOWGLI_LIST_LENGTH(&mu->nicks) - 1);
 		return;
 	}
 

@@ -74,7 +74,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_add_flood(si, LIST_LENGTH(&c->members) > 3 ? FLOOD_HEAVY : FLOOD_MODERATE);
+	command_add_flood(si, MOWGLI_LIST_LENGTH(&c->members) > 3 ? FLOOD_HEAVY : FLOOD_MODERATE);
 
 	/* stop a race condition where users can rejoin */
 	oldlimit = c->limit;
@@ -90,7 +90,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		if (cu->user == si->su || is_internal_client(cu->user))
 			continue;
 
-		nmembers = LIST_LENGTH(&c->members);
+		nmembers = MOWGLI_LIST_LENGTH(&c->members);
 		try_kick(chansvs.me->me, c, cu->user, fullreason);
 		/* If there are only two users remaining before the kick,
 		 * it is possible that the last user is chanserv which will
@@ -104,7 +104,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		 * of the channel structure.
 		 */
 		if (nmembers == 2 && ((c = channel_find(channel)) == NULL ||
-					LIST_LENGTH(&c->members) == 0))
+					MOWGLI_LIST_LENGTH(&c->members) == 0))
 			break;
 	}
 

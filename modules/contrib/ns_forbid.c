@@ -96,7 +96,7 @@ static void destroy_forbid(sourceinfo_t *si, const char *account)
 
 	md = metadata_find(mu, "private:freeze:freezer");
 	if (md == NULL || mu->registered != mu->lastlogin ||
-			LIST_LENGTH(&mu->nicks) != 1 ||
+			MOWGLI_LIST_LENGTH(&mu->nicks) != 1 ||
 			strcmp(mu->email, FORBID_EMAIL))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a forbidden nickname."), account);

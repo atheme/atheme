@@ -664,7 +664,7 @@ static void cs_newchan(channel_t *c)
 		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
 		metadata_add(mc, "private:channelts", str);
 	}
-	else if (!(MC_TOPICLOCK & mc->flags) && LIST_LENGTH(&c->members) == 0)
+	else if (!(MC_TOPICLOCK & mc->flags) && MOWGLI_LIST_LENGTH(&c->members) == 0)
 		/* Same channel, let's assume ircd has kept topic.
 		 * However, if topiclock is enabled, we must change it back
 		 * regardless.

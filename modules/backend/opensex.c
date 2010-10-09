@@ -80,7 +80,7 @@ opensex_db_save(database_handle_t *db)
 		 *
 		 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 		 */
-		char *flags = gflags_tostr(mu_flags, LIST_LENGTH(&mu->logins) ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
+		char *flags = gflags_tostr(mu_flags, MOWGLI_LIST_LENGTH(&mu->logins) ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
 		db_start_row(db, "MU");
 		db_write_word(db, entity(mu)->name);
 		db_write_word(db, mu->pass);

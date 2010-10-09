@@ -407,7 +407,7 @@ int login_user(sasl_session_t *p)
 		return 0;
 	}
 
-	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
+	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
 		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(mu)->name);
 		return 0;

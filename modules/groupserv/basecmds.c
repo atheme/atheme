@@ -417,7 +417,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else 
 	{
-		if (LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
 			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
 			return;
@@ -585,7 +585,7 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 
 	ga = groupacs_find(mg, si->smu, 0);
 
-	if (LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+	if (MOWGLI_LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
         {
                 command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
                 return;

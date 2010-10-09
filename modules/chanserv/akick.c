@@ -268,7 +268,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),
 							++i, ca->host,
 							md ? md->value : "", ago);
-				else if (isuser(ca->entity) && LIST_LENGTH(&user(ca->entity)->logins) > 0)
+				else if (isuser(ca->entity) && MOWGLI_LIST_LENGTH(&user(ca->entity)->logins) > 0)
 					command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [modified: %s ago]"),
 							++i, ca->entity->name,
 							md ? md->value : "", ago);

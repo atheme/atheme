@@ -212,7 +212,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (flagset && (mc->flags & flagset) != flagset)
 			continue;
 
-		if (aclsize && LIST_LENGTH(&mc->chanacs) < (unsigned int)aclsize)
+		if (aclsize && MOWGLI_LIST_LENGTH(&mc->chanacs) < (unsigned int)aclsize)
 			continue;
 
 		if (age && (CURRTIME - mc->registered) < age)

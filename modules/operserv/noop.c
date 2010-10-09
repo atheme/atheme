@@ -46,7 +46,7 @@ void _moddeinit()
 {
 	node_t *n, *tn;
 
-	if (LIST_LENGTH(&noop_kill_queue) > 0)
+	if (MOWGLI_LIST_LENGTH(&noop_kill_queue) > 0)
 	{
 		/* Cannot safely delete users from here, so just forget
 		 * about them.
@@ -90,7 +90,7 @@ static void check_quit(user_t *u)
 	{
 		node_del(n, &noop_kill_queue);
 		node_free(n);
-		if (LIST_LENGTH(&noop_kill_queue) == 0)
+		if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 		{
 			event_delete(noop_kill_users, NULL);
 			hook_del_user_delete(check_quit);
@@ -114,7 +114,7 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, hostbuf))
 		{
-			if (LIST_LENGTH(&noop_kill_queue) == 0)
+			if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 			{
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);
@@ -133,7 +133,7 @@ static void check_user(user_t *u)
 
 		if (!match(np->target, u->server->name))
 		{
-			if (LIST_LENGTH(&noop_kill_queue) == 0)
+			if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 			{
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);

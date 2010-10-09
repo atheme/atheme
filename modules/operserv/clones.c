@@ -329,7 +329,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(he, &state, hostlist)
 	{
-		k = LIST_LENGTH(&he->clients);
+		k = MOWGLI_LIST_LENGTH(&he->clients);
 
 		if (k > 3)
 		{
@@ -581,7 +581,7 @@ static void clones_newuser(hook_user_nick_t *data)
 		mowgli_patricia_add(hostlist, he->ip, he);
 	}
 	node_add(u, node_create(), &he->clients);
-	i = LIST_LENGTH(&he->clients);
+	i = MOWGLI_LIST_LENGTH(&he->clients);
 
 	if (i > DEFAULT_WARN_CLONES)
 	{
@@ -633,7 +633,7 @@ static void clones_userquit(user_t *u)
 	{
 		node_del(n, &he->clients);
 		node_free(n);
-		if (LIST_LENGTH(&he->clients) == 0)
+		if (MOWGLI_LIST_LENGTH(&he->clients) == 0)
 		{
 			mowgli_patricia_delete(hostlist, he->ip);
 			BlockHeapFree(hostentry_heap, he);

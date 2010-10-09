@@ -169,7 +169,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	/* if noone is logged in to this account, show account's lastseen,
 	 * unless we have a nick and it quit at the same time as the account
 	 */
-	if (LIST_LENGTH(&mu->logins) == 0)
+	if (MOWGLI_LIST_LENGTH(&mu->logins) == 0)
 	{
 		tm2 = *localtime(&mu->lastlogin);
 		strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);

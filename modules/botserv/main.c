@@ -448,7 +448,7 @@ static void db_h_bot_count(database_handle_t *db, const char *type)
 {
 	unsigned int i = db_sread_uint(db);
 
-	if (i != LIST_LENGTH(&bs_bots))
+	if (i != MOWGLI_LIST_LENGTH(&bs_bots))
 		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
 }
 
@@ -619,7 +619,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_add(mc, "private:botserv:bot-assigned", parv[1]);
 			metadata_add(mc, "private:botserv:bot-handle-fantasy", parv[1]);
-			if (!config_options.leave_chans || (mc->chan != NULL && LIST_LENGTH(&mc->chan->members) > 0))
+			if (!config_options.leave_chans || (mc->chan != NULL && MOWGLI_LIST_LENGTH(&mc->chan->members) > 0))
 				join(mc->name, parv[1]);
 		}
 	}
@@ -732,7 +732,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 			if (mc->flags & MC_GUARD &&
 					(!config_options.leave_chans ||
 					 (mc->chan != NULL &&
-					  LIST_LENGTH(&mc->chan->members) > 1)))
+					  MOWGLI_LIST_LENGTH(&mc->chan->members) > 1)))
 				join(mc->name, chansvs.nick);
 
 			metadata_delete(mc, "private:botserv:bot-assigned");
@@ -902,7 +902,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc->flags & MC_GUARD && (!config_options.leave_chans ||
 				(mc->chan != NULL &&
-				 LIST_LENGTH(&mc->chan->members) > 1)))
+				 MOWGLI_LIST_LENGTH(&mc->chan->members) > 1)))
 		join(mc->name, chansvs.nick);
 	part(mc->name, md->value);
 	metadata_delete(mc, "private:botserv:bot-assigned");

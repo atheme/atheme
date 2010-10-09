@@ -382,7 +382,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 		{
 			if (ca->entity == NULL)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
-			else if (isuser(ca->entity) && LIST_LENGTH(&user(ca->entity)->logins))
+			else if (isuser(ca->entity) && MOWGLI_LIST_LENGTH(&user(ca->entity)->logins))
 				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->entity->name);
 			else
 				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->entity->name);

@@ -61,7 +61,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (LIST_LENGTH(&si->smu->nicks) >= me.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
+	if (MOWGLI_LIST_LENGTH(&si->smu->nicks) >= me.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_noprivs, _("You have too many nicks registered already."));
 		return;
@@ -169,7 +169,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	mu = mn->owner;
 	if (!irccasecmp(mn->nick, entity(mu)->name))
 	{
-		if (LIST_LENGTH(&mu->nicks) <= 1 ||
+		if (MOWGLI_LIST_LENGTH(&mu->nicks) <= 1 ||
 			       !module_find_published("nickserv/set_accountname"))
 		{
 			command_fail(si, fault_noprivs, _("Nick \2%s\2 is an account name; you may not remove it."), mn->nick);

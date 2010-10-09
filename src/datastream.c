@@ -53,7 +53,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		return;
 
 	if (cptr->sendq_limit != 0 &&
-			LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
+			MOWGLI_LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
 	{
 		slog(LG_INFO, "sendq_add(): sendq limit exceeded on connection %s[%d]",
 				cptr->name, cptr->fd);
@@ -136,7 +136,7 @@ void sendq_flush(connection_t * cptr)
                 sq->firstused += l;
                 if (sq->firstused == sq->firstfree)
                 {
-			if (LIST_LENGTH(&cptr->sendq) > 1)
+			if (MOWGLI_LIST_LENGTH(&cptr->sendq) > 1)
 			{
                         	node_del(&sq->node, &cptr->sendq);
                         	free(sq);
@@ -288,7 +288,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 		sq->firstused += l;
 		if (sq->firstused == sq->firstfree)
 		{
-			if (LIST_LENGTH(&cptr->recvq) > 1)
+			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
 				node_del(&sq->node, &cptr->recvq);
 				free(sq);
@@ -344,7 +344,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 		sq->firstused += l;
 		if (sq->firstused == sq->firstfree)
 		{
-			if (LIST_LENGTH(&cptr->recvq) > 1)
+			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
 				node_del(&sq->node, &cptr->recvq);
 				free(sq);

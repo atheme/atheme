@@ -75,7 +75,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "LISTCHANS");
 	}
 
-	if (LIST_LENGTH(&entity(mu)->chanacs) == 0)
+	if (MOWGLI_LIST_LENGTH(&entity(mu)->chanacs) == 0)
 	{
 		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);
 		return;
@@ -92,7 +92,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 			akicks++;
 	}
 
-	i = LIST_LENGTH(&entity(mu)->chanacs) - akicks;
+	i = MOWGLI_LIST_LENGTH(&entity(mu)->chanacs) - akicks;
 
 	if (i == 0)
 		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), entity(mu)->name);

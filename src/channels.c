@@ -506,7 +506,7 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 		return NULL;
 
 	/* choose shortest list to search -- jilles */
-	if (LIST_LENGTH(&user->channels) < LIST_LENGTH(&chan->members))
+	if (MOWGLI_LIST_LENGTH(&user->channels) < MOWGLI_LIST_LENGTH(&chan->members))
 	{
 		MOWGLI_ITER_FOREACH(n, user->channels.head)
 		{

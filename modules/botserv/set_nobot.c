@@ -76,7 +76,7 @@ static void bs_cmd_set_nobot(sourceinfo_t *si, int parc, char *parv[])
 			if (mc->flags & MC_GUARD &&
 					(!config_options.leave_chans ||
 					 (mc->chan != NULL &&
-					  LIST_LENGTH(&mc->chan->members) > 1)))
+					  MOWGLI_LIST_LENGTH(&mc->chan->members) > 1)))
 				join(mc->name, chansvs.nick);
 			part(mc->name, md->value);
 			metadata_delete(mc, "private:botserv:bot-assigned");

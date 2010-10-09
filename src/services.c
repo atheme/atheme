@@ -332,7 +332,7 @@ void reintroduce_user(user_t *u)
 	MOWGLI_ITER_FOREACH(n, u->channels.head)
 	{
 		c = ((chanuser_t *)n->data)->chan;
-		if (LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
+		if (MOWGLI_LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
 			join_sts(c, u, 0, channel_modes(c, true));
 		else
 		{
@@ -519,7 +519,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 					(unsigned long)mu->registered);
 			return;
 		}
-		if (LIST_LENGTH(&mu->logins))
+		if (MOWGLI_LIST_LENGTH(&mu->logins))
 			slog(LG_INFO, "handle_setlogin(): account %s with changing registration time has logins", login);
 		slog(LG_DEBUG, "handle_setlogin(): changing registration time for %s from %lu to %lu",
 				entity(mu)->name, (unsigned long)mu->registered,
@@ -584,9 +584,9 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 		return;
 	}
 
-	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
+	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+		notice(svs->me->nick, u->nick, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 		return;
 	}
 

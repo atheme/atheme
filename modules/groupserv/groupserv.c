@@ -166,7 +166,7 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 	 * return the list length.
 	 */
 	if (flag == 0)
-		return LIST_LENGTH(&mg->acs);
+		return MOWGLI_LIST_LENGTH(&mg->acs);
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{

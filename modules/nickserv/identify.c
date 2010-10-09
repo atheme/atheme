@@ -119,9 +119,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (verify_password(mu, password))
 	{
-		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
+		if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
 			lau[0] = '\0';
 			MOWGLI_ITER_FOREACH(n, mu->logins.head)
 			{

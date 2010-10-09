@@ -168,7 +168,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	svsignore_t *svsignore;
 
-	if (LIST_LENGTH(&svs_ignore_list) == 0)
+	if (MOWGLI_LIST_LENGTH(&svs_ignore_list) == 0)
 	{
 		command_success_nodata(si, _("Services ignore list is empty."));
 		return;
@@ -204,7 +204,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	char strfbuf[32];
 	struct tm tm;
 
-	if (LIST_LENGTH(&svs_ignore_list) == 0)
+	if (MOWGLI_LIST_LENGTH(&svs_ignore_list) == 0)
 	{
 		command_success_nodata(si, _("The services ignore list is empty."));
 		return;

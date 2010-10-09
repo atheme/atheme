@@ -212,7 +212,7 @@ void myuser_delete(myuser_t *mu)
 					mc->name, entity(successor)->name,
 					(long)(CURRTIME - mc->used),
 					entity(mu)->name,
-					LIST_LENGTH(&mc->chanacs));
+					MOWGLI_LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mu)->name);
 
@@ -228,7 +228,7 @@ void myuser_delete(myuser_t *mu)
 			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					entity(mu)->name,
-					LIST_LENGTH(&mc->chanacs));
+					MOWGLI_LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
 			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
@@ -524,7 +524,7 @@ myuser_access_add(myuser_t *mu, const char *mask)
 		return false;
 	}
 
-	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
+	if (MOWGLI_LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
 		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", entity(mu)->name);
 		return false;
@@ -1061,7 +1061,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 
 		/* now have a user with requested flags */
 		if (isuser(mt))
-			recent_ok = LIST_LENGTH(&user(mt)->logins) > 0 ||
+			recent_ok = MOWGLI_LIST_LENGTH(&user(mt)->logins) > 0 ||
 				CURRTIME - user(mt)->lastlogin < RECENTLY_SEEN;
 
 		level = add_auto_flags(ca->level);
@@ -1821,7 +1821,7 @@ static int expire_myuser_cb(myentity_t *mt, void *unused)
 	 * this if the account would otherwise be
 	 * deleted. -- jilles 
 	 */
-	if (LIST_LENGTH(&mu->logins) > 0)
+	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{
 		mu->lastlogin = CURRTIME;
 		return 0;
@@ -1849,8 +1849,8 @@ static int expire_myuser_cb(myentity_t *mt, void *unused)
 		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), entity(mu)->name, mu->email);
 		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
-				mu->email, LIST_LENGTH(&mu->nicks),
-				LIST_LENGTH(&entity(mu)->chanacs));
+				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
+				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
 		object_unref(mu);
 	}
 
@@ -1942,7 +1942,7 @@ void expire_check(void *arg)
 			slog(LG_VERBOSE, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),
-					LIST_LENGTH(&mc->chanacs));
+					MOWGLI_LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
 			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))

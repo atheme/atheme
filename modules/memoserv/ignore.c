@@ -186,7 +186,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n, *tn;
 
-	if (LIST_LENGTH(&si->smu->memo_ignores) == 0)
+	if (MOWGLI_LIST_LENGTH(&si->smu->memo_ignores) == 0)
 	{
 		command_fail(si, fault_nochange, _("Ignore list already empty."));
 		return;

@@ -123,7 +123,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			/* log everything */
 			logcommand(si, CMDLOG_ADMIN, "GLOBAL: \2%s\2", global->text);
 		}
-		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%d\2 lines sent)", LIST_LENGTH(&globlist));
+		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%d\2 lines sent)", MOWGLI_LIST_LENGTH(&globlist));
 
 		/* destroy the list we made */
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)

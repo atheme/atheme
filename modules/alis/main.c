@@ -270,28 +270,28 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 	if(query->show_mode && show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3d :%s (%s)",
 			chptr->name, channel_modes(chptr, false),
-			LIST_LENGTH(&chptr->members),
+			MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
 	else if(query->show_mode && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3d :%s",
 			chptr->name, channel_modes(chptr, false),
-			LIST_LENGTH(&chptr->members),
+			MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic);
 	else if(query->show_mode)
 		command_success_nodata(si, "%-50s %-8s %3d",
 			chptr->name, channel_modes(chptr, false),
-			LIST_LENGTH(&chptr->members));
+			MOWGLI_LIST_LENGTH(&chptr->members));
 	else if(show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %3d :%s (%s)",
-			chptr->name, LIST_LENGTH(&chptr->members),
+			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
 	else if(show_topic)
 		command_success_nodata(si, "%-50s %3d :%s",
-			chptr->name, LIST_LENGTH(&chptr->members),
+			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic);
 	else
 		command_success_nodata(si, "%-50s %3d",
-			chptr->name, LIST_LENGTH(&chptr->members));
+			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));
 }
 
 static int show_channel(channel_t *chptr, struct alis_query *query)
@@ -302,8 +302,8 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
         if(chptr->modes & CMODE_SEC)
                 return 0;
 
-        if((int)LIST_LENGTH(&chptr->members) < query->min ||
-           (query->max && (int)LIST_LENGTH(&chptr->members) > query->max))
+        if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
+           (query->max && (int)MOWGLI_LIST_LENGTH(&chptr->members) > query->max))
                 return 0;
 
 	if(query->mode_dir == DIR_SET)
