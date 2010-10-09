@@ -229,6 +229,91 @@ static inline unsigned int count_bits(unsigned int bits)
 	return count;
 }
 
+typedef struct {
+	char name[400];
+	unsigned int level;
+	mowgli_node_t node;
+} template_t;
+
+int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
+{
+	template_t *ta = a->data;
+	template_t *tb = b->data;
+
+	return count_bits(tb->level) - count_bits(ta->level);
+}
+
+mowgli_list_t *build_template_list(mychan_t *mc)
+{
+	const char *p, *q, *r;
+	char *s;
+	char ss[40];
+	static char flagname[400];
+	metadata_t *md;
+	mowgli_list_t *l;
+	template_t *t;
+
+	l = mowgli_list_create();
+
+	md = metadata_find(mc, "private:templates");
+	if (md != NULL)
+	{
+		p = md->value;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			if (r != NULL && r < q)
+				break;
+			strlcpy(ss, q, sizeof ss);
+			if (r != NULL && r - q < (int)(sizeof ss - 1))
+			{
+				ss[r - q] = '\0';
+			}
+
+			strlcpy(flagname, p, sizeof flagname);
+			s = strchr(flagname, '=');
+			if (s != NULL)
+				*s = '\0';
+
+			t = smalloc(sizeof(template_t));
+			strlcpy(t->name, flagname, sizeof(t->name));
+			t->level = flags_to_bitmask(ss, 0);
+			mowgli_node_add(t, &t->node, l);
+
+			p = r;
+		}
+	}
+
+	t = smalloc(sizeof(template_t));
+	strlcpy(t->name, "SOP", sizeof(t->name));
+	t->level = get_template_flags(mc, "SOP");
+	mowgli_node_add(t, &t->node, l);
+
+	t = smalloc(sizeof(template_t));
+	strlcpy(t->name, "AOP", sizeof(t->name));
+	t->level = get_template_flags(mc, "AOP");
+	mowgli_node_add(t, &t->node, l);
+
+	t = smalloc(sizeof(template_t));
+	strlcpy(t->name, "HOP", sizeof(t->name));
+	t->level = get_template_flags(mc, "HOP");
+	mowgli_node_add(t, &t->node, l);
+
+	t = smalloc(sizeof(template_t));
+	strlcpy(t->name, "VOP", sizeof(t->name));
+	t->level = get_template_flags(mc, "VOP");
+	mowgli_node_add(t, &t->node, l);
+
+	mowgli_list_sort(l, compare_template_nodes, NULL);
+
+	return l;	
+}
+
 static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 {
 	metadata_t *md;
