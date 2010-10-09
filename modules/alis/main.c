@@ -268,29 +268,29 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 	}
 
 	if(query->show_mode && show_topicwho && show_topic)
-		command_success_nodata(si, "%-50s %-8s %3ld :%s (%s)",
+		command_success_nodata(si, "%-50s %-8s %3zu :%s (%s)",
 			chptr->name, channel_modes(chptr, false),
 			MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
 	else if(query->show_mode && show_topic)
-		command_success_nodata(si, "%-50s %-8s %3ld :%s",
+		command_success_nodata(si, "%-50s %-8s %3zu :%s",
 			chptr->name, channel_modes(chptr, false),
 			MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic);
 	else if(query->show_mode)
-		command_success_nodata(si, "%-50s %-8s %3ld",
+		command_success_nodata(si, "%-50s %-8s %3zu",
 			chptr->name, channel_modes(chptr, false),
 			MOWGLI_LIST_LENGTH(&chptr->members));
 	else if(show_topicwho && show_topic)
-		command_success_nodata(si, "%-50s %3ld :%s (%s)",
+		command_success_nodata(si, "%-50s %3zu :%s (%s)",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
 	else if(show_topic)
-		command_success_nodata(si, "%-50s %3ld :%s",
+		command_success_nodata(si, "%-50s %3zu :%s",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
 			chptr->topic);
 	else
-		command_success_nodata(si, "%-50s %3ld",
+		command_success_nodata(si, "%-50s %3zu",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));
 }
 

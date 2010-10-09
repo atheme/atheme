@@ -79,7 +79,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			MOWGLI_LIST_LENGTH(&mu->nicks) > 1 &&
 			command_find(si->service->commands, "UNGROUP"))
 	{
-		command_fail(si, fault_noprivs, _("Account \2%s\2 has %ld other nick(s) grouped to it, remove those first."),
+		command_fail(si, fault_noprivs, _("Account \2%s\2 has %zu other nick(s) grouped to it, remove those first."),
 				entity(mu)->name, MOWGLI_LIST_LENGTH(&mu->nicks) - 1);
 		return;
 	}

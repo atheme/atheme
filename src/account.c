@@ -208,7 +208,7 @@ void myuser_delete(myuser_t *mu)
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mu)->name);
-			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %ld)",
+			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, entity(successor)->name,
 					(long)(CURRTIME - mc->used),
 					entity(mu)->name,
@@ -225,7 +225,7 @@ void myuser_delete(myuser_t *mu)
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mu)->name);
-			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %ld)",
+			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, (long)(CURRTIME - mc->used),
 					entity(mu)->name,
 					MOWGLI_LIST_LENGTH(&mc->chanacs));
@@ -1847,7 +1847,7 @@ static int expire_myuser_cb(myentity_t *mt, void *unused)
 			return 0;
 
 		slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2 "), entity(mu)->name, mu->email);
-		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %ld, chanacs %ld)",
+		slog(LG_VERBOSE, "expire_check(): expiring account %s (unused %ds, email %s, nicks %zu, chanacs %zu)",
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
 				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
@@ -1939,7 +1939,7 @@ void expire_check(void *arg)
 				continue;
 
 			slog(LG_REGISTER, _("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
-			slog(LG_VERBOSE, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %ld)",
+			slog(LG_VERBOSE, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),
 					MOWGLI_LIST_LENGTH(&mc->chanacs));

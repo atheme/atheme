@@ -179,10 +179,10 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 
 		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%ld).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
+			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%ld).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
-		myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %ld"),
+			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
+		myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %zu"),
 					ircd->uses_rcommand ? "" : "msg ", si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 		/* Tell user memo sent */

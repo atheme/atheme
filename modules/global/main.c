@@ -123,7 +123,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			/* log everything */
 			logcommand(si, CMDLOG_ADMIN, "GLOBAL: \2%s\2", global->text);
 		}
-		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%ld\2 lines sent)", MOWGLI_LIST_LENGTH(&globlist));
+		logcommand(si, CMDLOG_ADMIN, "GLOBAL: (\2%zu\2 lines sent)", MOWGLI_LIST_LENGTH(&globlist));
 
 		/* destroy the list we made */
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
@@ -165,8 +165,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	mowgli_node_add(global, n, &globlist);
 
 	command_success_nodata(si,
-		"Stored text to be sent as line %ld. Use \2GLOBAL SEND\2 "
-		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "or \2GLOBAL\2 to store additional lines.", globlist.count);
+		"Stored text to be sent as line %zu. Use \2GLOBAL SEND\2 "
+		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
 
 void _modinit(module_t *m)

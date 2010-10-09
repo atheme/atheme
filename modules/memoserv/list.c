@@ -50,8 +50,8 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 		
 	
-	command_success_nodata(si, ngettext(N_("You have %ld memo (%d new)."),
-					    N_("You have %ld memos (%d new)."),
+	command_success_nodata(si, ngettext(N_("You have %zu memo (%d new)."),
+					    N_("You have %zu memos (%d new)."),
 					    si->smu->memos.count), si->smu->memos.count, si->smu->memoct_new);
 	
 	/* Check to see if any memos */
