@@ -253,6 +253,8 @@ mowgli_list_t *build_template_list(mychan_t *mc)
 	mowgli_list_t *l;
 	template_t *t;
 
+	return_if_fail(mc != NULL);
+
 	l = mowgli_list_create();
 
 	md = metadata_find(mc, "private:templates");
@@ -311,177 +313,78 @@ mowgli_list_t *build_template_list(mychan_t *mc)
 
 	mowgli_list_sort(l, compare_template_nodes, NULL);
 
+	/* reverse the list so that we go from highest flags to lowest. */
+	mowgli_list_reverse(l);
+
 	return l;	
 }
 
-static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
+void free_template_list(mowgli_list_t *l)
 {
-	metadata_t *md;
-	const char *p, *q, *r;
-	char *s;
-	char ss[40];
-	static char flagname[400];
-	unsigned int matchlev, matchbits, matchbits2;
+	mowgli_node_t *n, *tn;
 
-	md = metadata_find(mc, "private:templates");
-	if (md != NULL)
+	return_if_fail(l != NULL);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
-		p = md->value;
-		while (p != NULL)
-		{
-			while (*p == ' ')
-				p++;
-			q = strchr(p, '=');
-			if (q == NULL)
-				break;
-			r = strchr(q, ' ');
-			if (r != NULL && r < q)
-				break;
-			strlcpy(ss, q, sizeof ss);
-			if (r != NULL && r - q < (int)(sizeof ss - 1))
-			{
-				ss[r - q] = '\0';
-			}
+		template_t *t = n->data;
 
-			matchlev = flags_to_bitmask(ss, 0);
-			if ((level & matchlev) == matchlev || (matchlev & level) == level)
-			{
-				if (matchbits  > count_bits(level & ~matchlev) &&
-				    matchbits2 > count_bits(matchlev & ~level))
-					continue;
-					
-				strlcpy(flagname, p, sizeof flagname);
-				s = strchr(flagname, '=');
-				if (s != NULL)
-					*s = '\0';
-
-				matchbits  = count_bits(level & ~matchlev);
-				matchbits2 = count_bits(matchlev & ~level);
-			}
-			p = r;
-		}
+		mowgli_node_delete(&t->node, l);
+		free(t);
 	}
-
-	matchlev = get_template_flags(mc, "SOP");
-	if ((level & matchlev) == matchlev || (matchlev & level) == level)
-	{
-		if (matchbits  > count_bits(level & ~matchlev) &&
-		    matchbits2 > count_bits(matchlev & ~level))
-		{
-			strlcpy(flagname, "SOP", sizeof flagname);
-
-			matchbits  = count_bits(level & ~matchlev);
-			matchbits2 = count_bits(matchlev & ~level);
-		}			
-	}
-
-	matchlev = get_template_flags(mc, "AOP");
-	if ((level & matchlev) == matchlev || (matchlev & level) == level)
-	{
-		if (matchbits  > count_bits(level & ~matchlev) &&
-		    matchbits2 > count_bits(matchlev & ~level))
-		{
-			strlcpy(flagname, "AOP", sizeof flagname);
-
-			matchbits  = count_bits(level & ~matchlev);
-			matchbits2 = count_bits(matchlev & ~level);
-		}			
-	}
-
-	/* if vop==hop, prefer vop */
-	matchlev = get_template_flags(mc, "VOP");
-	if ((level & matchlev) == matchlev || (matchlev & level) == level)
-	{
-		if (matchbits  > count_bits(level & ~matchlev) &&
-		    matchbits2 > count_bits(matchlev & ~level))
-		{
-			strlcpy(flagname, "VOP", sizeof flagname);
-
-			matchbits  = count_bits(level & ~matchlev);
-			matchbits2 = count_bits(matchlev & ~level);
-		}			
-	}
-
-	matchlev = get_template_flags(mc, "HOP");
-	if (chansvs.ca_hop != chansvs.ca_vop && ((level & chansvs.ca_hop) == chansvs.ca_hop || (level & matchlev) == matchlev))
-	{
-		if (matchbits  > count_bits(level & ~matchlev) &&
-		    matchbits2 > count_bits(matchlev & ~level))
-		{
-			strlcpy(flagname, "HOP", sizeof flagname);
-
-			matchbits  = count_bits(level & ~matchlev);
-			matchbits2 = count_bits(matchlev & ~level);
-		}			
-	}
-
-	if (matchbits < matchbits2)
-		strlcat(flagname, "-", sizeof flagname);
-	else
-		strlcat(flagname, "+", sizeof flagname);
-
-	return flagname;
 }
 
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
-	metadata_t *md;
-	const char *p, *q, *r;
-	char *s;
-	char ss[40];
+	mowgli_list_t *l;
+	mowgli_node_t *n, *tn;
 	static char flagname[400];
+	template_t *exact_t, *lesser_t, *greater_t;
+	unsigned int flagcount = count_bits(level);
 
-	md = metadata_find(mc, "private:templates");
-	if (md != NULL)
+	l = build_template_list(mc);
+
+	/* find exact_t, lesser_t and greater_t */
+	MOWGLI_ITER_FOREACH(n, l->head)
 	{
-		p = md->value;
-		while (p != NULL)
-		{
-			while (*p == ' ')
-				p++;
-			q = strchr(p, '=');
-			if (q == NULL)
-				break;
-			r = strchr(q, ' ');
-			if (r != NULL && r < q)
-				break;
-			strlcpy(ss, q, sizeof ss);
-			if (r != NULL && r - q < (int)(sizeof ss - 1))
-			{
-				ss[r - q] = '\0';
-			}
-			if (level == flags_to_bitmask(ss, 0))
-			{
-				strlcpy(flagname, p, sizeof flagname);
-				s = strchr(flagname, '=');
-				if (s != NULL)
-					*s = '\0';
-				return flagname;
-			}
-			p = r;
-		}
+		template_t *t = n->data;
+
+		if (t->level == level)
+			exact_t = t;
+
+		else if ((t->level & level) == level)
+			lesser_t = t;
+
+		else if ((level & t->level) == t->level)
+			greater_t = t;
 	}
-	if (level == chansvs.ca_sop && level == get_template_flags(mc, "SOP"))
-		return "SOP";
-	if (level == chansvs.ca_aop && level == get_template_flags(mc, "AOP"))
-		return "AOP";
-	/* if vop==hop, prefer vop */
-	if (level == chansvs.ca_vop && level == get_template_flags(mc, "VOP"))
-		return "VOP";
-	if (chansvs.ca_hop != chansvs.ca_vop && level == chansvs.ca_hop &&
-			level == get_template_flags(mc, "HOP"))
-		return "HOP";
-	return NULL;
-}
 
-static const char *get_role_name(mychan_t *mc, unsigned int level)
-{
-	const char *role;
+	/*
+	 * if we have an exact match (exact_t): set flagname as exact_t->name.
+	 * if we have a greater match (greater_t) and lesser match (lesser_t):
+ 	 *      determine which has more flags set (count_bits), return that
+	 *      name with + or -.
+	 * if we have only a lesser match (lesser_t):
+	 *      return that name with +.
+	 */
+	if (exact_t != NULL)
+		strlcpy(flagname, exact_t->name, sizeof flagname);
+	else if (lesser_t != NULL && greater_t != NULL)
+	{
+		unsigned int lesser_count = count_bits(lesser_t->level);
+		unsigned int greater_count = count_bits(greater_t->level);
 
-	if ((role = get_template_name(mc, level)) != NULL)
-		return role;
+		if (lesser_count <= flagcount)
+			snprintf(flagname, sizeof flagname, "%s+", lesser_t->name);
+		else if (greater_count >= flagcount)
+			snprintf(flagname, sizeof flagname, "%s-", lesser_t->name);
+	}
+	else if (lesser_t != NULL)
+		snprintf(flagname, sizeof flagname, "%s+", lesser_t->name);
 
-	return get_template_name_fuzzy(mc, level);
+	free_template_list(l);
+
+	return flagname;
 }
 
 static void list_netwide_roles(sourceinfo_t *si, mychan_t *mc)
@@ -676,7 +579,7 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 		if (ca->level == CA_AKICK)
 			continue;
 
-		role = get_role_name(mc, ca->level);
+		role = get_template_name(mc, ca->level);
 
 		command_success_nodata(si, _("%-5d %-22s %s"), i, ca->entity ? ca->entity->name : ca->host, role);
 
@@ -766,7 +669,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	role = get_role_name(mc, ca->level);
+	role = get_template_name(mc, ca->level);
 
 	tm = *localtime(&ca->tmodified);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
@@ -861,7 +764,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	role = get_role_name(mc, ca->level);
+	role = get_template_name(mc, ca->level);
 
 	ca->level = 0;
 	chanacs_close(ca);
