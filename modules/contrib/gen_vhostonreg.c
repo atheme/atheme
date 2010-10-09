@@ -87,7 +87,7 @@ static void user_add_host(myuser_t *mu)
 static void handle_verify_register(hook_user_req_t *req)
 {
 	myuser_t *mu = req->mu;
-	node_t *n;
+	mowgli_node_t *n;
 	user_t *u;
 
 	if (me.hidehostsuffix == NULL)

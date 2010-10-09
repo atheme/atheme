@@ -172,7 +172,7 @@ void myuser_delete(myuser_t *mu)
 	mychan_t *mc;
 	mynick_t *mn;
 	user_t *u;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	mymemo_t *memo;
 	chanacs_t *ca;
 	char nicks[200];
@@ -193,8 +193,8 @@ void myuser_delete(myuser_t *mu)
 		if (!authservice_loaded || !ircd_on_logout(u, entity(mu)->name))
 		{
 			u->myuser = NULL;
-			node_del(n, &mu->logins);
-			node_free(n);
+			mowgli_node_delete(n, &mu->logins);
+			mowgli_node_free(n);
 		}
 	}
 
@@ -253,8 +253,8 @@ void myuser_delete(myuser_t *mu)
 	{
 		memo = (mymemo_t *)n->data;
 
-		node_del(n, &mu->memos);
-		node_free(n);
+		mowgli_node_delete(n, &mu->memos);
+		mowgli_node_free(n);
 		free(memo);
 	}
 
@@ -318,7 +318,7 @@ void myuser_delete(myuser_t *mu)
  */
 void myuser_rename(myuser_t *mu, const char *name)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	user_t *u;
 	hook_user_rename_t data;
 
@@ -429,7 +429,7 @@ void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	node_t *n;
+	mowgli_node_t *n;
 	user_t *u;
 
 	if (target == NULL)
@@ -465,7 +465,7 @@ void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 bool
 myuser_access_verify(user_t *u, myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char buf[USERLEN+HOSTLEN];
 	char buf2[USERLEN+HOSTLEN];
 	char buf3[USERLEN+HOSTLEN];
@@ -515,7 +515,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 bool
 myuser_access_add(myuser_t *mu, const char *mask)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char *msk;
 
 	if (mu == NULL || mask == NULL)
@@ -531,8 +531,8 @@ myuser_access_add(myuser_t *mu, const char *mask)
 	}
 
 	msk = sstrdup(mask);
-	n = node_create();
-	node_add(msk, n, &mu->access_list);
+	n = mowgli_node_create();
+	mowgli_node_add(msk, n, &mu->access_list);
 
 	cnt.myuser_access++;
 
@@ -554,7 +554,7 @@ myuser_access_add(myuser_t *mu, const char *mask)
 char *
 myuser_access_find(myuser_t *mu, const char *mask)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (mu == NULL || mask == NULL)
 	{
@@ -587,7 +587,7 @@ myuser_access_find(myuser_t *mu, const char *mask)
 void
 myuser_access_delete(myuser_t *mu, const char *mask)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (mu == NULL || mask == NULL)
 	{
@@ -601,8 +601,8 @@ myuser_access_delete(myuser_t *mu, const char *mask)
 
 		if (!strcasecmp(entry, mask))
 		{
-			node_del(n, &mu->access_list);
-			node_free(n);
+			mowgli_node_delete(n, &mu->access_list);
+			mowgli_node_free(n);
 			free(entry);
 
 			cnt.myuser_access--;
@@ -651,7 +651,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	mn->registered = CURRTIME;
 
 	mowgli_patricia_add(nicklist, mn->nick, mn);
-	node_add(mn, &mn->node, &mu->nicks);
+	mowgli_node_add(mn, &mn->node, &mu->nicks);
 
 	myuser_name_restore(mn->nick, mu);
 
@@ -684,7 +684,7 @@ void mynick_delete(mynick_t *mn)
 	myuser_name_remember(mn->nick, mn->owner);
 
 	mowgli_patricia_delete(nicklist, mn->nick);
-	node_del(&mn->node, &mn->owner->nicks);
+	mowgli_node_delete(&mn->node, &mn->owner->nicks);
 
 	BlockHeapFree(mynick_heap, mn);
 
@@ -824,7 +824,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 {
 	myuser_name_t *mun;
 	metadata_t *md, *md2;
-	node_t *n;
+	mowgli_node_t *n;
 	char *copy;
 
 	mun = myuser_name_find(name);
@@ -887,7 +887,7 @@ mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp)
 	mcfp->mu = mu;
 	mcfp->certfp = sstrdup(certfp);
 
-	node_add(mcfp, &mcfp->node, &mu->cert_fingerprints);
+	mowgli_node_add(mcfp, &mcfp->node, &mu->cert_fingerprints);
 	mowgli_patricia_add(certfplist, mcfp->certfp, mcfp);
 
 	return mcfp;
@@ -899,7 +899,7 @@ void mycertfp_delete(mycertfp_t *mcfp)
 	return_if_fail(mcfp->mu != NULL);
 	return_if_fail(mcfp->certfp != NULL);
 
-	node_del(&mcfp->node, &mcfp->mu->cert_fingerprints);
+	mowgli_node_delete(&mcfp->node, &mcfp->mu->cert_fingerprints);
 	mowgli_patricia_delete(certfplist, mcfp->certfp);
 
 	free(mcfp->certfp);
@@ -920,7 +920,7 @@ mycertfp_t *mycertfp_find(const char *certfp)
 /* private destructor for mychan_t. */
 static void mychan_delete(mychan_t *mc)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	return_if_fail(mc != NULL);
 
@@ -971,7 +971,7 @@ mychan_t *mychan_add(char *name)
  * inappropriate drops. -- jilles */
 bool mychan_isused(mychan_t *mc)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	channel_t *c;
 	chanuser_t *cu;
 
@@ -989,7 +989,7 @@ bool mychan_isused(mychan_t *mc)
 
 unsigned int mychan_num_founders(mychan_t *mc)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	unsigned int count = 0;
 
@@ -1004,7 +1004,7 @@ unsigned int mychan_num_founders(mychan_t *mc)
 
 const char *mychan_founder_names(mychan_t *mc)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	static char names[512];
 
@@ -1039,7 +1039,7 @@ static unsigned int add_auto_flags(unsigned int flags)
 /* Find a user fulfilling the conditions who can take another channel */
 myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	myentity_t *mt, *hi_mt;
 	unsigned int level, hi_level;
@@ -1280,7 +1280,7 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 /* private destructor for chanacs_t */
 static void chanacs_delete(chanacs_t *ca)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
@@ -1288,13 +1288,13 @@ static void chanacs_delete(chanacs_t *ca)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
 			ca->entity != NULL ? entity(ca->entity)->name : ca->host);
-	node_del(&ca->cnode, &ca->mychan->chanacs);
+	mowgli_node_delete(&ca->cnode, &ca->mychan->chanacs);
 
 	if (ca->entity != NULL)
 	{
-		n = node_find(ca, &ca->entity->chanacs);
-		node_del(n, &ca->entity->chanacs);
-		node_free(n);
+		n = mowgli_node_find(ca, &ca->entity->chanacs);
+		mowgli_node_delete(n, &ca->entity->chanacs);
+		mowgli_node_free(n);
 	}
 
 	metadata_delete_all(ca);
@@ -1326,7 +1326,7 @@ static void chanacs_delete(chanacs_t *ca)
 chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
@@ -1339,7 +1339,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, mt->name);
 
-	n = node_create();
+	n = mowgli_node_create();
 
 	ca = BlockHeapAlloc(chanacs_heap);
 
@@ -1350,8 +1350,8 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
 
-	node_add(ca, &ca->cnode, &mychan->chanacs);
-	node_add(ca, n, &mt->chanacs);
+	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
+	mowgli_node_add(ca, n, &mt->chanacs);
 
 	cnt.chanacs++;
 
@@ -1399,7 +1399,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
 
-	node_add(ca, &ca->cnode, &mychan->chanacs);
+	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
 	cnt.chanacs++;
 
@@ -1408,7 +1408,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 
 chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
@@ -1440,7 +1440,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 
 chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
@@ -1463,7 +1463,7 @@ chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *mt, unsigned int l
 
 chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && host != NULL, NULL);
@@ -1486,7 +1486,7 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 
 unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	unsigned int result = 0;
 
@@ -1505,7 +1505,7 @@ unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 
 chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 
 	if ((!mychan) || (!host))
@@ -1529,7 +1529,7 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 
 chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
@@ -1546,7 +1546,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int l
 
 unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int result = 0;
 	chanacs_t *ca;
 
@@ -1956,7 +1956,7 @@ void expire_check(void *arg)
 static int check_myuser_cb(myentity_t *mt, void *unused)
 {
 	myuser_t *mu = user(mt);
-	node_t *n;
+	mowgli_node_t *n;
 	mynick_t *mn, *mn1;
 
 	return_val_if_fail(isuser(mt), 0);

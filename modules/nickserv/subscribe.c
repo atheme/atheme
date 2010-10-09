@@ -77,7 +77,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 	if (do_remove)
 	{
-		node_t *n;
+		mowgli_node_t *n;
 		bool found = false;
 
 		MOWGLI_ITER_FOREACH(n, tmu->subscriptions.head)
@@ -93,20 +93,20 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 		if (found)
 		{
-			node_t *tn;
+			mowgli_node_t *tn;
 
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, md->taglist.head)
 			{
 				free(n->data);
 
-				node_del(n, &md->taglist);
-				node_free(n);
+				mowgli_node_delete(n, &md->taglist);
+				mowgli_node_free(n);
 			}
 
 			free(md);
 
-			node_del(n, &tmu->subscriptions);
-			node_free(n);
+			mowgli_node_delete(n, &tmu->subscriptions);
+			mowgli_node_free(n);
 
 			command_success_nodata(si, _("\2%s\2 has been removed from your subscriptions."), name);
 			return;
@@ -132,10 +132,10 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	do
 	{
 		slog(LG_DEBUG, "subscription: parsing tag %s", tag);
-		node_add(sstrdup(tag), node_create(), &md->taglist);
+		mowgli_node_add(sstrdup(tag), mowgli_node_create(), &md->taglist);
 	} while ((tag = strtok(NULL, ",")) != NULL);
 
-	node_add(md, node_create(), &tmu->subscriptions);
+	mowgli_node_add(md, mowgli_node_create(), &tmu->subscriptions);
 	command_success_nodata(si, _("\2%s\2 has been added to your subscriptions."), name);
 }
 
@@ -146,7 +146,7 @@ mowgli_list_t *ns_cmdtree;
 static void hook_metadata_change(hook_metadata_change_t *md)
 {
 	myuser_t *mu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* don't allow private metadata to be exposed to users. */
 	if (strchr(md->name, ':'))

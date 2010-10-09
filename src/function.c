@@ -573,7 +573,7 @@ bool is_admin(user_t *user)
 
 bool is_autokline_exempt(user_t *user)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char buf[BUFSIZE];
 
 	snprintf(buf, sizeof(buf), "%s@%s", user->user, user->host);

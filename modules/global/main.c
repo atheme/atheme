@@ -57,7 +57,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	static BlockHeap *glob_heap = NULL;
 	struct global_ *global;
 	static mowgli_list_t globlist;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *params = parv[0];
 	static char *sender = NULL;
 	bool isfirst;
@@ -82,8 +82,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
-			node_del(n, &globlist);
-			node_free(n);
+			mowgli_node_delete(n, &globlist);
+			mowgli_node_free(n);
 			free(global->text);
 			BlockHeapFree(glob_heap, global);
 		}
@@ -129,8 +129,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, globlist.head)
 		{
 			global = (struct global_ *)n->data;
-			node_del(n, &globlist);
-			node_free(n);
+			mowgli_node_delete(n, &globlist);
+			mowgli_node_free(n);
 			free(global->text);
 			BlockHeapFree(glob_heap, global);
 		}
@@ -161,8 +161,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 	global->text = sstrdup(params);
 
-	n = node_create();
-	node_add(global, n, &globlist);
+	n = mowgli_node_create();
+	mowgli_node_add(global, n, &globlist);
 
 	command_success_nodata(si,
 		"Stored text to be sent as line %d. Use \2GLOBAL SEND\2 "

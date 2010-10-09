@@ -54,7 +54,7 @@ static void logfile_delete_channel(void *vdata)
 
 static void logfile_join_channels(channel_t *c)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_if_fail(c != NULL);
 
@@ -76,7 +76,7 @@ static void logfile_join_channels(channel_t *c)
 
 static void logfile_join_service(service_t *svs)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	channel_t *c;
 
 	return_if_fail(svs != NULL && svs->me != NULL);
@@ -102,7 +102,7 @@ static void logfile_part_removed(void *unused)
 {
 	channel_t *c;
 	mowgli_patricia_iteration_state_t state;
-	node_t *n;
+	mowgli_node_t *n;
 	bool valid;
 
 	MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
@@ -274,7 +274,7 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
  */
 void logfile_register(logfile_t *lf)
 {
-	node_add(lf, &lf->node, &log_files);
+	mowgli_node_add(lf, &lf->node, &log_files);
 }
 
 /*
@@ -293,7 +293,7 @@ void logfile_register(logfile_t *lf)
  */
 void logfile_unregister(logfile_t *lf)
 {
-	node_del(&lf->node, &log_files);
+	mowgli_node_delete(&lf->node, &log_files);
 }
 
 /*
@@ -408,7 +408,7 @@ void log_open(void)
  */
 void log_shutdown(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, log_files.head)
 		object_unref(n->data);
@@ -430,7 +430,7 @@ void log_shutdown(void)
  */
 bool log_debug_enabled(void)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	logfile_t *lf;
 
 	if (log_force)
@@ -484,7 +484,7 @@ void log_master_set_mask(unsigned int mask)
  */
 logfile_t *logfile_find_mask(unsigned int log_mask)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	logfile_t *lf;
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
@@ -517,7 +517,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 		va_list args)
 {
 	char buf[BUFSIZE];
-	node_t *n;
+	mowgli_node_t *n;
 	char datetime[64];
 	time_t t;
 	struct tm tm;

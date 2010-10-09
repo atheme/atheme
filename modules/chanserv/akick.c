@@ -36,7 +36,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	int operoverride = 0;
 	char *chan;
 	char *cmd;

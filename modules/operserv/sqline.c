@@ -356,7 +356,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	bool full = false;
-	node_t *n;
+	mowgli_node_t *n;
 	qline_t *q;
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
@@ -387,7 +387,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	qline_t *q;
 
 	logcommand(si, CMDLOG_DO, "SQLINE:SYNC");

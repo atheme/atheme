@@ -153,7 +153,7 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	md->name = strshare_get(name);
 	md->value = sstrdup(value);
 
-	node_add(md, &md->node, &obj->metadata);
+	mowgli_node_add(md, &md->node, &obj->metadata);
 
 	if (!strncmp("private:", md->name, 8))
 		md->private = true;
@@ -171,7 +171,7 @@ void metadata_delete(void *target, const char *name)
 
 	obj = object(target);
 
-	node_del(&md->node, &obj->metadata);
+	mowgli_node_delete(&md->node, &obj->metadata);
 
 	strshare_unref(md->name);
 	free(md->value);
@@ -182,7 +182,7 @@ void metadata_delete(void *target, const char *name)
 metadata_t *metadata_find(void *target, const char *name)
 {
 	object_t *obj;
-	node_t *n;
+	mowgli_node_t *n;
 	metadata_t *md;
 
 	return_val_if_fail(name != NULL, NULL);
@@ -203,7 +203,7 @@ metadata_t *metadata_find(void *target, const char *name)
 void metadata_delete_all(void *target)
 {
 	object_t *obj;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	metadata_t *md;
 
 	obj = object(target);

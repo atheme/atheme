@@ -37,7 +37,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
 	char *key = parv[2];
@@ -148,7 +148,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
 	hook_user_req_t req;

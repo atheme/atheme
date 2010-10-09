@@ -755,7 +755,7 @@ static int c_gi_cflags(config_entry_t *ce)
 static int c_gi_exempts(config_entry_t *ce)
 {
 	config_entry_t *subce;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!ce->ce_entries)
 		return 0;
@@ -763,8 +763,8 @@ static int c_gi_exempts(config_entry_t *ce)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, config_options.exempts.head)
 	{
 		free(n->data);
-		node_del(n, &config_options.exempts);
-		node_free(n);
+		mowgli_node_delete(n, &config_options.exempts);
+		mowgli_node_free(n);
 	}
 
 	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
@@ -774,7 +774,7 @@ static int c_gi_exempts(config_entry_t *ce)
 			conf_report_warning(ce, "Invalid exempt entry");
 			continue;
 		}
-		node_add(sstrdup(subce->ce_varname), node_create(), &config_options.exempts);
+		mowgli_node_add(sstrdup(subce->ce_varname), mowgli_node_create(), &config_options.exempts);
 	}
 	return 0;
 }

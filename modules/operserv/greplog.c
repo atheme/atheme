@@ -81,7 +81,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	time_t t;
 	struct tm tm;
 	mowgli_list_t loglines = { NULL, NULL, 0 };
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* require user, channel and server auspex
 	 * (channel auspex checked via in command_t)
@@ -172,13 +172,13 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 			if (match(pattern, q))
 				continue;
 			matches++;
-			node_add_head(sstrdup(str), node_create(), &loglines);
+			mowgli_node_add_head(sstrdup(str), mowgli_node_create(), &loglines);
 			if (matches > MAXMATCHES)
 			{
 				n = loglines.tail;
-				node_del(n, &loglines);
+				mowgli_node_delete(n, &loglines);
 				free(n->data);
-				node_free(n);
+				mowgli_node_free(n);
 			}
 		}
 		fclose(in);
@@ -188,9 +188,9 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 			p = n->data;
 			matches++;
 			command_success_nodata(si, "[%d] %s", matches, p);
-			node_del(n, &loglines);
+			mowgli_node_delete(n, &loglines);
 			free(n->data);
-			node_free(n);
+			mowgli_node_free(n);
 		}
 		if (matches == 0 && lines > linesv && lines > 0)
 			command_success_nodata(si, "Log file may be corrupted, %d/%d unexpected lines", lines - linesv, lines);

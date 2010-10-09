@@ -36,7 +36,7 @@ void _moddeinit()
 static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanacs_t *ca;
 	char *name = parv[0];
 

@@ -59,7 +59,7 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (IS_TAINTED)
 	{
-		node_t *n;
+		mowgli_node_t *n;
 
 		command_success_nodata(si, _("Services is presently \2TAINTED\2, no support will be given for this configuration."));
 		command_success_nodata(si, _("List of active taints:"));

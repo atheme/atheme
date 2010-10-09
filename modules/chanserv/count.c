@@ -40,7 +40,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	int othercnt = 0;
 	unsigned int i;
-	node_t *n;
+	mowgli_node_t *n;
 	char str[512];
 	int operoverride = 0;
 

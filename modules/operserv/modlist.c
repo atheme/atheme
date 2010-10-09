@@ -33,7 +33,7 @@ void _moddeinit()
 
 static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int i = 0;
 	command_success_nodata(si, _("Loaded modules:"));
 

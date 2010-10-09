@@ -83,7 +83,7 @@ void _moddeinit(void)
 
 static void write_ticket_db(database_handle_t *db)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
@@ -110,12 +110,12 @@ static void db_h_he(database_handle_t *db, const char *type)
 	l->ticket_ts = ticket_ts;
 	l->creator = sstrdup(creator);
 	l->topic = sstrdup(topic);
-	node_add(l, node_create(), &helpserv_reqlist);
+	mowgli_node_add(l, mowgli_node_create(), &helpserv_reqlist);
 }
 
 static void account_drop_request(myuser_t *mu)
 {
-        node_t *n;
+        mowgli_node_t *n;
         ticket_t *l;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
@@ -125,7 +125,7 @@ static void account_drop_request(myuser_t *mu)
                 {
                         slog(LG_REGISTER, "HELP:REQUEST:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->topic);
 
-                        node_del(n, &helpserv_reqlist);
+                        mowgli_node_delete(n, &helpserv_reqlist);
 
                         free(l->nick);
                         free(l->creator);
@@ -139,7 +139,7 @@ static void account_drop_request(myuser_t *mu)
 
 static void account_delete_request(myuser_t *mu)
 {
-        node_t *n;
+        mowgli_node_t *n;
         ticket_t *l;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
@@ -149,7 +149,7 @@ static void account_delete_request(myuser_t *mu)
                 {
                         slog(LG_REGISTER, "HELP:REQUEST:EXPIRE: \2%s\2 \2%s\2", l->nick, l->topic);
 
-                        node_del(n, &helpserv_reqlist);
+                        mowgli_node_delete(n, &helpserv_reqlist);
 
                         free(l->nick);
                         free(l->creator);
@@ -166,7 +166,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *topic = parv[0];
 	char *target;
-	node_t *n;
+	mowgli_node_t *n;
 	ticket_t *l;
 
 	if (!topic)
@@ -229,8 +229,8 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	l->creator = sstrdup(get_source_name(si));
 	l->topic = sstrdup(topic);
 
-	n = node_create();
-	node_add(l, n, &helpserv_reqlist);
+	n = mowgli_node_create();
+	mowgli_node_add(l, n, &helpserv_reqlist);
 
 	command_success_nodata(si, _("You have requested help about \2%s\2."), topic);
 	logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", topic);
@@ -245,7 +245,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	char *nick = parv[0];
 	user_t *u;
 	ticket_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!nick)
 	{
@@ -265,7 +265,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			/* VHOSTNICK command below will generate snoop */
 			logcommand(si, CMDLOG_REQUEST, "CLOSE: Help for \2%s\2 about \2%s\2", nick, l->topic);
 
-			node_del(n, &helpserv_reqlist);
+			mowgli_node_delete(n, &helpserv_reqlist);
 
 			free(l->nick);
 			free(l->creator);
@@ -282,7 +282,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	ticket_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 	int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;
@@ -305,7 +305,7 @@ static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
 {
         ticket_t *l;
-        node_t *n;
+        mowgli_node_t *n;
         char *target;
 
         if (si->smu == NULL)
@@ -322,7 +322,7 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
 
                 if (!irccasecmp(l->nick, target))
                 {
-                        node_del(n, &helpserv_reqlist);
+                        mowgli_node_delete(n, &helpserv_reqlist);
 
                         free(l->nick);
                         free(l->creator);

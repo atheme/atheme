@@ -166,7 +166,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((tu = user_find_named(target)))
 	{
-		node_t *n, *tn;
+		mowgli_node_t *n, *tn;
 		char hostbuf2[BUFSIZE];
 		int count = 0;
 

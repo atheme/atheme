@@ -19,7 +19,7 @@ static mowgli_list_t regnotices = { NULL, NULL, 0 };
 
 static void regnotice_hook(myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_if_fail(mu != NULL);
 
@@ -38,7 +38,7 @@ static int regnotice_config_handler(config_entry_t *ce)
 	for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)
 	{
 		char *line = sstrdup(cce->ce_varname);
-		node_add(line, node_create(), &regnotices);
+		mowgli_node_add(line, mowgli_node_create(), &regnotices);
 	}
 
 	return 0;
@@ -46,15 +46,15 @@ static int regnotice_config_handler(config_entry_t *ce)
 
 static void regnotice_config_purge(void *unused)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, regnotices.head)
 	{
 		char *line = n->data;
 
 		free(line);
-		node_del(n, &regnotices);
-		node_free(n);
+		mowgli_node_delete(n, &regnotices);
+		mowgli_node_free(n);
 	}
 }
 

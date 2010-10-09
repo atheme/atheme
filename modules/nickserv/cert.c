@@ -33,7 +33,7 @@ void _moddeinit()
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 	char *mcfp;
 	mycertfp_t *cert;
 

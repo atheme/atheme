@@ -58,8 +58,8 @@ void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *a
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
 void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *login) = generic_svslogin_sts;
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
-node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first) = generic_next_matching_ban;
-node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first) = generic_next_matching_host_chanacs;
+mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
+mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
 
@@ -135,7 +135,7 @@ void generic_notice_channel_sts(user_t *from, channel_t *target, const char *tex
 void generic_wallchops(user_t *sender, channel_t *channel, const char *message)	
 {
 	/* ugly, but always works -- jilles */
-	node_t *n;
+	mowgli_node_t *n;
 	chanuser_t *cu;
 
 	MOWGLI_ITER_FOREACH(n, channel->members.head)
@@ -270,10 +270,10 @@ void generic_sasl_sts(char *target, char mode, char *data)
 	/* nothing to do here. */
 }
 
-node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
 {
 	chanban_t *cb;
-	node_t *n;
+	mowgli_node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char cloakbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
@@ -295,10 +295,10 @@ node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fir
 	return NULL;
 }
 
-node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *first)
+mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first)
 {
 	chanacs_t *ca;
-	node_t *n;
+	mowgli_node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char hostbuf2[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];

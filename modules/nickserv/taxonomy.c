@@ -33,7 +33,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 	bool isoper;
 
 	if (!target && si->smu)

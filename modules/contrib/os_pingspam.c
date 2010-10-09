@@ -131,7 +131,7 @@ static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[])
 void pingspam(user_t *u)
 {
 	user_t *sptr;
-	node_t *n;
+	mowgli_node_t *n;
 	int i;
 	service_t *svs;
 

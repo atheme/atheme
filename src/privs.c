@@ -47,7 +47,7 @@ void init_privs(void)
 operclass_t *operclass_add(const char *name, const char *privs)
 {
 	operclass_t *operclass;
-	node_t *n = node_create();
+	mowgli_node_t *n = mowgli_node_create();
 
 	operclass = operclass_find(name);
 	if (operclass != NULL)
@@ -57,7 +57,7 @@ operclass_t *operclass_add(const char *name, const char *privs)
 	}
 	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
 	operclass = BlockHeapAlloc(operclass_heap);
-	node_add(operclass, n, &operclasslist);
+	mowgli_node_add(operclass, n, &operclasslist);
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
 	cnt.operclass++;
@@ -73,14 +73,14 @@ operclass_t *operclass_add(const char *name, const char *privs)
 
 void operclass_delete(operclass_t *operclass)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (operclass == NULL)
 		return;
 	slog(LG_DEBUG, "operclass_delete(): %s", operclass->name);
-	n = node_find(operclass, &operclasslist);
-	node_del(n, &operclasslist);
-	node_free(n);
+	n = mowgli_node_find(operclass, &operclasslist);
+	mowgli_node_delete(n, &operclasslist);
+	mowgli_node_free(n);
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper_t *soper = n->data;
@@ -96,7 +96,7 @@ void operclass_delete(operclass_t *operclass)
 operclass_t *operclass_find(const char *name)
 {
 	operclass_t *operclass;
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, operclasslist.head)
 	{
@@ -117,7 +117,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 {
 	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
-	node_t *n;
+	mowgli_node_t *n;
 	operclass_t *operclass = operclass_find(classname);
 
 	soper = mu ? soper_find(mu) : soper_find_named(name);
@@ -142,9 +142,9 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? entity(mu)->name : name, operclass ? operclass->name : "<null>");
 
 	soper = BlockHeapAlloc(soper_heap);
-	n = node_create();
+	n = mowgli_node_create();
 
-	node_add(soper, n, &soperlist);
+	mowgli_node_add(soper, n, &soperlist);
 
 	if (mu)
 	{
@@ -169,7 +169,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 
 void soper_delete(soper_t *soper)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!soper)
 	{
@@ -180,9 +180,9 @@ void soper_delete(soper_t *soper)
 
 	slog(LG_DEBUG, "soper_delete(): %s", (soper->myuser) ? entity(soper->myuser)->name : soper->name);
 
-	n = node_find(soper, &soperlist);
-	node_del(n, &soperlist);
-	node_free(n);
+	n = mowgli_node_find(soper, &soperlist);
+	mowgli_node_delete(n, &soperlist);
+	mowgli_node_free(n);
 
 	if (soper->myuser)
 		soper->myuser->soper = NULL;
@@ -201,7 +201,7 @@ void soper_delete(soper_t *soper)
 soper_t *soper_find(myuser_t *myuser)
 {
 	soper_t *soper;
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
@@ -217,7 +217,7 @@ soper_t *soper_find(myuser_t *myuser)
 soper_t *soper_find_named(const char *name)
 {
 	soper_t *soper;
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{

@@ -26,7 +26,7 @@ typedef struct {
 	char nick[NICKLEN];
 	char host[HOSTLEN];
 	time_t timelimit;
-	node_t node;
+	mowgli_node_t node;
 } enforce_timeout_t;
 
 mowgli_list_t enforce_list;
@@ -72,7 +72,7 @@ static void guest_nickname(user_t *u)
 
 static void check_enforce_all(myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	mynick_t *mn;
 	user_t *u;
 
@@ -143,7 +143,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *password = parv[1];
 	user_t *u;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 
 	/* Absolutely do not do anything like this if nicks
@@ -187,7 +187,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 				timeout = n->data;
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
 				{
-					node_del(&timeout->node, &enforce_list);
+					mowgli_node_delete(&timeout->node, &enforce_list);
 					BlockHeapFree(enforce_timeout_heap, timeout);
 				}
 			}
@@ -236,7 +236,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *password = parv[1];
 	user_t *u;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 
 	/* Absolutely do not do anything like this if nicks
@@ -280,7 +280,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 				timeout = n->data;
 				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
 				{
-					node_del(&timeout->node, &enforce_list);
+					mowgli_node_delete(&timeout->node, &enforce_list);
 					BlockHeapFree(enforce_timeout_heap, timeout);
 				}
 			}
@@ -323,7 +323,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 
 static void enforce_remove_enforcers(void *arg)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	user_t *u;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, me.me->userlist.head)
@@ -339,7 +339,7 @@ static void enforce_remove_enforcers(void *arg)
 
 void enforce_timeout_check(void *arg)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
 	user_t *u;
 	mynick_t *mn;
@@ -358,7 +358,7 @@ void enforce_timeout_check(void *arg)
 		u = user_find_named(timeout->nick);
 		mn = mynick_find(timeout->nick);
 		valid = u != NULL && mn != NULL && (!strcmp(u->host, timeout->host) || !strcmp(u->vhost, timeout->host));
-		node_del(&timeout->node, &enforce_list);
+		mowgli_node_delete(&timeout->node, &enforce_list);
 		BlockHeapFree(enforce_timeout_heap, timeout);
 		if (!valid)
 			continue;
@@ -405,7 +405,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 static void check_enforce(hook_nick_enforce_t *hdata)
 {
 	enforce_timeout_t *timeout, *timeout2;
-	node_t *n;
+	mowgli_node_t *n;
 	metadata_t *md;
 
 	/* nick is a service, ignore it */
@@ -459,11 +459,11 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 				break;
 		}
 		if (n == NULL)
-			node_add_head(timeout, &timeout->node, &enforce_list);
+			mowgli_node_add_head(timeout, &timeout->node, &enforce_list);
 		else if (n->next == NULL)
-			node_add(timeout, &timeout->node, &enforce_list);
+			mowgli_node_add(timeout, &timeout->node, &enforce_list);
 		else
-			node_add_before(timeout, &timeout->node, &enforce_list, n->next);
+			mowgli_node_add_before(timeout, &timeout->node, &enforce_list, n->next);
 
 		if (enforce_next == 0 || enforce_next > timeout->timelimit)
 		{

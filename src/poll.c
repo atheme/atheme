@@ -71,7 +71,7 @@ void init_socket_queues(void)
  */
 static nfds_t update_poll_fds(void)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	connection_t *cptr;
 	nfds_t slot = 0;
 
@@ -111,7 +111,7 @@ static nfds_t update_poll_fds(void)
 void connection_select(int delay)
 {
 	int sr;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	connection_t *cptr;
 	int slot;
 	nfds_t count;

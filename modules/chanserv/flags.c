@@ -86,7 +86,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	node_t *n;
+	mowgli_node_t *n;
 	int operoverride = 0;
 	char *channel = parv[0];
 	char *target = parv[1];

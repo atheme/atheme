@@ -49,7 +49,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE], strfbuf[32], *end;
 	time_t registered;
 	struct tm tm;
-	node_t *n;
+	mowgli_node_t *n;
 	chanuser_t *cu;
 
 	if (parc < 1 || parv[0] == NULL)

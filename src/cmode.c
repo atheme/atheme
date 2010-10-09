@@ -51,7 +51,7 @@ int mode_to_flag(char c)
 
 static void reop_service(channel_t *chan, user_t *victim, user_t **pfirst_deopped_service)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (*pfirst_deopped_service == NULL)
 	{

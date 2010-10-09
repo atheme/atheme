@@ -22,7 +22,6 @@ BASE_SRCS =				\
 	culture.c		\
 	database_backend.c	\
 	datastream.c		\
-	dlink.c		\
 	entity.c	\
 	event.c		\
 	flags.c		\

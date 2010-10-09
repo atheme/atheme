@@ -56,7 +56,7 @@ void modules_init(void)
  */
 module_t *module_load(const char *filespec)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	module_t *m, *old_modtarget;
 	v3_moduleheader_t *h;
 	void *handle = NULL;
@@ -132,8 +132,8 @@ module_t *module_load(const char *filespec)
 	m->address = handle;
 #endif
 
-	n = node_create();
-	node_add(m, n, &modules_inprogress);
+	n = mowgli_node_create();
+	mowgli_node_add(m, n, &modules_inprogress);
 
 	/* set the module target for module dependencies */
 	old_modtarget = modtarget;
@@ -145,17 +145,17 @@ module_t *module_load(const char *filespec)
 	/* we won't be loading symbols outside the init code */
 	modtarget = old_modtarget;
 
-	node_del(n, &modules_inprogress);
+	mowgli_node_delete(n, &modules_inprogress);
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
 		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", filespec);
-		node_free(n);
+		mowgli_node_free(n);
 		module_unload(m);
 		return NULL;
 	}
 
-	node_add(m, n, &modules);
+	mowgli_node_add(m, n, &modules);
 
 	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, (unsigned long)m->address, h->abi_ver);
 
@@ -259,7 +259,7 @@ void module_load_dir_match(const char *dirspec, const char *pattern)
  */
 void module_unload(module_t * m)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!m)
 		return;
@@ -272,15 +272,15 @@ void module_unload(module_t * m)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
 	{
 		module_t *hm = (module_t *) n->data;
-		node_t *hn = node_find(m, &hm->dephost);
+		mowgli_node_t *hn = mowgli_node_find(m, &hm->dephost);
 
-		node_del(hn, &hm->dephost);		
-		node_free(hn);
-		node_del(n, &m->deplist);
-		node_free(n);
+		mowgli_node_delete(hn, &hm->dephost);		
+		mowgli_node_free(hn);
+		mowgli_node_delete(n, &m->deplist);
+		mowgli_node_free(n);
 	}
 
-	n = node_find(m, &modules);
+	n = mowgli_node_find(m, &modules);
 	if (n != NULL)
 	{
 		slog(LG_INFO, "module_unload(): unloaded \2%s\2", m->header->name);
@@ -291,8 +291,8 @@ void module_unload(module_t * m)
 
 		if (m->header->deinit)
 			m->header->deinit();
-		node_del(n, &modules);
-		node_free(n);
+		mowgli_node_delete(n, &modules);
+		mowgli_node_free(n);
 	}
 	/* else unloaded in embryonic state */
 	linker_close(m->handle);
@@ -322,12 +322,12 @@ void *module_locate_symbol(const char *modname, const char *sym)
 		return NULL;
 	}
 
-	if (modtarget != NULL && !node_find(m, &modtarget->deplist))
+	if (modtarget != NULL && !mowgli_node_find(m, &modtarget->deplist))
 	{
 		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
 			m->header->name, modtarget->header->name, sym);
-		node_add(m, node_create(), &modtarget->deplist);
-		node_add(modtarget, node_create(), &m->dephost);
+		mowgli_node_add(m, mowgli_node_create(), &modtarget->deplist);
+		mowgli_node_add(modtarget, mowgli_node_create(), &m->dephost);
 	}
 
 	symptr = linker_getsym(m->handle, sym);
@@ -351,7 +351,7 @@ void *module_locate_symbol(const char *modname, const char *sym)
  */
 module_t *module_find(const char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
@@ -378,7 +378,7 @@ module_t *module_find(const char *name)
  */
 module_t *module_find_published(const char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
 	{
@@ -406,7 +406,7 @@ module_t *module_find_published(const char *name)
 bool module_request(const char *name)
 {
 	module_t *m;
-	node_t *n;
+	mowgli_node_t *n;
 	char path[BUFSIZE];
 
 	if ((m = module_find_published(name)) != NULL)

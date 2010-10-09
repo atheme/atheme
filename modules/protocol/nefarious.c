@@ -255,7 +255,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	else if (ts < c->ts)
 	{
 		chanuser_t *cu;
-		node_t *n;
+		mowgli_node_t *n;
 
 		clear_simple_modes(c);
 		chanban_clear(c);
@@ -493,7 +493,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *chan;
 	char *p, c;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanuser_t *cu;
 	int i;
 

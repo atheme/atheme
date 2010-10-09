@@ -81,7 +81,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	hook_del_sasl_input(sasl_input);
 	hook_del_user_add(sasl_newuser);
@@ -95,8 +95,8 @@ void _moddeinit(void)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		destroy_session(n->data);
-		node_del(n, &sessions);
-		node_free(n);
+		mowgli_node_delete(n, &sessions);
+		mowgli_node_free(n);
 	}
 }
 
@@ -108,7 +108,7 @@ void _moddeinit(void)
 sasl_session_t *find_session(char *uid)
 {
 	sasl_session_t *p;
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sessions.head)
 	{
@@ -124,7 +124,7 @@ sasl_session_t *find_session(char *uid)
 sasl_session_t *make_session(char *uid)
 {
 	sasl_session_t *p = find_session(uid);
-	node_t *n;
+	mowgli_node_t *n;
 
 	if(p)
 		return p;
@@ -133,8 +133,8 @@ sasl_session_t *make_session(char *uid)
 	memset(p, 0, sizeof(sasl_session_t));
 	strlcpy(p->uid, uid, IDLEN);
 
-	n = node_create();
-	node_add(p, n, &sessions);
+	n = mowgli_node_create();
+	mowgli_node_add(p, n, &sessions);
 
 	return p;
 }
@@ -142,7 +142,7 @@ sasl_session_t *make_session(char *uid)
 /* free a session and all its contents */
 void destroy_session(sasl_session_t *p)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	myuser_t *mu;
 
 	if (p->flags & ASASL_NEED_LOG && p->username != NULL)
@@ -156,8 +156,8 @@ void destroy_session(sasl_session_t *p)
 	{
 		if(n->data == p)
 		{
-			node_del(n, &sessions);
-			node_free(n);
+			mowgli_node_delete(n, &sessions);
+			mowgli_node_free(n);
 		}
 	}
 
@@ -223,7 +223,7 @@ static void sasl_input(sasl_message_t *smsg)
 /* find a mechanism by name */
 static sasl_mechanism_t *find_mechanism(char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	sasl_mechanism_t *mptr;
 
 	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
@@ -272,7 +272,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 /*			
 			char temp[400], *ptr = temp;
 			int l = 0;
-			node_t *n;
+			mowgli_node_t *n;
 
 			MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 			{
@@ -464,16 +464,16 @@ static void sasl_newuser(hook_user_nick_t *data)
 static void delete_stale(void *vptr)
 {
 	sasl_session_t *p;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		p = n->data;
 		if(p->flags & ASASL_MARKED_FOR_DELETION)
 		{
-			node_del(n, &sessions);
+			mowgli_node_delete(n, &sessions);
 			destroy_session(p);
-			node_free(n);
+			mowgli_node_free(n);
 		} else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}

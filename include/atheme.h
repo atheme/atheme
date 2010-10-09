@@ -18,7 +18,6 @@
 #include "stdinc.h"
 #include "i18n.h"
 #include "common.h"
-#include "dlink.h"
 #include "object.h"
 #include "event.h"
 #include "balloc.h"

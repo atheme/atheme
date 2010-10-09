@@ -41,7 +41,7 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	char *property = strtok(parv[0], " ");
 	char *value = strtok(NULL, "");
 	unsigned int count;
-	node_t *n;
+	mowgli_node_t *n;
 	metadata_t *md;
 	hook_metadata_change_t mdchange;
 

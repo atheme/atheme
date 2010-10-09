@@ -48,7 +48,7 @@ static void write_channels_dot_file(void *arg)
 {
 	mychan_t *mc;
 	chanacs_t *ca;
-	node_t *tn;
+	mowgli_node_t *tn;
 	FILE *f;
 	int errno1, was_errored = 0;
 	mowgli_patricia_iteration_state_t state;
@@ -118,7 +118,7 @@ static void write_uchannels_dot_file(void *arg)
 {
 	channel_t *c;
 	chanuser_t *cu;
-	node_t *tn;
+	mowgli_node_t *tn;
 	FILE *f;
 	int errno1, was_errored = 0;
 	mowgli_patricia_iteration_state_t state;

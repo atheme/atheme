@@ -66,7 +66,7 @@ int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 {
 	char change[MAX_BUF];
 	int count = 0;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanban_t *cb;
 
 	if (type == 0)
@@ -300,7 +300,7 @@ void partall(char *name)
 /* reintroduce a service e.g. after it's been killed -- jilles */
 void reintroduce_user(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	channel_t *c;
 	service_t *svs;
 
@@ -401,7 +401,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (login != NULL)
 		/* don't allow alias nicks here -- jilles */
@@ -458,8 +458,8 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 	}
 	u->myuser = mu;
 	u->flags &= ~UF_SOPER_PASS;
-	n = node_create();
-	node_add(u, n, &mu->logins);
+	n = mowgli_node_create();
+	mowgli_node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
@@ -467,7 +467,7 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (login != NULL)
 		/* don't allow alias nicks here -- jilles */
@@ -488,11 +488,11 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 
 	if (u->myuser != NULL)
 	{
-		n = node_find(u, &u->myuser->logins);
+		n = mowgli_node_find(u, &u->myuser->logins);
 		if (n != NULL)
 		{
-			node_del(n, &u->myuser->logins);
-			node_free(n);
+			mowgli_node_delete(n, &u->myuser->logins);
+			mowgli_node_free(n);
 		}
 		u->myuser = NULL;
 	}
@@ -528,15 +528,15 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
 	}
 	u->myuser = mu;
 	u->flags &= ~UF_SOPER_PASS;
-	n = node_create();
-	node_add(u, n, &mu->logins);
+	n = mowgli_node_create();
+	mowgli_node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_setlogin(): %s set %s logged in as %s",
 			get_oper_name(si), u->nick, login);
 }
 
 void handle_clearlogin(sourceinfo_t *si, user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (authservice_loaded)
 	{
@@ -550,11 +550,11 @@ void handle_clearlogin(sourceinfo_t *si, user_t *u)
 
 	slog(LG_DEBUG, "handle_clearlogin(): %s cleared login for %s (%s)",
 			get_oper_name(si), u->nick, entity(u->myuser)->name);
-	n = node_find(u, &u->myuser->logins);
+	n = mowgli_node_find(u, &u->myuser->logins);
 	if (n != NULL)
 	{
-		node_del(n, &u->myuser->logins);
-		node_free(n);
+		mowgli_node_delete(n, &u->myuser->logins);
+		mowgli_node_free(n);
 	}
 	u->myuser = NULL;
 }
@@ -598,7 +598,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 
 void grant_channel_access(user_t *u, myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, entity(mu)->chanacs.head)
 	{
@@ -683,7 +683,7 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	myuser_notice(svs->me->nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, entity(mu)->name);
 
 	u->myuser = mu;
-	node_add(u, node_create(), &mu->logins);
+	mowgli_node_add(u, mowgli_node_create(), &mu->logins);
 	u->flags &= ~UF_SOPER_PASS;
 
 	/* keep track of login address for users */

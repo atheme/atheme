@@ -333,7 +333,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		flagstr = bitmask_to_flags2(addflags, removeflags);
 		if (changechanacs)
 		{
-			node_t *n, *tn;
+			mowgli_node_t *n, *tn;
 			chanacs_t *ca;
 			int changes = 0, founderskipped = 0;
 			char flagstr2[128];

@@ -38,7 +38,7 @@ static inline channel_t *channel_find(const char *name)
  */
 static inline void chanban_clear(channel_t *chan)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, chan->bans.head)
 	{

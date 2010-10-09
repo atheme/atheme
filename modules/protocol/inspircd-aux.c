@@ -776,7 +776,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	if (ts < c->ts)
 	{
 		chanuser_t *cu;
-		node_t *n;
+		mowgli_node_t *n;
 
 		/* the TS changed.  a TS change requires us to do
 		 * bugger all except update the TS, because in InspIRCd
@@ -1443,7 +1443,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 /* Server ended their burst: warn all their users if necessary -- jilles */
 static void server_eob(server_t *s)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, s->userlist.head)
 	{

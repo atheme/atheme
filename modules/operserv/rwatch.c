@@ -73,7 +73,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rwatch_list.head)
 	{
@@ -85,8 +85,8 @@ void _moddeinit(void)
 			regex_destroy(rw->re);
 		free(rw);
 
-		node_del(n, &rwatch_list);
-		node_free(n);
+		mowgli_node_delete(n, &rwatch_list);
+		mowgli_node_free(n);
 	}
 
 	service_named_unbind_command("operserv", &os_rwatch);
@@ -105,7 +105,7 @@ void _moddeinit(void)
 static void write_rwatchdb(void)
 {
 	FILE *f;
-	node_t *n;
+	mowgli_node_t *n;
 	rwatch_t *rw;
 
 	if (!(f = fopen(DATADIR "/rwatch.db.new", "w")))
@@ -174,7 +174,7 @@ static void load_rwatchdb(void)
 			{
 				rw->actions = atoi(actionstr);
 				rw->reason = sstrdup(reason);
-				node_add(rw, node_create(), &rwatch_list);
+				mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
 				rw = NULL;
 			}
 		}
@@ -209,7 +209,7 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char *pattern;
 	char *reason;
 	atheme_regex_t *regex;
@@ -267,7 +267,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 	rw->actions = RWACT_SNOOP;
 	rw->re = regex;
 
-	node_add(rw, node_create(), &rwatch_list);
+	mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
 	command_success_nodata(si, _("Added \2%s\2 to regex watch list."), pattern);
 	logcommand(si, CMDLOG_ADMIN, "RWATCH:ADD: \2%s\2 (reason: \2%s\2)", pattern, reason);
 	write_rwatchdb();
@@ -275,7 +275,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *pattern;
 	int flags;
 	char *args = parv[0];
@@ -315,8 +315,8 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 			if (rw->re != NULL)
 				regex_destroy(rw->re);
 			free(rw);
-			node_del(n, &rwatch_list);
-			node_free(n);
+			mowgli_node_delete(n, &rwatch_list);
+			mowgli_node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from regex watch list."), pattern);
 			logcommand(si, CMDLOG_ADMIN, "RWATCH:DEL: \2%s\2", pattern);
 			write_rwatchdb();
@@ -329,7 +329,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
@@ -349,7 +349,7 @@ static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *pattern;
 	char *opts;
 	int addflags = 0, removeflags = 0;
@@ -439,7 +439,7 @@ static void rwatch_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
-	node_t *n;
+	mowgli_node_t *n;
 	rwatch_t *rw;
 
 	/* If the user has been killed, don't do anything. */
@@ -487,7 +487,7 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 	user_t *u = data->u;
 	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	char oldusermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
-	node_t *n;
+	mowgli_node_t *n;
 	rwatch_t *rw;
 
 	/* If the user has been killed, don't do anything. */

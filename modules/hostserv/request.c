@@ -94,7 +94,7 @@ void _moddeinit(void)
 
 static void write_hsreqdb(database_handle_t *db)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
 	{
@@ -121,12 +121,12 @@ static void db_h_hr(database_handle_t *db, const char *type)
 	l->vhost = sstrdup(vhost);
 	l->vhost_ts = vhost_ts;
 	l->creator = sstrdup(creator);
-	node_add(l, node_create(), &hs_reqlist);
+	mowgli_node_add(l, mowgli_node_create(), &hs_reqlist);
 }
 
 static void nick_drop_request(hook_user_req_t *hdata)
 {
-	node_t *m;
+	mowgli_node_t *m;
 	hsreq_t *l;
 
 	MOWGLI_ITER_FOREACH(m, hs_reqlist.head)
@@ -136,7 +136,7 @@ static void nick_drop_request(hook_user_req_t *hdata)
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPNICK: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			node_del(m, &hs_reqlist);
+			mowgli_node_delete(m, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -150,7 +150,7 @@ static void nick_drop_request(hook_user_req_t *hdata)
 
 static void account_drop_request(myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	hsreq_t *l;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
@@ -160,7 +160,7 @@ static void account_drop_request(myuser_t *mu)
 		{
 			slog(LG_REGISTER, "VHOSTREQ:DROPACCOUNT: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -174,7 +174,7 @@ static void account_drop_request(myuser_t *mu)
 
 static void account_delete_request(myuser_t *mu)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	hsreq_t *l;
 
 	MOWGLI_ITER_FOREACH(n, hs_reqlist.head)
@@ -184,7 +184,7 @@ static void account_delete_request(myuser_t *mu)
 		{
 			slog(LG_REGISTER, "VHOSTREQ:EXPIRE: \2%s\2 \2%s\2", l->nick, l->vhost);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -202,7 +202,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	char *host = parv[0];
 	char *target;
 	mynick_t *mn;
-	node_t *n;
+	mowgli_node_t *n;
 	hsreq_t *l;
 
 	if (!host)
@@ -284,8 +284,8 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	l->vhost_ts = CURRTIME;;
 	l->creator = sstrdup(get_source_name(si));
 
-	n = node_create();
-	node_add(l, n, &hs_reqlist);
+	n = mowgli_node_create();
+	mowgli_node_add(l, n, &hs_reqlist);
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
@@ -301,7 +301,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!nick)
 	{
@@ -323,7 +323,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -342,7 +342,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_REQUEST, "ACTIVATE: \2%s\2 for \2%s\2", l->vhost, l->nick);
 			snprintf(buf, BUFSIZE, "%s %s", l->nick, l->vhost);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -366,7 +366,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!nick)
 	{
@@ -392,7 +392,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, nick);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 			free(l->nick);
 			free(l->vhost);
 			free(l->creator);
@@ -412,7 +412,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			/* VHOSTNICK command below will generate snoop */
 			logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, l->nick);
 
-			node_del(n, &hs_reqlist);
+			mowgli_node_delete(n, &hs_reqlist);
 
 			free(l->nick);
 			free(l->vhost);
@@ -430,7 +430,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 {
 	hsreq_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 	int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;

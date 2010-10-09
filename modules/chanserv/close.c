@@ -73,7 +73,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	channel_t *c;
 	chanuser_t *cu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!target || !action)
 	{

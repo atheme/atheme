@@ -61,12 +61,12 @@ void hook_del_event(const char *name)
 
 	if ((h = find_hook(name)) != NULL)
 	{
-		node_t *n, *tn;
+		mowgli_node_t *n, *tn;
 
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, h->hooks.head)
 		{
-			node_del(n, &h->hooks);
-			node_free(n);
+			mowgli_node_delete(n, &h->hooks);
+			mowgli_node_free(n);
 		}
 
 		BlockHeapFree(hook_heap, h);
@@ -81,7 +81,7 @@ static hook_t *find_hook(const char *name)
 
 void hook_del_hook(const char *event, void (*handler)(void *data))
 {
-	node_t *n, *n2;
+	mowgli_node_t *n, *n2;
 	hook_t *h;
 
 	if (!(h = find_hook(event)))
@@ -91,8 +91,8 @@ void hook_del_hook(const char *event, void (*handler)(void *data))
 	{
 		if (handler == (void (*)(void *)) n->data)
 		{
-			node_del(n, &h->hooks);
-			node_free(n);
+			mowgli_node_delete(n, &h->hooks);
+			mowgli_node_free(n);
 		}
 	}
 }
@@ -100,31 +100,31 @@ void hook_del_hook(const char *event, void (*handler)(void *data))
 void hook_add_hook(const char *event, void (*handler)(void *data))
 {
 	hook_t *h;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!(h = find_hook(event)))
 		h = hook_add_event(event);
 
-	n = node_create();
-	node_add((void *) handler, n, &h->hooks);
+	n = mowgli_node_create();
+	mowgli_node_add((void *) handler, n, &h->hooks);
 }
 
 void hook_add_hook_first(const char *event, void (*handler)(void *data))
 {
 	hook_t *h;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!(h = find_hook(event)))
 		h = hook_add_event(event);
 
-	n = node_create();
-	node_add_head((void *) handler, n, &h->hooks);
+	n = mowgli_node_create();
+	mowgli_node_add_head((void *) handler, n, &h->hooks);
 }
 
 void hook_call_event(const char *event, void *dptr)
 {
 	hook_t *h;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	void (*func)(void *data);
 
 	if (!(h = find_hook(event)))

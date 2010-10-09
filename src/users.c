@@ -170,7 +170,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	u->server = server;
 	u->server->users++;
-	node_add(u, &u->snode, &u->server->userlist);
+	mowgli_node_add(u, &u->snode, &u->server->userlist);
 
 	u->ts = ts ? ts : CURRTIME;
 
@@ -202,7 +202,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
  */
 void user_delete(user_t *u, const char *comment)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanuser_t *cu;
 	mynick_t *mn;
 	char oldnick[NICKLEN];
@@ -250,7 +250,7 @@ void user_delete(user_t *u, const char *comment)
 	if (*u->uid)
 		mowgli_patricia_delete(uidlist, u->uid);
 
-	node_del(&u->snode, &u->server->userlist);
+	mowgli_node_delete(&u->snode, &u->server->userlist);
 
 	if (u->myuser)
 	{
@@ -258,8 +258,8 @@ void user_delete(user_t *u, const char *comment)
 		{
 			if (n->data == u)
 			{
-				node_del(n, &u->myuser->logins);
-				node_free(n);
+				mowgli_node_delete(n, &u->myuser->logins);
+				mowgli_node_free(n);
 				break;
 			}
 		}

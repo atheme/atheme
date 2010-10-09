@@ -34,7 +34,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mychan_t *mc;
-	node_t *n;
+	mowgli_node_t *n;
 	bool isoper;
 
 	if (!target || *target != '#')

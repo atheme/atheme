@@ -31,7 +31,7 @@ void _moddeinit()
 static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	node_t *n;
+	mowgli_node_t *n;
 	int matches = 0;
 
 	if (si->smu == NULL)

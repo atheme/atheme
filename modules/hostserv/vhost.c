@@ -36,7 +36,7 @@ void _moddeinit(void)
 
 static void hs_sethost_all(myuser_t *mu, const char *host)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	mynick_t *mn;
 	char buf[BUFSIZE];
 
@@ -102,7 +102,7 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	myentity_t *mt;
 	myuser_t *mu;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	char buf[BUFSIZE];
 	int matches = 0;
 

@@ -58,7 +58,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
 	au->myuser = mu;
 	au->expire = CURRTIME + 3600;
 
-	node_add(au, &au->node, &authcookie_list);
+	mowgli_node_add(au, &au->node, &authcookie_list);
 
 	return au;
 }
@@ -77,7 +77,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
  */
 authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	authcookie_t *ac;
 
 	/* at least one must be specified */
@@ -134,7 +134,7 @@ void authcookie_destroy(authcookie_t * ac)
 {
 	return_if_fail(ac != NULL);
 
-	node_del(&ac->node, &authcookie_list);
+	mowgli_node_delete(&ac->node, &authcookie_list);
 	free(ac->ticket);
 	BlockHeapFree(authcookie_heap, ac);
 }
@@ -153,7 +153,7 @@ void authcookie_destroy(authcookie_t * ac)
  */
 void authcookie_destroy_all(myuser_t *mu)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	authcookie_t *ac;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, authcookie_list.head)
@@ -180,7 +180,7 @@ void authcookie_destroy_all(myuser_t *mu)
 void authcookie_expire(void *arg)
 {
 	authcookie_t *ac;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	(void)arg;
         MOWGLI_ITER_FOREACH_SAFE(n, tn, authcookie_list.head)

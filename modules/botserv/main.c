@@ -400,7 +400,7 @@ static void botserv_config_ready(void *unused)
 
 void botserv_save_database(database_handle_t *db)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	/* iterate through and write all the metadata */
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
@@ -441,7 +441,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	bot->registered = registered;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
 	service_set_chanmsg(bot->me, true);
-	node_add(bot, &bot->bnode, &bs_bots);
+	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 }
 
 static void db_h_bot_count(database_handle_t *db, const char *type)
@@ -456,7 +456,7 @@ static void db_h_bot_count(database_handle_t *db, const char *type)
 
 botserv_bot_t* botserv_bot_find(char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (name == NULL)
 		return NULL;
@@ -693,7 +693,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	bot->registered = CURRTIME;
 	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
 	service_set_chanmsg(bot->me, true);
-	node_add(bot, &bot->bnode, &bs_bots);
+	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 
 	logcommand(si, CMDLOG_ADMIN, "BOT:ADD: \2%s\2 (\2%s\2@\2%s\2) [\2%s\2]", bot->nick, bot->user, bot->host, bot->real);
 	command_success_nodata(si, "\2%s\2 (\2%s\2@\2%s\2) [\2%s\2] created.", bot->nick, bot->user, bot->host, bot->real);
@@ -740,7 +740,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	node_del(&bot->bnode, &bs_bots);
+	mowgli_node_delete(&bot->bnode, &bs_bots);
 	service_delete(bot->me);
 	free(bot->nick);
 	free(bot->user);
@@ -758,7 +758,7 @@ static void bs_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i = 0;
-	node_t *n;
+	mowgli_node_t *n;
 
 	command_success_nodata(si, _("Listing of bots available on \2%s\2:"), me.netname);
 
@@ -963,7 +963,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (botsvs)
 	{
@@ -974,7 +974,7 @@ void _moddeinit(void)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
 
-		node_del(&bot->bnode, &bs_bots);
+		mowgli_node_delete(&bot->bnode, &bs_bots);
 		service_delete(bot->me);
 		free(bot->nick);
 		free(bot->user);
@@ -1010,7 +1010,7 @@ void _moddeinit(void)
 
 static void on_shutdown(void *unused)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, bs_bots.head)
 	{

@@ -132,7 +132,7 @@ struct mynick_
   time_t registered;
   time_t lastseen;
 
-  node_t node; /* for myuser_t.nicks */
+  mowgli_node_t node; /* for myuser_t.nicks */
 };
 
 /* record about a name that used to exist */
@@ -149,7 +149,7 @@ struct mycertfp_
 
   char *certfp;
   
-  node_t node;
+  mowgli_node_t node;
 };
 
 struct mychan_
@@ -201,7 +201,7 @@ struct chanacs_
 	char     *host;
 	unsigned int  level;
 	time_t    tmodified;
-	node_t    cnode;
+	mowgli_node_t    cnode;
 };
 
 /* the new atheme-style channel flags */

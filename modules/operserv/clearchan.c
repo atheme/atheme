@@ -36,7 +36,7 @@ void _moddeinit(void)
 static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu = NULL;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	channel_t *c = NULL;
 	int action;
 	char *actionstr = parv[0];

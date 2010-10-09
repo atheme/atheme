@@ -76,7 +76,7 @@ void _moddeinit(void)
 
 static void hs_sethost_all(myuser_t *mu, const char *host)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	mynick_t *mn;
 	char buf[BUFSIZE];
 
@@ -94,7 +94,7 @@ static void hs_sethost_all(myuser_t *mu, const char *host)
 
 static void write_hsofferdb(database_handle_t *db)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
@@ -137,7 +137,7 @@ static void db_h_ho(database_handle_t *db, const char *type)
 	l->vhost_ts = vhost_ts;
 	l->creator = sstrdup(creator);
 
-	node_add(l, node_create(), &hs_offeredlist);
+	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
 }
 
 /* OFFER <host> */
@@ -184,7 +184,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 	l->vhost_ts = CURRTIME;;
 	l->creator = sstrdup(entity(si->smu)->name);
 
-	node_add(l, node_create(), &hs_offeredlist);
+	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
 
 	command_success_nodata(si, _("You have offered vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_ADMIN, "OFFER: \2%s\2", host);
@@ -197,7 +197,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	hsoffered_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!host)
 	{
@@ -213,7 +213,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_ADMIN, "UNOFFER: \2%s\2", host);
 
-			node_del(n, &hs_offeredlist);
+			mowgli_node_delete(n, &hs_offeredlist);
 
 			free(l->vhost);
 			free(l->creator);
@@ -229,7 +229,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 {
 	mygroup_t *mg;
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_val_if_fail(mu != NULL, false);
 	return_val_if_fail(mt != NULL, false);
@@ -251,7 +251,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *host = parv[0];
 	hsoffered_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!host)
 	{
@@ -298,7 +298,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 {
 	hsoffered_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 	int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;

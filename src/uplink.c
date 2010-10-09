@@ -45,7 +45,7 @@ void init_uplinks(void)
 uplink_t *uplink_add(const char *name, const char *host, const char *password, const char *vhost, int port)
 {
 	uplink_t *u;
-	node_t *n;
+	mowgli_node_t *n;
 
 	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
 
@@ -68,9 +68,9 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 	else
 	{
 		u = BlockHeapAlloc(uplink_heap);
-		n = node_create();
+		n = mowgli_node_create();
 		u->node = n;
-		node_add(u, n, &uplinks);
+		mowgli_node_add(u, n, &uplinks);
 		cnt.uplink++;
 	}
 
@@ -88,15 +88,15 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 
 void uplink_delete(uplink_t * u)
 {
-	node_t *n = node_find(u, &uplinks);
+	mowgli_node_t *n = mowgli_node_find(u, &uplinks);
 
 	free(u->name);
 	free(u->host);
 	free(u->pass);
 	free(u->vhost);
 
-	node_del(n, &uplinks);
-	node_free(n);
+	mowgli_node_delete(n, &uplinks);
+	mowgli_node_free(n);
 
 	BlockHeapFree(uplink_heap, u);
 	cnt.uplink--;
@@ -104,7 +104,7 @@ void uplink_delete(uplink_t * u)
 
 uplink_t *uplink_find(const char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, uplinks.head)
 	{

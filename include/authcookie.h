@@ -15,7 +15,7 @@ struct authcookie_ {
 	char *ticket;
 	myuser_t *myuser;
 	time_t expire;
-	node_t node;
+	mowgli_node_t node;
 };
 
 E void authcookie_init(void);

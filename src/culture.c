@@ -192,7 +192,7 @@ struct language_
 {
 	char *name;
 	unsigned int flags; /* LANG_* */
-	node_t node;
+	mowgli_node_t node;
 };
 
 static mowgli_list_t language_list;
@@ -237,14 +237,14 @@ language_add(const char *name)
 	slog(LG_DEBUG, "language_add(): %s", name);
 	lang = smalloc(sizeof(*lang));
 	lang->name = sstrdup(name);
-	node_add(lang, &lang->node, &language_list);
+	mowgli_node_add(lang, &lang->node, &language_list);
 	return lang;
 }
 
 language_t *
 language_find(const char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	language_t *lang;
 
 	MOWGLI_ITER_FOREACH(n, language_list.head)
@@ -260,7 +260,7 @@ const char *
 language_names(void)
 {
 	static char names[512];
-	node_t *n;
+	mowgli_node_t *n;
 	language_t *lang;
 
 	names[0] = '\0';

@@ -35,7 +35,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	myuser_t *tmu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	mymemo_t *memo;
 	mygroup_t *mg;
 	int sent = 0, tried = 0;
@@ -156,8 +156,8 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 		snprintf(memo->text, MEMOLEN, "%s %s", entity(mg)->name, m);
 
 		/* Create a linked list node and add to memos */
-		n = node_create();
-		node_add(memo, n, &tmu->memos);
+		n = mowgli_node_create();
+		mowgli_node_add(memo, n, &tmu->memos);
 		tmu->memoct_new++;
 
 		/* Should we email this? */

@@ -19,7 +19,7 @@ struct uplink_
 	char *pass;
 	char *vhost;
 
-	node_t	*node;
+	mowgli_node_t	*node;
 
 	unsigned int port;
 

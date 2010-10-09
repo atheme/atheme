@@ -45,7 +45,7 @@ static inline void do_sethost(user_t *u, char *host)
  */
 static inline void do_sethost_all(myuser_t *mu, char *host)
 {
-        node_t *n;
+	mowgli_node_t *n;
         user_t *u;
 
         MOWGLI_ITER_FOREACH(n, mu->logins.head)

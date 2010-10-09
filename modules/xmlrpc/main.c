@@ -89,10 +89,10 @@ static void xmlrpc_config_ready(void *vptr)
 
 	if (handle_xmlrpc.handler != NULL)
 	{
-		if (node_find(&handle_xmlrpc, httpd_path_handlers))
+		if (mowgli_node_find(&handle_xmlrpc, httpd_path_handlers))
 			return;
 
-		node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
+		mowgli_node_add(&handle_xmlrpc, mowgli_node_create(), httpd_path_handlers);
 	}
 	else
 		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc {} block missing or invalid");
@@ -120,17 +120,17 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	xmlrpc_unregister_method("atheme.login");
 	xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.command");
 	xmlrpc_unregister_method("atheme.privset");
 
-	if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
+	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
 	{
-		node_del(n, httpd_path_handlers);
-		node_free(n);
+		mowgli_node_delete(n, httpd_path_handlers);
+		mowgli_node_free(n);
 	}
 
 	del_conf_item("PATH", &conf_xmlrpc_table);

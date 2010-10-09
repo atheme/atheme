@@ -29,14 +29,14 @@
 static void table_destroy(void *obj)
 {
 	table_t *table = (table_t *) obj;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	return_if_fail(table != NULL);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, table->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
-		node_t *n2, *tn2;
+		mowgli_node_t *n2, *tn2;
 
 		return_if_fail(r != NULL);
 
@@ -47,14 +47,14 @@ static void table_destroy(void *obj)
 			free(c->name);
 			free(c->value);
 			free(c);
-			node_del(n2, &r->cells);
-			node_free(n2);
+			mowgli_node_delete(n2, &r->cells);
+			mowgli_node_free(n2);
 		}
 
 		free(r);
 
-		node_del(n, &table->rows);
-		node_free(n);
+		mowgli_node_delete(n, &table->rows);
+		mowgli_node_free(n);
 	}
 
 	metadata_delete_all(table);
@@ -121,7 +121,7 @@ table_row_t *table_row_new(table_t *t)
 
 	out = scalloc(sizeof(table_row_t), 1);
 
-	node_add(out, node_create(), &t->rows);
+	mowgli_node_add(out, mowgli_node_create(), &t->rows);
 
 	return out;
 }
@@ -153,7 +153,7 @@ void table_cell_associate(table_row_t *r, const char *name, const char *value)
 	c->name = sstrdup(name);
 	c->value = sstrdup(value);
 
-	node_add(c, node_create(), &r->cells);
+	mowgli_node_add(c, mowgli_node_create(), &r->cells);
 }
 
 /*
@@ -175,7 +175,7 @@ void table_cell_associate(table_row_t *r, const char *name, const char *value)
  */
 void table_render(table_t *t, void (*callback)(const char *line, void *data), void *data)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	table_row_t *f;
 	size_t bufsz = 0;
 	char *buf = NULL;
@@ -190,7 +190,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
-		node_t *n2, *rn;
+		mowgli_node_t *n2, *rn;
 
 		/* we, uhh... we don't provide a macro for dealing with two lists at once ;) */
 		for (n2 = r->cells.head, rn = f->cells.head;
@@ -256,7 +256,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	MOWGLI_ITER_FOREACH(n, t->rows.head)
 	{
 		table_row_t *r = (table_row_t *) n->data;
-		node_t *n2, *rn;
+		mowgli_node_t *n2, *rn;
 
 		for (n2 = r->cells.head, rn = f->cells.head;
 		     n2 != NULL && rn != NULL; n2 = n2->next, rn = rn->next)

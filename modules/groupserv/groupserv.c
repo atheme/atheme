@@ -39,7 +39,7 @@ void mygroups_deinit(void)
 
 static void mygroup_delete(mygroup_t *mg)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	myentity_del(entity(mg));
 
@@ -47,8 +47,8 @@ static void mygroup_delete(mygroup_t *mg)
 	{
 		groupacs_t *ga = n->data;
 
-		node_del(&ga->gnode, &mg->acs);
-		node_del(&ga->unode, myuser_get_membership_list(ga->mu));
+		mowgli_node_delete(&ga->gnode, &mg->acs);
+		mowgli_node_delete(&ga->unode, myuser_get_membership_list(ga->mu));
 		object_unref(ga);
 	}
 
@@ -108,15 +108,15 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	ga->mu = mu;
 	ga->flags = flags;
 
-	node_add(ga, &ga->gnode, &mg->acs);
-	node_add(ga, &ga->unode, myuser_get_membership_list(mu));
+	mowgli_node_add(ga, &ga->gnode, &mg->acs);
+	mowgli_node_add(ga, &ga->unode, myuser_get_membership_list(mu));
 
 	return ga;
 }
 
 groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mu != NULL, NULL);
@@ -144,8 +144,8 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 	ga = groupacs_find(mg, mu, 0);
 	if (ga != NULL)
 	{
-		node_del(&ga->gnode, &mg->acs);
-		node_del(&ga->unode, myuser_get_membership_list(mu));
+		mowgli_node_delete(&ga->gnode, &mg->acs);
+		mowgli_node_delete(&ga->unode, myuser_get_membership_list(mu));
 		object_unref(ga);
 	}
 }
@@ -157,7 +157,7 @@ bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int 
 
 unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int count = 0;
 
 	return_val_if_fail(mg != NULL, 0);
@@ -189,7 +189,7 @@ mowgli_list_t *myuser_get_membership_list(myuser_t *mu)
 	if (l != NULL)
 		return l;
 
-	l = list_create();
+	l = mowgli_list_create();
 	privatedata_set(mu, "groupserv:membership", l);
 
 	return l;	
@@ -197,7 +197,7 @@ mowgli_list_t *myuser_get_membership_list(myuser_t *mu)
 
 const char *mygroup_founder_names(mygroup_t *mg)
 {
-        node_t *n;
+        mowgli_node_t *n;
         groupacs_t *ga;
         static char names[512];
 
@@ -218,7 +218,7 @@ const char *mygroup_founder_names(mygroup_t *mg)
 unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 {
 	mowgli_list_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int count = 0;
 
 	l = myuser_get_membership_list(mu);

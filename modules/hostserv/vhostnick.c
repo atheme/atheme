@@ -39,7 +39,7 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	metadata_t *md;
 	char buf[BUFSIZE];
-	node_t *n;
+	mowgli_node_t *n;
 	int found = 0;
 
 	if (!target)

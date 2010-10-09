@@ -37,7 +37,7 @@ void _moddeinit(void)
 /* USERINFO <channel> [user] [message] */
 static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;

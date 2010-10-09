@@ -455,7 +455,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	char *user = NULL, *host = NULL;
 	unsigned long num = 0;
 	bool full = false;
-	node_t *n;
+	mowgli_node_t *n;
 	kline_t *k;
 
 	if (param != NULL)
@@ -525,7 +525,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	kline_t *k;
 
 	logcommand(si, CMDLOG_DO, "AKILL:SYNC");

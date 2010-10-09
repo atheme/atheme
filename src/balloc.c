@@ -70,7 +70,7 @@ struct Block
 /* information for the root node of the heap */
 struct BlockHeap
 {
-  node_t hlist;
+  mowgli_node_t hlist;
   size_t elemSize;        /* Size of each element to be stored */
   unsigned long elemsPerBlock;    /* Number of elements per block */
   unsigned long blocksAllocated;  /* Number of blocks allocated */
@@ -176,7 +176,7 @@ static void *get_block(size_t size)
 
 static void block_heap_gc(void *unused)
 {
-	node_t *ptr, *tptr;
+	mowgli_node_t *ptr, *tptr;
 
 	MOWGLI_ITER_FOREACH_SAFE(ptr, tptr, heap_lists.head)
 		BlockHeapGarbageCollect(ptr->data);
@@ -296,7 +296,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	{
 		blockheap_fail("bh == NULL when it shouldn't be");
 	}
-	node_add(bh, &bh->hlist, &heap_lists);
+	mowgli_node_add(bh, &bh->hlist, &heap_lists);
 	return (bh);
 }
 
@@ -511,7 +511,7 @@ int BlockHeapDestroy(BlockHeap *bh)
 			free(walker);
 	}
 #endif
-	node_del(&bh->hlist, &heap_lists);
+	mowgli_node_delete(&bh->hlist, &heap_lists);
 	free(bh);
 	return (0);
 }

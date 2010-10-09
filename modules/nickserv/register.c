@@ -53,7 +53,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
-	node_t *n;
+	mowgli_node_t *n;
 	char *account;
 	char *pass;
 	char *email;
@@ -223,8 +223,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL)
 	{
 		si->su->myuser = mu;
-		n = node_create();
-		node_add(si->su, n, &mu->logins);
+		n = mowgli_node_create();
+		mowgli_node_add(si->su, n, &mu->logins);
 
 		if (!(mu->flags & MU_WAITAUTH))
 			/* only grant ircd registered status if it's verified */

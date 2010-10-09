@@ -32,7 +32,7 @@ void _moddeinit(void)
 
 static void hs_sethost_all(myuser_t *mu, const char *host)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	mynick_t *mn;
 	char buf[BUFSIZE];
 

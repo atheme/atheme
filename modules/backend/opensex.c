@@ -52,7 +52,7 @@ opensex_db_save(database_handle_t *db)
 	qline_t *q;
 	svsignore_t *svsignore;
 	soper_t *soper;
-	node_t *n, *tn, *tn2;
+	mowgli_node_t *n, *tn, *tn2;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 
@@ -471,7 +471,7 @@ static void opensex_h_me(database_handle_t *db, const char *type)
 	if (!(mz->status & MEMO_READ))
 		mu->memoct_new++;
 
-	node_add(mz, node_create(), &mu->memos);
+	mowgli_node_add(mz, mowgli_node_create(), &mu->memos);
 }
 
 static void opensex_h_mi(database_handle_t *db, const char *type)
@@ -489,7 +489,7 @@ static void opensex_h_mi(database_handle_t *db, const char *type)
 		return;
 	}
 
-	node_add(sstrdup(target), node_create(), &mu->memo_ignores);
+	mowgli_node_add(sstrdup(target), mowgli_node_create(), &mu->memo_ignores);
 }
 
 static void opensex_h_ac(database_handle_t *db, const char *type)
@@ -583,10 +583,10 @@ static void opensex_h_su(database_handle_t *db, const char *type)
 	tag = strtok(buf, ",");
 	do
 	{
-		node_add(sstrdup(tag), node_create(), &ms->taglist);
+		mowgli_node_add(sstrdup(tag), mowgli_node_create(), &ms->taglist);
 	} while ((tag = strtok(NULL, ",")));
 
-	node_add(ms, node_create(), &mu->subscriptions);
+	mowgli_node_add(ms, mowgli_node_create(), &mu->subscriptions);
 }
 
 static void opensex_h_nam(database_handle_t *db, const char *type)

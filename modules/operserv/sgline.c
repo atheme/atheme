@@ -330,7 +330,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *param = parv[0];
 	bool full = false;
-	node_t *n;
+	mowgli_node_t *n;
 	xline_t *x;
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
@@ -361,7 +361,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	xline_t *x;
 
 	logcommand(si, CMDLOG_DO, "SGLINE:SYNC");

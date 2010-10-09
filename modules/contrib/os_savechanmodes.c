@@ -39,7 +39,7 @@ static void os_cmd_savechanmodes(sourceinfo_t *si, int parc, char *parv[])
 	FILE *out;
 	mowgli_patricia_iteration_state_t state;
 	channel_t *c;
-	node_t *n;
+	mowgli_node_t *n;
 	chanban_t *cb;
 
 	if (!(out = fopen(DATADIR "/chanmodes.txt", "w")))

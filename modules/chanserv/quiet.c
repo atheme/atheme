@@ -68,10 +68,10 @@ static void notify_one_victim(sourceinfo_t *si, channel_t *c, user_t *u, int dir
 
 static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int dir)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanuser_t *cu;
 	mowgli_list_t ban_l = { NULL, NULL, 0 };
-	node_t ban_n;
+	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;
 
@@ -85,7 +85,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 		return;
 
 	/* only check the newly added/removed quiet */
-	node_add(cb, &ban_n, &ban_l);
+	mowgli_node_add(cb, &ban_n, &ban_l);
 
 	MOWGLI_ITER_FOREACH(n, c->members.head)
 	{
@@ -254,7 +254,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((tu = user_find_named(target)))
 	{
-		node_t *n, *tn;
+		mowgli_node_t *n, *tn;
 		char hostbuf2[BUFSIZE];
 		int count = 0;
 

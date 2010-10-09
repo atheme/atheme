@@ -38,7 +38,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm;
 	myuser_t *mu;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	hook_channel_req_t req;
 	bool hide_info;
 

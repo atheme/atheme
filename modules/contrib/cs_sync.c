@@ -34,7 +34,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	mychan_t *mc;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
 	bool noop;

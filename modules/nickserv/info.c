@@ -41,7 +41,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	time_t registered;
 	struct tm tm, tm2;
 	metadata_t *md;
-	node_t *n;
+	mowgli_node_t *n;
 	const char *vhost;
 	bool hide_info;
 	hook_user_req_t req;

@@ -170,7 +170,7 @@ static void ircnet_msg(const char *from, const char *target, const char *fmt, ..
 
 static void ircnet_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -193,7 +193,7 @@ static void ircnet_notice_user_sts(user_t *from, user_t *target, const char *tex
 
 static void ircnet_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -712,7 +712,7 @@ static void m_trace(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')

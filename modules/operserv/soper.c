@@ -85,7 +85,7 @@ static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	soper_t *soper;
 	const char *typestr;
 
@@ -112,7 +112,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	operclass_t *operclass;
 
 	logcommand(si, CMDLOG_GET, "SOPER:LISTCLASS");
@@ -232,7 +232,7 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 	user_t *u;
 
 	if (parc < 1)

@@ -34,7 +34,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	char *name = parv[0];
 	char *newfndr = parv[1];

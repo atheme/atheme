@@ -35,7 +35,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	char *object2 = parv[1];
 	channel_t *c1, *c2;
 	user_t *u1, *u2;
-	node_t *n1, *n2;
+	mowgli_node_t *n1, *n2;
 	chanuser_t *cu1, *cu2;
 	int matches = 0;
 

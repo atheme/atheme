@@ -428,7 +428,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	bool found = false;
 	unsigned int oldflags;
 	char *flagstr;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanacs_t *ca;
 	int changes = 0;
 
@@ -555,7 +555,7 @@ static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], u
 static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	node_t *n;
+	mowgli_node_t *n;
 	mychan_t *mc;
 	const char *channel = parv[0];
 	int operoverride = 0;

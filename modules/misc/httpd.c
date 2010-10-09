@@ -165,7 +165,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 	int in;
 	struct stat sb;
 	off_t count1;
-	node_t *n;
+	mowgli_node_t *n;
 	path_handler_t *ph = NULL;
 	bool is_get, is_post, handling_done = false;
 
@@ -357,7 +357,7 @@ static void do_listen(connection_t *cptr)
 
 static void httpd_checkidle(void *arg)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	connection_t *cptr;
 
 	(void)arg;

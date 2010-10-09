@@ -28,7 +28,7 @@
 
 /* sendq struct */
 struct sendq {
-	node_t node;
+	mowgli_node_t node;
 	int firstused; /* offset of first used byte */
 	int firstfree; /* 1 + offset of last used byte */
 	char buf[SENDQSIZE];
@@ -36,7 +36,7 @@ struct sendq {
 
 void sendq_add(connection_t * cptr, char *buf, int len)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	struct sendq *sq;
 	int l;
 	int pos = 0;
@@ -81,7 +81,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 	{
 		sq = smalloc(sizeof(struct sendq));
 		sq->firstused = sq->firstfree = 0;
-		node_add(sq, &sq->node, &cptr->sendq);
+		mowgli_node_add(sq, &sq->node, &cptr->sendq);
 		l = SENDQSIZE - sq->firstfree;
 		if (l > len)
 			l = len;
@@ -108,7 +108,7 @@ void sendq_add_eof(connection_t * cptr)
 
 void sendq_flush(connection_t * cptr)
 {
-        node_t *n, *tn;
+        mowgli_node_t *n, *tn;
         struct sendq *sq;
         int l;
 
@@ -138,7 +138,7 @@ void sendq_flush(connection_t * cptr)
                 {
 			if (MOWGLI_LIST_LENGTH(&cptr->sendq) > 1)
 			{
-                        	node_del(&sq->node, &cptr->sendq);
+                        	mowgli_node_delete(&sq->node, &cptr->sendq);
                         	free(sq);
 			}
 			else
@@ -164,7 +164,7 @@ void sendq_flush(connection_t * cptr)
 
 bool sendq_nonempty(connection_t *cptr)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	struct sendq *sq;
 
 	if (cptr->flags & CF_SEND_DEAD)
@@ -186,7 +186,7 @@ void sendq_set_limit(connection_t *cptr, size_t len)
 int recvq_length(connection_t *cptr)
 {
 	int l = 0;
-	node_t *n;
+	mowgli_node_t *n;
 	struct sendq *sq;
 
 	MOWGLI_ITER_FOREACH(n, cptr->recvq.head)
@@ -199,7 +199,7 @@ int recvq_length(connection_t *cptr)
 
 void recvq_put(connection_t *cptr)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	struct sendq *sq = NULL;
 	int l, ll;
 
@@ -231,7 +231,7 @@ void recvq_put(connection_t *cptr)
 	{
 		sq = smalloc(sizeof(struct sendq));
 		sq->firstused = sq->firstfree = 0;
-		node_add(sq, &sq->node, &cptr->recvq);
+		mowgli_node_add(sq, &sq->node, &cptr->recvq);
 		l = SENDQSIZE;
 	}
 	errno = 0;
@@ -264,7 +264,7 @@ void recvq_put(connection_t *cptr)
 
 int recvq_get(connection_t *cptr, char *buf, int len)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	struct sendq *sq;
 	int l;
 	char *p = buf;
@@ -290,7 +290,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 		{
 			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
-				node_del(&sq->node, &cptr->recvq);
+				mowgli_node_delete(&sq->node, &cptr->recvq);
 				free(sq);
 			}
 			else
@@ -305,7 +305,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 
 int recvq_getline(connection_t *cptr, char *buf, int len)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	struct sendq *sq, *sq2 = NULL;
 	int l = 0;
 	char *p = buf;
@@ -346,7 +346,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 		{
 			if (MOWGLI_LIST_LENGTH(&cptr->recvq) > 1)
 			{
-				node_del(&sq->node, &cptr->recvq);
+				mowgli_node_delete(&sq->node, &cptr->recvq);
 				free(sq);
 			}
 			else
@@ -361,14 +361,14 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 
 void sendqrecvq_free(connection_t *cptr)
 {
-	node_t *nptr, *nptr2;
+	mowgli_node_t *nptr, *nptr2;
 	struct sendq *sq;
 
 	MOWGLI_ITER_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
 	{
 		sq = nptr->data;
 
-		node_del(&sq->node, &cptr->recvq);
+		mowgli_node_delete(&sq->node, &cptr->recvq);
 		free(sq);
 	}
 
@@ -376,7 +376,7 @@ void sendqrecvq_free(connection_t *cptr)
 	{
 		sq = nptr->data;
 
-		node_del(&sq->node, &cptr->sendq);
+		mowgli_node_delete(&sq->node, &cptr->sendq);
 		free(sq);
 	}
 }

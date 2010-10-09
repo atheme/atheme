@@ -222,7 +222,7 @@ static void flatfile_db_load(void)
 			if (!(mz->status & MEMO_READ))
 				mu->memoct_new++;
 
-			node_add(mz, node_create(), &mu->memos);
+			mowgli_node_add(mz, mowgli_node_create(), &mu->memos);
 		}
 		else if (!strcmp("MI", item))
 		{
@@ -242,7 +242,7 @@ static void flatfile_db_load(void)
 			
 			strbuf = sstrdup(target);
 			
-			node_add(strbuf, node_create(), &mu->memo_ignores);
+			mowgli_node_add(strbuf, mowgli_node_create(), &mu->memo_ignores);
 		}
 		else if (!strcmp("AC", item))
 		{
@@ -340,10 +340,10 @@ static void flatfile_db_load(void)
 			tag = strtok(tags, ",");
 			do
 			{
-				node_add(sstrdup(tag), node_create(), &md->taglist);
+				mowgli_node_add(sstrdup(tag), mowgli_node_create(), &md->taglist);
 			} while ((tag = strtok(NULL, ",")) != NULL);
 
-			node_add(md, node_create(), &mu->subscriptions);
+			mowgli_node_add(md, mowgli_node_create(), &mu->subscriptions);
 		}
 		else if (!strcmp("NAM", item))
 		{

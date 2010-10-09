@@ -11,7 +11,7 @@ typedef struct {
 	char *user;
 	char *host;
 	char *real;
-	node_t bnode;
+	mowgli_node_t bnode;
 	bool private;
 	time_t registered;
 } botserv_bot_t; 

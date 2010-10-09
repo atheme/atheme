@@ -49,7 +49,7 @@ typedef void (*log_write_func_t)(logfile_t *lf, const char *buf);
 /* logger.c */
 struct logfile_ {
 	object_t parent;
-	node_t node;
+	mowgli_node_t node;
 
 	void *log_file;		/* opaque: can either be mychan_t or FILE --nenolod */
 	char *log_path;

@@ -105,7 +105,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 		  &cptr->saddr.sin6.sin6_addr,
 		  cptr->hbuf, BUFSIZE);
 
-	node_add(cptr, node_create(), &connection_list);
+	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
 	return cptr;
 }
@@ -125,7 +125,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 connection_t *connection_find(int fd)
 {
 	connection_t *cptr;
-	node_t *nptr;
+	mowgli_node_t *nptr;
 
 	MOWGLI_ITER_FOREACH(nptr, connection_list.head)
 	{
@@ -152,7 +152,7 @@ connection_t *connection_find(int fd)
  */
 void connection_close(connection_t *cptr)
 {
-	node_t *nptr;
+	mowgli_node_t *nptr;
 	int errno1, errno2;
 #ifdef SO_ERROR
 	socklen_t len = sizeof(errno2);
@@ -164,7 +164,7 @@ void connection_close(connection_t *cptr)
 		return;
 	}
 
-	nptr = node_find(cptr, &connection_list);
+	nptr = mowgli_node_find(cptr, &connection_list);
 	if (!nptr)
 	{
 		slog(LG_ERROR, "connection_close(): connection %p is not registered!",
@@ -192,8 +192,8 @@ void connection_close(connection_t *cptr)
 	/* close the fd */
 	close(cptr->fd);
 
-	node_del(nptr, &connection_list);
-	node_free(nptr);
+	mowgli_node_delete(nptr, &connection_list);
+	mowgli_node_free(nptr);
 
 	sendqrecvq_free(cptr);
 
@@ -251,7 +251,7 @@ void connection_close_soon(connection_t *cptr)
  */
 void connection_close_soon_children(connection_t *cptr)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	connection_t *cptr2;
 
 	if (cptr == NULL)
@@ -283,7 +283,7 @@ void connection_close_soon_children(connection_t *cptr)
  */
 void connection_close_all(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	connection_t *cptr;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
@@ -310,7 +310,7 @@ void connection_close_all(void)
  */
 void connection_close_all_fds(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	connection_t *cptr;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, connection_list.head)
@@ -615,7 +615,7 @@ void connection_setselect_write(connection_t *cptr,
  */
 void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char buf[160];
 	char buf2[20];
 

@@ -87,7 +87,7 @@ struct __wumpusconfig
 static int
 distance_to_wumpus(player_t *player)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	
 	MOWGLI_ITER_FOREACH(n, player->location->exits.head)
 	{
@@ -114,7 +114,7 @@ distance_to_wumpus(player_t *player)
 static bool
 adjacent_room(player_t *p, int id)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, p->location->exits.head)
 	{
@@ -131,7 +131,7 @@ adjacent_room(player_t *p, int id)
 static player_t *
 find_player(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, wumpus.players.head)
 	{
@@ -169,7 +169,7 @@ create_player(user_t *u)
 	p->arrows = 10;
 	p->hp = 30;
 
-	node_add(p, node_create(), &wumpus.players);
+	mowgli_node_add(p, mowgli_node_create(), &wumpus.players);
 
 	return p;
 }
@@ -178,21 +178,21 @@ create_player(user_t *u)
 static void
 resign_player(player_t *player)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (player == NULL)
 		return;
 	
 	if (player->location)
 	{
-		n = node_find(player, &player->location->players);
-		node_del(n, &player->location->players);
-		node_free(n);
+		n = mowgli_node_find(player, &player->location->players);
+		mowgli_node_delete(n, &player->location->players);
+		mowgli_node_free(n);
 	}
 
-	n = node_find(player, &wumpus.players);
-	node_del(n, &wumpus.players);
-	node_free(n);
+	n = mowgli_node_find(player, &wumpus.players);
+	mowgli_node_delete(n, &wumpus.players);
+	mowgli_node_free(n);
 
 	free(player);
 }
@@ -230,7 +230,7 @@ build_maze(int size)
 			/* make sure this isn't a tunnel to itself */
 			while (t == r->id)
 			{
-				node_t *rn;
+				mowgli_node_t *rn;
 				t = rand() % size;
 
 				/* also check that this path doesn't already exist. */
@@ -244,7 +244,7 @@ build_maze(int size)
 			}
 
 			slog(LG_DEBUG, "wumpus: creating link for route %d -> %d", i, t);
-			node_add(&wumpus.rmemctx[t], node_create(), &r->exits);
+			mowgli_node_add(&wumpus.rmemctx[t], mowgli_node_create(), &r->exits);
 		}
 
 		slog(LG_DEBUG, "wumpus: finished creating exit paths for chamber %d", i);
@@ -330,7 +330,7 @@ void end_game(void);
 static void
 init_game(void)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!build_maze(rand() % 100))
 	{
@@ -345,7 +345,7 @@ init_game(void)
 		player_t *p = (player_t *) n->data;
 
 		p->location = &wumpus.rmemctx[rand() % wumpus.mazesize];
-		node_add(p, node_create(), &p->location->players);
+		mowgli_node_add(p, mowgli_node_create(), &p->location->players);
 
 		look_player(p);
 	}
@@ -379,7 +379,7 @@ start_game(void *unused)
 void
 end_game(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	int i;
 
 	/* destroy players */
@@ -395,7 +395,7 @@ end_game(void)
 			room_t *r = &wumpus.rmemctx[i];
 
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, r->exits.head)
-				node_del(n, &r->exits);
+				mowgli_node_delete(n, &r->exits);
 		}
 		free(wumpus.rmemctx);
 		wumpus.rmemctx = NULL;
@@ -413,7 +413,7 @@ end_game(void)
 void
 look_player(player_t *p)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	return_if_fail(p != NULL);
 	return_if_fail(p->location != NULL);
@@ -563,7 +563,7 @@ check_last_person_alive(void)
 void
 move_wumpus(void *unused)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	room_t *r;
 	int w_kills = 0;
 	bool moved = false;
@@ -654,7 +654,7 @@ regen_obj(int obj)
 static void
 move_player(player_t *p, int id)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (adjacent_room(p, id) == false)
 	{
@@ -732,13 +732,13 @@ move_player(player_t *p, int id)
 		wumpus.rmemctx[rand() % wumpus.mazesize].contents = E_CRYSTALBALL;
 	}
 
-	/* we recycle the node_t here for speed */
-	n = node_find(p, &p->location->players);
-	node_del(n, &p->location->players);
-	node_free(n);
+	/* we recycle the mowgli_node_t here for speed */
+	n = mowgli_node_find(p, &p->location->players);
+	mowgli_node_delete(n, &p->location->players);
+	mowgli_node_free(n);
 
 	p->location = &wumpus.rmemctx[id];
-	node_add(p, node_create(), &p->location->players);
+	mowgli_node_add(p, mowgli_node_create(), &p->location->players);
 
 	/* provide player with information, including their new location */
 	look_player(p);
@@ -924,7 +924,7 @@ command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, 0, 
 
 static void cmd_who(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	notice(wumpus_cfg.nick, si->su->nick, "The following people are playing:");
 

@@ -44,7 +44,7 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (MOWGLI_LIST_LENGTH(&noop_kill_queue) > 0)
 	{
@@ -54,8 +54,8 @@ void _moddeinit()
 		event_delete(noop_kill_users, NULL);
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 		{
-			node_del(n, &noop_kill_queue);
-			node_free(n);
+			mowgli_node_delete(n, &noop_kill_queue);
+			mowgli_node_free(n);
 		}
 		hook_del_user_delete(check_quit);
 	}
@@ -66,7 +66,7 @@ void _moddeinit()
 static void noop_kill_users(void *dummy)
 {
 	service_t *service;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	user_t *u;
 
 	hook_del_user_delete(check_quit);
@@ -76,20 +76,20 @@ static void noop_kill_users(void *dummy)
 	{
 		u = n->data;
 		kill_user(service->me, u, "Operator access denied");
-		node_del(n, &noop_kill_queue);
-		node_free(n);
+		mowgli_node_delete(n, &noop_kill_queue);
+		mowgli_node_free(n);
 	}
 }
 
 static void check_quit(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
-	n = node_find(u, &noop_kill_queue);
+	n = mowgli_node_find(u, &noop_kill_queue);
 	if (n != NULL)
 	{
-		node_del(n, &noop_kill_queue);
-		node_free(n);
+		mowgli_node_delete(n, &noop_kill_queue);
+		mowgli_node_free(n);
 		if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 		{
 			event_delete(noop_kill_users, NULL);
@@ -100,10 +100,10 @@ static void check_quit(user_t *u)
 
 static void check_user(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char hostbuf[BUFSIZE];
 
-	if (node_find(u, &noop_kill_queue))
+	if (mowgli_node_find(u, &noop_kill_queue))
 		return;
 
 	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
@@ -119,8 +119,8 @@ static void check_user(user_t *u)
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);
 			}
-			if (!node_find(u, &noop_kill_queue))
-				node_add(u, node_create(), &noop_kill_queue);
+			if (!mowgli_node_find(u, &noop_kill_queue))
+				mowgli_node_add(u, mowgli_node_create(), &noop_kill_queue);
 			/* Prevent them using the privs in Atheme. */
 			u->flags &= ~UF_IRCOP;
 			return;
@@ -138,8 +138,8 @@ static void check_user(user_t *u)
 				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);
 			}
-			if (!node_find(u, &noop_kill_queue))
-				node_add(u, node_create(), &noop_kill_queue);
+			if (!mowgli_node_find(u, &noop_kill_queue))
+				mowgli_node_add(u, mowgli_node_create(), &noop_kill_queue);
 			/* Prevent them using the privs in Atheme. */
 			u->flags &= ~UF_IRCOP;
 			return;
@@ -149,7 +149,7 @@ static void check_user(user_t *u)
 
 static noop_t *noop_find(char *target, mowgli_list_t *list)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, list->head)
 	{
@@ -165,7 +165,7 @@ static noop_t *noop_find(char *target, mowgli_list_t *list)
 /* NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason] */
 static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	noop_t *np;
 	char *action = parv[0];
 	enum { type_all, type_hostmask, type_server } type;
@@ -211,8 +211,8 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			else
 				np->reason = sstrdup("Abusive operator.");
 
-			n = node_create();
-			node_add(np, n, &noop_hostmask_list);
+			n = mowgli_node_create();
+			mowgli_node_add(np, n, &noop_hostmask_list);
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP:ADD:HOSTMASK: \2%s\2 (reason: \2%s\2)", np->target, np->reason);
 			command_success_nodata(si, _("Added \2%s\2 to the hostmask NOOP list."), mask);
@@ -237,8 +237,8 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			else
 				np->reason = sstrdup("Abusive operator.");
 
-			n = node_create();
-			node_add(np, n, &noop_server_list);
+			n = mowgli_node_create();
+			mowgli_node_add(np, n, &noop_server_list);
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP:ADD:SERVER: \2%s\2 (reason: \2%s\2)", np->target, np->reason);
 			command_success_nodata(si, _("Added \2%s\2 to the server NOOP list."), mask);
@@ -259,14 +259,14 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_ADMIN, "NOOP:DEL:HOSTMASK: \2%s\2", np->target);
 			command_success_nodata(si, _("Removed \2%s\2 from the hostmask NOOP list."), np->target);
 
-			n = node_find(np, &noop_hostmask_list);
+			n = mowgli_node_find(np, &noop_hostmask_list);
 
 			free(np->target);
 			free(np->added_by);
 			free(np->reason);
 
-			node_del(n, &noop_hostmask_list);
-			node_free(n);
+			mowgli_node_delete(n, &noop_hostmask_list);
+			mowgli_node_free(n);
 			free(np);
 
 			return;
@@ -282,14 +282,14 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_ADMIN, "NOOP:DEL:SERVER: \2%s\2", np->target);
 			command_success_nodata(si, _("Removed \2%s\2 from the server NOOP list."), np->target);
 
-			n = node_find(np, &noop_server_list);
+			n = mowgli_node_find(np, &noop_server_list);
 
 			free(np->target);
 			free(np->added_by);
 			free(np->reason);
 
-			node_del(n, &noop_server_list);
-			node_free(n);
+			mowgli_node_delete(n, &noop_server_list);
+			mowgli_node_free(n);
 			free(np);
 
 			return;

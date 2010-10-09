@@ -219,7 +219,7 @@ mowgli_list_t childproc_list;
 
 struct childproc
 {
-	node_t node;
+	mowgli_node_t node;
 	pid_t pid;
 	char *desc;
 	void (*cb)(pid_t pid, int status, void *data);
@@ -239,7 +239,7 @@ void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status
 	p->desc = sstrdup(desc);
 	p->cb = cb;
 	p->data = data;
-	node_add(p, &p->node, &childproc_list);
+	mowgli_node_add(p, &p->node, &childproc_list);
 }
 
 static void childproc_free(struct childproc *p)
@@ -253,7 +253,7 @@ static void childproc_free(struct childproc *p)
  */
 void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	struct childproc *p;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, childproc_list.head)
@@ -261,7 +261,7 @@ void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 		p = n->data;
 		if (p->cb == cb)
 		{
-			node_del(&p->node, &childproc_list);
+			mowgli_node_delete(&p->node, &childproc_list);
 			childproc_free(p);
 		}
 	}
@@ -271,7 +271,7 @@ static void childproc_check(void)
 {
 	pid_t pid;
 	int status;
-	node_t *n;
+	mowgli_node_t *n;
 	struct childproc *p;
 
 	while ((pid = waitpid(-1, &status, WNOHANG)) > 0)
@@ -281,7 +281,7 @@ static void childproc_check(void)
 			p = n->data;
 			if (p->pid == pid)
 			{
-				node_del(&p->node, &childproc_list);
+				mowgli_node_delete(&p->node, &childproc_list);
 				if (p->cb)
 					p->cb(pid, status, p->data);
 				childproc_free(p);

@@ -133,7 +133,7 @@ server_t *server_add(const char *name, unsigned int hops, server_t *uplink, cons
 	if (uplink)
 	{
 		s->uplink = uplink;
-		node_add(s, node_create(), &uplink->children);
+		mowgli_node_add(s, mowgli_node_create(), &uplink->children);
 	}
 
 	/* tld list for global noticer */
@@ -183,7 +183,7 @@ static void server_delete_serv(server_t *s)
 {
 	server_t *child;
 	user_t *u;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (s == me.me)
 	{
@@ -234,9 +234,9 @@ static void server_delete_serv(server_t *s)
 
 	if (s->uplink)
 	{
-		n = node_find(s, &s->uplink->children);
-		node_del(n, &s->uplink->children);
-		node_free(n);
+		n = mowgli_node_find(s, &s->uplink->children);
+		mowgli_node_delete(n, &s->uplink->children);
+		mowgli_node_free(n);
 	}
 
 	/* If unconnect semantics SQUIT was confirmed, introduce the jupe
@@ -302,13 +302,13 @@ server_t *server_find(const char *name)
 tld_t *tld_add(const char *name)
 {
         tld_t *tld;
-        node_t *n = node_create();
+        mowgli_node_t *n = mowgli_node_create();
 
         slog(LG_DEBUG, "tld_add(): %s", name);
 
         tld = BlockHeapAlloc(tld_heap);
 
-        node_add(tld, n, &tldlist);
+        mowgli_node_add(tld, n, &tldlist);
 
         tld->name = sstrdup(name);
 
@@ -334,7 +334,7 @@ tld_t *tld_add(const char *name)
 void tld_delete(const char *name)
 {
         tld_t *tld = tld_find(name);
-        node_t *n;
+        mowgli_node_t *n;
 
         if (!tld)
         {
@@ -345,9 +345,9 @@ void tld_delete(const char *name)
 
         slog(LG_DEBUG, "tld_delete(): %s", tld->name);
 
-        n = node_find(tld, &tldlist);
-        node_del(n, &tldlist);
-        node_free(n);
+        n = mowgli_node_find(tld, &tldlist);
+        mowgli_node_delete(n, &tldlist);
+        mowgli_node_free(n);
 
         free(tld->name);
         BlockHeapFree(tld_heap, tld);
@@ -373,7 +373,7 @@ void tld_delete(const char *name)
 tld_t *tld_find(const char *name)
 {
         tld_t *tld;
-        node_t *n;
+        mowgli_node_t *n;
 
 	if (name == NULL)
 		return NULL;

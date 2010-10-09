@@ -37,7 +37,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *u;
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	metadata_t *md;
 	int operoverride = 0;

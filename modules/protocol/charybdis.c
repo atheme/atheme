@@ -163,10 +163,10 @@ static bool extgecos_match(const char *mask, user_t *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
 {
 	chanban_t *cb;
-	node_t *n;
+	mowgli_node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];

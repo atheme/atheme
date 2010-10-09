@@ -122,7 +122,7 @@ static void p10_msg(const char *from, const char *target, const char *fmt, ...)
 
 static void p10_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -145,7 +145,7 @@ static void p10_notice_user_sts(user_t *from, user_t *target, const char *text)
 
 static void p10_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -462,7 +462,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	int chanc;
 	char *chanv[256];
 	int i;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanuser_t *cu;
 
 	/* JOIN 0 is really a part from all channels */
@@ -527,7 +527,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	if (ts < c->ts)
 	{
 		chanuser_t *cu;
-		node_t *n;
+		mowgli_node_t *n;
 
 		clear_simple_modes(c);
 		chanban_clear(c);
@@ -767,7 +767,7 @@ static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *chan;
 	char *p, c;
-	node_t *n;
+	mowgli_node_t *n;
 	chanuser_t *cu;
 	int i;
 

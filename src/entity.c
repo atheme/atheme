@@ -108,7 +108,7 @@ entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *m
 /* chanacs */
 unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanacs_t *ca;
 	unsigned int count = 0;
 

@@ -91,7 +91,7 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *tmu;
-	node_t *n;
+	mowgli_node_t *n;
 	const char *newnick;
 	char *temp;
 
@@ -141,7 +141,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Add to ignore list */
 	temp = sstrdup(newnick);
-	node_add(temp, node_create(), &si->smu->memo_ignores);
+	mowgli_node_add(temp, mowgli_node_create(), &si->smu->memo_ignores);
 	logcommand(si, CMDLOG_SET, "IGNORE:ADD: \2%s\2", newnick);
 	command_success_nodata(si, _("Account \2%s\2 added to your ignore list."), newnick);
 	return;
@@ -149,7 +149,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 
 static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *temp;
 
 	/* Arg check */
@@ -170,8 +170,8 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_SET, "IGNORE:DEL: \2%s\2", temp);
 			command_success_nodata(si, _("Account \2%s\2 removed from ignore list."), temp);
-			node_del(n, &si->smu->memo_ignores);
-			node_free(n);
+			mowgli_node_delete(n, &si->smu->memo_ignores);
+			mowgli_node_free(n);
 			free(temp);
 
 			return;
@@ -184,7 +184,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 
 static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (MOWGLI_LIST_LENGTH(&si->smu->memo_ignores) == 0)
 	{
@@ -195,8 +195,8 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memo_ignores.head)
 	{
 		free(n->data);
-		node_del(n,&si->smu->memo_ignores);
-		node_free(n);
+		mowgli_node_delete(n,&si->smu->memo_ignores);
+		mowgli_node_free(n);
 	}
 
 	/* Let them know list is clear */
@@ -207,7 +207,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int i = 1;
 
 	/* Throw in list header */

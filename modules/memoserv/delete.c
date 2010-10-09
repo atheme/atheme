@@ -37,7 +37,7 @@ void _moddeinit()
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	unsigned int i = 0, delcount = 0, memonum = 0;
 	unsigned int deleteall = 0, deleteold = 0;
 	mymemo_t *memo;
@@ -114,8 +114,8 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 				si->smu->memoct_new--;
 			
 			/* Free to node pool, remove from chain */
-			node_del(n, &si->smu->memos);
-			node_free(n);
+			mowgli_node_delete(n, &si->smu->memos);
+			mowgli_node_free(n);
 
 			free(memo);
 		}

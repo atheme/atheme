@@ -36,7 +36,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	myuser_t *tmu;
 	mymemo_t *memo, *newmemo;
-	node_t *n, *temp;
+	mowgli_node_t *n, *temp;
 	unsigned int i = 1, memonum = 0;
 	
 	/* Grab args */
@@ -172,8 +172,8 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			strlcpy(newmemo->text,memo->text,MEMOLEN);
 			
 			/* Create node, add to their linked list of memos */
-			temp = node_create();
-			node_add(newmemo, temp, &tmu->memos);
+			temp = mowgli_node_create();
+			mowgli_node_add(newmemo, temp, &tmu->memos);
 			tmu->memoct_new++;
 		
 			/* Should we email this? */

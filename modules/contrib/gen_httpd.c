@@ -248,7 +248,7 @@ static void do_listen(connection_t *cptr)
 
 static void httpd_checkidle(void *arg)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	connection_t *cptr;
 
 	(void)arg;

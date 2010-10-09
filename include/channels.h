@@ -38,8 +38,8 @@ struct chanuser_
   channel_t *chan;
   user_t *user;
   unsigned int modes;
-  node_t unode;
-  node_t cnode;
+  mowgli_node_t unode;
+  mowgli_node_t cnode;
 };
 
 struct chanban_
@@ -47,7 +47,7 @@ struct chanban_
   channel_t *chan;
   char *mask;
   int type; /* 'b', 'e', 'I', etc -- jilles */
-  node_t node; /* for channel_t.bans */
+  mowgli_node_t node; /* for channel_t.bans */
 };
 
 /* channel_t.modes */

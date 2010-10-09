@@ -34,7 +34,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
 	mymemo_t *memo;
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int i = 0;
 	char strfbuf[32];
 	struct tm tm;

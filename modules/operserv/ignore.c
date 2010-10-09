@@ -86,7 +86,7 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
         char *target = parv[0];
 	char *reason = parv[1];
 	svsignore_t *svsignore;
@@ -132,7 +132,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	svsignore_t *svsignore;
 
 	if (target == NULL)
@@ -165,7 +165,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	svsignore_t *svsignore;
 
 	if (MOWGLI_LIST_LENGTH(&svs_ignore_list) == 0)
@@ -179,8 +179,8 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 		svsignore = (svsignore_t *)n->data;
 
 		command_success_nodata(si, _("\2%s\2 has been removed from the services ignore list."), svsignore->mask);
-		node_del(n,&svs_ignore_list);
-		node_free(n);
+		mowgli_node_delete(n,&svs_ignore_list);
+		mowgli_node_free(n);
 		free(svsignore->mask);
 		free(svsignore->setby);
 		free(svsignore->reason);
@@ -198,7 +198,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int i = 1;
 	svsignore_t *svsignore;
 	char strfbuf[32];

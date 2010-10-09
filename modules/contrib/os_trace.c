@@ -28,7 +28,7 @@ typedef struct {
 
 typedef struct {
 	trace_query_constructor_t *cons;
-	node_t node;
+	mowgli_node_t node;
 } trace_query_domain_t;
 
 static int read_comparison_operator(char** string, int default_comparison)
@@ -756,7 +756,7 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 	trace_action_constructor_t *actcons;
 	trace_action_t* act;
 	char *args = parv[1];
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *params;
 	bool succeeded;
 
@@ -795,7 +795,7 @@ static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actco
 {
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (args == NULL)
 	{
@@ -837,7 +837,7 @@ static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actco
 		slog(LG_DEBUG, "operserv/trace: new args position [%s]", args);
 
 		q->cons = cons;
-		node_add(q, &q->node, crit);
+		mowgli_node_add(q, &q->node, crit);
 	}
 
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)

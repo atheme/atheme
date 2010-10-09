@@ -40,7 +40,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	char *property = strtok(parv[1], " ");
 	char *value = strtok(NULL, "");
 	unsigned int count;
-	node_t *n;
+	mowgli_node_t *n;
 	metadata_t *md;
 
 	if (!property)

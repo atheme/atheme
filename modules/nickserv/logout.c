@@ -32,7 +32,7 @@ void _moddeinit()
 static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	mynick_t *mn;
 	char *user = parv[0];
 	char *pass = parv[1];
@@ -104,8 +104,8 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (n->data == si->su)
 				{
-					node_del(n, &si->smu->logins);
-					node_free(n);
+					mowgli_node_delete(n, &si->smu->logins);
+					mowgli_node_free(n);
 					break;
 				}
 			}

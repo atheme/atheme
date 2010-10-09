@@ -102,7 +102,7 @@ static void underscores_to_spaces(char *y)
 
 static void write_infodb(database_handle_t *db)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, logon_info.head)
 	{
@@ -142,7 +142,7 @@ static void db_h_li(database_handle_t *db, const char *type)
 	l->subject = sstrdup(subject);
 	l->info_ts = info_ts;
 	l->story = sstrdup(story);
-	node_add(l, node_create(), &logon_info);
+	mowgli_node_add(l, mowgli_node_create(), &logon_info);
 }
 
 static void db_h_lio(database_handle_t *db, const char *type)
@@ -157,13 +157,13 @@ static void db_h_lio(database_handle_t *db, const char *type)
 	o->subject = sstrdup(subject);
 	o->info_ts = info_ts;
 	o->story = sstrdup(story);
-	node_add(o, node_create(), &operlogon_info);
+	mowgli_node_add(o, mowgli_node_create(), &operlogon_info);
 }
 
 static void display_info(hook_user_nick_t *data)
 {
 	user_t *u;
-	node_t *n;
+	mowgli_node_t *n;
 	logoninfo_t *l;
 	char dBuf[BUFSIZE];
 	struct tm tm;
@@ -210,7 +210,7 @@ static void display_info(hook_user_nick_t *data)
 
 static void display_oper_info(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	operlogoninfo_t *o;
 	char dBuf[BUFSIZE];
 	struct tm tm;
@@ -262,7 +262,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	int imp;
 	logoninfo_t *l;
 	operlogoninfo_t *o;
-	node_t *n;
+	mowgli_node_t *n;
 	char buf[BUFSIZE];
 
 	/* make sure they're logged in */
@@ -318,8 +318,8 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		o->story = sstrdup(story);
 		o->subject = sstrdup(subject);
 
-		n = node_create();
-		node_add(o, n, &operlogon_info);
+		n = mowgli_node_create();
+		mowgli_node_add(o, n, &operlogon_info);
 	}
 
 	if (imp > 0)
@@ -330,8 +330,8 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		l->story = sstrdup(story);
 		l->subject = sstrdup(subject);
 
-		n = node_create();
-		node_add(l, n, &logon_info);
+		n = mowgli_node_create();
+		mowgli_node_add(l, n, &logon_info);
 	}
 
 	command_success_nodata(si, _("Added entry to logon info"));
@@ -354,7 +354,7 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 	int x = 0;
 	int id;
 	logoninfo_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!target)
 	{
@@ -382,7 +382,7 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_ADMIN, "INFO:DEL: \2%s\2, \2%s\2", l->subject, l->story);
 
-			node_del(n, &logon_info);
+			mowgli_node_delete(n, &logon_info);
 
 			free(l->nick);
 			free(l->subject);
@@ -404,7 +404,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 	int x = 0;
 	int id;
 	operlogoninfo_t *o;
-	node_t *n;
+	mowgli_node_t *n;
 
 	if (!target)
 	{
@@ -432,7 +432,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_ADMIN, "INFO:ODEL: \2%s\2, \2%s\2", o->subject, o->story);
 
-			node_del(n, &operlogon_info);
+			mowgli_node_delete(n, &operlogon_info);
 
 			free(o->nick);
 			free(o->subject);
@@ -451,7 +451,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	logoninfo_t *l;
-	node_t *n;
+	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
 	int x = 0;
@@ -479,7 +479,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 {
 	operlogoninfo_t *o;
-	node_t *n;
+	mowgli_node_t *n;
 	struct tm tm;
 	char dBuf[BUFSIZE];
 	int x = 0;

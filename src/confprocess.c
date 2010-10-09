@@ -69,7 +69,7 @@ struct ConfTable
 
 		mowgli_list_t *subblock;
 	} un;
-	node_t node;
+	mowgli_node_t node;
 };
 
 static BlockHeap *conftable_heap;
@@ -291,7 +291,7 @@ void conf_process(config_file_t *cfp)
 {
 	config_file_t *cfptr;
 	config_entry_t *ce;
-	node_t *tn;
+	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
 
 	MOWGLI_ITER_FOREACH(tn, confblocks.head)
@@ -326,7 +326,7 @@ void conf_process(config_file_t *cfp)
 
 int subblock_handler(config_entry_t *ce, mowgli_list_t *entries)
 {
-	node_t *tn;
+	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
 
 	MOWGLI_ITER_FOREACH(tn, entries->head)
@@ -357,7 +357,7 @@ int subblock_handler(config_entry_t *ce, mowgli_list_t *entries)
 
 struct ConfTable *find_top_conf(const char *name)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	struct ConfTable *ct;
 
 	MOWGLI_ITER_FOREACH(n, confblocks.head)
@@ -373,7 +373,7 @@ struct ConfTable *find_top_conf(const char *name)
 
 struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	struct ConfTable *ct;
 
 	MOWGLI_ITER_FOREACH(n, conflist->head)
@@ -404,7 +404,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 	ct->flags = 0;
 	ct->un.handler = handler;
 
-	node_add(ct, &ct->node, &confblocks);
+	mowgli_node_add(ct, &ct->node, &confblocks);
 	conf_need_rehash = true;
 }
 
@@ -425,7 +425,7 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 	ct->flags = 0;
 	ct->un.subblock = list;
 
-	node_add(ct, &ct->node, &confblocks);
+	mowgli_node_add(ct, &ct->node, &confblocks);
 	conf_need_rehash = true;
 }
 
@@ -446,7 +446,7 @@ void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (co
 	ct->flags = 0;
 	ct->un.handler = handler;
 
-	node_add(ct, &ct->node, conflist);
+	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -470,7 +470,7 @@ void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 	ct->un.uint_val.max = max;
 	ct->un.uint_val.def = def;
 
-	node_add(ct, &ct->node, conflist);
+	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -493,7 +493,7 @@ void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned 
 	ct->un.duration_val.defunit = defunit;
 	ct->un.duration_val.def = def;
 
-	node_add(ct, &ct->node, conflist);
+	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -515,7 +515,7 @@ void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned in
 	ct->un.dupstr_val.var = var;
 	ct->un.dupstr_val.def = sstrdup(def);
 
-	node_add(ct, &ct->node, conflist);
+	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -537,7 +537,7 @@ void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 	ct->un.bool_val.var = var;
 	ct->un.bool_val.def = def;
 
-	node_add(ct, &ct->node, conflist);
+	mowgli_node_add(ct, &ct->node, conflist);
 	conf_need_rehash = true;
 }
 
@@ -551,7 +551,7 @@ void del_top_conf(const char *name)
 		return;
 	}
 
-	node_del(&ct->node, &confblocks);
+	mowgli_node_delete(&ct->node, &confblocks);
 
 	free(ct->name);
 
@@ -568,7 +568,7 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 		return;
 	}
 
-	node_del(&ct->node, conflist);
+	mowgli_node_delete(&ct->node, conflist);
 
 	if (ct->type == CONF_DUPSTR && ct->un.dupstr_val.def)
 	{

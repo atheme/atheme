@@ -95,7 +95,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			&& (md = metadata_find(mc, "private:verify:founderchg:timestamp"))
 			&& (atol(md->value) >= si->smu->registered))
 		{
-			node_t *n;
+			mowgli_node_t *n;
 			chanacs_t *ca;
 	
 			/* Duplicates the check below. We check below for user

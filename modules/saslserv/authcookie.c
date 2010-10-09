@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 );
 
 mowgli_list_t *mechanisms;
-node_t *mnode;
+mowgli_node_t *mnode;
 static int mech_start(sasl_session_t *p, char **out, int *out_len);
 static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len);
 static void mech_finish(sasl_session_t *p);
@@ -26,13 +26,13 @@ sasl_mechanism_t mech = {"AUTHCOOKIE", &mech_start, &mech_step, &mech_finish};
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
-	mnode = node_create();
-	node_add(&mech, mnode, mechanisms);
+	mnode = mowgli_node_create();
+	mowgli_node_add(&mech, mnode, mechanisms);
 }
 
 void _moddeinit()
 {
-	node_del(mnode, mechanisms);
+	mowgli_node_delete(mnode, mechanisms);
 }
 
 static int mech_start(sasl_session_t *p, char **out, int *out_len)

@@ -35,7 +35,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	/* misc structs etc */
 	user_t *tu;
 	myuser_t *tmu;
-	node_t *n;
+	mowgli_node_t *n;
 	mymemo_t *memo;
 	command_t *cmd;
 	
@@ -157,8 +157,8 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		strlcpy(memo->text,m,MEMOLEN);
 	
 		/* Create a linked list node and add to memos */
-		n = node_create();
-		node_add(memo, n, &tmu->memos);
+		n = mowgli_node_create();
+		mowgli_node_add(memo, n, &tmu->memos);
 		tmu->memoct_new++;
 
 		/* Should we email this? */

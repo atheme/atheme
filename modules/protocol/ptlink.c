@@ -444,7 +444,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	if (ts < c->ts)
 	{
 		chanuser_t *cu;
-		node_t *n;
+		mowgli_node_t *n;
 
 		/* the TS changed.  a TS change requires the following things
 		 * to be done to the channel:  reset all modes to nothing, remove
@@ -691,7 +691,7 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')

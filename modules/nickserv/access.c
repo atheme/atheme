@@ -155,7 +155,7 @@ static bool mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen
 static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 {
 	mowgli_list_t l = {NULL, NULL, 0};
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	mynick_t *mn;
 	user_t *u;
 	hook_nick_enforce_t hdata;
@@ -166,7 +166,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 		mn = n->data;
 		u = user_find_named(mn->nick);
 		if (u != NULL && u->myuser != mu && myuser_access_verify(u, mu))
-			node_add(u, node_create(), &l);
+			mowgli_node_add(u, mowgli_node_create(), &l);
 	}
 	/* remove mask */
 	myuser_access_delete(mu, mask);
@@ -174,8 +174,8 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l.head)
 	{
 		u = n->data;
-		node_del(n, &l);
-		node_free(n);
+		mowgli_node_delete(n, &l);
+		mowgli_node_free(n);
 		if (!myuser_access_verify(u, mu))
 		{
 			mn = mynick_find(u->nick);
@@ -192,7 +192,7 @@ static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	node_t *n;
+	mowgli_node_t *n;
 	char *mask;
 	char *host;
 	char *p;

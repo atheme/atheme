@@ -37,7 +37,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* Misc structs etc */
 	myuser_t *tmu;
 	mymemo_t *memo, *receipt;
-	node_t *n;
+	mowgli_node_t *n;
 	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[32];
 	struct tm tm;
@@ -119,8 +119,8 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
 						
 						/* Attach to their linked list */
-						n = node_create();
-						node_add(receipt, n, &tmu->memos);
+						n = mowgli_node_create();
+						mowgli_node_add(receipt, n, &tmu->memos);
 						tmu->memoct_new++;
 					}
 				}

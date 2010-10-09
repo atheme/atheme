@@ -46,11 +46,11 @@ mowgli_list_t svs_ignore_list;
 svsignore_t *svsignore_add(const char *mask, const char *reason)
 {
         svsignore_t *svsignore;
-        node_t *n = node_create();
+        mowgli_node_t *n = mowgli_node_create();
 
         svsignore = smalloc(sizeof(svsignore_t));
                         
-        node_add(svsignore, n, &svs_ignore_list);
+        mowgli_node_add(svsignore, n, &svs_ignore_list);
         
         svsignore->mask = sstrdup(mask);
         svsignore->settime = CURRTIME;
@@ -78,7 +78,7 @@ svsignore_t *svsignore_add(const char *mask, const char *reason)
 svsignore_t *svsignore_find(user_t *source)
 {       
         svsignore_t *svsignore;
-        node_t *n;
+        mowgli_node_t *n;
         char host[BUFSIZE];
 
 	if (!use_svsignore)
@@ -118,10 +118,10 @@ svsignore_t *svsignore_find(user_t *source)
  */
 void svsignore_delete(svsignore_t *svsignore)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
-	n = node_find(svsignore, &svs_ignore_list);
-	node_del(n, &svs_ignore_list);
+	n = mowgli_node_find(svsignore, &svs_ignore_list);
+	mowgli_node_delete(n, &svs_ignore_list);
 
 	free(svsignore->mask);
 	free(svsignore->reason);

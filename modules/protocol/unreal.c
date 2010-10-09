@@ -232,7 +232,7 @@ static void unreal_msg(const char *from, const char *target, const char *fmt, ..
 
 static void unreal_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -255,7 +255,7 @@ static void unreal_notice_user_sts(user_t *from, user_t *target, const char *tex
 
 static void unreal_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -586,7 +586,7 @@ static void remove_our_modes(channel_t *c)
 	 * and set the new TS.
 	 */
 	chanuser_t *cu;
-	node_t *n;
+	mowgli_node_t *n;
 
 	clear_simple_modes(c);
 
@@ -987,7 +987,7 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')

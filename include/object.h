@@ -13,7 +13,7 @@ struct metadata_ {
 	char *name;
 	char *value;
 	bool private;
-	node_t node;
+	mowgli_node_t node;
 };
 
 typedef struct metadata_ metadata_t;

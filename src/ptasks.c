@@ -83,7 +83,7 @@ void handle_stats(user_t *u, char req)
 	kline_t *k;
 	xline_t *x;
 	qline_t *q;
-	node_t *n;
+	mowgli_node_t *n;
 	uplink_t *uplink;
 	soper_t *soper;
 	int i, j;
@@ -336,7 +336,7 @@ static void single_trace(user_t *u, user_t *t)
 void handle_trace(user_t *u, const char *target, const char *dest)
 {
 	user_t *t;
-	node_t *n;
+	mowgli_node_t *n;
 	int nusers;
 
 	if (u == NULL)
@@ -443,7 +443,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 {
 	char *vec[3];
 	hook_cmessage_data_t cdata;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	mowgli_list_t l = { NULL, NULL, 0 };
 	service_t *svs;
 
@@ -477,7 +477,7 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 		if (svs->chanmsg == false)
 			continue;
 
-		node_add(svs, node_create(), &l);
+		mowgli_node_add(svs, mowgli_node_create(), &l);
 	}
 	/* Note: this assumes a fantasy command will not remove another
 	 * service.
@@ -489,8 +489,8 @@ handle_channel_message(sourceinfo_t *si, char *target, bool is_notice, char *mes
 			si->service->notice_handler(si, 2, vec);
 		else
 			si->service->handler(si, 2, vec);
-		node_del(n, &l);
-		node_free(n);
+		mowgli_node_delete(n, &l);
+		mowgli_node_free(n);
 	}
 }
 
@@ -500,7 +500,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 	user_t *u, *target_u;
 	char *p;
 	char name2[NICKLEN];
-	node_t *n;
+	mowgli_node_t *n;
 
 	/* message from server, ignore */
 	if (si->su == NULL)
@@ -775,7 +775,7 @@ server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
 
 void handle_eob(server_t *s)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	server_t *s2;
 
 	if (s == NULL)

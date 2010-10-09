@@ -46,8 +46,8 @@ struct groupacs_ {
 	myuser_t *mu;
 	unsigned int flags;
 
-	node_t gnode;
-	node_t unode;
+	mowgli_node_t gnode;
+	mowgli_node_t unode;
 };
 
 E void mygroups_init(void);

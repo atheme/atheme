@@ -19,7 +19,7 @@ static void write_groupdb(database_handle_t *db)
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
-		node_t *n;
+		mowgli_node_t *n;
 		mygroup_t *mg = group(mt);
 		char *mgflags = gflags_tostr(mg_flags, mg->flags);
 

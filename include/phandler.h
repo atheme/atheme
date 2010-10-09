@@ -214,9 +214,9 @@ E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *l
 /* send sasl message */
 E void (*sasl_sts) (char *target, char mode, char *data);
 /* find next channel ban (or other ban-like mode) matching user */
-E node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first);
+E mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first);
 /* find next host channel access matching user */
-E node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first);
+E mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first);
 /* check a vhost for validity; the core will already have checked for
  * @!?*, space, empty, : at start, length and cidr masks */
 E bool (*is_valid_host)(const char *host);
@@ -257,8 +257,8 @@ E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
 E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account);
 E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char *login);
 E void generic_sasl_sts(char *target, char mode, char *data);
-E node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first);
-E node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *first);
+E mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first);
+E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);
 E bool generic_is_valid_host(const char *host);
 E void generic_mlock_sts(channel_t *c);
 

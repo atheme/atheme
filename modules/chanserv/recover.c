@@ -34,7 +34,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu, *origin_cu = NULL;
 	mychan_t *mc;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanban_t *cb;
 	char *name = parv[0];
 	char hostbuf2[BUFSIZE];

@@ -372,7 +372,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 {
 	chanacs_t *ca;
 	int i = 0;
-	node_t *n;
+	mowgli_node_t *n;
 
 	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
@@ -401,7 +401,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	char *chan = parv[0];
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
-	node_t *n;
+	mowgli_node_t *n;
 	int changes;
 	unsigned int newlevel;
 	const char *desc;

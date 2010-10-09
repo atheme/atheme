@@ -13,7 +13,7 @@ typedef struct {
 	char file[BUFSIZE];
 	int line;
 	char buf[BUFSIZE];
-	node_t node;
+	mowgli_node_t node;
 } taint_reason_t;
 
 E mowgli_list_t taint_list;
@@ -28,7 +28,7 @@ E mowgli_list_t taint_list;
 		strlcpy(tr->file, __FILE__, BUFSIZE);		\
 		tr->line = __LINE__;				\
 		strlcpy(tr->buf, (reason), BUFSIZE);		\
-		node_add(tr, &tr->node, &taint_list);		\
+		mowgli_node_add(tr, &tr->node, &taint_list);	\
 		slog(LG_ERROR, "TAINTED: %s", (reason));	\
 		if (!config_options.allow_taint)		\
 		{						\

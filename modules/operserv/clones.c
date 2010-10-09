@@ -124,20 +124,20 @@ void _modinit(module_t *m)
 
 static void free_hostentry(const char *key, void *data, void *privdata)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	hostentry_t *he = data;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, he->clients.head)
 	{
-		node_del(n, &he->clients);
-		node_free(n);
+		mowgli_node_delete(n, &he->clients);
+		mowgli_node_free(n);
 	}
 	BlockHeapFree(hostentry_heap, he);
 }
 
 void _moddeinit(void)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	mowgli_patricia_destroy(hostlist, free_hostentry, NULL);
 	BlockHeapDestroy(hostentry_heap);
@@ -150,8 +150,8 @@ void _moddeinit(void)
 		free(c->reason);
 		free(c);
 
-		node_del(n, &clone_exempts);
-		node_free(n);
+		mowgli_node_delete(n, &clone_exempts);
+		mowgli_node_free(n);
 	}
 
 	service_named_unbind_command("operserv", &os_clones);
@@ -176,7 +176,7 @@ void _moddeinit(void)
 
 static void write_exemptdb(database_handle_t *db)
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	db_start_row(db, "CLONES-CK");
 	db_write_uint(db, kline_enabled);
@@ -193,8 +193,8 @@ static void write_exemptdb(database_handle_t *db)
 			free(c->ip);
 			free(c->reason);
 			free(c);
-			node_del(n, &clone_exempts);
-			node_free(n);
+			mowgli_node_delete(n, &clone_exempts);
+			mowgli_node_free(n);
 		}
 		else
 		{
@@ -230,12 +230,12 @@ static void db_h_ex(database_handle_t *db, const char *type)
 	c->clones = clones;
 	c->expires = expires;
 	c->reason = sstrdup(reason);
-	node_add(c, node_create(), &clone_exempts);
+	mowgli_node_add(c, mowgli_node_create(), &clone_exempts);
 }
 
 static unsigned int is_exempt(const char *ip)
 {
-	node_t *n;
+	mowgli_node_t *n;
 
 	/* first check for an exact match */
 	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
@@ -345,7 +345,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n;
+	mowgli_node_t *n;
 	char *ip = parv[0];
 	char *clonesstr = parv[1];
 	int clones;
@@ -444,7 +444,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		c = smalloc(sizeof(cexcept_t));
 		c->ip = sstrdup(ip);
 		c->reason = sstrdup(rreason);
-		node_add(c, node_create(), &clone_exempts);
+		mowgli_node_add(c, mowgli_node_create(), &clone_exempts);
 		command_success_nodata(si, _("Added \2%s\2 to clone exempt list."), ip);
 	}
 	else
@@ -464,7 +464,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	char *arg = parv[0];
 
 	if (!arg)
@@ -479,16 +479,16 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c->ip);
 			free(c->reason);
 			free(c);
-			node_del(n, &clone_exempts);
-			node_free(n);
+			mowgli_node_delete(n, &clone_exempts);
+			mowgli_node_free(n);
 		}
 		else if (!strcmp(c->ip, arg))
 		{
 			free(c->ip);
 			free(c->reason);
 			free(c);
-			node_del(n, &clone_exempts);
-			node_free(n);
+			mowgli_node_delete(n, &clone_exempts);
+			mowgli_node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from clone exempt list."), arg);
 			logcommand(si, CMDLOG_ADMIN, "CLONES:DELEXEMPT: \2%s\2", arg);
 			return;
@@ -535,7 +535,7 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 {
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
@@ -546,8 +546,8 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c->ip);
 			free(c->reason);
 			free(c);
-			node_del(n, &clone_exempts);
-			node_free(n);
+			mowgli_node_delete(n, &clone_exempts);
+			mowgli_node_free(n);
 		}
 		else if (c->expires)
 			command_success_nodata(si, "%s - limit %d - expires in %s - \2%s\2", c->ip, c->clones, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
@@ -580,7 +580,7 @@ static void clones_newuser(hook_user_nick_t *data)
 		strlcpy(he->ip, u->ip, sizeof he->ip);
 		mowgli_patricia_add(hostlist, he->ip, he);
 	}
-	node_add(u, node_create(), &he->clients);
+	mowgli_node_add(u, mowgli_node_create(), &he->clients);
 	i = MOWGLI_LIST_LENGTH(&he->clients);
 
 	if (i > DEFAULT_WARN_CLONES)
@@ -615,7 +615,7 @@ static void clones_newuser(hook_user_nick_t *data)
 
 static void clones_userquit(user_t *u)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	hostentry_t *he;
 
 	/* User has no IP, ignore him */
@@ -628,11 +628,11 @@ static void clones_userquit(user_t *u)
 		slog(LG_DEBUG, "clones_userquit(): hostentry for %s not found??", u->ip);
 		return;
 	}
-	n = node_find(u, &he->clients);
+	n = mowgli_node_find(u, &he->clients);
 	if (n)
 	{
-		node_del(n, &he->clients);
-		node_free(n);
+		mowgli_node_delete(n, &he->clients);
+		mowgli_node_free(n);
 		if (MOWGLI_LIST_LENGTH(&he->clients) == 0)
 		{
 			mowgli_patricia_delete(hostlist, he->ip);

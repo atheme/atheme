@@ -232,7 +232,7 @@ static void solidircd_msg(const char *from, const char *target, const char *fmt,
 
 static void solidircd_msg_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -255,7 +255,7 @@ static void solidircd_notice_user_sts(user_t *from, user_t *target, const char *
 
 static void solidircd_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	tld_t *tld;
 
 	if (!strcmp(mask, "*"))
@@ -555,7 +555,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		else if (ts < c->ts)
 		{
 			chanuser_t *cu;
-			node_t *n;
+			mowgli_node_t *n;
 
 			/* the TS changed.  a TS change requires the following things
 			 * to be done to the channel:  reset all modes to nothing, remove
@@ -858,7 +858,7 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')

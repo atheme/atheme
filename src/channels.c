@@ -153,7 +153,7 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 void channel_delete(channel_t *c)
 {
 	mychan_t *mc;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 	chanuser_t *cu;
 
 	return_if_fail(c != NULL);
@@ -170,8 +170,8 @@ void channel_delete(channel_t *c)
 	{
 		cu = n->data;
 		soft_assert(is_internal_client(cu->user) && !me.connected);
-		node_del(&cu->cnode, &c->members);
-		node_del(&cu->unode, &cu->user->channels);
+		mowgli_node_delete(&cu->cnode, &c->members);
+		mowgli_node_delete(&cu->unode, &cu->user->channels);
 		BlockHeapFree(chanuser_heap, cu);
 		cnt.chanuser--;
 	}
@@ -250,7 +250,7 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 	c->mask = sstrdup(mask);
 	c->type = type;
 
-	node_add(c, &c->node, &chan->bans);
+	mowgli_node_add(c, &c->node, &chan->bans);
 
 	return c;
 }
@@ -277,7 +277,7 @@ void chanban_delete(chanban_t * c)
 		return;
 	}
 
-	node_del(&c->node, &c->chan->bans);
+	mowgli_node_delete(&c->node, &c->chan->bans);
 
 	free(c->mask);
 	BlockHeapFree(chanban_heap, c);
@@ -303,7 +303,7 @@ void chanban_delete(chanban_t * c)
 chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
-	node_t *n;
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, chan->bans.head)
 	{
@@ -405,8 +405,8 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	chan->nummembers++;
 
-	node_add(cu, &cu->cnode, &chan->members);
-	node_add(cu, &cu->unode, &u->channels);
+	mowgli_node_add(cu, &cu->cnode, &chan->members);
+	mowgli_node_add(cu, &cu->unode, &u->channels);
 
 	cnt.chanuser++;
 
@@ -464,8 +464,8 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 	slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 
-	node_del(&cu->cnode, &chan->members);
-	node_del(&cu->unode, &user->channels);
+	mowgli_node_delete(&cu->cnode, &chan->members);
+	mowgli_node_delete(&cu->unode, &user->channels);
 
 	BlockHeapFree(chanuser_heap, cu);
 
@@ -499,7 +499,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
  */
 chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 {
-	node_t *n;
+	mowgli_node_t *n;
 	chanuser_t *cu;
 
 	if ((!chan) || (!user))

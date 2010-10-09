@@ -38,7 +38,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	char *action = parv[1];
 	char *reason = parv[2];
 	user_t *u;
-	node_t *n, *tn;
+	mowgli_node_t *n, *tn;
 
 	if (!target || !action)
 	{
@@ -86,8 +86,8 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 			if (!ircd_on_logout(u, entity(mu)->name))
 			{
 				u->myuser = NULL;
-				node_del(n, &mu->logins);
-				node_free(n);
+				mowgli_node_delete(n, &mu->logins);
+				mowgli_node_free(n);
 			}
 		}
 		mu->flags |= MU_NOBURSTLOGIN;
