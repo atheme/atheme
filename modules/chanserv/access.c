@@ -335,8 +335,6 @@ static const char *get_template_name_fuzzy(mychan_t *mc, unsigned int level)
 	else
 		strlcat(flagname, "+", sizeof flagname);
 
-//	strlcat(flagname, xflag_tostr(level & ~matchlev), sizeof flagname);
-
 	return flagname;
 }
 
