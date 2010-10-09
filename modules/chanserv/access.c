@@ -353,10 +353,21 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			exact_t = t;
 
 		else if ((t->level & level) == level)
-			lesser_t = t;
+		{
+			if (greater_t == NULL)
+				greater_t = t;
+			else
+			{
+				unsigned int a = count_bits(greater_t->level);
+				unsigned int a = count_bits(t->level);
+
+				if (a < b && b > flagcount)
+					greater_t = t;
+			}
+		}
 
 		else if ((level & t->level) == t->level && greater_t == NULL)
-			greater_t = t;
+			lesser_t = t;
 	}
 
 	/*
