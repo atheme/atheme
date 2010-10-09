@@ -62,15 +62,10 @@ config (dist/atheme.conf.example). The recommended ones are charybdis, ratbox,
 inspircd, asuka, beware ircd (bircd), nefarious and undernet-ircu 
 (undernet).
 
-The easy way: run the "setup" script. This does it all for you:
-	$ ./setup
-
-Follow the instructions and you're good to go.
-
-The slightly less easy but more traditional way:
-
 Run the "configure" script:
 	$ ./configure --prefix=/path/to/install/
+
+If no prefix is specified, the default install path is ~/atheme/.
 
 If you're running a large network (more than 2000 users), you should 
 pass the --enable-large-net switch to configure for enhanced performance.
@@ -84,7 +79,8 @@ Services will compile. To install, type:
 	$ make install
 
 The newly-compiled binary and several supporting files will be copied to the
-directory you specified in the "configure" script.
+directory you specified in the "configure" script. If no directory (prefix)
+was specified, all the relevant files will be in ~/atheme/.
 
 It is recommended to keep the source directory; you will need it to
 (re)compile modules later.
