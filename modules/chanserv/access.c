@@ -334,6 +334,24 @@ void free_template_list(mowgli_list_t *l)
 	}
 }
 
+/*
+ * get_template_name()
+ *
+ * this is, by far, one of the most complicated functions in Atheme.
+ * it is also one of the most bloated fuzzy bitmask matchers that i have
+ * ever written.
+ *
+ * basically, we build a template list, which has been sorted and then
+ * reversed.  we then find three templates that are the closest match to:
+ *
+ *      - an exact match (level == level)
+ *      - the closest template to the level but with less privilege ((level & t->level) == level)
+ *      - the closest template to the level but with more privilege ((t->level & level) == t->level)
+ *
+ * we then count the number of bits in each level and we tighten the match further
+ * based on number of bits flipped on in each level.  (it's the only sane way to do
+ * this, trust me.)
+ */
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
 	mowgli_list_t *l;
