@@ -1,6 +1,5 @@
 # Please don't update this file manually - use ./update-potfiles.sh instead!
 modules/alis/main.c
-modules/backend/flatfile.c
 modules/backend/opensex.c
 modules/botserv/bottalk.c
 modules/botserv/help.c
@@ -10,10 +9,12 @@ modules/botserv/set_core.c
 modules/botserv/set_fantasy.c
 modules/botserv/set_nobot.c
 modules/botserv/set_private.c
+modules/chanserv/access.c
 modules/chanserv/akick.c
 modules/chanserv/ban.c
 modules/chanserv/clear_bans.c
 modules/chanserv/clear.c
+modules/chanserv/clear_flags.c
 modules/chanserv/clear_users.c
 modules/chanserv/close.c
 modules/chanserv/count.c
@@ -46,6 +47,7 @@ modules/chanserv/set_guard.c
 modules/chanserv/set_keeptopic.c
 modules/chanserv/set_limitflags.c
 modules/chanserv/set_mlock.c
+modules/chanserv/set_prefix.c
 modules/chanserv/set_private.c
 modules/chanserv/set_property.c
 modules/chanserv/set_restricted.c
@@ -62,12 +64,30 @@ modules/chanserv/version.c
 modules/chanserv/voice.c
 modules/chanserv/why.c
 modules/chanserv/xop.c
+modules/contrib/cs_userinfo.c
+modules/contrib/ns_fenforce.c
+modules/contrib/ns_forbid.c
+modules/contrib/ns_generatehash.c
+modules/contrib/ns_listlogins.c
+modules/contrib/ns_waitreg.c
+modules/contrib/os_helpme.c
+modules/contrib/os_klinechan.c
+modules/contrib/os_procwatch.c
+modules/contrib/os_testproc.c
+modules/contrib/os_trace.c
 modules/gameserv/dice.c
 modules/gameserv/eightball.c
 modules/gameserv/help.c
 modules/gameserv/namegen.c
 modules/gameserv/rps.c
 modules/global/main.c
+modules/groupserv/basecmds.c
+modules/groupserv/hooks.c
+modules/groupserv/set.c
+modules/helpserv/helpme.c
+modules/helpserv/main.c
+modules/helpserv/services.c
+modules/helpserv/ticket.c
 modules/hostserv/group.c
 modules/hostserv/help.c
 modules/hostserv/offer.c
@@ -84,6 +104,7 @@ modules/memoserv/list.c
 modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/send.c
+modules/memoserv/sendgroup.c
 modules/memoserv/sendops.c
 modules/nickserv/access.c
 modules/nickserv/cert.c
@@ -105,6 +126,7 @@ modules/nickserv/logout.c
 modules/nickserv/main.c
 modules/nickserv/mark.c
 modules/nickserv/register.c
+modules/nickserv/regnolimit.c
 modules/nickserv/resetpass.c
 modules/nickserv/return.c
 modules/nickserv/sendpass.c
@@ -113,9 +135,11 @@ modules/nickserv/set_accountname.c
 modules/nickserv/set_core.c
 modules/nickserv/set_email.c
 modules/nickserv/set_emailmemos.c
+modules/nickserv/set_enforcetime.c
 modules/nickserv/set_hidemail.c
 modules/nickserv/set_language.c
 modules/nickserv/set_neverop.c
+modules/nickserv/set_nogreet.c
 modules/nickserv/set_nomemo.c
 modules/nickserv/set_noop.c
 modules/nickserv/setpass.c
@@ -151,6 +175,7 @@ modules/operserv/noop.c
 modules/operserv/override.c
 modules/operserv/rakill.c
 modules/operserv/raw.c
+modules/operserv/readonly.c
 modules/operserv/rehash.c
 modules/operserv/restart.c
 modules/operserv/rmatch.c
