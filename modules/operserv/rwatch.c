@@ -27,7 +27,6 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[]);
 static void write_rwatchdb(void);
 static void load_rwatchdb(void);
 
-mowgli_list_t *os_cmdtree;
 mowgli_patricia_t *os_rwatch_cmds;
 
 mowgli_list_t rwatch_list;

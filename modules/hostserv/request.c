@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
-mowgli_list_t *hs_helptree, *conf_hs_table;
+mowgli_list_t *conf_hs_table;
 bool request_per_nick;
 
 unsigned int ratelimit_count = 0;

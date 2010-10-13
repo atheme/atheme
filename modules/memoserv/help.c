@@ -15,8 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_list_t *ms_helptree;
-
 static void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, ms_cmd_help, { .path = "help" } };
