@@ -51,6 +51,6 @@ static void os_cmd_kill(sourceinfo_t *si, int parc, char *parv[])
 
 	kill_user(si->service->me, target, "Requested: %s", parv[1]);
 
-	logcommand(si, CMDLOG_ADMIN, "KILL: \2%s\2 (reason: \2%s\2)", target->nick, parv[1]);
-	command_success_nodata(si, "\2%s\2 has been killed.", target->nick);
+	logcommand(si, CMDLOG_ADMIN, "KILL: \2%s\2 (reason: \2%s\2)", parv[0], parv[1]);
+	command_success_nodata(si, "\2%s\2 has been killed.", parv[0]);
 }
