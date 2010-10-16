@@ -760,6 +760,13 @@ static void os_cmd_trace(sourceinfo_t *si, int parc, char *parv[])
 	char *params;
 	bool succeeded;
 
+	if (!parv[0])
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TRACE");
+		command_fail(si, fault_badparams, _("Syntax: TRACE <action> <params>"));
+		return;
+	}
+
 	actcons = mowgli_patricia_retrieve(trace_acttree, parv[0]);
 	if (actcons == NULL)
 	{
