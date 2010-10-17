@@ -811,7 +811,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (c->members.count < min_users)
+	if ((c != NULL ? c->members.count : 0) < min_users)
 	{
 		command_fail(si, fault_noprivs, _("There are not enough users in \2%s\2 to be able to assign a bot."), mc->name);
 		return;
