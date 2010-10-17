@@ -4,6 +4,11 @@
  *
  * DEFCON implementation.
  *
+ * By default, any setting except 5 will expire after 15 minutes,
+ * to change this, add a defcon_timeout = X; option to the operserv{}
+ * block in your atheme.con. X = amount of time in minutes for a defcon
+ * setting to time out/expire.
+ *
  */
 #include "atheme.h"
 #define DEFCON_CMODE "R"
@@ -19,7 +24,9 @@ static void os_cmd_defcon(sourceinfo_t *si, int parc, char *parv[]);
 static void defcon_nouserreg(hook_user_register_check_t *hdata);
 static void defcon_nochanreg(hook_channel_register_check_t *hdatac);
 static void defcon_useradd(hook_user_nick_t *data);
+static void defcon_timeoutfunc(void *dummy);
 static int level = 5;
+static unsigned int defcon_timeout = 900;
 
 command_t os_defcon = { "DEFCON", N_("Implements Defense Condition lockdowns."), PRIV_ADMIN, 1, os_cmd_defcon, { .path = "contrib/defcon" } };
 
@@ -35,6 +42,10 @@ void _modinit(module_t *m)
 	hook_add_channel_can_register(defcon_nochanreg);
 	hook_add_event("user_add");
 	hook_add_user_add(defcon_useradd);
+
+	service_t *svs;
+	svs = service_find("operserv");
+	add_duration_conf_item("DEFCON_TIMEOUT", svs->conf_table, 0, &defcon_timeout, "m", 900);
 }
 
 void _moddeinit(void)
@@ -44,6 +55,12 @@ void _moddeinit(void)
 	hook_del_user_can_register(defcon_nouserreg);
 	hook_del_channel_can_register(defcon_nochanreg);
 	hook_del_user_add(defcon_useradd);
+
+	service_t *svs;
+	svs = service_find("operserv");
+	del_conf_item("DEFCON_TIMEOUT", svs->conf_table);
+
+	event_delete(defcon_timeoutfunc, NULL);
 }
 
 static void defcon_nouserreg(hook_user_register_check_t *hdata)
@@ -87,7 +104,7 @@ static void defcon_useradd(hook_user_nick_t *data)
 	}
 }
 
-static void defcon_svsignore(sourceinfo_t *si)
+static void defcon_svsignore(void)
 {
 	svsignore_t *svsignore;
 	mowgli_node_t *n, *tn;
@@ -104,7 +121,7 @@ static void defcon_svsignore(sourceinfo_t *si)
 
 		slog(LG_INFO, "DEFCON:IGNORE:ADD");
 		svsignore = svsignore_add("*@*", "DEFCON Level 1 or 2 activated");
-		svsignore->setby = sstrdup(get_oper_name(si));
+		svsignore->setby = "DEFCON";
 		svsignore->settime = CURRTIME;
 	}
 	else if (level >= 3)
@@ -152,6 +169,22 @@ static void defcon_forcechanmodes(void)
 	}
 }
 
+static void defcon_timeoutfunc(void *dummy)
+{
+	service_t *svs;
+	char buf[BUFSIZE];
+
+	svs = service_find("operserv");
+
+	level = 5;
+	defcon_svsignore();
+	defcon_forcechanmodes();
+	slog(LG_INFO, "DEFCON:TIMEOUT");
+
+	snprintf(buf, sizeof buf, "The DEFCON level is now back to normal (\2%d\2). Sorry for any inconvenience this caused.", level);
+	notice_global_sts(svs->me, "*", buf);
+}
+
 static void os_cmd_defcon(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *defcon = parv[0];
@@ -173,13 +206,23 @@ static void os_cmd_defcon(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Call the 2 functions that don't use hooks */
-	defcon_svsignore(si);
+	defcon_svsignore();
 	defcon_forcechanmodes();
 
 	if (level < 5)
+	{
 		snprintf(buf, sizeof buf, "The DEFCON level has been changed to \2%d\2. We apologize for any inconvenience.", level);
+
+		int i = event_find(defcon_timeoutfunc, NULL);
+
+		if (i == -1)
+			event_add_once("defcon_timeout", defcon_timeoutfunc, NULL, defcon_timeout);
+	}
 	else
+	{
 		snprintf(buf, sizeof buf, "The DEFCON level is now back to normal (\2%d\2). Sorry for any inconvenience this caused.", level);
+		event_delete(defcon_timeoutfunc, NULL);
+	}
 
 	notice_global_sts(si->service->me, "*", buf);
 	command_success_nodata(si, _("Defense condition set to level \2%d\2."), level);
