@@ -159,8 +159,7 @@ static void os_cmd_defcon(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!defcon)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEFCON");
-		command_fail(si, fault_needmoreparams, _("Syntax: DEFCON <level>"));
+		command_success_nodata(si, _("Defense condition is currently level \2%d\2."), level);
 		return;
 	}
 
