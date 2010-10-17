@@ -1,7 +1,8 @@
 Ayuda para DEL:
 
-DEL permite eliminar mensajes de información que ya no sea
-necesario mostrar a los usuarios al conectarse.
+DEL elimina mensajes informativos que ya no desee enviar a los
+usuarios al conectarse. Este comando no le permite quitar
+mensajes de &nick& destinados a operadores.
 
 Sintaxis: DEL <id>
 

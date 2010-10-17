@@ -2,7 +2,7 @@ Ayuda para FLAGS:
 
 El comando FLAGS permite conceder o quitar privilegios de
 canal de un modo más específico y menos generalizado.
-Admite tanto nicks como máscaras de host como objetos.
+Admite nicks, grupos y máscaras de host como objetos.
 
 Si sólo se especifica el nombre del canal, se mostrará
 la lista de permisos concedidos en él.
@@ -31,8 +31,8 @@ aplican más restricciones; vea la ayuda sobre SET LIMITFLAGS.
 #endif
 Si Ud. no tiene +f aún puede quitar su propio acceso con -*.
 
-Sintaxis: FLAGS <#canal> [nick|máscara_de_host plantilla]
-Sintaxis: FLAGS <#canal> [nick|máscara_de_host cambios_de_opciones]
+Sintaxis: FLAGS <#canal> [nick|máscara_de_host|grupo plantilla]
+Sintaxis: FLAGS <#canal> [nick|máscara_de_host|grupo cambios_de_opciones]
 
 Permisos:
     +v - Permite el uso de VOICE y DEVOICE.
@@ -64,6 +64,9 @@ Permisos:
     +f - Permite la modificación de las listas de acceso del canal.
     +t - Permite el uso de TOPIC y TOPICAPPEND.
     +A - Permite ver las listas de acceso del canal.
+#if module chanserv/successor_acl
+    +S - Marca al usuario como sucesor del canal.
+#endif
     +F - Concede acceso completo como fundador del canal.
     +b - Activa la expulsión y veto automáticos.
 
@@ -77,3 +80,4 @@ Ejemplos:
     /msg &nick& FLAGS #abc abc!*@xyz.com -*
     /msg &nick& FLAGS #abc abc +oOtsi
     /msg &nick& FLAGS #abc UsuarioProblema!*@*.ispproblema.net +b
+    /msg &nick& FLAGS #abc !buena-gente +*

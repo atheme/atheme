@@ -3,7 +3,11 @@ Ayuda para ACTIVATE:
 Activa el vHost solicitado para el nick especificado.
 Un memo será también enviado notificando al usuario.
 
+Si se utiliza un asterisco en vez de un nick, todos los
+vHosts en espera serán activados.
+
 Sintaxis: ACTIVATE <nick>
 
 Ejemplos:
     /msg &nick& ACTIVATE nenolod
+    /msg &nick& ACTIVATE *

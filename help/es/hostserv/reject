@@ -3,7 +3,11 @@ Ayuda para REJECT:
 Rechaza el vHost solicitado para el nick especificado.
 Un memo será también enviado notificando al usuario.
 
+Si se utiliza un asterisco en vez de un nick, todos los
+vHosts en espera serán rechazados.
+
 Sintaxis: REJECT <nick>
 
 Ejemplos:
     /msg &nick& REJECT nenolod
+    /msg &nick& REJECT *

@@ -4,12 +4,12 @@ TRACE le permite encontrar usuarios de acuerdo a múltiples criterios y posiblem
 realizar una acción sobre ellos.
 
 Los criterios posibles son:
-CHANNEL - Todos los usuarios en un canal dado.
-SERVER - Todos los usuarios en un servidor específico.
-REGEXP - Todos los usuarios que coinciden con un patrón regex dado. Esto es muy
-        similar a RMATCH/RWATCH.
-NICKAGE - Cuanto tiempo (en segundos) ha estado un usuario conectado a la red.
-NUMCHAN - Número de canales en los que se encuentra un usuario.
+CHANNEL    - Todos los usuarios en un canal dado.
+SERVER     - Todos los usuarios en un servidor específico.
+REGEXP     - Todos los usuarios que coinciden con un patrón regex dado. Esto es muy
+             similar a RMATCH/RWATCH.
+NICKAGE    - Cuanto tiempo (en segundos) ha estado un usuario conectado a la red.
+NUMCHAN    - Número de canales en los que se encuentra un usuario.
 IDENTIFIED - Estado de identificación de usuarios que cumplen un criterio específico
         (identificado = yes; no identificado = no).
 
@@ -17,7 +17,7 @@ Las acciones posibles son:
 PRINT - Muestra el nick!usuario@host y otra información sobre cada usuario que cumple
         con los criterios especificados.
 COUNT - Muestra el número de usuarios que cumplen los criterios de búsqueda.
-KILL - Desconecta (KILL) todos los usuarios encontrados.
+KILL  - Desconecta (KILL) todos los usuarios encontrados.
 AKILL - Aplica AKILLs en los usuarios encontrados.
 
 Sintaxis: TRACE <acción> <parámetros>

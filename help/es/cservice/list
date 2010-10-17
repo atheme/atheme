@@ -1,10 +1,38 @@
 Ayuda para LIST:
 
-LIST muestra canales que coinciden con un
-patrón especificado. Se permiten comodines.
+LIST muestra canales que cumplen un conjunto de criterios
+especificados que pueden aplicarse a la vez.
 
-Sintaxis: LIST <patrón>
+Los criterios aceptados son:
+PATTERN      - Canales que coinciden con un patrón especificado.
+MARK-REASON  - Todos los canales con una razón de marca que cumpla con un patrón
+               especificado.
+CLOSE-REASON - Canales cerrados con una razón que cumpla un patrón especificado.
+HOLD         - Canales con la opción HOLD.
+NOOP         - Canales con la opción NOOP.
+LIMITFLAGS   - Canales con la opción LIMITFLAGS.
+SECURE       - Canales con la opción SECURE.
+VERBOSE      - Canales con la opción VERBOSE.
+RESTRICTED   - Canales con la opción RESTRICTED.
+KEEPTOPIC    - Canales con la opción KEEPTOPIC.
+VERBOSE-OPS  - Canales con la opción VERBOSE aplicada sólo a operadores.
+TOPICLOCK    - Canales con la opción TOPICLOCK.
+GUARD        - Canales con la opción GUARD.
+PRIVATE      - Canales con la opción PRIVATE.
+
+CLOSED       - Canales cerrados por la administración de red.
+MARKED       - Canales marcados por la administración de red.
+ACLSIZE      - Canales con una lista de acceso más larga que un tamaño especificado.
+REGISTERED   - Canales registrados con anterioridad a un tiempo especificado.
+LASTUSED     - Canales utilizados por última vez antes de un tiempo especificado.
+
+Sintaxis: LIST <criterios>
 
 Ejemplos:
-    /msg &nick& LIST #*abc*
-    /msg &nick& LIST #x*
+    /msg &nick& LIST pattern #*abc*
+    /msg &nick& LIST hold
+    /msg &nick& LIST closed pattern #x*
+    /msg &nick& LIST aclsize 10
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST aclsize 20 registered 7d pattern #bar*
+    /msg &nick& LIST mark-reason lamers?aquí

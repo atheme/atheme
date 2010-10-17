@@ -5,7 +5,13 @@ red que pueden aceptar a voluntad sin la ayuda de un operador.
 La cadena $account en el vhost ofrecido será reemplazada por el
 nombre de cuenta de un usuario cuando lo acepten con TAKE.
 
-Sintaxis: OFFER <vhost>
+Al proveer el parámetro !grupo, sólo aquellos usuarios con la
+opción de acceso +v en tal grupo podrán ver el vhost en OFFERLIST
+y aceptarlo con TAKE.
+
+Sintaxis: OFFER [!grupo] <vhost>
 
 Ejemplos:
     /msg &nick& OFFER gaaa.tos
+    /msg &nick& OFFER mired.usuarios.$account
+    /msg &nick& OFFER !atheme-usuarios $account.usuarios.atheme.net

@@ -7,4 +7,4 @@ ver la lista de acceso pueden hacer esto.
 Sintaxis: SENDOPS <#canal> <texto>
 
 Ejemplos:
-    /msg &nick& SENDOPS #chat tengan cuidado con badguy
+    /msg &nick& SENDOPS #chat tengan cuidado con maloso

@@ -1,16 +1,41 @@
 Ayuda para LIST:
 
-LIST muestra nicks de acuerdo a un patrón
-especificado. Se permiten comodines.
+LIST muestra usuarios registrados que cumplen un conjunto
+de criterios especificados que pueden aplicarse a la vez.
 
-Si una máscara usuario@host es también
-especificada, sólo se mostrarán nicks cuyos
-últimos hosts utilizados coincidan.
+Los criterios aceptados son:
+PATTERN       - Usuarios que coinciden con un patrón especificado.
+EMAIL         - Cuentas registradas con una dirección de email que coincide con
+                un patrón especificado.
+MARK-REASON   - Todos las cuentas con una razón de marca que cumpla con un patrón
+                especificado.
+FROZEN-REASON - Cuentas congeladas con una razón que cumpla un patrón
+                especificado.
+HOLD          - Usuarios con la opción HOLD.
+NOOP          - Usuarios con la opción NOOP.
+NEVEROP       - Usuarios con la opción NEVEROP.
+WAITAUTH      - Usuarios con la opción WAITAUTH.
+HIDEMAIL      - Usuarios con la opción HIDEMAIL.
+NOMEMO        - Usuarios con la opción NOMEMO.
+EMAILMEMOS    - Usuarios con la opción EMAILMEMOS.
+USE-PRIVMSG   - Usuarios con la opción USEPRIVMSG.
+QUIETCHG      - Usuarios con la opción QUIETCHG.
+NOGREET       - Usuarios con la opción NOGREET.
+PRIVATE       - Usuarios con la opción PRIVATE.
+REGNOLIMIT    - Usuarios con la opción REGNOLIMIT.
 
-Sintaxis: LIST <patrón>
-Sintaxis: LIST <patrón>!<usuario@host>
+FROZEN        - Usuarios reservados por la administración de red.
+MARKED        - Usuarios marcados por la administración de red.
+REGISTERED    - Cuentas registradas con anterioridad a un tiempo especificado.
+LASTUSED      - Cuentas utilizadas por última vez antes de un tiempo especificado.
+
+Sintaxis: LIST <criterios>
 
 Ejemplos:
-    /msg &nick& LIST jorge*
-    /msg &nick& LIST *a?ambert*
-    /msg &nick& LIST *!*@*.de
+    /msg &nick& LIST pattern jorge*
+    /msg &nick& LIST hold
+    /msg &nick& LIST frozen pattern x*
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST marked registered 7d pattern bar
+    /msg &nick& LIST email *@gmail.com
+    /msg &nick& LIST mark-reason *lamer*
