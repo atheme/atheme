@@ -1,0 +1,16 @@
+Ayuda para SET ENFORCETIME:
+
+SET ENFORCETIME establece el tiempo máximo (en segundos) hasta
+que el nick de alguien sea automáticamente modificado de acuerdo
+a la opción ENFORCE.
+
+Este ajuste puede ser establecido como DEFAULT para revertirlo
+al predeterminado de la red, o un valor numérico entre 1-180
+(segundos).
+
+Sintaxis: SET ENFORCETIME TIME|DEFAULT
+
+Ejemplo:
+    /msg &nick& SET ENFORCETIME DEFAULT
+    /msg &nick& SET ENFORCETIME 90
+    /msg &nick& SET ENFORCETIME 3

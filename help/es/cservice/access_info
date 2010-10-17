@@ -1,0 +1,10 @@
+Ayuda para ACCESS INFO:
+
+ACCESS INFO muestra el nivel de acceso de un usuario dado en
+un canal. Muestra el rol, opciones completas y cortas junto
+con la fecha última de modificación del acceso del usuario.
+
+Sintaxis: ACCESS <#canal> INFO <usuario>
+
+Examples:
+    /msg &nick& ACCESS #atheme INFO nenolod

@@ -1,0 +1,9 @@
+Ayuda para CLOSE:
+
+Cierra la petición de ayuda del nick especificado.
+El usuario será notificado del cierre de su petición.
+
+Sintaxis: CLOSE <nick>
+
+Ejemplos:
+    /msg &nick& CLOSE Grue

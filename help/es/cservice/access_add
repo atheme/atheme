@@ -1,0 +1,8 @@
+Ayuda para ACCESS ADD:
+
+ACCESS ADD asigna al usuario especificado un rol dado.
+
+Sintaxis: ACCESS <#canal> ADD <usuario> <rol>
+
+Ejemplos:
+    /msg &nick& ACCESS #atheme ADD stitch ayudantes

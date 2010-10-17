@@ -1,0 +1,9 @@
+Ayuda para READONLY:
+
+READONLY permite a operadores de servicios activar o desactivar
+el modo de sólo lectura mientras los servicios están activos.
+
+Sintaxis: READONLY ON|OFF
+
+Ejemplos:
+    /msg &nick& READONLY ON

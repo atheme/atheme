@@ -1,0 +1,9 @@
+Ayuda para SERVICES:
+
+SERVICES le permite ver una lista de todos los servicios activos en
+la red para que pueda elegir uno al cual solicitar más ayuda.
+
+Sintaxis: SERVICES
+
+Ejemplos:
+    /msg &nick& SERVICES

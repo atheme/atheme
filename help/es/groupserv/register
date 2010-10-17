@@ -1,0 +1,9 @@
+Ayuda para REGISTER:
+
+REGISTER le permite registrar un grupo para poder administrar
+conjuntos de usuarios y canales con mayor facilidad.
+
+Sintaxis: REGISTER <!grupo>
+
+Ejemplos:
+    /msg &nick& REGISTER !desarrolladores

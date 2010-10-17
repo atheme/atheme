@@ -1,0 +1,35 @@
+Ayuda para FLAGS:
+
+El comando FLAGS permite conceder o quitar privilegios de grupo
+a un nivel más específico, menos generalizado. Se utilizan nicks
+registrados como objetos.
+
+Si sólo entrega el grupo como argumento, se le mostrará una
+lista de los permisos concedidos a los usuarios.
+
+Sintaxis: FLAGS <!group>
+
+Puede modificar las opciones de un usuario si Ud. mismo tiene
+el permiso +f. Este comando tiene una sintaxis semejante a la
+de chanserv/flags, utilizando + para agregar permisos a un
+usuario, y - para quitarlos..
+
+Sintaxis: FLAGS <!grupo> [nick flag_changes]
+
+Permisos:
+    +f - Permite modificar la lista de acceso del grupo.
+    +F - Concede acceso completo de fundador.
+    +m - Autoriza a leer memos enviados al grupo.
+    +c - Concede acceso a canales donde el grupo tenga
+         suficientes privilegios.
+    +v - Permite aceptar vhosts ofrecidos al grupo a través
+         de HostServ.
+
+El permiso especial +* agrega todos los permisos salvo +F
+Utilice -* para quitar todos los permisos incluyendo +F.
+
+Ejemplos:
+    /msg &nick& FLAGS !bar
+    /msg &nick& FLAGS !bar fuu +F
+    /msg &nick& FLAGS !bar fuu -*
+    /msg &nick& FLAGS !bar fuu +fmc

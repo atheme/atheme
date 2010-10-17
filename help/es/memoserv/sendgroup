@@ -1,0 +1,9 @@
+Ayuda para SENDGROUP:
+
+SENDGROUP le permite enviar un memo a todos los miembros
+de un grupo que tengan la opción de acceso +m.
+
+Sintaxis: SENDGROUP <!grupo> <texto>
+
+Ejemplos:
+    /msg &nick& SENDGROUP !opers tengan cuidado con maloso

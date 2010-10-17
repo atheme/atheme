@@ -1,0 +1,10 @@
+Ayuda para SET DESCRIPTION:
+
+SET DESCRIPTION le permite cambiar o establecer la descripción
+de un grupo. Ésta es mostrada a los usuarios al pedir
+información acerca del grupo.
+
+Sintaxis: SET <!grupo> DESCRIPTION [descripción]
+
+Ejemplo:
+    /msg &nick& SET !atheme DESCRIPTION Grupo Oficial Atheme

@@ -1,0 +1,15 @@
+Ayuda para DROP:
+
+DROP le permite anular el registro de un grupo.
+
+Una vez que anule el registro de un grupo, todos los datos
+asociados a éste (listas de acceso, metadatos, etc.) son
+eliminados y no podrán ser recuperados.
+
+Vea la ayuda sobre FLAGS para información acerca de cómo
+transferir un grupo a otro usuario.
+
+Sintaxis: DROP <!grupo>
+
+Ejemplo:
+    /msg &nick& DROP !bar

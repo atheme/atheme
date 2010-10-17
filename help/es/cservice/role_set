@@ -1,0 +1,13 @@
+Ayuda para ROLE SET:
+
+ROLE SET le permite modificar las opciones de un rol existente.
+Todos los usuarios con el rol dado serán afectados por los cambios.
+Múltiples marcas deben ser separadas por un espacio y tener un
+modificador (+ o -) en frente.
+
+Sintaxis: ROLE <#canal> SET <rol> <opciones>
+
+Ejemplos:
+    /msg &nick& ROLE #atheme SET chanops +acl-change +set +recover
+    /msg &nick& ROLE #atheme SET ayudantes +invite
+    /msg &nick& ROLE #foo SET ayudantes -topic -invite

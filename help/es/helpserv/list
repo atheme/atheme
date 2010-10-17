@@ -1,0 +1,9 @@
+Ayuda para LIST:
+
+LIST muestra una lista de todas las peticiones de ayuda
+pendientes.
+
+Sintaxis: LIST
+
+Ejemplos:
+    /msg &nick& LIST

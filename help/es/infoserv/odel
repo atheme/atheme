@@ -1,0 +1,10 @@
+Ayuda para ODEL:
+
+ODEL elimina mensajes informativos que ya no desee enviar a los
+operadores al autenticarse. Este comando no le permite quitar
+mensajes de &nick& para usuarios.
+
+Sintaxis: ODEL <id>
+
+Ejemplo:
+    /msg &nick& ODEL 1

@@ -1,0 +1,8 @@
+Ayuda para ROLE DEL:
+
+ROLE DEL quita un rol específico de un canal.
+
+Syntax: ROLE <#canal> DEL <rol>
+
+Ejemplos:
+    /msg &nick& ROLE #atheme DEL ayudantes

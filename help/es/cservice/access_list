@@ -1,0 +1,11 @@
+Ayuda para ACCESS LIST:
+
+ACCESS LIST muestra una lista de usuarios con acceso en el
+canal y sus roles. Utiliza comparación difusa, así que si
+un usuario no coincide de forma exacta con ningún rol, se
+le mostrará con el rol más parecido que se encuentre.
+
+Sintaxis: ACCESS <#canal> LIST
+
+Ejemplos:
+    /msg &nick& ACCESS #atheme LIST

@@ -1,0 +1,13 @@
+Ayuda para CLEAR FLAGS:
+
+CLEAR FLAGS quita todas las opciones de acceso de todos los
+usuarios o grupos con acceso al canal especificado, salvo
+por usuarios con acceso de fundador.
+
+Este canal sólo puede ser utilizado por los fundadores de
+un canal.
+
+Sintaxis: CLEAR <#canal> FLAGS
+
+Ejemplos:
+    /msg &nick& CLEAR #atheme FLAGS

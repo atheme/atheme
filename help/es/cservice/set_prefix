@@ -1,0 +1,16 @@
+Ayuda para SET PREFIX:
+
+PREFIX le permite cambiar el desencadenador de comandos de
+fantasía en su canal. Esto es particularmente útil si tiene
+sus propios bots que entran en conflicto con el prefijo de
+fantasía usado por ChanServ de forma predeterminada. Si no
+provee un argumento (o especifica DEFAULT), reestablecerá
+el prefijo del canal al predeterminado de la red.
+
+Sintaxis: SET <#canal> PREFIX [prefijo]
+
+Ejemplos:
+    /msg &nick& SET #foo PREFIX
+    /msg &nick& SET #foo PREFIX '
+    /msg &nick& SET #c PREFIX %
+    /msg &nick& SET #c PREFIX default

@@ -1,0 +1,9 @@
+Ayuda para ROLE LIST:
+
+ROLE LIST muestra todos los roles específicos de un canal y
+la red, y las opciones asociadas a cada rol.
+
+Sintaxis: ROLE <#canal> LIST
+
+Examples:
+    /msg &nick& ROLE #baz LIST

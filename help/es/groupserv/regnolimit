@@ -1,0 +1,9 @@
+Ayuda para REGNOLIMIT:
+
+REGNOLIMIT le permite a un grupo mantener un número ilimitado
+de canales registrados.
+
+Sintaxis: REGNOLIMIT <!grupo> ON|OFF
+
+Ejemplos:
+    /msg &nick& REGNOLIMIT !buena-gente ON

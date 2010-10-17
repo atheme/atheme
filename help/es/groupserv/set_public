@@ -1,0 +1,9 @@
+Ayuda para SET PUBLIC:
+
+SET PUBLIC permite mostrar los miembros del grupo al utilizar
+NickServ INFO en ellos.
+
+Sintaxis: SET <!grupo> PUBLIC <ON|OFF>
+
+Ejemplos:
+    /msg &nick& SET !buena-gente PUBLIC ON

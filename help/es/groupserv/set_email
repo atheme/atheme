@@ -1,0 +1,13 @@
+Ayuda para SET EMAIL:
+
+SET EMAIL le permite cambiar o establecer la dirección
+de email asociada a un grupo. Ésta es mostrada a los
+usuarios en INFO.
+
+Sintaxis: SET <!grupo> EMAIL [email]
+
+Usar el comando de este modo resulta en la asociación
+de una dirección a grupo.
+
+Ejemplo:
+    /msg &nick& SET !bar EMAIL direccion@de.email

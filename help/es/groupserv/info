@@ -1,0 +1,10 @@
+Ayuda para INFO:
+
+INFO muestra información acerca de un grupo, tal como
+fecha de registro, URL del grupo, dirección de email
+y fundador.
+
+Sintaxis: INFO <!grupo>
+
+Ejemplos:
+    /msg &nick& INFO !bar

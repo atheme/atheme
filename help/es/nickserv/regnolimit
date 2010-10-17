@@ -1,0 +1,9 @@
+Ayuda para REGNOLIMIT:
+
+REGNOLIMIT le permite a un usuario mantener
+un número ilimitado de canales registrados.
+
+Sintaxis: REGNOLIMIT <usuario> ON|OFF
+
+Ejemplos:
+    /msg &nick& REGNOLIMIT nenolod ON

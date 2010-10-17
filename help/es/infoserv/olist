@@ -1,0 +1,12 @@
+Ayuda para OLIST:
+
+LIST le permite ver todos los mensajes informativos para operadores en
+la base de datos. Éstos también son enviados a los operadores al adquirir
+sus privilegios con /OPER.
+Este comando no muestra mensajes para usuarios regulares; utilice LIST
+para ver tales mensajes.
+
+Sintaxis: OLIST
+
+Ejemplo:
+    /msg &nick& OLIST

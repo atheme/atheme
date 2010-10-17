@@ -1,0 +1,11 @@
+Ayuda para HELPME:
+
+HELPME le permite fácilmente solicitar ayuda a la administración
+de la red. Esto funciona más bien como una alerta que un sistema
+de registro.
+
+Sintaxis: HELPME [tema]
+
+Ejemplos:
+    /msg &nick& HELPME
+    /msg &nick& HELPME Necesito ayuda con el registro de un canal.

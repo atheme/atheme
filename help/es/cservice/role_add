@@ -1,0 +1,45 @@
+Ayuda para ROLE ADD:
+
+ROLE ADD crea un rol de canal con las opciones especificadas.
+Marcas múltiples deben ser separadas por un espacio.
+
+Sintaxis: ROLE <#channel> ADD <rol> [opciones]
+
+Opciones:
+    +voice - Permite el uso de VOICE y DEVOICE.
+    +autovoice - Concede voz automáticamente.
+#if halfops
+    +halfop - Permite el uso de HALFOP y DEHALFOP.
+    +autohalfop - Concede halfop automáticamente.
+#endif
+    +op - Permite el uso de OP y DEOP.
+    +autoop - Concede op automáticamente.
+#if protect
+    +protect - Permite el uso de PROTECT y DEPROTECT.
+#endif
+#if owner
+    +owner - Permite el uso de OWNER y DEOWNER.
+#endif
+    +set - Permite el uso del comando SET.
+    +invite - Permite el uso de los comandos INVITE y GETKEY.
+#if module chanserv/kick
+    +remove - Permite el uso de KICK, KICKBAN, BAN y UNBAN.
+#else
+#if !module chanserv/unban_self
+    +remove - Permite el uso de BAN y UNBAN.
+#else
+    +remove - Permite el uso de UNBAN.
+#endif
+#endif
+    +recover - Permite el uso de RECOVER y CLEAR.
+    +acl-change - Permite la modificación de las listas de acceso del canal.
+    +topic - Permite el uso de TOPIC y TOPICAPPEND.
+    +acl-view - Permite ver las listas de acceso del canal.
+#if module chanserv/successor_acl
+    +successor - Marca al usuario como sucesor del canal.
+#endif
+    +founder - Concede acceso completo como fundador del canal.
+    +banned - Activa la expulsión y veto automáticos.
+
+Ejemplos:
+    /msg &nick& ROLE #atheme ADD ayudantes topic autovoice

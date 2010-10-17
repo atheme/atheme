@@ -1,0 +1,10 @@
+Ayuda para SET CHANNEL:
+
+SET CHANNEL le permite cambiar o establecer el canal IRC oficial de
+un grupo. Éste es mostrado a los usuarios al pedir información
+acerca del grupo.
+
+Sintaxis: SET <!grupo> CHANNEL [#canal]
+
+Ejemplo:
+    /msg &nick& SET !atheme CHANNEL #atheme

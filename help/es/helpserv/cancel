@@ -1,0 +1,8 @@
+Ayuda para CANCEL:
+
+CANCEL le permite cancelar una petición pendiente de ayuda.
+
+Sintaxis: CANCEL
+
+Ejemplos:
+    /msg &nick& CANCEL

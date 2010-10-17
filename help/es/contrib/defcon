@@ -1,0 +1,22 @@
+Ayuda para DEFCON:
+
+DEFCON le permite implementar seguridad basada en condición de defensa en su red.
+El uso de éste módulo no es recomendable ya que es un pobre método de seguridad
+de red y tiene un gran potencial de ser molesto para sus usuarios
+
+NIVELES:
+    Los niveles definen las medidas de seguridad a implementar.
+    Cada nivel hereda de los inferiores (3 es equivalente a 4 y más, por ejemplo).
+
+    1 - AKILLs de 15 minutos son aplicadas a usuarios entrantes.
+    2 - Todos los usuarios (salvo operadores de servicios) son ignorados por los
+        servicios.
+    3 - Todos los canales son forzados a modo +R de forma predeterminada.
+    4 - No se permiten registros de nicks o canales.
+    5 - Operación normal. Sin restricciones.
+
+
+Sintaxis: DEFCON <nivel>
+
+Ejemplo:
+    /msg &nick& DEFCON 4

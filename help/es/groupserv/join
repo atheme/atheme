@@ -1,0 +1,12 @@
+Ayuda para JOIN:
+
+JOIN le permite unirse a un grupo abierto.
+
+No se le concederán privilegios automáticamente al unirse
+a un grupo de este modo, aunque sí será considerado miembro
+de grupo.
+
+Sintaxis: JOIN <!grupo>
+
+Ejemplos:
+    /msg &nick& JOIN !baz

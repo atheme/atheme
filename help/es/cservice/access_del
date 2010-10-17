@@ -1,0 +1,8 @@
+Ayuda para ACCESS DEL:
+
+ACCESS DEL quita todos los permisos del usuario dado.
+
+Sintaxis: ACCESS <#canal> DEL <usuario>
+
+Ejemplos:
+    /msg &nick& ACCESS #atheme DEL stitch

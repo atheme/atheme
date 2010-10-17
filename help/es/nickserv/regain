@@ -1,0 +1,12 @@
+Ayuda para REGAIN:
+
+REGAIN recupera el acceso a su nick de un usuario que lo
+esté utilizando actualmente.
+
+Si se encuentra actualmente identificado con la cuenta
+del nick, Ud. no necesita especificar una contraseña.
+
+Sintaxis: REGAIN <nick> [contraseña]
+
+Ejemplo:
+    /msg &nick& REGAIN Pasta ContaseñaSecreta

@@ -1,0 +1,11 @@
+Ayuda para REQUEST:
+
+REQUEST permite solicitar ayuda de la administración de
+red. Esto funciona similar a un rastreador de eventos o
+sistema de mesa de ayuda. Por favor tenga paciencia
+mientras su petición es considerada por la administración.
+
+Sintaxis: REQUEST <tema>
+
+Ejemplos:
+    /msg &nick& REQUEST Requiero ayuda con un vHost.
