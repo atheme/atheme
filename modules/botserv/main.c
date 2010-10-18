@@ -449,7 +449,7 @@ static void db_h_bot_count(database_handle_t *db, const char *type)
 	unsigned int i = db_sread_uint(db);
 
 	if (i != MOWGLI_LIST_LENGTH(&bs_bots))
-		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %d.", i, bs_bots.count);
+		slog(LG_ERROR, "botserv_load_database(): inconsistency: database defines %d objects, I only deserialized %zu.", i, bs_bots.count);
 }
 
 /* ******************************************************************** */

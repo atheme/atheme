@@ -82,7 +82,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("  Options : Private"));
 		else
 			command_success_nodata(si, _("  Options : None"));
-		command_success_nodata(si, _("  Used on : %d channel(s)"), MOWGLI_LIST_LENGTH(&bot->me->me->channels));
+		command_success_nodata(si, _("  Used on : %zu channel(s)"), MOWGLI_LIST_LENGTH(&bot->me->me->channels));
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			i = 0;
