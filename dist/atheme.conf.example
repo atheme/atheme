@@ -140,6 +140,7 @@ loadmodule "modules/crypto/posix";
  * CertFP fingerprint managment			modules/nickserv/cert
  * CrackLib password validation			modules/nickserv/cracklib
  * DROP command					modules/nickserv/drop
+ * Nickname enforcement				modules/nickserv/enforce
  * GHOST command				modules/nickserv/ghost
  * GROUP and UNGROUP commands			modules/nickserv/group
  * HELP command					modules/nickserv/help
@@ -177,7 +178,6 @@ loadmodule "modules/crypto/posix";
  * SET QUIETCHG command			modules/nickserv/set_quietchg
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
  * Presence notifications (EXPERIMENTAL)        modules/nickserv/subscribe
- * Nickname enforcement				modules/nickserv/enforce
  * STATUS command				modules/nickserv/status
  * Nickname metadata viewer (TAXONOMY command)	modules/nickserv/taxonomy
  * VACATION command                             modules/nickserv/vacation
@@ -189,6 +189,7 @@ loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/cert";
 #loadmodule "modules/nickserv/cracklib";
 loadmodule "modules/nickserv/drop";
+#loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/ghost";
 loadmodule "modules/nickserv/group";
 loadmodule "modules/nickserv/help";
@@ -226,7 +227,6 @@ loadmodule "modules/nickserv/set_password";
 loadmodule "modules/nickserv/set_property";
 loadmodule "modules/nickserv/set_quietchg";
 #loadmodule "modules/nickserv/subscribe";
-#loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/status";
 loadmodule "modules/nickserv/taxonomy";
 loadmodule "modules/nickserv/vacation";
@@ -316,7 +316,7 @@ loadmodule "modules/chanserv/drop";
 loadmodule "modules/chanserv/flags";
 loadmodule "modules/chanserv/ftransfer";
 loadmodule "modules/chanserv/getkey";
-loadmodule "modules/chanserv/halfop";
+#loadmodule "modules/chanserv/halfop";
 loadmodule "modules/chanserv/help";
 loadmodule "modules/chanserv/hold";
 loadmodule "modules/chanserv/info";
