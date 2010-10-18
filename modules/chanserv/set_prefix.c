@@ -89,8 +89,8 @@ static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!goodprefix(prefix))
 	{
-		command_fail(si, fault_badparams, _("Prefix '%s' is invalid. The prefix may"
-		             "contain only printable characters, and must contain at least"
+		command_fail(si, fault_badparams, _("Prefix '%s' is invalid. The prefix may "
+		             "contain only printable characters, and must contain at least "
 		             "one non-space character."), prefix);
 		return;
 	}
