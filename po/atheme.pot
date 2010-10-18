@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-12 18:48-0300\n"
+"POT-Creation-Date: 2010-10-18 14:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,10 +21,10 @@ msgstr ""
 #: modules/botserv/set_core.c:47 modules/chanserv/access.c:109
 #: modules/chanserv/access.c:125 modules/chanserv/clear.c:44
 #: modules/chanserv/help.c:48 modules/chanserv/help.c:101
-#: modules/chanserv/set_core.c:43 modules/gameserv/help.c:41
+#: modules/chanserv/set_core.c:43 modules/gameserv/help.c:39
 #: modules/groupserv/basecmds.c:35 modules/groupserv/set.c:59
 #: modules/helpserv/main.c:32 modules/hostserv/help.c:39
-#: modules/infoserv/main.c:77 modules/memoserv/help.c:41
+#: modules/infoserv/main.c:77 modules/memoserv/help.c:39
 #: modules/nickserv/help.c:39 modules/nickserv/help.c:88
 #: modules/nickserv/set_core.c:30 modules/operserv/help.c:46 src/help.c:147
 #, c-format
@@ -39,10 +39,10 @@ msgid ""
 msgstr ""
 
 #: modules/alis/main.c:421 modules/botserv/help.c:42
-#: modules/chanserv/help.c:77 modules/gameserv/help.c:44
+#: modules/chanserv/help.c:77 modules/gameserv/help.c:42
 #: modules/groupserv/basecmds.c:38 modules/helpserv/main.c:35
 #: modules/hostserv/help.c:42 modules/infoserv/main.c:80
-#: modules/memoserv/help.c:44 modules/nickserv/help.c:64
+#: modules/memoserv/help.c:42 modules/nickserv/help.c:64
 msgid "For more information on a command, type:"
 msgstr ""
 
@@ -50,10 +50,10 @@ msgstr ""
 #: modules/botserv/set_core.c:55 modules/chanserv/access.c:115
 #: modules/chanserv/access.c:131 modules/chanserv/clear.c:52
 #: modules/chanserv/help.c:85 modules/chanserv/help.c:103
-#: modules/chanserv/set_core.c:53 modules/gameserv/help.c:50
+#: modules/chanserv/set_core.c:53 modules/gameserv/help.c:48
 #: modules/groupserv/basecmds.c:44 modules/groupserv/set.c:69
 #: modules/helpserv/main.c:41 modules/hostserv/help.c:48
-#: modules/infoserv/main.c:86 modules/memoserv/help.c:50
+#: modules/infoserv/main.c:86 modules/memoserv/help.c:48
 #: modules/nickserv/help.c:72 modules/nickserv/help.c:90
 #: modules/nickserv/set_core.c:45 modules/operserv/help.c:58 src/help.c:187
 msgid "***** End of Help *****"
@@ -216,10 +216,10 @@ msgid "Syntax: ACT <#channel> <msg>"
 msgstr ""
 
 #: modules/botserv/help.c:20 modules/chanserv/help.c:20
-#: modules/gameserv/help.c:22 modules/global/main.c:30
+#: modules/gameserv/help.c:20 modules/global/main.c:30
 #: modules/groupserv/basecmds.c:29 modules/helpserv/main.c:23
 #: modules/hostserv/help.c:20 modules/infoserv/main.c:62
-#: modules/memoserv/help.c:22 modules/nickserv/help.c:20
+#: modules/memoserv/help.c:20 modules/nickserv/help.c:20
 #: modules/operserv/help.c:21
 msgid "Displays contextual help information."
 msgstr ""
@@ -477,7 +477,7 @@ msgstr ""
 #: modules/chanserv/clear.c:85 modules/chanserv/set_core.c:87
 #: modules/groupserv/set.c:103 modules/memoserv/ignore.c:84
 #: modules/operserv/akill.c:109 modules/operserv/clones.c:276
-#: modules/operserv/ignore.c:79 modules/operserv/rwatch.c:203
+#: modules/operserv/ignore.c:79 modules/operserv/rwatch.c:202
 #: modules/operserv/sgline.c:113 modules/operserv/soper.c:79
 #: modules/operserv/sqline.c:142 src/commandtree.c:96
 #, c-format
@@ -2610,6 +2610,34 @@ msgid ""
 "and try again."
 msgstr ""
 
+#: modules/contrib/os_defcon.c:31
+msgid "Implements Defense Condition lockdowns."
+msgstr ""
+
+#: modules/contrib/os_defcon.c:73 modules/contrib/os_defcon.c:85
+msgid ""
+"Registrations are currently disabled on this network, please try again later."
+msgstr ""
+
+#: modules/contrib/os_defcon.c:195
+#, c-format
+msgid "Defense condition is currently level %d."
+msgstr ""
+
+#: modules/contrib/os_defcon.c:203
+msgid "Defcon level must be between 1 and 5"
+msgstr ""
+
+#: modules/contrib/os_defcon.c:228
+#, c-format
+msgid "Defense condition set to level %d."
+msgstr ""
+
+#: modules/contrib/os_defcon.c:229
+#, c-format
+msgid "%s set Defense condition to level %d."
+msgstr ""
+
 #: modules/contrib/os_helpme.c:18
 msgid "Makes you into a network helper."
 msgstr ""
@@ -2673,16 +2701,17 @@ msgstr ""
 msgid "%d matches"
 msgstr ""
 
-#: modules/contrib/os_trace.c:767 modules/contrib/os_trace.c:803
+#: modules/contrib/os_trace.c:766 modules/contrib/os_trace.c:774
+#: modules/contrib/os_trace.c:810
 msgid "Syntax: TRACE <action> <params>"
 msgstr ""
 
-#: modules/contrib/os_trace.c:774
+#: modules/contrib/os_trace.c:781
 msgid "Action compilation failed."
 msgstr ""
 
-#: modules/contrib/os_trace.c:819 modules/contrib/os_trace.c:826
-#: modules/contrib/os_trace.c:834
+#: modules/contrib/os_trace.c:826 modules/contrib/os_trace.c:833
+#: modules/contrib/os_trace.c:841
 msgid "Invalid criteria specified."
 msgstr ""
 
@@ -2866,7 +2895,7 @@ msgstr ""
 msgid "No chance at all!"
 msgstr ""
 
-#: modules/gameserv/help.c:42
+#: modules/gameserv/help.c:40
 #, c-format
 msgid "%s provides games and tools for playing games to the network."
 msgstr ""
@@ -3710,7 +3739,7 @@ msgstr ""
 msgid "To read it, type /%s%s READ %zu"
 msgstr ""
 
-#: modules/memoserv/help.c:42
+#: modules/memoserv/help.c:40
 #, c-format
 msgid "%s allows users to send memos to registered users."
 msgstr ""
@@ -6212,7 +6241,7 @@ msgid "Syntax: RAKILL /<regex>/[i] <reason>"
 msgstr ""
 
 #: modules/operserv/rakill.c:85 modules/operserv/rmatch.c:83
-#: modules/operserv/rwatch.c:259
+#: modules/operserv/rwatch.c:258
 #, c-format
 msgid "The provided regex %s is invalid."
 msgstr ""
@@ -6311,74 +6340,74 @@ msgstr ""
 msgid "%d: %d matches for realname %s"
 msgstr ""
 
-#: modules/operserv/rwatch.c:48
+#: modules/operserv/rwatch.c:47
 msgid "Performs actions on connecting clients matching regexes."
 msgstr ""
 
-#: modules/operserv/rwatch.c:50
+#: modules/operserv/rwatch.c:49
 msgid "Adds an entry to the regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:51
+#: modules/operserv/rwatch.c:50
 msgid "Removes an entry from the regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:52
+#: modules/operserv/rwatch.c:51
 msgid "Displays the regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:53
+#: modules/operserv/rwatch.c:52
 msgid "Changes actions on an entry in the regex watch list"
 msgstr ""
 
-#: modules/operserv/rwatch.c:196
+#: modules/operserv/rwatch.c:195
 msgid "Syntax: RWATCH ADD|DEL|LIST|SET"
 msgstr ""
 
-#: modules/operserv/rwatch.c:223 modules/operserv/rwatch.c:231
-#: modules/operserv/rwatch.c:241
+#: modules/operserv/rwatch.c:222 modules/operserv/rwatch.c:230
+#: modules/operserv/rwatch.c:240
 msgid "Syntax: RWATCH ADD /<regex>/[i] <reason>"
 msgstr ""
 
-#: modules/operserv/rwatch.c:251
+#: modules/operserv/rwatch.c:250
 #, c-format
 msgid "%s already found in regex watch list; not adding."
 msgstr ""
 
-#: modules/operserv/rwatch.c:271
+#: modules/operserv/rwatch.c:270
 #, c-format
 msgid "Added %s to regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:286 modules/operserv/rwatch.c:294
+#: modules/operserv/rwatch.c:285 modules/operserv/rwatch.c:293
 msgid "Syntax: RWATCH DEL /<regex>/[i]"
 msgstr ""
 
-#: modules/operserv/rwatch.c:320
+#: modules/operserv/rwatch.c:319
 #, c-format
 msgid "Removed %s from regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:327 modules/operserv/rwatch.c:435
+#: modules/operserv/rwatch.c:326 modules/operserv/rwatch.c:434
 #, c-format
 msgid "%s not found in regex watch list."
 msgstr ""
 
-#: modules/operserv/rwatch.c:346
+#: modules/operserv/rwatch.c:345
 msgid "End of RWATCH LIST"
 msgstr ""
 
-#: modules/operserv/rwatch.c:362 modules/operserv/rwatch.c:370
-#: modules/operserv/rwatch.c:379 modules/operserv/rwatch.c:398
+#: modules/operserv/rwatch.c:361 modules/operserv/rwatch.c:369
+#: modules/operserv/rwatch.c:378 modules/operserv/rwatch.c:397
 msgid "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]"
 msgstr ""
 
-#: modules/operserv/rwatch.c:419
+#: modules/operserv/rwatch.c:418
 #, c-format
 msgid "Options for %s unchanged."
 msgstr ""
 
-#: modules/operserv/rwatch.c:424
+#: modules/operserv/rwatch.c:423
 #, c-format
 msgid "Set options %s on %s."
 msgstr ""
