@@ -81,7 +81,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validhostmask(target))
 	{
-		if (!(mt = myentity_find(target)))
+		if (!(mt = myentity_find_ext(target)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 			return;

@@ -175,7 +175,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				ca = chanacs_find_host_literal(mc, target, 0);
 			else
 			{
-				if (!(mt = myentity_find(target)))
+				if (!(mt = myentity_find_ext(target)))
 				{
 					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 					return;
@@ -246,7 +246,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!validhostmask(target))
 		{
-			if (!(mt = myentity_find(target)))
+			if (!(mt = myentity_find_ext(target)))
 			{
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 				return;

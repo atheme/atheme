@@ -119,7 +119,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		mt = myentity_find(uname);
+		mt = myentity_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything */
 		restrictflags = chanacs_source_flags(mc, si);
@@ -143,7 +143,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 
 	else if (!strcasecmp("DEL", cmd))
 	{
-		mt = myentity_find(uname);
+		mt = myentity_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
 		restrictflags = chanacs_source_flags(mc, si);

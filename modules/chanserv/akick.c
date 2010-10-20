@@ -105,7 +105,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		mt = myentity_find(uname);
+		mt = myentity_find_ext(uname);
 		if (!mt)
 		{
 			/* we might be adding a hostmask */
@@ -198,7 +198,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		mt = myentity_find(uname);
+		mt = myentity_find_ext(uname);
 		if (!mt)
 		{
 			/* we might be deleting a hostmask */

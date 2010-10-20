@@ -47,7 +47,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mt = myentity_find(newfndr)))
+	if (!(mt = myentity_find_ext(newfndr)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfndr);
 		return;

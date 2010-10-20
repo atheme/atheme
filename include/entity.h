@@ -30,6 +30,7 @@ void init_entities(void);
 void myentity_put(myentity_t *me);
 void myentity_del(myentity_t *me);
 myentity_t *myentity_find(const char *name);
+myentity_t *myentity_find_ext(const char *name);
 
 typedef struct {
 	mowgli_patricia_iteration_state_t st;

@@ -69,7 +69,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mt = myentity_find(newfounder)))
+	if (!(mt = myentity_find_ext(newfounder)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfounder);
 		return;
