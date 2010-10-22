@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-22 12:36-0300\n"
+"POT-Creation-Date: 2010-10-22 12:37-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team:  <shadowm2006@gmail.com>\n"
@@ -276,8 +276,8 @@ msgstr " Opciones : Ninguna"
 
 #: modules/botserv/info.c:85
 #, c-format
-msgid "  Used on : %d channel(s)"
-msgstr "Utilizado : %d canal(es)"
+msgid "  Used on : %zu channel(s)"
+msgstr "Utilizado : %zu canal(es)"
 
 #: modules/botserv/info.c:92
 #, c-format
@@ -2100,7 +2100,7 @@ msgid "The fantasy prefix for channel %s has been reset."
 msgstr "El prefijo de fantasía para %s ha sido reestablecido."
 
 #: modules/chanserv/set_prefix.c:92
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Prefix '%s' is invalid. The prefix may contain only printable characters, "
 "and must contain at least one non-space character."

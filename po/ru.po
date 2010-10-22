@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-22 12:36-0300\n"
+"POT-Creation-Date: 2010-10-22 12:37-0300\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -275,7 +275,7 @@ msgstr ""
 
 #: modules/botserv/info.c:85
 #, c-format
-msgid "  Used on : %d channel(s)"
+msgid "  Used on : %zu channel(s)"
 msgstr ""
 
 #: modules/botserv/info.c:92
