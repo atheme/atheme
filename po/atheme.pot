@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-18 14:51-0300\n"
+"POT-Creation-Date: 2010-10-22 12:36-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2052,8 +2052,8 @@ msgstr ""
 #: modules/chanserv/set_prefix.c:92
 #, c-format
 msgid ""
-"Prefix '%s' is invalid. The prefix maycontain only printable characters, and "
-"must contain at leastone non-space character."
+"Prefix '%s' is invalid. The prefix may contain only printable characters, "
+"and must contain at least one non-space character."
 msgstr ""
 
 #: modules/chanserv/set_prefix.c:100
