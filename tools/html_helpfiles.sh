@@ -24,6 +24,8 @@ for d in $helpdir/*; do
 		botserv) service=BotServ ;;
 		cservice) service=ChanServ ;;
 		gservice) service=Global ;;
+        groupserv) service=GroupServ ;;
+        helpserv) service=HelpServ ;;
 		hostserv) service=HostServ ;;
 		memoserv) service=MemoServ ;;
 		nickserv) service=NickServ ;;
