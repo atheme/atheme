@@ -409,7 +409,7 @@ bool module_request(const char *name)
 	mowgli_node_t *n;
 	char path[BUFSIZE];
 
-	if ((m = module_find_published(name)) != NULL)
+	if (module_find_published(name))
 		return true;
 
 	MOWGLI_ITER_FOREACH(n, modules_inprogress.head)
@@ -426,7 +426,7 @@ bool module_request(const char *name)
 	}
 
 	snprintf(path, BUFSIZE, "%s/modules/%s", MODDIR, name);
-	if ((m = module_load(path)) == NULL)
+	if (module_load(path) == NULL)
 		return false;
 
 	return true;

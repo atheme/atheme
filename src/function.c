@@ -127,7 +127,7 @@ char *time_ago(time_t event)
 	int years, weeks, days, hours, minutes, seconds;
 
 	event = CURRTIME - event;
-	years = weeks = days = hours = minutes = seconds = 0;
+	years = weeks = days = hours = minutes = 0;
 
 	while (event >= 60 * 60 * 24 * 365)
 	{

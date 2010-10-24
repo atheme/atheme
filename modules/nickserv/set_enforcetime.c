@@ -35,7 +35,6 @@ void _moddeinit(void)
 
 static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 {
-	metadata_t *md;
 	char *setting = parv[0];
 
 	if (!setting)
@@ -55,7 +54,7 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strcasecmp(setting, "DEFAULT") == 0)
 	{
-		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
+		if (metadata_find(si->smu, "private:doenforce"))
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCETIME:DEFAULT");
 			metadata_delete(si->smu, "private:enforcetime");
@@ -68,7 +67,7 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (enforcetime > 0 && enforcetime <= 180)
 	{
-		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
+		if (metadata_find(si->smu, "private:doenforce"))
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCETIME: %d", enforcetime);
 			metadata_add(si->smu, "private:enforcetime", setting);

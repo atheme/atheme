@@ -32,7 +32,6 @@ void _moddeinit()
 
 static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 {
-	metadata_t *md;
 	char *setting;
 	myuser_t *mu;
 
@@ -53,7 +52,7 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strcasecmp(setting, "ON") == 0)
 	{
-		if ((md = metadata_find(mu, "private:doenforce")) != NULL)
+		if (metadata_find(mu, "private:doenforce"))
 		{
 			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", entity(mu)->name);
 		}
@@ -67,7 +66,7 @@ static void ns_cmd_fenforce(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
 	{
-		if ((md = metadata_find(mu, "private:doenforce")) != NULL)
+		if (metadata_find(mu, "private:doenforce"))
 		{
 			wallops("%s disabled ENFORCE on the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 			logcommand(si, CMDLOG_ADMIN, "FENFORCE:OFF: \2%s\2", entity(mu)->name);

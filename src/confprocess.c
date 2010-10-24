@@ -391,7 +391,7 @@ void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_top_conf(name)))
+	if (find_top_conf(name))
 	{
 		slog(LG_DEBUG, "add_top_conf(): duplicate config block '%s'.", name);
 		return;
@@ -412,7 +412,7 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_top_conf(name)))
+	if (find_top_conf(name))
 	{
 		slog(LG_DEBUG, "add_top_conf(): duplicate config block '%s'.", name);
 		return;
@@ -433,7 +433,7 @@ void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (co
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_conf_item(name, conflist)))
+	if (find_conf_item(name, conflist))
 	{
 		slog(LG_DEBUG, "add_conf_item(): duplicate item %s", name);
 		return;
@@ -454,7 +454,7 @@ void add_uint_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_conf_item(name, conflist)))
+	if (find_conf_item(name, conflist))
 	{
 		slog(LG_DEBUG, "add_uint_conf_item(): duplicate item %s", name);
 		return;
@@ -478,7 +478,7 @@ void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned 
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_conf_item(name, conflist)))
+	if (find_conf_item(name, conflist))
 	{
 		slog(LG_DEBUG, "add_uint_conf_item(): duplicate item %s", name);
 		return;
@@ -501,7 +501,7 @@ void add_dupstr_conf_item(const char *name, mowgli_list_t *conflist, unsigned in
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_conf_item(name, conflist)))
+	if (find_conf_item(name, conflist))
 	{
 		slog(LG_DEBUG, "add_dupstr_conf_item(): duplicate item %s", name);
 		return;
@@ -523,7 +523,7 @@ void add_bool_conf_item(const char *name, mowgli_list_t *conflist, unsigned int 
 {
 	struct ConfTable *ct;
 
-	if ((ct = find_conf_item(name, conflist)))
+	if (find_conf_item(name, conflist))
 	{
 		slog(LG_DEBUG, "add_bool_conf_item(): duplicate item %s", name);
 		return;

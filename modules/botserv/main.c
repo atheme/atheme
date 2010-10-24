@@ -211,7 +211,6 @@ bs_join_registered(bool all)
 {
 	mychan_t *mc;
 	mowgli_patricia_iteration_state_t state;
-	chanuser_t *cu;
 	metadata_t *md;
 	int cs = 0;
 
@@ -226,14 +225,14 @@ bs_join_registered(bool all)
 		if (all)
 		{
 			join(mc->name, md->value);
-			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me)))
+			if (mc->chan && cs && chanuser_find(mc->chan, chansvs.me->me))
 				part(mc->name, chansvs.nick);
 			continue;
 		}
 		else if (mc->chan != NULL && mc->chan->members.count != 0)
 		{
 			join(mc->name, md->value);
-			if (mc->chan && cs && (cu = chanuser_find(mc->chan, chansvs.me->me)))
+			if (mc->chan && cs && chanuser_find(mc->chan, chansvs.me->me))
 				part(mc->name, chansvs.nick);
 			continue;
 		}

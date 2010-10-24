@@ -273,7 +273,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if ((k = kline_find(kuser, khost)))
+	if (kline_find(kuser, khost))
 	{
 		command_fail(si, fault_nochange, _("AKILL \2%s@%s\2 is already matched in the database."), kuser, khost);
 		return;

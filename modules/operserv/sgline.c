@@ -216,7 +216,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((x = xline_find(target)))
+	if (xline_find(target))
 	{
 		command_fail(si, fault_nochange, _("SGLINE \2%s\2 is already matched in the database."), target);
 		return;

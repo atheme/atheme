@@ -88,7 +88,6 @@ static void check_enforce_all(myuser_t *mu)
 
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 {
-	metadata_t *md;
 	char *setting = parv[0];
 
 	if (!setting)
@@ -106,7 +105,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strcasecmp(setting, "ON") == 0)
 	{
-		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
+		if (metadata_find(si->smu, "private:doenforce"))
 		{
 			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", entity(si->smu)->name);
 		}
@@ -120,7 +119,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
 	{
-		if ((md = metadata_find(si->smu, "private:doenforce")) != NULL)
+		if (metadata_find(si->smu, "private:doenforce"))
 		{
 			logcommand(si, CMDLOG_SET, "SET:ENFORCE:OFF");
 			metadata_delete(si->smu, "private:doenforce");

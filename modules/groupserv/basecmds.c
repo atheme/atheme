@@ -71,7 +71,7 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((mg = mygroup_find(parv[0])) != NULL)
+	if (mygroup_find(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists, _("The group \2%s\2 already exists."), parv[0]);
 		return;

@@ -242,7 +242,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if ((q = qline_find(target)))
+	if (qline_find(target))
 	{
 		command_fail(si, fault_nochange, _("SQLINE \2%s\2 is already matched in the database."), target);
 		return;

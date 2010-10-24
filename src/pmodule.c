@@ -56,7 +56,7 @@ void pcommand_add(const char *token, void (*handler) (sourceinfo_t *si, int parc
 {
 	pcommand_t *pcmd;
 
-	if ((pcmd = pcommand_find(token)))
+	if (pcommand_find(token))
 	{
 		slog(LG_INFO, "pcommand_add(): token %s is already registered", token);
 		return;

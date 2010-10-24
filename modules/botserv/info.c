@@ -108,12 +108,12 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("         Bot nick : not assigned yet"));
 		end = buf;
 		*end = '\0';
-		if ((md = metadata_find(mc, "private:botserv:bot-handle-fantasy")) != NULL)
+		if (metadata_find(mc, "private:botserv:bot-handle-fantasy"))
 		{
 			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", (comma) ? ", " : "", "Fantasy");
 			comma = 1;
 		}
-		if ((md = metadata_find(mc, "private:botserv:no-bot")) != NULL)
+		if (metadata_find(mc, "private:botserv:no-bot"))
 		{
 			end += snprintf(end, sizeof(buf) - (end - buf), "%s%s", (comma) ? ", " : "", "No bot");
 			comma = 1;

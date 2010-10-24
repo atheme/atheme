@@ -146,7 +146,7 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 
 	obj = object(target);
 
-	if ((md = metadata_find(target, name)))
+	if (metadata_find(target, name))
 		metadata_delete(target, name);
 
 	md = mowgli_heap_alloc(metadata_heap);

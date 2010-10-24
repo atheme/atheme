@@ -209,7 +209,7 @@ void join(char *chan, char *nick)
 			check_modes(mc, false);
 		isnew = true;
 	}
-	else if ((cu = chanuser_find(c, u)))
+	else if (chanuser_find(c, u))
 	{
 		slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
 		return;

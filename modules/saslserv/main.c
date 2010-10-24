@@ -396,12 +396,11 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 int login_user(sasl_session_t *p)
 {
 	myuser_t *mu = myuser_find(p->username);
-	metadata_t *md;
 
 	if(mu == NULL) /* WTF? */
 		return 0;
 
- 	if ((md = metadata_find(mu, "private:freeze:freezer")))
+ 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
 		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);
 		return 0;
