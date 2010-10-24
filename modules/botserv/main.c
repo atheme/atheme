@@ -1021,14 +1021,12 @@ static void on_shutdown(void *unused)
 static void bs_join(hook_channel_joinpart_t *hdata)
 {
 	chanuser_t *cu = hdata->cu;
-	user_t *u;
 	channel_t *chan;
 	mychan_t *mc;
 	botserv_bot_t *bot;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
-	u = cu->user;
 	chan = cu->chan;
 
 	/* first check if this is a registered channel at all */

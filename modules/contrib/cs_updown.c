@@ -143,7 +143,6 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];
-	int fl;
 
 	if (!name)
 	{
@@ -181,7 +180,7 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	fl = chanacs_user_flags(mc, cu->user);
+	chanacs_user_flags(mc, cu->user);
 
 	// Don't check NOOP, because they are explicitly requesting status
 	if (ircd->uses_owner)

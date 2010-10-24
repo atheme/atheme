@@ -75,7 +75,6 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	/* pub_key */
 	*((unsigned int *)ptr) = htons(BN_num_bytes(dh->pub_key));
 	BN_bn2bin(dh->pub_key, (unsigned char *)ptr + 2);
-	ptr += 2 + BN_num_bytes(dh->pub_key);
 
 	p->mechdata = dh;
 	return ASASL_MORE;

@@ -20,11 +20,12 @@ static void write_groupdb(database_handle_t *db)
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
 		mowgli_node_t *n;
-		mygroup_t *mg = group(mt);
-		char *mgflags = gflags_tostr(mg_flags, mg->flags);
 
 		continue_if_fail(mt != NULL);
+		mygroup_t *mg = group(mt);
 		continue_if_fail(mg != NULL);
+
+		char *mgflags = gflags_tostr(mg_flags, mg->flags);
 
 		db_start_row(db, "GRP");
 		db_write_word(db, entity(mg)->name);
