@@ -33,6 +33,7 @@ modules/Makefile.defs
 po/Makefile.in
 po/POTFILES
 po/*.gmo
+po/*.mo
 po/stamp-po
 scripts/*.tbz2
 scripts/*.tgz
