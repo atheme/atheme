@@ -355,7 +355,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	cexcept_t *c = NULL;
 	long duration;
 
-	if (!ip || !clonesstr)
+	if (!ip || !clonesstr || !expiry)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
@@ -371,11 +371,25 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	if (expiry && !strcasecmp(expiry, "!P"))
 	{
+		if (!reason)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
+			return;
+		}
+
 		duration = 0;
 		strlcpy(rreason, reason, BUFSIZE);
 	}
 	else if (expiry && !strcasecmp(expiry, "!T"))
 	{
+		if (!reason)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
+			return;
+		}
+
 		reason = strchr(reason, ' ');
 		if (reason)
 			*reason++ = '\0';
@@ -407,7 +421,14 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-			command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"));
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
+			return;
+		}
+
+		if (!reason)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
 			return;
 		}
 
