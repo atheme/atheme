@@ -248,6 +248,8 @@ char *bitmask_to_flags(unsigned int flags)
 		if (chanacs_flags[i].value & flags)
 			*bptr++ = (char) i;
 
+	*bptr++ = '\0';
+
 	return flags_buf;
 }
 
@@ -272,6 +274,8 @@ char *bitmask_to_flags2(unsigned int addflags, unsigned int removeflags)
 			if (chanacs_flags[i].value & addflags)
 				*bptr++ = (char) i;
 	}
+
+	*bptr++ = '\0';
 
 	return flags_buf;
 }
