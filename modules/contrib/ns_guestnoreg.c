@@ -30,7 +30,7 @@ static void guestnoreg_hook(hook_user_register_check_t *hdata)
 
         if (!irccasecmp(guestnick, hdata->account))
         {
-                command_fail(hdata->si, fault_badparams, _("Registering guest nicks is disallowed."));
+                command_fail(hdata->si, fault_badparams, _("Registering of guest nicknames is disallowed."));
                 hdata->approved++;
         }
 
