@@ -24,10 +24,6 @@
 #include "atheme.h"
 #include "template.h"
 
-typedef struct {
-	unsigned int flags;
-} default_template_t;
-
 mowgli_patricia_t *global_template_dict = NULL;
 
 void set_global_template_flags(const char *name, unsigned int flags)
