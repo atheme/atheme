@@ -31,6 +31,7 @@ SRCS =			\
 	ns_forbid.c		\
 	ns_generatehash.c	\
 	ns_generatepass.c	\
+	ns_guestnoreg.c	\
 	ns_listlogins.c	\
 	ns_mxcheck.c		\
 	ns_mxcheck_async.c	\
