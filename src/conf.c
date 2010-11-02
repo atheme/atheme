@@ -47,6 +47,7 @@ static int c_ci_vop(config_entry_t *);
 static int c_ci_hop(config_entry_t *);
 static int c_ci_aop(config_entry_t *);
 static int c_ci_sop(config_entry_t *);
+static int c_ci_templates(config_entry_t *);
 
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
@@ -247,6 +248,7 @@ void init_newconf(void)
 	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
 	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
+	add_conf_item("TEMPLATES", &conf_ci_table, c_ci_templates);
 	add_bool_conf_item("CHANGETS", &conf_ci_table, 0, &chansvs.changets, false);
 	add_dupstr_conf_item("TRIGGER", &conf_ci_table, 0, &chansvs.trigger, "!");
 	add_duration_conf_item("EXPIRE", &conf_ci_table, 0, &chansvs.expiry, "d", 0);
@@ -707,6 +709,24 @@ static int c_ci_sop(config_entry_t *ce)
 	}
 
 	set_global_template_flags("SOP", flags_to_bitmask(ce->ce_vardata, 0));
+
+	return 0;
+}
+
+static int c_ci_templates(config_entry_t *ce)
+{
+	config_entry_t *flce;
+
+	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	{
+		if (flce->ce_vardata == NULL)
+		{
+			conf_report_warning(ce, "no parameter for configuration option");
+			return 0;
+		}
+
+		set_global_template_flags(flce->ce_varname, flags_to_bitmask(flce->ce_vardata, 0));
+	}
 
 	return 0;
 }

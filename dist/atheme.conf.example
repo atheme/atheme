@@ -930,8 +930,10 @@ chanserv {
 	 */
 	fantasy;
 
-	/* (*) ca_xop
-	 * Defines what flags the xop access levels comprise.
+	/* (*) templates
+	 * Defines what flags the global templates comprise.
+	 *
+	 * For the special XOP templates:
 	 * These should all be different and not equal to the empty set,
 	 * except that hop may be equal to vop to disable hop.
 	 * Each subsequent level should have more flags (except +VHO).
@@ -944,11 +946,23 @@ chanserv {
 	 * entries unchanged, thus removing them of the view of /cs xop list.
 	 * Usually the channel founder can use /cs forcexop to update the
 	 * entries to the new levels.
+	 *
+	 * Advice:
+	 * If you want to add a co-founder role, remove flags permission from
+	 * SOP, and create specify a co-founder role with flags permissions.
 	 */
-	vop = "+VA";
-	hop = "+vVhHtA";
-	aop = "+vhoOtriA";
-	sop = "+vhoOtrsifAa";
+	templates {
+		vop = "+VA";
+		hop = "+vVhHtA";
+		aop = "+vhoOtriA";
+		sop = "+vhoOtrsifAa";
+
+		founder = "+vhoOtrisifAaF";
+
+		/* some examples (which are commented out...) */
+		#member = "+iA";
+		#op = "+voOtriA";
+	};
 
 	/* (*) deftemplates
 	 * Defines default templates to set on new channels, as a
