@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_clear(sourceinfo_t *si, char *subcmd);
+static void cs_help_clear(sourceinfo_t *si, const char *subcmd);
 
 command_t cs_clear = { "CLEAR", N_("Channel removal toolkit."),
                         AC_NONE, 3, cs_cmd_clear, { .func = cs_help_clear } };
@@ -37,7 +37,7 @@ void _moddeinit()
 	mowgli_patricia_destroy(cs_clear_cmds, NULL, NULL);
 }
 
-static void cs_help_clear(sourceinfo_t *si, char *subcmd)
+static void cs_help_clear(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{

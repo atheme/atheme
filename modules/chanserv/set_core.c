@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_help_set(sourceinfo_t *si, char *subcmd);
+static void cs_help_set(sourceinfo_t *si, const char *subcmd);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cmd_set, { .func = cs_help_set } };
@@ -36,7 +36,7 @@ void _moddeinit()
 	mowgli_patricia_destroy(cs_set_cmdtree, NULL, NULL);
 }
 
-static void cs_help_set(sourceinfo_t *si, char *subcmd)
+static void cs_help_set(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{

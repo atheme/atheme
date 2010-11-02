@@ -16,13 +16,13 @@ DECLARE_MODULE_V1
 );
 
 static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_access(sourceinfo_t *si, char *subcmd);
+static void cs_help_access(sourceinfo_t *si, const char *subcmd);
 
 command_t cs_access = { "ACCESS", N_("Manage channel access."),
                         AC_NONE, 3, cs_cmd_access, { .func = cs_help_access } };
 
 static void cs_cmd_role(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_help_role(sourceinfo_t *si, char *subcmd);
+static void cs_help_role(sourceinfo_t *si, const char *subcmd);
 
 command_t cs_role =  { "ROLE", N_("Manage channel roles."),
                         AC_NONE, 3, cs_cmd_role, { .func = cs_help_role } };
@@ -102,7 +102,7 @@ void _moddeinit()
 	mowgli_patricia_destroy(cs_role_cmds, NULL, NULL);
 }
 
-static void cs_help_access(sourceinfo_t *si, char *subcmd)
+static void cs_help_access(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{
@@ -118,7 +118,7 @@ static void cs_help_access(sourceinfo_t *si, char *subcmd)
 		help_display(si, si->service, subcmd, cs_access_cmds);
 }
 
-static void cs_help_role(sourceinfo_t *si, char *subcmd)
+static void cs_help_role(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{

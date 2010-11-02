@@ -5,7 +5,7 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-static void gs_help_set(sourceinfo_t *si, char *subcmd);
+static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
@@ -52,7 +52,7 @@ void set_deinit(void)
 	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
 }
 
-static void gs_help_set(sourceinfo_t *si, char *subcmd)
+static void gs_help_set(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{

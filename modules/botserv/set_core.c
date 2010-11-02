@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://dev.rizon.net>"
 );
 
-static void bs_help_set(sourceinfo_t *si, char *subcmd);
+static void bs_help_set(sourceinfo_t *si, const char *subcmd);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_set, { .func =  bs_help_set } };
@@ -40,7 +40,7 @@ void _moddeinit()
 
 /* ******************************************************************** */
 
-static void bs_help_set(sourceinfo_t *si, char *subcmd)
+static void bs_help_set(sourceinfo_t *si, const char *subcmd)
 {
 	if (!subcmd)
 	{

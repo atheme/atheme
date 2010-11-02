@@ -19,7 +19,7 @@ struct commandentry_ {
 	void (*cmd)(sourceinfo_t *, const int parc, char *parv[]);
 	struct {
 		const char *path;
-		void (*func)(sourceinfo_t *, char *subcmd);
+		void (*func)(sourceinfo_t *, const char *subcmd);
 	} help;
 };
 
