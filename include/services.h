@@ -26,11 +26,6 @@ struct chansvs_
 
   bool fantasy;		/* enable fantasy commands    */
 
-  unsigned int ca_vop;		/* xop access levels */
-  unsigned int ca_hop;
-  unsigned int ca_aop;
-  unsigned int ca_sop;
-
   char *trigger;		/* trigger, e.g. !, ` or .    */
 
   bool changets;		/* use TS to better deop people */

@@ -27,6 +27,7 @@
 #include "pmodule.h"
 #include "privs.h"
 #include "datastream.h"
+#include "template.h"
 #include <limits.h>
 
 static int c_uplink(config_entry_t *);
@@ -165,10 +166,11 @@ void conf_init(void)
 
 	me.auth = AUTH_NONE;
 
-	chansvs.ca_vop = CA_VOP_DEF & ca_all;
-	chansvs.ca_hop = CA_HOP_DEF & ca_all;
-	chansvs.ca_aop = CA_AOP_DEF & ca_all;
-	chansvs.ca_sop = CA_SOP_DEF & ca_all;
+	clear_global_template_flags();
+	set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
+	set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
+	set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
+	set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -665,7 +667,7 @@ static int c_ci_vop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_vop = flags_to_bitmask(ce->ce_vardata, 0);
+	set_global_template_flags("VOP", flags_to_bitmask(ce->ce_vardata, 0));
 
 	return 0;
 }
@@ -678,7 +680,7 @@ static int c_ci_hop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_hop = flags_to_bitmask(ce->ce_vardata, 0);
+	set_global_template_flags("HOP", flags_to_bitmask(ce->ce_vardata, 0));
 
 	return 0;
 }
@@ -691,7 +693,7 @@ static int c_ci_aop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_aop = flags_to_bitmask(ce->ce_vardata, 0);
+	set_global_template_flags("AOP", flags_to_bitmask(ce->ce_vardata, 0));
 
 	return 0;
 }
@@ -704,7 +706,7 @@ static int c_ci_sop(config_entry_t *ce)
 		return 0;
 	}
 
-	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, 0);
+	set_global_template_flags("SOP", flags_to_bitmask(ce->ce_vardata, 0));
 
 	return 0;
 }
@@ -903,6 +905,8 @@ bool conf_rehash(void)
 
 bool conf_check(void)
 {
+	unsigned int vopflags, hopflags, aopflags, sopflags;
+
 	if (!me.name)
 	{
 		slog(LG_ERROR, "conf_check(): no `name' set in %s", config_file);
@@ -954,24 +958,35 @@ bool conf_check(void)
 	}
 
 	/* we know ca_all now */
-	chansvs.ca_vop &= ca_all;
-	chansvs.ca_hop &= ca_all;
-	chansvs.ca_aop &= ca_all;
-	chansvs.ca_sop &= ca_all;
-	/* chansvs.ca_hop may be equal to chansvs.ca_vop to disable HOP */
-	if (!chansvs.ca_vop || !chansvs.ca_hop || !chansvs.ca_aop ||
-			!chansvs.ca_sop ||
-			chansvs.ca_vop == chansvs.ca_aop ||
-			chansvs.ca_vop == chansvs.ca_sop ||
-			chansvs.ca_hop == chansvs.ca_aop ||
-			chansvs.ca_hop == chansvs.ca_sop ||
-			chansvs.ca_aop == chansvs.ca_sop)
+	vopflags = get_global_template_flags("VOP");
+	hopflags = get_global_template_flags("HOP");
+	aopflags = get_global_template_flags("AOP");
+	sopflags = get_global_template_flags("SOP");
+
+	vopflags &= ca_all;
+	hopflags &= ca_all;
+	aopflags &= ca_all;
+	sopflags &= ca_all;
+
+	set_global_template_flags("VOP", vopflags);
+	set_global_template_flags("HOP", hopflags);
+	set_global_template_flags("AOP", aopflags);
+	set_global_template_flags("SOP", sopflags);
+
+	/* hopflags may be equal to vopflags to disable HOP */
+	if (!vopflags || !hopflags || !aopflags || !sopflags ||
+			vopflags == aopflags ||
+			vopflags == sopflags ||
+			hopflags == aopflags ||
+			hopflags == sopflags ||
+			aopflags == sopflags)
 	{
 		slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
-		chansvs.ca_vop = CA_VOP_DEF & ca_all;
-		chansvs.ca_hop = CA_HOP_DEF & ca_all;
-		chansvs.ca_aop = CA_AOP_DEF & ca_all;
-		chansvs.ca_sop = CA_SOP_DEF & ca_all;
+
+		set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
+		set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
+		set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
+		set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
 	}
 
 	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)

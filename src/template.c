@@ -2,7 +2,7 @@
  * atheme-services: A collection of minimalist IRC services
  * template.c: Functions to work with predefined flags collections
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)
+ * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,6 +23,62 @@
 
 #include "atheme.h"
 #include "template.h"
+
+typedef struct {
+	unsigned int flags;
+} default_template_t;
+
+mowgli_patricia_t *global_template_dict = NULL;
+
+void set_global_template_flags(const char *name, unsigned int flags)
+{
+	default_template_t *def_t;
+
+	if (global_template_dict == NULL)
+		global_template_dict = mowgli_patricia_create(strcasecanon);
+
+	def_t = mowgli_patricia_retrieve(global_template_dict, name);
+	if (def_t != NULL)
+	{
+		def_t->flags = flags;
+		return;
+	}
+
+	def_t = smalloc(sizeof(default_template_t));
+	def_t->flags = flags;
+	mowgli_patricia_add(global_template_dict, name, def_t);
+
+	slog(LG_DEBUG, "set_global_template_flags(): add %s", name);
+}
+
+unsigned int get_global_template_flags(const char *name)
+{
+	default_template_t *def_t;
+
+	if (global_template_dict == NULL)
+		global_template_dict = mowgli_patricia_create(strcasecanon);
+
+	def_t = mowgli_patricia_retrieve(global_template_dict, name);
+	if (def_t == NULL)
+		return 0;
+
+	return def_t->flags;
+}
+
+static void release_global_template_data(const char *key, void *data, void *privdata)
+{
+	slog(LG_DEBUG, "release_global_template_data(): delete %s", key);
+
+	free(data);
+}
+
+void clear_global_template_flags(void)
+{
+	if (global_template_dict == NULL)
+		return;
+
+	mowgli_patricia_destroy(global_template_dict, release_global_template_data, NULL);	
+}
 
 /* name1=value1 name2=value2 name3=value3... */
 const char *getitem(const char *str, const char *name)
@@ -68,17 +124,8 @@ unsigned int get_template_flags(mychan_t *mc, const char *name)
 				return flags_to_bitmask(d, 0);
 		}
 	}
-	if (*name != '\0' && !strcasecmp(name + 1, "op"))
-	{
-		switch (*name)
-		{
-			case 's': case 'S': return chansvs.ca_sop;
-			case 'a': case 'A': return chansvs.ca_aop;
-			case 'h': case 'H': return chansvs.ca_hop;
-			case 'v': case 'V': return chansvs.ca_vop;
-		}
-	}
-	return 0;
+
+	return get_global_template_flags(name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

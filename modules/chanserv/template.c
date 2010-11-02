@@ -35,13 +35,18 @@ void _moddeinit()
 
 static void list_generic_flags(sourceinfo_t *si)
 {
+	unsigned int hopflags, vopflags;
+
+	vopflags = get_global_template_flags("VOP");
+	hopflags = get_global_template_flags("HOP");
+
 	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
-	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(chansvs.ca_sop));
-	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(chansvs.ca_aop));
-	if (chansvs.ca_hop != chansvs.ca_vop)
-		command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop));
-	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(chansvs.ca_vop));
+	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(get_global_template_flags("SOP")));
+	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(get_global_template_flags("AOP")));
+	if (hopflags != vopflags)
+		command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(hopflags));
+	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(vopflags));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 	command_success_nodata(si, _("End of network wide template list."));
 }
