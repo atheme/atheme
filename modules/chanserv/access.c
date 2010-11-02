@@ -541,7 +541,9 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	}
 
 	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
-	command_success_nodata(si, _("%d access entries updated accordingly."), changes);
+
+	if (changes > 0)
+		command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 }
 
 static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], unsigned int restrictflags)
