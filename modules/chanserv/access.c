@@ -235,12 +235,37 @@ typedef struct {
 	mowgli_node_t node;
 } template_t;
 
+typedef struct {
+	mychan_t *mc;
+	mowgli_list_t *l;
+} template_iter_t;
+
 static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaque)
 {
 	template_t *ta = a->data;
 	template_t *tb = b->data;
 
 	return count_bits(tb->level) - count_bits(ta->level);
+}
+
+static int append_global_template(const char *key, void *data, void *privdata)
+{
+	template_t *t;
+	template_iter_t *ti = privdata;
+	default_template_t *def_t = data;
+	unsigned int vopflags;
+
+	vopflags = get_global_template_flags("VOP");
+
+	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
+		return 0;
+
+	t = smalloc(sizeof(template_t));
+	strlcpy(t->name, key, sizeof(t->name));
+	t->level = get_template_flags(ti->mc, key);
+	mowgli_node_add(t, &t->node, ti->l);
+
+        return 0;
 }
 
 static mowgli_list_t *build_template_list(mychan_t *mc)
@@ -252,6 +277,7 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	metadata_t *md;
 	mowgli_list_t *l;
 	template_t *t;
+	template_iter_t ti;
 	unsigned int hopflags, vopflags;
 
 	l = mowgli_list_create();
@@ -292,31 +318,9 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 		}
 	}
 
-	t = smalloc(sizeof(template_t));
-	strlcpy(t->name, "SOP", sizeof(t->name));
-	t->level = get_template_flags(mc, "SOP");
-	mowgli_node_add(t, &t->node, l);
-
-	t = smalloc(sizeof(template_t));
-	strlcpy(t->name, "AOP", sizeof(t->name));
-	t->level = get_template_flags(mc, "AOP");
-	mowgli_node_add(t, &t->node, l);
-
-	hopflags = get_template_flags(mc, "HOP");
-	vopflags = get_template_flags(mc, "VOP");
-
-	if (hopflags != vopflags)
-	{
-		t = smalloc(sizeof(template_t));
-		strlcpy(t->name, "HOP", sizeof(t->name));
-		t->level = hopflags;
-		mowgli_node_add(t, &t->node, l);
-	}
-
-	t = smalloc(sizeof(template_t));
-	strlcpy(t->name, "VOP", sizeof(t->name));
-	t->level = vopflags;
-	mowgli_node_add(t, &t->node, l);
+	ti.l = l;
+	ti.mc = mc;
+	mowgli_patricia_foreach(global_template_dict, append_global_template, &ti);
 
 	mowgli_list_sort(l, compare_template_nodes, NULL);
 
