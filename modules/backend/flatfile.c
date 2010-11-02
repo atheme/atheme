@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "template.h"
 
 DECLARE_MODULE_V1
 (
@@ -591,13 +592,13 @@ static void flatfile_db_load(void)
 					switch (fl)
 					{
 					  case SHRIKE_CA_VOP:
-						  fl2 = chansvs.ca_vop;
+						  fl2 = get_template_flags(mc, "VOP");
 						  break;
 					  case SHRIKE_CA_AOP:
-						  fl2 = chansvs.ca_aop;
+						  fl2 = get_template_flags(mc, "AOP");
 						  break;
 					  case SHRIKE_CA_SOP:
-						  fl2 = chansvs.ca_sop;
+						  fl2 = get_template_flags(mc, "SOP");
 						  break;
 					  case SHRIKE_CA_SUCCESSOR:
 						  fl2 = CA_SUCCESSOR_0;
