@@ -519,7 +519,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 		chanacs_close(ca);
 	}
 
-	logcommand(si, CMDLOG_SET, "ACCESS:SET: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
+	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
 	command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 }
 
