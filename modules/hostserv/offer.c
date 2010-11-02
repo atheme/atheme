@@ -299,14 +299,12 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 {
 	hsoffered_t *l;
 	mowgli_node_t *n;
-	int x = 0;
 	char buf[BUFSIZE];
 	struct tm tm;
 
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
-		x++;
 
 		if (l->group != NULL && !myuser_is_in_group(si->smu, l->group) && !has_priv(si, PRIV_GROUP_ADMIN))
 			continue;
@@ -316,11 +314,11 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 		strftime(buf, BUFSIZE, "%b %d %T %Y %Z", &tm);
 
 		if(l->group != NULL)
-			command_success_nodata(si, "#%d vhost:\2%s\2, group:\2%s\2 creator:\2%s\2 (%s)",
-						x, l->vhost, entity(l->group)->name, l->creator, buf);
+			command_success_nodata(si, "vhost:\2%s\2, group:\2%s\2 creator:\2%s\2 (%s)",
+						l->vhost, entity(l->group)->name, l->creator, buf);
 		else
-			command_success_nodata(si, "#%d vhost:\2%s\2, creator:\2%s\2 (%s)",
-						x, l->vhost, l->creator, buf);
+			command_success_nodata(si, "vhost:\2%s\2, creator:\2%s\2 (%s)",
+						l->vhost, l->creator, buf);
 	}
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
