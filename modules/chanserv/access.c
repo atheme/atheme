@@ -524,7 +524,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 				continue;
 
 			/* don't change entries involving foundership status. */
-			if (flags & CA_FOUNDER)
+			if (oldflags & CA_FOUNDER)
 				continue;
 
 			changes++;
