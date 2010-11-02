@@ -33,6 +33,22 @@ void _moddeinit()
 	service_named_unbind_command("chanserv", &cs_flags);
 }
 
+static int display_template(const char *key, void *data, void *privdata)
+{
+	sourceinfo_t *si = privdata;
+	default_template_t *def_t = data;
+	unsigned int vopflags;
+
+	vopflags = get_global_template_flags("VOP");
+
+	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
+		return 0;
+
+	command_success_nodata(si, "%-20s %s", key, bitmask_to_flags(def_t->flags));
+
+	return 0;
+}
+
 static void list_generic_flags(sourceinfo_t *si)
 {
 	unsigned int hopflags, vopflags;
@@ -42,11 +58,9 @@ static void list_generic_flags(sourceinfo_t *si)
 
 	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
-	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(get_global_template_flags("SOP")));
-	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(get_global_template_flags("AOP")));
-	if (hopflags != vopflags)
-		command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(hopflags));
-	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(vopflags));
+
+	mowgli_patricia_foreach(global_template_dict, display_template, si);
+
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 	command_success_nodata(si, _("End of network wide template list."));
 }
