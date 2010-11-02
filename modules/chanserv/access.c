@@ -508,15 +508,22 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	else
 		metadata_add(mc, "private:templates", newstr);
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	if (flags)
 	{
-		ca = n->data;
-		if (ca->level != oldflags)
-			continue;
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
+		{
+			ca = n->data;
+			if (ca->level != oldflags)
+				continue;
 
-		changes++;
-		chanacs_modify_simple(ca, flags, ~flags);
-		chanacs_close(ca);
+			/* don't change entries involving foundership status. */
+			if (flags & CA_FOUNDER)
+				continue;
+
+			changes++;
+			chanacs_modify_simple(ca, flags, ~flags);
+			chanacs_close(ca);
+		}
 	}
 
 	logcommand(si, CMDLOG_SET, "ROLE:MOD: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, role, flagstr, changes);
