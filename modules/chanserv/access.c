@@ -252,6 +252,7 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	metadata_t *md;
 	mowgli_list_t *l;
 	template_t *t;
+	unsigned int hopflags, vopflags;
 
 	l = mowgli_list_create();
 
@@ -301,14 +302,20 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	t->level = get_template_flags(mc, "AOP");
 	mowgli_node_add(t, &t->node, l);
 
-	t = smalloc(sizeof(template_t));
-	strlcpy(t->name, "HOP", sizeof(t->name));
-	t->level = get_template_flags(mc, "HOP");
-	mowgli_node_add(t, &t->node, l);
+	hopflags = get_template_flags(mc, "HOP");
+	vopflags = get_template_flags(mc, "VOP");
+
+	if (hopflags != vopflags)
+	{
+		t = smalloc(sizeof(template_t));
+		strlcpy(t->name, "HOP", sizeof(t->name));
+		t->level = hopflags;
+		mowgli_node_add(t, &t->node, l);
+	}
 
 	t = smalloc(sizeof(template_t));
 	strlcpy(t->name, "VOP", sizeof(t->name));
-	t->level = get_template_flags(mc, "VOP");
+	t->level = vopflags;
 	mowgli_node_add(t, &t->node, l);
 
 	mowgli_list_sort(l, compare_template_nodes, NULL);
