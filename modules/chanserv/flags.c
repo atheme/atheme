@@ -31,6 +31,22 @@ void _moddeinit()
 	service_named_unbind_command("chanserv", &cs_flags);
 }
 
+typedef struct {
+	const char *res;
+	unsigned int level;
+} template_iter_t;
+
+static int global_template_search(const char *key, void *data, void *privdata)
+{
+	template_iter_t *iter = privdata;
+	default_template_t *def_t = data;
+
+	if (def_t->flags == iter->level)
+		iter->res = key;
+
+	return 0;
+}
+
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
 	metadata_t *md;
@@ -38,6 +54,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	char *s;
 	char ss[40];
 	static char flagname[400];
+	template_iter_t iter;
 
 	md = metadata_find(mc, "private:templates");
 	if (md != NULL)
@@ -69,16 +86,12 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			p = r;
 		}
 	}
-	if (level == get_template_flags(mc, "SOP"))
-		return "SOP";
-	if (level == get_template_flags(mc, "AOP"))
-		return "AOP";
-	/* if vop==hop, prefer vop */
-	if (level == get_template_flags(mc, "VOP"))
-		return "VOP";
-	if (level == get_template_flags(mc, "HOP"))
-		return "HOP";
-	return NULL;
+
+	iter.res = NULL;
+	iter.level = level;
+	mowgli_patricia_foreach(global_template_dict, global_template_search, &iter);
+
+	return iter.res;
 }
 
 /* FLAGS <channel> [user] [flags] */
