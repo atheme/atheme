@@ -250,6 +250,7 @@ void init_newconf(void)
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 	add_conf_item("TEMPLATES", &conf_ci_table, c_ci_templates);
 	add_bool_conf_item("CHANGETS", &conf_ci_table, 0, &chansvs.changets, false);
+	add_bool_conf_item("HIDE_XOP", &conf_ci_table, 0, &chansvs.hide_xop, false);
 	add_dupstr_conf_item("TRIGGER", &conf_ci_table, 0, &chansvs.trigger, "!");
 	add_duration_conf_item("EXPIRE", &conf_ci_table, 0, &chansvs.expiry, "d", 0);
 	add_uint_conf_item("MAXCHANACS", &conf_ci_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);

@@ -930,6 +930,12 @@ chanserv {
 	 */
 	fantasy;
 
+	/* (*) hide_xop
+	 * Hide the XOP templates from sight.  This is useful if you
+	 * want to use templates and not have the XOP templates displayed.
+	 */
+	#hide_xop;
+
 	/* (*) templates
 	 * Defines what flags the global templates comprise.
 	 *

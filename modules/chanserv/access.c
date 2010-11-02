@@ -255,6 +255,9 @@ static int append_global_template(const char *key, void *data, void *privdata)
 	default_template_t *def_t = data;
 	unsigned int vopflags;
 
+	if (chansvs.hide_xop && *(key + 1) == 'O' && *(key + 2) == 'P')
+		return 0;
+
 	vopflags = get_global_template_flags("VOP");
 
 	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))

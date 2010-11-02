@@ -38,6 +38,8 @@ struct chansvs_
   unsigned int maxfounders;	/* max founders per channel    */
 
   char *deftemplates;		/* default templates          */
+
+  bool hide_xop;		/* hide XOP templates	      */
 };
 
 /* authentication services */
