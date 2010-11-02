@@ -594,6 +594,42 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 
+static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_fdrop = { "FDROP", N_("Force drops a group registration."), PRIV_GROUP_ADMIN, 1, gs_cmd_fdrop, { .path = "groupserv/fdrop" } };
+
+static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	char *name = parv[0];
+
+	if (!name)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
+		command_fail(si, fault_needmoreparams, _("Syntax: DROP <!group>"));
+		return;
+	}
+
+	if (*name != '!')
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DROP");
+		command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
+		return;
+	}
+
+	if (!(mg = mygroup_find(name)))
+	{
+		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
+		return;
+	}
+
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
+        wallops("%s dropped the group \2%s\2", get_oper_name(si), name);
+	object_unref(mg);
+	command_success_nodata(si, _("The group \2%s\2 has been dropped."), name);
+	return;
+}
+
 void basecmds_init(void)
 {
 	service_bind_command(groupsvs, &gs_help);
@@ -605,6 +641,7 @@ void basecmds_init(void)
 	service_bind_command(groupsvs, &gs_regnolimit);
 	service_bind_command(groupsvs, &gs_acsnolimit);
 	service_bind_command(groupsvs, &gs_join);
+	service_bind_command(groupsvs, &gs_fdrop);
 }
 
 void basecmds_deinit(void)
@@ -618,5 +655,6 @@ void basecmds_deinit(void)
 	service_unbind_command(groupsvs, &gs_regnolimit);
 	service_unbind_command(groupsvs, &gs_acsnolimit);
 	service_unbind_command(groupsvs, &gs_join);
+	service_unbind_command(groupsvs, &gs_fdrop);
 }
 
