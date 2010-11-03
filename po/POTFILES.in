@@ -68,6 +68,7 @@ modules/contrib/cs_userinfo.c
 modules/contrib/ns_fenforce.c
 modules/contrib/ns_forbid.c
 modules/contrib/ns_generatehash.c
+modules/contrib/ns_guestnoreg.c
 modules/contrib/ns_listlogins.c
 modules/contrib/ns_waitreg.c
 modules/contrib/os_defcon.c
