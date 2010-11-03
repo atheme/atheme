@@ -1,0 +1,12 @@
+Ayuda para FDROP:
+
+FDROP le permite anular el registro de un grupo.
+
+Una vez que anule el registro de un grupo, todos los datos
+asociados a éste (listas de acceso, metadatos, etc.) son
+eliminados y no podrán ser recuperados.
+
+Sintaxis: FDROP <!grupo>
+
+Ejemplo:
+    /msg &nick& FDROP !baz
