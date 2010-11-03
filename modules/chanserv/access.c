@@ -281,7 +281,6 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	mowgli_list_t *l;
 	template_t *t;
 	template_iter_t ti;
-	unsigned int hopflags, vopflags;
 
 	l = mowgli_list_create();
 
