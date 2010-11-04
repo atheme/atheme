@@ -74,6 +74,7 @@ void clear_global_template_flags(void)
 		return;
 
 	mowgli_patricia_destroy(global_template_dict, release_global_template_data, NULL);	
+	global_template_dict = NULL;
 }
 
 /* name1=value1 name2=value2 name3=value3... */
