@@ -133,8 +133,8 @@ void uplink_connect(void)
 	{
 		if (uplinks.head == NULL)
 		{
-			slog(LG_ERROR, "uplink_connect(): no uplinks configured, exiting. Make sure to have at least one uplink{} block in your configuration file.");
-			exit(EXIT_FAILURE);
+			slog(LG_ERROR, "uplink_connect(): no uplinks configured, not connecting to IRC.  For IRC usage, make sure to have at least one uplink{} block in your configuration file.");
+			return;
 		}
 		curr_uplink = uplinks.head->data;
 		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%d.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
