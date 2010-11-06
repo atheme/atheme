@@ -243,10 +243,6 @@ static unsigned int inspircd_server_login(void)
 		exit(EXIT_FAILURE);
 	}
 
-	/* XXX This is a horrible hack, but I don't know how else */
-	/* XXX is this REALLY necessary anymore? --nenolod */
-	sleep(3);
-
 	/* will be determined in CAPAB. */
 	ircd->uses_owner = false;
 	ircd->uses_protect = false;
