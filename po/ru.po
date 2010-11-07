@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-02 22:21-0300\n"
+"POT-Creation-Date: 2010-11-07 19:11-0300\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -88,10 +88,10 @@ msgstr "Синтаксис: WHY <#канал> <ник>"
 
 #: modules/botserv/bottalk.c:55 modules/botserv/bottalk.c:109
 #: modules/botserv/set_fantasy.c:70 modules/botserv/set_nobot.c:55
-#: modules/chanserv/access.c:594 modules/chanserv/access.c:664
-#: modules/chanserv/access.c:759 modules/chanserv/access.c:835
-#: modules/chanserv/access.c:904 modules/chanserv/access.c:983
-#: modules/chanserv/access.c:1022 modules/chanserv/access.c:1063
+#: modules/chanserv/access.c:593 modules/chanserv/access.c:663
+#: modules/chanserv/access.c:758 modules/chanserv/access.c:834
+#: modules/chanserv/access.c:916 modules/chanserv/access.c:995
+#: modules/chanserv/access.c:1034 modules/chanserv/access.c:1081
 #: modules/chanserv/akick.c:89 modules/chanserv/ban.c:55
 #: modules/chanserv/ban.c:145 modules/chanserv/clear_bans.c:68
 #: modules/chanserv/clear_users.c:55 modules/chanserv/close.c:87
@@ -172,10 +172,10 @@ msgstr "Вы не идентифицированы."
 #: modules/botserv/bottalk.c:73 modules/botserv/bottalk.c:127
 #: modules/botserv/info.c:100 modules/botserv/set_fantasy.c:82
 #: modules/botserv/set_nobot.c:67 modules/botserv/set_private.c:72
-#: modules/chanserv/access.c:604 modules/chanserv/access.c:681
-#: modules/chanserv/access.c:775 modules/chanserv/access.c:851
-#: modules/chanserv/access.c:917 modules/chanserv/access.c:1035
-#: modules/chanserv/access.c:1076 modules/chanserv/akick.c:104
+#: modules/chanserv/access.c:603 modules/chanserv/access.c:680
+#: modules/chanserv/access.c:774 modules/chanserv/access.c:850
+#: modules/chanserv/access.c:929 modules/chanserv/access.c:1047
+#: modules/chanserv/access.c:1094 modules/chanserv/akick.c:104
 #: modules/chanserv/akick.c:197 modules/chanserv/akick.c:253
 #: modules/chanserv/ban.c:73 modules/chanserv/ban.c:163
 #: modules/chanserv/clear_bans.c:80 modules/chanserv/clear_users.c:67
@@ -386,8 +386,8 @@ msgid "Syntax: ASSIGN <#channel> <nick>"
 msgstr "Синтаксис: TOPIC <#канал> <текст>"
 
 #: modules/botserv/main.c:809 modules/botserv/main.c:886
-#: modules/chanserv/access.c:692 modules/chanserv/access.c:785
-#: modules/chanserv/access.c:861 modules/chanserv/access.c:927
+#: modules/chanserv/access.c:691 modules/chanserv/access.c:784
+#: modules/chanserv/access.c:866 modules/chanserv/access.c:939
 #: modules/chanserv/fflags.c:86 modules/chanserv/flags.c:192
 #: modules/chanserv/flags.c:263 modules/chanserv/ftransfer.c:52
 #: modules/chanserv/set_founder.c:74 modules/contrib/cs_userinfo.c:57
@@ -644,104 +644,109 @@ msgstr "Синтаксис: CLEAR <#канал> <команда> [параметры]"
 msgid "Syntax: ROLE <#channel> <command> [parameters]"
 msgstr "Синтаксис: CLEAR <#канал> <команда> [параметры]"
 
-#: modules/chanserv/access.c:510 modules/chanserv/template.c:185
+#: modules/chanserv/access.c:509 modules/chanserv/template.c:185
 #: modules/chanserv/template.c:322
 #, c-format
 msgid "Invalid template name %s."
 msgstr "Указано неверное имя шаблона: %s."
 
-#: modules/chanserv/access.c:516 modules/chanserv/template.c:340
+#: modules/chanserv/access.c:515 modules/chanserv/template.c:340
 #, c-format
 msgid "Sorry, too many templates on %s."
 msgstr "Превышено максимально допустимое количество шаблонов для канала %s."
 
-#: modules/chanserv/access.c:546 modules/chanserv/template.c:380
+#: modules/chanserv/access.c:545 modules/chanserv/template.c:380
 #, c-format
 msgid "%d access entries updated accordingly."
 msgstr ""
 "В соответствии с новыми шаблонами изменены %d записей в списке доступа."
 
-#: modules/chanserv/access.c:609
+#: modules/chanserv/access.c:608
 #, fuzzy
 msgid "Entry Nickname/Host          Role"
 msgstr "Запись Ник/хостмаска          Флаг"
 
-#: modules/chanserv/access.c:623
+#: modules/chanserv/access.c:622
 #, c-format
 msgid "%-5d %-22s %s"
 msgstr ""
 
-#: modules/chanserv/access.c:629
+#: modules/chanserv/access.c:628
 #, fuzzy, c-format
 msgid "End of %s ACCESS listing."
 msgstr "Конец списка флагов канала %s\""
 
-#: modules/chanserv/access.c:671
+#: modules/chanserv/access.c:670
 #, fuzzy
 msgid "Syntax: ACCESS <#channel> INFO <account|hostmask>"
 msgstr "Синтаксис: BAN <#канал> <ник|хостмаска>"
 
-#: modules/chanserv/access.c:701 modules/chanserv/access.c:796
+#: modules/chanserv/access.c:700 modules/chanserv/access.c:795
 #, fuzzy, c-format
 msgid "No ACL entry for %s in %s was found."
 msgstr "Никаких флагов для %s на канале %s не обнаружено."
 
-#: modules/chanserv/access.c:716
+#: modules/chanserv/access.c:715
 #, fuzzy, c-format
 msgid "Access for %s in %s:"
 msgstr "Флаги доступа %s в %s"
 
-#: modules/chanserv/access.c:722
+#: modules/chanserv/access.c:721
 #, fuzzy, c-format
 msgid "Ban reason : %s"
 msgstr "Версия    : %s"
 
-#: modules/chanserv/access.c:726
+#: modules/chanserv/access.c:725
 #, c-format
 msgid "Role       : %s (inherited from %s)"
 msgstr ""
 
-#: modules/chanserv/access.c:728
+#: modules/chanserv/access.c:727
 #, fuzzy, c-format
 msgid "Role       : %s"
 msgstr "Имя       : %s"
 
-#: modules/chanserv/access.c:730
+#: modules/chanserv/access.c:729
 #, fuzzy, c-format
 msgid "Flags      : %s (%s)"
 msgstr "Флаги      : %s"
 
-#: modules/chanserv/access.c:731
+#: modules/chanserv/access.c:730
 #, fuzzy, c-format
 msgid "Modified   : %s (%s ago)"
 msgstr "Посл. раз использован  : %s (%s назад)"
 
-#: modules/chanserv/access.c:732 modules/nickserv/info.c:396
+#: modules/chanserv/access.c:731 modules/nickserv/info.c:396
 #: modules/operserv/modinspect.c:70
 msgid "*** End of Info ***"
 msgstr "*** Конец отчёта ***"
 
-#: modules/chanserv/access.c:766
+#: modules/chanserv/access.c:765
 #, fuzzy
 msgid "Syntax: ACCESS <#channel> DEL <account|hostmask>"
 msgstr "Синтаксис: BAN <#канал> <ник|хостмаска>"
 
-#: modules/chanserv/access.c:802 modules/chanserv/fflags.c:98
+#: modules/chanserv/access.c:801 modules/chanserv/fflags.c:98
 #: modules/chanserv/flags.c:277
 msgid "You may not remove the last founder."
 msgstr "Вы не можете удалить последнего владельца канала."
 
-#: modules/chanserv/access.c:811
+#: modules/chanserv/access.c:810
 #, fuzzy, c-format
 msgid "%s was removed from the %s role in %s."
 msgstr "%s был удалён из списка %s для %s."
 
-#: modules/chanserv/access.c:842
+#: modules/chanserv/access.c:841
 #, fuzzy
 msgid "Syntax: ACCESS <#channel> ADD <account|hostmask> <role>"
 msgstr "Синтаксис: BAN <#канал> <ник|хостмаска>"
 
-#: modules/chanserv/access.c:871 modules/chanserv/access.c:937
+#: modules/chanserv/access.c:856 modules/chanserv/access.c:884
+#, fuzzy, c-format
+msgid "Role %s does not exist."
+msgstr "Канал %s не существует."
+
+#: modules/chanserv/access.c:876 modules/chanserv/access.c:949
 #: modules/chanserv/akick.c:141 modules/chanserv/akick.c:174
 #: modules/chanserv/flags.c:312 modules/chanserv/flags.c:335
 #: modules/chanserv/set_founder.c:110 modules/chanserv/set_founder.c:192
@@ -750,46 +755,51 @@ msgstr "Синтаксис: BAN <#канал> <ник|хостмаска>"
 msgid "Channel %s access list is full."
 msgstr "Список доступа канала %s переполнен."
 
-#: modules/chanserv/access.c:878
+#: modules/chanserv/access.c:890
 #, fuzzy, c-format
 msgid "%s was added with the %s role in %s."
 msgstr "%s был добавлен в список %s для %s."
 
-#: modules/chanserv/access.c:911
+#: modules/chanserv/access.c:923
 #, fuzzy
 msgid "Syntax: ACCESS <#channel> SET <account|hostmask> <role|flags>"
 msgstr "Синтаксис: AKICK <#канал> ADD|DEL|LIST <ник|хостмаска> [причина]"
 
-#: modules/chanserv/access.c:945
+#: modules/chanserv/access.c:957
 #, fuzzy, c-format
 msgid "%s now has the %s role in %s."
 msgstr "%s нет в списке %s для %s."
 
-#: modules/chanserv/access.c:952
+#: modules/chanserv/access.c:964
 #, fuzzy, c-format
 msgid "%s now has the following flags in %s: %s"
 msgstr "Для записи %s уже установлены флаги %s на канале %s."
 
-#: modules/chanserv/access.c:992
+#: modules/chanserv/access.c:1004
 msgid "List of channel-defined roles:"
 msgstr ""
 
-#: modules/chanserv/access.c:1029
+#: modules/chanserv/access.c:1041
 #, fuzzy
 msgid "Syntax: ROLE <#channel> ADD|SET <role> [flags]"
 msgstr "Синтаксис: FLAGS <#канал> [цель] [флаги]"
 
-#: modules/chanserv/access.c:1043
+#: modules/chanserv/access.c:1057
+#, fuzzy, c-format
+msgid "You cannot remove all flags from the role %s."
+msgstr "%s был удалён из списка %s для %s."
+
+#: modules/chanserv/access.c:1061
 #, fuzzy, c-format
 msgid "Flags for role %s were changed to: %s."
 msgstr "Пароль для %s был изменен на %s."
 
-#: modules/chanserv/access.c:1070
+#: modules/chanserv/access.c:1088
 #, fuzzy
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr "Синтаксис: DROP <#канал>"
 
-#: modules/chanserv/access.c:1080
+#: modules/chanserv/access.c:1098
 #, fuzzy, c-format
 msgid "Role %s has been deleted."
 msgstr "%s снят с регистрации."
