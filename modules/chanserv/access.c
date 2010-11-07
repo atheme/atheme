@@ -851,6 +851,12 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (chansvs.hide_xop && ToUpper(*(role + 1)) == 'O' && ToUpper(*(role + 2)) == 'P')
+	{
+		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
 	if (validhostmask(target))
 		ca = chanacs_open(mc, NULL, target, true);
 	else
@@ -872,6 +878,13 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	ca->level = get_template_flags(mc, role);
+	if (ca->level == 0)
+	{
+		chanacs_close(ca);
+		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
@@ -1038,6 +1051,12 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 	restrictflags = chanacs_source_flags(mc, si);
 	oldflags = get_template_flags(mc, role);
 	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+
+	if (newflags == 0)
+	{
+		command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
+		return;
+	}
 
 	command_success_nodata(si, _("Flags for role \2%s\2 were changed to: \2%s\2."), role, xflag_tostr(newflags));
 	update_role_entry(si, mc, role, newflags);
