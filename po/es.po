@@ -712,9 +712,9 @@ msgid "Syntax: ACCESS <#channel> ADD <account|hostmask> <role>"
 msgstr "Sintaxis: ACCESS <#canal> ADD <cuenta|máscara de host> <rol>"
 
 #: modules/chanserv/access.c:856 modules/chanserv/access.c:884
-#, fuzzy, c-format
+#, c-format
 msgid "Role %s does not exist."
-msgstr "El grupo %s no existe."
+msgstr "El rol %s no existe."
 
 #: modules/chanserv/access.c:876 modules/chanserv/access.c:949
 #: modules/chanserv/akick.c:141 modules/chanserv/akick.c:174
@@ -753,9 +753,9 @@ msgid "Syntax: ROLE <#channel> ADD|SET <role> [flags]"
 msgstr "Sintaxis: ROLE <#canal> ADD|SET <rol> [permisos]"
 
 #: modules/chanserv/access.c:1057
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot remove all flags from the role %s."
-msgstr "%s ha sido quitado del rol %s en %s."
+msgstr "No puede quitar todos los permisos del rol %s."
 
 #: modules/chanserv/access.c:1061
 #, c-format
