@@ -67,8 +67,6 @@ E me_t me;
 /* config_options, a struct containing other global configuration options */
 struct ConfOption
 {
-  char *chan;                   /* channel we join/msg        */
-
   char *helpchan;		/* official help channel    */
   char *helpurl;		/* official help URL	    */
 

@@ -856,7 +856,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 			part(mc->name, md->value);
 	}
 
-	if ((!config_options.chan || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG) && chanuser_find(mc->chan, chansvs.me->me))
+	if (!(mc->chan->flags & CHAN_LOG) && chanuser_find(mc->chan, chansvs.me->me))
 		part(mc->name, chansvs.nick);
 
 	metadata_add(mc, "private:botserv:bot-assigned", parv[1]);

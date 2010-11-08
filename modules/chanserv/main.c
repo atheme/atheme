@@ -393,7 +393,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc->flags & MC_INHABIT && chan->nummembers >= 3)
 	{
 		mc->flags &= ~MC_INHABIT;
-		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccasecmp(chan->name, config_options.chan)) && !(chan->flags & CHAN_LOG) && chanuser_find(chan, chansvs.me->me))
+		if (!(mc->flags & MC_GUARD) && !(chan->flags & CHAN_LOG) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
 
@@ -759,7 +759,6 @@ static void cs_leave_empty(void *unused)
 			continue;
 		mc->flags &= ~MC_INHABIT;
 		if (mc->chan != NULL &&
-				(!config_options.chan || irccasecmp(mc->name, config_options.chan)) &&
 				!(mc->chan->flags & CHAN_LOG) &&
 				(!(mc->flags & MC_GUARD) ||
 				 (config_options.leave_chans && mc->chan->nummembers == 1) ||

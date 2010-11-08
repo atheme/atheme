@@ -218,7 +218,6 @@ void init_newconf(void)
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
 
 	/* general{} block */
-	add_dupstr_conf_item("CHAN", &conf_gi_table, 0, &config_options.chan, NULL);
 	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, 0, &config_options.helpchan, NULL);
 	add_dupstr_conf_item("HELPURL", &conf_gi_table, 0, &config_options.helpurl, NULL);
 	add_dupstr_conf_item("TIME_FORMAT", &conf_gi_table, 0, &config_options.time_format, "%b %d %H:%M:%S %Y");

@@ -220,8 +220,6 @@ void join(char *chan, char *nick)
 	if (isnew)
 	{
 		hook_call_channel_add(c);
-		if (config_options.chan != NULL && !irccasecmp(config_options.chan, c->name))
-			joinall(config_options.chan);
 	}
 }
 

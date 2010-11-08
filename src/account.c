@@ -231,7 +231,7 @@ void myuser_delete(myuser_t *mu)
 					MOWGLI_LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
-			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
+			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
 			object_unref(mc);
 		}
@@ -1945,7 +1945,7 @@ void expire_check(void *arg)
 					MOWGLI_LIST_LENGTH(&mc->chanacs));
 
 			hook_call_channel_drop(mc);
-			if (mc->chan != NULL && (config_options.chan == NULL || irccasecmp(mc->name, config_options.chan)) && !(mc->chan->flags & CHAN_LOG))
+			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
 				part(mc->name, chansvs.nick);
 
 			object_unref(mc);

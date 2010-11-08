@@ -127,8 +127,6 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 	{
 		hook_call_channel_add(c);
 
-		if (config_options.chan != NULL && !irccasecmp(config_options.chan, name))
-			joinall(config_options.chan);
 	}
 
 	return c;

@@ -97,7 +97,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (config_options.chan && !irccasecmp(config_options.chan, target))
+		if (mc->flags & CHAN_LOG)
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 cannot be closed."), target);
 			return;
