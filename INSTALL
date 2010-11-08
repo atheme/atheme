@@ -59,7 +59,7 @@ linker these days.
 
 IRCd's known to be supported by Services are listed in the example 
 config (dist/atheme.conf.example). The recommended ones are charybdis, ratbox, 
-inspircd, asuka, beware ircd (bircd), nefarious and undernet-ircu 
+inspircd, asuka, beware ircd (bircd), shadowircd, nefarious and undernet-ircu 
 (undernet).
 
 Run the "configure" script:
@@ -154,10 +154,10 @@ still running, and restart it if not. You'll need to have atheme-services
 binaries and data installed in the same directory for this to work 
 without modification.
 
-First rename the dist/atheme.chk script that is in Atheme path (by default, 
+First rename the etc/atheme.cron.example script that is in Atheme path (by default, 
 ~/atheme/) and edit it. You'll need to modify the "cd" part of the file.
 Then ensure that the file is marked as executable by typing
-"chmod +x atheme.chk" and try to launch the script to see if it works.
+"chmod +x atheme.cron.example" and try to launch the script to see if it works.
 
 When this is done, you'll have to add the crontab entry. Type "crontab -e"
 This will open the default text editor with the crontab file. Enter the
@@ -174,18 +174,13 @@ and it's installed.
 
 In the Atheme source there is a directory called contrib filled with
 all sorts of modules that are not included in the main modules directory
-for one reason or another. Compiling these modules are very simple.
+for one reason or another. Compiling these modules is very simple.
 
-After a successful compile of Atheme core, cd into the contrib directory
-and type:
+Simply pass the --enable-contrib switch to the configure script like so:
 
-			$ make
-
-The contrib modules will compile. Then to install them, type:
-
-			$ make install
+			$ ./configure --enable-contrib
 
 The contrib modules will then be in your atheme install directory (by default
-this is ~/atheme/) in the contrib directory. you can then load them on a live
-network like: "/msg operserv modload ../contrib/os_kill" or in your atheme.conf
-by adding a loadmodule line like: loadmodule "contrib/os_kill";
+this is ~/atheme/) in the modules/contrib directory. you can then load them on a live
+network like: "/msg operserv modload contrib/os_kill" or in your atheme.conf
+by adding a loadmodule line like: loadmodule "modules/contrib/os_kill";
