@@ -176,6 +176,8 @@ In the Atheme source there is a directory called contrib filled with
 all sorts of modules that are not included in the main modules directory
 for one reason or another. Compiling these modules is very simple.
 
+A README for what each contrib module does is at modules/contrib/README .
+
 Simply pass the --enable-contrib switch to the configure script like so:
 
 			$ ./configure --enable-contrib

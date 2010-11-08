@@ -1,0 +1,40 @@
+This contrib directory contains random Atheme-related files that are not Atheme
+modules.
+
+Files
+=====
+
+Atheme.pm, athemecgi.pl and the Atheme folder - Examples for a decent
+                                                XMLRPC implementation in Perl.
+
+anope-1.9.2-convert.php - Converts a Anope 1.9.2 flatfile database to an Atheme
+                          OpenSEX database. Requires that the Anope Database
+                          either be nuencrypted or sha1 encrypted. Also, it
+                          will not convert MLOCKs or any channel flags other
+                          than the default Anope levels/xOP.
+
+anope_convert.c - An ANOPE MODULE to convert an Anope 1.7.x or 1.8.x database
+                  to an Atheme database. This will output a old-style flatfile
+                  Atheme database.
+
+cap_sasl.pl - An irssi script with a implementation of SASL.
+
+check_collisions.pl - Checks two Atheme databases for account and channel
+                      collisions before you combine them to create one database.
+
+dbread.pl - Reads an Atheme flatfile database and outputs some information
+            about it.
+
+hybservtoatheme.pl - Converts a HybServ2 or dancer-services database to an
+                     Atheme flatfile database.
+
+ircservtoatheme.php - Converts a IRCServices database to an Atheme flatfile
+                      database.
+
+perlxmlrpc.pl - A simple XMLRPC implementation example in Perl.
+
+pythonxmlrpc.py - A simple XMLRPC implementation example in Python.
+
+rubyxmlrpc.rb - A simple XMLRPC implementation example in Ruby.
+
+xmlrpc-php folder - A decent XMLRPC implementation in PHP.
