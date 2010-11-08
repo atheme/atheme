@@ -218,7 +218,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 		svsignore = (svsignore_t *)n->data;
 
 		tm = *localtime(&svsignore->settime);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
 
 		command_success_nodata(si, _("%d: %s by %s on %s (Reason: %s)"), i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
 		i++;

@@ -714,7 +714,7 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
 
 		notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
 			md_failaddr->value, strfbuf);
@@ -857,7 +857,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	{
 		time_t ts = CURRTIME;
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
 
 		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", entity(mu)->name, mask, strfbuf);
 	}

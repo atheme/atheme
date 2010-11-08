@@ -1522,6 +1522,16 @@ general {
 	 */
 	#helpurl = "http://www.stack.nl/~jilles/irc/atheme-help/";
 
+    /* (*)time_format
+     * The default time format outputted from most commands. The only
+     * real exception being InfoServ message timestamps. See
+     * 'man strftime' for the possible variables that can be used here.
+     * You can also put words and seperators in if you would like.
+     * Here is an example for ISO 8601 date and time:
+     * time_format = "%F %T";
+     */
+    time_format = "%b %d %H:%M:%S %Y";
+
 	/* (*)silent
 	 * If you want to prevent services from sending
 	 * WALLOPS/GLOBOPS about things uncomment this.

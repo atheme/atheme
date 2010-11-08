@@ -68,7 +68,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&memo->sent);
 		
 		strftime(strfbuf, sizeof(strfbuf) - 1, 
-			"%b %d %H:%M:%S %Y", &tm);
+			config_options.time_format, &tm);
 		
 		snprintf(line, sizeof line, _("- %d From: %s Sent: %s"),
 				i, memo->sender, strfbuf);

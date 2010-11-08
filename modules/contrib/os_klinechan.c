@@ -107,7 +107,7 @@ static void klinechan_show_info(hook_channel_req_t *hdata)
 	ts = md != NULL ? atoi(md->value) : 0;
 
 	tm = *localtime(&ts);
-	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+	strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
 
 	command_success_nodata(hdata->si, "%s had \2automatic klines\2 enabled on it by %s on %s (%s)", hdata->mc->name, setter, strfbuf, reason);
 }

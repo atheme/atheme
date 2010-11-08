@@ -710,7 +710,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	role = get_template_name(mc, ca->level);
 
 	tm = *localtime(&ca->tmodified);
-	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+	strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
 
 	command_success_nodata(si, _("Access for \2%s\2 in \2%s\2:"), target, channel);
 
