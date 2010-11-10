@@ -109,6 +109,12 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from registering channels by network staff."));
+		return;
+	}
+
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
 		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
 

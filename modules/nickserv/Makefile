@@ -36,6 +36,7 @@ BASE_SRCS =			\
 	register.c	\
 	regnolimit.c	\
 	resetpass.c	\
+	restrict.c	\
 	return.c	\
 	sendpass.c	\
 	sendpass_user.c \

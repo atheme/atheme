@@ -83,6 +83,12 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from grouping nicks by network staff."));
+		return;
+	}
+
 	hdata_reg.si = si;
 	hdata_reg.account = si->su->nick;
 	hdata_reg.email = si->smu->email;

@@ -155,6 +155,12 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 
 		strlcat(buf, "\2[marked]\2", BUFSIZE);
 	}
+	if (metadata_find(mu, "private:restrict:setter")) {
+		if (*buf)
+			strlcat(buf, " ", BUFSIZE);
+
+		strlcat(buf, "\2[restricted]\2", BUFSIZE);
+	}
 	if (mu->flags & MU_HOLD) {
 		if (*buf)
 			strlcat(buf, " ", BUFSIZE);
@@ -177,16 +183,16 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
-	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL, *markpattern = NULL, *frozenpattern = NULL;
-	bool hostmatch, markmatch, frozenmatch;
+	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL, *markpattern = NULL, *frozenpattern = NULL, *restrictedpattern = NULL;
+	bool hostmatch, markmatch, frozenmatch, restrictedmatch;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 	myuser_t *mu;
 	myentity_t *mt;
 	mynick_t *mn;
-	metadata_t *md, *mdmark, *mdfrozen;
+	metadata_t *md, *mdmark, *mdfrozen, *mdrestricted;
 	int matches = 0;
-	bool frozen = false, marked = false;
+	bool frozen = false, marked = false, restricted = false;
 	unsigned int flagset = 0;
 	time_t age = 0, lastlogin = 0;
 
@@ -196,6 +202,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"mail",	OPT_STRING,	{.strval = &email}, 0},
 		{"mark-reason", OPT_STRING,	{.strval = &markpattern}, 0},
 		{"frozen-reason", OPT_STRING,   {.strval = &frozenpattern}, 0},
+		{"restricted-reason", OPT_STRING, {.strval = &restrictedpattern}, 0},
 		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
@@ -212,6 +219,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"regnolimit",	OPT_FLAG,	{.flagval = &flagset}, MU_REGNOLIMIT},
 		{"frozen",	OPT_BOOL,	{.boolval = &frozen}, 0},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
+		{"restricted",	OPT_BOOL,	{.boolval = &restricted}, 0},
 		{"registered",	OPT_AGE,	{.ageval = &age}, 0},
 		{"lastlogin",	OPT_AGE,	{.ageval = &lastlogin}, 0},
 	};
@@ -284,10 +292,24 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 			}
 
+			if (restrictedpattern)
+			{
+				restrictedmatch = false;
+				mdrestricted = metadata_find(mu, "private:restrict:reason");
+				if (mdrestricted != NULL && !match(restrictedpattern, mdrestricted->value))
+					restrictedmatch = true;
+
+				if (!restrictedmatch)
+					continue;
+			}
+
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;
 
 			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
+				continue;
+
+			if (restricted && !metadata_find(mu, "private:restrict:setter"))
 				continue;
 
 			if (flagset && (mu->flags & flagset) != flagset)
@@ -347,11 +369,25 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				if (!frozenmatch)
 					continue;
 			}
+			
+			if (restrictedpattern)
+			{
+				restrictedmatch = false;
+				mdrestricted = metadata_find(mu, "private:restrict:reason");
+				if (mdrestricted != NULL && !match(restrictedpattern, mdrestricted->value))
+					restrictedmatch = true;
+
+				if (!restrictedmatch)
+					continue;
+			}
 
 			if (marked && !metadata_find(mu, "private:mark:setter"))
 				continue;
 
 			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
+				continue;
+			
+			if (restricted && !metadata_find(mu, "private:restrict:setter"))
 				continue;
 
 			if (flagset && (mu->flags & flagset) != flagset)

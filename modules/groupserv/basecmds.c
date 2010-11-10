@@ -89,6 +89,12 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+        if (metadata_find(si->smu, "private:restrict:setter"))
+        {
+                command_fail(si, fault_noprivs, _("You have been restricted from registering groups by network staff."));
+                return;
+        }
+
 	mg = mygroup_add(parv[0]);
 	groupacs_add(mg, si->smu, GA_ALL | GA_FOUNDER);
 

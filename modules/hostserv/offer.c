@@ -266,6 +266,12 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from taking vhosts by network staff"));
+		return;
+	}
+
 	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
 	{
 		l = n->data;
