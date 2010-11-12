@@ -954,8 +954,9 @@ chanserv {
 	 * entries to the new levels.
 	 *
 	 * Advice:
-	 * If you want to add a co-founder role, remove flags permission from
-	 * SOP, and create specify a co-founder role with flags permissions.
+	 * If you want to add a co-founder role, remove the flags permission
+	 * from the SOP role, and define a co-founder role with flags
+	 * permissions.
 	 */
 	templates {
 		vop = "+VA";
