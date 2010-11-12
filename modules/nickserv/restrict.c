@@ -50,9 +50,9 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 		if (mun != NULL && !strcasecmp(action, "OFF"))
 		{
 			object_unref(mun);
-			wallops("%s derestricted the name \2%s\2.", get_oper_name(si), target);
+			wallops("%s unrestricted the name \2%s\2.", get_oper_name(si), target);
 			logcommand(si, CMDLOG_ADMIN, "RESTRICT:OFF: \2%s\2", target);
-			command_success_nodata(si, _("\2%s\2 is now derestricted."), target);
+			command_success_nodata(si, _("\2%s\2 is now unrestricted."), target);
 			return;
 		}
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
@@ -94,9 +94,9 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, "private:restrict:reason");
 		metadata_delete(mu, "private:restrict:timestamp");
 
-		wallops("%s derestricted the account \2%s\2.", get_oper_name(si), entity(mu)->name);
+		wallops("%s unrestricted the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "RESTRICT:OFF: \2%s\2", entity(mu)->name);
-		command_success_nodata(si, _("\2%s\2 is now derestricted."), entity(mu)->name);
+		command_success_nodata(si, _("\2%s\2 is now unrestricted."), entity(mu)->name);
 	}
 	else
 	{
