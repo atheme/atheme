@@ -576,6 +576,8 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 
 	mu = mcfp->mu;
 	svs = nicksvs.me; /* XXX */
+	if (svs == NULL)
+		return;
 
 	if (metadata_find(mu, "private:freeze:freezer"))
 	{
