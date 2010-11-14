@@ -224,6 +224,12 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
 		return;
 	}
+	
+        if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
 
 	if (!(mg = mygroup_find(name)))
 	{
@@ -288,6 +294,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if ((mg = mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+        if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

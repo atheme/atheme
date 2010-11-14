@@ -118,6 +118,12 @@ static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
@@ -162,6 +168,12 @@ static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
@@ -203,6 +215,12 @@ static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
@@ -242,6 +260,12 @@ static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mg = mygroup_find(parv[0])))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -289,6 +313,12 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 	if ((mg = mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
@@ -351,6 +381,12 @@ static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[])
 	if ((mg = mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
