@@ -337,6 +337,65 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	} 
 	
+	if (IsDigit(*target))
+	{
+		unsigned int start = 0, end = 0, i;
+		char t[16];
+
+		if (strchr(target, ':'))
+		{
+			for (i = 0; *target != ':'; target++, i++)
+				t[i] = *target;
+
+			t[++i] = '\0';
+			start = atoi(t);
+
+			target++;	/* skip past the : */
+
+			for (i = 0; *target != '\0'; target++, i++)
+				t[i] = *target;
+
+			t[++i] = '\0';
+			end = atoi(t);
+
+			for (i = start; i <= end; i++)
+			{
+				if (!(q = qline_find_num(i)))
+				{
+					command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), i);
+					continue;
+				}
+
+				command_success_nodata(si, _("SQLINE on \2%s\2 has been successfully removed."), q->mask);
+				verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
+					get_oper_name(si), q->mask, q->reason);
+
+				logcommand(si, CMDLOG_ADMIN, "SQLINE:DEL: \2%s\2", q->mask);
+				qline_delete(q->mask);
+			}
+
+			return;
+		}
+
+		number = atoi(target);
+
+		if (!(q = qline_find_num(number)))
+		{
+			command_fail(si, fault_nosuch_target, _("No such SQLINE with number \2%d\2."), number);
+			return;
+		}
+
+		command_success_nodata(si, _("SQLINE on \2%s\2 has been successfully removed."), q->mask);
+		
+		verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
+			get_oper_name(si), q->mask, q->reason);
+
+		logcommand(si, CMDLOG_ADMIN, "SQLINE:DEL: \2%s\2", q->mask);
+		qline_delete(q->mask);
+		return;
+	}
+
+	
 	if (!(q = qline_find(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("No such SQLINE: \2%s\2."), target);
