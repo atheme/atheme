@@ -244,7 +244,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		matches++;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (%d matches)", criteriastr, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", criteriastr, matches);
 	if (matches == 0)
 		command_success_nodata(si, _("No channel matched criteria \2%s\2"), criteriastr);
 	else
