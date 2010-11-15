@@ -90,7 +90,7 @@ mowgli_heap_expand(mowgli_heap_t *bh)
 	void *blp = NULL;
 	mowgli_heap_elem_header_t *node, *prev;
 	char *offset;
-	int a;
+	unsigned int a;
 
 	size_t blp_size = sizeof(mowgli_block_t) + (bh->alloc_size * bh->mowgli_heap_elems);
 

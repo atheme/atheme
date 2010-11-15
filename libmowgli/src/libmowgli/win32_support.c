@@ -23,7 +23,7 @@
 
 #include "mowgli.h"
 
-#ifdef _MSC_EXTENSIONS
+#ifdef _MSC_VER
 # define EPOCH_TIME_IN_MICROSECS	11644473600000000Ui64
 #else
 # define EPOCH_TIME_IN_MICROSECS	11644473600000000ULL
@@ -32,21 +32,20 @@
 int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
 	FILETIME ft;
-	unsigned int tmpres = 0;
+	ULARGE_INTEGER tmpres = { 0 };
 	static mowgli_boolean_t tz_init_done = FALSE;
 
 	if (tv != NULL)
 	{
 		GetSystemTimeAsFileTime(&ft);
 
-		tmpres |= ft.dwHighDateTime;
-		tmpres <<= 32;
-		tmpres |= ft.dwLowDateTime;
+		tmpres.u.HighPart = ft.dwHighDateTime;
+		tmpres.u.LowPart  = ft.dwLowDateTime;
 
-		tmpres /= 10;
-		tmpres -= EPOCH_TIME_IN_MICROSECS;
-		tv->tv_sec = (long) (tmpres / 1000000UL);
-		tv->tv_usec = (long) (tmpres % 1000000UL);
+		tmpres.QuadPart /= 10;
+		tmpres.QuadPart -= EPOCH_TIME_IN_MICROSECS;
+		tv->tv_sec = (long) (tmpres.QuadPart / 1000000UL);
+		tv->tv_usec = (long) (tmpres.QuadPart % 1000000UL);
 	}
 
 	if (tz != NULL)

@@ -1,6 +1,6 @@
 /*
  * libmowgli: A collection of useful routines for programming.
- * mowgli_module.c: Loadable modules.
+ * mowgli_module.c: Loadable modules for POSIX systems.
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
@@ -23,15 +23,7 @@
 
 #include "mowgli.h"
 
-#ifndef _WIN32
 #include <dlfcn.h>
-#else
-#include "win32_dlfcn.h"
-#endif
-
-#ifndef RTLD_NOW
-#define RTLD_NOW RTLD_LAZY
-#endif
 
 mowgli_module_t mowgli_module_open(const char *path)
 {

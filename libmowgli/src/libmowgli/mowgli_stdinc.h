@@ -56,7 +56,6 @@
 # include <direct.h>
 # include <io.h>
 # include <fcntl.h>
-# include "win32_support.h"
 #endif
 
 #include <sys/types.h>

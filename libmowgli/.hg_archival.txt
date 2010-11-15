@@ -1,5 +1,5 @@
 repo: 296171f8aa0f0ccd458582586484fad825fa4b7c
-node: bc35715311e403c365d0868b30beb0c54b8ccc3e
+node: 4bb99f5cc057f7d3873a40acb6ed82d371b9aeb3
 branch: default
 latesttag: libmowgli-0.7.1
-latesttagdistance: 10
+latesttagdistance: 13

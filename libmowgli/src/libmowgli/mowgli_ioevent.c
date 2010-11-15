@@ -59,7 +59,12 @@ void mowgli_ioevent_destroy(mowgli_ioevent_handle_t *self)
 
 int mowgli_ioevent_get(mowgli_ioevent_handle_t *self, mowgli_ioevent_t *buf, size_t bufsize, unsigned int delay)
 {
+#if defined HAVE_EPOLL_CTL || defined HAVE_PORT_CREATE
 	int ret, iter;
+#else
+   int ret = -1;
+#endif
+
 #ifdef HAVE_EPOLL_CTL
 	struct epoll_event events[bufsize];
 

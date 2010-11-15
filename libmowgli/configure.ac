@@ -42,6 +42,19 @@ AC_FUNC_STAT
 
 AC_CHECK_LIB(dl, dlopen, [LIBS="$LIBS -ldl"])
 
+dnl Detect which loader to use
+AC_MSG_CHECKING(loader type)
+case "$target" in
+*-*-mingw32)
+    MOWGLI_MODULE='mowgli_module_win32.c'
+	;;
+*)
+    MOWGLI_MODULE='mowgli_module_posix.c'
+	;;
+esac
+AC_MSG_RESULT($MOWGLI_MODULE);
+AC_SUBST(MOWGLI_MODULE)
+
 # Check for optional features.
 EXAMPLES_BUILD=""
 AC_ARG_ENABLE(examples,

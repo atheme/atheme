@@ -33,6 +33,7 @@
 #endif
 
 #ifdef MOWGLI_CORE
+# include "win32_support.h"
 # include "mowgli_config.h"
 #endif
 

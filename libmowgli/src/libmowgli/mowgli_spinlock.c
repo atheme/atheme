@@ -23,10 +23,6 @@
 
 #include "mowgli.h"
 
-#ifdef __MINGW32__
-#define usleep(usec) Sleep((usec / 1000))
-#endif
-
 mowgli_spinlock_t *mowgli_spinlock_create(void)
 {
 	mowgli_spinlock_t *out = mowgli_alloc(sizeof(mowgli_spinlock_t));
