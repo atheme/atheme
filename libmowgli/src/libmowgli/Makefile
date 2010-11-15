@@ -1,3 +1,5 @@
+include ../../extra.mk
+
 LIB = ${LIB_PREFIX}mowgli${LIB_SUFFIX}
 LIB_MAJOR = 2
 LIB_MINOR = 0
@@ -20,7 +22,7 @@ SRCS = mowgli_alloc.c			\
        mowgli_list.c			\
        mowgli_logger.c			\
        mowgli_mempool.c			\
-       mowgli_module.c			\
+       $(MOWGLI_MODULE)			\
        mowgli_object.c			\
        mowgli_object_class.c		\
        mowgli_object_messaging.c	\
@@ -31,7 +33,6 @@ SRCS = mowgli_alloc.c			\
        mowgli_signal.c			\
        mowgli_spinlock.c		\
        mowgli_string.c			\
-       win32_dlfcn.c
 
 INCLUDES = mowgli.h			\
 	   mowgli_alloc.h		\

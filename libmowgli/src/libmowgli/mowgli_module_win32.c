@@ -1,8 +1,8 @@
 /*
  * libmowgli: A collection of useful routines for programming.
- * win32_support.h: Support functions and values for Win32 platform.
+ * mowgli_module_win32.c: Loadable modules under Microsoft Windows.
  *
- * Copyright (c) 2009 SystemInPlace, Inc.
+ * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,37 +21,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __LIBMOWGLI_SRC_LIBMOWGLI_WIN32_SUPPORT_H__GUARD
-#define __LIBMOWGLI_SRC_LIBMOWGLI_WIN32_SUPPORT_H__GUARD
+#include "mowgli.h"
 
-#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#include <winsock.h> // just for struct timeval declaration
-#include <time.h>
+mowgli_module_t mowgli_module_open(const char *path)
+{
+	HANDLE handle = LoadLibraryA(path);
 
-#define strcasecmp			_stricmp
-#define strdup				_strdup
-#define usleep(_usecs)		Sleep((_usecs)/1000L)
+	/* make sure we have something. make this an assertion so that 
+	 * there is feedback if something happens. (poor programming practice).
+	 */
+	return_val_if_fail(handle != NULL, NULL);
 
-/* Functions with security enhancements are
- * available only on VISUAL .NET 2005 and later!
- * Also not available on MinGW W32API yet...
- */
-#if defined _MSC_VER && _MSC_VER >= 1400
-# define snprintf			_snprintf_s
-# define vsnprintf			_vsnprintf_s
-#else
-# define snprintf			_snprintf
-# define vsnprintf			_vsnprintf
-#endif
+	return (mowgli_module_t)handle;
+}
 
-struct timezone {
-	int tz_minuteswest;
-	int tz_dsttime;
-};
+void * mowgli_module_symbol(mowgli_module_t module, const char *symbol)
+{
+	void *handle;
 
-extern int gettimeofday(struct timeval *tv, struct timezone *tz);
+	return_val_if_fail(module != NULL, NULL);
 
-#endif
+	handle = GetProcAddress((HANDLE)module, symbol);
 
-#endif
+	/* make sure we have something. make this an assertion so that 
+	 * there is feedback if something happens. (poor programming practice).
+	 */
+	return_val_if_fail(handle != NULL, NULL);
+
+	return handle;
+}
+
+void mowgli_module_close(mowgli_module_t module)
+{
+	return_if_fail(module != NULL);
+
+	FreeLibrary((HANDLE)module);
+}
