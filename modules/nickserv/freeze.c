@@ -78,7 +78,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_add(mu, "private:freeze:freezer", get_oper_name(si));
 		metadata_add(mu, "private:freeze:reason", reason);
-		metadata_add(mu, "private:freeze:timestamp", itoa(CURRTIME));
+		metadata_add(mu, "private:freeze:timestamp", number_to_string(CURRTIME));
 		/* log them out */
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 		{

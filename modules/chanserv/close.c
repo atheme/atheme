@@ -111,7 +111,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_add(mc, "private:close:closer", si->su->nick);
 		metadata_add(mc, "private:close:reason", reason);
-		metadata_add(mc, "private:close:timestamp", itoa(CURRTIME));
+		metadata_add(mc, "private:close:timestamp", number_to_string(CURRTIME));
 
 		if ((c = channel_find(target)))
 		{

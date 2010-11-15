@@ -587,7 +587,7 @@ static void cs_keeptopic_topicset(channel_t *c)
 		metadata_add(mc, "private:topic:text",
 			c->topic);
 		metadata_add(mc, "private:topic:ts",
-			itoa(c->topicts));
+			number_to_string(c->topicts));
 	}
 	else
 		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);

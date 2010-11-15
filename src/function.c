@@ -113,7 +113,7 @@ char *replace(char *s, int size, const char *old, const char *new)
 }
 
 /* reverse of atoi() */
-char *itoa(int num)
+const char *number_as_string(int num)
 {
 	static char ret[32];
 	snprintf(ret, 32, "%d", num);

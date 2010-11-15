@@ -115,7 +115,7 @@ E void logcommand_external(service_t *svs, const char *type, connection_t *sourc
 E char *gen_pw(int sz);
 E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
-E char *itoa(int num);
+E const char *number_to_string(int num);
 E int validemail(const char *email);
 E bool validhostmask(const char *host);
 E bool validtopic(const char *topic);

@@ -82,11 +82,11 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	{
 		unsigned long key = makekey();
 
-		metadata_add(si->smu, "private:verify:emailchg:key", itoa(key));
+		metadata_add(si->smu, "private:verify:emailchg:key", number_to_string(key));
 		metadata_add(si->smu, "private:verify:emailchg:newemail", email);
-		metadata_add(si->smu, "private:verify:emailchg:timestamp", itoa(time(NULL)));
+		metadata_add(si->smu, "private:verify:emailchg:timestamp", number_to_string(CURRTIME));
 
-		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETEMAIL, si->smu, itoa(key)))
+		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETEMAIL, si->smu, number_to_string(key)))
 		{
 			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Your email address is unchanged."));
 			metadata_delete(si->smu, "private:verify:emailchg:key");

@@ -155,7 +155,7 @@ static void os_cmd_klinechan(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_add(mc, "private:klinechan:closer", si->su->nick);
 		metadata_add(mc, "private:klinechan:reason", reason);
-		metadata_add(mc, "private:klinechan:timestamp", itoa(CURRTIME));
+		metadata_add(mc, "private:klinechan:timestamp", number_to_string(CURRTIME));
 
 		wallops("%s enabled automatic klines on the channel \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "KLINECHAN:ON: \2%s\2 (reason: \2%s\2)", target, reason);

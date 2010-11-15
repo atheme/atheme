@@ -206,7 +206,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_REGISTER, "SET:FOUNDER: \2%s\2 to \2%s\2 (initializing transfer)", mc->name, mt->name);
 
 	metadata_add(mc, "private:verify:founderchg:newfounder", mt->name);
-	metadata_add(mc, "private:verify:founderchg:timestamp", itoa(time(NULL)));
+	metadata_add(mc, "private:verify:founderchg:timestamp", number_to_string(time(NULL)));
 
 	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), mt->name, mc->name);
 	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), mt->name);

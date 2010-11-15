@@ -1160,7 +1160,7 @@ const char *mychan_get_mlock(mychan_t *mc)
 			dir = MTYPE_ADD, strcat(buf, "+");
 		strcat(buf, "l");
 		strcat(params, " ");
-		strcat(params, itoa(mc->mlock_limit));
+		strcat(params, number_to_string(mc->mlock_limit));
 	}
 
 	if (mc->mlock_key)
