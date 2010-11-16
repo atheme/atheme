@@ -53,7 +53,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
-	mowgli_node_t *n;
+	mowgli_node_t *n, *tn;
 	char *account;
 	char *pass;
 	char *email;
@@ -162,16 +162,22 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure they're within limits */
-	if (me.maxusers > 0)
+	MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
 	{
-		tcnt = 0;
-		myentity_foreach_t(ENT_USER, register_foreach_cb, email);
+		if (0 == match(tn->data, email))
+			continue;
 
-		if (tcnt >= me.maxusers)
+		/* make sure they're within limits */
+		if (me.maxusers > 0)
 		{
-			command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
-			return;
+			tcnt = 0;
+			myentity_foreach_t(ENT_USER, register_foreach_cb, email);
+
+			if (tcnt >= me.maxusers)
+			{
+				command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
+				return;
+			}
 		}
 	}
 

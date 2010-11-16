@@ -887,6 +887,14 @@ nickserv {
 	 * register the nick at all until the user chooses a better password.
 	 */
 	#cracklib_warn;
+
+	/* (*)emailexempts
+	 * A list of email addresses that will be exempt from the check of how many
+	 * accounts one user may have. Any email address in this block may register
+	 * an unlimited number of accounts/usernames.
+	 */
+	emailexempts {
+	};
 };
 
 /* ChanServ configuration.
