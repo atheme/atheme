@@ -76,7 +76,7 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_add(mu, "private:restrict:setter", get_oper_name(si));
 		metadata_add(mu, "private:restrict:reason", info);
-		metadata_add(mu, "private:restrict:timestamp", itoa(time(NULL)));
+		metadata_add(mu, "private:restrict:timestamp", number_to_string(time(NULL)));
 
 		wallops("%s restricted the account \2%s\2.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "RESTRICT:ON: \2%s\2 (reason: \2%s\2)", entity(mu)->name, info);
