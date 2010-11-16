@@ -31,6 +31,8 @@ void _moddeinit()
 
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
+	mowgli_node_t *tn, *n2;
+
 	logcommand(si, CMDLOG_GET, "INFO");
 
 	command_success_nodata(si, _("How often services writes changes to the database: %d minutes"), config_options.commit_interval / 60);
@@ -72,6 +74,16 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Taint Location: %s:%d"), tr->file, tr->line);
 			command_success_nodata(si, _("Taint Explanation: %s"), tr->buf);
 		}
+	}
+
+	MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
+	{
+		command_success_nodata(si, _("Email address(es) exempt from the maximum usernames check: %s"), (char *)tn->data);
+	}
+
+	MOWGLI_ITER_FOREACH(n2, config_options.exempts.head)
+	{
+		command_success_nodata(si, _("user@host mask(s) that are autokline exempt: %s"), (char *)n2->data);
 	}
 }
 
