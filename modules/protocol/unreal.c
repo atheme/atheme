@@ -14,6 +14,8 @@
 
 DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
+static bool use_esvid = false;
+
 /* *INDENT-OFF* */
 
 ircd_t Unreal = {
@@ -162,7 +164,7 @@ static unsigned int unreal_server_login(void)
 
 	me.bursting = true;
 
-	sts("PROTOCTL TOKEN NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT");
+	sts("PROTOCTL TOKEN NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
 	services_init();
@@ -175,7 +177,7 @@ static void unreal_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts("NICK %s 1 %lu %s %s %s 0 %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+	sts("NICK %s 1 %lu %s %s %s * %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -439,12 +441,19 @@ static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost
 	if (!me.connected || u == NULL)
 		return;
 
-	/* Can only do this for nickserv, and can only record identified
-	 * state if logged in to correct nick, sorry -- jilles
-	 */
-	/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
-	if (should_reg_umode(u))
-		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts);
+	if (!use_esvid)
+	{
+		/* Can only do this for nickserv, and can only record identified
+		 * state if logged in to correct nick, sorry -- jilles
+		 */
+		/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
+		if (should_reg_umode(u))
+			sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts);
+
+		return;
+	}
+
+	sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -454,7 +463,7 @@ static bool unreal_on_logout(user_t *u, const char *account)
 		return false;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 
 	return false;
 }
@@ -782,9 +791,19 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		user_mode(u, parv[7]);
 
-		/* If the user's SVID is equal to their nick TS,
-		 * they're properly logged in -- jilles */
-		if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
+		/*
+		 * with ESVID:
+		 * If the user's SVID is equal to their accountname,
+		 * they're properly logged in.  Alternatively, the
+		 * 'without ESVID' criteria is used. --nenolod
+		 *
+		 * without ESVID:
+		 * If the user's SVID is equal to their nick TS,
+		 * they're properly logged in --jilles
+		 */
+		if (use_esvid && *parv[6] != '*' && !IsDigit(*parv[6]))
+			handle_burstlogin(u, parv[6], 0);
+		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, NULL, 0);
 
 		handle_nickchange(u);
@@ -807,14 +826,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		/* fix up +r if necessary -- jilles */
-		if (realchange && !nicksvs.no_nick_ownership)
+		if (realchange && !nicksvs.no_nick_ownership && !use_esvid)
 		{
 			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
 				sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, parv[0], atol(parv[1]));
 			else
 				/* changed from registered nick, remove +r */
-				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
+				sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, parv[0]);
 		}
 
 		handle_nickchange(si->su);
@@ -1039,7 +1058,7 @@ static void nick_group(hook_user_req_t *hdata)
 	user_t *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL && should_reg_umode(u))
+	if (!use_esvid && u != NULL && should_reg_umode(u))
 		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick,
 				(unsigned long)u->ts);
 }
@@ -1050,7 +1069,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 }
 
 void _modinit(module_t * m)
