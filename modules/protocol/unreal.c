@@ -1072,6 +1072,17 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 }
 
+static void m_protoctl(sourceinfo_t *si, int parc, char *parv)
+{
+	int i;
+
+	for (i = 0; i < parc; i++)
+	{
+		if (!irccasecmp(parv[i], "ESVID"))
+			use_esvid = true;
+	}
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -1143,6 +1154,7 @@ void _modinit(module_t * m)
 	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
+	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_SERVER);
 
 	/* 
 	 * for fun, and to give nenolod a heart attack
@@ -1182,6 +1194,7 @@ void _modinit(module_t * m)
 	pcommand_add("AA", m_sethost, 1, MSRC_USER);
 	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("F", m_motd, 1, MSRC_USER);
+	pcommand_add("_", m_protoctl, 10, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
