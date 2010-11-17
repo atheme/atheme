@@ -1072,7 +1072,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 }
 
-static void m_protoctl(sourceinfo_t *si, int parc, char *parv)
+static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i;
 
