@@ -1154,7 +1154,7 @@ void _modinit(module_t * m)
 	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
-	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_SERVER);
+	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
 
 	/* 
 	 * for fun, and to give nenolod a heart attack
@@ -1194,7 +1194,7 @@ void _modinit(module_t * m)
 	pcommand_add("AA", m_sethost, 1, MSRC_USER);
 	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("F", m_motd, 1, MSRC_USER);
-	pcommand_add("_", m_protoctl, 10, MSRC_SERVER);
+	pcommand_add("_", m_protoctl, 10, MSRC_UNREG);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
