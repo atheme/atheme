@@ -3,9 +3,7 @@ Help for CLONES:
 CLONES keeps track of the number of clients
 per IP address. Warnings are displayed in
 the snoop channel about IP addresses with
-more than 3 clients, and network bans may
-optionally be set on IP addresses with more
-than 5 clients.
+multiple clients.
 
 CLONES only works on clients whose IP address
 Atheme knows. If the ircd does not support
@@ -17,10 +15,10 @@ CLONES checking.
 Syntax: CLONES KLINE ON|OFF
 
 Enables/disables banning IP addresses with more
-than 5 clients from the network for one hour
-(these bans are not added to the AKILL list).
-This setting is saved in etc/services.db and
-defaults to off.
+than the allowed number clients from the network
+for one hour (these bans are not added to the 
+AKILL list). This setting is saved in etc/services.db
+and defaults to off.
 
 Syntax: CLONES LIST
 
@@ -37,14 +35,26 @@ The IP address can also be a CIDR mask, for example
 192.168.1.0/24. Single IPs take priority above CIDR.
 <clones> is the number of clones allowed; it must be
 at least 4. Warnings are sent if this number is
-exceeded, and a network ban may be set if the number
-is exceeded by 10 or more.
+met, and a network ban may be set if the number
+is exceeded.
 The reason is shown in LISTEXEMPT.
 The clone exemption list is stored in etc/services.db.
 
 Syntax: CLONES DELEXEMPT <ip>
 
 Removes an IP address from the clone exemption list.
+
+Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>
+
+Sets either the default or a given exemption's ALLOWED, 
+WARN, or KILL limit to the specified number of clones. 
+WARN or KILL can be 0, disabling any warning messages or kills.
+
+Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>
+
+Sets the reason or duration of a given exemption to the
+specified value. The DURATION value can be 0, making the 
+exemption permanent.
 
 Syntax: CLONES LISTEXEMPT
 

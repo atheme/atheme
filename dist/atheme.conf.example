@@ -1654,8 +1654,22 @@ general {
 
 	/* (*)default_clone_limit
 	 * The default clone limit used by operserv/clones.
+	 * Deprecated by the two options below.
 	 */
 	default_clone_limit = 5;
+
+	/* (*)default_clone_allowed
+	 * The limit after which clones will be KILLed or TKLINEd.
+	 * Used by operserv/clones.
+	 */
+	default_clone_allowed = 5;
+
+	/* (*)default_clone_warn
+	 * The limit after which clones will be warned that they may not
+	 * have any more concurrent connections. Should be lower than
+	 * default_clone_allowed . Used by operserv/clones.
+	 */
+	default_clone_warn = 4;
 
 	/* (*)uplink_sendq_limit
 	 * The maximum amount of data that may be queued to be sent
