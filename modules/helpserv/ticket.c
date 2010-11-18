@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"helpserv/ticket", false, _modinit, _moddeinit,
+	"helpserv/ticket", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.net>"
 );

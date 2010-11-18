@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/clones", false, _modinit, _moddeinit,
+	"operserv/clones", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );

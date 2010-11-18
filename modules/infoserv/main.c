@@ -16,7 +16,7 @@
 
 DECLARE_MODULE_V1
 (
-	"infoserv/main", false, _modinit, _moddeinit,
+	"infoserv/main", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
