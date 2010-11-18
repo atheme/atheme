@@ -1072,6 +1072,7 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
+	unsigned int level;
 	const char *channel = parv[0];
 	const char *role = parv[1];
 
@@ -1092,6 +1093,13 @@ static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+
+	level = get_template_flags(mc, role);
+	if (level == 0)
+	{
+		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
 
