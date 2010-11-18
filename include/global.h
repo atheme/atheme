@@ -96,6 +96,9 @@ struct ConfOption
   bool verbose_wallops;	/* verbose wallops? :)        */
 
   unsigned int default_clone_limit;  /* default clone limit */
+  unsigned int default_clone_allowed;  /* default clone kill */
+  unsigned int default_clone_warn;  /* default clone warn */
+
   unsigned int uplink_sendq_limit;
 
   char *language;		/* default language */
