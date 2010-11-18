@@ -111,9 +111,10 @@ static void clones_kill_users(void *dummy)
 		u = n->data;
 		kill_user(serviceinfo->me, u, "Too many connections from this host.");
 
-		//This node delete() and free() will be handled inside the user_quit()
-		//mowgli_node_delete(n, &clones_kill_queue);
-		//mowgli_node_free(n);
+		/* This node delete() and free() will be handled inside the user_quit()
+		 * mowgli_node_delete(n, &clones_kill_queue);
+		 * mowgli_node_free(n);
+		 */
 	}
 }
 
@@ -158,7 +159,7 @@ void _modinit(module_t *m)
 	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = mowgli_heap_create(sizeof(hostentry_t), HEAP_USER, BH_NOW);
 
-	kline_duration = 3600; // set a default
+	kline_duration = 3600; /* set a default */
 
 	serviceinfo = service_find("operserv");
 
@@ -869,6 +870,13 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 					free(c->reason);
 					c->reason = sstrdup(rreason);
 					command_success_nodata(si,_("Clone exemption reason for host \2%s\2 changed to \2%s\2"),ip,c->reason);
+				}
+				else
+				{
+					/* Invalid parameters */
+					command_fail(si, fault_badparams, _("Invalid syntax given."));
+					command_fail(si, fault_badparams, _("Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | KILL | DURATION | REASON> <value>"));
+					return;
 				}
 				return;
 			}
