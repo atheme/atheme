@@ -601,8 +601,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c->reason);
 			c->reason = sstrdup(rreason);
 		}
-		command_success_nodata(si, _("\2Warning\2: the syntax you are using to update this exemption has been deprecated \
-					and may be removed in a future version.  Please use SETEXEMPT in the future instead."));
+		command_success_nodata(si, _("\2Warning\2: the syntax you are using to update this exemption has been deprecated and may be removed in a future version.  Please use SETEXEMPT in the future instead."));
 		command_success_nodata(si, _("Updated \2%s\2 in clone exempt list."), ip);
 	}
 
