@@ -3,7 +3,7 @@ Ayuda para CLONES:
 CLONES maintiene un seguimiento del número
 de clientes por cada dirección IP. Se muestran
 alertan en el canal snoop sobre IPs con múltiples
-clientes
+clientes.
 
 CLONES sólo funciona con clientes cuya IP es
 conocida por Atheme. Si el ircd no soporta la
