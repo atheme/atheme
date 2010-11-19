@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-18 22:07-0300\n"
+"POT-Creation-Date: 2010-11-18 21:48-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team:  <shadowm2006@gmail.com>\n"
@@ -5684,9 +5684,8 @@ msgid "Deletes a clones exemption."
 msgstr "Quita una exención de clones."
 
 #: modules/operserv/clones.c:93
-#, fuzzy
 msgid "Sets a clone exemption details."
-msgstr "Quita una exención de clones."
+msgstr "Establece los detalles de una exención de clones."
 
 #: modules/operserv/clones.c:94
 msgid "Lists clones exemptions."
@@ -5697,12 +5696,12 @@ msgid "Sets a custom duration to ban clones for."
 msgstr "Establece una duración personalizada para vetar clones."
 
 #: modules/operserv/clones.c:388
-#, fuzzy
 msgid ""
 "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT "
 "[parameters]"
 msgstr ""
-"Sintaxis: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parámetros]"
+"Sintaxis: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT "
+"[parámetros]"
 
 #: modules/operserv/clones.c:413
 msgid "CLONES klines are already enabled."
@@ -5765,6 +5764,9 @@ msgid ""
 "deprecated and may be removed in a future version.  Please use SETEXEMPT in "
 "the future instead."
 msgstr ""
+"Advertencia: la sintaxis que está usando para actualizar esta exención es "
+"obsoleta y podría ser removida en versiones posteriores. Por favor utilice "
+"SETEXEMPT en su lugar."
 
 #: modules/operserv/clones.c:605
 #, c-format
@@ -5785,15 +5787,16 @@ msgstr "No se encontró %s en la lista de exención de clones."
 msgid ""
 "Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>"
 msgstr ""
+"Sintaxis: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <límite>"
 
 #: modules/operserv/clones.c:669
 msgid "Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>"
-msgstr ""
+msgstr "Sintaxis: CLONES SETEXEMPT <ip> <REASON | DURATION> <valor>"
 
 #: modules/operserv/clones.c:680
-#, fuzzy, c-format
+#, c-format
 msgid "Default allowed clone limit must be more than %d."
-msgstr "El número de clones permitidos debe ser más que %d"
+msgstr "El número de clones permitidos predeterminado debe ser más que %d"
 
 #: modules/operserv/clones.c:685
 #, c-format
@@ -5801,6 +5804,8 @@ msgid ""
 "Default allowed clone limit cannot be higher than the default warn limit "
 "(currently %d)."
 msgstr ""
+"El límite de clones permitidos predeterminado no puede ser superior al "
+"límite de alerta predeterminado (actualmente %d)."
 
 #: modules/operserv/clones.c:690
 #, c-format
@@ -5808,15 +5813,17 @@ msgid ""
 "Default allowed clone limit must be lower than the default kill limit "
 "(currently %d)."
 msgstr ""
+"El límite de clones permitidos predeterminado debe ser inferior al límite de "
+"desconexión predeterminado (actualmente %d)."
 
 #: modules/operserv/clones.c:695
-#, fuzzy, c-format
+#, c-format
 msgid "Default allowed clone limit set to %d."
-msgstr "Límite predeterminado de clones: %d"
+msgstr "El límite de clones permitidos predeterminado ha cambiado a %d."
 
 #: modules/operserv/clones.c:701
 msgid "Default clone warning has been disabled."
-msgstr ""
+msgstr "El límite de alerta de clones predeterminado ha sido desactivado."
 
 #: modules/operserv/clones.c:707
 #, c-format
@@ -5824,6 +5831,8 @@ msgid ""
 "Default warned clone limit cannot be lower than the default allowed limit "
 "(currently %d)."
 msgstr ""
+"El límite de alerta de clones predeterminado no puede ser inferior al límite "
+"de clones permitidos predeterminado (actualmente %d)."
 
 #: modules/operserv/clones.c:712
 #, c-format
@@ -5831,16 +5840,17 @@ msgid ""
 "Default warned clone limit must be less than the default kill limit "
 "(currently %d)."
 msgstr ""
+"El límite de alerta de clones predeterminado debe ser inferior al límite de "
+"desconexión de clones predeterminado (actualmente %d)."
 
 #: modules/operserv/clones.c:717
-#, fuzzy, c-format
+#, c-format
 msgid "Default warned clone limit set to %d"
-msgstr "Límite predeterminado de clones: %d"
+msgstr "Número predeterminado de alerta de clones cambiado a %d"
 
 #: modules/operserv/clones.c:723
-#, fuzzy
 msgid "Default clone kill limit has been disabled."
-msgstr "Límite predeterminado de clones: %d"
+msgstr "El límite de desconexión de clones predeterminado ha sido desactivado."
 
 #: modules/operserv/clones.c:727
 #, c-format
@@ -5848,6 +5858,8 @@ msgid ""
 "Default kill clone limit must be more than the default warn limit (currently "
 "%d)."
 msgstr ""
+"El límite de desconexión de clones predeterminado debe ser superior al "
+"límite de alerta de clones predeterminado (actualmente %d)."
 
 #: modules/operserv/clones.c:732
 #, c-format
@@ -5855,102 +5867,119 @@ msgid ""
 "Default kill clone limit must be more than the default allowed limit "
 "(currently %d) since warnings are disabled."
 msgstr ""
+"El límite de desconexión de clones predeterminado debe ser superior al "
+"límite de clones permitidos predeterminado (actualmente %d) ya que las "
+"alertas se encuentran desactivadas."
 
 #: modules/operserv/clones.c:737
-#, fuzzy, c-format
+#, c-format
 msgid "Default kill clone limit set to %d"
-msgstr "Límite predeterminado de clones: %d"
+msgstr "Límite predeterminado de desconexión de clones cambiado a %d"
 
 #: modules/operserv/clones.c:742 modules/operserv/clones.c:876
-#, fuzzy
 msgid "Invalid syntax given."
-msgstr "Duración no válida."
+msgstr "Sintaxis no válida."
 
 #: modules/operserv/clones.c:743
 msgid "Syntax: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN | KILL> <limit>"
-msgstr ""
+msgstr "Sintaxis: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN | KILL> <límite>"
 
 #: modules/operserv/clones.c:767
-#, fuzzy, c-format
+#, c-format
 msgid "Allowed clones must be more than %d."
-msgstr "El número de clones permitidos debe ser más que %d"
+msgstr "El número de clones permitidos debe ser más que %d."
 
 #: modules/operserv/clones.c:772
 #, c-format
 msgid ""
 "The ALLOWED clone limit must be lower than the WARN limit (currently %d)"
 msgstr ""
+"El límite de clones permitidos debe ser inferior al límite de alerta "
+"(actualmente %d)"
 
 #: modules/operserv/clones.c:777
 #, c-format
 msgid ""
 "The ALLOWED clone limit must be lower than the KILL limit (currently %d)"
 msgstr ""
+"El límite de clones permitidos debe ser inferior al límite de desconexión "
+"(actualmente %d)"
 
 #: modules/operserv/clones.c:782
-#, fuzzy, c-format
+#, c-format
 msgid "Allowed clones limit for host %s set to %d"
-msgstr "El número de clones permitidos debe ser más que %d"
+msgstr "Número de clones permitidos para el host %s cambiado a %d"
 
 #: modules/operserv/clones.c:789
 #, c-format
 msgid "Clone warning messages will be disabled for host %s"
-msgstr ""
+msgstr "Mensajes de alerta de clones desactivados para el host %s"
 
 #: modules/operserv/clones.c:795
 #, c-format
 msgid "Warned clones limit cannot be less than the allowed limit of %d"
 msgstr ""
+"El límite de alerta de clones no puede ser inferior al límite de clones "
+"permitidos de %d"
 
 #: modules/operserv/clones.c:800
 #, c-format
 msgid "Warned clones limit must be less than the kill limit of %d."
 msgstr ""
+"El límite de alerta de clones debe ser inferior al límite de desconexión de "
+"%d."
 
 #: modules/operserv/clones.c:805
 #, c-format
 msgid "Warned clones limit for host %s set to %d"
-msgstr ""
+msgstr "Límite de alerta de clones para el host %s establecido como %d"
 
 #: modules/operserv/clones.c:812
-#, fuzzy, c-format
+#, c-format
 msgid "Clone kills will be disabled for host %s"
-msgstr "%s ha sido desactivado para %s."
+msgstr "Desconexión de clones desactivada para el host %s"
 
 #: modules/operserv/clones.c:818
-#, fuzzy, c-format
+#, c-format
 msgid "Killed clones limit must be more than the warn limit of %d"
-msgstr "El número de clones permitidos debe ser más que %d"
+msgstr ""
+"El límite de desconexión de clones permitidos debe ser más que el límite de "
+"alerta %d"
 
 #: modules/operserv/clones.c:823
 #, c-format
 msgid "Kill clone limit for host %s set to %d"
-msgstr ""
+msgstr "Límite de desconexión de clones para el host %s establecido como %d"
 
 #: modules/operserv/clones.c:831
 #, c-format
 msgid "Clone exemption duration for host %s set to permanent"
 msgstr ""
+"Duración de exención de clones para el host %s establecida como permanente"
 
 #: modules/operserv/clones.c:852
 msgid "Syntax: CLONES SETEXEMPT <ip> DURATION <value>"
-msgstr ""
+msgstr "Sintaxis: CLONES SETEXEMPT <ip> DURATION <valor>"
 
 #: modules/operserv/clones.c:856
-#, fuzzy, c-format
+#, c-format
 msgid "Clone exemption duration for host %s set to %s (%ld seconds)"
-msgstr "Duración de veto de clones establecida en %s (%ld segundos)"
+msgstr ""
+"Duración de exención de clones para el host %s establecida en %s (%ld "
+"segundos)"
 
 #: modules/operserv/clones.c:871
-#, fuzzy, c-format
+#, c-format
 msgid "Clone exemption reason for host %s changed to %s"
-msgstr "La dirección de e-mail de la cuenta %s ha cambiado a %s."
+msgstr "La razón de exención de clones para el host %s ha cambiado a %s."
 
 #: modules/operserv/clones.c:877
 msgid ""
 "Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | KILL | DURATION | REASON> "
 "<value>"
 msgstr ""
+"Sintaxis: CLONES SETEXEMPT <IP> <ALLOWED | WARN | KILL | DURATION | REASON> "
+"<valor>"
 
 #: modules/operserv/clones.c:895
 #, c-format
