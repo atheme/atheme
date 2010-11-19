@@ -2,9 +2,8 @@ Ayuda para CLONES:
 
 CLONES maintiene un seguimiento del número
 de clientes por cada dirección IP. Se muestran
-alertan en el canal snoop sobre IPs con más de
-3 clientes, y opcionalmente pueden aplicarse
-vetos de red sobre IPs con más de 5 clientes.
+alertan en el canal snoop sobre IPs con múltiples
+clientes
 
 CLONES sólo funciona con clientes cuya IP es
 conocida por Atheme. Si el ircd no soporta la
@@ -16,10 +15,10 @@ tales están exentos de la comprobación de CLONES.
 Sintaxis: CLONES KLINE ON|OFF
 
 Activa/desactiva el veto de direcciones IP con más
-de 5 clientes en la red por una hora (estos vetos
-no son agregados a la lista AKILL). Este ajuste es
-almacenado en etc/services.db y tiene un valor
-predeterminado OFF.
+del número de clientes permitido por la red por una
+hora (estos vetos no son agregados a la lista AKILL).
+Este ajuste es almacenado en etc/services.db y tiene
+un valor predeterminado OFF.
 
 Sintaxis: CLONES LIST
 
@@ -36,8 +35,8 @@ una máscara CIDR, por ej. 192.168.1.0/24. IPs
 individuales tienen prioridad sobre CIDRs. <clones>
 corresponde al número de clones permitidos; debe ser
 al menos 4. Se producen alertas si este número es
-excedido, y un veto puede ser aplicado si el número
-es excedido por 10 o más.
+alcanzado, y un veto puede ser aplicado si el número
+es excedido.
 La razón es mostrada en LISTEXEMPT.
 La lista de exención de clones es almacenada en
 etc/services.db y actualizada tras cada modificación.
@@ -45,6 +44,19 @@ etc/services.db y actualizada tras cada modificación.
 Sintaxis: CLONES DELEXEMPT <ip>
 
 Quita una dirección IP de la lista de exención de clones.
+
+Sintaxis: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <límite>
+
+Establece bien el valor predeterminado de clones permitidos
+(ALLOWED), de alerta (WARN) o desconexión (KILL) de una
+exención al número especificado. WARN y KILL pueden ser
+cero, desactivando advertencias y desconexiones respectivamente.
+
+Sintaxis: CLONES SETEXEMPT <ip> <REASON | DURATION> <valor>
+
+Establece la razón (REASON) o duración (DURATION) de una
+exención al valor especificado. El valor de duración puede ser
+cero, señalando una exención permanente.
 
 Sintaxis: CLONES LISTEXEMPT
 
