@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-07 19:12-0300\n"
+"POT-Creation-Date: 2010-11-18 22:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,7 +92,7 @@ msgstr ""
 #: modules/chanserv/access.c:593 modules/chanserv/access.c:663
 #: modules/chanserv/access.c:758 modules/chanserv/access.c:834
 #: modules/chanserv/access.c:916 modules/chanserv/access.c:995
-#: modules/chanserv/access.c:1034 modules/chanserv/access.c:1081
+#: modules/chanserv/access.c:1034 modules/chanserv/access.c:1082
 #: modules/chanserv/akick.c:89 modules/chanserv/ban.c:55
 #: modules/chanserv/ban.c:145 modules/chanserv/clear_bans.c:68
 #: modules/chanserv/clear_users.c:55 modules/chanserv/close.c:87
@@ -148,7 +148,11 @@ msgstr ""
 #: modules/chanserv/set_founder.c:62 modules/chanserv/status.c:77
 #: modules/chanserv/template.c:153 modules/chanserv/unban_self.c:80
 #: modules/chanserv/xop.c:94 modules/contrib/ns_listlogins.c:39
-#: modules/groupserv/basecmds.c:82 modules/groupserv/basecmds.c:570
+#: modules/groupserv/basecmds.c:82 modules/groupserv/basecmds.c:230
+#: modules/groupserv/basecmds.c:302 modules/groupserv/basecmds.c:582
+#: modules/groupserv/set.c:124 modules/groupserv/set.c:174
+#: modules/groupserv/set.c:221 modules/groupserv/set.c:268
+#: modules/groupserv/set.c:321 modules/groupserv/set.c:389
 #: modules/helpserv/ticket.c:181 modules/helpserv/ticket.c:313
 #: modules/hostserv/group.c:66 modules/hostserv/offer.c:174
 #: modules/hostserv/offer.c:265 modules/hostserv/onoff.c:52
@@ -176,7 +180,7 @@ msgstr ""
 #: modules/chanserv/access.c:603 modules/chanserv/access.c:680
 #: modules/chanserv/access.c:774 modules/chanserv/access.c:850
 #: modules/chanserv/access.c:929 modules/chanserv/access.c:1047
-#: modules/chanserv/access.c:1094 modules/chanserv/akick.c:104
+#: modules/chanserv/access.c:1095 modules/chanserv/akick.c:104
 #: modules/chanserv/akick.c:197 modules/chanserv/akick.c:253
 #: modules/chanserv/ban.c:73 modules/chanserv/ban.c:163
 #: modules/chanserv/clear_bans.c:80 modules/chanserv/clear_users.c:67
@@ -199,7 +203,7 @@ msgstr ""
 #: modules/chanserv/xop.c:162 modules/chanserv/xop.c:176
 #: modules/chanserv/xop.c:431 modules/contrib/cs_userinfo.c:73
 #: modules/contrib/cs_userinfo.c:98 modules/gameserv/dice.c:128
-#: modules/groupserv/basecmds.c:296 modules/memoserv/sendops.c:113
+#: modules/groupserv/basecmds.c:308 modules/memoserv/sendops.c:113
 #: modules/nickserv/sendpass_user.c:60 modules/operserv/soper.c:65
 #: src/commandtree.c:71
 msgid "You are not authorized to perform this operation."
@@ -476,7 +480,7 @@ msgstr ""
 #: modules/chanserv/access.c:205 modules/chanserv/akick.c:290
 #: modules/chanserv/clear.c:85 modules/chanserv/set_core.c:87
 #: modules/groupserv/set.c:103 modules/memoserv/ignore.c:84
-#: modules/operserv/akill.c:109 modules/operserv/clones.c:276
+#: modules/operserv/akill.c:109 modules/operserv/clones.c:395
 #: modules/operserv/ignore.c:79 modules/operserv/rwatch.c:202
 #: modules/operserv/sgline.c:113 modules/operserv/soper.c:79
 #: modules/operserv/sqline.c:142 src/commandtree.c:96
@@ -706,6 +710,7 @@ msgid "Syntax: ACCESS <#channel> ADD <account|hostmask> <role>"
 msgstr ""
 
 #: modules/chanserv/access.c:856 modules/chanserv/access.c:884
+#: modules/chanserv/access.c:1102
 #, c-format
 msgid "Role %s does not exist."
 msgstr ""
@@ -756,11 +761,11 @@ msgstr ""
 msgid "Flags for role %s were changed to: %s."
 msgstr ""
 
-#: modules/chanserv/access.c:1088
+#: modules/chanserv/access.c:1089
 msgid "Syntax: ROLE <#channel> DEL <role>"
 msgstr ""
 
-#: modules/chanserv/access.c:1098
+#: modules/chanserv/access.c:1106
 #, c-format
 msgid "Role %s has been deleted."
 msgstr ""
@@ -1041,14 +1046,14 @@ msgstr ""
 msgid "The channel %s is held; it cannot be dropped."
 msgstr ""
 
-#: modules/chanserv/drop.c:118 modules/groupserv/basecmds.c:248
+#: modules/chanserv/drop.c:118 modules/groupserv/basecmds.c:254
 #, c-format
 msgid ""
 "To avoid accidental use of this command, this operation has to be confirmed. "
 "Please confirm by replying with %s"
 msgstr ""
 
-#: modules/chanserv/drop.c:127 modules/groupserv/basecmds.c:257
+#: modules/chanserv/drop.c:127 modules/groupserv/basecmds.c:263
 #, c-format
 msgid "Invalid key for %s."
 msgstr ""
@@ -1129,7 +1134,7 @@ msgstr ""
 msgid "%-5d %-22s %s [modified %s ago]"
 msgstr ""
 
-#: modules/chanserv/flags.c:162 modules/groupserv/basecmds.c:319
+#: modules/chanserv/flags.c:162 modules/groupserv/basecmds.c:331
 #, c-format
 msgid "End of %s FLAGS listing."
 msgstr ""
@@ -1137,10 +1142,10 @@ msgstr ""
 #: modules/chanserv/flags.c:183 modules/chanserv/flags.c:227
 #: modules/chanserv/set_email.c:50 modules/chanserv/set_entrymsg.c:49
 #: modules/chanserv/set_prefix.c:78 modules/chanserv/set_url.c:50
-#: modules/chanserv/template.c:165 modules/groupserv/basecmds.c:236
-#: modules/groupserv/set.c:124 modules/groupserv/set.c:168
-#: modules/groupserv/set.c:209 modules/groupserv/set.c:250
-#: modules/groupserv/set.c:297 modules/groupserv/set.c:359
+#: modules/chanserv/template.c:165 modules/groupserv/basecmds.c:242
+#: modules/groupserv/set.c:130 modules/groupserv/set.c:180
+#: modules/groupserv/set.c:227 modules/groupserv/set.c:274
+#: modules/groupserv/set.c:327 modules/groupserv/set.c:395
 msgid "You are not authorized to execute this command."
 msgstr ""
 
@@ -1174,7 +1179,7 @@ msgid "%s has too many channels registered."
 msgstr ""
 
 #: modules/chanserv/flags.c:305 modules/chanserv/xop.c:286
-#: modules/groupserv/basecmds.c:390
+#: modules/groupserv/basecmds.c:402
 #, c-format
 msgid "%s does not wish to be added to channel access lists (NEVEROP set)."
 msgstr ""
@@ -1811,7 +1816,7 @@ msgstr ""
 msgid "The e-mail address for channel %s was not set."
 msgstr ""
 
-#: modules/chanserv/set_email.c:70 modules/groupserv/set.c:144
+#: modules/chanserv/set_email.c:70 modules/groupserv/set.c:150
 #: modules/nickserv/return.c:65
 #, c-format
 msgid "%s is not a valid e-mail address."
@@ -2129,17 +2134,17 @@ msgstr ""
 msgid "Sets the channel URL."
 msgstr ""
 
-#: modules/chanserv/set_url.c:63 modules/groupserv/set.c:181
+#: modules/chanserv/set_url.c:63 modules/groupserv/set.c:193
 #, c-format
 msgid "The URL for %s has been cleared."
 msgstr ""
 
-#: modules/chanserv/set_url.c:67 modules/groupserv/set.c:185
+#: modules/chanserv/set_url.c:67 modules/groupserv/set.c:197
 #, c-format
 msgid "The URL for %s was not set."
 msgstr ""
 
-#: modules/chanserv/set_url.c:75 modules/groupserv/set.c:193
+#: modules/chanserv/set_url.c:75 modules/groupserv/set.c:205
 #, c-format
 msgid "The URL of %s has been set to %s."
 msgstr ""
@@ -2990,10 +2995,10 @@ msgstr ""
 msgid "Syntax: INFO <!groupname>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:119 modules/groupserv/basecmds.c:230
-#: modules/groupserv/basecmds.c:564 modules/groupserv/basecmds.c:622
-#: modules/groupserv/set.c:118 modules/groupserv/set.c:162
-#: modules/groupserv/set.c:203 modules/groupserv/set.c:244
+#: modules/groupserv/basecmds.c:119 modules/groupserv/basecmds.c:236
+#: modules/groupserv/basecmds.c:576 modules/groupserv/basecmds.c:634
+#: modules/groupserv/set.c:118 modules/groupserv/set.c:168
+#: modules/groupserv/set.c:215 modules/groupserv/set.c:262
 #, c-format
 msgid "Group %s does not exist."
 msgstr ""
@@ -3060,139 +3065,139 @@ msgid "Drops a group registration."
 msgstr ""
 
 #: modules/groupserv/basecmds.c:217 modules/groupserv/basecmds.c:224
-#: modules/groupserv/basecmds.c:609 modules/groupserv/basecmds.c:616
+#: modules/groupserv/basecmds.c:621 modules/groupserv/basecmds.c:628
 msgid "Syntax: DROP <!group>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:264 modules/groupserv/basecmds.c:629
+#: modules/groupserv/basecmds.c:270 modules/groupserv/basecmds.c:641
 #, c-format
 msgid "The group %s has been dropped."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:270
+#: modules/groupserv/basecmds.c:276
 msgid "Sets flags on a user in a group."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:284
+#: modules/groupserv/basecmds.c:290
 msgid "Syntax: FLAGS <!group> [user] [changes]"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:290 modules/groupserv/basecmds.c:451
-#: modules/groupserv/basecmds.c:507 modules/groupserv/set.c:291
-#: modules/groupserv/set.c:353
+#: modules/groupserv/basecmds.c:296 modules/groupserv/basecmds.c:463
+#: modules/groupserv/basecmds.c:519 modules/groupserv/set.c:315
+#: modules/groupserv/set.c:383
 #, c-format
 msgid "The group %s does not exist."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:305
+#: modules/groupserv/basecmds.c:317
 msgid "Entry Account                Flags"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:326 modules/nickserv/main.c:30
+#: modules/groupserv/basecmds.c:338 modules/nickserv/main.c:30
 #: modules/operserv/override.c:200
 #, c-format
 msgid "%s is not a registered account."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:333
+#: modules/groupserv/basecmds.c:345
 msgid "Syntax: FLAGS <!group> <user> <changes>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:414
+#: modules/groupserv/basecmds.c:426
 #, c-format
 msgid "%s has been removed from %s."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:422 modules/groupserv/basecmds.c:588
+#: modules/groupserv/basecmds.c:434 modules/groupserv/basecmds.c:600
 #, c-format
 msgid "Group %s access list is full."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:428
+#: modules/groupserv/basecmds.c:440
 #, c-format
 msgid "%s now has flags %s on %s."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:436
+#: modules/groupserv/basecmds.c:448
 msgid "Allow a group to bypass registration limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:445 modules/groupserv/basecmds.c:486
+#: modules/groupserv/basecmds.c:457 modules/groupserv/basecmds.c:498
 msgid "Syntax: REGNOLIMIT <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:459 modules/nickserv/regnolimit.c:55
+#: modules/groupserv/basecmds.c:471 modules/nickserv/regnolimit.c:55
 #, c-format
 msgid "%s can already bypass registration limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:467 modules/nickserv/regnolimit.c:63
+#: modules/groupserv/basecmds.c:479 modules/nickserv/regnolimit.c:63
 #, c-format
 msgid "%s can now bypass registration limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:473 modules/nickserv/regnolimit.c:69
+#: modules/groupserv/basecmds.c:485 modules/nickserv/regnolimit.c:69
 #, c-format
 msgid "%s cannot bypass registration limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:481 modules/nickserv/regnolimit.c:77
+#: modules/groupserv/basecmds.c:493 modules/nickserv/regnolimit.c:77
 #, c-format
 msgid "%s cannot bypass registration limits anymore."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:492
+#: modules/groupserv/basecmds.c:504
 msgid "Allow a group to bypass access list limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:501 modules/groupserv/basecmds.c:542
+#: modules/groupserv/basecmds.c:513 modules/groupserv/basecmds.c:554
 msgid "Syntax: ACSNOLIMIT <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:515
+#: modules/groupserv/basecmds.c:527
 #, c-format
 msgid "%s can already bypass access list limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:523
+#: modules/groupserv/basecmds.c:535
 #, c-format
 msgid "%s can now bypass access list limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:529
+#: modules/groupserv/basecmds.c:541
 #, c-format
 msgid "%s cannot bypass access list limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:537
+#: modules/groupserv/basecmds.c:549
 #, c-format
 msgid "%s cannot bypass access list limits anymore."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:548
+#: modules/groupserv/basecmds.c:560
 msgid "Join a open group."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:558
+#: modules/groupserv/basecmds.c:570
 msgid "Syntax: JOIN <!groupname>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:576
+#: modules/groupserv/basecmds.c:588
 #, c-format
 msgid "Group %s is not open to anyone joining."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:582
+#: modules/groupserv/basecmds.c:594
 #, c-format
 msgid "You are already a member of group %s."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:594
+#: modules/groupserv/basecmds.c:606
 #, c-format
 msgid "You are now a member of %s."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:599
+#: modules/groupserv/basecmds.c:611
 msgid "Force drops a group registration."
 msgstr ""
 
@@ -3236,99 +3241,99 @@ msgstr ""
 msgid "Syntax: SET <!group> <setting> [parameters]"
 msgstr ""
 
-#: modules/groupserv/set.c:133
+#: modules/groupserv/set.c:139
 #, c-format
 msgid "The e-mail address for group %s was deleted."
 msgstr ""
 
-#: modules/groupserv/set.c:138
+#: modules/groupserv/set.c:144
 #, c-format
 msgid "The e-mail address for group %s was not set."
 msgstr ""
 
-#: modules/groupserv/set.c:152
+#: modules/groupserv/set.c:158
 #, c-format
 msgid "The e-mail address for group %s has been set to %s."
 msgstr ""
 
-#: modules/groupserv/set.c:222
+#: modules/groupserv/set.c:240
 #, c-format
 msgid "The description for %s has been cleared."
 msgstr ""
 
-#: modules/groupserv/set.c:226
+#: modules/groupserv/set.c:244
 #, c-format
 msgid "A description for %s was not set."
 msgstr ""
 
-#: modules/groupserv/set.c:234
+#: modules/groupserv/set.c:252
 #, c-format
 msgid "The description of %s has been set to %s."
 msgstr ""
 
-#: modules/groupserv/set.c:263
+#: modules/groupserv/set.c:287
 #, c-format
 msgid "The official channel for %s has been cleared."
 msgstr ""
 
-#: modules/groupserv/set.c:267
+#: modules/groupserv/set.c:291
 #, c-format
 msgid "A official channel for %s was not set."
 msgstr ""
 
-#: modules/groupserv/set.c:275
+#: modules/groupserv/set.c:299
 #, c-format
 msgid "The official channel of %s has been set to %s."
 msgstr ""
 
-#: modules/groupserv/set.c:285 modules/groupserv/set.c:336
+#: modules/groupserv/set.c:309 modules/groupserv/set.c:366
 msgid "Syntax: OPEN <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/set.c:305
+#: modules/groupserv/set.c:335
 msgid "Setting groups as open has been administratively disabled."
 msgstr ""
 
-#: modules/groupserv/set.c:311
+#: modules/groupserv/set.c:341
 #, c-format
 msgid "%s is already open to anyone joining."
 msgstr ""
 
-#: modules/groupserv/set.c:318
+#: modules/groupserv/set.c:348
 #, c-format
 msgid "%s is now open to anyone joining."
 msgstr ""
 
-#: modules/groupserv/set.c:324
+#: modules/groupserv/set.c:354
 #, c-format
 msgid "%s is already not open to anyone joining."
 msgstr ""
 
-#: modules/groupserv/set.c:331
+#: modules/groupserv/set.c:361
 #, c-format
 msgid "%s is no longer open to anyone joining."
 msgstr ""
 
-#: modules/groupserv/set.c:347 modules/groupserv/set.c:392
+#: modules/groupserv/set.c:377 modules/groupserv/set.c:428
 msgid "Syntax: PUBLIC <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/set.c:367
+#: modules/groupserv/set.c:403
 #, c-format
 msgid "%s is already public."
 msgstr ""
 
-#: modules/groupserv/set.c:374
+#: modules/groupserv/set.c:410
 #, c-format
 msgid "%s is now public."
 msgstr ""
 
-#: modules/groupserv/set.c:380
+#: modules/groupserv/set.c:416
 #, c-format
 msgid "%s is not public already."
 msgstr ""
 
-#: modules/groupserv/set.c:387
+#: modules/groupserv/set.c:423
 #, c-format
 msgid "%s is no longer public."
 msgstr ""
@@ -4428,7 +4433,7 @@ msgstr ""
 msgid "Please check your email for instructions to complete your registration."
 msgstr ""
 
-#: modules/nickserv/identify.c:122 src/services.c:589
+#: modules/nickserv/identify.c:122 src/services.c:591
 #, c-format
 msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr ""
@@ -4438,12 +4443,12 @@ msgstr ""
 msgid "Logged in nicks are: %s"
 msgstr ""
 
-#: modules/nickserv/identify.c:154 src/services.c:593
+#: modules/nickserv/identify.c:154 src/services.c:595
 #, c-format
 msgid "You are now logged in as %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:154 src/services.c:593
+#: modules/nickserv/identify.c:154 src/services.c:595
 #, c-format
 msgid "You are now identified for %s."
 msgstr ""
@@ -5337,12 +5342,13 @@ msgid "Syntax: AKILL ADD|DEL|LIST"
 msgstr ""
 
 #: modules/operserv/akill.c:131 modules/operserv/akill.c:171
-#: modules/operserv/akill.c:177
+#: modules/operserv/akill.c:177 modules/operserv/clones.c:543
 msgid "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"
 msgstr ""
 
-#: modules/operserv/akill.c:170 modules/operserv/clones.c:416
-#: modules/operserv/sgline.c:171 modules/operserv/sqline.c:200
+#: modules/operserv/akill.c:170 modules/operserv/clones.c:535
+#: modules/operserv/clones.c:851 modules/operserv/sgline.c:171
+#: modules/operserv/sqline.c:200
 msgid "Invalid duration given."
 msgstr ""
 
@@ -5501,119 +5507,301 @@ msgstr ""
 msgid "%d matches, %d ignores for %s on %s"
 msgstr ""
 
-#: modules/operserv/clones.c:71
+#: modules/operserv/clones.c:87
 msgid "Manages network wide clones."
 msgstr ""
 
-#: modules/operserv/clones.c:73
+#: modules/operserv/clones.c:89
 msgid "Enables/disables klines for excessive clones."
 msgstr ""
 
-#: modules/operserv/clones.c:74
+#: modules/operserv/clones.c:90
 msgid "Lists clones on the network."
 msgstr ""
 
-#: modules/operserv/clones.c:75
+#: modules/operserv/clones.c:91
 msgid "Adds a clones exemption."
 msgstr ""
 
-#: modules/operserv/clones.c:76
+#: modules/operserv/clones.c:92
 msgid "Deletes a clones exemption."
 msgstr ""
 
-#: modules/operserv/clones.c:77
+#: modules/operserv/clones.c:93
+msgid "Sets a clone exemption details."
+msgstr ""
+
+#: modules/operserv/clones.c:94
 msgid "Lists clones exemptions."
 msgstr ""
 
-#: modules/operserv/clones.c:78
+#: modules/operserv/clones.c:95
 msgid "Sets a custom duration to ban clones for."
 msgstr ""
 
-#: modules/operserv/clones.c:269
-msgid "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]"
+#: modules/operserv/clones.c:388
+msgid ""
+"Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT "
+"[parameters]"
 msgstr ""
 
-#: modules/operserv/clones.c:294
+#: modules/operserv/clones.c:413
 msgid "CLONES klines are already enabled."
 msgstr ""
 
-#: modules/operserv/clones.c:298
+#: modules/operserv/clones.c:417
 msgid "Enabled CLONES klines."
 msgstr ""
 
-#: modules/operserv/clones.c:306
+#: modules/operserv/clones.c:425
 msgid "CLONES klines are already disabled."
 msgstr ""
 
-#: modules/operserv/clones.c:310
+#: modules/operserv/clones.c:429
 msgid "Disabled CLONES klines."
 msgstr ""
 
-#: modules/operserv/clones.c:317
+#: modules/operserv/clones.c:436
 msgid "CLONES klines are currently enabled."
 msgstr ""
 
-#: modules/operserv/clones.c:319
+#: modules/operserv/clones.c:438
 msgid "CLONES klines are currently disabled."
 msgstr ""
 
-#: modules/operserv/clones.c:337
+#: modules/operserv/clones.c:456
 #, c-format
 msgid "%d from %s (EXEMPT; allowed %d)"
 msgstr ""
 
-#: modules/operserv/clones.c:339
+#: modules/operserv/clones.c:458
 #, c-format
 msgid "%d from %s"
 msgstr ""
 
-#: modules/operserv/clones.c:342
+#: modules/operserv/clones.c:461
 msgid "End of CLONES LIST"
 msgstr ""
 
-#: modules/operserv/clones.c:361 modules/operserv/clones.c:377
-#: modules/operserv/clones.c:389 modules/operserv/clones.c:417
-#: modules/operserv/clones.c:424 modules/operserv/clones.c:431
-#: modules/operserv/clones.c:462
+#: modules/operserv/clones.c:480 modules/operserv/clones.c:496
+#: modules/operserv/clones.c:508 modules/operserv/clones.c:536
+#: modules/operserv/clones.c:550 modules/operserv/clones.c:570
+#: modules/operserv/clones.c:587
 msgid "Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"
 msgstr ""
 
-#: modules/operserv/clones.c:368
+#: modules/operserv/clones.c:487
 #, c-format
 msgid "Allowed clones count must be more than %d"
 msgstr ""
 
-#: modules/operserv/clones.c:469
+#: modules/operserv/clones.c:595
 #, c-format
 msgid "Added %s to clone exempt list."
 msgstr ""
 
-#: modules/operserv/clones.c:478
+#: modules/operserv/clones.c:604
+msgid ""
+"Warning: the syntax you are using to update this exemption has been "
+"deprecated and may be removed in a future version.  Please use SETEXEMPT in "
+"the future instead."
+msgstr ""
+
+#: modules/operserv/clones.c:605
 #, c-format
 msgid "Updated %s in clone exempt list."
 msgstr ""
 
-#: modules/operserv/clones.c:513
+#: modules/operserv/clones.c:643
 #, c-format
 msgid "Removed %s from clone exempt list."
 msgstr ""
 
-#: modules/operserv/clones.c:519
+#: modules/operserv/clones.c:649 modules/operserv/clones.c:884
 #, c-format
 msgid "%s not found in clone exempt list."
 msgstr ""
 
-#: modules/operserv/clones.c:529
+#: modules/operserv/clones.c:668
+msgid ""
+"Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>"
+msgstr ""
+
+#: modules/operserv/clones.c:669
+msgid "Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>"
+msgstr ""
+
+#: modules/operserv/clones.c:680
+#, c-format
+msgid "Default allowed clone limit must be more than %d."
+msgstr ""
+
+#: modules/operserv/clones.c:685
+#, c-format
+msgid ""
+"Default allowed clone limit cannot be higher than the default warn limit "
+"(currently %d)."
+msgstr ""
+
+#: modules/operserv/clones.c:690
+#, c-format
+msgid ""
+"Default allowed clone limit must be lower than the default kill limit "
+"(currently %d)."
+msgstr ""
+
+#: modules/operserv/clones.c:695
+#, c-format
+msgid "Default allowed clone limit set to %d."
+msgstr ""
+
+#: modules/operserv/clones.c:701
+msgid "Default clone warning has been disabled."
+msgstr ""
+
+#: modules/operserv/clones.c:707
+#, c-format
+msgid ""
+"Default warned clone limit cannot be lower than the default allowed limit "
+"(currently %d)."
+msgstr ""
+
+#: modules/operserv/clones.c:712
+#, c-format
+msgid ""
+"Default warned clone limit must be less than the default kill limit "
+"(currently %d)."
+msgstr ""
+
+#: modules/operserv/clones.c:717
+#, c-format
+msgid "Default warned clone limit set to %d"
+msgstr ""
+
+#: modules/operserv/clones.c:723
+msgid "Default clone kill limit has been disabled."
+msgstr ""
+
+#: modules/operserv/clones.c:727
+#, c-format
+msgid ""
+"Default kill clone limit must be more than the default warn limit (currently "
+"%d)."
+msgstr ""
+
+#: modules/operserv/clones.c:732
+#, c-format
+msgid ""
+"Default kill clone limit must be more than the default allowed limit "
+"(currently %d) since warnings are disabled."
+msgstr ""
+
+#: modules/operserv/clones.c:737
+#, c-format
+msgid "Default kill clone limit set to %d"
+msgstr ""
+
+#: modules/operserv/clones.c:742 modules/operserv/clones.c:876
+msgid "Invalid syntax given."
+msgstr ""
+
+#: modules/operserv/clones.c:743
+msgid "Syntax: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN | KILL> <limit>"
+msgstr ""
+
+#: modules/operserv/clones.c:767
+#, c-format
+msgid "Allowed clones must be more than %d."
+msgstr ""
+
+#: modules/operserv/clones.c:772
+#, c-format
+msgid ""
+"The ALLOWED clone limit must be lower than the WARN limit (currently %d)"
+msgstr ""
+
+#: modules/operserv/clones.c:777
+#, c-format
+msgid ""
+"The ALLOWED clone limit must be lower than the KILL limit (currently %d)"
+msgstr ""
+
+#: modules/operserv/clones.c:782
+#, c-format
+msgid "Allowed clones limit for host %s set to %d"
+msgstr ""
+
+#: modules/operserv/clones.c:789
+#, c-format
+msgid "Clone warning messages will be disabled for host %s"
+msgstr ""
+
+#: modules/operserv/clones.c:795
+#, c-format
+msgid "Warned clones limit cannot be less than the allowed limit of %d"
+msgstr ""
+
+#: modules/operserv/clones.c:800
+#, c-format
+msgid "Warned clones limit must be less than the kill limit of %d."
+msgstr ""
+
+#: modules/operserv/clones.c:805
+#, c-format
+msgid "Warned clones limit for host %s set to %d"
+msgstr ""
+
+#: modules/operserv/clones.c:812
+#, c-format
+msgid "Clone kills will be disabled for host %s"
+msgstr ""
+
+#: modules/operserv/clones.c:818
+#, c-format
+msgid "Killed clones limit must be more than the warn limit of %d"
+msgstr ""
+
+#: modules/operserv/clones.c:823
+#, c-format
+msgid "Kill clone limit for host %s set to %d"
+msgstr ""
+
+#: modules/operserv/clones.c:831
+#, c-format
+msgid "Clone exemption duration for host %s set to permanent"
+msgstr ""
+
+#: modules/operserv/clones.c:852
+msgid "Syntax: CLONES SETEXEMPT <ip> DURATION <value>"
+msgstr ""
+
+#: modules/operserv/clones.c:856
+#, c-format
+msgid "Clone exemption duration for host %s set to %s (%ld seconds)"
+msgstr ""
+
+#: modules/operserv/clones.c:871
+#, c-format
+msgid "Clone exemption reason for host %s changed to %s"
+msgstr ""
+
+#: modules/operserv/clones.c:877
+msgid ""
+"Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | KILL | DURATION | REASON> "
+"<value>"
+msgstr ""
+
+#: modules/operserv/clones.c:895
 #, c-format
 msgid "Clone ban duration set to %ld (%ld seconds)"
 msgstr ""
 
-#: modules/operserv/clones.c:554
+#: modules/operserv/clones.c:920
 #, c-format
 msgid "Clone ban duration set to %s (%ld seconds)"
 msgstr ""
 
-#: modules/operserv/clones.c:578
+#: modules/operserv/clones.c:946
 msgid "End of CLONES LISTEXEMPT"
 msgstr ""
 
@@ -6514,22 +6702,22 @@ msgstr ""
 msgid "SGLINE list:"
 msgstr ""
 
-#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:375
+#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:434
 #, c-format
 msgid "%d: %s - by %s - expires in %s - (%s)"
 msgstr ""
 
-#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:377
+#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:436
 #, c-format
 msgid "%d: %s - by %s - expires in %s"
 msgstr ""
 
-#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:379
+#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:438
 #, c-format
 msgid "%d: %s - by %s - permanent - (%s)"
 msgstr ""
 
-#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:381
+#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:440
 #, c-format
 msgid "%d: %s - by %s - permanent"
 msgstr ""
@@ -6777,35 +6965,37 @@ msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr ""
 
 #: modules/operserv/sqline.c:306 modules/operserv/sqline.c:325
+#: modules/operserv/sqline.c:365 modules/operserv/sqline.c:384
 #, c-format
 msgid "No such SQLINE with number %d."
 msgstr ""
 
 #: modules/operserv/sqline.c:310 modules/operserv/sqline.c:329
-#: modules/operserv/sqline.c:346
+#: modules/operserv/sqline.c:369 modules/operserv/sqline.c:388
+#: modules/operserv/sqline.c:405
 #, c-format
 msgid "SQLINE on %s has been successfully removed."
 msgstr ""
 
-#: modules/operserv/sqline.c:342
+#: modules/operserv/sqline.c:401
 #, c-format
 msgid "No such SQLINE: %s."
 msgstr ""
 
-#: modules/operserv/sqline.c:366
+#: modules/operserv/sqline.c:425
 msgid "SQLINE list (with reasons):"
 msgstr ""
 
-#: modules/operserv/sqline.c:368
+#: modules/operserv/sqline.c:427
 msgid "SQLINE list:"
 msgstr ""
 
-#: modules/operserv/sqline.c:384
+#: modules/operserv/sqline.c:443
 #, c-format
 msgid "Total of %zu %s in SQLINE list."
 msgstr ""
 
-#: modules/operserv/sqline.c:405
+#: modules/operserv/sqline.c:464
 msgid "SQLINE list synchronized to servers."
 msgstr ""
 
@@ -7012,24 +7202,24 @@ msgstr ""
 msgid "Login to account %s seems invalid, forcing logout"
 msgstr ""
 
-#: src/services.c:914
+#: src/services.c:916
 #, c-format
 msgid "Output limit (%u) exceeded, halting output"
 msgstr ""
 
-#: src/services.c:1121
+#: src/services.c:1123
 msgid "The vhost provided contains invalid characters."
 msgstr ""
 
-#: src/services.c:1126
+#: src/services.c:1128
 msgid "The vhost provided is too long."
 msgstr ""
 
-#: src/services.c:1132
+#: src/services.c:1134
 msgid "The vhost provided looks like a CIDR mask."
 msgstr ""
 
-#: src/services.c:1138
+#: src/services.c:1140
 msgid "The vhost provided is invalid."
 msgstr ""
 
