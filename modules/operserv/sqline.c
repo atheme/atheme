@@ -162,6 +162,12 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (IsDigit(*target))
+	{
+		command_fail(si, fault_badparams, _("Invalid target: \2%s\2. You can not SQLINE UIDs."), target);
+		return;
+	}
+
 	if (!strcasecmp(token, "!P"))
 	{
 		duration = 0;
