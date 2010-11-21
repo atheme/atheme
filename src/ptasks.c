@@ -413,7 +413,7 @@ void handle_motd(user_t *u)
 		numeric_sts(me.me, 372, u, ":- %s", lbuf);
 	}
 
-	numeric_sts(me.me, 376, u, ":- End of the Message of the Day.");
+	numeric_sts(me.me, 376, u, ":End of the Message of the Day.");
 
 	fclose(f);
 }
