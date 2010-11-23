@@ -41,8 +41,8 @@ static void ctcp_ping_handler(sourceinfo_t *si, char *cmd, char *args)
 static void ctcp_version_handler(sourceinfo_t *si, char *cmd, char *args)
 {
 	notice(si->service->nick, si->su->nick,
-		"\001VERSION %s. %s %s %s [%s]\001",
-		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname);
+		"\001VERSION %s. %s %s %s [%s] Build Date: %s\001",
+		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname, __DATE__);
 }
 
 static void ctcp_clientinfo_handler(sourceinfo_t *si, char *cmd, char *args)

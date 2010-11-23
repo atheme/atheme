@@ -33,7 +33,7 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "UPTIME");
 
-        command_success_nodata(si, "%s [%s]", PACKAGE_STRING, revision);
+        command_success_nodata(si, "%s [%s] Build Date: %s", PACKAGE_STRING, revision, __DATE__);
         command_success_nodata(si, _("Services have been up for %s"), timediff(CURRTIME - me.start));
         command_success_nodata(si, _("Registered accounts: %d"), cnt.myuser);
 	if (!nicksvs.no_nick_ownership)

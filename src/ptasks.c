@@ -49,8 +49,8 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s]",
-		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname);
+	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s] Build Date: %s",
+		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, __DATE__);
 }
 
 void handle_admin(user_t *u)
