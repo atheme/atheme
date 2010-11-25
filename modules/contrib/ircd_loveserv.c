@@ -8,9 +8,6 @@
 
 #include "atheme.h"
 
-/* CONFIG SECTION */
-#define LS_HOST		"services.int"
-
 DECLARE_MODULE_V1
 (
         "contrib/ircd_loveserv", false, _modinit, _moddeinit,
@@ -19,336 +16,318 @@ DECLARE_MODULE_V1
 );
 
 service_t *loveserv;
-mowgli_list_t ls_cmdtree;
+mowgli_list_t conf_ls_table;
 
-static void _ls_admirer(char *origin)
+static void _ls_admirer(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "ADMIRER");
-		notice(loveserv->name, origin, "Syntax: ADMIRER <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "ADMIRER");
+		notice(loveserv->nick, si->su->nick, "Syntax: ADMIRER <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "They have been told that they have a secret admirer. :)");
-	notice(loveserv->name, target, "You have a secret admirer ;)");
+	notice(loveserv->nick, si->su->nick, "They have been told that they have a secret admirer. :)");
+	notice(loveserv->nick, target, "You have a secret admirer ;)");
 }
 
-command_t ls_admirer = { "ADMIRER", "Tell somebody they have a secret admirer.", AC_NONE, _ls_admirer };
+command_t ls_admirer = { "ADMIRER", "Tell somebody they have a secret admirer.", AC_NONE, 1, _ls_admirer, { .path = "" } };
 
-static void _ls_rose(char *origin)
+static void _ls_rose(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "ROSE");
-		notice(loveserv->name, origin, "Syntax: ROSE <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "ROSE");
+		notice(loveserv->nick, si->su->nick, "Syntax: ROSE <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your rose has been sent! :)");
-	notice(loveserv->name, target, "%s has sent you a pretty rose: \00303--<--<--<{\00304@", origin);
+	notice(loveserv->nick, si->su->nick, "Your rose has been sent! :)");
+	notice(loveserv->nick, target, "%s has sent you a pretty rose: \00303--<--<--<{\00304@", si->su->nick);
 }
 
-command_t ls_rose = { "ROSE", "Sends a rose to somebody.", AC_NONE, _ls_rose };
+command_t ls_rose = { "ROSE", "Sends a rose to somebody.", AC_NONE, 1, _ls_rose, { .path = "" } };
 
-static void _ls_chocolate(char *origin)
+static void _ls_chocolate(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "CHOCOLATE");
-		notice(loveserv->name, origin, "Syntax: CHOCOLATE <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CHOCOLATE");
+		notice(loveserv->nick, si->su->nick, "Syntax: CHOCOLATE <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your chocolates have been sent! :)");
-	notice(loveserv->name, target, "%s would like you to have this YUMMY box of chocolates.", origin);
+	notice(loveserv->nick, si->su->nick, "Your chocolates have been sent! :)");
+	notice(loveserv->nick, target, "%s would like you to have this YUMMY box of chocolates.", si->su->nick);
 }
 
-command_t ls_chocolate = { "CHOCOLATE", "Sends chocolates to somebody.", AC_NONE, _ls_chocolate };
+command_t ls_chocolate = { "CHOCOLATE", "Sends chocolates to somebody.", AC_NONE, 1, _ls_chocolate, { .path = "" } };
 
-static void _ls_candy(char *origin)
+static void _ls_candy(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "CANDY");
-		notice(loveserv->name, origin, "Syntax: CANDY <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CANDY");
+		notice(loveserv->nick, si->su->nick, "Syntax: CANDY <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your bag of candy has been sent! :)");
-	notice(loveserv->name, target, "%s would like you to have this bag of heart-shaped candies.", origin);
+	notice(loveserv->nick, si->su->nick, "Your bag of candy has been sent! :)");
+	notice(loveserv->nick, target, "%s would like you to have this bag of heart-shaped candies.", si->su->nick);
 }
 
-command_t ls_candy = { "CANDY", "Sends a bag of candy to somebody.", AC_NONE, _ls_candy };
+command_t ls_candy = { "CANDY", "Sends a bag of candy to somebody.", AC_NONE, 1, _ls_candy, { .path = "" } };
 
-static void _ls_hug(char *origin)
+static void _ls_hug(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "HUG");
-		notice(loveserv->name, origin, "Syntax: HUG <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HUG");
+		notice(loveserv->nick, si->su->nick, "Syntax: HUG <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "You have virtually hugged %s!", target);
-	notice(loveserv->name, target, "%s has sent you a \002BIG WARM HUG\002.", origin);
+	notice(loveserv->nick, si->su->nick, "You have virtually hugged %s!", target);
+	notice(loveserv->nick, target, "%s has sent you a \002BIG WARM HUG\002.", si->su->nick);
 }
 
-command_t ls_hug = { "HUG", "Reach out and hug somebody.", AC_NONE, _ls_hug };
+command_t ls_hug = { "HUG", "Reach out and hug somebody.", AC_NONE, 1, _ls_hug, { .path = "" } };
 
-static void _ls_kiss(char *origin)
+static void _ls_kiss(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "KISS");
-		notice(loveserv->name, origin, "Syntax: KISS <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "KISS");
+		notice(loveserv->nick, si->su->nick, "Syntax: KISS <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "You have virtually kissed %s!", target);
-	notice(loveserv->name, target, "%s has sent you a \00304kiss\003.", origin);
+	notice(loveserv->nick, si->su->nick, "You have virtually kissed %s!", target);
+	notice(loveserv->nick, target, "%s has sent you a \00304kiss\003.", si->su->nick);
 }
 
-command_t ls_kiss = { "KISS", "Kiss somebody.", AC_NONE, _ls_kiss };
+command_t ls_kiss = { "KISS", "Kiss somebody.", AC_NONE, 1, _ls_kiss, { .path = "" } };
 
-static void _ls_lovenote(char *origin)
+static void _ls_lovenote(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
-	char *note = strtok(NULL, "");
+	char *target = parv[0];
+	char *note = parv[1];
 
 	if (target == NULL || note == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "LOVENOTE");
-		notice(loveserv->name, origin, "Syntax: LOVENOTE <target> <message>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LOVENOTE");
+		notice(loveserv->nick, si->su->nick, "Syntax: LOVENOTE <target> <message>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your love-note to %s has been sent.", target);
-	notice(loveserv->name, target, "%s has sent you a love-note which reads: %s", origin, note);
+	notice(loveserv->nick, si->su->nick, "Your love-note to %s has been sent.", target);
+	notice(loveserv->nick, target, "%s has sent you a love-note which reads: %s", si->su->nick, note);
 }
 
-command_t ls_lovenote = { "LOVENOTE", "Sends a lovenote to somebody.", AC_NONE, _ls_lovenote };
+command_t ls_lovenote = { "LOVENOTE", "Sends a lovenote to somebody.", AC_NONE, 2, _ls_lovenote, { .path = "" } };
 
-static void _ls_apology(char *origin)
+static void _ls_apology(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
-	char *note = strtok(NULL, "");
+	char *target = parv[0];
+	char *note = parv[1];
 
 	if (target == NULL || note == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "APOLOGY");
-		notice(loveserv->name, origin, "Syntax: APOLOGY <target> <message>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "APOLOGY");
+		notice(loveserv->nick, si->su->nick, "Syntax: APOLOGY <target> <message>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your apology to %s has been sent.", target);
-	notice(loveserv->name, target, "%s would like to apologize for: %s", origin, note);
+	notice(loveserv->nick, si->su->nick, "Your apology to %s has been sent.", target);
+	notice(loveserv->nick, target, "%s would like to apologize for: %s", si->su->nick, note);
 }
 
-command_t ls_apology = { "APOLOGY", "Sends an apology to somebody.", AC_NONE, _ls_apology };
+command_t ls_apology = { "APOLOGY", "Sends an apology to somebody.", AC_NONE, 2, _ls_apology, { .path = "" } };
 
-static void _ls_thankyou(char *origin)
+static void _ls_thankyou(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
-	char *note = strtok(NULL, "");
+	char *target = parv[0];
+	char *note = parv[1];
 
 	if (target == NULL || note == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "THANKYOU");
-		notice(loveserv->name, origin, "Syntax: THANKYOU <target> <message>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "THANKYOU");
+		notice(loveserv->nick, si->su->nick, "Syntax: THANKYOU <target> <message>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your thank-you note to %s has been sent.", target);
-	notice(loveserv->name, target, "%s would like to thank you for: %s", origin, note);
+	notice(loveserv->nick, si->su->nick, "Your thank-you note to %s has been sent.", target);
+	notice(loveserv->nick, target, "%s would like to thank you for: %s", si->su->nick, note);
 }
 
-command_t ls_thankyou = { "THANKYOU", "Sends a thank-you note to somebody.", AC_NONE, _ls_thankyou };
+command_t ls_thankyou = { "THANKYOU", "Sends a thank-you note to somebody.", AC_NONE, 2, _ls_thankyou, { .path = "" } };
 
-static void _ls_spank(char *origin)
+static void _ls_spank(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "SPANK");
-		notice(loveserv->name, origin, "Syntax: SPANK <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SPANK");
+		notice(loveserv->nick, si->su->nick, "Syntax: SPANK <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "You have virtually spanked %s!", target);
-	notice(loveserv->name, target, "%s has given you a virtual playful spanking.", origin);
+	notice(loveserv->nick, si->su->nick, "You have virtually spanked %s!", target);
+	notice(loveserv->nick, target, "%s has given you a virtual playful spanking.", si->su->nick);
 }
 
-command_t ls_spank = { "SPANK", "Gives somebody a spanking.", AC_NONE, _ls_spank };
+command_t ls_spank = { "SPANK", "Gives somebody a spanking.", AC_NONE, 1, _ls_spank, { .path = "" } };
 
-static void _ls_chocobo(char *origin)	/* silly */
+static void _ls_chocobo(sourceinfo_t *si, int parc, char *parv[])	/* silly */
 {
 	user_t *u;
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target == NULL)
 	{
-		notice(loveserv->name, origin, STR_INSUFFICIENT_PARAMS, "CHOCOBO");
-		notice(loveserv->name, origin, "Syntax: CHOCOBO <target>");
+		notice(loveserv->nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CHOCOBO");
+		notice(loveserv->nick, si->su->nick, "Syntax: CHOCOBO <target>");
 		return;
 	}
 
 	if ((u = user_find_named(target)) == NULL)
 	{
-		notice(loveserv->name, origin, "As much as I'd love to do this, you need to specify a person who really exists!");
+		notice(loveserv->nick, si->su->nick, "As much as I'd love to do this, you need to specify a person who really exists!");
 		return;
 	}
 
-	notice(loveserv->name, origin, "Your chocobo has been sent to %s.", target);
-	notice(loveserv->name, target, "%s would like you to have this chocobo. \00308Kweh!\003", origin);
+	notice(loveserv->nick, si->su->nick, "Your chocobo has been sent to %s.", target);
+	notice(loveserv->nick, target, "%s would like you to have this chocobo. \00308Kweh!\003", si->su->nick);
 }
 
-command_t ls_chocobo = { "CHOCOBO", "Sends a chocobo to somebody.", AC_NONE, _ls_chocobo };
+command_t ls_chocobo = { "CHOCOBO", "Sends a chocobo to somebody.", AC_NONE, 1, _ls_chocobo, { .path = "" } };
 
-static void _ls_help(char *origin)
+static void _ls_help(sourceinfo_t *si, int parc, char *parv[])
 {
-        command_help(loveserv->name, origin, &ls_cmdtree);
+        command_help(si, si->service->commands);
 }
 
 command_t ls_help = { "HELP", "Displays contextual help information.",
-                                AC_NONE, _ls_help };
-
-static void ls_handler(char *origin, int parc, char *parv[])
-{
-        char *cmd;
-        char orig[BUFSIZE];
-
-        /* this should never happen */
-        if (parv[0][0] == '&')
-        {
-                slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
-                return;
-        }
-
-        /* make a copy of the original for debugging */
-        strlcpy(orig, parv[parc - 1], BUFSIZE);
-
-        /* lets go through this to get the command */
-        cmd = strtok(parv[parc - 1], " ");
-
-        if (!cmd)
-                return;
-
-        /* take the command through the hash table */
-        command_exec(loveserv, origin, cmd, &ls_cmdtree);
-}
-
-command_t *ls_commands[] = {
-	&ls_admirer,
-	&ls_rose,
-	&ls_chocolate,
-	&ls_candy,
-	&ls_hug,
-	&ls_kiss,
-	&ls_lovenote,
-	&ls_apology,
-	&ls_thankyou,
-	&ls_spank,
-	&ls_chocobo,
-	&ls_help,
-	NULL
-};
+                                AC_NONE, 1, _ls_help, { .path = "help" } };
 
 void _modinit(module_t *m)
 {
-        loveserv = add_service("LoveServ", "LoveServ", LS_HOST, "LoveServ, etc.", ls_handler);
+        loveserv = service_add("LoveServ", NULL, &conf_ls_table);
 
-	command_add_many(ls_commands, &ls_cmdtree);
+	service_bind_command(loveserv, &ls_admirer);
+	service_bind_command(loveserv, &ls_rose);
+	service_bind_command(loveserv, &ls_chocolate);
+	service_bind_command(loveserv, &ls_candy);
+	service_bind_command(loveserv, &ls_hug);
+	service_bind_command(loveserv, &ls_kiss);
+	service_bind_command(loveserv, &ls_lovenote);
+	service_bind_command(loveserv, &ls_apology);
+	service_bind_command(loveserv, &ls_thankyou);
+	service_bind_command(loveserv, &ls_spank);
+	service_bind_command(loveserv, &ls_chocobo);
+	service_bind_command(loveserv, &ls_help);
 }
 
 void _moddeinit()
 {
-	command_delete_many(ls_commands, &ls_cmdtree);
-
-        del_service(loveserv);
+	if (loveserv)
+		service_delete(loveserv);
+	
+	service_unbind_command(loveserv, &ls_admirer);
+	service_unbind_command(loveserv, &ls_rose);
+	service_unbind_command(loveserv, &ls_chocolate);
+	service_unbind_command(loveserv, &ls_candy);
+	service_unbind_command(loveserv, &ls_hug);
+	service_unbind_command(loveserv, &ls_kiss);
+	service_unbind_command(loveserv, &ls_lovenote);
+	service_unbind_command(loveserv, &ls_apology);
+	service_unbind_command(loveserv, &ls_thankyou);
+	service_unbind_command(loveserv, &ls_spank);
+	service_unbind_command(loveserv, &ls_chocobo);
+	service_unbind_command(loveserv, &ls_help);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
