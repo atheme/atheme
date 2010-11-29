@@ -253,16 +253,16 @@ add_nameserver(const char *arg)
 
 /*
  * Expand compressed domain name 'comp_dn' to full domain name.
- * 'msg' is a pointer to the begining of the message,
+ * 'rmsg' is a pointer to the begining of the message,
  * 'eomorig' points to the first location after the message,
  * 'exp_dn' is a pointer to a buffer of size 'length' for the result.
  * Return size of compressed name or -1 if there was an error.
  */
 int
-irc_dn_expand(const unsigned char *msg, const unsigned char *eom,
+irc_dn_expand(const unsigned char *rmsg, const unsigned char *eom,
               const unsigned char *src, char *dst, int dstsiz)
 {
-  int n = irc_ns_name_uncompress(msg, eom, src, dst, (size_t)dstsiz);
+  int n = irc_ns_name_uncompress(rmsg, eom, src, dst, (size_t)dstsiz);
 
   if (n > 0 && dst[0] == '.')
     dst[0] = '\0';
@@ -270,7 +270,7 @@ irc_dn_expand(const unsigned char *msg, const unsigned char *eom,
 }
 
 /*
- * irc_ns_name_uncompress(msg, eom, src, dst, dstsiz)
+ * irc_ns_name_uncompress(rmsg, eom, src, dst, dstsiz)
  *	Expand compressed domain name to presentation format.
  * return:
  *	Number of bytes read out of `src', or -1 (with errno set).
@@ -278,26 +278,26 @@ irc_dn_expand(const unsigned char *msg, const unsigned char *eom,
  *	Root domain returns as "." not "".
  */
 static int
-irc_ns_name_uncompress(const unsigned char *msg, const unsigned char *eom,
+irc_ns_name_uncompress(const unsigned char *rmsg, const unsigned char *eom,
                        const unsigned char *src, char *dst, size_t dstsiz)
 {
   unsigned char tmp[NS_MAXCDNAME];
   int n;
 
-  if ((n = irc_ns_name_unpack(msg, eom, src, tmp, sizeof tmp)) == -1)
+  if ((n = irc_ns_name_unpack(rmsg, eom, src, tmp, sizeof tmp)) == -1)
     return(-1);
   if (irc_ns_name_ntop((char*)tmp, dst, dstsiz) == -1)
     return(-1);
   return(n);
 }
 /*
- * irc_ns_name_unpack(msg, eom, src, dst, dstsiz)
+ * irc_ns_name_unpack(rmsg, eom, src, dst, dstsiz)
  *	Unpack a domain name from a message, source may be compressed.
  * return:
  *	-1 if it fails, or consumed octets if it succeeds.
  */
 static int
-irc_ns_name_unpack(const unsigned char *msg, const unsigned char *eom,
+irc_ns_name_unpack(const unsigned char *rmsg, const unsigned char *eom,
                    const unsigned char *src, unsigned char *dst,
                    size_t dstsiz)
 {
@@ -310,7 +310,7 @@ irc_ns_name_unpack(const unsigned char *msg, const unsigned char *eom,
 	dstp = dst;
 	srcp = src;
 	dstlim = dst + dstsiz;
-	if (srcp < msg || srcp >= eom) {
+	if (srcp < rmsg || srcp >= eom) {
 		errno = EMSGSIZE;
 		return (-1);
 	}
@@ -343,8 +343,8 @@ irc_ns_name_unpack(const unsigned char *msg, const unsigned char *eom,
 			}
 			if (len < 0)
 				len = srcp - src + 1;
-			srcp = msg + (((n & 0x3f) << 8) | (*srcp & 0xff));
-			if (srcp < msg || srcp >= eom) {  /* Out of range. */
+			srcp = rmsg + (((n & 0x3f) << 8) | (*srcp & 0xff));
+			if (srcp < rmsg || srcp >= eom) {  /* Out of range. */
 				errno = EMSGSIZE;
 				return (-1);
 			}
@@ -354,7 +354,7 @@ irc_ns_name_unpack(const unsigned char *msg, const unsigned char *eom,
 			 * if we've looked at the whole message,
 			 * there must be a loop.
 			 */
-			if (checked >= eom - msg) {
+			if (checked >= eom - rmsg) {
 				errno = EMSGSIZE;
 				return (-1);
 			}
@@ -845,7 +845,7 @@ irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
                  const unsigned char **dnptrs, const unsigned char **lastdnptr)
 {
   unsigned char *dstp;
-  const unsigned char **cpp, **lpp, *eob, *msg;
+  const unsigned char **cpp, **lpp, *eob, *rmsg;
   const unsigned char *srcp;
   int n, l, first = 1;
 
@@ -854,13 +854,13 @@ irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
   eob = dstp + dstsiz;
   lpp = cpp = NULL;
   if (dnptrs != NULL) {
-    if ((msg = *dnptrs++) != NULL) {
+    if ((rmsg = *dnptrs++) != NULL) {
       for (cpp = dnptrs; *cpp != NULL; cpp++)
         (void)NULL;
       lpp = cpp;  /* end of list to search */
     }
   } else
-    msg = NULL;
+    rmsg = NULL;
 
   /* make sure the domain we are about to add is legal */
   l = 0;
@@ -889,8 +889,8 @@ irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
   do {
     /* Look to see if we can use pointers. */
     n = *srcp;
-    if (n != 0 && msg != NULL) {
-      l = irc_dn_find(srcp, msg, (const unsigned char * const *)dnptrs,
+    if (n != 0 && rmsg != NULL) {
+      l = irc_dn_find(srcp, rmsg, (const unsigned char * const *)dnptrs,
             (const unsigned char * const *)lpp);
       if (l >= 0) {
         if (dstp + 1 >= eob) {
@@ -902,7 +902,7 @@ irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
       }
       /* Not found, save it. */
       if (lastdnptr != NULL && cpp < lastdnptr - 1 &&
-          (dstp - msg) < 0x4000 && first) {
+          (dstp - rmsg) < 0x4000 && first) {
         *cpp++ = dstp;
         *cpp = NULL;
         first = 0;
@@ -924,7 +924,7 @@ irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
 
   if (dstp > eob) {
 cleanup:
-    if (msg != NULL)
+    if (rmsg != NULL)
       *lpp = NULL;
     errno = EMSGSIZE;
     return (-1);
@@ -1049,16 +1049,16 @@ irc_encode_bitsring(const char **bp, const char *end, unsigned char **labelp,
 }
 
 /*
- * dn_find(domain, msg, dnptrs, lastdnptr)
+ * dn_find(domain, rmsg, dnptrs, lastdnptr)
  *  Search for the counted-label name in an array of compressed names.
  * return:
- *  offset from msg if found, or -1.
+ *  offset from rmsg if found, or -1.
  * notes:
  *  dnptrs is the pointer to the first name on the list,
  *  not the pointer to the start of the message.
  */
 static int
-irc_dn_find(const unsigned char *domain, const unsigned char *msg,
+irc_dn_find(const unsigned char *domain, const unsigned char *rmsg,
             const unsigned char * const *dnptrs,
             const unsigned char * const *lastdnptr)
 {
@@ -1076,7 +1076,7 @@ irc_dn_find(const unsigned char *domain, const unsigned char *msg,
      * unusable offset
      */
     while (*sp != 0 && (*sp & NS_CMPRSFLGS) == 0 &&
-           (sp - msg) < 0x4000) {
+           (sp - rmsg) < 0x4000) {
       dn = domain;
       cp = sp;
       while ((n = *cp++) != 0) {
@@ -1096,12 +1096,12 @@ irc_dn_find(const unsigned char *domain, const unsigned char *msg,
               goto next;
           /* Is next root for both ? */
           if (*dn == '\0' && *cp == '\0')
-            return (sp - msg);
+            return (sp - rmsg);
           if (*dn)
             continue;
           goto next;
         case NS_CMPRSFLGS:  /* indirection */
-          cp = msg + (((n & 0x3f) << 8) | *cp);
+          cp = rmsg + (((n & 0x3f) << 8) | *cp);
           break;
 
         default:  /* illegal type */

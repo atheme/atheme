@@ -353,7 +353,7 @@ static int retryfreq(int timeouts)
  * Returns number of nameserver successfully sent to 
  * or -1 if no successful sends.
  */
-static int send_res_msg(const char *msg, int len, int rcount)
+static int send_res_msg(const char *rmsg, int len, int rcount)
 {
 	int i;
 	int ns;
@@ -369,7 +369,7 @@ static int send_res_msg(const char *msg, int len, int rcount)
 		ns = (i + rcount - 1) % irc_nscount;
 		if (ns_timeout_count[ns] && retrycnt % retryfreq(ns_timeout_count[ns]))
 			continue;
-		if (sendto(res_fd->fd, msg, len, 0,
+		if (sendto(res_fd->fd, rmsg, len, 0,
 		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr), 
 				irc_nsaddr_list[ns].saddr_len) == len)
 			return ns;
@@ -381,7 +381,7 @@ static int send_res_msg(const char *msg, int len, int rcount)
 		ns = (i + rcount - 1) % irc_nscount;
 		if (!ns_timeout_count[ns])
 			continue;
-		if (sendto(res_fd->fd, msg, len, 0,
+		if (sendto(res_fd->fd, rmsg, len, 0,
 		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr), 
 				irc_nsaddr_list[ns].saddr_len) == len)
 			return ns;
@@ -879,11 +879,11 @@ static dns_reply_t *make_dnsreply(struct reslist *request)
 void report_dns_servers(sourceinfo_t *si)
 {
 	int i;
-	char ipaddr[128];
 
 	for (i = 0; i < irc_nscount; i++)
 	{
 #if 0
+		char ipaddr[128];
 		if (!rb_inet_ntop_sock((struct sockaddr *)&(irc_nsaddr_list[i]),
 				ipaddr, sizeof ipaddr))
 			strlcpy(ipaddr, "?", sizeof ipaddr);
