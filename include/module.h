@@ -91,13 +91,6 @@ E bool module_request(const char *name);
 		}								\
 	}
 
-/* Use this macro in your _modinit() function to use symbols from
- * other modules. It will abort the _modinit() and unload your module
- * without calling _moddeinit(). -- jilles */
-/* XXX this assumes the parameter is called m */
-#define MODULE_USE_SYMBOL(dest, modname, sym) \
-	MODULE_TRY_REQUEST_SYMBOL(m, dest, modname, sym)
-
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
