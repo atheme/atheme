@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-18 22:07-0300\n"
+"POT-Creation-Date: 2010-11-28 23:22-0300\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -5659,7 +5659,7 @@ msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
 
 #: modules/operserv/akill.c:170 modules/operserv/clones.c:535
 #: modules/operserv/clones.c:851 modules/operserv/sgline.c:171
-#: modules/operserv/sqline.c:200
+#: modules/operserv/sqline.c:206
 msgid "Invalid duration given."
 msgstr "Указана неверная длительность."
 
@@ -7059,22 +7059,22 @@ msgstr "Список AKILL (с причинами):"
 msgid "SGLINE list:"
 msgstr "AKILL список:"
 
-#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:434
+#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:440
 #, fuzzy, c-format
 msgid "%d: %s - by %s - expires in %s - (%s)"
 msgstr "%lu: %s@%s - от %s - истекает через %s - (%s)"
 
-#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:436
+#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:442
 #, fuzzy, c-format
 msgid "%d: %s - by %s - expires in %s"
 msgstr "%lu: %s@%s - от %s - истекает через %s"
 
-#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:438
+#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:444
 #, fuzzy, c-format
 msgid "%d: %s - by %s - permanent - (%s)"
 msgstr "%lu: %s@%s - от %s - перманентный - (%s)"
 
-#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:440
+#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:446
 #, fuzzy, c-format
 msgid "%d: %s - by %s - permanent"
 msgstr "%lu: %s@%s - от %s - перманентный"
@@ -7301,73 +7301,78 @@ msgstr "Синхронизирует глобальные сетевые баны между серверами."
 msgid "Syntax: SQLINE ADD|DEL|LIST"
 msgstr "Синтаксис: AKILL ADD|DEL|LIST"
 
-#: modules/operserv/sqline.c:161 modules/operserv/sqline.c:201
-#: modules/operserv/sqline.c:207
+#: modules/operserv/sqline.c:161 modules/operserv/sqline.c:207
+#: modules/operserv/sqline.c:213
 #, fuzzy
 msgid "Syntax: SQLINE ADD <nick|chan> [!P|!T <minutes>] <reason>"
 msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
 
-#: modules/operserv/sqline.c:240
+#: modules/operserv/sqline.c:167
+#, c-format
+msgid "Invalid target: %s. You can not SQLINE UIDs."
+msgstr ""
+
+#: modules/operserv/sqline.c:246
 #, fuzzy, c-format
 msgid ""
 "Invalid target: %s. At least three non-wildcard characters are required."
 msgstr ""
 "Неверный user@host: %s@%s. Как минимум четыре non-wildcard символа требуется."
 
-#: modules/operserv/sqline.c:247
+#: modules/operserv/sqline.c:253
 #, fuzzy, c-format
 msgid "SQLINE %s is already matched in the database."
 msgstr "AKILL %s@%s уже есть в базе."
 
-#: modules/operserv/sqline.c:254
+#: modules/operserv/sqline.c:260
 #, fuzzy, c-format
 msgid "Timed SQLINE on %s was successfully added and will expire in %s."
 msgstr "Временный AKILL на %s@%s был успешно добавлен и истечет %s."
 
-#: modules/operserv/sqline.c:256
+#: modules/operserv/sqline.c:262
 #, fuzzy, c-format
 msgid "SQLINE on %s was successfully added."
 msgstr "AKILL на %s@%s был успешно добавлен."
 
-#: modules/operserv/sqline.c:273
+#: modules/operserv/sqline.c:279
 #, fuzzy
 msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr "Синтаксис: SOPER DEL <аккаунт>"
 
-#: modules/operserv/sqline.c:306 modules/operserv/sqline.c:325
-#: modules/operserv/sqline.c:365 modules/operserv/sqline.c:384
+#: modules/operserv/sqline.c:312 modules/operserv/sqline.c:331
+#: modules/operserv/sqline.c:371 modules/operserv/sqline.c:390
 #, fuzzy, c-format
 msgid "No such SQLINE with number %d."
 msgstr "В базе нет AKILL с номером %d."
 
-#: modules/operserv/sqline.c:310 modules/operserv/sqline.c:329
-#: modules/operserv/sqline.c:369 modules/operserv/sqline.c:388
-#: modules/operserv/sqline.c:405
+#: modules/operserv/sqline.c:316 modules/operserv/sqline.c:335
+#: modules/operserv/sqline.c:375 modules/operserv/sqline.c:394
+#: modules/operserv/sqline.c:411
 #, fuzzy, c-format
 msgid "SQLINE on %s has been successfully removed."
 msgstr "AKILL на %s@%s был успешно удален."
 
-#: modules/operserv/sqline.c:401
+#: modules/operserv/sqline.c:407
 #, fuzzy, c-format
 msgid "No such SQLINE: %s."
 msgstr "Нет такого AKILL: %s@%s."
 
-#: modules/operserv/sqline.c:425
+#: modules/operserv/sqline.c:431
 #, fuzzy
 msgid "SQLINE list (with reasons):"
 msgstr "Список AKILL (с причинами):"
 
-#: modules/operserv/sqline.c:427
+#: modules/operserv/sqline.c:433
 #, fuzzy
 msgid "SQLINE list:"
 msgstr "AKILL список:"
 
-#: modules/operserv/sqline.c:443
+#: modules/operserv/sqline.c:449
 #, fuzzy, c-format
 msgid "Total of %zu %s in SQLINE list."
 msgstr "Всего %d %s в AKILL списке."
 
-#: modules/operserv/sqline.c:464
+#: modules/operserv/sqline.c:470
 #, fuzzy
 msgid "SQLINE list synchronized to servers."
 msgstr "AKILL список синхронизирован с серверами."

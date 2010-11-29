@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-18 21:48-0300\n"
+"POT-Creation-Date: 2010-11-28 23:22-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team:  <shadowm2006@gmail.com>\n"
@@ -5501,7 +5501,7 @@ msgstr "Sintaxis: AKILL ADD <nick|máscara de host> [!P|!T <minutos>] <razón>"
 
 #: modules/operserv/akill.c:170 modules/operserv/clones.c:535
 #: modules/operserv/clones.c:851 modules/operserv/sgline.c:171
-#: modules/operserv/sqline.c:200
+#: modules/operserv/sqline.c:206
 msgid "Invalid duration given."
 msgstr "Duración no válida."
 
@@ -6924,22 +6924,22 @@ msgstr "Lista SGLINE (con razones):"
 msgid "SGLINE list:"
 msgstr "Lista SGLINE:"
 
-#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:434
+#: modules/operserv/sgline.c:349 modules/operserv/sqline.c:440
 #, c-format
 msgid "%d: %s - by %s - expires in %s - (%s)"
 msgstr "%d: %s - por %s - expira en %s - (%s)"
 
-#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:436
+#: modules/operserv/sgline.c:351 modules/operserv/sqline.c:442
 #, c-format
 msgid "%d: %s - by %s - expires in %s"
 msgstr "%d: %s - por %s - expira en %s"
 
-#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:438
+#: modules/operserv/sgline.c:353 modules/operserv/sqline.c:444
 #, c-format
 msgid "%d: %s - by %s - permanent - (%s)"
 msgstr "%d: %s - por %s - permanente - (%s)"
 
-#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:440
+#: modules/operserv/sgline.c:355 modules/operserv/sqline.c:446
 #, c-format
 msgid "%d: %s - by %s - permanent"
 msgstr "%d: %s - por %s - permanente"
@@ -7161,12 +7161,17 @@ msgstr "Sincroniza los vetos de red sobre nombres entre los servidores"
 msgid "Syntax: SQLINE ADD|DEL|LIST"
 msgstr "Sintaxis: SQLINE ADD|DEL|LIST"
 
-#: modules/operserv/sqline.c:161 modules/operserv/sqline.c:201
-#: modules/operserv/sqline.c:207
+#: modules/operserv/sqline.c:161 modules/operserv/sqline.c:207
+#: modules/operserv/sqline.c:213
 msgid "Syntax: SQLINE ADD <nick|chan> [!P|!T <minutes>] <reason>"
 msgstr "Sintaxis: SQLINE ADD <nick|canal> [!P|!T <minutos>] <razón>"
 
-#: modules/operserv/sqline.c:240
+#: modules/operserv/sqline.c:167
+#, c-format
+msgid "Invalid target: %s. You can not SQLINE UIDs."
+msgstr ""
+
+#: modules/operserv/sqline.c:246
 #, c-format
 msgid ""
 "Invalid target: %s. At least three non-wildcard characters are required."
@@ -7174,57 +7179,57 @@ msgstr ""
 "El objeto especificado no es válido: %s. Se requieren al menos tres "
 "caracteres que no sean comodines."
 
-#: modules/operserv/sqline.c:247
+#: modules/operserv/sqline.c:253
 #, c-format
 msgid "SQLINE %s is already matched in the database."
 msgstr "SQLINE %s ya coincide en la base de datos."
 
-#: modules/operserv/sqline.c:254
+#: modules/operserv/sqline.c:260
 #, c-format
 msgid "Timed SQLINE on %s was successfully added and will expire in %s."
 msgstr "SQLINE temporal sobre %s añadida con éxito; expirará en %s."
 
-#: modules/operserv/sqline.c:256
+#: modules/operserv/sqline.c:262
 #, c-format
 msgid "SQLINE on %s was successfully added."
 msgstr "SQLINE sobre %s añadida con éxito."
 
-#: modules/operserv/sqline.c:273
+#: modules/operserv/sqline.c:279
 msgid "Syntax: SQLINE DEL <nick|chan>"
 msgstr "Sintaxis: SQLINE DEL <nick|canal>"
 
-#: modules/operserv/sqline.c:306 modules/operserv/sqline.c:325
-#: modules/operserv/sqline.c:365 modules/operserv/sqline.c:384
+#: modules/operserv/sqline.c:312 modules/operserv/sqline.c:331
+#: modules/operserv/sqline.c:371 modules/operserv/sqline.c:390
 #, c-format
 msgid "No such SQLINE with number %d."
 msgstr "No hay tal SQLINE con número %d."
 
-#: modules/operserv/sqline.c:310 modules/operserv/sqline.c:329
-#: modules/operserv/sqline.c:369 modules/operserv/sqline.c:388
-#: modules/operserv/sqline.c:405
+#: modules/operserv/sqline.c:316 modules/operserv/sqline.c:335
+#: modules/operserv/sqline.c:375 modules/operserv/sqline.c:394
+#: modules/operserv/sqline.c:411
 #, c-format
 msgid "SQLINE on %s has been successfully removed."
 msgstr "La entrada SQLINE sobre %s ha sido quitada con éxito."
 
-#: modules/operserv/sqline.c:401
+#: modules/operserv/sqline.c:407
 #, c-format
 msgid "No such SQLINE: %s."
 msgstr "No hay tal SQLINE: %s."
 
-#: modules/operserv/sqline.c:425
+#: modules/operserv/sqline.c:431
 msgid "SQLINE list (with reasons):"
 msgstr "Lista SQLINE (con razones):"
 
-#: modules/operserv/sqline.c:427
+#: modules/operserv/sqline.c:433
 msgid "SQLINE list:"
 msgstr "Lista SQLINE:"
 
-#: modules/operserv/sqline.c:443
+#: modules/operserv/sqline.c:449
 #, c-format
 msgid "Total of %zu %s in SQLINE list."
 msgstr "Total de %zu %s en la lista SQLINE."
 
-#: modules/operserv/sqline.c:464
+#: modules/operserv/sqline.c:470
 msgid "SQLINE list synchronized to servers."
 msgstr "Lista SQLINE sincronizada entre servidores."
 
