@@ -24,7 +24,7 @@ mowgli_patricia_t **cs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_topiclock, *cs_set_cmdtree);
 }

@@ -25,7 +25,7 @@ command_t bs_set_nobot = { "NOBOT", N_("Prevent a bot from being assigned to a c
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 
 	command_add(&bs_set_nobot, *bs_set_cmdtree);
 }

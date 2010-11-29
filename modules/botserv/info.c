@@ -26,8 +26,8 @@ mowgli_list_t *bs_bots;
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
-	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
+	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
 
 	service_named_bind_command("botserv", &bs_info);
 }

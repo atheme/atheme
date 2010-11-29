@@ -28,10 +28,10 @@ command_t bs_set_private = { "PRIVATE", N_("Prevent a bot from being assigned by
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 
-	MODULE_USE_SYMBOL(bs_bots, "botserv/main", "bs_bots");
-	MODULE_USE_SYMBOL(botserv_bot_find, "botserv/main", "botserv_bot_find");
+	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
+	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
 
 	command_add(&bs_set_private, *bs_set_cmdtree);
 }
