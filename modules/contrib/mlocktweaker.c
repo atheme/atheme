@@ -39,7 +39,7 @@ static void handle_channel_register(void *vptr)
 {
 	hook_channel_req_t *hdata = vptr;
 	mychan_t *mc = hdata->mc;
-	int *target;
+	unsigned int *target;
 	char *it, *str = MLOCK_CHANGE;
 
 	if (mc == NULL)
