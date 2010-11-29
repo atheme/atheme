@@ -42,6 +42,8 @@ BASE_SRCS =				\
 	poll.c		\
 	privs.c		\
 	ptasks.c		\
+	res.c		\
+	reslib.c	\
 	send.c		\
 	servers.c		\
 	services.c		\

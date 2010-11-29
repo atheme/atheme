@@ -55,6 +55,7 @@ AC_PATH_PROG(TAR, tar)
 AC_PATH_PROG(AR, ar)
 AC_PATH_PROG(RANLIB, ranlib)
 AC_C_INLINE
+AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
 AC_MSG_CHECKING(how to generate dependancy info)
