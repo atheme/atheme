@@ -83,8 +83,8 @@ static void do_query_number(dns_query_t *query, const sockaddr_any_t *,
 static void query_name(struct reslist *request);
 static int send_res_msg(const char *buf, int len, int count);
 static void resend_query(struct reslist *request);
-static int check_question(struct reslist *request, HEADER * header, char *buf, char *eob);
-static int proc_answer(struct reslist *request, HEADER * header, char *, char *);
+static int check_question(struct reslist *request, RESHEADER * header, char *buf, char *eob);
+static int proc_answer(struct reslist *request, RESHEADER * header, char *, char *);
 static struct reslist *find_id(int id);
 static dns_reply_t *make_dnsreply(struct reslist *request);
 
@@ -518,7 +518,7 @@ static void query_name(struct reslist *request)
 	if ((request_len =
 	     irc_res_mkquery(request->queryname, C_IN, request->type, (unsigned char *)buf, sizeof(buf))) > 0)
 	{
-		HEADER *header = (HEADER *) buf;
+		RESHEADER *header = (RESHEADER *) buf;
 #ifndef HAVE_LRAND48
 		int k = 0;
 		struct timeval tv;
@@ -574,13 +574,13 @@ static void resend_query(struct reslist *request)
  * name we queried (to guard against late replies from previous
  * queries with the same id).
  */
-static int check_question(struct reslist *request, HEADER * header, char *buf, char *eob)
+static int check_question(struct reslist *request, RESHEADER * header, char *buf, char *eob)
 {
 	char hostbuf[IRCD_RES_HOSTLEN + 1];	/* working buffer */
 	unsigned char *current;	/* current position in buf */
 	int n;			/* temp count */
 
-	current = (unsigned char *)buf + sizeof(HEADER);
+	current = (unsigned char *)buf + sizeof(RESHEADER);
 	if (header->qdcount != 1)
 		return 0;
 	n = irc_dn_expand((unsigned char *)buf, (unsigned char *)eob, current, hostbuf,
@@ -595,7 +595,7 @@ static int check_question(struct reslist *request, HEADER * header, char *buf, c
 /*
  * proc_answer - process name server reply
  */
-static int proc_answer(struct reslist *request, HEADER * header, char *buf, char *eob)
+static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, char *eob)
 {
 	char hostbuf[IRCD_RES_HOSTLEN + 100];	/* working buffer */
 	unsigned char *current;	/* current position in buf */
@@ -607,7 +607,7 @@ static int proc_answer(struct reslist *request, HEADER * header, char *buf, char
 #ifdef RB_IPV6
 	struct sockaddr_in6 *v6;
 #endif
-	current = (unsigned char *)buf + sizeof(HEADER);
+	current = (unsigned char *)buf + sizeof(RESHEADER);
 
 	for (; header->qdcount > 0; --header->qdcount)
 	{
@@ -734,16 +734,16 @@ static int proc_answer(struct reslist *request, HEADER * header, char *buf, char
  */
 static int res_read_single_reply(connection_t *F)
 {
-	char buf[sizeof(HEADER) + MAXPACKET]
+	char buf[sizeof(RESHEADER) + MAXPACKET]
 		/* Sparc and alpha need 16bit-alignment for accessing header->id 
-		 * (which is uint16_t). Because of the header = (HEADER*) buf; 
+		 * (which is uint16_t). Because of the header = (RESHEADER*) buf; 
 		 * lateron, this is neeeded. --FaUl
 		 */
 #if defined(__sparc__) || defined(__alpha__)
 		__attribute__ ((aligned(16)))
 #endif
 		;
-	HEADER *header;
+	RESHEADER *header;
 	struct reslist *request = NULL;
 	dns_reply_t *reply = NULL;
 	int rc;
@@ -758,13 +758,13 @@ static int res_read_single_reply(connection_t *F)
 		return 0;
 
 	/* Too small */
-	if (rc <= (int)(sizeof(HEADER)))
+	if (rc <= (int)(sizeof(RESHEADER)))
 		return 1;
 
 	/*
 	 * convert DNS reply reader from Network byte order to CPU byte order.
 	 */
-	header = (HEADER *) buf;
+	header = (RESHEADER *) buf;
 	header->ancount = ntohs(header->ancount);
 	header->qdcount = ntohs(header->qdcount);
 	header->nscount = ntohs(header->nscount);

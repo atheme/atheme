@@ -1143,7 +1143,7 @@ irc_res_mkquery(
 	     unsigned char *buf,		/* buffer to put query */
 	     int buflen)		/* size of buffer */
 {
-	HEADER *hp;
+	RESHEADER *hp;
 	unsigned char *cp;
 	int n;
 	unsigned char *dnptrs[20], **dpp, **lastdnptr;
@@ -1154,7 +1154,7 @@ irc_res_mkquery(
 	if ((buf == NULL) || (buflen < HFIXEDSZ))
 		return (-1);
 	memset(buf, 0, HFIXEDSZ);
-	hp = (HEADER *) buf;
+	hp = (RESHEADER *) buf;
 
 	hp->id = 0;
 	hp->opcode = QUERY;

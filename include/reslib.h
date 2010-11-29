@@ -70,7 +70,7 @@ typedef struct
         unsigned        ancount :16;    /* number of answer entries */
         unsigned        nscount :16;    /* number of authority entries */
         unsigned        arcount :16;    /* number of resource entries */
-} HEADER;
+} RESHEADER;
 
 /*
  * Inline versions of get/put short/long.  Pointer is advanced.
