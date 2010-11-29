@@ -490,6 +490,7 @@ static int idcheck_foreach_cb(myentity_t *mt, void *privdata)
 
 void _modinit(module_t *m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_core");
 	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	/* Leave this for compatibility with old versions of this code
