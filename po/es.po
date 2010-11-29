@@ -7169,7 +7169,7 @@ msgstr "Sintaxis: SQLINE ADD <nick|canal> [!P|!T <minutos>] <razón>"
 #: modules/operserv/sqline.c:167
 #, c-format
 msgid "Invalid target: %s. You can not SQLINE UIDs."
-msgstr ""
+msgstr "Objeto no válido: %s. No puede aplicar SQLINEs en UIDs."
 
 #: modules/operserv/sqline.c:246
 #, c-format
