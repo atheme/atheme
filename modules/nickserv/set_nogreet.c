@@ -25,7 +25,7 @@ command_t ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel ent
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_nogreet, *ns_set_cmdtree);
 }

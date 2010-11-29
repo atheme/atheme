@@ -57,7 +57,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_USE_SYMBOL(conf_hs_table, "hostserv/main", "conf_hs_table");
+	MODULE_TRY_REQUEST_SYMBOL(m, conf_hs_table, "hostserv/main", "conf_hs_table");
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);

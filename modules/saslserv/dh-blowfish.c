@@ -32,7 +32,7 @@ sasl_mechanism_t mech = {"DH-BLOWFISH", &mech_start, &mech_step, &mech_finish};
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
+	MODULE_TRY_REQUEST_SYMBOL(m, mechanisms, "saslserv/main", "sasl_mechanisms");
 	mnode = mowgli_node_create();
 	mowgli_node_add(&mech, mnode, mechanisms);
 }

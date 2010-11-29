@@ -25,7 +25,7 @@ command_t ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos to you
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_emailmemos, *ns_set_cmdtree);
 }

@@ -23,7 +23,7 @@ command_t ns_set_enforcetime = { "ENFORCETIME", N_("Amount of time it takes befo
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/enforce");
-	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
+	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_enforcetime, *ns_set_cmdtree);
 }

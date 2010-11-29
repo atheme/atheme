@@ -100,7 +100,7 @@ static void xmlrpc_config_ready(void *vptr)
 
 void _modinit(module_t *m)
 {
-	MODULE_USE_SYMBOL(httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
+	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
 	hook_add_event("config_ready");
 	hook_add_config_ready(xmlrpc_config_ready);
