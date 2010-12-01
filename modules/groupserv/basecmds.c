@@ -132,7 +132,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 
-	if (mg->flags & MG_PUBLIC || (si->smu != NULL && groupacs_sourceinfo_has_flag(mg, si, 0)) || has_priv(si, PRIV_GROUP_AUSPEX))
+	if (mg->flags & MG_PUBLIC || (si->smu != NULL && groupacs_sourceinfo_has_flag(mg, si, 0) && !groupacs_sourceinfo_has_flag(mg, si, GA_BAN)) || has_priv(si, PRIV_GROUP_AUSPEX))
 		command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 
 	if ((md = metadata_find(mg, "description")))
@@ -619,6 +619,12 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (groupacs_sourceinfo_has_flag(mg, si, GA_BAN))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
 	if (groupacs_sourceinfo_has_flag(mg, si, 0))
 	{
 		command_fail(si, fault_nochange, _("You are already a member of group \2%s\2."), parv[0]);
@@ -774,6 +780,12 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 				flags &= ~GA_MEMOS;
 			else
 				flags |= GA_MEMOS;
+			break;
+		case 'b':
+			if (dir)
+				flags &= ~GA_BAN;
+			else
+				flags |= GA_BAN;
 			break;
 		default:
 			break;

@@ -116,6 +116,9 @@ static void user_info_hook(hook_user_req_t *req)
 	{
 		groupacs_t *ga = n->data;
 
+		if (groupacs_find(ga->mg, req->mu, GA_BAN) != NULL)
+			continue;
+
 		if ((ga->mg->flags & MG_PUBLIC) || (req->si->smu == req->mu || has_priv(req->si, PRIV_GROUP_AUSPEX)))
 		{
 			if (*buf != 0)

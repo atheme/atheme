@@ -142,6 +142,9 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 {
 	groupacs_t *ga;
 
+	/* XXX: Figure out a way to still expire the group even if there are
+	 * still +b users. --jdhore
+	 */
 	ga = groupacs_find(mg, mu, 0);
 	if (ga != NULL)
 	{
