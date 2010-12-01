@@ -67,7 +67,10 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* we'll overwrite any existing metadata */
+	/* we'll overwrite any existing metadata.
+	 * Why is/was this even private? There are no size/content sanity checks
+	 * and even users with no channel access can see it. --jdhore
+	 */
 	metadata_add(mc, "private:entrymsg", parv[1]);
 
 	logcommand(si, CMDLOG_SET, "SET:ENTRYMSG: \2%s\2 \2%s\2", mc->name, parv[1]);
