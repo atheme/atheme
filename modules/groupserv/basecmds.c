@@ -312,7 +312,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
-		if (has_priv(si, PRIV_GROUP_ADMIN))
+		if (has_priv(si, PRIV_GROUP_AUSPEX))
 			operoverride = 1;
 		else
 		{
@@ -347,6 +347,13 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		else
 			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
 
+		return;
+	}
+
+	/* simple check since it's already checked above */
+	if (operoverride)
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
@@ -441,12 +448,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		groupacs_delete(mg, mu);
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
-
-		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "FLAGS:REMOVE: \2%s\2 on \2%s\2 (oper override)", entity(mu)->name, entity(mg)->name);
-		else
-			logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
-
+		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
 		return;
 	}
 	else 
@@ -462,10 +464,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
 	/* XXX */
-	if (operoverride)
-		logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2 (oper override)", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
-	else
-		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
