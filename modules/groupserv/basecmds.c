@@ -289,6 +289,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int flags = 0;
 	unsigned int dir = 0;
 	char *c;
+	int operoverride = 0;
 
 	if (!parv[0])
 	{
@@ -311,8 +312,13 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
+		if (has_priv(si, PRIV_GROUP_ADMIN))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
 	}
 
 	if (!parv[1])
@@ -335,7 +341,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
-		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
+
+		if (operoverride)
+			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", parv[0]);
+		else
+			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
+
 		return;
 	}
 
@@ -430,7 +441,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		groupacs_delete(mg, mu);
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
-		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
+
+		if (operoverride)
+			logcommand(si, CMDLOG_ADMIN, "FLAGS:REMOVE: \2%s\2 on \2%s\2 (oper override)", entity(mu)->name, entity(mg)->name);
+		else
+			logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
+
 		return;
 	}
 	else 
@@ -446,7 +462,10 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
 
 	/* XXX */
-	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2 (oper override)", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+	else
+		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
 static void gs_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
