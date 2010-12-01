@@ -666,6 +666,143 @@ static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
+static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
+
+static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	myuser_t *mu;
+	groupacs_t *ga;
+	unsigned int flags = 0;
+	unsigned int dir = 0;
+	char *c;
+
+	if (!parv[0] || !parv[1] || !parv[2])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [user] [changes]"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+        if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if ((mu = myuser_find_ext(parv[1])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
+		return;
+	}
+
+	ga = groupacs_find(mg, mu, 0);
+	if (ga != NULL)
+		flags = ga->flags;
+
+	/* XXX: this sucks. :< */
+	c = parv[2];
+	while (*c)
+	{
+		switch(*c)
+		{
+		case '+':
+			dir = 0;
+			break;
+		case '-':
+			dir = 1;
+			break;
+		case '*':
+			if (dir)
+				flags = 0;
+			else
+				flags = GA_ALL;
+			break;
+		case 'F':
+			if (dir)
+				flags &= ~GA_FOUNDER;
+			else
+				flags |= GA_FOUNDER;
+			break;
+		case 'f':
+			if (dir)
+				flags &= ~GA_FLAGS;
+			else
+				flags |= GA_FLAGS;
+			break;
+		case 's':
+			if (dir)
+				flags &= ~GA_SET;
+			else
+				flags |= GA_SET;
+			break;
+		case 'v':
+			if (dir)
+				flags &= ~GA_VHOST;
+			else
+				flags |= GA_VHOST;
+			break;
+		case 'c':
+			if (dir)
+				flags &= ~GA_CHANACS;
+			else
+			{
+				if (mu->flags & MU_NEVEROP)
+				{
+					command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), entity(mu)->name);
+					return;
+				}
+				flags |= GA_CHANACS;
+			}
+			break;
+		case 'm':
+			if (dir)
+				flags &= ~GA_MEMOS;
+			else
+				flags |= GA_MEMOS;
+			break;
+		default:
+			break;
+		}
+
+		c++;
+	}
+
+	if (ga != NULL && flags != 0)
+		ga->flags = flags;
+	else if (ga != NULL)
+	{
+		groupacs_delete(mg, mu);
+		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
+		wallops("\2%s\2 is removing flags for \2%s\2 on \2%s\2", get_oper_name(si), entity(mu)->name, entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "FFLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
+		return;
+	}
+	else 
+	{
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		{
+			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
+			return;
+		}
+		ga = groupacs_add(mg, mu, flags);
+	}
+
+	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
+
+	/* XXX */
+	wallops("\2%s\2 is modifying flags(\2%s\2) for \2%s\2 on \2%s\2", get_oper_name(si), gflags_tostr(ga_flags, ga->flags), entity(mu)->name, entity(mg)->name);
+	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+}
+
 void basecmds_init(void)
 {
 	service_bind_command(groupsvs, &gs_help);
@@ -678,6 +815,7 @@ void basecmds_init(void)
 	service_bind_command(groupsvs, &gs_acsnolimit);
 	service_bind_command(groupsvs, &gs_join);
 	service_bind_command(groupsvs, &gs_fdrop);
+	service_bind_command(groupsvs, &gs_fflags);
 }
 
 void basecmds_deinit(void)
@@ -692,5 +830,6 @@ void basecmds_deinit(void)
 	service_unbind_command(groupsvs, &gs_acsnolimit);
 	service_unbind_command(groupsvs, &gs_join);
 	service_unbind_command(groupsvs, &gs_fdrop);
+	service_unbind_command(groupsvs, &gs_fflags);
 }
 
