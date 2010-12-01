@@ -435,6 +435,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				flags |= GA_MEMOS;
 			break;
+		case 'b':
+			if (dir)
+				flags &= ~GA_BAN;
+			else
+				flags |= GA_BAN;
+			break;
 		default:
 			break;
 		}

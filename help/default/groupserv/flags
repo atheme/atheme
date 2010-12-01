@@ -22,6 +22,10 @@ Permissions:
     +c - Have channel access in channels where the group has sufficient
          privileges.
     +v - Take vhosts offered to the group through HostServ.
+	+b - Ban a user from the group. The user will not be able to join the
+	     group with the JOIN command and it will not show up in their
+		 NickServ INFO or anywhere else. NOTE that setting this flag will NOT
+		 automatically remove the users' privileges (if applicable).
 
 The special permission +* adds all permissions except +F.
 The special permission -* removes all permissions including +F.

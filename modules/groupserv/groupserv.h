@@ -34,6 +34,7 @@ bool enable_open_groups;
 #define GA_MEMOS		0x00000008
 #define GA_SET			0x00000010
 #define GA_VHOST		0x00000020
+#define GA_BAN			0x00000040
 #define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST)
 
 #define PRIV_GROUP_ADMIN "group:admin"

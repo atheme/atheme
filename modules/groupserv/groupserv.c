@@ -12,6 +12,7 @@ struct gflags ga_flags[] = {
 	{ 'c', GA_CHANACS },
 	{ 'm', GA_MEMOS },
 	{ 'v', GA_VHOST },
+	{ 'b', GA_BAN },
 	{ 0, 0 }
 };
 
