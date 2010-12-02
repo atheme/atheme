@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void command_roulette(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_roulette = { "ROULETTE", N_("A game of Russian Roulette."), AC_NONE, 0, command_roulette, { .path = "gameserv/roulette" } };
+command_t cmd_roulette = { "ROULETTE", N_("A game of Russian Roulette."), AC_NONE, 0, command_roulette, { .path = "contrib/roulette" } };
 
 void _modinit(module_t * m)
 {
