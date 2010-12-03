@@ -21,10 +21,15 @@ command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static void do_channel_sync(mychan_t *mc)
 {
+	char akickreason[120] = "User is banned from this channel", *p;
 	chanuser_t *cu;
 	mowgli_node_t *n, *tn;
 	int fl;
 	bool noop;
+
+	return_if_fail(mc != NULL);
+	if (mc->chan == NULL)
+		return;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
 	{
@@ -39,14 +44,62 @@ static void do_channel_sync(mychan_t *mc)
 
 		if (fl & CA_AKICK && !(fl & CA_REMOVE))
 		{
+			chanacs_t *ca2;
+			metadata_t *md;
+
+			/* Stay on channel if this would empty it -- jilles */
 			if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
 			{
 				mc->flags |= MC_INHABIT;
 				if (!(mc->flags & MC_GUARD))
-					join(mc->name, chansvs.nick);
+					join(mc->chan->name, chansvs.nick);
 			}
-			/* XXX duplicate the whole thing in cs_join()? */
-			kick(chansvs.me->me, mc->chan, cu->user, "User is banned from this channel");
+
+			/* use a user-given ban mask if possible -- jilles */
+			ca2 = chanacs_find_host_by_user(mc, cu->user, CA_AKICK);
+			if (ca2 != NULL)
+			{
+				if (chanban_find(mc->chan, ca2->host, 'b') == NULL)
+				{
+					char str[512];
+
+					chanban_add(mc->chan, ca2->host, 'b');
+					snprintf(str, sizeof str, "+b %s", ca2->host);
+					/* ban immediately */
+					mode_sts(chansvs.nick, mc->chan, str);
+				}
+			}
+			else if (cu->user->myuser != NULL)
+			{
+				/* XXX this could be done more efficiently */
+				ca2 = chanacs_find(mc, entity(cu->user->myuser), CA_AKICK);
+				ban(chansvs.me->me, mc->chan, cu->user);
+			}
+
+			remove_ban_exceptions(chansvs.me->me, mc->chan, cu->user);
+			if (ca2 != NULL)
+			{
+				md = metadata_find(ca2, "reason");
+				if (md != NULL && *md->value != '|')
+				{
+					snprintf(akickreason, sizeof akickreason,
+							"Banned: %s", md->value);
+					p = strchr(akickreason, '|');
+					if (p != NULL)
+						*p = '\0';
+					else
+						p = akickreason + strlen(akickreason);
+
+					/* strip trailing spaces, so as not to
+					 * disclose the existence of an oper reason */
+					p--;
+					while (p > akickreason && *p == ' ')
+						p--;
+					p[1] = '\0';
+				}
+			}
+
+			try_kick(chansvs.me->me, mc->chan, cu->user, akickreason);
 			continue;
 		}
 		if (ircd->uses_owner)
