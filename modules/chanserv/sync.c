@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
-                        AC_NONE, 1, cs_cmd_sync, { .path = "contrib/sync" } };
+                        AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
 
 static void do_channel_sync(mychan_t *mc)
 {
