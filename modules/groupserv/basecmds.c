@@ -472,6 +472,10 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		chanacs_t *ca = n->data;
 
+		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
+			entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
+			bitmask_to_flags(ca->level), ca->mychan->name);
+
 		hook_call_channel_acl_change(ca);
 	}
 
@@ -826,6 +830,10 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
 	{
 		chanacs_t *ca = n->data;
+
+		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
+			entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
+			bitmask_to_flags(ca->level), ca->mychan->name);
 
 		hook_call_channel_acl_change(ca);
 	}
