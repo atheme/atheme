@@ -16,7 +16,6 @@ SRCS =			\
 	cs_kickdots.c		\
 	cs_ping.c		\
 	cs_regnotice.c		\
-	cs_sync.c		\
 	cs_updown.c		\
 	cs_userinfo.c		\
 	gen_echoserver.c	\

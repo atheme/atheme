@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService SYNC functions.
- *
  */
 
 #include "atheme.h"
@@ -20,58 +19,12 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync, { .path = "contrib/sync" } };
 
-void _modinit(module_t *m)
-{
-	service_named_bind_command("chanserv", &cs_sync);
-}
-
-void _moddeinit()
-{
-	service_named_unbind_command("chanserv", &cs_sync);
-}
-
-static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
+static void do_channel_sync(mychan_t *mc)
 {
 	chanuser_t *cu;
-	mychan_t *mc;
 	mowgli_node_t *n, *tn;
-	char *name = parv[0];
 	int fl;
 	bool noop;
-
-	if (!name)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SYNC");
-		command_fail(si, fault_needmoreparams, "Syntax: SYNC <#channel>");
-		return;
-	}
-
-	if (!(mc = mychan_find(name)))
-	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
-		return;
-	}
-	
-	if (metadata_find(mc, "private:close:closer"))
-	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", name);
-		return;
-	}
-
-	if (!mc->chan)
-	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
-	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-		return;
-	}
-
-	verbose(mc, "\2%s\2 used SYNC.", get_source_name(si));
-	logcommand(si, CMDLOG_SET, "SYNC: \2%s\2", mc->name);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
 	{
@@ -174,8 +127,75 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 			cu->modes &= ~CSTATUS_VOICE;
 		}
 	}
+}
+
+static void sync_channel_acl_change(chanacs_t *ca)
+{
+	mychan_t *mc;
+
+	mc = ca->mychan;
+	return_if_fail(mc != NULL);
+
+	do_channel_sync(mc);
+}
+
+static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *name = parv[0];
+	mychan_t *mc;
+
+	if (!name)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SYNC");
+		command_fail(si, fault_needmoreparams, "Syntax: SYNC <#channel>");
+		return;
+	}
+
+	if (!(mc = mychan_find(name)))
+	{
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		return;
+	}
+	
+	if (metadata_find(mc, "private:close:closer"))
+	{
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", name);
+		return;
+	}
+
+	if (!mc->chan)
+	{
+		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
+	{
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		return;
+	}
+
+	verbose(mc, "\2%s\2 used SYNC.", get_source_name(si));
+	logcommand(si, CMDLOG_SET, "SYNC: \2%s\2", mc->name);
+
+	do_channel_sync(mc);
 
 	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
+}
+
+void _modinit(module_t *m)
+{
+	service_named_bind_command("chanserv", &cs_sync);
+
+	hook_add_event("channel_acl_change");
+	hook_add_channel_acl_change(sync_channel_acl_change);
+}
+
+void _moddeinit()
+{
+	hook_del_channel_acl_change(sync_channel_acl_change);
+
+	service_named_unbind_command("chanserv", &cs_sync);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
