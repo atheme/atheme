@@ -1321,7 +1321,8 @@ groupserv {
 	 * This is the GroupServ flagset that users who JOIN a open
 	 * group will get upon join. Please check the groupserv/flags
 	 * helpfile before changing this option. Valid flagsets (for
-	 * example) would be: "+v" or "+cv".
+	 * example) would be: "+v" or "+cv". It is not valid to use
+	 * minus flags (such as "-v") here.
 	 */
 	join_flags = "+";
 };
