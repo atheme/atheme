@@ -189,6 +189,9 @@ static void sync_channel_acl_change(chanacs_t *ca)
 	mc = ca->mychan;
 	return_if_fail(mc != NULL);
 
+	if (MC_NOSYNC & mc->flags)
+		return;
+
 	do_channel_sync(mc);
 }
 
@@ -236,9 +239,77 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
 }
 
+static void cs_cmd_set_nosync(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t cs_set_nosync = { "NOSYNC", N_("Disables automatic channel ACL syncing."), AC_NONE, 2, cs_cmd_set_nosync, { .path = "cservice/set_nosync" } };
+
+mowgli_patricia_t **cs_set_cmdtree;
+
+static void cs_cmd_set_nosync(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+
+	if (!(mc = mychan_find(parv[0])))
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
+		return;
+	}
+
+	if (!parv[1])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET NOSYNC");
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+		return;
+	}
+
+	if (!strcasecmp("ON", parv[1]))
+	{
+		if (MC_NOSYNC & mc->flags)
+		{
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "NOSYNC", mc->name);
+			return;
+		}
+
+		logcommand(si, CMDLOG_SET, "SET:NOSYNC:ON: \2%s\2", mc->name);
+
+		mc->flags |= MC_NOSYNC;
+
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "NOSYNC", mc->name);
+		return;
+	}
+	else if (!strcasecmp("OFF", parv[1]))
+	{
+		if (!(MC_NOSYNC & mc->flags))
+		{
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "NOSYNC", mc->name);
+			return;
+		}
+
+		logcommand(si, CMDLOG_SET, "SET:NOSYNC:OFF: \2%s\2", mc->name);
+
+		mc->flags &= ~MC_NOSYNC;
+
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "NOSYNC", mc->name);
+		return;
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOSYNC");
+		return;
+	}
+}
+
 void _modinit(module_t *m)
 {
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	service_named_bind_command("chanserv", &cs_sync);
+
+	command_add(&cs_set_nosync, *cs_set_cmdtree);
 
 	hook_add_event("channel_acl_change");
 	hook_add_channel_acl_change(sync_channel_acl_change);
@@ -249,6 +320,7 @@ void _moddeinit()
 	hook_del_channel_acl_change(sync_channel_acl_change);
 
 	service_named_unbind_command("chanserv", &cs_sync);
+	command_delete(&cs_set_nosync, *cs_set_cmdtree);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
