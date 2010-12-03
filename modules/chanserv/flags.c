@@ -320,6 +320,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 				return;
 			}
+
+			hook_call_channel_acl_change(ca);
 			chanacs_close(ca);
 		}
 		else
@@ -342,6 +344,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 				return;
 			}
+
+			hook_call_channel_acl_change(ca);
 			chanacs_close(ca);
 		}
 

@@ -99,13 +99,13 @@ static void enforce_akicks_on_channel(chanacs_t *ca)
 
 void _modinit(module_t *m)
 {
-	hook_add_event("channel_akick_add");
-	hook_add_channel_akick_add(enforce_akicks_on_channel);
+	hook_add_event("channel_acl_change");
+	hook_add_channel_acl_change(enforce_akicks_on_channel);
 }
 
 void _moddeinit()
 {
-	hook_del_channel_akick_add(enforce_akicks_on_channel);
+	hook_del_channel_acl_change(enforce_akicks_on_channel);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
