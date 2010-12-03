@@ -142,8 +142,10 @@ static void do_channel_sync(mychan_t *mc)
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 				cu->modes |= CSTATUS_OP;
-				continue;
 			}
+
+			if (cu->modes & CSTATUS_OP)
+				continue;
 		}
 		else if ((CSTATUS_OP & cu->modes))
 		{
@@ -159,8 +161,10 @@ static void do_channel_sync(mychan_t *mc)
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->halfops_mode;
-					continue;
 				}
+
+				if (cu->modes & ircd->halfops_mode)
+					continue;
 			}
 			else if (ircd->halfops_mode & cu->modes)
 			{
