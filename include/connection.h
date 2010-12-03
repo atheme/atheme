@@ -22,6 +22,8 @@ union sockaddr_any_
 #define SOCKADDR_IN(foo) 	(struct sockaddr_in	*) &(foo)
 #define SOCKADDR_IN6(foo) 	(struct sockaddr_in6	*) &(foo)
 
+#include "res.h"
+
 typedef struct connection_ connection_t;
 
 struct connection_
