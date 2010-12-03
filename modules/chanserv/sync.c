@@ -118,6 +118,7 @@ static void do_channel_sync(mychan_t *mc)
 				cu->modes &= ~ircd->owner_mode;
 			}
 		}
+
 		if (ircd->uses_protect)
 		{
 			if (fl & CA_USEPROTECT)
@@ -134,20 +135,22 @@ static void do_channel_sync(mychan_t *mc)
 				cu->modes &= ~ircd->protect_mode;
 			}
 		}
+
 		if (fl & (CA_AUTOOP | CA_OP))
 		{
 			if (!noop && fl & CA_AUTOOP && !(CSTATUS_OP & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 				cu->modes |= CSTATUS_OP;
+				continue;
 			}
-			continue;
 		}
-		if ((CSTATUS_OP & cu->modes))
+		else if ((CSTATUS_OP & cu->modes))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 			cu->modes &= ~CSTATUS_OP;
 		}
+
 		if (ircd->uses_halfops)
 		{
 			if (fl & (CA_AUTOHALFOP | CA_HALFOP))
@@ -156,25 +159,26 @@ static void do_channel_sync(mychan_t *mc)
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->halfops_mode;
+					continue;
 				}
-				continue;
 			}
-			if (ircd->halfops_mode & cu->modes)
+			else if (ircd->halfops_mode & cu->modes)
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes &= ~ircd->halfops_mode;
 			}
 		}
+
 		if (fl & (CA_AUTOVOICE | CA_VOICE))
 		{
 			if (!noop && fl & CA_AUTOVOICE && !(CSTATUS_VOICE & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
 				cu->modes |= CSTATUS_VOICE;
+				continue;
 			}
-			continue;
 		}
-		if ((CSTATUS_VOICE & cu->modes))
+		else if ((CSTATUS_VOICE & cu->modes))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
 			cu->modes &= ~CSTATUS_VOICE;
