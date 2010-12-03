@@ -604,6 +604,9 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	groupacs_t *ga;
+	char *c;
+	unsigned int flags = 0;
+	unsigned int dir = 0;
 
 	if (!parv[0])
 	{
@@ -647,9 +650,49 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
                 command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
                 return;
         }
-        
-	ga = groupacs_add(mg, si->smu, 0);
 
+	/* XXX: this sucks. a lot. :< */
+	c = join_flags;
+	while (*c)
+	{
+		switch(*c)
+		{
+		case '+':
+			dir = 0;
+			break;
+		case '*':
+			flags = GA_ALL;
+			break;
+		case 'F':
+			flags |= GA_FOUNDER;
+			break;
+		case 'f':
+			flags |= GA_FLAGS;
+			break;
+		case 's':
+			flags |= GA_SET;
+			break;
+		case 'v':
+			flags |= GA_VHOST;
+			break;
+		case 'c':
+			flags |= GA_CHANACS;
+			break;
+		case 'm':
+			flags |= GA_MEMOS;
+			break;
+		case 'b':
+			flags |= GA_BAN;
+			break;
+		default:
+			break;
+		}
+
+		c++;
+	}
+
+	ga = groupacs_add(mg, si->smu, flags);
+        
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 

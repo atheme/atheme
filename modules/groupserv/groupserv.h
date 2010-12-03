@@ -27,6 +27,7 @@ typedef struct groupacs_ groupacs_t;
 unsigned int maxgroups;
 unsigned int maxgroupacs;
 bool enable_open_groups;
+char *join_flags;
 
 #define GA_FOUNDER		0x00000001
 #define GA_FLAGS		0x00000002

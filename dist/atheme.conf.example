@@ -1316,6 +1316,14 @@ groupserv {
 	 * their group as "anyone can join".
 	 */
 	enable_open_groups;
+
+	/* (*)join_flags
+	 * This is the GroupServ flagset that users who JOIN a open
+	 * group will get upon join. Please check the groupserv/flags
+	 * helpfile before changing this option. Valid flagsets (for
+	 * example) would be: "+v" or "+cv".
+	 */
+	join_flags = "+";
 };
 
 /* HostServ configuration.
