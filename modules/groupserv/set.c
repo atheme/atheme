@@ -437,9 +437,7 @@ static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	char *joinflags = parv[1];
-	char *c;
 	unsigned int flags = 0;
-	unsigned int dir = 0;
 
 	if (!(mg = mygroup_find(parv[0])))
 	{
@@ -482,48 +480,7 @@ static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* this doesn't completely suck. At least if the group has group-specific joinflags,
-	 * the switch statement only runs on change, not on every JOIN.
-	 */
-	c = joinflags;
-	while (*c)
-	{
-		switch(*c)
-		{
-		case '+':
-			dir = 0;
-			break;
-		case '*':
-			flags = GA_ALL;
-			break;
-		case 'F':
-			flags |= GA_FOUNDER;
-			break;
-		case 'f':
-			flags |= GA_FLAGS;
-			break;
-		case 's':
-			flags |= GA_SET;
-			break;
-		case 'v':
-			flags |= GA_VHOST;
-			break;
-		case 'c':
-			flags |= GA_CHANACS;
-			break;
-		case 'm':
-			flags |= GA_MEMOS;
-			break;
-		case 'b':
-			flags |= GA_BAN;
-			break;
-		default:
-			break;
-		}
-
-		c++;
-	}
-
+	flags = gs_flags_parser(joinflags, 0);
 
 	/* we'll overwrite any existing metadata */
 	metadata_add(mg, "joinflags", number_to_string(flags));

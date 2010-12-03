@@ -374,7 +374,9 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
-	/* XXX: this sucks. :< */
+	/* XXX: this sucks. :< We have to keep this here instead of using the "global" function
+	 * because of the MU_NEVEROP check which is really only needed in FLAGS. 
+	 */
 	c = parv[2];
 	while (*c)
 	{
@@ -605,9 +607,7 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	mygroup_t *mg;
 	groupacs_t *ga;
 	metadata_t *md;
-	char *c;
 	unsigned int flags = 0;
-	unsigned int dir = 0;
 
 	if (!parv[0])
 	{
@@ -655,47 +655,8 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	if ((md = metadata_find(mg, "joinflags")))
 		flags = atoi(md->value);
 	else
-	{
-		/* XXX: this sucks. a lot. :< */
-		c = join_flags;
-		while (*c)
-		{
-			switch(*c)
-			{
-			case '+':
-				dir = 0;
-				break;
-			case '*':
-				flags = GA_ALL;
-				break;
-			case 'F':
-				flags |= GA_FOUNDER;
-				break;
-			case 'f':
-				flags |= GA_FLAGS;
-				break;
-			case 's':
-				flags |= GA_SET;
-				break;
-			case 'v':
-				flags |= GA_VHOST;
-				break;
-			case 'c':
-				flags |= GA_CHANACS;
-				break;
-			case 'm':
-				flags |= GA_MEMOS;
-				break;
-			case 'b':
-				flags |= GA_BAN;
-				break;
-			default:
-				break;
-			}
+		flags = gs_flags_parser(join_flags, 0);
 
-			c++;
-		}
-	}
 
 	ga = groupacs_add(mg, si->smu, flags);
         
@@ -749,8 +710,6 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	groupacs_t *ga;
 	unsigned int flags = 0;
-	unsigned int dir = 0;
-	char *c;
 
 	if (!parv[0] || !parv[1] || !parv[2])
 	{
@@ -781,79 +740,7 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
-	/* XXX: this sucks. :< */
-	c = parv[2];
-	while (*c)
-	{
-		switch(*c)
-		{
-		case '+':
-			dir = 0;
-			break;
-		case '-':
-			dir = 1;
-			break;
-		case '*':
-			if (dir)
-				flags = 0;
-			else
-				flags = GA_ALL;
-			break;
-		case 'F':
-			if (dir)
-				flags &= ~GA_FOUNDER;
-			else
-				flags |= GA_FOUNDER;
-			break;
-		case 'f':
-			if (dir)
-				flags &= ~GA_FLAGS;
-			else
-				flags |= GA_FLAGS;
-			break;
-		case 's':
-			if (dir)
-				flags &= ~GA_SET;
-			else
-				flags |= GA_SET;
-			break;
-		case 'v':
-			if (dir)
-				flags &= ~GA_VHOST;
-			else
-				flags |= GA_VHOST;
-			break;
-		case 'c':
-			if (dir)
-				flags &= ~GA_CHANACS;
-			else
-			{
-				if (mu->flags & MU_NEVEROP)
-				{
-					command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), entity(mu)->name);
-					return;
-				}
-				flags |= GA_CHANACS;
-			}
-			break;
-		case 'm':
-			if (dir)
-				flags &= ~GA_MEMOS;
-			else
-				flags |= GA_MEMOS;
-			break;
-		case 'b':
-			if (dir)
-				flags &= ~GA_BAN;
-			else
-				flags |= GA_BAN;
-			break;
-		default:
-			break;
-		}
-
-		c++;
-	}
+	flags = gs_flags_parser(parv[2], 1);
 
 	if (ga != NULL && flags != 0)
 		ga->flags = flags;

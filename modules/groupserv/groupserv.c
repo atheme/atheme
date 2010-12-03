@@ -233,3 +233,82 @@ unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 
 	return count;
 }
+
+unsigned int gs_flags_parser(char *flagstring, int allow_minus)
+{
+	char *c;
+	unsigned int flags = 0;
+	unsigned int dir = 0;
+
+	/* XXX: this sucks. :< */
+	c = flagstring;
+	while (*c)
+	{
+		switch(*c)
+		{
+		case '+':
+			dir = 0;
+			break;
+		if (allow_minus == 1)
+		{
+			case '-':
+				dir = 1;
+				break;
+		}
+		case '*':
+			if (dir)
+				flags = 0;
+			else
+				flags = GA_ALL;
+			break;
+		case 'F':
+			if (dir)
+				flags &= ~GA_FOUNDER;
+			else
+				flags |= GA_FOUNDER;
+			break;
+		case 'f':
+			if (dir)
+				flags &= ~GA_FLAGS;
+			else
+				flags |= GA_FLAGS;
+			break;
+		case 's':
+			if (dir)
+				flags &= ~GA_SET;
+			else
+				flags |= GA_SET;
+			break;
+		case 'v':
+			if (dir)
+				flags &= ~GA_VHOST;
+			else
+				flags |= GA_VHOST;
+			break;
+		case 'c':
+			if (dir)
+				flags &= ~GA_CHANACS;
+			else
+				flags |= GA_CHANACS;
+			break;
+		case 'm':
+			if (dir)
+				flags &= ~GA_MEMOS;
+			else
+				flags |= GA_MEMOS;
+			break;
+		case 'b':
+			if (dir)
+				flags &= ~GA_BAN;
+			else
+				flags |= GA_BAN;
+			break;
+		default:
+			break;
+		}
+
+		c++;
+	}
+
+	return flags;
+}
