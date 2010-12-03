@@ -182,6 +182,7 @@ struct mychan_
 #define MC_TOPICLOCK   0x00000100
 #define MC_GUARD       0x00000200
 #define MC_PRIVATE     0x00000400
+#define MC_NOSYNC      0x00000800
 
 /* The following are temporary state */
 #define MC_INHABIT     0x80000000 /* we're on channel to enforce akick/staffonly/close */
