@@ -283,6 +283,7 @@ command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE,
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
+	mowgli_node_t *n;
 	mygroup_t *mg;
 	myuser_t *mu;
 	groupacs_t *ga;
@@ -465,6 +466,13 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		ga = groupacs_add(mg, mu, flags);
+	}
+
+	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
+	{
+		chanacs_t *ca = n->data;
+
+		hook_call_channel_acl_change(ca);
 	}
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
@@ -684,6 +692,7 @@ command_t gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group.
 
 static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 {
+	mowgli_node_t *n;
 	mygroup_t *mg;
 	myuser_t *mu;
 	groupacs_t *ga;
@@ -812,6 +821,13 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		ga = groupacs_add(mg, mu, flags);
+	}
+
+	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
+	{
+		chanacs_t *ca = n->data;
+
+		hook_call_channel_acl_change(ca);
 	}
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
