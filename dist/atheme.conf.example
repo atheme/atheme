@@ -245,7 +245,6 @@ loadmodule "modules/nickserv/vhost";
  * Core components				modules/chanserv/main
  * ACCESS command (simplified ACL editing)	modules/chanserv/access
  * AKICK command				modules/chanserv/akick
- *  + Immediately enforce AKICKs on add         modules/chanserv/akick_enforce
  * BAN/UNBAN commands				modules/chanserv/ban
  * UNBAN self only (load ban or this not both)	modules/chanserv/unban_self
  * CLOSE command				modules/chanserv/close
@@ -307,7 +306,6 @@ loadmodule "modules/nickserv/vhost";
 loadmodule "modules/chanserv/main";
 loadmodule "modules/chanserv/access";
 loadmodule "modules/chanserv/akick";
-loadmodule "modules/chanserv/akick_enforce";
 loadmodule "modules/chanserv/ban";
 #loadmodule "modules/chanserv/unban_self";
 loadmodule "modules/chanserv/close";

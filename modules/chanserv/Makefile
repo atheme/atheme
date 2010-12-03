@@ -16,7 +16,6 @@ SRCS =			\
 	main.c	\
 	access.c \
 	akick.c	\
-	akick_enforce.c	\
 	ban.c		\
 	clear.c	\
 	clear_bans.c	\
