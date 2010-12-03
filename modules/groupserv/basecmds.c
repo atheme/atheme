@@ -324,7 +324,6 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!parv[1])
 	{
-		mowgli_node_t *n;
 		int i = 1;
 
 		command_success_nodata(si, _("Entry Account                Flags"));
