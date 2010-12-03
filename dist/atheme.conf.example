@@ -1607,7 +1607,7 @@ general {
 	/* (*)cflags
 	 * The default flags to set for channels upon registration.
 	 * Valid values are: hold, secure, verbose, verbose_ops, keeptopic,
-	 * topiclock, guard, private, limitflags and none.
+	 * topiclock, guard, private, nosync, limitflags and none.
 	 */
 	cflags = { verbose; guard; };
 
