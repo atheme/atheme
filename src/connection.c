@@ -98,12 +98,15 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	/* set connection name */
 	strlcpy(cptr->name, name, HOSTLEN);
 
-	cptr->saddr_size = sizeof(cptr->saddr);
-	getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
+	if (cptr->fd > -1)
+	{
+		cptr->saddr_size = sizeof(cptr->saddr);
+		getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
 
-	inet_ntop(cptr->saddr.sa.sa_family,
-		  &cptr->saddr.sin6.sin6_addr,
-		  cptr->hbuf, BUFSIZE);
+		inet_ntop(cptr->saddr.sa.sa_family,
+			  &cptr->saddr.sin6.sin6_addr,
+			  cptr->hbuf, BUFSIZE);
+	}
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
