@@ -8,7 +8,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/helpme", false, _modinit, _moddeinit,
+	"contrib/os_helpme", false, _modinit, _moddeinit,
 	"os_helpme.c",
 	"elly+atheme@leptoquark.net"
 );

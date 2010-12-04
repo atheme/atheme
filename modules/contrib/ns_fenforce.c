@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/fenforce", false, _modinit, _moddeinit,
+	"contrib/ns_fenforce", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );

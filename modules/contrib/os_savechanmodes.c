@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/savechanmodes", false, _modinit, _moddeinit,
+	"contrib/os_savechanmodes", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );

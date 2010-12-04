@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"misc/vhostonreg", false, _modinit, _moddeinit,
+	"contrib/gen_vhostonreg", false, _modinit, _moddeinit,
 	"$Revision: 7785 $",
 	"Atheme Development Group <http://www.atheme.org>"
 );

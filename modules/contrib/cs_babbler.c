@@ -38,7 +38,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/babbler", false, _modinit, _moddeinit,
+	"contrib/cs_babbler", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"William Pitcock <nenolod -at- nenolod.net>"
 );

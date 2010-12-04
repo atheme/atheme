@@ -6,7 +6,7 @@
 
 DECLARE_MODULE_V1
 (
-    "nickserv/mxcheck_async", false, _modinit, _moddeinit,
+    "contrib/ns_mxcheck_async", false, _modinit, _moddeinit,
     "1.1",
     "Jamie L. Penman-Smithson <jamie@slacked.org>"
 );

@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/klinechan", false, _modinit, _moddeinit,
+	"contrib/os_klinechan", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Jilles Tjoelker <http://www.stack.nl/~jilles/irc/>"
 );

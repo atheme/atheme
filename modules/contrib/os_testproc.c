@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/testproc", false, _modinit, _moddeinit,
+	"contrib/os_testproc", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
