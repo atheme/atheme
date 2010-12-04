@@ -32,11 +32,21 @@ void _modinit(module_t *m)
 		mygroups_init();
 	else
 	{
+		myentity_iteration_state_t iter;
+		myentity_t *grp;
+
 		mygroup_heap = rec->mygroup_heap;
 		groupacs_heap = rec->groupacs_heap;
 
 		mowgli_global_storage_free("atheme.groupserv.main.persist");
 		free(rec);
+
+		MYENTITY_FOREACH_T(grp, &iter, ENT_GROUP)
+		{
+			continue_if_fail(isgroup(grp));
+
+			mygroup_set_chanacs_validator(grp);
+		}
 	}
 
 	groupsvs = service_add("groupserv", NULL, &conf_gs_table);
