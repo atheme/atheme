@@ -7,7 +7,7 @@
 
 DECLARE_MODULE_V1
 (
-	"groupserv/main", true, _modinit, _moddeinit,
+	"groupserv/main", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -15,9 +15,30 @@ DECLARE_MODULE_V1
 service_t *groupsvs;
 mowgli_list_t conf_gs_table;
 
+typedef struct {
+	int version;
+
+	mowgli_heap_t *mygroup_heap;
+	mowgli_heap_t *groupacs_heap;
+} groupserv_persist_record_t;
+
+extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
+
 void _modinit(module_t *m)
 {
-	mygroups_init();
+	groupserv_persist_record_t *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
+
+	if (rec == NULL)
+		mygroups_init();
+	else
+	{
+		mygroup_heap = rec->mygroup_heap;
+		groupacs_heap = rec->groupacs_heap;
+
+		mowgli_global_storage_free("atheme.groupserv.main.persist");
+		free(rec);
+	}
+
 	groupsvs = service_add("groupserv", NULL, &conf_gs_table);
 	add_uint_conf_item("MAXGROUPS", &conf_gs_table, 0, &maxgroups, 0, 65535, 5);
 	add_uint_conf_item("MAXGROUPACS", &conf_gs_table, 0, &maxgroupacs, 0, 65535, 0);
@@ -44,5 +65,23 @@ void _moddeinit(module_unload_intent_t intent)
 	if (groupsvs)
 		service_delete(groupsvs);
 
-	mygroups_deinit();
+	switch (intent)
+	{
+		case MODULE_UNLOAD_INTENT_RELOAD:
+		{
+			groupserv_persist_record_t *rec = smalloc(sizeof(groupserv_persist_record_t));
+
+			rec->version = 1;
+			rec->mygroup_heap = mygroup_heap;
+			rec->groupacs_heap = groupacs_heap;
+
+			mowgli_global_storage_put("atheme.groupserv.main.persist", rec);
+			break;
+		}
+
+		case MODULE_UNLOAD_INTENT_PERM:
+		default:
+			mygroups_deinit();
+			break;
+	}
 }

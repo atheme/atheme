@@ -24,7 +24,7 @@ struct gflags mg_flags[] = {
 	{ 0, 0 }
 };
 
-static mowgli_heap_t *mygroup_heap, *groupacs_heap;
+mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
 void mygroups_init(void)
 {
