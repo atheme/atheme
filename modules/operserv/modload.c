@@ -68,6 +68,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_fail(si, fault_nosuch_target, _("Module \2%s\2 failed to load."), module);
 	}
+
 	if (conf_need_rehash)
 	{
 		logcommand(si, CMDLOG_ADMIN, "REHASH (MODLOAD)");

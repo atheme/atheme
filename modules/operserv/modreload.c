@@ -73,4 +73,13 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2, operation failed.", get_oper_name(si), module);
 		return;
 	}
+	
+	if (conf_need_rehash)
+	{
+		logcommand(si, CMDLOG_ADMIN, "REHASH (MODRELOAD)");
+		wallops("Rehashing \2%s\2 to complete module reload by request of \2%s\2.", config_file, get_oper_name(si));
+		if (!conf_rehash())
+			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
+	}
+}
 }
