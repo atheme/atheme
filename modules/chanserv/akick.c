@@ -555,7 +555,7 @@ void akick_timeout_check(void *arg)
 	mowgli_node_t *n, *tn;
 	akick_timeout_t *timeout;
 	myentity_t *mt;
-	chanacs_t *ca;
+	chanacs_t *ca = NULL;
 	metadata_t *md;
 	char *vhost;
 
