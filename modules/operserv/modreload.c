@@ -82,4 +82,3 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
 }
-}
