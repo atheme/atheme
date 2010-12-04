@@ -555,7 +555,7 @@ void akick_timeout_check(void *arg)
 	mowgli_node_t *n, *tn;
 	akick_timeout_t *timeout;
 	myentity_t *mt;
-	chanacs_t *ca = NULL;
+	chanacs_t *ca;
 	metadata_t *md;
 	char *vhost;
 
@@ -573,6 +573,8 @@ void akick_timeout_check(void *arg)
 			event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 			break;
 		}
+
+		ca = NULL;
 
 		mychan_t *mc = mychan_find(timeout->chan);
 		if (strstr(timeout->host,"@"))
