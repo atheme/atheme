@@ -1040,7 +1040,7 @@ chanserv {
 	 * Comment this option out or set to zero for permanent AKICKs
 	 * by default (the old behaviour).
 	 */
-	akick_time = 10;
+	#akick_time = 10;
 };
 
 /* Global noticing configuration.

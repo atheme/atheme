@@ -136,8 +136,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (token) { /* A duration, reason, or duration and reason */
-
+		/* A duration, reason or duration and reason. */
+		if (token)
+		{
 			if (!strcasecmp(token, "!P")) /* A duration [permanent] */
 			{
 				duration = 0;
@@ -152,10 +153,12 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				s = strtok(NULL, " ");
 				treason = strtok(NULL, "");
+
 				if (treason)
 					strlcpy(reason, treason, BUFSIZE);
 				else
 					reason[0] = 0;
+
 				if (s)
 				{
 					duration = (atol(s) * 60);
@@ -171,6 +174,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 						;
 					else
 						duration = 0;
+
 					if (duration == 0)
 					{
 						command_fail(si, fault_badparams, _("Invalid duration given."));
@@ -323,6 +327,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 			chanacs_modify_simple(ca2, CA_AKICK, 0);
+
 			if (reason[0])
 				metadata_add(ca2, "reason", reason);
 
@@ -421,7 +426,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
 			{
 				timeout = n->data;
-				if (!strcmp(timeout->host,uname) && !strcmp(timeout->chan,mc->name))
+				if (!strcmp(timeout->host, uname) && !strcmp(timeout->chan, mc->name))
 				{
 					mowgli_node_delete(&timeout->node, &akickdel_list);
 					mowgli_heap_free(akick_timeout_heap, timeout);
@@ -443,9 +448,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if ((md = metadata_find(mt,"private:host:vhost")) && (vhost = strstr(md->value,"@")) && (++vhost))
+		if ((md = metadata_find(mt, "private:host:vhost")) && (vhost = strstr(md->value, "@")) && (++vhost))
 		{
-			snprintf(expiry,sizeof timeout->host,"*!*@%s",vhost);
+			snprintf(expiry, sizeof timeout->host, "*!*@%s", vhost);
 			if ((cb = chanban_find(mc->chan, expiry, 'b')))
 			{
 				snprintf(modestr, sizeof modestr, "-b %s", timeout->host);
@@ -457,7 +462,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
 		{
 			timeout = n->data;
-			if (!strcmp(timeout->host,mt->name) && !strcmp(timeout->chan,mc->name))
+			if (!strcmp(timeout->host, mt->name) && !strcmp(timeout->chan, mc->name))
 			{
 				mowgli_node_delete(&timeout->node, &akickdel_list);
 				mowgli_heap_free(akick_timeout_heap, timeout);
@@ -491,7 +496,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("AKICK list for \2%s\2:"), mc->name);
 
 
-		MOWGLI_ITER_FOREACH_SAFE(n,tn,mc->chanacs.head)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		{
 			time_t expires_on = 0;
 			char *ago;
