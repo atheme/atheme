@@ -51,7 +51,7 @@ void _modinit(module_t *m)
 	hook_add_user_add(os_akill_newuser);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_akill);
 

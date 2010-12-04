@@ -118,7 +118,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_t *n;
 

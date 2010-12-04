@@ -42,7 +42,7 @@ void _modinit(module_t *m)
 	command_add(&ms_ignore_list, ms_ignore_cmds);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_ignore);
 

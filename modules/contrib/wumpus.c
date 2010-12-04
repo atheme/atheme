@@ -987,7 +987,7 @@ _modinit(module_t *m)
 }
 
 void
-_moddeinit(void)
+_moddeinit(module_unload_intent_t intent)
 {
 	/* cleanup after ourselves if necessary */
 	if (wumpus.running)

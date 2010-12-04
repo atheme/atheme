@@ -29,7 +29,7 @@ void _modinit(module_t *m)
 	hostsvs = service_add("hostserv", NULL, &conf_hs_table);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (hostsvs != NULL)
 		service_delete(hostsvs);

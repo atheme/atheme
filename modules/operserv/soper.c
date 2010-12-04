@@ -45,7 +45,7 @@ void _modinit(module_t *m)
 	command_add(&os_soper_setpass, os_soper_cmds);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_soper);
 	command_delete(&os_soper_list, os_soper_cmds);

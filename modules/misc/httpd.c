@@ -411,7 +411,7 @@ void _modinit(module_t *m)
 	add_uint_conf_item("PORT", &conf_httpd_table, 0, &httpd_config.port, 1, 65535, 0);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	event_delete(httpd_checkidle, NULL);
 	hook_del_config_ready(httpd_config_ready);

@@ -16,7 +16,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("operserv", &os_modreload);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_modreload);
 }
@@ -52,7 +52,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("Refusing to reload \2%s\2."), module);
 		return;
 	}
-	module_unload(m);
+	module_unload(m, MODULE_UNLOAD_INTENT_RELOAD);
 
 	if (*module != '/')
 	{

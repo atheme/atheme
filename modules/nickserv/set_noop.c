@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	command_add(&ns_set_noop, *ns_set_cmdtree);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_noop, *ns_set_cmdtree);
 }

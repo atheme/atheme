@@ -29,7 +29,7 @@ void _modinit(module_t *m)
 	ircd->flags &= ~IRCD_HOLDNICK;
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 
 	ircd->flags |= oldflag;

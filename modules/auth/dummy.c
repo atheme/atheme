@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 	auth_module_loaded = true;
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	auth_user_custom = NULL;
 

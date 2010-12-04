@@ -179,7 +179,7 @@ void _modinit(module_t *m)
 	hook_add_metadata_change(hook_metadata_change);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_subscribe);
 	hook_del_metadata_change(hook_metadata_change);

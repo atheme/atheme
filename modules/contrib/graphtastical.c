@@ -181,7 +181,7 @@ void _modinit(module_t *m)
 	event_add("write_uchannels_dot_file", write_uchannels_dot_file, NULL, 60);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	event_delete(write_channels_dot_file, NULL);
 	event_delete(write_uchannels_dot_file, NULL);

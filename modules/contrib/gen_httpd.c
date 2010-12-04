@@ -279,7 +279,7 @@ void _modinit(module_t *m)
 	event_add("httpd_checkidle", httpd_checkidle, NULL, 60);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	event_delete(httpd_checkidle, NULL);
 	connection_close_soon_children(listener);

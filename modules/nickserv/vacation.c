@@ -102,7 +102,7 @@ void _modinit(module_t *m)
 	hook_add_user_info(info_hook);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_vacation);
 

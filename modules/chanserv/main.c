@@ -210,7 +210,7 @@ void _modinit(module_t *m)
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (chansvs.me)
 	{

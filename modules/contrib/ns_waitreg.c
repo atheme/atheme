@@ -45,7 +45,7 @@ _modinit(module_t *m)
 }
 
 void
-_moddeinit(void)
+_moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_can_register(waitreg_hook);
 

@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	hook_add_first_channel_join(close_check_join);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_close);
 	hook_del_channel_join(close_check_join);

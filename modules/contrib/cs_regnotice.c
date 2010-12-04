@@ -74,7 +74,7 @@ _modinit(module_t *m)
 }
 
 void
-_moddeinit(void)
+_moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_register(regnotice_hook);
 	hook_del_config_purge(regnotice_config_purge);

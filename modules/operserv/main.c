@@ -24,7 +24,7 @@ void _modinit(module_t *m)
         opersvs = service_add("operserv", NULL, &os_conftable);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (opersvs != NULL)
 		service_delete(opersvs);

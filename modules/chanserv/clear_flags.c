@@ -28,7 +28,7 @@ void _modinit(module_t *m)
         command_add(&cs_clear_flags, *cs_clear_cmds);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&cs_clear_flags, *cs_clear_cmds);
 }

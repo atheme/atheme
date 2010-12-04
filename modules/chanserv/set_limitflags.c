@@ -31,7 +31,7 @@ void _modinit(module_t *m)
 	use_limitflags++;
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&cs_set_limitflags, *cs_set_cmdtree);
 

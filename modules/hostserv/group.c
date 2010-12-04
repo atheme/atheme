@@ -25,7 +25,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_group);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_group);
 }

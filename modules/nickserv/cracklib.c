@@ -83,7 +83,7 @@ _modinit(module_t *m)
 }
 
 void
-_moddeinit(void)
+_moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_can_register(cracklib_hook);
 	hook_del_config_ready(cracklib_config_ready);

@@ -37,7 +37,7 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "chanserv/set_verbose");
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 }
 

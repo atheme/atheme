@@ -960,7 +960,7 @@ void _modinit(module_t *m)
 	msg                   = bs_msg;
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 

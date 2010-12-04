@@ -185,7 +185,7 @@ static void free_hostentry(const char *key, void *data, void *privdata)
 	mowgli_heap_free(hostentry_heap, he);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 

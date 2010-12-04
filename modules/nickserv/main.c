@@ -121,7 +121,7 @@ void _modinit(module_t *m)
 	authservice_loaded++;
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
         if (nicksvs.me)
 	{

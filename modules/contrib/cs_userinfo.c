@@ -28,7 +28,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("chanserv", &cs_userinfo);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_join(userinfo_check_join);
 	service_named_unbind_command("chanserv", &cs_userinfo);

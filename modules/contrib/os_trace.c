@@ -739,7 +739,7 @@ void _modinit(module_t *m)
 	mowgli_patricia_add(trace_acttree, "COUNT", &trace_count);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_patricia_destroy(trace_cmdtree, NULL, NULL);
 

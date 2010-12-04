@@ -26,7 +26,7 @@ void _modinit(module_t *m)
         service_named_bind_command("operserv", &os_id);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_identify);
 	service_named_unbind_command("operserv", &os_id);

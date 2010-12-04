@@ -67,7 +67,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("helpserv", &helpserv_cancel);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_myuser_delete(account_delete_request);

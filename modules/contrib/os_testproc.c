@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("operserv", &os_testproc);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (procdata.pip != NULL)
 		connection_close_soon(procdata.pip);

@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	hook_add_first_channel_register(handle_channel_register);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_register(handle_channel_register);
 }

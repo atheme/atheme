@@ -42,7 +42,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_delete");
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 

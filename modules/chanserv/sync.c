@@ -323,7 +323,7 @@ void _modinit(module_t *m)
 	hook_add_channel_acl_change(sync_channel_acl_change);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_acl_change(sync_channel_acl_change);
 

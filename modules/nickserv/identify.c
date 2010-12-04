@@ -41,7 +41,7 @@ void _modinit(module_t *m)
 #endif
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 #ifdef NICKSERV_LOGIN
 	service_named_unbind_command("nickserv", &ns_login);

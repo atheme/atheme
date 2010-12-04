@@ -40,6 +40,11 @@ struct module_ {
 
 #define MAX_CMD_PARC		20
 
+typedef enum {
+	MODULE_UNLOAD_INTENT_PERM,
+	MODULE_UNLOAD_INTENT_RELOAD,
+} module_unload_intent_t;
+
 struct v3_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
@@ -48,7 +53,7 @@ struct v3_moduleheader_ {
 	const char *name;
 	bool norestart;
 	void (*modinit)(module_t *m);
-	void (*deinit)(void);
+	void (*deinit)(module_unload_intent_t intent);
 	const char *vendor;
 	const char *version;
 };
@@ -61,14 +66,14 @@ struct v3_moduleheader_ {
 	}
 
 E void _modinit(module_t *m);
-E void _moddeinit(void);
+E void _moddeinit(module_unload_intent_t intent);
 
 E void modules_init(void);
 E module_t *module_load(const char *filespec);
 E void module_load_dir(const char *dirspec);
 E void module_load_dir_match(const char *dirspec, const char *pattern);
 E void *module_locate_symbol(const char *modname, const char *sym);
-E void module_unload(module_t *m);
+E void module_unload(module_t *m, module_unload_intent_t intent);
 E module_t *module_find(const char *name);
 E module_t *module_find_published(const char *name);
 E bool module_request(const char *name);

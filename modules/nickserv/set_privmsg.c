@@ -79,7 +79,7 @@ void _modinit(module_t *m)
 	use_privmsg++;
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_privmsg, *ns_set_cmdtree);
 

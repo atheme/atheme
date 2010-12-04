@@ -88,7 +88,7 @@ void _modinit(module_t *m)
 	hook_add_channel_message(on_channel_message);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_message(on_channel_message);
 }

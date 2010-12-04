@@ -36,7 +36,7 @@ void _modinit(module_t *m)
 	command_add(&bs_set_private, *bs_set_cmdtree);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&bs_set_private, *bs_set_cmdtree);
 }

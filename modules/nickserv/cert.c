@@ -25,7 +25,7 @@ void _modinit(module_t *m)
 
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_cert);
 }

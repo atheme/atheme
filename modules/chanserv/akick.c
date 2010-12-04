@@ -50,7 +50,7 @@ void _modinit(module_t *m)
     	event_add_once("akickdel_list_create", akickdel_list_create, NULL, 0);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_akick);
 	mowgli_heap_destroy(akick_timeout_heap);

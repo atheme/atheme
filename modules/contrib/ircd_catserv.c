@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 	service_bind_command(catserv, &catserv_help);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_unbind_command(catserv, &catserv_meow);
 	service_unbind_command(catserv, &catserv_help);

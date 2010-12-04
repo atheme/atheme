@@ -159,7 +159,7 @@ _modinit(module_t *m)
 }
 
 void
-_moddeinit(void)
+_moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_add(aknl_nickhook);
 	hook_del_user_nickchange(aknl_nickhook);

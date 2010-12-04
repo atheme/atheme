@@ -63,7 +63,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_take);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_db_write(write_hsofferdb);
 	db_unregister_type_handler("HO");

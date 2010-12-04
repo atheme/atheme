@@ -193,7 +193,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_ajoin);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_identify(ajoin_on_identify);
 	service_named_unbind_command("nickserv", &ns_ajoin);

@@ -29,7 +29,7 @@ void _modinit(module_t *m)
 	command_add(&cs_set_email, *cs_set_cmdtree);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&cs_set_email, *cs_set_cmdtree);
 }

@@ -42,7 +42,7 @@ void _modinit(module_t *m)
 	update_chanacs_flags();
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 
 	ircd->uses_halfops = oldflag;

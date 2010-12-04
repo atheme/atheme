@@ -300,7 +300,7 @@ void _modinit(module_t *m)
 	service_bind_command(loveserv, &ls_help);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (loveserv)
 		service_delete(loveserv);

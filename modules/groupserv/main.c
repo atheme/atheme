@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	set_init();
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	gs_db_deinit();
 	gs_hooks_deinit();

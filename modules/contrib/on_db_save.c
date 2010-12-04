@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 	add_dupstr_conf_item("db_update_command", &conf_gi_table, 0, &command, NULL);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_db_saved(on_db_save);
 

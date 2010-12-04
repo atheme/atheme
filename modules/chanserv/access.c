@@ -93,7 +93,7 @@ void _modinit(module_t *m)
 	command_add(&cs_role_del, cs_role_cmds);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_access);
 	service_named_unbind_command("chanserv", &cs_role);

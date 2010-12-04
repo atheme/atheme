@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 	hook_add_config_ready(cs_set_guard_config_ready);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&cs_set_guard, *cs_set_cmdtree);
 

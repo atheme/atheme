@@ -151,7 +151,7 @@ module_t *module_load(const char *filespec)
 	{
 		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", filespec);
 		mowgli_node_free(n);
-		module_unload(m);
+		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;
 	}
 
@@ -257,7 +257,7 @@ void module_load_dir_match(const char *dirspec, const char *pattern)
  * side effects:
  *       a module is unloaded and neccessary deinitalization code is run.
  */
-void module_unload(module_t * m)
+void module_unload(module_t *m, module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -266,7 +266,7 @@ void module_unload(module_t * m)
 
 	/* unload modules which depend on us */
 	while (m->dephost.head != NULL)
-		module_unload((module_t *) m->dephost.head->data);
+		module_unload((module_t *) m->dephost.head->data, intent);
 
 	/* let modules that we depend on know that we no longer exist */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, m->deplist.head)
@@ -290,7 +290,7 @@ void module_unload(module_t * m)
 		}
 
 		if (m->header->deinit)
-			m->header->deinit();
+			m->header->deinit(intent);
 		mowgli_node_delete(n, &modules);
 		mowgli_node_free(n);
 	}

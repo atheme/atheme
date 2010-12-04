@@ -48,7 +48,7 @@ void _modinit(module_t *m)
 	add_duration_conf_item("DEFCON_TIMEOUT", svs->conf_table, 0, &defcon_timeout, "m", 900);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_defcon);
 

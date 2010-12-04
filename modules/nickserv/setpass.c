@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_setpass);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_identify(clear_setpass_key);
 	service_named_unbind_command("nickserv", &ns_setpass);

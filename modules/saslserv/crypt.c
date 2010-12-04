@@ -44,7 +44,7 @@ void _modinit(module_t *m)
 	mowgli_node_add(&mech, mnode, mechanisms);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_delete(mnode, mechanisms);
 }

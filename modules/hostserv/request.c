@@ -76,7 +76,7 @@ void _modinit(module_t *m)
 	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, 0, &request_per_nick, false);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_nick_ungroup(nick_drop_request);

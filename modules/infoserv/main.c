@@ -533,7 +533,7 @@ void _modinit(module_t *m)
 	service_bind_command(infoserv, &is_olist);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	del_conf_item("LOGONINFO_COUNT", &is_conftable);
 

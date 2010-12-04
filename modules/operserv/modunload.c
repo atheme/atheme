@@ -26,7 +26,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("operserv", &os_modunload);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_modunload);
 }
@@ -72,7 +72,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD: \2%s\2", module);
 
-		module_unload(m);
+		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 
 		command_success_nodata(si, _("Module \2%s\2 unloaded."), module);
 	}

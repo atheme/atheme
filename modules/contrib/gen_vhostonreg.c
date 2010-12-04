@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 		counter += 100000;
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_verify_register(handle_verify_register);
 	hook_del_user_identify(hook_user_identify);

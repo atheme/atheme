@@ -23,7 +23,7 @@ void _modinit(module_t *m)
 	gs = service_add("gameserv", NULL, &gs_conftable);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
         if (gs != NULL)
                 service_delete(gs);

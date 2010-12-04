@@ -40,7 +40,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("operserv", &os_procwatch);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	if (kq_conn != NULL)
 		connection_close_soon(kq_conn);

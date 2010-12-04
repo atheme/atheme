@@ -35,7 +35,7 @@ void _modinit(module_t *m)
 	hook_add_channel_info(klinechan_show_info);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_klinechan);
 	service_named_unbind_command("operserv", &os_listklinechans);

@@ -23,7 +23,7 @@ void _modinit(module_t *m)
 	hook_add_user_can_register(check_registration);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_can_register(check_registration);
 }

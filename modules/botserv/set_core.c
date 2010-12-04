@@ -31,7 +31,7 @@ void _modinit(module_t *m)
 	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_set);
 

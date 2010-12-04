@@ -140,7 +140,7 @@ void _modinit(module_t *m)
 	crypto_module_loaded = true;
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	crypt_string = &generic_crypt_string;
 

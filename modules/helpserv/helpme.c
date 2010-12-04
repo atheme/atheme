@@ -28,7 +28,7 @@ void _modinit(module_t *m)
         service_named_bind_command("helpserv", &helpserv_helpme);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
         service_named_unbind_command("helpserv", &helpserv_helpme);
 }

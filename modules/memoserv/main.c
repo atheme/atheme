@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 	memosvs = service_add("memoserv", NULL, &ms_conftable);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
         if (memosvs != NULL)
                 service_delete(memosvs);

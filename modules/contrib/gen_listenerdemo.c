@@ -80,7 +80,7 @@ void _modinit(module_t *m)
 	listener = connection_open_listener_tcp("127.0.0.1", 7100, do_listen);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	connection_close(listener);
 }

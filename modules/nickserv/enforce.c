@@ -525,7 +525,7 @@ void _modinit(module_t *m)
 	hook_add_nick_enforce(check_enforce);
 }
 
-void _moddeinit()
+void _moddeinit(module_unload_intent_t intent)
 {
 	enforce_remove_enforcers(NULL);
 	event_delete(enforce_remove_enforcers, NULL);

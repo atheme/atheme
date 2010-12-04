@@ -35,7 +35,7 @@ void _modinit(module_t *m)
 	hook_add_config_ready(bs_set_fantasy_config_ready);
 }
 
-void _moddeinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
 
