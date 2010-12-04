@@ -14,6 +14,6 @@ Syntax: SET <!group>  JOINFLAGS [OFF|flags]
 
 Examples:
     /msg &nick& SET !awesome-people JOINFLAGS OFF
-	/msg &nick& SET !foo JOINFLAGS +
-	/msg &nick& SET !foo JOINFLAGS +v
-	/msg &nick& SET !foo JOINFLAGS +cfv
+    /msg &nick& SET !foo JOINFLAGS +
+    /msg &nick& SET !foo JOINFLAGS +v
+    /msg &nick& SET !foo JOINFLAGS +cfv
