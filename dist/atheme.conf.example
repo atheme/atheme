@@ -291,6 +291,7 @@ loadmodule "modules/nickserv/vhost";
  * SET URL command                              modules/chanserv/set_url
  * SET VERBOSE command                          modules/chanserv/set_verbose
  * STATUS command				modules/chanserv/status
+ * SYNC command (and automatic ACL syncing)     modules/chanserv/sync
  * Named Successor ACL flag                     modules/chanserv/successor_acl
  * Channel metadata viewer (TAXONOMY command)	modules/chanserv/taxonomy
  * TEMPLATE command				modules/chanserv/template
@@ -351,6 +352,7 @@ loadmodule "modules/chanserv/set_topiclock";
 loadmodule "modules/chanserv/set_url";
 loadmodule "modules/chanserv/set_verbose";
 loadmodule "modules/chanserv/status";
+loadmodule "modules/chanserv/sync";
 #loadmodule "modules/chanserv/successor_acl";
 loadmodule "modules/chanserv/taxonomy";
 loadmodule "modules/chanserv/template";
@@ -1032,6 +1034,13 @@ chanserv {
 	 * the list of founders is shown in various places.
 	 */
 	maxfounders = 4;
+
+	/* (*)akick_time
+	 * The default expiration time (in minutes) for AKICKs.
+	 * Comment this option out or set to zero for permanent AKICKs
+	 * by default (the old behaviour).
+	 */
+	akick_time = 10;
 };
 
 /* Global noticing configuration.
@@ -1314,6 +1323,15 @@ groupserv {
 	 * their group as "anyone can join".
 	 */
 	enable_open_groups;
+
+	/* (*)join_flags
+	 * This is the GroupServ flagset that users who JOIN a open
+	 * group will get upon join. Please check the groupserv/flags
+	 * helpfile before changing this option. Valid flagsets (for
+	 * example) would be: "+v" or "+cv". It is not valid to use
+	 * minus flags (such as "-v") here.
+	 */
+	join_flags = "+";
 };
 
 /* HostServ configuration.
@@ -1605,7 +1623,7 @@ general {
 	/* (*)cflags
 	 * The default flags to set for channels upon registration.
 	 * Valid values are: hold, secure, verbose, verbose_ops, keeptopic,
-	 * topiclock, guard, private, limitflags and none.
+	 * topiclock, guard, private, nosync, limitflags and none.
 	 */
 	cflags = { verbose; guard; };
 

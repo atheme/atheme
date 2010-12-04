@@ -132,7 +132,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 
-	if (mg->flags & MG_PUBLIC || (si->smu != NULL && groupacs_sourceinfo_has_flag(mg, si, 0)) || has_priv(si, PRIV_GROUP_AUSPEX))
+	if (mg->flags & MG_PUBLIC || (si->smu != NULL && groupacs_sourceinfo_has_flag(mg, si, 0) && !groupacs_sourceinfo_has_flag(mg, si, GA_BAN)) || has_priv(si, PRIV_GROUP_AUSPEX))
 		command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 
 	if ((md = metadata_find(mg, "description")))
@@ -283,12 +283,14 @@ command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE,
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
+	mowgli_node_t *n;
 	mygroup_t *mg;
 	myuser_t *mu;
 	groupacs_t *ga;
 	unsigned int flags = 0;
 	unsigned int dir = 0;
 	char *c;
+	int operoverride = 0;
 
 	if (!parv[0])
 	{
@@ -311,13 +313,17 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
+		if (has_priv(si, PRIV_GROUP_AUSPEX))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
 	}
 
 	if (!parv[1])
 	{
-		mowgli_node_t *n;
 		int i = 1;
 
 		command_success_nodata(si, _("Entry Account                Flags"));
@@ -335,7 +341,19 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), parv[0]);
-		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
+
+		if (operoverride)
+			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", parv[0]);
+		else
+			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", parv[0]);
+
+		return;
+	}
+
+	/* simple check since it's already checked above */
+	if (operoverride)
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
@@ -356,7 +374,9 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
-	/* XXX: this sucks. :< */
+	/* XXX: this sucks. :< We have to keep this here instead of using the "global" function
+	 * because of the MU_NEVEROP check which is really only needed in FLAGS. 
+	 */
 	c = parv[2];
 	while (*c)
 	{
@@ -417,6 +437,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				flags |= GA_MEMOS;
 			break;
+		case 'b':
+			if (dir)
+				flags &= ~GA_BAN;
+			else
+				flags |= GA_BAN;
+			break;
 		default:
 			break;
 		}
@@ -441,6 +467,17 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		ga = groupacs_add(mg, mu, flags);
+	}
+
+	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
+	{
+		chanacs_t *ca = n->data;
+
+		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
+			entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
+			bitmask_to_flags(ca->level), ca->mychan->name);
+
+		hook_call_channel_acl_change(ca);
 	}
 
 	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
@@ -569,6 +606,8 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	groupacs_t *ga;
+	metadata_t *md;
+	unsigned int flags = 0;
 
 	if (!parv[0])
 	{
@@ -595,6 +634,12 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (groupacs_sourceinfo_has_flag(mg, si, GA_BAN))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
 	if (groupacs_sourceinfo_has_flag(mg, si, 0))
 	{
 		command_fail(si, fault_nochange, _("You are already a member of group \2%s\2."), parv[0]);
@@ -606,9 +651,15 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
                 command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
                 return;
         }
-        
-	ga = groupacs_add(mg, si->smu, 0);
 
+	if ((md = metadata_find(mg, "joinflags")))
+		flags = atoi(md->value);
+	else
+		flags = gs_flags_parser(join_flags, 0);
+
+
+	ga = groupacs_add(mg, si->smu, flags);
+        
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 
@@ -648,6 +699,87 @@ static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
+static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
+
+command_t gs_fflags = { "FFLAGS", N_("Forces a flag change on a user in a group."), PRIV_GROUP_ADMIN, 3, gs_cmd_fflags, { .path = "groupserv/fflags" } };
+
+static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
+{
+	mowgli_node_t *n;
+	mygroup_t *mg;
+	myuser_t *mu;
+	groupacs_t *ga;
+	unsigned int flags = 0;
+
+	if (!parv[0] || !parv[1] || !parv[2])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [user] [changes]"));
+		return;
+	}
+
+	if ((mg = mygroup_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+        if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if ((mu = myuser_find_ext(parv[1])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered account."), parv[1]);
+		return;
+	}
+
+	ga = groupacs_find(mg, mu, 0);
+	if (ga != NULL)
+		flags = ga->flags;
+
+	flags = gs_flags_parser(parv[2], 1);
+
+	if (ga != NULL && flags != 0)
+		ga->flags = flags;
+	else if (ga != NULL)
+	{
+		groupacs_delete(mg, mu);
+		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
+		wallops("\2%s\2 is removing flags for \2%s\2 on \2%s\2", get_oper_name(si), entity(mu)->name, entity(mg)->name);
+		logcommand(si, CMDLOG_ADMIN, "FFLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
+		return;
+	}
+	else 
+	{
+		if (MOWGLI_LIST_LENGTH(&mg->acs) > maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+		{
+			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
+			return;
+		}
+		ga = groupacs_add(mg, mu, flags);
+	}
+
+	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
+	{
+		chanacs_t *ca = n->data;
+
+		verbose(ca->mychan, "\2%s\2 now has flags \2%s\2 in the group \2%s\2 which communally has \2%s\2 on \2%s\2.",
+			entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name,
+			bitmask_to_flags(ca->level), ca->mychan->name);
+
+		hook_call_channel_acl_change(ca);
+	}
+
+	command_success_nodata(si, _("\2%s\2 now has flags \2%s\2 on \2%s\2."), entity(mu)->name, gflags_tostr(ga_flags, ga->flags), entity(mg)->name);
+
+	/* XXX */
+	wallops("\2%s\2 is modifying flags(\2%s\2) for \2%s\2 on \2%s\2", get_oper_name(si), gflags_tostr(ga_flags, ga->flags), entity(mu)->name, entity(mg)->name);
+	logcommand(si, CMDLOG_ADMIN, "FFLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", entity(mu)->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
+}
+
 void basecmds_init(void)
 {
 	service_bind_command(groupsvs, &gs_help);
@@ -660,6 +792,7 @@ void basecmds_init(void)
 	service_bind_command(groupsvs, &gs_acsnolimit);
 	service_bind_command(groupsvs, &gs_join);
 	service_bind_command(groupsvs, &gs_fdrop);
+	service_bind_command(groupsvs, &gs_fflags);
 }
 
 void basecmds_deinit(void)
@@ -674,5 +807,6 @@ void basecmds_deinit(void)
 	service_unbind_command(groupsvs, &gs_acsnolimit);
 	service_unbind_command(groupsvs, &gs_join);
 	service_unbind_command(groupsvs, &gs_fdrop);
+	service_unbind_command(groupsvs, &gs_fflags);
 }
 

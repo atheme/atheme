@@ -462,7 +462,9 @@ static bool unreal_on_logout(user_t *u, const char *account)
 	if (!me.connected || u == NULL)
 		return false;
 
-	if (!nicksvs.no_nick_ownership)
+	if (!use_esvid && !nicksvs.no_nick_ownership)
+		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+	else
 		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 
 	return false;
@@ -833,7 +835,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 				sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, parv[0], atol(parv[1]));
 			else
 				/* changed from registered nick, remove +r */
-				sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, parv[0]);
+				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
 		}
 
 		handle_nickchange(si->su);
@@ -1068,7 +1070,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 	user_t *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL && !nicksvs.no_nick_ownership)
+	if (u != NULL && !nicksvs.no_nick_ownership && !use_esvid)
 		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 }
 

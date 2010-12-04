@@ -246,7 +246,10 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			chanacs_close(ca);
 			return;
 		}
+
+		hook_call_channel_acl_change(ca);
 		chanacs_close(ca);
+
 		if (!isnew)
 		{
 			/* they have access? change it! */
@@ -309,6 +312,8 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		chanacs_close(ca);
 		return;
 	}
+
+	hook_call_channel_acl_change(ca);
 	chanacs_close(ca);
 
 	if (!isnew)
@@ -348,6 +353,8 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
+		hook_call_channel_acl_change(ca);
+
 		object_unref(ca);
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, target);
@@ -361,7 +368,9 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
+	hook_call_channel_acl_change(ca);
 	object_unref(ca);
+
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mt->name);
 	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mt->name, leveldesc);

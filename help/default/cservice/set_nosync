@@ -1,0 +1,10 @@
+Help for SET NOSYNC:
+
+SET NOSYNC allows channel staff to disable
+automatic syncing of channel status when it
+is changed.
+
+Syntax: SET <#channel> NOSYNC ON|OFF
+
+Example:
+    /msg &nick& SET #foo NOSYNC ON

@@ -98,12 +98,15 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	/* set connection name */
 	strlcpy(cptr->name, name, HOSTLEN);
 
-	cptr->saddr_size = sizeof(cptr->saddr);
-	getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
+	if (cptr->fd > -1)
+	{
+		cptr->saddr_size = sizeof(cptr->saddr);
+		getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
 
-	inet_ntop(cptr->saddr.sa.sa_family,
-		  &cptr->saddr.sin6.sin6_addr,
-		  cptr->hbuf, BUFSIZE);
+		inet_ntop(cptr->saddr.sa.sa_family,
+			  &cptr->saddr.sin6.sin6_addr,
+			  cptr->hbuf, BUFSIZE);
+	}
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
@@ -627,7 +630,7 @@ void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 	{
 		connection_t *c = (connection_t *) n->data;
 
-		snprintf(buf, sizeof buf, "fd %-3d desc '%s'", c->fd, c->flags & CF_UPLINK ? "uplink" : c->flags & CF_LISTENING ? "listener" : "misc");
+		snprintf(buf, sizeof buf, "fd %-3d desc '%s'", c->fd, c->name);
 		if (c->listener != NULL)
 		{
 			snprintf(buf2, sizeof buf2, " listener %d", c->listener->fd);

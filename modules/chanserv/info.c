@@ -125,6 +125,9 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (!hide_info && (md = metadata_find(mc, "email")))
 		command_success_nodata(si, "Email      : %s", md->value);
 
+	if (!hide_info && (md = metadata_find(mc, "private:entrymsg")))
+		command_success_nodata(si, "Entrymsg   : %s", md->value);
+
 	if (!hide_info)
 	{
 		MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)

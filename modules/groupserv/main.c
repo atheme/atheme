@@ -22,6 +22,7 @@ void _modinit(module_t *m)
 	add_uint_conf_item("MAXGROUPS", &conf_gs_table, 0, &maxgroups, 0, 65535, 5);
 	add_uint_conf_item("MAXGROUPACS", &conf_gs_table, 0, &maxgroupacs, 0, 65535, 0);
 	add_bool_conf_item("ENABLE_OPEN_GROUPS", &conf_gs_table, 0, &enable_open_groups, false);
+	add_dupstr_conf_item("JOIN_FLAGS", &conf_gs_table, 0, &join_flags, "+");
 
 	gs_db_init();
 	gs_hooks_init();
@@ -38,6 +39,7 @@ void _moddeinit(void)
 	del_conf_item("MAXGROUPS", &conf_gs_table);
 	del_conf_item("MAXGROUPACS", &conf_gs_table);
 	del_conf_item("ENABLE_OPEN_GROUPS", &conf_gs_table);
+	del_conf_item("JOIN_FLAGS", &conf_gs_table);
 
 	if (groupsvs)
 		service_delete(groupsvs);

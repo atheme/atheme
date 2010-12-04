@@ -27,6 +27,7 @@ typedef struct groupacs_ groupacs_t;
 unsigned int maxgroups;
 unsigned int maxgroupacs;
 bool enable_open_groups;
+char *join_flags;
 
 #define GA_FOUNDER		0x00000001
 #define GA_FLAGS		0x00000002
@@ -34,6 +35,7 @@ bool enable_open_groups;
 #define GA_MEMOS		0x00000008
 #define GA_SET			0x00000010
 #define GA_VHOST		0x00000020
+#define GA_BAN			0x00000040
 #define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST)
 
 #define PRIV_GROUP_ADMIN "group:admin"
@@ -75,6 +77,7 @@ E void set_deinit(void);
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
 E unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset);
+E unsigned int gs_flags_parser(char *flagstring, int allow_minus);
 
 
 E mowgli_list_t *myuser_get_membership_list(myuser_t *mu);

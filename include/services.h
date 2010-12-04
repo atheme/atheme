@@ -34,6 +34,8 @@ struct chansvs_
 
   unsigned int expiry;		/* expiry time                */
 
+  unsigned int akick_time; /* default akick duration */
+
   unsigned int maxchanacs;	/* max entries in chanacs list */
   unsigned int maxfounders;	/* max founders per channel    */
 

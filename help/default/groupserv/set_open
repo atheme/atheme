@@ -2,7 +2,7 @@ Help for SET OPEN:
 
 SET OPEN allows a group to be open to any user joining
 whenever they like. Users that JOIN the group will have
-no privledges by default.
+no privileges by default.
 
 Syntax: SET <!group> OPEN <ON|OFF>
 

@@ -80,6 +80,7 @@ static struct Token cflags[] = {
   { "VERBOSE_OPS", MC_VERBOSE_OPS },
   { "TOPICLOCK",   MC_TOPICLOCK   },
   { "GUARD",       MC_GUARD       },
+  { "NOSYNC",	   MC_NOSYNC	  },
   { "PRIVATE",     MC_PRIVATE     },
   { "LIMITFLAGS",  MC_LIMITFLAGS  },
   { "NONE",        0              },
@@ -261,6 +262,8 @@ void init_newconf(void)
 	add_uint_conf_item("MAXCHANACS", &conf_ci_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
 	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
 	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, 0, &chansvs.deftemplates, NULL);
+
+	add_duration_conf_item("AKICK_TIME", &conf_ci_table, 0, &chansvs.akick_time, "m", 0);
 
 	/* nickserv{} block */
 	add_bool_conf_item("SPAM", &conf_ni_table, 0, &nicksvs.spam, false);

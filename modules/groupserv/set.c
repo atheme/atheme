@@ -13,6 +13,7 @@ static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[]);
+static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set, { .func = gs_help_set } };
 command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
@@ -21,6 +22,7 @@ command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."
 command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
 command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
 command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
+command_t gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_NONE, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 
@@ -36,6 +38,7 @@ void set_init(void)
 	command_add(&gs_set_channel, gs_set_cmdtree);
 	command_add(&gs_set_open, gs_set_cmdtree);
 	command_add(&gs_set_public, gs_set_cmdtree);
+	command_add(&gs_set_joinflags, gs_set_cmdtree);
 }
 
 void set_deinit(void)
@@ -48,6 +51,7 @@ void set_deinit(void)
 	command_delete(&gs_set_channel, gs_set_cmdtree);
 	command_delete(&gs_set_open, gs_set_cmdtree);
 	command_delete(&gs_set_public, gs_set_cmdtree);
+	command_delete(&gs_set_joinflags, gs_set_cmdtree);
 
 	mowgli_patricia_destroy(gs_set_cmdtree, NULL, NULL);
 }
@@ -427,6 +431,62 @@ static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PUBLIC");
 		command_fail(si, fault_badparams, _("Syntax: PUBLIC <!group> <ON|OFF>"));
 	}
+}
+
+static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
+{
+	mygroup_t *mg;
+	char *joinflags = parv[1];
+	unsigned int flags = 0;
+
+	if (!(mg = mygroup_find(parv[0])))
+	{
+		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
+		return;
+	}
+	
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
+	if (!joinflags || !strcasecmp("OFF", joinflags) || !strcasecmp("NONE", joinflags))
+	{
+		/* not in a namespace to allow more natural use of SET PROPERTY.
+		 * they may be able to introduce spaces, though. c'est la vie.
+		 */
+		if (metadata_find(mg, "joinflags"))
+		{
+			metadata_delete(mg, "joinflags");
+			logcommand(si, CMDLOG_SET, "SET:JOINFLAGS:NONE: \2%s\2", entity(mg)->name);
+			command_success_nodata(si, _("The group-specific join flags for \2%s\2 have been cleared."), parv[0]);
+			return;
+		}
+
+		command_fail(si, fault_nochange, _("Join flags for \2%s\2 were not set."), parv[0]);
+		return;
+	}
+
+	if (!strncasecmp(joinflags, "-", 1))
+	{
+		command_fail(si, fault_badparams, _("You can't set joinflags to be removed."));
+		return;
+	}
+
+	flags = gs_flags_parser(joinflags, 0);
+
+	/* we'll overwrite any existing metadata */
+	metadata_add(mg, "joinflags", number_to_string(flags));
+
+	logcommand(si, CMDLOG_SET, "SET:JOINFLAGS: \2%s\2 \2%s\2", entity(mg)->name, joinflags);
+	command_success_nodata(si, _("The join flags of \2%s\2 have been set to \2%s\2."), parv[0], joinflags);
 }
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
