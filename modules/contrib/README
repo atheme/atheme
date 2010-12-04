@@ -19,9 +19,6 @@ cs_regnotice.c - Sends a user a notice with some information specified in a
                  regnotice {} block inside the chanserv {} block of your
                  atheme.conf when the user registers a channel.
 
-cs_sync.c - Syncs channel statuses with the channel flags. This will op, deop,
-            voice, devoice, ban, etc users as needed.
-
 cs_updown.c - Either gives or removes all your channel status modes at once.
 
 cs_userinfo.c - Display a message when a user joins a channel. You must be able
@@ -48,10 +45,12 @@ gen_vhostonreg.c - Assigns a $account.hidehostsuffix vhost to all users upon
 graphtastical.c - Graphs user->channel relationships. Not recommended to use if
                   there are privacy concerns.
 
+gs_roulette.c - A nice GameServ game of Russian Roulette.
+
 ircd_catserv.c - Little module showing a CatServ Services client.
 
 ircd_loveserv.c - A services bot for sending love-related items to other users.
-                  NOT COMPILED BY DEFAULT AND DOES NOT COMPILE.
+                  NOT COMPILED BY DEFAULT.
 
 ircd_crypto_trans.c - A encryption module for IRCServices weird password
                       encryption scheme. NOT COMPILED BY DEFAULT.
