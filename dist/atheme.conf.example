@@ -1034,6 +1034,13 @@ chanserv {
 	 * the list of founders is shown in various places.
 	 */
 	maxfounders = 4;
+
+	/* (*)akick_time
+	 * The default expiration time (in minutes) for AKICKs.
+	 * Comment this option out or set to zero for permanent AKICKs
+	 * by default (the old behaviour).
+	 */
+	akick_time = 10;
 };
 
 /* Global noticing configuration.

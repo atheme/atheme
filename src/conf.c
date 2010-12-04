@@ -263,6 +263,8 @@ void init_newconf(void)
 	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
 	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, 0, &chansvs.deftemplates, NULL);
 
+	add_duration_conf_item("AKICK_TIME", &conf_ci_table, 0, &chansvs.akick_time, "m", 0);
+
 	/* nickserv{} block */
 	add_bool_conf_item("SPAM", &conf_ni_table, 0, &nicksvs.spam, false);
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, 0, &nicksvs.no_nick_ownership, false);
