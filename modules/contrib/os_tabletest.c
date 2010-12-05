@@ -2,7 +2,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/tabletest", false, _modinit, _moddeinit,
+	"contrib/os_tabletest", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );

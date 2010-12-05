@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/generatepass", false, _modinit, _moddeinit,
+	"contrib/ns_generatepass", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Epiphanic Networks <http://www.epiphanic.org>"
 );

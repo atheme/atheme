@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/trace", false, _modinit, _moddeinit,
+	"contrib/os_trace", false, _modinit, _moddeinit,
 	"Copyright (c) 2010 William Pitcock <nenolod@atheme.org>",
 	"Atheme Development Group <http://www.atheme.org>"
 );

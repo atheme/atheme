@@ -16,15 +16,16 @@ AKICK LIST. If the reason contains a '|' character,
 everything after it does not appear in kick reasons
 but does appear in AKICK LIST.
 
-If the !P token is specified the AKILL will never
-expire (permanent). If the !T token is specified expire
+If the !P token is specified, the AKICK will never
+expire (permanent). If the !T token is specified, expire
 time must follow, in minutes, hours ("h"), days ("d")
 or weeks ("w").
 
 Syntax: AKICK <#channel> DEL <nickname|hostmask>
 
 This will remove an entry from the AKICK list. Removing 
-an entry will not remove any channel bans placed by it.
+an entry will remove any matching channel bans unless the
+channel is set NOSYNC.
 
 Syntax: AKICK <#channel> LIST
 

@@ -157,6 +157,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"noop",	OPT_FLAG,	{.flagval = &flagset}, MC_NOOP},
 		{"limitflags",	OPT_FLAG,	{.flagval = &flagset}, MC_LIMITFLAGS},
 		{"secure",	OPT_FLAG,	{.flagval = &flagset}, MC_SECURE},
+		{"nosync",	OPT_FLAG,	{.flagval = &flagset}, MC_NOSYNC},
 		{"verbose",	OPT_FLAG,	{.flagval = &flagset}, MC_VERBOSE},
 		{"restricted",	OPT_FLAG,	{.flagval = &flagset}, MC_RESTRICTED},
 		{"keeptopic",	OPT_FLAG,	{.flagval = &flagset}, MC_KEEPTOPIC},

@@ -19,7 +19,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/guestnoreg", false, _modinit, _moddeinit,
+	"contrib/ns_guestnoreg", false, _modinit, _moddeinit,
         PACKAGE_STRING,
         "Atheme Development Group <http://www.atheme.org>"
 );

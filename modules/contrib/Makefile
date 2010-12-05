@@ -13,6 +13,7 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 SRCS =			\
+	cs_fregister.c		\
 	cs_kickdots.c		\
 	cs_ping.c		\
 	cs_regnotice.c		\

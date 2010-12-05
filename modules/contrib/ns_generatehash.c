@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/generatehash", false, _modinit, _moddeinit,
+	"contrib/ns_generatehash", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme development group"
 );
