@@ -33,6 +33,8 @@ typedef struct {
 time_t akickdel_next;
 mowgli_list_t akickdel_list;
 
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, char *host, time_t expireson);
+
 mowgli_heap_t *akick_timeout_heap;
 
 void _modinit(module_t *m)
@@ -251,7 +253,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			if (duration > 0)
 			{
-				akick_timeout_t *timeout, *timeout2;
+				akick_timeout_t *timeout;
 				time_t expireson = ca2->tmodified+duration;
 
 				snprintf(expiry, sizeof expiry, "%ld", (duration > 0L ? expireson : 0L));
@@ -261,38 +263,16 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s.", uname, mc->name,timediff(duration));
 				command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), uname, mc->name,timediff(duration) );
 
-				timeout = mowgli_heap_alloc(akick_timeout_heap);
-				strlcpy(timeout->chan, mc->name, sizeof timeout->chan);
-				strlcpy(timeout->host, uname, sizeof timeout->host);
-				timeout->expiration = expireson;
+				timeout = akick_add_timeout(mc, uname, expireson);
 
-				if (timeout) /* If theres no space, we just won't worry about unbanning this one automatically. */
+				if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 				{
-					/* insert in sorted order */
-					MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
-					{
-						timeout2 = n->data;
-						if (timeout2->expiration <= timeout->expiration)
-							break;
-					}
-					if (n == NULL)
-						mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
-					else if (n->next == NULL)
-						mowgli_node_add(timeout, &timeout->node, &akickdel_list);
-					else
-						mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
+					if (akickdel_next != 0)
+						event_delete(akick_timeout_check, NULL);
 
-					if (akickdel_next == 0 || akickdel_next > timeout->expiration)
-					{
-						if (akickdel_next != 0)
-							event_delete(akick_timeout_check, NULL);
-
-						akickdel_next = timeout->expiration;
-						event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-					}
-
+					akickdel_next = timeout->expiration;
+					event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 				}
-
 			}
 			else
 			{
@@ -333,7 +313,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			if (duration > 0)
 			{
-				akick_timeout_t *timeout, *timeout2;
+				akick_timeout_t *timeout;
 				time_t expireson = ca2->tmodified+duration;
 
 				snprintf(expiry, sizeof expiry, "%ld", (duration > 0L ? ca2->tmodified+duration : 0L));
@@ -343,36 +323,14 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), mt->name, timediff(duration));
 				logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s", mt->name, mc->name, timediff(duration));
 
+				timeout = akick_add_timeout(mc, mt->name, expireson);
 
-				timeout = mowgli_heap_alloc(akick_timeout_heap);
-				strlcpy(timeout->chan, mc->name, sizeof timeout->chan);
-				strlcpy(timeout->host, mt->name, sizeof timeout->host);
-				timeout->expiration = expireson;
-
-
-				if (timeout) /* If theres no space, we just won't worry about unbanning this one automatically. */
+				if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 				{
-					/* insert in sorted order */
-					MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
-					{
-						timeout2 = n->data;
-						if (timeout2->expiration <= timeout->expiration)
-							break;
-					}
-					if (n == NULL)
-						mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
-					else if (n->next == NULL)
-						mowgli_node_add(timeout, &timeout->node, &akickdel_list);
-					else
-						mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
-
-					if (akickdel_next == 0 || akickdel_next > timeout->expiration)
-					{
-						if (akickdel_next != 0)
-							event_delete(akick_timeout_check, NULL);
-						akickdel_next = timeout->expiration;
-						event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
-					}
+					if (akickdel_next != 0)
+						event_delete(akick_timeout_check, NULL);
+					akickdel_next = timeout->expiration;
+					event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 				}
 			}
 			else
@@ -549,7 +507,6 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 }
 
-
 void akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
@@ -611,11 +568,36 @@ void akick_timeout_check(void *arg)
 	}
 }
 
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, char *host, time_t expireson)
+{
+	mowgli_node_t *n;
+	akick_timeout_t *timeout, *timeout2;
+
+	timeout = mowgli_heap_alloc(akick_timeout_heap);
+	strlcpy(timeout->chan, mc->name, sizeof timeout->chan);
+	strlcpy(timeout->host, host, sizeof timeout->host);
+	timeout->expiration = expireson;
+
+	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
+	{
+		timeout2 = n->data;
+		if (timeout2->expiration <= timeout->expiration)
+			break;
+	}
+	if (n == NULL)
+		mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
+	else if (n->next == NULL)
+		mowgli_node_add(timeout, &timeout->node, &akickdel_list);
+	else
+		mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n->next);
+
+	return timeout;
+}
+
 void akickdel_list_create(void *arg)
 {
 	mychan_t *mc;
-	mowgli_node_t *n, *tn, *n2;
-	akick_timeout_t *timeout, *timeout2;
+	mowgli_node_t *n, *tn;
 	chanacs_t *ca;
 	metadata_t *md;
 	time_t expireson;
@@ -624,51 +606,27 @@ void akickdel_list_create(void *arg)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		if (mc)
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		{
-			MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
+			ca = (chanacs_t *)n->data;
+			
+			if (!(ca->level & CA_AKICK))
+				continue;
+
+			md = metadata_find(ca, "expires");
+			
+			if (!md)
+				continue;
+
+			expireson = atol(md->value);
+			
+			if (CURRTIME > expireson)
 			{
-				ca = (chanacs_t *)n->data;
-				if (ca->level & CA_AKICK)
-				{
-					md = metadata_find(ca, "expires");
-					
-					if (!md)
-						continue;
-
-					expireson = atol(md->value);
-					
-					if (CURRTIME > expireson)
-					{
-						chanacs_modify_simple(ca, 0, CA_AKICK);
-						chanacs_close(ca);
-					}
-					else
-					{
-						timeout = mowgli_heap_alloc(akick_timeout_heap);
-						strlcpy(timeout->chan, mc->name, sizeof timeout->chan);
-						strlcpy(timeout->host, ca->host, sizeof timeout->host);
-						timeout->expiration = expireson;
-
-						if (timeout)
-						{
-							MOWGLI_ITER_FOREACH_PREV(n2, akickdel_list.tail)
-							{
-								timeout2 = n2->data;
-								if (timeout2->expiration <= timeout->expiration)
-									break;
-							}
-							if (n2 == NULL)
-								mowgli_node_add_head(timeout, &timeout->node, &akickdel_list);
-							else if (n2->next == NULL)
-								mowgli_node_add(timeout, &timeout->node, &akickdel_list);
-							else
-								mowgli_node_add_before(timeout, &timeout->node, &akickdel_list, n2->next);
-						}
-					}
-				}
+				chanacs_modify_simple(ca, 0, CA_AKICK);
+				chanacs_close(ca);
 			}
-
+			else
+				akick_add_timeout(mc, ca->host, expireson);
 		}
 	}
 }
