@@ -50,7 +50,7 @@ typedef struct {
 	/* space for reason etc here */
 } hook_server_delete_t;
 
-#define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
+#define SERVER_NAME(serv)	((serv)->sid ? (serv)->sid : (serv)->name)
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 /* servers.c */
