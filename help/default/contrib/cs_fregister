@@ -1,0 +1,11 @@
+Help for FREGISTER:
+
+FREGISTER allows you to forcibly register a channel
+so that you have better control. FREGISTER allows
+you to register a channel without needing ops in
+it or even needing to be joined to it.
+
+Syntax: FREGISTER <#channel>
+
+Examples:
+    /msg &nick& FREGISTER #atheme
