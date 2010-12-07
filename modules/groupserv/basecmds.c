@@ -183,14 +183,25 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_list = { "LIST", N_("List all registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
+command_t gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
 
+/* Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future */
 static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	myentity_t *mt;
+	char *pattern = parv[0];
+	unsigned int matches = 0;
 	myentity_iteration_state_t state;
 
-	command_success_nodata(si, _("Groups currently registered:"));
+	if (!pattern)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
+		command_fail(si, fault_needmoreparams, _("Syntax: LIST <group pattern>"));
+		return;
+	}
+
+	/* No need to say "Groups currently registered". You can't have a unregistered group. */
+	command_success_nodata(si, _("Groups matching pattern \2%s\2:"), pattern);
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
 	{
@@ -198,11 +209,19 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		continue_if_fail(mt != NULL);
 		continue_if_fail(mg != NULL);
 
-		command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
+		if (!match(pattern, entity(mg)->name))
+		{
+			command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
+			matches++;
+		}
 	}
 
-	command_success_nodata(si, _("\2*** End of List ***\2"));
-	logcommand(si, CMDLOG_GET, "LIST");
+	if (matches == 0)
+		command_success_nodata(si, _("No groups matched pattern \2%s\2"), matches);
+	else
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"), N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
+
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);

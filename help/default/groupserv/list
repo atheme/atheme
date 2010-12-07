@@ -1,8 +1,9 @@
 Help for LIST:
 
-LIST shows all groups currently registered.
+LIST shows all groups matching a specified pattern.
 
-Syntax: LIST
+Syntax: LIST <group pattern>
 
 Examples:
-    /msg &nick& LIST
+    /msg &nick& LIST *
+    /msg &nick& LIST !pants*
