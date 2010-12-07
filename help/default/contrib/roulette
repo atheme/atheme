@@ -6,4 +6,4 @@ Russian Roulette.
 Syntax: ROULETTE
 
 Example:
-    /msg GameServ ROULETTE
+    /msg &nick& ROULETTE
