@@ -7,12 +7,10 @@ al unirse al canal, quitando cualquier exención de
 veto que se les aplique primero. Aquellos usuarios con
 la opción de acceso +r no son afectados.
 
+Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] [razón]
+
 También es posible especificar una máscara de host
 (nick!usuario@host) para la lista AKICK.
-
-Los vetos de canal introducidos por una entrada de
-AKICK no son quitados automáticamente cuando una
-entrada es borrada de la lista.
 
 La razón es utilizada al expulsar a un usuario y es
 visible en la salida de AKICK LIST. Si la razón
@@ -20,10 +18,25 @@ contiene un carácter '|', toda la información luego
 de éste no aparece en las razones de expulsión pero
 sí en AKICK LIST.
 
-Sintaxis: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]
+Al proveer el indicador !P la AKICK será permanente.
+Utilizando !T debe también especificar el tiempo de
+expiración, en minutos, horas ("h"), días ("d") o
+semanas("w").
+
+Sintaxis: AKICK <#canal> DEL <nick|máscara de host>
+
+Esta sintaxis quita entradas de la lista AKICK. El
+remover entradas también elimina los vetos de canal
+generados por éllas salvo que el canal tenga la
+opción NOSYNC activada.
+
+Sintaxis: AKICK <#canal> LIST
+
+Muestra la lista de entradas de AKICK, incluyendo
+razones y tiempos de expiración.
 
 Ejemplos:
     /msg &nick& AKICK #abc ADD xyz eres molesto | información privada para ops aquí
-    /msg &nick& AKICK #abc ADD *!*abc@xyz.com
+    /msg &nick& AKICK #abc ADD *!*abc@xyz.com !T 5d
     /msg &nick& AKICK #abc DEL xyz
     /msg &nick& AKICK #abc LIST

@@ -1,0 +1,14 @@
+Ayuda para RESTRICT:
+
+RESTRICT permite a operadores restringir las acciones que puede
+realizar una cuenta. Actualmente bloquea la agrupación de nicks,
+el registro de caneles, solicitud de vhosts o habilidad de aceptar
+vhosts ofrecidos.
+
+Esto es particularmente útil si un usuario abusa estos comandos.
+
+Sintaxis: RESTRICT <nick> ON|OFF <razón>
+
+Ejemplos:
+    /msg &nick& RESTRICT game_boy ON Abuso de vhosts
+    /msg &nick& RESTRICT nenolod OFF

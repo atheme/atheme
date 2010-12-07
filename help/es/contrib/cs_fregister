@@ -1,0 +1,10 @@
+Ayuda para FREGISTER:
+
+FREGISTER le permite forzar el registro de un canal para así
+tener mayor control. FREGISTER le permite registrar un canal
+sin necesidad de ops o incluso sin unirse a éste.
+
+Sintaxis: FREGISTER <#canal>
+
+Ejemplos:
+	/msg &nick& FREGISTER #atheme
