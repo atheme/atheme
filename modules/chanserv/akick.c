@@ -201,7 +201,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			else
 			{
 				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK ADD");
-				command_fail(si, fault_needmoreparams, _("Syntax: AKILL <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"));
+				command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"));
 				return;
 			}
 		}
