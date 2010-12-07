@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-07 01:25-0300\n"
-"PO-Revision-Date: 2010-12-07 01:24-0300\n"
+"PO-Revision-Date: 2010-12-07 01:26-0300\n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team: Spanish <shadowm2006@gmail.com>\n"
 "Language: \n"
@@ -239,8 +239,7 @@ msgstr "Muestra información de ayuda contextual."
 #: modules/botserv/help.c:40
 #, c-format
 msgid "%s allows users to request a custom bot for their channel."
-msgstr ""
-"%s permite a los usuarios solicitar un bot personalizado para su canal."
+msgstr "%s permite a los usuarios solicitar un bot personalizado para su canal."
 
 #: modules/botserv/info.c:22
 msgid "Allows you to see BotServ information about a channel or a bot."
@@ -802,8 +801,7 @@ msgid "Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"
 msgstr "Sintaxis: AKICK <#canal> <ADD|DEL|LIST> [parámetros]"
 
 #: modules/chanserv/akick.c:138 modules/chanserv/akick.c:379
-msgid ""
-"Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"
+msgid "Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"
 msgstr ""
 "Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] [razón]"
 
@@ -1152,8 +1150,7 @@ msgstr "No está autorizado a establecer %s para %s en %s."
 
 #: modules/chanserv/fflags.c:113 modules/chanserv/flags.c:331
 msgid "You may not set founder status on a hostmask."
-msgstr ""
-"No es posible establecer permisos de fundador para una máscara de host."
+msgstr "No es posible establecer permisos de fundador para una máscara de host."
 
 #: modules/chanserv/fflags.c:126 modules/chanserv/flags.c:354
 #, c-format
@@ -1825,8 +1822,7 @@ msgstr "Sintaxis: REGISTER <#canal>"
 
 #: modules/chanserv/register.c:77
 msgid "You need to verify your email address before you may register channels."
-msgstr ""
-"Ud. debe verificar su dirección de email antes de poder registrar canales."
+msgstr "Ud. debe verificar su dirección de email antes de poder registrar canales."
 
 #: modules/chanserv/register.c:85
 #, c-format
@@ -2018,10 +2014,8 @@ msgstr "%s ahora puede tomar posesión de %s."
 
 #: modules/chanserv/set_founder.c:212
 #, c-format
-msgid ""
-"In order to complete the transfer, %s must perform the following command:"
-msgstr ""
-"Para completar la transferencia, %s debe ejecutar el siguiente comando:"
+msgid "In order to complete the transfer, %s must perform the following command:"
+msgstr "Para completar la transferencia, %s debe ejecutar el siguiente comando:"
 
 #: modules/chanserv/set_founder.c:214
 msgid "After that command is issued, the channel will be transferred."
@@ -3481,7 +3475,6 @@ msgid "Join flags for %s were not set."
 msgstr "No se establecieron permisos iniciales para %s."
 
 #: modules/groupserv/set.c:479
-#, fuzzy
 msgid "You can't set join flags to be removed."
 msgstr "No puede establecer permisos iniciales a ser quitados."
 
@@ -3646,8 +3639,7 @@ msgstr "Sintaxis: TAKE <vhost>"
 
 #: modules/hostserv/offer.c:271
 msgid "You have been restricted from taking vhosts by network staff"
-msgstr ""
-"La administración de la red le ha restringido la opción de aceptar vhosts."
+msgstr "La administración de la red le ha restringido la opción de aceptar vhosts."
 
 #: modules/hostserv/offer.c:292
 #, c-format
@@ -3840,8 +3832,7 @@ msgstr "No se encontró la entrada %d entre los mensajes informativos."
 #: modules/infoserv/main.c:442
 #, c-format
 msgid "Deleted entry %d from oper logon info."
-msgstr ""
-"Se ha eliminado la entrada %d de los mensajes informativos de operadores."
+msgstr "Se ha eliminado la entrada %d de los mensajes informativos de operadores."
 
 #: modules/infoserv/main.c:447
 #, c-format
@@ -3895,8 +3886,7 @@ msgstr "Redirige un memo."
 #: modules/memoserv/forward.c:69 modules/memoserv/send.c:67
 #: modules/memoserv/sendgroup.c:69 modules/memoserv/sendops.c:68
 msgid "You need to verify your email address before you may send memos."
-msgstr ""
-"Ud. necesita confirmar su dirección de email antes de poder enviar memos."
+msgstr "Ud. necesita confirmar su dirección de email antes de poder enviar memos."
 
 #: modules/memoserv/forward.c:76
 msgid "You have no memos to forward."
@@ -3916,8 +3906,7 @@ msgstr "La bandeja de entrada del destinatario está llena."
 
 #: modules/memoserv/forward.c:130
 msgid "Too many memos; please wait a while and try again"
-msgstr ""
-"Demasiados memos; por favor espere unos instantes e inténtelo nuevamente."
+msgstr "Demasiados memos; por favor espere unos instantes e inténtelo nuevamente."
 
 #: modules/memoserv/forward.c:153 modules/memoserv/forward.c:202
 #, c-format
@@ -3978,8 +3967,7 @@ msgstr "¡Ud. no puede ignorarse a sí mismo!"
 
 #: modules/memoserv/ignore.c:125
 msgid "Your ignore list is full, please DEL an account."
-msgstr ""
-"Su lista de ignorados se encuentra llena, por favor use DEL en una cuenta."
+msgstr "Su lista de ignorados se encuentra llena, por favor use DEL en una cuenta."
 
 #: modules/memoserv/ignore.c:137
 #, c-format
@@ -4313,8 +4301,7 @@ msgstr ""
 #: modules/nickserv/drop.c:89 modules/nickserv/drop.c:136
 #, c-format
 msgid "The nickname %s belongs to a services operator; it cannot be dropped."
-msgstr ""
-"El nick %s pertenece a un operador de servicios; no puede ser eliminado."
+msgstr "El nick %s pertenece a un operador de servicios; no puede ser eliminado."
 
 #: modules/nickserv/drop.c:95 modules/nickserv/drop.c:142
 #, c-format
@@ -4548,8 +4535,7 @@ msgstr "Sitaxis: FUNGROUP <nick> [nuevonombredecuenta]"
 
 #: modules/nickserv/group.c:204
 msgid "The new account name must be different from the nick to be ungrouped."
-msgstr ""
-"El nuevo nombre de cuenta debe ser distinto al nick que desea desagrupar."
+msgstr "El nuevo nombre de cuenta debe ser distinto al nick que desea desagrupar."
 
 #: modules/nickserv/group.c:209
 #, c-format
@@ -4879,8 +4865,7 @@ msgstr "No se encontraron cuentas para el patrón %s"
 
 #: modules/nickserv/main.c:33
 #, c-format
-msgid ""
-"An email containing account activation instructions has been sent to %s."
+msgid "An email containing account activation instructions has been sent to %s."
 msgstr "Un e-mail con instrucciones de activación ha sido enviado a %s."
 
 #: modules/nickserv/main.c:34
@@ -4891,8 +4876,7 @@ msgstr "Si Ud. no completa su registro dentro de un día su cuenta expirará."
 #: modules/nickserv/main.c:35
 #, c-format
 msgid "%s registered the account %s and gained services operator privileges."
-msgstr ""
-"%s registró la cuenta %s y obtuvo privilegios de operador de servicios."
+msgstr "%s registró la cuenta %s y obtuvo privilegios de operador de servicios."
 
 #: modules/nickserv/main.c:36
 msgid "You cannot use your account name as a password."
@@ -4975,8 +4959,7 @@ msgstr "No se pudo enviar e-mail, ¡lo siento! Registro abortado."
 
 #: modules/nickserv/register.c:223
 #, c-format
-msgid ""
-"An email containing nickname activation instructions has been sent to %s."
+msgid "An email containing nickname activation instructions has been sent to %s."
 msgstr ""
 "Un e-mail con instrucciones para la activación de su nick ha sido enviado a"
 " %s."
@@ -5258,8 +5241,7 @@ msgid "An email containing email changing instructions has been sent to %s."
 msgstr "Un e-mail con instrucciones de cambio de e-mail ha sido enviado a %s."
 
 #: modules/nickserv/set_email.c:100
-msgid ""
-"Your email address will not be changed until you follow these instructions."
+msgid "Your email address will not be changed until you follow these instructions."
 msgstr "Su dirección de e-mail no cambiará hasta que siga éstas instrucciones."
 
 #: modules/nickserv/set_email.c:108
@@ -5272,8 +5254,7 @@ msgid "Forwards incoming memos to your e-mail address."
 msgstr "Envía memos entrantes a su dirección de e-mail."
 
 #: modules/nickserv/set_emailmemos.c:48
-msgid ""
-"You have to verify your email address before you can enable emailing memos."
+msgid "You have to verify your email address before you can enable emailing memos."
 msgstr ""
 "Ud. tiene que verificar su dirección de e-mail antes de poder activar el "
 "envío de memos por e-mail."
@@ -5284,8 +5265,7 @@ msgstr "El envío de e-mails ha sido desactivado por la administración."
 
 #: modules/nickserv/set_enforcetime.c:21
 msgid "Amount of time it takes before nickname protection occurs."
-msgstr ""
-"Cantidad de tiempo antes de que la protección de nicks entre en efecto."
+msgstr "Cantidad de tiempo antes de que la protección de nicks entre en efecto."
 
 #: modules/nickserv/set_enforcetime.c:43
 msgid "Syntax: SET ENFORCETIME TIME|DEFAULT"
@@ -5871,8 +5851,7 @@ msgid "%s not found in clone exempt list."
 msgstr "No se encontró %s en la lista de exención de clones."
 
 #: modules/operserv/clones.c:668
-msgid ""
-"Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>"
+msgid "Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>"
 msgstr ""
 "Sintaxis: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <límite>"
 
@@ -5978,16 +5957,14 @@ msgstr "El número de clones permitidos debe ser más que %d."
 
 #: modules/operserv/clones.c:772
 #, c-format
-msgid ""
-"The ALLOWED clone limit must be lower than the WARN limit (currently %d)"
+msgid "The ALLOWED clone limit must be lower than the WARN limit (currently %d)"
 msgstr ""
 "El límite de clones permitidos debe ser inferior al límite de alerta "
 "(actualmente %d)"
 
 #: modules/operserv/clones.c:777
 #, c-format
-msgid ""
-"The ALLOWED clone limit must be lower than the KILL limit (currently %d)"
+msgid "The ALLOWED clone limit must be lower than the KILL limit (currently %d)"
 msgstr ""
 "El límite de clones permitidos debe ser inferior al límite de desconexión "
 "(actualmente %d)"
@@ -6179,8 +6156,7 @@ msgstr "Ud. no tiene una cuenta de operador de servicios."
 
 #: modules/operserv/identify.c:76
 msgid "Your services operator account does not have a password set."
-msgstr ""
-"Su cuenta de operador de servicios no tiene una contraseña establecida."
+msgstr "Su cuenta de operador de servicios no tiene una contraseña establecida."
 
 #: modules/operserv/identify.c:82
 #, c-format
@@ -6272,8 +6248,7 @@ msgstr "%d: %s por %s en %s (Razón: %s)"
 
 #: modules/operserv/info.c:20
 msgid "Shows some useful information about the current settings of services."
-msgstr ""
-"Muestra algo de información útil sobre los ajustes actuales de servicios."
+msgstr "Muestra algo de información útil sobre los ajustes actuales de servicios."
 
 #: modules/operserv/info.c:38
 #, c-format
@@ -6347,8 +6322,7 @@ msgstr "Tiempo de expiración de la protección de nicks: %d días"
 #: modules/operserv/info.c:49
 #, c-format
 msgid "Default nickname enforce delay: %d seconds"
-msgstr ""
-"Intervalo predeterminado de espera de la protección de nicks: %d segundos"
+msgstr "Intervalo predeterminado de espera de la protección de nicks: %d segundos"
 
 #: modules/operserv/info.c:50
 #, c-format
@@ -6362,8 +6336,7 @@ msgstr "Número máximo de sesiones permitidas por usuario: %d"
 
 #: modules/operserv/info.c:52
 #, c-format
-msgid ""
-"Maximum number of usernames that can be registered to one email address: %d"
+msgid "Maximum number of usernames that can be registered to one email address: %d"
 msgstr ""
 "Máximo número de usuarios que pueden ser registrados por una misma dirección "
 "de email: %d"
@@ -6432,8 +6405,7 @@ msgstr "Explicación de violación: %s"
 #: modules/operserv/info.c:81
 #, c-format
 msgid "Email address(es) exempt from the maximum usernames check: %s"
-msgstr ""
-"Direcciones de email eximidas de la comprobación de nombres máximos: %s"
+msgstr "Direcciones de email eximidas de la comprobación de nombres máximos: %s"
 
 #: modules/operserv/info.c:86
 #, c-format
@@ -6600,8 +6572,7 @@ msgstr "No se pudo cargar el módulo %s."
 #: modules/operserv/modload.c:77 modules/operserv/modreload.c:82
 #: modules/operserv/rehash.c:48 src/signal.c:165
 #, c-format
-msgid ""
-"REHASH of %s failed. Please correct any errors in the file and try again."
+msgid "REHASH of %s failed. Please correct any errors in the file and try again."
 msgstr ""
 "REHASH de %s falló. Por favor corrija errores en el archivo e inténtelo "
 "nuevamente."
@@ -7168,8 +7139,7 @@ msgstr "Sintaxis: SOPER SETPASS <cuenta> [contraseña]"
 
 #: modules/operserv/soper.c:276
 #, c-format
-msgid ""
-"Refusing to set a services operator password if %s IDENTIFY is not loaded."
+msgid "Refusing to set a services operator password if %s IDENTIFY is not loaded."
 msgstr ""
 "Rehusando establecer contraseñas de operadores de servicios si %s IDENTIFY "
 "no está cargado."
@@ -7272,8 +7242,7 @@ msgstr "Objeto no válido: %s. No puede aplicar SQLINEs en UIDs."
 
 #: modules/operserv/sqline.c:246
 #, c-format
-msgid ""
-"Invalid target: %s. At least three non-wildcard characters are required."
+msgid "Invalid target: %s. At least three non-wildcard characters are required."
 msgstr ""
 "El objeto especificado no es válido: %s. Se requieren al menos tres "
 "caracteres que no sean comodines."
