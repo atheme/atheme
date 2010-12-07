@@ -476,7 +476,7 @@ static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strncasecmp(joinflags, "-", 1))
 	{
-		command_fail(si, fault_badparams, _("You can't set joinflags to be removed."));
+		command_fail(si, fault_badparams, _("You can't set join flags to be removed."));
 		return;
 	}
 
