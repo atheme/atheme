@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-07 01:05-0300\n"
+"POT-Creation-Date: 2010-12-07 01:25-0300\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -867,14 +867,9 @@ msgstr "Канал %s закрыт и запрещен для использования."
 msgid "Invalid duration given."
 msgstr "Указана неверная длительность."
 
-#: modules/chanserv/akick.c:197
+#: modules/chanserv/akick.c:197 modules/chanserv/akick.c:204
 #, fuzzy
 msgid "Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
-msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
-
-#: modules/chanserv/akick.c:204
-#, fuzzy
-msgid "Syntax: AKILL <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
 msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
 
 #: modules/chanserv/akick.c:232 modules/chanserv/xop.c:345
@@ -3581,8 +3576,9 @@ msgid "Join flags for %s were not set."
 msgstr "Никаких флагов для %s на канале %s не обнаружено."
 
 #: modules/groupserv/set.c:479
-msgid "You can't set joinflags to be removed."
-msgstr ""
+#, fuzzy
+msgid "You can't set join flags to be removed."
+msgstr "%s был удалён из списка %s для %s."
 
 #: modules/groupserv/set.c:489
 #, fuzzy, c-format
@@ -7756,6 +7752,11 @@ msgstr "Получен сигнал SIGUSR2; перезапуск..."
 #, c-format
 msgid "user_find(): found user %s by nick!"
 msgstr "user_find(): пользователь %s найден по нику!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Syntax: AKILL <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
+#~ msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
 
 #~ msgid "DATABASE ERROR: db_save(): cannot create atheme.db.new: %s"
 #~ msgstr "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможно создать atheme.db.new: %s"

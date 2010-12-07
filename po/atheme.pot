@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-07 01:05-0300\n"
+"POT-Creation-Date: 2010-12-07 01:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -823,12 +823,8 @@ msgstr ""
 msgid "Invalid duration given."
 msgstr ""
 
-#: modules/chanserv/akick.c:197
+#: modules/chanserv/akick.c:197 modules/chanserv/akick.c:204
 msgid "Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
-msgstr ""
-
-#: modules/chanserv/akick.c:204
-msgid "Syntax: AKILL <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
 msgstr ""
 
 #: modules/chanserv/akick.c:232 modules/chanserv/xop.c:345
@@ -3406,7 +3402,7 @@ msgid "Join flags for %s were not set."
 msgstr ""
 
 #: modules/groupserv/set.c:479
-msgid "You can't set joinflags to be removed."
+msgid "You can't set join flags to be removed."
 msgstr ""
 
 #: modules/groupserv/set.c:489
