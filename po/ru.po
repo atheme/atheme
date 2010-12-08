@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Russian language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-07 01:25-0300\n"
+"POT-Creation-Date: 2010-12-07 21:19-0300\n"
 "PO-Revision-Date: 2009-02-23 01:05+0300\n"
 "Last-Translator: Kein <kein-of@yandex.ru>\n"
 "Language-Team: Kein's Translation Team <kein-of@yandex.ru>\n"
@@ -117,12 +117,12 @@ msgstr "Синтаксис: WHY <#канал> <ник>"
 #: modules/chanserv/set_restricted.c:43 modules/chanserv/set_secure.c:43
 #: modules/chanserv/set_topiclock.c:43 modules/chanserv/set_url.c:44
 #: modules/chanserv/set_verbose.c:43 modules/chanserv/status.c:50
-#: modules/chanserv/template.c:94 modules/chanserv/topic.c:62
-#: modules/chanserv/topic.c:126 modules/chanserv/topic.c:201
-#: modules/chanserv/unban_self.c:68 modules/chanserv/voice.c:63
-#: modules/chanserv/voice.c:131 modules/chanserv/why.c:70
-#: modules/chanserv/xop.c:102 modules/chanserv/xop.c:428
-#: modules/gameserv/dice.c:87
+#: modules/chanserv/sync.c:262 modules/chanserv/template.c:94
+#: modules/chanserv/topic.c:62 modules/chanserv/topic.c:126
+#: modules/chanserv/topic.c:201 modules/chanserv/unban_self.c:68
+#: modules/chanserv/voice.c:63 modules/chanserv/voice.c:131
+#: modules/chanserv/why.c:70 modules/chanserv/xop.c:102
+#: modules/chanserv/xop.c:428 modules/gameserv/dice.c:87
 #, c-format
 msgid "Channel %s is not registered."
 msgstr "Канал %s не зарегистрирован."
@@ -147,31 +147,32 @@ msgstr "Канал %s на данный момент не существует (пуст)."
 #: modules/chanserv/quiet.c:245 modules/chanserv/register.c:71
 #: modules/chanserv/set_founder.c:62 modules/chanserv/status.c:77
 #: modules/chanserv/template.c:153 modules/chanserv/unban_self.c:80
-#: modules/chanserv/xop.c:94 modules/contrib/ns_listlogins.c:39
-#: modules/groupserv/basecmds.c:82 modules/groupserv/basecmds.c:236
-#: modules/groupserv/basecmds.c:310 modules/groupserv/basecmds.c:627
-#: modules/groupserv/basecmds.c:729 modules/groupserv/set.c:128
-#: modules/groupserv/set.c:178 modules/groupserv/set.c:225
-#: modules/groupserv/set.c:272 modules/groupserv/set.c:325
-#: modules/groupserv/set.c:393 modules/groupserv/set.c:450
-#: modules/helpserv/ticket.c:181 modules/helpserv/ticket.c:313
-#: modules/hostserv/group.c:66 modules/hostserv/offer.c:174
-#: modules/hostserv/offer.c:265 modules/hostserv/onoff.c:52
-#: modules/hostserv/onoff.c:94 modules/hostserv/request.c:217
-#: modules/infoserv/main.c:271 modules/memoserv/delete.c:61
-#: modules/memoserv/forward.c:63 modules/memoserv/ignore.c:77
-#: modules/memoserv/list.c:48 modules/memoserv/read.c:61
-#: modules/memoserv/send.c:61 modules/memoserv/sendgroup.c:63
-#: modules/memoserv/sendops.c:62 modules/nickserv/access.c:215
-#: modules/nickserv/access.c:267 modules/nickserv/access.c:393
-#: modules/nickserv/cert.c:54 modules/nickserv/cert.c:109
-#: modules/nickserv/cert.c:145 modules/nickserv/enforce.c:102
-#: modules/nickserv/group.c:60 modules/nickserv/group.c:119
-#: modules/nickserv/listchans.c:64 modules/nickserv/listownmail.c:63
-#: modules/nickserv/logout.c:42 modules/nickserv/set_accountname.c:53
-#: modules/nickserv/set_core.c:59 modules/nickserv/set_enforcetime.c:49
-#: modules/nickserv/status.c:85 modules/nickserv/subscribe.c:60
-#: modules/nickserv/vacation.c:24 modules/operserv/identify.c:64
+#: modules/chanserv/xop.c:94 modules/contrib/cs_fregister.c:68
+#: modules/contrib/ns_listlogins.c:39 modules/groupserv/basecmds.c:82
+#: modules/groupserv/basecmds.c:255 modules/groupserv/basecmds.c:329
+#: modules/groupserv/basecmds.c:646 modules/groupserv/basecmds.c:748
+#: modules/groupserv/set.c:128 modules/groupserv/set.c:178
+#: modules/groupserv/set.c:225 modules/groupserv/set.c:272
+#: modules/groupserv/set.c:325 modules/groupserv/set.c:393
+#: modules/groupserv/set.c:450 modules/helpserv/ticket.c:181
+#: modules/helpserv/ticket.c:313 modules/hostserv/group.c:66
+#: modules/hostserv/offer.c:174 modules/hostserv/offer.c:265
+#: modules/hostserv/onoff.c:52 modules/hostserv/onoff.c:94
+#: modules/hostserv/request.c:217 modules/infoserv/main.c:271
+#: modules/memoserv/delete.c:61 modules/memoserv/forward.c:63
+#: modules/memoserv/ignore.c:77 modules/memoserv/list.c:48
+#: modules/memoserv/read.c:61 modules/memoserv/send.c:61
+#: modules/memoserv/sendgroup.c:63 modules/memoserv/sendops.c:62
+#: modules/nickserv/access.c:215 modules/nickserv/access.c:267
+#: modules/nickserv/access.c:393 modules/nickserv/cert.c:54
+#: modules/nickserv/cert.c:109 modules/nickserv/cert.c:145
+#: modules/nickserv/enforce.c:102 modules/nickserv/group.c:60
+#: modules/nickserv/group.c:119 modules/nickserv/listchans.c:64
+#: modules/nickserv/listownmail.c:63 modules/nickserv/logout.c:42
+#: modules/nickserv/set_accountname.c:53 modules/nickserv/set_core.c:59
+#: modules/nickserv/set_enforcetime.c:49 modules/nickserv/status.c:85
+#: modules/nickserv/subscribe.c:60 modules/nickserv/vacation.c:24
+#: modules/operserv/identify.c:64
 msgid "You are not logged in."
 msgstr "Вы не идентифицированы."
 
@@ -204,7 +205,7 @@ msgstr "Вы не идентифицированы."
 #: modules/chanserv/xop.c:162 modules/chanserv/xop.c:176
 #: modules/chanserv/xop.c:440 modules/contrib/cs_userinfo.c:73
 #: modules/contrib/cs_userinfo.c:98 modules/gameserv/dice.c:128
-#: modules/groupserv/basecmds.c:320 modules/groupserv/basecmds.c:356
+#: modules/groupserv/basecmds.c:339 modules/groupserv/basecmds.c:375
 #: modules/memoserv/sendops.c:113 modules/nickserv/sendpass_user.c:60
 #: modules/operserv/soper.c:65 src/commandtree.c:71
 msgid "You are not authorized to perform this operation."
@@ -406,13 +407,13 @@ msgstr "Синтаксис: TOPIC <#канал> <текст>"
 #: modules/nickserv/hold.c:48 modules/nickserv/info.c:88
 #: modules/nickserv/listchans.c:55 modules/nickserv/logout.c:52
 #: modules/nickserv/mark.c:58 modules/nickserv/regnolimit.c:47
-#: modules/nickserv/resetpass.c:48 modules/nickserv/return.c:52
-#: modules/nickserv/sendpass.c:73 modules/nickserv/sendpass_user.c:77
-#: modules/nickserv/setpass.c:60 modules/nickserv/subscribe.c:73
-#: modules/nickserv/taxonomy.c:50 modules/nickserv/verify.c:55
-#: modules/nickserv/verify.c:165 modules/nickserv/vhost.c:83
-#: modules/operserv/soper.c:146 modules/operserv/soper.c:203
-#: modules/operserv/soper.c:248
+#: modules/nickserv/resetpass.c:48 modules/nickserv/restrict.c:58
+#: modules/nickserv/return.c:52 modules/nickserv/sendpass.c:73
+#: modules/nickserv/sendpass_user.c:77 modules/nickserv/setpass.c:60
+#: modules/nickserv/subscribe.c:73 modules/nickserv/taxonomy.c:50
+#: modules/nickserv/verify.c:55 modules/nickserv/verify.c:165
+#: modules/nickserv/vhost.c:83 modules/operserv/soper.c:146
+#: modules/operserv/soper.c:203 modules/operserv/soper.c:248
 #, c-format
 msgid "%s is not registered."
 msgstr "Ник %s не зарегистрирован."
@@ -1131,7 +1132,7 @@ msgstr "Канал %s закрыт и не может быть удален."
 msgid "The channel %s is held; it cannot be dropped."
 msgstr "Канал %s находится в режиме удержания и не может быть удален."
 
-#: modules/chanserv/drop.c:118 modules/groupserv/basecmds.c:260
+#: modules/chanserv/drop.c:118 modules/groupserv/basecmds.c:279
 #, c-format
 msgid ""
 "To avoid accidental use of this command, this operation has to be confirmed. "
@@ -1140,7 +1141,7 @@ msgstr ""
 "Чтобы исключить случайное использование данной команды, эта операция должна "
 "быть подтверждена. Пожалуйста подтвердите свое намерение, ответив %s"
 
-#: modules/chanserv/drop.c:127 modules/groupserv/basecmds.c:269
+#: modules/chanserv/drop.c:127 modules/groupserv/basecmds.c:288
 #, c-format
 msgid "Invalid key for %s."
 msgstr "Неверный ключ для %s."
@@ -1223,7 +1224,7 @@ msgstr "%-5d %-22s %s (%s) [посл. изменения %s назад]"
 msgid "%-5d %-22s %s [modified %s ago]"
 msgstr "%-5d %-22s %s [посл. изменения %s назад]"
 
-#: modules/chanserv/flags.c:162 modules/groupserv/basecmds.c:343
+#: modules/chanserv/flags.c:162 modules/groupserv/basecmds.c:362
 #, c-format
 msgid "End of %s FLAGS listing."
 msgstr "Конец списка флагов канала %s\""
@@ -1231,8 +1232,8 @@ msgstr "Конец списка флагов канала %s\""
 #: modules/chanserv/flags.c:183 modules/chanserv/flags.c:227
 #: modules/chanserv/set_email.c:50 modules/chanserv/set_entrymsg.c:49
 #: modules/chanserv/set_prefix.c:78 modules/chanserv/set_url.c:50
-#: modules/chanserv/template.c:165 modules/groupserv/basecmds.c:248
-#: modules/groupserv/basecmds.c:639 modules/groupserv/set.c:134
+#: modules/chanserv/template.c:165 modules/groupserv/basecmds.c:267
+#: modules/groupserv/basecmds.c:658 modules/groupserv/set.c:134
 #: modules/groupserv/set.c:184 modules/groupserv/set.c:231
 #: modules/groupserv/set.c:278 modules/groupserv/set.c:331
 #: modules/groupserv/set.c:399 modules/groupserv/set.c:456
@@ -1271,7 +1272,7 @@ msgstr ""
 "каналов."
 
 #: modules/chanserv/flags.c:305 modules/chanserv/xop.c:289
-#: modules/groupserv/basecmds.c:428
+#: modules/groupserv/basecmds.c:447
 #, fuzzy, c-format
 msgid "%s does not wish to be added to channel access lists (NEVEROP set)."
 msgstr ""
@@ -1875,23 +1876,24 @@ msgstr "Для регистрации канала наберите: REGISTER <#канал>"
 msgid "Syntax: REGISTER <#channel>"
 msgstr "Синтаксис: REGISTER <#канал>"
 
-#: modules/chanserv/register.c:77
+#: modules/chanserv/register.c:77 modules/contrib/cs_fregister.c:74
 msgid "You need to verify your email address before you may register channels."
 msgstr ""
 "Прежде чем вы сможете регистрировать каналы, Вам необходимо пройти проверку "
 "вашего email-адреса."
 
-#: modules/chanserv/register.c:85
+#: modules/chanserv/register.c:85 modules/contrib/cs_fregister.c:82
 #, c-format
 msgid "%s is already registered to %s."
 msgstr "Канал %s уже зарегистрирован на пользователя %s."
 
-#: modules/chanserv/register.c:87 modules/nickserv/register.c:129
+#: modules/chanserv/register.c:87 modules/contrib/cs_fregister.c:84
+#: modules/nickserv/register.c:129
 #, c-format
 msgid "%s is already registered."
 msgstr "Канал %s уже зарегистрирован другим пользователем."
 
-#: modules/chanserv/register.c:94
+#: modules/chanserv/register.c:94 modules/contrib/cs_fregister.c:91
 #, c-format
 msgid "The channel %s must exist in order to register it."
 msgstr "Вы не можете зарегистрировать несуществующий канал %s"
@@ -1921,7 +1923,7 @@ msgid "You have too many channels registered."
 msgstr ""
 "На ваш ник уже зарегистрировано максимально допустимое количество каналов."
 
-#: modules/chanserv/register.c:169
+#: modules/chanserv/register.c:169 modules/contrib/cs_fregister.c:127
 #, c-format
 msgid "%s is now registered to %s."
 msgstr "Канал %s успешно зарегистрирован на ник %s."
@@ -2000,6 +2002,7 @@ msgstr "Настройка fantasy-режима канала (fantasy-команды)."
 #: modules/chanserv/set_private.c:59 modules/chanserv/set_property.c:67
 #: modules/chanserv/set_restricted.c:55 modules/chanserv/set_secure.c:55
 #: modules/chanserv/set_topiclock.c:55 modules/chanserv/set_verbose.c:55
+#: modules/chanserv/sync.c:274
 msgid "You are not authorized to perform this command."
 msgstr "У вас недостаточно прав для использования данной команды."
 
@@ -2007,6 +2010,7 @@ msgstr "У вас недостаточно прав для использования данной команды."
 #: modules/chanserv/set_keeptopic.c:63 modules/chanserv/set_restricted.c:63
 #: modules/chanserv/set_secure.c:63 modules/chanserv/set_topiclock.c:63
 #: modules/chanserv/set_verbose.c:63 modules/chanserv/set_verbose.c:81
+#: modules/chanserv/sync.c:282
 #, c-format
 msgid "The %s flag is already set for channel %s."
 msgstr "Режим %s для канала %s уже активирован."
@@ -2015,6 +2019,7 @@ msgstr "Режим %s для канала %s уже активирован."
 #: modules/chanserv/set_keeptopic.c:71 modules/chanserv/set_restricted.c:71
 #: modules/chanserv/set_secure.c:71 modules/chanserv/set_topiclock.c:71
 #: modules/chanserv/set_verbose.c:73 modules/chanserv/set_verbose.c:99
+#: modules/chanserv/sync.c:290
 #, c-format
 msgid "The %s flag has been set for channel %s."
 msgstr "Режим %s для канала %s успешно установлен."
@@ -2022,7 +2027,7 @@ msgstr "Режим %s для канала %s успешно установлен."
 #: modules/chanserv/set_fantasy.c:96 modules/chanserv/set_guard.c:102
 #: modules/chanserv/set_keeptopic.c:78 modules/chanserv/set_restricted.c:78
 #: modules/chanserv/set_secure.c:78 modules/chanserv/set_topiclock.c:79
-#: modules/chanserv/set_verbose.c:106
+#: modules/chanserv/set_verbose.c:106 modules/chanserv/sync.c:297
 #, c-format
 msgid "The %s flag is not set for channel %s."
 msgstr "Режим %s для канала %s не установлен."
@@ -2030,7 +2035,7 @@ msgstr "Режим %s для канала %s не установлен."
 #: modules/chanserv/set_fantasy.c:103 modules/chanserv/set_guard.c:113
 #: modules/chanserv/set_keeptopic.c:86 modules/chanserv/set_restricted.c:86
 #: modules/chanserv/set_secure.c:86 modules/chanserv/set_topiclock.c:87
-#: modules/chanserv/set_verbose.c:118
+#: modules/chanserv/set_verbose.c:118 modules/chanserv/sync.c:305
 #, c-format
 msgid "The %s flag has been removed for channel %s."
 msgstr "Режим %s на канале %s теперь отключен."
@@ -2351,6 +2356,10 @@ msgstr "Вы являетесь Администратором Сервера"
 msgid "You are an IRC operator."
 msgstr "Вы являетесь IRC-оператором."
 
+#: modules/chanserv/sync.c:252
+msgid "Disables automatic channel ACL syncing."
+msgstr ""
+
 #: modules/chanserv/taxonomy.c:20
 msgid "Displays a channel's metadata."
 msgstr "Отображает метаданные канала."
@@ -2668,6 +2677,21 @@ msgstr "Синтаксис: FORCEXOP #канал"
 msgid "FORCEXOP %s done (%d changes)"
 msgstr "FORCEXOP для канала  %s выполнен успешно (всего %d изменений)."
 
+#: modules/contrib/cs_fregister.c:20
+#, fuzzy
+msgid "Forcibly registers a channel."
+msgstr "Позволяет зарегистрировать канал"
+
+#: modules/contrib/cs_fregister.c:54
+#, fuzzy
+msgid "To forcibly register a channel: FREGISTER <#channel>"
+msgstr "Для регистрации канала наберите: REGISTER <#канал>"
+
+#: modules/contrib/cs_fregister.c:61
+#, fuzzy
+msgid "Syntax: FREGISTER <#channel>"
+msgstr "Синтаксис: REGISTER <#канал>"
+
 #: modules/contrib/cs_userinfo.c:21
 #, fuzzy
 msgid "Sets a userinfo message."
@@ -2702,6 +2726,18 @@ msgstr "Установить class для %s %s."
 #, fuzzy, c-format
 msgid "Added userinfo for %s on %s."
 msgstr "Установить class для %s %s."
+
+#: modules/contrib/gs_roulette.c:20
+msgid "A game of Russian Roulette."
+msgstr ""
+
+#: modules/contrib/gs_roulette.c:62
+msgid "*BANG*"
+msgstr ""
+
+#: modules/contrib/gs_roulette.c:63
+msgid "*CLICK*"
+msgstr ""
 
 #: modules/contrib/ns_fenforce.c:41
 #, fuzzy
@@ -2849,14 +2885,16 @@ msgstr "У вас нет мемо-сообщений, удалять нечего."
 msgid "No K:line channels matched pattern %s"
 msgstr "Каналов соответствующих маске %s не обнаружено."
 
-#: modules/contrib/os_klinechan.c:213 modules/hostserv/vhost.c:138
-#: modules/nickserv/vhost.c:229 modules/operserv/greplog.c:208
+#: modules/contrib/os_klinechan.c:213 modules/groupserv/basecmds.c:222
+#: modules/hostserv/vhost.c:138 modules/nickserv/vhost.c:229
+#: modules/operserv/greplog.c:208
 #, c-format
 msgid "%d match for pattern %s"
 msgstr "Итого: %d совпадений по маске %s"
 
-#: modules/contrib/os_klinechan.c:214 modules/hostserv/vhost.c:139
-#: modules/nickserv/vhost.c:230 modules/operserv/greplog.c:209
+#: modules/contrib/os_klinechan.c:214 modules/groupserv/basecmds.c:222
+#: modules/hostserv/vhost.c:139 modules/nickserv/vhost.c:230
+#: modules/operserv/greplog.c:209
 #, c-format
 msgid "%d matches for pattern %s"
 msgstr "Итого: %d совпадений по маске %s"
@@ -3192,8 +3230,8 @@ msgstr "Отображает различную информацию о регистрации."
 msgid "Syntax: INFO <!groupname>"
 msgstr "Синтаксис: INFO <ник>"
 
-#: modules/groupserv/basecmds.c:125 modules/groupserv/basecmds.c:242
-#: modules/groupserv/basecmds.c:621 modules/groupserv/basecmds.c:691
+#: modules/groupserv/basecmds.c:125 modules/groupserv/basecmds.c:261
+#: modules/groupserv/basecmds.c:640 modules/groupserv/basecmds.c:710
 #: modules/groupserv/set.c:122 modules/groupserv/set.c:172
 #: modules/groupserv/set.c:219 modules/groupserv/set.c:266
 #: modules/groupserv/set.c:444
@@ -3243,173 +3281,179 @@ msgstr "Флаги      : %s"
 
 #: modules/groupserv/basecmds.c:186
 #, fuzzy
-msgid "List all registered groups."
+msgid "List registered groups."
 msgstr "%s незарегистрированный аккаунт."
 
-#: modules/groupserv/basecmds.c:193
-msgid "Groups currently registered:"
-msgstr ""
+#: modules/groupserv/basecmds.c:199
+#, fuzzy
+msgid "Syntax: LIST <group pattern>"
+msgstr "Синтаксис: LIST <маска_по_названию>"
 
-#: modules/groupserv/basecmds.c:201
+#: modules/groupserv/basecmds.c:204
+#, fuzzy, c-format
+msgid "Groups matching pattern %s:"
+msgstr "Не обнаружено ни одного ника по маске %s"
+
+#: modules/groupserv/basecmds.c:214
 #, c-format
 msgid "- %s (%s)"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:204
-#, fuzzy
-msgid "*** End of List ***"
-msgstr "*** Конец информации о канале ***"
+#: modules/groupserv/basecmds.c:220
+#, fuzzy, c-format
+msgid "No groups matched pattern %s"
+msgstr "Не найдено ни одного аккаунта для заданной маски (%s)"
 
-#: modules/groupserv/basecmds.c:210
+#: modules/groupserv/basecmds.c:229
 #, fuzzy
 msgid "Drops a group registration."
 msgstr "Отмена регистрации аккаунта."
 
-#: modules/groupserv/basecmds.c:223 modules/groupserv/basecmds.c:230
-#: modules/groupserv/basecmds.c:678 modules/groupserv/basecmds.c:685
+#: modules/groupserv/basecmds.c:242 modules/groupserv/basecmds.c:249
+#: modules/groupserv/basecmds.c:697 modules/groupserv/basecmds.c:704
 #, fuzzy
 msgid "Syntax: DROP <!group>"
 msgstr "Синтаксис: FDROP <#канал>"
 
-#: modules/groupserv/basecmds.c:276 modules/groupserv/basecmds.c:698
+#: modules/groupserv/basecmds.c:295 modules/groupserv/basecmds.c:717
 #, fuzzy, c-format
 msgid "The group %s has been dropped."
 msgstr "Аккаунт %s удален."
 
-#: modules/groupserv/basecmds.c:282
+#: modules/groupserv/basecmds.c:301
 msgid "Sets flags on a user in a group."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:298 modules/groupserv/basecmds.c:717
+#: modules/groupserv/basecmds.c:317 modules/groupserv/basecmds.c:736
 #, fuzzy
 msgid "Syntax: FLAGS <!group> [user] [changes]"
 msgstr "Синтаксис: FLAGS <#канал> [цель] [флаги]"
 
-#: modules/groupserv/basecmds.c:304 modules/groupserv/basecmds.c:506
-#: modules/groupserv/basecmds.c:562 modules/groupserv/basecmds.c:723
+#: modules/groupserv/basecmds.c:323 modules/groupserv/basecmds.c:525
+#: modules/groupserv/basecmds.c:581 modules/groupserv/basecmds.c:742
 #: modules/groupserv/set.c:319 modules/groupserv/set.c:387
 #, fuzzy, c-format
 msgid "The group %s does not exist."
 msgstr "Канал %s не существует."
 
-#: modules/groupserv/basecmds.c:329
+#: modules/groupserv/basecmds.c:348
 #, fuzzy
 msgid "Entry Account                Flags"
 msgstr "Запись Ник/хостмаска          Флаг"
 
-#: modules/groupserv/basecmds.c:362 modules/groupserv/basecmds.c:735
+#: modules/groupserv/basecmds.c:381 modules/groupserv/basecmds.c:754
 #: modules/nickserv/main.c:30 modules/operserv/override.c:200
 #, c-format
 msgid "%s is not a registered account."
 msgstr "%s незарегистрированный аккаунт."
 
-#: modules/groupserv/basecmds.c:369
+#: modules/groupserv/basecmds.c:388
 #, fuzzy
 msgid "Syntax: FLAGS <!group> <user> <changes>"
 msgstr "Синтаксис: FFLAGS <#канал> <цель> <флаги>"
 
-#: modules/groupserv/basecmds.c:458 modules/groupserv/basecmds.c:750
+#: modules/groupserv/basecmds.c:477 modules/groupserv/basecmds.c:769
 #, fuzzy, c-format
 msgid "%s has been removed from %s."
 msgstr "Пользователь %s был кикнут с канала %s."
 
-#: modules/groupserv/basecmds.c:466 modules/groupserv/basecmds.c:651
-#: modules/groupserv/basecmds.c:759
+#: modules/groupserv/basecmds.c:485 modules/groupserv/basecmds.c:670
+#: modules/groupserv/basecmds.c:778
 #, fuzzy, c-format
 msgid "Group %s access list is full."
 msgstr "Ваш список доступа переполнен"
 
-#: modules/groupserv/basecmds.c:483 modules/groupserv/basecmds.c:776
+#: modules/groupserv/basecmds.c:502 modules/groupserv/basecmds.c:795
 #, fuzzy, c-format
 msgid "%s now has flags %s on %s."
 msgstr "Для записи %s уже установлены флаги %s на канале %s."
 
-#: modules/groupserv/basecmds.c:491
+#: modules/groupserv/basecmds.c:510
 msgid "Allow a group to bypass registration limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:500 modules/groupserv/basecmds.c:541
+#: modules/groupserv/basecmds.c:519 modules/groupserv/basecmds.c:560
 msgid "Syntax: REGNOLIMIT <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:514 modules/nickserv/regnolimit.c:55
+#: modules/groupserv/basecmds.c:533 modules/nickserv/regnolimit.c:55
 #, fuzzy, c-format
 msgid "%s can already bypass registration limits."
 msgstr "Канал %s уже зарегистрирован на пользователя %s."
 
-#: modules/groupserv/basecmds.c:522 modules/nickserv/regnolimit.c:63
+#: modules/groupserv/basecmds.c:541 modules/nickserv/regnolimit.c:63
 #, fuzzy, c-format
 msgid "%s can now bypass registration limits."
 msgstr "%s незарегистрированный аккаунт."
 
-#: modules/groupserv/basecmds.c:528 modules/nickserv/regnolimit.c:69
+#: modules/groupserv/basecmds.c:547 modules/nickserv/regnolimit.c:69
 #, fuzzy, c-format
 msgid "%s cannot bypass registration limits."
 msgstr "%s незарегистрированный аккаунт."
 
-#: modules/groupserv/basecmds.c:536 modules/nickserv/regnolimit.c:77
+#: modules/groupserv/basecmds.c:555 modules/nickserv/regnolimit.c:77
 #, c-format
 msgid "%s cannot bypass registration limits anymore."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:547
+#: modules/groupserv/basecmds.c:566
 msgid "Allow a group to bypass access list limits."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:556 modules/groupserv/basecmds.c:597
+#: modules/groupserv/basecmds.c:575 modules/groupserv/basecmds.c:616
 msgid "Syntax: ACSNOLIMIT <!group> <ON|OFF>"
 msgstr ""
 
-#: modules/groupserv/basecmds.c:570
+#: modules/groupserv/basecmds.c:589
 #, fuzzy, c-format
 msgid "%s can already bypass access list limits."
 msgstr "Маска %s уже находится в вашем списке доступа"
 
-#: modules/groupserv/basecmds.c:578
+#: modules/groupserv/basecmds.c:597
 #, fuzzy, c-format
 msgid "%s can now bypass access list limits."
 msgstr "Пользователь %s не имеет флагов доступа на канале %s"
 
-#: modules/groupserv/basecmds.c:584
+#: modules/groupserv/basecmds.c:603
 #, fuzzy, c-format
 msgid "%s cannot bypass access list limits."
 msgstr "Пользователь %s не имеет флагов доступа на канале %s"
 
-#: modules/groupserv/basecmds.c:592
+#: modules/groupserv/basecmds.c:611
 #, c-format
 msgid "%s cannot bypass access list limits anymore."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:603
+#: modules/groupserv/basecmds.c:622
 msgid "Join a open group."
 msgstr ""
 
-#: modules/groupserv/basecmds.c:615
+#: modules/groupserv/basecmds.c:634
 #, fuzzy
 msgid "Syntax: JOIN <!groupname>"
 msgstr "Синтаксис: INFO <ник>"
 
-#: modules/groupserv/basecmds.c:633
+#: modules/groupserv/basecmds.c:652
 #, fuzzy, c-format
 msgid "Group %s is not open to anyone joining."
 msgstr "Ник %s отсутствует в вашем списке игнорирования.."
 
-#: modules/groupserv/basecmds.c:645
+#: modules/groupserv/basecmds.c:664
 #, fuzzy, c-format
 msgid "You are already a member of group %s."
 msgstr "Вы уже авторизованы как %s."
 
-#: modules/groupserv/basecmds.c:663
+#: modules/groupserv/basecmds.c:682
 #, fuzzy, c-format
 msgid "You are now a member of %s."
 msgstr "Вы не являетесь владельцем канала %s."
 
-#: modules/groupserv/basecmds.c:668
+#: modules/groupserv/basecmds.c:687
 #, fuzzy
 msgid "Force drops a group registration."
 msgstr "Отмена регистрации аккаунта."
 
-#: modules/groupserv/basecmds.c:704
+#: modules/groupserv/basecmds.c:723
 #, fuzzy
 msgid "Forces a flag change on a user in a group."
 msgstr "Позволяет принудительно изменить флаги для канала."
@@ -5183,6 +5227,40 @@ msgid ""
 msgstr ""
 "Эта операция не может быть проведена на %s из-за того, что аккаунт был "
 "помечен как %s."
+
+#: modules/nickserv/restrict.c:20
+msgid "Restrict a user from using certain commands."
+msgstr ""
+
+#: modules/nickserv/restrict.c:43 modules/nickserv/restrict.c:104
+#, fuzzy
+msgid "Usage: RESTRICT <target> <ON|OFF> [note]"
+msgstr "Синтаксис: MARK <аккаунт> <ON|OFF> [заметка]"
+
+#: modules/nickserv/restrict.c:55 modules/nickserv/restrict.c:99
+#, fuzzy, c-format
+msgid "%s is now unrestricted."
+msgstr "Ник %s не зарегистрирован."
+
+#: modules/nickserv/restrict.c:67
+#, fuzzy
+msgid "Usage: RESTRICT <target> ON <note>"
+msgstr "Синтаксис: MARK <аккаунт> ON <заметка>"
+
+#: modules/nickserv/restrict.c:73
+#, fuzzy, c-format
+msgid "%s is already restricted."
+msgstr "Канал %s уже зарегистрирован другим пользователем."
+
+#: modules/nickserv/restrict.c:83
+#, fuzzy, c-format
+msgid "%s is now restricted."
+msgstr "Ник %s не зарегистрирован."
+
+#: modules/nickserv/restrict.c:89
+#, fuzzy, c-format
+msgid "%s is not restricted."
+msgstr "Ник %s не зарегистрирован."
 
 #: modules/nickserv/return.c:21
 msgid "Returns an account to its owner."
@@ -7754,6 +7832,10 @@ msgid "user_find(): found user %s by nick!"
 msgstr "user_find(): пользователь %s найден по нику!"
 
 #, fuzzy
+#~ msgid "*** End of List ***"
+#~ msgstr "*** Конец информации о канале ***"
+
+#, fuzzy
 #~ msgid ""
 #~ "Syntax: AKILL <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
 #~ msgstr "Синтаксис: AKILL ADD <ник|маска> [!P|!T <минуты>] <причина>"
@@ -7770,9 +7852,6 @@ msgstr "user_find(): пользователь %s найден по нику!"
 #~ msgstr ""
 #~ "ОШИБКА БАЗЫ ДАННЫХ: db_save(): невозможно переименовать atheme.db.new в "
 #~ "atheme.db: %s"
-
-#~ msgid "Syntax: LIST <channel pattern>"
-#~ msgstr "Синтаксис: LIST <маска_по_названию>"
 
 #~ msgid "Mode lock is too long."
 #~ msgstr "Указан слишком длинный список режимов для MLOCK'а"
