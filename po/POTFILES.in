@@ -56,6 +56,7 @@ modules/chanserv/set_topiclock.c
 modules/chanserv/set_url.c
 modules/chanserv/set_verbose.c
 modules/chanserv/status.c
+modules/chanserv/sync.c
 modules/chanserv/taxonomy.c
 modules/chanserv/template.c
 modules/chanserv/topic.c
@@ -64,7 +65,9 @@ modules/chanserv/version.c
 modules/chanserv/voice.c
 modules/chanserv/why.c
 modules/chanserv/xop.c
+modules/contrib/cs_fregister.c
 modules/contrib/cs_userinfo.c
+modules/contrib/gs_roulette.c
 modules/contrib/ns_fenforce.c
 modules/contrib/ns_forbid.c
 modules/contrib/ns_generatehash.c
@@ -130,6 +133,7 @@ modules/nickserv/mark.c
 modules/nickserv/register.c
 modules/nickserv/regnolimit.c
 modules/nickserv/resetpass.c
+modules/nickserv/restrict.c
 modules/nickserv/return.c
 modules/nickserv/sendpass.c
 modules/nickserv/sendpass_user.c
