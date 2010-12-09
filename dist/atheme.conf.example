@@ -596,9 +596,9 @@ loadmodule "modules/infoserv/main";
  */
 loadmodule "modules/groupserv/main";
 
-/* AnmounceServ module.
+/* AnnounceServ module.
  *
- * Like the other services, InfoServ is a module. You can disable or
+ * Like the other services, AnnounceServ is a module. You can disable or
  * enable it to your liking below.
  *
  * AnnounceServ allows users to request to send announcements.
