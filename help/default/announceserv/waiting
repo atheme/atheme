@@ -1,0 +1,8 @@
+Help for WAITING:
+
+WAIING lists all announcements currently waiting for activation.
+
+Syntax: WAITING
+
+Examples:
+    /msg &nick& WAITING

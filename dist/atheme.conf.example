@@ -596,6 +596,17 @@ loadmodule "modules/infoserv/main";
  */
 loadmodule "modules/groupserv/main";
 
+/* AnmounceServ module.
+ *
+ * Like the other services, InfoServ is a module. You can disable or
+ * enable it to your liking below.
+ *
+ * AnnounceServ allows users to request to send announcements.
+ * This is a seperate service so users can easily ignore announcements from
+ * other users, but not important network announcements from Global or InfoServ.
+ */
+loadmodule "modules/announceserv/main";
+
 /*
  * Various modules.
  *
@@ -1429,6 +1440,40 @@ alis {
 	 * The realname (gecos) information we want ALIS to have.
 	 */
 	real = "Channel Directory";
+};
+
+/* AnnounceServ configuration.
+ *
+ * The announceserv {} block contains settings specific to the AnnounceServ modules.
+ */
+announceserv {
+	/* (*)nick
+	 * The nickname we want the Announcement Service to have.
+	 */
+	nick = "AnnounceServ";
+
+	/* (*)user
+	 * Sets the username used for this client.
+	 */
+	user = "AnnounceServ";
+
+	/* (*)host
+	 * The hostname used for this client.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The GECOS (real name) of the client.
+	 */
+	real = "Announcement Services";
+
+	/* (*)aliases
+	 * Command aliases for AnnounceServ.
+	 */
+	aliases {
+		"APPROVE" = "ACTIVATE";
+		"DENY" = "REJECT";
+	};
 };
 
 /* HTTP server configuration.
