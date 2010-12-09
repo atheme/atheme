@@ -193,6 +193,12 @@ static void as_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from requesting announcements by network staff."));
+		return;
+	}
+	
 	target = entity(si->smu)->name;
 
 	MOWGLI_LIST_FOREACH(n, as_reqlist.head)
