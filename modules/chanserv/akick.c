@@ -206,9 +206,16 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		else
-		{ /* A reason */
+		{
 			duration = chansvs.akick_time;
 			strlcpy(reason, token, BUFSIZE);
+			treason = strtok(NULL, "");
+
+			if (treason)
+			{
+				strlcat(reason, " ", BUFSIZE);
+				strlcat(reason, treason, BUFSIZE);
+			}
 		}
 	} 
 	else
@@ -704,7 +711,13 @@ void akickdel_list_create(void *arg)
 				chanacs_close(ca);
 			}
 			else
-				akick_add_timeout(mc, ca->host, expireson);
+			{
+				/* overcomplicate the logic here a tiny bit */
+				if (ca->host == NULL && ca->entity != NULL)
+					akick_add_timeout(mc, entity(ca->entity)->name, expireson);
+				else if (ca->host != NULL && ca->entity == NULL)
+					akick_add_timeout(mc, ca->host, expireson);
+			}
 		}
 	}
 }
