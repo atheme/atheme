@@ -1014,38 +1014,47 @@ bool conf_check(void)
 		me.auth = AUTH_NONE;
 	}
 
-	/* we know ca_all now */
-	vopflags = get_global_template_flags("VOP");
-	hopflags = get_global_template_flags("HOP");
-	aopflags = get_global_template_flags("AOP");
-	sopflags = get_global_template_flags("SOP");
-
-	vopflags &= ca_all;
-	hopflags &= ca_all;
-	aopflags &= ca_all;
-	sopflags &= ca_all;
-
-	set_global_template_flags("VOP", vopflags);
-	set_global_template_flags("HOP", hopflags);
-	set_global_template_flags("AOP", aopflags);
-	set_global_template_flags("SOP", sopflags);
-
-	/* hopflags may be equal to vopflags to disable HOP */
-	if (!vopflags || !hopflags || !aopflags || !sopflags ||
-			vopflags == aopflags ||
-			vopflags == sopflags ||
-			hopflags == aopflags ||
-			hopflags == sopflags ||
-			aopflags == sopflags)
+	if (chansvs.hide_xop)
 	{
-		slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
-
-		set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
-		set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
-		set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
-		set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
+		mowgli_patricia_delete(global_template_dict,"VOP");
+		mowgli_patricia_delete(global_template_dict,"HOP");
+		mowgli_patricia_delete(global_template_dict,"AOP");
+		mowgli_patricia_delete(global_template_dict,"SOP");
 	}
+	else
+	{
+	/* we know ca_all now */
+		vopflags = get_global_template_flags("VOP");
+		hopflags = get_global_template_flags("HOP");
+		aopflags = get_global_template_flags("AOP");
+		sopflags = get_global_template_flags("SOP");
 
+		vopflags &= ca_all;
+		hopflags &= ca_all;
+		aopflags &= ca_all;
+		sopflags &= ca_all;
+
+		set_global_template_flags("VOP", vopflags);
+		set_global_template_flags("HOP", hopflags);
+		set_global_template_flags("AOP", aopflags);
+		set_global_template_flags("SOP", sopflags);
+
+		/* hopflags may be equal to vopflags to disable HOP */
+		if (!vopflags || !hopflags || !aopflags || !sopflags ||
+				vopflags == aopflags ||
+				vopflags == sopflags ||
+				hopflags == aopflags ||
+				hopflags == sopflags ||
+				aopflags == sopflags)
+		{
+			slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
+
+			set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
+			set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
+			set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
+			set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
+		}
+	}
 	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
 	{
 		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; " "defaulting to 5 minutes", config_file);

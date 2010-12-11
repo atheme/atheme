@@ -39,9 +39,6 @@ static int display_template(const char *key, void *data, void *privdata)
 	default_template_t *def_t = data;
 	unsigned int vopflags;
 
-	if (chansvs.hide_xop && *(key + 1) == 'O' && *(key + 2) == 'P')
-		return 0;
-
 	vopflags = get_global_template_flags("VOP");
 	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
 		return 0;
@@ -53,11 +50,6 @@ static int display_template(const char *key, void *data, void *privdata)
 
 static void list_generic_flags(sourceinfo_t *si)
 {
-	unsigned int hopflags, vopflags;
-
-	vopflags = get_global_template_flags("VOP");
-	hopflags = get_global_template_flags("HOP");
-
 	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 
@@ -287,7 +279,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (!found)
 		{
-			if (l == 3 && (!strcasecmp(target, "SOP") ||
+			if (l == 3 && !chansvs.hide_xop && (!strcasecmp(target, "SOP") ||
 						!strcasecmp(target, "AOP") ||
 						!strcasecmp(target, "HOP") ||
 						!strcasecmp(target, "VOP")))
@@ -340,6 +332,25 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_toomany, _("Sorry, too many templates on \2%s\2."), channel);
 			return;
 		}
+		p = md != NULL ? md->value : NULL;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+			p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+					break;
+			r = strchr(q, ' ');
+			snprintf(ss,sizeof ss,"%.*s",r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
+			if (flags_to_bitmask(ss,0) == newflags)
+			{
+				command_fail(si, fault_alreadyexists, _("The template \2%.*s\2 already has flags \2%.*s\2."), (int)(q - p), p, r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
+				return;
+			}
+
+			p = r;
+		}
+
 		if (newstr[0] == '\0')
 			metadata_delete(mc, "private:templates");
 		else

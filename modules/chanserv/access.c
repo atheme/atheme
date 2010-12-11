@@ -255,13 +255,13 @@ static int append_global_template(const char *key, void *data, void *privdata)
 	default_template_t *def_t = data;
 	unsigned int vopflags;
 
-	if (chansvs.hide_xop && *(key + 1) == 'O' && *(key + 2) == 'P')
-		return 0;
+	if (!chansvs.hide_xop)
+	{
+		vopflags = get_global_template_flags("VOP");
 
-	vopflags = get_global_template_flags("VOP");
-
-	if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
-		return 0;
+		if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
+			return 0;
+	}
 
 	t = smalloc(sizeof(template_t));
 	strlcpy(t->name, key, sizeof(t->name));
@@ -747,9 +747,10 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
  */
 static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	chanacs_t *ca, *successor_ca;
 	myentity_t *mt;
 	mychan_t *mc;
+	myuser_t *successor;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role;
@@ -800,8 +801,17 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 	{
-		command_fail(si, fault_noprivs, _("You may not remove the last founder."));
-		return;
+		if (!(successor = mychan_pick_successor(mc)))
+		{
+			command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
+			return;
+		}
+
+		/* Grant Founder access to the next successor */
+		successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
+		successor_ca->level |= CA_ALLPRIVS;
+		chanacs_close(successor_ca);
+
 	}
 
 	role = get_template_name(mc, ca->level);
@@ -827,6 +837,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
+	unsigned int new_level;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role = parv[2];
@@ -854,12 +865,6 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (chansvs.hide_xop && ToUpper(*(role + 1)) == 'O' && ToUpper(*(role + 2)) == 'P')
-	{
-		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
-		return;
-	}
-
 	if (validhostmask(target))
 		ca = chanacs_open(mc, NULL, target, true);
 	else
@@ -880,13 +885,14 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	ca->level = get_template_flags(mc, role);
-	if (ca->level == 0)
+	new_level = get_template_flags(mc, role);
+	if (new_level == 0)
 	{
 		chanacs_close(ca);
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
+	ca->level = new_level;
 
 	hook_call_channel_acl_change(ca);
 	chanacs_close(ca);
@@ -906,7 +912,8 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
  */
 static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
+	chanacs_t *ca, *successor_ca;
+	myuser_t *successor;
 	myentity_t *mt;
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -947,6 +954,12 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 		ca = chanacs_open(mc, mt, NULL, true);
 	}
 
+	if (ca->level & CA_FOUNDER && !chanacs_source_has_flag(mc, si, CA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to change a founder's access levels."));
+		return;
+	}
+
 	if (ca->level == 0 && chanacs_is_table_full(ca))
 	{
 		chanacs_close(ca);
@@ -956,6 +969,27 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((level = get_template_flags(mc, role)) != 0)
 	{
+
+		if (level & CA_FOUNDER && !(ca->level & CA_FOUNDER))
+		{
+			command_fail(si, fault_noprivs, _("You cannot grant a role with founder access if you are not a founder."));
+			return;
+		}
+		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
+		{
+			if (!(successor = mychan_pick_successor(mc)))
+			{
+				command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
+				return;
+			}
+
+			/* Grant Founder access to the next successor */
+			successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
+			successor_ca->level |= CA_ALLPRIVS;
+			chanacs_close(successor_ca);
+		}
+
+
 		ca->level = level;
 
 		hook_call_channel_acl_change(ca);
@@ -964,8 +998,33 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+
+	role = get_template_name(mc, ca->level);
 	restrictflags = chanacs_source_flags(mc, si);
-	ca->level = xflag_apply_batch(ca->level, parc - 2, parv + 2, restrictflags);
+	level = xflag_apply_batch(ca->level, parc - 2, parv + 2, restrictflags);
+	if (level & CA_FOUNDER)
+		level |= CA_FLAGS;
+
+	if (level & CA_FOUNDER && !(ca->level & CA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You cannot grant a role with founder access if you are not a founder."));
+		return;
+	}
+	else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
+	{
+		if (!(successor = mychan_pick_successor(mc)))
+		{
+			command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
+			return;
+		}
+
+		/* Grant Founder access to the next successor */
+		successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
+		successor_ca->level |= CA_ALLPRIVS;
+		chanacs_close(successor_ca);
+	}
+
+	ca->level = level;
 
 	command_success_nodata(si, _("\2%s\2 now has the following flags in \2%s\2: \2%s\2"), target, channel,
 			       xflag_tostr(ca->level));
@@ -1031,6 +1090,7 @@ static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
+	mowgli_list_t *l;
 	const char *channel = parv[0];
 	const char *role = parv[1];
 	unsigned int oldflags, newflags, restrictflags;
@@ -1059,10 +1119,33 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 	oldflags = get_template_flags(mc, role);
 	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
 
+	if (newflags & CA_FOUNDER) newflags |= CA_FLAGS;
+
 	if (newflags == 0)
 	{
-		command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
+		if (oldflags == 0)
+			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP ROLE ADD for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
+		else
+			command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
 		return;
+	}
+	l = build_template_list(mc);
+	if (l != NULL)
+	{
+		mowgli_node_t *n;
+
+		MOWGLI_ITER_FOREACH(n, l->head)
+		{
+			template_t *t = n->data;
+
+			if (t->level == newflags)
+			{
+				command_fail(si, fault_alreadyexists, _("The role \2%s\2 already has flags \2%s\2."), t->name, xflag_tostr(newflags));
+				return;
+			}
+		}
+
+		free_template_list(l);
 	}
 
 	command_success_nodata(si, _("Flags for role \2%s\2 were changed to: \2%s\2."), role, xflag_tostr(newflags));
