@@ -380,10 +380,10 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	char modestr[512];
 	char *uname = parv[1];
 
-	if (!uname)
+	if (!chan || !uname)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> DEL <nickname|hostmask>"));
 		return;
 	}
 	
@@ -499,6 +499,13 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	int operoverride = 0;
 	char *chan = parv[0];
 	char expiry[512];
+	
+	if (!chan)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> LIST"));
+		return;
+	}
 	
 	/* make sure they're registered, logged in
 	 * and the founder of the channel before
