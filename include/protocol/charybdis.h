@@ -21,4 +21,9 @@
 #define CMODE_DISFWD    0x00080000      /* charybdis +Q */
 #define CMODE_NOCTCP    0x00100000      /* charybdis +C */
 
+#define CMODE_NPC	0x00200000	/* charybdis extensions/m_roleplay.c +N */
+#define CMODE_SSLONLY	0x00400000	/* charybdis extensions/chm_sslonly.c +S */
+#define CMODE_OPERONLY	0x00800000	/* charybdis extensions/chm_operonly.c +O */
+#define CMODE_ADMINONLY	0x01000000	/* charybdis extensions/chm_adminonly.c +A */
+
 #endif

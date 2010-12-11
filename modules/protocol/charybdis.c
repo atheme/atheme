@@ -58,6 +58,13 @@ struct cmode_ charybdis_mode_list[] = {
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
   { 'C', CMODE_NOCTCP },
+
+  /* following modes are added as extensions */
+  { 'N', CMODE_NPC       },
+  { 'S', CMODE_SSLONLY   },
+  { 'O', CMODE_OPERONLY  },
+  { 'A', CMODE_ADMINONLY },
+
   { '\0', 0 }
 };
 
