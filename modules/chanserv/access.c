@@ -245,7 +245,7 @@ static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaq
 	template_t *ta = a->data;
 	template_t *tb = b->data;
 
-	return count_bits(tb->level) - count_bits(ta->level);
+	return count_bits(ta->level) - count_bits(tb->level);
 }
 
 static int append_global_template(const char *key, void *data, void *privdata)
