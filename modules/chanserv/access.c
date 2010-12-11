@@ -800,7 +800,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 	{
-		command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
+		command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 		return;
 	}
 
