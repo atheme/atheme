@@ -747,10 +747,9 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
  */
 static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca, *successor_ca;
+	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
-	myuser_t *successor;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role;
@@ -801,17 +800,8 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 	{
-		if (!(successor = mychan_pick_successor(mc)))
-		{
-			command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
-			return;
-		}
-
-		/* Grant Founder access to the next successor */
-		successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
-		successor_ca->level |= CA_ALLPRIVS;
-		chanacs_close(successor_ca);
-
+		command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
+		return;
 	}
 
 	role = get_template_name(mc, ca->level);
@@ -912,8 +902,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
  */
 static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca, *successor_ca;
-	myuser_t *successor;
+	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
 	const char *channel = parv[0];
@@ -977,18 +966,9 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
 		{
-			if (!(successor = mychan_pick_successor(mc)))
-			{
-				command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
-				return;
-			}
-
-			/* Grant Founder access to the next successor */
-			successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
-			successor_ca->level |= CA_ALLPRIVS;
-			chanacs_close(successor_ca);
+			command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
+			return;
 		}
-
 
 		ca->level = level;
 
@@ -1012,16 +992,8 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
 	{
-		if (!(successor = mychan_pick_successor(mc)))
-		{
-			command_fail(si, fault_noprivs, _("You may not remove the last founder if there is no successor."));
-			return;
-		}
-
-		/* Grant Founder access to the next successor */
-		successor_ca = chanacs_open(mc, &successor->ent, NULL, true);
-		successor_ca->level |= CA_ALLPRIVS;
-		chanacs_close(successor_ca);
+		command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
+		return;
 	}
 
 	ca->level = level;
