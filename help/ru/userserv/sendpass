@@ -7,4 +7,4 @@
 Синтаксис: SENDPASS <аккаунт>
 
 Примеры:
-    /msg &nick& SENDPASS BlackAgent 
+    /msg &nick& SENDPASS BlackAgent

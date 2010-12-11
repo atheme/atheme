@@ -9,4 +9,4 @@
 Синтаксис: SET NOOP ON|OFF
 
 Пример:
-    /msg &nick& SET NOOP ON 
+    /msg &nick& SET NOOP ON

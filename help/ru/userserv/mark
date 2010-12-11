@@ -6,10 +6,10 @@
 однажды предупреждали за какие-либо противоправные
 действия.
 
-Заметка будет показана в INFO аккаунта. 
+Заметка будет показана в INFO аккаунта.
 
 Синтаксис: MARK <аккаунт> ON|OFF <причина>
 
 Examples:
     /msg &nick& MARK Super_Perez ON Ахтыспамер!
-    /msg &nick& MARK Kirill OFF 
+    /msg &nick& MARK Kirill OFF

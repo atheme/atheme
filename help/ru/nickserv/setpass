@@ -12,4 +12,4 @@
 Синтаксис: SETPASS <ник> <ключ> <новый_пароль>
 
 Пример:
-    /msg &nick& SETPASS Kostya wkgvjmyfjqvk tarapara 
+    /msg &nick& SETPASS Kostya wkgvjmyfjqvk tarapara

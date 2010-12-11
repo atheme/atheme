@@ -8,4 +8,4 @@
 Синтаксис: STATUS
 
 Пример:
-    /msg &nick& STATUS 
+    /msg &nick& STATUS

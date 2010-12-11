@@ -24,4 +24,4 @@
 Синтаксис: REGISTER <аккаунт> <пароль> <email-адрес>
 
 Пример:
-    /msg &nick& REGISTER Tanya KlassniyPass tat@indigoskyes.ru 
+    /msg &nick& REGISTER Tanya KlassniyPass tat@indigoskyes.ru

@@ -10,4 +10,4 @@
 Синтаксис: SET PRIVATE ON|OFF
 
 Пример:
-    /msg &nick& SET PRIVATE ON 
+    /msg &nick& SET PRIVATE ON

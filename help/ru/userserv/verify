@@ -8,4 +8,4 @@
 
 Примеры:
     /msg &nick& VERIFY REGISTER Inna 161803399
-    /msg &nick& VERIFY EMAILCHG Alex 271828183 
+    /msg &nick& VERIFY EMAILCHG Alex 271828183

@@ -6,4 +6,4 @@
 Синтаксис: SET EMAILMEMOS [ON|OFF]
 
 Пример:
-    /msg &nick& SET EMAILMEMOS ON 
+    /msg &nick& SET EMAILMEMOS ON

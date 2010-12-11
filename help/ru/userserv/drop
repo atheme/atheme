@@ -17,4 +17,4 @@
 Синтаксис: DROP <аккаунт> <пароль>
 
 Пример:
-    /msg &nick& DROP Vasya pupkin747 
+    /msg &nick& DROP Vasya pupkin747

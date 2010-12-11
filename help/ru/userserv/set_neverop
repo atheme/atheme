@@ -7,4 +7,4 @@
 Синтаксис: SET NEVEROP ON|OFF
 
 Пример:
-    /msg &nick& SET NEVEROP ON 
+    /msg &nick& SET NEVEROP ON

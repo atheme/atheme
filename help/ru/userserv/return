@@ -9,4 +9,4 @@
 Синтаксис: RETURN <аккаунт> <email-адрес>
 
 Примеры:
-    /msg &nick& RETURN Jobe eboj@anope.org 
+    /msg &nick& RETURN Jobe eboj@anope.org

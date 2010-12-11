@@ -16,7 +16,7 @@ Syntax: CLONES KLINE ON|OFF
 
 Enables/disables banning IP addresses with more
 than the allowed number clients from the network
-for one hour (these bans are not added to the 
+for one hour (these bans are not added to the
 AKILL list). This setting is saved in etc/services.db
 and defaults to off.
 
@@ -46,14 +46,14 @@ Removes an IP address from the clone exemption list.
 
 Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>
 
-Sets either the default or a given exemption's ALLOWED, 
-WARN, or KILL limit to the specified number of clones. 
+Sets either the default or a given exemption's ALLOWED,
+WARN, or KILL limit to the specified number of clones.
 WARN or KILL can be 0, disabling any warning messages or kills.
 
 Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>
 
 Sets the reason or duration of a given exemption to the
-specified value. The DURATION value can be 0, making the 
+specified value. The DURATION value can be 0, making the
 exemption permanent.
 
 Syntax: CLONES LISTEXEMPT

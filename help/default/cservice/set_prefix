@@ -8,7 +8,7 @@ the channel fantasy prefix to the network default prefix.
 
 Syntax: SET <#channel> PREFIX [prefix]
 
-Examples: 
+Examples:
     /msg &nick& SET #foo PREFIX
     /msg &nick& SET #foo PREFIX '
     /msg &nick& SET #c PREFIX %

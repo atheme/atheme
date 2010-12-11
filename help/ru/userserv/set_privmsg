@@ -7,4 +7,4 @@
 Пример: SET PRIVMSG ON|OFF
 
 Пример:
-    /msg &nick& SET PRIVMSG ON 
+    /msg &nick& SET PRIVMSG ON

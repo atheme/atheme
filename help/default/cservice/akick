@@ -23,14 +23,14 @@ or weeks ("w").
 
 Syntax: AKICK <#channel> DEL <nickname|hostmask>
 
-This will remove an entry from the AKICK list. Removing 
+This will remove an entry from the AKICK list. Removing
 an entry will remove any matching channel bans unless the
 channel is set NOSYNC.
 
 Syntax: AKICK <#channel> LIST
 
-This will list all entries in the AKICK list, including 
-the reason and time left until expiration.  
+This will list all entries in the AKICK list, including
+the reason and time left until expiration.
 
 Examples:
     /msg &nick& AKICK #foo ADD bar you are annoying | private op info
