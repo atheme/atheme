@@ -38,12 +38,10 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 		if (is_internal_client(cu->user))
 			continue;
 
-		if (ca != NULL)
+		if (ca != NULL && ca->entity != NULL)
 		{
 			if (ca->entity == entity(cu->user->myuser))
 				fl = ca->level;
-			else if (ca->entity != NULL)
-				/* XXX: handle hostmask changes */;
 			else
 				continue;
 		}
