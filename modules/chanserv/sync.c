@@ -19,7 +19,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
 
-static void do_channel_sync(mychan_t *mc)
+static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
 	chanuser_t *cu;
@@ -38,7 +38,18 @@ static void do_channel_sync(mychan_t *mc)
 		if (is_internal_client(cu->user))
 			continue;
 
-		fl = chanacs_user_flags(mc, cu->user);
+		if (ca != NULL)
+		{
+			if (ca->entity == entity(cu->user->myuser))
+				fl = ca->level;
+			else if (ca->entity != NULL)
+				/* XXX: handle hostmask changes */;
+			else
+				continue;
+		}
+		else
+			fl = chanacs_user_flags(mc, cu->user);
+
 		noop = mc->flags & MC_NOOP || (cu->user->myuser != NULL &&
 				cu->user->myuser->flags & MU_NOOP);
 
@@ -200,7 +211,7 @@ static void sync_channel_acl_change(chanacs_t *ca)
 	if (MC_NOSYNC & mc->flags)
 		return;
 
-	do_channel_sync(mc);
+	do_channel_sync(mc, ca);
 }
 
 static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
@@ -242,7 +253,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, "\2%s\2 used SYNC.", get_source_name(si));
 	logcommand(si, CMDLOG_SET, "SYNC: \2%s\2", mc->name);
 
-	do_channel_sync(mc);
+	do_channel_sync(mc, NULL);
 
 	command_success_nodata(si, "Sync complete for \2%s\2.", mc->name);
 }
