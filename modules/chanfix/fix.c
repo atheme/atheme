@@ -27,6 +27,11 @@ bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 {
 	mychan_t *mc;
 
+	return_val_if_fail(cfchan != NULL, false);
+
+	if (c == NULL)
+		return false;
+
 	if ((mc = mychan_find(c->name)) != NULL)
 		return false;
 
