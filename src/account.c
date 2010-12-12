@@ -322,6 +322,9 @@ void myuser_rename(myuser_t *mu, const char *name)
 	user_t *u;
 	hook_user_rename_t data;
 
+	return_if_fail(mu != NULL);
+	return_if_fail(name != NULL);
+
 	char nb[NICKLEN];
 	strlcpy(nb, entity(mu)->name, NICKLEN);
 
@@ -367,6 +370,9 @@ void myuser_rename(myuser_t *mu, const char *name)
  */
 void myuser_set_email(myuser_t *mu, const char *newemail)
 {
+	return_if_fail(mu != NULL);
+	return_if_fail(newemail != NULL);
+
 	free(mu->email);
 	mu->email = sstrdup(newemail);
 }
@@ -391,8 +397,7 @@ myuser_t *myuser_find_ext(const char *name)
 	user_t *u;
 	mynick_t *mn;
 
-	if (name == NULL)
-		return NULL;
+	return_val_if_fail(name != NULL, NULL);
 
 	if (*name == '=')
 	{
@@ -432,8 +437,9 @@ void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 	mowgli_node_t *n;
 	user_t *u;
 
-	if (target == NULL)
-		return;
+	return_if_fail(from != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(fmt != NULL);
 
 	/* have to reformat it here, can't give a va_list to notice() :(
 	 * -- jilles
@@ -471,11 +477,8 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	char buf3[USERLEN+HOSTLEN];
 	char buf4[USERLEN+HOSTLEN];
 
-	if (u == NULL || mu == NULL)
-	{
-		slog(LG_DEBUG, "myuser_access_verify(): invalid parameters: u = %p, mu = %p", u, mu);
-		return false;
-	}
+	return_val_if_fail(u != NULL, false);
+	return_val_if_fail(mu != NULL, false);
 
 	if (!use_myuser_access)
 		return false;
@@ -518,11 +521,8 @@ myuser_access_add(myuser_t *mu, const char *mask)
 	mowgli_node_t *n;
 	char *msk;
 
-	if (mu == NULL || mask == NULL)
-	{
-		slog(LG_DEBUG, "myuser_access_add(): invalid parameters: mu = %p, mask = %p", mu, mask);
-		return false;
-	}
+	return_val_if_fail(mu != NULL, false);
+	return_val_if_fail(mask != NULL, false);
 
 	if (MOWGLI_LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
@@ -556,11 +556,8 @@ myuser_access_find(myuser_t *mu, const char *mask)
 {
 	mowgli_node_t *n;
 
-	if (mu == NULL || mask == NULL)
-	{
-		slog(LG_DEBUG, "myuser_access_find(): invalid parameters: mu = %p, mask = %p", mu, mask);
-		return NULL;
-	}
+	return_val_if_fail(mu != NULL, NULL);
+	return_val_if_fail(mask != NULL, NULL);
 
 	MOWGLI_ITER_FOREACH(n, mu->access_list.head)
 	{
@@ -589,11 +586,8 @@ myuser_access_delete(myuser_t *mu, const char *mask)
 {
 	mowgli_node_t *n, *tn;
 
-	if (mu == NULL || mask == NULL)
-	{
-		slog(LG_DEBUG, "myuser_access_delete(): invalid parameters: mu = %p, mask = %p", mu, mask);
-		return;
-	}
+	return_if_fail(mu != NULL);
+	return_if_fail(mask != NULL);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->access_list.head)
 	{
@@ -946,6 +940,7 @@ mychan_t *mychan_add(char *name)
 {
 	mychan_t *mc;
 
+	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail((mc = mychan_find(name)) == NULL, mc);
 
 	if (!(runflags & RF_STARTING))
@@ -975,6 +970,8 @@ bool mychan_isused(mychan_t *mc)
 	channel_t *c;
 	chanuser_t *cu;
 
+	return_val_if_fail(mc != NULL, false);
+
 	c = mc->chan;
 	if (c == NULL)
 		return false;
@@ -993,6 +990,8 @@ unsigned int mychan_num_founders(mychan_t *mc)
 	chanacs_t *ca;
 	unsigned int count = 0;
 
+	return_val_if_fail(mc != NULL, 0);
+
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
@@ -1007,6 +1006,8 @@ const char *mychan_founder_names(mychan_t *mc)
 	mowgli_node_t *n;
 	chanacs_t *ca;
 	static char names[512];
+
+	return_val_if_fail(mc != NULL, NULL);
 
 	names[0] = '\0';
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
@@ -1045,6 +1046,8 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
 	unsigned int level, hi_level;
 	bool recent_ok = false;
 	bool hi_recent_ok = false;
+
+	return_val_if_fail(mc != NULL, NULL);
 
 	hi_mt = NULL;
 	hi_level = 0;
@@ -1098,6 +1101,8 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 	myuser_t *mu;
 	hook_channel_succession_req_t req;
 
+	return_val_if_fail(mc != NULL, NULL);
+
 	/* allow a hook to override/augment the succession. */
 	req.mc = mc;
 	req.mu = NULL;
@@ -1137,6 +1142,8 @@ const char *mychan_get_mlock(mychan_t *mc)
 	metadata_t *md;
 	char *p, *q, *qq;
 	int dir;
+
+	return_val_if_fail(mc != NULL, NULL);
 
 	*buf = 0;
 	*params = 0;
@@ -1244,6 +1251,8 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 {
 	static char mlock[BUFSIZE];
 	metadata_t *md;
+
+	return_val_if_fail(mc != NULL, NULL);
 
 	mlock[0] = '\0';
 
