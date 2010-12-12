@@ -11,7 +11,6 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
-#include "protocol/charybdis.h"
 #include "protocol/shadowircd.h"
 
 DECLARE_MODULE_V1("protocol/shadowircd", true, _modinit, NULL, PACKAGE_STRING, "ShadowIRCd Development Group <http://www.shadowircd.net>");

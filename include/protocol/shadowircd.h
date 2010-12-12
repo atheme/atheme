@@ -12,6 +12,16 @@
 
 /* Extended channel modes will eventually go here. */
 /* Note that these are involved in atheme.db file format */
+#define CMODE_NOCOLOR   0x00001000	/* hyperion +c */
+#define CMODE_REGONLY   0x00002000	/* hyperion +r */
+#define CMODE_OPMOD     0x00004000	/* hyperion +z */
+#define CMODE_FINVITE   0x00008000	/* hyperion +g */
+#define CMODE_EXLIMIT   0x00010000	/* charybdis +L */
+#define CMODE_PERM	0x00020000	/* charybdis +P */
+#define CMODE_FTARGET   0x00040000	/* charybdis +F */
+#define CMODE_DISFWD    0x00080000	/* charybdis +Q */
+#define CMODE_NOCTCP    0x00100000	/* charybdis +C */
+
 #define CMODE_IMMUNE    0x00200000      /* shadowircd +M */
 #define CMODE_ADMINONLY 0x00400000      /* shadowircd +A */
 #define CMODE_OPERONLY  0x00800000      /* shadowircd +O */
