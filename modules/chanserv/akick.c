@@ -376,8 +376,6 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md;
 	mowgli_node_t *n, *tn;
 	char *chan = parv[0];
-	char expiry[512];
-	char modestr[512];
 	char *uname = parv[1];
 
 	if (!chan || !uname)
@@ -445,8 +443,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 
 		if ((cb = chanban_find(mc->chan, uname, 'b')))
 		{
-			snprintf(modestr, sizeof modestr, "-b %s", uname);
-			mode_sts(chansvs.nick, mc->chan, modestr);
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 		}
 		return;
@@ -458,14 +455,28 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((md = metadata_find(mt, "private:host:vhost")) && (vhost = strstr(md->value, "@")) && (++vhost))
+	if (isuser(mt))
 	{
-		snprintf(expiry, sizeof timeout->host, "*!*@%s", vhost);
-		if ((cb = chanban_find(mc->chan, expiry, 'b')))
+		myuser_t *tmu = user(mt);
+
+		MOWGLI_ITER_FOREACH(n, tmu->logins.head)
 		{
-			snprintf(modestr, sizeof modestr, "-b %s", timeout->host);
-			mode_sts(chansvs.nick, mc->chan, modestr);
-			chanban_delete(cb);
+			user_t *tu;
+			mowgli_node_t *it, *itn;
+
+			char hostbuf2[BUFSIZE];
+
+			tu = n->data;
+
+			snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
+			for (it = next_matching_ban(mc->chan, tu, 'b', mc->chan->bans.head); it != NULL; it = next_matching_ban(mc->chan, tu, 'b', itn))
+			{
+				itn = it->next;
+				cb = it->data;
+
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+				chanban_delete(cb);
+			}
 		}
 	}
 
