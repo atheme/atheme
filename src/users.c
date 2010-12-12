@@ -208,11 +208,7 @@ void user_delete(user_t *u, const char *comment)
 	char oldnick[NICKLEN];
 	bool doenforcer = false;
 
-	if (!u)
-	{
-		slog(LG_DEBUG, "user_delete(): called for NULL user");
-		return;
-	}
+	return_if_fail(u != NULL);
 
 	if (u->flags & UF_DOENFORCE)
 	{
@@ -297,8 +293,7 @@ user_t *user_find(const char *nick)
 {
 	user_t *u;
 
-	if (nick == NULL)
-		return NULL;
+	return_val_if_fail(nick != NULL, NULL);
 
 	if (ircd->uses_uid)
 	{
@@ -357,6 +352,8 @@ user_t *user_find_named(const char *nick)
  */
 void user_changeuid(user_t *u, const char *uid)
 {
+	return_if_fail(u != NULL);
+
 	if (*u->uid)
 		mowgli_patricia_delete(uidlist, u->uid);
 
@@ -390,6 +387,9 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 	char oldnick[NICKLEN];
 	bool doenforcer = false;
 	hook_user_nick_t hdata;
+
+	return_val_if_fail(u != NULL, false);
+	return_val_if_fail(nick != NULL, false);
 
 	strlcpy(oldnick, u->nick, sizeof oldnick);
 	u2 = user_find_named(nick);
@@ -517,11 +517,8 @@ void user_mode(user_t *user, const char *modes)
 	bool was_ircop, was_invis;
 	int iter;
 
-	if (!user)
-	{
-		slog(LG_DEBUG, "user_mode(): called for nonexistant user");
-		return;
-	}
+	return_if_fail(user != NULL);
+	return_if_fail(modes != NULL);
 
 	was_ircop = is_ircop(user);
 	was_invis = (user->flags & UF_INVIS);
@@ -579,6 +576,8 @@ const char *user_get_umodestr(user_t *u)
 	static char result[34];
 	int iter;
 	int i;
+
+	return_val_if_fail(u != NULL, NULL);
 
 	i = 0;
 	result[i++] = '+';
