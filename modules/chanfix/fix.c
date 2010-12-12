@@ -5,7 +5,7 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-#define CHANFIX_OP_THRESHHOLD	1
+#define CHANFIX_OP_THRESHHOLD	3
 #define CHANFIX_ACCOUNT_WEIGHT	1.5
 
 static unsigned int count_ops(channel_t *c)
@@ -26,11 +26,17 @@ static unsigned int count_ops(channel_t *c)
 	return i;
 }
 
-bool chanfix_should_handle(channel_t *c)
+bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 {
 	mychan_t *mc;
 
 	if ((mc = mychan_find(c->name)) != NULL)
+		return false;
+
+	if (MOWGLI_LIST_LENGTH(&cfchan->oprecords) < CHANFIX_OP_THRESHHOLD)
+		return false;
+
+	if (MOWGLI_LIST_LENGTH(&c->members) < CHANFIX_OP_THRESHHOLD)
 		return false;
 
 	if (count_ops(c) >= CHANFIX_OP_THRESHHOLD)
@@ -144,7 +150,7 @@ void chanfix_autofix_ev(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
-		if (chanfix_should_handle(chan->chan))
+		if (chanfix_should_handle(chan, chan->chan))
 		{
 			slog(LG_DEBUG, "chanfix_autofix_ev(): fixing %s automatically.", chan->name);
 			chanfix_fix_channel(chan);
