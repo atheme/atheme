@@ -484,7 +484,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 
-		if ((cb = chanban_find(mc->chan, uname, 'b')))
+		if (mc->chan != NULL && (cb = chanban_find(mc->chan, uname, 'b')))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
@@ -659,7 +659,7 @@ void akick_timeout_check(void *arg)
 
 		if (timeout->entity == NULL)
 		{
-			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && (cb = chanban_find(mc->chan, ca->host, 'b')))
+			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && mc->chan != NULL && (cb = chanban_find(mc->chan, ca->host, 'b')))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
 				chanban_delete(cb);
