@@ -220,11 +220,9 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
 
-	if (mask == NULL)
-	{
-		slog(LG_ERROR, "chanban_add(): NULL +%c mask", type);
-		return NULL;
-	}
+	return_val_if_fail(chan != NULL, NULL);
+	return_val_if_fail(mask != NULL, NULL);
+
 	/* this would break protocol and/or cause crashes */
 	if (*mask == '\0' || *mask == ':' || strchr(mask, ' '))
 	{
@@ -269,11 +267,7 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
  */
 void chanban_delete(chanban_t * c)
 {
-	if (!c)
-	{
-		slog(LG_DEBUG, "chanban_delete(): called for nonexistant ban");
-		return;
-	}
+	return_if_fail(c != NULL);
 
 	mowgli_node_delete(&c->node, &c->chan->bans);
 
@@ -302,6 +296,9 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
 	mowgli_node_t *n;
+
+	return_val_if_fail(chan != NULL, NULL);
+	return_val_if_fail(mask != NULL, NULL);
 
 	MOWGLI_ITER_FOREACH(n, chan->bans.head)
 	{
@@ -353,8 +350,8 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	int i = 0;
 	hook_channel_joinpart_t hdata;
 
-	if (chan == NULL)
-		return NULL;
+	return_val_if_fail(chan != NULL, NULL);
+	return_val_if_fail(nick != NULL, NULL);
 
 	if (*chan->name != '#')
 	{
@@ -440,17 +437,8 @@ void chanuser_delete(channel_t *chan, user_t *user)
 	chanuser_t *cu;
 	hook_channel_joinpart_t hdata;
 
-	if (!chan)
-	{
-		slog(LG_DEBUG, "chanuser_delete(): called with NULL chan");
-		return;
-	}
-
-	if (!user)
-	{
-		slog(LG_DEBUG, "chanuser_delete(): called with NULL user");
-		return;
-	}
+	return_if_fail(chan != NULL);
+	return_if_fail(user != NULL);
 
 	cu = chanuser_find(chan, user);
 	if (cu == NULL)
@@ -500,8 +488,8 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 	mowgli_node_t *n;
 	chanuser_t *cu;
 
-	if ((!chan) || (!user))
-		return NULL;
+	return_val_if_fail(chan != NULL, NULL);
+	return_val_if_fail(user != NULL, NULL);
 
 	/* choose shortest list to search -- jilles */
 	if (MOWGLI_LIST_LENGTH(&user->channels) < MOWGLI_LIST_LENGTH(&chan->members))
