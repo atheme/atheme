@@ -5,9 +5,6 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-#define CHANFIX_OP_THRESHHOLD	3
-#define CHANFIX_ACCOUNT_WEIGHT	1.5
-
 static unsigned int count_ops(channel_t *c)
 {
 	unsigned int i = 0;
@@ -58,18 +55,16 @@ unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 	return base;
 }
 
-void chanfix_fix_channel(chanfix_channel_t *chan)
+void chanfix_lower_ts(chanfix_channel_t *chan)
 {
 	channel_t *ch;
 	chanuser_t *cfu;
 	mowgli_node_t *n;
-	unsigned int highscore = 0, opped = 0;
 
 	ch = chan->chan;
 	if (ch == NULL)
 		return;
 
-	/* first, lower the TS by one to kill all ops. */
 	chan->ts--;
 	ch->ts = chan->ts;
 
@@ -86,6 +81,24 @@ void chanfix_fix_channel(chanfix_channel_t *chan)
 	chan_lowerts(ch, chanfix->me);
 	cfu = chanuser_add(ch, CLIENT_NAME(chanfix->me));
 	cfu->modes |= CSTATUS_OP;
+
+	msg(chanfix->me->nick, chan->name, "I only joined to remove modes.");
+
+	part(chan->name, chanfix->me->nick);
+}
+
+void chanfix_fix_channel(chanfix_channel_t *chan)
+{
+	channel_t *ch;
+	mowgli_node_t *n;
+	unsigned int highscore = 0, opped = 0;
+
+	ch = chan->chan;
+	if (ch == NULL)
+		return;
+
+	/* join the channel */
+	join(chan->name, chanfix->me->nick);
 
 	/* find the highest score */
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
@@ -123,7 +136,7 @@ void chanfix_fix_channel(chanfix_channel_t *chan)
 
 		score = chanfix_calculate_score(orec);
 
-		if (score > (highscore * 0.30))
+		if (score > (highscore * chan->step))
 		{
 			modestack_mode_param(chanfix->me->nick, chan->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 			cu->modes |= CSTATUS_OP;
@@ -154,7 +167,11 @@ void chanfix_autofix_ev(void *unused)
 		{
 			slog(LG_DEBUG, "chanfix_autofix_ev(): fixing %s automatically.", chan->name);
 			chanfix_fix_channel(chan);
+
+			chan->step -= CHANFIX_STEP_SIZE;
 		}
+		else
+			chan->step = CHANFIX_INITIAL_STEP;
 	}
 }
 
@@ -178,9 +195,9 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	chanfix_fix_channel(chan);
+	chanfix_lower_ts(chan);
 
-	command_success_nodata(si, "\2%s\2 was fixed.", parv[0]);
+	command_success_nodata(si, _("Fix request has been acknowledged for \2%s\2."), parv[0]);
 }
 
 command_t cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), AC_NONE, 1, chanfix_cmd_fix, { .path = "" } };

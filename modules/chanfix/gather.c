@@ -112,6 +112,7 @@ chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan)
 	c = mowgli_heap_alloc(chanfix_channel_heap);
 	c->name = sstrdup(name);
 	c->chan = chan;
+	c->step = CHANFIX_INITIAL_STEP;
 
 	if (c->chan != NULL)
 		c->ts = c->chan->ts;
