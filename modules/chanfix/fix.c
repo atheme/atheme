@@ -148,7 +148,7 @@ void chanfix_fix_channel(chanfix_channel_t *chan)
 	modestack_flush_channel(ch);
 
 	/* now report the damage */
-	msg(chanfix->me->nick, chan->name, "\2%d\2 client(s) should have been opped; minimum required score was \2%0.1f\2.", opped, (highscore * 0.30));
+	msg(chanfix->me->nick, chan->name, "\2%d\2 client%s should have been opped.", opped, opped != 1 ? "s" : "");
 
 	/* fix done, leave. */
 	part(chan->name, chanfix->me->nick);
