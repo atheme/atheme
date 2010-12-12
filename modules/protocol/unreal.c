@@ -211,6 +211,15 @@ static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 				c->name, u->nick);
 }
 
+/* lower TS */
+static void unreal_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "unreal_chan_lowerts(): lowering TS for %s to %lu",
+			c->name, (unsigned long)c->ts);
+	sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts, c->name,
+			channel_modes(c, true), CLIENT_NAME(u));
+}
+
 /* kicks a user from a channel */
 static void unreal_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
@@ -1118,6 +1127,7 @@ void _modinit(module_t * m)
 	fnc_sts = &unreal_fnc_sts;
 	invite_sts = &unreal_invite_sts;
 	holdnick_sts = &unreal_holdnick_sts;
+	chan_lowerts = &unreal_chan_lowerts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;
