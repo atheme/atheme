@@ -30,6 +30,7 @@ void _modinit(module_t *m)
 	chanfix = service_add("chanfix", NULL, &conf_cfx_table);
 	service_bind_command(chanfix, &cmd_chanfix);
 	service_bind_command(chanfix, &cmd_scores);
+	service_bind_command(chanfix, &cmd_info);
 
 	event_add("chanfix_autofix", chanfix_autofix_ev, NULL, 60);
 }

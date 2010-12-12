@@ -174,6 +174,8 @@ void chanfix_autofix_ev(void *unused)
 			chanfix_fix_channel(chan);
 
 			chan->step -= CHANFIX_STEP_SIZE;
+			if (chan->step < CHANFIX_FINAL_STEP)
+				chan->step = CHANFIX_FINAL_STEP;
 		}
 		else
 			chan->step = CHANFIX_INITIAL_STEP;
@@ -270,3 +272,54 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 }
 
 command_t cmd_scores = { "SCORES", N_("List channel scores."), AC_NONE, 1, chanfix_cmd_scores, { .path = "" } };
+
+static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
+{
+	mowgli_node_t *n;
+	chanfix_oprecord_t *orec;
+	chanfix_channel_t *chan;
+	struct tm tm;
+	char strfbuf[BUFSIZE];
+	unsigned int highscore = 0;
+
+	if (parv[0] == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SCORES");
+		command_fail(si, fault_needmoreparams, _("To view CHANFIX scores for a channel: SCORES <#channel>"));
+		return;
+	}
+
+	if ((chan = chanfix_channel_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("No CHANFIX record available for \2%s\2; try again later."),
+			     parv[0]);
+		return;
+	}
+
+	/* sort records by score. */
+	mowgli_list_sort(&chan->oprecords, chanfix_compare_records, NULL);
+
+	command_success_nodata(si, _("Information on \2%s\2:"), chan->name);
+
+	tm = *localtime(&chan->ts);
+	strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+
+	command_success_nodata(si, _("Creation time: %s"), strfbuf);
+
+	if (chan->oprecords.head != NULL)
+	{
+		orec = chan->oprecords.head->data;
+		highscore = chanfix_calculate_score(orec);
+	}
+
+	command_success_nodata(si, _("Highest score: \2%u\2"), highscore);
+	command_success_nodata(si, _("Usercount    : \2%zu\2"), chan->chan ? MOWGLI_LIST_LENGTH(&chan->chan->members) : 0);
+	command_success_nodata(si, _("Initial step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_INITIAL_STEP * 100, highscore, (highscore * CHANFIX_INITIAL_STEP));
+	command_success_nodata(si, _("Current step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), chan->step * 100, highscore, (highscore * chan->step));
+	command_success_nodata(si, _("Final step   : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_FINAL_STEP * 100, highscore, (highscore * CHANFIX_FINAL_STEP));
+	command_success_nodata(si, _("Needs fixing : \2%s\2"), chanfix_should_handle(chan, chan->chan) ? "YES" : "NO");
+
+	command_success_nodata(si, _("\2*** End of Info ***\2"));
+}
+
+command_t cmd_info = { "INFO", N_("List information on channel."), AC_NONE, 1, chanfix_cmd_info, { .path = "" } };
