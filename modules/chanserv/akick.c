@@ -34,17 +34,20 @@ command_t cs_akick_list = { "LIST", N_("Displays a channel's AKICK list."),
 
 typedef struct {
 	time_t expiration;
-	char host[HOSTLEN];
-	char chan[CHANNELLEN];
-	mowgli_node_t node;
 
+	myentity_t *entity;
+	mychan_t *chan;
+
+	char host[NICKLEN + USERLEN + HOSTLEN + 4];
+
+	mowgli_node_t node;
 } akick_timeout_t;
 
 time_t akickdel_next;
 mowgli_list_t akickdel_list;
 mowgli_patricia_t *cs_akick_cmds;
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, char *host, time_t expireson);
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *host, time_t expireson);
 
 mowgli_heap_t *akick_timeout_heap;
 
@@ -81,6 +84,44 @@ void _moddeinit(module_unload_intent_t intent)
 
 	mowgli_heap_destroy(akick_timeout_heap);
 	mowgli_patricia_destroy(cs_akick_cmds, NULL, NULL);
+}
+
+static void clear_bans_matching_entity(mychan_t *mc, myentity_t *mt)
+{
+	mowgli_node_t *n;
+	myuser_t *tmu;
+
+	if (mc->chan == NULL)
+		return;
+
+	if (!isuser(mt))
+		return;
+
+	tmu = user(mt);
+
+	MOWGLI_ITER_FOREACH(n, tmu->logins.head)
+	{
+		user_t *tu;
+		mowgli_node_t *it, *itn;
+
+		char hostbuf2[BUFSIZE];
+
+		tu = n->data;
+
+		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
+		for (it = next_matching_ban(mc->chan, tu, 'b', mc->chan->bans.head); it != NULL; it = next_matching_ban(mc->chan, tu, 'b', itn))
+		{
+			chanban_t *cb;
+
+			itn = it->next;
+			cb = it->data;
+
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+			chanban_delete(cb);
+		}
+	}
+
+	modestack_flush_channel(mc->chan);
 }
 
 static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
@@ -127,10 +168,12 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 	long duration;
 	char expiry[512];
 	char *s;
-	char *uname = parv[1];
-	char *token = strtok(parv[2], " ");
+	char *uname;
+	char *token;
+	char *treason, reason[BUFSIZE];
 
-	char *treason,reason[BUFSIZE];
+	uname = parv[1];
+	token = strtok(parv[2], " ");
 
 	if (!uname)
 	{
@@ -284,7 +327,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s.", uname, mc->name,timediff(duration));
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), uname, mc->name,timediff(duration) );
 
-			timeout = akick_add_timeout(mc, uname, expireson);
+			timeout = akick_add_timeout(mc, NULL, uname, expireson);
 
 			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 			{
@@ -344,7 +387,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), mt->name, timediff(duration));
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2, expires in %s", mt->name, mc->name, timediff(duration));
 
-			timeout = akick_add_timeout(mc, mt->name, expireson);
+			timeout = akick_add_timeout(mc, mt, mt->name, expireson);
 
 			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 			{
@@ -434,7 +477,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
 		{
 			timeout = n->data;
-			if (!strcmp(timeout->host, uname) && !strcmp(timeout->chan, mc->name))
+			if (!match(timeout->host, uname) && timeout->chan == mc)
 			{
 				mowgli_node_delete(&timeout->node, &akickdel_list);
 				mowgli_heap_free(akick_timeout_heap, timeout);
@@ -446,6 +489,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
 			chanban_delete(cb);
 		}
+
 		return;
 	}
 
@@ -455,35 +499,12 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (isuser(mt))
-	{
-		myuser_t *tmu = user(mt);
-
-		MOWGLI_ITER_FOREACH(n, tmu->logins.head)
-		{
-			user_t *tu;
-			mowgli_node_t *it, *itn;
-
-			char hostbuf2[BUFSIZE];
-
-			tu = n->data;
-
-			snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
-			for (it = next_matching_ban(mc->chan, tu, 'b', mc->chan->bans.head); it != NULL; it = next_matching_ban(mc->chan, tu, 'b', itn))
-			{
-				itn = it->next;
-				cb = it->data;
-
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
-				chanban_delete(cb);
-			}
-		}
-	}
+	clear_bans_matching_entity(mc, mt);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
 	{
 		timeout = n->data;
-		if (!strcmp(timeout->host, mt->name) && !strcmp(timeout->chan, mc->name))
+		if (timeout->entity == mt && timeout->chan == mc)
 		{
 			mowgli_node_delete(&timeout->node, &akickdel_list);
 			mowgli_heap_free(akick_timeout_heap, timeout);
@@ -559,7 +580,6 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, _("AKICK list for \2%s\2:"), mc->name);
 
-
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 	{
 		time_t expires_on = 0;
@@ -614,10 +634,10 @@ void akick_timeout_check(void *arg)
 {
 	mowgli_node_t *n, *tn;
 	akick_timeout_t *timeout;
-	myentity_t *mt;
 	chanacs_t *ca;
 	metadata_t *md;
 	char *vhost;
+	mychan_t *mc;
 
 	char modestr[HOSTLEN+3];
 	chanban_t *cb;
@@ -626,6 +646,7 @@ void akick_timeout_check(void *arg)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, akickdel_list.head)
 	{
 		timeout = n->data;
+		mc = timeout->chan;
 
 		if (timeout->expiration > CURRTIME)
 		{
@@ -636,28 +657,26 @@ void akick_timeout_check(void *arg)
 
 		ca = NULL;
 
-		mychan_t *mc = mychan_find(timeout->chan);
-		if (strstr(timeout->host,"@"))
+		if (timeout->entity == NULL)
 		{
 			if ((ca = chanacs_find_host_literal(mc, timeout->host, CA_AKICK)) && (cb = chanban_find(mc->chan, ca->host, 'b')))
 			{
-				snprintf(modestr, sizeof modestr, "-b %s", ca->host);
-				mode_sts(chansvs.nick, mc->chan, modestr);
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
 				chanban_delete(cb);
 			}
 		}
 		else
 		{
-			if ((mt = myentity_find(timeout->host)) && (ca = chanacs_find(mc, mt, CA_AKICK)) && (md = metadata_find(mt, "private:host:vhost")) && (vhost = strstr(md->value,"@")) && ++vhost)
+			ca = chanacs_find(mc, timeout->entity, CA_AKICK);
+			if (ca == NULL)
 			{
-				snprintf(timeout->host, sizeof timeout->host, "*!*@%s", vhost);
-				if ((cb = chanban_find(mc->chan, timeout->host, 'b')))
-				{
-					snprintf(modestr, sizeof modestr, "-b %s", timeout->host);
-					mode_sts(chansvs.nick, mc->chan, modestr);
-					chanban_delete(cb);
-				}
+				mowgli_node_delete(&timeout->node, &akickdel_list);
+				mowgli_heap_free(akick_timeout_heap, timeout);
+
+				continue;
 			}
+
+			clear_bans_matching_entity(mc, timeout->entity);
 		}
 
 		if (ca)
@@ -665,21 +684,24 @@ void akick_timeout_check(void *arg)
 			chanacs_modify_simple(ca, 0, CA_AKICK);
 			chanacs_close(ca);
 		}
+
 		mowgli_node_delete(&timeout->node, &akickdel_list);
 		mowgli_heap_free(akick_timeout_heap, timeout);
-
 	}
 }
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, char *host, time_t expireson)
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *host, time_t expireson)
 {
 	mowgli_node_t *n;
 	akick_timeout_t *timeout, *timeout2;
 
 	timeout = mowgli_heap_alloc(akick_timeout_heap);
-	strlcpy(timeout->chan, mc->name, sizeof timeout->chan);
-	strlcpy(timeout->host, host, sizeof timeout->host);
+
+	timeout->entity = mt;
+	timeout->chan = mc;
 	timeout->expiration = expireson;
+
+	strlcpy(timeout->host, host, sizeof timeout->host);
 
 	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
 	{
@@ -732,9 +754,9 @@ void akickdel_list_create(void *arg)
 			{
 				/* overcomplicate the logic here a tiny bit */
 				if (ca->host == NULL && ca->entity != NULL)
-					akick_add_timeout(mc, entity(ca->entity)->name, expireson);
+					akick_add_timeout(mc, ca->entity, entity(ca->entity)->name, expireson);
 				else if (ca->host != NULL && ca->entity == NULL)
-					akick_add_timeout(mc, ca->host, expireson);
+					akick_add_timeout(mc, NULL, ca->host, expireson);
 			}
 		}
 	}
