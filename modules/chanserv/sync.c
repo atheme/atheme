@@ -70,12 +70,11 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			{
 				if (chanban_find(mc->chan, ca2->host, 'b') == NULL)
 				{
-					char str[512];
-
 					chanban_add(mc->chan, ca2->host, 'b');
-					snprintf(str, sizeof str, "+b %s", ca2->host);
+					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'b', ca2->host);
+
 					/* ban immediately */
-					mode_sts(chansvs.nick, mc->chan, str);
+					modestack_flush_channel(mc->chan);
 				}
 			}
 			else if (cu->user->myuser != NULL)

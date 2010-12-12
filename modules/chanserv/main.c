@@ -314,12 +314,9 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (chanban_find(chan, ca2->host, 'b') == NULL)
 			{
-				char str[512];
-
 				chanban_add(chan, ca2->host, 'b');
-				snprintf(str, sizeof str, "+b %s", ca2->host);
-				/* ban immediately */
-				mode_sts(chansvs.nick, chan, str);
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'b', ca2->host);
+				modestack_flush_channel(chan);
 			}
 		}
 		else
