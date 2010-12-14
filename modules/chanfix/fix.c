@@ -23,7 +23,7 @@ static unsigned int count_ops(channel_t *c)
 	return i;
 }
 
-bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
+static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 {
 	mychan_t *mc;
 
@@ -44,7 +44,7 @@ bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 	return true;
 }
 
-unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
+static unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 {
 	unsigned int base;
 
@@ -57,7 +57,7 @@ unsigned int chanfix_calculate_score(chanfix_oprecord_t *orec)
 	return base;
 }
 
-void chanfix_lower_ts(chanfix_channel_t *chan)
+static void chanfix_lower_ts(chanfix_channel_t *chan)
 {
 	channel_t *ch;
 	chanuser_t *cfu;
@@ -73,8 +73,6 @@ void chanfix_lower_ts(chanfix_channel_t *chan)
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
 		chanuser_t *cu = n->data;
-		chanfix_oprecord_t *orec;
-		unsigned int score;
 
 		if (cu->modes & CSTATUS_OP)
 			cu->modes &= ~CSTATUS_OP;
@@ -89,7 +87,7 @@ void chanfix_lower_ts(chanfix_channel_t *chan)
 	part(chan->name, chanfix->me->nick);
 }
 
-void chanfix_fix_channel(chanfix_channel_t *chan)
+static void chanfix_fix_channel(chanfix_channel_t *chan)
 {
 	channel_t *ch;
 	mowgli_node_t *n;
@@ -218,7 +216,8 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_node_t *n;
 	chanfix_channel_t *chan;
-	int count = 20, i;
+	int i = 0;
+	unsigned int count = 20;
 
 	if (parv[0] == NULL)
 	{
@@ -272,7 +271,6 @@ command_t cmd_scores = { "SCORES", N_("List channel scores."), AC_NONE, 1, chanf
 
 static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
-	mowgli_node_t *n;
 	chanfix_oprecord_t *orec;
 	chanfix_channel_t *chan;
 	struct tm tm;

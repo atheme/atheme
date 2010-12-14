@@ -64,6 +64,8 @@ E chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan);
 E chanfix_channel_t *chanfix_channel_find(const char *name);
 E chanfix_channel_t *chanfix_channel_get(channel_t *chan);
 E void chanfix_channel_delete(chanfix_channel_t *c);
+E void chanfix_gather(void *unused);
+E void chanfix_expire(void *unused);
 
 E void chanfix_autofix_ev(void *unused);
 

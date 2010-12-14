@@ -416,7 +416,6 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	myentity_t *mt;
 	mychan_t *mc;
 	chanacs_t *ca;
-	metadata_t *md;
 	mowgli_node_t *n, *tn;
 	char *chan = parv[0];
 	char *uname = parv[1];
@@ -443,7 +442,6 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 
 	akick_timeout_t *timeout;
 	chanban_t *cb;
-	char *vhost;
 
 	if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 	{
@@ -635,11 +633,8 @@ void akick_timeout_check(void *arg)
 	mowgli_node_t *n, *tn;
 	akick_timeout_t *timeout;
 	chanacs_t *ca;
-	metadata_t *md;
-	char *vhost;
 	mychan_t *mc;
 
-	char modestr[HOSTLEN+3];
 	chanban_t *cb;
 	akickdel_next = 0;
 
