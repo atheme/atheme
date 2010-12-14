@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "gameserv_common.h"
 
 DECLARE_MODULE_V1
 (
@@ -33,28 +34,13 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_eightball);
 }
 
-/*
- * Handle reporting for both fantasy commands and normal commands in GameServ
- * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
- * but this is quicker and easier...                                  -- nenolod
- */
-static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
-{
-	va_list args;
-	char buf[BUFSIZE];
-
-	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, args);
-	va_end(args);
-
-	if (si->c != NULL)
-		msg(chansvs.nick, si->c->name, "%s", buf);
-	else
-		command_success_nodata(si, "%s", buf);
-}
-
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[])
 {
+	mychan_t *mc;
+
+	if (!gs_do_parameters(si, &parc, &parv, &mc))
+		return;
+
 	static const char *eightball_responses[28] = {
 		N_("Absolutely yes!"),
 		N_("Prospect looks hopeful."),
