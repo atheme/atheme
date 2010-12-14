@@ -33,7 +33,6 @@
  *
  * Asuka 1.2.1 or later				modules/protocol/asuka
  * Bahamut 1.8.x				modules/protocol/bahamut
- * Beware IRCd (bircd)				modules/protocol/bircd
  * Charybdis IRCd				modules/protocol/charybdis
  * DreamForge 4.6.7 or later			modules/protocol/dreamforge
  * Hybrid 7.1.2 and later			modules/protocol/hybrid
@@ -44,7 +43,6 @@
  * InspIRCd 1.2+				modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * PleXusIRCd 3.x				modules/protocol/plexus
- * PTlink IRCd					modules/protocol/ptlink
  * ShadowIRCd 5.0 or later			modules/protocol/shadowircd
  * UnrealIRCd 3.1/3.2				modules/protocol/unreal
  *
