@@ -47,11 +47,6 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_access_add =  { "ADD", N_("Add an access list entry."),
                              AC_NONE, 3, cs_cmd_access_add, { .path = "cservice/access_add" } };
 
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[]);
-
-command_t cs_access_set =  { "SET", N_("Change an access list entry."),
-                             AC_NONE, 20, cs_cmd_access_set, { .path = "cservice/access_set" } };
-
 static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_role_list = { "LIST", N_("List available roles."),
@@ -85,7 +80,6 @@ void _modinit(module_t *m)
 	command_add(&cs_access_info, cs_access_cmds);
 	command_add(&cs_access_del, cs_access_cmds);
 	command_add(&cs_access_add, cs_access_cmds);
-	command_add(&cs_access_set, cs_access_cmds);
 
 	command_add(&cs_role_list, cs_role_cmds);
 	command_add(&cs_role_add, cs_role_cmds);
@@ -890,121 +884,6 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
-}
-
-/*
- * Syntax: ACCESS #channel SET user role|flags
- *
- * Output:
- *
- * nenolod now has the Founder role in #atheme.
- * nenolod now has the following flags: ...
- */
-static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
-{
-	chanacs_t *ca;
-	myentity_t *mt;
-	mychan_t *mc;
-	const char *channel = parv[0];
-	const char *target = parv[1];
-	const char *role = parv[2];
-	unsigned int level, restrictflags;
-
-	mc = mychan_find(channel);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
-		return;
-	}
-
-	if (!target || !role)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS <#channel> SET <account|hostmask> <role|flags>"));
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
-	if (validhostmask(target))
-		ca = chanacs_open(mc, NULL, target, true);
-	else
-	{
-		if (!(mt = myentity_find_ext(target)))
-		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
-			return;
-		}
-		target = mt->name;
-		ca = chanacs_open(mc, mt, NULL, true);
-	}
-
-	if (ca->level & CA_FOUNDER && !chanacs_source_has_flag(mc, si, CA_FOUNDER))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to change a founder's access levels."));
-		return;
-	}
-
-	if (ca->level == 0 && chanacs_is_table_full(ca))
-	{
-		chanacs_close(ca);
-		command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
-		return;
-	}
-
-	if ((level = get_template_flags(mc, role)) != 0)
-	{
-
-		if (level & CA_FOUNDER && !(ca->level & CA_FOUNDER))
-		{
-			command_fail(si, fault_noprivs, _("You cannot grant a role with founder access if you are not a founder."));
-			return;
-		}
-		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
-		{
-			command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
-			return;
-		}
-
-		ca->level = level;
-
-		hook_call_channel_acl_change(ca);
-		chanacs_close(ca);
-		command_success_nodata(si, _("\2%s\2 now has the \2%s\2 role in \2%s\2."), target, role, channel);
-		return;
-	}
-
-
-	role = get_template_name(mc, ca->level);
-	restrictflags = chanacs_source_flags(mc, si);
-	level = xflag_apply_batch(ca->level, parc - 2, parv + 2, restrictflags);
-	if (level & CA_FOUNDER)
-		level |= CA_FLAGS;
-
-	if (level & CA_FOUNDER && !(ca->level & CA_FOUNDER))
-	{
-		command_fail(si, fault_noprivs, _("You cannot grant a role with founder access if you are not a founder."));
-		return;
-	}
-	else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && !(level & CA_FOUNDER))
-	{
-		command_fail(si, fault_noprivs, _("You may not remove the last founder with this command."));
-		return;
-	}
-
-	ca->level = level;
-
-	command_success_nodata(si, _("\2%s\2 now has the following flags in \2%s\2: \2%s\2"), target, channel,
-			       xflag_tostr(ca->level));
-
-	hook_call_channel_acl_change(ca);
-	chanacs_close(ca);
-
-	logcommand(si, CMDLOG_SET, "ACCESS:SET: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
 }
 
 /*
