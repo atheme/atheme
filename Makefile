@@ -1,7 +1,7 @@
 -include extra.mk
 -include buildsys.mk
 
-SUBDIRS=$(LIBMOWGLI) src modules $(PODIR)
+SUBDIRS=$(LIBMOWGLI) libathemecore modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h
@@ -32,7 +32,7 @@ dist:
 	hg manifest | awk '{ print "$(DISTNAME)/"$$1; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; print "$(DISTNAME)/include/serno.h"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
 
-include/hooktypes.h: ${SRCDIR}/src/mkhooktypes.sh ${SRCDIR}/src/hooktypes.in
+include/hooktypes.h: ${SRCDIR}/libathemecore/mkhooktypes.sh ${SRCDIR}/libathemecore/hooktypes.in
 	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)
 
 buildsys.mk:

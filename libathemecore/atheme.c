@@ -86,7 +86,7 @@ static void process_mowgli_log(const char *line)
 	slog(LG_INFO, "%s", line);
 }
 
-int main(int argc, char *argv[])
+int atheme_main(int argc, char *argv[])
 {
 	bool have_conf = false;
 	bool have_log = false;

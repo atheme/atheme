@@ -15,3 +15,5 @@ include ../../buildsys.module.mk
 SRCS = dice.c  eightball.c  help.c  main.c  namegen.c rps.c
 
 CPPFLAGS	+= -I../../include
+LIBS +=	-L../../libathemecore -lathemecore
+

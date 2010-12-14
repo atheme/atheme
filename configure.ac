@@ -45,6 +45,7 @@ dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
 dnl Checks for programs.
 AC_ISC_POSIX
 AC_PROG_CC
+AC_PROG_LN_S
 AC_PROG_INSTALL
 AC_EXEEXT
 AC_PATH_PROG(RM, rm)

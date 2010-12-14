@@ -13,3 +13,5 @@ plugindir = $(MODDIR)/modules/chanfix
 CPPFLAGS += -I../../include
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS)
+LIBS +=	-L../../libathemecore -lathemecore
+

@@ -10,3 +10,5 @@ plugindir = $(MODDIR)/modules/xmlrpc
 CPPFLAGS	+= -I../../include
 CFLAGS		+= $(PLUGIN_CFLAGS)
 LDFLAGS		+= $(PLUGIN_LDFLAGS)
+LIBS +=	-L../../libathemecore -lathemecore
+

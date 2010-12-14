@@ -68,3 +68,5 @@ BASE_SRCS =			\
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 
 CPPFLAGS	+= -I../../include
+LIBS +=	-L../../libathemecore -lathemecore
+

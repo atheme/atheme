@@ -12,6 +12,7 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
+LIBS += -L../../libathemecore -lathemecore
 SRCS = main.c
 
 CPPFLAGS	+= -I../../include

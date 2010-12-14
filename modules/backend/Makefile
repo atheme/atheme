@@ -14,4 +14,5 @@ include ../../buildsys.module.mk
 
 SRCS = flatfile.c opensex.c
 
+LIBS +=	-L../../libathemecore -lathemecore
 CPPFLAGS	+= -I../../include

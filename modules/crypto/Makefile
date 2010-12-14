@@ -22,3 +22,5 @@ SRCS =			\
 CPPFLAGS	+= -I../../include
 # Only rawsha1.so needs this, oh well.
 LIBS		+= ${SSL_LIBS}
+LIBS 		+= -L../../libathemecore -lathemecore
+

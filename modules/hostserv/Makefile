@@ -15,3 +15,5 @@ include ../../buildsys.module.mk
 SRCS = group.c  help.c  main.c  offer.c  onoff.c  request.c  vhost.c  vhostnick.c
 
 CPPFLAGS	+= -I../../include
+LIBS +=	-L../../libathemecore -lathemecore
+

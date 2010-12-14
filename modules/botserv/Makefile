@@ -24,3 +24,5 @@ SRCS =			\
 	set_private.c	\
 
 CPPFLAGS	+= -I../../include
+LIBS +=	-L../../libathemecore -lathemecore
+

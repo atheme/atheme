@@ -16,5 +16,6 @@ SRCS =			\
 	dummy.c				\
 	$(LDAP_AUTHC)
 
+LIBS 		+= -L../../libathemecore -lathemecore
 CPPFLAGS	+= -I../../include $(LDAP_CFLAGS)
 LIBS		+= $(LDAP_LIBS)

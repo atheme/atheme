@@ -50,3 +50,5 @@ SRCS = \
 	update.c
 
 CPPFLAGS	+= -I../../include
+LIBS +=	-L../../libathemecore -lathemecore
+

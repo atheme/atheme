@@ -53,3 +53,5 @@ SRCS =			\
 
 CPPFLAGS	+= -I../../include
 CFLAGS		+= ${PLUGIN_CFLAGS}
+LIBS +=	-L../../libathemecore -lathemecore
+
