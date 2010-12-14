@@ -15,7 +15,6 @@ include ../../buildsys.module.mk
 SRCS = \
 	asuka.c	\
 	bahamut.c	\
-	bircd.c	\
 	charybdis.c	\
 	dreamforge.c	\
 	hybrid.c	\
@@ -23,7 +22,6 @@ SRCS = \
 	inspircd12.c	\
         ircd-seven.c  \
 	ircnet.c	\
-	ithildin.c	\
 	mixin_nohalfops.c	\
 	mixin_noholdnick.c	\
 	mixin_noowner.c	\
@@ -31,7 +29,6 @@ SRCS = \
 	nefarious.c	\
 	p10-generic.c	\
 	plexus.c	\
-	ptlink.c	\
 	ratbox.c	\
 	shadowircd.c	\
 	solidircd.c	\
