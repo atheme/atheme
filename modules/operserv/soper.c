@@ -22,11 +22,11 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper, { .path = "oservice/soper" } };
+command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 4, os_cmd_soper, { .path = "oservice/soper" } };
 
 command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list, { .path = "" } };
 command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass, { .path = "" } };
-command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 2, os_cmd_soper_add, { .path = "" } };
+command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 3, os_cmd_soper_add, { .path = "" } };
 command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del, { .path = "" } };
 command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass, { .path = "" } };
 
@@ -132,11 +132,12 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	operclass_t *operclass;
+	char hash[PASSLEN];
 
 	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER ADD");
-		command_fail(si, fault_needmoreparams, _("Syntax: SOPER ADD <account> <operclass>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: SOPER ADD <account> <operclass> [password]"));
 		return;
 	}
 
@@ -182,7 +183,20 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SOPER:ADD: \2%s\2 \2%s\2", entity(mu)->name, operclass->name);
 	if (is_soper(mu))
 		soper_delete(mu->soper);
-	soper_add(entity(mu)->name, operclass->name, 0, NULL);
+
+	if (parv[2])
+	{
+		if (crypto_module_loaded)
+		{
+			strlcpy(hash, crypt_string(parv[2], gen_salt()), PASSLEN); 
+			soper_add(entity(mu)->name, operclass->name, 0, hash);
+		}
+		else
+			soper_add(entity(mu)->name, operclass->name, 0, parv[2]);
+	}
+	else
+		soper_add(entity(mu)->name, operclass->name, 0, NULL);
+
 	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), entity(mu)->name, operclass->name);
 }
 
