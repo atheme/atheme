@@ -33,7 +33,7 @@ dist:
 	$(RM) $(DISTNAME)
 
 include/hooktypes.h: ${SRCDIR}/libathemecore/mkhooktypes.sh ${SRCDIR}/libathemecore/hooktypes.in
-	(cd src && touch .depend && ${MAKE} ../include/hooktypes.h)
+	(cd src && touch .depend && ${MAKE} ../../include/hooktypes.h)
 
 buildsys.mk:
 	@echo "Run ./setup or at least ./configure first you idiot."
