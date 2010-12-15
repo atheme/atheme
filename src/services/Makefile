@@ -113,7 +113,4 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 		done; \
 	fi
 
-../../include/hooktypes.h: mkhooktypes.sh hooktypes.in
-	PATH=`getconf PATH` sh mkhooktypes.sh hooktypes.in >../../include/hooktypes.h
-
 include .deps

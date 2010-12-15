@@ -73,4 +73,7 @@ LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(PROG_IMPLIB_LDFLAGS)
 
 build: all
 
+../include/hooktypes.h: mkhooktypes.sh hooktypes.in
+	PATH=`getconf PATH` sh mkhooktypes.sh hooktypes.in >../include/hooktypes.h
+
 include .deps
