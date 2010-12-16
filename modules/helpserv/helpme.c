@@ -46,6 +46,14 @@ static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
                 slog(LG_INFO, "HELPME:THROTTLED: %s", si->su->nick);
                 return;
         }
+	
+	if (si->smu != NULL && metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from requesting help by network staff."));
+		return;
+	}
+
+	command_add_flood(si, FLOOD_HEAVY);
 
         if (topic)
         {
@@ -57,6 +65,8 @@ static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
                 logcommand(si, CMDLOG_ADMIN, "HELPME");
                 wallops("\2%s\2 has requested help.", get_source_name(si));
         }
+
+	command_success_nodata(si, "The network staff has been notified that you need help and will be with you shortly.");
 
 	if (config_options.ratelimit_uses && config_options.ratelimit_period)
 		ratelimit_count++;
