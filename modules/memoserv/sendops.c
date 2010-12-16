@@ -39,6 +39,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	int sent = 0, tried = 0;
 	bool ignored, operoverride = false;
+	service_t *memoserv;
 
 	/* Grab args */
 	char *target = parv[0];
@@ -177,13 +178,17 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 			sendemail(si->su, EMAIL_MEMO, tmu, memo->text);
 		}
 
+		memoserv = service_find("memoserv");
+		if (memoserv == NULL)
+			memoserv = si->service;
+
 		/* Is the user online? If so, tell them about the new memo. */
 		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
+			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
-		myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %zu"),
-					ircd->uses_rcommand ? "" : "msg ", si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
+			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
+		myuser_notice(memoserv->nick, tmu, _("To read it, type /%s%s READ %zu"),
+					ircd->uses_rcommand ? "" : "msg ", memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 	}
 
 	/* Tell user memo sent, return */

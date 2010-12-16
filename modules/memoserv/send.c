@@ -38,6 +38,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	mymemo_t *memo;
 	command_t *cmd;
+	service_t *memoserv;
 	
 	/* Grab args */
 	char *target = parv[0];
@@ -95,6 +96,10 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
+	memoserv = service_find("memoserv");
+	if (memoserv == NULL)
+		memoserv = si->service;
+
 	if (*target != '#' && *target != '!')
 	{
 		/* See if target is valid */
@@ -167,7 +172,6 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			sendemail(si->su, EMAIL_MEMO, tmu, memo->text);
 	        }
 	
-		/* Is the user online? If so, tell them about the new memo. */
 		/* Note: do not disclose other nicks they're logged in with
 		 * -- jilles
 		 *
@@ -178,12 +182,13 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		if (tu != NULL && tu->myuser == tmu)
 			command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 
+		/* Is the user online? If so, tell them about the new memo. */
 		if (si->su == NULL || !irccasecmp(si->su->nick, entity(si->smu)->name))
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
+			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (%zu).", entity(si->smu)->name, MOWGLI_LIST_LENGTH(&tmu->memos));
 		else
-			myuser_notice(si->service->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
-		myuser_notice(si->service->nick, tmu, _("To read it, type /%s%s READ %zu"),
-					ircd->uses_rcommand ? "" : "msg ", si->service->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
+			myuser_notice(memoserv->nick, tmu, "You have a new memo from %s (nick: %s) (%zu).", entity(si->smu)->name, si->su->nick, MOWGLI_LIST_LENGTH(&tmu->memos));
+		myuser_notice(memoserv->nick, tmu, _("To read it, type /%s%s READ %zu"),
+					ircd->uses_rcommand ? "" : "msg ", memoserv->disp, MOWGLI_LIST_LENGTH(&tmu->memos));
 
 		/* Tell user memo sent */
 		command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);
@@ -192,7 +197,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	{
 		cmd = command_find(si->service->commands, "SENDOPS");
 		if (cmd != NULL)
-			command_exec(si->service, si, cmd, parc, parv);
+			command_exec(memoserv, si, cmd, parc, parv);
 		else
 			command_fail(si, fault_nosuch_target, _("Channel memos are administratively disabled."));
 	}
@@ -200,7 +205,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	{
 		cmd = command_find(si->service->commands, "SENDGROUP");
 		if (cmd != NULL)
-			command_exec(si->service, si, cmd, parc, parv);
+			command_exec(memoserv, si, cmd, parc, parv);
 		else
 			command_fail(si, fault_nosuch_target, _("Group memos are administratively disabled."));
 	}
