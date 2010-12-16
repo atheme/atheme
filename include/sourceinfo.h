@@ -39,7 +39,10 @@ struct sourceinfo_
 	const char *sourcedesc; /* additional information (e.g. IP address) */
 	myuser_t *smu; /* login associated with source */
 
-	service_t *service; /* destination service */
+	/* the service the original command was sent to, which may differ
+	 * from the service the current command is in
+	 */
+	service_t *service;
 
 	channel_t *c; /* channel this command applies to (fantasy?) */
 
