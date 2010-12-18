@@ -141,9 +141,6 @@ static void chanfix_fix_channel(chanfix_channel_t *chan)
 	if (ch == NULL)
 		return;
 
-	/* join the channel */
-	join(chan->name, chanfix->me->nick);
-
 	/* op users who have X% of the highest score. */
 	threshold = chanfix_get_threshold(chan);
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
@@ -165,11 +162,16 @@ static void chanfix_fix_channel(chanfix_channel_t *chan)
 
 		if (score >= threshold)
 		{
+			if (opped == 0)
+				join(chan->name, chanfix->me->nick);
 			modestack_mode_param(chanfix->me->nick, chan->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 			cu->modes |= CSTATUS_OP;
 			opped++;
 		}
 	}
+
+	if (opped == 0)
+		return;
 
 	/* flush the modestacker. */
 	modestack_flush_channel(ch);
