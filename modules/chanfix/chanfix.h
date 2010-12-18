@@ -10,9 +10,9 @@
 
 #define	CHANFIX_INITIAL_STEP	0.70f
 #define CHANFIX_FINAL_STEP	0.30f
-#define	CHANFIX_STEP_SIZE	0.10f
 
-#define CHANFIX_RETENTION_TIME		(86400 * 28)
+#define CHANFIX_RETENTION_TIME	(86400 * 28)
+#define CHANFIX_FIX_TIME	(5 * 60)
 
 typedef struct chanfix_channel {
 	char *name;
@@ -22,8 +22,8 @@ typedef struct chanfix_channel {
 	time_t lastupdate;
 
 	channel_t *chan;
-
-	float step;
+	
+	time_t fix_started;
 } chanfix_channel_t;
 
 typedef struct chanfix_oprecord {
