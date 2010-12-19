@@ -60,7 +60,7 @@ module_t *module_load(const char *filespec)
 	module_t *m, *old_modtarget;
 	v3_moduleheader_t *h;
 	void *handle = NULL;
-#ifdef HAVE_DLINFO
+#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
 #endif
 
@@ -121,7 +121,7 @@ module_t *module_load(const char *filespec)
 	m->mflags = MODTYPE_STANDARD;
 	m->header = h;
 
-#ifdef HAVE_DLINFO
+#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	dlinfo(handle, RTLD_DI_LINKMAP, &map);
 	if (map != NULL)
 		m->address = (void *) map->l_addr;
