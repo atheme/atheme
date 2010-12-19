@@ -26,6 +26,7 @@ static unsigned int count_ops(channel_t *c)
 static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 {
 	mychan_t *mc;
+	unsigned int n;
 
 	return_val_if_fail(cfchan != NULL, false);
 
@@ -38,7 +39,15 @@ static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 	if (MOWGLI_LIST_LENGTH(&c->members) < CHANFIX_OP_THRESHHOLD)
 		return false;
 
-	if (count_ops(c) >= CHANFIX_OP_THRESHHOLD)
+	n = count_ops(c);
+	/* enough ops, don't touch it */
+	if (n >= CHANFIX_OP_THRESHHOLD)
+		return false;
+	/* only start a fix for opless channels, and consider a fix done
+	 * after CHANFIX_FIX_TIME if any ops were given
+	 */
+	if (n > 0 && (cfchan->fix_started == 0 ||
+			CURRTIME - cfchan->fix_started > CHANFIX_FIX_TIME))
 		return false;
 
 	return true;
@@ -87,40 +96,53 @@ static void chanfix_lower_ts(chanfix_channel_t *chan)
 	part(chan->name, chanfix->me->nick);
 }
 
-static void chanfix_fix_channel(chanfix_channel_t *chan)
+static unsigned int chanfix_get_highscore(chanfix_channel_t *chan)
 {
-	channel_t *ch;
+	unsigned int highscore = 0;
 	mowgli_node_t *n;
-	unsigned int highscore = 0, opped = 0;
 
-	ch = chan->chan;
-	if (ch == NULL)
-		return;
-
-	/* join the channel */
-	join(chan->name, chanfix->me->nick);
-
-	/* find the highest score */
-	MOWGLI_ITER_FOREACH(n, ch->members.head)
+	MOWGLI_ITER_FOREACH(n, chan->oprecords.head)
 	{
-		chanuser_t *cu = n->data;
-		chanfix_oprecord_t *orec;
 		unsigned int score;
-
-		if (cu->user == chanfix->me)
-			continue;
-
-		orec = chanfix_oprecord_find(chan, cu->user);
-		if (orec == NULL)
-			continue;
+		chanfix_oprecord_t *orec = n->data;
 
 		score = chanfix_calculate_score(orec);
-
 		if (score > highscore)
 			highscore = score;
 	}
 
-	/* now op users who have X% of that score. */
+	return highscore;
+}
+
+static unsigned int chanfix_get_threshold(chanfix_channel_t *chan)
+{
+	unsigned int highscore, t, threshold;
+
+	highscore = chanfix_get_highscore(chan);
+
+	t = CURRTIME - chan->fix_started;
+	if (t > CHANFIX_FIX_TIME)
+		t = CHANFIX_FIX_TIME;
+	threshold = highscore * (CHANFIX_INITIAL_STEP +
+			(CHANFIX_FINAL_STEP - CHANFIX_INITIAL_STEP) *
+			t / CHANFIX_FIX_TIME);
+	if (threshold == 0)
+		threshold = 1;
+	return threshold;
+}
+
+static bool chanfix_fix_channel(chanfix_channel_t *chan)
+{
+	channel_t *ch;
+	mowgli_node_t *n;
+	unsigned int threshold, opped = 0;
+
+	ch = chan->chan;
+	if (ch == NULL)
+		return false;
+
+	/* op users who have X% of the highest score. */
+	threshold = chanfix_get_threshold(chan);
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
 		chanuser_t *cu = n->data;
@@ -129,6 +151,8 @@ static void chanfix_fix_channel(chanfix_channel_t *chan)
 
 		if (cu->user == chanfix->me)
 			continue;
+		if (cu->modes & CSTATUS_OP)
+			continue;
 
 		orec = chanfix_oprecord_find(chan, cu->user);
 		if (orec == NULL)
@@ -136,13 +160,18 @@ static void chanfix_fix_channel(chanfix_channel_t *chan)
 
 		score = chanfix_calculate_score(orec);
 
-		if (score > (highscore * chan->step))
+		if (score >= threshold)
 		{
+			if (opped == 0)
+				join(chan->name, chanfix->me->nick);
 			modestack_mode_param(chanfix->me->nick, chan->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 			cu->modes |= CSTATUS_OP;
 			opped++;
 		}
 	}
+
+	if (opped == 0)
+		return false;
 
 	/* flush the modestacker. */
 	modestack_flush_channel(ch);
@@ -152,6 +181,99 @@ static void chanfix_fix_channel(chanfix_channel_t *chan)
 
 	/* fix done, leave. */
 	part(chan->name, chanfix->me->nick);
+
+	return true;
+}
+
+static bool chanfix_can_start_fix(chanfix_channel_t *chan)
+{
+	channel_t *ch;
+	mowgli_node_t *n;
+	unsigned int threshold;
+
+	ch = chan->chan;
+	if (ch == NULL)
+		return false;
+
+	threshold = chanfix_get_highscore(chan) * CHANFIX_FINAL_STEP;
+	MOWGLI_ITER_FOREACH(n, ch->members.head)
+	{
+		chanuser_t *cu = n->data;
+		chanfix_oprecord_t *orec;
+		unsigned int score;
+
+		if (cu->user == chanfix->me)
+			continue;
+		if (cu->modes & CSTATUS_OP)
+			return false;
+
+		orec = chanfix_oprecord_find(chan, cu->user);
+		if (orec == NULL)
+			continue;
+
+		score = chanfix_calculate_score(orec);
+		if (score >= threshold)
+			return true;
+	}
+	return false;
+}
+
+static void chanfix_clear_bans(channel_t *ch)
+{
+	bool joined = false;
+	mowgli_node_t *n, *tn;
+
+	return_if_fail(ch != NULL);
+
+	if (ch->modes & CMODE_INVITE)
+	{
+		if (!joined)
+		{
+			joined = true;
+			join(ch->name, chanfix->me->nick);
+		}
+		channel_mode_va(chanfix->me, ch, 1, "-i");
+	}
+	if (ch->limit > 0)
+	{
+		if (!joined)
+		{
+			joined = true;
+			join(ch->name, chanfix->me->nick);
+		}
+		channel_mode_va(chanfix->me, ch, 1, "-l");
+	}
+	if (ch->key != NULL)
+	{
+		if (!joined)
+		{
+			joined = true;
+			join(ch->name, chanfix->me->nick);
+		}
+		channel_mode_va(chanfix->me, ch, 2, "-k", "*");
+	}
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, ch->bans.head)
+	{
+		chanban_t *cb = n->data;
+
+		if (cb->type != 'b')
+			continue;
+
+		if (!joined)
+		{
+			joined = true;
+			join(ch->name, chanfix->me->nick);
+		}
+		modestack_mode_param(chanfix->me->nick, ch, MTYPE_DEL,
+				'b', cb->mask);
+		chanban_delete(cb);
+	}
+	if (!joined)
+		return;
+
+	modestack_flush_channel(ch);
+	msg(chanfix->me->nick, ch->name, "I only joined to remove modes.");
+	part(ch->name, chanfix->me->nick);
 }
 
 /*************************************************************************************/
@@ -165,15 +287,41 @@ void chanfix_autofix_ev(void *unused)
 	{
 		if (chanfix_should_handle(chan, chan->chan))
 		{
-			slog(LG_DEBUG, "chanfix_autofix_ev(): fixing %s automatically.", chan->name);
-			chanfix_fix_channel(chan);
-
-			chan->step -= CHANFIX_STEP_SIZE;
-			if (chan->step < CHANFIX_FINAL_STEP)
-				chan->step = CHANFIX_FINAL_STEP;
+			if (chan->fix_started == 0)
+			{
+				if (chanfix_can_start_fix(chan))
+				{
+					slog(LG_INFO, "chanfix_autofix_ev(): fixing %s automatically.", chan->name);
+					chan->fix_started = CURRTIME;
+					/* If we are opping some users
+					 * immediately, they can handle it.
+					 * Otherwise, remove bans to allow
+					 * users with higher scores to join.
+					 */
+					if (!chanfix_fix_channel(chan))
+						chanfix_clear_bans(chan->chan);
+				}
+				else
+				{
+					/* No scored ops yet, remove bans
+					 * to allow them to join.
+					 */
+					chanfix_clear_bans(chan->chan);
+				}
+			}
+			else
+			{
+				/* Continue trying to give ops.
+				 * If the channel is still or again opless,
+				 * remove bans to allow ops to join.
+				 */
+				if (!chanfix_fix_channel(chan) &&
+						count_ops(chan->chan) == 0)
+					chanfix_clear_bans(chan->chan);
+			}
 		}
 		else
-			chan->step = CHANFIX_INITIAL_STEP;
+			chan->fix_started = 0;
 	}
 }
 
@@ -310,9 +458,11 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Highest score: \2%u\2"), highscore);
 	command_success_nodata(si, _("Usercount    : \2%zu\2"), chan->chan ? MOWGLI_LIST_LENGTH(&chan->chan->members) : 0);
 	command_success_nodata(si, _("Initial step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_INITIAL_STEP * 100, highscore, (highscore * CHANFIX_INITIAL_STEP));
-	command_success_nodata(si, _("Current step : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), chan->step * 100, highscore, (highscore * chan->step));
+	command_success_nodata(si, _("Current step : \2%u\2"), chanfix_get_threshold(chan));
 	command_success_nodata(si, _("Final step   : \2%.0f%%\2 of \2%u\2 (\2%0.1f\2)"), CHANFIX_FINAL_STEP * 100, highscore, (highscore * CHANFIX_FINAL_STEP));
 	command_success_nodata(si, _("Needs fixing : \2%s\2"), chanfix_should_handle(chan, chan->chan) ? "YES" : "NO");
+	command_success_nodata(si, _("Now fixing   : \2%s\2"),
+			chan->fix_started ? "YES" : "NO");
 
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }

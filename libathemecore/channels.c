@@ -396,7 +396,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	cu->chan = chan;
 	cu->user = u;
-	cu->modes |= flags;
+	cu->modes = flags;
 
 	chan->nummembers++;
 
