@@ -233,13 +233,20 @@ void chanfix_expire(void *unused)
 		{
 			chanfix_oprecord_t *orec = n->data;
 
-			if ((CURRTIME - orec->lastevent) < CHANFIX_RETENTION_TIME)
+			/* Simple exponential decay, rounding the decay up
+			 * so that low scores expire sooner.
+			 */
+			orec->age -= (orec->age + CHANFIX_EXPIRE_DIVISOR - 1) /
+				CHANFIX_EXPIRE_DIVISOR;
+
+			if (orec->age > 0 && CURRTIME - orec->lastevent < CHANFIX_RETENTION_TIME)
 				continue;
 
 			chanfix_oprecord_delete(orec);
 		}
 
-		if ((CURRTIME - chan->lastupdate) < CHANFIX_RETENTION_TIME)
+		if (MOWGLI_LIST_LENGTH(&chan->oprecords) > 0 &&
+				CURRTIME - chan->lastupdate < CHANFIX_RETENTION_TIME)
 			continue;
 
 		chanfix_channel_delete(chan);
@@ -372,8 +379,10 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 
 	chanfix_channels = mowgli_patricia_create(strcasecanon);
 
-	event_add("chanfix_expire", chanfix_expire, NULL, 3600);
-	event_add("chanfix_gather", chanfix_gather, NULL, 300);
+	event_add("chanfix_expire", chanfix_expire, NULL,
+			CHANFIX_EXPIRE_INTERVAL);
+	event_add("chanfix_gather", chanfix_gather, NULL,
+			CHANFIX_GATHER_INTERVAL);
 }
 
 void chanfix_gather_deinit(module_unload_intent_t intent, chanfix_persist_record_t *rec)
