@@ -59,7 +59,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	injecting = true;
-	irc_parse(inject);
+	parse(inject);
 	injecting = false;
 }
 
