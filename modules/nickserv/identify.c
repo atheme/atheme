@@ -135,6 +135,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		/* if they are identified to another account, nuke their session first */
 		if (u->myuser)
 		{
+			command_success_nodata(si, _("You have been logged out as \2%s\2."), entity(u->myuser)->name);
+
 			if (ircd_on_logout(u, entity(u->myuser)->name))
 				/* logout killed the user... */
 				return;
