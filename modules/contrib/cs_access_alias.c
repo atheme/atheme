@@ -121,7 +121,7 @@ static void access_list(sourceinfo_t *si, mychan_t *mc, int parc, char *parv[])
 	chanacs_t *ca;
 	const char *str1, *str2;
 	int i = 1;
-	int operoverride = 0;
+	bool operoverride = false;
 
 	/* Copied from modules/chanserv/flags.c */
 	/* Note: This overrides the normal need of +A access unless private */
@@ -129,7 +129,7 @@ static void access_list(sourceinfo_t *si, mychan_t *mc, int parc, char *parv[])
 			!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -159,6 +159,7 @@ static void access_list(sourceinfo_t *si, mychan_t *mc, int parc, char *parv[])
 
 	command_success_nodata(si, "----- ---------------------- -----");
 	command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), mc->name);
+
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "%s ACCESS LIST (oper override)", mc->name);
 	else

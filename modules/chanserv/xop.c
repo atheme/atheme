@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
 static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, int operoverride);
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride);
 
 static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[]);
@@ -61,7 +61,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 {
 	myentity_t *mt;
 	mychan_t *mc;
-	int operoverride = 0;
+	bool operoverride = false;
 	unsigned int restrictflags;
 	const char *chan = parv[0];
 	const char *cmd = parv[1];
@@ -170,7 +170,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si, PRIV_CHAN_AUSPEX))
-				operoverride = 1;
+				operoverride = true;
 			else
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -377,7 +377,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 }
 
 
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, int operoverride)
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, const char *leveldesc, bool operoverride)
 {
 	chanacs_t *ca;
 	int i = 0;
@@ -399,6 +399,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 	}
 	/* XXX */
 	command_success_nodata(si, _("Total of \2%d\2 %s in %s list of \2%s\2."), i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
+
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 \2%s\2 (oper override)", mc->name, leveldesc);
 	else

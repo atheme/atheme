@@ -63,7 +63,7 @@ static void list_generic_flags(sourceinfo_t *si)
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 {
 	metadata_t *md;
-	int operoverride = 0, changechanacs = 0;
+	bool operoverride = false, changechanacs = false;
 	size_t l;
 	char *channel = parv[0];
 	char *target = parv[1];
@@ -92,7 +92,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si, PRIV_CHAN_AUSPEX))
-				operoverride = 1;
+				operoverride = true;
 			else
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -131,6 +131,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 			command_success_nodata(si, _("No templates set on channel \2%s\2."), mc->name);
+
 		if (operoverride)
 			logcommand(si, CMDLOG_ADMIN, "TEMPLATE: \2%s\2 (oper override)", mc->name);
 		else
@@ -181,7 +182,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 
 		if (*flagstr == '!' && (flagstr[1] == '+' || flagstr[1] == '-' || flagstr[1] == '='))
 		{
-			changechanacs = 1;
+			changechanacs = true;
 			flagstr++;
 		}
 

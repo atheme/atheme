@@ -99,7 +99,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
-	int operoverride = 0;
+	bool operoverride = false;
 	char *channel = parv[0];
 	char *target = parv[1];
 	const char *str1, *str2;
@@ -133,7 +133,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si, PRIV_CHAN_AUSPEX))
-				operoverride = 1;
+				operoverride = true;
 			else
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -160,6 +160,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
+
 		if (operoverride)
 			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", mc->name);
 		else

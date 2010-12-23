@@ -42,7 +42,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i;
 	mowgli_node_t *n;
 	char str[512];
-	int operoverride = 0;
+	bool operoverride = false;
 
 	if (!chan)
 	{
@@ -60,7 +60,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -119,6 +119,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 				"%c:%d ", (char) i, othercnt);
 	}
 	command_success_nodata(si, "%s", str);
+
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "COUNT: \2%s\2 (oper override)", mc->name);
 	else

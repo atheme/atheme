@@ -40,7 +40,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	chanacs_t *ca;
 	metadata_t *md;
-	int operoverride = 0;
+	bool operoverride = false;
 	int fl = 0;
 
 	if (!chan)
@@ -75,7 +75,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));

@@ -526,7 +526,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_t *ca;
 	metadata_t *md, *md2;
 	mowgli_node_t *n, *tn;
-	int operoverride = 0;
+	bool operoverride = false;
 	char *chan = parv[0];
 	char expiry[512];
 	
@@ -569,7 +569,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -622,6 +622,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Total of \2%d\2 %s in \2%s\2's AKICK list."), i, (i == 1) ? "entry" : "entries", mc->name);
+
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "AKICK:LIST: \2%s\2 (oper override)", mc->name);
 	else

@@ -580,7 +580,7 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	mychan_t *mc;
 	const char *channel = parv[0];
-	int operoverride = 0;
+	bool operoverride = false;
 	unsigned int i = 1;
 
 	mc = mychan_find(channel);
@@ -593,7 +593,7 @@ static void cs_cmd_access_list(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -647,7 +647,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	const char *channel = parv[0];
 	const char *target = parv[1];
-	int operoverride = 0;
+	bool operoverride = false;
 	const char *role;
 	struct tm tm;
 	char strfbuf[BUFSIZE];
@@ -670,7 +670,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));

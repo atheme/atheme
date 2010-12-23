@@ -297,7 +297,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int flags = 0;
 	unsigned int dir = 0;
 	char *c;
-	int operoverride = 0;
+	bool operoverride = false;
 
 	if (!parv[0])
 	{
@@ -315,7 +315,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
-			operoverride = 1;
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
