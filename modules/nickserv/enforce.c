@@ -56,14 +56,14 @@ static bool log_enforce_victim_out(user_t *u)
 	mynick_t *mn;
 	mowgli_node_t *n, *tn;
 
-	return_if_fail(u != NULL);
+	return_val_if_fail(u != NULL, false);
 
 	if (u->myuser == NULL)
-		return;
+		return false;
 
 	u->myuser->lastlogin = CURRTIME;
 
-	if ((mn = mynick_find(u->nick))
+	if ((mn = mynick_find(u->nick)) != NULL)
 		mn->lastseen = CURRTIME;
 
 	if (!ircd_on_logout(u, entity(u->myuser)->name))
