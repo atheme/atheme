@@ -75,7 +75,7 @@ module_t *module_load(const char *filespec)
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_ERROR, "module_load(): error: \2%s\2", errp);
+		slog(LG_ERROR, "module_load(): error while loading %s: \2%s\2", filespec, errp);
 		free(errp);
 		return NULL;
 	}
