@@ -14,5 +14,5 @@ include ../../buildsys.module.mk
 SRCS = main.c
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
+LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 

@@ -15,5 +15,5 @@ include ../../buildsys.module.mk
 SRCS = delete.c  forward.c  help.c  ignore.c  list.c  main.c  read.c  send.c  sendops.c  sendgroup.c
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
+LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 
