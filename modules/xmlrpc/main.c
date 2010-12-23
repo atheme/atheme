@@ -245,8 +245,20 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (!verify_password(mu, parv[1]))
 	{
+		sourceinfo_t si;
+
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
+
+		si.service = NULL;
+		si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
+		si.connection = conn;
+		si.v = &xmlrpc_vtable;
+		si.force_language = language_find("en");
+		si.smu = mu;
+
+		bad_password(&si, mu);
+
 		return 0;
 	}
 
