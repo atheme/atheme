@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_NONE, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
+command_t ns_listownmail = { "LISTOWNMAIL", N_("Lists accounts registered to your e-mail address."), AC_AUTHENTICATED, 1, ns_cmd_listownmail, { .path = "nickserv/listownmail" } };
 
 void _modinit(module_t *m)
 {
@@ -57,12 +57,6 @@ static int listmail_foreach_cb(myentity_t *mt, void *privdata)
 static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 {
 	struct listmail_state state;
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{

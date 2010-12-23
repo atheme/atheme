@@ -19,8 +19,8 @@ DECLARE_MODULE_V1
 static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t hs_on = { "ON", N_("Activates your assigned vhost."), AC_NONE, 1, hs_cmd_on, { .path = "hostserv/on" } };
-command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_NONE, 1, hs_cmd_off, { .path = "hostserv/off" } };
+command_t hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
+command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
 
 void _modinit(module_t *m)
 {
@@ -44,12 +44,6 @@ static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "ON");
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -86,12 +80,6 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "OFF");
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

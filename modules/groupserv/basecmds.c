@@ -51,7 +51,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_register = { "REGISTER", N_("Registers a group."), AC_NONE, 2, gs_cmd_register, { .path = "groupserv/register" } };
+command_t gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
 
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -74,12 +74,6 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (mygroup_find(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists, _("The group \2%s\2 already exists."), parv[0]);
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -226,7 +220,7 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_NONE, 2, gs_cmd_drop, { .path = "groupserv/drop" } };
+command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_AUTHENTICATED, 2, gs_cmd_drop, { .path = "groupserv/drop" } };
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -250,12 +244,6 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-        if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!(mg = mygroup_find(name)))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);
@@ -298,7 +286,7 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_NONE, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
+command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
 
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -324,12 +312,6 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-        if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
@@ -619,7 +601,7 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_join = { "JOIN", N_("Join a open group."), AC_NONE, 2, gs_cmd_join, { .path = "groupserv/join" } };
+command_t gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2, gs_cmd_join, { .path = "groupserv/join" } };
 
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -641,12 +623,6 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!(mg->flags & MG_OPEN))
 	{
 		command_fail(si, fault_noprivs, _("Group \2%s\2 is not open to anyone joining."), parv[0]);

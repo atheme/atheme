@@ -32,7 +32,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
 static void write_hsreqdb(database_handle_t *db);
 static void db_h_hr(database_handle_t *db, const char *type);
 
-command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_NONE, 2, hs_cmd_request, { .path = "hostserv/request" } };
+command_t hs_request = { "REQUEST", N_("Requests new virtual hostname for current nick."), AC_AUTHENTICATED, 2, hs_cmd_request, { .path = "hostserv/request" } };
 command_t hs_waiting = { "WAITING", N_("Lists vhosts currently waiting for activation."), PRIV_USER_VHOST, 1, hs_cmd_waiting, { .path = "hostserv/waiting" } };
 command_t hs_reject = { "REJECT", N_("Reject the requested vhost for the given nick."), PRIV_USER_VHOST, 2, hs_cmd_reject, { .path = "hostserv/reject" } };
 command_t hs_activate = { "ACTIVATE", N_("Activate the requested vhost for a given nick."), PRIV_USER_VHOST, 2, hs_cmd_activate, { .path = "hostserv/activate" } };
@@ -209,12 +209,6 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REQUEST");
 		command_fail(si, fault_needmoreparams, _("Syntax: REQUEST <vhost>"));
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

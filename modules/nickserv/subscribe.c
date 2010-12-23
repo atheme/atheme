@@ -55,13 +55,6 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (mu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-
-		return;
-	}
-
 	if (*name == '-')
 	{
 		do_remove = true;
@@ -139,7 +132,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been added to your subscriptions."), name);
 }
 
-command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_NONE, 2, cmd_subscribe, { .path = "" } };
+command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_AUTHENTICATED, 2, cmd_subscribe, { .path = "" } };
 
 static void hook_metadata_change(hook_metadata_change_t *md)
 {

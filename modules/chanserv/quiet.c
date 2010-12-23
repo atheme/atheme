@@ -19,9 +19,9 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
-                        AC_NONE, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
+                        AC_AUTHENTICATED, 2, cs_cmd_quiet, { .path = "cservice/quiet" } };
 command_t cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
-			AC_NONE, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
+			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
 void _modinit(module_t *m)
 {
@@ -148,12 +148,6 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!chanacs_source_has_flag(mc, si, CA_REMOVE))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -237,12 +231,6 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

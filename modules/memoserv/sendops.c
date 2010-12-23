@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendops = { "SENDOPS", N_("Sends a memo to all ops on a channel."),
-                          AC_NONE, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
+                          AC_AUTHENTICATED, 2, ms_cmd_sendops, { .path = "memoserv/sendops" } };
 
 void _modinit(module_t *m)
 {
@@ -57,13 +57,6 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	/* user logged in? */
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));

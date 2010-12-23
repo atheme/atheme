@@ -23,7 +23,7 @@ static void bs_set_fantasy_config_ready(void *unused);
 
 static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_NONE, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
+command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
 
 void _modinit(module_t *m)
 {
@@ -68,12 +68,6 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

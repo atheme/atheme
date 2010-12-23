@@ -54,12 +54,6 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	char *setting = parv[0];
 	command_t *c;
 
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (setting == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");

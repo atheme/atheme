@@ -19,8 +19,8 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group, { .path = "nickserv/group" } };
-command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
+command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
+command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
 command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 void _modinit(module_t *m)
@@ -52,12 +52,6 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	if (nicksvs.no_nick_ownership)
 	{
 		command_fail(si, fault_noprivs, _("Nickname ownership is disabled."));
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -113,12 +107,6 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn;
 	const char *target;
 	hook_user_req_t hdata;
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
 
 	if (parc >= 1)
 		target = parv[0];

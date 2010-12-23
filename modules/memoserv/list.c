@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_list = { "LIST", N_(N_("Lists all of your memos.")),
-                        AC_NONE, 0, ms_cmd_list, { .path = "memoserv/list" } };
+                        AC_AUTHENTICATED, 0, ms_cmd_list, { .path = "memoserv/list" } };
 
 void _modinit(module_t *m)
 {
@@ -41,14 +41,6 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char line[512];
 	char chan[CHANNELLEN];
 	char *p;
-	
-	/* user logged in? */
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-		
 	
 	command_success_nodata(si, ngettext(N_("You have %zu memo (%d new)."),
 					    N_("You have %zu memos (%d new)."),

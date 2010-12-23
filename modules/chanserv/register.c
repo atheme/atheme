@@ -21,7 +21,7 @@ time_t ratelimit_firsttime = 0;
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_register = { "REGISTER", N_("Registers a channel."),
-                           AC_NONE, 3, cs_cmd_register, { .path = "cservice/register" } };
+                           AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
 void _modinit(module_t *m)
 {
@@ -62,13 +62,6 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
 		command_fail(si, fault_badparams, _("Syntax: REGISTER <#channel>"));
-		return;
-	}
-
-	/* make sure they're logged in */
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

@@ -19,12 +19,6 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 {
 	char tsbuf[BUFSIZE];
 
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (CURRTIME < (time_t)(si->smu->registered + nicksvs.expiry))
 	{
 		command_fail(si, fault_noprivs, _("You must be registered for at least \2%d\2 days in order to enable VACATION mode."), 
@@ -45,7 +39,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
-command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
+command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_AUTHENTICATED, 1, ns_cmd_vacation, { .path = "nickserv/vacation" } };
 
 static void user_identify_hook(user_t *u)
 {

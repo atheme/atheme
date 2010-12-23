@@ -15,14 +15,14 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[]);
 static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, gs_cmd_set, { .func = gs_help_set } };
-command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_NONE, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
-command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_NONE, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
-command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_NONE, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
-command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_NONE, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
-command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_NONE, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
-command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_NONE, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
-command_t gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_NONE, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
+command_t gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 3, gs_cmd_set, { .func = gs_help_set } };
+command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
+command_t gs_set_url = { "URL", N_("Sets the group URL."), AC_AUTHENTICATED, 2, gs_cmd_set_url, { .path = "groupserv/set_url" } };
+command_t gs_set_description = { "DESCRIPTION", N_("Sets the group description."), AC_AUTHENTICATED, 2, gs_cmd_set_description, { .path = "groupserv/set_description" } };
+command_t gs_set_channel = { "CHANNEL", N_("Sets the official group channel."), AC_AUTHENTICATED, 2, gs_cmd_set_channel, { .path = "groupserv/set_channel" } };
+command_t gs_set_open = { "OPEN", N_("Sets the group as open for anyone to join."), AC_AUTHENTICATED, 2, gs_cmd_set_open, { .path = "groupserv/set_open" } };
+command_t gs_set_public = { "PUBLIC", N_("Sets the group as public."), AC_AUTHENTICATED, 2, gs_cmd_set_public, { .path = "groupserv/set_public" } };
+command_t gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be given when they JOIN the group."), AC_AUTHENTICATED, 2, gs_cmd_set_joinflags, { .path = "groupserv/set_joinflags" } };
 
 mowgli_patricia_t *gs_set_cmdtree;
 
@@ -123,12 +123,6 @@ static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -173,12 +167,6 @@ static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -220,12 +208,6 @@ static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -267,12 +249,6 @@ static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -317,12 +293,6 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 	if ((mg = mygroup_find(parv[0])) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
-		return;
-	}
-	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
@@ -388,12 +358,6 @@ static void gs_cmd_set_public(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-	
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -445,12 +409,6 @@ static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));

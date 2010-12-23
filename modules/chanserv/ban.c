@@ -19,9 +19,9 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ban = { "BAN", N_("Sets a ban on a channel."),
-                        AC_NONE, 2, cs_cmd_ban, { .path = "cservice/ban" } };
+                        AC_AUTHENTICATED, 2, cs_cmd_ban, { .path = "cservice/ban" } };
 command_t cs_unban = { "UNBAN", N_("Removes a ban on a channel."),
-			AC_NONE, 2, cs_cmd_unban, { .path = "cservice/unban" } };
+			AC_AUTHENTICATED, 2, cs_cmd_unban, { .path = "cservice/unban" } };
 
 void _modinit(module_t *m)
 {
@@ -59,12 +59,6 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -149,12 +143,6 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

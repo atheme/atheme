@@ -17,8 +17,8 @@ DECLARE_MODULE_V1
 
 static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_NONE, 1, os_cmd_identify, { .path = "oservice/identify" } };
-command_t os_id = { "ID", N_("Alias for IDENTIFY"), AC_NONE, 1, os_cmd_identify, { .path = "oservice/identify" } };
+command_t os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
+command_t os_id = { "ID", N_("Alias for IDENTIFY"), AC_AUTHENTICATED, 1, os_cmd_identify, { .path = "oservice/identify" } };
 
 void _modinit(module_t *m)
 {
@@ -56,12 +56,6 @@ static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
 		command_fail(si, fault_needmoreparams, _("Syntax: IDENTIFY <password>"));
-		return;
-	}
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

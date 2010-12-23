@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_read = { "READ", N_("Reads a memo."),
-                        AC_NONE, 2, ms_cmd_read, { .path = "memoserv/read" } };
+                        AC_AUTHENTICATED, 2, ms_cmd_read, { .path = "memoserv/read" } };
 
 void _modinit(module_t *m)
 {
@@ -52,13 +52,6 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 			STR_INSUFFICIENT_PARAMS, "READ");
 		
 		command_fail(si, fault_needmoreparams, _("Syntax: READ <memo number>"));
-		return;
-	}
-	
-	/* user logged in? */
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	

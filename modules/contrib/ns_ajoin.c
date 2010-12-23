@@ -32,12 +32,6 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!si->smu)
-	{
-		command_fail(si, fault_badparams, "You are not logged in.");
-		return;
-	}
-
 	if (!strcasecmp(parv[0], "LIST"))
 	{
 		command_success_nodata(si, "\2AJOIN LIST\2:");
@@ -184,7 +178,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_NONE, 2, ns_cmd_ajoin, { .path = "contrib/ajoin" } };
+command_t ns_ajoin = { "AJOIN", "Manages automatic-join on identify.", AC_AUTHENTICATED, 2, ns_cmd_ajoin, { .path = "contrib/ajoin" } };
 
 void _modinit(module_t *m)
 {

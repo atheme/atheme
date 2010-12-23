@@ -21,11 +21,11 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_NONE, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
-command_t ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_NONE, 1, ms_cmd_ignore_add, { .path = "" } };
-command_t ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_NONE, 1, ms_cmd_ignore_del, { .path = "" } };
-command_t ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_NONE, 1, ms_cmd_ignore_clear, { .path = "" } };
-command_t ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_NONE, 1, ms_cmd_ignore_list, { .path = "" } };
+command_t ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_AUTHENTICATED, 2, ms_cmd_ignore, { .path = "memoserv/ignore" } };
+command_t ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_add, { .path = "" } };
+command_t ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_del, { .path = "" } };
+command_t ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_clear, { .path = "" } };
+command_t ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_AUTHENTICATED, 1, ms_cmd_ignore_list, { .path = "" } };
 
 mowgli_patricia_t *ms_ignore_cmds;
 
@@ -68,13 +68,6 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 			STR_INSUFFICIENT_PARAMS, "IGNORE");
 
 		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"));
-		return;
-	}
-
-	/* User logged in? */
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

@@ -18,7 +18,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_enforcetime = { "ENFORCETIME", N_("Amount of time it takes before nickname protection occurs."), AC_NONE, 1, ns_cmd_set_enforcetime, { .path = "nickserv/set_enforcetime" } };
+command_t ns_set_enforcetime = { "ENFORCETIME", N_("Amount of time it takes before nickname protection occurs."), AC_AUTHENTICATED, 1, ns_cmd_set_enforcetime, { .path = "nickserv/set_enforcetime" } };
 
 void _modinit(module_t *m)
 {
@@ -41,12 +41,6 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCETIME");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCETIME TIME|DEFAULT"));
-		return;
-	}
-
-	if (!si->smu)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 

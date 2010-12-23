@@ -28,10 +28,10 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[]);
 static void write_ticket_db(database_handle_t *db);
 static void db_h_he(database_handle_t *db, const char *type);
 
-command_t helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_NONE, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
+command_t helpserv_request = { "REQUEST", N_("Request help from network staff."), AC_AUTHENTICATED, 1, helpserv_cmd_request, { .path = "helpserv/request" } };
 command_t helpserv_list = { "LIST", N_("Lists users waiting for help."), PRIV_HELPER, 1, helpserv_cmd_list, { .path = "helpserv/list" } };
 command_t helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_HELPER, 2, helpserv_cmd_close, { .path = "helpserv/close" } };
-command_t helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_NONE, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
+command_t helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
 
 struct ticket_ {
 	char *nick;
@@ -176,12 +176,6 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
-	
 	if (metadata_find(si->smu, "private:restrict:setter"))
 	{
 		command_fail(si, fault_noprivs, _("You have been restricted from requesting help by network staff."));
@@ -313,12 +307,6 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
         ticket_t *l;
         mowgli_node_t *n;
         char *target;
-
-        if (si->smu == NULL)
-        {
-                command_fail(si, fault_noprivs, _("You are not logged in."));
-                return;
-        }
 
         target = entity(si->smu)->name;
 

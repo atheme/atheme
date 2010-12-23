@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_listlogins = { "LISTLOGINS", N_("Lists details of clients authenticated as you."), AC_NONE, 1, ns_cmd_listlogins, { .path = "contrib/listlogins" } };
+command_t ns_listlogins = { "LISTLOGINS", N_("Lists details of clients authenticated as you."), AC_AUTHENTICATED, 1, ns_cmd_listlogins, { .path = "contrib/listlogins" } };
 
 void _modinit(module_t *m)
 {
@@ -33,12 +33,6 @@ static void ns_cmd_listlogins(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	mowgli_node_t *n;
 	int matches = 0;
-
-	if (si->smu == NULL)
-	{
-		command_fail(si, fault_noprivs, _("You are not logged in."));
-		return;
-	}
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
