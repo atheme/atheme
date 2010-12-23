@@ -255,7 +255,6 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 		si.connection = conn;
 		si.v = &xmlrpc_vtable;
 		si.force_language = language_find("en");
-		si.smu = mu;
 
 		bad_password(&si, mu);
 
