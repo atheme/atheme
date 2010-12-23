@@ -43,32 +43,30 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (user && pass)
+	if (user)
 	{
-		myuser_t *mu = myuser_find(user);
+		u = user_find(user);
 
-		if (!mu)
+		if (!u)
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), user);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), user);
 			return;
 		}
 
-#if 0
-		if ((verify_password(mu, pass)) && (mu->user))
+		if (!u->myuser)
 		{
-			u = mu->user;
-			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not logged in."), user);
+			return;
 		}
+
+		if (u->myuser == si->smu || (pass != NULL && verify_password(u->myuser, pass)))
+			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
 		else
 		{
-			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), entity(mu)->name);
-			bad_password(si, mu);
+			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), entity(u->myuser)->name);
+			bad_password(si, u->myuser);
 			return;
 		}
-#endif
-		/* remove this for now -- jilles */
-		command_fail(si, fault_unimplemented, _("External logout is not yet implemented."));
-		return;
 	}
 	else if (si->su == NULL)
 	{
