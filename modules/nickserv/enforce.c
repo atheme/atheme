@@ -50,6 +50,41 @@ command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2,
 
 mowgli_patricia_t **ns_set_cmdtree;
 
+/* logs a released nickname out */
+static bool log_enforce_victim_out(user_t *u)
+{
+	mynick_t *mn;
+	mowgli_node_t *n, *tn;
+
+	return_if_fail(u != NULL);
+
+	if (u->myuser == NULL)
+		return;
+
+	u->myuser->lastlogin = CURRTIME;
+
+	if ((mn = mynick_find(u->nick))
+		mn->lastseen = CURRTIME;
+
+	if (!ircd_on_logout(u, entity(u->myuser)->name))
+	{
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		{
+			if (n->data == u)
+			{
+				mowgli_node_delete(n, &u->myuser->logins);
+				mowgli_node_free(n);
+				break;
+			}
+		}
+
+		u->myuser = NULL;
+		return false;
+	}
+
+	return true;
+}
+
 /* sends an FNC for the given user */
 static void guest_nickname(user_t *u)
 {
@@ -205,13 +240,17 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			notice(nicksvs.nick, target, "%s has released your nickname.", get_source_mask(si));
-			guest_nickname(u);
-			if (ircd->flags & IRCD_HOLDNICK)
-				holdnick_sts(nicksvs.me->me, 60 + arc4random() % 60, u->nick, mn->owner);
-			else
-				u->flags |= UF_DOENFORCE;
-			command_success_nodata(si, _("%s has been released."), target);
-			logcommand(si, CMDLOG_DO, "RELEASE: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
+
+			if (!log_enforce_victim_out(u))
+			{
+				guest_nickname(u);
+				if (ircd->flags & IRCD_HOLDNICK)
+					holdnick_sts(nicksvs.me->me, 60 + arc4random() % 60, u->nick, mn->owner);
+				else
+					u->flags |= UF_DOENFORCE;
+				command_success_nodata(si, _("%s has been released."), target);
+				logcommand(si, CMDLOG_DO, "RELEASE: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
+			}
 		}
 		return;
 	}
@@ -299,10 +338,17 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			notice(nicksvs.nick, target, "\2%s\2 has regained your nickname.", get_source_mask(si));
-			guest_nickname(u);
+			if (!log_enforce_victim_out(u))
+			{
+				guest_nickname(u);
+				if (ircd->flags & IRCD_HOLDNICK)
+					holdnick_sts(nicksvs.me->me, 60 + arc4random() % 60, u->nick, mn->owner);
+				else
+					u->flags |= UF_DOENFORCE;
+				command_success_nodata(si, _("\2%s\2 has been regained."), target);
+				logcommand(si, CMDLOG_DO, "REGAIN: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
+			}
 			fnc_sts(nicksvs.me->me, si->su, target, FNC_FORCE);
-			command_success_nodata(si, _("\2%s\2 has been regained."), target);
-			logcommand(si, CMDLOG_DO, "REGAIN: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
 		}
 		return;
 	}
