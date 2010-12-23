@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ns_help_set(sourceinfo_t *si, const char *subcmd);
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set, { .func = ns_help_set } };
+command_t ns_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED, 2, ns_cmd_set, { .func = ns_help_set } };
 
 mowgli_patricia_t *ns_set_cmdtree;
 

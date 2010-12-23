@@ -23,7 +23,7 @@ mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_language(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, ns_cmd_set_language, { .path = "nickserv/set_language" } };
+command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_AUTHENTICATED, 1, ns_cmd_set_language, { .path = "nickserv/set_language" } };
 
 void _modinit(module_t *m)
 {
@@ -42,9 +42,6 @@ static void ns_cmd_set_language(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *language = strtok(parv[0], " ");
 	language_t *lang;
-
-	if (si->smu == NULL)
-		return;
 
 	if (language == NULL)
 	{

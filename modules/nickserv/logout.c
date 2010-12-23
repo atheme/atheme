@@ -96,6 +96,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner == si->smu)
 			mn->lastseen = CURRTIME;
+
 		if (!ircd_on_logout(si->su, entity(si->smu)->name))
 		{
 			MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)

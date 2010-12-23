@@ -47,6 +47,7 @@
 /* other access levels */
 #define AC_NONE NULL /* anyone */
 #define AC_DISABLED "special:disabled" /* noone */
+#define AC_AUTHENTICATED "special:authenticated"
 /* please do not use the following anymore */
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"

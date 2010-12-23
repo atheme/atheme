@@ -55,7 +55,14 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	if (si->smu != NULL)
 		language_set_active(si->smu->language);
 
-	if (has_priv(si, c->access))
+	/* Make this look a bit more expected for normal users */
+	if (si->smu == NULL && c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED))
+	{
+		command_fail(si, fault_noprivs, _("You are not logged in."));
+		return;
+	}
+
+	if (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED)))
 	{
 		if (si->force_language != NULL)
 			language_set_active(si->force_language);
