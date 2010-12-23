@@ -25,6 +25,8 @@
 #include "datastream.h"
 #include "uplink.h"
 
+void (*parse) (char *line) = NULL;
+
 mowgli_list_t uplinks;
 uplink_t *curr_uplink;
 

@@ -1449,6 +1449,8 @@ static void server_eob(server_t *s)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+
 	/* Symbol relocation voodoo. */
 	server_login = &inspircd_server_login;
 	introduce_nick = &inspircd_introduce_nick;

@@ -746,6 +746,8 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+
 	/* Symbol relocation voodoo. */
 	server_login = &ircnet_server_login;
 	introduce_nick = &ircnet_introduce_nick;

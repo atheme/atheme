@@ -38,7 +38,6 @@ BASE_SRCS =				\
 	node.c		\
 	object.c		\
 	packet.c		\
-	parse.c		\
 	phandler.c		\
 	pmodule.c		\
 	poll.c		\
@@ -69,7 +68,7 @@ include ../buildsys.mk
 
 CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(PROG_IMPLIB_LDFLAGS)
+LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(PROG_IMPLIB_LDFLAGS) $(LIBINTL)
 
 build: all
 

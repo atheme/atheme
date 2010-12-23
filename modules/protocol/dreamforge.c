@@ -673,6 +673,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+
 	/* Symbol relocation voodoo. */
 	server_login = &dreamforge_server_login;
 	introduce_nick = &dreamforge_introduce_nick;

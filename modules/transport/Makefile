@@ -6,13 +6,15 @@
 # $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-SUBDIRS = xmlrpc
+SUBDIRS = xmlrpc rfc1459
 MODULE = transport
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
+SRCS = p10.c
+
+CPPFLAGS        += -I../../include
+LIBS += -L../../libathemecore -lathemecore
 

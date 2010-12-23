@@ -46,12 +46,8 @@ E void uplink_connect(void);
 E struct timeval burstime;
 #endif
 
-E void irc_handle_connect(connection_t *cptr);
-
-/* parse.c */
 E void (*parse)(char *line);
-E void irc_parse(char *line);
-E void p10_parse(char *line);
+E void irc_handle_connect(connection_t *cptr);
 
 /* send.c */
 E int sts(const char *fmt, ...) PRINTFLIKE(1, 2);

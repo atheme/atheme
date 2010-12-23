@@ -995,6 +995,8 @@ static void check_hidehost(user_t *u)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/p10");
+
 	/* Symbol relocation voodoo. */
 	server_login = &p10_server_login;
 	introduce_nick = &p10_introduce_nick;
@@ -1025,8 +1027,6 @@ void _modinit(module_t * m)
 	ircd_on_logout = &p10_on_logout;
 	jupe = &p10_jupe;
 	invite_sts = &p10_invite_sts;
-
-	parse = &p10_parse;
 
 	pcommand_add("G", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("Z", m_pong, 1, MSRC_SERVER);

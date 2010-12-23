@@ -1432,6 +1432,8 @@ static server_t *sid_find(char *name)
 
 void _modinit(module_t * m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+
 	/* Symbol relocation voodoo. */
 	server_login = &ts6_server_login;
 	introduce_nick = &ts6_introduce_nick;

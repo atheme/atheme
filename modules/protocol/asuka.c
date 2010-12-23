@@ -316,8 +316,6 @@ void _modinit(module_t * m)
 	ircd_on_login = &asuka_on_login;
 	ircd_on_logout = &asuka_on_logout;
 
-	parse = &p10_parse;
-
 	mode_list = asuka_mode_list;
 	ignore_mode_list = asuka_ignore_mode_list;
 	status_mode_list = asuka_status_mode_list;
