@@ -75,8 +75,26 @@ Once this is done you will want to compile services. To do this, simply
 type:
 	$ make
 
+If you are on a BSD-based operating system, you may get an error like:
+
+"Makefile", line 1: Need an operator
+"Makefile", line 2: Need an operator
+make: fatal errors encountered -- cannot continue
+
+upon running 'make'. If so, run gmake instead.
+
 Services will compile. To install, type:
 	$ make install
+
+If you get an error like this:
+
+/usr/bin/install: cannot stat `es.mo': No such file or directory
+Failed to install es.mo!
+
+All you have to do is rerun the "configure" script and pass --disable-nls to it
+like so:    $ ./configure --disable-nls
+It can also be fixed by installing your operating system's gettext package.
+
 
 The newly-compiled binary and several supporting files will be copied to the
 directory you specified in the "configure" script. If no directory (prefix)
