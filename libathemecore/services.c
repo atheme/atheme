@@ -607,6 +607,9 @@ void grant_channel_access(user_t *u, myuser_t *mu)
 
 		ca = (chanacs_t *)n->data;
 
+		if (ca->mychan->chan == NULL)
+			continue;
+
 		cu = chanuser_find(ca->mychan->chan, u);
 		if (cu && chansvs.me != NULL)
 		{
