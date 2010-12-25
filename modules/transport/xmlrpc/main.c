@@ -250,6 +250,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 
+		memset(&si, '\0', sizeof si);
 		si.service = NULL;
 		si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
 		si.connection = conn;
