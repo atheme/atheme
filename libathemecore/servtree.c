@@ -93,6 +93,11 @@ static void free_alias_string(const char *key, void *data, void *privdata)
 	free(data);
 }
 
+static void free_access_string(const char *key, void *data, void *privdata)
+{
+	free(data);
+}
+
 static void create_unique_service_nick(char *dest, size_t len)
 {
 	unsigned int i = arc4random();
@@ -217,6 +222,37 @@ static int conf_service_aliases(config_entry_t *ce)
 	return 0;
 }
 
+static int conf_service_access(config_entry_t *ce)
+{
+	service_t *sptr;
+	config_entry_t *subce;
+
+	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	if (!sptr)
+		return -1;
+
+	if (sptr->access)
+		mowgli_patricia_destroy(sptr->access, free_access_string, NULL);
+
+	sptr->access = NULL;
+	if (!ce->ce_entries)
+		return 0;
+
+	sptr->access = mowgli_patricia_create(strcasecanon);
+	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+	{
+		if (subce->ce_vardata == NULL || subce->ce_entries != NULL)
+		{
+			conf_report_warning(subce, "Invalid access entry");
+			continue;
+		}
+		mowgli_patricia_add(sptr->access, subce->ce_varname,
+				sstrdup(subce->ce_vardata));
+	}
+
+	return 0;
+}
+
 static int conf_service(config_entry_t *ce)
 {
 	service_t *sptr;
@@ -277,6 +313,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 
 	sptr->notice_handler = dummy_handler;
 	sptr->aliases = NULL;
+	sptr->access = NULL;
 	sptr->chanmsg = false;
 	sptr->conf_table = conf_table;
 
@@ -297,6 +334,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		add_conf_item("HOST", sptr->conf_table, conf_service_host);
 		add_conf_item("REAL", sptr->conf_table, conf_service_real);
 		add_conf_item("ALIASES", sptr->conf_table, conf_service_aliases);
+		add_conf_item("ACCESS", sptr->conf_table, conf_service_access);
 	}
 
 	return sptr;
@@ -311,6 +349,7 @@ void service_delete(service_t *sptr)
 
 	if (sptr->conf_table != NULL)
 	{
+		del_conf_item("ACCESS", sptr->conf_table);
 		del_conf_item("ALIASES", sptr->conf_table);
 		del_conf_item("REAL", sptr->conf_table);
 		del_conf_item("HOST", sptr->conf_table);
@@ -328,6 +367,8 @@ void service_delete(service_t *sptr)
 		sptr->me = NULL;
 	}
 	sptr->handler = NULL;
+	if (sptr->access)
+		mowgli_patricia_destroy(sptr->access, free_access_string, NULL);
 	if (sptr->aliases)
 		mowgli_patricia_destroy(sptr->aliases, free_alias_string, NULL);
 	if (sptr->commands)
@@ -479,6 +520,17 @@ const char *service_resolve_alias(service_t *sptr, const char *context, const ch
 	strlcat(fullname, cmd, sizeof fullname);
 	alias = mowgli_patricia_retrieve(sptr->aliases, fullname);
 	return alias != NULL ? alias : cmd;
+}
+
+const char *service_set_access(service_t *sptr, const char *cmd, const char *oldaccess)
+{
+	char *newaccess;
+
+	if (sptr->access == NULL)
+		return oldaccess;
+
+	newaccess = mowgli_patricia_retrieve(sptr->access, cmd);
+	return newaccess != NULL ? newaccess : oldaccess;
 }
 
 void service_bind_command(service_t *sptr, command_t *cmd)

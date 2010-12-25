@@ -25,6 +25,7 @@ struct service_ {
 
 	mowgli_patricia_t *commands;
 	mowgli_patricia_t *aliases;
+	mowgli_patricia_t *access;
 
 	bool chanmsg;
 
@@ -43,6 +44,7 @@ E service_t *service_find_nick(const char *nick);
 E char *service_name(char *name);
 E void service_set_chanmsg(service_t *, bool);
 E const char *service_resolve_alias(service_t *sptr, const char *context, const char *cmd);
+E const char *service_set_access(service_t *sptr, const char *cmd, const char *access);
 
 E void service_bind_command(service_t *, command_t *);
 E void service_unbind_command(service_t *, command_t *);

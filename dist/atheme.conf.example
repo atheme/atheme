@@ -864,6 +864,16 @@ nickserv {
 		"MYACCESS" = "LISTCHANS";
 	};
 
+	/* (*)access
+	 * This block allows you to modify the access level required to run
+	 * commands. The list of possible accesses are listed in the operclass
+	 * section later in this .conf . Note that you can only set the access
+	 * on an actual command, not an alias.
+	 */
+	access {
+		"MARK" = "user:mark";
+	};
+
 	/* (*)expire
 	 * The number of days before inactive registrations are expired.
 	 */
@@ -942,6 +952,13 @@ chanserv {
 	 * Command aliases for ChanServ.
 	 */
 	aliases {
+	};
+	
+	/* (*)access
+	 * Command access changes for ChanServ.
+	 */
+	access {
+		"MARK" = "user:mark";
 	};
 
 	/* fantasy
@@ -1149,6 +1166,12 @@ operserv {
 	 */
 	aliases {
 	};
+	
+	/* (*)access
+	 * Command access changes for OperServ.
+	 */
+	access {
+	};
 };
 
 /* SaslServ configuration.
@@ -1213,6 +1236,12 @@ memoserv {
 	 */
 	aliases {
 	};
+	
+	/* (*)access
+	 * Command access changes for MemoServ.
+	 */
+	access {
+	};
 };
 
 /* GameServ configuration.
@@ -1246,6 +1275,12 @@ gameserv {
 	 * Command aliases for GameServ.
 	 */
 	aliases {
+	};
+	
+	/* (*)access
+	 * Command access changes for GameServ.
+	 */
+	access {
 	};
 };
 
@@ -1316,6 +1351,12 @@ groupserv {
 	 */
 	aliases {
 	};
+	
+	/* (*)access
+	 * Command access changes for GroupServ.
+	 */
+	access {
+	};
 
 	/* (*)maxgroups
 	 * Maximum number of groups one username can be founder of.
@@ -1383,6 +1424,12 @@ hostserv {
 	aliases {
 		"APPROVE" = "ACTIVATE";
 		"DENY" = "REJECT";
+	};
+	
+	/* (*)access
+	 * Command access changes for HostServ.
+	 */
+	access {
 	};
 };
 
@@ -1471,6 +1518,12 @@ announceserv {
 	aliases {
 		"APPROVE" = "ACTIVATE";
 		"DENY" = "REJECT";
+	};
+	
+	/* (*)access
+	 * Command access changes for AnnounceServ.
+	 */
+	access {
 	};
 };
 
