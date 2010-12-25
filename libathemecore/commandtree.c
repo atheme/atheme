@@ -57,16 +57,17 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	if (si->smu != NULL)
 		language_set_active(si->smu->language);
 
-	cmdaccess = service_set_access(svs, c->name, c->access);
-
 	/* Make this look a bit more expected for normal users */
-	if (si->smu == NULL && cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED))
+	if (si->smu == NULL && c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED))
 	{
 		command_fail(si, fault_noprivs, _("You are not logged in."));
+		language_set_active(NULL);
 		return;
 	}
 
-	if (has_priv(si, cmdaccess) || (cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED)))
+	cmdaccess = service_set_access(svs, c->name, c->access);
+
+	if (has_priv(si, c->access) && has_priv(si, cmdaccess) || (cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED)))
 	{
 		if (si->force_language != NULL)
 			language_set_active(si->force_language);
@@ -77,7 +78,14 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
+	{
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, cmdaccess);
+		language_set_active(NULL);
+		return;
+	}
+
+	if (has_any_privs(si))
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, c->access);
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 	/* logcommand(si, CMDLOG_ADMIN, "DENIED COMMAND: \2%s\2 used \2%s\2 \2%s\2", origin, svs->name, cmd); */
