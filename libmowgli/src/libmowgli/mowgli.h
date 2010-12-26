@@ -73,6 +73,7 @@ MOWGLI_DECLS_START
 #include "mowgli_string.h"
 #include "mowgli_allocator.h"
 #include "mowgli_formatter.h"
+#include "mowgli_delegate.h"
 
 MOWGLI_DECLS_END
 
