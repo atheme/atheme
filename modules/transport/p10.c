@@ -32,6 +32,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+void p10_parse(char *line);
+
 /* parses a P10 IRC stream */
 void p10_parse(char *line)
 {

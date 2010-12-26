@@ -49,6 +49,7 @@ bool readonly = false;
 
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (void) = NULL;
+int atheme_main(int argc, char *argv[]);
 
 /* *INDENT-OFF* */
 static void print_help(void)

@@ -25,6 +25,8 @@
 #include "uplink.h"
 #include "pmodule.h"
 
+void irc_parse(char *line);
+
 /* parses a standard 2.8.21 style IRC stream */
 void irc_parse(char *line)
 {

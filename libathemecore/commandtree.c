@@ -67,7 +67,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 	cmdaccess = service_set_access(svs, c->name, c->access);
 
-	if (has_priv(si, c->access) && has_priv(si, cmdaccess) || (cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED)))
+	if ((has_priv(si, c->access) && has_priv(si, cmdaccess)) || (cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED)))
 	{
 		if (si->force_language != NULL)
 			language_set_active(si->force_language);
