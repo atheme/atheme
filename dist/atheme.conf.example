@@ -871,7 +871,6 @@ nickserv {
 	 * on an actual command, not an alias.
 	 */
 	access {
-		"MARK" = "user:mark";
 	};
 
 	/* (*)expire
@@ -958,7 +957,6 @@ chanserv {
 	 * Command access changes for ChanServ.
 	 */
 	access {
-		"MARK" = "user:mark";
 	};
 
 	/* fantasy
