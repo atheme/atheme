@@ -1,0 +1,18 @@
+Help for LISTGROUPS:
+
+LISTGROUPS shows the channels that you have access
+to, including those that you own.
+
+Group BANs are not shown.
+
+Syntax: LISTGROUPS
+#if priv group:auspex
+
+Operators with group:auspex privilege can also
+check another user's access.
+
+Syntax: LISTGROUPS <nick>
+#endif
+
+Example:
+    /msg &nick& LISTGROUPS
