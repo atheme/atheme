@@ -252,7 +252,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 		memset(&si, '\0', sizeof si);
 		si.service = NULL;
-		si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
+		si.sourcedesc = parv[2] != NULL && *parv[2] ? parv[2] : NULL;
 		si.connection = conn;
 		si.v = &xmlrpc_vtable;
 		si.force_language = language_find("en");
