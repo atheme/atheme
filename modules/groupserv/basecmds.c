@@ -218,11 +218,11 @@ static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
 
-static void gs_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, gs_cmd_listgroups, { .path = "groupserv/listgroups" } };
+command_t ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
 
-static void gs_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mowgli_node_t *n;
@@ -864,7 +864,7 @@ void basecmds_init(void)
 	service_bind_command(groupsvs, &gs_register);
 	service_bind_command(groupsvs, &gs_info);
 	service_bind_command(groupsvs, &gs_list);
-	service_bind_command(groupsvs, &gs_listgroups);
+	service_named_bind_command("nickserv", &ns_listgroups);
 	service_bind_command(groupsvs, &gs_drop);
 	service_bind_command(groupsvs, &gs_flags);
 	service_bind_command(groupsvs, &gs_regnolimit);
@@ -880,7 +880,7 @@ void basecmds_deinit(void)
 	service_unbind_command(groupsvs, &gs_register);
 	service_unbind_command(groupsvs, &gs_info);
 	service_unbind_command(groupsvs, &gs_list);
-	service_unbind_command(groupsvs, &gs_listgroups);
+	service_named_unbind_command("nickserv", &ns_listgroups);
 	service_unbind_command(groupsvs, &gs_drop);
 	service_unbind_command(groupsvs, &gs_flags);
 	service_unbind_command(groupsvs, &gs_regnolimit);
