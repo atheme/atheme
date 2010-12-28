@@ -153,6 +153,7 @@ loadmodule "modules/crypto/posix";
  * MARK command					modules/nickserv/mark
  * FREEZE command				modules/nickserv/freeze
  * LISTCHANS command				modules/nickserv/listchans
+ * LISTGROUPS command				modules/nickserv/listgroups
  * REGISTER command				modules/nickserv/register
  * Bypass registration limits (REGNOLIMIT)      modules/nickserv/regnolimit
  * Password reset (RESETPASS command)		modules/nickserv/resetpass
@@ -203,6 +204,7 @@ loadmodule "modules/nickserv/logout";
 loadmodule "modules/nickserv/mark";
 loadmodule "modules/nickserv/freeze";
 loadmodule "modules/nickserv/listchans";
+loadmodule "modules/nickserv/listgroups";
 loadmodule "modules/nickserv/register";
 loadmodule "modules/nickserv/regnolimit";
 loadmodule "modules/nickserv/resetpass";
