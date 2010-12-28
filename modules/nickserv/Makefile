@@ -28,6 +28,7 @@ BASE_SRCS =			\
 	info.c	\
 	list.c	\
 	listchans.c	\
+	listgroups.c	\
 	listmail.c	\
 	listownmail.c	\
 	login.c		\
