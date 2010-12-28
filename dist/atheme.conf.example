@@ -603,6 +603,7 @@ loadmodule "modules/infoserv/main";
  * LIST command					modules/groupserv/list
  * REGISTER command				modules/groupserv/register
  * REGNOLIMIT command				modules/groupserv/regnolimit
+ * SET command					modules/groupserv/set
  *
  */
 loadmodule "modules/groupserv/main";
@@ -617,6 +618,7 @@ loadmodule "modules/groupserv/join";
 loadmodule "modules/groupserv/list";
 loadmodule "modules/groupserv/register";
 loadmodule "modules/groupserv/regnolimit";
+loadmodule "modules/groupserv/set";
 
 /* AnnounceServ module.
  *
