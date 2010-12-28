@@ -17,6 +17,7 @@ SUBDIRS = main
 
 BASE_SRCS =			\
 	help.c			\
+	info.c			\
 	register.c		\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
