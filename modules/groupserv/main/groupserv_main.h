@@ -26,9 +26,6 @@ E void gs_db_deinit(void);
 E void gs_hooks_init(void);
 E void gs_hooks_deinit(void);
 
-E void set_init(void);
-E void set_deinit(void);
-
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
 E unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset);

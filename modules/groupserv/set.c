@@ -1,9 +1,20 @@
-/* groupserv.c - group services
- * Copyright (C) 2010 Atheme Development Group
+/*
+ * Copyright (c) 2005 Atheme Development Group
+ * Rights to this code are documented in doc/LICENSE.
+ *
+ * This file contains routines to handle the GroupServ HELP command.
+ *
  */
 
 #include "atheme.h"
-#include "groupserv_main.h"
+#include "groupserv.h"
+
+DECLARE_MODULE_V1
+(
+	"groupserv/set", false, _modinit, _moddeinit,
+	PACKAGE_STRING,
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -26,9 +37,11 @@ command_t gs_set_joinflags = { "JOINFLAGS", N_("Sets the flags users will be giv
 
 mowgli_patricia_t *gs_set_cmdtree;
 
-void set_init(void)
+void _modinit(module_t *m)
 {
-	service_bind_command(groupsvs, &gs_set);
+	use_groupserv_main_symbols(m);
+
+	service_named_bind_command("groupserv", &gs_set);
 
 	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 
@@ -41,9 +54,9 @@ void set_init(void)
 	command_add(&gs_set_joinflags, gs_set_cmdtree);
 }
 
-void set_deinit(void)
+void _moddeinit(module_unload_intent_t intent)
 {
-	service_unbind_command(groupsvs, &gs_set);
+	service_named_unbind_command("groupserv", &gs_set);
 
 	command_delete(&gs_set_email, gs_set_cmdtree);
 	command_delete(&gs_set_url, gs_set_cmdtree);
@@ -304,7 +317,7 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(parv[1], "ON"))
 	{
-		if (!gs_config.enable_open_groups)
+		if (!gs_config->enable_open_groups)
 		{
 			command_fail(si, fault_nochange, _("Setting groups as open has been administratively disabled."));
 			return;

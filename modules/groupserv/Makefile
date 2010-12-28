@@ -27,6 +27,7 @@ BASE_SRCS =			\
 	list.c			\
 	register.c		\
 	regnolimit.c		\
+	set.c			\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 
