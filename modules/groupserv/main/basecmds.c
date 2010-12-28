@@ -24,49 +24,6 @@ static void create_challenge(sourceinfo_t *si, const char *name, int v, char *de
 	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
 }
 
-static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
-
-command_t gs_list = { "LIST", N_("List registered groups."), PRIV_GROUP_AUSPEX, 1, gs_cmd_list, { .path = "groupserv/list" } };
-
-/* Perhaps add criteria to groupser/list like there is now in chanserv/list and nickserv/list in the future */
-static void gs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
-{
-	myentity_t *mt;
-	char *pattern = parv[0];
-	unsigned int matches = 0;
-	myentity_iteration_state_t state;
-
-	if (!pattern)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
-		command_fail(si, fault_needmoreparams, _("Syntax: LIST <group pattern>"));
-		return;
-	}
-
-	/* No need to say "Groups currently registered". You can't have a unregistered group. */
-	command_success_nodata(si, _("Groups matching pattern \2%s\2:"), pattern);
-
-	MYENTITY_FOREACH_T(mt, &state, ENT_GROUP)
-	{
-		mygroup_t *mg = group(mt);
-		continue_if_fail(mt != NULL);
-		continue_if_fail(mg != NULL);
-
-		if (!match(pattern, entity(mg)->name))
-		{
-			command_success_nodata(si, _("- %s (%s)"), entity(mg)->name, mygroup_founder_names(mg));
-			matches++;
-		}
-	}
-
-	if (matches == 0)
-		command_success_nodata(si, _("No groups matched pattern \2%s\2"), pattern);
-	else
-		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"), N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
-
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", pattern, matches);
-}
-
 static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
@@ -709,7 +666,6 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 void basecmds_init(void)
 {
-	service_bind_command(groupsvs, &gs_list);
 	service_named_bind_command("nickserv", &ns_listgroups);
 	service_bind_command(groupsvs, &gs_drop);
 	service_bind_command(groupsvs, &gs_flags);
@@ -722,7 +678,6 @@ void basecmds_init(void)
 
 void basecmds_deinit(void)
 {
-	service_unbind_command(groupsvs, &gs_list);
 	service_named_unbind_command("nickserv", &ns_listgroups);
 	service_unbind_command(groupsvs, &gs_drop);
 	service_unbind_command(groupsvs, &gs_flags);
