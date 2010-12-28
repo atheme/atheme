@@ -8,6 +8,8 @@
 #include "atheme.h"
 #include "groupserv_common.h"
 
+E groupserv_config_t gs_config;
+
 E void mygroups_init(void);
 E void mygroups_deinit(void);
 E mygroup_t *mygroup_add(const char *name);

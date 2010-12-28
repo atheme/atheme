@@ -304,7 +304,7 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(parv[1], "ON"))
 	{
-		if (!enable_open_groups)
+		if (!gs_config.enable_open_groups)
 		{
 			command_fail(si, fault_nochange, _("Setting groups as open has been administratively disabled."));
 			return;

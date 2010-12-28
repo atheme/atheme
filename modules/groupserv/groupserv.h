@@ -28,6 +28,8 @@ const char * (*mygroup_founder_names)(mygroup_t *mg);
 
 struct gflags *ga_flags;
 
+groupserv_config_t *gs_config;
+
 void use_groupserv_main_symbols(module_t *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/main");
@@ -45,6 +47,7 @@ void use_groupserv_main_symbols(module_t *m)
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_founder_names, "groupserv/main", "mygroup_founder_names");
 
     MODULE_TRY_REQUEST_SYMBOL(m, ga_flags, "groupserv/main", "ga_flags");
+    MODULE_TRY_REQUEST_SYMBOL(m, gs_config, "groupserv/main", "gs_config");
 }
 
 #endif

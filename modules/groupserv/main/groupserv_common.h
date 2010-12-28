@@ -7,12 +7,21 @@
 
 #include "atheme.h"
 
-typedef struct mygroup_ mygroup_t;
+typedef struct groupserv_config_ groupserv_config_t;
+
+struct groupserv_config_ {
+    unsigned int maxgroups;
+    unsigned int maxgroupacs;
+    bool enable_open_groups;
+    char *join_flags;
+};
 
 #define MG_REGNOLIMIT		0x00000001
 #define MG_ACSNOLIMIT		0x00000002
 #define MG_OPEN			0x00000004
 #define MG_PUBLIC			0x00000008
+
+typedef struct mygroup_ mygroup_t;
 
 struct mygroup_ {
 	myentity_t ent;
@@ -22,12 +31,6 @@ struct mygroup_ {
 
 	unsigned int flags;
 };
-
-typedef struct groupacs_ groupacs_t;
-unsigned int maxgroups;
-unsigned int maxgroupacs;
-bool enable_open_groups;
-char *join_flags;
 
 #define GA_FOUNDER		0x00000001
 #define GA_FLAGS		0x00000002
@@ -40,6 +43,8 @@ char *join_flags;
 
 #define PRIV_GROUP_ADMIN "group:admin"
 #define PRIV_GROUP_AUSPEX "group:auspex"
+
+typedef struct groupacs_ groupacs_t;
 
 struct groupacs_ {
 	object_t parent;
