@@ -37,7 +37,7 @@ po/*.mo
 po/stamp-po
 scripts/*.tbz2
 scripts/*.tgz
-src/atheme-services
+src/services/atheme-services
 tools/createtestdb
 tools/htmlhelp
 buildsys.mk
