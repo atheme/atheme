@@ -1,5 +1,4 @@
 syntax: glob
-Makefile
 *~
 *.bak
 *.rej
