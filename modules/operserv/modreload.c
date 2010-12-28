@@ -28,16 +28,12 @@ typedef struct module_dependency_ {
 	module_unload_capability_t can_unload;
 } module_dependency_t;
 
-#include <stdio.h>
-
 void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
-	fprintf(stderr, "processing module %s\n", m->header->name);
 	MOWGLI_LIST_FOREACH(n, m->dephost.head)
 	{
 		module_t *dm = (module_t *) n->data;
-		fprintf(stderr, "processing dependency %s\n", dm->header->name);
 
 		/* Skip duplicates */
 		bool found = false;
@@ -45,7 +41,6 @@ void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 		MOWGLI_LIST_FOREACH(n2, deplist->head)
 		{
 			module_dependency_t *existing_dep = (module_dependency_t *) n2->data;
-			fprintf(stderr, "found existing dep %s\n", existing_dep->name);
 			if (0 == strcasecmp(dm->header->name, existing_dep->name))
 				found = true;
 		}
