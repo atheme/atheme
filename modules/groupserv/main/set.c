@@ -3,7 +3,7 @@
  */
 
 #include "atheme.h"
-#include "groupserv.h"
+#include "groupserv_main.h"
 
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);

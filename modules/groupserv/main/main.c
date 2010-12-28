@@ -3,7 +3,7 @@
  */
 
 #include "atheme.h"
-#include "groupserv.h"
+#include "groupserv_main.h"
 
 DECLARE_MODULE_V1
 (

@@ -3,7 +3,7 @@
  */
 
 #include "atheme.h"
-#include "groupserv.h"
+#include "groupserv_main.h"
 
 struct gflags ga_flags[] = {
 	{ 'F', GA_FOUNDER },

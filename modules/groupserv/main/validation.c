@@ -2,7 +2,7 @@
  * Copyright (c) 2010 Atheme Development Group
  */
 
-#include "groupserv.h"
+#include "groupserv_main.h"
 
 static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 {

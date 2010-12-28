@@ -2,7 +2,7 @@
  * Copyright (C) 2010 Atheme Development Group
  */
 
-#include "groupserv.h"
+#include "groupserv_main.h"
 
 static void mygroup_expire(void *unused)
 {
