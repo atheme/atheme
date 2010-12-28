@@ -28,6 +28,13 @@ BASE_SRCS =			\
 	register.c		\
 	regnolimit.c		\
 	set.c			\
+	set_channel.c		\
+	set_description.c	\
+	set_email.c		\
+	set_joinflags.c		\
+	set_open.c		\
+	set_public.c		\
+	set_url.c		\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 

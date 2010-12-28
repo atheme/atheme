@@ -50,4 +50,19 @@ void use_groupserv_main_symbols(module_t *m)
     MODULE_TRY_REQUEST_SYMBOL(m, gs_config, "groupserv/main", "gs_config");
 }
 
+#ifndef IN_GROUPSERV_SET
+
+mowgli_patricia_t *gs_set_cmdtree;
+
+void use_groupserv_set_symbols(module_t *m)
+{
+    MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/set");
+
+    mowgli_patricia_t **gs_set_cmdtree_tmp;
+    MODULE_TRY_REQUEST_SYMBOL(m, gs_set_cmdtree_tmp, "groupserv/set", "gs_set_cmdtree");
+    gs_set_cmdtree = *gs_set_cmdtree_tmp;
+}
+
+#endif
+
 #endif
