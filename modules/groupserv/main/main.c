@@ -57,7 +57,6 @@ void _modinit(module_t *m)
 
 	gs_db_init();
 	gs_hooks_init();
-	basecmds_init();
 	set_init();
 }
 
@@ -65,7 +64,6 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	gs_db_deinit();
 	gs_hooks_deinit();
-	basecmds_deinit();
 	set_deinit();
 	del_conf_item("MAXGROUPS", &conf_gs_table);
 	del_conf_item("MAXGROUPACS", &conf_gs_table);

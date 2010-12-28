@@ -18,9 +18,6 @@ E groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags);
 E void groupacs_delete(mygroup_t *mg, myuser_t *mu);
 E bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
 
-E void basecmds_init(void);
-E void basecmds_deinit(void);
-
 E void gs_db_init(void);
 E void gs_db_deinit(void);
 

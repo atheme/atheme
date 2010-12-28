@@ -16,10 +16,17 @@ include ../../buildsys.module.mk
 SUBDIRS = main
 
 BASE_SRCS =			\
+	acsnolimit.c		\
+	drop.c			\
+	fdrop.c			\
+	fflags.c		\
+	flags.c			\
 	help.c			\
 	info.c			\
+	join.c			\
 	list.c			\
 	register.c		\
+	regnolimit.c		\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 

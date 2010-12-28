@@ -22,6 +22,7 @@ groupacs_t * (*groupacs_find)(mygroup_t *mg, myuser_t *mu, unsigned int flags);
 void (*groupacs_delete)(mygroup_t *mg, myuser_t *mu);
 bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
 
+unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus);
 mowgli_list_t * (*myuser_get_membership_list)(myuser_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
 
@@ -38,6 +39,8 @@ void use_groupserv_main_symbols(module_t *m)
     MODULE_TRY_REQUEST_SYMBOL(m, groupacs_find, "groupserv/main", "groupacs_find");
     MODULE_TRY_REQUEST_SYMBOL(m, groupacs_delete, "groupserv/main", "groupacs_delete");
     MODULE_TRY_REQUEST_SYMBOL(m, groupacs_sourceinfo_has_flag, "groupserv/main", "groupacs_sourceinfo_has_flag");
+
+    MODULE_TRY_REQUEST_SYMBOL(m, gs_flags_parser, "groupserv/main", "gs_flags_parser");
     MODULE_TRY_REQUEST_SYMBOL(m, myuser_get_membership_list, "groupserv/main", "myuser_get_membership_list");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_founder_names, "groupserv/main", "mygroup_founder_names");
 
