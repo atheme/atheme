@@ -13,12 +13,12 @@
 #include "abirev.h"
 
 typedef struct module_ module_t;
-typedef struct v3_moduleheader_ v3_moduleheader_t;
+typedef struct v4_moduleheader_ v4_moduleheader_t;
 
 struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	v3_moduleheader_t *header;
+	v4_moduleheader_t *header;
 
 	unsigned int mflags;
 
@@ -36,7 +36,7 @@ struct module_ {
 #define MODTYPE_FAIL		0x8000 /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
-#define MAPI_ATHEME_V3		3
+#define MAPI_ATHEME_V4		4
 
 #define MAX_CMD_PARC		20
 
@@ -45,13 +45,19 @@ typedef enum {
 	MODULE_UNLOAD_INTENT_RELOAD,
 } module_unload_intent_t;
 
-struct v3_moduleheader_ {
+typedef enum {
+	MODULE_UNLOAD_CAPABILITY_OK,
+	MODULE_UNLOAD_CAPABILITY_NEVER,
+	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
+} module_unload_capability_t;
+
+struct v4_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
 	unsigned int abi_rev;
 	const char *serial;
 	const char *name;
-	bool norestart;
+	module_unload_capability_t can_unload;
 	void (*modinit)(module_t *m);
 	void (*deinit)(module_unload_intent_t intent);
 	const char *vendor;
@@ -59,8 +65,8 @@ struct v3_moduleheader_ {
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	v3_moduleheader_t _header = { \
-		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V3, \
+	v4_moduleheader_t _header = { \
+		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4, \
 		CURRENT_ABI_REVISION, "unknown", \
 		name, norestart, modinit, deinit, ven, ver \
 	}

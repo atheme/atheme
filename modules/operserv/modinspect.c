@@ -66,7 +66,8 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("SDK Serial : %s"), m->header->serial);
 	command_success_nodata(si, _("Version    : %s"), m->header->version);
 	command_success_nodata(si, _("Vendor     : %s"), m->header->vendor);
-	command_success_nodata(si, _("Permanent  : %s"), m->header->norestart ? "Yes" : "No");
+	command_success_nodata(si, _("Can unload : %s"), m->header->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? "Yes" :
+					( m->header->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
 

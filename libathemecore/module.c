@@ -58,7 +58,7 @@ module_t *module_load(const char *filespec)
 {
 	mowgli_node_t *n;
 	module_t *m, *old_modtarget;
-	v3_moduleheader_t *h;
+	v4_moduleheader_t *h;
 	void *handle = NULL;
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
@@ -80,7 +80,7 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	h = (v3_moduleheader_t *) linker_getsym(handle, "_header");
+	h = (v4_moduleheader_t *) linker_getsym(handle, "_header");
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
@@ -90,9 +90,9 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	if (h->abi_ver != MAPI_ATHEME_V3)
+	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V3);
+		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V4);
 
 		linker_close(handle);
 		return NULL;

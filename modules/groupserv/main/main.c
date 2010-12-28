@@ -7,7 +7,7 @@
 
 DECLARE_MODULE_V1
 (
-	"groupserv/main", true, _modinit, _moddeinit,
+	"groupserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );

@@ -1,5 +1,7 @@
 #include "atheme.h"
 #include "conf.h"
+#include "uplink.h" /* XXX: For sendq_flush and curr_uplink */
+#include "datastream.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,19 +25,36 @@ void _moddeinit(module_unload_intent_t intent)
 
 typedef struct module_dependency_ {
 	const char *name;
-	bool norestart;
+	module_unload_capability_t can_unload;
 } module_dependency_t;
+
+#include <stdio.h>
 
 void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
+	fprintf(stderr, "processing module %s\n", m->header->name);
 	MOWGLI_LIST_FOREACH(n, m->dephost.head)
 	{
 		module_t *dm = (module_t *) n->data;
+		fprintf(stderr, "processing dependency %s\n", dm->header->name);
+
+		/* Skip duplicates */
+		bool found = false;
+		mowgli_node_t *n2;
+		MOWGLI_LIST_FOREACH(n2, deplist->head)
+		{
+			module_dependency_t *existing_dep = (module_dependency_t *) n2->data;
+			fprintf(stderr, "found existing dep %s\n", existing_dep->name);
+			if (0 == strcasecmp(dm->header->name, existing_dep->name))
+				found = true;
+		}
+		if (found)
+			continue;
 
 		module_dependency_t *dep = malloc(sizeof(module_dependency_t));
 		dep->name = sstrdup(dm->header->name);
-		dep->norestart = dm->header->norestart;
+		dep->can_unload = dm->header->can_unload;
 		mowgli_node_add(dep, mowgli_node_create(), deplist);
 
 		recurse_module_deplist(dm, deplist);
@@ -48,6 +67,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	module_t *m;
 	mowgli_node_t *n;
 	char buf[BUFSIZE + 1];
+	module_dependency_t * reloading_semipermanent_module = NULL;
 
 	if (parc < 1)
         {
@@ -72,7 +92,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (m->header->norestart)
+	if (m->header->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is a permanent module; it cannot be reloaded."), module);
 		slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload permanent module \2%s\2", get_oper_name(si), module);
@@ -82,14 +102,14 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_list_t *module_deplist = mowgli_list_create();
 	module_dependency_t *self_dep = malloc(sizeof(module_dependency_t));
 	self_dep->name = sstrdup(module);
-	self_dep->norestart = m->header->norestart;
+	self_dep->can_unload = m->header->can_unload;
 	mowgli_node_add(self_dep, mowgli_node_create(), module_deplist);
 	recurse_module_deplist(m, module_deplist);
 
 	MOWGLI_LIST_FOREACH(n, module_deplist->head)
 	{
 		module_dependency_t *dep = (module_dependency_t *) n->data;
-		if (dep->norestart)
+		if (dep->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER)
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is depended upon by \2%s\2, which is a permanent module and cannot be reloaded."), module, dep->name);
 			slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2, which is depended upon by permanent module \2%s\2", get_oper_name(si), module, dep->name);
@@ -105,6 +125,23 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 		}
+		else if (dep->can_unload == MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY
+			&& reloading_semipermanent_module == NULL)
+		{
+			reloading_semipermanent_module = dep;
+		}
+	}
+
+	if (reloading_semipermanent_module)
+	{
+		/* If we're reloading a semi-permanent module (reload only; no unload), then there's
+		 * a chance that we'll abort if the module fails to load again. Save the DB beforehand
+		 * just in case
+		 */
+		slog(LG_INFO, "UPDATE (due to reload of module \2%s\2): \2%s\2",
+				reloading_semipermanent_module->name, get_oper_name(si));
+		wallops("Updating database by request of \2%s\2.", get_oper_name(si));
+		db_save(NULL);
 	}
 
 	module_unload(m, MODULE_UNLOAD_INTENT_RELOAD);
@@ -130,7 +167,20 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			command_fail(si, fault_nosuch_target, _("Module \2%s\2 failed to reload."), module);
+			if (dep->can_unload != MODULE_UNLOAD_CAPABILITY_OK)
+			{
+				/* Failed to reload a module that can't be unloaded. Abort. */
+				command_fail(si, fault_nosuch_target, _(
+						"Module \2%s\2 failed to reload, and does not allow unloading. "
+						"Shutting down to avoid data loss."), dep->name);
+				slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 failed to reload and does not allow unloading. "
+						"Shutting down to avoid data loss.", dep->name);
+				sendq_flush(curr_uplink->conn);
+
+				exit(EXIT_FAILURE);
+			}
+
+			command_fail(si, fault_nosuch_target, _("Module \2%s\2 failed to reload."), dep->name);
 			slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2 (from \2%s\2), operation failed.", get_oper_name(si), dep->name, module);
 		}
 
