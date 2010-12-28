@@ -24,31 +24,6 @@ static void create_challenge(sourceinfo_t *si, const char *name, int v, char *de
 	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
 }
 
-static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
-
-command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, gs_cmd_help, { .path = "help" } };
-
-void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (!parv[0])
-	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-		command_success_nodata(si, _("\2%s\2 provides tools for managing groups of users and channels."), si->service->nick);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		command_success_nodata(si, " ");
-
-		command_help(si, si->service->commands);
-
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-		return;
-	}
-
-	/* take the command through the hash table */
-	help_display(si, si->service, parv[0], si->service->commands);
-}
-
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
@@ -860,7 +835,6 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 void basecmds_init(void)
 {
-	service_bind_command(groupsvs, &gs_help);
 	service_bind_command(groupsvs, &gs_register);
 	service_bind_command(groupsvs, &gs_info);
 	service_bind_command(groupsvs, &gs_list);
@@ -876,7 +850,6 @@ void basecmds_init(void)
 
 void basecmds_deinit(void)
 {
-	service_unbind_command(groupsvs, &gs_help);
 	service_unbind_command(groupsvs, &gs_register);
 	service_unbind_command(groupsvs, &gs_info);
 	service_unbind_command(groupsvs, &gs_list);

@@ -16,6 +16,7 @@ include ../../buildsys.module.mk
 SUBDIRS = main
 
 BASE_SRCS =			\
+	help.c			\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 
