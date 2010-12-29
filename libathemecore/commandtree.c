@@ -72,6 +72,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 		if (si->force_language != NULL)
 			language_set_active(si->force_language);
 
+		si->command = c;
 		c->cmd(si, parc, parv);
 		language_set_active(NULL);
 		return;

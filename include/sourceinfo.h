@@ -53,6 +53,9 @@ struct sourceinfo_
 	unsigned int output_count; /* lines of output upto now */
 
 	language_t *force_language; /* locale to force replies to be in, could be NULL */
+
+	command_t *command; /* The command being executed. Needed when one function handles
+				more than one command. */
 };
 
 #endif
