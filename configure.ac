@@ -34,6 +34,7 @@ dnl GNU gettext
 dnl Uncomment this if we choose to provide our own libintl.
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.16.1])
+AM_PO_SUBDIRS
 
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
@@ -589,5 +590,6 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	CFLAGS               : ${CFLAGS}
+	Internationalization : ${USE_NLS}
 
 Type make to build Atheme, and make install to install it."
