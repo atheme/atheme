@@ -661,9 +661,9 @@ loadmodule "modules/misc/httpd";
  * The XML-RPC handler requires modules/misc/httpd to be loaded as it merely
  * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
  *
- * XMLRPC handler for the httpd			modules/xmlrpc/main
+ * XMLRPC handler for the httpd			modules/transport/xmlrpc
  */
-loadmodule "modules/xmlrpc/main";
+loadmodule "modules/transport/xmlrpc";
 
 /* Other modules.
  *
