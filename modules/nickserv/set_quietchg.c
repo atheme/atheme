@@ -38,18 +38,15 @@ void _moddeinit(module_unload_intent_t intent)
 /* SET QUIETCHG [ON|OFF] */
 static void ns_cmd_set_quietchg(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *params = strtok(parv[0], " ");
+	char *setting = parv[0];
 
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
+	if (!setting)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "QUIETCHG");
 		return;
 	}
 
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", setting))
 	{
 		if (MU_QUIETCHG & si->smu->flags)
 		{
@@ -65,7 +62,7 @@ static void ns_cmd_set_quietchg(sourceinfo_t *si, int parc, char *parv[])
 
 		return;
 	}
-	else if (!strcasecmp("OFF", params))
+	else if (!strcasecmp("OFF", setting))
 	{
 		if (!(MU_QUIETCHG & si->smu->flags))
 		{

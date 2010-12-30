@@ -19,12 +19,9 @@ mowgli_patricia_t **ns_set_cmdtree;
 /* SET PRIVATE ON|OFF */
 static void ns_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *params = strtok(parv[0], " ");
+	char *params = parv[0];
 
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
+	if (!params)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PRIVATE");
 		return;

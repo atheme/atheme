@@ -45,9 +45,6 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md;
 	hook_metadata_change_t mdchange;
 
-	if (si->smu == NULL)
-		return;
-
 	if (!property)
 	{
 		command_fail(si, fault_needmoreparams, _("Syntax: SET PROPERTY <property> [value]"));

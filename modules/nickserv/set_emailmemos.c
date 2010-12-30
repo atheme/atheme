@@ -38,10 +38,7 @@ void _moddeinit(module_unload_intent_t intent)
 /* SET EMAILMEMOS [ON|OFF] */
 static void ns_cmd_set_emailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
+	char *params = parv[0];
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
@@ -49,7 +46,7 @@ static void ns_cmd_set_emailmemos(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (params == NULL)
+	if (!params)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
 		return;

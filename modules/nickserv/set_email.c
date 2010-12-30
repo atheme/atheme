@@ -41,10 +41,7 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	char *email = parv[0];
 	metadata_t *md;
 
-	if (si->smu == NULL)
-		return;
-
-	if (email == NULL)
+	if (!email)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAIL");
 		command_fail(si, fault_needmoreparams, _("Syntax: SET EMAIL <new e-mail>"));

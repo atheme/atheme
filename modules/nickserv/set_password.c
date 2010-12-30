@@ -38,10 +38,7 @@ void _moddeinit(module_unload_intent_t intent)
 /* SET PASSWORD <password> */
 static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *password = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
+	char *password = parv[0];
 
 	if (auth_module_loaded)
 	{
@@ -49,7 +46,7 @@ static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (password == NULL)
+	if (!password)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PASSWORD");
 		return;

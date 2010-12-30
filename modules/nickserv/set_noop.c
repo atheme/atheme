@@ -38,12 +38,9 @@ void _moddeinit(module_unload_intent_t intent)
 /* SET NOOP [ON|OFF] */
 static void ns_cmd_set_noop(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *params = strtok(parv[0], " ");
+	char *params = parv[0];
 
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
+	if (!params)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
 		return;
