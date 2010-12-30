@@ -14,7 +14,6 @@ include ../../buildsys.module.mk
 
 SRCS = \
 	authcookie.c	\
-	crypt.c		\
 	dh-blowfish.c	\
 	main.c		\
 	plain.c
