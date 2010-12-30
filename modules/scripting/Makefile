@@ -6,7 +6,7 @@
 # $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-SUBDIRS = perl
+SUBDIRS = $(PERL_ENABLE)
 MODULE = scripting
 
 include ../../extra.mk

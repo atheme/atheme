@@ -138,6 +138,29 @@ AC_SUBST(LDAP_CFLAGS)
 AC_SUBST(LDAP_LIBS)
 AC_SUBST(LDAP_AUTHC)
 
+AC_ARG_WITH([perl],
+        [AS_HELP_STRING([--without-perl],[Disable building perl scripting module.])],
+        [],
+        [with_perl="no"])
+
+AS_IF([test "x$with_perl" != "xno"],
+[
+  AC_PATH_PROG(perlpath, perl)
+  if test -n "$perlpath"; then
+      PERL_ENABLE=perl
+      PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts`
+      PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
+  fi
+])
+
+AS_IF([test "x$with_perl" = "xyes" && test "x$PERL_CFLAGS" = "x"],
+[AC_MSG_ERROR([Perl support was requested but Perl could not be found.])])
+
+AC_SUBST(PERL_CFLAGS)
+AC_SUBST(PERL_LIBS)
+AC_SUBST(PERL_ENABLE)
+
+
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"
 AC_SUBST(mkdir_p)
@@ -589,6 +612,7 @@ Configuration:
 	Block Allocator      : ${balloc}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
+	Perl support         : ${with_perl}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
