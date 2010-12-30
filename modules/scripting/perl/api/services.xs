@@ -23,3 +23,39 @@ CODE:
 	RETVAL = self->internal_name;
 OUTPUT:
 	RETVAL
+
+const char *
+nick(Atheme_Service self)
+CODE:
+	RETVAL = self->nick;
+OUTPUT:
+	RETVAL
+
+const char *
+user(Atheme_Service self)
+CODE:
+	RETVAL = self->user;
+OUTPUT:
+	RETVAL
+
+const char *
+host(Atheme_Service self)
+CODE:
+	RETVAL = self->host;
+OUTPUT:
+	RETVAL
+
+const char *
+realname(Atheme_Service self)
+CODE:
+	RETVAL = self->real;
+OUTPUT:
+	RETVAL
+
+Atheme_User
+me(Atheme_Service self)
+CODE:
+	RETVAL = self->me;
+OUTPUT:
+	RETVAL
+
