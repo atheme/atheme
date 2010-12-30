@@ -1,0 +1,24 @@
+TYPEMAP
+Atheme_Sourceinfo		T_PTROBJ_SPECIAL
+Atheme_Command			T_PTROBJ_SPECIAL
+Atheme_Service			T_PTROBJ_SPECIAL
+
+INPUT
+T_PTROBJ_SPECIAL
+	do
+	{
+		SV *arg = $arg;
+		SV *ref = SvRV(arg);
+		const char * type = \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\";
+		if ( sv_isobject(arg) && (SvTYPE(SvRV(arg)) == SVt_PVMG) &&
+		    sv_derived_from(arg, type)) {
+			IV tmp = SvIV(ref);
+			$var = INT2PTR($type, tmp);
+		}
+		else
+			croak(\"$var is not of type ${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\");
+	} while(0)
+
+OUTPUT
+T_PTROBJ_SPECIAL
+	sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
