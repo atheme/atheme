@@ -286,7 +286,7 @@ static void os_cmd_script_load(sourceinfo_t *si, int parc, char *parv[])
 	if (!do_script_load(parv[0]))
 	{
 		command_fail(si, fault_badparams, _("Loading \2%s\2 failed. Error was:"), parv[0]);
-		command_fail(si, fault_badparams, _("%s"), perl_error);
+		command_fail(si, fault_badparams, "%s", perl_error);
 		return;
 	}
 
@@ -314,7 +314,7 @@ static void os_cmd_script_unload(sourceinfo_t *si, int parc, char *parv[])
 	if (!do_script_unload(parv[0]))
 	{
 		command_fail(si, fault_badparams, _("Unloading \2%s\2 failed. Error was:"), parv[0]);
-		command_fail(si, fault_badparams, _("%s"), perl_error);
+		command_fail(si, fault_badparams, "%s", perl_error);
 		return;
 	}
 
