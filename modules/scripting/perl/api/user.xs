@@ -1,5 +1,12 @@
 MODULE = Atheme			PACKAGE = Atheme::User
 
+Atheme_User
+find(SV * package, const char *nick)
+CODE:
+	RETVAL = user_find(nick);
+OUTPUT:
+	RETVAL
+
 const char *
 nick(Atheme_User self)
 CODE:

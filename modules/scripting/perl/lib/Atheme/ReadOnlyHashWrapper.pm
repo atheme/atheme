@@ -1,12 +1,12 @@
-package Atheme::Services;
+package Atheme::HashWrapper;
 
 use Carp;
 
 sub TIEHASH {
-	my ($class) = @_;
+	my ($class, $find_func) = @_;
 	$class = ref $class || $class;
 
-	my $self = {};
+	my $self = { find_func => $find_func };
 
 	return bless $self, $class;
 }
@@ -14,11 +14,11 @@ sub TIEHASH {
 sub FETCH {
 	my ($self, $key) = @_;
 
-	return Atheme::Service->find($key);
+	return $self->{find_func}->($key);
 }
 
 sub readonly {
-	croak "Attempted to modify read-only Services hash\n";
+	croak "Attempted to modify read-only hash\n";
 }
 
 sub STORE { goto &readonly; }
@@ -32,14 +32,14 @@ sub EXISTS {
 }
 
 sub unimplemented {
-	croak "Iteration over Services hash not yet implemented\n";
+	croak "Iteration over Atheme object hash not yet implemented\n";
 }
 
 sub FIRSTKEY { goto &unimplemented; }
 sub NEXTKEY { goto &unimplemented; }
 
 sub SCALAR {
-	return 1; # Generic true value. There's always at least one service.
+	return 1; # Generic true value. There's always at least one client.
 }
 
 1;
