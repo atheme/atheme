@@ -34,9 +34,6 @@ E void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, cons
 
 /* help.c */
 E void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);
-E void help_addentry(mowgli_list_t *list, const char *topic, const char *fname,
-	void (*func)(sourceinfo_t *si)) DEPRECATED;
-E void help_delentry(mowgli_list_t *list, const char *name) DEPRECATED;
 
 #endif
 

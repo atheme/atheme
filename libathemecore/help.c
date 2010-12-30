@@ -200,17 +200,6 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 	free(ccommand);
 }
 
-void help_addentry(mowgli_list_t *list, const char *topic, const char *fname,
-	void (*func)(sourceinfo_t *si))
-{
-	slog(LG_DEBUG, "help_addentry(): unimplemented stub, port to new command framework");
-}
-
-void help_delentry(mowgli_list_t *list, const char *name)
-{
-	slog(LG_DEBUG, "help_delentry(): unimplemented stub, port to new command framework");
-}
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
