@@ -49,7 +49,7 @@ static char perl_error[512];
  *
  * These deal with starting and stopping the perl interpreter.
  */
-static bool startup_perl()
+static bool startup_perl(void)
 {
 	/*
 	 * Hack: atheme modules (hence our dependent libperl.so) are loaded with
@@ -91,7 +91,7 @@ static bool startup_perl()
 	return true;
 }
 
-static void shutdown_perl()
+static void shutdown_perl(void)
 {
 	PL_perl_destruct_level = 1;
 	perl_destruct(my_perl);
