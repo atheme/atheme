@@ -15,6 +15,8 @@
 #include "atheme.h"
 #include "conf.h"
 
+#include <dlfcn.h>
+
 DECLARE_MODULE_V1
 (
 	"scripting/perl", false, _modinit, _moddeinit,
