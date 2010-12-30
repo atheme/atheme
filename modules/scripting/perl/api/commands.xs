@@ -15,7 +15,7 @@ CODE:
 		newcmd->command.help.func = perl_command_help_func;
 
 	if (!SvROK(handler))
-		Perl_croak("Tried to create a command handler that's not a coderef");
+		Perl_croak(aTHX_ "Tried to create a command handler that's not a coderef");
 
 	SvREFCNT_inc(handler);
 	newcmd->handler = handler;
