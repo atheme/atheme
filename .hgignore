@@ -29,6 +29,8 @@ libmowgli/src/examples/patriciatest/patriciatest
 libmowgli/src/libmowgli/mowgli_config.h
 modules/Makefile.common
 modules/Makefile.defs
+modules/scripting/perl/api/Atheme.c
+modules/scripting/perl/perlxsi.c
 po/Makefile.in
 po/POTFILES
 po/*.gmo
