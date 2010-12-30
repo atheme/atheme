@@ -11,6 +11,7 @@
 typedef sourceinfo_t *Atheme_Sourceinfo;
 typedef perl_command_t *Atheme_Command;
 typedef service_t *Atheme_Service;
+typedef user_t *Atheme_User;
 
 
 MODULE = Atheme			PACKAGE = Atheme
@@ -35,3 +36,4 @@ CODE:
 INCLUDE: services.xs
 INCLUDE: sourceinfo.xs
 INCLUDE: commands.xs
+INCLUDE: user.xs

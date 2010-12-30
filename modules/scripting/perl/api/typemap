@@ -2,6 +2,7 @@ TYPEMAP
 Atheme_Sourceinfo		T_PTROBJ_SPECIAL
 Atheme_Command			T_PTROBJ_SPECIAL
 Atheme_Service			T_PTROBJ_SPECIAL
+Atheme_User			T_PTROBJ_SPECIAL
 
 INPUT
 T_PTROBJ_SPECIAL
