@@ -11,6 +11,7 @@ void perl_command_handler(sourceinfo_t *si, const int parc, char **parv)
 {
 	perl_command_t * pc = (perl_command_t *) si->command;
 
+	dTHX;
 	dSP;
 	ENTER;
 	SAVETMPS;
