@@ -12,4 +12,6 @@ typedef struct perl_command_ perl_command_t;
 void perl_command_handler(sourceinfo_t *si, const int parc, char **parv);
 void perl_command_help_func(sourceinfo_t *si, const char *subcmd);
 
+#define PERL_MODULE_NAME "scripting/perl"
+
 #endif

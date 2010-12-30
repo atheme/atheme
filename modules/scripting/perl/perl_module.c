@@ -13,6 +13,7 @@
 #undef _
 
 #include "atheme.h"
+#include "conf.h"
 
 DECLARE_MODULE_V1
 (
@@ -291,6 +292,14 @@ static void os_cmd_script_load(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "SCRIPT LOAD: %s", parv[0]);
 	command_success_nodata(si, _("Loaded \2%s\2"), parv[0]);
+
+	if (conf_need_rehash)
+	{
+		logcommand(si, CMDLOG_ADMIN, "REHASH (MODLOAD)");
+		wallops("Rehashing \2%s\2 to complete module load by request of \2%s\2.", config_file, get_oper_name(si));
+		if (!conf_rehash())
+			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
+	}
 }
 
 static void os_cmd_script_unload(sourceinfo_t *si, int parc, char *parv[])
