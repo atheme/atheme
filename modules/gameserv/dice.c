@@ -13,16 +13,11 @@
 
 #include <math.h>
 
-DECLARE_MODULE_V1
-(
-	"gameserv/dice", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("gameserv/dice", false, _modinit, _moddeinit, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_dice, { .path = "gameserv/roll" } };
+command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_dice, {.path = "gameserv/roll"} };
 
 void _modinit(module_t * m)
 {
@@ -44,8 +39,7 @@ void _moddeinit(module_unload_intent_t intent)
 #define DICE_MAX_SIDES		(100)
 
 int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presult);
-int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs,
-				 long double *out, char *errmsg);
+int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, long double *out, char *errmsg);
 int is_calcoper(char oper);
 
 //
@@ -74,7 +68,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	int err, braces = 0;
 	long double expr;
 
-	
+
 	if (s_input == NULL)
 	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
@@ -82,21 +76,29 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	}
 
 	// Skip leading whitespace
-	while( *ci && isspace(*ci) ) ci++;
+	while (*ci && isspace(*ci))
+		ci++;
 
-	if (!*ci) {
+	if (!*ci)
+	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
 		return;
 	}
 
 	// Validate braces
-	while( *ci ) {
-		if ( *ci == '(' ) {
+	while (*ci)
+	{
+		if (*ci == '(')
+		{
 			braces++;
-		} else if ( *ci == ')' ) {
-			if ( --braces < 0 )
-				break; // mismatched!
-		} else if ( !isspace(*ci) && !isdigit(*ci) && *ci != '.' && !is_calcoper(*ci) ) {
+		}
+		else if (*ci == ')')
+		{
+			if (--braces < 0)
+				break;	// mismatched!
+		}
+		else if (!isspace(*ci) && !isdigit(*ci) && *ci != '.' && !is_calcoper(*ci))
+		{
 			command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
 			return;
 		}
@@ -111,11 +113,15 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 
 	err = do_calc_expr(si, s_input, buffer, &expr);
 
-	if ( !err ) {
-		if (strlen(s_input) > 250) {
+	if (!err)
+	{
+		if (strlen(s_input) > 250)
+		{
 			strncpy(buffer, s_input, 150);
-			sprintf(&buffer[150],"...%s = %.8Lg", &s_input[strlen(s_input)-10], expr);
-		} else {
+			sprintf(&buffer[150], "...%s = %.8Lg", &s_input[strlen(s_input) - 10], expr);
+		}
+		else
+		{
 			sprintf(buffer, "%s = %.8Lg", s_input, expr);
 		}
 	}
@@ -128,12 +134,14 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 
 //////////////////////////////////////////////////////////////////////////
 
-enum {
+enum
+{
 	CALCEXPR_VALUE,
 	CALCEXPR_OPER
 };
 
-typedef struct _tagCalcStack {
+typedef struct _tagCalcStack
+{
 	long double _value;
 	char _oper;
 	int _rank;
@@ -145,131 +153,165 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 	int expect = CALCEXPR_VALUE, lastrank, currank;
 	char *cur = expr, *endptr, lastop, curop = ' ';
 	long double total, curval = 0;
-	static int nStack = 0; // Current stack position
-	static CalcStack pStack[CALC_MAX_STACK]; // Value stack
+	static int nStack = 0;	// Current stack position
+	static CalcStack pStack[CALC_MAX_STACK];	// Value stack
 
 	nStack = 0;
 
 	total = 0;
 	lastrank = is_calcoper(lastop = '+');
 
-	while ( *cur ) {
-		printf("%i : %s\n",expect,cur);
-		switch(expect) {
-			case CALCEXPR_VALUE: {
-				curval = strtol(cur, &endptr, 10);
-				if ( *endptr == '.' || (curval < -2000000000 || curval > 2000000000))
-					curval = strtod(cur, &endptr);
-				if ( cur == endptr ) { // didn't go anywhere! o.O
-					if ( *cur == '(' ) {
-						if (curop != ' ') {
-							command_fail(si, fault_badparams, _("Error: Missing expected value in expression."));
-							return 1;
-						}
-						cur++; // skip it
-						pStack[nStack]._value = total;
-						pStack[nStack]._oper = lastop;
-						pStack[nStack]._rank = lastrank;
-						pStack[nStack++]._brace = 1;
-						total = 0;
-						lastrank = is_calcoper(lastop = '+');
-					} else if ( ( currank = is_calcoper(curop = *cur) ) ) {
-						if ( currank != 1 ) { // Unary: ~!
-							command_fail(si, fault_badparams, _("Error: Missing expected value in expression."));
-							return 1;
-						}
-						cur++; // skip unary op
-					} else {
-						command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-						return 1;
-					}
-				} else {
-					// got value... grab next operator
-					if ( curop != ' ' ) {
-						// LHS ignored -- unary ops only have RHS :)
-						if ( do_calc_eval(si, 0, curop, curval, &curval, errmsg) ) {
-							return 1; // error
-						}
-					}
-					cur = endptr;
-					expect = CALCEXPR_OPER;
-				}
-				break;
-			}
-			case CALCEXPR_OPER: {
-				currank = is_calcoper(curop = *cur);
-				if (curop == '(') {
-					cur--;
-					currank = is_calcoper(curop = '*');
-				}
-				if ( currank == 0 ) {
-					if ( curop == ')' ) {
-						do {
-							if ( do_calc_eval(si, total, lastop, curval, &curval, errmsg) ) {
-								return 1; // error
-							}
-							total = pStack[--nStack]._value;
-							lastop = pStack[nStack]._oper;
-							lastrank = pStack[nStack]._rank;
-						} while ( !pStack[nStack]._brace );
-						expect = CALCEXPR_OPER;
-					} else {
-						command_fail(si, fault_badparams, _("Error: Missing expected operator in expression."));
-						return 1;
-					}
-				} else if ( currank < lastrank ) { // operator precedence (new over old!)
-					pStack[nStack]._value = total;
-					pStack[nStack]._oper = lastop;
-					pStack[nStack]._rank = lastrank;
-					pStack[nStack++]._brace = 0;
-					total = curval;
-					lastop = curop;
-					lastrank = currank;
-					currank = is_calcoper(curop = ' ');
-					expect = CALCEXPR_VALUE;
-				} else { // previous opers have precedence -- work backwards (until start/brace)
-					while ( currank >= lastrank ) {
-						if ( do_calc_eval(si, total, lastop, curval, &curval, errmsg) ) {
-							return 1; // error
-						}
-						if ( nStack == 0 )
-							break;
-						if ( pStack[nStack-1]._brace || currank < pStack[nStack-1]._rank )
-							break;
-						total = pStack[--nStack]._value;
-						lastop = pStack[nStack]._oper;
-						lastrank = pStack[nStack]._rank;
-					}
-					total = curval;
-					lastop = curop;
-					lastrank = currank;
-					currank = is_calcoper(curop = ' ');
-					expect = CALCEXPR_VALUE;
-				}
-				cur++;
-				break;
-			}
+	while (*cur)
+	{
+		printf("%i : %s\n", expect, cur);
+		switch (expect)
+		{
+		  case CALCEXPR_VALUE:
+		  {
+			  curval = strtol(cur, &endptr, 10);
+			  if (*endptr == '.' || (curval < -2000000000 || curval > 2000000000))
+				  curval = strtod(cur, &endptr);
+			  if (cur == endptr)
+			  {	// didn't go anywhere! o.O
+				  if (*cur == '(')
+				  {
+					  if (curop != ' ')
+					  {
+						  command_fail(si, fault_badparams, _("Error: Missing expected value in expression."));
+						  return 1;
+					  }
+					  cur++;	// skip it
+					  pStack[nStack]._value = total;
+					  pStack[nStack]._oper = lastop;
+					  pStack[nStack]._rank = lastrank;
+					  pStack[nStack++]._brace = 1;
+					  total = 0;
+					  lastrank = is_calcoper(lastop = '+');
+				  }
+				  else if ((currank = is_calcoper(curop = *cur)))
+				  {
+					  if (currank != 1)
+					  {	// Unary: ~!
+						  command_fail(si, fault_badparams, _("Error: Missing expected value in expression."));
+						  return 1;
+					  }
+					  cur++;	// skip unary op
+				  }
+				  else
+				  {
+					  command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
+					  return 1;
+				  }
+			  }
+			  else
+			  {
+				  // got value... grab next operator
+				  if (curop != ' ')
+				  {
+					  // LHS ignored -- unary ops only have RHS :)
+					  if (do_calc_eval(si, 0, curop, curval, &curval, errmsg))
+					  {
+						  return 1;	// error
+					  }
+				  }
+				  cur = endptr;
+				  expect = CALCEXPR_OPER;
+			  }
+			  break;
+		  }
+		  case CALCEXPR_OPER:
+		  {
+			  currank = is_calcoper(curop = *cur);
+			  if (curop == '(')
+			  {
+				  cur--;
+				  currank = is_calcoper(curop = '*');
+			  }
+			  if (currank == 0)
+			  {
+				  if (curop == ')')
+				  {
+					  do
+					  {
+						  if (do_calc_eval(si, total, lastop, curval, &curval, errmsg))
+						  {
+							  return 1;	// error
+						  }
+						  total = pStack[--nStack]._value;
+						  lastop = pStack[nStack]._oper;
+						  lastrank = pStack[nStack]._rank;
+					  } while (!pStack[nStack]._brace);
+					  expect = CALCEXPR_OPER;
+				  }
+				  else
+				  {
+					  command_fail(si, fault_badparams, _("Error: Missing expected operator in expression."));
+					  return 1;
+				  }
+			  }
+			  else if (currank < lastrank)
+			  {	// operator precedence (new over old!)
+				  pStack[nStack]._value = total;
+				  pStack[nStack]._oper = lastop;
+				  pStack[nStack]._rank = lastrank;
+				  pStack[nStack++]._brace = 0;
+				  total = curval;
+				  lastop = curop;
+				  lastrank = currank;
+				  currank = is_calcoper(curop = ' ');
+				  expect = CALCEXPR_VALUE;
+			  }
+			  else
+			  {	// previous opers have precedence -- work backwards (until start/brace)
+				  while (currank >= lastrank)
+				  {
+					  if (do_calc_eval(si, total, lastop, curval, &curval, errmsg))
+					  {
+						  return 1;	// error
+					  }
+					  if (nStack == 0)
+						  break;
+					  if (pStack[nStack - 1]._brace || currank < pStack[nStack - 1]._rank)
+						  break;
+					  total = pStack[--nStack]._value;
+					  lastop = pStack[nStack]._oper;
+					  lastrank = pStack[nStack]._rank;
+				  }
+				  total = curval;
+				  lastop = curop;
+				  lastrank = currank;
+				  currank = is_calcoper(curop = ' ');
+				  expect = CALCEXPR_VALUE;
+			  }
+			  cur++;
+			  break;
+		  }
 		}
-		if ( nStack >= CALC_MAX_STACK ) {
+		if (nStack >= CALC_MAX_STACK)
+		{
 			command_fail(si, fault_badparams, _("Error: Expression is too deeply nested."));
 			return 1;
 		}
 		// skip whitespace
-		while( *cur && isspace(*cur) ) cur++;
+		while (*cur && isspace(*cur))
+			cur++;
 	}
 
 	// Did we end on an operator instead of a value?
-	if ( expect == CALCEXPR_VALUE ) {
+	if (expect == CALCEXPR_VALUE)
+	{
 		command_fail(si, fault_badparams, _("Error: Missing expected value in expression."));
 		return 1;
 	}
 
 	// Wind back up the stack, if it exists (including last value!)
-	while ( nStack > -1 ) {
-		if ( do_calc_eval(si, total, lastop, curval, &curval, errmsg) ) {
-			return 1; // error
+	while (nStack > -1)
+	{
+		if (do_calc_eval(si, total, lastop, curval, &curval, errmsg))
+		{
+			return 1;	// error
 		}
-		if ( nStack == 0 )
+		if (nStack == 0)
 			break;
 		total = pStack[--nStack]._value;
 		lastop = pStack[nStack]._oper;
@@ -277,7 +319,7 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 	}
 
 	*presult = curval;
-	return 0; // no error
+	return 0;		// no error
 }
 
 
@@ -285,61 +327,61 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 
 int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, long double *out, char *errmsg)
 {
-	switch(oper)
+	switch (oper)
 	{
-		case '~': // 1's compliment (unary)
-			*out = (long double)(~(long long)rhs);
-			break;
-		case '!': // NOT (unary)
-			*out = !rhs;
-			break;
-		case '*': // multiplication
-			*out = lhs * rhs;
-			break;
-		case '/': // division
-		case '%': // MOD
-		case '\\': // DIV
-			if (rhs == 0 || (oper=='%' && ((long long)rhs == 0)))
-			{
-				command_fail(si, fault_badparams, _("Error: Cannot perform modulus or division by zero."));
-				return 1;
-			}
+	  case '~':		// 1's compliment (unary)
+		  *out = (long double)(~(long long)rhs);
+		  break;
+	  case '!':		// NOT (unary)
+		  *out = !rhs;
+		  break;
+	  case '*':		// multiplication
+		  *out = lhs * rhs;
+		  break;
+	  case '/':		// division
+	  case '%':		// MOD
+	  case '\\':		// DIV
+		  if (rhs == 0 || (oper == '%' && ((long long)rhs == 0)))
+		  {
+			  command_fail(si, fault_badparams, _("Error: Cannot perform modulus or division by zero."));
+			  return 1;
+		  }
 
-			switch (oper)
-			{
-				case '/':
-					*out = lhs / rhs;
-					break;
-				case '%':
-					*out = (long double)((long long)lhs % (long long)rhs);
-					break;
-				case '\\':
-					lhs /= rhs;
-					*out = (lhs < 0) ? ceil(lhs) : floor(lhs);
-					break;
-			}
-			break;
-		case '^': // power-of
-			*out = powl(lhs, rhs);
-			break;
-		case '+': // addition
-			*out = lhs + rhs;
-			break;
-		case '-': // subtraction
-			*out = lhs - rhs;
-			break;
-		case '&': // AND (bitwise)
-			*out = (long double)((long long)lhs & (long long)rhs);
-			break;
-		case '$': // XOR (bitwise)
-			*out = (long double)((long long)lhs ^ (long long)rhs);
-			break;
-		case '|': // OR (bitwise)
-			*out = (long double)((long long)lhs | (long long)rhs);
-			break;
-		default:
-			command_fail(si, fault_unimplemented, _("Error: Unknown mathematical operator %c."), oper);
-			return 1;
+		  switch (oper)
+		  {
+		    case '/':
+			    *out = lhs / rhs;
+			    break;
+		    case '%':
+			    *out = (long double)((long long)lhs % (long long)rhs);
+			    break;
+		    case '\\':
+			    lhs /= rhs;
+			    *out = (lhs < 0) ? ceil(lhs) : floor(lhs);
+			    break;
+		  }
+		  break;
+	  case '^':		// power-of
+		  *out = powl(lhs, rhs);
+		  break;
+	  case '+':		// addition
+		  *out = lhs + rhs;
+		  break;
+	  case '-':		// subtraction
+		  *out = lhs - rhs;
+		  break;
+	  case '&':		// AND (bitwise)
+		  *out = (long double)((long long)lhs & (long long)rhs);
+		  break;
+	  case '$':		// XOR (bitwise)
+		  *out = (long double)((long long)lhs ^ (long long)rhs);
+		  break;
+	  case '|':		// OR (bitwise)
+		  *out = (long double)((long long)lhs | (long long)rhs);
+		  break;
+	  default:
+		  command_fail(si, fault_unimplemented, _("Error: Unknown mathematical operator %c."), oper);
+		  return 1;
 	}
 
 	return 0;
@@ -355,8 +397,10 @@ int is_calcoper(char oper)
 	char *c = opers;
 	int rank = 1;
 
-	while( *c && *c != oper ) {
-		if ( *c == ' ' ) rank++;
+	while (*c && *c != oper)
+	{
+		if (*c == ' ')
+			rank++;
 		c++;
 	}
 
@@ -373,14 +417,16 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 	unsigned int dice, roll, x, y, z = 0;
 	double total;
 
-	while( *c && isspace(*c) ) ++c;
-	if ( !*c || !isdigit(*c) ) {
+	while (*c && isspace(*c))
+		++c;
+	if (!*c || !isdigit(*c))
+	{
 		gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
 		return;
 	}
 
 	x = strtoul(c, &c, 10);
-	if (x == 0 || c == NULL || ToLower(*c++) != 'd' || !isdigit(*c)) 
+	if (x == 0 || c == NULL || ToLower(*c++) != 'd' || !isdigit(*c))
 	{
 		if (x < 1 || x > DICE_MAX_DICE)
 		{
@@ -398,7 +444,8 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 		while (*c && isspace(*c))
 			++c;
 
-		if ( *c && strchr("-+*/", *c) == NULL ) {
+		if (*c && strchr("-+*/", *c) == NULL)
+		{
 			gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
 			return;
 		}
@@ -439,7 +486,7 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 
 	total = 0.0;
 	snprintf(buffer, 1024, "\2%s\2 rolled %lud%lu: ", si->su->nick, x, y);
-	for (roll = 0; roll < x ; ++roll)
+	for (roll = 0; roll < x; ++roll)
 	{
 		snprintf(result, 32, "%d ", dice = (1 + (arc4random() % y)));
 		strlcat(buffer, result, sizeof(buffer));
@@ -448,15 +495,26 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 
 	if (op == '\0')
 		snprintf(result, 32, " <Total: %g>", total);
-	else {
+	else
+	{
 		snprintf(result, 32, " <Total: %g(%c%lu) = ", total, op, z);
 		strlcat(buffer, result, sizeof(buffer));
-		switch(op) {
-			case '+':	total += z; break;
-			case '-':	total -= z; break;
-			case '/':	total /= z; break;
-			case '*':	total *= z; break;
-			default:	break;
+		switch (op)
+		{
+		  case '+':
+			  total += z;
+			  break;
+		  case '-':
+			  total -= z;
+			  break;
+		  case '/':
+			  total /= z;
+			  break;
+		  case '*':
+			  total *= z;
+			  break;
+		  default:
+			  break;
 		}
 		snprintf(result, 32, "%g>", total);
 	}
