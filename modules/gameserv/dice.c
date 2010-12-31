@@ -169,7 +169,6 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 
 	while (*cur)
 	{
-		printf("%i : %s\n", expect, cur);
 		switch (expect)
 		{
 		  case CALCEXPR_VALUE:
