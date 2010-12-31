@@ -109,11 +109,6 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		return;
 	}
 
-	// Calculate the expression
-	//
-	//==> err=0: calc succeeded / err!=0: calc failed - errmsg in 'buffer'
-	//
-
 	err = do_calc_expr(si, s_input, buffer, &expr);
 
 	if ( !err ) {
@@ -124,6 +119,8 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 			sprintf(buffer, "%s = %.8Lg", s_input, expr);
 		}
 	}
+	else
+		return;
 
 	gs_command_report(si, "%s", buffer);
 }
