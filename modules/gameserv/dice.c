@@ -38,61 +38,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_dice);
 }
 
-#if 0
-static void do_calc(User *u) {
- 
-    char *target = strtok(NULL, "");
-    char *calcstr;
-
-    ChannelInfo *ci;
-
-    if (!target) {
-        syntax_error(s_GameServ, u, "CALC", GAME_CALC_SYNTAX);
-	return;
-    } else if ( *target == '#' ) {
-	target = strtok(target, " ");
-	calcstr = strtok(NULL, "");
-
-        write_log("%s is using the calc command: %s", u->nick, calcstr);
-
-	if (!(ci = cs_findchan(target))) {
-	    notice_lang(s_GameServ, u, CHAN_X_NOT_REGISTERED, target);
-	    return;
-	} else if (ci->flags & CI_VERBOTEN) {
-	    notice_lang(s_GameServ, u, CHAN_X_FORBIDDEN, target);
-	    return;
-	} else if (!ci->founder) {
-	    notice_lang(s_GameServ, u, CHAN_X_NOT_REGISTERED, target);
-	    return;
-	} else if (!(ci->flags & CI_GAMESERV)) {
-	    notice_lang(s_GameServ, u, GAME_DISABLED, target);
-	    return;
-	} else if (!(ci->flags & CI_CALC)) {
-	    notice_lang(s_GameServ, u, GAME_CALC_DISABLED, target);
-	    return;
-	} else if (!is_on_chan(u, target)) {
-	    notice_lang(s_GameServ, u, MUST_JOIN_CHANNEL, target);
-	    return;
-	}
-    } else {
-	calcstr = target;
-	target = u->nick;
-    }
- 
-    calcstr = process_calc(calcstr);
-
-    if (strncmp(calcstr, "Error:", 6) == 0) {
-	// Error Message... skip the prefix and send it.
-	send_cmd(s_GameServ, "PRIVMSG %s :%s: %s", target, u->nick, calcstr+7);
-	return;
-    }
-
-    // Show the result...
-    send_cmd(s_GameServ, "PRIVMSG %s :%s: %s", target, u->nick, calcstr);
-    return;
-}
-#endif
-
 #define CALC_MAX_STACK		(128)
 
 #define DICE_MAX_DICE		(100)
