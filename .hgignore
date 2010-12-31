@@ -24,7 +24,7 @@ libmowgli/buildsys.mk
 libmowgli/extra.mk
 libmowgli/libmowgli.pc
 libmowgli/mk/rules.mk
-libmowgli/src/libmowgli/.deps
+libmowgli/src/libmowgli/*.dep
 libmowgli/src/examples/patriciatest/patriciatest
 libmowgli/src/libmowgli/mowgli_config.h
 modules/Makefile.common
