@@ -571,6 +571,9 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	{
 		times = atoi(parv[0]);
 		arg = parv[1];
+
+		if (times > 10)
+			times = 10;
 	}
 
 	for (i = 0; i < times; i++)
@@ -597,6 +600,9 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 	{
 		times = atoi(parv[0]);
 		arg = parv[1];
+
+		if (times > 10)
+			times = 10;
 	}
 
 	for (i = 0; i < times; i++)
