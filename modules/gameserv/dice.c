@@ -16,21 +16,27 @@
 DECLARE_MODULE_V1("gameserv/dice", false, _modinit, _moddeinit, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
+static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_dice, {.path = "gameserv/roll"} };
+command_t cmd_calc = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_calc, {.path = "gameserv/calc"} };
 
 void _modinit(module_t * m)
 {
 	service_named_bind_command("gameserv", &cmd_dice);
+	service_named_bind_command("gameserv", &cmd_calc);
 
 	service_named_bind_command("chanserv", &cmd_dice);
+	service_named_bind_command("chanserv", &cmd_calc);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_dice);
+	service_named_unbind_command("gameserv", &cmd_calc);
 
 	service_named_unbind_command("chanserv", &cmd_dice);
+	service_named_unbind_command("chanserv", &cmd_calc);
 }
 
 #define CALC_MAX_STACK		(128)
