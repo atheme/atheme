@@ -9,8 +9,8 @@
 
 DECLARE_MODULE_V1
 (
-	"announceserv/main", false, _modinit, _moddeinit,
-	"thinstack-1.0", 
+	"contrib/ircd_announceserv", false, _modinit, _moddeinit,
+	PACKAGE_STRING, 
 	"JD and Taros"
 );
 
@@ -28,11 +28,11 @@ static void write_asreqdb(database_handle_t *db);
 static void db_h_ar(database_handle_t *db, const char *type);
 
 command_t as_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 2, as_cmd_help, { .path = "help/help" } };
-command_t as_request = { "REQUEST", N_("Requests new announcement."), AC_AUTHENTICATED, 2, as_cmd_request, { .path = "announceserv/request" } };
-command_t as_waiting = { "WAITING", N_("Lists announcements currently waiting for activation."), PRIV_GLOBAL, 1, as_cmd_waiting, { .path = "announceserv/waiting" } };
-command_t as_reject = { "REJECT", N_("Reject the requested announcement for the given nick."), PRIV_GLOBAL, 2, as_cmd_reject, { .path = "announceserv/reject" } };
-command_t as_activate = { "ACTIVATE", N_("Activate the requested announcement for a given nick."), PRIV_GLOBAL, 2, as_cmd_activate, { .path = "announceserv/activate" } };
-command_t as_cancel = { "CANCEL", N_("Cancels your requested announcement."), AC_AUTHENTICATED, 0, as_cmd_cancel, { .path = "announceserv/cancel" } };
+command_t as_request = { "REQUEST", N_("Requests new announcement."), AC_AUTHENTICATED, 2, as_cmd_request, { .path = "contrib/as_request" } };
+command_t as_waiting = { "WAITING", N_("Lists announcements currently waiting for activation."), PRIV_GLOBAL, 1, as_cmd_waiting, { .path = "contrib/as_waiting" } };
+command_t as_reject = { "REJECT", N_("Reject the requested announcement for the given nick."), PRIV_GLOBAL, 2, as_cmd_reject, { .path = "contrib/as_reject" } };
+command_t as_activate = { "ACTIVATE", N_("Activate the requested announcement for a given nick."), PRIV_GLOBAL, 2, as_cmd_activate, { .path = "contrib/as_activate" } };
+command_t as_cancel = { "CANCEL", N_("Cancels your requested announcement."), AC_AUTHENTICATED, 0, as_cmd_cancel, { .path = "contrib/as_cancel" } };
 
 struct asreq_ {
 	char *nick;

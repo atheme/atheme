@@ -634,17 +634,6 @@ loadmodule "modules/groupserv/set_open";
 loadmodule "modules/groupserv/set_public";
 loadmodule "modules/groupserv/set_url";
 
-/* AnnounceServ module.
- *
- * Like the other services, AnnounceServ is a module. You can disable or
- * enable it to your liking below.
- *
- * AnnounceServ allows users to request to send announcements.
- * This is a seperate service so users can easily ignore announcements from
- * other users, but not important network announcements from Global or InfoServ.
- */
-#loadmodule "modules/announceserv/main";
-
 /*
  * Various modules.
  *
@@ -1523,48 +1512,6 @@ alis {
 	 * The realname (gecos) information we want ALIS to have.
 	 */
 	real = "Channel Directory";
-};
-
-/* AnnounceServ configuration.
- *
- * The announceserv {} block contains settings specific to the AnnounceServ modules.
- */
-announceserv {
-	/* (*)nick
-	 * The nickname we want the Announcement Service to have.
-	 */
-	nick = "AnnounceServ";
-
-	/* (*)user
-	 * Sets the username used for this client.
-	 * Because IRC username lengths are 10 characters, we use
-	 * 'Announce' here as truncation would yield 'AnnounceSe'.
-	 */
-	user = "Announce";
-
-	/* (*)host
-	 * The hostname used for this client.
-	 */
-	host = "services.int";
-
-	/* (*)real
-	 * The GECOS (real name) of the client.
-	 */
-	real = "Announcement Services";
-
-	/* (*)aliases
-	 * Command aliases for AnnounceServ.
-	 */
-	aliases {
-		"APPROVE" = "ACTIVATE";
-		"DENY" = "REJECT";
-	};
-	
-	/* (*)access
-	 * Command access changes for AnnounceServ.
-	 */
-	access {
-	};
 };
 
 /* HTTP server configuration.
