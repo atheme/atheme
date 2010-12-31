@@ -20,20 +20,24 @@ DECLARE_MODULE_V1
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
+static void command_nwod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_df(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice, { .path = "gameserv/roll" } };
 command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
+command_t cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_wod, { .path = "gameserv/roll" } };
 command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
 void _modinit(module_t * m)
 {
 	service_named_bind_command("gameserv", &cmd_dice);
 	service_named_bind_command("gameserv", &cmd_wod);
+	service_named_bind_command("gameserv", &cmd_nwod);
 	service_named_bind_command("gameserv", &cmd_df);
 
 	service_named_bind_command("chanserv", &cmd_dice);
 	service_named_bind_command("chanserv", &cmd_wod);
+	service_named_bind_command("chanserv", &cmd_nwod);
 	service_named_bind_command("chanserv", &cmd_df);
 }
 
@@ -41,10 +45,12 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_dice);
 	service_named_unbind_command("gameserv", &cmd_wod);
+	service_named_unbind_command("gameserv", &cmd_nwod);
 	service_named_unbind_command("gameserv", &cmd_df);
 
 	service_named_unbind_command("chanserv", &cmd_dice);
 	service_named_unbind_command("chanserv", &cmd_wod);
+	service_named_unbind_command("chanserv", &cmd_nwod);
 	service_named_unbind_command("chanserv", &cmd_df);
 }
 
@@ -201,6 +207,103 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 		/* prepare for another go. */
 		arg_dice = parv[ii++];
 		arg_difficulty = parv[ii++];
+	}
+}
+
+static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+	char *arg_dice, *arg_rerollflag;
+	int ii = 0;
+	int dice, reroll;
+	int roll, total, roll_count = 0, i;
+	int success = 0, failure = 0, botches = 0, rerolls = 0;
+	static char buf[BUFSIZE];
+	char *end_p;
+
+	if (!gs_do_parameters(si, &parc, &parv, &mc))
+		return;
+	if (parc < 2)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NWOD");
+		command_fail(si, fault_needmoreparams, _("Syntax: NWOD [-chance] <dice> [-reroll] [reroll]"));
+		return;
+	}
+	arg_dice = parv[ii++];
+	arg_rerollflag = parv[ii++];
+
+	while (roll_count < 3 && arg_dice != NULL)
+	{
+		success = 0, failure = 0, botches = 0, rerolls = 0;
+		roll_count++;
+
+		dice = atoi(arg_dice);
+
+		if (dice == 0 && !strcasecmp(arg_dice, "-chance"))
+		{
+			int roll = (arc4random() % 10) + 1;
+
+			if (roll == 1)
+				botches++;
+
+			if (roll == 10)
+				success++;
+
+			gs_command_report(si, _("%s rolls a chance die: %d"), si->su->nick, roll);
+			gs_command_report(si, _("Successes: %d, Failures: %d, Botches: %d."), success, failure, botches);
+			return;
+		}
+
+		if (dice > 30 || dice < 1)
+		{
+			command_fail(si, fault_badparams, _("Only 1-30 dice may be thrown at one time."));
+			return;
+		}
+
+		if (arg_rerollflag != NULL && !strcasecmp(arg_rerollflag, "-reroll") && parv[ii + 1] != NULL)
+			reroll = atoi(parv[ii++]);
+		else
+			reroll = 10;
+
+		{
+			end_p = buf;
+
+			for (i = 0; i < dice; i++)
+			{
+				roll = (arc4random() % 10) + 1;
+
+				end_p += snprintf(end_p, BUFSIZE - (end_p - buf), "%d  ", roll);
+
+				if (roll == 1)
+				{
+					botches++;
+					continue;
+				}
+				else if (roll >= reroll)
+					rerolls++;
+
+				if (roll >= 8)
+					success++;
+				else
+					failure++;
+			}
+
+			rerolls = rerolls - botches;
+			total = success - botches;
+
+			gs_command_report(si, _("%s rolls %d dice: %s"), si->su->nick, dice, buf);
+
+			if (rerolls > 0)
+				gs_command_report(si, _("Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d."),
+					success, failure, botches, total, rerolls);
+			else
+				gs_command_report(si, _("Successes: %d, Failures: %d, Botches: %d, Total: %d."),
+					success, failure, botches, total);
+		}
+
+		/* prepare for another go. */
+		arg_dice = parv[ii++];
+		arg_rerollflag = parv[ii++];
 	}
 }
 
