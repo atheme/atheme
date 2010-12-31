@@ -148,7 +148,7 @@ static int conf_service_user(config_entry_t *ce)
 		return -1;
 
 	free(sptr->user);
-	sptr->user = sstrdup(ce->ce_vardata);
+	sptr->user = sstrndup(ce->ce_vardata, 10);
 
 	return 0;
 }
