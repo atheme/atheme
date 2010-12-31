@@ -19,7 +19,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_dice, {.path = "gameserv/roll"} };
-command_t cmd_calc = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 1, command_calc, {.path = "gameserv/calc"} };
+command_t cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 1, command_calc, {.path = "gameserv/calc"} };
 
 void _modinit(module_t * m)
 {
