@@ -1,4 +1,4 @@
-package Atheme::HashWrapper;
+package Atheme::ReadOnlyHashWrapper;
 
 use Carp;
 
