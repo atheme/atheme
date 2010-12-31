@@ -1537,8 +1537,10 @@ announceserv {
 
 	/* (*)user
 	 * Sets the username used for this client.
+	 * Because IRC username lengths are 10 characters, we use
+	 * 'Announce' here as truncation would yield 'AnnounceSe'.
 	 */
-	user = "AnnounceServ";
+	user = "Announce";
 
 	/* (*)host
 	 * The hostname used for this client.
