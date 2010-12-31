@@ -337,6 +337,9 @@ long double calc_dice_simple(long double lhs, long double rhs)
 	if (!lhs)
 		lhs = 1.0;
 
+	if (!rhs)
+		rhs = 1.0;
+
 	for (i = 0; i < lhs; i++)
 	{
 		int sides = floorl(rhs);
