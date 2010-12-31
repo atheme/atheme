@@ -135,7 +135,9 @@ int mowgli_ioevent_get(mowgli_ioevent_handle_t *self, mowgli_ioevent_t *buf, siz
 
 void mowgli_ioevent_associate(mowgli_ioevent_handle_t *self, mowgli_ioevent_source_t source, int object, unsigned int flags, void *opaque)
 {
+#if defined HAVE_EPOLL_CTL || defined HAVE_PORT_CREATE
 	int events = 0;
+#endif
 
 	if (source != MOWGLI_SOURCE_FD)
 		return;

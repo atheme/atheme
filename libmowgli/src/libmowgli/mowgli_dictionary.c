@@ -35,6 +35,17 @@ struct mowgli_dictionary_
 	mowgli_boolean_t dirty;
 };
 
+static void warn_deprecated (void)
+{
+	static char warned = 0;
+	if (warned)
+		return;
+
+	printf("mowgli_dictionary is deprecated and pending removal in Mowgli 1.0 "
+	 "series.\nPlease use mowgli_patricia instead.\n");
+	warned = 1;
+}
+
 /*
  * mowgli_dictionary_create(mowgli_dictionary_comparator_func_t compare_cb)
  *
@@ -59,9 +70,7 @@ mowgli_dictionary_t *mowgli_dictionary_create(mowgli_dictionary_comparator_func_
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
 
-	mowgli_log("mowgli_dictionary is deprecated and pending removal in Mowgli 1.0 series.");
-	mowgli_log("Consider replacing this code with mowgli_patricia.");
-
+	warn_deprecated();
 	return dtree;
 }
 
@@ -93,9 +102,7 @@ mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name,
 	if (!elem_heap)
 		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
 
-	mowgli_log("mowgli_dictionary is deprecated and pending removal in Mowgli 1.0 series.");
-	mowgli_log("Consider replacing this code with mowgli_patricia.");
-
+	warn_deprecated();
 	return dtree;
 }
 

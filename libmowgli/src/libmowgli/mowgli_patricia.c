@@ -165,7 +165,7 @@ mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key))
 }
 
 /*
- * mowgli_patricia_create_named(const char *name, 
+ * mowgli_patricia_create_named(const char *name,
  *     void (*canonize_cb)(char *key))
  *
  * Dictionary object factory.
@@ -547,7 +547,8 @@ void mowgli_patricia_foreach_next(mowgli_patricia_t *dtree,
 static struct patricia_leaf *mowgli_patricia_find(mowgli_patricia_t *dict, const char *key)
 {
 	char ckey_store[256];
-	char *ckey;
+	char *ckey_buf = NULL;
+	const char *ckey;
 	union patricia_elem *delem;
 	int val, keylen;
 
@@ -555,14 +556,24 @@ static struct patricia_leaf *mowgli_patricia_find(mowgli_patricia_t *dict, const
 	return_val_if_fail(key != NULL, NULL);
 
 	keylen = strlen(key);
-	if (keylen >= sizeof ckey_store)
-		ckey = strdup(key);
+
+	if (dict->canonize_cb == NULL)
+		ckey = key;
 	else
 	{
-		strcpy(ckey_store, key);
-		ckey = ckey_store;
+		if (keylen >= sizeof ckey_store)
+		{
+			ckey_buf = strdup(key);
+			dict->canonize_cb(ckey_buf);
+			ckey = ckey_buf;
+		}
+		else
+		{
+			strcpy(ckey_store, key);
+			dict->canonize_cb(ckey_store);
+			ckey = ckey_store;
+		}
 	}
-	dict->canonize_cb(ckey);
 
 	delem = dict->root;
 	while (delem != NULL && !IS_LEAF(delem))
@@ -577,8 +588,7 @@ static struct patricia_leaf *mowgli_patricia_find(mowgli_patricia_t *dict, const
 	if (delem != NULL && strcmp(delem->leaf.key, ckey))
 		delem = NULL;
 
-	if (ckey != ckey_store)
-		free(ckey);
+	free(ckey_buf);
 
 	return &delem->leaf;
 }
@@ -619,7 +629,8 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 		mowgli_log("major WTF: ckey is NULL, not adding node.");
 		return FALSE;
 	}
-	dict->canonize_cb(ckey);
+	if (dict->canonize_cb != NULL)
+		dict->canonize_cb(ckey);
 
 	prev = NULL;
 	val = POINTERS_PER_NODE + 2; /* trap value */
@@ -756,7 +767,8 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 {
 	void *data;
 	char ckey_store[256];
-	char *ckey;
+	char *ckey_buf = NULL;
+	const char *ckey;
 	union patricia_elem *delem, *prev, *next;
 	int val, i, keylen, used;
 
@@ -765,14 +777,23 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 
 	keylen = strlen(key);
 
-	if (keylen >= sizeof ckey_store)
-		ckey = strdup(key);
+	if (dict->canonize_cb == NULL)
+		ckey = key;
 	else
 	{
-		strcpy(ckey_store, key);
-		ckey = ckey_store;
+		if (keylen >= sizeof ckey_store)
+		{
+			ckey_buf = strdup(key);
+			dict->canonize_cb(ckey_buf);
+			ckey = ckey_buf;
+		}
+		else
+		{
+			strcpy(ckey_store, key);
+			dict->canonize_cb(ckey_store);
+			ckey = ckey_store;
+		}
 	}
-	dict->canonize_cb(ckey);
 
 	val = POINTERS_PER_NODE + 2; /* trap value */
 	delem = dict->root;
@@ -788,8 +809,7 @@ void *mowgli_patricia_delete(mowgli_patricia_t *dict, const char *key)
 	if (delem != NULL && strcmp(delem->leaf.key, ckey))
 		delem = NULL;
 
-	if (ckey != ckey_store)
-		free(ckey);
+	free(ckey_buf);
 
 	if (delem == NULL)
 		return NULL;

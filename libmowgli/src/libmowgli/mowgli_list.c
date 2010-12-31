@@ -180,7 +180,7 @@ mowgli_node_t *mowgli_node_nth(mowgli_list_t *l, int pos)
 	if (pos < MOWGLI_LIST_LENGTH(l) / 2)
 		for (iter = 0, n = l->head; iter != pos && n != NULL; iter++, n = n->next);
 	else
-		for (iter = MOWGLI_LIST_LENGTH(l), n = l->tail;
+		for (iter = MOWGLI_LIST_LENGTH(l) - 1, n = l->tail;
 			iter != pos && n != NULL; iter--, n = n->prev);
 
 	return n;

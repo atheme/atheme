@@ -62,6 +62,10 @@ typedef struct mowgli_patricia_iteration_state_ mowgli_patricia_iteration_state_
  * mowgli_patricia_create() creates a new patricia tree of the defined resolution.
  * compare_cb is the canonizing function.
  */
+
+/* defined if this version of Mowgli allows canonize_cb to be NULL */
+#define MOWGLI_PATRICIA_ALLOWS_NULL_CANONIZE
+
 extern mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key));
 
 /*
