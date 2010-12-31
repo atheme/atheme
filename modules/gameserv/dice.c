@@ -45,19 +45,19 @@ int is_calcoper(char oper);
 //
 // <expr>
 //   expr = {<op>(<expr>)}|{<op><expr>}
-//   op   = { ~ ! * / % \ ^ + - & $ | }
+//   op   = { ~ ! d * / % \ ^ + - & $ | }
 //
 // [Rank 1]                        |  [Rank 4]
 // ~   = One's compliment          |  + - = Add / Subtract
 // !   = Logical NOT               |
-//                                 |  [Rank 5]
-// [Rank 2]                        |  &   = Bitwise AND
-// ^   = Power                     |
-//                                 |  [Rank 6]
-// [Rank 3]                        |  $   = Bitwise XOR (eXclusive OR)
-// * / = Multiply / Divide         |
-// % \ = Modulus / Integer-divide  |  [Rank 7]
-//                                 |  |   = Bitwise inclusive OR
+// d   = Dice Generator, LOL.      |  [Rank 5]
+//                                 |  &   = Bitwise AND
+// [Rank 2]                        |  
+// ^   = Power                     |  [Rank 6]
+//                                 |  $   = Bitwise XOR (eXclusive OR)
+// [Rank 3]                        |  
+// * / = Multiply / Divide         |  [Rank 7]
+// % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //
 static void eval_calc(sourceinfo_t *si, char *s_input)
 {
@@ -323,6 +323,23 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 }
 
 
+long double calc_dice_simple(long double lhs, long double rhs)
+{
+	long double i;
+	long double out = 0.0;
+
+	if (!lhs)
+		lhs = 1.0;
+
+	for (i = 0; i < lhs; i++)
+	{
+		int sides = floorl(rhs);
+		out += 1.0 + (arc4random() % sides);
+	}
+
+	return out;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, long double *out, char *errmsg)
@@ -334,6 +351,9 @@ int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, 
 		  break;
 	  case '!':		// NOT (unary)
 		  *out = !rhs;
+		  break;
+	  case 'd':
+		  *out = calc_dice_simple(lhs, rhs);
 		  break;
 	  case '*':		// multiplication
 		  *out = lhs * rhs;
@@ -393,7 +413,7 @@ int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, 
 //
 int is_calcoper(char oper)
 {
-	static char *opers = "~! ^ */%\\ +- & $ |";
+	static char *opers = "~!d ^ */%\\ +- & $ |";
 	char *c = opers;
 	int rank = 1;
 
