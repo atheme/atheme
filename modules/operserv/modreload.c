@@ -9,6 +9,7 @@ DECLARE_MODULE_V1
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
+void recurse_module_deplist(module_t *m, mowgli_list_t *deplist);
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modreload = { "MODRELOAD", N_("Reloads a module."), PRIV_ADMIN, 20, os_cmd_modreload, { .path = "oservice/modreload" } };
