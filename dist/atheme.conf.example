@@ -643,7 +643,7 @@ loadmodule "modules/groupserv/set_url";
  * This is a seperate service so users can easily ignore announcements from
  * other users, but not important network announcements from Global or InfoServ.
  */
-loadmodule "modules/announceserv/main";
+#loadmodule "modules/announceserv/main";
 
 /*
  * Various modules.
