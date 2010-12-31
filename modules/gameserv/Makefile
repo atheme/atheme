@@ -12,7 +12,7 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-SRCS = dice.c  eightball.c  gamecalc.c  help.c  main.c  namegen.c rps.c
+SRCS = dice.c  eightball.c  gamecalc.c  help.c  lottery.c  main.c  namegen.c  rps.c
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH} -lm
