@@ -49,7 +49,6 @@ CODE:
 OUTPUT:
 	RETVAL
 
-
 const char *
 uid(Atheme_User self)
 CODE:
@@ -57,4 +56,16 @@ CODE:
 OUTPUT:
 	RETVAL
 
+Atheme_Account
+account(Atheme_User self)
+CODE:
+	RETVAL = self->myuser;
+OUTPUT:
+	RETVAL
 
+Atheme_Internal_List
+channels(Atheme_User self)
+CODE:
+	RETVAL = perl_list_create(&self->channels, "Atheme::ChanUser");
+OUTPUT:
+	RETVAL

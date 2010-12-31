@@ -1,10 +1,3 @@
-
-#include <EXTERN.h>
-#include <perl.h>
-
-#undef _
-
-#include "atheme.h"
 #include "atheme_perl.h"
 
 void perl_command_handler(sourceinfo_t *si, const int parc, char **parv)

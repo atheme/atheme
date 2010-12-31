@@ -3,7 +3,7 @@
 
 PLUGIN = Atheme$(PLUGIN_SUFFIX)
 
-SRCS = Atheme.c perl_command.c
+SRCS = Atheme.c perl_command.c perl_utilities.c
 
 include ../../../../extra.mk
 include ../../../../buildsys.mk

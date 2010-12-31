@@ -1,6 +1,14 @@
 #ifndef ATHEME_PERL_H
 #define ATHEME_PERL_H
 
+#include <EXTERN.h>
+#include <perl.h>
+#include <XSUB.h>
+
+#undef _
+
+#include "atheme.h"
+
 struct perl_command_ {
 	command_t command;
 	SV * handler;
@@ -13,5 +21,33 @@ void perl_command_handler(sourceinfo_t *si, const int parc, char **parv);
 void perl_command_help_func(sourceinfo_t *si, const char *subcmd);
 
 #define PERL_MODULE_NAME "scripting/perl"
+
+/*
+ * Wrapper objects for collections.
+ *
+ * These objects hold a reference to the underlying collection, along with
+ * knowledge of which Perl package to bless the contents into.
+ */
+
+struct perl_list_ {
+	mowgli_list_t *list;
+	const char *package_name;
+};
+
+typedef struct perl_list_ perl_list_t;
+
+inline perl_list_t * perl_list_create(mowgli_list_t *list, const char *package)
+{
+	perl_list_t *ret = malloc(sizeof(perl_list_t));
+	ret->list = list;
+	ret->package_name = sstrdup(package);
+	return ret;
+}
+
+/*
+ * Utility functions for ease of XS coding
+ */
+
+SV * bless_pointer_to_package(void *data, const char *package);
 
 #endif

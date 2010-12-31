@@ -1,17 +1,16 @@
-#include <EXTERN.h>
-#include <perl.h>
-#include <XSUB.h>
-
-/* Take the Atheme definition of this. */
-#undef _
-
-#include "atheme.h"
 #include "atheme_perl.h"
 
 typedef sourceinfo_t *Atheme_Sourceinfo;
 typedef perl_command_t *Atheme_Command;
 typedef service_t *Atheme_Service;
 typedef user_t *Atheme_User;
+typedef myentity_t *Atheme_Entity;
+typedef myuser_t *Atheme_Account;
+typedef channel_t *Atheme_Channel;
+typedef chanuser_t *Atheme_ChanUser;
+typedef mychan_t *Atheme_ChannelRegistration;
+
+typedef perl_list_t *Atheme_Internal_List;
 
 
 MODULE = Atheme			PACKAGE = Atheme
@@ -37,3 +36,8 @@ INCLUDE: services.xs
 INCLUDE: sourceinfo.xs
 INCLUDE: commands.xs
 INCLUDE: user.xs
+INCLUDE: account.xs
+INCLUDE: channel.xs
+INCLUDE: channelregistration.xs
+
+INCLUDE: internal_list.xs
