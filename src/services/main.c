@@ -5,9 +5,9 @@
  * Initialization stub for libathemecore.
  */
 
-extern int atheme_main(int argc, const char *argv[]);
+#include "libathemecore.h"
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
 	return atheme_main(argc, argv);
 }

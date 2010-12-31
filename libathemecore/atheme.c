@@ -28,6 +28,7 @@
 #include "internal.h"
 #include "datastream.h"
 #include "authcookie.h"
+#include "libathemecore.h"
 #include <sys/resource.h>
 
 chansvs_t chansvs;
@@ -49,7 +50,6 @@ bool readonly = false;
 
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (void) = NULL;
-int atheme_main(int argc, char *argv[]);
 
 /* *INDENT-OFF* */
 static void print_help(void)

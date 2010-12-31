@@ -23,6 +23,7 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "rfc1459.h"
 
 DECLARE_MODULE_V1
 (
@@ -30,8 +31,6 @@ DECLARE_MODULE_V1
 	PACKAGE_VERSION,
 	"Atheme Development Group <http://www.atheme.org>"
 );
-
-extern void irc_parse(char *line);
 
 void _modinit(module_t *m)
 {
