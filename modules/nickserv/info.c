@@ -249,7 +249,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH(n, object(mu)->metadata.head)
 	{
 		md = n->data;
-		if (md->private)
+		if (!strncmp(md->name, "private:", 8))
 			continue;
 		command_success_nodata(si, _("Metadata   : %s = %s"),
 				md->name, md->value);

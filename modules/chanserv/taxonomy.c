@@ -70,7 +70,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	{
 		metadata_t *md = n->data;
 
-                if (md->private && !isoper)
+                if (!strncmp(md->name, "private:", 8) && !isoper)
                         continue;
 
 		command_success_nodata(si, "%-32s: %s", md->name, md->value);

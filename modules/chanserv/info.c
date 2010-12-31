@@ -133,7 +133,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
 		{
 			md = n->data;
-			if (md->private)
+			if (!strncmp(md->name, "private:", 8))
 				continue;
 			/* these are shown separately */
 			if (!strcasecmp(md->name, "email") ||

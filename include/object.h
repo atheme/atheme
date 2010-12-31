@@ -12,7 +12,6 @@
 struct metadata_ {
 	char *name;
 	char *value;
-	bool private;
 	mowgli_node_t node;
 };
 

@@ -91,7 +91,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
 	{
 		md = n->data;
-		if (strchr(property, ':') ? md->private : !md->private)
+		if (strncmp(property, "private:", 8))
 			count++;
 	}
 	if (count >= me.mdlimit)
