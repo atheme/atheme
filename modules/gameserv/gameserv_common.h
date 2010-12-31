@@ -55,7 +55,7 @@ static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, m
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
 			return false;
 		}
-		if (si->c == NULL)
+		if (si->c != NULL && module_find_published("chanserv/set_gameserv"))
 		{
 			md = metadata_find(mc, "gameserv");
 			if (md == NULL)
