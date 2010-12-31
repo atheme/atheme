@@ -18,8 +18,8 @@ DECLARE_MODULE_V1("gameserv/dice", false, _modinit, _moddeinit, PACKAGE_STRING, 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice, {.path = "gameserv/roll"} };
-command_t cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 2, command_calc, {.path = "gameserv/calc"} };
+command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
+command_t cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
 
 void _modinit(module_t * m)
 {
@@ -555,36 +555,52 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLL");
-		command_fail(si, fault_needmoreparams, _("Syntax: ROLL [dice]d<sides>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLL [times] [dice]d<sides>"));
 		return;
 	}
-	arg = parv[0];
+	if (parc < 2)
+		arg = parv[0];
+	else
+	{
+		times = atoi(parv[0]);
+		arg = parv[1];
+	}
 
-	return eval_dice(si, arg);
+	for (i = 0; i < times; i++)
+		eval_dice(si, arg);
 }
 
 static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CALC");
-		command_fail(si, fault_needmoreparams, _("Syntax: CALC <expression>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CALC [times] <expression>"));
 		return;
 	}
-	arg = parv[0];
+	if (parc < 2)
+		arg = parv[0];
+	else
+	{
+		times = atoi(parv[0]);
+		arg = parv[1];
+	}
 
-	return eval_calc(si, arg);
+	for (i = 0; i < times; i++)
+		eval_calc(si, arg);
 }
 
 //////////////////////////////////////////////////////////////////////////
