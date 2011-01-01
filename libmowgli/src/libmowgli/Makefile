@@ -42,7 +42,6 @@ INCLUDES = mowgli.h			\
 	   mowgli_assert.h		\
 	   mowgli_bitvector.h		\
 	   mowgli_config.h		\
-	   mowgli_delegate.h		\
 	   mowgli_dictionary.h		\
 	   mowgli_error_backtrace.h	\
 	   mowgli_exception.h		\
