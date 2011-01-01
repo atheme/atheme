@@ -1,5 +1,5 @@
 # Atheme::Account inherits Atheme::Entity, which inherits
-# Atheme::Object (or will).
+# Atheme::Object
 #
 
 MODULE = Atheme			PACKAGE = Atheme::Entity
@@ -36,4 +36,10 @@ CODE:
 OUTPUT:
 	RETVAL
 
+Atheme_Internal_List
+nicks(Atheme_Account self)
+CODE:
+	RETVAL = perl_list_create(&self->nicks, "Atheme::NickRegistration");
+OUTPUT:
+	RETVAL
 
