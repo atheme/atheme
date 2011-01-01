@@ -124,6 +124,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *target = parv[1];
+	char *newtarget;
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
@@ -160,17 +161,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (validhostmask(target))
-	{
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', target);
-		cb = chanban_add(c, target, 'q');
-		notify_victims(si, c, cb, MTYPE_ADD);
-		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", target, mc->name);
-		if (!chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
-		return;
-	}
-	else if ((tu = user_find_named(target)))
+	if ((tu = user_find_named(target)))
 	{
 		char hostbuf[BUFSIZE];
 
@@ -185,6 +176,16 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
+		return;
+	}
+	else if ((newtarget = pretty_mask(target)))
+	{
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', newtarget);
+		cb = chanban_add(c, newtarget, 'q');
+		notify_victims(si, c, cb, MTYPE_ADD);
+		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", newtarget, mc->name);
+		if (!chanuser_find(mc->chan, si->su))
+			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), newtarget, channel);
 		return;
 	}
 	else

@@ -299,6 +299,120 @@ bool validhostmask(const char *host)
 	return true;
 }
 
+/* char *
+ * pretty_mask(char *mask);
+ *
+ * Input: A mask.
+ * Output: A "user-friendly" version of the mask, in mask_buf.
+ * Side-effects: mask_buf is appended to. mask_pos is incremented.
+ * Notes: The following transitions are made:
+ *  x!y@z =>  x!y@z
+ *  y@z   =>  *!y@z
+ *  x!y   =>  x!y@*
+ *  x     =>  x!*@*
+ *  z.d   =>  *!*@z.d
+ *
+ * If either nick/user/host are > than their respective limits, they are
+ * chopped
+ */
+char *pretty_mask(char *mask)
+{
+        int old_mask_pos;
+        char star[] = "*";
+        char *nick = star, *user = star, *host = star;
+	int mask_pos = 0;
+	char mask_buf[BUFSIZE];
+
+        char *t, *at, *ex;
+        char ne = 0, ue = 0, he = 0;    /* save values at nick[NICKLEN], et all */
+
+	/* No point wasting CPU time if the mask is already valid */
+	if (validhostmask(mask))
+		return mask;
+
+        if((size_t) (BUFSIZE - mask_pos) < strlen(mask) + 5)
+                return (NULL);
+
+        old_mask_pos = mask_pos;
+
+        at = ex = NULL;
+        if((t = strchr(mask, '@')) != NULL)
+	{
+                at = t;
+                *t++ = '\0';
+                if(*t != '\0')
+                        host = t;
+
+                if((t = strchr(mask, '!')) != NULL)
+                {
+                        ex = t;
+                        *t++ = '\0';
+                        if(*t != '\0')
+                                user = t;
+                        if(*mask != '\0' && *mask != ':')
+                                nick = mask;
+                }
+                else
+                {
+                        if(*mask != '\0')
+                                user = mask;
+                }
+        }
+        else if((t = strchr(mask, '!')) != NULL)
+        {
+                ex = t;
+                *t++ = '\0';
+                if(*mask != '\0' && *mask != ':')
+                        nick = mask;
+                if(*t != '\0')
+                        user = t;
+        }
+        else if(strchr(mask, '.') != NULL && strchr(mask, ':') != NULL)
+        {
+                if(*mask != '\0')
+                        host = mask;
+        }
+        else
+        {
+                if(*mask != '\0' && *mask != ':')
+                        nick = mask;
+        }
+
+        /* truncate values to max lengths */
+        if(strlen(nick) > NICKLEN - 1)
+        {
+                ne = nick[NICKLEN - 1];
+                nick[NICKLEN - 1] = '\0';
+        }
+        if(strlen(user) > USERLEN)
+        {
+                ue = user[USERLEN];
+                user[USERLEN] = '\0';
+        }
+        if(strlen(host) > HOSTLEN)
+        {
+                he = host[HOSTLEN];
+                host[HOSTLEN] = '\0';
+        }
+
+        mask_pos += sprintf(mask_buf + mask_pos, "%s!%s@%s", nick, user, host) + 1;
+
+        /* restore mask, since we may need to use it again later */
+        if(at)
+                *at = '@';
+        if(ex)
+                *ex = '!';
+        if(ne)
+                nick[NICKLEN - 1] = ne;
+        if(ue)
+                user[USERLEN] = ue;
+        if(he)
+                host[HOSTLEN] = he;
+
+        mask = mask_buf + old_mask_pos;
+	return(mask);
+}
+
 bool validtopic(const char *topic)
 {
 	int i;
