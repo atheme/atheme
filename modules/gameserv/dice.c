@@ -44,8 +44,8 @@ void _moddeinit(module_unload_intent_t intent)
 #define DICE_MAX_DICE		(100)
 #define DICE_MAX_SIDES		(100)
 
-int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presult);
-int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, long double *out, char *errmsg);
+int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult);
+int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *out, char *errmsg);
 int is_calcoper(char oper);
 
 //
@@ -72,7 +72,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	char *ci = s_input;
 
 	int err, braces = 0;
-	long double expr;
+	double expr;
 
 
 	if (s_input == NULL)
@@ -124,11 +124,11 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		if (strlen(s_input) > 250)
 		{
 			strncpy(buffer, s_input, 150);
-			sprintf(&buffer[150], "...%s = %.8Lg", &s_input[strlen(s_input) - 10], expr);
+			sprintf(&buffer[150], "...%s = %.8g", &s_input[strlen(s_input) - 10], expr);
 		}
 		else
 		{
-			sprintf(buffer, "%s = %.8Lg", s_input, expr);
+			sprintf(buffer, "%s = %.8g", s_input, expr);
 		}
 	}
 	else
@@ -148,17 +148,17 @@ enum
 
 typedef struct _tagCalcStack
 {
-	long double _value;
+	double _value;
 	char _oper;
 	int _rank;
 	int _brace;
 } CalcStack;
 
-int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presult)
+int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult)
 {
 	int expect = CALCEXPR_VALUE, lastrank, currank;
 	char *cur = expr, *endptr, lastop, curop = ' ';
-	long double total, curval = 0;
+	double total, curval = 0;
 	static int nStack = 0;	// Current stack position
 	static CalcStack pStack[CALC_MAX_STACK];	// Value stack
 
@@ -328,10 +328,10 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, long double *presul
 }
 
 
-long double calc_dice_simple(long double lhs, long double rhs)
+double calc_dice_simple(double lhs, double rhs)
 {
-	long double i;
-	long double out = 0.0;
+	double i;
+	double out = 0.0;
 
 	if (!lhs)
 		lhs = 1.0;
@@ -350,12 +350,12 @@ long double calc_dice_simple(long double lhs, long double rhs)
 
 //////////////////////////////////////////////////////////////////////////
 
-int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, long double *out, char *errmsg)
+int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *out, char *errmsg)
 {
 	switch (oper)
 	{
 	  case '~':		// 1's compliment (unary)
-		  *out = (long double)(~(long long)rhs);
+		  *out = (double)(~(long long)rhs);
 		  break;
 	  case '!':		// NOT (unary)
 		  *out = !rhs;
@@ -381,7 +381,7 @@ int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, 
 			    *out = lhs / rhs;
 			    break;
 		    case '%':
-			    *out = (long double)((long long)lhs % (long long)rhs);
+			    *out = (double)((long long)lhs % (long long)rhs);
 			    break;
 		    case '\\':
 			    lhs /= rhs;
@@ -390,7 +390,7 @@ int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, 
 		  }
 		  break;
 	  case '^':		// power-of
-		  *out = powl(lhs, rhs);
+		  *out = pow(lhs, rhs);
 		  break;
 	  case '+':		// addition
 		  *out = lhs + rhs;
@@ -399,13 +399,13 @@ int do_calc_eval(sourceinfo_t *si, long double lhs, char oper, long double rhs, 
 		  *out = lhs - rhs;
 		  break;
 	  case '&':		// AND (bitwise)
-		  *out = (long double)((long long)lhs & (long long)rhs);
+		  *out = (double)((long long)lhs & (long long)rhs);
 		  break;
 	  case '$':		// XOR (bitwise)
-		  *out = (long double)((long long)lhs ^ (long long)rhs);
+		  *out = (double)((long long)lhs ^ (long long)rhs);
 		  break;
 	  case '|':		// OR (bitwise)
-		  *out = (long double)((long long)lhs | (long long)rhs);
+		  *out = (double)((long long)lhs | (long long)rhs);
 		  break;
 	  default:
 		  command_fail(si, fault_unimplemented, _("Error: Unknown mathematical operator %c."), oper);
