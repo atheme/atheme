@@ -11,6 +11,7 @@ bootstrap Atheme;
 
 use Atheme::Service;
 use Atheme::Account;
+use Atheme::ChannelRegistration;
 use Atheme::ReadOnlyHashWrapper;
 
 our %Services;
