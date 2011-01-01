@@ -8,7 +8,7 @@ sub unbind_commands {
 
 	if (ref $CommandBinds{$packagename} eq 'ARRAY') {
 		foreach my $bind (@{$CommandBinds{$packagename}}) {
-			$bind->{service}->unbind_command($bind->{command});
+			$Atheme::Services{$bind->{service}}->unbind_command($bind->{command});
 		}
 		delete $CommandBinds{$packagename};
 	}

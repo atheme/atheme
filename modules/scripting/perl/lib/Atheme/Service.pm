@@ -11,7 +11,7 @@ sub bind_command {
 	my ($caller) = caller;
 
 	$Atheme::Internal::CommandBinds{$caller} ||= [];
-	push @{$Atheme::Internal::CommandBinds{$caller}}, { service => $self, command => $command };
+	push @{$Atheme::Internal::CommandBinds{$caller}}, { service => $self->name, command => $command };
 
 	$self->do_bind_command($command);
 }
