@@ -3,7 +3,7 @@
 
 PLUGIN = perl$(PLUGIN_SUFFIX)
 
-SRCS = perl_module.c perlxsi.c
+SRCS = perl_module.c perl_object_list.c perlxsi.c
 
 SUBDIRS = api
 

@@ -7,12 +7,8 @@
  * handled in the perl API module.
  */
 
-#include <EXTERN.h>
-#include <perl.h>
+#include "api/atheme_perl.h"
 
-#undef _
-
-#include "atheme.h"
 #include "conf.h"
 
 #include <dlfcn.h>
@@ -88,7 +84,15 @@ static bool startup_perl(void)
 		return false;
 	}
 
-	perl_run(my_perl);
+	exitstatus = perl_run(my_perl);
+
+	if (exitstatus != 0)
+	{
+		slog(LG_INFO, "Couldn't run perl startup file: %s", SvPV_nolen(ERRSV));
+		return false;
+	}
+
+	invalidate_object_references();
 
 	return true;
 }
@@ -106,6 +110,8 @@ static void shutdown_perl(void)
 		dlclose(libperl_handle);
 		libperl_handle = NULL;
 	}
+
+	free_object_list();
 }
 
 /*
@@ -138,6 +144,8 @@ static bool do_script_load(const char *filename)
 	FREETMPS;
 	LEAVE;
 
+	invalidate_object_references();
+
 	return retval;
 }
 
@@ -166,6 +174,8 @@ static bool do_script_unload(const char *filename)
 
 	FREETMPS;
 	LEAVE;
+
+	invalidate_object_references();
 
 	return retval;
 }
@@ -198,6 +208,8 @@ static bool do_script_list(sourceinfo_t *si)
 
 	FREETMPS;
 	LEAVE;
+
+	invalidate_object_references();
 
 	return retval;
 }

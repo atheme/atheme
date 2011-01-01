@@ -31,6 +31,11 @@ void perl_command_handler(sourceinfo_t *si, const int parc, char **parv)
 	PUTBACK;
 	FREETMPS;
 	LEAVE;
+
+	/* Control has now handed back to Atheme, so all references held
+	 * by Perl to Atheme objects are invalid.
+	 */
+	invalidate_object_references();
 }
 
 void perl_command_help_func(sourceinfo_t *si, const char *subcmd)

@@ -23,6 +23,8 @@ T_PTROBJ_SPECIAL
 		if ( sv_isobject(arg) && (SvTYPE(SvRV(arg)) == SVt_PVMG) &&
 		    sv_derived_from(arg, type)) {
 			IV tmp = SvIV(ref);
+			if (tmp == invalid_object_pointer)
+				croak(\"$var is an invalid object reference\");
 			$var = INT2PTR($type, tmp);
 		}
 		else
@@ -38,6 +40,8 @@ T_PTROBJ_TIEDARRAY
 		if ( sv_isobject(arg) && (SvTYPE(SvRV(arg)) == SVt_PVMG) &&
 		    sv_derived_from(arg, type)) {
 			IV tmp = SvIV(ref);
+			if (tmp == invalid_object_pointer)
+				croak(\"$var is not a valid object reference\");
 			$var = INT2PTR($type, tmp);
 		}
 		else
@@ -53,6 +57,8 @@ T_PTROBJ_TIEDHASH
 		if ( sv_isobject(arg) && (SvTYPE(SvRV(arg)) == SVt_PVMG) &&
 		    sv_derived_from(arg, type)) {
 			IV tmp = SvIV(ref);
+			if (tmp == invalid_object_pointer)
+				croak(\"$var is not a valid object reference\");
 			$var = INT2PTR($type, tmp);
 		}
 		else
@@ -61,7 +67,10 @@ T_PTROBJ_TIEDHASH
 
 OUTPUT
 T_PTROBJ_SPECIAL
-	sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
+	do {
+		sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
+		register_object_reference($arg);
+	} while(0);
 
 T_PTROBJ_TIEDARRAY
 	do {
@@ -70,6 +79,7 @@ T_PTROBJ_TIEDARRAY
 		sv_setref_pv(tie, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
 		hv_magic(array, tie, PERL_MAGIC_tied);
 		$arg = newRV_noinc((SV*)array);
+		register_object_reference(tie);
 	} while(0);
 
 T_PTROBJ_TIEDHASH
@@ -79,4 +89,5 @@ T_PTROBJ_TIEDHASH
 		sv_setref_pv(tie, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
 		hv_magic(hash, tie, PERL_MAGIC_tied);
 		$arg = newRV_noinc((SV*)hash);
+		register_object_reference(tie);
 	} while(0);
