@@ -168,14 +168,15 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 	long duration;
 	char expiry[512];
 	char *s;
+	char *target;
 	char *uname;
 	char *token;
 	char *treason, reason[BUFSIZE];
 
-	uname = parv[1];
+	target = parv[1];
 	token = strtok(parv[2], " ");
 
-	if (!uname)
+	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
 		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"));
@@ -273,9 +274,13 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	mt = myentity_find_ext(uname);
+	mt = myentity_find_ext(target);
 	if (!mt)
 	{
+		uname = pretty_mask(target);
+		if (uname == NULL)
+			uname = target;
+
 		/* we might be adding a hostmask */
 		if (!validhostmask(uname))
 		{
