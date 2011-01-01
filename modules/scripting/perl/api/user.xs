@@ -69,3 +69,10 @@ CODE:
 	RETVAL = perl_list_create(&self->channels, "Atheme::ChanUser");
 OUTPUT:
 	RETVAL
+
+Atheme_Server
+server(Atheme_User self)
+CODE:
+	RETVAL = self->server;
+OUTPUT:
+	RETVAL

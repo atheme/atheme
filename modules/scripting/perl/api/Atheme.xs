@@ -11,6 +11,7 @@ typedef myuser_t *Atheme_Account;
 typedef channel_t *Atheme_Channel;
 typedef chanuser_t *Atheme_ChanUser;
 typedef mychan_t *Atheme_ChannelRegistration;
+typedef server_t *Atheme_Server;
 
 typedef perl_list_t *Atheme_Internal_List;
 
@@ -43,5 +44,6 @@ INCLUDE: metadata.xs
 INCLUDE: account.xs
 INCLUDE: channel.xs
 INCLUDE: channelregistration.xs
+INCLUDE: server.xs
 
 INCLUDE: internal_list.xs
