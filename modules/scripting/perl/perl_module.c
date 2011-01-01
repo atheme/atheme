@@ -223,6 +223,8 @@ command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2,
 
 mowgli_patricia_t *os_script_cmdtree;
 
+static int conf_loadscript(config_entry_t *);
+
 /*
  * Module startup/shutdown
  */
@@ -240,6 +242,8 @@ void _modinit(module_t *m)
 	command_add(&os_script_load, os_script_cmdtree);
 	command_add(&os_script_unload, os_script_cmdtree);
 	command_add(&os_script_list, os_script_cmdtree);
+
+	add_top_conf("LOADSCRIPT", conf_loadscript);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -329,3 +333,33 @@ static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[])
 	if (!do_script_list(si))
 		command_fail(si, fault_badparams, _("Failed to retrieve script list: %s"), perl_error);
 }
+
+static int conf_loadscript(config_entry_t *ce)
+{
+	char pathbuf[4096];
+	char *name;
+
+	if (!cold_start)
+		return 0;
+
+	if (ce->ce_vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	name = ce->ce_vardata;
+
+	if (*name == '/')
+	{
+		do_script_load(name);
+	}
+	else
+	{
+		snprintf(pathbuf, 4096, "%s/%s", MODDIR, name);
+		do_script_load(pathbuf);
+	}
+
+	return 0;
+}
+
