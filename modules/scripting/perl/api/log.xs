@@ -8,17 +8,17 @@ CODE:
 void
 verbose(SV * package, const char * message)
 CODE:
-	slog(LG_DEBUG, "%s", message);
+	slog(LG_VERBOSE, "%s", message);
 
 void
 info(SV * package, const char * message)
 CODE:
-	slog(LG_DEBUG, "%s", message);
+	slog(LG_INFO, "%s", message);
 
 void
 error(SV * package, const char * message)
 CODE:
-	slog(LG_DEBUG, "%s", message);
+	slog(LG_ERROR, "%s", message);
 
 void
 command(SV * package, Atheme_Sourceinfo si, int level, const char * message)
