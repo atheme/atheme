@@ -80,6 +80,7 @@ sub unload_script {
     eval "${packagename}::unload(\$message)";
 
     Atheme::Internal::unbind_commands($packagename);
+    Atheme::Hooks::unbind_hooks($packagename);
 
     delete_package($packagename);
     delete $Scripts{$packagename};

@@ -3,7 +3,7 @@
 
 PLUGIN = Atheme$(PLUGIN_SUFFIX)
 
-SRCS = Atheme.c perl_command.c perl_utilities.c
+SRCS = Atheme.c perl_command.c perl_utilities.c perl_hooks.c
 
 include ../../../../extra.mk
 include ../../../../buildsys.mk
@@ -18,3 +18,6 @@ LIBS += -L../../../../libathemecore -lathemecore ${LDFLAGS_RPATH} -L../../../../
 
 Atheme.c: $(wildcard *.xs) typemap
 	xsubpp -prototypes -typemap typemap Atheme.xs >$@ || rm -f $@
+
+perl_hooks.c: make_perl_hooks.pl ../../../../libathemecore/hooktypes.in
+	perl make_perl_hooks.pl

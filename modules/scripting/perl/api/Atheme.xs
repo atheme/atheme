@@ -49,3 +49,5 @@ INCLUDE: nickregistration.xs
 INCLUDE: server.xs
 
 INCLUDE: internal_list.xs
+
+INCLUDE: hooks.xs
