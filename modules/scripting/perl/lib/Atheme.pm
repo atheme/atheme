@@ -15,6 +15,7 @@ use Atheme::ChannelRegistration;
 use Atheme::ReadOnlyHashWrapper;
 use Atheme::Internal::HookHash;
 use Atheme::Hooks;
+use Atheme::Log;
 
 our %Services;
 our %Users;
