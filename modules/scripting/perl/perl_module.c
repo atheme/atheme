@@ -127,10 +127,11 @@ static bool do_script_load(const char *filename)
 	SAVETMPS;
 	PUSHMARK(SP);
 
+	XPUSHs(newRV_noinc((SV*)get_cv("Atheme::Init::load_script", 0)));
 	XPUSHs(sv_2mortal(newSVpv(filename, 0)));
 	PUTBACK;
 
-	call_pv("Atheme::Init::load_script", G_EVAL | G_DISCARD);
+	call_pv("Atheme::Init::call_wrapper", G_EVAL | G_DISCARD);
 
 	SPAGAIN;
 

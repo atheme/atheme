@@ -10,6 +10,7 @@ void perl_command_handler(sourceinfo_t *si, const int parc, char **parv)
 	SAVETMPS;
 	PUSHMARK(SP);
 
+	XPUSHs(pc->handler);
 	SV *sourceinfo_sv = newSV(0);
 	sv_setref_pv(sourceinfo_sv, "Atheme::Sourceinfo", si);
 	XPUSHs(sv_2mortal(sourceinfo_sv));
@@ -18,7 +19,7 @@ void perl_command_handler(sourceinfo_t *si, const int parc, char **parv)
 		XPUSHs(sv_2mortal(newSVpv(parv[i], 0)));
 
 	PUTBACK;
-	call_sv(pc->handler, G_VOID | G_DISCARD | G_EVAL);
+	call_pv("Atheme::Init::call_wrapper", G_VOID | G_DISCARD | G_EVAL);
 	SPAGAIN;
 
 	if (SvTRUE(ERRSV))

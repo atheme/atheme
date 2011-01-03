@@ -282,10 +282,11 @@ static void perl_hook_$hookname ($arg_type * data)
 	SAVETMPS;
 	PUSHMARK(SP);
 
+	XPUSHs(newRV_noinc((SV*)get_cv("Atheme::Hooks::call_hooks", 0)));
 	XPUSHs(sv_2mortal(newSVpv("$hookname", 0)));
 	XPUSHs(arg);
 	PUTBACK;
-	call_pv("Atheme::Hooks::call_hooks", G_EVAL | G_DISCARD);
+	call_pv("Atheme::Init::call_wrapper", G_EVAL | G_DISCARD);
 
 	SPAGAIN;
 

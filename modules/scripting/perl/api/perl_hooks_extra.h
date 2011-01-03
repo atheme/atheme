@@ -55,9 +55,10 @@ static void perl_hook_expiry_check(hook_expiry_req_t * data, const char *hooknam
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(arg);
+	XPUSHs(sv_2mortal(newRV_noinc((SV*)get_cv("Atheme::Hooks::call_hooks", 0))));
 	XPUSHs(sv_2mortal(newSVpv(hookname, 0)));
-	call_pv("Atheme::Hooks::call_hooks", G_EVAL | G_DISCARD);
+	XPUSHs(arg);
+	call_pv("Atheme::Init::call_wrapper", G_EVAL | G_DISCARD);
 
 	SPAGAIN;
 	FREETMPS;

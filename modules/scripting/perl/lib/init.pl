@@ -96,3 +96,17 @@ sub list_scripts {
 	}
 	$si->success("\x02$num\x02 scripts loaded.");
 }
+
+sub call_wrapper {
+	my $sub = shift;
+	my $saved_alarm=$SIG{ALRM};
+	$SIG{ALRM} = sub { die "Script used too much running time"; };
+	eval {
+		alarm 1;
+		&$sub(@_);
+	};
+	alarm 0;
+	$SIG{ALRM} = $saved_alarm;
+	die $@ if $@;
+}
+
