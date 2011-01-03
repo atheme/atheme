@@ -88,17 +88,23 @@ T_PTROBJ_TIEDHASH
 OUTPUT
 T_PTROBJ_SPECIAL
 	do {
+		if ($var == NULL)
+			XSRETURN_UNDEF;
 		sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
 		register_object_reference($arg);
 	} while(0);
 
 T_PTROBJ_PERLOWNED
 	do {
+		if ($var == NULL)
+			XSRETURN_UNDEF;
 		sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
 	} while(0);
 
 T_PTROBJ_TIEDARRAY
 	do {
+		if ($var == NULL)
+			XSRETURN_UNDEF;
 		AV *array = newAV();
 		SV *tie = newSV(0);
 		sv_setref_pv(tie, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
@@ -109,6 +115,8 @@ T_PTROBJ_TIEDARRAY
 
 T_PTROBJ_TIEDHASH
 	do {
+		if ($var == NULL)
+			XSRETURN_UNDEF;
 		HV *hash = newHV();
 		SV *tie = newSV(0);
 		sv_setref_pv(tie, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
