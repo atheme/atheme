@@ -23,3 +23,24 @@ CODE:
 	RETVAL = self->su;
 OUTPUT:
 	RETVAL
+
+Atheme_Server
+server(Atheme_Sourceinfo self)
+CODE:
+	RETVAL = self->s;
+OUTPUT:
+	RETVAL
+
+Atheme_Channel
+channel(Atheme_Sourceinfo self)
+CODE:
+	RETVAL = self->c;
+OUTPUT:
+	RETVAL
+
+Atheme_Account
+account(Atheme_Sourceinfo self)
+CODE:
+	RETVAL = self->smu;
+OUTPUT:
+	RETVAL
