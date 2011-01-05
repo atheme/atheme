@@ -43,8 +43,8 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	char buf[512];
 	char tmpbuf[100];
 
-	bzero(buf, 512);
-	bzero(tmpbuf, 100);
+	memset(buf, '\0', 512);
+	memset(tmpbuf, '\0', 100);
 
 	if (!object1 || !object2)
 	{
@@ -85,13 +85,13 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 						/* common user! */
 						snprintf(tmpbuf, 99, "%s, ", cu1->user->nick);
 						strcat((char *)buf, tmpbuf);
-						bzero(tmpbuf, 100);
+						memset(tmpbuf, '\0', 100);
 
 						/* if too many, output to user */
 						if (temp >= 5 || strlen(buf) > 300)
 						{
 							command_success_nodata(si, "%s", buf);
-							bzero(buf, 512);
+							memset(buf, '\0', 512);
 							temp = 0;
 						}
 
@@ -146,13 +146,13 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 						/* common channel! */
 						snprintf(tmpbuf, 99, "%s, ", cu1->chan->name);
 						strcat((char *)buf, tmpbuf);
-						bzero(tmpbuf, 100);
+						memset(tmpbuf, '\0', 100);
 
 						/* if too many, output to user */
 						if (temp >= 5 || strlen(buf) > 300)
 						{
 							command_success_nodata(si, "%s", buf);
-							bzero(buf, 512);
+							memset(buf, '\0', 512);
 							temp = 0;
 						}
 
