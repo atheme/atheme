@@ -146,7 +146,7 @@ void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (has_priv(si, c->access))
+		if (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL))
 			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
 	}
 }
@@ -204,7 +204,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (string_in_list(maincmds, c->name) && has_priv(si, c->access))
+		if (string_in_list(maincmds, c->name) && (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL)))
 			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
 	}
 
@@ -223,7 +223,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (!string_in_list(maincmds, c->name) && has_priv(si, c->access))
+		if (!string_in_list(maincmds, c->name) && (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL)))
 		{
 			if (strlen(buf) > l)
 				strlcat(buf, ", ", sizeof buf);
