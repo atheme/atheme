@@ -22,8 +22,8 @@ perlxsi.c:
 
 install-extra:
 	${MKDIR_P} ${plugindir}/lib
-	${INSTALL} -m644 -t ${plugindir}/lib lib/*.pl lib/*.pm
+	${INSTALL} -m644 lib/*.pl lib/*.pm ${plugindir}/lib
 	${MKDIR_P} ${plugindir}/lib/Atheme
-	${INSTALL} -m644 -t ${plugindir}/lib/Atheme lib/Atheme/*.pm
+	${INSTALL} -m644 lib/Atheme/*.pm ${plugindir}/lib/Atheme
 	${MKDIR_P} ${plugindir}/lib/Atheme/Internal
-	${INSTALL} -m644 -t ${plugindir}/lib/Atheme/Internal lib/Atheme/Internal/*.pm
+	${INSTALL} -m644 lib/Atheme/Internal/*.pm ${plugindir}/lib/Atheme/Internal
