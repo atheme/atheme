@@ -76,15 +76,16 @@ static void chanfix_lower_ts(chanfix_channel_t *chan)
 	if (ch == NULL)
 		return;
 
+	/* Apply mode change locally only, chan_lowerts() will propagate. */
+	channel_mode_va(NULL, ch, 2, "-ilk", "*");
+
 	chan->ts--;
 	ch->ts = chan->ts;
 
 	MOWGLI_ITER_FOREACH(n, ch->members.head)
 	{
 		chanuser_t *cu = n->data;
-
-		if (cu->modes & CSTATUS_OP)
-			cu->modes &= ~CSTATUS_OP;
+		cu->modes = 0;
 	}
 
 	chan_lowerts(ch, chanfix->me);
