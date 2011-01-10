@@ -36,9 +36,6 @@ static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 	if ((mc = mychan_find(c->name)) != NULL)
 		return false;
 
-	if (MOWGLI_LIST_LENGTH(&c->members) < CHANFIX_OP_THRESHHOLD)
-		return false;
-
 	n = count_ops(c);
 	/* enough ops, don't touch it */
 	if (n >= CHANFIX_OP_THRESHHOLD)
