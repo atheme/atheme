@@ -350,7 +350,7 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Fix request has been acknowledged for \2%s\2."), parv[0]);
 }
 
-command_t cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), AC_NONE, 1, chanfix_cmd_fix, { .path = "" } };
+command_t cmd_chanfix = { "CHANFIX", N_("Manually chanfix a channel."), PRIV_CHAN_ADMIN, 1, chanfix_cmd_fix, { .path = "" } };
 
 static int chanfix_compare_records(mowgli_node_t *a, mowgli_node_t *b, void *unused)
 {
@@ -415,7 +415,7 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("End of \2SCORES\2 listing for \2%s\2."), chan->name);
 }
 
-command_t cmd_scores = { "SCORES", N_("List channel scores."), AC_NONE, 1, chanfix_cmd_scores, { .path = "" } };
+command_t cmd_scores = { "SCORES", N_("List channel scores."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_scores, { .path = "" } };
 
 static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -467,4 +467,4 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
-command_t cmd_info = { "INFO", N_("List information on channel."), AC_NONE, 1, chanfix_cmd_info, { .path = "" } };
+command_t cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "" } };
