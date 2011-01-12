@@ -23,7 +23,6 @@ SRCS =			\
 	gen_echoserver.c	\
 	gen_httpd.c		\
 	gen_listenerdemo.c	\
-	gen_regcheckemail.c	\
 	gen_vhostonreg.c	\
 	graphtastical.c	\
 	gs_roulette.c	\
