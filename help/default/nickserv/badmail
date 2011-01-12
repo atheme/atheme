@@ -1,0 +1,34 @@
+Help for BADMAIL:
+
+BADMAIL allows you to maintain a list of email addresses that are
+not allowed to be used to register accounts.
+
+These email addresses are saved to the Atheme detabase and are kept
+between services restarts.
+
+In BADMAIL ADD, you are able to use glob matching to disallow email
+addresses that match a pattern.
+
+Syntax: BADMAIL ADD <email> [reason]
+
+Examples:
+    /msg &nick& BADMAIL ADD jdhore1@gmail.com bar reason
+    /msg &nick& BADMAIL ADD *@aol.com bar reason
+    /msg &nick& BADMAIL ADD *@*.tk foo reason
+    /msg &nick& BADMAIL ADD some-spambot-pattern-*@gmail.com
+
+BADMAIL DEL allows you to remove entires from the list of currently
+banned email addresses.
+
+Syntax: BADMAIL DEL <email>
+
+Examples:
+    /msg &nick& BADMAIL DEL foo@bar.com
+    /msg &nick& BADMAIL DEL *@aol.com
+
+BADMAIL LIST allows you to list the currently banned email addresses.
+
+Syntax: BADMAIL LIST
+
+Examples:
+    /msg &nick& BADMAIL LIST

@@ -15,6 +15,7 @@ include ../../buildsys.module.mk
 BASE_SRCS =			\
 	main.c	\
 	access.c	\
+	badmail.c	\
 	cert.c	\
 	$(CRACKLIB_C)	\
 	drop.c	\

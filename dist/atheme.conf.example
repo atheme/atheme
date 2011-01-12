@@ -135,6 +135,7 @@ loadmodule "modules/crypto/posix";
  *
  * Core components				modules/nickserv/main
  * Nickname access lists			modules/nickserv/access
+ * Bad email address blocking	modules/nickserv/badmail
  * CertFP fingerprint managment			modules/nickserv/cert
  * CrackLib password validation			modules/nickserv/cracklib
  * DROP command					modules/nickserv/drop
@@ -186,6 +187,7 @@ loadmodule "modules/crypto/posix";
  */
 loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
+loadmodule "modules/nickserv/badmail";
 #loadmodule "modules/nickserv/cert";
 #loadmodule "modules/nickserv/cracklib";
 loadmodule "modules/nickserv/drop";
