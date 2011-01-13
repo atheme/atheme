@@ -80,5 +80,6 @@ E void chanfix_autofix_ev(void *unused);
 E command_t cmd_chanfix;
 E command_t cmd_scores;
 E command_t cmd_info;
+E command_t cmd_help;
 
 #endif
