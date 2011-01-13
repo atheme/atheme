@@ -295,6 +295,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "EMailMemos");
 	}
+	if (MU_NEVERGROUP & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "NeverGroup");
+	}
 	if (use_account_private && MU_PRIVATE & mu->flags)
 	{
 		if (*buf)

@@ -169,6 +169,7 @@ loadmodule "modules/crypto/posix";
  * SET ENFORCETIME command      modules/nickserv/set_enforcetime
  * SET HIDEMAIL command			modules/nickserv/set_hidemail
  * SET LANGUAGE command			modules/nickserv/set_language
+ * SET NEVERGROUP command		modules/nickserv/set_nevergroup
  * SET NEVEROP command			modules/nickserv/set_neverop
  * SET NOMEMO command			modules/nickserv/set_nomemo
  * SET NOOP command				modules/nickserv/set_noop
@@ -222,6 +223,7 @@ loadmodule "modules/nickserv/set_emailmemos";
 #loadmodule "modules/nickserv/set_enforcetime";
 loadmodule "modules/nickserv/set_hidemail";
 loadmodule "modules/nickserv/set_language";
+loadmodule "modules/nickserv/set_nevergroup";
 loadmodule "modules/nickserv/set_neverop";
 loadmodule "modules/nickserv/set_nomemo";
 loadmodule "modules/nickserv/set_noop";

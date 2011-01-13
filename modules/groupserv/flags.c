@@ -103,6 +103,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if ((MU_NEVERGROUP & mu->flags) && (groupacs_find(mg, mu, 0) == NULL))
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to have flags in any groups."), parv[1]);
+		return;
+	}
+
 	ga = groupacs_find(mg, mu, 0);
 	if (ga != NULL)
 		flags = ga->flags;

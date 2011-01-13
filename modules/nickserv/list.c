@@ -208,6 +208,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
 		{"noop",	OPT_FLAG,	{.flagval = &flagset}, MU_NOOP},
 		{"neverop",	OPT_FLAG,	{.flagval = &flagset}, MU_NEVEROP},
+		{"nevergroup",  OPT_FLAG,	{.flagval = &flagset}, MU_NEVERGROUP},
 		{"waitauth",	OPT_FLAG,	{.flagval = &flagset}, MU_WAITAUTH},
 		{"hidemail",	OPT_FLAG,	{.flagval = &flagset}, MU_HIDEMAIL},
 		{"nomemo",	OPT_FLAG,	{.flagval = &flagset}, MU_NOMEMO},

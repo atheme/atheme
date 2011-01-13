@@ -68,6 +68,7 @@ static struct Token uflags[] = {
   { "PRIVMSG",   MU_USE_PRIVMSG  },
   { "PRIVATE",   MU_PRIVATE      },
   { "QUIETCHG",  MU_QUIETCHG     },
+  { "NEVERGROUP", MU_NEVERGROUP  },
   { "NONE",      0               },
   { NULL, 0 }
 };

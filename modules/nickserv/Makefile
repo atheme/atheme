@@ -50,6 +50,7 @@ BASE_SRCS =			\
 	set_enforcetime.c	\
 	set_hidemail.c	\
 	set_language.c	\
+	set_nevergroup.c	\
 	set_neverop.c	\
 	set_nogreet.c   \
 	set_nomemo.c	\
