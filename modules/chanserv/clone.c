@@ -125,6 +125,9 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc2, md->name, md->value);
 	}
 
+	/* Copy channel flags */
+	mc2->flags = mc->flags;
+
 	command_add_flood(si, FLOOD_MODERATE);
 
 	/* I feel like this should log at a higher level... */
