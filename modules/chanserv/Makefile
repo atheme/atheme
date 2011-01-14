@@ -21,6 +21,7 @@ SRCS =			\
 	clear_bans.c	\
 	clear_flags.c	\
 	clear_users.c	\
+	clone.c	\
 	close.c	\
 	count.c	\
 	drop.c	\

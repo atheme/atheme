@@ -252,6 +252,7 @@ loadmodule "modules/nickserv/vhost";
  * BAN/UNBAN commands				modules/chanserv/ban
  * UNBAN self only (load ban or this not both)	modules/chanserv/unban_self
  * CLOSE command				modules/chanserv/close
+ * CLONE command				modules/chanserv/clone
  * CLEAR command				modules/chanserv/clear
  * CLEAR BANS command				modules/chanserv/clear_bans
  * CLEAR FLAGS command				modules/chanserv/clear_flags
@@ -312,6 +313,7 @@ loadmodule "modules/chanserv/access";
 loadmodule "modules/chanserv/akick";
 loadmodule "modules/chanserv/ban";
 #loadmodule "modules/chanserv/unban_self";
+loadmodule "modules/chanserv/clone";
 loadmodule "modules/chanserv/close";
 loadmodule "modules/chanserv/clear";
 loadmodule "modules/chanserv/clear_bans";
