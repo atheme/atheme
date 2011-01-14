@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-char ch[27] = "abcdefghijklmnopqrstuvwxyz";
+char ch[63] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 /* This function uses smalloc() to allocate memory.
  * You MUST free the result when you are done with it!
@@ -35,7 +35,7 @@ char *gen_pw(int sz)
 
 	for (i = 0; i < sz; i++)
 	{
-		buf[i] = ch[arc4random() % 26];
+		buf[i] = ch[arc4random() % 62];
 	}
 
 	buf[sz] = 0;
