@@ -33,9 +33,9 @@
 #define RTLD_LOCAL 0
 #endif
 
-mowgli_module_t mowgli_module_open_flag(const char *path, int flag)
+mowgli_module_t mowgli_module_open(const char *path)
 {
-	void *handle = dlopen(path, flag);
+	void *handle = dlopen(path, RTLD_NOW | RTLD_LOCAL);
 
 	/* make sure we have something. make this an assertion so that 
 	 * there is feedback if something happens. (poor programming practice).
@@ -43,11 +43,6 @@ mowgli_module_t mowgli_module_open_flag(const char *path, int flag)
 	return_val_if_fail(handle != NULL, NULL);
 
 	return handle;
-}
-
-mowgli_module_t mowgli_module_open(const char *path)
-{
-	return mowgli_module_open_flag(path, RTLD_NOW);
 }
 
 void * mowgli_module_symbol(mowgli_module_t module, const char *symbol)
