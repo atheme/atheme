@@ -38,18 +38,20 @@ static void flatfile_db_load(void)
 	size_t bufsize = BUFSIZE, n;
 	int c;
 	unsigned int their_ca_all = 0;
+	char path[BUFSIZE];
 
-	f = fopen(DATADIR "/atheme.db", "r");
+	snprintf(path, BUFSIZE, "%s/atheme.db", datadir);
+	f = fopen(path, "r");
 	if (f == NULL)
 	{
 		if (errno == ENOENT)
 		{
-			slog(LG_ERROR, "db_load(): %s does not exist, creating it", DATADIR "/atheme.db");
+			slog(LG_ERROR, "db_load(): %s does not exist, creating it", path);
 			return;
 		}
 		else
 		{
-			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", path, strerror(errno));
 			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
 			exit(1);
 		}
@@ -76,7 +78,7 @@ static void flatfile_db_load(void)
 
 		if (c == EOF && ferror(f))
 		{
-			slog(LG_ERROR, "db_load(): error while reading %s: %s", DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, "db_load(): error while reading %s: %s", path, strerror(errno));
 			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
 			exit(1);
 		}

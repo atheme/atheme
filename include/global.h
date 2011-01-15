@@ -168,6 +168,7 @@ E void remove_illegals(void);
 E bool cold_start;
 E bool readonly;
 E char *config_file;
+E char *datadir;
 
 /* conf.c */
 E const char *get_conf_opts(void);

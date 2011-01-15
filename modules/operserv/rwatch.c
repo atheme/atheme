@@ -107,7 +107,12 @@ static void write_rwatchdb(void)
 	mowgli_node_t *n;
 	rwatch_t *rw;
 
-	if (!(f = fopen(DATADIR "/rwatch.db.new", "w")))
+	char tmppath[BUFSIZE], path[BUFSIZE];
+
+	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db.new");
+	snprintf(tmppath, BUFSIZE, "%s/%s", datadir, "rwatch.db");
+
+	if (!(f = fopen(tmppath, "w")))
 	{
 		slog(LG_ERROR, "write_rwatchdb(): cannot write rwatch database: %s", strerror(errno));
 		return;
@@ -122,7 +127,7 @@ static void write_rwatchdb(void)
 
 	fclose(f);
 
-	if ((rename(DATADIR "/rwatch.db.new", DATADIR "/rwatch.db")) < 0)
+	if ((rename(tmppath, path)) < 0)
 	{
 		slog(LG_ERROR, "write_rwatchdb(): couldn't rename rwatch database.");
 		return;
@@ -135,7 +140,11 @@ static void load_rwatchdb(void)
 	char *item, rBuf[BUFSIZE * 2];
 	rwatch_t *rw = NULL;
 
-	if (!(f = fopen(DATADIR "/rwatch.db", "r")))
+	char path[BUFSIZE];
+
+	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db.new");
+
+	if (!(f = fopen(path, "r")))
 	{
 		slog(LG_DEBUG, "load_rwatchdb(): cannot open rwatch database: %s", strerror(errno));
 		return;

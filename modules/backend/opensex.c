@@ -1078,9 +1078,10 @@ static database_handle_t *opensex_db_open_read(void)
 	database_handle_t *db;
 	opensex_t *rs;
 	FILE *f;
-	static const char *path = DATADIR "/services.db";
 	int errno1;
+	char path[BUFSIZE];
 
+	snprintf(path, BUFSIZE, "%s/services.db", datadir);
 	f = fopen(path, "r");
 	if (!f)
 	{
@@ -1100,7 +1101,7 @@ static database_handle_t *opensex_db_open_read(void)
 	db->priv = rs;
 	db->vt = &opensex_vt;
 	db->txn = DB_READ;
-	db->file = path;
+	db->file = sstrdup(path);
 	db->line = 0;
 	db->token = 0;
 
@@ -1112,9 +1113,10 @@ static database_handle_t *opensex_db_open_write(void)
 	database_handle_t *db;
 	opensex_t *rs;
 	FILE *f;
-	static const char *path = DATADIR "/services.db.new";
 	int errno1;
+	char path[BUFSIZE];
 
+	snprintf(path, BUFSIZE, "%s/services.db.new", datadir);
 	f = fopen(path, "w");
 	if (!f)
 	{
@@ -1131,7 +1133,7 @@ static database_handle_t *opensex_db_open_write(void)
 	db->priv = rs;
 	db->vt = &opensex_vt;
 	db->txn = DB_WRITE;
-	db->file = path;
+	db->file = sstrdup(path);
 	db->line = 0;
 	db->token = 0;
 
@@ -1149,6 +1151,10 @@ static void opensex_db_close(database_handle_t *db)
 {
 	opensex_t *rs;
 	int errno1;
+	char oldpath[BUFSIZE], newpath[BUFSIZE];
+
+	snprintf(oldpath, BUFSIZE, "%s/services.db.new", datadir);
+	snprintf(newpath, BUFSIZE, "%s/services.db", datadir);
 
 	return_if_fail(db != NULL);
 	rs = db->priv;
@@ -1159,10 +1165,10 @@ static void opensex_db_close(database_handle_t *db)
 	{
 		/* now, replace the old database with the new one, using an atomic rename */
 #ifdef _WIN32
-		unlink(DATADIR "/services.db");
+		unlink(newpath);
 #endif
 	
-		if ((rename(DATADIR "/services.db.new", DATADIR "/services.db")) < 0)
+		if (rename(oldpath, newpath) < 0)
 		{
 			errno1 = errno;
 			slog(LG_ERROR, "db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
@@ -1174,6 +1180,7 @@ static void opensex_db_close(database_handle_t *db)
 
 	free(rs->buf);
 	free(rs);
+	free((void*)db->file);
 	free(db);
 }
 

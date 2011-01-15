@@ -45,6 +45,7 @@ int runflags;
 
 char *config_file;
 char *log_path;
+char *datadir;
 bool cold_start = false;
 bool readonly = false;
 
@@ -58,10 +59,11 @@ static void print_help(void)
 	       "-c <file>    Specify the config file\n"
 	       "-d           Start in debugging mode\n"
 	       "-h           Print this message and exit\n"
-	       "-r	     Start in read-only mode\n"
+	       "-r           Start in read-only mode\n"
 	       "-l <file>    Specify the log file\n"
 	       "-n           Don't fork into the background (log screen + log file)\n"
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
+	       "-D <dir>     Specify the data directory\n"
 	       "-v           Print version information and exit\n");
 }
 /* *INDENT-ON* */
@@ -91,6 +93,7 @@ int atheme_main(int argc, char *argv[])
 {
 	bool have_conf = false;
 	bool have_log = false;
+	bool have_datadir = false;
 	char buf[32];
 	int i, pid, r;
 	FILE *pid_file;
@@ -128,7 +131,7 @@ int atheme_main(int argc, char *argv[])
 #endif
 	
 	/* do command-line options */
-	while ((r = getopt(argc, argv, "c:dhrl:np:v")) != -1)
+	while ((r = getopt(argc, argv, "c:dhrl:np:D:v")) != -1)
 	{
 		switch (r)
 		{
@@ -156,6 +159,10 @@ int atheme_main(int argc, char *argv[])
 		  case 'p':
 			  pidfilename = optarg;
 			  break;
+		  case 'D':
+			  datadir = optarg;
+			  have_datadir = true;
+			  break;
 		  case 'v':
 			  print_version();
 			  exit(EXIT_SUCCESS);
@@ -172,6 +179,9 @@ int atheme_main(int argc, char *argv[])
 
 	if (!have_log)
 		log_path = sstrdup(LOGDIR "/atheme.log");
+
+	if (!have_datadir)
+		datadir = sstrdup(DATADIR);
 
 	cold_start = true;
 
