@@ -32,32 +32,6 @@ static void childproc_check(void);
 
 static volatile sig_atomic_t got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;
 
-typedef void (*signal_handler_t) (int);
-
-static signal_handler_t
-signal_install_handler_full(int signum, signal_handler_t handler,
-			    int *sigtoblock, size_t sigtoblocksize)
-{
-	struct sigaction action, old_action;
-	size_t i;
-
-	action.sa_handler = handler;
-	action.sa_flags = SA_RESTART;
-
-	sigemptyset(&action.sa_mask);
-
-	for (i = 0; i < sigtoblocksize; i++)
-		sigaddset(&action.sa_mask, sigtoblock[i]);
-
-	if (sigaction(signum, &action, &old_action) == -1)
-	{
-		slog(LG_DEBUG, "Failed to install signal handler for signal %d", signum);
-		return NULL;
-	}
-
-	return old_action.sa_handler;
-}
-
 /*
  * A version of signal(2) that works more reliably across different
  * platforms.
@@ -65,12 +39,6 @@ signal_install_handler_full(int signum, signal_handler_t handler,
  * It restarts interrupted system calls, does not reset the handler,
  * and blocks the same signal from within the handler.
  */
-static signal_handler_t
-signal_install_handler(int signum, signal_handler_t handler)
-{
-	return signal_install_handler_full(signum, handler, NULL, 0);
-}
-
 static void
 signal_empty_handler(int signum)
 {
@@ -130,14 +98,14 @@ signal_usr1_handler(int signum)
 
 void init_signal_handlers(void)
 {
-	signal_install_handler(SIGHUP, signal_hup_handler);
-	signal_install_handler(SIGINT, signal_int_handler);
-	signal_install_handler(SIGTERM, signal_term_handler);
-	signal_install_handler(SIGPIPE, signal_empty_handler);
-	signal_install_handler(SIGCHLD, signal_chld_handler);
+	mowgli_signal_install_handler(SIGHUP, signal_hup_handler);
+	mowgli_signal_install_handler(SIGINT, signal_int_handler);
+	mowgli_signal_install_handler(SIGTERM, signal_term_handler);
+	mowgli_signal_install_handler(SIGPIPE, signal_empty_handler);
+	mowgli_signal_install_handler(SIGCHLD, signal_chld_handler);
 
-	signal_install_handler(SIGUSR1, signal_usr1_handler);
-	signal_install_handler(SIGUSR2, signal_usr2_handler);
+	mowgli_signal_install_handler(SIGUSR1, signal_usr1_handler);
+	mowgli_signal_install_handler(SIGUSR2, signal_usr2_handler);
 }
 
 void check_signals(void)
