@@ -55,7 +55,7 @@ mowgli_module_t *linker_open_ext(const char *path)
 	if (!strstr(buf, PLATFORM_SUFFIX))
 		strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
 
-	ret = mowgli_module_open_flag(buf, RTLD_NOW | RTLD_LOCAL);
+	ret = mowgli_module_open(buf);
 	free(buf);
 	return ret;
 }
