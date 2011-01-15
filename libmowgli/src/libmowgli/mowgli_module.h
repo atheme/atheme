@@ -26,6 +26,7 @@
 
 typedef void * mowgli_module_t;
 
+extern mowgli_module_t mowgli_module_open_flag(const char *path, int flag);
 extern mowgli_module_t mowgli_module_open(const char *path);
 extern void * mowgli_module_symbol(mowgli_module_t module, const char *symbol);
 extern void mowgli_module_close(mowgli_module_t module);

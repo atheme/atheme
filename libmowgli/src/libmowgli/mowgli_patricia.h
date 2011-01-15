@@ -134,6 +134,14 @@ extern void *mowgli_patricia_retrieve(mowgli_patricia_t *dtree, const char *key)
  */
 extern void *mowgli_patricia_delete(mowgli_patricia_t *dtree, const char *key);
 
+/* Low-level functions */
+mowgli_patricia_elem_t *mowgli_patricia_elem_add(mowgli_patricia_t *dtree, const char *key, void *data);
+mowgli_patricia_elem_t *mowgli_patricia_elem_find(mowgli_patricia_t *dtree, const char *key);
+void mowgli_patricia_elem_delete(mowgli_patricia_t *dtree, mowgli_patricia_elem_t *elem);
+const char *mowgli_patricia_elem_get_key(mowgli_patricia_elem_t *elem);
+void mowgli_patricia_elem_set_data(mowgli_patricia_elem_t *elem, void *data);
+void *mowgli_patricia_elem_get_data(mowgli_patricia_elem_t *elem);
+
 unsigned int mowgli_patricia_size(mowgli_patricia_t *dict);
 void mowgli_patricia_stats(mowgli_patricia_t *dict, void (*cb)(const char *line, void *privdata), void *privdata);
 

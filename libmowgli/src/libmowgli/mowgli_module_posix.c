@@ -25,9 +25,17 @@
 
 #include <dlfcn.h>
 
-mowgli_module_t mowgli_module_open(const char *path)
+#ifdef __OpenBSD__
+# define RTLD_NOW RTLD_LAZY
+#endif
+
+#ifndef RTLD_LOCAL
+#define RTLD_LOCAL 0
+#endif
+
+mowgli_module_t mowgli_module_open_flag(const char *path, int flag)
 {
-	void *handle = dlopen(path, RTLD_NOW);
+	void *handle = dlopen(path, flag);
 
 	/* make sure we have something. make this an assertion so that 
 	 * there is feedback if something happens. (poor programming practice).
@@ -35,6 +43,11 @@ mowgli_module_t mowgli_module_open(const char *path)
 	return_val_if_fail(handle != NULL, NULL);
 
 	return handle;
+}
+
+mowgli_module_t mowgli_module_open(const char *path)
+{
+	return mowgli_module_open_flag(path, RTLD_NOW);
 }
 
 void * mowgli_module_symbol(mowgli_module_t module, const char *symbol)
