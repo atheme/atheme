@@ -59,7 +59,7 @@ module_t *module_load(const char *filespec)
 	mowgli_node_t *n;
 	module_t *m, *old_modtarget;
 	v4_moduleheader_t *h;
-	void *handle = NULL;
+	mowgli_module_t *handle = NULL;
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
 #endif
@@ -80,13 +80,13 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	h = (v4_moduleheader_t *) linker_getsym(handle, "_header");
+	h = (v4_moduleheader_t *) mowgli_module_symbol(handle, "_header");
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
 		slog(LG_ERROR, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", filespec);
 
-		linker_close(handle);
+		mowgli_module_close(handle);
 		return NULL;
 	}
 
@@ -94,7 +94,7 @@ module_t *module_load(const char *filespec)
 	{
 		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V4);
 
-		linker_close(handle);
+		mowgli_module_close(handle);
 		return NULL;
 	}
 
@@ -102,7 +102,7 @@ module_t *module_load(const char *filespec)
 	{
 		slog(LG_ERROR, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", filespec, h->abi_rev, CURRENT_ABI_REVISION);
 
-		linker_close(handle);
+		mowgli_module_close(handle);
 		return NULL;
 	}
 
@@ -110,7 +110,7 @@ module_t *module_load(const char *filespec)
 	{
 		slog(LG_INFO, "module_load(): \2%s\2: Published name \2%s\2 already exists.", filespec, h->name);
 
-		linker_close(handle);
+		mowgli_module_close(handle);
 		return NULL;
 	}
 
@@ -295,7 +295,7 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 		mowgli_node_free(n);
 	}
 	/* else unloaded in embryonic state */
-	linker_close(m->handle);
+	mowgli_module_close(m->handle);
 	mowgli_heap_free(module_heap, m);
 }
 
@@ -330,7 +330,7 @@ void *module_locate_symbol(const char *modname, const char *sym)
 		mowgli_node_add(modtarget, mowgli_node_create(), &m->dephost);
 	}
 
-	symptr = linker_getsym(m->handle, sym);
+	symptr = mowgli_module_symbol(m->handle, sym);
 
 	if (symptr == NULL)
 		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);

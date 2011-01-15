@@ -23,7 +23,7 @@ struct module_ {
 	unsigned int mflags;
 
 	void *address;
-	void *handle;
+	mowgli_module_t *handle;
 
 	mowgli_list_t dephost;
 	mowgli_list_t deplist;

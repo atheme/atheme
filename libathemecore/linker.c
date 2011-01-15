@@ -26,36 +26,11 @@
 
 #include <dlfcn.h>
 
-#ifdef __OpenBSD__
-# define RTLD_NOW RTLD_LAZY
-#endif
-
-#ifndef RTLD_LOCAL
-#define RTLD_LOCAL 0
-#endif
-
 #ifndef __HPUX__
 # define PLATFORM_SUFFIX ".so"
 #else
 # define PLATFORM_SUFFIX ".sl"
 #endif
-
-/*
- * linker_open()
- *
- * Inputs:
- *       path to file to open
- *
- * Outputs:
- *       linker handle.
- *
- * Side Effects:
- *       a shared module is loaded into the application's memory space
- */
-void *linker_open(const char *path)
-{
-	return dlopen(path, RTLD_NOW | RTLD_LOCAL);
-}
 
 /*
  * linker_open_ext()
@@ -70,7 +45,7 @@ void *linker_open(const char *path)
  *       the extension is appended if it's not already there.
  *       a shared module is loaded into the application's memory space
  */
-void *linker_open_ext(const char *path)
+mowgli_module_t *linker_open_ext(const char *path)
 {
 	char *buf = smalloc(strlen(path) + 20);
 	void *ret;
@@ -80,43 +55,9 @@ void *linker_open_ext(const char *path)
 	if (!strstr(buf, PLATFORM_SUFFIX))
 		strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
 
-	ret = linker_open(buf);
+	ret = mowgli_module_open_flag(buf, RTLD_NOW | RTLD_LOCAL);
 	free(buf);
 	return ret;
-}
-
-/*
- * linker_getsym()
- *
- * Inputs:
- *       linker handle, symbol to retrieve
- *
- * Outputs:
- *       pointer to symbol, or NULL if no symbol.
- *
- * Side Effects:
- *       none
- */
-void *linker_getsym(void *vptr, const char *sym)
-{
-	return dlsym(vptr, sym);
-}
-
-/*
- * linker_close()
- *
- * Inputs:
- *       linker handle
- *
- * Outputs:
- *       none
- *
- * Side Effects:
- *       the module is unloaded from the linker
- */
-void linker_close(void *vptr)
-{
-	dlclose(vptr);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
