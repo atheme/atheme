@@ -24,8 +24,6 @@
 #include "atheme.h"
 #include "linker.h"
 
-#include <dlfcn.h>
-
 #ifndef __HPUX__
 # define PLATFORM_SUFFIX ".so"
 #else
