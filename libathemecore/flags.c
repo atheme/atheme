@@ -424,6 +424,7 @@ bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
 
 bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res)
 {
+	*res = 0;
 	while (*f)
 		if (!gflag_fromchar(gflags, *f++, res))
 			return false;
