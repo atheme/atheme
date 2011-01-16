@@ -409,7 +409,7 @@ char *gflags_tostr(gflags_t *gflags, unsigned int flags)
 	return buf;
 }
 
-bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
+static bool gflag_fromchar(gflags_t *gflags, char f, unsigned int *res)
 {
 	int i;
 	if (f == '+') return true;
