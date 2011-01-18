@@ -41,7 +41,7 @@ static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
 	if (n <= 0 || n > 127)
 		n = 7;
 
-	newpass = gen_pw(n);
+	newpass = random_string(n);
 
 	command_success_string(si, newpass, "Randomly generated password: %s", newpass);
 	free(newpass);

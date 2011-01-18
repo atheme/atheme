@@ -66,7 +66,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newpass = gen_pw(12);
+	newpass = random_string(12);
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	myuser_set_email(mu, newmail);
 
