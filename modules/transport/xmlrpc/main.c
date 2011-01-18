@@ -14,7 +14,7 @@
 
 DECLARE_MODULE_V1
 (
-	"xmlrpc/main", false, _modinit, _moddeinit,
+	"transport/xmlrpc", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
