@@ -328,11 +328,18 @@ void chanfix_autofix_ev(void *unused)
 static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
+	unsigned int highscore;
 
 	if (parv[0] == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANFIX");
 		command_fail(si, fault_needmoreparams, _("To fix a channel: CHANFIX <#channel>"));
+		return;
+	}
+
+	if (!channel_find(parv[0]))
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), parv[0]);
 		return;
 	}
 
@@ -343,7 +350,23 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (mychan_find(parv[0]))
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is already registered."), parv[0]);
+		return;
+	}
+
+	highscore = chanfix_get_highscore(chan);
+	if (highscore < CHANFIX_MIN_FIX_SCORE)
+	{
+		command_fail(si, fault_nosuch_target, _("Scores for \2%s\2 are too low (< %u) for a fix."),
+			     parv[0], CHANFIX_MIN_FIX_SCORE);
+		return;
+	}
+
 	chanfix_lower_ts(chan);
+
+	logcommand(si, CMDLOG_ADMIN, "CHANFIX: \2%s\2", parv[0]);
 
 	command_success_nodata(si, _("Fix request has been acknowledged for \2%s\2."), parv[0]);
 }
