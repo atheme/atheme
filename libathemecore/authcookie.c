@@ -54,7 +54,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
 {
 	authcookie_t *au = mowgli_heap_alloc(authcookie_heap);
 
-	au->ticket = gen_pw(20);
+	au->ticket = random_string(20);
 	au->myuser = mu;
 	au->expire = CURRTIME + 3600;
 

@@ -53,7 +53,7 @@ bool crypt_verify_password(const char *uinput, const char *pass)
 
 const char *gen_salt(void)
 {
-	char *ht = gen_pw(6);
+	char *ht = random_string(6);
 
 	strlcpy(saltbuf, "$1$", BUFSIZE);
 	strlcat(saltbuf, ht, BUFSIZE);
