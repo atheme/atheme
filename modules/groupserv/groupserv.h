@@ -26,14 +26,11 @@ unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus);
 mowgli_list_t * (*myuser_get_membership_list)(myuser_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
 
-/* A function prototype to shut GCC up. */
-void use_groupserv_main_symbols(module_t *m);
-
 struct gflags *ga_flags;
 
 groupserv_config_t *gs_config;
 
-void use_groupserv_main_symbols(module_t *m)
+static inline void use_groupserv_main_symbols(module_t *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/main");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_add, "groupserv/main", "mygroup_add");
@@ -55,12 +52,9 @@ void use_groupserv_main_symbols(module_t *m)
 
 #ifndef IN_GROUPSERV_SET
 
-/* Another function prototype to shut GCC up. */
-void use_groupserv_set_symbols(module_t *m);
-
 mowgli_patricia_t *gs_set_cmdtree;
 
-void use_groupserv_set_symbols(module_t *m)
+static inline void use_groupserv_set_symbols(module_t *m)
 {
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/set");
 
