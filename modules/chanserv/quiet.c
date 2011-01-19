@@ -178,7 +178,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
-	else if ((newtarget = pretty_mask(target)))
+	else if ((newtarget = pretty_mask(target)) && validhostmask(newtarget))
 	{
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', newtarget);
 		cb = chanban_add(c, newtarget, 'q');
