@@ -67,7 +67,7 @@ struct cmode_ shadowircd_mode_list[] = {
   { 'T', CMODE_NONOTICE },		/* cmodes/nonotice */
   { 'G', CMODE_NOCAPS },		/* cmodes/nocaps */
   { 'E', CMODE_NOKICKS },		/* cmodes/nokicks */
-  { 'N', CMODE_NONICKS },		/* cmodes/nonicks */
+  { 'd', CMODE_NONICKS },		/* cmodes/nonicks */
   { 'K', CMODE_NOREPEAT },		/* cmodes/norepeat */
   { 'J', CMODE_KICKNOREJOIN },
   { '\0', 0 }
