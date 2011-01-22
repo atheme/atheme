@@ -99,7 +99,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	topic_sts(c, si->service->me, topicsetter, CURRTIME, prevtopicts, topic);
 
 	logcommand(si, CMDLOG_DO, "TOPIC: \2%s\2", mc->name);
-	if (!chanuser_find(c, si->su))
+	if (si->su == NULL || !chanuser_find(c, si->su))
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), topic, chan);
 }
 
@@ -174,7 +174,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	topic_sts(c, si->service->me, topicsetter, CURRTIME, prevtopicts, topicbuf);
 
 	logcommand(si, CMDLOG_DO, "TOPICAPPEND: \2%s\2", mc->name);
-	if (!chanuser_find(c, si->su))
+	if (si->su == NULL || !chanuser_find(c, si->su))
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
@@ -249,7 +249,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 	topic_sts(c, si->service->me, topicsetter, CURRTIME, prevtopicts, topicbuf);
 
 	logcommand(si, CMDLOG_DO, "TOPICPREPEND: \2%s\2", mc->name);
-	if (!chanuser_find(c, si->su))
+	if (si->su == NULL || !chanuser_find(c, si->su))
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
