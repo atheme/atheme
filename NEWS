@@ -1,3 +1,95 @@
+Atheme Services 7.0 Release Notes
+=================================
+All bugfixes from the 6.0 branch of Atheme are also in 7.0.
+
+ircd protocol
+- charybdis: Add support for locking of modes provided by
+  extensions modules.
+- unreal33: New protocol module for the upcoming UnrealIRCd 3.3.
+- unreal: Add support for changets.
+- ithildin, bircd and ptlink protocol modules removed.
+chanserv
+- sync: New module based on cs_sync from contrib. Adds autosync on
+  ACL change (and the ability to turn it off).
+- channel entrymsgs are now displayed in INFO.
+- akick: Support added for timed AKICKs.
+- ban, quiet and akick: Atheme now fills in the parts of a hostmask
+  that are missing with these commands.
+- access: Various cleanups.
+- cs_access_alias: New contrib module. Allows level-style pseudo
+  access lists.
+- clone: New module allowing you to clone a channel's access list,
+  flags and metadata to a new channel.
+chanfix
+- New service. Similar to EFNet's chanfix service.
+groupserv
+- all groupserv commands are now modules. Your atheme.conf will need
+  to be updated for this change if you use groupserv.
+- add join_flags config option and SET JOINFLAGS command. These allow
+  changing the group flags a new user will get upon JOINing the group.
+- add the +b (ban) flag. This prevents accounts matching it from JOINing
+  the group.
+- fflags: New command. Allows services operators to force a flags change
+  on a group they they do not have access to.
+- list: Allow refining the list with a pattern.
+gameserv
+- many refactorings
+- calc: new command. Allows doing basic math with GameServ.
+- gs_roulette: New contrib module. A game of Russian Roulette.
+- lottery: New module that randomly chooses one user out of the channel
+  members.
+nickserv
+- restrict: New module that allows services opers to stop users from using
+  commands that can be abused (hostserv/request, hostserv/take,
+  groupserv/register, etc)
+- emailexempts: New config option. Lets you specify email addresses that have
+  no limit to the number of accounts they can have registered.
+- when logging into a new account, users are informed that they will be logged
+  out of their old account.
+- when doing RELEASE or REGAIN against a user logged into an account, log
+  them out of the account.
+- old Atheme-1.x-style external logout implemented. Allows logging another user
+  logged into your account out remotely.
+- listgroups: New module that shows you which groups you have access in.
+- nevergroup: New module that prevents anyone giving you access to a group.
+- badmail: New module which allows setting email addresses (or glob patterns)
+  which are not allowed to register accounts on-the-fly.
+operserv
+- emailexempts and autokline exempts are now shown in INFO.
+- modreload now rehashes the config if the module requires it and reloads modules
+  that depend on the specified module.
+- soper: Allow adding a new SOPER with a password (optional, of course).
+scripting
+- Support for scripting Atheme in Perl added. This adds the SCRIPT operserv
+  command for loading/unloading/listing of Perl scripts. Still in alpha.
+xmlrpc
+- moved to transport/xmlrpc . Your atheme.conf will need to be updated for this
+  change if you use xmlrpc.
+- bad_password() is now called on invalid XMLRPC logins.
+code
+- a bit of the signal code and linker code was converted to use the mowgli
+  implementations.
+- charybdis' asynchronous DNS resolver added.
+- mowgli.global_storage can now be used to make a module's data persistent on
+  module reload. It is currently only used in GroupServ.
+- many assertions added in various places throughout the code.
+- added a new AC_AUTHENTICATED pseudo-priv to replace many identical checks if
+  a user is logged in throughout the code.
+- irc parse/uplink state has been made modular.
+- atheme core has been changed to build as a library.
+- all the old SNOOP channel code has been removed. SNOOP has been deprecated since
+  5.1 and gone since 5.2.
+- MODULE_USE_SYMBOL() was removed in favour of MODULE_TRY_REQUEST_SYMBOL().
+- configuration-defined usernames are now truncated at USERLEN (10 characters).
+other
+- time_format config option added. This allows changing the time format displayed
+  in many places throughout Atheme.
+- ircd_announceserv: New contrib service. This allows users to request network
+  announcements (which sopers must approve before they're sent).
+- an access {} config block was added allowing rewriting of command privs.
+  If specified, the user must match the original priv and the rewritten priv.
+- allow Atheme datadir to be specified on the command-line when starting.
+
 Atheme Services 6.0 Release Notes
 =================================
 All bugfixes from the 5.2 branch of Atheme are also in 6.0.
