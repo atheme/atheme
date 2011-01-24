@@ -8,6 +8,7 @@ Atheme_Account			T_PTROBJ_SPECIAL
 Atheme_Channel			T_PTROBJ_SPECIAL
 Atheme_ChanUser			T_PTROBJ_SPECIAL
 Atheme_ChannelRegistration	T_PTROBJ_SPECIAL
+Atheme_ChanAcs			T_PTROBJ_SPECIAL
 Atheme_NickRegistration		T_PTROBJ_SPECIAL
 Atheme_Server			T_PTROBJ_SPECIAL
 

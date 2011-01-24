@@ -43,3 +43,10 @@ CODE:
 OUTPUT:
 	RETVAL
 
+Atheme_Internal_List
+chanacs(Atheme_Account self)
+CODE:
+	RETVAL = perl_list_create(&self->ent.chanacs, "Atheme::ChanAcs");
+OUTPUT:
+	RETVAL
+
