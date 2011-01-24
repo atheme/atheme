@@ -1,0 +1,9 @@
+Help for SCORES:
+
+SCORES lists all users' chanfix scores
+for the specified channel.
+
+Syntax: SCORES <#channel>
+
+Examples:
+    /msg &nick& SCORES #foo
