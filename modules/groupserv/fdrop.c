@@ -45,6 +45,7 @@ static void gs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	remove_group_chanacs(mg);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mg)->name);
         wallops("%s dropped the group \2%s\2", get_oper_name(si), name);
 	object_unref(mg);

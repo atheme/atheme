@@ -314,3 +314,52 @@ unsigned int gs_flags_parser(char *flagstring, int allow_minus)
 
 	return flags;
 }
+
+void remove_group_chanacs(mygroup_t *mg)
+{
+	chanacs_t *ca;
+	mychan_t *mc;
+	myuser_t *successor;
+	mowgli_node_t *n, *tn;
+
+	/* kill all their channels and chanacs */
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, entity(mg)->chanacs.head)
+	{
+		ca = n->data;
+		mc = ca->mychan;
+
+		/* attempt succession */
+		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
+		{
+			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mg)->name);
+			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
+					mc->name, entity(successor)->name,
+					(long)(CURRTIME - mc->used),
+					entity(mg)->name,
+					MOWGLI_LIST_LENGTH(&mc->chanacs));
+			if (chansvs.me != NULL)
+				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mg)->name);
+
+			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0);
+			if (chansvs.me != NULL)
+				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
+			object_unref(ca);
+		}
+		/* no successor found */
+		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
+		{
+			slog(LG_REGISTER, _("DELETE: \2%s\2 from \2%s\2"), mc->name, entity(mg)->name);
+			slog(LG_VERBOSE, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %zu)",
+					mc->name, (long)(CURRTIME - mc->used),
+					entity(mg)->name,
+					MOWGLI_LIST_LENGTH(&mc->chanacs));
+
+			hook_call_channel_drop(mc);
+			if (mc->chan != NULL && !(mc->chan->flags & CHAN_LOG))
+				part(mc->name, chansvs.nick);
+			object_unref(mc);
+		}
+		else /* not founder */
+			object_unref(ca);
+	}
+}

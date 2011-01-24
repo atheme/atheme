@@ -25,6 +25,7 @@ bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, sourceinfo_t *si, unsigned i
 unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus);
 mowgli_list_t * (*myuser_get_membership_list)(myuser_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
+void (*remove_group_chanacs)(mygroup_t *mg);
 
 struct gflags *ga_flags;
 
@@ -45,6 +46,7 @@ static inline void use_groupserv_main_symbols(module_t *m)
     MODULE_TRY_REQUEST_SYMBOL(m, gs_flags_parser, "groupserv/main", "gs_flags_parser");
     MODULE_TRY_REQUEST_SYMBOL(m, myuser_get_membership_list, "groupserv/main", "myuser_get_membership_list");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_founder_names, "groupserv/main", "mygroup_founder_names");
+    MODULE_TRY_REQUEST_SYMBOL(m, remove_group_chanacs, "groupserv/main", "remove_group_chanacs");
 
     MODULE_TRY_REQUEST_SYMBOL(m, ga_flags, "groupserv/main", "ga_flags");
     MODULE_TRY_REQUEST_SYMBOL(m, gs_config, "groupserv/main", "gs_config");
