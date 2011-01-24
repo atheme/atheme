@@ -162,7 +162,7 @@ static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
 
 		if (dice == 0 && !strcasecmp(arg_dice, "-chance"))
 		{
-			int roll = (arc4random() % 10) + 1;
+			roll = (arc4random() % 10) + 1;
 
 			if (roll == 1)
 				botches++;

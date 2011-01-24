@@ -328,7 +328,7 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult)
 }
 
 
-double calc_dice_simple(double lhs, double rhs)
+static double calc_dice_simple(double lhs, double rhs)
 {
 	double i;
 	double out = 0.0;
@@ -437,7 +437,7 @@ int is_calcoper(char oper)
 
 /*************************************************************************************/
 
-void eval_dice(sourceinfo_t *si, char *s_input)
+static void eval_dice(sourceinfo_t *si, char *s_input)
 {
 	static char buffer[1024], result[32];
 
@@ -513,7 +513,7 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 	}
 
 	total = 0.0;
-	snprintf(buffer, 1024, "\2%s\2 rolled %lud%lu: ", si->su->nick, x, y);
+	snprintf(buffer, 1024, "\2%s\2 rolled %ud%u: ", si->su->nick, x, y);
 	for (roll = 0; roll < x; ++roll)
 	{
 		snprintf(result, 32, "%d ", dice = (1 + (arc4random() % y)));
@@ -525,7 +525,7 @@ void eval_dice(sourceinfo_t *si, char *s_input)
 		snprintf(result, 32, " <Total: %g>", total);
 	else
 	{
-		snprintf(result, 32, " <Total: %g(%c%lu) = ", total, op, z);
+		snprintf(result, 32, " <Total: %g(%c%u) = ", total, op, z);
 		strlcat(buffer, result, sizeof(buffer));
 		switch (op)
 		{

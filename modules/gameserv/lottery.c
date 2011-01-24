@@ -33,7 +33,7 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cmd_lottery);
 }
 
-user_t *pick_a_sucker(channel_t *c)
+static user_t *pick_a_sucker(channel_t *c)
 {
 	int slot = arc4random() % MOWGLI_LIST_LENGTH(&c->members);
 	chanuser_t *cu;

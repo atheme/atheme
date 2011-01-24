@@ -230,9 +230,9 @@ static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_script = { "SCRIPT", N_("Loads or unloads perl scripts."), PRIV_ADMIN, 2, os_cmd_script, { .path = "oservice/script" } };
 
-command_t os_script_load = { "LOAD", N_("Load a named perl script."), PRIV_ADMIN, 2, os_cmd_script_load };
-command_t os_script_unload = { "UNLOAD", N_("Unload a loaded script."), PRIV_ADMIN, 2, os_cmd_script_unload };
-command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2, os_cmd_script_list };
+command_t os_script_load = { "LOAD", N_("Load a named perl script."), PRIV_ADMIN, 2, os_cmd_script_load, { .path = "" } };
+command_t os_script_unload = { "UNLOAD", N_("Unload a loaded script."), PRIV_ADMIN, 2, os_cmd_script_unload, { .path = "" } };
+command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2, os_cmd_script_list, { .path = "" } };
 
 mowgli_patricia_t *os_script_cmdtree;
 
