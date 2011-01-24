@@ -62,6 +62,7 @@ operserv
 scripting
 - Support for scripting Atheme in Perl added. This adds the SCRIPT operserv
   command for loading/unloading/listing of Perl scripts. Still in alpha.
+  Add the --with-perl configure switch to enable it.
 xmlrpc
 - moved to transport/xmlrpc . Your atheme.conf will need to be updated for this
   change if you use xmlrpc.
