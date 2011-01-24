@@ -333,10 +333,10 @@ static double calc_dice_simple(double lhs, double rhs)
 	double i;
 	double out = 0.0;
 
-	if (!lhs)
+	if (lhs <= 0.0)
 		lhs = 1.0;
 
-	if (!rhs)
+	if (rhs <= 0.0)
 		rhs = 1.0;
 
 	for (i = 0; i < lhs; i++)
@@ -369,7 +369,7 @@ int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *ou
 	  case '/':		// division
 	  case '%':		// MOD
 	  case '\\':		// DIV
-		  if (rhs == 0 || (oper == '%' && ((long long)rhs == 0)))
+		  if (rhs <= 0.0 || (oper == '%' && ((long long)rhs == 0)))
 		  {
 			  command_fail(si, fault_badparams, _("Error: Cannot perform modulus or division by zero."));
 			  return 1;
