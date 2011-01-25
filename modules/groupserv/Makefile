@@ -25,6 +25,7 @@ BASE_SRCS =			\
 	info.c			\
 	join.c			\
 	list.c			\
+	listchans.c		\
 	register.c		\
 	regnolimit.c		\
 	set.c			\
