@@ -17,6 +17,7 @@ SRCS =			\
 	cs_fregister.c		\
 	cs_kickdots.c		\
 	cs_ping.c		\
+	cs_regmode.c		\
 	cs_regnotice.c		\
 	cs_updown.c		\
 	cs_userinfo.c		\
