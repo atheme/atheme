@@ -59,6 +59,7 @@ struct chanban_
 #define CMODE_PRIV      0x00000040      /* AKA PARA */
 #define CMODE_SEC       0x00000080
 #define CMODE_TOPIC     0x00000100
+#define CMODE_CHANREG	0x00000200
 
 /* channel_t.flags */
 #define CHAN_LOG        0x00000001 /* logs sent to here */

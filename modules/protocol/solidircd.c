@@ -55,6 +55,7 @@ struct cmode_ solidircd_mode_list[] = {
   { 'S', CMODE_SSL }, /* SSL users only */
   { 'N', CMODE_NONICK }, /* No Nick Changes */
   { 'D', CMODE_RSL },  /*  Only Resolved Clients */
+  { 'r', CMODE_CHANREG },
   { '\0', 0 }
 };
 

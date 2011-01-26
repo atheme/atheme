@@ -51,6 +51,7 @@ struct cmode_ dreamforge_mode_list[] = {
   { 't', CMODE_TOPIC    },
   { 'c', CMODE_NOCOLOR  },
   { 'R', CMODE_REGONLY  },
+  { 'r', CMODE_CHANREG  },
   { '\0', 0 }
 };
 

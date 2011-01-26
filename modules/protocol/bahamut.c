@@ -53,6 +53,7 @@ struct cmode_ bahamut_mode_list[] = {
   { 'M', CMODE_MODREG   },
   { 'R', CMODE_REGONLY  },
   { 'O', CMODE_OPERONLY },
+  { 'r', CMODE_CHANREG  },
   { '\0', 0 }
 };
 

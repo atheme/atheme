@@ -65,6 +65,7 @@ struct cmode_ unreal_mode_list[] = {
   { 'z', CMODE_SSLONLY  },
   { 'N', CMODE_STICKY   },
   { 'G', CMODE_CENSOR   },
+  { 'r', CMODE_CHANREG  },
   { '\0', 0 }
 };
 
