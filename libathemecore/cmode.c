@@ -267,7 +267,9 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 				chanban_t *c;
 
 				c = chanban_find(chan, parv[parpos], *pos);
-				chanban_delete(c);
+				if (c != NULL)
+					chanban_delete(c);
+
 				if (source)
 					modestack_mode_param(source->nick, chan, MTYPE_DEL, *pos, parv[parpos]);
 			}
