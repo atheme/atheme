@@ -14,8 +14,6 @@ DECLARE_MODULE_V1
         "Atheme Development Group <http://www.atheme.org>"
 );
 
-static mowgli_list_t regnotices = { NULL, NULL, 0 };
-
 static void register_hook(hook_channel_req_t *hdata)
 {
 	mychan_t *mc = hdata->mc;
