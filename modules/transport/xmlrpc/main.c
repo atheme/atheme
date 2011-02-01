@@ -377,8 +377,9 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	else
 		mu = NULL;
 
-	svs = service_find_nick(parv[3]);
-	if (svs == NULL || svs->commands == NULL)
+	/* try literal service name first, then user-configured nickname. */
+	svs = service_find(parv[3]);
+	if ((svs == NULL && (svs = service_find_nick(parv[3])) == NULL) || svs->commands == NULL)
 	{
 		slog(LG_DEBUG, "xmlrpcmethod_command(): invalid service %s", parv[3]);
 		xmlrpc_generic_error(fault_nosuch_source, "Invalid service name.");
