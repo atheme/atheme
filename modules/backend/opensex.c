@@ -498,7 +498,7 @@ static void opensex_h_ac(database_handle_t *db, const char *type)
 	const char *user, *mask;
 
 	user = db_sread_word(db);
-	mask = db_sread_str(db);
+	mask = db_sread_word(db);
 
 	mu = myuser_find(user);
 	if (!mu)
