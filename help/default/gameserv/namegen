@@ -9,4 +9,4 @@ a channel.
 Syntax: NAMEGEN [number of names]
 
 Example:
-    /msg GameServ NAMEGEN 5
+    /msg &nick& NAMEGEN 5

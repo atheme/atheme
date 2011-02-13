@@ -8,5 +8,5 @@ dice rolls that can be done at once.
 Syntax: ROLL [times] <#dice>d<#sides>
 
 Example:
-    /msg GameServ ROLL 2d16
-    /msg GameServ ROLL 5 4d16
+    /msg &nick& ROLL 2d16
+    /msg &nick& ROLL 5 4d16
