@@ -10,10 +10,20 @@ cs_babbler.c - Repeats what others users in a channel say back to a specific
                user. Useful for users that claim they have entire channels on
                ignore. NOT COMPILED BY DEFAULT.
 
+cs_badwords.c - Takes actions against users (KICK, BAN, KICKBAN or QUIET) for
+                using badwords in channel, specified on a per-channel basis
+				with the BADWORDS command. Be aware it will check every message
+				sent to channels that BLOCKBADWORDS is set on so it can be a bit
+				CPU-heavy.
+
 cs_kickdots.c - Kicks users from a channel when kickdots metadata is set on
                 that channel and users send a line containing only "...".
+				Deprecated by cs_badwords (/cs badwords #channel add ... kick).
 
 cs_ping.c - Responds to users that ping ChanServ with "Pong!".
+
+cs_regmode.c - Sets the stupid, pointless DALNet-style +/-r mode when a channel
+               is registered or dropped. NOT RECOMMENDED TO USE.
 
 cs_regnotice.c - Sends a user a notice with some information specified in a
                  regnotice {} block inside the chanserv {} block of your
@@ -31,12 +41,6 @@ gen_httpd.c - A small sample httpd for serving files. It is highly recommended
 
 gen_listenerdemo.c - NOT RECOMMENDED TO USE.
 
-gen_regcheckemail.c - Rejects account registrations with certain email addresses.
-                      It is recommended to read and edit the code for this module
-                      first as it will block registation from users with email
-                      addresses at gmail.com, yahoo.com, hotmail.com and msn.com
-                      by default.
-
 gen_vhostonreg.c - Assigns a $account.hidehostsuffix vhost to all users upon
                    account registration. $account will be replaced by the users'
                    accountname and hidehostsuffix is that config option from the
@@ -48,6 +52,13 @@ graphtastical.c - Graphs user->channel relationships. Not recommended to use if
 gs_roulette.c - A nice GameServ game of Russian Roulette.
 
 ircd_catserv.c - Little module showing a CatServ Services client.
+
+ircd_announceserv.c - A services bot which allows users to request network
+                      announcements that will then (when approved by a soper)
+					  be sent to all users on the network. This is seperate
+					  from InfoServ so that users can easily ignore users'
+					  announcements but won't miss any important announcements
+					  from network staff.
 
 ircd_loveserv.c - A services bot for sending love-related items to other users.
                   NOT COMPILED BY DEFAULT.
