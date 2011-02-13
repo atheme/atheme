@@ -125,3 +125,9 @@ operserv:grant
 	use /os soper add/del
 operserv:override
 	use /os override to run services commands as other users
+
+group:auspex
+	see the invisible about groups and group registrations,
+	groupserv info/list/flags, ns/us listgroups mainly
+group:admin
+	administer groups
