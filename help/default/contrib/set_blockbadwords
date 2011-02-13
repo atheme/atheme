@@ -1,0 +1,11 @@
+Help for SET BLOCKBADWORDS:
+
+SET BLOCKBADWORDS designates whether a channel's messages
+are checked against the badword list. All users will
+be affected by this. There are currently no exemptions
+for channel ops or voices.
+
+Syntax: SET <#channel> BLOCKBADWORDS ON|OFF
+
+Example:
+    /msg &nick& SET #sailors BLOCKBADWORDS ON

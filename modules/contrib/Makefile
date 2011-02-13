@@ -14,6 +14,7 @@ include ../../buildsys.module.mk
 
 SRCS =			\
 	cs_access_alias.c	\
+	cs_badwords.c		\
 	cs_fregister.c		\
 	cs_kickdots.c		\
 	cs_ping.c		\
