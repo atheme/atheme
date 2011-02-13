@@ -1,10 +1,10 @@
-# Ignacio Riquelme Morelle <shadowm2006@gmail.com>, 2010.
+# Ignacio Riquelme Morelle <shadowm2006@gmail.com>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-13 16:39-0300\n"
-"PO-Revision-Date: 2010-12-07 21:22-0300\n"
+"PO-Revision-Date: 2011-02-13 17:42-0300\n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team: Spanish <shadowm2006@gmail.com>\n"
 "Language: \n"
@@ -542,9 +542,8 @@ msgid "Private mode of bot %s is now OFF."
 msgstr "El modo privado del bot %s está ahora DESACTIVADO."
 
 #: modules/chanfix/fix.c:336
-#, fuzzy
 msgid "To fix a channel: CHANFIX <#channel>"
-msgstr "Para registrar un canal: REGISTER <#canal>"
+msgstr "Para reparar un canal: CHANFIX <#canal>"
 
 #: modules/chanfix/fix.c:342 modules/operserv/clearchan.c:60
 #: modules/operserv/mode.c:50
@@ -557,6 +556,8 @@ msgstr "El canal %s no existe."
 #, c-format
 msgid "No CHANFIX record available for %s; try again later."
 msgstr ""
+"No hay registros de CHANFIX disponibles para %s; espere a intentarlo "
+"nuevamente."
 
 #: modules/chanfix/fix.c:355 modules/chanserv/register.c:80
 #: modules/contrib/cs_fregister.c:84 modules/nickserv/register.c:129
@@ -567,55 +568,51 @@ msgstr "%s ya se encuentra registrado."
 #: modules/chanfix/fix.c:362
 #, c-format
 msgid "Scores for %s are too low (< %u) for a fix."
-msgstr ""
+msgstr "Los puntajes de %s son muy bajos (< %u) para chanfix."
 
 #: modules/chanfix/fix.c:371
-#, fuzzy, c-format
+#, c-format
 msgid "Fix request has been acknowledged for %s."
-msgstr "%s ha sido desactivado para %s."
+msgstr "La solicitud de reparación ha sido procesada para %s."
 
 #: modules/chanfix/fix.c:374
-#, fuzzy
 msgid "Manually chanfix a channel."
-msgstr "Le quita un veto a sí mismo de un canal."
+msgstr "Reparar manualmente un canal."
 
 #: modules/chanfix/fix.c:394 modules/chanfix/fix.c:452
-#, fuzzy
 msgid "To view CHANFIX scores for a channel: SCORES <#channel>"
-msgstr "Para registrar un canal: REGISTER <#canal>"
+msgstr "Para ver puntajes CHANFIX de un canal: SCORES<#canal>"
 
 #: modules/chanfix/fix.c:413
 #, c-format
 msgid "There are no scores in the CHANFIX database for %s."
-msgstr ""
+msgstr "No hay puntajes en la base de datos CHANFIX para %s."
 
 #: modules/chanfix/fix.c:417
 #, c-format
 msgid "Top %d scores for %s in the database:"
-msgstr ""
+msgstr "%d puntajes más altos para %s en la base de datos:"
 
 #: modules/chanfix/fix.c:419
 msgid "Num"
-msgstr ""
+msgstr "Núm"
 
 #: modules/chanfix/fix.c:419
-#, fuzzy
 msgid "Account/Hostmask"
-msgstr "Cuenta"
+msgstr "Cuenta/Máscara"
 
 #: modules/chanfix/fix.c:419
 msgid "Score"
-msgstr ""
+msgstr "Puntaje"
 
 #: modules/chanfix/fix.c:436
-#, fuzzy, c-format
+#, c-format
 msgid "End of SCORES listing for %s."
-msgstr "Fin de la lista ACCESS para %s."
+msgstr "Fin de la lista SCORE para %s."
 
 #: modules/chanfix/fix.c:439
-#, fuzzy
 msgid "List channel scores."
-msgstr "Muestra entradas de acceso al canal."
+msgstr "Muestra una lista de puntajes de canal."
 
 #: modules/chanfix/fix.c:466 modules/chanserv/info.c:78
 #: modules/nickserv/info.c:114 modules/operserv/modinspect.c:61
@@ -624,44 +621,44 @@ msgid "Information on %s:"
 msgstr "Información sobre %s:"
 
 #: modules/chanfix/fix.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Creation time: %s"
-msgstr "Tiempo de expiración de canales: %d días"
+msgstr "Fecha de creación: %s"
 
 #: modules/chanfix/fix.c:479
 #, c-format
 msgid "Highest score: %u"
-msgstr ""
+msgstr "Puntaje más alto : %u"
 
 #: modules/chanfix/fix.c:480
-#, fuzzy, c-format
+#, c-format
 msgid "Usercount    : %zu"
-msgstr "Versión         : %s"
+msgstr "Núm. de usuarios : %zu"
 
 #: modules/chanfix/fix.c:481
 #, c-format
 msgid "Initial step : %.0f%% of %u (%0.1f)"
-msgstr ""
+msgstr "Paso inicial     : %.0f%% de %u (%0.1f)"
 
 #: modules/chanfix/fix.c:482
 #, c-format
 msgid "Current step : %u"
-msgstr ""
+msgstr "Paso actual      : %u"
 
 #: modules/chanfix/fix.c:483
 #, c-format
 msgid "Final step   : %.0f%% of %u (%0.1f)"
-msgstr ""
+msgstr "Paso final       : %.0f%% de %u (%0.1f)"
 
 #: modules/chanfix/fix.c:484
 #, c-format
 msgid "Needs fixing : %s"
-msgstr ""
+msgstr "Req. reparación  : %s"
 
 #: modules/chanfix/fix.c:485
 #, c-format
 msgid "Now fixing   : %s"
-msgstr ""
+msgstr "Reparando        : %s"
 
 #: modules/chanfix/fix.c:488 modules/chanserv/info.c:283
 #: modules/groupserv/info.c:93
@@ -669,14 +666,13 @@ msgid "*** End of Info ***"
 msgstr "*** Fin de Información ***"
 
 #: modules/chanfix/fix.c:491
-#, fuzzy
 msgid "List information on channel."
-msgstr "Oculta información sobre un canal."
+msgstr "Lista información sobre un canal."
 
 #: modules/chanfix/fix.c:501
 #, c-format
 msgid "%s allows for simple channel operator managment."
-msgstr ""
+msgstr "%s permite administración simple de operadores de canal."
 
 #: modules/chanserv/access.c:21
 msgid "Manage channel access."
@@ -864,10 +860,11 @@ msgid "Syntax: ROLE <#channel> ADD|SET <role> [flags]"
 msgstr "Sintaxis: ROLE <#canal> ADD|SET <rol> [permisos]"
 
 #: modules/chanserv/access.c:978
-#, fuzzy, c-format
+#, c-format
 msgid "No valid flags given, use /%s%s HELP ROLE ADD for a list"
 msgstr ""
-"Permisos no válidos, vea /%s%s HELP FLAGS para una lista de permisos válidos"
+"No ha especificado permisos válidos, use /%s%s HELP ROLE ADD para ver una "
+"lista"
 
 #: modules/chanserv/access.c:980
 #, c-format
@@ -875,9 +872,9 @@ msgid "You cannot remove all flags from the role %s."
 msgstr "No puede quitar todos los permisos del rol %s."
 
 #: modules/chanserv/access.c:994
-#, fuzzy, c-format
+#, c-format
 msgid "The role %s already has flags %s."
-msgstr "%s ya tiene los permisos %s en %s"
+msgstr "El rol %s ya tiene los permisos %s."
 
 #: modules/chanserv/access.c:1002
 #, c-format
@@ -981,9 +978,8 @@ msgid "AKICK on %s was successfully added to the AKICK list for %s."
 msgstr "AKICK sobre %s añadida con éxito a la lista AKICK para %s."
 
 #: modules/chanserv/akick.c:431
-#, fuzzy
 msgid "Syntax: AKICK <#channel> DEL <nickname|hostmask>"
-msgstr "Sintaxis: BAN <#canal> <nick|máscara de host>"
+msgstr "Sintaxis: AKICK <#canal> DEL <nick|máscara de host>"
 
 #: modules/chanserv/akick.c:466
 #, c-format
@@ -1001,9 +997,8 @@ msgid "%s has been removed from the AKICK list for %s."
 msgstr "%s ha sido quitado de la lista AKICK para %s."
 
 #: modules/chanserv/akick.c:541
-#, fuzzy
 msgid "Syntax: AKICK <#channel> LIST"
-msgstr "Sintaxis: ACT <#canal> <mensaje>"
+msgstr "Sintaxis: AKICK <#canal> LIST"
 
 #: modules/chanserv/akick.c:584
 #, c-format
@@ -1131,9 +1126,9 @@ msgid "Cleared users from %s."
 msgstr "Se han expulsado a los usuarios de %s."
 
 #: modules/chanserv/clone.c:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cloned %s to %s."
-msgstr "%s ha sido vetado de %s."
+msgstr "%s ha sido clonado en %s."
 
 #: modules/chanserv/close.c:21
 msgid "Closes a channel."
@@ -2497,9 +2492,9 @@ msgid "You are not allowed to set %s on template %s in %s."
 msgstr "Ud. no está autorizado a establecer %s en la plantilla %s en %s."
 
 #: modules/chanserv/template.c:348
-#, fuzzy, c-format
+#, c-format
 msgid "The template %.*s already has flags %.*s."
-msgstr "%s ya tiene los permisos %s en %s"
+msgstr "La plantilla %.*s ya tiene los permisos %.*s."
 
 #: modules/chanserv/template.c:360
 #, c-format
@@ -2738,19 +2733,17 @@ msgid "FORCEXOP %s done (%d changes)"
 msgstr "FORCEXOP %s completado (%d cambios)"
 
 #: modules/contrib/cs_access_alias.c:52
-#, fuzzy, c-format
+#, c-format
 msgid "Command %s not loaded?"
-msgstr "%s no está cargado."
+msgstr "¿Comando %s no está cargado?"
 
 #: modules/contrib/cs_access_alias.c:180 modules/contrib/cs_access_alias.c:190
-#, fuzzy
 msgid "Syntax: ACCESS <#channel> ADD|DEL|LIST [nick] [level]"
-msgstr "Sintaxis: AKICK <#canal> <ADD|DEL|LIST> [parámetros]"
+msgstr "Sintaxis: ACCESS <#canal> ADD|DEL|LIST [nick] [nivel]"
 
 #: modules/contrib/cs_access_alias.c:206
-#, fuzzy
 msgid "Syntax: ACCESS <#channel> ADD|DEL <nick> [level]"
-msgstr "Sintaxis: ASSIGN <#canal> <nick>"
+msgstr "Sintaxis: ACCESS <#canal> ADD|DEL <nick> [nivel]"
 
 #: modules/contrib/cs_fregister.c:20
 msgid "Forcibly registers a channel."
@@ -2810,92 +2803,89 @@ msgstr "*CLIC*"
 
 #: modules/contrib/ircd_announceserv.c:31
 msgid "Requests new announcement."
-msgstr ""
+msgstr "Solicita un nuevo anuncio."
 
 #: modules/contrib/ircd_announceserv.c:32
-#, fuzzy
 msgid "Lists announcements currently waiting for activation."
-msgstr "Muestra la lista de vhosts actualmente en espera de activación."
+msgstr "Muestra una lista de anuncios en espera de activación."
 
 #: modules/contrib/ircd_announceserv.c:33
-#, fuzzy
 msgid "Reject the requested announcement for the given nick."
-msgstr "Rechaza la solicitud de vhost para el nick especificado."
+msgstr "Rechaza el anuncio solicitado por el nick especificado."
 
 #: modules/contrib/ircd_announceserv.c:34
-#, fuzzy
 msgid "Activate the requested announcement for a given nick."
-msgstr "Activa el vhost solicitado para el nick especificado."
+msgstr "Activa el anuncio solicitado por el nick especificado."
 
 #: modules/contrib/ircd_announceserv.c:35
 msgid "Cancels your requested announcement."
-msgstr ""
+msgstr "Cancela su solicitud de anuncio."
 
 #: modules/contrib/ircd_announceserv.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "%s allows users to request a network announcement."
-msgstr "%s permite a los usuarios solicitar ayuda de la administración de red."
+msgstr "%s permite a los usuarios solicitar un anuncio de red."
 
 #: modules/contrib/ircd_announceserv.c:186
-#, fuzzy
 msgid "Syntax: REQUEST <subject> <text>"
-msgstr "Sintaxis: REQUEST <vhost>"
+msgstr "Sintaxis: REQUEST <asunto> <texto>"
 
 #: modules/contrib/ircd_announceserv.c:192
-#, fuzzy
 msgid ""
 "You have been restricted from requesting announcements by network staff."
 msgstr ""
 "La administración de la red le ha restringido la opción de solicitud de "
-"vhosts."
+"anuncios."
 
 #: modules/contrib/ircd_announceserv.c:204
 msgid ""
 "You cannot request more than one announcement. Use CANCEL if you wish to "
 "cancel your current announcement and submit another."
 msgstr ""
+"Ud. no puede solicitar más de un anuncio. Utilize CANCEL si desea cancelar "
+"su anuncio actual y solicitar uno nuevo."
 
 #: modules/contrib/ircd_announceserv.c:214
 msgid "Your subject is too long. Subjects need to be under 35 characters."
 msgstr ""
+"Su asunto es demasiado largo. Los asuntos no deben superar 35 caracteres."
 
 #: modules/contrib/ircd_announceserv.c:221
 msgid ""
 "Your announcement is too long. Announcements need to be under 450 characters."
 msgstr ""
+"Su anuncio es demasiado largo. Los anuncios no deben superar 450 caracteres."
 
 #: modules/contrib/ircd_announceserv.c:241
-#, fuzzy
 msgid "You have requested the following announcement: "
-msgstr "Ud. ha solicitado ayuda sobre %s."
+msgstr "Ud. ha solicitado el siguiente anuncio: "
 
 #: modules/contrib/ircd_announceserv.c:242
-#, fuzzy, c-format
+#, c-format
 msgid "[%s - %s] %s"
-msgstr "- %s (%s)"
+msgstr "[%s - %s] %s"
 
 #: modules/contrib/ircd_announceserv.c:264 modules/hostserv/request.c:309
 msgid "Syntax: ACTIVATE <nick>"
 msgstr "Sintaxis: ACTIVATE <nick>"
 
 #: modules/contrib/ircd_announceserv.c:294
-#, fuzzy, c-format
+#, c-format
 msgid "Nick %s not found in announce request database."
-msgstr "No se encontró el nick %s en la lista de solicitudes de ayuda."
+msgstr "No se encontró el nick %s en la lista de solicitudes de anuncios."
 
 #: modules/contrib/ircd_announceserv.c:307 modules/hostserv/request.c:374
 msgid "Syntax: REJECT <nick>"
 msgstr "Sintaxis: REJECT <nick>"
 
 #: modules/contrib/ircd_announceserv.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "Nick %s not found in announcement request database."
-msgstr "No se encontró el nick %s en la lista de solicitudes de vhosts."
+msgstr "No se encontró el nick %s en la lista de solicitudes de anuncios."
 
 #: modules/contrib/ircd_announceserv.c:387
-#, fuzzy
 msgid "You do not have a pending announcement to cancel."
-msgstr "Ud. no tiene una solicitud de ayuda que cancelar."
+msgstr "Ud. no tiene una solicitud de anuncio que cancelar."
 
 #: modules/contrib/ns_fenforce.c:41
 msgid "Syntax: FENFORCE <account> ON|OFF"
@@ -3108,68 +3098,64 @@ msgstr "Lanza uno o más dados."
 
 #: modules/gameserv/dice.c:22
 msgid "Calculate stuff."
-msgstr ""
+msgstr "Calcular valores."
 
 #: modules/gameserv/dice.c:80 modules/gameserv/dice.c:90
 #: modules/gameserv/dice.c:108 modules/gameserv/dice.c:207
 msgid "Error: You typed an invalid expression."
-msgstr ""
+msgstr "Error: Ha ingresado una expresión inválida."
 
 #: modules/gameserv/dice.c:116
 msgid "Error: Mismatched braces '( )' in expression."
-msgstr ""
+msgstr "Error: Paréntesis no coincidentes en la expresión."
 
 #: modules/gameserv/dice.c:185 modules/gameserv/dice.c:200
 #: modules/gameserv/dice.c:308
 msgid "Error: Missing expected value in expression."
-msgstr ""
+msgstr "Error: Falta un valor en la expresión."
 
 #: modules/gameserv/dice.c:253
 msgid "Error: Missing expected operator in expression."
-msgstr ""
+msgstr "Error: Falta un operador en la expresión."
 
 #: modules/gameserv/dice.c:297
 msgid "Error: Expression is too deeply nested."
-msgstr ""
+msgstr "Error: La expresión es demasiado anidada."
 
 #: modules/gameserv/dice.c:374
 msgid "Error: Cannot perform modulus or division by zero."
-msgstr ""
+msgstr "Error: No es posible realizar módulo o división por cero."
 
 #: modules/gameserv/dice.c:411
 #, c-format
 msgid "Error: Unknown mathematical operator %c."
-msgstr ""
+msgstr "Error: Operador matemático desconocido %c."
 
 #: modules/gameserv/dice.c:452 modules/gameserv/dice.c:465
 #: modules/gameserv/dice.c:477 modules/gameserv/dice.c:484
 #: modules/gameserv/dice.c:505
 msgid "Syntax: XdY [ {-|+|*|/} Z ]"
-msgstr ""
+msgstr "Sintaxis: XdY [ {-|+|*|/} Z ]"
 
 #: modules/gameserv/dice.c:461
-#, fuzzy
 msgid "Only 1-100 dice may be thrown at once."
-msgstr "Sólo 1-30 dados pueden ser lanzados a la vez."
+msgstr "Sólo 1-100 dados pueden ser lanzados a la vez."
 
 #: modules/gameserv/dice.c:490
-#, fuzzy
 msgid "Only 1-100 sides may be used on a dice."
-msgstr "Sólo 1-30 dados pueden ser lanzados a la vez."
+msgstr "Un dado puede tener sólo 1-100 lados."
 
 #: modules/gameserv/dice.c:510
 msgid "Can't divide by zero."
-msgstr ""
+msgstr "No es posible dividir por cero."
 
 #: modules/gameserv/dice.c:565
-#, fuzzy
 msgid "Syntax: ROLL [times] [dice]d<sides>"
-msgstr "Sintaxis: ROLL [dados]d<lados>"
+msgstr "Sintaxis: ROLL [veces] [dados]d<lados>"
 
 #: modules/gameserv/dice.c:594
-#, fuzzy
 msgid "Syntax: CALC [times] <expression>"
-msgstr "Sintaxis: RAKILL /<regex>/[i] <razón>"
+msgstr "Sintaxis: CALC [veces] <expresión>"
 
 #: modules/gameserv/eightball.c:21
 msgid "Ask the 8-Ball a question."
@@ -3292,9 +3278,8 @@ msgid "WOD-style dice generation."
 msgstr "Generación de dados estilo WOD."
 
 #: modules/gameserv/gamecalc.c:26
-#, fuzzy
 msgid "New WOD-style dice generation."
-msgstr "Generación de dados estilo WOD."
+msgstr "Generación de dados estilo nuevo WOD."
 
 #: modules/gameserv/gamecalc.c:27
 msgid "Fudge-style dice generation."
@@ -3334,29 +3319,29 @@ msgstr "Éxitos: %d, Fracasos: %d, Errores: %d, Total: %d."
 
 #: modules/gameserv/gamecalc.c:150
 msgid "Syntax: NWOD [-chance] <dice> [-reroll] [reroll]"
-msgstr ""
+msgstr "Sintaxis: NWOD [-chance] <dados> [-reroll] [reroll]"
 
 #: modules/gameserv/gamecalc.c:173
 #, c-format
 msgid "%s rolls a chance die: %d"
-msgstr ""
+msgstr "%s lanza un dado: %d"
 
 #: modules/gameserv/gamecalc.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Successes: %d, Failures: %d, Botches: %d."
-msgstr "Éxitos: %d, Fracasos: %d, Errores: %d, Total: %d."
+msgstr "Éxitos: %d, Fracasos: %d, Errores: %d."
 
 #: modules/gameserv/gamecalc.c:215
-#, fuzzy, c-format
+#, c-format
 msgid "%s rolls %d dice: %s"
-msgstr "%s lanza %d dados a dificultad %d: %s"
+msgstr "%s lanzamientos %d dados: %s"
 
 #: modules/gameserv/gamecalc.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d."
 msgstr ""
 "Éxitos: %d, Fracasos: %d, Errores: %d, Total: %d. Ud. puede volver a lanzar "
-"%d si tiene una especialidad."
+"%d."
 
 #: modules/gameserv/gamecalc.c:245
 msgid "Syntax: DF <dice>"
@@ -3373,14 +3358,12 @@ msgid "%s provides games and tools for playing games to the network."
 msgstr "%s provee juegos y herramientas para jugar en la red."
 
 #: modules/gameserv/lottery.c:20
-#, fuzzy
 msgid "Choose a random user on a channel."
-msgstr "Establece un veto en un canal."
+msgstr "Escoge a un usuario al azar del canal."
 
 #: modules/gameserv/lottery.c:61
-#, fuzzy
 msgid "This command may only be used on a channel."
-msgstr "Expulsa y veta a un usuario de un canal."
+msgstr "Este comando sólo puede ser utilizado en un canal."
 
 #: modules/gameserv/namegen.c:22
 msgid "Generates some names to ponder."
@@ -3528,9 +3511,9 @@ msgid "Syntax: FLAGS <!group> <user> <changes>"
 msgstr "Sintaxis: FLAGS <!grupo> <usuario> <permisos>"
 
 #: modules/groupserv/flags.c:108
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not wish to have flags in any groups."
-msgstr "%s no tiene fundadores."
+msgstr "%s no desea tener permisos en ningún grupo."
 
 #: modules/groupserv/help.c:27
 #, c-format
@@ -3634,14 +3617,13 @@ msgid "No groups matched pattern %s"
 msgstr "No se encontraron grupos para el patrón %s"
 
 #: modules/groupserv/listchans.c:21
-#, fuzzy
 msgid "Lists channels that a group has access to."
-msgstr "Muestra una lista de canales a los cuales Ud. tiene acceso."
+msgstr "Muestra una lista de canales a los cuales un grupo tiene acceso."
 
 #: modules/groupserv/listchans.c:69 modules/groupserv/listchans.c:87
-#, fuzzy, c-format
+#, c-format
 msgid "No channel access was found for the group %s."
-msgstr "No se encontraron permisos de acceso a canales para el nick %s."
+msgstr "No se encontraron permisos de acceso a canales para el grupo %s."
 
 #: modules/groupserv/listchans.c:79 modules/nickserv/listchans.c:90
 #: modules/nickserv/listgroups.c:90
@@ -3650,14 +3632,14 @@ msgid "Access flag(s) %s in %s"
 msgstr "Opción(es) de acceso %s en %s"
 
 #: modules/groupserv/listchans.c:89
-#, fuzzy, c-format
+#, c-format
 msgid "%d channel access match for the group %s"
-msgstr "%d entrada de acceso a canal para el nick %s"
+msgstr "%d entrada de acceso a canal para el grupo %s"
 
 #: modules/groupserv/listchans.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "%d channel access matches for the group %s"
-msgstr "%d entradas de acceso a canal para el nick %s"
+msgstr "%d entradas de acceso a canal para el grupo %s"
 
 #: modules/groupserv/main/groupserv.c:334
 #, c-format
@@ -3900,11 +3882,10 @@ msgstr ""
 "solicitud de ayuda, por favor intente después."
 
 #: modules/helpserv/helpme.c:52 modules/helpserv/ticket.c:181
-#, fuzzy
 msgid "You have been restricted from requesting help by network staff."
 msgstr ""
 "La administración de la red le ha restringido la opción de solicitud de "
-"vhosts."
+"ayuda."
 
 #: modules/helpserv/main.c:33
 #, c-format
@@ -4608,43 +4589,41 @@ msgid "Deleted mask %s from your access list."
 msgstr "Se ha quitado la máscara %s de su lista de acceso."
 
 #: modules/nickserv/badmail.c:24
-#, fuzzy
 msgid "Disallows registrations from certain email addresses."
-msgstr "Muestra una lista de cuentas registradas por una dirección de e-mail."
+msgstr "Permite denegar el registro con ciertas direcciones de email."
 
 #: modules/nickserv/badmail.c:131
-#, fuzzy
 msgid "Syntax: BADMAIL ADD|DEL|LIST [parameters]"
-msgstr "Sintaxis: AKICK <#canal> <ADD|DEL|LIST> [parámetros]"
+msgstr "Sintaxis: BADMAIL ADD|DEL|LIST [parámetros]"
 
 #: modules/nickserv/badmail.c:140
-#, fuzzy
 msgid "Syntax: BADMAIL ADD <email> [reason]"
-msgstr "Sintaxis: IGNORE ADD <máscara> <razón>"
+msgstr "Sintaxis: BADMAIL ADD <email> [razón]"
 
 #: modules/nickserv/badmail.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "Email %s has already been banned."
-msgstr "%s ha sido recuperado."
+msgstr "La dirección de email %s ya ha sido vetada."
 
 #: modules/nickserv/badmail.c:174
 msgid "None"
-msgstr ""
+msgstr "Ninguno"
 
 #: modules/nickserv/badmail.c:181
-#, fuzzy, c-format
+#, c-format
 msgid "You have banned email address %s."
-msgstr "Ud. no tiene acceso especial a %s."
+msgstr "La dirección de email %s ha sido vetada."
 
 #: modules/nickserv/badmail.c:189
-#, fuzzy
 msgid "Syntax: BADMAIL DEL <email>"
-msgstr "Sintaxis: LISTMAIL <email>"
+msgstr "Sintaxis: BADMAIL DEL <email>"
 
 #: modules/nickserv/badmail.c:211
-#, fuzzy, c-format
+#, c-format
 msgid "Email pattern %s not found in badmail database."
-msgstr "No se encontró el nick %s en la lista de solicitudes de ayuda."
+msgstr ""
+"No se encontró el patrón de direcciones de email %s en la lista de "
+"denegación de registro."
 
 #: modules/nickserv/cert.c:20
 msgid "Changes and shows your nickname CertFP authentication list."
@@ -5082,9 +5061,9 @@ msgid "Logged in nicks are: %s"
 msgstr "Los nicks en sesión son: %s"
 
 #: modules/nickserv/identify.c:138
-#, fuzzy, c-format
+#, c-format
 msgid "You have been logged out of %s."
-msgstr "Ud. ha cerrado su sesión."
+msgstr "Ud. ha cerrado su sesión de %s."
 
 #: modules/nickserv/identify.c:156
 #, c-format
@@ -5242,24 +5221,23 @@ msgid "%d channel access matches for the nickname %s"
 msgstr "%d entradas de acceso a canal para el nick %s"
 
 #: modules/nickserv/listgroups.c:22
-#, fuzzy
 msgid "Lists groups that you have access to."
-msgstr "Muestra una lista de canales a los cuales Ud. tiene acceso."
+msgstr "Muestra una lista de grupos a los cuales Ud. tiene acceso."
 
 #: modules/nickserv/listgroups.c:73 modules/nickserv/listgroups.c:96
-#, fuzzy, c-format
+#, c-format
 msgid "No group access was found for the nickname %s."
-msgstr "No se encontraron permisos de acceso a canales para el nick %s."
+msgstr "No se encontraron permisos de acceso a grupos para el nick %s."
 
 #: modules/nickserv/listgroups.c:98
-#, fuzzy, c-format
+#, c-format
 msgid "%d group access match for the nickname %s"
-msgstr "%d entrada de acceso a canal para el nick %s"
+msgstr "%d entrada de acceso a grupo para el nick %s"
 
 #: modules/nickserv/listgroups.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "%d group access matches for the nickname %s"
-msgstr "%d entradas de acceso a canal para el nick %s"
+msgstr "%d entradas de acceso a grupo para el nick %s"
 
 #: modules/nickserv/listmail.c:20
 msgid "Lists accounts registered to an e-mail address."
@@ -5294,9 +5272,9 @@ msgid "Logs your services session out."
 msgstr "Cierra su sesión de servicios."
 
 #: modules/nickserv/logout.c:58
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not logged in."
-msgstr "%s no está cargado."
+msgstr "%s no ha iniciado sesión."
 
 #: modules/nickserv/logout.c:74
 msgid "Syntax: LOGOUT <target> <password>"
@@ -5812,9 +5790,8 @@ msgid "The language for %s has been changed to %s."
 msgstr "El idioma para %s ha sido cambiado a %s."
 
 #: modules/nickserv/set_nevergroup.c:24
-#, fuzzy
 msgid "Prevents you from being added to group access lists."
-msgstr "Previene que Ud. sea agregado a listas de acceso."
+msgstr "Previene que Ud. sea agregado a listas de acceso de grupo."
 
 #: modules/nickserv/set_neverop.c:24
 msgid "Prevents you from being added to access lists."
@@ -7039,9 +7016,9 @@ msgid "Vendor     : %s"
 msgstr "Proveedor       : %s"
 
 #: modules/operserv/modinspect.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "Can unload : %s"
-msgstr "Canal           : %s"
+msgstr "Descargable     : %s"
 
 #: modules/operserv/modlist.c:20
 msgid "Lists loaded modules."
@@ -7112,16 +7089,18 @@ msgid "%s is a permanent module; it cannot be reloaded."
 msgstr "%s es un módulo permanente; no puede ser recargado."
 
 #: modules/operserv/modreload.c:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s is depended upon by %s, which is a permanent module and cannot be "
 "reloaded."
-msgstr "%s es un módulo permanente; no puede ser recargado."
+msgstr ""
+"%s es una dependencia de %s, el cual es un módulo permanente y no puede ser "
+"recargado."
 
 #: modules/operserv/modreload.c:162
-#, fuzzy, c-format
+#, c-format
 msgid "Module %s reloaded (from %s)."
-msgstr "Módulo %s recargado."
+msgstr "Módulo %s recargado (de %s)."
 
 #: modules/operserv/modreload.c:170
 #, c-format
@@ -7129,6 +7108,8 @@ msgid ""
 "Module %s failed to reload, and does not allow unloading. Shutting down to "
 "avoid data loss."
 msgstr ""
+"El módulo %s no pudo ser recargado, y no permite ser descargado. Terminando "
+"ejecución para evitar la pérdida de datos."
 
 #: modules/operserv/modreload.c:179
 #, c-format
@@ -7610,9 +7591,8 @@ msgid "End of oper class list"
 msgstr "Fin de lista de clases de operador"
 
 #: modules/operserv/soper.c:140
-#, fuzzy
 msgid "Syntax: SOPER ADD <account> <operclass> [password]"
-msgstr "Sintaxis: SOPER ADD <cuenta> <clase oper.>"
+msgstr "Sintaxis: SOPER ADD <cuenta> <clase oper.> [contraseña]"
 
 #: modules/operserv/soper.c:153 modules/operserv/soper.c:223
 #: modules/operserv/soper.c:268
@@ -7876,68 +7856,64 @@ msgstr "Usuarios no actualmente en línea: %d"
 #: modules/scripting/perl/api/perl_command.c:27
 #, c-format
 msgid "Unexpected error occurred: %s"
-msgstr ""
+msgstr "Error inesperado: %s"
 
 #: modules/scripting/perl/api/perl_command.c:44
-#, fuzzy
 msgid "Perl help commands not yet implemented"
-msgstr "El cierre de sesión externo no ha sido implementado aún."
+msgstr "Comandos de ayuda Perl no implementados aún"
 
 #: modules/scripting/perl/perl_module.c:231
 msgid "Loads or unloads perl scripts."
-msgstr ""
+msgstr "Carga o descarga scripts Perl."
 
 #: modules/scripting/perl/perl_module.c:233
 msgid "Load a named perl script."
-msgstr ""
+msgstr "Carga un script Perl."
 
 #: modules/scripting/perl/perl_module.c:234
-#, fuzzy
 msgid "Unload a loaded script."
-msgstr "Descarga un módulo."
+msgstr "Descarga un script cargado."
 
 #: modules/scripting/perl/perl_module.c:235
 msgid "Shows loaded scripts."
-msgstr ""
+msgstr "Muestra scripts cargados actualmente."
 
 #: modules/scripting/perl/perl_module.c:282
 msgid "Syntax: SCRIPT LOAD <filename>|UNLOAD <filename>|LIST"
-msgstr ""
+msgstr "Sintaxis: SCRIPT LOAD <nombrearchivo>|UNLOAD <nombrearchivo>|LIST"
 
 #: modules/scripting/perl/perl_module.c:301
-#, fuzzy
 msgid "Syntax: SCRIPT LOAD <filename>"
-msgstr "Sintaxis: CERT ADD <huella>"
+msgstr "Sintaxis: SCRIPT LOAD <nombrearchivo>"
 
 #: modules/scripting/perl/perl_module.c:307
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s failed. Error was:"
-msgstr "No se pudo cargar el módulo %s."
+msgstr "No se pudo cargar %s. El error fue:"
 
 #: modules/scripting/perl/perl_module.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %s"
-msgstr "Módulos cargados:"
+msgstr "Cargado %s"
 
 #: modules/scripting/perl/perl_module.c:329
-#, fuzzy
 msgid "Syntax: SCRIPT UNLOAD <filename>"
-msgstr "Sintaxis: INFO <nick>"
+msgstr "Sintaxis: SCRIPT UNLOAD <nombrearchivo>"
 
 #: modules/scripting/perl/perl_module.c:335
-#, fuzzy, c-format
+#, c-format
 msgid "Unloading %s failed. Error was:"
-msgstr "No se pudo cargar el módulo %s."
+msgstr "No se pudo descargar %s. El error fue:"
 
 #: modules/scripting/perl/perl_module.c:341
 #, c-format
 msgid "Unloaded %s"
-msgstr ""
+msgstr "Descargado %s"
 
 #: modules/scripting/perl/perl_module.c:347
 #, c-format
 msgid "Failed to retrieve script list: %s"
-msgstr ""
+msgstr "No se pudo obtener la lista de scripts: %s"
 
 #~ msgid "Change an access list entry."
 #~ msgstr "Cambia una entrada de lista de acceso."
