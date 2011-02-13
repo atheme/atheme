@@ -1,0 +1,11 @@
+Ayuda para CHANFIX:
+
+CHANFIX le permite "reparar" manualmente un
+canal no registrado ajustando ciertos modos
+y otrogando estado de operador al usuario
+o usuarios con los puntajes más altos.
+
+Sintaxis: CHANFIX <#canal>
+
+Ejemplo:
+    /msg &nick& CHANFIX #foo

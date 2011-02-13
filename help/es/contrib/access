@@ -1,0 +1,32 @@
+Ayuda para ACCESS:
+
+El comando ACCESS permite visualizar y modificar
+privilegios de canal.
+
+El subcomando LIST muestra una lista de usuarios y
+sus privilegios.
+
+Sintaxis: ACCESS <#canal> LIST
+
+El comando ADD agrega un usuario a la lista de acceso
+o altera sus privilegios existentes.
+
+Si especifica un nivel, éste indica que privilegios
+serán concedidos; vea la ayuda de FLAGS y TEMPLATE.
+En caso contrario, al usuario se le otorgarán
+privilegios apropiados para la administración diaria
+del canal.
+
+Sintaxis: ACCESS <#canal> ADD <nick> [nivel]
+
+El subcomando DEL quita un usuario de la lista de
+acceso.
+
+Sintaxis: ACCESS <#canal> DEL <nick>
+
+Ejemplos:
+    /msg &nick& ACCESS #foo LIST
+    /msg &nick& ACCESS #foo ADD john OP
+    /msg &nick& ACCESS #foo DEL john
+
+Vea también: FLAGS, TEMPLATE

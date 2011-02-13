@@ -1,0 +1,9 @@
+Ayuda para REJECT:
+
+Rechaza el anuncio requerido por el nick especificado.
+También envía un memo informativo al usuario.
+
+Sintaxis: REJECT <nick>
+
+Ejemplos:
+    /msg &nick& REJECT nenolod

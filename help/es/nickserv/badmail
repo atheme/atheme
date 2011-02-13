@@ -1,0 +1,35 @@
+Ayuda para BADMAIL:
+
+BADMAIL le permite mantener una lista de direcciones de email no
+autorizadas para el registro de cuentas de servicios.
+
+Estas direcciones son almacenadas en la base de datos de Atheme y
+preservadas entre reinicios del software.
+
+Con BADMAIL ADD, Ud. puede utilizar comodines para denegar el uso
+de direcciones que coinciden con un patrón dado.
+
+Sintaxis: BADMAIL ADD <email> [razón]
+
+Ejemplos:
+    /msg &nick& BADMAIL ADD jdhore1@gmail.com razón aquí
+    /msg &nick& BADMAIL ADD *@aol.com razón aquí
+    /msg &nick& BADMAIL ADD *@*.tk razón aquí
+    /msg &nick& BADMAIL ADD patron.de.spambots.*@gmail.com
+
+BADMAIL DEL le permite quitar entradas de la lista de direcciones
+denegadas.
+
+Sintaxis: BADMAIL DEL <email>
+
+Ejemplos:
+    /msg &nick& BADMAIL DEL foo@bar.com
+    /msg &nick& BADMAIL DEL *@aol.com
+
+BADMAIL LIST le permite visualizar la lista de direcciones denegadas
+actualmente.
+
+Sintaxis: BADMAIL LIST
+
+Ejemplos:
+    /msg &nick& BADMAIL LIST

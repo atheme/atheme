@@ -1,0 +1,11 @@
+Ayuda para LISTCHANS:
+
+LISTCHANS muestra los canales a los cuales tiene
+acceso un grupo.
+
+Este comando no muestra entradas de AKICK.
+
+Sintaxis: LISTCHANS <grupo>
+
+Ejemplo:
+    /msg &nick& LISTCHANS !foo
