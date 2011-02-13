@@ -1,0 +1,14 @@
+Ayuda para FFLAGS:
+
+El comando FFLAGS le permite a un operador forzar un cambio
+de permisos sobre un grupo. La sintaxis es la misma de FLAGS,
+excepto que el objeto y los cambios de permisos deben ser
+provistos. Utilice FLAGS para ver la lista de acceso de un
+grupo.
+
+Sintaxis: FFLAGS <!grupo> <nick> <cambios de permisos>
+
+Ejemplos:
+    /msg &nick& FFLAGS !bar fuu +F
+    /msg &nick& FFLAGS !bar fuu -*
+    /msg &nick& FFLAGS !bar fuu +fmc

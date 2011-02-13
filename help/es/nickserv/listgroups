@@ -1,0 +1,19 @@
+Ayuda para LISTGROUPS:
+
+LISTGROUPS muestra los grupos a los cuales Ud.
+tiene acceso, incluyendo áquellos que haya
+creado Ud. mismo.
+
+Este comando no muestra vetos de grupo.
+
+Sintaxis: LISTGROUPS
+#if priv group:auspex
+
+Operadores con el privilegio group:auspex pueden
+también comprobar el acceso de otro usuario.
+
+Sintaxis: LISTGROUPS <nick>
+#endif
+
+Ejemplo:
+    /msg &nick& LISTGROUPS

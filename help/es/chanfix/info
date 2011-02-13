@@ -1,0 +1,10 @@
+Ayuda para INFO:
+
+INFO muestra información de chanfix como el
+puntaje más alto, número de usuarios, incremento
+de puntaje y el estado de reparación del canal.
+
+Sintaxis: INFO <#canal>
+
+Ejemplos:
+    /msg &nick& INFO #foo

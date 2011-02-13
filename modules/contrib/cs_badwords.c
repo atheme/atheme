@@ -69,6 +69,22 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&cs_set_blockbadwords, *cs_set_cmdtree);
 }
 
+static inline mowgli_list_t *badwords_list_of(mychan_t *mc)
+{
+	mowgli_list_t *l;
+
+	return_val_if_fail(mc != NULL, NULL);
+
+	l = privatedata_get(mc, "badword:list");
+	if (l != NULL)
+		return l;
+
+	l = mowgli_list_create();
+	privatedata_set(mc, "badword:list", l);
+
+	return l;
+}
+
 static void write_badword_db(database_handle_t *db)
 {
 	mowgli_node_t *n;
@@ -78,7 +94,7 @@ static void write_badword_db(database_handle_t *db)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		l = privatedata_get(mc, "badword:list");
+		l = badwords_list_of(mc);
 
 		if (l == NULL)
 			return;
@@ -115,19 +131,17 @@ static void db_h_bw(database_handle_t *db, const char *type)
 		if (irccasecmp(mc->name, channel))
 			continue;
 
-		l = privatedata_get(mc, "badword:list");
-
-		if (l == NULL)
-			l = mowgli_list_create();
+		l = badwords_list_of(mc);
 
 		badword_t *bw = smalloc(sizeof(badword_t));
+
 		bw->badword = sstrdup(badword);
-		bw->add_ts = add_ts;;
+		bw->add_ts = add_ts;
 		bw->creator = sstrdup(creator);
 		bw->channel = sstrdup(channel);
 		bw->action = sstrdup(action);
+
 		mowgli_node_add(bw, &bw->node, l);
-		privatedata_set(mc, "badword:list", l);
 	}
 }
 
@@ -142,9 +156,8 @@ static void on_channel_message(hook_cmessage_data_t *data)
 	if (metadata_find(mc, "blockbadwords") == NULL)
 		return;
 
-	l = privatedata_get(mc, "badword:list");
-
-	if (l == NULL)
+	l = badwords_list_of(mc);
+	if (MOWGLI_LIST_LENGTH(l) == 0)
 		return;
 
 	char *kickstring = "Foul language is prohibited here.";
@@ -157,7 +170,6 @@ static void on_channel_message(hook_cmessage_data_t *data)
 
 			if (!match(bw->badword, data->msg))
 			{
-
 				if (!strcasecmp("KICKBAN", bw->action))
 				{
 					char hostbuf[BUFSIZE];
@@ -208,9 +220,6 @@ static void on_channel_message(hook_cmessage_data_t *data)
 	}
 }
 
-
-
-
 /* SET BADWORD */
 static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -236,9 +245,7 @@ static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Do this here to avoid duplicating this line */
-	l = privatedata_get(mc, "badword:list");
-
+	l = badwords_list_of(mc);
 	if (!strcasecmp("ADD", command))
 	{
 
@@ -271,9 +278,6 @@ static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 				}
 			}
 
-			if (l == NULL)
-				l = mowgli_list_create();
-
 			bw = smalloc(sizeof(badword_t));
 			bw->add_ts = CURRTIME;;
 			bw->creator = sstrdup(get_source_name(si));
@@ -281,7 +285,6 @@ static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 			bw->badword = sstrdup(word);
 			bw->action = sstrdup(action);
 			mowgli_node_add(bw, &bw->node, l);
-			privatedata_set(mc, "badword:list", l);
 
 			command_success_nodata(si, _("You have added \2%s\2 as a bad word."), word);
 			logcommand(si, CMDLOG_SET, "BADWORDS:ADD: \2%s\2 \2%s\2 \2%s\2", channel, word, action);
@@ -331,10 +334,8 @@ static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 				free(bw->action);
 				free(bw);
 
-				privatedata_set(mc, "badword:list", l);
-
 				return;
-				}
+			}
 		}
 		command_success_nodata(si, _("Word \2%s\2 not found in bad word database."), word);
 	}

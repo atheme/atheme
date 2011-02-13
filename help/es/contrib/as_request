@@ -1,0 +1,20 @@
+Ayuda para REQUEST:
+
+Solicita el envío de un anuncio. Ud. debe estar identificado
+con un nick registrado antes de poder usar este comando. Por
+favor tenga paciencia mientras su solicitud es considerada por
+la administración de la red.
+
+Nótese que sólo puede tener 1 anuncio pendiente a la vez. Si
+comete una equivocación, cancele su anuncio actual con CANCEL
+y repita su solicitud. Si desea realizar una nueva solicitud,
+espere a que la primera sea aprovada o denegada.
+
+Los guiones bajos ("_") en el Asunto serán reemplazados
+automáticamente por espacios. Esta sustitución no se aplica
+al resto del anuncio.
+
+Sintaxis: REQUEST <asunto> <anuncio>
+
+Ejemplos:
+    /msg &nick& REQUEST Cierto_Asunto ¡Éste es un anuncio!

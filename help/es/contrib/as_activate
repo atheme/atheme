@@ -1,0 +1,9 @@
+Ayuda para ACTIVATE:
+
+Envía el anuncio requerido por el nick especificado.
+También envía un memo informativo al usuario.
+
+Sintaxis: ACTIVATE <nick>
+
+Ejemplos:
+    /msg &nick& ACTIVATE nenolod

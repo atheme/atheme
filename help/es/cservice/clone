@@ -1,0 +1,17 @@
+Ayuda para CLONE:
+
+CLONE copia la lista de acceso y otros metadatos de
+un canal a otro. Ambos canales deben estar registrados
+con &nick& y Ud. debe teneder acceso de fundador en el
+canal de destino.
+
+CLONE no copia el tema del canal, puesto que la mayoría
+querrá establecer temas distintos en ambos canales.
+
+También eliminará todas las entradas de acceso (salvo
+fundadores) y metadatos del mismo tipo en el destino.
+
+Sintaxis: CLONE <#origen> <#destino>
+
+Ejemplos:
+    /msg &nick& CLONE #social1 #social2

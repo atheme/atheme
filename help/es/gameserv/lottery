@@ -1,0 +1,9 @@
+Ayuda para LOTTERY:
+
+LOTTERY escoge a un usuario al azar del
+canal en que es ejecutado.
+
+Sintaxis: LOTTERY
+
+Ejemplo:
+    /msg &nick& LOTTERY

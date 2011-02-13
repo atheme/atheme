@@ -1,0 +1,11 @@
+Ayuda para CALC:
+
+CALC le permite hacer cálculos simples. También
+puede especificar un número de cálculos que pueden
+ser realizados simultáneamente.
+
+Sintaxis: CALC [veces] <expresión>
+
+Ejemplo:
+    /msg &nick& CALC 6*8
+    /msg &nick& CALC 5 1+2

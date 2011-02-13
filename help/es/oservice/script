@@ -1,0 +1,30 @@
+Ayuda para SCRIPT:
+
+SCRIPT le permite administrar scripts para Atheme. Actualmente,
+Atheme sólo acepta scripts en Perl.
+
+Use MODLOAD/MODUNLOAD/MODRELOAD para módulos C de Atheme.
+
+Sintaxis: SCRIPT LOAD <nombrearchivo>
+
+El nombre de archivo debe ser una ruta completa (absoluta) al
+script Perl que desea cargar.
+
+Ejemplos:
+    /msg &nick& SCRIPT LOAD /home/servicios/scripts/cs_hello.pl
+
+Sintaxis: SCRIPT UNLOAD <nombrearchivo>
+
+El nombre de archivo debe ser una ruta completa (absoluta) al
+script Perl que desea descargar.
+
+Ejemplos:
+    /msg &nick& SCRIPT UNLOAD /home/servicios/scripts/cs_hello.pl
+
+Sintaxis: SCRIPT LIST
+
+LIST simplemente muestra una lista de scripts en Perl cargados
+actualmente.
+
+Ejemplos:
+    /msg &nick& SCRIPT LIST

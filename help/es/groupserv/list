@@ -1,8 +1,10 @@
 Ayuda para LIST:
 
-LIST muestra todos los grupos actualmente registrados.
+LIST muestra todos los grupos que cumplen un patrón
+específico.
 
-Sintaxis: LIST
+Sintaxis: LIST <patrón de grupos>
 
 Ejemplos:
-    /msg &nick& LIST
+    /msg &nick& LIST *
+    /msg &nick& LIST !buen*

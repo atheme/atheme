@@ -11,7 +11,7 @@ Sintaxis: LISTCHANS
 #if priv chan:auspex
 
 Operadores con el privilegio chan:auspex pueden
-también comprobar al acceso de otro usuario.
+también comprobar el acceso de otro usuario.
 
 Sintaxis: LISTCHANS <nick>
 #endif

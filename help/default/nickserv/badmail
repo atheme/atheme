@@ -17,7 +17,7 @@ Examples:
     /msg &nick& BADMAIL ADD *@*.tk foo reason
     /msg &nick& BADMAIL ADD some-spambot-pattern-*@gmail.com
 
-BADMAIL DEL allows you to remove entires from the list of currently
+BADMAIL DEL allows you to remove entries from the list of currently
 banned email addresses.
 
 Syntax: BADMAIL DEL <email>

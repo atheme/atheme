@@ -1,0 +1,21 @@
+Ayuda para SET JOINFLAGS:
+
+SET JOINFLAGS permite a un grupo especificar los permisos
+inicialmente asignados a los usuarios al unirse al grupo (si
+el grupo es abierto).
+
+Nótese que las opciones deben ser válidas, o se asignará "+" a
+los nuevos usuarios. Si no especifica un parámetro o es OFF,
+los permisos iniciales son restablecidos a los predeterminados
+de la red.
+
+Vea "/msg &nick& HELP FLAGS" para detalles sobre los permisos
+que son válidos para este comando.
+
+Sintaxis: SET <!grupo> JOINFLAGS [OFF|permisos]
+
+Ejemplos:
+    /msg &nick& SET !buena-gente JOINFLAGS OFF
+    /msg &nick& SET !fuu JOINFLAGS +
+    /msg &nick& SET !fuu JOINFLAGS +v
+    /msg &nick& SET !fuu JOINFLAGS +cfv

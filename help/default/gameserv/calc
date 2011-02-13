@@ -7,5 +7,5 @@ calculations that can be done at once.
 Syntax: CALC [times] <expression>
 
 Example:
-    /msg GameServ CALC 6*8
-    /msg GameServ CALC 5 1+2
+    /msg &nick& CALC 6*8
+    /msg &nick& CALC 5 1+2

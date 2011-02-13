@@ -7,14 +7,14 @@ registrados como objetos.
 Si sólo entrega el grupo como argumento, se le mostrará una
 lista de los permisos concedidos a los usuarios.
 
-Sintaxis: FLAGS <!group>
+Sintaxis: FLAGS <!grupo>
 
 Puede modificar las opciones de un usuario si Ud. mismo tiene
 el permiso +f. Este comando tiene una sintaxis semejante a la
 de chanserv/flags, utilizando + para agregar permisos a un
 usuario, y - para quitarlos..
 
-Sintaxis: FLAGS <!grupo> [nick flag_changes]
+Sintaxis: FLAGS <!grupo> [nick cambios_de_permisos]
 
 Permisos:
     +f - Permite modificar la lista de acceso del grupo.
@@ -24,6 +24,13 @@ Permisos:
          suficientes privilegios.
     +v - Permite aceptar vhosts ofrecidos al grupo a través
          de HostServ.
+    +b - Vetar a un usuario del grupo, imposibilitándole el
+         uso de JOIN, y ocultando el grupo de su vista INFO
+         para NickServ y otros. Nótese que esta opción
+         NO remueve automáticamente permisos que se le hayan
+         concedido al usuario.
+    +s - Permiso para utilizar comandos &nick& SET sobre
+         el grupo.
 
 El permiso especial +* agrega todos los permisos salvo +F
 Utilice -* para quitar todos los permisos incluyendo +F.

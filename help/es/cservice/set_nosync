@@ -1,0 +1,10 @@
+Ayuda para SET NOSYNC:
+
+SET NOSYNC permite a la administración del canal
+desactivar la sincronización automática de estado
+cuando se realizan cambios.
+
+Sintaxis: SET <#canal> NOSYNC ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #fuu NOSYNC ON
