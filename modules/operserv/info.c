@@ -85,6 +85,8 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, _("user@host mask(s) that are autokline exempt: %s"), (char *)n2->data);
 	}
+
+	hook_call_operserv_info(si);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -34,12 +34,22 @@ static void waitreg_hook(hook_user_register_check_t *hdata)
 	}
 }
 
+static void info_hook(sourceinfo_t *si)
+{
+	return_if_fail(si != NULL);
+
+	command_success_nodata(si, "Time (in seconds) before users may register an account: %u", waitreg_time);
+}
+
 void
 _modinit(module_t *m)
 {
 
 	hook_add_event("user_can_register");
 	hook_add_user_can_register(waitreg_hook);
+
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(info_hook);
 
 	add_uint_conf_item("WAITREG_TIME", &conf_ni_table, 0, &waitreg_time, 0, INT_MAX, 0);
 }
@@ -48,6 +58,7 @@ void
 _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_user_can_register(waitreg_hook);
+	hook_del_operserv_info(info_hook);
 
 	del_conf_item("WAITREG_TIME", &conf_ni_table);
 }
