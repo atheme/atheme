@@ -24,6 +24,7 @@ time_t ratelimit_firsttime = 0;
 static void account_drop_request(myuser_t *mu);
 static void nick_drop_request(hook_user_req_t *hdata);
 static void account_delete_request(myuser_t *mu);
+static void osinfo_hook(sourceinfo_t *si);
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
@@ -65,6 +66,8 @@ void _modinit(module_t *m)
 	hook_add_nick_ungroup(nick_drop_request);
 	hook_add_event("myuser_delete");
 	hook_add_myuser_delete(account_delete_request);
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(osinfo_hook);
 	hook_add_db_write(write_hsreqdb);
 
 	db_register_type_handler("HR", db_h_hr);
@@ -81,6 +84,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_user_drop(account_drop_request);
 	hook_del_nick_ungroup(nick_drop_request);
 	hook_del_myuser_delete(account_delete_request);
+	hook_del_operserv_info(osinfo_hook);
 	hook_del_db_write(write_hsreqdb);
 
 	db_unregister_type_handler("HR");
@@ -194,6 +198,14 @@ static void account_delete_request(myuser_t *mu)
 			return;
 		}
 	}
+}
+
+static void osinfo_hook(sourceinfo_t *si)
+{
+	return_if_fail(si != NULL);
+
+	/* Can't think of a better way to phrase this, feel free to fix if you can. */
+	command_success_nodata(si, "Requested vHosts will be per-nick: %s", request_per_nick ? "Yes" : "No");
 }
 
 /* REQUEST <host> */

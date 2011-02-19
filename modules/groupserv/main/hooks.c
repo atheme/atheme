@@ -152,6 +152,16 @@ static void myuser_delete_hook(myuser_t *mu)
 	mowgli_list_free(l);
 }
 
+static void osinfo_hook(sourceinfo_t *si)
+{
+	return_if_fail(si != NULL);
+
+	command_success_nodata(si, "Maximum number of groups one user can own: %u", gs_config.maxgroups);
+	command_success_nodata(si, "Maximum number of ACL entries allowed for one group: %u", gs_config.maxgroupacs);
+	command_success_nodata(si, "Are open groups allowed: %s", gs_config.enable_open_groups ? "Yes" : "No");
+	command_success_nodata(si, "Default joinflags for open groups: %s", gs_config.join_flags);
+}
+
 void gs_hooks_init(void)
 {
 	event_add("mygroup_expire", mygroup_expire, NULL, 3600);
@@ -159,10 +169,12 @@ void gs_hooks_init(void)
 	hook_add_event("myuser_delete");
 	hook_add_event("user_info");
 	hook_add_event("grant_channel_access");
+	hook_add_event("operserv_info");
 
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
 	hook_add_grant_channel_access(grant_channel_access_hook);
+	hook_add_operserv_info(osinfo_hook);
 }
 
 void gs_hooks_deinit(void)
@@ -172,4 +184,5 @@ void gs_hooks_deinit(void)
 	hook_del_user_info(user_info_hook);
 	hook_del_myuser_delete(myuser_delete_hook);
 	hook_del_grant_channel_access(grant_channel_access_hook);
+	hook_del_operserv_info(osinfo_hook);
 }

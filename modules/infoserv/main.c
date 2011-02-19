@@ -254,6 +254,13 @@ static void display_oper_info(user_t *u)
 	}
 }
 
+static void osinfo_hook(sourceinfo_t *si)
+{
+	return_if_fail(si != NULL);
+
+	command_success_nodata(si, "How many messages will be sent to users on connect: %u", logoninfo_count);
+}
+
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *importance = parv[0];
@@ -520,6 +527,8 @@ void _modinit(module_t *m)
 	hook_add_user_add(display_info);
 	hook_add_event("user_oper");
 	hook_add_user_oper(display_oper_info);
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(osinfo_hook);
 	hook_add_db_write(write_infodb);
 
 	db_register_type_handler("LI", db_h_li);
@@ -545,6 +554,7 @@ void _moddeinit(module_unload_intent_t intent)
 	
 	hook_del_user_add(display_info);
 	hook_del_user_oper(display_oper_info);
+	hook_del_operserv_info(osinfo_hook);
 	hook_del_db_write(write_infodb);
 
 	db_unregister_type_handler("LI");

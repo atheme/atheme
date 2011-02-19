@@ -27,6 +27,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[]);
 static void on_shutdown(void *unused);
+static void osinfo_hook(sourceinfo_t *si);
 
 static void botserv_save_database(database_handle_t *db);
 static void db_h_bot(database_handle_t *db, const char *type);
@@ -946,6 +947,8 @@ void _modinit(module_t *m)
 	hook_add_event("channel_register");
 	hook_add_event("channel_add");
 	hook_add_event("channel_can_change_topic");
+	hook_add_event("operserv_info");
+	hook_add_operserv_info(osinfo_hook);
 	hook_add_channel_join(bs_join);
 	hook_add_channel_part(bs_part);
 
@@ -991,7 +994,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_channel_drop(bs_channel_drop);
 	hook_del_shutdown(on_shutdown);
 	hook_del_config_ready(botserv_config_ready);
-
+	hook_del_operserv_info(osinfo_hook);
 	hook_del_db_write(botserv_save_database);
 	db_unregister_type_handler("BOT");
 	db_unregister_type_handler("BOT-COUNT");
@@ -1006,6 +1009,13 @@ void _moddeinit(module_unload_intent_t intent)
 }
 
 /* ******************************************************************** */
+
+static void osinfo_hook(sourceinfo_t *si)
+{
+	return_if_fail(si != NULL);
+
+	command_success_nodata(si, "Minimum number of users that must be in a channel for a bot to be assigned: %u", min_users);
+}
 
 static void on_shutdown(void *unused)
 {
