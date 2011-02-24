@@ -1,0 +1,19 @@
+Ayuda para BADWORDS:
+
+BADWORDS administra una lista de patrones utilizados para
+comparar cada palabra dicha en un canal, si BLOCKBADWORDS está
+activo.
+
+El parámetro ACTION (acción) puede ser uno de los siguientes:
+KICK (expulsar), BAN (vetar), KICKBAN (vetar+expulsar) o, si su
+IRCd lo soporta, QUIET (silenciar).
+
+Sintaxis: BADWORDS <#canal> LIST
+Sintaxis: BADWORDS <#canal> ADD <palabra> <acción>
+Sintaxis: BADWORDS <#canal> DEL <palabra>
+
+Ejemplos:
+    /msg &nick& BADWORDS #atheme LIST
+    /msg &nick& BADWORDS #marinos ADD p?ta kick
+    /msg &nick& BADWORDS #marinos ADD *maldici?n* quiet
+    /msg &nick& BADWORDS #desensitized DEL p?ta
