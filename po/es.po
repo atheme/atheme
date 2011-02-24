@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-23 22:20-0300\n"
-"PO-Revision-Date: 2011-02-13 17:42-0300\n"
+"PO-Revision-Date: 2011-02-23 22:26-0300\n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team: Spanish <shadowm2006@gmail.com>\n"
 "Language: \n"
@@ -2751,58 +2751,53 @@ msgid "Syntax: ACCESS <#channel> ADD|DEL <nick> [level]"
 msgstr "Sintaxis: ACCESS <#canal> ADD|DEL <nick> [nivel]"
 
 #: modules/contrib/cs_badwords.c:23
-#, fuzzy
 msgid "Manage the list of channel bad words."
-msgstr "Administra roles de canal."
+msgstr "Administra la lista de palabras censuradas en los canales."
 
 #: modules/contrib/cs_badwords.c:24
 msgid "Set whether users can say badwords in channel or not."
 msgstr ""
+"Establece si los usuarios pueden decir ciertas palabras en un canal o no."
 
 #: modules/contrib/cs_badwords.c:238 modules/contrib/cs_badwords.c:374
-#, fuzzy
 msgid "Syntax: BADWORDS <#channel> ADD|DEL|LIST [badword] [action]"
-msgstr "Sintaxis: AKICK <#canal> <ADD|DEL|LIST> [parámetros]"
+msgstr "Sintaxis: BADWORDS <#canal> ADD|DEL|LIST [patrón] [acción]"
 
 #: modules/contrib/cs_badwords.c:255
-#, fuzzy
 msgid "Syntax: BADWORDS <#channel> ADD <badword> <action>"
-msgstr "Sintaxis: ACCESS <#canal> ADD <cuenta|máscara de host> <rol>"
+msgstr "Sintaxis: BADWORDS <#canal> ADD <patrón> <acción>"
 
 #: modules/contrib/cs_badwords.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "%s has already been entered into the bad word list."
-msgstr "%s ha sido agregado a la lista de ignoración de servicios."
+msgstr "%s ya se encuentra en la lista de censura."
 
 #: modules/contrib/cs_badwords.c:289
 #, c-format
 msgid "You have added %s as a bad word."
-msgstr ""
+msgstr "%s ha sido agregado a la lista de censura."
 
 #: modules/contrib/cs_badwords.c:294
-#, fuzzy
 msgid "Invalid action given."
-msgstr "Duración no válida."
+msgstr "Acción no válida."
 
 #: modules/contrib/cs_badwords.c:304
-#, fuzzy
 msgid "Syntax: BADWORDS <#channel> DEL <badword>"
-msgstr "Sintaxis: ROLE <#canal> DEL <rol>"
+msgstr "Sintaxis: BADWORDS <#canal> DEL <patrón>"
 
 #: modules/contrib/cs_badwords.c:316 modules/contrib/cs_badwords.c:355
-#, fuzzy
 msgid "There are no badwords set in this channel."
-msgstr "Escoge a un usuario al azar del canal."
+msgstr "No hay patrones de censura establecidos para este canal."
 
 #: modules/contrib/cs_badwords.c:327
-#, fuzzy, c-format
+#, c-format
 msgid "Bad word %s has been deleted."
-msgstr "El rol %s ha sido eliminado."
+msgstr "El patrón %s ha sido eliminado."
 
 #: modules/contrib/cs_badwords.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "Word %s not found in bad word database."
-msgstr "No se encontró %s en la lista de vhosts ofrecidos."
+msgstr "No se encontró %s en la lista de patrones de censura."
 
 #: modules/contrib/cs_fregister.c:20
 msgid "Forcibly registers a channel."

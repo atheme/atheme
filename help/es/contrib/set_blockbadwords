@@ -1,0 +1,11 @@
+Ayuda para SET BLOCKBADWORDS:
+
+SET BLOCKBADWORDS establece si los mensajes en un canal
+deben ser comprobados contra una lista de patrones censurados.
+Todos los usuarios son afectados. No hay actualmente excepciones
+para operadores o usuarios con voz.
+
+Sintaxis: SET <#canal> BLOCKBADWORDS ON|OFF
+
+Ejemplo:
+    /msg &nick& SET #marinos BLOCKBADWORDS ON
