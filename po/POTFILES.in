@@ -68,6 +68,7 @@ modules/chanserv/voice.c
 modules/chanserv/why.c
 modules/chanserv/xop.c
 modules/contrib/cs_access_alias.c
+modules/contrib/cs_badwords.c
 modules/contrib/cs_fregister.c
 modules/contrib/cs_userinfo.c
 modules/contrib/gs_roulette.c

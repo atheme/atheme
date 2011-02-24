@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-13 16:39-0300\n"
+"POT-Creation-Date: 2011-02-23 22:20-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,6 +126,7 @@ msgstr ""
 #: modules/chanserv/unban_self.c:68 modules/chanserv/voice.c:63
 #: modules/chanserv/voice.c:131 modules/chanserv/why.c:70
 #: modules/chanserv/xop.c:102 modules/chanserv/xop.c:429
+#: modules/contrib/cs_badwords.c:244 modules/contrib/cs_badwords.c:385
 #, c-format
 msgid "Channel %s is not registered."
 msgstr ""
@@ -178,7 +179,7 @@ msgid "You are not authorized to perform this operation."
 msgstr ""
 
 #: modules/botserv/bottalk.c:77 modules/botserv/bottalk.c:125
-#: modules/botserv/main.c:898
+#: modules/botserv/main.c:899
 #, c-format
 msgid "%s does not have a bot assigned."
 msgstr ""
@@ -272,87 +273,87 @@ msgstr ""
 msgid "          Options : %s"
 msgstr ""
 
-#: modules/botserv/main.c:482 modules/botserv/main.c:503
-#: modules/botserv/main.c:641
+#: modules/botserv/main.c:483 modules/botserv/main.c:504
+#: modules/botserv/main.c:642
 msgid "Syntax: BOT ADD <nick> <user> <host> <real>"
 msgstr ""
 
-#: modules/botserv/main.c:483 modules/botserv/main.c:504
-#: modules/botserv/main.c:539 modules/botserv/main.c:604
+#: modules/botserv/main.c:484 modules/botserv/main.c:505
+#: modules/botserv/main.c:540 modules/botserv/main.c:605
 msgid "Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]"
 msgstr ""
 
-#: modules/botserv/main.c:484 modules/botserv/main.c:505
-#: modules/botserv/main.c:714
+#: modules/botserv/main.c:485 modules/botserv/main.c:506
+#: modules/botserv/main.c:715
 msgid "Syntax: BOT DEL <nick>"
 msgstr ""
 
-#: modules/botserv/main.c:546 modules/botserv/main.c:720
-#: modules/botserv/main.c:836
+#: modules/botserv/main.c:547 modules/botserv/main.c:721
+#: modules/botserv/main.c:837
 #, c-format
 msgid "%s is not a bot"
 msgstr ""
 
-#: modules/botserv/main.c:552 modules/botserv/main.c:655
+#: modules/botserv/main.c:553 modules/botserv/main.c:656
 #, c-format
 msgid "%s is a registered nick."
 msgstr ""
 
-#: modules/botserv/main.c:561 modules/botserv/main.c:648
+#: modules/botserv/main.c:562 modules/botserv/main.c:649
 #, c-format
 msgid "%s is already a bot or service."
 msgstr ""
 
-#: modules/botserv/main.c:570 modules/botserv/main.c:667
+#: modules/botserv/main.c:571 modules/botserv/main.c:668
 #, c-format
 msgid "%s is an invalid nickname."
 msgstr ""
 
-#: modules/botserv/main.c:587
+#: modules/botserv/main.c:588
 #, c-format
 msgid "%s is an invalid realname, not changing it"
 msgstr ""
 
-#: modules/botserv/main.c:597
+#: modules/botserv/main.c:598
 #, c-format
 msgid "%s is an invalid username, not changing it."
 msgstr ""
 
-#: modules/botserv/main.c:673
+#: modules/botserv/main.c:674
 #, c-format
 msgid "%s is an invalid username."
 msgstr ""
 
-#: modules/botserv/main.c:682
+#: modules/botserv/main.c:683
 #, c-format
 msgid "%s is an invalid realname."
 msgstr ""
 
-#: modules/botserv/main.c:762
+#: modules/botserv/main.c:763
 #, c-format
 msgid "Listing of bots available on %s:"
 msgstr ""
 
-#: modules/botserv/main.c:772
+#: modules/botserv/main.c:773
 #, c-format
 msgid "%d bots available."
 msgstr ""
 
-#: modules/botserv/main.c:776
+#: modules/botserv/main.c:777
 #, c-format
 msgid "Listing of private bots available on %s:"
 msgstr ""
 
-#: modules/botserv/main.c:784
+#: modules/botserv/main.c:785
 #, c-format
 msgid "%d private bots available."
 msgstr ""
 
-#: modules/botserv/main.c:803
+#: modules/botserv/main.c:804
 msgid "Syntax: ASSIGN <#channel> <nick>"
 msgstr ""
 
-#: modules/botserv/main.c:809 modules/botserv/main.c:886
+#: modules/botserv/main.c:810 modules/botserv/main.c:887
 #: modules/chanserv/access.c:687 modules/chanserv/access.c:780
 #: modules/chanserv/access.c:858 modules/chanserv/fflags.c:86
 #: modules/chanserv/flags.c:193 modules/chanserv/flags.c:264
@@ -378,46 +379,46 @@ msgstr ""
 msgid "%s is not registered."
 msgstr ""
 
-#: modules/botserv/main.c:815
+#: modules/botserv/main.c:816
 #, c-format
 msgid "There are not enough users in %s to be able to assign a bot."
 msgstr ""
 
-#: modules/botserv/main.c:821
+#: modules/botserv/main.c:822
 #, c-format
 msgid "You cannot assign bots to %s."
 msgstr ""
 
-#: modules/botserv/main.c:827
+#: modules/botserv/main.c:828
 #, c-format
 msgid "You are not authorised to assign bots on %s."
 msgstr ""
 
-#: modules/botserv/main.c:842
+#: modules/botserv/main.c:843
 #, c-format
 msgid "You are not authorised to assign the bot %s to a channel."
 msgstr ""
 
-#: modules/botserv/main.c:848
+#: modules/botserv/main.c:849
 #, c-format
 msgid "%s is already assigned to %s."
 msgstr ""
 
-#: modules/botserv/main.c:866
+#: modules/botserv/main.c:867
 #, c-format
 msgid "Assigned the bot %s to %s."
 msgstr ""
 
-#: modules/botserv/main.c:880
+#: modules/botserv/main.c:881
 msgid "Syntax: UNASSIGN <#channel>"
 msgstr ""
 
-#: modules/botserv/main.c:892
+#: modules/botserv/main.c:893
 #, c-format
 msgid "You are not authorised to unassign a bot on %s."
 msgstr ""
 
-#: modules/botserv/main.c:910
+#: modules/botserv/main.c:911
 #, c-format
 msgid "Unassigned the bot from %s."
 msgstr ""
@@ -490,7 +491,7 @@ msgstr ""
 #: modules/chanserv/template.c:146 modules/chanserv/unban_self.c:80
 #: modules/chanserv/xop.c:94 modules/contrib/cs_fregister.c:68
 #: modules/groupserv/fflags.c:46 modules/hostserv/offer.c:174
-#: modules/infoserv/main.c:271 modules/nickserv/access.c:215
+#: modules/infoserv/main.c:278 modules/nickserv/access.c:215
 #: modules/nickserv/access.c:267 modules/nickserv/access.c:393
 #: modules/nickserv/badmail.c:146 modules/nickserv/cert.c:54
 #: modules/nickserv/cert.c:109 modules/nickserv/cert.c:145
@@ -2000,7 +2001,9 @@ msgstr ""
 #: modules/chanserv/set_private.c:59 modules/chanserv/set_property.c:67
 #: modules/chanserv/set_restricted.c:55 modules/chanserv/set_secure.c:55
 #: modules/chanserv/set_topiclock.c:55 modules/chanserv/set_verbose.c:55
-#: modules/chanserv/sync.c:282
+#: modules/chanserv/sync.c:282 modules/contrib/cs_badwords.c:261
+#: modules/contrib/cs_badwords.c:310 modules/contrib/cs_badwords.c:349
+#: modules/contrib/cs_badwords.c:397
 msgid "You are not authorized to perform this command."
 msgstr ""
 
@@ -2008,7 +2011,7 @@ msgstr ""
 #: modules/chanserv/set_keeptopic.c:63 modules/chanserv/set_restricted.c:63
 #: modules/chanserv/set_secure.c:63 modules/chanserv/set_topiclock.c:63
 #: modules/chanserv/set_verbose.c:63 modules/chanserv/set_verbose.c:81
-#: modules/chanserv/sync.c:290
+#: modules/chanserv/sync.c:290 modules/contrib/cs_badwords.c:407
 #, c-format
 msgid "The %s flag is already set for channel %s."
 msgstr ""
@@ -2017,7 +2020,7 @@ msgstr ""
 #: modules/chanserv/set_keeptopic.c:71 modules/chanserv/set_restricted.c:71
 #: modules/chanserv/set_secure.c:71 modules/chanserv/set_topiclock.c:71
 #: modules/chanserv/set_verbose.c:73 modules/chanserv/set_verbose.c:99
-#: modules/chanserv/sync.c:298
+#: modules/chanserv/sync.c:298 modules/contrib/cs_badwords.c:414
 #, c-format
 msgid "The %s flag has been set for channel %s."
 msgstr ""
@@ -2026,6 +2029,7 @@ msgstr ""
 #: modules/chanserv/set_keeptopic.c:78 modules/chanserv/set_restricted.c:78
 #: modules/chanserv/set_secure.c:78 modules/chanserv/set_topiclock.c:79
 #: modules/chanserv/set_verbose.c:106 modules/chanserv/sync.c:305
+#: modules/contrib/cs_badwords.c:423
 #, c-format
 msgid "The %s flag is not set for channel %s."
 msgstr ""
@@ -2034,6 +2038,7 @@ msgstr ""
 #: modules/chanserv/set_keeptopic.c:86 modules/chanserv/set_restricted.c:86
 #: modules/chanserv/set_secure.c:86 modules/chanserv/set_topiclock.c:87
 #: modules/chanserv/set_verbose.c:118 modules/chanserv/sync.c:313
+#: modules/contrib/cs_badwords.c:430
 #, c-format
 msgid "The %s flag has been removed for channel %s."
 msgstr ""
@@ -2674,6 +2679,54 @@ msgstr ""
 msgid "Syntax: ACCESS <#channel> ADD|DEL <nick> [level]"
 msgstr ""
 
+#: modules/contrib/cs_badwords.c:23
+msgid "Manage the list of channel bad words."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:24
+msgid "Set whether users can say badwords in channel or not."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:238 modules/contrib/cs_badwords.c:374
+msgid "Syntax: BADWORDS <#channel> ADD|DEL|LIST [badword] [action]"
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:255
+msgid "Syntax: BADWORDS <#channel> ADD <badword> <action>"
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:275
+#, c-format
+msgid "%s has already been entered into the bad word list."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:289
+#, c-format
+msgid "You have added %s as a bad word."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:294
+msgid "Invalid action given."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:304
+msgid "Syntax: BADWORDS <#channel> DEL <badword>"
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:316 modules/contrib/cs_badwords.c:355
+msgid "There are no badwords set in this channel."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:327
+#, c-format
+msgid "Bad word %s has been deleted."
+msgstr ""
+
+#: modules/contrib/cs_badwords.c:340
+#, c-format
+msgid "Word %s not found in bad word database."
+msgstr ""
+
 #: modules/contrib/cs_fregister.c:20
 msgid "Forcibly registers a channel."
 msgstr ""
@@ -2788,7 +2841,7 @@ msgstr ""
 msgid "[%s - %s] %s"
 msgstr ""
 
-#: modules/contrib/ircd_announceserv.c:264 modules/hostserv/request.c:309
+#: modules/contrib/ircd_announceserv.c:264 modules/hostserv/request.c:321
 msgid "Syntax: ACTIVATE <nick>"
 msgstr ""
 
@@ -2797,7 +2850,7 @@ msgstr ""
 msgid "Nick %s not found in announce request database."
 msgstr ""
 
-#: modules/contrib/ircd_announceserv.c:307 modules/hostserv/request.c:374
+#: modules/contrib/ircd_announceserv.c:307 modules/hostserv/request.c:386
 msgid "Syntax: REJECT <nick>"
 msgstr ""
 
@@ -3860,14 +3913,14 @@ msgid "Syncs the vhost for all nicks in a group."
 msgstr ""
 
 #: modules/hostserv/group.c:67 modules/hostserv/onoff.c:53
-#: modules/hostserv/onoff.c:89 modules/hostserv/request.c:230
+#: modules/hostserv/onoff.c:89 modules/hostserv/request.c:242
 #: modules/nickserv/group.c:121 modules/nickserv/group.c:160
 #: modules/nickserv/group.c:187 modules/nickserv/set_accountname.c:60
 #, c-format
 msgid "Nick %s is not registered."
 msgstr ""
 
-#: modules/hostserv/group.c:72 modules/hostserv/request.c:235
+#: modules/hostserv/group.c:72 modules/hostserv/request.c:247
 #: modules/nickserv/group.c:126 modules/nickserv/set_accountname.c:65
 #, c-format
 msgid "Nick %s is not registered to your account."
@@ -3963,47 +4016,47 @@ msgstr ""
 msgid "Your vhost of %s is now deactivated."
 msgstr ""
 
-#: modules/hostserv/request.c:35
+#: modules/hostserv/request.c:36
 msgid "Requests new virtual hostname for current nick."
 msgstr ""
 
-#: modules/hostserv/request.c:36
+#: modules/hostserv/request.c:37
 msgid "Lists vhosts currently waiting for activation."
 msgstr ""
 
-#: modules/hostserv/request.c:37
+#: modules/hostserv/request.c:38
 msgid "Reject the requested vhost for the given nick."
 msgstr ""
 
-#: modules/hostserv/request.c:38
+#: modules/hostserv/request.c:39
 msgid "Activate the requested vhost for a given nick."
 msgstr ""
 
-#: modules/hostserv/request.c:211
+#: modules/hostserv/request.c:223
 msgid "Syntax: REQUEST <vhost>"
 msgstr ""
 
-#: modules/hostserv/request.c:220
+#: modules/hostserv/request.c:232
 msgid "You have been restricted from requesting vhosts by network staff."
 msgstr ""
 
-#: modules/hostserv/request.c:254
+#: modules/hostserv/request.c:266
 #, c-format
 msgid "You have already requested vhost %s."
 msgstr ""
 
-#: modules/hostserv/request.c:259 modules/hostserv/request.c:277
+#: modules/hostserv/request.c:271 modules/hostserv/request.c:289
 msgid ""
 "The system is currently too busy to process your vHost request, please try "
 "again later."
 msgstr ""
 
-#: modules/hostserv/request.c:267 modules/hostserv/request.c:290
+#: modules/hostserv/request.c:279 modules/hostserv/request.c:302
 #, c-format
 msgid "You have requested vhost %s."
 msgstr ""
 
-#: modules/hostserv/request.c:359 modules/hostserv/request.c:426
+#: modules/hostserv/request.c:371 modules/hostserv/request.c:438
 #, c-format
 msgid "Nick %s not found in vhost request database."
 msgstr ""
@@ -4083,43 +4136,43 @@ msgstr ""
 msgid "%s allows users to view informational messages."
 msgstr ""
 
-#: modules/infoserv/main.c:278
+#: modules/infoserv/main.c:285
 msgid "Syntax: POST <importance> <subject> <message>"
 msgstr ""
 
-#: modules/infoserv/main.c:286
+#: modules/infoserv/main.c:293
 msgid "Importance must be a digit between 0 and 4"
 msgstr ""
 
-#: modules/infoserv/main.c:297 modules/infoserv/main.c:307
+#: modules/infoserv/main.c:304 modules/infoserv/main.c:314
 msgid "The InfoServ message has been sent"
 msgstr ""
 
-#: modules/infoserv/main.c:337
+#: modules/infoserv/main.c:344
 msgid "Added entry to logon info"
 msgstr ""
 
-#: modules/infoserv/main.c:392
+#: modules/infoserv/main.c:399
 #, c-format
 msgid "Deleted entry %d from logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:397
+#: modules/infoserv/main.c:404
 #, c-format
 msgid "Entry %d not found in logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:442
+#: modules/infoserv/main.c:449
 #, c-format
 msgid "Deleted entry %d from oper logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:447
+#: modules/infoserv/main.c:454
 #, c-format
 msgid "Entry %d not found in oper logon info."
 msgstr ""
 
-#: modules/infoserv/main.c:474 modules/infoserv/main.c:502
+#: modules/infoserv/main.c:481 modules/infoserv/main.c:509
 msgid "End of list."
 msgstr ""
 
