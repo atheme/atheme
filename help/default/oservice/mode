@@ -1,10 +1,19 @@
 Help for MODE:
 
+Syntax: MODE <#channel> <mode> [parameters]
+
 MODE allows for the editing of modes on a channel. Some networks
 will most likely find this command to be unethical.
-
-Syntax: MODE <#channel> <mode> [parameters]
 
 Examples:
     /msg &nick& MODE #heh -m
     /msg &nick& MODE #heh +o foo
+
+Syntax: MODE ALL <mode> [parameters]
+
+MODE can also set modes on all channels. This may be useful in
+the event of a bot flood, to set all channels +R.
+
+Examples:
+    /msg &nick& MODE ALL +R
+    /msg &nick& MODE ALL +M
