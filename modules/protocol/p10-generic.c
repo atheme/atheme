@@ -996,6 +996,7 @@ static void check_hidehost(user_t *u)
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/p10");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
 	server_login = &p10_server_login;

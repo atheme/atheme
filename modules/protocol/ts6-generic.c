@@ -1433,6 +1433,7 @@ static server_t *sid_find(char *name)
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
 	server_login = &ts6_server_login;

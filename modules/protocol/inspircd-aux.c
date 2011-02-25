@@ -1450,6 +1450,7 @@ static void server_eob(server_t *s)
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
 	server_login = &inspircd_server_login;
