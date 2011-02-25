@@ -122,6 +122,10 @@ os_helpme.c - Sets usermode +h on all users listed with the general:helper
               soper priv upon recieving soper status. Requires an IRCd that has
               +h (helper) usermode support. NOT COMPILED BY DEFAULT.
 
+os_joinmon.c - Allows adding nick patterns to a joinmon list and when a user
+               matching one of the patterns joins a channel, a message will
+			   be sent to the logchan (with the info loglevel).
+
 os_kill.c - Allows opers to KILL users via services.
 
 os_klinechan.c - KLINEs all users who join a KLINECHAN.
