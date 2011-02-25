@@ -24,9 +24,7 @@
 
 #include "atheme.h"
 
-#define LDAP_DEPRECATED 1
 #include <ldap.h>
-#include <stdio.h>
 
 DECLARE_MODULE_V1("auth/ldap", false, _modinit, _moddeinit, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
@@ -100,9 +98,8 @@ static void ldap_config_ready(void *unused)
 static bool ldap_auth_user(myuser_t *mu, const char *password)
 {
 	int res;
-	static time_t lastwarning;
 	struct berval cred;
-	LDAPMessage *msg, *entry;
+	LDAPMessage *message, *entry;
 
 	if (ldap_conn == NULL)
 	{
@@ -135,7 +132,8 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	{
 		char dn[512];
 		cred.bv_len = strlen(password);
-		cred.bv_val = password;
+		/* sstrdup it to remove the const */
+		cred.bv_val = sstrdup(password);
 
 		snprintf(dn, sizeof dn, ldap_config.dnformat, entity(mu)->name);
 		res = ldap_sasl_bind_s(ldap_conn, dn, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
@@ -175,22 +173,23 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 		}
 
 		sprintf(what, "%s=%s", ldap_config.attribute, entity(mu)->name);
-		if ((res = ldap_search_ext_s(ldap_conn, ldap_config.base, LDAP_SCOPE_SUBTREE, what, NULL, 0, NULL, NULL, NULL, 0, &msg)) != LDAP_SUCCESS)
+		if ((res = ldap_search_ext_s(ldap_conn, ldap_config.base, LDAP_SCOPE_SUBTREE, what, NULL, 0, NULL, NULL, NULL, 0, &message)) != LDAP_SUCCESS)
 		{
 			slog(LG_INFO, "ldap_auth_user(%s): ldap search failed: %s", entity(mu)->name, ldap_err2string(res));
 			return false;
 		}
 
 		cred.bv_len = strlen(password);
-		cred.bv_val = password;
+		/* sstrdup it to remove the const */
+		cred.bv_val = sstrdup(password);
 
-		for (entry = ldap_first_message(ldap_conn, msg); entry && ldap_msgtype(entry) == LDAP_RES_SEARCH_ENTRY; entry = ldap_next_message(ldap_conn, entry))
+		for (entry = ldap_first_message(ldap_conn, message); entry && ldap_msgtype(entry) == LDAP_RES_SEARCH_ENTRY; entry = ldap_next_message(ldap_conn, entry))
 		{
 
 			res = ldap_sasl_bind_s(ldap_conn, ldap_get_dn(ldap_conn, entry), LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
 			if (res == LDAP_SUCCESS)
 			{
-				ldap_msgfree(msg);
+				ldap_msgfree(message);
 				return true;
 			}
 		}
