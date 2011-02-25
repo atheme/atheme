@@ -29,11 +29,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_mode);
 }
 
-static void set_channel_mode(service_t *s, channel_t *c, int modeparc, char *modeparv[])
-{
-	channel_mode(s->me, c, modeparc, modeparv);
-}
-
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 {
         char *channel = parv[0];
@@ -49,37 +44,21 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-	modeparc = sjtoken(mode, ' ', modeparv);
-
-	if (*channel == '#')
+	c = channel_find(channel);
+	if (!c)
 	{
-		c = channel_find(channel);
-		if (!c)
-		{
-        	        command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
-	                return;
-		}
-
-		set_channel_mode(si->service, c, modeparc, modeparv);
-		command_success_nodata(si, _("Set modes \2%s\2 on \2%s\2."), mode, channel);		
-	}
-	else if (!strcasecmp(channel, "ALL"))
-	{
-		mowgli_patricia_iteration_state_t state;
-		int count = 0;
-
-		MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
-		{
-			set_channel_mode(si->service, c, modeparc, modeparv);
-			count++;
-		}
-
-		command_success_nodata(si, _("Set modes \2%s\2 on \2%d\2 channels."), mode, count);
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
+                return;
 	}
 
 	wallops("\2%s\2 is using MODE on \2%s\2 (set: \2%s\2)",
 		get_oper_name(si), channel, mode);
 	logcommand(si, CMDLOG_ADMIN, "MODE: \2%s\2 on \2%s\2", mode, channel);
+
+	modeparc = sjtoken(mode, ' ', modeparv);
+
+	channel_mode(si->service->me, c, modeparc, modeparv);
+	command_success_nodata(si, _("Set modes \2%s\2 on \2%s\2."), mode, channel);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
