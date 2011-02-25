@@ -15,7 +15,4 @@ typedef struct {
 
 extern uid_provider_t *__uid_provider;
 
-extern void uid_init(const char *sid);
-extern const char *uid_get(void);
-
 #endif
