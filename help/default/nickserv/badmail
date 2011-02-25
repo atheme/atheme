@@ -3,7 +3,7 @@ Help for BADMAIL:
 BADMAIL allows you to maintain a list of email addresses that are
 not allowed to be used to register accounts.
 
-These email addresses are saved to the Atheme detabase and are kept
+These email addresses are saved to the Atheme database and are kept
 between services restarts.
 
 In BADMAIL ADD, you are able to use glob matching to disallow email

@@ -4,7 +4,7 @@ JOINMON allows you to maintain a list of glob patterns that match nicks of
 users who will have their channel joins sent to the logchannel (under
 the info loglevel).
 
-These patterns are saved to the Atheme detabase and are kept between
+These patterns are saved to the Atheme database and are kept between
 services restarts.
 
 Syntax: JOINMON ADD <pattern> [reason]
