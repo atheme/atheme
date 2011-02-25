@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/modeall", false, _modinit, _moddeinit,
+	"contrib/os_modeall", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
