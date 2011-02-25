@@ -6,5 +6,5 @@ MODEALL sets modes on all channels. This may be useful in
 the event of a bot flood, to set all channels +R.
 
 Examples:
-    /msg &nick& MODE ALL +R
-    /msg &nick& MODE ALL +M
+    /msg &nick& MODEALL +R
+    /msg &nick& MODEALL +M
