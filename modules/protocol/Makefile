@@ -15,6 +15,7 @@ include ../../buildsys.module.mk
 SRCS = \
 	asuka.c	\
 	bahamut.c	\
+	base36uid.c	\
 	charybdis.c	\
 	dreamforge.c	\
 	hybrid.c	\
