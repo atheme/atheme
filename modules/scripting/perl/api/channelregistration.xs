@@ -31,6 +31,13 @@ OUTPUT:
 
 MODULE = Atheme			PACKAGE = Atheme::ChanAcs
 
+Atheme_ChannelRegistration
+channel(Atheme_ChanAcs self)
+CODE:
+	RETVAL = self->mychan;
+OUTPUT:
+	RETVAL
+
 Atheme_Entity
 entity(Atheme_ChanAcs self)
 CODE:
@@ -41,7 +48,7 @@ OUTPUT:
 Atheme_Account
 user(Atheme_ChanAcs self)
 CODE:
-	if (self->entity->type != ENT_USER)
+	if (!self->entity || self->entity->type != ENT_USER)
 		RETVAL = NULL;
 	else
 		RETVAL = (Atheme_Account)self->entity;
@@ -59,6 +66,16 @@ const char *
 hostmask(Atheme_ChanAcs self)
 CODE:
 	RETVAL = self->host;
+OUTPUT:
+	RETVAL
+
+const char *
+namestr(Atheme_ChanAcs self)
+CODE:
+	if (self->entity)
+		RETVAL = self->entity->name;
+	else
+		RETVAL = self->host;
 OUTPUT:
 	RETVAL
 
@@ -80,6 +97,13 @@ time_t
 modified(Atheme_ChanAcs self)
 CODE:
 	RETVAL = self->tmodified;
+OUTPUT:
+	RETVAL
+
+const char *
+datestr(Atheme_ChanAcs self)
+CODE:
+	RETVAL = time_ago(self->tmodified);
 OUTPUT:
 	RETVAL
 
