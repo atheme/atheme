@@ -76,3 +76,8 @@ CODE:
 	RETVAL = self->server;
 OUTPUT:
 	RETVAL
+
+void
+notice(Atheme_User self, Atheme_Service from, const char * text)
+CODE:
+	notice_user_sts(from->me, self, text);

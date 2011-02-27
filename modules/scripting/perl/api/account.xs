@@ -50,3 +50,8 @@ CODE:
 OUTPUT:
 	RETVAL
 
+void
+notice(Atheme_Account self, Atheme_Service from, const char * text)
+CODE:
+	myuser_notice(from->nick, self, "%s", text);
+
