@@ -7,4 +7,4 @@ debe tener el permiso de acceso +R al canal para ejecutar este comando.
 Sintaxis: SYNC <#canal>
 
 Ejemplos:
-	/msg &nick& SYNC #xyz
+    /msg &nick& SYNC #xyz

@@ -19,12 +19,14 @@ use Atheme::Log;
 
 our %Services;
 our %Users;
+our %Accounts;
 our %Channels;
 our %ChannelRegistrations;
 our %Hooks;
 
 tie %Services, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Service->find(@_) };
 tie %Users, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::User->find(@_) };
+tie %Users, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Account->find(@_) };
 tie %Channels, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Channel->find(@_) };
 tie %ChannelRegistrations, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::ChannelRegistration->find(@_) };
 tie %Hooks, 'Atheme::Internal::HookHash';

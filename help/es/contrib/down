@@ -6,4 +6,4 @@ No elimina las opciones de acceso o xOP que tenga, sólo los modos.
 Sintaxis: DOWN <#canal>
 
 Ejemplos:
-	/msg &nick& DOWN #abc
+    /msg &nick& DOWN #abc

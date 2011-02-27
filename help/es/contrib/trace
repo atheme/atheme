@@ -23,10 +23,10 @@ AKILL - Aplica AKILLs en los usuarios encontrados.
 Sintaxis: TRACE <acción> <parámetros>
 
 Ejemplos:
-	/msg &nick& TRACE print channel #nombrecanal
-	/msg &nick& TRACE print server irc.nombreservidor.org
-	/msg &nick& TRACE kill "razón" server alfred.staticbox.net
-	/msg &nick& TRACE kill "razón con cuatro palabras" channel #test nickage <60
-	/msg &nick& TRACE print numchan 0 nickage <180
-	/msg &nick& TRACE count numchan >10 identified no
-	/msg &nick& TRACE akill !P "entra a un canal la próxima vez" numchan 0
+    /msg &nick& TRACE print channel #nombrecanal
+    /msg &nick& TRACE print server irc.nombreservidor.org
+    /msg &nick& TRACE kill "razón" server alfred.staticbox.net
+    /msg &nick& TRACE kill "razón con cuatro palabras" channel #test nickage <60
+    /msg &nick& TRACE print numchan 0 nickage <180
+    /msg &nick& TRACE count numchan >10 identified no
+    /msg &nick& TRACE akill !P "entra a un canal la próxima vez" numchan 0

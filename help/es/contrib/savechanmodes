@@ -6,4 +6,4 @@ la red a un archivo que puede ser restaurado posteriormente con LOADCHANMODES.
 Sintaxis: SAVECHANMODES
 
 Ejemplos:
-	/msg &nick& SAVECHANMODES
+    /msg &nick& SAVECHANMODES

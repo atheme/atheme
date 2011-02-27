@@ -1,0 +1,9 @@
+Help for SET MAXFOUNDERS:
+
+SET MAXFOUNDERS allows setting the maximum number of founders
+that one channel may have.
+
+Syntax: SET MAXFOUNDERS <value>
+
+Example:
+    /msg &nick& SET MAXFOUNDERS 4

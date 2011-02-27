@@ -13,8 +13,8 @@ modules/chanfix/fix.c
 modules/chanserv/access.c
 modules/chanserv/akick.c
 modules/chanserv/ban.c
-modules/chanserv/clear_bans.c
 modules/chanserv/clear.c
+modules/chanserv/clear_bans.c
 modules/chanserv/clear_flags.c
 modules/chanserv/clear_users.c
 modules/chanserv/clone.c
@@ -73,6 +73,7 @@ modules/contrib/cs_fregister.c
 modules/contrib/cs_userinfo.c
 modules/contrib/gs_roulette.c
 modules/contrib/ircd_announceserv.c
+modules/contrib/ms_fsend.c
 modules/contrib/ns_fenforce.c
 modules/contrib/ns_forbid.c
 modules/contrib/ns_generatehash.c
@@ -81,13 +82,16 @@ modules/contrib/ns_listlogins.c
 modules/contrib/ns_waitreg.c
 modules/contrib/os_defcon.c
 modules/contrib/os_helpme.c
+modules/contrib/os_joinmon.c
 modules/contrib/os_klinechan.c
+modules/contrib/os_modeall.c
 modules/contrib/os_procwatch.c
 modules/contrib/os_testproc.c
 modules/contrib/os_trace.c
 modules/gameserv/dice.c
 modules/gameserv/eightball.c
 modules/gameserv/gamecalc.c
+modules/gameserv/happyfarm.c
 modules/gameserv/help.c
 modules/gameserv/lottery.c
 modules/gameserv/namegen.c
@@ -177,12 +181,12 @@ modules/nickserv/set_neverop.c
 modules/nickserv/set_nogreet.c
 modules/nickserv/set_nomemo.c
 modules/nickserv/set_noop.c
-modules/nickserv/setpass.c
 modules/nickserv/set_password.c
 modules/nickserv/set_private.c
 modules/nickserv/set_privmsg.c
 modules/nickserv/set_property.c
 modules/nickserv/set_quietchg.c
+modules/nickserv/setpass.c
 modules/nickserv/status.c
 modules/nickserv/subscribe.c
 modules/nickserv/taxonomy.c
@@ -216,6 +220,7 @@ modules/operserv/restart.c
 modules/operserv/rmatch.c
 modules/operserv/rnc.c
 modules/operserv/rwatch.c
+modules/operserv/set.c
 modules/operserv/sgline.c
 modules/operserv/shutdown.c
 modules/operserv/soper.c

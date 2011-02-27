@@ -6,4 +6,4 @@ registrar un nick en nombre de otro usuario.
 Sintaxis: FREGISTER <cuenta> <contraseña> <email> [CRYPTPASS|HIDEMAIL|NOOP|NEVEROP]
 
 Ejemplos:
-	/msg &nick& FREGISTER nenolod contraseñacualquiera nenolod@nenolod.net
+    /msg &nick& FREGISTER nenolod contraseñacualquiera nenolod@nenolod.net

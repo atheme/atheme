@@ -6,4 +6,4 @@ every channel on the network to a file to be restored later with LOADCHANMODES.
 Syntax: SAVECHANMODES
 
 Examples:
-	/msg &nick& SAVECHANMODES
+    /msg &nick& SAVECHANMODES

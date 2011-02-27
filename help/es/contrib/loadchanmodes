@@ -8,4 +8,4 @@ es ~/atheme/etc/chanmodes.txt , pero puede variar en su instalación.
 Sintaxis: LOADCHANMODES
 
 Ejemplos:
-	/msg &nick& LOADCHANMODES
+    /msg &nick& LOADCHANMODES

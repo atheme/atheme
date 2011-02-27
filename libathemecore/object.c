@@ -61,12 +61,9 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 		obj->name = sstrdup(name);
 
 	obj->destructor = des;
-#ifdef USE_OBJECT_REF
 	obj->refcount = 1;
-#endif
 }
 
-#ifdef USE_OBJECT_REF
 /*
  * object_ref
  *
@@ -89,7 +86,6 @@ void * object_ref(void *object)
 
 	return object;
 }
-#endif
 
 /*
  * object_unref
@@ -108,32 +104,51 @@ void * object_ref(void *object)
 void object_unref(void *object)
 {
 	object_t *obj;
+
+	return_if_fail(object != NULL);
+	obj = object(object);
+
+	obj->refcount--;
+	if (obj->refcount <= 0)
+		object_dispose(obj);
+}
+
+/*
+ * object_dispose
+ *
+ * Disposes of an object.
+ *
+ * Inputs:
+ *      - the object to dispose
+ *
+ * Outputs:
+ *      - none
+ *
+ * Side Effects:
+ *      - the object is destroyed
+ */
+void object_dispose(void *object)
+{
+	object_t *obj;
 	mowgli_patricia_t *privatedata;
 
 	return_if_fail(object != NULL);
 	obj = object(object);
 	privatedata = obj->privatedata;
 
-#ifdef USE_OBJECT_REF
-	obj->refcount--;
+	if (obj->name != NULL)
+		free(obj->name);
 
-	if (obj->refcount <= 0)
-#endif
+	if (obj->destructor != NULL)
+		obj->destructor(obj);
+	else
 	{
-		if (obj->name != NULL)
-			free(obj->name);
-
-		if (obj->destructor != NULL)
-			obj->destructor(obj);
-		else
-		{
-			metadata_delete_all(obj);
-			free(obj);
-		}
-
-		if (privatedata != NULL)
-			mowgli_patricia_destroy(privatedata, NULL, NULL);
+		metadata_delete_all(obj);
+		free(obj);
 	}
+
+	if (privatedata != NULL)
+		mowgli_patricia_destroy(privatedata, NULL, NULL);
 }
 
 metadata_t *metadata_add(void *target, const char *name, const char *value)
@@ -239,3 +254,4 @@ void privatedata_set(void *target, const char *key, void *data)
  * vim:sw=8
  * vim:noexpandtab
  */
+

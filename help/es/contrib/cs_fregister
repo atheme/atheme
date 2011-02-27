@@ -7,4 +7,4 @@ sin necesidad de ops o incluso sin unirse a éste.
 Sintaxis: FREGISTER <#canal>
 
 Ejemplos:
-	/msg &nick& FREGISTER #atheme
+    /msg &nick& FREGISTER #atheme

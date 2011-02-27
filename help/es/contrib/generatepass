@@ -6,5 +6,5 @@ ninguna configuración.
 Sintaxis: GENERATEPASS [longitud]
 
 Ejemplos:
-	/msg &nick& GENERATEPASS
-	/msg &nick& GENERATEPASS 12
+    /msg &nick& GENERATEPASS
+    /msg &nick& GENERATEPASS 12

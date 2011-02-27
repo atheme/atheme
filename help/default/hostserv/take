@@ -8,5 +8,5 @@ account name.
 Syntax: TAKE <vhost>
 
 Examples:
-	/msg &nick& TAKE $account.users.example.net
-	/msg &nick& TAKE example.net
+    /msg &nick& TAKE $account.users.example.net
+    /msg &nick& TAKE example.net

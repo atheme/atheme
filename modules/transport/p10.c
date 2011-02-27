@@ -35,7 +35,7 @@ DECLARE_MODULE_V1
 /* parses a P10 IRC stream */
 static void p10_parse(char *line)
 {
-	sourceinfo_t si;
+	sourceinfo_t *si;
 	char *pos;
 	char *origin = NULL;
 	char *command = NULL;
@@ -50,9 +50,9 @@ static void p10_parse(char *line)
 	for (i = 0; i <= MAXPARC; i++)
 		parv[i] = NULL;
 
-	memset(&si, '\0', sizeof si);
-	si.connection = curr_uplink->conn;
-	si.output_limit = MAX_IRC_OUTPUT_LINES;
+	si = sourceinfo_create();
+	si->connection = curr_uplink->conn;
+	si->output_limit = MAX_IRC_OUTPUT_LINES;
 
 	if (line != NULL)
 	{
@@ -60,9 +60,9 @@ static void p10_parse(char *line)
 		 * catch those here... they'll core us later on if we don't
 		 */
 		if (*line == '\n')
-			return;
+			goto cleanup;
 		if (*line == '\000')
-			return;
+			goto cleanup;
 
 		/* copy the original line so we know what we crashed on */
 		memset((char *)&coreLine, '\0', BUFSIZE);
@@ -85,13 +85,13 @@ static void p10_parse(char *line)
 				if (*origin == ':')
 				{
 					origin++;
-                                	si.s = server_find(origin);
-                                	si.su = user_find_named(origin);
+                                	si->s = server_find(origin);
+                                	si->su = user_find_named(origin);
 				}
 				else
 				{
-                                	si.s = server_find(origin);
-                                	si.su = user_find(origin);
+                                	si->s = server_find(origin);
+                                	si->su = user_find(origin);
 				}
 
 				if ((message = strchr(pos, ' ')))
@@ -113,22 +113,22 @@ static void p10_parse(char *line)
 			}
 		}
 
-                if (!si.s && !si.su && me.recvsvr)
+                if (!si->s && !si->su && me.recvsvr)
                 {
                         slog(LG_DEBUG, "p10_parse(): got message from nonexistant user or server: %s", origin);
-                        return;
+                        goto cleanup;
                 }
-		if (si.s == me.me)
+		if (si->s == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from myself %s: %s", si.s->name, coreLine);
-                        return;
+                        slog(LG_INFO, "p10_parse(): got message supposedly from myself %s: %s", si->s->name, coreLine);
+                        goto cleanup;
 		}
-		if (si.su != NULL && si.su->server == me.me)
+		if (si->su != NULL && si->su->server == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client %s: %s", si.su->nick, coreLine);
-                        return;
+                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client %s: %s", si->su->nick, coreLine);
+                        goto cleanup;
 		}
-		si.smu = si.su != NULL ? si.su->myuser : NULL;
+		si->smu = si->su != NULL ? si->su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
@@ -154,39 +154,41 @@ static void p10_parse(char *line)
 		if (!command)
 		{
 			slog(LG_DEBUG, "p10_parse(): command not found: %s", coreLine);
-			return;
+			goto cleanup;
 		}
 
 		/* take the command through the hash table */
 		if ((pcmd = pcommand_find(command)))
 		{
-			if (si.su && !(pcmd->sourcetype & MSRC_USER))
+			if (si->su && !(pcmd->sourcetype & MSRC_USER))
 			{
-				slog(LG_INFO, "p10_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
-				return;
+				slog(LG_INFO, "p10_parse(): user %s sent disallowed command %s", si->su->nick, pcmd->token);
+				goto cleanup;
 			}
-			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
+			else if (si->s && !(pcmd->sourcetype & MSRC_SERVER))
 			{
-				slog(LG_INFO, "p10_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
-				return;
+				slog(LG_INFO, "p10_parse(): server %s sent disallowed command %s", si->s->name, pcmd->token);
+				goto cleanup;
 			}
 			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
 			{
 				slog(LG_INFO, "p10_parse(): unregistered server sent disallowed command %s", pcmd->token);
-				return;
+				goto cleanup;
 			}
 			if (parc < pcmd->minparc)
 			{
 				slog(LG_INFO, "p10_parse(): insufficient parameters for command %s", pcmd->token);
-				return;
+				goto cleanup;
 			}
 			if (pcmd->handler)
 			{
-				pcmd->handler(&si, parc, parv);
-				return;
+				pcmd->handler(si, parc, parv);
 			}
 		}
 	}
+
+cleanup:
+	object_unref(si);
 }
 
 void (*default_parse)(char *line) = NULL;

@@ -6,4 +6,4 @@ recibiendo una respuesta "Pong!".
 Sintaxis: PING
 
 Ejemplos:
-	/msg &nick& PING
+    /msg &nick& PING

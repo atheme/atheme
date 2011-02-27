@@ -6,6 +6,6 @@ automáticamente al conectarse.
 Sintaxis: AJOIN ADD|DEL|LIST [#canal]
 
 Ejemplos:
-	/msg &nick& AJOIN LIST
-	/msg &nick& AJOIN ADD #abc
-	/msg &nick& AJOIN DEL #abc
+    /msg &nick& AJOIN LIST
+    /msg &nick& AJOIN ADD #abc
+    /msg &nick& AJOIN DEL #abc

@@ -1,0 +1,9 @@
+Help for ACCESS SET:
+
+ACCESS SET will change the given user's role to the given
+channel role.
+
+Syntax: ACCESS <#channel> SET <user> <role>
+
+Examples:
+    /msg &nick& ACCESS #atheme SET stitch lowlevel-staff

@@ -22,6 +22,7 @@ SRCS =			\
 	cs_regnotice.c		\
 	cs_updown.c		\
 	cs_userinfo.c		\
+	dnsbl.c		\
 	gen_echoserver.c	\
 	gen_httpd.c		\
 	gen_listenerdemo.c	\
@@ -30,6 +31,7 @@ SRCS =			\
 	gs_roulette.c	\
 	ircd_announceserv.c	\
 	ircd_catserv.c	\
+	ms_fsend.c		\
 	ns_fenforce.c		\
 	ns_fregister.c	\
 	ns_forbid.c		\
@@ -48,6 +50,7 @@ SRCS =			\
 	os_klinechan.c	\
 	os_modeall.c		\
 	os_pingspam.c		\
+	os_resolve.c		\
 	os_savechanmodes.c	\
 	os_tabletest.c	\
 	os_testcmd.c		\

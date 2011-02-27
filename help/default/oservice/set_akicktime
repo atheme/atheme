@@ -1,0 +1,10 @@
+Help for SET AKICKTIME:
+
+SET AKICKTIME allows network staff to the default duration
+of akicks. Setting this to 0 makes all akicks permanent unless
+a duration is specified in the AKICK command.
+
+Syntax: SET AKICKTIME <time in minutes>
+
+Example:
+    /msg &nick& SET AKICKTIME 20

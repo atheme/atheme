@@ -6,4 +6,4 @@ the snoop channel.
 Syntax: LOGSTREAM <#channel>
 
 Examples:
-	/msg &nick& LOGSTREAM #services
+    /msg &nick& LOGSTREAM #services

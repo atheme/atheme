@@ -400,6 +400,7 @@ loadmodule "modules/chanserv/why";
  * Display regex matching (RMATCH command)	modules/operserv/rmatch
  * Most common realnames (RNC command)		modules/operserv/rnc
  * RWATCH system				modules/operserv/rwatch
+ * Temporarily modify config options (SET command)  modules/operserv/set
  * SGLINE system                                modules/operserv/sgline
  * SHUTDOWN command				modules/operserv/shutdown
  * Non-config oper privileges (SOPER command)	modules/operserv/soper
@@ -434,6 +435,7 @@ loadmodule "modules/operserv/restart";
 loadmodule "modules/operserv/rmatch";
 loadmodule "modules/operserv/rnc";
 loadmodule "modules/operserv/rwatch";
+loadmodule "modules/operserv/set";
 loadmodule "modules/operserv/sgline";
 loadmodule "modules/operserv/shutdown";
 #loadmodule "modules/operserv/soper";

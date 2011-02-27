@@ -8,4 +8,4 @@ DATADIR/chanmodes.txt for the saved data. This path is usually
 Syntax: LOADCHANMODES
 
 Examples:
-	/msg &nick& LOADCHANMODES
+    /msg &nick& LOADCHANMODES

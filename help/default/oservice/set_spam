@@ -1,0 +1,9 @@
+Help for SET SPAM:
+
+SET SPAM allows network staff to define whether or not new users
+get messaged about services when they connect.
+
+Syntax: SET SPAM TRUE|FALSE
+
+Example:
+    /msg &nick& SET SPAM TRUE

@@ -1,0 +1,9 @@
+Help for SET CHANEXPIRE:
+
+SET CHANEXPIRE allows network staff to modify how often channel
+expirations will be checked.
+
+Syntax: SET CHANEXPIRE <time in days>
+
+Example:
+    /msg &nick& SET CHANEXPIRE 30

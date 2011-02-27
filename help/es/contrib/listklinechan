@@ -6,5 +6,5 @@ de canales con la opción KLINECHAN activada.
 Sintaxis: LISTKLINECHAN [patrón]
 
 Ejemplos:
-	/msg &nick& LISTKLINECHAN
-	/msg &nick& LISTKLINECHAN #lame*
+    /msg &nick& LISTKLINECHAN
+    /msg &nick& LISTKLINECHAN #lame*
