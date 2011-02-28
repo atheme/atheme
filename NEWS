@@ -7,6 +7,7 @@ ircd protocol
   extensions modules.
 - unreal33: New protocol module for the upcoming UnrealIRCd 3.3.
 - unreal: Add support for changets.
+- inspircd: Add support for locking the +H channel mode.
 - ithildin, bircd and ptlink protocol modules removed.
 chanserv
 - sync: New module based on cs_sync from contrib. Adds autosync on
@@ -20,6 +21,9 @@ chanserv
   access lists.
 - clone: New module allowing you to clone a channel's access list,
   flags and metadata to a new channel.
+- cs_badwords: New contrib module. Allows channel staff to specify a
+  badwords list for a channel and what action to take when a user
+  says one of the words in the channel.
 chanfix
 - New service. Similar to EFNet's chanfix service.
 groupserv
@@ -32,6 +36,8 @@ groupserv
 - fflags: New command. Allows services operators to force a flags change
   on a group they they do not have access to.
 - list: Allow refining the list with a pattern.
+- listchans: New command. Allows group members with the +c flag to see all
+  channels that group has access in.
 gameserv
 - many refactorings
 - calc: new command. Allows doing basic math with GameServ.
@@ -59,6 +65,12 @@ operserv
 - modreload now rehashes the config if the module requires it and reloads modules
   that depend on the specified module.
 - soper: Allow adding a new SOPER with a password (optional, of course).
+- info: Add a new hooks so modules that add config options can also add lines to
+  the operserv/info output.
+- os_modeall: New contrib module. Allows setting a given mode on all channels.
+- os_joinmon: New contrib module. Facilitates monitoring certain users and when
+  a monitored user joins a channel, that information will be sent to the services
+  log channel.
 scripting
 - Support for scripting Atheme in Perl added. This adds the SCRIPT operserv
   command for loading/unloading/listing of Perl scripts. Still in alpha.
@@ -82,6 +94,7 @@ code
   5.1 and gone since 5.2.
 - MODULE_USE_SYMBOL() was removed in favour of MODULE_TRY_REQUEST_SYMBOL().
 - configuration-defined usernames are now truncated at USERLEN (10 characters).
+- UID generation split out from the core.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
@@ -90,6 +103,7 @@ other
 - an access {} config block was added allowing rewriting of command privs.
   If specified, the user must match the original priv and the rewritten priv.
 - allow Atheme datadir to be specified on the command-line when starting.
+- many improvements to the LDAP authentication module.
 
 Atheme Services 6.0 Release Notes
 =================================
