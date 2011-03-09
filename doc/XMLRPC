@@ -1,14 +1,14 @@
 Atheme XMLRPC interface
 -----------------------
 
-The modules/xmlrpc/* modules provide an XMLRPC interface to Atheme.
+The modules/transport/xmlrpc/main module provides an XMLRPC interface to Atheme.
 
 Atheme does not use HTTP authentication, instead using its own system with
 authentication cookies.
 
 All parameters are strings.
 
-Methods from modules/xmlrpc/main:
+Methods from modules/transport/xmlrpc:
 
 /*
  * atheme.login
@@ -65,6 +65,19 @@ The authcookie will be valid for one hour or until Atheme shuts down.
  *       command is executed
  */
 
+/*
+ * atheme.privset
+ *
+ * XML inputs:
+ * authcookie, account name, source ip
+ *
+ * XML outputs:
+ * depends on command
+ *
+ * Side Effects:
+ * command is executed
+ */ 
+
 Authcookie and account name specify authentication for the command; authcookie
 can be specified as '.' to execute a command without a login.
 Source ip is logged with the request, it does not need to be an IP address.
@@ -88,7 +101,7 @@ For an example see contrib/perlxmlrpc.pl.
 
 Other methods:
 
-See the source code, modules/xmlrpc/*.c.
+See the source code, modules/transport/xmlrpc/main.c.
 
 Fault codes:
 
