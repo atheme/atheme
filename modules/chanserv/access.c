@@ -875,6 +875,13 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (ca->level != 0)
+	{
+		chanacs_close(ca);
+		command_fail(si, fault_toomany, _("\2%s\2 already has the \2%s\2 role in \2%s\2."), target, get_template_name(mc, ca->level), mc->name);
+		return;
+	}
+
 	new_level = get_template_flags(mc, role);
 	if (new_level == 0)
 	{
