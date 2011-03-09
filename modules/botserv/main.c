@@ -825,7 +825,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorised to assign bots on \2%s\2."), mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorized to assign bots on \2%s\2."), mc->name);
 		return;
 	}
 
@@ -840,7 +840,7 @@ static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (bot->private && !has_priv(si, PRIV_CHAN_ADMIN))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorised to assign the bot \2%s\2 to a channel."), bot->nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to assign the bot \2%s\2 to a channel."), bot->nick);
 		return;
 	}
 
@@ -890,7 +890,7 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorised to unassign a bot on \2%s\2."), mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorized to unassign a bot on \2%s\2."), mc->name);
 		return;
 	}
 
