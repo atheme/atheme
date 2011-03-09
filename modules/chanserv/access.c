@@ -62,8 +62,10 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_role_add =  { "ADD", N_("Add a role."),
                             AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_add" } };
 
+static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[]);
+
 command_t cs_role_set =  { "SET", N_("Change flags on a role."),
-                            AC_NONE, 20, cs_cmd_role_add, { .path = "cservice/role_set" } };
+                            AC_NONE, 20, cs_cmd_role_set, { .path = "cservice/role_set" } };
 
 static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -1058,9 +1060,97 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 
 	restrictflags = chanacs_source_flags(mc, si);
 	oldflags = get_template_flags(mc, role);
+
+	if (oldflags != 0)
+	{
+		command_fail(si, fault_badparams, _("Role \2%s\2 already exists."), role);
+		return;
+	}
+
 	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
 
-	if (newflags & CA_FOUNDER) newflags |= CA_FLAGS;
+	if (newflags & CA_FOUNDER)
+		newflags |= CA_FLAGS;
+
+	if (newflags == 0)
+	{
+		if (oldflags == 0)
+			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP ROLE ADD for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.me->disp);
+		else
+			command_fail(si, fault_nosuch_target, _("You cannot remove all flags from the role \2%s\2."), role);
+		return;
+	}
+	l = build_template_list(mc);
+	if (l != NULL)
+	{
+		mowgli_node_t *n;
+
+		MOWGLI_ITER_FOREACH(n, l->head)
+		{
+			template_t *t = n->data;
+
+			if (t->level == newflags)
+			{
+				command_fail(si, fault_alreadyexists, _("The role \2%s\2 already has flags \2%s\2."), t->name, xflag_tostr(newflags));
+				return;
+			}
+		}
+
+		free_template_list(l);
+	}
+
+	command_success_nodata(si, _("Flags for role \2%s\2 were changed to: \2%s\2."), role, xflag_tostr(newflags));
+	update_role_entry(si, mc, role, newflags);
+}
+
+/*
+ * Syntax: ROLE #channel SET <role> [flags-changes]
+ *
+ * Output:
+ *
+ * Creates a new role with the given flags.
+ */
+static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+	mowgli_list_t *l;
+	const char *channel = parv[0];
+	const char *role = parv[1];
+	unsigned int oldflags, newflags, restrictflags;
+
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
+		return;
+	}
+	
+	if (!role)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE ADD|SET");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> ADD|SET <role> [flags]"));
+		return;
+	}
+	
+	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
+
+	restrictflags = chanacs_source_flags(mc, si);
+	oldflags = get_template_flags(mc, role);
+
+	if (oldflags == 0)
+	{
+		command_fail(si, fault_nosuch_target, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+
+	if (newflags & CA_FOUNDER)
+		newflags |= CA_FLAGS;
 
 	if (newflags == 0)
 	{
