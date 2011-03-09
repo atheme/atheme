@@ -101,6 +101,34 @@ static inline bool gs_do_parameters(sourceinfo_t *si, int *parc, char ***parv, m
 	return true;
 }
 
+static inline void gs_interactive_notification(myuser_t *mu, const char *notification, ...)
+{
+	service_t *gameserv;
+	char buf[BUFSIZE];
+	va_list va;
+
+	va_start(va, notification);
+	vsnprintf(buf, BUFSIZE, notification, va);
+	va_end(va);
+
+	gameserv = service_find("gameserv");
+	return_if_fail(gameserv != NULL);
+
+	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
+		myuser_notice(gameserv->nick, mu, "%s", buf);
+	else
+	{
+		service_t *svs;
+
+		if ((svs = service_find("memoserv")) != NULL)
+		{
+			sourceinfo_t nullinfo = { .su = gameserv->me };
+
+			command_exec_split(svs, &nullinfo, "SEND", buf, svs->commands);
+		}
+	}
+}
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
