@@ -1,0 +1,9 @@
+Help for SET MAXCHANS:
+
+SET MAXCHANS allows setting how many channels one account may
+be founder of.
+
+Syntax: SET MAXCHANS <value>
+
+Example:
+    /msg &nick& SET MAXCHANS 7

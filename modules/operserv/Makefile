@@ -41,6 +41,7 @@ SRCS = \
 	restart.c	\
 	rnc.c		\
 	rwatch.c	\
+	set.c		\
 	shutdown.c	\
 	sgline.c	\
 	soper.c	\
