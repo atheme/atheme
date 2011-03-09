@@ -11,7 +11,7 @@ FSEND will override the target user having the NOMEMO
 flag set and the target user having the source (you) on
 memoserv ignore.
 
-Syntax: SEND <user|nick> text
+Syntax: FSEND <user|nick> text
 
 Examples:
-    /msg &nick& SEND Kog pay your bills
+    /msg &nick& FSEND Kog pay your bills
