@@ -1,50 +1,9 @@
 Help for ACCESS SET:
 
-ACCESS SET allows you to set specific flags on a user
-above or below a certain role or lets you change the
-role a user is in. Multiple flags should be seperated
-by a space and have the modifier (+ or -) in front
-of each flag.
+ACCESS SET will change the given user's role to the given
+channel role.
 
-Syntax: ACCESS <#channel> SET <user> <role|flags>
-
-Flags:
-    +voice - Enables use of the voice/devoice commands.
-    +autovoice - Enables automatic voice.
-#if halfops
-    +halfop - Enables use of the halfop/dehalfop commands.
-    +autohalfop - Enables automatic halfop.
-#endif
-    +op - Enables use of the op/deop commands.
-    +autoop - Enables automatic op.
-#if protect
-    +protect - Enables use of the protect/deprotect commands.
-#endif
-#if owner
-    +owner - Enables use of the owner/deowner commands.
-#endif
-    +set - Enables use of the set command.
-    +invite - Enables use of the invite and getkey commands.
-#if module chanserv/kick
-    +remove - Enables use of the kick, kickban, ban and unban commands.
-#else
-#if !module chanserv/unban_self
-    +remove - Enables use of the ban and unban commands.
-#else
-    +remove - Enables use of the unban command.
-#endif
-#endif
-    +recover - Enables use of the recover and clear commands.
-    +acl-change - Enables modification of channel access lists.
-    +topic - Enables use of the topic and topicappend commands.
-    +acl-view - Enables viewing of channel access lists.
-#if module chanserv/successor_acl
-    +successor - Marks the user as a successor.
-#endif
-    +founder - Grants full founder access.
-    +banned - Enables automatic kickban.
+Syntax: ACCESS <#channel> SET <user> <role>
 
 Examples:
-    /msg &nick& ACCESS #atheme SET stitch channel-ops
-    /msg &nick& ACCESS #atheme SET stitch -topic
-    /msg &nick& ACCESS #foo set jdhore +acl-view +topic +autoop
+    /msg &nick& ACCESS #atheme SET stitch lowlevel-staff
