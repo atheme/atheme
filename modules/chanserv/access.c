@@ -962,12 +962,20 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	new_level = get_template_flags(mc, role);
+
 	if (new_level == 0)
 	{
 		chanacs_close(ca);
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
+
+	if ((ca->level & CA_FOUNDER) && !(new_level & CA_FOUNDER) && mychan_num_founders(mc) == 1)
+	{
+		command_fail(si, fault_noprivs, _("You may not remove the last founder."));
+		return;
+	}
+
 	ca->level = new_level;
 
 	hook_call_channel_acl_change(ca);
