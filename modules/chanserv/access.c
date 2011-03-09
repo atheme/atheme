@@ -352,27 +352,29 @@ static void free_template_list(mowgli_list_t *l)
 /*
  * get_template_name()
  *
- * this is, by far, one of the most complicated functions in Atheme.
- * it is also one of the most bloated fuzzy bitmask matchers that i have
+ * this was, by far, one of the most complicated functions in Atheme.
+ * it was also one of the most bloated fuzzy bitmask matchers that i have
  * ever written.
  *
- * basically, we build a template list, which has been sorted and then
+ * basically, we used to build a template list, which has been sorted and then
  * reversed.  we then find three templates that are the closest match to:
  *
  *      - an exact match (level == level)
  *      - the closest template to the level but with less privilege ((level & t->level) == level)
  *      - the closest template to the level but with more privilege ((t->level & level) == t->level)
  *
- * we then count the number of bits in each level and we tighten the match further
- * based on number of bits flipped on in each level.  (it's the only sane way to do
+ * we then counted the number of bits in each level and we tightened the match further
+ * based on number of bits flipped on in each level.  (it was the only sane way to do
  * this, trust me.)
+ *
+ * but now we just return an exact template name or <Custom>.
  */
 static const char *get_template_name(mychan_t *mc, unsigned int level)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;
 	static char flagname[400];
-	template_t *exact_t = NULL, *lesser_t = NULL, *greater_t = NULL;
+	template_t *exact_t = NULL;
 	unsigned int flagcount = count_bits(level);
 
 	l = build_template_list(mc);
@@ -384,51 +386,12 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 
 		if (t->level == level)
 			exact_t = t;
-
-		else if ((t->level & level) == level)
-		{
-			if (greater_t == NULL)
-				greater_t = t;
-			else
-			{
-				unsigned int a = count_bits(greater_t->level);
-				unsigned int b = count_bits(t->level);
-
-				if (a < b && b > flagcount)
-					greater_t = t;
-			}
-		}
-
-		else if ((level & t->level) == t->level)
-			lesser_t = t;
 	}
 
-	/*
-	 * if we have an exact match (exact_t): set flagname as exact_t->name.
-	 * if we have a greater match (greater_t) and lesser match (lesser_t):
- 	 *      determine which has more flags set (count_bits), return that
-	 *      name with + or -.
-	 * if we have only a lesser match (lesser_t):
-	 *      return that name with +.
-	 * if we have only a greater match (greater_t):
-	 *      return that name with -.
-	 */
 	if (exact_t != NULL)
 		strlcpy(flagname, exact_t->name, sizeof flagname);
-	else if (lesser_t != NULL && greater_t != NULL)
-	{
-		unsigned int lesser_count = count_bits(lesser_t->level);
-		unsigned int greater_count = count_bits(greater_t->level);
-
-		if (lesser_count <= flagcount)
-			snprintf(flagname, sizeof flagname, "%s+", lesser_t->name);
-		else if (greater_count >= flagcount)
-			snprintf(flagname, sizeof flagname, "%s-", lesser_t->name);
-	}
-	else if (lesser_t != NULL)
-		snprintf(flagname, sizeof flagname, "%s+", lesser_t->name);
-	else if (greater_t != NULL)
-		snprintf(flagname, sizeof flagname, "%s-", greater_t->name);
+	else
+		strlcpy(flagname, "<Custom>", sizeof flagname);
 
 	free_template_list(l);
 
