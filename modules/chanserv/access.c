@@ -50,7 +50,7 @@ command_t cs_access_add =  { "ADD", N_("Add an access list entry."),
 static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_access_set =  { "SET", N_("Update an access list entry."),
-                             AC_NONE, 3, cs_cmd_access_set, { .path = "cservice/access_add" } };
+                             AC_NONE, 3, cs_cmd_access_set, { .path = "cservice/access_set" } };
 
 static void cs_cmd_role_list(sourceinfo_t *si, int parc, char *parv[]);
 
