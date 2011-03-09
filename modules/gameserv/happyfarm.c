@@ -361,8 +361,8 @@ static void __command_trampoline(sourceinfo_t * si, int parc, char *parv[])
 
 	if (subcmd == NULL)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: SET <setting> <parameters>"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HAPPYFARM");
+		command_fail(si, fault_needmoreparams, _("Syntax: HAPPYFARM <command>"));
 		return;
 	}
 
