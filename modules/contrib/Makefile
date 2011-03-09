@@ -30,6 +30,7 @@ SRCS =			\
 	gs_roulette.c	\
 	ircd_announceserv.c	\
 	ircd_catserv.c	\
+	ms_fsend.c		\
 	ns_fenforce.c		\
 	ns_fregister.c	\
 	ns_forbid.c		\
