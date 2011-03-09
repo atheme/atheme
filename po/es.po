@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Spanish language file for Atheme\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-09 00:32-0600\n"
+"POT-Creation-Date: 2011-03-09 00:35-0600\n"
 "PO-Revision-Date: 2011-02-23 22:26-0300\n"
 "Last-Translator: Ignacio Riquelme Morelle <shadowm2006@gmail.com>\n"
 "Language-Team: Spanish <shadowm2006@gmail.com>\n"
@@ -27,6 +27,7 @@ msgstr ""
 #: modules/infoserv/main.c:77 modules/memoserv/help.c:39
 #: modules/nickserv/help.c:39 modules/nickserv/help.c:88
 #: modules/nickserv/set_core.c:30 modules/operserv/help.c:46
+#: modules/operserv/set.c:61
 #, c-format
 msgid "***** %s Help *****"
 msgstr "***** Ayuda de %s *****"
@@ -60,6 +61,7 @@ msgstr "Para más información sobre un comando, escriba:"
 #: modules/infoserv/main.c:86 modules/memoserv/help.c:48
 #: modules/nickserv/help.c:72 modules/nickserv/help.c:90
 #: modules/nickserv/set_core.c:45 modules/operserv/help.c:58
+#: modules/operserv/set.c:73
 msgid "***** End of Help *****"
 msgstr "***** Fin de la Ayuda *****"
 
@@ -441,6 +443,7 @@ msgstr "Configura opciones de un bot."
 
 #: modules/botserv/set_core.c:48 modules/chanserv/set_core.c:44
 #: modules/groupserv/set.c:49 modules/nickserv/set_core.c:31
+#: modules/operserv/set.c:62
 msgid "Help for SET:"
 msgstr "Ayuda para SET:"
 
@@ -502,6 +505,7 @@ msgstr "Sintaxis: SET <#canal> NOBOT {ON|OFF}"
 #: modules/chanserv/set_founder.c:62 modules/chanserv/status.c:77
 #: modules/chanserv/template.c:146 modules/chanserv/unban_self.c:80
 #: modules/chanserv/xop.c:94 modules/contrib/cs_fregister.c:68
+#: modules/contrib/ms_fsend.c:66 modules/contrib/os_joinmon.c:157
 #: modules/groupserv/fflags.c:46 modules/hostserv/offer.c:174
 #: modules/infoserv/main.c:278 modules/nickserv/access.c:215
 #: modules/nickserv/access.c:267 modules/nickserv/access.c:393
@@ -1111,20 +1115,6 @@ msgstr "No se encontró el veto %s en %s."
 msgid "Syntax: UNBAN <#channel> [nickname|hostmask]"
 msgstr "Sintaxis: UNBAN <#canal> [nick|máscara de host]"
 
-#: modules/chanserv/clear_bans.c:20
-msgid "Clears bans or other lists of a channel."
-msgstr "Limpia vetos u otras listas de un canal."
-
-#: modules/chanserv/clear_bans.c:56 modules/chanserv/clear_bans.c:62
-#, c-format
-msgid "Invalid mode; valid ones are %s."
-msgstr "Modo no válido; los modos permitidos son %s."
-
-#: modules/chanserv/clear_bans.c:107
-#, c-format
-msgid "Cleared %s modes on %s (%d removed)."
-msgstr "Se han limpiado modos %s en %s (%d removidos)."
-
 #: modules/chanserv/clear.c:21
 msgid "Channel removal toolkit."
 msgstr "Herramientas de limpieza de canales."
@@ -1145,6 +1135,20 @@ msgstr "Para mayor información, vea /msg %s HELP CLEAR comando."
 #: modules/chanserv/clear.c:67 modules/chanserv/clear.c:78
 msgid "Syntax: CLEAR <#channel> <command> [parameters]"
 msgstr "Sintaxis: CLEAR <#canal> <comando> [parámetros]"
+
+#: modules/chanserv/clear_bans.c:20
+msgid "Clears bans or other lists of a channel."
+msgstr "Limpia vetos u otras listas de un canal."
+
+#: modules/chanserv/clear_bans.c:56 modules/chanserv/clear_bans.c:62
+#, c-format
+msgid "Invalid mode; valid ones are %s."
+msgstr "Modo no válido; los modos permitidos son %s."
+
+#: modules/chanserv/clear_bans.c:107
+#, c-format
+msgid "Cleared %s modes on %s (%d removed)."
+msgstr "Se han limpiado modos %s en %s (%d removidos)."
 
 #: modules/chanserv/clear_flags.c:86
 #, c-format
@@ -2019,7 +2023,7 @@ msgid "%s is now registered to %s."
 msgstr "%s ahora se encuentra registrado por %s."
 
 #: modules/chanserv/set_core.c:21 modules/groupserv/set.c:24
-#: modules/nickserv/set_core.c:21
+#: modules/nickserv/set_core.c:21 modules/operserv/set.c:37
 msgid "Sets various control flags."
 msgstr "Modifica varios ajustes de un canal."
 
@@ -2975,6 +2979,61 @@ msgstr "No se encontró el nick %s en la lista de solicitudes de anuncios."
 msgid "You do not have a pending announcement to cancel."
 msgstr "Ud. no tiene una solicitud de anuncio que cancelar."
 
+#: modules/contrib/ms_fsend.c:26
+#, fuzzy
+msgid "Forcibly sends a memo to a user."
+msgstr "Envía un memo a un usuario."
+
+#: modules/contrib/ms_fsend.c:75 modules/memoserv/send.c:70
+#: modules/memoserv/sendgroup.c:72 modules/memoserv/sendops.c:71
+msgid ""
+"You have used this command too many times; please wait a while and try again."
+msgstr ""
+"Ud. ha usado este comando demasiadas veces; por favor espere unos instantes "
+"e inténtelo nuevamente."
+
+#: modules/contrib/ms_fsend.c:93 modules/memoserv/send.c:88
+#: modules/memoserv/sendgroup.c:90 modules/memoserv/sendops.c:89
+msgid "Your memo contains invalid characters."
+msgstr "Su memo contiene caracteres no válidos."
+
+#: modules/contrib/ms_fsend.c:118 modules/memoserv/send.c:122
+#, c-format
+msgid "%s's inbox is full"
+msgstr "La bandeja de entrada de %s está llena"
+
+#: modules/contrib/ms_fsend.c:152 modules/memoserv/forward.c:186
+#: modules/memoserv/send.c:176
+#, c-format
+msgid ""
+"%s is currently online, and you may talk directly, by sending a private "
+"message."
+msgstr ""
+"%s se encuentra en línea, y puede hablar directamente enviándole un mensaje "
+"privado."
+
+#: modules/contrib/ms_fsend.c:159 modules/memoserv/forward.c:192
+#: modules/memoserv/send.c:183 modules/memoserv/sendgroup.c:172
+#: modules/memoserv/sendops.c:183
+#, c-format
+msgid "To read it, type /%s%s READ %zu"
+msgstr "Para leerlo, escriba /%s%s READ %zu"
+
+#: modules/contrib/ms_fsend.c:163 modules/memoserv/send.c:144
+#: modules/memoserv/send.c:187
+#, c-format
+msgid "The memo has been successfully sent to %s."
+msgstr "El memo ha sido enviado a %s con éxito."
+
+#: modules/contrib/ms_fsend.c:167
+#, fuzzy
+msgid "Channel memos may not be forced."
+msgstr "El canal %s no está registrado."
+
+#: modules/contrib/ms_fsend.c:171
+msgid "Group memos may not be forced."
+msgstr ""
+
 #: modules/contrib/ns_fenforce.c:41
 msgid "Syntax: FENFORCE <account> ON|OFF"
 msgstr "Sintaxis: FENFORCE <cuenta> ON|OFF"
@@ -3109,6 +3168,46 @@ msgstr "Le convierte en un ayudante de red."
 msgid "You are now a network helper."
 msgstr "Ahora es un ayudante de red."
 
+#: modules/contrib/os_joinmon.c:24
+msgid "Monitors what channels a user is joining."
+msgstr ""
+
+#: modules/contrib/os_joinmon.c:142
+#, fuzzy
+msgid "Syntax: JOINMON ADD|DEL|LIST [parameters]"
+msgstr "Sintaxis: BADMAIL ADD|DEL|LIST [parámetros]"
+
+#: modules/contrib/os_joinmon.c:151
+#, fuzzy
+msgid "Syntax: JOINMON ADD <pattern> [reason]"
+msgstr "Sintaxis: IGNORE ADD <máscara> <razón>"
+
+#: modules/contrib/os_joinmon.c:168
+#, fuzzy, c-format
+msgid "Pattern %s is already being monitored."
+msgstr "%s ya se encuentra registrado."
+
+#: modules/contrib/os_joinmon.c:185 modules/nickserv/badmail.c:174
+msgid "None"
+msgstr "Ninguno"
+
+#: modules/contrib/os_joinmon.c:192
+#, fuzzy, c-format
+msgid "%s is now being monitored."
+msgstr "%s no está registrado."
+
+#: modules/contrib/os_joinmon.c:200
+#, fuzzy
+msgid "Syntax: JOINMON DEL <pattern>"
+msgstr "Sintaxis: INJECT <parámetros>"
+
+#: modules/contrib/os_joinmon.c:222
+#, fuzzy, c-format
+msgid "Pattern %s not found in joinmon database."
+msgstr ""
+"No se encontró el patrón de direcciones de email %s en la lista de "
+"denegación de registro."
+
 #: modules/contrib/os_klinechan.c:211
 #, c-format
 msgid "No K:line channels matched pattern %s"
@@ -3127,6 +3226,21 @@ msgstr "%d resultado para el patrón %s"
 #, c-format
 msgid "%d matches for pattern %s"
 msgstr "%d resultados para el patrón %s"
+
+#: modules/contrib/os_modeall.c:21
+#, fuzzy
+msgid "Changes modes on all channels."
+msgstr "Cambia modos de canal."
+
+#: modules/contrib/os_modeall.c:50
+#, fuzzy
+msgid "Syntax: MODEALL <parameters>"
+msgstr "Sintaxis: RAW <parámetros>"
+
+#: modules/contrib/os_modeall.c:62
+#, fuzzy, c-format
+msgid "Set modes %s on %d channels."
+msgstr "Modos %s establecidos en %s."
 
 #: modules/contrib/os_procwatch.c:76 modules/contrib/os_procwatch.c:85
 msgid "Syntax: PROCWATCH <pid>"
@@ -3439,6 +3553,72 @@ msgstr "Sintaxis: DF <dados>"
 #, c-format
 msgid "Result: %s"
 msgstr "Resultado: %s"
+
+#: modules/gameserv/happyfarm.c:275
+msgid "Welcome to Happy Farm!  May your farm be lucky."
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:276
+#, c-format
+msgid "You have started with %d money.  For help, use /msg %s HELP HAPPYFARM."
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:279
+msgid "Join the Happy Farm game!"
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:297 modules/gameserv/happyfarm.c:334
+#, c-format
+msgid ""
+"You do not appear to be playing Happy Farm.  To join the game, use /msg %s "
+"HAPPYFARM JOIN."
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:304
+msgid "You don't have enough money to buy a plot of land."
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:311
+msgid "You have bought a plot of land!"
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:312 modules/gameserv/happyfarm.c:348
+#, fuzzy, c-format
+msgid "You have %d money available."
+msgstr "%d bots disponibles."
+
+#: modules/gameserv/happyfarm.c:315
+msgid "Buy a plot of land!"
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:340
+#, fuzzy
+msgid "You do not have any vacant plots at this time."
+msgstr "Ud. no tiene una solicitud de anuncio que cancelar."
+
+#: modules/gameserv/happyfarm.c:347
+#, fuzzy
+msgid "You have sold a plot of land."
+msgstr "Ud. no tiene memos para redirigir."
+
+#: modules/gameserv/happyfarm.c:351
+msgid "Sell a vacant plot of land."
+msgstr ""
+
+#: modules/gameserv/happyfarm.c:365 modules/nickserv/set_core.c:60
+#: modules/operserv/set.c:88
+msgid "Syntax: SET <setting> <parameters>"
+msgstr "Sintaxis: SET <ajuste> <parámetros>"
+
+#: modules/gameserv/happyfarm.c:376
+#, fuzzy, c-format
+msgid "Invalid command. Use /%s%s HELP HAPPYFARM for a command listing."
+msgstr ""
+"Comando de ajuste no válido. Vea /%s%s HELP SET para una lista de comandos."
+
+#: modules/gameserv/happyfarm.c:380
+msgid "Happy Farm!"
+msgstr ""
 
 #: modules/gameserv/help.c:40
 #, c-format
@@ -4388,21 +4568,6 @@ msgstr ""
 msgid "The memo has been successfully forwarded to %s."
 msgstr "El memo ha sido redirigido a %s exitosamente."
 
-#: modules/memoserv/forward.c:186 modules/memoserv/send.c:176
-#, c-format
-msgid ""
-"%s is currently online, and you may talk directly, by sending a private "
-"message."
-msgstr ""
-"%s se encuentra en línea, y puede hablar directamente enviándole un mensaje "
-"privado."
-
-#: modules/memoserv/forward.c:192 modules/memoserv/send.c:183
-#: modules/memoserv/sendgroup.c:172 modules/memoserv/sendops.c:183
-#, c-format
-msgid "To read it, type /%s%s READ %zu"
-msgstr "Para leerlo, escriba /%s%s READ %zu"
-
 #: modules/memoserv/help.c:40
 #, c-format
 msgid "%s allows users to send memos to registered users."
@@ -4553,29 +4718,6 @@ msgstr "%d memos leídos."
 msgid "Sends a memo to a user."
 msgstr "Envía un memo a un usuario."
 
-#: modules/memoserv/send.c:70 modules/memoserv/sendgroup.c:72
-#: modules/memoserv/sendops.c:71
-msgid ""
-"You have used this command too many times; please wait a while and try again."
-msgstr ""
-"Ud. ha usado este comando demasiadas veces; por favor espere unos instantes "
-"e inténtelo nuevamente."
-
-#: modules/memoserv/send.c:88 modules/memoserv/sendgroup.c:90
-#: modules/memoserv/sendops.c:89
-msgid "Your memo contains invalid characters."
-msgstr "Su memo contiene caracteres no válidos."
-
-#: modules/memoserv/send.c:122
-#, c-format
-msgid "%s's inbox is full"
-msgstr "La bandeja de entrada de %s está llena"
-
-#: modules/memoserv/send.c:144 modules/memoserv/send.c:187
-#, c-format
-msgid "The memo has been successfully sent to %s."
-msgstr "El memo ha sido enviado a %s con éxito."
-
 #: modules/memoserv/send.c:195
 msgid "Channel memos are administratively disabled."
 msgstr "Los memos de canal han sido desactivados por la administración."
@@ -4692,10 +4834,6 @@ msgstr "Sintaxis: BADMAIL ADD <email> [razón]"
 #, c-format
 msgid "Email %s has already been banned."
 msgstr "La dirección de email %s ya ha sido vetada."
-
-#: modules/nickserv/badmail.c:174
-msgid "None"
-msgstr "Ninguno"
 
 #: modules/nickserv/badmail.c:181
 #, c-format
@@ -5475,8 +5613,8 @@ msgstr "Por favor cambie a un nick real e inténtelo nuevamente."
 msgid "The account name %s is invalid."
 msgstr "El nombre de cuenta %s no es válido."
 
-#: modules/nickserv/register.c:118 modules/nickserv/setpass.c:72
-#: modules/nickserv/set_password.c:63
+#: modules/nickserv/register.c:118 modules/nickserv/set_password.c:63
+#: modules/nickserv/setpass.c:72
 msgid "You cannot use your nickname as a password."
 msgstr "Ud. no puede usar su nick como contraseña."
 
@@ -5759,16 +5897,12 @@ msgstr ""
 "que cambian el modo en que ciertas operaciones\n"
 "funcionan en ellos."
 
-#: modules/nickserv/set_core.c:44
+#: modules/nickserv/set_core.c:44 modules/operserv/set.c:72
 #, c-format
 msgid "For more information, use /msg %s HELP SET command."
 msgstr "Para más información, vea /msg %s HELP SET comando."
 
-#: modules/nickserv/set_core.c:60
-msgid "Syntax: SET <setting> <parameters>"
-msgstr "Sintaxis: SET <ajuste> <parámetros>"
-
-#: modules/nickserv/set_core.c:71
+#: modules/nickserv/set_core.c:71 modules/operserv/set.c:99
 #, c-format
 msgid "Invalid set command. Use /%s%s HELP SET for a command listing."
 msgstr ""
@@ -5897,26 +6031,6 @@ msgstr "Desactiva la capacidad de recibir memos."
 msgid "Prevents services from setting modes upon you automatically."
 msgstr "Previene que servicios establezca modos en Ud. automáticamente."
 
-#: modules/nickserv/setpass.c:21
-msgid "Changes a password using an authcode."
-msgstr "Cambia una contraseña utilizando un código de autenticación."
-
-#: modules/nickserv/setpass.c:47 modules/nickserv/setpass.c:54
-#: modules/nickserv/setpass.c:73
-msgid "Syntax: SETPASS <account> <key> <newpass>"
-msgstr "Sintaxis: SETPASS <cuenta> <clave> <nueva contraseña>"
-
-#: modules/nickserv/setpass.c:84 modules/nickserv/set_password.c:72
-#, c-format
-msgid "The password for %s has been changed to %s."
-msgstr "La contraseña para %s ha sido cambiada a %s."
-
-#: modules/nickserv/setpass.c:93 modules/nickserv/verify.c:103
-#: modules/nickserv/verify.c:134
-#, c-format
-msgid "Verification failed. Invalid key for %s."
-msgstr "Falló la verificación. Clave no válida para %s."
-
 #: modules/nickserv/set_password.c:24
 msgid "Changes the password associated with your account."
 msgstr "Cambia la contraseña asociada con su cuenta."
@@ -5928,6 +6042,11 @@ msgstr "Ud. debe cambiar la contraseña en el sistema externo."
 #: modules/nickserv/set_password.c:64
 msgid "Syntax: SET PASSWORD <new password>"
 msgstr "Sintaxis: SET PASSWORD <nueva contraseña>"
+
+#: modules/nickserv/set_password.c:72 modules/nickserv/setpass.c:84
+#, c-format
+msgid "The password for %s has been changed to %s."
+msgstr "La contraseña para %s ha sido cambiada a %s."
 
 #: modules/nickserv/set_private.c:70
 msgid "Hides information about you from other users."
@@ -5948,6 +6067,21 @@ msgstr "Sintaxis: SET PROPERTY <propiedad> [valor]"
 #: modules/nickserv/set_quietchg.c:24
 msgid "Allows you to opt-out of channel change messages."
 msgstr "Le permite rechazar mensajes de cambio de estado en canales."
+
+#: modules/nickserv/setpass.c:21
+msgid "Changes a password using an authcode."
+msgstr "Cambia una contraseña utilizando un código de autenticación."
+
+#: modules/nickserv/setpass.c:47 modules/nickserv/setpass.c:54
+#: modules/nickserv/setpass.c:73
+msgid "Syntax: SETPASS <account> <key> <newpass>"
+msgstr "Sintaxis: SETPASS <cuenta> <clave> <nueva contraseña>"
+
+#: modules/nickserv/setpass.c:93 modules/nickserv/verify.c:103
+#: modules/nickserv/verify.c:134
+#, c-format
+msgid "Verification failed. Invalid key for %s."
+msgstr "Falló la verificación. Clave no válida para %s."
 
 #: modules/nickserv/status.c:21
 msgid "Displays session information."
@@ -7509,6 +7643,244 @@ msgstr "Opciones para %s no cambiadas."
 #, c-format
 msgid "Set options %s on %s."
 msgstr "Opciones %s establecidas en %s."
+
+#: modules/operserv/set.c:38
+msgid "Changes IRCd reconnect delay."
+msgstr ""
+
+#: modules/operserv/set.c:39
+#, fuzzy
+msgid ""
+"Changes the maximum number of users that may be logged in to one account."
+msgstr ""
+"Máximo número de usuarios que pueden ser registrados por una misma dirección "
+"de email: %d"
+
+#: modules/operserv/set.c:40
+#, fuzzy
+msgid "Changes the maximum number of nicks that one account may own."
+msgstr "Número máximo de nicks que pueden pertenecer a un usuario: %d"
+
+#: modules/operserv/set.c:41
+msgid ""
+"Changes the maximum number of accounts that one email address may have "
+"registered."
+msgstr ""
+
+#: modules/operserv/set.c:42
+#, fuzzy
+msgid "Changes the maximum number of channels one account may own."
+msgstr "Número máximo de canales que pueden pertenecer a un usuario: %d"
+
+#: modules/operserv/set.c:43
+msgid "Sets the maximum amount of metadata one channel or account may have."
+msgstr ""
+
+#: modules/operserv/set.c:44
+msgid "Sets the default KLINE/AKILL time."
+msgstr ""
+
+#: modules/operserv/set.c:45
+msgid "Changes how often the database is written to disk."
+msgstr ""
+
+#: modules/operserv/set.c:46
+#, fuzzy
+msgid "Sets when unused channels expire."
+msgstr "Establece la dirección de email del canal."
+
+#: modules/operserv/set.c:47
+#, fuzzy
+msgid "Changes the maximum number of channel access list entries per channel."
+msgstr "Número máximo de canales que pueden pertenecer a un usuario: %d"
+
+#: modules/operserv/set.c:48
+#, fuzzy
+msgid "Sets the maximum number of founders per channel."
+msgstr "Número máximo de fundadores permitidos por canal: %d"
+
+#: modules/operserv/set.c:49
+msgid "Sets the default AKICK time."
+msgstr ""
+
+#: modules/operserv/set.c:50
+msgid "Changes whether service spams unregistered users on connect."
+msgstr ""
+
+#: modules/operserv/set.c:51
+msgid "Sets when unused nicks and accounts expire."
+msgstr ""
+
+#: modules/operserv/set.c:52
+msgid "Changes the prefix to use when changing the user's nick on enforcement."
+msgstr ""
+
+#: modules/operserv/set.c:64
+#, fuzzy
+msgid ""
+"SET allows you to set various control flags\n"
+"for services that changes the way certain\n"
+"operations are performed."
+msgstr ""
+"SET le permite cambiar varios ajustes de nicks\n"
+"que cambian el modo en que ciertas operaciones\n"
+"funcionan en ellos."
+
+#: modules/operserv/set.c:67
+msgid ""
+"Note that all settings will be reset to the values\n"
+"in the configuration file on rehash or services restart."
+msgstr ""
+
+#: modules/operserv/set.c:110
+#, fuzzy
+msgid "Syntax: SET RECONTIME <seconds>"
+msgstr "Sintaxis: SET ACCOUNTNAME <nick>"
+
+#: modules/operserv/set.c:118
+#, fuzzy, c-format
+msgid "RECONTIME must be a positive integer, %s is invalid"
+msgstr "Ud. debe especificar un entero positivo para el límite."
+
+#: modules/operserv/set.c:136
+#, fuzzy
+msgid "Syntax: SET MAXLOGINS <value>"
+msgstr "Sintaxis: LISTMAIL <email>"
+
+#: modules/operserv/set.c:144
+#, fuzzy, c-format
+msgid "%s is invalid for MAXLOGINS value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:162
+#, fuzzy
+msgid "Syntax: SET MAXUSERS <value>"
+msgstr "Sintaxis: RESETPASS <cuenta>"
+
+#: modules/operserv/set.c:170
+#, fuzzy, c-format
+msgid "%s is invalid for MAXUSERS value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:188
+#, fuzzy
+msgid "Syntax: SET MAXNICKS <value>"
+msgstr "Sintaxis: LISTMAIL <email>"
+
+#: modules/operserv/set.c:196
+#, fuzzy, c-format
+msgid "%s is invalid for MAXNICKS value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:214
+#, fuzzy
+msgid "Syntax: SET MAXCHANS <value>"
+msgstr "Sintaxis: SET EMAIL <nuevo e-mail>"
+
+#: modules/operserv/set.c:222
+#, fuzzy, c-format
+msgid "%s is invalid for MAXCHANS value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:240
+#, fuzzy
+msgid "Syntax: SET MDLIMIT <value>"
+msgstr "Sintaxis: SET EMAIL <nuevo e-mail>"
+
+#: modules/operserv/set.c:248
+#, fuzzy, c-format
+msgid "%s is invalid for MDLIMIT value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:266
+#, fuzzy
+msgid "Syntax: SET KLINETIME <days>"
+msgstr "Sintaxis: SGLINE DEL <gecos>"
+
+#: modules/operserv/set.c:274
+#, fuzzy, c-format
+msgid "KLINETIME must be a positive integer, %s is invalid"
+msgstr "Ud. debe especificar un entero positivo para el límite."
+
+#: modules/operserv/set.c:293
+#, fuzzy
+msgid "Syntax: SET COMMITINTERVAL <minutes>"
+msgstr "Sintaxis: SET ACCOUNTNAME <nick>"
+
+#: modules/operserv/set.c:301
+#, c-format
+msgid "COMMITINTERVAL must be a positive integer, %s is invalid"
+msgstr ""
+
+#: modules/operserv/set.c:320
+#, fuzzy
+msgid "Syntax: SET CHANEXPIRE <days>"
+msgstr "Sintaxis: TAKE <vhost>"
+
+#: modules/operserv/set.c:328
+#, fuzzy, c-format
+msgid "CHANEXPIRE must be a positive integer, %s is invalid"
+msgstr "Ud. debe especificar un entero positivo para el límite."
+
+#: modules/operserv/set.c:347
+#, fuzzy
+msgid "Syntax: SET MAXCHANACS <value>"
+msgstr "Sintaxis: SENDPASS <cuenta>"
+
+#: modules/operserv/set.c:355
+#, fuzzy, c-format
+msgid "%s is invalid for MAXCHANACS value."
+msgstr "%s no es un nombre real válido."
+
+#: modules/operserv/set.c:373
+#, fuzzy
+msgid "Syntax: SET MAXFOUNDERS <value>"
+msgstr "Sintaxis: SET ACCOUNTNAME <nick>"
+
+#: modules/operserv/set.c:384
+#, c-format
+msgid "%s is invalid for MAXFOUNDERS value."
+msgstr ""
+
+#: modules/operserv/set.c:402
+#, fuzzy
+msgid "Syntax: SET AKICKTIME <minutes>"
+msgstr "Sintaxis: SET ACCOUNTNAME <nick>"
+
+#: modules/operserv/set.c:410
+#, fuzzy, c-format
+msgid "AKICKTIME must be a positive integer, %s is invalid"
+msgstr "Ud. debe especificar un entero positivo para el límite."
+
+#: modules/operserv/set.c:429
+#, fuzzy
+msgid "Syntax: SET SPAM <TRUE|FALSE>"
+msgstr "Sintaxis: SET ENFORCETIME <tiempo>|DEFAULT"
+
+#: modules/operserv/set.c:437 modules/operserv/set.c:450
+#, fuzzy, c-format
+msgid "SPAM directive is already set to %s."
+msgstr "Su nombre de cuenta ya es %s."
+
+#: modules/operserv/set.c:442 modules/operserv/set.c:455
+#, fuzzy, c-format
+msgid "SPAM directive has been successfully set to %s."
+msgstr "El memo ha sido enviado a %s con éxito."
+
+#: modules/operserv/set.c:473
+#, fuzzy
+msgid "Syntax: SET NICKEXPIRE <days>"
+msgstr "Sintaxis: TAKE <vhost>"
+
+#: modules/operserv/set.c:481
+#, fuzzy, c-format
+msgid "NICKEXPIRE must be a positive integer, %s is invalid"
+msgstr "Ud. debe especificar un entero positivo para el límite."
+
+#: modules/operserv/set.c:500
+#, fuzzy
+msgid "Syntax: SET ENFORCEPREFIX <prefix>"
+msgstr "Sintaxis: SET ENFORCE ON|OFF"
 
 #: modules/operserv/sgline.c:27
 msgid "Manages network realname bans."
