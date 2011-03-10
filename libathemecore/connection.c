@@ -47,6 +47,8 @@ static int socket_setnonblocking(int sck)
 {
 	int flags;
 
+	slog(LG_DEBUG, "socket_setnonblocking(): setting file descriptor %d as non-blocking", sck);
+
 	flags = fcntl(sck, F_GETFL, 0);
 	flags |= O_NONBLOCK;
 
@@ -106,6 +108,8 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 		inet_ntop(cptr->saddr.sa.sa_family,
 			  &cptr->saddr.sin6.sin6_addr,
 			  cptr->hbuf, BUFSIZE);
+
+		socket_setnonblocking(cptr->fd);
 	}
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
