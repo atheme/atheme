@@ -75,12 +75,14 @@ static inline struct Blacklist *listed_in_dnsbl(user_t *u)
 
         blptr = privatedata_get(u, "dnsbl:listed");
         if (blptr != NULL)
-                return blptr;
-
-        privatedata_set(u, "dnsbl:listed", blptr);
+	{
+		privatedata_set(u, "dnsbl:listed", blptr);
+		return blptr;
+	}
 
         return blptr;
 }
+
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *act = parv[0];
