@@ -250,14 +250,14 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 
-		si = sourceinfo_create(si);
+		si = sourceinfo_create();
 		si->service = NULL;
 		si->sourcedesc = parv[2] != NULL && *parv[2] ? parv[2] : NULL;
 		si->connection = conn;
 		si->v = &xmlrpc_vtable;
 		si->force_language = language_find("en");
 
-		bad_password(&si, mu);
+		bad_password(si, mu);
 
 		object_unref(si);
 
@@ -401,14 +401,14 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	if (newparc > 0)
 		memcpy(newparv, parv + 5, newparc * sizeof(parv[0]));
 
-	si = sourceinfo_create(si);
+	si = sourceinfo_create();
 	si->smu = mu;
 	si->service = svs;
 	si->sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
 	si->connection = conn;
 	si->v = &xmlrpc_vtable;
 	si->force_language = language_find("en");
-	command_exec(svs, &si, cmd, newparc, newparv);
+	command_exec(svs, si, cmd, newparc, newparv);
 
 	/* XXX: needs to be fixed up for restartable commands... */
 	if (!hd->sent_reply)

@@ -182,7 +182,7 @@ void irc_parse(char *line)
 			}
 			if (pcmd->handler)
 			{
-				pcmd->handler(&si, parc, parv);
+				pcmd->handler(si, parc, parv);
 			}
 		}
 	}

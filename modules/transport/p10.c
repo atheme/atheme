@@ -85,13 +85,13 @@ static void p10_parse(char *line)
 				if (*origin == ':')
 				{
 					origin++;
-                                	si.s = server_find(origin);
-                                	si.su = user_find_named(origin);
+                                	si->s = server_find(origin);
+                                	si->su = user_find_named(origin);
 				}
 				else
 				{
-                                	si.s = server_find(origin);
-                                	si.su = user_find(origin);
+                                	si->s = server_find(origin);
+                                	si->su = user_find(origin);
 				}
 
 				if ((message = strchr(pos, ' ')))
@@ -113,22 +113,22 @@ static void p10_parse(char *line)
 			}
 		}
 
-                if (!si.s && !si.su && me.recvsvr)
+                if (!si->s && !si->su && me.recvsvr)
                 {
                         slog(LG_DEBUG, "p10_parse(): got message from nonexistant user or server: %s", origin);
                         goto cleanup;
                 }
-		if (si.s == me.me)
+		if (si->s == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from myself %s: %s", si.s->name, coreLine);
+                        slog(LG_INFO, "p10_parse(): got message supposedly from myself %s: %s", si->s->name, coreLine);
                         goto cleanup;
 		}
-		if (si.su != NULL && si.su->server == me.me)
+		if (si->su != NULL && si->su->server == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client %s: %s", si.su->nick, coreLine);
+                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client %s: %s", si->su->nick, coreLine);
                         goto cleanup;
 		}
-		si.smu = si.su != NULL ? si.su->myuser : NULL;
+		si->smu = si->su != NULL ? si->su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
@@ -160,14 +160,14 @@ static void p10_parse(char *line)
 		/* take the command through the hash table */
 		if ((pcmd = pcommand_find(command)))
 		{
-			if (si.su && !(pcmd->sourcetype & MSRC_USER))
+			if (si->su && !(pcmd->sourcetype & MSRC_USER))
 			{
-				slog(LG_INFO, "p10_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
+				slog(LG_INFO, "p10_parse(): user %s sent disallowed command %s", si->su->nick, pcmd->token);
 				goto cleanup;
 			}
-			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
+			else if (si->s && !(pcmd->sourcetype & MSRC_SERVER))
 			{
-				slog(LG_INFO, "p10_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
+				slog(LG_INFO, "p10_parse(): server %s sent disallowed command %s", si->s->name, pcmd->token);
 				goto cleanup;
 			}
 			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
@@ -182,7 +182,7 @@ static void p10_parse(char *line)
 			}
 			if (pcmd->handler)
 			{
-				pcmd->handler(&si, parc, parv);
+				pcmd->handler(si, parc, parv);
 			}
 		}
 	}
