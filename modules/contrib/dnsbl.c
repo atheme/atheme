@@ -75,12 +75,9 @@ static inline struct Blacklist *listed_in_dnsbl(user_t *u)
 
         blptr = privatedata_get(u, "dnsbl:listed");
         if (blptr != NULL)
-	{
-		privatedata_set(u, "dnsbl:listed", blptr);
 		return blptr;
-	}
 
-        return blptr;
+        return NULL;
 }
 
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
@@ -165,11 +162,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 
 	/* they have a blacklist entry for this client */
 	if (listed && dnsbl_listed == NULL)
-	{
-		dnsbl_listed = blcptr->blacklist;
-		privatedata_set(blcptr->u, "dnsbl:listed", blcptr->blacklist);
-		/* reference to blacklist moves from blcptr to u */
-	}
+		privatedata_set(blcptr->u, "dnsbl:listed", dnsbl_listed);
 	else
 		unref_blacklist(blcptr->blacklist);
 
