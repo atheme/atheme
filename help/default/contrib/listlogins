@@ -6,4 +6,4 @@ their nick!user@host mask and their real host.
 Syntax: LISTLOGINS
 
 Examples:
-	/msg &nick& LISTLOGINS
+    /msg &nick& LISTLOGINS

@@ -6,4 +6,4 @@ having it reply with "Pong!".
 Syntax: PING
 
 Examples:
-	/msg &nick& PING
+    /msg &nick& PING

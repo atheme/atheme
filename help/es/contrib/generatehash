@@ -6,4 +6,4 @@ GENERATEHASH genera un hash de contraseña para Atheme. Esto es
 Sintaxis: GENERATEHASH <contraseña>
 
 Ejemplos:
-	/msg &nick& GENERATEHASH EsTaC0ntras3ña
+    /msg &nick& GENERATEHASH EsTaC0ntras3ña

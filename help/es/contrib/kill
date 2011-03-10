@@ -8,4 +8,4 @@ por Servicios.
 Sintaxis: KILL <objeto> <razón>
 
 Ejemplos:
-	/msg &nick& KILL jdhore Buu!
+    /msg &nick& KILL jdhore Buu!

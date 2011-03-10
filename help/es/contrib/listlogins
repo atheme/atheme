@@ -6,4 +6,4 @@ como Ud. incluyendo su máscara nick!usuario@host y su host real.
 Sintaxis: LISTLOGINS
 
 Ejemplos:
-	/msg &nick& LISTLOGINS
+    /msg &nick& LISTLOGINS

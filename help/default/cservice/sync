@@ -7,4 +7,4 @@ run this command.
 Syntax: SYNC <#channel>
 
 Examples:
-	/msg &nick& SYNC #bar
+    /msg &nick& SYNC #bar

@@ -5,5 +5,5 @@ LISTKLINECHAN lists all (or a pattern of) channels with a active KLINECHAN on th
 Syntax: LISTKLINECHAN [pattern]
 
 Examples:
-	/msg &nick& LISTKLINECHAN
-	/msg &nick& LISTKLINECHAN #lame*
+    /msg &nick& LISTKLINECHAN
+    /msg &nick& LISTKLINECHAN #lame*

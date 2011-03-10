@@ -6,4 +6,4 @@ canal, similar al canal snoop.
 Sintaxis: LOGSTREAM <#canal>
 
 Ejemplos:
-	/msg &nick& LOGSTREAM #servicios
+    /msg &nick& LOGSTREAM #servicios

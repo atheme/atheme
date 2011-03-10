@@ -6,4 +6,4 @@ sólo puede ser compilado y utilizado con FreeBSD 4.1 y versiones posteriores.
 Sintaxis: PROCWATCH <id. de proceso>
 
 Ejemplos:
-	/msg &nick& PROCWATCH 1234
+    /msg &nick& PROCWATCH 1234

@@ -5,4 +5,4 @@ Cancela un anuncio pendiente.
 Sintaxis: CANCEL
 
 Ejemplos:
-	/msg &nick& CANCEL
+    /msg &nick& CANCEL

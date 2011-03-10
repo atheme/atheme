@@ -5,4 +5,4 @@ UP le otorga todo el acceso al cual está autorizado en un canal especificado.
 Sintaxis: UP <#canal>
 
 Ejemplos:
-	/msg &nick& UP #abc
+    /msg &nick& UP #abc
