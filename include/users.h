@@ -36,6 +36,9 @@ struct user_
 	mowgli_node_t snode; /* for server_t.userlist */
 
 	char *certfp; /* client certificate fingerprint */
+
+	mowgli_list_t dnsbl_queries; /* list of struct BlacklistClient * */
+	struct Blacklist *dnsbl_listed; /* first dnsbl where it's listed */
 };
 
 #define FLOOD_MSGS_FACTOR 256

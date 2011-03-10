@@ -151,6 +151,24 @@ E char *timediff(time_t seconds);
 E int sjtoken(char *message, char delimiter, char **parv);
 E int tokenize(char *message, char **parv);
 
+/* dnsbl.c */
+/* A configured DNSBL */
+struct Blacklist {
+	unsigned int status;	/* If CONF_ILLEGAL, delete when no clients */
+	int refcount;
+	char host[IRCD_RES_HOSTLEN + 1];
+	unsigned int hits;
+	time_t lastwarning;
+};
+
+/* A lookup in progress for a particular DNSBL for a particular client */
+struct BlacklistClient {
+	struct Blacklist *blacklist;
+	user_t *u;
+	dns_query_t dns_query;
+	mowgli_node_t node;
+};
+
 /* ubase64.c */
 E const char *uinttobase64(char *buf, uint64_t v, int64_t count);
 E unsigned int base64touint(const char *buf);
