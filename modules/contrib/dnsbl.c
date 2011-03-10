@@ -51,7 +51,36 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "contrib/set_dnsblaction" } };
 
+static inline mowgli_list_t *dnsbl_queries(user_t *u)
+{
+        mowgli_list_t *l;
 
+        return_val_if_fail(u != NULL, NULL);
+
+        l = privatedata_get(u, "dnsbl:queries");
+        if (l != NULL)
+                return l;
+
+        l = mowgli_list_create();
+        privatedata_set(u, "dnsbl:queries", l);
+
+        return l;
+}
+
+static inline struct Blacklist *listed_in_dnsbl(user_t *u)
+{
+        struct Blacklist *blptr;
+
+        return_val_if_fail(u != NULL, NULL);
+
+        blptr = privatedata_get(u, "dnsbl:listed");
+        if (blptr != NULL)
+                return blptr;
+
+        privatedata_set(u, "dnsbl:listed", blptr);
+
+        return blptr;
+}
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *act = parv[0];
@@ -104,6 +133,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;
+	mowgli_list_t *l;
 
 	if (blcptr == NULL)
 		return;
@@ -129,16 +159,20 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		}
 	}
 
+	struct Blacklist *dnsbl_listed = listed_in_dnsbl(blcptr->u);
+
 	/* they have a blacklist entry for this client */
-	if (listed && blcptr->u->dnsbl_listed == NULL)
+	if (listed && dnsbl_listed == NULL)
 	{
-		blcptr->u->dnsbl_listed = blcptr->blacklist;
+		dnsbl_listed = blcptr->blacklist;
 		/* reference to blacklist moves from blcptr to u */
 	}
 	else
 		unref_blacklist(blcptr->blacklist);
 
-	mowgli_node_delete(&blcptr->node, &blcptr->u->dnsbl_queries);
+
+	l = dnsbl_queries(blcptr->u);
+	mowgli_node_delete(&blcptr->node, l);
 
 	free(blcptr);
 }
@@ -149,6 +183,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 	struct BlacklistClient *blcptr = malloc(sizeof(struct BlacklistClient));
 	char buf[IRCD_RES_HOSTLEN + 1];
 	int ip[4];
+	mowgli_list_t *l;
 
 	blcptr->blacklist = blptr;
 	blcptr->u = u;
@@ -164,7 +199,8 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 
 	gethost_byname_type(buf, &blcptr->dns_query, T_A);
 
-	mowgli_node_add(blcptr, &blcptr->node, &u->dnsbl_queries);
+	l = dnsbl_queries(u);
+	mowgli_node_add(blcptr, &blcptr->node, l);
 	blptr->refcount++;
 }
 
@@ -223,15 +259,18 @@ static void lookup_blacklists(user_t *u)
 static void abort_blacklist_queries(user_t *u)
 {
 	mowgli_node_t *n, *tn;
+	mowgli_list_t *l;
 	struct BlacklistClient *blcptr;
 
 	if (u == NULL)
 		return;
 
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, u->dnsbl_queries.head)
+	l = dnsbl_queries(u);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
 		blcptr = n->data;
-		mowgli_node_delete(&blcptr->node, &u->dnsbl_queries);
+		mowgli_node_delete(&blcptr->node, l);
 		unref_blacklist(blcptr->blacklist);
 		delete_resolver_queries(&blcptr->dns_query);
 		free(blcptr);
@@ -273,8 +312,9 @@ static void dnsbl_config_purge(void *unused)
 
 static void check_dnsbls(hook_user_nick_t *data)
 {
-    user_t *u = data->u;
+	user_t *u = data->u;
 	service_t *svs;
+	mowgli_list_t *l;
 
     if (!u)
         return;
@@ -287,11 +327,14 @@ static void check_dnsbls(hook_user_nick_t *data)
 
 	lookup_blacklists(u);
 
+	l = dnsbl_queries(u);
+	struct Blacklist *dnsbl_listed = listed_in_dnsbl(u);
+
 	svs = service_find("operserv");
 
-	if (MOWGLI_LIST_LENGTH(&u->dnsbl_queries) > 0)
+	if (MOWGLI_LIST_LENGTH(l) > 0)
 	{
-		if (u->dnsbl_listed == NULL)
+		if (dnsbl_listed == NULL)
 			return;
 
 		if (!strcasecmp("SNOOP", action))
@@ -302,15 +345,15 @@ static void check_dnsbls(hook_user_nick_t *data)
 		}
 		else if (!strcasecmp("NOTIFY", action))
 		{
-			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, u->dnsbl_listed->host);
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, u->dnsbl_listed->host);
+			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, dnsbl_listed->host);
+			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, dnsbl_listed->host);
 			abort_blacklist_queries(u);
 			return;
 		}
 		else if (!strcasecmp("KLINE", action))
 		{
-			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, u->dnsbl_listed->host);
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, u->dnsbl_listed->host);
+			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, dnsbl_listed->host);
+			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, dnsbl_listed->host);
 			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
 			abort_blacklist_queries(u);
 			return;
