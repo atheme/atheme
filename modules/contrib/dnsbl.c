@@ -151,7 +151,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		/* only accept 127.x.y.z as a listing */
 		if (reply->addr.saddr.sa.sa_family == AF_INET &&
 				!memcmp(&((struct sockaddr_in *)&reply->addr)->sin_addr, "\177", 1))
-			listed = TRUE;
+			listed++;
 		else if (blcptr->blacklist->lastwarning + 3600 < CURRTIME)
 		{
 			slog(LG_DEBUG,
@@ -167,6 +167,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 	if (listed && dnsbl_listed == NULL)
 	{
 		dnsbl_listed = blcptr->blacklist;
+		privatedata_set(blcptr->u, "dnsbl:listed", blcptr->blacklist);
 		/* reference to blacklist moves from blcptr to u */
 	}
 	else
@@ -197,7 +198,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 	sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]); 
 
 	/* becomes 2.0.0.127.torbl.ahbl.org or whatever */
-	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[3], ip[2], ip[1], ip[0], blptr->host);
+	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
 
 	gethost_byname_type(buf, &blcptr->dns_query, T_A);
 
