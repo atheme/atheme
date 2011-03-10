@@ -40,7 +40,7 @@ static void resolve_cb(void *vptr, dns_reply_t *reply)
 	if (reply->addr.saddr.sa.sa_family != AF_INET)
 		return;
 
-	inet_ntop(reply->addr.saddr.sa.sa_family, &reply->addr.saddr.sa, buf, reply->addr.saddr_len);
+	inet_ntop(reply->addr.saddr.sa.sa_family, &reply->addr.saddr.sin.sin_addr, buf, reply->addr.saddr_len);
 
 	svs = service_find("operserv");
 	notice(svs->nick, u->nick, "Result is %s", buf);
