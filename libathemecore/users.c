@@ -151,6 +151,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	}
 
 	u = mowgli_heap_alloc(user_heap);
+	object_init(object(u), NULL, (destructor_t) user_delete);
 
 	if (uid != NULL)
 	{

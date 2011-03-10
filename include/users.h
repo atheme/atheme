@@ -11,6 +11,8 @@
 
 struct user_
 {
+	object_t parent;
+
 	char nick[NICKLEN];
 	char user[USERLEN];
 	char host[HOSTLEN]; /* Real host */
