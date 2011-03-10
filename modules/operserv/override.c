@@ -29,6 +29,8 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_override);
 }
 
+#warning needs to be reworked for restartable commands
+
 typedef struct {
 	sourceinfo_t si;
 	sourceinfo_t *parent_si;

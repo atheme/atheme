@@ -866,6 +866,26 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	return false;
 }
 
+mowgli_heap_t *sourceinfo_heap = NULL;
+
+static void sourceinfo_delete(sourceinfo_t *si)
+{
+	mowgli_heap_free(sourceinfo_heap, si);
+}
+
+sourceinfo_t *sourceinfo_create(void)
+{
+	sourceinfo_t *out;
+
+	if (sourceinfo_heap == NULL)
+		sourceinfo_heap = mowgli_heap_create(sizeof(sourceinfo_t), 16, BH_NOW);
+
+	out = mowgli_heap_alloc(sourceinfo_heap);
+	object_init(object(out), NULL, (destructor_t) sourceinfo_delete);
+
+	return out;
+}
+
 void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 {
 	va_list args;

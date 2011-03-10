@@ -245,19 +245,21 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (!verify_password(mu, parv[1]))
 	{
-		sourceinfo_t si;
+		sourceinfo_t *si;
 
 		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (bad password)", entity(mu)->name);
 		xmlrpc_generic_error(fault_authfail, "The password is not valid for this account.");
 
-		memset(&si, '\0', sizeof si);
-		si.service = NULL;
-		si.sourcedesc = parv[2] != NULL && *parv[2] ? parv[2] : NULL;
-		si.connection = conn;
-		si.v = &xmlrpc_vtable;
-		si.force_language = language_find("en");
+		si = sourceinfo_create(si);
+		si->service = NULL;
+		si->sourcedesc = parv[2] != NULL && *parv[2] ? parv[2] : NULL;
+		si->connection = conn;
+		si->v = &xmlrpc_vtable;
+		si->force_language = language_find("en");
 
 		bad_password(&si, mu);
+
+		object_unref(si);
 
 		return 0;
 	}
@@ -339,7 +341,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	service_t *svs;
 	command_t *cmd;
-	sourceinfo_t si;
+	sourceinfo_t *si;
 	int newparc;
 	char *newparv[20];
 	struct httpddata *hd = ((connection_t *)conn)->userdata;
@@ -398,14 +400,17 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 		newparc = 20;
 	if (newparc > 0)
 		memcpy(newparv, parv + 5, newparc * sizeof(parv[0]));
-	memset(&si, '\0', sizeof si);
-	si.smu = mu;
-	si.service = svs;
-	si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
-	si.connection = conn;
-	si.v = &xmlrpc_vtable;
-	si.force_language = language_find("en");
+
+	si = sourceinfo_create(si);
+	si->smu = mu;
+	si->service = svs;
+	si->sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
+	si->connection = conn;
+	si->v = &xmlrpc_vtable;
+	si->force_language = language_find("en");
 	command_exec(svs, &si, cmd, newparc, newparv);
+
+	/* XXX: needs to be fixed up for restartable commands... */
 	if (!hd->sent_reply)
 	{
 		if (hd->replybuf != NULL)
@@ -413,6 +418,8 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 		else
 			xmlrpc_generic_error(fault_unimplemented, "Command did not return a result.");
 	}
+
+	object_unref(si);
 
 	return 0;
 }
