@@ -49,6 +49,7 @@ SRCS =			\
 	os_klinechan.c	\
 	os_modeall.c		\
 	os_pingspam.c		\
+	os_resolve.c		\
 	os_savechanmodes.c	\
 	os_tabletest.c	\
 	os_testcmd.c		\
