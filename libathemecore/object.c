@@ -61,12 +61,9 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 		obj->name = sstrdup(name);
 
 	obj->destructor = des;
-#ifdef USE_OBJECT_REF
 	obj->refcount = 1;
-#endif
 }
 
-#ifdef USE_OBJECT_REF
 /*
  * object_ref
  *
@@ -89,7 +86,6 @@ void * object_ref(void *object)
 
 	return object;
 }
-#endif
 
 /*
  * object_unref
@@ -114,11 +110,9 @@ void object_unref(void *object)
 	obj = object(object);
 	privatedata = obj->privatedata;
 
-#ifdef USE_OBJECT_REF
 	obj->refcount--;
 
 	if (obj->refcount <= 0)
-#endif
 	{
 		if (obj->name != NULL)
 			free(obj->name);
@@ -239,3 +233,4 @@ void privatedata_set(void *target, const char *key, void *data)
  * vim:sw=8
  * vim:noexpandtab
  */
+

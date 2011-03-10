@@ -26,9 +26,7 @@ typedef void (*destructor_t)(void *);
 
 typedef struct {
 	char *name;
-#ifdef USE_OBJECT_REF
 	int refcount;
-#endif
 	destructor_t destructor;
 	mowgli_list_t metadata;
 	mowgli_patricia_t *privatedata;
@@ -37,9 +35,7 @@ typedef struct {
 E void init_metadata(void);
 
 E void object_init(object_t *, const char *name, destructor_t destructor);
-#ifdef USE_OBJECT_REF
 E void *object_ref(void *);
-#endif
 E void object_unref(void *);
 
 E metadata_t *metadata_add(void *target, const char *name, const char *value);
