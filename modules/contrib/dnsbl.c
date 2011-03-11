@@ -65,6 +65,7 @@ struct BlacklistClient {
 
 static void unref_blacklist(struct Blacklist *blptr);
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
+static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
 
 command_t os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "contrib/set_dnsblaction" } };
 
@@ -82,19 +83,6 @@ static inline mowgli_list_t *dnsbl_queries(user_t *u)
         privatedata_set(u, "dnsbl:queries", l);
 
         return l;
-}
-
-static inline struct Blacklist *listed_in_dnsbl(user_t *u)
-{
-        struct Blacklist *blptr;
-
-        return_val_if_fail(u != NULL, NULL);
-
-        blptr = privatedata_get(u, "dnsbl:listed");
-        if (blptr != NULL)
-		return blptr;
-
-        return NULL;
 }
 
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
@@ -149,7 +137,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;
-	mowgli_list_t *l;
+	mowgli_list_t *l2;
 
 	if (blcptr == NULL)
 		return;
@@ -175,17 +163,17 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		}
 	}
 
-	struct Blacklist *dnsbl_listed = listed_in_dnsbl(blcptr->u);
-
 	/* they have a blacklist entry for this client */
-	if (listed && dnsbl_listed == NULL)
-		privatedata_set(blcptr->u, "dnsbl:listed", dnsbl_listed);
+	if (listed)
+	{
+		dnsbl_hit(blcptr->u, blcptr->blacklist);
+		return;
+	}
 	else
 		unref_blacklist(blcptr->blacklist);
 
-
-	l = dnsbl_queries(blcptr->u);
-	mowgli_node_delete(&blcptr->node, l);
+	l2 = dnsbl_queries(blcptr->u);
+	mowgli_node_delete(&blcptr->node, l2);
 
 	free(blcptr);
 }
@@ -269,6 +257,10 @@ static void lookup_blacklists(user_t *u)
 	}
 }
 
+/* This appears to be unnecessary on Atheme and only causes crashes so #if 0
+ * it out, at least for now. --jdhore
+ */
+#if 0
 static void abort_blacklist_queries(user_t *u)
 {
 	mowgli_node_t *n, *tn;
@@ -289,6 +281,7 @@ static void abort_blacklist_queries(user_t *u)
 		free(blcptr);
 	}
 }
+#endif
 
 static void destroy_blacklists(void)
 {
@@ -326,8 +319,6 @@ static void dnsbl_config_purge(void *unused)
 static void check_dnsbls(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
-	service_t *svs;
-	mowgli_list_t *l;
 
     if (!u)
         return;
@@ -339,43 +330,42 @@ static void check_dnsbls(hook_user_nick_t *data)
 		return;
 
 	lookup_blacklists(u);
+}
 
-	l = dnsbl_queries(u);
-	struct Blacklist *dnsbl_listed = listed_in_dnsbl(u);
+static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
+{
+	service_t *svs;
 
 	svs = service_find("operserv");
 
-	if (MOWGLI_LIST_LENGTH(l) > 0)
+	if (!strcasecmp("SNOOP", action))
 	{
-		if (dnsbl_listed == NULL)
-			return;
-
-		if (!strcasecmp("SNOOP", action))
-		{
-			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist.", u->nick, u->user, u->host, u->gecos);
-			abort_blacklist_queries(u);
-			return;
-		}
-		else if (!strcasecmp("NOTIFY", action))
-		{
-			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, dnsbl_listed->host);
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, dnsbl_listed->host);
-			abort_blacklist_queries(u);
-			return;
-		}
-		else if (!strcasecmp("KLINE", action))
-		{
-			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, dnsbl_listed->host);
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, dnsbl_listed->host);
-			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
-			abort_blacklist_queries(u);
-			return;
-		}
-	}	
+		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+		/* abort_blacklist_queries(u); */
+		return;
+	}
+	else if (!strcasecmp("NOTIFY", action))
+	{
+		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+		notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
+		/* abort_blacklist_queries(u); */
+		return;
+	}
+	else if (!strcasecmp("KLINE", action))
+	{
+		slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+		/* abort_blacklist_queries(u); */
+		notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
+		kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
+		return;
+	}
 }
+
 static void osinfo_hook(sourceinfo_t *si)
 {
 	mowgli_node_t *n;
+
+	command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", action);
 
     MOWGLI_ITER_FOREACH(n, blacklist_list.head)
     {

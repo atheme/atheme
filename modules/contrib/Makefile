@@ -22,6 +22,7 @@ SRCS =			\
 	cs_regnotice.c		\
 	cs_updown.c		\
 	cs_userinfo.c		\
+	dnsbl.c		\
 	gen_echoserver.c	\
 	gen_httpd.c		\
 	gen_listenerdemo.c	\
