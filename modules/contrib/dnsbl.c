@@ -32,6 +32,15 @@
  *
  */
 
+/* To configure/use, add a block to the general{} section of your atheme.conf
+ * like this:
+ *
+ * blacklists {
+ *	"dnsbl.dronebl.org";
+ *	"rbl.efnetrbl.org";
+ * };
+ */
+
 #include "atheme.h"
 #include "conf.h"
 
@@ -44,7 +53,7 @@ DECLARE_MODULE_V1
 
 mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 mowgli_patricia_t **os_set_cmdtree;
-char *action;
+static char *action = NULL;
 
 /* A configured DNSBL */
 struct Blacklist {
@@ -374,7 +383,7 @@ static void osinfo_hook(sourceinfo_t *si)
     {
         struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-	command_success_nodata(si, "Blacklists: %s", blptr->host);
+	command_success_nodata(si, "Blacklist(s): %s", blptr->host);
     }
 }
 
@@ -392,6 +401,7 @@ _modinit(module_t *m)
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
+	add_dupstr_conf_item("dnsbl_action", &conf_gi_table, 0, &action, NULL);
 	add_conf_item("BLACKLISTS", &conf_gi_table, dnsbl_config_handler);
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
 }
@@ -403,6 +413,7 @@ _moddeinit(module_unload_intent_t intent)
 	hook_del_config_purge(dnsbl_config_purge);
 	hook_del_operserv_info(osinfo_hook);
 
+	del_conf_item("dnsbl_action", &conf_gi_table);
 	del_conf_item("BLACKLISTS", &conf_gi_table);
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
 }
