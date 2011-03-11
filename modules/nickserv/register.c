@@ -85,9 +85,10 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(pass) > 32)
+	if (!crypto_module_loaded && strlen(pass) > PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
+		command_fail(si, fault_badparams, _("Registration passwords must be longer than \2%d\2 characters."), PASSLEN);
 		return;
 	}
 
