@@ -29,8 +29,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
- */
+*
+*/
 
 /* To configure/use, add a block to the general{} section of your atheme.conf
  * like this:
@@ -72,26 +72,41 @@ struct BlacklistClient {
 	mowgli_node_t node;
 };
 
-static void unref_blacklist(struct Blacklist *blptr);
+struct dnsbl_exempt_ {
+	char *ip;
+	time_t exempt_ts;
+	char *creator;
+	char *reason;
+};
+
+typedef struct dnsbl_exempt_ dnsbl_exempt_t;
+
+mowgli_list_t dnsbl_elist;
+
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
+static void os_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[]);
+static void write_dnsbl_exempt_db(database_handle_t *db);
+static void db_h_ble(database_handle_t *db, const char *type);
+
 
 command_t os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "contrib/set_dnsblaction" } };
+command_t os_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, os_cmd_dnsblexempt, { .path = "contrib/dnsblexempt" } };
 
 static inline mowgli_list_t *dnsbl_queries(user_t *u)
 {
-        mowgli_list_t *l;
+	mowgli_list_t *l;
 
-        return_val_if_fail(u != NULL, NULL);
+	return_val_if_fail(u != NULL, NULL);
 
-        l = privatedata_get(u, "dnsbl:queries");
-        if (l != NULL)
-                return l;
+	l = privatedata_get(u, "dnsbl:queries");
+	if (l != NULL)
+		return l;
 
-        l = mowgli_list_create();
-        privatedata_set(u, "dnsbl:queries", l);
+	l = mowgli_list_create();
+	privatedata_set(u, "dnsbl:queries", l);
 
-        return l;
+	return l;
 }
 
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
@@ -122,6 +137,108 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, _("Invalid action given."));
+		return;
+	}
+}
+
+static void os_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *command = parv[0];
+	char *ip = parv[1];
+	char *reason = parv[2];
+	mowgli_node_t *n, *tn;
+	dnsbl_exempt_t *de;
+
+	if (!command)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DNSBLEXEMPT");
+		command_fail(si, fault_needmoreparams, _("Syntax: DNSBLEXEMPT ADD|DEL|LIST [ip] [reason]"));
+		return;
+	}
+
+	if (!strcasecmp("ADD", command))
+	{
+
+		if (!ip || !reason)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DNSBLEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: DNSBLEXEMPT ADD <ip> <reason>"));
+			return;
+		}
+
+		MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+		{
+			de = n->data;
+
+			if (!irccasecmp(de->ip, ip))
+			{	
+				command_success_nodata(si, _("\2%s\2 has already been entered into the DNSBL exempts list."), ip);
+				return;
+			}
+		}
+
+		de = smalloc(sizeof(dnsbl_exempt_t));
+		de->exempt_ts = CURRTIME;;
+		de->creator = sstrdup(get_source_name(si));
+		de->reason = sstrdup(reason);
+		de->ip = sstrdup(ip);
+		mowgli_node_add(de, mowgli_node_create(), &dnsbl_elist);
+
+		command_success_nodata(si, _("You have added \2%s\2 to the DNSBL exempts list."), ip);
+		logcommand(si, CMDLOG_ADMIN, "DNSBL:EXEMPT:ADD: \2%s\2 \2%s\2", ip, reason);
+	}
+	else if (!strcasecmp("DEL", command))
+	{
+
+		if (!ip)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DNSBLEXEMPT");
+			command_fail(si, fault_needmoreparams, _("Syntax: DNSBLEXEMPT DEL <ip>"));
+			return;
+		}
+
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, dnsbl_elist.head)
+		{
+			de = n->data;
+
+			if (!irccasecmp(de->ip, ip))
+			{
+				logcommand(si, CMDLOG_SET, "DNSBL:EXEMPT:DEL: \2%s\2", de->ip);
+				command_success_nodata(si, _("DNSBL Exempt IP \2%s\2 has been deleted."), de->ip);
+
+				mowgli_node_delete(n, &dnsbl_elist);
+
+				free(de->creator);
+				free(de->reason);
+				free(de->ip);
+				free(de);
+
+				return;
+			}
+		}
+		command_success_nodata(si, _("IP \2%s\2 not found in DNSBL Exempt database."), ip);
+	}
+	else if (!strcasecmp("LIST", command))
+	{
+		char buf[BUFSIZE];
+		struct tm tm;
+
+		MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+		{
+			de = n->data;
+
+			tm = *localtime(&de->exempt_ts);
+			strftime(buf, BUFSIZE, config_options.time_format, &tm);
+			command_success_nodata(si, "IP: \2%s\2 Reason: \2%s\2 (%s - %s)",
+					de->ip, de->reason, de->creator, buf);
+		}
+		command_success_nodata(si, "End of list.");
+		logcommand(si, CMDLOG_GET, "DNSBL:EXEMPT:LIST");
+	}
+	else
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "DNSBLEXEMPT");
+		command_fail(si, fault_needmoreparams, _("Syntax: DNSBLEXEMPT ADD|DEL|LIST [ip] [reason]"));
 		return;
 	}
 }
@@ -166,8 +283,8 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		else if (blcptr->blacklist->lastwarning + 3600 < CURRTIME)
 		{
 			slog(LG_DEBUG,
-				"Garbage reply from blacklist %s",
-				blcptr->blacklist->host);
+					"Garbage reply from blacklist %s",
+					blcptr->blacklist->host);
 			blcptr->blacklist->lastwarning = CURRTIME;
 		}
 	}
@@ -178,8 +295,6 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		dnsbl_hit(blcptr->u, blcptr->blacklist);
 		return;
 	}
-	else
-		unref_blacklist(blcptr->blacklist);
 
 	l = dnsbl_queries(blcptr->u);
 	mowgli_node_delete(&blcptr->node, l);
@@ -223,7 +338,7 @@ static struct Blacklist *new_blacklist(char *name)
 		return NULL;
 
 	blptr = find_blacklist(name);
-	
+
 	if (blptr == NULL)
 	{
 		blptr = malloc(sizeof(struct Blacklist));
@@ -234,20 +349,6 @@ static struct Blacklist *new_blacklist(char *name)
 	blptr->lastwarning = 0;
 
 	return blptr;
-}
-
-static void unref_blacklist(struct Blacklist *blptr)
-{
-	mowgli_node_t *n;
-
-	blptr->refcount--;
-	if (blptr->refcount <= 0)
-	{
-		n = mowgli_node_find(blptr, &blacklist_list);
-		mowgli_node_delete(n, &blacklist_list);
-
-		free(blptr);
-	}
 }
 
 static void lookup_blacklists(user_t *u)
@@ -328,15 +429,24 @@ static void dnsbl_config_purge(void *unused)
 static void check_dnsbls(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
+	mowgli_node_t *n;
 
-    if (!u)
-        return;
+	if (!u)
+		return;
 
-    if (is_internal_client(u))
-        return;
+	if (is_internal_client(u))
+		return;
 
 	if (!action)
 		return;
+
+	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+	{
+		dnsbl_exempt_t *de = n->data;
+
+		if (!irccasecmp(de->ip, u->ip))
+			return;
+	}
 
 	lookup_blacklists(u);
 }
@@ -379,18 +489,65 @@ static void osinfo_hook(sourceinfo_t *si)
 	else	
 		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", "None");
 
-    MOWGLI_ITER_FOREACH(n, blacklist_list.head)
-    {
-        struct Blacklist *blptr = (struct Blacklist *) n->data;
+	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
+	{
+		struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-	command_success_nodata(si, "Blacklist(s): %s", blptr->host);
-    }
+		command_success_nodata(si, "Blacklist(s): %s", blptr->host);
+	}
+}
+
+static void write_dnsbl_exempt_db(database_handle_t *db)
+{
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
+	{
+		dnsbl_exempt_t *de = n->data;
+
+		db_start_row(db, "BW");
+		db_write_word(db, de->ip);
+		db_write_time(db, de->exempt_ts);
+		db_write_word(db, de->creator);
+		db_write_word(db, de->reason);
+		db_commit_row(db);
+	}
+}
+
+static void db_h_ble(database_handle_t *db, const char *type)
+{
+	const char *ip = db_sread_word(db);
+	time_t exempt_ts = db_sread_time(db);
+	const char *creator = db_sread_word(db);
+	const char *reason = db_sread_word(db);
+
+	dnsbl_exempt_t *de = smalloc(sizeof(dnsbl_exempt_t));
+
+	de->ip = sstrdup(ip);
+	de->exempt_ts = exempt_ts;
+	de->creator = sstrdup(creator);
+	de->reason = sstrdup(reason);
+
+	mowgli_node_add(de, mowgli_node_create(), &dnsbl_elist);
 }
 
 void
 _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, os_set_cmdtree, "operserv/set", "os_set_cmdtree");
+
+	if (!module_find_published("backend/opensex"))
+	{
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
+	hook_add_db_write(write_dnsbl_exempt_db);
+
+	db_register_type_handler("BLE", db_h_ble);
+
+	service_named_bind_command("operserv", &os_dnsblexempt);
 
 	hook_add_event("config_purge");
 	hook_add_config_purge(dnsbl_config_purge);
@@ -409,11 +566,20 @@ _modinit(module_t *m)
 void
 _moddeinit(module_unload_intent_t intent)
 {
+	hook_del_db_write(write_dnsbl_exempt_db);
 	hook_del_user_add(check_dnsbls);
 	hook_del_config_purge(dnsbl_config_purge);
 	hook_del_operserv_info(osinfo_hook);
 
+	db_unregister_type_handler("BLE");
+
 	del_conf_item("dnsbl_action", &conf_gi_table);
 	del_conf_item("BLACKLISTS", &conf_gi_table);
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
+	service_named_unbind_command("operserv", &os_dnsblexempt);
 }
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
+ * vim:noexpandtab
+ */
