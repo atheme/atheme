@@ -55,13 +55,6 @@ CODE:
 OUTPUT:
 	RETVAL
 
-Atheme_ChannelRegistration
-channel(Atheme_ChanAcs self)
-CODE:
-	RETVAL = self->mychan;
-OUTPUT:
-	RETVAL
-
 const char *
 hostmask(Atheme_ChanAcs self)
 CODE:
