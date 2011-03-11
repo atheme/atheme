@@ -46,6 +46,23 @@ mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 mowgli_patricia_t **os_set_cmdtree;
 char *action;
 
+/* A configured DNSBL */
+struct Blacklist {
+	unsigned int status;	/* If CONF_ILLEGAL, delete when no clients */
+	int refcount;
+	char host[IRCD_RES_HOSTLEN + 1];
+	unsigned int hits;
+	time_t lastwarning;
+};
+
+/* A lookup in progress for a particular DNSBL for a particular client */
+struct BlacklistClient {
+	struct Blacklist *blacklist;
+	user_t *u;
+	dns_query_t dns_query;
+	mowgli_node_t node;
+};
+
 static void unref_blacklist(struct Blacklist *blptr);
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 
