@@ -137,7 +137,7 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 {
 	struct BlacklistClient *blcptr = (struct BlacklistClient *) vptr;
 	int listed = 0;
-	mowgli_list_t *l2;
+	mowgli_list_t *l;
 
 	if (blcptr == NULL)
 		return;
@@ -172,8 +172,8 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 	else
 		unref_blacklist(blcptr->blacklist);
 
-	l2 = dnsbl_queries(blcptr->u);
-	mowgli_node_delete(&blcptr->node, l2);
+	l = dnsbl_queries(blcptr->u);
+	mowgli_node_delete(&blcptr->node, l);
 
 	free(blcptr);
 }
