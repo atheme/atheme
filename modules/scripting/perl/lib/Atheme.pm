@@ -9,9 +9,11 @@ our @EXPORT = qw( %Services %Users %ChannelRegistrations %Hooks &depends );
 
 bootstrap Atheme;
 
+use Atheme::Fault;
 use Atheme::Service;
 use Atheme::Account;
 use Atheme::ChannelRegistration;
+use Atheme::ChanAcs;
 use Atheme::ReadOnlyHashWrapper;
 use Atheme::Internal::HookHash;
 use Atheme::Hooks;
