@@ -1,0 +1,42 @@
+=head1 NAME
+
+Atheme::Account
+
+=head1 SYNOPSIS
+
+    my $account = $Accounts{'accountname'};
+    my $nicks = $account->nicks;
+    foreach my $n (@$nicks) {
+        print "nickname " . $n->nick . " is owned by " . $account->name;
+    }
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes an account.
+
+=head1 METHODS
+
+=head2 name
+
+Returns the account name.
+
+=head2 email
+
+Returns the account's email address.
+
+=head2 nicks
+
+Returns an arrayref of L<Atheme::NickRegistration> objects for the nicknames
+owned by this account.
+
+=head2 chanacs
+
+Returns an arrayref of L<Atheme::ChanAcs> objects for this account's channel
+access entries.
+
+=head2 notice
+
+    $account->notice($service, $text);
+
+Sends a notice from C<$service> to all clients currently logged in to this
+account.

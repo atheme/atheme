@@ -1,0 +1,68 @@
+=head1 NAME
+
+Atheme::User
+
+=head1 SYNOPSIS
+
+    my $user = $Users{$source->user->nick};
+    $source->success("You are " . $user->nick . "!" . $user->user . "@" . $user->host);
+    $source->success("You are logged in as ". $user->account->name);
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a user connected to IRC. It is essentially
+read-only to Perl, as it is a reflection of external network state.
+
+=head1 METHODS
+
+=head2 nick
+
+Returns this user's nickname.
+
+=head2 user
+
+Returns this user's username.
+
+=head2 vhost
+
+Returns this user's visible hostname.
+
+=head2 host
+
+Returns this user's real hostname. Do not disclose this to non-operators; use
+C<vhost> instead
+
+=head2 ip
+
+Returns this user's underlying IP address. As with C<host>, this must not be
+disclosed to non-operators.
+
+=head2 gecos
+
+Returns this user's GECOS (real name) field.
+
+=head2 uid
+
+Returns this user's unique ID, if the uplink supports them.
+
+=head2 account
+
+Returns an L<Atheme::Account> referring to the account to which the user is
+currently logged in, or undef if they have none.
+
+=head2 channels
+
+Returns an array of L<Atheme::ChanUser> objects, for the channels this user is
+in.
+
+=head2 server
+
+Returns an L<Atheme::Server> referring to the server to which this user is
+connected.
+
+=head2 notice
+
+    $user->notice($service, $text);
+
+Sends this user a notice. C<$service> is an L<Atheme::Service> that is to
+be the source of the notice, and C<$text> is the text to send.

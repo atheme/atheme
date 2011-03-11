@@ -1,0 +1,358 @@
+=head1 NAME
+
+Atheme::Hooks - Documentation for the Perl Hooks interface
+
+=head1 DESCRIPTION
+
+Atheme uses hooks as its primary mechanism for extensibility, outside of command
+handlers. Almost all of the hook types used by the core and by standard modules
+are available to Perl.
+
+=head1 ADDING HOOKS
+
+The Atheme interface provides a global C<%Hooks> tied hash as the primary Perl
+interface to hooks. This is keyed on the hook name (see L</HOOK TYPES>), and the value is
+a type with one method:
+
+=head2 add_hook
+
+    $Hooks{channel_join}->add_hook(\&channel_join_hook);
+
+The C<add_hook> method takes one argument, which is a coderef that will be
+called when the hook is triggered. Argument types vary with the particular hook,
+and are described individually in L</HOOK TYPES> below.
+
+There is no need to remove hooks; this is done automatically when the script
+that added them is unloaded.
+
+=head1 HOOK TYPES
+
+All hook functions take a single argument or none at all. This is either an
+object reference, or a hashref containing one or more named values. Some such
+values are read/write; which these are, and the effects of changing them, are
+described where applicable.
+
+=head2 config_purge
+
+Parameter: None.
+
+Called when the current configuration info is being purged prior to reloading.
+
+=head2 config_ready
+
+Parameter: None.
+
+Called when the config file has completed loading.
+
+=head2 db_write, db_write_pre_ca
+
+Called to allow modules to write their own persistent information to the
+database file. Not currently supported in Perl.
+
+=head2 db_saved
+
+Parameter: None.
+
+Called when the database has completed saving.
+
+=head2 shutdown
+
+Parameter: None.
+
+Called immediately prior to shutting down services.
+
+=head2 channel_add
+
+Parameter: L<Atheme::Channel>
+
+Called when a channel is created on the network.
+
+=head2 channel_delete
+
+Parameter: L<Atheme::Channel>
+
+Called when a channel on the network becomes empty and is deleted.
+
+=head2 channel_tschange
+
+Parameter: L<Atheme::Channel>
+
+Called when a channel's creation timestamp (TS) changes.
+
+=head2 channel_join
+
+Parameters: { C<cu> => L<Atheme::ChanUser> }
+
+Called when a user joins a channel. If C<cu> is undef, then another hook
+function has already kicked the user. If this function kicks the user, then it
+must set C<cu> to undef.
+
+=head2 channel_part
+
+Parameters: { C<cu> => L<Atheme::ChanUser> }
+
+Called when a user parts a channel. C<cu> is the user's membership of the
+channel immediately before the part.
+
+=head2 channel_topic
+
+Parameter: L<Atheme::Channel>
+
+Called when a channel's topic changes.
+
+=head2 channel_can_change_topic
+
+Parameters: { C<user> => L<Atheme::User>, C<server> => L<Atheme::Server>,
+C<channel> => L<Atheme::Channel>, C<setter> => string, C<ts> => integer,
+C<topic> => string, C<approved> => integer }
+
+Called when a user is trying to change the topic of a channel. Setting
+C<approved> to a non-zero value will result in services reverting the topic
+change.
+
+=head2 channel_message
+
+Parameters: { C<user> => L<Atheme::User>, C<channel> => L<Atheme::Channel>,
+C<message> => string }
+
+Called when a user sends a message to a channel.
+
+=head2 server_add
+
+Parameter: L<Atheme::Server>
+
+Called when a new server is introduced to the network.
+
+=head2 server_eob
+
+Parameter: L<Atheme::Server>
+
+Called when a new server finishes linking (end-of-burst) to the network.
+
+=head2 server_delete
+
+Parameter: { C<server> => L<Atheme::Server> }
+
+Called when a server delinks from the network.
+
+=head2 user_add
+
+Parameters: { C<user> => L<Atheme::User> }
+
+Called when a new user appears on the network.
+
+=head2 user_delete
+
+Parameter: L<Atheme::User>
+
+Called when a user is removed from the network.
+
+=head2 user_nickchange
+
+Parameters: { C<user> => L<Atheme::User>, C<oldnick> => string }
+
+Called when a user changes nick.
+
+=head2 user_away
+
+Parameter: L<Atheme::User>
+
+Called when a user's away status changes.
+
+=head2 user_deoper
+
+Parameter: L<Atheme::User>
+
+Called when a user ceases to be an IRC Operator (sets user mode -o).
+
+=head2 user_oper
+
+Parameter: L<Atheme::User>
+
+Called when a user becomes an IRC Operator (gains user mode +o).
+
+=head2 channel_can_register
+
+Parameters: { C<source> => L<Atheme::Sourceinfo>, C<name> => string, C<channel>
+=> L<Atheme::Channel>, C<approved> => integer }
+
+Called to decide whether a user is allowed to register a channel. Setting
+C<approved> to a non-zero value will deny the registration.
+
+=head2 channel_drop
+
+Parameter: L<Atheme::ChannelRegistration>
+
+Called when a channel registration is being dropped.
+
+=head2 channel_info
+
+Parameters: { C<channel> => L<Atheme::ChannelRegistration>, C<source> =>
+L<Atheme::Sourceinfo> }
+
+Called when requesting ChanServ INFO output about a channel. Can be used by
+modules to add extra lines to this output.
+
+=head2 channel_register
+
+Parameters: { C<channel> => L<Atheme::ChannelRegistration>, C<source> =>
+L<Atheme::Sourceinfo> }
+
+Called when a channel has been registered.
+
+=head2 channel_check_expire
+
+Parameters: { C<channel> => L<Atheme::ChannelRegistration>, C<do_expire> =>
+integer }
+
+Called when a channel is about to expire. Setting C<do_expire> to 0 will cause
+the channel not to expire during this round of checking.
+
+=head2 channel_acl_change
+
+Parameter: L<Atheme::ChanAcs>
+
+Called when a channel access list entry changes.
+
+=head2 nick_can_register
+
+Parameters: { C<source> => L<Atheme::Sourceinfo>, C<account> => string,
+C<approved> => integer }
+
+Called to decide whether a user can register the given nickname. Setting
+C<approved> to a non-zero value will deny the registration.
+
+=head2 nick_group
+
+Parameters: { C<source> => L<Atheme::Sourceinfo>, C<account> =>
+L<Atheme::Account>, C<nick> => L<Atheme::NickRegistration> }
+
+Called when a user groups a new nickname.
+
+=head2 nick_check
+
+Parameter: L<Atheme::User>
+
+Called whenever a user begins to use a new nick. This could be when he connects,
+changes nick, or any number of other actions. Use this hook if you want to do
+any sort of pattern matching on all clients.
+
+=head2 nick_enforce
+
+Parameters: { C<user> => L<Atheme::User>, C<nick> => L<Atheme::NickRegistration> }
+
+Used by the C<nickserv/enforce> module. Called when a user begins to use a
+registered nickname they do not own, so that the enforcement timer should start.
+Of questionable use to anyone else.
+
+=head2 nick_ungroup
+
+Parameters: { C<source> => L<Atheme::Sourceinfo>, C<account> =>
+L<Atheme::Account>, C<nick> => L<Atheme::NickRegistration> }
+
+Called when a user ungroups a nickname that they previously had grouped.
+
+=head2 nick_check_expire
+
+Parameters: { C<nick> => L<Atheme::NickRegistration>, C<do_expire> => integer }
+
+Called when a nickname is about to expire. Setting C<do_expire> to 0 will cause
+the nickname not to expire during this round of checking.
+
+=head2 service_introduce
+
+Parameter: L<Atheme::Service>
+
+Called when a new service client is introduced to the network.
+
+=head2 user_can_register
+
+Parameters: { C<source> => L<Atheme::Sourceinfo>, C<account> => string, C<email>
+=> string, C<password> => string, C<approved> => integer }
+
+Called to decide whether the given user can register the given account name.
+Setting C<approved> to a non-zero value will deny the registration.
+
+=head2 user_drop
+
+Parameter: L<Atheme::Account>
+
+Called when a user drops his account.
+
+=head2 user_identify
+
+Parameter: L<Atheme::User>
+
+Called when a user on IRC identifies to an account.
+
+=head2 user_info
+
+Parameters: C<source> => L<Atheme::Sourceinfo>, C<account> =>
+L<Atheme::Account>, C<nick> => L<Atheme::NickRegistration> }
+
+Called when processing a NickServ INFO request for the given nick registration
+and account. Used for modules to provide extra information where appropriate.
+
+=head2 user_register
+
+Parameter: L<Atheme::Account>
+
+Called when a user registers a new account.
+
+=head2 user_verify_register
+
+Parameters: C<source> => L<Atheme::Sourceinfo>, C<account> => L<Atheme::Account> }
+
+Called when a user completes email verification of a new account.
+
+=head2 user_check_expire
+
+Parameters: { C<account> => L<Atheme::Account>, C<do_expire> =>
+integer }
+
+Called when an account is about to expire. Setting C<do_expire> to 0 will cause
+the account not to expire during this round of checking.
+
+=head2 user_rename
+
+Parameters: { C<account> => L<Atheme::Account>, C<oldname> => string }
+
+Called when an account is renamed, such as via NickServ SET ACCOUNTNAME.
+
+=head2 myuser_delete
+
+Parameter: L<Atheme::Account>
+
+Called when an account is about to be deleted, for any reason.
+
+=head2 metadata_change
+
+Parameters: { C<target> => L<Atheme::Account>, C<name> => string, C<value> => string }
+
+Called when a user's public metadata changes.
+
+=head2 channel_pick_successor
+
+Parameters: { C<channel> => L<Atheme::ChannelRegistration>, C<account> =>
+L<Atheme::Account> }
+
+Called to choose a channel's successor. Does not imply that the owner is about
+to drop or expire.
+
+Change C<account> to select a new successor. This may be overwritten by
+subsequent hook functions.
+
+=head2 grant_channel_access
+
+Parameters: L<Atheme::User>
+
+Called when a user should be granted any ircd-side channel access (+o, +v, etc)
+that his services login allows.
+
+=head2 operserv_info
+
+Parameter: L<Atheme::Sourceinfo>
+
+Called when a user runs the OperServ INFO command. Use this to add in any
+relevant information.
+

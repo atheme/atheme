@@ -1,0 +1,37 @@
+=head1 NAME
+
+Atheme::NickRegistration
+
+=head1 SYNOPSIS
+
+    my $account = $Accounts{'accountname'};
+    my $nicks = $account->nicks;
+    foreach my $n (@$nicks) {
+        print "nickname " . $n->nick . " is owned by " . $account->name;
+    }
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a nickname registration.
+
+=head1 METHODS
+
+=head2 nick
+
+Returns the nickname that is registered.
+
+=head2 owner
+
+Returns the L<Atheme::Account> that owns this nick registration.
+
+=head1 Atheme::Object METHODS
+
+=head1 name
+
+Returns the name of this object.
+
+=head1 metadata
+
+Returns a tied hash object of metadata entries for this object.
+
+

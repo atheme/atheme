@@ -1,0 +1,35 @@
+=head1 NAME
+
+Atheme::ChannelRegistration
+
+=head1 SYNOPSIS
+
+    my $channel = $ChannelRegistrations{$channelname};
+    $source->success($channel->name . " topic is " . $channel->metadata->{'private:topic:text'});
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a channel registration.
+
+=head1 METHODS
+
+=head2 name
+
+Returns the channel name.
+
+=head2 chan
+
+Returns the L<Atheme::Channel> that corresponds to this channel registration,
+if the channel currently exists on the network.
+
+=head2 chanacs
+
+Returns a tied array of L<Atheme::ChanAcs> objects for this channel's access
+list.
+
+=head1 Atheme::Object METHODS
+
+=head2 metadata
+
+Returns a tied hash of metadata entries for this channel registration.
+

@@ -1,0 +1,119 @@
+=head1 NAME
+
+Atheme::Service
+
+=head1 SYNOPSIS
+
+    my $chanserv = %Services{chanserv};
+    $chanserv->bind_command(
+        name => "HELLO",
+        desc => "Says hello",
+        help_path => "chanserv/hello",
+        handler => \&cs_hello
+    );
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a service in Atheme. The most common
+operation here is L</bind_command>, which is used to register a new command
+handler. However, there are several other methods supported.
+
+=head1 METHODS
+
+=head2 bind_command
+
+    $service->bind_command(%args);
+
+Registers a new command handler. C<%args> is a hash, not a hashref. The
+following elements have meaning:
+
+=over 4
+
+=item B<name>
+
+The command name to which to bind.
+
+=item B<desc>
+
+Command description, as seen in command lists (such as C</ns help commands>).
+
+=item B<access>
+
+The services operator privilege required to use this command. Note that this is
+for global privileges only; checks against channel access must be done
+explicitly.
+
+=item B<maxparc>
+
+The maximum number of arguments this command accepts. This is used in the IRC
+command parser -- at most C<maxparc> arguments will be automatically split based
+on whitespace. If more are provided, then the splitting will stop at this number
+and the last argument will contain, verbatim, all text from there to end of
+line.
+
+This can be important if your command handler allows an argument to contain
+whitespace, such as C</OS RMATCH>.
+
+=item B<help_path>
+
+The path to a help file for this command. At most one of C<help_path> and
+C<help_func> may be specified.
+
+=item B<help_func>
+
+A command handler to be invoked in response to a help request for this topic. At
+most one of C<help_path> and C<help_func> may be specified.
+
+You may wish to specify a help function instead of a help file if the help
+output is dynamically generated, or if this is a compound command with multiple
+sub-topics.
+
+=item B<handler>
+
+A command handler function. See L</COMMAND HANDLERS> below for details.
+
+=back
+
+C<bind_command> returns void. It is not necessary to explicitly unbind commands
+bound in this way; they will be automatically removed when the script that
+created them is unloaded.
+
+=head2 name
+
+Returns the internal name of this service.
+
+=head2 nick
+
+Returns the IRC nickname of this service pseudoclient.
+
+=head2 user
+
+Returns the IRC username (ident) of this service pseudoclient.
+
+=head2 host
+
+Returns the IRC-visible hostname of this service pseudoclient.
+
+=head2 realname
+
+Returns the IRC-visible 'real name' (GECOS) of this service pseudoclient.
+
+=head2 me
+
+Returns an L<Atheme::User> corresponding to this service pseudoclient.
+
+=head1 COMMAND HANDLERS
+
+    sub cs_echo {
+        my ($source, @parv) = @_;
+
+        $source->success("You said " . $parv[0]);
+    }
+
+Command handler functions in Perl are all called in the same manner. The first
+argument is always an L<Atheme::Sourceinfo> object, and subsequent arguments are
+the command parameters as provided by the user, all strings.
+
+Errors that are propagated from a command handler (via C<die>) will be reported
+to the user who triggered the command, and logged. Thus, it is important that
+they do not contain any sensitive information.

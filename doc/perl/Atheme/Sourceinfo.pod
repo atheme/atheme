@@ -1,0 +1,59 @@
+=head1 NAME
+
+Atheme::Sourceinfo
+
+=head1 SYNOPSIS
+
+    my ($source, @parv) = @_;
+
+    $source->success("Hello from " . $source->service->nick . ", " . $source->user->nick);
+
+=head1 DESCRIPTION
+
+This is the Perl type that wraps Atheme's sourceinfo structure, which contains
+all relevant information about the source of a command. It is always the first
+parameter to a command handler function, whether that command is executed via
+IRC or some other mechanism such as XML-RPC.
+
+=head1 METHODS
+
+=head2 success
+
+Sends a success response to this command. Argument is a single string containing
+the message to send.
+
+=head2 fail
+
+Sends a failure response to this command. Arguments are a fault code (see
+L</FAULT CODES> for possible values) and a message string.
+
+=head2 service
+
+Returns the L<Atheme::Service> to which the command was sent.
+
+=head2 user
+
+Returns the L<Atheme::User> executing this command, if it arrived via IRC and
+originated from a client.
+
+=head2 server
+
+Returns the L<Atheme::Server> that triggered this command, if it arrived via IRC
+and originated from a server. This is not the server to which the originating
+user is connected, and will be C<undef> for any 'normal' user-facing command --
+the only commands originating from servers are protocol commands which cannot
+currently be added in Perl scripts.
+
+=head2 channel
+
+The channel in which this command was executed, if it was run as a fantasy
+command. See the ChanServ help for 'SET FANTASY' for how to enable or disable
+this.
+
+=head2 account
+
+Returns the L<Atheme::Account> that originated this command, if there is one.
+This will be set if the source is a logged-in IRC user, or an authenticated
+XML-RPC connection.
+
+

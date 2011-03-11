@@ -1,0 +1,32 @@
+=head1 NAME
+
+Atheme::Channel
+
+=head1 SYNOPSIS
+
+    my $channel = $Channels{'#atheme'};
+    foreach my $member (@{$channel->members}) {
+        $member->user->notice("You are in " . $channel->name);
+    }
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a channel on IRC. It is essentially
+read-only to Perl, as it is a reflection of external network state.
+
+Note that this is a channel that exists, not a channel that is registered. See
+L<Atheme::ChannelRegistration> for the latter.
+
+=head1 METHODS
+
+=head2 name
+
+Returns the name of this channel.
+
+=head2 topic
+
+Returns the topic of this channel.
+
+=head2 members
+
+Returns an array of L<Atheme::ChanUser> objects for this channel's member list.

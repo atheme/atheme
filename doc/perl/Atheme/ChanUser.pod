@@ -1,0 +1,25 @@
+=head1 NAME
+
+Atheme::ChanUser
+
+=head1 SYNOPSIS
+
+    my $channel = $Channels{'#atheme'};
+    foreach my $member (@{$channel->members}) {
+        $member->user->notice("You are in " . $member->channel->name;
+    }
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a user's membership of a channel. It is
+essentially read-only to Perl, as it is a reflection of external network state.
+
+=head1 METHODS
+
+=head2 channel
+
+Returns an L<Atheme::Channel> object for the channel of which this is a member.
+
+=head2 user
+
+Returns an L<Atheme::User> object for the user who is a member of this channel.

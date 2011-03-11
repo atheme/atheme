@@ -1,0 +1,57 @@
+=head1 NAME
+
+Atheme::Server
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes an IRC server linked to the network. It is
+essentially read-only to Perl, as it is a reflection of external network state.
+
+=head1 METHODS
+
+=head2 name
+
+Returns this server's name.
+
+=head2 desc
+
+Returns this server's description (M:line)
+
+=head2 sid
+
+Returns this server's SID, if the uplink supports them.
+
+=head2 hops
+
+Returns the number of server links between Atheme and this server.
+
+=head2 invis
+
+Returns the number of invisible users (user mode +i) on this server.
+
+=head2 opers
+
+Returns the number of IRC operators on this server.
+
+=head2 away
+
+Returns the number of users currently set away on this server.
+
+=head2 connected
+
+Returns the time since when this server has been linked to the network.
+
+=head2 uplink
+
+Returns an C<Atheme::Server> to which this server is connected.
+
+=head2 children
+
+Returns an array of C<Atheme::Server> objects for the servers connected behind
+this server.
+
+=head2 users
+
+Returns an array of L<Atheme::User> objects for the users connected to this
+server.
+

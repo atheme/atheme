@@ -1,0 +1,51 @@
+=head1 NAME
+
+Atheme::ChanAcs
+
+=head1 SYNOPSIS
+
+    my $channel = $ChannelRegistrations{'#channel'};
+    foreach my $chanacs (@{$channel->chanacs}) {
+        $source->success($chanacs->namestr . " has access ". $chanacs->flagstr .
+        " in " . $chanacs->channel->name);
+    }
+
+=head1 DESCRIPTION
+
+This is the Perl type that describes a channel access list entry.
+
+=head1 METHODS
+
+=head2 channel
+
+Returns the L<Atheme::ChannelRegistration> to which this access entry belongs.
+
+=head2 user
+
+Returns the L<Atheme::Account> that has access, if this is an account-based
+access entry.
+
+=head2 hostmask
+
+Returns the hostmask string that has access, if this is a host-based access
+entry.
+
+=head2 namestr
+
+Returns the account name or hostmask that has access, whichever is applicable.
+
+=head2 flags
+
+Returns the flags associated with this access entry, as a bitmask.
+
+=head2 flagstr
+
+Returns the flags associated with this access entry, as a human-readable string.
+
+=head2 modified
+
+Returns the modification time of this access entry, as a UNIX timestamp.
+
+=head2 datestr
+
+Returns the modification time of this access entry, as a human-readable string.

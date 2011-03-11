@@ -1,0 +1,115 @@
+=head1 NAME
+
+Atheme -- Perl script interface for Atheme IRC Services.
+
+=head1 SYNOPSIS
+
+    use Atheme;
+
+    depends 'chanserv/main';
+
+    $Services{chanserv}->bind_command(
+        name => "HELLO",
+        desc => "Says hello",
+        help_path => "chanserv/hello",
+        handler => \&cs_hello
+    );
+
+    sub cs_hello {
+        my ($source, @parv) = @_;
+
+        $source->success("Hello, " . $source->user->nick);
+
+        my $user = $Users{$source->user->nick};
+        $source->success("You are " . $user->nick . "!" . $user->user . "@" . $user->host);
+        $source->success("You are logged in as ". $user->account->name . " and your email address is " . $user->account->email);
+    }
+
+=head1 DESCRIPTION
+
+Since version 7, Atheme IRC Services can use Perl scripts, as well as C modules,
+for extensibility. Since the Perl API is less easy to deduce from header files
+than the C one, it is described herein.
+
+=head1 EXPORTS
+
+Most of the state available to the Perl interface is exported via a set of
+read-only tied hashes. They are:
+
+=over 4
+
+=item B<%Services>
+
+The services currently loaded in this Atheme instance, keyed by internal
+name. Values are L<Atheme::Service> references.
+
+=item B<%Users>
+
+The users currently connected to the network, keyed by nickname B<or> UID.
+Values are L<Atheme::User> references.
+
+=item B<%Accounts>
+
+Accounts currently registered, keyed by account name. Values are
+L<Atheme::Account> references.
+
+=item B<%Channels>
+
+Channels currently in existence on the network, keyed by name. Values are
+L<Atheme::Channel> references.
+
+=item B<%ChannelRegistrations>
+
+Channels currently registered, keyed by name. Values are
+L<Atheme::ChannelRegistration> references.
+
+=item B<%Hooks>
+
+Hook types supported by Perl, keyed by hook name. See L<Atheme::Hooks> for
+details of how to use this.
+
+=back
+
+There is also one globally exported function:
+
+=over 4
+
+=item B<depends $modulename>
+
+Indicate that this script requires C<$modulename> to be loaded. Currently this
+must be a C module; it is not yet possible for a script to depend upon another
+script.
+
+=back
+
+=head1 COMMAND HANDLERS
+
+Perl scripts can install command handlers via the C<bind_command> method in
+L<Atheme::Service>. See the documentation there for details.
+
+=head1 HOOKS
+
+See L<Atheme::Hooks> for details on writing and installing hook functions.
+
+=head1 CAVEATS
+
+Ownership semantics of Atheme objects are clear: the Perl script owns nothing.
+Perl's reference counting also does not apply to objects owned by the Atheme C
+code, for obvious reasons. This leads to the most important non-obvious rule of
+writing Atheme Perl scripts: B<do not store references to Atheme objects>. As
+soon as your handler function returns control to Atheme, all Perl references to
+Atheme objects are invalidated. If you need to persistently store such things,
+then store the object's name and use this to look up the actual object on each
+invocation of your handler.
+
+=head1 SEE ALSO
+
+Network object types: L<Atheme::Service>, L<Atheme::User>, L<Atheme::Server>,
+L<Atheme::Channel>, L<Atheme::ChanUser>.
+
+Atheme object types: L<Atheme::Account>, L<Atheme::NickRegistration>,
+L<Atheme::ChannelRegistration>, L<Atheme::ChanAcs>.
+
+Command handlers: L<Atheme::Sourceinfo>.
+
+Hook system: L<Atheme::Hooks>.
