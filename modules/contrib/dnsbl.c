@@ -365,14 +365,17 @@ static void osinfo_hook(sourceinfo_t *si)
 {
 	mowgli_node_t *n;
 
-	command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", action);
+	if (action)
+		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", action);
+	else	
+		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", "None");
 
     MOWGLI_ITER_FOREACH(n, blacklist_list.head)
     {
         struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-		command_success_nodata(si, "Blacklists: %s", blptr->host);
-	}
+	command_success_nodata(si, "Blacklists: %s", blptr->host);
+    }
 }
 
 void
