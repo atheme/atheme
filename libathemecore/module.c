@@ -78,19 +78,34 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	if ((m = module_load_internal(pathname, errbuf)))
-		return m;
+	m = module_load_internal(pathname, errbuf);
 
-	hdata.name = filespec;
-	hdata.path = pathname;
-	hdata.module = NULL;
-	hook_call_module_load(&hdata);
+	if (!m)
+	{
+		hdata.name = filespec;
+		hdata.path = pathname;
+		hdata.module = NULL;
+		hdata.handled = 0;
+		hook_call_module_load(&hdata);
 
-	if (hdata.module)
-		return hdata.module;
+		if (! hdata.module)
+		{
+			if (!hdata.handled)
+				slog(LG_ERROR, "%s", errbuf);
 
-	slog(LG_ERROR, "%s", errbuf);
-	return NULL;
+			return NULL;
+		}
+
+		m = hdata.module;
+	}
+
+	mowgli_node_add(m, mowgli_node_create(), &modules);
+
+	if (me.connected && !cold_start)
+	{
+		wallops(_("Module %s loaded at 0x%lx"), m->name, (unsigned long)m->address);
+		slog(LG_INFO, _("MODLOAD: \2%s\2 at 0x%lx"), m->name, (unsigned long)m->address);
+	}
 }
 
 /*
@@ -185,24 +200,16 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 	modtarget = old_modtarget;
 
 	mowgli_node_delete(n, &modules_inprogress);
+	mowgli_node_free(n);
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
 		snprintf(errbuf, BUFSIZE, "module_load(): module \2%s\2 init failed", pathname);
-		mowgli_node_free(n);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;
 	}
 
-	mowgli_node_add(m, n, &modules);
-
 	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, (unsigned long)m->address, h->abi_ver);
-
-	if (me.connected && !cold_start)
-	{
-		wallops(_("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
-		slog(LG_INFO, _("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
-	}
 
 	return m;
 }
@@ -375,7 +382,7 @@ void *module_locate_symbol(const char *modname, const char *sym)
 	/* If this isn't a loaded .so module, we can't search for symbols in it
 	 */
 	if (!m->handle)
-		return;
+		return NULL;
 
 	if (modtarget != NULL && !mowgli_node_find(m, &modtarget->deplist))
 	{
@@ -480,8 +487,7 @@ bool module_request(const char *name)
 		}
 	}
 
-	snprintf(path, BUFSIZE, "%s/modules/%s", MODDIR, name);
-	if (module_load(path) == NULL)
+	if (module_load(name) == NULL)
 		return false;
 
 	return true;

@@ -55,7 +55,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		if (m->header->can_unload != MODULE_UNLOAD_CAPABILITY_OK)
+		if (m->can_unload != MODULE_UNLOAD_CAPABILITY_OK)
 		{
 			slog(LG_INFO, "\2%s\2 tried to unload a permanent module",
 				get_oper_name(si));

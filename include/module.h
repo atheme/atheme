@@ -87,6 +87,7 @@ typedef struct {
 	const char *name;
 	const char *path;
 	module_t *module;
+	int handled;
 } hook_module_load_t;
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \

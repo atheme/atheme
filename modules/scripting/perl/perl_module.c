@@ -42,6 +42,17 @@ static char **perl_argv = &_perl_argv[0];
 
 static char perl_error[512];
 
+typedef struct {
+	module_t mod;
+	char filename[BUFSIZE];
+}perl_script_module_t;
+
+static mowgli_heap_t *perl_script_module_heap;
+
+static module_t *do_script_load(const char *filename);
+static bool do_script_unload(const char *filename);
+static void perl_script_module_unload_handler(module_t *m, module_unload_intent_t intent);
+
 /*
  * Startup and shutdown routines.
  *
@@ -117,9 +128,18 @@ static void shutdown_perl(void)
 /*
  * Implementation functions: load or unload a perl script.
  */
-static bool do_script_load(const char *filename)
+static module_t *do_script_load(const char *filename)
 {
+	/* Remember, this must now be re-entrant. The use of the static
+	 * perl_error buffer is still OK, as it's only used immediately after
+	 * setting, without control passing from this function.
+	 */
 	bool retval = true;
+	perl_script_module_t *m = mowgli_heap_alloc(perl_script_module_heap);
+	strlcpy(m->filename, filename, sizeof(m->filename));
+
+	snprintf(perl_error, sizeof(perl_error),  "Unknown error attempting to load perl script %s",
+			filename);
 
 	dSP;
 	ENTER;
@@ -131,23 +151,110 @@ static bool do_script_load(const char *filename)
 	XPUSHs(sv_2mortal(newSVpv(filename, 0)));
 	PUTBACK;
 
-	call_pv("Atheme::Init::call_wrapper", G_EVAL | G_DISCARD);
+	int perl_return_count = call_pv("Atheme::Init::call_wrapper", G_EVAL | G_SCALAR);
 
 	SPAGAIN;
 
 	if (SvTRUE(ERRSV))
 	{
-		retval = false;
 		strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
-		POPs;
+		goto fail;
 	}
+	if (1 != perl_return_count)
+	{
+		snprintf(perl_error, sizeof(perl_error), "Script load didn't return a package name");
+		goto fail;
+	}
+
+	/* load_script should have returned the package name that was just
+	 * loaded...
+	 */
+	const char *packagename = POPp;
+	char info_varname[BUFSIZE];
+	snprintf(info_varname, BUFSIZE, "%s::Info", packagename);
+
+	/* ... so use that name to grab the script information hash...
+	 */
+	HV *info_hash = get_hv(info_varname, 0);
+	if (!info_hash)
+	{
+		snprintf(perl_error, sizeof(perl_error), "Couldn't get package info hash %s", info_varname);
+		goto fail;
+	}
+
+	/* ..., extract the canonical name...
+	 */
+	SV **name_var = hv_fetch(info_hash, "name", 4, 0);
+	if (!name_var)
+	{
+		snprintf(perl_error, sizeof(perl_error), "Couldn't find canonical name in package info hash");
+		goto fail;
+	}
+
+	strlcpy(m->mod.name, SvPV_nolen(*name_var), sizeof(m->mod.name));
+
+	/* ... and dependency list.
+	 */
+	SV **deplist_var = hv_fetch(info_hash, "depends", 7, 0);
+	/* Not declaring this is legal... */
+	if (deplist_var)
+	{
+		/* ... but having it as anything but an arrayref isn't. */
+		if (!SvROK(*deplist_var) || SvTYPE(SvRV(*deplist_var)) != SVt_PVAV)
+		{
+			snprintf(perl_error, sizeof(perl_error), "$Info::depends must be an array reference");
+			goto fail;
+		}
+
+		AV *deplist = (AV*)SvRV(*deplist_var);
+		I32 len = av_len(deplist);
+		/* av_len returns max index, not number of items */
+		for (I32 i = 0; i <= len; ++i)
+		{
+			SV **item = av_fetch(deplist, i, 0);
+			if (!item)
+				continue;
+			const char *dep_name = SvPV_nolen(*item);
+			if (!module_request(dep_name))
+			{
+				snprintf(perl_error, sizeof(perl_error), "Dependent module %s failed to load",
+						dep_name);
+				goto fail;
+			}
+			module_t *dep_mod = module_find_published(dep_name);
+			mowgli_node_add(dep_mod, mowgli_node_create(), &m->mod.deplist);
+			mowgli_node_add(m, mowgli_node_create(), &dep_mod->dephost);
+		}
+	}
+
+	FREETMPS;
+	LEAVE;
+	invalidate_object_references();
+
+	/* Now that everything's loaded, do the module housekeeping stuff. */
+	m->mod.unload_handler = perl_script_module_unload_handler;
+	/* Can't do much better than the address of the module_t here */
+	m->mod.address = m;
+	m->mod.can_unload = MODULE_UNLOAD_CAPABILITY_OK;
+	return (module_t*)m;
+
+fail:
+	slog(LG_ERROR, "Failed to load Perl script %s: %s", filename, perl_error);
+
+	if (info_hash)
+		SvREFCNT_dec((SV*)info_hash);
+
+	do_script_unload(filename);
+
+	mowgli_heap_free(perl_script_module_heap, m);
+	POPs;
 
 	FREETMPS;
 	LEAVE;
 
 	invalidate_object_references();
 
-	return retval;
+	return NULL;
 }
 
 static bool do_script_unload(const char *filename)
@@ -219,30 +326,88 @@ static bool do_script_list(sourceinfo_t *si)
  * Connect all of the above to OperServ.
  *
  * The following commands are provided:
- * /OS SCRIPT LOAD <filename>
- * /OS SCRIPT UNLOAD <filename>
  * /OS SCRIPT LIST
  */
 static void os_cmd_script(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_script_load(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_script_unload(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_script = { "SCRIPT", N_("Loads or unloads perl scripts."), PRIV_ADMIN, 2, os_cmd_script, { .path = "oservice/script" } };
 
-command_t os_script_load = { "LOAD", N_("Load a named perl script."), PRIV_ADMIN, 2, os_cmd_script_load, { .path = "" } };
-command_t os_script_unload = { "UNLOAD", N_("Unload a loaded script."), PRIV_ADMIN, 2, os_cmd_script_unload, { .path = "" } };
 command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2, os_cmd_script_list, { .path = "" } };
 
 mowgli_patricia_t *os_script_cmdtree;
 
 static int conf_loadscript(config_entry_t *);
 
+static void hook_module_load(hook_module_load_t *data)
+{
+	struct stat s;
+	char buf[BUFSIZE];
+
+	slog(LG_DEBUG, "Perl hook handler trying to load %s", data->name);
+
+	if (data->module)
+		return;
+
+	if (0 == stat(data->path, &s))
+	{
+		data->handled = 1;
+		data->module = do_script_load(buf);
+		return;
+	}
+
+	snprintf(buf, BUFSIZE, "%s/%s.pl", MODDIR, data->name);
+	if (0 == stat(buf, &s))
+	{
+		data->handled = 1;
+		data->module = do_script_load(buf);
+		return;
+	}
+
+	snprintf(buf, BUFSIZE, "%s/%s.pl", MODDIR "/scripts", data->name);
+	if (0 == stat(buf, &s))
+	{
+		data->handled = 1;
+		data->module = do_script_load(buf);
+		return;
+	}
+
+	snprintf(buf, BUFSIZE, "%s/%s", MODDIR, data->name);
+	if (0 == stat(buf, &s))
+	{
+		data->handled = 1;
+		data->module = do_script_load(buf);
+		return;
+	}
+
+	snprintf(buf, BUFSIZE, "%s/%s", MODDIR "/scripts", data->name);
+	if (0 == stat(buf, &s))
+	{
+		data->handled = 1;
+		data->module = do_script_load(buf);
+		return;
+	}
+}
+
+void perl_script_module_unload_handler(module_t *m, module_unload_intent_t intent)
+{
+	perl_script_module_t *pm = (perl_script_module_t *)m;
+	do_script_unload(pm->filename);
+	mowgli_heap_free(perl_script_module_heap, pm);
+}
+
 /*
  * Module startup/shutdown
  */
 void _modinit(module_t *m)
 {
+	perl_script_module_heap = mowgli_heap_create(sizeof(perl_script_module_t), 256, BH_NOW);
+	if (!perl_script_module_heap)
+	{
+		m->mflags |= MODTYPE_FAIL;
+		return;
+	}
+
 	if (! startup_perl())
 	{
 		m->mflags |= MODTYPE_FAIL;
@@ -252,9 +417,10 @@ void _modinit(module_t *m)
 	service_named_bind_command("operserv", &os_script);
 
 	os_script_cmdtree = mowgli_patricia_create(strcasecanon);
-	command_add(&os_script_load, os_script_cmdtree);
-	command_add(&os_script_unload, os_script_cmdtree);
 	command_add(&os_script_list, os_script_cmdtree);
+
+        hook_add_event("module_load");
+        hook_add_module_load(hook_module_load);
 
 	add_top_conf("LOADSCRIPT", conf_loadscript);
 }
@@ -262,11 +428,14 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_script);
-	command_delete(&os_script_load, os_script_cmdtree);
-	command_delete(&os_script_unload, os_script_cmdtree);
 	command_delete(&os_script_list, os_script_cmdtree);
 
 	shutdown_perl();
+
+	/* Since all our perl pseudo-modules depend on us, we know they'll
+	 * all be deallocated before this. No need to clean them up.
+	 */
+	mowgli_heap_destroy(perl_script_module_heap);
 }
 
 /*
@@ -291,54 +460,6 @@ static void os_cmd_script(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_exec(si->service, si, c, parc-1, parv+1);
-}
-
-static void os_cmd_script_load(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc < 1)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SCRIPT LOAD");
-		command_fail(si, fault_needmoreparams, _("Syntax: SCRIPT LOAD <filename>"));
-		return;
-	}
-
-	if (!do_script_load(parv[0]))
-	{
-		command_fail(si, fault_badparams, _("Loading \2%s\2 failed. Error was:"), parv[0]);
-		command_fail(si, fault_badparams, "%s", perl_error);
-		return;
-	}
-
-	logcommand(si, CMDLOG_ADMIN, "SCRIPT LOAD: %s", parv[0]);
-	command_success_nodata(si, _("Loaded \2%s\2"), parv[0]);
-
-	if (conf_need_rehash)
-	{
-		logcommand(si, CMDLOG_ADMIN, "REHASH (MODLOAD)");
-		wallops("Rehashing \2%s\2 to complete module load by request of \2%s\2.", config_file, get_oper_name(si));
-		if (!conf_rehash())
-			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
-	}
-}
-
-static void os_cmd_script_unload(sourceinfo_t *si, int parc, char *parv[])
-{
-	if (parc < 1)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SCRIPT UNLOAD");
-		command_fail(si, fault_needmoreparams, _("Syntax: SCRIPT UNLOAD <filename>"));
-		return;
-	}
-
-	if (!do_script_unload(parv[0]))
-	{
-		command_fail(si, fault_badparams, _("Unloading \2%s\2 failed. Error was:"), parv[0]);
-		command_fail(si, fault_badparams, "%s", perl_error);
-		return;
-	}
-
-	logcommand(si, CMDLOG_ADMIN, "SCRIPT UNLOAD: %s", parv[0]);
-	command_success_nodata(si, _("Unloaded \2%s\2"), parv[0]);
 }
 
 static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[])

@@ -55,7 +55,9 @@ sub load_script {
     my $script_text = <FH>;
     close FH;
 
-    my $eval = qq{package $packagename; $script_text };
+    # Must all be on one line here to avoid messing up line numbers in error
+    # messages.
+    my $eval = "package $packagename; our %Info; $script_text";
     {
         my ($filename, $packagename, $script_text);
         eval $eval;
@@ -66,6 +68,7 @@ sub load_script {
     }
 
     $Scripts{$packagename} = $filename;
+    return $packagename;
 }
 
 sub unload_script {
@@ -87,26 +90,28 @@ sub unload_script {
 }
 
 sub list_scripts {
-	my ($si) = @_;
-	$si->success("Loaded scripts:");
-	my $num = 0;
-	foreach my $script (values %Scripts) {
-		$num++;
-		$si->success("$num: $script");
-	}
-	$si->success("\x02$num\x02 scripts loaded.");
+    my ($si) = @_;
+    $si->success("Loaded scripts:");
+    my $num = 0;
+    foreach my $script (values %Scripts) {
+            $num++;
+            $si->success("$num: $script");
+    }
+    $si->success("\x02$num\x02 scripts loaded.");
 }
 
 sub call_wrapper {
-	my $sub = shift;
-	my $saved_alarm=$SIG{ALRM};
-	$SIG{ALRM} = sub { die "Script used too much running time"; };
-	eval {
-		alarm 1;
-		&$sub(@_);
-	};
-	alarm 0;
-	$SIG{ALRM} = $saved_alarm;
-	die $@ if $@;
+    my $sub = shift;
+    my $saved_alarm=$SIG{ALRM};
+    $SIG{ALRM} = sub { die "Script used too much running time"; };
+    my $ret;
+    eval {
+            alarm 1;
+            $ret = &$sub(@_);
+    };
+    alarm 0;
+    $SIG{ALRM} = $saved_alarm;
+    die $@ if $@;
+    return $ret;
 }
 
