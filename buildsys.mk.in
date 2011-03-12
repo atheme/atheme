@@ -295,7 +295,7 @@ locales: ${MO_FILES}
 		${COMPILE_FAILED}; \
 	fi
 
-install: ${LIB} ${STATIC_LIB} ${PLUGIN} ${PROG} install-extra
+install: ${LIB} ${STATIC_LIB} ${PLUGIN} ${PROG} locales install-extra
 	for i in ${SUBDIRS}; do \
 		${DIR_ENTER}; \
 		${MAKE} ${MFLAGS} install || exit 1; \
