@@ -76,3 +76,4 @@ metadata_change    hook_metadata_change_t *
 channel_pick_successor	hook_channel_succession_req_t *
 grant_channel_access	user_t *
 operserv_info	  sourceinfo_t *
+module_load        hook_module_load_t *

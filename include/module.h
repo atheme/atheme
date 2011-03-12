@@ -26,16 +26,30 @@ typedef enum {
 typedef struct module_ module_t;
 typedef struct v4_moduleheader_ v4_moduleheader_t;
 
+typedef void (*module_unload_handler_t)(module_t *, module_unload_intent_t);
+
+/* Module structure. Might be a loaded .so module, or something else that
+ * behaves as a module for dependency purposes (perl script, etc).
+ */
 struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	v4_moduleheader_t *header;
 	module_unload_capability_t can_unload;
 
 	unsigned int mflags;
 
+	/* These three are real-module-specific. Either all will be set, or all
+	 * will be null.
+	 */
+	v4_moduleheader_t *header;
 	void *address;
 	mowgli_module_t *handle;
+
+	/* If this module is not a loaded .so (the above three are null), and
+	 * can_unload is not never, then * this must be set to a working unload
+	 * function.
+	 */
+	module_unload_handler_t unload_handler;
 
 	mowgli_list_t dephost;
 	mowgli_list_t deplist;
@@ -64,6 +78,16 @@ struct v4_moduleheader_ {
 	const char *vendor;
 	const char *version;
 };
+
+/* name is the module name we're searching for.
+ * path is the likely full path name, which may be ignored.
+ * If it is found, set module to the loaded module_t pointer
+ */
+typedef struct {
+	const char *name;
+	const char *path;
+	module_t *module;
+} hook_module_load_t;
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
 	v4_moduleheader_t _header = { \

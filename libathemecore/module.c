@@ -31,6 +31,8 @@ mowgli_list_t modules, modules_inprogress;
 
 module_t *modtarget = NULL;
 
+static module_t *module_load_internal(const char *pathname, char *errbuf);
+
 void modules_init(void)
 {
 	module_heap = mowgli_heap_create(sizeof(module_t), 256, BH_NOW);
@@ -52,19 +54,15 @@ void modules_init(void)
  *       the respective module_t object of the module.
  *
  * side effects:
- *       a module is loaded and necessary initialization code is run.
+ *       a module, or module-like object, is loaded and necessary initialization
+ *       code is run.
  */
 module_t *module_load(const char *filespec)
 {
-	mowgli_node_t *n;
-	module_t *m, *old_modtarget;
-	v4_moduleheader_t *h;
-	mowgli_module_t *handle = NULL;
-	char pathbuf[BUFSIZE];
+	module_t *m;
+	char pathbuf[BUFSIZE], errbuf[BUFSIZE];
 	const char *pathname;
-#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
-	struct link_map *map;
-#endif
+	hook_module_load_t hdata;
 
 	if (*filespec == '/')
 		pathname = filespec;
@@ -80,12 +78,41 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
+	if ((m = module_load_internal(pathname, errbuf)))
+		return m;
+
+	hdata.name = filespec;
+	hdata.path = pathname;
+	hdata.module = NULL;
+	hook_call_module_load(&hdata);
+
+	if (hdata.module)
+		return hdata.module;
+
+	slog(LG_ERROR, "%s", errbuf);
+	return NULL;
+}
+
+/*
+ * module_load_internal: the part of module_load that deals with 'real' shared
+ * object modules.
+ */
+static module_t *module_load_internal(const char *pathname, char *errbuf)
+{
+	mowgli_node_t *n;
+	module_t *m, *old_modtarget;
+	v4_moduleheader_t *h;
+	mowgli_module_t *handle = NULL;
+#if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
+	struct link_map *map;
+#endif
+
 	handle = linker_open_ext(pathname);
 
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_ERROR, "module_load(): error while loading %s: \2%s\2", pathname, errp);
+		snprintf(errbuf, BUFSIZE, "module_load(): error while loading %s: \2%s\2", pathname, errp);
 		free(errp);
 		return NULL;
 	}
@@ -94,7 +121,7 @@ module_t *module_load(const char *filespec)
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
+		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -102,7 +129,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
+		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -110,7 +137,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
+		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -118,7 +145,7 @@ module_t *module_load(const char *filespec)
 
 	if (module_find_published(h->name))
 	{
-		slog(LG_INFO, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
+		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -161,7 +188,7 @@ module_t *module_load(const char *filespec)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", pathname);
+		snprintf(errbuf, BUFSIZE, "module_load(): module \2%s\2 init failed", pathname);
 		mowgli_node_free(n);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;
@@ -295,19 +322,30 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 	n = mowgli_node_find(m, &modules);
 	if (n != NULL)
 	{
-		slog(LG_INFO, "module_unload(): unloaded \2%s\2", m->header->name);
+		slog(LG_INFO, "module_unload(): unloaded \2%s\2", m->name);
 		if (me.connected)
 		{
-			wallops(_("Module %s unloaded."), m->header->name);
+			wallops(_("Module %s unloaded."), m->name);
 		}
 
-		if (m->header->deinit)
+		if (m->header && m->header->deinit)
 			m->header->deinit(intent);
 		mowgli_node_delete(n, &modules);
 		mowgli_node_free(n);
 	}
+
 	/* else unloaded in embryonic state */
-	mowgli_module_close(m->handle);
+	if (m->handle)
+	{
+		mowgli_module_close(m->handle);
+	}
+	else
+	{
+		/* If handle is null, unload_handler is required to be valid
+		 * and we can't do anything meaningful if it isn't.
+		 */
+		m->unload_handler(m, intent);
+	}
 	mowgli_heap_free(module_heap, m);
 }
 
@@ -334,10 +372,15 @@ void *module_locate_symbol(const char *modname, const char *sym)
 		return NULL;
 	}
 
+	/* If this isn't a loaded .so module, we can't search for symbols in it
+	 */
+	if (!m->handle)
+		return;
+
 	if (modtarget != NULL && !mowgli_node_find(m, &modtarget->deplist))
 	{
 		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
-			m->header->name, modtarget->header->name, sym);
+			m->name, modtarget->name, sym);
 		mowgli_node_add(m, mowgli_node_create(), &modtarget->deplist);
 		mowgli_node_add(modtarget, mowgli_node_create(), &m->dephost);
 	}
@@ -396,7 +439,7 @@ module_t *module_find_published(const char *name)
 	{
 		module_t *m = n->data;
 
-		if (!strcasecmp(m->header->name, name))
+		if (!strcasecmp(m->name, name))
 			return m;
 	}
 
@@ -428,11 +471,11 @@ bool module_request(const char *name)
 	{
 		m = n->data;
 
-		if (!strcasecmp(m->header->name, name))
+		if (!strcasecmp(m->name, name))
 		{
 			slog(LG_ERROR, "module_request(): circular dependency between modules %s and %s",
-					modtarget != NULL ? modtarget->header->name : "?",
-					m->header->name);
+					modtarget != NULL ? modtarget->name : "?",
+					m->name);
 			return false;
 		}
 	}

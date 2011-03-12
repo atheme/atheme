@@ -9,7 +9,8 @@ my %hooks;
 my %arg_types;
 
 # XXX: Types we haven't exposed to perl yet. Remove these if they do become supported.
-my @unsupported_types = ( 'database_handle_t', 'sasl_message_t' );
+my @unsupported_types = ( 'database_handle_t', 'sasl_message_t',
+    'hook_module_load_t' );
 
 # Types that need special handling. Define the dispatch for these, but the handler
 # functions themselves are hand-written.
