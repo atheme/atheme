@@ -54,14 +54,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_ADMIN, "MODLOAD: \2%s\2", module);
-		if (*module != '/')
-		{
-			snprintf(pbuf, BUFSIZE, "%s/%s", MODDIR "/modules",
-					module);
-			m = module_load(pbuf);
-		}
-		else
-			m = module_load(module);
+		m = module_load(module);
 
 		if (m != NULL)
 			command_success_nodata(si, _("Module \2%s\2 loaded."), module);

@@ -60,22 +60,32 @@ module_t *module_load(const char *filespec)
 	module_t *m, *old_modtarget;
 	v4_moduleheader_t *h;
 	mowgli_module_t *handle = NULL;
+	char pathbuf[BUFSIZE];
+	const char *pathname;
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
 #endif
 
-	if ((m = module_find(filespec)))
+	if (*filespec == '/')
+		pathname = filespec;
+	else
 	{
-		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at 0x%lx]", filespec, (unsigned long)m->address);
+		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
+		pathname = pathbuf;
+	}
+
+	if ((m = module_find(pathname)))
+	{
+		slog(LG_INFO, "module_load(): module \2%s\2 is already loaded [at 0x%lx]", pathname, (unsigned long)m->address);
 		return NULL;
 	}
 
-	handle = linker_open_ext(filespec);
+	handle = linker_open_ext(pathname);
 
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_ERROR, "module_load(): error while loading %s: \2%s\2", filespec, errp);
+		slog(LG_ERROR, "module_load(): error while loading %s: \2%s\2", pathname, errp);
 		free(errp);
 		return NULL;
 	}
@@ -84,7 +94,7 @@ module_t *module_load(const char *filespec)
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", filespec);
+		slog(LG_ERROR, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -92,7 +102,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", filespec, h->abi_ver, MAPI_ATHEME_V4);
+		slog(LG_ERROR, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -100,7 +110,7 @@ module_t *module_load(const char *filespec)
 
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
-		slog(LG_ERROR, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", filespec, h->abi_rev, CURRENT_ABI_REVISION);
+		slog(LG_ERROR, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -108,7 +118,7 @@ module_t *module_load(const char *filespec)
 
 	if (module_find_published(h->name))
 	{
-		slog(LG_INFO, "module_load(): \2%s\2: Published name \2%s\2 already exists.", filespec, h->name);
+		slog(LG_INFO, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -116,7 +126,7 @@ module_t *module_load(const char *filespec)
 
 	m = mowgli_heap_alloc(module_heap);
 
-	strlcpy(m->modpath, filespec, BUFSIZE);
+	strlcpy(m->modpath, pathname, BUFSIZE);
 	strlcpy(m->name, h->name, BUFSIZE);
 	m->can_unload = h->can_unload;
 	m->handle = handle;
@@ -151,7 +161,7 @@ module_t *module_load(const char *filespec)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", filespec);
+		slog(LG_ERROR, "module_load(): module \2%s\2 init failed", pathname);
 		mowgli_node_free(n);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;

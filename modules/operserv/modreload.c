@@ -148,13 +148,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		n = module_deplist->head;
 		module_dependency_t *dep = (module_dependency_t *) n->data;
 
-		if (*dep->name != '/')
-		{
-			snprintf(buf, BUFSIZE, "%s/%s", MODDIR "/modules", dep->name);
-			t = module_load(buf);
-		}
-		else
-			t = module_load(dep->name);
+		t = module_load(dep->name);
 
 		if (t != NULL)
 		{
