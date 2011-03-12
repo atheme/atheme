@@ -8,10 +8,6 @@
 
 MODULE = operserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS = \
 	main.c	\
 	akill.c	\
@@ -49,6 +45,10 @@ SRCS = \
 	sqline.c	\
 	uptime.c	\
 	update.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

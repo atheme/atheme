@@ -8,11 +8,11 @@
 
 MODULE = backend
 
+SRCS = flatfile.c opensex.c
+
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
-
-SRCS = flatfile.c opensex.c
 
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 CPPFLAGS	+= -I../../include

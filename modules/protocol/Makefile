@@ -8,10 +8,6 @@
 
 MODULE = protocol
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS = \
 	asuka.c	\
 	bahamut.c	\
@@ -37,6 +33,10 @@ SRCS = \
 	undernet.c	\
 	unreal.c	\
 	unreal33.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

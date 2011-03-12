@@ -9,11 +9,11 @@
 SUBDIRS = xmlrpc rfc1459
 MODULE = transport
 
+SRCS = p10.c
+
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
-
-SRCS = p10.c
 
 CPPFLAGS        += -I../../include
 LIBS += -L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

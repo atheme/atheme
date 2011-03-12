@@ -8,10 +8,6 @@
 
 MODULE = nickserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 BASE_SRCS =			\
 	main.c	\
 	access.c	\
@@ -69,6 +65,10 @@ BASE_SRCS =			\
 	vhost.c
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

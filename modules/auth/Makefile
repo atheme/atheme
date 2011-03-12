@@ -8,13 +8,13 @@
 
 MODULE = auth
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS =			\
 	dummy.c				\
 	$(LDAP_AUTHC)
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 LIBS 		+= -L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 CPPFLAGS	+= -I../../include $(LDAP_CFLAGS)

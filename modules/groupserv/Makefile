@@ -9,12 +9,6 @@
 
 MODULE = groupserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
-SUBDIRS = main
-
 BASE_SRCS =			\
 	acsnolimit.c		\
 	drop.c			\
@@ -38,6 +32,12 @@ BASE_SRCS =			\
 	set_url.c		\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
+
+SUBDIRS = main
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

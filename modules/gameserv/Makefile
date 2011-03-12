@@ -8,11 +8,11 @@
 
 MODULE = gameserv
 
+SRCS = dice.c  eightball.c  gamecalc.c  happyfarm.c  help.c  lottery.c  main.c  namegen.c  rps.c
+
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
-
-SRCS = dice.c  eightball.c  gamecalc.c  happyfarm.c  help.c  lottery.c  main.c  namegen.c  rps.c
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH} -lm

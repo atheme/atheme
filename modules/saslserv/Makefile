@@ -8,15 +8,15 @@
 
 MODULE = saslserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS = \
 	authcookie.c	\
 	dh-blowfish.c	\
 	main.c		\
 	plain.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 # Only dh-blowfish.so needs this, oh well.

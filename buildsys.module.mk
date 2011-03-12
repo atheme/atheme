@@ -5,6 +5,8 @@
 plugindir = ${MODDIR}/modules/$(MODULE)
 PLUGIN=${SRCS:.c=$(PLUGIN_SUFFIX)}
 
+install: $(PLUGIN)
+
 .c$(PLUGIN_SUFFIX):
 	${COMPILE_STATUS}
 	if ${CC} -MMD -MP ${CFLAGS} ${PLUGIN_CFLAGS} ${CPPFLAGS} ${PLUGIN_LDFLAGS} ${LDFLAGS} -o $@ $< ${LIBS}; then \

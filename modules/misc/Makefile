@@ -8,11 +8,11 @@
 
 MODULE = misc
 
+SRCS = httpd.c
+
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
-
-SRCS = httpd.c
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

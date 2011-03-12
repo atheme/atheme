@@ -8,10 +8,6 @@
 
 MODULE = contrib
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS =			\
 	cs_access_alias.c	\
 	cs_badwords.c		\
@@ -57,6 +53,10 @@ SRCS =			\
 	os_testproc.c		\
 	os_trace.c		\
 	wumpus.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 CFLAGS		+= ${PLUGIN_CFLAGS}

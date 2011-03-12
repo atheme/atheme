@@ -8,16 +8,16 @@
 
 MODULE = crypto
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS =			\
 	$(POSIX_CRYPTC)	\
 	ircservices.c		\
 	rawmd5.c		\
 	rawsha1.c		\
 	sorservices.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 # Only rawsha1.so needs this, oh well.

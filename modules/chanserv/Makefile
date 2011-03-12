@@ -8,10 +8,6 @@
 
 MODULE = chanserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS =			\
 	main.c	\
 	access.c \
@@ -73,6 +69,10 @@ SRCS =			\
 	voice.c	\
 	why.c		\
 	xop.c
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}

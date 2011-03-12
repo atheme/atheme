@@ -8,10 +8,6 @@
 
 MODULE = botserv
 
-include ../../extra.mk
-include ../../buildsys.mk
-include ../../buildsys.module.mk
-
 SRCS =			\
 	main.c	\
 	bottalk.c	\
@@ -22,6 +18,10 @@ SRCS =			\
 	set_fantasy.c	\
 	set_nobot.c	\
 	set_private.c	\
+
+include ../../extra.mk
+include ../../buildsys.mk
+include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
