@@ -240,7 +240,7 @@ void recvq_put(connection_t *cptr)
 	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
 		if (l == 0)
-			slog(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
+			slog(LG_DEBUG, "recvq_put(): fd %d closed the connection", cptr->fd);
 		else
 			slog(LG_DEBUG, "recvq_put(): lost connection on fd %d", cptr->fd);
 		connection_close(cptr);
