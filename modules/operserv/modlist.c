@@ -42,7 +42,7 @@ static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 		module_t *m = n->data;
 
 		command_success_nodata(si, _("%2d: %-20s [loaded at 0x%lx]"),
-			++i, m->header->name, (unsigned long)m->address);
+			++i, m->name, (unsigned long)m->address);
 	}
 
 	command_success_nodata(si, _("\2%d\2 modules loaded."), i);

@@ -59,15 +59,15 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mname);
-	command_success_nodata(si, _("Name       : %s"), m->header->name);
+	command_success_nodata(si, _("Name       : %s"), m->name);
 	command_success_nodata(si, _("Address    : %p"), m->address);
 	command_success_nodata(si, _("Entry point: %p"), m->header->modinit);
 	command_success_nodata(si, _("Exit point : %p"), m->header->deinit);
 	command_success_nodata(si, _("SDK Serial : %s"), m->header->serial);
 	command_success_nodata(si, _("Version    : %s"), m->header->version);
 	command_success_nodata(si, _("Vendor     : %s"), m->header->vendor);
-	command_success_nodata(si, _("Can unload : %s"), m->header->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? "Yes" :
-					( m->header->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
+	command_success_nodata(si, _("Can unload : %s"), m->can_unload == MODULE_UNLOAD_CAPABILITY_OK ? "Yes" :
+					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
 

@@ -38,7 +38,7 @@ void _modinit(module_t *m)
 	if (ircd != NULL && xline_sts == generic_xline_sts)
 	{
 		slog(LG_INFO, "Module %s requires xline support, refusing to load.",
-				m->header->name);
+				m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}

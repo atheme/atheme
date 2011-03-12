@@ -63,7 +63,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		if (!strcmp(m->header->name, "operserv/main") || !strcmp(m->header->name, "operserv/modload") || !strcmp(m->header->name, "operserv/modunload"))
+		if (!strcmp(m->name, "operserv/main") || !strcmp(m->name, "operserv/modload") || !strcmp(m->name, "operserv/modunload"))
 		{
 			command_fail(si, fault_noprivs, _("Refusing to unload \2%s\2."),
 					module);

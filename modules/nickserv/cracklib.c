@@ -26,7 +26,7 @@ static void cracklib_config_ready(void *unused)
 
 	if (nicksvs.cracklib_dict == NULL)
 	{
-		slog(LG_INFO, "%s requires that the cracklib_dict configuration option be set.", m->header->name);
+		slog(LG_INFO, "%s requires that the cracklib_dict configuration option be set.", m->name);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return;
 	}

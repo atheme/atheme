@@ -42,15 +42,15 @@ static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 		MOWGLI_LIST_FOREACH(n2, deplist->head)
 		{
 			module_dependency_t *existing_dep = (module_dependency_t *) n2->data;
-			if (0 == strcasecmp(dm->header->name, existing_dep->name))
+			if (0 == strcasecmp(dm->name, existing_dep->name))
 				found = true;
 		}
 		if (found)
 			continue;
 
 		module_dependency_t *dep = malloc(sizeof(module_dependency_t));
-		dep->name = sstrdup(dm->header->name);
-		dep->can_unload = dm->header->can_unload;
+		dep->name = sstrdup(dm->name);
+		dep->can_unload = dm->can_unload;
 		mowgli_node_add(dep, mowgli_node_create(), deplist);
 
 		recurse_module_deplist(dm, deplist);
@@ -82,13 +82,13 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	 * we can return without having to clean up everything.
 	 */
 
-	if (!strcmp(m->header->name, "operserv/main") || !strcmp(m->header->name, "operserv/modload") || !strcmp(m->header->name, "operserv/modunload") || !strcmp(m->header->name, "operserv/modreload"))
+	if (!strcmp(m->name, "operserv/main") || !strcmp(m->name, "operserv/modload") || !strcmp(m->name, "operserv/modunload") || !strcmp(m->name, "operserv/modreload"))
 	{
 		command_fail(si, fault_noprivs, _("Refusing to reload \2%s\2."), module);
 		return;
 	}
 
-	if (m->header->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER)
+	if (m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is a permanent module; it cannot be reloaded."), module);
 		slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload permanent module \2%s\2", get_oper_name(si), module);
@@ -98,7 +98,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_list_t *module_deplist = mowgli_list_create();
 	module_dependency_t *self_dep = malloc(sizeof(module_dependency_t));
 	self_dep->name = sstrdup(module);
-	self_dep->can_unload = m->header->can_unload;
+	self_dep->can_unload = m->can_unload;
 	mowgli_node_add(self_dep, mowgli_node_create(), module_deplist);
 	recurse_module_deplist(m, module_deplist);
 

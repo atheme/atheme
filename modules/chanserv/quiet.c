@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 {
 	if (ircd != NULL && !strchr(ircd->ban_like_modes, 'q'))
 	{
-		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->header->name);
+		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}

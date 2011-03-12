@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 {
 	if (ircd != NULL && !ircd->uses_protect)
 	{
-		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->header->name);
+		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}

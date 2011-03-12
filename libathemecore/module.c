@@ -117,6 +117,8 @@ module_t *module_load(const char *filespec)
 	m = mowgli_heap_alloc(module_heap);
 
 	strlcpy(m->modpath, filespec, BUFSIZE);
+	strlcpy(m->name, h->name, BUFSIZE);
+	m->can_unload = h->can_unload;
 	m->handle = handle;
 	m->mflags = MODTYPE_STANDARD;
 	m->header = h;

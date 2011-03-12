@@ -27,7 +27,7 @@ void _modinit(module_t *m)
 {
 	if (ircd != NULL && !ircd->uses_owner)
 	{
-		slog(LG_INFO, "Module %s requires owner support, refusing to load.", m->header->name);
+		slog(LG_INFO, "Module %s requires owner support, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}

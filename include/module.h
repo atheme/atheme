@@ -12,6 +12,17 @@
 #include "privs.h"
 #include "abirev.h"
 
+typedef enum {
+	MODULE_UNLOAD_INTENT_PERM,
+	MODULE_UNLOAD_INTENT_RELOAD,
+} module_unload_intent_t;
+
+typedef enum {
+	MODULE_UNLOAD_CAPABILITY_OK,
+	MODULE_UNLOAD_CAPABILITY_NEVER,
+	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
+} module_unload_capability_t;
+
 typedef struct module_ module_t;
 typedef struct v4_moduleheader_ v4_moduleheader_t;
 
@@ -19,6 +30,7 @@ struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
 	v4_moduleheader_t *header;
+	module_unload_capability_t can_unload;
 
 	unsigned int mflags;
 
@@ -39,17 +51,6 @@ struct module_ {
 #define MAPI_ATHEME_V4		4
 
 #define MAX_CMD_PARC		20
-
-typedef enum {
-	MODULE_UNLOAD_INTENT_PERM,
-	MODULE_UNLOAD_INTENT_RELOAD,
-} module_unload_intent_t;
-
-typedef enum {
-	MODULE_UNLOAD_CAPABILITY_OK,
-	MODULE_UNLOAD_CAPABILITY_NEVER,
-	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
-} module_unload_capability_t;
 
 struct v4_moduleheader_ {
 	unsigned int atheme_mod;

@@ -538,7 +538,7 @@ _modinit(module_t *m)
 
 	if (!module_find_published("backend/opensex"))
 	{
-		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->header->name);
+		slog(LG_INFO, "Module %s requires use of the OpenSEX database backend, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}

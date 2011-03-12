@@ -41,7 +41,7 @@ void _modinit(module_t *m)
 	if (ircd != NULL && qline_sts == generic_qline_sts)
 	{
 		slog(LG_INFO, "Module %s requires qline support, refusing to load.",
-				m->header->name);
+				m->name);
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
