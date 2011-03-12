@@ -1,5 +1,6 @@
 package Atheme;
 
+use Carp;
 use Exporter 'import';
 
 require DynaLoader;
@@ -34,7 +35,7 @@ tie %ChannelRegistrations, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::ChannelR
 tie %Hooks, 'Atheme::Internal::HookHash';
 
 sub depends {
-    Atheme::request_module_dependency $_ foreach @_;
+    croak "Use depends entry in \%Info hash instead of depends function\n";
 }
 
 1;
