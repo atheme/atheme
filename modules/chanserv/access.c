@@ -375,7 +375,6 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	mowgli_node_t *n;
 	static char flagname[400];
 	template_t *exact_t = NULL;
-	unsigned int flagcount = count_bits(level);
 
 	l = build_template_list(mc);
 

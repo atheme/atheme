@@ -34,7 +34,6 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *module;
 	module_t *m;
-	char pbuf[BUFSIZE + 1];
 	int i;
 
 	if (parc < 1)

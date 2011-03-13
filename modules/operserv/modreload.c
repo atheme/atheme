@@ -62,7 +62,6 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	char *module = parv[0];
 	module_t *m;
 	mowgli_node_t *n;
-	char buf[BUFSIZE + 1];
 	module_dependency_t * reloading_semipermanent_module = NULL;
 
 	if (parc < 1)

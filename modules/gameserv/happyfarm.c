@@ -170,7 +170,7 @@ mowgli_heap_t *plot_heap = NULL;
  * When a happy farmer joins our happy little game, we have to create a happy_farmer_t
  * object for them.  Which, you know, requires a constructor...
  */
-happy_farmer_t *happy_farmer_create(myentity_t * mt)
+static happy_farmer_t *happy_farmer_create(myentity_t * mt)
 {
 	happy_farmer_t *farmer;
 
@@ -189,7 +189,7 @@ happy_farmer_t *happy_farmer_create(myentity_t * mt)
  * When a happy farmer decides to commit suicide, Government must intervene and start the
  * probate procedures (which in our case means we take all resources back).
  */
-void happy_farmer_destroy(happy_farmer_t * farmer)
+static void happy_farmer_destroy(happy_farmer_t * farmer)
 {
 	mowgli_node_t *n, *tn;
 
@@ -213,7 +213,7 @@ void happy_farmer_destroy(happy_farmer_t * farmer)
 /*
  * A farmer just bought a plot of land.
  */
-happy_plot_t *happy_plot_create(happy_farmer_t * farmer)
+static happy_plot_t *happy_plot_create(happy_farmer_t * farmer)
 {
 	happy_plot_t *plot;
 
@@ -229,7 +229,7 @@ happy_plot_t *happy_plot_create(happy_farmer_t * farmer)
 /*
  * The farmer has sold his plot of land back.
  */
-void happy_plot_destroy(happy_farmer_t * farmer, happy_plot_t * plot)
+static void happy_plot_destroy(happy_farmer_t * farmer, happy_plot_t * plot)
 {
 	return_if_fail(farmer != NULL);
 	return_if_fail(plot != NULL);
@@ -243,7 +243,7 @@ void happy_plot_destroy(happy_farmer_t * farmer, happy_plot_t * plot)
 /*
  * Find the first plot that can actually be sold back.
  */
-happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
+static happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
 {
 	mowgli_node_t *n;
 

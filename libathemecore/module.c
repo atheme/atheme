@@ -106,6 +106,8 @@ module_t *module_load(const char *filespec)
 		wallops(_("Module %s loaded at 0x%lx"), m->name, (unsigned long)m->address);
 		slog(LG_INFO, _("MODLOAD: \2%s\2 at 0x%lx"), m->name, (unsigned long)m->address);
 	}
+
+	return m;
 }
 
 /*
@@ -469,7 +471,6 @@ bool module_request(const char *name)
 {
 	module_t *m;
 	mowgli_node_t *n;
-	char path[BUFSIZE];
 
 	if (module_find_published(name))
 		return true;
