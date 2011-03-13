@@ -6,7 +6,10 @@ Atheme -- Perl script interface for Atheme IRC Services.
 
     use Atheme;
 
-    depends 'chanserv/main';
+    %Info = (
+        name => 'perl_example.pl',
+        depends => [ 'chanserv/main' ],
+    );
 
     $Services{chanserv}->bind_command(
         name => "HELLO",
@@ -31,56 +34,56 @@ Since version 7, Atheme IRC Services can use Perl scripts, as well as C modules,
 for extensibility. Since the Perl API is less easy to deduce from header files
 than the C one, it is described herein.
 
+=head1 SCRIPT REQUIREMENTS
+
+All Atheme perl scripts must define a C<%Info> hash, with the following
+contents:
+
+=head2 name
+
+Required. This is the canonical name which will be used to refer to this script
+once it is loaded, both for unloading and for dependencies (see below).
+
+=head2 depends
+
+Optional. If specified, this must be an array reference, containing the
+canonical names of all modules and scripts which this script requires.
+
 =head1 EXPORTS
 
 Most of the state available to the Perl interface is exported via a set of
 read-only tied hashes. They are:
 
-=over 4
-
-=item B<%Services>
+=head2 %Services
 
 The services currently loaded in this Atheme instance, keyed by internal
 name. Values are L<Atheme::Service> references.
 
-=item B<%Users>
+=head2 %Users
 
 The users currently connected to the network, keyed by nickname B<or> UID.
 Values are L<Atheme::User> references.
 
-=item B<%Accounts>
+=head2 %Accounts
 
 Accounts currently registered, keyed by account name. Values are
 L<Atheme::Account> references.
 
-=item B<%Channels>
+=head2 %Channels
 
 Channels currently in existence on the network, keyed by name. Values are
 L<Atheme::Channel> references.
 
-=item B<%ChannelRegistrations>
+=head2 %ChannelRegistrations
 
 Channels currently registered, keyed by name. Values are
 L<Atheme::ChannelRegistration> references.
 
-=item B<%Hooks>
+=head2 %Hooks
 
 Hook types supported by Perl, keyed by hook name. See L<Atheme::Hooks> for
 details of how to use this.
 
-=back
-
-There is also one globally exported function:
-
-=over 4
-
-=item B<depends $modulename>
-
-Indicate that this script requires C<$modulename> to be loaded. Currently this
-must be a C module; it is not yet possible for a script to depend upon another
-script.
-
-=back
 
 =head1 COMMAND HANDLERS
 
