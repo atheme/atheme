@@ -31,7 +31,7 @@ mowgli_list_t modules, modules_inprogress;
 
 module_t *modtarget = NULL;
 
-static module_t *module_load_internal(const char *pathname, char *errbuf);
+static module_t *module_load_internal(const char *pathname, char *errbuf, int errlen);
 
 void modules_init(void)
 {
@@ -78,7 +78,7 @@ module_t *module_load(const char *filespec)
 		return NULL;
 	}
 
-	m = module_load_internal(pathname, errbuf);
+	m = module_load_internal(pathname, errbuf, sizeof errbuf);
 
 	if (!m)
 	{
@@ -114,7 +114,7 @@ module_t *module_load(const char *filespec)
  * module_load_internal: the part of module_load that deals with 'real' shared
  * object modules.
  */
-static module_t *module_load_internal(const char *pathname, char *errbuf)
+static module_t *module_load_internal(const char *pathname, char *errbuf, int errlen)
 {
 	mowgli_node_t *n;
 	module_t *m, *old_modtarget;
@@ -123,14 +123,13 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 #if defined(HAVE_DLINFO) && !defined(__UCLIBC__)
 	struct link_map *map;
 #endif
+	char linker_errbuf[BUFSIZE];
 
-	handle = linker_open_ext(pathname);
+	handle = linker_open_ext(pathname, linker_errbuf, BUFSIZE);
 
 	if (!handle)
 	{
-		char *errp = sstrdup(dlerror());
-		snprintf(errbuf, BUFSIZE, "module_load(): error while loading %s: \2%s\2", pathname, errp);
-		free(errp);
+		snprintf(errbuf, errlen, "module_load(): error while loading %s: \2%s\2", pathname, linker_errbuf);
 		return NULL;
 	}
 
@@ -138,7 +137,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 
 	if (h == NULL || h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
+		snprintf(errbuf, errlen, "module_load(): \2%s\2: Attempted to load an incompatible module. Aborting.", pathname);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -146,7 +145,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 
 	if (h->abi_ver != MAPI_ATHEME_V4)
 	{
-		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
+		snprintf(errbuf, errlen, "module_load(): \2%s\2: MAPI version mismatch (%u != %u), please recompile.", pathname, h->abi_ver, MAPI_ATHEME_V4);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -154,7 +153,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 
 	if (h->abi_rev != CURRENT_ABI_REVISION)
 	{
-		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
+		snprintf(errbuf, errlen, "module_load(): \2%s\2: ABI revision mismatch (%u != %u), please recompile.", pathname, h->abi_rev, CURRENT_ABI_REVISION);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -162,7 +161,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 
 	if (module_find_published(h->name))
 	{
-		snprintf(errbuf, BUFSIZE, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
+		snprintf(errbuf, errlen, "module_load(): \2%s\2: Published name \2%s\2 already exists.", pathname, h->name);
 
 		mowgli_module_close(handle);
 		return NULL;
@@ -206,7 +205,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		snprintf(errbuf, BUFSIZE, "module_load(): module \2%s\2 init failed", pathname);
+		snprintf(errbuf, errlen, "module_load(): module \2%s\2 init failed", pathname);
 		module_unload(m, MODULE_UNLOAD_INTENT_PERM);
 		return NULL;
 	}

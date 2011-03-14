@@ -45,7 +45,7 @@
  *       the extension is appended if it's not already there.
  *       a shared module is loaded into the application's memory space
  */
-mowgli_module_t *linker_open_ext(const char *path)
+mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 {
 	char *buf = smalloc(strlen(path) + 20);
 	void *ret;
@@ -55,8 +55,22 @@ mowgli_module_t *linker_open_ext(const char *path)
 	if (!strstr(buf, PLATFORM_SUFFIX))
 		strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
 
+	/* Don't try to open a file that doesn't exist. */
+	struct stat s;
+	if (0 != stat(buf, &s))
+	{
+		strlcpy(errbuf, strerror(errno), errlen);
+		return NULL;
+	}
+
 	ret = mowgli_module_open(buf);
 	free(buf);
+
+	if (!ret)
+	{
+		strlcpy(errbuf, dlerror(), errlen);
+	}
+
 	return ret;
 }
 
