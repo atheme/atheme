@@ -347,6 +347,7 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 	if (m->handle)
 	{
 		mowgli_module_close(m->handle);
+		mowgli_heap_free(module_heap, m);
 	}
 	else
 	{
@@ -355,7 +356,6 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 		 */
 		m->unload_handler(m, intent);
 	}
-	mowgli_heap_free(module_heap, m);
 }
 
 /*
