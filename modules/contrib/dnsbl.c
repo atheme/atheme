@@ -86,12 +86,14 @@ mowgli_list_t dnsbl_elist;
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
 static void os_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[]);
 static void write_dnsbl_exempt_db(database_handle_t *db);
 static void db_h_ble(database_handle_t *db, const char *type);
-
+static void lookup_blacklists(user_t *u);
 
 command_t os_set_dnsblaction = { "DNSBLACTION", N_("Changes what happens to a user when they hit a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_set_dnsblaction, { .path = "contrib/set_dnsblaction" } };
 command_t os_dnsblexempt = { "DNSBLEXEMPT", N_("Manage the list of IP's exempt from DNSBL checking."), PRIV_USER_ADMIN, 3, os_cmd_dnsblexempt, { .path = "contrib/dnsblexempt" } };
+command_t os_dnsblscan = { "DNSBLSCAN", N_("Manually scan if a user is in a DNSBL."), PRIV_USER_ADMIN, 1, os_cmd_dnsblscan, { .path = "contrib/dnsblscan" } };
 
 static inline mowgli_list_t *dnsbl_queries(user_t *u)
 {
@@ -239,6 +241,32 @@ static void os_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "DNSBLEXEMPT");
 		command_fail(si, fault_needmoreparams, _("Syntax: DNSBLEXEMPT ADD|DEL|LIST [ip] [reason]"));
+		return;
+	}
+}
+
+static void os_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *user = parv[0];
+	user_t *u;
+
+	if (!user)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DNSBLSCAN");
+		command_fail(si, fault_needmoreparams, _("Syntax: DNSBLSCAN <user>"));
+		return;
+	}
+
+	if ((u = user_find_named(user)))
+	{
+		lookup_blacklists(u);
+		logcommand(si, CMDLOG_ADMIN, "DNSBLSCAN: %s", user);
+		command_success_nodata(si, "%s has been scanned.", user);
+		return;
+	}
+	else
+	{
+		command_fail(si, fault_badparams, "User %s is not on the network, you can not scan them.", user);
 		return;
 	}
 }
@@ -548,6 +576,7 @@ _modinit(module_t *m)
 	db_register_type_handler("BLE", db_h_ble);
 
 	service_named_bind_command("operserv", &os_dnsblexempt);
+	service_named_bind_command("operserv", &os_dnsblscan);
 
 	hook_add_event("config_purge");
 	hook_add_config_purge(dnsbl_config_purge);
@@ -577,6 +606,7 @@ _moddeinit(module_unload_intent_t intent)
 	del_conf_item("BLACKLISTS", &conf_gi_table);
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
 	service_named_unbind_command("operserv", &os_dnsblexempt);
+	service_named_unbind_command("operserv", &os_dnsblscan);
 }
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
