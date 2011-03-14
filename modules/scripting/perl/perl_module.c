@@ -352,6 +352,14 @@ static void hook_module_load(hook_module_load_t *data)
 	if (0 == stat(data->path, &s))
 	{
 		data->handled = 1;
+		data->module = do_script_load(data->path);
+		return;
+	}
+
+	snprintf(buf, BUFSIZE, "%s.pl", data->path);
+	if (0 == stat(buf, &s))
+	{
+		data->handled = 1;
 		data->module = do_script_load(buf);
 		return;
 	}
