@@ -1829,6 +1829,18 @@ general {
 	 * you void any perceived rights to support.
 	 */
 	#allow_taint;
+
+	/* (*)immune_level
+	 * This option allows you to customize the operlevel which gets kick
+	 * immunity privileges.
+	 *
+	 * The following flags are available:
+	 *    immune - require whatever ircd usermode is needed for kick
+	 *             immunity (this is the default);
+	 *    admin  - require admin privileges for kick immunity
+	 *    ircop  - require any ircop privileges for kick immunity (umode +o) 
+	 */
+	immune_level = immune;
 };
 
 /******************************************************************************

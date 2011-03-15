@@ -54,6 +54,7 @@ static int c_ci_templates(config_entry_t *);
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
 static int c_gi_exempts(config_entry_t *);
+static int c_gi_immune_level(config_entry_t *);
 
 /* *INDENT-OFF* */
 
@@ -85,6 +86,13 @@ static struct Token cflags[] = {
   { "PRIVATE",     MC_PRIVATE     },
   { "LIMITFLAGS",  MC_LIMITFLAGS  },
   { "NONE",        0              },
+  { NULL, 0 }
+};
+
+static struct Token operflags[] = {
+  { "IMMUNE",      UF_IMMUNE      },
+  { "ADMIN",       UF_ADMIN       },
+  { "IRCOP",       UF_IRCOP       },
   { NULL, 0 }
 };
 
@@ -168,6 +176,7 @@ void conf_init(void)
 	hook_call_config_purge();
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
+	config_options.immune_level = UF_IMMUNE;
 
 	me.auth = AUTH_NONE;
 
@@ -248,6 +257,7 @@ void init_newconf(void)
 	add_uint_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, 0, &config_options.uplink_sendq_limit, 10240, INT_MAX, 1048576);
 	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, 0, &config_options.language, "en");
 	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
+	add_conf_item("IMMUNE_LEVEL", &conf_gi_table, c_gi_immune_level);
 
 	/* chanserv{} block */
 	add_bool_conf_item("FANTASY", &conf_ci_table, 0, &chansvs.fantasy, false);
@@ -765,6 +775,21 @@ static int c_ci_templates(config_entry_t *ce)
 
 		set_global_template_flags(flce->ce_varname, flags_to_bitmask(flce->ce_vardata, 0));
 	}
+
+	return 0;
+}
+
+static int c_gi_immune_level(config_entry_t *ce)
+{
+	config_entry_t *flce;
+	int val;
+
+	val = token_to_value(operflags, flce->ce_vardata);
+
+	if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
+		config_options.immune_level |= val;
+	else
+		conf_report_warning(ce, "unknown flag: %s", ce->ce_vardata);
 
 	return 0;
 }

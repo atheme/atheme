@@ -111,7 +111,7 @@ void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *
 				target->nick, reason);
 		return;
 	}
-	if (target->flags & UF_IMMUNE)
+	if (target->flags & config_options.immune_level)
 	{
 		wallops("Not kicking immune user %s!%s@%s from %s (%s: %s)",
 				target->nick, target->user, target->vhost,
