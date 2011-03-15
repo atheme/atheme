@@ -284,6 +284,8 @@ void add_local_domain(char *hname, size_t size)
  */
 static void rem_request(struct reslist *request)
 {
+	return_if_fail(request != NULL);
+
 	mowgli_node_delete(&request->node, &request_list);
 	free(request->name);
 	free(request);
