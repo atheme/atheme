@@ -781,10 +781,9 @@ static int c_ci_templates(config_entry_t *ce)
 
 static int c_gi_immune_level(config_entry_t *ce)
 {
-	config_entry_t *flce;
 	int val;
 
-	val = token_to_value(operflags, flce->ce_vardata);
+	val = token_to_value(operflags, ce->ce_vardata);
 
 	if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 		config_options.immune_level |= val;
