@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static mowgli_patricia_t *exttarget_tree = NULL;
+static mowgli_patricia_t **exttarget_tree = NULL;
 
 static myentity_t dummy_entity;
 
@@ -59,12 +59,12 @@ void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, exttarget_tree, "exttarget/main", "exttarget_tree");
 
-	mowgli_patricia_add(exttarget_tree, "oper", oper_validate_f);
+	mowgli_patricia_add(*exttarget_tree, "oper", oper_validate_f);
 
 	object_init(object(&dummy_entity), "$oper", NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	mowgli_patricia_delete(exttarget_tree, "oper");
+	mowgli_patricia_delete(*exttarget_tree, "oper");
 }
