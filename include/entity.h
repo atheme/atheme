@@ -53,7 +53,7 @@ E unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int
 E bool myentity_can_register_channel(myentity_t *mt);
 
 typedef struct {
-	myentity_t *res;
+	myentity_t *entity;
 	const char *name;
 
 	bool approval;
