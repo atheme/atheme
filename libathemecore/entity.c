@@ -23,7 +23,17 @@ void myentity_del(myentity_t *mt)
 
 myentity_t *myentity_find(const char *name)
 {
-	return mowgli_patricia_retrieve(entities, name);
+	myentity_t *ent;
+	hook_myentity_req_t req;
+
+	if ((ent = mowgli_patricia_retrieve(entities, name)) != NULL)
+		return ent;
+
+	req.name = name;
+	req.entity = NULL;
+	hook_call_myentity_find(&req);
+
+	return req.entity;
 }
 
 myentity_t *myentity_find_ext(const char *name)
