@@ -1608,6 +1608,37 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 	return false;
 }
 
+unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
+{
+	mowgli_node_t *n;
+	unsigned int result = 0;
+
+	return_val_if_fail(mychan != NULL, 0);
+	return_val_if_fail(u != NULL, 0);
+
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
+	{
+		chanacs_t *ca = n->data;
+		myentity_t *mt;
+		entity_chanacs_validation_vtable_t *vt;
+
+		if (ca->entity == NULL)
+			continue;
+
+		mt = ca->entity;
+		vt = myentity_get_chanacs_validator(mt);
+
+		/* not all entities support matching against all users. */
+		if (vt->match_user == NULL)
+			continue;
+
+		if (vt->match_user(ca, u) != NULL)
+			result |= ca->level;
+	}
+
+	return result;
+}
+
 unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 {
 	myentity_t *mt;
@@ -1624,6 +1655,7 @@ unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 			result |= ca->level;
 	}
 
+	result |= chanacs_entity_flags_by_user(mychan, u);
 	result |= chanacs_host_flags_by_user(mychan, u);
 
 	return result;
