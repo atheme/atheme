@@ -44,6 +44,10 @@ gameserv
 - gs_roulette: New contrib module. A game of Russian Roulette.
 - lottery: New module that randomly chooses one user out of the channel
   members.
+- happyfarm: New (skeleton) module that's a game like FarmVille! But on IRC!
+memoserv
+- ms_fsend: new contrib module. Allows sopers to override a target user being
+  set NOMEMO or having the source user on ignore.
 nickserv
 - restrict: New module that allows services opers to stop users from using
   commands that can be abused (hostserv/request, hostserv/take,
@@ -60,21 +64,25 @@ nickserv
 - nevergroup: New module that prevents anyone giving you access to a group.
 - badmail: New module which allows setting email addresses (or glob patterns)
   which are not allowed to register accounts on-the-fly.
+- nickserv now allows passwords longer than 32 characters if the database is 
+  being hashed.
 operserv
 - emailexempts and autokline exempts are now shown in INFO.
 - modreload now rehashes the config if the module requires it and reloads modules
   that depend on the specified module.
 - soper: Allow adding a new SOPER with a password (optional, of course).
+- set: Adds the ability to temporarily modify some config options on-the-fly.
 - info: Add a new hooks so modules that add config options can also add lines to
   the operserv/info output.
 - os_modeall: New contrib module. Allows setting a given mode on all channels.
 - os_joinmon: New contrib module. Facilitates monitoring certain users and when
   a monitored user joins a channel, that information will be sent to the services
   log channel.
+- os_resolve: New contrib module for testing the asynchronous DNS resolver.
 scripting
-- Support for scripting Atheme in Perl added. This adds the SCRIPT operserv
-  command for loading/unloading/listing of Perl scripts. Still in alpha.
-  Add the --with-perl configure switch to enable it.
+- Support for scripting Atheme in Perl added. Perl scripts are loaded with
+  OperServ MODLOAD just like modules. Still in alpha. Add the --with-perl configure 
+  switch to enable it. POD-style documentation for the perl API is in doc/perl/.
 xmlrpc
 - moved to transport/xmlrpc . Your atheme.conf will need to be updated for this
   change if you use xmlrpc.
@@ -95,6 +103,8 @@ code
 - MODULE_USE_SYMBOL() was removed in favour of MODULE_TRY_REQUEST_SYMBOL().
 - configuration-defined usernames are now truncated at USERLEN (10 characters).
 - UID generation split out from the core.
+- module_load can now be hooked into. This is particularly useful for scripting
+  modules.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
@@ -104,6 +114,11 @@ other
   If specified, the user must match the original priv and the rewritten priv.
 - allow Atheme datadir to be specified on the command-line when starting.
 - many improvements to the LDAP authentication module.
+- DNS Blacklist scanning module added. This module will scan connecting users
+  against a list of DNS blacklists and take action if the users' IP is in one
+  of the blacklists. This module is mainly managed through operserv.
+- general::immune_level config option added. This allows customising the operlevel
+  that gets kick immunity privileges.
 
 Atheme Services 6.0 Release Notes
 =================================
