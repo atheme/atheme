@@ -41,6 +41,8 @@ static void exttarget_find(hook_myentity_req_t *req)
 
 void _modinit(module_t *m)
 {
+	exttarget_tree = mowgli_patricia_create(strcasecanon);
+
 	hook_add_event("myentity_find");
 	hook_add_myentity_find(exttarget_find);
 }
@@ -48,4 +50,6 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_myentity_find(exttarget_find);
+
+	mowgli_patricia_destroy(exttarget_tree, NULL, NULL);
 }
