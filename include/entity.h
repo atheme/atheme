@@ -9,6 +9,7 @@ typedef enum {
 	ENT_ANY = 0,
 	ENT_USER,
 	ENT_GROUP,
+	ENT_EXTTARGET,
 } myentity_type_t;
 
 typedef struct {
