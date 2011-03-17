@@ -664,6 +664,18 @@ loadmodule "modules/misc/httpd";
  */
 loadmodule "modules/transport/xmlrpc";
 
+/* Extended target entity types. [EXPERIMENTAL]
+ *
+ * Atheme can set up special target mapping entities which match multiple
+ * users in channel access entries.  These target mapping entity types are
+ * defined through the 'exttarget' modules listed below.
+ *
+ * Exttarget handling core			modules/exttarget/main
+ * $oper exttarget match type			modules/exttarget/oper
+ */
+#loadmodule "modules/exttarget/main";
+#loadmodule "modules/exttarget/oper";
+
 /* Other modules.
  *
  * Put any other modules you want to load on startup here. The path
