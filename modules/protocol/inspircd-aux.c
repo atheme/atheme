@@ -717,6 +717,15 @@ static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 {
+	if (!me.recvsvr)
+	{
+		slog(LG_ERROR, "m_notice(): received NOTICE from uplink which is in unregistered state.");
+		slog(LG_ERROR, "m_notice(): this probably means that you are linking to a client port instead");
+		slog(LG_ERROR, "m_notice(): of a server port on your inspircd server.");
+		slog(LG_ERROR, "m_notice(): atheme is giving up now.  please correct your configuration and try again.");
+		exit(EXIT_FAILURE);
+	}
+
 	if (parc != 2)
 		return;
 
@@ -1497,7 +1506,7 @@ void _modinit(module_t * m)
 	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 1, MSRC_USER | MSRC_SERVER);
