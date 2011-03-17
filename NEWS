@@ -9,6 +9,8 @@ ircd protocol
 - unreal: Add support for changets.
 - inspircd: Add support for locking the +H channel mode.
 - ithildin, bircd and ptlink protocol modules removed.
+- inspircd: Users are now warned when they attempt to link on a client
+  port instead of a server port.
 chanserv
 - sync: New module based on cs_sync from contrib. Adds autosync on
   ACL change (and the ability to turn it off).
@@ -26,6 +28,14 @@ chanserv
   says one of the words in the channel.
 chanfix
 - New service. Similar to EFNet's chanfix service.
+exttarget
+- exttarget/main: a new framework has been added which extends the
+  entity subsystem further, allowing for entities to be dynamically
+  constructed with the purpose of matching against any kind of user
+  or account attribute in channel access lists.  these targets can
+  take optional parameters.
+- exttarget/oper: $oper extended target added.  this target allows you
+  to match against all opers on the network in channel access lists. 
 groupserv
 - all groupserv commands are now modules. Your atheme.conf will need
   to be updated for this change if you use groupserv.
