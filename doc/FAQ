@@ -31,8 +31,6 @@ also generally known as "assholes."
 4. I get a compile error about some .po file thing.
 
 ./configure --disable-nls or install gettext and rerun ./configure.
-If you want a more interactive experience, use ./setup which prompts
-you if you want internationalization support or not.
 
 5. Atheme exits complaining that it is 'tainted'.
 
