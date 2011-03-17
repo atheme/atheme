@@ -36,6 +36,7 @@ E void init_metadata(void);
 
 E void object_init(object_t *, const char *name, destructor_t destructor);
 E void *object_ref(void *);
+E void *object_sink_ref(void *);
 E void object_unref(void *);
 E void object_dispose(void *);
 

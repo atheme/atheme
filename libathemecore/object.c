@@ -88,6 +88,28 @@ void * object_ref(void *object)
 }
 
 /*
+ * object_sink_ref
+ *
+ * Decrement the reference counter on an object.
+ *
+ * Inputs:
+ *      - the object to refcount
+ *
+ * Outputs:
+ *      - none
+ *
+ * Side Effects:
+ *      - none
+ */
+void *object_sink_ref(void *obj)
+{
+	return_if_fail(obj != NULL);
+	object(obj)->refcount--;
+
+	return obj;
+}
+
+/*
  * object_unref
  *
  * Decrement the reference counter on an object.
@@ -101,15 +123,12 @@ void * object_ref(void *object)
  * Side Effects:
  *      - if the refcount is 0, the object is destroyed.
  */
-void object_unref(void *object)
+void object_unref(void *obj)
 {
-	object_t *obj;
+	return_if_fail(obj != NULL);
 
-	return_if_fail(object != NULL);
-	obj = object(object);
-
-	obj->refcount--;
-	if (obj->refcount <= 0)
+	object_sink_ref(obj);
+	if (object(obj)->refcount <= 0)
 		object_dispose(obj);
 }
 
