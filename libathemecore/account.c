@@ -1304,6 +1304,8 @@ static void chanacs_delete(chanacs_t *ca)
 		n = mowgli_node_find(ca, &ca->entity->chanacs);
 		mowgli_node_delete(n, &ca->entity->chanacs);
 		mowgli_node_free(n);
+
+		object_unref(ca->entity);
 	}
 
 	metadata_delete_all(ca);
@@ -1361,6 +1363,8 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, n, &mt->chanacs);
+
+	object_ref(mt);
 
 	cnt.chanacs++;
 
