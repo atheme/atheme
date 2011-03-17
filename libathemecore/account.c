@@ -1602,7 +1602,7 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 			return true;
 	}
 
-	if (chanacs_find_host_by_user(mychan, u, level))
+	if (chanacs_user_flags(mychan, u) & level)
 		return true;
 
 	return false;
