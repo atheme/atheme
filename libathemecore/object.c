@@ -103,7 +103,7 @@ void * object_ref(void *object)
  */
 void *object_sink_ref(void *obj)
 {
-	return_if_fail(obj != NULL);
+	return_val_if_fail(obj != NULL, NULL);
 	object(obj)->refcount--;
 
 	return obj;
