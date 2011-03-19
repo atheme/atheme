@@ -214,6 +214,57 @@ trace_query_constructor_t trace_server = { trace_server_prepare, trace_server_ex
 
 typedef struct {
 	trace_query_domain_t domain;
+	char *pattern;
+} trace_query_glob_domain_t;
+
+static void *trace_glob_prepare(char **args)
+{
+	char *pattern;
+	trace_query_glob_domain_t *domain;
+	
+	return_val_if_fail(args != NULL, NULL);
+	return_val_if_fail(*args != NULL, NULL);
+
+	/* split out the next space */
+	pattern = strtok(*args, " ");
+
+	domain = scalloc(sizeof(trace_query_glob_domain_t), 1);
+	domain->pattern = sstrdup(pattern);
+
+	*args = strtok(NULL, "");
+	
+	return domain;
+}
+
+static bool trace_glob_exec(user_t *u, void *q)
+{
+	char usermask[512];
+	trace_query_glob_domain_t *domain = (trace_query_glob_domain_t *) q;
+
+	return_val_if_fail(domain != NULL, false);
+	return_val_if_fail(u != NULL, false);
+
+	if (domain->pattern == NULL)
+		return false;
+
+	snprintf(usermask, 512, "%s!%s@%s", u->nick, u->user, u->host);
+
+	return !match(domain->pattern, usermask);
+}
+
+static void trace_glob_cleanup(void *q)
+{
+	trace_query_glob_domain_t *domain = (trace_query_glob_domain_t *) q;
+
+	return_if_fail(domain != NULL);
+
+	free(domain);
+}
+
+trace_query_constructor_t trace_glob = { trace_glob_prepare, trace_glob_exec, trace_glob_cleanup };
+
+typedef struct {
+	trace_query_domain_t domain;
 	channel_t *channel;
 } trace_query_channel_domain_t;
 
@@ -727,6 +778,7 @@ void _modinit(module_t *m)
 	trace_cmdtree = mowgli_patricia_create(strcasecanon);
 	mowgli_patricia_add(trace_cmdtree, "REGEXP", &trace_regexp);
 	mowgli_patricia_add(trace_cmdtree, "SERVER", &trace_server);
+	mowgli_patricia_add(trace_cmdtree, "GLOB", &trace_glob);
 	mowgli_patricia_add(trace_cmdtree, "CHANNEL", &trace_channel);
 	mowgli_patricia_add(trace_cmdtree, "NICKAGE", &trace_nickage);
 	mowgli_patricia_add(trace_cmdtree, "NUMCHAN", &trace_numchan);
