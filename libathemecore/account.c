@@ -1912,7 +1912,8 @@ void expire_check(void *arg)
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */
-	sendq_flush(curr_uplink->conn);
+	if (curr_uplink != NULL && curr_uplink->conn != NULL)
+		sendq_flush(curr_uplink->conn);
 
 	myentity_foreach_t(ENT_USER, expire_myuser_cb, NULL);
 
