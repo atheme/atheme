@@ -132,8 +132,7 @@ static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const 
 /* topic wrapper */
 static void nefarious_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
 
 	/* for nefarious, set topicsetter iff we can set the proper topicTS */
 	if (ts > prevts || prevts == 0)
@@ -162,8 +161,8 @@ static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
 /* protocol-specific stuff to do on login */
 static void nefarious_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
+	return_if_fail(mu != NULL);
 
 	sts("%s AC %s R %s %lu", me.numeric, u->uid, entity(mu)->name,
 			(unsigned long)mu->registered);
@@ -176,8 +175,7 @@ static void nefarious_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
  */
 static bool nefarious_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	sts("%s AC %s U", me.numeric, u->uid);
 	if (u->flags & UF_HIDEHOSTREQ && me.hidehostsuffix != NULL &&

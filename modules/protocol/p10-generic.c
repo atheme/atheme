@@ -54,9 +54,6 @@ static void p10_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 
 static void p10_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts("%s Q :%s", u->uid, reason);
 }
 
@@ -204,9 +201,6 @@ static void p10_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	/* hold permanent akills for four weeks -- jilles */
 	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, reason);
 }
@@ -214,34 +208,22 @@ static void p10_kline_sts(const char *server, const char *user, const char *host
 /* server-to-server UNKLINE wrapper */
 static void p10_unkline_sts(const char *server, const char *user, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	sts("%s GL * -%s@%s", me.numeric, user, host);
 }
 
 static void p10_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	/* hold permanent sglines for four weeks -- jilles */
 	sts("%s GL * +$R%s %ld :%s", me.numeric, realname, duration > 0 ? duration : 2419200, reason);
 }
 
 static void p10_unxline_sts(const char *server, const char *realname)
 {
-	if (!me.connected)
-		return;
-
 	sts("%s GL * -$R%s", me.numeric, realname);
 }
 
 static void p10_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	if (*name != '#' && *name != '&')
 	{
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2, not supported by ircu.", name);
@@ -254,9 +236,6 @@ static void p10_qline_sts(const char *server, const char *name, long duration, c
 
 static void p10_unqline_sts(const char *server, const char *name)
 {
-	if (!me.connected)
-		return;
-
 	if (*name != '#' && *name != '&')
 	{
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2, not supported by ircu.", name);
@@ -269,9 +248,6 @@ static void p10_unqline_sts(const char *server, const char *name)
 /* topic wrapper */
 static void p10_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
-
 	if (ts > prevts || prevts == 0)
 		sts("%s T %s %lu %lu :%s", source->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
 	else
@@ -301,17 +277,13 @@ static void p10_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void p10_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("%s G !%lu %s %lu", me.numeric, (unsigned long)CURRTIME, me.name, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
 static void p10_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	sts("%s AC %s %s %lu", me.numeric, u->uid, entity(mu)->name,
 			(unsigned long)mu->registered);
@@ -322,24 +294,15 @@ static void p10_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
  * we can't keep track of which logins are stale and which aren't -- jilles */
 static bool p10_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
-	if (u != NULL)
-	{
-		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
-		return true;
-	}
-	else
-		return false;
+	kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
+	return true;
 }
 
 static void p10_jupe(const char *server, const char *reason)
 {
 	server_t *s;
-
-	if (!me.connected)
-		return;
 
 	/* hold it for a day (arbitrary) -- jilles */
 	/* get rid of local deactivation too */

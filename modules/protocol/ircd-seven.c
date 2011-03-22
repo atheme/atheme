@@ -98,9 +98,6 @@ static bool seven_is_valid_hostslash(const char *host)
 
 static void seven_wallops_sts(const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s ENCAP * SNOTE s :%s", ME, reason);
 }
 
@@ -234,8 +231,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 /* protocol-specific stuff to do on login */
 static void seven_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), entity(mu)->name);
 
@@ -245,8 +241,7 @@ static void seven_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 
 static bool seven_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));
 	sts(":%s ENCAP * IDENTIFIED %s %s OFF", ME, CLIENT_NAME(u), u->nick);

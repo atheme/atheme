@@ -170,9 +170,6 @@ static void solidircd_invite_sts(user_t *sender, user_t *target, channel_t *chan
 
 static void solidircd_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
@@ -313,9 +310,6 @@ static void solidircd_kline_sts(const char *server, const char *user, const char
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
 }
@@ -323,44 +317,31 @@ static void solidircd_kline_sts(const char *server, const char *user, const char
 /* server-to-server UNKLINE wrapper */
 static void solidircd_unkline_sts(const char *server, const char *user, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s RAKILL %s %s", me.name, host, user);
 }
 
 /* topic wrapper */
 static void solidircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
-
 	sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
 }
 
 /* mode wrapper */
 static void solidircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s MODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 }
 
 /* ping wrapper */
 static void solidircd_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
 static void solidircd_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
@@ -372,8 +353,7 @@ static void solidircd_on_login(user_t *u, myuser_t *account, const char *wantedh
 /* protocol-specific stuff to do on login */
 static bool solidircd_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
@@ -384,9 +364,6 @@ static void solidircd_jupe(const char *server, const char *reason)
 {
 	server_t *s;
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 
@@ -404,9 +381,6 @@ static void solidircd_jupe(const char *server, const char *reason)
 
 static void solidircd_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	if (irccasecmp(target->host, host))
 		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else

@@ -166,9 +166,6 @@ static void bahamut_invite_sts(user_t *sender, user_t *target, channel_t *channe
 
 static void bahamut_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
@@ -308,9 +305,6 @@ static void bahamut_kline_sts(const char *server, const char *user, const char *
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
 }
@@ -318,17 +312,13 @@ static void bahamut_kline_sts(const char *server, const char *user, const char *
 /* server-to-server UNKLINE wrapper */
 static void bahamut_unkline_sts(const char *server, const char *user, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s RAKILL %s %s", me.name, host, user);
 }
 
 /* topic wrapper */
 static void bahamut_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
 
 	sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
 }
@@ -336,26 +326,19 @@ static void bahamut_topic_sts(channel_t *c, user_t *source, const char *setter, 
 /* mode wrapper */
 static void bahamut_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s MODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 }
 
 /* ping wrapper */
 static void bahamut_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
 static void bahamut_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
@@ -367,8 +350,7 @@ static void bahamut_on_login(user_t *u, myuser_t *account, const char *wantedhos
 /* protocol-specific stuff to do on login */
 static bool bahamut_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
@@ -378,9 +360,6 @@ static bool bahamut_on_logout(user_t *u, const char *account)
 static void bahamut_jupe(const char *server, const char *reason)
 {
 	server_t *s;
-
-	if (!me.connected)
-		return;
 
 	sts(":%s SQUIT %s :%s", me.name, server, reason);
 	s = server_find(server);

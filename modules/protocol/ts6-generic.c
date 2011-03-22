@@ -116,9 +116,6 @@ static void ts6_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 
 static void ts6_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
@@ -275,9 +272,6 @@ static void ts6_kline_sts(const char *server, const char *user, const char *host
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s KLINE %ld %s %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, user, host, reason);
 }
@@ -286,9 +280,6 @@ static void ts6_kline_sts(const char *server, const char *user, const char *host
 static void ts6_unkline_sts(const char *server, const char *user, const char *host)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNKLINE %s %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, user, host);
@@ -299,9 +290,6 @@ static void ts6_xline_sts(const char *server, const char *realname, long duratio
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s XLINE %ld %s 2 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, realname, reason);
 }
@@ -310,9 +298,6 @@ static void ts6_xline_sts(const char *server, const char *realname, long duratio
 static void ts6_unxline_sts(const char *server, const char *realname)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNXLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, realname);
@@ -323,9 +308,6 @@ static void ts6_qline_sts(const char *server, const char *name, long duration, c
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s RESV %ld %s 0 :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, name, reason);
 }
@@ -334,9 +316,6 @@ static void ts6_qline_sts(const char *server, const char *name, long duration, c
 static void ts6_unqline_sts(const char *server, const char *name)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 	sts(":%s ENCAP %s UNRESV %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, name);
@@ -347,8 +326,8 @@ static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time
 {
 	int joined = 0;
 
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
+	return_if_fail(source != NULL);
 
 	/* If possible, try to use ETB */
 	if (use_eopmod && (c->ts > 0 || ts > prevts))
@@ -406,8 +385,7 @@ static void ts6_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u = user_find(sender);
 
-	if (!me.connected || !u)
-		return;
+	return_if_fail(u != NULL);
 
 	if (ircd->uses_uid)
 		sts(":%s TMODE %lu %s %s", CLIENT_NAME(u), (unsigned long)target->ts, target->name, modes);
@@ -418,17 +396,16 @@ static void ts6_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void ts6_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
 static void ts6_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
-	if (!me.connected || !use_rserv_support || u == NULL)
+	if (!use_rserv_support)
 		return;
+
+	return_if_fail(u != NULL);
 
 	sts(":%s ENCAP * SU %s %s", ME, CLIENT_NAME(u), entity(mu)->name);
 }
@@ -436,8 +413,10 @@ static void ts6_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 /* protocol-specific stuff to do on login */
 static bool ts6_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || !use_rserv_support || u == NULL)
+	if (!use_rserv_support)
 		return false;
+
+	return_val_if_fail(u != NULL, false);
 
 	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));
 	return false;
@@ -450,9 +429,6 @@ static bool ts6_on_logout(user_t *u, const char *account)
 static void ts6_jupe(const char *server, const char *reason)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	server_delete(server);
 

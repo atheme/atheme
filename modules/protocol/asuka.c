@@ -118,8 +118,7 @@ static void asuka_wallchops(user_t *sender, channel_t *channel, const char *mess
 /* protocol-specific stuff to do on login */
 static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	sts("%s AC %s %s %lu", me.numeric, u->uid, entity(u->myuser)->name,
 			(unsigned long)account->registered);
@@ -130,16 +129,10 @@ static void asuka_on_login(user_t *u, myuser_t *account, const char *wantedhost)
  * we can't keep track of which logins are stale and which aren't -- jilles */
 static bool asuka_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
-	if (u != NULL)
-	{
-		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
-		return true;
-	}
-	else
-		return false;
+	kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, account);
+	return true;
 }
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])

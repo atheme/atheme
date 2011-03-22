@@ -125,9 +125,6 @@ static void ircnet_invite_sts(user_t *sender, user_t *target, channel_t *channel
 
 static void ircnet_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
@@ -250,9 +247,6 @@ static void ircnet_kline_sts(const char *server, const char *user, const char *h
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	/* this won't propagate!
 	 * you'll need some bot/service on each server to do that */
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
@@ -267,9 +261,6 @@ static void ircnet_unkline_sts(const char *server, const char *user, const char 
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	if (irccasecmp(server, me.actual) && cnt.server > 2)
 		wallops("Missed an untkline");
 
@@ -282,8 +273,7 @@ static void ircnet_topic_sts(channel_t *c, user_t *source, const char *setter, t
 {
 	int joined = 0;
 
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
 
 	/* Need to join to set topic -- jilles */
 	if (!chanuser_find(c, source))
@@ -302,9 +292,6 @@ static void ircnet_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u;
 
-	if (!me.connected)
-		return;
-
 	u = user_find(sender);
 
 	/* send it from the server if that service isn't on channel
@@ -315,9 +302,6 @@ static void ircnet_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void ircnet_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("PING :%s", me.name);
 }
 
@@ -341,9 +325,6 @@ static void ircnet_jupe(const char *server, const char *reason)
 	static char sid[4+1];
 	int i;
 	server_t *s;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 	sts(":%s SQUIT %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : me.actual, server, reason);

@@ -189,9 +189,6 @@ static void unreal_invite_sts(user_t *sender, user_t *target, channel_t *channel
 
 static void unreal_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
@@ -340,9 +337,6 @@ static void unreal_kline_sts(const char *server, const char *user, const char *h
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
@@ -352,9 +346,6 @@ static void unreal_unkline_sts(const char *server, const char *user, const char 
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s TKL - G %s %s %s", me.name, user, host, svs != NULL ? svs->nick : me.name);
 }
@@ -362,9 +353,6 @@ static void unreal_unkline_sts(const char *server, const char *user, const char 
 static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
 {
 	char escapedreason[512], *p;
-
-	if (!me.connected)
-		return;
 
 	if (duration > 0)
 	{
@@ -384,18 +372,12 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 
 static void unreal_unxline_sts(const char *server, const char *realname)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s BR - :%s", me.name, realname);
 }
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	if (*name == '#' || *name == '&')
 	{
@@ -411,9 +393,6 @@ static void unreal_unqline_sts(const char *server, const char *name)
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	svs = service_find("operserv");
 	sts(":%s TKL - Q * %s %s", me.name, name, svs != NULL ? svs->nick : me.name);
 }
@@ -421,8 +400,8 @@ static void unreal_unqline_sts(const char *server, const char *name)
 /* topic wrapper */
 static void unreal_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
+	return_if_fail(source != NULL);
 
 	sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
 }
@@ -430,26 +409,20 @@ static void unreal_topic_sts(channel_t *c, user_t *source, const char *setter, t
 /* mode wrapper */
 static void unreal_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 
 /* ping wrapper */
 static void unreal_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
 static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
+	return_if_fail(account != NULL);
 
 	if (!use_esvid)
 	{
@@ -469,8 +442,7 @@ static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost
 /* protocol-specific stuff to do on logout */
 static bool unreal_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	if (!use_esvid && !nicksvs.no_nick_ownership)
 		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
@@ -484,9 +456,6 @@ static void unreal_jupe(const char *server, const char *reason)
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	server_delete(server);
 
 	svs = service_find("operserv");
@@ -496,9 +465,6 @@ static void unreal_jupe(const char *server, const char *reason)
 
 static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	if (irccasecmp(target->host, host))
 		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else

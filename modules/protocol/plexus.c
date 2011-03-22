@@ -108,8 +108,7 @@ static void plexus_introduce_nick(user_t *u)
 /* protocol-specific stuff to do on login */
 static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost)
 {
-	if (!me.connected || u == NULL)
-		return;
+	return_if_fail(u != NULL);
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
@@ -128,8 +127,7 @@ static void plexus_on_login(user_t *u, myuser_t *account, const char *wantedhost
 /* protocol-specific stuff to do on login */
 static bool plexus_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected || u == NULL)
-		return false;
+	return_val_if_fail(u != NULL, false);
 
 	if (nicksvs.no_nick_ownership)
 		return false;
@@ -144,9 +142,6 @@ static bool plexus_on_logout(user_t *u, const char *account)
 
 static void plexus_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	if (irccasecmp(target->host, host))
 		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else

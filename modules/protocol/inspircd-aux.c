@@ -269,9 +269,6 @@ static void inspircd_introduce_nick(user_t *u)
 
 static void inspircd_quit_sts(user_t *u, const char *reason)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s QUIT :%s", u->uid, reason);
 }
 
@@ -384,9 +381,6 @@ static void inspircd_kline_sts(const char *server, const char *user, const char 
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
 	svs = service_find("operserv");
 	sts(":%s ADDLINE G %s@%s %s %lu %ld :%s", me.numeric, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
@@ -397,9 +391,6 @@ static void inspircd_unkline_sts(const char *server, const char *user, const cha
 {
 	service_t *svs;
 
-	if (!me.connected)
-		return;
-
 	/* I know this looks wrong, but it's really not. Trust me. --w00t */
 	svs = service_find("operserv");
 	sts(":%s GLINE %s@%s", svs != NULL ? svs->me->uid : ME, user, host);
@@ -409,9 +400,6 @@ static void inspircd_unkline_sts(const char *server, const char *user, const cha
 static void inspircd_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
 	service_t *svs;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 
@@ -430,9 +418,6 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 /* server-to-server UNQLINE wrapper */
 static void inspircd_unqline_sts(const char *server, const char *name)
 {
-	if (!me.connected)
-		return;
-
 	if (*name != '#')
 	{
 		sts(":%s QLINE %s", ME, name);
@@ -448,8 +433,7 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 /* topic wrapper */
 static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (!me.connected || !c)
-		return;
+	return_if_fail(c != NULL);
 
 	/* If possible, try to use FTOPIC
 	 * Note that because TOPIC does not contain topicTS, it may be
@@ -478,18 +462,12 @@ static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *sender_p = user_find(sender);
 
-	if (!me.connected)
-		return;
-
 	sts(":%s FMODE %s %lu %s", sender_p->uid, target->name, (unsigned long)target->ts, modes);
 }
 
 /* ping wrapper */
 static void inspircd_ping_sts(void)
 {
-	if (!me.connected)
-		return;
-
 	// XXX this is annoying, uplink_t contains no sid or link to server_t
 	server_t *u = server_find(curr_uplink->name);
 
@@ -502,18 +480,12 @@ static void inspircd_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void inspircd_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
-	if (!me.connected)
-		return;
-
 	sts(":%s METADATA %s accountname :%s", me.numeric, u->uid, entity(mu)->name);
 }
 
 /* protocol-specific stuff to do on logout */
 static bool inspircd_on_logout(user_t *u, const char *account)
 {
-	if (!me.connected)
-		return false;
-
 	sts(":%s METADATA %s accountname :", me.numeric, u->uid);
 	return false;
 }
@@ -524,9 +496,6 @@ static void inspircd_jupe(const char *server, const char *reason)
 	static char sid[3+1];
 	int i;
 	server_t *s;
-
-	if (!me.connected)
-		return;
 
 	svs = service_find("operserv");
 
@@ -570,9 +539,6 @@ static void inspircd_jupe(const char *server, const char *reason)
 
 static void inspircd_sethost_sts(user_t *source, user_t *target, const char *host)
 {
-	if (!me.connected)
-		return;
-
 	if (has_chghostmod)
 		sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
 
