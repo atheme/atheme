@@ -32,7 +32,8 @@ int sts(const char *fmt, ...)
 	char buf[513];
 	int len;
 
-	return_val_if_fail(fmt != NULL, 1);
+	return_val_if_fail(me.connected, 0);
+	return_val_if_fail(fmt != NULL, 0);
 
 	va_start(ap, fmt);
 	vsnprintf(buf, 511, fmt, ap); /* leave two bytes for \r\n */
