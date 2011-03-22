@@ -32,7 +32,11 @@ int sts(const char *fmt, ...)
 	char buf[513];
 	int len;
 
-	return_val_if_fail(me.connected, 0);
+	if (!me.connected)
+		return 0;
+
+	return_val_if_fail(curr_uplink != NULL, 0);
+	return_val_if_fail(curr_uplink->conn != NULL, 0);
 	return_val_if_fail(fmt != NULL, 0);
 
 	va_start(ap, fmt);
