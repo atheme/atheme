@@ -24,7 +24,7 @@ static inline void do_sethost(user_t *u, char *host)
 
 	svs = service_find("hostserv");
         strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
-        sethost_sts(svs->me, u, u->vhost);
+        user_sethost(svs->me, u, u->vhost);
 }
 
 /*
