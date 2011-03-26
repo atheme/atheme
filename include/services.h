@@ -122,7 +122,6 @@ E const char *get_storage_oper_name(sourceinfo_t *si);
 E void wallops(const char *, ...) PRINTFLIKE(1, 2);
 E void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
 E bool check_vhost_validity(sourceinfo_t *si, const char *host);
-E void grant_channel_access(user_t *u, myuser_t *mu);
 
 /* ptasks.c */
 E void handle_topic(channel_t *, const char *, time_t, const char *);

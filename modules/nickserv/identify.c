@@ -158,8 +158,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		myuser_login(si->service, u, mu, true);
 		logcommand(si, CMDLOG_LOGIN, COMMAND_UC);
 
-		grant_channel_access(u, mu);
-
 		return;
 	}
 
