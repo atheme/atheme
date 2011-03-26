@@ -595,6 +595,8 @@ void user_sethost(user_t *source, user_t *target, const char *host)
 	return_if_fail(host != NULL);
 
 	sethost_sts(source, target, host);
+
+	hook_call_user_sethost(u);
 }
 
 const char *user_get_umodestr(user_t *u)
