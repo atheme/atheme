@@ -283,7 +283,7 @@ static happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
  */
 static happy_planttype_t happy_plant_by_name(const char *name)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRAY_SIZE(happy_planttype_mapping); i++)
 	{
