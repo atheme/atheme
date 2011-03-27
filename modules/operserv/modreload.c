@@ -24,11 +24,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_modreload);
 }
 
-typedef struct module_dependency_ {
-	const char *name;
-	module_unload_capability_t can_unload;
-} module_dependency_t;
-
 static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 {
 	mowgli_node_t *n;
@@ -113,7 +108,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 			while (module_deplist->head != NULL)
 			{
 				dep = module_deplist->head->data;
-				free((void*)dep->name);
+				free(dep->name);
 				free(dep);
 				mowgli_node_delete(module_deplist->head, module_deplist);
 				mowgli_list_free(module_deplist);
@@ -173,7 +168,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 			slog(LG_ERROR, "MODRELOAD:ERROR: \2%s\2 tried to reload \2%s\2 (from \2%s\2), operation failed.", get_oper_name(si), dep->name, module);
 		}
 
-		free((void*)dep->name);
+		free(dep->name);
 		free(dep);
 		mowgli_node_delete(n, module_deplist);
 	}
