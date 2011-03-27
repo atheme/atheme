@@ -37,6 +37,24 @@ typedef struct {
 	unsigned int count;
 } happy_inventory_t;
 
+struct {
+	const char *name;
+	happy_planttype_t plant;
+} happy_planttype_mapping[] = {
+	{"nothing", PLANT_NOTHING},
+	{"turnip", PLANT_TURNIP},
+	{"tomato", PLANT_TOMATO},
+	{"parsley", PLANT_PARSLEY},
+	{"lettuce", PLANT_LETTUCE},
+	{"corn", PLANT_CORN},
+	{"potato", PLANT_POTATO},
+	{"beans", PLANT_BEANS},
+	{"peaches", PLANT_PEACHES},
+	{"pears", PLANT_PEARS},
+	{"apples", PLANT_APPLES},
+	{NULL, PLANT_NOTHING},
+};
+
 /*
  * Really, we're unsure of the emotional state of the farmer.  However,
  * a sad farmer does not seem as amusing.  Plus, since IRC does not
@@ -258,6 +276,22 @@ static happy_plot_t *happy_farmer_find_vacant_plot(happy_farmer_t * farmer)
 	}
 
 	return NULL;
+}
+
+/*
+ * Determine a plant type, given user input.
+ */
+static happy_planttype_t happy_plant_by_name(const char *name)
+{
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(happy_planttype_mapping); i++)
+	{
+		if (!strcasecmp(happy_planttype_mapping[i].name, name))
+			return happy_planttype_mapping[i].plant;
+	}
+
+	return PLANT_NOTHING;
 }
 
 /*******************************************************************************************/
