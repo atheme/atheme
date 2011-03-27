@@ -273,7 +273,7 @@ static void cs_user_identify(user_t *u)
 			if (ca->level & CA_USEDUPDATE)
 				ca->mychan->used = CURRTIME;
 
-			if (ca->mychan->flags & MC_NOOP || mu->flags & MU_NOOP)
+			if (ca->mychan->flags & MC_NOOP || u->myuser->flags & MU_NOOP)
 				continue;
 
 			if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && ca->level & CA_USEOWNER)
