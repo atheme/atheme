@@ -886,8 +886,8 @@ static bool os_cmd_trace_run(sourceinfo_t *si, trace_action_constructor_t *actco
 			return false;
 		}
 
-		slog(LG_DEBUG, "operserv/trace: adding criteria %p(%s) to list [remain: %s]", q, cmd, args);
 		q = cons->prepare(&args);
+		slog(LG_DEBUG, "operserv/trace: adding criteria %p(%s) to list [remain: %s]", q, cmd, args);
 		if (q == NULL)
 		{
 			command_fail(si, fault_nosuch_target, _("Invalid criteria specified."));
