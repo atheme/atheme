@@ -48,6 +48,8 @@ static void resolve_cb(void *vptr, dns_reply_t *reply)
 
 	inet_ntop(reply->addr.saddr.sa.sa_family, &reply->addr.saddr.sin.sin_addr, buf, reply->addr.saddr_len);
 
+	command_success_nodata(req->si, "Result is %s", buf);
+
 	mowgli_heap_free(request_heap, req);
 	object_unref(req->si);
 }
