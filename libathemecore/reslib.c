@@ -123,7 +123,7 @@ static int special(int ch);
 static int printable(int ch);
 static int irc_decode_bitstring(const char **cpp, char *dn, const char *eom);
 static int irc_ns_name_compress(const char *src, unsigned char *dst, size_t dstsiz,
-    const unsigned char **dnptrs, const unsigned char **lastdnptr);
+    unsigned char **dnptrs, unsigned char **lastdnptr);
 static int irc_dn_find(const unsigned char *, const unsigned char *, const unsigned char * const *,
                        const unsigned char * const *);
 static int irc_encode_bitsring(const char **, const char *, unsigned char **, unsigned char **, 
@@ -482,8 +482,8 @@ irc_dn_comp(const char *src, unsigned char *dst, int dstsiz,
             unsigned char **dnptrs, unsigned char **lastdnptr)
 {
   return(irc_ns_name_compress(src, dst, (size_t)dstsiz,
-                              (const unsigned char **)dnptrs,
-                              (const unsigned char **)lastdnptr));
+                              dnptrs,
+                              lastdnptr));
 }
 
 /*
@@ -842,10 +842,11 @@ irc_ns_name_pton(const char *src, unsigned char *dst, size_t dstsiz)
  */
 static int
 irc_ns_name_pack(const unsigned char *src, unsigned char *dst, int dstsiz,
-                 const unsigned char **dnptrs, const unsigned char **lastdnptr)
+                 unsigned char **dnptrs, unsigned char **lastdnptr)
 {
   unsigned char *dstp;
-  const unsigned char **cpp, **lpp, *eob, *rmsg;
+  unsigned char **cpp, **lpp;
+  const unsigned char *eob, *rmsg;
   const unsigned char *srcp;
   int n, l, first = 1;
 
@@ -934,7 +935,7 @@ cleanup:
 
 static int
 irc_ns_name_compress(const char *src, unsigned char *dst, size_t dstsiz,
-                     const unsigned char **dnptrs, const unsigned char **lastdnptr)
+                     unsigned char **dnptrs, unsigned char **lastdnptr)
 {
   unsigned char tmp[NS_MAXCDNAME];
 

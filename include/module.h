@@ -128,6 +128,11 @@ E bool module_request(const char *name);
 		}								\
 	}
 
+typedef struct module_dependency_ {
+	char *name;
+	module_unload_capability_t can_unload;
+} module_dependency_t;
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

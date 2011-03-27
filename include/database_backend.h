@@ -44,7 +44,7 @@ struct database_handle_ {
 	void *priv;
 	database_vtable_t *vt;
 	database_transaction_t txn;
-	const char *file;
+	char *file;
 	unsigned int line;
 	unsigned int token;
 };
