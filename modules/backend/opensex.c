@@ -1180,7 +1180,7 @@ static void opensex_db_close(database_handle_t *db)
 
 	free(rs->buf);
 	free(rs);
-	free((void*)db->file);
+	free(db->file);
 	free(db);
 }
 
