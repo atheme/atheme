@@ -358,7 +358,7 @@ int do_calc_eval(sourceinfo_t *si, double lhs, char oper, double rhs, double *ou
 		  *out = (double)(~(long long)rhs);
 		  break;
 	  case '!':		// NOT (unary)
-		  *out = !rhs;
+		  *out = (double)(!(long long)rhs);
 		  break;
 	  case 'd':
 		  *out = calc_dice_simple(lhs, rhs);
