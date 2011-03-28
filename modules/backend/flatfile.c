@@ -46,14 +46,14 @@ static void flatfile_db_load(void)
 	{
 		if (errno == ENOENT)
 		{
-			slog(LG_ERROR, "db_load(): %s does not exist, creating it", path);
-			return;
+			slog(LG_ERROR, "db_load(): %s does not exist.  as no data will be converted, you should use the 'opensex' backend now.", path);
+			exit(EXIT_FAILURE);
 		}
 		else
 		{
 			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", path, strerror(errno));
 			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	}
 
@@ -80,7 +80,7 @@ static void flatfile_db_load(void)
 		{
 			slog(LG_ERROR, "db_load(): error while reading %s: %s", path, strerror(errno));
 			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 
 		if (c == EOF && n == 0)
