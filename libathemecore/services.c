@@ -808,7 +808,7 @@ sourceinfo_t *sourceinfo_create(void)
 		sourceinfo_heap = mowgli_heap_create(sizeof(sourceinfo_t), 16, BH_NOW);
 
 	out = mowgli_heap_alloc(sourceinfo_heap);
-	object_init(object(out), NULL, (destructor_t) sourceinfo_delete);
+	object_init(object(out), "<sourceinfo>", (destructor_t) sourceinfo_delete);
 
 	return out;
 }

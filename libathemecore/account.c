@@ -110,7 +110,7 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
 	mu = mowgli_heap_alloc(myuser_heap);
-	object_init(object(mu), NULL, (destructor_t) myuser_delete);
+	object_init(object(mu), name, (destructor_t) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
 	strlcpy(entity(mu)->name, name, NICKLEN);
@@ -638,7 +638,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, entity(mu)->name);
 
 	mn = mowgli_heap_alloc(mynick_heap);
-	object_init(object(mn), NULL, (destructor_t) mynick_delete);
+	object_init(object(mn), name, (destructor_t) mynick_delete);
 
 	strlcpy(mn->nick, name, NICKLEN);
 	mn->owner = mu;
@@ -716,7 +716,7 @@ myuser_name_t *myuser_name_add(const char *name)
 		slog(LG_DEBUG, "myuser_name_add(): %s", name);
 
 	mun = mowgli_heap_alloc(myuser_name_heap);
-	object_init(object(mun), NULL, (destructor_t) myuser_name_delete);
+	object_init(object(mun), name, (destructor_t) myuser_name_delete);
 
 	strlcpy(mun->name, name, NICKLEN);
 
@@ -948,7 +948,7 @@ mychan_t *mychan_add(char *name)
 
 	mc = mowgli_heap_alloc(mychan_heap);
 
-	object_init(object(mc), NULL, (destructor_t) mychan_delete);
+	object_init(object(mc), name, (destructor_t) mychan_delete);
 	mc->name = sstrdup(name);
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
@@ -1354,7 +1354,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
+	object_init(object(ca), mt->name, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->entity = object_ref(mt);
 	ca->host = NULL;
@@ -1403,7 +1403,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 
 	ca = mowgli_heap_alloc(chanacs_heap);
 
-	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
+	object_init(object(ca), host, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->entity = NULL;
 	ca->host = sstrdup(host);
