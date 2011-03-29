@@ -58,7 +58,7 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 	return_if_fail(obj != NULL);
 
 	if (name != NULL)
-		obj->name = sstrdup(name);
+		obj->name = strshare_get(name);
 
 	obj->destructor = des;
 	obj->refcount = 1;
@@ -166,7 +166,7 @@ void object_dispose(void *object)
 	obj->dying = true;
 
 	if (obj->name != NULL)
-		free(obj->name);
+		strshare_unref(obj->name);
 
 	if (obj->destructor != NULL)
 		obj->destructor(obj);
