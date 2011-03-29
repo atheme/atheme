@@ -1356,15 +1356,13 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->entity = mt;
+	ca->entity = object_ref(mt);
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, n, &mt->chanacs);
-
-	object_ref(mt);
 
 	cnt.chanacs++;
 
