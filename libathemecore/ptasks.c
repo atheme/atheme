@@ -160,6 +160,17 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.me, 215, u, "I * * *@%s 0 nonopered", me.name);
 		  break;
 
+	  case 'j':
+	  case 'J':
+		  MOWGLI_ITER_FOREACH(n, object_list.head)
+		  {
+			  object_t *obj = n->data;
+			  numeric_sts(me.me, 249, u, "T object:%p%s%s refs:%d destructor:%p",
+				      obj, obj->name != NULL ? "/" : "", obj->name ? obj->name : "",
+				      obj->refcount, obj->destructor);
+		  }
+		  break;
+
 	  case 'K':
 	  case 'k':
 		  if (!has_priv_user(u, PRIV_AKILL))
@@ -222,6 +233,7 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.me, 249, u, "T :myuser_nam %7d", cnt.myuser_name);
 		  numeric_sts(me.me, 249, u, "T :mychan     %7d", cnt.mychan);
 		  numeric_sts(me.me, 249, u, "T :chanacs    %7d", cnt.chanacs);
+		  numeric_sts(me.me, 249, u, "T :objects    %7zu", MOWGLI_LIST_LENGTH(&object_list));
 
 		  numeric_sts(me.me, 249, u, "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
 		  numeric_sts(me.me, 249, u, "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));

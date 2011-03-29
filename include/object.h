@@ -50,6 +50,8 @@ E void metadata_delete_all(void *target);
 E void *privatedata_get(void *target, const char *key);
 E void privatedata_set(void *target, const char *key, void *data);
 
+E mowgli_list_t object_list;
+
 #define object(x) ((object_t *) x)
 
 #endif
