@@ -165,7 +165,7 @@ void handle_stats(user_t *u, char req)
 		  MOWGLI_ITER_FOREACH(n, object_list.head)
 		  {
 			  object_t *obj = n->data;
-			  numeric_sts(me.me, 249, u, "T object:%p%s%s refs:%d destructor:%p",
+			  numeric_sts(me.me, 249, u, "J object:%p%s%s refs:%d destructor:%p",
 				      obj, obj->name != NULL ? "/" : "", obj->name ? obj->name : "",
 				      obj->refcount, obj->destructor);
 		  }
