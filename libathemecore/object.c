@@ -83,7 +83,7 @@ void * object_ref(void *object)
 	return_val_if_fail(object != NULL, NULL);
 
 	object(object)->refcount++;
-	slog(LG_DEBUG, "object_ref(%p): %d references", object(object)->refcount);
+	slog(LG_DEBUG, "object_ref(%p): %d references", object, object(object)->refcount);
 
 	return object;
 }
@@ -107,7 +107,7 @@ void *object_sink_ref(void *obj)
 	return_val_if_fail(obj != NULL, NULL);
 	object(obj)->refcount--;
 
-	slog(LG_DEBUG, "object_sink_ref(%p): %d references", object(obj)->refcount);
+	slog(LG_DEBUG, "object_sink_ref(%p): %d references", object, object(obj)->refcount);
 
 	return obj;
 }
