@@ -168,10 +168,10 @@ void object_dispose(void *object)
 	return_if_fail(obj->dying == false);
 	obj->dying = true;
 
+	mowgli_node_delete(&obj->dnode, &object_list);
+
 	if (obj->name != NULL)
 		strshare_unref(obj->name);
-
-	mowgli_node_delete(&obj->dnode, &object_list);
 
 	if (obj->destructor != NULL)
 		obj->destructor(obj);
