@@ -131,7 +131,7 @@ void object_unref(void *obj)
 	return_if_fail(obj != NULL);
 
 	object_sink_ref(obj);
-	if (object(obj)->refcount <= 0)
+	if (object(obj)->refcount == 0)
 		object_dispose(obj);
 }
 
@@ -157,6 +157,13 @@ void object_dispose(void *object)
 	return_if_fail(object != NULL);
 	obj = object(object);
 	privatedata = obj->privatedata;
+
+	/* we shouldn't be disposing an object more than once in it's
+	 * lifecycle.  so do a soft assert and get out if that's the case.
+	 *    --nenolod
+	 */
+	return_if_fail(obj->dying == false);
+	obj->dying = true;
 
 	if (obj->name != NULL)
 		free(obj->name);

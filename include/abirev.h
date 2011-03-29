@@ -16,7 +16,7 @@
  * digits and set the rest to 0 (e.g. 330000). Otherwise, increment
  * the lower digits.
  */
-#define CURRENT_ABI_REVISION 700000
+#define CURRENT_ABI_REVISION 700001
 
 #endif
 
