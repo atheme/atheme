@@ -11,6 +11,7 @@ MODULE = saslserv
 SRCS = \
 	authcookie.c	\
 	dh-blowfish.c	\
+	external.c	\
 	main.c		\
 	plain.c
 
