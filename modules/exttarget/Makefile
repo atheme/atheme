@@ -8,7 +8,7 @@
 
 MODULE = exttarget
 
-SRCS = main.c oper.c registered.c
+SRCS = main.c oper.c registered.c channel.c
 
 include ../../extra.mk
 include ../../buildsys.mk
