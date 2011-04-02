@@ -20,7 +20,7 @@ static myentity_t dummy_entity;
 
 static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
 {
-	if (ca->entity == &dummy_entity && is_ircop(u))
+	if (is_ircop(u))
 		return ca;
 
 	return NULL;
