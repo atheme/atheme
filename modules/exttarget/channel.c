@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"exttarget/registered", false, _modinit, _moddeinit,
+	"exttarget/channel", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
