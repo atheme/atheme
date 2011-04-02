@@ -104,7 +104,7 @@ void _modinit(module_t *m)
 
 	/* since we are dealing with channel names, we use irccasecanon. */
 	channel_exttarget_tree = mowgli_patricia_create(irccasecanon);
-	channel_ext_heap = mowgli_heap_alloc(sizeof(channel_exttarget_t), 32, BH_LAZY);
+	channel_ext_heap = mowgli_heap_create(sizeof(channel_exttarget_t), 32, BH_LAZY);
 }
 
 void _moddeinit(module_unload_intent_t intent)
