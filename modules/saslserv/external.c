@@ -41,17 +41,28 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 
 static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
 {
-	char certfp[256];
 	mycertfp_t *mcfp;
+	const char *name;
+	int namelen;
 
-	if(strlen(message) > 255)
-		return ASASL_FAIL;
-	strlcpy(certfp, message, len + 1);
-
-	if(!(mcfp = mycertfp_find(certfp)))
+	if(p->certfp == NULL)
 		return ASASL_FAIL;
 
-	p->username = strdup(entity(mcfp->mu)->name);
+	mcfp = mycertfp_find(p->certfp);
+	if(mcfp == NULL)
+		return ASASL_FAIL;
+
+	/* The client response is the authorization identity.
+	 * We do not support authenticating as someone else,
+	 * so the client response should be either empty or match the
+	 * certfp's user.
+	 */
+	name = entity(mcfp->mu)->name;
+	namelen = strlen(name);
+	if(len > 0 && (len != namelen || memcmp(name, message, len)))
+		return ASASL_FAIL;
+
+	p->username = strdup(name);
 	return ASASL_DONE;
 }
 

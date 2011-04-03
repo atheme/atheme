@@ -1220,6 +1220,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		smsg.uid = parv[2];
 		smsg.mode = *parv[4];
 		smsg.buf = parv[5];
+		smsg.ext = parc >= 6 ? parv[6] : NULL;
 		hook_call_sasl_input(&smsg);
 	}
 }

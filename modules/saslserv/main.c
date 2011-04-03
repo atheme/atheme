@@ -167,6 +167,7 @@ void destroy_session(sasl_session_t *p)
 		p->mechptr->mech_finish(p); /* Free up any mechanism data */
 	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
 	free(p->username);
+	free(p->certfp);
 
 	free(p);
 }
@@ -186,6 +187,13 @@ static void sasl_input(sasl_message_t *smsg)
 
 	if(smsg->mode != 'S' && smsg->mode != 'C')
 		return;
+
+	if(smsg->mode == 'S' && smsg->ext != NULL &&
+			!strcmp(smsg->buf, "EXTERNAL"))
+	{
+		free(p->certfp);
+		p->certfp = sstrdup(smsg->ext);
+	}
 
 	if(p->buf == NULL)
 	{

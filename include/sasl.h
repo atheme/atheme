@@ -22,12 +22,14 @@ struct sasl_session_ {
   void *mechdata;
 
   char *username;
+  char *certfp;
 };
 
 struct sasl_message_ {
   char *uid;
   char mode;
   char *buf;
+  char *ext;
 };
 
 struct sasl_mechanism_ {
