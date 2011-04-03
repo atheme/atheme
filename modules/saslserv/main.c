@@ -299,7 +299,10 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		rc = p->mechptr->mech_start(p, &out, &out_len);
 	}else{
-		if(base64_decode_alloc(buf, len, &temp, &tlen))
+		if(len == 1 && *buf == '+')
+			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,
+					&out, &out_len);
+		else if(base64_decode_alloc(buf, len, &temp, &tlen))
 		{
 			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
 			free(temp);
