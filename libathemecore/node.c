@@ -451,16 +451,12 @@ qline_t *qline_find(const char *mask)
 {
 	qline_t *q;
 	mowgli_node_t *n;
-	bool ischan;
 
 	MOWGLI_ITER_FOREACH(n, qlnlist.head)
 	{
 		q = (qline_t *)n->data;
 
-		ischan = q->mask[0] == '#' || q->mask[0] == '&';
-		if (!ischan && !match(q->mask, mask))
-			return q;
-		else if (ischan && !irccasecmp(q->mask, mask))
+		if (!irccasecmp(q->mask, mask))
 			return q;
 	}
 
