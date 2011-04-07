@@ -74,6 +74,12 @@ static myentity_t *channel_validate_f(const char *param)
 {
 	channel_exttarget_t *ext;
 
+	if (param == NULL)
+		return NULL;
+
+	if (*param == '\0')
+		return NULL;
+
 	/* if we already have an object, return it from our tree. */
 	if ((ext = mowgli_patricia_retrieve(channel_exttarget_tree, param)) != NULL)
 		return entity(ext);
