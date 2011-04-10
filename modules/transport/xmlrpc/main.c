@@ -349,7 +349,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 
 	for (i = 0; i < parc; i++)
 	{
-		if (strchr(parv[i], '\r') || strchr(parv[i], '\n'))
+		if (*parv[i] == '\0' || strchr(parv[i], '\r') || strchr(parv[i], '\n'))
 		{
 			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
 			return 0;
