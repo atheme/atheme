@@ -50,7 +50,7 @@ struct cmode_ shadowircd_mode_list[] = {
   { 'p', CMODE_PRIV   },
   { 's', CMODE_SEC    },
   { 't', CMODE_TOPIC  },
-  { 'c', CMODE_NOCOLOR},		/* cmodes/nocolour.c */
+  { 'c', CMODE_NOCOLOR},
   { 'r', CMODE_REGONLY},
   { 'z', CMODE_OPMOD  },
   { 'g', CMODE_FINVITE},
@@ -58,17 +58,17 @@ struct cmode_ shadowircd_mode_list[] = {
   { 'P', CMODE_PERM   },
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
-  { 'M', CMODE_IMMUNE },		/* cmodes/no_oper_kick */
-  { 'C', CMODE_NOCTCP },		/* cmodes/noctcp */
-  { 'A', CMODE_ADMINONLY },		/* cmodes/adminonly */
-  { 'O', CMODE_OPERONLY },		/* cmodes/operonly */
-  { 'Z', CMODE_SSLONLY },		/* cmodes/sslonly */
-  { 'D', CMODE_NOACTIONS },		/* cmodes/noactions */
-  { 'T', CMODE_NONOTICE },		/* cmodes/nonotice */
-  { 'G', CMODE_NOCAPS },		/* cmodes/nocaps */
-  { 'E', CMODE_NOKICKS },		/* cmodes/nokicks */
-  { 'd', CMODE_NONICKS },		/* cmodes/nonicks */
-  { 'K', CMODE_NOREPEAT },		/* cmodes/norepeat */
+  { 'M', CMODE_IMMUNE },
+  { 'C', CMODE_NOCTCP },		
+  { 'A', CMODE_ADMINONLY },		
+  { 'O', CMODE_OPERONLY },		
+  { 'Z', CMODE_SSLONLY },		
+  { 'D', CMODE_NOACTIONS },		
+  { 'T', CMODE_NONOTICE },		
+  { 'G', CMODE_NOCAPS },		
+  { 'E', CMODE_NOKICKS },		
+  { 'd', CMODE_NONICKS },		
+  { 'K', CMODE_NOREPEAT },		
   { 'J', CMODE_KICKNOREJOIN },
   { '\0', 0 }
 };
