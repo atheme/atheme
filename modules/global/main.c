@@ -144,6 +144,36 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 		return;
 	}
+	
+	if (!strcasecmp("LIST", params))
+	{
+		if (!globlist.count)
+		{
+			command_fail(si, fault_nosuch_target, _("No messages to list."));
+			return;
+		}
+
+		isfirst = true;
+		MOWGLI_ITER_FOREACH(n, globlist.head)
+		{
+			global = (struct global_ *)n->data;
+
+			snprintf(buf, sizeof buf, "[Network Notice] %s%s%s",
+					isfirst ? get_source_name(si) : "",
+					isfirst ? " - " : "",
+					global->text);
+			/* Use command_success_nodata here, we only want to send
+			 * to the person running the command.
+			 */
+			command_success_nodata(si, "%s", buf);
+			isfirst = false;
+		}
+		logcommand(si, CMDLOG_ADMIN, "GLOBAL:LIST");
+
+		command_success_nodata(si, "End of list.");
+
+		return;
+	}
 
 	if (!glob_heap)
 		glob_heap = mowgli_heap_create(sizeof(struct global_), 5, BH_NOW);
@@ -166,7 +196,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 	command_success_nodata(si,
 		"Stored text to be sent as line %zu. Use \2GLOBAL SEND\2 "
-		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
+		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
 
 void _modinit(module_t *m)
