@@ -86,7 +86,9 @@ void * object_ref(void *object)
 	return_val_if_fail(object != NULL, NULL);
 
 	object(object)->refcount++;
+#ifdef DEBUG_OBJECT_REF
 	slog(LG_DEBUG, "object_ref(%p): %d references", object, object(object)->refcount);
+#endif
 
 	return object;
 }
@@ -110,7 +112,9 @@ void *object_sink_ref(void *obj)
 	return_val_if_fail(obj != NULL, NULL);
 	object(obj)->refcount--;
 
+#ifdef DEBUG_OBJECT_REF
 	slog(LG_DEBUG, "object_sink_ref(%p): %d references", obj, object(obj)->refcount);
+#endif
 
 	return obj;
 }
