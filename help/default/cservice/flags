@@ -31,6 +31,24 @@ If the LIMITFLAGS option is set for the channel, this is
 restricted further, see help for SET LIMITFLAGS.
 
 #endif
+
+#if module exttarget/main
+As of Atheme 7.0, there are now extended entity targets
+which allow you to match chanacs against a situation instead
+of against a nickname, hostmask or group.
+
+Available exttargets are:
+#endif
+#if module exttarget/oper
+$oper - Any user who is an oper (user mode +o).
+#endif
+#if module exttarget/registered
+$registered - Any user who is identified to services.
+#endif
+#if module exttarget/channel
+$channel:#channel - Any user who is the member of the given channel.
+#endif
+
 If you do not have +f you may still remove your own access
 with -*.
 
