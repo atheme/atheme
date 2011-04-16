@@ -1295,8 +1295,9 @@ static void chanacs_delete(chanacs_t *ca)
 	return_if_fail(ca->mychan != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
-			ca->entity != NULL ? entity(ca->entity)->name : ca->host);
+		slog(LG_DEBUG, "chanacs_delete(): %s -> %s [%s]", ca->mychan->name,
+			ca->entity != NULL ? entity(ca->entity)->name : ca->host,
+			ca->entity != NULL ? "entity" : "hostmask");
 	mowgli_node_delete(&ca->cnode, &ca->mychan->chanacs);
 
 	if (ca->entity != NULL)

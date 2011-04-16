@@ -98,6 +98,9 @@ static myentity_t *channel_validate_f(const char *param)
 	/* initialize the object. */
 	object_init(object(ext), entity(ext)->name, (destructor_t) channel_ext_delete);
 
+	/* add the object to the exttarget tree. */
+	mowgli_patricia_add(channel_exttarget_tree, ext->channel, ext);
+
 	/* return the object as initially unowned by sinking the reference count. */
 	return object_sink_ref(ext);
 }

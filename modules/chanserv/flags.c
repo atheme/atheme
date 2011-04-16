@@ -101,7 +101,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	bool operoverride = false;
 	char *channel = parv[0];
-	char *target = parv[1];
+	char *target = sstrdup(parv[1]);
 	const char *str1, *str2;
 	unsigned int addflags, removeflags, restrictflags;
 	mychan_t *mc;
@@ -193,7 +193,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 					return;
 				}
-				target = mt->name;
+				free(target);
+				target = sstrdup(mt->name);
 				ca = chanacs_find(mc, mt, 0);
 			}
 			if (ca != NULL)
@@ -264,7 +265,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 				return;
 			}
-			target = mt->name;
+			free(target);
+			target = sstrdup(mt->name);
 
 			ca = chanacs_open(mc, mt, NULL, true);
 
@@ -360,6 +362,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 	}
+
+	free(target);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

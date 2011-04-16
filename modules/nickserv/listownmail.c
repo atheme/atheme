@@ -64,6 +64,17 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* Normally this couldn't fail due to the verification check above,
+	 * except when accounts have been imported from another services
+	 * database that didn't require them, in which case lots of unrelated
+	 * accounts may have 'noemail' or similar.
+	 */
+	if (!validemail(si->smu->email))
+	{
+		command_fail(si, fault_noprivs, _("You must have a valid email address to perform this operation."));
+		return;
+	}
+
 	command_add_flood(si, FLOOD_HEAVY);
 
 	state.matches = 0;
