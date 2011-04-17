@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/rwatch", false, _modinit, _moddeinit,
+	"operserv/rwatch", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -25,6 +25,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[]);
 
 static void write_rwatchdb(database_handle_t *db);
+static void load_rwatchdb(char *path);
 static void db_h_rw(database_handle_t *db, const char *type);
 static void db_h_rr(database_handle_t *db, const char *type);
 
@@ -53,6 +54,7 @@ command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NO
 command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
 rwatch_t *rwread = NULL;
+FILE *f;
 
 void _modinit(module_t *m)
 {
@@ -70,9 +72,18 @@ void _modinit(module_t *m)
 	hook_add_event("user_nickchange");
 	hook_add_user_nickchange(rwatch_nickchange);
 	hook_add_db_write(write_rwatchdb);
+	
+	char path[BUFSIZE];
+	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db");
+	f = fopen(path, "r");
 
-	db_register_type_handler("RW", db_h_rw);
-	db_register_type_handler("RR", db_h_rr);
+	if (f)
+		load_rwatchdb(path); /* because i'm lazy, let's pass path to the function */
+	else
+	{
+		db_register_type_handler("RW", db_h_rw);
+		db_register_type_handler("RR", db_h_rr);
+	}
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -130,6 +141,60 @@ static void write_rwatchdb(database_handle_t *db)
 	}
 }
 
+static void load_rwatchdb(char *path)
+{
+	char *item, rBuf[BUFSIZE * 2];
+	rwatch_t *rw = NULL;
+	char newpath[BUFSIZE];
+	
+	snprintf(newpath, BUFSIZE, "%s/%s", datadir, "rwatch.db.old");
+
+	while (fgets(rBuf, BUFSIZE * 2, f))
+	{
+		item = strtok(rBuf, " ");
+		strip(item);
+
+		if (!strcmp(item, "RW"))
+		{
+			char *reflagsstr = strtok(NULL, " ");
+			char *regex = strtok(NULL, "\n");
+
+			if (!reflagsstr || !regex || rw)
+				; /* erroneous, don't add */
+			else
+			{
+				rw = (rwatch_t *)smalloc(sizeof(rwatch_t));
+
+				rw->regex = sstrdup(regex);
+				rw->reflags = atoi(reflagsstr);
+				rw->re = regex_create(rw->regex, rw->reflags);
+			}
+		}
+		else if (!strcmp(item, "RR"))
+		{
+			char *actionstr = strtok(NULL, " ");
+			char *reason = strtok(NULL, "\n");
+
+			if (!actionstr || !reason || !rw)
+				; /* erroneous, don't add */
+			else
+			{
+				rw->actions = atoi(actionstr);
+				rw->reason = sstrdup(reason);
+				mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
+				rw = NULL;
+			}
+		}
+	}
+
+	fclose(f);
+	
+	if ((rename(path, newpath)) < 0)
+	{
+		slog(LG_ERROR, "load_rwatchdb(): couldn't rename rwatch database.");
+		return;
+	}
+}
 
 static void db_h_rw(database_handle_t *db, const char *type)
 {
