@@ -2,7 +2,7 @@
  * This is an ANOPE module to convert anope databases to atheme.
  * Compile and load this (you may need to do some tricks; hint: if
  * it won't load the first time try another time), and an atheme
- * flatfile db will be dumped to WHERE_TO.
+ * OpenSEX db will be dumped to WHERE_TO.
  *
  * Caveats:
  * 1. Most likely, only channels with xOP access are converted correctly.
@@ -14,7 +14,7 @@
  * Good luck, and have fun!
  */
 
-/* WHERE_TO is now a prefix which defines where atheme.db and botserv.db should be dumped. --nenolod */
+/* WHERE_TO is now a prefix which defines where services.db should be dumped. --nenolod */
 #define WHERE_TO "/home/jilles/atheme/etc/"
 
 /* define this if you use an anope that has everything in root, i.e. "pre CAPAB", 1.7.4 or lower. */
@@ -170,15 +170,15 @@ static void ATHEME_CONVERT_write_accounts(void)
 					athemeflags);
 			if (na->last_usermask != NULL)
 			{
-				/*fprintf(f, "MD U %s private:host:actual %s", nc->display, na->last_usermask);*/
-				fprintf(f, "MD U %s private:host:vhost %s\n", nc->display, na->last_usermask);
+				/*fprintf(f, "MDU %s private:host:actual %s", nc->display, na->last_usermask);*/
+				fprintf(f, "MDU %s private:host:vhost %s\n", nc->display, na->last_usermask);
 			}
 			if (nc->greet)
-				fprintf(f, "MD U %s greet %s\n", nc->display, nc->greet);
+				fprintf(f, "MDU %s greet %s\n", nc->display, nc->greet);
 			if (nc->icq)
-				fprintf(f, "MD U %s icq %u\n", nc->display, (unsigned int)nc->icq);
+				fprintf(f, "MDU %s icq %u\n", nc->display, (unsigned int)nc->icq);
 			if (nc->url)
-				fprintf(f, "MD U %s url %s\n", nc->display, nc->url);
+				fprintf(f, "MDU %s url %s\n", nc->display, nc->url);
 			if (nc->flags & NI_SERVICES_ROOT)
 				fprintf(f, "SO %s %s 0\n", nc->display, OPERCLASS_ROOT);
 			else if (nc->flags & NI_SERVICES_ADMIN)
@@ -284,9 +284,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				continue;
 #endif
 
-			fprintf(f, "MC %s 0 %s %lu %lu %d %d %d %d %s\n", ci->name, 
-				(forbidden) ? 
-				ci->forbidby : ci->founder->display, 
+			fprintf(f, "MC %s %lu %lu %d %d %d %d %s\n", ci->name,
 				(unsigned long)ci->time_registered,
 				(unsigned long)ci->last_used, athemeflags,
 				athememon, athememoff,
@@ -294,7 +292,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				ci->mlock_key ? ci->mlock_key : "");
 
 			mcout++;
-			fprintf(f, "CA %s %s %s\n", ci->name, ci->founder->display, "+AvhoOtsirRf");
+			fprintf(f, "CA %s %s %s\n", ci->name, ci->founder->display, "+AvhoOtsirRfF");
 			caout++;
 
 			for (j = 0; j < ci->accesscount; j++) {
@@ -331,49 +329,49 @@ static void ATHEME_CONVERT_write_channels(void)
 			for (j = 0; j < ci->akickcount; j++) {
 				if (!ci->akick[j].in_use)
 					continue;
-				fprintf(f, "CA %s %s +b\n", ci->name,
+				fprintf(f, "CA %s %s +b %lu\n", ci->name,
 					(ci->akick[j].flags & AK_ISNICK) ? ci->akick[j].u.nc->display :
-					ci->akick[j].u.mask);
+					ci->akick[j].u.mask, (unsigned long)ci->last_used);
 				caout++;
 			}
 
 			if (ci->url)
-				fprintf(f, "MD C %s url %s\n", ci->name, ci->url);
+				fprintf(f, "MDC %s url %s\n", ci->name, ci->url);
 
 			if (ci->email)
-				fprintf(f, "MD C %s email %s\n", ci->name, ci->email);
+				fprintf(f, "MDC %s email %s\n", ci->name, ci->email);
 
 			if (ci->desc)
-				fprintf(f, "MD C %s description %s\n", ci->name, ci->desc);
+				fprintf(f, "MDC %s description %s\n", ci->name, ci->desc);
 
 			if (ci->entry_message)
-				fprintf(f, "MD C %s private:entrymsg %s\n", ci->name, ci->entry_message);
+				fprintf(f, "MDC %s private:entrymsg %s\n", ci->name, ci->entry_message);
 
 			if (ci->last_topic && ci->last_topic_setter[0] &&
 					ci->last_topic_time)
 			{
-				fprintf(f, "MD C %s private:topic:text %s\n",
+				fprintf(f, "MDC %s private:topic:text %s\n",
 						ci->name, ci->last_topic);
-				fprintf(f, "MD C %s private:topic:setter %s\n",
+				fprintf(f, "MDC %s private:topic:setter %s\n",
 						ci->name, ci->last_topic_setter);
-				fprintf(f, "MD C %s private:topic:ts %lu\n",
+				fprintf(f, "MDC %s private:topic:ts %lu\n",
 						ci->name, (unsigned long)ci->last_topic_time);
 			}
 
 			/* If the channel is forbidden, add close metadata */
 			if (ci->flags & CI_VERBOTEN)
 			{
-				fprintf(f, "MD C %s private:close:closer %s\n", ci->name, ci->forbidby);
-				fprintf(f, "MD C %s private:close:reason %s\n", ci->name, ci->forbidreason);
-				fprintf(f, "MD C %s private:close:timestamp %lu\n", ci->name, (unsigned long)time(NULL));
+				fprintf(f, "MDC %s private:close:closer %s\n", ci->name, ci->forbidby);
+				fprintf(f, "MDC %s private:close:reason %s\n", ci->name, ci->forbidreason);
+				fprintf(f, "MDC %s private:close:timestamp %lu\n", ci->name, (unsigned long)time(NULL));
 			}
 
 			/* if the channel has a botserv bot assigned, add botserv metadata */
 			bi = ci->bi;
 			if (bi != NULL)
 			{
-				fprintf(f, "MD C %s private:botserv:bot-assigned %s\n", ci->name, bi->nick);
-				fprintf(f, "MD C %s private:botserv:bot-handle-fantasy %s\n", ci->name, bi->nick);
+				fprintf(f, "MDC %s private:botserv:bot-assigned %s\n", ci->name, bi->nick);
+				fprintf(f, "MDC %s private:botserv:bot-handle-fantasy %s\n", ci->name, bi->nick);
 			}
 		}
 	}
@@ -426,29 +424,18 @@ int AnopeInit(int argc, char **argv)
 {
 	time_t ts;
 
-	f = fopen(WHERE_TO "atheme.db", "w");
+	f = fopen(WHERE_TO "services.db", "w");
 
 	if (!f)
-		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO "atheme.db", errno, strerror(errno));
+		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO "services.db", errno, strerror(errno));
 
 	time(&ts);
 	fprintf(f, "# Database converted at %s", ctime(&ts));
-	fprintf(f, "DBV 4\n");
+	fprintf(f, "DBV 7\n");
 	ATHEME_CONVERT_write_accounts();
 	ATHEME_CONVERT_write_channels();
 	ATHEME_CONVERT_write_akills();
 	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, klnout);
-	fprintf(f, "# End conversion.\n");
-
-	fclose(f);
-
-	f = fopen(WHERE_TO "botserv.db", "w");
-
-	if (!f)
-		alog("[convert to atheme] could not open %s: %d (%s)", WHERE_TO "botserv.db", errno, strerror(errno));
-
-	time(&ts);
-	fprintf(f, "# Database converted at %s\n", ctime(&ts));
 	ATHEME_CONVERT_write_botserv_bots();
 	fprintf(f, "# End conversion.\n");
 
