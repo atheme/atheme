@@ -24,8 +24,9 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[]);
 
-static void write_rwatchdb(void);
-static void load_rwatchdb(void);
+static void write_rwatchdb(database_handle_t *db);
+static void db_h_rw(database_handle_t *db, const char *type);
+static void db_h_rr(database_handle_t *db, const char *type);
 
 mowgli_patricia_t *os_rwatch_cmds;
 
@@ -51,6 +52,8 @@ command_t os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch lis
 command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list, { .path = "" } };
 command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set, { .path = "" } };
 
+rwatch_t *rwread = NULL;
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("operserv", &os_rwatch);
@@ -66,8 +69,10 @@ void _modinit(module_t *m)
 	hook_add_user_add(rwatch_newuser);
 	hook_add_event("user_nickchange");
 	hook_add_user_nickchange(rwatch_nickchange);
+	hook_add_db_write(write_rwatchdb);
 
-	load_rwatchdb();
+	db_register_type_handler("RW", db_h_rw);
+	db_register_type_handler("RR", db_h_rr);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -97,98 +102,55 @@ void _moddeinit(module_unload_intent_t intent)
 
 	hook_del_user_add(rwatch_newuser);
 	hook_del_user_nickchange(rwatch_nickchange);
+	hook_del_db_write(write_rwatchdb);
+
+        db_unregister_type_handler("RW");
+        db_unregister_type_handler("RR");
 
 	mowgli_patricia_destroy(os_rwatch_cmds, NULL, NULL);
 }
 
-static void write_rwatchdb(void)
+static void write_rwatchdb(database_handle_t *db)
 {
-	FILE *f;
 	mowgli_node_t *n;
-	rwatch_t *rw;
-
-	char tmppath[BUFSIZE], path[BUFSIZE];
-
-	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db.new");
-	snprintf(tmppath, BUFSIZE, "%s/%s", datadir, "rwatch.db");
-
-	if (!(f = fopen(tmppath, "w")))
-	{
-		slog(LG_ERROR, "write_rwatchdb(): cannot write rwatch database: %s", strerror(errno));
-		return;
-	}
 
 	MOWGLI_ITER_FOREACH(n, rwatch_list.head)
 	{
-		rw = n->data;
-		fprintf(f, "RW %d %s\n", rw->reflags, rw->regex);
-		fprintf(f, "RR %d %s\n", rw->actions, rw->reason);
-	}
+		rwatch_t *rw = n->data;
 
-	fclose(f);
+		db_start_row(db, "RW");
+		db_write_uint(db, rw->reflags);
+		db_write_str(db, rw->regex);
+		db_commit_row(db);
 
-	if ((rename(tmppath, path)) < 0)
-	{
-		slog(LG_ERROR, "write_rwatchdb(): couldn't rename rwatch database.");
-		return;
+		db_start_row(db, "RR");
+		db_write_uint(db, rw->actions);
+		db_write_str(db, rw->reason);
+		db_commit_row(db);
 	}
 }
 
-static void load_rwatchdb(void)
+
+static void db_h_rw(database_handle_t *db, const char *type)
 {
-	FILE *f;
-	char *item, rBuf[BUFSIZE * 2];
-	rwatch_t *rw = NULL;
+	int reflags = db_sread_uint(db);
+	const char *regex = db_sread_str(db);
 
-	char path[BUFSIZE];
+	rwread = (rwatch_t *)smalloc(sizeof(rwatch_t));
+	rwread->regex = sstrdup(regex);
+	rwread->reflags = reflags;
+	rwread->re = regex_create(rwread->regex, rwread->reflags);
+}
 
-	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db.new");
+static void db_h_rr(database_handle_t *db, const char *type)
+{
+	int actions = db_sread_uint(db);
+	const char *reason = db_sread_str(db);
 
-	if (!(f = fopen(path, "r")))
-	{
-		slog(LG_DEBUG, "load_rwatchdb(): cannot open rwatch database: %s", strerror(errno));
-		return;
-	}
-
-	while (fgets(rBuf, BUFSIZE * 2, f))
-	{
-		item = strtok(rBuf, " ");
-		strip(item);
-
-		if (!strcmp(item, "RW"))
-		{
-			char *reflagsstr = strtok(NULL, " ");
-			char *regex = strtok(NULL, "\n");
-
-			if (!reflagsstr || !regex || rw)
-				; /* erroneous, don't add */
-			else
-			{
-				rw = (rwatch_t *)smalloc(sizeof(rwatch_t));
-
-				rw->regex = sstrdup(regex);
-				rw->reflags = atoi(reflagsstr);
-				rw->re = regex_create(rw->regex, rw->reflags);
-			}
-		}
-		else if (!strcmp(item, "RR"))
-		{
-			char *actionstr = strtok(NULL, " ");
-			char *reason = strtok(NULL, "\n");
-
-			if (!actionstr || !reason || !rw)
-				; /* erroneous, don't add */
-			else
-			{
-				rw->actions = atoi(actionstr);
-				rw->reason = sstrdup(reason);
-				mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
-				rw = NULL;
-			}
-		}
-	}
-
-	fclose(f);
+	rwread->actions = actions;
+	rwread->reason = sstrdup(reason);
+	mowgli_node_add(rwread, mowgli_node_create(), &rwatch_list);
+	rwread = NULL;
 }
 
 static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
@@ -278,7 +240,6 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
 	command_success_nodata(si, _("Added \2%s\2 to regex watch list."), pattern);
 	logcommand(si, CMDLOG_ADMIN, "RWATCH:ADD: \2%s\2 (reason: \2%s\2)", pattern, reason);
-	write_rwatchdb();
 }
 
 static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
@@ -327,7 +288,6 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 			mowgli_node_free(n);
 			command_success_nodata(si, _("Removed \2%s\2 from regex watch list."), pattern);
 			logcommand(si, CMDLOG_ADMIN, "RWATCH:DEL: \2%s\2", pattern);
-			write_rwatchdb();
 			return;
 		}
 	}
@@ -435,7 +395,6 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 			if (removeflags & RWACT_KLINE)
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			logcommand(si, CMDLOG_ADMIN, "RWATCH:SET: \2%s\2 \2%s\2", pattern, opts);
-			write_rwatchdb();
 			return;
 		}
 	}
