@@ -188,12 +188,15 @@ static void load_rwatchdb(char *path)
 	}
 
 	fclose(f);
-	
+
 	if ((rename(path, newpath)) < 0)
 	{
 		slog(LG_ERROR, "load_rwatchdb(): couldn't rename rwatch database.");
 		return;
 	}
+	
+	slog(LG_INFO, "The RWATCH database has been converted to the OpenSEX format.");
+	slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
 }
 
 static void db_h_rw(database_handle_t *db, const char *type)
