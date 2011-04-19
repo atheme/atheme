@@ -593,6 +593,8 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 
 		if (ca->level == CA_AKICK)
 		{
+			char buf[BUFSIZE], *buf_iter;
+
 			md = metadata_find(ca, "reason");
 
 			/* check if it's a temporary akick */
@@ -604,24 +606,26 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 			}
 			ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
-			if (ca->entity == NULL)
-				command_success_nodata(si, _("%d: \2%s\2  %s [expires: %s, modified: %s ago]"),
-						++i, ca->host,
-						md ? md->value : "",
-						expires_on > 0 ? timediff(time_left) : "never",
-						ago);
-			else if (isuser(ca->entity) && MOWGLI_LIST_LENGTH(&user(ca->entity)->logins) > 0)
-				command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [expires: %s, modified: %s ago]"),
-						++i, ca->entity->name,
-						md ? md->value : "",
-						expires_on > 0 ? timediff(time_left) : "never",
-						ago);
-			else
-				command_success_nodata(si, _("%d: \2%s\2 (not logged in)  %s [expires: %s, modified: %s ago]"),
-						++i, ca->entity->name,
-						md ? md->value : "",
-						expires_on > 0 ? timediff(time_left) : "never",
-						ago);
+			buf_iter = buf;
+			buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%d: \2%s\2 (\2%s\2) ["),
+					     ++i, ca->entity != NULL ? ca->entity->name : ca->host,
+					     md != NULL ? md->value : _("no AKICK reason specified"));
+
+			if (ca->setter)
+				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("setter: %s"),
+						     ca->setter->name);
+
+			if (expires_on > 0)
+				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%sexpires: %s"),
+						     ca->setter ? ", " : "", timediff(time_left));
+
+			if (ca->tmodified)
+				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
+						     expires_on > 0 ? ", " : "", ago);
+
+			strlcat(buf, "]", sizeof buf);
+
+			command_success_nodata(si, "%s", buf);
 		}
 
 	}
