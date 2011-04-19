@@ -104,7 +104,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			 * access list too big. */
 			if (!chanacs_find(mc, mt, 0))
 			{
-				ca = chanacs_open(mc, mt, NULL, true);
+				ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 				if (ca->level == 0 && chanacs_is_table_full(ca))
 				{
 					command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -139,7 +139,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->entity != NULL && ca->level & CA_FOUNDER)
 					chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
 			}
-			chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0);
+			chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0, entity(si->smu));
 
 			/* delete transfer metadata */
 			metadata_delete(mc, "private:verify:founderchg:newfounder");
@@ -186,7 +186,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	{
 		chanacs_t *ca;
 
-		ca = chanacs_open(mc, mt, NULL, true);
+		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (ca->level == 0 && chanacs_is_table_full(ca))
 		{
 			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);

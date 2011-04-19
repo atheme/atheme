@@ -204,6 +204,8 @@ struct chanacs_
 	unsigned int  level;
 	time_t    tmodified;
 	mowgli_node_t    cnode;
+
+	myentity_t *setter;
 };
 
 /* the new atheme-style channel flags */
@@ -411,8 +413,8 @@ E myuser_t *mychan_pick_successor(mychan_t *mc);
 E const char *mychan_get_mlock(mychan_t *mc);
 E const char *mychan_get_sts_mlock(mychan_t *mc);
 
-E chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts);
-E chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts);
+E chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts, myentity_t *setter);
+E chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter);
 
 E chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
 E chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *myuser, unsigned int level);
@@ -428,15 +430,15 @@ E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 //inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
 E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
-E chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create);
+E chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
 //inline void chanacs_close(chanacs_t *ca);
 E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
 
 //inline bool chanacs_is_table_full(chanacs_t *ca);
 
-E bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-E bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags);
+E bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter);
+E bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter);
 
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

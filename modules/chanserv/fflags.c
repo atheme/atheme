@@ -99,7 +99,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (!chanacs_change(mc, mt, NULL, &addflags, &removeflags, ca_all))
+		if (!chanacs_change(mc, mt, NULL, &addflags, &removeflags, ca_all, entity(si->smu)))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
@@ -113,7 +113,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
 			return;
 		}
-		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all))
+		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all, entity(si->smu)))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);

@@ -268,7 +268,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			free(target);
 			target = sstrdup(mt->name);
 
-			ca = chanacs_open(mc, mt, NULL, true);
+			ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 
 			if (ca->level & CA_FOUNDER && removeflags & CA_FLAGS && !(removeflags & CA_FOUNDER))
 			{
@@ -334,7 +334,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		                command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
 				return;
 			}
-			ca = chanacs_open(mc, NULL, target, true);
+			ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{
 				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);

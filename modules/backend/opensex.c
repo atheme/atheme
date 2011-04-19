@@ -63,7 +63,7 @@ opensex_db_save(database_handle_t *db)
 
 	/* write the database version */
 	db_start_row(db, "DBV");
-	db_write_int(db, 8);
+	db_write_int(db, 9);
 	db_commit_row(db);
 
 	db_start_row(db, "CF");
@@ -197,6 +197,7 @@ opensex_db_save(database_handle_t *db)
 			db_write_word(db, ca->entity ? ca->entity->name : ca->host);
 			db_write_word(db, bitmask_to_flags(ca->level));
 			db_write_time(db, ca->tmodified);
+			db_write_word(db, ca->setter ? ca->setter->name : "*");
 			db_commit_row(db);
 
 			MOWGLI_ITER_FOREACH(tn2, object(ca)->metadata.head)
@@ -716,6 +717,7 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 	unsigned int flags;
 	mychan_t *mc;
 	myentity_t *mt;
+	myentity_t *setter;
 
 	chan = db_sread_word(db);
 	target = db_sread_word(db);
@@ -724,6 +726,10 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 
 	mc = mychan_find(chan);
 	mt = myentity_find(target);
+
+	setter = NULL;
+	if (rs->dbv >= 9)
+		setter = myentity_find(db_sread_word(db));
 
 	if (mc == NULL)
 	{
@@ -739,11 +745,11 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 
 	if (mt == NULL && validhostmask(target))
 	{
-		chanacs_add_host(mc, target, flags, tmod);
+		chanacs_add_host(mc, target, flags, tmod, setter);
 	}
 	else
 	{
-		chanacs_add(mc, mt, flags, tmod);
+		chanacs_add(mc, mt, flags, tmod, setter);
 	}
 
 	rs->nca++;

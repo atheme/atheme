@@ -112,7 +112,7 @@ static void cs_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 		mc->mlock_off |= CMODE_KEY;
 	mc->flags |= config_options.defcflags;
 
-	chanacs_add(mc, entity(si->smu), CA_INITIAL & ca_all, CURRTIME);
+	chanacs_add(mc, entity(si->smu), CA_INITIAL & ca_all, CURRTIME, entity(si->smu));
 
 	if (c->ts > 0)
 	{

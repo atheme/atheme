@@ -83,7 +83,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
 	}
 	mc->used = CURRTIME;
-	chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0);
+	chanacs_change_simple(mc, mt, NULL, CA_FOUNDER_0, 0, entity(si->smu));
 
 	/* delete transfer metadata -- prevents a user from stealing it back */
 	metadata_delete(mc, "private:verify:founderchg:newfounder");

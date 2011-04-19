@@ -340,7 +340,7 @@ void remove_group_chanacs(mygroup_t *mg)
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mg)->name);
 
-			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0);
+			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0, NULL);
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
 			object_unref(ca);

@@ -109,9 +109,9 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 		ca = n->data;
 
 		if (!ca->host)
-			chanacs_change_simple(mc2, ca->entity, NULL, ca->level, 0);
+			chanacs_change_simple(mc2, ca->entity, NULL, ca->level, 0, ca->setter);
 		else if (ca->host != NULL)
-			chanacs_change_simple(mc2, NULL, ca->host, ca->level, 0);
+			chanacs_change_simple(mc2, NULL, ca->host, ca->level, 0, ca->setter);
 	}
 
 	/* Copy ze metadata! */

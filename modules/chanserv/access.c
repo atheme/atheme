@@ -742,7 +742,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (validhostmask(target))
-		ca = chanacs_open(mc, NULL, target, true);
+		ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 	else
 	{
 		if (!(mt = myentity_find_ext(target)))
@@ -751,7 +751,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		target = mt->name;
-		ca = chanacs_open(mc, mt, NULL, true);
+		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 	}
 
 	if (ca->level == 0)
@@ -820,7 +820,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (validhostmask(target))
-		ca = chanacs_open(mc, NULL, target, true);
+		ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 	else
 	{
 		if (!(mt = myentity_find_ext(target)))
@@ -829,7 +829,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		target = mt->name;
-		ca = chanacs_open(mc, mt, NULL, true);
+		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 	}
 
 	if (ca->level == 0 && chanacs_is_table_full(ca))
@@ -904,7 +904,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (validhostmask(target))
-		ca = chanacs_open(mc, NULL, target, true);
+		ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 	else
 	{
 		if (!(mt = myentity_find_ext(target)))
@@ -913,7 +913,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		target = mt->name;
-		ca = chanacs_open(mc, mt, NULL, true);
+		ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 	}
 
 	if (ca->level == 0 && chanacs_is_table_full(ca))

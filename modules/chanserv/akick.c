@@ -308,7 +308,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* new entry */
-		ca2 = chanacs_open(mc, NULL, uname, true);
+		ca2 = chanacs_open(mc, NULL, uname, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
 			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
@@ -368,7 +368,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* new entry */
-		ca2 = chanacs_open(mc, mt, NULL, true);
+		ca2 = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 		if (chanacs_is_table_full(ca2))
 		{
 			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);

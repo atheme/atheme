@@ -216,7 +216,7 @@ void myuser_delete(myuser_t *mu)
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", entity(successor)->name, entity(mu)->name);
 
-			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0);
+			chanacs_change_simple(mc, entity(successor), NULL, CA_FOUNDER_0, 0, NULL);
 			if (chansvs.me != NULL)
 				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, entity(successor)->name);
 			object_unref(ca);
@@ -1319,7 +1319,7 @@ static void chanacs_delete(chanacs_t *ca)
 }
 
 /*
- * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts)
+ * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts, myentity_t *setter)
  *
  * Creates an access entry mapping between a user and channel.
  *
@@ -1335,7 +1335,7 @@ static void chanacs_delete(chanacs_t *ca)
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts)
+chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts, myentity_t *setter)
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
@@ -1361,6 +1361,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
+	ca->setter = setter;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, n, &mt->chanacs);
@@ -1387,7 +1388,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts)
+chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter)
 {
 	chanacs_t *ca;
 
@@ -1410,6 +1411,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
+	ca->setter = setter;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
@@ -1683,7 +1685,7 @@ unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
  * host must be non-NULL). If not found, and create is true, create a new
  * chanacs with no flags.
  */
-chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create)
+chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter)
 {
 	chanacs_t *ca;
 
@@ -1697,7 +1699,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
 		if (ca != NULL)
 			return ca;
 		else if (create)
-			return chanacs_add(mychan, mt, 0, CURRTIME);
+			return chanacs_add(mychan, mt, 0, CURRTIME, setter);
 	}
 	else
 	{
@@ -1705,7 +1707,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
 		if (ca != NULL)
 			return ca;
 		else if (create)
-			return chanacs_add_host(mychan, hostmask, 0, CURRTIME);
+			return chanacs_add_host(mychan, hostmask, 0, CURRTIME, setter);
 	}
 	return NULL;
 }
@@ -1759,7 +1761,7 @@ bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int re
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter)
 {
 	chanacs_t *ca;
 
@@ -1780,7 +1782,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return false;
-			chanacs_add(mychan, mt, *addflags, CURRTIME);
+			chanacs_add(mychan, mt, *addflags, CURRTIME, setter);
 		}
 		else
 		{
@@ -1816,7 +1818,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return false;
-			chanacs_add_host(mychan, hostmask, *addflags, CURRTIME);
+			chanacs_add_host(mychan, hostmask, *addflags, CURRTIME, setter);
 		}
 		else
 		{
@@ -1844,13 +1846,13 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags)
+bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter)
 {
 	unsigned int a, r;
 
 	a = addflags & ca_all;
 	r = removeflags & ca_all;
-	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all);
+	return chanacs_change(mychan, mt, hostmask, &a, &r, ca_all, setter);
 }
 
 static int expire_myuser_cb(myentity_t *mt, void *unused)
