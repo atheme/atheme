@@ -617,11 +617,11 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 
 			if (expires_on > 0)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%sexpires: %s"),
-						     ca->setter ? ", " : "", timediff(time_left));
+						     ca->setter != NULL ? ", " : "", timediff(time_left));
 
 			if (ca->tmodified)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
-						     expires_on > 0 ? ", " : "", ago);
+						     expires_on > 0 || ca->setter != NULL ? ", " : "", ago);
 
 			strlcat(buf, "]", sizeof buf);
 
