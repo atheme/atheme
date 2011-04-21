@@ -5,11 +5,13 @@
 #include "atheme.h"
 
 static mowgli_patricia_t *entities;
+static mowgli_patricia_t *entities_by_id;
 static char last_entity_uid[IDLEN];
 
 void init_entities(void)
 {
 	entities = mowgli_patricia_create(irccasecanon);
+	entities_by_id = mowgli_patricia_create(noopcanon);
 	memset(last_entity_uid, 'A', sizeof last_entity_uid);
 }
 
@@ -65,11 +67,13 @@ void myentity_put(myentity_t *mt)
 		strlcpy(mt->id, myentity_alloc_uid(), sizeof mt->id);
 
 	mowgli_patricia_add(entities, mt->name, mt);
+	mowgli_patricia_add(entities_by_id, mt->id, mt);
 }
 
 void myentity_del(myentity_t *mt)
 {
 	mowgli_patricia_delete(entities, mt->name);
+	mowgli_patricia_delete(entities_by_id, mt->id);
 }
 
 myentity_t *myentity_find(const char *name)
@@ -85,6 +89,11 @@ myentity_t *myentity_find(const char *name)
 	hook_call_myentity_find(&req);
 
 	return req.entity;
+}
+
+myentity_t *myentity_find_uid(const char *uid)
+{
+	return mowgli_patricia_retrieve(entities_by_id, uid);
 }
 
 myentity_t *myentity_find_ext(const char *name)

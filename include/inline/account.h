@@ -20,6 +20,11 @@ static inline myuser_t *myuser_find(const char *name)
 	return name ? user(myentity_find(name)) : NULL;
 }
 
+static inline myuser_t *myuser_find_uid(const char *uid)
+{
+	return uid ? user(myentity_find_uid(uid)) : NULL;
+}
+
 /*
  * mynick_find(const char *name)
  *

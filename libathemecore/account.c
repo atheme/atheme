@@ -420,6 +420,10 @@ myuser_t *myuser_find_ext(const char *name)
 		u = user_find_named(name + 1);
 		return u != NULL ? u->myuser : NULL;
 	}
+	else if (*name == '?')
+	{
+		return myuser_find_uid(name + 1);
+	}
 	else if (nicksvs.no_nick_ownership)
 		return myuser_find(name);
 	else

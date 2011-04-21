@@ -77,6 +77,18 @@ static void db_h_grp(database_handle_t *db, const char *type)
 		uid = db_sread_word(db);
 
 	name = db_sread_word(db);
+
+	if (mygroup_find(name))
+	{
+		slog(LG_INFO, "db-h-grp: line %d: skipping duplicate group %s", db->line, name);
+		return;
+	}
+	if (uid && myentity_find_uid(uid))
+	{
+		slog(LG_INFO, "db-h-grp: line %d: skipping group %s with duplicate UID %s", db->line, name, uid);
+		return;
+	}
+
 	regtime = db_sread_time(db);
 
 	mg = mygroup_add_id(uid, name);
