@@ -117,10 +117,16 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 	mu = myuser_find(user);
 
 	if (mg == NULL)
+	{
+		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent group %s", db->line, name);
 		return;
+	}
 
 	if (mu == NULL)
+	{
+		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent user %s", db->line, user);
 		return;
+	}
 
 	if (loading_gdbv >= 2)
 	{
@@ -141,6 +147,14 @@ static void db_h_mdg(database_handle_t *db, const char *type)
 	void *obj = NULL;
 
 	obj = mygroup_find(name);
+
+	if (obj == NULL)
+	{
+		slog(LG_INFO, "db-h-mdg: attempting to add %s property to non-existant object %s",
+		     prop, name);
+		return;
+	}
+
 	metadata_add(obj, prop, value);
 }
 
