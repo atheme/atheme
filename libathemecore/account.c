@@ -99,7 +99,19 @@ void init_accounts(void)
  *      - if nicksvs.no_nick_ownership is not enabled, the caller is
  *        responsible for adding a nick with the same name
  */
+
 myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
+{
+	return myuser_add_id(NULL, name, pass, email, flags);
+}
+
+/*
+ * myuser_add_id(const char *id, const char *name, const char *pass,
+ * const char *email, unsigned int flags)
+ *
+ * Like myuser_add, but lets you specify the new entity's UID.
+ */
+myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	myuser_t *mu;
 	soper_t *soper;
@@ -115,6 +127,10 @@ myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsi
 	entity(mu)->type = ENT_USER;
 	strlcpy(entity(mu)->name, name, NICKLEN);
 	mu->email = sstrdup(email);
+	if (id)
+		strlcpy(entity(mu)->id, id, sizeof(entity(mu)->name));
+	else
+		entity(mu)->id[0] = '\0';
 
 	mu->registered = CURRTIME;
 	mu->flags = flags;

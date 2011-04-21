@@ -125,6 +125,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
+	if (has_priv(si, PRIV_USER_AUSPEX))
+	{
+		command_success_nodata(si, _("Entity ID  : %s"), entity(mu)->id);
+	}
+
 	if ((md = metadata_find(mu, "private:usercloak")))
 		vhost = md->value;
 	else

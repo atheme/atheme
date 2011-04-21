@@ -61,12 +61,22 @@ static void mygroup_delete(mygroup_t *mg)
 
 mygroup_t *mygroup_add(const char *name)
 {
+	return mygroup_add_id(NULL, name);
+}
+
+mygroup_t *mygroup_add_id(const char *id, const char *name)
+{
 	mygroup_t *mg;
 
 	mg = mowgli_heap_alloc(mygroup_heap);
 	object_init(object(mg), NULL, (destructor_t) mygroup_delete);
 
 	entity(mg)->type = ENT_GROUP;
+
+	if (id)
+		strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
+	else
+		entity(mg)->id[0] = '\0';
 
 	strlcpy(entity(mg)->name, name, sizeof(entity(mg)->name));
 	myentity_put(entity(mg));

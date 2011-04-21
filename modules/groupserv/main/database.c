@@ -4,7 +4,7 @@
 
 #include "groupserv_main.h"
 
-#define GDBV_VERSION	3
+#define GDBV_VERSION	4
 
 static unsigned int loading_gdbv = -1;
 
@@ -28,6 +28,7 @@ static void write_groupdb(database_handle_t *db)
 		char *mgflags = gflags_tostr(mg_flags, mg->flags);
 
 		db_start_row(db, "GRP");
+		db_write_word(db, entity(mg)->id);
 		db_write_word(db, entity(mg)->name);
 		db_write_time(db, mg->regtime);
 		db_write_word(db, mgflags);
@@ -67,11 +68,18 @@ static void db_h_gdbv(database_handle_t *db, const char *type)
 static void db_h_grp(database_handle_t *db, const char *type)
 {
 	mygroup_t *mg;
-	const char *name = db_sread_word(db);
-	time_t regtime = db_sread_time(db);
+	const char *uid = NULL;
+	const char *name;
+	time_t regtime;
 	const char *flagset;
 
-	mg = mygroup_add(name);
+	if (loading_gdbv >= 4)
+		uid = db_sread_word(db);
+
+	name = db_sread_word(db);
+	regtime = db_sread_time(db);
+
+	mg = mygroup_add_id(uid, name);
 	mg->regtime = regtime;
 
 	if (loading_gdbv >= 3)

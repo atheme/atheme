@@ -5,14 +5,65 @@
 #include "atheme.h"
 
 static mowgli_patricia_t *entities;
+static char last_entity_uid[IDLEN];
 
 void init_entities(void)
 {
 	entities = mowgli_patricia_create(irccasecanon);
+	memset(last_entity_uid, 'A', sizeof last_entity_uid);
+}
+
+void myentity_set_last_uid(const char *last_id)
+{
+	strlcpy(last_entity_uid, last_id, sizeof last_entity_uid);
+	last_entity_uid[IDLEN-1] = '\0';
+}
+
+const char *myentity_get_last_uid(void)
+{
+	return last_entity_uid;
+}
+
+const char *myentity_alloc_uid(void)
+{
+	int i;
+
+	for(i = 8; i > 3; i--)
+	{
+		if(last_entity_uid[i] == 'Z')
+		{
+			last_entity_uid[i] = '0';
+			return last_entity_uid;
+		}
+		else if(last_entity_uid[i] != '9')
+		{
+			last_entity_uid[i]++;
+			return last_entity_uid;
+		}
+		else
+			last_entity_uid[i] = 'A';
+	}
+
+	/* if this next if() triggers, we're fucked. */
+	if(last_entity_uid[3] == 'Z')
+	{
+		last_entity_uid[i] = 'A';
+		slog(LG_ERROR, "Out of entity UIDs!");
+		wallops("Out of entity UIDs. This is a Bad Thing.");
+		wallops("You should probably do something about this.");
+	}
+	else
+		last_entity_uid[3]++;
+
+	return last_entity_uid;
 }
 
 void myentity_put(myentity_t *mt)
 {
+	/* If the entity doesn't have an ID yet, allocate one */
+	if (mt->id[0] == '\0')
+		strlcpy(mt->id, myentity_alloc_uid(), sizeof mt->id);
+
 	mowgli_patricia_add(entities, mt->name, mt);
 }
 

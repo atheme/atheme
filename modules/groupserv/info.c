@@ -46,6 +46,9 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));
 
+	if (has_priv(si, PRIV_GROUP_AUSPEX))
+		command_success_nodata(si, _("Entity ID   : %s"), entity(mg)->id);
+
 	if (mg->flags & MG_PUBLIC || (si->smu != NULL && groupacs_sourceinfo_has_flag(mg, si, 0) && !groupacs_sourceinfo_has_flag(mg, si, GA_BAN)) || has_priv(si, PRIV_GROUP_AUSPEX))
 		command_success_nodata(si, _("Founder     : %s"), mygroup_founder_names(mg));
 

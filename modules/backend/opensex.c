@@ -63,7 +63,11 @@ opensex_db_save(database_handle_t *db)
 
 	/* write the database version */
 	db_start_row(db, "DBV");
-	db_write_int(db, 9);
+	db_write_int(db, 10);
+	db_commit_row(db);
+
+	db_start_row(db, "LUID");
+	db_write_word(db, myentity_get_last_uid());
 	db_commit_row(db);
 
 	db_start_row(db, "CF");
@@ -82,6 +86,7 @@ opensex_db_save(database_handle_t *db)
 		 */
 		char *flags = gflags_tostr(mu_flags, MOWGLI_LIST_LENGTH(&mu->logins) ? mu->flags & ~MU_NOBURSTLOGIN : mu->flags);
 		db_start_row(db, "MU");
+		db_write_word(db, entity(mu)->id);
 		db_write_word(db, entity(mu)->name);
 		db_write_word(db, mu->pass);
 		db_write_word(db, mu->email);
@@ -389,6 +394,11 @@ static void opensex_h_dbv(database_handle_t *db, const char *type)
 	slog(LG_INFO, "opensex: data format version is %d.", rs->dbv);
 }
 
+static void opensex_h_luid(database_handle_t *db, const char *type)
+{
+	myentity_set_last_uid(db_sread_word(db));
+}
+
 static void opensex_h_cf(database_handle_t *db, const char *type)
 {
 	unsigned int their_ca_all;
@@ -408,12 +418,18 @@ static void opensex_h_cf(database_handle_t *db, const char *type)
 static void opensex_h_mu(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	const char *name = db_sread_word(db);
+	const char *uid = NULL;
+	const char *name;
 	const char *pass, *email, *language;
 	time_t reg, login;
 	const char *sflags;
 	unsigned int flags = 0;
 	myuser_t *mu;
+
+	if (rs->dbv >= 10)
+		uid = db_sread_word(db);
+
+	name = db_sread_word(db);
 
 	if (myuser_find(name))
 	{
@@ -435,7 +451,7 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	language = db_read_word(db);
 
 
-	mu = myuser_add(name, pass, email, flags);
+	mu = myuser_add_id(uid, name, pass, email, flags);
 	mu->registered = reg;
 	mu->lastlogin = login;
 	if (language)
@@ -1225,6 +1241,7 @@ void _modinit(module_t *m)
 	db_save = &opensex_db_write;
 
 	db_register_type_handler("DBV", opensex_h_dbv);
+	db_register_type_handler("LUID", opensex_h_luid);
 	db_register_type_handler("CF", opensex_h_cf);
 	db_register_type_handler("MU", opensex_h_mu);
 	db_register_type_handler("ME", opensex_h_me);

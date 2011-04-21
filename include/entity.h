@@ -16,6 +16,7 @@ typedef struct {
 	object_t parent;
 	myentity_type_t type;
 	char name[NICKLEN * 4];
+	char id[IDLEN];
 
 	mowgli_list_t chanacs;
 	void *chanacs_validate;	/* vtable for validating chanacs entries */
@@ -28,6 +29,10 @@ typedef struct {
 #define isgroup(x)	(x != NULL && entity(x)->type == ENT_GROUP)
 
 void init_entities(void);
+void myentity_set_last_uid(const char *last_uid);
+const char *myentity_get_last_uid(void);
+const char *myentity_alloc_uid(void);
+
 void myentity_put(myentity_t *me);
 void myentity_del(myentity_t *me);
 myentity_t *myentity_find(const char *name);

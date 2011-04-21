@@ -646,15 +646,21 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 {
 	va_list args;
 	char lbuf[BUFSIZE];
+	char accountbuf[NICKLEN * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
 	bool showaccount;
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
+	accountbuf[0] = '\0';
+	if (source->myuser != NULL)
+		snprintf(accountbuf, sizeof accountbuf, "%s/%s",
+				entity(source->myuser)->name, entity(source->myuser)->id);
+
 	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s!%s@%s[%s] %s",
 			svs != NULL ? svs->nick : me.name,
-			source->myuser != NULL ? entity(source->myuser)->name : "",
+			accountbuf,
 			source->nick, source->user, source->host,
 			source->ip[0] != '\0' ? source->ip : source->host,
 			lbuf);

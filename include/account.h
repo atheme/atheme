@@ -378,6 +378,7 @@ E mowgli_patricia_t *mclist;
 E void init_accounts(void);
 
 E myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
+E myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
 //inline myuser_t *myuser_find(const char *name);
 E void myuser_rename(myuser_t *mu, const char *name);

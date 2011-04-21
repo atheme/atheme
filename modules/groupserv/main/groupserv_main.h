@@ -13,6 +13,7 @@ E groupserv_config_t gs_config;
 E void mygroups_init(void);
 E void mygroups_deinit(void);
 E mygroup_t *mygroup_add(const char *name);
+E mygroup_t *mygroup_add_id(const char *id, const char *name);
 E mygroup_t *mygroup_find(const char *name);
 
 E groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags);
