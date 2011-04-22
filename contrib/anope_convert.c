@@ -292,7 +292,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				ci->mlock_key ? ci->mlock_key : "");
 
 			mcout++;
-			fprintf(f, "CA %s %s %s\n", ci->name, ci->founder->display, "+AvhoOtsirRfF");
+			fprintf(f, "CA %s %s %s 0\n", ci->name, ci->founder->display, "+AvhoOtsirRfF");
 			caout++;
 
 			for (j = 0; j < ci->accesscount; j++) {
@@ -320,7 +320,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				}
 				if (flags != NULL)
 				{
-					fprintf(f, "CA %s %s %s\n", ci->name,
+					fprintf(f, "CA %s %s %s 0\n", ci->name,
 						ci->access[j].nc->display, flags);
 					caout++;
 				}
@@ -329,9 +329,9 @@ static void ATHEME_CONVERT_write_channels(void)
 			for (j = 0; j < ci->akickcount; j++) {
 				if (!ci->akick[j].in_use)
 					continue;
-				fprintf(f, "CA %s %s +b %lu\n", ci->name,
+				fprintf(f, "CA %s %s +b 0\n", ci->name,
 					(ci->akick[j].flags & AK_ISNICK) ? ci->akick[j].u.nc->display :
-					ci->akick[j].u.mask, (unsigned long)ci->last_used);
+					ci->akick[j].u.mask);
 				caout++;
 			}
 
