@@ -292,7 +292,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				ci->mlock_key ? ci->mlock_key : "");
 
 			mcout++;
-			fprintf(f, "CA %s %s %s 0\n", ci->name, ci->founder->display, "+AvhoOtsirRfF");
+			fprintf(f, "CA %s %s %s 0\n", ci->name, ci->founder->display, "+AavhoOqtsirRfF");
 			caout++;
 
 			for (j = 0; j < ci->accesscount; j++) {
@@ -310,7 +310,7 @@ static void ATHEME_CONVERT_write_channels(void)
 					case ACCESS_VOP: flags = "+AV"; break;
 					case ACCESS_HOP: flags = "+AvVHt"; break;
 					case ACCESS_AOP: flags = "+AvhoOtir"; break;
-					case ACCESS_SOP: flags = "+AvhoOtsirf"; break;
+					case ACCESS_SOP: flags = "+AavhoOtsirf"; break;
 					case -1: case -2: break;
 					default:
 						fprintf(f, "# Access Entry %s::%s level %d unknown, using +AvhoOtir\n",
@@ -435,7 +435,8 @@ int AnopeInit(int argc, char **argv)
 	ATHEME_CONVERT_write_accounts();
 	ATHEME_CONVERT_write_channels();
 	ATHEME_CONVERT_write_akills();
-	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, klnout);
+	/* set the equivalents of qlout and xlout to 0 since we don't convert them */
+	fprintf(f, "DE %d %d %d %d 0 0\n", muout, mcout, caout, klnout);
 	ATHEME_CONVERT_write_botserv_bots();
 	fprintf(f, "# End conversion.\n");
 
