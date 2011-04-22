@@ -14,7 +14,7 @@ anope-1.9.2-convert.php - Converts a Anope 1.9.2 flatfile database to an Atheme
                           than the default Anope levels/xOP.
 
 anope_convert.c - An ANOPE MODULE to convert an Anope 1.7.x or 1.8.x database
-                  to an Atheme database. This will output a old-style flatfile
+                  to an Atheme database. This will output a new-style OpenSEX
                   Atheme database.
 
 cap_sasl.pl - An irssi script with a implementation of SASL.
