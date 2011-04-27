@@ -8,7 +8,7 @@
 
 MODULE = memoserv
 
-SRCS = delete.c  forward.c  help.c  ignore.c  list.c  main.c  read.c  send.c  sendops.c  sendgroup.c
+SRCS = delete.c  forward.c  help.c  ignore.c  list.c  main.c  read.c  send.c  sendall.c  sendops.c  sendgroup.c
 
 include ../../extra.mk
 include ../../buildsys.mk
