@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/sendgroup", false, _modinit, _moddeinit,
+	"memoserv/sendall", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
@@ -167,7 +167,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 		command_add_flood(si, FLOOD_HEAVY);
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_ADMIN, "SENDALL: to \2%s\2 (%d/%d sent) (oper override)", m, sent, tried);
+	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%d/%d sent) (oper override)", m, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d accounts."), sent);
 	return;
 }	
