@@ -36,6 +36,10 @@ exttarget
   take optional parameters.
 - exttarget/oper: $oper extended target added.  this target allows you
   to match against all opers on the network in channel access lists. 
+- exttarget/registered: $registered extended target added.  this target
+  matches anyone who is logged into services.
+- exttarget/channel: $channel extended target added.  this target allows
+  you to match anyone who is on a channel.
 groupserv
 - all groupserv commands are now modules. Your atheme.conf will need
   to be updated for this change if you use groupserv.
@@ -89,6 +93,7 @@ operserv
   a monitored user joins a channel, that information will be sent to the services
   log channel.
 - os_resolve: New contrib module for testing the asynchronous DNS resolver.
+- the RWATCH database is now serialized as opensex entities.
 scripting
 - Support for scripting Atheme in Perl added. Perl scripts are loaded with
   OperServ MODLOAD just like modules. Still in alpha. Add the --with-perl configure 
@@ -115,6 +120,8 @@ code
 - UID generation split out from the core.
 - module_load can now be hooked into. This is particularly useful for scripting
   modules.
+- entities now have unique IDs.  unique IDs may be referenced in all XMLRPC and
+  IRC commands.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
