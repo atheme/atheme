@@ -163,7 +163,7 @@ static void ATHEME_CONVERT_write_accounts(void)
 #endif
 			if (nc->memos.memomax == 0)
 				athemeflags |= 0x40; /* MU_NOMEMO */
-			fprintf(f, "MU %s %s %s %lu %lu 0 0 0 %d\n",
+			fprintf(f, "MU %s %s %s %lu %lu %d\n",
 					nc->display, passwd, nc->email,
 					(unsigned long)registered,
 					(unsigned long)na->last_seen,
