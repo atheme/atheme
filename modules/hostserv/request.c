@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "hostserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -216,6 +217,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn;
 	mowgli_node_t *n;
 	hsreq_t *l;
+	hook_host_request_t hdata;
 
 	if (!host)
 	{
@@ -252,6 +254,18 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		target = entity(si->smu)->name;
 
 	if (!check_vhost_validity(si, host))
+		return;
+
+	hdata.host = host;
+	hdata.si = si;
+	hdata.approved = 0;
+	/* keep target an si seperate so modules that use the hook
+	 * can see if it's an account or nick requesting the host
+	 */
+	hdata.target = target;
+	hook_call_host_request(&hdata);
+
+	if (hdata.approved != 0)
 		return;
 
 	/* search for it */

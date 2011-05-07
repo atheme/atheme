@@ -1,5 +1,12 @@
 #ifndef INLINE_HOSTSERV_H
 #define INLINE_HOSTSERV_H
+
+typedef struct {
+        char *host;
+	sourceinfo_t *si;
+	int approved;
+	char *target;
+} hook_host_request_t;
 /*
  * do_sethost(user_t *u, char *host)
  *
