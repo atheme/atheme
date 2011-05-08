@@ -42,7 +42,7 @@ struct perl_list_ {
 
 typedef struct perl_list_ perl_list_t;
 
-inline perl_list_t * perl_list_create(mowgli_list_t *list, const char *package)
+static inline perl_list_t * perl_list_create(mowgli_list_t *list, const char *package)
 {
 	perl_list_t *ret = malloc(sizeof(perl_list_t));
 	ret->list = list;
