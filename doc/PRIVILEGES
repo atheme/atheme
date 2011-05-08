@@ -131,3 +131,42 @@ group:auspex
 	groupserv info/list/flags, ns/us listgroups mainly
 group:admin
 	administer groups
+
+Overriding the default privilege scheme
+---------------------------------------
+
+Starting with Atheme 7, it is possible to override the default privilege
+scheme using the config file.
+
+Each block related to a service, e.g. nickserv{} or chanserv{} has a
+new sub-block called access{}. This allows you to map commands to custom
+privileges or privileges defined above.
+
+As a simple example, we will first redefine ChanServ REGISTER to require
+chan:admin. In the config file, to accomplish this, we add the following
+block to chanserv{}.
+
+	access {
+		"REGISTER" => "chan:admin";
+	};
+
+It is, however, possible to define a custom privilege, thus overriding
+the permission scheme. To do this, we then tie that custom privilege to
+an operclass, like so:
+
+	chanserv {
+		access {
+			"FDROP" => "darkmyst:chan:drop";
+		};
+	};
+
+	operclass "servicesadmin" {
+		extends "ircop";
+
+		privs {
+			darkmyst:chan:drop;
+		};
+	};
+
+As such, it is possible to implement an entirely customized privilege
+scheme.
