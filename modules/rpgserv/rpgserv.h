@@ -16,10 +16,11 @@ typedef enum {
 } rpg_rating_t;
 
 typedef enum {
-	RPG_FLAG_CHARAPPROVAL = (1 << 1),
-	RPG_FLAG_DICE         = (1 << 2),
-	RPG_FLAG_CHARSHEET    = (1 << 3),
-} rpg_systemflags_t;
+	RPG_SYSTEM_CHARAPPROVAL,
+	RPG_SYSTEM_DICE,
+	RPG_SYSTEM_CHARSHEET,
+	RPG_SYSTEM_COUNT,
+} rpg_system_t;
 
 typedef enum {
 	RPG_RULESET_ADND,
