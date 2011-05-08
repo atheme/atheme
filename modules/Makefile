@@ -21,6 +21,7 @@ SUBDIRS = \
 	nickserv \
 	operserv \
 	protocol \
+	rpgserv \
 	saslserv \
 	scripting \
 	transport \
