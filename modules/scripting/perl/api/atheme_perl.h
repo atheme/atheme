@@ -25,7 +25,6 @@ static const IV invalid_object_pointer = -1;
 
 void register_object_reference(SV *sv);
 void invalidate_object_references(void);
-void invalidate_object_references(void);
 void free_object_list(void);
 
 /*

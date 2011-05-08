@@ -16,6 +16,13 @@ CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS)
 LIBS += -L../../../../libathemecore -lathemecore ${LDFLAGS_RPATH} -L../../../../libmowgli/src/libmowgli
 
+# Some of the code from Perl is not designed to compile with warnings.
+PERL_WARN_HACKS = -Wno-redundant-decls -Wno-float-equal -Wno-unused-value
+PERL_WARN_HACKS += -Wno-nested-externs -Wno-unused-variable -Wno-shadow
+CFLAGS += $(PERL_WARN_HACKS)
+# This does not make any sense, but other warning flags are in CPPFLAGS too.
+CPPFLAGS += $(PERL_WARN_HACKS)
+
 Atheme.c: $(wildcard *.xs) typemap
 	xsubpp -prototypes -typemap typemap Atheme.xs >$@ || rm -f $@
 

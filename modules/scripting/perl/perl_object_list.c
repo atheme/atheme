@@ -15,14 +15,14 @@ void register_object_reference(SV * sv)
 	mowgli_node_add(SvREFCNT_inc(sv), mowgli_node_create(), perl_object_references);
 }
 
-void invalidate_object_references()
+void invalidate_object_references(void)
 {
 	mowgli_node_t *n;
 
 	if (perl_object_references == NULL)
 		return;
 
-	while (n = perl_object_references->head)
+	while ((n = perl_object_references->head) != NULL)
 	{
 		SV *sv = n->data;
 		SV *ref = SvRV(sv);
@@ -44,7 +44,7 @@ void free_object_list(void)
 	if (perl_object_references == NULL)
 		return;
 
-	while (n = perl_object_references->head)
+	while ((n = perl_object_references->head) != NULL)
 	{
 		SV *sv = n->data;
 		SvREFCNT_dec(sv);

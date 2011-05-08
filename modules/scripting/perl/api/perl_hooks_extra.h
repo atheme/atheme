@@ -15,7 +15,7 @@ static void perl_hook_marshal_void(perl_hook_marshal_direction_t dir, void * dat
  * used (and hence the package to which to bless it) dependent on the hook that's
  * being called.
  */
-void perl_hook_marshal_hook_expiry_req_t(perl_hook_marshal_direction_t dir, hook_expiry_req_t * data, SV **psv,
+static void perl_hook_marshal_hook_expiry_req_t(perl_hook_marshal_direction_t dir, hook_expiry_req_t * data, SV **psv,
 		const char * argname, const char * packagename)
 {
 	if (dir == PERL_HOOK_TO_PERL)

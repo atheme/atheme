@@ -134,7 +134,6 @@ static module_t *do_script_load(const char *filename)
 	 * perl_error buffer is still OK, as it's only used immediately after
 	 * setting, without control passing from this function.
 	 */
-	bool retval = true;
 	perl_script_module_t *m = mowgli_heap_alloc(perl_script_module_heap);
 	strlcpy(m->filename, filename, sizeof(m->filename));
 
