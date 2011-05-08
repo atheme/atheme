@@ -159,6 +159,7 @@ print $outfile <<EOF;
  * Change and re-run make_perl_hooks.pl instead.
  */
 #include "atheme_perl.h"
+#include "perl_hooks.h"
 
 typedef enum {
 	PERL_HOOK_TO_PERL,
