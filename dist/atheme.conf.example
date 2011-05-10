@@ -1803,12 +1803,6 @@ general {
 	 */
 	commit_interval = 5;
 
-	/* (*)default_clone_limit
-	 * The default clone limit used by operserv/clones.
-	 * Deprecated by the two options below.
-	 */
-	default_clone_limit = 5;
-
 	/* (*)default_clone_allowed
 	 * The limit after which clones will be KILLed or TKLINEd.
 	 * Used by operserv/clones.

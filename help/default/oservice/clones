@@ -44,11 +44,11 @@ Syntax: CLONES DELEXEMPT <ip>
 
 Removes an IP address from the clone exemption list.
 
-Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN | KILL> <limit>
+Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN> <limit>
 
-Sets either the default or a given exemption's ALLOWED,
-WARN, or KILL limit to the specified number of clones.
-WARN or KILL can be 0, disabling any warning messages or kills.
+Sets either the default or a given exemption's ALLOWED or
+WARN limit to the specified number of clones. WARN or ALLOWED
+can be 0, disabling any warning messages or kills.
 
 Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>
 
