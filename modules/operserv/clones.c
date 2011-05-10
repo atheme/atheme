@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-#define CLONESDB_VERSION	2
+#define CLONESDB_VERSION	3
 
 static void clones_newuser(hook_user_nick_t *data);
 static void clones_userquit(user_t *u);
