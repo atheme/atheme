@@ -105,7 +105,7 @@ static void clones_kill_users(void *dummy)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clones_kill_queue.head)
 	{
 		u = n->data;
-		kill_user(serviceinfo->me, u, "Too many connections from this host.");
+		kill_user(serviceinfo->me, u, _("Too many connections from this host."));
 
 		/* This node delete() and free() will be handled inside the user_quit()
 		 * mowgli_node_delete(n, &clones_kill_queue);
@@ -661,25 +661,25 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp(ip,"DEFAULT"))
+	if (!strcasecmp(ip, "DEFAULT"))
 	{
 		clones = atoi(clonesstr);
-		if (!strcasecmp(subcmd,"ALLOWED"))
+		if (!strcasecmp(subcmd, "ALLOWED"))
 		{
 			clones_allowed = clones;
-			command_success_nodata(si,_("Default allowed clone limit set to \2%d\2."),clones_allowed);
+			command_success_nodata(si, _("Default allowed clone limit set to \2%d\2."), clones_allowed);
 		}
 		else if (!strcasecmp(subcmd,"WARN"))
 		{
 			if (clones == 0)
 			{
-				command_success_nodata(si,_("Default clone warning has been disabled."));
+				command_success_nodata(si, _("Default clone warning has been disabled."));
 				clones_warn = 0;
 				return;
 			}
 
 			clones_warn = clones;
-			command_success_nodata(si,_("Default warned clone limit set to \2%d\2"),clones_warn);
+			command_success_nodata(si, _("Default warned clone limit set to \2%d\2"), clones_warn);
 		}
 		else
 		{
@@ -704,24 +704,24 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 			}
 			else if (!strcmp(c->ip, ip))
 			{
-				if (!strcasecmp(subcmd,"ALLOWED"))
+				if (!strcasecmp(subcmd, "ALLOWED"))
 				{
 					clones = atoi(clonesstr);
 					if (clones < c->warn)
 					{
-						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %d"),c->warn);
+						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %d"), c->warn);
 						return;
 					}
 
 					c->allowed = clones;
-					command_success_nodata(si,_("Allowed clones limit for host \2%s\2 set to \2%d\2"),ip,c->allowed);
+					command_success_nodata(si, _("Allowed clones limit for host \2%s\2 set to \2%d\2"), ip, c->allowed);
 				}
-				else if (!strcasecmp(subcmd,"WARN"))
+				else if (!strcasecmp(subcmd, "WARN"))
 				{
 					clones = atoi(clonesstr);
 					if (clones == 0)
 					{
-						command_success_nodata(si,_("Clone warning messages will be disabled for host \2%s\2"),ip);
+						command_success_nodata(si, _("Clone warning messages will be disabled for host \2%s\2"), ip);
 						c->warn = 0;
 						return;
 					}
@@ -732,15 +732,15 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 					}
 
 					c->warn = clones;
-					command_success_nodata(si,_("Warned clones limit for host \2%s\2 set to \2%d\2"),ip,c->warn);
+					command_success_nodata(si, _("Warned clones limit for host \2%s\2 set to \2%d\2"), ip, c->warn);
 				}
-				else if (!strcasecmp(subcmd,"DURATION"))
+				else if (!strcasecmp(subcmd, "DURATION"))
 				{
 					char *expiry = clonesstr;
-					if (!strcmp(expiry,"0"))
+					if (!strcmp(expiry, "0"))
 					{
 						c->expires = 0;
-						command_success_nodata(si,_("Clone exemption duration for host \2%s\2 set to \2permanent\2"),ip);
+						command_success_nodata(si, _("Clone exemption duration for host \2%s\2 set to \2permanent\2"), ip);
 					}
 					else
 					{
@@ -765,11 +765,11 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 							return;
 						}
 						c->expires = CURRTIME + duration;
-						command_success_nodata(si,_("Clone exemption duration for host \2%s\2 set to \2%s\2 (%ld seconds)"),ip,clonesstr,duration);
+						command_success_nodata(si, _("Clone exemption duration for host \2%s\2 set to \2%s\2 (%ld seconds)"), ip, clonesstr, duration);
 					}
 
 				}
-				else if (!strcasecmp(subcmd,"REASON"))
+				else if (!strcasecmp(subcmd, "REASON"))
 				{
 					strlcpy(rreason, clonesstr, BUFSIZE);
 					if (reason)
@@ -780,7 +780,7 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 					/* strlcat(rreason,clonesstr,BUFSIZE); */
 					free(c->reason);
 					c->reason = sstrdup(rreason);
-					command_success_nodata(si,_("Clone exemption reason for host \2%s\2 changed to \2%s\2"),ip,c->reason);
+					command_success_nodata(si, _("Clone exemption reason for host \2%s\2 changed to \2%s\2"), ip, c->reason);
 				}
 				else
 				{
@@ -835,7 +835,7 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 {
 
-	command_success_nodata(si, "DEFAULT - allowed limit %d, warn on %d",clones_allowed,clones_warn);
+	command_success_nodata(si, _("DEFAULT - allowed limit %d, warn on %d"), clones_allowed, clones_warn);
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
@@ -851,9 +851,9 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 			mowgli_node_free(n);
 		}
 		else if (c->expires)
-			command_success_nodata(si, "%s - allowed limit %d, warn on %d - expires in %s - \2%s\2", c->ip, c->allowed, c->warn, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
+			command_success_nodata(si, _("%s - allowed limit %d, warn on %d - expires in %s - \2%s\2"), c->ip, c->allowed, c->warn, timediff(c->expires > CURRTIME ? c->expires - CURRTIME : 0), c->reason);
 		else
-			command_success_nodata(si, "%s - allowed limit %d, warn on %d - \2permanent\2 - \2%s\2", c->ip, c->allowed, c->warn, c->reason);
+			command_success_nodata(si, _("%s - allowed limit %d, warn on %d - \2permanent\2 - \2%s\2"), c->ip, c->allowed, c->warn, c->reason);
 	}
 	command_success_nodata(si, _("End of CLONES LISTEXEMPT"));
 	logcommand(si, CMDLOG_ADMIN, "CLONES:LISTEXEMPT");
@@ -918,14 +918,14 @@ static void clones_newuser(hook_user_nick_t *data)
 		else
 		{
 			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
-			kline_sts("*", "*", u->ip, kline_duration, "Excessive clones");
+			kline_sts("*", "*", u->ip, kline_duration, _("Excessive clones"));
 		}
 
 	}
 	else if (i >= warn && warn != 0)
 	{
 		slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (\2%d\2 allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
-		msg(serviceinfo->nick, u->nick, "\2WARNING\2: You may not have any more than \2%d\2 clients on the network at once. Any further connections over this limit risks being removed.", allowed);
+		msg(serviceinfo->nick, u->nick, _("\2WARNING\2: You may not have any more than \2%d\2 clients on the network at once. Any further connections over this limit risks being removed."), allowed);
 	}
 }
 
