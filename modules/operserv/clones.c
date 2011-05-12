@@ -323,31 +323,6 @@ static void db_h_ex(database_handle_t *db, const char *type)
 	mowgli_node_add(c, mowgli_node_create(), &clone_exempts);
 }
 
-static unsigned int is_exempt(const char *ip)
-{
-	mowgli_node_t *n;
-
-	/* first check for an exact match */
-	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
-	{
-		cexcept_t *c = n->data;
-
-		if (!strcmp(ip, c->ip))
-			return c->allowed;
-	}
-
-	/* then look for cidr */
-	MOWGLI_ITER_FOREACH(n, clone_exempts.head)
-	{
-		cexcept_t *c = n->data;
-
-		if (!match_ips(c->ip, ip))
-			return c->allowed;
-	}
-
-	return 0;
-}
-
 static cexcept_t * find_exempt(const char *ip)
 {
 	mowgli_node_t *n;
@@ -449,8 +424,9 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 
 		if (k > 3)
 		{
-			if ((allowed = is_exempt(he->ip)))
-				command_success_nodata(si, _("%d from %s (\2EXEMPT\2; allowed %d)"), k, he->ip, allowed);
+			cexcept_t *c = find_exempt(he->ip);
+			if (c)
+				command_success_nodata(si, _("%d from %s (\2EXEMPT\2; allowed %d)"), k, he->ip, c->allowed);
 			else
 				command_success_nodata(si, _("%d from %s"), k, he->ip);
 		}
