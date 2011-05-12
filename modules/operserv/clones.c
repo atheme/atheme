@@ -105,7 +105,7 @@ static void clones_kill_users(void *dummy)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clones_kill_queue.head)
 	{
 		u = n->data;
-		kill_user(serviceinfo->me, u, _("Too many connections from this host."));
+		kill_user(serviceinfo->me, u, "Too many connections from this host.");
 
 		/* This node delete() and free() will be handled inside the user_quit()
 		 * mowgli_node_delete(n, &clones_kill_queue);
@@ -918,7 +918,7 @@ static void clones_newuser(hook_user_nick_t *data)
 		else
 		{
 			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
-			kline_sts("*", "*", u->ip, kline_duration, _("Excessive clones"));
+			kline_sts("*", "*", u->ip, kline_duration, "Excessive clones");
 		}
 
 	}
