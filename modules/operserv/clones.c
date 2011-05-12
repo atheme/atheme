@@ -33,8 +33,6 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[]);
 static void write_exemptdb(database_handle_t *db);
 
 
-static void clones_kill_users(void *dummy);
-
 static void db_h_ck(database_handle_t *db, const char *type);
 static void db_h_cd(database_handle_t *db, const char *type);
 static void db_h_ex(database_handle_t *db, const char *type);
@@ -51,8 +49,6 @@ mowgli_heap_t *hostentry_heap;
 static long kline_duration;
 static int clones_allowed, clones_warn;
 static unsigned int clones_dbversion = 1;
-
-static mowgli_list_t clones_kill_queue;
 
 typedef struct cexcept_ cexcept_t;
 struct cexcept_
@@ -95,23 +91,6 @@ static void clones_configready(void *unused)
 {
 	clones_allowed = config_options.default_clone_allowed;
 	clones_warn = config_options.default_clone_warn;
-}
-
-static void clones_kill_users(void *dummy)
-{
-	mowgli_node_t *n, *tn;
-	user_t *u;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, clones_kill_queue.head)
-	{
-		u = n->data;
-		kill_user(serviceinfo->me, u, "Too many connections from this host.");
-
-		/* This node delete() and free() will be handled inside the user_quit()
-		 * mowgli_node_delete(n, &clones_kill_queue);
-		 * mowgli_node_free(n);
-		 */
-	}
 }
 
 void _modinit(module_t *m)
@@ -198,19 +177,6 @@ void _moddeinit(module_unload_intent_t intent)
 
 		mowgli_node_delete(n, &clone_exempts);
 		mowgli_node_free(n);
-	}
-
-	if (MOWGLI_LIST_LENGTH(&clones_kill_queue) > 0)
-	{
-		/* Cannot safely delete users from here, so just forget
-		 * about them.
-		 */
-		event_delete(clones_kill_users, NULL);
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, clones_kill_queue.head)
-		{
-			mowgli_node_delete(n, &clones_kill_queue);
-			mowgli_node_free(n);
-		}
 	}
 
 	service_named_unbind_command("operserv", &os_clones);
@@ -881,15 +847,8 @@ static void clones_newuser(hook_user_nick_t *data)
 		{
 			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled, killing user)", i, u->ip, u->nick, u->user, u->host);
 
-			if (MOWGLI_LIST_LENGTH(&clones_kill_queue) == 0)
-			{
-				event_add_once("clones_kill_users", clones_kill_users, NULL, 0);
-			}
-
-			if (!mowgli_node_find(u, &clones_kill_queue))
-			{
-				mowgli_node_add(u, mowgli_node_create(), &clones_kill_queue);
-			}
+			kill_user(serviceinfo->me, u, "Too many connections from this host.");
+			data->u = NULL; /* Required due to kill_user being called during user_add hook. --mr_flea */
 		}
 		else
 		{
@@ -930,13 +889,6 @@ static void clones_userquit(user_t *u)
 			mowgli_patricia_delete(hostlist, he->ip);
 			mowgli_heap_free(hostentry_heap, he);
 		}
-	}
-
-	n = mowgli_node_find(u, &clones_kill_queue);
-	if (n != NULL)
-	{
-		mowgli_node_delete(n, &clones_kill_queue);
-		mowgli_node_free(n);
 	}
 }
 
