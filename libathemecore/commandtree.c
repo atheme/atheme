@@ -79,13 +79,6 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
-	{
-		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, cmdaccess);
-		language_set_active(NULL);
-		return;
-	}
-
-	if (has_any_privs(si))
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, c->access);
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
