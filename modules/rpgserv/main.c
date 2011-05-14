@@ -104,4 +104,17 @@ static unsigned int lookup_flag(const char **flags, unsigned int count, const ch
 	}
 }
 
+/***************************************************************************************/
 
+service_t *rpgserv = NULL;
+mowgli_list_t conf_rg_table;
+
+void _modinit(module_t *m)
+{
+	rpgserv = service_add("rpgserv", NULL, &conf_rg_table);
+}
+
+void _moddeinit(module_unload_intent_t intent)
+{
+	service_delete(rpgserv);
+}
