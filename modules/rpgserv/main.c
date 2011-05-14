@@ -17,12 +17,6 @@ static const char *rpg_rating_names[RPG_RATING_COUNT] = {
 	[RPG_RATING_ADULT]	= "Adult",
 };
 
-static const char *rpg_system_names[RPG_SYSTEM_COUNT] = {
-	[RPG_SYSTEM_CHARAPPROVAL]	= "Character approval",
-	[RPG_SYSTEM_DICE]		= "Character generated using dice",
-	[RPG_SYSTEM_CHARSHEET]		= "Character sheets",
-};
-
 static const char *rpg_ruleset_names[RPG_RULESET_COUNT] = {
 	[RPG_RULESET_ADND]	= "ADnD",
 	[RPG_RULESET_DND3]	= "DnD 3.0",

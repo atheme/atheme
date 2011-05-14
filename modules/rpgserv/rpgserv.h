@@ -16,13 +16,6 @@ typedef enum {
 } rpg_rating_t;
 
 typedef enum {
-	RPG_SYSTEM_CHARAPPROVAL,
-	RPG_SYSTEM_DICE,
-	RPG_SYSTEM_CHARSHEET,
-	RPG_SYSTEM_COUNT,
-} rpg_system_t;
-
-typedef enum {
 	RPG_RULESET_ADND,
 	RPG_RULESET_DND3,
 	RPG_RULESET_DND35,
@@ -59,5 +52,20 @@ typedef enum {
 	RPG_GENRE_OTHER,
 	RPG_GENRE_COUNT
 } rpg_genre_t;
+
+typedef struct {
+	mychan_t *owner;
+
+	rpg_rating_t rating;
+	rpg_ruleset_t ruleset;
+	rpg_period_t period;
+	rpg_genre_t genre;
+
+	char *summary;
+	char *setting;
+	char *storyline;
+	char *system;
+	char *ooc_channel;
+} rpg_channel_t;
 
 #endif
