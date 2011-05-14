@@ -292,6 +292,10 @@ static void ircnet_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u;
 
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
 	u = user_find(sender);
 
 	/* send it from the server if that service isn't on channel

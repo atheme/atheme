@@ -460,7 +460,15 @@ static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter,
 /* mode wrapper */
 static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	user_t *sender_p = user_find(sender);
+	user_t *sender_p;
+
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
+	sender_p = user_find(sender);
+
+	return_if_fail(sender_p != NULL);
 
 	sts(":%s FMODE %s %lu %s", sender_p->uid, target->name, (unsigned long)target->ts, modes);
 }

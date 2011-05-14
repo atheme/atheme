@@ -383,7 +383,13 @@ static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time
 /* mode wrapper */
 static void ts6_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	user_t *u = user_find(sender);
+	user_t *u;
+
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
+	u = user_find(sender);
 
 	return_if_fail(u != NULL);
 

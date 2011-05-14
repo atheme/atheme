@@ -263,10 +263,15 @@ static void p10_topic_sts(channel_t *c, user_t *source, const char *setter, time
 /* mode wrapper */
 static void p10_mode_sts(char *sender, channel_t *target, char *modes)
 {
-	user_t *fptr = user_find_named(sender);
+	user_t *fptr;
 
-	if (!fptr)
-		return;
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
+	fptr = user_find_named(sender);
+
+	return_if_fail(fptr != NULL);
 
 	if (chanuser_find(target, fptr))
 		sts("%s M %s %s", fptr->uid, target->name, modes);

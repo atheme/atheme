@@ -329,6 +329,10 @@ static void solidircd_topic_sts(channel_t *c, user_t *source, const char *setter
 /* mode wrapper */
 static void solidircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
 	sts(":%s MODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 }
 

@@ -409,6 +409,10 @@ static void unreal_topic_sts(channel_t *c, user_t *source, const char *setter, t
 /* mode wrapper */
 static void unreal_mode_sts(char *sender, channel_t *target, char *modes)
 {
+	return_if_fail(sender != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(modes != NULL);
+
 	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 

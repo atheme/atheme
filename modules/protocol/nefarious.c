@@ -147,17 +147,6 @@ static void nefarious_topic_sts(channel_t *c, user_t *source, const char *setter
 	}
 }
 
-/* mode wrapper */
-static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
-{
-	user_t *fptr = user_find_named(sender);
-
-	if (!fptr)
-		return;
-
-	sts("%s M %s %s", fptr->uid, target->name, modes);
-}
-
 /* protocol-specific stuff to do on login */
 static void nefarious_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 {
@@ -644,7 +633,6 @@ void _modinit(module_t * m)
 	kick = &nefarious_kick;
 	notice_channel_sts = &nefarious_notice_channel_sts;
 	topic_sts = &nefarious_topic_sts;
-	mode_sts = &nefarious_mode_sts;
 	ircd_on_login = &nefarious_on_login;
 	ircd_on_logout = &nefarious_on_logout;
 	sethost_sts = &nefarious_sethost_sts;
