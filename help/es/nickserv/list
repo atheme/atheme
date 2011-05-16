@@ -27,7 +27,7 @@ REGNOLIMIT    - Usuarios con la opción REGNOLIMIT.
 FROZEN        - Usuarios reservados por la administración de red.
 MARKED        - Usuarios marcados por la administración de red.
 REGISTERED    - Cuentas registradas con anterioridad a un tiempo especificado.
-LASTUSED      - Cuentas utilizadas por última vez antes de un tiempo especificado.
+LASTLOGIN     - Cuentas utilizadas por última vez antes de un tiempo especificado.
 
 Sintaxis: LIST <criterios>
 

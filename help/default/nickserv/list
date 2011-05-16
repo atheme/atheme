@@ -27,7 +27,7 @@ REGNOLIMIT    - All users with the REGNOLIMIT flag set.
 FROZEN        - All users frozen by network staff.
 MARKED        - All users marked by network staff.
 REGISTERED    - User accounts registered longer ago than a given age.
-LASTUSED      - User accounts last used longer ago than a given age.
+LASTLOGIN     - User accounts last used longer ago than a given age.
 
 Syntax: LIST <criteria>
 
