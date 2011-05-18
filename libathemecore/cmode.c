@@ -551,11 +551,15 @@ static void modestack_flush(struct modestackdata *md)
 
 static struct modestackdata *modestack_init(const char *source, channel_t *channel)
 {
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
+
 	if (irccasecmp(source, modestackdata.source) || channel != modestackdata.channel)
 	{
 		/*slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");*/
 		modestack_flush(&modestackdata);
 	}
+
 	strlcpy(modestackdata.source, source, sizeof modestackdata.source);
 	modestackdata.channel = channel;
 	return &modestackdata;
