@@ -109,6 +109,33 @@ static void nickserv_config_ready(void *unused)
 			itranslation_destroy(_(nick_account_trans[i].nickstring));
 }
 
+static int c_ni_emailexempts(config_entry_t *ce)
+{
+	config_entry_t *subce;
+	mowgli_node_t *n, *tn;
+
+	if (!ce->ce_entries)
+		return 0;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, nicksvs.emailexempts.head)
+	{
+		free(n->data);
+		mowgli_node_delete(n, &nicksvs.emailexempts);
+		mowgli_node_free(n);
+	}
+
+	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+	{
+		if (subce->ce_entries != NULL)
+		{
+			conf_report_warning(ce, "Invalid email exempt entry");
+			continue;
+		}
+		mowgli_node_add(sstrdup(subce->ce_varname), mowgli_node_create(), &nicksvs.emailexempts);
+	}
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
@@ -119,6 +146,15 @@ void _modinit(module_t *m)
 
 	nicksvs.me = service_add("nickserv", NULL);
 	authservice_loaded++;
+	
+	add_bool_conf_item("SPAM", &nicksvs.me->conf_table, 0, &nicksvs.spam, false);
+	add_bool_conf_item("NO_NICK_OWNERSHIP", &nicksvs.me->conf_table, 0, &nicksvs.no_nick_ownership, false);
+	add_duration_conf_item("EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.expiry, "d", 0);
+	add_duration_conf_item("ENFORCE_EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.enforce_expiry, "d", 0);
+	add_duration_conf_item("ENFORCE_DELAY", &nicksvs.me->conf_table, 0, &nicksvs.enforce_delay, "s", 30);
+	add_dupstr_conf_item("ENFORCE_PREFIX", &nicksvs.me->conf_table, 0, &nicksvs.enforce_prefix, "Guest");
+	add_dupstr_conf_item("CRACKLIB_DICT", &nicksvs.me->conf_table, 0, &nicksvs.cracklib_dict, NULL);
+	add_conf_item("EMAILEXEMPTS", &nicksvs.me->conf_table, c_ni_emailexempts);
 }
 
 void _moddeinit(module_unload_intent_t intent)

@@ -42,8 +42,6 @@ static int c_si_loglevel(config_entry_t *);
 static int c_si_auth(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
 
-static int c_ni_emailexempts(config_entry_t *);
-
 /* CService client information. */
 static int c_ci_vop(config_entry_t *);
 static int c_ci_hop(config_entry_t *);
@@ -118,7 +116,6 @@ static struct Token logflags[] = {
 
 mowgli_list_t conf_si_table;
 mowgli_list_t conf_ci_table;
-mowgli_list_t conf_ni_table;
 mowgli_list_t conf_gi_table;
 mowgli_list_t conf_la_table;
 
@@ -197,7 +194,6 @@ void init_newconf(void)
 	/* First we set up the blocks. */
 	add_subblock_top_conf("SERVERINFO", &conf_si_table);
 	add_subblock_top_conf("CHANSERV", &conf_ci_table);
-	add_subblock_top_conf("NICKSERV", &conf_ni_table);
 	add_top_conf("UPLINK", c_uplink);
 	add_subblock_top_conf("GENERAL", &conf_gi_table);
 	add_top_conf("LOADMODULE", c_loadmodule);
@@ -274,16 +270,6 @@ void init_newconf(void)
 	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, 0, &chansvs.deftemplates, NULL);
 
 	add_duration_conf_item("AKICK_TIME", &conf_ci_table, 0, &chansvs.akick_time, "m", 0);
-
-	/* nickserv{} block */
-	add_bool_conf_item("SPAM", &conf_ni_table, 0, &nicksvs.spam, false);
-	add_bool_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, 0, &nicksvs.no_nick_ownership, false);
-	add_duration_conf_item("EXPIRE", &conf_ni_table, 0, &nicksvs.expiry, "d", 0);
-	add_duration_conf_item("ENFORCE_EXPIRE", &conf_ni_table, 0, &nicksvs.enforce_expiry, "d", 0);
-	add_duration_conf_item("ENFORCE_DELAY", &conf_ni_table, 0, &nicksvs.enforce_delay, "s", 30);
-	add_dupstr_conf_item("ENFORCE_PREFIX", &conf_ni_table, 0, &nicksvs.enforce_prefix, "Guest");
-	add_dupstr_conf_item("CRACKLIB_DICT", &conf_ni_table, 0, &nicksvs.cracklib_dict, NULL);
-	add_conf_item("EMAILEXEMPTS", &conf_ni_table, c_ni_emailexempts);
 
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, 0, &me.language_name, NULL);
@@ -678,33 +664,6 @@ static int c_si_casemapping(config_entry_t *ce)
 	else
 		set_match_mapping(MATCH_RFC1459);
 
-	return 0;
-}
-
-static int c_ni_emailexempts(config_entry_t *ce)
-{
-	config_entry_t *subce;
-	mowgli_node_t *n, *tn;
-
-	if (!ce->ce_entries)
-		return 0;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, nicksvs.emailexempts.head)
-	{
-		free(n->data);
-		mowgli_node_delete(n, &nicksvs.emailexempts);
-		mowgli_node_free(n);
-	}
-
-	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
-	{
-		if (subce->ce_entries != NULL)
-		{
-			conf_report_warning(ce, "Invalid email exempt entry");
-			continue;
-		}
-		mowgli_node_add(sstrdup(subce->ce_varname), mowgli_node_create(), &nicksvs.emailexempts);
-	}
 	return 0;
 }
 
