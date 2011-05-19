@@ -254,23 +254,6 @@ void init_newconf(void)
 	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
 	add_conf_item("IMMUNE_LEVEL", &conf_gi_table, c_gi_immune_level);
 
-	/* chanserv{} block */
-	add_bool_conf_item("FANTASY", &conf_ci_table, 0, &chansvs.fantasy, false);
-	add_conf_item("VOP", &conf_ci_table, c_ci_vop);
-	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
-	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
-	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
-	add_conf_item("TEMPLATES", &conf_ci_table, c_ci_templates);
-	add_bool_conf_item("CHANGETS", &conf_ci_table, 0, &chansvs.changets, false);
-	add_bool_conf_item("HIDE_XOP", &conf_ci_table, 0, &chansvs.hide_xop, false);
-	add_dupstr_conf_item("TRIGGER", &conf_ci_table, 0, &chansvs.trigger, "!");
-	add_duration_conf_item("EXPIRE", &conf_ci_table, 0, &chansvs.expiry, "d", 0);
-	add_uint_conf_item("MAXCHANACS", &conf_ci_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
-	add_uint_conf_item("MAXFOUNDERS", &conf_ci_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
-	add_dupstr_conf_item("DEFTEMPLATES", &conf_ci_table, 0, &chansvs.deftemplates, NULL);
-
-	add_duration_conf_item("AKICK_TIME", &conf_ci_table, 0, &chansvs.akick_time, "m", 0);
-
 	/* language:: stuff */
 	add_dupstr_conf_item("NAME", &conf_la_table, 0, &me.language_name, NULL);
 	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, 0, &me.language_translator, NULL);
@@ -667,76 +650,6 @@ static int c_si_casemapping(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_vop(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	set_global_template_flags("VOP", flags_to_bitmask(ce->ce_vardata, 0));
-
-	return 0;
-}
-
-static int c_ci_hop(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	set_global_template_flags("HOP", flags_to_bitmask(ce->ce_vardata, 0));
-
-	return 0;
-}
-
-static int c_ci_aop(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	set_global_template_flags("AOP", flags_to_bitmask(ce->ce_vardata, 0));
-
-	return 0;
-}
-
-static int c_ci_sop(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-	{
-		conf_report_warning(ce, "no parameter for configuration option");
-		return 0;
-	}
-
-	set_global_template_flags("SOP", flags_to_bitmask(ce->ce_vardata, 0));
-
-	return 0;
-}
-
-static int c_ci_templates(config_entry_t *ce)
-{
-	config_entry_t *flce;
-
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
-	{
-		if (flce->ce_vardata == NULL)
-		{
-			conf_report_warning(ce, "no parameter for configuration option");
-			return 0;
-		}
-
-		set_global_template_flags(flce->ce_varname, flags_to_bitmask(flce->ce_vardata, 0));
-	}
-
-	return 0;
-}
-
 static int c_gi_immune_level(config_entry_t *ce)
 {
 	int val;
@@ -993,7 +906,7 @@ bool conf_check(void)
 
 	if (me.auth != 0 && me.auth != 1)
 	{
-		slog(LG_INFO, "conf_check(): no `auth' set in %s; " "defaulting to NONE", config_file);
+		slog(LG_INFO, "conf_check(): no `auth' set in %s; defaulting to NONE", config_file);
 		me.auth = AUTH_NONE;
 	}
 

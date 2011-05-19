@@ -7,7 +7,7 @@
  */
 
 #include "atheme.h"
-#include "conf.h" /* XXX conf_ci_table */
+#include "template.h"
 
 DECLARE_MODULE_V1
 (
@@ -185,6 +185,76 @@ static void chanserv_config_ready(void *unused)
 		join_registered(false); /* !config_options.leave_chans */
 }
 
+static int c_ci_vop(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	set_global_template_flags("VOP", flags_to_bitmask(ce->ce_vardata, 0));
+
+	return 0;
+}
+
+static int c_ci_hop(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	set_global_template_flags("HOP", flags_to_bitmask(ce->ce_vardata, 0));
+
+	return 0;
+}
+
+static int c_ci_aop(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	set_global_template_flags("AOP", flags_to_bitmask(ce->ce_vardata, 0));
+
+	return 0;
+}
+
+static int c_ci_sop(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	set_global_template_flags("SOP", flags_to_bitmask(ce->ce_vardata, 0));
+
+	return 0;
+}
+
+static int c_ci_templates(config_entry_t *ce)
+{
+	config_entry_t *flce;
+
+	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	{
+		if (flce->ce_vardata == NULL)
+		{
+			conf_report_warning(ce, "no parameter for configuration option");
+			return 0;
+		}
+
+		set_global_template_flags(flce->ce_varname, flags_to_bitmask(flce->ce_vardata, 0));
+	}
+
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	hook_add_event("config_ready");
@@ -211,6 +281,22 @@ void _modinit(module_t *m)
 	hook_add_user_identify(cs_user_identify);
 	hook_add_shutdown(on_shutdown);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
+
+	/* chanserv{} block */
+	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);
+	add_conf_item("VOP", &chansvs.me->conf_table, c_ci_vop);
+	add_conf_item("HOP", &chansvs.me->conf_table, c_ci_hop);
+	add_conf_item("AOP", &chansvs.me->conf_table, c_ci_aop);
+	add_conf_item("SOP", &chansvs.me->conf_table, c_ci_sop);
+	add_conf_item("TEMPLATES", &chansvs.me->conf_table, c_ci_templates);
+	add_bool_conf_item("CHANGETS", &chansvs.me->conf_table, 0, &chansvs.changets, false);
+	add_bool_conf_item("HIDE_XOP", &chansvs.me->conf_table, 0, &chansvs.hide_xop, false);
+	add_dupstr_conf_item("TRIGGER", &chansvs.me->conf_table, 0, &chansvs.trigger, "!");
+	add_duration_conf_item("EXPIRE", &chansvs.me->conf_table, 0, &chansvs.expiry, "d", 0);
+	add_uint_conf_item("MAXCHANACS", &chansvs.me->conf_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
+	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
+	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
+	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
 }
 
 void _moddeinit(module_unload_intent_t intent)
