@@ -39,9 +39,6 @@ static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_nick)
 	{
-		if (sptr->conf_table == NULL)
-			continue;
-
 		command_success_nodata(si, _("%s"), sptr->nick);
 	}
 

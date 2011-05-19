@@ -13,7 +13,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *chanfix;
-mowgli_list_t conf_cfx_table;
 
 void _modinit(module_t *m)
 {
@@ -27,7 +26,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	chanfix = service_add("chanfix", NULL, &conf_cfx_table);
+	chanfix = service_add("chanfix", NULL);
 	service_bind_command(chanfix, &cmd_chanfix);
 	service_bind_command(chanfix, &cmd_scores);
 	service_bind_command(chanfix, &cmd_info);

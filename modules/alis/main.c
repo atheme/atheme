@@ -52,7 +52,6 @@ DECLARE_MODULE_V1
 #define DIR_EQUAL	2
 
 service_t *alis;
-mowgli_list_t alis_conftable;
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -81,7 +80,7 @@ struct alis_query
 
 void _modinit(module_t *m)
 {
-	alis = service_add("alis", NULL, &alis_conftable);
+	alis = service_add("alis", NULL);
 	service_bind_command(alis, &alis_list);
 	service_bind_command(alis, &alis_help);
 }

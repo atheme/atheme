@@ -22,8 +22,6 @@ struct global_ {
 
 service_t *globsvs = NULL;
 
-mowgli_list_t gs_conftable;
-
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
@@ -201,7 +199,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	globsvs = service_add("global", NULL, &gs_conftable);
+	globsvs = service_add("global", NULL);
 
 	service_bind_command(globsvs, &gs_global);
 	service_named_bind_command("operserv", &gs_global);

@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *helpserv;
-mowgli_list_t helpserv_conftable;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
@@ -48,8 +47,7 @@ void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 void _modinit(module_t *m)
 {
-	/* Gotta use long-form here because hs already is in use for HostServ */
-	helpserv = service_add("helpserv", NULL, &helpserv_conftable);
+	helpserv = service_add("helpserv", NULL);
 
 	service_bind_command(helpserv, &helpserv_help);
 }

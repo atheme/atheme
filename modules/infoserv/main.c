@@ -45,7 +45,6 @@ mowgli_list_t operlogon_info;
 unsigned int logoninfo_count = 0;
 
 service_t *infoserv;
-mowgli_list_t is_conftable;
 
 static void is_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[]);
@@ -520,8 +519,8 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	infoserv = service_add("infoserv", NULL, &is_conftable);
-	add_uint_conf_item("LOGONINFO_COUNT", &is_conftable, 0, &logoninfo_count, 0, INT_MAX, 3);
+	infoserv = service_add("infoserv", NULL);
+	add_uint_conf_item("LOGONINFO_COUNT", &infoserv->conf_table, 0, &logoninfo_count, 0, INT_MAX, 3);
 
 	hook_add_event("user_add");
 	hook_add_user_add(display_info);
@@ -544,7 +543,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	del_conf_item("LOGONINFO_COUNT", &is_conftable);
+	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
 
 	if (infoserv)
 	{

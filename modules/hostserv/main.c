@@ -19,14 +19,13 @@ DECLARE_MODULE_V1
 static void on_user_identify(user_t *u);
 
 service_t *hostsvs;
-mowgli_list_t conf_hs_table;
 
 void _modinit(module_t *m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
 
-	hostsvs = service_add("hostserv", NULL, &conf_hs_table);
+	hostsvs = service_add("hostserv", NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)

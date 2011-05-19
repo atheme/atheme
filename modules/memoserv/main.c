@@ -18,8 +18,6 @@ DECLARE_MODULE_V1
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
 
-mowgli_list_t ms_conftable;
-
 service_t *memosvs = NULL;
 
 void _modinit(module_t *m)
@@ -30,7 +28,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_away");
 	hook_add_user_away(on_user_away);
 
-	memosvs = service_add("memoserv", NULL, &ms_conftable);
+	memosvs = service_add("memoserv", NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)

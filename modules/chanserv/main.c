@@ -190,7 +190,7 @@ void _modinit(module_t *m)
 	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);
 
-	chansvs.me = service_add("chanserv", chanserv, &conf_ci_table);
+	chansvs.me = service_add("chanserv", chanserv);
 
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");

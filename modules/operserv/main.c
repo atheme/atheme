@@ -15,13 +15,11 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_list_t os_conftable;
-
 service_t *opersvs = NULL;
 
 void _modinit(module_t *m)
 {
-        opersvs = service_add("operserv", NULL, &os_conftable);
+        opersvs = service_add("operserv", NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)

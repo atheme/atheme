@@ -117,7 +117,7 @@ void _modinit(module_t *m)
         hook_add_event("nick_check");
         hook_add_nick_check(nickserv_handle_nickchange);
 
-	nicksvs.me = service_add("nickserv", NULL, &conf_ni_table);
+	nicksvs.me = service_add("nickserv", NULL);
 	authservice_loaded++;
 }
 

@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *catserv;
-mowgli_list_t catserv_conftable;
 
 static void catserv_cmd_meow(sourceinfo_t *si, int parc, char *parv[]);
 static void catserv_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -28,7 +27,7 @@ command_t catserv_help = { "HELP", "Displays contextual help information.",
 
 void _modinit(module_t *m)
 {
-	catserv = service_add("catserv", NULL, &catserv_conftable);
+	catserv = service_add("catserv", NULL);
 
 	service_bind_command(catserv, &catserv_meow);
 	service_bind_command(catserv, &catserv_help);

@@ -15,7 +15,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *announcesvs;
-mowgli_list_t conf_as_table;
 
 static void as_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 static void account_drop_request(myuser_t *mu);
@@ -48,7 +47,7 @@ mowgli_list_t as_reqlist;
 
 void _modinit(module_t *m)
 {
-	announcesvs = service_add("announceserv", NULL, &conf_as_table);
+	announcesvs = service_add("announceserv", NULL);
 	
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);

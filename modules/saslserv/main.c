@@ -15,8 +15,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_list_t saslserv_conftable;
-
 mowgli_list_t sessions;
 mowgli_list_t sasl_mechanisms;
 
@@ -75,7 +73,7 @@ void _modinit(module_t *m)
 	hook_add_user_add(sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
-	saslsvs = service_add("saslserv", saslserv, &saslserv_conftable);
+	saslsvs = service_add("saslserv", saslserv);
 	authservice_loaded++;
 }
 

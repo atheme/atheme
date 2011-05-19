@@ -37,7 +37,6 @@ static void db_h_bot_count(database_handle_t *db, const char *type);
 fn_botserv_bot_find botserv_bot_find;
 
 service_t *botsvs;
-mowgli_list_t bs_conftable;
 
 unsigned int min_users = 0;
 
@@ -935,9 +934,9 @@ void _modinit(module_t *m)
 	hook_add_event("shutdown");
 	hook_add_shutdown(on_shutdown);
 
-	botsvs = service_add("botserv", NULL, &bs_conftable);
+	botsvs = service_add("botserv", NULL);
 
-	add_uint_conf_item("MIN_USERS", &bs_conftable, 0, &min_users, 0, 65535, 0);
+	add_uint_conf_item("MIN_USERS", &botsvs->conf_table, 0, &min_users, 0, 65535, 0);
 	service_bind_command(botsvs, &bs_bot);
 	service_bind_command(botsvs, &bs_assign);
 	service_bind_command(botsvs, &bs_unassign);
@@ -967,11 +966,6 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
-	if (botsvs)
-	{
-		service_delete(botsvs);
-		botsvs = NULL;
-	}
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, bs_bots.head)
 	{
 		botserv_bot_t *bot = (botserv_bot_t *) n->data;
@@ -988,7 +982,7 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(botsvs, &bs_assign);
 	service_unbind_command(botsvs, &bs_unassign);
 	service_unbind_command(botsvs, &bs_botlist);
-	del_conf_item("MIN_USERS", &bs_conftable);
+	del_conf_item("MIN_USERS", &botsvs->conf_table);
 	hook_del_channel_join(bs_join);
 	hook_del_channel_part(bs_part);
 	hook_del_channel_drop(bs_channel_drop);
@@ -998,6 +992,8 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_db_write(botserv_save_database);
 	db_unregister_type_handler("BOT");
 	db_unregister_type_handler("BOT-COUNT");
+
+	service_delete(botsvs);
 
 	modestack_mode_simple = modestack_mode_simple_real;
 	modestack_mode_limit  = modestack_mode_limit_real;

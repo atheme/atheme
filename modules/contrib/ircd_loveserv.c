@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 );
 
 service_t *loveserv;
-mowgli_list_t conf_ls_table;
 
 static void _ls_admirer(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -284,7 +283,7 @@ command_t ls_help = { "HELP", "Displays contextual help information.",
 
 void _modinit(module_t *m)
 {
-        loveserv = service_add("LoveServ", NULL, &conf_ls_table);
+        loveserv = service_add("LoveServ", NULL);
 
 	service_bind_command(loveserv, &ls_admirer);
 	service_bind_command(loveserv, &ls_rose);
@@ -302,9 +301,6 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	if (loveserv)
-		service_delete(loveserv);
-	
 	service_unbind_command(loveserv, &ls_admirer);
 	service_unbind_command(loveserv, &ls_rose);
 	service_unbind_command(loveserv, &ls_chocolate);
@@ -317,6 +313,9 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(loveserv, &ls_spank);
 	service_unbind_command(loveserv, &ls_chocobo);
 	service_unbind_command(loveserv, &ls_help);
+
+	if (loveserv)
+		service_delete(loveserv);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
