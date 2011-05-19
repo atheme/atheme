@@ -261,7 +261,7 @@ static int conf_service(config_entry_t *ce)
 	if (!sptr)
 		return -1;
 
-	subblock_handler(ce, sptr->conf_table);
+	subblock_handler(ce, &sptr->conf_table);
 	return 0;
 }
 
@@ -373,7 +373,7 @@ service_t *service_add_static(const char *name, const char *user, const char *ho
 	char internal_name[NICKLEN + 10];
 
 	snprintf(internal_name, sizeof internal_name, "static:%s", name);
-	sptr = service_add(internal_name, handler, NULL);
+	sptr = service_add(internal_name, handler);
 
 	free(sptr->user);
 	free(sptr->host);
@@ -441,8 +441,7 @@ static void servtree_update(void *dummy)
 				kill_user(NULL, u, "Nick taken by service");
 			sptr->me = user_add(sptr->nick, sptr->user, sptr->host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, sptr->real, me.me, CURRTIME);
 			sptr->me->flags |= UF_IRCOP | UF_INVIS;
-			if ((sptr == chansvs.me || sptr->conf_table == NULL) &&
-				!chansvs.fantasy)
+			if ((sptr == chansvs.me) && !chansvs.fantasy)
 				sptr->me->flags |= UF_DEAF;
 
 			if (me.connected)

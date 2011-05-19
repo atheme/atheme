@@ -266,7 +266,7 @@ void joinall(char *name)
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
 		/* service must be online and not a botserv bot */
-		if (svs->me == NULL || svs->conf_table == NULL)
+		if (svs->me == NULL)
 			continue;
 		join(name, svs->me->nick);
 	}
@@ -285,7 +285,7 @@ void partall(char *name)
 	{
 		if (svs == chansvs.me && mc != NULL && mc->flags & MC_GUARD)
 			continue;
-		if (svs->me == NULL || svs->conf_table == NULL)
+		if (svs->me == NULL)
 			continue;
 		/* Do not cache this channel_find(), the
 		 * channel may disappear under our feet
