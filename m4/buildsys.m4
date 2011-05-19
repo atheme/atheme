@@ -180,6 +180,6 @@ AC_DEFUN([BUILDSYS_TOUCH_DEPS], [
 	for i in $(find . -name Makefile); do
 		DEPSFILE="$(dirname $i)/.deps"
 		test -f "$DEPSFILE" && rm "$DEPSFILE"
-		touch -t 0001010000 "$DEPSFILE"
+		touch "$DEPSFILE"
 	done
 ])
