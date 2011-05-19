@@ -42,13 +42,6 @@ static int c_si_loglevel(config_entry_t *);
 static int c_si_auth(config_entry_t *);
 static int c_si_casemapping(config_entry_t *);
 
-/* CService client information. */
-static int c_ci_vop(config_entry_t *);
-static int c_ci_hop(config_entry_t *);
-static int c_ci_aop(config_entry_t *);
-static int c_ci_sop(config_entry_t *);
-static int c_ci_templates(config_entry_t *);
-
 static int c_gi_uflags(config_entry_t *);
 static int c_gi_cflags(config_entry_t *);
 static int c_gi_exempts(config_entry_t *);
@@ -115,7 +108,6 @@ static struct Token logflags[] = {
 };
 
 mowgli_list_t conf_si_table;
-mowgli_list_t conf_ci_table;
 mowgli_list_t conf_gi_table;
 mowgli_list_t conf_la_table;
 
@@ -953,7 +945,7 @@ bool conf_check(void)
 	}
 	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
 	{
-		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; " "defaulting to 5 minutes", config_file);
+		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; defaulting to 5 minutes", config_file);
 		config_options.commit_interval = 300;
 	}
 
