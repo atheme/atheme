@@ -17,8 +17,6 @@ E void init_newconf(void);
 
 /* XXX Unstable module api to add things to the standard conf blocks */
 E mowgli_list_t conf_si_table; /* serverinfo{} */
-E mowgli_list_t conf_ci_table; /* chanserv{} */
-E mowgli_list_t conf_ni_table; /* nickserv{} */
 E mowgli_list_t conf_gi_table; /* general{} */
 E mowgli_list_t conf_la_table; /* language{} */
 
