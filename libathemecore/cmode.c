@@ -551,8 +551,8 @@ static void modestack_flush(struct modestackdata *md)
 
 static struct modestackdata *modestack_init(const char *source, channel_t *channel)
 {
-	return_if_fail(source != NULL);
-	return_if_fail(channel != NULL);
+	return_val_if_fail(source != NULL, NULL);
+	return_val_if_fail(channel != NULL, NULL);
 
 	if (irccasecmp(source, modestackdata.source) || channel != modestackdata.channel)
 	{
