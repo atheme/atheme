@@ -272,17 +272,8 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	const char *nick;
 	char newnick[30 + 1];
 
-	if (name == NULL)
-	{
-		slog(LG_INFO, "service_add(): Bad error! We were given a NULL pointer for service name!");
-		return NULL;
-	}
-
-	if (service_find(name))
-	{
-		slog(LG_INFO, "service_add(): Service `%s' already exists.", name);
-		return NULL;
-	}
+	return_val_if_fail(name != NULL, NULL);
+	return_val_if_fail(service_find(name) == NULL, NULL);
 
 	sptr = mowgli_heap_alloc(service_heap);
 
