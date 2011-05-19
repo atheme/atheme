@@ -7,6 +7,13 @@ CODE:
 OUTPUT:
 	RETVAL
 
+Atheme_Service
+create(SV * package, const char * name)
+CODE:
+	RETVAL = service_add(name, NULL);
+OUTPUT:
+	RETVAL
+
 void
 do_bind_command(Atheme_Service self, Atheme_Command command)
 CODE:

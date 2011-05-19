@@ -17,6 +17,7 @@ use Atheme::ChannelRegistration;
 use Atheme::ChanAcs;
 use Atheme::ReadOnlyHashWrapper;
 use Atheme::Internal::HookHash;
+use Atheme::Internal::ServiceHash;
 use Atheme::Hooks;
 use Atheme::Log;
 
@@ -27,7 +28,7 @@ our %Channels;
 our %ChannelRegistrations;
 our %Hooks;
 
-tie %Services, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Service->find(@_) };
+tie %Services, 'Atheme::Internal::ServiceHash';
 tie %Users, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::User->find(@_) };
 tie %Accounts, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Account->find(@_) };
 tie %Channels, 'Atheme::ReadOnlyHashWrapper', sub { Atheme::Channel->find(@_) };
