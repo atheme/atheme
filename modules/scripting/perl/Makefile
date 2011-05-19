@@ -34,3 +34,5 @@ install-extra:
 	${INSTALL} -m644 lib/Atheme/*.pm ${plugindir}/lib/Atheme
 	${MKDIR_P} ${plugindir}/lib/Atheme/Internal
 	${INSTALL} -m644 lib/Atheme/Internal/*.pm ${plugindir}/lib/Atheme/Internal
+	${MKDIR_P} ${plugindir}/examples
+	${INSTALL} -m644 examples/*.pl ${plugindir}/examples
