@@ -151,6 +151,11 @@ AS_IF([test "x$with_perl" != "xno"],
       PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts`
       PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
   fi
+
+  dnl if Perl is built with threading support, we need to link atheme against libpthread
+  if test -n "`echo "$PERL_LIBS" | grep pthread`"; then
+     LIBS="$LIBS -lpthread"
+  fi
 ])
 
 AS_IF([test "x$with_perl" = "xyes" && test "x$PERL_CFLAGS" = "x"],
@@ -159,7 +164,6 @@ AS_IF([test "x$with_perl" = "xyes" && test "x$PERL_CFLAGS" = "x"],
 AC_SUBST(PERL_CFLAGS)
 AC_SUBST(PERL_LIBS)
 AC_SUBST(PERL_ENABLE)
-
 
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"

@@ -7615,12 +7615,15 @@ fi
       PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
   fi
 
+    if test -n "`echo "$PERL_LIBS" | grep pthread`"; then
+     LIBS="$LIBS -lpthread"
+  fi
+
 fi
 
 if test "x$with_perl" = "xyes" && test "x$PERL_CFLAGS" = "x"; then :
   as_fn_error $? "Perl support was requested but Perl could not be found." "$LINENO" 5
 fi
-
 
 
 
