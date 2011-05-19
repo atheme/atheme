@@ -29,14 +29,14 @@ struct service_ {
 
 	bool chanmsg;
 
-	mowgli_list_t *conf_table;
+	mowgli_list_t conf_table;
 };
 
 E mowgli_patricia_t *services_name;
 E mowgli_patricia_t *services_nick;
 
 E void servtree_init(void);
-E service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), mowgli_list_t *conf_table);
+E service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
 E service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
 E void service_delete(service_t *sptr);
 E service_t *service_find(const char *name);

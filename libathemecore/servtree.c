@@ -265,7 +265,7 @@ static int conf_service(config_entry_t *ce)
 	return 0;
 }
 
-service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), mowgli_list_t *conf_table)
+service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
 {
 	service_t *sptr;
 	struct ConfTable *subblock;
@@ -306,7 +306,6 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	sptr->aliases = NULL;
 	sptr->access = NULL;
 	sptr->chanmsg = false;
-	sptr->conf_table = conf_table;
 
 	sptr->me = NULL;
 
@@ -315,18 +314,15 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 
 	sptr->commands = mowgli_patricia_create(strcasecanon);
 
-	if (sptr->conf_table != NULL)
-	{
-		subblock = find_top_conf(name);
-		if (subblock == NULL)
-			add_top_conf(sptr->internal_name, conf_service);
-		add_conf_item("NICK", sptr->conf_table, conf_service_nick);
-		add_conf_item("USER", sptr->conf_table, conf_service_user);
-		add_conf_item("HOST", sptr->conf_table, conf_service_host);
-		add_conf_item("REAL", sptr->conf_table, conf_service_real);
-		add_conf_item("ALIASES", sptr->conf_table, conf_service_aliases);
-		add_conf_item("ACCESS", sptr->conf_table, conf_service_access);
-	}
+	subblock = find_top_conf(name);
+	if (subblock == NULL)
+		add_top_conf(sptr->internal_name, conf_service);
+	add_conf_item("NICK", &sptr->conf_table, conf_service_nick);
+	add_conf_item("USER", &sptr->conf_table, conf_service_user);
+	add_conf_item("HOST", &sptr->conf_table, conf_service_host);
+	add_conf_item("REAL", &sptr->conf_table, conf_service_real);
+	add_conf_item("ALIASES", &sptr->conf_table, conf_service_aliases);
+	add_conf_item("ACCESS", &sptr->conf_table, conf_service_access);
 
 	return sptr;
 }
@@ -338,18 +334,15 @@ void service_delete(service_t *sptr)
 	mowgli_patricia_delete(services_name, sptr->internal_name);
 	mowgli_patricia_delete(services_nick, sptr->nick);
 
-	if (sptr->conf_table != NULL)
-	{
-		del_conf_item("ACCESS", sptr->conf_table);
-		del_conf_item("ALIASES", sptr->conf_table);
-		del_conf_item("REAL", sptr->conf_table);
-		del_conf_item("HOST", sptr->conf_table);
-		del_conf_item("USER", sptr->conf_table);
-		del_conf_item("NICK", sptr->conf_table);
-		subblock = find_top_conf(sptr->internal_name);
-		if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
-			del_top_conf(sptr->internal_name);
-	}
+	del_conf_item("ACCESS", &sptr->conf_table);
+	del_conf_item("ALIASES", &sptr->conf_table);
+	del_conf_item("REAL", &sptr->conf_table);
+	del_conf_item("HOST", &sptr->conf_table);
+	del_conf_item("USER", &sptr->conf_table);
+	del_conf_item("NICK", &sptr->conf_table);
+	subblock = find_top_conf(sptr->internal_name);
+	if (subblock != NULL && conftable_get_conf_handler(subblock) == conf_service)
+		del_top_conf(sptr->internal_name);
 
 	if (sptr->me != NULL)
 	{
