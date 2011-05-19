@@ -65,8 +65,13 @@ static bool startup_perl(void)
 	 * RTLD_LOCAL, meaning that they're not available for later resolution. Perl
 	 * extension modules assume that libperl.so is already loaded and available.
 	 * Make it so.
+	 *
+	 * Secondary hack: some linkers do not respect rpath in dlopen(), so we fall back
+	 * to some secondary paths where libperl.so may be living.  --nenolod
 	 */
-	if (!(libperl_handle = dlopen("libperl.so", RTLD_NOW | RTLD_GLOBAL)))
+	if (!(libperl_handle = dlopen("libperl.so", RTLD_NOW | RTLD_GLOBAL)) &&
+	    !(libperl_handle = dlopen("/usr/lib/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL)) &&
+	    !(libperl_handle = dlopen("/usr/lib64/perl5/core_perl/CORE/libperl.so", RTLD_NOW | RTLD_GLOBAL)))
 	{
 		slog(LG_INFO, "Couldn't dlopen libperl.so");
 		return false;
