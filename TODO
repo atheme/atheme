@@ -9,7 +9,7 @@
   [ ] Basic StatServ nonsense (mainly interesting for xmlrpc)
   [ ] rrdtool support for fancy graphs
   [ ] work ^^^ into atheme-web
-[ ] IPv6 linking support
+[x] IPv6 linking support
 
 
 ---
