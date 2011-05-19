@@ -185,7 +185,6 @@ void init_newconf(void)
 {
 	/* First we set up the blocks. */
 	add_subblock_top_conf("SERVERINFO", &conf_si_table);
-	add_subblock_top_conf("CHANSERV", &conf_ci_table);
 	add_top_conf("UPLINK", c_uplink);
 	add_subblock_top_conf("GENERAL", &conf_gi_table);
 	add_top_conf("LOADMODULE", c_loadmodule);
