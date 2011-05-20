@@ -17,8 +17,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.net>"
 );
 
-mowgli_list_t *conf_hs_table;
-
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[]);
@@ -51,8 +49,6 @@ void _modinit(module_t *m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
-
-	MODULE_TRY_REQUEST_SYMBOL(m, conf_hs_table, "hostserv/main", "conf_hs_table");
 
 	hook_add_db_write(write_hsofferdb);
 	db_register_type_handler("HO", db_h_ho);

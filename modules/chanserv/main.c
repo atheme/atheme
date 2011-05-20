@@ -8,6 +8,7 @@
 
 #include "atheme.h"
 #include "template.h"
+#include <limits.h>
 
 DECLARE_MODULE_V1
 (

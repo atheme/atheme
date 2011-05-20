@@ -16,7 +16,6 @@ DECLARE_MODULE_V1
 	"Rizon Development Group <http://www.rizon.net>"
 );
 
-mowgli_list_t *conf_hs_table;
 bool request_per_nick;
 
 unsigned int ratelimit_count = 0;
@@ -59,8 +58,6 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_TRY_REQUEST_SYMBOL(m, conf_hs_table, "hostserv/main", "conf_hs_table");
-
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
 	hook_add_event("nick_ungroup");
@@ -77,7 +74,7 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_waiting);
 	service_named_bind_command("hostserv", &hs_reject);
 	service_named_bind_command("hostserv", &hs_activate);
-	add_bool_conf_item("REQUEST_PER_NICK", conf_hs_table, 0, &request_per_nick, false);
+	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -94,7 +91,7 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("hostserv", &hs_waiting);
 	service_named_unbind_command("hostserv", &hs_reject);
 	service_named_unbind_command("hostserv", &hs_activate);
-	del_conf_item("REQUEST_PER_NICK", conf_hs_table);
+	del_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table);
 }
 
 static void write_hsreqdb(database_handle_t *db)

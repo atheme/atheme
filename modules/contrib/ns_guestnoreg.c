@@ -83,7 +83,7 @@ _modinit(module_t *m)
 	hook_add_event("user_can_register");
 	hook_add_user_can_register(guestnoreg_hook);
 
-        add_conf_item("GUESTNICKS", &conf_ni_table, guestnoreg_config_handler);
+        add_conf_item("GUESTNICKS", &nicksvs.me->conf_table, guestnoreg_config_handler);
 }
 
 void
@@ -92,5 +92,5 @@ _moddeinit(module_unload_intent_t intent)
 	hook_del_user_can_register(guestnoreg_hook);
         hook_del_config_purge(guestnoreg_config_purge);
 
-        del_conf_item("GUESTNICKS", &conf_ni_table);
+        del_conf_item("GUESTNICKS", &nicksvs.me->conf_table);
 }

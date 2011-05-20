@@ -67,7 +67,7 @@ _modinit(module_t *m)
 	hook_add_event("user_register");
 	hook_add_user_register(regnotice_hook);
 
-	add_conf_item("REGNOTICE", &conf_ni_table, regnotice_config_handler);
+	add_conf_item("REGNOTICE", &nicksvs.me->conf_table, regnotice_config_handler);
 }
 
 void
@@ -76,5 +76,5 @@ _moddeinit(module_unload_intent_t intent)
 	hook_del_user_register(regnotice_hook);
 	hook_del_config_purge(regnotice_config_purge);
 
-	del_conf_item("REGNOTICE", &conf_ni_table);
+	del_conf_item("REGNOTICE", &nicksvs.me->conf_table);
 }

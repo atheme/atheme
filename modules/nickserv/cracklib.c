@@ -89,7 +89,7 @@ _modinit(module_t *m)
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
-	add_bool_conf_item("CRACKLIB_WARN", &conf_ni_table, 0, &cracklib_warn, false);
+	add_bool_conf_item("CRACKLIB_WARN", &nicksvs.me->conf_table, 0, &cracklib_warn, false);
 }
 
 void
@@ -99,5 +99,5 @@ _moddeinit(module_unload_intent_t intent)
 	hook_del_config_ready(cracklib_config_ready);
 	hook_del_operserv_info(osinfo_hook);
 
-	del_conf_item("CRACKLIB_WARN", &conf_ni_table);
+	del_conf_item("CRACKLIB_WARN", &nicksvs.me->conf_table);
 }

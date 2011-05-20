@@ -51,7 +51,7 @@ _modinit(module_t *m)
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(info_hook);
 
-	add_uint_conf_item("WAITREG_TIME", &conf_ni_table, 0, &waitreg_time, 0, INT_MAX, 0);
+	add_uint_conf_item("WAITREG_TIME", &nicksvs.me->conf_table, 0, &waitreg_time, 0, INT_MAX, 0);
 }
 
 void
@@ -60,5 +60,5 @@ _moddeinit(module_unload_intent_t intent)
 	hook_del_user_can_register(waitreg_hook);
 	hook_del_operserv_info(info_hook);
 
-	del_conf_item("WAITREG_TIME", &conf_ni_table);
+	del_conf_item("WAITREG_TIME", &nicksvs.me->conf_table);
 }
