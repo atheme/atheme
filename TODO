@@ -1,7 +1,5 @@
-5.2 TODO
+7.0 TODO
 
-[x] hostserv OFFER system (jdhore)
-[x] snoop() removal (jdhore)
 [ ] Split tracking (datamine STATS c to make/apply routing suggestions?)
   [ ] log splits cleanly to log channels
   [ ] if we datamine, use this information to make suggestions
