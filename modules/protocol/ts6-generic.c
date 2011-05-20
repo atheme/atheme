@@ -1399,8 +1399,7 @@ static void channel_drop(mychan_t *mc)
 	if (use_mlock == false)
 		return;
 
-	/* Don't reset it if the channel doesn't exist. */
-	if (!mc->chan)
+	if (mc->chan == NULL)
 		return;
 
 	sts(":%s MLOCK %ld %s :", ME, mc->chan->ts, mc->chan->name);
