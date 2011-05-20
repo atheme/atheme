@@ -118,6 +118,11 @@ bs_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t
 	mychan_t *mc;
 	botserv_bot_t *bot = NULL;
 
+	return_if_fail(source != NULL);
+	return_if_fail(c != NULL);
+	return_if_fail(setter != NULL);
+	return_if_fail(topic != NULL);
+
 	if (source == chansvs.me->me && (mc = mychan_find(c->name)) != NULL)
 		bot = bs_mychan_find_bot(mc);
 
@@ -130,6 +135,9 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 	mychan_t *mc;
 	metadata_t *bs;
 	user_t *bot = NULL;
+
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
@@ -147,6 +155,9 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 	metadata_t *bs;
 	user_t *bot = NULL;
 
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
+
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
 			(mc = mychan_find(channel->name)) != NULL &&
@@ -162,6 +173,9 @@ bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, unsigned 
 	mychan_t *mc;
 	metadata_t *bs;
 	user_t *bot = NULL;
+
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
@@ -179,6 +193,9 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 	metadata_t *bs;
 	user_t *bot = NULL;
 
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
+
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
 			(mc = mychan_find(channel->name)) != NULL &&
@@ -194,6 +211,9 @@ bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
 	mychan_t *mc;
 	metadata_t *bs;
 	user_t *bot = NULL;
+
+	return_if_fail(source != NULL);
+	return_if_fail(channel != NULL);
 
 	if (source != chansvs.me->me)
 		return try_kick_real(source, chan, target, reason);
