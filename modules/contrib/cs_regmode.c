@@ -18,7 +18,7 @@ static void register_hook(hook_channel_req_t *hdata)
 {
 	mychan_t *mc = hdata->mc;
 
-	if (mc == NULL)
+	if (mc == NULL || mc->chan == NULL)
 		return;
 
 	modestack_mode_simple(chansvs.nick, mc->chan, MTYPE_ADD, CMODE_CHANREG);
@@ -26,7 +26,7 @@ static void register_hook(hook_channel_req_t *hdata)
 
 static void drop_hook(mychan_t *mc)
 {
-	if (mc == NULL)
+	if (mc == NULL || mc->chan == NULL)
 		return;
 
 	modestack_mode_simple(chansvs.nick, mc->chan, MTYPE_DEL, CMODE_CHANREG);
