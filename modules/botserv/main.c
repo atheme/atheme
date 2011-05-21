@@ -213,7 +213,7 @@ bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
 	user_t *bot = NULL;
 
 	return_if_fail(source != NULL);
-	return_if_fail(channel != NULL);
+	return_if_fail(chan != NULL);
 
 	if (source != chansvs.me->me)
 		return try_kick_real(source, chan, target, reason);
