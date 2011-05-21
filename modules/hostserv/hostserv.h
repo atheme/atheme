@@ -8,7 +8,6 @@ typedef struct {
 	char *target;
 } hook_host_request_t;
 
-service_t *hostsvs;
 /*
  * do_sethost(user_t *u, char *host)
  *

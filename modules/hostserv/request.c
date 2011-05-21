@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 );
 
 bool request_per_nick;
+service_t *hostsvs;
 
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
@@ -57,6 +58,8 @@ void _modinit(module_t *m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
+
+	MODULE_TRY_REQUEST_SYMBOL(m, hostsvs, "hostserv/main", "hostsvs");
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);

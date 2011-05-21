@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 );
 
 static void on_user_identify(user_t *u);
+service_t *hostsvs;
 
 void _modinit(module_t *m)
 {
