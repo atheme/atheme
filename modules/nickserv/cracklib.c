@@ -51,7 +51,10 @@ static void
 cracklib_hook(hook_user_register_check_t *hdata)
 {
 	const char *cracklib_reason;
-	char *dict = strcat(nicksvs.cracklib_dict, ".pwd");
+	char dict[BUFSIZE];
+
+	strlcpy(dict, nicksvs.cracklib_dict, BUFSIZE);
+	strlcat(dict, ".pwd", BUFSIZE);
 
 	return_if_fail(hdata != NULL);
 	return_if_fail(hdata->si != NULL);
@@ -74,7 +77,7 @@ static void osinfo_hook(sourceinfo_t *si)
 	return_if_fail(si != NULL);
 
 	command_success_nodata(si, "Registrations will fail with bad passwords: %s", cracklib_warn ? "No" : "Yes");
-};
+}
 
 void
 _modinit(module_t *m)
