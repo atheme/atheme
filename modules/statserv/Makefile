@@ -3,7 +3,8 @@
 
 PLUGIN = main$(PLUGIN_SUFFIX)
 
-SRCS = main.c
+SRCS = main.c \
+	   channel.c
 
 include ../../extra.mk
 include ../../buildsys.mk
