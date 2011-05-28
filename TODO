@@ -4,8 +4,6 @@
   [ ] log splits cleanly to log channels
   [ ] if we datamine, use this information to make suggestions
 [ ] Statistics
-  [ ] SQL query provider API
-  [ ] write schema
   [/] base collector
     [ ] kills collector
     [ ] wallops collector
