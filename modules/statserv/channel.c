@@ -51,7 +51,7 @@ static void ss_cmd_channel(sourceinfo_t *si, int parc, char *parv[])
         return;
     }
 
-	c = command_find(os_clones_cmds, cmd);
+	c = command_find(ss_channel_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
