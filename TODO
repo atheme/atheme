@@ -11,7 +11,7 @@
   [ ] servers collector
   [/] channels collector
     [ ] channel info
-    [ ] channel topics
+    [x] channel topics
     [ ] channel userlist
       [ ] channel op/deop status
     [ ] channel modes
