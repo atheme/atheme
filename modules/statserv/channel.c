@@ -66,7 +66,6 @@ static void ss_cmd_channel_topic(sourceinfo_t *si, int parc, char *parv[])
 {
     char *chan = parv[0];
     channel_t *c;
-    mowgli_patricia_iteration_state_t state;
 
     if (!chan)
     {
