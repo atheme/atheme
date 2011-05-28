@@ -4,11 +4,27 @@
   [ ] log splits cleanly to log channels
   [ ] if we datamine, use this information to make suggestions
 [ ] Statistics
+  [ ] SQL query provider API
+  [ ] write schema
+  [/] base collector
+    [ ] kills collector
+    [ ] wallops collector
+    [ ] users collector
+  [ ] servers collector
+  [/] channels collector
+    [ ] channel info
+    [ ] channel topics
+    [ ] channel userlist
+      [ ] channel op/deop status
+    [ ] channel modes
+  [?] netsplit history
   [ ] Basic StatServ nonsense (mainly interesting for xmlrpc)
   [ ] rrdtool support for fancy graphs
-  [ ] work ^^^ into atheme-web
 [x] IPv6 linking support
 
+frontend (www+sql)
+  [ ] make it!
+  [ ] work ^^^ into atheme-web
 
 ---
 
