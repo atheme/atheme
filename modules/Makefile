@@ -23,6 +23,7 @@ SUBDIRS = \
 	protocol \
 	rpgserv \
 	saslserv \
+	statserv \
 	scripting \
 	transport \
 	$(CONTRIB_ENABLE)
