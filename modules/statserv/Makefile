@@ -1,18 +1,19 @@
-# Copyright (c) 2010 Atheme Development Group
+# Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
 
-PLUGIN = main$(PLUGIN_SUFFIX)
+MODULE = statserv
 
-SRCS = main.c \
-	   channel.c
+SRCS =			\
+	main.c	\
+	channel.c
 
 include ../../extra.mk
 include ../../buildsys.mk
+include ../../buildsys.module.mk
 
-plugindir = $(MODDIR)/modules/statserv
-
-CPPFLAGS += -I../../include
-CFLAGS += $(PLUGIN_CFLAGS)
-LDFLAGS += $(PLUGIN_LDFLAGS)
+CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 
