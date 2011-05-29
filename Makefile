@@ -6,8 +6,8 @@ CLEANDIRS = ${SUBDIRS}
 
 pre-depend: include/hooktypes.h
 	@revh=; \
-	if [ -d .hg ]; then \
-		revh=`hg parent --template '{rev}:{node|short}' 2>/dev/null` || :; \
+	if [ -d .git ]; then \
+		revh=`git log -1 --pretty=oneline | cut -d' ' -f1 2>/dev/null` || :; \
 	fi; \
 	if [ -z "$$revh" ] && [ ! -r include/serno.h ]; then \
 		revh=`sed -ne 's/^node: \(............\).*/\1/p' .hg_archival.txt 2>/dev/null` || :; \
