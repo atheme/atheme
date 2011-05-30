@@ -8,7 +8,8 @@ MODULE = statserv
 
 SRCS =			\
 	main.c	\
-	channel.c
+	channel.c \
+	server.c
 
 include ../../extra.mk
 include ../../buildsys.mk
