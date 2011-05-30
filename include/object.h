@@ -17,11 +17,6 @@ struct metadata_ {
 
 typedef struct metadata_ metadata_t;
 
-typedef struct {
-	myuser_t *mu;
-	mowgli_list_t taglist;
-} metadata_subscription_t;
-
 typedef void (*destructor_t)(void *);
 
 typedef struct {

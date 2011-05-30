@@ -88,12 +88,8 @@ struct myuser_
   time_t memo_ratelimit_time; /* last time a memo was sent */
   mowgli_list_t memo_ignores;
 
-  /* openservices patch */
   mowgli_list_t access_list;
-
   mowgli_list_t nicks; /* registered nicks, must include mu->name if nonempty */
-
-  mowgli_list_t subscriptions; /* presence subscriptors */
   
   language_t *language;
 
