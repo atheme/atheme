@@ -6,7 +6,6 @@
 [ ] Statistics
   [/] base collector
     [ ] kills collector
-    [ ] wallops collector
     [ ] users collector
   [ ] servers collector
   [/] channels collector
