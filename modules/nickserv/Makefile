@@ -58,7 +58,6 @@ BASE_SRCS =			\
 	set_quietchg.c	\
 	setpass.c	\
 	status.c	\
-	subscribe.c	\
 	taxonomy.c	\
 	vacation.c	\
 	verify.c	\

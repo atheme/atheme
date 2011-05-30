@@ -583,33 +583,7 @@ static void opensex_h_mcfp(database_handle_t *db, const char *type)
 
 static void opensex_h_su(database_handle_t *db, const char *type)
 {
-	char buf[4096];
-	const char *user, *sub_user, *tags, *tag;
-	myuser_t *mu;
-	metadata_subscription_t *ms;
-
-	user = db_sread_word(db);
-	sub_user = db_sread_word(db);
-	tags = db_sread_word(db);
-
-	if (!(mu = myuser_find(user)))
-	{
-		slog(LG_INFO, "dh-h-su: line %d: subscription to %s:%s for unknown account %s", db->line,
-		     sub_user, tags, user);
-		return;
-	}
-
-	ms = smalloc(sizeof *ms);
-	ms->mu = mu;
-
-	strlcpy(buf, tags, sizeof buf);
-	tag = strtok(buf, ",");
-	do
-	{
-		mowgli_node_add(sstrdup(tag), mowgli_node_create(), &ms->taglist);
-	} while ((tag = strtok(NULL, ",")));
-
-	mowgli_node_add(ms, mowgli_node_create(), &mu->subscriptions);
+	slog(LG_INFO, "db-h-su: line %d: metadata change subscriptions have been dropped, ignoring", db->line);
 }
 
 static void opensex_h_nam(database_handle_t *db, const char *type)
