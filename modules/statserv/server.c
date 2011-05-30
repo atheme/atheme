@@ -67,7 +67,7 @@ static void ss_cmd_server_list(sourceinfo_t *si, int parc, char *parv[])
     MOWGLI_PATRICIA_FOREACH(s, &state, servlist)
     {
         i++;
-        command_success_nodata(si, _("%d: %s"), i, s->name);
+        command_success_nodata(si, _("%d: %s [%s]"), i, s->name, s->desc);
     }
     command_success_nodata(si, _("End of server list."));
 }
