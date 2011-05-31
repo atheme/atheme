@@ -78,7 +78,7 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 		return;
 	}
 
-	if (c->modes & CMODE_SEC)
+	if ((c->modes & CMODE_SEC) || (c->flags & MC_PRIVATE))
 	{
 		if (!has_priv(si, PRIV_CHAN_AUSPEX))
 		{
