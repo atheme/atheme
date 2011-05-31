@@ -74,12 +74,6 @@ static void ss_cmd_channel_topic(sourceinfo_t *si, int parc, char *parv[])
         return;
     }
 
-    if (!(c = channel_find(chan)))
-    {
-        command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."), chan);
-        return;
-    }
-
     if (c->modes & CMODE_SEC)
     {
         if (!has_priv(si, PRIV_CHAN_AUSPEX))
@@ -88,7 +82,13 @@ static void ss_cmd_channel_topic(sourceinfo_t *si, int parc, char *parv[])
             return;
         }
     }
-    
+
+    if (!(c = channel_find(chan)))
+    {
+        command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."), chan);
+        return;
+    }
+
     if (c->topic)
         command_success_nodata(si, _("Topic for %s set by %s: %s"), c->name, c->topic_setter, c->topic);
     else
