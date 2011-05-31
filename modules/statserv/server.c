@@ -19,6 +19,7 @@ static void ss_cmd_server_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ss_server = { "SERVER", N_("Obtain information about servers on the network."), AC_NONE, 2, ss_cmd_server, { .path = "statserv/server" } };
 command_t ss_server_list = { "LIST", N_("Obtain a list of servers."), AC_NONE, 1, ss_cmd_server_list, { .path = "" } };
+command_t ss_server_count = { "COUNT", N_("Count the amount of servers connected to the network."), AC_NONE, 1, ss_cmd_server_count, { .path = "" } };
 
 mowgli_patricia_t *ss_server_cmds;
 
@@ -27,15 +28,16 @@ void _modinit(module_t *m)
     service_named_bind_command("statserv", &ss_server);
     ss_server_cmds = mowgli_patricia_create(strcasecanon);
     command_add(&ss_server_list, ss_server_cmds);
+    command_add(&ss_server_count, ss_server_cmds);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
     service_named_unbind_command("statserv", &ss_server);
     command_delete(&ss_server_list, ss_server_cmds);
+    command_delete(&ss_server_count, ss_server_cmds);
     mowgli_patricia_destroy(ss_server_cmds, NULL, NULL);
 }
-
 
 static void ss_cmd_server(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -70,4 +72,11 @@ static void ss_cmd_server_list(sourceinfo_t *si, int parc, char *parv[])
         command_success_nodata(si, _("%d: %s [%s]"), i, s->name, s->desc);
     }
     command_success_nodata(si, _("End of server list."));
+}
+
+static void ss_cmd_server_count(sourceinfo_t *si, int parc, char *parv[])
+{
+   int count;
+   count = mowgli_patricia_size(servlist);
+   command_success_nodata(si, _("Network size: %d servers"), count);
 }
