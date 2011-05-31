@@ -58,6 +58,7 @@
 #include "inline/account.h"
 #include "inline/channels.h"
 #include "inline/connection.h"
+#include "inline/users.h"
 
 #endif /* ATHEME_H */
 
