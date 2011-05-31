@@ -81,6 +81,5 @@ static void ss_cmd_server_list(sourceinfo_t * si, int parc, char *parv[])
 
 static void ss_cmd_server_count(sourceinfo_t * si, int parc, char *parv[])
 {
-	unsigned int count = mowgli_patricia_size(servlist);
-	command_success_nodata(si, _("Network size: %d servers"), count);
+	command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }

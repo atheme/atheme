@@ -13,12 +13,16 @@ DECLARE_MODULE_V1("statserv/channel", false, _modinit, _moddeinit,
 
 static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[]);
 
 command_t ss_channel =
 	{ "CHANNEL", N_("Obtain various information about clones"), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channels"} };
 
 command_t ss_channel_topic =
 	{ "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic, {.path = ""} };
+
+command_t ss_channel_count =
+    { "COUNT", N_("Count the number of channels on the network."), AC_NONE, 1, ss_cmd_channel_count, {.path = ""}};
 
 mowgli_patricia_t *ss_channel_cmds;
 
@@ -29,6 +33,7 @@ void _modinit(module_t * m)
 	ss_channel_cmds = mowgli_patricia_create(strcasecanon);
 
 	command_add(&ss_channel_topic, ss_channel_cmds);
+    command_add(&ss_channel_count, ss_channel_cmds);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -36,6 +41,7 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("statserv", &ss_channel);
 
 	command_delete(&ss_channel_topic, ss_channel_cmds);
+    command_delete(&ss_channel_count, ss_channel_cmds);
 
 	mowgli_patricia_destroy(ss_channel_cmds, NULL, NULL);
 }
@@ -99,4 +105,9 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 				       c->topic_setter, c->topic);
 	else
 		command_success_nodata(si, _("No topic set for %s"), c->name);
+}
+
+static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[])
+{
+    command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_count(chanlist));
 }
