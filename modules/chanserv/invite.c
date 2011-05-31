@@ -73,16 +73,16 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
+	
+	if (!mc->chan)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
+		return;
+	}
 
 	if (chanuser_find(mc->chan, si->su))
 	{
 		command_fail(si, fault_noprivs, _("You're already on \2%s\2."), mc->name);
-		return;
-	}
-
-	if (!mc->chan)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
 		return;
 	}
 
