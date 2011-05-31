@@ -16,6 +16,7 @@ DECLARE_MODULE_V1(
 
 static void ss_cmd_server(sourceinfo_t *si, int parc, char *parv[]);
 static void ss_cmd_server_list(sourceinfo_t *si, int parc, char *parv[]);
+static void ss_cmd_server_count(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ss_server = { "SERVER", N_("Obtain information about servers on the network."), AC_NONE, 2, ss_cmd_server, { .path = "statserv/server" } };
 command_t ss_server_list = { "LIST", N_("Obtain a list of servers."), AC_NONE, 1, ss_cmd_server_list, { .path = "" } };
