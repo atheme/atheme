@@ -15,11 +15,10 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
 
 command_t ss_channel =
-	{ "CHANNEL", N_("Obtain various information about clones"), AC_NONE, 2, ss_cmd_channel,
- {.path = "statserv/channels"} };
+	{ "CHANNEL", N_("Obtain various information about clones"), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channels"} };
+
 command_t ss_channel_topic =
-	{ "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic,
-{.path = ""} };
+	{ "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic, {.path = ""} };
 
 mowgli_patricia_t *ss_channel_cmds;
 
