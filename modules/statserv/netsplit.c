@@ -11,9 +11,9 @@
 DECLARE_MODULE_V1("statserv/netsplit", false, _modinit, _moddeinit,
           PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
-static void ss_cmd_netsplit(sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_list(sourceinfo * si, int parc, char *parv[]);
-static void ss_cmd_netsplit_remove(sourceinfo * si, int parc, char *parv[]);
+static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[]);
+static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[]);
 
 command_t ss_netsplit =
     { "NETSPLIT", N_("Monitor network splits."), AC_NONE, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
@@ -28,7 +28,7 @@ mowgli_patricia_t *ss_netsplit_cmds;
 mowgli_patricia_t *splitlist;
 mowgli_heap_t *split_heap;
 
-static void split_find(const char *name)
+server_t * split_find(const char *name)
 {
     return mowgli_patricia_retrieve(splitlist, name);
 }
@@ -80,7 +80,7 @@ static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
     c = command_find(ss_netsplit_cmds, cmd);
     if (c == NULL)
     {
-        command_fail(sim fault_badparams,
+        command_fail(si, fault_badparams,
                 _("Invalid command. Use \2/%s%s help\2 for a command listing."),
                 (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
         return;
