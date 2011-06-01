@@ -50,7 +50,7 @@ static void ss_cmd_server(sourceinfo_t * si, int parc, char *parv[])
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SERVER");
-		command_fail(si, fault_needmoreparams, _("Syntax: SERVER [LIST] [parameters]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: SERVER [LIST|COUNT] [parameters]"));
 		return;
 	}
 

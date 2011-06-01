@@ -55,7 +55,7 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL");
 		command_fail(si, fault_needmoreparams,
-			     _("Syntax: CHANNEL [TOPIC|USERS] [parameters]"));
+			     _("Syntax: CHANNEL [TOPIC|USERS|COUNT] [parameters]"));
 		return;
 	}
 
@@ -109,14 +109,5 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 
 static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[])
 {
-    unsigned int i;
-    mowgli_patricia_iteration_state_t state;
-    channel_t *c;
-
-    MOWGLI_PATRICIA_FOREACH(c, &state, chanlist)
-    {
-        i++;
-    }
-
-    command_success_nodata(si, "There are %u channels on the network.", i);
+    command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }
