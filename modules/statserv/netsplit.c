@@ -39,10 +39,7 @@ static void netsplit_server_add(server_t *s)
     {
         /* Insert magical code to remove a netsplit here. */
         mowgli_patricia_delete(splitlist, s->name);
-        if (s->uplink)
-            wallops("Netsplit between %s and %s over.", s->name, s->uplink->name);
-        else
-            wallops("Netsplit from %s over.", s->name);
+        wallops("Server %s reconnected to the network.", s->name);
     }
 }
 
@@ -54,14 +51,8 @@ static void netsplit_server_delete(server_t *serv)
     s->name = serv->name;
     s->desc = serv->desc;
     s->connected_since = CURRTIME;
-    if (serv->uplink)
-        s->uplink = serv->uplink;
-    s->hops = serv->hops;
     mowgli_patricia_add(splitlist, s->name, s);
-    if (s->uplink)
-        wallops("Server %s split from %s.", s->name, s->uplink->name);
-    else
-        wallops("Server %s split from the network.", s->name);
+    wallops("Server %s split from the network.", s->name);
 }
 
 static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
