@@ -83,6 +83,13 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 		return;
 	}
 
+	if (!(c = channel_find(chan)))
+	{
+		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."),
+			     chan);
+		return;
+	}
+
 	if ((c->modes & CMODE_SEC) || (c->flags & MC_PRIVATE))
 	{
 		if (!has_priv(si, PRIV_CHAN_AUSPEX))
@@ -91,13 +98,6 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 				     _("You are not authorised to perform this action."));
 			return;
 		}
-	}
-
-	if (!(c = channel_find(chan)))
-	{
-		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 does not exist."),
-			     chan);
-		return;
 	}
 
 	if (c->topic)
