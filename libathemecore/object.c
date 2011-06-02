@@ -163,6 +163,10 @@ void object_dispose(void *object)
 
 	return_if_fail(object != NULL);
 	obj = object(object);
+
+	/* set refcount to -1 to ensure that object_unref() doesn't cause a loop */
+	obj->refcount = -1;
+
 	privatedata = obj->privatedata;
 
 	/* we shouldn't be disposing an object more than once in it's
