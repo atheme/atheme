@@ -26,7 +26,6 @@ struct user_
 
 	server_t *server;
 	myuser_t *myuser;
-	mowgli_list_t logins;
 
 	unsigned int offenses;
 	unsigned int msgs; /* times FLOOD_MSGS_FACTOR */
