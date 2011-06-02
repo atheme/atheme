@@ -100,7 +100,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
-	object_unref(mu);
+	object_dispose(mu);
 }
 
 static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
@@ -147,7 +147,7 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
-	object_unref(mu);
+	object_dispose(mu);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
