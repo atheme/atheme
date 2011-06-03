@@ -49,7 +49,11 @@ echo "Making release named $RELEASENAME (tip $TIP)"
 
 echo
 echo "Building root: $RELEASENAME/"
-git archive $RELEASENAME
+# Do this a slightly ugly way because i'm lazy
+cd ..
+git archive --format=tar --prefix=$RELEASENAME/ HEAD | gzip >scripts/$RELEASENAME-working.tar.gz
+cd $WRKDIR
+tar -xzvf $RELEASENAME-working.tar.gz
 cd $RELEASENAME
 sh autogen.sh
 rm -rf autogen.sh autom4te.cache
@@ -67,6 +71,8 @@ tar zcf $RELEASENAME.tar.gz $RELEASENAME/
 
 echo "Building $RELEASENAME.tar.bz2 from $RELEASENAME/"
 tar jcf $RELEASENAME.tar.bz2 $RELEASENAME/
+
+rm $RELEASENAME-working.tar.gz
 
 PUBLISH="yes"
 
