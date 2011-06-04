@@ -20,7 +20,6 @@ typedef struct metadata_ metadata_t;
 typedef void (*destructor_t)(void *);
 
 typedef struct {
-	char *name;
 	int refcount;
 	destructor_t destructor;
 	mowgli_list_t metadata;

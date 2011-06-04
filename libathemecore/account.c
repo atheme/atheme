@@ -125,10 +125,10 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	object_init(object(mu), name, (destructor_t) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
-	strlcpy(entity(mu)->name, name, NICKLEN);
+	entity(mu)->name = sstrdup(name);
 	mu->email = sstrdup(email);
 	if (id)
-		strlcpy(entity(mu)->id, id, sizeof(entity(mu)->name));
+		strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
 	else
 		entity(mu)->id[0] = '\0';
 
@@ -309,6 +309,7 @@ void myuser_delete(myuser_t *mu)
 	myentity_del(entity(mu));
 
 	free(mu->email);
+	free(entity(mu)->name);
 
 	mowgli_heap_free(myuser_heap, mu);
 
@@ -337,12 +338,15 @@ void myuser_rename(myuser_t *mu, const char *name)
 	mowgli_node_t *n, *tn;
 	user_t *u;
 	hook_user_rename_t data;
+	char *newname;
+	char nb[NICKLEN];
 
 	return_if_fail(mu != NULL);
 	return_if_fail(name != NULL);
+	return_if_fail(strlen(name) >= NICKLEN);
 
-	char nb[NICKLEN];
 	strlcpy(nb, entity(mu)->name, NICKLEN);
+	newname = sstrdup(name);
 
 	if (authservice_loaded)
 	{
@@ -353,7 +357,8 @@ void myuser_rename(myuser_t *mu, const char *name)
 		}
 	}
 	myentity_del(entity(mu));
-	strlcpy(entity(mu)->name, name, NICKLEN);
+	free(entity(mu)->name);
+	entity(mu)->name = newname;
 	myentity_put(entity(mu));
 	if (authservice_loaded)
 	{
