@@ -221,7 +221,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	*buf = '\0';
 
 	/* start outputting the header. */
-	callback(object(t)->name, data);
+	callback("", data);
 	MOWGLI_ITER_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;

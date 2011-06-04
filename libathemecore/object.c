@@ -58,9 +58,6 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 {
 	return_if_fail(obj != NULL);
 
-	if (name != NULL)
-		obj->name = strshare_get(name);
-
 	obj->destructor = des;
 	obj->refcount = 1;
 
@@ -177,9 +174,6 @@ void object_dispose(void *object)
 	obj->dying = true;
 
 	mowgli_node_delete(&obj->dnode, &object_list);
-
-	if (obj->name != NULL)
-		strshare_unref(obj->name);
 
 	if (obj->destructor != NULL)
 		obj->destructor(obj);
