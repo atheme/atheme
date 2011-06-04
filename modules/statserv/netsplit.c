@@ -39,8 +39,7 @@ bool split_exists(const char *name)
 {
     if (mowgli_patricia_retrieve(splitlist, name))
         return true;
-    else
-        return false;
+    return false;
 }
 
 static void netsplit_server_add(server_t *s)
