@@ -92,7 +92,7 @@ static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
 
 static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
 {
-    server_t *s;
+    split_t *s;
     mowgli_patricia_iteration_state_t state;
     int i = 0;
     
