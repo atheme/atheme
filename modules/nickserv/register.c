@@ -114,6 +114,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	if (strlen(account) >= NICKLEN)
+	{
+		command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
+		return;
+	}
+
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
 	{
 		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
