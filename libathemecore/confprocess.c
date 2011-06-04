@@ -480,7 +480,7 @@ void add_duration_conf_item(const char *name, mowgli_list_t *conflist, unsigned 
 
 	if (find_conf_item(name, conflist))
 	{
-		slog(LG_DEBUG, "add_uint_conf_item(): duplicate item %s", name);
+		slog(LG_DEBUG, "add_duration_conf_item(): duplicate item %s", name);
 		return;
 	}
 
