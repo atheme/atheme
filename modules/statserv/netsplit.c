@@ -28,14 +28,24 @@ mowgli_patricia_t *ss_netsplit_cmds;
 mowgli_patricia_t *splitlist;
 mowgli_heap_t *split_heap;
 
-server_t * split_find(const char *name)
+typedef struct {
+    char *name;
+    time_t disconnected_since;
+    unsigned int flags;
+} split_t;
+
+
+bool split_exists(const char *name)
 {
-    return mowgli_patricia_retrieve(splitlist, name);
+    if (mowgli_patricia_retrieve(splitlist, name))
+        return true;
+    else
+        return false;
 }
 
 static void netsplit_server_add(server_t *s)
 {
-    if (split_find(s->name))
+    if (split_exists(s->name))
     {
         /* Insert magical code to remove a netsplit here. */
         mowgli_patricia_delete(splitlist, s->name);
@@ -43,14 +53,14 @@ static void netsplit_server_add(server_t *s)
     }
 }
 
-static void netsplit_server_delete(server_t *serv)
+static void netsplit_server_delete(hook_server_delete_t *serv)
 {
-    server_t *s;
+    wallops("%s", serv->s->name);
+    split_t *s;
     s = mowgli_heap_alloc(split_heap);
-    s->sid = serv->sid;
-    s->name = serv->name;
-    s->desc = serv->desc;
-    s->connected_since = CURRTIME;
+    s->name = serv->s->name;
+    s->disconnected_since = CURRTIME;
+    s->flags = serv->s->flags;
     mowgli_patricia_add(splitlist, s->name, s);
     wallops("Server %s split from the network.", s->name);
 }
@@ -89,7 +99,7 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
     MOWGLI_PATRICIA_FOREACH(s, &state, splitlist)
     {
         i++;
-        command_success_nodata(si, _("%d: %s [Split %s ago]"), i, s->name, time_ago(s->connected_since));
+        command_success_nodata(si, _("%d: %s [Split %s ago]"), i, s->name, time_ago(s->disconnected_since));
     }
     command_success_nodata(si, _("End of netsplit list."));
 }
@@ -97,7 +107,7 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
 static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
 {
     char *name = parv[0];
-    if (mowgli_patricia_delete(splitlist, name))
+    if (split_exists(name))
         command_success_nodata(si, _("%s removed from the netsplit list."), name);
     else
         command_fail(si, fault_nosuch_target, _("The server \2%s\2 does is not a split server."), name);
@@ -117,7 +127,7 @@ void _modinit(module_t * m)
     hook_add_server_add(netsplit_server_add);
     hook_add_server_delete(netsplit_server_delete);
 
-    split_heap = mowgli_heap_create(sizeof(server_t), HEAP_SERVER, BH_NOW);
+    split_heap = mowgli_heap_create(sizeof(split_t), 30, BH_NOW);
 
     if (split_heap == NULL)
     {
