@@ -85,10 +85,10 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!crypto_module_loaded && strlen(pass) > PASSLEN)
+	if (strlen(pass) >= PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
-		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%d\2 characters."), PASSLEN);
+		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%d\2 characters."), PASSLEN - 1);
 		return;
 	}
 
@@ -112,6 +112,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
 			return;
 		}
+	}
+
+	if (strlen(account) >= NICKLEN)
+	{
+		command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
+		return;
 	}
 
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
