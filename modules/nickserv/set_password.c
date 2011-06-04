@@ -52,9 +52,10 @@ static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(password) > 32)
+	if (strlen(password) >= PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PASSWORD");
+		command_fail(si, fault_badparams, _("Registration passwords may not be longer than \2%d\2 characters."), PASSLEN - 1);
 		return;
 	}
 
