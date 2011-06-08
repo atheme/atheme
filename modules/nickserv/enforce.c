@@ -200,7 +200,8 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (u == si->su)
+	/* The != NULL check is required to make releasing an enforcer via xmlrpc work */
+	if (u != NULL && u == si->su)
 	{
 		command_fail(si, fault_noprivs, _("You cannot RELEASE yourself."));
 		return;
