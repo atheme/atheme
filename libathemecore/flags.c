@@ -168,17 +168,17 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned int)*string].value)
+			  if (chanacs_flags[(unsigned char)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
 				  {
-					  *addflags |= chanacs_flags[(unsigned int)*string].value;
-					  *removeflags &= ~chanacs_flags[(unsigned int)*string].value;
+					  *addflags |= chanacs_flags[(unsigned char)*string].value;
+					  *removeflags &= ~chanacs_flags[(unsigned char)*string].value;
 				  }
 				  else if (status == FLAGS_DEL)
 				  {
-					  *addflags &= ~chanacs_flags[(unsigned int)*string].value;
-					  *removeflags |= chanacs_flags[(unsigned int)*string].value;
+					  *addflags &= ~chanacs_flags[(unsigned char)*string].value;
+					  *removeflags |= chanacs_flags[(unsigned char)*string].value;
 				  }
 			  }
 		}
@@ -222,12 +222,12 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned int)*string].value)
+			  if (chanacs_flags[(unsigned char)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
-					  bitmask |= chanacs_flags[(unsigned int)*string].value;
+					  bitmask |= chanacs_flags[(unsigned char)*string].value;
 				  else if (status == FLAGS_DEL)
-					  bitmask &= ~chanacs_flags[(unsigned int)*string].value;
+					  bitmask &= ~chanacs_flags[(unsigned char)*string].value;
 			  }
 		}
 
