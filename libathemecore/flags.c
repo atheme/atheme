@@ -31,7 +31,7 @@ unsigned int ca_all_enable = CA_ALL_ALL;
 
 static char flags_buf[128];
 
-struct flags_table chanacs_flags[255] = {
+struct flags_table chanacs_flags[256] = {
 	['v'] = {CA_VOICE, 0, true,      "voice"},
 	['V'] = {CA_AUTOVOICE, 0, true,  "autovoice"},
 	['o'] = {CA_OP, 0, true,         "op"},
