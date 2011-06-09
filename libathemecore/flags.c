@@ -240,7 +240,7 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 char *bitmask_to_flags(unsigned int flags)
 {
 	char *bptr;
-	unsigned char i = 0;
+	unsigned int i = 0;
 
 	bptr = flags_buf;
 
