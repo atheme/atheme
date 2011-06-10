@@ -27,7 +27,7 @@ static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (!metadata_find(mc, "private:rpgserv:enabled"))
 			continue;
 		if (!metadata_find(mc, "private:rpgserv:summary"))
-			desc = "<no summary>";
+			desc = _("<no summary>");
 		else
 			desc = metadata_find(mc, "private:rpgserv:summary")->value;
 		command_success_nodata(si, "\2%s\2: %s", mc->name, desc);
