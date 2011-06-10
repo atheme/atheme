@@ -71,6 +71,8 @@ __matched:
 
 	command_success_nodata(si, _("\2%d\2 channels met your criteria."), listed);
 	command_success_nodata(si, _("For more information on a specific channel, use \2/msg %s INFO <channel>\2."), si->service->disp);
+
+	logcommand(si, CMDLOG_GET, "RPGSERV:SEARCH");
 }
 
 void _modinit(module_t *m)
