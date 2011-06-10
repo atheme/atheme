@@ -13,6 +13,7 @@ SRCS =  main.c \
 	help.c \
 	info.c \
 	list.c \
+	search.c \
 	set.c
 
 include ../../extra.mk

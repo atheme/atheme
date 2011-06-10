@@ -531,6 +531,7 @@ loadmodule "modules/infoserv/main";
  * HELP command                                 modules/rpgserv/help
  * INFO command                                 modules/rpgserv/info
  * LIST command                                 modules/rpgserv/list
+ * SEARCH command                               modules/rpgserv/search
  * SET commands                                 modules/rpgserv/set
  */
 #loadmodule "modules/rpgserv/main";
@@ -538,6 +539,7 @@ loadmodule "modules/infoserv/main";
 #loadmodule "modules/rpgserv/help";
 #loadmodule "modules/rpgserv/info";
 #loadmodule "modules/rpgserv/list";
+#loadmodule "modules/rpgserv/search";
 #loadmodule "modules/rpgserv/set";
 
 /* BotServ modules.
