@@ -3,6 +3,7 @@
  */
 
 #include "atheme.h"
+#include "prettyprint.h"
 
 DECLARE_MODULE_V1
 (
@@ -39,13 +40,7 @@ static int inlist(const char *needle, const char **haystack)
 
 static void set_genre(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	static const char *genres[] = {
-		"apocalypse", "anime", "anthromorph", "cyberpunk",
-		"fantasy", "horror", "multigenre", "realistic",
-		"scifi", "steampunk", "other", NULL
-	};
-
-	if (inlist(value, genres) < 0) {
+	if (inlist(value, genre_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid genre."), value);
 		return;
 	}
@@ -56,12 +51,7 @@ static void set_genre(sourceinfo_t *si, mychan_t *mc, char *value)
 
 static void set_period(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	static const char *periods[] = {
-		"prehistoric", "antiquity", "middleages", "earlymodern",
-		"modern", "future", NULL
-	};
-
-	if (inlist(value, periods) < 0) {
+	if (inlist(value, period_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid period."), value);
 		return;
 	}
@@ -72,12 +62,7 @@ static void set_period(sourceinfo_t *si, mychan_t *mc, char *value)
 
 static void set_ruleset(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	static const char *rulesets[] = {
-		"adnd", "homebrew", "dnd3.0", "dnd3.5", "dnd4.0", "freeform",
-		"other", "owod", "nwod", NULL
-	};
-
-	if (inlist(value, rulesets) < 0) {
+	if (inlist(value, ruleset_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid ruleset."), value);
 		return;
 	}
@@ -88,11 +73,7 @@ static void set_ruleset(sourceinfo_t *si, mychan_t *mc, char *value)
 
 static void set_rating(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	static const char *ratings[] = {
-		"g", "pg", "pg13", "r", "adult", NULL
-	};
-
-	if (inlist(value, ratings) < 0) {
+	if (inlist(value, rating_keys) < 0) {
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid rating."), value);
 		return;
 	}
@@ -105,14 +86,11 @@ static void set_system(sourceinfo_t *si, mychan_t *mc, char *value)
 {
 	char copy[512];
 	char *sp = NULL, *t = NULL;
-	static const char *systems[] = {
-		"charapproval", "diced", "sheeted"
-	};
 
 	strlcpy(copy, value, sizeof(copy));
 	t = strtok_r(copy, " ", &sp);
 	while (t) {
-		if (inlist(t, systems) < 0) {
+		if (inlist(t, system_keys) < 0) {
 			command_fail(si, fault_badparams, _("\2%s\2 is not a valid system."), t);
 			return;
 		}
