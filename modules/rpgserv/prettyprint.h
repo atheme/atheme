@@ -58,4 +58,42 @@ static const char *system_names[] = {
 	"Character Approval", "Diced", "Character Sheets"
 };
 
+static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **keys, const char **values,
+	unsigned int arraysize)
+{
+	static char ppbuf[BUFSIZE];
+	char parsebuf[BUFSIZE];
+	char *keyword = NULL, *pos;
+
+	if (md == NULL)
+		return "<none>";
+
+	*ppbuf = '\0';
+
+	strlcpy(parsebuf, md->value, BUFSIZE);
+
+	keyword = strtok_r(parsebuf, " ", &pos);
+	if (keyword == NULL)
+		return "<none>";
+
+	do
+	{
+		int i;
+
+		for (i = 0; i < arraysize; i++)
+		{
+			if (!strcasecmp(keyword, keys[i]))
+			{
+				if (*ppbuf != '\0')
+					strlcat(ppbuf, ", ", BUFSIZE);
+
+				strlcat(ppbuf, values[i], BUFSIZE);
+			}
+		}
+	}
+	while (keyword = strtok_r(NULL, " ", &pos));
+
+	return ppbuf;
+}
+
 #endif
