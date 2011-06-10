@@ -199,6 +199,10 @@ static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 				settings[i].func(si, mc, value);
 			else
 				setting_clear(si, mc, setting);
+
+			logcommand(si, CMDLOG_SET, "RPGSERV:SET: \2%s\2 (\2%s\2 -> \2%s\2)",
+				   mc->name, setting, value ? value : "(cleared)");
+
 			break;
 		}
 	}
