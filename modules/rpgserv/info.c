@@ -3,6 +3,7 @@
  */
 
 #include "atheme.h"
+#include "prettyprint.h"
 
 DECLARE_MODULE_V1
 (
@@ -43,15 +44,15 @@ static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Channel \2%s\2:"), parv[0]);
 	md = metadata_find(mc, "private:rpgserv:genre");
-	command_success_nodata(si, _("Genre: %s"), md ? md->value : "<none>");
+	command_success_nodata(si, _("Genre: %s"), rs_prettyprint_keywords(md, genre_keys, genre_names, ARRAY_SIZE(genre_keys)));
 	md = metadata_find(mc, "private:rpgserv:period");
-	command_success_nodata(si, _("Period: %s"), md ? md->value : "<none>");
+	command_success_nodata(si, _("Period: %s"), rs_prettyprint_keywords(md, period_keys, period_names, ARRAY_SIZE(period_keys)));
 	md = metadata_find(mc, "private:rpgserv:ruleset");
-	command_success_nodata(si, _("Ruleset: %s"), md ? md->value : "<none>");
+	command_success_nodata(si, _("Ruleset: %s"), rs_prettyprint_keywords(md, ruleset_keys, ruleset_names, ARRAY_SIZE(ruleset_keys)));
 	md = metadata_find(mc, "private:rpgserv:rating");
-	command_success_nodata(si, _("Rating: %s"), md ? md->value : "<none>");
+	command_success_nodata(si, _("Rating: %s"), rs_prettyprint_keywords(md, rating_keys, rating_names, ARRAY_SIZE(rating_keys)));
 	md = metadata_find(mc, "private:rpgserv:system");
-	command_success_nodata(si, _("System: %s"), md ? md->value : "<none>");
+	command_success_nodata(si, _("System: %s"), rs_prettyprint_keywords(md, system_keys, system_names, ARRAY_SIZE(system_keys)));
 	md = metadata_find(mc, "private:rpgserv:setting");
 	command_success_nodata(si, _("Setting: %s"), md ? md->value : "<none>");
 	md = metadata_find(mc, "private:rpgserv:storyline");
