@@ -8,7 +8,8 @@
 
 MODULE = rpgserv
 
-SRCS = main.c
+SRCS =  main.c \
+	list.c
 
 include ../../extra.mk
 include ../../buildsys.mk

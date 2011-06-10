@@ -15,7 +15,6 @@ static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
-static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_help = { "HELP", N_("Displays contextual help information."),
@@ -26,8 +25,6 @@ command_t rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
                          PRIV_HELPER, 1, rs_cmd_disable, { .path = "rpgserv/disable" } };
 command_t rs_set = { "SET", N_("Sets RPG properties of your channel."),
                      AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
-command_t rs_list = { "LIST", N_("Lists games."),
-                      AC_NONE, 0, rs_cmd_list, { .path = "rpgserv/list" } };
 command_t rs_info = { "INFO", N_("Displays info for a particular game."),
                       AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
 
@@ -308,27 +305,6 @@ static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
-{
-	mowgli_patricia_iteration_state_t state;
-	mychan_t *mc;
-	unsigned int listed = 0;
-	char *desc;
-
-	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
-	{
-		if (!metadata_find(mc, "private:rpgserv:enabled"))
-			continue;
-		if (!metadata_find(mc, "private:rpgserv:summary"))
-			desc = "<no summary>";
-		else
-			desc = metadata_find(mc, "private:rpgserv:summary")->value;
-		command_success_nodata(si, "\2%s\2: %s", mc->name, desc);
-		listed++;
-	}
-	command_success_nodata(si, "Listed \2%d\2 channels.", listed);
-}
-
 static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
@@ -380,7 +356,6 @@ void _modinit(module_t *m)
 	service_bind_command(rpgserv, &rs_enable);
 	service_bind_command(rpgserv, &rs_disable);
 	service_bind_command(rpgserv, &rs_set);
-	service_bind_command(rpgserv, &rs_list);
 	service_bind_command(rpgserv, &rs_info);
 }
 
@@ -395,6 +370,5 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(rpgserv, &rs_enable);
 	service_unbind_command(rpgserv, &rs_disable);
 	service_unbind_command(rpgserv, &rs_set);
-	service_unbind_command(rpgserv, &rs_list);
 	service_unbind_command(rpgserv, &rs_info);
 }
