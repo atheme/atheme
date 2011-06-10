@@ -1357,7 +1357,7 @@ gameserv {
  *
  * RPGServ provides a facility for finding roleplaying channels.
  */
-gameserv {
+rpgserv {
 	/* (*)nick
 	 * The nickname we want GameServ to have.
 	 */
