@@ -40,9 +40,18 @@ static int inlist(const char *needle, const char **haystack)
 
 static void set_genre(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	if (inlist(value, genre_keys) < 0) {
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid genre."), value);
-		return;
+	char copy[512];
+	char *sp = NULL, *t = NULL;
+
+	strlcpy(copy, value, sizeof(copy));
+	t = strtok_r(copy, " ", &sp);
+
+	while(t) {
+		if (inlist(t, genre_keys) < 0) {
+			command_fail(si, fault_badparams, _("\2%s\2 is not a valid genre."), t);
+			return;
+		}
+		t = strtok_r(NULL, " ", &sp);
 	}
 
 	metadata_add(mc, "private:rpgserv:genre", value);
@@ -51,9 +60,18 @@ static void set_genre(sourceinfo_t *si, mychan_t *mc, char *value)
 
 static void set_period(sourceinfo_t *si, mychan_t *mc, char *value)
 {
-	if (inlist(value, period_keys) < 0) {
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid period."), value);
-		return;
+	char copy[512];
+	char *sp = NULL, *t = NULL;
+
+	strlcpy(copy, value, sizeof(copy));
+	t = strtok_r(copy, " ", &sp);
+
+	while(t) {
+		if (inlist(t, period_keys) < 0) {
+			command_fail(si, fault_badparams, _("\2%s\2 is not a valid period."), value);
+			return;
+		}
+		t = strtok_r(NULL, " ", &sp);
 	}
 
 	metadata_add(mc, "private:rpgserv:period", value);
@@ -98,7 +116,7 @@ static void set_system(sourceinfo_t *si, mychan_t *mc, char *value)
 	}
 
 	metadata_add(mc, "private:rpgserv:system", value);
-	command_success_nodata(si, _("system for \2%s\2 set to \2%s\2."), mc->name, value);
+	command_success_nodata(si, _("System for \2%s\2 set to \2%s\2."), mc->name, value);
 }
 
 static void set_setting(sourceinfo_t *si, mychan_t *mc, char *value)
