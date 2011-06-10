@@ -34,6 +34,8 @@ static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		listed++;
 	}
 	command_success_nodata(si, _("Listed \2%d\2 channels."), listed);
+
+	logcommand(si, CMDLOG_GET, "RPGSERV:LIST");
 }
 
 void _modinit(module_t *m)
