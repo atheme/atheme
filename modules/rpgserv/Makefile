@@ -9,9 +9,11 @@
 MODULE = rpgserv
 
 SRCS =  main.c \
+	enable.c \
 	help.c \
 	info.c \
-	list.c
+	list.c \
+	set.c
 
 include ../../extra.mk
 include ../../buildsys.mk
