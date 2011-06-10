@@ -14,7 +14,6 @@ DECLARE_MODULE_V1
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
-static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."),
                         PRIV_HELPER, 1, rs_cmd_enable, { .path = "rpgserv/enable" } };
@@ -22,8 +21,6 @@ command_t rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
                          PRIV_HELPER, 1, rs_cmd_disable, { .path = "rpgserv/disable" } };
 command_t rs_set = { "SET", N_("Sets RPG properties of your channel."),
                      AC_NONE, 3, rs_cmd_set, { .path = "rpgserv/set" } };
-command_t rs_info = { "INFO", N_("Displays info for a particular game."),
-                      AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
 
 service_t *rpgserv;
 
@@ -283,57 +280,12 @@ static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
-{
-	mychan_t *mc;
-	metadata_t *md;
-
-	if (parc < 1)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
-		command_fail(si, fault_needmoreparams, _("Syntax: INFO <channel>"));
-		return;
-	}
-
-	mc = mychan_find(parv[0]);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
-		return;
-	}
-
-	if (!metadata_find(mc, "private:rpgserv:enabled"))
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not have RPGServ enabled."), parv[0]);
-		return;
-	}
-
-	command_success_nodata(si, _("Channel \2%s\2:"), parv[0]);
-	md = metadata_find(mc, "private:rpgserv:genre");
-	command_success_nodata(si, _("Genre: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:period");
-	command_success_nodata(si, _("Period: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:ruleset");
-	command_success_nodata(si, _("Ruleset: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:rating");
-	command_success_nodata(si, _("Rating: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:system");
-	command_success_nodata(si, _("System: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:setting");
-	command_success_nodata(si, _("Setting: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:storyline");
-	command_success_nodata(si, _("Storyline: %s"), md ? md->value : "<none>");
-	md = metadata_find(mc, "private:rpgserv:summary");
-	command_success_nodata(si, _("Summary: %s"), md ? md->value : "<none>");	
-}
-
 void _modinit(module_t *m)
 {
 	rpgserv = service_add("rpgserv", NULL);
 	service_bind_command(rpgserv, &rs_enable);
 	service_bind_command(rpgserv, &rs_disable);
 	service_bind_command(rpgserv, &rs_set);
-	service_bind_command(rpgserv, &rs_info);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -346,5 +298,4 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(rpgserv, &rs_enable);
 	service_unbind_command(rpgserv, &rs_disable);
 	service_unbind_command(rpgserv, &rs_set);
-	service_unbind_command(rpgserv, &rs_info);
 }

@@ -528,10 +528,12 @@ loadmodule "modules/infoserv/main";
  *
  * Core components                              modules/rpgserv/main
  * HELP command                                 modules/rpgserv/help
+ * INFO command                                 modules/rpgserv/info
  * LIST command                                 modules/rpgserv/list
  */
 #loadmodule "modules/rpgserv/main";
 #loadmodule "modules/rpgserv/help";
+#loadmodule "modules/rpgserv/info";
 #loadmodule "modules/rpgserv/list";
 
 /* BotServ modules.
