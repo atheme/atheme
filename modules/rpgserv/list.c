@@ -33,7 +33,7 @@ static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2%s\2: %s", mc->name, desc);
 		listed++;
 	}
-	command_success_nodata(si, "Listed \2%d\2 channels.", listed);
+	command_success_nodata(si, _("Listed \2%d\2 channels."), listed);
 }
 
 void _modinit(module_t *m)
