@@ -60,6 +60,8 @@ static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mc, "private:rpgserv:summary");
 	command_success_nodata(si, _("Summary  : %s"), md ? md->value : "<none>");
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
+
+	logcommand(si, CMDLOG_GET, "RPGSERV:INFO: \2%s\2", mc->name);
 }
 
 void _modinit(module_t *m)
