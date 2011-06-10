@@ -9,6 +9,7 @@
 MODULE = rpgserv
 
 SRCS =  main.c \
+	help.c \
 	list.c
 
 include ../../extra.mk

@@ -11,14 +11,11 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t rs_help = { "HELP", N_("Displays contextual help information."),
-                      AC_NONE, 2, rs_cmd_help, { .path = "help" } };
 command_t rs_enable = { "ENABLE", N_("Enable RPGServ for a channel."),
                         PRIV_HELPER, 1, rs_cmd_enable, { .path = "rpgserv/enable" } };
 command_t rs_disable = { "DISABLE", N_("Disable RPGServ for a channel."),
@@ -29,25 +26,6 @@ command_t rs_info = { "INFO", N_("Displays info for a particular game."),
                       AC_NONE, 1, rs_cmd_info, { .path = "rpgserv/info" } };
 
 service_t *rpgserv;
-
-static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *command = parv[0];
-	if (!command)
-	{
-		command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->nick);
-		command_success_nodata(si, _("\2%s\2 allows users to search for game channels by matching on properties."), si->service->nick);
-		command_success_nodata(si, " ");
-		command_success_nodata(si, _("For more information on a command, type:"));
-		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == false) ? "msg " : "", rpgserv->disp);
-		command_success_nodata(si, " ");
-		command_help(si, si->service->commands);
-		command_success_nodata(si, _("***** \2End of Help\2 *****"));
-		return;
-	}
-
-	help_display(si, si->service, command, si->service->commands);
-}
 
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -352,7 +330,6 @@ static void rs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 void _modinit(module_t *m)
 {
 	rpgserv = service_add("rpgserv", NULL);
-	service_bind_command(rpgserv, &rs_help);
 	service_bind_command(rpgserv, &rs_enable);
 	service_bind_command(rpgserv, &rs_disable);
 	service_bind_command(rpgserv, &rs_set);
@@ -366,7 +343,6 @@ void _moddeinit(module_unload_intent_t intent)
 		rpgserv = NULL;
 	}
 
-	service_unbind_command(rpgserv, &rs_help);
 	service_unbind_command(rpgserv, &rs_enable);
 	service_unbind_command(rpgserv, &rs_disable);
 	service_unbind_command(rpgserv, &rs_set);
