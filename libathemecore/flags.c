@@ -31,7 +31,7 @@ unsigned int ca_all_enable = CA_ALL_ALL;
 
 static char flags_buf[128];
 
-struct flags_table chanacs_flags[255] = {
+struct flags_table chanacs_flags[256] = {
 	['v'] = {CA_VOICE, 0, true,      "voice"},
 	['V'] = {CA_AUTOVOICE, 0, true,  "autovoice"},
 	['o'] = {CA_OP, 0, true,         "op"},
@@ -168,17 +168,17 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned int)*string].value)
+			  if (chanacs_flags[(unsigned char)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
 				  {
-					  *addflags |= chanacs_flags[(unsigned int)*string].value;
-					  *removeflags &= ~chanacs_flags[(unsigned int)*string].value;
+					  *addflags |= chanacs_flags[(unsigned char)*string].value;
+					  *removeflags &= ~chanacs_flags[(unsigned char)*string].value;
 				  }
 				  else if (status == FLAGS_DEL)
 				  {
-					  *addflags &= ~chanacs_flags[(unsigned int)*string].value;
-					  *removeflags |= chanacs_flags[(unsigned int)*string].value;
+					  *addflags &= ~chanacs_flags[(unsigned char)*string].value;
+					  *removeflags |= chanacs_flags[(unsigned char)*string].value;
 				  }
 			  }
 		}
@@ -222,12 +222,12 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned int)*string].value)
+			  if (chanacs_flags[(unsigned char)*string].value)
 			  {
 				  if (status == FLAGS_ADD)
-					  bitmask |= chanacs_flags[(unsigned int)*string].value;
+					  bitmask |= chanacs_flags[(unsigned char)*string].value;
 				  else if (status == FLAGS_DEL)
-					  bitmask &= ~chanacs_flags[(unsigned int)*string].value;
+					  bitmask &= ~chanacs_flags[(unsigned char)*string].value;
 			  }
 		}
 
@@ -240,7 +240,7 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 char *bitmask_to_flags(unsigned int flags)
 {
 	char *bptr;
-	unsigned char i = 0;
+	unsigned int i = 0;
 
 	bptr = flags_buf;
 

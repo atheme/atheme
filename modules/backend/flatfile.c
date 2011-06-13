@@ -311,43 +311,6 @@ static void flatfile_db_load(void)
 
 			mcfp = mycertfp_add(mu, certfp);
 		}
-		else if (!strcmp("SU", item))
-		{
-			/* subscriptions */
-			char *user, *sub_user, *tags, *tag;
-			myuser_t *subscriptor;
-			metadata_subscription_t *md;
-
-			user = strtok(NULL, " ");
-			sub_user = strtok(NULL, " ");
-			tags = strtok(NULL, "\n");
-			if (!user || !sub_user || !tags)
-			{
-				slog(LG_INFO, "db_load(): invalid subscription (line %d)", linecnt);
-				continue;
-			}
-
-			strip(tags);
-
-			mu = myuser_find(user);
-			subscriptor = myuser_find(sub_user);
-			if (!mu || !subscriptor)
-			{
-				slog(LG_INFO, "db_load(): invalid subscription <%s,%s> (line %d)", user, sub_user, linecnt);
-				continue;
-			}
-
-			md = smalloc(sizeof(metadata_subscription_t));
-			md->mu = subscriptor;
-
-			tag = strtok(tags, ",");
-			do
-			{
-				mowgli_node_add(sstrdup(tag), mowgli_node_create(), &md->taglist);
-			} while ((tag = strtok(NULL, ",")) != NULL);
-
-			mowgli_node_add(md, mowgli_node_create(), &mu->subscriptions);
-		}
 		else if (!strcmp("NAM", item))
 		{
 			/* formerly registered name (created by a marked account being dropped) */

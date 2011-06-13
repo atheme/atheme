@@ -71,6 +71,7 @@ modules/contrib/cs_access_alias.c
 modules/contrib/cs_badwords.c
 modules/contrib/cs_fregister.c
 modules/contrib/cs_userinfo.c
+modules/contrib/dnsbl.c
 modules/contrib/gs_roulette.c
 modules/contrib/ircd_announceserv.c
 modules/contrib/ms_fsend.c
@@ -86,6 +87,7 @@ modules/contrib/os_joinmon.c
 modules/contrib/os_klinechan.c
 modules/contrib/os_modeall.c
 modules/contrib/os_procwatch.c
+modules/contrib/os_resolve.c
 modules/contrib/os_testproc.c
 modules/contrib/os_trace.c
 modules/gameserv/dice.c
@@ -139,6 +141,7 @@ modules/memoserv/list.c
 modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/send.c
+modules/memoserv/sendall.c
 modules/memoserv/sendgroup.c
 modules/memoserv/sendops.c
 modules/nickserv/access.c
@@ -188,7 +191,6 @@ modules/nickserv/set_property.c
 modules/nickserv/set_quietchg.c
 modules/nickserv/setpass.c
 modules/nickserv/status.c
-modules/nickserv/subscribe.c
 modules/nickserv/taxonomy.c
 modules/nickserv/vacation.c
 modules/nickserv/verify.c
@@ -228,5 +230,11 @@ modules/operserv/specs.c
 modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
+modules/rpgserv/enable.c
+modules/rpgserv/help.c
+modules/rpgserv/info.c
+modules/rpgserv/list.c
+modules/rpgserv/search.c
+modules/rpgserv/set.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c

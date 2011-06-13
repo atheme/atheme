@@ -58,9 +58,6 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 {
 	return_if_fail(obj != NULL);
 
-	if (name != NULL)
-		obj->name = strshare_get(name);
-
 	obj->destructor = des;
 	obj->refcount = 1;
 
@@ -163,6 +160,10 @@ void object_dispose(void *object)
 
 	return_if_fail(object != NULL);
 	obj = object(object);
+
+	/* set refcount to -1 to ensure that object_unref() doesn't cause a loop */
+	obj->refcount = -1;
+
 	privatedata = obj->privatedata;
 
 	/* we shouldn't be disposing an object more than once in it's
@@ -173,9 +174,6 @@ void object_dispose(void *object)
 	obj->dying = true;
 
 	mowgli_node_delete(&obj->dnode, &object_list);
-
-	if (obj->name != NULL)
-		strshare_unref(obj->name);
 
 	if (obj->destructor != NULL)
 		obj->destructor(obj);

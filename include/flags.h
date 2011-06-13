@@ -18,7 +18,7 @@ struct flags_table
 };
 
 E unsigned int ca_all;
-E struct flags_table chanacs_flags[255];
+E struct flags_table chanacs_flags[256];
 
 E unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name);
 E void flags_clear(unsigned char flag);

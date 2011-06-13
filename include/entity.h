@@ -15,7 +15,7 @@ typedef enum {
 typedef struct {
 	object_t parent;
 	myentity_type_t type;
-	char name[NICKLEN * 4];
+	char *name;
 	char id[IDLEN];
 
 	mowgli_list_t chanacs;

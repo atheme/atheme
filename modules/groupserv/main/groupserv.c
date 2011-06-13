@@ -56,6 +56,7 @@ static void mygroup_delete(mygroup_t *mg)
 	}
 
 	metadata_delete_all(mg);
+	free(entity(mg)->name);
 	mowgli_heap_free(mygroup_heap, mg);
 }
 
@@ -78,7 +79,7 @@ mygroup_t *mygroup_add_id(const char *id, const char *name)
 	else
 		entity(mg)->id[0] = '\0';
 
-	strlcpy(entity(mg)->name, name, sizeof(entity(mg)->name));
+	entity(mg)->name = sstrdup(name);
 	myentity_put(entity(mg));
 
 	mygroup_set_chanacs_validator(entity(mg));

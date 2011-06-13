@@ -68,6 +68,7 @@ static void chanacs_ext_delete(chanacs_exttarget_t *e)
 
 	mowgli_patricia_delete(chanacs_exttarget_tree, e->channel);
 	strshare_unref(e->channel);
+	free(entity(e)->name);
 
 	mowgli_heap_free(chanacs_ext_heap, e);
 }
@@ -75,6 +76,7 @@ static void chanacs_ext_delete(chanacs_exttarget_t *e)
 static myentity_t *chanacs_validate_f(const char *param)
 {
 	chanacs_exttarget_t *ext;
+	size_t namelen;
 
 	if (param == NULL)
 		return NULL;
@@ -90,8 +92,13 @@ static myentity_t *chanacs_validate_f(const char *param)
 	ext->channel = strshare_get(param);
 
 	/* name the entity... $chanacs:param */
-	strlcpy(entity(ext)->name, "$chanacs:", sizeof entity(ext)->name);
-	strlcat(entity(ext)->name, param, sizeof entity(ext)->name);
+#define NAMEPREFIX "$chanacs:"
+	namelen = sizeof NAMEPREFIX + strlen(param);
+	entity(ext)->name = smalloc(namelen);
+	memcpy(entity(ext)->name, NAMEPREFIX, sizeof NAMEPREFIX - 1);
+	memcpy(entity(ext)->name + sizeof NAMEPREFIX - 1, param,
+			namelen - sizeof NAMEPREFIX + 1);
+#undef NAMEPREFIX
 
 	/* hook up the entity's validation table. */
 	entity(ext)->chanacs_validate = &chanacs_ext_validate;

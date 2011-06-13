@@ -44,6 +44,12 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (strlen(parv[0]) >= NICKLEN)
+	{
+		command_fail(si, fault_badparams, _("The group name \2%s\2 is invalid."), parv[0]);
+		return;
+	}
+
 	if (myuser_count_group_flag(si->smu, GA_FOUNDER) > gs_config->maxgroups)
 	{
 		command_fail(si, fault_toomany, _("You have too many groups registered."));

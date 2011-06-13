@@ -3,7 +3,7 @@ MODULE = Atheme			PACKAGE = Atheme::Object
 const char *
 name(Atheme_Object self)
 CODE:
-	RETVAL = self->name;
+	RETVAL = "";
 OUTPUT:
 	RETVAL
 
