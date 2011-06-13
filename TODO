@@ -6,7 +6,6 @@
 [ ] Statistics
   [/] base collector
     [ ] kills collector
-    [ ] wallops collector
     [ ] users collector
   [ ] servers collector
   [/] channels collector
@@ -17,10 +16,9 @@
     [ ] channel modes
   [?] netsplit history
   [ ] Basic StatServ nonsense (mainly interesting for xmlrpc)
-  [ ] rrdtool support for fancy graphs
 [x] IPv6 linking support
 
-frontend (www+sql)
+frontend (www+xmlrpc)
   [ ] make it!
   [ ] work ^^^ into atheme-web
 
