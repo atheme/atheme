@@ -987,10 +987,9 @@ static bool opensex_write_word(database_handle_t *db, const char *word)
 	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
-	return_val_if_fail(word != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%s ", word);
+	fprintf(rs->f, "%s ", word ? word : "*");
 
 	return true;
 }
@@ -1000,10 +999,9 @@ static bool opensex_write_str(database_handle_t *db, const char *word)
 	opensex_t *rs;
 
 	return_val_if_fail(db != NULL, false);
-	return_val_if_fail(word != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%s", word);
+	fprintf(rs->f, "%s", word ? word : "*");
 
 	return true;
 }
