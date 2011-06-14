@@ -8360,7 +8360,11 @@ $as_echo "no" >&6; }
 
 # Check whether --enable-warnings was given.
 if test "${enable_warnings+set}" = set; then :
-  enableval=$enable_warnings;
+  enableval=$enable_warnings; enable_warnings=no
+fi
+
+if test "x$enable_warnings" = "xyes"; then :
+
 
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wall" >&5
 $as_echo_n "checking GCC flag(s) -Wall... " >&6; }
@@ -9335,10 +9339,15 @@ $as_echo "no" >&6; }
 
 fi
 
-
 # Check whether --enable-propolice was given.
 if test "${enable_propolice+set}" = set; then :
   enableval=$enable_propolice;
+else
+  enable_propolice=no
+fi
+
+if test "x$enable_propolice" = "xyes"; then :
+
 
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -fno-stack-protector-all" >&5
 $as_echo_n "checking GCC flag(s) -fno-stack-protector-all... " >&6; }
@@ -9546,10 +9555,15 @@ $as_echo "no" >&6; }
 
 fi
 
-
 # Check whether --enable-profile was given.
 if test "${enable_profile+set}" = set; then :
   enableval=$enable_profile;
+else
+  enable_profile=no
+fi
+
+if test "x$enable_profile" = "xyes"; then :
+
 
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -pg" >&5
 $as_echo_n "checking GCC flag(s) -pg... " >&6; }
@@ -9605,7 +9619,6 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 
 fi
-
 
 ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 CPPFLAGS=${ac_save_CPPFLAGS}

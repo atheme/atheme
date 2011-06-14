@@ -484,8 +484,10 @@ AC_SUBST(PICFLAGS)
 ATHEME_C_GCC_TRY_FLAGS([-std=gnu99], atheme_cv_c_gcc_std_gnu99)
 ATHEME_C_GCC_TRY_FLAGS([-Werror-implicit-function-declaration], atheme_cv_c_gcc_w_error_implicit_function_declaration)
 
-AC_ARG_ENABLE(warnings,
-AC_HELP_STRING([--enable-warnings],[ Enable compiler warnings]),
+AC_ARG_ENABLE([warnings],
+	[AS_HELP_STRING([--enable-warnings],[ Enable compiler warnings])],
+	[enable_warnings=no])
+AS_IF([test "x$enable_warnings" = "xyes"],
 [
 dnl See what warnings we can get away with
 ATHEME_C_GCC_TRY_FLAGS([-Wall], atheme_cv_c_gcc_w_all)
@@ -519,8 +521,10 @@ dnl ATHEME_C_GCC_TRY_FLAGS([-Wwrite-strings], atheme_cv_c_gcc_w_strings)
 dnl ATHEME_C_GCC_TRY_FLAGS([-Werror], atheme_cv_c_gcc_w_error)
 ])
 
-AC_ARG_ENABLE(propolice,
-AC_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)]),
+AC_ARG_ENABLE([propolice],
+	[AS_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)])],
+	[], [enable_propolice=no])
+AS_IF([test "x$enable_propolice" = "xyes"],
 [
 ATHEME_C_GCC_TRY_FLAGS([-fno-stack-protector-all], atheme_cv_nspa)
 ATHEME_C_GCC_TRY_FLAGS([-fno-pie], atheme_cv_npie)
@@ -528,8 +532,10 @@ ATHEME_C_GCC_TRY_FLAGS([-nonow], atheme_cv_nonow)
 ATHEME_C_GCC_TRY_FLAGS([-norelro], atheme_cv_no_relro)
 ])
 
-AC_ARG_ENABLE(profile,
-AC_HELP_STRING([--enable-profile],[ Enable profiling extensions]),
+AC_ARG_ENABLE([profile],
+	[AS_HELP_STRING([--enable-profile],[ Enable profiling extensions])],
+	[], [enable_profile=no])
+AS_IF([test "x$enable_profile" = "xyes"],
 [
 ATHEME_C_GCC_TRY_FLAGS([-pg], atheme_cv_pg)
 ac_save_LDFLAGS="${LDFLAGS} -pg"
