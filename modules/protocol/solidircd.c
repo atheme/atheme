@@ -443,7 +443,7 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 	if (s->uplink != me.me)
 		handle_eob(s);
 
-	if (irccasecmp(me.actual, parv[0]))
+	if (s != si->s)
 		return;
 
 	me.uplinkpong = CURRTIME;
