@@ -657,11 +657,21 @@ static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 {
-	handle_eob(si->s);
+	server_t *s;
 
-	if (irccasecmp(me.actual, si->s->name))
+	if (!parv[1])
 		return;
+	s = server_find(parv[1]);
+	if (!s)
+		return;
+
+	handle_eob(s);
+
 	me.uplinkpong = CURRTIME;
+
+	/* if pong source isn't origin, this isn't a complete burst. --nenolod */
+	if (s != si->s)
+		return;
 
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
 	if (me.bursting)
