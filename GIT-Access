@@ -1,5 +1,11 @@
 The Atheme GIT repository can be checked out using the following command:
-	git clone git://git.atheme.org/atheme.git atheme-devel
+	$ git clone git://git.atheme.org/atheme.git atheme-devel
+	$ cd atheme-devel
+
+If you need libmowgli, you should also run this command to check it out into
+the source tree.  This is, in theory, unnecessary if you have a system-wide
+installation of libmowgli.
+	$ git submodule init
 
 Atheme's GIT repository depot can be browsed over the internet at 
 the following address:
