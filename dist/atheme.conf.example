@@ -1878,6 +1878,13 @@ general {
 	 */
 	default_clone_warn = 4;
 
+	/* (*)clone_identified_increase_limit
+	 * If this option is enabled, the clone limit for a IP/host will
+	 * be increased by 1 per clone that's identified to services.
+	 * This has a limit of double the clone limits above.
+	 */
+	clone_identified_increase_limit;
+
 	/* (*)uplink_sendq_limit
 	 * The maximum amount of data that may be queued to be sent
 	 * to the uplink, in bytes. This should be enough to contain

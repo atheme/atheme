@@ -97,6 +97,7 @@ struct ConfOption
 
   unsigned int default_clone_allowed;  /* default clone kill */
   unsigned int default_clone_warn;  /* default clone warn */
+  bool clone_increase;  /* If the clone limit will increase based on # of identified clones */
 
   unsigned int uplink_sendq_limit;
 
