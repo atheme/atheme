@@ -807,6 +807,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	unsigned int i;
 	hostentry_t *he;
 	unsigned int allowed, warn;
+	mowgli_node_t *n;
 
 	/* If the user has been killed, don't do anything. */
 	if (!u)
@@ -836,6 +837,30 @@ static void clones_newuser(hook_user_nick_t *data)
 	{
 		allowed = c->allowed;
 		warn = c->warn;
+	}
+
+	if (config_options.clone_increase)
+	{
+		unsigned int real_allowed = allowed;
+		unsigned int real_warn = warn;
+
+		MOWGLI_ITER_FOREACH(n, he->clients.head)
+		{
+			user_t *tu = n->data;
+
+			if (tu->myuser == NULL)
+				continue;
+			if (allowed != 0)
+				allowed++;
+			if (warn != 0)
+				warn++;
+		}
+			
+		/* A hard limit of 2x the "real" limit sounds good IMO --jdhore */
+		if (allowed > (real_allowed * 2))
+			allowed = real_allowed * 2;
+		if (warn > (real_warn * 2))
+			warn = real_warn * 2;
 	}
 
 	if (i > allowed && allowed != 0)

@@ -1,0 +1,3 @@
+[submodule "libmowgli"]
+	path = libmowgli
+	url = git://git.atheme.org/libmowgli.git
