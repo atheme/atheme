@@ -33,6 +33,11 @@ static void rs_cmd_search(sourceinfo_t *si, int parc, char *parv[])
 			"private:rpgserv:rating", "private:rpgserv:system"
 		};
 
+		if (!mc->chan)
+			continue;
+		if (CMODE_SEC & mc->chan->modes || CMODE_PRIV & mc->chan->modes)
+			continue;
+
 		if (!metadata_find(mc, "private:rpgserv:enabled"))
 			continue;
 

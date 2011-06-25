@@ -24,6 +24,11 @@ static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
+		if (!mc->chan)
+			continue;
+		if (CMODE_SEC & mc->chan->modes || CMODE_PRIV & mc->chan->modes)
+			continue;
+
 		if (!metadata_find(mc, "private:rpgserv:enabled"))
 			continue;
 		if (!metadata_find(mc, "private:rpgserv:summary"))
