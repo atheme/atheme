@@ -79,7 +79,21 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
-		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, c->access);
+	{
+		char accessbuf[BUFSIZE];
+
+		*accessbuf = '\0';
+
+		if (c->access)
+		{
+			strlcat(accessbuf, c->access, BUFSIZE);
+			strlcat(accessbuf, " ", BUFSIZE);
+		}
+
+		strlcat(accessbuf, cmdaccess, BUFSIZE);
+
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, cmdaccess);
+	}
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 	/* logcommand(si, CMDLOG_ADMIN, "DENIED COMMAND: \2%s\2 used \2%s\2 \2%s\2", origin, svs->name, cmd); */
