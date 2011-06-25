@@ -661,21 +661,38 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	if (CURRTIME - mc->used >= 3600)
 		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
 			mc->used = CURRTIME;
+
 	/*
 	 * When channel_part is fired, we haven't yet removed the
 	 * user from the room. So, the channel will have two members
 	 * if ChanServ is joining channels: the triggering user and
 	 * itself.
 	 *
-	 * Do not part if we're enforcing an akick/close in an otherwise
-	 * empty channel (MC_INHABIT). -- jilles
+	 * This if block was utter nonsense.  Refactor it into multiple
+	 * branches for better clarity and debugging ability. --nenolod
 	 */
-	if ((mc->flags & MC_GUARD)
-		&& config_options.leave_chans
-		&& !(mc->flags & MC_INHABIT)
-		&& (cu->chan->nummembers <= 2)
-		&& !is_internal_client(cu->user))
-		part(cu->chan->name, chansvs.nick);
+
+	/* we're not parting if we've been told to never part. */
+	if (!config_options.leave_chans)
+		return;
+
+	/* we're not parting if the channel has more than one person on it */
+	if (cu->chan->nummembers > 2)
+		return;
+
+	/* internal clients parting a channel shouldn't cause chanserv to leave. */
+	if (is_internal_client(cu->user))
+		return;
+
+	/* if we're enforcing an akick, we're MC_INHABIT.  do not part. */
+	if (mc->flags & MC_INHABIT)
+	{
+		slog(LG_DEBUG, "cs_part(): not leaving channel %s due to MC_INHABIT flag", mc->name);
+		return;
+	}
+
+	/* seems we've met all conditions to be parted from a channel. */
+	part(cu->chan->name, chansvs.nick);
 }
 
 static user_t *get_changets_user(mychan_t *mc)
