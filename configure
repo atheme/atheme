@@ -5789,6 +5789,7 @@ $as_echo "found xgettext program is not GNU xgettext; ignore it" >&6; }
   ac_config_commands="$ac_config_commands default-2"
 
 
+LDFLAGS="${LDFLAGS} ${LIBINTL}"
 
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
