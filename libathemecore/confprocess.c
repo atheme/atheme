@@ -209,6 +209,9 @@ bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
 
 static void set_default(struct ConfTable *ct)
 {
+	mowgli_node_t *n;
+	struct ConfTable *ct2;
+
 	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
 		return;
 	
@@ -229,7 +232,14 @@ static void set_default(struct ConfTable *ct)
 			*ct->un.bool_val.var = ct->un.bool_val.def;
 			break;
 		case CONF_HANDLER:
+			break;
 		case CONF_SUBBLOCK:
+			MOWGLI_ITER_FOREACH(n, ct->un.subblock->head)
+			{
+				ct2 = n->data;
+
+				set_default(ct2);
+			}
 			break;
 	}
 }
@@ -328,13 +338,6 @@ int subblock_handler(config_entry_t *ce, mowgli_list_t *entries)
 {
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
-
-	MOWGLI_ITER_FOREACH(tn, entries->head)
-	{
-		ct = tn->data;
-
-		set_default(ct);
-	}
 
 	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
 	{
