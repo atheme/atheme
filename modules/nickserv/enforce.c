@@ -51,14 +51,14 @@ command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2,
 mowgli_patricia_t **ns_set_cmdtree;
 
 /* logs a released nickname out */
-static bool log_enforce_victim_out(user_t *u)
+static bool log_enforce_victim_out(user_t *u, myuser_t *mu)
 {
 	mynick_t *mn;
 	mowgli_node_t *n, *tn;
 
 	return_val_if_fail(u != NULL, false);
 
-	if (u->myuser == NULL)
+	if (u->myuser == NULL || u->myuser != mu)
 		return false;
 
 	u->myuser->lastlogin = CURRTIME;
@@ -236,7 +236,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		{
 			notice(nicksvs.nick, target, "%s has released your nickname.", get_source_mask(si));
 
-			if (!log_enforce_victim_out(u))
+			if (!log_enforce_victim_out(u, mn->owner))
 			{
 				guest_nickname(u);
 				if (ircd->flags & IRCD_HOLDNICK)
@@ -333,7 +333,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			notice(nicksvs.nick, target, "\2%s\2 has regained your nickname.", get_source_mask(si));
-			if (!log_enforce_victim_out(u))
+			if (!log_enforce_victim_out(u, mn->owner))
 			{
 				guest_nickname(u);
 				if (ircd->flags & IRCD_HOLDNICK)
