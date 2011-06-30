@@ -563,8 +563,8 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 
 	/* set up the email headers */
 	time(&t);
-	tm = *gmtime(&t);
-	strftime(timebuf, sizeof(timebuf) - 1, "%a, %d %b %Y %H:%M:%S +0000", &tm);
+	tm = *localtime(&t);
+	strftime(timebuf, sizeof(timebuf) - 1, "%a, %d %b %Y %H:%M:%S %z", &tm);
 
 	date = timebuf;
 
