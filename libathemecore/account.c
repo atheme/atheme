@@ -1797,7 +1797,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 
 	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, mt, 0);
+		ca = chanacs_find_literal(mychan, mt, 0);
 		if (ca == NULL)
 		{
 			*removeflags = 0;
