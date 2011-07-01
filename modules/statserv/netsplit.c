@@ -42,9 +42,10 @@ static void netsplit_delete_serv(split_t *s)
 
 static void netsplit_server_add(server_t *s)
 {
-    if (mowgli_patricia_retrieve(splitlist, s->name))
+    split_t *serv = mowgli_patricia_retrieve(splitlist, s->name);
+    if (serv != NULL)
     {
-        netsplit_delete_serv(mowgli_patricia_retrieve(splitlist, s->name));
+        netsplit_delete_serv(serv);
         wallops("Server %s reconnected to the network.", s->name);
     }
 }
@@ -103,6 +104,7 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
 static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
 {
     char *name = parv[0];
+    split_t *s;
 
     if (!name)
     {
@@ -112,9 +114,11 @@ static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
         return;
     }
 
-    if (mowgli_patricia_retrieve(splitlist, name))
+    s = mowgli_patricia_retrieve(splitlist, name);
+
+    if (s != NULL)
     {
-        netsplit_delete_serv(mowgli_patricia_retrieve(splitlist, name));
+        netsplit_delete_serv(s);
         command_success_nodata(si, _("%s removed from the netsplit list."), name);
     }
     else
