@@ -630,7 +630,7 @@ loadmodule "modules/infoserv/main";
 loadmodule "modules/statserv/main";
 #loadmodule "modules/statserv/channel";
 loadmodule "modules/statserv/netsplit";
-#loadmodule "modules/statserv/server";
+loadmodule "modules/statserv/server";
 
 /* GroupServ module.
  * GroupServ allows users to create groups to easily mass-manage channel
