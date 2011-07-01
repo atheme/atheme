@@ -44,11 +44,12 @@ echo "Making release named $RELEASENAME (tip $TIP)"
 echo
 echo "Building root: $RELEASENAME/"
 # Do this a slightly ugly way because i'm lazy
-cd ..
-git archive --format=tar --prefix=$RELEASENAME/ HEAD | gzip >scripts/$RELEASENAME-working.tar.gz
+(cd ..; git archive --format=tar --prefix=$RELEASENAME/ HEAD | gzip >scripts/$RELEASENAME-working.tar.gz)
+(cd ../libmowgli; git archive --format=tar --prefix=libmowgli/ HEAD | gzip >../scripts/$RELEASENAME-libmowgli.tar.gz)
 cd $WRKDIR
 tar -xzvf $RELEASENAME-working.tar.gz
 cd $RELEASENAME
+tar -xzvf $WRKDIR/$RELEASENAME-libmowgli.tar.gz
 sh autogen.sh
 rm -rf autogen.sh autom4te.cache
 rm -rf .gitignore
