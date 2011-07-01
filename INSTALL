@@ -62,6 +62,9 @@ config (dist/atheme.conf.example). The recommended ones are charybdis, ratbox,
 inspircd, asuka, beware ircd (bircd), shadowircd, nefarious and undernet-ircu 
 (undernet).
 
+If you are installing Services from Git and need libmowgli, please read the 
+GIT-Access file for information on how to pull in libmowgli as a submodule.
+
 Run the "configure" script:
 	$ ./configure --prefix=/path/to/install/
 
