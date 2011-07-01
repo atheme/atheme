@@ -134,7 +134,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			t = CURRTIME - day * 86400;
-			tm = *gmtime(&t);
+			tm = *localtime(&t);
 			snprintf(logfile, sizeof logfile, "%s.%04u%02u%02u",
 					baselog, tm.tm_year + 1900,
 					tm.tm_mon + 1, tm.tm_mday);

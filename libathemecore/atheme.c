@@ -86,7 +86,7 @@ static void rng_reseed(void *unused)
 
 static void process_mowgli_log(const char *line)
 {
-	slog(LG_INFO, "%s", line);
+	slog(LG_ERROR, "%s", line);
 }
 
 int atheme_main(int argc, char *argv[])

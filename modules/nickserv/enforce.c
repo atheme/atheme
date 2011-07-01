@@ -423,14 +423,17 @@ void enforce_timeout_check(void *arg)
 
 static void show_enforce(hook_user_req_t *hdata)
 {
-
 	if (metadata_find(hdata->mu, "private:doenforce"))
 		command_success_nodata(hdata->si, "%s has enabled nick protection", entity(hdata->mu)->name);
 }
 
 static void check_registration(hook_user_register_check_t *hdata)
 {
-	int prefixlen = strlen(nicksvs.enforce_prefix);
+	int prefixlen;
+
+	return_if_fail(nicksvs.enforce_prefix != NULL);
+
+	prefixlen = strlen(nicksvs.enforce_prefix);
 
 	if (hdata->approved)
 		return;
