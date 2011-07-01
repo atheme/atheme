@@ -22,7 +22,7 @@ command_t ss_netsplit_list =
     { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
 
 command_t ss_netsplit_remove = 
-    { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 1, ss_cmd_netsplit_remove, {.path = ""} };
+    { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
 
 mowgli_patricia_t *ss_netsplit_cmds;
 mowgli_patricia_t *splitlist;
@@ -106,8 +106,20 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[])
 static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
 {
     char *name = parv[0];
+    
+    if (!name)
+    {
+        command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NETSPLIT REMOVE");
+        command_fail(si, fault_needmoreparams,
+                _("Syntax: NETSPLIT REMOVE <server>"));
+        return;
+    }
+
     if (split_exists(name))
+    {
+        mowgli_patricia_delete(splitlist, name);
         command_success_nodata(si, _("%s removed from the netsplit list."), name);
+    }
     else
         command_fail(si, fault_nosuch_target, _("The server \2%s\2 does is not a split server."), name);
 }
