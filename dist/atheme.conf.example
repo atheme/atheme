@@ -619,6 +619,19 @@ loadmodule "modules/infoserv/main";
  */
 #loadmodule "modules/alis/main";
 
+/* StatServ module.
+ * StatServ provides basic statistics and split tracking.
+ *
+ * Core components              modules/statserv/main
+ * CHANNEL command              modules/statserv/channel
+ * NETSPLIT command             modules/statserv/netsplit
+ * SERVER command               modules/statserv/server
+ */
+loadmodule "modules/statserv/main";
+#loadmodule "modules/statserv/channel";
+loadmodule "modules/statserv/netsplit";
+#loadmodule "modules/statserv/server";
+
 /* GroupServ module.
  * GroupServ allows users to create groups to easily mass-manage channel
  * access and more.
@@ -1578,6 +1591,34 @@ helpserv {
 	 * The realname (gecos) information we want HelpServ to have.
 	 */
 	real = "Help Services";
+};
+
+/* StatServ configuration
+ *
+ * The statserv {} block contains settings specific to the StatServ modules.
+ *
+ * StatServ adds basic stats and split tracking.
+ */
+statserv {
+	/* (*)nick
+	 * The nickname we want StatServ to have.
+	 */
+	nick = "StatServ";
+
+	/* (*)user
+	 * The username we want StatServ to have.
+	 */
+	user = "StatServ";
+
+	/* (*)host
+	 * The hostname we want StatServ to have.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The realname (gecos) information we want StatServ to have.
+	 */
+	real = "Statistics Services";
 };
 
 /* ALIS configuration.
