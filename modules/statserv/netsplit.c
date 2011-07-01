@@ -34,19 +34,10 @@ typedef struct {
     unsigned int flags;
 } split_t;
 
-
-bool split_exists(const char *name)
-{
-    if (mowgli_patricia_retrieve(splitlist, name))
-        return true;
-    return false;
-}
-
 static void netsplit_server_add(server_t *s)
 {
-    if (split_exists(s->name))
+    if (mowgli_patricia_retrieve(splitlist, s->name))
     {
-        /* Insert magical code to remove a netsplit here. */
         mowgli_patricia_delete(splitlist, s->name);
         wallops("Server %s reconnected to the network.", s->name);
     }
@@ -115,7 +106,7 @@ static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
         return;
     }
 
-    if (split_exists(name))
+    if (mowgli_patricia_retrieve(splitlist, name))
     {
         mowgli_patricia_delete(splitlist, name);
         command_success_nodata(si, _("%s removed from the netsplit list."), name);
