@@ -54,13 +54,14 @@ static void netsplit_server_add(server_t *s)
 
 static void netsplit_server_delete(hook_server_delete_t *serv)
 {
-    wallops("%s", serv->s->name);
     split_t *s;
+
     s = mowgli_heap_alloc(split_heap);
     s->name = sstrdup(serv->s->name);
     s->disconnected_since = CURRTIME;
     s->flags = serv->s->flags;
     mowgli_patricia_add(splitlist, s->name, s);
+
     wallops("Server %s split from the network.", s->name);
 }
 
