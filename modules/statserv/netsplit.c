@@ -155,6 +155,14 @@ void _modinit(module_t * m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
+    mowgli_patricia_iteration_state_t state;
+    split_t *s;
+
+    MOWGLI_PATRICIA_FOREACH(s, &state, splitlist)
+        netsplit_delete_serv(s);
+
+    mowgli_heap_destroy(split_heap);
+
     service_named_unbind_command("statserv", &ss_netsplit);
 
     command_delete(&ss_netsplit_list, ss_netsplit_cmds);
