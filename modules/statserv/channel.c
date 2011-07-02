@@ -55,7 +55,7 @@ static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CHANNEL");
 		command_fail(si, fault_needmoreparams,
-			     _("Syntax: CHANNEL [TOPIC|USERS|COUNT] [parameters]"));
+			     _("Syntax: CHANNEL [TOPIC|COUNT] [parameters]"));
 		return;
 	}
 
