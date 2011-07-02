@@ -37,6 +37,8 @@ typedef struct {
 static void netsplit_delete_serv(split_t *s)
 {
     mowgli_patricia_delete(splitlist, s->name);
+    free(s->name);
+
     mowgli_heap_free(split_heap, s);
 }
 
