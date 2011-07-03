@@ -28,6 +28,7 @@ SRCS =			\
 	ircd_announceserv.c	\
 	ircd_catserv.c	\
 	ms_fsend.c		\
+	ns_cleannick.c		\
 	ns_fenforce.c		\
 	ns_fregister.c	\
 	ns_forbid.c		\

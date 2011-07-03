@@ -74,6 +74,8 @@ ns_ajoin.c - Allows users to set a AJOIN/autojoin list of channels that Atheme
              will automatically join them to upon identify. Only works on
              ShadowIRCd, InspIRCd and UnrealIRCd. NOT COMPILED BY DEFAULT.
 
+ns_cleannick.c - Detects and cleans 'lame' nicknames using case normalization.
+
 ns_fenforce.c - Allows opers to force the ENFORCE flag on/off on other users'
                 accounts.
 
