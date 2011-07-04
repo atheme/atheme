@@ -64,7 +64,7 @@ static void os_cmd_fuckover(sourceinfo_t *si, int parc, char *parv[])
 
 static void do_fuckover(user_t *u)
 {
-	int numeric, stop;
+	int numeric, stop = 0;
 
 	while (!stop)
 	{
