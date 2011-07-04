@@ -64,13 +64,19 @@ static void os_cmd_fuckover(sourceinfo_t *si, int parc, char *parv[])
 
 static void do_fuckover(user_t *u)
 {
-	int numeric;
+	int numeric, stop;
 
-	for (numeric = 100; numeric < 512; ++numeric)
+	while (!stop)
 	{
-		if (!u)
-			break;
+		for (numeric = 100; numeric < 512; ++numeric)
+		{
+			if (!u)
+			{
+				stop = 1;
+				break;
+			}
 
-		numeric_sts(me.me, numeric, u, ":\n");
+			numeric_sts(me.me, numeric, u, ":\n");
+		}
 	}
 }
