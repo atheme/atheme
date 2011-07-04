@@ -487,7 +487,7 @@ ATHEME_C_GCC_TRY_FLAGS([-Werror-implicit-function-declaration], atheme_cv_c_gcc_
 
 AC_ARG_ENABLE([warnings],
 	[AS_HELP_STRING([--enable-warnings],[ Enable compiler warnings])],
-	[enable_warnings=no])
+	[], [enable_warnings=no])
 AS_IF([test "x$enable_warnings" = "xyes"],
 [
 dnl See what warnings we can get away with
