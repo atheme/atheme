@@ -1,0 +1,13 @@
+Help for LIST:
+
+LIST is used to display a channel list of all active channels 
+flagged as role-playing channels on the network.
+
+Please note that this command will not include all role-playing channels,
+only those that utilize RPGServ. For a complete list of channels on
+the network, use /LIST.
+
+Syntax: LIST
+
+Example:
+    /msg &nick& LIST
