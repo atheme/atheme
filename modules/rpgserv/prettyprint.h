@@ -12,13 +12,13 @@
 static const char *genre_keys[] = {
 	"apocalypse", "anime", "antropomorph", "cyberpunk",
 	"fantasy", "horror", "multigenre", "realistic",
-	"scifi", "steampunk", "other"
+	"scifi", "steampunk"
 };
 
 static const char *genre_names[] = {
 	"Apocalypse", "Anime", "Anthromorph", "Cyberpunk",
 	"Fantasy", "Horror", "Multi-genre", "Realistic",
-	"Sci-Fi", "Steampunk", "Other"
+	"Sci-Fi", "Steampunk"
 };
 
 static const char *period_keys[] = {
