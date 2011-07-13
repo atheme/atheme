@@ -343,7 +343,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 
 	return_if_fail(mu != NULL);
 	return_if_fail(name != NULL);
-	return_if_fail(strlen(name) >= NICKLEN);
+	return_if_fail(strlen(name) < NICKLEN);
 
 	strlcpy(nb, entity(mu)->name, NICKLEN);
 	newname = sstrdup(name);
