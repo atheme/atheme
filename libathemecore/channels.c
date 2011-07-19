@@ -351,6 +351,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	hook_channel_joinpart_t hdata;
 
 	return_val_if_fail(chan != NULL, NULL);
+	return_val_if_fail(chan->name != NULL, NULL);
 	return_val_if_fail(nick != NULL, NULL);
 
 	if (*chan->name != '#')
