@@ -293,14 +293,31 @@ void conf_process(config_file_t *cfp)
 	config_entry_t *ce;
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
+	struct ConfTable *loadmodule = NULL;
 
 	MOWGLI_ITER_FOREACH(tn, confblocks.head)
 	{
 		ct = tn->data;
 
 		set_default(ct);
+
+		if (!strcasecmp(ct->name, "LOADMODULE"))
+			loadmodule = ct;
 	}
 
+
+	/* LOADMODULEs may change confblocks, so we must
+	 * load modules before doing anything else */
+	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
+	{
+		for (ce = cfptr->cf_entries; ce; ce = ce->ce_next)
+		{
+			if (!strcasecmp(ce->ce_varname, "LOADMODULE"))
+			{
+				process_configentry(loadmodule, ce);
+			}
+		}
+	}
 
 	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
 	{
@@ -310,7 +327,7 @@ void conf_process(config_file_t *cfp)
 			{
 				ct = tn->data;
 
-				if (!strcasecmp(ct->name, ce->ce_varname))
+				if ((!strcasecmp(ct->name, ce->ce_varname)) && (strcasecmp(ce->ce_varname, "LOADMODULE")))
 				{
 					process_configentry(ct, ce);
 					break;
