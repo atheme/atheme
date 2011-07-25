@@ -662,10 +662,10 @@ static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 	if (!parv[1])
 		return;
 	s = server_find(parv[0]);
-	if (!s)
+	if (!s || s == me.me)
 	{
 		TAINT_ON(s = server_find(parv[1]), "inspircd bug #90 causes possible state desync -- upgrade your software");
-		if (!s)
+		if (!s || s == me.me)
 			return;
 	}
 
