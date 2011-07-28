@@ -12,7 +12,7 @@ include ../../../buildsys.mk
 
 plugindir = $(MODDIR)/modules/scripting
 
-CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS)
+CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR='"$(plugindir)"'
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS) $(PERL_LIBS)
 LIBS +=	-L../../../libathemecore -lathemecore ${LDFLAGS_RPATH}
@@ -28,11 +28,11 @@ perlxsi.c:
 	perl -MExtUtils::Embed -e xsinit
 
 install-extra:
-	${MKDIR_P} ${plugindir}/lib
-	${INSTALL} -m644 lib/*.pl lib/*.pm ${plugindir}/lib
-	${MKDIR_P} ${plugindir}/lib/Atheme
-	${INSTALL} -m644 lib/Atheme/*.pm ${plugindir}/lib/Atheme
-	${MKDIR_P} ${plugindir}/lib/Atheme/Internal
-	${INSTALL} -m644 lib/Atheme/Internal/*.pm ${plugindir}/lib/Atheme/Internal
-	${MKDIR_P} ${plugindir}/examples
-	${INSTALL} -m644 examples/*.pl ${plugindir}/examples
+	${MKDIR_P} '${DESTDIR}'${plugindir}/lib
+	${INSTALL} -m644 lib/*.pl lib/*.pm '${DESTDIR}'${plugindir}/lib
+	${MKDIR_P} '${DESTDIR}'${plugindir}/lib/Atheme
+	${INSTALL} -m644 lib/Atheme/*.pm '${DESTDIR}'${plugindir}/lib/Atheme
+	${MKDIR_P} '${DESTDIR}'${plugindir}/lib/Atheme/Internal
+	${INSTALL} -m644 lib/Atheme/Internal/*.pm '${DESTDIR}'${plugindir}/lib/Atheme/Internal
+	${MKDIR_P} '${DESTDIR}'${plugindir}/examples
+	${INSTALL} -m644 examples/*.pl '${DESTDIR}'${plugindir}/examples

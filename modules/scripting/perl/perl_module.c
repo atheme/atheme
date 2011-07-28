@@ -24,7 +24,7 @@ DECLARE_MODULE_V1
  * Definitions:
  *  PERL_INIT_FILE is the perl script that is used to boot the Atheme interface.
  */
-#define PERL_INIT_FILE PREFIX "/modules/scripting/lib/init.pl"
+#define PERL_INIT_FILE PERL_MODDIR "/lib/init.pl"
 
 /*
  * External functions:
