@@ -81,6 +81,10 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 void * object_ref(void *object)
 {
 	return_val_if_fail(object != NULL, NULL);
+	/* XXX refcount == 0 really should not be possible here
+	 * but in fact it happens for modules/exttarget/.
+	 */
+	return_val_if_fail(object(object)->refcount >= 0, object);
 
 	object(object)->refcount++;
 #ifdef DEBUG_OBJECT_REF
@@ -107,6 +111,7 @@ void * object_ref(void *object)
 void *object_sink_ref(void *obj)
 {
 	return_val_if_fail(obj != NULL, NULL);
+	return_val_if_fail(object(obj)->refcount > 0, obj);
 	object(obj)->refcount--;
 
 #ifdef DEBUG_OBJECT_REF
@@ -133,6 +138,7 @@ void *object_sink_ref(void *obj)
 void object_unref(void *obj)
 {
 	return_if_fail(obj != NULL);
+	return_if_fail(object(obj)->refcount > 0);
 
 	object_sink_ref(obj);
 	if (object(obj)->refcount == 0)
