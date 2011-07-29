@@ -102,7 +102,6 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 	slog(LG_DEBUG, "channel_add(): %s by %s", name, creator->name);
 
 	c = mowgli_heap_alloc(chan_heap);
-	object_init(object(c), name, (destructor_t) channel_delete);
 
 	c->name = sstrdup(name);
 	c->ts = ts;
@@ -463,9 +462,9 @@ void chanuser_delete(channel_t *chan, user_t *user)
 	if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
 	{
 		/* empty channels die */
-		slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, possibly removing", chan->name);
+		slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
 
-		object_unref(chan);
+		channel_delete(chan);
 	}
 }
 

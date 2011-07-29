@@ -766,8 +766,6 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		return_if_fail(c != NULL);
 	}
 
-	object_ref(c);
-
 	if (ts < c->ts)
 	{
 		chanuser_t *cu;
@@ -868,7 +866,8 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		/* go to the next user */
 	}
 
-	object_unref(c);
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c);
 }
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
