@@ -407,6 +407,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	unsigned int flags;
 	bool noop;
 	bool secure;
+	bool guard;
 	metadata_t *md;
 	chanacs_t *ca2;
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -428,6 +429,9 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	 * sophisticated mechanism is disabled */
 	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
 			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
+	/* chanserv or a botserv bot should join */
+	guard = mc->flags & MC_GUARD ||
+		metadata_find(mc, "private:botserv:bot-assigned") != NULL;
 
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD &&
 		metadata_find(mc, "private:botserv:bot-assigned") == NULL)
@@ -440,10 +444,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		if (chan->nummembers <= (guard ? 2 : 1))
 		{
 			mc->flags |= MC_INHABIT;
-			if (!(mc->flags & MC_GUARD))
+			if (!guard)
 				join(chan->name, chansvs.nick);
 		}
 		if (mc->mlock_on & CMODE_INVITE || chan->modes & CMODE_INVITE)
@@ -466,10 +470,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (flags & CA_AKICK && !(flags & CA_REMOVE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		if (chan->nummembers <= (guard ? 2 : 1))
 		{
 			mc->flags |= MC_INHABIT;
-			if (!(mc->flags & MC_GUARD))
+			if (!guard)
 				join(chan->name, chansvs.nick);
 		}
 		/* use a user-given ban mask if possible -- jilles */
@@ -531,10 +535,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me)))) &&
 			(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
 	{
-		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		if (chan->nummembers <= (guard ? 2 : 1))
 		{
 			mc->flags |= MC_INHABIT;
-			if (!(mc->flags & MC_GUARD))
+			if (!guard)
 				join(chan->name, chansvs.nick);
 		}
 		if (!(chan->modes & CMODE_INVITE))

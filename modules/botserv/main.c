@@ -968,7 +968,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_can_change_topic");
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
-	hook_add_channel_join(bs_join);
+	hook_add_first_channel_join(bs_join);
 	hook_add_channel_part(bs_part);
 
 	modestack_mode_simple = bs_modestack_mode_simple;
