@@ -11,6 +11,8 @@
 
 struct channel_
 {
+  object_t parent;
+
   char *name;
 
   unsigned int modes;
