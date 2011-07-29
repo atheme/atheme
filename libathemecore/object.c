@@ -161,17 +161,16 @@ void object_dispose(void *object)
 	return_if_fail(object != NULL);
 	obj = object(object);
 
-	/* set refcount to -1 to ensure that object_unref() doesn't cause a loop */
-	obj->refcount = -1;
-
-	privatedata = obj->privatedata;
-
 	/* we shouldn't be disposing an object more than once in it's
 	 * lifecycle.  so do a soft assert and get out if that's the case.
 	 *    --nenolod
 	 */
-	return_if_fail(obj->dying == false);
-	obj->dying = true;
+	return_if_fail(obj->refcount != -1);
+
+	/* set refcount to -1 to ensure that object_unref() doesn't cause a loop */
+	obj->refcount = -1;
+
+	privatedata = obj->privatedata;
 
 	mowgli_node_delete(&obj->dnode, &object_list);
 

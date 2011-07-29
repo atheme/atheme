@@ -24,7 +24,6 @@ typedef struct {
 	destructor_t destructor;
 	mowgli_list_t metadata;
 	mowgli_patricia_t *privatedata;
-	bool dying;
 	mowgli_node_t dnode;
 } object_t;
 
