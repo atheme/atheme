@@ -901,6 +901,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		user_mode(u, parv[3]);
+		if (strchr(parv[3], 'S'))
+			u->flags |= UF_IMMUNE;
 
 		/* If server is not yet EOB we will do this later.
 		 * This avoids useless "please identify" -- jilles */
@@ -954,6 +956,8 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		user_mode(u, parv[3]);
+		if (strchr(parv[3], 'S'))
+			u->flags |= UF_IMMUNE;
 
 		/* If server is not yet EOB we will do this later.
 		 * This avoids useless "please identify" -- jilles
@@ -995,6 +999,12 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 			return;
 
 		user_mode(u, parv[3]);
+		/* Services cannot be kicked.
+		 * They are assumed not to set/clear oper immune.
+		 */
+		if (strchr(parv[3], 'S'))
+			u->flags |= UF_IMMUNE;
+
 		if (*parv[9] != '*')
 			handle_burstlogin(u, parv[9], 0);
 
