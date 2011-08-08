@@ -79,15 +79,13 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	msg(bot->nick, channel, "%s", message);
-	logcommand(si, CMDLOG_DO, "SAY: \2%s\2", message);
+	logcommand(si, CMDLOG_DO, "SAY:\2%s\2: \2%s\2", channel, message);
 }
 
 static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
 	char *message = parv[1];
-	channel_t *c = channel_find(channel);
-	mychan_t *mc = mychan_find(channel);
 	metadata_t *bs;
 	user_t *bot;
 
@@ -97,6 +95,9 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: ACT <#channel> <msg>"));
 		return;
 	}
+	
+	channel_t *c = channel_find(channel);
+	mychan_t *mc = mychan_find(channel);
 
 	if (!mc)
 	{
@@ -127,7 +128,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	msg(bot->nick, channel, "\001ACTION %s\001", message);
-	logcommand(si, CMDLOG_DO, "ACT: \2%s\2", message);
+	logcommand(si, CMDLOG_DO, "ACT:\2%s\2: \2%s\2", channel, message);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
