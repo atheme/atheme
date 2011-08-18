@@ -593,13 +593,8 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
 {
 	user_t *tu = user_find(target);
-	server_t *s;
 
-	if(tu)
-		s = tu->server;
-	else if(ircd->uses_uid) /* Non-announced UID - must be a SASL client. */
-		s = sid_find(target);
-	else
+	if(!tu && !ircd->uses_uid)
 		return;
 
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, login);
