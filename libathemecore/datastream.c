@@ -38,7 +38,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 {
 	mowgli_node_t *n;
 	struct sendq *sq;
-	int l;
+	size_t l;
 	int pos = 0;
 
 	return_if_fail(cptr != NULL);
@@ -307,7 +307,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq, *sq2 = NULL;
-	int l = 0;
+	size_t l = 0;
 	char *p = buf;
 	char *newline = NULL;
 
