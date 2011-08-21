@@ -55,9 +55,12 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 	if (cptr->sendq_limit != 0 &&
 			MOWGLI_LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
 	{
+		/* Ensure the following log message does not trigger this
+		 * check again.
+		 */
+		cptr->flags |= CF_DEAD;
 		slog(LG_INFO, "sendq_add(): sendq limit exceeded on connection %s[%d]",
 				cptr->name, cptr->fd);
-		cptr->flags |= CF_DEAD;
 		return;
 	}
 
