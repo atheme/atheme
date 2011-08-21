@@ -518,11 +518,16 @@ enum log_type
 static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 		va_list args)
 {
+	static bool in_slog = false;
 	char buf[BUFSIZE];
 	mowgli_node_t *n;
 	char datetime[64];
 	time_t t;
 	struct tm tm;
+
+	if (in_slog)
+		return;
+	in_slog = true;
 
 	vsnprintf(buf, BUFSIZE, fmt, args);
 
@@ -555,6 +560,8 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	if (((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
 		((runflags & RF_LIVE) && log_force))
 		fprintf(stderr, "%s %s\n", datetime, logfile_strip_control_codes(buf));
+
+	in_slog = false;
 }
 
 static PRINTFLIKE(3, 4) void slog_ext(enum log_type type, unsigned int level,
