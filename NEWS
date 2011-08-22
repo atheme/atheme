@@ -59,6 +59,8 @@ gameserv
 - lottery: New module that randomly chooses one user out of the channel
   members.
 - happyfarm: New (skeleton) module that's a game like FarmVille! But on IRC!
+hostserv
+- added a new host_request hook to catch and do other things with host requests.
 memoserv
 - ms_fsend: new contrib module. Allows sopers to override a target user being
   set NOMEMO or having the source user on ignore.
@@ -80,10 +82,16 @@ nickserv
   which are not allowed to register accounts on-the-fly.
 - nickserv now allows passwords longer than 32 characters if the database is 
   being hashed.
+- subscribe: Removed as it had many flaws and no one used it.
+- ns_cleannick: new contrib module. Forces a nick change on a user if their nick is
+  'lame' using case normalisation.
 operserv
 - emailexempts and autokline exempts are now shown in INFO.
 - modreload now rehashes the config if the module requires it and reloads modules
   that depend on the specified module.
+- clones: Many cleanups.
+- clones: Added an option to variable increase the clone limit if a users' clones
+  are identified.
 - soper: Allow adding a new SOPER with a password (optional, of course).
 - set: Adds the ability to temporarily modify some config options on-the-fly.
 - info: Add a new hooks so modules that add config options can also add lines to
@@ -94,10 +102,14 @@ operserv
   log channel.
 - os_resolve: New contrib module for testing the asynchronous DNS resolver.
 - the RWATCH database is now serialized as opensex entities.
+rpgserv
+- New service. For finding and joining RP games on an IRC network.
 scripting
 - Support for scripting Atheme in Perl added. Perl scripts are loaded with
   OperServ MODLOAD just like modules. Still in alpha. Add the --with-perl configure 
   switch to enable it. POD-style documentation for the perl API is in doc/perl/.
+statserv
+- New service. For querying for statistics about the network.
 xmlrpc
 - moved to transport/xmlrpc . Your atheme.conf will need to be updated for this
   change if you use xmlrpc.
@@ -116,6 +128,7 @@ code
 - all the old SNOOP channel code has been removed. SNOOP has been deprecated since
   5.1 and gone since 5.2.
 - MODULE_USE_SYMBOL() was removed in favour of MODULE_TRY_REQUEST_SYMBOL().
+- most service-specific (config file) code split out from the core.
 - configuration-defined usernames are now truncated at USERLEN (10 characters).
 - UID generation split out from the core.
 - module_load can now be hooked into. This is particularly useful for scripting
