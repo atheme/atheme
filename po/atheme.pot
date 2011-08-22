@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-09 21:40-0500\n"
+"POT-Creation-Date: 2011-08-18 13:36-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,17 +64,17 @@ msgstr ""
 msgid "***** End of Help *****"
 msgstr ""
 
-#: modules/backend/opensex.c:1092
+#: modules/backend/opensex.c:1090
 #, c-format
 msgid "DATABASE ERROR: db-open-read: cannot open '%s' for reading: %s"
 msgstr ""
 
-#: modules/backend/opensex.c:1127
+#: modules/backend/opensex.c:1125
 #, c-format
 msgid "DATABASE ERROR: db-open-write: cannot open '%s' for writing: %s"
 msgstr ""
 
-#: modules/backend/opensex.c:1177
+#: modules/backend/opensex.c:1175
 #, c-format
 msgid ""
 "DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
@@ -88,11 +88,11 @@ msgstr ""
 msgid "Makes the bot do the equivalent of a \"/me\" command."
 msgstr ""
 
-#: modules/botserv/bottalk.c:49
+#: modules/botserv/bottalk.c:47
 msgid "Syntax: SAY <#channel> <msg>"
 msgstr ""
 
-#: modules/botserv/bottalk.c:55 modules/botserv/bottalk.c:103
+#: modules/botserv/bottalk.c:56 modules/botserv/bottalk.c:105
 #: modules/botserv/set_fantasy.c:70 modules/botserv/set_nobot.c:55
 #: modules/chanserv/access.c:559 modules/chanserv/access.c:629
 #: modules/chanserv/access.c:724 modules/chanserv/access.c:802
@@ -131,12 +131,12 @@ msgstr ""
 #: modules/chanserv/xop.c:102 modules/chanserv/xop.c:429
 #: modules/contrib/cs_badwords.c:244 modules/contrib/cs_badwords.c:385
 #: modules/rpgserv/enable.c:37 modules/rpgserv/enable.c:67
-#: modules/rpgserv/info.c:34 modules/rpgserv/set.c:184
+#: modules/rpgserv/info.c:35 modules/rpgserv/set.c:180
 #, c-format
 msgid "Channel %s is not registered."
 msgstr ""
 
-#: modules/botserv/bottalk.c:61 modules/botserv/bottalk.c:109
+#: modules/botserv/bottalk.c:62 modules/botserv/bottalk.c:111
 #: modules/chanserv/ban.c:62 modules/chanserv/ban.c:146
 #: modules/chanserv/clear_bans.c:74 modules/chanserv/clear_users.c:61
 #: modules/chanserv/getkey.c:66 modules/chanserv/invite.c:79
@@ -148,7 +148,7 @@ msgstr ""
 msgid "%s is currently empty."
 msgstr ""
 
-#: modules/botserv/bottalk.c:67 modules/botserv/bottalk.c:115
+#: modules/botserv/bottalk.c:68 modules/botserv/bottalk.c:117
 #: modules/botserv/info.c:100 modules/botserv/set_fantasy.c:76
 #: modules/botserv/set_nobot.c:67 modules/botserv/set_private.c:72
 #: modules/chanserv/access.c:569 modules/chanserv/access.c:646
@@ -181,17 +181,17 @@ msgstr ""
 #: modules/groupserv/flags.c:53 modules/groupserv/flags.c:89
 #: modules/groupserv/listchans.c:57 modules/memoserv/sendops.c:107
 #: modules/nickserv/sendpass_user.c:60 modules/operserv/soper.c:65
-#: modules/rpgserv/set.c:190
+#: modules/rpgserv/set.c:186
 msgid "You are not authorized to perform this operation."
 msgstr ""
 
-#: modules/botserv/bottalk.c:77 modules/botserv/bottalk.c:125
+#: modules/botserv/bottalk.c:78 modules/botserv/bottalk.c:127
 #: modules/botserv/main.c:918
 #, c-format
 msgid "%s does not have a bot assigned."
 msgstr ""
 
-#: modules/botserv/bottalk.c:97
+#: modules/botserv/bottalk.c:96
 msgid "Syntax: ACT <#channel> <msg>"
 msgstr ""
 
@@ -615,6 +615,7 @@ msgstr ""
 
 #: modules/chanfix/fix.c:466 modules/chanserv/info.c:78
 #: modules/nickserv/info.c:114 modules/operserv/modinspect.c:61
+#: modules/rpgserv/info.c:45
 #, c-format
 msgid "Information on %s:"
 msgstr ""
@@ -659,8 +660,8 @@ msgstr ""
 msgid "Now fixing   : %s"
 msgstr ""
 
-#: modules/chanfix/fix.c:488 modules/chanserv/info.c:283
-#: modules/groupserv/info.c:96
+#: modules/chanfix/fix.c:488 modules/chanserv/info.c:284
+#: modules/groupserv/info.c:96 modules/rpgserv/info.c:62
 msgid "*** End of Info ***"
 msgstr ""
 
@@ -1621,37 +1622,37 @@ msgstr ""
 msgid "Mode lock  : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:143 modules/nickserv/info.c:259
+#: modules/chanserv/info.c:144 modules/nickserv/info.c:259
 #, c-format
 msgid "Metadata   : %s = %s"
 msgstr ""
 
-#: modules/chanserv/info.c:233 modules/nickserv/info.c:319
+#: modules/chanserv/info.c:234 modules/nickserv/info.c:319
 #, c-format
 msgid "Flags      : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:236
+#: modules/chanserv/info.c:237
 #, c-format
 msgid "Prefix     : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:238
+#: modules/chanserv/info.c:239
 #, c-format
 msgid "Prefix     : %s (default)"
 msgstr ""
 
-#: modules/chanserv/info.c:255 modules/nickserv/info.c:383
+#: modules/chanserv/info.c:256 modules/nickserv/info.c:383
 #, c-format
 msgid "%s was MARKED by %s on %s (%s)"
 msgstr ""
 
-#: modules/chanserv/info.c:259
+#: modules/chanserv/info.c:260
 #, c-format
 msgid "%s is temporarily holding this channel."
 msgstr ""
 
-#: modules/chanserv/info.c:276
+#: modules/chanserv/info.c:277
 #, c-format
 msgid "%s was CLOSED by %s on %s (%s)"
 msgstr ""
@@ -6552,7 +6553,7 @@ msgstr ""
 msgid "End of CLONES LISTEXEMPT"
 msgstr ""
 
-#: modules/operserv/clones.c:863
+#: modules/operserv/clones.c:888
 #, c-format
 msgid ""
 "WARNING: You may not have any more than %d clients on the network at once. "
@@ -8072,171 +8073,196 @@ msgstr ""
 msgid "%s allows users to search for game channels by matching on properties."
 msgstr ""
 
-#: modules/rpgserv/info.c:16
+#: modules/rpgserv/info.c:17
 msgid "Displays info for a particular game."
 msgstr ""
 
-#: modules/rpgserv/info.c:27
+#: modules/rpgserv/info.c:28
 msgid "Syntax: INFO <channel>"
 msgstr ""
 
-#: modules/rpgserv/info.c:40 modules/rpgserv/set.c:196
+#: modules/rpgserv/info.c:41 modules/rpgserv/set.c:192
 #, c-format
 msgid "Channel %s does not have RPGServ enabled."
 msgstr ""
 
-#: modules/rpgserv/info.c:44 modules/rpgserv/search.c:58
+#: modules/rpgserv/info.c:47
 #, c-format
-msgid "Channel %s:"
+msgid "Genre    : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:46 modules/rpgserv/search.c:60
+#: modules/rpgserv/info.c:49
 #, c-format
-msgid "Genre: %s"
+msgid "Period   : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:48 modules/rpgserv/search.c:62
+#: modules/rpgserv/info.c:51
 #, c-format
-msgid "Period: %s"
+msgid "Ruleset  : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:50 modules/rpgserv/search.c:64
+#: modules/rpgserv/info.c:53
 #, c-format
-msgid "Ruleset: %s"
+msgid "Rating   : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:52 modules/rpgserv/search.c:66
+#: modules/rpgserv/info.c:55
 #, c-format
-msgid "Rating: %s"
+msgid "System   : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:54 modules/rpgserv/search.c:68
+#: modules/rpgserv/info.c:57
 #, c-format
-msgid "System: %s"
+msgid "Setting  : %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:56
-#, c-format
-msgid "Setting: %s"
-msgstr ""
-
-#: modules/rpgserv/info.c:58
+#: modules/rpgserv/info.c:59
 #, c-format
 msgid "Storyline: %s"
 msgstr ""
 
-#: modules/rpgserv/info.c:60
+#: modules/rpgserv/info.c:61
 #, c-format
-msgid "Summary: %s"
+msgid "Summary  : %s"
 msgstr ""
 
 #: modules/rpgserv/list.c:15
 msgid "Lists games."
 msgstr ""
 
-#: modules/rpgserv/list.c:30
+#: modules/rpgserv/list.c:35
 msgid "<no summary>"
 msgstr ""
 
-#: modules/rpgserv/list.c:36
+#: modules/rpgserv/list.c:41
 #, c-format
 msgid "Listed %d channels."
 msgstr ""
 
-#: modules/rpgserv/search.c:15
+#: modules/rpgserv/search.c:16
 msgid "Search for games based on specific criteria."
 msgstr ""
 
-#: modules/rpgserv/search.c:71
+#: modules/rpgserv/search.c:64
 #, c-format
-msgid "%d channels met your criteria."
+msgid "Channel %s:"
+msgstr ""
+
+#: modules/rpgserv/search.c:66
+#, c-format
+msgid "Genre: %s"
+msgstr ""
+
+#: modules/rpgserv/search.c:68
+#, c-format
+msgid "Period: %s"
+msgstr ""
+
+#: modules/rpgserv/search.c:70
+#, c-format
+msgid "Ruleset: %s"
 msgstr ""
 
 #: modules/rpgserv/search.c:72
 #, c-format
+msgid "Rating: %s"
+msgstr ""
+
+#: modules/rpgserv/search.c:74
+#, c-format
+msgid "System: %s"
+msgstr ""
+
+#: modules/rpgserv/search.c:77
+#, c-format
+msgid "%d channels met your criteria."
+msgstr ""
+
+#: modules/rpgserv/search.c:78
+#, c-format
 msgid "For more information on a specific channel, use /msg %s INFO <channel>."
 msgstr ""
 
-#: modules/rpgserv/set.c:16
+#: modules/rpgserv/set.c:17
 msgid "Sets RPG properties of your channel."
 msgstr ""
 
-#: modules/rpgserv/set.c:24
+#: modules/rpgserv/set.c:25
 #, c-format
 msgid "%s has no %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:28
+#: modules/rpgserv/set.c:29
 #, c-format
 msgid "Setting %s cleared for %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:49
+#: modules/rpgserv/set.c:51
 #, c-format
 msgid "%s is not a valid genre."
 msgstr ""
 
-#: modules/rpgserv/set.c:54
+#: modules/rpgserv/set.c:58
 #, c-format
 msgid "Genre for %s set to %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:65
+#: modules/rpgserv/set.c:71
 #, c-format
 msgid "%s is not a valid period."
 msgstr ""
 
-#: modules/rpgserv/set.c:70
+#: modules/rpgserv/set.c:78
 #, c-format
 msgid "Period for %s set to %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:81
+#: modules/rpgserv/set.c:84
 #, c-format
 msgid "%s is not a valid ruleset."
 msgstr ""
 
-#: modules/rpgserv/set.c:86
+#: modules/rpgserv/set.c:89
 #, c-format
 msgid "Ruleset for %s set to %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:96
+#: modules/rpgserv/set.c:95
 #, c-format
 msgid "%s is not a valid rating."
 msgstr ""
 
-#: modules/rpgserv/set.c:101
+#: modules/rpgserv/set.c:100
 #, c-format
 msgid "Rating for %s set to %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:116
+#: modules/rpgserv/set.c:112
 #, c-format
 msgid "%s is not a valid system."
 msgstr ""
 
-#: modules/rpgserv/set.c:123
+#: modules/rpgserv/set.c:119
 #, c-format
-msgid "system for %s set to %s."
+msgid "System for %s set to %s."
 msgstr ""
 
-#: modules/rpgserv/set.c:129
+#: modules/rpgserv/set.c:125
 #, c-format
 msgid "Setting for %s set."
 msgstr ""
 
-#: modules/rpgserv/set.c:135
+#: modules/rpgserv/set.c:131
 #, c-format
 msgid "Storyline for %s set."
 msgstr ""
 
-#: modules/rpgserv/set.c:141
+#: modules/rpgserv/set.c:137
 #, c-format
 msgid "Summary for %s set."
 msgstr ""
 
-#: modules/rpgserv/set.c:172
+#: modules/rpgserv/set.c:168
 msgid "Syntax: SET <channel> <property> [value...]"
 msgstr ""
 
