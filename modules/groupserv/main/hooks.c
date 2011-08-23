@@ -47,6 +47,9 @@ static void grant_channel_access_hook(user_t *u)
 
 			ca = (chanacs_t *)n->data;
 
+			if (ca->mychan->chan == NULL)
+				continue;
+
 			cu = chanuser_find(ca->mychan->chan, u);
 			if (cu && chansvs.me != NULL)
 			{
