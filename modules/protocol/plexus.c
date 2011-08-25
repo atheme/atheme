@@ -181,7 +181,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 		s = si->s;
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], parv[9], parv[6], parv[7], parv[10], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[4], parv[9], parv[5], parv[6], parv[7], parv[10], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 
