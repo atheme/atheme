@@ -12,6 +12,8 @@ typedef enum {
 	ENT_EXTTARGET,
 } myentity_type_t;
 
+typedef struct entity_chanacs_validation_vtable entity_chanacs_validation_vtable_t;
+
 typedef struct {
 	object_t parent;
 	myentity_type_t type;
@@ -19,7 +21,7 @@ typedef struct {
 	char id[IDLEN];
 
 	mowgli_list_t chanacs;
-	void *chanacs_validate;	/* vtable for validating chanacs entries */
+	entity_chanacs_validation_vtable_t *chanacs_validate;
 } myentity_t;
 
 #define entity(x)	((myentity_t *)(x))
