@@ -39,6 +39,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mowgli_node_t *n;
 	chanacs_t *ca;
+	entity_chanacs_validation_vtable_t *vt;
 	metadata_t *md;
 	bool operoverride = false;
 	int fl = 0;
@@ -94,43 +95,37 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_GET, "WHY: \2%s!%s@%s\2 on \2%s\2", u->nick, u->user, u->vhost, mc->name);
 
-	if (u->myuser != NULL)
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
-		{
-       	        	ca = (chanacs_t *)n->data;
+		ca = (chanacs_t *)n->data;
 
+		if (ca->entity == NULL)
+			continue;
+		vt = myentity_get_chanacs_validator(ca->entity);
+		if (ca->entity == entity(u->myuser) ||
+				(vt->match_user != NULL ? 
+				 vt->match_user(ca, u) != NULL :
+				 u->myuser != NULL &&
+				 vt->match_entity(ca, entity(u->myuser)) != NULL))
+		{
+			fl |= ca->level;
 			if (ca->entity == entity(u->myuser))
-			{
-				fl |= ca->level;
 				command_success_nodata(si,
 					"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
 					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
-				if (ca->level & CA_AKICK)
-				{
-					md = metadata_find(ca, "reason");
-					if (md != NULL)
-						command_success_nodata(si, "Ban reason: %s", md->value);
-				}
-			}
 			else if (isgroup(ca->entity))
+				command_success_nodata(si,
+					"\2%s\2 has flags \2%s\2 in \2%s\2 because they are a member of \2%s\2.",
+					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
+			else
+				command_success_nodata(si,
+					"\2%s\2 has flags \2%s\2 in \2%s\2 because they match \2%s\2.",
+					u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
+			if (ca->level & CA_AKICK)
 			{
-				entity_chanacs_validation_vtable_t *vt;
-
-				vt = myentity_get_chanacs_validator(ca->entity);
-				if (vt->match_entity(ca, entity(u->myuser)) != NULL)
-				{
-					fl |= ca->level;
-					command_success_nodata(si,
-						"\2%s\2 has flags \2%s\2 in \2%s\2 because they are a member of \2%s\2.",
-						u->nick, bitmask_to_flags2(ca->level, 0), mc->name, ca->entity->name);
-					if (ca->level & CA_AKICK)
-					{
-						md = metadata_find(ca, "reason");
-						if (md != NULL)
-							command_success_nodata(si, "Ban reason: %s", md->value);
-					}
-				}
+				md = metadata_find(ca, "reason");
+				if (md != NULL)
+					command_success_nodata(si, "Ban reason: %s", md->value);
 			}
 		}
 	}
