@@ -42,6 +42,13 @@ static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	/* target */
 	char *target = parv[0];
 
+	if (!target)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LISTCHANS");
+		command_fail(si, fault_needmoreparams, _("Syntax: LISTCHANS <!groupname>"));
+		return;
+	}
+
 	if (!(mg = mygroup_find(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), target);
