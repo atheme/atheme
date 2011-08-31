@@ -315,7 +315,7 @@ void xmlrpc_generic_error(int code, const char *string)
 {
 	char buf[1024];
 	const char *ss;
-	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create();
 	char *s2;
 	int len;
 
@@ -353,7 +353,8 @@ void xmlrpc_generic_error(int code, const char *string)
 	}
 	else
 		xmlrpc.setbuffer(s->str, len);
-	s->delete(s);
+
+	s->destroy(s);
 }
 
 /*************************************************************************/
@@ -387,7 +388,7 @@ void xmlrpc_send(int argc, ...)
 	int len;
 	char buf[1024];
 	const char *ss;
-	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create();
 	char *s2;
 	char *header;
 
@@ -438,7 +439,8 @@ void xmlrpc_send(int argc, ...)
 		free(xmlrpc.encode);
 		xmlrpc.encode = NULL;
 	}
-	s->delete(s);
+
+	s->destroy(s);
 }
 
 /*************************************************************************/
@@ -448,7 +450,7 @@ void xmlrpc_send_string(const char *value)
 	int len;
 	char buf[1024];
 	const char *ss;
-	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create();
 	char *s2;
 	char *header;
 
@@ -493,7 +495,8 @@ void xmlrpc_send_string(const char *value)
 		free(xmlrpc.encode);
 		xmlrpc.encode = NULL;
 	}
-	s->delete(s);
+
+	s->destroy(s);
 }
 
 /*************************************************************************/
@@ -736,7 +739,7 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	long unsigned int i;
 	unsigned char c;
 	char buf2[15];
-	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create();
 	*buf2 = '\0';
 	*outbuffer = '\0';
 
