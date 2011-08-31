@@ -95,7 +95,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 	{
 		case 0: /* child */
 			connection_close_all_fds();
-			strlcpy(buf, hdata->email, sizeof buf);
+			mowgli_strlcpy(buf, hdata->email, sizeof buf);
 			user = strtok(buf, "@");
 			domain = strtok(NULL, "@");
 			count = count_mx(domain);
@@ -119,8 +119,8 @@ static void check_registration(hook_user_register_check_t *hdata)
 			return;
 		default: /* parent */
 			pd = &procdata[proccount++];
-			strlcpy(pd->name, hdata->account, sizeof pd->name);
-			strlcpy(pd->email, hdata->email, sizeof pd->email);
+			mowgli_strlcpy(pd->name, hdata->account, sizeof pd->name);
+			mowgli_strlcpy(pd->email, hdata->email, sizeof pd->email);
 			childproc_add(pid, "ns_mxcheck_async", childproc_cb, pd);
 			return;
 	}

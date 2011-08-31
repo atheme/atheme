@@ -157,7 +157,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = MEMO_CHANNEL;
-		strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
+		mowgli_strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
 		snprintf(memo->text, MEMOLEN, "%s %s", mc->name, m);
 
 		/* Create a linked list node and add to memos */

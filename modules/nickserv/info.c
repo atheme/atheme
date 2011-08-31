@@ -136,7 +136,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		vhost = NULL;
 	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
 	{
-		strlcpy(buf, md->value, sizeof buf);
+		mowgli_strlcpy(buf, md->value, sizeof buf);
 		if (vhost != NULL)
 		{
 			p = strchr(buf, '@');
@@ -144,7 +144,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 				p = buf;
 			else
 				p++;
-			strlcpy(p, vhost, sizeof buf - (p - buf));
+			mowgli_strlcpy(p, vhost, sizeof buf - (p - buf));
 		}
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}

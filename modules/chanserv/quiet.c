@@ -167,8 +167,8 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 
 		hostbuf[0] = '\0';
 
-		strlcat(hostbuf, "*!*@", BUFSIZE);
-		strlcat(hostbuf, tu->vhost, BUFSIZE);
+		mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+		mowgli_strlcat(hostbuf, tu->vhost, BUFSIZE);
 
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
 		cb = chanban_add(c, hostbuf, 'q');

@@ -482,8 +482,8 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 	if (timeout == NULL)
 	{
 		timeout = mowgli_heap_alloc(enforce_timeout_heap);
-		strlcpy(timeout->nick, hdata->mn->nick, sizeof timeout->nick);
-		strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
+		mowgli_strlcpy(timeout->nick, hdata->mn->nick, sizeof timeout->nick);
+		mowgli_strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
 
 		if (!metadata_find(hdata->mn->owner, "private:enforcetime"))
 			timeout->timelimit = CURRTIME + nicksvs.enforce_delay;

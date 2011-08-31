@@ -47,7 +47,7 @@ static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
+	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
 
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
@@ -284,7 +284,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 		nick++;
 	else
 		nick = name;
-	strlcpy(newnick, nick, sizeof newnick);
+	mowgli_strlcpy(newnick, nick, sizeof newnick);
 	if (service_find_nick(newnick))
 	{
 		create_unique_service_nick(newnick, sizeof newnick);
@@ -428,9 +428,9 @@ static void servtree_update(void *dummy)
 			if (u != NULL && u != sptr->me)
 				kill_user(NULL, u, "Nick taken by service");
 			user_changenick(sptr->me, sptr->nick, CURRTIME);
-			strlcpy(sptr->me->user, sptr->user, sizeof sptr->me->user);
-			strlcpy(sptr->me->host, sptr->host, sizeof sptr->me->host);
-			strlcpy(sptr->me->gecos, sptr->real, sizeof sptr->me->gecos);
+			mowgli_strlcpy(sptr->me->user, sptr->user, sizeof sptr->me->user);
+			mowgli_strlcpy(sptr->me->host, sptr->host, sizeof sptr->me->host);
+			mowgli_strlcpy(sptr->me->gecos, sptr->real, sizeof sptr->me->gecos);
 			if (me.connected)
 				reintroduce_user(sptr->me);
 		}
@@ -497,10 +497,10 @@ const char *service_resolve_alias(service_t *sptr, const char *context, const ch
 	fullname[0] = '\0';
 	if (context != NULL)
 	{
-		strlcpy(fullname, context, sizeof fullname);
-		strlcat(fullname, " ", sizeof fullname);
+		mowgli_strlcpy(fullname, context, sizeof fullname);
+		mowgli_strlcat(fullname, " ", sizeof fullname);
 	}
-	strlcat(fullname, cmd, sizeof fullname);
+	mowgli_strlcat(fullname, cmd, sizeof fullname);
 	alias = mowgli_patricia_retrieve(sptr->aliases, fullname);
 	return alias != NULL ? alias : cmd;
 }

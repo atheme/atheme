@@ -486,8 +486,8 @@ static void opensex_h_me(database_handle_t *db, const char *type)
 	}
 
 	mz = smalloc(sizeof *mz);
-	strlcpy(mz->sender, src, NICKLEN);
-	strlcpy(mz->text, text, MEMOLEN);
+	mowgli_strlcpy(mz->sender, src, NICKLEN);
+	mowgli_strlcpy(mz->text, text, MEMOLEN);
 	mz->sent = sent;
 	mz->status = status;
 
@@ -631,7 +631,7 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 	const char *sflags;
 	unsigned int flags = 0;
 
-	strlcpy(buf, name, sizeof buf);
+	mowgli_strlcpy(buf, name, sizeof buf);
 	mychan_t *mc = mychan_add(buf);
 
 	mc->registered = db_sread_time(db);
@@ -652,7 +652,7 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 
 	if ((key = db_read_word(db)))
 	{
-		strlcpy(buf, key, sizeof buf);
+		mowgli_strlcpy(buf, key, sizeof buf);
 		strip(buf);
 		if (buf[0] && buf[0] != ':' && !strchr(buf, ','))
 			mc->mlock_key = sstrdup(buf);
@@ -762,7 +762,7 @@ static void opensex_h_si(database_handle_t *db, const char *type)
 	settime = db_sread_time(db);
 	setby = db_sread_word(db);
 	reason = db_sread_str(db);
-	strlcpy(buf, reason, sizeof buf);
+	mowgli_strlcpy(buf, reason, sizeof buf);
 
 	strip(buf);
 	svsignore = svsignore_add(mask, reason);
@@ -791,7 +791,7 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	setby = db_sread_word(db);
 	reason = db_sread_str(db);
 
-	strlcpy(buf, reason, sizeof buf);
+	mowgli_strlcpy(buf, reason, sizeof buf);
 	strip(buf);
 
 	k = kline_add(user, host, buf, duration, setby);
@@ -820,7 +820,7 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 	setby = db_sread_word(db);
 	reason = db_sread_str(db);
 
-	strlcpy(buf, reason, sizeof buf);
+	mowgli_strlcpy(buf, reason, sizeof buf);
 	strip(buf);
 
 	x = xline_add(realname, buf, duration, setby);
@@ -849,7 +849,7 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	setby = db_sread_word(db);
 	reason = db_sread_str(db);
 
-	strlcpy(buf, reason, sizeof buf);
+	mowgli_strlcpy(buf, reason, sizeof buf);
 	strip(buf);
 
 	q = qline_add(mask, buf, duration, setby);

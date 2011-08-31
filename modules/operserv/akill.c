@@ -138,18 +138,18 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		treason = strtok(NULL, "");
 
 		if (treason)
-			strlcpy(reason, treason, BUFSIZE);
+			mowgli_strlcpy(reason, treason, BUFSIZE);
 		else
-			strlcpy(reason, "No reason given", BUFSIZE);
+			mowgli_strlcpy(reason, "No reason given", BUFSIZE);
 	}
 	else if (!strcasecmp(token, "!T"))
 	{
 		s = strtok(NULL, " ");
 		treason = strtok(NULL, "");
 		if (treason)
-			strlcpy(reason, treason, BUFSIZE);
+			mowgli_strlcpy(reason, treason, BUFSIZE);
 		else
-			strlcpy(reason, "No reason given", BUFSIZE);
+			mowgli_strlcpy(reason, "No reason given", BUFSIZE);
 		if (s)
 		{
 			duration = (atol(s) * 60);
@@ -182,13 +182,13 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		duration = config_options.kline_time;
-		strlcpy(reason, token, BUFSIZE);
+		mowgli_strlcpy(reason, token, BUFSIZE);
 		treason = strtok(NULL, "");
 
 		if (treason)
 		{
-			strlcat(reason, " ", BUFSIZE);
-			strlcat(reason, treason, BUFSIZE);
+			mowgli_strlcat(reason, " ", BUFSIZE);
+			mowgli_strlcat(reason, treason, BUFSIZE);
 		}			
 	}
 

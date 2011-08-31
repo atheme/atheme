@@ -419,7 +419,7 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 		else
 			buf[0] = '\0';
 
-		strlcat(buf, si->su->uid, BUFSIZE);
+		mowgli_strlcat(buf, si->su->uid, BUFSIZE);
 
 		chanuser_add(c, buf);
 	}
@@ -573,8 +573,8 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 							p++;
 						}
 				}
-				strlcpy(newnick, prefix, sizeof newnick);
-				strlcat(newnick, userv[i], sizeof newnick);
+				mowgli_strlcpy(newnick, prefix, sizeof newnick);
+				mowgli_strlcat(newnick, userv[i], sizeof newnick);
 				chanuser_add(c, newnick);
 			}
 		}

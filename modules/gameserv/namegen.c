@@ -61,19 +61,19 @@ static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 		unsigned int medial_iter;
 
 		/* Here we generate the name. */
-		strlcpy(namebuf, begin_sym[rand() % BEGIN_SYM_SZ], BUFSIZE);
+		mowgli_strlcpy(namebuf, begin_sym[rand() % BEGIN_SYM_SZ], BUFSIZE);
 
 		for (medial_iter = rand() % 3; medial_iter > 0; medial_iter--)
-			strlcat(namebuf, medial_sym[rand() % MEDIAL_SYM_SZ], BUFSIZE);
+			mowgli_strlcat(namebuf, medial_sym[rand() % MEDIAL_SYM_SZ], BUFSIZE);
 
-		strlcat(namebuf, end_sym[rand() % END_SYM_SZ], BUFSIZE);
+		mowgli_strlcat(namebuf, end_sym[rand() % END_SYM_SZ], BUFSIZE);
 
 		if (iter == 0)
-			strlcpy(buf, namebuf, BUFSIZE);
+			mowgli_strlcpy(buf, namebuf, BUFSIZE);
 		else
-			strlcat(buf, namebuf, BUFSIZE);
+			mowgli_strlcat(buf, namebuf, BUFSIZE);
 
-		strlcat(buf, iter + 1 < amt ? ", " : ".", BUFSIZE);
+		mowgli_strlcat(buf, iter + 1 < amt ? ", " : ".", BUFSIZE);
 	}
 
 	gs_command_report(si, "Some names to ponder: %s", buf);

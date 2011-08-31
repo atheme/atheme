@@ -58,7 +58,7 @@ static void clean_nickname(user_t *u)
 
 	return_if_fail(u != NULL);
 
-	strlcpy(nickbuf, u->nick, NICKLEN);
+	mowgli_strlcpy(nickbuf, u->nick, NICKLEN);
 
 	p = nickbuf;
 

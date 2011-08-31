@@ -128,7 +128,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	entity(mu)->name = sstrdup(name);
 	mu->email = sstrdup(email);
 	if (id)
-		strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
+		mowgli_strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
 	else
 		entity(mu)->id[0] = '\0';
 
@@ -148,7 +148,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	 * immediately converted the first time we start up with crypto.
 	 */
 	if (flags & MU_CRYPTPASS)
-		strlcpy(mu->pass, pass, PASSLEN);
+		mowgli_strlcpy(mu->pass, pass, PASSLEN);
 	else
 		set_password(mu, pass);
 
@@ -295,10 +295,10 @@ void myuser_delete(myuser_t *mu)
 				nicks[0] = '\0';
 			}
 			if (nicks[0] != '\0')
-				strlcat(nicks, ", ", sizeof nicks);
-			strlcat(nicks, "\2", sizeof nicks);
-			strlcat(nicks, mn->nick, sizeof nicks);
-			strlcat(nicks, "\2", sizeof nicks);
+				mowgli_strlcat(nicks, ", ", sizeof nicks);
+			mowgli_strlcat(nicks, "\2", sizeof nicks);
+			mowgli_strlcat(nicks, mn->nick, sizeof nicks);
+			mowgli_strlcat(nicks, "\2", sizeof nicks);
 		}
 		object_unref(mn);
 	}
@@ -345,7 +345,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 	return_if_fail(name != NULL);
 	return_if_fail(strlen(name) < NICKLEN);
 
-	strlcpy(nb, entity(mu)->name, NICKLEN);
+	mowgli_strlcpy(nb, entity(mu)->name, NICKLEN);
 	newname = sstrdup(name);
 
 	if (authservice_loaded)
@@ -665,7 +665,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	mn = mowgli_heap_alloc(mynick_heap);
 	object_init(object(mn), name, (destructor_t) mynick_delete);
 
-	strlcpy(mn->nick, name, NICKLEN);
+	mowgli_strlcpy(mn->nick, name, NICKLEN);
 	mn->owner = mu;
 	mn->registered = CURRTIME;
 
@@ -743,7 +743,7 @@ myuser_name_t *myuser_name_add(const char *name)
 	mun = mowgli_heap_alloc(myuser_name_heap);
 	object_init(object(mun), name, (destructor_t) myuser_name_delete);
 
-	strlcpy(mun->name, name, NICKLEN);
+	mowgli_strlcpy(mun->name, name, NICKLEN);
 
 	mowgli_patricia_add(oldnameslist, mun->name, mun);
 
@@ -1041,8 +1041,8 @@ const char *mychan_founder_names(mychan_t *mc)
 		if (ca->entity != NULL && ca->level & CA_FOUNDER)
 		{
 			if (names[0] != '\0')
-				strlcat(names, ", ", sizeof names);
-			strlcat(names, entity(ca->entity)->name, sizeof names);
+				mowgli_strlcat(names, ", ", sizeof names);
+			mowgli_strlcat(names, entity(ca->entity)->name, sizeof names);
 		}
 	}
 	return names;
@@ -1264,10 +1264,10 @@ const char *mychan_get_mlock(mychan_t *mc)
 		*q = '\0';
 	}
 
-	strlcat(buf, params, BUFSIZE);
+	mowgli_strlcat(buf, params, BUFSIZE);
 
 	if (*buf == '\0')
-		strlcpy(buf, "+", BUFSIZE);
+		mowgli_strlcpy(buf, "+", BUFSIZE);
 
 	return buf;
 }
@@ -1282,13 +1282,13 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 	mlock[0] = '\0';
 
 	if (mc->mlock_on)
-		strlcat(mlock, flags_to_string(mc->mlock_on), sizeof(mlock));
+		mowgli_strlcat(mlock, flags_to_string(mc->mlock_on), sizeof(mlock));
 	if (mc->mlock_off)
-		strlcat(mlock, flags_to_string(mc->mlock_off), sizeof(mlock));
+		mowgli_strlcat(mlock, flags_to_string(mc->mlock_off), sizeof(mlock));
 	if (mc->mlock_limit || mc->mlock_off & CMODE_LIMIT)
-		strlcat(mlock, "l", sizeof(mlock));
+		mowgli_strlcat(mlock, "l", sizeof(mlock));
 	if (mc->mlock_key || mc->mlock_off & CMODE_KEY)
-		strlcat(mlock, "k", sizeof(mlock));
+		mowgli_strlcat(mlock, "k", sizeof(mlock));
 	if ((md = metadata_find(mc, "private:mlockext")))
 	{
 		char *p = md->value;

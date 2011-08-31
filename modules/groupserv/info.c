@@ -64,30 +64,30 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	*buf = '\0';
 
 	if (mg->flags & MG_REGNOLIMIT)
-		strlcat(buf, "REGNOLIMIT", BUFSIZE);
+		mowgli_strlcat(buf, "REGNOLIMIT", BUFSIZE);
 
 	if (mg->flags & MG_ACSNOLIMIT)
 	{
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "ACSNOLIMIT", BUFSIZE);
+		mowgli_strlcat(buf, "ACSNOLIMIT", BUFSIZE);
 	}
 	
 	if (mg->flags & MG_OPEN)
 	{
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "OPEN", BUFSIZE);
+		mowgli_strlcat(buf, "OPEN", BUFSIZE);
 	}
 
 	if (mg->flags & MG_PUBLIC)
 	{
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "PUBLIC", BUFSIZE);
+		mowgli_strlcat(buf, "PUBLIC", BUFSIZE);
 	}
 
 	if (*buf)

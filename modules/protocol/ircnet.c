@@ -343,7 +343,7 @@ static void ircnet_jupe(const char *server, const char *reason)
 
 	/* dirty dirty make up some sid */
 	if (sid[0] == '\0')
-		strlcpy(sid, me.numeric, sizeof sid);
+		mowgli_strlcpy(sid, me.numeric, sizeof sid);
 	do
 	{
 		i = 3;

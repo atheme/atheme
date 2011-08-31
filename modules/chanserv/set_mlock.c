@@ -123,7 +123,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 					  return;
 				  }
 
-				  strlcpy(newlock_key, arg, sizeof newlock_key);
+				  mowgli_strlcpy(newlock_key, arg, sizeof newlock_key);
 				  newlock_off &= ~CMODE_KEY;
 			  }
 			  else
@@ -195,7 +195,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 							  command_fail(si, fault_badparams, _("Invalid value \2%s\2 for mode +%c."), arg, c);
 							  return;
 						  }
-						  strlcpy(newlock_ext[i], arg, sizeof newlock_ext[i]);
+						  mowgli_strlcpy(newlock_ext[i], arg, sizeof newlock_ext[i]);
 						  newlock_ext_off[i] = false;
 					  }
 					  else
@@ -243,7 +243,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 			{
 				modebuf[0] = *arg;
 				modebuf[1] = '\0';
-				strlcat(arg[1] == ' ' || arg[1] == '\0' ? ext_minus : ext_plus, modebuf, ignore_mode_list_size + 1);
+				mowgli_strlcat(arg[1] == ' ' || arg[1] == '\0' ? ext_minus : ext_plus, modebuf, ignore_mode_list_size + 1);
 				arg++;
 				while (*arg != ' ' && *arg != '\0')
 					arg++;
@@ -263,15 +263,15 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 				{
 					modebuf[0] = ' ';
 					modebuf[1] = '\0';
-					strlcat(newext, modebuf, sizeof newext);
+					mowgli_strlcat(newext, modebuf, sizeof newext);
 				}
 				modebuf[0] = ignore_mode_list[i].mode;
 				modebuf[1] = '\0';
-				strlcat(newext, modebuf, sizeof newext);
-				strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
+				mowgli_strlcat(newext, modebuf, sizeof newext);
+				mowgli_strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
 						modebuf, ignore_mode_list_size + 1);
 				if (!newlock_ext_off[i])
-					strlcat(newext, newlock_ext[i], sizeof newext);
+					mowgli_strlcat(newext, newlock_ext[i], sizeof newext);
 			}
 		}
 		if (newext[0] != '\0')

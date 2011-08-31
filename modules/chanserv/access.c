@@ -171,7 +171,7 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	if (parc > 2)
 		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
 	else
-		strlcpy(buf, chan, BUFSIZE);
+		mowgli_strlcpy(buf, chan, BUFSIZE);
 
 	command_exec_split(si->service, si, c->name, buf, cs_access_cmds);
 }
@@ -211,7 +211,7 @@ static void cs_cmd_role(sourceinfo_t *si, int parc, char *parv[])
 	if (parc > 2)
 		snprintf(buf, BUFSIZE, "%s %s", chan, parv[2]);
 	else
-		strlcpy(buf, chan, BUFSIZE);
+		mowgli_strlcpy(buf, chan, BUFSIZE);
 
 	command_exec_split(si->service, si, c->name, buf, cs_role_cmds);
 }
@@ -266,7 +266,7 @@ static int append_global_template(const char *key, void *data, void *privdata)
 	}
 
 	t = smalloc(sizeof(template_t));
-	strlcpy(t->name, key, sizeof(t->name));
+	mowgli_strlcpy(t->name, key, sizeof(t->name));
 	t->level = get_template_flags(ti->mc, key);
 	mowgli_node_add(t, &t->node, ti->l);
 
@@ -302,19 +302,19 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 			r = strchr(q, ' ');
 			if (r != NULL && r < q)
 				break;
-			strlcpy(ss, q, sizeof ss);
+			mowgli_strlcpy(ss, q, sizeof ss);
 			if (r != NULL && r - q < (int)(sizeof ss - 1))
 			{
 				ss[r - q] = '\0';
 			}
 
-			strlcpy(flagname, p, sizeof flagname);
+			mowgli_strlcpy(flagname, p, sizeof flagname);
 			s = strchr(flagname, '=');
 			if (s != NULL)
 				*s = '\0';
 
 			t = smalloc(sizeof(template_t));
-			strlcpy(t->name, flagname, sizeof(t->name));
+			mowgli_strlcpy(t->name, flagname, sizeof(t->name));
 			t->level = flags_to_bitmask(ss, 0);
 			mowgli_node_add(t, &t->node, l);
 
@@ -388,9 +388,9 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	}
 
 	if (exact_t != NULL)
-		strlcpy(flagname, exact_t->name, sizeof flagname);
+		mowgli_strlcpy(flagname, exact_t->name, sizeof flagname);
 	else
-		strlcpy(flagname, "<Custom>", sizeof flagname);
+		mowgli_strlcpy(flagname, "<Custom>", sizeof flagname);
 
 	free_template_list(l);
 
@@ -421,7 +421,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	if (md != NULL)
 	{
 		p = md->value;
-		strlcpy(newstr, p, sizeof newstr);
+		mowgli_strlcpy(newstr, p, sizeof newstr);
 		while (p != NULL)
 		{
 			while (*p == ' ')
@@ -432,7 +432,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 			r = strchr(q, ' ');
 			if (r != NULL && r < q)
 				break;
-			strlcpy(ss, q, sizeof ss);
+			mowgli_strlcpy(ss, q, sizeof ss);
 			if (r != NULL && r - q < (int)(sizeof ss - 1))
 			{
 				ss[r - q] = '\0';
@@ -444,12 +444,12 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 				if (flags == 0)
 				{
 					if (p == md->value)
-						strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
+						mowgli_strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
 					else
 					{
 						/* otherwise, zap the space before it */
 						p--;
-						strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
+						mowgli_strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
 					}
 				}
 				else

@@ -55,9 +55,9 @@ const char *gen_salt(void)
 {
 	char *ht = random_string(6);
 
-	strlcpy(saltbuf, "$1$", BUFSIZE);
-	strlcat(saltbuf, ht, BUFSIZE);
-	strlcat(saltbuf, "$", BUFSIZE);
+	mowgli_strlcpy(saltbuf, "$1$", BUFSIZE);
+	mowgli_strlcat(saltbuf, ht, BUFSIZE);
+	mowgli_strlcat(saltbuf, "$", BUFSIZE);
 
 	free(ht);
 

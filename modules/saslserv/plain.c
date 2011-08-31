@@ -57,13 +57,13 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	len -= strlen(message) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
-	strlcpy(auth, message, 256);
+	mowgli_strlcpy(auth, message, 256);
 	message += strlen(message) + 1;
 
 	/* Copy the password */
 	if(strlen(message) > 255)
 		return ASASL_FAIL;
-	strlcpy(pass, message, len + 1);
+	mowgli_strlcpy(pass, message, len + 1);
 
 	/* Done dissecting, now check. */
 	if(!(mu = myuser_find(auth)))

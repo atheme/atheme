@@ -75,7 +75,7 @@ mygroup_t *mygroup_add_id(const char *id, const char *name)
 	entity(mg)->type = ENT_GROUP;
 
 	if (id)
-		strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
+		mowgli_strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
 	else
 		entity(mg)->id[0] = '\0';
 
@@ -222,8 +222,8 @@ const char *mygroup_founder_names(mygroup_t *mg)
                 if (ga->mu != NULL && ga->flags & GA_FOUNDER)
                 {
                         if (names[0] != '\0')
-                                strlcat(names, ", ", sizeof names);
-                        strlcat(names, entity(ga->mu)->name, sizeof names);
+                                mowgli_strlcat(names, ", ", sizeof names);
+                        mowgli_strlcat(names, entity(ga->mu)->name, sizeof names);
                 }
         }
         return names;

@@ -130,7 +130,7 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 	for (day = 0; day <= days; day++)
 	{
 		if (day == 0)
-			strlcpy(logfile, baselog, sizeof logfile);
+			mowgli_strlcpy(logfile, baselog, sizeof logfile);
 		else
 		{
 			t = CURRTIME - day * 86400;

@@ -151,8 +151,8 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = 0;
-		strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
-		strlcpy(memo->text,m,MEMOLEN);
+		mowgli_strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
+		mowgli_strlcpy(memo->text,m,MEMOLEN);
 	
 		/* Create a linked list node and add to memos */
 		n = mowgli_node_create();

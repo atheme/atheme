@@ -469,7 +469,7 @@ static void modestack_flush(struct modestackdata *md)
 	{
 		if (dir != MTYPE_DEL)
 			dir = MTYPE_DEL, *p++ = '-';
-		strlcpy(p, flags_to_string(md->modes_off), end - p);
+		mowgli_strlcpy(p, flags_to_string(md->modes_off), end - p);
 		p += strlen(p);
 	}
 	if (md->limitused && md->limit == 0)
@@ -491,7 +491,7 @@ static void modestack_flush(struct modestackdata *md)
 	{
 		if (dir != MTYPE_ADD)
 			dir = MTYPE_ADD, *p++ = '+';
-		strlcpy(p, flags_to_string(md->modes_on), end - p);
+		mowgli_strlcpy(p, flags_to_string(md->modes_on), end - p);
 		p += strlen(p);
 	}
 	if (md->limitused && md->limit != 0)
@@ -509,7 +509,7 @@ static void modestack_flush(struct modestackdata *md)
 			*p++ = ignore_mode_list[i].mode;
 		}
 	}
-	strlcpy(p, md->pmodes + ((dir == MTYPE_ADD && *md->pmodes == '+') || (dir == MTYPE_DEL && *md->pmodes == '-') ? 1 : 0), end - p);
+	mowgli_strlcpy(p, md->pmodes + ((dir == MTYPE_ADD && *md->pmodes == '+') || (dir == MTYPE_DEL && *md->pmodes == '-') ? 1 : 0), end - p);
 	p += strlen(p);
 
 	/* all mode letters done, now for some checks */
@@ -542,7 +542,7 @@ static void modestack_flush(struct modestackdata *md)
 	}
 	if (*md->params)
 	{
-		strlcpy(p, md->params, end - p);
+		mowgli_strlcpy(p, md->params, end - p);
 		p += strlen(p);
 	}
 	mode_sts(md->source, md->channel, buf);
@@ -560,7 +560,7 @@ static struct modestackdata *modestack_init(const char *source, channel_t *chann
 		modestack_flush(&modestackdata);
 	}
 
-	strlcpy(modestackdata.source, source, sizeof modestackdata.source);
+	mowgli_strlcpy(modestackdata.source, source, sizeof modestackdata.source);
 	modestackdata.channel = channel;
 	return &modestackdata;
 }
@@ -604,7 +604,7 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, const ch
 	{
 		if (md->totallen + 1 + strlen(value) > 512)
 			modestack_flush(md);
-		strlcpy(md->extmodes[i], value, sizeof md->extmodes[i]);
+		mowgli_strlcpy(md->extmodes[i], value, sizeof md->extmodes[i]);
 	}
 	else if (dir == MTYPE_DEL)
 		md->extmodes[i][0] = '\0';
@@ -652,9 +652,9 @@ static void modestack_add_param(struct modestackdata *md, int dir, char type, co
 		str[0] = type;
 		str[1] = '\0';
 	}
-	strlcat(md->pmodes, str, sizeof md->pmodes);
-	strlcat(md->params, " ", sizeof md->params);
-	strlcat(md->params, value, sizeof md->params);
+	mowgli_strlcat(md->pmodes, str, sizeof md->pmodes);
+	mowgli_strlcat(md->params, " ", sizeof md->params);
+	mowgli_strlcat(md->params, value, sizeof md->params);
 }
 
 static void modestack_flush_callback(void *arg)
@@ -811,7 +811,7 @@ char *channel_modes(channel_t *c, bool doparams)
 		if (doparams)
 		{
 			*q++ = ' ';
-			strlcpy(q, c->key, params + sizeof params - q);
+			mowgli_strlcpy(q, c->key, params + sizeof params - q);
 			q += strlen(q);
 		}
 	}
@@ -823,12 +823,12 @@ char *channel_modes(channel_t *c, bool doparams)
 			if (doparams)
 			{
 				*q++ = ' ';
-				strlcpy(q, c->extmodes[i], params + sizeof params - q);
+				mowgli_strlcpy(q, c->extmodes[i], params + sizeof params - q);
 				q += strlen(q);
 			}
 		}
 	}
-	strlcpy(p, params, fullmode + sizeof fullmode - p);
+	mowgli_strlcpy(p, params, fullmode + sizeof fullmode - p);
 	return fullmode;
 }
 
@@ -919,7 +919,7 @@ void check_modes(mychan_t *mychan, bool sendnow)
 					}
 					else if (p[1] != ' ' && p[1] != '\0')
 					{
-						strlcpy(str2, p + 1, sizeof str2);
+						mowgli_strlcpy(str2, p + 1, sizeof str2);
 						q = strchr(str2, ' ');
 						if (q != NULL)
 							*q = '\0';

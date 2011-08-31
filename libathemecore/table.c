@@ -228,7 +228,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 		char buf2[1024];
 
 		snprintf(buf2, 1024, "%-*s", n->next != NULL ? c->width + 1 : 0, c->name);
-		strlcat(buf, buf2, bufsz);
+		mowgli_strlcat(buf, buf2, bufsz);
 	}
 	callback(buf, data);
 	*buf = '\0';
@@ -268,7 +268,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 			rc = (table_cell_t *) rn->data;
 
 			snprintf(buf2, 1024, "%-*s", n2->next != NULL ? rc->width + 1 : 0, c->value);
-			strlcat(buf, buf2, bufsz);
+			mowgli_strlcat(buf, buf2, bufsz);
 		}
 		callback(buf, data);
 		*buf = '\0';

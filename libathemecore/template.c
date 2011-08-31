@@ -92,7 +92,7 @@ const char *getitem(const char *str, const char *name)
 			return NULL;
 		if (p - str == l && !strncasecmp(str, name, p - str))
 		{
-			strlcpy(result, p, sizeof result);
+			mowgli_strlcpy(result, p, sizeof result);
 			p = strchr(result, ' ');
 			if (p != NULL)
 				*p = '\0';

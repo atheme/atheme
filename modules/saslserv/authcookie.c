@@ -64,7 +64,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	/* Copy the authcookie */
 	if(strlen(message) > 255)
 		return ASASL_FAIL;
-	strlcpy(cookie, message, len + 1);
+	mowgli_strlcpy(cookie, message, len + 1);
 
 	/* Done dissecting, now check. */
 	if(!(mu = myuser_find(auth)))

@@ -53,7 +53,7 @@ static void do_packet(char *buf)
 
         if (*buf)
         {
-                strlcpy(tmp, buf, BUFSIZE * 2);
+                mowgli_strlcpy(tmp, buf, BUFSIZE * 2);
                 tmp[BUFSIZE * 2] = '\0';
         }
 }

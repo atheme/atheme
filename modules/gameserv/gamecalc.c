@@ -261,9 +261,9 @@ static void command_df(sourceinfo_t *si, int parc, char *parv[])
 		int roll = arc4random() % 3;
 
 		if (*buf != '\0')
-			strlcat(buf, df_dice_table[roll], BUFSIZE);
+			mowgli_strlcat(buf, df_dice_table[roll], BUFSIZE);
 		else
-			strlcpy(buf, df_dice_table[roll], BUFSIZE);
+			mowgli_strlcpy(buf, df_dice_table[roll], BUFSIZE);
 	}
 
 	gs_command_report(si, _("Result: %s"), buf);

@@ -204,7 +204,7 @@ parse_resvconf(void)
       *p = '\0';  /* take the first word */
 
     if (strcmp(opt, "domain") == 0)
-      strlcpy(irc_domain, arg, sizeof(irc_domain));
+      mowgli_strlcpy(irc_domain, arg, sizeof(irc_domain));
     else if (strcmp(opt, "nameserver") == 0)
       add_nameserver(arg);
   }

@@ -161,8 +161,8 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			/* Create memo */
 			newmemo->sent = CURRTIME;
 			newmemo->status = 0;
-			strlcpy(newmemo->sender,entity(si->smu)->name,NICKLEN);
-			strlcpy(newmemo->text,memo->text,MEMOLEN);
+			mowgli_strlcpy(newmemo->sender,entity(si->smu)->name,NICKLEN);
+			mowgli_strlcpy(newmemo->text,memo->text,MEMOLEN);
 			
 			/* Create node, add to their linked list of memos */
 			temp = mowgli_node_create();

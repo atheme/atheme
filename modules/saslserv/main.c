@@ -44,7 +44,7 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
+	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
 	
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
@@ -129,7 +129,7 @@ sasl_session_t *make_session(char *uid)
 
 	p = malloc(sizeof(sasl_session_t));
 	memset(p, 0, sizeof(sasl_session_t));
-	strlcpy(p->uid, uid, IDLEN);
+	mowgli_strlcpy(p->uid, uid, IDLEN);
 
 	n = mowgli_node_create();
 	mowgli_node_add(p, n, &sessions);

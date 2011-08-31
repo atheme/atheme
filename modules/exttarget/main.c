@@ -27,7 +27,7 @@ static void exttarget_find(hook_myentity_req_t *req)
 	if (*req->name != '$')
 		return;
 
-	strlcpy(buf, req->name, BUFSIZE);
+	mowgli_strlcpy(buf, req->name, BUFSIZE);
 
 	i = (buf + 1);
 	if ((j = strchr(buf, ':')) != NULL)

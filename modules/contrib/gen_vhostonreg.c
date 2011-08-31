@@ -78,8 +78,8 @@ static void user_add_host(myuser_t *mu)
 	}
 	else
 		newhost[i] = '\0';
-	strlcat(newhost, ".", sizeof newhost);
-	strlcat(newhost, me.hidehostsuffix, sizeof newhost);
+	mowgli_strlcat(newhost, ".", sizeof newhost);
+	mowgli_strlcat(newhost, me.hidehostsuffix, sizeof newhost);
 
 	metadata_add(mu, "private:usercloak", newhost);
 }

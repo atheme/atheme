@@ -258,8 +258,8 @@ int match_ips(const char *s1, const char *s2)
 	char *len;
 	int cidrlen;
 
-	strlcpy(ipmask, s1, sizeof ipmask);
-	strlcpy(ip, s2, sizeof ip);
+	mowgli_strlcpy(ipmask, s1, sizeof ipmask);
+	mowgli_strlcpy(ip, s2, sizeof ip);
 
 	len = strrchr(ipmask, '/');
 	if (len == NULL)
@@ -312,8 +312,8 @@ match_cidr(const char *s1, const char *s2)
 	char *len;
 	int cidrlen;
 
-	strlcpy(mask, s1, sizeof mask);
-	strlcpy(address, s2, sizeof address);
+	mowgli_strlcpy(mask, s1, sizeof mask);
+	mowgli_strlcpy(address, s2, sizeof address);
 
 	ipmask = strrchr(mask, '@');
 	if (ipmask == NULL)

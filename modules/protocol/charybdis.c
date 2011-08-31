@@ -201,7 +201,7 @@ static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int t
 		 * one day.
 		 *   --nenolod
 		 */
-		strlcpy(strippedmask, cb->mask, sizeof strippedmask);
+		mowgli_strlcpy(strippedmask, cb->mask, sizeof strippedmask);
 		p = strrchr(strippedmask, '$');
 		if (p != NULL && p != strippedmask)
 			*p = 0;

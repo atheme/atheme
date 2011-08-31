@@ -81,7 +81,7 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Please contact an Operator to get a vhost assigned to this nick."));
 		return;
 	}
-	strlcpy(buf, md->value, sizeof buf);
+	mowgli_strlcpy(buf, md->value, sizeof buf);
 	hs_sethost_all(si->smu, buf);
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);

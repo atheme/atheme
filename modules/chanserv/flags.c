@@ -70,14 +70,14 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 			r = strchr(q, ' ');
 			if (r != NULL && r < q)
 				break;
-			strlcpy(ss, q, sizeof ss);
+			mowgli_strlcpy(ss, q, sizeof ss);
 			if (r != NULL && r - q < (int)(sizeof ss - 1))
 			{
 				ss[r - q] = '\0';
 			}
 			if (level == flags_to_bitmask(ss, 0))
 			{
-				strlcpy(flagname, p, sizeof flagname);
+				mowgli_strlcpy(flagname, p, sizeof flagname);
 				s = strchr(flagname, '=');
 				if (s != NULL)
 					*s = '\0';

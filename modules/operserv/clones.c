@@ -432,7 +432,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		duration = 0;
-		strlcpy(rreason, reason, BUFSIZE);
+		mowgli_strlcpy(rreason, reason, BUFSIZE);
 	}
 	else if (expiry && !strcasecmp(expiry, "!T"))
 	{
@@ -485,17 +485,17 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		strlcpy(rreason, reason, BUFSIZE);
+		mowgli_strlcpy(rreason, reason, BUFSIZE);
 	}
 	else if (expiry)
 	{
 		duration = config_options.clone_time;
 
-		strlcpy(rreason, expiry, BUFSIZE);
+		mowgli_strlcpy(rreason, expiry, BUFSIZE);
 		if (reason)
 		{
-			strlcat(rreason, " ", BUFSIZE);
-			strlcat(rreason, reason, BUFSIZE);
+			mowgli_strlcat(rreason, " ", BUFSIZE);
+			mowgli_strlcat(rreason, reason, BUFSIZE);
 		}
 	}
 	else
@@ -713,13 +713,13 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 				}
 				else if (!strcasecmp(subcmd, "REASON"))
 				{
-					strlcpy(rreason, clonesstr, BUFSIZE);
+					mowgli_strlcpy(rreason, clonesstr, BUFSIZE);
 					if (reason)
 					{
-						strlcat(rreason, " ", BUFSIZE);
-						strlcat(rreason, reason, BUFSIZE);
+						mowgli_strlcat(rreason, " ", BUFSIZE);
+						mowgli_strlcat(rreason, reason, BUFSIZE);
 					}
-					/* strlcat(rreason,clonesstr,BUFSIZE); */
+					/* mowgli_strlcat(rreason,clonesstr,BUFSIZE); */
 					free(c->reason);
 					c->reason = sstrdup(rreason);
 					command_success_nodata(si, _("Clone exemption reason for host \2%s\2 changed to \2%s\2"), ip, c->reason);
@@ -821,7 +821,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	if (he == NULL)
 	{
 		he = mowgli_heap_alloc(hostentry_heap);
-		strlcpy(he->ip, u->ip, sizeof he->ip);
+		mowgli_strlcpy(he->ip, u->ip, sizeof he->ip);
 		mowgli_patricia_add(hostlist, he->ip, he);
 	}
 	mowgli_node_add(u, mowgli_node_create(), &he->clients);

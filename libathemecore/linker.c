@@ -50,16 +50,16 @@ mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 	char *buf = smalloc(strlen(path) + 20);
 	void *ret;
 	
-	strlcpy(buf, path, strlen(path) + 20);
+	mowgli_strlcpy(buf, path, strlen(path) + 20);
 
 	if (!strstr(buf, PLATFORM_SUFFIX))
-		strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
+		mowgli_strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
 
 	/* Don't try to open a file that doesn't exist. */
 	struct stat s;
 	if (0 != stat(buf, &s))
 	{
-		strlcpy(errbuf, strerror(errno), errlen);
+		mowgli_strlcpy(errbuf, strerror(errno), errlen);
 		return NULL;
 	}
 
@@ -68,7 +68,7 @@ mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 
 	if (!ret)
 	{
-		strlcpy(errbuf, dlerror(), errlen);
+		mowgli_strlcpy(errbuf, dlerror(), errlen);
 	}
 
 	return ret;

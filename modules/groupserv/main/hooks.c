@@ -128,9 +128,9 @@ static void user_info_hook(hook_user_req_t *req)
 		if ((ga->mg->flags & MG_PUBLIC) || (req->si->smu == req->mu || has_priv(req->si, PRIV_GROUP_AUSPEX)))
 		{
 			if (*buf != 0)
-				strlcat(buf, ", ", BUFSIZE);
+				mowgli_strlcat(buf, ", ", BUFSIZE);
 
-			strlcat(buf, entity(ga->mg)->name, BUFSIZE);
+			mowgli_strlcat(buf, entity(ga->mg)->name, BUFSIZE);
 		}
 	}
 

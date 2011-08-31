@@ -66,19 +66,19 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				i, memo->sender, strfbuf);
 		if (memo->status & MEMO_CHANNEL && *memo->text == '#')
 		{
-			strlcat(line, " ", sizeof line);
-			strlcat(line, _("To:"), sizeof line);
-			strlcat(line, " ", sizeof line);
-			strlcpy(chan, memo->text, sizeof chan);
+			mowgli_strlcat(line, " ", sizeof line);
+			mowgli_strlcat(line, _("To:"), sizeof line);
+			mowgli_strlcat(line, " ", sizeof line);
+			mowgli_strlcpy(chan, memo->text, sizeof chan);
 			p = strchr(chan, ' ');
 			if (p != NULL)
 				*p = '\0';
-			strlcat(line, chan, sizeof line);
+			mowgli_strlcat(line, chan, sizeof line);
 		}
 		if (!(memo->status & MEMO_READ))
 		{
-			strlcat(line, " ", sizeof line);
-			strlcat(line, _("[unread]"), sizeof line);
+			mowgli_strlcat(line, " ", sizeof line);
+			mowgli_strlcat(line, _("[unread]"), sizeof line);
 		}
 		command_success_nodata(si, "%s", line);
 	}

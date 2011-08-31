@@ -35,7 +35,7 @@ static void check_registration(hook_user_register_check_t *hdata)
     if (hdata->approved)
         return;
 
-    strlcpy(buf, hdata->email, sizeof buf);
+    mowgli_strlcpy(buf, hdata->email, sizeof buf);
     user = strtok(buf, "@");
     domain = strtok(NULL, "@");
     count = count_mx(domain);

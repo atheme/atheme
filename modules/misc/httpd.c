@@ -226,11 +226,11 @@ static void httpd_recvqhandler(connection_t *cptr)
 		p = strtok(buf, " ");
 		if (p == NULL)
 			return;
-		strlcpy(hd->method, p, sizeof hd->method);
+		mowgli_strlcpy(hd->method, p, sizeof hd->method);
 		p = strtok(NULL, " ");
 		if (p == NULL)
 			return;
-		strlcpy(hd->filename, p, sizeof hd->filename);
+		mowgli_strlcpy(hd->filename, p, sizeof hd->filename);
 		p = strtok(NULL, "");
 		if (p == NULL || !strcmp(p, "HTTP/1.0"))
 			hd->connection_close = true;

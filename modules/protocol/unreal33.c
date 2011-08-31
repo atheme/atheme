@@ -360,7 +360,7 @@ static void unreal33_xline_sts(const char *server, const char *realname, long du
 		return;
 	}
 
-	strlcpy(escapedreason, reason, sizeof escapedreason);
+	mowgli_strlcpy(escapedreason, reason, sizeof escapedreason);
 	for (p = escapedreason; *p != '\0'; p++)
 		if (*p == ' ')
 			*p = '_';
@@ -860,10 +860,10 @@ static void unreal33_user_mode(user_t *u, const char *changes)
 					 * vhost instead of their cloaked host. - Adam
 					 */
 					if (strcmp(u->vhost, u->chost))
-						strlcpy(u->chost, u->vhost, HOSTLEN);
+						mowgli_strlcpy(u->chost, u->vhost, HOSTLEN);
 				}
 				else if (dir == MTYPE_DEL)
-					strlcpy(u->vhost, u->host, HOSTLEN);
+					mowgli_strlcpy(u->vhost, u->host, HOSTLEN);
 				break;
 		}
 }
@@ -1016,7 +1016,7 @@ static void m_error(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_sethost(sourceinfo_t *si, int parc, char *parv[])
 {
-	strlcpy(si->su->vhost, parv[0], HOSTLEN);
+	mowgli_strlcpy(si->su->vhost, parv[0], HOSTLEN);
 }
 
 static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
@@ -1026,7 +1026,7 @@ static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	strlcpy(u->vhost, parv[1], HOSTLEN);
+	mowgli_strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
 static void m_motd(sourceinfo_t *si, int parc, char *parv[])

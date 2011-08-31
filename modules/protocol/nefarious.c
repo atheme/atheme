@@ -173,7 +173,7 @@ static bool nefarious_on_logout(user_t *u, const char *account)
 	{
 		slog(LG_DEBUG, "nefarious_on_logout(): removing +x vhost for %s: %s -> %s",
 				u->nick, u->vhost, u->host);
-		strlcpy(u->vhost, u->host, sizeof u->vhost);
+		mowgli_strlcpy(u->vhost, u->host, sizeof u->vhost);
 	}
 
 	return false;
@@ -324,8 +324,8 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 						p++;
 					}
 				}
-				strlcpy(newnick, prefix, sizeof newnick);
-				strlcat(newnick, userv[i], sizeof newnick);
+				mowgli_strlcpy(newnick, prefix, sizeof newnick);
+				mowgli_strlcat(newnick, userv[i], sizeof newnick);
 				chanuser_add(c, newnick);
 			}
 		}
@@ -373,11 +373,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				p = strchr(parv[5+i], '@');
 				if (p == NULL)
-					strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
+					mowgli_strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
 				else
 				{
-					strlcpy(u->vhost, p + 1, sizeof u->vhost);
-					strlcpy(u->user, parv[5+i], sizeof u->user);
+					mowgli_strlcpy(u->vhost, p + 1, sizeof u->vhost);
+					mowgli_strlcpy(u->user, parv[5+i], sizeof u->user);
 					p = strchr(u->user, '@');
 					if (p != NULL)
 						*p = '\0';
@@ -386,7 +386,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (strchr(parv[5], 'f'))
 			{
-				strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
+				mowgli_strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
 				i++;
 			}
 			if (strchr(parv[5], 'x'))
@@ -453,11 +453,11 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 				/* assume +h */
 				p = strchr(parv[2], '@');
 				if (p == NULL)
-					strlcpy(u->vhost, parv[2], sizeof u->vhost);
+					mowgli_strlcpy(u->vhost, parv[2], sizeof u->vhost);
 				else
 				{
-					strlcpy(u->vhost, p + 1, sizeof u->vhost);
-					strlcpy(u->user, parv[2], sizeof u->user);
+					mowgli_strlcpy(u->vhost, p + 1, sizeof u->vhost);
+					mowgli_strlcpy(u->user, parv[2], sizeof u->user);
 					p = strchr(u->user, '@');
 					if (p != NULL)
 						*p = '\0';
@@ -469,7 +469,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 				/* must be -h */
 				/* XXX we don't know the original ident */
 				slog(LG_DEBUG, "m_mode(): user %s turning off vhost", u->nick);
-				strlcpy(u->vhost, u->host, sizeof u->vhost);
+				mowgli_strlcpy(u->vhost, u->host, sizeof u->vhost);
 				/* revert to +x vhost if applicable */
 				check_hidehost(u);
 			}

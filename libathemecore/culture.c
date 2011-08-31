@@ -146,12 +146,12 @@ void translation_create(const char *str, const char *trans)
 	char buf[BUFSIZE];
 	translation_t *t = smalloc(sizeof(translation_t));
 
-	strlcpy(buf, str, BUFSIZE);
+	mowgli_strlcpy(buf, str, BUFSIZE);
 	replace(buf, BUFSIZE, "\\2", "\2");
 
 	t->name = sstrdup(buf);
 
-	strlcpy(buf, trans, BUFSIZE);
+	mowgli_strlcpy(buf, trans, BUFSIZE);
 	replace(buf, BUFSIZE, "\\2", "\2");
 
 	t->replacement = sstrdup(buf);
@@ -270,8 +270,8 @@ language_names(void)
 		if (lang->flags & LANG_VALID)
 		{
 			if (names[0] != '\0')
-				strlcat(names, " ", sizeof names);
-			strlcat(names, lang->name, sizeof names);
+				mowgli_strlcat(names, " ", sizeof names);
+			mowgli_strlcat(names, lang->name, sizeof names);
 		}
 	}
 	return names;

@@ -532,7 +532,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 		/* Make sure it's for us, not for a jupe -- jilles */
 		if (!irccasecmp(p + 1, me.name))
 		{
-			strlcpy(name2, target, sizeof name2);
+			mowgli_strlcpy(name2, target, sizeof name2);
 			p = strchr(name2, '@');
 			if (p != NULL)
 				*p = '\0';
@@ -660,7 +660,7 @@ void handle_topic(channel_t *c, const char *setter, time_t ts, const char *topic
 	/* setter can be a nick, nick!user@host or server.
 	 * strip off !user@host part if it's there
 	 * (do we really want this?) */
-	strlcpy(newsetter, setter, sizeof newsetter);
+	mowgli_strlcpy(newsetter, setter, sizeof newsetter);
 	p = strchr(newsetter, '!');
 	if (p != NULL)
 		*p = '\0';

@@ -150,12 +150,12 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (c->topic)
 	{
-		strlcpy(topicbuf, c->topic, BUFSIZE);
-		strlcat(topicbuf, " | ", BUFSIZE);
-		strlcat(topicbuf, topic, BUFSIZE);
+		mowgli_strlcpy(topicbuf, c->topic, BUFSIZE);
+		mowgli_strlcat(topicbuf, " | ", BUFSIZE);
+		mowgli_strlcat(topicbuf, topic, BUFSIZE);
 	}
 	else
-		strlcpy(topicbuf, topic, BUFSIZE);
+		mowgli_strlcpy(topicbuf, topic, BUFSIZE);
 
 	if (!validtopic(topicbuf))
 	{
@@ -225,12 +225,12 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (c->topic)
 	{
-		strlcpy(topicbuf, topic, BUFSIZE);
-		strlcat(topicbuf, " | ", BUFSIZE);
-		strlcat(topicbuf, c->topic, BUFSIZE);
+		mowgli_strlcpy(topicbuf, topic, BUFSIZE);
+		mowgli_strlcat(topicbuf, " | ", BUFSIZE);
+		mowgli_strlcat(topicbuf, c->topic, BUFSIZE);
 	}
 	else
-		strlcpy(topicbuf, topic, BUFSIZE);
+		mowgli_strlcpy(topicbuf, topic, BUFSIZE);
 
 	if (!validtopic(topicbuf))
 	{

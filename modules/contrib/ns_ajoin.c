@@ -37,7 +37,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2AJOIN LIST\2:");
 		if ((md = metadata_find(si->smu, "private:autojoin")))
 		{
-			strlcpy(buf, md->value, sizeof buf);
+			mowgli_strlcpy(buf, md->value, sizeof buf);
 
 			chan = strtok(buf, ",");
 			while (chan != NULL)
@@ -59,7 +59,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 
 		if ((md = metadata_find(si->smu, "private:autojoin")))
 		{
-			strlcpy(buf, md->value, sizeof buf);
+			mowgli_strlcpy(buf, md->value, sizeof buf);
 
 			chan = strtok(buf, ",");
 			while (chan != NULL)
@@ -79,7 +79,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 					return;
 			}
 
-			strlcpy(buf, md->value, sizeof buf);
+			mowgli_strlcpy(buf, md->value, sizeof buf);
 			strncat(buf, ",", sizeof buf);
 			strncat(buf, parv[1], sizeof buf);
 			metadata_delete(si->smu, "private:autojoin");
@@ -203,7 +203,7 @@ static void ajoin_on_identify(user_t *u)
 	if (!(md = metadata_find(mu, "private:autojoin")))
 		return;
 
-	strlcpy(buf, md->value, sizeof buf);
+	mowgli_strlcpy(buf, md->value, sizeof buf);
 	chan = strtok(buf, " ,");
 	while (chan != NULL)
 	{

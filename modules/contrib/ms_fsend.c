@@ -126,8 +126,8 @@ static void ms_cmd_fsend(sourceinfo_t *si, int parc, char *parv[])
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = 0;
-		strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
-		strlcpy(memo->text, "[FORCE] ", FMEMOLEN);
+		mowgli_strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
+		mowgli_strlcpy(memo->text, "[FORCE] ", FMEMOLEN);
 		strncat(memo->text, m, FMEMOLEN);
 	
 		/* Create a linked list node and add to memos */

@@ -1184,7 +1184,7 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (ircd->uses_uid && parc > 3 && atoi(parv[2]) >= 6)
-		strlcpy(ts6sid, parv[3], sizeof(ts6sid));
+		mowgli_strlcpy(ts6sid, parv[3], sizeof(ts6sid));
 	else
 	{
 		if (ircd->uses_uid)
@@ -1248,7 +1248,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		u = si->su;
 		if (u == NULL)
 			return;
-		strlcpy(u->host, parv[2], HOSTLEN);
+		mowgli_strlcpy(u->host, parv[2], HOSTLEN);
 	}
 	else if (!irccasecmp(parv[1], "CHGHOST"))
 	{
@@ -1257,7 +1257,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		u = user_find(parv[2]);
 		if (u == NULL)
 			return;
-		strlcpy(u->vhost, parv[3], HOSTLEN);
+		mowgli_strlcpy(u->vhost, parv[3], HOSTLEN);
 		slog(LG_DEBUG, "m_encap(): chghost %s -> %s", u->nick,
 				u->vhost);
 	}
@@ -1287,8 +1287,8 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		for (i = 3; i < parc; i++)
 		{
 			if (i > 3)
-				strlcat(buf, " ", sizeof buf);
-			strlcat(buf, parv[i], sizeof buf);
+				mowgli_strlcat(buf, " ", sizeof buf);
+			mowgli_strlcat(buf, parv[i], sizeof buf);
 		}
 		snprintf(dest, sizeof dest, "%s@%s", parv[2], me.name);
 		handle_message(si, dest, false, buf);
@@ -1320,10 +1320,10 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 	handle_nickchange(u); /* If they're logging out, this will bug them about identifying. Or something. */
 
 	/* USER */
-	strlcpy(u->user, parv[1], USERLEN);
+	mowgli_strlcpy(u->user, parv[1], USERLEN);
 
 	/* HOST */
-	strlcpy(u->vhost, parv[2], HOSTLEN);
+	mowgli_strlcpy(u->vhost, parv[2], HOSTLEN);
 
 	/* LOGIN */
 	if(*parv[4] == '*') /* explicitly unchanged */
@@ -1386,7 +1386,7 @@ static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	strlcpy(u->vhost, parv[1], HOSTLEN);
+	mowgli_strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
 static void m_motd(sourceinfo_t *si, int parc, char *parv[])
@@ -1421,7 +1421,7 @@ static void channel_drop(mychan_t *mc)
 static server_t *sid_find(char *name)
 {
 	char sid[4];
-	strlcpy(sid, name, 4);
+	mowgli_strlcpy(sid, name, 4);
 	return server_find(sid);
 }
 

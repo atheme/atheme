@@ -66,7 +66,7 @@ static void p10_parse(char *line)
 
 		/* copy the original line so we know what we crashed on */
 		memset((char *)&coreLine, '\0', BUFSIZE);
-		strlcpy(coreLine, line, BUFSIZE);
+		mowgli_strlcpy(coreLine, line, BUFSIZE);
 
 		slog(LG_RAWDATA, "-> %s", line);
 

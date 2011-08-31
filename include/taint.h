@@ -24,10 +24,10 @@ E mowgli_list_t taint_list;
 	{							\
 		taint_reason_t *tr;				\
 		tr = scalloc(sizeof(taint_reason_t), 1);	\
-		strlcpy(tr->condition, #cond, BUFSIZE);		\
-		strlcpy(tr->file, __FILE__, BUFSIZE);		\
+		mowgli_strlcpy(tr->condition, #cond, BUFSIZE);	\
+		mowgli_strlcpy(tr->file, __FILE__, BUFSIZE);	\
 		tr->line = __LINE__;				\
-		strlcpy(tr->buf, (reason), BUFSIZE);		\
+		mowgli_strlcpy(tr->buf, (reason), BUFSIZE);	\
 		mowgli_node_add(tr, &tr->node, &taint_list);	\
 		slog(LG_ERROR, "TAINTED: %s", (reason));	\
 		if (!config_options.allow_taint)		\

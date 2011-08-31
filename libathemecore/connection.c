@@ -98,7 +98,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	cptr->write_handler = write_handler;
 
 	/* set connection name */
-	strlcpy(cptr->name, name, HOSTLEN);
+	mowgli_strlcpy(cptr->name, name, HOSTLEN);
 
 	if (cptr->fd > -1)
 	{
@@ -568,7 +568,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	socket_setnonblocking(s);
 
-	strlcpy(buf, "incoming connection", BUFSIZE);
+	mowgli_strlcpy(buf, "incoming connection", BUFSIZE);
 	newptr = connection_add(buf, s, 0, read_handler, write_handler);
 	newptr->listener = cptr;
 	return newptr;
@@ -638,21 +638,21 @@ void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
 		if (c->listener != NULL)
 		{
 			snprintf(buf2, sizeof buf2, " listener %d", c->listener->fd);
-			strlcat(buf, buf2, sizeof buf);
+			mowgli_strlcat(buf, buf2, sizeof buf);
 		}
 		if (c->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
 		{
-			strlcat(buf, " status", sizeof buf);
+			mowgli_strlcat(buf, " status", sizeof buf);
 			if (c->flags & CF_CONNECTING)
-				strlcat(buf, " connecting", sizeof buf);
+				mowgli_strlcat(buf, " connecting", sizeof buf);
 			if (c->flags & CF_DEAD)
-				strlcat(buf, " dead", sizeof buf);
+				mowgli_strlcat(buf, " dead", sizeof buf);
 			if (c->flags & CF_NONEWLINE)
-				strlcat(buf, " nonewline", sizeof buf);
+				mowgli_strlcat(buf, " nonewline", sizeof buf);
 			if (c->flags & CF_SEND_DEAD)
-				strlcat(buf, " send_dead", sizeof buf);
+				mowgli_strlcat(buf, " send_dead", sizeof buf);
 			else if (c->flags & CF_SEND_EOF)
-				strlcat(buf, " send_eof", sizeof buf);
+				mowgli_strlcat(buf, " send_eof", sizeof buf);
 		}
 		stats_cb(buf, privdata);
 	}

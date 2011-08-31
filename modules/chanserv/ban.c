@@ -81,8 +81,8 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 
 		hostbuf[0] = '\0';
 
-		strlcat(hostbuf, "*!*@", BUFSIZE);
-		strlcat(hostbuf, tu->vhost, BUFSIZE);
+		mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+		mowgli_strlcat(hostbuf, tu->vhost, BUFSIZE);
 
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');

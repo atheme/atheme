@@ -140,7 +140,7 @@ static module_t *do_script_load(const char *filename)
 	 * setting, without control passing from this function.
 	 */
 	perl_script_module_t *m = mowgli_heap_alloc(perl_script_module_heap);
-	strlcpy(m->filename, filename, sizeof(m->filename));
+	mowgli_strlcpy(m->filename, filename, sizeof(m->filename));
 
 	snprintf(perl_error, sizeof(perl_error),  "Unknown error attempting to load perl script %s",
 			filename);
@@ -161,7 +161,7 @@ static module_t *do_script_load(const char *filename)
 
 	if (SvTRUE(ERRSV))
 	{
-		strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
+		mowgli_strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
 		goto fail;
 	}
 	if (1 != perl_return_count)
@@ -195,7 +195,7 @@ static module_t *do_script_load(const char *filename)
 		goto fail;
 	}
 
-	strlcpy(m->mod.name, SvPV_nolen(*name_var), sizeof(m->mod.name));
+	mowgli_strlcpy(m->mod.name, SvPV_nolen(*name_var), sizeof(m->mod.name));
 
 	/* ... and dependency list.
 	 */
@@ -280,7 +280,7 @@ static bool do_script_unload(const char *filename)
 	if (SvTRUE(ERRSV))
 	{
 		retval = false;
-		strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
+		mowgli_strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
 		POPs;
 	}
 
@@ -314,7 +314,7 @@ static bool do_script_list(sourceinfo_t *si)
 	if (SvTRUE(ERRSV))
 	{
 		retval = false;
-		strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
+		mowgli_strlcpy(perl_error, SvPV_nolen(ERRSV), sizeof(perl_error));
 		POPs;
 	}
 

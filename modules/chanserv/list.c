@@ -129,8 +129,8 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	*buf = 0;
 	for (i = 0; i < parc; i++)
 	{
-		strlcat(buf, parv[i], BUFSIZE);
-		strlcat(buf, " ", BUFSIZE);
+		mowgli_strlcat(buf, parv[i], BUFSIZE);
+		mowgli_strlcat(buf, " ", BUFSIZE);
 	}
 }
 
@@ -226,19 +226,19 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		*buf = '\0';
 
 		if (metadata_find(mc, "private:mark:setter")) {
-			strlcat(buf, "\2[marked]\2", BUFSIZE);
+			mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
 		}
 		if (metadata_find(mc, "private:close:closer")) {
 			if (*buf)
-				strlcat(buf, " ", BUFSIZE);
+				mowgli_strlcat(buf, " ", BUFSIZE);
 
-			strlcat(buf, "\2[closed]\2", BUFSIZE);
+			mowgli_strlcat(buf, "\2[closed]\2", BUFSIZE);
 		}
 		if (mc->flags & MC_HOLD) {
 			if (*buf)
-				strlcat(buf, " ", BUFSIZE);
+				mowgli_strlcat(buf, " ", BUFSIZE);
 
-			strlcat(buf, "\2[held]\2", BUFSIZE);
+			mowgli_strlcat(buf, "\2[held]\2", BUFSIZE);
 		}
 
 		command_success_nodata(si, "- %s (%s) %s", mc->name, mychan_founder_names(mc), buf);

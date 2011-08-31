@@ -93,7 +93,7 @@ void conf_report_warning(config_entry_t *ce, const char *fmt, ...)
 	va_end(va);
 
 	if (ce->ce_prevlevel == NULL)
-		strlcpy(name, ce->ce_varname, sizeof name);
+		mowgli_strlcpy(name, ce->ce_varname, sizeof name);
 	else if (ce->ce_prevlevel->ce_prevlevel == NULL)
 		snprintf(name, sizeof name, "%s::%s",
 				ce->ce_prevlevel->ce_varname, ce->ce_varname);

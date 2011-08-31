@@ -876,7 +876,7 @@ static void m_svhost(sourceinfo_t *si, int parc, char *parv[])
 	u = user_find(parv[0]);
 	if (u == NULL)
 		return;
-	strlcpy(u->vhost, parv[1], HOSTLEN);
+	mowgli_strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
 static void nick_group(hook_user_req_t *hdata)

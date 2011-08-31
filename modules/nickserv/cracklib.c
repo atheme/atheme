@@ -53,8 +53,8 @@ cracklib_hook(hook_user_register_check_t *hdata)
 	const char *cracklib_reason;
 	char dict[BUFSIZE];
 
-	strlcpy(dict, nicksvs.cracklib_dict, BUFSIZE);
-	strlcat(dict, ".pwd", BUFSIZE);
+	mowgli_strlcpy(dict, nicksvs.cracklib_dict, BUFSIZE);
+	mowgli_strlcat(dict, ".pwd", BUFSIZE);
 
 	return_if_fail(hdata != NULL);
 	return_if_fail(hdata->si != NULL);

@@ -43,7 +43,7 @@ static void set_genre(sourceinfo_t *si, mychan_t *mc, char *value)
 	char copy[512];
 	char *sp = NULL, *t = NULL;
 
-	strlcpy(copy, value, sizeof(copy));
+	mowgli_strlcpy(copy, value, sizeof(copy));
 	t = strtok_r(copy, " ", &sp);
 
 	while(t) {
@@ -63,7 +63,7 @@ static void set_period(sourceinfo_t *si, mychan_t *mc, char *value)
 	char copy[512];
 	char *sp = NULL, *t = NULL;
 
-	strlcpy(copy, value, sizeof(copy));
+	mowgli_strlcpy(copy, value, sizeof(copy));
 	t = strtok_r(copy, " ", &sp);
 
 	while(t) {
@@ -105,7 +105,7 @@ static void set_system(sourceinfo_t *si, mychan_t *mc, char *value)
 	char copy[512];
 	char *sp = NULL, *t = NULL;
 
-	strlcpy(copy, value, sizeof(copy));
+	mowgli_strlcpy(copy, value, sizeof(copy));
 	t = strtok_r(copy, " ", &sp);
 	while (t) {
 		if (inlist(t, system_keys) < 0) {

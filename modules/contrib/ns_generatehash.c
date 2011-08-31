@@ -44,7 +44,7 @@ static void ns_cmd_generatehash(sourceinfo_t *si, int parc, char *parv[])
 
 	if (crypto_module_loaded)
 	{
-		strlcpy(hash, crypt_string(pass, gen_salt()), PASSLEN);
+		mowgli_strlcpy(hash, crypt_string(pass, gen_salt()), PASSLEN);
 		command_success_string(si, hash, "Hash is: %s", hash);
 	}
 	else

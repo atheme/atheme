@@ -517,7 +517,7 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 	for (roll = 0; roll < x; ++roll)
 	{
 		snprintf(result, 32, "%d ", dice = (1 + (arc4random() % y)));
-		strlcat(buffer, result, sizeof(buffer));
+		mowgli_strlcat(buffer, result, sizeof(buffer));
 		total += dice;
 	}
 
@@ -526,7 +526,7 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 	else
 	{
 		snprintf(result, 32, " <Total: %g(%c%u) = ", total, op, z);
-		strlcat(buffer, result, sizeof(buffer));
+		mowgli_strlcat(buffer, result, sizeof(buffer));
 		switch (op)
 		{
 		  case '+':
@@ -546,7 +546,7 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 		}
 		snprintf(result, 32, "%g>", total);
 	}
-	strlcat(buffer, result, sizeof(buffer));
+	mowgli_strlcat(buffer, result, sizeof(buffer));
 
 	gs_command_report(si, "%s", buffer);
 }

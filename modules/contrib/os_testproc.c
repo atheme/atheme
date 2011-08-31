@@ -122,7 +122,7 @@ static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[])
 			procdata.pip = connection_add("testproc pipe", pipes[0], 0, recvq_put, NULL);
 			procdata.pip->recvq_handler = testproc_recvqhandler;
 			procdata.pip->close_handler = testproc_closehandler;
-			strlcpy(procdata.dest, CLIENT_NAME(si->su), sizeof procdata.dest);
+			mowgli_strlcpy(procdata.dest, CLIENT_NAME(si->su), sizeof procdata.dest);
 			break;
 	}
 }

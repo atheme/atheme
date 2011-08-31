@@ -572,19 +572,19 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 			me.netname, me.adminemail);
 	snprintf(to, sizeof to, "%s <%s>", entity(mu)->name, email);
 
-	strlcpy(subject, me.netname, sizeof subject);
-	strlcat(subject, " ", sizeof subject);
+	mowgli_strlcpy(subject, me.netname, sizeof subject);
+	mowgli_strlcat(subject, " ", sizeof subject);
 	if (type == EMAIL_REGISTER)
 		if (nicksvs.no_nick_ownership)
-			strlcat(subject, "Account Registration", sizeof subject);
+			mowgli_strlcat(subject, "Account Registration", sizeof subject);
 		else
-			strlcat(subject, "Nickname Registration", sizeof subject);
+			mowgli_strlcat(subject, "Nickname Registration", sizeof subject);
 	else if (type == EMAIL_SENDPASS || type == EMAIL_SETPASS)
-		strlcat(subject, "Password Retrieval", sizeof subject);
+		mowgli_strlcat(subject, "Password Retrieval", sizeof subject);
 	else if (type == EMAIL_SETEMAIL)
-		strlcat(subject, "Change Email Confirmation", sizeof subject);
+		mowgli_strlcat(subject, "Change Email Confirmation", sizeof subject);
 	else if (type == EMAIL_MEMO)
-		strlcat(subject, "New memo", sizeof subject);
+		mowgli_strlcat(subject, "New memo", sizeof subject);
 	
 	/* now set up the email */
 	if (pipe(pipfds) < 0)

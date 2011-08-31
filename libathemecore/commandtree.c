@@ -86,11 +86,11 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 		if (c->access)
 		{
-			strlcat(accessbuf, c->access, BUFSIZE);
-			strlcat(accessbuf, " ", BUFSIZE);
+			mowgli_strlcat(accessbuf, c->access, BUFSIZE);
+			mowgli_strlcat(accessbuf, " ", BUFSIZE);
 		}
 
-		strlcat(accessbuf, cmdaccess, BUFSIZE);
+		mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
 
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, cmdaccess);
 	}
@@ -216,7 +216,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 	}
 
 	command_success_nodata(si, " ");
-	strlcpy(buf, translation_get(_("\2Other commands:\2 ")), sizeof buf);
+	mowgli_strlcpy(buf, translation_get(_("\2Other commands:\2 ")), sizeof buf);
 	l = strlen(buf);
 	lv = 0;
 	for (p = buf; *p != '\0'; p++)
@@ -233,7 +233,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 		if (!string_in_list(maincmds, c->name) && (has_priv(si, c->access) || (c->access != NULL && !strcasecmp(c->access, AC_AUTHENTICATED) && si->smu != NULL)))
 		{
 			if (strlen(buf) > l)
-				strlcat(buf, ", ", sizeof buf);
+				mowgli_strlcat(buf, ", ", sizeof buf);
 			if (strlen(buf) > 55)
 			{
 				command_success_nodata(si, "%s", buf);
@@ -244,7 +244,7 @@ void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const 
 				buf[0] = ' ';
 				lv = l;
 			}
-			strlcat(buf, c->name, sizeof buf);
+			mowgli_strlcat(buf, c->name, sizeof buf);
 		}
 	}
 	if (strlen(buf) > l)

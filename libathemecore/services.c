@@ -617,15 +617,15 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	u->flags &= ~UF_SOPER_PASS;
 
 	/* keep track of login address for users */
-	strlcpy(lau, u->user, BUFSIZE);
-	strlcat(lau, "@", BUFSIZE);
-	strlcat(lau, u->vhost, BUFSIZE);
+	mowgli_strlcpy(lau, u->user, BUFSIZE);
+	mowgli_strlcat(lau, "@", BUFSIZE);
+	mowgli_strlcat(lau, u->vhost, BUFSIZE);
 	metadata_add(mu, "private:host:vhost", lau);
 
 	/* and for opers */
-	strlcpy(lao, u->user, BUFSIZE);
-	strlcat(lao, "@", BUFSIZE);
-	strlcat(lao, u->host, BUFSIZE);
+	mowgli_strlcpy(lao, u->user, BUFSIZE);
+	mowgli_strlcat(lao, "@", BUFSIZE);
+	mowgli_strlcat(lao, u->host, BUFSIZE);
 	metadata_add(mu, "private:host:actual", lao);
 
 	/* check for failed attempts and let them know */

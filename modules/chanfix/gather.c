@@ -40,8 +40,8 @@ chanfix_oprecord_t *chanfix_oprecord_create(chanfix_channel_t *chan, user_t *u)
 	{
 		orec->entity = entity(u->myuser);
 
-		strlcpy(orec->user, u->user, sizeof orec->user);
-		strlcpy(orec->host, u->vhost, sizeof orec->host);
+		mowgli_strlcpy(orec->user, u->user, sizeof orec->user);
+		mowgli_strlcpy(orec->host, u->vhost, sizeof orec->host);
 	}
 
 	mowgli_node_add(orec, &orec->node, &chan->oprecords);
@@ -344,8 +344,8 @@ static void db_h_cfop(database_handle_t *db, const char *type)
 	orec = chanfix_oprecord_create(chan, NULL);
 
 	orec->entity = myentity_find(entity);
-	strlcpy(orec->user, user, sizeof orec->user);
-	strlcpy(orec->host, host, sizeof orec->host);
+	mowgli_strlcpy(orec->user, user, sizeof orec->user);
+	mowgli_strlcpy(orec->host, host, sizeof orec->host);
 
 	orec->firstseen = firstseen;
 	orec->lastevent = lastevent;

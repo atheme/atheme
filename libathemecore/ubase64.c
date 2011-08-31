@@ -111,7 +111,7 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 					break;
 				if (j != 0)
 					ipstring[j++] = ':';
-				strlcpy(buf, b64 + i, 4);
+				mowgli_strlcpy(buf, b64 + i, 4);
 				i += strlen(buf);
 				j += sprintf(ipstring + j, "%x", (uint16_t)base64touint(buf));
 			}

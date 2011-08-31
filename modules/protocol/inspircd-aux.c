@@ -127,7 +127,7 @@ static int has_protocol = 0;
 static server_t *sid_find(char *name)
 {
 	char sid[4];
-	strlcpy(sid, name, 4);
+	mowgli_strlcpy(sid, name, 4);
 	return server_find(sid);
 }
 
@@ -520,7 +520,7 @@ static void inspircd_jupe(const char *server, const char *reason)
 	sts(":%s SQUIT %s :%s", me.numeric, server, reason);
 	/* dirty dirty make up some sid */
 	if (sid[0] == '\0')
-		strlcpy(sid, me.numeric, sizeof sid);
+		mowgli_strlcpy(sid, me.numeric, sizeof sid);
 	do
 	{
 		i = 2;
@@ -845,7 +845,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 				else
 				{
 					/* else, we do care about their prefixes.. add '@%w00t' to the chan */
-					strlcpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick) - nlen);
+					mowgli_strlcpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick) - nlen);
 					chanuser_add(c, prefixandnick);
 				}
 
@@ -986,7 +986,7 @@ static void inspircd_user_mode(user_t *u, const char *modes)
 					 * vhost instead of their cloaked host. - Adam
 					 */
 					if (strcmp(u->vhost, u->chost))
-						strlcpy(u->chost, u->vhost, HOSTLEN);
+						mowgli_strlcpy(u->chost, u->vhost, HOSTLEN);
 				}
 				break;
 		}
@@ -1221,7 +1221,7 @@ static void m_opertype(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_fhost(sourceinfo_t *si, int parc, char *parv[])
 {
-	strlcpy(si->su->vhost, parv[0], HOSTLEN);
+	mowgli_strlcpy(si->su->vhost, parv[0], HOSTLEN);
 }
 
 static void m_encap(sourceinfo_t *si, int parc, char *parv[])

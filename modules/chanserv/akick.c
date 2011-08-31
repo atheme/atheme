@@ -205,7 +205,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			treason = strtok(NULL, "");
 
 			if (treason)
-				strlcpy(reason, treason, BUFSIZE);
+				mowgli_strlcpy(reason, treason, BUFSIZE);
 			else
 				reason[0] = 0;
 		}
@@ -215,7 +215,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			treason = strtok(NULL, "");
 
 			if (treason)
-				strlcpy(reason, treason, BUFSIZE);
+				mowgli_strlcpy(reason, treason, BUFSIZE);
 			else
 				reason[0] = 0;
 
@@ -252,13 +252,13 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			duration = chansvs.akick_time;
-			strlcpy(reason, token, BUFSIZE);
+			mowgli_strlcpy(reason, token, BUFSIZE);
 			treason = strtok(NULL, "");
 
 			if (treason)
 			{
-				strlcat(reason, " ", BUFSIZE);
-				strlcat(reason, treason, BUFSIZE);
+				mowgli_strlcat(reason, " ", BUFSIZE);
+				mowgli_strlcat(reason, treason, BUFSIZE);
 			}
 		}
 	} 
@@ -623,7 +623,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
 						     expires_on > 0 || ca->setter != NULL ? ", " : "", ago);
 
-			strlcat(buf, "]", sizeof buf);
+			mowgli_strlcat(buf, "]", sizeof buf);
 
 			command_success_nodata(si, "%s", buf);
 		}
@@ -706,7 +706,7 @@ static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *ho
 	timeout->chan = mc;
 	timeout->expiration = expireson;
 
-	strlcpy(timeout->host, host, sizeof timeout->host);
+	mowgli_strlcpy(timeout->host, host, sizeof timeout->host);
 
 	MOWGLI_ITER_FOREACH_PREV(n, akickdel_list.tail)
 	{

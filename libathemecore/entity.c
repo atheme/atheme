@@ -17,7 +17,7 @@ void init_entities(void)
 
 void myentity_set_last_uid(const char *last_id)
 {
-	strlcpy(last_entity_uid, last_id, sizeof last_entity_uid);
+	mowgli_strlcpy(last_entity_uid, last_id, sizeof last_entity_uid);
 	last_entity_uid[IDLEN-1] = '\0';
 }
 
@@ -64,7 +64,7 @@ void myentity_put(myentity_t *mt)
 {
 	/* If the entity doesn't have an ID yet, allocate one */
 	if (mt->id[0] == '\0')
-		strlcpy(mt->id, myentity_alloc_uid(), sizeof mt->id);
+		mowgli_strlcpy(mt->id, myentity_alloc_uid(), sizeof mt->id);
 
 	mowgli_patricia_add(entities, mt->name, mt);
 	mowgli_patricia_add(entities_by_id, mt->id, mt);

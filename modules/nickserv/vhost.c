@@ -42,7 +42,7 @@ static void do_sethost(user_t *u, char *host)
 {
 	if (!strcmp(u->vhost, host))
 		return;
-	strlcpy(u->vhost, host, HOSTLEN);
+	mowgli_strlcpy(u->vhost, host, HOSTLEN);
 	user_sethost(nicksvs.me->me, u, u->vhost);
 }
 

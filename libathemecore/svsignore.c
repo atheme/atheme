@@ -85,11 +85,11 @@ svsignore_t *svsignore_find(user_t *source)
 		return NULL;
 
         *host = '\0';
-        strlcpy(host, source->nick, BUFSIZE);
-        strlcat(host, "!", BUFSIZE);
-        strlcat(host, source->user, BUFSIZE);
-        strlcat(host, "@", BUFSIZE);
-        strlcat(host, source->host, BUFSIZE);
+        mowgli_strlcpy(host, source->nick, BUFSIZE);
+        mowgli_strlcat(host, "!", BUFSIZE);
+        mowgli_strlcat(host, source->user, BUFSIZE);
+        mowgli_strlcat(host, "@", BUFSIZE);
+        mowgli_strlcat(host, source->host, BUFSIZE);
                 
         MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
         {

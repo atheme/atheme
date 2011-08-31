@@ -59,7 +59,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		s++;
 	if (*s == '!')
 		return !evaluate_condition(si, s + 1);
-	strlcpy(word, s, sizeof word);
+	mowgli_strlcpy(word, s, sizeof word);
 	p = strchr(word, ' ');
 	if (p != NULL)
 	{
@@ -117,7 +117,7 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 				help_file = fopen(c->help.path, "r");
 			else
 			{
-				strlcpy(subname, c->help.path, sizeof subname);
+				mowgli_strlcpy(subname, c->help.path, sizeof subname);
 				if (nicksvs.no_nick_ownership && !strncmp(subname, "nickserv/", 9))
 					memcpy(subname, "userserv", 8);
 				if (si->smu != NULL)

@@ -437,7 +437,7 @@ static void do_query_name(dns_query_t *query, const char *name, struct reslist *
 {
 	char host_name[IRCD_RES_HOSTLEN + 1];
 
-	strlcpy(host_name, name, IRCD_RES_HOSTLEN + 1);
+	mowgli_strlcpy(host_name, name, IRCD_RES_HOSTLEN + 1);
 	add_local_domain(host_name, IRCD_RES_HOSTLEN);
 
 	if (request == NULL)
@@ -447,7 +447,7 @@ static void do_query_name(dns_query_t *query, const char *name, struct reslist *
 		strcpy(request->name, host_name);
 	}
 
-	strlcpy(request->queryname, host_name, sizeof(request->queryname));
+	mowgli_strlcpy(request->queryname, host_name, sizeof(request->queryname));
 	request->type = type;
 	query_name(request);
 }
@@ -708,7 +708,7 @@ static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, c
 			  else if (n == 0)
 				  return (0);	/* no more answers left */
 
-			  strlcpy(request->name, hostbuf, IRCD_RES_HOSTLEN + 1);
+			  mowgli_strlcpy(request->name, hostbuf, IRCD_RES_HOSTLEN + 1);
 
 			  return (1);
 			  break;
@@ -888,7 +888,7 @@ void report_dns_servers(sourceinfo_t *si)
 		char ipaddr[128];
 		if (!rb_inet_ntop_sock((struct sockaddr *)&(irc_nsaddr_list[i]),
 				ipaddr, sizeof ipaddr))
-			strlcpy(ipaddr, "?", sizeof ipaddr);
+			mowgli_strlcpy(ipaddr, "?", sizeof ipaddr);
 		sendto_one_numeric(source_p, RPL_STATSDEBUG,
 				"A %s %d", ipaddr, ns_timeout_count[i]);
 #endif

@@ -388,9 +388,9 @@ const char *xflag_tostr(unsigned int flags)
 			continue;
 
 		if (*buf != '\0')
-			strlcat(buf, ", ", sizeof buf);
+			mowgli_strlcat(buf, ", ", sizeof buf);
 
-		strlcat(buf, chanacs_flags[i].name, sizeof buf);
+		mowgli_strlcat(buf, chanacs_flags[i].name, sizeof buf);
 	}
 
 	return buf;

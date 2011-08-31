@@ -329,7 +329,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* make a copy of the original for debugging */
-	strlcpy(orig, parv[parc - 1], BUFSIZE);
+	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
 
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
@@ -360,12 +360,12 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		if (floodcheck(si->su, si->service->me))
 			return;
 		/* construct <channel> <args> */
-		strlcpy(newargs, parv[parc - 2], sizeof newargs);
+		mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
 		args = strtok(NULL, "");
 		if (args != NULL)
 		{
-			strlcat(newargs, " ", sizeof newargs);
-			strlcat(newargs, args, sizeof newargs);
+			mowgli_strlcat(newargs, " ", sizeof newargs);
+			mowgli_strlcat(newargs, args, sizeof newargs);
 		}
 		/* let the command know it's called as fantasy cmd */
 		si->c = mc->chan;
@@ -380,13 +380,13 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	{
 		char *pptr;
 
-		strlcpy(newargs, parv[parc - 2], sizeof newargs);
+		mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
 		if ((pptr = strchr(cmd, ' ')) != NULL)
 		{
 			*pptr = '\0';
 
-			strlcat(newargs, " ", sizeof newargs);
-			strlcat(newargs, ++pptr, sizeof newargs);
+			mowgli_strlcat(newargs, " ", sizeof newargs);
+			mowgli_strlcat(newargs, ++pptr, sizeof newargs);
 		}
 
 		if (command_find(sptr->commands, cmd) == NULL)

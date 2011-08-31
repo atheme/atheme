@@ -124,8 +124,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			MOWGLI_ITER_FOREACH(n, mu->logins.head)
 			{
 				if (lau[0] != '\0')
-					strlcat(lau, ", ", sizeof lau);
-				strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
+					mowgli_strlcat(lau, ", ", sizeof lau);
+				mowgli_strlcat(lau, ((user_t *)n->data)->nick, sizeof lau);
 			}
 			command_fail(si, fault_toomany, _("Logged in nicks are: %s"), lau);
 			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (too many logins)", entity(mu)->name);

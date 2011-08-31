@@ -155,19 +155,19 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	if (uid != NULL)
 	{
-		strlcpy(u->uid, uid, IDLEN);
+		mowgli_strlcpy(u->uid, uid, IDLEN);
 		mowgli_patricia_add(uidlist, u->uid, u);
 	}
 
-	strlcpy(u->nick, nick, NICKLEN);
-	strlcpy(u->user, user, USERLEN);
-	strlcpy(u->host, host, HOSTLEN);
-	strlcpy(u->gecos, gecos, GECOSLEN);
-	strlcpy(u->chost, vhost ? vhost : host, HOSTLEN);
-	strlcpy(u->vhost, vhost ? vhost : host, HOSTLEN);
+	mowgli_strlcpy(u->nick, nick, NICKLEN);
+	mowgli_strlcpy(u->user, user, USERLEN);
+	mowgli_strlcpy(u->host, host, HOSTLEN);
+	mowgli_strlcpy(u->gecos, gecos, GECOSLEN);
+	mowgli_strlcpy(u->chost, vhost ? vhost : host, HOSTLEN);
+	mowgli_strlcpy(u->vhost, vhost ? vhost : host, HOSTLEN);
 
 	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
-		strlcpy(u->ip, ip, HOSTIPLEN);
+		mowgli_strlcpy(u->ip, ip, HOSTIPLEN);
 
 	u->server = server;
 	u->server->users++;
@@ -214,7 +214,7 @@ void user_delete(user_t *u, const char *comment)
 	if (u->flags & UF_DOENFORCE)
 	{
 		doenforcer = true;
-		strlcpy(oldnick, u->nick, sizeof oldnick);
+		mowgli_strlcpy(oldnick, u->nick, sizeof oldnick);
 		u->flags &= ~UF_DOENFORCE;
 	}
 
@@ -358,7 +358,7 @@ void user_changeuid(user_t *u, const char *uid)
 	if (*u->uid)
 		mowgli_patricia_delete(uidlist, u->uid);
 
-	strlcpy(u->uid, uid ? uid : "", IDLEN);
+	mowgli_strlcpy(u->uid, uid ? uid : "", IDLEN);
 
 	if (*u->uid)
 		mowgli_patricia_add(uidlist, u->uid, u);
@@ -392,7 +392,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 	return_val_if_fail(u != NULL, false);
 	return_val_if_fail(nick != NULL, false);
 
-	strlcpy(oldnick, u->nick, sizeof oldnick);
+	mowgli_strlcpy(oldnick, u->nick, sizeof oldnick);
 	u2 = user_find_named(nick);
 	if (u->flags & UF_DOENFORCE && u2 != u)
 	{
@@ -479,7 +479,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 		mn->lastseen = CURRTIME;
 	mowgli_patricia_delete(userlist, u->nick);
 
-	strlcpy(u->nick, nick, NICKLEN);
+	mowgli_strlcpy(u->nick, nick, NICKLEN);
 	u->ts = ts;
 
 	mowgli_patricia_add(userlist, u->nick, u);

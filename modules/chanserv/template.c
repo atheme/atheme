@@ -221,7 +221,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		if (md != NULL)
 		{
 			p = md->value;
-			strlcpy(newstr, p, sizeof newstr);
+			mowgli_strlcpy(newstr, p, sizeof newstr);
 			while (p != NULL)
 			{
 				while (*p == ' ')
@@ -232,7 +232,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				r = strchr(q, ' ');
 				if (r != NULL && r < q)
 					break;
-				strlcpy(ss, q, sizeof ss);
+				mowgli_strlcpy(ss, q, sizeof ss);
 				if (r != NULL && r - q < (int)(sizeof ss - 1))
 				{
 					ss[r - q] = '\0';
@@ -263,12 +263,12 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 						if (p == md->value)
 							/* removing first entry,
 							 * zap the space after it */
-							strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
+							mowgli_strlcpy(newstr, r != NULL ? r + 1 : "", sizeof newstr);
 						else
 						{
 							/* otherwise, zap the space before it */
 							p--;
-							strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
+							mowgli_strlcpy(newstr + (p - md->value), r != NULL ? r : "", sizeof newstr - (p - md->value));
 						}
 					}
 					else
@@ -386,7 +386,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 			}
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, target, flagstr, changes);
-			strlcpy(flagstr2, flagstr, sizeof flagstr2);
+			mowgli_strlcpy(flagstr2, flagstr, sizeof flagstr2);
 			if (changes > 0)
 				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags));
 			command_success_nodata(si, _("%d access entries updated accordingly."), changes);

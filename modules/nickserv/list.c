@@ -130,8 +130,8 @@ static void build_criteriastr(char *buf, int parc, char *parv[])
 	*buf = 0;
 	for (i = 0; i < parc; i++)
 	{
-		strlcat(buf, parv[i], BUFSIZE);
-		strlcat(buf, " ", BUFSIZE);
+		mowgli_strlcat(buf, parv[i], BUFSIZE);
+		mowgli_strlcat(buf, " ", BUFSIZE);
 	}
 }
 
@@ -145,33 +145,33 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 	*buf = '\0';
 	if (metadata_find(mu, "private:freeze:freezer")) {
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "\2[frozen]\2", BUFSIZE);
+		mowgli_strlcat(buf, "\2[frozen]\2", BUFSIZE);
 	}
 	if (metadata_find(mu, "private:mark:setter")) {
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "\2[marked]\2", BUFSIZE);
+		mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
 	}
 	if (metadata_find(mu, "private:restrict:setter")) {
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "\2[restricted]\2", BUFSIZE);
+		mowgli_strlcat(buf, "\2[restricted]\2", BUFSIZE);
 	}
 	if (mu->flags & MU_HOLD) {
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "\2[held]\2", BUFSIZE);
+		mowgli_strlcat(buf, "\2[held]\2", BUFSIZE);
 	}
 	if (mu->flags & MU_WAITAUTH) {
 		if (*buf)
-			strlcat(buf, " ", BUFSIZE);
+			mowgli_strlcat(buf, " ", BUFSIZE);
 
-		strlcat(buf, "\2[unverified]\2", BUFSIZE);
+		mowgli_strlcat(buf, "\2[unverified]\2", BUFSIZE);
 	}
 
 	if (mn == NULL || !irccasecmp(mn->nick, entity(mu)->name))
@@ -230,7 +230,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (pattern != NULL)
 	{
-		strlcpy(pat, pattern, sizeof pat);
+		mowgli_strlcpy(pat, pattern, sizeof pat);
 		p = strrchr(pat, ' ');
 		if (p == NULL)
 			p = strrchr(pat, '!');

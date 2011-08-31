@@ -176,8 +176,8 @@ static void on_channel_message(hook_cmessage_data_t *data)
 
 					hostbuf[0] = '\0';
 
-					strlcat(hostbuf, "*!*@", BUFSIZE);
-					strlcat(hostbuf, data->u->vhost, BUFSIZE);
+					mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+					mowgli_strlcat(hostbuf, data->u->vhost, BUFSIZE);
 
 					modestack_mode_param(chansvs.nick, data->c, MTYPE_ADD, 'b', hostbuf);
 					chanban_add(data->c, hostbuf, 'b');
@@ -195,8 +195,8 @@ static void on_channel_message(hook_cmessage_data_t *data)
 
 					hostbuf[0] = '\0';
 
-					strlcat(hostbuf, "*!*@", BUFSIZE);
-					strlcat(hostbuf, data->u->vhost, BUFSIZE);
+					mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+					mowgli_strlcat(hostbuf, data->u->vhost, BUFSIZE);
 
 					modestack_mode_param(chansvs.nick, data->c, MTYPE_ADD, 'q', hostbuf);
 					chanban_add(data->c, hostbuf, 'q');
@@ -208,8 +208,8 @@ static void on_channel_message(hook_cmessage_data_t *data)
 
 					hostbuf[0] = '\0';
 
-					strlcat(hostbuf, "*!*@", BUFSIZE);
-					strlcat(hostbuf, data->u->vhost, BUFSIZE);
+					mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+					mowgli_strlcat(hostbuf, data->u->vhost, BUFSIZE);
 
 					modestack_mode_param(chansvs.nick, data->c, MTYPE_ADD, 'b', hostbuf);
 					chanban_add(data->c, hostbuf, 'b');
