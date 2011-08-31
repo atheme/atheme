@@ -94,6 +94,51 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return iter.res;
 }
 
+static void do_list(sourceinfo_t *si, mychan_t *mc)
+{
+	chanacs_t *ca;
+	mowgli_node_t *n;
+	bool operoverride = false;
+	unsigned int i = 1;
+
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	{
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
+			operoverride = true;
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+	}
+
+	command_success_nodata(si, _("Entry Nickname/Host          Flags"));
+	command_success_nodata(si, "----- ---------------------- -----");
+
+	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
+	{
+		ca = n->data;
+		str1 = get_template_name(mc, ca->level);
+		str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
+
+		if (str1 != NULL)
+			command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), str1,
+				str2);
+		else
+			command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level),
+				str2);
+		i++;
+	}
+
+	command_success_nodata(si, "----- ---------------------- -----");
+	command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
+
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", mc->name);
+	else
+		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", mc->name);
+}
+
 /* FLAGS <channel> [user] [flags] */
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -128,43 +173,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		unsigned int i = 1;
-
-		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
-		{
-			if (has_priv(si, PRIV_CHAN_AUSPEX))
-				operoverride = true;
-			else
-			{
-				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-				return;
-			}
-		}
-		
-		command_success_nodata(si, _("Entry Nickname/Host          Flags"));
-		command_success_nodata(si, "----- ---------------------- -----");
-
-		MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
-		{
-			ca = n->data;
-			str1 = get_template_name(mc, ca->level);
-			str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
-			if (str1 != NULL)
-				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), str1,
-					str2);
-			else
-				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level),
-					str2);
-			i++;
-		}
-
-		command_success_nodata(si, "----- ---------------------- -----");
-		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
-
-		if (operoverride)
-			logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", mc->name);
-		else
-			logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", mc->name);
+		do_list(si, mc);
 	}
 	else
 	{
