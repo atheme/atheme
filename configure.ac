@@ -556,7 +556,7 @@ RPATH=""
 
 AC_SUBST(RPATH)
 
-PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.9.50],
+PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.9.90],
 	[MOWGLI_SOURCE="system"], [
 	MOWGLI_SOURCE="internal"
 	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
