@@ -188,7 +188,6 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	 * FLAGS #channel LIST
 	 * FLAGS #channel MODIFY user flagspec
 	 * FLAGS #channel CLEAR
-	 *    (XXX: CLEAR is not supported yet.  honestly not sure if it's worth it.  we'll see.)
 	 *
 	 * obviously they do not support the atheme syntax, because lets face it, they like to
 	 * 'innovate.'  this is, of course, hilarious for obvious reasons.  never mind that we
@@ -212,6 +211,32 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		do_list(si, mc);
 		free(target);
 
+		return;
+	}
+	else if (!strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
+	{
+		free(target);
+
+		if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
+		{
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			return;
+		}
+
+		mowgli_node_t *tn;
+
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
+		{
+			ca = n->data;
+
+			if (ca->level & CA_FOUNDER)
+				continue;
+
+			object_unref(ca);
+		}
+
+		logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
+		command_success_nodata(si, _("Cleared flags in \2%s\2."), mc->name);
 		return;
 	}
 	else if (!strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
