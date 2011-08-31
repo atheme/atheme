@@ -145,11 +145,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
-	bool operoverride = false;
 	char *channel = parv[0];
 	char *target = sstrdup(parv[1]);
 	char *flagstr = parv[2];
-	const char *str1, *str2;
+	const char *str1;
 	unsigned int addflags, removeflags, restrictflags;
 	mychan_t *mc;
 
