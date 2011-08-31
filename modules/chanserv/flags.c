@@ -132,7 +132,7 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 	}
 
 	command_success_nodata(si, "----- ---------------------- -----");
-	command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
+	command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), mc->name);
 
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "FLAGS: \2%s\2 (oper override)", mc->name);
