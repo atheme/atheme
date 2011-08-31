@@ -81,64 +81,6 @@ char *sstrndup(const char *s, int len)
 	return t;
 }
 
-/* stringbuffer operations */
-void string_append(string_t *this, const char *src, size_t n)
-{
-	if (this->size - this->pos <= n)
-	{
-		int size = MAX(this->size * 2, this->pos + n + 8);
-		char *new = (char *)realloc(this->str, size);
-		this->size = size;
-		this->str = new;
-	}
-
-	memcpy(this->str + this->pos, src, n);
-	this->pos += n;
-	this->str[this->pos] = 0;
-}
-
-void string_append_char(string_t *this, const char c)
-{
-	if (this->size - this->pos <= 1)
-	{
-		int size = MAX(this->size * 2, this->pos + 9);
-		char *new = (char *)realloc(this->str, size);
-		this->size = size;
-		this->str = new;
-	}
-
-	this->str[this->pos++] = c;
-	this->str[this->pos] = 0;
-}
-
-void string_reset(string_t *this)
-{
-	this->str[0] = this->pos = 0;
-}
-
-void string_delete(string_t *this)
-{
-	free (this->str);
-	free (this);
-}
-
-string_t *new_string(size_t size)
-{
-	string_t *this = (string_t *)smalloc(sizeof(string_t));
-
-	this->size = size;
-	this->pos  = 0;
-	this->str  = (char *)smalloc(size);
-
-	/* Function pointers */
-	this->append      = &string_append;
-	this->append_char = &string_append_char;
-	this->reset       = &string_reset;
-	this->delete      = &string_delete;
-
-	return this;
-}
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
