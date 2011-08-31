@@ -81,8 +81,16 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 void * object_ref(void *object)
 {
 	return_val_if_fail(object != NULL, NULL);
-	/* XXX refcount == 0 really should not be possible here
-	 * but in fact it happens for modules/exttarget/.
+
+	/*
+	 * refcount == 0 really should not be possible here
+	 * but in fact it happens for modules/exttarget/.  --jilles
+	 *
+	 * actually... refcount == 0 means the object is initially
+	 * unowned, which is intentional for the exttarget code, the
+	 * exttarget virtual entity object is built by a 'factory' so
+	 * we want to sink the reference to make it an unowned object.
+	 *   --nenolod
 	 */
 	return_val_if_fail(object(object)->refcount >= 0, object);
 
