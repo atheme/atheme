@@ -9,13 +9,6 @@
 #ifndef __CLAROSTRING
 #define __CLAROSTRING
 
-#ifndef HAVE_STRLCAT
-E size_t strlcat(char *dest, const char *src, size_t count);
-#endif
-#ifndef HAVE_STRLCPY
-E size_t strlcpy(char *dest, const char *src, size_t count);
-#endif
-
 E void strip(char *line);
 
 #endif
