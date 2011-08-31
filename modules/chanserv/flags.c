@@ -172,7 +172,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!target)
+	if (!target || (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL))
 	{
 		do_list(si, mc);
 	}
