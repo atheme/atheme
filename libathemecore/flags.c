@@ -194,8 +194,9 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 
 unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 {
-	int bitmask = (flags ? flags : 0x0);
+	unsigned int bitmask = (flags ? flags : 0x0);
 	int status = FLAGS_ADD;
+	unsigned int flag;
 
 	while (*string)
 	{
@@ -222,12 +223,12 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned char)*string].value)
+			  if ((flag = chanacs_flags[(unsigned char) *string].value) != 0x0)
 			  {
 				  if (status == FLAGS_ADD)
-					  bitmask |= chanacs_flags[(unsigned char)*string].value;
+					  bitmask |= flag;
 				  else if (status == FLAGS_DEL)
-					  bitmask &= ~chanacs_flags[(unsigned char)*string].value;
+					  bitmask &= ~flag;
 			  }
 		}
 
