@@ -99,6 +99,7 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 	chanacs_t *ca;
 	mowgli_node_t *n;
 	bool operoverride = false;
+	const char *str1, *str2;
 	unsigned int i = 1;
 
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
