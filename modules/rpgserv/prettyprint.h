@@ -70,7 +70,7 @@ static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **k
 
 	*ppbuf = '\0';
 
-	strlcpy(parsebuf, md->value, BUFSIZE);
+	mowgli_strlcpy(parsebuf, md->value, BUFSIZE);
 
 	keyword = strtok_r(parsebuf, " ", &pos);
 	if (keyword == NULL)
@@ -85,9 +85,9 @@ static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **k
 			if (!strcasecmp(keyword, keys[i]))
 			{
 				if (*ppbuf != '\0')
-					strlcat(ppbuf, ", ", BUFSIZE);
+					mowgli_strlcat(ppbuf, ", ", BUFSIZE);
 
-				strlcat(ppbuf, values[i], BUFSIZE);
+				mowgli_strlcat(ppbuf, values[i], BUFSIZE);
 			}
 		}
 	}

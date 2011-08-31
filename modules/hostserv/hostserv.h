@@ -31,7 +31,7 @@ static inline void do_sethost(user_t *u, char *host)
                 return;
 
 	svs = service_find("hostserv");
-        strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
+        mowgli_strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
         user_sethost(svs->me, u, u->vhost);
 }
 
