@@ -133,6 +133,8 @@ unsigned int flags_find_slot(void)
  * -- jilles */
 void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags)
 {
+	unsigned int flag;
+	bool shortflag = false;
 	int status = FLAGS_ADD;
 
 	*addflags = *removeflags = 0;
@@ -168,19 +170,39 @@ void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned in
 			  break;
 
 		  default:
-			  if (chanacs_flags[(unsigned char)*string].value)
+			  if (!shortflag && (flag = xflag_lookup(string)) != 0x0)
 			  {
 				  if (status == FLAGS_ADD)
 				  {
-					  *addflags |= chanacs_flags[(unsigned char)*string].value;
-					  *removeflags &= ~chanacs_flags[(unsigned char)*string].value;
+					  *addflags |= flag;
+					  *removeflags &= ~flag;
 				  }
 				  else if (status == FLAGS_DEL)
 				  {
-					  *addflags &= ~chanacs_flags[(unsigned char)*string].value;
-					  *removeflags |= chanacs_flags[(unsigned char)*string].value;
+					  *addflags &= ~flag;
+					  *removeflags |= flag;
+				  }
+
+				  *addflags &= ca_all;
+				  *removeflags &= ca_all;
+
+				  return;
+			  }
+			  else if ((flag = chanacs_flags[(unsigned char)*string].value) != 0x0)
+			  {
+				  if (status == FLAGS_ADD)
+				  {
+					  *addflags |= flag;
+					  *removeflags &= ~flag;
+				  }
+				  else if (status == FLAGS_DEL)
+				  {
+					  *addflags &= ~flag;
+					  *removeflags |= flag;
 				  }
 			  }
+
+			  shortflag = true;
 		}
 
 		string++;
