@@ -39,7 +39,7 @@ struct xmlrpc_settings {
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
-static void xmlrpc_append_char_encode(string_t *s, const char *s1);
+static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1);
 
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
 static int addXMLCommand(XMLRPCCmd * xml);
@@ -315,7 +315,7 @@ void xmlrpc_generic_error(int code, const char *string)
 {
 	char buf[1024];
 	const char *ss;
-	string_t *s = new_string(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
 	char *s2;
 	int len;
 
@@ -387,7 +387,7 @@ void xmlrpc_send(int argc, ...)
 	int len;
 	char buf[1024];
 	const char *ss;
-	string_t *s = new_string(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
 	char *s2;
 	char *header;
 
@@ -448,7 +448,7 @@ void xmlrpc_send_string(const char *value)
 	int len;
 	char buf[1024];
 	const char *ss;
-	string_t *s = new_string(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
 	char *s2;
 	char *header;
 
@@ -736,7 +736,7 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	long unsigned int i;
 	unsigned char c;
 	char buf2[15];
-	string_t *s = new_string(XMLRPC_BUFSIZE);
+	mowgli_string_t *s = mowgli_string_create(XMLRPC_BUFSIZE);
 	*buf2 = '\0';
 	*outbuffer = '\0';
 
@@ -778,7 +778,7 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	memcpy(outbuffer, s->str, XMLRPC_BUFSIZE);
 }
 
-static void xmlrpc_append_char_encode(string_t *s, const char *s1)
+static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
 {
 	long unsigned int i;
 	unsigned char c;
