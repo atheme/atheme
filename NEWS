@@ -135,6 +135,8 @@ code
   modules.
 - entities now have unique IDs.  unique IDs may be referenced in all XMLRPC and
   IRC commands.
+- strlcpy()/strlcat() have been replaced with mowgli implementations.
+- atheme.string has been replaced with mowgli.string.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
