@@ -25,7 +25,6 @@ SRCS = \
 	mixin_noprotect.c	\
 	nefarious.c	\
 	p10-generic.c	\
-	plexus.c	\
 	ratbox.c	\
 	shadowircd.c	\
 	solidircd.c	\
