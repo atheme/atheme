@@ -134,10 +134,10 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp("ADD", action))
 	{
-		if (!email)
+		if (!email || !reason)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "BADMAIL");
-			command_fail(si, fault_needmoreparams, _("Syntax: BADMAIL ADD <email> [reason]"));
+			command_fail(si, fault_needmoreparams, _("Syntax: BADMAIL ADD <email> <reason>"));
 			return;
 		}
 
@@ -163,17 +163,9 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 		l->mail = sstrdup(email);
 		l->mail_ts = CURRTIME;;
 		l->creator = sstrdup(get_source_name(si));
+		l->reason = sstrdup(reason);
 
-		if (reason)
-		{
-			l->reason = sstrdup(reason);
-			logcommand(si, CMDLOG_ADMIN, "BADMAIL:ADD: \2%s\2 (Reason: \2%s\2)", email, reason);
-		}
-		else
-		{
-			l->reason = _("None");
-			logcommand(si, CMDLOG_ADMIN, "BADMAIL:ADD: \2%s\2", email);
-		}
+		logcommand(si, CMDLOG_ADMIN, "BADMAIL:ADD: \2%s\2 (Reason: \2%s\2)", email, reason);
 
 		n = mowgli_node_create();
 		mowgli_node_add(l, n, &ns_maillist);
