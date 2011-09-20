@@ -630,6 +630,8 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("Syntax: CLONES SETEXEMPT DEFAULT <ALLOWED | WARN> <limit>"));
 			return;
 		}
+
+		logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT:DEFAULT: \2%s\2 \2%d\2 allowed, \2%d\2 warn", ip, clones_allowed, clones_warn);
 	}
 	else if (ip) {
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
@@ -733,6 +735,8 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 				}
 				return;
 			}
+
+			logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
 		}
 
 		command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), ip);
