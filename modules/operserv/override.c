@@ -29,8 +29,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_override);
 }
 
-#warning needs to be reworked for restartable commands
-
 typedef struct {
 	sourceinfo_t si;
 	sourceinfo_t *parent_si;
@@ -110,6 +108,12 @@ struct sourceinfo_vtable override_vtable = {
 	override_get_storage_oper_name,
 };
 
+static void override_sourceinfo_dispose(cooked_sourceinfo_t *o_si)
+{
+	object_unref(o_si->parent_si);
+	free(o_si);
+}
+
 static int text_to_parv(char *text, int maxparc, char **parv)
 {
 	int count = 0;
@@ -150,7 +154,7 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 {
-	cooked_sourceinfo_t o_si;
+	cooked_sourceinfo_t *o_si;
 	myuser_t *mu = NULL;
 	service_t *svs;
 	service_t *memosvs;
@@ -225,13 +229,15 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	memset(&o_si, '\0', sizeof(cooked_sourceinfo_t));
-	o_si.si.su = NULL;
-	o_si.si.smu = mu;
-	o_si.si.service = svs;
-	o_si.si.v = &override_vtable;
-	o_si.si.connection = NULL;
-	o_si.parent_si = si;
+	o_si = smalloc(sizeof(cooked_sourceinfo_t));
+	o_si->si.su = NULL;
+	o_si->si.smu = mu;
+	o_si->si.service = svs;
+	o_si->si.v = &override_vtable;
+	o_si->si.connection = NULL;
+	o_si->parent_si = object_ref(si);
+
+	object_init(object(o_si), NULL, (destructor_t) override_sourceinfo_dispose);
 
 	logcommand(si, CMDLOG_ADMIN, "OVERRIDE: (account: \2%s\2) (service: \2%s\2) (command: \2%s\2) [parameters: \2%s\2]", parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
@@ -240,6 +246,8 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	for (i = newparc; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)
 		newparv[i] = NULL;
 	command_exec(svs, (sourceinfo_t *) &o_si, cmd, newparc, newparv);
+
+	object_unref(o_si);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
