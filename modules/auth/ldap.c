@@ -193,6 +193,8 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 				return true;
 			}
 		}
+
+		ldap_msgfree(message);
 	}
 
 	slog(LG_INFO, "ldap_auth_user(%s): ldap auth bind failed: %s", entity(mu)->name, ldap_err2string(res));
