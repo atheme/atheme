@@ -353,9 +353,11 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
-		hook_call_channel_acl_change(ca);
+		ca->level = 0;
 
+		hook_call_channel_acl_change(ca);
 		object_unref(ca);
+
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, target);
 		command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), target, leveldesc, mc->name);
@@ -367,6 +369,8 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 		return;
 	}
+
+	ca->level = 0;
 
 	hook_call_channel_acl_change(ca);
 	object_unref(ca);
