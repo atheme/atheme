@@ -5,10 +5,9 @@ All bugfixes from the 6.0 branch of Atheme are also in 7.0.
 ircd protocol
 - charybdis: Add support for locking of modes provided by
   extensions modules.
-- unreal33: New protocol module for the upcoming UnrealIRCd 3.3.
 - unreal: Add support for changets.
 - inspircd: Add support for locking the +H channel mode.
-- ithildin, bircd and ptlink protocol modules removed.
+- ithildin, bircd, plexus and ptlink protocol modules removed.
 - inspircd: Users are now warned when they attempt to link on a client
   port instead of a server port.
 chanserv
