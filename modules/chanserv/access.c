@@ -149,7 +149,7 @@ static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS <#channel> <command> [parameters]"));
 		return;
 	}
-	
+
 	if (parv[0][0] == '#')
 		chan = parv[0], cmd = parv[1];
 	else if (parv[1][0] == '#')
@@ -189,7 +189,7 @@ static void cs_cmd_role(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> <command> [parameters]"));
 		return;
 	}
-	
+
 	if (parv[0][0] == '#')
 		chan = parv[0], cmd = parv[1];
 	else if (parv[1][0] == '#')
@@ -331,7 +331,7 @@ static mowgli_list_t *build_template_list(mychan_t *mc)
 	/* reverse the list so that we go from highest flags to lowest. */
 	mowgli_list_reverse(l);
 
-	return l;	
+	return l;
 }
 
 static void free_template_list(mowgli_list_t *l)
@@ -1014,14 +1014,14 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
-	
+
 	if (!role)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE ADD|SET");
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> ADD|SET <role> [flags]"));
 		return;
 	}
-	
+
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -1094,14 +1094,14 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
-	
+
 	if (!role)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE ADD|SET");
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> ADD|SET <role> [flags]"));
 		return;
 	}
-	
+
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -1173,14 +1173,14 @@ static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
-	
+
 	if (!role)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLE DEL");
 		command_fail(si, fault_needmoreparams, _("Syntax: ROLE <#channel> DEL <role>"));
 		return;
 	}
-	
+
 	if (!chanacs_source_has_flag(mc, si, CA_FLAGS))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
