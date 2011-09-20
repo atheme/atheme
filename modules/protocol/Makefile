@@ -30,8 +30,7 @@ SRCS = \
 	solidircd.c	\
 	ts6-generic.c	\
 	undernet.c	\
-	unreal.c	\
-	unreal33.c
+	unreal.c
 
 include ../../extra.mk
 include ../../buildsys.mk
