@@ -197,6 +197,7 @@ void connection_close(connection_t *cptr)
 		cptr->close_handler(cptr);
 
 	/* close the fd */
+	shutdown(cptr->fd, SHUT_RDWR);
 	close(cptr->fd);
 
 	mowgli_node_delete(nptr, &connection_list);
