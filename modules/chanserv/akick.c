@@ -351,7 +351,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), uname, mc->name);
 		}
 
-		hook_call_channel_acl_change(ca2);
+		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca2 });
 		chanacs_close(ca2);
 
 		return;
@@ -410,7 +410,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mt->name, mc->name);
 		}
 
-		hook_call_channel_acl_change(ca2);
+		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca2 });
 		chanacs_close(ca2);
 		return;
 	}
@@ -470,7 +470,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		chanacs_modify_simple(ca, 0, CA_AKICK);
-		hook_call_channel_acl_change(ca);
+		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 		chanacs_close(ca);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
@@ -515,7 +515,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	chanacs_modify_simple(ca, 0, CA_AKICK);
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mt->name, mc->name);

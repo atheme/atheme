@@ -198,17 +198,20 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 	}
 }
 
-static void sync_channel_acl_change(chanacs_t *ca)
+static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 {
 	mychan_t *mc;
 
-	mc = ca->mychan;
+	return_if_fail(hookdata != NULL);
+	return_if_fail(hookdata->ca != NULL);
+
+	mc = hookdata->ca->mychan;
 	return_if_fail(mc != NULL);
 
 	if (MC_NOSYNC & mc->flags)
 		return;
 
-	do_channel_sync(mc, ca);
+	do_channel_sync(mc, hookdata->ca);
 }
 
 static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])

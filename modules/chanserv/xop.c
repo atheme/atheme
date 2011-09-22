@@ -247,7 +247,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
-		hook_call_channel_acl_change(ca);
+		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 		chanacs_close(ca);
 
 		if (!isnew)
@@ -313,7 +313,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	chanacs_close(ca);
 
 	if (!isnew)
@@ -355,7 +355,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 
 		ca->level = 0;
 
-		hook_call_channel_acl_change(ca);
+		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 		object_unref(ca);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
@@ -372,7 +372,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 
 	ca->level = 0;
 
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	object_unref(ca);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);

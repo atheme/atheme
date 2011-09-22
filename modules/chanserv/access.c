@@ -500,7 +500,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 			changes++;
 			chanacs_modify_simple(ca, flags, ~flags);
 
-			hook_call_channel_acl_change(ca);
+			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 			chanacs_close(ca);
 		}
 	}
@@ -771,7 +771,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	role = get_template_name(mc, ca->level);
 
 	ca->level = 0;
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was removed from the \2%s\2 role in \2%s\2."), target, role, channel);
@@ -856,7 +856,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 	ca->level = new_level;
 
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
@@ -942,7 +942,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 
 	ca->level = new_level;
 
-	hook_call_channel_acl_change(ca);
+	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 now has the \2%s\2 role in \2%s\2."), target, role, channel);

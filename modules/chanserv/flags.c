@@ -405,7 +405,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			hook_call_channel_acl_change(ca);
+			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 			chanacs_close(ca);
 		}
 		else
@@ -429,7 +429,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			hook_call_channel_acl_change(ca);
+			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
 			chanacs_close(ca);
 		}
 
