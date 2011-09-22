@@ -279,6 +279,7 @@ typedef struct {
 typedef struct {
 	chanacs_t *ca;
 	sourceinfo_t *si;
+	myentity_t *parent;
 	unsigned int oldlevel;
 	unsigned int newlevel;
 	int approved;
