@@ -277,6 +277,14 @@ typedef struct {
 } hook_channel_req_t;
 
 typedef struct {
+	chanacs_t *ca;
+	sourceinfo_t *si;
+	unsigned int oldlevel;
+	unsigned int newlevel;
+	int approved;
+} hook_channel_acl_req_t;
+
+typedef struct {
 	mychan_t *mc;
 	myuser_t *mu;
 } hook_channel_succession_req_t;
