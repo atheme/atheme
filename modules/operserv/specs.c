@@ -32,7 +32,7 @@ void _moddeinit(module_unload_intent_t intent)
 struct
 {
 	const char *priv;
-	const char *npriv, *cpriv, *gpriv, *opriv;
+	const char *nickserv_priv, *chanserv_priv, *general_priv, *operserv_priv;
 } privnames[] =
 {
 	/* NickServ/UserServ */
@@ -75,7 +75,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	operclass_t *cl = NULL;
 	const char *targettype = parv[0];
 	const char *target = parv[1];
-	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
+	char nickserv_privs[BUFSIZE], chanserv_privs[BUFSIZE], general_privs[BUFSIZE], operserv_privs[BUFSIZE];
 	int i;
 
 	if (!has_any_privs(si))
@@ -103,7 +103,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (!has_any_privs_user(tu))
 			{
-				command_success_nodata(si, _("\2%s\2 is unprivileged."), tu->nick);
+				command_success_nodata(si, _("\2%s\2 is unickserv_privileged."), tu->nick);
 				return;
 			}
 			if (is_internal_client(tu))
@@ -131,34 +131,34 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 		tu = si->su;
 
 	i = 0;
-	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
+	*nickserv_privs = *chanserv_privs = *general_privs = *operserv_privs = '\0';
 	while (privnames[i].priv != NULL)
 	{
 		if (targettype == NULL ? has_priv(si, privnames[i].priv) : (tu ? has_priv_user(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv)))
 		{
-			if (privnames[i].npriv != NULL)
+			if (privnames[i].nickserv_priv != NULL)
 			{
-				if (*nprivs)
-					strcat(nprivs, ", ");
-				strcat(nprivs, privnames[i].npriv);
+				if (*nickserv_privs)
+					mowgli_strlcat(nickserv_privs, ", ", sizeof nickserv_privs);
+				mowgli_strlcat(nickserv_privs, privnames[i].nickserv_priv, sizeof nickserv_privs);
 			}
-			if (privnames[i].cpriv != NULL)
+			if (privnames[i].chanserv_priv != NULL)
 			{
-				if (*cprivs)
-					strcat(cprivs, ", ");
-				strcat(cprivs, privnames[i].cpriv);
+				if (*chanserv_privs)
+					mowgli_strlcat(chanserv_privs, ", ", sizeof chanserv_privs);
+				mowgli_strlcat(chanserv_privs, privnames[i].chanserv_priv, sizeof chanserv_privs);
 			}
-			if (privnames[i].gpriv != NULL)
+			if (privnames[i].general_priv != NULL)
 			{
-				if (*gprivs)
-					strcat(gprivs, ", ");
-				strcat(gprivs, privnames[i].gpriv);
+				if (*general_privs)
+					mowgli_strlcat(general_privs, ", ", sizeof general_privs);
+				mowgli_strlcat(general_privs, privnames[i].general_priv, sizeof general_privs);
 			}
-			if (privnames[i].opriv != NULL)
+			if (privnames[i].operserv_priv != NULL)
 			{
-				if (*oprivs)
-					strcat(oprivs, ", ");
-				strcat(oprivs, privnames[i].opriv);
+				if (*operserv_privs)
+					mowgli_strlcat(operserv_privs, ", ", sizeof operserv_privs);
+				mowgli_strlcat(operserv_privs, privnames[i].operserv_priv, sizeof operserv_privs);
 			}
 		}
 		i++;
@@ -171,14 +171,14 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Privileges for oper class \2%s\2:"), cl->name);
 
-	if (*nprivs)
-		command_success_nodata(si, _("\2Nicknames/accounts\2: %s"), nprivs);
-	if (*cprivs)
-		command_success_nodata(si, _("\2Channels\2: %s"), cprivs);
-	if (*gprivs)
-		command_success_nodata(si, _("\2General\2: %s"), gprivs);
-	if (*oprivs)
-		command_success_nodata(si, _("\2OperServ\2: %s"), oprivs);
+	if (*nickserv_privs)
+		command_success_nodata(si, _("\2Nicknames/accounts\2: %s"), nickserv_privs);
+	if (*chanserv_privs)
+		command_success_nodata(si, _("\2Channels\2: %s"), chanserv_privs);
+	if (*general_privs)
+		command_success_nodata(si, _("\2General\2: %s"), general_privs);
+	if (*operserv_privs)
+		command_success_nodata(si, _("\2OperServ\2: %s"), operserv_privs);
 	command_success_nodata(si, _("End of privileges"));
 
 	if (targettype == NULL)
