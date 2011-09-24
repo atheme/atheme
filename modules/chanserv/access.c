@@ -412,6 +412,7 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 	mowgli_node_t *n, *tn;
 	chanacs_t *ca;
 	int changes = 0;
+	hook_channel_acl_req_t req;
 
 	flagstr = bitmask_to_flags2(flags, 0);
 	oldflags = get_template_flags(mc, role);
@@ -497,10 +498,15 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 			if (oldflags & CA_FOUNDER)
 				continue;
 
+			req.ca = ca;
+			req.oldlevel = ca->level;
+
 			changes++;
 			chanacs_modify_simple(ca, flags, ~flags);
 
-			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+			req.newlevel = ca->level;
+
+			hook_call_channel_acl_change(&req);
 			chanacs_close(ca);
 		}
 	}
@@ -714,6 +720,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
+	hook_channel_acl_req_t req;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role;
@@ -772,8 +779,11 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 
 	role = get_template_name(mc, ca->level);
 
-	ca->level = 0;
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+	req.ca = ca;
+	req.oldlevel = ca->level;
+	req.newlevel = ca->level = 0;
+
+	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was removed from the \2%s\2 role in \2%s\2."), target, role, channel);
@@ -794,6 +804,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
+	hook_channel_acl_req_t req;
 	unsigned int new_level;
 	const char *channel = parv[0];
 	const char *target = parv[1];
@@ -849,6 +860,9 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	req.ca = ca;
+	req.oldlevel = ca->level;
+
 	new_level = get_template_flags(mc, role);
 	if (new_level == 0)
 	{
@@ -856,9 +870,9 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
-	ca->level = new_level;
+	req.newlevel = ca->level = new_level;
 
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
