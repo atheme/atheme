@@ -732,10 +732,12 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	mt = myentity_find_ext(target);
+
 	/* allow a user to resign their access even without FLAGS access. this is
 	 * consistent with the other commands. --nenolod
 	 */
-	if (!chanacs_source_has_flag(mc, si, CA_FLAGS) && si->smu != NULL && !strcasecmp(target, entity(si->smu)->name))
+	if (!chanacs_source_has_flag(mc, si, CA_FLAGS) && entity(si->smu) != mt)
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
@@ -745,7 +747,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 		ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 	else
 	{
-		if (!(mt = myentity_find_ext(target)))
+		if (mt == NULL)
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 			return;
