@@ -136,7 +136,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> <ADD|DEL|LIST> [parameters]"));
 		return;
 	}
-	
+
 	if (parv[0][0] == '#')
 		chan = parv[0], cmd = parv[1];
 	else if (parv[1][0] == '#')
@@ -163,6 +163,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;
+	hook_channel_acl_req_t req;
 	chanacs_t *ca, *ca2;
 	char *chan = parv[0];
 	long duration;
@@ -189,7 +190,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -261,7 +262,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 				mowgli_strlcat(reason, treason, BUFSIZE);
 			}
 		}
-	} 
+	}
 	else
 	{ /* No reason and no duration */
 		duration = chansvs.akick_time;
@@ -315,7 +316,13 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_close(ca2);
 			return;
 		}
+
+		req.ca = ca2;
+		req.oldlevel = ca2->level;
+
 		chanacs_modify_simple(ca2, CA_AKICK, 0);
+
+		req.newlevel = ca2->level;
 
 		if (reason[0])
 			metadata_add(ca2, "reason", reason);
@@ -351,7 +358,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added to the AKICK list for \2%s\2."), uname, mc->name);
 		}
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca2 });
+		hook_call_channel_acl_change(&req);
 		chanacs_close(ca2);
 
 		return;
@@ -375,7 +382,13 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_close(ca2);
 			return;
 		}
+
+		req.ca = ca2;
+		req.oldlevel = ca2->level;
+
 		chanacs_modify_simple(ca2, CA_AKICK, 0);
+
+		req.newlevel = ca2->level;
 
 		if (reason[0])
 			metadata_add(ca2, "reason", reason);
@@ -410,7 +423,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "AKICK:ADD: \2%s\2 on \2%s\2", mt->name, mc->name);
 		}
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca2 });
+		hook_call_channel_acl_change(&req);
 		chanacs_close(ca2);
 		return;
 	}
@@ -420,6 +433,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	mychan_t *mc;
+	hook_channel_acl_req_t req;
 	chanacs_t *ca;
 	mowgli_node_t *n, *tn;
 	char *chan = parv[0];
@@ -431,14 +445,14 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> DEL <nickname|hostmask>"));
 		return;
 	}
-	
+
 	mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -469,8 +483,14 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
+		req.ca = ca;
+		req.oldlevel = ca->level;
+
 		chanacs_modify_simple(ca, 0, CA_AKICK);
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+
+		req.newlevel = ca->level;
+
+		hook_call_channel_acl_change(&req);
 		chanacs_close(ca);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
@@ -514,8 +534,14 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	req.ca = ca;
+	req.oldlevel = ca->level;
+
 	chanacs_modify_simple(ca, 0, CA_AKICK);
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+
+	req.newlevel = ca->level;
+
+	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mt->name, mc->name);
@@ -534,14 +560,14 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 	bool operoverride = false;
 	char *chan = parv[0];
 	char expiry[512];
-	
+
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
 		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> LIST"));
 		return;
 	}
-	
+
 	/* make sure they're registered, logged in
 	 * and the founder of the channel before
 	 * we go any further.
@@ -555,14 +581,14 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
-	
+
 	mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -739,17 +765,17 @@ void akickdel_list_create(void *arg)
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		{
 			ca = (chanacs_t *)n->data;
-			
+
 			if (!(ca->level & CA_AKICK))
 				continue;
 
 			md = metadata_find(ca, "expires");
-			
+
 			if (!md)
 				continue;
 
 			expireson = atol(md->value);
-			
+
 			if (CURRTIME > expireson)
 			{
 				chanacs_modify_simple(ca, 0, CA_AKICK);
