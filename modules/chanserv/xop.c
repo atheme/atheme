@@ -214,6 +214,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 	chanacs_t *ca;
 	unsigned int addflags = level, removeflags = ~level;
 	bool isnew;
+	hook_channel_acl_req_t req;
 
 	if (!mt)
 	{
@@ -240,6 +241,9 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
+		req.ca = ca;
+		req.oldlevel = ca->level;
+
 		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
@@ -247,7 +251,10 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+		req.newlevel = ca->level;
+
+		hook_call_channel_acl_change(&req);
+
 		chanacs_close(ca);
 
 		if (!isnew)
@@ -306,6 +313,9 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
+	req.ca = ca;
+	req.oldlevel = ca->level;
+
 	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mt->name, mc->name);
@@ -313,7 +323,9 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+	req.newlevel = ca->level;
+
+	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
 
 	if (!isnew)
@@ -335,6 +347,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	chanacs_t *ca;
+	hook_channel_acl_req_t req;
 
 	/* let's finally make this sane.. --w00t */
 	if (!mt)
@@ -353,9 +366,14 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			return;
 		}
 
+		req.ca = ca;
+		req.oldlevel = ca->level;
+
 		ca->level = 0;
 
-		hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+		req.newlevel = ca->level;
+
+		hook_call_channel_acl_change(&req);
 		object_unref(ca);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
@@ -370,9 +388,14 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
+	req.ca = ca;
+	req.oldlevel = ca->level;
+
 	ca->level = 0;
 
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+	req.newlevel = ca->level;
+
+	hook_call_channel_acl_change(&req);
 	object_unref(ca);
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
