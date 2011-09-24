@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "../groupserv/main/groupserv_common.h"
 
 DECLARE_MODULE_V1
 (
@@ -97,8 +98,18 @@ static struct priv_category operserv_privs = {
 	}
 };
 
+static struct priv_category groupserv_privs = {
+	N_("GroupServ"),
+	{
+		{ PRIV_GROUP_AUSPEX, N_("view concealed information about groups") },
+		{ PRIV_GROUP_ADMIN, N_("administer groups") },
+		{ PRIV_REG_NOLIMIT, N_("bypass group registration limits") },
+		{ NULL, NULL },
+	}
+};
+
 static struct priv_category *priv_categories[] = {
-	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs,
+	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs, &groupserv_privs,
 };
 
 static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
