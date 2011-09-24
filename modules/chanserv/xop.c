@@ -102,7 +102,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer") && (!has_priv(si, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -147,7 +147,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], const char *levelde
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
 		restrictflags = chanacs_source_flags(mc, si);
-		if (restrictflags & CA_FOUNDER || user(mt) == si->smu)
+		if (restrictflags & CA_FOUNDER || entity(si->smu) == mt)
 			restrictflags = ca_all;
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
@@ -335,7 +335,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc)
 {
 	chanacs_t *ca;
-	
+
 	/* let's finally make this sane.. --w00t */
 	if (!mt)
 	{
