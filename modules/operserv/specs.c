@@ -1,9 +1,10 @@
 /*
  * Copyright (c) 2005-2006 Patrick Fish, et al
+ * Copyright (c) 2011 William Pitcock <nenolod@atheme.org>.
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService SPECS command.
- *
  */
 
 #include "atheme.h"
@@ -29,44 +30,75 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("operserv", &os_specs);
 }
 
-struct
+struct privilege
 {
 	const char *priv;
-	const char *nickserv_priv, *chanserv_priv, *general_priv, *operserv_priv;
-} privnames[] =
+	const char *desc;
+};
+
+struct priv_category
 {
-	/* NickServ/UserServ */
-	{ PRIV_USER_AUSPEX, "view concealed information", NULL, NULL, NULL },
-	{ PRIV_USER_ADMIN, "drop accounts, freeze accounts, reset passwords", NULL, NULL, NULL },
-	{ PRIV_USER_SENDPASS, "send passwords", NULL, NULL, NULL },
-	{ PRIV_USER_VHOST, "set vhosts", NULL, NULL, NULL },
-	{ PRIV_USER_FREGISTER, "register accounts on behalf of another user", NULL, NULL, NULL },
-	/* ChanServ */
-	{ PRIV_CHAN_AUSPEX, NULL, "view concealed information", NULL, NULL },
-	{ PRIV_CHAN_ADMIN, NULL, "drop channels, close channels, transfer ownership", NULL, NULL },
-	{ PRIV_CHAN_CMODES, NULL, "mlock operator modes", NULL, NULL },
-	{ PRIV_JOIN_STAFFONLY, NULL, "join staff channels", NULL, NULL },
-	/* NickServ/UserServ+ChanServ */
-	{ PRIV_MARK, "mark accounts", "mark channels", NULL, NULL },
-	{ PRIV_HOLD, "hold accounts", "hold channels", NULL, NULL },
-	{ PRIV_REG_NOLIMIT, NULL, "bypass registration limits", NULL, NULL },
-	/* general */
-	{ PRIV_SERVER_AUSPEX, NULL, NULL, "view concealed information", NULL },
-	{ PRIV_VIEWPRIVS, NULL, NULL, "view privileges of other users", NULL },
-	{ PRIV_FLOOD, NULL, NULL, "exempt from flood control", NULL },
-	{ PRIV_ADMIN, NULL, NULL, "administer services", NULL },
-	{ PRIV_METADATA, NULL, NULL, "edit private metadata", NULL },
-	/* OperServ */
-	{ PRIV_OMODE, NULL, NULL, NULL, "set channel modes" },
-	{ PRIV_AKILL, NULL, NULL, NULL, "add and remove autokills" },
-	{ PRIV_MASS_AKILL, NULL, NULL, NULL, "masskill channels or regexes" },
-	{ PRIV_JUPE, NULL, NULL, NULL, "jupe servers" },
-	{ PRIV_NOOP, NULL, NULL, NULL, "NOOP access" },
-	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },
-	{ PRIV_GRANT, NULL, NULL, NULL, "edit oper privileges" },
-	{ PRIV_OVERRIDE, NULL, NULL, NULL, "perform actions as any other user" },
-	/* -- */
-	{ NULL, NULL, NULL, NULL, NULL }
+	const char *name;
+	struct privilege privs[];
+};
+
+static struct priv_category nickserv_privs = {
+	N_("Nicknames/Accounts"),
+	{
+		{ PRIV_USER_AUSPEX, N_("view concealed information") },
+		{ PRIV_USER_ADMIN, N_("drop accounts, freeze accounts, reset passwords") },
+		{ PRIV_USER_SENDPASS, N_("send passwords") },
+		{ PRIV_USER_VHOST, N_("set vhosts") },
+		{ PRIV_USER_FREGISTER, N_("register accounts on behalf of another user") },
+		{ PRIV_MARK, N_("mark accounts") },
+		{ PRIV_HOLD, N_("hold accounts") },
+		{ NULL, NULL },
+	}
+};
+
+static struct priv_category chanserv_privs = {
+	N_("Channels"),
+	{
+		{ PRIV_CHAN_AUSPEX, N_("view concealed information") },
+		{ PRIV_CHAN_ADMIN, N_("drop channels, close channels, transfer ownership") },
+		{ PRIV_CHAN_CMODES, N_("mlock operator modes") },
+		{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
+		{ PRIV_MARK, N_("mark accounts") },
+		{ PRIV_HOLD, N_("hold accounts") },
+		{ PRIV_REG_NOLIMIT, N_("bypass channel registration limits") },
+		{ NULL, NULL },
+	}
+};
+
+static struct priv_category general_privs = {
+	N_("General"),
+	{
+		{ PRIV_SERVER_AUSPEX, N_("view concealed information") },
+		{ PRIV_VIEWPRIVS, N_("view privileges of other users") },
+		{ PRIV_FLOOD, N_("exempt from flood control") },
+		{ PRIV_ADMIN, N_("administer services") },
+		{ PRIV_METADATA, N_("edit private and internal metadata") },
+		{ NULL, NULL },
+	}
+};
+
+static struct priv_category operserv_privs = {
+	N_("OperServ"),
+	{
+		{ PRIV_OMODE, N_("set channel modes") },
+		{ PRIV_AKILL, N_("add and remove autokills") },
+		{ PRIV_MASS_AKILL, N_("masskill channels or regexes") },
+		{ PRIV_JUPE, N_("jupe servers") },
+		{ PRIV_NOOP, N_("NOOP access") },
+		{ PRIV_GLOBAL, N_("send global notices") },
+		{ PRIV_GRANT, N_("edit oper privileges") },
+		{ PRIV_OVERRIDE, N_("perform actions as any other user") },
+		{ NULL, NULL },
+	}
+};
+
+static struct priv_category *priv_categories[] = {
+	&nickserv_privs, &chanserv_privs, &general_privs, &operserv_privs,
 };
 
 static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
@@ -75,8 +107,8 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	operclass_t *cl = NULL;
 	const char *targettype = parv[0];
 	const char *target = parv[1];
-	char nickserv_privs[BUFSIZE], chanserv_privs[BUFSIZE], general_privs[BUFSIZE], operserv_privs[BUFSIZE];
-	int i;
+	char privbuf[BUFSIZE];
+	int i, j;
 
 	if (!has_any_privs(si))
 	{
@@ -130,40 +162,6 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	else
 		tu = si->su;
 
-	i = 0;
-	*nickserv_privs = *chanserv_privs = *general_privs = *operserv_privs = '\0';
-	while (privnames[i].priv != NULL)
-	{
-		if (targettype == NULL ? has_priv(si, privnames[i].priv) : (tu ? has_priv_user(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv)))
-		{
-			if (privnames[i].nickserv_priv != NULL)
-			{
-				if (*nickserv_privs)
-					mowgli_strlcat(nickserv_privs, ", ", sizeof nickserv_privs);
-				mowgli_strlcat(nickserv_privs, privnames[i].nickserv_priv, sizeof nickserv_privs);
-			}
-			if (privnames[i].chanserv_priv != NULL)
-			{
-				if (*chanserv_privs)
-					mowgli_strlcat(chanserv_privs, ", ", sizeof chanserv_privs);
-				mowgli_strlcat(chanserv_privs, privnames[i].chanserv_priv, sizeof chanserv_privs);
-			}
-			if (privnames[i].general_priv != NULL)
-			{
-				if (*general_privs)
-					mowgli_strlcat(general_privs, ", ", sizeof general_privs);
-				mowgli_strlcat(general_privs, privnames[i].general_priv, sizeof general_privs);
-			}
-			if (privnames[i].operserv_priv != NULL)
-			{
-				if (*operserv_privs)
-					mowgli_strlcat(operserv_privs, ", ", sizeof operserv_privs);
-				mowgli_strlcat(operserv_privs, privnames[i].operserv_priv, sizeof operserv_privs);
-			}
-		}
-		i++;
-	}
-
 	if (targettype == NULL)
 		command_success_nodata(si, _("Privileges for \2%s\2:"), get_source_name(si));
 	else if (tu)
@@ -171,14 +169,26 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Privileges for oper class \2%s\2:"), cl->name);
 
-	if (*nickserv_privs)
-		command_success_nodata(si, _("\2Nicknames/accounts\2: %s"), nickserv_privs);
-	if (*chanserv_privs)
-		command_success_nodata(si, _("\2Channels\2: %s"), chanserv_privs);
-	if (*general_privs)
-		command_success_nodata(si, _("\2General\2: %s"), general_privs);
-	if (*operserv_privs)
-		command_success_nodata(si, _("\2OperServ\2: %s"), operserv_privs);
+	for (i = 0; i < ARRAY_SIZE(priv_categories); i++)
+	{
+		struct priv_category *cat = priv_categories[i];
+
+		*privbuf = '\0';
+
+		for (j = 0; cat->privs[j].priv != NULL; j++)
+		{
+			if (targettype == NULL ? has_priv(si, cat->privs[j].priv) : (tu ? has_priv_user(tu, cat->privs[j].priv) : has_priv_operclass(cl, cat->privs[j].priv)))
+			{
+				if (*privbuf)
+					mowgli_strlcat(privbuf, ", ", sizeof privbuf);
+				mowgli_strlcat(privbuf, _(cat->privs[j].desc), sizeof privbuf);
+			}
+		}
+
+		if (*privbuf)
+			command_success_nodata(si, "\2%s\2: %s", _(cat->name), privbuf);
+	}
+
 	command_success_nodata(si, _("End of privileges"));
 
 	if (targettype == NULL)
