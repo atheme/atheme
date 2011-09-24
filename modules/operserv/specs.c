@@ -45,7 +45,7 @@ struct priv_category
 static struct priv_category nickserv_privs = {
 	N_("Nicknames/Accounts"),
 	{
-		{ PRIV_USER_AUSPEX, N_("view concealed information") },
+		{ PRIV_USER_AUSPEX, N_("view concealed information about accounts") },
 		{ PRIV_USER_ADMIN, N_("drop accounts, freeze accounts, reset passwords") },
 		{ PRIV_USER_SENDPASS, N_("send passwords") },
 		{ PRIV_USER_VHOST, N_("set vhosts") },
@@ -59,7 +59,7 @@ static struct priv_category nickserv_privs = {
 static struct priv_category chanserv_privs = {
 	N_("Channels"),
 	{
-		{ PRIV_CHAN_AUSPEX, N_("view concealed information") },
+		{ PRIV_CHAN_AUSPEX, N_("view concealed information about channels") },
 		{ PRIV_CHAN_ADMIN, N_("drop channels, close channels, transfer ownership") },
 		{ PRIV_CHAN_CMODES, N_("mlock operator modes") },
 		{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
@@ -73,7 +73,7 @@ static struct priv_category chanserv_privs = {
 static struct priv_category general_privs = {
 	N_("General"),
 	{
-		{ PRIV_SERVER_AUSPEX, N_("view concealed information") },
+		{ PRIV_SERVER_AUSPEX, N_("view concealed information about servers") },
 		{ PRIV_VIEWPRIVS, N_("view privileges of other users") },
 		{ PRIV_FLOOD, N_("exempt from flood control") },
 		{ PRIV_ADMIN, N_("administer services") },
