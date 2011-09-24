@@ -150,6 +150,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	char *flagstr = parv[2];
 	const char *str1;
 	unsigned int addflags, removeflags, restrictflags;
+	hook_channel_acl_req_t req;
 	mychan_t *mc;
 
 	if (parc < 1)
@@ -398,6 +399,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
+			req.ca = ca;
+			req.oldlevel = ca->level;
+
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
@@ -405,7 +409,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+			req.newlevel = ca->level;
+
+			hook_call_channel_acl_change(&req);
 			chanacs_close(ca);
 		}
 		else
@@ -415,6 +421,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		                command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
 				return;
 			}
+
 			ca = chanacs_open(mc, NULL, target, true, entity(si->smu));
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{
@@ -422,6 +429,10 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				chanacs_close(ca);
 				return;
 			}
+
+			req.ca = ca;
+			req.oldlevel = ca->level;
+
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 		                command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);
@@ -429,7 +440,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+			req.newlevel = ca->level;
+
+			hook_call_channel_acl_change(&req);
 			chanacs_close(ca);
 		}
 
