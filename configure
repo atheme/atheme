@@ -9652,7 +9652,7 @@ else
 fi
 
 
-if "x$with_mowgli2" = "xyes"; then
+if test "x$with_mowgli2" = "xyes"; then
 
 
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then

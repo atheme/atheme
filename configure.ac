@@ -561,7 +561,7 @@ AC_HELP_STRING([--with-mowgli2],[ Enable usage of Mowgli-2 instead of Mowgli-1 f
 [with_mowgli2=yes],
 [with_mowgli2=no])
 
-if "x$with_mowgli2" = "xyes"; then
+if test "x$with_mowgli2" = "xyes"; then
 	PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 0.9.90],
 		[MOWGLI_SOURCE="system"], [
 		MOWGLI_SOURCE="internal"
