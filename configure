@@ -758,6 +758,7 @@ enable_warnings
 enable_propolice
 enable_profile
 enable_rpath
+with_mowgli2
 with_pcre
 '
       ac_precious_vars='build_alias
@@ -774,7 +775,8 @@ MOWGLI_CFLAGS
 MOWGLI_LIBS
 PCRE_CFLAGS
 PCRE_LIBS'
-ac_subdirs_all='libmowgli'
+ac_subdirs_all='libmowgli-2
+libmowgli'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1412,6 +1414,8 @@ Optional Packages:
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module.
+  --with-mowgli2          Enable usage of Mowgli-2 instead of Mowgli-1
+                          framework
   --with-pcre             Enable PCRE regular expression support
 
 Some influential environment variables:
@@ -9640,6 +9644,16 @@ RPATH=""
 
 
 
+# Check whether --with-mowgli2 was given.
+if test "${with_mowgli2+set}" = set; then :
+  withval=$with_mowgli2; with_mowgli2=yes
+else
+  with_mowgli2=no
+fi
+
+
+if "x$with_mowgli2" = "xyes"; then
+
 
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
 	if test -n "$ac_tool_prefix"; then
@@ -9764,6 +9778,97 @@ if test -n "$MOWGLI_CFLAGS"; then
     pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 0.9.90\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 0.9.90") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 0.9.90" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$MOWGLI_LIBS"; then
+    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 0.9.90\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 0.9.90") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 0.9.90" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 0.9.90" 2>&1`
+        else
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 0.9.90" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$MOWGLI_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+		MOWGLI_SOURCE="internal"
+		MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+		MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+		LIBMOWGLI="libmowgli-2"
+		if test "x$enablerpath" = "xyes"; then
+			RPATH="-Wl,-rpath,${libdir}"
+		fi
+
+elif test $pkg_failed = untried; then
+
+		MOWGLI_SOURCE="internal"
+		MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+		MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+		LIBMOWGLI="libmowgli-2"
+		if test "x$enablerpath" = "xyes"; then
+			RPATH="-Wl,-rpath,${libdir}"
+		fi
+
+else
+	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
+	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	MOWGLI_SOURCE="system"
+fi
+
+
+
+if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
+   subdirs="$subdirs libmowgli-2"
+
+fi
+else
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
+$as_echo_n "checking for MOWGLI... " >&6; }
+
+if test -n "$MOWGLI_CFLAGS"; then
+    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli >= 0.9.90\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libmowgli >= 0.9.90") 2>&5
   ac_status=$?
@@ -9813,23 +9918,23 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-	MOWGLI_SOURCE="internal"
-	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
-	LIBMOWGLI="libmowgli"
-	if test "x$enablerpath" = "xyes"; then
-		RPATH="-Wl,-rpath,${libdir}"
-	fi
+		MOWGLI_SOURCE="internal"
+		MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
+		MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
+		LIBMOWGLI="libmowgli"
+		if test "x$enablerpath" = "xyes"; then
+			RPATH="-Wl,-rpath,${libdir}"
+		fi
 
 elif test $pkg_failed = untried; then
 
-	MOWGLI_SOURCE="internal"
-	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
-	LIBMOWGLI="libmowgli"
-	if test "x$enablerpath" = "xyes"; then
-		RPATH="-Wl,-rpath,${libdir}"
-	fi
+		MOWGLI_SOURCE="internal"
+		MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
+		MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
+		LIBMOWGLI="libmowgli"
+		if test "x$enablerpath" = "xyes"; then
+			RPATH="-Wl,-rpath,${libdir}"
+		fi
 
 else
 	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
@@ -9839,10 +9944,10 @@ $as_echo "yes" >&6; }
 	MOWGLI_SOURCE="system"
 fi
 
-
-if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
+	if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
    subdirs="$subdirs libmowgli"
 
+fi
 fi
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
@@ -11648,6 +11753,7 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
+	Mowgli-2 support     : ${with_mowgli2}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
