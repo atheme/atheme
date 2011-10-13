@@ -92,7 +92,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 		mowgli_strlcat(accessbuf, cmdaccess, BUFSIZE);
 
-		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, cmdaccess);
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, accessbuf);
 	}
 	else
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
