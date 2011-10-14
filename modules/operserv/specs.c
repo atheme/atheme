@@ -146,7 +146,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (!has_any_privs_user(tu))
 			{
-				command_success_nodata(si, _("\2%s\2 is unickserv_privileged."), tu->nick);
+				command_success_nodata(si, _("\2%s\2 is unprivileged."), tu->nick);
 				return;
 			}
 			if (is_internal_client(tu))
