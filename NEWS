@@ -51,6 +51,8 @@ groupserv
 - list: Allow refining the list with a pattern.
 - listchans: New command. Allows group members with the +c flag to see all
   channels that group has access in.
+- honor user:regnolimit permission in relation to the maximum number of groups
+  a user may register. (SRV-125)
 gameserv
 - many refactorings
 - calc: new command. Allows doing basic math with GameServ.
@@ -101,6 +103,8 @@ operserv
   log channel.
 - os_resolve: New contrib module for testing the asynchronous DNS resolver.
 - the RWATCH database is now serialized as opensex entities.
+- specs: add support for groupserv-related permissions and clarify meanings of
+  the various 'auspex' privileges. (SRV-125)
 rpgserv
 - New service. For finding and joining RP games on an IRC network.
 scripting
@@ -136,6 +140,10 @@ code
   IRC commands.
 - strlcpy()/strlcat() have been replaced with mowgli implementations.
 - atheme.string has been replaced with mowgli.string.
+- add new hook_channel_acl_req_t structure for channel_acl_change hook, which is
+  intended to describe ACL changes more effectively.
+- call shutdown(2) on sockets being closed to help some TCP stacks be more aggressive
+  when closing sockets.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
