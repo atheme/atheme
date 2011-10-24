@@ -60,7 +60,7 @@ chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u)
 	{
 		chanfix_oprecord_t *orec = n->data;
 
-		if (orec->entity == entity(u->myuser))
+		if (orec->entity != NULL && orec->entity == entity(u->myuser))
 			return orec;
 
 		if (!irccasecmp(orec->user, u->user) && !irccasecmp(orec->host, u->vhost))
