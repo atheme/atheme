@@ -647,7 +647,7 @@ move_wumpus(void *unused)
 static void
 regen_obj(int obj)
 {
-	wumpus.rmemctx[rand() % 42].contents = obj;
+	wumpus.rmemctx[rand() % wumpus.mazesize].contents = obj;
 }
 
 /* handles movement requests from players */
