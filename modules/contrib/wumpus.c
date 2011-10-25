@@ -1,6 +1,6 @@
 /*
- * Wumpus - 0.1.0
- * Copyright (c) 2006 William Pitcock <nenolod -at- nenolod.net>
+ * Wumpus - 0.2.0
+ * Copyright (c) 2006, 2011 William Pitcock <nenolod -at- nenolod.net>
  * Portions copyright (c) 2006 Kiyoshi Aman <kiyoshi.aman -at- gmail.com>
  *
  * Rights to this code are as documented in doc/LICENSE.
@@ -949,25 +949,26 @@ user_deleted(user_t *u)
 }
 
 static void
-burst_the_wumpus(void *unused)
+join_wumpus_channel(server_t *s)
 {
-	if (!wumpus.svs)
-		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, NULL);
+	join(wumpus_cfg.chan, wumpus.svs->me->nick);
 
-	join(wumpus_cfg.chan, wumpus_cfg.nick);	/* what if we're not ready? then this is a NOOP */
+	hook_del_server_eob(join_wumpus_channel);
 }
 
 /* start handler */
 void
 _modinit(module_t *m)
 {
+	wumpus.svs = service_add("Wumpus", NULL);
+
 	if (cold_start)
 	{
-		hook_add_event("config_ready");
-		hook_add_config_ready(burst_the_wumpus);
+		hook_add_event("server_eob");
+		hook_add_server_eob(join_wumpus_channel);
 	}
 	else
-		burst_the_wumpus(NULL);
+		join(wumpus_cfg.chan, wumpus.svs->me->nick);
 
 	hook_add_event("user_delete");
 	hook_add_user_delete(user_deleted);
