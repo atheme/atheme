@@ -40,7 +40,7 @@ static bool is_nickname_lame(const char *nickname)
 	}
 
 	score = (float) capcount / (float) strlen(nickname);
-	slog(LG_DEBUG, "is_nickname_lame(%s): score %0.3f %d/%d caps", nickname, score, capcount, strlen(nickname));
+	slog(LG_DEBUG, "is_nickname_lame(%s): score %0.3f %d/%zu caps", nickname, score, capcount, strlen(nickname));
 
 	if (score > LAMENESS_WEIGHT)
 		return true;
