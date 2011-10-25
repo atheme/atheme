@@ -60,6 +60,8 @@ struct game_ {
 	service_t *svs;
 	int wump_hp;
 	int speed;
+
+	unsigned int wantsize;
 };
 
 typedef struct game_ game_t;
@@ -201,7 +203,7 @@ resign_player(player_t *player)
 
 /* builds the maze, and returns false if the maze is too small */
 static bool
-build_maze(int size)
+build_maze(unsigned int size)
 {
 	int i, j;
 	room_t *w;
@@ -328,11 +330,11 @@ static void end_game(void);
 
 /* sets the game up */
 static void
-init_game(void)
+init_game(unsigned int size)
 {
 	mowgli_node_t *n;
 
-	if (!build_maze(rand() % 100))
+	if (!build_maze(size))
 	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Maze generation failed, please try again.");
 		end_game();
@@ -372,7 +374,10 @@ start_game(void *unused)
 		return;
 	}
 
-	init_game();
+	if (wumpus.wantsize >= 300)
+		wumpus.wantsize = 300;
+
+	init_game(wumpus.wantsize);
 }
 
 /* destroys game objects */
@@ -763,12 +768,16 @@ static void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 		si->su->nick);
 
 	wumpus.starting = true;
+	wumpus.wantsize = 100;
+
+	if (parv[0])
+		wumpus.wantsize = atoi(parv[0]);
 
 	event_add_once("start_game", start_game, NULL, 60);
 }
 
 /* reference tuple for the above code: cmd_start */
-command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 0, cmd_start, { .path = "" } };
+command_t wumpus_start = { "START", "Starts the game.", AC_NONE, 1, cmd_start, { .path = "" } };
 
 static void cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
