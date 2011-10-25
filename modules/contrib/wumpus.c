@@ -19,20 +19,20 @@ DECLARE_MODULE_V1
 );
 
 /* contents */
-enum {
+typedef enum {
 	E_NOTHING = 0,
 	E_WUMPUS,
 	E_PIT,
 	E_BATS,
 	E_ARROWS,
 	E_CRYSTALBALL
-};
+} contents_t;
 
 /* room_t: Describes a room that the wumpus or players could be in. */
 struct room_ {
 	int id;			/* room 3 or whatever */
 	mowgli_list_t exits;		/* old int count == exits.count */
-	int contents;
+	contents_t contents;
 	mowgli_list_t players;		/* player_t players */
 };
 
@@ -543,7 +543,7 @@ shoot_player(player_t *p, int target_id)
 }
 
 /* move_wumpus depends on this */
-static void regen_obj(int);
+static void regen_obj(contents_t);
 
 /* check for last-man-standing win condition. */
 static void
@@ -638,7 +638,7 @@ move_wumpus(void *unused)
 
 /* regenerates objects */
 static void
-regen_obj(int obj)
+regen_obj(contents_t obj)
 {
 	wumpus.rmemctx[rand() % wumpus.mazesize].contents = obj;
 }
