@@ -564,9 +564,8 @@ static void
 move_wumpus(void *unused)
 {
 	mowgli_node_t *n, *tn;
-	room_t *r;
+	room_t *r, *tr;
 	int w_kills = 0;
-	bool moved = false;
 
 	/* can we do any of this? if this is null, we really shouldn't be here */
 	if (wumpus.rmemctx == NULL)
@@ -584,27 +583,16 @@ move_wumpus(void *unused)
 	regen_obj(r->contents);
 	r->contents = E_NOTHING;
 
-	while (!moved)
-	{
-		MOWGLI_ITER_FOREACH(n, r->exits.head)
-		{
-			room_t *tr = (room_t *) n->data;
+	tr = mowgli_node_nth_data(&r->exits, rand() % MOWGLI_LIST_LENGTH(&r->exits));
 
-			if (rand() % 42 == 0 && moved == false)
-			{
 #ifdef DEBUG_AI
-				msg(wumpus_cfg.nick, wumpus_cfg.chan, "I moved to chamber %d", tr->id);
+	msg(wumpus_cfg.nick, wumpus_cfg.chan, "I moved to chamber %d", tr->id);
 #endif
 
-				slog(LG_DEBUG, "wumpus: the wumpus is now in room %d! (was in %d)",
-					tr->id, wumpus.wumpus);
-				wumpus.wumpus = tr->id;
-				tr->contents = E_WUMPUS;
-
-				moved = true;
-			}
-		}
-	}
+	slog(LG_DEBUG, "wumpus: the wumpus is now in room %d! (was in %d)",
+	     tr->id, wumpus.wumpus);
+	wumpus.wumpus = tr->id;
+	tr->contents = E_WUMPUS;
 
 #ifdef DEBUG_AI
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "On my next turn, I can move to:");
