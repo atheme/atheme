@@ -88,7 +88,7 @@ static int
 distance_to_wumpus(player_t *player)
 {
 	mowgli_node_t *n, *tn;
-	
+
 	MOWGLI_ITER_FOREACH(n, player->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
@@ -182,7 +182,7 @@ resign_player(player_t *player)
 
 	if (player == NULL)
 		return;
-	
+
 	if (player->location)
 	{
 		n = mowgli_node_find(player, &player->location->players);
@@ -322,9 +322,9 @@ build_maze(int size)
 }
 
 /* init_game depends on these */
-void move_wumpus(void *unused);
-void look_player(player_t *p);
-void end_game(void);
+static void move_wumpus(void *unused);
+static void look_player(player_t *p);
+static void end_game(void);
 
 /* sets the game up */
 static void
@@ -376,7 +376,7 @@ start_game(void *unused)
 }
 
 /* destroys game objects */
-void
+static void
 end_game(void)
 {
 	mowgli_node_t *n, *tn;
@@ -410,7 +410,7 @@ end_game(void)
 }
 
 /* gives the player information about their surroundings */
-void
+static void
 look_player(player_t *p)
 {
 	mowgli_node_t *n;
@@ -526,8 +526,8 @@ shoot_player(player_t *p, int target_id)
 			wumpus.speed -= 3;
 
 			move_wumpus(NULL);
-			event_delete(move_wumpus,NULL);
-			event_add("move_wumpus",move_wumpus,NULL,wumpus.speed);
+			event_delete(move_wumpus, NULL);
+			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
 		}
 		else
 		{
@@ -538,7 +538,7 @@ shoot_player(player_t *p, int target_id)
 }
 
 /* move_wumpus depends on this */
-void regen_obj(int);
+static void regen_obj(int);
 
 /* check for last-man-standing win condition. */
 static void
@@ -553,14 +553,14 @@ check_last_person_alive(void)
 		end_game();
 	}
 	else if (wumpus.players.count == 0)
-	{	
+	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Everyone lost. Sucks. :(");
 		end_game();
 	}
 }
 
 /* move the wumpus, the wumpus moves every 60 seconds */
-void
+static void
 move_wumpus(void *unused)
 {
 	mowgli_node_t *n, *tn;
@@ -644,7 +644,7 @@ move_wumpus(void *unused)
 }
 
 /* regenerates objects */
-void
+static void
 regen_obj(int obj)
 {
 	wumpus.rmemctx[rand() % 42].contents = obj;
@@ -715,7 +715,7 @@ move_player(player_t *p, int id)
 		else
 			notice(wumpus_cfg.nick, p->u->nick, "You found some arrows. You don't have any room to take them however, "
 						"so you break them in half and continue on your way.");
-		
+
 		wumpus.rmemctx[id].contents = E_NOTHING;
 
 		regen_obj(E_ARROWS);
@@ -956,7 +956,7 @@ burst_the_wumpus(void *unused)
 {
 	if (!wumpus.svs)
 		wumpus.svs = service_add_static(wumpus_cfg.nick, wumpus_cfg.user, wumpus_cfg.host, wumpus_cfg.real, NULL);
-	
+
 	join(wumpus_cfg.chan, wumpus_cfg.nick);	/* what if we're not ready? then this is a NOOP */
 }
 
