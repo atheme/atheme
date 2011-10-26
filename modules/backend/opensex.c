@@ -1113,6 +1113,14 @@ static database_handle_t *opensex_db_open_read(void)
 	if (!f)
 	{
 		errno1 = errno;
+
+		/* ENOENT can happen if the database does not exist yet. */
+		if (errno == ENOENT)
+		{
+			slog(LG_ERROR, "db-open-read: database '%s' does not yet exist; a new one will be created.", path);
+			return NULL;
+		}
+
 		slog(LG_ERROR, "db-open-read: cannot open '%s' for reading: %s", path, strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db-open-read: cannot open '%s' for reading: %s"), path, strerror(errno1));
 		return NULL;
