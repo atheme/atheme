@@ -76,6 +76,7 @@ E void chanfix_channel_delete(chanfix_channel_t *c);
 E void chanfix_gather(void *unused);
 E void chanfix_expire(void *unused);
 
+E bool chanfix_do_autofix;
 E void chanfix_autofix_ev(void *unused);
 
 E command_t cmd_chanfix;

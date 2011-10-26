@@ -276,10 +276,15 @@ static void chanfix_clear_bans(channel_t *ch)
 
 /*************************************************************************************/
 
+bool chanfix_do_autofix;
+
 void chanfix_autofix_ev(void *unused)
 {
 	chanfix_channel_t *chan;
 	mowgli_patricia_iteration_state_t state;
+
+	if (!chanfix_do_autofix)
+		return;
 
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
