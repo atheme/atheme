@@ -283,11 +283,11 @@ void chanfix_autofix_ev(void *unused)
 	chanfix_channel_t *chan;
 	mowgli_patricia_iteration_state_t state;
 
-	if (!chanfix_do_autofix)
-		return;
-
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
+		if (!chanfix_do_autofix && !chan->fix_requested)
+			continue;
+
 		if (chanfix_should_handle(chan, chan->chan))
 		{
 			if (chan->fix_started == 0)
@@ -324,7 +324,10 @@ void chanfix_autofix_ev(void *unused)
 			}
 		}
 		else
+		{
+			chan->fix_requested = false;
 			chan->fix_started = 0;
+		}
 	}
 }
 
@@ -370,6 +373,7 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	chanfix_lower_ts(chan);
+	chan->fix_requested = true;
 
 	logcommand(si, CMDLOG_ADMIN, "CHANFIX: \2%s\2", parv[0]);
 

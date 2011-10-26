@@ -31,8 +31,9 @@ typedef struct chanfix_channel {
 	time_t lastupdate;
 
 	channel_t *chan;
-	
+
 	time_t fix_started;
+	bool fix_requested;
 } chanfix_channel_t;
 
 typedef struct chanfix_oprecord {
