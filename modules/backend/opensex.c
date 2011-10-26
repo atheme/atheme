@@ -63,7 +63,7 @@ opensex_db_save(database_handle_t *db)
 
 	/* write the database version */
 	db_start_row(db, "DBV");
-	db_write_int(db, 10);
+	db_write_int(db, 11);
 	db_commit_row(db);
 
 	db_start_row(db, "LUID");
@@ -305,6 +305,7 @@ opensex_db_save(database_handle_t *db)
 
 		/* KL <user> <host> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "KL");
+		db_write_uint(db, k->number);
 		db_write_word(db, k->user);
 		db_write_word(db, k->host);
 		db_write_uint(db, k->duration);
@@ -328,6 +329,7 @@ opensex_db_save(database_handle_t *db)
 
 		/* XL <gecos> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "XL");
+		db_write_uint(db, x->number);
 		db_write_word(db, x->realname);
 		db_write_uint(db, x->duration);
 		db_write_time(db, x->settime);
@@ -348,6 +350,7 @@ opensex_db_save(database_handle_t *db)
 
 		/* QL <mask> <duration> <settime> <setby> <reason> */
 		db_start_row(db, "QL");
+		db_write_uint(db, q->number);
 		db_write_word(db, q->mask);
 		db_write_uint(db, q->duration);
 		db_write_time(db, q->settime);
@@ -780,9 +783,13 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	char buf[4096];
 	const char *user, *host, *reason, *setby;
+	unsigned int id = 0;
 	time_t settime;
 	long duration;
 	kline_t *k;
+
+	if (rs->dbv > 10)
+		id = db_sread_uint(db);
 
 	user = db_sread_word(db);
 	host = db_sread_word(db);
@@ -797,6 +804,10 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	k = kline_add(user, host, buf, duration, setby);
 	k->settime = settime;
 	k->expires = k->settime + k->duration;
+
+	if (id)
+		k->number = id;
+
 	rs->nkl++;
 }
 
@@ -810,9 +821,13 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	char buf[4096];
 	const char *realname, *reason, *setby;
+	unsigned int id = 0;
 	time_t settime;
 	long duration;
 	xline_t *x;
+
+	if (rs->dbv > 10)
+		id = db_sread_uint(db);
 
 	realname = db_sread_word(db);
 	duration = db_sread_uint(db);
@@ -826,6 +841,10 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 	x = xline_add(realname, buf, duration, setby);
 	x->settime = settime;
 	x->expires = x->settime + x->duration;
+
+	if (id)
+		x->number = id;
+
 	rs->nxl++;
 }
 
@@ -839,9 +858,13 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	char buf[4096];
 	const char *mask, *reason, *setby;
+	unsigned int id = 0;
 	time_t settime;
 	long duration;
 	qline_t *q;
+
+	if (rs->dbv > 10)
+		id = db_sread_uint(db);
 
 	mask = db_sread_word(db);
 	duration = db_sread_uint(db);
@@ -855,6 +878,10 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	q = qline_add(mask, buf, duration, setby);
 	q->settime = settime;
 	q->expires = q->settime + q->duration;
+
+	if (id)
+		q->number = id;
+
 	rs->nql++;
 }
 
