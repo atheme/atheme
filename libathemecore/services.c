@@ -778,15 +778,17 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
+	myuser_notice(si->service->me->nick, mu, "\2%s\2 failed to login to \2%s\2.  There has been \2%d\2 failed login %s since your last successful login.",
+		      mask, entity(mu)->name, count, count == 1 ? "attempt" : "attempts");
+
 	if (is_soper(mu))
 		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), entity(mu)->name);
 
-	if (atoi(md_failnum->value) == 10)
+	if (count == 10)
 	{
 		time_t ts = CURRTIME;
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
-
 		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", entity(mu)->name, mask, strfbuf);
 	}
 
