@@ -367,6 +367,15 @@ loadmodule "modules/chanserv/voice";
 loadmodule "modules/chanserv/why";
 #loadmodule "modules/chanserv/xop";
 
+/* CHANFIX module.
+ *
+ * Here you can disable or enable certain features of CHANFIX, by
+ * defining which modules are loaded.
+ *
+ * Core components				modules/chanfix/main
+ */
+#loadmodule "modules/chanfix/main";
+
 /* OperServ modules.
  *
  * Here you can disable or enable certain features of OperServ, by
@@ -1159,6 +1168,42 @@ chanserv {
 	 * by default (the old behaviour).
 	 */
 	#akick_time = 10;
+};
+
+/* CHANFIX configuration.
+ *
+ * The chanfix {} block contains settings specific to the CHANFIX modules.
+ *
+ * CHANFIX provides channel recovery services without registration, which
+ * allows users to maintain control of channels even if ChanServ is not used
+ * to register them.
+ */
+chanfix {
+	/* (*)nick
+	 * The nickname we want the client to have.
+	 */
+	nick = "ChanFix";
+
+	/* (*)user
+	 * The username we want the client to have.
+	 */
+	user = "ChanFix";
+
+	/* (*)host
+	 * The hostname we want the client to have.
+	 */
+	host = "services.int";
+
+	/* (*)real
+	 * The GECOS of the client.
+	 */
+	real = "Channel Fixing Service";
+
+	/* (*)autofix
+	 * Automatically fix channels if they become opless and meet fixing
+	 * criteria.
+	 */
+	autofix;
 };
 
 /* Global noticing configuration.
