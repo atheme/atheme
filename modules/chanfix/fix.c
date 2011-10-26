@@ -438,7 +438,7 @@ static void chanfix_cmd_scores(sourceinfo_t *si, int parc, char *parv[])
 
 		snprintf(buf, BUFSIZE, "%s@%s", orec->user, orec->host);
 
-		command_success_nodata(si, "%-3d %-50s %d", i + 1, orec->entity ? orec->entity->name : buf, score);
+		command_success_nodata(si, "%-3d %-50s %d", ++i, orec->entity ? orec->entity->name : buf, score);
 	}
 
 	command_success_nodata(si, "%-3s %-50s %s", "---", "--------------------------------------------------", "-----");
