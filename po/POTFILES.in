@@ -238,3 +238,7 @@ modules/rpgserv/search.c
 modules/rpgserv/set.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
+modules/statserv/channel.c
+modules/statserv/main.c
+modules/statserv/netsplit.c
+modules/statserv/server.c
