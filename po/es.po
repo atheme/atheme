@@ -1,21 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Translation for Atheme IRC Services.
+# Copyright (C) 2004 - 2011 Atheme
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Ignacio Riquelme Morelle <shadowm2006@gmail.com>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: Atheme IRC Services\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: http://jira.atheme.org/browse/SRV\n"
 "POT-Creation-Date: 2011-10-28 15:54-0500\n"
-"PO-Revision-Date: 2011-10-28 18:49+0000\n"
+"PO-Revision-Date: 2011-10-28 21:19+0000\n"
 "Last-Translator: nenolod <nenolod@dereferenced.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: modules/alis/main.c:415 modules/botserv/help.c:39
@@ -80,13 +80,14 @@ msgstr ""
 #, c-format
 msgid "DATABASE ERROR: db-open-write: cannot open '%s' for writing: %s"
 msgstr ""
-"ERROR DE BASE DE DATOS: db-open-write: no se pudo abrir '%s' para escribir: "
-"%s"
+"ERROR DE BASE DE DATOS: db-open-write: no se pudo abrir '%s' para "
+"escribir: %s"
 
 #: modules/backend/opensex.c:1210
 #, c-format
 msgid ""
-"DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
+"DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: "
+"%s"
 msgstr ""
 "ERROR DE BASE DE DATOS: db_save(): no se pudo renombrar services.db.new a "
 "services.db: %s"
@@ -499,7 +500,8 @@ msgstr "El modo de fantasía se encuentra ahora ACTIVADO para el canal %s."
 #: modules/botserv/set_fantasy.c:93
 #, c-format
 msgid "Fantasy mode is now OFF on channel %s."
-msgstr "El modo de fantasía se encuentra ahora DESACTIVADO para el canal %s."
+msgstr ""
+"El modo de fantasía se encuentra ahora DESACTIVADO para el canal %s."
 
 #: modules/botserv/set_nobot.c:24
 msgid "Prevent a bot from being assigned to a channel."
@@ -961,7 +963,8 @@ msgstr "Sintaxis: AKICK <#canal> <ADD|DEL|LIST> [parámetros]"
 msgid ""
 "Syntax: AKICK <#channel> ADD <nickname|hostmask> [!P|!T <minutes>] [reason]"
 msgstr ""
-"Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] [razón]"
+"Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] "
+"[razón]"
 
 #: modules/chanserv/akick.c:196 modules/chanserv/akick.c:458
 #: modules/chanserv/akick.c:594 modules/chanserv/ban.c:74
@@ -990,9 +993,11 @@ msgid "Invalid duration given."
 msgstr "Duración no válida."
 
 #: modules/chanserv/akick.c:242 modules/chanserv/akick.c:249
-msgid "Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
+msgid ""
+"Syntax: AKICK <#channel> ADD <nick|hostmask> [!P|!T <minutes>] [reason]"
 msgstr ""
-"Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] [razón]"
+"Sintaxis: AKICK <#canal> ADD <nick|máscara de host> [!P|!T <minutos>] "
+"[razón]"
 
 #: modules/chanserv/akick.c:288 modules/chanserv/xop.c:358
 #, c-format
@@ -1012,7 +1017,8 @@ msgstr "%s ya tiene los permisos %s en %s"
 #: modules/chanserv/akick.c:307
 #, c-format
 msgid "The more general mask %s is already on the AKICK list for %s"
-msgstr "La máscara más general %s ya se encuentra en la lista AKICK para %s"
+msgstr ""
+"La máscara más general %s ya se encuentra en la lista AKICK para %s"
 
 #: modules/chanserv/akick.c:340 modules/chanserv/akick.c:404
 #, c-format
@@ -1031,7 +1037,8 @@ msgstr "Sintaxis: AKICK <#canal> DEL <nick|máscara de host>"
 #: modules/chanserv/akick.c:480
 #, c-format
 msgid "%s is not on the AKICK list for %s, however %s is."
-msgstr "%s no se encuentra en la lista AKICK para %s, sin embargo %s sí."
+msgstr ""
+"%s no se encuentra en la lista AKICK para %s, sin embargo %s sí."
 
 #: modules/chanserv/akick.c:482 modules/chanserv/akick.c:521
 #, c-format
@@ -1255,11 +1262,11 @@ msgstr "Sintaxis: DROP <#canal>"
 
 #: modules/chanserv/drop.c:87 modules/chanserv/drop.c:169
 msgid ""
-"For security reasons, you may not drop a channel registration with a fantasy "
-"command."
+"For security reasons, you may not drop a channel registration with a fantasy"
+" command."
 msgstr ""
-"Por razones de seguridad, Ud. no puede anular el registro de un canal usando "
-"un comando de fantasía."
+"Por razones de seguridad, Ud. no puede anular el registro de un canal usando"
+" un comando de fantasía."
 
 #: modules/chanserv/drop.c:100
 #, c-format
@@ -1274,8 +1281,8 @@ msgstr "El canal %s está reservado; no puede ser eliminado."
 #: modules/chanserv/drop.c:118 modules/groupserv/drop.c:85
 #, c-format
 msgid ""
-"To avoid accidental use of this command, this operation has to be confirmed. "
-"Please confirm by replying with %s"
+"To avoid accidental use of this command, this operation has to be confirmed."
+" Please confirm by replying with %s"
 msgstr ""
 "Para evitar el uso accidental de este comando, la operación debe ser "
 "confirmada. Por favor confirme respondiendo con %s"
@@ -1485,10 +1492,11 @@ msgstr "%s no se encuentra en línea."
 #: modules/chanserv/owner.c:104 modules/chanserv/protect.c:104
 #, c-format
 msgid ""
-"%s has the SECURE option enabled, and %s does not have appropriate access."
+"%s has the SECURE option enabled, and %s does not have appropriate "
+"access."
 msgstr ""
-"%s tiene la opción SECURE activada, y %s no tiene los permisos de acceso "
-"apropiados."
+"%s tiene la opción SECURE activada, y %s no tiene los permisos de acceso"
+" apropiados."
 
 #: modules/chanserv/halfop.c:111 modules/chanserv/halfop.c:184
 #: modules/chanserv/kick.c:88 modules/chanserv/kick.c:150
@@ -1545,7 +1553,8 @@ msgid ""
 "Please note that channels will expire if there are no eligible channel "
 "successors."
 msgstr ""
-"Por favor note que los canales expiran si no hay posibles sucesores de canal."
+"Por favor note que los canales expiran si no hay posibles sucesores de "
+"canal."
 
 #: modules/chanserv/help.c:65
 msgid ""
@@ -1768,10 +1777,11 @@ msgstr "Sintaxis: KICKBAN <#canal> <nick> [razón]"
 #: modules/chanserv/kick.c:164
 #, c-format
 msgid ""
-"To avoid rejoin, %d ban exception(s) matching %s have been removed from %s."
+"To avoid rejoin, %d ban exception(s) matching %s have been removed from "
+"%s."
 msgstr ""
-"Para evitar su reingreso, %d excepción(es) de veto coincidentes con %s han "
-"sido quitadas de %s."
+"Para evitar su reingreso, %d excepción(es) de veto coincidentes con %s han"
+" sido quitadas de %s."
 
 #: modules/chanserv/kick.c:168
 #, c-format
@@ -1994,7 +2004,8 @@ msgid "Syntax: REGISTER <#channel>"
 msgstr "Sintaxis: REGISTER <#canal>"
 
 #: modules/chanserv/register.c:70 modules/contrib/cs_fregister.c:74
-msgid "You need to verify your email address before you may register channels."
+msgid ""
+"You need to verify your email address before you may register channels."
 msgstr ""
 "Ud. debe verificar su dirección de email antes de poder registrar canales."
 
@@ -2166,7 +2177,8 @@ msgstr "%s está cerrado; no puede ser transferido."
 #: modules/chanserv/set_founder.c:149
 #, c-format
 msgid "Transfer complete: %s has been set as founder for %s."
-msgstr "Transferencia completa: %s ha sido convertido en el fundador de %s."
+msgstr ""
+"Transferencia completa: %s ha sido convertido en el fundador de %s."
 
 #: modules/chanserv/set_founder.c:154
 #, c-format
@@ -2235,8 +2247,8 @@ msgstr "Establece si los servicios habitan el canal o no."
 #: modules/chanserv/set_guard.c:84
 #, c-format
 msgid ""
-"Channel %s already has a BotServ bot assigned to it.  You need to unassign "
-"it first."
+"Channel %s already has a BotServ bot assigned to it.  You need to unassign"
+" it first."
 msgstr ""
 "El canal %s ya tiene un bot de BotServ asignado. Necesitará desasignarlo "
 "primero."
@@ -2549,7 +2561,8 @@ msgstr "No hay tal plantilla %s en %s."
 #: modules/chanserv/template.c:328
 #, c-format
 msgid "You are not allowed to set %s on template %s in %s."
-msgstr "Ud. no está autorizado a establecer %s en la plantilla %s en %s."
+msgstr ""
+"Ud. no está autorizado a establecer %s en la plantilla %s en %s."
 
 #: modules/chanserv/template.c:348
 #, c-format
@@ -2731,7 +2744,8 @@ msgstr "%s ya se encuentra en la lista %s para %s"
 #: modules/contrib/cs_userinfo.c:115
 #, c-format
 msgid "You are not authorized to modify the access entry for %s on %s."
-msgstr "Ud. no está autorizado a modificar la entrada de acceso para %s en %s."
+msgstr ""
+"Ud. no está autorizado a modificar la entrada de acceso para %s en %s."
 
 #: modules/chanserv/xop.c:264 modules/chanserv/xop.c:335
 #, c-format
@@ -3018,7 +3032,8 @@ msgstr ""
 
 #: modules/contrib/ircd_announceserv.c:220
 msgid ""
-"Your announcement is too long. Announcements need to be under 450 characters."
+"Your announcement is too long. Announcements need to be under 450 "
+"characters."
 msgstr ""
 "Su anuncio es demasiado largo. Los anuncios no deben superar 450 caracteres."
 
@@ -3061,7 +3076,8 @@ msgstr ""
 #: modules/memoserv/sendall.c:69 modules/memoserv/sendgroup.c:72
 #: modules/memoserv/sendops.c:71
 msgid ""
-"You have used this command too many times; please wait a while and try again."
+"You have used this command too many times; please wait a while and try "
+"again."
 msgstr ""
 "Ud. ha usado este comando demasiadas veces; por favor espere unos instantes "
 "e inténtelo nuevamente."
@@ -3198,8 +3214,8 @@ msgstr "%d clientes encontrados"
 
 #: modules/contrib/ns_waitreg.c:32
 msgid ""
-"You can not register your nick so soon after connecting. Please wait a while "
-"and try again."
+"You can not register your nick so soon after connecting. Please wait a while"
+" and try again."
 msgstr ""
 "No puede registrar su nick tan pronto tras conectarse. Espere un tiempo e "
 "inténtelo nuevamente."
@@ -3210,7 +3226,8 @@ msgstr "Implementa medidas de seguridad basadas en Condición de Defensa."
 
 #: modules/contrib/os_defcon.c:73 modules/contrib/os_defcon.c:85
 msgid ""
-"Registrations are currently disabled on this network, please try again later."
+"Registrations are currently disabled on this network, please try again "
+"later."
 msgstr ""
 "El registro de usuarios se encuentra actualmente desactivado. Por favor "
 "espere e inténtelo nuevamente."
@@ -3611,7 +3628,8 @@ msgstr "%s lanzamientos %d dados: %s"
 
 #: modules/gameserv/gamecalc.c:218
 #, c-format
-msgid "Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d."
+msgid ""
+"Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d."
 msgstr ""
 "Éxitos: %d, Fracasos: %d, Errores: %d, Total: %d. Ud. puede volver a lanzar "
 "%d."
@@ -3631,7 +3649,8 @@ msgstr ""
 
 #: modules/gameserv/happyfarm.c:310
 #, c-format
-msgid "You have started with %d money.  For help, use /msg %s HELP HAPPYFARM."
+msgid ""
+"You have started with %d money.  For help, use /msg %s HELP HAPPYFARM."
 msgstr ""
 
 #: modules/gameserv/happyfarm.c:313
@@ -3965,9 +3984,8 @@ msgid "Lists channels that a group has access to."
 msgstr "Muestra una lista de canales a los cuales un grupo tiene acceso."
 
 #: modules/groupserv/listchans.c:48
-#, fuzzy
 msgid "Syntax: LISTCHANS <!groupname>"
-msgstr "Sintaxis: INFO <!nombregrupo>"
+msgstr ""
 
 #: modules/groupserv/listchans.c:76 modules/groupserv/listchans.c:94
 #, c-format
@@ -4142,7 +4160,8 @@ msgstr "Establece los permisos concedidos a los usuarios al unirse al grupo."
 #: modules/groupserv/set_joinflags.c:50
 #, c-format
 msgid "The group-specific join flags for %s have been cleared."
-msgstr "Los permisos iniciales específicos de grupo para %s han sido quitados."
+msgstr ""
+"Los permisos iniciales específicos de grupo para %s han sido quitados."
 
 #: modules/groupserv/set_joinflags.c:54
 #, c-format
@@ -4244,7 +4263,8 @@ msgstr ""
 #: modules/helpserv/main.c:32
 #, c-format
 msgid "%s allows users to request help from network staff."
-msgstr "%s permite a los usuarios solicitar ayuda de la administración de red."
+msgstr ""
+"%s permite a los usuarios solicitar ayuda de la administración de red."
 
 #: modules/helpserv/services.c:21
 msgid "List all services currently running on the network."
@@ -4658,7 +4678,8 @@ msgstr "El memo ha sido redirigido a %s exitosamente."
 #: modules/memoserv/help.c:40
 #, c-format
 msgid "%s allows users to send memos to registered users."
-msgstr "%s permite a los usuarios enviar memos a otros usuarios registrados."
+msgstr ""
+"%s permite a los usuarios enviar memos a otros usuarios registrados."
 
 #: modules/memoserv/ignore.c:24
 msgid "Ignores memos."
@@ -4927,9 +4948,8 @@ msgid "Syntax: BADMAIL ADD|DEL|LIST [parameters]"
 msgstr "Sintaxis: BADMAIL ADD|DEL|LIST [parámetros]"
 
 #: modules/nickserv/badmail.c:140
-#, fuzzy
 msgid "Syntax: BADMAIL ADD <email> <reason>"
-msgstr "Sintaxis: BADMAIL ADD <email> [razón]"
+msgstr ""
 
 #: modules/nickserv/badmail.c:157
 #, c-format
@@ -4982,7 +5002,8 @@ msgstr "La huella %s ya se encuentra en su lista de huellas."
 #: modules/nickserv/cert.c:123
 #, c-format
 msgid "Fingerprint %s is already on another user's fingerprint list."
-msgstr "La huella %s ya se encuentra en la lista de huellas de otro usuario."
+msgstr ""
+"La huella %s ya se encuentra en la lista de huellas de otro usuario."
 
 #: modules/nickserv/cert.c:128
 #, c-format
@@ -5052,7 +5073,8 @@ msgstr ""
 
 #: modules/nickserv/drop.c:89 modules/nickserv/drop.c:136
 #, c-format
-msgid "The nickname %s belongs to a services operator; it cannot be dropped."
+msgid ""
+"The nickname %s belongs to a services operator; it cannot be dropped."
 msgstr ""
 "El nick %s pertenece a un operador de servicios; no puede ser eliminado."
 
@@ -5271,11 +5293,11 @@ msgstr "El nick %s es un nombre de cuenta; no puede quitarlo."
 #: modules/nickserv/group.c:174
 #, c-format
 msgid ""
-"You may not modify %s's account name because their operclass is defined in "
-"the configuration file."
+"You may not modify %s's account name because their operclass is defined in"
+" the configuration file."
 msgstr ""
-"Ud. no puede modificar el nombre de cuenta de %s porque su clase de operador "
-"está definida en el archivo de configuración."
+"Ud. no puede modificar el nombre de cuenta de %s porque su clase de "
+"operador está definida en el archivo de configuración."
 
 #: modules/nickserv/group.c:180
 #, c-format
@@ -5306,7 +5328,8 @@ msgstr ""
 #: modules/nickserv/group.c:226
 #, c-format
 msgid "Nick %s has been removed from account %s, name changed to %s."
-msgstr "El nick %s ha sido quitado de la cuenta %s, cuyo nombre cambió a %s."
+msgstr ""
+"El nick %s ha sido quitado de la cuenta %s, cuyo nombre cambió a %s."
 
 #: modules/nickserv/group.c:228
 #, c-format
@@ -5316,7 +5339,8 @@ msgstr "El nick %s ha sido quitado de la cuenta %s."
 #: modules/nickserv/help.c:42
 #, c-format
 msgid "%s allows users to 'register' an account for use with %s."
-msgstr "%s permite a los usuarios 'registrar' una cuenta para su uso con %s."
+msgstr ""
+"%s permite a los usuarios 'registrar' una cuenta para su uso con %s."
 
 #: modules/nickserv/help.c:45
 #, c-format
@@ -5372,14 +5396,16 @@ msgid "You are already logged in as %s."
 msgstr "Ud. ya ha iniciado sesión como %s."
 
 #: modules/nickserv/identify.c:109
-msgid "Please check your email for instructions to complete your registration."
+msgid ""
+"Please check your email for instructions to complete your registration."
 msgstr ""
 "Por favor compruebe las instrucciones en su e-mail para completar su "
 "registro."
 
 #: modules/nickserv/identify.c:122
 #, c-format
-msgid "There are already %zu sessions logged in to %s (maximum allowed: %u)."
+msgid ""
+"There are already %zu sessions logged in to %s (maximum allowed: %u)."
 msgstr "Ya hay %zu sesiones activas para %s (máximas permitidas: %u)."
 
 #: modules/nickserv/identify.c:130
@@ -5659,7 +5685,8 @@ msgstr "Si Ud. no completa su registro dentro de un día su cuenta expirará."
 
 #: modules/nickserv/main.c:35
 #, c-format
-msgid "%s registered the account %s and gained services operator privileges."
+msgid ""
+"%s registered the account %s and gained services operator privileges."
 msgstr ""
 "%s registró la cuenta %s y obtuvo privilegios de operador de servicios."
 
@@ -5675,8 +5702,8 @@ msgstr "Por favor identifíquese mediante /%s%s identify <contraseña>."
 #: modules/nickserv/main.c:87
 #, c-format
 msgid ""
-"This nickname is registered. Please choose a different nickname, or identify "
-"via /%s%s identify <password>."
+"This nickname is registered. Please choose a different nickname, or identify"
+" via /%s%s identify <password>."
 msgstr ""
 "Este nick se encuentra registrado. Por favor escoja un nick distinto, o "
 "identifíquese mediante /%s%s identify <contraseña>."
@@ -5753,8 +5780,8 @@ msgstr "No se pudo enviar e-mail, ¡lo siento! Registro abortado."
 msgid ""
 "An email containing nickname activation instructions has been sent to %s."
 msgstr ""
-"Un e-mail con instrucciones para la activación de su nick ha sido enviado a"
-" %s."
+"Un e-mail con instrucciones para la activación de su nick ha sido enviado a "
+"%s."
 
 #: modules/nickserv/register.c:231
 msgid ""
@@ -5789,8 +5816,8 @@ msgid ""
 "%s belongs to a services operator; you need %s privilege to reset the "
 "password."
 msgstr ""
-"%s pertenece a un operador de servicios; Ud. necesita el privilegio %s para "
-"restablecer la contraseña."
+"%s pertenece a un operador de servicios; Ud. necesita el privilegio %s "
+"para restablecer la contraseña."
 
 #: modules/nickserv/resetpass.c:62 modules/nickserv/sendpass.c:156
 #: modules/nickserv/sendpass.c:180 modules/nickserv/vhost.c:171
@@ -5892,8 +5919,8 @@ msgid ""
 "%s belongs to a services operator; you need %s privilege to send the "
 "password."
 msgstr ""
-"%s pertenece a un operador de servicios; Ud. necesita el privilegio %s para "
-"enviar la contraseña."
+"%s pertenece a un operador de servicios; Ud. necesita el privilegio %s "
+"para enviar la contraseña."
 
 #: modules/nickserv/sendpass.c:86 modules/nickserv/sendpass_user.c:83
 #, c-format
@@ -5918,7 +5945,8 @@ msgstr "%s no tenía una clave de cambio de contraseña en espera."
 #: modules/nickserv/sendpass.c:128 modules/nickserv/sendpass_user.c:108
 #, c-format
 msgid ""
-"This operation cannot be performed on %s, because someone is logged in to it."
+"This operation cannot be performed on %s, because someone is logged in to "
+"it."
 msgstr ""
 "Esta operación no puede ser realizada en %s, puesto que alguien tiene una "
 "sesión activa con ella."
@@ -5950,8 +5978,8 @@ msgid ""
 "The password for the account %s is encrypted; a new password will be "
 "assigned and sent."
 msgstr ""
-"La contraseña para la cuenta %s está encriptada; una nueva contraseña será "
-"asignada y enviada."
+"La contraseña para la cuenta %s está encriptada; una nueva contraseña será"
+" asignada y enviada."
 
 #: modules/nickserv/sendpass.c:176
 #, c-format
@@ -5964,8 +5992,8 @@ msgid ""
 "The password change key for %s has been sent to the corresponding email "
 "address."
 msgstr ""
-"La clave de cambio de contraseña para %s ha sido enviada a la dirección de e-"
-"mail correspondiente."
+"La clave de cambio de contraseña para %s ha sido enviada a la dirección de"
+" e-mail correspondiente."
 
 #: modules/nickserv/set_accountname.c:24
 msgid "Changes your account name."
@@ -6026,7 +6054,8 @@ msgstr "Sintaxis: SET <ajuste> <parámetros>"
 #, c-format
 msgid "Invalid set command. Use /%s%s HELP SET for a command listing."
 msgstr ""
-"Comando de ajuste no válido. Vea /%s%s HELP SET para una lista de comandos."
+"Comando de ajuste no válido. Vea /%s%s HELP SET para una lista de "
+"comandos."
 
 #: modules/nickserv/set_email.c:24
 msgid "Changes your e-mail address."
@@ -6038,10 +6067,11 @@ msgstr "Sintaxis: SET EMAIL <nuevo e-mail>"
 
 #: modules/nickserv/set_email.c:53
 msgid ""
-"Please verify your original registration before changing your e-mail address."
+"Please verify your original registration before changing your e-mail "
+"address."
 msgstr ""
-"Por favor verifique su registro original antes de cambiar su dirección de e-"
-"mail."
+"Por favor verifique su registro original antes de cambiar su dirección de "
+"e-mail."
 
 #: modules/nickserv/set_email.c:62
 #, c-format
@@ -6062,12 +6092,14 @@ msgstr ""
 #: modules/nickserv/set_email.c:96
 #, c-format
 msgid "An email containing email changing instructions has been sent to %s."
-msgstr "Un e-mail con instrucciones de cambio de e-mail ha sido enviado a %s."
+msgstr ""
+"Un e-mail con instrucciones de cambio de e-mail ha sido enviado a %s."
 
 #: modules/nickserv/set_email.c:97
 msgid ""
 "Your email address will not be changed until you follow these instructions."
-msgstr "Su dirección de e-mail no cambiará hasta que siga éstas instrucciones."
+msgstr ""
+"Su dirección de e-mail no cambiará hasta que siga éstas instrucciones."
 
 #: modules/nickserv/set_email.c:105
 #, c-format
@@ -6100,7 +6132,8 @@ msgstr "Sintaxis: SET ENFORCETIME <tiempo>|DEFAULT"
 
 #: modules/nickserv/set_enforcetime.c:55
 #, c-format
-msgid "The %s for account %s has been reset to default, which is %d seconds."
+msgid ""
+"The %s for account %s has been reset to default, which is %d seconds."
 msgstr "%s para la cuenta %s ha sido restablecido a %d segundos."
 
 #: modules/nickserv/set_enforcetime.c:68
@@ -6232,25 +6265,25 @@ msgstr "Sintaxis: TAXONOMY <nick>"
 #: modules/nickserv/vacation.c:24
 #, c-format
 msgid ""
-"You must be registered for at least %d days in order to enable VACATION mode."
+"You must be registered for at least %d days in order to enable VACATION "
+"mode."
 msgstr ""
-"Ud. debe estar registrado por al menos %d días para poder activar el modo de "
-"VACACIONES."
+"Ud. debe estar registrado por al menos %d días para poder activar el modo "
+"de VACACIONES."
 
 #: modules/nickserv/vacation.c:34
 #, c-format
 msgid ""
 "Your account is now marked as being on vacation.\n"
-"Please be aware that this will be automatically removed the next time you "
-"identify to %s."
+"Please be aware that this will be automatically removed the next time you identify to %s."
 msgstr ""
 "Su cuenta ahora está marcada como estando en vacaciones.\n"
-"Por favor tome en cuenta que esto dejará de tener efecto la próxima vez que "
-"se identifique a %s."
+"Por favor tome en cuenta que esto dejará de tener efecto la próxima vez que se identifique a %s."
 
 #: modules/nickserv/vacation.c:38
 #, c-format
-msgid "Your account will automatically expire in %d days if you do not return."
+msgid ""
+"Your account will automatically expire in %d days if you do not return."
 msgstr "Su cuenta expirará automáticamente en %d días si Ud. no regresa."
 
 #: modules/nickserv/vacation.c:42
@@ -6294,8 +6327,8 @@ msgid ""
 "Thank you for verifying your e-mail address! You have taken steps in "
 "ensuring that your registrations are not exploited."
 msgstr ""
-"¡Gracias por verificar su dirección de e-mail! Ud. ha ayudado a asegurar que "
-"el sistema de registro no sean abusado."
+"¡Gracias por verificar su dirección de e-mail! Ud. ha ayudado a asegurar que"
+" el sistema de registro no sean abusado."
 
 #: modules/nickserv/verify.c:141
 msgid "Invalid operation specified for VERIFY."
@@ -6398,7 +6431,8 @@ msgstr "Demasiados '%c' en usuario@host."
 #: modules/operserv/akill.c:252
 #, c-format
 msgid ""
-"Invalid user@host: %s@%s. At least four non-wildcard characters are required."
+"Invalid user@host: %s@%s. At least four non-wildcard characters are "
+"required."
 msgstr ""
 "El usuario@host especificado no es válido: %s@%s. Se requieren al menos "
 "cuatro caracteres que no sean comodines."
@@ -6407,7 +6441,8 @@ msgstr ""
 #, c-format
 msgid "Invalid user@host: %s@%s. This mask is unsafe."
 msgstr ""
-"El usuario@host especificado no es válido: %s@%s. Esta máscara no es segura."
+"El usuario@host especificado no es válido: %s@%s. Esta máscara no es "
+"segura."
 
 #: modules/operserv/akill.c:278
 #, c-format
@@ -6704,7 +6739,8 @@ msgstr "Límite de alerta de clones para el host %s establecido como %d"
 #, c-format
 msgid "Clone exemption duration for host %s set to permanent"
 msgstr ""
-"Duración de exención de clones para el host %s establecida como permanente"
+"Duración de exención de clones para el host %s establecida como "
+"permanente"
 
 #: modules/operserv/clones.c:708
 msgid "Syntax: CLONES SETEXEMPT <ip> DURATION <value>"
@@ -6759,8 +6795,8 @@ msgstr "Fin de CLONES LISTEXEMPT"
 #: modules/operserv/clones.c:892
 #, c-format
 msgid ""
-"WARNING: You may not have any more than %d clients on the network at once. "
-"Any further connections over this limit risks being removed."
+"WARNING: You may not have any more than %d clients on the network at "
+"once. Any further connections over this limit risks being removed."
 msgstr ""
 
 #: modules/operserv/compare.c:20
@@ -6913,7 +6949,8 @@ msgstr "Máscara de host no válida, %s"
 #: modules/operserv/ignore.c:115
 #, c-format
 msgid "The mask %s already exists on the services ignore list."
-msgstr "La máscara %s ya se encuentra en la lista de ignoración de servicios."
+msgstr ""
+"La máscara %s ya se encuentra en la lista de ignoración de servicios."
 
 #: modules/operserv/ignore.c:124
 #, c-format
@@ -7046,8 +7083,8 @@ msgstr "Número máximo de sesiones permitidas por usuario: %d"
 msgid ""
 "Maximum number of usernames that can be registered to one email address: %d"
 msgstr ""
-"Máximo número de usuarios que pueden ser registrados por una misma dirección "
-"de email: %d"
+"Máximo número de usuarios que pueden ser registrados por una misma dirección"
+" de email: %d"
 
 #: modules/operserv/info.c:54
 #, c-format
@@ -7311,8 +7348,8 @@ msgid ""
 "%s is depended upon by %s, which is a permanent module and cannot be "
 "reloaded."
 msgstr ""
-"%s es una dependencia de %s, el cual es un módulo permanente y no puede ser "
-"recargado."
+"%s es una dependencia de %s, el cual es un módulo permanente y no puede "
+"ser recargado."
 
 #: modules/operserv/modreload.c:150
 #, c-format
@@ -7322,11 +7359,11 @@ msgstr "Módulo %s recargado (de %s)."
 #: modules/operserv/modreload.c:158
 #, c-format
 msgid ""
-"Module %s failed to reload, and does not allow unloading. Shutting down to "
-"avoid data loss."
+"Module %s failed to reload, and does not allow unloading. Shutting down to"
+" avoid data loss."
 msgstr ""
-"El módulo %s no pudo ser recargado, y no permite ser descargado. Terminando "
-"ejecución para evitar la pérdida de datos."
+"El módulo %s no pudo ser recargado, y no permite ser descargado. "
+"Terminando ejecución para evitar la pérdida de datos."
 
 #: modules/operserv/modreload.c:167
 #, c-format
@@ -7453,7 +7490,8 @@ msgid "%s is not a valid command."
 msgstr "%s no es un comando válido."
 
 #: modules/operserv/rakill.c:25
-msgid "Sets a group of AKILLs against users matching a specific regex pattern."
+msgid ""
+"Sets a group of AKILLs against users matching a specific regex pattern."
 msgstr ""
 "Establece un grupo de AKILLs sobre usuarios que coincidan con un patrón "
 "regex específico."
@@ -7471,7 +7509,8 @@ msgstr "La expresión regular %s no es válida."
 
 #: modules/operserv/rakill.c:98
 msgid "The provided regex matches you, refusing RAKILL."
-msgstr "La expresión regular especificada coincide con Ud., rechazando RAKILL."
+msgstr ""
+"La expresión regular especificada coincide con Ud., rechazando RAKILL."
 
 #: modules/operserv/rakill.c:112
 #, c-format
@@ -7571,11 +7610,13 @@ msgstr ""
 
 #: modules/operserv/rwatch.c:51
 msgid "Adds an entry to the regex watch list."
-msgstr "Agrega una entrada a la lista de expresiones regulares de observación."
+msgstr ""
+"Agrega una entrada a la lista de expresiones regulares de observación."
 
 #: modules/operserv/rwatch.c:52
 msgid "Removes an entry from the regex watch list."
-msgstr "Quita una entrada de la lista de expresiones regulares de observación."
+msgstr ""
+"Quita una entrada de la lista de expresiones regulares de observación."
 
 #: modules/operserv/rwatch.c:53
 msgid "Displays the regex watch list."
@@ -7699,7 +7740,8 @@ msgid "Sets when unused nicks and accounts expire."
 msgstr ""
 
 #: modules/operserv/set.c:52
-msgid "Changes the prefix to use when changing the user's nick on enforcement."
+msgid ""
+"Changes the prefix to use when changing the user's nick on enforcement."
 msgstr ""
 
 #: modules/operserv/set.c:64
@@ -7881,10 +7923,11 @@ msgstr "Sintaxis: SGLINE ADD <gecos> [!P|!T <minutos>] <razón>"
 
 #: modules/operserv/sgline.c:209
 #, c-format
-msgid "Invalid gecos: %s. At least three non-wildcard characters are required."
+msgid ""
+"Invalid gecos: %s. At least three non-wildcard characters are required."
 msgstr ""
-"El gecos specificado no es válido: %s. Se requieren al menos tres caracteres "
-"que no sean comodines."
+"El gecos specificado no es válido: %s. Se requieren al menos tres "
+"caracteres que no sean comodines."
 
 #: modules/operserv/sgline.c:215
 msgid "The mask provided is too long."
@@ -8026,10 +8069,11 @@ msgstr "Sintaxis: SOPER ADD <cuenta> <clase oper.> [contraseña]"
 #: modules/operserv/soper.c:268
 #, c-format
 msgid ""
-"You may not modify %s's operclass as it is defined in the configuration file."
+"You may not modify %s's operclass as it is defined in the configuration "
+"file."
 msgstr ""
-"Ud. no puede modificar la clase de operador de %s puesto que está definida "
-"en el archivo de configuración."
+"Ud. no puede modificar la clase de operador de %s puesto que está definida"
+" en el archivo de configuración."
 
 #: modules/operserv/soper.c:160 modules/operserv/specs.c:163
 #, c-format
@@ -8049,9 +8093,11 @@ msgstr "La clase de operador %s tiene más privilegios que Ud."
 #: modules/operserv/soper.c:176 modules/operserv/soper.c:234
 #: modules/operserv/soper.c:280
 #, c-format
-msgid "Oper class for %s is set to %s which you are not authorized to change."
+msgid ""
+"Oper class for %s is set to %s which you are not authorized to change."
 msgstr ""
-"La clase de operador para %s es %s, la cual Ud. no está autorizado a cambiar."
+"La clase de operador para %s es %s, la cual Ud. no está autorizado a "
+"cambiar."
 
 #: modules/operserv/soper.c:200
 #, c-format
@@ -8099,23 +8145,20 @@ msgid "Shows oper flags."
 msgstr "Muestra permisos de operador."
 
 #: modules/operserv/specs.c:47
-#, fuzzy
 msgid "Nicknames/Accounts"
-msgstr "Nicks/contraseñas: %s"
+msgstr ""
 
 #: modules/operserv/specs.c:49
-#, fuzzy
 msgid "view concealed information about accounts"
-msgstr "Oculta información sobre un canal."
+msgstr ""
 
 #: modules/operserv/specs.c:50
 msgid "drop accounts, freeze accounts, reset passwords"
 msgstr ""
 
 #: modules/operserv/specs.c:51
-#, fuzzy
 msgid "send passwords"
-msgstr "Contraseña no válida."
+msgstr ""
 
 #: modules/operserv/specs.c:52
 msgid "set vhosts"
@@ -8126,24 +8169,20 @@ msgid "register accounts on behalf of another user"
 msgstr ""
 
 #: modules/operserv/specs.c:54 modules/operserv/specs.c:67
-#, fuzzy
 msgid "mark accounts"
-msgstr "Cuenta"
+msgstr ""
 
 #: modules/operserv/specs.c:55 modules/operserv/specs.c:68
-#, fuzzy
 msgid "hold accounts"
-msgstr "Cuenta"
+msgstr ""
 
 #: modules/operserv/specs.c:61
-#, fuzzy
 msgid "Channels"
-msgstr "Canales: %s"
+msgstr ""
 
 #: modules/operserv/specs.c:63
-#, fuzzy
 msgid "view concealed information about channels"
-msgstr "Oculta información sobre un canal."
+msgstr ""
 
 #: modules/operserv/specs.c:64
 msgid "drop channels, close channels, transfer ownership"
@@ -8154,53 +8193,44 @@ msgid "mlock operator modes"
 msgstr ""
 
 #: modules/operserv/specs.c:66
-#, fuzzy
 msgid "join staff channels"
-msgstr "Muestra una lista de puntajes de canal."
+msgstr ""
 
 #: modules/operserv/specs.c:69
-#, fuzzy
 msgid "bypass channel registration limits"
-msgstr "Anula (elimina) el registro de un canal."
+msgstr ""
 
 #: modules/operserv/specs.c:75
-#, fuzzy
 msgid "General"
-msgstr "General: %s"
+msgstr ""
 
 #: modules/operserv/specs.c:77
-#, fuzzy
 msgid "view concealed information about servers"
-msgstr "Muestra información sobre grupos registrados."
+msgstr ""
 
 #: modules/operserv/specs.c:78
-#, fuzzy
 msgid "view privileges of other users"
-msgstr "Privilegios de %s:"
+msgstr ""
 
 #: modules/operserv/specs.c:79
 msgid "exempt from flood control"
 msgstr ""
 
 #: modules/operserv/specs.c:80
-#, fuzzy
 msgid "administer services"
-msgstr "Reinicia los servicios."
+msgstr ""
 
 #: modules/operserv/specs.c:81
-#, fuzzy
 msgid "edit private and internal metadata"
-msgstr "Manipula metadatos del canal."
+msgstr ""
 
 #: modules/operserv/specs.c:87
-#, fuzzy
 msgid "OperServ"
-msgstr "OperServ: %s"
+msgstr ""
 
 #: modules/operserv/specs.c:89
-#, fuzzy
 msgid "set channel modes"
-msgstr "Muestra una lista de puntajes de canal."
+msgstr ""
 
 #: modules/operserv/specs.c:90
 msgid "add and remove autokills"
@@ -8211,47 +8241,40 @@ msgid "masskill channels or regexes"
 msgstr ""
 
 #: modules/operserv/specs.c:92
-#, fuzzy
 msgid "jupe servers"
-msgstr "Desconecta un servidor."
+msgstr ""
 
 #: modules/operserv/specs.c:93
 msgid "NOOP access"
 msgstr ""
 
 #: modules/operserv/specs.c:94
-#, fuzzy
 msgid "send global notices"
-msgstr "Envía un anuncio global."
+msgstr ""
 
 #: modules/operserv/specs.c:95
-#, fuzzy
 msgid "edit oper privileges"
-msgstr "Fin de privilegios"
+msgstr ""
 
 #: modules/operserv/specs.c:96
-#, fuzzy
 msgid "perform actions as any other user"
-msgstr "Realiza una operación sobre la cuenta de otro usuario."
+msgstr ""
 
 #: modules/operserv/specs.c:102
 msgid "GroupServ"
 msgstr ""
 
 #: modules/operserv/specs.c:104
-#, fuzzy
 msgid "view concealed information about groups"
-msgstr "Muestra información sobre grupos registrados."
+msgstr ""
 
 #: modules/operserv/specs.c:105
-#, fuzzy
 msgid "administer groups"
-msgstr "Muestra grupos registrados."
+msgstr ""
 
 #: modules/operserv/specs.c:106
-#, fuzzy
 msgid "bypass group registration limits"
-msgstr "%s no puede ignorar límites de registro."
+msgstr ""
 
 #: modules/operserv/specs.c:149
 #, c-format
@@ -8397,9 +8420,9 @@ msgid "Services have been up for %s"
 msgstr "Servicios en ejecución por %s"
 
 #: modules/operserv/uptime.c:38
-#, fuzzy, c-format
+#, c-format
 msgid "Current PID: %d"
-msgstr "Paso actual      : %u"
+msgstr ""
 
 #: modules/operserv/uptime.c:39
 #, c-format
@@ -8459,7 +8482,8 @@ msgstr ""
 
 #: modules/rpgserv/help.c:25
 #, c-format
-msgid "%s allows users to search for game channels by matching on properties."
+msgid ""
+"%s allows users to search for game channels by matching on properties."
 msgstr ""
 
 #: modules/rpgserv/info.c:17
@@ -8569,7 +8593,8 @@ msgstr ""
 
 #: modules/rpgserv/search.c:78
 #, c-format
-msgid "For more information on a specific channel, use /msg %s INFO <channel>."
+msgid ""
+"For more information on a specific channel, use /msg %s INFO <channel>."
 msgstr ""
 
 #: modules/rpgserv/set.c:17
@@ -8687,49 +8712,43 @@ msgid "Failed to retrieve script list: %s"
 msgstr "No se pudo obtener la lista de scripts: %s"
 
 #: modules/statserv/channel.c:19
-#, fuzzy
 msgid "Obtain various information about clones"
-msgstr "Oculta información sobre un canal."
+msgstr ""
 
 #: modules/statserv/channel.c:22
-#, fuzzy
 msgid "Obtain the topic for a given channel."
-msgstr "Establece el tema en un canal."
+msgstr ""
 
 #: modules/statserv/channel.c:25
-#, fuzzy
 msgid "Count the number of channels on the network."
-msgstr "Muestra los nombres reales más frecuentes en la red"
+msgstr ""
 
 #: modules/statserv/channel.c:58
-#, fuzzy
 msgid "Syntax: CHANNEL [TOPIC|COUNT] [parameters]"
-msgstr "Sintaxis: INJECT <parámetros>"
+msgstr ""
 
 #: modules/statserv/channel.c:82
-#, fuzzy
 msgid "Syntax: CHANNEL TOPIC <#channel>"
-msgstr "Sintaxis: COUNT <#canal>"
+msgstr ""
 
 #: modules/statserv/channel.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "The channel %s does not exist."
-msgstr "El canal %s no existe."
+msgstr ""
 
 #: modules/statserv/channel.c:98
-#, fuzzy
 msgid "You are not authorised to perform this action."
-msgstr "Ud. no está autorizado a realizar esta operación."
+msgstr ""
 
 #: modules/statserv/channel.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "Topic for %s set by %s: %s"
-msgstr "El tema ha cambiado a %s en %s."
+msgstr ""
 
 #: modules/statserv/channel.c:107
-#, fuzzy, c-format
+#, c-format
 msgid "No topic set for %s"
-msgstr "Lista %s para %s:"
+msgstr ""
 
 #: modules/statserv/main.c:43
 #, c-format
@@ -8741,48 +8760,43 @@ msgid "Monitor network splits."
 msgstr ""
 
 #: modules/statserv/netsplit.c:22
-#, fuzzy
 msgid "List currently split servers."
-msgstr "%s se encuentra actualmente vacío."
+msgstr ""
 
 #: modules/statserv/netsplit.c:25
-#, fuzzy
 msgid "Remove a server from the netsplit list."
-msgstr "Quita una entrada de la lista de expresiones regulares de observación."
+msgstr ""
 
 #: modules/statserv/netsplit.c:77
-#, fuzzy
 msgid "Syntax: NETSPLIT [LIST|REMOVE] [parameters]"
-msgstr "Sintaxis: BADMAIL ADD|DEL|LIST [parámetros]"
+msgstr ""
 
 #: modules/statserv/netsplit.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s [Split %s ago]"
-msgstr "%-5d %-22s %s [modificado hace %s]"
+msgstr ""
 
 #: modules/statserv/netsplit.c:104
-#, fuzzy
 msgid "End of netsplit list."
-msgstr "Fin de la lista."
+msgstr ""
 
 #: modules/statserv/netsplit.c:116
 msgid "Syntax: NETSPLIT REMOVE <server>"
 msgstr ""
 
 #: modules/statserv/netsplit.c:125
-#, fuzzy, c-format
+#, c-format
 msgid "%s removed from the netsplit list."
-msgstr "%s ha sido quitado de la lista de ignoración de servicios."
+msgstr ""
 
 #: modules/statserv/netsplit.c:128
-#, fuzzy, c-format
+#, c-format
 msgid "The server %s does is not a split server."
-msgstr "%s no es un servicio válido."
+msgstr ""
 
 #: modules/statserv/server.c:19
-#, fuzzy
 msgid "Obtain information about servers on the network."
-msgstr "Oculta información acerca de Ud. a otros usuarios."
+msgstr ""
 
 #: modules/statserv/server.c:22
 msgid "Obtain a list of servers."
@@ -8793,21 +8807,21 @@ msgid "Count the amount of servers connected to the network."
 msgstr ""
 
 #: modules/statserv/server.c:53
-#, fuzzy
 msgid "Syntax: SERVER [LIST|COUNT] [parameters]"
-msgstr "Sintaxis: INJECT <parámetros>"
+msgstr ""
 
 #: modules/statserv/server.c:77
-#, fuzzy, c-format
+#, c-format
 msgid "%d: %s [%s]"
-msgstr "%d: %s"
+msgstr ""
 
 #: modules/statserv/server.c:79
-#, fuzzy
 msgid "End of server list."
-msgstr "Fin de la Lista NOOP de servidores."
+msgstr ""
 
 #: modules/statserv/server.c:84
 #, c-format
 msgid "Network size: %u servers"
 msgstr ""
+
+
