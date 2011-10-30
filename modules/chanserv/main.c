@@ -296,6 +296,7 @@ void _modinit(module_t *m)
 	add_duration_conf_item("EXPIRE", &chansvs.me->conf_table, 0, &chansvs.expiry, "d", 0);
 	add_uint_conf_item("MAXCHANACS", &chansvs.me->conf_table, 0, &chansvs.maxchanacs, 0, INT_MAX, 0);
 	add_uint_conf_item("MAXFOUNDERS", &chansvs.me->conf_table, 0, &chansvs.maxfounders, 1, (512 - 60) / (9 + 2), 4); /* fit on a line */
+	add_dupstr_conf_item("FOUNDER_FLAGS", &chansvs.me->conf_table, 0, &chansvs.founder_flags, NULL);
 	add_dupstr_conf_item("DEFTEMPLATES", &chansvs.me->conf_table, 0, &chansvs.deftemplates, NULL);
 	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
 }

@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "chanserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -147,7 +148,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		mc->mlock_off |= CMODE_KEY;
 	mc->flags |= config_options.defcflags;
 
-	chanacs_add(mc, entity(si->smu), CA_INITIAL & ca_all, CURRTIME, entity(si->smu));
+	chanacs_add(mc, entity(si->smu), custom_founder_check(), CURRTIME, entity(si->smu));
 
 	if (c->ts > 0)
 	{

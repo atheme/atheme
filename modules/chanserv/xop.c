@@ -8,6 +8,7 @@
 
 #include "atheme.h"
 #include "template.h"
+#include "chanserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -482,7 +483,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (ca->level & CA_AKICK)
 			continue;
 		if (ca->level & CA_FOUNDER)
-			newlevel = CA_INITIAL & ca_all, desc = "Founder";
+			newlevel = custom_founder_check(), desc = "Founder";
 		else if (!(~ca->level & ca_sop))
 			newlevel = ca_sop, desc = "SOP";
 		else if (ca->level == ca_aop)

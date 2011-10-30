@@ -1162,6 +1162,13 @@ chanserv {
 	 */
 	maxfounders = 4;
 
+	/* (*)founder_flags
+	 * The flags a user will get when they register a new channel.
+	 * This MUST include at least 'F' or it will be ignored.
+	 * If it is not set, Atheme will give the user all channel flags.
+	 */
+	#founder_flags = "AFORfiorstv";
+
 	/* (*)akick_time
 	 * The default expiration time (in minutes) for AKICKs.
 	 * Comment this option out or set to zero for permanent AKICKs

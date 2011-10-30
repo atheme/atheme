@@ -39,6 +39,8 @@ struct chansvs_
   unsigned int maxchanacs;	/* max entries in chanacs list */
   unsigned int maxfounders;	/* max founders per channel    */
 
+  char *founder_flags;		/* default founder flags for new channels */
+
   char *deftemplates;		/* default templates          */
 
   bool hide_xop;		/* hide XOP templates	      */
