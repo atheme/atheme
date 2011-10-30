@@ -205,7 +205,7 @@ resign_player(player_t *player)
 static bool
 build_maze(unsigned int size)
 {
-	int i, j;
+	unsigned int i, j;
 	room_t *w;
 
 	if (size < 10)

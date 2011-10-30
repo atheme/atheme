@@ -382,7 +382,6 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 	hostentry_t *he;
 	int k = 0;
 	mowgli_patricia_iteration_state_t state;
-	int allowed = 0;
 
 	MOWGLI_PATRICIA_FOREACH(he, &state, hostlist)
 	{

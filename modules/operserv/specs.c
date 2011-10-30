@@ -119,7 +119,8 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	const char *targettype = parv[0];
 	const char *target = parv[1];
 	char privbuf[BUFSIZE];
-	int i, j;
+	unsigned int i;
+	int j;
 
 	if (!has_any_privs(si))
 	{

@@ -33,10 +33,10 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* misc structs etc */
 	myentity_t *mt;
-	mowgli_node_t *n, *tn;
+	mowgli_node_t *n;
 	mymemo_t *memo;
 	int sent = 0, tried = 0;
-	bool ignored, operoverride = false;
+	bool ignored;
 	service_t *memoserv;
 	myentity_iteration_state_t state;
 
@@ -167,7 +167,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 		command_add_flood(si, FLOOD_HEAVY);
 	else if (sent > 1)
 		command_add_flood(si, FLOOD_MODERATE);
-	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%d/%d sent) (oper override)", m, sent, tried);
+	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%d/%d sent)", m, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d accounts."), sent);
 	return;
 }	
