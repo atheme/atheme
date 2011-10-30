@@ -48,7 +48,6 @@ static void netsplit_server_add(server_t *s)
     if (serv != NULL)
     {
         netsplit_delete_serv(serv);
-        wallops("Server %s reconnected to the network.", s->name);
     }
 }
 
@@ -61,8 +60,6 @@ static void netsplit_server_delete(hook_server_delete_t *serv)
     s->disconnected_since = CURRTIME;
     s->flags = serv->s->flags;
     mowgli_patricia_add(splitlist, s->name, s);
-
-    wallops("Server %s split from the network.", s->name);
 }
 
 static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[])
