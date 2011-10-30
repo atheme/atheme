@@ -558,7 +558,7 @@ AC_SUBST(RPATH)
 
 AC_ARG_WITH(mowgli2,
 AC_HELP_STRING([--with-mowgli2],[ Enable usage of Mowgli-2 instead of Mowgli-1 framework]),
-[with_mowgli2=yes],
+[],
 [with_mowgli2=no])
 
 if test "x$with_mowgli2" = "xyes"; then
