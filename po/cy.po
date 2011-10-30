@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Atheme IRC Services\n"
 "Report-Msgid-Bugs-To: http://jira.atheme.org/browse/SRV\n"
 "POT-Creation-Date: 2011-10-28 15:54-0500\n"
-"PO-Revision-Date: 2011-10-28 22:05+0000\n"
+"PO-Revision-Date: 2011-10-30 19:12+0000\n"
 "Last-Translator: nenolod <nenolod@dereferenced.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1170,7 +1170,7 @@ msgstr "Annilys dull; rhai dilys yn cael eu %s."
 #: modules/chanserv/clear_bans.c:107
 #, c-format
 msgid "Cleared %s modes on %s (%d removed)."
-msgstr "Dulliau %s Clirio ar  (%d symud)."
+msgstr "Dulliau %s Clirio ar %s (%d symud)."
 
 #: modules/chanserv/clear_flags.c:86 modules/chanserv/flags.c:239
 #, c-format
@@ -1189,7 +1189,7 @@ msgstr "Clirio defnyddwyr o %s."
 #: modules/chanserv/clone.c:135
 #, c-format
 msgid "Cloned %s to %s."
-msgstr "%s wedi'u clonio i ."
+msgstr "%s wedi'u clonio i %s."
 
 #: modules/chanserv/close.c:21
 msgid "Closes a channel."
@@ -1431,7 +1431,7 @@ msgstr "Cystrawen: FTRANSFER <#sianel> <iawr>"
 #: modules/chanserv/ftransfer.c:65 modules/chanserv/set_founder.c:176
 #, c-format
 msgid "%s is already the founder of %s."
-msgstr "%s eisoes yn sylfaenydd ."
+msgstr "%s eisoes yn sylfaenydd %s."
 
 #: modules/chanserv/ftransfer.c:73
 #, c-format
@@ -1502,12 +1502,12 @@ msgstr ""
 #: modules/chanserv/voice.c:98 modules/chanserv/voice.c:159
 #, c-format
 msgid "%s is not on %s."
-msgstr "Nid %s yn  ar."
+msgstr "Nid %s yn %s ar."
 
 #: modules/chanserv/halfop.c:123
 #, c-format
 msgid "%s has been halfopped on %s."
-msgstr "%s wedi bod yn halfopped ar ."
+msgstr "%s wedi bod yn halfopped ar %s."
 
 #: modules/chanserv/halfop.c:143
 msgid "Syntax: DEHALFOP <#channel> [nickname]"
@@ -2224,22 +2224,22 @@ msgstr "Caniatáu neu wasanaethau wrthod hapchwarae."
 #: modules/chanserv/set_gameserv.c:81
 #, c-format
 msgid "%s is already set to %s for %s."
-msgstr ""
+msgstr "%s yn cael ei osod yn barod i %s am %s."
 
 #: modules/chanserv/set_gameserv.c:88
 #, c-format
 msgid "%s has been set to %s for %s."
-msgstr ""
+msgstr "%s wedi ei osod i %s am %s."
 
 #: modules/chanserv/set_gameserv.c:96
 #, c-format
 msgid "%s was not set for %s."
-msgstr ""
+msgstr "Nid oedd %s a osodwyd ar gyfer %s."
 
 #: modules/chanserv/set_gameserv.c:104
 #, c-format
 msgid "%s has been disabled for %s."
-msgstr ""
+msgstr "%s wedi bod yn anabl am %s."
 
 #: modules/chanserv/set_guard.c:23
 msgid "Sets whether or not services will inhabit the channel."
@@ -2266,68 +2266,68 @@ msgstr "Terfynau grym y faner +f."
 #: modules/nickserv/set_private.c:34 modules/nickserv/set_privmsg.c:34
 #, c-format
 msgid "The %s flag is already set for %s."
-msgstr ""
+msgstr "Baner y %s wedi ei osod yn barod ar gyfer %s."
 
 #: modules/chanserv/set_limitflags.c:75 modules/chanserv/set_private.c:75
 #: modules/nickserv/set_private.c:43 modules/nickserv/set_privmsg.c:42
 #, c-format
 msgid "The %s flag has been set for %s."
-msgstr ""
+msgstr "Baner y %s wedi cael ei osod ar gyfer %s."
 
 #: modules/chanserv/set_limitflags.c:84 modules/chanserv/set_private.c:84
 #: modules/nickserv/set_private.c:51 modules/nickserv/set_privmsg.c:50
 #, c-format
 msgid "The %s flag is not set for %s."
-msgstr ""
+msgstr "Nid yw baner y %s wedi ei osod ar gyfer %s."
 
 #: modules/chanserv/set_limitflags.c:92 modules/chanserv/set_private.c:92
 #: modules/nickserv/set_private.c:59 modules/nickserv/set_privmsg.c:58
 #, c-format
 msgid "The %s flag has been removed for %s."
-msgstr ""
+msgstr "Baner y %s wedi cael ei symud ar gyfer %s."
 
 #: modules/chanserv/set_mlock.c:21
 msgid "Sets channel mode lock."
-msgstr ""
+msgstr "Setiau clo modd sianel."
 
 #: modules/chanserv/set_mlock.c:112 modules/chanserv/set_mlock.c:143
 #: modules/chanserv/set_mlock.c:185
 #, c-format
 msgid "You need to specify a value for mode +%c."
-msgstr ""
+msgstr "Mae angen i chi bennu gwerth am modd +%c."
 
 #: modules/chanserv/set_mlock.c:117
 #, c-format
 msgid "MLOCK key is too long (%d > %d)."
-msgstr ""
+msgstr "MLOCK allweddol yn rhy hir (%d > %d)."
 
 #: modules/chanserv/set_mlock.c:122
 msgid "MLOCK key contains invalid characters."
-msgstr ""
+msgstr "MLOCK allweddol yn cynnwys nodau annilys."
 
 #: modules/chanserv/set_mlock.c:149
 msgid "You must specify a positive integer for limit."
-msgstr ""
+msgstr "Mae'n rhaid i chi bennu cyfanrif positif ar gyfer terfyn."
 
 #: modules/chanserv/set_mlock.c:190 modules/chanserv/set_mlock.c:195
 #, c-format
 msgid "Invalid value %s for mode +%c."
-msgstr ""
+msgstr "Gwerth annilys %s ar gyfer dull +%c."
 
 #: modules/chanserv/set_mlock.c:218
 #, c-format
 msgid "You may only alter +%s modes."
-msgstr ""
+msgstr "Efallai mai dim ond newid dulliau teithio +%s."
 
 #: modules/chanserv/set_mlock.c:294
 #, c-format
 msgid "The MLOCK for %s has been set to %s."
-msgstr ""
+msgstr "Mae'r MLOCK am %s wedi ei osod i %s."
 
 #: modules/chanserv/set_mlock.c:299
 #, c-format
 msgid "The MLOCK for %s has been removed."
-msgstr ""
+msgstr "Mae'r MLOCK am %s wedi cael ei ddileu."
 
 #: modules/chanserv/set_mlock.c:303
 #, c-format
@@ -2336,12 +2336,12 @@ msgstr ""
 
 #: modules/chanserv/set_prefix.c:21
 msgid "Sets the channel PREFIX."
-msgstr ""
+msgstr "Gosod y rhagddodiad sianel."
 
 #: modules/chanserv/set_prefix.c:86
 #, c-format
 msgid "The fantasy prefix for channel %s has been reset."
-msgstr ""
+msgstr "Mae'r rhagddodiad ffantasi am %s sianel wedi cael ei ailosod."
 
 #: modules/chanserv/set_prefix.c:92
 #, c-format
@@ -2349,233 +2349,237 @@ msgid ""
 "Prefix '%s' is invalid. The prefix may contain only printable characters, "
 "and must contain at least one non-space character."
 msgstr ""
+"Rhagddodiad '%s' yn annilys. Gall y rhagddodiad cynnwys dim ond cymeriadau "
+"argraffadwy, a rhaid iddo gynnwys o leiaf un nad ydynt yn lle cymeriad."
 
 #: modules/chanserv/set_prefix.c:100
 #, c-format
 msgid "The fantasy prefix for channel %s has been set to %s."
-msgstr ""
+msgstr "Mae'r rhagddodiad ffantasi am %s sianel wedi ei osod i %s."
 
 #: modules/chanserv/set_private.c:21
 msgid "Hides information about a channel."
-msgstr ""
+msgstr "Cuddio gwybodaeth am sianel."
 
 #: modules/chanserv/set_property.c:21
 msgid "Manipulates channel metadata."
-msgstr ""
+msgstr "Yn trin metadata sianel."
 
 #: modules/chanserv/set_property.c:48
 msgid "Syntax: SET <#channel> PROPERTY <property> [value]"
-msgstr ""
+msgstr "Cystrawen: SET <#sianel> PROPERTY <eiddo> [gwerth]"
 
 #: modules/chanserv/set_property.c:55 modules/nickserv/set_property.c:56
 msgid "Invalid property name."
-msgstr ""
+msgstr "Enw annilys eiddo."
 
 #: modules/chanserv/set_property.c:80 modules/nickserv/set_property.c:69
 #, c-format
 msgid "Metadata entry %s was not set."
-msgstr ""
+msgstr "Nid yw Metadata cofnod %s osodwyd."
 
 #: modules/chanserv/set_property.c:86 modules/nickserv/set_property.c:80
 #, c-format
 msgid "Metadata entry %s has been deleted."
-msgstr ""
+msgstr "Metadata mynediad %s wedi cael ei ddileu."
 
 #: modules/chanserv/set_property.c:99 modules/nickserv/set_property.c:93
 #, c-format
 msgid "Cannot add %s to %s metadata table, it is full."
-msgstr ""
+msgstr "Methu ychwanegu %s i dabl metadata %s, mae'n llawn."
 
 #: modules/chanserv/set_property.c:106 modules/nickserv/set_property.c:100
 msgid "Parameters are too long. Aborting."
-msgstr ""
+msgstr "Paramedrau yn rhy hir. Erthylu."
 
 #: modules/chanserv/set_property.c:112 modules/nickserv/set_property.c:113
 #, c-format
 msgid "Metadata entry %s added."
-msgstr ""
+msgstr "Metadata cofnod %s ychwanegodd."
 
 #: modules/chanserv/set_restricted.c:21
 msgid ""
 "Restricts access to the channel to users on the access list. (Other users "
 "are kickbanned.)"
 msgstr ""
+"Cyfyngu mynediad i'r sianel i ddefnyddwyr ar y rhestr mynediad. (Defnyddwyr "
+"eraill yn tynnu oddi ar y sianel.)"
 
 #: modules/chanserv/set_secure.c:21
 msgid "Prevents unauthorized users from gaining operator status."
-msgstr ""
+msgstr "Rhwystro defnyddwyr heb awdurdod rhag cael statws gweithredwr."
 
 #: modules/chanserv/set_topiclock.c:21
 msgid "Restricts who can change the topic."
-msgstr ""
+msgstr "Cyfyngu a all newid y pwnc."
 
 #: modules/chanserv/set_url.c:21
 msgid "Sets the channel URL."
-msgstr ""
+msgstr "Gosod yr URL sianel."
 
 #: modules/chanserv/set_url.c:63 modules/groupserv/set_url.c:49
 #, c-format
 msgid "The URL for %s has been cleared."
-msgstr ""
+msgstr "Y URL am %s wedi cael ei glirio."
 
 #: modules/chanserv/set_url.c:67 modules/groupserv/set_url.c:53
 #, c-format
 msgid "The URL for %s was not set."
-msgstr ""
+msgstr "Nid yw'r URL %s ar gyfer ei osod."
 
 #: modules/chanserv/set_url.c:75 modules/groupserv/set_url.c:61
 #, c-format
 msgid "The URL of %s has been set to %s."
-msgstr ""
+msgstr "Mae URL %s wedi ei osod i %s."
 
 #: modules/chanserv/set_verbose.c:21
 msgid "Notifies channel about access list modifications."
-msgstr ""
+msgstr "Rhoi gwybod am addasiadau sianel rhestr mynediad."
 
 #: modules/chanserv/status.c:20
 msgid "Displays your status in services."
-msgstr ""
+msgstr "Arddangosfeydd eich statws yn y gwasanaethau."
 
 #: modules/chanserv/status.c:64
 #, c-format
 msgid "You are banned from %s."
-msgstr ""
+msgstr "Rydych yn gwahardd rhag %s."
 
 #: modules/chanserv/status.c:67
 #, c-format
 msgid "You have access flags %s on %s."
-msgstr ""
+msgstr "Mae gennych fynediad baneri %s ar %s."
 
 #: modules/chanserv/status.c:70
 #, c-format
 msgid "You have no special access to %s."
-msgstr ""
+msgstr "Nid oes gennych unrhyw fynediad arbennig i %s."
 
 #: modules/chanserv/status.c:80 modules/nickserv/status.c:88
 #, c-format
 msgid "You are logged in as %s."
-msgstr ""
+msgstr "Rydych wedi logio i mewn fel %s."
 
 #: modules/chanserv/status.c:86 modules/nickserv/status.c:94
 #, c-format
 msgid "You are a services operator of class %s."
-msgstr ""
+msgstr "Rydych yn weithredwr gwasanaethau dosbarth %s."
 
 #: modules/chanserv/status.c:97 modules/nickserv/status.c:105
 #, c-format
 msgid "You are recognized as %s."
-msgstr ""
+msgstr "Rydych yn cael eu cydnabod fel %s."
 
 #: modules/chanserv/status.c:101 modules/nickserv/status.c:109
 msgid "You are a server administrator."
-msgstr ""
+msgstr "Rydych yn weinyddwr gweinydd."
 
 #: modules/chanserv/status.c:104 modules/nickserv/status.c:112
 msgid "You are an IRC operator."
-msgstr ""
+msgstr "Rydych yn gweithredwr IRC."
 
 #: modules/chanserv/sync.c:263
 msgid "Disables automatic channel ACL syncing."
-msgstr ""
+msgstr "Analluogi'r awtomatig cydamseru sianel ACL."
 
 #: modules/chanserv/taxonomy.c:20
 msgid "Displays a channel's metadata."
-msgstr ""
+msgstr "Arddangosfeydd metadata sianel yn."
 
 #: modules/chanserv/taxonomy.c:43
 msgid "Syntax: TAXONOMY <#channel>"
-msgstr ""
+msgstr "Cystrawen: TAXONOMY <#sianel>"
 
 #: modules/chanserv/taxonomy.c:49 modules/operserv/override.c:179
 #, c-format
 msgid "%s is not a registered channel."
-msgstr ""
+msgstr "Nid %s yn sianel cofrestredig."
 
 #: modules/chanserv/taxonomy.c:58
 #, c-format
 msgid "Channel %s is private."
-msgstr ""
+msgstr "%s sianel yn breifat."
 
 #: modules/chanserv/taxonomy.c:67 modules/nickserv/taxonomy.c:60
 #, c-format
 msgid "Taxonomy for %s:"
-msgstr ""
+msgstr "Tacsonomeg ar gyfer %s:"
 
 #: modules/chanserv/taxonomy.c:79 modules/nickserv/taxonomy.c:72
 #, c-format
 msgid "End of %s taxonomy."
-msgstr ""
+msgstr "Diwedd y tacsonomeg %s."
 
 #: modules/chanserv/template.c:23
 msgid "Manipulates predefined sets of flags."
-msgstr ""
+msgstr "Setiau yn trin diffinio ymlaen llaw o faneri."
 
 #: modules/chanserv/template.c:53 modules/chanserv/template.c:113
 msgid "Name"
-msgstr ""
+msgstr "Enw"
 
 #: modules/chanserv/template.c:53 modules/chanserv/template.c:113
 msgid "Flags"
-msgstr ""
+msgstr "Baneri"
 
 #: modules/chanserv/template.c:59
 msgid "End of network wide template list."
-msgstr ""
+msgstr "Diwedd y rhestr rhwydwaith templed eang."
 
 #: modules/chanserv/template.c:130
 #, c-format
 msgid "End of %s TEMPLATE listing."
-msgstr ""
+msgstr "Diwedd y rhestr TEMPLATE %s."
 
 #: modules/chanserv/template.c:133
 #, c-format
 msgid "No templates set on channel %s."
-msgstr ""
+msgstr "Dim templedi osod ar %s sianel."
 
 #: modules/chanserv/template.c:172
 #, c-format
 msgid "Usage: TEMPLATE %s [target flags]"
-msgstr ""
+msgstr "Defnydd: TEMPLATE %s [targed baneri]"
 
 #: modules/chanserv/template.c:295
 #, c-format
 msgid "Redefining built-in template %s."
-msgstr ""
+msgstr "Ailddiffinio adeiledig yn templed %s."
 
 #: modules/chanserv/template.c:321
 #, c-format
 msgid "Template %s on %s unchanged."
-msgstr ""
+msgstr "Templed %s ar %s y newid."
 
 #: modules/chanserv/template.c:323
 #, c-format
 msgid "No such template %s on %s."
-msgstr ""
+msgstr "Dim %s templed ar %s o'r fath."
 
 #: modules/chanserv/template.c:328
 #, c-format
 msgid "You are not allowed to set %s on template %s in %s."
-msgstr ""
+msgstr "Ni chaniateir i chi osod %s ar y templed %s yn %s."
 
 #: modules/chanserv/template.c:348
 #, c-format
 msgid "The template %.*s already has flags %.*s."
-msgstr ""
+msgstr "Mae'r templed %.*s eisoes wedi baneri %.*s"
 
 #: modules/chanserv/template.c:360
 #, c-format
 msgid "Added template %s with flags %s in %s."
-msgstr ""
+msgstr "Ychwanegwyd templed %s gyda baneri %s yn %s."
 
 #: modules/chanserv/template.c:362
 #, c-format
 msgid "Removed template %s from %s."
-msgstr ""
+msgstr "Symudwyd %s templed o %s."
 
 #: modules/chanserv/template.c:364
 #, c-format
 msgid "Changed template %s to %s in %s."
-msgstr ""
+msgstr "Wedi newid templed %s i %s yn %s."
 
 #: modules/chanserv/template.c:394
 #, c-format
@@ -2583,131 +2587,135 @@ msgid ""
 "Not updating %d access entries involving founder status. Please do it "
 "manually."
 msgstr ""
+"Ddim yn diweddaru cofnodion %d yn ymwneud â mynediad statws sylfaenydd. Os "
+"gwelwch yn dda yn ei wneud â llaw."
 
 #: modules/chanserv/topic.c:22
 msgid "Sets a topic on a channel."
-msgstr ""
+msgstr "Yn gosod bwnc ar sianel."
 
 #: modules/chanserv/topic.c:24
 msgid "Appends a topic on a channel."
-msgstr ""
+msgstr "Atodi bwnc ar sianel."
 
 #: modules/chanserv/topic.c:26
 msgid "Prepends a topic on a channel."
-msgstr ""
+msgstr "Dechrau bwnc ar sianel."
 
 #: modules/chanserv/topic.c:55
 msgid "Syntax: TOPIC <#channel> <topic>"
-msgstr ""
+msgstr "Cystrawen: TOPIC <#sianel> <bwnc>"
 
 #: modules/chanserv/topic.c:87 modules/chanserv/topic.c:162
 #: modules/chanserv/topic.c:237
 msgid "The new topic is invalid or too long."
-msgstr ""
+msgstr "Mae'r pwnc newydd yn annilys neu'n rhy hir."
 
 #: modules/chanserv/topic.c:103 modules/chanserv/topic.c:178
 #: modules/chanserv/topic.c:253
 #, c-format
 msgid "Topic set to %s on %s."
-msgstr ""
+msgstr "Pwnc osod i %s ar %s."
 
 #: modules/chanserv/topic.c:119
 msgid "Syntax: TOPICAPPEND <#channel> <topic>"
-msgstr ""
+msgstr "Cystrawen: TOPICAPPEND <#sianel> <bwnc>"
 
 #: modules/chanserv/topic.c:194
 msgid "Syntax: TOPICPREPEND <#channel> <topic>"
-msgstr ""
+msgstr "Cystrawen: TOPICPREPEND <#sianel> <bwnc>"
 
 #: modules/chanserv/unban_self.c:22
 msgid "Unbans you on a channel."
-msgstr ""
+msgstr " Cael gwared gwahardd yn erbyn chi ar sianel."
 
 #: modules/chanserv/unban_self.c:53
 msgid "Syntax: UNBAN <#channel>"
-msgstr ""
+msgstr "Cystrawen: UNBAN <#sianel>"
 
 #: modules/chanserv/unban_self.c:59
 #, c-format
 msgid "You may only unban yourself via %s."
-msgstr ""
+msgstr "Efallai y byddwch yn unig unban eich hun drwy %s."
 
 #: modules/chanserv/unban_self.c:61
 #, c-format
 msgid "Try /mode %s -b %s"
-msgstr ""
+msgstr "Ceisiwch /mode %s -b %s"
 
 #: modules/chanserv/version.c:12
 msgid "Displays version information of the services."
-msgstr ""
+msgstr "Arddangosfeydd gwybodaeth fersiwn o'r gwasanaethau."
 
 #: modules/chanserv/voice.c:21
 msgid "Gives channel voice to a user."
-msgstr ""
+msgstr "Mae'n rhoi llais sianel i ddefnyddiwr."
 
 #: modules/chanserv/voice.c:23
 msgid "Removes channel voice from a user."
-msgstr ""
+msgstr "Cael gwared ar lais sianel o ddefnyddiwr."
 
 #: modules/chanserv/voice.c:49
 msgid "Syntax: VOICE <#channel> [nickname]"
-msgstr ""
+msgstr "Cystrawen: VOICE <#sianel> [llysenw]"
 
 #: modules/chanserv/voice.c:110
 #, c-format
 msgid "%s has been voiced on %s."
-msgstr ""
+msgstr "%s wedi bod yn lleisio ar %s."
 
 #: modules/chanserv/voice.c:124
 msgid "Syntax: DEVOICE <#channel> [nickname]"
-msgstr ""
+msgstr "Cystrawen: DEVOICE <#sianel> [llysenw]"
 
 #: modules/chanserv/voice.c:171
 #, c-format
 msgid "%s has been devoiced on %s."
-msgstr ""
+msgstr "%s  ar %s."
 
 #: modules/chanserv/why.c:20
 msgid "Explains channel access logic."
-msgstr ""
+msgstr "Yn egluro rhesymeg mynediad sianel."
 
 #: modules/chanserv/why.c:50
 msgid "Syntax: WHY <channel> [user]"
-msgstr ""
+msgstr "Cystrawen: WHY <sianel> [defnyddwyr]"
 
 #: modules/chanserv/why.c:150 modules/chanserv/why.c:154
 #, c-format
 msgid "The %s flag is set for %s, therefore no status will be given."
 msgstr ""
+"Baner Y %s wedi ei osod ar gyfer %s, felly ni fydd statws yn cael ei "
+"roi."
 
 #: modules/chanserv/why.c:159
 msgid "+r exempts from +b."
-msgstr ""
+msgstr "+r yn eithrio o +b."
 
 #: modules/chanserv/why.c:161
 #, c-format
 msgid "%s has no special access to %s."
-msgstr ""
+msgstr "%s Nid oes mynediad arbennig i %s."
 
 #: modules/chanserv/xop.c:30
 msgid "Manipulates a channel SOP list."
-msgstr ""
+msgstr "Sianel yn trin rhestr SOP."
 
 #: modules/chanserv/xop.c:32
 msgid "Manipulates a channel AOP list."
-msgstr ""
+msgstr "Sianel yn trin rhestr AOP."
 
 #: modules/chanserv/xop.c:34
 msgid "Manipulates a channel HOP list."
-msgstr ""
+msgstr "Sianel yn trin rhestr HOP."
 
 #: modules/chanserv/xop.c:36
 msgid "Manipulates a channel VOP list."
-msgstr ""
+msgstr "Sianel yn trin rhestr VOP."
 
 #: modules/chanserv/xop.c:38
 msgid "Forces access levels to xOP levels."
-msgstr ""
+msgstr "Lluoedd lefelau mynediad i lefelau xOP."
 
 #: modules/chanserv/xop.c:74 modules/chanserv/xop.c:81
 msgid "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>"
@@ -2808,11 +2816,11 @@ msgstr ""
 
 #: modules/contrib/cs_badwords.c:23
 msgid "Manage the list of channel bad words."
-msgstr ""
+msgstr "Rheoli y rhestr o eiriau drwg sianel."
 
 #: modules/contrib/cs_badwords.c:24
 msgid "Set whether users can say badwords in channel or not."
-msgstr ""
+msgstr "Gosod a gall defnyddwyr ei ddweud badwords yn sianel neu beidio."
 
 #: modules/contrib/cs_badwords.c:238 modules/contrib/cs_badwords.c:374
 msgid "Syntax: BADWORDS <#channel> ADD|DEL|LIST [badword] [action]"
@@ -2834,7 +2842,7 @@ msgstr ""
 
 #: modules/contrib/cs_badwords.c:294 modules/contrib/dnsbl.c:141
 msgid "Invalid action given."
-msgstr ""
+msgstr "Gweithredu a roddwyd annilys."
 
 #: modules/contrib/cs_badwords.c:304
 msgid "Syntax: BADWORDS <#channel> DEL <badword>"
@@ -2842,7 +2850,7 @@ msgstr ""
 
 #: modules/contrib/cs_badwords.c:316 modules/contrib/cs_badwords.c:355
 msgid "There are no badwords set in this channel."
-msgstr ""
+msgstr "Nid oes unrhyw badwords a bennir yn y sianel."
 
 #: modules/contrib/cs_badwords.c:327
 #, c-format
@@ -2856,7 +2864,7 @@ msgstr ""
 
 #: modules/contrib/cs_fregister.c:20
 msgid "Forcibly registers a channel."
-msgstr ""
+msgstr "Rymus cofrestri sianel."
 
 #: modules/contrib/cs_fregister.c:54
 msgid "To forcibly register a channel: FREGISTER <#channel>"
@@ -2868,7 +2876,7 @@ msgstr ""
 
 #: modules/contrib/cs_userinfo.c:21
 msgid "Sets a userinfo message."
-msgstr ""
+msgstr "Yn gosod neges userinfo."
 
 #: modules/contrib/cs_userinfo.c:50
 msgid "Syntax: USERINFO <channel> [target] [info]"
@@ -2900,15 +2908,15 @@ msgstr ""
 
 #: modules/contrib/dnsbl.c:94
 msgid "Changes what happens to a user when they hit a DNSBL."
-msgstr ""
+msgstr "Newidiadau beth sy'n digwydd i ddefnyddiwr pan fyddant yn daro DNSBL."
 
 #: modules/contrib/dnsbl.c:95
 msgid "Manage the list of IP's exempt from DNSBL checking."
-msgstr ""
+msgstr "Rheoli y rhestr o ED heithrio rhag wirio DNSBL."
 
 #: modules/contrib/dnsbl.c:96
 msgid "Manually scan if a user is in a DNSBL."
-msgstr ""
+msgstr "Sgan llaw os yw defnyddiwr mewn DNSBL."
 
 #: modules/contrib/dnsbl.c:121
 msgid "Syntax: SET DNSBLACTION <action>"
@@ -2957,35 +2965,35 @@ msgstr ""
 
 #: modules/contrib/gs_roulette.c:20
 msgid "A game of Russian Roulette."
-msgstr ""
+msgstr "Mae gêm o roulette Rwsia."
 
 #: modules/contrib/gs_roulette.c:62
 msgid "*BANG*"
-msgstr ""
+msgstr "*BANG*"
 
 #: modules/contrib/gs_roulette.c:63
 msgid "*CLICK*"
-msgstr ""
+msgstr "*CLICK*"
 
 #: modules/contrib/ircd_announceserv.c:30
 msgid "Requests new announcement."
-msgstr ""
+msgstr "Ceisiadau cyhoeddiad newydd."
 
 #: modules/contrib/ircd_announceserv.c:31
 msgid "Lists announcements currently waiting for activation."
-msgstr ""
+msgstr "Rhestrau cyhoeddiadau hyn o bryd yn aros am activation."
 
 #: modules/contrib/ircd_announceserv.c:32
 msgid "Reject the requested announcement for the given nick."
-msgstr ""
+msgstr "Gwrthod y cais ar gyfer cyhoeddiad y Nick a roddir."
 
 #: modules/contrib/ircd_announceserv.c:33
 msgid "Activate the requested announcement for a given nick."
-msgstr ""
+msgstr "Activate y cyhoeddiad gofyn am Nick a roddir."
 
 #: modules/contrib/ircd_announceserv.c:34
 msgid "Cancels your requested announcement."
-msgstr ""
+msgstr "Canslo eich cyhoeddiad y gofynnwyd amdani."
 
 #: modules/contrib/ircd_announceserv.c:156
 #, c-format
@@ -3000,26 +3008,33 @@ msgstr ""
 msgid ""
 "You have been restricted from requesting announcements by network staff."
 msgstr ""
+"Rydych wedi cael eich cyfyngu rhag gofyn am gyhoeddiadau gan staff "
+"rhwydwaith."
 
 #: modules/contrib/ircd_announceserv.c:203
 msgid ""
 "You cannot request more than one announcement. Use CANCEL if you wish to "
 "cancel your current announcement and submit another."
 msgstr ""
+"Ni allwch ofyn am fwy nag un cyhoeddiad. Defnyddiwch GANSLO os ydych yn "
+"dymuno canslo eich cyhoeddiad ar hyn o bryd a chyflwyno un arall."
 
 #: modules/contrib/ircd_announceserv.c:213
 msgid "Your subject is too long. Subjects need to be under 35 characters."
 msgstr ""
+"Mae eich pwnc yn rhy hir. Pynciau Mae angen i fod o dan 35 gymeriadau."
 
 #: modules/contrib/ircd_announceserv.c:220
 msgid ""
 "Your announcement is too long. Announcements need to be under 450 "
 "characters."
 msgstr ""
+"Mae eich cyhoeddiad yn rhy hir. Cyhoeddiadau Mae angen i fod o dan 450 "
+"cymeriadau."
 
 #: modules/contrib/ircd_announceserv.c:240
 msgid "You have requested the following announcement: "
-msgstr ""
+msgstr "Rydych wedi gofyn am y cyhoeddiad canlynol: "
 
 #: modules/contrib/ircd_announceserv.c:241
 #, c-format
@@ -3046,11 +3061,11 @@ msgstr ""
 
 #: modules/contrib/ircd_announceserv.c:386
 msgid "You do not have a pending announcement to cancel."
-msgstr ""
+msgstr "Nid oes gennych cyhoeddiad yr arfaeth i ganslo."
 
 #: modules/contrib/ms_fsend.c:26
 msgid "Forcibly sends a memo to a user."
-msgstr ""
+msgstr "Rymus yn anfon memo i ddefnyddiwr."
 
 #: modules/contrib/ms_fsend.c:75 modules/memoserv/send.c:70
 #: modules/memoserv/sendall.c:69 modules/memoserv/sendgroup.c:72
@@ -3059,12 +3074,14 @@ msgid ""
 "You have used this command too many times; please wait a while and try "
 "again."
 msgstr ""
+"Rydych wedi defnyddio hon archa gormod o weithiau; os gwelwch yn dda aros am"
+" beth amser a cheisiwch eto."
 
 #: modules/contrib/ms_fsend.c:93 modules/memoserv/send.c:88
 #: modules/memoserv/sendall.c:87 modules/memoserv/sendgroup.c:90
 #: modules/memoserv/sendops.c:89
 msgid "Your memo contains invalid characters."
-msgstr ""
+msgstr "Eich memo yn cynnwys nodau annilys."
 
 #: modules/contrib/ms_fsend.c:118 modules/memoserv/send.c:122
 #, c-format
@@ -3094,11 +3111,11 @@ msgstr ""
 
 #: modules/contrib/ms_fsend.c:167
 msgid "Channel memos may not be forced."
-msgstr ""
+msgstr "Efallai na fydd memos Sianel cael ei orfodi."
 
 #: modules/contrib/ms_fsend.c:171
 msgid "Group memos may not be forced."
-msgstr ""
+msgstr "Efallai na fydd memos Grŵp yn cael ei orfodi."
 
 #: modules/contrib/ns_fenforce.c:41
 msgid "Syntax: FENFORCE <account> ON|OFF"
@@ -3165,16 +3182,18 @@ msgstr ""
 
 #: modules/contrib/ns_guestnoreg.c:43
 msgid "Registering of guest nicknames is disallowed."
-msgstr ""
+msgstr "Cofrestru o'r llysenwau gwadd yn wrthod."
 
 #: modules/contrib/ns_listlogins.c:19
 msgid "Lists details of clients authenticated as you."
-msgstr ""
+msgstr "Manylion rhestrau o gleientiaid dilysu wrth i chi."
 
 #: modules/contrib/ns_listlogins.c:39 modules/nickserv/listownmail.c:63
 msgid ""
 "You have to verify your email address before you can perform this operation."
 msgstr ""
+"Mae'n rhaid i chi gadarnhau eich cyfeiriad e-bost cyn y gallwch wneud y "
+"llawdriniaeth hon."
 
 #: modules/contrib/ns_listlogins.c:50
 #, c-format
@@ -3191,30 +3210,34 @@ msgid ""
 "You can not register your nick so soon after connecting. Please wait a while"
 " and try again."
 msgstr ""
+"Ni allwch gofrestru eich Nick mor fuan ar ôl cysylltu. Os gwelwch yn dda "
+"aros am beth amser a cheisiwch eto."
 
 #: modules/contrib/os_defcon.c:31
 msgid "Implements Defense Condition lockdowns."
-msgstr ""
+msgstr "Offer lockdowns Cyflwr Defense."
 
 #: modules/contrib/os_defcon.c:73 modules/contrib/os_defcon.c:85
 msgid ""
 "Registrations are currently disabled on this network, please try again "
 "later."
 msgstr ""
+"Cofrestriadau yn anabl ar hyn o bryd ar y rhwydwaith hwn, rhowch gynnig arni"
+" nes ymlaen."
 
 #: modules/contrib/os_defcon.c:195
 #, c-format
 msgid "Defense condition is currently level %d."
-msgstr ""
+msgstr "Cyflwr Amddiffyn ar hyn o bryd %d lefel."
 
 #: modules/contrib/os_defcon.c:203
 msgid "Defcon level must be between 1 and 5"
-msgstr ""
+msgstr "Mae'n rhaid i lefel Defcon fod rhwng 1 a 5"
 
 #: modules/contrib/os_defcon.c:228
 #, c-format
 msgid "Defense condition set to level %d."
-msgstr ""
+msgstr "Cyflwr Defense osod i lefel %d."
 
 #: modules/contrib/os_defcon.c:229
 #, c-format
@@ -3223,15 +3246,15 @@ msgstr ""
 
 #: modules/contrib/os_helpme.c:18
 msgid "Makes you into a network helper."
-msgstr ""
+msgstr "Gwneud i chi i mewn i rwydwaith cynorthwy-ydd."
 
 #: modules/contrib/os_helpme.c:38
 msgid "You are now a network helper."
-msgstr ""
+msgstr "Rydych yn awr cynorthwy-ydd rhwydwaith."
 
 #: modules/contrib/os_joinmon.c:24
 msgid "Monitors what channels a user is joining."
-msgstr ""
+msgstr "Monitro pa sianeli defnyddiwr yn ymuno."
 
 #: modules/contrib/os_joinmon.c:142
 msgid "Syntax: JOINMON ADD|DEL|LIST [parameters]"
@@ -3248,7 +3271,7 @@ msgstr ""
 
 #: modules/contrib/os_joinmon.c:185
 msgid "None"
-msgstr ""
+msgstr "Dim"
 
 #: modules/contrib/os_joinmon.c:192
 #, c-format
@@ -3285,7 +3308,7 @@ msgstr ""
 
 #: modules/contrib/os_modeall.c:21
 msgid "Changes modes on all channels."
-msgstr ""
+msgstr "Newidiadau dulliau ar bob sianel."
 
 #: modules/contrib/os_modeall.c:50
 msgid "Syntax: MODEALL <parameters>"
@@ -3307,11 +3330,11 @@ msgstr ""
 
 #: modules/contrib/os_resolve.c:19
 msgid "Perform DNS lookup on hostname"
-msgstr ""
+msgstr "Perfformio DNS-edrych ar enw gwesteiwr"
 
 #: modules/contrib/os_trace.c:21
 msgid "Looks for users and performs actions on them."
-msgstr ""
+msgstr "Edrych ar gyfer defnyddwyr ac yn perfformio camau gweithredu arnynt."
 
 #: modules/contrib/os_trace.c:526
 #, c-format
@@ -3321,22 +3344,22 @@ msgstr ""
 #: modules/contrib/os_trace.c:534 modules/contrib/os_trace.c:592
 #: modules/contrib/os_trace.c:712
 msgid "No matches."
-msgstr ""
+msgstr "Dim gemau."
 
 #: modules/contrib/os_trace.c:584
 #, c-format
 msgid "%s has been killed."
-msgstr ""
+msgstr "%s wedi cael ei ladd."
 
 #: modules/contrib/os_trace.c:704
 #, c-format
 msgid "%s has been akilled."
-msgstr ""
+msgstr "%s wedi cael ei akilled."
 
 #: modules/contrib/os_trace.c:755
 #, c-format
 msgid "%d matches"
-msgstr ""
+msgstr "%d gemau"
 
 #: modules/contrib/os_trace.c:818 modules/contrib/os_trace.c:826
 #: modules/contrib/os_trace.c:862
@@ -3345,61 +3368,61 @@ msgstr ""
 
 #: modules/contrib/os_trace.c:833
 msgid "Action compilation failed."
-msgstr ""
+msgstr "Casglu Gweithredu methu."
 
 #: modules/contrib/os_trace.c:878 modules/contrib/os_trace.c:885
 #: modules/contrib/os_trace.c:893
 msgid "Invalid criteria specified."
-msgstr ""
+msgstr "Meini prawf annilys penodol."
 
 #: modules/gameserv/dice.c:21
 msgid "Rolls one or more dice."
-msgstr ""
+msgstr "Rholiau un neu fwy o dis."
 
 #: modules/gameserv/dice.c:22
 msgid "Calculate stuff."
-msgstr ""
+msgstr "Cyfrifwch stwff."
 
 #: modules/gameserv/dice.c:80 modules/gameserv/dice.c:90
 #: modules/gameserv/dice.c:108 modules/gameserv/dice.c:207
 msgid "Error: You typed an invalid expression."
-msgstr ""
+msgstr "Gwall: Rydych yn teipio mynegiant annilys."
 
 #: modules/gameserv/dice.c:116
 msgid "Error: Mismatched braces '( )' in expression."
-msgstr ""
+msgstr "Gwall: bresys rhifau gwahanol '()' yn ymadrodd."
 
 #: modules/gameserv/dice.c:185 modules/gameserv/dice.c:200
 #: modules/gameserv/dice.c:308
 msgid "Error: Missing expected value in expression."
-msgstr ""
+msgstr "Gwall: goll gwerth disgwyliedig yn y mynegiant."
 
 #: modules/gameserv/dice.c:253
 msgid "Error: Missing expected operator in expression."
-msgstr ""
+msgstr "Gwall: gweithredwr ar goll a ddisgwylir yn mynegiant."
 
 #: modules/gameserv/dice.c:297
 msgid "Error: Expression is too deeply nested."
-msgstr ""
+msgstr "Gwall: mynegiant yn rhy ddwfn nythu."
 
 #: modules/gameserv/dice.c:374
 msgid "Error: Cannot perform modulus or division by zero."
-msgstr ""
+msgstr "Gwall: Does dim modd perfformio modwlws neu is-adran gan sero."
 
 #: modules/gameserv/dice.c:411
 #, c-format
 msgid "Error: Unknown mathematical operator %c."
-msgstr ""
+msgstr "Gwall: Anhysbys gweithredwr mathemategol %c."
 
 #: modules/gameserv/dice.c:452 modules/gameserv/dice.c:465
 #: modules/gameserv/dice.c:477 modules/gameserv/dice.c:484
 #: modules/gameserv/dice.c:505
 msgid "Syntax: XdY [ {-|+|*|/} Z ]"
-msgstr ""
+msgstr "Cystrawen: XdY [{-|+|*|/} Z]"
 
 #: modules/gameserv/dice.c:461
 msgid "Only 1-100 dice may be thrown at once."
-msgstr ""
+msgstr "Dim ond 100-100 dis cael eu taflu ar unwaith."
 
 #: modules/gameserv/dice.c:490
 msgid "Only 1-100 sides may be used on a dice."
@@ -8545,7 +8568,7 @@ msgstr ""
 
 #: modules/statserv/channel.c:98
 msgid "You are not authorised to perform this action."
-msgstr ""
+msgstr "Nid ydych yn cael eu hawdurdodi i wneud hyn."
 
 #: modules/statserv/channel.c:104
 #, c-format
