@@ -8,7 +8,7 @@
 #   'make update-pot' respectively.
 #
 
-LOCALES=es.po ru.po cy.po
+LOCALES=es.po ru.po cy.po de.po
 
 include ../buildsys.mk
 
