@@ -721,6 +721,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	myentity_t *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
+	unsigned int restrictflags;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role;
@@ -781,7 +782,28 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 
 	req.ca = ca;
 	req.oldlevel = ca->level;
-	req.newlevel = ca->level = 0;
+	req.newlevel = 0;
+
+	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+	{
+		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+
+		if (entity(si->smu) != mt)
+			restrictflags = allow_flags(mc, restrictflags);
+	}
+
+	if (!chanacs_modify(ca, &req.newlevel, &req.oldlevel, restrictflags))
+	{
+		command_fail(si, fault_noprivs, _("You may not remove \2%s\2 from the \2%s\2 role."), target, role);
+		return;
+	}
 
 	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
@@ -805,7 +827,8 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	myentity_t *mt;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
-	unsigned int new_level;
+	unsigned int oldflags, restrictflags;
+	unsigned int newflags, addflags, removeflags;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role = parv[2];
@@ -863,14 +886,41 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	req.ca = ca;
 	req.oldlevel = ca->level;
 
-	new_level = get_template_flags(mc, role);
-	if (new_level == 0)
+	newflags = get_template_flags(mc, role);
+	if (newflags == 0)
 	{
 		chanacs_close(ca);
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
-	req.newlevel = ca->level = new_level;
+
+	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+	{
+		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+
+		if (entity(si->smu) != mt)
+			restrictflags = allow_flags(mc, restrictflags);
+	}
+
+	oldflags = ca->level;
+
+	addflags = newflags & ~oldflags;
+	removeflags = ca_all & ~newflags;
+
+	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
+	{
+		command_fail(si, fault_noprivs, _("You may not add \2%s\2 to the \2%s\2 role."), target, role);
+		return;
+	}
+
+	req.newlevel = newflags;
 
 	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
@@ -893,7 +943,9 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_t *ca;
 	myentity_t *mt;
 	mychan_t *mc;
-	unsigned int new_level;
+	hook_channel_acl_req_t req;
+	unsigned int oldflags, restrictflags;
+	unsigned int newflags, addflags, removeflags;
 	const char *channel = parv[0];
 	const char *target = parv[1];
 	const char *role = parv[2];
@@ -941,24 +993,61 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	new_level = get_template_flags(mc, role);
+	newflags = get_template_flags(mc, role);
 
-	if (new_level == 0)
+	if (newflags == 0)
 	{
 		chanacs_close(ca);
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
 		return;
 	}
 
-	if ((ca->level & CA_FOUNDER) && !(new_level & CA_FOUNDER) && mychan_num_founders(mc) == 1)
+	if ((ca->level & CA_FOUNDER) && !(newflags & CA_FOUNDER) && mychan_num_founders(mc) == 1)
 	{
 		command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 		return;
 	}
 
-	ca->level = new_level;
+	req.ca = ca;
+	req.oldlevel = ca->level;
 
-	hook_call_channel_acl_change(&(hook_channel_acl_req_t){ .ca = ca });
+	newflags = get_template_flags(mc, role);
+	if (newflags == 0)
+	{
+		chanacs_close(ca);
+		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
+	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+	{
+		if (restrictflags & CA_AKICK && entity(si->smu) == mt)
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
+		}
+
+		if (entity(si->smu) != mt)
+			restrictflags = allow_flags(mc, restrictflags);
+	}
+
+	oldflags = ca->level;
+
+	addflags = newflags & ~oldflags;
+	removeflags = ca_all & ~newflags;
+
+	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
+	{
+		command_fail(si, fault_noprivs, _("You may not add \2%s\2 to the \2%s\2 role."), target, role);
+		return;
+	}
+
+	req.newlevel = newflags;
+
+	hook_call_channel_acl_change(&req);
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 now has the \2%s\2 role in \2%s\2."), target, role, channel);
