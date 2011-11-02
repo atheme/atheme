@@ -43,8 +43,6 @@ int sts(const char *fmt, ...)
 	vsnprintf(buf, 511, fmt, ap); /* leave two bytes for \r\n */
 	va_end(ap);
 
-	slog(LG_RAWDATA, "<- %s", buf);
-
 	len = strlen(buf);
 	buf[len++] = '\r';
 	buf[len++] = '\n';
@@ -53,6 +51,8 @@ int sts(const char *fmt, ...)
 	cnt.bout += len;
 
 	sendq_add(curr_uplink->conn, buf, len);
+
+	slog(LG_RAWDATA, "<- %.*s", len, buf);
 
 	return 0;
 }
