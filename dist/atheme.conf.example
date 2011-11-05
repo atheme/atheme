@@ -1098,16 +1098,16 @@ chanserv {
 	 * permissions.
 	 */
 	templates {
-		vop = "+VA";
-		hop = "+vVhHtA";
-		aop = "+vhoOtriA";
-		sop = "+vhoOtrsifAa";
+		vop = "+AV";
+		hop = "+AHVhtv";
+		aop = "+AOhortvi";
+		sop = "+AOafhiorstv";
 
-		founder = "+vhoOtrisifAaF";
+		founder = "+AOFafhiorstv";
 
 		/* some examples (which are commented out...) */
-		#member = "+iA";
-		#op = "+voOtriA";
+		#member = "+Ai";
+		#op = "+AOiortv";
 	};
 
 	/* (*) deftemplates
@@ -1116,7 +1116,7 @@ chanserv {
 	 * Note: at this time no syntax checking is done on this; it
 	 * is your own responsibility to make sure it is correct.
 	 */
-	#deftemplates = "MEMBER=+iA OP=+voOtriA";
+	#deftemplates = "MEMBER=+Ai OP=+AOiortv";
 
 	/* (*) changets
 	 * Change the channel TS to the registration time when someone
