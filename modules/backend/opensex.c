@@ -99,13 +99,16 @@ opensex_db_save(database_handle_t *db)
 
 		muout++;
 
-		MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
+		if (object(mu)->metadata)
 		{
-			db_start_row(db, "MDU");
-			db_write_word(db, entity(mu)->name);
-			db_write_word(db, md->name);
-			db_write_str(db, md->value);
-			db_commit_row(db);
+			MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
+			{
+				db_start_row(db, "MDU");
+				db_write_word(db, entity(mu)->name);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
+				db_commit_row(db);
+			}
 		}
 
 		MOWGLI_ITER_FOREACH(tn, mu->memos.head)
@@ -206,29 +209,35 @@ opensex_db_save(database_handle_t *db)
 			db_write_word(db, ca->setter && ca->setter->name ? ca->setter->name : "*");
 			db_commit_row(db);
 
-			MOWGLI_PATRICIA_FOREACH(md, &state2, object(ca)->metadata)
+			if (object(ca)->metadata)
 			{
-				char buf[BUFSIZE];
+				MOWGLI_PATRICIA_FOREACH(md, &state2, object(ca)->metadata)
+				{
+					char buf[BUFSIZE];
 
-				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->entity) ? ca->entity->name : ca->host);
+					snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->entity) ? ca->entity->name : ca->host);
 
-				db_start_row(db, "MDA");
-				db_write_word(db, buf);
-				db_write_word(db, md->name);
-				db_write_str(db, md->value);
-				db_commit_row(db);
+					db_start_row(db, "MDA");
+					db_write_word(db, buf);
+					db_write_word(db, md->name);
+					db_write_str(db, md->value);
+					db_commit_row(db);
+				}
 			}
 
 			caout++;
 		}
 
-		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mc)->metadata)
+		if (object(mc)->metadata)
 		{
-			db_start_row(db, "MDC");
-			db_write_word(db, mc->name);
-			db_write_word(db, md->name);
-			db_write_str(db, md->value);
-			db_commit_row(db);
+			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mc)->metadata)
+			{
+				db_start_row(db, "MDC");
+				db_write_word(db, mc->name);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
+				db_commit_row(db);
+			}
 		}
 	}
 
@@ -241,13 +250,16 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, mun->name);
 		db_commit_row(db);
 
-		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mun)->metadata)
+		if (object(mun)->metadata)
 		{
-			db_start_row(db, "MDN");
-			db_write_word(db, mun->name);
-			db_write_word(db, md->name);
-			db_write_str(db, md->value);
-			db_commit_row(db);
+			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mun)->metadata)
+			{
+				db_start_row(db, "MDN");
+				db_write_word(db, mun->name);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
+				db_commit_row(db);
+			}
 		}
 	}
 
