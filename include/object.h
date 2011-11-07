@@ -23,7 +23,9 @@ typedef struct {
 	destructor_t destructor;
 	mowgli_patricia_t *metadata;
 	mowgli_patricia_t *privatedata;
+#ifdef OBJECT_DEBUG
 	mowgli_node_t dnode;
+#endif
 } object_t;
 
 E void init_metadata(void);
@@ -42,7 +44,9 @@ E void metadata_delete_all(void *target);
 E void *privatedata_get(void *target, const char *key);
 E void privatedata_set(void *target, const char *key, void *data);
 
+#ifdef OBJECT_DEBUG
 E mowgli_list_t object_list;
+#endif
 
 #define object(x) ((object_t *) x)
 

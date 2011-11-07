@@ -23,7 +23,10 @@
 
 #include "atheme.h"
 
+#ifdef OBJECT_DEBUG
 mowgli_list_t object_list = { NULL, NULL, 0 };
+#endif
+
 mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
 
 void init_metadata(void)
@@ -61,7 +64,9 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 	obj->destructor = des;
 	obj->refcount = 1;
 
+#ifdef OBJECT_DEBUG
 	mowgli_node_add(obj, &obj->dnode, &object_list);
+#endif
 }
 
 /*
@@ -187,7 +192,9 @@ void object_dispose(void *object)
 	privatedata = obj->privatedata;
 	metadata = obj->metadata;
 
+#ifdef OBJECT_DEBUG
 	mowgli_node_delete(&obj->dnode, &object_list);
+#endif
 
 	if (obj->destructor != NULL)
 		obj->destructor(obj);
