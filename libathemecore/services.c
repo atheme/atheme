@@ -758,6 +758,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	char numeric[21], strfbuf[32];
 	int count;
 	metadata_t *md_failnum;
+	service_t *svs;
 
 	/* If the user is already logged in, no paranoia is needed,
 	 * as they could /ns set password anyway.
@@ -778,8 +779,14 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
 	metadata_add(mu, "private:loginfail:lastfailtime", numeric);
 
-	myuser_notice(si->service->me->nick, mu, "\2%s\2 failed to login to \2%s\2.  There has been \2%d\2 failed login %s since your last successful login.",
-		      mask, entity(mu)->name, count, count == 1 ? "attempt" : "attempts");
+	svs = si->service;
+	if (svs == NULL)
+		svs = service_find("nickserv");
+	if (svs != NULL)
+	{
+		myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2.  There has been \2%d\2 failed login %s since your last successful login.",
+			      mask, entity(mu)->name, count, count == 1 ? "attempt" : "attempts");
+	}
 
 	if (is_soper(mu))
 		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), entity(mu)->name);
