@@ -170,7 +170,7 @@ void object_unref(void *obj)
 void object_dispose(void *object)
 {
 	object_t *obj;
-	mowgli_patricia_t *privatedata;
+	mowgli_patricia_t *privatedata, *metadata;
 
 	return_if_fail(object != NULL);
 	obj = object(object);
@@ -185,6 +185,7 @@ void object_dispose(void *object)
 	obj->refcount = -1;
 
 	privatedata = obj->privatedata;
+	metadata = obj->metadata;
 
 	mowgli_node_delete(&obj->dnode, &object_list);
 
@@ -198,6 +199,9 @@ void object_dispose(void *object)
 
 	if (privatedata != NULL)
 		mowgli_patricia_destroy(privatedata, NULL, NULL);
+
+	if (metadata != NULL)
+		mowgli_patricia_destroy(metadata, NULL, NULL);
 }
 
 metadata_t *metadata_add(void *target, const char *name, const char *value)
@@ -218,7 +222,10 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	md->name = strshare_get(name);
 	md->value = sstrdup(value);
 
-	mowgli_node_add(md, &md->node, &obj->metadata);
+	if (obj->metadata == NULL)
+		obj->metadata = mowgli_patricia_create(strcasecanon);
+
+	mowgli_patricia_add(obj->metadata, md->name, md);
 
 	return md;
 }
@@ -233,7 +240,7 @@ void metadata_delete(void *target, const char *name)
 
 	obj = object(target);
 
-	mowgli_node_delete(&md->node, &obj->metadata);
+	mowgli_patricia_delete(obj->metadata, name);
 
 	strshare_unref(md->name);
 	free(md->value);
@@ -247,19 +254,12 @@ metadata_t *metadata_find(void *target, const char *name)
 	mowgli_node_t *n;
 	metadata_t *md;
 
+	return_val_if_fail(target != NULL, NULL);
 	return_val_if_fail(name != NULL, NULL);
 
 	obj = object(target);
 
-	MOWGLI_ITER_FOREACH(n, obj->metadata.head)
-	{
-		md = n->data;
-
-		if (!strcasecmp(md->name, name))
-			return md;
-	}
-
-	return NULL;
+	return mowgli_patricia_retrieve(obj->metadata, name);
 }
 
 void metadata_delete_all(void *target)
@@ -267,11 +267,12 @@ void metadata_delete_all(void *target)
 	object_t *obj;
 	mowgli_node_t *n, *tn;
 	metadata_t *md;
+	mowgli_patricia_iteration_state_t state;
 
 	obj = object(target);
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, obj->metadata.head)
+
+	MOWGLI_PATRICIA_FOREACH(md, &state, obj->metadata)
 	{
-		md = n->data;
 		metadata_delete(obj, md->name);
 	}
 }
@@ -295,7 +296,7 @@ void privatedata_set(void *target, const char *key, void *data)
 	if (obj->privatedata == NULL)
 		obj->privatedata = mowgli_patricia_create(noopcanon);
 
-	mowgli_patricia_add(obj->privatedata, key, data);	
+	mowgli_patricia_add(obj->privatedata, key, data);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -12,7 +12,6 @@
 struct metadata_ {
 	char *name;
 	char *value;
-	mowgli_node_t node;
 };
 
 typedef struct metadata_ metadata_t;
@@ -22,7 +21,7 @@ typedef void (*destructor_t)(void *);
 typedef struct {
 	int refcount;
 	destructor_t destructor;
-	mowgli_list_t metadata;
+	mowgli_patricia_t *metadata;
 	mowgli_patricia_t *privatedata;
 	mowgli_node_t dnode;
 } object_t;

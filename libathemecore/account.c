@@ -843,7 +843,7 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 {
 	myuser_name_t *mun;
 	metadata_t *md, *md2;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	char *copy;
 
 	mun = myuser_name_find(name);
@@ -866,9 +866,8 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 				md2->value, entity(mu)->name, name);
 	}
 
-	MOWGLI_ITER_FOREACH(n, object(mun)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mun)->metadata)
 	{
-		md = n->data;
 		/* prefer current metadata to saved */
 		if (!metadata_find(mu, md->name))
 		{
