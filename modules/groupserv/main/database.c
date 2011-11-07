@@ -12,6 +12,8 @@ static void write_groupdb(database_handle_t *db)
 {
 	myentity_t *mt;
 	myentity_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state2;
+	metadata_t *md;
 
 	db_start_row(db, "GDBV");
 	db_write_uint(db, GDBV_VERSION);
@@ -46,10 +48,8 @@ static void write_groupdb(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		MOWGLI_ITER_FOREACH(n, object(mg)->metadata.head)
+		MOWGLI_ITER_FOREACH(md, &state, object(mg)->metadata)
 		{
-			metadata_t *md = (metadata_t *)n->data;
-
 			db_start_row(db, "MDG");
 			db_write_word(db, entity(mg)->name);
 			db_write_word(db, md->name);
