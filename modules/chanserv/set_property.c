@@ -88,10 +88,13 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+	if (object(mc)->metadata)
 	{
-		if (strncmp(property, "private:", 8))
-			count++;
+		MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
+		{
+			if (strncmp(md->name, "private:", 8))
+				count++;
+		}
 	}
 	if (count >= me.mdlimit)
 	{
