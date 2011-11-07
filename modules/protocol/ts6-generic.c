@@ -1248,7 +1248,9 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		u = si->su;
 		if (u == NULL)
 			return;
-		mowgli_strlcpy(u->host, parv[2], HOSTLEN);
+
+		strshare_unref(u->host);
+		u->host = strshare_get(parv[2]);
 	}
 	else if (!irccasecmp(parv[1], "CHGHOST"))
 	{
@@ -1257,7 +1259,10 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		u = user_find(parv[2]);
 		if (u == NULL)
 			return;
-		mowgli_strlcpy(u->vhost, parv[3], HOSTLEN);
+
+		strshare_unref(u->vhost);
+		u->vhost = strshare_get(parv[3]);
+
 		slog(LG_DEBUG, "m_encap(): chghost %s -> %s", u->nick,
 				u->vhost);
 	}
@@ -1320,10 +1325,12 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 	handle_nickchange(u); /* If they're logging out, this will bug them about identifying. Or something. */
 
 	/* USER */
-	mowgli_strlcpy(u->user, parv[1], USERLEN);
+	strshare_unref(u->user);
+	u->user = strshare_get(parv[1]);
 
 	/* HOST */
-	mowgli_strlcpy(u->vhost, parv[2], HOSTLEN);
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(parv[2]);
 
 	/* LOGIN */
 	if(*parv[4] == '*') /* explicitly unchanged */
@@ -1386,7 +1393,8 @@ static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	mowgli_strlcpy(u->vhost, parv[1], HOSTLEN);
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(parv[1]);
 }
 
 static void m_motd(sourceinfo_t *si, int parc, char *parv[])

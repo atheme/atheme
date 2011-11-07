@@ -986,7 +986,10 @@ static void inspircd_user_mode(user_t *u, const char *modes)
 					 * vhost instead of their cloaked host. - Adam
 					 */
 					if (strcmp(u->vhost, u->chost))
-						mowgli_strlcpy(u->chost, u->vhost, HOSTLEN);
+					{
+						strshare_unref(u->chost);
+						u->chost = strshare_get(u->vhost);
+					}
 				}
 				break;
 		}
@@ -1221,7 +1224,8 @@ static void m_opertype(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_fhost(sourceinfo_t *si, int parc, char *parv[])
 {
-	mowgli_strlcpy(si->su->vhost, parv[0], HOSTLEN);
+	strshare_unref(si->su->vhost);
+	si->su->vhost = strshare_get(parv[0]);
 }
 
 static void m_encap(sourceinfo_t *si, int parc, char *parv[])

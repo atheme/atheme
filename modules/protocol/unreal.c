@@ -861,10 +861,16 @@ static void unreal_user_mode(user_t *u, const char *changes)
 					 * vhost instead of their cloaked host. - Adam
 					 */
 					if (strcmp(u->vhost, u->chost))
-						mowgli_strlcpy(u->chost, u->vhost, HOSTLEN);
+					{
+						strshare_unref(u->chost);
+						u->chost = strshare_get(u->vhost);
+					}
 				}
 				else if (dir == MTYPE_DEL)
-					mowgli_strlcpy(u->vhost, u->host, HOSTLEN);
+				{
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(u->host);
+				}
 				break;
 		}
 }
@@ -1027,7 +1033,8 @@ static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	mowgli_strlcpy(u->vhost, parv[1], HOSTLEN);
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(parv[1]);
 }
 
 static void m_motd(sourceinfo_t *si, int parc, char *parv[])

@@ -173,7 +173,9 @@ static bool nefarious_on_logout(user_t *u, const char *account)
 	{
 		slog(LG_DEBUG, "nefarious_on_logout(): removing +x vhost for %s: %s -> %s",
 				u->nick, u->vhost, u->host);
-		mowgli_strlcpy(u->vhost, u->host, sizeof u->vhost);
+
+		strshare_unref(u->vhost);
+		u->vhost = strshare_get(u->host);
 	}
 
 	return false;
@@ -373,20 +375,33 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				p = strchr(parv[5+i], '@');
 				if (p == NULL)
-					mowgli_strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
+				{
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(parv[5 + i]);
+				}
 				else
 				{
-					mowgli_strlcpy(u->vhost, p + 1, sizeof u->vhost);
-					mowgli_strlcpy(u->user, parv[5+i], sizeof u->user);
-					p = strchr(u->user, '@');
+					char userbuf[USERLEN];
+
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(p + 1);
+
+					mowgli_strlcpy(userbuf, parv[5+i], sizeof userbuf);
+
+					p = strchr(userbuf, '@');
 					if (p != NULL)
 						*p = '\0';
+
+					strshare_unref(u->user);
+					u->user = strshare_get(userbuf);
 				}
 				i++;
 			}
 			if (strchr(parv[5], 'f'))
 			{
-				mowgli_strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
+				strshare_unref(u->vhost);
+				u->vhost = strshare_get(parv[5 + i]);
+
 				i++;
 			}
 			if (strchr(parv[5], 'x'))
@@ -453,14 +468,24 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 				/* assume +h */
 				p = strchr(parv[2], '@');
 				if (p == NULL)
-					mowgli_strlcpy(u->vhost, parv[2], sizeof u->vhost);
+				{
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(parv[2]);
+				}
 				else
 				{
-					mowgli_strlcpy(u->vhost, p + 1, sizeof u->vhost);
-					mowgli_strlcpy(u->user, parv[2], sizeof u->user);
-					p = strchr(u->user, '@');
+					char userbuf[USERLEN];
+
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(p + 1);
+
+					mowgli_strlcpy(userbuf, parv[2], sizeof userbuf);
+					p = strchr(userbuf, '@');
 					if (p != NULL)
 						*p = '\0';
+
+					strshare_unref(u->user);
+					u->user = strshare_get(userbuf);
 				}
 				slog(LG_DEBUG, "m_mode(): user %s setting vhost %s@%s", u->nick, u->user, u->vhost);
 			}
@@ -469,7 +494,10 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 				/* must be -h */
 				/* XXX we don't know the original ident */
 				slog(LG_DEBUG, "m_mode(): user %s turning off vhost", u->nick);
-				mowgli_strlcpy(u->vhost, u->host, sizeof u->vhost);
+
+				strshare_unref(u->vhost);
+				u->vhost = strshare_get(u->host);
+
 				/* revert to +x vhost if applicable */
 				check_hidehost(u);
 			}
