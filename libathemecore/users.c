@@ -155,19 +155,19 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 
 	if (uid != NULL)
 	{
-		mowgli_strlcpy(u->uid, uid, IDLEN);
+		u->uid = strshare_get(uid);
 		mowgli_patricia_add(uidlist, u->uid, u);
 	}
 
-	mowgli_strlcpy(u->nick, nick, NICKLEN);
-	mowgli_strlcpy(u->user, user, USERLEN);
-	mowgli_strlcpy(u->host, host, HOSTLEN);
-	mowgli_strlcpy(u->gecos, gecos, GECOSLEN);
-	mowgli_strlcpy(u->chost, vhost ? vhost : host, HOSTLEN);
-	mowgli_strlcpy(u->vhost, vhost ? vhost : host, HOSTLEN);
+	u->nick = strshare_get(nick);
+	u->user = strshare_get(user);
+	u->host = strshare_get(host);
+	u->gecos = strshare_get(gecos);
+	u->chost = strshare_get(vhost ? vhost : host);
+	u->vhost = strshare_get(vhost ? vhost : host);
 
 	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
-		mowgli_strlcpy(u->ip, ip, HOSTIPLEN);
+		u->ip = strshare_get(ip);
 
 	u->server = server;
 	u->server->users++;
@@ -267,6 +267,15 @@ void user_delete(user_t *u, const char *comment)
 		u->myuser = NULL;
 	}
 
+	strshare_unref(u->uid);
+	strshare_unref(u->nick);
+	strshare_unref(u->user);
+	strshare_unref(u->host);
+	strshare_unref(u->gecos);
+	strshare_unref(u->vhost);
+	strshare_unref(u->chost);
+	strshare_unref(u->ip);
+
 	mowgli_heap_free(user_heap, u);
 
 	cnt.user--;
@@ -358,7 +367,8 @@ void user_changeuid(user_t *u, const char *uid)
 	if (*u->uid)
 		mowgli_patricia_delete(uidlist, u->uid);
 
-	mowgli_strlcpy(u->uid, uid ? uid : "", IDLEN);
+	strshare_unref(u->uid);
+	u->uid = strshare_get(uid);
 
 	if (*u->uid)
 		mowgli_patricia_add(uidlist, u->uid, u);
@@ -479,7 +489,9 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 		mn->lastseen = CURRTIME;
 	mowgli_patricia_delete(userlist, u->nick);
 
-	mowgli_strlcpy(u->nick, nick, NICKLEN);
+	strshare_unref(u->nick);
+	u->nick = strshare_get(nick);
+
 	u->ts = ts;
 
 	mowgli_patricia_add(userlist, u->nick, u);

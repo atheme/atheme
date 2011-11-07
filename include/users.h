@@ -13,14 +13,14 @@ struct user_
 {
 	object_t parent;
 
-	char nick[NICKLEN];
-	char user[USERLEN];
-	char host[HOSTLEN]; /* Real host */
-	char gecos[GECOSLEN];
-	char chost[HOSTLEN]; /* Cloaked host */
-	char vhost[HOSTLEN]; /* Visible host */
-	char uid[IDLEN]; /* Used for TS6, P10, IRCNet ircd. */
-	char ip[HOSTIPLEN];
+	char *nick;
+	char *user;
+	char *host; /* Real host */
+	char *gecos;
+	char *chost; /* Cloaked host */
+	char *vhost; /* Visible host */
+	char *uid; /* Used for TS6, P10, IRCNet ircd. */
+	char *ip;
 
 	mowgli_list_t channels;
 
