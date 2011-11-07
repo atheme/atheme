@@ -817,7 +817,7 @@ static void clones_newuser(hook_user_nick_t *data)
 		return;
 
 	/* User has no IP, ignore him */
-	if (is_internal_client(u) || *u->ip == '\0')
+	if (is_internal_client(u) || u->ip == NULL)
 		return;
 
 	he = mowgli_patricia_retrieve(hostlist, u->ip);
@@ -898,7 +898,7 @@ static void clones_userquit(user_t *u)
 	hostentry_t *he;
 
 	/* User has no IP, ignore him */
-	if (is_internal_client(u) || *u->ip == '\0')
+	if (is_internal_client(u) || u->ip == NULL)
 		return;
 
 	he = mowgli_patricia_retrieve(hostlist, u->ip);
