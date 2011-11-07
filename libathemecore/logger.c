@@ -671,7 +671,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 			svs != NULL ? svs->nick : me.name,
 			accountbuf,
 			source->nick, source->user, source->host,
-			source->ip[0] != '\0' ? source->ip : source->host,
+			source->ip != NULL ? source->ip : source->host,
 			lbuf);
 	showaccount = source->myuser == NULL || irccasecmp(entity(source->myuser)->name, source->nick);
 	slog_ext(LOG_INTERACTIVE, level, "%s %s%s%s%s %s",
