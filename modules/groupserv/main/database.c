@@ -48,7 +48,7 @@ static void write_groupdb(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		MOWGLI_ITER_FOREACH(md, &state, object(mg)->metadata)
+		MOWGLI_PATRICIA_FOREACH(md, &state, object(mg)->metadata)
 		{
 			db_start_row(db, "MDG");
 			db_write_word(db, entity(mg)->name);
