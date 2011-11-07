@@ -60,7 +60,7 @@ void strshare_unref(char *str)
 	strshare_t *ss;
 
 	if (str == NULL)
-		return NULL;
+		return;
 
 	ss = (strshare_t *)str - 1;
 	ss->refcount--;
