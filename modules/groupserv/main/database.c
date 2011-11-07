@@ -48,13 +48,16 @@ static void write_groupdb(database_handle_t *db)
 			db_commit_row(db);
 		}
 
-		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mg)->metadata)
+		if (object(mg)->metadata)
 		{
-			db_start_row(db, "MDG");
-			db_write_word(db, entity(mg)->name);
-			db_write_word(db, md->name);
-			db_write_str(db, md->value);
-			db_commit_row(db);
+			MOWGLI_PATRICIA_FOREACH(md, &state2, object(mg)->metadata)
+			{
+				db_start_row(db, "MDG");
+				db_write_word(db, entity(mg)->name);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
+				db_commit_row(db);
+			}
 		}
 	}
 }
