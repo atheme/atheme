@@ -389,6 +389,7 @@ static void hs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
+	char *reason = parv[1];
 	user_t *u;
 	char buf[BUFSIZE];
 	hsreq_t *l;
@@ -397,10 +398,15 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	if (!nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REJECT");
-		command_fail(si, fault_needmoreparams, _("Syntax: REJECT <nick>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: REJECT <nick> [reason]"));
 		return;
 	}
 
+	if (reason && strlen(reason) > 150)
+	{
+		command_fail(si, fault_badparams, _("Reason too long. It must be 150 characters or less."));
+		return;
+	}
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, hs_reqlist.head)
 	{
@@ -411,12 +417,25 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if ((svs = service_find("memoserv")) != NULL)
 			{
-				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
+				if (reason)
+					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", nick, l->vhost, nick, reason);
+				else
+					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
+
 				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
 			else if ((u = user_find_named(nick)) != NULL)
-				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
-			logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, nick);
+			{
+				if (reason)
+					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", l->vhost, nick, reason);
+				else
+					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
+			}
+			
+			if (reason)
+				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, nick, reason);
+			else
+				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, nick);
 
 			mowgli_node_delete(n, &hs_reqlist);
 			free(l->nick);
@@ -430,13 +449,25 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if ((svs = service_find("memoserv")) != NULL)
 			{
-				snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->nick, l->vhost, l->nick);
+				if (reason)
+					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", nick, l->vhost, nick, reason);
+				else
+					snprintf(buf, BUFSIZE, "%s [auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", nick, l->vhost, nick);
+
 				command_exec_split(svs, si, "SEND", buf, svs->commands);
 			}
 			else if ((u = user_find_named(l->nick)) != NULL)
-				notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, l->nick);
-			/* VHOSTNICK command below will generate snoop */
-			logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, l->nick);
+			{
+				if (reason)
+					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected due to: %s", l->vhost, nick, reason);
+				else
+					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
+			}
+		
+			if (reason)
+				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, l->nick, reason);
+			else
+				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2", l->vhost, l->nick);
 
 			mowgli_node_delete(n, &hs_reqlist);
 
