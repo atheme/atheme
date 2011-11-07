@@ -39,6 +39,9 @@ char *strshare_get(const char *str)
 {
 	strshare_t *ss;
 
+	if (str == NULL)
+		return NULL;
+
 	ss = mowgli_patricia_retrieve(strshare_dict, str);
 	if (ss != NULL)
 		ss->refcount++;
@@ -55,6 +58,9 @@ char *strshare_get(const char *str)
 void strshare_unref(char *str)
 {
 	strshare_t *ss;
+
+	if (str == NULL)
+		return NULL;
 
 	ss = (strshare_t *)str - 1;
 	ss->refcount--;
