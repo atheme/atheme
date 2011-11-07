@@ -33,6 +33,8 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc, *mc2;
 	mowgli_node_t *n, *tn;
+	mowgli_patricia_iteration_state_t state;
+	metadata_t *md;
 	chanacs_t *ca;
 	char *source = parv[0];
 	char *target = parv[1];
@@ -115,10 +117,8 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Copy ze metadata! */
-	MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
 	{
-		metadata_t *md = n->data;
-
 		if(!strncmp(md->name, "private:topic:", 14))
 				continue;
 

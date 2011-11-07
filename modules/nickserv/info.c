@@ -42,6 +42,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm, tm2;
 	metadata_t *md;
 	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	const char *vhost;
 	bool hide_info;
 	hook_user_req_t req;
@@ -251,9 +252,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
-	MOWGLI_ITER_FOREACH(n, object(mu)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
 	{
-		md = n->data;
 		if (!strncmp(md->name, "private:", 8))
 			continue;
 		command_success_nodata(si, _("Metadata   : %s = %s"),

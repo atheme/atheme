@@ -40,7 +40,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	char *property = strtok(parv[1], " ");
 	char *value = strtok(NULL, "");
 	unsigned int count;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	metadata_t *md;
 
 	if (!property)
@@ -88,9 +88,8 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
 	{
-		md = n->data;
 		if (strncmp(property, "private:", 8))
 			count++;
 	}

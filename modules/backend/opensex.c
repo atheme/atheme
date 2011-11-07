@@ -42,6 +42,7 @@ unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 static void
 opensex_db_save(database_handle_t *db)
 {
+	metadata_t *md;
 	myuser_t *mu;
 	myentity_t *ment;
 	myuser_name_t *mun;
@@ -98,10 +99,8 @@ opensex_db_save(database_handle_t *db)
 
 		muout++;
 
-		MOWGLI_ITER_FOREACH(tn, object(mu)->metadata.head)
+		MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
 		{
-			metadata_t *md = (metadata_t *)tn->data;
-
 			db_start_row(db, "MDU");
 			db_write_word(db, entity(mu)->name);
 			db_write_word(db, md->name);
@@ -168,6 +167,8 @@ opensex_db_save(database_handle_t *db)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
+		mowgli_patricia_iteration_state_t state2;
+
 		char *flags = gflags_tostr(mc_flags, mc->flags);
 		/* find a founder */
 		mu = NULL;
@@ -205,10 +206,9 @@ opensex_db_save(database_handle_t *db)
 			db_write_word(db, ca->setter && ca->setter->name ? ca->setter->name : "*");
 			db_commit_row(db);
 
-			MOWGLI_ITER_FOREACH(tn2, object(ca)->metadata.head)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, object(ca)->metadata)
 			{
 				char buf[BUFSIZE];
-				metadata_t *md = (metadata_t *)tn2->data;
 
 				snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->entity) ? ca->entity->name : ca->host);
 
@@ -222,10 +222,8 @@ opensex_db_save(database_handle_t *db)
 			caout++;
 		}
 
-		MOWGLI_ITER_FOREACH(tn, object(mc)->metadata.head)
+		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mc)->metadata)
 		{
-			metadata_t *md = (metadata_t *)tn->data;
-
 			db_start_row(db, "MDC");
 			db_write_word(db, mc->name);
 			db_write_word(db, md->name);
@@ -237,11 +235,13 @@ opensex_db_save(database_handle_t *db)
 	/* Old names */
 	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
+		mowgli_patricia_iteration_state_t state2;
+
 		db_start_row(db, "NAM");
 		db_write_word(db, mun->name);
 		db_commit_row(db);
 
-		MOWGLI_ITER_FOREACH(tn, object(mun)->metadata.head)
+		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mun)->metadata)
 		{
 			metadata_t *md = (metadata_t *)tn->data;
 

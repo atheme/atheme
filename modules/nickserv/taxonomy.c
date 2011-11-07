@@ -33,8 +33,9 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	myuser_t *mu;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	bool isoper;
+	metadata_t *md;
 
 	if (!target && si->smu)
 		target = entity(si->smu)->name;
@@ -59,10 +60,8 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), entity(mu)->name);
 
-	MOWGLI_ITER_FOREACH(n, object(mu)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mu)->metadata)
 	{
-		metadata_t *md = n->data;
-
 		if (!strncmp(md->name, "private:", 8) && !isoper)
 			continue;
 

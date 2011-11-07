@@ -41,7 +41,7 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	char *property = strtok(parv[0], " ");
 	char *value = strtok(NULL, "");
 	unsigned int count;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	metadata_t *md;
 	hook_metadata_change_t mdchange;
 
@@ -82,9 +82,8 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	count = 0;
-	MOWGLI_ITER_FOREACH(n, object(si->smu)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(si->smu)->metadata)
 	{
-		md = n->data;
 		if (strncmp(md->name, "private:", 8))
 			count++;
 	}

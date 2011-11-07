@@ -38,7 +38,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm;
 	myuser_t *mu;
 	metadata_t *md;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
 	hook_channel_req_t req;
 	bool hide_info;
 
@@ -131,9 +131,8 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!hide_info)
 	{
-		MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
+		MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
 		{
-			md = n->data;
 			if (!strncmp(md->name, "private:", 8))
 				continue;
 			/* these are shown separately */

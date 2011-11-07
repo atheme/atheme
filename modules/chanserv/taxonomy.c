@@ -34,7 +34,8 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
 	mychan_t *mc;
-	mowgli_node_t *n;
+	mowgli_patricia_iteration_state_t state;
+	metadata_t *md;
 	bool isoper;
 
 	if (!target || *target != '#')
@@ -66,10 +67,8 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "TAXONOMY: \2%s\2", mc->name);
 	command_success_nodata(si, _("Taxonomy for \2%s\2:"), target);
 
-	MOWGLI_ITER_FOREACH(n, object(mc)->metadata.head)
+	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
 	{
-		metadata_t *md = n->data;
-
                 if (!strncmp(md->name, "private:", 8) && !isoper)
                         continue;
 
