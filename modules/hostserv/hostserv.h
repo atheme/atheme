@@ -31,7 +31,10 @@ static inline void do_sethost(user_t *u, char *host)
                 return;
 
 	svs = service_find("hostserv");
-        mowgli_strlcpy(u->vhost, host ? host : u->host, HOSTLEN);
+
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(host ? host : u->host);
+
         user_sethost(svs->me, u, u->vhost);
 }
 
