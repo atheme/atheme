@@ -1,12 +1,15 @@
 Help for REJECT:
 
 Reject the requested vHost for the given nick.
-A memo informing the user will also be sent.
+A memo informing the user will also be sent. If
+a reason is provided, that reason will be included
+in the rejection memo.
 If an asterisk ("*") is used in place of a nick,
-all waiting vHosts will be rejected.
+all waiting vHosts will be rejected. 
 
-Syntax: REJECT <nick>
+Syntax: REJECT <nick> [reason]
 
 Examples:
     /msg &nick& REJECT nenolod
     /msg &nick& REJECT *
+	/msg &nick& REJECT spb Vulgar vHosts are not allowed

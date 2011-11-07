@@ -62,6 +62,8 @@ gameserv
 - happyfarm: New (skeleton) module that's a game like FarmVille! But on IRC!
 hostserv
 - added a new host_request hook to catch and do other things with host requests.
+- reject: Add a optional reason parameter that will be memoed to the user with the
+  rejection notice.
 memoserv
 - ms_fsend: new contrib module. Allows sopers to override a target user being
   set NOMEMO or having the source user on ignore.
