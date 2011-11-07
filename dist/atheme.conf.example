@@ -1100,7 +1100,7 @@ chanserv {
 	templates {
 		vop = "+AV";
 		hop = "+AHVhtv";
-		aop = "+AOhortvi";
+		aop = "+AOhiortv";
 		sop = "+AOafhiorstv";
 
 		founder = "+AFORafhiorstv";
