@@ -258,6 +258,9 @@ int match_ips(const char *s1, const char *s2)
 	char *len;
 	int cidrlen;
 
+	if (s1 == NULL || s2 == NULL)
+		return 1;
+
 	mowgli_strlcpy(ipmask, s1, sizeof ipmask);
 	mowgli_strlcpy(ip, s2, sizeof ip);
 
