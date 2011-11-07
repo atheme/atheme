@@ -243,8 +243,6 @@ opensex_db_save(database_handle_t *db)
 
 		MOWGLI_PATRICIA_FOREACH(md, &state2, object(mun)->metadata)
 		{
-			metadata_t *md = (metadata_t *)tn->data;
-
 			db_start_row(db, "MDN");
 			db_write_word(db, mun->name);
 			db_write_word(db, md->name);
