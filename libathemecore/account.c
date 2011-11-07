@@ -866,21 +866,24 @@ void myuser_name_restore(const char *name, myuser_t *mu)
 				md2->value, entity(mu)->name, name);
 	}
 
-	MOWGLI_PATRICIA_FOREACH(md, &state, object(mun)->metadata)
+	if (object(mun)->metadata)
 	{
-		/* prefer current metadata to saved */
-		if (!metadata_find(mu, md->name))
+		MOWGLI_PATRICIA_FOREACH(md, &state, object(mun)->metadata)
 		{
-			if (strcmp(md->name, "private:mark:reason") ||
-					!strncmp(md->value, "(restored) ", 11))
-				metadata_add(mu, md->name, md->value);
-			else
+			/* prefer current metadata to saved */
+			if (!metadata_find(mu, md->name))
 			{
-				copy = smalloc(strlen(md->value) + 12);
-				memcpy(copy, "(restored) ", 11);
-				strcpy(copy + 11, md->value);
-				metadata_add(mu, md->name, copy);
-				free(copy);
+				if (strcmp(md->name, "private:mark:reason") ||
+						!strncmp(md->value, "(restored) ", 11))
+					metadata_add(mu, md->name, md->value);
+				else
+				{
+					copy = smalloc(strlen(md->value) + 12);
+					memcpy(copy, "(restored) ", 11);
+					strcpy(copy + 11, md->value);
+					metadata_add(mu, md->name, copy);
+					free(copy);
+				}
 			}
 		}
 	}
