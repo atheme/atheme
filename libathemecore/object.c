@@ -221,6 +221,9 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 
 	obj = object(target);
 
+	if (obj->metadata == NULL)
+		obj->metadata = mowgli_patricia_create(strcasecanon);
+
 	if (metadata_find(target, name))
 		metadata_delete(target, name);
 
@@ -228,9 +231,6 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 
 	md->name = strshare_get(name);
 	md->value = sstrdup(value);
-
-	if (obj->metadata == NULL)
-		obj->metadata = mowgli_patricia_create(strcasecanon);
 
 	mowgli_patricia_add(obj->metadata, md->name, md);
 
@@ -246,6 +246,9 @@ void metadata_delete(void *target, const char *name)
 		return;
 
 	obj = object(target);
+
+	if (obj->metadata == NULL)
+		obj->metadata = mowgli_patricia_create(strcasecanon);
 
 	mowgli_patricia_delete(obj->metadata, name);
 
@@ -266,6 +269,9 @@ metadata_t *metadata_find(void *target, const char *name)
 
 	obj = object(target);
 
+	if (obj->metadata == NULL)
+		obj->metadata = mowgli_patricia_create(strcasecanon);
+
 	return mowgli_patricia_retrieve(obj->metadata, name);
 }
 
@@ -277,6 +283,9 @@ void metadata_delete_all(void *target)
 	mowgli_patricia_iteration_state_t state;
 
 	obj = object(target);
+
+	if (obj->metadata == NULL)
+		obj->metadata = mowgli_patricia_create(strcasecanon);
 
 	MOWGLI_PATRICIA_FOREACH(md, &state, obj->metadata)
 	{
