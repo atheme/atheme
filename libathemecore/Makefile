@@ -49,6 +49,7 @@ BASE_SRCS =				\
 	servers.c		\
 	services.c		\
 	servtree.c		\
+	sharedheap.c		\
 	signal.c		\
 	string.c		\
 	strshare.c		\

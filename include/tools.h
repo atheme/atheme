@@ -161,6 +161,10 @@ void strshare_init(void);
 char *strshare_get(const char *str);
 void strshare_unref(char *str);
 
+/* sharedheap.c */
+E mowgli_heap_t *sharedheap_get(size_t size);
+E void sharedheap_unref(mowgli_heap_t *heap);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
