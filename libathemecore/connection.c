@@ -28,20 +28,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-mowgli_heap_t *connection_heap;
-
 mowgli_list_t connection_list;
-
-void init_netio(void)
-{
-	connection_heap = sharedheap_get(sizeof(connection_t));
-
-	if (!connection_heap)
-	{
-		slog(LG_INFO, "init_netio(): blockheap failure");
-		exit(EXIT_FAILURE);
-	}
-}
 
 static int socket_setnonblocking(int sck)
 {
@@ -86,7 +73,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 
 	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
-	cptr = mowgli_heap_alloc(connection_heap);
+	cptr = smalloc(sizeof(connection_t));
 
 	cptr->fd = fd;
 	cptr->pollslot = -1;
@@ -205,7 +192,7 @@ void connection_close(connection_t *cptr)
 
 	sendqrecvq_free(cptr);
 
-	mowgli_heap_free(connection_heap, cptr);
+	free(cptr);
 }
 
 /* This one is only safe for use by connection_close_soon(),

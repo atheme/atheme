@@ -229,7 +229,6 @@ int atheme_main(int argc, char *argv[])
 
         event_init();
         hooks_init();
-        init_netio();
         init_socket_queues();
 	db_init();
 
