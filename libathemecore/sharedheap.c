@@ -89,6 +89,20 @@ static inline size_t sharedheap_prealloc_size(size_t size)
 	return prealloc_size;
 }
 
+static inline size_t sharedheap_normalize_size(size_t size)
+{
+	size_t normalized;
+
+	if (size % sizeof(void *) == 0 && (size / sizeof(void *)) % 2 == 0)
+		normalized = size;
+	else
+		normalized = ((size / sizeof(void *)) + 1) * sizeof(void *);
+
+	slog(LG_DEBUG, "sharedheap_normalize_size(%zu): normalized=%zu", size, normalized);
+
+	return normalized;
+}
+
 static sharedheap_t *sharedheap_new(size_t size)
 {
 	sharedheap_t *s;
@@ -107,6 +121,8 @@ static sharedheap_t *sharedheap_new(size_t size)
 mowgli_heap_t *sharedheap_get(size_t size)
 {
 	sharedheap_t *s;
+
+	size = sharedheap_normalize_size(size);
 
 	s = sharedheap_find_by_size(size);
 
