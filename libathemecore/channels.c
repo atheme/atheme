@@ -45,9 +45,9 @@ mowgli_heap_t *chanban_heap;
  */
 void init_channels(void)
 {
-	chan_heap = mowgli_heap_create(sizeof(channel_t), HEAP_CHANNEL, BH_NOW);
-	chanuser_heap = mowgli_heap_create(sizeof(chanuser_t), HEAP_CHANUSER, BH_NOW);
-	chanban_heap = mowgli_heap_create(sizeof(chanban_t), HEAP_CHANUSER, BH_NOW);
+	chan_heap = sharedheap_get(sizeof(channel_t));
+	chanuser_heap = sharedheap_get(sizeof(chanuser_t));
+	chanban_heap = sharedheap_get(sizeof(chanban_t));
 
 	if (chan_heap == NULL || chanuser_heap == NULL || chanban_heap == NULL)
 	{

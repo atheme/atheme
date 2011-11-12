@@ -44,7 +44,7 @@ mowgli_patricia_t *uidlist;
  */
 void init_users(void)
 {
-	user_heap = mowgli_heap_create(sizeof(user_t), HEAP_USER, BH_NOW);
+	user_heap = sharedheap_get(sizeof(user_t));
 
 	if (user_heap == NULL)
 	{

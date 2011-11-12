@@ -55,12 +55,12 @@ mowgli_heap_t *chanacs_heap;	/* HEAP_CHANACS */
  */
 void init_accounts(void)
 {
-	myuser_heap = mowgli_heap_create(sizeof(myuser_t), HEAP_USER, BH_NOW);
-	mynick_heap = mowgli_heap_create(sizeof(myuser_t), HEAP_USER, BH_NOW);
-	myuser_name_heap = mowgli_heap_create(sizeof(myuser_name_t), HEAP_USER / 2, BH_NOW);
-	mychan_heap = mowgli_heap_create(sizeof(mychan_t), HEAP_CHANNEL, BH_NOW);
-	chanacs_heap = mowgli_heap_create(sizeof(chanacs_t), HEAP_CHANUSER, BH_NOW);
-	mycertfp_heap = mowgli_heap_create(sizeof(mycertfp_t), HEAP_USER, BH_NOW);
+	myuser_heap = sharedheap_get(sizeof(myuser_t));
+	mynick_heap = sharedheap_get(sizeof(myuser_t));
+	myuser_name_heap = sharedheap_get(sizeof(myuser_name_t));
+	mychan_heap = sharedheap_get(sizeof(mychan_t));
+	chanacs_heap = sharedheap_get(sizeof(chanacs_t));
+	mycertfp_heap = sharedheap_get(sizeof(mycertfp_t));
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
 			|| chanacs_heap == NULL || mycertfp_heap == NULL)
