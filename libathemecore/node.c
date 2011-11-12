@@ -39,9 +39,9 @@ mowgli_heap_t *qline_heap;	/* 16 */
 
 void init_nodes(void)
 {
-	kline_heap = mowgli_heap_create(sizeof(kline_t), 16, BH_NOW);
-	xline_heap = mowgli_heap_create(sizeof(xline_t), 16, BH_NOW);
-	qline_heap = mowgli_heap_create(sizeof(qline_t), 16, BH_NOW);
+	kline_heap = sharedheap_get(sizeof(kline_t));
+	xline_heap = sharedheap_get(sizeof(xline_t));
+	qline_heap = sharedheap_get(sizeof(qline_t));
 
 	if (kline_heap == NULL || xline_heap == NULL || qline_heap == NULL)
 	{

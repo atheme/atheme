@@ -31,7 +31,7 @@ static hook_t *find_hook(const char *name);
 void hooks_init()
 {
 	hooks = mowgli_patricia_create(strcasecanon);
-	hook_heap = mowgli_heap_create(sizeof(hook_t), 1024, BH_NOW);
+	hook_heap = sharedheap_get(sizeof(hook_t));
 
 	if (!hook_heap || !hooks)
 	{

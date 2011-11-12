@@ -36,7 +36,7 @@ static void uplink_close(connection_t *cptr);
 
 void init_uplinks(void)
 {
-	uplink_heap = mowgli_heap_create(sizeof(uplink_t), 4, BH_NOW);
+	uplink_heap = sharedheap_get(sizeof(uplink_t));
 	if (!uplink_heap)
 	{
 		slog(LG_INFO, "init_uplinks(): block allocator failed.");

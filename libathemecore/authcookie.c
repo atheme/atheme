@@ -29,7 +29,7 @@ mowgli_heap_t *authcookie_heap;
 
 void authcookie_init(void)
 {
-	authcookie_heap = mowgli_heap_create(sizeof(authcookie_t), 1024, BH_NOW);
+	authcookie_heap = sharedheap_get(sizeof(authcookie_t));
 
 	if (!authcookie_heap)
 	{

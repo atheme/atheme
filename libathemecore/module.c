@@ -35,7 +35,7 @@ static module_t *module_load_internal(const char *pathname, char *errbuf, int er
 
 void modules_init(void)
 {
-	module_heap = mowgli_heap_create(sizeof(module_t), 256, BH_NOW);
+	module_heap = sharedheap_get(sizeof(module_t));
 
 	if (!module_heap)
 	{
