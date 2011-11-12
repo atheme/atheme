@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Atheme IRC Services\n"
 "Report-Msgid-Bugs-To: http://jira.atheme.org/browse/SRV\n"
 "POT-Creation-Date: 2011-10-28 15:54-0500\n"
-"PO-Revision-Date: 2011-10-29 19:21+0000\n"
+"PO-Revision-Date: 2011-11-09 03:02+0000\n"
 "Last-Translator: Dessa <Dessa@gmake.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -686,107 +686,107 @@ msgstr "*** Ende der Info ***"
 
 #: modules/chanfix/fix.c:500
 msgid "List information on channel."
-msgstr ""
+msgstr "Zeigt Informationen eines Channels."
 
 #: modules/chanfix/fix.c:510
 #, c-format
 msgid "%s allows for simple channel operator managment."
-msgstr ""
+msgstr "%s erlaubt einfaches Verwalten von Channel Operatoren."
 
 #: modules/chanserv/access.c:21
 msgid "Manage channel access."
-msgstr ""
+msgstr "Channelzugriff Verwalten."
 
 #: modules/chanserv/access.c:27
 msgid "Manage channel roles."
-msgstr ""
+msgstr "Channelrollen Verwalten."
 
 #: modules/chanserv/access.c:32
 msgid "List channel access entries."
-msgstr ""
+msgstr "Einträge der Channel-Accessliste zeigen."
 
 #: modules/chanserv/access.c:37
 msgid "Display information on an access list entry."
-msgstr ""
+msgstr "Zeigt Informationen über einen Accesslisteneintrag."
 
 #: modules/chanserv/access.c:42
 msgid "Delete an access list entry."
-msgstr ""
+msgstr "Löscht einen Accesslisteneintrag."
 
 #: modules/chanserv/access.c:47
 msgid "Add an access list entry."
-msgstr ""
+msgstr "Fügt einen Accesslisteneintrag hinzu."
 
 #: modules/chanserv/access.c:52
 msgid "Update an access list entry."
-msgstr ""
+msgstr "Ändert einen Accesslisteneintrag."
 
 #: modules/chanserv/access.c:57
 msgid "List available roles."
-msgstr ""
+msgstr "Zeigt verfügbare Rollen."
 
 #: modules/chanserv/access.c:62
 msgid "Add a role."
-msgstr ""
+msgstr "Eine Rolle hinzufügen."
 
 #: modules/chanserv/access.c:67
 msgid "Change flags on a role."
-msgstr ""
+msgstr "Ändere Flags einer Rolle."
 
 #: modules/chanserv/access.c:72
 msgid "Delete a role."
-msgstr ""
+msgstr "Löscht eine Rolle"
 
 #: modules/chanserv/access.c:112
 msgid "Help for ACCESS:"
-msgstr ""
+msgstr "Hilfe für ACCESS:"
 
 #: modules/chanserv/access.c:116
 #, c-format
 msgid "For more information, use /msg %s HELP ACCESS command."
-msgstr ""
+msgstr "Für mehr Informationen nutzen sie /msg %s HELP ACCESS Kommando."
 
 #: modules/chanserv/access.c:128
 msgid "Help for ROLE:"
-msgstr ""
+msgstr "Hilfe für ROLE:"
 
 #: modules/chanserv/access.c:132
 #, c-format
 msgid "For more information, use /msg %s HELP ROLE command."
-msgstr ""
+msgstr "Für mehr Informationen nutzen sie /msg %s HELP ROLE Kommando."
 
 #: modules/chanserv/access.c:149 modules/chanserv/access.c:160
 msgid "Syntax: ACCESS <#channel> <command> [parameters]"
-msgstr ""
+msgstr "Syntax: ACCESS <#channel> <Kommando> [Parameter]"
 
 #: modules/chanserv/access.c:189 modules/chanserv/access.c:200
 msgid "Syntax: ROLE <#channel> <command> [parameters]"
-msgstr ""
+msgstr "Syntax: ROLE <#channel> <Kommando> [Parameter]"
 
 #: modules/chanserv/access.c:474 modules/chanserv/template.c:178
 #: modules/chanserv/template.c:315
 #, c-format
 msgid "Invalid template name %s."
-msgstr ""
+msgstr "Ungültiger Templatename %s."
 
 #: modules/chanserv/access.c:480 modules/chanserv/template.c:333
 #, c-format
 msgid "Sorry, too many templates on %s."
-msgstr ""
+msgstr "Zu viele Templates in %s."
 
 #: modules/chanserv/access.c:517 modules/chanserv/template.c:392
 #, c-format
 msgid "%d access entries updated accordingly."
-msgstr ""
+msgstr "%d Accesslisteneinträge aktualisiert."
 
 #: modules/chanserv/access.c:580
 msgid "Entry Nickname/Host          Role"
-msgstr ""
+msgstr "Eintrag Nickname/Host          Rolle"
 
 #: modules/chanserv/access.c:594
 #, c-format
 msgid "%-5d %-22s %s"
-msgstr ""
+msgstr "%-5d %-22s %s"
 
 #: modules/chanserv/access.c:600
 #, c-format
