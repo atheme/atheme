@@ -49,8 +49,8 @@ static void server_delete_serv(server_t *s);
  */
 void init_servers(void)
 {
-	serv_heap = mowgli_heap_create(sizeof(server_t), HEAP_SERVER, BH_NOW);
-	tld_heap = mowgli_heap_create(sizeof(tld_t), 4, BH_NOW);
+	serv_heap = sharedheap_get(sizeof(server_t));
+	tld_heap = sharedheap_get(sizeof(tld_t));
 
 	if (serv_heap == NULL || tld_heap == NULL)
 	{

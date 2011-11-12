@@ -31,7 +31,7 @@ mowgli_heap_t *metadata_heap;	/* HEAP_CHANUSER */
 
 void init_metadata(void)
 {
-	metadata_heap = mowgli_heap_create(sizeof(metadata_t), HEAP_CHANUSER, BH_NOW);
+	metadata_heap = sharedheap_get(sizeof(metadata_t));
 
 	if (metadata_heap == NULL)
 	{

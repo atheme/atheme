@@ -34,7 +34,7 @@ mowgli_list_t connection_list;
 
 void init_netio(void)
 {
-	connection_heap = mowgli_heap_create(sizeof(connection_t), 16, BH_NOW);
+	connection_heap = sharedheap_get(sizeof(connection_t));
 
 	if (!connection_heap)
 	{

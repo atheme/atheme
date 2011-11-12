@@ -41,7 +41,7 @@ bool backend_loaded = false;
 
 void pcommand_init(void)
 {
-	pcommand_heap = mowgli_heap_create(sizeof(pcommand_t), 64, BH_NOW);
+	pcommand_heap = sharedheap_get(sizeof(pcommand_t));
 
 	if (!pcommand_heap)
 	{
@@ -61,7 +61,7 @@ void pcommand_add(const char *token, void (*handler) (sourceinfo_t *si, int parc
 		slog(LG_INFO, "pcommand_add(): token %s is already registered", token);
 		return;
 	}
-	
+
 	pcmd = mowgli_heap_alloc(pcommand_heap);
 	pcmd->token = sstrdup(token);
 	pcmd->handler = handler;

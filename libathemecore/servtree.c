@@ -67,7 +67,7 @@ static void service_default_handler(sourceinfo_t *si, int parc, char *parv[])
 
 void servtree_init(void)
 {
-	service_heap = mowgli_heap_create(sizeof(service_t), 12, BH_NOW);
+	service_heap = sharedheap_get(sizeof(service_t));
 	services_name = mowgli_patricia_create(strcasecanon);
 	services_nick = mowgli_patricia_create(strcasecanon);
 

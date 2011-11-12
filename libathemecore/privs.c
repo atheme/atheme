@@ -32,8 +32,9 @@ mowgli_heap_t *soper_heap;
 
 void init_privs(void)
 {
-	operclass_heap = mowgli_heap_create(sizeof(operclass_t), 2, BH_NOW);
-	soper_heap = mowgli_heap_create(sizeof(soper_t), 2, BH_NOW);
+	operclass_heap = sharedheap_get(sizeof(operclass_t));
+	soper_heap = sharedheap_get(sizeof(soper_t));
+
 	if (!operclass_heap || !soper_heap)
 	{
 		slog(LG_INFO, "init_privs(): block allocator failed.");

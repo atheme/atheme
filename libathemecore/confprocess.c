@@ -626,7 +626,7 @@ int token_to_value(struct Token token_table[], const char *token)
 
 void init_confprocess(void)
 {
-	conftable_heap = mowgli_heap_create(sizeof(struct ConfTable), 32, BH_NOW);
+	conftable_heap = sharedheap_get(sizeof(struct ConfTable));
 
 	if (!conftable_heap)
 	{
