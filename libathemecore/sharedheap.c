@@ -74,6 +74,21 @@ static void sharedheap_destroy(sharedheap_t *s)
 	free(s);
 }
 
+static inline size_t sharedheap_prealloc_size(size_t size)
+{
+	size_t page_size, prealloc_size;
+
+	page_size = sysconf(_SC_PAGESIZE);
+
+	prealloc_size = page_size / size;
+
+#ifdef LARGE_NETWORK
+	prealloc_size *= 4;
+#endif
+
+	return prealloc_size;
+}
+
 static sharedheap_t *sharedheap_new(size_t size)
 {
 	sharedheap_t *s;
@@ -82,7 +97,7 @@ static sharedheap_t *sharedheap_new(size_t size)
 	object_init(object(s), NULL, (destructor_t) sharedheap_destroy);
 
 	s->size = size;
-	s->heap = mowgli_heap_create(size, 16, BH_NOW);
+	s->heap = mowgli_heap_create(size, sharedheap_prealloc_size(size), BH_NOW);
 
 	mowgli_node_add(s, &s->node, &sharedheap_list);
 
