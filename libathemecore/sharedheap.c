@@ -93,10 +93,7 @@ static inline size_t sharedheap_normalize_size(size_t size)
 {
 	size_t normalized;
 
-	if (size % sizeof(void *) == 0 && (size / sizeof(void *)) % 2 == 0)
-		normalized = size;
-	else
-		normalized = ((size / sizeof(void *)) + 1) * sizeof(void *);
+	normalized = ((size / sizeof(void *)) + ((size / sizeof(void *)) % 2)) * sizeof(void *);
 
 	slog(LG_DEBUG, "sharedheap_normalize_size(%zu): normalized=%zu", size, normalized);
 
