@@ -556,40 +556,19 @@ RPATH=""
 
 AC_SUBST(RPATH)
 
-AC_ARG_WITH(mowgli2,
-AC_HELP_STRING([--with-mowgli2],[ Enable usage of Mowgli-2 instead of Mowgli-1 framework]),
-[],
-[with_mowgli2=no])
+PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 0.9.90],
+	[MOWGLI_SOURCE="system"], [
+	MOWGLI_SOURCE="internal"
+	MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+	MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+	LIBMOWGLI="libmowgli-2"
+	if test "x$enablerpath" = "xyes"; then
+		RPATH="-Wl,-rpath,${libdir}"
+	fi
+])
 
-if test "x$with_mowgli2" = "xyes"; then
-	PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 0.9.90],
-		[MOWGLI_SOURCE="system"], [
-		MOWGLI_SOURCE="internal"
-		MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-		MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-		LIBMOWGLI="libmowgli-2"
-		if test "x$enablerpath" = "xyes"; then
-			RPATH="-Wl,-rpath,${libdir}"
-		fi
-	])
-
-	AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
-		[ AC_CONFIG_SUBDIRS([libmowgli-2]) ])
-else
-	PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.9.90],
-		[MOWGLI_SOURCE="system"], [
-		MOWGLI_SOURCE="internal"
-		MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
-		MOWGLI_LIBS="-L../libmowgli/src/libmowgli -L../../libmowgli/src/libmowgli -L../../../libmowgli/src/libmowgli -lmowgli"
-		LIBMOWGLI="libmowgli"
-		if test "x$enablerpath" = "xyes"; then
-			RPATH="-Wl,-rpath,${libdir}"
-		fi
-	])
-
-	AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
-		[ AC_CONFIG_SUBDIRS([libmowgli]) ])
-fi
+AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
+	[ AC_CONFIG_SUBDIRS([libmowgli-2]) ])
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
 LIBS="$LIBS $MOWGLI_LIBS $RPATH"
@@ -646,7 +625,6 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
-	Mowgli-2 support     : ${with_mowgli2}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
