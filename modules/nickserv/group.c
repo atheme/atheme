@@ -137,6 +137,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 	hdata.mu = si->smu;
 	hdata.mn = mn;
 	hook_call_nick_ungroup(&hdata);
+	holdnick_sts(si->service->me, 0, mn->nick, NULL);
 	command_success_nodata(si, _("Nick \2%s\2 has been removed from your account."), mn->nick);
 	object_unref(mn);
 }
@@ -222,6 +223,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	hdata.mu = mu;
 	hdata.mn = mn;
 	hook_call_nick_ungroup(&hdata);
+	holdnick_sts(si->service->me, 0, mn->nick, NULL);
 	if (mn2 != NULL)
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, entity(mu)->name, mn2->nick);
 	else

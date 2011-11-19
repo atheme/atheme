@@ -99,6 +99,8 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
+	if (!nicksvs.no_nick_ownership)
+		holdnick_sts(si->service->me, 0, entity(mu)->name, NULL);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
 	object_dispose(mu);
 }
@@ -108,6 +110,7 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mynick_t *mn;
 	char *acc = parv[0];
+	mowgli_node_t *n;
 
 	if (!acc)
 	{
@@ -146,6 +149,14 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	wallops("%s dropped the account \2%s\2", get_oper_name(si), entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP: \2%s\2", entity(mu)->name);
 	hook_call_user_drop(mu);
+	if (!nicksvs.no_nick_ownership)
+	{
+		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
+		{
+			mn = n->data;
+			holdnick_sts(si->service->me, 0, mn->nick, NULL);
+		}
+	}
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
 	object_dispose(mu);
 }
