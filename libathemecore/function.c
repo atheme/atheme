@@ -550,7 +550,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 					type, entity(mu)->name, email);
 			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",
 					u->nick, u->user, u->vhost,
-					u->ip[0] ? u->ip : u->host,
+					u->ip ? u->ip : u->host,
 					type, entity(mu)->name, email);
 			lastwallops = CURRTIME;
 		}
@@ -558,7 +558,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	}
 
 	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>",
-			u->nick, u->user, u->vhost, u->ip[0] ? u->ip : u->host,
+			u->nick, u->user, u->vhost, u->ip ? u->ip : u->host,
 			type, entity(mu)->name, email);
 
 	/* set up the email headers */

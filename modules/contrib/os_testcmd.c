@@ -117,7 +117,7 @@ static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[])
 	memset(&newsi, '\0', sizeof newsi);
 	newsi.smu = si->smu;
 	if (si->su != NULL)
-		newsi.sourcedesc = si->su->ip[0] != '\0' ? si->su->ip : si->su->host;
+		newsi.sourcedesc = si->su->ip != NULL ? si->su->ip : si->su->host;
 	else
 		newsi.sourcedesc = si->sourcedesc;
 	newsi.service = svs;
