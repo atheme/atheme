@@ -8751,57 +8751,6 @@ $as_echo "no" >&6; }
  fi
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wbad-function-cast" >&5
-$as_echo_n "checking GCC flag(s) -Wbad-function-cast... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_bad_function_cast+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wbad-function-cast -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <string.h>
-#include <stdio.h>
-int main(void);
-
-int
-main ()
-{
-
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_bad_function_cast=yes
-else
-  atheme_cv_c_gcc_w_bad_function_cast=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
-
-  if test "x$atheme_cv_c_gcc_w_bad_function_cast" = xyes; then
-   CWARNS="${CWARNS}-Wbad-function-cast "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_bad_function_cast=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
-
-
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wunused-function -Wunused-label -Wunused-value -Wunused-variable" >&5
 $as_echo_n "checking GCC flag(s) -Wunused-function -Wunused-label -Wunused-value -Wunused-variable... " >&6; }
  if test "${GCC-no}" = yes
