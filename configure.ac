@@ -339,7 +339,7 @@ if test "$shared_modules" = yes; then
 	hold_ldflags=$LDFLAGS
 	AC_MSG_CHECKING(for the ld -export-dynamic flag)
 	LDFLAGS="${LDFLAGS} -Wl,-export-dynamic"
-	AC_LINK_IFELSE(AC_LANG_PROGRAM([],[int i;]), found=yes, found=no)
+	AC_LINK_IFELSE([AC_LANG_PROGRAM([],[int i;])], found=yes, found=no)
 	LDFLAGS=$hold_ldflags
 
 	if expr "`uname -s`" : ^IRIX >/dev/null 2>&1; then
