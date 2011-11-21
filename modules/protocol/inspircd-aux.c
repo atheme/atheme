@@ -119,6 +119,7 @@ static bool has_cbanmod = false;
 static bool has_hidechansmod = false;
 static bool has_servprotectmod = false;
 static bool has_svshold = false;
+static bool has_cloakingmod = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
@@ -1365,6 +1366,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_services_account.so"))
 		{
 			has_servicesmod = true;
+		}
+		if (strstr(parv[1], "m_cloaking.so"))
+		{
+			has_cloakingmod = true;
 		}
 		if (strstr(parv[1], "m_globops.so"))
 		{
