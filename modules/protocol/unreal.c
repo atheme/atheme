@@ -469,11 +469,15 @@ static void unreal_jupe(const char *server, const char *reason)
 
 static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 {
+	sts(":%s CHGHOST %s :%s", source->nick, target->nick, host);
+
 	if (irccasecmp(target->host, host))
 		numeric_sts(me.me, 396, target, "%s :is now your hidden host (set by %s)", host, source->nick);
 	else
+	{
 		numeric_sts(me.me, 396, target, "%s :hostname reset by %s", host, source->nick);
-	sts(":%s CHGHOST %s :%s", source->nick, target->nick, host);
+		sts(":%s SVS2MODE %s +x", source->nick, target->nick);
+	}
 }
 
 static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
