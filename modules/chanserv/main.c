@@ -188,52 +188,52 @@ static void chanserv_config_ready(void *unused)
 
 static int c_ci_vop(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	set_global_template_flags("VOP", flags_to_bitmask(ce->ce_vardata, 0));
+	set_global_template_flags("VOP", flags_to_bitmask(ce->vardata, 0));
 
 	return 0;
 }
 
 static int c_ci_hop(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	set_global_template_flags("HOP", flags_to_bitmask(ce->ce_vardata, 0));
+	set_global_template_flags("HOP", flags_to_bitmask(ce->vardata, 0));
 
 	return 0;
 }
 
 static int c_ci_aop(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	set_global_template_flags("AOP", flags_to_bitmask(ce->ce_vardata, 0));
+	set_global_template_flags("AOP", flags_to_bitmask(ce->vardata, 0));
 
 	return 0;
 }
 
 static int c_ci_sop(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	set_global_template_flags("SOP", flags_to_bitmask(ce->ce_vardata, 0));
+	set_global_template_flags("SOP", flags_to_bitmask(ce->vardata, 0));
 
 	return 0;
 }
@@ -242,15 +242,15 @@ static int c_ci_templates(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
 	{
-		if (flce->ce_vardata == NULL)
+		if (flce->vardata == NULL)
 		{
 			conf_report_warning(ce, "no parameter for configuration option");
 			return 0;
 		}
 
-		set_global_template_flags(flce->ce_varname, flags_to_bitmask(flce->ce_vardata, 0));
+		set_global_template_flags(flce->varname, flags_to_bitmask(flce->vardata, 0));
 	}
 
 	return 0;

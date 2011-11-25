@@ -260,13 +260,13 @@ static int c_loadmodule(mowgli_config_file_entry_t *ce)
 	if (!cold_start)
 		return 0;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
 	if (*name == '/')
 	{
@@ -287,54 +287,54 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 	char *host = NULL, *vhost = NULL, *password = NULL;
 	unsigned int port = 0;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	if (me.name != NULL && !irccasecmp(ce->ce_vardata, me.name))
-		conf_report_warning(ce, "uplink's server name %s should not be the same as our server name, continuing anyway", ce->ce_vardata);
-	else if (!strchr(ce->ce_vardata, '.'))
-		conf_report_warning(ce, "uplink's server name %s is invalid, continuing anyway", ce->ce_vardata);
-	else if (isdigit(ce->ce_vardata[0]))
-		conf_report_warning(ce, "uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_vardata);
+	if (me.name != NULL && !irccasecmp(ce->vardata, me.name))
+		conf_report_warning(ce, "uplink's server name %s should not be the same as our server name, continuing anyway", ce->vardata);
+	else if (!strchr(ce->vardata, '.'))
+		conf_report_warning(ce, "uplink's server name %s is invalid, continuing anyway", ce->vardata);
+	else if (isdigit(ce->vardata[0]))
+		conf_report_warning(ce, "uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->vardata);
 
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
-	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	MOWGLI_ITER_FOREACH(ce, ce->entries)
 	{
-		if (!strcasecmp("HOST", ce->ce_varname))
+		if (!strcasecmp("HOST", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			host = ce->ce_vardata;
+			host = ce->vardata;
 		}
-		else if (!strcasecmp("VHOST", ce->ce_varname))
+		else if (!strcasecmp("VHOST", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			vhost = ce->ce_vardata;
+			vhost = ce->vardata;
 		}
-		else if (!strcasecmp("PASSWORD", ce->ce_varname))
+		else if (!strcasecmp("PASSWORD", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			password = ce->ce_vardata;
+			password = ce->vardata;
 		}
-		else if (!strcasecmp("PORT", ce->ce_varname))
+		else if (!strcasecmp("PORT", ce->varname))
 		{
 			(void)process_uint_configentry(ce, &port, 1, 65535);
 		}
@@ -356,31 +356,31 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 	char *privs = NULL, *newprivs;
 	int flags = 0;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
-	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	MOWGLI_ITER_FOREACH(ce, ce->entries)
 	{
-		if (!strcasecmp("PRIVS", ce->ce_varname))
+		if (!strcasecmp("PRIVS", ce->varname))
 		{
-			if (ce->ce_vardata == NULL && ce->ce_entries == NULL)
+			if (ce->vardata == NULL && ce->entries == NULL)
 				conf_report_warning(ce, "no parameter for configuration option");
 
-			if (ce->ce_vardata != NULL)
+			if (ce->vardata != NULL)
 			{
 				if (privs == NULL)
-					privs = sstrdup(ce->ce_vardata);
+					privs = sstrdup(ce->vardata);
 				else
 				{
-					newprivs = smalloc(strlen(privs) + 1 + strlen(ce->ce_vardata) + 1);
+					newprivs = smalloc(strlen(privs) + 1 + strlen(ce->vardata) + 1);
 					strcpy(newprivs, privs);
 					strcat(newprivs, " ");
-					strcat(newprivs, ce->ce_vardata);
+					strcat(newprivs, ce->vardata);
 					free(privs);
 					privs = newprivs;
 				}
@@ -399,33 +399,33 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 				 *
 				 * - nenolod
 				 */
-				for (conf_p = ce->ce_entries; conf_p; conf_p = conf_p->ce_next)
+				MOWGLI_ITER_FOREACH(conf_p, ce->entries)
 				{
 					if (privs == NULL)
-						privs = sstrdup(conf_p->ce_varname);
+						privs = sstrdup(conf_p->varname);
 					else
 					{
-						newprivs = smalloc(strlen(privs) + 1 + strlen(conf_p->ce_varname) + 1);
+						newprivs = smalloc(strlen(privs) + 1 + strlen(conf_p->varname) + 1);
 						strcpy(newprivs, privs);
 						strcat(newprivs, " ");
-						strcat(newprivs, conf_p->ce_varname);
+						strcat(newprivs, conf_p->varname);
 						free(privs);
 						privs = newprivs;
 					}
 				}
 			}
 		}
-		else if (!strcasecmp("EXTENDS", ce->ce_varname))
+		else if (!strcasecmp("EXTENDS", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				continue;
 			}
-			operclass_t *parent = operclass_find(ce->ce_vardata);
+			operclass_t *parent = operclass_find(ce->vardata);
 			if (parent == NULL)
 			{
-				conf_report_warning(ce, "nonexistent extends operclass %s for operclass %s", ce->ce_vardata, name);
+				conf_report_warning(ce, "nonexistent extends operclass %s for operclass %s", ce->vardata, name);
 				continue;
 			}
 
@@ -441,7 +441,7 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 				privs = newprivs;
 			}
 		}
-		else if (!strcasecmp("NEEDOPER", ce->ce_varname))
+		else if (!strcasecmp("NEEDOPER", ce->varname))
 			flags |= OPERCLASS_NEEDOPER;
 		else
 		{
@@ -464,39 +464,39 @@ static int c_operator(mowgli_config_file_entry_t *ce)
 	operclass_t *operclass = NULL;
 	mowgli_config_file_entry_t *topce;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
 	topce = ce;
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
-	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	MOWGLI_ITER_FOREACH(ce, ce->entries)
 	{
-		if (!strcasecmp("OPERCLASS", ce->ce_varname))
+		if (!strcasecmp("OPERCLASS", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			operclass = operclass_find(ce->ce_vardata);
+			operclass = operclass_find(ce->vardata);
 			if (operclass == NULL)
 				conf_report_warning(ce, "invalid operclass %s for operator %s",
-						ce->ce_vardata, name);
+						ce->vardata, name);
 		}
-		else if (!strcasecmp("PASSWORD", ce->ce_varname))
+		else if (!strcasecmp("PASSWORD", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			password = ce->ce_vardata;
+			password = ce->vardata;
 		}
 		else
 		{
@@ -529,13 +529,13 @@ static int c_operator(mowgli_config_file_entry_t *ce)
  */
 static int c_language(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_entries)
+	if (ce->entries)
 	{
 		subblock_handler(ce, &conf_la_table);
 		return 0;
 	}
 	else
-		config_options.languagefile = sstrdup(ce->ce_vardata);
+		config_options.languagefile = sstrdup(ce->vardata);
 
 	return 0;
 }
@@ -545,26 +545,26 @@ static int c_string(mowgli_config_file_entry_t *ce)
 	char *name, *trans = NULL;
 	mowgli_config_file_entry_t *topce;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
 	topce = ce;
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
-	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	MOWGLI_ITER_FOREACH(ce, ce->entries)
 	{
-		if (!strcasecmp("TRANSLATION", ce->ce_varname))
+		if (!strcasecmp("TRANSLATION", ce->varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 			{
 				conf_report_warning(ce, "no parameter for configuration option");
 				return 0;
 			}
 
-			trans = ce->ce_vardata;
+			trans = ce->vardata;
 		}
 		else
 		{
@@ -586,24 +586,26 @@ static int c_si_loglevel(mowgli_config_file_entry_t *ce)
 	int val;
 	int mask = 0;
 
-	if (ce->ce_vardata != NULL)
+	if (ce->vardata != NULL)
 	{
-		val = token_to_value(logflags, ce->ce_vardata);
+		val = token_to_value(logflags, ce->vardata);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			mask |= val;
 		else
-			conf_report_warning(ce, "unknown flag: %s", ce->ce_vardata);
+			conf_report_warning(ce, "unknown flag: %s", ce->vardata);
 	}
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
 	{
-		val = token_to_value(logflags, flce->ce_varname);
+		val = token_to_value(logflags, flce->varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			mask |= val;
 		else
-			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
+			conf_report_warning(flce, "unknown flag: %s", flce->varname);
 	}
+
 	log_master_set_mask(mask);
 
 	return 0;
@@ -611,13 +613,13 @@ static int c_si_loglevel(mowgli_config_file_entry_t *ce)
 
 static int c_si_auth(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	if (!strcasecmp("EMAIL", ce->ce_vardata))
+	if (!strcasecmp("EMAIL", ce->vardata))
 		me.auth = AUTH_EMAIL;
 
 	else
@@ -628,13 +630,13 @@ static int c_si_auth(mowgli_config_file_entry_t *ce)
 
 static int c_si_casemapping(mowgli_config_file_entry_t *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	if (!strcasecmp("ASCII", ce->ce_vardata))
+	if (!strcasecmp("ASCII", ce->vardata))
 		set_match_mapping(MATCH_ASCII);
 
 	else
@@ -647,12 +649,12 @@ static int c_gi_immune_level(mowgli_config_file_entry_t *ce)
 {
 	int val;
 
-	val = token_to_value(operflags, ce->ce_vardata);
+	val = token_to_value(operflags, ce->vardata);
 
 	if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 		config_options.immune_level |= val;
 	else
-		conf_report_warning(ce, "unknown flag: %s", ce->ce_vardata);
+		conf_report_warning(ce, "unknown flag: %s", ce->vardata);
 
 	return 0;
 }
@@ -661,17 +663,17 @@ static int c_gi_uflags(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
 	{
 		int val;
 
-		val = token_to_value(uflags, flce->ce_varname);
+		val = token_to_value(uflags, flce->varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			config_options.defuflags |= val;
 
 		else
-			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
+			conf_report_warning(flce, "unknown flag: %s", flce->varname);
 	}
 
 	return 0;
@@ -681,17 +683,17 @@ static int c_gi_cflags(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *flce;
 
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
 	{
 		int val;
 
-		val = token_to_value(cflags, flce->ce_varname);
+		val = token_to_value(cflags, flce->varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			config_options.defcflags |= val;
 
 		else
-			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
+			conf_report_warning(flce, "unknown flag: %s", flce->varname);
 	}
 
 	if (config_options.defcflags & MC_TOPICLOCK)
@@ -705,7 +707,7 @@ static int c_gi_exempts(mowgli_config_file_entry_t *ce)
 	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
 
-	if (!ce->ce_entries)
+	if (!ce->entries)
 		return 0;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, config_options.exempts.head)
@@ -715,15 +717,16 @@ static int c_gi_exempts(mowgli_config_file_entry_t *ce)
 		mowgli_node_free(n);
 	}
 
-	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+	MOWGLI_ITER_FOREACH(subce, ce->entries)
 	{
-		if (subce->ce_entries != NULL)
+		if (subce->entries != NULL)
 		{
 			conf_report_warning(ce, "Invalid exempt entry");
 			continue;
 		}
-		mowgli_node_add(sstrdup(subce->ce_varname), mowgli_node_create(), &config_options.exempts);
+		mowgli_node_add(sstrdup(subce->varname), mowgli_node_create(), &config_options.exempts);
 	}
+
 	return 0;
 }
 
@@ -733,27 +736,27 @@ static int c_logfile(mowgli_config_file_entry_t *ce)
 	mowgli_config_file_entry_t *flce;
 	unsigned int logval = 0;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	MOWGLI_ITER_FOREACH(flce, ce->entries)
 	{
 		int val;
 
-		val = token_to_value(logflags, flce->ce_varname);
+		val = token_to_value(logflags, flce->varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
 			logval |= val;
 		else
 		{
-			conf_report_warning(flce, "unknown flag: %s", flce->ce_varname);
+			conf_report_warning(flce, "unknown flag: %s", flce->varname);
 		}
 	}
 
-	logfile_new(ce->ce_vardata, logval);
+	logfile_new(ce->vardata, logval);
 
 	return 0;
 }

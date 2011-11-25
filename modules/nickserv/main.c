@@ -114,7 +114,7 @@ static int c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
 
-	if (!ce->ce_entries)
+	if (!ce->entries)
 		return 0;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, nicksvs.emailexempts.head)
@@ -124,15 +124,17 @@ static int c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 		mowgli_node_free(n);
 	}
 
-	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+	MOWGLI_ITER_FOREACH(subce, ce->entries)
 	{
-		if (subce->ce_entries != NULL)
+		if (subce->entries != NULL)
 		{
 			conf_report_warning(ce, "Invalid email exempt entry");
 			continue;
 		}
-		mowgli_node_add(sstrdup(subce->ce_varname), mowgli_node_create(), &nicksvs.emailexempts);
+
+		mowgli_node_add(sstrdup(subce->varname), mowgli_node_create(), &nicksvs.emailexempts);
 	}
+
 	return 0;
 }
 

@@ -51,9 +51,9 @@ static int guestnoreg_config_handler(mowgli_config_file_entry_t *ce)
 {
         mowgli_config_file_entry_t *cce;
 
-        for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)
+	MOWGLI_ITER_FOREACH(cce, ce->entries)
         {
-                char *nick = sstrdup(cce->ce_varname);
+                char *nick = sstrdup(cce->varname);
                 mowgli_node_add(nick, mowgli_node_create(), &guestnicks);
         }
 

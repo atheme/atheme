@@ -113,16 +113,16 @@ static int conf_service_nick(mowgli_config_file_entry_t *ce)
 	service_t *sptr;
 	char newnick[30 + 1];
 
-	if (!ce->ce_vardata)
+	if (!ce->vardata)
 		return -1;
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
 	mowgli_patricia_delete(services_nick, sptr->nick);
 	free(sptr->nick);
-	if (service_find_nick(ce->ce_vardata))
+	if (service_find_nick(ce->vardata))
 	{
 		create_unique_service_nick(newnick, sizeof newnick);
 		slog(LG_INFO, "conf_service_nick(): using nick %s for service %s due to duplication",
@@ -130,7 +130,7 @@ static int conf_service_nick(mowgli_config_file_entry_t *ce)
 		sptr->nick = sstrdup(newnick);
 	}
 	else
-		sptr->nick = sstrdup(ce->ce_vardata);
+		sptr->nick = sstrdup(ce->vardata);
 	mowgli_patricia_add(services_nick, sptr->nick, sptr);
 
 	return 0;
@@ -140,15 +140,15 @@ static int conf_service_user(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
-	if (!ce->ce_vardata)
+	if (!ce->vardata)
 		return -1;
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
 	free(sptr->user);
-	sptr->user = sstrndup(ce->ce_vardata, 10);
+	sptr->user = sstrndup(ce->vardata, 10);
 
 	return 0;
 }
@@ -157,21 +157,21 @@ static int conf_service_host(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
-	if (!ce->ce_vardata)
+	if (!ce->vardata)
 		return -1;
 
-	if (!is_valid_host(ce->ce_vardata))
+	if (!is_valid_host(ce->vardata))
 	{
-		conf_report_warning(ce, "invalid hostname: %s", ce->ce_vardata);
+		conf_report_warning(ce, "invalid hostname: %s", ce->vardata);
 		return -1;
 	}
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
 	free(sptr->host);
-	sptr->host = sstrdup(ce->ce_vardata);
+	sptr->host = sstrdup(ce->vardata);
 
 	return 0;
 }
@@ -180,15 +180,15 @@ static int conf_service_real(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
-	if (!ce->ce_vardata)
+	if (!ce->vardata)
 		return -1;
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
 	free(sptr->real);
-	sptr->real = sstrdup(ce->ce_vardata);
+	sptr->real = sstrdup(ce->vardata);
 
 	return 0;
 }
@@ -198,25 +198,29 @@ static int conf_service_aliases(mowgli_config_file_entry_t *ce)
 	service_t *sptr;
 	mowgli_config_file_entry_t *subce;
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
 	if (sptr->aliases)
 		mowgli_patricia_destroy(sptr->aliases, free_alias_string, NULL);
+
 	sptr->aliases = NULL;
-	if (!ce->ce_entries)
+	if (!ce->entries)
 		return 0;
+
 	sptr->aliases = mowgli_patricia_create(strcasecanon);
-	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+
+	MOWGLI_ITER_FOREACH(subce, ce->entries)
 	{
-		if (subce->ce_vardata == NULL || subce->ce_entries != NULL)
+		if (subce->vardata == NULL || subce->entries != NULL)
 		{
 			conf_report_warning(subce, "Invalid alias entry");
 			continue;
 		}
-		mowgli_patricia_add(sptr->aliases, subce->ce_varname,
-				sstrdup(subce->ce_vardata));
+
+		mowgli_patricia_add(sptr->aliases, subce->varname,
+				sstrdup(subce->vardata));
 	}
 
 	return 0;
@@ -227,7 +231,7 @@ static int conf_service_access(mowgli_config_file_entry_t *ce)
 	service_t *sptr;
 	mowgli_config_file_entry_t *subce;
 
-	sptr = service_find(ce->ce_prevlevel->ce_varname);
+	sptr = service_find(ce->prevlevel->varname);
 	if (!sptr)
 		return -1;
 
@@ -235,19 +239,21 @@ static int conf_service_access(mowgli_config_file_entry_t *ce)
 		mowgli_patricia_destroy(sptr->access, free_access_string, NULL);
 
 	sptr->access = NULL;
-	if (!ce->ce_entries)
+	if (!ce->entries)
 		return 0;
 
 	sptr->access = mowgli_patricia_create(strcasecanon);
-	for (subce = ce->ce_entries; subce != NULL; subce = subce->ce_next)
+
+	MOWGLI_ITER_FOREACH(subce, ce->entries)
 	{
-		if (subce->ce_vardata == NULL || subce->ce_entries != NULL)
+		if (subce->vardata == NULL || subce->entries != NULL)
 		{
 			conf_report_warning(subce, "Invalid access entry");
 			continue;
 		}
-		mowgli_patricia_add(sptr->access, subce->ce_varname,
-				sstrdup(subce->ce_vardata));
+
+		mowgli_patricia_add(sptr->access, subce->varname,
+				sstrdup(subce->vardata));
 	}
 
 	return 0;
@@ -257,7 +263,7 @@ static int conf_service(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
-	sptr = service_find(ce->ce_varname);
+	sptr = service_find(ce->varname);
 	if (!sptr)
 		return -1;
 

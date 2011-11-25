@@ -92,20 +92,20 @@ void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, va);
 	va_end(va);
 
-	if (ce->ce_prevlevel == NULL)
-		mowgli_strlcpy(name, ce->ce_varname, sizeof name);
-	else if (ce->ce_prevlevel->ce_prevlevel == NULL)
+	if (ce->prevlevel == NULL)
+		mowgli_strlcpy(name, ce->varname, sizeof name);
+	else if (ce->prevlevel->prevlevel == NULL)
 		snprintf(name, sizeof name, "%s::%s",
-				ce->ce_prevlevel->ce_varname, ce->ce_varname);
-	else if (ce->ce_prevlevel->ce_prevlevel->ce_prevlevel == NULL)
+				ce->prevlevel->varname, ce->varname);
+	else if (ce->prevlevel->prevlevel->prevlevel == NULL)
 		snprintf(name, sizeof name, "%s::%s::%s",
-				ce->ce_prevlevel->ce_prevlevel->ce_varname,
-				ce->ce_prevlevel->ce_varname, ce->ce_varname);
+				ce->prevlevel->prevlevel->varname,
+				ce->prevlevel->varname, ce->varname);
 	else
 		snprintf(name, sizeof name, "...::%s::%s::%s",
-				ce->ce_prevlevel->ce_prevlevel->ce_varname,
-				ce->ce_prevlevel->ce_varname, ce->ce_varname);
-	slog(LG_ERROR, "%s:%d: [%s] warning: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, name, buf);
+				ce->prevlevel->prevlevel->varname,
+				ce->prevlevel->varname, ce->varname);
+	slog(LG_ERROR, "%s:%d: [%s] warning: %s", ce->fileptr->filename, ce->varlinenum, name, buf);
 }
 
 bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
@@ -114,17 +114,17 @@ bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 	unsigned long v;
 	char *end;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return false;
 	}
 	errno = 0;
-	v = strtoul(ce->ce_vardata, &end, 10);
-	if (errno != 0 || *end != '\0' || end == ce->ce_vardata)
+	v = strtoul(ce->vardata, &end, 10);
+	if (errno != 0 || *end != '\0' || end == ce->vardata)
 	{
 		conf_report_warning(ce, "invalid number \"%s\"",
-				ce->ce_vardata);
+				ce->vardata);
 		return false;
 	}
 	if (v > max || v < min)
@@ -162,17 +162,17 @@ bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *
 	const char *unit;
 	char *end;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return false;
 	}
 	errno = 0;
-	v = strtoul(ce->ce_vardata, &end, 10);
-	if (errno != 0 || end == ce->ce_vardata)
+	v = strtoul(ce->vardata, &end, 10);
+	if (errno != 0 || end == ce->vardata)
 	{
 		conf_report_warning(ce, "invalid number \"%s\"",
-				ce->ce_vardata);
+				ce->vardata);
 		return false;
 	}
 	while (*end == ' ' || *end == '\t')
@@ -257,29 +257,29 @@ static void process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t
 				return;
 			break;
 		case CONF_DUPSTR:
-			if (ce->ce_vardata == NULL)
+			if (ce->vardata == NULL)
 				conf_report_warning(ce, "no parameter for configuration option");
 			else
 			{
 				if (*ct->un.dupstr_val.var)
 					free(*ct->un.dupstr_val.var);
-				*ct->un.dupstr_val.var = sstrdup(ce->ce_vardata);
+				*ct->un.dupstr_val.var = sstrdup(ce->vardata);
 			}
 			break;
 		case CONF_BOOL:
-			if (ce->ce_vardata == NULL ||
-					!strcasecmp(ce->ce_vardata, "yes") ||
-					!strcasecmp(ce->ce_vardata, "on") ||
-					!strcasecmp(ce->ce_vardata, "true") ||
-					!strcmp(ce->ce_vardata, "1"))
+			if (ce->vardata == NULL ||
+					!strcasecmp(ce->vardata, "yes") ||
+					!strcasecmp(ce->vardata, "on") ||
+					!strcasecmp(ce->vardata, "true") ||
+					!strcmp(ce->vardata, "1"))
 				*ct->un.bool_val.var = true;
-			else if (!strcasecmp(ce->ce_vardata, "no") ||
-					!strcasecmp(ce->ce_vardata, "off") ||
-					!strcasecmp(ce->ce_vardata, "false") ||
-					!strcmp(ce->ce_vardata, "0"))
+			else if (!strcasecmp(ce->vardata, "no") ||
+					!strcasecmp(ce->vardata, "off") ||
+					!strcasecmp(ce->vardata, "false") ||
+					!strcmp(ce->vardata, "0"))
 				*ct->un.bool_val.var = false;
 			else
-				conf_report_warning(ce, "invalid boolean \"%s\"", ce->ce_vardata);
+				conf_report_warning(ce, "invalid boolean \"%s\"", ce->vardata);
 			break;
 		case CONF_SUBBLOCK:
 			subblock_handler(ce, ct->un.subblock);
@@ -308,26 +308,26 @@ void conf_process(mowgli_config_file_t *cfp)
 
 	/* LOADMODULEs may change confblocks, so we must
 	 * load modules before doing anything else */
-	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
+	MOWGLI_ITER_FOREACH(cfptr, cfp)
 	{
-		for (ce = cfptr->cf_entries; ce; ce = ce->ce_next)
+		MOWGLI_ITER_FOREACH(ce, cfptr->entries)
 		{
-			if (!strcasecmp(ce->ce_varname, "LOADMODULE"))
+			if (!strcasecmp(ce->varname, "LOADMODULE"))
 			{
 				process_configentry(loadmodule, ce);
 			}
 		}
 	}
 
-	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
+	MOWGLI_ITER_FOREACH(cfptr, cfp)
 	{
-		for (ce = cfptr->cf_entries; ce; ce = ce->ce_next)
+		MOWGLI_ITER_FOREACH(ce, cfptr->entries)
 		{
 			MOWGLI_ITER_FOREACH(tn, confblocks.head)
 			{
 				ct = tn->data;
 
-				if ((!strcasecmp(ct->name, ce->ce_varname)) && (strcasecmp(ce->ce_varname, "LOADMODULE")))
+				if ((!strcasecmp(ct->name, ce->varname)) && (strcasecmp(ce->varname, "LOADMODULE")))
 				{
 					process_configentry(ct, ce);
 					break;
@@ -338,6 +338,7 @@ void conf_process(mowgli_config_file_t *cfp)
 				conf_report_warning(ce, "invalid configuration option");
 		}
 	}
+
 	conf_need_rehash = false;
 }
 
@@ -353,13 +354,13 @@ int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
 		set_default(ct);
 	}
 
-	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	MOWGLI_ITER_FOREACH(ce, ce->entries)
 	{
 		MOWGLI_ITER_FOREACH(tn, entries->head)
 		{
 			ct = tn->data;
 
-			if (!strcasecmp(ct->name, ce->ce_varname))
+			if (!strcasecmp(ct->name, ce->varname))
 			{
 				process_configentry(ct, ce);
 				break;

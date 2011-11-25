@@ -440,9 +440,9 @@ static int dnsbl_config_handler(mowgli_config_file_entry_t *ce)
 {
 	mowgli_config_file_entry_t *cce;
 
-	for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)
+	MOWGLI_ITER_FOREACH(cce, ce->entries)
 	{
-		char *line = sstrdup(cce->ce_varname);
+		char *line = sstrdup(cce->varname);
 		new_blacklist(line);
 	}
 

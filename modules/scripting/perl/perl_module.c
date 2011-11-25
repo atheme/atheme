@@ -488,13 +488,13 @@ static int conf_loadscript(mowgli_config_file_entry_t *ce)
 	if (!cold_start)
 		return 0;
 
-	if (ce->ce_vardata == NULL)
+	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	name = ce->ce_vardata;
+	name = ce->vardata;
 
 	if (*name == '/')
 	{
