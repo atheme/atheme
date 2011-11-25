@@ -41,7 +41,7 @@ struct ConfTable
 	unsigned int flags;
 	union
 	{
-		int (*handler) (config_entry_t *);
+		int (*handler) (mowgli_config_file_entry_t *);
 
 		struct
 		{
@@ -79,7 +79,7 @@ bool conf_need_rehash;
 
 /* *INDENT-ON* */
 
-void conf_report_warning(config_entry_t *ce, const char *fmt, ...)
+void conf_report_warning(mowgli_config_file_entry_t *ce, const char *fmt, ...)
 {
 	va_list va;
 	char buf[BUFSIZE];
@@ -108,7 +108,7 @@ void conf_report_warning(config_entry_t *ce, const char *fmt, ...)
 	slog(LG_ERROR, "%s:%d: [%s] warning: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, name, buf);
 }
 
-bool process_uint_configentry(config_entry_t *ce, unsigned int *var,
+bool process_uint_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		unsigned int min, unsigned int max)
 {
 	unsigned long v;
@@ -153,7 +153,7 @@ static struct
 	{ NULL, 0 }
 };
 
-bool process_duration_configentry(config_entry_t *ce, unsigned int *var,
+bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *var,
 		const char *defunit)
 {
 	unsigned long v;
@@ -234,7 +234,7 @@ static void set_default(struct ConfTable *ct)
 	}
 }
 
-static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
+static void process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 {
 	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
 		return;
@@ -287,10 +287,10 @@ static void process_configentry(struct ConfTable *ct, config_entry_t *ce)
 	}
 }
 
-void conf_process(config_file_t *cfp)
+void conf_process(mowgli_config_file_t *cfp)
 {
-	config_file_t *cfptr;
-	config_entry_t *ce;
+	mowgli_config_file_t *cfptr;
+	mowgli_config_file_entry_t *ce;
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
 	struct ConfTable *loadmodule = NULL;
@@ -341,7 +341,7 @@ void conf_process(config_file_t *cfp)
 	conf_need_rehash = false;
 }
 
-int subblock_handler(config_entry_t *ce, mowgli_list_t *entries)
+int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
 {
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
@@ -404,7 +404,7 @@ struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 	return NULL;
 }
 
-void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
+void add_top_conf(const char *name, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	struct ConfTable *ct;
 
@@ -446,7 +446,7 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 	conf_need_rehash = true;
 }
 
-void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (config_entry_t *ce))
+void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	struct ConfTable *ct;
 

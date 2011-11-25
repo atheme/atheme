@@ -16,7 +16,6 @@ BASE_SRCS =				\
 	commandtree.c		\
 	ctcp-common.c		\
 	conf.c		\
-	confparse.c		\
 	confprocess.c		\
 	connection.c		\
 	crypto.c		\

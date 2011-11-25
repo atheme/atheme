@@ -341,7 +341,7 @@ command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2,
 
 mowgli_patricia_t *os_script_cmdtree;
 
-static int conf_loadscript(config_entry_t *);
+static int conf_loadscript(mowgli_config_file_entry_t *);
 
 static void hook_module_load(hook_module_load_t *data)
 {
@@ -480,7 +480,7 @@ static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Failed to retrieve script list: %s"), perl_error);
 }
 
-static int conf_loadscript(config_entry_t *ce)
+static int conf_loadscript(mowgli_config_file_entry_t *ce)
 {
 	char pathbuf[4096];
 	char *name;

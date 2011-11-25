@@ -108,7 +108,7 @@ static void create_unique_service_nick(char *dest, size_t len)
 	return;
 }
 
-static int conf_service_nick(config_entry_t *ce)
+static int conf_service_nick(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 	char newnick[30 + 1];
@@ -136,7 +136,7 @@ static int conf_service_nick(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_user(config_entry_t *ce)
+static int conf_service_user(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
@@ -153,7 +153,7 @@ static int conf_service_user(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_host(config_entry_t *ce)
+static int conf_service_host(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
@@ -176,7 +176,7 @@ static int conf_service_host(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_real(config_entry_t *ce)
+static int conf_service_real(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 
@@ -193,10 +193,10 @@ static int conf_service_real(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_aliases(config_entry_t *ce)
+static int conf_service_aliases(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
-	config_entry_t *subce;
+	mowgli_config_file_entry_t *subce;
 
 	sptr = service_find(ce->ce_prevlevel->ce_varname);
 	if (!sptr)
@@ -222,10 +222,10 @@ static int conf_service_aliases(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service_access(config_entry_t *ce)
+static int conf_service_access(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
-	config_entry_t *subce;
+	mowgli_config_file_entry_t *subce;
 
 	sptr = service_find(ce->ce_prevlevel->ce_varname);
 	if (!sptr)
@@ -253,7 +253,7 @@ static int conf_service_access(config_entry_t *ce)
 	return 0;
 }
 
-static int conf_service(config_entry_t *ce)
+static int conf_service(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
 

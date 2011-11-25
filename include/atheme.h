@@ -41,7 +41,6 @@
 #include "auth.h"
 #include "tools.h"
 #include "confprocess.h"
-#include "confparse.h"
 #include "global.h"
 #include "flags.h"
 #include "phandler.h"

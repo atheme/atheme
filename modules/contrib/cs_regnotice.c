@@ -34,9 +34,9 @@ static void regnotice_hook(hook_channel_req_t *hdata)
 	}
 }
 
-static int regnotice_config_handler(config_entry_t *ce)
+static int regnotice_config_handler(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *cce;
+	mowgli_config_file_entry_t *cce;
 
 	for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)
 	{

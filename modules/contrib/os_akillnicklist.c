@@ -64,7 +64,7 @@ add_contents_of_file_to_list(const char *filename, mowgli_patricia_t *list)
 }
 
 static int
-nicklist_config_handler_all(config_entry_t *entry)
+nicklist_config_handler_all(mowgli_config_file_entry_t *entry)
 {
 	add_contents_of_file_to_list(entry->ce_vardata, akillalllist);
 
@@ -72,7 +72,7 @@ nicklist_config_handler_all(config_entry_t *entry)
 }
 
 static int
-nicklist_config_handler_nick(config_entry_t *entry)
+nicklist_config_handler_nick(mowgli_config_file_entry_t *entry)
 {
 	add_contents_of_file_to_list(entry->ce_vardata, akillnicklist);
 
@@ -80,7 +80,7 @@ nicklist_config_handler_nick(config_entry_t *entry)
 }
 
 static int
-nicklist_config_handler_user(config_entry_t *entry)
+nicklist_config_handler_user(mowgli_config_file_entry_t *entry)
 {
 	add_contents_of_file_to_list(entry->ce_vardata, akilluserlist);
 
@@ -88,7 +88,7 @@ nicklist_config_handler_user(config_entry_t *entry)
 }
 
 static int
-nicklist_config_handler_real(config_entry_t *entry)
+nicklist_config_handler_real(mowgli_config_file_entry_t *entry)
 {
 	add_contents_of_file_to_list(entry->ce_vardata, akillreallist);
 

@@ -109,9 +109,9 @@ static void nickserv_config_ready(void *unused)
 			itranslation_destroy(_(nick_account_trans[i].nickstring));
 }
 
-static int c_ni_emailexempts(config_entry_t *ce)
+static int c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *subce;
+	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
 
 	if (!ce->ce_entries)

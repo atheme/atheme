@@ -82,9 +82,6 @@ typedef struct service_ service_t;
 
 typedef struct sourceinfo_ sourceinfo_t;
 
-typedef struct _configfile config_file_t;
-typedef struct _configentry config_entry_t;
-
 enum faultcode_
 {
 	fault_needmoreparams	= 1,

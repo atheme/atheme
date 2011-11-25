@@ -30,22 +30,22 @@
 #include "template.h"
 #include <limits.h>
 
-static int c_uplink(config_entry_t *);
-static int c_loadmodule(config_entry_t *);
-static int c_operclass(config_entry_t *);
-static int c_operator(config_entry_t *);
-static int c_language(config_entry_t *);
-static int c_string(config_entry_t *);
-static int c_logfile(config_entry_t *);
+static int c_uplink(mowgli_config_file_entry_t *);
+static int c_loadmodule(mowgli_config_file_entry_t *);
+static int c_operclass(mowgli_config_file_entry_t *);
+static int c_operator(mowgli_config_file_entry_t *);
+static int c_language(mowgli_config_file_entry_t *);
+static int c_string(mowgli_config_file_entry_t *);
+static int c_logfile(mowgli_config_file_entry_t *);
 
-static int c_si_loglevel(config_entry_t *);
-static int c_si_auth(config_entry_t *);
-static int c_si_casemapping(config_entry_t *);
+static int c_si_loglevel(mowgli_config_file_entry_t *);
+static int c_si_auth(mowgli_config_file_entry_t *);
+static int c_si_casemapping(mowgli_config_file_entry_t *);
 
-static int c_gi_uflags(config_entry_t *);
-static int c_gi_cflags(config_entry_t *);
-static int c_gi_exempts(config_entry_t *);
-static int c_gi_immune_level(config_entry_t *);
+static int c_gi_uflags(mowgli_config_file_entry_t *);
+static int c_gi_cflags(mowgli_config_file_entry_t *);
+static int c_gi_exempts(mowgli_config_file_entry_t *);
+static int c_gi_immune_level(mowgli_config_file_entry_t *);
 
 /* *INDENT-OFF* */
 
@@ -136,14 +136,14 @@ const char *get_conf_opts(void)
 
 bool conf_parse(const char *file)
 {
-	config_file_t *cfp;
+	mowgli_config_file_t *cfp;
 
-	cfp = config_load(file);
+	cfp = mowgli_config_file_load(file);
 	if (cfp == NULL)
 		return false;
 
 	conf_process(cfp);
-	config_free(cfp);
+	mowgli_config_file_free(cfp);
 
 	if (!pmodule_loaded)
 	{
@@ -252,7 +252,7 @@ void init_newconf(void)
 	add_dupstr_conf_item("TRANSLATOR", &conf_la_table, 0, &me.language_translator, NULL);
 }
 
-static int c_loadmodule(config_entry_t *ce)
+static int c_loadmodule(mowgli_config_file_entry_t *ce)
 {
 	char pathbuf[4096];
 	char *name;
@@ -281,7 +281,7 @@ static int c_loadmodule(config_entry_t *ce)
 	}
 }
 
-static int c_uplink(config_entry_t *ce)
+static int c_uplink(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *host = NULL, *vhost = NULL, *password = NULL;
@@ -349,7 +349,7 @@ static int c_uplink(config_entry_t *ce)
 	return 0;
 }
 
-static int c_operclass(config_entry_t *ce)
+static int c_operclass(mowgli_config_file_entry_t *ce)
 {
 	operclass_t *operclass;
 	char *name;
@@ -387,7 +387,7 @@ static int c_operclass(config_entry_t *ce)
 			}
 			else
 			{
-				config_entry_t *conf_p;
+				mowgli_config_file_entry_t *conf_p;
 				/*
 				 * New definition format for operclasses.
 				 *
@@ -457,12 +457,12 @@ static int c_operclass(config_entry_t *ce)
 	return 0;
 }
 
-static int c_operator(config_entry_t *ce)
+static int c_operator(mowgli_config_file_entry_t *ce)
 {
 	char *name;
 	char *password = NULL;
 	operclass_t *operclass = NULL;
-	config_entry_t *topce;
+	mowgli_config_file_entry_t *topce;
 
 	if (ce->ce_vardata == NULL)
 	{
@@ -527,7 +527,7 @@ static int c_operator(config_entry_t *ce)
  * to set the languagefile setting. So it's rather weird.
  *    --nenolod
  */
-static int c_language(config_entry_t *ce)
+static int c_language(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_entries)
 	{
@@ -540,10 +540,10 @@ static int c_language(config_entry_t *ce)
 	return 0;
 }
 
-static int c_string(config_entry_t *ce)
+static int c_string(mowgli_config_file_entry_t *ce)
 {
 	char *name, *trans = NULL;
-	config_entry_t *topce;
+	mowgli_config_file_entry_t *topce;
 
 	if (ce->ce_vardata == NULL)
 	{
@@ -580,9 +580,9 @@ static int c_string(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_loglevel(config_entry_t *ce)
+static int c_si_loglevel(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *flce;
+	mowgli_config_file_entry_t *flce;
 	int val;
 	int mask = 0;
 
@@ -609,7 +609,7 @@ static int c_si_loglevel(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_auth(config_entry_t *ce)
+static int c_si_auth(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -626,7 +626,7 @@ static int c_si_auth(config_entry_t *ce)
 	return 0;
 }
 
-static int c_si_casemapping(config_entry_t *ce)
+static int c_si_casemapping(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -643,7 +643,7 @@ static int c_si_casemapping(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_immune_level(config_entry_t *ce)
+static int c_gi_immune_level(mowgli_config_file_entry_t *ce)
 {
 	int val;
 
@@ -657,9 +657,9 @@ static int c_gi_immune_level(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_uflags(config_entry_t *ce)
+static int c_gi_uflags(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *flce;
+	mowgli_config_file_entry_t *flce;
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
@@ -677,9 +677,9 @@ static int c_gi_uflags(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_cflags(config_entry_t *ce)
+static int c_gi_cflags(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *flce;
+	mowgli_config_file_entry_t *flce;
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
@@ -700,9 +700,9 @@ static int c_gi_cflags(config_entry_t *ce)
 	return 0;
 }
 
-static int c_gi_exempts(config_entry_t *ce)
+static int c_gi_exempts(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *subce;
+	mowgli_config_file_entry_t *subce;
 	mowgli_node_t *n, *tn;
 
 	if (!ce->ce_entries)
@@ -728,9 +728,9 @@ static int c_gi_exempts(config_entry_t *ce)
 }
 
 
-static int c_logfile(config_entry_t *ce)
+static int c_logfile(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *flce;
+	mowgli_config_file_entry_t *flce;
 	unsigned int logval = 0;
 
 	if (ce->ce_vardata == NULL)
@@ -788,13 +788,13 @@ static void free_cstructs(struct me *mesrc)
 bool conf_rehash(void)
 {
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
-	config_file_t *cfp;
+	mowgli_config_file_t *cfp;
 
 	/* we're rehashing */
 	slog(LG_INFO, "conf_rehash(): rehashing");
 	runflags |= RF_REHASHING;
 
-	cfp = config_load(config_file);
+	cfp = mowgli_config_file_load(config_file);
 	if (cfp == NULL)
 	{
 		slog(LG_ERROR, "conf_rehash(): unable to load configuration file, aborting rehash");
@@ -812,7 +812,7 @@ bool conf_rehash(void)
 	/* now reload */
 	log_open();
 	conf_process(cfp);
-	config_free(cfp);
+	mowgli_config_file_free(cfp);
 
 	/* now recheck */
 	if (!conf_check())

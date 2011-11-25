@@ -436,9 +436,9 @@ static void destroy_blacklists(void)
 	}
 }
 
-static int dnsbl_config_handler(config_entry_t *ce)
+static int dnsbl_config_handler(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *cce;
+	mowgli_config_file_entry_t *cce;
 
 	for (cce = ce->ce_entries; cce != NULL; cce = cce->ce_next)
 	{

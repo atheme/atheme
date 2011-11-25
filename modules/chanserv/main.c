@@ -186,7 +186,7 @@ static void chanserv_config_ready(void *unused)
 		join_registered(false); /* !config_options.leave_chans */
 }
 
-static int c_ci_vop(config_entry_t *ce)
+static int c_ci_vop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -199,7 +199,7 @@ static int c_ci_vop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_hop(config_entry_t *ce)
+static int c_ci_hop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -212,7 +212,7 @@ static int c_ci_hop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_aop(config_entry_t *ce)
+static int c_ci_aop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -225,7 +225,7 @@ static int c_ci_aop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_sop(config_entry_t *ce)
+static int c_ci_sop(mowgli_config_file_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
 	{
@@ -238,9 +238,9 @@ static int c_ci_sop(config_entry_t *ce)
 	return 0;
 }
 
-static int c_ci_templates(config_entry_t *ce)
+static int c_ci_templates(mowgli_config_file_entry_t *ce)
 {
-	config_entry_t *flce;
+	mowgli_config_file_entry_t *flce;
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
