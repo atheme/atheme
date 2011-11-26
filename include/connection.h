@@ -52,8 +52,11 @@ struct connection_
 
 	void (*recvq_handler)(connection_t *);
 	void (*close_handler)(connection_t *);
+
 	connection_t *listener;
 	void *userdata;
+
+	mowgli_eventloop_pollable_t *pollable;
 };
 
 #define CF_UPLINK     0x00000001
