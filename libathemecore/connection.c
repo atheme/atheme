@@ -46,6 +46,37 @@ static int socket_setnonblocking(int sck)
 }
 
 /*
+ * connection_trampoline()
+ *
+ * inputs:
+ *       mowgli.eventloop object
+ *       mowgli.eventloop.pollable object
+ *       poll direction
+ *       user-specified data
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       whatever happens from the connection_t i/o handlers
+ */
+static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_pollable_t *pollable,
+	mowgli_eventloop_pollable_dir_t dir, void *userdata)
+{
+	connection_t *cptr = userdata;
+
+	switch (dir) {
+	case MOWGLI_EVENTLOOP_POLL_READ:
+		return cptr->read_handler(cptr);
+		break;
+	case MOWGLI_EVENTLOOP_POLL_WRITE:
+	default:
+		return cptr->write_handler(cptr);
+		break;
+	}
+}
+
+/*
  * connection_add()
  *
  * inputs:
