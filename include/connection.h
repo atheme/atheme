@@ -100,7 +100,6 @@ extern void connection_close_all(void);
 extern void connection_close_all_fds(void);
 extern void connection_stats(void (*)(const char *, void *), void *);
 extern connection_t *connection_find(int);
-extern void connection_select(int delay);
 //inline int connection_count(void);
 
 extern mowgli_list_t connection_list;

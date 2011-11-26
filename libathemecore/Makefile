@@ -38,7 +38,6 @@ BASE_SRCS =				\
 	packet.c		\
 	phandler.c		\
 	pmodule.c		\
-	poll.c		\
 	privs.c		\
 	ptasks.c		\
 	res.c		\
