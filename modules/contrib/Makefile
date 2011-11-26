@@ -20,7 +20,6 @@ SRCS =			\
 	cs_userinfo.c		\
 	dnsbl.c		\
 	gen_echoserver.c	\
-	gen_httpd.c		\
 	gen_listenerdemo.c	\
 	gen_vhostonreg.c	\
 	graphtastical.c	\
