@@ -71,34 +71,10 @@ int sts(const char *fmt, ...)
  */
 void io_loop(void)
 {
-	time_t delay;
-	int t;
-
 	while (!(runflags & (RF_SHUTDOWN | RF_RESTART)))
 	{
-		/* update the current time */
 		CURRTIME = mowgli_eventloop_get_time(base_eventloop);
-
-		/* check for events */
-		delay = mowgli_eventloop_next_timer(base_eventloop);
-
-		if (delay <= CURRTIME)
-		{
-			mowgli_eventloop_run_timers(base_eventloop);
-
-			mowgli_eventloop_synchronize(base_eventloop);
-			CURRTIME = mowgli_eventloop_get_time(base_eventloop);
-
-			delay = mowgli_eventloop_next_timer(base_eventloop);
-		}
-
-		if (delay <= CURRTIME)
-			t = 250;
-		else
-			t = (delay - CURRTIME) * 1000;
-		connection_select(t);
-
-		/* actually handle signals when it's safe to do so -- jilles */
+		mowgli_eventloop_run_once(base_eventloop);
 		check_signals();
 	}
 }
