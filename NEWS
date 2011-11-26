@@ -120,6 +120,7 @@ xmlrpc
   change if you use xmlrpc.
 - bad_password() is now called on invalid XMLRPC logins.
 code
+- libmowgli-2 is now required instead of libmowgli.
 - a bit of the signal code and linker code was converted to use the mowgli
   implementations.
 - charybdis' asynchronous DNS resolver added.
@@ -146,6 +147,7 @@ code
   intended to describe ACL changes more effectively.
 - call shutdown(2) on sockets being closed to help some TCP stacks be more aggressive
   when closing sockets.
+- use mowgli_eventloop_pollable instead of old eventloop code.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
