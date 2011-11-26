@@ -112,8 +112,10 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	cptr->first_recv = CURRTIME;
 	cptr->last_recv = CURRTIME;
 
-	cptr->read_handler = read_handler;
-	cptr->write_handler = write_handler;
+	cptr->pollable = mowgli_pollable_create(base_eventloop, cptr->fd, cptr);
+
+	connection_setselect_read(cptr, read_handler);
+	connection_setselect_write(cptr, write_handler);
 
 	/* set connection name */
 	mowgli_strlcpy(cptr->name, name, HOSTLEN);
@@ -386,7 +388,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		freeaddrinfo(addr);
 		return NULL;
 	}
-	
+
 	if (!(s = socket(addr->ai_family, SOCK_STREAM, 0)))
 	{
 		slog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
@@ -501,7 +503,7 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 		freeaddrinfo(addr);
 		return NULL;
 	}
-	
+
 	if (!(s = socket(addr->ai_family, SOCK_STREAM, 0)))
 	{
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
@@ -610,6 +612,7 @@ void connection_setselect_read(connection_t *cptr,
 	void (*read_handler)(connection_t *))
 {
 	cptr->read_handler = read_handler;
+	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
 }
 
 /*
@@ -629,6 +632,8 @@ void connection_setselect_write(connection_t *cptr,
 	void (*write_handler)(connection_t *))
 {
 	cptr->write_handler = write_handler;
+	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
+	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_ERROR, cptr->write_handler != NULL ? connection_trampoline : NULL);
 }
 
 /*
