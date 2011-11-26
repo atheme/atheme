@@ -231,7 +231,6 @@ int atheme_main(int argc, char *argv[])
 
 	base_eventloop = mowgli_eventloop_create();
         hooks_init();
-        init_socket_queues();
 	db_init();
 
 	init_resolver();
