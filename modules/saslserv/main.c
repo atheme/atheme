@@ -35,21 +35,21 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 	char *cmd;
 	char *text;
 	char orig[BUFSIZE];
-	
+
 	/* this should never happen */
 	if (parv[0][0] == '&')
 	{
 		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
 		return;
 	}
-	
+
 	/* make a copy of the original for debugging */
 	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
-	
+
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
 	text = strtok(NULL, "");
-	
+
 	if (!cmd)
 		return;
 	if (*cmd == '\001')
@@ -57,13 +57,14 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 		handle_ctcp_common(si, cmd, text);
 		return;
 	}
-	
+
 	command_fail(si, fault_noprivs, "This service exists to identify "
 			"connecting clients to the network. It has no "
 			"public interface.");
 }
 
 service_t *saslsvs = NULL;
+mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 void _modinit(module_t *m)
 {
@@ -71,7 +72,8 @@ void _modinit(module_t *m)
 	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
 	hook_add_user_add(sasl_newuser);
-	event_add("sasl_delete_stale", delete_stale, NULL, 30);
+
+	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", delete_stale, NULL, 30);
 
 	saslsvs = service_add("saslserv", saslserv);
 	authservice_loaded++;
@@ -83,7 +85,8 @@ void _moddeinit(module_unload_intent_t intent)
 
 	hook_del_sasl_input(sasl_input);
 	hook_del_user_add(sasl_newuser);
-	event_delete(delete_stale, NULL);
+
+	mowgli_timer_destroy(base_eventloop, delete_stale_timer);
 
         if (saslsvs != NULL)
 		service_delete(saslsvs);

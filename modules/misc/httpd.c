@@ -396,9 +396,11 @@ static void httpd_config_ready(void *vptr)
 		slog(LG_ERROR, "httpd_config_ready(): httpd {} block missing or invalid");
 }
 
+static mowgli_eventloop_timer_t *httpd_checkidle_timer = NULL;
+
 void _modinit(module_t *m)
 {
-	event_add("httpd_checkidle", httpd_checkidle, NULL, 60);
+	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, 60);
 
 	/* This module needs a rehash to initialize fully if loaded
 	 * at run time */
@@ -413,7 +415,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	event_delete(httpd_checkidle, NULL);
+	mowgli_timer_destroy(base_eventloop, httpd_checkidle_timer);
+
 	hook_del_config_ready(httpd_config_ready);
 	connection_close_soon_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);

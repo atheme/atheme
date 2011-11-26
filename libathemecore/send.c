@@ -77,16 +77,19 @@ void io_loop(void)
 	while (!(runflags & (RF_SHUTDOWN | RF_RESTART)))
 	{
 		/* update the current time */
-		CURRTIME = time(NULL);
+		CURRTIME = mowgli_eventloop_get_time(base_eventloop);
 
 		/* check for events */
-		delay = event_next_time();
+		delay = mowgli_eventloop_next_timer(base_eventloop);
 
 		if (delay <= CURRTIME)
 		{
-			event_run();
-			CURRTIME = time(NULL);
-			delay = event_next_time();
+			mowgli_eventloop_run_timers(base_eventloop);
+
+			mowgli_eventloop_synchronize(base_eventloop);
+			CURRTIME = mowgli_eventloop_get_time(base_eventloop);
+
+			delay = mowgli_eventloop_next_timer(base_eventloop);
 		}
 
 		if (delay <= CURRTIME)

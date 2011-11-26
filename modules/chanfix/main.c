@@ -13,6 +13,7 @@ DECLARE_MODULE_V1
 );
 
 service_t *chanfix;
+mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
 void _modinit(module_t *m)
 {
@@ -34,14 +35,14 @@ void _modinit(module_t *m)
 
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);
 
-	event_add("chanfix_autofix", chanfix_autofix_ev, NULL, 60);
+	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, 60);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	chanfix_persist_record_t *rec = NULL;
 
-	event_delete(chanfix_autofix_ev, NULL);
+	mowgli_timer_destroy(base_eventloop, chanfix_autofix_timer);
 
 	if (chanfix)
 		service_delete(chanfix);

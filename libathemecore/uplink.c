@@ -163,7 +163,7 @@ void uplink_connect(void)
 		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
 	}
 	else
-		event_add_once("reconn", reconn, NULL, me.recontime);
+		mowgli_timer_add_once(base_eventloop, "reconn", reconn, NULL, me.recontime);
 }
 
 /*
@@ -186,7 +186,7 @@ static void uplink_close(connection_t *cptr)
 	channel_t *c;
 	mowgli_patricia_iteration_state_t state;
 
-	event_add_once("reconn", reconn, NULL, me.recontime);
+	mowgli_timer_add_once(base_eventloop, "reconn", reconn, NULL, me.recontime);
 
 	me.connected = false;
 

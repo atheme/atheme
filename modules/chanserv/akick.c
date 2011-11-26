@@ -46,6 +46,7 @@ typedef struct {
 time_t akickdel_next;
 mowgli_list_t akickdel_list;
 mowgli_patricia_t *cs_akick_cmds;
+mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
 static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *host, time_t expireson);
 
@@ -70,7 +71,7 @@ void _modinit(module_t *m)
     		return;
     	}
 
-    	event_add_once("akickdel_list_create", akickdel_list_create, NULL, 0);
+	mowgli_timer_add_once(base_eventloop, "akickdel_list_create", akickdel_list_create, NULL, 0);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -344,10 +345,10 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 			{
 				if (akickdel_next != 0)
-					event_delete(akick_timeout_check, NULL);
+					mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
 
 				akickdel_next = timeout->expiration;
-				event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
+				akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 			}
 		}
 		else
@@ -410,9 +411,10 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			if (akickdel_next == 0 || akickdel_next > timeout->expiration)
 			{
 				if (akickdel_next != 0)
-					event_delete(akick_timeout_check, NULL);
+					mowgli_timer_destroy(base_eventloop, akick_timeout_check_timer);
+
 				akickdel_next = timeout->expiration;
-				event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
+				akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 			}
 		}
 		else
@@ -682,7 +684,7 @@ void akick_timeout_check(void *arg)
 		if (timeout->expiration > CURRTIME)
 		{
 			akickdel_next = timeout->expiration;
-			event_add_once("akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
+			akick_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "akick_timeout_check", akick_timeout_check, NULL, akickdel_next - CURRTIME);
 			break;
 		}
 

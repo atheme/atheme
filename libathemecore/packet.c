@@ -30,6 +30,8 @@
 struct timeval burstime;
 #endif
 
+mowgli_eventloop_timer_t *ping_uplink_timer = NULL;
+
 static void irc_recvq_handler(connection_t *cptr)
 {
 	bool wasnonl;
@@ -77,7 +79,10 @@ static void ping_uplink(void *arg)
 	}
 
 	if (!me.connected)
-		event_delete(ping_uplink, NULL);
+	{
+		mowgli_timer_destroy(base_eventloop, ping_uplink_timer);
+		ping_uplink_timer = NULL;
+	}
 }
 
 void irc_handle_connect(connection_t *cptr)
@@ -104,8 +109,11 @@ void irc_handle_connect(connection_t *cptr)
 		ping_sts();
 
 		/* ping our uplink every 5 minutes */
-		event_delete(ping_uplink, NULL);
-		event_add("ping_uplink", ping_uplink, NULL, 300);
+		if (ping_uplink_timer != NULL)
+			mowgli_timer_destroy(base_eventloop, ping_uplink_timer);
+
+		ping_uplink_timer = mowgli_timer_add(base_eventloop, "ping_uplink", ping_uplink, NULL, 300);
+
 		me.uplinkpong = time(NULL);
 	}
 }

@@ -12,6 +12,9 @@ mowgli_patricia_t *chanfix_channels = NULL;
 mowgli_heap_t *chanfix_channel_heap = NULL;
 mowgli_heap_t *chanfix_oprecord_heap = NULL;
 
+mowgli_eventloop_timer_t *chanfix_gather_timer = NULL;
+mowgli_eventloop_timer_t *chanfix_expire_timer = NULL;
+
 static int loading_cfdbv = 0;
 
 /*************************************************************************************/
@@ -379,10 +382,8 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 
 	chanfix_channels = mowgli_patricia_create(strcasecanon);
 
-	event_add("chanfix_expire", chanfix_expire, NULL,
-			CHANFIX_EXPIRE_INTERVAL);
-	event_add("chanfix_gather", chanfix_gather, NULL,
-			CHANFIX_GATHER_INTERVAL);
+	chanfix_expire_timer = mowgli_timer_add(base_eventloop, "chanfix_expire", chanfix_expire, NULL, CHANFIX_EXPIRE_INTERVAL);
+	chanfix_gather_timer = mowgli_timer_add(base_eventloop, "chanfix_gather", chanfix_gather, NULL, CHANFIX_GATHER_INTERVAL);
 }
 
 void chanfix_gather_deinit(module_unload_intent_t intent, chanfix_persist_record_t *rec)
@@ -395,8 +396,8 @@ void chanfix_gather_deinit(module_unload_intent_t intent, chanfix_persist_record
 	db_unregister_type_handler("CFCHAN");
 	db_unregister_type_handler("CFOP");
 
-	event_delete(chanfix_expire, NULL);
-	event_delete(chanfix_gather, NULL);
+	mowgli_timer_destroy(base_eventloop, chanfix_expire_timer);
+	mowgli_timer_destroy(base_eventloop, chanfix_gather_timer);
 
 	switch (intent)
 	{

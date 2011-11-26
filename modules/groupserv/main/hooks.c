@@ -165,9 +165,11 @@ static void osinfo_hook(sourceinfo_t *si)
 	command_success_nodata(si, "Default joinflags for open groups: %s", gs_config.join_flags);
 }
 
+static mowgli_eventloop_timer_t *mygroup_expire_timer = NULL;
+
 void gs_hooks_init(void)
 {
-	event_add("mygroup_expire", mygroup_expire, NULL, 3600);
+	mygroup_expire_timer = mowgli_timer_add(base_eventloop, "mygroup_expire", mygroup_expire, NULL, 3600);
 
 	hook_add_event("myuser_delete");
 	hook_add_event("user_info");
@@ -182,7 +184,7 @@ void gs_hooks_init(void)
 
 void gs_hooks_deinit(void)
 {
-	event_delete(mygroup_expire, NULL);
+	mowgli_timer_destroy(base_eventloop, mygroup_expire_timer);
 
 	hook_del_user_info(user_info_hook);
 	hook_del_myuser_delete(myuser_delete_hook);

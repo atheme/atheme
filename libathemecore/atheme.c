@@ -36,6 +36,8 @@ nicksvs_t nicksvs;
 
 mowgli_list_t taint_list = { NULL, NULL, 0 };
 
+mowgli_eventloop_t *base_eventloop = NULL;
+
 me_t me;
 struct cnt cnt;
 
@@ -227,7 +229,7 @@ int atheme_main(int argc, char *argv[])
 	umask(077);
 #endif
 
-        event_init();
+	base_eventloop = mowgli_eventloop_create();
         hooks_init();
         init_socket_queues();
 	db_init();
@@ -347,21 +349,21 @@ int atheme_main(int argc, char *argv[])
 
 	/* DB commit interval is configurable */
 	if (db_save && !readonly)
-		event_add("db_save", db_save, NULL, config_options.commit_interval);
+		mowgli_timer_add(base_eventloop, "db_save", db_save, NULL, config_options.commit_interval);
 
 	/* check expires every hour */
-	event_add("expire_check", expire_check, NULL, 3600);
+	mowgli_timer_add(base_eventloop, "expire_check", expire_check, NULL, 3600);
 
 	/* check k/x/q line expires every minute */
-	event_add("kline_expire", kline_expire, NULL, 60);
-	event_add("xline_expire", xline_expire, NULL, 60);
-	event_add("qline_expire", qline_expire, NULL, 60);
+	mowgli_timer_add(base_eventloop, "kline_expire", kline_expire, NULL, 60);
+	mowgli_timer_add(base_eventloop, "xline_expire", xline_expire, NULL, 60);
+	mowgli_timer_add(base_eventloop, "qline_expire", qline_expire, NULL, 60);
 
 	/* check authcookie expires every ten minutes */
-	event_add("authcookie_expire", authcookie_expire, NULL, 600);
+	mowgli_timer_add(base_eventloop, "authcookie_expire", authcookie_expire, NULL, 600);
 
 	/* reseed rng a little every five minutes */
-	event_add("rng_reseed", rng_reseed, NULL, 293);
+	mowgli_timer_add(base_eventloop, "rng_reseed", rng_reseed, NULL, 293);
 
 	me.connected = false;
 	uplink_connect();
@@ -395,6 +397,7 @@ int atheme_main(int argc, char *argv[])
 
 	slog(LG_INFO, "main(): shutting down");
 
+	mowgli_eventloop_destroy(base_eventloop);
 	log_shutdown();
 
 	return 0;

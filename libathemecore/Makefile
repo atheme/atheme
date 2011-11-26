@@ -23,7 +23,6 @@ BASE_SRCS =				\
 	database_backend.c	\
 	datastream.c		\
 	entity.c	\
-	event.c		\
 	flags.c		\
 	function.c		\
 	help.c		\

@@ -124,13 +124,15 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.me, 249, u, "E :Last event to run: %s", last_event_ran);
+		  numeric_sts(me.me, 249, u, "E :Last event to run: %s", base_eventloop->last_ran);
 
 		  numeric_sts(me.me, 249, u, "E :%-28s %s", "Operation", "Next Execution");
-		  for (i = 0; i < MAX_EVENTS; i++)
+		  MOWGLI_ITER_FOREACH(n, base_eventloop->timer_list.head)
 		  {
-			  if (event_table[i].active)
-				  numeric_sts(me.me, 249, u, "E :%-28s %4ld seconds (%ld)", event_table[i].name, (long)(event_table[i].when - CURRTIME), (long)event_table[i].frequency);
+			  mowgli_eventloop_timer_t *timer = n->data;
+
+			  if (timer->active)
+				  numeric_sts(me.me, 249, u, "E :%-28s %4ld seconds (%ld)", timer->name, (long)(timer->when - mowgli_eventloop_get_time(base_eventloop)), (long)timer->frequency);
 		  }
 
 		  break;

@@ -62,6 +62,9 @@ struct game_ {
 	int speed;
 
 	unsigned int wantsize;
+
+	mowgli_eventloop_timer_t *move_timer;
+	mowgli_eventloop_timer_t *start_game_timer;
 };
 
 typedef struct game_ game_t;
@@ -353,13 +356,15 @@ init_game(unsigned int size)
 	}
 
 	/* timer initialization */
-	event_add("move_wumpus", move_wumpus, NULL, 60);
+	wumpus.move_timer = mowgli_timer_add(base_eventloop, "move_wumpus", move_wumpus, NULL, 60);
 
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "The game has started!");
 
 	wumpus.running = true;
 	wumpus.speed = 60;
 	wumpus.wump_hp = 70;
+
+	wumpus.start_game_timer = NULL;
 }
 
 /* starts the game */
@@ -409,7 +414,8 @@ end_game(void)
 	wumpus.wumpus = -1;
 	wumpus.running = false;
 
-	event_delete(move_wumpus, NULL);
+	mowgli_timer_destroy(base_eventloop, wumpus.move_timer);
+	wumpus.move_timer = NULL;
 
 	/* game is now ended */
 }
@@ -531,8 +537,9 @@ shoot_player(player_t *p, int target_id)
 			wumpus.speed -= 3;
 
 			move_wumpus(NULL);
-			event_delete(move_wumpus, NULL);
-			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
+
+			mowgli_timer_destroy(base_eventloop, wumpus.move_timer);
+			wumpus.move_timer = mowgli_timer_add(base_eventloop, "move_wumpus", move_wumpus, NULL, wumpus.speed);
 		}
 		else
 		{
@@ -576,7 +583,7 @@ move_wumpus(void *unused)
 	if (wumpus.rmemctx == NULL)
 	{
 		slog(LG_DEBUG, "wumpus: move_wumpus() called while game not running!");
-		event_delete(move_wumpus, NULL);
+		mowgli_timer_destroy(base_eventloop, wumpus.move_timer);
 		return;
 	}
 
@@ -773,7 +780,7 @@ static void cmd_start(sourceinfo_t *si, int parc, char *parv[])
 	if (parv[0])
 		wumpus.wantsize = atoi(parv[0]);
 
-	event_add_once("start_game", start_game, NULL, 60);
+	wumpus.start_game_timer = mowgli_timer_add_once(base_eventloop, "start_game", start_game, NULL, 60);
 }
 
 /* reference tuple for the above code: cmd_start */
@@ -1005,8 +1012,11 @@ _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(wumpus.svs, &wumpus_who);
 	service_unbind_command(wumpus.svs, &wumpus_look);
 
-	event_delete(move_wumpus, NULL);
-	event_delete(start_game, NULL);
+	if (wumpus.move_timer)
+		mowgli_timer_destroy(base_eventloop, wumpus.move_timer);
+
+	if (wumpus.start_game_timer)
+		mowgli_timer_destroy(base_eventloop, wumpus.start_game_timer);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

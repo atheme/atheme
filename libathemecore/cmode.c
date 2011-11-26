@@ -387,7 +387,7 @@ static struct modestackdata {
 	int totallen;
 	int paramcount;
 
-	unsigned int event;
+	mowgli_eventloop_timer_t *event;
 } modestackdata;
 
 static void modestack_calclen(struct modestackdata *md);
@@ -710,7 +710,7 @@ void modestack_mode_simple_real(const char *source, channel_t *channel, int dir,
 	md = modestack_init(source, channel);
 	modestack_add_simple(md, dir, flags);
 	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
 void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags) = modestack_mode_simple_real;
 
@@ -722,7 +722,7 @@ void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, 
 	md = modestack_init(source, channel);
 	modestack_add_limit(md, dir, limit);
 	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
 void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit) = modestack_mode_limit_real;
 
@@ -740,7 +740,7 @@ void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, un
 	}
 	modestack_add_ext(md, dir, i, value);
 	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
 void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value) = modestack_mode_ext_real;
 
@@ -752,7 +752,7 @@ void modestack_mode_param_real(const char *source, channel_t *channel, int dir, 
 	md = modestack_init(source, channel);
 	modestack_add_param(md, dir, type, value);
 	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+		md->event = mowgli_timer_add_once(base_eventloop, "flush_cmode_callback", modestack_flush_callback, md, 0);
 }
 void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value) = modestack_mode_param_real;
 

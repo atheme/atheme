@@ -43,6 +43,9 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static mowgli_eventloop_timer_t *channels_timer = NULL;
+static mowgli_eventloop_timer_t *uchannels_timer = NULL;
+
 /* write channels.dot */
 static void write_channels_dot_file(void *arg)
 {
@@ -176,15 +179,16 @@ static void write_uchannels_dot_file(void *arg)
 void _modinit(module_t *m)
 {
 	write_channels_dot_file(NULL);
+	write_uchannels_dot_file(NULL);
 
-	event_add("write_channels_dot_file", write_channels_dot_file, NULL, 60);
-	event_add("write_uchannels_dot_file", write_uchannels_dot_file, NULL, 60);
+	channels_timer = mowgli_timer_add(base_eventloop, "write_channels_dot_file", write_channels_dot_file, NULL, 60);
+	uchannels_timer = mowgli_timer_add(base_eventloop, "write_uchannels_dot_file", write_uchannels_dot_file, NULL, 60);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	event_delete(write_channels_dot_file, NULL);
-	event_delete(write_uchannels_dot_file, NULL);
+	mowgli_timer_destroy(base_eventloop, channels_timer);
+	mowgli_timer_destroy(base_eventloop, uchannels_timer);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

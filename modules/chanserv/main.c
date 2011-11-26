@@ -28,6 +28,8 @@ static void cs_leave_empty(void *unused);
 static void cs_user_identify(user_t *u);
 static void on_shutdown(void *unused);
 
+static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
+
 static void join_registered(bool all)
 {
 	mychan_t *mc;
@@ -281,7 +283,8 @@ void _modinit(module_t *m)
 	hook_add_channel_tschange(cs_tschange);
 	hook_add_user_identify(cs_user_identify);
 	hook_add_shutdown(on_shutdown);
-	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
+
+	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
 
 	/* chanserv{} block */
 	add_bool_conf_item("FANTASY", &chansvs.me->conf_table, 0, &chansvs.fantasy, false);
@@ -323,7 +326,8 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_channel_tschange(cs_tschange);
 	hook_del_user_identify(cs_user_identify);
 	hook_del_shutdown(on_shutdown);
-	event_delete(cs_leave_empty, NULL);
+
+	mowgli_timer_destroy(base_eventloop, cs_leave_empty_timer);
 }
 
 static void cs_user_identify(user_t *u)

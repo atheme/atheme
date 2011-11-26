@@ -27,6 +27,7 @@ static void defcon_useradd(hook_user_nick_t *data);
 static void defcon_timeoutfunc(void *dummy);
 static int level = 5;
 static unsigned int defcon_timeout = 900;
+static mowgli_eventloop_timer_t *defcon_timer = NULL;
 
 command_t os_defcon = { "DEFCON", N_("Implements Defense Condition lockdowns."), PRIV_ADMIN, 1, os_cmd_defcon, { .path = "contrib/defcon" } };
 
@@ -213,15 +214,15 @@ static void os_cmd_defcon(sourceinfo_t *si, int parc, char *parv[])
 	{
 		snprintf(buf, sizeof buf, "The DEFCON level has been changed to \2%d\2. We apologize for any inconvenience.", level);
 
-		int i = event_find(defcon_timeoutfunc, NULL);
-
-		if (i == -1)
-			event_add_once("defcon_timeout", defcon_timeoutfunc, NULL, defcon_timeout);
+		if (defcon_timer == NULL)
+			defcon_timer = mowgli_timer_add_once(base_eventloop, "defcon_timeout", defcon_timeoutfunc, NULL, defcon_timeout);
 	}
 	else
 	{
 		snprintf(buf, sizeof buf, "The DEFCON level is now back to normal (\2%d\2). Sorry for any inconvenience this caused.", level);
-		event_delete(defcon_timeoutfunc, NULL);
+
+		mowgli_timer_destroy(base_eventloop, defcon_timer);
+		defcon_timer = NULL;
 	}
 
 	notice_global_sts(si->service->me, "*", buf);

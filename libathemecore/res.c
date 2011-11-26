@@ -209,6 +209,8 @@ static void timeout_resolver(void *notused)
  * start_resolver - do everything we need to read the resolv.conf file
  * and initialize the resolver file descriptor if needed
  */
+static mowgli_eventloop_timer_t *timeout_resolver_timer = NULL;
+
 static void start_resolver(void)
 {
 	int i;
@@ -229,7 +231,7 @@ static void start_resolver(void)
 		}
 
 		res_fd = connection_add("UDP resolver socket", fd, 0, res_readreply, NULL);
-		event_add("timeout_resolver", timeout_resolver, NULL, 1);
+		timeout_resolver_timer = mowgli_timer_add(base_eventloop, "timeout_resolver", timeout_resolver, NULL, 1);
 	}
 }
 
@@ -251,7 +253,10 @@ void restart_resolver(void)
 {
 	connection_close(res_fd);
 	res_fd = NULL;
-	event_delete(timeout_resolver, NULL);	/* -ddosen */
+
+	mowgli_timer_destroy(base_eventloop, timeout_resolver_timer);	/* -ddosen */
+	timeout_resolver_timer = NULL;
+
 	start_resolver();
 }
 

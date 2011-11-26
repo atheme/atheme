@@ -31,6 +31,7 @@ static void noop_kill_users(void *dummy);
 static void check_quit(user_t *u);
 static void check_user(user_t *u);
 static mowgli_list_t noop_kill_queue;
+static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
@@ -51,7 +52,7 @@ void _moddeinit(module_unload_intent_t intent)
 		/* Cannot safely delete users from here, so just forget
 		 * about them.
 		 */
-		event_delete(noop_kill_users, NULL);
+		mowgli_timer_destroy(base_eventloop, noop_kill_users_timer);
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, noop_kill_queue.head)
 		{
 			mowgli_node_delete(n, &noop_kill_queue);
@@ -92,7 +93,7 @@ static void check_quit(user_t *u)
 		mowgli_node_free(n);
 		if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 		{
-			event_delete(noop_kill_users, NULL);
+			mowgli_timer_destroy(base_eventloop, noop_kill_users_timer);
 			hook_del_user_delete(check_quit);
 		}
 	}
@@ -116,7 +117,7 @@ static void check_user(user_t *u)
 		{
 			if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 			{
-				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
+				noop_kill_users_timer = mowgli_timer_add_once(base_eventloop, "noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);
 			}
 			if (!mowgli_node_find(u, &noop_kill_queue))
@@ -135,7 +136,7 @@ static void check_user(user_t *u)
 		{
 			if (MOWGLI_LIST_LENGTH(&noop_kill_queue) == 0)
 			{
-				event_add_once("noop_kill_users", noop_kill_users, NULL, 0);
+				noop_kill_users_timer = mowgli_timer_add_once(base_eventloop, "noop_kill_users", noop_kill_users, NULL, 0);
 				hook_add_user_delete(check_quit);
 			}
 			if (!mowgli_node_find(u, &noop_kill_queue))

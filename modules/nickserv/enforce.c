@@ -50,6 +50,9 @@ command_t ns_regain = { "REGAIN", N_("Regain usage of a nickname."), AC_NONE, 2,
 
 mowgli_patricia_t **ns_set_cmdtree;
 
+static mowgli_eventloop_timer_t *enforce_timeout_check_timer = NULL;
+static mowgli_eventloop_timer_t *enforce_remove_enforcers_timer = NULL;
+
 /* logs a released nickname out */
 static bool log_enforce_victim_out(user_t *u, myuser_t *mu)
 {
@@ -392,7 +395,7 @@ void enforce_timeout_check(void *arg)
 		if (timeout->timelimit > CURRTIME)
 		{
 			enforce_next = timeout->timelimit;
-			event_add_once("enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
+			enforce_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
 			break; /* assume sorted list */
 		}
 		u = user_find_named(timeout->nick);
@@ -511,9 +514,9 @@ static void check_enforce(hook_nick_enforce_t *hdata)
 		if (enforce_next == 0 || enforce_next > timeout->timelimit)
 		{
 			if (enforce_next != 0)
-				event_delete(enforce_timeout_check, NULL);
+				mowgli_timer_destroy(base_eventloop, enforce_timeout_check_timer);
 			enforce_next = timeout->timelimit;
-			event_add_once("enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
+			enforce_timeout_check_timer = mowgli_timer_add_once(base_eventloop, "enforce_timeout_check", enforce_timeout_check, NULL, enforce_next - CURRTIME);
 		}
 	}
 
@@ -549,7 +552,7 @@ void _modinit(module_t *m)
 		m->mflags = MODTYPE_FAIL;
 		return;
 	}
-	
+
 	enforce_timeout_heap = mowgli_heap_create(sizeof(enforce_timeout_t), 128, BH_NOW);
 	if (enforce_timeout_heap == NULL)
 	{
@@ -557,7 +560,8 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
+	enforce_remove_enforcers_timer = mowgli_timer_add(base_eventloop, "enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
+
 	service_named_bind_command("nickserv", &ns_release);
 	service_named_bind_command("nickserv", &ns_regain);
 	command_add(&ns_set_enforce, *ns_set_cmdtree);
@@ -572,9 +576,12 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	enforce_remove_enforcers(NULL);
-	event_delete(enforce_remove_enforcers, NULL);
+
+	mowgli_timer_destroy(base_eventloop, enforce_remove_enforcers_timer);
+
 	if (enforce_next)
-		event_delete(enforce_timeout_check, NULL);
+		mowgli_timer_destroy(base_eventloop, enforce_timeout_check_timer);
+
 	service_named_unbind_command("nickserv", &ns_release);
 	service_named_unbind_command("nickserv", &ns_regain);
 	command_delete(&ns_set_enforce, *ns_set_cmdtree);

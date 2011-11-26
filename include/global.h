@@ -167,6 +167,7 @@ E void unmark_all_illegal(void);
 E void remove_illegals(void);
 
 /* atheme.c */
+E mowgli_eventloop_t *base_eventloop;
 E bool cold_start;
 E bool readonly;
 E char *config_file;
