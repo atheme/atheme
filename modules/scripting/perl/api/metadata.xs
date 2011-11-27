@@ -43,26 +43,23 @@ OUTPUT:
 const char *
 FIRSTKEY(Atheme_Object_MetadataHash object)
 CODE:
-	metadata_t *md = object->metadata.head->data;
-	RETVAL = md->name;
+	XSRETURN_UNDEF;
+	RETVAL = NULL;
 OUTPUT:
 	RETVAL
 
 const char *
 NEXTKEY(Atheme_Object_MetadataHash object, const char *lastkey)
 CODE:
-	metadata_t *md = metadata_find(object, lastkey);
-	if (md->node.next == NULL)
-		XSRETURN_UNDEF;
-	md = md->node.next->data;
-	RETVAL = md->name;
+	XSRETURN_UNDEF;
+	RETVAL = NULL;
 OUTPUT:
 	RETVAL
 
 int
 SCALAR(Atheme_Object_MetadataHash object)
 CODE:
-	RETVAL = object->metadata.count;
+	RETVAL = 0;
 OUTPUT:
 	RETVAL
 
