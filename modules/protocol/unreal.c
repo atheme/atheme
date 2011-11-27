@@ -752,8 +752,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			if (strlen(ipb64) == 8)
 			{
 				iplen = 4;
-				if (!base64_decode(ipb64, 8, ipdata, &iplen) ||
-						iplen != 4)
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
 					iplen = 0;
 				af = AF_INET;
 			}
@@ -761,8 +760,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			else if (strlen(ipb64) == 24)
 			{
 				iplen = 16;
-				if (!base64_decode(ipb64, 24, ipdata, &iplen) ||
-						iplen != 16)
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
 					iplen = 0;
 				af = AF_INET6;
 			}

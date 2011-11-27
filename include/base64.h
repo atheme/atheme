@@ -1,42 +1,50 @@
-/* base64.h -- Encode binary data using printable characters.
-   Copyright (C) 2004, 2005 Free Software Foundation, Inc.
-   Written by Simon Josefsson.
+/*
+ * Copyright (c) 1996, 1998 by Internet Software Consortium.
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND INTERNET SOFTWARE CONSORTIUM DISCLAIMS
+ * ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL INTERNET SOFTWARE
+ * CONSORTIUM BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE.
+ */
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU Lesser General Public License as published by
-   the Free Software Foundation; either version 2.1, or (at your option)
-   any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
-   $Id: base64.h 7779 2007-03-03 13:55:42Z pippijn $ */
+/*
+ * Portions Copyright (c) 1995 by International Business Machines, Inc.
+ *
+ * International Business Machines, Inc. (hereinafter called IBM) grants
+ * permission under its copyrights to use, copy, modify, and distribute this
+ * Software with or without fee, provided that the above copyright notice and
+ * all paragraphs of this notice appear in all copies, and that the name of IBM
+ * not be used in connection with the marketing of any product incorporating
+ * the Software or modifications thereof, without specific, written prior
+ * permission.
+ *
+ * To the extent it has a right to do so, IBM grants an immunity from suit
+ * under its patents, if any, for the use, sale or manufacture of products to
+ * the extent that such products are used for performing Domain Name System
+ * dynamic updates in TCP/IP networks by means of the Software.  No immunity is
+ * granted for any product per se or for any other function of any product.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", AND IBM DISCLAIMS ALL WARRANTIES,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  IN NO EVENT SHALL IBM BE LIABLE FOR ANY SPECIAL,
+ * DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE, EVEN
+ * IF IBM IS APPRISED OF THE POSSIBILITY OF SUCH DAMAGES.
+ */
 
 #ifndef BASE64_H
-# define BASE64_H
+#define BASE64_H
 
-/* Get size_t. */
-#include <stddef.h>
-
-/* Get bool. */
-#include <stdbool.h>
-
-/* This uses that the expression (n+(k-1))/k means the smallest
-   integer >= n/k, i.e., the ceiling of n/k.  */
-#define BASE64_LENGTH(inlen) ((((inlen) + 2) / 3) * 4)
-
-extern bool isbase64 (char ch);
-
-extern void base64_encode (const char *in, size_t inlen, char *out, size_t outlen);
-extern size_t base64_encode_alloc (const char *in, size_t inlen, char **out);
-extern bool base64_decode (const char *in, size_t inlen, char *out, size_t *outlen);
-extern bool base64_decode_alloc (const char *in, size_t inlen, char **out, size_t *outlen);
+extern int base64_encode(unsigned char const *src, size_t srclength, char *target, size_t targsize);
+extern int base64_decode(char const *src, unsigned char *target, size_t targsize);
 
 #endif /* BASE64_H */
 
