@@ -45,12 +45,10 @@ echo
 echo "Building root: $RELEASENAME/"
 # Do this a slightly ugly way because i'm lazy
 (cd ..; git archive --format=tar --prefix=$RELEASENAME/ HEAD | gzip >scripts/$RELEASENAME-working.tar.gz)
-(cd ../libmowgli; git archive --format=tar --prefix=libmowgli/ HEAD | gzip >../scripts/$RELEASENAME-libmowgli.tar.gz)
 (cd ../libmowgli-2; git archive --format=tar --prefix=libmowgli-2/ HEAD | gzip >../scripts/$RELEASENAME-libmowgli-2.tar.gz)
 cd $WRKDIR
 tar -xzvf $RELEASENAME-working.tar.gz
 cd $RELEASENAME
-tar -xzvf $WRKDIR/$RELEASENAME-libmowgli.tar.gz
 tar -xzvf $WRKDIR/$RELEASENAME-libmowgli-2.tar.gz
 sh autogen.sh
 rm -rf autogen.sh autom4te.cache
