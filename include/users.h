@@ -55,7 +55,7 @@ struct user_
 #define UF_WASENFORCED 0x00002000 /* this user was FNCed once already */
 #define UF_DEAF        0x00004000 /* user does not receive channel msgs */
 
-#define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
+#define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
 typedef struct {
 	user_t *u;		/* User in question. Write NULL here if you delete the user. */
