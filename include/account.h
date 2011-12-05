@@ -201,7 +201,7 @@ struct chanacs_
 	time_t    tmodified;
 	mowgli_node_t    cnode;
 
-	myentity_t *setter;
+	char *setter;
 };
 
 /* the new atheme-style channel flags */

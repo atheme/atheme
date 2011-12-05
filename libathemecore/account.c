@@ -1336,6 +1336,9 @@ static void chanacs_delete(chanacs_t *ca)
 		object_unref(ca->entity);
 	}
 
+	if (ca->setter != NULL)
+		strshare_unref(ca->setter);
+
 	metadata_delete_all(ca);
 
 	free(ca->host);
@@ -1388,7 +1391,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter;
+	ca->setter = setter != NULL ? strshare_get(setter->name) : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, n, &mt->chanacs);
@@ -1438,7 +1441,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter;
+	ca->setter = setter != NULL ? strshare_get(setter->name) : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
