@@ -105,6 +105,8 @@ int atheme_main(int argc, char *argv[])
 #endif
 	curr_uplink = NULL;
 
+	/* request mowgli is initialized without threading support */
+	mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
 	mowgli_init();
 
 	/* Prepare gettext */
