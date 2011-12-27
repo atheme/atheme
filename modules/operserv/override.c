@@ -245,7 +245,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	newparc = text_to_parv(parv[3] != NULL ? parv[3] : "", cmd->maxparc, newparv);
 	for (i = newparc; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)
 		newparv[i] = NULL;
-	command_exec(svs, (sourceinfo_t *) &o_si, cmd, newparc, newparv);
+	command_exec(svs, &o_si->si, cmd, newparc, newparv);
 
 	object_unref(o_si);
 }
