@@ -132,8 +132,44 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 	return true;
 }
 
+/* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
+static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	bool found_colon = false;
+
+	return_val_if_fail(value != NULL, false);
+
+	/* x:y is 3 bytes long, so that is the minimum length of a +f parameter. */
+	if (strlen(value) < 3)
+		return false;
+
+	/* skip past the * if present */
+	if (*value == '*')
+		value++;
+
+	/* check to make sure all bytes are numbers, allowing for one colon */
+	while (*value != '\0')
+	{
+		if (*value == '*' && !found_colon)
+			found_colon = true;
+		else if (!isdigit(*value))
+			return false;
+
+		value++;
+	}
+
+	/* we have to have a colon in order for it to be valid */
+	if (!found_colon)
+		return false;
+
+	return true;
+}
+
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
+	if (*value != '[')
+		return check_flood_old(value, c, mc, u, mu);
+
 	/* way too complicated */
 	return false;
 }
