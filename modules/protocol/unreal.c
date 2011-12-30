@@ -165,13 +165,63 @@ static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc
 	return true;
 }
 
+#define VALID_FLOOD_CHAR(c)	((c == 'c') || (c == 'j') || (c == 'k') || (c == 'm') || (c == 'n') || (c == 't'))
+#define VALID_ACTION_CHAR(c)	((c == 'm') || (c == 'M') || (c == 'C') || (c == 'R') || (c == 'i') || (c == 'K') \
+				 || (c == 'N') || (c == 'b'))
+
+/*
+ * +f *X:Y       (handled by check_flood_old)
+ * +f X:Y        (handled by check_flood_old)
+ *
+ * +f [<number><letter>(#<letter>)(,...)]
+ */
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
+	char evalbuf[BUFSIZE], *ep, *p;
+
 	if (*value != '[')
 		return check_flood_old(value, c, mc, u, mu);
 
-	/* way too complicated */
-	return false;
+	/* copy this to a local buffer for evaluation */
+	strlcpy(evalbuf, value, sizeof evalbuf);
+	ep = evalbuf + 1;
+
+	/* check that the parameter ends with a ] */
+	if ((p = strchr(ep, ']')) != NULL)
+		return false;
+
+	/* we have a ], blast it away and check for a colon. */
+	*p = '\0';
+	if (*(p + 1) != ':')
+		return false;
+
+	for (p = strtok(ep, ","); p != NULL; p = strtok(NULL, ","))
+	{
+		while (isdigit(*p))
+			p++;
+
+		if (!VALID_FLOOD_CHAR(*p))
+			return false;
+
+		*p = '\0';
+		p++;
+
+		if (*p != '\0')
+		{
+			if (*p == '#')
+			{
+				p++;
+
+				if (!VALID_ACTION_CHAR(*p))
+					return false;
+			}
+
+			/* not valid, needs to be # or nothing */
+			return false;
+		}
+	}
+
+	return true;
 }
 
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
