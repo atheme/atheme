@@ -448,10 +448,8 @@ static bool unreal_on_logout(user_t *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
-	if (!use_esvid && !nicksvs.no_nick_ownership)
+	if (use_esvid || !nicksvs.no_nick_ownership)
 		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
-	else
-		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 
 	return false;
 }
@@ -785,7 +783,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		 * If the user's SVID is equal to their nick TS,
 		 * they're properly logged in --jilles
 		 */
-		if (use_esvid && *parv[6] != '*' && !IsDigit(*parv[6]))
+		if (use_esvid && !IsDigit(*parv[6]))
 			handle_burstlogin(u, parv[6], 0);
 		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, NULL, 0);
@@ -1059,8 +1057,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 	user_t *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL && !nicksvs.no_nick_ownership && !use_esvid)
-		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
+	if (u != NULL && (use_esvid || !nicksvs.no_nick_ownership))
+		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
 }
 
 static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
