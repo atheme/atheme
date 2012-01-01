@@ -183,7 +183,7 @@ static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u
 		return check_flood_old(value, c, mc, u, mu);
 
 	/* copy this to a local buffer for evaluation */
-	strlcpy(evalbuf, value, sizeof evalbuf);
+	mowgli_strlcpy(evalbuf, value, sizeof evalbuf);
 	ep = evalbuf + 1;
 
 	/* check that the parameter ends with a ] */
