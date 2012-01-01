@@ -643,7 +643,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 				ipstring[0] = '\0';
 		}
 		else
-			strlcpy(ipstring, parv[8], sizeof ipstring);
+			mowgli_strlcpy(ipstring, parv[8], sizeof ipstring);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
 		if (u == NULL)
