@@ -255,7 +255,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	int rc;
 	size_t tlen = 0;
 	char *cloak, *out = NULL;
-	char *temp;
+	char temp[BUFSIZE];
 	char mech[21];
 	int out_len = 0;
 	metadata_t *md;
@@ -311,11 +311,9 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if(len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,
 					&out, &out_len);
-		else if(base64_decode_alloc(buf, len, &temp, &tlen))
-		{
+		else if ((tlen = base64_decode(buf, temp, BUFSIZE)))
 			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
-			free(temp);
-		}else
+		else
 			rc = ASASL_FAIL;
 	}
 
@@ -345,10 +343,9 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	{
 		if(out_len)
 		{
-			if(base64_encode_alloc(out, out_len, &temp))
+			if(base64_encode(out, out_len, temp, BUFSIZE))
 			{
 				sasl_write(p->uid, temp, strlen(temp));
-				free(temp);
 				free(out);
 				return;
 			}

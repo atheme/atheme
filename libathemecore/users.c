@@ -134,7 +134,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 		{
 			wallops("Server %s is introducing nick %s which already exists on %s",
 					server->name, nick, u2->server->name);
-			if (uid != NULL && *u2->uid != '\0')
+			if (uid != NULL && u2->uid != NULL)
 			{
 				kill_id_sts(NULL, uid, "Ghost detected via nick collision (new)");
 				kill_id_sts(NULL, u2->uid, "Ghost detected via nick collision (old)");
@@ -244,7 +244,7 @@ void user_delete(user_t *u, const char *comment)
 
 	mowgli_patricia_delete(userlist, u->nick);
 
-	if (*u->uid)
+	if (u->uid != NULL)
 		mowgli_patricia_delete(uidlist, u->uid);
 
 	mowgli_node_delete(&u->snode, &u->server->userlist);
@@ -364,13 +364,13 @@ void user_changeuid(user_t *u, const char *uid)
 {
 	return_if_fail(u != NULL);
 
-	if (*u->uid)
+	if (u->uid != NULL)
 		mowgli_patricia_delete(uidlist, u->uid);
 
 	strshare_unref(u->uid);
 	u->uid = strshare_get(uid);
 
-	if (*u->uid)
+	if (u->uid != NULL)
 		mowgli_patricia_add(uidlist, u->uid, u);
 }
 
@@ -420,7 +420,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 		slog(LG_INFO, "user_changenick(): nick collision on %s", nick);
 		if (u2->server == me.me)
 		{
-			if (*u->uid != '\0')
+			if (u->uid != NULL)
 			{
 				/* If the changing client has a UID, our
 				 * client will have a UID too and the
@@ -466,7 +466,7 @@ bool user_changenick(user_t *u, const char *nick, time_t ts)
 			wallops("Server %s is sending nick change from %s to %s which already exists on %s",
 					u->server->name, u->nick, nick,
 					u2->server->name);
-			if (*u->uid != '\0' && *u2->uid != '\0')
+			if (u->uid != NULL && u2->uid != NULL)
 			{
 				kill_id_sts(NULL, u->uid, "Ghost detected via nick change collision (new)");
 				kill_id_sts(NULL, u2->uid, "Ghost detected via nick change collision (old)");

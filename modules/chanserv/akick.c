@@ -641,7 +641,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 
 			if (ca->setter)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("setter: %s"),
-						     ca->setter->name);
+						     ca->setter);
 
 			if (expires_on > 0)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%sexpires: %s"),

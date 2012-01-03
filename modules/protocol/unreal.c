@@ -132,10 +132,96 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 	return true;
 }
 
+/* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
+static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	bool found_colon = false;
+
+	return_val_if_fail(value != NULL, false);
+
+	/* x:y is 3 bytes long, so that is the minimum length of a +f parameter. */
+	if (strlen(value) < 3)
+		return false;
+
+	/* skip past the * if present */
+	if (*value == '*')
+		value++;
+
+	/* check to make sure all bytes are numbers, allowing for one colon */
+	while (*value != '\0')
+	{
+		if (*value == '*' && !found_colon)
+			found_colon = true;
+		else if (!isdigit(*value))
+			return false;
+
+		value++;
+	}
+
+	/* we have to have a colon in order for it to be valid */
+	if (!found_colon)
+		return false;
+
+	return true;
+}
+
+#define VALID_FLOOD_CHAR(c)	((c == 'c') || (c == 'j') || (c == 'k') || (c == 'm') || (c == 'n') || (c == 't'))
+#define VALID_ACTION_CHAR(c)	((c == 'm') || (c == 'M') || (c == 'C') || (c == 'R') || (c == 'i') || (c == 'K') \
+				 || (c == 'N') || (c == 'b'))
+
+/*
+ * +f *X:Y       (handled by check_flood_old)
+ * +f X:Y        (handled by check_flood_old)
+ *
+ * +f [<number><letter>(#<letter>)(,...)]
+ */
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-	/* way too complicated */
-	return false;
+	char evalbuf[BUFSIZE], *ep, *p;
+
+	if (*value != '[')
+		return check_flood_old(value, c, mc, u, mu);
+
+	/* copy this to a local buffer for evaluation */
+	mowgli_strlcpy(evalbuf, value, sizeof evalbuf);
+	ep = evalbuf + 1;
+
+	/* check that the parameter ends with a ] */
+	if ((p = strchr(ep, ']')) != NULL)
+		return false;
+
+	/* we have a ], blast it away and check for a colon. */
+	*p = '\0';
+	if (*(p + 1) != ':')
+		return false;
+
+	for (p = strtok(ep, ","); p != NULL; p = strtok(NULL, ","))
+	{
+		while (isdigit(*p))
+			p++;
+
+		if (!VALID_FLOOD_CHAR(*p))
+			return false;
+
+		*p = '\0';
+		p++;
+
+		if (*p != '\0')
+		{
+			if (*p == '#')
+			{
+				p++;
+
+				if (!VALID_ACTION_CHAR(*p))
+					return false;
+			}
+
+			/* not valid, needs to be # or nothing */
+			return false;
+		}
+	}
+
+	return true;
 }
 
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
@@ -448,10 +534,8 @@ static bool unreal_on_logout(user_t *u, const char *account)
 {
 	return_val_if_fail(u != NULL, false);
 
-	if (!use_esvid && !nicksvs.no_nick_ownership)
+	if (use_esvid || !nicksvs.no_nick_ownership)
 		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
-	else
-		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
 
 	return false;
 }
@@ -752,8 +836,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			if (strlen(ipb64) == 8)
 			{
 				iplen = 4;
-				if (!base64_decode(ipb64, 8, ipdata, &iplen) ||
-						iplen != 4)
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
 					iplen = 0;
 				af = AF_INET;
 			}
@@ -761,8 +844,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			else if (strlen(ipb64) == 24)
 			{
 				iplen = 16;
-				if (!base64_decode(ipb64, 24, ipdata, &iplen) ||
-						iplen != 16)
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
 					iplen = 0;
 				af = AF_INET6;
 			}
@@ -787,7 +869,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		 * If the user's SVID is equal to their nick TS,
 		 * they're properly logged in --jilles
 		 */
-		if (use_esvid && *parv[6] != '*' && !IsDigit(*parv[6]))
+		if (use_esvid && !IsDigit(*parv[6]))
 			handle_burstlogin(u, parv[6], 0);
 		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, NULL, 0);
@@ -1061,8 +1143,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 	user_t *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL && !nicksvs.no_nick_ownership && !use_esvid)
-		sts(":%s SVS2MODE %s -r+d *", nicksvs.nick, u->nick);
+	if (u != NULL && (use_esvid || !nicksvs.no_nick_ownership))
+		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
 }
 
 static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])

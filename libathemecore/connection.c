@@ -402,9 +402,13 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 
 	if (vhost != NULL)
 	{
-		struct addrinfo *bind_addr = NULL;
+		struct addrinfo hints, *bind_addr = NULL;
 
-		if ((error = getaddrinfo(vhost, NULL, NULL, &bind_addr)))
+		memset(&hints, 0, sizeof hints);
+		hints.ai_family = addr->ai_family;
+		hints.ai_socktype = SOCK_STREAM;
+		hints.ai_flags = AI_PASSIVE;
+		if ((error = getaddrinfo(vhost, NULL, &hints, &bind_addr)))
 		{
 			slog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s: %s", vhost, gai_strerror(error));
 			close(s);

@@ -10,11 +10,11 @@ include ../../../../buildsys.mk
 
 plugindir = $(MODDIR)/modules/scripting/lib
 
-CPPFLAGS += -I../../../../include -I. -I../../../../libmowgli/src/libmowgli
+CPPFLAGS += -I../../../../include -I. -I../../../../libmowgli-2/src/libmowgli
 CPPFLAGS += $(PERL_CFLAGS)
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS)
-LIBS += -L../../../../libathemecore -lathemecore ${LDFLAGS_RPATH} -L../../../../libmowgli/src/libmowgli
+LIBS += -L../../../../libathemecore -lathemecore ${LDFLAGS_RPATH} -L../../../../libmowgli-2/src/libmowgli
 
 # Some of the code from Perl is not designed to compile with warnings.
 PERL_WARN_HACKS = -Wno-redundant-decls -Wno-float-equal -Wno-unused-value

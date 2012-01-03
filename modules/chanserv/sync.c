@@ -38,9 +38,12 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 		if (is_internal_client(cu->user))
 			continue;
 
-		if (ca != NULL && ca->entity != NULL)
+		if (ca != NULL && ca->entity != NULL && cu->user->myuser != NULL)
 		{
-			if (ca->entity == entity(cu->user->myuser))
+			entity_chanacs_validation_vtable_t *vt;
+
+			vt = myentity_get_chanacs_validator(ca->entity);
+			if (vt->match_entity(ca, entity(cu->user->myuser)) != NULL)
 				fl = ca->level;
 			else
 				continue;
@@ -231,7 +234,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, "\2%s\2 is closed.", name);

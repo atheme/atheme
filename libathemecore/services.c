@@ -245,9 +245,9 @@ void services_init(void)
 
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
-		if (ircd->uses_uid && svs->me->uid[0] == '\0')
+		if (ircd->uses_uid && svs->me->uid == NULL)
 			user_changeuid(svs->me, uid_get());
-		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
+		else if (!ircd->uses_uid && svs->me->uid != NULL)
 			user_changeuid(svs->me, NULL);
 		if (!ircd->uses_uid)
 			kill_id_sts(NULL, svs->nick, "Attempt to use service nick");
@@ -311,7 +311,7 @@ void reintroduce_user(user_t *u)
 	/* Reintroduce with a new UID.  This avoids problems distinguishing
 	 * commands targeted at the old and new user.
 	 */
-	if (*u->uid)
+	if (u->uid != NULL)
 	{
 		user_changeuid(u, uid_get());
 	}

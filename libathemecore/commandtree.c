@@ -84,7 +84,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 		*accessbuf = '\0';
 
-		if (c->access)
+		if (c->access && (!cmdaccess || strcmp(c->access, cmdaccess)))
 		{
 			mowgli_strlcat(accessbuf, c->access, BUFSIZE);
 			mowgli_strlcat(accessbuf, " ", BUFSIZE);

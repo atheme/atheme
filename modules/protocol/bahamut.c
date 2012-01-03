@@ -130,6 +130,8 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 	return true;
 }
 
+static bool use_nickipstr = false;
+
 /* login to our uplink */
 static unsigned int bahamut_server_login(void)
 {
@@ -141,11 +143,9 @@ static unsigned int bahamut_server_login(void)
 
 	me.bursting = true;
 
-	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE");
+	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE NICKIPSTR");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
-
-	services_init();
 
 	return 0;
 }
@@ -155,7 +155,10 @@ static void bahamut_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts("NICK %s 1 %lu %s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
+	if (use_nickipstr)
+		sts("NICK %s 1 %lu %s %s %s %s 0 0.0.0.0 :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
+	else
+		sts("NICK %s 1 %lu %s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -615,7 +618,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
-	struct in_addr ip;
 	char ipstring[64];
 	bool realchange;
 
@@ -631,10 +633,18 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));
-		ipstring[0] = '\0';
-		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+		if (!use_nickipstr)
+		{
+			struct in_addr ip;
+
+			ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));
 			ipstring[0] = '\0';
+			if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+				ipstring[0] = '\0';
+		}
+		else
+			mowgli_strlcpy(ipstring, parv[8], sizeof ipstring);
+
 		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
 		if (u == NULL)
 			return;
@@ -852,6 +862,25 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
+static void m_capab(sourceinfo_t *si, int parc, char *parv[])
+{
+	int i;
+
+	use_nickipstr = false;
+
+	for (i = 0; i < parc; i++)
+	{
+		if (!irccasecmp(parv[i], "NICKIPSTR"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink supports string-based IP addresses, enabling support.");
+			use_nickipstr = true;
+		}
+	}
+
+	/* now burst services with NICKIP set correctly. */
+	services_init();
+}
+
 static void nick_group(hook_user_req_t *hdata)
 {
 	user_t *u;
@@ -912,6 +941,7 @@ void _modinit(module_t * m)
 
 	ircd = &Bahamut;
 
+	pcommand_add("CAPAB", m_capab, 0, MSRC_UNREG);
 	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
