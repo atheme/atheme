@@ -80,9 +80,11 @@ static void ss_cmd_server_list(sourceinfo_t * si, int parc, char *parv[])
 	mowgli_patricia_iteration_state_t state;
 	MOWGLI_PATRICIA_FOREACH(s, &state, servlist)
 	{
-		i++;
         if ((!(s->flags & SF_HIDE)) || (has_priv(si, PRIV_SERVER_AUSPEX)))
+        {
+		    i++;
         	command_success_nodata(si, _("%d: %s [%s]"), i, s->name, s->desc);
+        }
 	}
 	command_success_nodata(si, _("End of server list."));
 }
