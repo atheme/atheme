@@ -97,8 +97,22 @@ AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 AC_SUBST(POSIX_CRYPTC)
 
 CRACKLIB_C=""
-AC_SEARCH_LIBS(FascistCheck, crack, [CRACKLIB_C="cracklib.c"])
+CRACKLIB_LIBS=""
+AC_ARG_WITH([cracklib],
+	[AS_HELP_STRING([--with-cracklib], [Compile cracklib nickserv submodule for checking password strength.])],
+	[],
+	[with_cracklib="auto"])
+AS_IF([test "x$with_cracklib" != "xno"],
+	[LIBS_save="$LIBS"
+	AC_SEARCH_LIBS([FascistCheck], [crack],
+		[CRACKLIB_C="cracklib.c"
+		AS_IF([test "x$ac_cv_search_FascistCheck" != "xnone required"],
+			[CRACKLIB_LIBS="$ac_cv_search_FascistCheck"])],
+		[AS_IF([test "x$with_cracklib" != "xauto"],
+			[AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found.])])])
+	LIBS="$LIBS_save"])
 AC_SUBST(CRACKLIB_C)
+AC_SUBST([CRACKLIB_LIBS])
 
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
