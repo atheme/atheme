@@ -64,7 +64,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -72,7 +72,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* figure out who we're going to kick */
-	if (!(tu = user_find_named(nick)))
+	if ((tu = user_find_named(nick)) != NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 		return;
