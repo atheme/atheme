@@ -72,7 +72,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* figure out who we're going to kick */
-	if ((tu = user_find_named(nick)) != NULL)
+	if ((tu = user_find_named(nick)) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 		return;
@@ -134,7 +134,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* figure out who we're going to kick */
-	if (!(tu = user_find_named(nick)))
+	if ((tu = user_find_named(nick)) == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 		return;
