@@ -54,7 +54,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	myuser_t *mu;
-	mynick_t *mn;
 	mowgli_node_t *n, *tn;
 	char *target = parv[0];
 	char *password = parv[1];
@@ -81,14 +80,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (nicksvs.no_nick_ownership)
-		mu = myuser_find(target);
-	else
-	{
-		mn = mynick_find(target);
-		mu = mn != NULL ? mn->owner : NULL;
-	}
-
+	mu = myuser_find_by_nick(target);
 	if (!mu)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
