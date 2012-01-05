@@ -44,6 +44,22 @@ static inline mynick_t *mynick_find(const char *name)
 	return name ? mowgli_patricia_retrieve(nicklist, name) : NULL;
 }
 
+static inline myuser_t *myuser_find_by_nick(const char *name)
+{
+	myuser_t *mu;
+	mynick_t *mn;
+
+	mu = myuser_find(name);
+	if (mu != NULL)
+		return mu;
+
+	mn = mynick_find(name);
+	if (mn != NULL)
+		return mn->owner;
+
+	return NULL;
+}
+
 /*
  * myuser_name_find(const char *name)
  *
