@@ -53,9 +53,12 @@ static inline myuser_t *myuser_find_by_nick(const char *name)
 	if (mu != NULL)
 		return mu;
 
-	mn = mynick_find(name);
-	if (mn != NULL)
-		return mn->owner;
+	if (!nicksvs.no_nick_ownership)
+	{
+		mn = mynick_find(name);
+		if (mn != NULL)
+			return mn->owner;
+	}
 
 	return NULL;
 }
