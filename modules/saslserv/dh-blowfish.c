@@ -114,7 +114,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	p->username = strdup(message);
 	message += size + 1;
 	len -= size + 1;
-	if ((mu = myuser_find(p->username)) == NULL)
+	if ((mu = myuser_find_by_nick(p->username)) == NULL)
 		goto end;
 	/* AES-encrypted password remains */
 

@@ -66,7 +66,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	mowgli_strlcpy(pass, message, len + 1);
 
 	/* Done dissecting, now check. */
-	if(!(mu = myuser_find(auth)))
+	if(!(mu = myuser_find_by_nick(auth)))
 		return ASASL_FAIL;
 
 	p->username = strdup(auth);
