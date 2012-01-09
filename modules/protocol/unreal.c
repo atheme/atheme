@@ -583,6 +583,48 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
 }
 
+static void unreal_sasl_sts(char *target, char mode, char *data)
+{
+	char servermask[BUFSIZE], *p;
+
+	/* extract the servername from the target. */
+	strlcpy(servermask, target, sizeof servermask);
+	p = strchr(servermask, '!');
+	if (p != NULL)
+		*p = '\0';
+
+	sts(":%s SASL %s %s %c %s", me.name, servermask, target, mode, data);
+}
+
+static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+{
+	char servermask[BUFSIZE], *p;
+
+	/* extract the servername from the target. */
+	strlcpy(servermask, target, sizeof servermask);
+	p = strchr(servermask, '!');
+	if (p != NULL)
+		*p = '\0';
+
+	sts(":%s SVSLOGIN %s %s %s", me.name, servermask, target, login);
+}
+
+static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
+{
+	sasl_message_t smsg;
+
+	/* :irc.loldongs.eu SASL * irc.goatse.cx!42 S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
+	if (parc < 4)
+		return;
+
+	smsg.uid = parv[1];
+	smsg.mode = *parv[2];
+	smsg.buf = parv[3];
+	smsg.ext = parc >= 4 ? parv[4] : NULL;
+
+	hook_call_sasl_input(&smsg);
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -1194,6 +1236,8 @@ void _modinit(module_t * m)
 	invite_sts = &unreal_invite_sts;
 	holdnick_sts = &unreal_holdnick_sts;
 	chan_lowerts = &unreal_chan_lowerts;
+	sasl_sts = &unreal_sasl_sts;
+	svslogin_sts = &unreal_svslogin_sts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;
@@ -1233,6 +1277,7 @@ void _modinit(module_t * m)
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
+	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 
 	/* 
 	 * for fun, and to give nenolod a heart attack
@@ -1273,6 +1318,7 @@ void _modinit(module_t * m)
 	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("F", m_motd, 1, MSRC_USER);
 	pcommand_add("_", m_protoctl, 10, MSRC_UNREG);
+	pcommand_add("SA", m_sasl, 4, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
