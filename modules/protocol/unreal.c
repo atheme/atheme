@@ -588,7 +588,7 @@ static void unreal_sasl_sts(char *target, char mode, char *data)
 	char servermask[BUFSIZE], *p;
 
 	/* extract the servername from the target. */
-	strlcpy(servermask, target, sizeof servermask);
+	mowgli_strlcpy(servermask, target, sizeof servermask);
 	p = strchr(servermask, '!');
 	if (p != NULL)
 		*p = '\0';
@@ -601,7 +601,7 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 	char servermask[BUFSIZE], *p;
 
 	/* extract the servername from the target. */
-	strlcpy(servermask, target, sizeof servermask);
+	mowgli_strlcpy(servermask, target, sizeof servermask);
 	p = strchr(servermask, '!');
 	if (p != NULL)
 		*p = '\0';
