@@ -586,6 +586,11 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 static void unreal_sasl_sts(char *target, char mode, char *data)
 {
 	char servermask[BUFSIZE], *p;
+	service_t *saslserv;
+
+	saslserv = service_find("saslserv");
+	if (saslserv == NULL)
+		return;
 
 	/* extract the servername from the target. */
 	mowgli_strlcpy(servermask, target, sizeof servermask);
@@ -593,12 +598,17 @@ static void unreal_sasl_sts(char *target, char mode, char *data)
 	if (p != NULL)
 		*p = '\0';
 
-	sts(":%s SASL %s %s %c %s", me.name, servermask, target, mode, data);
+	sts(":%s SASL %s %s %c %s", saslserv->me->nick, servermask, target, mode, data);
 }
 
 static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
 {
 	char servermask[BUFSIZE], *p;
+	service_t *saslserv;
+
+	saslserv = service_find("saslserv");
+	if (saslserv == NULL)
+		return;
 
 	/* extract the servername from the target. */
 	mowgli_strlcpy(servermask, target, sizeof servermask);
@@ -606,7 +616,7 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 	if (p != NULL)
 		*p = '\0';
 
-	sts(":%s SVSLOGIN %s %s %s", me.name, servermask, target, login);
+	sts(":%s SVSLOGIN %s %s %s", saslserv->me->nick, servermask, target, login);
 }
 
 static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
