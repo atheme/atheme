@@ -152,7 +152,7 @@ void destroy_session(sasl_session_t *p)
 	if (p->flags & ASASL_NEED_LOG && p->username != NULL)
 	{
 		mu = myuser_find(p->username);
-		if (mu != NULL)
+		if (mu != NULL && !(ircd->flags & IRCD_SASL_USE_PUID))
 			sasl_logcommand(p, mu, CMDLOG_LOGIN, "LOGIN (session timed out)");
 	}
 
@@ -442,44 +442,31 @@ static void sasl_newuser(hook_user_nick_t *data)
 	if (!u)
 		return;
 
-	if (!(ircd->flags & IRCD_SASL_USE_PUID))
+	p = find_session(u->uid);
+
+	/* Not concerned unless it's a SASL login. */
+	if(p == NULL)
+		return;
+
+	/* We will log it ourselves, if needed */
+	p->flags &= ~ASASL_NEED_LOG;
+
+	/* Find the account */
+	mu = p->username ? myuser_find(p->username) : NULL;
+	if (mu == NULL)
 	{
-		p = find_session(u->uid);
-
-		/* Not concerned unless it's a SASL login. */
-		if(p == NULL)
-			return;
-
-		/* We will log it ourselves, if needed */
-		p->flags &= ~ASASL_NEED_LOG;
-
-		/* Find the account */
-		mu = p->username ? myuser_find(p->username) : NULL;
-		if (mu == NULL)
-		{
-			notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-			       p->username ? p->username : "??");
-			destroy_session(p);
-			/* We'll remove their ircd login in handle_burstlogin() */
-			return;
-		}
-
+		notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
+		       p->username ? p->username : "??");
 		destroy_session(p);
-
-		myuser_login(saslsvs, u, mu, false);
-
-		logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN");
+		/* We'll remove their ircd login in handle_burstlogin() */
+		return;
 	}
-	else
-	{
-		destroy_session(p);
 
-		mu = u->myuser;
-		u->myuser = NULL;
+	destroy_session(p);
 
-		myuser_login(saslsvs, u, mu, false);
-		logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN");
-	}
+	myuser_login(saslsvs, u, mu, false);
+
+	logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN");
 }
 
 /* This function is run approximately once every 30 seconds.
