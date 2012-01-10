@@ -132,7 +132,7 @@ sasl_session_t *make_session(char *uid)
 
 	p = malloc(sizeof(sasl_session_t));
 	memset(p, 0, sizeof(sasl_session_t));
-	mowgli_strlcpy(p->uid, uid, IDLEN);
+	p->uid = strdup(uid);
 
 	n = mowgli_node_create();
 	mowgli_node_add(p, n, &sessions);
@@ -162,6 +162,7 @@ void destroy_session(sasl_session_t *p)
 		}
 	}
 
+	free(p->uid);
 	free(p->buf);
 	p->buf = p->p = NULL;
 	if(p->mechptr)

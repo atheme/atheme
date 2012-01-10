@@ -14,7 +14,7 @@ typedef struct sasl_message_ sasl_message_t;
 typedef struct sasl_mechanism_ sasl_mechanism_t;
 
 struct sasl_session_ {
-  char uid[IDLEN];
+  char *uid;
   char *buf, *p;
   int len, flags;
 
