@@ -69,6 +69,7 @@ typedef struct ircd_ ircd_t;
 #define IRCD_CIDR_BANS			1
 #define IRCD_HOLDNICK			2 /* supports holdnick_sts() */
 #define IRCD_TOPIC_NOCOLOUR		4
+#define IRCD_SASL_USE_PUID		8
 
 /* forced nick change types */
 #define FNC_REGAIN 0 /* give a registered user their nick back */
