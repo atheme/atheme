@@ -251,7 +251,7 @@ static unsigned int unreal_server_login(void)
 
 	me.bursting = true;
 
-	sts("PROTOCTL TOKEN NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
+	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
 	services_init();
@@ -1288,47 +1288,6 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
-
-	/* 
-	 * for fun, and to give nenolod a heart attack
-	 * whenever he reads unreal.c, let us do tokens... --w00t
-	 * 
-	 * oh, as a side warning: don't remove the above. not only
-	 * are they for compatability, but unreal's server protocol
-	 * can be odd in places (ie not sending JOIN token after synch
-	 * with no SJOIN, not using KILL token... etc. --w00t.
-	 */
-
-	pcommand_add("8", m_ping, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("9", m_pong, 1, MSRC_SERVER);
-	pcommand_add("!", m_privmsg, 2, MSRC_USER);
-	pcommand_add("B", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
-	pcommand_add("~", m_sjoin, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("D", m_part, 1, MSRC_USER);
-	pcommand_add("&", m_nick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add(",", m_quit, 1, MSRC_USER);
-	pcommand_add("|", m_umode, 1, MSRC_USER);
-	pcommand_add("G", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("H", m_kick, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add(".", m_kill, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("-", m_squit, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("'", m_server, 3, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("2", m_stats, 2, MSRC_USER);
-	pcommand_add("@", m_admin, 1, MSRC_USER);
-	pcommand_add("+", m_version, 1, MSRC_USER);
-	pcommand_add("/", m_info, 1, MSRC_USER);
-	pcommand_add("#", m_whois, 2, MSRC_USER);
-	pcommand_add("b", m_trace, 1, MSRC_USER);
-	pcommand_add("6", m_away, 0, MSRC_USER);
-	pcommand_add("C", m_join, 1, MSRC_USER);
-	pcommand_add("<", m_pass, 1, MSRC_UNREG);
-	pcommand_add("5", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add(")", m_topic, 4, MSRC_USER | MSRC_SERVER);
-	pcommand_add("AA", m_sethost, 1, MSRC_USER);
-	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("F", m_motd, 1, MSRC_USER);
-	pcommand_add("_", m_protoctl, 10, MSRC_UNREG);
-	pcommand_add("SA", m_sasl, 4, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
