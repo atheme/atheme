@@ -80,8 +80,8 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			mowgli_strlcpy(buf, md->value, sizeof buf);
-			strncat(buf, ",", sizeof buf);
-			strncat(buf, parv[1], sizeof buf);
+			mowgli_strlcat(buf, ",", sizeof buf);
+			mowgli_strlcat(buf, parv[1], sizeof buf);
 			metadata_delete(si->smu, "private:autojoin");
 			metadata_add(si->smu, "private:autojoin", buf);
 		}

@@ -123,7 +123,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	{
 		if (strlen(s_input) > 250)
 		{
-			strncpy(buffer, s_input, 150);
+			mowgli_strlcpy(buffer, s_input, 150);
 			sprintf(&buffer[150], "...%s = %.8g", &s_input[strlen(s_input) - 10], expr);
 		}
 		else

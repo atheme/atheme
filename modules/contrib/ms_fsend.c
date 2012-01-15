@@ -128,7 +128,7 @@ static void ms_cmd_fsend(sourceinfo_t *si, int parc, char *parv[])
 		memo->status = 0;
 		mowgli_strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
 		mowgli_strlcpy(memo->text, "[FORCE] ", FMEMOLEN);
-		strncat(memo->text, m, FMEMOLEN);
+		mowgli_strlcat(memo->text, m, FMEMOLEN);
 	
 		/* Create a linked list node and add to memos */
 		n = mowgli_node_create();
