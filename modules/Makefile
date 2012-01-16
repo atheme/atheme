@@ -21,6 +21,7 @@ SUBDIRS = \
 	nickserv \
 	operserv \
 	protocol \
+	proxyscan \
 	rpgserv \
 	saslserv \
 	statserv \
