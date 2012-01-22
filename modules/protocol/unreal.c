@@ -453,12 +453,12 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 	if (*escapedreason == ':')
 		*escapedreason = ';';
 
-	sts(":%s BR + %s :%s", me.name, escapedreason, realname);
+	sts(":%s SVSNLINE + %s :%s", me.name, escapedreason, realname);
 }
 
 static void unreal_unxline_sts(const char *server, const char *realname)
 {
-	sts(":%s BR - :%s", me.name, realname);
+	sts(":%s SVSNLINE - :%s", me.name, realname);
 }
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
