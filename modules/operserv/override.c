@@ -243,7 +243,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	wallops("\2%s\2 is using OperServ OVERRIDE: account=%s service=%s command=%s params=%s", get_source_name(si), parv[0], parv[1], parv[2], parv[3] != NULL ? parv[3] : "");
 
 	newparc = text_to_parv(parv[3] != NULL ? parv[3] : "", cmd->maxparc, newparv);
-	for (i = newparc; i < (int)(sizeof(newparv) / sizeof(newparv[0])); i++)
+	for (i = newparc; i < ARRAY_SIZE(newparv); i++)
 		newparv[i] = NULL;
 	command_exec(svs, &o_si->si, cmd, newparc, newparv);
 
