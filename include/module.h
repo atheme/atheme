@@ -128,6 +128,15 @@ E bool module_request(const char *name);
 		}								\
 	}
 
+#define MODULE_CONFLICT(self, modname) \
+	if (module_find_published(modname))					\
+	{									\
+		slog(LG_DEBUG, "module %s conflicts with %s, unloading",	\
+		     self->name, modname);					\
+		(self)->mflags = MODTYPE_FAIL;					\
+		return;								\
+	}
+
 typedef struct module_dependency_ {
 	char *name;
 	module_unload_capability_t can_unload;
