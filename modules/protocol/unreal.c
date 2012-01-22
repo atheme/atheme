@@ -1195,7 +1195,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 	user_t *u;
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
-	if (u != NULL && (use_esvid || !nicksvs.no_nick_ownership))
+	if (u != NULL && (!use_esvid || !nicksvs.no_nick_ownership))
 		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
 }
 
