@@ -56,6 +56,7 @@ struct operclass_ {
   char *name;
   char *privs; /* priv1 priv2 priv3... */
   int flags;
+  mowgli_node_t node;
 };
 
 #define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */

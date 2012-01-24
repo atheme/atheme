@@ -48,20 +48,26 @@ void init_privs(void)
 operclass_t *operclass_add(const char *name, const char *privs)
 {
 	operclass_t *operclass;
-	mowgli_node_t *n = mowgli_node_create();
+	mowgli_node_t *n;
 
 	operclass = operclass_find(name);
+
 	if (operclass != NULL)
 	{
 		slog(LG_DEBUG, "operclass_add(): duplicate class %s", name);
 		return NULL;
 	}
+
 	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
+
 	operclass = mowgli_heap_alloc(operclass_heap);
-	mowgli_node_add(operclass, n, &operclasslist);
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
+
+	mowgli_node_add(operclass, &operclass->node, &operclasslist);
+
 	cnt.operclass++;
+
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper_t *soper = n->data;
@@ -69,6 +75,7 @@ operclass_t *operclass_add(const char *name, const char *privs)
 				!strcasecmp(name, soper->classname))
 			soper->operclass = operclass;
 	}
+
 	return operclass;
 }
 
@@ -78,18 +85,20 @@ void operclass_delete(operclass_t *operclass)
 
 	if (operclass == NULL)
 		return;
+
 	slog(LG_DEBUG, "operclass_delete(): %s", operclass->name);
-	n = mowgli_node_find(operclass, &operclasslist);
-	mowgli_node_delete(n, &operclasslist);
-	mowgli_node_free(n);
+	mowgli_node_delete(&operclass->node, &operclasslist);
+
 	MOWGLI_ITER_FOREACH(n, soperlist.head)
 	{
 		soper_t *soper = n->data;
 		if (soper->operclass == operclass)
 			soper->operclass = NULL;
 	}
+
 	free(operclass->name);
 	free(operclass->privs);
+
 	mowgli_heap_free(operclass_heap, operclass);
 	cnt.operclass--;
 }
@@ -122,6 +131,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 	operclass_t *operclass = operclass_find(classname);
 
 	soper = mu ? soper_find(mu) : soper_find_named(name);
+
 	if (soper != NULL)
 	{
 		if (flags & SOPER_CONF && !(soper->flags & SOPER_CONF))
@@ -140,6 +150,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 			return NULL;
 		}
 	}
+
 	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? entity(mu)->name : name, operclass ? operclass->name : "<null>");
 
 	soper = mowgli_heap_alloc(soper_heap);
@@ -158,6 +169,7 @@ soper_t *soper_add(const char *name, const char *classname, int flags, const cha
 		soper->name = sstrdup(name);
 		soper->myuser = NULL;
 	}
+
 	soper->operclass = operclass;
 	soper->classname = sstrdup(classname);
 	soper->flags = flags;
