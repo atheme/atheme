@@ -1341,7 +1341,8 @@ static void chanacs_delete(chanacs_t *ca)
 
 	metadata_delete_all(ca);
 
-	free(ca->host);
+	if (ca->host != NULL)
+		free(ca->host);
 
 	mowgli_heap_free(chanacs_heap, ca);
 
