@@ -1329,10 +1329,7 @@ static void chanacs_delete(chanacs_t *ca)
 
 	if (ca->entity != NULL)
 	{
-		n = mowgli_node_find(ca, &ca->entity->chanacs);
-		mowgli_node_delete(n, &ca->entity->chanacs);
-		mowgli_node_free(n);
-
+		mowgli_node_delete(&ca->unode, &ca->entity->chanacs);
 		object_unref(ca->entity);
 	}
 
@@ -1369,7 +1366,6 @@ static void chanacs_delete(chanacs_t *ca)
 chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, time_t ts, myentity_t *setter)
 {
 	chanacs_t *ca;
-	mowgli_node_t *n;
 
 	return_val_if_fail(mychan != NULL && mt != NULL, NULL);
 
@@ -1382,8 +1378,6 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, mt->name);
 
-	n = mowgli_node_create();
-
 	ca = mowgli_heap_alloc(chanacs_heap);
 
 	object_init(object(ca), mt->name, (destructor_t) chanacs_delete);
@@ -1395,7 +1389,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->setter = setter != NULL ? strshare_get(setter->name) : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
-	mowgli_node_add(ca, n, &mt->chanacs);
+	mowgli_node_add(ca, &ca->unode, &mt->chanacs);
 
 	cnt.chanacs++;
 

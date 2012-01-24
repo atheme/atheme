@@ -199,7 +199,9 @@ struct chanacs_
 	char     *host;
 	unsigned int  level;
 	time_t    tmodified;
+
 	mowgli_node_t    cnode;
+	mowgli_node_t    unode;
 
 	char *setter;
 };
