@@ -242,7 +242,8 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 
 		if (targetlen < NICKLEN)
 		{
-			mowgli_strlcpy(targetbuf, buf, targetlen);
+			mowgli_strlcpy(targetbuf, buf, sizeof targetbuf);
+			targetbuf[targetlen] = '\0';
 
 			svs = service_find_nick(targetbuf);
 			targetlen++;
