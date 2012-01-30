@@ -7,7 +7,7 @@
 
 MODULE = proxyscan
 
-SRCS = main.c
+SRCS = main.c dnsbl.c
 
 include ../../extra.mk
 include ../../buildsys.mk
