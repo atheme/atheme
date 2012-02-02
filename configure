@@ -9457,12 +9457,12 @@ if test -n "$MOWGLI_CFLAGS"; then
     pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 0.9.90\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 0.9.90") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0-alpha1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0-alpha1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 0.9.90" 2>/dev/null`
+  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0-alpha1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -9473,12 +9473,12 @@ if test -n "$MOWGLI_LIBS"; then
     pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 0.9.90\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 0.9.90") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0-alpha1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0-alpha1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 0.9.90" 2>/dev/null`
+  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0-alpha1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -9496,9 +9496,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 0.9.90" 2>&1`
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 2.0.0-alpha1" 2>&1`
         else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 0.9.90" 2>&1`
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 2.0.0-alpha1" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$MOWGLI_PKG_ERRORS" >&5
