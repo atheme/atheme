@@ -3,6 +3,8 @@ Atheme Services 7.0 Release Notes
 All bugfixes from the 6.0 branch of Atheme are also in 7.0.
 
 ircd protocol
+- bahamut: add experimental support for bahamut-2.0 NICKIPSTR 
+  capability.
 - charybdis: Add support for locking of modes provided by
   extensions modules.
 - unreal: Add support for changets.
@@ -10,6 +12,8 @@ ircd protocol
 - ithildin, bircd, plexus and ptlink protocol modules removed.
 - inspircd: Users are now warned when they attempt to link on a client
   port instead of a server port.
+- unreal: Add SASL support.
+- unreal: Implement full support for mlocking +f.
 chanserv
 - sync: New module based on cs_sync from contrib. Adds autosync on
   ACL change (and the ability to turn it off).
@@ -107,6 +111,8 @@ operserv
 - the RWATCH database is now serialized as opensex entities.
 - specs: add support for groupserv-related permissions and clarify meanings of
   the various 'auspex' privileges. (SRV-125)
+proxyscan
+- New service. Currently implements only a DNSBL scanning module.
 rpgserv
 - New service. For finding and joining RP games on an IRC network.
 scripting
@@ -157,11 +163,13 @@ other
   If specified, the user must match the original priv and the rewritten priv.
 - allow Atheme datadir to be specified on the command-line when starting.
 - many improvements to the LDAP authentication module.
+- general::immune_level config option added. This allows customising the operlevel
+  that gets kick immunity privileges.
 - DNS Blacklist scanning module added. This module will scan connecting users
   against a list of DNS blacklists and take action if the users' IP is in one
   of the blacklists. This module is mainly managed through operserv.
-- general::immune_level config option added. This allows customising the operlevel
-  that gets kick immunity privileges.
+- allow SASL authentication for any nick linked to the account, not just the
+  accountname.
 
 Atheme Services 6.0 Release Notes
 =================================
