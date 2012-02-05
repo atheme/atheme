@@ -1922,7 +1922,7 @@ static int expire_myuser_cb(myentity_t *mt, void *unused)
 				entity(mu)->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, MOWGLI_LIST_LENGTH(&mu->nicks),
 				MOWGLI_LIST_LENGTH(&entity(mu)->chanacs));
-		object_unref(mu);
+		object_dispose(mu);
 	}
 
 	return 0;
