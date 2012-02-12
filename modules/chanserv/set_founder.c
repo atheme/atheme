@@ -74,6 +74,11 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfounder);
 		return;
 	}
+	if (!isuser(mt))
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "SET FOUNDER");
+		return;
+	}
 
 	if (!(mc = mychan_find(parv[0])))
 	{
