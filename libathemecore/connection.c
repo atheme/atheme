@@ -60,7 +60,7 @@ static int socket_setnonblocking(int sck)
  * side effects:
  *       whatever happens from the connection_t i/o handlers
  */
-static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_pollable_t *pollable,
+static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
 	mowgli_eventloop_pollable_dir_t dir, void *userdata)
 {
 	connection_t *cptr = userdata;
