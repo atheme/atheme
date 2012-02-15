@@ -137,7 +137,7 @@ static void db_h_li(database_handle_t *db, const char *type)
 	const char *story = db_sread_str(db);
 
 	logoninfo_t *l = smalloc(sizeof(logoninfo_t));
-	l->nick = sstrdup(nick);
+	l->nick = strshare_get(nick);
 	l->subject = sstrdup(subject);
 	l->info_ts = info_ts;
 	l->story = sstrdup(story);
@@ -152,7 +152,7 @@ static void db_h_lio(database_handle_t *db, const char *type)
 	const char *story = db_sread_str(db);
 
 	operlogoninfo_t *o = smalloc(sizeof(operlogoninfo_t));
-	o->nick = sstrdup(nick);
+	o->nick = strshare_get(nick);
 	o->subject = sstrdup(subject);
 	o->info_ts = info_ts;
 	o->story = sstrdup(story);
@@ -319,7 +319,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp == 0)
 	{
 		o = smalloc(sizeof(operlogoninfo_t));
-		o->nick = sstrdup(entity(si->smu)->name);
+		o->nick = strshare_ref(entity(si->smu)->name);
 		o->info_ts = CURRTIME;
 		o->story = sstrdup(story);
 		o->subject = sstrdup(subject);
@@ -331,7 +331,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 	if (imp > 0)
 	{
 		l = smalloc(sizeof(logoninfo_t));
-		l->nick = sstrdup(entity(si->smu)->name);
+		l->nick = strshare_ref(entity(si->smu)->name);
 		l->info_ts = CURRTIME;
 		l->story = sstrdup(story);
 		l->subject = sstrdup(subject);
@@ -390,7 +390,7 @@ static void is_cmd_del(sourceinfo_t *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &logon_info);
 
-			free(l->nick);
+			strshare_unref(l->nick);
 			free(l->subject);
 			free(l->story);
 			free(l);
@@ -440,7 +440,7 @@ static void is_cmd_odel(sourceinfo_t *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &operlogon_info);
 
-			free(o->nick);
+			strshare_unref(o->nick);
 			free(o->subject);
 			free(o->story);
 			free(o);

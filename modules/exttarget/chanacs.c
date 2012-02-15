@@ -33,7 +33,7 @@ static chanacs_t *chanacs_ext_match_user(chanacs_t *ca, user_t *u)
 
 	if (chanacs_user_has_flag(mc, u, CA_AKICK))
 		return NULL;
-	
+
 	if (chanacs_user_has_flag(mc, u, 0))
 		return ca;
 
@@ -68,13 +68,14 @@ static void chanacs_ext_delete(chanacs_exttarget_t *e)
 
 	mowgli_patricia_delete(chanacs_exttarget_tree, e->channel);
 	strshare_unref(e->channel);
-	free(entity(e)->name);
+	strshare_unref(entity(e)->name);
 
 	mowgli_heap_free(chanacs_ext_heap, e);
 }
 
 static myentity_t *chanacs_validate_f(const char *param)
 {
+	char *name;
 	chanacs_exttarget_t *ext;
 	size_t namelen;
 
@@ -94,10 +95,13 @@ static myentity_t *chanacs_validate_f(const char *param)
 	/* name the entity... $chanacs:param */
 #define NAMEPREFIX "$chanacs:"
 	namelen = sizeof NAMEPREFIX + strlen(param);
-	entity(ext)->name = smalloc(namelen);
-	memcpy(entity(ext)->name, NAMEPREFIX, sizeof NAMEPREFIX - 1);
-	memcpy(entity(ext)->name + sizeof NAMEPREFIX - 1, param,
-			namelen - sizeof NAMEPREFIX + 1);
+
+	name = smalloc(namelen);
+	memcpy(name, NAMEPREFIX, sizeof NAMEPREFIX - 1);
+	memcpy(name + sizeof NAMEPREFIX - 1, param, namelen - sizeof NAMEPREFIX + 1);
+
+	entity(ext)->name = strshare_get(name);
+	free(name);
 #undef NAMEPREFIX
 
 	/* hook up the entity's validation table. */

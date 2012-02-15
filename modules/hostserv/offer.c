@@ -131,7 +131,7 @@ static void db_h_ho(database_handle_t *db, const char *type)
 	l->group = mt;
 	l->vhost = sstrdup(buf);
 	l->vhost_ts = vhost_ts;
-	l->creator = sstrdup(creator);
+	l->creator = strshare_get(creator);
 
 	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
 }
@@ -178,7 +178,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;
-	l->creator = sstrdup(entity(si->smu)->name);
+	l->creator = strshare_ref(entity(si->smu)->name);
 
 	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
 
@@ -211,8 +211,8 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &hs_offeredlist);
 
+			strshare_unref(l->creator);
 			free(l->vhost);
-			free(l->creator);
 			free(l);
 
 			command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);

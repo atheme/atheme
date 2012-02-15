@@ -66,13 +66,14 @@ static void channel_ext_delete(channel_exttarget_t *e)
 
 	mowgli_patricia_delete(channel_exttarget_tree, e->channel);
 	strshare_unref(e->channel);
-	free(entity(e)->name);
+	strshare_unref(entity(e)->name);
 
 	mowgli_heap_free(channel_ext_heap, e);
 }
 
 static myentity_t *channel_validate_f(const char *param)
 {
+	char *name;
 	channel_exttarget_t *ext;
 	size_t namelen;
 
@@ -92,10 +93,13 @@ static myentity_t *channel_validate_f(const char *param)
 	/* name the entity... $channel:param */
 #define NAMEPREFIX "$channel:"
 	namelen = sizeof NAMEPREFIX + strlen(param);
-	entity(ext)->name = smalloc(namelen);
-	memcpy(entity(ext)->name, NAMEPREFIX, sizeof NAMEPREFIX - 1);
-	memcpy(entity(ext)->name + sizeof NAMEPREFIX - 1, param,
-			namelen - sizeof NAMEPREFIX + 1);
+
+	name = smalloc(namelen);
+	memcpy(name, NAMEPREFIX, sizeof NAMEPREFIX - 1);
+	memcpy(name + sizeof NAMEPREFIX - 1, param, namelen - sizeof NAMEPREFIX + 1);
+
+	entity(ext)->name = strshare_get(name);
+	free(name);
 #undef NAMEPREFIX
 
 	/* hook up the entity's validation table. */

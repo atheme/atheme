@@ -111,10 +111,10 @@ static void db_h_ar(database_handle_t *db, const char *type)
 	const char *text = db_sread_str(db);
 
 	asreq_t *l = smalloc(sizeof(asreq_t));
-	l->nick = sstrdup(nick);
+	l->nick = strshare_get(nick);
+	l->creator = strshare_get(creator);
 	l->subject = sstrdup(subject);
 	l->announce_ts = announce_ts;
-	l->creator = sstrdup(creator);
 	l->text = sstrdup(text);
 	mowgli_node_add(l, mowgli_node_create(), &as_reqlist);
 }
@@ -134,9 +134,9 @@ static void account_drop_request(myuser_t *mu)
 
 			mowgli_node_delete(n, &as_reqlist);
 
-			free(l->nick);
+			strshare_unref(l->nick);
+			strshare_unref(l->creator);
 			free(l->subject);
-			free(l->creator);
 			free(l->text);
 			free(l);
 
@@ -191,7 +191,7 @@ static void as_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You have been restricted from requesting announcements by network staff."));
 		return;
 	}
-	
+
 	target = entity(si->smu)->name;
 
 	MOWGLI_LIST_FOREACH(n, as_reqlist.head)
@@ -224,10 +224,10 @@ static void as_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	snprintf(buf, BUFSIZE, "%s", text);
 
 	l = smalloc(sizeof(asreq_t));
-	l->nick = sstrdup(target);
+	l->nick = strshare_ref(target);
 	l->subject = sstrdup(subject);
 	l->announce_ts = CURRTIME;;
-	l->creator = sstrdup(entity(si->smu)->name);
+	l->creator = strshare_ref(target);
 	l->text = sstrdup(buf);
 
 	n = mowgli_node_create();
@@ -371,9 +371,9 @@ static void as_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mowgli_node_delete(n, &as_reqlist);
 
-			free(l->nick);
+			strshare_unref(l->nick);
+			strshare_unref(l->creator);
 			free(l->subject);
-			free(l->creator);
 			free(l->text);
 			free(l);
 

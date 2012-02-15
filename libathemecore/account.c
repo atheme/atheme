@@ -125,8 +125,8 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	object_init(object(mu), name, (destructor_t) myuser_delete);
 
 	entity(mu)->type = ENT_USER;
-	entity(mu)->name = sstrdup(name);
-	mu->email = sstrdup(email);
+	entity(mu)->name = strshare_get(name);
+	mu->email = strshare_get(email);
 	if (id)
 		mowgli_strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
 	else
@@ -309,7 +309,7 @@ void myuser_delete(myuser_t *mu)
 	myentity_del(entity(mu));
 
 	free(mu->email);
-	free(entity(mu)->name);
+	strshare_unref(entity(mu)->name);
 
 	mowgli_heap_free(myuser_heap, mu);
 
@@ -346,7 +346,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 	return_if_fail(strlen(name) < NICKLEN);
 
 	mowgli_strlcpy(nb, entity(mu)->name, NICKLEN);
-	newname = sstrdup(name);
+	newname = strshare_get(name);
 
 	if (authservice_loaded)
 	{
@@ -357,8 +357,10 @@ void myuser_rename(myuser_t *mu, const char *name)
 		}
 	}
 	myentity_del(entity(mu));
-	free(entity(mu)->name);
+
+	strshare_unref(entity(mu)->name);
 	entity(mu)->name = newname;
+
 	myentity_put(entity(mu));
 	if (authservice_loaded)
 	{
@@ -956,7 +958,7 @@ static void mychan_delete(mychan_t *mc)
 
 	mowgli_patricia_delete(mclist, mc->name);
 
-	free(mc->name);
+	strshare_unref(mc->name);
 
 	mowgli_heap_free(mychan_heap, mc);
 
@@ -976,7 +978,7 @@ mychan_t *mychan_add(char *name)
 	mc = mowgli_heap_alloc(mychan_heap);
 
 	object_init(object(mc), name, (destructor_t) mychan_delete);
-	mc->name = sstrdup(name);
+	mc->name = strshare_get(name);
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 
@@ -1386,7 +1388,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? strshare_get(setter->name) : NULL;
+	ca->setter = setter != NULL ? strshare_ref(setter->name) : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, &ca->unode, &mt->chanacs);
@@ -1436,7 +1438,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? strshare_get(setter->name) : NULL;
+	ca->setter = setter != NULL ? strshare_ref(setter->name) : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
