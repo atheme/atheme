@@ -159,6 +159,7 @@ E void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
 /* strshare.c */
 void strshare_init(void);
 char *strshare_get(const char *str);
+char *strshare_ref(char *str);
 void strshare_unref(char *str);
 
 /* sharedheap.c */

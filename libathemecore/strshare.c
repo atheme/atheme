@@ -55,6 +55,19 @@ char *strshare_get(const char *str)
 	return (char *)(ss + 1);
 }
 
+char *strshare_ref(char *str)
+{
+	strshare_t *ss;
+
+	if (str == NULL)
+		return;
+
+	ss = (strshare_t *)str - 1;
+	ss->refcount++;
+
+	return str;
+}
+
 void strshare_unref(char *str)
 {
 	strshare_t *ss;
