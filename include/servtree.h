@@ -30,6 +30,8 @@ struct service_ {
 	bool chanmsg;
 
 	mowgli_list_t conf_table;
+
+	bool botonly;
 };
 
 E mowgli_patricia_t *services_name;

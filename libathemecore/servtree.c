@@ -387,6 +387,7 @@ service_t *service_add_static(const char *name, const char *user, const char *ho
 	sptr->user = sstrndup(user, 10);
 	sptr->host = sstrdup(host);
 	sptr->real = sstrdup(real);
+	sptr->botonly = true;
 
 	servtree_update(NULL);
 
