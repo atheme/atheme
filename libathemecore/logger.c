@@ -81,11 +81,9 @@ static void logfile_join_service(service_t *svs)
 
 	return_if_fail(svs != NULL && svs->me != NULL);
 
-#ifdef NOTYET
 	/* no botserv bots */
-	if (svs->conf_table == NULL)
+	if (svs->botonly)
 		return;
-#endif
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
