@@ -14,18 +14,6 @@
    */
 #undef HAVE_DCGETTEXT
 
-/* Define to 1 if you have the <dlfcn.h> header file. */
-#undef HAVE_DLFCN_H
-
-/* Define to 1 if you have the `dlfunc' function. */
-#undef HAVE_DLFUNC
-
-/* Define to 1 if you have the `dlinfo' function. */
-#undef HAVE_DLINFO
-
-/* Define if the dlopen function is available. */
-#undef HAVE_DLOPEN
-
 /* Define to 1 if you have the `execve' function. */
 #undef HAVE_EXECVE
 
@@ -142,10 +130,6 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* String containing extra underscores prepended to symbols loaded from
-   modules. */
-#undef SYMBOL_PREFIX
 
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
