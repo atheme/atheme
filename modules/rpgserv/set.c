@@ -158,9 +158,7 @@ static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	char *setting;
 	char *value = NULL;
 	mychan_t *mc;
-	chanacs_t *ca;
 	int i;
-	char nbuf[64];
 
 	if (parc < 2)
 	{

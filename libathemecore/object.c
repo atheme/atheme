@@ -261,8 +261,6 @@ void metadata_delete(void *target, const char *name)
 metadata_t *metadata_find(void *target, const char *name)
 {
 	object_t *obj;
-	mowgli_node_t *n;
-	metadata_t *md;
 
 	return_val_if_fail(target != NULL, NULL);
 	return_val_if_fail(name != NULL, NULL);
@@ -278,7 +276,6 @@ metadata_t *metadata_find(void *target, const char *name)
 void metadata_delete_all(void *target)
 {
 	object_t *obj;
-	mowgli_node_t *n, *tn;
 	metadata_t *md;
 	mowgli_patricia_iteration_state_t state;
 

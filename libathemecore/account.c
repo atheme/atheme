@@ -1318,8 +1318,6 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 /* private destructor for chanacs_t */
 static void chanacs_delete(chanacs_t *ca)
 {
-	mowgli_node_t *n;
-
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
 

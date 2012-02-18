@@ -86,7 +86,7 @@ void handle_stats(user_t *u, char req)
 	mowgli_node_t *n;
 	uplink_t *uplink;
 	soper_t *soper;
-	int i, j;
+	int j;
 	char fl[10];
 
 	if (floodcheck(u, NULL))

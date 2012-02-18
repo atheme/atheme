@@ -53,7 +53,7 @@ opensex_db_save(database_handle_t *db)
 	qline_t *q;
 	svsignore_t *svsignore;
 	soper_t *soper;
-	mowgli_node_t *n, *tn, *tn2;
+	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 

@@ -21,7 +21,6 @@ static void rs_cmd_search(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_patricia_iteration_state_t state;
 	mychan_t *mc;
 	unsigned int listed = 0;
-	char *desc;
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
