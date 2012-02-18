@@ -637,7 +637,6 @@ void connection_setselect_write(connection_t *cptr,
 {
 	cptr->write_handler = write_handler;
 	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
-	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_ERROR, cptr->write_handler != NULL ? connection_trampoline : NULL);
 }
 
 /*
