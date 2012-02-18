@@ -824,7 +824,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt;
+	myentity_t *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;
@@ -905,7 +905,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (entity(si->smu) != mt)
+		if (mt != entity(si->smu))
 			restrictflags = allow_flags(mc, restrictflags);
 	}
 
@@ -941,7 +941,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanacs_t *ca;
-	myentity_t *mt;
+	myentity_t *mt = NULL;
 	mychan_t *mc;
 	hook_channel_acl_req_t req;
 	unsigned int oldflags, restrictflags;
@@ -1030,7 +1030,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (entity(si->smu) != mt)
+		if (mt != entity(si->smu))
 			restrictflags = allow_flags(mc, restrictflags);
 	}
 
