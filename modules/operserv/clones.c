@@ -594,6 +594,8 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	long duration;
 
+	clones = atoi(clonesstr);
+
 	if (!ip || !subcmd || !clonesstr)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES SETEXEMPT");
@@ -604,7 +606,6 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(ip, "DEFAULT"))
 	{
-		clones = atoi(clonesstr);
 		if (!strcasecmp(subcmd, "ALLOWED"))
 		{
 			clones_allowed = clones;
@@ -649,7 +650,6 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (!strcasecmp(subcmd, "ALLOWED"))
 				{
-					clones = atoi(clonesstr);
 					if (clones < c->warn)
 					{
 						command_fail(si, fault_badparams, _("Allowed clones limit must be greater than or equal to the warned limit of %d"), c->warn);
@@ -661,7 +661,6 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 				}
 				else if (!strcasecmp(subcmd, "WARN"))
 				{
-					clones = atoi(clonesstr);
 					if (clones == 0)
 					{
 						command_success_nodata(si, _("Clone warning messages will be disabled for host \2%s\2"), ip);
@@ -735,7 +734,7 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(duration));
+			logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(c->expires));
 		}
 
 		command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), ip);
