@@ -78,7 +78,7 @@ static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **k
 
 	do
 	{
-		int i;
+		unsigned int i;
 
 		for (i = 0; i < arraysize; i++)
 		{
@@ -91,7 +91,7 @@ static inline const char *rs_prettyprint_keywords(metadata_t *md, const char **k
 			}
 		}
 	}
-	while (keyword = strtok_r(NULL, " ", &pos));
+	while ((keyword = strtok_r(NULL, " ", &pos)) != NULL);
 
 	return ppbuf;
 }

@@ -42,13 +42,11 @@ static void rs_cmd_search(sourceinfo_t *si, int parc, char *parv[])
 
 		for (i = 0; i < ARRAY_SIZE(mdkeys); i++)
 		{
-			metadata_t *md;
-
 			md = metadata_find(mc, mdkeys[i]);
 			if (md == NULL)
 				continue;
 
-			for (j = 0; j < parc; j++)
+			for (j = 0; j < (unsigned int) parc; j++)
 			{
 				if (strcasestr(md->value, parv[j]) != NULL)
 					goto __matched;
