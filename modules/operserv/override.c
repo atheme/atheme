@@ -159,7 +159,8 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	service_t *svs;
 	service_t *memosvs;
 	command_t *cmd;
-	int newparc, i;
+	int newparc;
+	size_t i;
 	char *newparv[20];
 
 	if (!parv[0] || !parv[1] || !parv[2])
