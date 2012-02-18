@@ -125,7 +125,7 @@ static const char Pad64 = '=';
 	   characters followed by one "=" padding character.
    */
 
-int base64_encode(unsigned char const *src, size_t srclength, char *target, size_t targsize)
+int base64_encode(char const *src, size_t srclength, char *target, size_t targsize)
 {
 	size_t datalength = 0;
 	unsigned char input[3];
@@ -190,7 +190,7 @@ int base64_encode(unsigned char const *src, size_t srclength, char *target, size
    src from base - 64 numbers into three 8 bit bytes in the target area.
    it returns the number of data bytes stored at the target, or -1 on error.
  */
-int base64_decode(char const *src, unsigned char *target, size_t targsize)
+int base64_decode(char const *src, char *target, size_t targsize)
 {
 	int tarindex, state, ch;
 	char *pos;
