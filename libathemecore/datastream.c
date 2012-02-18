@@ -266,7 +266,7 @@ int recvq_get(connection_t *cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq;
-	int l;
+	size_t l;
 	char *p = buf;
 
 	return_val_if_fail(cptr != NULL, 0);
@@ -335,7 +335,7 @@ int recvq_getline(connection_t *cptr, char *buf, size_t len)
 		l = sq->firstfree - sq->firstused;
 		if (l > len)
 			l = len;
-		if (sq == sq2 && l >= newline - sq->buf - sq->firstused + 1)
+		if (sq == sq2 && l >= (size_t) (newline - sq->buf - sq->firstused + 1))
 			cptr->flags &= ~CF_NONEWLINE, l = newline - sq->buf - sq->firstused + 1;
 		memcpy(p, sq->buf + sq->firstused, l);
 
