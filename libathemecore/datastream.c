@@ -34,7 +34,7 @@ struct sendq {
 	char buf[SENDQSIZE];
 };
 
-void sendq_add(connection_t * cptr, char *buf, int len)
+void sendq_add(connection_t * cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n;
 	struct sendq *sq;
@@ -262,7 +262,7 @@ void recvq_put(connection_t *cptr)
 	return;
 }
 
-int recvq_get(connection_t *cptr, char *buf, int len)
+int recvq_get(connection_t *cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq;
@@ -303,7 +303,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 	return p - buf;
 }
 
-int recvq_getline(connection_t *cptr, char *buf, int len)
+int recvq_getline(connection_t *cptr, char *buf, size_t len)
 {
 	mowgli_node_t *n, *tn;
 	struct sendq *sq, *sq2 = NULL;
