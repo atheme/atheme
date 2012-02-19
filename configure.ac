@@ -14,6 +14,9 @@ AC_CONFIG_AUX_DIR(autoconf)
 AC_CONFIG_HEADER(include/sysconf.h)
 AC_PREFIX_DEFAULT(~/atheme)
 
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 AC_GNU_SOURCE
 AC_SYS_LARGEFILE
 
@@ -302,13 +305,6 @@ if test "$balloc" = no; then
 fi
 AC_MSG_RESULT($balloc)
 
-case "$target" in
-*-*-mingw32)
-    CFLAGS="-I/mingw/include -I/mingw/msys/1.0/include $CFLAGS"
-    LIBS="$LIBS -lwsock32 -lws2_32 -L/mingw/msys/1.0/lib -lregex"
-        ;;
-esac
-
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
 	,
@@ -327,6 +323,13 @@ if test "$enable_ssl" = "yes"; then
 		AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
 	fi
 fi
+
+case "$target" in
+*-*-mingw32)
+    CFLAGS="-I/mingw/include -I/mingw/msys/1.0/include $CFLAGS"
+    LIBS="$LIBS -lwsock32 -lws2_32 -L/mingw/msys/1.0/lib -lregex"
+        ;;
+esac
 
 ATHEME_C_GCC_TRY_FLAGS([-std=gnu99], atheme_cv_c_gcc_std_gnu99)
 ATHEME_C_GCC_TRY_FLAGS([-Werror-implicit-function-declaration], atheme_cv_c_gcc_w_error_implicit_function_declaration)
