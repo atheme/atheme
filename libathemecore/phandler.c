@@ -98,10 +98,10 @@ void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 void generic_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
-	char *buf;
+	char buf[BUFSIZE];
 
 	va_start(ap, fmt);
-	if (vasprintf(&buf, fmt, ap) < 0)
+	if (vsnprintf(buf, sizeof buf, fmt, ap) < 0)
 	{
 		va_end(ap);
 		return;
@@ -109,7 +109,6 @@ void generic_msg(const char *from, const char *target, const char *fmt, ...)
 	va_end(ap);
 
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
-	free(buf);
 }
 
 void generic_msg_global_sts(user_t *from, const char *mask, const char *text)
@@ -149,10 +148,10 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
 {
 	va_list va;
-	char *buf;
+	char buf[BUFSIZE];
 
 	va_start(va, fmt);
-	if (vasprintf(&buf, fmt, va) < 0)
+	if (vsnprintf(buf, sizeof buf, fmt, va) < 0)
 	{
 		va_end(va);
 		return;
@@ -160,7 +159,6 @@ void generic_numeric_sts(server_t *from, int numeric, user_t *target, const char
 	va_end(va);
 
 	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
-	free(buf);
 }
 
 void generic_kill_id_sts(user_t *killer, const char *id, const char *reason)
