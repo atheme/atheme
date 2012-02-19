@@ -42,22 +42,6 @@
 
 #include "atheme.h"
 
-#include <sys/cdefs.h>
-
-#include <sys/types.h>
-#include <sys/param.h>
-#include <sys/socket.h>
-
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <arpa/nameser.h>
-
-#include <ctype.h>
-#include <resolv.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 static const char Base64[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 static const char Pad64 = '=';
