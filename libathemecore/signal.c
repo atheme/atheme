@@ -26,7 +26,10 @@
 #include "conf.h"
 #include "internal.h"
 #include <signal.h>
-#include <sys/wait.h>
+
+#ifndef _WIN32
+# include <sys/wait.h>
+#endif
 
 static void childproc_check(void);
 
@@ -237,6 +240,7 @@ void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 
 static void childproc_check(void)
 {
+#ifndef _WIN32
 	pid_t pid;
 	int status;
 	mowgli_node_t *n;
@@ -257,6 +261,7 @@ static void childproc_check(void)
 			}
 		}
 	}
+#endif
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
