@@ -27,6 +27,11 @@
 
 mowgli_list_t connection_list;
 
+#ifdef _WIN32
+# define EINPROGRESS WSAEINPROGRESS
+# define SHUT_RDWR   SD_BOTH
+#endif
+
 static int socket_setnonblocking(mowgli_descriptor_t sck)
 {
 #ifndef _WIN32
