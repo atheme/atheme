@@ -177,7 +177,6 @@ E char *datadir;
 E const char *get_conf_opts(void);
 
 /* version.c */
-E const char *generation;
 E const char *creation;
 E const char *platform;
 E const char *version;

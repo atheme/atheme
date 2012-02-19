@@ -25,7 +25,7 @@ void _moddeinit(module_unload_intent_t intent)
 static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[])
 {
         char buf[BUFSIZE];
-        snprintf(buf, BUFSIZE, "Atheme %s [%s] #%s", version, revision, generation);
+        snprintf(buf, BUFSIZE, "Atheme %s [%s]", version, revision);
         command_success_string(si, buf, "%s", buf);
         return;
 }
