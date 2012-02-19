@@ -27,8 +27,9 @@
 
 mowgli_list_t connection_list;
 
-static int socket_setnonblocking(int sck)
+static int socket_setnonblocking(mowgli_descriptor_t sck)
 {
+#ifndef _WIN32
 	int flags;
 
 	slog(LG_DEBUG, "socket_setnonblocking(): setting file descriptor %d as non-blocking", sck);
@@ -40,6 +41,11 @@ static int socket_setnonblocking(int sck)
 		return -1;
 
 	return 0;
+#else
+	u_long yes = 1;
+
+	ioctlsocket(sck, FIONBIO, &yes);
+#endif
 }
 
 /*
