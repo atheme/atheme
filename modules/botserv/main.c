@@ -81,11 +81,11 @@ static void
 bs_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
-	char *buf;
+	char buf[BUFSIZE];
 	const char *real_source = from;
 
 	va_start(ap, fmt);
-	if (vasprintf(&buf, fmt, ap) < 0)
+	if (vsnprintf(buf, sizeof buf, fmt, ap) < 0)
 	{
 		va_end(ap);
 		return;
@@ -107,7 +107,6 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 	}
 
 	msg_real(real_source, target, "%s", buf);
-	free(buf);
 }
 
 static void (*topic_sts_real)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
