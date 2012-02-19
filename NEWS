@@ -154,6 +154,7 @@ code
 - call shutdown(2) on sockets being closed to help some TCP stacks be more aggressive
   when closing sockets.
 - use mowgli_eventloop_pollable instead of old eventloop code.
+- Windows is now supported.
 other
 - time_format config option added. This allows changing the time format displayed
   in many places throughout Atheme.
