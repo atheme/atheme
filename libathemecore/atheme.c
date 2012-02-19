@@ -29,7 +29,10 @@
 #include "datastream.h"
 #include "authcookie.h"
 #include "libathemecore.h"
-#include <sys/resource.h>
+
+#ifdef HAVE_GETRLIMIT
+# include <sys/resource.h>
+#endif
 
 chansvs_t chansvs;
 nicksvs_t nicksvs;
