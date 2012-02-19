@@ -141,7 +141,7 @@ int atheme_main(int argc, char *argv[])
 #endif
 
 	/* do command-line options */
-	while ((r = mowgli_getopt_long(*argc, *argv, "c:dhrl:np:D:v", long_opts, NULL)) != -1)
+	while ((r = mowgli_getopt_long(argc, argv, "c:dhrl:np:D:v", long_opts, NULL)) != -1)
 	{
 		switch (r)
 		{
