@@ -466,9 +466,9 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR)
 	{
 		if (vhost)
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %s", host, vhost, strerror(ioerrno()));
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %d (%s)", host, vhost, ioerrno(), strerror(ioerrno()));
 		else
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(ioerrno()));
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %d (%s)", host, ioerrno(), strerror(ioerrno()));
 		close(s);
 		return NULL;
 	}
