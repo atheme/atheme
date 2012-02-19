@@ -308,7 +308,7 @@ void myuser_delete(myuser_t *mu)
 	/* entity(mu)->name is the index for this dtree */
 	myentity_del(entity(mu));
 
-	free(mu->email);
+	strshare_unref(mu->email);
 	strshare_unref(entity(mu)->name);
 
 	mowgli_heap_free(myuser_heap, mu);
@@ -396,8 +396,8 @@ void myuser_set_email(myuser_t *mu, const char *newemail)
 	return_if_fail(mu != NULL);
 	return_if_fail(newemail != NULL);
 
-	free(mu->email);
-	mu->email = sstrdup(newemail);
+	strshare_unref(mu->email);
+	mu->email = strshare_get(newemail);
 }
 
 /*
