@@ -24,7 +24,9 @@
 #include "atheme.h"
 #include "linker.h"
 
-#include <dlfcn.h>
+#ifdef HAVE_DLINFO
+# include <dlfcn.h>
+#endif
 
 mowgli_heap_t *module_heap;
 mowgli_list_t modules, modules_inprogress;
