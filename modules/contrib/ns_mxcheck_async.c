@@ -1,4 +1,7 @@
 #include "atheme.h"
+
+#ifndef _WIN32
+
 #include <netinet/in.h>
 #include <arpa/nameser.h>
 #include <resolv.h>
@@ -145,3 +148,5 @@ int count_mx (const char *host)
     
     return l;
 }
+
+#endif

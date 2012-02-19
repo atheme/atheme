@@ -2,6 +2,8 @@
 #include "conf.h"
 #include "datastream.h"
 
+#ifndef _WIN32
+
 DECLARE_MODULE_V1
 (
 	"contrib/on_db_save", false, _modinit, _moddeinit,
@@ -138,3 +140,5 @@ static void on_db_save(void *unused)
 			break;
 	}
 }
+
+#endif
