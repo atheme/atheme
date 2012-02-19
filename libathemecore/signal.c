@@ -101,14 +101,31 @@ signal_usr1_handler(int signum)
 
 void init_signal_handlers(void)
 {
+#ifdef SIGHUP
 	mowgli_signal_install_handler(SIGHUP, signal_hup_handler);
+#endif
+
+#ifdef SIGINT
 	mowgli_signal_install_handler(SIGINT, signal_int_handler);
+#endif
+
+#ifdef SIGTERM
 	mowgli_signal_install_handler(SIGTERM, signal_term_handler);
+#endif
+
+#ifdef SIGPIPE
 	mowgli_signal_install_handler(SIGPIPE, signal_empty_handler);
+#endif
+
+#ifdef SIGCHLD
 	mowgli_signal_install_handler(SIGCHLD, signal_chld_handler);
+#endif
 
 #ifdef SIGUSR1
 	mowgli_signal_install_handler(SIGUSR1, signal_usr1_handler);
+#endif
+
+#ifdef SIGUSR2
 	mowgli_signal_install_handler(SIGUSR2, signal_usr2_handler);
 #endif
 }
