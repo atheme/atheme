@@ -106,6 +106,10 @@ int atheme_main(int argc, char *argv[])
 #ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
 #endif
+	mowgli_getopt_option_t longopts[] = {
+		{ NULL },
+	};
+
 	curr_uplink = NULL;
 
 	/* shutdown mowgli threading support */
@@ -135,9 +139,9 @@ int atheme_main(int argc, char *argv[])
 		setrlimit(RLIMIT_CORE, &rlim);
 	}
 #endif
-	
+
 	/* do command-line options */
-	while ((r = getopt(argc, argv, "c:dhrl:np:D:v")) != -1)
+	while ((r = mowgli_getopt_long(*argc, *argv, "c:dhrl:np:D:v", long_opts, NULL)) != -1)
 	{
 		switch (r)
 		{
