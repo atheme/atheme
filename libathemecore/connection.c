@@ -61,15 +61,15 @@ static int socket_setnonblocking(int sck)
  *       whatever happens from the connection_t i/o handlers
  */
 static void connection_trampoline(mowgli_eventloop_t *eventloop, mowgli_eventloop_io_t *io,
-	mowgli_eventloop_pollable_dir_t dir, void *userdata)
+	mowgli_eventloop_io_dir_t dir, void *userdata)
 {
 	connection_t *cptr = userdata;
 
 	switch (dir) {
-	case MOWGLI_EVENTLOOP_POLL_READ:
+	case MOWGLI_EVENTLOOP_IO_READ:
 		return cptr->read_handler(cptr);
 		break;
-	case MOWGLI_EVENTLOOP_POLL_WRITE:
+	case MOWGLI_EVENTLOOP_IO_WRITE:
 	default:
 		return cptr->write_handler(cptr);
 		break;
@@ -616,7 +616,7 @@ void connection_setselect_read(connection_t *cptr,
 	void (*read_handler)(connection_t *))
 {
 	cptr->read_handler = read_handler;
-	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
+	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_READ, cptr->read_handler != NULL ? connection_trampoline : NULL);
 }
 
 /*
@@ -636,7 +636,7 @@ void connection_setselect_write(connection_t *cptr,
 	void (*write_handler)(connection_t *))
 {
 	cptr->write_handler = write_handler;
-	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_POLL_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
+	mowgli_pollable_setselect(base_eventloop, cptr->pollable, MOWGLI_EVENTLOOP_IO_WRITE, cptr->write_handler != NULL ? connection_trampoline : NULL);
 }
 
 /*
