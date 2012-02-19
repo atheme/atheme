@@ -465,6 +465,7 @@ bool has_ctrl_chars(const char *text)
 	return false;
 }
 
+#ifndef _WIN32
 static void sendemail_waited(pid_t pid, int status, void *data)
 {
 	char *email;
@@ -474,6 +475,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
 		slog(LG_INFO, "sendemail_waited(): email for %s failed", email);
 	free(email);
 }
+#endif
 
 /* send the specified type of email.
  *
@@ -485,6 +487,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  */
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
+#ifndef _WIN32
 	char *email, *date = NULL;
 	char timebuf[256], to[128], from[128], subject[128];
 	FILE *out;
@@ -585,7 +588,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		mowgli_strlcat(subject, "Change Email Confirmation", sizeof subject);
 	else if (type == EMAIL_MEMO)
 		mowgli_strlcat(subject, "New memo", sizeof subject);
-	
+
 	/* now set up the email */
 	if (pipe(pipfds) < 0)
 		return 0;
@@ -656,6 +659,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (rc == 0)
 		slog(LG_ERROR, "sendemail(): mta failure");
 	return rc;
+#else
+# warning implement me :(
+	return 0;
+#endif
 }
 
 /* various access level checkers */
