@@ -128,6 +128,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	/* set connection name */
 	mowgli_strlcpy(cptr->name, name, HOSTLEN);
 
+#ifndef _WIN32
 	if (cptr->fd > -1)
 	{
 		cptr->saddr_size = sizeof(cptr->saddr);
@@ -139,6 +140,7 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 
 		socket_setnonblocking(cptr->fd);
 	}
+#endif
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 
