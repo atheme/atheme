@@ -26,6 +26,12 @@
 
 #define SENDQSIZE (4096 - 40)
 
+#ifdef _WIN32
+# define EWOULDBLOCK	WSAEWOULDBLOCK
+# define EALREADY	WSAEALREADY
+# define ENOBUFS	WSAENOBUFS
+#endif
+
 /* sendq struct */
 struct sendq {
 	mowgli_node_t node;
