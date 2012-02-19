@@ -68,7 +68,8 @@ module_t *module_load(const char *filespec)
 	const char *pathname;
 	hook_module_load_t hdata;
 
-	if (*filespec == '/')
+	/* / or C:\... */
+	if (*filespec == '/' || *(filespec + 1) == ':')
 		pathname = filespec;
 	else
 	{
