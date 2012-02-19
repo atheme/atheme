@@ -79,13 +79,13 @@ static void table_destroy(void *obj)
 table_t *table_new(const char *fmt, ...)
 {
 	va_list vl;
-	char *buf;
+	char buf[BUFSIZE];
 	table_t *out;
 
 	return_val_if_fail(fmt != NULL, NULL);
 
 	va_start(vl, fmt);
-	if (vasprintf(&buf, fmt, vl) < 0)
+	if (vsnprintf(buf, sizeof buf, fmt, vl) < 0)
 	{
 		va_end(vl);
 		return NULL;
@@ -94,7 +94,6 @@ table_t *table_new(const char *fmt, ...)
 
 	out = scalloc(sizeof(table_t), 1);
 	object_init(&out->parent, buf, table_destroy);
-	free(buf);
 
 	return out;
 }
