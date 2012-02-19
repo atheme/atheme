@@ -24,12 +24,12 @@
 #include "atheme.h"
 #include "linker.h"
 
-#include <dlfcn.h>
-
-#ifndef __HPUX__
-# define PLATFORM_SUFFIX ".so"
-#else
+#if defined(__HPUX__)
 # define PLATFORM_SUFFIX ".sl"
+#elif defined(_WIN32)
+# define PLATFORM_SUFFIX ".dll"
+#else
+# define PLATFORM_SUFFIX ".so"
 #endif
 
 /*
@@ -49,7 +49,7 @@ mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 {
 	char *buf = smalloc(strlen(path) + 20);
 	void *ret;
-	
+
 	mowgli_strlcpy(buf, path, strlen(path) + 20);
 
 	if (!strstr(buf, PLATFORM_SUFFIX))
