@@ -73,6 +73,7 @@ module_t *module_load(const char *filespec)
 	else
 	{
 		snprintf(pathbuf, BUFSIZE, "%s/%s", MODDIR "/modules", filespec);
+		slog(LG_DEBUG, "module_load(): translated %s to %s", filespec, pathbuf);
 		pathname = pathbuf;
 	}
 
