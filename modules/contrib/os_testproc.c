@@ -8,6 +8,8 @@
 #include "atheme.h"
 #include "datastream.h"
 
+#ifndef _WIN32
+
 DECLARE_MODULE_V1
 (
 	"contrib/os_testproc", false, _modinit, _moddeinit,
@@ -126,6 +128,8 @@ static void os_cmd_testproc(sourceinfo_t *si, int parc, char *parv[])
 			break;
 	}
 }
+
+#endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
