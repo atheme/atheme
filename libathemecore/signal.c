@@ -107,8 +107,10 @@ void init_signal_handlers(void)
 	mowgli_signal_install_handler(SIGPIPE, signal_empty_handler);
 	mowgli_signal_install_handler(SIGCHLD, signal_chld_handler);
 
+#ifdef SIGUSR1
 	mowgli_signal_install_handler(SIGUSR1, signal_usr1_handler);
 	mowgli_signal_install_handler(SIGUSR2, signal_usr2_handler);
+#endif
 }
 
 void check_signals(void)
