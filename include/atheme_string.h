@@ -11,8 +11,8 @@
 
 E void strip(char *line);
 
-#ifdef _WIN32
-# define strtok_r strtok_s
+#ifndef HAVE_STRTOK_R
+E char *strtok_r(char *s, const char *delim, char **lasts);
 #endif
 
 #endif
