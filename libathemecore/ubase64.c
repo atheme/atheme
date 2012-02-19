@@ -84,8 +84,12 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 	if (len == 6)
 	{
 		ip.s_addr = ntohl(base64touint(b64));
+#ifndef _WIN32
 		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN))
 			ipstring[0] = '\0';
+#else
+		mowgli_strlcpy(ipstring, inetntoa(&ip), HOSTIPLEN);
+#endif
 	}
 	else if (len == 24 || (len < 24 && strchr(b64, '_')))
 	{
