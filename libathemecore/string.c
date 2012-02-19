@@ -39,6 +39,21 @@ void strip(char *line)
         }
 }
 
+#ifndef HAVE_INET_NTOP
+const char *
+inet_ntop(int af, const void *src, char *dst, socklen_t size)
+{
+	switch (af)
+	{
+	case AF_INET:
+		mowgli_strlcpy(dst, inet_ntoa(src), size);
+		break;
+	}
+
+	return dst;
+}
+#endif
+
 #ifndef HAVE_STRTOK_R
 /*
  * Copyright (c) 1988 Regents of the University of California.
