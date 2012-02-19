@@ -88,7 +88,7 @@ void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN])
 		if (!inet_ntop(AF_INET, &ip, ipstring, HOSTIPLEN))
 			ipstring[0] = '\0';
 #else
-		mowgli_strlcpy(ipstring, inet_ntoa(&ip), HOSTIPLEN);
+		mowgli_strlcpy(ipstring, inet_ntoa(ip), HOSTIPLEN);
 #endif
 	}
 	else if (len == 24 || (len < 24 && strchr(b64, '_')))
