@@ -127,7 +127,7 @@ void sendq_flush(connection_t * cptr)
                 if (sq->firstused == sq->firstfree)
                         break;
 
-                if ((l = write(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused)) == -1)
+                if ((l = send(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused, 0)) == -1)
                 {
                         if (errno != EAGAIN)
 			{
@@ -242,7 +242,7 @@ void recvq_put(connection_t *cptr)
 	}
 	errno = 0;
 
-	l = read(cptr->fd, sq->buf + sq->firstfree, l);
+	l = recv(cptr->fd, sq->buf + sq->firstfree, l, 0);
 	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
 		if (l == 0)

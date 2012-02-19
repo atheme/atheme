@@ -88,11 +88,11 @@ signal_usr1_handler(int signum)
 	{
 		if (chansvs.nick != NULL)
 		{
-			n = write(curr_uplink->conn->fd, ":", 1);
-			n = write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
-			n = write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+			n = send(curr_uplink->conn->fd, ":", 1, 0);
+			n = send(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick), 0);
+			n = send(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23, 0);
 		}
-		n = write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
+		n = send(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30, 0);
 	}
 	if (runflags & (RF_LIVE | RF_STARTING))
 		n = write(2, "Out of memory!\n", 15);
