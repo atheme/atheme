@@ -1,4 +1,4 @@
-LIB		= ${LIB_PREFIX}athemecore${LIB_SUFFIX}
+SHARED_LIB		= ${LIB_PREFIX}athemecore${LIB_SUFFIX}
 LIB_MAJOR	= 1
 LIB_MINOR	= 0
 HELP_LINGUAS	= es ru
@@ -61,8 +61,8 @@ BASE_SRCS =				\
 
 SRCS = ${BASE_SRCS} version.c
 
-include ../extra.mk
 include ../buildsys.mk
+include ../extra.mk
 
 CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)

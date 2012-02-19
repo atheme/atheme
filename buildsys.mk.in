@@ -198,7 +198,7 @@ ${SHARED_LIB} ${SHARED_LIB_NOINST}: ${EXT_DEPS} ${LIB_OBJS}
 		done; \
 		cd ..; \
 	done; \
-	if ${LD} -o $@ $$objs ${LIB_OBJS} ${LIB_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
+	if ${LD} -o $@ $$objs ${LIB_LDFLAGS} ${LDFLAGS} ${LIBS}; then \
 		${LINK_OK}; \
 	else \
 		${LINK_FAILED}; \
