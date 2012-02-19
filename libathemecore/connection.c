@@ -24,9 +24,6 @@
 #include "atheme.h"
 #include "internal.h"
 #include "datastream.h"
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 mowgli_list_t connection_list;
 
