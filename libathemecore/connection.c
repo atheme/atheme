@@ -209,7 +209,7 @@ void connection_close(connection_t *cptr)
 		return;
 	}
 
-	errno1 = errno;
+	errno1 = ioerrno();
 #ifdef SO_ERROR
 	if (!getsockopt(cptr->fd, SOL_SOCKET, SO_ERROR, (char *) &errno2, (socklen_t *) &len))
 	{
@@ -441,7 +441,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 
 		if (bind(s, bind_addr->ai_addr, bind_addr->ai_addrlen) < 0)
 		{
-			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(errno));
+			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s: %s", vhost, strerror(ioerrno()));
 			close(s);
 			freeaddrinfo(addr);
 			freeaddrinfo(bind_addr);
@@ -463,12 +463,12 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		break;	
 	}
 
-	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && errno != EINPROGRESS && errno != EINTR)
+	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR)
 	{
 		if (vhost)
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %s", host, vhost, strerror(errno));
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %s", host, vhost, strerror(ioerrno()));
 		else
-			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
+			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(ioerrno()));
 		close(s);
 		return NULL;
 	}
@@ -548,7 +548,7 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	{
 		close(s);
 		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
-			errno);
+			ioerrno());
 		freeaddrinfo(addr);
 		return NULL;
 	}
@@ -561,7 +561,7 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	if (listen(s, 5) < 0)
 	{
 		close(s);
-		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
+		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(ioerrno()));
 		return NULL;
 	}
 

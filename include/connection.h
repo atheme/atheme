@@ -9,6 +9,12 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#ifndef _WIN32
+# define ioerrno()	errno
+#else
+# define ioerrno()	WSAGetLastError()
+#endif
+
 typedef union sockaddr_any_ sockaddr_any_t;
 
 union sockaddr_any_
