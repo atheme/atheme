@@ -106,7 +106,7 @@ int atheme_main(int argc, char *argv[])
 #ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
 #endif
-	mowgli_getopt_option_t longopts[] = {
+	mowgli_getopt_option_t long_opts[] = {
 		{ NULL },
 	};
 
@@ -216,6 +216,7 @@ int atheme_main(int argc, char *argv[])
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 
 	/* check for pid file */
+#ifndef _WIN32
 	if ((pid_file = fopen(pidfilename, "r")))
 	{
 		if (fgets(buf, 32, pid_file))
@@ -231,6 +232,7 @@ int atheme_main(int argc, char *argv[])
 
 		fclose(pid_file);
 	}
+#endif
 
 #if HAVE_UMASK
 	/* file creation mask */
