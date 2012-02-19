@@ -28,6 +28,7 @@
 mowgli_list_t connection_list;
 
 #ifdef _WIN32
+# define EWOULDBLOCK WSAEWOULDBLOCK
 # define EINPROGRESS WSAEINPROGRESS
 # define SHUT_RDWR   SD_BOTH
 #endif
@@ -463,7 +464,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		break;	
 	}
 
-	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR)
+	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR && ioerrno() != EWOULDBLOCK)
 	{
 		if (vhost)
 			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s using vhost %s: %d (%s)", host, vhost, ioerrno(), strerror(ioerrno()));
