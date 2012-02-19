@@ -1,0 +1,116 @@
+Compiling Atheme on Windows
+---------------------------
+
+Since Atheme 7.0.0-alpha13pre2 there has been relatively mature Windows
+support in Atheme.  Unfortunately, as Atheme heavily uses C99/C11
+features, you cannot use Microsoft Visual C to compile Atheme, as it does
+not support anything newer than C89.
+
+The solution is to use MinGW.  MinGW stands for Minimalist GNU for Windows,
+and provides a basic GCC development environment.  GCC is the compiler
+typically used to build Atheme on POSIX-compliant platforms.
+
+To install MinGW, download the mingw-get-inst.exe installer from their website.
+The latest one at time of writing can be found at:
+
+	http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst
+
+Run mingw-get-inst to install MinGW.  You will need the following components:
+
+	* C compiler (GCC)
+	* MSYS base system
+	* MSYS developers toolkit
+
+This will download and install all MinGW components needed to build Atheme.
+
+Once the installation of MinGW is completed, you will have a new Start Menu
+entry for "MinGW Shell."  Provided you have this, the installation was
+successful.
+
+Now download a tarball containing the Atheme sources which is sufficiently
+new enough.  If the tarball has this file, it is sufficiently new enough.
+
+Extract the tarball to a preferred work area.  For this example, the sources
+will be in C:\Users\nenolod\dev-src\atheme.
+
+Start the MinGW shell, and change into the atheme sources directory.
+
+	$ cd /c/Users/nenolod/dev-src/atheme
+
+In order to normalize line-endings so that the configure scripts work correctly,
+you may need to regenerate the configuration files.  You may do so by running the
+following command.
+
+	$ sh autogen.sh
+	*info* running aclocal (-I m4)
+	*info* running autoheader
+	*info* running autoconf
+
+This will rebuild the configuration files so that they are usable by MinGW.
+
+Now, run configure to configure the sources for building:
+
+	$ ./configure --prefix=/c/atheme --disable-nls --enable-contrib
+
+An explanation of the preceeding options:
+
+	--prefix=/c/atheme:
+		This means that you want the Atheme files installed to the
+		C:\atheme directory.  This is a good default, and is what we
+		use for our QA testing purposes.  If you want a different
+		destination, that is fine, just make sure that the first
+		directory in the prefix is a drive letter.
+		
+		For example, to install to D:\IRCStuff\atheme, use the
+		following prefix option:
+
+			--prefix=/d/IRCStuff/atheme
+
+	--disable-nls:
+		This disables internationalization support.  Right now, due
+		to technical problems, internationalization support is broken
+		on Windows.  Patches to correct the matter will be gladly
+		accepted.
+
+	--enable-contrib:
+		Enable support for 'contrib' modules.  These modules add some
+		additional features, but for some reason are not included in
+		the main distribution.
+
+There are some additional options, you might want to give ./configure --help
+a try.
+
+Now to build the sources, run 'make':
+
+	$ make
+	[build output follows]
+
+You will see a lot of lines about compiling specific source files and DLLs,
+which is normal.
+
+To install what you just built to C:\atheme (or wherever you specified they
+should go), run 'make install':
+
+	$ make install
+
+This should provide you with a working Atheme installation, if launched from
+MinGW.  If you want to launch your Atheme installation from the DOS prompt,
+you will need to copy some DLLs.
+
+To do this, run the following commands:
+
+	$ cd c:/atheme/bin
+	$ cp /mingw/bin/libgcc_s_dw2-1.dll .
+	$ cp /mingw/msys/1.0/bin/msys-1.0.dll .
+	$ cp /mingw/msys/1.0/bin/msys-regex-1.dll .
+
+Now you need to configure your services install.  The appropriate file for this
+is in c:\atheme\etc\atheme.conf.  You can find a sample file called
+"atheme.conf.example" that you can copy and use as a starting point.  Save that
+file as atheme.conf when you are done making your changes.
+
+This file doesn't cover setting up link blocks to your IRCd.  Read your IRCd's
+documentation for that.
+
+This will give you a working services install.  Please report any bugs to
+http://jira.atheme.org/.

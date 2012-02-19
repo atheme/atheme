@@ -33,6 +33,7 @@ version is known to work on:
 	FreeBSD 8.0              (i386, amd64)
 	Linux (glibc) 2.6.x, 2.7.x, 2.8.x, 2.10.x, 2.11.x   (i386, amd64)
 	MacOS 10.5               (intel) (*)
+	Windows XP+		 (i386, x64) (*)
 
 Older versions have been tested on:
 	FreeBSD 5.[0,1,2,3,4,5]
@@ -49,6 +50,9 @@ Older versions have been tested on:
 For MacOS 10, install libmowgli (version 0.7.x) and pkg-config separately,
 possibly using a package/ports system. The included libmowgli does not
 work on MacOS 10.
+
+For Windows, please read doc/WINDOWS for compilation and installation
+instructions as well as a list of known caveats.
 
 Other BSD-based systems will probably work. Other SysV-based systems *might*
 work provided they support BSD sockets and POSIX function calls.
