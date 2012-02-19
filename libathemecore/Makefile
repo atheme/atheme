@@ -68,11 +68,14 @@ CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
 LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(LIBINTL)
 
-pre-depend: ../include/hooktypes.h
+pre-depend: ../include/hooktypes.h ../include/serno.h
 
 build: all
 
 ../include/hooktypes.h: mkhooktypes.sh hooktypes.in
 	sh mkhooktypes.sh hooktypes.in >../include/hooktypes.h
+
+../include/serno.h:
+	(cd ..; make include/serno.h)
 
 include .deps

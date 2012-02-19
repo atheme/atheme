@@ -4,7 +4,7 @@
 SUBDIRS=$(LIBMOWGLI) libathemecore modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 
-pre-depend: include/hooktypes.h
+include/serno.h:
 	@revh=; \
 	if [ -d .git ]; then \
 		revh=`git log -1 --pretty=oneline | cut -d' ' -f1 2>/dev/null` || :; \
