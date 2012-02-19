@@ -302,6 +302,12 @@ if test "$balloc" = no; then
 fi
 AC_MSG_RESULT($balloc)
 
+case "$target" in
+*-*-mingw32)
+    LIBS="$LIBS -lwsock32 -lws2_32"
+        ;;
+esac
+
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
 	,

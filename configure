@@ -7516,6 +7516,12 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $balloc" >&5
 $as_echo "$balloc" >&6; }
 
+case "$target" in
+*-*-mingw32)
+    LIBS="$LIBS -lwsock32 -lws2_32"
+        ;;
+esac
+
 # Check whether --enable-ssl was given.
 if test "${enable_ssl+set}" = set; then :
   enableval=$enable_ssl;
