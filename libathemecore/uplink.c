@@ -59,7 +59,8 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 			free(u->name);
 			free(u->host);
 			free(u->pass);
-			free(u->vhost);
+			if (u->vhost)
+				free(u->vhost);
 		}
 		else
 		{
@@ -81,8 +82,6 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 	u->pass = sstrdup(password);
 	if (vhost)
 		u->vhost = sstrdup(vhost);
-	else
-		u->vhost = sstrdup("0.0.0.0");
 	u->port = port;
 
 	return u;
@@ -95,7 +94,8 @@ void uplink_delete(uplink_t * u)
 	free(u->name);
 	free(u->host);
 	free(u->pass);
-	free(u->vhost);
+	if (u->vhost)
+		free(u->vhost);
 
 	mowgli_node_delete(n, &uplinks);
 	mowgli_node_free(n);
