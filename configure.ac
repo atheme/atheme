@@ -304,7 +304,8 @@ AC_MSG_RESULT($balloc)
 
 case "$target" in
 *-*-mingw32)
-    LIBS="$LIBS -lwsock32 -lws2_32"
+    CFLAGS="-I/mingw/include -I/mingw/msys/1.0/include $CFLAGS"
+    LIBS="$LIBS -lwsock32 -lws2_32 -L/mingw/msys/1.0/lib -lregex"
         ;;
 esac
 
