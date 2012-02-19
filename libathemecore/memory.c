@@ -23,13 +23,19 @@
 
 #include "atheme.h"
 
+#ifndef SIGUSR1
+# define RAISE_EXCEPTION abort()
+#else
+# define RAISE_EXCEPTION raise(SIGUSR1)
+#endif
+
 /* does malloc()'s job and dies if malloc() fails */
 void *smalloc(size_t size)
 {
         void *buf = calloc(size, 1);
 
         if (!buf)
-                raise(SIGUSR1);
+                RAISE_EXCEPTION;
         return buf;
 }
 
@@ -37,9 +43,9 @@ void *smalloc(size_t size)
 void *scalloc(size_t elsize, size_t els)
 {
         void *buf = calloc(elsize, els);
-        
+
         if (!buf)
-                raise(SIGUSR1);
+                RAISE_EXCEPTION;
         return buf;
 }
 
@@ -49,7 +55,7 @@ void *srealloc(void *oldptr, size_t newsize)
         void *buf = realloc(oldptr, newsize);
 
         if (!buf)
-                raise(SIGUSR1);
+                RAISE_EXCEPTION;
         return buf;
 }
 
