@@ -78,7 +78,14 @@ static inline size_t sharedheap_prealloc_size(size_t size)
 {
 	size_t page_size, prealloc_size;
 
+#ifndef _WIN32
 	page_size = sysconf(_SC_PAGESIZE);
+#else
+	SYSTEM_INFO si;
+	GetSystemInfo(&si);
+
+	page_size = si.dwPageSize;
+#endif
 
 	prealloc_size = page_size / size;
 
