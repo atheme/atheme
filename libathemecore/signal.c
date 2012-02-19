@@ -101,6 +101,7 @@ signal_usr1_handler(int signum)
 
 void init_signal_handlers(void)
 {
+#ifndef _WIN32
 #ifdef SIGHUP
 	mowgli_signal_install_handler(SIGHUP, signal_hup_handler);
 #endif
@@ -127,6 +128,7 @@ void init_signal_handlers(void)
 
 #ifdef SIGUSR2
 	mowgli_signal_install_handler(SIGUSR2, signal_usr2_handler);
+#endif
 #endif
 }
 
