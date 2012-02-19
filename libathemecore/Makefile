@@ -68,6 +68,8 @@ CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
 LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(LIBINTL)
 
+pre-depend: ../include/hooktypes.h
+
 build: all
 
 ../include/hooktypes.h: mkhooktypes.sh hooktypes.in
