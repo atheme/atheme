@@ -1,4 +1,5 @@
 #include "atheme.h"
+#include "serno.h"
 
 DECLARE_MODULE_V1
 (
@@ -25,7 +26,7 @@ void _moddeinit(module_unload_intent_t intent)
 static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[])
 {
         char buf[BUFSIZE];
-        snprintf(buf, BUFSIZE, "Atheme %s [%s]", version, revision);
+        snprintf(buf, BUFSIZE, "%s [%s]", PACKAGE_STRING, SERNO);
         command_success_string(si, buf, "%s", buf);
         return;
 }
