@@ -118,9 +118,7 @@ you will need to copy some DLLs.
 To do this, run the following commands:
 
 	$ cd c:/atheme/bin
-	$ cp /mingw/bin/libgcc_s_dw2-1.dll .
-	$ cp /mingw/msys/1.0/bin/msys-1.0.dll .
-	$ cp /mingw/msys/1.0/bin/msys-regex-1.dll .
+	$ cp /mingw/bin/libgnurx-0.dll .
 
 Now you need to configure your services install.  The appropriate file for this
 is in c:\atheme\etc\atheme.conf.  You can find a sample file called
