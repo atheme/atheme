@@ -37,6 +37,12 @@ Start the MinGW shell, and change into the atheme sources directory.
 
 	$ cd /c/Users/nenolod/dev-src/atheme
 
+Before we build Atheme, we need to install a regular expressions library.  This is
+required by Atheme for various reasons and is a hard requirement.  The utility
+"mingw-get" can install a suitable regular expressions library (GNU libregex).
+
+	$ mingw-get install msys-libregex
+
 In order to normalize line-endings so that the configure scripts work correctly,
 you may need to regenerate the configuration files.  You may do so by running the
 following command.
