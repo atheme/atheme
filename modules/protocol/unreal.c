@@ -583,6 +583,11 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
 }
 
+static void unreal_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
+{
+	sts(":%s SHUN +*@%s %ld :%s", source->nick, victim->host, duration, reason);
+}
+
 static void unreal_sasl_sts(char *target, char mode, char *data)
 {
 	char servermask[BUFSIZE], *p;
@@ -1248,6 +1253,7 @@ void _modinit(module_t * m)
 	chan_lowerts = &unreal_chan_lowerts;
 	sasl_sts = &unreal_sasl_sts;
 	svslogin_sts = &unreal_svslogin_sts;
+	quarantine_sts = &unreal_quarantine_sts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;
