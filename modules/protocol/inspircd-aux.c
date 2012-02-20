@@ -120,6 +120,7 @@ static bool has_hidechansmod = false;
 static bool has_servprotectmod = false;
 static bool has_svshold = false;
 static bool has_cloakingmod = false;
+static bool has_shun = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
@@ -617,6 +618,12 @@ static void inspircd_sasl_sts(char *target, char mode, char *data)
 		return;
 
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, svs->me->uid, target, mode, data);
+}
+
+static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
+{
+	if (has_shun)
+		sts(":%s ADDLINE SHUN *@%s %s %lu %ld :%s", me.numeric, victim->host, CLIENT_NAME(source), (unsigned long) CURRTIME, duration, reason);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -1338,6 +1345,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		has_hidechansmod = false;
 		has_servprotectmod = false;
 		has_svshold = false;
+		has_shun = false;
 		has_protocol = 0;
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0 && parc > 1)
@@ -1398,6 +1406,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_svshold.so"))
 		{
 			has_svshold = true;
+		}
+		if (strstr(parv[1], "m_shun.so"))
+		{
+			has_shun = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services (m_serverbots) are not compatible with atheme");
@@ -1490,6 +1502,7 @@ void _modinit(module_t * m)
 	holdnick_sts = &inspircd_holdnick_sts;
 	svslogin_sts = &inspircd_svslogin_sts;
 	sasl_sts = &inspircd_sasl_sts;
+	quarantine_sts = &inspircd_quarantine_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
