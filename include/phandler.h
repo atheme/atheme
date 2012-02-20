@@ -223,6 +223,12 @@ E mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_n
 E bool (*is_valid_host)(const char *host);
 /* burst a channel mlock. */
 E void (*mlock_sts)(channel_t *c);
+/* attempt to quarantine a user.
+ * in Unreal-esque terms, this means SHUN.
+ * in Hybrid, this means CAPTURE.
+ * pretty much the same thing either way.
+ */
+E void (*quarantine_sts)(user_t *source, user_t *victim, const char *reason);
 
 E unsigned int generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
@@ -262,6 +268,7 @@ E mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mo
 E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);
 E bool generic_is_valid_host(const char *host);
 E void generic_mlock_sts(channel_t *c);
+E void generic_quarantine_sts(user_t *source, user_t *victim, const char *reason);
 
 E struct cmode_ *mode_list;
 E struct extmode *ignore_mode_list;

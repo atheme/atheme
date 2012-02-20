@@ -62,6 +62,7 @@ mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_no
 mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
+void (*quarantine_sts)(user_t *source, user_t *victim, const char *reason) = generic_quarantine_sts;
 
 unsigned int generic_server_login(void)
 {
@@ -327,6 +328,11 @@ bool generic_is_valid_host(const char *host)
 void generic_mlock_sts(channel_t *c)
 {
 	/* nothing to do here. */
+}
+
+void generic_quarantine_sts(user_t *source, user_t *victim, const char *reason)
+{
+	/* nothing to do here */
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
