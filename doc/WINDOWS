@@ -33,15 +33,27 @@ new enough.  If the tarball has this file, it is sufficiently new enough.
 Extract the tarball to a preferred work area.  For this example, the sources
 will be in C:\Users\nenolod\dev-src\atheme.
 
-Start the MinGW shell, and change into the atheme sources directory.
+Start the MinGW shell, and change into a temporary directory.
 
-	$ cd /c/Users/nenolod/dev-src/atheme
+	$ cd /tmp
 
 Before we build Atheme, we need to install a regular expressions library.  This is
 required by Atheme for various reasons and is a hard requirement.  The utility
 "mingw-get" can install a suitable regular expressions library (GNU libregex).
 
-	$ mingw-get install msys-libregex
+However, if we do that, we have to depend on MSYS, which is entirely unnecessary.
+There is, however, a non-MSYS build of libregex which is libgnurx-0.dll, and you can
+install it by running the following commands:
+
+	$ mingw-get install msys-wget
+	$ wget http://prdownloads.sourceforge.net/mingw/mingw-libgnurx-2.5.1-bin.tar.gz
+	$ wget http://prdownloads.sourceforge.net/mingw/mingw-libgnurx-2.5.1-dev.tar.gz
+	$ tar --directory /mingw -xzf mingw-libgnurx-2.5.1-bin.tar.gz
+	$ tar --directory /mingw -xzf mingw-libgnurx-2.5.1-dev.tar.gz
+
+Now change into the atheme sources directory:
+
+	$ cd /c/Users/nenolod/dev-src/atheme
 
 In order to normalize line-endings so that the configure scripts work correctly,
 you may need to regenerate the configuration files.  You may do so by running the
