@@ -623,7 +623,7 @@ static void inspircd_sasl_sts(char *target, char mode, char *data)
 static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
 {
 	if (has_shun)
-		sts(":%s ADDLINE SHUN *@%s %s %lu %ld :%s", me.numeric, victim->host, CLIENT_NAME(source), (unsigned long) CURRTIME, duration, reason);
+		sts(":%s ADDLINE SHUN *@%s %s %lu %ld :%s", me.numeric, victim->host, source->nick, (unsigned long) CURRTIME, duration, reason);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
