@@ -327,8 +327,8 @@ fi
 
 case "$target" in
 *-*-mingw32)
-    CFLAGS="-I/mingw/include -I/mingw/msys/1.0/include $CFLAGS"
-    LIBS="$LIBS -lwsock32 -lws2_32 -L/mingw/msys/1.0/lib -lregex"
+    CFLAGS="-I/mingw/include $CFLAGS"
+    LIBS="$LIBS -lwsock32 -lws2_32 -lregex"
         ;;
 esac
 
