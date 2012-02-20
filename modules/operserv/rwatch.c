@@ -33,8 +33,9 @@ mowgli_patricia_t *os_rwatch_cmds;
 
 mowgli_list_t rwatch_list;
 
-#define RWACT_SNOOP 1
-#define RWACT_KLINE 2
+#define RWACT_SNOOP 		1
+#define RWACT_KLINE 		2
+#define RWACT_QUARANTINE	4
 
 typedef struct rwatch_ rwatch_t;
 struct rwatch_
@@ -72,7 +73,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_nickchange");
 	hook_add_user_nickchange(rwatch_nickchange);
 	hook_add_db_write(write_rwatchdb);
-	
+
 	char path[BUFSIZE];
 	snprintf(path, BUFSIZE, "%s/%s", datadir, "rwatch.db");
 	f = fopen(path, "r");
@@ -146,7 +147,7 @@ static void load_rwatchdb(char *path)
 	char *item, rBuf[BUFSIZE * 2];
 	rwatch_t *rw = NULL;
 	char newpath[BUFSIZE];
-	
+
 	snprintf(newpath, BUFSIZE, "%s/%s", datadir, "rwatch.db.old");
 
 	while (fgets(rBuf, BUFSIZE * 2, f))
@@ -194,7 +195,7 @@ static void load_rwatchdb(char *path)
 		slog(LG_ERROR, "load_rwatchdb(): couldn't rename rwatch database.");
 		return;
 	}
-	
+
 	slog(LG_INFO, "The RWATCH database has been converted to the OpenSEX format.");
 	slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
 }
@@ -347,6 +348,15 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 				}
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			}
+			if (rw->actions & RWACT_QUARANTINE)
+			{
+				if (!has_priv(si, PRIV_MASS_AKILL))
+				{
+					command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MASS_AKILL);
+					return;
+				}
+				wallops("\2%s\2 disabled quarantine on regex watch pattern \2%s\2", get_oper_name(si), pattern);
+			}
 			free(rw->regex);
 			free(rw->reason);
 			if (rw->re != NULL)
@@ -395,7 +405,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	if (args == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP] [QUARANTINE] [NOQUARANTINE]"));
 		return;
 	}
 
@@ -403,7 +413,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	if (pattern == NULL)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH SET");
-		command_fail(si, fault_badparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]"));
+		command_fail(si, fault_badparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP] [QUARANTINE] [NOQUARANTINE]"));
 		return;
 	}
 	while (*args == ' ')
@@ -412,7 +422,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	if (*args == '\0')
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
-		command_fail(si, fault_needmoreparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP] [QUARANTINE] [NOQUARANTINE]"));
 		return;
 	}
 
@@ -427,11 +437,15 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 			addflags |= RWACT_SNOOP, removeflags &= ~RWACT_SNOOP, args += 5;
 		else if (!strncasecmp(args, "NOSNOOP", 7))
 			removeflags |= RWACT_SNOOP, addflags &= ~RWACT_SNOOP, args += 7;
+		else if (!strncasecmp(args, "QUARANTINE", 10))
+			addflags |= RWACT_QUARANTINE, removeflags &= ~RWACT_QUARANTINE, args += 10;
+		else if (!strncasecmp(args, "NOQUARANTINE", 12))
+			removeflags |= RWACT_QUARANTINE, addflags &= ~RWACT_QUARANTINE, args += 12;
 
 		if (*args != '\0' && *args != ' ')
 		{
 			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH SET");
-			command_fail(si, fault_badparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]"));
+			command_fail(si, fault_badparams, _("Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP] [QUARANTINE] [NOQUARANTINE]"));
 			return;
 		}
 		while (*args == ' ')
@@ -439,6 +453,12 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if ((addflags | removeflags) & RWACT_KLINE && !has_priv(si, PRIV_MASS_AKILL))
+	{
+		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MASS_AKILL);
+		return;
+	}
+
+	if ((addflags | removeflags) & RWACT_QUARANTINE && !has_priv(si, PRIV_MASS_AKILL))
 	{
 		command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MASS_AKILL);
 		return;
@@ -458,10 +478,17 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 			rw->actions |= addflags;
 			rw->actions &= ~removeflags;
 			command_success_nodata(si, _("Set options \2%s\2 on \2%s\2."), opts, pattern);
+
 			if (addflags & RWACT_KLINE)
 				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			if (removeflags & RWACT_KLINE)
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
+
+			if (addflags & RWACT_QUARANTINE)
+				wallops("\2%s\2 enabled quarantine on regex watch pattern \2%s\2", get_oper_name(si), pattern);
+			if (removeflags & RWACT_QUARANTINE)
+				wallops("\2%s\2 disabled quarantine on regex watch pattern \2%s\2", get_oper_name(si), pattern);
+
 			logcommand(si, CMDLOG_ADMIN, "RWATCH:SET: \2%s\2 \2%s\2", pattern, opts);
 			return;
 		}
@@ -511,6 +538,20 @@ static void rwatch_newuser(hook_user_nick_t *data)
 							u->host, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
 					kline_sts("*", "*", u->host, 86400, rw->reason);
+				}
+			}
+			else if (rw->actions & RWACT_QUARANTINE)
+			{
+				if (is_autokline_exempt(u))
+					slog(LG_INFO, "rwatch_newuser(): not qurantining *@%s (user %s!%s@%s is autokline exempt but matches %s %s)",
+							u->host, u->nick, u->user, u->host,
+							rw->regex, rw->reason);
+				else
+				{
+					slog(LG_VERBOSE, "rwatch_newuser(): quaranting *@%s (user %s!%s@%s matches %s %s)",
+							u->host, u->nick, u->user, u->host,
+							rw->regex, rw->reason);
+					quarantine_sts(service_find("operserv")->me, u, 86400, rw->reason);
 				}
 			}
 		}
@@ -563,6 +604,20 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 							u->host, data->oldnick, u->nick, u->user, u->host,
 							rw->regex, rw->reason);
 					kline_sts("*", "*", u->host, 86400, rw->reason);
+				}
+			}
+			else if (rw->actions & RWACT_QUARANTINE)
+			{
+				if (is_autokline_exempt(u))
+					slog(LG_INFO, "rwatch_newuser(): not qurantining *@%s (user %s!%s@%s is autokline exempt but matches %s %s)",
+							u->host, u->nick, u->user, u->host,
+							rw->regex, rw->reason);
+				else
+				{
+					slog(LG_VERBOSE, "rwatch_newuser(): quaranting *@%s (user %s!%s@%s matches %s %s)",
+							u->host, u->nick, u->user, u->host,
+							rw->regex, rw->reason);
+					quarantine_sts(service_find("operserv")->me, u, 86400, rw->reason);
 				}
 			}
 		}
