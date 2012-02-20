@@ -76,6 +76,10 @@ struct cmode_ hybrid_user_mode_list[] = {
 };
 
 /* *INDENT-ON* */
+void hybrid_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
+{
+	sts(":%s CAPTURE %s", CLIENT_NAME(source), CLIENT_NAME(victim));
+}
 
 static void m_tburst(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -113,6 +117,8 @@ void _modinit(module_t * m)
 	prefix_mode_list = hybrid_prefix_mode_list;
 	user_mode_list = hybrid_user_mode_list;
 	ignore_mode_list_size = ARRAY_SIZE(hybrid_ignore_mode_list);
+
+	quarantine_sts = hybrid_quarantine_sts;
 
 	ircd = &Hybrid;
 
