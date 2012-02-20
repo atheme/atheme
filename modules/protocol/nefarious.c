@@ -189,6 +189,11 @@ static void nefarious_sethost_sts(user_t *source, user_t *target, const char *ho
 		sts("%s M %s +x", me.numeric, target->uid);
 }
 
+static void nefarious_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
+{
+	sts("%s SU * +*@%s %lu :%s", me.numeric, victim->host, CURRTIME + duration, reason);
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -665,6 +670,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &nefarious_on_login;
 	ircd_on_logout = &nefarious_on_logout;
 	sethost_sts = &nefarious_sethost_sts;
+	quarantine_sts = &nefarious_quarantine_sts;
 
 	mode_list = nefarious_mode_list;
 	ignore_mode_list = nefarious_ignore_mode_list;
