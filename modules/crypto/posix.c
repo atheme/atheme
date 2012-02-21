@@ -175,7 +175,7 @@ static const char *openssl_md5crypt(const char *passwd, const char *salt)
 	return out_buf;
 }
 
-static const char openssl_crypt_string(const char *key, const char *salt)
+static const char *openssl_crypt_string(const char *key, const char *salt)
 {
 	return openssl_md5crypt(key, salt + 3);
 }
