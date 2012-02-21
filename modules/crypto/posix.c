@@ -179,7 +179,7 @@ static const char *openssl_crypt_string(const char *key, const char *salt)
 {
 	char real_salt[BUFSIZE];
 
-	mowgli_strlcpy(real_salt, salt + 3, sizeof salt);
+	mowgli_strlcpy(real_salt, salt + 3, sizeof real_salt);
 	real_salt[strlen(real_salt) - 1] = '\0';
 
 	return openssl_md5crypt(key, real_salt);
