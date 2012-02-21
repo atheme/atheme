@@ -228,6 +228,8 @@ void connection_close(connection_t *cptr)
 		cptr->close_handler(cptr);
 
 	/* close the fd */
+	mowgli_pollable_destroy(base_eventloop, cptr->pollable);
+
 	shutdown(cptr->fd, SHUT_RDWR);
 	close(cptr->fd);
 
