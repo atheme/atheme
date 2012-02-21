@@ -204,7 +204,7 @@ void chanfix_gather(void *unused)
 			continue;
 
 		chan = chanfix_channel_get(ch);
-		if (chan != NULL)
+		if (chan == NULL)
 			chan = chanfix_channel_create(ch->name, ch);
 
 		MOWGLI_ITER_FOREACH(n, ch->members.head)
