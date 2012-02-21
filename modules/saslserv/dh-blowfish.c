@@ -13,7 +13,6 @@
 #include <openssl/bn.h>
 #include <openssl/dh.h>
 #include <openssl/blowfish.h>
-#include <arpa/inet.h>
 
 DECLARE_MODULE_V1
 (
