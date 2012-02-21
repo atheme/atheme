@@ -320,7 +320,8 @@ if test "$enable_ssl" = "yes"; then
 		], [
 			AC_CHECK_LIB(eay32, DH_generate_key, [
 				AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
-					SSL_LIBS="-leay32 -lssleay32"
+					# Ugh.
+					SSL_LIBS="-leay32 /mingw/lib/ssleay32.a"
 					AC_SUBST(SSL_LIBS)
 					SSL=yes
 					],,[-])

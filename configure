@@ -8244,7 +8244,8 @@ if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
 #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
-					SSL_LIBS="-leay32 -lssleay32"
+					# Ugh.
+					SSL_LIBS="-leay32 /mingw/lib/ssleay32.a"
 
 					SSL=yes
 
