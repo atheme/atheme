@@ -178,11 +178,16 @@ static const char *openssl_md5crypt(const char *passwd, const char *salt)
 static const char *openssl_crypt_string(const char *key, const char *salt)
 {
 	char real_salt[BUFSIZE];
+	char *ret;
 
 	mowgli_strlcpy(real_salt, salt + 3, sizeof real_salt);
 	real_salt[strlen(real_salt) - 1] = '\0';
 
-	return openssl_md5crypt(key, real_salt);
+	ret = openssl_md5crypt(key, real_salt);
+
+	slog(LG_DEBUG, "key=%s salt=%s real_salt=%s ret=%s", key, salt, real_salt, ret);
+
+	return ret;
 }
 
 static const char *(*crypt_impl_)(const char *key, const char *salt) = &openssl_crypt_string;
