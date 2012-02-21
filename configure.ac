@@ -27,6 +27,8 @@ AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])
 
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+
 dnl GNU gettext
 
 dnl Uncomment this if we choose to provide our own libintl.
