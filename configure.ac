@@ -91,11 +91,7 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([strdup inet_pton inet_ntop gettimeofday umask mmap arc4random getrlimit fork getpid execve strtok_r inet_ntop strcasestr])
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
 AC_CHECK_FUNC(gethostbyname,, AC_CHECK_LIB(nsl, gethostbyname))
-
-POSIX_CRYPTC=""
-AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
-
-AC_SUBST(POSIX_CRYPTC)
+AC_SEARCH_LIBS(crypt, crypt, [AC_DEFINE([HAVE_CRYPT], [], [Define if crypt() is available])])
 
 CRACKLIB_C=""
 CRACKLIB_LIBS=""

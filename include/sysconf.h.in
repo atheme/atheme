@@ -10,6 +10,9 @@
 /* Define to 1 if you have the `arc4random' function. */
 #undef HAVE_ARC4RANDOM
 
+/* Define if crypt() is available */
+#undef HAVE_CRYPT
+
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #undef HAVE_DCGETTEXT

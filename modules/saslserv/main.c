@@ -281,8 +281,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		if(!(p->mechptr = find_mechanism(mech)))
 		{
-			/* Generate a list of supported mechanisms (disabled since charybdis doesn't support this yet). */
-/*			
 			char temp[400], *ptr = temp;
 			int l = 0;
 			mowgli_node_t *n;
@@ -303,7 +301,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			*ptr = '\0';
 
 			sasl_sts(p->uid, 'M', temp);
-			*/
 
 			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);

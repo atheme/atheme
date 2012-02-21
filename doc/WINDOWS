@@ -51,6 +51,19 @@ install it by running the following commands:
 	$ tar --directory /mingw -xzf mingw-libgnurx-2.5.1-bin.tar.gz
 	$ tar --directory /mingw -xzf mingw-libgnurx-2.5.1-dev.tar.gz
 
+If you want to build with OpenSSL support (for SASL mechanisms such as dh-blowfish,
+and eventually, SSL linking support), you will need to install an OpenSSL SDK.  The
+OpenSSL website recommends "Win32 OpenSSL", which is downloadable here:
+
+	http://www.slproweb.com/products/Win32OpenSSL.html
+
+You need to download the latest OpenSSL that is "recommended for software developers."
+Run the installer, and you should have a working SDK, once you copy some things in
+place.
+
+	$ cp /c/OpenSSL-Win32/lib/MinGW/* /mingw/lib
+	$ cp -r /c/OpenSSL-Win32/include/openssl /mingw/include/openssl
+
 Now change into the atheme sources directory:
 
 	$ cd /c/Users/nenolod/dev-src/atheme
@@ -94,6 +107,10 @@ An explanation of the preceeding options:
 		Enable support for 'contrib' modules.  These modules add some
 		additional features, but for some reason are not included in
 		the main distribution.
+
+	--enable-ssl:
+		Enable support for additional SASL mechanisms using OpenSSL,
+		such as DH-BLOWFISH.
 
 There are some additional options, you might want to give ./configure --help
 a try.

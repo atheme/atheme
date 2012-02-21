@@ -636,7 +636,6 @@ LDAP_LIBS
 LDAP_CFLAGS
 CRACKLIB_LIBS
 CRACKLIB_C
-POSIX_CRYPTC
 PROG_IMPLIB_LDFLAGS
 PROG_IMPLIB_NEEDED
 CLEAN_LIB
@@ -7647,8 +7646,6 @@ fi
 
 fi
 
-
-POSIX_CRYPTC=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing crypt" >&5
 $as_echo_n "checking for library containing crypt... " >&6; }
 if ${ac_cv_search_crypt+:} false; then :
@@ -7702,10 +7699,10 @@ $as_echo "$ac_cv_search_crypt" >&6; }
 ac_res=$ac_cv_search_crypt
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  POSIX_CRYPTC="posix.c"
+
+$as_echo "#define HAVE_CRYPT /**/" >>confdefs.h
+
 fi
-
-
 
 
 CRACKLIB_C=""

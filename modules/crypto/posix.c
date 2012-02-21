@@ -15,6 +15,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+#if defined(HAVE_CRYPT)
+
 static const char *posixc_crypt_string(const char *key, const char *salt)
 {
 	const char *result;
@@ -35,16 +37,31 @@ static const char *posixc_crypt_string(const char *key, const char *salt)
 	return result;
 }
 
+static const char *(*crypt_impl_)(const char *key, const char *salt) = &posixc_crypt_string;
+
+#else
+
+#warning could not find a crypt impl, sorry (this is stubbed)
+
+static const char *stub_crypt_string(const char *key, const char *salt)
+{
+	return key;
+}
+
+static const char *(*crypt_impl_)(const char *key, const char *salt) = &stub_crypt_string;
+
+#endif
+
 void _modinit(module_t *m)
 {
-	crypt_string = &posixc_crypt_string;
+	crypt_string = crypt_impl_;
 
 	crypto_module_loaded = true;
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = &generic_crypt_string;
+	crypt_string = crypt_impl_;
 
 	crypto_module_loaded = false;
 }

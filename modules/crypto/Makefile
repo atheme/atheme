@@ -9,7 +9,7 @@
 MODULE = crypto
 
 SRCS =			\
-	$(POSIX_CRYPTC)	\
+	posix.c		\
 	ircservices.c		\
 	rawmd5.c		\
 	rawsha1.c		\

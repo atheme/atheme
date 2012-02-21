@@ -25,7 +25,6 @@ sbindir ?= @sbindir@
 CP ?= @CP@
 SET_MAKE ?= @SET_MAKE@
 PACKAGE_BUGREPORT ?= @PACKAGE_BUGREPORT@
-POSIX_CRYPTC ?= @POSIX_CRYPTC@
 PLUGIN_CFLAGS ?= @PLUGIN_CFLAGS@
 ECHO_C ?= @ECHO_C@
 subdirs ?= @subdirs@
