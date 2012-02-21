@@ -69,7 +69,7 @@ static unsigned const char cov_2char[64] = {
  * 'magic' string was changed -- the laziest application of the NIH principle
  * I've ever encountered.)
  */
-static const char *openssl_crypt_string(const char *passwd, const char *salt)
+static const char *openssl_md5crypt(const char *passwd, const char *salt)
 {
 	const char *magic = "1";
 	static char out_buf[6 + 9 + 24 + 2]; /* "$apr1$..salt..$.......md5hash..........\0" */
@@ -173,6 +173,11 @@ static const char *openssl_crypt_string(const char *passwd, const char *salt)
 	EVP_MD_CTX_cleanup(&md);
 
 	return out_buf;
+}
+
+static const char openssl_crypt_string(const char *key, const char *salt)
+{
+	return openssl_md5crypt(key, salt + 3);
 }
 
 static const char *(*crypt_impl_)(const char *key, const char *salt) = &openssl_crypt_string;
