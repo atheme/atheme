@@ -8195,6 +8195,67 @@ fi
 done
 
 
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DH_generate_key in -leay32" >&5
+$as_echo_n "checking for DH_generate_key in -leay32... " >&6; }
+if ${ac_cv_lib_eay32_DH_generate_key+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-leay32  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char DH_generate_key ();
+int
+main ()
+{
+return DH_generate_key ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_eay32_DH_generate_key=yes
+else
+  ac_cv_lib_eay32_DH_generate_key=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_eay32_DH_generate_key" >&5
+$as_echo "$ac_cv_lib_eay32_DH_generate_key" >&6; }
+if test "x$ac_cv_lib_eay32_DH_generate_key" = xyes; then :
+
+				for ac_header in openssl/ssl.h openssl/err.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+					SSL_LIBS="-leay32 -lssleay32"
+
+					SSL=yes
+
+fi
+
+done
+
+
+fi
+
+
 fi
 
 	if test "$SSL" = "yes"; then

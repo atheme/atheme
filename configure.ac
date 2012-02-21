@@ -317,7 +317,15 @@ if test "$enable_ssl" = "yes"; then
 			AC_SUBST(SSL_LIBS)
 			SSL=yes
 			],,[-])
-		],, -lcrypto)
+		], [
+			AC_CHECK_LIB(eay32, DH_generate_key, [
+				AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
+					SSL_LIBS="-leay32 -lssleay32"
+					AC_SUBST(SSL_LIBS)
+					SSL=yes
+					],,[-])
+			], [], [])
+		], -lcrypto)
 	if test "$SSL" = "yes"; then
 		AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
 	fi
