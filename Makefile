@@ -1,7 +1,7 @@
 -include extra.mk
 -include buildsys.mk
 
-SUBDIRS=$(LIBMOWGLI) libathemecore modules src $(PODIR)
+SUBDIRS=$(LIBMOWGLI) include libathemecore modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 
 include/serno.h:
