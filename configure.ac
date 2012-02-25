@@ -34,7 +34,7 @@ dnl GNU gettext
 dnl Uncomment this if we choose to provide our own libintl.
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.16.1])
-LDFLAGS="${LDFLAGS} ${LIBINTL}"
+LIBS="${LIBS} ${LIBINTL}"
 
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"

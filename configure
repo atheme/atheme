@@ -6019,7 +6019,7 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 
-LDFLAGS="${LDFLAGS} ${LIBINTL}"
+LIBS="${LIBS} ${LIBINTL}"
 
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
