@@ -9,6 +9,9 @@
 #ifndef CHANNELS_H
 #define CHANNELS_H
 
+#define MYCHAN_FROM(chan)		(ENSURE_TYPE((chan), channel_t *) != NULL ? \
+						((chan)->mychan != NULL ? (chan)->mychan : mychan_find((chan)->name)) : NULL)
+
 struct channel_
 {
   char *name;
