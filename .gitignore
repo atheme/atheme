@@ -1,4 +1,5 @@
 *~
+*.pc
 *.bak
 *.rej
 *.orig
@@ -41,6 +42,7 @@ scripts/*.tgz
 scripts/*.tar.bz2
 scripts/*.tar.gz
 src/services/atheme-services
+src/footprint/footprint
 tools/createtestdb
 tools/htmlhelp
 buildsys.mk
