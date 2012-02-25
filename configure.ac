@@ -32,7 +32,6 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
 dnl GNU gettext
 
 dnl Uncomment this if we choose to provide our own libintl.
-AM_PO_SUBDIRS
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.16.1])
 LDFLAGS="${LDFLAGS} ${LIBINTL}"
