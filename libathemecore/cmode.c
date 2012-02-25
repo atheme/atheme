@@ -756,6 +756,12 @@ void modestack_mode_param_real(const char *source, channel_t *channel, int dir, 
 }
 void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value) = modestack_mode_param_real;
 
+/* go ahead and flush now */
+void modestack_flush_now(void)
+{
+	modestack_flush(&modestackdata);
+}
+
 /* Clear all simple modes (+imnpstkl etc) on a channel */
 void clear_simple_modes(channel_t *c)
 {

@@ -144,6 +144,8 @@ E void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, 
 E void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value);
 E void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value);
 
+E void modestack_flush_now(void);
+
 /* channels.c */
 E mowgli_patricia_t *chanlist;
 
