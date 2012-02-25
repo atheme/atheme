@@ -942,7 +942,7 @@ void _modinit(module_t *m)
 
 	hook_add_event("config_ready");
 	hook_add_config_ready(botserv_config_ready);
-	
+
 	hook_add_db_write(botserv_save_database);
 	db_register_type_handler("BOT", db_h_bot);
 	db_register_type_handler("BOT-COUNT", db_h_bot_count);
