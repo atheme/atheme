@@ -516,7 +516,7 @@ static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myu
 
 static void ts6_mlock_sts(channel_t *c)
 {
-	mychan_t *mc = mychan_find(c->name);
+	mychan_t *mc = MYCHAN_FROM(c);
 
 	if (use_mlock == false)
 		return;
@@ -541,7 +541,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (!(c = channel_find(parv[1])))
 		return;
 
-	if (!(mc = mychan_find(c->name)))
+	if (!(mc = MYCHAN_FROM(c)))
 	{
 		/* Unregistered channel. Clear the MLOCK. */
 		sts(":%s MLOCK %lu %s :", ME, (unsigned long)c->ts, c->name);
