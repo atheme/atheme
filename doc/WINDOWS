@@ -81,9 +81,9 @@ This will rebuild the configuration files so that they are usable by MinGW.
 
 Now, run configure to configure the sources for building:
 
-	$ ./configure --prefix=/c/atheme --disable-nls --enable-contrib
+	$ ./configure --prefix=/c/atheme --enable-contrib
 
-An explanation of the preceeding options:
+An explanation of the configuration options:
 
 	--prefix=/c/atheme:
 		This means that you want the Atheme files installed to the
@@ -97,16 +97,14 @@ An explanation of the preceeding options:
 
 			--prefix=/d/IRCStuff/atheme
 
-	--disable-nls:
-		This disables internationalization support.  Right now, due
-		to technical problems, internationalization support is broken
-		on Windows.  Patches to correct the matter will be gladly
-		accepted.
-
 	--enable-contrib:
 		Enable support for 'contrib' modules.  These modules add some
 		additional features, but for some reason are not included in
 		the main distribution.
+
+	--disable-nls:
+		This disables internationalization support.  It should be working
+		properly on Windows now.
 
 	--enable-ssl:
 		Enable support for additional SASL mechanisms using OpenSSL,
