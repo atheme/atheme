@@ -57,7 +57,7 @@ static void klinechan_check_join(hook_channel_joinpart_t *hdata)
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
 
-	if (!(mc = mychan_find(cu->chan->name)))
+	if (!(mc = MYCHAN_FROM(cu->chan)))
 		return;
 
 	if (metadata_find(mc, "private:klinechan:closer"))

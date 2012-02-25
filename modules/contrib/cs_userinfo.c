@@ -145,7 +145,7 @@ static void userinfo_check_join(hook_channel_joinpart_t *hdata)
 	if (!(cu->user->server->flags & SF_EOB))
 		return;
 	mu = cu->user->myuser;
-	mc = mychan_find(cu->chan->name);
+	mc = MYCHAN_FROM(cu->chan);
 	if (mu == NULL || mc == NULL)
 		return;
 	ca = chanacs_find(mc, entity(mu), 0);

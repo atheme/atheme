@@ -50,7 +50,7 @@ on_channel_message(void *p)
 
 	if (data != NULL && data->msg != NULL)
 	{
-		mychan_t *mc = mychan_find(data->c->name);
+		mychan_t *mc = MYCHAN_FROM(data->c);
 		metadata_t *md;
 
 		if (!mc)

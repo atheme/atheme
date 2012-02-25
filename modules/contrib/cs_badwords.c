@@ -150,8 +150,8 @@ static void on_channel_message(hook_cmessage_data_t *data)
 	badword_t *bw;
 	mowgli_node_t *n;
 	mowgli_list_t *l;
-	
-	mychan_t *mc = mychan_find(data->c->name);
+
+	mychan_t *mc = MYCHAN_FROM(data->c);
 
 	if (metadata_find(mc, "blockbadwords") == NULL)
 		return;
