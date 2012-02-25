@@ -250,6 +250,24 @@ static int compare_template_nodes(mowgli_node_t *a, mowgli_node_t *b, void *opaq
 	return count_bits(ta->level) - count_bits(tb->level);
 }
 
+static template_t *find_template(mowgli_list_t *l, const char *key)
+{
+	mowgli_node_t *iter;
+
+	return_val_if_fail(l != NULL, NULL);
+	return_val_if_fail(key != NULL, NULL);
+
+	MOWGLI_ITER_FOREACH(iter, l->head)
+	{
+		template_t *t = iter->data;
+
+		if (!strcasecmp(t->name, key))
+			return t;
+	}
+
+	return NULL;
+}
+
 static int append_global_template(const char *key, void *data, void *privdata)
 {
 	template_t *t;
@@ -264,6 +282,9 @@ static int append_global_template(const char *key, void *data, void *privdata)
 		if (def_t->flags == vopflags && !strcasecmp(key, "HOP"))
 			return 0;
 	}
+
+	if ((t = find_template(ti->l, key)) != NULL)
+		return 0;
 
 	t = smalloc(sizeof(template_t));
 	mowgli_strlcpy(t->name, key, sizeof(t->name));
