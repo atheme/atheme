@@ -122,7 +122,7 @@ bs_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t
 	return_if_fail(setter != NULL);
 	return_if_fail(topic != NULL);
 
-	if (source == chansvs.me->me && (mc = mychan_find(c->name)) != NULL)
+	if (source == chansvs.me->me && (mc = MYCHAN_FROM(c)) != NULL)
 		bot = bs_mychan_find_bot(mc);
 
 	topic_sts_real(c, bot ? bot->me->me : source, setter, ts, prevts, topic);
@@ -140,7 +140,7 @@ bs_modestack_mode_simple(const char *source, channel_t *channel, int dir, int fl
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
-			(mc = mychan_find(channel->name)) != NULL &&
+			(mc = MYCHAN_FROM(channel)) != NULL &&
 			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
@@ -159,7 +159,7 @@ bs_modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigne
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
-			(mc = mychan_find(channel->name)) != NULL &&
+			(mc = MYCHAN_FROM(channel)) != NULL &&
 			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
@@ -178,7 +178,7 @@ bs_modestack_mode_ext(const char *source, channel_t *channel, int dir, unsigned 
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
-			(mc = mychan_find(channel->name)) != NULL &&
+			(mc = MYCHAN_FROM(channel)) != NULL &&
 			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
@@ -197,7 +197,7 @@ bs_modestack_mode_param(const char *source, channel_t *channel, int dir, char ty
 
 	if (source != NULL && chansvs.nick != NULL &&
 			!strcmp(source, chansvs.nick) &&
-			(mc = mychan_find(channel->name)) != NULL &&
+			(mc = MYCHAN_FROM(channel)) != NULL &&
 			(bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
@@ -217,7 +217,7 @@ bs_try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
 	if (source != chansvs.me->me)
 		return try_kick_real(source, chan, target, reason);
 
-	if ((mc = mychan_find(chan->name)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
+	if ((mc = MYCHAN_FROM(chan)) != NULL && (bs = metadata_find(mc, "private:botserv:bot-assigned")) != NULL)
 		bot = user_find_named(bs->value);
 
 	try_kick_real(bot ? bot : source, chan, target, reason);
@@ -811,8 +811,8 @@ static void bs_cmd_botlist(sourceinfo_t *si, int parc, char *parv[])
 static void bs_cmd_assign(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
-	mychan_t *mc = mychan_find(channel);
 	channel_t *c = channel_find(channel);
+	mychan_t *mc = MYCHAN_FROM(c);
 	metadata_t *md;
 	botserv_bot_t *bot;
 
@@ -1055,7 +1055,7 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	chan = cu->chan;
 
 	/* first check if this is a registered channel at all */
-	mc = mychan_find(chan->name);
+	mc = MYCHAN_FROM(chan);
 	if (mc == NULL)
 		return;
 
@@ -1089,7 +1089,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 	if (cu == NULL)
 		return;
 
-	mc = mychan_find(cu->chan->name);
+	mc = MYCHAN_FROM(cu->chan);
 	if (mc == NULL)
 		return;
 
