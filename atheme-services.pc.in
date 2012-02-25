@@ -1,0 +1,16 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datarootdir=@datarootdir@
+data_dir=@datadir@/@PACKAGE_NAME@
+MODDIR=@MODDIR@/modules
+
+version=@PACKAGE_VERSION@
+include_dir=@includedir@/@PACKAGE_NAME@
+lib_dir=@libdir@
+
+Name: atheme-services
+Description: Atheme IRC services (for building modules)
+Version: @PACKAGE_VERSION@
+Libs: -L${lib_dir} -lathemecore
+Cflags: -I${include_dir}
+
