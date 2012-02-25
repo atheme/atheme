@@ -707,7 +707,7 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 static user_t *get_changets_user(mychan_t *mc)
 {
 	metadata_t *md;
-	
+
 	return_val_if_fail(mc != NULL, chansvs.me->me);
 
 	md = metadata_find(mc, "private:botserv:bot-assigned");
@@ -832,6 +832,9 @@ static void cs_newchan(channel_t *c)
 
 	if (!(mc = mychan_find(c->name)))
 		return;
+
+	/* set channel_t.mychan */
+	c->mychan = mc;
 
 	/* schedule a mode lock check when we know the current modes
 	 * -- jilles */

@@ -982,6 +982,9 @@ mychan_t *mychan_add(char *name)
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 
+	if (mc->chan != NULL)
+		mc->chan->mychan = mc;
+
 	mowgli_patricia_add(mclist, mc->name, mc);
 
 	cnt.mychan++;

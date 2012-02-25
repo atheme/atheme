@@ -30,6 +30,8 @@ struct channel_
   mowgli_list_t bans;
 
   unsigned int flags;
+
+  mychan_t *mychan;
 };
 
 /* struct for channel memberships */
