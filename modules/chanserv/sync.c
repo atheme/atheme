@@ -19,6 +19,8 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
                         AC_NONE, 1, cs_cmd_sync, { .path = "cservice/sync" } };
 
+static bool no_vhost_sync = false;
+
 static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
@@ -201,6 +203,29 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 	}
 }
 
+/* this could be a little slow, should probably have an option to disable it */
+static void sync_user_sethost(user_t *u)
+{
+	mowgli_node_t *iter;
+
+	return_if_fail(u != NULL);
+
+	if (no_vhost_sync)
+		return;
+
+	MOWGLI_ITER_FOREACH(iter, u->channels.head)
+	{
+		chanuser_t *cu = iter->data;
+		mychan_t *mc;
+
+		mc = MYCHAN_FROM(cu->chan);
+		if (mc == NULL)
+			continue;
+
+		do_channel_sync(mc, NULL);
+	}
+}
+
 static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 {
 	mychan_t *mc;
@@ -333,16 +358,24 @@ void _modinit(module_t *m)
 
 	command_add(&cs_set_nosync, *cs_set_cmdtree);
 
+	add_bool_conf_item("NO_VHOST_SYNC", &chansvs.me->conf_table, 0, &no_vhost_sync, false);
+
 	hook_add_event("channel_acl_change");
 	hook_add_channel_acl_change(sync_channel_acl_change);
+
+	hook_add_event("user_sethost");
+	hook_add_user_sethost(sync_user_sethost);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_acl_change(sync_channel_acl_change);
+	hook_del_user_sethost(sync_user_sethost);
 
 	service_named_unbind_command("chanserv", &cs_sync);
 	command_delete(&cs_set_nosync, *cs_set_cmdtree);
+
+	del_conf_item("NO_VHOST_SYNC", &chansvs.me->conf_table);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
