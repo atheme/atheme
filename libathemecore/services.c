@@ -38,7 +38,6 @@ int use_limitflags = 0;
 int ban(user_t *sender, channel_t *c, user_t *user)
 {
 	char mask[MAX_BUF];
-	char modemask[MAX_BUF];
 	chanban_t *cb;
 
 	if (!c)
@@ -47,9 +46,6 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 	snprintf(mask, MAX_BUF, "*!*@%s", user->vhost);
 	mask[MAX_BUF - 1] = '\0';
 
-	snprintf(modemask, MAX_BUF, "+b %s", mask);
-	modemask[MAX_BUF - 1] = '\0';
-
 	cb = chanban_find(c, mask, 'b');
 
 	if (cb != NULL)
@@ -57,14 +53,15 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 
 	chanban_add(c, mask, 'b');
 
-	mode_sts(sender->nick, c, modemask);
+	modestack_mode_param(sender->nick, c, MTYPE_ADD, 'b', mask);
+	modestack_flush_now();
+
 	return 1;
 }
 
 /* returns number of modes removed -- jilles */
 int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 {
-	char change[MAX_BUF];
 	int count = 0;
 	mowgli_node_t *n, *tn;
 	chanban_t *cb;
@@ -79,11 +76,13 @@ int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 		tn = n->next;
 		cb = n->data;
 
-		snprintf(change, sizeof change, "-%c %s", cb->type, cb->mask);
-		mode_sts(source->nick, chan, change);
+		modestack_mode_param(source->nick, chan, MTYPE_DEL, cb->type, cb->mask);
 		chanban_delete(cb);
 		count++;
 	}
+
+	modestack_flush_now();
+
 	return count;
 }
 
