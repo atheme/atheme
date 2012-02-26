@@ -113,7 +113,8 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 	if (c != NULL)
 	{
 		if ((mc->flags & MC_GUARD) && !config_options.leave_chans
-				&& c != NULL && !chanuser_find(c, si->su))
+				&& c != NULL &&
+				(si->su == NULL || !chanuser_find(c, si->su)))
 		{
 			/* Always cycle it if the requester is not on channel
 			 * -- jilles */

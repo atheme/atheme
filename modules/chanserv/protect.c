@@ -119,7 +119,7 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
 		change_notify(chansvs.nick, tu, "You have been set as protected on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_DO, "PROTECT: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (!chanuser_find(mc->chan, si->su))
+	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been set as protected on \2%s\2."), tu->nick, mc->name);
 }
 
@@ -192,7 +192,7 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 		change_notify(chansvs.nick, tu, "You have been unset as protected on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_DO, "DEPROTECT: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (!chanuser_find(mc->chan, si->su))
+	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been unset as protected on \2%s\2."), tu->nick, mc->name);
 }
 
