@@ -59,7 +59,7 @@ const char *infotext[] =
   "  w00t, Robin Burchell <viroteck@viroteck.net>",
   "  zparta, Jens Holmqvist <zparta@hispan.se>",
   " ",
-  "Portions of Atheme's code was derived from Shrike, which was mostly developed by",
+  "Portions of Atheme's code were derived from Shrike, which was mostly developed by",
   "the following developers in nick-alphabetical order:",
   "  madragoran, Mike Campbell <madragoran@avendesora.net>",
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
