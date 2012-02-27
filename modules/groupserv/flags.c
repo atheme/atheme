@@ -182,6 +182,12 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				flags |= GA_BAN;
 			break;
+		case 'i':
+			if (dir)
+				flags &= ~GA_INVITE;
+			else
+				flags |= GA_INVITE;
+			break;
 		default:
 			break;
 		}
