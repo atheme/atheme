@@ -37,7 +37,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u = NULL;
 	bool recognized = false;
 	char *name = parv[0];
-	char buf[BUFSIZE], strfbuf[32], lastlogin[32], *p;
+	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], *p;
 	time_t registered;
 	struct tm tm, tm2;
 	metadata_t *md;
@@ -81,7 +81,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			ts = md != NULL ? atoi(md->value) : 0;
 
 			tm = *localtime(&ts);
-			strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+			strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered anymore, but was marked by %s on %s (%s)."), mun->name, setter, strfbuf, reason);
 		}
@@ -116,13 +116,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	registered = mn != NULL ? mn->registered : mu->registered;
 	tm = *localtime(&registered);
-	strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+	strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(registered));
 	/* show account's time if it's different from nick's time */
 	if (mu->registered != registered)
 	{
 		tm = *localtime(&mu->registered);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
@@ -165,7 +165,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	else if (mn != NULL)
 	{
 		tm2 = *localtime(&mn->lastseen);
-		strftime(lastlogin, sizeof(lastlogin) -1, config_options.time_format, &tm2);
+		strftime(lastlogin, sizeof lastlogin, config_options.time_format, &tm2);
 		if (hide_info)
 			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (int)((CURRTIME - mn->lastseen) / 604800));
 		else
@@ -178,7 +178,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (MOWGLI_LIST_LENGTH(&mu->logins) == 0)
 	{
 		tm2 = *localtime(&mu->lastlogin);
-		strftime(lastlogin, sizeof(lastlogin) -1, config_options.time_format, &tm2);
+		strftime(lastlogin, sizeof lastlogin, config_options.time_format, &tm2);
 		if (mn == NULL)
 		{
 			if (hide_info)
@@ -358,7 +358,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
@@ -378,7 +378,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), entity(mu)->name, setter, strfbuf, reason);
 	}
@@ -395,7 +395,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		md = metadata_find(mu, "private:verify:emailchg:timestamp");
 		ts = md != NULL ? atoi(md->value) : 0;
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), entity(mu)->name, newemail, strfbuf);
 	}
