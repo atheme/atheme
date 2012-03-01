@@ -93,7 +93,7 @@ static void klinechan_show_info(hook_channel_req_t *hdata)
 	const char *setter, *reason;
 	time_t ts;
 	struct tm tm;
-	char strfbuf[32];
+	char strfbuf[BUFSIZE];
 
 	if (!has_priv(hdata->si, PRIV_CHAN_AUSPEX))
 		return;
@@ -107,7 +107,7 @@ static void klinechan_show_info(hook_channel_req_t *hdata)
 	ts = md != NULL ? atoi(md->value) : 0;
 
 	tm = *localtime(&ts);
-	strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+	strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 	command_success_nodata(hdata->si, "%s had \2automatic klines\2 enabled on it by %s on %s (%s)", hdata->mc->name, setter, strfbuf, reason);
 }
