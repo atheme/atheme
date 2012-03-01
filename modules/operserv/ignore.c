@@ -201,7 +201,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	unsigned int i = 1;
 	svsignore_t *svsignore;
-	char strfbuf[32];
+	char strfbuf[BUFSIZE];
 	struct tm tm;
 
 	if (MOWGLI_LIST_LENGTH(&svs_ignore_list) == 0)
@@ -218,7 +218,7 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 		svsignore = (svsignore_t *)n->data;
 
 		tm = *localtime(&svsignore->settime);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 		command_success_nodata(si, _("%d: %s by %s on %s (Reason: %s)"), i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
 		i++;
