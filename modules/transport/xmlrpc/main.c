@@ -40,6 +40,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_privset(void *conn, int parc, char *parv[]);
+static int xmlrpcmethod_ison(void *conn, int parc, char *parv[]);
 
 /* Configuration */
 mowgli_list_t conf_xmlrpc_table;
@@ -116,6 +117,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.logout", xmlrpcmethod_logout);
 	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
 	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
+	xmlrpc_register_method("atheme.ison", xmlrpcmethod_ison);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -126,6 +128,7 @@ void _moddeinit(module_unload_intent_t intent)
 	xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.command");
 	xmlrpc_unregister_method("atheme.privset");
+	xmlrpc_unregister_method("atheme.ison");
 
 	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
 	{
@@ -480,6 +483,45 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
 		return 0;
 	}
 	xmlrpc_send_string(mu->soper->operclass->privs);
+
+	return 0;
+}
+
+/*
+ * atheme.ison
+ *
+ * XML inputs:
+ *       nickname
+ *
+ * XML outputs:
+ *       boolean: if nickname is online
+ *       string: if nickname is authenticated, what entity he is authed to, else '*'
+ */
+static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
+{
+	user_t *u;
+	int i;
+	char buf[BUFSIZE], buf2[BUFSIZE];
+
+	for (i = 0; i < parc; i++)
+	{
+		if (strchr(parv[i], '\r') || strchr(parv[i], '\n'))
+		{
+			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
+			return 0;
+		}
+	}
+
+	if (parc < 1)
+	{
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
+		return 0;
+	}
+
+	u = user_find(parv[0]);
+	xmlrpc_boolean(buf, u != NULL);
+	xmlrpc_string(buf2, u->myuser != NULL ? entity(u->myuser)->name : "*");
+	xmlrpc_send(2, buf, buf2);
 
 	return 0;
 }
