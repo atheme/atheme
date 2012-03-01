@@ -641,7 +641,7 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 
 		notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
 			md_failaddr->value, strfbuf);
