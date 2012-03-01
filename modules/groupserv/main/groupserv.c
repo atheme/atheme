@@ -14,6 +14,7 @@ struct gflags ga_flags[] = {
 	{ 'v', GA_VHOST },
 	{ 'i', GA_INVITE },
 	{ 'b', GA_BAN },
+	{ 'i', GA_INVITE },
 	{ 0, 0 }
 };
 
@@ -316,6 +317,12 @@ unsigned int gs_flags_parser(char *flagstring, int allow_minus)
 				flags &= ~GA_BAN;
 			else
 				flags |= GA_BAN;
+			break;
+		case 'i':
+			if (dir)
+				flags &= ~GA_INVITE;
+			else
+				flags |= GA_INVITE;
 			break;
 		default:
 			break;

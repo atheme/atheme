@@ -24,8 +24,9 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
 	groupacs_t *ga;
-	metadata_t *md;
+	metadata_t *md, *md2;
 	unsigned int flags = 0;
+	bool invited = false;
 
 	if (!parv[0])
 	{
@@ -39,8 +40,16 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_alreadyexists, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
+
+	if ((md2 = metadata_find(si->smu, "private:groupinvite")))
+	{
+		if (!strcasecmp(md2->value, parv[0]))
+			invited = true;
+		else
+			invited = false;
+	}
 	
-	if (!(mg->flags & MG_OPEN))
+	if (!(mg->flags & MG_OPEN) && !invited)
 	{
 		command_fail(si, fault_noprivs, _("Group \2%s\2 is not open to anyone joining."), parv[0]);
 		return;
@@ -58,7 +67,7 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
+	if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)) && !invited)
         {
                 command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
                 return;
@@ -70,6 +79,9 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		flags = gs_flags_parser(gs_config->join_flags, 0);
 
 	ga = groupacs_add(mg, si->smu, flags);
+
+	if (invited)
+		metadata_delete(si->smu, "private:groupinvite");
 
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
