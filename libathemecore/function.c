@@ -489,7 +489,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
 #ifndef _WIN32
 	char *email, *date = NULL;
-	char timebuf[256], to[128], from[128], subject[128];
+	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], subject[BUFSIZE];
 	FILE *out;
 	time_t t;
 	struct tm tm;
@@ -567,7 +567,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	/* set up the email headers */
 	time(&t);
 	tm = *localtime(&t);
-	strftime(timebuf, sizeof(timebuf) - 1, "%a, %d %b %Y %H:%M:%S %z", &tm);
+	strftime(timebuf, sizeof timebuf, "%a, %d %b %Y %H:%M:%S %z", &tm);
 
 	date = timebuf;
 

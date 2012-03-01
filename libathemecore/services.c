@@ -754,7 +754,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 {
 	const char *mask;
 	struct tm tm;
-	char numeric[21], strfbuf[32];
+	char numeric[21], strfbuf[BUFSIZE];
 	int count;
 	metadata_t *md_failnum;
 	service_t *svs;
@@ -794,7 +794,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	{
 		time_t ts = CURRTIME;
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", entity(mu)->name, mask, strfbuf);
 	}
 

@@ -186,7 +186,7 @@ logfile_strip_control_codes(const char *buf)
  */
 static void logfile_write(logfile_t *lf, const char *buf)
 {
-	char datetime[64];
+	char datetime[BUFSIZE];
 	time_t t;
 	struct tm tm;
 
@@ -196,7 +196,7 @@ static void logfile_write(logfile_t *lf, const char *buf)
 
 	time(&t);
 	tm = *localtime(&t);
-	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
+	strftime(datetime, sizeof datetime, "[%d/%m/%Y %H:%M:%S]", &tm);
 
 	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, logfile_strip_control_codes(buf));
 	fflush((FILE *) lf->log_file);
@@ -520,7 +520,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	static bool in_slog = false;
 	char buf[BUFSIZE];
 	mowgli_node_t *n;
-	char datetime[64];
+	char datetime[BUFSIZE];
 	time_t t;
 	struct tm tm;
 
@@ -532,7 +532,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 
 	time(&t);
 	tm = *localtime(&t);
-	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
+	strftime(datetime, sizeof datetime, "[%d/%m/%Y %H:%M:%S]", &tm);
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
