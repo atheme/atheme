@@ -46,7 +46,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	botserv_bot_t* bot = NULL;
 	metadata_t *md;
 	int comma = 0, i;
-	char buf[BUFSIZE], strfbuf[32], *end;
+	char buf[BUFSIZE], strfbuf[BUFSIZE], *end;
 	time_t registered;
 	struct tm tm;
 	mowgli_node_t *n;
@@ -76,7 +76,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Real name : %s"), bot->real);
 		registered = bot->registered;
 		tm = *localtime(&registered);
-		strftime(strfbuf, sizeof(strfbuf) - 1, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
 		command_success_nodata(si, _("  Created : %s (%s ago)"), strfbuf, time_ago(registered));
 		if (bot->private)
 			command_success_nodata(si, _("  Options : Private"));
