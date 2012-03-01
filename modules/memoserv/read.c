@@ -39,7 +39,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo, *receipt;
 	mowgli_node_t *n;
 	unsigned int i = 1, memonum = 0, numread = 0;
-	char strfbuf[32];
+	char strfbuf[BUFSIZE];
 	struct tm tm;
 	bool readnew;
 	
@@ -84,7 +84,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))
 		{
 			tm = *localtime(&memo->sent);
-			strftime(strfbuf, sizeof(strfbuf) - 1, 
+			strftime(strfbuf, sizeof strfbuf, 
 				config_options.time_format, &tm);
 			
 			if (!(memo->status & MEMO_READ))

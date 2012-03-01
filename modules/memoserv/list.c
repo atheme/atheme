@@ -36,7 +36,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo;
 	mowgli_node_t *n;
 	unsigned int i = 0;
-	char strfbuf[32];
+	char strfbuf[BUFSIZE];
 	struct tm tm;
 	char line[512];
 	char chan[CHANNELLEN];
@@ -59,7 +59,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		memo = (mymemo_t *)n->data;
 		tm = *localtime(&memo->sent);
 		
-		strftime(strfbuf, sizeof(strfbuf) - 1, 
+		strftime(strfbuf, sizeof strfbuf, 
 			config_options.time_format, &tm);
 		
 		snprintf(line, sizeof line, _("- %d From: %s Sent: %s"),
