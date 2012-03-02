@@ -1819,7 +1819,7 @@ general {
      * Here is an example for ISO 8601 date and time:
      * time_format = "%F %T";
      */
-    time_format = "%b %d %H:%M:%S %Y";
+    #time_format = "%b %d %H:%M:%S %Y";
 
 	/* (*)silent
 	 * If you want to prevent services from sending
