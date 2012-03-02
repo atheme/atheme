@@ -53,6 +53,8 @@
 #define HASH_SERVER		32
 #endif
 
+#define TIME_FORMAT		"%b %d %H:%M:%S %Y"
+
 #define HASH_COMMAND		256
 #define HASH_SMALL		32
 #define HASH_ITRANS		128
