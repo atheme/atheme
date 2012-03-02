@@ -220,7 +220,6 @@ void init_newconf(void)
 	/* general{} block */
 	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, 0, &config_options.helpchan, NULL);
 	add_dupstr_conf_item("HELPURL", &conf_gi_table, 0, &config_options.helpurl, NULL);
-	add_dupstr_conf_item("TIME_FORMAT", &conf_gi_table, 0, &config_options.time_format, "%b %d %H:%M:%S %Y");
 	add_bool_conf_item("VERBOSE_WALLOPS", &conf_gi_table, 0, &config_options.verbose_wallops, false);
 	add_bool_conf_item("ALLOW_TAINT", &conf_gi_table, 0, &config_options.allow_taint, false);
 	add_bool_conf_item("SILENT", &conf_gi_table, 0, &config_options.silent, false);

@@ -70,8 +70,6 @@ struct ConfOption
   char *helpchan;		/* official help channel    */
   char *helpurl;		/* official help URL	    */
 
-  char *time_format;		/* Time format used in strftime() calls */
-
   unsigned int flood_msgs;          /* messages determining flood */
   unsigned int flood_time;          /* time determining flood     */
   unsigned int ratelimit_uses;	    /* uses of a ratelimited command */
