@@ -159,8 +159,6 @@ other
 - ensure buffers passed to strftime() are large enough to fit the entire string.
   strftime() is not really required to behave in any specific way in the event of
   buffer overflow.
-- time_format config option added. This allows changing the time format displayed
-  in many places throughout Atheme.
 - ircd_announceserv: New contrib service. This allows users to request network
   announcements (which sopers must approve before they're sent).
 - an access {} config block was added allowing rewriting of command privs.
