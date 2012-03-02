@@ -361,7 +361,7 @@ static void cs_cmd_badwords(sourceinfo_t *si, int parc, char *parv[])
 			bw = n->data;
 
 			tm = *localtime(&bw->add_ts);
-			strftime(buf, BUFSIZE, config_options.time_format, &tm);
+			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 			command_success_nodata(si, "Word: \2%s\2 Action: \2%s\2 (%s - %s)",
 				bw->badword, bw->action, bw->creator, buf);
 		}

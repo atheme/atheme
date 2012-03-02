@@ -475,7 +475,7 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information on \2%s\2:"), chan->name);
 
 	tm = *localtime(&chan->ts);
-	strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
 	command_success_nodata(si, _("Creation time: %s"), strfbuf);
 

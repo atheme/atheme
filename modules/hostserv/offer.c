@@ -307,7 +307,7 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 
 		tm = *localtime(&l->vhost_ts);
 
-		strftime(buf, BUFSIZE, config_options.time_format, &tm);
+		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 
 		if(l->group != NULL)
 			command_success_nodata(si, "vhost:\2%s\2, group:\2%s\2 creator:\2%s\2 (%s)",

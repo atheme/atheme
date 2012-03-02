@@ -293,7 +293,7 @@ static void helpserv_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		x++;
 
 		tm = *localtime(&l->ticket_ts);
-		strftime(buf, BUFSIZE, config_options.time_format, &tm);
+		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 		command_success_nodata(si, "#%d Nick:\2%s\2, topic:\2%s\2 (%s - %s)",
 			x, l->nick, l->topic, l->creator, buf);
 	}

@@ -230,7 +230,7 @@ static void os_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 			de = n->data;
 
 			tm = *localtime(&de->exempt_ts);
-			strftime(buf, BUFSIZE, config_options.time_format, &tm);
+			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 			command_success_nodata(si, "IP: \2%s\2 Reason: \2%s\2 (%s - %s)",
 					de->ip, de->reason, de->creator, buf);
 		}

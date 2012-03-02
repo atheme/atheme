@@ -232,7 +232,7 @@ static void os_cmd_joinmon(sourceinfo_t *si, int parc, char *parv[])
 			l = n->data;
 
 			tm = *localtime(&l->mon_ts);
-			strftime(buf, BUFSIZE, config_options.time_format, &tm);
+			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 			command_success_nodata(si, "Pattern: \2%s\2, Reason: \2%s\2 (%s - %s)",
 				l->user, l->reason, l->creator, buf);
 		}

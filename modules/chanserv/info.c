@@ -73,7 +73,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		!has_priv(si, PRIV_CHAN_AUSPEX);
 
 	tm = *localtime(&mc->registered);
-	strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mc->name);
 
@@ -99,7 +99,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			tm = *localtime(&mc->used);
-			strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 			command_success_nodata(si, _("Last used  : %s (%s ago)"), strfbuf, time_ago(mc->used));
 		}
 	}
@@ -250,7 +250,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}
@@ -271,7 +271,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
 		command_success_nodata(si, _("%s was \2CLOSED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}

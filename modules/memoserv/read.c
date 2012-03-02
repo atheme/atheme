@@ -85,7 +85,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		{
 			tm = *localtime(&memo->sent);
 			strftime(strfbuf, sizeof strfbuf, 
-				config_options.time_format, &tm);
+				TIME_FORMAT, &tm);
 			
 			if (!(memo->status & MEMO_READ))
 			{

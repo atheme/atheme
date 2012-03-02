@@ -41,7 +41,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	tm = *localtime(&mg->regtime);
-	strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+	strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
 	command_success_nodata(si, _("Information for \2%s\2:"), parv[0]);
 	command_success_nodata(si, _("Registered  : %s (%s ago)"), strfbuf, time_ago(mg->regtime));

@@ -342,7 +342,7 @@ static void as_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 
 		tm = *localtime(&l->announce_ts);
-		strftime(buf, BUFSIZE, config_options.time_format, &tm);
+		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 		subject2 = sstrdup(l->subject);
 		replace(subject2, BUFSIZE, "_", " ");
 		/* This needs to be two lines for cutoff purposes */

@@ -76,7 +76,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Real name : %s"), bot->real);
 		registered = bot->registered;
 		tm = *localtime(&registered);
-		strftime(strfbuf, sizeof strfbuf, config_options.time_format, &tm);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 		command_success_nodata(si, _("  Created : %s (%s ago)"), strfbuf, time_ago(registered));
 		if (bot->private)
 			command_success_nodata(si, _("  Options : Private"));

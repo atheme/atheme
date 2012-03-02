@@ -496,7 +496,7 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 		l = n->data;
 
 		tm = *localtime(&l->vhost_ts);
-		strftime(buf, BUFSIZE, config_options.time_format, &tm);
+		strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
 		command_success_nodata(si, "Nick:\2%s\2, vhost:\2%s\2 (%s - %s)",
 			l->nick, l->vhost, l->creator, buf);
 	}
