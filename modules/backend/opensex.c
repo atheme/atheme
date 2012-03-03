@@ -742,14 +742,18 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 
 	if (mc == NULL)
 	{
-		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent channel %s", db->line, chan);
-		return;
+		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent channel %s - exiting to avoid data loss", db->line, chan);
+		slog(LG_INFO, "db-h-ca: line %d: if this depends on a specific module or feature; please make sure", db->line);
+		slog(LG_INFO, "db-h-ca: line %d: that feature is enabled.", db->line);
+		exit(EXIT_FAILURE);
 	}
 
 	if (mt == NULL && !validhostmask(target))
 	{
-		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent target %s", db->line, target);
-		return;
+		slog(LG_INFO, "db-h-ca: line %d: chanacs for nonexistent target %s - exiting to avoid data loss", db->line, target);
+		slog(LG_INFO, "db-h-ca: line %d: if this depends on a specific module or feature; please make sure", db->line);
+		slog(LG_INFO, "db-h-ca: line %d: that feature is enabled.", db->line);
+		exit(EXIT_FAILURE);
 	}
 
 	if (mt == NULL && validhostmask(target))
