@@ -253,9 +253,22 @@ static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 void _modinit(module_t *m)
 {
 	csreq_list = mowgli_patricia_create(strcasecanon);
+
+	service_named_bind_command("chanserv", &cs_activate);
+	service_named_bind_command("chanserv", &cs_reject);
+	service_named_bind_command("chanserv", &cs_waiting);
+
+	hook_add_event("channel_can_register");
+	hook_add_channel_can_register(can_register);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	mowgli_patricia_destroy(csreq_list, NULL, NULL);
+
+	service_named_unbind_command("chanserv", &cs_activate);
+	service_named_unbind_command("chanserv", &cs_reject);
+	service_named_unbind_command("chanserv", &cs_waiting);
+
+	hook_del_channel_can_register(can_register);
 }
