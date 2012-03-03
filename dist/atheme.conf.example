@@ -269,6 +269,7 @@ loadmodule "modules/nickserv/vhost";
  * KICK/KICKBAN commands			modules/chanserv/kick
  * LIST command					modules/chanserv/list
  * MARK command					modules/chanserv/mark
+ * Moderated channel registrations              modules/chanserv/moderate
  * OP/DEOP commands				modules/chanserv/op
  * OWNER/DEOWNER commands                       modules/chanserv/owner
  * PROTECT/DEPROTECT commands                   modules/chanserv/protect
@@ -330,6 +331,7 @@ loadmodule "modules/chanserv/invite";
 loadmodule "modules/chanserv/kick";
 loadmodule "modules/chanserv/list";
 loadmodule "modules/chanserv/mark";
+#loadmodule "modules/chanserv/moderate";
 loadmodule "modules/chanserv/op";
 #loadmodule "modules/chanserv/owner";
 #loadmodule "modules/chanserv/protect";

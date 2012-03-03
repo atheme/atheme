@@ -33,6 +33,7 @@ SRCS =			\
 	kick.c	\
 	list.c	\
 	mark.c	\
+	moderate.c \
 	op.c		\
 	owner.c	\
 	protect.c	\
