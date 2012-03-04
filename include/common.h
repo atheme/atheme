@@ -10,6 +10,22 @@
 #define COMMON_H
 
 /* D E F I N E S */
+
+/*
+ * XXX: this is very nieve.
+ * We assume that %zu works if we're not on Windows; we know this is a lie.
+ * Oh well...
+ */
+#ifndef _WIN32
+# define SIZE_T_FORMAT	"%zu"
+#else
+# ifndef _WIN64
+#  define SIZE_T_FORMAT "%lu"
+# else
+#  define SIZE_T_FORMAT "%llu"
+# endif
+#endif
+
 #define BUFSIZE			1024		/* maximum size of a buffer */
 #define MAXMODES		4
 #define MAX_IRC_OUTPUT_LINES	2000
