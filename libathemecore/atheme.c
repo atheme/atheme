@@ -34,6 +34,8 @@
 # include <sys/resource.h>
 #endif
 
+struct ConfOption config_options;
+
 chansvs_t chansvs;
 nicksvs_t nicksvs;
 

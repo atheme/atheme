@@ -106,7 +106,9 @@ struct ConfOption
   bool allow_taint;		/* allow tainted operation */
 
   unsigned int immune_level;	/* what flag is required for kick immunity */
-} config_options;
+};
+
+E struct ConfOption config_options;
 
 /* keep track of how many of what we have */
 struct cnt
