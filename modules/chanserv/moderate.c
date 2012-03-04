@@ -183,6 +183,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 
 		baked_si.su = u;
 		baked_si.smu = mu;
+		baked_si.service = si->service;
 
 	        hdata.si = &baked_si;
 	        hdata.mc = mc;
