@@ -46,6 +46,7 @@ typedef struct {
 } csreq_t;
 
 static mowgli_patricia_t *csreq_list = NULL;
+static char *groupmemo;
 
 /*****************************************************************************/
 
@@ -110,6 +111,33 @@ static void send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
 	}
 }
 
+static void send_group_memo(sourceinfo_t *si, const char *memo, ...)
+{
+	service_t *msvs;
+	va_list va;
+	char buf[BUFSIZE];
+
+	return_if_fail(si != NULL);
+	return_if_fail(memo != NULL);
+
+	va_start(va, memo);
+	vsnprintf(buf, BUFSIZE, memo, va);
+	va_end(va);
+
+	if ((msvs = service_find("memoserv")) == NULL)
+		return;
+	else
+	{
+		char cmdbuf[BUFSIZE];
+
+		mowgli_strlcpy(cmdbuf, groupmemo, BUFSIZE);
+		mowgli_strlcat(cmdbuf, " ", BUFSIZE);
+		mowgli_strlcat(cmdbuf, buf, BUFSIZE);
+
+		command_exec_split(msvs, si, "SEND", cmdbuf, msvs->commands);
+	}
+}
+
 /*****************************************************************************/
 
 /* deny chanserv registrations but turn them into a request */
@@ -124,6 +152,9 @@ static void can_register(hook_channel_register_check_t *req)
 	cs = csreq_create(req->name, entity(req->si->smu));
 	command_success_nodata(req->si, _("\2%s\2 has channel moderation enabled.  Your request to register \2%s\2 has been received and should be processed shortly."),
 			       me.netname, cs->name);
+
+	if (groupmemo != NULL)
+		send_group_memo(req->si, "[auto memo] Please register \2%s\2 for me!", req->name);
 }
 
 /*****************************************************************************/
@@ -265,6 +296,8 @@ void _modinit(module_t *m)
 
 	hook_add_event("channel_can_register");
 	hook_add_channel_can_register(can_register);
+
+	add_dupstr_conf_item("REGGROUP", &chansvs.me->conf_table, 0, &groupmemo, NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -276,4 +309,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_waiting);
 
 	hook_del_channel_can_register(can_register);
+
+	del_conf_item("REGGROUP", &chansvs.me->conf_table);
 }
