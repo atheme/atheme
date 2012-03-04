@@ -106,7 +106,7 @@ static void send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
 		mowgli_strlcat(cmdbuf, " ", BUFSIZE);
 		mowgli_strlcat(cmdbuf, buf, BUFSIZE);
 
-		command_exec_split(msvs, si, "SEND", buf, msvs->commands);
+		command_exec_split(msvs, si, "SEND", cmdbuf, msvs->commands);
 	}
 }
 
