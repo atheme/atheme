@@ -166,6 +166,19 @@ void strshare_unref(char *str);
 E mowgli_heap_t *sharedheap_get(size_t size);
 E void sharedheap_unref(mowgli_heap_t *heap);
 
+#if !HAVE_VSNPRINTF
+int rpl_vsnprintf(char *, size_t, const char *, va_list);
+#endif
+#if !HAVE_SNPRINTF
+int rpl_snprintf(char *, size_t, const char *, ...);
+#endif
+#if !HAVE_VASPRINTF
+int rpl_vasprintf(char **, const char *, va_list);
+#endif
+#if !HAVE_ASPRINTF
+int rpl_asprintf(char **, const char *, ...);
+#endif
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
