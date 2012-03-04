@@ -59,7 +59,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	MODULE_TRY_REQUEST_SYMBOL(m, hostsvs, "hostserv/main", "hostsvs");
+	hostsvs = service_find("hostserv");
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
