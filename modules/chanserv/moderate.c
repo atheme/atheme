@@ -188,25 +188,28 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	        hdata.mc = mc;
         	hook_call_channel_register(&hdata);
 
-	        /* Allow the hook to override this. */
-	        fl = chanacs_source_flags(mc, &baked_si);
-	        cu = chanuser_find(mc->chan, u);
-	        if (cu == NULL)
-	                ;
-        	else if (ircd->uses_owner && fl & CA_USEOWNER && fl & CA_AUTOOP &&
-	                        !(cu->modes & CSTATUS_OWNER))
-        	{
-	                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-                	                ircd->owner_mchar[1], CLIENT_NAME(si->su));
-        	        cu->modes |= CSTATUS_OWNER;
-	        }
-        	else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
-	                        !(cu->modes & CSTATUS_PROTECT))
-	        {
-	                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-                	                ircd->protect_mchar[1], CLIENT_NAME(si->su));
-        	        cu->modes |= CSTATUS_PROTECT;
-	        }
+		if (mc->chan != NULL)
+		{
+		        /* Allow the hook to override this. */
+		        fl = chanacs_source_flags(mc, &baked_si);
+		        cu = chanuser_find(mc->chan, u);
+		        if (cu == NULL)
+	        	        ;
+	        	else if (ircd->uses_owner && fl & CA_USEOWNER && fl & CA_AUTOOP &&
+		                        !(cu->modes & CSTATUS_OWNER))
+        		{
+		                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+        	        	                ircd->owner_mchar[1], CLIENT_NAME(si->su));
+        		        cu->modes |= CSTATUS_OWNER;
+		        }
+        		else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
+	        	                !(cu->modes & CSTATUS_PROTECT))
+		        {
+		                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+                		                ircd->protect_mchar[1], CLIENT_NAME(si->su));
+        	        	cu->modes |= CSTATUS_PROTECT;
+		        }
+		}
 	}
 
 	csreq_destroy(cs);
