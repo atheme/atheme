@@ -91,6 +91,8 @@ AC_CHECK_FUNCS([strdup inet_pton inet_ntop gettimeofday umask mmap arc4random ge
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
 AC_CHECK_FUNC(gethostbyname,, AC_CHECK_LIB(nsl, gethostbyname))
 AC_SEARCH_LIBS(crypt, crypt, [AC_DEFINE([HAVE_CRYPT], [], [Define if crypt() is available])])
+HW_FUNC_SNPRINTF
+HW_FUNC_ASPRINTF
 
 CRACKLIB_C=""
 CRACKLIB_LIBS=""

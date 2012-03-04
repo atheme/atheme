@@ -48,6 +48,7 @@ BASE_SRCS =				\
 	servtree.c		\
 	sharedheap.c		\
 	signal.c		\
+	snprintf.c		\
 	string.c		\
 	strshare.c		\
 	svsignore.c		\
