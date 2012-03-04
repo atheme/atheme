@@ -141,16 +141,16 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	sourceinfo_t baked_si;
 	unsigned int fl;
 
-	cs = csreq_find(parv[1]);
+	cs = csreq_find(parv[0]);
 	if (cs == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not pending registration."), parv[1]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not pending registration."), parv[0]);
 		return;
 	}
 
 	mu = user(cs->mt);
 	if (mu != NULL)
-		send_memo(si, mu, "Your registration request for \2%s\2 was approved.", parv[1]);
+		send_memo(si, mu, "Your registration request for \2%s\2 was approved.", parv[0]);
 
 	c = channel_find(cs->name);
 	mc = mychan_add(cs->name);
@@ -209,7 +209,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	csreq_destroy(cs);
-	logcommand(si, CMDLOG_ADMIN, "ACTIVATE: \2%s\2", parv[1]);
+	logcommand(si, CMDLOG_ADMIN, "ACTIVATE: \2%s\2", parv[0]);
 }
 
 static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
@@ -217,21 +217,21 @@ static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 	csreq_t *cs;
 	myuser_t *mu;
 
-	cs = csreq_find(parv[1]);
+	cs = csreq_find(parv[0]);
 	if (cs == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not pending registration."), parv[1]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not pending registration."), parv[0]);
 		return;
 	}
 
 	mu = user(cs->mt);
 	if (mu != NULL)
-		send_memo(si, mu, "Your registration request for \2%s\2 was rejected.", parv[1]);
+		send_memo(si, mu, "Your registration request for \2%s\2 was rejected.", parv[0]);
 
 	csreq_destroy(cs);
 
-	command_success_nodata(si, _("\2%s\2 was rejected."), parv[1]);
-	logcommand(si, CMDLOG_ADMIN, "REJECT: \2%s\2", parv[1]);
+	command_success_nodata(si, _("\2%s\2 was rejected."), parv[0]);
+	logcommand(si, CMDLOG_ADMIN, "REJECT: \2%s\2", parv[0]);
 }
 
 static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
