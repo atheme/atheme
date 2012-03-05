@@ -148,6 +148,12 @@ static void can_register(hook_channel_register_check_t *req)
 
 	return_if_fail(req != NULL);
 
+	/* no point in moderating registrations from those who have PRIV_CHAN_ADMIN since they can
+	 * approve them anyway. --nenolod
+	 */
+	if (has_priv(req->si, PRIV_CHAN_ADMIN))
+		return;
+
 	req->approved++;
 
 	cs = csreq_create(req->name, entity(req->si->smu));
