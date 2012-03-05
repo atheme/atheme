@@ -14,6 +14,8 @@ ircd protocol
   port instead of a server port.
 - unreal: Add SASL support.
 - unreal: Implement full support for mlocking +f.
+chanfix
+- New service. Similar to EFNet's chanfix service.
 chanserv
 - sync: New module based on cs_sync from contrib. Adds autosync on
   ACL change (and the ability to turn it off).
@@ -29,8 +31,10 @@ chanserv
 - cs_badwords: New contrib module. Allows channel staff to specify a
   badwords list for a channel and what action to take when a user
   says one of the words in the channel.
-chanfix
-- New service. Similar to EFNet's chanfix service.
+- moderate: New module allowing operators with PRIV_CHAN_ADMIN to moderate
+  channel registrations.  This is especially useful in combination with
+  chanfix.  It is also useful in maintaining a standard of content correctness
+  for specialized chat systems.
 exttarget
 - exttarget/main: a new framework has been added which extends the
   entity subsystem further, allowing for entities to be dynamically
