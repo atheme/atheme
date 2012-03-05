@@ -151,11 +151,16 @@ void *object_sink_ref(void *obj)
 void object_unref(void *obj)
 {
 	return_if_fail(obj != NULL);
-	return_if_fail(object(obj)->refcount > 0);
+	return_if_fail(object(obj)->refcount >= -1);
 
-	object_sink_ref(obj);
-	if (object(obj)->refcount == 0)
-		object_dispose(obj);
+	if (object(obj)->refcount == -1)
+		return;
+	else if (object(obj)->refcount > 0)
+	{
+		object_sink_ref(obj);
+		if (object(obj)->refcount == 0)
+			object_dispose(obj);
+	}
 }
 
 /*
