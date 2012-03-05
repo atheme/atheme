@@ -106,6 +106,25 @@ void chanfix_oprecord_delete(chanfix_oprecord_t *orec)
 
 /*************************************************************************************/
 
+static void chanfix_channel_delete(chanfix_channel_t *c)
+{
+	mowgli_node_t *n, *tn;
+
+	return_if_fail(c != NULL);
+
+	mowgli_patricia_delete(chanfix_channels, c->name);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->oprecords.head)
+	{
+		chanfix_oprecord_t *orec = n->data;
+
+		chanfix_oprecord_delete(orec);
+	}
+
+	free(c->name);
+	mowgli_heap_free(chanfix_channel_heap, c);
+}
+
 chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan)
 {
 	chanfix_channel_t *c;
@@ -113,6 +132,8 @@ chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan)
 	return_val_if_fail(name != NULL, NULL);
 
 	c = mowgli_heap_alloc(chanfix_channel_heap);
+	object_init(object(c), name, (destructor_t) chanfix_channel_delete);
+
 	c->name = sstrdup(name);
 	c->chan = chan;
 	c->fix_started = 0;
@@ -135,25 +156,6 @@ chanfix_channel_t *chanfix_channel_get(channel_t *chan)
 	return_val_if_fail(chan != NULL, NULL);
 
 	return mowgli_patricia_retrieve(chanfix_channels, chan->name);
-}
-
-void chanfix_channel_delete(chanfix_channel_t *c)
-{
-	mowgli_node_t *n, *tn;
-
-	return_if_fail(c != NULL);
-
-	mowgli_patricia_delete(chanfix_channels, c->name);
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->oprecords.head)
-	{
-		chanfix_oprecord_t *orec = n->data;
-
-		chanfix_oprecord_delete(orec);
-	}
-
-	free(c->name);
-	mowgli_heap_free(chanfix_channel_heap, c);
 }
 
 /*************************************************************************************/
@@ -253,7 +255,7 @@ void chanfix_expire(void *unused)
 				CURRTIME - chan->lastupdate < CHANFIX_RETENTION_TIME)
 			continue;
 
-		chanfix_channel_delete(chan);
+		object_unref(chan);
 	}
 }
 

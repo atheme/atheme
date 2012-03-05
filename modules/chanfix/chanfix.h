@@ -24,6 +24,8 @@
 #define CHANFIX_EXPIRE_DIVISOR	672
 
 typedef struct chanfix_channel {
+	object_t parent;
+
 	char *name;
 
 	mowgli_list_t oprecords;
@@ -73,7 +75,6 @@ E chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u);
 E chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan);
 E chanfix_channel_t *chanfix_channel_find(const char *name);
 E chanfix_channel_t *chanfix_channel_get(channel_t *chan);
-E void chanfix_channel_delete(chanfix_channel_t *c);
 E void chanfix_gather(void *unused);
 E void chanfix_expire(void *unused);
 
