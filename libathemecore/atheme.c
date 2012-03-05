@@ -57,7 +57,7 @@ bool cold_start = false;
 bool readonly = false;
 
 void (*db_save) (void *arg) = NULL;
-void (*db_load) (void) = NULL;
+void (*db_load) (const char *name) = NULL;
 
 /* *INDENT-OFF* */
 static void print_help(void)
@@ -305,7 +305,7 @@ int atheme_main(int argc, char *argv[])
 
 	/* load our db */
 	if (db_load)
-		db_load();
+		db_load(NULL);
 	else if (backend_loaded)
 	{
 		slog(LG_ERROR, "atheme: backend module does not provide db_load()!");

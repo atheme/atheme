@@ -343,7 +343,7 @@ E bool backend_loaded;
 
 /* dbhandler.c */
 E void (*db_save)(void *arg);
-E void (*db_load)(void);
+E void (*db_load)(const char *arg);
 
 /* function.c */
 E bool is_founder(mychan_t *mychan, myentity_t *myuser);

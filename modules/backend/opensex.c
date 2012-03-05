@@ -1114,7 +1114,7 @@ database_vtable_t opensex_vt = {
 	.commit_row = opensex_commit_row
 };
 
-static database_handle_t *opensex_db_open_read(void)
+static database_handle_t *opensex_db_open_read(const char *filename)
 {
 	database_handle_t *db;
 	opensex_t *rs;
@@ -1122,7 +1122,7 @@ static database_handle_t *opensex_db_open_read(void)
 	int errno1;
 	char path[BUFSIZE];
 
-	snprintf(path, BUFSIZE, "%s/services.db", datadir);
+	snprintf(path, BUFSIZE, "%s/%s", datadir, filename != NULL ? filename : "services.db");
 	f = fopen(path, "r");
 	if (!f)
 	{
@@ -1157,7 +1157,7 @@ static database_handle_t *opensex_db_open_read(void)
 	return db;
 }
 
-static database_handle_t *opensex_db_open_write(void)
+static database_handle_t *opensex_db_open_write(const char *filename)
 {
 	database_handle_t *db;
 	opensex_t *rs;
@@ -1165,7 +1165,7 @@ static database_handle_t *opensex_db_open_write(void)
 	int errno1;
 	char path[BUFSIZE];
 
-	snprintf(path, BUFSIZE, "%s/services.db.new", datadir);
+	snprintf(path, BUFSIZE, "%s/%s.new", datadir, filename != NULL ? filename : "services.db");
 	f = fopen(path, "w");
 	if (!f)
 	{
@@ -1189,11 +1189,11 @@ static database_handle_t *opensex_db_open_write(void)
 	return db;
 }
 
-static database_handle_t *opensex_db_open(database_transaction_t txn)
+static database_handle_t *opensex_db_open(const char *filename, database_transaction_t txn)
 {
 	if (txn == DB_WRITE)
-		return opensex_db_open_write();
-	return opensex_db_open_read();
+		return opensex_db_open_write(filename);
+	return opensex_db_open_read(filename);
 }
 
 static void opensex_db_close(database_handle_t *db)
@@ -1202,11 +1202,13 @@ static void opensex_db_close(database_handle_t *db)
 	int errno1;
 	char oldpath[BUFSIZE], newpath[BUFSIZE];
 
-	snprintf(oldpath, BUFSIZE, "%s/services.db.new", datadir);
-	snprintf(newpath, BUFSIZE, "%s/services.db", datadir);
-
 	return_if_fail(db != NULL);
 	rs = db->priv;
+
+	mowgli_strlcpy(oldpath, db->file, sizeof oldpath);
+	mowgli_strlcat(oldpath, ".new", sizeof oldpath);
+
+	mowgli_strlcpy(newpath, db->file, sizeof newpath);
 
 	fclose(rs->f);
 
@@ -1216,7 +1218,7 @@ static void opensex_db_close(database_handle_t *db)
 #ifdef _WIN32
 		unlink(newpath);
 #endif
-	
+
 		if (rename(oldpath, newpath) < 0)
 		{
 			errno1 = errno;
@@ -1233,11 +1235,11 @@ static void opensex_db_close(database_handle_t *db)
 	free(db);
 }
 
-static void opensex_db_load(void)
+static void opensex_db_load(const char *filename)
 {
 	database_handle_t *db;
 
-	db = db_open(DB_READ);
+	db = db_open(filename, DB_READ);
 	if (db == NULL)
 		return;
 
@@ -1245,11 +1247,11 @@ static void opensex_db_load(void)
 	db_close(db);
 }
 
-static void opensex_db_write(void *arg)
+static void opensex_db_write(void *filename)
 {
 	database_handle_t *db;
 
-	db = db_open(DB_WRITE);
+	db = db_open(filename, DB_WRITE);
 
 	opensex_db_save(db);
 	hook_call_db_write(db);

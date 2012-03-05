@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 #define DB_ATHEME	2
 
 /* loads atheme.db */
-static void flatfile_db_load(void)
+static void flatfile_db_load(const char *filename)
 {
 	myuser_t *mu, *founder = NULL;
 	myuser_name_t *mun;
@@ -40,7 +40,7 @@ static void flatfile_db_load(void)
 	unsigned int their_ca_all = 0;
 	char path[BUFSIZE];
 
-	snprintf(path, BUFSIZE, "%s/atheme.db", datadir);
+	snprintf(path, BUFSIZE, "%s/%s", datadir, filename != NULL ? filename : "atheme.db");
 	f = fopen(path, "r");
 	if (f == NULL)
 	{
