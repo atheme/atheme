@@ -304,6 +304,21 @@ static void write_chanfixdb(database_handle_t *db)
 
 			db_commit_row(db);
 		}
+
+		if (object(chan)->metadata != NULL)
+		{
+			mowgli_patricia_iteration_state_t state2;
+			metadata_t *md;
+
+			MOWGLI_PATRICIA_FOREACH(md, &state, object(chan)->metadata)
+			{
+				db_start_row(db, "CFMD");
+				db_write_word(db, chan->name);
+				db_write_word(db, md->name);
+				db_write_str(db, md->value);
+				db_commit_row(db);
+			}
+		}
 	}
 }
 
@@ -359,6 +374,19 @@ static void db_h_cfop(database_handle_t *db, const char *type)
 	orec->age = age;
 }
 
+static void db_h_cfmd(database_handle_t *db, const char *type)
+{
+	const char *chname, *key, *value;
+	chanfix_channel_t *chan;
+
+	chname = db_sread_word(db);
+	key = db_sread_word(db);
+	value = db_sread_str(db);
+
+	chan = chanfix_channel_find(chname);
+	metadata_add(chan, key, value);
+}
+
 /*************************************************************************************/
 
 void chanfix_gather_init(chanfix_persist_record_t *rec)
@@ -370,6 +398,7 @@ void chanfix_gather_init(chanfix_persist_record_t *rec)
 	db_register_type_handler("CFDBV", db_h_cfdbv);
 	db_register_type_handler("CFCHAN", db_h_cfchan);
 	db_register_type_handler("CFOP", db_h_cfop);
+	db_register_type_handler("CFMD", db_h_cfmd);
 
 	if (rec != NULL)
 	{
