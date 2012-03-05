@@ -43,6 +43,7 @@ static command_t cs_waiting  = { "WAITING", N_("View pending registrations"), PR
 typedef struct {
 	char *name;
 	myentity_t *mt;
+	time_t ts;
 } csreq_t;
 
 static mowgli_patricia_t *csreq_list = NULL;
@@ -60,6 +61,7 @@ static csreq_t *csreq_create(const char *name, myentity_t *mt)
 	cs = smalloc(sizeof(csreq_t));
 	cs->name = sstrdup(name);
 	cs->mt = mt;
+	cs->ts = CURRTIME;
 
 	mowgli_patricia_add(csreq_list, cs->name, cs);
 
@@ -283,10 +285,16 @@ static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 {
 	mowgli_patricia_iteration_state_t state;
 	csreq_t *cs;
+	struct tm tm;
+	char strfbuf[BUFSIZE];
 
 	MOWGLI_PATRICIA_FOREACH(cs, &state, csreq_list)
 	{
-		command_success_nodata(si, "\2%s\2 (\2%s\2)", cs->name, cs->mt->name);
+		tm = *localtime(&cs->ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+
+		command_success_nodata(si, _("\2%s\2 (\2%s\2) [%s (%s ago)]"),
+				       cs->name, cs->mt->name, strfbuf, time_ago(cs->ts));
 	}
 
 	command_success_nodata(si, _("End of list."));
