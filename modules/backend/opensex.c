@@ -466,12 +466,6 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 		return;
 	}
 
-	if (uid && myuser_find_uid(uid))
-	{
-		slog(LG_INFO, "db-h-mu: line %d: skipping account %s with duplicate UID %s", db->line, name, uid);
-		return;
-	}
-
 	pass = db_sread_word(db);
 	email = db_sread_word(db);
 	reg = db_sread_time(db);
