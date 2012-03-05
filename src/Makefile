@@ -1,4 +1,4 @@
 include ../extra.mk
 include ../buildsys.mk
 
-SUBDIRS = footprint services
+SUBDIRS = footprint services dbverify
