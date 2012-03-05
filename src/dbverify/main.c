@@ -21,6 +21,35 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
+unsigned int verify_entity_uids(void)
+{
+	unsigned int errcnt = 0;
+	mowgli_patricia_t *known = mowgli_patricia_create(strcasecanon);
+	myentity_iteration_state_t state;
+	myentity_t *mt;
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_ANY)
+	{
+		myentity_t *mt2;
+
+		if ((mt2 = mowgli_patricia_retrieve(known, mt->id)) != NULL)
+		{
+			mowgli_strlcpy(mt->id, myentity_alloc_uid(), sizeof mt->id);
+
+			slog(LG_INFO, "*** phase 4: entity '%s' has duplicate EID '%s' (belonging to '%s'); regenerating as '%s'",
+					mt->name, mt2->id, mt2->name, mt->id);
+
+			errcnt++;
+			continue;
+		}
+
+		mowgli_patricia_add(known, mt->id, mt);
+	}
+
+	mowgli_patricia_destroy(known, NULL, NULL);
+	return errcnt;
+}
+
 void verify_channel_registrations(void)
 {
 	mowgli_patricia_iteration_state_t state;
@@ -72,6 +101,7 @@ int main(int argc, char *argv[])
 	atheme_init(argv[0], LOGDIR "/dbverify.log");
 	atheme_setup();
 	module_t *m;
+	unsigned int errcnt;
 	char *filename = argv[1] ? argv[1] : "services.db";
 
 	runflags = RF_LIVE;
@@ -98,7 +128,12 @@ int main(int argc, char *argv[])
 
 	verify_channel_registrations();
 
-	slog(LG_INFO, "*** phase 4: writing corrected database to object store");
+	slog(LG_INFO, "*** phase 4: verifying entity UID integrity");
+
+	while ((errcnt = verify_entity_uids()) != 0)
+		slog(LG_INFO, "*** phase 4: %u error(s) were found; running another pass", errcnt);
+
+	slog(LG_INFO, "*** phase 5: writing corrected state to object store");
 
 	db_save(filename);
 
