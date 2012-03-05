@@ -133,7 +133,7 @@ void atheme_bootstrap(void)
 	curr_uplink = NULL;
 }
 
-void atheme_init(char *execname)
+void atheme_init(char *execname, char *log_p)
 {
 	me.execname = execname;
 	me.kline_id = 0;
@@ -148,6 +148,8 @@ void atheme_init(char *execname)
 	strshare_init();
 
 	/* open log */
+	log_path = log_p;
+
 	log_open();
 	mowgli_log_set_cb(process_mowgli_log);
 }
@@ -190,6 +192,7 @@ int atheme_main(int argc, char *argv[])
 	int i, pid, r;
 	FILE *pid_file;
 	const char *pidfilename = RUNDIR "/atheme.pid";
+	char *log_p;
 	mowgli_getopt_option_t long_opts[] = {
 		{ NULL },
 	};
@@ -244,7 +247,7 @@ int atheme_main(int argc, char *argv[])
 		config_file = sstrdup(SYSCONFDIR "/atheme.conf");
 
 	if (!have_log)
-		log_path = sstrdup(LOGDIR "/atheme.log");
+		log_p = sstrdup(LOGDIR "/atheme.log");
 
 	if (!have_datadir)
 		datadir = sstrdup(DATADIR);
@@ -253,7 +256,7 @@ int atheme_main(int argc, char *argv[])
 
 	runflags |= RF_STARTING;
 
-	atheme_init(argv[0]);
+	atheme_init(argv[0], log_p);
 
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 
