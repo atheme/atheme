@@ -84,6 +84,40 @@ static void csreq_destroy(csreq_t *cs)
 	free(cs);
 }
 
+static void csreq_demarshal(database_handle_t *db, const char *type)
+{
+        const char *chan = db_sread_word(db);
+        const char *nick = db_sread_word(db);
+        time_t req_ts = db_sread_time(db);
+	myentity_t *mt;
+	csreq_t *cs;
+
+	mt = myentity_find(nick);
+	if (mt == NULL)
+	{
+		slog(LG_INFO, "csreq_demarshal(): couldn't find entity for '%s'", nick);
+		return;
+	}
+
+	cs = csreq_create(chan, mt);
+	cs->ts = req_ts;
+}
+
+static void csreq_marshal_set(database_handle_t *db)
+{
+	mowgli_patricia_iteration_state_t state;
+	csreq_t *cs;
+
+	MOWGLI_PATRICIA_FOREACH(cs, &state, csreq_list)
+	{
+		db_start_row(db, "CSREQ");
+		db_write_word(db, cs->name);
+		db_write_word(db, cs->mt->name);
+		db_write_time(db, cs->ts);
+		db_commit_row(db);
+	}
+}
+
 /*****************************************************************************/
 
 static void send_memo(sourceinfo_t *si, myuser_t *mu, const char *memo, ...)
@@ -314,7 +348,11 @@ void _modinit(module_t *m)
 	hook_add_event("channel_can_register");
 	hook_add_channel_can_register(can_register);
 
+	hook_add_db_write(csreq_marshal_set);
+
 	add_dupstr_conf_item("REGGROUP", &chansvs.me->conf_table, 0, &groupmemo, NULL);
+
+	db_register_type_handler("CSREQ", csreq_demarshal);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -326,6 +364,9 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_waiting);
 
 	hook_del_channel_can_register(can_register);
+	hook_del_db_write(csreq_marshal_set);
 
 	del_conf_item("REGGROUP", &chansvs.me->conf_table);
+
+	db_unregister_type_handler("CSREQ");
 }
