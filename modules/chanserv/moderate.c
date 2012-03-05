@@ -155,6 +155,8 @@ static void can_register(hook_channel_register_check_t *req)
 
 	if (groupmemo != NULL)
 		send_group_memo(req->si, "[auto memo] Please register \2%s\2 for me!", req->name);
+
+	logcommand(req->si, CMDLOG_REGISTER, "REGISTER: \2%s\2 (pending)", req->name);
 }
 
 /*****************************************************************************/
