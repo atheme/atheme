@@ -1333,7 +1333,9 @@ static void chanacs_delete(chanacs_t *ca)
 	if (ca->entity != NULL)
 	{
 		mowgli_node_delete(&ca->unode, &ca->entity->chanacs);
-		object_unref(ca->entity);
+
+		if (isdynamic(ca->entity))
+			object_unref(ca->entity);
 	}
 
 	if (ca->setter != NULL)
@@ -1385,7 +1387,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 
 	object_init(object(ca), mt->name, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
-	ca->entity = object_ref(mt);
+	ca->entity = isdynamic(mt) ? object_ref(mt) : mt;
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;

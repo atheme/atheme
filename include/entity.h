@@ -29,6 +29,7 @@ typedef struct {
 #define group(x)	(isgroup(x) ? (mygroup_t *)(x) : NULL)
 #define isuser(x)	(x != NULL && entity(x)->type == ENT_USER)
 #define isgroup(x)	(x != NULL && entity(x)->type == ENT_GROUP)
+#define isdynamic(x)	(x != NULL && (entity(x)->type == ENT_EXTTARGET))
 
 void init_entities(void);
 void myentity_set_last_uid(const char *last_uid);
