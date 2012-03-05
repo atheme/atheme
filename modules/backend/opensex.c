@@ -1179,9 +1179,13 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	opensex_t *rs;
 	FILE *f;
 	int errno1;
-	char path[BUFSIZE];
+	char bpath[BUFSIZE], path[BUFSIZE];
 
-	snprintf(path, BUFSIZE, "%s/%s.new", datadir, filename != NULL ? filename : "services.db");
+	snprintf(bpath, BUFSIZE, "%s/%s", datadir, filename != NULL ? filename : "services.db");
+
+	mowgli_strlcpy(path, bpath, sizeof path);
+	mowgli_strlcat(path, ".new", sizeof path);
+
 	f = fopen(path, "w");
 	if (!f)
 	{
@@ -1198,7 +1202,7 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	db->priv = rs;
 	db->vt = &opensex_vt;
 	db->txn = DB_WRITE;
-	db->file = sstrdup(path);
+	db->file = sstrdup(bpath);
 	db->line = 0;
 	db->token = 0;
 
