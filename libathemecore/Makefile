@@ -77,6 +77,6 @@ build: all
 	sh mkhooktypes.sh hooktypes.in >../include/hooktypes.h
 
 ../include/serno.h:
-	(cd ..; make include/serno.h)
+	(cd ..; ${MAKE} include/serno.h)
 
 include .deps
