@@ -2,6 +2,8 @@ include ../extra.mk
 
 SUBDIRS = inline protocol
 
+DISTCLEAN = serno.h
+
 INCLUDES = \
 	abirev.h		\
 	account.h		\
