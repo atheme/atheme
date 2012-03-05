@@ -79,6 +79,7 @@ static void csreq_destroy(csreq_t *cs)
 
 	mowgli_patricia_delete(csreq_list, cs->name);
 	free(cs->name);
+	free(cs);
 }
 
 /*****************************************************************************/
