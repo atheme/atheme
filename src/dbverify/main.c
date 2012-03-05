@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
 
 	runflags = RF_LIVE;
 	datadir = DATADIR;
+	strict_mode = false;
 
 	slog(LG_INFO, "dbverify is operating on %s", filename);
 

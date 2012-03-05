@@ -10,6 +10,8 @@
 
 #include "common.h"
 
+E bool strict_mode;
+
 struct database_handle_;
 typedef struct database_handle_ database_handle_t;
 

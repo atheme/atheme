@@ -55,6 +55,7 @@ char *log_path;
 char *datadir;
 bool cold_start = false;
 bool readonly = false;
+bool strict_mode = true;
 
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (const char *name) = NULL;
