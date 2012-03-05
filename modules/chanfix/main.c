@@ -32,6 +32,7 @@ void _modinit(module_t *m)
 	service_bind_command(chanfix, &cmd_scores);
 	service_bind_command(chanfix, &cmd_info);
 	service_bind_command(chanfix, &cmd_help);
+	service_bind_command(chanfix, &cmd_mark);
 
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);
 

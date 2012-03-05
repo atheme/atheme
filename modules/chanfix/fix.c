@@ -454,6 +454,7 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm;
 	char strfbuf[BUFSIZE];
 	unsigned int highscore = 0;
+	metadata_t *md;
 
 	if (parv[0] == NULL)
 	{
@@ -494,10 +495,102 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Now fixing   : \2%s\2"),
 			chan->fix_started ? "YES" : "NO");
 
+	if ((md = metadata_find(chan, "private:mark:setter")) != NULL)
+	{
+		const char *setter = md->value;
+		const char *reason;
+		time_t ts;
+
+		md = metadata_find(chan, "private:mark:reason");
+		reason = md != NULL ? md->value : "unknown";
+
+		md = metadata_find(chan, "private:mark:timestamp");
+		ts = md != NULL ? atoi(md->value) : 0;
+
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+
+		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
+	}
+
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
 command_t cmd_info = { "INFO", N_("List information on channel."), PRIV_CHAN_AUSPEX, 1, chanfix_cmd_info, { .path = "chanfix/info" } };
+
+/* MARK <channel> ON|OFF [reason] */
+static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *target = parv[0];
+	char *action = parv[1];
+	char *info = parv[2];
+	chanfix_channel_t *chan;
+
+	if (!target || !action)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
+		command_fail(si, fault_needmoreparams, _("Usage: MARK <#channel> <ON|OFF> [note]"));
+		return;
+	}
+
+	if (target[0] != '#')
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
+		return;
+	}
+
+	if ((chan = chanfix_channel_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("No CHANFIX record available for \2%s\2; try again later."),
+			     parv[0]);
+		return;
+	}
+
+	if (!strcasecmp(action, "ON"))
+	{
+		if (!info)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
+			command_fail(si, fault_needmoreparams, _("Usage: MARK <#channel> ON <note>"));
+			return;
+		}
+
+		if (metadata_find(chan, "private:mark:setter"))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 is already marked."), target);
+			return;
+		}
+
+		metadata_add(chan, "private:mark:setter", get_oper_name(si));
+		metadata_add(chan, "private:mark:reason", info);
+		metadata_add(chan, "private:mark:timestamp", number_to_string(CURRTIME));
+
+		logcommand(si, CMDLOG_ADMIN, "MARK:ON: \2%s\2 (reason: \2%s\2)", chan->name, info);
+		command_success_nodata(si, _("\2%s\2 is now marked."), target);
+	}
+	else if (!strcasecmp(action, "OFF"))
+	{
+		if (!metadata_find(chan, "private:mark:setter"))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 is not marked."), target);
+			return;
+		}
+
+		metadata_delete(chan, "private:mark:setter");
+		metadata_delete(chan, "private:mark:reason");
+		metadata_delete(chan, "private:mark:timestamp");
+
+		logcommand(si, CMDLOG_ADMIN, "MARK:OFF: \2%s\2", chan->name);
+		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
+		command_fail(si, fault_badparams, _("Usage: MARK <#channel> <ON|OFF> [note]"));
+	}
+}
+
+command_t cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
 
 /* HELP <command> [params] */
 static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])

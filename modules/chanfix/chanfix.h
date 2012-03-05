@@ -85,5 +85,6 @@ E command_t cmd_chanfix;
 E command_t cmd_scores;
 E command_t cmd_info;
 E command_t cmd_help;
+E command_t cmd_mark;
 
 #endif
