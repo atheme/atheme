@@ -96,23 +96,11 @@ static void process_mowgli_log(const char *line)
 	slog(LG_ERROR, "%s", line);
 }
 
-int atheme_main(int argc, char *argv[])
+void atheme_bootstrap(void)
 {
-	bool have_conf = false;
-	bool have_log = false;
-	bool have_datadir = false;
-	char buf[32];
-	int i, pid, r;
-	FILE *pid_file;
-	const char *pidfilename = RUNDIR "/atheme.pid";
 #ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
 #endif
-	mowgli_getopt_option_t long_opts[] = {
-		{ NULL },
-	};
-
-	curr_uplink = NULL;
 
 	/* shutdown mowgli threading support */
 	mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
@@ -128,7 +116,7 @@ int atheme_main(int argc, char *argv[])
 	if (chdir(PREFIX) < 0)
 	{
 		perror(PREFIX);
-		return 20;
+		exit(EXIT_FAILURE);
 	}
 
 #ifdef HAVE_GETRLIMIT
@@ -141,6 +129,72 @@ int atheme_main(int argc, char *argv[])
 		setrlimit(RLIMIT_CORE, &rlim);
 	}
 #endif
+
+	curr_uplink = NULL;
+}
+
+void atheme_init(char *execname)
+{
+	me.execname = execname;
+	me.kline_id = 0;
+	me.start = time(NULL);
+	CURRTIME = me.start;
+	srand(arc4random());
+
+	/* set signal handlers */
+	init_signal_handlers();
+
+	/* initialize strshare */
+	strshare_init();
+
+	/* open log */
+	log_open();
+	mowgli_log_set_cb(process_mowgli_log);
+}
+
+void atheme_setup(void)
+{
+#if HAVE_UMASK
+	/* file creation mask */
+	umask(077);
+#endif
+
+	base_eventloop = mowgli_eventloop_create();
+        hooks_init();
+	db_init();
+
+	init_resolver();
+
+	translation_init();
+#ifdef ENABLE_NLS
+	language_init();
+#endif
+	init_nodes();
+	init_confprocess();
+	init_newconf();
+	servtree_init();
+
+	modules_init();
+	pcommand_init();
+
+	authcookie_init();
+	common_ctcp_init();
+}
+
+int atheme_main(int argc, char *argv[])
+{
+	bool have_conf = false;
+	bool have_log = false;
+	bool have_datadir = false;
+	char buf[32];
+	int i, pid, r;
+	FILE *pid_file;
+	const char *pidfilename = RUNDIR "/atheme.pid";
+	mowgli_getopt_option_t long_opts[] = {
+		{ NULL },
+	};
+
+	atheme_bootstrap();
 
 	/* do command-line options */
 	while ((r = mowgli_getopt_long(argc, argv, "c:dhrl:np:D:v", long_opts, NULL)) != -1)
@@ -199,21 +253,7 @@ int atheme_main(int argc, char *argv[])
 
 	runflags |= RF_STARTING;
 
-	me.kline_id = 0;
-	me.start = time(NULL);
-	CURRTIME = me.start;
-	srand(arc4random());
-	me.execname = argv[0];
-
-	/* set signal handlers */
-	init_signal_handlers();
-
-	/* initialize strshare */
-	strshare_init();
-
-	/* open log */
-	log_open();
-	mowgli_log_set_cb(process_mowgli_log);
+	atheme_init(argv[0]);
 
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 
@@ -236,28 +276,7 @@ int atheme_main(int argc, char *argv[])
 	}
 #endif
 
-#if HAVE_UMASK
-	/* file creation mask */
-	umask(077);
-#endif
-
-	base_eventloop = mowgli_eventloop_create();
-        hooks_init();
-	db_init();
-
-	init_resolver();
-
-	translation_init();
-#ifdef ENABLE_NLS
-	language_init();
-#endif
-	init_nodes();
-	init_confprocess();
-	init_newconf();
-	servtree_init();
-
-	modules_init();
-	pcommand_init();
+	atheme_setup();
 
 	conf_init();
 	if (!conf_parse(config_file))
@@ -274,9 +293,6 @@ int atheme_main(int argc, char *argv[])
 			slog(LG_INFO, "Error loading language file %s, continuing",
 					config_options.languagefile);
 	}
-
-	authcookie_init();
-	common_ctcp_init();
 
 	if (!backend_loaded && authservice_loaded)
 	{
