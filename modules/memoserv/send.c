@@ -188,7 +188,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (*target == '#')
 	{
-		cmd = command_find(si->service->commands, "SENDOPS");
+		cmd = command_find(memoserv->commands, "SENDOPS");
 		if (cmd != NULL)
 			command_exec(memoserv, si, cmd, parc, parv);
 		else
@@ -196,7 +196,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		cmd = command_find(si->service->commands, "SENDGROUP");
+		cmd = command_find(memoserv->commands, "SENDGROUP");
 		if (cmd != NULL)
 			command_exec(memoserv, si, cmd, parc, parv);
 		else
