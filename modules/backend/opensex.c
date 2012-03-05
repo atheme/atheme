@@ -35,6 +35,8 @@ typedef struct opensex_ {
 	unsigned int nql;
 } opensex_t;
 
+extern mowgli_list_t modules;
+
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
@@ -66,6 +68,15 @@ opensex_db_save(database_handle_t *db)
 	db_start_row(db, "DBV");
 	db_write_int(db, 11);
 	db_commit_row(db);
+
+	MOWGLI_ITER_FOREACH(n, modules.head)
+	{
+		module_t *m = n->data;
+
+		db_start_row(db, "MDEP");
+		db_write_word(db, m->name);
+		db_commit_row(db);
+	}
 
 	db_start_row(db, "LUID");
 	db_write_word(db, myentity_get_last_uid());
@@ -391,6 +402,11 @@ static void opensex_db_parse(database_handle_t *db)
 		if (!cmd || !*cmd || strchr("#\n\t \r", *cmd)) continue;
 		db_process(db, cmd);
 	}
+}
+
+static void opensex_h_mdep(database_handle_t *db, const char *type)
+{
+	return;
 }
 
 static void opensex_h_unknown(database_handle_t *db, const char *type)
@@ -1273,6 +1289,7 @@ void _modinit(module_t *m)
 	db_save = &opensex_db_write;
 
 	db_register_type_handler("DBV", opensex_h_dbv);
+	db_register_type_handler("MDEP", opensex_h_mdep);
 	db_register_type_handler("LUID", opensex_h_luid);
 	db_register_type_handler("CF", opensex_h_cf);
 	db_register_type_handler("MU", opensex_h_mu);
