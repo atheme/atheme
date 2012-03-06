@@ -204,7 +204,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 }
 
 /* this could be a little slow, should probably have an option to disable it */
-static void sync_user_sethost(user_t *u)
+static void sync_user(user_t *u)
 {
 	mowgli_node_t *iter;
 
@@ -364,13 +364,21 @@ void _modinit(module_t *m)
 	hook_add_channel_acl_change(sync_channel_acl_change);
 
 	hook_add_event("user_sethost");
-	hook_add_user_sethost(sync_user_sethost);
+	hook_add_user_sethost(sync_user);
+
+	hook_add_event("user_oper");
+	hook_add_user_oper(sync_user);
+
+	hook_add_event("user_identify");
+	hook_add_user_identify(sync_user);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_acl_change(sync_channel_acl_change);
-	hook_del_user_sethost(sync_user_sethost);
+	hook_del_user_sethost(sync_user);
+	hook_del_user_oper(sync_user);
+	hook_del_user_identify(sync_user);
 
 	service_named_unbind_command("chanserv", &cs_sync);
 	command_delete(&cs_set_nosync, *cs_set_cmdtree);
