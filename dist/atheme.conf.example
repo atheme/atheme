@@ -505,10 +505,10 @@ loadmodule "modules/infoserv/main";
  * AUTHCOOKIE mechanism (for IRIS)		modules/saslserv/authcookie
  * EXTERNAL mechanism (IRCv3.1+)		modules/saslserv/external
  */
-#loadmodule "modules/saslserv/main";
-#loadmodule "modules/saslserv/plain";
+loadmodule "modules/saslserv/main";
+loadmodule "modules/saslserv/plain";
 #loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL */
-#loadmodule "modules/saslserv/authcookie";
+loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
 
 /* GameServ modules.
