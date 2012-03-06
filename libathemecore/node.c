@@ -145,7 +145,8 @@ kline_t *kline_add(const char *user, const char *host, const char *reason, long 
 	char treason[BUFSIZE];
 	snprintf(treason, sizeof(treason), "[#%lu] %s", k->number, k->reason);
 
-	kline_sts("*", user, host, duration, treason);
+	if (me.connected)
+		kline_sts("*", user, host, duration, treason);
 
 	return k;
 }
@@ -157,8 +158,9 @@ void kline_delete(kline_t *k)
 	return_if_fail(k != NULL);
 
 	slog(LG_DEBUG, "kline_delete(): %s@%s -> %s", k->user, k->host, k->reason);
+
 	/* only unkline if ircd has not already removed this -- jilles */
-	if (k->duration == 0 || k->expires > CURRTIME)
+	if (me.connected && (k->duration == 0 || k->expires > CURRTIME))
 		unkline_sts("*", k->user, k->host);
 
 	n = mowgli_node_find(k, &klnlist);
@@ -276,7 +278,8 @@ xline_t *xline_add(const char *realname, const char *reason, long duration, cons
 
 	cnt.xline++;
 
-	xline_sts("*", realname, duration, reason);
+	if (me.connected)
+		xline_sts("*", realname, duration, reason);
 
 	return x;
 }
@@ -295,7 +298,7 @@ void xline_delete(const char *realname)
 	slog(LG_DEBUG, "xline_delete(): %s -> %s", x->realname, x->reason);
 
 	/* only unxline if ircd has not already removed this -- jilles */
-	if (x->duration == 0 || x->expires > CURRTIME)
+	if (me.connected && (x->duration == 0 || x->expires > CURRTIME))
 		unxline_sts("*", x->realname);
 
 	n = mowgli_node_find(x, &xlnlist);
@@ -412,7 +415,8 @@ qline_t *qline_add(const char *mask, const char *reason, long duration, const ch
 
 	cnt.qline++;
 
-	qline_sts("*", mask, duration, reason);
+	if (me.connected)
+		qline_sts("*", mask, duration, reason);
 
 	return q;
 }
@@ -431,7 +435,7 @@ void qline_delete(const char *mask)
 	slog(LG_DEBUG, "qline_delete(): %s -> %s", q->mask, q->reason);
 
 	/* only unqline if ircd has not already removed this -- jilles */
-	if (q->duration == 0 || q->expires > CURRTIME)
+	if (me.connected && (q->duration == 0 || q->expires > CURRTIME))
 		unqline_sts("*", q->mask);
 
 	n = mowgli_node_find(q, &qlnlist);
