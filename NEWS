@@ -2,6 +2,14 @@ Atheme Services 7.0 Release Notes
 =================================
 All bugfixes from the 6.0 branch of Atheme are also in 7.0.
 
+dbverify
+- New utility.  Performs extensive and complicated consistency checks
+  on your OpenSEX object store.  It can find things like:
+  - corrupt AKICK entries (AKICKs with other flags/metadata that shouldn't be there);
+  - duplicate channel ACL entries;
+  - entity ID collisions
+  It can find other stuff too, and will be expanded upon in the future.
+  Think of it like a fsck(1) for your object store.
 ircd protocol
 - bahamut: add experimental support for bahamut-2.0 NICKIPSTR 
   capability.
