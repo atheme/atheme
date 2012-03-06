@@ -410,6 +410,9 @@ static void servtree_update(void *dummy)
 	mowgli_patricia_iteration_state_t state;
 	user_t *u;
 
+	if (offline_mode)
+		return;
+
 	if (me.me == NULL)
 		me_me_init();
 	if (ircd->uses_uid && !me.numeric)
@@ -417,7 +420,7 @@ static void servtree_update(void *dummy)
 		slog(LG_ERROR, "servtree_update(): ircd requires numeric, but none was specified in the configuration file");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
 	{
 		free(sptr->disp);
