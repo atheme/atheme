@@ -21,7 +21,7 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
-unsigned int verify_entity_uids(void)
+static unsigned int verify_entity_uids(void)
 {
 	unsigned int errcnt = 0;
 	mowgli_patricia_t *known = mowgli_patricia_create(strcasecanon);
@@ -50,7 +50,7 @@ unsigned int verify_entity_uids(void)
 	return errcnt;
 }
 
-void verify_channel_registrations(void)
+static void verify_channel_registrations(void)
 {
 	mowgli_patricia_iteration_state_t state;
 	mychan_t *mc;
@@ -97,7 +97,7 @@ void verify_channel_registrations(void)
 	}
 }
 
-void handle_mdep(database_handle_t *db, const char *type)
+static void handle_mdep(database_handle_t *db, const char *type)
 {
 	const char *modname = db_sread_word(db);
 
