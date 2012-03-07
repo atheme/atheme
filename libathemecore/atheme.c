@@ -30,6 +30,8 @@
 #include "authcookie.h"
 #include "libathemecore.h"
 
+#include <ext/getopt_long.h> /* XXX */
+
 #ifdef HAVE_GETRLIMIT
 # include <sys/resource.h>
 #endif
