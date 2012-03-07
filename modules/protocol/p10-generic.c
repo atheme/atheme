@@ -317,6 +317,16 @@ static void p10_jupe(const char *server, const char *reason)
 	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
 }
 
+static void p10_sasl_sts(char *target, char mode, char *data)
+{
+	sts("%s XR %c%c %s :SASL:%c:%s", me.numeric, target[0], target[1], target, mode, data);
+}
+
+static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+{
+	sts("%s XR %c%c %s :SASL:L:%s", me.numeric, target[0], target[1], target, login);
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -996,6 +1006,8 @@ void _modinit(module_t * m)
 	ircd_on_logout = &p10_on_logout;
 	jupe = &p10_jupe;
 	invite_sts = &p10_invite_sts;
+	sasl_sts = &p10_sasl_sts;
+	svslogin_sts = &p10_svslogin_sts;
 
 	pcommand_add("G", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("Z", m_pong, 1, MSRC_SERVER);
