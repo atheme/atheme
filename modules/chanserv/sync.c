@@ -21,24 +21,14 @@ command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
+static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
-	chanuser_t *cu;
-	mowgli_node_t *n, *tn;
 	int fl;
 	bool noop;
 
-	return_if_fail(mc != NULL);
-	if (mc->chan == NULL)
-		return;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
-	{
-		cu = (chanuser_t *)n->data;
-
 		if (is_internal_client(cu->user))
-			continue;
+			return;
 
 		if (ca != NULL && ca->entity != NULL && cu->user->myuser != NULL)
 		{
@@ -48,7 +38,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			if (vt->match_entity(ca, entity(cu->user->myuser)) != NULL)
 				fl = ca->level;
 			else
-				continue;
+				return;
 		}
 		else
 			fl = chanacs_user_flags(mc, cu->user);
@@ -113,7 +103,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			}
 
 			try_kick(chansvs.me->me, mc->chan, cu->user, akickreason);
-			continue;
+			return;
 		}
 		if (ircd->uses_owner)
 		{
@@ -158,7 +148,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			}
 
 			if (cu->modes & CSTATUS_OP)
-				continue;
+				return;
 		}
 		else if ((CSTATUS_OP & cu->modes))
 		{
@@ -177,7 +167,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 				}
 
 				if (cu->modes & ircd->halfops_mode)
-					continue;
+					return;
 			}
 			else if (ircd->halfops_mode & cu->modes)
 			{
@@ -192,7 +182,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
 				cu->modes |= CSTATUS_VOICE;
-				continue;
+				return;
 			}
 		}
 		else if ((CSTATUS_VOICE & cu->modes))
@@ -200,6 +190,22 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
 			cu->modes &= ~CSTATUS_VOICE;
 		}
+}
+
+static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
+{
+	chanuser_t *cu;
+	mowgli_node_t *n, *tn;
+
+	return_if_fail(mc != NULL);
+	if (mc->chan == NULL)
+		return;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chan->members.head)
+	{
+		cu = (chanuser_t *)n->data;
+
+		do_chanuser_sync(mc, cu, ca);
 	}
 }
 
