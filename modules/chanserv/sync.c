@@ -228,7 +228,7 @@ static void sync_user(user_t *u)
 		if (mc == NULL)
 			continue;
 
-		do_channel_sync(mc, NULL);
+		do_chanuser_sync(mc, cu, NULL);
 	}
 
 	hook_call_grant_channel_access(u);
