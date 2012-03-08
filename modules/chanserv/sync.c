@@ -231,7 +231,8 @@ static void sync_user(user_t *u)
 		do_chanuser_sync(mc, cu, NULL);
 	}
 
-	hook_call_grant_channel_access(u);
+	if (u->myuser != NULL)
+		hook_call_grant_channel_access(u);
 }
 
 static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
