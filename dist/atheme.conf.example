@@ -162,6 +162,7 @@ loadmodule "modules/crypto/posix";
  * Password return (RETURN command)		modules/nickserv/return
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
  * Password retrieval allowed to normal users	modules/nickserv/sendpass_user
+ * SET command core				modules/nickserv/set_core
  * Change primary nickname (SET ACCOUNTNAME)    modules/nickserv/set_accountname
  * SET EMAIL command			modules/nickserv/set_email
  * SET EMAILMEMOS command		modules/nickserv/set_emailmemos
@@ -215,6 +216,7 @@ loadmodule "modules/nickserv/return";
 loadmodule "modules/nickserv/setpass";
 #loadmodule "modules/nickserv/sendpass";
 loadmodule "modules/nickserv/sendpass_user";
+loadmodule "modules/nickserv/set_core";
 loadmodule "modules/nickserv/set_accountname";
 loadmodule "modules/nickserv/set_email";
 loadmodule "modules/nickserv/set_emailmemos";
@@ -276,6 +278,7 @@ loadmodule "modules/nickserv/vhost";
  * QUIET command (+q support)			modules/chanserv/quiet
  * Channel takeover recovery (RECOVER command)	modules/chanserv/recover
  * REGISTER command				modules/chanserv/register
+ * SET command core				modules/chanserv/set_core
  * SET EMAIL command	                        modules/chanserv/set_email
  * SET ENTRYMSG command	                        modules/chanserv/set_entrymsg
  * SET FANTASY command	                        modules/chanserv/set_fantasy
@@ -338,6 +341,7 @@ loadmodule "modules/chanserv/op";
 #loadmodule "modules/chanserv/quiet";
 loadmodule "modules/chanserv/recover";
 loadmodule "modules/chanserv/register";
+loadmodule "modules/chanserv/set_core";
 loadmodule "modules/chanserv/set_email";
 loadmodule "modules/chanserv/set_entrymsg";
 loadmodule "modules/chanserv/set_fantasy";
