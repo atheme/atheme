@@ -248,6 +248,11 @@ static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 	if (MC_NOSYNC & mc->flags)
 		return;
 
+	if (((hookdata->ca->level ^ hookdata->oldlevel) &
+	    (CA_AKICK | CA_REMOVE | CA_USEOWNER | CA_USEPROTECT | CA_AUTOOP |
+	     CA_OP | CA_AUTOHALFOP | CA_HALFOP | CA_AUTOVOICE | CA_VOICE)) == 0)
+		return;
+
 	do_channel_sync(mc, hookdata->ca);
 }
 
