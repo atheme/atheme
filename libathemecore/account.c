@@ -1615,7 +1615,7 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int
 	mt = myentity_find(mask);
 	if (mt != NULL)
 	{
-		ca = chanacs_find(mychan, mt, level);
+		ca = chanacs_find_literal(mychan, mt, level);
 
 		if (ca)
 			return ca;
