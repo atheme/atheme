@@ -1,7 +1,7 @@
 Help for DNSBLEXEMPT:
 
 DNSBLEXEMPT maintains a list of IP addresses which if a user matches
-one, that user will not ne checked against DNS Blacklists.
+one, that user will not be checked against DNS Blacklists.
 
 Syntax: DNSBLEXEMPT LIST
 Syntax: DNSBLEXEMPT ADD <ip> <reason>
