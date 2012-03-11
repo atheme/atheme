@@ -831,12 +831,9 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	mowgli_strlcpy(buf, reason, sizeof buf);
 	strip(buf);
 
-	k = kline_add(user, host, buf, duration, setby);
+	k = kline_add_with_id(user, host, buf, duration, setby, id ? id : ++me.kline_id);
 	k->settime = settime;
 	k->expires = k->settime + k->duration;
-
-	if (id)
-		k->number = id;
 
 	rs->nkl++;
 }
