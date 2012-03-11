@@ -1099,7 +1099,7 @@ chanserv {
 	 */
 	templates {
 		vop = "+AV";
-		hop = "+AHVhtv";
+		hop = "+AHhtv";
 		aop = "+AOhiortv";
 		sop = "+AOafhiorstv";
 
