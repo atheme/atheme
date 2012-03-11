@@ -119,7 +119,7 @@ void remove_illegals()
  * K L I N E *
  *************/
 
-kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
+kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id)
 {
 	kline_t *k;
 	mowgli_node_t *n = mowgli_node_create();
@@ -137,7 +137,7 @@ kline_t *kline_add(const char *user, const char *host, const char *reason, long 
 	k->duration = duration;
 	k->settime = CURRTIME;
 	k->expires = CURRTIME + duration;
-	k->number = ++me.kline_id;
+	k->number = id;
 
 	cnt.kline++;
 
@@ -149,6 +149,11 @@ kline_t *kline_add(const char *user, const char *host, const char *reason, long 
 		kline_sts("*", user, host, duration, treason);
 
 	return k;
+}
+
+kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby)
+{
+	return kline_add_with_id(user, host, reason, duration, setby, ++me.kline_id);
 }
 
 void kline_delete(kline_t *k)

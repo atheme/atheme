@@ -351,6 +351,7 @@ E bool is_founder(mychan_t *mychan, myentity_t *myuser);
 /* node.c */
 E mowgli_list_t klnlist;
 
+E kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
 E kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
 E void kline_delete(kline_t *k);
 E kline_t *kline_find(const char *user, const char *host);
