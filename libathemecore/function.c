@@ -734,6 +734,15 @@ float bytes(float x)
 	return x;
 }
 
+int srename(const char *old_fn, const char *new_fn)
+{
+#ifdef _WIN32
+	unlink(new_fn);
+#endif
+
+	return rename(old_fn, new_fn);
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

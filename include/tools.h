@@ -20,7 +20,7 @@ struct email_t_
 	char *subject;
 	char *body;
 	char **headers;
-	
+
 	void *miscellaneous;			/* module defined data */
 	void (*callback_sent)(email_t *);	/* callback on email send */
 };
@@ -125,6 +125,7 @@ E char *sbytes(float x);
 E float bytes(float x);
 
 E unsigned long makekey(void);
+E int srename(const char *old_fn, const char *new_fn);
 
 /* time stuff */
 #if HAVE_GETTIMEOFDAY
