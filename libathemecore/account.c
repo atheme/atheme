@@ -1617,7 +1617,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int l
 	return NULL;
 }
 
-unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
+static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;
@@ -1672,7 +1672,7 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 	return false;
 }
 
-unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
+static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 {
 	mowgli_node_t *n;
 	unsigned int result = 0;

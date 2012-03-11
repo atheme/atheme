@@ -432,8 +432,6 @@ E chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int 
 E unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
 E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
 E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
-E unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u);
-E unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
 E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
 E bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
 E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
