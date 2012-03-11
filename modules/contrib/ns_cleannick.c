@@ -77,7 +77,7 @@ static void clean_nickname(user_t *u)
 	notice(nicksvs.nick, u->nick, "Your nick has been changed to \2%s\2 per %s nickname quality guidelines.",
 	       nickbuf, me.netname);
 
-	fnc_sts(nicksvs.me->me, u, nickbuf, FNC_FORCE);	
+	fnc_sts(nicksvs.me->me, u, nickbuf, FNC_FORCE);
 }
 
 static void user_state_changed(hook_user_nick_t *data)
@@ -85,7 +85,7 @@ static void user_state_changed(hook_user_nick_t *data)
 	return_if_fail(data != NULL);
 	return_if_fail(data->u != NULL);
 
-	if (is_nickname_lame(data->u->nick))
+	if (!is_internal_client(data->u) && is_nickname_lame(data->u->nick))
 	{
 #ifdef TAUNT_LAME_USERS
 		if (data->oldnick != NULL && !is_nickname_lame(data->oldnick))
