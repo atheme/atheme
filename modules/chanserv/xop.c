@@ -383,7 +383,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, mt, level)) || ca->level != level)
+	if (!(ca = chanacs_find_literal(mc, mt, level)) || ca->level != level)
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 		return;

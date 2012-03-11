@@ -277,7 +277,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				}
 				free(target);
 				target = sstrdup(mt->name);
-				ca = chanacs_find(mc, mt, 0);
+				ca = chanacs_find_literal(mc, mt, 0);
 			}
 			if (ca != NULL)
 			{

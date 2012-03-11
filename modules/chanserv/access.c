@@ -685,7 +685,7 @@ static void cs_cmd_access_info(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		target = mt->name;
-		ca = chanacs_find(mc, mt, 0);
+		ca = chanacs_find_literal(mc, mt, 0);
 	}
 
 	if (ca == NULL)

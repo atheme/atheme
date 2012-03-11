@@ -366,7 +366,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		if ((ca = chanacs_find(mc, mt, 0x0)))
+		if ((ca = chanacs_find_literal(mc, mt, 0x0)))
 		{
 			if (ca->level & CA_AKICK)
 				command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mt->name, mc->name);
@@ -518,7 +518,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, mt, CA_AKICK)))
+	if (!(ca = chanacs_find_literal(mc, mt, CA_AKICK)))
 	{
 		command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), mt->name, mc->name);
 		return;
@@ -700,7 +700,7 @@ void akick_timeout_check(void *arg)
 		}
 		else
 		{
-			ca = chanacs_find(mc, timeout->entity, CA_AKICK);
+			ca = chanacs_find_literal(mc, timeout->entity, CA_AKICK);
 			if (ca == NULL)
 			{
 				mowgli_node_delete(&timeout->node, &akickdel_list);

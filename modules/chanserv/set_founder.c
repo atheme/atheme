@@ -107,7 +107,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			 * convenience, but we need to check here as well to
 			 * avoid a verify/use bug that can cause us to make the
 			 * access list too big. */
-			if (!chanacs_find(mc, mt, 0))
+			if (!chanacs_find_literal(mc, mt, 0))
 			{
 				ca = chanacs_open(mc, mt, NULL, true, entity(si->smu));
 				if (ca->level == 0 && chanacs_is_table_full(ca))
@@ -187,7 +187,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	 * for users.
 	 * -- jilles
 	 */
-	if (!chanacs_find(mc, mt, 0))
+	if (!chanacs_find_literal(mc, mt, 0))
 	{
 		chanacs_t *ca;
 
