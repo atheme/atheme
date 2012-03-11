@@ -1,7 +1,7 @@
 Help for ROLE ADD:
 
 ROLE ADD will create a channel role with the given
-flags. Multiple flags should be seperated by a space.
+flags. Multiple flags should be separated by a space.
 
 Syntax: ROLE <#channel> ADD <role> [flags]
 
