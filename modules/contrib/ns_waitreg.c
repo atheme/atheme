@@ -20,10 +20,12 @@ unsigned int waitreg_time = 0;
 
 static void waitreg_hook(hook_user_register_check_t *hdata)
 {
-
 	return_if_fail(hdata != NULL);
 	return_if_fail(hdata->si != NULL);
 	return_if_fail(hdata->password != NULL);
+
+	if (hdata->si->su == NULL)
+		return;
 
 	unsigned int nickage = CURRTIME - hdata->si->su->ts;
 
