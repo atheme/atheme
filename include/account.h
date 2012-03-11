@@ -425,6 +425,8 @@ E chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int leve
 E chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter);
 
 E chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
+E unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *myuser);
+//inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
 E chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *myuser, unsigned int level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
 E unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);

@@ -87,10 +87,15 @@ static inline mychan_t *mychan_find(const char *name)
 	return name ? mowgli_patricia_retrieve(mclist, name) : NULL;
 }
 
+static inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
+{
+	return (chanacs_entity_flags(mychan, mt) & level) != 0;
+}
+
 static inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
 {
 	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
-		chanacs_find(mychan, entity(si->smu), level) != NULL;
+		chanacs_entity_has_flag(mychan, entity(si->smu), level);
 }
 
 /* Destroy a chanacs if it has no flags */

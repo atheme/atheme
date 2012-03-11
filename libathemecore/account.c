@@ -1482,6 +1482,35 @@ chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *mt, unsigned int level)
 	return NULL;
 }
 
+unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *mt)
+{
+	mowgli_node_t *n;
+	chanacs_t *ca;
+	unsigned int result = 0;
+
+	return_val_if_fail(mychan != NULL && mt != NULL, 0);
+
+	MOWGLI_ITER_FOREACH(n, mychan->chanacs.head)
+	{
+		entity_chanacs_validation_vtable_t *vt;
+
+		ca = (chanacs_t *)n->data;
+
+		if (ca->entity == NULL)
+			continue;
+		if (ca->entity == mt)
+			result |= ca->level;
+		else
+		{
+			vt = myentity_get_chanacs_validator(ca->entity);
+			if (vt->match_entity(ca, mt) != NULL)
+				result |= ca->level;
+		}
+	}
+
+	return result;
+}
+
 chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
 	mowgli_node_t *n;
@@ -1633,7 +1662,7 @@ bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 	mt = entity(u->myuser);
 	if (mt != NULL)
 	{
-		if (chanacs_find(mychan, mt, level))
+		if (chanacs_entity_has_flag(mychan, mt, level))
 			return true;
 	}
 
@@ -1677,18 +1706,13 @@ unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 {
 	myentity_t *mt;
-	chanacs_t *ca;
 	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
 	mt = entity(u->myuser);
 	if (mt != NULL)
-	{
-		ca = chanacs_find(mychan, mt, 0);
-		if (ca != NULL)
-			result |= ca->level;
-	}
+		result |= chanacs_entity_flags(mychan, mt);
 
 	result |= chanacs_entity_flags_by_user(mychan, u);
 	result |= chanacs_host_flags_by_user(mychan, u);
@@ -1698,16 +1722,16 @@ unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 
 unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 {
-	chanacs_t *ca;
-
 	if (si->su != NULL)
 	{
 		return chanacs_user_flags(mychan, si->su);
 	}
 	else
 	{
-		ca = chanacs_find(mychan, entity(si->smu), 0);
-		return ca != NULL ? ca->level : 0;
+		if (entity(si->smu))
+			return chanacs_entity_flags(mychan, entity(si->smu));
+		else
+			return 0;
 	}
 }
 

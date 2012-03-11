@@ -670,7 +670,7 @@ bool is_founder(mychan_t *mychan, myentity_t *mt)
 {
 	return_val_if_fail(mt != NULL, false);
 
-	if (chanacs_find(mychan, mt, CA_FOUNDER))
+	if (chanacs_entity_has_flag(mychan, mt, CA_FOUNDER))
 		return true;
 
 	return false;
