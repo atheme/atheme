@@ -1,0 +1,8 @@
+Help for SET NOGREET:
+
+This setting allows you to opt-out of channel greeting notices.
+
+Syntax: SET NOGREET ON|OFF
+
+Example:
+    /msg &nick& SET NOGREET ON
