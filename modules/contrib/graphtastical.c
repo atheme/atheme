@@ -108,7 +108,7 @@ static void write_channels_dot_file(void *arg)
 	}
 
 	/* now, replace the old database with the new one, using an atomic rename */
-	if ((rename(DATADIR "/channels.dot.new", DATADIR "/channels.dot")) < 0)
+	if ((srename(DATADIR "/channels.dot.new", DATADIR "/channels.dot")) < 0)
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "graphtastical: cannot rename channels.dot.new to channels.dot: %s", strerror(errno1));
@@ -168,7 +168,7 @@ static void write_uchannels_dot_file(void *arg)
 	}
 
 	/* now, replace the old database with the new one, using an atomic rename */
-	if ((rename(DATADIR "/uchannels.dot.new", DATADIR "/uchannels.dot")) < 0)
+	if ((srename(DATADIR "/uchannels.dot.new", DATADIR "/uchannels.dot")) < 0)
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "graphtastical: cannot rename uchannels.dot.new to uchannels.dot: %s", strerror(errno1));
