@@ -48,39 +48,42 @@ mowgli_list_t as_reqlist;
 void _modinit(module_t *m)
 {
 	announcesvs = service_add("announceserv", NULL);
-	
+
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_request);
-	
+
 	hook_add_db_write(write_asreqdb);
 	db_register_type_handler("AR", db_h_ar);
 
-	service_named_bind_command("announceserv", &as_help);
-	service_named_bind_command("announceserv", &as_request);
-	service_named_bind_command("announceserv", &as_waiting);
-	service_named_bind_command("announceserv", &as_reject);
-	service_named_bind_command("announceserv", &as_activate);
-	service_named_bind_command("announceserv", &as_cancel);
+	if (announcesvs == NULL)
+		return;
+
+	service_bind_command(announcesvs, &as_help);
+	service_bind_command(announcesvs, &as_request);
+	service_bind_command(announcesvs, &as_waiting);
+	service_bind_command(announcesvs, &as_reject);
+	service_bind_command(announcesvs, &as_activate);
+	service_bind_command(announcesvs, &as_cancel);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	if (announcesvs)
-	{
-		service_delete(announcesvs);
-		announcesvs = NULL;
-	}
-	
 	hook_del_user_drop(account_drop_request);
 	hook_del_db_write(write_asreqdb);
 	db_unregister_type_handler("AR");
 
-	service_named_unbind_command("announceserv", &as_help);
-	service_named_unbind_command("announceserv", &as_request);
-	service_named_unbind_command("announceserv", &as_waiting);
-	service_named_unbind_command("announceserv", &as_reject);
-	service_named_unbind_command("announceserv", &as_activate);
-	service_named_unbind_command("announceserv", &as_cancel);
+	if (announcesvs != NULL)
+	{
+		service_unbind_command(announcesvs, &as_help);
+		service_unbind_command(announcesvs, &as_request);
+		service_unbind_command(announcesvs, &as_waiting);
+		service_unbind_command(announcesvs, &as_reject);
+		service_unbind_command(announcesvs, &as_activate);
+		service_unbind_command(announcesvs, &as_cancel);
+
+		service_delete(announcesvs);
+		announcesvs = NULL;
+	}
 }
 
 static void write_asreqdb(database_handle_t *db)
