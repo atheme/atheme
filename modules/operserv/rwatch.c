@@ -190,7 +190,7 @@ static void load_rwatchdb(char *path)
 
 	fclose(f);
 
-	if ((rename(path, newpath)) < 0)
+	if ((srename(path, newpath)) < 0)
 	{
 		slog(LG_ERROR, "load_rwatchdb(): couldn't rename rwatch database.");
 		return;
