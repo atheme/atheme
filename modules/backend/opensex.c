@@ -1235,11 +1235,7 @@ static void opensex_db_close(database_handle_t *db)
 	if (db->txn == DB_WRITE)
 	{
 		/* now, replace the old database with the new one, using an atomic rename */
-#ifdef _WIN32
-		unlink(newpath);
-#endif
-
-		if (rename(oldpath, newpath) < 0)
+		if (srename(oldpath, newpath) < 0)
 		{
 			errno1 = errno;
 			slog(LG_ERROR, "db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
