@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 0, command_rps, { .path = "" } };
+command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 0, command_rps, { .path = "gameserv/rps" } };
 
 void _modinit(module_t * m)
 {
