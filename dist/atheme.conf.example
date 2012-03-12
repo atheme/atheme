@@ -523,13 +523,21 @@ loadmodule "modules/saslserv/authcookie";
  *
  * Core components				modules/gameserv/main
  * DICE/WOD commands				modules/gameserv/dice
+ * EIGHTBALL command				modules/gameserv/eightball
+ * Game-specific dice calculators		modules/gameserv/gamecalc
  * HELP commands				modules/gameserv/help
+ * LOTTERY command				modules/gameserv/lottery
  * NAMEGEN command				modules/gameserv/namegen
+ * RPS command					modules/gameserv/rps
  */
 #loadmodule "modules/gameserv/main";
 #loadmodule "modules/gameserv/dice";
+#loadmodule "modules/gameserv/eightball";
+#loadmodule "modules/gameserv/gamecalc";
 #loadmodule "modules/gameserv/help";
+#loadmodule "modules/gameserv/lottery";
 #loadmodule "modules/gameserv/namegen";
+#loadmodule "modules/gameserv/rps";
 
 /* RPGServ modules.
  *
