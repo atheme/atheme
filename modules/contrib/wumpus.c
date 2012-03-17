@@ -974,7 +974,7 @@ _modinit(module_t *m)
 		hook_add_event("server_eob");
 		hook_add_server_eob(join_wumpus_channel);
 	}
-	else
+	else if (me.connected)
 		join(wumpus_cfg.chan, wumpus.svs->me->nick);
 
 	hook_add_event("user_delete");
