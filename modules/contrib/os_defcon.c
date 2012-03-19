@@ -46,7 +46,7 @@ void _modinit(module_t *m)
 
 	service_t *svs;
 	svs = service_find("operserv");
-	add_duration_conf_item("DEFCON_TIMEOUT", svs->conf_table, 0, &defcon_timeout, "m", 900);
+	add_duration_conf_item("DEFCON_TIMEOUT", &svs->conf_table, 0, &defcon_timeout, "m", 900);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -59,9 +59,10 @@ void _moddeinit(module_unload_intent_t intent)
 
 	service_t *svs;
 	svs = service_find("operserv");
-	del_conf_item("DEFCON_TIMEOUT", svs->conf_table);
+	del_conf_item("DEFCON_TIMEOUT", &svs->conf_table);
 
-	event_delete(defcon_timeoutfunc, NULL);
+	if (defcon_timer != NULL)
+		mowgli_timer_destroy(base_eventloop, defcon_timer);
 }
 
 static void defcon_nouserreg(hook_user_register_check_t *hdata)
