@@ -41,6 +41,7 @@ SRCS =			\
 	ns_waitreg.c	\
 	on_db_save.c		\
 	os_akillnicklist.c	\
+	os_defcon.c	\
 	os_joinmon.c	\
 	os_kill.c		\
 	os_klinechan.c	\
