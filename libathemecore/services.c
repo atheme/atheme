@@ -572,7 +572,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 		return;
 
 	mu = mcfp->mu;
-	svs = nicksvs.me; /* XXX */
+	svs = service_find("nickserv");
 	if (svs == NULL)
 		return;
 
