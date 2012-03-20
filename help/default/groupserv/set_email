@@ -11,4 +11,3 @@ address being associated with the group.
 
 Example:
     /msg &nick& SET !bar EMAIL some@email.address
-
