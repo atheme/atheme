@@ -278,6 +278,10 @@ void myuser_delete(myuser_t *mu)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->access_list.head)
 		myuser_access_delete(mu, (char *)n->data);
 
+	/* delete certfp entries */
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->cert_fingerprints.head)
+		mycertfp_delete((mycertfp_t *) n->data);
+
 	/* delete their nicks and report them */
 	nicks[0] = '\0';
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->nicks.head)
