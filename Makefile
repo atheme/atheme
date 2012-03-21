@@ -54,5 +54,5 @@ include/hooktypes.h: ${SRCDIR}/libathemecore/mkhooktypes.sh ${SRCDIR}/libathemec
 	(cd libathemecore && touch .depend && ${MAKE} ../include/hooktypes.h)
 
 buildsys.mk:
-	@echo "Run ./setup or at least ./configure first you idiot."
+	@echo "Run ./configure first you idiot."
 	@exit 1
