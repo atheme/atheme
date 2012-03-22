@@ -16,7 +16,7 @@ static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[]);
 
 command_t ss_netsplit =
-{ "NETSPLIT", N_("Monitor network splits."), AC_NONE, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
+{ "NETSPLIT", N_("Monitor network splits."), PRIV_SERVER_AUSPEX, 2, ss_cmd_netsplit, {.path = "statserv/netsplit"} };
 
 command_t ss_netsplit_list =
 { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
