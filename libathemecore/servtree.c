@@ -111,7 +111,7 @@ static void create_unique_service_nick(char *dest, size_t len)
 static int conf_service_nick(mowgli_config_file_entry_t *ce)
 {
 	service_t *sptr;
-	char newnick[30 + 1];
+	char newnick[NICKLEN + 1];
 
 	if (!ce->vardata)
 		return -1;
@@ -122,6 +122,7 @@ static int conf_service_nick(mowgli_config_file_entry_t *ce)
 
 	mowgli_patricia_delete(services_nick, sptr->nick);
 	free(sptr->nick);
+
 	if (service_find_nick(ce->vardata))
 	{
 		create_unique_service_nick(newnick, sizeof newnick);
@@ -276,7 +277,7 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	service_t *sptr;
 	struct ConfTable *subblock;
 	const char *nick;
-	char newnick[30 + 1];
+	char newnick[NICKLEN];
 
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(service_find(name) == NULL, NULL);
