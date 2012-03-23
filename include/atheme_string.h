@@ -15,10 +15,6 @@ E void strip(char *line);
 E char *strtok_r(char *s, const char *delim, char **lasts);
 #endif
 
-#ifndef HAVE_INET_NTOP
-E const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
-#endif
-
 #ifndef HAVE_STRCASESTR
 E char *strcasestr(char *s, const char *find);
 #endif
