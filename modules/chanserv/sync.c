@@ -21,7 +21,8 @@ command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
 
 static bool no_vhost_sync = false;
 
-static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
+static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
+		bool take)
 {
 	char akickreason[120] = "User is banned from this channel", *p;
 	int fl;
@@ -112,7 +113,8 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 				cu->modes |= ircd->owner_mode;
 			}
 		}
-		else if (ircd->owner_mode & cu->modes)
+		else if ((take || mc->flags & MC_SECURE) &&
+				ircd->owner_mode & cu->modes)
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
 			cu->modes &= ~ircd->owner_mode;
@@ -129,7 +131,8 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 				cu->modes |= ircd->protect_mode;
 			}
 		}
-		else if (ircd->protect_mode & cu->modes)
+		else if ((take || mc->flags & MC_SECURE) &&
+				ircd->protect_mode & cu->modes)
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 			cu->modes &= ~ircd->protect_mode;
@@ -147,7 +150,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 		if (cu->modes & CSTATUS_OP)
 			return;
 	}
-	else if ((CSTATUS_OP & cu->modes))
+	else if ((take || mc->flags & MC_SECURE) && CSTATUS_OP & cu->modes)
 	{
 		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 		cu->modes &= ~CSTATUS_OP;
@@ -166,7 +169,8 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 			if (cu->modes & ircd->halfops_mode)
 				return;
 		}
-		else if (ircd->halfops_mode & cu->modes)
+		else if ((take || mc->flags & MC_SECURE) &&
+				ircd->halfops_mode & cu->modes)
 		{
 			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 			cu->modes &= ~ircd->halfops_mode;
@@ -182,7 +186,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca)
 			return;
 		}
 	}
-	else if ((CSTATUS_VOICE & cu->modes))
+	else if (take && CSTATUS_VOICE & cu->modes)
 	{
 		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
 		cu->modes &= ~CSTATUS_VOICE;
@@ -202,7 +206,7 @@ static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 	{
 		cu = (chanuser_t *)n->data;
 
-		do_chanuser_sync(mc, cu, ca);
+		do_chanuser_sync(mc, cu, ca, true);
 	}
 }
 
@@ -225,7 +229,7 @@ static void sync_user(user_t *u)
 		if (mc == NULL)
 			continue;
 
-		do_chanuser_sync(mc, cu, NULL);
+		do_chanuser_sync(mc, cu, NULL, !(mc->flags & MC_NOSYNC));
 	}
 
 	if (u->myuser != NULL)
