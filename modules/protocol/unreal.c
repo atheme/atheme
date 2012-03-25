@@ -15,6 +15,7 @@
 DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
 static bool use_esvid = false;
+static bool use_mlock = false;
 
 /* *INDENT-OFF* */
 
@@ -624,6 +625,52 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 	sts(":%s SVSLOGIN %s %s %s", saslserv->me->nick, servermask, target, login);
 }
 
+static void unreal_mlock_sts(channel_t *c)
+{
+	mychan_t *mc = MYCHAN_FROM(c);
+
+	if (use_mlock == false)
+		return;
+
+	if (mc == NULL)
+		return;
+
+	sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name,
+				    mychan_get_sts_mlock(mc));
+}
+
+static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
+{
+	channel_t *c;
+	mychan_t *mc;
+	const char *mlock;
+
+	/* Ignore MLOCK if the server isn't bursting, to avoid 'war' conditions */
+	if (si->s->flags & SF_EOB)
+		return;
+
+	if (!(c = channel_find(parv[1])))
+		return;
+
+	if (!(mc = MYCHAN_FROM(c)))
+	{
+		/* Unregistered channel. Clear the MLOCK. */
+		sts(":%s MLOCK %lu %s :", me.name, (unsigned long)c->ts, c->name);
+		return;
+	}
+
+	time_t ts = atol(parv[0]);
+	if (ts > c->ts)
+		return;
+
+	mlock = mychan_get_sts_mlock(mc);
+	if (0 != strcmp(parv[2], mlock))
+	{
+		/* MLOCK is changing, with the same TS. Bounce back the correct one. */
+		sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name, mlock);
+	}
+}
+
 static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
 {
 	sasl_message_t smsg;
@@ -1212,6 +1259,8 @@ static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!irccasecmp(parv[i], "ESVID"))
 			use_esvid = true;
+		else if (!irccasecmp(parv[i], "MLOCK"))
+			use_mlock = true;
 	}
 }
 
@@ -1254,6 +1303,7 @@ void _modinit(module_t * m)
 	sasl_sts = &unreal_sasl_sts;
 	svslogin_sts = &unreal_svslogin_sts;
 	quarantine_sts = &unreal_quarantine_sts;
+	mlock_sts = &unreal_mlock_sts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;
@@ -1294,6 +1344,7 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
+	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
