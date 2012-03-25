@@ -62,6 +62,7 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_SOLIDIRCD		18
 #define PROTOCOL_NEFARIOUS		19
 #define PROTOCOL_OFFICEIRC		20
+#define PROTOCOL_SPORKSIRCD		21
 
 #define PROTOCOL_OTHER			255
 

@@ -43,6 +43,7 @@
  * InspIRCd 1.2 or later				modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * ShadowIRCd 5.0 or later			modules/protocol/shadowircd
+ * SporksIRCd					modules/protocol/sporksircd
  * UnrealIRCd 3.1/3.2				modules/protocol/unreal
  *
  * If your IRCd vendor has supplied a module file, build it and load it here

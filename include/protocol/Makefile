@@ -13,6 +13,7 @@ INCLUDES = \
 	officeirc.h	\
 	ratbox.h	\
 	shadowircd.h	\
+	sporksircd.h	\
 	ultimate3.h	\
 	undernet.h	\
 	unreal.h
