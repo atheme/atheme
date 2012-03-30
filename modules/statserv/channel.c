@@ -90,7 +90,7 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
         return;
     }
 
-    if ((c->modes & CMODE_SEC) || (c->flags & MC_PRIVATE))
+    if (c->modes & CMODE_SEC)
     {
         command_fail(si, fault_noprivs,
                 _("You are not authorised to perform this action."));
