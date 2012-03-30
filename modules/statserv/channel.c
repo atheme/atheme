@@ -92,12 +92,9 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[])
 
     if ((c->modes & CMODE_SEC) || (c->flags & MC_PRIVATE))
     {
-        if (!has_priv(si, PRIV_CHAN_AUSPEX))
-        {
             command_fail(si, fault_noprivs,
                     _("You are not authorised to perform this action."));
             return;
-        }
     }
 
     if (c->topic)
