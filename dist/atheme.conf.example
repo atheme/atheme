@@ -95,13 +95,11 @@ loadmodule "modules/backend/opensex";
  *
  * POSIX-style crypt(3)				modules/crypto/posix
  * IRCServices (also Anope etc) compatibility	modules/crypto/ircservices
- * SorceryNet services compatibility		modules/crypto/sorservices
  * Raw MD5 (Anope compatibility)		modules/crypto/rawmd5
  * Raw SHA1 (Anope compatibility)		modules/crypto/rawsha1
  *
- * The ircservices, sorservices, rawmd5 and rawsha1 modules are only
- * recommended for use with a database converted from other services with
- * password encryption.
+ * The ircservices, rawmd5 and rawsha1 modules are only recommended for use with
+ * a database converted from other services with password encryption.
  *
  * The rawsha1 module requires OpenSSL.
  */
