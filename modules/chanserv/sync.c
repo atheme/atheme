@@ -44,7 +44,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 	noop = mc->flags & MC_NOOP || (cu->user->myuser != NULL &&
 			cu->user->myuser->flags & MU_NOOP);
 
-	if (!(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
+	if (take && !(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
