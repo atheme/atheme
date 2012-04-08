@@ -16,7 +16,7 @@ static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[]);
 
 command_t ss_channel =
-{ "CHANNEL", N_("Obtain various information about a channel"), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channel"} };
+{ "CHANNEL", N_("Obtain various information about a channel."), AC_NONE, 2, ss_cmd_channel, {.path = "statserv/channel"} };
 
 command_t ss_channel_topic =
 { "TOPIC", N_("Obtain the topic for a given channel."), AC_NONE, 1, ss_cmd_channel_topic, {.path = ""} };
