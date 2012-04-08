@@ -250,7 +250,7 @@ static void sync_user(user_t *u)
 		chanuser_t *cu = iter->data;
 		mychan_t *mc;
 
-		mc = MYCHAN_FROM(mc->chan);
+		mc = MYCHAN_FROM(cu->chan);
 		if (mc == NULL)
 			continue;
 
