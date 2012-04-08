@@ -44,6 +44,31 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 	noop = mc->flags & MC_NOOP || (cu->user->myuser != NULL &&
 			cu->user->myuser->flags & MU_NOOP);
 
+	if (!(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
+	{
+		/* Stay on channel if this would empty it -- jilles */
+		if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		{
+			mc->flags |= MC_INHABIT;
+			if (!(mc->flags & MC_GUARD))
+				join(mc->chan->name, chansvs.nick);
+		}
+
+		if (mc->mlock_on & CMODE_INVITE || mc->chan->modes & CMODE_INVITE)
+		{
+			if (!(mc->chan->modes & CMODE_INVITE))
+				check_modes(mc, true);
+			remove_banlike(chansvs.me->me, mc->chan, ircd->invex_mchar, cu->user);
+			modestack_flush_channel(mc->chan);
+		}
+		else
+		{
+			ban(chansvs.me->me, mc->chan, cu->user);
+			remove_ban_exceptions(chansvs.me->me, mc->chan, cu->user);
+		}
+
+		try_kick(chansvs.me->me, mc->chan, cu->user, "You are not authorized to be on this channel");
+	}
 	if (fl & CA_AKICK && !(fl & CA_REMOVE))
 	{
 		chanacs_t *ca2;
@@ -225,7 +250,7 @@ static void sync_user(user_t *u)
 		chanuser_t *cu = iter->data;
 		mychan_t *mc;
 
-		mc = MYCHAN_FROM(cu->chan);
+		mc = MYCHAN_FROM(mc->chan);
 		if (mc == NULL)
 			continue;
 
