@@ -213,7 +213,7 @@ int atheme_main(int argc, char *argv[])
 		switch (r)
 		{
 		  case 'c':
-			  config_file = sstrdup(optarg);
+			  config_file = sstrdup(mowgli_optarg);
 			  have_conf = true;
 			  break;
 		  case 'd':
@@ -227,17 +227,17 @@ int atheme_main(int argc, char *argv[])
 			  readonly = true;
 			  break;
 		  case 'l':
-			  log_path = sstrdup(optarg);
+			  log_path = sstrdup(mowgli_optarg);
 			  have_log = true;
 			  break;
 		  case 'n':
 			  runflags |= RF_LIVE;
 			  break;
 		  case 'p':
-			  pidfilename = optarg;
+			  pidfilename = mowgli_optarg;
 			  break;
 		  case 'D':
-			  datadir = optarg;
+			  datadir = mowgli_optarg;
 			  have_datadir = true;
 			  break;
 		  case 'v':
