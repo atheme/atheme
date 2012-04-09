@@ -166,7 +166,7 @@
 
 #include "atheme.h"
 
-#if TEST_SNPRINTF
+#ifdef TEST_SNPRINTF
 #include <math.h>	/* For pow(3), NAN, and INFINITY. */
 #include <string.h>	/* For strcmp(3). */
 #if defined(__NetBSD__) || \
@@ -1553,7 +1553,7 @@ rpl_asprintf(va_alist) va_dcl
 int main(void);
 #endif	/* !HAVE_SNPRINTF || !HAVE_VSNPRINTF || !HAVE_ASPRINTF || [...] */
 
-#if TEST_SNPRINTF
+#ifdef TEST_SNPRINTF
 int
 main(void)
 {

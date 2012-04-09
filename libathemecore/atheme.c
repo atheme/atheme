@@ -200,9 +200,9 @@ int atheme_main(int argc, char *argv[])
 #endif
 	FILE *pid_file;
 	const char *pidfilename = RUNDIR "/atheme.pid";
-	char *log_p;
+	char *log_p = NULL;
 	mowgli_getopt_option_t long_opts[] = {
-		{ NULL },
+		{ NULL, 0, NULL, 0, 0 },
 	};
 
 	atheme_bootstrap();
@@ -227,7 +227,7 @@ int atheme_main(int argc, char *argv[])
 			  readonly = true;
 			  break;
 		  case 'l':
-			  log_path = sstrdup(mowgli_optarg);
+			  log_p = sstrdup(mowgli_optarg);
 			  have_log = true;
 			  break;
 		  case 'n':
