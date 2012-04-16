@@ -97,7 +97,7 @@ AC_DEFUN([BUILDSYS_SHARED_LIB], [
 			LIB_LDFLAGS='-dynamiclib -current_version ${LIB_MAJOR}.${LIB_MINOR} -compatibility_version ${LIB_MAJOR}'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.dylib'
-			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
+			LDFLAGS_RPATH='-Wl,-macosx_version_min,10.5 -Wl,-rpath,${libdir}'
 			PLUGIN_CFLAGS='-fPIC -DPIC'
 			PLUGIN_LDFLAGS='-bundle -undefined dynamic_lookup'
 			PLUGIN_SUFFIX='.impl'
