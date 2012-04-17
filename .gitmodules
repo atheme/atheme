@@ -7,3 +7,6 @@
 [submodule "libunwind"]
 	path = libunwind
 	url = git://git.savannah.gnu.org/libunwind.git
+[submodule "modules/contrib"]
+	path = modules/contrib
+	url = git://github.com/atheme/atheme-contrib-modules.git
