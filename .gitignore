@@ -12,6 +12,7 @@ core
 *.dll
 *.dll.*
 *.exe
+*.a
 *.d
 .depend
 .depend-done
