@@ -968,6 +968,7 @@ void
 _modinit(module_t *m)
 {
 	wumpus.svs = service_add("Wumpus", NULL);
+	service_set_chanmsg(wumpus.svs, false);
 
 	if (cold_start)
 	{
