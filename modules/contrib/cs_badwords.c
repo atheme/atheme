@@ -153,6 +153,9 @@ static void on_channel_message(hook_cmessage_data_t *data)
 
 	mychan_t *mc = MYCHAN_FROM(data->c);
 
+	if (mc == NULL)
+		return;
+
 	if (metadata_find(mc, "blockbadwords") == NULL)
 		return;
 
