@@ -5,17 +5,14 @@
 plugindir = ${MODDIR}/modules/$(MODULE)
 PLUGIN=${SRCS:.c=$(PLUGIN_SUFFIX)}
 
+all: $(PLUGIN)
 install: $(PLUGIN)
 
 .c$(PLUGIN_SUFFIX):
 	COMPILER=${CC}; \
 	COMPILER_FLAGS="-MMD -MP ${CFLAGS} ${PLUGIN_CFLAGS} ${CPPFLAGS} ${PLUGIN_LDFLAGS} ${LDFLAGS} -o $@ $< ${LIBS}"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 ifndef V
 

@@ -343,236 +343,148 @@ locales: ${MO_FILES}
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${CFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .c.lib.o:
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .c.plugin.o:
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .cc.o .cxx.o:
 	COMPILER="${CXX}"; \
 	COMPILER_FLAGS="${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .cc.lib.o .cxx.lib.o:
 	COMPILER="${CXX}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .cc.plugin.o .cxx.plugin.o:
 	COMPILER="${CXX}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .d.o:
 	COMPILER="${DC}"; \
 	${COMPILE_STATUS}; \
 	if test x"$(basename ${COMPILER})" = x"dmd"; then \
-		if $${COMPILER} ${DFLAGS} -c -of$@ $<; then \
-			${COMPILE_OK}; \
-		else \
-			${COMPILE_FAILED}; \
-		fi \
+		$${COMPILER} ${DFLAGS} -c -of$@ $<; \
 	else \
-		if $${COMPILER} ${DFLAGS} -c -o $@ $<; then \
-			${COMPILE_OK}; \
-		else \
-			${COMPILE_FAILED}; \
-		fi \
+		$${COMPILER} ${DFLAGS} -c -o $@ $<; \
 	fi
 
 .erl.beam:
 	COMPILER="${ERLC}"; \
 	COMPILER_FLAGS="${ERLCFLAGS} -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .java.class:
 	COMPILER="${JAVAC}"; \
 	COMPILER_FLAGS="${JAVACFLAGS} $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS} $<; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .m.o:
 	COMPILER="${OBJC}"; \
 	COMPILER_FLAGS="${OBJCFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .m.lib.o:
 	COMPILER="${OBJC}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${OBJCFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .m.plugin.o:
 	COMPILER="${OBJC}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${OBJCFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .mm.o:
 	COMPILER="${OBJCXX}"; \
 	COMPILER_FLAGS="${OBJCXXFLAGS} ${OBJCFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .mm.lib.o:
 	COMPILER="${OBJCXX}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${OBJCXXFLAGS} ${OBJCFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .mm.plugin.o:
 	COMPILER="${OBJCXX}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${OBJCXXFLAGS} ${OBJCFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .po.mo:
 	COMPILER="${MSGFMT}"; \
 	COMPILER_FLAGS="-c -o $@ $<"; \
 	${COMPILE_RESOURCE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_RESOURCE_OK}; \
-	else \
-		${COMPILE_RESOURCE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .py.pyc:
 	COMPILER="${PYTHON}"; \
 	COMPILER_FLAGS="${PYTHON_FLAGS}"; \
 	${COMPILE_RESOURCE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS} -c "import py_compile; py_compile.compile('$<')"; then \
-		${COMPILE_RESOURCE_OK}; \
-	else \
-		${COMPILE_RESOURCE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS} -c "import py_compile; py_compile.compile('$<')"
 
 .rc.o .rc.lib.o .rc.plugin.o:
 	COMPILER="${WINDRES}"; \
 	COMPILER_FLAGS="${CPPFLAGS} -J rc -O coff -o $@ $<"; \
 	${COMPILE_RESOURCE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_RESOURCE_OK}; \
-	else \
-		${COMPILE_RESOURCE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .S.o:
 	COMPILER="${AS}"; \
 	COMPILER_FLAGS="${ASFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .S.lib.o:
 	COMPILER="${AS}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${ASFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .S.plugin.o:
 	COMPILER="${AS}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${ASFLAGS} ${CPPFLAGS} -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 .xpm.o:
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${CFLAGS} ${CPPFLAGS} -x c -c -o $@ $<"; \
 	${COMPILE_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .xpm.lib.o:
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${LIB_CFLAGS} ${CFLAGS} ${CPPFLAGS} -x c -c -o $@ $<"; \
 	${COMPILE_LIB_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_LIB_OK}; \
-	else \
-		${COMPILE_LIB_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
+
 .xpm.plugin.o:
 	COMPILER="${CC}"; \
 	COMPILER_FLAGS="${PLUGIN_CFLAGS} ${CFLAGS} ${CPPFLAGS} -x c -c -o $@ $<"; \
 	${COMPILE_PLUGIN_STATUS}; \
-	if $${COMPILER} $${COMPILER_FLAGS}; then \
-		${COMPILE_PLUGIN_OK}; \
-	else \
-		${COMPILE_PLUGIN_FAILED}; \
-	fi
+	$${COMPILER} $${COMPILER_FLAGS}
 
 install: ${SHARED_LIB} ${STATIC_LIB} ${STATIC_PIC_LIB} ${PLUGIN} ${PROG} install-extra
 	for i in ${SUBDIRS}; do \
