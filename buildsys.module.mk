@@ -19,7 +19,8 @@ install: $(PLUGIN)
 
 ifndef V
 
-COMPILE_OK = printf "\033[K\033[0;32mSuccessfully compiled \033[1;32m$<\033[0;32m as \033[1;32m$@\033[0;32m.\033[0m\n"
+COMPILE_STATUS = printf "CompileModule: $@\n"
+COMPILE_OK = true
 
 else
 
