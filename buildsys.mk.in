@@ -101,6 +101,7 @@ LIB_OBJS = ${OBJS:.o=.lib.o}
 PLUGIN_OBJS = ${OBJS:.o=.plugin.o}
 
 MO_FILES = ${LOCALES:.po=.mo}
+DEPFILES = $(patsubst %,%.dep,${SRCS})
 
 .SILENT:
 .SUFFIXES:
@@ -113,29 +114,8 @@ subdirs: ${SUBDIRS}
 ${SUBDIRS}:
 	${MAKE} -C $@ ${MFLAGS}
 
-depend: pre-depend ${SRCS}
-	regen=0; \
-	deps=""; \
-	test -f .deps || regen=1; \
-	for i in ${SRCS}; do \
-		case $$i in \
-			*.c | *.cc | *.cxx | *.m | *.mm | *.S) \
-				test $$i -nt .deps && regen=1; \
-				deps="$$deps $$i.dep"; \
-				;; \
-		esac; \
-	done; \
-	if test x"$$regen" = x"1" -a x"$$deps" != x""; then \
-		${DEPEND_STATUS}; \
-		if ${MAKE} ${MFLAGS} $$deps && cat $$deps >.deps; then \
-			rm -f $$deps; \
-			${DEPEND_OK}; \
-		else \
-			:> .deps; \
-			touch -t 0001010000 .deps; \
-			${DEPEND_FAILED}; \
-		fi; \
-	fi
+depend: pre-depend ${DEPFILES}
+pre-depend:
 
 .c.c.dep:
 	${CPP} ${CPPFLAGS} ${CFLAGS} -M $< | \
@@ -161,8 +141,6 @@ depend: pre-depend ${SRCS}
 	${CPP} ${CPPFLAGS} ${ASFLAGS} -M $< | \
 	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
 	{ rm -f $@; false; }
-
-pre-depend:
 
 ${PROG} ${PROG_NOINST}: ${EXT_DEPS} ${OBJS} ${OBJS_EXTRA}
 	LDOBJS="${OBJS} ${OBJS_EXTRA}"; \
@@ -684,7 +662,7 @@ distclean: clean
 		${DIR_LEAVE}; \
 	done
 
-	for i in ${DISTCLEAN} .deps *~; do \
+	for i in ${DISTCLEAN} *.dep *~; do \
 		if test -f $$i -o -d $$i; then \
 			if rm -fr $$i; then \
 				${DELETE_OK}; \
@@ -726,8 +704,8 @@ else
 
 DIR_ENTER = cd $$i || exit $$?
 DIR_LEAVE = cd .. || exit $$?
-DEPEND_STATUS = true
-DEPEND_OK = true
+DEPEND_STATUS = printf "BuildDepends\n"
+DEPEND_OK = printf "Done\n"
 DEPEND_FAILED = exit $$?
 COMPILE_STATUS = printf "CompileExe: $$COMPILER $${COMPILER_FLAGS}\n"
 COMPILE_OK = true
@@ -752,4 +730,4 @@ DELETE_FAILED = exit $$?
 
 endif
 
-include .deps
+-include ${DEPFILES}

@@ -10,5 +10,3 @@ LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) -L../../libathemecore -lathemecore
 LDFLAGS		+= $(LDFLAGS_RPATH)
 
 build: all
-
-include .deps

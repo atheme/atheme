@@ -112,5 +112,3 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 			done); \
 		done; \
 	fi
-
-include .deps

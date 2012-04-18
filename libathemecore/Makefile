@@ -78,5 +78,3 @@ build: all
 
 ../include/serno.h:
 	(cd ..; ${MAKE} include/serno.h)
-
-include .deps
