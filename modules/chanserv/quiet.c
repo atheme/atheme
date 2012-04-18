@@ -42,6 +42,32 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_unquiet);
 }
 
+static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
+{
+	chanuser_t *cu;
+	unsigned int flag;
+
+	cu = chanuser_find(c, tu);
+	if (cu == NULL)
+		return true;
+	if (cu->modes & CSTATUS_OP)
+		flag = CA_OP;
+	else if (cu->modes & CSTATUS_VOICE)
+		flag = CA_VOICE;
+	else
+		flag = 0;
+	if (flag != 0 && !chanacs_source_has_flag(mc, si, flag))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return false;
+	}
+	if (cu->modes & CSTATUS_OP)
+		channel_mode_va(chansvs.me->me, c, 2, "-o", tu->nick);
+	if (cu->modes & CSTATUS_VOICE)
+		channel_mode_va(chansvs.me->me, c, 2, "-v", tu->nick);
+	return true;
+}
+
 /* Notify at most this many users in private notices, otherwise channel */
 #define MAX_SINGLE_NOTIFY 3
 
@@ -164,6 +190,9 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	if ((tu = user_find_named(target)))
 	{
 		char hostbuf[BUFSIZE];
+
+		if (!devoice_user(si, mc, c, tu))
+			return;
 
 		hostbuf[0] = '\0';
 
