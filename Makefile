@@ -1,9 +1,14 @@
--include extra.mk
--include buildsys.mk
-
 SUBDIRS=$(LIBMOWGLI) include libathemecore modules src $(PODIR)
 CLEANDIRS = ${SUBDIRS}
 DISTCLEAN = extra.mk buildsys.mk config.log config.status atheme-services.pc
+
+-include extra.mk
+-include buildsys.mk
+
+# explicit dependencies need to be expressed to ensure parallel builds don't die
+libathemecore: $(LIBMOWGLI)
+modules: libathemecore
+src: libathemecore
 
 include/serno.h:
 	@revh=; \

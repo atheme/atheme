@@ -1,6 +1,3 @@
-include ../extra.mk
-include ../buildsys.mk
-
 SUBDIRS = \
 	alis \
 	auth \
@@ -28,3 +25,6 @@ SUBDIRS = \
 	scripting \
 	transport \
 	$(CONTRIB_ENABLE)
+
+include ../extra.mk
+include ../buildsys.mk

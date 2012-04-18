@@ -11,4 +11,3 @@ MODULE = scripting
 
 include ../../extra.mk
 include ../../buildsys.mk
-

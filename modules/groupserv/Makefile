@@ -34,11 +34,11 @@ BASE_SRCS =			\
 
 SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
 
+SUBDIRS = main
+
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
-
-SUBDIRS = main
 
 CPPFLAGS	+= -I../../include
 LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
