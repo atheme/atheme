@@ -21,6 +21,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 
+V=1
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 AS = @AS@
@@ -142,8 +143,28 @@ depend: pre-depend ${SRCS}
 		fi; \
 	fi
 
-.c.c.dep .cc.cc.dep .cxx.cxx.dep .m.m.dep .mm.mm.dep .S.S.dep:
-	${CPP} ${CPPFLAGS} -M $< | \
+.c.c.dep:
+	${CPP} ${CPPFLAGS} ${CFLAGS} -M $< | \
+	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
+	{ rm -f $@; false; }
+
+.cc.cc.dep .cxx.cxx.dep:
+	${CPP} ${CPPFLAGS} ${CXXFLAGS} -M $< | \
+	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
+	{ rm -f $@; false; }
+
+.m.m.dep:
+	${CPP} ${CPPFLAGS} ${OBJCFLAGS} -M $< | \
+	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
+	{ rm -f $@; false; }
+
+.mm.mm.dep:
+	${CPP} ${CPPFLAGS} ${OBJCPPFLAGS} -M $< | \
+	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
+	{ rm -f $@; false; }
+
+.S.S.dep:
+	${CPP} ${CPPFLAGS} ${ASFLAGS} -M $< | \
 	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
 	{ rm -f $@; false; }
 
@@ -797,9 +818,9 @@ DELETE_FAILED = err=$$?; printf "@TERM_EL@@TERM_SETAF1@Failed to delete @TERM_BO
 
 else
 
-DIR_ENTER = printf "DirectoryEnter: $$i\n"; cd $$i || exit $$?
-DIR_LEAVE = printf "DirectoryLeave: $$i\n"; cd .. || exit $$?
-DEPEND_STATUS = printf "GenerateDependencies\n"
+DIR_ENTER = cd $$i || exit $$?
+DIR_LEAVE = cd .. || exit $$?
+DEPEND_STATUS = true
 DEPEND_OK = true
 DEPEND_FAILED = exit $$?
 COMPILE_STATUS = printf "CompileExe: $$COMPILER $${COMPILER_FLAGS}\n"
