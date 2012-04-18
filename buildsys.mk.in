@@ -105,19 +105,13 @@ MO_FILES = ${LOCALES:.po=.mo}
 .SILENT:
 .SUFFIXES:
 .SUFFIXES: .beam .c .c.dep .cc .cc.dep .class .cxx .cxx.dep .d .erl .lib.o .java .mo .m .m.dep .mm .mm.dep .o .plugin.o .po .py .pyc .rc .S .S.dep .xpm
-.PHONY: all subdirs pre-depend depend install install-extra uninstall uninstall-extra clean distclean locales
+.PHONY: all subdirs ${SUBDIRS} pre-depend depend install install-extra uninstall uninstall-extra clean distclean locales
 
-all:
-	${MAKE} ${MFLAGS} subdirs
-	${MAKE} ${MFLAGS} depend
-	${MAKE} ${STATIC_LIB} ${STATIC_LIB_NOINST} ${STATIC_PIC_LIB} ${STATIC_PIC_LIB_NOINST} ${SHARED_LIB} ${SHARED_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} ${JARFILE} locales
+all: subdirs depend ${STATIC_LIB} ${STATIC_LIB_NOINST} ${STATIC_PIC_LIB} ${STATIC_PIC_LIB_NOINST} ${SHARED_LIB} ${SHARED_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} ${JARFILE} locales
 
-subdirs:
-	for i in ${SUBDIRS}; do \
-		${DIR_ENTER}; \
-		${MAKE} ${MFLAGS} || exit $$?; \
-		${DIR_LEAVE}; \
-	done
+subdirs: ${SUBDIRS}
+${SUBDIRS}:
+	${MAKE} -C $@ ${MFLAGS}
 
 depend: pre-depend ${SRCS}
 	regen=0; \
