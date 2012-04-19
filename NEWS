@@ -1,6 +1,6 @@
-Atheme Services 7.0 Release Notes
-=================================
-All bugfixes from the 6.0 branch of Atheme are also in 7.0.
+Atheme Services 7.0.0 Release Notes
+===================================
+All bugfixes from the 6.0 branch of Atheme are also in 7.0.0.
 
 dbverify
 - New utility.  Performs extensive and complicated consistency checks
