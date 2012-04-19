@@ -155,6 +155,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
 	chanban_t *cb;
+	int n;
 
 	if (!channel || !target)
 	{
@@ -201,6 +202,9 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
 		cb = chanban_add(c, hostbuf, 'q');
+		n = remove_ban_exceptions(si->service->me, c, tu);
+		if (n > 0)
+			command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
 		notify_victims(si, c, cb, MTYPE_ADD);
 		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
