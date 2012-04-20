@@ -12,7 +12,7 @@ include ../../../buildsys.mk
 
 plugindir = $(MODDIR)/modules/scripting
 
-CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR='"$(plugindir)"'
+CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR=\"$(plugindir)\"
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS) $(PERL_LIBS)
 LIBS +=	-L../../../libathemecore -lathemecore ${LDFLAGS_RPATH}
