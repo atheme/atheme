@@ -1,4 +1,5 @@
 *~
+*.dep
 *.pc
 *.bak
 *.rej
