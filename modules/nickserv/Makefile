@@ -70,14 +70,4 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
-
-# Custom rule for cracklib.c which is the only module to ever need
-# -lcrack.
-cracklib$(PLUGIN_SUFFIX): cracklib.c
-	${COMPILE_STATUS}
-	if ${CC} -MMD -MP ${CFLAGS} ${PLUGIN_CFLAGS} ${CPPFLAGS} ${PLUGIN_LDFLAGS} ${LDFLAGS} -o $@ ${CRACKLIB_C} ${LIBS} ${CRACKLIB_LIBS}; then \
-		${COMPILE_OK}; \
-	else \
-		${COMPILE_FAILED}; \
-	fi
+LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH} ${CRACKLIB_LIBS}
