@@ -290,6 +290,7 @@ typedef struct {
 typedef struct {
 	mychan_t *mc;
 	myuser_t *mu;
+	bool simulate;
 } hook_channel_succession_req_t;
 
 typedef struct {
