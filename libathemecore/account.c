@@ -223,6 +223,11 @@ void myuser_delete(myuser_t *mu)
 		/* attempt succession */
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
+			hook_call_channel_succession((
+					&(hook_channel_succession_req_t){
+						.mc = mc,
+						.mu = successor
+					}));
 			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
 					mc->name, entity(successor)->name,

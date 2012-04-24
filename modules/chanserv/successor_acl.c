@@ -28,8 +28,15 @@ static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
 	req->mu = mychan_pick_candidate(req->mc, successor_flag);
 	if (req->mu == NULL)
 		return;
+}
 
-	/* remove the successor flag from the ACL entry since we've picked a successor. */
+static void channel_succession_hook(hook_channel_succession_req_t *req)
+{
+	return_if_fail(req != NULL);
+	return_if_fail(req->mc != NULL);
+	return_if_fail(req->mu != NULL);
+
+	/* Remove the successor flag from the new founder. */
 	chanacs_change_simple(req->mc, entity(req->mu), NULL, 0, successor_flag, NULL);
 }
 
@@ -45,4 +52,5 @@ void _modinit(module_t *m)
 
 	slog(LG_DEBUG, "chanserv/successor_acl: +S has been inserted with bitmask 0x%x", successor_flag);
 	hook_add_first_channel_pick_successor(channel_pick_successor_hook);
+	hook_add_channel_succession(channel_succession_hook);
 }
