@@ -30,8 +30,7 @@ static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
 		return;
 
 	/* remove the successor flag from the ACL entry since we've picked a successor. */
-	if (!req->simulate)
-		chanacs_change_simple(req->mc, entity(req->mu), NULL, 0, successor_flag, NULL);
+	chanacs_change_simple(req->mc, entity(req->mu), NULL, 0, successor_flag, NULL);
 }
 
 void _modinit(module_t *m)

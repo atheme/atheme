@@ -221,7 +221,7 @@ void myuser_delete(myuser_t *mu)
 		mc = ca->mychan;
 
 		/* attempt succession */
-		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc, false)) != NULL)
+		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			slog(LG_INFO, _("SUCCESSION: \2%s\2 to \2%s\2 from \2%s\2"), mc->name, entity(successor)->name, entity(mu)->name);
 			slog(LG_VERBOSE, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %zu)",
@@ -1132,7 +1132,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel)
  * the channel or on IRC; this would give an unfair advantage to
  * 24*7 clients and bots.
  * -- jilles */
-myuser_t *mychan_pick_successor(mychan_t *mc, bool simulate)
+myuser_t *mychan_pick_successor(mychan_t *mc)
 {
 	myuser_t *mu;
 	hook_channel_succession_req_t req;
@@ -1142,7 +1142,6 @@ myuser_t *mychan_pick_successor(mychan_t *mc, bool simulate)
 	/* allow a hook to override/augment the succession. */
 	req.mc = mc;
 	req.mu = NULL;
-	req.simulate = simulate;
 	hook_call_channel_pick_successor(&req);
 	if (req.mu != NULL)
 		return req.mu;
