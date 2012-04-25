@@ -173,11 +173,11 @@ static void ATHEME_CONVERT_write_accounts(void)
 				/*fprintf(f, "MDU %s private:host:actual %s", nc->display, na->last_usermask);*/
 				fprintf(f, "MDU %s private:host:vhost %s\n", nc->display, na->last_usermask);
 			}
-			if (nc->greet)
+			if (nc->greet && *nc->greet)
 				fprintf(f, "MDU %s greet %s\n", nc->display, nc->greet);
 			if (nc->icq)
 				fprintf(f, "MDU %s icq %u\n", nc->display, (unsigned int)nc->icq);
-			if (nc->url)
+			if (nc->url && *nc->url)
 				fprintf(f, "MDU %s url %s\n", nc->display, nc->url);
 			if (nc->flags & NI_SERVICES_ROOT)
 				fprintf(f, "SO %s %s 0\n", nc->display, OPERCLASS_ROOT);
@@ -335,20 +335,19 @@ static void ATHEME_CONVERT_write_channels(void)
 				caout++;
 			}
 
-			if (ci->url)
+			if (ci->url != NULL && *ci->url)
 				fprintf(f, "MDC %s url %s\n", ci->name, ci->url);
 
-			if (ci->email)
+			if (ci->email != NULL && *ci->email)
 				fprintf(f, "MDC %s email %s\n", ci->name, ci->email);
 
-			if (ci->desc)
+			if (ci->desc != NULL && *ci->desc)
 				fprintf(f, "MDC %s description %s\n", ci->name, ci->desc);
 
-			if (ci->entry_message)
+			if (ci->entry_message != NULL && *ci->entry_message)
 				fprintf(f, "MDC %s private:entrymsg %s\n", ci->name, ci->entry_message);
 
-			if (ci->last_topic && ci->last_topic_setter[0] &&
-					ci->last_topic_time)
+			if (ci->last_topic != NULL && *ci->last_topic && ci->last_topic_setter != NULL && *ci->last_topic_setter && ci->last_topic_time)
 			{
 				fprintf(f, "MDC %s private:topic:text %s\n",
 						ci->name, ci->last_topic);
@@ -359,16 +358,19 @@ static void ATHEME_CONVERT_write_channels(void)
 			}
 
 			/* If the channel is forbidden, add close metadata */
-			if (ci->flags & CI_VERBOTEN)
+			if (ci->flags & CI_VERBOTEN && ci->forbidby != NULL && *ci->forbidby)
 			{
 				fprintf(f, "MDC %s private:close:closer %s\n", ci->name, ci->forbidby);
-				fprintf(f, "MDC %s private:close:reason %s\n", ci->name, ci->forbidreason);
+
+				if (ci->forbidreason != NULL && *ci->forbidreason)
+					fprintf(f, "MDC %s private:close:reason %s\n", ci->name, ci->forbidreason);
+
 				fprintf(f, "MDC %s private:close:timestamp %lu\n", ci->name, (unsigned long)time(NULL));
 			}
 
 			/* if the channel has a botserv bot assigned, add botserv metadata */
 			bi = ci->bi;
-			if (bi != NULL)
+			if (bi != NULL && bi->nick != NULL && *bi->nick)
 			{
 				fprintf(f, "MDC %s private:botserv:bot-assigned %s\n", ci->name, bi->nick);
 				fprintf(f, "MDC %s private:botserv:bot-handle-fantasy %s\n", ci->name, bi->nick);
