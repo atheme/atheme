@@ -1113,13 +1113,19 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		sts(":%s ENDBURST", me.numeric);
 	}
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
+}
 
-	if (s != NULL)
+static void m_endburst(sourceinfo_t *si, int parc, char *parv[])
+{
+	mowgli_node_t *n;
+
+	/* elicit PONG for EOB detection. */
+	sts(":%s PING %s %s", me.numeric, me.numeric, si->s->sid);
+
+	MOWGLI_ITER_FOREACH(n, si->s->children.head)
 	{
-		/* elicit PONG for EOB detection; pinging uplink is
-		 * already done elsewhere -- jilles
-		 * Not in inspircd12 -- jilles
-		 */
+		server_t *s = n->data;
+
 		sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
 	}
 }
@@ -1549,6 +1555,7 @@ void _modinit(module_t * m)
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("ENDBURST", m_endburst, 0, MSRC_SERVER);
 
 	hook_add_event("server_eob");
 	hook_add_server_eob(server_eob);
