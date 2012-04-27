@@ -1,3 +1,20 @@
+Atheme Services 7.0.1 Release Notes
+Codename: "Codenames are magic!"
+===================================
+ircd protocol
+- inspircd: use ENDBURST to determine who to elicit PING/PONG from.
+  This fixes a possible desync with inspircd.
+botserv
+- add '/' to character blacklist.
+chanserv
+- Add a new hook channel_succession to remove +S from the new 
+  founder properly.
+scripting
+- perl: Fix build on some systems with a newer GNU Make.
+other
+- libmowgli-2.0.0 is now the required libmowgli. This change is
+  so the system libmowgli-2 will work correctly with fd.o pkgconfig.
+
 Atheme Services 7.0.0 Release Notes
 ===================================
 All bugfixes from the 6.0 branch of Atheme are also in 7.0.0.
