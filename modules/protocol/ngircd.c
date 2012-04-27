@@ -119,7 +119,7 @@ static void ngircd_quit_sts(user_t *u, const char *reason)
 /* WALLOPS wrapper */
 static void ngircd_wallops_sts(const char *text)
 {
-	sts(":%s GLOBOPS :%s", me.name, text);
+	sts(":%s WALLOPS :%s", me.name, text);
 }
 
 /* join a channel */
