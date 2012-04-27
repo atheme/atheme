@@ -125,23 +125,15 @@ static void ngircd_wallops_sts(const char *text)
 /* join a channel */
 static void ngircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
-	if (isnew)
-	{
-		sts(":%s JOIN %s", u->nick, c->name);
-		if (modes[0] && modes[1])
-			sts(":%s MODE %s %s", u->nick, c->name, modes);
-	}
-	else
-	{
-		sts(":%s JOIN %s", u->nick, c->name);
-	}
-	sts(":%s MODE %s +o %s %lu", u->nick, c->name, u->nick, (unsigned long)c->ts);
+	sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(u));
+	if (isnew && modes[0] && modes[1])
+		sts(":%s MODE %s %s", ME, c->name, modes);
 }
 
 /* kicks a user from a channel */
 static void ngircd_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
-	sts(":%s KICK %s %s :%s", source->nick, c->name, u->nick, reason);
+	sts(":%s KICK %s %s :%s", CLIENT_NAME(source), c->name, CLIENT_NAME(u), reason);
 
 	chanuser_delete(c, u);
 }
@@ -433,6 +425,40 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
+{
+	channel_t *c;
+	unsigned int userc;
+	char *userv[256];
+	unsigned int i;
+
+	c = channel_find(parv[0]);
+
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_njoin(): new channel: %s", parv[0]);
+
+                /* Give channels created during burst an older "TS"
+                 * so they won't be deopped -- jilles */
+		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
+
+                /* if !/+ channel, we don't want to do anything with it */
+		if (c == NULL)
+			return;
+
+		/* Check mode locks */
+		channel_mode_va(NULL, c, 1, "+");
+	}
+
+	userc = sjtoken(parv[parc - 1], ',', userv);
+
+	for (i = 0; i < userc; i++)
+		chanuser_add(c, userv[i]);
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c);
+}
+
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
@@ -569,12 +595,17 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 		chanc = sjtoken(parv[0], ',', chanv);
 		for (i = 0; i < chanc; i++)
 		{
+			char *st = strchr(chanv[i], 0x07);
+			if (st != NULL)
+				*st++ = '\0';
+
 			channel_t *c = channel_find(chanv[i]);
 
 			if (!c)
 			{
-				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
+				slog(LG_DEBUG, "m_join(): new channel: %s", chanv[i]);
 				c = channel_add(chanv[i], CURRTIME, si->su->server);
+
 				/* Tell the core to check mode locks now,
 				 * otherwise it may only happen after the next
 				 * mode change.
@@ -586,7 +617,27 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 				if (!me.bursting)
 					channel_mode_va(NULL, c, 1, "+");
 			}
+
 			chanuser_add(c, si->su->nick);
+
+			if (st != NULL)
+			{
+				while (*st != '\0')
+				{
+					switch (*st)
+					{
+					case 'o':
+						channel_mode_va(NULL, c, 2, "+o", si->su->nick);
+						break;
+					case 'v':
+						channel_mode_va(NULL, c, 2, "+v", si->su->nick);
+						break;
+					default:
+						break;
+					}
+					st++;
+				}
+			}
 		}
 	}
 }
@@ -670,6 +721,7 @@ void _modinit(module_t * m)
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("NJOIN", m_njoin, 2, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
