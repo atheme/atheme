@@ -241,19 +241,7 @@ static void ngircd_unkline_sts(const char *server, const char *user, const char 
 /* topic wrapper */
 static void ngircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	if (ts < prevts || prevts == 0)
-		sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, setter, (unsigned long)ts, topic);
-	else if (prevts > 1)
-	{
-		ts = prevts - 1;
-		sts(":%s TOPIC %s %s %lu :%s", source->nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
-		c->topicts = ts;
-	}
-	else
-	{
-		notice(source->nick, c->name, "Unable to change topic to: %s", topic);
-		c->topicts = 1;
-	}
+	sts(":%s TOPIC %s :%s", source->nick, c->name, topic);
 }
 
 /* mode wrapper */
@@ -308,7 +296,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic_from(si, c, parv[1], atol(parv[2]), parv[3]);
+	handle_topic_from(si, c, si->su != NULL ? si->su->nick : si->s->name, CURRTIME, parv[1]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
@@ -767,7 +755,7 @@ void _modinit(module_t * m)
 	pcommand_add("JOIN", m_join, 1, MSRC_USER);
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("TOPIC", m_topic, 4, MSRC_USER | MSRC_SERVER);
+	pcommand_add("TOPIC", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
 	hook_add_event("nick_group");
