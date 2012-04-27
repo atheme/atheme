@@ -459,6 +459,32 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 		channel_delete(c);
 }
 
+static void m_chaninfo(sourceinfo_t *si, int parc, char *parv[])
+{
+	channel_t *c;
+
+	c = channel_find(parv[0]);
+
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_chaninfo(): new channel: %s", parv[0]);
+
+		/* Give channels created during burst an older "TS"
+		 * so they won't be deopped -- jilles */
+		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
+
+		/* if !/+ channel, we don't want to do anything with it */
+		if (c == NULL)
+			return;
+
+		/* Check mode locks */
+		channel_mode_va(NULL, c, 1, "+");
+	}
+
+	channel_mode(NULL, c, parc - 2, parv + 1);
+	handle_topic(c, si->s->name, CURRTIME, parv[parc - 1]);
+}
+
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
@@ -721,6 +747,7 @@ void _modinit(module_t * m)
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("CHANINFO", m_chaninfo, 3, MSRC_SERVER);
 	pcommand_add("NJOIN", m_njoin, 2, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
