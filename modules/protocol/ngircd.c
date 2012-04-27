@@ -277,7 +277,7 @@ static void ngircd_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void ngircd_ping_sts(void)
 {
-	sts("PING :%s", me.name);
+	sts(":%s PING :%s", me.name, me.name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -322,23 +322,12 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
+	sts(":%s PONG %s", me.name, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 {
-	server_t *s;
-
-	/* someone replied to our PING */
-	if (!parv[0])
-		return;
-	s = server_find(parv[0]);
-	if (s == NULL)
-		return;
-	handle_eob(s);
-
-	if (s != si->s)
-		return;
+	handle_eob(si->s);
 
 	me.uplinkpong = CURRTIME;
 
@@ -519,7 +508,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, s->name);
+		sts(":%s PING %s", me.name, s->name);
 	}
 }
 
