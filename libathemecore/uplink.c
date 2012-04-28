@@ -47,7 +47,6 @@ void init_uplinks(void)
 uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
 {
 	uplink_t *u;
-	mowgli_node_t *n;
 
 	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
 
@@ -72,9 +71,7 @@ uplink_t *uplink_add(const char *name, const char *host, const char *send_passwo
 	else
 	{
 		u = mowgli_heap_alloc(uplink_heap);
-		n = mowgli_node_create();
-		u->node = n;
-		mowgli_node_add(u, n, &uplinks);
+		mowgli_node_add(u, &u->node, &uplinks);
 		cnt.uplink++;
 	}
 
@@ -91,8 +88,6 @@ uplink_t *uplink_add(const char *name, const char *host, const char *send_passwo
 
 void uplink_delete(uplink_t * u)
 {
-	mowgli_node_t *n = mowgli_node_find(u, &uplinks);
-
 	free(u->name);
 	free(u->host);
 	free(u->send_pass);
@@ -100,10 +95,9 @@ void uplink_delete(uplink_t * u)
 	if (u->vhost)
 		free(u->vhost);
 
-	mowgli_node_delete(n, &uplinks);
-	mowgli_node_free(n);
-
+	mowgli_node_delete(&u->node, &uplinks);
 	mowgli_heap_free(uplink_heap, u);
+
 	cnt.uplink--;
 }
 
@@ -144,9 +138,9 @@ void uplink_connect(void)
 		curr_uplink = uplinks.head->data;
 		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%d.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
-	else if (curr_uplink->node->next)
+	else if (curr_uplink->node.next)
 	{
-		u = curr_uplink->node->next->data;
+		u = curr_uplink->node.next->data;
 
 		curr_uplink = u;
 		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);

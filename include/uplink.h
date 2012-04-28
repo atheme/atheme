@@ -14,13 +14,13 @@ typedef struct uplink_ uplink_t;
 
 struct uplink_
 {
+	mowgli_node_t	node;
+
 	char *name;
 	char *host;
 	char *send_pass;
 	char *receive_pass;
 	char *vhost;
-
-	mowgli_node_t	*node;
 
 	unsigned int port;
 
