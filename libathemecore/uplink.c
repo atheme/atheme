@@ -44,7 +44,7 @@ void init_uplinks(void)
 	}
 }
 
-uplink_t *uplink_add(const char *name, const char *host, const char *password, const char *vhost, int port)
+uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port)
 {
 	uplink_t *u;
 	mowgli_node_t *n;
@@ -58,7 +58,8 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 			u->flags &= ~UPF_ILLEGAL;
 			free(u->name);
 			free(u->host);
-			free(u->pass);
+			free(u->send_pass);
+			free(u->receive_pass);
 			if (u->vhost)
 				free(u->vhost);
 		}
@@ -79,7 +80,8 @@ uplink_t *uplink_add(const char *name, const char *host, const char *password, c
 
 	u->name = sstrdup(name);
 	u->host = sstrdup(host);
-	u->pass = sstrdup(password);
+	u->send_pass = sstrdup(send_password);
+	u->receive_pass = sstrdup(receive_password);
 	if (vhost)
 		u->vhost = sstrdup(vhost);
 	u->port = port;
@@ -93,7 +95,8 @@ void uplink_delete(uplink_t * u)
 
 	free(u->name);
 	free(u->host);
-	free(u->pass);
+	free(u->send_pass);
+	free(u->receive_pass);
 	if (u->vhost)
 		free(u->vhost);
 
@@ -155,7 +158,7 @@ void uplink_connect(void)
 	}
 
 	u = curr_uplink;
-	
+
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, NULL, irc_handle_connect);
 	if (curr_uplink->conn != NULL)
 	{

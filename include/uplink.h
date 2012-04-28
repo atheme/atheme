@@ -16,7 +16,8 @@ struct uplink_
 {
 	char *name;
 	char *host;
-	char *pass;
+	char *send_pass;
+	char *receive_pass;
 	char *vhost;
 
 	mowgli_node_t	*node;
@@ -35,7 +36,7 @@ E mowgli_list_t uplinks;
 E uplink_t *curr_uplink;
 
 E void init_uplinks(void);
-E uplink_t *uplink_add(const char *name, const char *host, const char *password, const char *vhost, int port);
+E uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
 E void uplink_delete(uplink_t *u);
 E uplink_t *uplink_find(const char *name);
 E void uplink_connect(void);

@@ -901,9 +901,13 @@ uplink "irc.example.net" {
 	// The source IP to connect from, used on machines with multiple interfaces.
 	#vhost = "202.119.187.31";
 
-	// password
-	// The password used for linking.
-	password = "linkage";
+	// send_password
+	// The password sent for linking.
+	send_password = "mypassword";
+
+	// accept_password
+	// The password sent for linking.
+	accept_password = "theirpassword";
 
 	// port
 	// The port to connect to.
@@ -913,7 +917,12 @@ uplink "irc.example.net" {
 /* this is an example for using an IPv6 address as an uplink */
 uplink "irc6.example.net" {
 	host = "::1";
+
+	// password
+	// If you want to have same send_password and accept_password, you
+	// can specify both using 'password' instead of individually.
 	password = "linkage";
+
 	port = 6667;
 };
 

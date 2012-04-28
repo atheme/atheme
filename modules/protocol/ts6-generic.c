@@ -71,12 +71,12 @@ static unsigned int ts6_server_login(void)
 	if (!me.numeric)
 	{
 		ircd->uses_uid = false;
-		ret = sts("PASS %s :TS", curr_uplink->pass);
+		ret = sts("PASS %s :TS", curr_uplink->send_pass);
 	}
 	else if (strlen(me.numeric) == 3 && isdigit(*me.numeric))
 	{
 		ircd->uses_uid = true;
-		ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, me.numeric);
+		ret = sts("PASS %s TS 6 :%s", curr_uplink->send_pass, me.numeric);
 	}
 	else
 	{
@@ -1177,7 +1177,7 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* TS5: PASS mypassword :TS
 	 * TS6: PASS mypassword TS 6 :sid */
-	if (strcmp(curr_uplink->pass, parv[0]))
+	if (strcmp(curr_uplink->receive_pass, parv[0]))
 	{
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;

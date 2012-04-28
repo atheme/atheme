@@ -21,7 +21,7 @@ static unsigned int p10_server_login(void)
 {
 	int ret;
 
-	ret = sts("PASS :%s", curr_uplink->pass);
+	ret = sts("PASS :%s", curr_uplink->send_pass);
 	if (ret == 1)
 		return 1;
 
@@ -913,7 +913,7 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (strcmp(curr_uplink->pass, parv[0]))
+	if (strcmp(curr_uplink->receive_pass, parv[0]))
 	{
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;

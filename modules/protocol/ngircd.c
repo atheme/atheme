@@ -84,7 +84,7 @@ static unsigned int ngircd_server_login(void)
 {
 	int ret;
 
-	ret = sts("PASS %s 0210-IRC+ atheme|%s:CLo", curr_uplink->pass, PACKAGE_VERSION);
+	ret = sts("PASS %s 0210-IRC+ atheme|%s:CLo", curr_uplink->send_pass, PACKAGE_VERSION);
 	if (ret == 1)
 		return 1;
 
@@ -658,7 +658,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (strcmp(curr_uplink->pass, parv[0]))
+	if (strcmp(curr_uplink->receive_pass, parv[0]))
 	{
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;

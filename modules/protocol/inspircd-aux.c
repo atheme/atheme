@@ -250,7 +250,7 @@ static unsigned int inspircd_server_login(void)
 	ircd->uses_protect = false;
 	ircd->uses_halfops = false;
 
-	ret = sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->pass, me.numeric, me.desc);
+	ret = sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->send_pass, me.numeric, me.desc);
 	if (ret == 1)
 		return 1;
 

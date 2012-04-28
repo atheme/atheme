@@ -283,7 +283,7 @@ static int c_loadmodule(mowgli_config_file_entry_t *ce)
 static int c_uplink(mowgli_config_file_entry_t *ce)
 {
 	char *name;
-	char *host = NULL, *vhost = NULL, *password = NULL;
+	char *host = NULL, *vhost = NULL, *send_password = NULL, *receive_password = NULL;
 	unsigned int port = 0;
 
 	if (ce->vardata == NULL)
@@ -331,7 +331,28 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 				return 0;
 			}
 
-			password = ce->vardata;
+			send_password = ce->vardata;
+			receive_password = ce->vardata;
+		}
+		else if (!strcasecmp("SEND_PASSWORD", ce->varname))
+		{
+			if (ce->vardata == NULL)
+			{
+				conf_report_warning(ce, "no parameter for configuration option");
+				return 0;
+			}
+
+			send_password = ce->vardata;
+		}
+		else if (!strcasecmp("RECEIVE_PASSWORD", ce->varname))
+		{
+			if (ce->vardata == NULL)
+			{
+				conf_report_warning(ce, "no parameter for configuration option");
+				return 0;
+			}
+
+			receive_password = ce->vardata;
 		}
 		else if (!strcasecmp("PORT", ce->varname))
 		{
@@ -344,7 +365,7 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 		}
 	}
 
-	uplink_add(name, host, password, vhost, port);
+	uplink_add(name, host, send_password, receive_password, vhost, port);
 	return 0;
 }
 
