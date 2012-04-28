@@ -905,9 +905,9 @@ uplink "irc.example.net" {
 	// The password sent for linking.
 	send_password = "mypassword";
 
-	// accept_password
-	// The password sent for linking.
-	accept_password = "theirpassword";
+	// receive_password
+	// The password received for linking.
+	receive_password = "theirpassword";
 
 	// port
 	// The port to connect to.
