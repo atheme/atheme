@@ -258,6 +258,7 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 {
 	int show_topicwho = query->show_topicwho;
 	int show_topic = 1;
+	char topic[BUFSIZE];
 
         /* cant show a topicwho, when a channel has no topic. */
         if(!chptr->topic)
@@ -265,17 +266,22 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
                 show_topicwho = 0;
 		show_topic = 0;
 	}
+	if(show_topic)
+	{
+		mowgli_strlcpy(topic, chptr->topic, sizeof topic);
+		strip_ctrl(topic);
+	}
 
 	if(query->show_mode && show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3zu :%s (%s)",
 			chptr->name, channel_modes(chptr, false),
 			MOWGLI_LIST_LENGTH(&chptr->members),
-			chptr->topic, chptr->topic_setter);
+			topic, chptr->topic_setter);
 	else if(query->show_mode && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3zu :%s",
 			chptr->name, channel_modes(chptr, false),
 			MOWGLI_LIST_LENGTH(&chptr->members),
-			chptr->topic);
+			topic);
 	else if(query->show_mode)
 		command_success_nodata(si, "%-50s %-8s %3zu",
 			chptr->name, channel_modes(chptr, false),
@@ -283,11 +289,11 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 	else if(show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %3zu :%s (%s)",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
-			chptr->topic, chptr->topic_setter);
+			topic, chptr->topic_setter);
 	else if(show_topic)
 		command_success_nodata(si, "%-50s %3zu :%s",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members),
-			chptr->topic);
+			topic);
 	else
 		command_success_nodata(si, "%-50s %3zu",
 			chptr->name, MOWGLI_LIST_LENGTH(&chptr->members));

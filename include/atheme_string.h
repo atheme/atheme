@@ -10,6 +10,7 @@
 #define __CLAROSTRING
 
 E void strip(char *line);
+E void strip_ctrl(char *line);
 
 #ifndef HAVE_STRTOK_R
 E char *strtok_r(char *s, const char *delim, char **lasts);

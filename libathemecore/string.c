@@ -39,6 +39,46 @@ void strip(char *line)
         }
 }
 
+/* remove mirc colors and controls */
+void strip_ctrl(char *line)
+{
+	char *p, *q;
+
+	return_if_fail(line != NULL);
+
+	for (p = line, q = line; *p != '\0'; p++)
+	{
+		switch (*p)
+		{
+			case 3:
+				if (!isdigit((unsigned char)p[1]))
+					break;
+				p++;
+				if (isdigit((unsigned char)p[1]))
+					p++;
+				if (p[1] != ',' || !isdigit((unsigned char)p[2]))
+					break;
+				p += 2;
+				if (isdigit((unsigned char)p[1]))
+					p++;
+				break;
+			case 2:
+			case 4:
+			case 6:
+			case 7:
+			case 22:
+			case 23:
+			case 27:
+			case 29:
+			case 31:
+				break;
+			default:
+				*q++ = *p;
+		}
+	}
+	*q = '\0';
+}
+
 #ifndef HAVE_STRTOK_R
 /*
  * Copyright (c) 1988 Regents of the University of California.
