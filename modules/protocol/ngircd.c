@@ -110,9 +110,9 @@ static void ngircd_invite_sts(user_t *sender, user_t *target, channel_t *channel
 {
 	bool joined = false;
 
-	if (!chanuser_find(c, source))
+	if (!chanuser_find(channel, sender))
 	{
-		sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(source));
+		sts(":%s NJOIN %s :@%s", ME, channel->name, CLIENT_NAME(sender));
 		joined = true;
 	}
 
