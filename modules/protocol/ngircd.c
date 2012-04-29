@@ -237,13 +237,14 @@ static void ngircd_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ngircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	/* no remote klines yet */
+	sts(":%s GLINE %s@%s %ld :%s", ME, user, host, duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
 static void ngircd_unkline_sts(const char *server, const char *user, const char *host)
 {
-	/* no remote klines yet */
+	/* when sent with no extra parameters, it indicates the GLINE should be removed. */
+	sts(":%s GLINE %s@%s", ME, user, host);
 }
 
 /* topic wrapper */
