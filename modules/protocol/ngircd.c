@@ -102,7 +102,7 @@ static void ngircd_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts(":%s NICK %s 1 %s %s %s %s :%s", me.name, u->nick, u->user, u->host, me.numeric, umode, u->gecos);
+	sts(":%s NICK %s 1 %s %s 1 %s :%s", me.name, u->nick, u->user, u->host, umode, u->gecos);
 }
 
 /* invite a user to a channel */
