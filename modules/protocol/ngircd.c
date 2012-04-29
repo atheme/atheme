@@ -226,16 +226,13 @@ static void ngircd_part_sts(channel_t *c, user_t *u)
 /* server-to-server KLINE wrapper */
 static void ngircd_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
-	service_t *svs;
-
-	svs = service_find("operserv");
-	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, reason);
+	/* no remote klines yet */
 }
 
 /* server-to-server UNKLINE wrapper */
 static void ngircd_unkline_sts(const char *server, const char *user, const char *host)
 {
-	sts(":%s RAKILL %s %s", me.name, host, user);
+	/* no remote klines yet */
 }
 
 /* topic wrapper */
