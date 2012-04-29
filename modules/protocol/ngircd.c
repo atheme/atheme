@@ -108,7 +108,18 @@ static void ngircd_introduce_nick(user_t *u)
 /* invite a user to a channel */
 static void ngircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	bool joined = false;
+
+	if (!chanuser_find(c, source))
+	{
+		sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(source));
+		joined = true;
+	}
+
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
+
+	if (joined)
+		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
 
 static void ngircd_quit_sts(user_t *u, const char *reason)
