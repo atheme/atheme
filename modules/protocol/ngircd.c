@@ -238,7 +238,18 @@ static void ngircd_unkline_sts(const char *server, const char *user, const char 
 /* topic wrapper */
 static void ngircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
-	sts(":%s TOPIC %s :%s", source->nick, c->name, topic);
+	bool joined = false;
+
+	if (!chanuser_find(c, source))
+	{
+		sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(source));
+		joined = true;
+	}
+
+	sts(":%s TOPIC %s :%s", CLIENT_NAME(source), c->name, topic);
+
+	if (joined)
+		sts(":%s PART %s :Topic set for %s", CLIENT_NAME(source), c->name, setter);
 }
 
 /* mode wrapper */
