@@ -124,7 +124,7 @@ static void ngircd_invite_sts(user_t *sender, user_t *target, channel_t *channel
 
 static void ngircd_quit_sts(user_t *u, const char *reason)
 {
-	sts(":%s QUIT :%s", u->nick, reason);
+	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
 /* WALLOPS wrapper */
@@ -172,17 +172,17 @@ static void ngircd_msg_global_sts(user_t *from, const char *mask, const char *te
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s PRIVMSG %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
 static void ngircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
 static void ngircd_notice_global_sts(user_t *from, const char *mask, const char *text)
@@ -195,16 +195,16 @@ static void ngircd_notice_global_sts(user_t *from, const char *mask, const char 
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 static void ngircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
 static void ngircd_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
@@ -216,22 +216,22 @@ static void ngircd_numeric_sts(server_t *from, int numeric, user_t *target, cons
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
+	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
 /* KILL wrapper */
 static void ngircd_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
-		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
 	else
-		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
 static void ngircd_part_sts(channel_t *c, user_t *u)
 {
-	sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
@@ -285,7 +285,7 @@ static void ngircd_on_login(user_t *u, myuser_t *account, const char *wantedhost
 	return_if_fail(u != NULL);
 
 	if (should_reg_umode(u))
-		sts(":%s MODE %s +R", nicksvs.nick, u->nick);
+		sts(":%s MODE %s +R", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u));
 }
 
 /* protocol-specific stuff to do on login */
@@ -294,7 +294,7 @@ static bool ngircd_on_logout(user_t *u, const char *account)
 	return_val_if_fail(u != NULL, false);
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s MODE %s -R", nicksvs.nick, u->nick);
+		sts(":%s MODE %s -R", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u));
 
 	return false;
 }
@@ -304,8 +304,8 @@ static void ngircd_jupe(const char *server, const char *reason)
 	static int jupe_ctr = 1;
 
 	server_delete(server);
-	sts(":%s SQUIT %s :%s", me.name, server, reason);
-	sts(":%s SERVER %s 2 %d :%s", me.name, server, ++jupe_ctr, reason);
+	sts(":%s SQUIT %s :%s", ME, server, reason);
+	sts(":%s SERVER %s 2 %d :%s", ME, server, ++jupe_ctr, reason);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -321,7 +321,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s", me.name, parv[0]);
+	sts(":%s PONG %s", ME, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
