@@ -47,13 +47,14 @@
  */
 mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 {
-	char *buf = smalloc(strlen(path) + 20);
+	size_t len = strlen(path) + 20;
+	char *buf = smalloc(len);
 	void *ret;
 
-	mowgli_strlcpy(buf, path, strlen(path) + 20);
+	mowgli_strlcpy(buf, path, len);
 
 	if (!strstr(buf, PLATFORM_SUFFIX))
-		mowgli_strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
+		mowgli_strlcat(buf, PLATFORM_SUFFIX, len);
 
 	/* Don't try to open a file that doesn't exist. */
 	struct stat s;
