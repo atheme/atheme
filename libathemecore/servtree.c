@@ -439,9 +439,12 @@ static void servtree_update(void *dummy)
 			if (u != NULL && u != sptr->me)
 				kill_user(NULL, u, "Nick taken by service");
 			user_changenick(sptr->me, sptr->nick, CURRTIME);
-			mowgli_strlcpy(sptr->me->user, sptr->user, sizeof sptr->me->user);
-			mowgli_strlcpy(sptr->me->host, sptr->host, sizeof sptr->me->host);
-			mowgli_strlcpy(sptr->me->gecos, sptr->real, sizeof sptr->me->gecos);
+			strshare_unref(sptr->me->user);
+			sptr->me->user = strshare_get(sptr->user);
+			strshare_unref(sptr->me->host);
+			sptr->me->host = strshare_get(sptr->host);
+			strshare_unref(sptr->me->gecos);
+			sptr->me->gecos = strshare_get(sptr->real);
 			if (me.connected)
 				reintroduce_user(sptr->me);
 		}
