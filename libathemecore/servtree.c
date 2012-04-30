@@ -443,6 +443,10 @@ static void servtree_update(void *dummy)
 			sptr->me->user = strshare_get(sptr->user);
 			strshare_unref(sptr->me->host);
 			sptr->me->host = strshare_get(sptr->host);
+			strshare_unref(sptr->me->chost);
+			sptr->me->chost = strshare_ref(sptr->me->host);
+			strshare_unref(sptr->me->vhost);
+			sptr->me->vhost = strshare_ref(sptr->me->host);
 			strshare_unref(sptr->me->gecos);
 			sptr->me->gecos = strshare_get(sptr->real);
 			if (me.connected)
