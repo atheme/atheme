@@ -94,13 +94,13 @@ AC_DEFUN([BUILDSYS_SHARED_LIB], [
 		darwin*)
 			AC_MSG_RESULT(Darwin)
 			LIB_CFLAGS='-fPIC -DPIC'
-			LIB_LDFLAGS='-dynamiclib -current_version ${LIB_MAJOR}.${LIB_MINOR} -compatibility_version ${LIB_MAJOR}'
+			LIB_LDFLAGS='-dynamiclib -current_version ${LIB_MAJOR}.${LIB_MINOR} -compatibility_version ${LIB_MAJOR} -install_name @rpath/${SHARED_LIB}'
 			LIB_PREFIX='lib'
 			LIB_SUFFIX='.dylib'
-			LDFLAGS_RPATH='-Wl,-macosx_version_min,10.5 -Wl,-rpath,${libdir}'
+			LDFLAGS_RPATH='-Wl,-rpath,${libdir}'
 			PLUGIN_CFLAGS='-fPIC -DPIC'
-			PLUGIN_LDFLAGS='-bundle -undefined dynamic_lookup'
-			PLUGIN_SUFFIX='.impl'
+			PLUGIN_LDFLAGS='-shared -undefined dynamic_lookup'
+			PLUGIN_SUFFIX='.so'
 			INSTALL_LIB='&& ${INSTALL} -m 755 $$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib && ${LN_S} -f $${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib ${DESTDIR}${libdir}/$$i'
 			UNINSTALL_LIB='&& rm -f ${DESTDIR}${libdir}/$$i ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.dylib ${DESTDIR}${libdir}/$${i%.dylib}.${LIB_MAJOR}.${LIB_MINOR}.dylib'
 			CLEAN_LIB=''

@@ -28,8 +28,6 @@
 # define PLATFORM_SUFFIX ".sl"
 #elif defined(_WIN32)
 # define PLATFORM_SUFFIX ".dll"
-#elif defined(__APPLE_)
-# define PLATFORM_SUFFIX ".impl"
 #else
 # define PLATFORM_SUFFIX ".so"
 #endif
