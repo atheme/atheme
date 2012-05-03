@@ -317,11 +317,11 @@ bool validhostmask(const char *host)
  */
 char *pretty_mask(char *mask)
 {
+	static char mask_buf[BUFSIZE];
         int old_mask_pos;
         char star[] = "*";
         char *nick = star, *user = star, *host = star;
 	int mask_pos = 0;
-	char mask_buf[BUFSIZE];
 
         char *t, *at, *ex;
         char ne = 0, ue = 0, he = 0;    /* save values at nick[NICKLEN], et all */
@@ -395,7 +395,7 @@ char *pretty_mask(char *mask)
                 host[HOSTLEN] = '\0';
         }
 
-        mask_pos += sprintf(mask_buf + mask_pos, "%s!%s@%s", nick, user, host) + 1;
+	snprintf(mask_buf, sizeof mask_buf, "%s!%s@%s", nick, user, host);
 
         /* restore mask, since we may need to use it again later */
         if(at)
@@ -409,8 +409,7 @@ char *pretty_mask(char *mask)
         if(he)
                 host[HOSTLEN] = he;
 
-        mask = mask_buf + old_mask_pos;
-	return(mask);
+	return mask_buf;
 }
 
 bool validtopic(const char *topic)
