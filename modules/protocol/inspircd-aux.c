@@ -121,6 +121,7 @@ static bool has_servprotectmod = false;
 static bool has_svshold = false;
 static bool has_cloakingmod = false;
 static bool has_shun = false;
+static bool has_mlock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
@@ -624,6 +625,19 @@ static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duratio
 {
 	if (has_shun)
 		sts(":%s ADDLINE SHUN *@%s %s %lu %ld :%s", me.numeric, victim->host, source->nick, (unsigned long) CURRTIME, duration, reason);
+}
+
+static void inspircd_mlock_sts(channel_t *c)
+{
+	mychan_t *mc = MYCHAN_FROM(c);
+
+	if (has_mlock == false)
+		return;
+
+	if (mc == NULL)
+		return;
+
+	sts(":%s METADATA %s mlock :%s", ME, c->name, mychan_get_sts_mlock(mc));
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -1322,6 +1336,26 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		handle_certfp(si, u, certfp);
 		free(certfp);
 	}
+	else if (!irccasecmp(parv[1], "mlock"))
+	{
+		// :419 METADATA #moo mlock :ntiklm
+		const char *mlock_str;
+		channel_t *c;
+		mychan_t *mc;
+
+		c = channel_find(parv[0]);
+		if (c == NULL)
+			return;
+
+		mc = MYCHAN_FROM(c);
+		if (mc == NULL)
+			return;
+
+		/* bounce MLOCK change if it doesn't match what we say it is */
+		mlock_str = mychan_get_sts_mlock(mc);
+		if (strcmp(mlock_str, parv[2]))
+			mlock_sts(c);
+	}
 }
 
 /*
@@ -1417,6 +1451,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			has_shun = true;
 		}
+		if (strstr(parv[1], "m_mlock.so"))
+		{
+			has_mlock = true;
+		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services (m_serverbots) are not compatible with atheme");
 		TAINT_ON(strstr(parv[1], "m_chanacl.so") != NULL, "inspircd built-in services (m_chanacl) are not compatible with atheme");
@@ -1509,6 +1547,7 @@ void _modinit(module_t * m)
 	svslogin_sts = &inspircd_svslogin_sts;
 	sasl_sts = &inspircd_sasl_sts;
 	quarantine_sts = &inspircd_quarantine_sts;
+	mlock_sts = &inspircd_mlock_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
