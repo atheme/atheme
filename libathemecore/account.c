@@ -1321,7 +1321,7 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 	}
 	if (mc->flags & MC_SECURE)
 	{
-		mowgli_strlcat(mlock, "ov", sizeof mlock);
+		mowgli_strlcat(mlock, "o", sizeof mlock);
 
 		if (ircd->uses_halfops)
 			mowgli_strlcat(mlock, (ircd->halfops_mchar + 1), sizeof mlock);
