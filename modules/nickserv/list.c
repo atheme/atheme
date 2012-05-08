@@ -73,13 +73,15 @@ static time_t parse_age(char *s)
 	return duration;
 }
 
-static void process_parvarray(list_option_t *opts, size_t optsize, int parc, char *parv[])
+static bool process_parvarray(sourceinfo_t *si, list_option_t *opts, size_t optsize, int parc, char *parv[])
 {
 	int i;
 	size_t j;
+	bool found;
 
 	for (i = 0; i < parc; i++)
 	{
+		found = false;
 		for (j = 0; j < optsize; j++)
 		{
 			if (!strcasecmp(opts[j].option, parv[i]))
@@ -94,6 +96,9 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 					{
 						*opts[j].optval.intval = atoi(parv[i + 1]);
 						i++;
+					} else {
+						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
+						return false;
 					}
 					break;
 				case OPT_STRING:
@@ -101,6 +106,9 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 					{
 						*opts[j].optval.strval = parv[i + 1];
 						i++;
+					} else {
+						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
+						return false;
 					}
 					break;
 				case OPT_FLAG:
@@ -111,14 +119,25 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 					{
 						*opts[j].optval.ageval = parse_age(parv[i + 1]);
 						i++;
+					} else {
+						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
+						return false;
 					}
-					break;					
+					break;
 				default:
 					break;
 				}
+				found = true;
+				break;
 			}
 		}
+		if (!found) {
+			command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criteria"), parv[i]);
+			return false;
+		}
 	}
+
+	return true;
 }
 
 static void build_criteriastr(char *buf, int parc, char *parv[])
@@ -225,7 +244,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"lastlogin",	OPT_AGE,	{.ageval = &lastlogin}, 0},
 	};
 
-	process_parvarray(optstable, ARRAY_SIZE(optstable), parc, parv);
+	if (!process_parvarray(si, optstable, ARRAY_SIZE(optstable), parc, parv))
+		return;
+
 	build_criteriastr(criteriastr, parc, parv);
 
 	if (pattern != NULL)
