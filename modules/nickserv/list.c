@@ -132,7 +132,7 @@ static bool process_parvarray(sourceinfo_t *si, list_option_t *opts, size_t opts
 			}
 		}
 		if (!found) {
-			command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criteria"), parv[i]);
+			command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criterion"), parv[i]);
 			return false;
 		}
 	}
