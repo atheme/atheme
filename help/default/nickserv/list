@@ -1,9 +1,9 @@
 Help for LIST:
 
-LIST shows registered users that match a given criteria.
+LIST shows registered users that match the given criteria.
 Multiple criteria may be used in the same command.
 
-Current Criteria are:
+Current criteria are:
 PATTERN       - All users that match a given pattern.
 EMAIL         - All accounts registered with an email address
                 that matches a given pattern.
