@@ -119,7 +119,7 @@ static void ss_cmd_server_info(sourceinfo_t * si, int parc, char *parv[])
     command_success_nodata(si, _("Online operators: %u"), s->opers);
     if (has_priv(si, PRIV_SERVER_AUSPEX))
     {
-        if (s->uplink->name)
+        if (s->uplink != NULL && s->uplink->name != NULL)
             command_success_nodata(si, _("Server uplink: %s"), s->uplink->name);
         command_success_nodata(si, _("Servers linked from %s: %u"), name, (unsigned int)s->children.count);
     }
