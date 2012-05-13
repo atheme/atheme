@@ -257,7 +257,7 @@ unsigned int flags_to_bitmask(const char *string, unsigned int flags)
 		string++;
 	}
 
-	return bitmask;
+	return bitmask & ca_all;
 }
 
 char *bitmask_to_flags(unsigned int flags)
