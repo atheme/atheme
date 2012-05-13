@@ -26,6 +26,17 @@
 
 mowgli_patricia_t *global_template_dict = NULL;
 
+void fix_global_template_flags(void)
+{
+	default_template_t *def_t;
+	mowgli_patricia_iteration_state_t state;
+
+	MOWGLI_PATRICIA_FOREACH(def_t, &state, global_template_dict)
+	{
+		def_t->flags &= ca_all;
+	}
+}
+
 void set_global_template_flags(const char *name, unsigned int flags)
 {
 	default_template_t *def_t;
