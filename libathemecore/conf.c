@@ -170,10 +170,10 @@ void conf_init(void)
 	me.auth = AUTH_NONE;
 
 	clear_global_template_flags();
-	set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
-	set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
-	set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
-	set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
+	set_global_template_flags("VOP", CA_VOP_DEF);
+	set_global_template_flags("HOP", CA_HOP_DEF);
+	set_global_template_flags("AOP", CA_AOP_DEF);
+	set_global_template_flags("SOP", CA_SOP_DEF);
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -914,21 +914,8 @@ bool conf_check(void)
 	}
 	else
 	{
-	/* we know ca_all now */
-		vopflags = get_global_template_flags("VOP");
-		hopflags = get_global_template_flags("HOP");
-		aopflags = get_global_template_flags("AOP");
-		sopflags = get_global_template_flags("SOP");
-
-		vopflags &= ca_all;
-		hopflags &= ca_all;
-		aopflags &= ca_all;
-		sopflags &= ca_all;
-
-		set_global_template_flags("VOP", vopflags);
-		set_global_template_flags("HOP", hopflags);
-		set_global_template_flags("AOP", aopflags);
-		set_global_template_flags("SOP", sopflags);
+		/* we know ca_all now, so remove invalid flags */
+		fix_global_template_flags();
 
 		/* hopflags may be equal to vopflags to disable HOP */
 		if (!vopflags || !hopflags || !aopflags || !sopflags ||
@@ -940,10 +927,10 @@ bool conf_check(void)
 		{
 			slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
 
-			set_global_template_flags("VOP", CA_VOP_DEF & ca_all);
-			set_global_template_flags("HOP", CA_HOP_DEF & ca_all);
-			set_global_template_flags("AOP", CA_AOP_DEF & ca_all);
-			set_global_template_flags("SOP", CA_SOP_DEF & ca_all);
+			set_global_template_flags("VOP", CA_VOP_DEF);
+			set_global_template_flags("HOP", CA_HOP_DEF);
+			set_global_template_flags("AOP", CA_AOP_DEF);
+			set_global_template_flags("SOP", CA_SOP_DEF);
 		}
 	}
 	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
