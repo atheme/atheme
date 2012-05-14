@@ -121,10 +121,13 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
 		{
+			mowgli_patricia_t *cmdlist;
 
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
-			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) == NULL)
+			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) != NULL)
+				cmdlist = si->service->commands;
+			if (cmdlist == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -142,11 +145,12 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, si->service->commands);
+			command_exec_split(si->service, si, cmd, newargs, cmdlist);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
 		{
+			mowgli_patricia_t *cmdlist;
 			char *pptr;
 
 			mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
@@ -158,7 +162,9 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 				*pptr = '\0';
 			}
 
-			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) == NULL)
+			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) != NULL)
+				cmdlist = si->service->commands;
+			if (cmdlist == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -169,7 +175,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, si->service->commands);
+			command_exec_split(si->service, si, cmd, newargs, cmdlist);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
