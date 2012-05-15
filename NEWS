@@ -1,3 +1,20 @@
+Atheme Services 7.0.2 Release Notes
+Codename: "When is Namegduf going to release an actual Iris tarball?"
+===================================
+ircd protocol
+- ngircd: New protocol module.
+chanserv
+- ban, quiet: Fix possible corruption.
+- template fixes
+nickserv
+- list: Parsing cleanups and better errors on list failures.
+statserv
+- server/info: fix possible crash.
+other
+- fix changing services user/host/real via a rehash.
+build
+- fix build on OS X.
+
 Atheme Services 7.0.1 Release Notes
 Codename: "Codenames are magic!"
 ===================================
