@@ -1,22 +1,11 @@
-atheme-services -- a set of services for IRC networks
-=====================================================
+# atheme-services -- a set of services for IRC networks
 
 This program is free but copyrighted software; see the COPYING file for
 details.
 
 Information about atheme-services may be found at http://www.atheme.net/.
 
-TABLE OF CONTENTS
------------------
-  1. Credits
-  2. Presentation, and what atheme-services is not
-  3. Installation
-  4. Command line options
-  5. Getting support
-  6. Reporting bugs
-
-1. CREDITS
-----------
+## Credits
 
 atheme-services contains code from Shrike, Sentinel and ircd-ratbox. 
 Some of the initial design was influenced by Shrike too.
@@ -28,8 +17,7 @@ Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 For further information about our relationship with those projects, see 
 the Atheme FAQ: http://www.atheme.net/FAQ
 
-2. PRESENTATION AND WHAT ATHEME-SERVICES IS NOT
------------------------------------------------
+## Presentation (also, what atheme is not)
 
 atheme-services is a set of Services for IRC networks that allows users to
 manage their channels in a secure and efficient way and allows operators to
@@ -55,13 +43,11 @@ exactly like what was previously implemented. Atheme is designed to act
 as a directory server, with alternative ways of getting to the data 
 implemented as well as the IRC presence.
 
-3. INSTALLATION
----------------
+## Installation
 
 See the INSTALL file.
 
-4. COMMAND LINE OPTIONS
------------------------
+## Command line options
 
 Normally, services can be run simply by invoking the "atheme-services" 
 executable.  Services will then use the defaults specified in the 
@@ -90,8 +76,7 @@ the background.  If services encounters an error while parsing the
 configuration or database files it will terminate immediately. 
 Otherwise, it will run until killed or otherwise stopped.
 
-5. GETTING SUPPORT
-------------------
+## Getting Support
 
 If you are stuck, or services are doing something really weird, or you have
 some sort of brilliant idea, we have a channel on IRC! (Surprising, no?)
@@ -100,11 +85,10 @@ To access this channel, connect to irc.atheme.org, and join #atheme.
 It is important to note that operating Atheme in obviously insane
 configurations automatically loses your support privileges.
 
-6. REPORTING BUGS
------------------
+## Reporting Bugs
 
 If you find a bug in services, you must report it via the bugtracker; 
 our developers have a tendency to forget things. Your bug is not 
 actually a bug until it's reported.
 
-Report bugs at http://jira.atheme.org/.
+Report bugs at <http://github.com/atheme/atheme/issues/new>.
