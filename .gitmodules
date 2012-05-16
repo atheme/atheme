@@ -1,9 +1,6 @@
-[submodule "libmowgli"]
-	path = libmowgli
-	url = git://git.atheme.org/libmowgli.git
 [submodule "libmowgli-2"]
 	path = libmowgli-2
-	url = git://git.atheme.org/libmowgli-2.git
+	url = git://github.com/atheme/libmowgli-2.git
 [submodule "libunwind"]
 	path = libunwind
 	url = git://git.savannah.gnu.org/libunwind.git
