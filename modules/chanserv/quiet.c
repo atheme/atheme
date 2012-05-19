@@ -25,7 +25,8 @@ command_t cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
 
 void _modinit(module_t *m)
 {
-	if (ircd != NULL && !strchr(ircd->ban_like_modes, 'q'))
+	/* inspircd and unreal do this differently... grumble */
+	if (ircd != NULL && (!strchr(ircd->ban_like_modes, 'q') && (ircd->type != PROTOCOL_INSPIRCD || ircd->type != PROTOCOL_UNREAL)))
 	{
 		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
@@ -40,6 +41,58 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_quiet);
 	service_named_unbind_command("chanserv", &cs_unquiet);
+}
+
+static chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
+{
+	char rhostbuf[BUFSIZE];
+	chanban_t *cb = NULL;
+
+	switch (ircd->type)
+	{
+	case PROTOCOL_INSPIRCD:
+		mowgli_strlcpy(rhostbuf, "m:", sizeof rhostbuf);
+		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
+		cb = chanban_add(c, rhostbuf, 'b');
+		break;
+	case PROTOCOL_UNREAL:
+		mowgli_strlcpy(rhostbuf, "~q:", sizeof rhostbuf);
+		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
+		cb = chanban_add(c, rhostbuf, 'b');
+		break;
+	default:
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
+		cb = chanban_add(c, hostbuf, 'q');
+	}
+
+	return cb;
+}
+
+static void make_extban(char *buf, size_t size, user_t *tu)
+{
+	return_if_fail(buf != NULL);
+	return_if_fail(tu != NULL);
+
+	switch (ircd->type)
+	{
+	case PROTOCOL_INSPIRCD:
+		mowgli_strlcpy(buf, "m:", size);
+		break;
+	case PROTOCOL_UNREAL:
+		mowgli_strlcpy(buf, "~q:", size);
+		break;
+	default:
+		*buf = '\0';
+		break;
+	}
+
+	mowgli_strlcat(buf, tu->nick, size);
+	mowgli_strlcat(buf, "!", size);
+	mowgli_strlcat(buf, tu->user, size);
+	mowgli_strlcat(buf, "@", size);
+	mowgli_strlcat(buf, tu->vhost, size);
 }
 
 static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
@@ -200,8 +253,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
 		mowgli_strlcat(hostbuf, tu->vhost, BUFSIZE);
 
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
-		cb = chanban_add(c, hostbuf, 'q');
+		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
 		n = remove_ban_exceptions(si->service->me, c, tu);
 		if (n > 0)
 			command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
@@ -280,7 +332,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		char hostbuf2[BUFSIZE];
 		int count = 0;
 
-		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
+		make_extban(hostbuf2, sizeof hostbuf2, tu);
 		for (n = next_matching_ban(c, tu, 'q', c->bans.head); n != NULL; n = next_matching_ban(c, tu, 'q', tn))
 		{
 			tn = n->next;
@@ -303,6 +355,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
+#warning support UNQUIET against extbans
 	else if ((cb = chanban_find(c, target, 'q')) != NULL || validhostmask(target))
 	{
 		if (cb)
