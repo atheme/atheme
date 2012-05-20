@@ -853,8 +853,6 @@ bool conf_rehash(void)
 
 bool conf_check(void)
 {
-	unsigned int vopflags, hopflags, aopflags, sopflags;
-
 	if (!me.name)
 	{
 		slog(LG_ERROR, "conf_check(): no `name' set in %s", config_file);
@@ -916,23 +914,8 @@ bool conf_check(void)
 	{
 		/* we know ca_all now, so remove invalid flags */
 		fix_global_template_flags();
-
-		/* hopflags may be equal to vopflags to disable HOP */
-		if (!vopflags || !hopflags || !aopflags || !sopflags ||
-				vopflags == aopflags ||
-				vopflags == sopflags ||
-				hopflags == aopflags ||
-				hopflags == sopflags ||
-				aopflags == sopflags)
-		{
-			slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
-
-			set_global_template_flags("VOP", CA_VOP_DEF);
-			set_global_template_flags("HOP", CA_HOP_DEF);
-			set_global_template_flags("AOP", CA_AOP_DEF);
-			set_global_template_flags("SOP", CA_SOP_DEF);
-		}
 	}
+
 	if (config_options.commit_interval < 60 || config_options.commit_interval > 3600)
 	{
 		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; defaulting to 5 minutes", config_file);
