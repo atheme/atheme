@@ -121,7 +121,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
 		{
-			mowgli_patricia_t *cmdlist;
+			mowgli_patricia_t *cmdlist = NULL;
 
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
@@ -150,7 +150,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
 		{
-			mowgli_patricia_t *cmdlist;
+			mowgli_patricia_t *cmdlist = NULL;
 			char *pptr;
 
 			mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
