@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
-                         PRIV_ADMIN, 2, ms_cmd_sendall, { .path = "memoserv/sendall" } };
+                         PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
 
 void _modinit(module_t *m)
 {
