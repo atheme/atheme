@@ -26,7 +26,7 @@ command_t cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
 void _modinit(module_t *m)
 {
 	/* inspircd and unreal do this differently... grumble */
-	if (ircd != NULL && (!strchr(ircd->ban_like_modes, 'q') && (ircd->type != PROTOCOL_INSPIRCD || ircd->type != PROTOCOL_UNREAL)))
+	if (ircd != NULL && (!strchr(ircd->ban_like_modes, 'q') && (ircd->type != PROTOCOL_INSPIRCD && ircd->type != PROTOCOL_UNREAL)))
 	{
 		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->name);
 		m->mflags = MODTYPE_FAIL;
