@@ -125,6 +125,7 @@ static bool has_mlock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
+#define PROTOCOL_METADATA_TS	1204
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
@@ -136,6 +137,17 @@ static server_t *sid_find(char *name)
 
 
 /* *INDENT-ON* */
+
+static inline void channel_metadata_sts(channel_t *c, const char *key, const char *value)
+{
+	if (has_protocol < PROTOCOL_METADATA_TS)
+	{
+		sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
+		return;
+	}
+
+	sts(":%s METADATA %s %ld %s :%s", ME, c->name, c->ts, key, value);
+}
 
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
@@ -637,7 +649,7 @@ static void inspircd_mlock_sts(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	sts(":%s METADATA %s mlock :%s", ME, c->name, mychan_get_sts_mlock(mc));
+	channel_metadata_sts(c, "mlock", mychan_get_sts_mlock(mc));
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -1278,18 +1290,47 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static inline void verify_mlock(channel_t *c, time_t ts, const char *their_mlock)
+{
+	const char *mlock_str;
+	mychan_t *mc;
+
+	mc = MYCHAN_FROM(c);
+	if (mc == NULL)
+		return;
+
+	if (ts != 0 && ts != c->ts)
+		return mlock_sts(c);
+
+	/* bounce MLOCK change if it doesn't match what we say it is */
+	mlock_str = mychan_get_sts_mlock(mc);
+	if (strcmp(mlock_str, their_mlock))
+		return mlock_sts(c);
+}
+
 /*
  * :<source server> METADATA <channel|user> <key> :<value>
  * The sole piece of metadata we're interested in is 'accountname', set by Services,
  * and kept by ircd.
  *
  * :services.barafranca METADATA w00t accountname :w00t
+ * :services.barafranca METADATA #moo 1274712456 mlock :nt
  */
-
 static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
+	channel_t *c;
+	time_t ts;
 	char *certfp;
+
+	if (parc > 3)
+	{
+		c = channel_find(parv[0]);
+		ts = atoi(parv[1]);
+
+		if (!irccasecmp(parv[2], "mlock"))
+			verify_mlock(c, ts, parv[3]);
+	}
 
 	if (!irccasecmp(parv[1], "accountname"))
 	{
@@ -1337,25 +1378,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		free(certfp);
 	}
 	else if (!irccasecmp(parv[1], "mlock"))
-	{
-		// :419 METADATA #moo mlock :ntiklm
-		const char *mlock_str;
-		channel_t *c;
-		mychan_t *mc;
-
-		c = channel_find(parv[0]);
-		if (c == NULL)
-			return;
-
-		mc = MYCHAN_FROM(c);
-		if (mc == NULL)
-			return;
-
-		/* bounce MLOCK change if it doesn't match what we say it is */
-		mlock_str = mychan_get_sts_mlock(mc);
-		if (strcmp(mlock_str, parv[2]))
-			mlock_sts(c);
-	}
+		verify_mlock(c, 0, parv[2]);
 }
 
 /*
@@ -1591,7 +1614,7 @@ void _modinit(module_t * m)
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER);
 	pcommand_add("AWAY", m_away, 0, MSRC_USER);
 	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
-	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
+	pcommand_add("METADATA", m_metadata, 4, MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ENDBURST", m_endburst, 0, MSRC_SERVER);
