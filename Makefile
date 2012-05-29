@@ -6,7 +6,9 @@ DISTCLEAN = extra.mk buildsys.mk config.log config.status atheme-services.pc
 -include buildsys.mk
 
 # explicit dependencies need to be expressed to ensure parallel builds don't die
-libathemecore: include/hooktypes.h $(LIBMOWGLI)
+pre-recurse: include/serno.h include/hooktypes.h
+pre-depend: pre-recurse
+libathemecore: $(LIBMOWGLI)
 modules: libathemecore
 src: libathemecore
 

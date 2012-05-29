@@ -114,7 +114,8 @@ DEPFILES = $(patsubst %,%.dep,${SRCS})
 
 all: subdirs depend ${STATIC_LIB} ${STATIC_LIB_NOINST} ${STATIC_PIC_LIB} ${STATIC_PIC_LIB_NOINST} ${SHARED_LIB} ${SHARED_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} ${JARFILE} locales
 
-subdirs: ${SUBDIRS}
+pre-recurse: 
+subdirs: pre-recurse ${SUBDIRS}
 ${SUBDIRS}:
 	${MAKE} -C $@ ${MFLAGS}
 

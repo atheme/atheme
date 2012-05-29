@@ -65,13 +65,13 @@ SRCS = ${BASE_SRCS} version.c
 include ../buildsys.mk
 include ../extra.mk
 
+.c.c.dep: ../include/hooktypes.h ../include/serno.h
+
 CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
 LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(LIBINTL)
 
-pre-depend: ../include/hooktypes.h ../include/serno.h
-
-build: all
+build: depend all
 
 ../include/hooktypes.h: mkhooktypes.sh hooktypes.in
 	sh mkhooktypes.sh hooktypes.in >../include/hooktypes.h
