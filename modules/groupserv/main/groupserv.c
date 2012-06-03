@@ -14,7 +14,6 @@ struct gflags ga_flags[] = {
 	{ 'v', GA_VHOST },
 	{ 'i', GA_INVITE },
 	{ 'b', GA_BAN },
-	{ 'i', GA_INVITE },
 	{ 0, 0 }
 };
 
