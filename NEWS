@@ -1,3 +1,18 @@
+Atheme Services 7.0.3 Release Notes
+Codename: "Now with less pointless errata."
+===================================
+ircd protocol
+- inspircd: add support for timestamped channel metadata
+- inspircd: add support for server-side MLOCK (services part)
+nickserv
+- sendpass, sendpass_user: accept grouped nicknames
+groupserv
+- main: remove duplicate +i flag
+memoserv
+- sendall: fix bug where it only sends the first word
+code
+- fix regression with validating XOP levels and other global templates
+
 Atheme Services 7.0.2 Release Notes
 Codename: "When is Namegduf going to release an actual Iris tarball?"
 ===================================
