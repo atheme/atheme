@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 datarootdir=@datarootdir@
 datadir=@datadir@/@PACKAGE_NAME@
 
-MODDIR=@MODDIR@/modules
 version=@PACKAGE_VERSION@
 includedir=@includedir@/@PACKAGE_NAME@
 libdir=@libdir@
+MODDIR=@MODDIR@/modules
 
 Name: atheme-services
 Description: Atheme IRC services (for building modules)
