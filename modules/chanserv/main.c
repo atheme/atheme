@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "chanserv.h"
 #include "template.h"
 #include <limits.h>
 
@@ -20,6 +21,7 @@ DECLARE_MODULE_V1
 static void cs_join(hook_channel_joinpart_t *hdata);
 static void cs_part(hook_channel_joinpart_t *hdata);
 static void cs_register(hook_channel_req_t *mc);
+static void cs_succession(hook_channel_succession_req_t *data);
 static void cs_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
@@ -274,6 +276,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
 	hook_add_event("channel_register");
+	hook_add_event("channel_succession");
 	hook_add_event("channel_add");
 	hook_add_event("channel_topic");
 	hook_add_event("channel_can_change_topic");
@@ -283,6 +286,7 @@ void _modinit(module_t *m)
 	hook_add_channel_join(cs_join);
 	hook_add_channel_part(cs_part);
 	hook_add_channel_register(cs_register);
+	hook_add_channel_succession(cs_succession);
 	hook_add_channel_add(cs_newchan);
 	hook_add_channel_topic(cs_keeptopic_topicset);
 	hook_add_channel_can_change_topic(cs_topiccheck);
@@ -325,6 +329,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_channel_join(cs_join);
 	hook_del_channel_part(cs_part);
 	hook_del_channel_register(cs_register);
+	hook_del_channel_succession(cs_succession);
 	hook_del_channel_add(cs_newchan);
 	hook_del_channel_topic(cs_keeptopic_topicset);
 	hook_del_channel_can_change_topic(cs_topiccheck);
@@ -669,6 +674,11 @@ static void cs_register(hook_channel_req_t *hdata)
 		mlock_sts(mc->chan);
 		check_modes(mc, true);
 	}
+}
+
+static void cs_succession(hook_channel_succession_req_t *data)
+{
+	chanacs_change_simple(data->mc, entity(data->mu), NULL, custom_founder_check(), 0, NULL);
 }
 
 /* Called on every set of a topic, after updating our internal structures */
