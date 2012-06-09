@@ -60,6 +60,13 @@ struct cmode_ seven_mode_list[] = {
   { 'Q', CMODE_DISFWD },
   { 'M', CMODE_IMMUNE },
   { 'C', CMODE_NOCTCP },
+
+  /* following modes are added as extensions */
+  { 'N', CMODE_NPC       },
+  { 'S', CMODE_SSLONLY   },
+  { 'O', CMODE_OPERONLY  },
+  { 'A', CMODE_ADMINONLY },
+
   { '\0', 0 }
 };
 
