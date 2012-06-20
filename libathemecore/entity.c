@@ -81,6 +81,8 @@ myentity_t *myentity_find(const char *name)
 	myentity_t *ent;
 	hook_myentity_req_t req;
 
+	return_val_if_fail(name != NULL, NULL);
+
 	if ((ent = mowgli_patricia_retrieve(entities, name)) != NULL)
 		return ent;
 
@@ -93,12 +95,16 @@ myentity_t *myentity_find(const char *name)
 
 myentity_t *myentity_find_uid(const char *uid)
 {
+	return_val_if_fail(uid != NULL, NULL);
+
 	return mowgli_patricia_retrieve(entities_by_id, uid);
 }
 
 myentity_t *myentity_find_ext(const char *name)
 {
 	myentity_t *mt;
+
+	return_val_if_fail(name != NULL, NULL);
 
 	mt = entity(myuser_find_ext(name));
 	if (mt != NULL)
