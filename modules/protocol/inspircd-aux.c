@@ -1614,7 +1614,7 @@ void _modinit(module_t * m)
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER);
 	pcommand_add("AWAY", m_away, 0, MSRC_USER);
 	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
-	pcommand_add("METADATA", m_metadata, 4, MSRC_SERVER);
+	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("ENDBURST", m_endburst, 0, MSRC_SERVER);
