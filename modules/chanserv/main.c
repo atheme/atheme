@@ -775,9 +775,6 @@ static void cs_newchan(channel_t *c)
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
 
-	/* ...and send the MLOCK to the ircd to do its bit. */
-	mlock_sts(c);
-
 	md = metadata_find(mc, "private:channelts");
 	if (md != NULL)
 		channelts = atol(md->value);
@@ -813,6 +810,8 @@ static void cs_newchan(channel_t *c)
 		metadata_add(mc, "private:channelts", str);
 	}
 	else if (!(MC_TOPICLOCK & mc->flags) && MOWGLI_LIST_LENGTH(&c->members) == 0)
+	{
+		mlock_sts(c);
 		/* Same channel, let's assume ircd has kept topic.
 		 * However, if topiclock is enabled, we must change it back
 		 * regardless.
@@ -820,6 +819,9 @@ static void cs_newchan(channel_t *c)
 		 * being created by a service and we must restore.
 		 * -- jilles */
 		return;
+	}
+
+	mlock_sts(c);
 
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
