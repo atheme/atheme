@@ -94,6 +94,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 	unsigned int newlimit;
 	const char *pos = parv[0];
 	mychan_t *mc;
+	user_t *target;
 	chanuser_t *cu = NULL;
 	user_t *first_deopped_service = NULL;
 
@@ -282,15 +283,25 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 			{
 				if (++parpos >= parc)
 					break;
-				cu = chanuser_find(chan, source ? user_find_named(parv[parpos]) : user_find(parv[parpos]));
+				matched = true;
 
-				if (cu == NULL)
-				{
-					slog(LG_ERROR, "channel_mode(): MODE %s %c%c %s", chan->name, (whatt == MTYPE_ADD) ? '+' : '-', status_mode_list[i].mode, parv[parpos]);
+				target = source ? user_find_named(parv[parpos]) : user_find(parv[parpos]);
+				if (target == NULL) {
+					/* This may happen legitimately, e.g.
+					 * if mode and /ns ghost cross.
+					 */
+					slog(LG_DEBUG, "channel_mode(): MODE %s %c%c %s user not found", chan->name, (whatt == MTYPE_ADD) ? '+' : '-', status_mode_list[i].mode, parv[parpos]);
 					break;
 				}
-
-				matched = true;
+				cu = chanuser_find(chan, target);
+				if (cu == NULL)
+				{
+					/* This may happen legitimately, e.g.
+					 * if mode and /cs kick cross.
+					 */
+					slog(LG_DEBUG, "channel_mode(): MODE %s %c%c %s user not on channel", chan->name, (whatt == MTYPE_ADD) ? '+' : '-', status_mode_list[i].mode, parv[parpos]);
+					break;
+				}
 
 				if (whatt == MTYPE_ADD)
 				{
