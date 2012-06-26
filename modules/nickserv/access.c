@@ -99,7 +99,8 @@ static char *construct_mask(user_t *u)
 	}
 	else if (username_is_random(u->user))
 		snprintf(mask, sizeof mask, "*@%s", u->host);
-	else if (!strcmp(u->host, u->ip) && (p = strrchr(u->ip, '.')) != NULL)
+	else if (u->ip != NULL && !strcmp(u->host, u->ip) &&
+			(p = strrchr(u->ip, '.')) != NULL)
 		snprintf(mask, sizeof mask, "%s@%.*s.0/24", u->user, (int)(p - u->ip), u->ip);
 	else
 		snprintf(mask, sizeof mask, "%s@%s", u->user, u->host);
