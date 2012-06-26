@@ -40,7 +40,6 @@
  * IRCNet ircd (ircd 2.11)			modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
  * ircu 2.10.11.07 or later			modules/protocol/undernet
- * InspIRCd 1.2 or later				modules/protocol/inspircd12
  * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
  * ngIRCd 19 or later [experimental]		modules/protocol/ngircd
  * ShadowIRCd 5.0 or later			modules/protocol/shadowircd
@@ -1137,7 +1136,7 @@ chanserv {
 	 * a registered channel and then sets some modes before they are
 	 * deopped.
 	 * This is currently supported for charybdis, hybrid, ratbox,
-	 * bahamut and inspircd 1.1+. For charybdis, hybrid and ratbox
+	 * bahamut, and unrealircd.  For charybdis, hybrid and ratbox
 	 * it only fully works with TS6, with TS5 bans and last-moment modes
 	 * will still apply.
 	 * (That can also be used to advantage, when first enabling this.)

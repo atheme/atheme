@@ -15,8 +15,6 @@ SRCS = \
 	charybdis.c	\
 	dreamforge.c	\
 	hybrid.c	\
-	inspircd-aux.c	\
-	inspircd12.c	\
         ircd-seven.c  \
 	ircnet.c	\
 	mixin_nohalfops.c	\
