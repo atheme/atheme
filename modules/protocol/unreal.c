@@ -1213,7 +1213,8 @@ static void m_error(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_sethost(sourceinfo_t *si, int parc, char *parv[])
 {
-	mowgli_strlcpy(si->su->vhost, parv[0], HOSTLEN);
+	strshare_unref(si->su->vhost);
+	si->su->vhost = strshare_get(parv[0]);
 }
 
 static void m_chghost(sourceinfo_t *si, int parc, char *parv[])
