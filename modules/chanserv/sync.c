@@ -261,6 +261,18 @@ static void sync_user(user_t *u)
 		hook_call_grant_channel_access(u);
 }
 
+static void sync_myuser(myuser_t *mu)
+{
+	mowgli_node_t *iter;
+
+	return_if_fail(mu != NULL);
+
+	MOWGLI_ITER_FOREACH(iter, mu->logins.head)
+	{
+		sync_user(iter->data);
+	}
+}
+
 static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 {
 	mychan_t *mc;
@@ -411,6 +423,9 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_identify");
 	hook_add_user_identify(sync_user);
+
+	hook_add_event("user_register");
+	hook_add_user_register(sync_myuser);
 }
 
 void _moddeinit(module_unload_intent_t intent)
