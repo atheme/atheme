@@ -14,7 +14,6 @@ mkdir_p ?= @mkdir_p@
 CLEAN_LIB ?= @CLEAN_LIB@
 htmldir ?= @htmldir@
 bindir ?= @bindir@
-RPATH ?= @RPATH@
 MOWGLI_LIBS ?= @MOWGLI_LIBS@
 PACKAGE_URL ?= @PACKAGE_URL@
 BUILDROOT ?= @BUILDROOT@
