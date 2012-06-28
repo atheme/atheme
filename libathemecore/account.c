@@ -1532,6 +1532,8 @@ unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *mt)
 		}
 	}
 
+	slog(LG_DEBUG, "chanacs_entity_flags(%s, %s): return %s", mychan->name, mt->name, bitmask_to_flags(result));
+
 	return result;
 }
 
@@ -1655,6 +1657,8 @@ static unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 		result |= ca->level;
 	}
 
+	slog(LG_DEBUG, "chanacs_host_flags_by_user(%s, %s): return %s", mychan->name, u->nick, bitmask_to_flags(result));
+
 	return result;
 }
 
@@ -1716,13 +1720,11 @@ static unsigned int chanacs_entity_flags_by_user(mychan_t *mychan, user_t *u)
 		mt = ca->entity;
 		vt = myentity_get_chanacs_validator(mt);
 
-		/* not all entities support matching against all users. */
-		if (vt->match_user == NULL)
-			continue;
-
-		if (vt->match_user(ca, u) != NULL)
+		if (vt->match_user && vt->match_user(ca, u) != NULL)
 			result |= ca->level;
 	}
+
+	slog(LG_DEBUG, "chanacs_entity_flags_by_user(%s, %s): return %s", mychan->name, u->nick, bitmask_to_flags(result));
 
 	return result;
 }
