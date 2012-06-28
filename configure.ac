@@ -408,9 +408,10 @@ enablerpath="yes"
 AC_ARG_ENABLE(rpath,
 AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
    [enablerpath="$enableval"], [enablerpath="yes"])
-RPATH=""
 
-AC_SUBST(RPATH)
+if test "x$enablerpath" != "xyes"; then
+	LDFLAGS_RPATH=""
+fi
 
 PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
 	[MOWGLI_SOURCE="system"], [
@@ -418,16 +419,13 @@ PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
 	MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
 	MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
 	LIBMOWGLI="libmowgli-2"
-	if test "x$enablerpath" = "xyes"; then
-		RPATH="-Wl,-rpath,${libdir}"
-	fi
 ])
 
 AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
 	[ AC_CONFIG_SUBDIRS([libmowgli-2]) ])
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
-LIBS="$LIBS $MOWGLI_LIBS $RPATH"
+LIBS="$LIBS $MOWGLI_LIBS"
 
 AC_SUBST(MOWGLI_CFLAGS)
 AC_SUBST(MOWGLI_LIBS)

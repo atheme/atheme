@@ -613,7 +613,6 @@ LIBMOWGLI
 subdirs
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-RPATH
 SSL_LIBS
 CONTRIB_ENABLE
 LOCALEDIR
@@ -10759,9 +10758,10 @@ else
   enablerpath="yes"
 fi
 
-RPATH=""
 
-
+if test "x$enablerpath" != "xyes"; then
+	LDFLAGS_RPATH=""
+fi
 
 
 pkg_failed=no
@@ -10825,9 +10825,6 @@ $as_echo "no" >&6; }
 	MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
 	MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
 	LIBMOWGLI="libmowgli-2"
-	if test "x$enablerpath" = "xyes"; then
-		RPATH="-Wl,-rpath,${libdir}"
-	fi
 
 elif test $pkg_failed = untried; then
 
@@ -10835,9 +10832,6 @@ elif test $pkg_failed = untried; then
 	MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
 	MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
 	LIBMOWGLI="libmowgli-2"
-	if test "x$enablerpath" = "xyes"; then
-		RPATH="-Wl,-rpath,${libdir}"
-	fi
 
 else
 	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
@@ -10855,7 +10849,7 @@ if  test "x$MOWGLI_SOURCE" = "xinternal" ; then :
 fi
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
-LIBS="$LIBS $MOWGLI_LIBS $RPATH"
+LIBS="$LIBS $MOWGLI_LIBS"
 
 
 
