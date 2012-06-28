@@ -40,9 +40,10 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 			return;
 	}
 	fl = chanacs_user_flags(mc, cu->user);
-
 	noop = mc->flags & MC_NOOP || (cu->user->myuser != NULL &&
 			cu->user->myuser->flags & MU_NOOP);
+
+	slog(LG_DEBUG, "do_chanuser_sync(): flags: %s, noop: %s", bitmask_to_flags(fl), noop ? "true" : "false");
 
 	if (take && !(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
 	{
