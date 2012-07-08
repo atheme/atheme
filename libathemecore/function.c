@@ -266,10 +266,10 @@ int validemail(const char *email)
 	if (isdigit(lastdot[1]))
 		return 0;
 
-	/* make sure there are at least 6 characters besides the above
+	/* make sure there are at least 4 characters besides the above
 	 * mentioned @ and .
 	 */
-	if (chars < 6)
+	if (chars < 4)
 		return 0;
 
 	return valid;
