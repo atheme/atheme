@@ -51,7 +51,9 @@ bool crypt_verify_password(const char *uinput, const char *pass)
 	return false;
 }
 
-const char *gen_salt(void)
+const char *(*gen_salt) (void) = &generic_gen_salt;
+
+const char *generic_gen_salt(void)
 {
 	char *ht = random_string(6);
 

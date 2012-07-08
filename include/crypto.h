@@ -12,7 +12,8 @@
 E const char *(*crypt_string)(const char *str, const char *salt);
 E const char *generic_crypt_string(const char *str, const char *salt);
 E bool crypt_verify_password(const char *uinput, const char *pass);
-E const char *gen_salt(void);
+E const char *(*gen_salt)(void);
+E const char *generic_gen_salt(void);
 E bool crypto_module_loaded;
 
 #endif
