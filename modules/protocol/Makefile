@@ -14,6 +14,7 @@ SRCS = \
 	base36uid.c	\
 	charybdis.c	\
 	hybrid.c	\
+	inspircd.c	\
         ircd-seven.c  \
 	ircnet.c	\
 	mixin_nohalfops.c	\
