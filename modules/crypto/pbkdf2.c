@@ -84,15 +84,6 @@ int PKCS5_PBKDF2_HMAC(const char *pass, int passlen,
 		p+= cplen;
 	}
 	HMAC_CTX_cleanup(&hctx);
-#ifdef DEBUG_PKCS5V2
-	fprintf(stderr, "Password:\n");
-	h__dump (pass, passlen);
-	fprintf(stderr, "Salt:\n");
-	h__dump (salt, saltlen);
-	fprintf(stderr, "Iteration count %d\n", iter);
-	fprintf(stderr, "Key:\n");
-	h__dump (out, keylen);
-#endif
 	return 1;
 }
 
