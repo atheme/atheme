@@ -928,6 +928,8 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 
 		if (mt != entity(si->smu))
 			restrictflags = allow_flags(mc, restrictflags);
+		else
+			restrictflags |= allow_flags(mc, restrictflags);
 	}
 
 	oldflags = ca->level;
@@ -1053,6 +1055,8 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 
 		if (mt != entity(si->smu))
 			restrictflags = allow_flags(mc, restrictflags);
+		else
+			restrictflags |= allow_flags(mc, restrictflags);
 	}
 
 	oldflags = ca->level;
