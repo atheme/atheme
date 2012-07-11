@@ -314,6 +314,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (irccasecmp(target, entity(si->smu)->name))
 				restrictflags = allow_flags(mc, restrictflags);
+			else
+				restrictflags |= allow_flags(mc, restrictflags);
 		}
 
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
