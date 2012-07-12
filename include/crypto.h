@@ -24,6 +24,7 @@ typedef struct {
 E void crypt_register(crypt_impl_t *impl);
 E void crypt_unregister(crypt_impl_t *impl);
 E const crypt_impl_t *crypt_verify_password(const char *user_input, const char *pass);
+E const crypt_impl_t *crypt_get_default_provider(void);
 
 #endif
 

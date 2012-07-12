@@ -51,6 +51,24 @@ static const crypt_impl_t fallback_crypt_impl = {
 	.salt = &generic_gen_salt,
 };
 
+const crypt_impl_t *crypt_get_default_provider(void)
+{
+	crypt_impl_t *ci;
+
+	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
+		return &fallback_crypt_impl;
+
+	/* top of stack should handle string crypting, should be populated by now */
+	return_val_if_fail(crypt_impl_list.head != NULL, &fallback_crypt_impl);
+	ci = crypt_impl_list.head->data;
+
+	/* ensure the provider is populated */
+	return_val_if_fail(ci->crypt != NULL, &fallback_crypt_impl);
+	return_val_if_fail(ci->salt != NULL, &fallback_crypt_impl);
+
+	return ci;
+}
+
 /*
  * crypt_string is just like crypt(3) under UNIX
  * systems. Modules provide this function, otherwise
@@ -58,33 +76,15 @@ static const crypt_impl_t fallback_crypt_impl = {
  */
 const char *crypt_string(const char *key, const char *salt)
 {
-	crypt_impl_t *ci;
+	const crypt_impl_t *ci = crypt_get_default_provider();
 
-	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
-		return fallback_crypt_impl.crypt(key, salt);
-
-	/* top of stack should handle string crypting, should be populated by now */
-	return_val_if_fail(crypt_impl_list.head != NULL, fallback_crypt_impl.crypt(key, salt));
-	ci = crypt_impl_list.head->data;
-
-	/* ensure crypt_impl_t.crypt is populated */
-	return_val_if_fail(ci->crypt != NULL, fallback_crypt_impl.crypt(key, salt));
 	return ci->crypt(key, salt);
 }
 
 const char *gen_salt(void)
 {
-	crypt_impl_t *ci;
+	const crypt_impl_t *ci = crypt_get_default_provider();
 
-	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
-		return fallback_crypt_impl.salt();
-
-	/* top of stack should handle string crypting, should be populated by now */
-	return_val_if_fail(crypt_impl_list.head != NULL, fallback_crypt_impl.salt());
-	ci = crypt_impl_list.head->data;
-
-	/* ensure crypt_impl_t.crypt is populated */
-	return_val_if_fail(ci->salt != NULL, fallback_crypt_impl.salt());
 	return ci->salt();
 }
 
