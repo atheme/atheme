@@ -40,9 +40,11 @@ static void ctcp_ping_handler(sourceinfo_t *si, char *cmd, char *args)
 
 static void ctcp_version_handler(sourceinfo_t *si, char *cmd, char *args)
 {
+	const crypt_impl_t *ci = crypt_get_default_provider();
+
 	notice(si->service->nick, si->su->nick,
-		"\001VERSION %s. %s %s %s [%s] Build Date: %s\001",
-		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname, __DATE__);
+		"\001VERSION %s. %s %s %s [%s] [enc:%s] Build Date: %s\001",
+		PACKAGE_STRING, revision, me.name, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
 }
 
 static void ctcp_clientinfo_handler(sourceinfo_t *si, char *cmd, char *args)

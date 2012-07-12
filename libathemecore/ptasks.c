@@ -43,14 +43,15 @@ void handle_info(user_t *u)
 
 void handle_version(user_t *u)
 {
+	const crypt_impl_t *ci = crypt_get_default_provider();
 
 	if (u == NULL)
 		return;
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s] Build Date: %s",
-		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, __DATE__);
+	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
+		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
 }
 
 void handle_admin(user_t *u)
