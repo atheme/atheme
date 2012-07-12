@@ -1,3 +1,32 @@
+Atheme Services 7.0.4 Release Notes
+Codename: "I would rather be playing Assassin's Creed III instead of this."
+===================================
+ircd protocol
+- inspircd: new module with less bugs based in part from feedback from inspircd
+  dev team.  much cleaner.
+- unreal: fix memory corruption caused by strlcpy() against a strshare-managed
+  string.
+- ircd-seven: support charybdis's extension channel modes
+chanserv
+- sync: sync a channel on account registration.  this allows exttargets like
+  $registered react to new account registrations.
+- main: send MLOCK after a TS change, otherwise it will be lost.
+- flags: allow users with +f and +o (+v) to set +/-O and +/-V on themselves.
+- main: respect founder_flags config setting during channel succession
+code
+- validemail() now accepts single-character emails (issue #25)
+- fix assertion failure when setting a mode on a user which does not exist
+- add assertions against passing NULL to myentity_find().
+- fix evaluation order and undefined variables in the pkg-config file
+- buildsys: fix --disable-rpath
+exttarget
+- guard against not properly sanitized hook data
+gameserv
+- fix up SET GAMESERV enforcement on channel commands for some commands
+nickserv
+- info: show REGNOLIMIT flag
+- access: fix crash for users without IP information
+
 Atheme Services 7.0.3 Release Notes
 Codename: "Now with less pointless errata."
 ===================================
