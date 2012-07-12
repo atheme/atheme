@@ -46,7 +46,7 @@ static const char *generic_gen_salt(void)
 }
 
 static const crypt_impl_t fallback_crypt_impl = {
-	.id = "fallback",
+	.id = "plaintext",
 	.crypt = &generic_crypt_string,
 	.salt = &generic_gen_salt,
 };
