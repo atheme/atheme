@@ -37,10 +37,7 @@ static bool verify_operserv_password(soper_t *so, char *password)
 	if (so == NULL || password == NULL)
 		return false;
 
-	if (crypto_module_loaded)
-		return crypt_verify_password(password, so->password);
-	else
-		return !strcmp(password, so->password);
+	return crypt_verify_password(password, so->password) != NULL;
 }
 
 static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])

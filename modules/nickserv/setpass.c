@@ -76,7 +76,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	md = metadata_find(mu, "private:setpass:key");
-	if (md != NULL && crypt_verify_password(key, md->value))
+	if (md != NULL && crypt_verify_password(key, md->value) != NULL)
 	{
 		logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
 		set_password(mu, password);
