@@ -37,18 +37,19 @@ static const char *rawmd5_crypt_string(const char *key, const char *salt)
 	return output;
 }
 
+static crypt_impl_t rawmd5_crypt_impl = {
+	.id = "rawmd5",
+	.crypt = &rawmd5_crypt_string,
+};
+
 void _modinit(module_t *m)
 {
-	crypt_string = &rawmd5_crypt_string;
-
-	crypto_module_loaded = true;
+	crypt_register(&rawmd5_crypt_impl);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = &generic_crypt_string;
-
-	crypto_module_loaded = false;
+	crypt_unregister(&rawmd5_crypt_impl);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

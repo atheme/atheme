@@ -117,20 +117,20 @@ static const char *pbkdf2_crypt(const char *key, const char *salt)
 	return outbuf;
 }
 
+static crypt_impl_t pbkdf2_crypt_impl = {
+	.id = "pbkdf2",
+	.crypt = &pbkdf2_crypt,
+	.salt = &pbkdf2_salt
+};
+
 void _modinit(module_t *m)
 {
-	crypt_string = &pbkdf2_crypt;
-	gen_salt = &pbkdf2_salt;
-
-	crypto_module_loaded = true;
+	crypt_register(&pbkdf2_crypt_impl);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = &generic_crypt_string;
-	gen_salt = &generic_gen_salt;
-
-	crypto_module_loaded = false;
+	crypt_unregister(&pbkdf2_crypt_impl);
 }
 
 #endif

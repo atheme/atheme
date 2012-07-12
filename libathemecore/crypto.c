@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * crypto.c: Cryptographic module support.
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2012 William Pitcock <nenolod@dereferenced.org>.
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,47 +23,119 @@
 
 #include "atheme.h"
 
-static char saltbuf[BUFSIZE];
+static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 bool crypto_module_loaded = false;
+
+static const char *generic_crypt_string(const char *str, const char *salt)
+{
+	return str;
+}
+
+static const char *generic_gen_salt(void)
+{
+	static char buf[BUFSIZE];
+	char *ht = random_string(6);
+
+	mowgli_strlcpy(buf, "$1$", BUFSIZE);
+	mowgli_strlcat(buf, ht, BUFSIZE);
+	mowgli_strlcat(buf, "$", BUFSIZE);
+
+	free(ht);
+
+	return buf;
+}
+
+static const crypt_impl_t fallback_crypt_impl = {
+	.id = "fallback",
+	.crypt = &generic_crypt_string,
+	.salt = &generic_gen_salt,
+};
 
 /*
  * crypt_string is just like crypt(3) under UNIX
  * systems. Modules provide this function, otherwise
  * it returns the string unencrypted.
  */
-const char *(*crypt_string) (const char *str, const char *salt) = &generic_crypt_string;
-
-const char *generic_crypt_string(const char *str, const char *salt)
+const char *crypt_string(const char *key, const char *salt)
 {
-	return str;
+	crypt_impl_t *ci;
+
+	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
+		return fallback_crypt_impl.crypt(key, salt);
+
+	/* top of stack should handle string crypting, should be populated by now */
+	return_val_if_fail(crypt_impl_list.head != NULL, fallback_crypt_impl.crypt(key, salt));
+	ci = crypt_impl_list.head->data;
+
+	/* ensure crypt_impl_t.crypt is populated */
+	return_val_if_fail(ci->crypt != NULL, fallback_crypt_impl.crypt(key, salt));
+	return ci->crypt(key, salt);
+}
+
+const char *gen_salt(void)
+{
+	crypt_impl_t *ci;
+
+	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
+		return fallback_crypt_impl.salt();
+
+	/* top of stack should handle string crypting, should be populated by now */
+	return_val_if_fail(crypt_impl_list.head != NULL, fallback_crypt_impl.salt());
+	ci = crypt_impl_list.head->data;
+
+	/* ensure crypt_impl_t.crypt is populated */
+	return_val_if_fail(ci->salt != NULL, fallback_crypt_impl.salt());
+	return ci->salt();
+}
+
+void crypt_register(crypt_impl_t *impl)
+{
+	return_if_fail(impl != NULL);
+
+	if (impl->crypt == NULL)
+		impl->crypt = &generic_crypt_string;
+	if (impl->salt == NULL)
+		impl->salt = &generic_gen_salt;
+
+	mowgli_node_add(impl, &impl->node, &crypt_impl_list);
+
+	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
+}
+
+void crypt_unregister(crypt_impl_t *impl)
+{
+	return_if_fail(impl != NULL);
+
+	mowgli_node_delete(&impl->node, &crypt_impl_list);
+
+	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
 }
 
 /*
  * crypt_verify_password is a frontend to crypt_string().
  */
-bool crypt_verify_password(const char *uinput, const char *pass)
+const crypt_impl_t *crypt_verify_password(const char *uinput, const char *pass)
 {
-	const char *cstr = crypt_string(uinput, pass);
+	mowgli_node_t *n;
+	const char *cstr;
+
+	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
+	{
+		crypt_impl_t *ci;
+
+		ci = n->data;
+		cstr = ci->crypt(uinput, pass);
+
+		if (!strcmp(cstr, pass))
+			return ci;
+	}
+
+	cstr = fallback_crypt_impl.crypt(uinput, pass);
 
 	if (!strcmp(cstr, pass))
-		return true;
+		return &fallback_crypt_impl;
 
-	return false;
-}
-
-const char *(*gen_salt) (void) = &generic_gen_salt;
-
-const char *generic_gen_salt(void)
-{
-	char *ht = random_string(6);
-
-	mowgli_strlcpy(saltbuf, "$1$", BUFSIZE);
-	mowgli_strlcat(saltbuf, ht, BUFSIZE);
-	mowgli_strlcat(saltbuf, "$", BUFSIZE);
-
-	free(ht);
-
-	return saltbuf;
+	return NULL;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -133,18 +133,19 @@ static const char *ircservices_crypt_string(const char *key, const char *salt)
 	}
 }
 
+static crypt_impl_t ircservices_crypt_impl = {
+	.id = "ircservices",
+	.crypt = &ircservices_crypt_string,
+};
+
 void _modinit(module_t *m)
 {
-	crypt_string = &ircservices_crypt_string;
-
-	crypto_module_loaded = true;
+	crypt_register(&ircservices_crypt_impl);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = &generic_crypt_string;
-
-	crypto_module_loaded = false;
+	crypt_unregister(&ircservices_crypt_impl);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

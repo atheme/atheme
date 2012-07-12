@@ -203,21 +203,23 @@ static const char *(*crypt_impl_)(const char *key, const char *salt) = &stub_cry
 
 #endif
 
+static crypt_impl_t posix_crypt_impl = {
+	.id = "posix",
+};
+
 void _modinit(module_t *m)
 {
-	crypt_string = crypt_impl_;
+	posix_crypt_impl.crypt = crypt_impl_;
 
 #if defined(HAVE_CRYPT) || defined(HAVE_OPENSSL)
-	crypto_module_loaded = true;
+	crypt_register(&posix_crypt_impl);
 #endif
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = crypt_impl_;
-
 #if defined(HAVE_CRYPT) || defined(HAVE_OPENSSL)
-	crypto_module_loaded = false;
+	crypt_unregister(&posix_crypt_impl);
 #endif
 }
 

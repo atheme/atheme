@@ -41,18 +41,19 @@ static const char *rawsha1_crypt_string(const char *key, const char *salt)
 	return output;
 }
 
+static crypt_impl_t rawsha1_crypt_impl = {
+	.id = "rawsha1",
+	.crypt = &rawsha1_crypt_string,
+};
+
 void _modinit(module_t *m)
 {
-	crypt_string = &rawsha1_crypt_string;
-
-	crypto_module_loaded = true;
+	crypt_register(&rawsha1_crypt_impl);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_string = &generic_crypt_string;
-
-	crypto_module_loaded = false;
+	crypt_unregister(&rawsha1_crypt_impl);
 }
 
 #endif /* HAVE_OPENSSL */
