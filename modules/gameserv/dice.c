@@ -576,6 +576,14 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 			times = 10;
 	}
 
+	if (!strcasecmp("RICK", arg))
+	{
+		gs_command_report(si, "Never gonna give you up; Never gonna let you down");
+		gs_command_report(si, "Never gonna run around and desert you; Never gonna make you cry");
+		gs_command_report(si, "Never gonna say goodbye; Never gonna tell a lie and hurt you");
+		return;
+	}
+
 	for (i = 0; i < times; i++)
 		eval_dice(si, arg);
 }
