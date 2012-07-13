@@ -94,6 +94,7 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
+ * PBKDF2 cryptography				modules/crypto/pbkdf2
  * POSIX-style crypt(3)				modules/crypto/posix
  * IRCServices (also Anope etc) compatibility	modules/crypto/ircservices
  * Raw MD5 (Anope compatibility)		modules/crypto/rawmd5
@@ -102,7 +103,13 @@ loadmodule "modules/backend/opensex";
  * The ircservices, rawmd5 and rawsha1 modules are only recommended for use with
  * a database converted from other services with password encryption.
  *
- * The rawsha1 module requires OpenSSL.
+ * To transition between crypto schemes, load the preferred scheme first
+ * and as users login, they will be migrated to the new preferred scheme. Like:
+ * loadmodule "modules/crypto/pbkdf2";
+ * loadmodule "modules/crypto/posix";
+ * loadmodule "modules/crypto/ircservices";
+ *
+ * The rawsha1 and pbkdf2 modules require OpenSSL.
  */
 loadmodule "modules/crypto/posix";
 
