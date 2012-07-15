@@ -83,7 +83,7 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 			done; \
 			cd ..; \
 		fi; \
-	done; install -m 644 ../NEWS $(DESTDIR)$(DOCDIR)/RELEASE)
+	done; install -m 644 ../NEWS.md $(DESTDIR)$(DOCDIR)/RELEASE)
 	(cd ../../help/default; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
 		if [ -d $$i ]; then \
