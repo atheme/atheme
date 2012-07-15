@@ -189,11 +189,10 @@ static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int t
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
-
 	MOWGLI_ITER_FOREACH(n, first)
 	{
 		cb = n->data;
-		
+
 		/*
 		 * strip any banforwards from the mask. (SRV-73)
 		 * charybdis itself doesn't support banforward but i don't feel like copying
@@ -206,10 +205,12 @@ static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int t
 		if (p != NULL && p != strippedmask)
 			*p = 0;
 
-		if (cb->type == type &&
-				(!match(strippedmask, hostbuf) || !match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
+		if (cb->type != type)
+			continue;
+
+		if ((!match(strippedmask, hostbuf) || !match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
 			return n;
-		if (cb->type == type && strippedmask[0] == '$')
+		if (strippedmask[0] == '$')
 		{
 			p = strippedmask + 1;
 			negate = *p == '~';
