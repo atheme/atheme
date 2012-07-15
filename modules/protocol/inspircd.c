@@ -110,6 +110,75 @@ struct cmode_ inspircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
+static mowgli_node_t *inspircd_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
+{
+	chanban_t *cb;
+	mowgli_node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char realbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+	char *p;
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+
+	MOWGLI_ITER_FOREACH(n, first)
+	{
+		channel_t *target_c;
+
+		cb = n->data;
+
+		if (cb->type != type)
+			continue;
+
+		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)) || !match_cidr(cb->mask, ipbuf))
+			return n;
+
+		if (cb->mask[1] == ':' &&
+			(cb->mask[0] == 'M' || cb->mask[0] == 'R' || cb->mask[0] == 'j' || cb->mask[0] == 'r' || cb->mask[0] == 'U'))
+		{
+			bool matched = false;
+
+			p = cb->mask + 2;
+			if (*(p - 1) != ':')
+				p = NULL;
+
+			switch (cb->mask[0])
+			{
+			case 'M':
+			case 'R':
+				matched = u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && (p == NULL || !match(p, entity(u->myuser)->name));
+				break;
+			case 'U':
+				matched = u->myuser == NULL;
+				break;
+			case 'j':
+				if (p == NULL)
+					continue;
+				target_c = channel_find(p);
+				if (target_c == NULL || (target_c->modes & (CMODE_PRIV | CMODE_SEC)))
+					continue;
+				matched = chanuser_find(target_c, u) != NULL;
+				break;
+			case 'r':
+				if (p == NULL)
+					continue;
+				matched = !match(p, u->gecos);
+				break;
+			default:
+				continue;
+			}
+
+			if (matched)
+				return n;
+		}
+	}
+
+	return NULL;
+}
+
 /* CAPABilities */
 static bool has_servicesmod = false;
 static bool has_globopsmod = false;
@@ -1537,6 +1606,7 @@ void _modinit(module_t * m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
+	next_matching_ban = &inspircd_next_matching_ban;
 	server_login = &inspircd_server_login;
 	introduce_nick = &inspircd_introduce_nick;
 	quit_sts = &inspircd_quit_sts;
