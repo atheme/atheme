@@ -974,7 +974,12 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		 * they're properly logged in --jilles
 		 */
 		if (use_esvid && !IsDigit(*parv[6]))
+		{
 			handle_burstlogin(u, parv[6], 0);
+
+			if (authservice_loaded && should_reg_umode(u))
+				sts(":%s SVS2MODE %s +r", nicksvs.nick, u->nick);
+		}
 		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, NULL, 0);
 
@@ -985,11 +990,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	else if (parc == 2)
 	{
                 if (!si->su)
-                {       
+                {
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
                         return;
                 }
-                
+
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
