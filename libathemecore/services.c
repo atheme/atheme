@@ -443,7 +443,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 		}
 		return;
 	}
-	if (!(ircd->flags & IRCD_SASL_USE_PUID) && mu->flags & MU_NOBURSTLOGIN && authservice_loaded)
+	if (mu->flags & MU_NOBURSTLOGIN && authservice_loaded)
 	{
 		/* no splits for this account, this bursted login cannot
 		 * be legit...
