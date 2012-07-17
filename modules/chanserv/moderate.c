@@ -217,6 +217,13 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	sourceinfo_t baked_si;
 	unsigned int fl;
 
+	if (!parv[0])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACTIVATE");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACTIVATE <#channel>"));
+		return;
+	}
+
 	cs = csreq_find(parv[0]);
 	if (cs == NULL)
 	{
