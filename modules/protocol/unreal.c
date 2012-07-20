@@ -241,6 +241,72 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	return true;
 }
 
+static mowgli_node_t *unreal_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first)
+{
+	chanban_t *cb;
+	mowgli_node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char realbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+	char *p;
+	bool matched;
+	int exttype;
+	channel_t *target_c;
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+
+	MOWGLI_ITER_FOREACH(n, first)
+	{
+		cb = n->data;
+
+		if (cb->type != type)
+			continue;
+
+		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)))
+			return n;
+		if (cb->mask[0] == '~')
+		{
+			p = cb->mask + 1;
+			exttype = *p++;
+			if (exttype == '\0')
+				continue;
+			/* check parameter */
+			if (*p++ != ':')
+				p = NULL;
+			switch (exttype)
+			{
+				case 'a':
+					matched = u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && (p == NULL || !match(p, entity(u->myuser)->name));
+					break;
+				case 'c':
+					if (p == NULL)
+						continue;
+					target_c = channel_find(p);
+					if (target_c == NULL || (target_c->modes & (CMODE_PRIV | CMODE_SEC)))
+						continue;
+					matched = chanuser_find(target_c, u) != NULL;
+					break;
+				case 'r':
+					if (p == NULL)
+						continue;
+					matched = !match(p, u->gecos);
+					break;
+				case 'R':
+					matched = should_reg_umode(u);
+					break;
+				default:
+					continue;
+			}
+			if (matched)
+				return n;
+		}
+	}
+	return NULL;
+}
+
 /* login to our uplink */
 static unsigned int unreal_server_login(void)
 {
@@ -1311,6 +1377,7 @@ void _modinit(module_t * m)
 	quarantine_sts = &unreal_quarantine_sts;
 	mlock_sts = &unreal_mlock_sts;
 
+	next_matching_ban = &unreal_next_matching_ban;
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;
 	status_mode_list = unreal_status_mode_list;
