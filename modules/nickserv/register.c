@@ -60,6 +60,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	char lau[BUFSIZE], lao[BUFSIZE];
 	hook_user_register_check_t hdata;
 	hook_user_req_t req;
+	bool exempt;
 
 	if (si->smu)
 	{
@@ -169,13 +170,20 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
+	/* make sure they're within limits */
+	if (me.maxusers > 0)
 	{
-		if (0 == match(tn->data, email))
-			continue;
+		exempt = false;
+		MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
+		{
+			if (0 == match(tn->data, email))
+			{
+				exempt = true;
+				break;
+			}
+		}
 
-		/* make sure they're within limits */
-		if (me.maxusers > 0)
+		if (!exempt)
 		{
 			tcnt = 0;
 			myentity_foreach_t(ENT_USER, register_foreach_cb, email);
