@@ -26,6 +26,7 @@ DECLARE_MODULE_V1("crypto/pbkdf2", false, _modinit, _moddeinit, PACKAGE_VERSION,
 
 #include <openssl/evp.h>
 #include <openssl/sha.h>
+#include <openssl/hmac.h>
 
 #define ROUNDS		(128000)
 #define SALTLEN		(16)
