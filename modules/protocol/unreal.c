@@ -37,7 +37,7 @@ ircd_t Unreal = {
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_UNREAL,		/* Protocol type */
-	0,                              /* Permanent cmodes */
+	CMODE_PERM,                     /* Permanent cmodes */
 	0,                              /* Oper-immune cmode */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
@@ -67,6 +67,7 @@ struct cmode_ unreal_mode_list[] = {
   { 'N', CMODE_STICKY   },
   { 'G', CMODE_CENSOR   },
   { 'r', CMODE_CHANREG  },
+  { 'P', CMODE_PERM     },
   { '\0', 0 }
 };
 

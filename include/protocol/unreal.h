@@ -26,5 +26,6 @@
 #define CMODE_STICKY	0x01000000	/* unreal +N */
 #define CMODE_JTHROT	0x02000000	/* unreal +j */
 #define CMODE_CENSOR    0x04000000	/* unreal +G */
+#define CMODE_PERM	0x08000000	/* unreal +P */
 
 #endif
