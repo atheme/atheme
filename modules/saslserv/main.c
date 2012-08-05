@@ -182,6 +182,8 @@ static void sasl_input(sasl_message_t *smsg)
 {
 	sasl_session_t *p = make_session(smsg->uid);
 	int len = strlen(smsg->buf);
+	char *tmpbuf;
+	int tmplen;
 
 	/* Abort packets, or maybe some other kind of (D)one */
 	if(smsg->mode == 'D')
@@ -226,10 +228,12 @@ static void sasl_input(sasl_message_t *smsg)
 	if(len < 400)
 	{
 		p->buf[p->len] = '\0';
-		sasl_packet(p, p->buf, p->len);
-		free(p->buf);
+		tmpbuf = p->buf;
+		tmplen = p->len;
 		p->buf = p->p = NULL;
 		p->len = 0;
+		sasl_packet(p, tmpbuf, tmplen);
+		free(tmpbuf);
 	}
 }
 
