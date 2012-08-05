@@ -316,7 +316,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if(len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,
 					&out, &out_len);
-		else if ((tlen = base64_decode(buf, temp, BUFSIZE)))
+		else if ((tlen = base64_decode(buf, temp, BUFSIZE)) &&
+				tlen != (size_t)-1)
 			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
 		else
 			rc = ASASL_FAIL;
