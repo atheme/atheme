@@ -15,7 +15,7 @@ Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
 Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 
 For further information about our relationship with those projects, see 
-the Atheme FAQ: http://www.atheme.net/FAQ
+the Atheme FAQ: http://atheme.net/faq.html
 
 ## Presentation (also, what atheme is not)
 
