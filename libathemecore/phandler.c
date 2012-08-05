@@ -30,6 +30,7 @@ void (*wallops_sts) (const char *text) = generic_wallops_sts;
 void (*join_sts) (channel_t *c, user_t *u, bool isnew, char *modes) = generic_join_sts;
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (user_t *source, channel_t *c, user_t *u, const char *reason) = generic_kick;
+void (*notice) (const char *from, const char *target, const char *fmt, ...) = generic_notice;
 void (*msg) (const char *from, const char *target, const char *fmt, ...) = generic_msg;
 void (*msg_global_sts) (user_t *from, const char *mask, const char *text) = generic_msg_global_sts;
 void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = generic_notice_user_sts;
@@ -94,6 +95,37 @@ void generic_chan_lowerts(channel_t *c, user_t *u)
 void generic_kick(user_t *source, channel_t *c, user_t *u, const char *reason)
 {
 	/* We can't do anything here. Bail. */
+}
+
+/* this could be done with more finesse, but hey! */
+void generic_notice(const char *from, const char *to, const char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+	user_t *u;
+	channel_t *c;
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, args);
+	va_end(args);
+
+	if (*to == '#')
+	{
+		c = channel_find(to);
+		if (c != NULL)
+			notice_channel_sts(user_find_named(from), c, buf);
+	}
+	else
+	{
+		u = user_find_named(to);
+		if (u != NULL)
+		{
+			if (u->myuser != NULL && u->myuser->flags & MU_USE_PRIVMSG)
+				msg(from, to, "%s", buf);
+			else
+				notice_user_sts(user_find_named(from), u, buf);
+		}
+	}
 }
 
 void generic_msg(const char *from, const char *target, const char *fmt, ...)
