@@ -44,26 +44,37 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	char auth[256];
 	char pass[256];
 	myuser_t *mu;
+	char *end;
 
 	/* Skip the authzid entirely */
-	len -= strlen(message) + 1;
-	if(len <= 0)
+	end = memchr(message, '\0', len);
+	if (end == NULL)
 		return ASASL_FAIL;
-	message += strlen(message) + 1;
+	len -= end - message + 1;
+	if (len <= 0)
+		return ASASL_FAIL;
+	message = end + 1;
 
 	/* Copy the authcid */
-	if(strlen(message) > 255)
+	end = memchr(message, '\0', len);
+	if (end == NULL)
 		return ASASL_FAIL;
-	len -= strlen(message) + 1;
-	if(len <= 0)
+	if (end - message > 255)
 		return ASASL_FAIL;
-	mowgli_strlcpy(auth, message, 256);
-	message += strlen(message) + 1;
+	len -= end - message + 1;
+	if (len <= 0)
+		return ASASL_FAIL;
+	memcpy(auth, message, end - message + 1);
+	message = end + 1;
 
 	/* Copy the password */
-	if(strlen(message) > 255)
+	end = memchr(message, '\0', len);
+	if (end == NULL)
+		end = message + len;
+	if (end - message > 255)
 		return ASASL_FAIL;
-	mowgli_strlcpy(pass, message, len + 1);
+	memcpy(pass, message, end - message);
+	pass[end - message] = '\0';
 
 	/* Done dissecting, now check. */
 	if(!(mu = myuser_find_by_nick(auth)))
