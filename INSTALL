@@ -23,6 +23,9 @@ You should also read the README and FAQ files.
 NOTE: if you are using a third party package of Services, most of this section
 will not apply.
 
+NOTE: if you are using a copy of Atheme downloaded from Git, you need to 
+remember to run `git submodule update --init`. If not, you may ignore this step.
+
 IMPORTANT NOTE: it is not recommended to use and install services as root.
 Use an unprivileged user account.
 
