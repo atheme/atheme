@@ -64,9 +64,7 @@ static botserv_bot_t *bs_mychan_find_bot(mychan_t *mc)
 	{
 		slog(LG_INFO, "bs_mychan_find_bot(): unassigning invalid bot %s from %s",
 				md->value, mc->name);
-		if (mc->chan != NULL)
-			notice(botsvs->nick, mc->name, "Unassigning invalid bot %s",
-					md->value);
+
 		metadata_delete(mc, "private:botserv:bot-assigned");
 		metadata_delete(mc, "private:botserv:bot-handle-fantasy");
 	}
@@ -107,6 +105,40 @@ bs_msg(const char *from, const char *target, const char *fmt, ...)
 	}
 
 	msg_real(real_source, target, "%s", buf);
+}
+
+static void (*notice_real)(const char *from, const char *target, const char *fmt, ...);
+
+static void
+bs_notice(const char *from, const char *target, const char *fmt, ...)
+{
+	va_list ap;
+	char buf[BUFSIZE];
+	const char *real_source = from;
+
+	va_start(ap, fmt);
+	if (vsnprintf(buf, sizeof buf, fmt, ap) < 0)
+	{
+		va_end(ap);
+		return;
+	}
+	va_end(ap);
+
+	if (*target == '#' && !strcmp(from, chansvs.nick))
+	{
+		mychan_t *mc;
+		botserv_bot_t *bot = NULL;
+
+		mc = mychan_find(target);
+		if (mc != NULL)
+		{
+			bot = bs_mychan_find_bot(mc);
+
+			real_source = bot != NULL ? bot->nick : from;
+		}
+	}
+
+	notice_real(real_source, target, "%s", buf);
 }
 
 static void (*topic_sts_real)(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic);
@@ -979,6 +1011,8 @@ void _modinit(module_t *m)
 	topic_sts             = bs_topic_sts;
 	msg_real              = msg;
 	msg                   = bs_msg;
+	notice_real           = notice;
+	notice                = bs_notice;
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -1021,6 +1055,7 @@ void _moddeinit(module_unload_intent_t intent)
 	try_kick              = try_kick_real;
 	topic_sts             = topic_sts_real;
 	msg                   = msg_real;
+	notice                = notice_real;
 }
 
 /* ******************************************************************** */
