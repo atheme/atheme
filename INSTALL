@@ -64,10 +64,10 @@ Services requires a runtime linker. Systems which do not have a runtime linker
 will not be able to run services. However, most systems include a runtime
 linker these days.
 
-IRCd's known to be supported by Services are listed in the example 
-config (dist/atheme.conf.example). The recommended ones are charybdis, ratbox, 
-inspircd, asuka, beware ircd (bircd), shadowircd, nefarious and undernet-ircu 
-(undernet).
+The IRCds supported by Services are listed in the example config
+(dist/atheme.conf.example). Although many others are supported, Services can
+provide the richest experience with one of the recommended IRCds: Charybdis,
+ShadowIRCD and UnrealIRCd.
 
 If you are installing Services from Git and need libmowgli, please read the 
 GIT-Access file for information on how to pull in libmowgli as a submodule.
