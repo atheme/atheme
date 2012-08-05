@@ -109,9 +109,6 @@ E void (*chan_lowerts)(channel_t *c, user_t *u);
  * source is a client on the services server which may or may not be
  * on the channel */
 E void (*kick)(user_t *source, channel_t *c, user_t *u, const char *reason);
-/* send a notice
- * here it's ok to assume the source is able to send */
-E void (*notice)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
 E void (*msg)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
