@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * DH-BLOWFISH mechanism provider
- *
  */
 
 #include "atheme.h"
@@ -21,6 +20,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static DH *dh;
+
 mowgli_list_t *mechanisms;
 mowgli_node_t *mnode;
 
@@ -32,29 +33,28 @@ sasl_mechanism_t mech = {"DH-BLOWFISH", &mech_start, &mech_step, &mech_finish};
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, mechanisms, "saslserv/main", "sasl_mechanisms");
+
+	if ((dh = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
+		return;
+
 	mnode = mowgli_node_create();
 	mowgli_node_add(&mech, mnode, mechanisms);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
+	DH_free(dh);
+
 	mowgli_node_delete(mnode, mechanisms);
 	mowgli_node_free(mnode);
 }
 
 static int mech_start(sasl_session_t *p, char **out, int *out_len)
 {
-	DH *dh;
 	char *ptr;
 
-	if ((dh = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
-		return ASASL_FAIL;
-
 	if (!DH_generate_key(dh))
-	{
-		DH_free(dh);
 		return ASASL_FAIL;
-	}
 
 	/* Serialize p, g, and pub_key */
 	*out = malloc(BN_num_bytes(dh->p) + BN_num_bytes(dh->g) + BN_num_bytes(dh->pub_key) + 6);
@@ -105,7 +105,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 		goto end;
 	message += size;
 	len -= size;
-	
+
 	/* Username */
 	size = strlen(message);
 	if (size >= NICKLEN) /* our base64 routines null-terminate - how polite */
@@ -140,7 +140,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 
 	if (verify_password(mu, password))
 		ret = ASASL_DONE;
-	
+
 end:
 	if (their_key)
 		BN_free(their_key);
@@ -151,11 +151,6 @@ end:
 
 static void mech_finish(sasl_session_t *p)
 {
-	if (p && p->mechdata)
-	{
-		DH_free((DH*)p->mechdata);
-		p->mechdata = NULL;
-	}
 }
 
 #endif /* HAVE_OPENSSL */
