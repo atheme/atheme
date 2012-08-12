@@ -336,12 +336,13 @@ static double calc_dice_simple(double lhs, double rhs)
 	if (lhs <= 0.0)
 		lhs = 1.0;
 
-	if (rhs <= 0.0)
-		rhs = 1.0;
+	int sides = floorl(rhs);
+
+	if (sides < 1)
+		return 0.0;
 
 	for (i = 0; i < lhs; i++)
 	{
-		int sides = floorl(rhs);
 		out += 1.0 + (arc4random() % sides);
 	}
 
