@@ -336,7 +336,7 @@ static double calc_dice_simple(double lhs, double rhs)
 	if (lhs <= 0.0)
 		lhs = 1.0;
 
-	int sides = floorl(rhs);
+	int sides = floor(rhs);
 
 	if (sides < 1)
 		return 0.0;
