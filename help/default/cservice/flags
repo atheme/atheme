@@ -91,7 +91,11 @@ Permissions:
     +F - Grants full founder access.
     +b - Enables automatic kickban.
 
+#if module chanserv/successor_acl
+The special permission +* adds all permissions except +b, +S, and +F.
+#else
 The special permission +* adds all permissions except +b and +F.
+#endif
 The special permission -* removes all permissions including +b and +F.
 
 Examples:
