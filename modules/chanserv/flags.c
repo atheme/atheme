@@ -243,6 +243,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		free(target);
 
+		if (parc < 3)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+			command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <#channel> MODIFY [target] <flags>"));
+			return;
+		}
+
 		flagstr = strchr(parv[2], ' ');
 		if (flagstr)
 			*flagstr++ = '\0';
