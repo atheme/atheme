@@ -235,6 +235,7 @@ kline_t *kline_find_user(user_t *u)
 void kline_expire(void *arg)
 {
 	kline_t *k;
+	char *reason;
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, klnlist.head)
@@ -246,11 +247,14 @@ void kline_expire(void *arg)
 
 		if (k->expires <= CURRTIME)
 		{
-			slog(LG_INFO, _("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2"),
-				k->user, k->host, time_ago(k->settime), k->setby);
+			/* TODO: determine validity of k->reason */
+			reason = k->reason ? k->reason : "(none)";
 
-			verbose_wallops(_("AKILL expired on \2%s@%s\2, set by \2%s\2"),
-				k->user, k->host, k->setby);
+			slog(LG_INFO, _("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2 (reason: %s)"),
+				k->user, k->host, time_ago(k->settime), k->setby, reason);
+
+			verbose_wallops(_("AKILL expired on \2%s@%s\2, set by \2%s\2 (reason: %s)"),
+				k->user, k->host, k->setby, reason);
 
 			kline_delete(k);
 		}
