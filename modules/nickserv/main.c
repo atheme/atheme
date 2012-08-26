@@ -58,7 +58,7 @@ static void nickserv_handle_nickchange(user_t *u)
 		if (!nicksvs.spam)
 			return;
 
-		if (!(u->flags & UF_SEENINFO))
+		if (!(u->flags & UF_SEENINFO) && chansvs.me != NULL)
 		{
 			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
 			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
