@@ -934,8 +934,9 @@ uplink "irc6.example.net" {
  * are properly configured for your network.
  */
 nickserv {
-	// If you want NickServ to tell people about how great it is, enable the directive
-	// below.
+	/* (*)spam
+	 * Have NickServ tell people about how great it and ChanServ are.
+	 */
 	spam;
 
 	/* no_nick_ownership
