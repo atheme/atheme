@@ -961,6 +961,9 @@ static void mychan_delete(mychan_t *mc)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
 
+	if (mc->chan != NULL)
+		mc->chan->mychan = NULL;
+
 	/* remove the chanacs shiz */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		object_unref(n->data);
