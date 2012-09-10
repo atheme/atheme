@@ -76,13 +76,14 @@ struct gflags mc_flags[] = {
 	{ 'o', MC_NOOP },
 	{ 'l', MC_LIMITFLAGS },
 	{ 'z', MC_SECURE },
-	{ 'n', MC_NOSYNC },
 	{ 'v', MC_VERBOSE },
 	{ 'r', MC_RESTRICTED },
 	{ 'k', MC_KEEPTOPIC },
+	{ 'e', MC_VERBOSE_OPS },
 	{ 't', MC_TOPICLOCK },
 	{ 'g', MC_GUARD },
 	{ 'p', MC_PRIVATE },
+	{ 'n', MC_NOSYNC },
 	{ 0, 0 },
 };
 

@@ -96,6 +96,7 @@ struct myuser_
   mowgli_list_t cert_fingerprints;
 };
 
+/* Keep this synchronized with mu_flags in libathemecore/flags.c */
 #define MU_HOLD        0x00000001
 #define MU_NEVEROP     0x00000002
 #define MU_NOOP        0x00000004
@@ -168,6 +169,7 @@ struct mychan_
   unsigned int flags;
 };
 
+/* Keep this synchronized with mc_flags in libathemecore/flags.c */
 #define MC_HOLD        0x00000001
 #define MC_NOOP        0x00000002
 #define MC_LIMITFLAGS  0x00000004
