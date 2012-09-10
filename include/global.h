@@ -56,6 +56,8 @@ struct me
 
   char *language_name;		/* language file name		      */
   char *language_translator;	/* translator name		      */
+
+  char *register_email;         /* from address on e-mails            */
 };
 
 E me_t me;

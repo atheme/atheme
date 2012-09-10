@@ -205,6 +205,7 @@ void init_newconf(void)
 	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, 0, &me.hidehostsuffix, NULL);
 	add_dupstr_conf_item("ADMINNAME", &conf_si_table, 0, &me.adminname, NULL);
 	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, 0, &me.adminemail, NULL);
+	add_dupstr_conf_item("REGISTEREMAIL", &conf_si_table, 0, &me.registeremail, NULL);
 	add_dupstr_conf_item("MTA", &conf_si_table, 0, &me.mta, NULL);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
 	add_uint_conf_item("MAXLOGINS", &conf_si_table, 0, &me.maxlogins, 3, INT_MAX, 5);
@@ -789,6 +790,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->hidehostsuffix = sstrdup(src->hidehostsuffix);
 	dst->adminname = sstrdup(src->adminname);
 	dst->adminemail = sstrdup(src->adminemail);
+	dst->register_email = sstrdup(src->register_email);
 	dst->mta = src->mta ? sstrdup(src->mta) : NULL;
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
@@ -805,6 +807,7 @@ static void free_cstructs(struct me *mesrc)
 	free(mesrc->hidehostsuffix);
 	free(mesrc->adminname);
 	free(mesrc->adminemail);
+	free(mesrc->register_email);
 	free(mesrc->mta);
 }
 
@@ -910,6 +913,17 @@ bool conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `adminemail' set in %s", config_file);
 		return false;
+	}
+
+	if (!me.register_email)
+	{
+		char buf[BUFSIZE];
+
+		mowgli_strlcpy(buf, "noreply.", sizeof buf);
+		mowgli_strlcat(buf, me.adminemail, sizeof buf);
+
+		me.register_email = sstrdup(buf);
+		slog(LG_INFO, "conf_check(): no `registeremail' set in %s, using `%s' based on `adminemail'", config_file, me.register_email);
 	}
 
 	if (!me.mta && me.auth == AUTH_EMAIL)

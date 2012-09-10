@@ -806,6 +806,12 @@ serverinfo {
 	 */
 	adminemail = "misconfigured@admin.tld";
 
+	/* (*)registeremail
+	 * The email address that messages should be originated from.
+	 * If this is not set, then "noreply.$adminemail" will be used.
+	 */
+	registeremail = "noreply@admin.tld";
+
 	/* (*)mta
 	 * The full path to your mail transfer agent.
 	 * This is used for email authorization and password retrieval.
