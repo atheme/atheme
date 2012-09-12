@@ -205,7 +205,7 @@ void init_newconf(void)
 	add_dupstr_conf_item("HIDEHOSTSUFFIX", &conf_si_table, 0, &me.hidehostsuffix, NULL);
 	add_dupstr_conf_item("ADMINNAME", &conf_si_table, 0, &me.adminname, NULL);
 	add_dupstr_conf_item("ADMINEMAIL", &conf_si_table, 0, &me.adminemail, NULL);
-	add_dupstr_conf_item("REGISTEREMAIL", &conf_si_table, 0, &me.registeremail, NULL);
+	add_dupstr_conf_item("REGISTEREMAIL", &conf_si_table, 0, &me.register_email, NULL);
 	add_dupstr_conf_item("MTA", &conf_si_table, 0, &me.mta, NULL);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
 	add_uint_conf_item("MAXLOGINS", &conf_si_table, 0, &me.maxlogins, 3, INT_MAX, 5);
