@@ -88,7 +88,7 @@ static unsigned int ts6_server_login(void)
 	me.bursting = true;
 
 	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID EOPMOD MLOCK");
-	sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("SERVER %s 1 :%s%s", me.name, me.hidden ? "(H) " : "", me.desc);
 	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
 			(unsigned long)CURRTIME);
 
