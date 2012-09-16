@@ -812,6 +812,14 @@ serverinfo {
 	 */
 	registeremail = "noreply@admin.tld";
 
+	/* (*)hidden
+	 * If this is enabled, Atheme will indicate to the uplink IRCd
+	 * that it should not be included in /links output.  This only works
+	 * on the following IRCds at present: charybdis, hybrid, ircd-seven,
+	 * ratbox, shadowircd, sporksircd.
+	 */
+	#hidden;
+
 	/* (*)mta
 	 * The full path to your mail transfer agent.
 	 * This is used for email authorization and password retrieval.

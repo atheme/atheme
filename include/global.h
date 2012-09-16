@@ -58,6 +58,8 @@ struct me
   char *language_translator;	/* translator name		      */
 
   char *register_email;         /* from address on e-mails            */
+
+  bool hidden;			/* whether or not we should hide ourselves in /links (if the ircd supports it) */
 };
 
 E me_t me;

@@ -217,6 +217,7 @@ void init_newconf(void)
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
 	add_uint_conf_item("MDLIMIT", &conf_si_table, 0, &me.mdlimit, 0, INT_MAX, 30);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
+	add_bool_conf_item("HIDDEN", &conf_si_table, 0, &me.hidden, false);
 
 	/* general{} block */
 	add_dupstr_conf_item("HELPCHAN", &conf_gi_table, 0, &config_options.helpchan, NULL);
