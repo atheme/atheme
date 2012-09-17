@@ -768,7 +768,6 @@ serverinfo {
 
 	/* desc
 	 * The ``server comment'' we send to the IRC network.
-	 * If you want server hiding, prefix your desc with "(H)"
 	 */
 	desc = "Atheme IRC Services";
 
