@@ -519,7 +519,14 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 	}
 
 	u = user_find(parv[0]);
-	xmlrpc_boolean(buf, u != NULL);
+	if (u == NULL)
+	{
+		xmlrpc_boolean(buf, false);
+		xmlrpc_string(buf2, "*");
+		return 0;
+	}
+
+	xmlrpc_boolean(buf, true);
 	xmlrpc_string(buf2, u->myuser != NULL ? entity(u->myuser)->name : "*");
 	xmlrpc_send(2, buf, buf2);
 
