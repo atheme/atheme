@@ -197,6 +197,7 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 				free(l->reason);
 				free(l);
 
+				command_success_nodata(si, _("You have unbanned email address \2%s\2."), email);
 				return;
 			}
 		}
