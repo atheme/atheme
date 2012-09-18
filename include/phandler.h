@@ -269,6 +269,7 @@ E void generic_sasl_sts(char *target, char mode, char *data);
 E mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first);
 E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);
 E bool generic_is_valid_host(const char *host);
+E bool generic_is_valid_nick(const char *nick);
 E void generic_mlock_sts(channel_t *c);
 E void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason);
 

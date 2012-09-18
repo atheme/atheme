@@ -60,6 +60,7 @@ void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *lo
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
 mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
+bool (*is_valid_nick)(const char *nick) = generic_is_valid_nick;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
 void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason) = generic_quarantine_sts;
@@ -317,6 +318,23 @@ mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgl
 			return n;
 	}
 	return NULL;
+}
+
+bool generic_is_valid_nick(const char *nick)
+{
+	const char *iter = nick;
+
+	/* nicknames may not normally begin with a number, due to UID collision */
+	if (IsDigit(*iter))
+		return false;
+
+	for (; *iter != '\0'; iter++)
+	{
+		if (!IsNickChar(*iter))
+			return false;
+	}
+
+	return true;
 }
 
 bool generic_is_valid_host(const char *host)
