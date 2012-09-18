@@ -615,8 +615,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (parc >= 2 && (!valid_misc_field(parv[1], NICKLEN - 1) ||
-				strchr(parv[1], '.') || isdigit(*parv[1])))
+	if (parc >= 2 && (!is_valid_nick(parv[1]))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[1]);
 		return;
@@ -712,8 +711,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		snprintf(buf, sizeof(buf), "%s", parv[3]);
 
-	if (!valid_misc_field(parv[0], NICKLEN - 1) || strchr(parv[0], '.') ||
-			isdigit(*parv[0]))
+	if (!is_valid_nick(parv[0]))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[0]);
 		return;
