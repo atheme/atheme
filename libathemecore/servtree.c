@@ -292,10 +292,10 @@ service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int p
 	else
 		nick = name;
 	mowgli_strlcpy(newnick, nick, sizeof newnick);
-	if (service_find_nick(newnick))
+	if (!is_valid_nick(newnick) || service_find_nick(newnick))
 	{
 		create_unique_service_nick(newnick, sizeof newnick);
-		slog(LG_INFO, "service_add(): using nick %s for service %s due to duplication",
+		slog(LG_INFO, "service_add(): using nick %s for service %s due to duplicate or invalid nickname",
 				newnick, name);
 	}
 	sptr->nick = sstrdup(newnick);
