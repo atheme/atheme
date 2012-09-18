@@ -523,6 +523,7 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 	{
 		xmlrpc_boolean(buf, false);
 		xmlrpc_string(buf2, "*");
+		xmlrpc_send(2, buf, buf2);
 		return 0;
 	}
 
