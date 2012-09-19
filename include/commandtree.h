@@ -35,6 +35,9 @@ E void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, cons
 /* help.c */
 E void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);
 
+/* logger.c */
+E void logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

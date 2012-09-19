@@ -78,6 +78,8 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 		return;
 	}
 
+	logaudit_denycmd(si, c, cmdaccess);
+
 	if (has_any_privs(si))
 	{
 		char accessbuf[BUFSIZE];
