@@ -52,7 +52,13 @@ command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
 
 static bool default_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
 {
-	return (has_priv(si, c->access) && has_priv(si, userlevel)) || (userlevel != NULL && !strcasecmp(userlevel, AC_AUTHENTICATED));
+	if (!(has_priv(si, c->access) && has_priv(si, userlevel)) || (userlevel != NULL && !strcasecmp(userlevel, AC_AUTHENTICATED)))
+	{
+		logaudit_denycmd(si, c, userlevel);
+		return false;
+	}
+
+	return true;
 }
 bool (*command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = default_command_authorize;
 
@@ -83,8 +89,6 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 		language_set_active(NULL);
 		return;
 	}
-
-	logaudit_denycmd(si, c, cmdaccess);
 
 	if (has_any_privs(si))
 	{
