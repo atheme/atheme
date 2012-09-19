@@ -615,7 +615,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (parc >= 2 && (!is_valid_nick(parv[1]))
+	if (parc >= 2 && (!is_valid_nick(parv[1])))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is an invalid nickname."), parv[1]);
 		return;
