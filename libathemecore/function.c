@@ -570,9 +570,9 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 
 	date = timebuf;
 
-	snprintf(from, sizeof from, "%s automailer <noreply.%s>",
+	snprintf(from, sizeof from, "\"%s automailer\" <noreply.%s>",
 			me.netname, me.adminemail);
-	snprintf(to, sizeof to, "%s <%s>", entity(mu)->name, email);
+	snprintf(to, sizeof to, "\"%s\" <%s>", entity(mu)->name, email);
 
 	mowgli_strlcpy(subject, me.netname, sizeof subject);
 	mowgli_strlcat(subject, " ", sizeof subject);
