@@ -25,6 +25,18 @@
  * they will be ignored.
  */
 
+/* Dynamic security modules.
+ *
+ * WARNING: If you select one of these modules, the default security policy included
+ * with Atheme may break.  These modules are intended for people who know what they
+ * are doing and understand the implications of what they do.  Security modules which
+ * are likely to break the default policy are prefixed with [!], if you are new to
+ * Atheme, you should avoid enabling them.
+ *
+ * [!] Infer "command:" namespace permissions   modules/security/cmdperm
+ */
+#loadmodule "modules/security/cmdperm";
+
 /* Protocol module.
  *
  * Please select a protocol module. Different servers use different protocols.
