@@ -97,6 +97,17 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 			cd ..; \
 		fi; \
 	done)
+	(cd ../../email/default; for i in *; do \
+		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/email; \
+		if [ -d $$i ]; then \
+			cd $$i; \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/email/$$i; \
+			for j in *; do \
+				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/email/$$i; \
+			done; \
+			cd ..; \
+		fi; \
+	done)
 	-${RM} -f $(DESTDIR)$(SHAREDIR)/help/hostserv/vhostall
 	if [ $(USE_NLS) = yes ]; then \
 		for lingua in $(HELP_LINGUAS); do \
