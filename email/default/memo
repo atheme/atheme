@@ -1,7 +1,7 @@
 From: &from&
 To: &to&
 Reply-To: &replyto&
-Subject: New Memo
+Subject: &netname& New Memo
 Date: &date&
 
 &accountname&,

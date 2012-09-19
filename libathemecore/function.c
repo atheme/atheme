@@ -592,6 +592,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 		replace(buf, sizeof buf, "&date&", date);
 		replace(buf, sizeof buf, "&accountname&", mu != NULL ? entity(mu)->name : "Guest");
 		replace(buf, sizeof buf, "&entityname&", u != NULL ? entity(u)->name : "???");
+		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
 
 		fprintf(out, "%s\n", buf);

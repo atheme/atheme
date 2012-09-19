@@ -1,7 +1,7 @@
 From: &from&
 To: &to&
 Reply-To: &replyto&
-Subject: Account Password Change Verification
+Subject: &netname& Account Password Change Verification
 Date: &date&
 
 &accountname&,

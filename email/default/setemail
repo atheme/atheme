@@ -1,7 +1,7 @@
 From: &from&
 To: &to&
 Reply-To: &replyto&
-Subject: Account New E-Mail Verification
+Subject: &netname& Account New E-Mail Verification
 Date: &date&
 
 &accountname&,
