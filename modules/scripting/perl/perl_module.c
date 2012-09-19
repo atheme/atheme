@@ -328,18 +328,10 @@ static bool do_script_list(sourceinfo_t *si)
 
 /*
  * Connect all of the above to OperServ.
- *
- * The following commands are provided:
- * /OS SCRIPT LIST
  */
-static void os_cmd_script(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_perl(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_script = { "SCRIPT", N_("Loads or unloads perl scripts."), PRIV_ADMIN, 2, os_cmd_script, { .path = "oservice/script" } };
-
-command_t os_script_list = { "LIST", N_("Shows loaded scripts."), PRIV_ADMIN, 2, os_cmd_script_list, { .path = "" } };
-
-mowgli_patricia_t *os_script_cmdtree;
+command_t os_perl = { "PERL", N_("Inspect the Perl interpreter"), PRIV_ADMIN, 2, os_cmd_perl, { .path = "oservice/perl" } };
 
 static int conf_loadscript(mowgli_config_file_entry_t *);
 
@@ -426,10 +418,7 @@ void _modinit(module_t *m)
 		return;
 	}
 
-	service_named_bind_command("operserv", &os_script);
-
-	os_script_cmdtree = mowgli_patricia_create(strcasecanon);
-	command_add(&os_script_list, os_script_cmdtree);
+	service_named_bind_command("operserv", &os_perl);
 
         hook_add_event("module_load");
         hook_add_module_load(hook_module_load);
@@ -439,8 +428,7 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	service_named_unbind_command("operserv", &os_script);
-	command_delete(&os_script_list, os_script_cmdtree);
+	service_named_unbind_command("operserv", &os_perl);
 
 	shutdown_perl();
 
@@ -453,28 +441,7 @@ void _moddeinit(module_unload_intent_t intent)
 /*
  * Actual command handlers.
  */
-static void os_cmd_script(sourceinfo_t *si, int parc, char *parv[])
-{
-	command_t *c;
-
-	if (parc < 1)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SCRIPT");
-		command_fail(si, fault_needmoreparams, _("Syntax: SCRIPT LOAD <filename>|UNLOAD <filename>|LIST"));
-		return;
-	}
-
-	c = command_find(os_script_cmdtree, parv[0]);
-	if (c == NULL)
-	{
-		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == false) ? "msg " : "", si->service->disp);
-		return;
-	}
-
-	command_exec(si->service, si, c, parc-1, parv+1);
-}
-
-static void os_cmd_script_list(sourceinfo_t *si, int parc, char *parv[])
+static void os_cmd_perl(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (!do_script_list(si))
 		command_fail(si, fault_badparams, _("Failed to retrieve script list: %s"), perl_error);
@@ -508,4 +475,3 @@ static int conf_loadscript(mowgli_config_file_entry_t *ce)
 
 	return 0;
 }
-
