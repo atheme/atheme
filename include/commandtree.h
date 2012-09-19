@@ -31,6 +31,7 @@ E void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, ch
 E void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, mowgli_patricia_t *commandtree);
 E void command_help(sourceinfo_t *si, mowgli_patricia_t *commandtree);
 E void command_help_short(sourceinfo_t *si, mowgli_patricia_t *commandtree, const char *maincmds);
+E bool (*command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel);
 
 /* help.c */
 E void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);

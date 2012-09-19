@@ -50,6 +50,12 @@ command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
 	return mowgli_patricia_retrieve(commandtree, command);
 }
 
+static bool default_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
+{
+	return (has_priv(si, c->access) && has_priv(si, userlevel)) || (userlevel != NULL && !strcasecmp(userlevel, AC_AUTHENTICATED));
+}
+bool (*command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = default_command_authorize;
+
 void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
 {
 	const char *cmdaccess;
@@ -67,7 +73,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 
 	cmdaccess = service_set_access(svs, c->name, c->access);
 
-	if ((has_priv(si, c->access) && has_priv(si, cmdaccess)) || (cmdaccess != NULL && !strcasecmp(cmdaccess, AC_AUTHENTICATED)))
+	if (command_authorize(svs, si, c, cmdaccess))
 	{
 		if (si->force_language != NULL)
 			language_set_active(si->force_language);
