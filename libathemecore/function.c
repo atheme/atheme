@@ -484,12 +484,12 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  * mu is the recipient user
  * param depends on type, also see include/tools.h
  */
-int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
+int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param)
 {
 #ifndef _WIN32
-	char *email, *date = NULL;
-	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], subject[BUFSIZE];
-	FILE *out;
+	char *date = NULL;
+	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], buf[BUFSIZE], pathbuf[BUFSIZE];
+	FILE *in, *out;
 	time_t t;
 	struct tm tm;
 	int pipfds[2];
@@ -511,22 +511,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		return 0;
 	}
 
-	if (type == EMAIL_SETEMAIL)
-	{
-		/* special case for e-mail change */
-		metadata_t *md = metadata_find(mu, "private:verify:emailchg:newemail");
-
-		if (md && md->value)
-			email = md->value;
-		else		/* should NEVER happen */
-		{
-			slog(LG_ERROR, "sendemail(): got email change request, but newemail unset!");
-			return 0;
-		}
-	}
-	else
-		email = mu->email;
-
 	if (!validemail(email))
 	{
 		if (type != EMAIL_MEMO && !is_internal_client(u))
@@ -547,10 +531,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	{
 		if (CURRTIME - lastwallops > 60)
 		{
-			wallops(_("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)"),
+			wallops(_("Rejecting email for %s[%s@%s] due to too high load (type '%s' to %s <%s>)"),
 					u->nick, u->user, u->vhost,
 					type, entity(mu)->name, email);
-			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",
+			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type '%s' to %s <%s>)",
 					u->nick, u->user, u->vhost,
 					u->ip ? u->ip : u->host,
 					type, entity(mu)->name, email);
@@ -559,7 +543,15 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		return 0;
 	}
 
-	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>",
+	snprintf(pathbuf, sizeof pathbuf, "%s/%s", SHAREDIR "/email", type);
+	if ((in = fopen(pathbuf, "r")) == NULL)
+	{
+		slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s), due to unknown type '%s'",
+			       u->nick, u->user, u->vhost, email, type);
+		return 0;
+	}
+
+	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %s to %s <%s>",
 			u->nick, u->user, u->vhost, u->ip ? u->ip : u->host,
 			type, entity(mu)->name, email);
 
@@ -573,20 +565,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	snprintf(from, sizeof from, "%s <%s>",
 			me.netname, me.register_email);
 	snprintf(to, sizeof to, "%s <%s>", entity(mu)->name, email);
-
-	mowgli_strlcpy(subject, me.netname, sizeof subject);
-	mowgli_strlcat(subject, " ", sizeof subject);
-	if (type == EMAIL_REGISTER)
-		if (nicksvs.no_nick_ownership)
-			mowgli_strlcat(subject, "Account Registration", sizeof subject);
-		else
-			mowgli_strlcat(subject, "Nickname Registration", sizeof subject);
-	else if (type == EMAIL_SENDPASS || type == EMAIL_SETPASS)
-		mowgli_strlcat(subject, "Password Retrieval", sizeof subject);
-	else if (type == EMAIL_SETEMAIL)
-		mowgli_strlcat(subject, "Change Email Confirmation", sizeof subject);
-	else if (type == EMAIL_MEMO)
-		mowgli_strlcat(subject, "New memo", sizeof subject);
 
 	/* now set up the email */
 	if (pipe(pipfds) < 0)
@@ -606,51 +584,21 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	childproc_add(pid, "email", sendemail_waited, sstrdup(email));
 	out = fdopen(pipfds[1], "w");
 
-	fprintf(out, "From: %s\n", from);
-	fprintf(out, "To: %s\n", to);
-	fprintf(out, "Reply-To: %s\n", me.adminemail);
-	fprintf(out, "Subject: %s\n", subject);
-	fprintf(out, "Date: %s\n\n", date);
+	while (fgets(buf, BUFSIZE, in))
+	{
+		replace(buf, sizeof buf, "&from&", from);
+		replace(buf, sizeof buf, "&to&", to);
+		replace(buf, sizeof buf, "&replyto&", me.adminemail);
+		replace(buf, sizeof buf, "&date&", date);
+		replace(buf, sizeof buf, "&accountname&", mu != NULL ? entity(mu)->name : "Guest");
+		replace(buf, sizeof buf, "&entityname&", u != NULL ? entity(u)->name : "???");
+		replace(buf, sizeof buf, "&param&", param);
 
-	fprintf(out, "%s,\n\n", entity(mu)->name);
-
-	if (type == EMAIL_REGISTER)
-	{
-		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
-		fprintf(out, "/msg %s VERIFY REGISTER %s %s\n\n", nicksvs.me->disp, entity(mu)->name, param);
-		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
-				(nicksvs.no_nick_ownership ? "account" : "nickname"), me.netname);
-	}
-	else if (type == EMAIL_SENDPASS)
-	{
-		fprintf(out, "Someone has requested the password for %s be sent to the\n" "corresponding email address. If you did not request this action\n" "please let us know.\n\n", entity(mu)->name);
-		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n\n", entity(mu)->name, param);
-	}
-	else if (type == EMAIL_SETEMAIL)
-	{
-		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/msg %s VERIFY EMAILCHG %s %s\n\n", nicksvs.me->disp, entity(mu)->name, param);
-	}
-	else if (type == EMAIL_MEMO)
-	{
-		if (u->myuser != NULL)
-			fprintf(out,"You have a new memo from %s.\n\n", entity(u->myuser)->name);
-		else
-			/* shouldn't happen */
-			fprintf(out,"You have a new memo from %s (unregistered?).\n\n", u->nick);
-		fprintf(out,"%s\n\n", param);
-	}
-	else if (type == EMAIL_SETPASS)
-	{
-		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/msg %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.me->disp, entity(mu)->name, param);
+		fprintf(out, "%s\n", buf);
 	}
 
-	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
-	if (u->server != me.me)
-		fprintf(out, "\nThis email was sent due to a command from %s[%s@%s]\nat %s.\n", u->nick, u->user, u->vhost, date);
-	fprintf(out, "If this message is spam, please contact %s\nwith a full copy.\n",
-			me.adminemail);
+	fclose(in);
+
 	rc = 1;
 	if (ferror(out))
 		rc = 0;

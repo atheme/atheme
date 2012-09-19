@@ -11,28 +11,14 @@
 #define _TOOLS_H
 
 /* email stuff */
-/* the following struct is not used yet */
-typedef struct email_t_ email_t;
-struct email_t_
-{
-	char *sender;
-	char *receiver;
-	char *subject;
-	char *body;
-	char **headers;
-
-	void *miscellaneous;			/* module defined data */
-	void (*callback_sent)(email_t *);	/* callback on email send */
-};
-
-E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
+E int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param);
 
 /* email types (meaning of param argument) */
-#define EMAIL_REGISTER 1 /* register an account/nick (verification code) */
-#define EMAIL_SENDPASS 2 /* send a password to a user (password) */
-#define EMAIL_SETEMAIL 3 /* change email address (verification code) */
-#define EMAIL_MEMO     4 /* emailed memos (memo text) */
-#define EMAIL_SETPASS  5 /* send a password change key (verification code) */
+#define EMAIL_REGISTER	"register"	/* register an account/nick (verification code) */
+#define EMAIL_SENDPASS	"sendpass"	/* send a password to a user (password) */
+#define EMAIL_SETEMAIL	"setemail"	/* change email address (verification code) */
+#define EMAIL_MEMO	"memo"		/* emailed memos (memo text) */
+#define EMAIL_SETPASS	"setpass"	/* send a password change key (verification code) */
 
 /* arc4random.c */
 #ifndef HAVE_ARC4RANDOM
