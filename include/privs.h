@@ -107,6 +107,15 @@ E bool has_priv_operclass(operclass_t *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */
 E bool has_all_operclass(sourceinfo_t *, operclass_t *);
 
+/* get_sourceinfo_soper(): get the specific operclass role which is granting
+ * privilege authority
+ */
+E const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
+/* get_sourceinfo_operclass(): get the specific operclass role which is granting
+ * privilege authority
+ */
+E const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si);
+
 #endif /* PRIVS_H */
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

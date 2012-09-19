@@ -395,6 +395,36 @@ bool has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
 	return true;
 }
 
+/**********************************************************************************/
+
+const soper_t *get_sourceinfo_soper(sourceinfo_t *si)
+{
+	if (si->smu != NULL && is_soper(si->smu))
+		return si->smu->soper;
+
+	return NULL;
+}
+
+const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si)
+{
+	operclass_t *out = NULL;
+	const soper_t *soper;
+
+	if ((soper = get_sourceinfo_soper(si)) != NULL)
+		return soper->operclass;
+
+	if (si->su != NULL && is_ircop(si->su))
+	{
+		if ((out = operclass_find("ircop")) != NULL)
+			return out;
+	}
+
+	if ((out = operclass_find("user")) != NULL)
+		return out;
+
+	return NULL;
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
