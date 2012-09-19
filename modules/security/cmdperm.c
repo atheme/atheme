@@ -22,13 +22,16 @@
 
 DECLARE_MODULE_V1("security/cmdperm", false, _modinit, _moddeinit, PACKAGE_VERSION, "Atheme Development Group <http://www.atheme.org>");
 
-static void (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = NULL;
+static bool (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = NULL;
 
-static void cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
+static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
 {
-	char permbuf[BUFSIZE];
+	char permbuf[BUFSIZE], *cp;
 
-	snprintf(permbuf, sizeof permbuf, "command:%s:%s", svs->name, c->name);
+	snprintf(permbuf, sizeof permbuf, "command:%s:%s", svs->internal_name, c->name);
+	for (cp = permbuf; *cp != '\0'; cp++)
+		*cp = ToLower(*cp);
+
 	if (!has_priv(si, permbuf))
 		return false;
 
