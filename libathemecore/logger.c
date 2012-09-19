@@ -746,9 +746,9 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
  */
 void logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel)
 {
-	slog_ext(LOG_NONINTERACTIVE, CMDLOG_ADMIN, "DENYCMD: [%s] was denied execution of [%s], need privileges [%s %s]",
+	slog_ext(LOG_NONINTERACTIVE, LG_DENYCMD, "DENYCMD: [%s] was denied execution of [%s], need privileges [%s %s]",
 		 get_source_security_label(si), cmd->name, cmd->access, userlevel != NULL ? userlevel : "");
-	slog_ext(LOG_INTERACTIVE, CMDLOG_ADMIN, "DENYCMD: \2%s\2 was denied execution of \2%s\2, need privileges \2%s %s\2",
+	slog_ext(LOG_INTERACTIVE, LG_DENYCMD, "DENYCMD: \2%s\2 was denied execution of \2%s\2, need privileges \2%s %s\2",
 		 get_source_security_label(si), cmd->name, cmd->access, userlevel != NULL ? userlevel : "");
 }
 

@@ -87,6 +87,7 @@ E void logfile_unregister(logfile_t *lf);
 #define LG_REGISTER     0x00080000 /* all registration related messages */
 #define LG_WARN1        0x00100000 /* NOTYET messages formerly walloped */
 #define LG_WARN2        0x00200000 /* NOTYET messages formerly snooped */
+#define LG_DENYCMD	0x00400000 /* commands denied by security policy */
 
 #define LG_CMD_ALL      0x0000FF00
 #define LG_ALL          0x7FFFFFFF /* XXX cannot use bit 31 as it would then be equal to TOKEN_UNMATCHED */

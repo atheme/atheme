@@ -104,7 +104,8 @@ static struct Token logflags[] = {
   { "NETWORK",     LG_NETWORK                                                                                 },
   { "WALLOPS",     LG_WALLOPS                                                                                 },
   { "RAWDATA",     LG_RAWDATA                                                                                 },
-  { NULL,          0                                                                                          }
+  { "DENYCMD",     LG_DENYCMD                                                                                 },
+  { NULL,          0                                                                                          },
 };
 
 mowgli_list_t conf_si_table;
