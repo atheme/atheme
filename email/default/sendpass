@@ -1,0 +1,18 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: Account Password Reset
+Date: &date&
+
+&accountname&,
+
+Someone has requested that the password on your account be recovered,
+and sent to the e-mail address on file.  If you did not request this
+change, please let us know immediately, as it may be an attempt to
+compromise your account.
+
+The password for '&accountname&' is presently set to '&param&'.
+
+--
+If this message is unsolicited, please contact &replyto&
+with a full copy.

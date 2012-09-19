@@ -1,0 +1,18 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: Account Password Change Verification
+Date: &date&
+
+&accountname&,
+
+In order to complete the e-mail address change, you must verify your new
+e-mail address by issuing the following command on IRC, where <password>
+is the new password you wish to set.
+
+   /msg &nicksvs& SETPASS &accountname& &param& <password>
+
+Thank you for confirming you wish to change your password!
+--
+If this message is unsolicited, please contact &replyto&
+with a full copy.

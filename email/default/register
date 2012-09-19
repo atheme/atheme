@@ -1,0 +1,19 @@
+From: &from&
+To: &to&
+Reply-To: &replyto&
+Subject: Account Registration
+Date: &date&
+
+&accountname&,
+
+In order to complete your account registration, you must type the following
+command on IRC:
+
+   /msg &nicksvs& VERIFY REGISTER &authcode&
+
+Thank you for registering your account on the &netname& IRC network!
+
+--
+This e-mail was sent due to a command from &sourceinfo&
+at &date&.  If this message is unsolicited, please contact &replyto&
+with a full copy.
