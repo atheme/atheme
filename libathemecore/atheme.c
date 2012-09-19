@@ -162,6 +162,9 @@ static bool detach_console(int *daemonize_pipe)
 	dup2(0, 2);
 
 	return true;
+#elif defined(MOWGLI_OS_WIN)
+	FreeConsole();
+	return true;
 #else
 	return false;
 #endif
