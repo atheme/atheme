@@ -101,6 +101,72 @@ static void process_mowgli_log(const char *line)
 	slog(LG_ERROR, "%s", line);
 }
 
+static void daemonize(int *daemonize_pipe)
+{
+#ifdef HAVE_FORK
+	int i;
+	char c;
+
+	/* fork into the background */
+	if (!(runflags & RF_LIVE))
+	{
+		if (pipe(daemonize_pipe) < 0)
+		{
+			slog(LG_ERROR, "can't create a pipe");
+			exit(EXIT_FAILURE);
+		}
+		if ((i = fork()) < 0)
+		{
+			slog(LG_ERROR, "can't fork into the background");
+			exit(EXIT_FAILURE);
+		}
+
+		/* parent */
+		else if (i != 0)
+		{
+			close(daemonize_pipe[1]);
+			if (read(daemonize_pipe[0], &c, 1) == 1)
+			{
+				slog(LG_INFO, "pid %d", i);
+				slog(LG_INFO, "running in background mode from %s", PREFIX);
+				exit(EXIT_SUCCESS);
+			}
+			else
+				exit(EXIT_FAILURE);
+		}
+
+		close(daemonize_pipe[0]);
+	}
+#endif
+}
+
+static bool detach_console(int *daemonize_pipe)
+{
+#ifdef HAVE_FORK
+	close(0);
+	if (open("/dev/null", O_RDWR) != 0)
+	{
+		slog(LG_ERROR, "unable to open /dev/null??");
+		exit(EXIT_FAILURE);
+	}
+	if (setsid() < 0)
+	{
+		slog(LG_ERROR, "unable to create new session: %s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	/* notify parent that initialization was successful */
+	if (write(daemonize_pipe[1], "", 1) != 1)
+		slog(LG_ERROR, "failed to notify parent; continuing anyway");
+	close(daemonize_pipe[1]);
+	dup2(0, 1);
+	dup2(0, 2);
+
+	return true;
+#else
+	return false;
+#endif
+}
+
 void atheme_bootstrap(void)
 {
 #ifdef HAVE_GETRLIMIT
@@ -190,15 +256,12 @@ void atheme_setup(void)
 
 int atheme_main(int argc, char *argv[])
 {
+	int daemonize_pipe[2];
 	bool have_conf = false;
 	bool have_log = false;
 	bool have_datadir = false;
 	char buf[32];
 	int i, pid, r;
-#ifdef HAVE_FORK
-	int daemonize_pipe[2];
-	char c;
-#endif
 	FILE *pid_file;
 	const char *pidfilename = RUNDIR "/atheme.pid";
 	char *log_p = NULL;
@@ -288,38 +351,8 @@ int atheme_main(int argc, char *argv[])
 	}
 #endif
 
-#ifdef HAVE_FORK
-	/* fork into the background */
 	if (!(runflags & RF_LIVE))
-	{
-		if (pipe(daemonize_pipe) < 0)
-		{
-			slog(LG_ERROR, "can't create a pipe");
-			exit(EXIT_FAILURE);
-		}
-		if ((i = fork()) < 0)
-		{
-			slog(LG_ERROR, "can't fork into the background");
-			exit(EXIT_FAILURE);
-		}
-
-		/* parent */
-		else if (i != 0)
-		{
-			close(daemonize_pipe[1]);
-			if (read(daemonize_pipe[0], &c, 1) == 1)
-			{
-				slog(LG_INFO, "pid %d", i);
-				slog(LG_INFO, "running in background mode from %s", PREFIX);
-				exit(EXIT_SUCCESS);
-			}
-			else
-				exit(EXIT_FAILURE);
-		}
-
-		close(daemonize_pipe[0]);
-	}
-#endif
+		daemonize(daemonize_pipe);
 
 	atheme_setup();
 
@@ -371,36 +404,16 @@ int atheme_main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 #endif
-#ifdef HAVE_FORK
+
 	/* detach from terminal */
-	if (!(runflags & RF_LIVE))
+	if ((runflags & RF_LIVE) || !detach_console(daemonize_pipe))
 	{
-		close(0);
-		if (open("/dev/null", O_RDWR) != 0)
-		{
-			slog(LG_ERROR, "unable to open /dev/null??");
-			exit(EXIT_FAILURE);
-		}
-		if (setsid() < 0)
-		{
-			slog(LG_ERROR, "unable to create new session: %s", strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-		/* notify parent that initialization was successful */
-		if (write(daemonize_pipe[1], "", 1) != 1)
-			slog(LG_ERROR, "failed to notify parent; continuing anyway");
-		close(daemonize_pipe[1]);
-		dup2(0, 1);
-		dup2(0, 2);
-	}
-	else
-	{
+#ifdef HAVE_GETPID
 		slog(LG_INFO, "pid %d", getpid());
+#endif
 		slog(LG_INFO, "running in foreground mode from %s", PREFIX);
 	}
-#else
-	slog(LG_INFO, "running in foreground mode from %s", PREFIX);
-#endif
+
 	/* no longer starting */
 	runflags &= ~RF_STARTING;
 
