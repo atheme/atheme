@@ -1815,6 +1815,7 @@ ldap {
  *	network			- log notices related to network status
  *	rawdata			- log raw data sent and received by services
  *	wallops			- <not yet used>
+ *	cmddeny			- security model denials (commands, permissions)
  */
 
 /*
@@ -1829,11 +1830,16 @@ logfile "var/account.log" { register; set; };
 logfile "var/commands.log" { commands; };
 
 /*
+ * This block logs all security auditing information.
+ */
+logfile "var/audit.log" { cmddeny; };
+
+/*
  * You can log to IRC channels, and even split it by category, too.
  * This entry provides roughly the same functionality as the old snoop
  * feature.
  */
-logfile "#services" { error; info; admin; request; register; };
+logfile "#services" { error; info; admin; request; register; cmddeny; };
 
 /******************************************************************************
  * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *
