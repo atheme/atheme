@@ -157,7 +157,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 		/* Should we email this? */
 		if (tmu->flags & MU_EMAILMEMOS)
 		{
-			sendemail(si->su, EMAIL_MEMO, tmu, memo->text);
+			sendemail(si->su, tmu, EMAIL_MEMO, tmu->email, memo->text);
 		}
 
 		memoserv = service_find("memoserv");

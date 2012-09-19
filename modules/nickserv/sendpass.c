@@ -145,7 +145,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		key = random_string(12);
-		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
+		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 		{
 			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
@@ -170,7 +170,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		set_password(mu, newpass);
 	}
 
-	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
+	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);

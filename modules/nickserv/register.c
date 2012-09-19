@@ -227,7 +227,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, "private:verify:register:key", key);
 		metadata_add(mu, "private:verify:register:timestamp", number_to_string(time(NULL)));
 
-		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_REGISTER, mu, key))
+		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_REGISTER, mu->email, key))
 		{
 			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Registration aborted."));
 			object_unref(mu);

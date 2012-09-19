@@ -162,7 +162,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		/* Should we email this? */
 	        if (tmu->flags & MU_EMAILMEMOS)
 		{
-			sendemail(si->su, EMAIL_MEMO, tmu, memo->text);
+			sendemail(si->su, tmu, EMAIL_MEMO, tmu->email, memo->text);
 	        }
 	
 		/* Note: do not disclose other nicks they're logged in with

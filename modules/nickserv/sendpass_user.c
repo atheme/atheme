@@ -123,7 +123,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	key = random_string(12);
-	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
+	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 	{
 		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
