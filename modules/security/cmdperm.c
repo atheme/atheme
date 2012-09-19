@@ -33,7 +33,10 @@ static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_
 		*cp = ToLower(*cp);
 
 	if (!has_priv(si, permbuf))
+	{
+		logaudit_denycmd(si, c, permbuf);
 		return false;
+	}
 
 	return parent_command_authorize(svs, si, c, userlevel);
 }
