@@ -33,6 +33,10 @@
  * are likely to break the default policy are prefixed with [!], if you are new to
  * Atheme, you should avoid enabling them.
  *
+ * If you find your security policy is broken, you may debug it while allowing normal
+ * operation of your IRC network by putting Atheme into "permissive mode".  To do this,
+ * enable general::permissive_mode.
+ *
  * [!] Infer "command:" namespace permissions   modules/security/cmdperm
  */
 #loadmodule "modules/security/cmdperm";
@@ -1859,6 +1863,12 @@ logfile "#services" { error; info; admin; request; register; cmddeny; };
 
 /* The general {} block defines general configuration options. */
 general {
+	/* (*)permissive_mode
+	 * Whether or not security denials should be soft denials instead of
+	 * hard denials.  If security denials are soft denials, then they will
+	 * only be logged to the denial log.
+	 */
+	#permissive_mode;
 
 	/* (*)helpchan
 	 * Network help channel. Shown to users when they request

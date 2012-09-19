@@ -175,6 +175,7 @@ E mowgli_eventloop_t *base_eventloop;
 E bool cold_start;
 E bool readonly;
 E bool offline_mode;
+E bool permissive_mode;
 E char *config_file;
 E char *datadir;
 

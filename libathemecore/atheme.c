@@ -59,6 +59,7 @@ bool cold_start = false;
 bool readonly = false;
 bool strict_mode = true;
 bool offline_mode = false;
+bool permissive_mode = false;
 
 void (*db_save) (void *arg) = NULL;
 void (*db_load) (const char *name) = NULL;
