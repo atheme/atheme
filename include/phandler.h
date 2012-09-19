@@ -220,6 +220,8 @@ E void (*sasl_sts) (char *target, char mode, char *data);
 E mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first);
 /* find next host channel access matching user */
 E mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first);
+/* check a nickname for validity; normally you don't need to override this */
+E bool (*is_valid_nick)(const char *nick);
 /* check a vhost for validity; the core will already have checked for
  * @!?*, space, empty, : at start, length and cidr masks */
 E bool (*is_valid_host)(const char *host);
