@@ -1025,6 +1025,32 @@ const char *get_storage_oper_name(sourceinfo_t *si)
 	return result;
 }
 
+const char *get_source_security_label(sourceinfo_t *si)
+{
+	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+HOSTLEN+10];
+	const soper_t *soper;
+	const operclass_t *operclass;
+
+	mowgli_strlcpy(result, get_storage_oper_name(si), sizeof result);
+
+	soper = get_sourceinfo_soper(si);
+	if (soper != NULL)
+	{
+		mowgli_strlcat(result, "/", sizeof result);
+		mowgli_strlcat(result, soper->name, sizeof result);
+
+		operclass = soper->operclass;
+	}
+
+	if (operclass == NULL)
+		operclass = get_sourceinfo_operclass(si);
+
+	mowgli_strlcat(result, "/", sizeof result);
+	mowgli_strlcat(result, operclass != NULL ? operclass->name : "unauthenticated", sizeof result);
+
+	return result;
+}
+
 void wallops(const char *fmt, ...)
 {
 	va_list args;

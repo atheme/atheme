@@ -120,6 +120,7 @@ E const char *get_source_name(sourceinfo_t *si);
 E const char *get_source_mask(sourceinfo_t *si);
 E const char *get_oper_name(sourceinfo_t *si);
 E const char *get_storage_oper_name(sourceinfo_t *si);
+E const char *get_source_security_label(sourceinfo_t *si);
 
 E void wallops(const char *, ...) PRINTFLIKE(1, 2);
 E void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
