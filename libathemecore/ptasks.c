@@ -519,6 +519,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 	user_t *u, *target_u;
 	char *p;
 	char name2[NICKLEN];
+	char *sentinel;
 	mowgli_node_t *n;
 
 	/* message from server, ignore */
@@ -608,6 +609,11 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 				si->service->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->service->disp);
 		return;
 	}
+
+	/* strip OTR tagging (github issue #8) */
+	sentinel = strstr(message, "\x20\x09\x20\x20\x09\x09\x09\x09");
+	if (sentinel != NULL)
+		*sentinel = '\0';
 
 	vec[0] = target;
 	vec[1] = message;
