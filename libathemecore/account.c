@@ -1324,19 +1324,6 @@ const char *mychan_get_sts_mlock(mychan_t *mc)
 		}
 		*q = '\0';
 	}
-	if (mc->flags & MC_SECURE)
-	{
-		mowgli_strlcat(mlock, "o", sizeof mlock);
-
-		if (ircd->uses_halfops)
-			mowgli_strlcat(mlock, (ircd->halfops_mchar + 1), sizeof mlock);
-
-		if (ircd->uses_protect)
-			mowgli_strlcat(mlock, (ircd->protect_mchar + 1), sizeof mlock);
-
-		if (ircd->uses_owner)
-			mowgli_strlcat(mlock, (ircd->owner_mchar + 1), sizeof mlock);
-	}
 
 	return mlock;
 }
