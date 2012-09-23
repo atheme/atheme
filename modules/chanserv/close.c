@@ -109,7 +109,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_add(mc, "private:close:closer", si->su->nick);
+		metadata_add(mc, "private:close:closer", get_oper_name(si));
 		metadata_add(mc, "private:close:reason", reason);
 		metadata_add(mc, "private:close:timestamp", number_to_string(CURRTIME));
 
