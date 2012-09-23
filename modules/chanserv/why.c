@@ -44,7 +44,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	bool operoverride = false;
 	int fl = 0;
 
-	if (!chan)
+	if (!chan || (!targ && si->su == NULL))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "WHY");
 		command_fail(si, fault_needmoreparams, _("Syntax: WHY <channel> [user]"));
