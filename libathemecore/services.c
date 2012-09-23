@@ -1037,7 +1037,11 @@ const char *get_source_security_label(sourceinfo_t *si)
 	if (soper != NULL)
 	{
 		mowgli_strlcat(result, "/", sizeof result);
-		mowgli_strlcat(result, soper->name, sizeof result);
+		/* If the soper is attached to an entity, then soper->name
+		 * is null. Use soper->myuser->ent.name instead. --mr_flea
+		 */
+		mowgli_strlcat(result, soper->name ? soper->name : soper->myuser->ent.name,
+			sizeof result);
 
 		operclass = soper->operclass;
 	}
