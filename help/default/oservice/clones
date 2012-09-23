@@ -12,13 +12,16 @@ not useful; if IP addresses are not sent for
 spoofed clients, those clients are exempt from
 CLONES checking.
 
-Syntax: CLONES KLINE ON|OFF
+Syntax: CLONES KLINE ON|OFF|<count>
 
 Enables/disables banning IP addresses with more
 than the allowed number clients from the network
 for one hour (these bans are not added to the
 AKILL list). This setting is saved in etc/services.db
 and defaults to off.
+
+If a count is specified, <count> warning kills will
+be performed before setting a k-line.
 
 Syntax: CLONES LIST
 

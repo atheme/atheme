@@ -16,6 +16,7 @@ DECLARE_MODULE_V1
 );
 
 #define CLONESDB_VERSION	3
+#define CLONES_GRACE_TIMEPERIOD	180
 
 static void clones_newuser(hook_user_nick_t *data);
 static void clones_userquit(user_t *u);
@@ -35,6 +36,7 @@ static void write_exemptdb(database_handle_t *db);
 
 static void db_h_ck(database_handle_t *db, const char *type);
 static void db_h_cd(database_handle_t *db, const char *type);
+static void db_h_gr(database_handle_t *db, const char *type);
 static void db_h_ex(database_handle_t *db, const char *type);
 static void db_h_clonesdbv(database_handle_t *db, const char *type);
 
@@ -44,6 +46,7 @@ service_t *serviceinfo;
 
 static mowgli_list_t clone_exempts;
 bool kline_enabled;
+unsigned int grace_count;
 mowgli_patricia_t *hostlist;
 mowgli_heap_t *hostentry_heap;
 static long kline_duration;
@@ -65,8 +68,8 @@ struct hostentry_
 {
 	char ip[HOSTIPLEN];
 	mowgli_list_t clients;
-	time_t lastaction;
-	unsigned int lastaction_clones;
+	time_t firstkill;
+	unsigned int gracekills;
 };
 
 static inline bool cexempt_expired(cexcept_t *c)
@@ -129,6 +132,7 @@ void _modinit(module_t *m)
 	db_register_type_handler("CLONES-DBV", db_h_clonesdbv);
 	db_register_type_handler("CLONES-CK", db_h_ck);
 	db_register_type_handler("CLONES-CD", db_h_cd);
+	db_register_type_handler("CLONES-GR", db_h_gr);
 	db_register_type_handler("CLONES-EX", db_h_ex);
 
 	hostlist = mowgli_patricia_create(noopcanon);
@@ -217,6 +221,9 @@ static void write_exemptdb(database_handle_t *db)
 	db_start_row(db, "CLONES-CD");
 	db_write_uint(db, kline_duration);
 	db_commit_row(db);
+	db_start_row(db, "CLONES-GR");
+	db_write_uint(db, grace_count);
+	db_commit_row(db);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
@@ -254,6 +261,11 @@ static void db_h_ck(database_handle_t *db, const char *type)
 static void db_h_cd(database_handle_t *db, const char *type)
 {
 	kline_duration = db_sread_uint(db);
+}
+
+static void db_h_gr(database_handle_t *db, const char *type)
+{
+	grace_count = db_sread_uint(db);
 }
 
 static void db_h_ex(database_handle_t *db, const char *type)
@@ -346,12 +358,13 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(arg, "ON"))
 	{
-		if (kline_enabled)
+		if (kline_enabled && grace_count == 0)
 		{
 			command_fail(si, fault_nochange, _("CLONES klines are already enabled."));
 			return;
 		}
 		kline_enabled = true;
+		grace_count = 0;
 		command_success_nodata(si, _("Enabled CLONES klines."));
 		wallops("\2%s\2 enabled CLONES klines", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON");
@@ -368,10 +381,28 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:OFF");
 	}
+	else if (isdigit(arg[0]))
+	{
+		unsigned int newgrace = atol(arg);
+		if (kline_enabled && grace_count == newgrace)
+		{
+			command_fail(si, fault_nochange, _("CLONES kline grace is already enabled and set to %d kills."), grace_count);
+		}
+		kline_enabled = true;
+		grace_count = newgrace;
+		command_success_nodata(si, _("Enabled CLONES klines with a grace of %d kills"), grace_count);
+		wallops("\2%s\2 enabled CLONES klines with a grace of %d kills", get_oper_name(si), grace_count);
+		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:ON grace %d", grace_count);
+	}
 	else
 	{
 		if (kline_enabled)
-			command_success_string(si, "ON", _("CLONES klines are currently enabled."));
+		{
+			if (grace_count)
+				command_success_string(si, "ON", _("CLONES klines are currently enabled with a grace of %d kills."), grace_count);
+			else
+				command_success_string(si, "ON", _("CLONES klines are currently enabled."));
+		}
 		else
 			command_success_string(si, "OFF", _("CLONES klines are currently disabled."));
 	}
@@ -870,9 +901,23 @@ static void clones_newuser(hook_user_nick_t *data)
 		/* User has exceeded the maximum number of allowed clones. */
 		if (is_autokline_exempt(u))
 			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (user is autokline exempt)", i, u->ip, u->nick, u->user, u->host);
-		else if (!kline_enabled)
+		else if (!kline_enabled || he->gracekills < grace_count || (grace_count > 0 && he->firstkill < time(NULL) - CLONES_GRACE_TIMEPERIOD))
 		{
-			slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled, killing user)", i, u->ip, u->nick, u->user, u->host);
+			if (he->firstkill < time(NULL) - CLONES_GRACE_TIMEPERIOD)
+			{
+				he->firstkill = time(NULL);
+				he->gracekills = 1;
+			}
+			else
+			{
+				he->gracekills++;
+			}
+
+			if (!kline_enabled)
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (TKLINE disabled, killing user)", i, u->ip, u->nick, u->user, u->host);
+			else
+				slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (grace period, killing user, %d grace kills remaining)", i, u->ip, u->nick,
+					u->user, u->host, grace_count - he->gracekills);
 
 			kill_user(serviceinfo->me, u, "Too many connections from this host.");
 			data->u = NULL; /* Required due to kill_user being called during user_add hook. --mr_flea */
@@ -887,7 +932,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	else if (i >= warn && warn != 0)
 	{
 		slog(LG_INFO, "CLONES: \2%d\2 clones on \2%s\2 (%s!%s@%s) (\2%d\2 allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
-		msg(serviceinfo->nick, u->nick, _("\2WARNING\2: You may not have any more than \2%d\2 clients on the network at once. Any further connections over this limit risks being removed."), allowed);
+		msg(serviceinfo->nick, u->nick, _("\2WARNING\2: You may not have more than \2%d\2 clients connected to the network at once. Any further connections risks being removed."), allowed);
 	}
 }
 
@@ -913,6 +958,7 @@ static void clones_userquit(user_t *u)
 		mowgli_node_free(n);
 		if (MOWGLI_LIST_LENGTH(&he->clients) == 0)
 		{
+			/* TODO: free later if he->firstkill > time(NULL) - CLONES_GRACE_TIMEPERIOD. */
 			mowgli_patricia_delete(hostlist, he->ip);
 			mowgli_heap_free(hostentry_heap, he);
 		}
