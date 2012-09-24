@@ -313,6 +313,15 @@ static bool string_in_list(const char *str, const char *name)
 	return false;
 }
 
+bool has_priv_operclass(operclass_t *operclass, const char *priv)
+{
+	if (operclass == NULL)
+		return false;
+	if (string_in_list(operclass->privs, priv))
+		return true;
+	return false;
+}
+
 bool has_any_privs(sourceinfo_t *si)
 {
 	if (si->su != NULL && is_ircop(si->su))
@@ -357,21 +366,17 @@ bool has_priv_user(user_t *u, const char *priv)
 
 	if (priv == NULL)
 		return true;
+
 	if (u == NULL)
 		return false;
 
-	operclass = operclass_find("user");
-	if (operclass != NULL && string_in_list(operclass->privs, priv))
+	if (has_priv_operclass(user_r, priv))
 		return true;
 
-	if (is_ircop(u))
-	{
-		operclass = operclass_find("ircop");
-		if (operclass != NULL && string_in_list(operclass->privs, priv))
-			return true;
-	}
+	if (is_ircop(u) && has_priv_operclass(ircop_r, priv))
+		return true;
 
-	if (u->myuser != NULL && string_in_list(authenticated_r->privs, priv))
+	if (u->myuser != NULL && has_priv_operclass(authenticated_r, priv))
 		return true;
 
 	if (u->myuser && is_soper(u->myuser))
@@ -383,9 +388,10 @@ bool has_priv_user(user_t *u, const char *priv)
 			return false;
 		if (u->myuser->soper->password != NULL && !(u->flags & UF_SOPER_PASS))
 			return false;
-		if (string_in_list(operclass->privs, priv))
+		if (has_priv_operclass(operclass, priv))
 			return true;
 	}
+
 	return false;
 }
 
@@ -397,24 +403,18 @@ bool has_priv_myuser(myuser_t *mu, const char *priv)
 		return true;
 	if (mu == NULL)
 		return false;
-	if (string_in_list(authenticated_r->privs, priv))
+
+	if (has_priv_operclass(authenticated_r, priv))
 		return true;
+
 	if (!is_soper(mu))
 		return false;
 	operclass = mu->soper->operclass;
 	if (operclass == NULL)
 		return false;
-	if (string_in_list(operclass->privs, priv))
+	if (has_priv_operclass(operclass, priv))
 		return true;
-	return false;
-}
 
-bool has_priv_operclass(operclass_t *operclass, const char *priv)
-{
-	if (operclass == NULL)
-		return false;
-	if (string_in_list(operclass->privs, priv))
-		return true;
 	return false;
 }
 
