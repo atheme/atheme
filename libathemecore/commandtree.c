@@ -53,7 +53,7 @@ command_t *command_find(mowgli_patricia_t *commandtree, const char *command)
 static bool permissive_mode_fallback = false;
 static bool default_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
 {
-	if (!(has_priv(si, c->access) && has_priv(si, userlevel)) || (userlevel != NULL && !strcasecmp(userlevel, AC_AUTHENTICATED)))
+	if (!(has_priv(si, c->access) && has_priv(si, userlevel)))
 	{
 		if (!permissive_mode_fallback)
 			logaudit_denycmd(si, c, userlevel);
