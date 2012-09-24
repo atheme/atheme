@@ -30,6 +30,10 @@ mowgli_list_t soperlist;
 mowgli_heap_t *operclass_heap;
 mowgli_heap_t *soper_heap;
 
+static operclass_t *user_r = NULL;
+static operclass_t *authenticated_r = NULL;
+static operclass_t *ircop_r = NULL;
+
 void init_privs(void)
 {
 	operclass_heap = sharedheap_get(sizeof(operclass_t));
@@ -40,11 +44,21 @@ void init_privs(void)
 		slog(LG_INFO, "init_privs(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
+
+	/* create built-in operclasses. */
+	user_r = operclass_add("user", "");
+	authenticated_r = operclass_add("authenticated", AC_AUTHENTICATED);
+	ircop_r = operclass_add("ircop", "");
 }
 
 /*************************
  * O P E R C L A S S E S *
  *************************/
+/*
+ * operclass_add(const char *name, const char *privs)
+ *
+ * Add or override an operclass.
+ */
 operclass_t *operclass_add(const char *name, const char *privs)
 {
 	operclass_t *operclass;
@@ -54,11 +68,15 @@ operclass_t *operclass_add(const char *name, const char *privs)
 
 	if (operclass != NULL)
 	{
-		slog(LG_DEBUG, "operclass_add(): duplicate class %s", name);
-		return NULL;
+		slog(LG_DEBUG, "operclass_add(): update %s [%s]", name, privs);
+
+		free(operclass->privs);
+		operclass->privs = sstrdup(privs);
+
+		return operclass;
 	}
 
-	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
+	slog(LG_DEBUG, "operclass_add(): create %s [%s]", name, privs);
 
 	operclass = mowgli_heap_alloc(operclass_heap);
 	operclass->name = sstrdup(name);
@@ -345,6 +363,10 @@ bool has_priv_user(user_t *u, const char *priv)
 		if (operclass != NULL && string_in_list(operclass->privs, priv))
 			return true;
 	}
+
+	if (u->myuser != NULL && string_in_list(authenticated_r->privs, priv))
+		return true;
+
 	if (u->myuser && is_soper(u->myuser))
 	{
 		operclass = u->myuser->soper->operclass;
@@ -368,6 +390,8 @@ bool has_priv_myuser(myuser_t *mu, const char *priv)
 		return true;
 	if (mu == NULL)
 		return false;
+	if (string_in_list(authenticated_r->privs, priv))
+		return true;
 	if (!is_soper(mu))
 		return false;
 	operclass = mu->soper->operclass;
