@@ -310,6 +310,18 @@ bool has_any_privs_user(user_t *u)
 
 bool has_priv(sourceinfo_t *si, const char *priv)
 {
+	/*
+	 * XXX: handle AC_AUTHENTICATED specially.
+	 *
+	 * The better solution here is to have a specific role transition for
+	 * authenticated user, e.g. user_r,authenticated_r but this will do
+	 * for now.
+	 *
+	 *    -nenolod
+	 */
+	if (!strcasecmp(priv, AC_AUTHENTICATED))
+		return si->smu != NULL;
+
 	return si->su != NULL ? has_priv_user(si->su, priv) :
 		has_priv_myuser(si->smu, priv);
 }
