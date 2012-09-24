@@ -474,9 +474,7 @@ static int c_operclass(mowgli_config_file_entry_t *ce)
 		}
 	}
 
-	operclass = operclass_add(name, privs ? privs : "");
-	if (operclass != NULL)
-		operclass->flags |= flags;
+	operclass_add(name, privs ? privs : "", flags);
 	free(privs);
 	return 0;
 }

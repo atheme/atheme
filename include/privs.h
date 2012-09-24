@@ -60,6 +60,7 @@ struct operclass_ {
 };
 
 #define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */
+#define OPERCLASS_BUILTIN	0x2 /* builtin */
 
 /* soper list struct */
 struct soper_ {
@@ -79,7 +80,7 @@ E mowgli_list_t soperlist;
 
 E void init_privs(void);
 
-E operclass_t *operclass_add(const char *name, const char *privs);
+E operclass_t *operclass_add(const char *name, const char *privs, int flags);
 E void operclass_delete(operclass_t *operclass);
 E operclass_t *operclass_find(const char *name);
 

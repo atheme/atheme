@@ -46,9 +46,9 @@ void init_privs(void)
 	}
 
 	/* create built-in operclasses. */
-	user_r = operclass_add("user", "");
-	authenticated_r = operclass_add("authenticated", AC_AUTHENTICATED);
-	ircop_r = operclass_add("ircop", "");
+	user_r = operclass_add("user", "", OPERCLASS_BUILTIN);
+	authenticated_r = operclass_add("authenticated", AC_AUTHENTICATED, OPERCLASS_BUILTIN);
+	ircop_r = operclass_add("ircop", "", OPERCLASS_BUILTIN);
 }
 
 /*************************
@@ -59,7 +59,7 @@ void init_privs(void)
  *
  * Add or override an operclass.
  */
-operclass_t *operclass_add(const char *name, const char *privs)
+operclass_t *operclass_add(const char *name, const char *privs, int flags)
 {
 	operclass_t *operclass;
 	mowgli_node_t *n;
@@ -68,10 +68,13 @@ operclass_t *operclass_add(const char *name, const char *privs)
 
 	if (operclass != NULL)
 	{
+		bool builtin = operclass->flags & OPERCLASS_BUILTIN;
+
 		slog(LG_DEBUG, "operclass_add(): update %s [%s]", name, privs);
 
 		free(operclass->privs);
 		operclass->privs = sstrdup(privs);
+		operclass->flags = flags | (builtin ? OPERCLASS_BUILTIN : 0);
 
 		return operclass;
 	}
@@ -81,6 +84,7 @@ operclass_t *operclass_add(const char *name, const char *privs)
 	operclass = mowgli_heap_alloc(operclass_heap);
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
+	operclass->flags = flags;
 
 	mowgli_node_add(operclass, &operclass->node, &operclasslist);
 
@@ -102,6 +106,9 @@ void operclass_delete(operclass_t *operclass)
 	mowgli_node_t *n;
 
 	if (operclass == NULL)
+		return;
+
+	if (operclass->flags & OPERCLASS_BUILTIN)
 		return;
 
 	slog(LG_DEBUG, "operclass_delete(): %s", operclass->name);
