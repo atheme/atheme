@@ -67,6 +67,7 @@ install-extra: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.op
 	-$(INSTALL) -m 755 -d $(DESTDIR)$(RUNDIR)
 	-$(INSTALL) -m 755 -d $(DESTDIR)$(DATADIR)
 	-$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
+	-$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/email
 	$(INSTALL) -m 600 -c ../../dist/atheme.conf.example $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 644 -c ../../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)
 	[ -r $(DESTDIR)$(sysconfdir)/atheme.motd ] || $(INSTALL) -m 644 -c ../../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)/atheme.motd || :
