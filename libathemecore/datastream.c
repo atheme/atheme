@@ -129,13 +129,16 @@ void sendq_flush(connection_t * cptr)
 
                 if ((l = send(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused, 0)) == -1)
                 {
-                        if (errno != EAGAIN)
+                        int err = ioerrno();
+
+                        if (!mowgli_eventloop_ignore_errno(err))
 			{
 				slog(LG_DEBUG, "sendq_flush(): write error %d (%s) on connection %s[%d]",
-						errno, strerror(errno),
+						err, strerror(err),
 						cptr->name, cptr->fd);
 				cptr->flags |= CF_DEAD;
 			}
+
                         return;
                 }
 
@@ -243,7 +246,7 @@ void recvq_put(connection_t *cptr)
 	errno = 0;
 
 	l = recv(cptr->fd, sq->buf + sq->firstfree, l, 0);
-	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
+	if (l == 0 || (l < 0 && !mowgli_eventloop_ignore_errno(ioerrno())))
 	{
 		if (l == 0)
 			slog(LG_DEBUG, "recvq_put(): fd %d closed the connection", cptr->fd);
