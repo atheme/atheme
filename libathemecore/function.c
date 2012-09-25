@@ -275,6 +275,43 @@ int validemail(const char *email)
 	return valid;
 }
 
+static unsigned int tcnt = 0;
+
+static int email_count_cb(myentity_t *ment, void *privdata)
+{
+	const char *email = (const char *) privdata;
+	myuser_t *tmu = user(ment);
+
+	if (!strcasecmp(email, tmu->email))
+		tcnt++;
+
+	/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
+	if (tcnt >= me.maxusers)
+		return -1;
+
+	return 0;
+}
+
+bool email_within_limits(const char *email)
+{
+	mowgli_node_t *tn;
+
+	if (me.maxusers <= 0)
+		return true;
+
+	MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
+	{
+		if (0 == match(tn->data, email))
+			return true;
+	}
+
+	tcnt = 0;
+	/* Cast away const, which is casted back on in the callback */
+	myentity_foreach_t(ENT_USER, email_count_cb, (void*)email);
+
+	return tcnt < me.maxusers;
+}
+
 bool validhostmask(const char *host)
 {
 	char *p, *q;

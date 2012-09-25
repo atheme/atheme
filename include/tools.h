@@ -104,6 +104,7 @@ E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
 E const char *number_to_string(int num);
 E int validemail(const char *email);
+E bool email_within_limits(const char *email);
 E bool validhostmask(const char *host);
 E char *pretty_mask(char *mask);
 E bool validtopic(const char *topic);
