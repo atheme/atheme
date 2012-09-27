@@ -413,6 +413,9 @@ if test "x$enablerpath" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
+PKG_CHECK_MODULES(JANSSON, [jansson >= 2.4],
+	[JSON="yes"], [JSON="no"])
+
 PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
 	[MOWGLI_SOURCE="system"], [
 	MOWGLI_SOURCE="internal"
@@ -480,6 +483,7 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
+	JSON support         : ${JSON}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
