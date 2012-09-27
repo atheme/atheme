@@ -10863,6 +10863,12 @@ $as_echo "yes" >&6; }
 	JSON="yes"
 fi
 
+if test "$JSON" = "yes"; then
+
+$as_echo "#define HAVE_JSON /**/" >>confdefs.h
+
+fi
+
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
