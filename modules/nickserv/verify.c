@@ -117,6 +117,15 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		{
 			md = metadata_find(mu, "private:verify:emailchg:newemail");
 
+			/* Make sure we reject "set email same@address" for
+			 * several accounts (without verifying the change)
+			 * followed by verifying all of them.
+			 */
+			if (!email_within_limits(md->value)) {
+				command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), md->value);
+				return;
+			}
+
 			myuser_set_email(mu, md->value);
 
 			logcommand(si, CMDLOG_SET, "VERIFY:EMAILCHG: \2%s\2 (email: \2%s\2)", get_source_name(si), mu->email);
