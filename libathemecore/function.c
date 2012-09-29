@@ -275,6 +275,46 @@ int validemail(const char *email)
 	return valid;
 }
 
+/* Re-canonicalize email addresses.
+ * Call this after adding or removing an email_canonicalize hook.
+ */
+void canonicalize_emails()
+{
+	myentity_iteration_state_t state;
+	myentity_t *mt;
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		char *email_canonical;
+		myuser_t *mu = user(mt);
+
+		strshare_unref(mu->email_canonical);
+		email_canonical = canonicalize_email(mu->email);
+		mu->email_canonical = strshare_get(email_canonical);
+		free(email_canonical);
+	}
+}
+
+/* Canonicalize an email address.
+ * The caller is responsible for freeing the returned string.
+ */
+char *canonicalize_email(const char *email)
+{
+	hook_email_canonicalize_t hdata;
+
+	if (email == NULL)
+		return NULL;
+
+	hdata.email = sstrdup(email);
+	hook_call_email_canonicalize(&hdata);
+	return hdata.email;
+}
+
+void canonicalize_email_case(hook_email_canonicalize_t *data)
+{
+	strcasecanon(data->email);
+}
+
 bool email_within_limits(const char *email)
 {
 	mowgli_node_t *n;

@@ -115,6 +115,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 {
 	myuser_t *mu;
 	soper_t *soper;
+	char *email_canonical;
 
 	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
 
@@ -140,6 +141,10 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 		metadata_add(mu, "private:doenforce", "1");
 	}
 	mu->language = NULL; /* default */
+
+	email_canonical = canonicalize_email(email);
+	mu->email_canonical = strshare_get(email_canonical);
+	free(email_canonical);
 
 	/* If it's already crypted, don't touch the password. Otherwise,
 	 * use set_password() to initialize it. Why? Because set_password
@@ -320,6 +325,7 @@ void myuser_delete(myuser_t *mu)
 	myentity_del(entity(mu));
 
 	strshare_unref(mu->email);
+	strshare_unref(mu->email_canonical);
 	strshare_unref(entity(mu)->name);
 
 	mowgli_heap_free(myuser_heap, mu);
@@ -404,11 +410,18 @@ void myuser_rename(myuser_t *mu, const char *name)
  */
 void myuser_set_email(myuser_t *mu, const char *newemail)
 {
+	char *email_canonical;
+
 	return_if_fail(mu != NULL);
 	return_if_fail(newemail != NULL);
 
 	strshare_unref(mu->email);
+	strshare_unref(mu->email_canonical);
+
 	mu->email = strshare_get(newemail);
+	email_canonical = canonicalize_email(newemail);
+	mu->email_canonical = strshare_get(email_canonical);
+	free(email_canonical);
 }
 
 /*
