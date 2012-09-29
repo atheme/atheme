@@ -321,6 +321,8 @@ bool email_within_limits(const char *email)
 	myentity_iteration_state_t state;
 	myentity_t *mt;
 	unsigned int tcnt = 0;
+	char *email_canonical, *email_shared;
+	bool result = true;
 
 	if (me.maxusers <= 0)
 		return true;
@@ -331,19 +333,26 @@ bool email_within_limits(const char *email)
 			return true;
 	}
 
+	email_canonical = canonicalize_email(email);
+	email_shared = strshare_get(email_canonical);
+	free(email_canonical);
+
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
 		myuser_t *mu = user(mt);
 
-		if (!strcasecmp(email, mu->email))
+		if (mu->email_canonical == email_shared)
 			tcnt++;
 
 		/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
-		if (tcnt >= me.maxusers)
-			return false;
+		if (tcnt >= me.maxusers) {
+			result = false;
+			break;
+		}
 	}
 
-	return true;
+	strshare_unref(email_shared);
+	return result;
 }
 
 bool validhostmask(const char *host)
