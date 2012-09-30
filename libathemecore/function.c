@@ -306,7 +306,7 @@ char *canonicalize_email(const char *email)
 	hdata.email = sstrdup(email);
 	hook_call_email_canonicalize(&hdata);
 
-	result = strshare_ref(hdata.email);
+	result = strshare_get(hdata.email);
 	free(hdata.email);
 
 	return result;
