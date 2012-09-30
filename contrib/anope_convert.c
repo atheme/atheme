@@ -382,7 +382,6 @@ static void ATHEME_CONVERT_write_channels(void)
 static void ATHEME_CONVERT_write_akills(void)
 {
 	int i;
-	Akill *ak;
 
 	if (!f)
 		return;
@@ -393,9 +392,17 @@ static void ATHEME_CONVERT_write_akills(void)
 	alog("[convert to atheme] converting akills...");
 
 	for (i = 0; i < akills.count; i++) {
-		ak = akills.list[i];
+		Akill *ak = akills.list[i];
+		const char *username = ak->user;
+		const char *hostname = ak->host;
 
-		fprintf(f, "KL %s %s %lu %lu %s %s\n", ak->user, ak->host, (unsigned long)(ak->expires == 0 ? 0 : ak->expires - ak->seton), (unsigned long)ak->seton, ak->by, ak->reason);
+		if (!username || !*username)
+			username = "*";
+
+		if (!hostname || !*hostname)
+			continue;
+
+		fprintf(f, "KL %s %s %lu %lu %s %s\n", username, hostname, (unsigned long)(ak->expires == 0 ? 0 : ak->expires - ak->seton), (unsigned long)ak->seton, ak->by, ak->reason);
 		klnout++;
 	}
 }
