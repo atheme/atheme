@@ -416,10 +416,6 @@ fi
 PKG_CHECK_MODULES(JANSSON, [jansson >= 2.4],
 	[JSON="yes"], [JSON="no"])
 
-if test "$JSON" = "yes"; then
-	AC_DEFINE(HAVE_JSON,, Define to 1 if JSON is available)
-fi
-
 PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
 	[MOWGLI_SOURCE="system"], [
 	MOWGLI_SOURCE="internal"
