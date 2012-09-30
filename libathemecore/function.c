@@ -285,29 +285,31 @@ void canonicalize_emails()
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
-		char *email_canonical;
 		myuser_t *mu = user(mt);
 
 		strshare_unref(mu->email_canonical);
-		email_canonical = canonicalize_email(mu->email);
-		mu->email_canonical = strshare_get(email_canonical);
-		free(email_canonical);
+		mu->email_canonical = canonicalize_email(mu->email);
 	}
 }
 
 /* Canonicalize an email address.
- * The caller is responsible for freeing the returned string.
+ * The returned string is strshare'd, free with strshare_unref.
  */
 char *canonicalize_email(const char *email)
 {
 	hook_email_canonicalize_t hdata;
+	char *result;
 
 	if (email == NULL)
 		return NULL;
 
 	hdata.email = sstrdup(email);
 	hook_call_email_canonicalize(&hdata);
-	return hdata.email;
+
+	result = strshare_ref(hdata.email);
+	free(hdata.email);
+
+	return result;
 }
 
 void canonicalize_email_case(hook_email_canonicalize_t *data)
@@ -321,7 +323,7 @@ bool email_within_limits(const char *email)
 	myentity_iteration_state_t state;
 	myentity_t *mt;
 	unsigned int tcnt = 0;
-	char *email_canonical, *email_shared;
+	char *email_canonical;
 	bool result = true;
 
 	if (me.maxusers <= 0)
@@ -334,14 +336,12 @@ bool email_within_limits(const char *email)
 	}
 
 	email_canonical = canonicalize_email(email);
-	email_shared = strshare_get(email_canonical);
-	free(email_canonical);
 
 	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
 	{
 		myuser_t *mu = user(mt);
 
-		if (mu->email_canonical == email_shared)
+		if (mu->email_canonical == email_canonical)
 			tcnt++;
 
 		/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
@@ -351,7 +351,7 @@ bool email_within_limits(const char *email)
 		}
 	}
 
-	strshare_unref(email_shared);
+	strshare_unref(email_canonical);
 	return result;
 }
 
