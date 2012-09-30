@@ -25,6 +25,7 @@ typedef struct opensex_ {
 	FILE *f;
 
 	/* Interpreting state */
+	unsigned int grver;
 	unsigned int dbv;
 
 	unsigned int nmu;
@@ -63,6 +64,11 @@ opensex_db_save(database_handle_t *db)
 
 	/* reset state */
 	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
+
+	/* write the grammar version */
+	db_start_row(db, "GRVER");
+	db_write_int(db, 2);
+	db_commit_row(db);
 
 	/* write the database version */
 	db_start_row(db, "DBV");
@@ -406,11 +412,18 @@ static void opensex_h_unknown(database_handle_t *db, const char *type)
 	exit(EXIT_FAILURE);
 }
 
+static void opensex_h_grver(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	rs->grver = db_sread_int(db);
+	slog(LG_INFO, "opensex: grammar version is %d.", rs->grver);
+}
+
 static void opensex_h_dbv(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	rs->dbv = db_sread_int(db);
-	slog(LG_INFO, "opensex: data format version is %d.", rs->dbv);
+	slog(LG_INFO, "opensex: data schema version is %d.", rs->dbv);
 }
 
 static void opensex_h_luid(database_handle_t *db, const char *type)
@@ -1254,6 +1267,7 @@ void _modinit(module_t *m)
 	db_load = &opensex_db_load;
 	db_save = &opensex_db_write;
 
+	db_register_type_handler("GRVER", opensex_h_grver);
 	db_register_type_handler("DBV", opensex_h_dbv);
 	db_register_type_handler("MDEP", opensex_h_mdep);
 	db_register_type_handler("LUID", opensex_h_luid);
