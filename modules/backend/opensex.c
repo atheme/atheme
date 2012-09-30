@@ -27,19 +27,9 @@ typedef struct opensex_ {
 	/* Interpreting state */
 	unsigned int grver;
 	unsigned int dbv;
-
-	unsigned int nmu;
-	unsigned int nmc;
-	unsigned int nca;
-	unsigned int nkl;
-	unsigned int nxl;
-	unsigned int nql;
 } opensex_t;
 
 extern mowgli_list_t modules;
-
-/* flatfile state */
-unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 /* write atheme.db (core fields) */
 static void
@@ -61,9 +51,6 @@ opensex_db_save(database_handle_t *db)
 	myentity_iteration_state_t mestate;
 
 	errno = 0;
-
-	/* reset state */
-	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 	/* write the grammar version */
 	db_start_row(db, "GRVER");
@@ -113,8 +100,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, flags);
 		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
-
-		muout++;
 
 		if (object(mu)->metadata)
 		{
@@ -212,7 +197,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_uint(db, mc->mlock_limit);
 		db_write_word(db, mc->mlock_key ? mc->mlock_key : "");
 		db_commit_row(db);
-		mcout++;
 
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
@@ -241,8 +225,6 @@ opensex_db_save(database_handle_t *db)
 					db_commit_row(db);
 				}
 			}
-
-			caout++;
 		}
 
 		if (object(mc)->metadata)
@@ -340,8 +322,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, k->setby);
 		db_write_str(db, k->reason);
 		db_commit_row(db);
-
-		kout++;
 	}
 
 	slog(LG_DEBUG, "db_save(): saving xlines");
@@ -363,8 +343,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, x->setby);
 		db_write_str(db, x->reason);
 		db_commit_row(db);
-
-		xout++;
 	}
 
 	db_start_row(db, "QID");
@@ -384,8 +362,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, q->setby);
 		db_write_str(db, q->reason);
 		db_commit_row(db);
-
-		qout++;
 	}
 }
 
@@ -494,7 +470,6 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	mu->lastlogin = login;
 	if (language)
 		mu->language = language_add(language);
-	rs->nmu++;
 }
 
 static void opensex_h_me(database_handle_t *db, const char *type)
@@ -689,8 +664,6 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 		if (buf[0] && buf[0] != ':' && !strchr(buf, ','))
 			mc->mlock_key = sstrdup(buf);
 	}
-
-	rs->nmc++;
 }
 
 static void opensex_h_md(database_handle_t *db, const char *type)
@@ -783,8 +756,6 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 	{
 		chanacs_add(mc, mt, flags, tmod, setter);
 	}
-
-	rs->nca++;
 }
 
 static void opensex_h_si(database_handle_t *db, const char *type)
@@ -837,8 +808,6 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	k = kline_add_with_id(user, host, buf, duration, setby, id ? id : ++me.kline_id);
 	k->settime = settime;
 	k->expires = k->settime + k->duration;
-
-	rs->nkl++;
 }
 
 static void opensex_h_xid(database_handle_t *db, const char *type)
@@ -874,8 +843,6 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 
 	if (id)
 		x->number = id;
-
-	rs->nxl++;
 }
 
 static void opensex_h_qid(database_handle_t *db, const char *type)
@@ -911,8 +878,6 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 
 	if (id)
 		q->number = id;
-
-	rs->nql++;
 }
 
 static void opensex_ignore_row(database_handle_t *db, const char *type)
