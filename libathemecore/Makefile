@@ -69,7 +69,8 @@ include ../extra.mk
 
 CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(RPATH) $(LIBINTL)
+LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(LIBINTL)
+LDFLAGS         += $(LDFLAGS_RPATH)
 
 build: depend all
 
