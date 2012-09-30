@@ -49,12 +49,13 @@ opensex_db_save(database_handle_t *db)
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
+	opensex_t *rs = db->priv;
 
 	errno = 0;
 
 	/* write the grammar version */
 	db_start_row(db, "GRVER");
-	db_write_int(db, 2);
+	db_write_int(db, rs->grver);
 	db_commit_row(db);
 
 	/* write the database version */
@@ -1169,6 +1170,11 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 
 	rs = scalloc(sizeof(opensex_t), 1);
 	rs->f = f;
+#ifndef EXPERIMENTAL
+	rs->grver = 1;
+#else
+	rs->grver = 2;
+#endif
 
 	db = scalloc(sizeof(database_handle_t), 1);
 	db->priv = rs;
