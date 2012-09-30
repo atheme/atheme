@@ -888,8 +888,6 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 	unsigned int n = 0;
 	opensex_t *rs = (opensex_t *)hdl->priv;
 
-	rs->token = NULL;
-
 	while ((c = getc(rs->f)) != EOF && c != '\n')
 	{
 		rs->buf[n++] = c;
@@ -900,6 +898,7 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 		}
 	}
 	rs->buf[n] = '\0';
+	rs->token = rs->buf;
 
 	if (c == EOF && ferror(rs->f))
 	{
@@ -919,15 +918,48 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 static const char *opensex_read_word(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	char *res = strtok_r((db->token ? NULL : rs->buf), " ", &rs->token);
+	char *ptr = rs->token;
+	char *res;
+
+	switch (rs->grver)
+	{
+	case 1:
+	default:
+		res = rs->token;
+
+		ptr = strchr(res, ' ');
+		if (ptr != NULL)
+		{
+			*ptr++ = '\0';
+			rs->token = ptr;
+		}
+		else
+			rs->token = NULL;
+
+		break;
+	}
+
 	db->token++;
+
 	return res;
 }
 
 static const char *opensex_read_str(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	char *res = strtok_r((db->token ? NULL : rs->buf), "", &rs->token);
+	char *res;
+
+	switch (rs->grver)
+	{
+	case 1:
+	default:
+		/* rs->token will be pointing at the next cell always, and in grammar version 1
+		 * we just eat the remaining line if it's a multi-word cell. --nenolod
+		 */
+		res = rs->token;
+		break;
+	}
+
 	db->token++;
 	return res;
 }
