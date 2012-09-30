@@ -1136,6 +1136,7 @@ static database_handle_t *opensex_db_open_read(const char *filename)
 	}
 
 	rs = scalloc(sizeof(opensex_t), 1);
+	rs->grver = 1;
 	rs->buf = scalloc(512, 1);
 	rs->bufsize = 512;
 	rs->token = NULL;
