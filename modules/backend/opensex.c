@@ -10,6 +10,8 @@
 
 #include "atheme.h"
 
+#define EXPERIMENTAL
+
 DECLARE_MODULE_V1
 (
 	"backend/opensex", true, _modinit, NULL,
@@ -50,13 +52,17 @@ opensex_db_save(database_handle_t *db)
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
 	opensex_t *rs = db->priv;
+	unsigned int tmp_grver;
 
 	errno = 0;
 
-	/* write the grammar version */
+	/* write the grammar version, must always be written as a grver:1 row */
+	tmp_grver = rs->grver;
+	rs->grver = 1;
 	db_start_row(db, "GRVER");
-	db_write_int(db, rs->grver);
+	db_write_int(db, tmp_grver);
 	db_commit_row(db);
+	rs->grver = tmp_grver;
 
 	/* write the database version */
 	db_start_row(db, "DBV");
@@ -1012,68 +1018,97 @@ static bool opensex_start_row(database_handle_t *db, const char *type)
 	return_val_if_fail(type != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%s ", type);
+	switch (rs->grver)
+	{
+	case 2:
+		fprintf(rs->f, "(%s ", type);
+		break;
+	case 1:
+	default:
+		fprintf(rs->f, "%s ", type);
+		break;
+	}
+
+	return true;
+}
+
+static bool opensex_write_cell(database_handle_t *db, const char *data, bool multiword)
+{
+	opensex_t *rs;
+	char buf[BUFSIZE], *bi;
+	const char *i;
+
+	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
+
+	switch (rs->grver)
+	{
+	case 2:
+		if (data == NULL)
+		{
+			fprintf(rs->f, "(*)");
+			break;
+		}
+
+		bi = buf;
+		*bi++ = '(';
+
+		for (i = data; *i != '\0'; i++)
+		{
+			switch (*i)
+			{
+			case '(':
+			case ')':
+				*bi++ = '\\';
+			default:
+				*bi++ = *i;
+				break;
+			}
+		}
+
+		*bi++ = ')';
+		*bi++ = '\0';
+
+		fprintf(rs->f, "%s", buf);
+		break;
+	case 1:
+	default:
+		fprintf(rs->f, "%s%s", data != NULL ? data : "*", !multiword ? " " : "");
+		break;
+	}
 
 	return true;
 }
 
 static bool opensex_write_word(database_handle_t *db, const char *word)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%s ", word ? word : "*");
-
-	return true;
+	return opensex_write_cell(db, word, false);
 }
 
 static bool opensex_write_str(database_handle_t *db, const char *word)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%s", word ? word : "*");
-
-	return true;
+	return opensex_write_cell(db, word, true);
 }
 
 static bool opensex_write_int(database_handle_t *db, int num)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%d ", num);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%d", num);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_write_uint(database_handle_t *db, unsigned int num)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%u ", num);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%u", num);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_write_time(database_handle_t *db, time_t tm)
 {
-	opensex_t *rs;
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%lu ", (unsigned long)tm);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%lu", tm);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_commit_row(database_handle_t *db)
@@ -1083,7 +1118,16 @@ static bool opensex_commit_row(database_handle_t *db)
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "\n");
+	switch (rs->grver)
+	{
+	case 2:
+		fprintf(rs->f, ")\n");
+		break;
+	case 1:
+	default:
+		fprintf(rs->f, "\n");
+		break;
+	}
 
 	return true;
 }
