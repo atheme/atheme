@@ -952,6 +952,12 @@ static const char *opensex_read_str(database_handle_t *db)
 
 	switch (rs->grver)
 	{
+	case 2:
+		/*
+		 * no special handling needed for strings verses words.  all words are strings,
+		 * and all types derive from word, so all cells are encapsulated.
+		 */
+		return opensex_read_word(db);
 	case 1:
 	default:
 		/* rs->token will be pointing at the next cell always, and in grammar version 1
