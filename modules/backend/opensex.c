@@ -10,8 +10,6 @@
 
 #include "atheme.h"
 
-#define EXPERIMENTAL
-
 DECLARE_MODULE_V1
 (
 	"backend/opensex", true, _modinit, NULL,
@@ -927,9 +925,47 @@ static const char *opensex_read_word(database_handle_t *db)
 	opensex_t *rs = (opensex_t *)db->priv;
 	char *ptr = rs->token;
 	char *res;
+	static char buf[BUFSIZE];
 
 	switch (rs->grver)
 	{
+	case 2:
+		res = rs->token;
+
+		ptr = strchr(res, '(');
+		if (ptr != NULL)
+		{
+			char *bi, *pi;
+			bool escaped = false;
+
+			ptr++;
+			for (bi = buf, pi = ptr; *pi != '\0' && (bi - buf) < sizeof buf; pi++)
+			{
+				switch (*pi)
+				{
+				case '\\':
+					escaped = true;
+					pi++;
+					break;
+				case ')':
+					if (!escaped)
+						goto demarshal_out;
+				default:
+					*bi++ = *pi;
+					escaped = false;
+					break;
+				}
+			}
+demarshal_out:
+			*bi++ = '\0';
+			rs->token = pi;
+			res = buf;
+			slog(LG_DEBUG, "opensex_read_word(): read [%s], pi [%s]", res, pi);
+		}
+		else
+			rs->token = NULL;
+
+		break;
 	case 1:
 	default:
 		res = rs->token;
@@ -1021,7 +1057,7 @@ static bool opensex_start_row(database_handle_t *db, const char *type)
 	switch (rs->grver)
 	{
 	case 2:
-		fprintf(rs->f, "(%s ", type);
+		fprintf(rs->f, "(%s)", type);
 		break;
 	case 1:
 	default:
@@ -1120,10 +1156,8 @@ static bool opensex_commit_row(database_handle_t *db)
 
 	switch (rs->grver)
 	{
-	case 2:
-		fprintf(rs->f, ")\n");
-		break;
 	case 1:
+	case 2:
 	default:
 		fprintf(rs->f, "\n");
 		break;
