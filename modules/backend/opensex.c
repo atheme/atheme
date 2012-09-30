@@ -381,16 +381,6 @@ opensex_db_save(database_handle_t *db)
 
 		qout++;
 	}
-
-	/* DE <muout> <mcout> <caout> <kout> <xout> <qout> */
-	db_start_row(db, "DE");
-	db_write_uint(db, muout);
-	db_write_uint(db, mcout);
-	db_write_uint(db, caout);
-	db_write_uint(db, kout);
-	db_write_uint(db, xout);
-	db_write_uint(db, qout);
-	db_commit_row(db);
 }
 
 static void opensex_db_parse(database_handle_t *db)
@@ -912,30 +902,9 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 	rs->nql++;
 }
 
-static void opensex_h_de(database_handle_t *db, const char *type)
+static void opensex_ignore_row(database_handle_t *db, const char *type)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
-	unsigned int nmu, nmc, nca, nkl, nxl, nql;
-
-	nmu = db_sread_uint(db);
-	nmc = db_sread_uint(db);
-	nca = db_sread_uint(db);
-	nkl = db_sread_uint(db);
-	nxl = db_sread_uint(db);
-	nql = db_sread_uint(db);
-
-	if (nmu != rs->nmu)
-		slog(LG_ERROR, "db-h-de: got %d myusers; expected %d", rs->nmu, nmu);
-	if (nmc != rs->nmc)
-		slog(LG_ERROR, "db-h-de: got %d mychans; expected %d", rs->nmc, nmc);
-	if (nca != rs->nca)
-		slog(LG_ERROR, "db-h-de: got %d chanacs; expected %d", rs->nca, nca);
-	if (nkl != rs->nkl)
-		slog(LG_ERROR, "db-h-de: got %d klines; expected %d", rs->nkl, nkl);
-	if (nxl != rs->nxl)
-		slog(LG_ERROR, "db-h-de: got %d xlines; expected %d", rs->nxl, nxl);
-	if (nql != rs->nql)
-		slog(LG_ERROR, "db-h-de: got %d qlines; expected %d", rs->nql, nql);
+	return;
 }
 
 /***************************************************************************************************/
@@ -1313,7 +1282,7 @@ void _modinit(module_t *m)
 	db_register_type_handler("QID", opensex_h_qid);
 	db_register_type_handler("QL", opensex_h_ql);
 
-	db_register_type_handler("DE", opensex_h_de);
+	db_register_type_handler("DE", opensex_ignore_row);
 
 	db_register_type_handler("???", opensex_h_unknown);
 
