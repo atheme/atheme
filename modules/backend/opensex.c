@@ -376,11 +376,6 @@ static void opensex_db_parse(database_handle_t *db)
 	}
 }
 
-static void opensex_h_mdep(database_handle_t *db, const char *type)
-{
-	return;
-}
-
 static void opensex_h_unknown(database_handle_t *db, const char *type)
 {
 	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
@@ -1235,7 +1230,7 @@ void _modinit(module_t *m)
 
 	db_register_type_handler("GRVER", opensex_h_grver);
 	db_register_type_handler("DBV", opensex_h_dbv);
-	db_register_type_handler("MDEP", opensex_h_mdep);
+	db_register_type_handler("MDEP", opensex_ignore_row);
 	db_register_type_handler("LUID", opensex_h_luid);
 	db_register_type_handler("CF", opensex_h_cf);
 	db_register_type_handler("MU", opensex_h_mu);
