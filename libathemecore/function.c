@@ -565,6 +565,8 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 	snprintf(from, sizeof from, "\"%s\" <%s>",
 			me.netname, me.register_email);
 	snprintf(to, sizeof to, "\"%s\" <%s>", entity(mu)->name, email);
+	/* \ is special here; escape it */
+	replace(to, sizeof to, "\\", "\\\\");
 
 	/* now set up the email */
 	if (pipe(pipfds) < 0)
