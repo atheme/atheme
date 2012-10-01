@@ -573,6 +573,8 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	snprintf(from, sizeof from, "\"%s automailer\" <noreply.%s>",
 			me.netname, me.adminemail);
 	snprintf(to, sizeof to, "\"%s\" <%s>", entity(mu)->name, email);
+	/* \ is special here; escape it */
+	replace(to, sizeof to, "\\", "\\\\");
 
 	mowgli_strlcpy(subject, me.netname, sizeof subject);
 	mowgli_strlcat(subject, " ", sizeof subject);
