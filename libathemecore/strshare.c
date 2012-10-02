@@ -35,7 +35,7 @@ void strshare_init(void)
 	strshare_dict = mowgli_patricia_create(noopcanon);
 }
 
-char *strshare_get(const char *str)
+stringref strshare_get(const char *str)
 {
 	strshare_t *ss;
 
@@ -55,7 +55,7 @@ char *strshare_get(const char *str)
 	return (char *)(ss + 1);
 }
 
-char *strshare_ref(char *str)
+stringref strshare_ref(stringref str)
 {
 	strshare_t *ss;
 
@@ -68,7 +68,7 @@ char *strshare_ref(char *str)
 	return str;
 }
 
-void strshare_unref(char *str)
+void strshare_unref(stringref str)
 {
 	strshare_t *ss;
 
