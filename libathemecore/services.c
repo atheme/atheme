@@ -394,7 +394,7 @@ void handle_nickchange(user_t *u)
  *    server confirms EOB
  * -- jilles
  */
-void handle_burstlogin(user_t *u, char *login, time_t ts)
+void handle_burstlogin(user_t *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -460,7 +460,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
-void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
+void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;

@@ -351,7 +351,7 @@ void myuser_rename(myuser_t *mu, const char *name)
 	mowgli_node_t *n, *tn;
 	user_t *u;
 	hook_user_rename_t data;
-	char *newname;
+	stringref newname;
 	char nb[NICKLEN];
 
 	return_if_fail(mu != NULL);

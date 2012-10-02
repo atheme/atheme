@@ -17,7 +17,8 @@ typedef struct entity_chanacs_validation_vtable entity_chanacs_validation_vtable
 typedef struct {
 	object_t parent;
 	myentity_type_t type;
-	char *name;
+
+	stringref name;
 	char id[IDLEN];
 
 	mowgli_list_t chanacs;
