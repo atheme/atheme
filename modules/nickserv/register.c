@@ -22,8 +22,6 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_register = { "REGISTER", N_("Registers a nickname."), AC_NONE, 3, ns_cmd_register, { .path = "nickserv/register" } };
 
-unsigned int tcnt = 0;
-
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_register);
@@ -34,33 +32,17 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_register);
 }
 
-static int register_foreach_cb(myentity_t *ment, void *privdata)
-{
-	char *email = (char *) privdata;
-	myuser_t *tmu = user(ment);
-
-	if (!strcasecmp(email, tmu->email))
-		tcnt++;
-
-	/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
-	if (tcnt >= me.maxusers)
-		return -1;
-
-	return 0;
-}
-
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
-	mowgli_node_t *n, *tn;
+	mowgli_node_t *n;
 	char *account;
 	char *pass;
 	char *email;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	hook_user_register_check_t hdata;
 	hook_user_req_t req;
-	bool exempt;
 
 	if (si->smu)
 	{
@@ -170,30 +152,10 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure they're within limits */
-	if (me.maxusers > 0)
+	if (!email_within_limits(email))
 	{
-		exempt = false;
-		MOWGLI_ITER_FOREACH(tn, nicksvs.emailexempts.head)
-		{
-			if (0 == match(tn->data, email))
-			{
-				exempt = true;
-				break;
-			}
-		}
-
-		if (!exempt)
-		{
-			tcnt = 0;
-			myentity_foreach_t(ENT_USER, register_foreach_cb, email);
-
-			if (tcnt >= me.maxusers)
-			{
-				command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
-				return;
-			}
-		}
+		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
+		return;
 	}
 
 	mu = myuser_add(account, auth_module_loaded ? "*" : pass, email, config_options.defuflags | MU_NOBURSTLOGIN | (auth_module_loaded ? MU_CRYPTPASS : 0));

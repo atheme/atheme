@@ -275,6 +275,86 @@ int validemail(const char *email)
 	return valid;
 }
 
+/* Re-canonicalize email addresses.
+ * Call this after adding or removing an email_canonicalize hook.
+ */
+void canonicalize_emails()
+{
+	myentity_iteration_state_t state;
+	myentity_t *mt;
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		myuser_t *mu = user(mt);
+
+		strshare_unref(mu->email_canonical);
+		mu->email_canonical = canonicalize_email(mu->email);
+	}
+}
+
+/* Canonicalize an email address.
+ * The returned string is strshare'd, free with strshare_unref.
+ */
+char *canonicalize_email(const char *email)
+{
+	hook_email_canonicalize_t hdata;
+	char *result;
+
+	if (email == NULL)
+		return NULL;
+
+	hdata.email = sstrdup(email);
+	hook_call_email_canonicalize(&hdata);
+
+	result = strshare_get(hdata.email);
+	free(hdata.email);
+
+	return result;
+}
+
+void canonicalize_email_case(hook_email_canonicalize_t *data)
+{
+	strcasecanon(data->email);
+}
+
+bool email_within_limits(const char *email)
+{
+	mowgli_node_t *n;
+	myentity_iteration_state_t state;
+	myentity_t *mt;
+	unsigned int tcnt = 0;
+	char *email_canonical;
+	bool result = true;
+
+	if (me.maxusers <= 0)
+		return true;
+
+	MOWGLI_ITER_FOREACH(n, nicksvs.emailexempts.head)
+	{
+		if (0 == match(n->data, email))
+			return true;
+	}
+
+	email_canonical = canonicalize_email(email);
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		myuser_t *mu = user(mt);
+
+		if (mu->email_canonical == email_canonical)
+			tcnt++;
+
+		/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
+		if (tcnt >= me.maxusers) {
+			result = false;
+			break;
+		}
+	}
+
+	strshare_unref(email_canonical);
+	return result;
+}
+
 bool validhostmask(const char *host)
 {
 	char *p, *q;

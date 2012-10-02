@@ -127,6 +127,7 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	entity(mu)->type = ENT_USER;
 	entity(mu)->name = strshare_get(name);
 	mu->email = strshare_get(email);
+	mu->email_canonical = canonicalize_email(email);
 	if (id)
 		mowgli_strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
 	else
@@ -320,6 +321,7 @@ void myuser_delete(myuser_t *mu)
 	myentity_del(entity(mu));
 
 	strshare_unref(mu->email);
+	strshare_unref(mu->email_canonical);
 	strshare_unref(entity(mu)->name);
 
 	mowgli_heap_free(myuser_heap, mu);
@@ -408,7 +410,10 @@ void myuser_set_email(myuser_t *mu, const char *newemail)
 	return_if_fail(newemail != NULL);
 
 	strshare_unref(mu->email);
+	strshare_unref(mu->email_canonical);
+
 	mu->email = strshare_get(newemail);
+	mu->email_canonical = canonicalize_email(newemail);
 }
 
 /*

@@ -75,6 +75,12 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!email_within_limits(email))
+	{
+		command_fail(si, fault_toomany, _("\2%s\2 has too many accounts registered."), email);
+		return;
+	}
+
 	if (me.auth == AUTH_EMAIL)
 	{
 		unsigned long key = makekey();

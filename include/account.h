@@ -73,6 +73,7 @@ struct myuser_
   myentity_t ent;
   char pass[PASSLEN];
   char *email;
+  char *email_canonical;
 
   mowgli_list_t logins; /* user_t's currently logged in to this */
   time_t registered;
