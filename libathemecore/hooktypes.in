@@ -81,4 +81,4 @@ grant_channel_access	user_t *
 operserv_info	  sourceinfo_t *
 module_load        hook_module_load_t *
 myentity_find      hook_myentity_req_t *
-email_canonicalize	hook_email_canonicalize_t *
+email_canonicalize	char *

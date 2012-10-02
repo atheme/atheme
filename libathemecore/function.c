@@ -297,24 +297,23 @@ void canonicalize_emails()
  */
 char *canonicalize_email(const char *email)
 {
-	hook_email_canonicalize_t hdata;
-	char *result;
+	char *hdata, *result;
 
 	if (email == NULL)
 		return NULL;
 
-	hdata.email = sstrdup(email);
-	hook_call_email_canonicalize(&hdata);
+	hdata = sstrdup(email);
+	hook_call_email_canonicalize(hdata);
 
-	result = strshare_get(hdata.email);
-	free(hdata.email);
+	result = strshare_get(hdata);
+	free(hdata);
 
 	return result;
 }
 
-void canonicalize_email_case(hook_email_canonicalize_t *data)
+void canonicalize_email_case(char *email)
 {
-	strcasecanon(data->email);
+	strcasecanon(email);
 }
 
 bool email_within_limits(const char *email)

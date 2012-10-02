@@ -16,15 +16,15 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void canonicalize_gmail(hook_email_canonicalize_t *data)
+static void canonicalize_gmail(char *email)
 {
 	char *p, *p_out, *p_at;
 
-	p_at = strchr(data->email, '@');
+	p_at = strchr(email, '@');
 	if (!p_at || strcasecmp(p_at, "@gmail.com"))
 		return;
 
-	for (p = p_out = data->email; p < p_at; p++) {
+	for (p = p_out = email; p < p_at; p++) {
 		if (*p == '.')
 			continue;
 
