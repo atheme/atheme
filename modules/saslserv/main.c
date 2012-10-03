@@ -18,8 +18,8 @@ DECLARE_MODULE_V1
 mowgli_list_t sessions;
 mowgli_list_t sasl_mechanisms;
 
-sasl_session_t *find_session(char *uid);
-sasl_session_t *make_session(char *uid);
+sasl_session_t *find_session(const char *uid);
+sasl_session_t *make_session(const char *uid);
 void destroy_session(sasl_session_t *p);
 static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...);
 static void sasl_input(sasl_message_t *smsg);
@@ -106,7 +106,7 @@ void _moddeinit(module_unload_intent_t intent)
  */
 
 /* find an existing session by uid */
-sasl_session_t *find_session(char *uid)
+sasl_session_t *find_session(const char *uid)
 {
 	sasl_session_t *p;
 	mowgli_node_t *n;
@@ -125,7 +125,7 @@ sasl_session_t *find_session(char *uid)
 }
 
 /* create a new session if it does not already exist */
-sasl_session_t *make_session(char *uid)
+sasl_session_t *make_session(const char *uid)
 {
 	sasl_session_t *p = find_session(uid);
 	mowgli_node_t *n;
