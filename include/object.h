@@ -10,7 +10,7 @@
 #define __ATHEME_OBJECT_H__
 
 struct metadata_ {
-	char *name;
+	stringref name;
 	char *value;
 };
 

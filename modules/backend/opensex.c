@@ -25,20 +25,11 @@ typedef struct opensex_ {
 	FILE *f;
 
 	/* Interpreting state */
+	unsigned int grver;
 	unsigned int dbv;
-
-	unsigned int nmu;
-	unsigned int nmc;
-	unsigned int nca;
-	unsigned int nkl;
-	unsigned int nxl;
-	unsigned int nql;
 } opensex_t;
 
 extern mowgli_list_t modules;
-
-/* flatfile state */
-unsigned int muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
 
 /* write atheme.db (core fields) */
 static void
@@ -58,11 +49,18 @@ opensex_db_save(database_handle_t *db)
 	mowgli_node_t *n, *tn;
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
+	opensex_t *rs = db->priv;
+	unsigned int tmp_grver;
 
 	errno = 0;
 
-	/* reset state */
-	muout = 0, mcout = 0, caout = 0, kout = 0, xout = 0, qout = 0;
+	/* write the grammar version, must always be written as a grver:1 row */
+	tmp_grver = rs->grver;
+	rs->grver = 1;
+	db_start_row(db, "GRVER");
+	db_write_int(db, tmp_grver);
+	db_commit_row(db);
+	rs->grver = tmp_grver;
 
 	/* write the database version */
 	db_start_row(db, "DBV");
@@ -107,8 +105,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, flags);
 		db_write_word(db, language_get_name(mu->language));
 		db_commit_row(db);
-
-		muout++;
 
 		if (object(mu)->metadata)
 		{
@@ -206,7 +202,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_uint(db, mc->mlock_limit);
 		db_write_word(db, mc->mlock_key ? mc->mlock_key : "");
 		db_commit_row(db);
-		mcout++;
 
 		MOWGLI_ITER_FOREACH(tn, mc->chanacs.head)
 		{
@@ -235,8 +230,6 @@ opensex_db_save(database_handle_t *db)
 					db_commit_row(db);
 				}
 			}
-
-			caout++;
 		}
 
 		if (object(mc)->metadata)
@@ -334,8 +327,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, k->setby);
 		db_write_str(db, k->reason);
 		db_commit_row(db);
-
-		kout++;
 	}
 
 	slog(LG_DEBUG, "db_save(): saving xlines");
@@ -357,8 +348,6 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, x->setby);
 		db_write_str(db, x->reason);
 		db_commit_row(db);
-
-		xout++;
 	}
 
 	db_start_row(db, "QID");
@@ -378,19 +367,7 @@ opensex_db_save(database_handle_t *db)
 		db_write_word(db, q->setby);
 		db_write_str(db, q->reason);
 		db_commit_row(db);
-
-		qout++;
 	}
-
-	/* DE <muout> <mcout> <caout> <kout> <xout> <qout> */
-	db_start_row(db, "DE");
-	db_write_uint(db, muout);
-	db_write_uint(db, mcout);
-	db_write_uint(db, caout);
-	db_write_uint(db, kout);
-	db_write_uint(db, xout);
-	db_write_uint(db, qout);
-	db_commit_row(db);
 }
 
 static void opensex_db_parse(database_handle_t *db)
@@ -404,11 +381,6 @@ static void opensex_db_parse(database_handle_t *db)
 	}
 }
 
-static void opensex_h_mdep(database_handle_t *db, const char *type)
-{
-	return;
-}
-
 static void opensex_h_unknown(database_handle_t *db, const char *type)
 {
 	slog(LG_ERROR, "db %s:%d: unknown directive '%s'", db->file, db->line, type);
@@ -416,11 +388,18 @@ static void opensex_h_unknown(database_handle_t *db, const char *type)
 	exit(EXIT_FAILURE);
 }
 
+static void opensex_h_grver(database_handle_t *db, const char *type)
+{
+	opensex_t *rs = (opensex_t *)db->priv;
+	rs->grver = db_sread_int(db);
+	slog(LG_INFO, "opensex: grammar version is %d.", rs->grver);
+}
+
 static void opensex_h_dbv(database_handle_t *db, const char *type)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
 	rs->dbv = db_sread_int(db);
-	slog(LG_INFO, "opensex: data format version is %d.", rs->dbv);
+	slog(LG_INFO, "opensex: data schema version is %d.", rs->dbv);
 }
 
 static void opensex_h_luid(database_handle_t *db, const char *type)
@@ -491,7 +470,6 @@ static void opensex_h_mu(database_handle_t *db, const char *type)
 	mu->lastlogin = login;
 	if (language)
 		mu->language = language_add(language);
-	rs->nmu++;
 }
 
 static void opensex_h_me(database_handle_t *db, const char *type)
@@ -686,8 +664,6 @@ static void opensex_h_mc(database_handle_t *db, const char *type)
 		if (buf[0] && buf[0] != ':' && !strchr(buf, ','))
 			mc->mlock_key = sstrdup(buf);
 	}
-
-	rs->nmc++;
 }
 
 static void opensex_h_md(database_handle_t *db, const char *type)
@@ -780,8 +756,6 @@ static void opensex_h_ca(database_handle_t *db, const char *type)
 	{
 		chanacs_add(mc, mt, flags, tmod, setter);
 	}
-
-	rs->nca++;
 }
 
 static void opensex_h_si(database_handle_t *db, const char *type)
@@ -834,8 +808,6 @@ static void opensex_h_kl(database_handle_t *db, const char *type)
 	k = kline_add_with_id(user, host, buf, duration, setby, id ? id : ++me.kline_id);
 	k->settime = settime;
 	k->expires = k->settime + k->duration;
-
-	rs->nkl++;
 }
 
 static void opensex_h_xid(database_handle_t *db, const char *type)
@@ -871,8 +843,6 @@ static void opensex_h_xl(database_handle_t *db, const char *type)
 
 	if (id)
 		x->number = id;
-
-	rs->nxl++;
 }
 
 static void opensex_h_qid(database_handle_t *db, const char *type)
@@ -908,34 +878,11 @@ static void opensex_h_ql(database_handle_t *db, const char *type)
 
 	if (id)
 		q->number = id;
-
-	rs->nql++;
 }
 
-static void opensex_h_de(database_handle_t *db, const char *type)
+static void opensex_ignore_row(database_handle_t *db, const char *type)
 {
-	opensex_t *rs = (opensex_t *)db->priv;
-	unsigned int nmu, nmc, nca, nkl, nxl, nql;
-
-	nmu = db_sread_uint(db);
-	nmc = db_sread_uint(db);
-	nca = db_sread_uint(db);
-	nkl = db_sread_uint(db);
-	nxl = db_sread_uint(db);
-	nql = db_sread_uint(db);
-
-	if (nmu != rs->nmu)
-		slog(LG_ERROR, "db-h-de: got %d myusers; expected %d", rs->nmu, nmu);
-	if (nmc != rs->nmc)
-		slog(LG_ERROR, "db-h-de: got %d mychans; expected %d", rs->nmc, nmc);
-	if (nca != rs->nca)
-		slog(LG_ERROR, "db-h-de: got %d chanacs; expected %d", rs->nca, nca);
-	if (nkl != rs->nkl)
-		slog(LG_ERROR, "db-h-de: got %d klines; expected %d", rs->nkl, nkl);
-	if (nxl != rs->nxl)
-		slog(LG_ERROR, "db-h-de: got %d xlines; expected %d", rs->nxl, nxl);
-	if (nql != rs->nql)
-		slog(LG_ERROR, "db-h-de: got %d qlines; expected %d", rs->nql, nql);
+	return;
 }
 
 /***************************************************************************************************/
@@ -945,8 +892,6 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 	int c = 0;
 	unsigned int n = 0;
 	opensex_t *rs = (opensex_t *)hdl->priv;
-
-	rs->token = NULL;
 
 	while ((c = getc(rs->f)) != EOF && c != '\n')
 	{
@@ -958,6 +903,7 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 		}
 	}
 	rs->buf[n] = '\0';
+	rs->token = rs->buf;
 
 	if (c == EOF && ferror(rs->f))
 	{
@@ -977,15 +923,92 @@ static bool opensex_read_next_row(database_handle_t *hdl)
 static const char *opensex_read_word(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	char *res = strtok_r((db->token ? NULL : rs->buf), " ", &rs->token);
+	char *ptr = rs->token;
+	char *res;
+	static char buf[BUFSIZE];
+
+	switch (rs->grver)
+	{
+	case 2:
+		res = rs->token;
+
+		ptr = strchr(res, '(');
+		if (ptr != NULL)
+		{
+			char *bi, *pi;
+			bool escaped = false;
+
+			ptr++;
+			for (bi = buf, pi = ptr; *pi != '\0' && (bi - buf) < sizeof buf; pi++)
+			{
+				switch (*pi)
+				{
+				case '\\':
+					escaped = true;
+					pi++;
+					break;
+				case ')':
+					if (!escaped)
+						goto demarshal_out;
+				default:
+					*bi++ = *pi;
+					escaped = false;
+					break;
+				}
+			}
+demarshal_out:
+			*bi++ = '\0';
+			rs->token = pi;
+			res = buf;
+			slog(LG_DEBUG, "opensex_read_word(): read [%s], pi [%s]", res, pi);
+		}
+		else
+			rs->token = NULL;
+
+		break;
+	case 1:
+	default:
+		res = rs->token;
+
+		ptr = strchr(res, ' ');
+		if (ptr != NULL)
+		{
+			*ptr++ = '\0';
+			rs->token = ptr;
+		}
+		else
+			rs->token = NULL;
+
+		break;
+	}
+
 	db->token++;
+
 	return res;
 }
 
 static const char *opensex_read_str(database_handle_t *db)
 {
 	opensex_t *rs = (opensex_t *)db->priv;
-	char *res = strtok_r((db->token ? NULL : rs->buf), "", &rs->token);
+	char *res;
+
+	switch (rs->grver)
+	{
+	case 2:
+		/*
+		 * no special handling needed for strings verses words.  all words are strings,
+		 * and all types derive from word, so all cells are encapsulated.
+		 */
+		return opensex_read_word(db);
+	case 1:
+	default:
+		/* rs->token will be pointing at the next cell always, and in grammar version 1
+		 * we just eat the remaining line if it's a multi-word cell. --nenolod
+		 */
+		res = rs->token;
+		break;
+	}
+
 	db->token++;
 	return res;
 }
@@ -1031,68 +1054,97 @@ static bool opensex_start_row(database_handle_t *db, const char *type)
 	return_val_if_fail(type != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "%s ", type);
+	switch (rs->grver)
+	{
+	case 2:
+		fprintf(rs->f, "(%s)", type);
+		break;
+	case 1:
+	default:
+		fprintf(rs->f, "%s ", type);
+		break;
+	}
+
+	return true;
+}
+
+static bool opensex_write_cell(database_handle_t *db, const char *data, bool multiword)
+{
+	opensex_t *rs;
+	char buf[BUFSIZE], *bi;
+	const char *i;
+
+	return_val_if_fail(db != NULL, false);
+	rs = (opensex_t *)db->priv;
+
+	switch (rs->grver)
+	{
+	case 2:
+		if (data == NULL)
+		{
+			fprintf(rs->f, "(*)");
+			break;
+		}
+
+		bi = buf;
+		*bi++ = '(';
+
+		for (i = data; *i != '\0'; i++)
+		{
+			switch (*i)
+			{
+			case '(':
+			case ')':
+				*bi++ = '\\';
+			default:
+				*bi++ = *i;
+				break;
+			}
+		}
+
+		*bi++ = ')';
+		*bi++ = '\0';
+
+		fprintf(rs->f, "%s", buf);
+		break;
+	case 1:
+	default:
+		fprintf(rs->f, "%s%s", data != NULL ? data : "*", !multiword ? " " : "");
+		break;
+	}
 
 	return true;
 }
 
 static bool opensex_write_word(database_handle_t *db, const char *word)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%s ", word ? word : "*");
-
-	return true;
+	return opensex_write_cell(db, word, false);
 }
 
 static bool opensex_write_str(database_handle_t *db, const char *word)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%s", word ? word : "*");
-
-	return true;
+	return opensex_write_cell(db, word, true);
 }
 
 static bool opensex_write_int(database_handle_t *db, int num)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%d ", num);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%d", num);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_write_uint(database_handle_t *db, unsigned int num)
 {
-	opensex_t *rs;
-
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%u ", num);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%u", num);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_write_time(database_handle_t *db, time_t tm)
 {
-	opensex_t *rs;
-	return_val_if_fail(db != NULL, false);
-	rs = (opensex_t *)db->priv;
-
-	fprintf(rs->f, "%lu ", (unsigned long)tm);
-
-	return true;
+	char buf[32];
+	snprintf(buf, sizeof buf, "%lu", tm);
+	return opensex_write_cell(db, buf, false);
 }
 
 static bool opensex_commit_row(database_handle_t *db)
@@ -1102,7 +1154,14 @@ static bool opensex_commit_row(database_handle_t *db)
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	fprintf(rs->f, "\n");
+	switch (rs->grver)
+	{
+	case 1:
+	case 2:
+	default:
+		fprintf(rs->f, "\n");
+		break;
+	}
 
 	return true;
 }
@@ -1154,6 +1213,7 @@ static database_handle_t *opensex_db_open_read(const char *filename)
 	}
 
 	rs = scalloc(sizeof(opensex_t), 1);
+	rs->grver = 1;
 	rs->buf = scalloc(512, 1);
 	rs->bufsize = 512;
 	rs->token = NULL;
@@ -1194,6 +1254,11 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 
 	rs = scalloc(sizeof(opensex_t), 1);
 	rs->f = f;
+#ifndef EXPERIMENTAL
+	rs->grver = 1;
+#else
+	rs->grver = 2;
+#endif
 
 	db = scalloc(sizeof(database_handle_t), 1);
 	db->priv = rs;
@@ -1285,8 +1350,9 @@ void _modinit(module_t *m)
 	db_load = &opensex_db_load;
 	db_save = &opensex_db_write;
 
+	db_register_type_handler("GRVER", opensex_h_grver);
 	db_register_type_handler("DBV", opensex_h_dbv);
-	db_register_type_handler("MDEP", opensex_h_mdep);
+	db_register_type_handler("MDEP", opensex_ignore_row);
 	db_register_type_handler("LUID", opensex_h_luid);
 	db_register_type_handler("CF", opensex_h_cf);
 	db_register_type_handler("MU", opensex_h_mu);
@@ -1313,7 +1379,7 @@ void _modinit(module_t *m)
 	db_register_type_handler("QID", opensex_h_qid);
 	db_register_type_handler("QL", opensex_h_ql);
 
-	db_register_type_handler("DE", opensex_h_de);
+	db_register_type_handler("DE", opensex_ignore_row);
 
 	db_register_type_handler("???", opensex_h_unknown);
 

@@ -148,6 +148,14 @@ typedef enum faultcode_ faultcode_t;
 		continue;						\
 	}
 
+/* strshare.c - stringref management */
+typedef const char *stringref;
+
+void strshare_init(void);
+stringref strshare_get(const char *str);
+stringref strshare_ref(stringref str);
+void strshare_unref(stringref str);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

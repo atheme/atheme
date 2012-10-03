@@ -831,7 +831,7 @@ void handle_eob(server_t *s)
  */
 int floodcheck(user_t *u, user_t *t)
 {
-	char *from;
+	const char *from;
 	static time_t last_ignore_notice = 0;
 	unsigned int reduction;
 

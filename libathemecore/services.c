@@ -171,7 +171,7 @@ void introduce_enforcer(const char *nick)
 }
 
 /* join a channel, creating it if necessary */
-void join(char *chan, char *nick)
+void join(const char *chan, const char *nick)
 {
 	channel_t *c;
 	user_t *u;
@@ -223,7 +223,7 @@ void join(char *chan, char *nick)
 }
 
 /* part a channel */
-void part(char *chan, char *nick)
+void part(const char *chan, const char *nick)
 {
 	channel_t *c = channel_find(chan);
 	user_t *u = user_find_named(nick);
@@ -254,7 +254,7 @@ void services_init(void)
 	}
 }
 
-void joinall(char *name)
+void joinall(const char *name)
 {
 	service_t *svs;
 	mowgli_patricia_iteration_state_t state;
@@ -271,7 +271,7 @@ void joinall(char *name)
 	}
 }
 
-void partall(char *name)
+void partall(const char *name)
 {
 	mowgli_patricia_iteration_state_t state;
 	service_t *svs;
@@ -394,7 +394,7 @@ void handle_nickchange(user_t *u)
  *    server confirms EOB
  * -- jilles
  */
-void handle_burstlogin(user_t *u, char *login, time_t ts)
+void handle_burstlogin(user_t *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;
@@ -460,7 +460,7 @@ void handle_burstlogin(user_t *u, char *login, time_t ts)
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
-void handle_setlogin(sourceinfo_t *si, user_t *u, char *login, time_t ts)
+void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts)
 {
 	mynick_t *mn;
 	myuser_t *mu;

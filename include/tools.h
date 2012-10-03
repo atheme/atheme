@@ -156,12 +156,6 @@ E const char *uinttobase64(char *buf, uint64_t v, int64_t count);
 E unsigned int base64touint(const char *buf);
 E void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
 
-/* strshare.c */
-void strshare_init(void);
-char *strshare_get(const char *str);
-char *strshare_ref(char *str);
-void strshare_unref(char *str);
-
 /* sharedheap.c */
 E mowgli_heap_t *sharedheap_get(size_t size);
 E void sharedheap_unref(mowgli_heap_t *heap);

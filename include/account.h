@@ -72,8 +72,9 @@ struct myuser_
 {
   myentity_t ent;
   char pass[PASSLEN];
-  char *email;
-  char *email_canonical;
+
+  stringref email;
+  stringref email_canonical;
 
   mowgli_list_t logins; /* user_t's currently logged in to this */
   time_t registered;
@@ -82,7 +83,7 @@ struct myuser_
   soper_t *soper;
 
   unsigned int flags;
-  
+
   mowgli_list_t memos; /* store memos */
   unsigned short memoct_new;
   unsigned short memo_ratelimit_num; /* memos sent recently */
@@ -91,7 +92,7 @@ struct myuser_
 
   mowgli_list_t access_list;
   mowgli_list_t nicks; /* registered nicks, must include mu->name if nonempty */
-  
+
   language_t *language;
 
   mowgli_list_t cert_fingerprints;
@@ -147,7 +148,7 @@ struct mycertfp_
   myuser_t *mu;
 
   char *certfp;
-  
+
   mowgli_node_t node;
 };
 
@@ -155,7 +156,7 @@ struct mychan_
 {
   object_t parent;
 
-  char *name;
+  stringref name;
 
   channel_t *chan;
   mowgli_list_t chanacs;
@@ -206,7 +207,7 @@ struct chanacs_
 	mowgli_node_t    cnode;
 	mowgli_node_t    unode;
 
-	char *setter;
+	stringref setter;
 };
 
 /* the new atheme-style channel flags */
