@@ -41,6 +41,7 @@ E void servtree_init(void);
 E service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
 E service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
 E void service_delete(service_t *sptr);
+E service_t *service_find_any(void);
 E service_t *service_find(const char *name);
 E service_t *service_find_nick(const char *nick);
 E char *service_name(char *name);
