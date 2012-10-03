@@ -255,7 +255,13 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 		if (svs == NULL)
 			svs = service_find("operserv");
 
-		msg(svs->me->nick, c->name, "%s", (buf + targetlen));
+		if (svs == NULL)
+			svs = service_find_any();
+
+		if (svs != NULL && svs->me != NULL)
+			msg(svs->me->nick, c->name, "%s", (buf + targetlen));
+		else
+			wallops("%s", (buf + targetlen));
 	}
 }
 
