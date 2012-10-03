@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 );
 
 struct logoninfo_ {
-        char *nick;
+        stringref nick;
         char *subject;
         time_t info_ts;
         char *story;
@@ -33,7 +33,7 @@ typedef struct logoninfo_ logoninfo_t;
 mowgli_list_t logon_info;
 
 struct operlogoninfo_ {
-        char *nick;
+        stringref nick;
         char *subject;
         time_t info_ts;
         char *story;
