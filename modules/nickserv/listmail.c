@@ -33,7 +33,7 @@ struct listmail_state
 {
 	sourceinfo_t *origin;
 	char *pattern;
-	char *email_canonical;
+	stringref email_canonical;
 	int matches;
 };
 

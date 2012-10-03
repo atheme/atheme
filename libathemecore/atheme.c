@@ -250,9 +250,7 @@ void atheme_setup(void)
 	init_newconf();
 	servtree_init();
 
-	hook_add_event("email_canonicalize");
-	hook_add_email_canonicalize(canonicalize_email_case);
-	/* No need for canonicalize_emails(), no accounts exist yet. */
+	register_email_canonicalizer(canonicalize_email_case, NULL);
 
 	modules_init();
 	pcommand_init();

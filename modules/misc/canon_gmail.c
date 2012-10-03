@@ -16,15 +16,18 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void canonicalize_gmail(hook_email_canonicalize_t *data)
+static stringref canonicalize_gmail(stringref email, void *user_data)
 {
-	char *p, *p_out, *p_at;
+	static char buf[BUFSIZE];
+	const char *p, *p_at;
+	char *p_out;
+	stringref result;
 
-	p_at = strchr(data->email, '@');
+	p_at = strchr(email, '@');
 	if (!p_at || strcasecmp(p_at, "@gmail.com"))
-		return;
+		return email;
 
-	for (p = p_out = data->email; p < p_at; p++) {
+	for (p = email, p_out = buf; p < p_at; p++) {
 		if (*p == '.')
 			continue;
 
@@ -35,17 +38,19 @@ static void canonicalize_gmail(hook_email_canonicalize_t *data)
 	}
 
 	strcpy(p_out, "@gmail.com");
+
+	result = strshare_get(buf);
+	strshare_unref(email);
+
+	return result;
 }
 
 void _modinit(module_t *m)
 {
-	hook_add_event("email_canonicalize");
-	hook_add_email_canonicalize(canonicalize_gmail);
-	canonicalize_emails();
+	register_email_canonicalizer(canonicalize_gmail, NULL);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	hook_del_email_canonicalize(canonicalize_gmail);
-	canonicalize_emails();
+	unregister_email_canonicalizer(canonicalize_gmail, NULL);
 }

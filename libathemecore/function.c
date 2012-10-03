@@ -275,10 +275,12 @@ int validemail(const char *email)
 	return valid;
 }
 
+static mowgli_list_t email_canonicalizers;
+
 /* Re-canonicalize email addresses.
  * Call this after adding or removing an email_canonicalize hook.
  */
-void canonicalize_emails()
+static void canonicalize_emails()
 {
 	myentity_iteration_state_t state;
 	myentity_t *mt;
@@ -292,29 +294,73 @@ void canonicalize_emails()
 	}
 }
 
-/* Canonicalize an email address.
- * The returned string is strshare'd, free with strshare_unref.
- */
-char *canonicalize_email(const char *email)
+void
+register_email_canonicalizer(email_canonicalizer_t func, void *user_data)
 {
-	hook_email_canonicalize_t hdata;
-	char *result;
+	email_canonicalizer_item_t *item;
+
+	item = smalloc(sizeof(email_canonicalizer_item_t));
+	item->func = func;
+	item->user_data = user_data;
+
+	mowgli_node_add(item, &item->node, &email_canonicalizers);
+
+	canonicalize_emails();
+}
+
+void
+unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data)
+{
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, email_canonicalizers.head)
+	{
+		email_canonicalizer_item_t *item = n->data;
+
+		if (item->func == func && item->user_data == user_data)
+		{
+			mowgli_node_delete(&item->node, &email_canonicalizers);
+			free(item);
+
+			canonicalize_emails();
+
+			return;
+		}
+	}
+}
+
+stringref canonicalize_email(const char *email)
+{
+	mowgli_node_t *n, *tn;
+	stringref result;
 
 	if (email == NULL)
 		return NULL;
 
-	hdata.email = sstrdup(email);
-	hook_call_email_canonicalize(&hdata);
+	result = strshare_get(email);
 
-	result = strshare_get(hdata.email);
-	free(hdata.email);
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, email_canonicalizers.head)
+	{
+		email_canonicalizer_item_t *item = n->data;
+
+		result = item->func(result, item->user_data);
+	}
 
 	return result;
 }
 
-void canonicalize_email_case(hook_email_canonicalize_t *data)
+stringref canonicalize_email_case(stringref email, void *user_data)
 {
-	strcasecanon(data->email);
+	static char buf[BUFSIZE];
+	stringref result;
+
+	mowgli_strlcpy(buf, email, sizeof buf);
+	strcasecanon(buf);
+
+	result = strshare_get(buf);
+	strshare_unref(email);
+
+	return result;
 }
 
 bool email_within_limits(const char *email)
@@ -323,7 +369,7 @@ bool email_within_limits(const char *email)
 	myentity_iteration_state_t state;
 	myentity_t *mt;
 	unsigned int tcnt = 0;
-	char *email_canonical;
+	stringref email_canonical;
 	bool result = true;
 
 	if (me.maxusers <= 0)
