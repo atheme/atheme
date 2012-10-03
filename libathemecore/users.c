@@ -600,14 +600,16 @@ void user_mode(user_t *user, const char *modes)
  * Side Effects:
  *     - virtual host is set
  */
-void user_sethost(user_t *source, user_t *target, const char *host)
+void user_sethost(user_t *source, user_t *target, stringref host)
 {
 	return_if_fail(source != NULL);
 	return_if_fail(target != NULL);
 	return_if_fail(host != NULL);
 
-	sethost_sts(source, target, host);
+	strshare_unref(target->vhost);
+	target->vhost = strshare_get(host);
 
+	sethost_sts(source, target, host);
 	hook_call_user_sethost(target);
 }
 
