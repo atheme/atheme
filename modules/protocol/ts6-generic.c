@@ -461,7 +461,7 @@ static void ts6_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 			(unsigned long)u->ts);
 }
 
-static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
 {
 	user_t *tu = user_find(target);
 	server_t *s;

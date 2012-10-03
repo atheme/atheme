@@ -674,7 +674,7 @@ static void unreal_sasl_sts(char *target, char mode, char *data)
 	sts(":%s SASL %s %s %c %s", saslserv->me->nick, servermask, target, mode, data);
 }
 
-static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
 {
 	char servermask[BUFSIZE], *p;
 	service_t *saslserv;

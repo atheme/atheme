@@ -677,7 +677,7 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 	}
 }
 
-static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
 {
 	user_t *tu = user_find(target);
 
