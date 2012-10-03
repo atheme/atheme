@@ -395,6 +395,15 @@ service_t *service_add_static(const char *name, const char *user, const char *ho
 	return sptr;
 }
 
+service_t *service_find_any(void)
+{
+	service_t *sptr;
+	mowgli_patricia_iteration_state_t state;
+
+	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
+		return sptr;
+}
+
 service_t *service_find(const char *name)
 {
 	return mowgli_patricia_retrieve(services_name, name);
