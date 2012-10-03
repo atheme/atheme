@@ -33,7 +33,7 @@ command_t hs_take = { "TAKE", N_("Take an offered vhost for use."), AC_AUTHENTIC
 struct hsoffered_ {
 	char *vhost;
 	time_t vhost_ts;
-	char *creator;
+	stringref creator;
 	myentity_t *group;
 };
 

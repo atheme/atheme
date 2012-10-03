@@ -213,7 +213,7 @@ static void osinfo_hook(sourceinfo_t *si)
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *host = parv[0];
-	char *target;
+	const char *target;
 	mynick_t *mn;
 	mowgli_node_t *n;
 	hsreq_t *l;
