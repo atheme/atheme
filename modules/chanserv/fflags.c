@@ -34,9 +34,9 @@ void _moddeinit(module_unload_intent_t intent)
 /* FFLAGS <channel> <user> <flags> */
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *channel = parv[0];
-	char *target = parv[1];
-	char *flagstr = parv[2];
+	const char *channel = parv[0];
+	const char *target = parv[1];
+	const char *flagstr = parv[2];
 	mychan_t *mc;
 	myentity_t *mt;
 	unsigned int addflags, removeflags;

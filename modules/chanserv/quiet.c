@@ -275,8 +275,8 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 
 static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 {
-        char *channel = parv[0];
-        char *target = parv[1];
+        const char *channel = parv[0];
+        const char *target = parv[1];
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;

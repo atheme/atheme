@@ -32,8 +32,8 @@ void _moddeinit(module_unload_intent_t intent)
 
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = parv[0];
-	char *targ = parv[1];
+	const char *chan = parv[0];
+	const char *targ = parv[1];
 	mychan_t *mc;
 	user_t *u;
 	myuser_t *mu;

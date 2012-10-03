@@ -48,7 +48,7 @@ mowgli_list_t akickdel_list;
 mowgli_patricia_t *cs_akick_cmds;
 mowgli_eventloop_timer_t *akick_timeout_check_timer = NULL;
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *host, time_t expireson);
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, const char *host, time_t expireson);
 
 mowgli_heap_t *akick_timeout_heap;
 
@@ -723,7 +723,7 @@ void akick_timeout_check(void *arg)
 	}
 }
 
-static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, char *host, time_t expireson)
+static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, const char *host, time_t expireson)
 {
 	mowgli_node_t *n;
 	akick_timeout_t *timeout, *timeout2;
