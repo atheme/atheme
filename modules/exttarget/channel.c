@@ -18,7 +18,7 @@ static mowgli_patricia_t **exttarget_tree = NULL;
 
 typedef struct {
 	myentity_t parent;
-	char *channel;
+	stringref channel;
 } channel_exttarget_t;
 
 static chanacs_t *channel_ext_match_user(chanacs_t *ca, user_t *u)
