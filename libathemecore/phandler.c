@@ -53,7 +53,7 @@ void (*ircd_on_login) (user_t *u, myuser_t *account, const char *wantedhost) = g
 bool (*ircd_on_logout) (user_t *u, const char *account) = generic_on_logout;
 void (*jupe) (const char *server, const char *reason) = generic_jupe;
 void (*sethost_sts) (user_t *source, user_t *target, const char *host) = generic_sethost_sts;
-void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
+void (*fnc_sts) (user_t *source, user_t *u, const char *newnick, int type) = generic_fnc_sts;
 void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
 void (*svslogin_sts) (char *target, char *nick, char *user, char *host, stringref login) = generic_svslogin_sts;
@@ -244,7 +244,7 @@ void generic_sethost_sts(user_t *source, user_t *target, const char *host)
 	/* nothing to do here. */
 }
 
-void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+void generic_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
 	if (type == FNC_FORCE) /* XXX this does not work properly */
 		kill_id_sts(source, CLIENT_NAME(u), "Nickname enforcement");

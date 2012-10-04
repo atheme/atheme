@@ -379,7 +379,7 @@ static void bahamut_jupe(const char *server, const char *reason)
 		sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void bahamut_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+static void bahamut_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
 			(unsigned long)(CURRTIME - 60));

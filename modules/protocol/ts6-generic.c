@@ -451,7 +451,7 @@ static void ts6_sethost_sts(user_t *source, user_t *target, const char *host)
 		sts(":%s ENCAP * CHGHOST %s :%s", ME, target->nick, host);
 }
 
-static void ts6_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+static void ts6_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
 	/* XXX assumes the server will accept this -- jilles */
 	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,

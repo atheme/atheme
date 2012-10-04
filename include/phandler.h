@@ -205,7 +205,7 @@ E void (*sethost_sts)(user_t *source, user_t *target, const char *host);
  * FNC_REGAIN: give a registered user their nick back
  * FNC_FORCE:  force a user off their nick (kill if unsupported)
  */
-E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
+E void (*fnc_sts)(user_t *source, user_t *u, const char *newnick, int type);
 /* temporarily make a nick unavailable to users
  * source is the responsible service
  * duration is in seconds, 0 to remove the effect of a previous call
@@ -264,7 +264,7 @@ E void generic_on_login(user_t *u, myuser_t *account, const char *wantedhost);
 E bool generic_on_logout(user_t *u, const char *account);
 E void generic_jupe(const char *server, const char *reason);
 E void generic_sethost_sts(user_t *source, user_t *target, const char *host);
-E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
+E void generic_fnc_sts(user_t *source, user_t *u, const char *newnick, int type);
 E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account);
 E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login);
 E void generic_sasl_sts(char *target, char mode, char *data);

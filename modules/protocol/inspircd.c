@@ -641,7 +641,7 @@ static void inspircd_sethost_sts(user_t *source, user_t *target, const char *hos
 		slog(LG_INFO, "VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
 }
 
-static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+static void inspircd_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
 	/* svsnick can only be sent by a server */
 	sts(":%s SVSNICK %s %s %lu", me.numeric, u->uid, newnick,
