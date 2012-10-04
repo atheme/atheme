@@ -171,8 +171,8 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
-	char *target = parv[0];
-	char *password = parv[1];
+	const char *target = parv[0];
+	const char *password = parv[1];
 	user_t *u;
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;
@@ -269,8 +269,8 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
-	char *target = parv[0];
-	char *password = parv[1];
+	const char *target = parv[0];
+	const char *password = parv[1];
 	user_t *u;
 	mowgli_node_t *n, *tn;
 	enforce_timeout_t *timeout;

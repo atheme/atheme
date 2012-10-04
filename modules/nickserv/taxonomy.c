@@ -31,7 +31,7 @@ void _moddeinit(module_unload_intent_t intent)
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *target = parv[0];
+	const char *target = parv[0];
 	myuser_t *mu;
 	mowgli_patricia_iteration_state_t state;
 	bool isoper;

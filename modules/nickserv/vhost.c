@@ -38,13 +38,10 @@ void _moddeinit(module_unload_intent_t intent)
 }
 
 
-static void do_sethost(user_t *u, char *host)
+static void do_sethost(user_t *u, const char *host)
 {
 	if (!strcmp(u->vhost, host))
 		return;
-
-	strshare_unref(u->vhost);
-	u->vhost = strshare_get(host);
 
 	user_sethost(nicksvs.me->me, u, u->vhost);
 }
