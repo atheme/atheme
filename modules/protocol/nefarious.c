@@ -197,7 +197,7 @@ static void nefarious_quarantine_sts(user_t *source, user_t *victim, long durati
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	char *source;
+	const char *source;
 	time_t ts = 0;
 
 	if (!c)

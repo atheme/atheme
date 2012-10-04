@@ -330,7 +330,7 @@ static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, s
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	char *source;
+	const char *source;
 	time_t ts = 0;
 
 	if (!c)
