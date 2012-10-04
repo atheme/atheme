@@ -624,7 +624,7 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 		si->service->handler(si, 2, vec);
 }
 
-void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, char *topic)
+void handle_topic_from(sourceinfo_t *si, channel_t *c, const char *setter, time_t ts, const char *topic)
 {
 	hook_channel_topic_check_t hdata;
 

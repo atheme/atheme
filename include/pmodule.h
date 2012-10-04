@@ -50,7 +50,7 @@ E void handle_trace(user_t *, const char *, const char *);
 E void handle_motd(user_t *);
 E void handle_away(user_t *, const char *);
 E void handle_message(sourceinfo_t *, char *, bool, char *);
-E void handle_topic_from(sourceinfo_t *, channel_t *, char *, time_t, char *);
+E void handle_topic_from(sourceinfo_t *, channel_t *, const char *, time_t, const char *);
 E void handle_kill(sourceinfo_t *, const char *, const char *);
 E server_t *handle_server(sourceinfo_t *, const char *, const char *, int, const char *);
 E void handle_eob(server_t *);

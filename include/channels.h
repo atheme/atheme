@@ -115,10 +115,10 @@ typedef struct {
 	user_t *u; /* Online user that changed the topic */
 	server_t *s; /* Server that restored a topic */
         channel_t *c; /* Channel still has old topic */
-        char *setter; /* Stored setter string, can be nick, nick!user@host
-			 or server */
+        const char *setter; /* Stored setter string, can be nick, nick!user@host
+			       or server */
 	time_t ts; /* Time the topic was changed */
-	char *topic; /* New topic */
+	const char *topic; /* New topic */
 	int approved; /* Write non-zero here to cancel the change */
 } hook_channel_topic_check_t;
 
