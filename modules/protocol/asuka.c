@@ -300,6 +300,7 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 static void check_hidehost(user_t *u)
 {
 	static bool warned = false;
+	char buf[HOSTLEN + 1];
 
 	/* do they qualify? */
 	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
@@ -319,8 +320,12 @@ static void check_hidehost(user_t *u)
 		}
 		return;
 	}
-	snprintf(u->vhost, sizeof u->vhost, "%s.%s", entity(u->myuser)->name,
-			me.hidehostsuffix);
+
+	snprintf(buf, sizeof buf, "%s.%s", entity(u->myuser)->name, me.hidehostsuffix);
+
+	strshare_unref(u->vhost);
+	u->vhost = strshare_get(buf);
+
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
