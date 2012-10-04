@@ -119,7 +119,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *token = strtok(parv[1], " ");
 	char star[] = "*";
-	char *kuser, *khost;
+	const char *kuser, *khost;
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
@@ -214,7 +214,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		char *p;
+		const char *p;
 		int i = 0;
 
 		kuser = collapse(strtok(target, "@"));
