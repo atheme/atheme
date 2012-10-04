@@ -55,8 +55,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u = si->su;
 	myuser_t *mu;
 	mowgli_node_t *n, *tn;
-	char *target = parv[0];
-	char *password = parv[1];
+	const char *target = parv[0];
+	const char *password = parv[1];
 	char lau[BUFSIZE];
 
 	if (si->su == NULL)

@@ -37,9 +37,9 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mynick_t *mn = NULL;
 	mowgli_node_t *n;
-	char *account;
-	char *pass;
-	char *email;
+	const char *account;
+	const char *pass;
+	const char *email;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	hook_user_register_check_t hdata;
 	hook_user_req_t req;
