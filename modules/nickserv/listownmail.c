@@ -29,34 +29,11 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_listownmail);
 }
 
-struct listmail_state
-{
-	sourceinfo_t *origin;
-	char *pattern;
-	int matches;
-};
-
-static int listmail_foreach_cb(myentity_t *mt, void *privdata)
-{
-	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = user(mt);
-
-	if (!strcasecmp(state->pattern, mu->email))
-	{
-		/* in the future we could add a LIMIT parameter */
-		if (state->matches == 0)
-			command_success_nodata(state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
-
-		command_success_nodata(state->origin, "- %s (%s)", entity(mu)->name, mu->email);
-		state->matches++;
-	}
-
-	return 0;
-}
-
 static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 {
-	struct listmail_state state;
+	myentity_t *mt;
+	myentity_iteration_state_t state;
+	unsigned int matches;
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
@@ -77,14 +54,26 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 
 	command_add_flood(si, FLOOD_HEAVY);
 
-	state.matches = 0;
-	state.pattern = si->smu->email;
-	state.origin = si;
-	myentity_foreach_t(ENT_USER, listmail_foreach_cb, &state);
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		myuser_t *mu = user(mt);
 
-	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%d\2 matches)", si->smu->email, state.matches);
+		continue_if_fail(mu != NULL);
+
+		if (!strcasecmp(si->smu->email, mu->email))
+		{
+			/* in the future we could add a LIMIT parameter */
+			if (matches == 0)
+				command_success_nodata(si, "Accounts matching e-mail address \2%s\2:", si->smu->email);
+
+			command_success_nodata(si, "- %s (%s)", entity(mu)->name, mu->email);
+			matches++;
+		}
+	}
+
+	logcommand(si, CMDLOG_GET, "LISTOWNMAIL: \2%s\2 (\2%d\2 matches)", si->smu->email, matches);
 	command_success_nodata(si, ngettext(N_("\2%d\2 match for e-mail address \2%s\2"),
-					    N_("\2%d\2 matches for e-mail address \2%s\2"), state.matches), state.matches, si->smu->email);
+					    N_("\2%d\2 matches for e-mail address \2%s\2"), matches), matches, si->smu->email);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
