@@ -34,7 +34,7 @@ command_t helpserv_close = { "CLOSE", N_("Close a users' help request."), PRIV_H
 command_t helpserv_cancel = { "CANCEL", N_("Cancel your own pending help request."), AC_AUTHENTICATED, 1, helpserv_cmd_cancel, { .path = "helpserv/cancel" } };
 
 struct ticket_ {
-	char *nick;
+	stringref nick;
 	time_t ticket_ts;
 	char *creator;
 	char *topic;
@@ -106,7 +106,7 @@ static void db_h_he(database_handle_t *db, const char *type)
 	const char *topic = db_sread_str(db);
 
 	ticket_t *l = smalloc(sizeof(ticket_t));
-	l->nick = sstrdup(nick);
+	l->nick = strshare_get(nick);
 	l->ticket_ts = ticket_ts;
 	l->creator = sstrdup(creator);
 	l->topic = sstrdup(topic);
@@ -127,7 +127,7 @@ static void account_drop_request(myuser_t *mu)
 
                         mowgli_node_delete(n, &helpserv_reqlist);
 
-                        free(l->nick);
+                        strshare_unref(l->nick);
                         free(l->creator);
                         free(l->topic);
                         free(l);
@@ -151,7 +151,7 @@ static void account_delete_request(myuser_t *mu)
 
                         mowgli_node_delete(n, &helpserv_reqlist);
 
-                        free(l->nick);
+                        strshare_unref(l->nick);
                         free(l->creator);
                         free(l->topic);
                         free(l);
@@ -164,8 +164,7 @@ static void account_delete_request(myuser_t *mu)
 /* REQUEST <topic> */
 static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *topic = parv[0];
-	char *target;
+	const char *topic = parv[0];
 	mowgli_node_t *n;
 	ticket_t *l;
 
@@ -185,14 +184,12 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	if ((unsigned int)(CURRTIME - ratelimit_firsttime) > config_options.ratelimit_period)
 		ratelimit_count = 0, ratelimit_firsttime = CURRTIME;
 
-	target = entity(si->smu)->name;
-
 	/* search for it */
 	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
 		l = n->data;
 
-		if (!irccasecmp(l->nick, target))
+		if (!irccasecmp(l->nick, entity(si->smu)->name))
 		{
 			if (!strcmp(topic, l->topic))
 			{
@@ -224,7 +221,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	l = smalloc(sizeof(ticket_t));
-	l->nick = sstrdup(target);
+	l->nick = strshare_ref(entity(si->smu)->name);
 	l->ticket_ts = CURRTIME;;
 	l->creator = sstrdup(get_source_name(si));
 	l->topic = sstrdup(topic);
@@ -267,7 +264,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 			mowgli_node_delete(n, &helpserv_reqlist);
 
-			free(l->nick);
+			strshare_unref(l->nick);
 			free(l->creator);
 			free(l->topic);
 			free(l);
@@ -306,19 +303,16 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
 {
         ticket_t *l;
         mowgli_node_t *n;
-        char *target;
-
-        target = entity(si->smu)->name;
 
         MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
         {
                 l = n->data;
 
-                if (!irccasecmp(l->nick, target))
+                if (!irccasecmp(l->nick, entity(si->smu)->name))
                 {
                         mowgli_node_delete(n, &helpserv_reqlist);
 
-                        free(l->nick);
+                        strshare_unref(l->nick);
                         free(l->creator);
                         free(l->topic);
                         free(l);
