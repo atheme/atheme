@@ -99,7 +99,7 @@ E void logcommand_external(service_t *svs, const char *type, connection_t *sourc
 
 /* function.c */
 
-typedef stringref (*email_canonicalizer_t)(stringref email, void *user_data);
+typedef void (*email_canonicalizer_t)(char email[EMAILLEN + 1], void *user_data);
 
 typedef struct {
 	email_canonicalizer_t func;
@@ -114,7 +114,7 @@ E char *replace(char *s, int size, const char *old, const char *new);
 E const char *number_to_string(int num);
 E int validemail(const char *email);
 E stringref canonicalize_email(const char *email);
-E stringref canonicalize_email_case(stringref email, void *user_data);
+E void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data);
 E void register_email_canonicalizer(email_canonicalizer_t func, void *user_data);
 E void unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data);
 E bool email_within_limits(const char *email);

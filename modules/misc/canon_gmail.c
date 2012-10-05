@@ -16,16 +16,16 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static stringref canonicalize_gmail(stringref email, void *user_data)
+static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 {
-	static char buf[BUFSIZE];
+	static char buf[EMAILLEN + 1];
 	const char *p, *p_at;
 	char *p_out;
 	stringref result;
 
 	p_at = strchr(email, '@');
 	if (!p_at || strcasecmp(p_at, "@gmail.com"))
-		return email;
+		return;
 
 	for (p = email, p_out = buf; p < p_at; p++) {
 		if (*p == '.')
@@ -37,12 +37,16 @@ static stringref canonicalize_gmail(stringref email, void *user_data)
 		*p_out++ = *p;
 	}
 
+	/* Note the string handling here relies on the email addressed
+	 * passed in being at most EMAILLEN long, and the canonical
+	 * address being at most equally long. That is true for the
+	 * loop above, but if we start mapping equivalent domains here
+	 * be careful not to overflow the buffer.
+	 */
+
 	strcpy(p_out, "@gmail.com");
 
-	result = strshare_get(buf);
-	strshare_unref(email);
-
-	return result;
+	strcpy(email, buf);
 }
 
 void _modinit(module_t *m)

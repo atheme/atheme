@@ -332,35 +332,26 @@ unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data)
 stringref canonicalize_email(const char *email)
 {
 	mowgli_node_t *n, *tn;
-	stringref result;
+	char buf[EMAILLEN + 1];
 
 	if (email == NULL)
 		return NULL;
 
-	result = strshare_get(email);
+	mowgli_strlcpy(buf, email, sizeof buf);
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, email_canonicalizers.head)
 	{
 		email_canonicalizer_item_t *item = n->data;
 
-		result = item->func(result, item->user_data);
+		item->func(buf, item->user_data);
 	}
 
-	return result;
+	return strshare_get(buf);
 }
 
-stringref canonicalize_email_case(stringref email, void *user_data)
+void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data)
 {
-	static char buf[BUFSIZE];
-	stringref result;
-
-	mowgli_strlcpy(buf, email, sizeof buf);
-	strcasecanon(buf);
-
-	result = strshare_get(buf);
-	strshare_unref(email);
-
-	return result;
+	strcasecanon(email);
 }
 
 bool email_within_limits(const char *email)
