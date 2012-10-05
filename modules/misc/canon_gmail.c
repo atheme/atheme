@@ -37,7 +37,7 @@ static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 		*p_out++ = *p;
 	}
 
-	/* Note the string handling here relies on the email addressed
+	/* Note the string handling here relies on the email address
 	 * passed in being at most EMAILLEN long, and the canonical
 	 * address being at most equally long. That is true for the
 	 * loop above, but if we start mapping equivalent domains here
