@@ -280,7 +280,7 @@ static mowgli_list_t email_canonicalizers;
 /* Re-canonicalize email addresses.
  * Call this after adding or removing an email_canonicalize hook.
  */
-static void canonicalize_emails()
+static void canonicalize_emails(void)
 {
 	myentity_iteration_state_t state;
 	myentity_t *mt;
