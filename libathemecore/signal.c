@@ -27,7 +27,7 @@
 #include "internal.h"
 #include <signal.h>
 
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 # include <sys/wait.h>
 #endif
 
@@ -101,7 +101,7 @@ signal_usr1_handler(int signum)
 
 void init_signal_handlers(void)
 {
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 #ifdef SIGHUP
 	mowgli_signal_install_handler(SIGHUP, signal_hup_handler);
 #endif
@@ -261,7 +261,7 @@ void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
 
 static void childproc_check(void)
 {
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 	pid_t pid;
 	int status;
 	mowgli_node_t *n;

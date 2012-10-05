@@ -24,9 +24,9 @@
 #include "atheme.h"
 #include "linker.h"
 
-#if defined(__HPUX__)
+#if defined(MOWGLI_OS_HPUX)
 # define PLATFORM_SUFFIX ".sl"
-#elif defined(_WIN32)
+#elif defined(MOWGLI_OS_WIN)
 # define PLATFORM_SUFFIX ".dll"
 #else
 # define PLATFORM_SUFFIX ".so"

@@ -27,7 +27,7 @@
 
 mowgli_list_t connection_list;
 
-#ifdef _WIN32
+#ifdef MOWGLI_OS_WIN
 # define EWOULDBLOCK WSAEWOULDBLOCK
 # define EINPROGRESS WSAEINPROGRESS
 # define SHUT_RDWR   SD_BOTH
@@ -35,7 +35,7 @@ mowgli_list_t connection_list;
 
 static int socket_setnonblocking(mowgli_descriptor_t sck)
 {
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 	int flags;
 
 	slog(LG_DEBUG, "socket_setnonblocking(): setting file descriptor %d as non-blocking", sck);
@@ -129,19 +129,19 @@ connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	/* set connection name */
 	mowgli_strlcpy(cptr->name, name, HOSTLEN);
 
-#ifndef _WIN32
 	if (cptr->fd > -1)
 	{
+#ifndef MOWGLI_OS_WIN
 		cptr->saddr_size = sizeof(cptr->saddr);
 		getpeername(cptr->fd, &cptr->saddr.sa, &cptr->saddr_size);
 
 		inet_ntop(cptr->saddr.sa.sa_family,
 			  &cptr->saddr.sin6.sin6_addr,
 			  cptr->hbuf, BUFSIZE);
+#endif
 
 		socket_setnonblocking(cptr->fd);
 	}
-#endif
 
 	mowgli_node_add(cptr, mowgli_node_create(), &connection_list);
 

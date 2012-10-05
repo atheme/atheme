@@ -340,7 +340,7 @@ int atheme_main(int argc, char *argv[])
 	slog(LG_INFO, "%s is starting up...", PACKAGE_STRING);
 
 	/* check for pid file */
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 	if ((pid_file = fopen(pidfilename, "r")))
 	{
 		if (fgets(buf, 32, pid_file))

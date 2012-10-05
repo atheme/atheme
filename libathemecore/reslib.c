@@ -84,7 +84,7 @@
 #include "res.h"
 #include "reslib.h"
 
-#ifdef _WIN32
+#ifdef MOWGLI_OS_WIN
 # define EMSGSIZE	WSAEMSGSIZE
 #endif
 

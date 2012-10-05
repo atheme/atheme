@@ -544,7 +544,7 @@ bool has_ctrl_chars(const char *text)
 	return false;
 }
 
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 static void sendemail_waited(pid_t pid, int status, void *data)
 {
 	char *email;
@@ -566,7 +566,7 @@ static void sendemail_waited(pid_t pid, int status, void *data)
  */
 int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param)
 {
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 	char *date = NULL;
 	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], buf[BUFSIZE], pathbuf[BUFSIZE];
 	FILE *in, *out;
@@ -767,7 +767,7 @@ float bytes(float x)
 
 int srename(const char *old_fn, const char *new_fn)
 {
-#ifdef _WIN32
+#ifdef MOWGLI_OS_WIN
 	unlink(new_fn);
 #endif
 

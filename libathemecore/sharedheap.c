@@ -78,7 +78,7 @@ static inline size_t sharedheap_prealloc_size(size_t size)
 {
 	size_t page_size, prealloc_size;
 
-#ifndef _WIN32
+#ifndef MOWGLI_OS_WIN
 	page_size = sysconf(_SC_PAGESIZE);
 #else
 	SYSTEM_INFO si;
