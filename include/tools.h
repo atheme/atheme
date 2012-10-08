@@ -99,12 +99,13 @@ E void logcommand_external(service_t *svs, const char *type, connection_t *sourc
 
 /* function.c */
 
-/* The email address is normally updated in-place.
- * Freeing it and storing a new malloc'd string is also allowed.
- */
+typedef void (*email_canonicalizer_t)(char email[EMAILLEN + 1], void *user_data);
+
 typedef struct {
-	char *email;
-} hook_email_canonicalize_t;
+	email_canonicalizer_t func;
+	void *user_data;
+	mowgli_node_t node;
+} email_canonicalizer_item_t;
 
 /* misc string stuff */
 E char *random_string(int sz);
@@ -112,9 +113,10 @@ E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
 E const char *number_to_string(int num);
 E int validemail(const char *email);
-E char *canonicalize_email(const char *email);
-E void canonicalize_emails(void);
-E void canonicalize_email_case(hook_email_canonicalize_t *data);
+E stringref canonicalize_email(const char *email);
+E void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data);
+E void register_email_canonicalizer(email_canonicalizer_t func, void *user_data);
+E void unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data);
 E bool email_within_limits(const char *email);
 E bool validhostmask(const char *host);
 E char *pretty_mask(char *mask);
