@@ -330,18 +330,19 @@ int do_calc_expr(sourceinfo_t *si, char *expr, char *errmsg, double *presult)
 
 static double calc_dice_simple(double lhs, double rhs)
 {
-	double i;
 	double out = 0.0;
+	int i, sides, dice;
 
-	if (lhs <= 0.0)
-		lhs = 1.0;
+	dice = floor(lhs);
+	sides = floor(rhs);
 
-	int sides = floor(rhs);
-
-	if (sides < 1)
+	if (dice < 1 || dice > 100)
 		return 0.0;
 
-	for (i = 0; i < lhs; i++)
+	if (sides < 1 || sides > 100)
+		return 0.0;
+
+	for (i = 0; i < dice; i++)
 	{
 		out += 1.0 + (arc4random() % sides);
 	}
