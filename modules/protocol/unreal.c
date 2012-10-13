@@ -298,6 +298,9 @@ static mowgli_node_t *unreal_next_matching_ban(channel_t *c, user_t *u, int type
 				case 'R':
 					matched = should_reg_umode(u);
 					break;
+				case 'q':
+					matched = !match(p, hostbuf) || !match(p, ipbuf);
+					break;
 				default:
 					continue;
 			}
