@@ -378,7 +378,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		cb = chanban_find(c, target_extban, banlike_char);
 		if (cb != NULL)
 		{
-			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, target);
+			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, cb->mask);
 			notify_victims(si, c, cb, MTYPE_DEL);
 			chanban_delete(cb);
 			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target_extban, mc->name);
