@@ -41,6 +41,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_privset(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_ison(void *conn, int parc, char *parv[]);
+static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[]);
 
 /* Configuration */
 mowgli_list_t conf_xmlrpc_table;
@@ -118,6 +119,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.command", xmlrpcmethod_command);
 	xmlrpc_register_method("atheme.privset", xmlrpcmethod_privset);
 	xmlrpc_register_method("atheme.ison", xmlrpcmethod_ison);
+	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -129,6 +131,7 @@ void _moddeinit(module_unload_intent_t intent)
 	xmlrpc_unregister_method("atheme.command");
 	xmlrpc_unregister_method("atheme.privset");
 	xmlrpc_unregister_method("atheme.ison");
+	xmlrpc_unregister_method("atheme.metadata");
 
 	if ((n = mowgli_node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
 	{
@@ -530,6 +533,80 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 	xmlrpc_boolean(buf, true);
 	xmlrpc_string(buf2, u->myuser != NULL ? entity(u->myuser)->name : "*");
 	xmlrpc_send(2, buf, buf2);
+
+	return 0;
+}
+
+/*
+ * atheme.metadata
+ *
+ * XML inputs:
+ *       entity name, UID or channel name
+ *       metadata key
+ *       metadata value (optional)
+ *
+ * XML outputs:
+ *       string: metadata value
+ */
+static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
+{
+	metadata_t *md;
+	int i;
+	char buf[BUFSIZE];
+
+	for (i = 0; i < parc; i++)
+	{
+		if (strchr(parv[i], '\r') || strchr(parv[i], '\n'))
+		{
+			xmlrpc_generic_error(fault_badparams, "Invalid parameters.");
+			return 0;
+		}
+	}
+
+	if (parc < 2)
+	{
+		xmlrpc_generic_error(fault_needmoreparams, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (*parv[0] == '#')
+	{
+		mychan_t *mc;
+
+		mc = mychan_find(parv[0]);
+		if (mc == NULL)
+		{
+			xmlrpc_generic_error(fault_nosuch_source, "No channel registration was found for the provided channel name.");
+			return 0;
+		}
+
+		md = metadata_find(mc, parv[1]);
+	}
+	else
+	{
+		myentity_t *mt;
+
+		mt = myentity_find(parv[0]);
+		if (mt == NULL)
+			mt = myentity_find_uid(parv[0]);
+
+		if (mt == NULL)
+		{
+			xmlrpc_generic_error(fault_nosuch_source, "No account was found for this accountname or UID.");
+			return 0;
+		}
+
+		md = metadata_find(mt, parv[1]);
+	}
+
+	if (md == NULL)
+	{
+		xmlrpc_generic_error(fault_nosuch_source, "No metadata found matching this account/channel and key.");
+		return 0;
+	}
+
+	xmlrpc_string(buf, md->value);
+	xmlrpc_send(1, buf);
 
 	return 0;
 }
