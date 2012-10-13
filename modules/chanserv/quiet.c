@@ -381,12 +381,12 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, target);
 			notify_victims(si, c, cb, MTYPE_DEL);
 			chanban_delete(cb);
-			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target, mc->name);
+			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target_extban, mc->name);
 			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2."), target, channel);
+				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2."), target_extban, channel);
 		}
 		else
-			command_fail(si, fault_nosuch_key, _("No such quiet \2%s\2 on \2%s\2."), target, channel);
+			command_fail(si, fault_nosuch_key, _("No such quiet \2%s\2 on \2%s\2."), target_extban, channel);
 
 		return;
 	}
