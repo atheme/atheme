@@ -1,7 +1,7 @@
 Help for CLEAR FLAGS:
 
-CLEAR FLAGS will kick remove all flags from all users
-(or groups) with channel access on the channel specified
+CLEAR FLAGS will remove all flags from all users (or
+groups) with channel access on the channel specified
 except for users who are channel founders.
 
 This command can only be used by channel founders.
