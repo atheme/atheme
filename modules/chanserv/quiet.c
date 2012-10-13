@@ -35,6 +35,27 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_unquiet);
 }
 
+static void make_extbanmask(char *buf, size_t buflen, const char *mask)
+{
+	return_if_fail(buf != NULL);
+	return_if_fail(mask != NULL);
+
+	switch (ircd->type)
+	{
+	case PROTOCOL_INSPIRCD:
+		mowgli_strlcpy(buf, "m:", buflen);
+		break;
+	case PROTOCOL_UNREAL:
+		mowgli_strlcpy(buf, "~q:", buflen);
+		break;
+	default:
+		*buf = '\0';
+		break;
+	}
+
+	mowgli_strlcat(buf, mask, buflen);
+}
+
 static chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
@@ -348,10 +369,14 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
-#warning convert mask into EXTBAN mask
-	else if ((cb = chanban_find(c, target, banlike_char)) != NULL || validhostmask(target))
+	else if (validhostmask(target))
 	{
-		if (cb)
+		char target_extban[BUFSIZE];
+
+	 	make_extbanmask(target_extban, sizeof target_extban, target);
+
+		cb = chanban_find(c, target_extban, banlike_char);
+		if (cb != NULL)
 		{
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, target);
 			notify_victims(si, c, cb, MTYPE_DEL);
