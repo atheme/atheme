@@ -190,6 +190,7 @@ static bool has_svshold = false;
 static bool has_cloakingmod = false;
 static bool has_shun = false;
 static bool has_mlock = false;
+static bool has_svstopic_topiclock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
@@ -517,6 +518,13 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	return_if_fail(c != NULL);
+
+	/* if we have SVSTOPIC, then we don't have to deal with any of the below, so don't bother. */
+	if (has_svstopic_topiclock)
+	{
+		sts(":%s SVSTOPIC %s %lu %s :%s", ME, c->name, (unsigned long)ts, setter, topic);
+		return;
+	}
 
 	/* If possible, try to use FTOPIC
 	 * Note that because TOPIC does not contain topicTS, it may be
@@ -1477,6 +1485,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		has_servprotectmod = false;
 		has_svshold = false;
 		has_shun = false;
+		has_svstopic_topiclock = false;
 		has_protocol = 0;
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0 && parc > 1)
@@ -1545,6 +1554,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_mlock.so"))
 		{
 			has_mlock = true;
+		}
+		if (strstr(parv[1], "m_topiclock.so"))
+		{
+			has_svstopic_topiclock = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services (m_serverbots) are not compatible with atheme");
