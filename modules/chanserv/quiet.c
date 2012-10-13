@@ -145,6 +145,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;
+	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
 
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -167,7 +168,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 			continue;
 		if (cu->user == si->su)
 			continue;
-		if (next_matching_ban(c, cu->user, 'q', &ban_n))
+		if (next_matching_ban(c, cu->user, banlike_char, &ban_n))
 		{
 			to_notify[to_notify_count++] = cu->user;
 			if (to_notify_count >= MAX_SINGLE_NOTIFY)
@@ -257,8 +258,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if ((newtarget = pretty_mask(target)) && validhostmask(newtarget))
 	{
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', newtarget);
-		cb = chanban_add(c, newtarget, 'q');
+		cb = place_quietmask(c, MTYPE_ADD, newtarget);
 		notify_victims(si, c, cb, MTYPE_ADD);
 		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", newtarget, mc->name);
 		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
@@ -277,6 +277,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];
+	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
@@ -325,7 +326,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		int count = 0;
 
 		make_extban(hostbuf2, sizeof hostbuf2, tu);
-		for (n = next_matching_ban(c, tu, 'q', c->bans.head); n != NULL; n = next_matching_ban(c, tu, 'q', tn))
+		for (n = next_matching_ban(c, tu, banlike_char, c->bans.head); n != NULL; n = next_matching_ban(c, tu, banlike_char, tn))
 		{
 			tn = n->next;
 			cb = n->data;
@@ -347,12 +348,12 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
-#warning support UNQUIET against extbans
-	else if ((cb = chanban_find(c, target, 'q')) != NULL || validhostmask(target))
+#warning convert mask into EXTBAN mask
+	else if ((cb = chanban_find(c, target, banlike_char)) != NULL || validhostmask(target))
 	{
 		if (cb)
 		{
-			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'q', target);
+			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, target);
 			notify_victims(si, c, cb, MTYPE_DEL);
 			chanban_delete(cb);
 			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target, mc->name);
