@@ -167,6 +167,9 @@ static mowgli_node_t *inspircd_next_matching_ban(channel_t *c, user_t *u, int ty
 					continue;
 				matched = !match(p, u->gecos);
 				break;
+			case 'm':
+				matched = (!match(p, hostbuf) || !match(p, realbuf) || !match(p, ipbuf)) || !match_cidr(p, ipbuf));
+				break;
 			default:
 				continue;
 			}
