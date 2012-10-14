@@ -375,7 +375,6 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 
 static int c_operclass(mowgli_config_file_entry_t *ce)
 {
-	operclass_t *operclass;
 	char *name;
 	char *privs = NULL, *newprivs;
 	int flags = 0;

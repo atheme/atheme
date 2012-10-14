@@ -27,7 +27,6 @@ static void cs_keeptopic_topicset(channel_t *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
 static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
-static void cs_user_identify(user_t *u);
 static void on_shutdown(void *unused);
 
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;

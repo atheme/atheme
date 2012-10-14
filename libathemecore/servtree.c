@@ -402,6 +402,7 @@ service_t *service_find_any(void)
 
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_name)
 		return sptr;
+	return NULL;
 }
 
 service_t *service_find(const char *name)

@@ -266,7 +266,7 @@ int atheme_main(int argc, char *argv[])
 	bool have_log = false;
 	bool have_datadir = false;
 	char buf[32];
-	int i, pid, r;
+	int pid, r;
 	FILE *pid_file;
 	const char *pidfilename = RUNDIR "/atheme.pid";
 	char *log_p = NULL;

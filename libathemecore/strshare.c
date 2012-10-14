@@ -62,7 +62,8 @@ stringref strshare_ref(stringref str)
 	if (str == NULL)
 		return NULL;
 
-	ss = (strshare_t *)str - 1;
+	/* intermediate cast to suppress gcc -Wcast-qual */
+	ss = (strshare_t *)(uintptr_t)str - 1;
 	ss->refcount++;
 
 	return str;
@@ -75,7 +76,8 @@ void strshare_unref(stringref str)
 	if (str == NULL)
 		return;
 
-	ss = (strshare_t *)str - 1;
+	/* intermediate cast to suppress gcc -Wcast-qual */
+	ss = (strshare_t *)(uintptr_t)str - 1;
 	ss->refcount--;
 	if (ss->refcount == 0)
 	{

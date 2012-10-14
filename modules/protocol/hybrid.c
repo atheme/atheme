@@ -76,7 +76,7 @@ struct cmode_ hybrid_user_mode_list[] = {
 };
 
 /* *INDENT-ON* */
-void hybrid_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
+static void hybrid_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
 {
 	sts(":%s CAPTURE %s", CLIENT_NAME(source), CLIENT_NAME(victim));
 }

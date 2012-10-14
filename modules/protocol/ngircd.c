@@ -382,7 +382,6 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
-	server_t *s;
 	bool realchange;
 
 	if (parc == 7)
