@@ -716,7 +716,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 		replace(buf, sizeof buf, "&entityname&", u != NULL ? entity(u)->name : "???");
 		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
-		replace(buf, sizeof buf, "&sourceinfo&", 
+		replace(buf, sizeof buf, "&sourceinfo&", sourceinfo);
 
 		fprintf(out, "%s\n", buf);
 	}
