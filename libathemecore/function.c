@@ -605,7 +605,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 {
 #ifndef MOWGLI_OS_WIN
 	char *date = NULL;
-	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], buf[BUFSIZE], pathbuf[BUFSIZE];
+	char timebuf[BUFSIZE], to[BUFSIZE], from[BUFSIZE], buf[BUFSIZE], pathbuf[BUFSIZE], sourceinfo[BUFSIZE];
 	FILE *in, *out;
 	time_t t;
 	struct tm tm;
@@ -684,6 +684,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 	snprintf(to, sizeof to, "\"%s\" <%s>", entity(mu)->name, email);
 	/* \ is special here; escape it */
 	replace(to, sizeof to, "\\", "\\\\");
+	snprintf(sourceinfo, sizeof sourceinfo, "%s[%s@%s]", u->nick, u->user, u->vhost);
 
 	/* now set up the email */
 	if (pipe(pipfds) < 0)
@@ -713,6 +714,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 		replace(buf, sizeof buf, "&entityname&", u != NULL ? entity(u)->name : "???");
 		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
+		replace(buf, sizeof buf, "&sourceinfo&", 
 
 		fprintf(out, "%s\n", buf);
 	}
