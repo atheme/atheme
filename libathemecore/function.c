@@ -706,6 +706,8 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 
 	while (fgets(buf, BUFSIZE, in))
 	{
+		strip(buf);
+
 		replace(buf, sizeof buf, "&from&", from);
 		replace(buf, sizeof buf, "&to&", to);
 		replace(buf, sizeof buf, "&replyto&", me.adminemail);
