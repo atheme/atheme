@@ -6,22 +6,9 @@ DISTCLEAN = extra.mk buildsys.mk config.log config.status atheme-services.pc
 -include buildsys.mk
 
 # explicit dependencies need to be expressed to ensure parallel builds don't die
-pre-recurse: include/serno.h include/hooktypes.h
-pre-depend: pre-recurse
-libathemecore: $(LIBMOWGLI)
+libathemecore: include $(LIBMOWGLI)
 modules: libathemecore
 src: libathemecore
-
-include/serno.h:
-	@revh=; \
-	if [ -d .git ]; then \
-		revh=`git log -1 --pretty=oneline | cut -d' ' -f1 2>/dev/null` || :; \
-	fi; \
-	if [ -z "$$revh" ] && [ ! -r include/serno.h ]; then \
-		revh=`sed -ne 's/^node: \(............\).*/\1/p' .hg_archival.txt 2>/dev/null` || :; \
-		[ -n "$$revh" ] || revh=unknown; \
-	fi; \
-	[ -z "$$revh" ] || echo "#define SERNO \"$$revh\"" >include/serno.h
 
 install-extra:
 	@echo "----------------------------------------------------------------"
@@ -56,9 +43,6 @@ dist:
 	$(LN) -s . $(DISTNAME)
 	hg manifest | awk '{ print "$(DISTNAME)/"$$1; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; print "$(DISTNAME)/include/serno.h"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
-
-include/hooktypes.h: ${SRCDIR}/libathemecore/mkhooktypes.sh ${SRCDIR}/libathemecore/hooktypes.in
-	(cd libathemecore && touch .depend && ${MAKE} ../include/hooktypes.h)
 
 buildsys.mk:
 	@echo "Run ./configure first you idiot."

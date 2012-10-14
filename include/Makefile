@@ -2,7 +2,8 @@ include ../extra.mk
 
 SUBDIRS = inline protocol
 
-DISTCLEAN = serno.h
+DISTCLEAN = hooktypes.h serno.h
+pre-depend: ${DISTCLEAN}
 
 INCLUDES = \
 	abirev.h		\
@@ -57,5 +58,14 @@ INCLUDES = \
 	uid.h			\
 	uplink.h		\
 	users.h
+
+hooktypes.h:
+	$(info Generate: $@)
+	@sh mkhooktypes.sh hooktypes.in >hooktypes.h
+
+serno.h:
+	$(info Generate: $@)
+	@revh=`git log -1 --pretty=oneline | cut -d' ' -f1 2>/dev/null` || :; \
+	[ -z "$$revh" ] || echo "#define SERNO \"$$revh\"" >serno.h
 
 include ../buildsys.mk
