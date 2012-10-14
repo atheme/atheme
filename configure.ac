@@ -14,11 +14,23 @@ AC_CONFIG_AUX_DIR(autoconf)
 AC_CONFIG_HEADER(include/sysconf.h)
 AC_PREFIX_DEFAULT(~/atheme)
 
-AC_CANONICAL_HOST
-AC_CANONICAL_TARGET
+dnl Buildsys module stuff
+BUILDSYS_INIT
+BUILDSYS_SHARED_LIB
+BUILDSYS_PROG_IMPLIB
+LIBS="$LIBS $DYNAMIC_LD_LIBS"
 
-AC_GNU_SOURCE
-AC_SYS_LARGEFILE
+AC_PATH_PROG(RM, rm)
+AC_PATH_PROG(MV, mv)
+AC_PATH_PROG(CP, cp)
+AC_PATH_PROG(LN, ln)
+AC_PATH_PROG(TAR, tar)
+AC_PATH_PROG(AR, ar)
+AC_PATH_PROG(RANLIB, ranlib)
+
+AC_PROG_CC_C99
+AC_C_BIGENDIAN
+AC_PROG_MAKE_SET
 
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
@@ -27,13 +39,10 @@ AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
 AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])
 
-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
-
 dnl GNU gettext
 
 dnl Uncomment this if we choose to provide our own libintl.
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.16.1])
 LIBS="${LIBS} ${LIBINTL}"
 
 if test "$prefix" = "NONE"; then
@@ -43,51 +52,11 @@ fi
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
 
-dnl Checks for programs.
-AC_ISC_POSIX
-AC_PROG_CC
-AC_PROG_LN_S
-AC_PROG_INSTALL
-AC_EXEEXT
-AC_PATH_PROG(RM, rm)
-AC_PATH_PROG(MV, mv)
-AC_PATH_PROG(CP, cp)
-AC_PATH_PROG(LN, ln)
-AC_PATH_PROG(TAR, tar)
-AC_PATH_PROG(AR, ar)
-AC_PATH_PROG(RANLIB, ranlib)
-AC_C_INLINE
-AC_C_BIGENDIAN
-AC_PROG_MAKE_SET
-
-AC_MSG_CHECKING(how to generate dependancy info)
-if test "$SunWorkShop" = "yes"; then
-  AC_MSG_RESULT(Sun WorkShop/Forte using $CC -xM)
-  MKDEP="$CC -xM"
-fi
-if test "$HPUX" = "yes"; then
-  AC_MSG_RESULT(HP-UX C Compiler using makedepend)
-  MKDEP="makedepend"
-fi
-if test "x$MKDEP" = "x"; then
-  AC_MSG_RESULT(assuming $CC -MM)
-  MKDEP="$CC -MM"
-fi
-
-AC_SUBST(MKDEP)
-
 dnl Checks for header files.
 AC_CHECK_HEADERS(link.h,,,[-])
 
-dnl Buildsys module stuff
-BUILDSYS_INIT
-BUILDSYS_SHARED_LIB
-BUILDSYS_PROG_IMPLIB
-LIBS="$LIBS $DYNAMIC_LD_LIBS"
-
 dnl Checks for library functions.
-AC_FUNC_STRFTIME
-AC_CHECK_FUNCS([strdup inet_pton inet_ntop gettimeofday umask mmap arc4random getrlimit fork getpid execve strtok_r inet_ntop strcasestr])
+AC_CHECK_FUNCS([inet_pton inet_ntop gettimeofday umask arc4random getrlimit fork getpid execve strtok_r inet_ntop strcasestr])
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
 AC_CHECK_FUNC(gethostbyname,, AC_CHECK_LIB(nsl, gethostbyname))
 AC_SEARCH_LIBS(crypt, crypt, [AC_DEFINE([HAVE_CRYPT], [], [Define if crypt() is available])])
@@ -189,33 +158,6 @@ LOGDIR='${prefix}/var'
 DATADIR='${prefix}/etc'
 RUNDIR='${prefix}/var'
 
-ABSPATHS="#"
-AC_MSG_CHECKING(if you want to use absolute paths when building)
-AC_ARG_ENABLE(absolute-paths,
-AC_HELP_STRING([--enable-absolute-paths],[ Use absolute paths when building.]),
-[
-   case "$enableval" in
-   yes)
-      case "$srcdir" in
-         /*)
-         ;;
-         *)
-            oldsrcdir="$srcdir"
-            srcdir="`cd \"$srcdir\";pwd`"
-         ;;
-      esac
-      ABSPATHS=""
-      ;;
-   no)
-      ABSPATHS="#"
-      ;;
-   esac
-])
-AC_MSG_RESULT($ABSPATHS)
-
-SRCDIR="$srcdir"
-BUILDDIR=`pwd`
-
 FHSPATHS="no"
 AC_MSG_CHECKING(if you want FHS-like pathnames)
 AC_ARG_ENABLE(fhs-paths,
@@ -293,17 +235,6 @@ else
 fi
 
 AC_SUBST(CONTRIB_ENABLE)
-
-balloc="no"
-AC_MSG_CHECKING(if you want to enable the block allocator)
-AC_ARG_ENABLE(balloc,
-AC_HELP_STRING([--disable-balloc],[Disable the block allocator.]),
-[balloc=$enableval], [balloc=yes])
-
-if test "$balloc" = no; then
-	AC_DEFINE([NOBALLOC], 1, [Define to 1 if you wish to disable the block allocator.])
-fi
-AC_MSG_RESULT($balloc)
 
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
@@ -456,7 +387,7 @@ BUILDROOT=`pwd`
 AC_SUBST(BUILDROOT)
 
 PODIR=""
-if test "x$USE_NLS" = "xyes"; then
+if test "x$LIBINTL" != "x"; then
 	PODIR="po"
 fi
 AC_SUBST(PODIR)
@@ -483,7 +414,6 @@ Configuration:
 	Large network support: ${LARGENET}
 	OpenSSL SASL support : ${SSL}
 	Contrib modules      : ${CONTRIB}
-	Block Allocator      : ${balloc}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
