@@ -11,7 +11,9 @@ atheme-services contains code from Shrike, Sentinel and ircd-ratbox.
 Some of the initial design was influenced by Shrike too.
 
 Information about Shrike can be found at http://www.malkier.net/projects.php?p=shrike.
+
 Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
+
 Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 
 For further information about our relationship with those projects, see 
@@ -55,19 +57,22 @@ configuraiton file and connect to the specified uplink server.
 Alternatively, any of the following command-line options can be 
 specified to change the default behavior:
 
-  -c </path/to/file> - specify the configuration file
-  -d                 - start in debugging mode
-  -h                 - print the help message and exit
-  -r                 - start atheme in read-only mode
-  -l </path/to/file> - specify the main log file
-  -n                 - do not fork into the background
-  -p </path/to/file> - specify the PID file
-  -v                 - print the version information and exit
+```
+-c </path/to/file> - specify the configuration file
+-d                 - start in debugging mode
+-h                 - print the help message and exit
+-r                 - start atheme in read-only mode
+-l </path/to/file> - specify the main log file
+-n                 - do not fork into the background
+-p </path/to/file> - specify the PID file
+-v                 - print the version information and exit
+```
 
 Services also handles the following signals:
-  HUP  - force a REHASH
-  INT  - force a RESTART
-  TERM - force a SHUTDOWN
+
+* HUP  - force a REHASH
+* INT  - force a RESTART
+* TERM - force a SHUTDOWN
 
 Upon starting, atheme-services will parse its command-line arguments, 
 open its log file, parse its configuration file, load its database, 
