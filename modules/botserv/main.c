@@ -1110,7 +1110,8 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 		if (chan->nummembers == 1)
 			join(chan->name, bot->nick);
 
-		if ((md = metadata_find(mc, "private:entrymsg")) != NULL)
+		if (u->server->flags & SF_EOB &&
+				(md = metadata_find(mc, "private:entrymsg")) != NULL)
 		{
 			if (!u->myuser || !(u->myuser->flags & MU_NOGREET))
 				notice(bot->nick, u->nick, "[%s] %s", mc->name, md->value);
