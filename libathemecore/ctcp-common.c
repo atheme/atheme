@@ -52,9 +52,21 @@ static void ctcp_clientinfo_handler(sourceinfo_t *si, char *cmd, char *args)
 	notice(si->service->nick, si->su->nick, "\001CLIENTINFO PING VERSION CLIENTINFO\001");
 }
 
+/* easter egg (so is the next one, who cares) */
 static void ctcp_machinegod_handler(sourceinfo_t *si, char *cmd, char *args)
 {
 	notice(si->service->nick, si->su->nick, "\001MACHINEGOD http://www.findagrave.com/cgi-bin/fg.cgi?page=gr&GRid=10369601\001");
+}
+
+/* update this as necessary to track notable events */
+static void ctcp_about_handler(sourceinfo_t *si, char *cmd, char *args)
+{
+	/*
+	 * October 16, 2012: UnrealIRCd 3.2.10-rc1 was released, the first release of the world's most widely-deployed
+	 * IRC server software featuring full support for the Atheme platform.  Unreal has thousands of users, of which
+	 * Atheme will now be aggressively marketed to by both projects.
+	 */
+	notice(si->service->nick, si->su->nick, "\001ABOUT \002Suddenly\002 the beast saw the machine god's wisdom, and surely Belphegor \037trembled\037. ~The Book of Atheme, 10:16\001");
 }
 
 void common_ctcp_init(void)
@@ -65,6 +77,7 @@ void common_ctcp_init(void)
 	mowgli_patricia_add(ctcptree, "\001VERSION\001", ctcp_version_handler);
 	mowgli_patricia_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
 	mowgli_patricia_add(ctcptree, "\001MACHINEGOD\001", ctcp_machinegod_handler);
+	mowgli_patricia_add(ctcptree, "\001ABOUT\001", ctcp_about_handler);
 }
 
 unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
