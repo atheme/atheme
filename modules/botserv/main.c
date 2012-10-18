@@ -1082,9 +1082,12 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	channel_t *chan;
 	mychan_t *mc;
 	botserv_bot_t *bot;
+	metadata_t *md;
+	user_t *u;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
+	u = cu->user;
 	chan = cu->chan;
 
 	/* first check if this is a registered channel at all */
@@ -1106,6 +1109,12 @@ static void bs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (chan->nummembers == 1)
 			join(chan->name, bot->nick);
+
+		if ((md = metadata_find(mc, "private:entrymsg")) != NULL)
+		{
+			if (!u->myuser || !(u->myuser->flags & MU_NOGREET))
+				notice(bot->nick, u->nick, "[%s] %s", mc->name, md->value);
+		}
 	}
 }
 
