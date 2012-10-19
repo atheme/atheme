@@ -620,12 +620,10 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 	char *subcmd = parv[1];
 	char *clonesstr = parv[2];
 	char *reason = parv[3];
-	int clones;
 	char rreason[BUFSIZE];
 
 	long duration;
 
-	clones = atoi(clonesstr);
 
 	if (!ip || !subcmd || !clonesstr)
 	{
@@ -634,6 +632,8 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>"));
 		return;
 	}
+	
+	int clones = atoi(clonesstr);
 
 	if (!strcasecmp(ip, "DEFAULT"))
 	{
