@@ -10,6 +10,16 @@
 #define COMMON_H
 
 /* D E F I N E S */
+typedef enum {
+	PATH_LOCALE,
+	PATH_MODULE,
+	PATH_SHARE,
+	PATH_CONFIG,
+	PATH_LOG,
+	PATH_RUN,
+	PATH_DATA,
+	PATH_VEC_SIZE,
+} path_vec_t;
 
 /*
  * XXX: this is very nieve.
