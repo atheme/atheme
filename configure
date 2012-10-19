@@ -8070,7 +8070,7 @@ $as_echo "#define HAVE_OPENSSL /**/" >>confdefs.h
 	fi
 fi
 
-case "$target" in
+case "$host" in
 *-*-mingw32)
     CFLAGS="-I/mingw/include $CFLAGS"
     LIBS="$LIBS -lwsock32 -lws2_32 -lregex"

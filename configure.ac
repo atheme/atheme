@@ -266,7 +266,7 @@ if test "$enable_ssl" = "yes"; then
 	fi
 fi
 
-case "$target" in
+case "$host" in
 *-*-mingw32)
     CFLAGS="-I/mingw/include $CFLAGS"
     LIBS="$LIBS -lwsock32 -lws2_32 -lregex"
