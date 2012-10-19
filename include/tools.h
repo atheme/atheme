@@ -161,6 +161,7 @@ E void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
 /* sharedheap.c */
 E mowgli_heap_t *sharedheap_get(size_t size);
 E void sharedheap_unref(mowgli_heap_t *heap);
+E char *combine_path(const char *parent, const char *child);
 
 #if !HAVE_VSNPRINTF
 int rpl_vsnprintf(char *, size_t, const char *, va_list);

@@ -815,6 +815,20 @@ int srename(const char *old_fn, const char *new_fn)
 	return rename(old_fn, new_fn);
 }
 
+char *combine_path(const char *parent, const char *child)
+{
+	char buf[BUFSIZE];
+
+	return_val_if_fail(parent != NULL, NULL);
+	return_val_if_fail(child != NULL, NULL);
+
+	mowgli_strlcpy(buf, parent, sizeof buf);
+	mowgli_strlcat(buf, "/", sizeof buf);
+	mowgli_strlcat(buf, child, sizeof buf);
+
+	return sstrdup(buf);
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
