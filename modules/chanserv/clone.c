@@ -57,6 +57,12 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
+
+	if (mc == mc2)
+	{
+		command_fail(si, fault_nochange, "Cannot clone a channel to itself.");
+		return;
+	}
 	
 	if (metadata_find(mc, "private:close:closer"))
 	{
