@@ -127,7 +127,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (ratelimit_count > config_options.ratelimit_uses && !has_priv(si, PRIV_FLOOD))
 	{
 		command_fail(si, fault_toomany, _("The system is currently too busy to process your registration, please try again later."));
-		slog(LG_INFO, "NICKSERV:REGISTER:THROTTLED: \2%s\2 by \2%s\2", account, si->su->nick);
+		slog(LG_INFO, "NICKSERV:REGISTER:THROTTLED: \2%s\2 by \2%s\2", account, si->su != NULL ? si->su->nick : get_source_name(si));
 		return;
 	}
 
