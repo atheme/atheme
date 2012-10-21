@@ -74,6 +74,7 @@ static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, 
 static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_delaymsg(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static bool check_history(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
@@ -82,6 +83,7 @@ struct extmode inspircd_ignore_mode_list[] = {
   { 'L', check_forward },
   { 'J', check_rejoindelay },
   { 'd', check_delaymsg },
+  { 'H', check_history },
   { '\0', 0 }
 };
 
@@ -254,6 +256,11 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
 		return false;
 	return true;
+}
+
+static bool check_history(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+        return check_jointhrottle(value, c, mc, u, mu);
 }
 
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
