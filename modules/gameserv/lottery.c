@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 
 static void command_lottery(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 1, command_lottery, { .path = "gameserv/lottery" } };
+command_t cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
 void _modinit(module_t * m)
 {
