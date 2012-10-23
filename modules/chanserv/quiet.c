@@ -112,6 +112,7 @@ static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *t
 {
 	chanuser_t *cu;
 	unsigned int flag;
+	char buf[3];
 
 	cu = chanuser_find(c, tu);
 	if (cu == NULL)
@@ -127,10 +128,29 @@ static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *t
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return false;
 	}
+
+	buf[0] = '-';
+	buf[2] = '\0';
 	if (cu->modes & CSTATUS_OP)
 		channel_mode_va(chansvs.me->me, c, 2, "-o", tu->nick);
 	if (cu->modes & CSTATUS_VOICE)
 		channel_mode_va(chansvs.me->me, c, 2, "-v", tu->nick);
+	if (ircd->uses_owner && (cu->modes & ircd->owner_mode))
+	{
+		buf[1] = ircd->owner_mchar[1];
+		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+	}
+	if (ircd->uses_protect && (cu->modes & ircd->protect_mode))
+	{
+		buf[1] = ircd->protect_mchar[1];
+		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+	}
+	if (ircd->uses_halfops && (cu->modes & ircd->halfops_mode))
+	{
+		buf[1] = ircd->halfops_mchar[1];
+		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+	}
+
 	return true;
 }
 
