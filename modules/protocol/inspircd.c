@@ -189,7 +189,6 @@ static bool has_servprotectmod = false;
 static bool has_svshold = false;
 static bool has_cloakingmod = false;
 static bool has_shun = false;
-static bool has_mlock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
@@ -710,9 +709,6 @@ static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duratio
 static void inspircd_mlock_sts(channel_t *c)
 {
 	mychan_t *mc = MYCHAN_FROM(c);
-
-	if (has_mlock == false)
-		return;
 
 	if (mc == NULL)
 		return;
@@ -1541,10 +1537,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_shun.so"))
 		{
 			has_shun = true;
-		}
-		if (strstr(parv[1], "m_mlock.so"))
-		{
-			has_mlock = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services (m_serverbots) are not compatible with atheme");
