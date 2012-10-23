@@ -1115,16 +1115,6 @@ static void inspircd_user_mode(user_t *u, const char *modes)
 		}
 }
 
-static void m_saquit(sourceinfo_t *si, int parc, char *parv[])
-{
-	user_t *u = user_find(parv[0]);
-
-	slog(LG_DEBUG, "m_saquit(): user leaving: %s", parv[0]);
-
-	/* user_delete() takes care of removing channels and so forth */
-	user_delete(u, parv[1]);
-}
-
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
@@ -1273,30 +1263,6 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_add(c, si->su->nick);
 }
 
-static void m_sajoin(sourceinfo_t *si, int parc, char *parv[])
-{
-        si->su = user_find(parv[0]);
-	if (si->su == NULL)
-		return;
-	m_join(si, 1, &parv[1]);
-}
-
-static void m_sapart(sourceinfo_t *si, int parc, char *parv[])
-{
-        si->su = user_find(parv[0]);
-	if (si->su == NULL)
-		return;
-        m_part(si, 1, &parv[1]);
-}
-
-static void m_sanick(sourceinfo_t *si, int parc, char *parv[])
-{
-        si->su = user_find(parv[0]);
-	if (si->su == NULL)
-		return;
-	m_nick(si, 1, &parv[1]);
-}
-
 static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
 {
 	si->su = user_find(parv[0]);
@@ -1312,13 +1278,6 @@ static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		m_nick(si, 2, &parv[1]);
 	}
-}
-
-static void m_samode(sourceinfo_t *si, int parc, char *parv[])
-{
-	/* note that SAMODE is not checked in any way before propagation,
-	 * and only works on channels, not users */
-	channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 }
 
 static void m_error(sourceinfo_t *si, int parc, char *parv[])
@@ -1676,11 +1635,6 @@ void _modinit(module_t * m)
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_fmode, 3, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SAMODE", m_samode, 2, MSRC_USER);
-	pcommand_add("SAJOIN", m_sajoin, 2, MSRC_USER);
-	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
-	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);
-	pcommand_add("SAQUIT", m_saquit, 1, MSRC_USER);
 	pcommand_add("SVSNICK", m_svsnick, 3, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
