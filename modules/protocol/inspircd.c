@@ -194,7 +194,6 @@ static bool has_servprotectmod = false;
 static bool has_svshold = false;
 static bool has_cloakingmod = false;
 static bool has_shun = false;
-static bool has_mlock = false;
 static bool has_svstopic_topiclock = false;
 static int has_protocol = 0;
 
@@ -728,9 +727,6 @@ static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duratio
 static void inspircd_mlock_sts(channel_t *c)
 {
 	mychan_t *mc = MYCHAN_FROM(c);
-
-	if (has_mlock == false)
-		return;
 
 	if (mc == NULL)
 		return;
@@ -1560,10 +1556,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_shun.so"))
 		{
 			has_shun = true;
-		}
-		if (strstr(parv[1], "m_mlock.so"))
-		{
-			has_mlock = true;
 		}
 		if (strstr(parv[1], "m_topiclock.so"))
 		{
