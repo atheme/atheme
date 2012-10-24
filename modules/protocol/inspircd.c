@@ -1442,7 +1442,10 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 		free(certfp);
 	}
 	else if (!irccasecmp(parv[1], "mlock"))
+	{
+		c = channel_find(parv[0]);
 		verify_mlock(c, 0, parv[2]);
+	}
 }
 
 /*
