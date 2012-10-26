@@ -614,6 +614,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 	int rc;
 	static time_t period_start = 0, lastwallops = 0;
 	static unsigned int emailcount = 0;
+	service_t *svs;
 
 	if (u == NULL || mu == NULL)
 		return 0;
@@ -717,6 +718,14 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 		replace(buf, sizeof buf, "&netname&", me.netname);
 		replace(buf, sizeof buf, "&param&", param);
 		replace(buf, sizeof buf, "&sourceinfo&", sourceinfo);
+		if ((svs = service_find("nickserv")) != NULL)
+			replace(buf, sizeof buf, "&nicksvs&", svs->me->nick);
+		if ((svs = service_find("chanserv")) != NULL)
+			replace(buf, sizeof buf, "&chansvs&", svs->me->nick);
+		if ((svs = service_find("memoserv")) != NULL)
+			replace(buf, sizeof buf, "&memosvs&", svs->me->nick);
+		if ((svs = service_find("operserv")) != NULL)
+			replace(buf, sizeof buf, "&opersvs&", svs->me->nick);
 
 		fprintf(out, "%s\n", buf);
 	}
