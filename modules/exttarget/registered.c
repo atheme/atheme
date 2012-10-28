@@ -20,7 +20,7 @@ static myentity_t dummy_entity;
 
 static chanacs_t *dummy_match_user(chanacs_t *ca, user_t *u)
 {
-	if (u->myuser != NULL)
+	if (u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH))
 		return ca;
 
 	return NULL;
