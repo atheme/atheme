@@ -14,6 +14,7 @@ database_handle_t *
 db_open(const char *filename, database_transaction_t txn)
 {
 	return_val_if_fail(db_mod != NULL, NULL);
+	return_val_if_fail(db_mod->db_open != NULL, NULL);
 
 	return db_mod->db_open(filename, txn);
 }
@@ -22,8 +23,18 @@ void
 db_close(database_handle_t *db)
 {
 	return_if_fail(db_mod != NULL);
+	return_if_fail(db_mod->db_close != NULL);
 
 	return db_mod->db_close(db);
+}
+
+void
+db_parse(database_handle_t *db)
+{
+	return_if_fail(db_mod != NULL);
+	return_if_fail(db_mod->db_parse != NULL);
+
+	return db_mod->db_parse(db);
 }
 
 bool

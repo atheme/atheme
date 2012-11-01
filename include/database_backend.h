@@ -54,10 +54,12 @@ struct database_handle_ {
 typedef struct {
 	database_handle_t *(*db_open)(const char *filename, database_transaction_t txn);
 	void (*db_close)(database_handle_t *db);
+	void (*db_parse)(database_handle_t *db);
 } database_module_t;
 
 E database_handle_t *db_open(const char *filename, database_transaction_t txn);
 E void db_close(database_handle_t *db);
+E void db_parse(database_handle_t *db);
 
 E bool db_read_next_row(database_handle_t *db);
 
