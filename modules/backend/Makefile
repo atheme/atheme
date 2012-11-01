@@ -8,7 +8,7 @@
 
 MODULE = backend
 
-SRCS = flatfile.c opensex.c
+SRCS = flatfile.c corestorage.c opensex.c
 
 include ../../extra.mk
 include ../../buildsys.mk
