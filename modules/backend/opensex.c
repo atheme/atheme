@@ -482,8 +482,9 @@ static void opensex_db_close(database_handle_t *db)
 }
 
 database_module_t opensex_mod = {
-	opensex_db_open,
-	opensex_db_close
+	.db_open = opensex_db_open,
+	.db_close = opensex_db_close,
+	.db_parse = opensex_db_parse,
 };
 
 void _modinit(module_t *m)
