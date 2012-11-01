@@ -133,7 +133,7 @@ void handle_stats(user_t *u, char req)
 			  mowgli_eventloop_timer_t *timer = n->data;
 
 			  if (timer->active)
-				  numeric_sts(me.me, 249, u, "E :%-28s %4ld seconds (%ld)", timer->name, (long)(timer->when - mowgli_eventloop_get_time(base_eventloop)), (long)timer->frequency);
+				  numeric_sts(me.me, 249, u, "E :%-28s %4ld seconds (%ld)", timer->name, (long)(timer->deadline - mowgli_eventloop_get_time(base_eventloop)), (long)timer->frequency);
 		  }
 
 		  break;
