@@ -481,7 +481,7 @@ static void opensex_db_close(database_handle_t *db)
 	free(db);
 }
 
-database_module_t opensex_mod = {
+static database_module_t opensex_mod = {
 	.db_open = opensex_db_open,
 	.db_close = opensex_db_close,
 	.db_parse = opensex_db_parse,
