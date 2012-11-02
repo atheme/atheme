@@ -327,7 +327,7 @@ static bool opensex_commit_row(database_handle_t *db)
 	return true;
 }
 
-database_vtable_t opensex_vt = {
+static database_vtable_t opensex_vt = {
 	.name = "opensex",
 
 	.read_next_row = opensex_read_next_row,
@@ -422,12 +422,6 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	grver = 2;
 #endif
 
-	db_start_row(db, "GRVER");
-	db_write_int(db, grver);
-	db_commit_row(db);
-
-	rs->grver = grver;
-
 	db = scalloc(sizeof(database_handle_t), 1);
 	db->priv = rs;
 	db->vt = &opensex_vt;
@@ -435,6 +429,12 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	db->file = sstrdup(bpath);
 	db->line = 0;
 	db->token = 0;
+
+	db_start_row(db, "GRVER");
+	db_write_int(db, grver);
+	db_commit_row(db);
+
+	rs->grver = grver;
 
 	return db;
 }
