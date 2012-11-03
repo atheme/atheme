@@ -762,10 +762,11 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_badparams, _("Syntax: CLONES SETEXEMPT <IP> <ALLOWED | WARN | DURATION | REASON> <value>"));
 					return;
 				}
+
+				logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(c->expires));
+
 				return;
 			}
-
-			logcommand(si, CMDLOG_ADMIN, "CLONES:SETEXEMPT: \2%s\2 \2%d\2 (reason: \2%s\2) (duration: \2%s\2)", ip, clones, c->reason, timediff(c->expires));
 		}
 
 		command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), ip);
