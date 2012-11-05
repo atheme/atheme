@@ -89,7 +89,7 @@ static inline mychan_t *mychan_find(const char *name)
 
 static inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
-	return (chanacs_entity_flags(mychan, mt) & level) != 0;
+	return mychan && mt ? (chanacs_entity_flags(mychan, mt) & level) != 0 : false;
 }
 
 static inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
