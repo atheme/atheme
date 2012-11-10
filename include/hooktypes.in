@@ -44,6 +44,7 @@ server_eob         server_t *
 server_delete      hook_server_delete_t *
 user_add           hook_user_nick_t *
 user_delete        user_t *
+user_delete_info   hook_user_delete_t *
 user_nickchange    hook_user_nick_t *
 user_away          user_t *
 user_deoper        user_t *

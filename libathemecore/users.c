@@ -223,6 +223,8 @@ void user_delete(user_t *u, const char *comment)
 
 	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s (%s)", u->nick, u->server->name, comment);
 
+	hook_call_user_delete_info((&(hook_user_delete_t){ .u = u,
+				.comment = comment}));
 	hook_call_user_delete(u);
 
 	u->server->users--;

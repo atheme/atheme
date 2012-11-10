@@ -62,6 +62,11 @@ typedef struct {
 	const char *oldnick;	/* Previous nick for nick changes. u->nick is the new nick. */
 } hook_user_nick_t;
 
+typedef struct {
+	user_t *const u;
+	const char *comment;
+} hook_user_delete_t;
+
 /* function.c */
 E bool is_ircop(user_t *user);
 E bool is_admin(user_t *user);
