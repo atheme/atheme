@@ -59,7 +59,7 @@ INCLUDES = \
 	uplink.h		\
 	users.h
 
-hooktypes.h:
+hooktypes.h: hooktypes.in mkhooktypes.sh
 	$(info Generate: $@)
 	@sh mkhooktypes.sh hooktypes.in >hooktypes.h
 
