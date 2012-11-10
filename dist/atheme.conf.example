@@ -168,6 +168,7 @@ loadmodule "modules/crypto/posix";
  * Nickname expiry override (HOLD command)	modules/nickserv/hold
  * IDENTIFY command				modules/nickserv/identify
  * INFO command					modules/nickserv/info
+ * Last quit message in INFO			modules/nickserv/info_lastquit
  * LIST command					modules/nickserv/list
  * LISTMAIL command				modules/nickserv/listmail
  * LISTOWNMAIL command				modules/nickserv/listownmail
@@ -221,6 +222,7 @@ loadmodule "modules/nickserv/help";
 loadmodule "modules/nickserv/hold";
 loadmodule "modules/nickserv/identify";
 loadmodule "modules/nickserv/info";
+#loadmodule "modules/nickserv/info_lastquit";
 loadmodule "modules/nickserv/list";
 loadmodule "modules/nickserv/listmail";
 #loadmodule "modules/nickserv/listownmail";

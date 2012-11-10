@@ -23,6 +23,7 @@ BASE_SRCS =			\
 	hold.c	\
 	identify.c	\
 	info.c	\
+	info_lastquit.c	\
 	list.c	\
 	listchans.c	\
 	listgroups.c	\
