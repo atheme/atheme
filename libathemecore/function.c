@@ -698,7 +698,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 			connection_close_all_fds();
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
-			execl(me.mta, me.mta, "-t", NULL);
+			execl(me.mta, me.mta, "-t", "-f", me.register_email, NULL);
 			_exit(255);
 	}
 	close(pipfds[0]);
