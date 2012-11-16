@@ -777,6 +777,9 @@ void _modinit(module_t * m)
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
+	/* XXX: not sure if this is such a great idea, but Anope does it too */
+	pcommand_add("SQUERY", m_privmsg, 2, MSRC_USER);
+
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
 	hook_add_event("nick_ungroup");
