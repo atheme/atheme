@@ -586,6 +586,8 @@ static void corestorage_h_so(database_handle_t *db, const char *type)
 		flags = db_sread_int(db);
 	}
 	pass = db_read_word(db);
+	if (pass != NULL && !*pass)
+		pass = NULL;
 
 	if (!(mu = myuser_find(user)))
 	{
