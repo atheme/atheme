@@ -2085,6 +2085,12 @@ general {
  * to send a signal (killall -HUP atheme-services) to regain control.
  */
 /* (*) Operclasses specify groups of services operator privileges */
+/* The "user" operclass specifies privileges all users get.
+ * This may be empty (default) in which case users get no special privileges.
+ * If you use the security/cmdperm module, you will need to grant command: privileges
+ * to every command that you want users to be able to use.
+ */
+operclass "user" { };
 
 /* The "ircop" operclass specifies privileges all IRCops get.
  * This may be empty in which case IRCops get no privs.
