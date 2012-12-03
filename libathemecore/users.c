@@ -608,6 +608,12 @@ void user_sethost(user_t *source, user_t *target, stringref host)
 	return_if_fail(target != NULL);
 	return_if_fail(host != NULL);
 
+	if (*host != '\0')
+	{
+		slog(LG_INFO, "user_sethost(): eh?  trying to set a blank vhost on %s", target->nick);
+		return;
+	}
+
 	strshare_unref(target->vhost);
 	target->vhost = strshare_get(host);
 
