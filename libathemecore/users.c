@@ -611,7 +611,7 @@ void user_sethost(user_t *source, user_t *target, stringref host)
 	strshare_unref(target->vhost);
 	target->vhost = strshare_get(host);
 
-	sethost_sts(source, target, host);
+	sethost_sts(source, target, target->vhost);
 	hook_call_user_sethost(target);
 }
 
