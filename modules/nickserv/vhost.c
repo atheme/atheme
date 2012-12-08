@@ -43,7 +43,7 @@ static void do_sethost(user_t *u, const char *host)
 	if (!strcmp(u->vhost, host))
 		return;
 
-	user_sethost(nicksvs.me->me, u, u->vhost);
+	user_sethost(nicksvs.me->me, u, host);
 }
 
 static void do_sethost_all(myuser_t *mu, char *host)
