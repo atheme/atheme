@@ -76,13 +76,13 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	if (is_soper(si->smu))
-		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", si->su->nick, entity(si->smu)->name);
+	if (is_soper(u->myuser))
+		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", u->nick, entity(u->myuser)->name);
 
 	if (si->su != u)
 	{
 		logcommand(si, CMDLOG_LOGIN, "LOGOUT: \2%s\2", u->nick);
-		command_success_nodata(si, _("\2%s\2 has been logged out."), si->su->nick);
+		command_success_nodata(si, _("\2%s\2 has been logged out."), u->nick);
 	}
 	else
 	{
@@ -90,27 +90,24 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("You have been logged out."));
 	}
 
-	si->smu->lastlogin = CURRTIME;
-	if (si->su != NULL)
-	{
-		mn = mynick_find(si->su->nick);
-		if (mn != NULL && mn->owner == si->smu)
+	u->myuser->lastlogin = CURRTIME;
+		mn = mynick_find(u->nick);
+		if (mn != NULL && mn->owner == u->myuser)
 			mn->lastseen = CURRTIME;
 
-		if (!ircd_on_logout(si->su, entity(si->smu)->name))
+		if (!ircd_on_logout(u, entity(u->myuser)->name))
 		{
-			MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
+			MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 			{
-				if (n->data == si->su)
+				if (n->data == u)
 				{
-					mowgli_node_delete(n, &si->smu->logins);
+					mowgli_node_delete(n, &u->myuser->logins);
 					mowgli_node_free(n);
 					break;
 				}
 			}
-			si->su->myuser = NULL;
+			u->myuser = NULL;
 		}
-	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
