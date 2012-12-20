@@ -61,10 +61,16 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 		if (u->myuser == si->smu || (pass != NULL && verify_password(u->myuser, pass)))
 			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
-		else
+		else if (pass != NULL)
 		{
+			logcommand(si, CMDLOG_LOGIN, "failed LOGOUT \2%s\2 (bad password)", u->nick);
 			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), entity(u->myuser)->name);
 			bad_password(si, u->myuser);
+			return;
+		}
+		else
+		{
+			command_fail(si, fault_authfail, _("You may not log out \2%s\2."), u->nick);
 			return;
 		}
 	}
