@@ -91,23 +91,23 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	u->myuser->lastlogin = CURRTIME;
-		mn = mynick_find(u->nick);
-		if (mn != NULL && mn->owner == u->myuser)
-			mn->lastseen = CURRTIME;
+	mn = mynick_find(u->nick);
+	if (mn != NULL && mn->owner == u->myuser)
+		mn->lastseen = CURRTIME;
 
-		if (!ircd_on_logout(u, entity(u->myuser)->name))
+	if (!ircd_on_logout(u, entity(u->myuser)->name))
+	{
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		{
-			MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+			if (n->data == u)
 			{
-				if (n->data == u)
-				{
-					mowgli_node_delete(n, &u->myuser->logins);
-					mowgli_node_free(n);
-					break;
-				}
+				mowgli_node_delete(n, &u->myuser->logins);
+				mowgli_node_free(n);
+				break;
 			}
-			u->myuser = NULL;
 		}
+		u->myuser = NULL;
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
