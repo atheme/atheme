@@ -458,6 +458,14 @@ void handle_burstlogin(user_t *u, const char *login, time_t ts)
 	n = mowgli_node_create();
 	mowgli_node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
+
+	/* XXX: ugh, this is a lame hack but I can't think of anything better... --nenolod */
+	if (mu->flags & MU_PENDINGLOGIN && authservice_loaded)
+	{
+		slog(LG_DEBUG, "handle_burstlogin(): handling pending login hooks for %s", u->nick);
+		mu->flags &= ~MU_PENDINGLOGIN;
+		hook_call_user_identify(u);
+	}
 }
 
 void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts)
