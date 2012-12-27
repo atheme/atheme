@@ -432,10 +432,14 @@ int login_user(sasl_session_t *p)
 
 	/* We just did SASL authentication for a user.  With IRCds which do not have unique UIDs for users,
 	 * we will likely be expecting the login data to be bursted.
+	 * As a result, we should give the core a heads' up that this is going to happen so that hooks will be
+	 * properly fired...
 	 */
-	mu->flags |= MU_LOGINPENDING;
 	if (ircd->flags & IRCD_SASL_USE_PUID)
+	{
 		mu->flags &= ~MU_NOBURSTLOGIN;
+		mu->flags |= MU_PENDINGLOGIN;
+	}
 
 	return 1;
 }
