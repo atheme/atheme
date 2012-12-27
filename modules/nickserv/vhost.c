@@ -38,7 +38,7 @@ void _moddeinit(module_unload_intent_t intent)
 }
 
 
-static void do_sethost(user_t *u, const char *host)
+static void do_sethost(user_t *u, stringref host)
 {
 	if (!strcmp(u->vhost, host))
 		return;
@@ -46,7 +46,7 @@ static void do_sethost(user_t *u, const char *host)
 	user_sethost(nicksvs.me->me, u, host);
 }
 
-static void do_sethost_all(myuser_t *mu, char *host)
+static void do_sethost_all(myuser_t *mu, stringref host)
 {
 	mowgli_node_t *n;
 	user_t *u;
