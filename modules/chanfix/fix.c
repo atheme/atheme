@@ -617,3 +617,37 @@ static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 }
 
 command_t cmd_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, chanfix_cmd_help, { .path = "help" } };
+
+void chanfix_can_register(hook_channel_register_check_t *req)
+{
+	chanfix_channel_t *chan;
+	chanfix_oprecord_t *orec;
+	unsigned int highscore, score;
+
+	return_if_fail(req != NULL);
+
+	if (req->approved)
+		return;
+
+	chan = chanfix_channel_find(req->name);
+	if (chan == NULL)
+		return;
+	highscore = chanfix_get_highscore(chan);
+	if (highscore < CHANFIX_MIN_FIX_SCORE)
+		return;
+
+	if (req->si->su != NULL)
+		orec = chanfix_oprecord_find(chan, req->si->su);
+	else
+		orec = NULL;
+	score = orec != NULL ? chanfix_calculate_score(orec) : 0;
+
+	if (score < highscore * CHANFIX_FINAL_STEP)
+	{
+		/* If /msg chanfix chanfix would work, only allow users it
+		 * could possibly op to register the channel.
+		 */
+		req->approved = 1;
+		command_fail(req->si, fault_noprivs, _("Your chanfix score is too low to register \2%s\2."), req->name);
+	}
+}

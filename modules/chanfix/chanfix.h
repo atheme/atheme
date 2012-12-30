@@ -80,6 +80,7 @@ E void chanfix_expire(void *unused);
 
 E bool chanfix_do_autofix;
 E void chanfix_autofix_ev(void *unused);
+E void chanfix_can_register(hook_channel_register_check_t *req);
 
 E command_t cmd_chanfix;
 E command_t cmd_scores;
