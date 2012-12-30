@@ -474,6 +474,13 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 static void m_chaninfo(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
+	const char *kmode, *lmode;
+	bool swap;
+
+	/* Differently from what ngircd does itself, accept all received
+	 * modes and topics. This should help somewhat with resolving the
+	 * resulting desyncs.
+	 */
 
 	c = channel_find(parv[0]);
 
@@ -489,12 +496,28 @@ static void m_chaninfo(sourceinfo_t *si, int parc, char *parv[])
 		if (c == NULL)
 			return;
 
-		/* Check mode locks */
-		channel_mode_va(NULL, c, 1, "+");
+		/* Hope something will happen, otherwise the channel will
+		 * stick around empty.
+		 */
 	}
 
-	channel_mode(NULL, c, parc - 2, parv + 1);
-	handle_topic(c, si->s->name, CURRTIME, parv[parc - 1]);
+	if (parc >= 4)
+	{
+		/* CHANINFO #channel +modes key limit [:topic] */
+		kmode = strchr(parv[1], 'k');
+		lmode = strchr(parv[1], 'l');
+		swap = kmode == NULL || (lmode != NULL && kmode > lmode);
+		channel_mode_va(NULL, c, 3, parv[1], parv[swap ? 3 : 2],
+				parv[swap ? 2 : 3]);
+	}
+	else
+	{
+		/* CHANINFO #channel +modes [:topic] */
+		channel_mode_va(NULL, c, 1, parv[1]);
+	}
+
+	if (parc == 3 || parc >= 5)
+		handle_topic(c, si->s->name, CURRTIME, parv[parc - 1]);
 }
 
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
@@ -759,7 +782,7 @@ void _modinit(module_t * m)
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
 	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
 	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
-	pcommand_add("CHANINFO", m_chaninfo, 3, MSRC_SERVER);
+	pcommand_add("CHANINFO", m_chaninfo, 2, MSRC_SERVER);
 	pcommand_add("NJOIN", m_njoin, 2, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 1, MSRC_USER | MSRC_SERVER);
