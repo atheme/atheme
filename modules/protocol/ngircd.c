@@ -398,8 +398,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		handle_nickchange(u);
 	}
 
-	/* if it's only 2 then it's a nickname change */
-	else if (parc == 2)
+	/* if it's only 1 then it's a nickname change */
+	else if (parc == 1)
 	{
                 if (!si->su)
                 {
@@ -411,7 +411,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		if (user_changenick(si->su, parv[0], CURRTIME))
 			return;
 
 		/* fix up +r if necessary -- jilles */
@@ -762,7 +762,7 @@ void _modinit(module_t * m)
 	pcommand_add("CHANINFO", m_chaninfo, 3, MSRC_SERVER);
 	pcommand_add("NJOIN", m_njoin, 2, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
-	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("NICK", m_nick, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
