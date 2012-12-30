@@ -382,15 +382,20 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
+	user_t *u;
 	bool realchange;
 
 	if (parc == 7)
 	{
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
-		user_add(parv[0], parv[2], parv[3], NULL, NULL, NULL, parv[6], si->s, CURRTIME);
+		u = user_add(parv[0], parv[2], parv[3], NULL, NULL, NULL, parv[6], si->s, CURRTIME);
+		if (u == NULL)
+			return;
 
-		handle_nickchange(user_find(parv[0]));
+		user_mode(u, parv[5]);
+
+		handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */
