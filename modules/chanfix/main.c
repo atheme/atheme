@@ -34,6 +34,9 @@ void _modinit(module_t *m)
 	service_bind_command(chanfix, &cmd_help);
 	service_bind_command(chanfix, &cmd_mark);
 
+	hook_add_event("channel_can_register");
+	hook_add_channel_can_register(chanfix_can_register);
+
 	add_bool_conf_item("AUTOFIX", &chanfix->conf_table, 0, &chanfix_do_autofix, false);
 
 	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, 60);
@@ -42,6 +45,8 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	chanfix_persist_record_t *rec = NULL;
+
+	hook_del_channel_can_register(chanfix_can_register);
 
 	mowgli_timer_destroy(base_eventloop, chanfix_autofix_timer);
 
