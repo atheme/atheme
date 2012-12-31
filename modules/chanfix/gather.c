@@ -310,7 +310,7 @@ static void write_chanfixdb(database_handle_t *db)
 			mowgli_patricia_iteration_state_t state2;
 			metadata_t *md;
 
-			MOWGLI_PATRICIA_FOREACH(md, &state, object(chan)->metadata)
+			MOWGLI_PATRICIA_FOREACH(md, &state2, object(chan)->metadata)
 			{
 				db_start_row(db, "CFMD");
 				db_write_word(db, chan->name);
