@@ -13,8 +13,8 @@ modules/chanfix/fix.c
 modules/chanserv/access.c
 modules/chanserv/akick.c
 modules/chanserv/ban.c
-modules/chanserv/clear.c
 modules/chanserv/clear_bans.c
+modules/chanserv/clear.c
 modules/chanserv/clear_flags.c
 modules/chanserv/clear_users.c
 modules/chanserv/clone.c
@@ -33,6 +33,7 @@ modules/chanserv/invite.c
 modules/chanserv/kick.c
 modules/chanserv/list.c
 modules/chanserv/mark.c
+modules/chanserv/moderate.c
 modules/chanserv/op.c
 modules/chanserv/owner.c
 modules/chanserv/protect.c
@@ -106,6 +107,7 @@ modules/groupserv/fflags.c
 modules/groupserv/flags.c
 modules/groupserv/help.c
 modules/groupserv/info.c
+modules/groupserv/invite.c
 modules/groupserv/join.c
 modules/groupserv/list.c
 modules/groupserv/listchans.c
@@ -140,8 +142,8 @@ modules/memoserv/ignore.c
 modules/memoserv/list.c
 modules/memoserv/main.c
 modules/memoserv/read.c
-modules/memoserv/send.c
 modules/memoserv/sendall.c
+modules/memoserv/send.c
 modules/memoserv/sendgroup.c
 modules/memoserv/sendops.c
 modules/nickserv/access.c
@@ -184,12 +186,12 @@ modules/nickserv/set_neverop.c
 modules/nickserv/set_nogreet.c
 modules/nickserv/set_nomemo.c
 modules/nickserv/set_noop.c
+modules/nickserv/setpass.c
 modules/nickserv/set_password.c
 modules/nickserv/set_private.c
 modules/nickserv/set_privmsg.c
 modules/nickserv/set_property.c
 modules/nickserv/set_quietchg.c
-modules/nickserv/setpass.c
 modules/nickserv/status.c
 modules/nickserv/taxonomy.c
 modules/nickserv/vacation.c
@@ -230,6 +232,7 @@ modules/operserv/specs.c
 modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
+modules/proxyscan/dnsbl.c
 modules/rpgserv/enable.c
 modules/rpgserv/help.c
 modules/rpgserv/info.c
