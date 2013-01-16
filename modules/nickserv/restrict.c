@@ -19,14 +19,43 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
 
+static void info_hook(hook_user_req_t *hdata)
+{
+	metadata_t *md;
+
+	if (has_priv(hdata->si, PRIV_USER_AUSPEX) && (md = metadata_find(hdata->mu, "private:restrict:setter")))
+	{
+		const char *setter = md->value;
+		const char *reason;
+		time_t ts;
+		char strfbuf[BUFSIZE];
+
+		md = metadata_find(hdata->mu, "private:restrict:reason");
+		reason = md != NULL ? md->value : "unknown";
+
+		md = metadata_find(hdata->mu, "private:restrict:timestamp");
+		ts = md != NULL ? atoi(md->value) : 0;
+
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+
+		command_success_nodata(hdata->si, _("%s was \2RESTRICTED\2 by %s on %s (%s)"), entity(hdata->mu)->name, setter, strfbuf, reason);
+	}
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_restrict);
+
+	hook_add_event("user_info");
+	hook_add_user_info(info_hook);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_restrict);
+
+	hook_del_user_info(info_hook);
 }
 
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
