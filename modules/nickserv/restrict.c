@@ -28,6 +28,7 @@ static void info_hook(hook_user_req_t *hdata)
 		const char *setter = md->value;
 		const char *reason;
 		time_t ts;
+		struct tm tm;
 		char strfbuf[BUFSIZE];
 
 		md = metadata_find(hdata->mu, "private:restrict:reason");
