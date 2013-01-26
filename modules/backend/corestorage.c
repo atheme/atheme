@@ -690,6 +690,11 @@ static void corestorage_h_ca(database_handle_t *db, const char *type)
 	chan = db_sread_word(db);
 	target = db_sread_word(db);
 	flags = flags_to_bitmask(db_sread_word(db), 0);
+
+	/* UNBAN (and similar, like UNQUIET) have been split to +u per github #75 */
+	if (!(their_ca_all & CA_UNBAN) && (flags & CA_REMOVE))
+		flags |= CA_UNBAN;
+
 	tmod = db_sread_time(db);
 
 	mc = mychan_find(chan);

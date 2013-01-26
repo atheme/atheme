@@ -81,7 +81,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_REMOVE))
+	if (!chanacs_source_has_flag(mc, si, CA_UNBAN))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
