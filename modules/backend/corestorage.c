@@ -26,6 +26,7 @@ DECLARE_MODULE_V1
 );
 
 unsigned int dbv;
+unsigned int their_ca_all;
 
 extern mowgli_list_t modules;
 
@@ -378,7 +379,6 @@ static void corestorage_h_luid(database_handle_t *db, const char *type)
 
 static void corestorage_h_cf(database_handle_t *db, const char *type)
 {
-	unsigned int their_ca_all;
 	const char *flags = db_sread_word(db);
 
 	their_ca_all = flags_to_bitmask(flags, 0);
