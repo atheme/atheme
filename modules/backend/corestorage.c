@@ -634,11 +634,40 @@ static void corestorage_h_mc(database_handle_t *db, const char *type)
 	}
 }
 
+static char *
+convert_templates(const char *value)
+{
+	char *newvalue, *p;
+	size_t len;
+
+	len = strlen(value);
+	newvalue = smalloc(2 * len + 1);
+	p = newvalue;
+	for (;;)
+	{
+		while (*value != '\0' && *value != '=')
+			*p++ = *value++;
+		if (*value == '\0')
+			break;
+		while (*value != '\0' && *value != ' ')
+		{
+			if (*value == 'r')
+				*p++ = 'u';
+			*p++ = *value++;
+		}
+		if (*value == '\0')
+			break;
+	}
+	*p = '\0';
+	return newvalue;
+}
+
 static void corestorage_h_md(database_handle_t *db, const char *type)
 {
 	const char *name = db_sread_word(db);
 	const char *prop = db_sread_word(db);
 	const char *value = db_sread_str(db);
+	char *newvalue = NULL;
 	void *obj = NULL;
 
 	if (!strcmp(type, "MDU"))
@@ -648,6 +677,12 @@ static void corestorage_h_md(database_handle_t *db, const char *type)
 	else if (!strcmp(type, "MDC"))
 	{
 		obj = mychan_find(name);
+		if (!(their_ca_all & CA_UNBAN) &&
+				!strcmp(prop, "private:templates"))
+		{
+			newvalue = convert_templates(value);
+			value = newvalue;
+		}
 	}
 	else if (!strcmp(type, "MDA"))
 	{
@@ -676,6 +711,7 @@ static void corestorage_h_md(database_handle_t *db, const char *type)
 	}
 
 	metadata_add(obj, prop, value);
+	free(newvalue);
 }
 
 static void corestorage_h_ca(database_handle_t *db, const char *type)
