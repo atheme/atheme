@@ -70,7 +70,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 
 		try_kick(chansvs.me->me, mc->chan, cu->user, "You are not authorized to be on this channel");
 	}
-	if (fl & CA_AKICK && !(fl & CA_REMOVE))
+	if (fl & CA_AKICK && !(fl & CA_EXEMPT))
 	{
 		chanacs_t *ca2;
 		metadata_t *md;
@@ -288,7 +288,7 @@ static void sync_channel_acl_change(hook_channel_acl_req_t *hookdata)
 		return;
 
 	if (((hookdata->ca->level ^ hookdata->oldlevel) &
-	    (CA_AKICK | CA_REMOVE | CA_USEOWNER | CA_USEPROTECT | CA_AUTOOP |
+	    (CA_AKICK | CA_EXEMPT | CA_USEOWNER | CA_USEPROTECT | CA_AUTOOP |
 	     CA_OP | CA_AUTOHALFOP | CA_HALFOP | CA_AUTOVOICE | CA_VOICE)) == 0)
 		return;
 

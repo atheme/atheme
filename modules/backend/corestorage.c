@@ -652,7 +652,7 @@ convert_templates(const char *value)
 		while (*value != '\0' && *value != ' ')
 		{
 			if (*value == 'r')
-				*p++ = 'u';
+				*p++ = 'e';
 			*p++ = *value++;
 		}
 		if (*value == '\0')
@@ -677,7 +677,7 @@ static void corestorage_h_md(database_handle_t *db, const char *type)
 	else if (!strcmp(type, "MDC"))
 	{
 		obj = mychan_find(name);
-		if (!(their_ca_all & CA_UNBAN) &&
+		if (!(their_ca_all & CA_EXEMPT) &&
 				!strcmp(prop, "private:templates"))
 		{
 			newvalue = convert_templates(value);
@@ -727,9 +727,9 @@ static void corestorage_h_ca(database_handle_t *db, const char *type)
 	target = db_sread_word(db);
 	flags = flags_to_bitmask(db_sread_word(db), 0);
 
-	/* UNBAN (and similar, like UNQUIET) have been split to +u per github #75 */
-	if (!(their_ca_all & CA_UNBAN) && (flags & CA_REMOVE))
-		flags |= CA_UNBAN;
+	/* UNBAN self and akick exempt have been split to +e per github #75 */
+	if (!(their_ca_all & CA_EXEMPT) && (flags & CA_REMOVE))
+		flags |= CA_EXEMPT;
 
 	tmod = db_sread_time(db);
 

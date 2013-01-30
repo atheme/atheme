@@ -407,7 +407,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		return;
 	}
 
-	if (flags & CA_AKICK && !(flags & CA_REMOVE))
+	if (flags & CA_AKICK && !(flags & CA_EXEMPT))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (guard ? 2 : 1))

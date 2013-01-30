@@ -60,7 +60,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		flags = chanacs_source_flags(mc, si);
-		if (flags & CA_AKICK && !(flags & CA_REMOVE))
+		if (flags & CA_AKICK && !(flags & CA_EXEMPT))
 			command_success_nodata(si, _("You are banned from \2%s\2."), mc->name);
 		else if (flags != 0)
 		{

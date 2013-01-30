@@ -228,7 +228,7 @@ struct chanacs_
 #define CA_FOUNDER	 0x00002000 /* Is a channel founder */
 #define CA_USEPROTECT	 0x00004000 /* Ability to use /msg X protect */
 #define CA_USEOWNER	 0x00008000 /* Ability to use /msg X owner */
-#define CA_UNBAN	 0x00010000 /* Ability to use /msg X unban */
+#define CA_EXEMPT	 0x00010000 /* Exempt from akick, can use /msg X unban on self */
 
 /*#define CA_SUSPENDED	 0x40000000 * Suspended access entry (not yet implemented) */
 #define CA_AKICK         0x80000000 /* Automatic kick */
@@ -253,7 +253,7 @@ struct chanacs_
 #define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_FOUNDER | CA_USEPROTECT | CA_USEOWNER)
 /* "high" privs (for MC_LIMITFLAGS) */
 #define CA_HIGHPRIVS     (CA_SET | CA_RECOVER | CA_FLAGS)
-#define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_FOUNDER | CA_USEPROTECT | CA_USEOWNER | CA_UNBAN)
+#define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_FOUNDER | CA_USEPROTECT | CA_USEOWNER | CA_EXEMPT)
 #define CA_ALL_ALL       (CA_ALLPRIVS | CA_AKICK)
 
 /* old CA_ flags */

@@ -53,7 +53,7 @@ static void grant_channel_access_hook(user_t *u)
 			cu = chanuser_find(ca->mychan->chan, u);
 			if (cu && chansvs.me != NULL)
 			{
-				if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
+				if (ca->level & CA_AKICK && !(ca->level & CA_EXEMPT))
 				{
 					/* Stay on channel if this would empty it -- jilles */
 					if (ca->mychan->chan->nummembers <= (ca->mychan->flags & MC_GUARD ? 2 : 1))

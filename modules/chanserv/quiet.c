@@ -354,7 +354,10 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_UNBAN))
+	if (!chanacs_source_has_flag(mc, si, CA_REMOVE) &&
+			(si->su == NULL ||
+			 !chanacs_source_has_flag(mc, si, CA_EXEMPT) ||
+			 irccasecmp(target, si->su->nick)))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;

@@ -155,8 +155,8 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 					"NOOP",
 					entity(mu)->name);
 	}
-	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
-		command_success_nodata(si, _("+r exempts from +b."));
+	if ((fl & (CA_AKICK | CA_EXEMPT)) == (CA_AKICK | CA_EXEMPT))
+		command_success_nodata(si, _("+e exempts from +b."));
 	else if (fl == 0)
 		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);

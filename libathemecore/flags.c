@@ -49,7 +49,7 @@ struct flags_table chanacs_flags[256] = {
 	['q'] = {CA_USEOWNER, 0, true,   "owner"},
 	['a'] = {CA_USEPROTECT, 0, true, "protect"},
 	['b'] = {CA_AKICK, 0, false,     "banned"},
-	['u'] = {CA_UNBAN, 0, true,      "unban"},
+	['e'] = {CA_EXEMPT, 0, true,     "exempt"},
 };
 
 struct gflags mu_flags[] = {
