@@ -90,6 +90,7 @@ Permissions:
 #endif
     +F - Grants full founder access.
     +b - Enables automatic kickban.
+    +e - Exempts from +b and enables unbanning self.
 
 #if module chanserv/successor_acl
 The special permission +* adds all permissions except +b, +S, and +F.
