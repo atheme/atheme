@@ -118,9 +118,8 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	operclass_t *cl = NULL;
 	const char *targettype = parv[0];
 	const char *target = parv[1];
-	char privbuf[BUFSIZE];
 	unsigned int i;
-	int j;
+	int j, n;
 
 	if (!has_any_privs(si))
 	{
@@ -185,20 +184,19 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	{
 		struct priv_category *cat = priv_categories[i];
 
-		*privbuf = '\0';
+		command_success_nodata(si, "\2%s\2:", _(cat->name));
 
-		for (j = 0; cat->privs[j].priv != NULL; j++)
+		for (j = n = 0; cat->privs[j].priv != NULL; j++)
 		{
 			if (targettype == NULL ? has_priv(si, cat->privs[j].priv) : (tu ? has_priv_user(tu, cat->privs[j].priv) : has_priv_operclass(cl, cat->privs[j].priv)))
 			{
-				if (*privbuf)
-					mowgli_strlcat(privbuf, ", ", sizeof privbuf);
-				mowgli_strlcat(privbuf, _(cat->privs[j].desc), sizeof privbuf);
+				command_success_nodata(si, "    %s (%s)", cat->privs[j].priv, _(cat->privs[j].desc));
+				++n;
 			}
 		}
 
-		if (*privbuf)
-			command_success_nodata(si, "\2%s\2: %s", _(cat->name), privbuf);
+		if (!n)
+			command_success_nodata(si, "    %s", _("(no privileges held)"));
 	}
 
 	command_success_nodata(si, _("End of privileges"));
