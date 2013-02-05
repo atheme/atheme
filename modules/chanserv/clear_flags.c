@@ -39,6 +39,7 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n, *tn;
 	chanacs_t *ca;
 	char *name = parv[0];
+	int changes = 0;
 
 	if (!name)
 	{
@@ -79,11 +80,15 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 		if (ca->level & CA_FOUNDER)
 			continue;
 
+		changes++;
 		object_unref(ca);
 	}
 
 	logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
 	command_success_nodata(si, _("Cleared flags in \2%s\2."), name);
+	if (changes > 0)
+		verbose(mc, "\2%s\2 removed all %d non-founder access entries.",
+				get_source_name(si), changes);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
