@@ -69,6 +69,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 		}
 
 		try_kick(chansvs.me->me, mc->chan, cu->user, "You are not authorized to be on this channel");
+		return;
 	}
 	if (fl & CA_AKICK && !(fl & CA_EXEMPT))
 	{
