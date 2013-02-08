@@ -32,12 +32,12 @@ typedef struct {
 	hook_t *hook;
 	void *dptr;
 	mowgli_node_t node;
+	unsigned int flags;
 } hook_run_ctx_t;
 
 typedef struct {
 	hookfn_t hookfn;
 	mowgli_node_t node;
-	unsigned int flags;
 } hook_privfn_ctx_t;
 
 #define HF_RUN		0x1
