@@ -23,6 +23,9 @@ E void hook_add_hook(const char *, hookfn_t);
 E void hook_add_hook_first(const char *, hookfn_t);
 E void hook_call_event(const char *, void *);
 
+E void hook_stop(void);
+E void hook_continue(void *newptr);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

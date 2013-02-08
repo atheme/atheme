@@ -37,7 +37,11 @@ typedef struct {
 typedef struct {
 	hookfn_t hookfn;
 	mowgli_node_t node;
+	unsigned int flags;
 } hook_privfn_ctx_t;
+
+#define HF_RUN		0x1
+#define HF_STOP		0x2
 
 static mowgli_list_t hook_run_stack = { NULL, NULL, 0 };
 
@@ -176,17 +180,53 @@ void hook_call_event(const char *event, void *dptr)
 	if (ctx.hook == NULL)
 		return;
 
+	ctx.dptr = dptr;
+	ctx.flags = HF_RUN;
+
 	mowgli_node_add_head(&ctx, &ctx.node, &hook_run_stack);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, ctx.hook->hooks.head)
 	{
 		hook_privfn_ctx_t *priv = n->data;
 
-		priv->hookfn(dptr);
+		priv->hookfn(ctx.dptr);
+		if (ctx.flags & HF_STOP)
+			goto out;
 	}
 
 out:
 	mowgli_node_delete(&ctx.node, &hook_run_stack);
+}
+
+static inline hook_run_ctx_t *hook_run_stack_highest(void)
+{
+	if (hook_run_stack.head == NULL)
+		return NULL;
+
+	return hook_run_stack.head->data;
+}
+
+void hook_stop(void)
+{
+	hook_run_ctx_t *ctx;
+
+	ctx = hook_run_stack_highest();
+	if (ctx == NULL)
+		return;
+
+	ctx->flags |= HF_STOP;
+}
+
+void hook_continue(void *newptr)
+{
+	hook_run_ctx_t *ctx;
+
+	ctx = hook_run_stack_highest();
+	if (ctx == NULL)
+		return;
+
+	ctx->dptr = newptr;
+	ctx->flags &= ~HF_STOP;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
