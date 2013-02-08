@@ -147,7 +147,7 @@ chan:admin. In the config file, to accomplish this, we add the following
 block to chanserv{}.
 
 	access {
-		"REGISTER" => "chan:admin";
+		"REGISTER" = "chan:admin";
 	};
 
 It is, however, possible to define a custom privilege, thus overriding
@@ -156,7 +156,7 @@ an operclass, like so:
 
 	chanserv {
 		access {
-			"FDROP" => "darkmyst:chan:drop";
+			"FDROP" = "darkmyst:chan:drop";
 		};
 	};
 
