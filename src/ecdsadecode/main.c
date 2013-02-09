@@ -31,21 +31,21 @@
 
 int main(int argc, const char **argv)
 {
-	BIO *out;
 	EC_KEY *pub;
 	char workbuf[BUFSIZE];
 	const unsigned char *workbuf_p;
 	size_t len, i;
-
-	memset(workbuf, '\0', sizeof workbuf);
-
-	pub = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 
 	if (argv[1] == NULL)
 	{
 		fprintf(stderr, "usage: %s [base64key]\n", argv[0]);
 		return EXIT_FAILURE;
 	}
+
+	memset(workbuf, '\0', sizeof workbuf);
+
+	pub = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
+	EC_KEY_set_conv_form(pub, POINT_CONVERSION_COMPRESSED);
 
 	len = base64_decode(argv[1], workbuf, BUFSIZE);
 	workbuf_p = (unsigned char *) workbuf;
@@ -59,10 +59,6 @@ int main(int argc, const char **argv)
 
 	printf("Public key (reassembled):\n");
 	EC_KEY_print_fp(stdout, pub, 4);
-
-	out = BIO_new(BIO_s_file());
-	printf("Public key (reassembled, PEM):\n");
-	PEM_write_bio_EC_PUBKEY(out, pub);
 
 	return EXIT_SUCCESS;
 }
