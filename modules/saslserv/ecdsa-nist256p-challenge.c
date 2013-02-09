@@ -101,6 +101,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	*out = s->challenge;
 	*out_len = CHALLENGE_LENGTH;
 
+	s->step = ECDSA_ST_RESPONSE;
 	return ASASL_MORE;
 }
 
