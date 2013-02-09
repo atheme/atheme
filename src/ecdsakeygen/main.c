@@ -33,10 +33,10 @@ int main(int argc, const char **argv)
 {
 	BIO *out;
 	EC_KEY *prv, *pub;
-	char workbuf[BUFSIZE], encbuf[BUFSIZE];
+	unsigned char *workbuf, *workbuf_p;
+	char encbuf[BUFSIZE];
 	size_t len;
 
-	memset(workbuf, '\0', sizeof workbuf);
 	memset(encbuf, '\0', sizeof encbuf);
 
 	prv = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
@@ -44,12 +44,22 @@ int main(int argc, const char **argv)
 
 	EC_KEY_generate_key(prv);
 
-	len = i2o_ECPublicKey(prv, (unsigned char **) &workbuf);
-	base64_encode(workbuf, len, encbuf, BUFSIZE);
-	o2i_ECPublicKey(&pub, (const unsigned char **) &workbuf, len);
+	len = i2o_ECPublicKey(prv, NULL);
+	workbuf = mowgli_alloc(workbuf);
+	workbuf_p = workbuf;
+	i2o_ECPublicKey(prv, &workbuf_p);
+
+	base64_encode(workbuf_p, len, encbuf, BUFSIZE);
+
+	len = base64_decode(encbuf, workbuf, BUFSIZE);
+	workbuf_p = workbuf;
+	o2i_ECPublicKey(&pub, (const unsigned char **) &workbuf_p, len);
 
 	out = BIO_new(BIO_s_file());
 	BIO_set_fp(out, stdout, BIO_NOCLOSE);
+
+	printf("Keypair:\n");
+	EC_KEY_print_fp(stdout, pub, 4);
 
 	printf("Private key:\n");
 	PEM_write_bio_ECPrivateKey(out, prv, NULL, NULL, 0, NULL, NULL);
