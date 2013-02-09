@@ -20,7 +20,7 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/plain", false, _modinit, _moddeinit,
+	"saslserv/ecdsa-nist256p-challenge", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
