@@ -96,7 +96,11 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	if (s->pubkey == NULL)
 		return ASASL_FAIL;
 
+#ifndef DEBUG_STATIC_CHALLENGE_VECTOR
 	RAND_pseudo_bytes(s->challenge, CHALLENGE_LENGTH);
+#else
+	memset(s->challenge, 'A', CHALLENGE_LENGTH);
+#endif
 	*out = s->challenge;
 	*out_len = CHALLENGE_LENGTH;
 
