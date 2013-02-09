@@ -41,6 +41,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i = 0, delcount = 0, memonum = 0;
 	unsigned int deleteall = 0, deleteold = 0;
 	mymemo_t *memo;
+	char *errptr = NULL;
 	
 	/* We only take 1 arg, and we ignore all others */
 	char *arg1 = parv[0];
@@ -73,10 +74,10 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		memonum = atoi(arg1);
+		memonum = strtoul(arg1, &errptr, 10);
 		
 		/* Make sure they didn't slip us an alphabetic index */
-		if (!memonum)
+		if (!memonum || (errptr && *errptr))
 		{
 			command_fail(si, fault_badparams, _("Invalid message index."));
 			return;
