@@ -264,7 +264,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	size_t tlen = 0;
 	char *cloak, *out = NULL;
 	char temp[BUFSIZE];
-	char mech[21];
+	char mech[61];
 	int out_len = 0;
 	metadata_t *md;
 
