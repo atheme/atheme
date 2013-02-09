@@ -273,7 +273,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	 */
 	if(!p->mechptr)
 	{
-		if(len > 20)
+		if(len > 60)
 		{
 			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);
