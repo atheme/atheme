@@ -31,9 +31,11 @@
 
 int main(int argc, const char **argv)
 {
+	BIO *out;
 	EC_KEY *pub;
 	char workbuf[BUFSIZE];
-	size_t len;
+	const unsigned char *workbuf_p;
+	size_t len, i;
 
 	memset(workbuf, '\0', sizeof workbuf);
 
@@ -45,11 +47,22 @@ int main(int argc, const char **argv)
 		return EXIT_FAILURE;
 	}
 
-	len = base64_decode(workbuf, argv[1], BUFSIZE);
-	o2i_ECPublicKey(&pub, (const unsigned char **) &workbuf, len);
+	len = base64_decode(argv[1], workbuf, BUFSIZE);
+	workbuf_p = (unsigned char *) workbuf;
+
+	o2i_ECPublicKey(&pub, &workbuf_p, len);
+	if (!EC_KEY_check_key(pub))
+	{
+		fprintf(stderr, "Key data provided on commandline is inconsistent.\n");
+		return EXIT_FAILURE;
+	}
 
 	printf("Public key (reassembled):\n");
 	EC_KEY_print_fp(stdout, pub, 4);
+
+	out = BIO_new(BIO_s_file());
+	printf("Public key (reassembled, PEM):\n");
+	PEM_write_bio_EC_PUBKEY(out, pub);
 
 	return EXIT_SUCCESS;
 }
