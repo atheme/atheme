@@ -72,13 +72,19 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 {
 	ecdsa_session_t *s = p->mechdata;
 	myuser_t *mu;
+	char *username;
 	unsigned char pubkey_raw[BUFSIZE];
 	metadata_t *md;
 	int ret;
 
-	p->username = mowgli_alloc(len + 1);
-	memcpy(p->username, message, len);
-	p->username[len] = '\0';
+	memset(pubkey_raw, '\0', sizeof pubkey_raw);
+
+	username = mowgli_alloc(len + 5);
+	memcpy(username, message, len);
+	username[len] = '\0';
+
+	p->username = sstrdup(username);
+	mowgli_free(username);
 
 	mu = myuser_find_by_nick(p->username);
 	if (mu == NULL)
@@ -88,20 +94,20 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	if (md == NULL)
 		return ASASL_FAIL;
 
-	ret = base64_decode(md->value, pubkey_raw, BUFSIZE);
+	ret = base64_decode(pubkey_raw, md->value, BUFSIZE);
 	if (ret == -1)
 		return ASASL_FAIL;
 
-	s->pubkey = o2i_ECPublicKey(&s->pubkey, (const unsigned char **) &pubkey_raw, ret);
-	if (s->pubkey == NULL)
-		return ASASL_FAIL;
+	o2i_ECPublicKey(&s->pubkey, (const unsigned char **) &pubkey_raw, ret);
 
 #ifndef DEBUG_STATIC_CHALLENGE_VECTOR
 	RAND_pseudo_bytes(s->challenge, CHALLENGE_LENGTH);
 #else
 	memset(s->challenge, 'A', CHALLENGE_LENGTH);
 #endif
-	*out = s->challenge;
+
+	*out = malloc(400);
+	memcpy(*out, s->challenge, CHALLENGE_LENGTH);
 	*out_len = CHALLENGE_LENGTH;
 
 	s->step = ECDSA_ST_RESPONSE;
