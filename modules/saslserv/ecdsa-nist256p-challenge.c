@@ -72,16 +72,15 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 {
 	ecdsa_session_t *s = p->mechdata;
 	myuser_t *mu;
-	char *username;
 	unsigned char pubkey_raw[BUFSIZE];
 	metadata_t *md;
 	int ret;
 
-	username = mowgli_alloc(len + 1);
-	memcpy(username, message, len);
-	username[len] = '\0';
+	p->username = mowgli_alloc(len + 1);
+	memcpy(p->username, message, len);
+	p->username[len] = '\0';
 
-	mu = myuser_find_by_nick(username);
+	mu = myuser_find_by_nick(p->username);
 	if (mu == NULL)
 		return ASASL_FAIL;
 
