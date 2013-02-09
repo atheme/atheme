@@ -33,7 +33,7 @@ struct sasl_message_ {
 };
 
 struct sasl_mechanism_ {
-  char name[21];
+  char name[60];
   int (*mech_start) (struct sasl_session_ *sptr, char **buffer, int *buflen);
   int (*mech_step) (struct sasl_session_ *sptr, char *message, int length, char **buffer, int *buflen);
   void (*mech_finish) (struct sasl_session_ *sptr);
