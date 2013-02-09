@@ -44,9 +44,9 @@ int main(int argc, const char **argv)
 
 	EC_KEY_generate_key(prv);
 
-	len = i2o_ECPublicKey(prv, &workbuf);
+	len = i2o_ECPublicKey(prv, (unsigned char **) &workbuf);
 	base64_encode(workbuf, len, encbuf, BUFSIZE);
-	o2i_ECPublicKey(&pub, &workbuf, len);
+	o2i_ECPublicKey(&pub, (const unsigned char **) &workbuf, len);
 
 	out = BIO_new(BIO_s_file());
 	BIO_set_fp(out, stdout, BIO_NOCLOSE);
