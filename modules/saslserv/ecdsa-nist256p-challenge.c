@@ -65,6 +65,8 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	s->pubkey = EC_KEY_new_by_curve_name(CURVE_IDENTIFIER);
 	s->step = ECDSA_ST_ACCNAME;
 
+	EC_KEY_set_conv_form(s->pubkey, POINT_CONVERSION_COMPRESSED);
+
 	return ASASL_MORE;
 }
 
@@ -74,6 +76,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	myuser_t *mu;
 	char *username;
 	unsigned char pubkey_raw[BUFSIZE];
+	const unsigned char *pubkey_raw_p;
 	metadata_t *md;
 	int ret;
 
@@ -94,11 +97,12 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	if (md == NULL)
 		return ASASL_FAIL;
 
-	ret = base64_decode(pubkey_raw, md->value, BUFSIZE);
+	ret = base64_decode(md->value, pubkey_raw, BUFSIZE);
 	if (ret == -1)
 		return ASASL_FAIL;
 
-	o2i_ECPublicKey(&s->pubkey, (const unsigned char **) &pubkey_raw, ret);
+	pubkey_raw_p = pubkey_raw;
+	o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, ret);
 
 #ifndef DEBUG_STATIC_CHALLENGE_VECTOR
 	RAND_pseudo_bytes(s->challenge, CHALLENGE_LENGTH);
