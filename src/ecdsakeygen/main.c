@@ -42,6 +42,7 @@ int main(int argc, const char **argv)
 	prv = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 	pub = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 
+	EC_KEY_set_conv_form(prv, POINT_CONVERSION_COMPRESSED);
 	EC_KEY_generate_key(prv);
 
 	len = i2o_ECPublicKey(prv, NULL);
