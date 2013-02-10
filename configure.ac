@@ -389,7 +389,7 @@ BUILDROOT=`pwd`
 AC_SUBST(BUILDROOT)
 
 PODIR=""
-if test "x$LIBINTL" != "x"; then
+if test "x$USE_NLS" != "x"; then
 	PODIR="po"
 fi
 AC_SUBST(PODIR)
