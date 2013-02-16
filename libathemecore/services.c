@@ -799,12 +799,12 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	if (is_soper(mu))
 		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), entity(mu)->name);
 
-	if (count == 10)
+	if (count % 10 == 0)
 	{
 		time_t ts = CURRTIME;
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
-		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", entity(mu)->name, mask, strfbuf);
+		wallops("Warning: \2%d\2 failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", count, entity(mu)->name, mask, strfbuf);
 	}
 
 	return false;
