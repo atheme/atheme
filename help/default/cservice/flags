@@ -17,13 +17,15 @@ TEMPLATE help entry for more information about templates.
 #if !halfops
 If you are not a founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
-don't have. For this purpose, +v grants +V, +o grants +O
-and +r grants +b.
+don't have. For this purpose, +v grants the ability to grant
++V, +o grants the ability to grant +O, and +r grants the
+ability to grant +b.
 #else
 If you are not a founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
-don't have. For this purpose, +v grants +V, +h grants +H,
-+o grants +O and +r grants +b.
+don't have. For this purpose, +v grants the ability to grant
++V, +h grants the ability to grant +H, +o grants the ability
+to grant +O, and +r grants the ability to grant +b.
 #endif
 
 #if module chanserv/set_limitflags
