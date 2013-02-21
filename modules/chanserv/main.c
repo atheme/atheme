@@ -144,7 +144,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, realcmd, newargs, cmdlist);
+			command_exec_split(si->service, si, realcmd, newargs, si->service->commands);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
@@ -174,7 +174,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, realcmd, newargs, cmdlist);
+			command_exec_split(si->service, si, realcmd, newargs, si->service->commands);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
