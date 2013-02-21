@@ -419,8 +419,10 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 			mowgli_strlcat(newargs, " ", sizeof newargs);
 			mowgli_strlcat(newargs, ++pptr, sizeof newargs);
 		}
+		
+		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
 
-		if (command_find(sptr->commands, cmd) == NULL)
+		if (command_find(sptr->commands, realcmd) == NULL)
 			return;
 		if (floodcheck(si->su, si->service->me))
 			return;
@@ -431,7 +433,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 		* (a little ugly but this way we can !set verbose)
 		*/
 		mc->flags |= MC_FORCEVERBOSE;
-		command_exec_split(si->service, si, cmd, newargs, sptr->commands);
+		command_exec_split(si->service, si, realcmd, newargs, sptr->commands);
 		mc->flags &= ~MC_FORCEVERBOSE;
 	}
 }
