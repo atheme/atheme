@@ -122,13 +122,11 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
 		{
-			mowgli_patricia_t *cmdlist = NULL;
+			const char *realcmd = service_resolve_alias(si->service, NULL, cmd);
 
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
-			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) != NULL)
-				cmdlist = si->service->commands;
-			if (cmdlist == NULL)
+			if (command_find(si->service->commands, realcmd) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -146,12 +144,12 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, cmdlist);
+			command_exec_split(si->service, si, realcmd, newargs, cmdlist);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
 		{
-			mowgli_patricia_t *cmdlist = NULL;
+			const char *realcmd;
 			char *pptr;
 
 			mowgli_strlcpy(newargs, parv[parc - 2], sizeof newargs);
@@ -163,9 +161,9 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 				*pptr = '\0';
 			}
 
-			if (command_find(si->service->commands, service_resolve_alias(si->service, NULL, cmd)) != NULL)
-				cmdlist = si->service->commands;
-			if (cmdlist == NULL)
+			realcmd = service_resolve_alias(si->service, NULL, cmd);
+
+			if (command_find(si->service->commands, realcmd) == NULL)
 				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
@@ -176,7 +174,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd, newargs, cmdlist);
+			command_exec_split(si->service, si, realcmd, newargs, cmdlist);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
