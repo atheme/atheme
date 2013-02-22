@@ -220,7 +220,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 	}
 }
 
-static void do_channel_sync(mychan_t *mc, chanacs_t *ca)
+void do_channel_sync(mychan_t *mc, chanacs_t *ca)
 {
 	chanuser_t *cu;
 	mowgli_node_t *n, *tn;
