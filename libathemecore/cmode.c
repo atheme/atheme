@@ -97,6 +97,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 	user_t *target;
 	chanuser_t *cu = NULL;
 	user_t *first_deopped_service = NULL;
+	hook_channel_mode_t hookmsg;
 
 	if ((!pos) || (*pos == '\0'))
 		return;
@@ -107,6 +108,10 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 	/* SJOIN modes of 0 means no change */
 	if (*pos == '0')
 		return;
+
+	hookmsg.u = source;
+	hookmsg.c = chan;
+	hook_call_channel_mode(&hookmsg);
 
 	for (; *pos != '\0'; pos++)
 	{

@@ -36,6 +36,7 @@ channel_delete     channel_t *
 channel_tschange   channel_t *
 channel_join       hook_channel_joinpart_t *
 channel_part       hook_channel_joinpart_t *
+channel_mode       hook_channel_mode_t *
 channel_topic      channel_t *
 channel_can_change_topic  hook_channel_topic_check_t *
 channel_message    hook_cmessage_data_t *

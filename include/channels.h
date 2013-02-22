@@ -122,6 +122,11 @@ typedef struct {
 	int approved; /* Write non-zero here to cancel the change */
 } hook_channel_topic_check_t;
 
+typedef struct {
+	user_t *u;
+	channel_t *c;
+} hook_channel_mode_t;
+
 /* cmode.c */
 E char *flags_to_string(unsigned int flags);
 E int mode_to_flag(char c);
