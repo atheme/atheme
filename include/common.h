@@ -130,7 +130,7 @@ enum faultcode_
 	fault_badauthcookie	= 15
 };
 
-typedef enum faultcode_ faultcode_t;
+typedef enum faultcode_ cmd_faultcode_t;
 
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define PRINTFLIKE(fmtarg, firstvararg) \
