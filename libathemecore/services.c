@@ -830,7 +830,7 @@ sourceinfo_t *sourceinfo_create(void)
 	return out;
 }
 
-void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
+void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
