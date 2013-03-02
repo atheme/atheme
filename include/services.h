@@ -112,7 +112,7 @@ E void change_notify(const char *from, user_t *to, const char *message, ...) PRI
 E bool bad_password(sourceinfo_t *si, myuser_t *mu);
 
 E sourceinfo_t *sourceinfo_create(void);
-E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
+E void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void command_success_table(sourceinfo_t *si, table_t *table);
