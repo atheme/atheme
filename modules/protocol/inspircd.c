@@ -138,8 +138,7 @@ static mowgli_node_t *inspircd_next_matching_ban(channel_t *c, user_t *u, int ty
 		if ((!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)) || !match_cidr(cb->mask, ipbuf))
 			return n;
 
-		if (cb->mask[1] == ':' &&
-			(cb->mask[0] == 'M' || cb->mask[0] == 'R' || cb->mask[0] == 'j' || cb->mask[0] == 'r' || cb->mask[0] == 'U'))
+		if (cb->mask[1] == ':' && strchr("MRUjrm", cb->mask[0]))
 		{
 			bool matched = false;
 
