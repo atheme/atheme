@@ -34,7 +34,7 @@ ircd_t InspIRCd = {
 	PROTOCOL_INSPIRCD,		/* Protocol type */
 	CMODE_PERM,                              /* Permanent cmodes */
 	CMODE_IMMUNE,                              /* Oper-immune cmode */
-	"beIg",                         /* Ban-like cmodes */
+	"beIgXw",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
 	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
