@@ -382,14 +382,22 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
+	server_t *s;
 	user_t *u;
 	bool realchange;
 
 	if (parc == 7)
 	{
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
+		s = server_find(parv[4]);
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server (token): %s", parv[4]);
+			return;
+		}
 
-		u = user_add(parv[0], parv[2], parv[3], NULL, NULL, NULL, parv[6], si->s, CURRTIME);
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
+
+		u = user_add(parv[0], parv[2], parv[3], NULL, NULL, NULL, parv[6], s, CURRTIME);
 		if (u == NULL)
 			return;
 
@@ -588,7 +596,8 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	s = handle_server(si, parv[0], NULL, atoi(parv[1]), parv[2]);
+	s = handle_server(si, parv[0], parc >= 4 ? parv[2] : "1",
+			atoi(parv[1]), parv[parc - 1]);
 
 	if (s != NULL && s->uplink != me.me)
 	{
