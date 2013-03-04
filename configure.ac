@@ -353,16 +353,28 @@ if test "$JSON" = "yes"; then
 	AC_DEFINE(HAVE_JSON,, Define to 1 if JSON is available)
 fi
 
-PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
-	[MOWGLI_SOURCE="system"], [
-	MOWGLI_SOURCE="internal"
-	MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-	MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-	LIBMOWGLI="libmowgli-2"
-])
+AC_ARG_WITH(libmowgli,
+  AC_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],
+    [ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
+  [], [with_libmowgli=yes])
 
-AS_IF([ test "x$MOWGLI_SOURCE" = "xinternal" ],
-	[ AC_CONFIG_SUBDIRS([libmowgli-2]) ])
+if test "x$with_libmowgli" = "xyes"; then
+  PKG_CHECK_MODULES(MOWGLI, [libmowgli-2 >= 2.0.0],
+    [MOWGLI_SOURCE="system"],
+    [with_libmowgli=no])
+fi
+
+AS_IF(
+  [test "x$with_libmowgli" = "xyes"], [ ],
+  [test "x$with_libmowgli" = "xno"], [
+    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+    LIBMOWGLI="libmowgli-2"
+    MOWGLI_SOURCE="internal"
+    AC_CONFIG_SUBDIRS([libmowgli-2])],
+  [ MOWGLI_SOURCE="system"
+    MOWGLI_CFLAGS="-I$with_libmowgli/include/libmowgli-2"
+    MOWGLI_LIBS="-L$with_libmowgli/lib -lmowgli-2" ])
 
 CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
 LIBS="$LIBS $MOWGLI_LIBS"
