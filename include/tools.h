@@ -27,6 +27,12 @@ E void arc4random_addrandom(unsigned char *dat, int datlen);
 E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
+typedef enum {
+	LOG_ANY = 0,
+	LOG_INTERACTIVE = 1, /* IRC channels */
+	LOG_NONINTERACTIVE = 2 /* files */
+} log_type_t;
+
 typedef struct logfile_ logfile_t;
 
 /* logstreams API --nenolod */
@@ -42,6 +48,7 @@ struct logfile_ {
 	unsigned int log_mask;
 
 	log_write_func_t write_func;
+	log_type_t log_type;
 };
 
 E char *log_path; /* contains path to default log. */

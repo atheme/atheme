@@ -344,6 +344,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
 		lf->log_path = sstrdup(path);
+		lf->log_type = LOG_NONINTERACTIVE;
 		lf->write_func = logfile_write;
 	}
 	else
@@ -351,6 +352,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		object_init(object(lf), path, logfile_delete_channel);
 
 		lf->log_path = sstrdup(path);
+		lf->log_type = LOG_INTERACTIVE;
 		lf->write_func = logfile_write_irc;
 
 		c = channel_find(lf->log_path);
@@ -513,14 +515,7 @@ logfile_t *logfile_find_mask(unsigned int log_mask)
 	return NULL;
 }
 
-enum log_type
-{
-	LOG_ANY = 0,
-	LOG_INTERACTIVE = 1, /* IRC channels */
-	LOG_NONINTERACTIVE = 2 /* files */
-};
-
-static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
+static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 		va_list args)
 {
 	static bool in_slog = false;
@@ -544,11 +539,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	{
 		logfile_t *lf = (logfile_t *) n->data;
 
-		if (type == LOG_INTERACTIVE &&
-				lf->write_func != logfile_write_irc)
-			continue;
-		if (type == LOG_NONINTERACTIVE &&
-				lf->write_func == logfile_write_irc)
+		if (type != LOG_ANY && type != lf->log_type)
 			continue;
 		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
 			continue;
@@ -570,7 +561,7 @@ static void vslog_ext(enum log_type type, unsigned int level, const char *fmt,
 	in_slog = false;
 }
 
-static PRINTFLIKE(3, 4) void slog_ext(enum log_type type, unsigned int level,
+static PRINTFLIKE(3, 4) void slog_ext(log_type_t type, unsigned int level,
 		const char *fmt, ...)
 {
 	va_list args;
