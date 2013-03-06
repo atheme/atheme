@@ -266,6 +266,35 @@ static void logfile_write_irc(logfile_t *lf, const char *buf)
 }
 
 /*
+ * logfile_write_snotices(logfile_t *lf, const char *buf)
+ *
+ * Writes an I/O stream to IRC snotes.
+ *
+ * Inputs:
+ *       - logfile_t representing the I/O stream.
+ *       - data to write to the IRC target
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - none
+ */
+static void logfile_write_snotices(logfile_t *lf, const char *buf)
+{
+	channel_t *c;
+
+	return_if_fail(lf != NULL);
+	return_if_fail(lf->log_path != NULL);
+	return_if_fail(buf != NULL);
+
+	if (!me.connected || me.bursting)
+		return;
+
+	wallops("%s", buf);
+}
+
+/*
  * logfile_register(logfile_t *lf)
  *
  * Registers a log I/O stream.
@@ -346,6 +375,14 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		lf->log_path = sstrdup(path);
 		lf->log_type = LOG_NONINTERACTIVE;
 		lf->write_func = logfile_write;
+	}
+	else if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
+	{
+		object_init(object(lf), path, logfile_delete_channel);
+
+		lf->log_path = sstrdup(path);
+		lf->log_type = LOG_INTERACTIVE;
+		lf->write_func = logfile_write_snotices;
 	}
 	else
 	{

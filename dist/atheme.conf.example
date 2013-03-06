@@ -1859,6 +1859,11 @@ logfile "var/audit.log" { denycmd; };
  */
 logfile "#services" { error; info; admin; request; register; denycmd; };
 
+/*
+ * This block logs to server notices.
+ */
+logfile "!snotices" { error; info; request; denycmd; };
+
 /******************************************************************************
  * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *
  ******************************************************************************/
