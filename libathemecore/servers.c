@@ -274,12 +274,9 @@ server_t *server_find(const char *name)
 {
 	server_t *s;
 
-	if (ircd->uses_uid)
-	{
-		s = mowgli_patricia_retrieve(sidlist, name);
-		if (s != NULL)
-			return s;
-	}
+	s = mowgli_patricia_retrieve(sidlist, name);
+	if (s != NULL)
+		return s;
 
 	return mowgli_patricia_retrieve(servlist, name);
 }
