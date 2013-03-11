@@ -1493,7 +1493,7 @@ gameserv {
  */
 rpgserv {
 	/* (*)nick
-	 * The nickname we want GameServ to have.
+	 * The nickname we want RPGServ to have.
 	 */
 	nick = "RPGServ";
 
@@ -1513,13 +1513,13 @@ rpgserv {
 	real = "RPG Finding Services";
 
 	/* (*)aliases
-	 * Command aliases for GameServ.
+	 * Command aliases for RPGServ.
 	 */
 	aliases {
 	};
 	
 	/* (*)access
-	 * Command access changes for GameServ.
+	 * Command access changes for RPGServ.
 	 */
 	access {
 	};
