@@ -647,6 +647,13 @@ void chanfix_can_register(hook_channel_register_check_t *req)
 		/* If /msg chanfix chanfix would work, only allow users it
 		 * could possibly op to register the channel.
 		 */
+		if (has_priv(req->si, PRIV_CHAN_ADMIN))
+		{
+			slog(LG_INFO, "chanfix_can_register(): forced registration of %s by %s",
+					req->name,
+					req->si->smu != NULL ? req->si->smu : "??");
+			return;
+		}
 		req->approved = 1;
 		command_fail(req->si, fault_noprivs, _("Your chanfix score is too low to register \2%s\2."), req->name);
 	}
