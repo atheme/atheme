@@ -207,7 +207,7 @@ mqueue_should_enforce(mqueue_t *mq)
 		if (msg_matches > (antiflood_msg_count / 2))
 			return MQ_ENFORCE_MSG;
 
-		if (usr_matches > (antiflood_msg_count / 3))
+		if (usr_matches > (antiflood_msg_count / 2))
 			return MQ_ENFORCE_LINE;
 	}
 
