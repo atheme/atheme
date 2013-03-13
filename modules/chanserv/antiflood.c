@@ -242,7 +242,7 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 }
 
 static void
-antiflood_unenforce_quiet(channel_t *c)
+antiflood_unenforce_banlike(channel_t *c)
 {
 	mowgli_node_t *n, *tn;
 
@@ -261,9 +261,23 @@ antiflood_unenforce_quiet(channel_t *c)
 static void
 antiflood_enforce_kickban(user_t *u, channel_t *c)
 {
+	chanban_t *cb;
+
 	ban(chansvs.me->me, c, u);
 	remove_ban_exceptions(chansvs.me->me, c, u);
 	try_kick(chansvs.me->me, c, u, "Flooding");
+
+	/* poison tail */
+	if (c->bans.tail != NULL)
+	{
+		cb = c->bans.tail->data;
+		cb->flags |= CBAN_ANTIFLOOD;
+	}
+	else if (c->bans.head != NULL)
+	{
+		cb = c->bans.head->data;
+		cb->flags |= CBAN_ANTIFLOOD;
+	}
 }
 
 static void
@@ -278,8 +292,8 @@ typedef struct {
 } antiflood_enforce_method_impl_t;
 
 static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
-	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet, &antiflood_unenforce_quiet },
-	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban },
+	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet, &antiflood_unenforce_banlike },
+	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban, &antiflood_unenforce_banlike },
 	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline },
 };
 
