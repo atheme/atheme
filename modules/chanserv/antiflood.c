@@ -309,7 +309,7 @@ antiflood_enforce_method_impl_get(mychan_t *mc)
 			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_QUIET];
 		else if (!strcasecmp(md->value, "KICKBAN"))
 			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_KICKBAN];
-		else if (!strcasecmp(md->value, "KLINE"))
+		else if (!strcasecmp(md->value, "AKILL"))
 			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_KLINE];
 	}
 
@@ -392,9 +392,93 @@ on_channel_drop(mychan_t *mc)
 	mqueue_destroy(mq);
 }
 
+static void
+cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+
+	if (!(mc = mychan_find(parv[0])))
+	{
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
+		return;
+	}
+
+	/* allow opers with PRIV_CHAN_ADMIN to override this setting since it has
+	   oper-specific settings (i.e. AKILL action) */ 
+	if (!chanacs_source_has_flag(mc, si, CA_SET) && !has_priv(si, PRIV_CHAN_ADMIN))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+		return;
+	}
+
+	if (parv[1] == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET FLOOD");
+		return;
+	}
+
+	if (!strcasecmp(parv[1], "OFF"))
+	{
+		mc->flags &= ~MC_ANTIFLOOD;
+		metadata_delete(mc, METADATA_KEY_ENFORCE_METHOD);
+
+		command_success_nodata(si, _("Flood protection turned off for \2%s\2."), mc->name);
+		return;
+	}
+	else if (!strcasecmp(parv[1], "ON"))
+	{
+		mc->flags |= MC_ANTIFLOOD;
+		metadata_delete(mc, METADATA_KEY_ENFORCE_METHOD);
+
+		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with default settings."), mc->name);
+		return;
+	}
+	else if (!strcasecmp(parv[1], "QUIET"))
+	{
+		mc->flags |= MC_ANTIFLOOD;
+		metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "QUIET");
+
+		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "QUIET");
+		return;
+	}
+	else if (!strcasecmp(parv[1], "KICKBAN"))
+	{
+		mc->flags |= MC_ANTIFLOOD;
+		metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "KICKBAN");
+
+		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "KICKBAN");
+		return;
+	}
+	else if (!strcasecmp(parv[1], "AKILL") || !strcasecmp(parv[1], "KLINE"))
+	{
+		if (has_priv(si, PRIV_AKILL))
+		{
+			mc->flags |= MC_ANTIFLOOD;
+			metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "AKILL");
+
+			command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "AKILL");
+			return;
+		}
+		else
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+			return;
+		}
+	}
+}
+
+static command_t cs_set_antiflood = {
+	"ANTIFLOOD", N_("Set anti-flood action"), AC_NONE, 2,
+	cs_set_cmd_antiflood, { .path = "cservice/set_antiflood" }
+};
+
+mowgli_patricia_t **cs_set_cmdtree;
+
 void
 _modinit(module_t *m)
 {
+	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
+
 	/* attempt to pull in the place_quietmask() routine from chanserv/quiet,
 	   we don't see it as a hardfail because we can run without QUIET support. */
 	if (module_request("chanserv/quiet"))
@@ -417,11 +501,15 @@ _modinit(module_t *m)
 	mqueue_gc_timer = mowgli_timer_add(base_eventloop, "mqueue_gc", mqueue_gc, NULL, 300);
 
 	antiflood_unenforce_timer = mowgli_timer_add(base_eventloop, "antiflood_unenforce", antiflood_unenforce_timer_cb, NULL, 3600);
+
+	command_add(&cs_set_antiflood, *cs_set_cmdtree);
 }
 
 void
 _moddeinit(module_unload_intent_t intent)
 {
+	command_delete(&cs_set_antiflood, *cs_set_cmdtree);
+
 	hook_del_channel_message(on_channel_message);
 	hook_del_channel_drop(on_channel_drop);
 
