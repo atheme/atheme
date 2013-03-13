@@ -283,6 +283,13 @@ static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFOR
 	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline },
 };
 
+static inline antiflood_enforce_method_impl_t *
+antiflood_enforce_method_impl_get(mychan_t *mc)
+{
+	/* XXX: stub */
+	return &antiflood_enforce_methods[antiflood_enforce_method];
+}
+
 static void
 antiflood_unenforce_timer_cb(void *unused)
 {
@@ -291,7 +298,7 @@ antiflood_unenforce_timer_cb(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		antiflood_enforce_method_impl_t *enf = &antiflood_enforce_methods[antiflood_enforce_method];
+		antiflood_enforce_method_impl_t *enf = antiflood_enforce_method_impl_get(mc);
 
 		if (mc->chan == NULL)
 			continue;
@@ -335,7 +342,7 @@ on_channel_message(hook_cmessage_data_t *data)
 
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
 	{
-		antiflood_enforce_method_impl_t *enf = &antiflood_enforce_methods[antiflood_enforce_method];
+		antiflood_enforce_method_impl_t *enf = antiflood_enforce_method_impl_get(mc);
 
 		if (enf == NULL || enf->enforce == NULL)
 			return;
