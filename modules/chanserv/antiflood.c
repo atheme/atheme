@@ -182,7 +182,7 @@ mqueue_should_enforce(mqueue_t *mq)
 		{
 			msg_t *msg = n->data;
 
-			if (!strcasecmp(msg->message, newest->message))
+			if (msg != newest && !strcasecmp(msg->message, newest->message))
 				enforce = true;
 		}
 
