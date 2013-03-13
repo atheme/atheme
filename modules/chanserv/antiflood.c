@@ -474,6 +474,25 @@ static command_t cs_set_antiflood = {
 
 mowgli_patricia_t **cs_set_cmdtree;
 
+static int
+c_ci_antiflood_enforce_method(mowgli_config_file_entry_t *ce)
+{
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	if (!strcasecmp(ce->vardata, "QUIET"))
+		antiflood_enforce_method = ANTIFLOOD_ENFORCE_QUIET;
+	else if (!strcasecmp(ce->vardata, "KICKBAN"))
+		antiflood_enforce_method = ANTIFLOOD_ENFORCE_KICKBAN;
+	else if (!strcasecmp(ce->vardata, "AKILL") || !strcasecmp(ce->vardata, "KLINE"))
+		antiflood_enforce_method = ANTIFLOOD_ENFORCE_KLINE;
+
+	return 0;
+}
+
 void
 _modinit(module_t *m)
 {
@@ -503,6 +522,8 @@ _modinit(module_t *m)
 	antiflood_unenforce_timer = mowgli_timer_add(base_eventloop, "antiflood_unenforce", antiflood_unenforce_timer_cb, NULL, 3600);
 
 	command_add(&cs_set_antiflood, *cs_set_cmdtree);
+
+	add_conf_item("ANTIFLOOD_ENFORCE_METHOD", &chansvs.me->conf_table, c_ci_antiflood_enforce_method);
 }
 
 void
@@ -515,6 +536,8 @@ _moddeinit(module_unload_intent_t intent)
 
 	mowgli_patricia_destroy(mqueue_trie, mqueue_trie_destroy_cb, NULL);
 	mowgli_timer_destroy(base_eventloop, mqueue_gc_timer);
+
+	del_conf_item("ANTIFLOOD_ENFORCE_METHOD", &chansvs.me->conf_table);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
