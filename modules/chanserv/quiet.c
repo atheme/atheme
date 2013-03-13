@@ -56,7 +56,7 @@ static void make_extbanmask(char *buf, size_t buflen, const char *mask)
 	mowgli_strlcat(buf, mask, buflen);
 }
 
-static chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
+chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
 	chanban_t *cb = NULL;
