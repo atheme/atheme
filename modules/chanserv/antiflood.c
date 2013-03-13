@@ -176,17 +176,17 @@ mqueue_should_enforce(mqueue_t *mq)
 	if (age_delta <= antiflood_msg_time)
 	{
 		mowgli_node_t *n;
-		bool enforce = false;
+		int matches = 0;
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
 			msg_t *msg = n->data;
 
-			if (msg != newest && !strcasecmp(msg->message, newest->message))
-				enforce = true;
+			if (!strcasecmp(msg->message, newest->message))
+				matches++;
 		}
 
-		if (enforce)
+		if (matches > (antiflood_msg_count / 2))
 			return MQ_ENFORCE_MSG;
 	}
 
