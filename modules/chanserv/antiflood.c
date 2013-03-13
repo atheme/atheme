@@ -191,18 +191,24 @@ mqueue_should_enforce(mqueue_t *mq)
 	if (age_delta <= antiflood_msg_time)
 	{
 		mowgli_node_t *n;
-		int matches = 0;
+		size_t msg_matches = 0, usr_matches = 0;
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
 			msg_t *msg = n->data;
 
 			if (!strcasecmp(msg->message, newest->message))
-				matches++;
+				msg_matches++;
+
+			if (msg->source == newest->source)
+				usr_matches++;
 		}
 
-		if (matches > (antiflood_msg_count / 2))
+		if (msg_matches > (antiflood_msg_count / 2))
 			return MQ_ENFORCE_MSG;
+
+		if (usr_matches > (antiflood_msg_count / 3))
+			return MQ_ENFORCE_LINE;
 	}
 
 	return MQ_ENFORCE_NONE;
