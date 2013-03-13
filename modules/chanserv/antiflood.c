@@ -230,7 +230,7 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 	char hostbuf[BUFSIZE];
 
 	mowgli_strlcpy(hostbuf, "*!*@", sizeof hostbuf);
-	mowgli_strlcat(hostbuf, u->host, sizeof hostbuf);
+	mowgli_strlcat(hostbuf, u->vhost, sizeof hostbuf);
 
 	if (place_quietmask != NULL)
 		place_quietmask(c, MTYPE_ADD, hostbuf);
