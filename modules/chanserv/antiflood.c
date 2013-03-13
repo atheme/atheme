@@ -11,7 +11,17 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org/>"
 );
 
+static int antiflood_msg_time = 60;
+static int antiflood_msg_count = 5;
+static int antiflood_lne_time = 3;
+
 static void on_channel_message(hook_cmessage_data_t *data);
+
+typedef enum {
+	MQ_ENFORCE_NONE = 0,
+	MQ_ENFORCE_MSG,
+	MQ_ENFORCE_LINE,
+} mqueue_enforce_strategy_t;
 
 typedef struct {
 	char *name;
@@ -131,6 +141,46 @@ mqueue_gc(void *unused)
 		if ((mq->last_used + 3600) < CURRTIME)
 			mqueue_destroy(mq);
 	}
+}
+
+static mqueue_enforce_strategy_t
+mqueue_should_enforce(mqueue_t *mq)
+{
+	msg_t *oldest, *newest;
+	time_t age_delta;
+
+	if (MOWGLI_LIST_LENGTH(&mq->entries) < mq->max)
+		return MQ_ENFORCE_NONE;
+
+	oldest = mq->entries.head->data;
+	newest = mq->entries.tail->data;
+
+	if (oldest == NULL || newest == NULL || oldest == newest)
+		return MQ_ENFORCE_NONE;
+
+	age_delta = newest->time - oldest->time;
+
+	if (age_delta <= antiflood_lne_time)
+		return MQ_ENFORCE_LINE;
+
+	if (age_delta <= antiflood_msg_time)
+	{
+		mowgli_node_t *n;
+		bool enforce = true;
+
+		MOWGLI_ITER_FOREACH(n, mq->entries.head)
+		{
+			msg_t *msg = n->data;
+
+			if (strcasecmp(msg->message, newest->message))
+				enforce = false;
+		}
+
+		if (enforce)
+			return MQ_ENFORCE_MSG;
+	}
+
+	return MQ_ENFORCE_NONE;
 }
 
 static void
