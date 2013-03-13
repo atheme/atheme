@@ -367,7 +367,7 @@ on_channel_message(hook_cmessage_data_t *data)
 		return;
 
 	/* do not enforce unless enforcement is specifically enabled */
-	if (!(data->c->flags & MC_ANTIFLOOD))
+	if (!(mc->flags & MC_ANTIFLOOD))
 		return;
 
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
