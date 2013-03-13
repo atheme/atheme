@@ -233,7 +233,29 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 	mowgli_strlcat(hostbuf, u->vhost, sizeof hostbuf);
 
 	if (place_quietmask != NULL)
-		place_quietmask(c, MTYPE_ADD, hostbuf);
+	{
+		chanban_t *cb;
+
+		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
+		cb->flags |= CBAN_ANTIFLOOD;
+	}
+}
+
+static void
+antiflood_unenforce_quiet(channel_t *c)
+{
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, c->bans.head)
+	{
+		chanban_t *cb = n->data;
+
+		if (!(cb->flags & CBAN_ANTIFLOOD))
+			continue;
+
+		modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
+		chanban_delete(cb);
+	}
 }
 
 static void
@@ -252,13 +274,34 @@ antiflood_enforce_kline(user_t *u, channel_t *c)
 
 typedef struct {
 	void (*enforce)(user_t *u, channel_t *c);
+	void (*unenforce)(channel_t *c);
 } antiflood_enforce_method_impl_t;
 
 static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
-	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet },
+	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet, &antiflood_unenforce_quiet },
 	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban },
 	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline },
 };
+
+static void
+antiflood_unenforce_timer_cb(void *unused)
+{
+	mowgli_patricia_iteration_state_t state;
+	mychan_t *mc;
+
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+	{
+		antiflood_enforce_method_impl_t *enf = &antiflood_enforce_methods[antiflood_enforce_method];
+
+		if (mc->chan == NULL)
+			continue;
+
+		if (enf->unenforce != NULL)
+			enf->unenforce(mc->chan);
+	}
+}
+
+static mowgli_eventloop_timer_t *antiflood_unenforce_timer = NULL;
 
 static void
 on_channel_message(hook_cmessage_data_t *data)
@@ -335,6 +378,8 @@ _modinit(module_t *m)
 	mqueue_heap = sharedheap_get(sizeof(mqueue_t));
 	mqueue_trie = mowgli_patricia_create(irccasecanon);
 	mqueue_gc_timer = mowgli_timer_add(base_eventloop, "mqueue_gc", mqueue_gc, NULL, 300);
+
+	antiflood_unenforce_timer = mowgli_timer_add(base_eventloop, "antiflood_unenforce", antiflood_unenforce_timer_cb, NULL, 3600);
 }
 
 void
