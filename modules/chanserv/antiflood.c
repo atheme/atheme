@@ -263,6 +263,7 @@ static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFOR
 static void
 on_channel_message(hook_cmessage_data_t *data)
 {
+	chanuser_t *cu;
 	mychan_t *mc;
 	mqueue_t *mq;
 	msg_t *msg;
@@ -272,6 +273,10 @@ on_channel_message(hook_cmessage_data_t *data)
 	return_if_fail(data->u != NULL);
 	return_if_fail(data->c != NULL);
 
+	cu = chanuser_find(data->c, data->u);
+	if (cu == NULL)
+		return;
+
 	mc = MYCHAN_FROM(data->c);
 	if (mc == NULL)
 		return;
@@ -280,6 +285,10 @@ on_channel_message(hook_cmessage_data_t *data)
 	return_if_fail(mq != NULL);
 
 	msg = msg_create(mq, data->u, data->msg);
+
+	/* never enforce against any user who has special CSTATUS flags. */
+	if (cu->modes)
+		return;
 
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
 	{
