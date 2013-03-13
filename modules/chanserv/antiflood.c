@@ -366,6 +366,10 @@ on_channel_message(hook_cmessage_data_t *data)
 	if (cu->modes)
 		return;
 
+	/* do not enforce unless enforcement is specifically enabled */
+	if (!(data->c->flags & MC_ANTIFLOOD))
+		return;
+
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
 	{
 		antiflood_enforce_method_impl_t *enf = antiflood_enforce_method_impl_get(mc);
