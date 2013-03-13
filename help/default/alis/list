@@ -16,4 +16,6 @@ Options are:
 Syntax: LIST <pattern> [options]
 
 Examples:
+    /msg &nick& LIST *seachterm*
+    /msg &nick& LIST * -topic *seachterm*
     /msg &nick& LIST * -min 50
