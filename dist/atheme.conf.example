@@ -332,6 +332,9 @@ loadmodule "modules/nickserv/vhost";
  *  This module provides emulation of the ircservices XOP scheme ONLY.
  *  Do not report discrepencies when using native commands to edit channel
  *  ACLs. This is intentional.
+ * Flood protection                             modules/chanserv/antiflood
+ *  This module should be loaded after at least chanserv/quiet if you want
+ *  the autoquiet feature to work.
  */
 loadmodule "modules/chanserv/main";
 loadmodule "modules/chanserv/access";
@@ -392,6 +395,7 @@ loadmodule "modules/chanserv/topic";
 loadmodule "modules/chanserv/voice";
 loadmodule "modules/chanserv/why";
 #loadmodule "modules/chanserv/xop";
+loadmodule "modules/chanserv/antiflood";
 
 /* CHANFIX module.
  *
@@ -1232,6 +1236,13 @@ chanserv {
 	 * by default (the old behaviour).
 	 */
 	#akick_time = 10;
+
+	/* (*)antiflood_enforce_method
+	 * The enforcement method to use for flood protection by default.
+	 * This may be overridden by channel staff.
+	 * Available options are: quiet, kickban and akill.
+	 */
+	antiflood_enforce_method = quiet;
 };
 
 /* CHANFIX configuration.
