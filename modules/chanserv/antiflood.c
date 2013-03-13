@@ -55,8 +55,9 @@ typedef struct {
 } mqueue_t;
 
 typedef struct {
+	stringref source;
+	stringref message;
 	time_t time;
-	char *message;
 	mowgli_node_t node;
 } msg_t;
 
@@ -65,20 +66,22 @@ static mowgli_heap_t *msg_heap = NULL;
 static void
 msg_destroy(msg_t *msg, mqueue_t *mq)
 {
-	free(msg->message);
+	strshare_unref(msg->message);
+	strshare_unref(msg->source);
 	mowgli_node_delete(&msg->node, &mq->entries);
 
 	mowgli_heap_free(msg_heap, msg);
 }
 
 static msg_t *
-msg_create(mqueue_t *mq, const char *message)
+msg_create(mqueue_t *mq, user_t *u, const char *message)
 {
 	msg_t *msg;
 
 	msg = mowgli_heap_alloc(msg_heap);
-	msg->message = sstrdup(message);
+	msg->message = strshare_get(message);
 	msg->time = CURRTIME;
+	msg->source = u->uid != NULL ? strshare_ref(u->uid) : strshare_ref(u->nick);
 
 	if (MOWGLI_LIST_LENGTH(&mq->entries) > mq->max)
 	{
@@ -263,7 +266,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	mq = mqueue_get(mc);
 	return_if_fail(mq != NULL);
 
-	msg = msg_create(mq, data->msg);
+	msg = msg_create(mq, data->u, data->msg);
 
 	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
 	{
