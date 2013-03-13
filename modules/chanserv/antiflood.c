@@ -30,7 +30,7 @@ DECLARE_MODULE_V1
 static int antiflood_msg_time = 60;
 static int antiflood_msg_count = 10;
 
-static void on_channel_message(hook_cmessage_data_t *data);
+#define METADATA_KEY_ENFORCE_METHOD	"private:antiflood:enforce-method"
 
 typedef enum {
 	ANTIFLOOD_ENFORCE_QUIET = 0,
@@ -300,7 +300,19 @@ static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFOR
 static inline antiflood_enforce_method_impl_t *
 antiflood_enforce_method_impl_get(mychan_t *mc)
 {
-	/* XXX: stub */
+	metadata_t *md;
+
+	md = metadata_find(mc, METADATA_KEY_ENFORCE_METHOD);
+	if (md != NULL)
+	{
+		if (!strcasecmp(md->value, "QUIET"))
+			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_QUIET];
+		else if (!strcasecmp(md->value, "KICKBAN"))
+			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_KICKBAN];
+		else if (!strcasecmp(md->value, "KLINE"))
+			return &antiflood_enforce_methods[ANTIFLOOD_ENFORCE_KLINE];
+	}
+
 	return &antiflood_enforce_methods[antiflood_enforce_method];
 }
 
