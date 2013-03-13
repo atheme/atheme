@@ -53,6 +53,7 @@ struct chanban_
   char *mask;
   int type; /* 'b', 'e', 'I', etc -- jilles */
   mowgli_node_t node; /* for channel_t.bans */
+  unsigned int flags;
 };
 
 /* channel_t.modes */
@@ -75,6 +76,9 @@ struct chanban_
 #define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
 #define CSTATUS_PROTECT 0x00000008      /* unreal/inspircd +a */
 #define CSTATUS_HALFOP  0x00000010      /* unreal/inspircd +h */
+
+/* chanban_t.flags */
+#define CBAN_ANTIFLOOD  0x00000001	/* chanserv/antiflood set this */
 
 #define MTYPE_NUL 0
 #define MTYPE_ADD 1
