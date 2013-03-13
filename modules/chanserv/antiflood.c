@@ -260,6 +260,17 @@ on_channel_message(hook_cmessage_data_t *data)
 	}
 }
 
+static void
+on_channel_drop(mychan_t *mc)
+{
+	mqueue_t *mq;
+
+	mq = mqueue_get(mc);
+	return_if_fail(mq != NULL);
+
+	mqueue_destroy(mq);
+}
+
 void
 _modinit(module_t *m)
 {
@@ -275,6 +286,9 @@ _modinit(module_t *m)
 	hook_add_event("channel_message");
 	hook_add_channel_message(on_channel_message);
 
+	hook_add_event("channel_drop");
+	hook_add_channel_drop(on_channel_drop);
+
 	msg_heap = sharedheap_get(sizeof(msg_t));
 
 	mqueue_heap = sharedheap_get(sizeof(mqueue_t));
@@ -286,6 +300,7 @@ void
 _moddeinit(module_unload_intent_t intent)
 {
 	hook_del_channel_message(on_channel_message);
+	hook_del_channel_drop(on_channel_drop);
 
 	mowgli_patricia_destroy(mqueue_trie, mqueue_trie_destroy_cb, NULL);
 	mowgli_timer_destroy(base_eventloop, mqueue_gc_timer);
