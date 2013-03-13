@@ -53,6 +53,7 @@ msg_create(mqueue_t *mq, const char *message)
 	}
 
 	mowgli_node_add(msg, &msg->node, &mq->entries);
+	mq->last_used = CURRTIME;
 
 	return msg;
 }
