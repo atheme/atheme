@@ -13,7 +13,6 @@ DECLARE_MODULE_V1
 
 static int antiflood_msg_time = 60;
 static int antiflood_msg_count = 10;
-static int antiflood_lne_time = 3;
 
 static void on_channel_message(hook_cmessage_data_t *data);
 
@@ -169,9 +168,6 @@ mqueue_should_enforce(mqueue_t *mq)
 		return MQ_ENFORCE_NONE;
 
 	age_delta = newest->time - oldest->time;
-
-	if (age_delta <= antiflood_lne_time)
-		return MQ_ENFORCE_LINE;
 
 	if (age_delta <= antiflood_msg_time)
 	{
