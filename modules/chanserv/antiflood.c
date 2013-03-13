@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 );
 
 static int antiflood_msg_time = 60;
-static int antiflood_msg_count = 5;
+static int antiflood_msg_count = 10;
 static int antiflood_lne_time = 3;
 
 static void on_channel_message(hook_cmessage_data_t *data);
@@ -89,6 +89,7 @@ mqueue_create(const char *name)
 	mq = mowgli_heap_alloc(mqueue_heap);
 	mq->name = sstrdup(name);
 	mq->last_used = CURRTIME;
+	mq->max = antiflood_msg_count;
 
 	mowgli_patricia_add(mqueue_trie, mq->name, mq);
 
@@ -175,14 +176,14 @@ mqueue_should_enforce(mqueue_t *mq)
 	if (age_delta <= antiflood_msg_time)
 	{
 		mowgli_node_t *n;
-		bool enforce = true;
+		bool enforce = false;
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
 			msg_t *msg = n->data;
 
-			if (strcasecmp(msg->message, newest->message))
-				enforce = false;
+			if (!strcasecmp(msg->message, newest->message))
+				enforce = true;
 		}
 
 		if (enforce)
