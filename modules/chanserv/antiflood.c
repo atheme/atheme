@@ -192,6 +192,7 @@ mqueue_should_enforce(mqueue_t *mq)
 	{
 		mowgli_node_t *n;
 		size_t msg_matches = 0, usr_matches = 0;
+		time_t usr_first_seen = 0;
 
 		MOWGLI_ITER_FOREACH(n, mq->entries.head)
 		{
@@ -201,13 +202,19 @@ mqueue_should_enforce(mqueue_t *mq)
 				msg_matches++;
 
 			if (msg->source == newest->source)
+			{
 				usr_matches++;
+
+				if (!usr_first_seen)
+					usr_first_seen = msg->time;
+			}
 		}
 
 		if (msg_matches > (antiflood_msg_count / 2))
 			return MQ_ENFORCE_MSG;
 
-		if (usr_matches > (antiflood_msg_count / 2))
+		if (usr_matches > (antiflood_msg_count / 2) &&
+			((newest->time - usr_first_seen) < antiflood_msg_time / 4))
 			return MQ_ENFORCE_LINE;
 	}
 
