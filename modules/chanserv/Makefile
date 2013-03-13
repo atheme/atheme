@@ -12,6 +12,7 @@ SRCS =			\
 	main.c	\
 	access.c \
 	akick.c	\
+	antiflood.c	\
 	ban.c		\
 	clear.c	\
 	clear_bans.c	\
