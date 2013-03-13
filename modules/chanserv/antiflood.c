@@ -56,7 +56,7 @@ typedef struct {
 
 typedef struct {
 	stringref source;
-	stringref message;
+	char *message;
 	time_t time;
 	mowgli_node_t node;
 } msg_t;
@@ -66,7 +66,7 @@ static mowgli_heap_t *msg_heap = NULL;
 static void
 msg_destroy(msg_t *msg, mqueue_t *mq)
 {
-	strshare_unref(msg->message);
+	free(msg->message);
 	strshare_unref(msg->source);
 	mowgli_node_delete(&msg->node, &mq->entries);
 
@@ -79,7 +79,7 @@ msg_create(mqueue_t *mq, user_t *u, const char *message)
 	msg_t *msg;
 
 	msg = mowgli_heap_alloc(msg_heap);
-	msg->message = strshare_get(message);
+	msg->message = sstrdup(message);
 	msg->time = CURRTIME;
 	msg->source = u->uid != NULL ? strshare_ref(u->uid) : strshare_ref(u->nick);
 
