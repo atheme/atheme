@@ -18,6 +18,15 @@ static int antiflood_lne_time = 3;
 static void on_channel_message(hook_cmessage_data_t *data);
 
 typedef enum {
+	ANTIFLOOD_ENFORCE_QUIET = 0,
+	ANTIFLOOD_ENFORCE_KICKBAN,
+	ANTIFLOOD_ENFORCE_KLINE,
+	ANTIFLOOD_ENFORCE_COUNT
+} antiflood_enforce_method_t;
+
+static antiflood_enforce_method_t antiflood_enforce_method = ANTIFLOOD_ENFORCE_QUIET;
+
+typedef enum {
 	MQ_ENFORCE_NONE = 0,
 	MQ_ENFORCE_MSG,
 	MQ_ENFORCE_LINE,
@@ -183,6 +192,45 @@ mqueue_should_enforce(mqueue_t *mq)
 	return MQ_ENFORCE_NONE;
 }
 
+static chanban_t *(*place_quietmask)(channel_t *c, int dir, const char *hostbuf) = NULL;
+
+/* this requires `chanserv/quiet` to be loaded. */
+static void
+antiflood_enforce_quiet(user_t *u, channel_t *c)
+{
+	char hostbuf[BUFSIZE];
+
+	mowgli_strlcpy(hostbuf, "*!*@", sizeof hostbuf);
+	mowgli_strlcat(hostbuf, u->host, sizeof hostbuf);
+
+	if (place_quietmask != NULL)
+		place_quietmask(c, MTYPE_ADD, hostbuf);
+}
+
+static void
+antiflood_enforce_kickban(user_t *u, channel_t *c)
+{
+	ban(chansvs.me->me, c, u);
+	remove_ban_exceptions(chansvs.me->me, c, u);
+	try_kick(chansvs.me->me, c, u, "Flooding");
+}
+
+static void
+antiflood_enforce_kline(user_t *u, channel_t *c)
+{
+	kline_add("*", u->host, "Flooding", 86400, chansvs.nick);
+}
+
+typedef struct {
+	void (*enforce)(user_t *u, channel_t *c);
+} antiflood_enforce_method_impl_t;
+
+static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
+	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet },
+	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban },
+	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline },
+};
+
 static void
 on_channel_message(hook_cmessage_data_t *data)
 {
@@ -203,11 +251,30 @@ on_channel_message(hook_cmessage_data_t *data)
 	return_if_fail(mq != NULL);
 
 	msg = msg_create(mq, data->msg);
+
+	if (mqueue_should_enforce(mq) != MQ_ENFORCE_NONE)
+	{
+		antiflood_enforce_method_impl_t *enf = &antiflood_enforce_methods[antiflood_enforce_method];
+
+		if (enf == NULL || enf->enforce == NULL)
+			return;
+
+		enf->enforce(data->u, data->c);
+	}
 }
 
 void
 _modinit(module_t *m)
 {
+	/* attempt to pull in the place_quietmask() routine from chanserv/quiet,
+	   we don't see it as a hardfail because we can run without QUIET support. */
+	if (module_request("chanserv/quiet"))
+	{
+		place_quietmask = module_locate_symbol("chanserv/quiet", "place_quietmask");
+		if (place_quietmask == NULL)
+			antiflood_enforce_method = ANTIFLOOD_ENFORCE_KICKBAN;
+	}
+
 	hook_add_event("channel_message");
 	hook_add_channel_message(on_channel_message);
 
