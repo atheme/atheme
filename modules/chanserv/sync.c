@@ -436,6 +436,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_user_sethost(sync_user);
 	hook_del_user_oper(sync_user);
 	hook_del_user_identify(sync_user);
+	hook_del_user_register(sync_myuser);
 
 	service_named_unbind_command("chanserv", &cs_sync);
 	command_delete(&cs_set_nosync, *cs_set_cmdtree);
