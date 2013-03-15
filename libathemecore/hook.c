@@ -81,7 +81,7 @@ hook_t *hook_add_event(const char *name)
 static inline void hook_destroy(hook_t *hook, hook_privfn_ctx_t *priv)
 {
 	mowgli_node_delete(&priv->node, &hook->hooks);
-	mowgli_heap_free(hook_privfn_heap, hook);
+	mowgli_heap_free(hook_privfn_heap, priv);
 }
 
 void hook_del_event(const char *name)
