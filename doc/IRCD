@@ -37,20 +37,6 @@ fighting with chanserv.
 
 Do not use the "services hub" server type.
 
-bircd
------
-
-You need U:lines for services on all servers on the network.
-
-You must enable join_chans as P10 is designed for services to work that way.
-
-P10 does not support logout, so users are killed (from the services server)
-when they log out. It is suggested that the logout module is not loaded.
-Users dropping their account will be killed; this cannot be avoided.
-
-For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
-in serverinfo{} must be correct.
-
 charybdis
 ---------
 
@@ -58,24 +44,6 @@ You will need a service{} block on all servers.
 
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
-
-dreamforge
-----------
-
-You need U:lines for services on all servers on the network. If a server lacks
-U:lines, a storm of mode changes may result.
-
-Dreamforge is designed for services not joining channels, not having the
-ability to prevent services being kicked/deopped and the like. If you want to
-use fantasy commands, you will have to enable join_chans anyway; beware of bots
-fighting with chanserv.
-
-The TOPIC and TOPICAPPEND commands cannot be used to change topics as
-dreamforge does not allow services to set newer topics. KEEPTOPIC and
-TOPICLOCK can be used, however.
-
-Dreamforge is a dated IRCd, you should probably upgrade to a more
-modern one.
 
 inspircd
 --------
@@ -147,48 +115,6 @@ trouble. Combining +x and /ns vhost is OK.
 Ban exceptions (EXCEPTS and BREAK_P10) are supported, although some Nefarious
 versions have bugs where they are not sent properly.
 
-officeirc
----------
-
-Support for OfficeIRC has been discontinued as of Atheme 6.0. We suggest
-switching to another IRCd.
-
-plexus
-------
-
-PleXusIRCd 3 is the only version supported.
-
-If you want services to function properly, you will need a shared { } 
-block for services, without any usermask entries, tagged for services:
-
-shared
-{
-     name = "services.int";
-     type = all, services;
-};
-
-The above block should do the trick.
-
-ptlink
-------
-
-Atheme's server name must match ServicesServer in network.dconf (on all
-servers on the network).
-
-The following options/features are not recommended: HideServerOnWhois (not
-effective), SecureModes (Atheme does not set channels +r), RestrictedChans (not
-implemented by Atheme), user mode +H (various bugs and tricks allow users to
-see the oper status anyway), stealth mode (highly unethical and various bugs
-and tricks allow users to get around it).
-
-PTlink ircd allows services to do various special things like restarting the
-server; write a module if you want to use those.
-
-By default, Atheme assumes cmode +a (channel admin/protect, AdminWithDot in
-network.dconf) and cmode +h (halfops, compile time option) are enabled. If
-this is not the case, load the protocol/mixin_noprotect and/or
-protocol/mixin_nohalfops modules.
-
 ratbox
 ------
 
@@ -215,12 +141,6 @@ You will need a service{} block on all servers.
 
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
-
-ultimate3
----------
-
-Support for UltimateIRCd 3 has been discontinued as of Atheme 6.0. We suggest
-switching to another IRCd that's still being developed.
 
 undernet
 --------
