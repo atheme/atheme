@@ -105,11 +105,11 @@ LIB_OBJS = ${OBJS:.o=.lib.o}
 PLUGIN_OBJS = ${OBJS:.o=.plugin.o}
 
 MO_FILES = ${LOCALES:.po=.mo}
-DEPFILES = $(patsubst %,%.dep,${SRCS})
+DEPFLAGS = -MMD -MP
 
 .SILENT:
 .SUFFIXES:
-.SUFFIXES: .beam .c .c.dep .cc .cc.dep .class .cxx .cxx.dep .d .erl .lib.o .java .mo .m .m.dep .mm .mm.dep .o .plugin.o .po .py .pyc .rc .S .S.dep .xpm
+.SUFFIXES: .beam .c .cc .class .cxx .d .erl .lib.o .java .mo .m .mm .mm.d .o .plugin.o .po .py .pyc .rc .S .xpm
 .PHONY: all subdirs ${SUBDIRS} pre-depend depend install install-extra uninstall uninstall-extra clean distclean locales
 
 all: subdirs depend ${STATIC_LIB} ${STATIC_LIB_NOINST} ${STATIC_PIC_LIB} ${STATIC_PIC_LIB_NOINST} ${SHARED_LIB} ${SHARED_LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST} ${JARFILE} locales
@@ -119,33 +119,8 @@ subdirs: pre-recurse ${SUBDIRS}
 ${SUBDIRS}:
 	${MAKE} -C $@ ${MFLAGS}
 
-depend: pre-depend ${DEPFILES}
+depend: pre-depend
 pre-depend:
-
-.c.c.dep:
-	${CPP} ${CPPFLAGS} ${CFLAGS} -M $< | \
-	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
-	{ rm -f $@; false; }
-
-.cc.cc.dep .cxx.cxx.dep:
-	${CPP} ${CPPFLAGS} ${CXXFLAGS} -M $< | \
-	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
-	{ rm -f $@; false; }
-
-.m.m.dep:
-	${CPP} ${CPPFLAGS} ${OBJCFLAGS} -M $< | \
-	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
-	{ rm -f $@; false; }
-
-.mm.mm.dep:
-	${CPP} ${CPPFLAGS} ${OBJCPPFLAGS} -M $< | \
-	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
-	{ rm -f $@; false; }
-
-.S.S.dep:
-	${CPP} ${CPPFLAGS} ${ASFLAGS} -M $< | \
-	sed 's/^\([^\.]*\)\.o:/\1.o \1.lib.o \1.plugin.o:/' >$@ || \
-	{ rm -f $@; false; }
 
 echo-cmd = $(if $($(QUIET)$(1)),$(info $(phase_$(1)): $($(QUIET)$(1))))
 
@@ -326,15 +301,15 @@ locales: ${MO_FILES}
 
 phase_cmd_cc = CompileExe
 quiet_cmd_cc = $@
-      cmd_cc = ${CC} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cc = ${CC} ${DEPFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 phase_cmd_cc_lib = CompileLib
 quiet_cmd_cc_lib = $@
-      cmd_cc_lib = ${CC} ${LIB_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cc_lib = ${CC} ${DEPFLAGS} ${LIB_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 phase_cmd_cc_plugin = CompilePlugin
 quiet_cmd_cc_plugin = $@
-      cmd_cc_plugin = ${CC} ${PLUGIN_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cc_plugin = ${CC} ${DEPFLAGS} ${PLUGIN_CFLAGS} ${CFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 .c.o:
 	$(call echo-cmd,cmd_cc)
@@ -350,15 +325,15 @@ quiet_cmd_cc_plugin = $@
 
 phase_cmd_cxx = CompileExe
 quiet_cmd_cxx = $@
-      cmd_cxx = ${CXX} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cxx = ${CXX} ${DEPFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 phase_cmd_cxx_lib = CompileLib
 quiet_cmd_cxx_lib = $@
-      cmd_cxx_lib = ${CXX} ${LIB_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cxx_lib = ${CXX} ${DEPFLAGS} ${LIB_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 phase_cmd_cxx_plugin = CompilePlugin
 quiet_cmd_cxx_plugin = $@
-      cmd_cxx_plugin = ${CXX} ${PLUGIN_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
+      cmd_cxx_plugin = ${CXX} ${DEPFLAGS} ${PLUGIN_CFLAGS} ${CXXFLAGS} ${CPPFLAGS} -c -o $@ $<
 
 .cc.o .cxx.o:
 	$(call echo-cmd,cmd_cxx)
@@ -711,7 +686,7 @@ distclean: clean
 		${MAKE} -C $$i ${MFLAGS} distclean || exit $$?; \
 	done
 
-	for i in ${DISTCLEAN} *.dep *~; do \
+	for i in ${DISTCLEAN} *.d *~; do \
 		if test -f $$i -o -d $$i; then \
 			if rm -fr $$i; then \
 				${DELETE_OK}; \
@@ -747,4 +722,4 @@ DELETE_FAILED = exit $$?
 
 endif
 
--include ${DEPFILES}
+-include *.d

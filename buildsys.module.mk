@@ -9,7 +9,7 @@ install: $(PLUGIN)
 
 phase_cmd_cc_module = CompileModule
 quiet_cmd_cc_module = $@
-      cmd_cc_module = ${CC} ${CFLAGS} ${PLUGIN_CFLAGS} ${CPPFLAGS} ${PLUGIN_LDFLAGS} ${LDFLAGS} -o $@ $< ${LIBS}
+      cmd_cc_module = ${CC} ${DEPFLAGS} ${CFLAGS} ${PLUGIN_CFLAGS} ${CPPFLAGS} ${PLUGIN_LDFLAGS} ${LDFLAGS} -o $@ $< ${LIBS}
 
 .c$(PLUGIN_SUFFIX):
 	$(call echo-cmd,cmd_cc_module)
