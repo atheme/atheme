@@ -30,24 +30,6 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("hostserv", &hs_group);
 }
 
-static void hs_sethost_all(myuser_t *mu, const char *host)
-{
-	mowgli_node_t *n;
-	mynick_t *mn;
-	char buf[BUFSIZE];
-
-	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
-	{
-		mn = n->data;
-		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
-		metadata_delete(mu, buf);
-	}
-	if (host != NULL)
-		metadata_add(mu, "private:usercloak", host);
-	else
-		metadata_delete(mu, "private:usercloak");
-}
-
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
