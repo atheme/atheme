@@ -63,4 +63,22 @@ static inline void do_sethost_all(myuser_t *mu, const char *host)
                 do_sethost(u, host);
         }
 }
+
+static inline void hs_sethost_all(myuser_t *mu, const char *host)
+{
+	mowgli_node_t *n;
+	mynick_t *mn;
+	char buf[BUFSIZE];
+
+	MOWGLI_ITER_FOREACH(n, mu->nicks.head)
+	{
+		mn = n->data;
+		snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", mn->nick);
+		metadata_delete(mu, buf);
+	}
+	if (host != NULL)
+		metadata_add(mu, "private:usercloak", host);
+	else
+		metadata_delete(mu, "private:usercloak");
+}
 #endif
