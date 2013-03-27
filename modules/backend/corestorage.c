@@ -53,7 +53,7 @@ corestorage_db_save(database_handle_t *db)
 
 	/* write the database version */
 	db_start_row(db, "DBV");
-	db_write_int(db, 11);
+	db_write_int(db, 12);
 	db_commit_row(db);
 
 	MOWGLI_ITER_FOREACH(n, modules.head)
@@ -208,12 +208,9 @@ corestorage_db_save(database_handle_t *db)
 			{
 				MOWGLI_PATRICIA_FOREACH(md, &state2, object(ca)->metadata)
 				{
-					char buf[BUFSIZE];
-
-					snprintf(buf, BUFSIZE, "%s:%s", ca->mychan->name, (ca->entity) ? ca->entity->name : ca->host);
-
 					db_start_row(db, "MDA");
-					db_write_word(db, buf);
+					db_write_word(db, ca->mychan->name);
+					db_write_word(db, (ca->entity) ? ca->entity->name : ca->host);
 					db_write_word(db, md->name);
 					db_write_str(db, md->value);
 					db_commit_row(db);
@@ -714,6 +711,31 @@ static void corestorage_h_md(database_handle_t *db, const char *type)
 	free(newvalue);
 }
 
+static void corestorage_h_mda(database_handle_t *db, const char *type)
+{
+	const char *name, *prop, *value, *mask;
+	void *obj = NULL;
+
+	if (dbv < 12)
+		return corestorage_h_md(db, type);
+
+	name = db_sread_word(db);
+	mask = db_sread_word(db);
+	prop = db_sread_word(db);
+	value = db_sread_str(db);
+
+	obj = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
+
+	if (obj == NULL)
+	{
+		slog(LG_INFO, "db-h-mda: attempting to add %s property to non-existant object %s (acl %s)",
+		     prop, name, mask);
+		return;
+	}
+
+	metadata_add(obj, prop, value);
+}
+
 static void corestorage_h_ca(database_handle_t *db, const char *type)
 {
 	const char *chan, *target;
@@ -937,7 +959,7 @@ void _modinit(module_t *m)
 	db_register_type_handler("MC", corestorage_h_mc);
 	db_register_type_handler("MDU", corestorage_h_md);
 	db_register_type_handler("MDC", corestorage_h_md);
-	db_register_type_handler("MDA", corestorage_h_md);
+	db_register_type_handler("MDA", corestorage_h_mda);
 	db_register_type_handler("MDN", corestorage_h_md);
 	db_register_type_handler("CA", corestorage_h_ca);
 	db_register_type_handler("SI", corestorage_h_si);
