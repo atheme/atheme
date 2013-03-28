@@ -204,7 +204,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					continue;
 				chan->modes |= CMODE_LIMIT;
 				newlimit = atoi(parv[parpos]);
-				if (chan->limit != newlimit)
+				if (chan->limit != newlimit || !newlimit)
 					simple_modes_changed = true;
 				chan->limit = newlimit;
 				if (source)
@@ -906,7 +906,7 @@ void check_modes(mychan_t *mychan, bool sendnow)
 		modestack_mode_simple(chansvs.nick, mychan->chan, MTYPE_DEL, modes);
 	mychan->chan->modes &= ~modes;
 
-	if (mychan->chan->limit && (mychan->mlock_off & CMODE_LIMIT))
+	if (mychan->mlock_off & CMODE_LIMIT)
 	{
 		if (sendnow)
 			modestack_mode_limit(chansvs.nick, mychan->chan, MTYPE_DEL, 0);
