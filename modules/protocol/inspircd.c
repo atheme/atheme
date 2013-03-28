@@ -1212,19 +1212,19 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 }
 
-static void m_endburst(sourceinfo_t *si, int parc, char *parv[])
+static inline void solicit_pongs(server_t *s)
 {
 	mowgli_node_t *n;
 
-	/* elicit PONG for EOB detection. */
-	sts(":%s PING %s %s", me.numeric, me.numeric, si->s->sid);
+	sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
 
-	MOWGLI_ITER_FOREACH(n, si->s->children.head)
-	{
-		server_t *s = n->data;
+	MOWGLI_ITER_FOREACH(n, s->children.head)
+		solicit_pongs(n->data);
+}
 
-		sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
-	}
+static void m_endburst(sourceinfo_t *si, int parc, char *parv[])
+{
+	solicit_pongs(si->s);
 }
 
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])
