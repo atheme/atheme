@@ -204,6 +204,11 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					continue;
 				chan->modes |= CMODE_LIMIT;
 				newlimit = atoi(parv[parpos]);
+				/* Some ircds allow +l 0. This means that
+				 * noone can join, so map it to +l 1.
+				 */
+				if (newlimit <= 0)
+					newlimit = 1;
 				if (chan->limit != newlimit)
 					simple_modes_changed = true;
 				chan->limit = newlimit;
