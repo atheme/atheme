@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "chanserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -49,6 +50,8 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
+	char *nicklist = NULL;
+	char *strtokctx;
 
 	if (!ircd->uses_halfops)
 	{
@@ -59,7 +62,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HALFOP");
-		command_fail(si, fault_needmoreparams, _("Syntax: HALFOP <#channel> [nickname]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: HALFOP <#channel> [nickname] [...]"));
 		return;
 	}
 
@@ -82,45 +85,56 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to halfop */
-	if (!nick)
-		tu = si->su;
-	else
+	if (parv[1])
 	{
-		if (!(tu = user_find_named(nick)))
+		nicklist = strdup(parv[1]);
+		nick = strtok_r(nicklist, " ", &strtokctx);
+	}
+	do
+	{
+		if (nick && invert_purpose(si, parc, chan, nick, '-', &cs_cmd_dehalfop))
+			continue;
+		/* figure out who we're going to halfop */
+		if (!nick)
+			tu = si->su;
+		else
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
-			return;
+			if (!(tu = user_find_named(nick)))
+			{
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
+				continue;
+			}
 		}
-	}
 
-	if (is_internal_client(tu))
-		return;
+		if (is_internal_client(tu))
+			continue;
 
-	/* SECURE check; we can skip this if sender == target, because we already verified */
-	if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		command_fail(si, fault_noprivs, _("\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access."), mc->name, tu->nick);
-		return;
-	}
+		/* SECURE check; we can skip this if sender == target, because we already verified */
+		if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			command_fail(si, fault_noprivs, _("\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access."), mc->name, tu->nick);
+			continue;
+		}
 
-	cu = chanuser_find(mc->chan, tu);
-	if (!cu)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-		return;
-	}
+		cu = chanuser_find(mc->chan, tu);
+		if (!cu)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
+			continue;
+		}
 
-	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'h', CLIENT_NAME(tu));
-	cu->modes |= ircd->halfops_mode;
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'h', CLIENT_NAME(tu));
+		cu->modes |= ircd->halfops_mode;
 
-	if (si->c == NULL && tu != si->su)
-		change_notify(chansvs.nick, tu, "You have been halfopped on %s by %s", mc->name, get_source_name(si));
+		if (si->c == NULL && tu != si->su)
+			change_notify(chansvs.nick, tu, "You have been halfopped on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_DO, "HALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, _("\2%s\2 has been halfopped on \2%s\2."), tu->nick, mc->name);
+		logcommand(si, CMDLOG_DO, "HALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
+		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+			command_success_nodata(si, _("\2%s\2 has been halfopped on \2%s\2."), tu->nick, mc->name);
+	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL && nick);
+	free(nicklist);
 }
 
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
@@ -130,6 +144,8 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
+	char *nicklist = NULL;
+	char *strtokctx;
 
 	if (!ircd->uses_halfops)
 	{
@@ -140,7 +156,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEHALFOP");
-		command_fail(si, fault_needmoreparams, _("Syntax: DEHALFOP <#channel> [nickname]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: DEHALFOP <#channel> [nickname] [...]"));
 		return;
 	}
 
@@ -163,37 +179,48 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to dehalfop */
-	if (!nick)
-		tu = si->su;
-	else
+	if (parv[1])
 	{
-		if (!(tu = user_find_named(nick)))
+		nicklist = strdup(parv[1]);
+		nick = strtok_r(nicklist, " ", &strtokctx);
+	}
+	do
+	{
+		if (nick && invert_purpose(si, parc, chan, nick, '+', &cs_cmd_halfop))
+			continue;
+		/* figure out who we're going to dehalfop */
+		if (!nick)
+			tu = si->su;
+		else
 		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
-			return;
+			if (!(tu = user_find_named(nick)))
+			{
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
+				continue;
+			}
 		}
-	}
 
-	if (is_internal_client(tu))
-		return;
+		if (is_internal_client(tu))
+			continue;
 
-	cu = chanuser_find(mc->chan, tu);
-	if (!cu)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-		return;
-	}
+		cu = chanuser_find(mc->chan, tu);
+		if (!cu)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
+			continue;
+		}
 
-	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'h', CLIENT_NAME(tu));
-	cu->modes &= ~ircd->halfops_mode;
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'h', CLIENT_NAME(tu));
+		cu->modes &= ~ircd->halfops_mode;
 
-	if (si->c == NULL && tu != si->su)
-		change_notify(chansvs.nick, tu, "You have been dehalfopped on %s by %s", mc->name, get_source_name(si));
+		if (si->c == NULL && tu != si->su)
+			change_notify(chansvs.nick, tu, "You have been dehalfopped on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_DO, "DEHALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, _("\2%s\2 has been dehalfopped on \2%s\2."), tu->nick, mc->name);
+		logcommand(si, CMDLOG_DO, "DEHALFOP: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
+		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+			command_success_nodata(si, _("\2%s\2 has been dehalfopped on \2%s\2."), tu->nick, mc->name);
+	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL && nick);
+	free(nicklist);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
