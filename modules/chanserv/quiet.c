@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "chanserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -243,11 +244,13 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	chanban_t *cb;
 	int n;
+	char *targetlist;
+	char *strtokctx;
 
 	if (!channel || !target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "QUIET");
-		command_fail(si, fault_needmoreparams, _("Syntax: QUIET <#channel> <nickname|hostmask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: QUIET <#channel> <nickname|hostmask> [...]"));
 		return;
 	}
 
@@ -275,43 +278,52 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((tu = user_find_named(target)))
+	targetlist = strdup(parv[1]);
+	target = strtok_r(targetlist, " ", &strtokctx);
+	do
 	{
-		char hostbuf[BUFSIZE];
+		if (invert_purpose(si, parc, channel, &target, '-', &cs_cmd_unquiet))
+			continue;
 
-		if (!devoice_user(si, mc, c, tu))
-			return;
+		if ((tu = user_find_named(target)))
+		{
+			char hostbuf[BUFSIZE];
 
-		hostbuf[0] = '\0';
+			if (!devoice_user(si, mc, c, tu))
+				continue;
 
-		mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
-		mowgli_strlcat(hostbuf, tu->vhost, BUFSIZE);
+			hostbuf[0] = '\0';
 
-		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
-		n = remove_ban_exceptions(si->service->me, c, tu);
-		if (n > 0)
-			command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
-		notify_victims(si, c, cb, MTYPE_ADD);
-		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
-		return;
-	}
-	else if ((newtarget = pretty_mask(target)) && validhostmask(newtarget))
-	{
-		cb = place_quietmask(c, MTYPE_ADD, newtarget);
-		notify_victims(si, c, cb, MTYPE_ADD);
-		logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", newtarget, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), newtarget, channel);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
-		command_fail(si, fault_badparams, _("Syntax: QUIET <#channel> <nickname|hostmask>"));
-		return;
-	}
+			mowgli_strlcat(hostbuf, "*!*@", BUFSIZE);
+			mowgli_strlcat(hostbuf, tu->vhost, BUFSIZE);
+
+			cb = place_quietmask(c, MTYPE_ADD, hostbuf);
+			n = remove_ban_exceptions(si->service->me, c, tu);
+			if (n > 0)
+				command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
+			notify_victims(si, c, cb, MTYPE_ADD);
+			logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
+			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
+			continue;
+		}
+		else if ((newtarget = pretty_mask(target)) && validhostmask(newtarget))
+		{
+			cb = place_quietmask(c, MTYPE_ADD, newtarget);
+			notify_victims(si, c, cb, MTYPE_ADD);
+			logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2", newtarget, mc->name);
+			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+				command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), newtarget, channel);
+			continue;
+		}
+		else
+		{
+			command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
+			command_fail(si, fault_badparams, _("Syntax: QUIET <#channel> <nickname|hostmask> [,,,]"));
+			continue;
+		}
+	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
+	free(targetlist);
 }
 
 static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
@@ -323,11 +335,15 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
 	chanban_t *cb;
+	char *targetlist;
+	char *strtokctx;
+	char *chancop;
+	char *targetcop;
 
 	if (!channel)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNQUIET");
-		command_fail(si, fault_needmoreparams, _("Syntax: UNQUIET <#channel> <nickname|hostmask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: UNQUIET <#channel> <nickname|hostmask> [...]"));
 		return;
 	}
 
@@ -336,7 +352,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		if (si->su == NULL)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNQUIET");
-			command_fail(si, fault_needmoreparams, _("Syntax: UNQUIET <#channel> <nickname|hostmask>"));
+			command_fail(si, fault_needmoreparams, _("Syntax: UNQUIET <#channel> <nickname|hostmask> [...]"));
 			return;
 		}
 		target = si->su->nick;
@@ -363,62 +379,75 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((tu = user_find_named(target)))
+	targetlist = strdup(parv[1]);
+	target = strtok_r(targetlist, " ", &strtokctx);
+	do
 	{
-		mowgli_node_t *n, *tn;
-		char hostbuf2[BUFSIZE];
-		int count = 0;
+		chancop = strdup(channel);
+		targetcop = strdup(target);
+		if (invert_purpose(si, parc, chancop, &targetcop, '+', &cs_cmd_quiet))
+			continue;
+		free(chancop);
+		free(targetcop);
 
-		make_extban(hostbuf2, sizeof hostbuf2, tu);
-		for (n = next_matching_ban(c, tu, banlike_char, c->bans.head); n != NULL; n = next_matching_ban(c, tu, banlike_char, tn))
+		if ((tu = user_find_named(target)))
 		{
-			tn = n->next;
-			cb = n->data;
+			mowgli_node_t *n, *tn;
+			char hostbuf2[BUFSIZE];
+			int count = 0;
 
-			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2 (for user \2%s\2)", cb->mask, mc->name, hostbuf2);
-			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
-			chanban_delete(cb);
-			count++;
+			make_extban(hostbuf2, sizeof hostbuf2, tu);
+			for (n = next_matching_ban(c, tu, banlike_char, c->bans.head); n != NULL; n = next_matching_ban(c, tu, banlike_char, tn))
+			{
+				tn = n->next;
+				cb = n->data;
+
+				logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2 (for user \2%s\2)", cb->mask, mc->name, hostbuf2);
+				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
+				chanban_delete(cb);
+				count++;
+			}
+			if (count > 0)
+			{
+				/* one notification only */
+				if (chanuser_find(c, tu))
+					notify_one_victim(si, c, tu, MTYPE_DEL);
+				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d ban%s removed)."),
+					target, channel, count, (count != 1 ? "s" : ""));
+			}
+			else
+				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
+			continue;
 		}
-		if (count > 0)
+		else if (validhostmask(target))
 		{
-			/* one notification only */
-			if (chanuser_find(c, tu))
-				notify_one_victim(si, c, tu, MTYPE_DEL);
-			command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d ban%s removed)."),
-				target, channel, count, (count != 1 ? "s" : ""));
+			char target_extban[BUFSIZE];
+
+		 	make_extbanmask(target_extban, sizeof target_extban, target);
+
+			cb = chanban_find(c, target_extban, banlike_char);
+			if (cb != NULL)
+			{
+				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, cb->mask);
+				notify_victims(si, c, cb, MTYPE_DEL);
+				chanban_delete(cb);
+				logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target_extban, mc->name);
+				if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+					command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2."), target_extban, channel);
+			}
+			else
+				command_fail(si, fault_nosuch_key, _("No such quiet \2%s\2 on \2%s\2."), target_extban, channel);
+
+			continue;
 		}
 		else
-			command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
-		return;
-	}
-	else if (validhostmask(target))
-	{
-		char target_extban[BUFSIZE];
-
-	 	make_extbanmask(target_extban, sizeof target_extban, target);
-
-		cb = chanban_find(c, target_extban, banlike_char);
-		if (cb != NULL)
 		{
-			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, cb->mask);
-			notify_victims(si, c, cb, MTYPE_DEL);
-			chanban_delete(cb);
-			logcommand(si, CMDLOG_DO, "UNQUIET: \2%s\2 on \2%s\2", target_extban, mc->name);
-			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2."), target_extban, channel);
+			command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
+			command_fail(si, fault_badparams, _("Syntax: UNQUIET <#channel> [nickname|hostmask] [...]"));
+			continue;
 		}
-		else
-			command_fail(si, fault_nosuch_key, _("No such quiet \2%s\2 on \2%s\2."), target_extban, channel);
-
-		return;
-	}
-        else
-        {
-		command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
-		command_fail(si, fault_badparams, _("Syntax: UNQUIET <#channel> [nickname|hostmask]"));
-		return;
-        }
+	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
+	free(targetlist);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
