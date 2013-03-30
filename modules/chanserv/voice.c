@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "chanserv.h"
 
 DECLARE_MODULE_V1
 (
@@ -42,18 +43,13 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
+	char *nicklist;
+	char *strtokctx;
 
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VOICE");
-		command_fail(si, fault_needmoreparams, _("Syntax: VOICE <#channel> [nickname]"));
-		return;
-	}
-
-	if (nick && *nick == '-')
-	{
-		parv[1]++;
-		cs_cmd_devoice(si, parc, parv);
+		command_fail(si, fault_needmoreparams, _("Syntax: VOICE <#channel> [nickname] [...]"));
 		return;
 	}
 
@@ -70,44 +66,47 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to voice */
-	if (!nick)
-		tu = si->su;
-	else
+	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
+	nick = strtok_r(nicklist, " ", &strtokctx);
+	do
 	{
+		if (invert_purpose(si, parc, chan, &nick, '-', &cs_cmd_devoice))
+			continue;
+		/* figure out who we're going to voice */
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
-			return;
+			continue;
 		}
-	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_VOICE) && (tu != si->su ||
-				!chanacs_source_has_flag(mc, si, CA_AUTOVOICE)))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
+		if (!chanacs_source_has_flag(mc, si, CA_VOICE) && (tu != si->su ||
+					!chanacs_source_has_flag(mc, si, CA_AUTOVOICE)))
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			continue;
+		}
 
-	if (is_internal_client(tu))
-		return;
+		if (is_internal_client(tu))
+			continue;
 
-	cu = chanuser_find(mc->chan, tu);
-	if (!cu)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-		return;
-	}
+		cu = chanuser_find(mc->chan, tu);
+		if (!cu)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
+			continue;
+		}
 
-	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
-	cu->modes |= CSTATUS_VOICE;
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
+		cu->modes |= CSTATUS_VOICE;
 
-	if (si->c == NULL && tu != si->su)
-		change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
+		if (si->c == NULL && tu != si->su)
+			change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_DO, "VOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, _("\2%s\2 has been voiced on \2%s\2."), tu->nick, mc->name);
+		logcommand(si, CMDLOG_DO, "VOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
+		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+			command_success_nodata(si, _("\2%s\2 has been voiced on \2%s\2."), tu->nick, mc->name);
+	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
+	free(nicklist);
 }
 
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
@@ -117,11 +116,13 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
+	char *nicklist;
+	char *strtokctx;
 
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEVOICE");
-		command_fail(si, fault_needmoreparams, _("Syntax: DEVOICE <#channel> [nickname]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: DEVOICE <#channel> [nickname] [...]"));
 		return;
 	}
 
@@ -138,37 +139,40 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* figure out who we're going to devoice */
-	if (!nick)
-		tu = si->su;
-	else
+	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
+	nick = strtok_r(nicklist, " ", &strtokctx);
+	do
 	{
+		if (invert_purpose(si, parc, chan, &nick, '+', &cs_cmd_voice))
+			continue;
+		/* figure out who we're going to devoice */
 		if (!(tu = user_find_named(nick)))
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
-			return;
+			continue;
 		}
-	}
 
-	if (is_internal_client(tu))
-		return;
+		if (is_internal_client(tu))
+			continue;
 
-	cu = chanuser_find(mc->chan, tu);
-	if (!cu)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-		return;
-	}
+		cu = chanuser_find(mc->chan, tu);
+		if (!cu)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
+			continue;
+		}
 
-	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
-	cu->modes &= ~CSTATUS_VOICE;
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
+		cu->modes &= ~CSTATUS_VOICE;
 
-	if (si->c == NULL && tu != si->su)
-		change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
+		if (si->c == NULL && tu != si->su)
+			change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_DO, "DEVOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-	if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, _("\2%s\2 has been devoiced on \2%s\2."), tu->nick, mc->name);
+		logcommand(si, CMDLOG_DO, "DEVOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
+		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
+			command_success_nodata(si, _("\2%s\2 has been devoiced on \2%s\2."), tu->nick, mc->name);
+	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
+	free(nicklist);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
