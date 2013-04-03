@@ -1,0 +1,10 @@
+Aide pour FORBID:
+
+FORBID interdit l'utilisation d'un pseudo, de manière similaire à
+RESV ou QLINE sur votre IRCd.
+
+Syntaxe : FORBID <nickname> ON|OFF [raison]
+
+Exemples :
+    /msg &nick& FORBID spb ON Aucune raison.
+    /msg &nick& FORBID spb OFF

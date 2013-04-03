@@ -1,0 +1,9 @@
+Aide pour REGISTER:
+
+REGISTER vous permet d'enregistrer un groupe pour qu'il soit
+plus facile de gérer le nombre d'utilisateurs et les salons.
+
+Syntaxe : REGISTER <!groupe>
+
+Exemples :
+    /msg &nick& REGISTER !developers

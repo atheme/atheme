@@ -1,0 +1,9 @@
+Aide pour SET MAXCHANS:
+
+SET MAXCHANS permet la configuration du nombre de salons maximum
+fondés par un seul compte.
+
+Syntaxe : SET MAXCHANS <valeur>
+
+Exemple :
+    /msg &nick& SET MAXCHANS 7

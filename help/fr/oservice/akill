@@ -1,0 +1,73 @@
+Aide pour AKILL:
+
+AKILL vous permet de gérer les banissements à travers le réseau.
+Les services garderent vos AKILL stockés et aideront à faciliter
+leur gestion.
+
+Syntaxe : AKILL ADD <nick|hostmask> [!P|!T <minutes>] <raison>
+
+Si le token !P est spécifié, l'AKILL n'expirera jamais (permanent).
+Si le token !T est spécifié, le délai d'expiration doit suivre, en
+minutes, heures ("h"), jours ("d") ou semaines ("w").
+
+Exemples :
+    /msg &nick& AKILL ADD foo !T 5 raison bar
+    /msg &nick& AKILL ADD foo !T 3d raison bar
+    /msg &nick& AKILL ADD foo@bar.com !P raison foo
+    /msg &nick& AKILL ADD foo@bar.com raison foo
+
+Le premier exemple cherche un utilisateur avec le pseudo "foo" et
+ajoute un AKILL de 5 minutes pour la raison "raison bar."
+
+Le deuxième exemple est similaire mais ajoute un AKILL pour 3 jours
+au lieu de 5 minutes.
+
+Le troisième exemple ajoute un AKILL permanent sur foo@bar.com pour
+la raison "raison foo."
+
+Le quatrième exemple ajoute un AKILL sur foo@bar.com pour une durée
+spécifiée dans le fichier de configuration pour la raison "raison foo."
+
+La commande AKILL DEL vous permet de supprimer une entrée de la liste
+des AKILL.
+
+Syntaxe : AKILL DEL <hostmask|numéro>
+
+Si un nombre est précisé, il sera mis en corrélation avec un numéro
+de AKILL dans la liste des AKILL.
+Vous pouvez spécifier plusieurs nombres séparés par des virgules.
+Vous pouvez également spécifier une plage en utilisant un deux-points.
+
+Exemples :
+    /msg &nick& AKILL DEL foo@bar.com
+    /msg &nick& AKILL DEL 5
+    /msg &nick& AKILL DEL 1,2,5,10
+    /msg &nick& AKILL DEL 1:5,7,9:11
+
+Syntaxe : AKILL LIST [FULL]
+
+Si FULL est spécifié, les raisons du AKILL seront affichées.
+
+Exemples :
+    /msg &nick& AKILL LIST
+    /msg &nick& AKILL LIST FULL
+
+Syntaxe : AKILL LIST <hostmask>
+
+Affiche autant de AKILL qui correspondent au hostmask donné,
+avec les raisons. Cette commande n'exécutera pas de recherche
+DNS sur un host, pour de meilleurs résultats, répétez l'opération
+avec des hosts et des adresses IP.
+
+Exemples :
+    /msg &nick& AKILL LIST test@192.168.1.1
+
+Syntaxe : AKILL LIST <nombre>
+
+Affiche le AKILL donné avec la raison.
+
+Syntaxe : AKILL SYNC
+
+Envoie tous les AKILL à tous les serveurs. Ceci peut être utile
+en cas de coupure des services ou s'ils ne voient pas un utilisateur
+qui correpondrait à un AKILL.

@@ -1,0 +1,11 @@
+Aide pour CHANFIX:
+
+CHANFIX vous permet de "réparer" manuellement
+un salon non enregistré en réparant certains modes
+et en donnant le statut d'opérateur aux utilisateurs
+qui ont le plus grand score.
+
+Syntaxe : CHANFIX <#salon>
+
+Exemple :
+    /msg &nick& CHANFIX #foo

@@ -1,0 +1,15 @@
+Aide pour SET EMAIL:
+
+SET EMAIL vous permet de modifier ou de définir
+l'adresse e-mail associée à un salon.
+Elle sera montrée à tout le monde dans les
+informations de la commande INFO.
+
+Syntaxe : SET <#salon> EMAIL [email]
+
+Utiliser la commande de cette manière résultera en
+une adresse e-mail associée à un salon.
+
+Exemple :
+    /msg &nick& SET #chat EMAIL some@email.address
+

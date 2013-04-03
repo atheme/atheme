@@ -1,0 +1,14 @@
+Aide pour SET TOPICLOCK:
+
+SET TOPICLOCK fait de sorte que &nick& rétablisse
+les modifications de topic des utilisateurs sans le
+flag +t. Les changements pendant les netsplits ou
+les interruptions des services seront toujours rétablis.
+
+TOPICLOCK requiert KEEPTOPIC et l'activera automatiquement.
+Désactiver KEEPTOPIC désactivera aussi TOPICLOCK.
+
+Syntaxe : SET <#salon> TOPICLOCK ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo TOPICLOCK ON

@@ -1,0 +1,9 @@
+Aide pour SET SPAM:
+
+SET SPAM permet à l'équipe du réseau de définir si oui ou non les
+utilisateurs recoivent les messages des services lorsqu'ils se connectent.
+
+Syntaxe : SET SPAM TRUE|FALSE
+
+Exemple :
+    /msg &nick& SET SPAM TRUE

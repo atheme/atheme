@@ -1,0 +1,10 @@
+Aide pour SYNC:
+
+La commande SYNC forcera tous les statuts en flags, donnant et prenant les ops,
+voice, etc... lorsque nécessaire. Vous devez avoir le flag +R sur le salon
+pour pouvoir effectuer cette commande.
+
+Syntaxe : SYNC <#salon>
+
+Exemples :
+    /msg &nick& SYNC #bar

@@ -1,0 +1,10 @@
+Aide pour BAN:
+
+La commande BAN permet de bannir un utilisateur ou hostmask
+d'un salon.
+
+Syntaxe : BAN <#salon> <nickname|hostmask>
+
+Exemples :
+    /msg &nick& BAN #chat carnell
+    /msg &nick& BAN #chat *!*@*.ipt.aol.com

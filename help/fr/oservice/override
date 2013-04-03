@@ -1,0 +1,9 @@
+Aide pour OVERRIDE:
+
+OVERRIDE est utilisé pour effectuer une commande en tant
+qu'un autre utilisateur.
+
+Syntaxe : OVERRIDE <cible> <service> <commande> [paramètres]
+
+Exemples :
+    /msg &nick& OVERRIDE dotslasher ChanServ FLAGS #cows nenolod +*

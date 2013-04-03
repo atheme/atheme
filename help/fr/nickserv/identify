@@ -1,0 +1,17 @@
+Aide pour IDENTIFY:
+
+IDENTIFY vous identifie auprès des services pour
+que vous puissiez effectuer une maintenance générale
+et exécuter eds commandes qui requièrent que vous
+soyez idenitifé.
+
+Syntaxe : IDENTIFY <mot de passe>
+
+Vous pouvez également vous identifier pour un
+autre pseudo que vous utilisez actuellement.
+
+Syntaxe : IDENTIFY <nick> <mot de passe>
+
+Exemple :
+    /msg &nick& IDENTIFY foo
+    /msg &nick& IDENTIFY jilles foo

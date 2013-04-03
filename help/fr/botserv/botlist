@@ -1,0 +1,8 @@
+Aide pour BOTLIST:
+
+Liste les bots disponibles à assigner sur le réseau.
+
+Syntaxe : BOTLIST
+
+Exemples :
+    /msg &nick& BOTLIST

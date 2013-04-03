@@ -1,0 +1,16 @@
+Aide pour CLEARCHAN:
+
+CLEARCHAN permet aux opérateurs de nettoyer un salon
+de l'une des trois façons : KICK, qui kickera tous
+les utilisateurs du salon, KILL qui killera tous les
+utilisateurs présents sur le salon, ou AKILL, qui
+définiera un AKILL d'une semaine sur le réseau pour
+tous les utilisateurs du réseau.
+
+Cette commande ne doit pas être utilisée à la légère.
+
+Syntaxe : CLEARCHAN KICK|KILL|AKILL <#salon> <raison>
+
+Exemple :
+    /msg &nick& CLEARCHAN KICK #warez warez is bad, mk?
+    /msg &nick& CLEARCHAN AKILL #warez you were warned!

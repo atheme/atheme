@@ -1,0 +1,9 @@
+Aide pour SET PRIVATE:
+
+SET PRIVATE cache diverses informations à propos
+du salon des autres utilisateurs.
+
+Syntaxe : SET <#salon> PRIVATE ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo PRIVATE ON

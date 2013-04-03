@@ -1,0 +1,16 @@
+Aide pour FREEZE:
+
+FREEZE permet aux opérateurs de "geler" (freeze) le compte
+d'un utilisateur qui abuse.
+Ceci loggue toutes les sessions connectées sur le compte et
+empêche de continuer l'identification. Par conséquent,
+les utilisateurs ne peuvent pas obtenir l'accès associé
+au compte.
+
+Des informations de FREEZE seront affichées dans le INFO.
+
+Syntaxe : FREEZE <nick> ON|OFF <raison>
+
+Exemples :
+    /msg &nick& FREEZE pfish ON Persistent spammer
+    /msg &nick& FREEZE alambert OFF

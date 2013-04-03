@@ -1,0 +1,15 @@
+Aide pour SET VERBOSE:
+
+SET VERBOSE ON envoie une notice au salon quand quelqu'un fait
+un changement sur la liste d'accès.
+
+SET VERBOSE OPS envoie une notice aux opérateurs du salon
+lorsque quelqu'un modifie la liste d'accès.
+
+Les commande fantasy sont toujours exécutées comme si
+SET VERBOSE ON était activé.
+
+Syntaxe : SET <#salon> VERBOSE ON|OPS|OFF
+
+Exemple :
+    /msg &nick& SET #foo VERBOSE ON

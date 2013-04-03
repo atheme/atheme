@@ -1,0 +1,20 @@
+Aide pour FORCEXOP:
+
+FORCEXOP remet à zéro les niveaux d'accès 
+compatibles avec les valeurs xOP.
+Après cette opération, les fondateurs auront
+toutes les permissions et l'auto-op. Toutes les autres
+personnes avec des flags seront sur une des listes xOP.
+Cette commande est pratique si la définition de quel flag
+donne quel level xOP est faite et que le fondateur
+veut utiliser uniquement les commandes xOP.
+
+Seul un fondateur peut effectuer cette commande.
+
+Syntaxe : FORCEXOP <#salon>
+
+#if halfops
+Voir aussi : SOP, AOP, HOP, VOP
+#else
+Voir aussi : SOP, AOP, VOP
+#endif

@@ -1,0 +1,16 @@
+Aide pour SET ENFORCETIME:
+
+SET ENFORCETIME définit la durée (en secondes) après laquelle
+une personne aura son pseudo changé automatiquement s'il tente
+d'utiliser votre pseudo.
+
+Ceci peut être défini à DEFAULT pour retourner à la valeur
+par défaut définie sur le réseau, ou une valeur numérique
+entre 1 et 180 secondes.
+
+Syntaxe : SET ENFORCETIME TIME|DEFAULT
+
+Exemple :
+    /msg &nick& SET ENFORCETIME DEFAULT
+    /msg &nick& SET ENFORCETIME 90
+    /msg &nick& SET ENFORCETIME 3

@@ -1,0 +1,41 @@
+Aide pour SOPER:
+
+SOPER permet la manipulation des privilèges des 
+opérateurs des services.
+
+SOPER LIST montre les comptes avec des privilèges
+d'opérateur des services, dans le fichier de
+configuration et par cette commande.
+Ceci est similaire à /stats o &nick&.
+
+SOPER LISTCLASS affiche toutes les classes oper définies
+Utilisez la commande SPECS pour voir les privilèges
+assocités avec une classe oper.
+
+SOPER ADD donne les privilèges d'opérateur des services
+à un compte. Le privilège donné est décrit par une classe
+oper. Vous pouvez optionnellement spécifier un mot de passe
+pour le nouvel opérateur des services.
+
+SOPER DEL supprime les privilèges d'opérateur des services
+d'un compte.
+
+SOPER SETPASS définit ou supprime un mot de passe pour un
+compte d'opérateur des services. Le mot de passe doit déjà
+être chiffré. L'utilisateur cible doit entrer le mot de passe
+en utilisant IDENTIFY.
+
+Il est impossible de modifier les comptes avec les blocs
+operator{} dans le fichier de configuration.
+
+Syntaxe : SOPER LIST|LISTCLASS
+Syntaxe : SOPER ADD <compte> <operclass> [mot de passe]
+Syntaxe : SOPER DEL <compte>
+Syntaxe : SOPER SETPASS <compte> [mot de passe]
+
+Exemples :
+    /msg &nick& SOPER LIST
+    /msg &nick& SOPER ADD anoper sra
+    /msg &nick& SOPER ADD newoper sra $1$bllsww$xBjenkPsZgkqy1Rx5gl2h1
+    /msg &nick& SOPER DEL abusiveoper
+    /msg &nick& SOPER SETPASS anoper $1$vHFzU0jC$ePfKvERVwaDRdnHOnZZ6h.

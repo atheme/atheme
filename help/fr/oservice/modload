@@ -1,0 +1,16 @@
+Aide pour MODLOAD:
+
+MODLOAD charge un ou plusieurs modules.
+
+Si le chemin ne commence par par un slash il est considéré
+relatif à PREFIX/modules ou à PREFIX/lib/atheme/modules
+(suivant comment Atheme a été compilé). Spécifier un suffixe
+comme .so est optionnel.
+
+Si aucun des module ne nécessite un rehash après
+avoir été chargé, c'est effectué automatiquement.
+
+Syntaxe : MODLOAD <chemin...>
+
+Exemple :
+    /msg &nick& MODLOAD ../contrib/fc_dice

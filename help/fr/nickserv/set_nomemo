@@ -1,0 +1,10 @@
+Aide pour SET NOMEMO:
+
+Ceci empêche les utilisateurs de vous envoyer des mémos.
+Si vous ne voulez pas recevoir de mémo, vous pouvez juste 
+les désactiver pour votre pseudo.
+
+Syntaxe : SET NOMEMO ON|OFF
+
+Exemple :
+    /msg &nick& SET NOMEMO ON

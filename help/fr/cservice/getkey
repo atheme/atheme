@@ -1,0 +1,9 @@
+Aide pour GETKEY:
+
+GETKEY retourne la clé (+k, mot de passe pour entrer)
+du salon spécifié : /join #salon clé
+
+Syntaxe : GETKEY <#salon>
+
+Exemples :
+    /msg &nick& GETKEY #foo

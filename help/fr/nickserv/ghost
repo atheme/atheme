@@ -1,0 +1,14 @@
+Aide pour GHOST:
+
+GHOST déconnecte une vieille sessions utilisateur, ou
+quelqu'un qui tente d'utiliser votre nickname sans
+autorisation.
+
+Si vous êtes connectés sous le pseudo du compte, vous
+n'avez pas besoin de spécifier un pseudo, dans le cas
+contraire, vous le devez.
+
+Syntaxe : GHOST <nick> [mot de passe]
+
+Exemple :
+    /msg &nick& GHOST foo bar

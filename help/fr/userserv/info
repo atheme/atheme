@@ -1,0 +1,18 @@
+Aide pour INFO:
+
+INFO affiche des informations sur le compte comme
+la date d'enregistrement, les flags et d'autres détails.
+
+Vous pouvez faire la demande pour un pseudo identifié
+en spécifiant un signe égal suivi de son nick. Cette
+convention '=' fonctionne avec la plupart des commandes.
+
+Syntaxe : INFO <compte>
+Syntaxe : INFO =<online user>
+
+
+Exemples :
+    /msg &nick& INFO w00t
+Affiche des informations à propos du pseudo enregistré w00t.
+    /msg &nick& INFO =w00tie[home]
+Affiche des informations à propos du pseudo enregistré w00t[home] qui est identifié.

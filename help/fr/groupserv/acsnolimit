@@ -1,0 +1,9 @@
+Aide pour ACSNOLIMIT:
+
+ACSNOLIMIT permet à un groupe d'avoir un nombre illimité
+d'entrées de liste d'accès de groupe.
+
+Syntaxe : ACSNOLIMIT <!groupe> ON|OFF
+
+Exemples :
+    /msg &nick& ACSNOLIMIT !awesome-people ON

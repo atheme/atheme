@@ -1,0 +1,37 @@
+Aide pour SET:
+
+SET vous permet de fournir des détails à propos de votre salon de jeu de rôle.
+Voir les exemples suivant pour apprendre la syntaxe de la commande :
+
+GENRE (un choix seulement ; choisissez le plus approprié si multi-genre)
+     APOCALYPSE       ANIME            ANTROPOMORPH     CYBERPUNK
+     FANTASY          HORROR           MULTIGENRE       REALISTIC
+     SCIFI            STEAMPUNK        
+
+PERIOD (période : un choix seulement)
+     PREHISTORIC      ANTIQUITY        MIDDLEAGES       EARLYMODERN
+     MODERN           FUTURE
+
+RULESET (type de règlement : un choix seulement)
+     ADND             HOMEBREW         DND3.0           DND3.5
+     DND4.0           FREEFORM         OTHER            OWOD
+     NWOD
+
+RATING (classification : un choix seulement)
+     G                PG               PG13             R
+     ADULT
+
+SYSTEM (système de jeu : plusieurs choix possibles)
+     CHARAPPROVAL     DICED            SHEETED
+
+SETTING (paramètrage : texte libre)
+STORYLINE (scénario : texte libre)
+SUMMARY (sommaire : texte libre)
+
+Exemple :
+    /msg &nick& SET #ooc GENRE FANTASY
+         Définit le GENRE pour #ooc à fantastique (FANTASY)
+    /msg &nick& SET #ooc SYSTEM CHARAPPROVAL DICED
+         Définit le système de jeu (SYSTEM) de #ooc à "Character Approval" et "Diced"
+    /msg &nick& SET #ooc SYSTEM
+         Retire le paramètre pour SYSTEM sur le salon #ooc

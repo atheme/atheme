@@ -1,0 +1,9 @@
+Aide pour LOTTERY:
+
+LOTTERY choisit aléatoirement un utilisateur
+sur le salon sur lequel la commande est effectuée.
+
+Syntaxe : LOTTERY
+
+Exemple :
+    /msg &nick& LOTTERY

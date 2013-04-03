@@ -1,0 +1,9 @@
+Aide pour SET NEVEROP:
+
+SET NEVEROP empêche les autres de vous ajouter dans 
+des listes d'accès de salons.
+
+Syntaxe : SET NEVEROP ON|OFF
+
+Exemple :
+    /msg &nick& SET NEVEROP ON

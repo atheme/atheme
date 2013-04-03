@@ -1,0 +1,10 @@
+Aide pour SET URL:
+
+SET URL vous permet de modifier ou de définir
+une URL associée au groupe. Ceci est indiqué à tous
+les utilisateurs dans INFO.
+
+Syntaxe : SET <!groupe> URL [url]
+
+Exemple :
+    /msg &nick& SET !slashdot URL http://slashdot.org

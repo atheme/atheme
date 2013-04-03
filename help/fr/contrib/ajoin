@@ -1,0 +1,11 @@
+Aide pour AJOIN:
+
+AJOIN vous autorise à gérer les /join automatiques sur les salons de la liste
+lors de l'identification.
+
+Syntaxe : AJOIN ADD|DEL|LIST [#salon]
+
+Exemples :
+    /msg &nick& AJOIN LIST
+    /msg &nick& AJOIN ADD #foo
+    /msg &nick& AJOIN DEL #foo

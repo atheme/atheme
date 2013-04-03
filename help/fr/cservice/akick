@@ -1,0 +1,37 @@
+Aide pour AKICK:
+
+La commande AKICK permet de maintenir une liste de
+bannissements du salon. Les utilisateurs qui sont listés
+seront automatiquement KICKBAN lorsqu'ils essayeront de joindre
+et supprimera d'abord toutes les exceptions de bannissement.
+Les utilisateurs avec +r sont exemptés.
+
+Syntaxe : AKICK <#salon> ADD <nickname|hostmask> [!P|!T <minutes>] [raison]
+
+Vous pouvez également spécifier un masque (nick!user@host)
+pour la liste d'AKICK.
+
+La raison utilisée lors du kick est visible dans la AKICK LIST.
+Si la raison contient le caractère '|', tout ce qui apparaîtra après
+ne sera pas dans le motif du kick mais uniquement dans la liste.
+
+Si le token !P est spécifié, le AKICK n'expirera jamais (Permanent).
+Si le token !T est spécifié, le temps doit être précisé ensuite
+en minutes, heures ("h"), jours ("d") ou semaines ("w").
+
+Syntaxe : AKICK <#salon> DEL <nickname|hostmask>
+
+Ceci supprimera une entrée de la liste d'AKICK. Supprimer
+une entrée supprimera les bannissement du salon correspondant
+à moins que le salon soit configuré avec NOSYNC.
+
+Syntaxe : AKICK <#salon> LIST
+
+Ceci listera toutes les entrées de la liste des AKICK,
+incluant la raison et le temps restant avant l'expiration.
+
+Exemples :
+    /msg &nick& AKICK #foo ADD bar you are annoying | private op info
+    /msg &nick& AKICK #foo ADD *!*foo@bar.com !T 5d
+    /msg &nick& AKICK #foo DEL bar
+    /msg &nick& AKICK #foo LIST

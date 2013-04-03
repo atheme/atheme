@@ -1,0 +1,12 @@
+Aide pour FORWARD:
+
+FORWARD permet de transférer un mémo à un autre compte.
+Pratique pour de multiples raisons.
+
+Vous pouvez aussi envoyer, lire, lister et transférer 
+(SEND, READ, LIST et FORWARD) des mémos.
+
+Syntaxe : FORWARD <utilisateur|nick> <numéro de memo>
+
+Exemples :
+    /msg &nick& FORWARD kog 1

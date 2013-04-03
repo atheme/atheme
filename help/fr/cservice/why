@@ -1,0 +1,9 @@
+Aide pour WHY:
+
+La commande WHY montre les entrées d'accès qui
+correspondent à un utilisateur en ligne.
+
+Syntaxe : WHY <#salon> [nickname]
+
+Exemples :
+    /msg &nick& WHY #atheme jilles^

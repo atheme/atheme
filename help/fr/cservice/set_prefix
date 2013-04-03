@@ -1,0 +1,17 @@
+Aide pour SET PREFIX:
+
+PREFIX vous permet de customiser le déclencheur des commandes
+fantasy sur votre salon. Cela peut être particulièrement utile
+si vous avez des bots sur votre salon qui entrent en conflit
+avec les commandes fantasy de ChanServ avec le préfixe par défaut.
+Si aucun argument n'est donné comme préfixe (ou DEFAULT),
+le préfixe sera rétabli par celui par défaut configuré sur
+le réseau.
+
+Syntaxe : SET <#salon> PREFIX [préfixe]
+
+Exemples :
+    /msg &nick& SET #foo PREFIX
+    /msg &nick& SET #foo PREFIX '
+    /msg &nick& SET #c PREFIX %
+    /msg &nick& SET #c PREFIX default

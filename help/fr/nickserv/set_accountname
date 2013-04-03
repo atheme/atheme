@@ -1,0 +1,8 @@
+Aide pour SET ACCOUNTNAME:
+
+SET ACCOUNTNAME vous permet de modifier le nom de votre compte
+en n'importe quel pseudo enregistré sur ce compte.
+Le nom de votre compte est utilisé à de nombreux endroits, tout
+comme un nom l'est pour vous.
+
+Syntaxe : SET ACCOUNTNAME <nick>

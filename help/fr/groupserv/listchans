@@ -1,0 +1,10 @@
+Aide pour LISTCHANS:
+
+LISTCHANS affiche les salons auxquels un groupe à accès.
+
+Les AKICKs ne sont pas montrés.
+
+Syntaxe : LISTCHANS <!groupe>
+
+Exemple :
+    /msg &nick& LISTCHANS !foo

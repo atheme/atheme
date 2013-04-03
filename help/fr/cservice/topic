@@ -1,0 +1,8 @@
+Aide pour TOPIC:
+
+La commande TOPIC vous permet de changer le topic d'un salon.
+
+Syntaxe : TOPIC <#salon> <topic>
+
+Exemples :
+    /msg &nick& TOPIC #foo bar

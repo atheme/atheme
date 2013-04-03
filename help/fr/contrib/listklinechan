@@ -1,0 +1,9 @@
+Aide pour LISTKLINECHAN
+
+LISTKLINECHAN liste tous les (ou un pattern de) salons avec un KLINECHAN actif.
+
+Syntaxe : LISTKLINECHAN [pattern]
+
+Exemples :
+    /msg &nick& LISTKLINECHAN
+    /msg &nick& LISTKLINECHAN #lame*

@@ -1,0 +1,11 @@
+Aide pour FREGISTER:
+
+FREGISTER vous permet de forcer l'enregistrement d'un salon
+pour que vous en ayez un meilleur contrôle.
+FREGISTER permet d'enregitrer un salon sans avoir le statut
+d'opérateur ni même l'avoir /join
+
+Syntaxe : FREGISTER <#salon>
+
+Exemples :
+    /msg &nick& FREGISTER #atheme

@@ -1,0 +1,10 @@
+Aide pour ASSIGN:
+
+Assigne un bot désigé par <nick> sur le salon <salon> spécifié.
+Vous pouvez ensuite configurer le bot pour le salon pour qu'il
+corresponde à vos besoins.
+
+Syntaxe : ASSIGN <salon> <nick>
+
+Exemples :
+    /msg &nick& ASSIGN #help Security

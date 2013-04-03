@@ -1,0 +1,10 @@
+Aide pour SET PRIVMSG:
+
+SET PRIVMSG provoque l'utilisation de messages
+privés lorsque les services parlent à un utilisateur
+authentifié sur ce compte.
+
+Syntaxe : SET PRIVMSG ON|OFF
+
+Exemple :
+    /msg &nick& SET PRIVMSG ON

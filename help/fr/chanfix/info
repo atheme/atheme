@@ -1,0 +1,10 @@
+Aide pour INFO:
+
+INFO affiche les informations chanfix
+comme le plus grand score, le nombre d'utilisateurs
+le score stepping et le statut de réparation d'un salon.
+
+Syntaxe : INFO <#salon>
+
+Exemples :
+    /msg &nick& INFO #foo

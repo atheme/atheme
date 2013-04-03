@@ -1,0 +1,13 @@
+Aide pour CLEAR USERS:
+
+CLEAR USERS kickera tous les utilsateurs d'un salon,
+à part vous. Le salon sera "cyclé" (recréé) si vous
+n'êtes pas dessus.
+
+Si une raison est spécifiée, elle sera précisée dans
+le message de kick.
+
+Syntaxe : CLEAR <#salon> USERS [raison]
+
+Exemples :
+    /msg &nick& CLEAR #ChatZone USERS

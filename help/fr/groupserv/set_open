@@ -1,0 +1,10 @@
+Aide pour SET OPEN:
+
+SET OPEN permet à un groupe d'être ouvert à n'importe quel
+utilisateur qui le souhaite. Les utilisateurs qui JOIN
+le groupe n'auront aucun privilège par défaut.
+
+Syntaxe : SET <!groupe> OPEN <ON|OFF>
+
+Exemples :
+    /msg &nick& SET !awesome-people OPEN ON

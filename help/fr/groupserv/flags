@@ -1,0 +1,39 @@
+Aide pour FLAGS:
+
+La commande FLAGS permet de donner/retirer des privilèges de
+groupe à un niveau plus spécifique, non généralisé.
+Elle supporte uniquement les nickname enregistrés comme cible.
+
+Uniquement lorsque l'argument 'groupe' est donné, une liste
+de permissions données à tous les utilisateurs sera affichée.
+
+Syntaxe : FLAGS <!groupe>
+
+Vous pouvez modifier un flag utilisateur si vous avez le flag +f.
+C'est la même syntaxe que chanserv/flags, en utilisant + pour
+ajouter un flag ou 0 pour en retirer à un utilisateur.
+
+Syntaxe : FLAGS <!groupe> [nickname changement_flag]
+
+Permissions :
+    +f - Active la modification de la liste d'accès de groupe.
+    +F - Donne les pouvoirs de fondateur.
+    +m - Lire les mémos envoyés au groupe.
+    +c - Avoir un accès au salon où le groupe un les privilèges suffisants.
+    +v - Prendre les vHost offerts au groupe via HostServ.
+    +s - Possibilité d'utiliser la commande &nick& SET sur le groupe.
+    +b - Bannir un utilisateur du groupe. L'utilisateur ne sera pas dans la 
+       	 possibilité de joindre le groupe avec la commande JOIN et il ne
+	 sera pas montré dans le NickServ INFO ni ailleurs.
+         Notez que paramétrer ce flag ne retirera PAS automatiquement
+         les privilèges de l'utilisateur (si applicable).
+    +i - Donne la possibilité d'inviter des utilisateurs dans le groupe.
+
+La permission spéciale +* donne toutes les permissions sauf +F.
+La permission spéciale -* retire toutes les permissions y compris +F.
+
+Exemples :
+    /msg &nick& FLAGS !baz
+    /msg &nick& FLAGS !baz foo +F
+    /msg &nick& FLAGS !baz foo -*
+    /msg &nick& FLAGS !baz foo +fmc

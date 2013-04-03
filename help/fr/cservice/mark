@@ -1,0 +1,12 @@
+Aide pour MARK:
+
+MARK permet à un opérateur d'effectuer une note sur un salon.
+Par exemple, un opérateur pourrait marquer le salon d'un spammeur
+pour que les autres savent qu'il a déjà été prévenu.
+
+L'information MARK sera affichée dans l'output d'INFO.
+
+Syntaxe : MARK <#salon> ON|OFF <raison>
+
+Exemples :
+    /msg &nick& MARK #lobby ON Takeover: returned to bill

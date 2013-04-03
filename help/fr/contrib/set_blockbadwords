@@ -1,0 +1,12 @@
+Aide pour SET BLOCKBADWORDS:
+
+SET BLOCKBADWORDS définit si oui ou non les messages d'un salon
+seront cibles de vérifications des mots interdits.
+Tous les utilisateurs seront affectés par ceci.
+Il n'existe actuellement aucune exception pour les voice ou 
+opérateurs des salons.
+
+Syntaxe : SET <#salon> BLOCKBADWORDS ON|OFF
+
+Exemple :
+    /msg &nick& SET #sailors BLOCKBADWORDS ON

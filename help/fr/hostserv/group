@@ -1,0 +1,10 @@
+Aide pour GROUP:
+
+Cette commande définiera le vHost actuel du pseudo
+comme vHost pour tous les pseudo du groupe, incluant
+les pseudos qui seront ajoutés par la suite.
+
+Syntaxe : GROUP
+
+Exemples :
+    /msg &nick& GROUP

@@ -1,0 +1,14 @@
+Aide pour SET RESTRICTED:
+
+SET RESTRICTED désigne un salon avec un accès restreint.
+Les utilisateurs qui ne sont pas sur la liste d'accès du salon,
+ou qui n'out pas le privilège chan:joinstaffonly seront
+kickés et bannis du salon dès leur entrée, en 
+supprimant toutes les exceptions qui leur correspondent
+avant. Si le salon a le mode +im aucun bannissement ne sera
+fait et l'exception d'invite sera retirée.
+
+Syntaxe : SET <#salon> RESTRICTED ON|OFF
+
+Exemple :
+    /msg &nick& SET #snoop RESTRICTED ON

@@ -1,0 +1,12 @@
+Aide pour REGISTER:
+
+REGISTER permet d'enregistrer un salon pour que
+vous en ayez un meilleur contrôle. L'enregistrement
+vous permet de maintenir une liste d'accès au salon
+et de bénéficier d'autres fonctionnalités qui sont
+habituellement fournies par des bots IRC.
+
+Syntaxe : REGISTER <#salon>
+
+Exemples :
+    /msg &nick& REGISTER #atheme

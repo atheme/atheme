@@ -1,0 +1,52 @@
+Aide pour TEMPLATE:
+
+La commande TEMPLATE permet la défnition d'ensemble de flags
+en simplifiant l'utilisation de la commande FLAGS.
+
+Sans argument, les template du réseau sont montrés.
+#if halfops
+Ceci inclut au moins SOP/AOP/HOP/VOP.
+#else
+Ceci inclut SOP/AOP/VOP.
+#endif
+
+Syntaxe : TEMPLATE
+
+Lorsque seul l'argument salon est fourni, une liste
+de template pourle salon sera affichée.
+
+Syntaxe : TEMPLATE <#salon>
+
+Dans le cas contraire, un template est modifié. Une modification
+peut être spécifiée par le nom d'un templates (copie le template)
+ou un changement de flag (commence par + ou -, optionnellement
+précédé par un !). Les templates ne peuvent pas être vides (faire
+un template vide le supprimera).
+
+Si la forme ! est utilisée, toutes les entrées d'accès
+qui correspondent au template sont changés en conséquence.
+Ceci n'est pas supporté si le template inclut ou exclut
+l'accès fondateur (+F).
+
+Il y a une limite de longueur de tous les templates
+sur un salon.
+
+Si vous n'est pas un fondateur, des restricitions 
+similaires à FLAGS s'appliquent.
+
+Syntaxe : TEMPLATE <#salon> [template vieu_template]
+Syntaxe : TEMPLATE <#salon> [template modification_flag]
+Syntaxe : TEMPLATE <#salon> [template !modification_flag]
+
+Exemples :
+    /msg &nick& TEMPLATE #foo
+    /msg &nick& TEMPLATE #foo user VOP
+    /msg &nick& TEMPLATE #foo user !+A
+#if halfops
+    /msg &nick& TEMPLATE #foo co-founder +*-OH
+    /msg &nick& TEMPLATE #foo op -*+vVhoti
+#else
+    /msg &nick& TEMPLATE #foo co-founder +*-O
+    /msg &nick& TEMPLATE #foo op -*+vVoti
+#endif
+    /msg &nick& TEMPLATE #foo obsoletetemplate -*

@@ -1,0 +1,33 @@
+Aide pour TRACE:
+
+TRACE vous permet de faire correspondre des utilisateurs a m'importe quel nombre de
+critères et de potentiellement agir dessus.
+
+Les critères actuels sont :
+CHANNEL    - Tous les utilisateurs du salon donné.
+SERVER     - Tous les utilisateurs du serveur donné.
+REGEXP     - Toutes les correspondances trouvées à un pattern de REGEX. Ceci est similaire à
+             RMATCH/RWATCH.
+GLOB       - Tous les utilisateurs qui correspondent à un pattern 'glob' (*ex?mple*)
+NICKAGE    - Depuis combien de temps (en secondes) un utilisateur a été connecté sur le réseau.
+NUMCHAN    - Le nombre de salons sur lequel un utilisateur est présent.
+IDENTIFIED - Statut identifié d'utilisateurs qui correspondent à certains critères.
+
+Les action actuelles sont :
+PRINT - Affiche le nick!user@host et quelques informations à propos de tous les utilisateurs
+      	correspondant à certains critères.
+COUNT - Donne un nombre d'utilisateurs qui correspondent aux critères donnés.
+KILL  - KILL tous les utilisateurs qui correspondent aux critères donnés.
+AKILL - AKILL tous les utilisateurs qui correspondent aux critères donnés.
+
+Syntaxe : TRACE <action> <paramètres>
+
+Exemples :
+    /msg &nick& TRACE print channel #foo
+    /msg &nick& TRACE print server irc.dereferenced.org
+    /msg &nick& TRACE kill "reason" server alfred.staticbox.net
+    /msg &nick& TRACE print glob *!*@127.0.0.1
+    /msg &nick& TRACE kill "three word reason" channel #test nickage <60
+    /msg &nick& TRACE print numchan 0 nickage <180
+    /msg &nick& TRACE count numchan >10 identified no
+    /msg &nick& TRACE akill !P "join a channel next time" numchan 0

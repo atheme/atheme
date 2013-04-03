@@ -1,0 +1,9 @@
+Aide pour HOLD:
+
+HOLD empêche un compte et tous les nicknames qui y sont
+enregistrés d'expirer.
+
+Syntaxe : HOLD <nick> ON|OFF
+
+Exemples :
+    /msg &nick& HOLD jilles ON

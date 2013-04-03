@@ -1,0 +1,10 @@
+Aide pour SENDOPS:
+
+SENDOPS vous permet d'envoyer un mémo à tous les opérateurs
+d'un salon. Seuls les utilisateurs autorisés à voir la liste
+d'accès peuvent faire ceci.
+
+Syntaxe : SENDOPS <#salon> <texte>
+
+Exemples :
+    /msg &nick& SENDOPS #chat attention à badguy

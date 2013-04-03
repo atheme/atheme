@@ -1,0 +1,12 @@
+Aide pour RETURN:
+
+RETURN remet à zéro le mot de passe du compte
+spécifié, l'envoie à l'adresse email donnée et
+change l'email du compte à cette adresse.
+Toutes les sessions identifiées actuellement
+sur ce compte seront dés-identifiées.
+
+Syntaxe : RETURN <nickname> <e-mail>
+
+Exemples :
+    /msg &nick& RETURN jdoe john@example.com

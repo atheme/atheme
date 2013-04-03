@@ -1,0 +1,10 @@
+Aide pour ODEL:
+
+ODEL est utilisé pour supprimer un message d'information que vous ne
+voulez plus que les opers voient lorsqu'ils s'identifient avec la commande
+/oper. Ceci ne vous permet pas de supprimer les messages utilisateurs de &nick&.
+
+Syntaxe : ODEL <id>
+
+Exemple :
+    /msg &nick& ODEL 1

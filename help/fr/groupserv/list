@@ -1,0 +1,9 @@
+Aide pour LIST:
+
+LIST montre tous les groupes qui correspondent au pattern spécifié.
+
+Syntaxe : LIST <pattern de groupe>
+
+Exemples :
+    /msg &nick& LIST *
+    /msg &nick& LIST !pants*

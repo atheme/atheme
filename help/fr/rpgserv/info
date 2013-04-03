@@ -1,0 +1,8 @@
+Aide pour INFO:
+
+INFO est utilisé pour afficher le profile complet du salon.
+
+Syntaxe : INFO <#salon>
+
+Exemple :
+    /msg &nick& INFO #ooc

@@ -1,0 +1,14 @@
+Aide pour ROLE SET:
+
+ROLE SET vous permet de modifier les flags d'un rôle
+déjà existant. Tous les utilisateurs ayant le rôle spécifié
+seront affectés par les changements. Les flags multiples 
+doivent être séparés par un espace et tous être précédé
+par un "modifieur" (+ ou -).
+
+Syntaxe : ROLE <#salon> SET <rôle> <flags>
+
+Exemples :
+    /msg &nick& ROLE #atheme SET channel-ops +acl-change +set +recover
+    /msg &nick& ROLE #atheme SET helpers +invite
+    /msg &nick& ROLE #foo SET helpers -topic -invite

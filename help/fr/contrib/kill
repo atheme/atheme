@@ -1,0 +1,10 @@
+Aide pour KILL:
+
+KILL kill un utilisateur avec Services. Ceci est légèrement différent de 
+la commande KILL de votre IRCd puisque beaucoup de clients ne se reconnecteront pas
+à votre réseau après un KILL des Services.
+
+Syntaxe : KILL <cible> <raison>
+
+Exemples :
+    /msg &nick& KILL jdhore Pants!

@@ -1,0 +1,14 @@
+Aide pour VHOSTNICK:
+
+VHOSTNICK permet aux opérateurs de définir un host virtuel
+(aussi connu comme spoof ou cloak) sur un pseudo.
+Ce vHost sera défini sur l'utilisateur immédiatement et 
+à chaque fois qu'il s'identifiera en utilisant le pseudo donné.
+Si aucun vHost n'es spécifié, le vHost sera redéfini par celui
+du compte.
+
+Syntaxe : VHOSTNICK <nickname> [<vhost>]
+
+Exemples :
+    /msg &nick& VHOSTNICK spb may.explode.on.impact
+    /msg &nick& VHOSTNICK nenolod

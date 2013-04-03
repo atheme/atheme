@@ -1,0 +1,18 @@
+Aide pour SEARCH:
+
+SEARCH vous permet de rechercher un salon compatible RPG suivant certains
+critères. Pour connaitre les critères disponibles, voir le fichier d'aide
+pour la commande SET via /msg &nick& HELP SET
+
+Les options de recherche listées dans le fichier d'aide SET peuvent
+être utilisées comme mots clé avec la commande SEARCH. 
+Des exemples sont disponibles ci-dessous :
+
+Syntaxe : SEARCH <mots clé>
+
+Exemple :
+    /msg &nick& SEARCH FANTASY MIDDLEAGES FREEFORM PG13 R
+         Recherche un jeu du genre fantastique (FANTASY) du Moyen-Age (MIDDLEAGES)
+         avec un règlement de forme libre (FREEFORM) et une classification PG13 ou R.
+    /msg &nick& SEARCH CYBERPUNK FANTASY REALISTIC
+         Recherche tous les types de jeux du genre cyberpunk, fantastique ou realiste.

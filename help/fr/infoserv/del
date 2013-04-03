@@ -1,0 +1,10 @@
+Aide pour DEL:
+
+DEL est utilisé pour supprimer un message d'information que vous
+ne voulez plus que les utilisateurs voient à leur connexion.
+Ceci ne vous permettra pas de supprimer les message oper de &nick&.
+
+Syntaxe : DEL <id>
+
+Exemple :
+    /msg &nick& DEL 1

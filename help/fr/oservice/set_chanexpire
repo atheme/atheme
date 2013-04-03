@@ -1,0 +1,9 @@
+Aide pour SET CHANEXPIRE:
+
+SET CHANEXPIRE permet à l'équipe du réseau de modifier
+la fréquence de vérification des expirations.
+
+Syntaxe : SET CHANEXPIRE <temps en jours>
+
+Exemple :
+    /msg &nick& SET CHANEXPIRE 30

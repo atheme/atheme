@@ -1,0 +1,10 @@
+Aide pour DOWN:
+
+DOWN supprime tous les accès que vous avez sur un salon.
+Cela ne supprime pas les flags ou le niveau xOP que vous avez,
+mais uniquement les modes.
+
+Syntaxe : DOWN <#salon>
+
+Exemples :
+    /msg &nick& DOWN #foo

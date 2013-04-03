@@ -1,0 +1,9 @@
+Aide pour LISTOWNMAIL:
+
+LISTOWNMAIL affiche les comptes enregistrés avec l'adresse
+email de votre compte.
+
+Syntaxe : LISTOWNMAIL
+
+Exemples :
+    /msg &nick& LISTOWNMAIL

@@ -1,0 +1,13 @@
+Aide pour SET NOOP:
+
+SET NOOP empêche les services de vous donner
+automatiquement le statut d'opérateur sur les salons
+auxquels vous avez accès.
+
+Vous pouvez choisir de vous op/voice vous-même
+en utilisant les commandes OP et VOICE.
+
+Syntaxe : SET NOOP ON|OFF
+
+Exemple :
+    /msg &nick& SET NOOP ON

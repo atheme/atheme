@@ -1,0 +1,10 @@
+Aide pour GENERATEHASH:
+
+GENERATEHASH génère un hash de mot de passe Atheme.
+Utile pour créer un mot de passe facilement pour les 
+mots de passe d'un opérateur des services.
+
+Syntaxe : GENERATEHASH <mot de passe>
+
+Exemples :
+    /msg &nick& GENERATEHASH ThIsPassw0rd

@@ -1,0 +1,13 @@
+Aide pour SEND:
+
+SEND vous permet d'envoyer un mémo à un pseudo qui est
+actuellement hors ligne. Lorsqu'il sera en ligne, il sera
+informé du fait qu'il a des messages en attente et qu'il
+aura la possibilité de lire votre mémo.
+
+Votre mémo ne peut pas dépasser 300 caractères.
+
+Syntaxe : SEND <user|nick> texte
+
+Exemples :
+    /msg &nick& SEND Kog paye tes factures

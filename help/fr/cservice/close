@@ -1,0 +1,19 @@
+Aide pour CLOSE:
+
+CLOSE empêche un salon d'être utilisé. N'importe
+qui tenterait de le rejoindre sera KICKBAN immédiatement.
+Le salon ne peut pas être DROP et le statut de fondateur
+ne peut pas être transféré.
+
+Activer CLOSE kickera immédiatement tous les utilisateurs
+sur le salon.
+
+Utiliser CLOSE OFF pour réouvrir le salon. 
+Lorsqu'ils sont fermés, les salons expireront
+toujours.
+
+Syntaxe : CLOSE <#salon> ON|OFF [raison]
+
+Exemples :
+    /msg &nick& CLOSE #lamers ON spamming
+    /msg &nick& CLOSE #spiderslair OFF

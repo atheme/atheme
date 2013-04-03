@@ -1,0 +1,11 @@
+Aide pour LISTVHOST:
+
+LISTVHOST permet aux opérateurs de voir les vHost (aussi connu
+en tant que spoof ou cloak) qui correpondent au pattern donné.
+Si aucun pattern n'est spécifié, LISTVHOST listera les vHosts existants.
+
+Syntaxe : LISTVHOST [<pattern>]
+
+Exemples :
+    /msg &nick& LISTVHOST *lulz.com*
+    /msg &nick& LISTVHOST

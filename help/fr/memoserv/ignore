@@ -1,0 +1,18 @@
+Aide pour IGNORE:
+
+IGNORE vous permet d'ignorer les mémos provenant
+d'autres utilisateurs. Par exemple pour les spams
+de votre boite de réception par des utilisateurs
+agaçants ou des bots qui auraient trouvé le moyen
+de s'enregistrer.
+
+Vous pouvez ajouter jusqu'à 40 utilisateurs dans votre
+liste d'ignore.
+
+Syntaxe : IGNORE ADD|DEL|LIST|CLEAR <compte>
+
+Exemples :
+    /msg &nick& IGNORE ADD kog
+    /msg &nick& IGNORE DEL kog
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

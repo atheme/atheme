@@ -1,0 +1,28 @@
+Aide pour SENDPASS:
+
+#if !module nickserv/setpass
+SENDPASS envoie par email le mot de passe pour le nickname
+spécifié.
+#else
+SENDPASS envoie par email une clé à l'adresse email correspondante
+au nickname spécifié qui peut être utilisée pour définir
+un nouveau mot de passe en utilisant SETPASS.
+#endif
+
+Syntaxe : SENDPASS <nickname>
+
+Si le pseudo est marqué, vous pouvez l'outrepasser
+en utilisant le mot clé FORCE.
+
+Syntaxe : SENDPASS <nickname> FORCE
+#if module nickserv/setpass
+
+Si une clé a été envoyée par email mais pas encore utilisée
+vous pouvez la remettre à zéro en utilisant
+le mot clé CLEAR.
+
+Syntaxe : SENDPASS <nickname> CLEAR
+#endif
+
+Exemples :
+    /msg &nick& SENDPASS foo

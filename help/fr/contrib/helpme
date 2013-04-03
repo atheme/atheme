@@ -1,0 +1,12 @@
+Aide pour HELPME:
+
+Vous marque en tant qu'Helpeur en vous donnant le mode +h. 
+Ceci est utile uniquement si votre IRCd supporte le mode utilisateur +h
+et que vous avez le support de l'équipe qui ne sont pas opérateurs.
+Requiert le privilège OPERSERV:HELPME
+
+Syntaxe : HELPME
+
+Exemples :
+    /msg &nick& HELPME
+

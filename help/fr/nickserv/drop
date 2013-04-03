@@ -1,0 +1,17 @@
+Aide pour DROP:
+
+Utiliser cette commande fera supprimer votre compte
+par &nick& et arrêtera la surveillance de votre ou vos
+pseudonymes.
+Si un nick est DROP, n'importe qui peut l'enregistrer à
+nouveau. Vous perdrez aussi tous vos accès aux salons
+et vos mémos.
+
+Lors d'un DROP et du ré-enregistrement d'un compte pendant un netsplit,
+les utilisateurs de l'autre côté du split pourraient être reconnus comme 
+le nouveau compte par la suite.
+
+Syntaxe : DROP <nickname> <mot de passe>
+
+Exemples :
+    /msg &nick& DROP foo bar

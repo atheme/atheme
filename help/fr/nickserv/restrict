@@ -1,0 +1,13 @@
+Aide pour RESTRICT:
+
+RESTRICT permet aux opérateurs de restreindre ce qu'un compte peut faire.
+Ceci empêchera l'utilisateur de grouper des pseudos, enregistrer des salons,
+effectuer des demandes de vHost ou prendre un vHost proposé par OFFER.
+
+Ceci est particulièrement utile si un utilisateur abuse de ces commandes.
+
+Syntaxe : RESTRICT <nickname> ON|OFF <raison>
+
+Exemples :
+    /msg &nick& RESTRICT game_boy ON Abusing vhost requests
+    /msg &nick& RESTRICT nenolod OFF

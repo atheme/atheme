@@ -1,0 +1,9 @@
+Aide pour SET NEVERGROUP:
+
+SET NEVERGROUP empêche les autres de vous ajouter dans 
+des listes d'accès de groupes.
+
+Syntaxe : SET NEVERGROUP ON|OFF
+
+Exemple :
+    /msg &nick& SET NEVERGROUP ON

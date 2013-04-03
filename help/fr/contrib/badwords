@@ -1,0 +1,18 @@
+Aide pour BADWORDS:
+
+BADWORDS maintient une liste d'expressions auxquelles
+chaques mots sur un salon seront comparés et interdits
+(si l'option BLOCKBADWORDS est activée).
+
+Le paramètre ACTION peut être : KICK, BAN, KICKBAN ou (si 
+votre IRCd le supporte) QUIET.
+
+Syntaxe : BADWORDS <#salon> LIST
+Syntaxe : BADWORDS <#salon> ADD <word> <action>
+Syntaxe : BADWORDS <#salon> DEL <word>
+
+Exemples :
+    /msg &nick& BADWORDS #atheme LIST
+    /msg &nick& BADWORDS #sailors ADD f?ck kick
+    /msg &nick& BADWORDS #sailors ADD *dam?it* quiet
+    /msg &nick& BADWORDS #desensitized DEL f?ck

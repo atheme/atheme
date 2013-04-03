@@ -1,0 +1,18 @@
+Aide pour LISTGROUPS:
+
+LISTGROUPS affiche les groupes auxquels vous avez accès
+en incluant ceux que vous possédez.
+
+Les bannissements de groupe ne sont pas montrés.
+
+Syntaxe : LISTGROUPS
+#if priv group:auspex
+
+Les opérateurs avec le privilège group:auspex peuvent aussi
+voir les accès d'autres utilisateurs.
+
+Syntaxe : LISTGROUPS <nick>
+#endif
+
+Exemple :
+    /msg &nick& LISTGROUPS

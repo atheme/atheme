@@ -1,0 +1,8 @@
+Aide pour TOPICAPPEND:
+
+La commande TOPICAPPEND vous permet d'ajouter quelque chose au topic d'un salon.
+
+Syntaxe : TOPICAPPEND <#salon> <topic>
+
+Exemples :
+    /msg &nick& TOPICAPPEND #foo bar

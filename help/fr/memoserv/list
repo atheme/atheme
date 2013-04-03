@@ -1,0 +1,13 @@
+Aide pour LIST:
+
+LIST vous montre les mémos dans votre boite de
+réception, incluant le nom de l'expéditeur et
+la date de l'envoi.
+Pour lire un mémo, utilisez la commande READ.
+Vous pouvez aussi supprimer ou transférer un mémo
+(DELETE et FORWARD).
+
+Syntaxe : LIST
+
+Exemples :
+    /msg &nick& LIST

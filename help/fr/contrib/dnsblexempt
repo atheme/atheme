@@ -1,0 +1,15 @@
+Aide pour DNSBLEXEMPT:
+
+DNSBLEXEMPT maintient une liste d'adresses IP pour lesquelles les
+utilisateurs qui leur correspondent ne seront pas cible de vérifications 
+dans les blacklists.
+
+Syntaxe : DNSBLEXEMPT LIST
+Syntaxe : DNSBLEXEMPT ADD <ip> <raison>
+Syntaxe : DNSBLEXEMPT DEL <ip>
+
+Exemples :
+    /msg &nick& DNSBLEXEMPT LIST
+    /msg &nick& DNSBLEXEMPT ADD 127.0.0.2 localhost
+    /msg &nick& DNSBLEXEMPT ADD 208.54.35.85 T-Mobile IP in a DNSBL :(
+    /msg &nick& DNSBLEXEMPT DEL 127.0.0.2

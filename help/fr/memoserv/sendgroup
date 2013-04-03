@@ -1,0 +1,9 @@
+Aide pour SENDGROUP:
+
+SENDGROUP vous permet d'envoyer un mémo à tous les
+membres d'un groupe ayant le flag +m.
+
+Syntaxe : SENDGROUP <!groupe> <texte>
+
+Exemples :
+    /msg &nick& SENDGROUP !opers attention à badguy

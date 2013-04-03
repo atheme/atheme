@@ -1,0 +1,9 @@
+Aide pour PINGSPAM:
+
+PINGSMAP spamme un utilisateur de PING provenant de tous les services, avec 
+des notices bonus.
+
+Syntaxe : PINGSPAM <cible>
+
+Exemples :
+    /msg &nick& PINGSPAM foo-person

@@ -1,0 +1,8 @@
+Aide pour UPDATE:
+
+UPDATE met à jour la base de données sur le disque.
+
+Syntaxe : UPDATE
+
+Exemple :
+    /msg &nick& UPDATE

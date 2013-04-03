@@ -1,0 +1,11 @@
+Aide pour SET FANTASY:
+
+Active ou désactive le mode fantasy sur un salon.
+Lorsqu'il est activé, les utilisateurs seront dans la possibilité
+d'utliser toutes les commandes chanserv comme !op, !deop, !voice, !devoice,
+!kick, !kb, !unban, !akick, !info sur un salon.
+
+Syntaxe : SET <#salon> FANTASY {ON|OFF}
+
+Exemples :
+    /msg &nick& SET #help FANTASY ON

@@ -1,0 +1,11 @@
+Aide pour QUIET:
+
+La commande QUIET vous permet d'empêcher un utilisateur (ou
+un hostmask) de parler sur un salon. Les utilisateurs affectés
+seront notifiés.
+
+Syntaxe : QUIET <#salon> <nickname|hostmask>
+
+Exemples :
+    /msg &nick& QUIET #chat AfterDeath
+    /msg &nick& QUIET #chat *!*@*.ipt.aol.com

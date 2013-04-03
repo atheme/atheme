@@ -1,0 +1,9 @@
+Aide pour SET NOGREET:
+
+Ce paramètre vous permet de ne pas recevoir les notices
+de salutation (greeting) des salons.
+
+Syntaxe : SET NOGREET ON|OFF
+
+Exemple :
+    /msg &nick& SET NOGREET ON

@@ -1,0 +1,22 @@
+Aide pour USERINFO:
+
+La commande USERINFO  permet la définition de lignes d'informations
+qui seront montrées sur le salon lorsqu'un utilisateur rejoint le salon.
+
+Uniquement lorsque l'argument du salon est donné, une liste des
+utilisateurs avec des informations sera affichée.
+
+Syntaxe : USERINFO <#salon>
+
+Dans le cas contraire, une ligne d'informations sera modifiée ou supprimée.
+
+Syntaxe : USERINFO <#salon> <nickname> [nouvelle info]
+
+Le pseudo donné doit être sur la liste d'accès du salon
+et vous devez avoir la permission de modifier l'entrée (+f
+plus les flags d'entrée).
+
+Exemples :
+    /msg &nick& USERINFO #foo
+    /msg &nick& USERINFO #foo foouser
+    /msg &nick& USERINFO #foo foouser An info line.

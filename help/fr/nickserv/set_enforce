@@ -1,0 +1,11 @@
+Aide pour SET ENFORCE:
+
+SET ENFORCE vous permet d'activer plus de protection
+pour les pseudos enregistrés sur votre compte.
+
+Ceci changera automatiquement le pseudo de quelqu'un qui
+tente de l'utiliser sans s'identifier dans les temps, et
+bloquera temporairement son utilisation. Cela peut être
+retiré lorsque vous le désirez, voir l'aide pour RELEASE.
+
+Syntaxe : SET ENFORCE ON|OFF

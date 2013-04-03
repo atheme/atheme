@@ -1,0 +1,10 @@
+Aide pour SET CHANNEL:
+
+SET CHANNEL vous permet de modifier ou de définir un salon IRC officiel
+pour un groupe. Ceci sera montré lorsqu'un utilisateur demandera des 
+informations sur le groupe.
+
+Syntaxe : SET <!groupe> CHANNEL [#salon]
+
+Exemple :
+    /msg &nick& SET !atheme CHANNEL #atheme

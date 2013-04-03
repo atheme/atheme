@@ -1,0 +1,9 @@
+Aide pour SET KLINETIME:
+
+SET KLINETIME permet à l'équipe du réseau de définir un temps par
+défaut avant qu'un AKILL sans délai d'expiration précisé n'expire.
+
+Syntaxe : SET KLINETIME <temps en jours>
+
+Exemple :
+    /msg &nick& SET KLINETIME 5

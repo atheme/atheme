@@ -1,0 +1,10 @@
+Aide pour SET ENFORCEPREFIX:
+
+SET ENFORCEPREFIX modifie le préfixe du pseudo
+prendra lorsqu'un utilisateur sera utilisé par
+l'enforcer à cause de l'échec d'authentification.
+
+Syntaxe : SET ENFORCEPREFIX <préfixe>
+
+Exemple :
+    /msg &nick& SET ENFORCEPREFIX Guest

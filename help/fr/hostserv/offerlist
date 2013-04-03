@@ -1,0 +1,9 @@
+Aide pour OFFERLIST:
+
+OFFERLIST liste tous les vHost actuellement rendus disponibles par
+les membres de l'équipe du réseau.
+
+Syntaxe : OFFERLIST
+
+Exemples :
+    /msg &nick& OFFERLIST

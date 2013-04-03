@@ -1,0 +1,11 @@
+Aide pour DNSBLSCAN:
+
+DNSBLSCAN permet à l'équipe du réseau de scanner un utilisateur individuellement
+(qui soit connecté sur le réseau) pour vérification des blacklist.
+L'action définie par DNSBLACTION sera prise à son encontre s'il est listé 
+dans l'une des blacklists.
+
+Syntaxe : DNSBLSCAN <utilisateur>
+
+Exemples :
+    /msg &nick& DNSBLSCAN jdhore

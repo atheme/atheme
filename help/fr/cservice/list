@@ -1,0 +1,39 @@
+Aide pour LIST:
+
+LIST affiche les salons qui correspondent à certains critères.
+Vous pouvez utiliser plusieurs critères dans la même commande.
+
+Les critères disponibles sont :
+PATTERN      - Tous les salons qui correspondent au pattern.
+MARK-REASON  - Tous les salon dont la raison de marque (MARK)
+               correspond au pattern.
+CLOSE-REASON - Tous les salons fermés dont la raison du close
+               correspond au pattern.
+HOLD         - Tous les salons avec le flag HOLD actif.
+NOOP         - Tous les salons avec le flag NOOP actif.
+LIMITFLAGS   - Tous les salons avec le flag LIMITFLAGS actif.
+SECURE       - Tous les salons avec le flag SECURE actif.
+VERBOSE      - Tous les salons avec le flag VERBOSE actif.
+RESTRICTED   - Tous les salons avec le flag RESTRICTED actif.
+KEEPTOPIC    - Tous les salons avec le flag KEEPTOPIC actif.
+VERBOSE-OPS  - Tous les salons définis avec le verbose aux opérateurs.
+TOPICLOCK    - Tous les salons avec le flag TOPICLOCK actif.
+GUARD        - Tous les salons avec le flag GUARD actif.
+PRIVATE      - Tous les salons avec le flag PRIVATE actif.
+
+CLOSED       - Tous les salons fermés par l'équipe du réseau.
+MARKED       - Tous les salons marqués par l'équipe du réseau.
+ACLSIZE      - Les salons avec une liste d'accès plus grande que la taille donnée.
+REGISTERED   - Les salons enregistrés depuis plus longtemps que l'âge donné.
+LASTUSED     - Les salons non utilisés depuis plus longtemps que l'age donné.
+
+Syntaxe : LIST <criteria>
+
+Exemples :
+    /msg &nick& LIST pattern #*foo*
+    /msg &nick& LIST hold
+    /msg &nick& LIST closed pattern #x*
+    /msg &nick& LIST aclsize 10
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST aclsize 20 registered 7d pattern #bar*
+    /msg &nick& LIST mark-reason lamers?here

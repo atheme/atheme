@@ -1,0 +1,9 @@
+Aide pour SET MDLIMIT:
+
+SET MDLIMIT définit combien de morceaux de métadonnées
+peuvent appartenir à un objet (compte, groupe ou salon).
+
+Syntaxe : SET MDLIMIT <valeur>
+
+Exemple :
+    /msg &nick& SET MDLIMIT 30

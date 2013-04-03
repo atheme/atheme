@@ -1,0 +1,8 @@
+Aide pour FREGISTER:
+
+FREGISTER permet aux opérateurs des services d'enregistrer un utilisateur en son nom.
+
+Syntaxe : FREGISTER <compte> <mot de passe> <email> [CRYPTPASS|HIDEMAIL|NOOP|NEVEROP]
+
+Exemples :
+    /msg &nick& FREGISTER nenolod randompass nenolod@nenolod.net

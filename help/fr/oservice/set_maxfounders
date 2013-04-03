@@ -1,0 +1,9 @@
+Aide pour SET MAXFOUNDERS:
+
+SET MAXFOUNDERS permet la configuration du nombre de fondateurs
+maximum qu'on salon peut avoir.
+
+Syntaxe : SET MAXFOUNDERS <valeur>
+
+Exemple :
+    /msg &nick& SET MAXFOUNDERS 4

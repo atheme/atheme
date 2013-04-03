@@ -1,0 +1,15 @@
+Aide pour SET EMAIL:
+
+SET EMAIL modifie l'adresse email associée
+à un compte. Cette adresse email est utilisée
+pour la récupération de mot de passe.
+
+Une confirmation peut être requise pour la
+nouvelle adresse. Pour la confirmer, suivez les
+instructions dans le message envoyé à la nouvelle
+adresse.
+
+Syntaxe : SET EMAIL <nouvelle adresse>
+
+Exemple :
+    /msg &nick& SET EMAIL dan@example.com

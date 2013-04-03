@@ -1,0 +1,9 @@
+Aide pour SAVECHANMODES:
+
+SAVECHANMODES sauvegarde les modes, topics et bannissements des salons du réseau
+dans un fichier, pour être restaurés plus tard avec LOADCHANMODES.
+
+Syntaxe : SAVECHANMODES
+
+Exemples :
+    /msg &nick& SAVECHANMODES

@@ -1,0 +1,8 @@
+Aide pour WAITING:
+
+WAITING liste les annonces actuellement en attente d'activation.
+
+Syntaxe : WAITING
+
+Exemples :
+    /msg &nick& WAITING

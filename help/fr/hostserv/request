@@ -1,0 +1,11 @@
+Aide pour REQUEST:
+
+REQUEST effectue une demande d'activation de vHost. Vous devez
+être identifié à un pseudo enregistré pour effectuer cette commande.
+Merci d'être patient lors de la prise en compte de votre demande par
+l'équipe du réseau.
+
+Syntaxe : REQUEST <vhost>
+
+Exemples :
+    /msg &nick& REQUEST may.explode.on.impact

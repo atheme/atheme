@@ -1,0 +1,7 @@
+Aide pour TAXONOMY:
+
+La commande taxonomy liste les métadonnées associées
+aux utilisateurs enregistrés.
+
+Exemples :
+    /msg &nick& TAXONOMY foo

@@ -1,0 +1,11 @@
+Aide pour SET MAXUSERS:
+
+SET MAXUSERS permet la configuration du nombre de compte
+qu'une adresse email peut enregistrer. Cette valeur
+peut être outrepassée email par email avec les exceptions
+d'emails dans le block emailexempts.
+
+Syntaxe : SET MAXUSERS <valeur>
+
+Exemple :
+    /msg &nick& SET MAXUSERS 7

@@ -1,0 +1,43 @@
+Aide pour LIST:
+
+LIST affiche les utilisateurs enregistrés qui correspondent aux
+critères donnés.
+Des critères multiples peuvent être utilisés dans cette commande.
+
+Les critère actuels sont :
+PATTERN       - Tous les utilisateurs qui correpondent au pattern donné.
+EMAIL         - Tous les comptes enregistrés qui ont une adresse email
+	      	qui correspond au pattern donné.
+MARK-REASON   - Tous les comptes qui ont une raison de "marque" qui
+	      	correpond au pattern donné.
+FROZEN-REASON - Tous les comptes gelés qui ont un motif qui correpond
+	      	au pattern donné.
+HOLD          - Tous les utilisateurs avec le flag HOLD actif.
+NOOP          - Tous les utilisateurs avec le flag NOOP actif.
+NEVEROP       - Tous les utilisateurs avec le flag NEVEROP actif.
+WAITAUTH      - Tous les utilisateurs avec le flag WAITAUTH actif.
+HIDEMAIL      - Tous les utilisateurs avec le flag HIDEMAIL actif.
+NOMEMO        - Tous les utilisateurs avec le flag NOMEMO actif.
+EMAILMEMOS    - Tous les utilisateurs avec le flag EMAILMEMOS actif.
+USE-PRIVMSG   - Tous les utilisateurs avec le flag USEPRIVMSG actif.
+QUIETCHG      - Tous les utilisateurs avec le flag QUIETCHG actif.
+NOGREET       - Tous les utilisateurs avec le flag NOGREET actif.
+PRIVATE       - Tous les utilisateurs avec le flag PRIVATE actif.
+REGNOLIMIT    - Tous les utilisateurs avec le flag REGNOLIMIT actif.
+
+FROZEN        - Tous les utilisateurs gelés par l'équipe du réseau.
+MARKED        - Tous les utilisateurs marqués par l'équipe du réseau.
+REGISTERED    - Les comptes d'utilisateurs enregistrés depuis plus longtemps
+	      	que l'âge donné.
+LASTLOGIN     - Les comptes utilisateurs non utilisés depuis plus de l'âge donné.
+
+Syntaxe : LIST <critères>
+
+Exemples :
+    /msg &nick& LIST pattern foo*
+    /msg &nick& LIST hold
+    /msg &nick& LIST frozen pattern x*
+    /msg &nick& LIST registered 30d
+    /msg &nick& LIST marked registered 7d pattern bar
+    /msg &nick& LIST email *@gmail.com
+    /msg &nick& LIST mark-reason *lamer*

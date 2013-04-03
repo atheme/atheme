@@ -1,0 +1,9 @@
+Aide pour UNBAN:
+
+La commande UNBAN vous permet de supprimer les
+bans qui vous concernent sur un salon.
+
+Syntaxe : UNBAN <#salon>
+
+Exemples :
+    /msg &nick& UNBAN #chat

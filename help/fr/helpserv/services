@@ -1,0 +1,10 @@
+Aide pour SERVICES:
+
+SERVICES vous permet de voir la liste de tous les services sur le réseau
+pour que vous puissiez en choisir un à qui envoyer un message et obtenir
+plus d'aide.
+
+Syntaxe : SERVICES
+
+Exemples :
+    /msg &nick& SERVICES

@@ -1,0 +1,9 @@
+Aide pour SET PUBLIC:
+
+SET PUBLIC affiche l'appartenance à un groupe quand les utilisateurs
+effectuent NickServ INFO sur les membres du groupe.
+
+Syntaxe : SET <!groupe> PUBLIC <ON|OFF>
+
+Exemples :
+    /msg &nick& SET !awesome-people PUBLIC ON

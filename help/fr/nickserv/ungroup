@@ -1,0 +1,14 @@
+Aide pour UNGROUP:
+
+UNGROUP dés-enregistre le pseudo donné de votre compte.
+Le pseudo sera enregistrable pour les autres. Ceci n'affectera
+pas vos accès aux salon ou vos mémos.
+
+Si vous ne spécifiez pas de pseudo votre pseudo actuel
+sera dé-groupé. Vous ne pouvez pas dé-grouper le
+nom de votre compte.
+
+Syntaxe : UNGROUP [nickname]
+
+Exemples :
+    /msg &nick& UNGROUP SomeNick

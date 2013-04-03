@@ -1,0 +1,16 @@
+Aide pour DROP:
+
+Utiliser cette commande supprimera votre comte de la base
+de données des services. Vous perdrez tous vos accès aux salons
+et vos mémos. Si un compte est supprimé, n'importe qui peut le
+ré-enregistrer. Vous devez vou identifier aux services avant
+de faire ceci.
+
+Lorsque vous dropez et ré-enregistrez un compte pendant un netsplit,
+les utilisateurs de l'autre côté pourraient être reconnu comme
+le nouveau compte.
+
+Syntaxe : DROP <compte> <mot de passe>
+
+Exemples :
+    /msg &nick& DROP foo bar

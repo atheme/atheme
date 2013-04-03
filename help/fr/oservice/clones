@@ -1,0 +1,79 @@
+Aide pour CLONES:
+
+CLONES garde une trace du nombre de clients
+par adresse IP. Des avertissements sont affichés
+dans le snoop channel à propos des adresses IP
+avec de multiples clients.
+
+CLONES fonctionnera uniquement pour les adresses IP
+qu'Atheme connait. Si l'IRCd ne supporte pas la
+propagation des adresses IP, CLONES et inutile.
+Si des adresses IP ne sont pas envoyées pour les
+clients spoofés, ces clients seront exemptés
+de vérifications de clones.
+
+Syntaxe : CLONES KLINE ON|OFF
+
+Active/désactive le bannissement pour une heure des
+adresses IP avec plus du nombre autorisé de clients 
+par adresse IP sur le réseau (ces bannissements ne
+sont pas ajoutés à la liste des AKILL). Ce paramètre
+est sauvegardé dans etc/services.db et mis sur OFF
+par défaut.
+
+Syntaxe : CLONES LIST
+
+Montre les adresses IP avec plus de 3 clients ; indique
+le nombre de clients et si l'adresse IP est une
+exception ou non.
+
+Syntaxe : CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <raison>
+
+Ajoute une adresse IP à la liste d'exception de clone.
+L'adresse IP doit correspondre exactement avec la forme
+utilisée par l'IRCd (attention au raccourcis '::' d'IPv6).
+L'adresse IP peut également être un masque CIDR, par exemple
+192.168.1.0/24. Les adresses IP simples ont une plus grande
+priorité par rapport aux masques CIDR.
+<clones> est le nombre de clones autorisés ; ce doit être
+au moins 4.
+Des avertissements sont envoyés sur le nombre est rencontré
+et un bannissement du réseau peut être défini si le nombre 
+est dépassé.
+La raison est montrée dans LISTEXEMPT.
+Les exceptions de clone sont stockées dans etc/services.db.
+
+Syntaxe : CLONES DELEXEMPT <ip>
+
+Supprime une adresse IP de la liste des exceptions de clone.
+
+Syntaxe : CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN> <limite>
+
+Définit la limite par défaut (DEFAULT), la limite autorisée
+(ALLOWED) ou d'avertissement (WARN) pour le nombre de clones.
+WARN ou ALLOWED peuvent être 0, ce qui désactive tout
+avertissement ou kill.
+
+Syntaxe : CLONES SETEXEMPT <ip> <REASON | DURATION> <valeur>
+
+Définit la raison ou la durée de l'exception donnée à la
+valeur spécifiée. La valeur DURATION (durée) peut être 0,
+rendant l'exception permanente.
+
+Syntaxe : CLONES LISTEXEMPT
+
+Affiche la liste d'exception des clones avec les raisons.
+
+Exemple :
+    /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
+    /msg &nick& CLONES DELEXEMPT 192.168.1.2
+
+Syntaxe : CLONES DURATION
+
+Permet la modification de la durée des bannissements
+des clones. Par défaut à une heure. Ce paramètre est
+gardé entre les redémarrages.
+
+Exemple :
+    /msg &nick& CLONES DURATION 30m
+

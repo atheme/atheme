@@ -1,0 +1,9 @@
+Aide pour REJECT:
+
+Rejette la requête d'annonce faite par le pseudo donné.
+Un mémo informant l'utilisateur sera envoyé.
+
+Syntaxe : REJECT <nick>
+
+Exemples :
+    /msg &nick& REJECT nenolod

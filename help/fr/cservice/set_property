@@ -1,0 +1,13 @@
+Aide pour SET PROPERTY:
+
+SET PROPERTY manipule les métadonnées
+associées à un salon.
+
+Pour supprimer une entrée de métadonnée,
+spécifiez le nom et laissez la valeur vide.
+
+Syntaxe : SET <#salon> PROPERTY <nom> [valeur]
+
+Exemple :
+    /msg &nick& SET #atheme PROPERTY URL http://www.atheme.org/
+    /msg &nick& SET #meat PROPERTY VEGETABLES

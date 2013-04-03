@@ -1,0 +1,10 @@
+Aide pour HELPME:
+
+HELPME vous permet de faire des demandes d'aide à l'équipe du réseau.
+Ceci fonctionne plus comme une alerte qu'un système de ticket.
+
+Syntaxe : HELPME [topic]
+
+Exemples :
+    /msg &nick& HELPME
+    /msg &nick& HELPME J'ai besoin d'aide pour enregistrer un salon.

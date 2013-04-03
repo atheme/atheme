@@ -1,0 +1,14 @@
+Aide pour UNQUIET:
+
+La commande UNQUIET vous permet d'annuler la commande QUIET
+et redonnant la possibilité de parler sur un salon à un
+utilisateur ou un hostmask. Si aucun pseudonyme ou hostmask 
+n'est spécifié, vous serez UNQUIET.
+
+Les utilisateurs affectés en seront notifiés.
+
+Syntaxe : UNQUIET <#salon> [nickname|hostmask]
+
+Exemples :
+    /msg &nick& UNQUIET #chat Diablo-D3
+    /msg &nick& UNQUIET #chat *!*@*.trilug.org

@@ -1,0 +1,13 @@
+Aide pour SET KEEPTOPIC:
+
+SET KEEPTOPIC active la restauration d'un ancien
+topic après que le salon soit devenu vide.
+Dans certains cas, cela pourrait inverser les changements
+après les netsplits ou les interruptions des services.
+Il n'est donc pas recommendé d'utiliser cette option si
+votre salon n'a pas prévu d'être souvent vide.
+
+Syntaxe : SET <#salon> KEEPTOPIC ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo KEEPTOPIC ON

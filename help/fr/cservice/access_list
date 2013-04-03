@@ -1,0 +1,11 @@
+Aide pour ACCESS LIST:
+
+ACCESS LIST liste tous les utilisateurs avec un accès au salon
+et leurs rôles sur le salon.
+Ceci utilisera une détection approximative. Si un rôle ne correspond
+pas exactement, il sera listé comme le rôle le plus proche correspondant.
+
+Syntaxe : ACCESS <#salon> LIST
+
+Exemples :
+    /msg &nick& ACCESS #atheme LIST

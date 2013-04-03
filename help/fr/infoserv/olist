@@ -1,0 +1,12 @@
+Aide pour OLIST:
+
+OLIST vous permet de voir toutes les informations pour les opers dans la base de données.
+Ces message seront également envoyés aux opérateurs lorsqu'ils s'identifient avec la 
+commande /oper.
+Cette commande ne listera pas les message d'informations pour les utilisateurs. Utilisez
+LIST pour cela.
+
+Syntaxe : OLIST
+
+Exemple :
+    /msg &nick& OLIST

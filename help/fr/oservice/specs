@@ -1,0 +1,15 @@
+Aide pour SPECS:
+
+SPECS affiche les privilèges que vous avec dans
+les services.
+
+Syntaxe : SPECS
+
+Il est également possible de voir les privilèges des autres utilisateurs
+en ligne ou des class oper.
+
+Syntaxe : SPECS USER <nick>
+Syntaxe : SPECS OPERCLASS <nom de classe>
+
+Exemple :
+    /msg &nick& SPECS USER w00t

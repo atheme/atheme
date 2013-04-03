@@ -1,0 +1,13 @@
+Aide pour CLEAR FLAGS:
+
+CLEAR FLAGS retirera tous les flags de tous les utilisateurs
+(ou groupes) avec un accès sur le salon spécifié, excepté
+les utilisateurs qui sont fondateurs du salon.
+
+Cette commande peut seulement être utilisée par les fondateurs
+d'un salon.
+
+Syntaxe : CLEAR <#salon> FLAGS
+
+Exemples :
+    /msg &nick& CLEAR #atheme FLAGS

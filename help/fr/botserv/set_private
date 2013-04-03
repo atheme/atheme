@@ -1,0 +1,10 @@
+Aide pour SET PRIVATE:
+
+Cette option empêche un bot d'être assigné à un salon par 
+les utilisateurs qui n'ont pas les privilèges d'administrateur
+de salon.
+
+Syntaxe : SET <botnick> PRIVATE {ON|OFF}
+
+Exemples :
+    /msg &nick& SET Security PRIVATE ON

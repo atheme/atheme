@@ -1,0 +1,39 @@
+Aide pour xOP:
+
+La commande xOP vous permet de maintenir la liste
+d'accès d'un salon. La liste d'accès peut contenir
+des comptes enregistrés ou des hostmasks (nick!user@host).
+
+La signification même des niveaux d'accès peut changer
+selon les réseaux, utilisez /msg &nick& TEMPLATE pour vérifier.
+
+#if halfops
+Indice : VOP signifie VOice, HOP signigie
+HalfOP, AOP signifie AutoOP et SOP signifie SuperOP.
+#else
+Indice : VOP signifie VOice, AOP signifie AutoOP 
+et SOP signifie SuperOP.
+#endif
+
+Toutes les entrées de la liste d'accès ne peuvent
+pas être éditées avec ces commandes, voir l'aide pour
+FLAGS et FORCEXOP pour plus de détails.
+Notez que l'utilisation de FORCEXOP peut détruire
+beaucoup d'informations.
+Le système de TEMPLATE fourni une plus grande facilité
+de l'utilisation de ces commandes sans restrictions.
+
+Les privilèges requis pour exécuter cette commande sont
+les même que ceux requis pour la commande FLAGS correspondante.
+
+#if halfops
+Syntaxe : VOP|HOP|AOP|SOP <#salon> ADD|DEL|LIST <nickname|hostmask>
+#else
+Syntaxe : VOP|AOP|SOP <#salon> ADD|DEL|LIST <nickname|hostmask>
+#endif
+
+Exemples :
+    /msg &nick& VOP #foo ADD bar
+    /msg &nick& VOP #foo ADD foo!*@bar.com
+    /msg &nick& AOP #foo DEL bar
+    /msg &nick& SOP #foo LIST

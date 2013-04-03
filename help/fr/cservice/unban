@@ -1,0 +1,11 @@
+Aide pour UNBAN:
+
+La commande UNBAN vous permet de débannir un utilisateur ou un hostmask
+d'un salon. Si aucun utilisateur ou salon n'est spécifié, vous 
+serez débanni.
+
+Syntaxe : UNBAN <#salon> [nickname|hostmask]
+
+Exemples :
+    /msg &nick& UNBAN #chat pfish
+    /msg &nick& UNBAN #chat *!*@*.ucdavis.edu

@@ -1,0 +1,19 @@
+Aide pour VHOST:
+
+VHOST permet aux opérateurs de définir un host virtuel
+(aussi connu comme spoof ou cloak) pour votre compte.
+Ce vHost sera directement défini sur l'utilisateur
+à chacun de ses identifications.
+
+Syntaxe : VHOST <nickname> ON <vhost>
+Syntaxe : VHOST <nickname> OFF
+
+Si le pseudonyme est marqué, vous pouvez l'outrepasser
+en utilisant le mot clé FORCE.
+
+Syntaxe : VHOST <nickname> ON <vhost> FORCE
+Syntaxe : VHOST <nickname> OFF FORCE
+
+Exemples :
+    /msg &nick& VHOST spb ON may.explode.on.impact
+    /msg &nick& VHOST nenolod OFF

@@ -1,0 +1,15 @@
+Aide pour STATUS:
+
+STATUS retourne des informations  propos de votre
+statut courant.
+Des informations à propos de votre nickname, de
+votre statut d'IRCop et de SRA.
+
+Si le paramètre salon est spécifié, votre accès au salon
+donné sera retourné.
+
+Syntaxe : STATUS [#salon]
+
+Exemple :
+    /msg &nick& STATUS
+    /msg &nick& STATUS #foo

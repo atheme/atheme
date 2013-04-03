@@ -1,0 +1,8 @@
+Aide pour TOPICPREPEND:
+
+La commande TOPICPREPEND vous permet d'ajouter quelque chose au topic d'un salon.
+
+Syntaxe : TOPICPREPEND <#salon> <topic>
+
+Exemples :
+    /msg &nick& TOPICPREPEND #foo bar

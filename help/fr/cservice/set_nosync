@@ -1,0 +1,10 @@
+Aide pour SET NOSYNC:
+
+SET NOSYNC permet à l'équipe d'un salon de
+désactiver la synchronisation automatique
+du statut du salon pendant qu'il est changé.
+
+Syntaxe : SET <#salon> NOSYNC ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo NOSYNC ON

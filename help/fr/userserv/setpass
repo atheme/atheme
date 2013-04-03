@@ -1,0 +1,14 @@
+Aide pour SETPASS:
+
+SETPASS vous permet de définir un nouveau 
+mot de passe en utilisant une clé qui vous 
+a été envoyée par email. Cette clé est valide
+une seule fois et devient également invalide
+si vous vous identifiez avec votre ancien 
+mot de passe.
+
+Pour définir un nouveau mot de passe si vous
+connaissez l'actuel, utilisez la commande
+SET PASSWORD à la place de SETPASS.
+
+Syntaxe : SETPASS <nickname> <clé> <mot de passe>

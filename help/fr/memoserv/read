@@ -1,0 +1,11 @@
+Aide pour READ:
+
+READ vous permet de lire un mémo envoyé par un
+autre utilisateur. Vous pouvez soit lire les mémos
+avec leur numéro, ou lire vos nouveaux mémos.
+
+Syntaxe : READ <numéro de mémo>
+Syntaxe : READ NEW
+
+Exemples :
+    /msg &nick& READ 1

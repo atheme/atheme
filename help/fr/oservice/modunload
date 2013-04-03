@@ -1,0 +1,13 @@
+Aide pour MODUNLOAD:
+
+MODUNLOAD décharge un ou plusieurs modules. Tous les modules
+ne peuvent pas être déchargés.
+
+Les noms peuvent être rassemblés avec la commande MODLIST.
+Ils ne doivent pas nécessairement être égaux aux chemins
+avec lesquels MODLOAD les a chargé.
+
+Syntaxe : MODUNLOAD <nom...>
+
+Exemple :
+    /msg &nick& MODUNLOAD chanserv/register

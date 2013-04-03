@@ -1,0 +1,14 @@
+Aide pour OFF:
+
+Désactive le vHost actuellement assigné au pseudo utilisé.
+Lorsque vous utilisez cette commande, n'importe quel utilisateur
+effectuant un /whois sur votre pseudo verra votre vraie
+adresse IP.
+
+Pour une suppression permanente de votre vHost merci de contacter
+l'équipe du réseau.
+
+Syntaxe : OFF
+
+Exemples :
+    /msg &nick& OFF

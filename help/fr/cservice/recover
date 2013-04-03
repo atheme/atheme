@@ -1,0 +1,21 @@
+Aide pour RECOVER:
+
+RECOVER vous permet de reprendre le contrôle
+de votre salon en cas de takeover.
+
+Plus précisemment, tout le monde sera déopé,
+la limite la clé seront retirées, tous les
+ban qui vous correspondent seront retirés,
+une exception de bannissement vous correspondant
+sera ajoutée (dans le cas où Atheme ne pourrait
+pas voir tous les bans qui vous correspondent),
+le salon est mis en invités seulement, en modéré
+et vous serez invité.
+
+Si vous êtes sur le salon, vous serez opé et
+aucune exception de ban ne sera ajoutée.
+
+Syntaxe : RECOVER <#salon>
+
+Exemple :
+    /msg &nick& RECOVER #foo

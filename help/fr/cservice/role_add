@@ -1,0 +1,45 @@
+Aide pour ROLE ADD:
+
+ROLE ADD va créer un rôle sur un salon avec le flag donné.
+Les flags multiples doivent être séparés par un espace.
+
+Syntaxe : ROLE <#salon> ADD <role> [flags]
+
+Flags:
+    +voice - Active l'utilisation des commandes voice/devoice.
+    +autovoice - Active le voice automatique.
+#if halfops
+    +halfop - Active l'utilisation des commandes halfop/dehalfop.
+    +autohalfop - Active le halfop automatique.
+#endif
+    +op - Active l'utilisation des commandes op/deop.
+    +autoop - Active le op automatique.
+#if protect
+    +protect - Active l'utilisation des commandes protect/deprotect.
+#endif
+#if owner
+    +owner - Active l'utilisation des commandes owner/deowner.
+#endif
+    +set - Active l'utilisation de la commande set.
+    +invite - Active l'utilisation des commandes invite et getkey.
+#if module chanserv/kick
+    +remove - Active l'utilisation des commandes kick, kickban, ban et unban.
+#else
+#if !module chanserv/unban_self
+    +remove - Active l'utilisation des commande ban et unban.
+#else
+    +remove - Active l'utilisation de la commande unban.
+#endif
+#endif
+    +recover - Acive l'utilisation des commandes recover et clear.
+    +acl-change - Active la modification des listes d'accès du salon.
+    +topic - Active l'utilisation des commandes topic et topicappend.
+    +acl-view - Active le visionnage des listes d'accès de salon.
+#if module chanserv/successor_acl
+    +successor - Marque l'utilisateur comme successeur.
+#endif
+    +founder - Donne tous les privilèges de fondateur.
+    +banned - Active le kickban automatique.
+
+Exemples :
+    /msg &nick& ROLE #atheme ADD helpers topic autovoice

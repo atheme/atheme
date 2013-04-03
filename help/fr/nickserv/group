@@ -1,0 +1,18 @@
+Aide pour GROUP:
+
+GROUP enregistre votre pseudo courant à votre compte.
+Cela signifie que &nick& protège ce nickname de la 
+même façon qu'il protège votre nom de compte.
+La plupart des commandes des services accepteront
+le nouveau nickname comme alias pour votre nom de compte.
+
+Merci de noter que les nicks groupés expirent séparément
+des comptes. Pour empêcher ceci, vous devez les utiliser.
+Autrement, toutes les propriétés du compte sont partagées
+entre les pseudo qui y sont enregistrés.
+
+Syntaxe : GROUP
+
+Exemples :
+    /msg &nick& IDENTIFY OldNick SecretPassword
+    /msg &nick& GROUP

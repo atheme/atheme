@@ -1,0 +1,20 @@
+Aide pour REGISTER:
+
+Ceci enregistrement un compte auprès de &nick&. Ceci vous permet
+d'avoir accès à des salons plus facilement et d'utiliser les
+mémos (si activés). Le mot de passe est sensible à la casse
+(attention aux majuscules). 
+Merci de le mémoriser pour de le noter.
+Vous en aurez besoin pour vous identifier et modifier certains
+paramètres.
+#if auth
+
+Vous devez confirmer l'email que vous avez donné. Pour ce faire,
+suivez les instructions du message qui vous a été envoyé à l'adresse
+fournie.
+#endif
+
+Syntaxe : REGISTER <compte> <password> <email-address>
+
+Exemples :
+    /msg &nick& REGISTER foo sesame foo@bar.com

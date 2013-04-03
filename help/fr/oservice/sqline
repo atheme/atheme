@@ -1,0 +1,52 @@
+Aide pour SQLINE:
+
+SQLINE vous permet d'empêcher l'utilisation de certains
+pseudo ou salons sur l'ensemble du réseau.
+
+Un pseudo sqline peut contenir les wildcards *, ?, # 
+(n'importe quel chiffre) et @ (n'importe quelle lettre).
+Un salon sqline doit être une correspondance exacte, commençant
+par # ou &.
+
+Syntaxe : SQLINE ADD <mask> [!P|!T <minutes>] <raison>
+
+Si le token !P est spécifié, l'AKILL n'expirera jamais (permanent).
+Si le token !T est spécifié, le délai d'expiration doit suivre, en
+hours ("h"), days ("d") or weeks ("w").
+
+Exemples :
+    /msg &nick& SQLINE ADD spambot* !T 7d raison bar
+    /msg &nick& SQLINE ADD spam??? !P raison foo
+
+Le premier exemple interdit l'utilisation de pseudos qui commencent
+par "spambot" pour 7 jours.
+
+Le second exemple ajoute un SQLINE permanent sur "spam???" pour la raison "reason foo".
+
+Syntaxe : SQLINE DEL <mask|nombre>
+
+Si un nombre est précisé, il sera mis en corrélation avec un numéro
+de SQLINE dans la liste des SQLINE.
+Vous pouvez spécifier plusieurs nombres séparés par des virgules.
+Vous pouvez également spécifier une plage en utilisant un deux-points.
+
+Exemples :
+    /msg &nick& SQLINE DEL foo
+    /msg &nick& SQLINE DEL 5
+    /msg &nick& SQLINE DEL 1,2,5,10
+    /msg &nick& SQLINE DEL 1:5,7,9:11
+
+Syntaxe : SQLINE LIST [FULL]
+
+Si FULL est specifié, la raison du SQLINE sera montrée.
+
+Exemples :
+    /msg &nick& SQLINE LIST
+    /msg &nick& SQLINE LIST FULL
+
+Syntaxe : SQLINE SYNC
+
+Envoie tous les SQLINE à tous les serveurs. Ceci est utile
+parce que les SQLINE doivent être présents avant que
+les salons ou pseudos soient essayés pour que ceci soit
+totalement efficace.

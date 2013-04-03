@@ -1,0 +1,9 @@
+Aide pour SET EMAILMEMOS:
+
+Ceci transmettra les mémos envoyés sur votre compte
+à l'adresse email donnée lors de votre enregistrement
+
+Syntaxe : SET EMAILMEMOS [ON|OFF]
+
+Exemple :
+    /msg &nick& SET EMAILMEMOS ON

@@ -1,0 +1,33 @@
+Aide pour ACCESS:
+
+ACCESS maintient une liste de hostmask (user@host) avec
+lesquels &nick& vous reconnaîtra pour ne pas qu'il vous
+demande de changer votre pseudo.
+Cependant, empêcher l'expiration, donner des accès aux salons ou 
+éditer des paramètres du pseudo requiert toujours
+l'identification.
+
+Les entrées de la liste d'accès peuvent utiliser des hostname
+avec des wildcards (* ou ?) optionnels, des adresses IP et 
+des masques CIDR.
+Il y a des restrictions sur l'utilisation de wildcards.
+Si vous omettez le masque, &nick& tentera d'en gérérer un
+correspondant à votre connexion actuelle.
+
+Syntaxe : ACCESS LIST
+Syntaxe : ACCESS ADD [mask]
+Syntaxe : ACCESS DEL <mask>
+#if priv user:auspex
+
+Les opérateurs avec le privilège user:auspex peuvent aussi
+voir la liste d'accès d'autre utilisateurs.
+
+Syntaxe : ACCESS LIST <nick>
+#endif
+
+Exemples :
+    /msg &nick& ACCESS LIST
+    /msg &nick& ACCESS ADD jack@host.example.com
+    /msg &nick& ACCESS ADD user@10.0.0.8
+    /msg &nick& ACCESS ADD jilles@192.168.1.0/24
+    /msg &nick& ACCESS DEL *someone@*.area.old.example.net

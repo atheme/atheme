@@ -1,0 +1,13 @@
+Aide pour FDROP:
+
+FDROP permet de DROP n'importe quel salon enregistré,
+s'il n'est pas suspendu (voir l'aide pour HOLD).
+
+Une fois que FDROP est utilisé sur un salon, toutes
+les données associées (liste d'accès, etc) seront supprimées 
+sans pouvoir être restaurées.
+
+Syntaxe : FDROP <#salon>
+
+Exemples :
+    /msg &nick& FDROP #foo

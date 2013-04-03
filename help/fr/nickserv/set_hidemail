@@ -1,0 +1,9 @@
+Aide pour SET HIDEMAIL:
+
+SET HIDEMAIL empêche l'adresse email d'un compte
+d'être vue par les autres utilisateurs.
+
+Syntaxe : SET HIDEMAIL ON|OFF
+
+Exemple :
+    /msg &nick& SET HIDEMAIL ON

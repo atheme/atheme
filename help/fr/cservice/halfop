@@ -1,0 +1,14 @@
+Aide pour HALFOP|DEHALFOP:
+
+Ces commandes changent des modes sur un salon.
+
+Si vous effectuez une opération sur un autre utilisateur,
+il en sera notifié.
+
+Si le dernier paramètre est omis, l'action est effectuée
+sur la personne qui requiert la commande.
+
+Syntaxe : HALFOP|DEHALFOP <#salon> [nickname]
+
+Exemples :
+    /msg &nick& HALFOP #foo

@@ -1,0 +1,8 @@
+Aide pour ENABLE:
+
+Active RPGServ sur un salon.
+
+Syntaxe : ENABLE <#salon>
+
+Exemple :
+    /msg &nick& ENABLE #ooc

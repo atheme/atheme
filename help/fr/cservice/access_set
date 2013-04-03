@@ -1,0 +1,9 @@
+Aide pour ACCESS SET:
+
+ACCESS SET modifiera le rôle de l'utilisateur donné sur 
+le salon donné.
+
+Syntaxe : ACCESS <#salon> SET <utilisateur> <role>
+
+Exemples :
+    /msg &nick& ACCESS #atheme SET stitch lowlevel-staff

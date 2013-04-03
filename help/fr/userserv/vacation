@@ -1,0 +1,14 @@
+Aide pour VACATION:
+
+VACATION étend le temps d'expiration pour votre compte
+et vos pseudonymes (mais pas vos salons) à 3 fois
+la durée habituelle. Vous pouvez effectuer ceci uniquement
+si votre compte est enregistré depuis assez longtemps.
+
+Le mode Vacances est désactivé automatiquement après la première
+identification à &nick&.
+
+Syntaxe : VACATION
+
+Exemples :
+    /msg &nick& VACATION

@@ -1,0 +1,10 @@
+Aide pour SET LANGUAGE:
+
+SET LANGUAGE modifie le langage que les services
+utilisent pour communiquer avec vous.
+
+Syntaxe : SET LANGUAGE <abréviation>
+
+Exemple :
+    /msg &nick& SET LANGUAGE en
+    /msg &nick& SET LANGUAGE ru

@@ -1,0 +1,14 @@
+Aide pour COMPARE:
+
+COMPARE permet aux opérateurs avec le privilège
+chan:auspex de comparer des informations correpondantes
+entre deux utilisateurs ou deux salons.
+
+C'est utile pour la détection de clones, par
+rapport à d'autres situations.
+
+Syntaxe : COMPARE <#salon|utilisateur> <#salon|utilisateur>
+
+Exemple :
+    /msg &nick& COMPARE #warez #dcc
+    /msg &nick& COMPARE w00t Brik

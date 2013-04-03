@@ -1,0 +1,9 @@
+Aide pour RESETPASS:
+
+RESETPASS définit un mot de passe aléatoire pour le compte
+spécifié.
+
+Syntaxe : RESETPASS <nickname>
+
+Exemples :
+    /msg &nick& RESETPASS pfish

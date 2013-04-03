@@ -1,0 +1,13 @@
+Aide pour SET LIMITFLAGS:
+
+SET LIMITFLAGS limite le pouvoir du flag +f.
+
+Les utilisateurs avec +f qui n'ont ni +s ni +R
+pourront uniquement appliquer +b (akick), et
+les utilisateurs qui n'ont tout de +s et +R
+ne pourront pas appliquer +s, +R ou +f.
+
+Syntaxe : SET <#salon> LIMITFLAGS ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo LIMITFLAGS ON

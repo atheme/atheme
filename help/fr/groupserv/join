@@ -1,0 +1,10 @@
+Aide pour JOIN:
+
+JOIN vous permet de joindre un groupe marqué comme ouvert à tous.
+Aucun privilège ne vous sera donné quand vous joindrez un groupe
+de cette manière, vous serez juste listé comme un membre du groupe.
+
+Syntaxe : JOIN <!groupe>
+
+Exemples :
+    /msg &nick& JOIN !baz

@@ -1,0 +1,20 @@
+Aide pour DELETE:
+
+DELETE vous permet de supprimer des mémos de votre
+boite de réception. Vous pouvez supprimer tous les 
+mémos avec le paramètre ALL, tous les mémos lus
+avec le paramètre OLD ou spécifier le numéro du
+mémo.
+
+Vous pouvez obtenir le numéro d'un mémo avec la commande
+LIST. Une fois que le mémo sera supprimé, les numéros des
+mémos suivants changeront.
+
+Vous pouvez aussi envoyer, lire, lister et transférer 
+(SEND, READ, LIST et FORWARD) des mémos.
+
+Syntaxe : DELETE ALL|OLD|<numéro de mémo>
+
+Exemples :
+    /msg &nick& DELETE OLD
+    /msg &nick& DELETE 1

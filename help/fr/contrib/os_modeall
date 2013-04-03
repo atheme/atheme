@@ -1,0 +1,11 @@
+Aide pour MODEALL:
+
+Syntaxe : MODEALL <mode> [paramètres]
+
+MODEALL applique des modes sur tous les salons. Ceci peut être utile
+lors d'un flood de bots en mettant par exemple le mode +R sur tous les 
+salons.
+
+Exemples :
+    /msg &nick& MODEALL +R
+    /msg &nick& MODEALL +M

@@ -1,0 +1,14 @@
+Aide pour PROTECT|DEPROTECT:
+
+Ces commandes effectuent des modifications de mode sur un salon.
+
+Si vous effectuez une opération sur un autre utilisateur,
+il en sera notifié.
+
+Si le dernier paramètre est omis, l'action sera effectuée sur
+la personne qui effectue la commande.
+
+Syntaxe : PROTECT|DEPROTECT <#salon> [nickname]
+
+Exemples :
+    /msg &nick& PROTECT #foo

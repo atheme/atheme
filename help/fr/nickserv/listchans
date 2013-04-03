@@ -1,0 +1,18 @@
+Aide pour LISTCHANS:
+
+LISTCHANS affiche les salons auxquels vous avez accès
+en incluant ceux que vous possédez.
+
+Les AKICKs et les accès donnés à des hosts ne sont pas montrés.
+
+Syntaxe : LISTCHANS
+#if priv chan:auspex
+
+Les opérateurs avec le privilège chan:auspex peuvent aussi
+vérifier les accès d'autres utilisateurs.
+
+Syntaxe : LISTCHANS <nick>
+#endif
+
+Exemple :
+    /msg &nick& LISTCHANS

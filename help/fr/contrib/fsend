@@ -1,0 +1,16 @@
+Aide pour FSEND:
+
+FSEND vous permet de forcer l'envoi d'un mémo à un nick
+qui est déconnecté. Lorsqu'il se connectera, il recevra la
+notification d'un message en attente et aura l'opportunité
+de lire votre mémo.
+
+Votre mémo ne doit pas contenir plus de 300 caractères.
+
+FSEND ne tiendra pas compte du flag NOMEMO de la cible ni
+les ignores de mémoserv provenants de vous.
+
+Syntaxe : FSEND <user|nick> texte
+
+Exemples :
+    /msg &nick& FSEND Kog pay your bills

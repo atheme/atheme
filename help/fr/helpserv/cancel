@@ -1,0 +1,8 @@
+Aide pour CANCEL:
+
+CANCEL vous permet d'annuler une requête d'aide en attente.
+
+Syntaxe : CANCEL
+
+Exemples :
+    /msg &nick& CANCEL

@@ -1,0 +1,15 @@
+Aide pour RAKILL:
+
+RAKILL permet d'akill en se basant sur des regex.
+Ceci est utile pour les botnets ou les clones.
+Les akill ne seront pas àjoutés à la liste de
+&nick& et dureront une semaine.
+
+Soyez prudents, puisqu'il est très facile de
+faire des erreurs avec regex. Utilisez RMATCH
+en premier. La syntaxe est exactement la même.
+
+Syntaxe : RAKILL /<pattern>/[i][p] <raison>
+
+Exemple :
+    /msg &nick& RAKILL /^m[oo|00]cow/i No moocows allowed.

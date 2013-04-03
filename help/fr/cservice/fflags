@@ -1,0 +1,12 @@
+Aide pour FFLAGS:
+
+La commande FFLAGS permet à un oper de forcer un changement
+de flag sur un salon. La syntaxe est la même que FLAGS,
+sauf que la cible et les flags à changer doivent être donnés.
+Voir n'importe quelle liste d'accès d'un salon est fait avec FLAGS.
+
+Syntaxe : FFLAGS <#salon> <nickname|hostmask> <template>
+Syntaxe : FFLAGS <#salon> <nickname|hostmask> <modification_flag>
+
+Exemples :
+    /msg &nick& FFLAGS #foo foo AOP

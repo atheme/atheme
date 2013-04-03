@@ -1,0 +1,58 @@
+Aide pour SGLINE:
+
+SGLINE vous permet de maintenir une liste de bannissement
+du réseau par gecos. Cela fonctionne de manière similaire à AKILL.
+
+Syntaxe : SGLINE ADD <gecos> [!P|!T <minutes>] <raison>
+
+Si le token !P est spécifié, l'AKILL n'expirera jamais (permanent).
+Si le token !T est spécifié, le délai d'expiration doit suivre, en
+hours ("h"), days ("d") or weeks ("w").
+
+Exemples :
+    /msg &nick& SGLINE ADD foo !T 5 raison bar
+    /msg &nick& SGLINE ADD foo !T 3d raison bar
+    /msg &nick& SGLINE ADD foo !P raison foo
+    /msg &nick& SGLINE ADD foo raison foo
+
+Le premier exemple cherche un utilisateur avec le gecos "foo" et
+ajoute un SGLINE de 5 minutes pour la raison "raison bar."
+
+Le deuxième exemple est similaire mais ajoute un SGLINE pour 3 jours
+au lieu de 5 minutes.
+
+Le troisième exemple ajoute un SGLINE permanent sur le gecos pour
+la raison "raison foo."
+
+Le quatrième exemple ajoute un SGLINE sur le gecos foo pour une durée
+spécifiée dans le fichier de configuration pour la raison "raison foo."
+
+La commande SGLINE DEL permet de supprimer une entrée de la liste
+des SGLINE.
+
+Syntaxe : SGLINE DEL <gecos|nombre>
+
+Si un nombre est précisé, il sera mis en corrélation avec un numéro
+de SGLINE dans la liste des SGLINE.
+Vous pouvez spécifier plusieurs nombres séparés par des virgules.
+Vous pouvez également spécifier une plage en utilisant un deux-points.
+
+Exemples :
+    /msg &nick& SGLINE DEL foo
+    /msg &nick& SGLINE DEL 5
+    /msg &nick& SGLINE DEL 1,2,5,10
+    /msg &nick& SGLINE DEL 1:5,7,9:11
+
+Syntaxe : SGLINE LIST [FULL]
+
+Si FULL est spécifié, les raisons du SGLINE seront affichées.
+
+Exemples :
+    /msg &nick& SGLINE LIST
+    /msg &nick& SGLINE LIST FULL
+
+Syntaxe : SGLINE SYNC
+
+Envoie tous les SGLINE à tous les serveurs. Ceci peut être utile
+en cas de coupure des services ou s'ils ne voient pas un utilisateur
+qui correpondrait à un SGLINE.

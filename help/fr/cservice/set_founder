@@ -1,0 +1,17 @@
+Aide pour SET FOUNDER:
+
+SET FOUNDER vous permet de définir un nouveau
+fondateur sur le salon. Le nouveau fondateur doit
+effectuer la même commande pour confirmer le
+transfert.
+
+Syntaxe : SET <#salon> FOUNDER <nouveau nick>
+
+Si le nouveau fondateur n'a pas encore confirmé
+le transfert, vous pouvez l'annuler en spécifiant
+votre propre pseudo en tant que le nouveau fondateur.
+
+Syntaxe : SET <#salon> FOUNDER <votre nick>
+
+Exemple :
+    /msg &nick& SET #foo FOUNDER bar

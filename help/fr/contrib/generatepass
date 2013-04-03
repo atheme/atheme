@@ -1,0 +1,10 @@
+Aide pour GENERATEPASS:
+
+GENERATEPASS génère un mot de passe aléatoirement. Il ne sera ajouté
+dans ancun champ.
+
+Syntaxe : GENERATEPASS [longueur]
+
+Exemples :
+    /msg &nick& GENERATEPASS
+    /msg &nick& GENERATEPASS 12

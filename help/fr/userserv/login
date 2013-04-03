@@ -1,0 +1,10 @@
+Aide pour LOGIN:
+
+LOGIN vous identifie auprès des services pour que vous 
+puissiez effectuer une maintenance générale et exécuter
+des commandes qui requièrent que vous soyez identifié.
+
+Syntaxe : LOGIN <compte> <mot de passe>
+
+Exemple :
+    /msg &nick& LOGIN smith sesame

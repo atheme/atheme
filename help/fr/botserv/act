@@ -1,0 +1,9 @@
+Aide pour ACT:
+
+Fait agir un bot de la même façon que la commande "/me"
+sur le salon donné en utilisant le texte donné.
+
+Syntaxe : ACT <salon> <texte>
+
+Exemples :
+    /msg &nick& ACT #help yawns!

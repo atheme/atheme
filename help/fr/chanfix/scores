@@ -1,0 +1,9 @@
+Aide pour SCORES:
+
+SCORES liste les scores chanfix des utilisateurs
+sur le salon spécifié.
+
+Syntaxe : SCORES <#salon>
+
+Exemples :
+    /msg &nick& SCORES #foo

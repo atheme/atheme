@@ -1,0 +1,10 @@
+Aide pour INVITE:
+
+INVITE demande aux services de vous inviter sur
+le salon spécifié. C'est utile si vous utilisez le
+mode +i sur un salon.
+
+Syntaxe : INVITE <#salon>
+
+Exemples :
+    /msg &nick& INVITE #foo

@@ -1,0 +1,12 @@
+Aide pour CALC:
+
+CALC vous permet de faire quelques opérations
+simples de mathématique avec les services.
+Vous pouvez également spécifier un nombre de
+calculs qui peuvent être faits à la fois.
+
+Syntaxe : CALC [nombre] <expression>
+
+Exemple :
+    /msg &nick& CALC 6*8
+    /msg &nick& CALC 5 1+2

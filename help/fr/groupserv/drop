@@ -1,0 +1,15 @@
+Aide pour DROP:
+
+DROP vous permet de dés-enregistrer un groupe enregistré.
+
+Une fois que le groupe a été DROP, toutes les données associées
+(listes d'accès, métadonnées, etc) sont supprimées et ne
+peuvent pas être restaurées.
+
+Voir l'aide de FLAGS pour le transfert de groupe à un autre
+utilisateur.
+
+Syntaxe : DROP <!groupe>
+
+Exemples :
+    /msg &nick& DROP !baz

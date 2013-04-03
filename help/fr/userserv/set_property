@@ -1,0 +1,14 @@
+Aide pour SET PROPERTY:
+
+SET PROPERTY manipule des métadonnées
+associées à ce compte.
+
+Pour supprimer une entrée de métadonnées,
+spécifiez le nom et laissez la valeur vide.
+
+Syntaxe : SET PROPERTY <nom> [valeur]
+
+Exemple :
+    /msg &nick& SET PROPERTY URL http://www.example.com/~jay/
+    /msg &nick& SET PROPERTY SIGN Pisces
+    /msg &nick& SET PROPERTY ICQ

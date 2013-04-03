@@ -1,0 +1,14 @@
+Aide pour MARK:
+
+MARK permet aux opérateurs d'attacher une note à un compte.
+Par exemple, un opérateur peut marquer le compte d'un
+spammeur pour que les autres savent que l'utilisateur a déjà
+été averti.
+
+Les information de MARK seront affichées dans le retour d'INFO.
+
+Syntaxe : MARK <nickname> ON|OFF <raison>
+
+Exemples :
+    /msg &nick& MARK game_boy ON Persistent spammer
+    /msg &nick& MARK nenolod OFF

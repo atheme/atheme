@@ -1,0 +1,24 @@
+Aide pour FUNGROUP:
+
+FUNGROUP force le dés-enregistrement d'un nickname
+donné sur le compte auquel il est enregistré.
+
+#if module nickserv/set_accountname
+Si vous dé-groupez un nom de compte, vous devez
+spécifier un nouveau nom pour le compte. Cela doit
+être un autre pseudo qui est enregistré.
+specify a new name for the account. This must be
+#else
+Vous ne pouvez pas dé-grouper de noms de compte.
+#endif
+
+Syntaxe : FUNGROUP <nickname>
+#if module nickserv/set_accountname
+Syntaxe : FUNGROUP <compte> <nouveau nom>
+#endif
+
+Exemples :
+    /msg &nick& FUNGROUP SomeNick
+#if module nickserv/set_accountname
+    /msg &nick& FUNGROUP SomeName SomeNick
+#endif

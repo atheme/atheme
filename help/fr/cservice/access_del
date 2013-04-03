@@ -1,0 +1,8 @@
+Aide pour ACCESS DEL:
+
+ACCESS DEL retirera les accès d'un utilisateur sur le salon donné.
+
+Syntaxe : ACCESS <#salon> DEL <utilisateur>
+
+Exemples :
+    /msg &nick& ACCESS #atheme DEL stitch

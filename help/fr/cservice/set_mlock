@@ -1,0 +1,18 @@
+Aide pour SET MLOCK:
+
+MLOCK (ou "mode lock") vous permet de forcer certains
+modes sur un salon. Ceci empêche les abus comme +kl.
+Cela peut aussi rendre plus difficile de battre les
+bots maléfiques, soyez prudents.
+Les modes LOCK peuvent être vus par n'importe qui
+(en incluant la clé).
+
+Syntaxe : SET <#salon> MLOCK [modes]
+
+Exemples : (votre IRCd ne supporte peut être pas tous ces modes)
+    /msg &nick& SET #foo MLOCK +nt-lk
+    /msg &nick& SET #foo MLOCK +inst-kl
+    /msg &nick& SET #c MLOCK +ntk c
+    /msg &nick& SET #foo MLOCK +ntcjf-kl 2:30 #overflow
+    /msg &nick& SET #overflow MLOCK +mntF-kljf
+    /msg &nick& SET #foo1 MLOCK +ntlL 40 #foo2

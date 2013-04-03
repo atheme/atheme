@@ -1,0 +1,15 @@
+Aide pour REJECT:
+
+Rejette la demande de vHost du pseudo donné.
+Un mémo l'informant de ce rejet sera envoyé.
+Si une raison est donnée, la raison sera incluse
+dans le mémo de rejet.
+Si un astérisque ("*") est donné à la place du nick,
+toutes les demandes de vHosts en attente seront rejetées.
+
+Syntaxe : REJECT <nick> [raison]
+
+Exemples :
+    /msg &nick& REJECT nenolod
+    /msg &nick& REJECT *
+	/msg &nick& REJECT spb Vulgar Les vHosts ne sont pas autorisées.

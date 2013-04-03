@@ -1,0 +1,9 @@
+Aide pour SET MAXNICKS:
+
+SET MAXNICKS permet la configuration du nombre de nickname
+qu'un compte peut avoir.
+
+Syntaxe : SET MAXNICKS <valeur>
+
+Exemple :
+    /msg &nick& SET MAXNICKS 7

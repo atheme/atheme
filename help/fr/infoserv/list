@@ -1,0 +1,10 @@
+Aide pour LIST:
+
+LIST vous permet de voir les messages d'information dans la base de données.
+Ces messages seront également envoyés à tous les utilisateurs lors de leur
+connexion.
+
+Syntaxe : LIST
+
+Exemple :
+    /msg &nick& LIST

@@ -1,0 +1,8 @@
+Aide pour EIGHTBALL:
+
+Pose une question à la 8-ball magique.
+
+Syntaxe : EIGHTBALL
+
+Exemple :
+    /msg &nick& EIGHTBALL

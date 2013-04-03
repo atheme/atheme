@@ -1,0 +1,10 @@
+Aide pour SET ENTRYMSG:
+
+SET ENTRYMSG vous permet de modifier ou définir
+un message envoyé à tout utilisateur qui rejoint
+le salon.
+
+Syntaxe : SET <#salon> ENTRYMSG [message]
+
+Exemple :
+    /msg &nick& SET #support ENTRYMSG Bienvenur sur #support. Merci de ne pas paster plus de 5 lignes.

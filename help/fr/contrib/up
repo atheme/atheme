@@ -1,0 +1,8 @@
+Aide pour UP:
+
+UP vous donne tous les privilèges que vos permissions permettent sur le salon donné.
+
+Syntaxe : UP <#salon>
+
+Exemples :
+    /msg &nick& UP #foo

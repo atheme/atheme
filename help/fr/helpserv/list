@@ -1,0 +1,8 @@
+Aide pour LIST:
+
+LIST liste toutes les demandes d'aide actuellement ouvertes.
+
+Syntaxe : LIST
+
+Exemples :
+    /msg &nick& LIST

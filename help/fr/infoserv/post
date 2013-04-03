@@ -1,0 +1,26 @@
+Aide pour POST:
+
+POST vous permet de poster des messages à tous les utilisateurs (ils seront
+envoyés lorsque vous effectuerez la commande) ou des messages que tous les utilisateurs 
+verront à leur connexion, ou que les opers verront lorsqu'ils s'identifieront avec
+la commande /oper
+
+Les underscores ("_") dans le sujet (et uniquement dans le sujet) seront remplacés par des espaces.
+
+IMPORTANCE :
+    L'importance définit le type de message qui sera envoyé.
+
+    0 - Affiché seulement aux opers lors de leur identification (/oper)
+    1 - Affiché seulement aux utilisateurs lors de leur connexion.
+    2 - Envoie directement une notice à tous les utilisateurs connectés.
+    3 - Affiché à tous les utilisateurs lors de leur connexion ET envoie directement
+      	une notice à tous les utilisateurs connectés actuellement
+    4 - Envoie directement un query/privmsg à tous les utilisateurs. Il est important
+      	de noter que ceci peut ennuyer les utilisateurs et devrait être utilisé
+	en cas de nécessité absolue.
+
+Syntaxe : POST <importance> <sujet> <message>
+
+Exemple :
+    /msg &nick& POST 2 Info1 Some important information for users.
+    /msg &nick& POST 1 Multi_Word_Subject Some more information.

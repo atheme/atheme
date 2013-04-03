@@ -1,0 +1,24 @@
+Aide pour ACC:
+
+ACC retourne des informations parsables à propos
+du statut d'un utilisateur.
+Notez que sur beaucoup de réseaux, /whois
+montre des informations similaires, plus rapidement
+et de manière plus fiable.
+
+La réponse est sous la forme <nick> ACC <chiffre>:
+    0 - le compte ou l'utilisateur n'existe pas
+    1 - le compte existe mais l'utilisateur n'est pas identifié.
+    2 - l'utilisateur n'est pas identifié  mais reconnu (voir ACCESS)
+    3 - l'utilisateur est identifié.
+
+Si le compte est omis, le pseudo de l'utilisateur est utilisé.
+Le compte * signifie le compte sous lequel l'utilisateur est identifié.
+
+Syntaxe : ACC
+Syntaxe : ACC <nick>
+Syntaxe : ACC <nick> <compte>
+Syntaxe : ACC <nick> *
+
+Exemple :
+    /msg &nick& ACC jilles *

@@ -1,0 +1,7 @@
+Aide pour TAXONOMY:
+
+La commande TAXONOMY liste les métadonnées associées aux salons
+enregistrés.
+
+Exemples :
+    /msg &nick& TAXONOMY #atheme

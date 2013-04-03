@@ -1,0 +1,26 @@
+Aide pour REGISTER:
+
+Ceci enregistrera le pseudo que vous avez actuellement
+auprès de &nick&. Ceci vous permettra de vous procurer une
+sorte d'identité sur le réseau et d'être ajouté à des listes
+d'accès.
+De plus, &nick& avertira les utilisateurs qui utilisent
+votre pseudo sans s'identifier et vous permettra de
+KILL les fantômes.
+
+Le mot de passe que vous choisissez est sensible à 
+la casse (attention aux majuscules).
+Merci de noter ou de mémoriser votre mot de passe, 
+vous en aurez besoin plus tard pour modifier des
+paramètres.
+#if auth
+
+Vous devez confirmer l'email que vous avez donné. Pour ce faire,
+suivez les instructions du message qui vous a été envoyé à l'adresse
+fournie.
+#endif
+
+Syntaxe : REGISTER <mot de passe> <adresse email>
+
+Exemples :
+    /msg &nick& REGISTER bar foo@bar.com

@@ -1,0 +1,9 @@
+Aide pour REGNOLIMIT:
+
+REGNOLIMIT permet à un utilisateur d'enregistrer
+un nombre illimité de salons.
+
+Syntaxe : REGNOLIMIT <utilisateur> ON|OFF
+
+Exemples :
+    /msg &nick& REGNOLIMIT nenolod ON

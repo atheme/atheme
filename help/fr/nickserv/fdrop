@@ -1,0 +1,13 @@
+Aide pour FDROP:
+
+FDROP force la suppression du compte donné, en incluant
+tous les nicknames, accès aux salons et mémos qui y sont attachés.
+
+Lors d'un DROP et du ré-enregistrement d'un compte pendant un netsplit,
+les utilisateurs de l'autre côté du split pourraient être reconnus comme 
+le nouveau compte par la suite.
+
+Syntaxe : FDROP <nickname>
+
+Exemples :
+    /msg &nick& FDROP foo

@@ -1,0 +1,13 @@
+Aide pour SET FANTASY:
+
+SET FANTASY vous permet d'activer ou de désactiver
+les commandes fantasy de ChanServ (!op, !deop, etc.)
+sur votre salon.
+
+GUARD doit être activé également pour que les commandes
+fantasy fonctionnent.
+
+Syntaxe : SET <#salon> FANTASY ON|OFF
+
+Exemple :
+    /msg &nick& SET #chatspike FANTASY ON

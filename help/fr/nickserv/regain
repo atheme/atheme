@@ -1,0 +1,13 @@
+Aide pour REGAIN:
+
+REGAIN vous redonne l'accès à votre pseudo après
+qu'un utilisateur l'ait utilisé.
+
+Si vous êtes identifié sur votre compte associé au pseudo,
+vous ne devez pas spécifier un mot de passe, dans le cas
+contraire, vous le devez.
+
+Syntaxe : REGAIN <nick> [mot de passe]
+
+Exemple :
+    /msg &nick& REGAIN Dave2 goats

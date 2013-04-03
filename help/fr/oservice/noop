@@ -1,0 +1,22 @@
+Aide pour NOOP:
+
+NOOP vous permet de refuser l'accès aux IRCop basé sur des
+hostmask ou des serveurs. Si un opérateur (IRCop) identifié
+correspond, il sera KILL.
+
+Syntaxe : NOOP ADD HOSTMASK <nick!user@host> [raison]
+Syntaxe : NOOP ADD SERVER <masque> [raison]
+
+Exemples :
+    /msg &nick& NOOP ADD HOSTMASK *!*@some.spoof Abusive operator
+    /msg &nick& NOOP ADD SERVER bad.server Abusive admin
+
+Syntaxe : NOOP DEL HOSTMASK <nick!user@host>
+Syntaxe : NOOP DEL SERVER <masque>
+
+Exemples :
+    /msg &nick& NOOP DEL HOSTMASK *!some@operator.host
+    /msg &nick& NOOP DEL SERVER bad.server
+
+Syntaxe : NOOP LIST HOSTMASK
+Syntaxe : NOOP LIST SERVER

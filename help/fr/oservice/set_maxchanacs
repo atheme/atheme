@@ -1,0 +1,9 @@
+Aide pour SET MAXCHANACS:
+
+SET MAXCHANACS permet la définition du nombre maximum d'entrées
+dans la liste d'accès d'un salon.
+
+Syntaxe : SET MAXCHANACS <valeur>
+
+Exemple :
+    /msg &nick& SET MAXCHANACS 30

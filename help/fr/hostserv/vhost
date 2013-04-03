@@ -1,0 +1,14 @@
+Aide pour VHOST:
+
+VHOST permet aux opérateurs de définir un host virtuel
+(aussi connu en tant que spoof ou cloak) sur un compte.
+Ce vHost sera défini sur l'utilisateur immédiatement et 
+à chaque fois qu'il s'identifiera sur son compte.
+Si aucun vHost n'es spécifié, les vHosts existants pour votre
+compte seront supprimés.
+
+Syntaxe : VHOST <nickname> [<vhost>]
+
+Exemples :
+    /msg &nick& VHOST spb may.explode.on.impact
+    /msg &nick& VHOST nenolod

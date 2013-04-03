@@ -1,0 +1,45 @@
+Aide pour RWATCH:
+
+RWATCH maintient une liste d'expression régulières
+auxquelles le nick!user@host gecos
+de chaque client qui se connecte est comparé.
+Les clients correspondants peuvent être affichés 
+sur le snoop channel et/ou bannis du réseau.
+Ces bannissements du réseau ne sont pas ajoutés à
+la liste des AKILL.
+La liste RWATCH est stockées dans etc/rwatch.db et
+sauvegardées à chaque modification.
+
+Voir RMATCH pour plus d'informations à propos de la
+syntaxe des expressions régulières.
+
+Syntaxe : RWATCH ADD /<pattern>/[i][p] <raison>
+
+Ajoute une expression régulière à la liste RWATCH.
+La raison est montrées dans les notices snoop et
+dans la raison des KLINE.
+
+Syntaxe : RWATCH DEL /<pattern>/[i][p]
+
+Retire une expression régulière de la liste RWATCH.
+
+Syntaxe : RWATCH LIST
+
+Affiche la liste RWATCH. La signification des lettres est :
+    i - insensible à la casse
+    p - pattern PCRE (si compilé avec le support PCRE)
+    S - les clients correspondants sont montrés sur le snoop channel.
+    K - les clients correspondants sont bannis du réseau.
+
+Syntaxe : RWATCH SET /<pattern>/[i][p] <options>
+
+Modifie l'action pour une expression régulière. Les valeurs
+possibles pour <options> sont :
+    SNOOP   - active l'affichage dans le snoop channel
+    NOSNOOP - désactive l'affichage dans le snoop channel
+    KLINE   - active les bannissements du network
+    NOKLINE - désactive les bannissements du network
+
+Exemple :
+    /msg &nick& RWATCH ADD /^m(oo|00)cow/i moocow figure
+    /msg &nick& RWATCH DEL /^m(oo|00)cow/i

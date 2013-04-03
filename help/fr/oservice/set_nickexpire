@@ -1,0 +1,9 @@
+Aide pour SET NICKEXPIRE:
+
+SET NICKEXPIRE permet à l'équipe du réseau de modifier la fréquence
+de vérification de l'expiration des pseudos.
+
+Syntaxe : SET NICKEXPIRE <temps en jours>
+
+Exemple :
+    /msg &nick& SET NICKEXPIRE 30

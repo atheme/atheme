@@ -1,0 +1,18 @@
+Aide pour OFFER:
+
+OFFER vous permet de proposer une liste de vHost aux utilisateurs
+de votre réseau qu'ils pourront accepter de définir sans avoir besoin d'un
+oper qui définisse le vHost. La chaine de caractères $account dans le vHost
+proposé sera remplacé par le nom du compte de l'utilisateur lorsqu'ils
+utiliseront TAKE.
+
+Si le paramètre !groupe est fourni, seuls les utilisateurs avec 
+le flag +v dans ce groupe seront dans la possibilité de les voir
+dans OFFERLIST et de les définir avec TAKE.
+
+Syntaxe : OFFER [!groupe] <vhost>
+
+Exemples :
+    /msg &nick& OFFER may.explode.on.impact
+    /msg &nick& OFFER mynetwork.users.$account
+    /msg &nick& OFFER !atheme-users $account.users.atheme.net

@@ -1,0 +1,9 @@
+Aide pour REGNOLIMIT:
+
+REGNOLIMIT permet à un groupe de maintenir collectivement
+un nombre illimité d'enregistrements de salons.
+
+Syntaxe : REGNOLIMIT <!groupe> ON|OFF
+
+Exemples :
+    /msg &nick& REGNOLIMIT !awesome-people ON

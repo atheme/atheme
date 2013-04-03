@@ -1,0 +1,9 @@
+Aide pour CLOSE:
+
+CLOSE ferme la demande d'aide du pseudo donné.
+L'utilisateur sera notifié que sa demande a été fermée.
+
+Syntaxe : CLOSE <nick>
+
+Exemples :
+    /msg &nick& CLOSE Grue

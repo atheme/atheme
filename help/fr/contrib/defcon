@@ -1,0 +1,21 @@
+Aide pour DEFCON:
+
+DEFCON vous permet d'implémenter une sécurité de défense basée sur des conditions.
+L'utilisation de ce module est fortement déconseillée puisqu'il est considéré comme une mauvaise
+façon de gérer la sécurité d'un réseau et a de fortes chances d'ennuyer vos utilisateurs.
+
+Niveaux :
+    Les niveaux définissent le degré de sécurité qui sera mis en place.
+    Chaque niveau est construit sur celui en dessous (3 comprend tout 4 et plus,
+    par exemple).
+
+    1 - Tous les utilisateurs qui se connectent seront AKILL pour 15 minutes.
+    2 - Tous les utilisateurs (sauf les opérateurs des services) seront ignorés des services.
+    3 - Tous les salons seront forcés à appliquer le mode +R (par défaut).
+    4 - Aucun enregistrement de pseudo ou de salon n'est autorisé.
+    5 - Aucune restriction, le réseau fonctionne correctement.
+
+Syntaxe : DEFCON <niveau>
+
+Exemple :
+    /msg &nick& DEFCON 4

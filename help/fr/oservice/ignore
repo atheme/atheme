@@ -1,0 +1,18 @@
+Aide pour IGNORE:
+
+Les services ont une liste d'ignore qui est similaire
+à la facon dont laquelle un utilisateur en ignore un autre.
+Si un utilisateur correspond à un masque de la liste d'ignore
+et qu'il tente d'utiliser les services, il ne recevra pas
+de réponse.
+
+    ADD   - Ajoute un masque à la liste d'ignore.
+    DEL   - Supprime un masque de la liste d'ignore.
+    LIST  - Liste toutes les entrées de la liste d'ignore.
+    CLEAR - Retire toutes les entrées de la liste d'ignore.
+
+Exemples :
+    /msg &nick& IGNORE ADD pfish!*@* flood des services
+    /msg &nick& IGNORE DEL pfish!*@*
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

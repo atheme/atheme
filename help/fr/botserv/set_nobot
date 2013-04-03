@@ -1,0 +1,10 @@
+Aide pour SET NOBOT:
+
+Cette option rend un salon non assignable. Si un bot
+est déjà assigné au salon, il sera désassigné automatiquement
+lorsque vous activerez cette option.
+
+Syntaxe : SET <#salon> NOBOT {ON|OFF}
+
+Exemples :
+    /msg &nick& SET #help NOBOT ON

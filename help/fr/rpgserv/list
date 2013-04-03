@@ -1,0 +1,13 @@
+Aide pour LIST:
+
+LIST est utilisé pour afficher une liste de tous les
+salons du réseau qui ont le RPG actif.
+
+Notez que cette commande n'incluera pas tous les salons de jeu de rôles,
+mais seulement ceux qui utilisent RPGServ. Pour une liste complète de salons
+du réseau, utilisez /LIST.
+
+Syntaxe : LIST
+
+Exemple :
+    /msg &nick& LIST

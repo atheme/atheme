@@ -1,0 +1,12 @@
+Aide pour KICKBAN:
+
+La commande KICKBAN éjecte un utilisateur d'un salon et place un
+ban sur l'utilisateur.
+
+Toutes les exceptions de ban seront supprimées.
+
+Syntaxe : KICKBAN <#salon> <nick> [raison]
+
+Exemples :
+    /msg &nick& KICKBAN #foo abuser
+    /msg &nick& KICKBAN #foo abuser go away

@@ -1,0 +1,12 @@
+Aide pour NAMEGEN:
+
+NAMEGEN génère une liste de noms que vous
+pouvez utiliser.
+
+Le résultat peut être affiché sur un salon ou
+uniquement à vous.
+
+Syntaxe : NAMEGEN [nombre de noms]
+
+Exemple :
+    /msg &nick& NAMEGEN 5

@@ -1,0 +1,12 @@
+Aide pour ACTIVATE:
+
+Active la demande de vHost pour le pseudo donné.
+Un mémo informant l'utilisateur sera envoyé.
+Si un astérisque ("*") est utilisé à la place d'un
+pseudo, toutes les demandes en attente seront activées.
+
+Syntaxe : ACTIVATE <nick>
+
+Exemples :
+    /msg &nick& ACTIVATE nenolod
+    /msg &nick& ACTIVATE *

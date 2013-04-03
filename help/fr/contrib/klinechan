@@ -1,0 +1,9 @@
+Aide pour KLINECHAN:
+
+KLINECHAN K:Line tous les utilisateurs qui joingnent un salon.
+Utile pour les Botnet non désirés sur les salons.
+
+Syntaxe : KLINECHAN <#salon> <ON|OFF> [raison]
+
+Exemples :
+    /msg &nick& KLINECHAN #lamers ON Salon de lamers.

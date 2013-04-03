@@ -1,0 +1,10 @@
+Aide pour STATUS:
+
+STATUS retourne des informations sur votre statut
+actuel. Des informations à propos de votre pseudo,
+statut d'IRC opérateur et SRA seront visibles.
+
+Syntaxe : STATUS
+
+Exemple :
+    /msg &nick& STATUS

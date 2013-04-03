@@ -1,0 +1,22 @@
+Aide pour CERT:
+
+CERT maintient une liste d'empreintes CertFP qui autoriseront
+&nick& à vous reconnaitre et vous authentifier automatiquement.
+
+Vous ne pouvez pas ajouter la même empreinte pour différents comptes.
+
+Syntaxe : CERT LIST
+Syntaxe : CERT ADD [empreinte]
+Syntaxe : CERT DEL <empreinte>
+#if priv user:auspex
+
+Les opérateurs avec le privilège user:auspex peuvent aussi voir
+la liste d'empreintes d'autres utilisateurs.
+
+Syntaxe : CERT LIST <nick>
+#endif
+
+Exemples :
+    /msg &nick& CERT LIST
+    /msg &nick& CERT ADD f3a1aad46ca88e180c25c9c7021a4b3a
+    /msg &nick& CERT DEL f3a1aad46ca88e180c25c9c7021a4b3a

@@ -1,0 +1,10 @@
+Aide pour ACCESS INFO:
+
+ACCESS INFO affiche quel niveau d'accès l'utilisateur donné a
+sur le salon donné. Un rôle, des flags (forme longue et courte) 
+seront affichés depuis la dernière modification de l'accès de l'utilisateur.
+
+Syntaxe : ACCESS <#salon> INFO <utilisateur>
+
+Exemples :
+    /msg &nick& ACCESS #atheme INFO nenolod

@@ -1,0 +1,19 @@
+Aide pour REQUEST:
+
+REQUEST envoie une requête d'annonce. Vous devez être identifié
+sur un pseudo enregistré pour pouvoir effectuer cette demande.
+Merci d'être patient pendant que votre requête est considérée par 
+l'équipe du réseau.
+
+Note : Vous ne pouvez avoir qu'une seule annonce en attente à la fois.
+Si vous faites une erreur, merci d'annuler votre requête actuelle avec CANCEL
+et de ré-effectuer une requête. Si vous voulez en envoyer une deuxième,
+merci d'attendre que la première requête ait été traitée.
+
+Les underscores ("_") dans le sujet seront remplacés automatiquement 
+par des espaces. Ils ne seront pas remplacés dans l'annonce.
+
+Syntaxe : REQUEST <sujet> <annonce>
+
+Exemples :
+    /msg &nick& REQUEST Un_sujet Ceci est une annonce !

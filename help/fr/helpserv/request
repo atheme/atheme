@@ -1,0 +1,11 @@
+Aide pour REQUEST:
+
+REQUEST permet de faire une demande d'aide à l'équipe du réseau.
+Ceci fonctionne comme un bugtracker ou un système de ticket de support.
+Merci d'être patient pendant que votre requête est prise en compte
+par l'équipe du réseau.
+
+Syntaxe : REQUEST <sujet>
+
+Exemples :
+    /msg &nick& REQUEST J'ai besoin d'aide avec un vHost.

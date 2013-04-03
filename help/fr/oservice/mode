@@ -1,0 +1,11 @@
+Aide pour MODE:
+
+MODE permet l'édition de modes sur un salon. Certains
+réseaux ne trouveront probablement pas cette commande
+très éthique.
+
+Syntaxe : MODE <#salon> <mode> [paramètres]
+
+Exemples :
+    /msg &nick& MODE #heh -m
+    /msg &nick& MODE #heh +o foo

@@ -1,0 +1,9 @@
+Aide pour SET RECONTIME:
+
+SET RECONTIME permet la modification de la période d'attente
+avant une tentative de reconnexion après une déconnexion de l'uplink.
+
+Syntaxe : SET RECONTIME <temps en secondes>
+
+Exemple :
+    /msg &nick& SET RECONTIME 5

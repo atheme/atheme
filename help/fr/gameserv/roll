@@ -1,0 +1,12 @@
+Aide pour ROLL:
+
+ROLL vous fait lancer une série de dés virtuels
+et affiche le résultat, à vous ou sur un salon.
+Vous pouvez également spécifier le nombre de lancers
+de dés qui peuvent être faits à la fois.
+
+Syntaxe : ROLL [times] <#dés>d<#faces>
+
+Exemple :
+    /msg &nick& ROLL 2d16
+    /msg &nick& ROLL 5 4d16

@@ -1,0 +1,13 @@
+Aide pour JUPE:
+
+JUPE introduit un faux serveur avec le serveur donné
+pour que le serveur réel ne puisse pas se connecter.
+Les JUPES durent aussi longtemps que les services sont
+connectés sur l'uplink et peuvent également (sur la 
+plupart des IRCd) être supprimés avec une simple 
+commande /SQUIT.
+
+Syntaxe : JUPE <serveur> <raison>
+
+Exemple :
+    /msg &nick& JUPE irc.blah.net very unstable server

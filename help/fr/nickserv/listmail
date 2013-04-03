@@ -1,0 +1,10 @@
+Aide pour LISTMAIL:
+
+LISTMAIL affiche les comptes enregistrés avec l'adresse email
+donnée. Les wildcards sont acceptés.
+
+Syntaxe : LISTMAIL <email>
+
+Exemples :
+    /msg &nick& LISTMAIL patrick@example.com
+    /msg &nick& LISTMAIL *@cam.ac.uk

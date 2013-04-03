@@ -1,0 +1,9 @@
+Aide pour ROLE LIST:
+
+ROLE LIST liste tous les rôles relatifs aux salons et au réseau
+et les flags qu'ont chaque rôle.
+
+Syntaxe : ROLE <#salon> LIST
+
+Exemples :
+    /msg &nick& ROLE #baz LIST

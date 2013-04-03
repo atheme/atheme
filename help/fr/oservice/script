@@ -1,0 +1,29 @@
+Aide pour SCRIPT:
+
+SCRIPT vous permet de gérer les scripts Atheme.
+Actuellement, Atheme est scriptable seulement en Perl.
+
+Utiliser MODLOAD/MODUNLOAD/MODRELOAD pour des modules Atheme en C.
+
+Syntaxe : SCRIPT LOAD <nom de fichier>
+
+Le nom de fichier doit être un chemin absolu vers le script Perl
+que vous voulez charger.
+
+Exemples :
+    /msg &nick& SCRIPT LOAD /home/services/scripts/cs_hello.pl
+
+Syntaxe : SCRIPT UNLOAD <nom de fichier>
+
+Le nom de fichier doit être un chemin absolu vers le script Perl
+que vous voulez décharger.
+
+Exemples :
+    /msg &nick& SCRIPT UNLOAD /home/services/scripts/cs_hello.pl
+
+Syntaxe : SCRIPT LIST
+
+LIST liste simplement les scripts Perl chargés.
+
+Exemples :
+    /msg &nick& SCRIPT LIST

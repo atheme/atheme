@@ -1,0 +1,30 @@
+Aide pour JOINMON:
+
+JOINMON vous permet de maintenir une liste de pattern qui correspondront à des
+pseudo qui seront loggués lorsqu'ils joingnent leur salon (avec l'information loglevel).
+
+Ces patterns sont sauvegardés dans la base de données d'Atheme et seront gardés 
+entre deux redémarrages des services.
+
+Syntaxe : JOINMON ADD <pattern> [raison]
+
+Exemples :
+    /msg &nick& JOINMON ADD jdhore1 une raison
+    /msg &nick& JOINMON ADD jd* une autre raison
+    /msg &nick& JOINMON ADD machineg?d imposteur
+
+JOINMON DEL permet de supprimer des entrées de la liste des patterns utilisateurs
+actuellement monitorés.
+
+Syntaxe : JOINMON DEL <pattern>
+
+Exemples :
+    /msg &nick& JOINMON DEL jdhore1
+    /msg &nick& JOINMON DEL machineg?d
+
+JOINMON LIST vous permet de lister les patterns utilisateurs actuellement monitorés.
+
+Syntaxe : JOINMON LIST
+
+Exemples :
+    /msg &nick& JOINMON LIST

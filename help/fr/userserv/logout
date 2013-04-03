@@ -1,0 +1,9 @@
+Aide pour LOGOUT:
+
+LOGOUT vous déconnecte du compte auprès duquel
+vous êtes actuellement identifié.
+
+Syntaxe : LOGOUT
+
+Exemple :
+    /msg &nick& LOGOUT

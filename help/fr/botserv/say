@@ -1,0 +1,8 @@
+Aide pour SAY:
+
+Fait parler le bot avec le texte donné sur le salon donné.
+
+Syntaxe : SAY <salon> <texte>
+
+Exemples :
+    /msg &nick& SAY #help Welcome to #help!

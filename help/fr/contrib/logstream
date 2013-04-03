@@ -1,0 +1,9 @@
+Aide pour LOGSTREAM:
+
+LOGSTREAM vous permet de "streamer" les fichiers de log d'Atheme sur un salon,
+comme le snoop channel.
+
+Syntaxe : LOGSTREAM <#salon>
+
+Exemples :
+    /msg &nick& LOGSTREAM #services

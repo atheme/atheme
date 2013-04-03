@@ -1,0 +1,10 @@
+Aide pour IDENTIFY:
+
+IDENTIFY authentifie un opérateur des services
+pour l'obtention de ses privilèges. Si l'opérateur
+ou la classe a défini un mot de passe, il sera
+nécessaire de le préciser.
+
+Vous devez d'abord vous identifier à votre compte des services.
+
+Syntaxe : IDENTIFY <mot de passe>

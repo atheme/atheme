@@ -1,0 +1,111 @@
+Aide pour FLAGS:
+
+La commande FLAGS permet de donner/retirer des privilèges
+sur un salon de manière plus spécifique, non généralisée.
+Les cibles supportées sont les nickname, groupes et hostmask.
+
+Lorsque l'argument du salon est donné, une liste de permissions
+accordées aux utilisateurs sera affichée.
+
+Syntaxe : FLAGS <#salon>
+
+Autrement, une entrée de la liste d'accès est modifiée.
+Une modification peut être spécifiée par un nom de template
+(change l'accès au template) ou une modification de flag
+(commence par + ou -).
+Voir l'aide pour TEMPLATE pour plus d'informations sur
+les templates.
+
+#if !halfops
+Si vous n'êtes pas un fondateur, vous pouvez uniquement
+manipuler les flags que vous avez vous-même et vous ne pouvez
+pas éditer les flags que vous n'avez pas, sur les utilisateurs.
+Pour cela, +v donne +V, +o donne +O et +r donne +b.
+#else
+Si vous n'êtes pas un fondateur, vous pouvez seulement manipuler
+les flags que vous avez vous même et vous ne pouvez pas éditer
+les flags que vous n'avez pas, sur les utilisateurs.
+Pour cela, +v donne +V, +h donne +H, +o donne +O et +r donne +b.
+#endif
+
+#if module chanserv/set_limitflags
+Si l'option LIMITFLAGS est activée sur le salon, cette
+restriction est encore plus stricte.
+Voir l'aide pour SET LIMITFLAGS
+#endif
+
+#if module exttarget/main
+Sur Atheme 7.0, il y a maintenant des cibles étendues,
+ce qui vous permet de faire correspondre des accès avec
+des 'situations' à la place de les faire correspondre à
+des nickname, hostmask ou groupes.
+
+Les cibles supplémentaires disponibles sont :
+#endif
+#if module exttarget/oper
+$oper - N'importe quel utilisateur qui est un oper (mode utilisateur +o).
+#endif
+#if module exttarget/registered
+$registered - N'importe quel utilisateur qui est identifié aux services.
+#endif
+#if module exttarget/channel
+$channel:#channel - N'importe quel utilisateur qui est membre du salon donné.
+#endif
+
+Si vous n'avez pas +f, vous pouvez tout de même supprimer votre propre 
+accès avec -*.
+
+Syntaxe : FLAGS <#salon> [nickname|hostmask|groupe template]
+Syntaxe : FLAGS <#salon> [nickname|hostmask|groupe changement_flag]
+
+Permissions :
+    +v - Active l'utilisation des commandes voice/devoice.
+    +V - Active le voice automatique.
+#if halfops
+    +h - Active l'utilisation des commandes halfop/dehalfop.
+    +H - Active le halfop automatique.
+#endif
+    +o - Active l'utilisation des commandes op/deop.
+    +O - Active le op automatique.
+#if protect
+    +a - Active l'utilisation des commandes protect/deprotect.
+#endif
+#if owner
+    +q - Active l'utilisation des commandes owner/deowner.
+#endif
+    +s - Active l'utilisation de la commande set.
+    +i - Active l'utilisation des commande invite et getkey.
+#if module chanserv/kick
+    +r - Active l'utilisation des commandes kick, kickban, ban et unban.
+#else
+#if !module chanserv/unban_self
+    +r - Active l'utilisation des commandes ban et unban.
+#else
+    +r - Active l'utilisation de la commande unban.
+#endif
+#endif
+    +R - Active l'utilisation des commandes recover et clear.
+    +f - Active la modification d'une liste d'accès d'un salon.
+    +t - Active l'utilisation des commandes topic et topicappend.
+    +A - Active le visionnage de la liste d'accès d'un salon.
+#if module chanserv/successor_acl
+    +S - Marque l'utilisateur en tant que successeur.
+#endif
+    +F - Donne tous les pouvoirs de fondateur.
+    +b - Active le kickban automatique.
+
+#if module chanserv/successor_acl
+La permission spéciale +* ajoute toutes les permissions sauf +b, +S et +F.
+#else
+La permission spéciale +* ajoute toutes les permissions sauf +b et +F.
+#endif
+La permission spéciale +* ajoute toutes les permissions incluant +b et +F.
+
+Exemples :
+    /msg &nick& FLAGS #foo
+    /msg &nick& FLAGS #foo foo!*@bar.com VOP
+    /msg &nick& FLAGS #foo foo!*@bar.com -V+oO
+    /msg &nick& FLAGS #foo foo!*@bar.com -*
+    /msg &nick& FLAGS #foo foo +oOtsi
+    /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
+    /msg &nick& FLAGS #foo !baz +*

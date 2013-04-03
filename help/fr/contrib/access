@@ -1,0 +1,30 @@
+Aide pour ACCESS:
+
+La commande ACCESS permet d'afficher et de modifier
+les privilèges sur un salon.
+
+La sous-commande LIST affiche une liste d'utilisateurs
+et leurs privilèges.
+
+Syntaxe : ACCESS <#salon> LIST
+
+La sous-commande ADD ajoute un utilisateur à la liste d'accès
+ou change ses privilèges s'il est déjà sur la liste d'accès.
+
+Si le champ [level] est spécifié, il correspondra au niveau à
+donner. Voir les fichiers d'aide FLAGS et TEMPLATE.
+Sinon, l'utilisateur se verra accorder les privilèges appropriés
+pour une gestion quotidienne du salon.
+
+Syntaxe : ACCESS <#salon> ADD <nickname> [level]
+
+La sous-commande DEL supprime un utilisateur de la liste d'accès.
+
+Syntaxe : ACCESS <#salon> DEL <nickname>
+
+Exemples :
+    /msg &nick& ACCESS #foo LIST
+    /msg &nick& ACCESS #foo ADD bar OP
+    /msg &nick& ACCESS #foo DEL bar
+
+Voir aussi : FLAGS, TEMPLATE

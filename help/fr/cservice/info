@@ -1,0 +1,10 @@
+Aide pour INFO:
+
+INFO affiche des informations sur un salon
+telles que la date d'enregistrement, les flags
+et d'autres détails.
+
+Syntaxe : INFO <#salon>
+
+Exemples :
+    /msg &nick& INFO #foo

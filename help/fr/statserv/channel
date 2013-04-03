@@ -1,0 +1,14 @@
+Aide pour CHANNEL:
+
+CHANNEL fournit des informations variées sur les salons.
+
+Syntaxe : CHANNEL COUNT
+
+Ceci donnera le nombre total de salons.
+
+Syntaxe : CHANNEL TOPIC <salon>
+
+Exemples :
+    /msg &nick& CHANNEL TOPIC #atheme
+
+Cet exemple vous retournera le topic du salon #atheme.

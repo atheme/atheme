@@ -1,0 +1,8 @@
+Aide pour RESTART:
+
+RESTART éteint les services et les redémarre.
+
+Syntaxe : RESTART
+
+Exemple :
+    /msg &nick& RESTART

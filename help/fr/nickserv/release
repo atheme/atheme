@@ -1,0 +1,16 @@
+Aide pour RELEASE:
+
+RELEASE supprime un enforcer sur votre pseudo ou
+change le pseudo de l'utilisateur qui utilise votre nick.
+
+Les enforcers sont créés lorsque quelqu'un utilise votre
+pseudo sans être identifié et empêche toute utilisation
+de celui-ci.
+
+Si vous êtes identifié à ce pseudo, vous ne devez pas spécifier
+de mot de passe, dans le cas contraire, vous le devez.
+
+Syntaxe : RELEASE <nick> [mot de passe]
+
+Exemple :
+    /msg &nick& RELEASE smith sesame

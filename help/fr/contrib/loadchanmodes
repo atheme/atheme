@@ -1,0 +1,12 @@
+Aide pour LOADCHANMODES:
+
+LOADCHANMODES charge tous les modes salon, topics et bannissement pour tous les
+salons sur le réseau lorsqu'ils ont été sauvegardés avec SAVECHANMODES.
+LOADCHANMODES regarde DATADIR/chanmodes.txt pour les données sauvegardées.
+Ce chemin est souvent ~/atheme/etc/chanmodes.txt mais peut varier suivant
+votre installation.
+
+Syntaxe : LOADCHANMODES
+
+Exemples :
+    /msg &nick& LOADCHANMODES

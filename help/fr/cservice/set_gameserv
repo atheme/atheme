@@ -1,0 +1,19 @@
+Aide pour SET GAMESERV:
+
+SET GAMESERV permet aux services de jeux d'être
+utilisés en envoyant aux salon, via
+/msg GameServ <commande> <salon> <paramètre>.
+
+Vous pouvez décider qui peut utiliser GameServ :
+    ALL   - autorise tous les membres
+    VOICE - autorise les voice/ops
+    OP    - autorise les opérateurs
+    OFF   - personne n'est autorisé
+
+Pour OP et VOICE, les statuts du salon et les flags
+de &nick& sont tous les deux compris.
+
+Syntaxe : SET <#salon> GAMESERV ALL|VOICE|OP|OFF
+
+Exemple :
+    /msg &nick& SET #foo GAMESERV VOICE

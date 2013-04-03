@@ -1,0 +1,10 @@
+Aide pour INVITE:
+
+INVITE vous permet d'inviter un utilisateur 
+à joindre un groupe privé/non ouvert ou un groupe
+qui est actuellement plein.
+
+Syntaxe : INVITE <!groupe> <utilisateur>
+
+Exemples :
+    /msg &nick& INVITE !foo jdhore

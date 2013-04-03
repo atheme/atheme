@@ -1,0 +1,16 @@
+Aide pour OP|DEOP|VOICE|DEVOICE:
+
+Ces commandes effectuent des changement de mode sur un salon.
+
+Si vous effectuez une opération sur un autre utilisateur,
+il en sera notifié.
+
+Si le dernier paramètre est omis, l'action sera effectuée sur
+la personne qui effectue la commande.
+
+Syntaxe : OP|DEOP <#salon> [nickname]
+Syntaxe : VOICE|DEVOICE <#salon> [nickname]
+
+Exemples :
+    /msg &nick& OP #foo bar
+    /msg &nick& DEVOICE #foo

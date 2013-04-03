@@ -1,0 +1,12 @@
+Aide pour KICK:
+
+La commande KICK donne la possibilité d'ejecter un
+utilisateur d'un salon. L'utilisateur peut directement rejoindre.
+
+Votre pseudo sera ajouté à la raison du kick.
+
+Syntaxe : KICK <#salon> <nick> [raison]
+
+Exemples :
+    /msg &nick& KICK #foo abuser
+    /msg &nick& KICK #foo abuser please stop

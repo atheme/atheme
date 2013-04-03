@@ -1,0 +1,15 @@
+Aide pour DROP:
+
+DROP permet de "désenregistrer" un salon enregistré.
+
+Une fois que vous avez DROP votre salon, toutes les
+données associées (liste d'accès, etc) seront 
+supprimées et vous ne pourrez pas les restaurer.
+
+Voir l'aide pour SET FOUNDER et FLAGS pour transférer
+un salon à un autre utilisateur.
+
+Syntaxe : DROP <#salon>
+
+Exemples :
+    /msg &nick& DROP #foo

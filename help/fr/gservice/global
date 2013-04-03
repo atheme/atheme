@@ -1,0 +1,14 @@
+Aide pour GLOBAL:
+
+GLOBAL autorise un IRCop à stocker des lignes multiples
+en mémoire et de les envoyer en une seule fois à tous
+les utilisateurs du réseau.
+
+Syntaxe : GLOBAL <paramètres>|SEND|CLEAR|LIST
+
+Exemples :
+    /msg &nick& GLOBAL this is line 1
+    /msg &nick& GLOBAL this is line 2
+    /msg &nick& GLOBAL SEND
+    /msg &nick& GLOBAL CLEAR
+    /msg &nick& GLOBAL LIST

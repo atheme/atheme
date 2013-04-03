@@ -1,0 +1,19 @@
+Aide pour SENDPASS:
+
+SENDPASS envoir par email une clé à l'adresse correspondant
+au nickname spécifié qui pourra être utilisée
+pour définir un nouveau mot de passe en
+utilisant SETPASS.
+
+Syntaxe : SENDPASS <nickname>
+#if priv user:sendpass
+
+Si une clé a été envoyée par email pas encore
+utilisée, vous pouvez la remettre à zéro en
+utilisant le mot clé CLEAR.
+
+Syntaxe : SENDPASS <nickname> CLEAR
+#endif
+
+Exemples :
+    /msg &nick& SENDPASS foo

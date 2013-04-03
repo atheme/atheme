@@ -1,0 +1,28 @@
+Aide pour RMATCH:
+
+RMATCH affiche tous les utilisateurs pour lesquels
+nick!user@host gecos
+correspondent à l'expression régulière donnée (regex).
+
+À la place d'un slash, n'importe caractère qui ne soit
+pas une lettre, un chiffre, un espace ou un backslash
+et qui n'apparait pas dans le pattern, peut être utilisé.
+Un pattern i signifie que le matching sera insensible à la
+casse (exemple : 'a' est égal à 'A').
+
+Par défaut, le pattern est une regex POSIX étendue.
+Si la compilation a été faite avec le support PCRE,
+vous pouvez mettre un 'p' après le pattern pour
+l'utiliser.
+
+Par défaut, il y a une limite du nombre de correspondances.
+Pour outrepasser cette limite, ajoutez le mot clé FORCE.
+Dans tous les cas le nombre de correspondances sera montré.
+
+Syntaxe : RMATCH /<pattern>/[i][p] [FORCE]
+
+Exemple :
+    /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
+    /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
+    /msg &nick& RMATCH /^[^ ]* [^ ]*$/
+    /msg &nick& RMATCH /\d\d\d/p

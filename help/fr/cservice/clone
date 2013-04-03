@@ -1,0 +1,17 @@
+Aide pour CLONE:
+
+CLONE copie les métadonnées et accès d'un salon sur un nouveau.
+Les deux salons doivent être enregistrés par &nick& et vous
+devez être fondateur du salon ciblé pour que cette commande
+fonctionne.
+
+Le topic ne sera pas copié puisque la plupart des personnes
+veulent qu'il soit différent entre 2 salons.
+
+Les métadonnées et les accès du salon seront également 
+retirés (excepté le fondateur) du salon ciblé.
+
+Syntaxe : CLONE <#salon-source> <#salon-cible>
+
+Exemples :
+    /msg &nick& CLONE #funstuff #morefun

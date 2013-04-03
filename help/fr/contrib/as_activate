@@ -1,0 +1,9 @@
+Aide pour ACTIVATE:
+
+Envoie la requête d'annonce pour le pseudo donné.
+Un mémo informant l'utilisateur sera également envoyé.
+
+Syntaxe : ACTIVATE <nick>
+
+Exemples :
+    /msg &nick& ACTIVATE nenolod

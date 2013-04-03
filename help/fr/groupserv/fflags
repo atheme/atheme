@@ -1,0 +1,14 @@
+Aide pour FFLAGS:
+
+La commande FFLAGS permet à un oper de forcer le changement
+de flags sur un groupe. La syntaxe est la même que FLAGS,
+mais la cible et les changements doivent être précisés.
+Voir la liste d'accès de n'importe quel groupe est fait
+avec FLAGS.
+
+Syntaxe : FFLAGS <!groupe> <nickname> <flag_changes>
+
+Exemples :
+    /msg &nick& FFLAGS !baz foo +F
+    /msg &nick& FFLAGS !baz foo -*
+    /msg &nick& FFLAGS !baz foo +fmc

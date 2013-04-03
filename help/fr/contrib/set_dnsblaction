@@ -1,0 +1,14 @@
+Aide pour SET DNSBLACTION:
+
+SET DNSBLACTION permet de paramétrer quelle action sera effectuée
+lorsqu'un utilisateur est trouvé dans une blacklist DNS.
+
+SNOOP - Loggue uniquement sur le Snoop channel.
+NOTIFY - Loggue et informe l'utilisateur.
+KLINE - Loggue sur le salon de log des services et K:Line l'utilisateur.
+NONE - Désactive la vérification DNS.
+
+Syntaxe : SET DNSBLACTION <SNOOP|NOTIFY|KLINE|NONE>
+
+Exemple :
+    /msg &nick& SET DNSBLACTION NOTIFY

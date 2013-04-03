@@ -1,0 +1,12 @@
+Aide pour COUNT:
+
+Ceci donnera le nombre d'entrées qu'il y a dans la liste
+dex xOP et le nombre d'entrées dans la liste d'accès qui
+ne correspondent pas à une valeur xOP.
+
+La deuxième ligne montre combien d'entrées ont chaque flag.
+
+Syntaxe : COUNT <#salon>
+
+Exemples :
+    /msg &nick& COUNT #oscn

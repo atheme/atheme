@@ -1,0 +1,12 @@
+Aide pour SET QUIETCHG:
+
+SET QUIETCHG empêche les services de vous notifier
+automatiquement lorsque ChanServ est utilisé pour
+affecter votre statut sur les salons.
+Lorsque ceci est défini à ON, les services ne vous
+enverront plus de messages de cette nature.
+
+Syntaxe : SET QUIETCHG ON|OFF
+
+Exemple :
+    /msg &nick& SET QUIETCHG ON

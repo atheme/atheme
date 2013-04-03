@@ -1,0 +1,10 @@
+Aide pour REHASH:
+
+REHASH met à jour la base de données et recharge
+le fichier de configuration. Vous pouvez effectuer
+un rehash depuis la console avec un kill -HUP.
+
+Syntaxe : REHASH
+
+Exemple :
+    /msg &nick& REHASH

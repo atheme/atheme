@@ -1,0 +1,10 @@
+Aide pour HOLD:
+
+HOLD empêche un salon d'expirer pour inactivité.
+Les salons suspendus expireront toujours lorsqu'il
+n'y a pas de successeur éligible.
+
+Syntaxe : HOLD <#salon> ON|OFF
+
+Exemples :
+    /msg &nick& HOLD #atheme ON

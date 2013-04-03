@@ -1,0 +1,11 @@
+Aide pour SET SECURE:
+
+SET SECURE empêche quiconque n'est pas dans la 
+liste d'accès du salon de devenir opérateur ou
+halfop sur le salon. Ceci est utile si vous êtes
+paranoïaque.
+
+Syntaxe : SET <#salon> SECURE ON|OFF
+
+Exemple :
+    /msg &nick& SET #foo SECURE ON

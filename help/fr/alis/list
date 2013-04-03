@@ -1,0 +1,19 @@
+Aide pour LIST:
+
+LIST donne une liste de salon qui correpondent
+au pattern, modifié par les autres options.
+
+Le pattern peut contenir les wildcard * et ?
+
+Les options sont :
+    -min <n>: utilisateurs minimum sur le salon
+    -max <n>: utilisateurs maximum sur le salon
+    -skip <n>: passe les <n> premières correspondances
+    -show [m][t]: montre les modes/auteurs de topic
+    -mode <+|-|=><modes>: ajout/suppression ou modes égaux à
+    -topic <pattern>: matche le pattern de topic
+
+Syntaxe : LIST <pattern> [options]
+
+Exemples :
+    /msg &nick& LIST * -min 50

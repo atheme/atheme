@@ -1,0 +1,11 @@
+Aide pour SERVER:
+
+SERVER fournit des informations variées à propos des serveur du réseau.
+
+Syntaxe : SERVER COUNT
+
+Retourne le nombre de serveur connectés.
+
+Syntaxe : SERVER LIST
+
+Retourne une liste de tous les serveurs connectés.

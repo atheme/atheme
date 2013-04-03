@@ -1,0 +1,11 @@
+Aide pour UNASSIGN:
+
+Désassigne un bot d'un salon. Lorsque vous utilisez cette commande
+le bot ne rejoindra plus le salon. Cependant, la configuration du bot
+sur le salon sera gardée pour que vous puissiez réassigner le bot 
+plus tard sans avoir à recommencer la configuration entièrement.
+
+Syntaxe : UNASSIGN <salon>
+
+Exemples :
+    /msg &nick& UNASSIGN #help

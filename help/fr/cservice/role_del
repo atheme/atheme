@@ -1,0 +1,8 @@
+Aide pour ROLE DEL:
+
+ROLE DEL supprimera le rôle du salon spécifié.
+
+Syntaxe : ROLE <#salon> DEL <rôle>
+
+Exemples :
+    /msg &nick& ROLE #atheme DEL helpers

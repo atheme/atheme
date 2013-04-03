@@ -1,0 +1,12 @@
+Aide pour MODINSPECT:
+
+MODINSPECT affiche des informations détaillées sur un module.
+
+Les noms peuvent être rassemblés avec la commande MODLIST.
+Il n'est pas nécessaire qu'ils soient similaires aux chemins
+chargés avec MODLOAD.
+
+Syntaxe : MODINSPECT <nom>
+
+Exemple :
+    /msg &nick& MODINSPECT protocol/charybdis
