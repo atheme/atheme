@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[]);
-static unsigned int maxmemos;
+static unsigned int *maxmemos;
 
 
 command_t ms_send = { "SEND", N_("Sends a memo to a user."),
@@ -24,10 +24,8 @@ command_t ms_send = { "SEND", N_("Sends a memo to a user."),
 
 void _modinit(module_t *m)
 {
-        unsigned int *value;
         service_named_bind_command("memoserv", &ms_send);
-        MODULE_TRY_REQUEST_SYMBOL(m, value, "memoserv/main", "maxmemos");
-        maxmemos = *value;
+        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -122,7 +120,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		}
 	
 		/* Check to make sure target inbox not full */
-		if (tmu->memos.count >= maxmemos)
+		if (tmu->memos.count >= *maxmemos)
 		{
 			command_fail(si, fault_toomany, _("%s's inbox is full"), target);
 			logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (target inbox full)", entity(tmu)->name);

@@ -20,14 +20,12 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
                            AC_AUTHENTICATED, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
-static unsigned int maxmemos;
+static unsigned int *maxmemos;
 
 void _modinit(module_t *m)
 {
-        unsigned int *value;
         service_named_bind_command("memoserv", &ms_sendgroup);
-        MODULE_TRY_REQUEST_SYMBOL(m, value, "memoserv/main", "maxmemos");
-        maxmemos = *value;
+        MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -120,7 +118,7 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		/* Check to make sure target inbox not full */
-		if (tmu->memos.count >= maxmemos)
+		if (tmu->memos.count >= *maxmemos)
 			continue;
 
 		/* As in SEND to a single user, make ignore fail silently */
