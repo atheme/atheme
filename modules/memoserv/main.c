@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 
 	memosvs = service_add("memoserv", NULL);
 
-    add_uint_conf_item("MAXMEMOS", &memosvs->conf_table, 0, &maxmemos, 1, INT_MAX, 30);
+	add_uint_conf_item("MAXMEMOS", &memosvs->conf_table, 0, &maxmemos, 1, INT_MAX, 30);
 }
 
 void _moddeinit(module_unload_intent_t intent)

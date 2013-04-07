@@ -158,7 +158,7 @@ void _modinit(module_t *m)
 	add_dupstr_conf_item("ENFORCE_PREFIX", &nicksvs.me->conf_table, 0, &nicksvs.enforce_prefix, "Guest");
 	add_dupstr_conf_item("CRACKLIB_DICT", &nicksvs.me->conf_table, 0, &nicksvs.cracklib_dict, NULL);
 	add_conf_item("EMAILEXEMPTS", &nicksvs.me->conf_table, c_ni_emailexempts);
-    add_uint_conf_item("MAXNICKS", &nicksvs.me->conf_table, 9, &nicksvs.maxnicks, 1, INT_MAX, 5);
+	add_uint_conf_item("MAXNICKS", &nicksvs.me->conf_table, 9, &nicksvs.maxnicks, 1, INT_MAX, 5);
 }
 
 void _moddeinit(module_unload_intent_t intent)
