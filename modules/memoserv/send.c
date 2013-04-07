@@ -7,7 +7,6 @@
  */
 
 #include "atheme.h"
-#include "memoserv.h"
 
 DECLARE_MODULE_V1
 (
