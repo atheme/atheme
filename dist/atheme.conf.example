@@ -886,17 +886,6 @@ serverinfo {
 	 */
 	maxusers = 5;
 
-	/* (*)maxnicks
-	 * If GROUP is loaded, what are the maximum nicknames that one
-	 * username can register?
-	 */
-	maxnicks = 5;
-
-	/* (*)maxchans
-	 * What are the maximum channels that one username can register?
-	 */
-	maxchans = 5;
-
     /* (*)maxmemos
      * What is the maximum amount of memos a user can have in their inbox?
      */
@@ -1042,6 +1031,12 @@ nickserv {
 	access {
 	};
 
+	/* (*)maxnicks
+	 * If GROUP is loaded, what are the maximum nicknames that one
+	 * username can register?
+	 */
+	maxnicks = 5;
+
 	/* (*)expire
 	 * The number of days before inactive registrations are expired.
 	 */
@@ -1127,6 +1122,11 @@ chanserv {
 	 */
 	access {
 	};
+
+	/* (*)maxchans
+	 * What are the maximum channels that one username can register?
+	 */
+	maxchans = 5;
 
 	/* fantasy
 	 * Do you want to enable fantasy commands? This can
