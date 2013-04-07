@@ -219,6 +219,6 @@ bool myentity_can_register_channel(myentity_t *mt)
 	if (vt->can_register_channel(mt))
 		return true;
 
-	return (myentity_count_channels_with_flagset(mt, CA_FOUNDER) < me.maxchans);
+	return (myentity_count_channels_with_flagset(mt, CA_FOUNDER) < chansvs.maxchans);
 }
 
