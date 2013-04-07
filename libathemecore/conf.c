@@ -214,7 +214,7 @@ void init_newconf(void)
 	add_uint_conf_item("MAXUSERS", &conf_si_table, 0, &me.maxusers, 0, INT_MAX, 0);
 	add_uint_conf_item("MAXNICKS", &conf_si_table, 9, &me.maxnicks, 1, INT_MAX, 5);
 	add_uint_conf_item("MAXCHANS", &conf_si_table, 0, &me.maxchans, 1, INT_MAX, 5);
-    add_uint_conf_item("MAXMEMOS", &conf_si_table, 0, &me.maxmemos, 1, INT_MAX, 30);
+	add_uint_conf_item("MAXMEMOS", &conf_si_table, 0, &me.maxmemos, 1, INT_MAX, 30);
 	add_uint_conf_item("EMAILLIMIT", &conf_si_table, 0, &me.emaillimit, 1, INT_MAX, 10);
 	add_duration_conf_item("EMAILTIME", &conf_si_table, 0, &me.emailtime, "s", 300);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);

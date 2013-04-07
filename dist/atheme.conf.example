@@ -897,10 +897,10 @@ serverinfo {
 	 */
 	maxchans = 5;
 
-    /* (*)maxmemos
-     * What is the maximum amount of memos a user can have in their inbox?
-     */
-    maxmemos = 30;
+	/* (*)maxmemos
+	 * What is the maximum amount of memos a user can have in their inbox?
+	 */
+	maxmemos = 30;
 
 	/* (*)mdlimit
 	 * How many metadata entries can be added to an object?
