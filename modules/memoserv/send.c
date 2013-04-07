@@ -117,7 +117,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		}
 	
 		/* Check to make sure target inbox not full */
-		if (tmu->memos.count >= me.mdlimit)
+		if (tmu->memos.count >= me.maxmemos)
 		{
 			command_fail(si, fault_toomany, _("%s's inbox is full"), target);
 			logcommand(si, CMDLOG_SET, "failed SEND to \2%s\2 (target inbox full)", entity(tmu)->name);

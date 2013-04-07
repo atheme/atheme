@@ -42,6 +42,7 @@ struct me
   unsigned int maxusers;            /* maximum usernames from one email   */
   unsigned int maxnicks;            /* maximum nicks from one username    */
   unsigned int maxchans;            /* maximum chans from one username    */
+  unsigned int maxmemos;
   unsigned int auth;                /* registration auth type             */
   unsigned int emaillimit;          /* maximum number of emails sent      */
   unsigned int emailtime;           /* ... in this amount of time         */

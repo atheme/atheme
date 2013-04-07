@@ -105,7 +105,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		/* Check to make sure target inbox not full */
-		if (tmu->memos.count >= me.mdlimit)
+		if (tmu->memos.count >= me.maxmemos)
 			continue;
 
 		/* As in SEND to a single user, make ignore fail silently */
