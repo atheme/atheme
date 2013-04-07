@@ -18,10 +18,14 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
                          PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
+static unsigned int maxmemos;
 
 void _modinit(module_t *m)
 {
+        unsigned int *value;
         service_named_bind_command("memoserv", &ms_sendall);
+        MODULE_TRY_REQUEST_SYMBOL(m, value, "memoserv/main", "maxmemos");
+        maxmemos = *value;
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -105,7 +109,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		/* Check to make sure target inbox not full */
-		if (tmu->memos.count >= me.maxmemos)
+		if (tmu->memos.count >= maxmemos)
 			continue;
 
 		/* As in SEND to a single user, make ignore fail silently */
