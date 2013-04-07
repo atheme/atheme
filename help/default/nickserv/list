@@ -11,6 +11,10 @@ MARK-REASON   - All accounts whose mark reason matches a
                 given pattern.
 FROZEN-REASON - All frozen accounts whose freeze reason matches
                 a given pattern.
+#if module nickserv/restrict
+RESTRICTED-REASON - All restricted accounts whose restrict reason matches
+                a given pattern.
+#endif
 HOLD          - All users with the HOLD flag set.
 NOOP          - All users with the NOOP flag set.
 NEVEROP       - All users with the NEVEROP flag set.
@@ -26,6 +30,9 @@ REGNOLIMIT    - All users with the REGNOLIMIT flag set.
 
 FROZEN        - All users frozen by network staff.
 MARKED        - All users marked by network staff.
+#if module nickserv/restrict
+RESTRICTED    - All users restricted by network staff.
+#endif
 REGISTERED    - User accounts registered longer ago than a given age.
 LASTLOGIN     - User accounts last used longer ago than a given age.
 
