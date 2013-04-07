@@ -55,7 +55,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (MOWGLI_LIST_LENGTH(&si->smu->nicks) >= me.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
+	if (MOWGLI_LIST_LENGTH(&si->smu->nicks) >= nicksvs.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_noprivs, _("You have too many nicks registered already."));
 		return;

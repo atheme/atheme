@@ -198,7 +198,7 @@ static void os_cmd_set_maxnicks(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		me.maxnicks = value;
+		nicksvs.maxnicks = value;
 		command_success_nodata(si, "MAXNICKS has been successfully set to %s.", nicks);
 		logcommand(si, CMDLOG_ADMIN, "SET:MAXNICKS: \2%s\2", nicks);
 	}
@@ -224,7 +224,7 @@ static void os_cmd_set_maxchans(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		me.maxchans = value;
+		chansvs.maxchans = value;
 		command_success_nodata(si, "MAXCHANS has been successfully set to %s.", chans);
 		logcommand(si, CMDLOG_ADMIN, "SET:MAXCHANS: \2%s\2", chans);
 	}

@@ -51,8 +51,8 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Maximum number of logins allowed per username: %d"), me.maxlogins);
 	command_success_nodata(si, _("Maximum number of usernames that can be registered to one email address: %d"), me.maxusers);
 	if (!nicksvs.no_nick_ownership)
-		command_success_nodata(si, _("Maximum number of nicknames that one user can own: %d"), me.maxnicks);
-	command_success_nodata(si, _("Maximum number of channels that one user can own: %d"), me.maxchans);
+		command_success_nodata(si, _("Maximum number of nicknames that one user can own: %d"), nicksvs.maxnicks);
+	command_success_nodata(si, _("Maximum number of channels that one user can own: %d"), chansvs.maxchans);
         command_success_nodata(si, _("Channel expiration time: %d days"), chansvs.expiry / 86400);
 	if (chansvs.fantasy)
 		command_success_nodata(si, _("Default channel fantasy trigger: %s"), chansvs.trigger);

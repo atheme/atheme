@@ -60,6 +60,7 @@ struct nicksvs_
 
   service_t *me;
 
+  unsigned int maxnicks;        /* max nicknames one can group */
   unsigned int expiry;          /* expiry time                */
   unsigned int enforce_expiry;  /* expiry time                */
   unsigned int enforce_delay;   /* delay for nickname enforce */
