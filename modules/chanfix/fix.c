@@ -651,7 +651,8 @@ void chanfix_can_register(hook_channel_register_check_t *req)
 		{
 			slog(LG_INFO, "chanfix_can_register(): forced registration of %s by %s",
 					req->name,
-					req->si->smu != NULL ? req->si->smu : "??");
+					req->si->smu != NULL ?
+					entity(req->si->smu)->name : "??");
 			return;
 		}
 		req->approved = 1;
