@@ -65,7 +65,6 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 	char *action = parv[1];
 	char *info = parv[2];
 	myuser_t *mu;
-	myuser_name_t *mun;
 
 	if (!target || !action)
 	{
@@ -76,15 +75,6 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		mun = myuser_name_find(target);
-		if (mun != NULL && !strcasecmp(action, "OFF"))
-		{
-			object_unref(mun);
-			wallops("%s unrestricted the name \2%s\2.", get_oper_name(si), target);
-			logcommand(si, CMDLOG_ADMIN, "RESTRICT:OFF: \2%s\2", target);
-			command_success_nodata(si, _("\2%s\2 is now unrestricted."), target);
-			return;
-		}
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
