@@ -545,6 +545,7 @@ loadmodule "modules/infoserv/main";
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/plain";
 #loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL */
+loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
 
