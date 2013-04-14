@@ -97,7 +97,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	if (md == NULL)
 		return ASASL_FAIL;
 
-	ret = base64_decode(md->value, pubkey_raw, BUFSIZE);
+	ret = base64_decode(md->value, (char *)pubkey_raw, BUFSIZE);
 	if (ret == -1)
 		return ASASL_FAIL;
 
@@ -122,7 +122,7 @@ static int mech_step_response(sasl_session_t *p, char *message, int len, char **
 {
 	ecdsa_session_t *s = p->mechdata;
 
-	if (!ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, message, len, s->pubkey))
+	if (!ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, (const unsigned char *)message, len, s->pubkey))
 		return ASASL_FAIL;
 
 	return ASASL_DONE;

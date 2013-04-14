@@ -141,7 +141,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	len -= 2;
 	if (size > len)
 		goto end;
-	if ((their_key = BN_bin2bn(message, size, NULL)) == NULL)
+	if ((their_key = BN_bin2bn((const unsigned char *)message, size, NULL)) == NULL)
 		goto end;
 	message += size;
 	len -= size;
@@ -157,7 +157,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 
 	/* Compute shared secret */
 	secret = malloc(DH_size(dh));
-	if ((size = DH_compute_key(secret, their_key, dh)) == -1)
+	if ((size = DH_compute_key((unsigned char *)secret, their_key, dh)) == -1)
 		goto end;
 
 	/* Data must be multiple of the AES block size (16). Cap at 256. */
@@ -166,11 +166,13 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 
 	/* Decrypt! (AES_set_decrypt_key takes bits not bytes, hence multiply
 	 * by 8) */
-	AES_set_decrypt_key(secret, size*8, &key);
+	AES_set_decrypt_key((unsigned char *)secret, size*8, &key);
 
 	ptr = userpw = malloc(len + 1);
 	userpw[len] = '\0';
-	AES_cbc_encrypt(message, userpw, len, &key, iv, AES_DECRYPT);
+	AES_cbc_encrypt((unsigned char *)message, 
+	                (unsigned char *)userpw, len, &key, 
+	                (unsigned char *)iv, AES_DECRYPT);
 
 	/* Username */
 	size = strlen(ptr);
