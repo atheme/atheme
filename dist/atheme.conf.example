@@ -533,9 +533,14 @@ loadmodule "modules/infoserv/main";
  *
  * Core components				modules/saslserv/main
  * PLAIN mechanism				modules/saslserv/plain
- * DH-BLOWFISH mechanism			modules/saslserv/dh-blowfish
+ * DH-BLOWFISH mechanism (DEPRECATED)		modules/saslserv/dh-blowfish
+ * ECDSA-NIST256p-CHALLENGE			modules/saslserv/ecdsa-nist256p-challenge
  * AUTHCOOKIE mechanism (for IRIS)		modules/saslserv/authcookie
  * EXTERNAL mechanism (IRCv3.1+)		modules/saslserv/external
+ *
+ * DH-BLOWFISH has potential issues with weak keys unless the DH parameters
+ * are selected to avoid them. Its use is discouraged. Use
+ * ECDSA-NIST256p-CHALLENGE if at all possible.
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/plain";
