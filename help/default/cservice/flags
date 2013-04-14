@@ -83,7 +83,7 @@ Permissions:
     +r - Enables use of the unban command.
 #endif
 #endif
-    +R - Enables use of the recover and clear commands.
+    +R - Enables use of the recover, sync and clear commands.
     +f - Enables modification of channel access lists.
     +t - Enables use of the topic and topicappend commands.
     +A - Enables viewing of channel access lists.
