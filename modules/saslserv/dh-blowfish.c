@@ -74,8 +74,8 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 		return ASASL_FAIL;
 
 	/* Serialize p, g, and pub_key */
-	*out = malloc(BN_num_bytes(dh->p) + BN_num_bytes(dh->g) + BN_num_bytes(dh->pub_key) + 6);
 	*out_len = BN_num_bytes(dh->p) + BN_num_bytes(dh->g) + BN_num_bytes(dh->pub_key) + 6;
+	*out = malloc((size_t)*out_len);
 	ptr = *out;
 
 	/* p */
