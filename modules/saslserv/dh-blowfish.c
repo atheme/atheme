@@ -20,7 +20,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static DH *dh;
+static DH *base_dhparams;
 
 mowgli_list_t *mechanisms;
 mowgli_node_t *mnode;
@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, mechanisms, "saslserv/main", "sasl_mechanisms");
 
-	if ((dh = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
+	if ((base_dhparams = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
 		return;
 
 	mnode = mowgli_node_create();
@@ -43,17 +43,34 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	DH_free(dh);
+	DH_free(base_dhparams);
 
 	mowgli_node_delete(mnode, mechanisms);
 	mowgli_node_free(mnode);
 }
 
+static inline DH *DH_clone(DH *dh)
+{
+	DH *out = DH_new();
+
+	out->p = BN_dup(dh->p);
+	out->g = BN_dup(dh->g);
+
+	if (!DH_generate_key(out))
+	{
+		DH_free(out);
+		return NULL;
+	}
+
+	return out;
+}
+
 static int mech_start(sasl_session_t *p, char **out, int *out_len)
 {
 	char *ptr;
+	DH *dh;
 
-	if (!DH_generate_key(dh))
+	if ((dh = DH_clone(base_dhparams)) == NULL)
 		return ASASL_FAIL;
 
 	/* Serialize p, g, and pub_key */
@@ -151,6 +168,8 @@ end:
 
 static void mech_finish(sasl_session_t *p)
 {
+	DH_free((DH *) p->mechdata);
+	p->mechdata = NULL;
 }
 
 #endif /* HAVE_OPENSSL */
