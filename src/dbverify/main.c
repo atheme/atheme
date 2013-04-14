@@ -65,7 +65,7 @@ static void verify_channel_registrations(void)
 		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
 		{
 			chanacs_t *ca = n->data, *ca2;
-			char *key = ca->entity != NULL ? ca->entity->name : ca->host;
+			const char *key = ca->entity != NULL ? ca->entity->name : ca->host;
 
 			if (key == NULL)
 			{
