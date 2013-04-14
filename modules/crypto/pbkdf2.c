@@ -110,7 +110,7 @@ static const char *pbkdf2_crypt(const char *key, const char *salt)
 
 	memcpy(outbuf, salt, SALTLEN);
 
-	res = PKCS5_PBKDF2_HMAC(key, strlen(key), salt, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
+	res = PKCS5_PBKDF2_HMAC(key, strlen(key), (const unsigned char *)salt, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
 
 	for (iter = 0; iter < SHA512_DIGEST_LENGTH; iter++)
 		sprintf(outbuf + SALTLEN + (iter * 2), "%02x", 255 & digestbuf[iter]);

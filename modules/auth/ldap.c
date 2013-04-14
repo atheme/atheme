@@ -105,7 +105,7 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	{
 		ldap_config_ready(NULL);
 	}
-	if ((ldap_conn == NULL))
+	if (ldap_conn == NULL)
 	{
 		slog(LG_INFO, "ldap_auth_user(): no connection");
 		return false;
