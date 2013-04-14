@@ -4,8 +4,9 @@ use vars qw($VERSION %IRSSI);
 # $Id: cap_sasl.pl 5330 2006-05-31 02:25:21Z gxti $
 
 use MIME::Base64;
+use Data::Dumper;
 
-$VERSION = "1.1";
+$VERSION = "1.2";
 
 %IRSSI = (
     authors     => 'Michael Tharp and Jilles Tjoelker',
@@ -264,6 +265,52 @@ eval {
 		}
 
 		pack("n/a*Z*a*", $pubkey, $u, $crypted);
+	};
+};
+
+eval {
+	use Crypt::OpenSSL::Bignum;
+	use Crypt::DH;
+	use Math::BigInt;
+	#use Crypt::OpenSSL::AES;
+	use Crypt::Rijndael;
+	use Crypt::CBC;
+	sub bin2bi { return Crypt::OpenSSL::Bignum->new_from_bin(shift)->to_decimal } # binary to BigInt
+	sub bi2bin { return Crypt::OpenSSL::Bignum->new_from_decimal((shift)->bstr)->to_bin } # BigInt to binary
+	$mech{'DH-AES'} = sub {
+		my($sasl, $data) = @_;
+		my $u = $sasl->{user};
+		my $pass = $sasl->{password};
+
+		# Same as DH-BLOWFISH for the DH part.
+		my($p, $g, $y) = unpack("(n/a*)3", $data);
+		my $dh = Crypt::DH->new(p => bin2bi($p), g => bin2bi($g));
+		$dh->generate_keys;
+
+		my $secret = bi2bin($dh->compute_secret(bin2bi($y)));
+		my $pubkey = bi2bin($dh->pub_key);
+
+		# Padding is different. Multiple of 16 instead of 8
+		# Pad the username too.
+		$pass .= "\0";
+		$pass .= chr(rand(256)) while length($pass) % 16;
+
+		my $userpass = $u . "\0" . $pass;
+
+		my $iv = Crypt::CBC->random_bytes(16);
+
+		# Hum... this is a CBC mode cipher :P
+		my $cipher = Crypt::CBC->new(
+			-literal_key => 1,
+			-key    => $secret,
+			-cipher => "Crypt::Rijndael",
+			-iv     => $iv,
+			-header => 'none',
+		);
+
+		my $crypted = $cipher->encrypt($userpass);
+
+		pack("n/a*a*a*", $pubkey, $iv, $crypted);
 	};
 };
 
