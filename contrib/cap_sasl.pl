@@ -272,7 +272,6 @@ eval {
 	use Crypt::OpenSSL::Bignum;
 	use Crypt::DH;
 	use Math::BigInt;
-	#use Crypt::OpenSSL::AES;
 	use Crypt::Rijndael;
 	use Crypt::CBC;
 	sub bin2bi { return Crypt::OpenSSL::Bignum->new_from_bin(shift)->to_decimal } # binary to BigInt
@@ -292,14 +291,14 @@ eval {
 
 		# Padding is different. Multiple of 16 instead of 8
 		# Pad the username too.
+		$u .= "\0";
 		$pass .= "\0";
 		$pass .= chr(rand(256)) while length($pass) % 16;
 
-		my $userpass = $u . "\0" . $pass;
+		my $userpass = $u . $pass; 
 
+		# Hum... this is a CBC mode cipher. We need an IV :P
 		my $iv = Crypt::CBC->random_bytes(16);
-
-		# Hum... this is a CBC mode cipher :P
 		my $cipher = Crypt::CBC->new(
 			-literal_key => 1,
 			-key    => $secret,
@@ -310,6 +309,7 @@ eval {
 
 		my $crypted = $cipher->encrypt($userpass);
 
+		# Packing is different from DH-BLOWFISH.
 		pack("n/a*a*a*", $pubkey, $iv, $crypted);
 	};
 };

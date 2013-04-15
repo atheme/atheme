@@ -134,23 +134,30 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	dh = (DH*)p->mechdata;
 
 	/* Their pub_key */
-	if (len < 2)
+	if (len <= 2)
 		goto end;
+
 	size = ntohs(*(unsigned int*)message);
 	message += 2;
 	len -= 2;
-	if (size > len)
+
+	if (size >= len)
 		goto end;
+
 	if ((their_key = BN_bin2bn(message, size, NULL)) == NULL)
 		goto end;
+
 	message += size;
 	len -= size;
 
-	/* Their IV */
-	if (len < sizeof(iv))
+	/* Data must be a multiple of the AES block size. (16)
+	 * Verify we also have an IV and at least one block of data.
+	 * Cap at a rather arbitrary limit of 272 (IV + 16 blocks of 16 each).
+	 */
+	if (len < sizeof(iv) + AES_BLOCK_SIZE || len % AES_BLOCK_SIZE || len > 272)
 		goto end;
 
-	/* IV */
+	/* Extract the IV */
 	memcpy(iv, message, sizeof(iv));
 	message += sizeof(iv);
 	len -= sizeof(iv);
@@ -160,13 +167,9 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	if ((size = DH_compute_key(secret, their_key, dh)) == -1)
 		goto end;
 
-	/* Data must be multiple of the AES block size (16). Cap at 256. */
-	if (len == 0 || len % AES_BLOCK_SIZE || len > 256)
-		goto end;
-
 	/* Decrypt! (AES_set_decrypt_key takes bits not bytes, hence multiply
 	 * by 8) */
-	AES_set_decrypt_key(secret, size*8, &key);
+	AES_set_decrypt_key(secret, size * 8, &key);
 
 	ptr = userpw = malloc(len + 1);
 	userpw[len] = '\0';
