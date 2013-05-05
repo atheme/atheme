@@ -4,7 +4,3 @@ HELP displays help information on all
 commands in services.
 
 Syntax: HELP <command> [parameters]
-
-Examples:
-    /msg &nick& HELP REGISTER
-    /msg &nick& HELP SET PASSWORD
