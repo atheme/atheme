@@ -278,7 +278,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	targetlist = strdup(parv[1]);
+	targetlist = strdup(target);
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
@@ -379,7 +379,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	targetlist = strdup(parv[1]);
+	targetlist = strdup(target);
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
