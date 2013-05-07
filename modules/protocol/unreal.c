@@ -1419,7 +1419,7 @@ void _modinit(module_t * m)
 	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
-	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
+	pcommand_add("PROTOCTL", m_protoctl, 1, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 
