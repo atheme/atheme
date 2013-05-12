@@ -7,7 +7,7 @@
  *
  * Basically the same as DH-BLOWFISH, with a couple alterations:
  * 1) AES instead of blowfish. Blowfish suffers from weak keys, and the author
- *    of it (Bruce Schneider) recommends not using it.
+ *    of it (Bruce Schneier) recommends not using it.
  * 2) Username is encrypted with password
  * 3) CBC mode is used with AES. The IV is sent with the key by the client.
  *
