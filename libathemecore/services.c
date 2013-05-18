@@ -792,7 +792,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 		svs = service_find("nickserv");
 	if (svs != NULL)
 	{
-		myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2.  There has been \2%d\2 failed login %s since your last successful login.",
+		myuser_notice(svs->me->nick, mu, "\2%s\2 failed to login to \2%s\2.  There have been \2%d\2 failed login %s since your last successful login.",
 			      mask, entity(mu)->name, count, count == 1 ? "attempt" : "attempts");
 	}
 
