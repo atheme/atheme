@@ -63,7 +63,6 @@ struct cmode_ inspircd_mode_list[] = {
   { 'T', CMODE_NONOTICE },
   { 'u', CMODE_HIDING   },
   { 'Q', CMODE_PEACE    },
-  { 'Y', CMODE_IMMUNE	},
   { 'D', CMODE_DELAYJOIN },
   { '\0', 0 }
 };
