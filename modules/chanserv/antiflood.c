@@ -237,7 +237,8 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 		chanban_t *cb;
 
 		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
-		cb->flags |= CBAN_ANTIFLOOD;
+		if (cb != NULL)
+			cb->flags |= CBAN_ANTIFLOOD;
 	}
 }
 
