@@ -57,29 +57,22 @@ static void make_extbanmask(char *buf, size_t buflen, const char *mask)
 	mowgli_strlcat(buf, mask, buflen);
 }
 
+static char get_quiet_ban_char(void)
+{
+	return (ircd->type == PROTOCOL_UNREAL ||
+			ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+}
+
 chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
 	chanban_t *cb = NULL;
+	char banlike_char = get_quiet_ban_char();
 
-	switch (ircd->type)
-	{
-	case PROTOCOL_INSPIRCD:
-		mowgli_strlcpy(rhostbuf, "m:", sizeof rhostbuf);
-		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
-		cb = chanban_add(c, rhostbuf, 'b');
-		break;
-	case PROTOCOL_UNREAL:
-		mowgli_strlcpy(rhostbuf, "~q:", sizeof rhostbuf);
-		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
-		cb = chanban_add(c, rhostbuf, 'b');
-		break;
-	default:
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
-		cb = chanban_add(c, hostbuf, 'q');
-	}
+	make_extbanmask(rhostbuf, sizeof rhostbuf, hostbuf);
+	modestack_mode_param(chansvs.nick, c, MTYPE_ADD, banlike_char,
+			rhostbuf);
+	cb = chanban_add(c, rhostbuf, banlike_char);
 
 	return cb;
 }
@@ -187,7 +180,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;
-	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+	char banlike_char = get_quiet_ban_char();
 
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -330,7 +323,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];
-	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+	char banlike_char = get_quiet_ban_char();
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
