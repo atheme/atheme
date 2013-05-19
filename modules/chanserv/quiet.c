@@ -102,15 +102,19 @@ static void make_extban(char *buf, size_t size, user_t *tu)
 	mowgli_strlcat(buf, tu->vhost, size);
 }
 
-static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
+enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
+
+static enum devoice_result
+devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
 {
 	chanuser_t *cu;
 	unsigned int flag;
 	char buf[3];
+	enum devoice_result result = DEVOICE_NO_ACTION;
 
 	cu = chanuser_find(c, tu);
 	if (cu == NULL)
-		return true;
+		return DEVOICE_NO_ACTION;
 	if (cu->modes & CSTATUS_OP)
 		flag = CA_OP;
 	else if (cu->modes & CSTATUS_VOICE)
@@ -120,32 +124,41 @@ static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *t
 	if (flag != 0 && !chanacs_source_has_flag(mc, si, flag))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return false;
+		return DEVOICE_FAILED;
 	}
 
 	buf[0] = '-';
 	buf[2] = '\0';
 	if (cu->modes & CSTATUS_OP)
+	{
 		channel_mode_va(chansvs.me->me, c, 2, "-o", tu->nick);
+		result = DEVOICE_DONE;
+	}
 	if (cu->modes & CSTATUS_VOICE)
+	{
 		channel_mode_va(chansvs.me->me, c, 2, "-v", tu->nick);
+		result = DEVOICE_DONE;
+	}
 	if (ircd->uses_owner && (cu->modes & ircd->owner_mode))
 	{
 		buf[1] = ircd->owner_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 	if (ircd->uses_protect && (cu->modes & ircd->protect_mode))
 	{
 		buf[1] = ircd->protect_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 	if (ircd->uses_halfops && (cu->modes & ircd->halfops_mode))
 	{
 		buf[1] = ircd->halfops_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 
-	return true;
+	return result;
 }
 
 /* Notify at most this many users in private notices, otherwise channel */
@@ -239,6 +252,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	int n;
 	char *targetlist;
 	char *strtokctx;
+	enum devoice_result devoice_result;
 
 	if (!channel || !target)
 	{
@@ -279,7 +293,8 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		{
 			char hostbuf[BUFSIZE];
 
-			if (!devoice_user(si, mc, c, tu))
+			devoice_result = devoice_user(si, mc, c, tu);
+			if (devoice_result == DEVOICE_FAILED)
 				continue;
 
 			hostbuf[0] = '\0';
@@ -291,7 +306,11 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 			n = remove_ban_exceptions(si->service->me, c, tu);
 			if (n > 0)
 				command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
-			notify_victims(si, c, cb, MTYPE_ADD);
+			/* Notify if we did anything. */
+			if (cb != NULL)
+				notify_victims(si, c, cb, MTYPE_ADD);
+			else if (devoice_result == DEVOICE_DONE || n > 0)
+				notify_one_victim(si, c, tu, MTYPE_ADD);
 			logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
 				command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
