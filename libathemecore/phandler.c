@@ -327,6 +327,8 @@ bool generic_is_valid_nick(const char *nick)
 	/* nicknames may not normally begin with a number, due to UID collision */
 	if (IsDigit(*iter))
 		return false;
+	if (*iter == '-')
+		return false;
 
 	for (; *iter != '\0'; iter++)
 	{
