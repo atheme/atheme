@@ -339,6 +339,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	char *strtokctx;
 	char *chancop;
 	char *targetcop;
+	char target_extban[BUFSIZE];
 
 	if (!channel)
 	{
@@ -419,13 +420,10 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 			continue;
 		}
-		else if (validhostmask(target))
+		else if (make_extbanmask(target_extban, sizeof target_extban, target),
+				(cb = chanban_find(c, target_extban, banlike_char)) != NULL ||
+				validhostmask(target))
 		{
-			char target_extban[BUFSIZE];
-
-		 	make_extbanmask(target_extban, sizeof target_extban, target);
-
-			cb = chanban_find(c, target_extban, banlike_char);
 			if (cb != NULL)
 			{
 				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, cb->mask);
