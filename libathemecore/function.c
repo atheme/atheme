@@ -410,7 +410,8 @@ bool validhostmask(const char *host)
 	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
 		return false;
 
-	if (host[0] == ',' || host[0] == '-' || host[0] == '#' || host[0] == '@' || host[0] == '!')
+	if (host[0] == ',' || host[0] == '-' || host[0] == '#' ||
+			host[0] == '@' || host[0] == '!' || host[0] == ':')
 		return false;
 
 	return true;
@@ -466,7 +467,7 @@ char *pretty_mask(char *mask)
                         *t++ = '\0';
                         if(*t != '\0')
                                 user = t;
-                        if(*mask != '\0' && *mask != ':')
+                        if(*mask != '\0')
                                 nick = mask;
                 }
                 else
@@ -479,7 +480,7 @@ char *pretty_mask(char *mask)
         {
                 ex = t;
                 *t++ = '\0';
-                if(*mask != '\0' && *mask != ':')
+                if(*mask != '\0')
                         nick = mask;
                 if(*t != '\0')
                         user = t;
@@ -491,7 +492,7 @@ char *pretty_mask(char *mask)
         }
         else
         {
-                if(*mask != '\0' && *mask != ':')
+                if(*mask != '\0')
                         nick = mask;
         }
 
