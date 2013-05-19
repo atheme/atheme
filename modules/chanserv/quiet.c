@@ -275,9 +275,6 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
-		if (invert_purpose(si, parc, channel, &target, '-', &cs_cmd_unquiet))
-			continue;
-
 		if ((tu = user_find_named(target)))
 		{
 			char hostbuf[BUFSIZE];
@@ -330,8 +327,6 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	chanban_t *cb;
 	char *targetlist;
 	char *strtokctx;
-	char *chancop;
-	char *targetcop;
 	char target_extban[BUFSIZE];
 
 	if (!channel)
@@ -377,13 +372,6 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
-		chancop = strdup(channel);
-		targetcop = strdup(target);
-		if (invert_purpose(si, parc, chancop, &targetcop, '+', &cs_cmd_quiet))
-			continue;
-		free(chancop);
-		free(targetcop);
-
 		if ((tu = user_find_named(target)))
 		{
 			mowgli_node_t *n, *tn;
