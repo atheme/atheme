@@ -25,7 +25,7 @@
 
 DECLARE_MODULE_V1("protocol/base36uid", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
-static char new_uid[9];		/* allow for \0 */
+static char new_uid[10];		/* allow for \0 */
 static unsigned int uindex = 0;
 
 static void base36_uid_init(const char *sid)
