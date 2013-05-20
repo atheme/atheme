@@ -29,9 +29,14 @@ static bool bursting = false;
 
 void bootstrap(void)
 {
-	me.name = sstrdup("services.dereferenced.org");
-	me.numeric = sstrdup("00A");
-	me.desc = sstrdup("dragon ircd linking performance benchmark");
+	if (me.name == NULL)
+		me.name = sstrdup("services.dereferenced.org");
+
+	if (me.numeric == NULL)
+		me.numeric = sstrdup("00A");
+
+	if (me.desc == NULL)
+		me.desc = sstrdup("dragon ircd linking performance benchmark");
 
 	servtree_update(NULL);
 
