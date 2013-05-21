@@ -16,13 +16,14 @@ DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Athe
 
 static bool use_esvid = false;
 static bool use_mlock = false;
+static char ts6sid[3 + 1] = "";
 
 /* *INDENT-OFF* */
 
 ircd_t Unreal = {
         "UnrealIRCd 3.1 or later",      /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
         true,                           /* Whether or not we support channel owners. */
         true,                           /* Whether or not we support channel protection. */
@@ -323,6 +324,12 @@ static unsigned int unreal_server_login(void)
 	me.bursting = true;
 
 	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
+
+	if (me.numeric)
+		sts("PROTOCTL SID=%s", me.numeric);
+	else
+		ircd->uses_uid = false;
+
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
 	services_init();
@@ -1210,7 +1217,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		inf++;
 	else
 		inf = parv[2];
-	s = handle_server(si, parv[0], NULL, atoi(parv[1]), inf);
+	s = handle_server(si, parv[0], si->s || !ircd->uses_uid ? NULL : ts6sid, atoi(parv[1]), inf);
 
 	if (s != NULL && s->uplink != me.me)
 	{
@@ -1337,12 +1344,18 @@ static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 			use_esvid = true;
 		else if (!irccasecmp(parv[i], "MLOCK"))
 			use_mlock = true;
+		else if (!strncmp(parv[i], "SID=", 4))
+		{
+			ircd->uses_uid = true;
+			mowgli_strlcpy(ts6sid, (parv[i] + 4), sizeof(ts6sid));
+		}
 	}
 }
 
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
 	server_login = &unreal_server_login;
