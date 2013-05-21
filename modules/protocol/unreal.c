@@ -1228,6 +1228,22 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_sid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	const char *inf;
+
+	s = handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[3]);
+
+	if (s != NULL && s->uplink != me.me)
+	{
+		/* elicit PONG for EOB detection; pinging uplink is
+		 * already done elsewhere -- jilles
+		 */
+		sts(":%s PING %s %s", ME, me.name, s->sid);
+	}
+}
+
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
@@ -1418,6 +1434,7 @@ void _modinit(module_t * m)
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SID", m_sid, 4, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
 	pcommand_add("VERSION", m_version, 1, MSRC_USER);
