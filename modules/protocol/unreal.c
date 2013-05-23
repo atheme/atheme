@@ -334,6 +334,8 @@ static unsigned int unreal_server_login(void)
 
 	services_init();
 
+	sts(":%s EOS", ME);
+
 	return 0;
 }
 
@@ -647,7 +649,7 @@ static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 
 static void unreal_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
-	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
+	sts(":%s SVSNICK %s %s %lu", CLIENT_NAME(source), CLIENT_NAME(u), newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
@@ -1087,7 +1089,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	size_t iplen;
 	char ipdata[16];
 
-	if (parc == 12)
+	if (parc > 10)
 	{
 		s = server_find(parv[5]);
 		if (!s)
