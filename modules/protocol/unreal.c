@@ -351,12 +351,12 @@ static void unreal_introduce_nick(user_t *u)
 /* invite a user to a channel */
 static void unreal_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
 static void unreal_quit_sts(user_t *u, const char *reason)
 {
-	sts(":%s QUIT :%s", u->nick, reason);
+	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
 /* WALLOPS wrapper */
@@ -370,10 +370,10 @@ static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
-				c->name, modes, u->nick);
+				c->name, modes, CLIENT_NAME(u));
 	else
 		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts,
-				c->name, u->nick);
+				c->name, CLIENT_NAME(u));
 }
 
 /* lower TS */
@@ -416,17 +416,17 @@ static void unreal_msg_global_sts(user_t *from, const char *mask, const char *te
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : ME, ircd->tldprefix, tld->name, text);
+			sts(":%s PRIVMSG %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : ME, ircd->tldprefix, mask, text);
+		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
 static void unreal_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : ME, target->nick, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
 static void unreal_notice_global_sts(user_t *from, const char *mask, const char *text)
@@ -439,16 +439,16 @@ static void unreal_notice_global_sts(user_t *from, const char *mask, const char 
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s NOTICE %s*%s :%s", from ? from->nick : ME, ircd->tldprefix, tld->name, text);
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s NOTICE %s%s :%s", from ? from->nick : ME, ircd->tldprefix, mask, text);
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 static void unreal_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : ME, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
 static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
@@ -460,7 +460,7 @@ static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, cons
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
+	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
 /* KILL wrapper */
@@ -487,7 +487,7 @@ static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reaso
 			 * dropped.
 			 */
 		}
-		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
 	}
 	else
 		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
@@ -496,7 +496,7 @@ static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reaso
 /* PART wrapper */
 static void unreal_part_sts(channel_t *c, user_t *u)
 {
-	sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
