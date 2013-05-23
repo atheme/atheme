@@ -323,7 +323,7 @@ static unsigned int unreal_server_login(void)
 
 	me.bursting = true;
 
-	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
+	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID VHP");
 
 	if (me.numeric)
 		sts("PROTOCTL SID=%s", me.numeric);
@@ -1000,7 +1000,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	size_t iplen;
 	char ipdata[16];
 
-	if (parc == 10 || parc == 11)
+	if (parc == 12)
 	{
 		s = si->s;
 		if (!s)
@@ -1087,7 +1087,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	size_t iplen;
 	char ipdata[16];
 
-	if (parc == 10 || parc == 11)
+	if (parc == 12)
 	{
 		s = server_find(parv[5]);
 		if (!s)
