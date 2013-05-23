@@ -347,7 +347,7 @@ static void unreal_introduce_nick(user_t *u)
 	if (!ircd->uses_uid)
 		sts("NICK %s 1 %lu %s %s %s * %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
 	else
-		sts(":%s UID %s 1 %lu %s %s %s * %sS * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
+		sts(":%s UID %s 1 %lu %s %s %s * %sS * * * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
 }
 
 /* invite a user to a channel */
