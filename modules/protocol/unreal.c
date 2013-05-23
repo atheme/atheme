@@ -342,7 +342,10 @@ static void unreal_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts("NICK %s 1 %lu %s %s %s * %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+	if (!ircd->uses_uid)
+		sts("NICK %s 1 %lu %s %s %s * %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+	else
+		sts(":%s UID %s 1 %lu %s %s %s * %sS * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -985,6 +988,93 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_uid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+	bool realchange;
+	const char *vhost;
+	const char *ipb64;
+	char ipstring[64];
+	int af;
+	size_t iplen;
+	char ipdata[16];
+
+	if (parc == 10 || parc == 11)
+	{
+		s = si->s;
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", parv[0]);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, si->s->name);
+
+		vhost = strcmp(parv[8], "*") ? parv[8] : NULL;
+		iplen = 0;
+		if (parc == 11 && strcmp(parv[parc - 2], "*"))
+		{
+			ipb64 = parv[parc - 2];
+			af = AF_INET;
+			if (strlen(ipb64) == 8)
+			{
+				iplen = 4;
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
+					iplen = 0;
+				af = AF_INET;
+			}
+#ifdef AF_INET6
+			else if (strlen(ipb64) == 24)
+			{
+				iplen = 16;
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
+					iplen = 0;
+				af = AF_INET6;
+			}
+#endif
+			if (iplen != 0)
+				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
+					iplen = 0;
+		}
+		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, parv[5], parv[parc - 1], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
+
+		user_mode(u, parv[7]);
+
+		/*
+		 * with ESVID:
+		 * If the user's SVID is equal to their accountname,
+		 * they're properly logged in.  Alternatively, the
+		 * 'without ESVID' criteria is used. --nenolod
+		 *
+		 * without ESVID:
+		 * If the user's SVID is equal to their nick TS,
+		 * they're properly logged in --jilles
+		 */
+		if (use_esvid && !IsDigit(*parv[6]))
+		{
+			handle_burstlogin(u, parv[6], 0);
+
+			if (authservice_loaded && should_reg_umode(u))
+				sts(":%s SVS2MODE %s +r", nicksvs.nick, u->nick);
+		}
+		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
+			handle_burstlogin(u, NULL, 0);
+
+		handle_nickchange(u);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
@@ -1427,6 +1517,7 @@ void _modinit(module_t * m)
 	pcommand_add("SJOIN", m_sjoin, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("UID", m_uid, 10, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("UMODE2", m_umode, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
