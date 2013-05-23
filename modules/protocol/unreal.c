@@ -359,17 +359,17 @@ static void unreal_quit_sts(user_t *u, const char *reason)
 /* WALLOPS wrapper */
 static void unreal_wallops_sts(const char *text)
 {
-	sts(":%s GLOBOPS :%s", me.name, text);
+	sts(":%s GLOBOPS :%s", ME, text);
 }
 
 /* join a channel */
 static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
 				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts,
 				c->name, u->nick);
 }
 
@@ -413,17 +413,17 @@ static void unreal_msg_global_sts(user_t *from, const char *mask, const char *te
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : ME, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
 static void unreal_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+	sts(":%s NOTICE %s :%s", from ? from->nick : ME, target->nick, text);
 }
 
 static void unreal_notice_global_sts(user_t *from, const char *mask, const char *text)
@@ -436,16 +436,16 @@ static void unreal_notice_global_sts(user_t *from, const char *mask, const char 
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s NOTICE %s*%s :%s", from ? from->nick : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s NOTICE %s%s :%s", from ? from->nick : ME, ircd->tldprefix, mask, text);
 }
 
 static void unreal_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? from->nick : ME, target->name, text);
 }
 
 static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
@@ -487,7 +487,7 @@ static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reaso
 		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
 	}
 	else
-		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -502,7 +502,7 @@ static void unreal_kline_sts(const char *server, const char *user, const char *h
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	sts(":%s TKL + G %s %s %s %lu %lu :%s", ME, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -511,7 +511,7 @@ static void unreal_unkline_sts(const char *server, const char *user, const char 
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL - G %s %s %s", me.name, user, host, svs != NULL ? svs->nick : me.name);
+	sts(":%s TKL - G %s %s %s", ME, user, host, svs != NULL ? svs->nick : me.name);
 }
 
 static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
@@ -531,12 +531,12 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 	if (*escapedreason == ':')
 		*escapedreason = ';';
 
-	sts(":%s SVSNLINE + %s :%s", me.name, escapedreason, realname);
+	sts(":%s SVSNLINE + %s :%s", ME, escapedreason, realname);
 }
 
 static void unreal_unxline_sts(const char *server, const char *realname)
 {
-	sts(":%s SVSNLINE - :%s", me.name, realname);
+	sts(":%s SVSNLINE - :%s", ME, realname);
 }
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
@@ -550,7 +550,7 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 	}
 
 	svs = service_find("operserv");
-	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	sts(":%s TKL + Q * %s %s %lu %lu :%s", ME, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 static void unreal_unqline_sts(const char *server, const char *name)
@@ -558,7 +558,7 @@ static void unreal_unqline_sts(const char *server, const char *name)
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL - Q * %s %s", me.name, name, svs != NULL ? svs->nick : me.name);
+	sts(":%s TKL - Q * %s %s", ME, name, svs != NULL ? svs->nick : me.name);
 }
 
 /* topic wrapper */
@@ -583,7 +583,7 @@ static void unreal_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void unreal_ping_sts(void)
 {
-	sts("PING :%s", me.name);
+	sts("PING :%s", ME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -625,7 +625,7 @@ static void unreal_jupe(const char *server, const char *reason)
 	server_delete(server);
 
 	svs = service_find("operserv");
-	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : me.name, server, reason);
+	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : ME, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
@@ -652,13 +652,13 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 {
 	if (duration > 0)
 		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
-				me.name, nick, source->nick,
+				ME, nick, source->nick,
 				(unsigned long)(CURRTIME + duration),
 				(unsigned long)CURRTIME,
 				source->nick,
 				mu ? entity(mu)->name : nick);
 	else
-		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
+		sts(":%s TKL - Q H %s %s", ME, nick, source->nick);
 }
 
 static void unreal_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
@@ -712,7 +712,7 @@ static void unreal_mlock_sts(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name,
+	sts(":%s MLOCK %lu %s :%s", ME, (unsigned long)c->ts, c->name,
 				    mychan_get_sts_mlock(mc));
 }
 
@@ -732,7 +732,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mc = MYCHAN_FROM(c)))
 	{
 		/* Unregistered channel. Clear the MLOCK. */
-		sts(":%s MLOCK %lu %s :", me.name, (unsigned long)c->ts, c->name);
+		sts(":%s MLOCK %lu %s :", ME, (unsigned long)c->ts, c->name);
 		return;
 	}
 
@@ -744,7 +744,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (0 != strcmp(parv[2], mlock))
 	{
 		/* MLOCK is changing, with the same TS. Bounce back the correct one. */
-		sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name, mlock);
+		sts(":%s MLOCK %lu %s :%s", ME, (unsigned long)c->ts, c->name, mlock);
 	}
 }
 
@@ -784,7 +784,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
+	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
@@ -1224,7 +1224,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, s->name);
+		sts(":%s PING %s %s", ME, me.name, s->name);
 	}
 }
 
