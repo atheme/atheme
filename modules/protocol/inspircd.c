@@ -1480,7 +1480,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			/* XXX check/store CHANMAX/IDENTMAX */
 		}
 	}
-	else if (strcasecmp(parv[0], "MODULES") == 0 && parc > 1)
+	else if ((strcasecmp(parv[0], "MODULES") == 0 || strcasecmp(parv[0], "MODSUPPORT") == 0) && parc > 1)
 	{
 		if (strstr(parv[1], "m_services_account.so"))
 		{
