@@ -323,7 +323,7 @@ static unsigned int unreal_server_login(void)
 
 	me.bursting = true;
 
-	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID VHP");
+	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
 
 	if (me.numeric)
 		sts("PROTOCTL SID=%s", me.numeric);
