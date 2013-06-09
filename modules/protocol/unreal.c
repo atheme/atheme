@@ -14,6 +14,7 @@
 
 DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
+static bool has_protoctl = false;
 static bool use_esvid = false;
 static bool use_mlock = false;
 static char ts6sid[3 + 1] = "";
@@ -322,17 +323,11 @@ static unsigned int unreal_server_login(void)
 		return 1;
 
 	me.bursting = true;
+	has_protoctl = false;
 
 	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
-
-	if (me.numeric)
-		sts("PROTOCTL SID=%s", me.numeric);
-	else
-		ircd->uses_uid = false;
-
+	sts("PROTOCTL SID=%s", me.numeric);
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-
-	services_init();
 
 	sts(":%s EOS", ME);
 
@@ -1304,6 +1299,19 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 	const char *inf;
 
+	/* because multiple PROTOCTL messages are allowed without a PROTOCTL END,
+	 * and even if we added a PROTOCTL END in unreal 3.4, we'd still have to do
+	 * this hack in order to support 3.2... -- kaniini
+	 */
+	if (has_protoctl)
+	{
+		if (ts6sid[0] == '\0')
+			ircd->uses_uid = false;
+
+		services_init();
+		has_protoctl = false;	/* only once after PROTOCTL message. */
+	}
+
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	if (si->s == NULL && (inf = strchr(parv[2], ' ')) != NULL)
 		inf++;
@@ -1445,6 +1453,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i;
+
+	has_protoctl = true;
 
 	for (i = 0; i < parc; i++)
 	{
