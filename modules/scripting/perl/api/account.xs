@@ -18,6 +18,12 @@ CODE:
 OUTPUT:
 	RETVAL
 
+const char *
+uid(Atheme_Entity self)
+CODE:
+	RETVAL = self->id;
+OUTPUT:
+	RETVAL
 
 
 MODULE = Atheme			PACKAGE = Atheme::Account
