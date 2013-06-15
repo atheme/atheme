@@ -61,3 +61,16 @@ notice(Atheme_Account self, Atheme_Service from, const char * text)
 CODE:
 	myuser_notice(from->nick, self, "%s", text);
 
+void
+vhost(Atheme_Account self, const char *host)
+CODE:
+	mowgli_node_t *n;
+	user_t *u;
+
+	metadata_add(self, "private:usercloak", host);
+
+	MOWGLI_ITER_FOREACH(n, self->logins.head)
+	{
+        u = n->data;
+        user_sethost(nicksvs.me->me, u, host);
+	}

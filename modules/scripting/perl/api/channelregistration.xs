@@ -28,6 +28,36 @@ CODE:
 OUTPUT:
 	RETVAL
 
+void
+drop(Atheme_ChannelRegistration self)
+CODE:
+    hook_call_channel_drop (self);
+
+    if (self->chan != NULL && !(self->chan->flags & CHAN_LOG)) {
+        part (self->name, chansvs.nick);
+    }
+
+    object_unref (self);
+
+void
+transfer (Atheme_ChannelRegistration self, Atheme_Sourceinfo si, Atheme_Entity user)
+CODE:
+	mowgli_node_t *n;
+
+	chanacs_t *ca;
+
+    MOWGLI_ITER_FOREACH(n, self->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->entity != NULL && ca->level & CA_FOUNDER)
+			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
+	}
+
+	self->used = CURRTIME;
+	chanacs_change_simple(self, user, NULL, CA_FOUNDER_0, 0, entity(si->smu));
+
+    metadata_delete(self, "private:verify:founderchg:newfounder");
+	metadata_delete(self, "private:verify:founderchg:timestamp");
 
 MODULE = Atheme			PACKAGE = Atheme::ChanAcs
 
