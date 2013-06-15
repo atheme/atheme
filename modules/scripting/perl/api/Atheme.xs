@@ -36,3 +36,28 @@ INCLUDE: internal_list.xs
 
 INCLUDE: hooks.xs
 INCLUDE: log.xs
+
+MODULE = Atheme			PACKAGE = Atheme
+
+void
+wallops (const char * message)
+CODE:
+    wallops ("%s", message);
+
+void
+metadata_add (Atheme_Account self, const char * name, const char * value)
+CODE:
+    metadata_add (self, name, value);
+
+const char *
+metadata_find (Atheme_Account self, const char * name)
+CODE:
+    metadata_t *md = metadata_find (self, name);
+
+    if (md == NULL) {
+        RETVAL = "";
+    } else {
+        RETVAL = md->value;
+    }
+OUTPUT:
+    RETVAL
