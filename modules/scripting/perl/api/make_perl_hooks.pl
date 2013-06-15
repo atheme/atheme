@@ -104,7 +104,15 @@ my %hook_structs = (
 	hook_user_nick_t => {
 		u => [ 'user_t', '+user' ],
 		oldnick => 'const char *',
-	}
+	},
+	hook_channel_mode_t => {
+		u => [ 'user_t', 'user' ],
+		c => [ 'channel_t', 'channel' ],
+	},
+	hook_user_delete_t => {
+		u => [ 'user_t', 'user' ],
+		comment => 'const char *',
+	},
 );
 
 sub c_var_to_sv {
@@ -131,7 +139,7 @@ sub c_var_from_sv {
 	}
 }
 
-open my $hooktypes, "$FindBin::Bin/../../../../libathemecore/hooktypes.in"
+open my $hooktypes, "$FindBin::Bin/../../../../include/hooktypes.in"
 	or die "Couldn't open hooktypes.in: $!";
 
 while (<$hooktypes>) {
