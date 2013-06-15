@@ -29,9 +29,9 @@ OUTPUT:
 MODULE = Atheme			PACKAGE = Atheme::Account
 
 Atheme_Account
-find(SV * package, const char * accountname)
+find(SV * package, const char * identifier)
 CODE:
-	RETVAL = myuser_find(accountname);
+	RETVAL = myuser_find_ext(identifier);
 OUTPUT:
 	RETVAL
 
