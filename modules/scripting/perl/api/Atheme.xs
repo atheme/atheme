@@ -36,3 +36,10 @@ INCLUDE: internal_list.xs
 
 INCLUDE: hooks.xs
 INCLUDE: log.xs
+
+MODULE = Atheme			PACKAGE = Atheme
+
+void
+wallops (const char * message)
+CODE:
+    wallops ("%s", message);
