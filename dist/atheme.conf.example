@@ -729,7 +729,7 @@ loadmodule "modules/groupserv/list";
 loadmodule "modules/groupserv/listchans";
 loadmodule "modules/groupserv/register";
 loadmodule "modules/groupserv/regnolimit";
-loadmodule "modules/groupserv/invite";
+#loadmodule "modules/groupserv/invite";
 loadmodule "modules/groupserv/set";
 loadmodule "modules/groupserv/set_channel";
 loadmodule "modules/groupserv/set_description";
