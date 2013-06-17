@@ -538,23 +538,14 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 		command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 }
 
-static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], unsigned int restrictflags)
+static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
 {
 	unsigned int out;
 	int i;
 
 	out = in;
 	for (i = 0; i < parc; i++)
-	{
-#ifdef NOTYET
-		unsigned int flag;
-		flag = xflag_apply(0, parv[i]);
-		if (flag & restrictflags)
-			continue;
-#endif
-
 		out = xflag_apply(out, parv[i]);
-	}
 
 	return out;
 }
@@ -1170,7 +1161,14 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
+	if (newflags & restrictflags)
+	{
+		unsigned int delta = newflags & restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to add flags: \2%s\2"), xflag_tostr(delta));
+		return;
+	}
 
 	if (newflags & CA_FOUNDER)
 		newflags |= CA_FLAGS;
@@ -1250,7 +1248,14 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
+	if (newflags & restrictflags)
+	{
+		unsigned int delta = newflags & restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
+		return;
+	}
 
 	if (newflags & CA_FOUNDER)
 		newflags |= CA_FLAGS;
