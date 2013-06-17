@@ -196,17 +196,7 @@ static mowgli_node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int t
 		if (cb->type != type)
 			continue;
 
-		/*
-		 * strip any banforwards from the mask. (SRV-73)
-		 * charybdis itself doesn't support banforward but i don't feel like copying
-		 * this stuff into ircd-seven and it is possible that charybdis may support them
-		 * one day.
-		 *   --nenolod
-		 */
 		mowgli_strlcpy(strippedmask, cb->mask, sizeof strippedmask);
-		p = strrchr(strippedmask, '$');
-		if (p != NULL && p != strippedmask)
-			*p = 0;
 
 		if ((!match(strippedmask, hostbuf) || !match(strippedmask, realbuf) || !match(strippedmask, ipbuf) || !match_cidr(strippedmask, ipbuf)))
 			return n;
