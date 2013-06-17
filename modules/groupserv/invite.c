@@ -8,7 +8,6 @@
 
 /* TODO:
  * We should probably add a way for the target user to remove pending invites
- * and add a notification to the target user that they were invited to a group
  */
 
 #include "atheme.h"
@@ -32,6 +31,8 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	groupacs_t *ga;
 	char *group = parv[0];
 	char *user = parv[1];
+	char buf[BUFSIZE];
+	service_t *svs;
 
 	if (!group || !user)
 	{
@@ -78,6 +79,18 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	metadata_add(mu, "private:groupinvite", group);
+
+	if ((svs = service_find("memoserv")) != NULL)
+	{
+		snprintf(buf, BUFSIZE, "%s [auto memo] You have been invited to the group %s.", user, group);
+
+		command_exec_split(svs, si, "SEND", buf, svs->commands);
+	}
+	else
+	{
+		myuser_notice(si->service->nick, mu, "You have been invited to the group %s.", group);
+	}
+
 	logcommand(si, CMDLOG_SET, "INVITE: \2%s\2 \2%s\2", group, user);
 	command_success_nodata(si, _("\2%s\2 has been invited to \2%s\2"), user, group);
 }
