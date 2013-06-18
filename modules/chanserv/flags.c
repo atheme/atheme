@@ -94,20 +94,18 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return iter.res;
 }
 
-static void do_list(sourceinfo_t *si, mychan_t *mc, bool operoverride)
+static void do_list(sourceinfo_t *si, mychan_t *mc)
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
+	bool operoverride = false;
 	const char *str1, *str2;
 	unsigned int i = 1;
 
-	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW) && !operoverride)
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
-		{
-			command_fail(si, fault_noprivs, _("The flags on %s are hidden from you. Use the FORCE option to view them."), mc->name);
-			return;
-		}
+			operoverride = true;
 		else
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
@@ -177,12 +175,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		do_list(si, mc, false);
-		return;
-	}
-	else if (!strcasecmp(target, "FORCE") && has_priv(si, PRIV_CHAN_AUSPEX))
-	{
-		do_list(si, mc, true);
+		do_list(si, mc);
 		return;
 	}
 
@@ -215,7 +208,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	else if (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
 	{
-		do_list(si, mc, false);
+		do_list(si, mc);
 		free(target);
 
 		return;

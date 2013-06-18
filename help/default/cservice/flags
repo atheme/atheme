@@ -7,11 +7,7 @@ supports nicknames, groups and hostmasks as targets.
 When only the channel argument is given, a listing of
 permissions granted to users will be displayed.
 
-Syntax: FLAGS <#channel> [FORCE]
-
-The FORCE option allows you to view the flag list regardless
-of whether you have the +A flag. This option is restricted
-to IRC Operators.
+Syntax: FLAGS <#channel>
 
 Otherwise, an access entry is modified. A modification may be
 specified by a template name (changes the access to the
