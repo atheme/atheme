@@ -28,6 +28,55 @@ CODE:
 OUTPUT:
 	RETVAL
 
+Atheme_ChannelRegistration
+register (Atheme_Channel self, Atheme_Sourceinfo si, Atheme_Account user)
+CODE:
+    char *name = self->name;
+    mychan_t *mc = mychan_add(name);
+
+    if (mc == NULL) {
+        Perl_croak (aTHX_ "Failed to create channel registration for %s", name);
+    }
+
+    mc->registered = CURRTIME;
+    mc->used = CURRTIME;
+    mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
+    if (self->limit == 0)
+        mc->mlock_off |= CMODE_LIMIT;
+    if (self->key == NULL)
+        mc->mlock_off |= CMODE_KEY;
+    mc->flags |= config_options.defcflags;
+
+    if ( chanacs_add(mc, entity(user), custom_founder_check(), CURRTIME, entity(si->smu)) == NULL) {
+        object_unref (mc);
+        mc = NULL;
+        Perl_croak (aTHX_ "Failed to create channel access for %s", name);
+    }
+
+    RETVAL = mc;
+OUTPUT:
+    RETVAL
+
+unsigned int
+limit (Atheme_Channel self)
+CODE:
+    RETVAL = self->limit;
+OUTPUT:
+    RETVAL
+
+const char *
+key (Atheme_Channel self)
+CODE:
+    RETVAL = self->key;
+OUTPUT:
+    RETVAL
+
+time_t
+ts (Atheme_Channel self)
+CODE:
+    RETVAL = self->ts;
+OUTPUT:
+    RETVAL
 
 MODULE = Atheme			PACKAGE = Atheme::ChanUser
 
