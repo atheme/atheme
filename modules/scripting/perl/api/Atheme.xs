@@ -29,6 +29,7 @@ INCLUDE: metadata.xs
 INCLUDE: account.xs
 INCLUDE: channel.xs
 INCLUDE: channelregistration.xs
+INCLUDE: config.xs
 INCLUDE: nickregistration.xs
 INCLUDE: server.xs
 
