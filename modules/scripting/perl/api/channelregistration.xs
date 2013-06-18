@@ -59,6 +59,22 @@ CODE:
     metadata_delete(self, "private:verify:founderchg:newfounder");
 	metadata_delete(self, "private:verify:founderchg:timestamp");
 
+time_t
+used_time (Atheme_ChannelRegistration self)
+CODE:
+    RETVAL = self->used;
+OUTPUT:
+    RETVAL
+
+unsigned int
+flags (Atheme_ChannelRegistration self, unsigned int newflags = 0)
+CODE:
+    if (items > 1)
+        self->flags = newflags;
+    RETVAL = self->flags;
+OUTPUT:
+    RETVAL
+
 MODULE = Atheme			PACKAGE = Atheme::ChanAcs
 
 Atheme_ChannelRegistration
