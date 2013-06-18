@@ -180,7 +180,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		do_list(si, mc, false);
 		return;
 	}
-	else if (!strcasecmp(target, "FORCE"))
+	else if (!strcasecmp(target, "FORCE") && has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		do_list(si, mc, true);
 		return;
