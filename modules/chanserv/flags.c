@@ -105,7 +105,7 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, bool operoverride)
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
 		{
-			command_fail(si, fault_noprivs, _("This channel's flags are private. Use the FORCE option to view them."));
+			command_fail(si, fault_noprivs, _("The flags on %s are hidden from you. Use the FORCE option to view them."), mc->name);
 			return;
 		}
 		else
