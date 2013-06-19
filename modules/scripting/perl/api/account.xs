@@ -74,3 +74,32 @@ CODE:
         u = n->data;
         user_sethost(nicksvs.me->me, u, host);
 	}
+
+time_t
+registered(Atheme_Account self)
+CODE:
+    RETVAL = self->registered;
+OUTPUT:
+    RETVAL
+
+time_t
+last_login(Atheme_Account self)
+CODE:
+    RETVAL = self->lastlogin;
+OUTPUT:
+    RETVAL
+
+const char *
+last_seen(Atheme_Account self)
+CODE:
+    if (MOWGLI_LIST_LENGTH(&self->logins) != 0) {
+        RETVAL = "now";
+    } else {
+        static char seen[512];
+        time_t last = self->lastlogin;
+        struct tm *timeinfo = localtime (&last);
+        strftime ( seen, 512, "%b %d %H:%M:%S %Y", timeinfo);
+        RETVAL = seen;
+    }
+OUTPUT:
+    RETVAL
