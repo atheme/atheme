@@ -33,6 +33,7 @@ register (Atheme_Channel self, Atheme_Sourceinfo si, Atheme_Account user)
 CODE:
     char *name = self->name;
     mychan_t *mc = mychan_add(name);
+    hook_channel_req_t hdata;
 
     if (mc == NULL) {
         Perl_croak (aTHX_ "Failed to create channel registration for %s", name);
@@ -52,6 +53,11 @@ CODE:
         mc = NULL;
         Perl_croak (aTHX_ "Failed to create channel access for %s", name);
     }
+
+    hdata.si = si;
+    hdata.mc = mc;
+
+    hook_call_channel_register(&hdata);
 
     RETVAL = mc;
 OUTPUT:
