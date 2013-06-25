@@ -923,6 +923,28 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags |= allow_flags(mc, restrictflags);
 	}
 
+	if (!(ca->level & CA_FOUNDER) && newflags & CA_FOUNDER)
+	{
+		if (mychan_num_founders(mc) >= chansvs.maxfounders)
+		{
+			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			chanacs_close(ca);
+			return;
+		}
+		if (mt == NULL)
+		{
+			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+			chanacs_close(ca);
+			return;
+		}
+		if (!myentity_can_register_channel(mt))
+		{
+			command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
+			chanacs_close(ca);
+			return;
+		}
+	}
+
 	oldflags = ca->level;
 
 	addflags = newflags & ~oldflags;
@@ -1048,6 +1070,28 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags = allow_flags(mc, restrictflags);
 		else
 			restrictflags |= allow_flags(mc, restrictflags);
+	}
+
+	if (!(ca->level & CA_FOUNDER) && newflags & CA_FOUNDER)
+	{
+		if (mychan_num_founders(mc) >= chansvs.maxfounders)
+		{
+			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			chanacs_close(ca);
+			return;
+		}
+		if (mt == NULL)
+		{
+			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+			chanacs_close(ca);
+			return;
+		}
+		if (!myentity_can_register_channel(mt))
+		{
+			command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
+			chanacs_close(ca);
+			return;
+		}
 	}
 
 	oldflags = ca->level;
