@@ -1153,6 +1153,10 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
 	oldflags = get_template_flags(mc, role);
 
 	if (oldflags != 0)
@@ -1162,9 +1166,9 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
-	if (newflags & restrictflags)
+	if (newflags & ~restrictflags)
 	{
-		unsigned int delta = newflags & restrictflags;
+		unsigned int delta = newflags & ~restrictflags;
 
 		command_fail(si, fault_badparams, _("You do not have appropriate permissions to add flags: \2%s\2"), xflag_tostr(delta));
 		return;
@@ -1240,6 +1244,10 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
 	oldflags = get_template_flags(mc, role);
 
 	if (oldflags == 0)
@@ -1249,9 +1257,9 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
-	if (newflags & restrictflags)
+	if ((oldflags | newflags) & ~restrictflags)
 	{
-		unsigned int delta = newflags & restrictflags;
+		unsigned int delta = (oldflags | newflags) & ~restrictflags;
 
 		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
 		return;
@@ -1301,9 +1309,9 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	unsigned int level;
 	const char *channel = parv[0];
 	const char *role = parv[1];
+	unsigned int oldflags, restrictflags;
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -1325,10 +1333,23 @@ static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	level = get_template_flags(mc, role);
-	if (level == 0)
+	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
+	oldflags = get_template_flags(mc, role);
+	if (oldflags == 0)
 	{
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
+	if (oldflags & ~restrictflags)
+	{
+		unsigned int delta = oldflags & ~restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
 		return;
 	}
 
