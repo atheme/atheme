@@ -1047,14 +1047,6 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	req.ca = ca;
 	req.oldlevel = ca->level;
 
-	newflags = get_template_flags(mc, role);
-	if (newflags == 0)
-	{
-		chanacs_close(ca);
-		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
-		return;
-	}
-
 	restrictflags = chanacs_source_flags(mc, si);
 	if (restrictflags & CA_FOUNDER)
 		restrictflags = ca_all;
