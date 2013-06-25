@@ -515,8 +515,8 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 			if (ca->level != oldflags)
 				continue;
 
-			/* don't change entries involving foundership status. */
-			if (oldflags & CA_FOUNDER)
+			/* don't change foundership status. */
+			if ((oldflags ^ flags) & CA_FOUNDER)
 				continue;
 
 			req.ca = ca;
@@ -1262,6 +1262,12 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 		unsigned int delta = (oldflags | newflags) & ~restrictflags;
 
 		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
+		return;
+	}
+
+	if ((oldflags ^ newflags) & CA_FOUNDER)
+	{
+		command_fail(si, fault_unimplemented, _("Adding or removing founder status from a role is not implemented."));
 		return;
 	}
 
