@@ -599,12 +599,12 @@ static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost
 		 */
 		/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
 		if (should_reg_umode(u))
-			sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts);
+			sts(":%s SVS2MODE %s +r %lu", nicksvs.nick, u->nick, (unsigned long)u->ts);
 
 		return;
 	}
 
-	sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
+	sts(":%s SVS2MODE %s +r %s", nicksvs.nick, u->nick, entity(account)->name);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -613,7 +613,7 @@ static bool unreal_on_logout(user_t *u, const char *account)
 	return_val_if_fail(u != NULL, false);
 
 	if (use_esvid || !nicksvs.no_nick_ownership)
-		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+		sts(":%s SVS2MODE %s -r 0", nicksvs.nick, u->nick);
 
 	return false;
 }
@@ -1171,10 +1171,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
-				sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, parv[0], atol(parv[1]));
+				sts(":%s SVS2MODE %s +r %lu", nicksvs.nick, parv[0], atol(parv[1]));
 			else
 				/* changed from registered nick, remove +r */
-				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
+				sts(":%s SVS2MODE %s -r 0", nicksvs.nick, parv[0]);
 		}
 
 		handle_nickchange(si->su);
@@ -1437,7 +1437,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (!use_esvid && u != NULL && should_reg_umode(u))
-		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick,
+		sts(":%s SVS2MODE %s +r %lu", nicksvs.nick, u->nick,
 				(unsigned long)u->ts);
 }
 
@@ -1447,7 +1447,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && (!use_esvid || !nicksvs.no_nick_ownership))
-		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+		sts(":%s SVS2MODE %s -r 0", nicksvs.nick, u->nick);
 }
 
 static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
