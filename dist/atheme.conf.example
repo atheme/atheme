@@ -61,7 +61,7 @@
  * ngIRCd 19 or later [experimental]            modules/protocol/ngircd
  * ShadowIRCd 5.0 or later                      modules/protocol/shadowircd
  * SporksIRCd                                   modules/protocol/sporksircd
- * UnrealIRCd 3.1/3.2                           modules/protocol/unreal
+ * UnrealIRCd 3.2 or later                      modules/protocol/unreal
  *
  * If your IRCd vendor has supplied a module file, build it and load it here
  * instead of one above.
