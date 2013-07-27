@@ -604,7 +604,10 @@ static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost
 		return;
 	}
 
-	sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
+	if (should_reg_umode(u))
+		sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
+	else
+		sts(":%s SVS2MODE %s +d %s", nicksvs.nick, u->nick, entity(account)->name);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -1175,6 +1178,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			else
 				/* changed from registered nick, remove +r */
 				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
+		}
+		else if (realchange && !nicksvs.no_nick_ownership && use_esvid)
+		{
+			if (should_reg_umode(si->su))
+				sts(":%s SVS2MODE %s +r", nicksvs.nick, parv[0]);
+			else
+				sts(":%s SVS2MODE %s -r", nicksvs.nick, parv[0]);
 		}
 
 		handle_nickchange(si->su);
