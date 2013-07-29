@@ -65,7 +65,7 @@ int is_calcoper(char oper);
 // * / = Multiply / Divide         |  [Rank 7]
 // % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //
-static void eval_calc(sourceinfo_t *si, char *s_input)
+static bool eval_calc(sourceinfo_t *si, char *s_input)
 {
 	static char buffer[1024];
 
@@ -78,7 +78,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (s_input == NULL)
 	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return;
+		return false;
 	}
 
 	// Skip leading whitespace
@@ -88,7 +88,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (!*ci)
 	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return;
+		return false;
 	}
 
 	// Validate braces
@@ -106,7 +106,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		else if (!isspace(*ci) && !isdigit(*ci) && *ci != '.' && !is_calcoper(*ci))
 		{
 			command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-			return;
+			return false;
 		}
 		ci++;
 	}
@@ -114,7 +114,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (braces != 0)
 	{
 		command_fail(si, fault_badparams, _("Error: Mismatched braces '( )' in expression."));
-		return;
+		return false;
 	}
 
 	err = do_calc_expr(si, s_input, buffer, &expr);
@@ -132,9 +132,10 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		}
 	}
 	else
-		return;
+		return false;
 
 	gs_command_report(si, "%s", buffer);
+	return true;
 }
 
 
@@ -618,7 +619,8 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	for (i = 0; i < times; i++)
-		eval_calc(si, arg);
+		if (!eval_calc(si, arg))
+			break;
 }
 
 //////////////////////////////////////////////////////////////////////////
