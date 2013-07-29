@@ -135,7 +135,7 @@ static bool eval_calc(sourceinfo_t *si, char *s_input)
 		return false;
 
 	gs_command_report(si, "%s", buffer);
-    return true;
+	return true;
 }
 
 
@@ -620,7 +620,7 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 
 	for (i = 0; i < times; i++)
 		if (!eval_calc(si, arg))
-            return;
+			break;
 }
 
 //////////////////////////////////////////////////////////////////////////
