@@ -62,7 +62,7 @@ struct cmode_ shadowircd_mode_list[] = {
   { 'C', CMODE_NOCTCP },		
   { 'A', CMODE_ADMINONLY },		
   { 'O', CMODE_OPERONLY },		
-  { 'Z', CMODE_SSLONLY },		
+  { 'S', CMODE_SSLONLY },		
   { 'D', CMODE_NOACTIONS },		
   { 'T', CMODE_NONOTICE },		
   { 'G', CMODE_NOCAPS },		
