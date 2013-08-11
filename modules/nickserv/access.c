@@ -325,9 +325,21 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			p = strrchr(host, '.');
-			if (p != NULL)
+			if (strchr(host, ':'))
 			{
+				/* No wildcarded IPs */
+				if (strchr(host, '?') || strchr(host, '*'))
+				{
+					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
+					return;
+				}
+			}
+			else
+			{
+				p = strrchr(host, '.');
+				if (p == NULL)
+					p = host;
+
 				/* No wildcarded IPs */
 				if (isdigit(p[1]) && (strchr(host, '*') || strchr(host, '?')))
 				{
@@ -341,30 +353,20 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 					return;
 				}
-				p--;
-				while (p >= host && *p != '.')
+
+				if (p != host)
 				{
-					if (*p == '?' || *p == '*')
-					{
-						command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
-						return;
-					}
 					p--;
+					while (p >= host && *p != '.')
+					{
+						if (*p == '?' || *p == '*')
+						{
+							command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
+							return;
+						}
+						p--;
+					}
 				}
-			}
-			else if (strchr(host, ':'))
-			{
-				/* No wildcarded IPs */
-				if (strchr(host, '?') || strchr(host, '*'))
-				{
-					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
-					return;
-				}
-			}
-			else /* no '.' or ':' */
-			{
-				command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
-				return;
 			}
 		}
 		if (myuser_access_find(mu, mask))
