@@ -354,7 +354,15 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 	channel_t *c;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
-	if (*path != '#')
+	if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
+	{
+		object_init(object(lf), path, logfile_delete_channel);
+
+		lf->log_path = sstrdup(path);
+		lf->log_type = LOG_INTERACTIVE;
+		lf->write_func = logfile_write_snotices;
+	}
+	else if (*path != '#')
 	{
 		object_init(object(lf), path, logfile_delete_file);
 		if ((lf->log_file = fopen(path, "a")) == NULL)
@@ -375,14 +383,6 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		lf->log_path = sstrdup(path);
 		lf->log_type = LOG_NONINTERACTIVE;
 		lf->write_func = logfile_write;
-	}
-	else if (!strcasecmp(path, "!snotices") || !strcasecmp(path, "!wallops"))
-	{
-		object_init(object(lf), path, logfile_delete_channel);
-
-		lf->log_path = sstrdup(path);
-		lf->log_type = LOG_INTERACTIVE;
-		lf->write_func = logfile_write_snotices;
 	}
 	else
 	{
