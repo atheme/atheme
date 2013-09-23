@@ -33,12 +33,34 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_fdrop);
 }
 
+static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
+{
+	char buf[256];
+	int digest[4];
+	md5_state_t ctx;
+
+	snprintf(buf, sizeof buf, "%lu:%s:%s",
+			(unsigned long)(CURRTIME / 300) - v,
+			get_source_name(si),
+			name);
+	md5_init(&ctx);
+	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
+	md5_finish(&ctx, (unsigned char *)digest);
+	/* note: this depends on byte order, but that's ok because
+	 * it's only going to work in the same atheme instance anyway
+	 */
+	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
+}
+
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn;
 	char *acc = parv[0];
 	char *pass = parv[1];
+	char *key = parv[2];
+	char fullcmd[512];
+	char key0[80], key1[80];
 
 	if (!acc || !pass)
 	{
@@ -93,6 +115,27 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (mu->flags & MU_HOLD)
 	{
 		command_fail(si, fault_noprivs, _("The account \2%s\2 is held; it cannot be dropped."), acc);
+		return;
+	}
+
+	if (!key)
+	{
+		create_challenge(si, entity(mu)->name, 0, key0);
+		snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s %s",
+				(ircd->uses_rcommand == false) ? "msg " : "",
+				nicksvs.me->disp, entity(mu)->name, pass, key0);
+		command_success_nodata(si, _("This is a friendly reminder that you are about to \2destroy\2 the account \2%s\2."),
+				nicksvs.me->disp, entity(mu)->name);
+		command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
+				fullcmd);
+		return;
+	}
+
+	create_challenge(si, entity(mu)->name, 0, key0);
+	create_challenge(si, entity(mu)->name, 1, key1);
+	if (strcmp(key, key0) && strcmp(key, key1))
+	{
+		command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
 		return;
 	}
 
