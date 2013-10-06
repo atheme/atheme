@@ -944,7 +944,7 @@ uplink "irc.example.net" {
 
 	// vhost
 	// The source IP to connect from, used on machines with multiple interfaces.
-	#vhost = "202.119.187.31";
+	#vhost = "192.0.2.5";
 
 	// send_password
 	// The password sent for linking.
