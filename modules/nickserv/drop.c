@@ -125,7 +125,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 				(ircd->uses_rcommand == false) ? "msg " : "",
 				nicksvs.me->disp, entity(mu)->name, pass, key0);
 		command_success_nodata(si, _("This is a friendly reminder that you are about to \2destroy\2 the account \2%s\2."),
-				nicksvs.me->disp, entity(mu)->name);
+				entity(mu)->name);
 		command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
 				fullcmd);
 		return;
