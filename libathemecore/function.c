@@ -43,6 +43,25 @@ char *random_string(int sz)
 	return buf;
 }
 
+void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
+{
+	char buf[256];
+	int digest[4];
+	md5_state_t ctx;
+
+	snprintf(buf, sizeof buf, "%lu:%s:%s",
+			(unsigned long)(CURRTIME / 300) - v,
+			get_source_name(si),
+			name);
+	md5_init(&ctx);
+	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
+	md5_finish(&ctx, (unsigned char *)digest);
+	/* note: this depends on byte order, but that's ok because
+	 * it's only going to work in the same atheme instance anyway
+	 */
+	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
+}
+
 #ifdef HAVE_GETTIMEOFDAY
 /* starts a timer */
 void s_time(struct timeval *sttime)

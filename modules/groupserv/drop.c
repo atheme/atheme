@@ -20,26 +20,6 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_drop = { "DROP", N_("Drops a group registration."), AC_AUTHENTICATED, 2, gs_cmd_drop, { .path = "groupserv/drop" } };
 
-/* I don't like this here, but it works --jdhore */
-static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
-{
-	char buf[256];
-	int digest[4];
-	md5_state_t ctx;
-
-	snprintf(buf, sizeof buf, "%lu:%s:%s",
-			(unsigned long)(CURRTIME / 300) - v,
-			get_source_name(si),
-			name);
-	md5_init(&ctx);
-	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
-	md5_finish(&ctx, (unsigned char *)digest);
-	/* note: this depends on byte order, but that's ok because
-	 * it's only going to work in the same atheme instance anyway
-	 */
-	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
-}
-
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
 	mygroup_t *mg;
