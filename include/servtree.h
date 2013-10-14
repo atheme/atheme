@@ -54,6 +54,7 @@ E void service_unbind_command(service_t *, command_t *);
 
 E void service_named_bind_command(const char *, command_t *);
 E void service_named_unbind_command(const char *, command_t *);
+E void servtree_update(void *dummy);
 
 #endif
 

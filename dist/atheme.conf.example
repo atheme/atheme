@@ -47,21 +47,21 @@
  * Below is a listing of ircd's known to work with the various protocol modules
  * available.
  *
- * Asuka 1.2.1 or later				modules/protocol/asuka
- * Bahamut 1.8.x				modules/protocol/bahamut
- * Charybdis IRCd				modules/protocol/charybdis
- * DreamForge 4.6.7 or later			modules/protocol/dreamforge
- * Hybrid 7.1.2 and later			modules/protocol/hybrid
+ * Asuka 1.2.1 or later                         modules/protocol/asuka
+ * Bahamut 1.8.x                                modules/protocol/bahamut
+ * Charybdis IRCd                               modules/protocol/charybdis
+ * DreamForge 4.6.7 or later                    modules/protocol/dreamforge
+ * Hybrid 7.1.2 and later                       modules/protocol/hybrid
  * InspIRCd 1.2 - 2.1 (link protocol 1201-1204) modules/protocol/inspircd
- * ircd-ratbox 2.0 and later			modules/protocol/ratbox
- * IRCNet ircd (ircd 2.11)			modules/protocol/ircnet
+ * ircd-ratbox 2.0 and later                    modules/protocol/ratbox
+ * IRCNet ircd (ircd 2.11)                      modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
- * ircu 2.10.11.07 or later			modules/protocol/undernet
- * Nefarious IRCu 0.4.0 or later		modules/protocol/nefarious
- * ngIRCd 19 or later [experimental]		modules/protocol/ngircd
- * ShadowIRCd 5.0 or later			modules/protocol/shadowircd
- * SporksIRCd					modules/protocol/sporksircd
- * UnrealIRCd 3.1/3.2				modules/protocol/unreal
+ * ircu 2.10.11.07 or later                     modules/protocol/undernet
+ * Nefarious IRCu 0.4.0 or later                modules/protocol/nefarious
+ * ngIRCd 19 or later [experimental]            modules/protocol/ngircd
+ * ShadowIRCd 5.0 or later                      modules/protocol/shadowircd
+ * SporksIRCd                                   modules/protocol/sporksircd
+ * UnrealIRCd 3.2 or later                      modules/protocol/unreal
  *
  * If your IRCd vendor has supplied a module file, build it and load it here
  * instead of one above.
@@ -74,10 +74,10 @@
  * network that your ircd normally has. If you do not know what this means,
  * you do not need any of them.
  *
- * Disable halfops				modules/protocol/mixin_nohalfops
- * Disable holdnick (use enforcer clients)     modules/protocol/mixin_noholdnick
- * Disable "protect" mode on channels		modules/protocol/mixin_noprotect
- * Disable "owner" mode on channels		modules/protocol/mixin_noowner
+ * Disable halfops                              modules/protocol/mixin_nohalfops
+ * Disable holdnick (use enforcer clients)      modules/protocol/mixin_noholdnick
+ * Disable "protect" mode on channels           modules/protocol/mixin_noprotect
+ * Disable "owner" mode on channels             modules/protocol/mixin_noowner
  */
 #loadmodule "modules/protocol/mixin_nohalfops";
 #loadmodule "modules/protocol/mixin_noholdnick";
@@ -92,8 +92,8 @@
  * 
  * The following backends are available:
  * 
- * Atheme 0.1 flatfile database format		modules/backend/flatfile
- * Open Services Exchange database format	modules/backend/opensex
+ * Atheme 0.1 flatfile database format          modules/backend/flatfile
+ * Open Services Exchange database format       modules/backend/opensex
  * 
  * Most networks will want opensex.
  */
@@ -110,11 +110,11 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
- * PBKDF2 cryptography				modules/crypto/pbkdf2
- * POSIX-style crypt(3)				modules/crypto/posix
- * IRCServices (also Anope etc) compatibility	modules/crypto/ircservices
- * Raw MD5 (Anope compatibility)		modules/crypto/rawmd5
- * Raw SHA1 (Anope compatibility)		modules/crypto/rawsha1
+ * PBKDF2 cryptography                          modules/crypto/pbkdf2
+ * POSIX-style crypt(3)                         modules/crypto/posix
+ * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
+ * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
+ * Raw SHA1 (Anope compatibility)               modules/crypto/rawsha1
  *
  * The ircservices, rawmd5 and rawsha1 modules are only recommended for use with
  * a database converted from other services with password encryption.
@@ -137,7 +137,7 @@ loadmodule "modules/crypto/posix";
  *
  * The following authentication modules are available:
  *
- * LDAP						modules/auth/ldap
+ * LDAP                                         modules/auth/ldap
  *
  * The LDAP module requires OpenLDAP client libraries. It uses them in a
  * synchronous manner, which means that an unresponsive LDAP server can
@@ -155,59 +155,59 @@ loadmodule "modules/crypto/posix";
  * The CrackLib password validation module requires CrackLib to be
  * installed on your system in order to use.
  *
- * Core components				modules/nickserv/main
- * Nickname access lists			modules/nickserv/access
- * Bad email address blocking	modules/nickserv/badmail
- * CertFP fingerprint managment			modules/nickserv/cert
- * CrackLib password validation			modules/nickserv/cracklib
- * DROP command					modules/nickserv/drop
- * Nickname enforcement				modules/nickserv/enforce
- * GHOST command				modules/nickserv/ghost
- * GROUP and UNGROUP commands			modules/nickserv/group
- * HELP command					modules/nickserv/help
- * Nickname expiry override (HOLD command)	modules/nickserv/hold
- * IDENTIFY command				modules/nickserv/identify
- * INFO command					modules/nickserv/info
- * Last quit message in INFO			modules/nickserv/info_lastquit
- * LIST command					modules/nickserv/list
- * LISTMAIL command				modules/nickserv/listmail
- * LISTOWNMAIL command				modules/nickserv/listownmail
- * LOGIN command (for no_nick_ownership)	modules/nickserv/login
- * LOGOUT command				modules/nickserv/logout
- * MARK command					modules/nickserv/mark
- * FREEZE command				modules/nickserv/freeze
- * LISTCHANS command				modules/nickserv/listchans
- * LISTGROUPS command				modules/nickserv/listgroups
- * REGISTER command				modules/nickserv/register
+ * Core components                              modules/nickserv/main
+ * Nickname access lists                        modules/nickserv/access
+ * Bad email address blocking                   modules/nickserv/badmail
+ * CertFP fingerprint managment                 modules/nickserv/cert
+ * CrackLib password validation                 modules/nickserv/cracklib
+ * DROP command                                 modules/nickserv/drop
+ * Nickname enforcement                         modules/nickserv/enforce
+ * GHOST command                                modules/nickserv/ghost
+ * GROUP and UNGROUP commands                   modules/nickserv/group
+ * HELP command                                 modules/nickserv/help
+ * Nickname expiry override (HOLD command)      modules/nickserv/hold
+ * IDENTIFY command                             modules/nickserv/identify
+ * INFO command                                 modules/nickserv/info
+ * Last quit message in INFO                    modules/nickserv/info_lastquit
+ * LIST command                                 modules/nickserv/list
+ * LISTMAIL command                             modules/nickserv/listmail
+ * LISTOWNMAIL command                          modules/nickserv/listownmail
+ * LOGIN command (for no_nick_ownership)        modules/nickserv/login
+ * LOGOUT command                               modules/nickserv/logout
+ * MARK command                                 modules/nickserv/mark
+ * FREEZE command                               modules/nickserv/freeze
+ * LISTCHANS command                            modules/nickserv/listchans
+ * LISTGROUPS command                           modules/nickserv/listgroups
+ * REGISTER command                             modules/nickserv/register
  * Bypass registration limits (REGNOLIMIT)      modules/nickserv/regnolimit
- * Password reset (RESETPASS command)		modules/nickserv/resetpass
- * RESTRICT command				modules/nickserv/restrict
- * Password return (RETURN command)		modules/nickserv/return
- * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
- * Password retrieval allowed to normal users	modules/nickserv/sendpass_user
- * SET command core				modules/nickserv/set_core
+ * Password reset (RESETPASS command)           modules/nickserv/resetpass
+ * RESTRICT command                             modules/nickserv/restrict
+ * Password return (RETURN command)             modules/nickserv/return
+ * Password retrieval (SENDPASS command)        modules/nickserv/sendpass
+ * Password retrieval allowed to normal users   modules/nickserv/sendpass_user
+ * SET command core                             modules/nickserv/set_core
  * Change primary nickname (SET ACCOUNTNAME)    modules/nickserv/set_accountname
- * SET EMAIL command			modules/nickserv/set_email
- * SET EMAILMEMOS command		modules/nickserv/set_emailmemos
- * SET ENFORCETIME command      modules/nickserv/set_enforcetime
- * SET HIDEMAIL command			modules/nickserv/set_hidemail
- * SET LANGUAGE command			modules/nickserv/set_language
- * SET NEVERGROUP command		modules/nickserv/set_nevergroup
- * SET NEVEROP command			modules/nickserv/set_neverop
- * SET NOGREET command			modules/nickserv/set_nogreet
- * SET NOMEMO command			modules/nickserv/set_nomemo
- * SET NOOP command				modules/nickserv/set_noop
- * SET PASSWORD command			modules/nickserv/set_password
- * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
- * Account info hiding (SET PRIVATE command)	modules/nickserv/set_private
- * SET PROPERTY command			modules/nickserv/set_property
- * SET QUIETCHG command			modules/nickserv/set_quietchg
- * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
- * STATUS command				modules/nickserv/status
- * Nickname metadata viewer (TAXONOMY command)	modules/nickserv/taxonomy
+ * SET EMAIL command                            modules/nickserv/set_email
+ * SET EMAILMEMOS command                       modules/nickserv/set_emailmemos
+ * SET ENFORCETIME command                      modules/nickserv/set_enforcetime
+ * SET HIDEMAIL command                         modules/nickserv/set_hidemail
+ * SET LANGUAGE command                         modules/nickserv/set_language
+ * SET NEVERGROUP command                       modules/nickserv/set_nevergroup
+ * SET NEVEROP command                          modules/nickserv/set_neverop
+ * SET NOGREET command                          modules/nickserv/set_nogreet
+ * SET NOMEMO command                           modules/nickserv/set_nomemo
+ * SET NOOP command                             modules/nickserv/set_noop
+ * SET PASSWORD command                         modules/nickserv/set_password
+ * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)  modules/nickserv/set_privmsg
+ * Account info hiding (SET PRIVATE command)    modules/nickserv/set_private
+ * SET PROPERTY command                         modules/nickserv/set_property
+ * SET QUIETCHG command                         modules/nickserv/set_quietchg
+ * Password retrieval uses code (SETPASS cmd)   modules/nickserv/setpass
+ * STATUS command                               modules/nickserv/status
+ * Nickname metadata viewer (TAXONOMY command)  modules/nickserv/taxonomy
  * VACATION command                             modules/nickserv/vacation
- * VERIFY command				modules/nickserv/verify
- * VHOST command				modules/nickserv/vhost
+ * VERIFY command                               modules/nickserv/verify
+ * VHOST command                                modules/nickserv/vhost
  */
 loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
@@ -270,49 +270,49 @@ loadmodule "modules/nickserv/vhost";
  * entirely. Please note that ChanServ requires an authentication
  * service, either NickServ or UserServ will do.
  *
- * Core components				modules/chanserv/main
- * ACCESS command (simplified ACL editing)	modules/chanserv/access
- * AKICK command				modules/chanserv/akick
- * BAN/UNBAN commands				modules/chanserv/ban
- * UNBAN self only (load ban or this not both)	modules/chanserv/unban_self
- * CLOSE command				modules/chanserv/close
- * CLONE command				modules/chanserv/clone
- * CLEAR command				modules/chanserv/clear
- * CLEAR BANS command				modules/chanserv/clear_bans
- * CLEAR FLAGS command				modules/chanserv/clear_flags
- * CLEAR USERS command				modules/chanserv/clear_users
- * COUNT command				modules/chanserv/count
- * DROP command					modules/chanserv/drop
- * Forced flags changes				modules/chanserv/fflags
- * FLAGS command				modules/chanserv/flags
- * Forced foundership transfers			modules/chanserv/ftransfer
- * GETKEY command				modules/chanserv/getkey
- * HALFOP/DEHALFOP commands			modules/chanserv/halfop
- * HELP command					modules/chanserv/help
- * Channel expiry override (HOLD command)	modules/chanserv/hold
- * INFO command					modules/chanserv/info
- * INVITE command				modules/chanserv/invite
- * KICK/KICKBAN commands			modules/chanserv/kick
- * LIST command					modules/chanserv/list
- * MARK command					modules/chanserv/mark
+ * Core components                              modules/chanserv/main
+ * ACCESS command (simplified ACL editing)      modules/chanserv/access
+ * AKICK command                                modules/chanserv/akick
+ * BAN/UNBAN commands                           modules/chanserv/ban
+ * UNBAN self only (load ban or this not both)  modules/chanserv/unban_self
+ * CLOSE command                                modules/chanserv/close
+ * CLONE command                                modules/chanserv/clone
+ * CLEAR command                                modules/chanserv/clear
+ * CLEAR BANS command                           modules/chanserv/clear_bans
+ * CLEAR FLAGS command                          modules/chanserv/clear_flags
+ * CLEAR USERS command                          modules/chanserv/clear_users
+ * COUNT command                                modules/chanserv/count
+ * DROP command                                 modules/chanserv/drop
+ * Forced flags changes                         modules/chanserv/fflags
+ * FLAGS command                                modules/chanserv/flags
+ * Forced foundership transfers                 modules/chanserv/ftransfer
+ * GETKEY command                               modules/chanserv/getkey
+ * HALFOP/DEHALFOP commands                     modules/chanserv/halfop
+ * HELP command                                 modules/chanserv/help
+ * Channel expiry override (HOLD command)       modules/chanserv/hold
+ * INFO command                                 modules/chanserv/info
+ * INVITE command                               modules/chanserv/invite
+ * KICK/KICKBAN commands                        modules/chanserv/kick
+ * LIST command                                 modules/chanserv/list
+ * MARK command                                 modules/chanserv/mark
  * Moderated channel registrations              modules/chanserv/moderate
- * OP/DEOP commands				modules/chanserv/op
+ * OP/DEOP commands                             modules/chanserv/op
  * OWNER/DEOWNER commands                       modules/chanserv/owner
  * PROTECT/DEPROTECT commands                   modules/chanserv/protect
- * QUIET command (+q support)			modules/chanserv/quiet
- * Channel takeover recovery (RECOVER command)	modules/chanserv/recover
- * REGISTER command				modules/chanserv/register
- * SET command core				modules/chanserv/set_core
- * SET EMAIL command	                        modules/chanserv/set_email
- * SET ENTRYMSG command	                        modules/chanserv/set_entrymsg
- * SET FANTASY command	                        modules/chanserv/set_fantasy
- * SET FOUNDER command	                        modules/chanserv/set_founder
- * SET GAMESERV command				modules/chanserv/set_gameserv
- * SET GUARD command	                        modules/chanserv/set_guard
+ * QUIET command (+q support)                   modules/chanserv/quiet
+ * Channel takeover recovery (RECOVER command)  modules/chanserv/recover
+ * REGISTER command                             modules/chanserv/register
+ * SET command core                             modules/chanserv/set_core
+ * SET EMAIL command                            modules/chanserv/set_email
+ * SET ENTRYMSG command                         modules/chanserv/set_entrymsg
+ * SET FANTASY command                          modules/chanserv/set_fantasy
+ * SET FOUNDER command                          modules/chanserv/set_founder
+ * SET GAMESERV command                         modules/chanserv/set_gameserv
+ * SET GUARD command                            modules/chanserv/set_guard
  * SET KEEPTOPIC command                        modules/chanserv/set_keeptopic
  * SET LIMITFLAGS command                       modules/chanserv/set_limitflags
  * SET MLOCK command                            modules/chanserv/set_mlock
- * SET PREFIX command				modules/chanserv/set_prefix
+ * SET PREFIX command                           modules/chanserv/set_prefix
  * Channel info hiding (SET PRIVATE command)    modules/chanserv/set_private
  * SET PROPERTY command                         modules/chanserv/set_property
  * SET RESTRICTED command                       modules/chanserv/set_restricted
@@ -320,15 +320,15 @@ loadmodule "modules/nickserv/vhost";
  * SET TOPICLOCK command                        modules/chanserv/set_topiclock
  * SET URL command                              modules/chanserv/set_url
  * SET VERBOSE command                          modules/chanserv/set_verbose
- * STATUS command				modules/chanserv/status
+ * STATUS command                               modules/chanserv/status
  * SYNC command (and automatic ACL syncing)     modules/chanserv/sync
  * Named Successor ACL flag                     modules/chanserv/successor_acl
- * Channel metadata viewer (TAXONOMY command)	modules/chanserv/taxonomy
- * TEMPLATE command				modules/chanserv/template
- * TOPIC/TOPICAPPEND commands			modules/chanserv/topic
- * VOICE/DEVOICE commands			modules/chanserv/voice
- * WHY command					modules/chanserv/why
- * VOP/HOP/AOP/SOP commands			modules/chanserv/xop
+ * Channel metadata viewer (TAXONOMY command)   modules/chanserv/taxonomy
+ * TEMPLATE command                             modules/chanserv/template
+ * TOPIC/TOPICAPPEND commands                   modules/chanserv/topic
+ * VOICE/DEVOICE commands                       modules/chanserv/voice
+ * WHY command                                  modules/chanserv/why
+ * VOP/HOP/AOP/SOP commands                     modules/chanserv/xop
  *  This module provides emulation of the ircservices XOP scheme ONLY.
  *  Do not report discrepencies when using native commands to edit channel
  *  ACLs. This is intentional.
@@ -402,7 +402,7 @@ loadmodule "modules/chanserv/antiflood";
  * Here you can disable or enable certain features of CHANFIX, by
  * defining which modules are loaded.
  *
- * Core components				modules/chanfix/main
+ * Core components                              modules/chanfix/main
  */
 #loadmodule "modules/chanfix/main";
 
@@ -411,42 +411,42 @@ loadmodule "modules/chanserv/antiflood";
  * Here you can disable or enable certain features of OperServ, by
  * defining which modules are loaded.
  *
- * Core components				modules/operserv/main
- * AKILL system					modules/operserv/akill
- * CLEARCHAN command				modules/operserv/clearchan
- * CLONES system				modules/operserv/clones
- * COMPARE command				modules/operserv/compare
- * GREPLOG command				modules/operserv/greplog
- * HELP command					modules/operserv/help
- * IGNORE system				modules/operserv/ignore
- * IDENTIFY command				modules/operserv/identify
- * INFO command					modules/operserv/info
- * INJECT command				modules/operserv/inject
- * JUPE command					modules/operserv/jupe
- * MODE command					modules/operserv/mode
- * MODINSPECT command				modules/operserv/modinspect
- * MODLIST command				modules/operserv/modlist
- * MODLOAD command				modules/operserv/modload
- * MODRELOAD command				modules/operserv/modreload
- * MODUNLOAD command				modules/operserv/modunload
- * NOOP system					modules/operserv/noop
+ * Core components                              modules/operserv/main
+ * AKILL system                                 modules/operserv/akill
+ * CLEARCHAN command                            modules/operserv/clearchan
+ * CLONES system                                modules/operserv/clones
+ * COMPARE command                              modules/operserv/compare
+ * GREPLOG command                              modules/operserv/greplog
+ * HELP command                                 modules/operserv/help
+ * IGNORE system                                modules/operserv/ignore
+ * IDENTIFY command                             modules/operserv/identify
+ * INFO command                                 modules/operserv/info
+ * INJECT command                               modules/operserv/inject
+ * JUPE command                                 modules/operserv/jupe
+ * MODE command                                 modules/operserv/mode
+ * MODINSPECT command                           modules/operserv/modinspect
+ * MODLIST command                              modules/operserv/modlist
+ * MODLOAD command                              modules/operserv/modload
+ * MODRELOAD command                            modules/operserv/modreload
+ * MODUNLOAD command                            modules/operserv/modunload
+ * NOOP system                                  modules/operserv/noop
  * Override access (OVERRIDE command)           modules/operserv/override
- * Regex mass akill (RAKILL command)		modules/operserv/rakill
- * RAW command					modules/operserv/raw
- * READONLY command				modules/operserv/readonly
- * REHASH command				modules/operserv/rehash
- * RESTART command				modules/operserv/restart
- * Display regex matching (RMATCH command)	modules/operserv/rmatch
- * Most common realnames (RNC command)		modules/operserv/rnc
- * RWATCH system				modules/operserv/rwatch
+ * Regex mass akill (RAKILL command)            modules/operserv/rakill
+ * RAW command                                  modules/operserv/raw
+ * READONLY command                             modules/operserv/readonly
+ * REHASH command                               modules/operserv/rehash
+ * RESTART command                              modules/operserv/restart
+ * Display regex matching (RMATCH command)      modules/operserv/rmatch
+ * Most common realnames (RNC command)          modules/operserv/rnc
+ * RWATCH system                                modules/operserv/rwatch
  * Temporarily modify config options (SET command)  modules/operserv/set
  * SGLINE system                                modules/operserv/sgline
- * SHUTDOWN command				modules/operserv/shutdown
- * Non-config oper privileges (SOPER command)	modules/operserv/soper
- * Oper privilege display (SPECS command)	modules/operserv/specs
+ * SHUTDOWN command                             modules/operserv/shutdown
+ * Non-config oper privileges (SOPER command)   modules/operserv/soper
+ * Oper privilege display (SPECS command)       modules/operserv/specs
  * SQLINE system                                modules/operserv/sqline
- * UPDATE command				modules/operserv/update
- * UPTIME command				modules/operserv/uptime
+ * UPDATE command                               modules/operserv/update
+ * UPTIME command                               modules/operserv/uptime
  */
 loadmodule "modules/operserv/main";
 loadmodule "modules/operserv/akill";
@@ -489,16 +489,16 @@ loadmodule "modules/operserv/uptime";
  * defining which modules are loaded. You can even disable MemoServ
  * entirely.
  *
- * Core components				modules/memoserv/main
- * HELP command					modules/memoserv/help
- * SEND command					modules/memoserv/send
- * Channel memos (SENDOPS command)		modules/memoserv/sendops
+ * Core components                              modules/memoserv/main
+ * HELP command                                 modules/memoserv/help
+ * SEND command                                 modules/memoserv/send
+ * Channel memos (SENDOPS command)              modules/memoserv/sendops
  * Group memos (SENDGROUP command)              modules/memoserv/sendgroup
- * LIST command					modules/memoserv/list
- * READ command					modules/memoserv/read
- * FORWARD command				modules/memoserv/forward
- * DELETE command				modules/memoserv/delete
- * IGNORE command				modules/memoserv/ignore
+ * LIST command                                 modules/memoserv/list
+ * READ command                                 modules/memoserv/read
+ * FORWARD command                              modules/memoserv/forward
+ * DELETE command                               modules/memoserv/delete
+ * IGNORE command                               modules/memoserv/ignore
  */
 loadmodule "modules/memoserv/main";
 loadmodule "modules/memoserv/help";
@@ -531,38 +531,41 @@ loadmodule "modules/infoserv/main";
  * Allows clients to authenticate to services via SASL with an appropriate
  * ircd. You need the core components and at least one mechanism.
  *
- * Core components				modules/saslserv/main
- * PLAIN mechanism				modules/saslserv/plain
- * DH-BLOWFISH mechanism (DEPRECATED)		modules/saslserv/dh-blowfish
- * ECDSA-NIST256p-CHALLENGE			modules/saslserv/ecdsa-nist256p-challenge
- * AUTHCOOKIE mechanism (for IRIS)		modules/saslserv/authcookie
- * EXTERNAL mechanism (IRCv3.1+)		modules/saslserv/external
+ * Core components                              modules/saslserv/main
+ * PLAIN mechanism                              modules/saslserv/plain
+ * DH-BLOWFISH mechanism (DEPRECATED)           modules/saslserv/dh-blowfish
+ * DH-AES mechanism                             modules/saslserv/dh-aes
+ * ECDSA-NIST256p-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
+ * AUTHCOOKIE mechanism (for IRIS)              modules/saslserv/authcookie
+ * EXTERNAL mechanism (IRCv3.1+)                modules/saslserv/external
  *
  * DH-BLOWFISH has potential issues with weak keys unless the DH parameters
- * are selected to avoid them. Its use is discouraged. Use
+ * are selected to avoid them. Its use is discouraged. Use DH-AES and/or
  * ECDSA-NIST256p-CHALLENGE if at all possible.
+ *
+ * DH-BLOWFISH, DH-AES, and ECDSA-NIST256p-CHALLENGE all require SSL.
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/plain";
-#loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL */
-loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
-
+#loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL (DEPRECATED) */
+#loadmodule "modules/saslserv/dh-aes"; /* requires SSL */
+#loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
 /* GameServ modules.
  *
  * Here you can disable or enable certain features of GameServ, by
  * defining which modules are loaded. You can even disable GameServ
  * entirely.
  *
- * Core components				modules/gameserv/main
- * DICE/WOD commands				modules/gameserv/dice
- * EIGHTBALL command				modules/gameserv/eightball
- * Game-specific dice calculators		modules/gameserv/gamecalc
- * HELP commands				modules/gameserv/help
- * LOTTERY command				modules/gameserv/lottery
- * NAMEGEN command				modules/gameserv/namegen
- * RPS command					modules/gameserv/rps
+ * Core components                              modules/gameserv/main
+ * DICE/WOD commands                            modules/gameserv/dice
+ * EIGHTBALL command                            modules/gameserv/eightball
+ * Game-specific dice calculators               modules/gameserv/gamecalc
+ * HELP commands                                modules/gameserv/help
+ * LOTTERY command                              modules/gameserv/lottery
+ * NAMEGEN command                              modules/gameserv/namegen
+ * RPS command                                  modules/gameserv/rps
  */
 #loadmodule "modules/gameserv/main";
 #loadmodule "modules/gameserv/dice";
@@ -601,14 +604,14 @@ loadmodule "modules/saslserv/authcookie";
  * defining which modules are loaded. You can even disable BotServ
  * entirely.
  *
- * Core components				modules/botserv/main
- * HELP command					modules/botserv/help
- * INFO command					modules/botserv/info
- * NPC commands (SAY, ACT)			modules/botserv/bottalk
- * SET command (required for SET commands)	modules/botserv/set_core
- * SET FANTASY command				modules/botserv/set_fantasy
- * SET NOBOT command				modules/botserv/set_nobot
- * SET PRIVATE command				modules/botserv/set_private
+ * Core components                              modules/botserv/main
+ * HELP command                                 modules/botserv/help
+ * INFO command                                 modules/botserv/info
+ * NPC commands (SAY, ACT)                      modules/botserv/bottalk
+ * SET command (required for SET commands)      modules/botserv/set_core
+ * SET FANTASY command                          modules/botserv/set_fantasy
+ * SET NOBOT command                            modules/botserv/set_nobot
+ * SET PRIVATE command                          modules/botserv/set_private
  */
 #loadmodule "modules/botserv/main";
 #loadmodule "modules/botserv/help";
@@ -629,9 +632,9 @@ loadmodule "modules/saslserv/authcookie";
  * Users wishing only to set vhosts need not use it (they can use the builtin
  * vhost management of NickServ instead).
  *
- * Core components				modules/hostserv/main
- * HELP command					modules/hostserv/help
- * OFFER system					modules/hostserv/offer
+ * Core components                              modules/hostserv/main
+ * HELP command                                 modules/hostserv/help
+ * OFFER system                                 modules/hostserv/offer
  * ON and OFF commands                          modules/hostserv/onoff
  * REQUEST system                               modules/hostserv/request
  * VHOST and LISTVHOST commands                 modules/hostserv/vhost
@@ -650,10 +653,10 @@ loadmodule "modules/saslserv/authcookie";
 /* HelpServ modules.
  * HelpServ allows users to request help from network staff in a few different ways.
  *
- * Core components				modules/helpserv/main
- * HELPME command				modules/helpserv/helpme
- * Help Ticket system				modules/helpserv/ticket
- * Service List					modules/helpserv/services
+ * Core components                              modules/helpserv/main
+ * HELPME command                               modules/helpserv/helpme
+ * Help Ticket system                           modules/helpserv/ticket
+ * Service List                                 modules/helpserv/services
  *
  * The ticket system works like a bugtracker ot helpdesk ticket system, HELPME
  * works like a one-time alert. You should probably only load one of the two systems.
@@ -668,17 +671,17 @@ loadmodule "modules/saslserv/authcookie";
  * Allows users to list channels with more flexibility than the /list
  * command.
  *
- * Core components				modules/alis/main
+ * Core components                              modules/alis/main
  */
 #loadmodule "modules/alis/main";
 
 /* StatServ module.
  * StatServ provides basic statistics and split tracking.
  *
- * Core components              modules/statserv/main
- * CHANNEL command              modules/statserv/channel
- * NETSPLIT command             modules/statserv/netsplit
- * SERVER command               modules/statserv/server
+ * Core components                              modules/statserv/main
+ * CHANNEL command                              modules/statserv/channel
+ * NETSPLIT command                             modules/statserv/netsplit
+ * SERVER command                               modules/statserv/server
  */
 loadmodule "modules/statserv/main";
 #loadmodule "modules/statserv/channel";
@@ -689,27 +692,28 @@ loadmodule "modules/statserv/server";
  * GroupServ allows users to create groups to easily mass-manage channel
  * access and more.
  *
- * Core components				modules/groupserv/main
- * ACSNOLIMIT command				modules/groupserv/acsnolimit
- * DROP command					modules/groupserv/drop
- * FDROP command				modules/groupserv/fdrop
- * FFLAGS command				modules/groupserv/fflags
- * FLAGS command				modules/groupserv/flags
- * HELP command					modules/groupserv/help
- * INFO command					modules/groupserv/info
- * JOIN command					modules/groupserv/join
- * LIST command					modules/groupserv/list
- * LISTCHANS command					modules/groupserv/listchans
- * REGISTER command				modules/groupserv/register
- * REGNOLIMIT command				modules/groupserv/regnolimit
- * SET command					modules/groupserv/set
- * SET CHANNEL command				modules/groupserv/set_channel
- * SET DESCRIPTION command			modules/groupserv/set_description
- * SET EMAIL command				modules/groupserv/set_email
- * SET JOINFLAGS command			modules/groupserv/set_joinflags
- * SET OPEN command				modules/groupserv/set_open
- * SET PUBLIC command				modules/groupserv/set_public
- * SET URL command				modules/groupserv/set_url
+ * Core components                              modules/groupserv/main
+ * ACSNOLIMIT command                           modules/groupserv/acsnolimit
+ * DROP command                                 modules/groupserv/drop
+ * FDROP command                                modules/groupserv/fdrop
+ * FFLAGS command                               modules/groupserv/fflags
+ * FLAGS command                                modules/groupserv/flags
+ * HELP command                                 modules/groupserv/help
+ * INFO command                                 modules/groupserv/info
+ * JOIN command                                 modules/groupserv/join
+ * LIST command                                 modules/groupserv/list
+ * LISTCHANS command                            modules/groupserv/listchans
+ * REGISTER command                             modules/groupserv/register
+ * REGNOLIMIT command                           modules/groupserv/regnolimit
+ * INVITE command                               modules/groupserv/invite
+ * SET command                                  modules/groupserv/set
+ * SET CHANNEL command                          modules/groupserv/set_channel
+ * SET DESCRIPTION command                      modules/groupserv/set_description
+ * SET EMAIL command                            modules/groupserv/set_email
+ * SET JOINFLAGS command                        modules/groupserv/set_joinflags
+ * SET OPEN command                             modules/groupserv/set_open
+ * SET PUBLIC command                           modules/groupserv/set_public
+ * SET URL command                              modules/groupserv/set_url
  *
  */
 loadmodule "modules/groupserv/main";
@@ -725,6 +729,7 @@ loadmodule "modules/groupserv/list";
 loadmodule "modules/groupserv/listchans";
 loadmodule "modules/groupserv/register";
 loadmodule "modules/groupserv/regnolimit";
+#loadmodule "modules/groupserv/invite";
 loadmodule "modules/groupserv/set";
 loadmodule "modules/groupserv/set_channel";
 loadmodule "modules/groupserv/set_description";
@@ -741,7 +746,7 @@ loadmodule "modules/groupserv/set_url";
  * with portal software and other useful things. To enable it, load this
  * module, and uncomment the httpd { } block towards the bottom of the config.
  *
- * HTTP Server					modules/misc/httpd
+ * HTTP Server                                  modules/misc/httpd
  */
 loadmodule "modules/misc/httpd";
 
@@ -750,7 +755,7 @@ loadmodule "modules/misc/httpd";
  * The XML-RPC handler requires modules/misc/httpd to be loaded as it merely
  * registers a path handler for XML-RPC. The path used for XML-RPC is /xmlrpc.
  *
- * XMLRPC handler for the httpd			modules/transport/xmlrpc
+ * XMLRPC handler for the httpd                 modules/transport/xmlrpc
  */
 loadmodule "modules/transport/xmlrpc";
 
@@ -760,11 +765,11 @@ loadmodule "modules/transport/xmlrpc";
  * users in channel access entries.  These target mapping entity types are
  * defined through the 'exttarget' modules listed below.
  *
- * Exttarget handling core			modules/exttarget/main
- * $oper exttarget match type			modules/exttarget/oper
- * $registered exttarget match type		modules/exttarget/registered
- * $channel exttarget match type		modules/exttarget/channel
- * $chanacs exttarget match type		modules/exttarget/chanacs
+ * Exttarget handling core                      modules/exttarget/main
+ * $oper exttarget match type                   modules/exttarget/oper
+ * $registered exttarget match type             modules/exttarget/registered
+ * $channel exttarget match type                modules/exttarget/channel
+ * $chanacs exttarget match type                modules/exttarget/chanacs
  */
 #loadmodule "modules/exttarget/main";
 #loadmodule "modules/exttarget/oper";
@@ -861,22 +866,22 @@ serverinfo {
 	 * in the master Atheme logfile, usually var/atheme.log.
 	 *
 	 * Options include:
-	 *	debug, all	- meta-keyword for all possible categories
-	 *	trace		- meta-keyword for a little bit of info
-	 *	misc		- like trace, but with some more miscillaneous info
-	 *	notice		- meta-keyword for notice-like information
+	 *      debug, all      - meta-keyword for all possible categories
+	 *      trace           - meta-keyword for a little bit of info
+	 *      misc            - like trace, but with some more miscillaneous info
+	 *      notice          - meta-keyword for notice-like information
 	 * ------------------------------------------------------------------------------
-	 *	error		- critical errors
-	 *	info		- miscillaneous log notices
-	 *	verbose		- A bit more verbose than info, not quite as spammy as debug
-	 *	commands	- all command use
-	 *	admin		- administrative command use
-	 *	register	- account and channel registrations
-	 *	set		- changes of account or channel settings
-	 *  request		- user requests (currently only vhosts)
-	 *	network		- log notices related to network status
-	 *	rawdata		- log raw data sent and received by services
-	 *	wallops		- <not yet used>
+	 *      error           - critical errors
+	 *      info            - miscillaneous log notices
+	 *      verbose         - A bit more verbose than info, not quite as spammy as debug
+	 *      commands        - all command use
+	 *      admin           - administrative command use
+	 *      register        - account and channel registrations
+	 *      set             - changes of account or channel settings
+	 *      request         - user requests (currently only vhosts)
+	 *      network         - log notices related to network status
+	 *      rawdata         - log raw data sent and received by services
+	 *      wallops         - <not yet used>
 	 */
 	loglevel = { error; info; admin; network; wallops; };
 
@@ -1839,23 +1844,23 @@ ldap {
  * logfile used by services, which is controlled by serverinfo::loglevel.
  *
  * The various logging categories are:
- *	debug, all		- meta-keyword for all possible categories
- *	trace			- meta-keyword for a little bit of info
- *	misc			- like trace, but with some more miscillaneous info
- *	notice			- meta-keyword for notice-like information
+ *      debug, all      - meta-keyword for all possible categories
+ *      trace           - meta-keyword for a little bit of info
+ *      misc            - like trace, but with some more miscillaneous info
+ *      notice          - meta-keyword for notice-like information
  * ------------------------------------------------------------------------------
- *	error			- critical errors
- *	info			- miscillaneous log notices
- *	verbose			- A bit more verbose than info, not quite as spammy as debug
- *	commands		- all command use
- *	admin			- administrative command use
- *	register		- account and channel registrations
- *	set			- changes of account or channel settings
- *	request			- user requests (currently only vhosts)
- *	network			- log notices related to network status
- *	rawdata			- log raw data sent and received by services
- *	wallops			- <not yet used>
- *	denycmd			- security model denials (commands, permissions)
+ *      error           - critical errors
+ *      info            - miscillaneous log notices
+ *      verbose         - A bit more verbose than info, not quite as spammy as debug
+ *      commands        - all command use
+ *      admin           - administrative command use
+ *      register        - account and channel registrations
+ *      set             - changes of account or channel settings
+ *      request         - user requests (currently only vhosts)
+ *      network         - log notices related to network status
+ *      rawdata         - log raw data sent and received by services
+ *      wallops         - <not yet used>
+ *      denycmd         - security model denials (commands, permissions)
  */
 
 /*

@@ -65,7 +65,7 @@ int is_calcoper(char oper);
 // * / = Multiply / Divide         |  [Rank 7]
 // % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //
-static void eval_calc(sourceinfo_t *si, char *s_input)
+static bool eval_calc(sourceinfo_t *si, char *s_input)
 {
 	static char buffer[1024];
 
@@ -78,7 +78,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (s_input == NULL)
 	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return;
+		return false;
 	}
 
 	// Skip leading whitespace
@@ -88,7 +88,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (!*ci)
 	{
 		command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-		return;
+		return false;
 	}
 
 	// Validate braces
@@ -106,7 +106,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		else if (!isspace(*ci) && !isdigit(*ci) && *ci != '.' && !is_calcoper(*ci))
 		{
 			command_fail(si, fault_badparams, _("Error: You typed an invalid expression."));
-			return;
+			return false;
 		}
 		ci++;
 	}
@@ -114,7 +114,7 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 	if (braces != 0)
 	{
 		command_fail(si, fault_badparams, _("Error: Mismatched braces '( )' in expression."));
-		return;
+		return false;
 	}
 
 	err = do_calc_expr(si, s_input, buffer, &expr);
@@ -132,9 +132,10 @@ static void eval_calc(sourceinfo_t *si, char *s_input)
 		}
 	}
 	else
-		return;
+		return false;
 
 	gs_command_report(si, "%s", buffer);
+	return true;
 }
 
 
@@ -439,7 +440,7 @@ int is_calcoper(char oper)
 
 /*************************************************************************************/
 
-static void eval_dice(sourceinfo_t *si, char *s_input)
+static bool eval_dice(sourceinfo_t *si, char *s_input)
 {
 	static char buffer[1024], result[32];
 
@@ -452,7 +453,7 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 	if (!*c || !isdigit(*c))
 	{
 		gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
-		return;
+		return false;
 	}
 
 	x = strtoul(c, &c, 10);
@@ -461,11 +462,11 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 		if (x < 1 || x > DICE_MAX_DICE)
 		{
 			gs_command_report(si, _("Only 1-100 dice may be thrown at once."));
-			return;
+			return false;
 		}
 
 		gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
-		return;
+		return false;
 	}
 
 	y = strtoul(c, &c, 10);
@@ -477,20 +478,20 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 		if (*c && strchr("-+*/", *c) == NULL)
 		{
 			gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
-			return;
+			return false;
 		}
 	}
 
 	if (x < 1 || x > 100)
 	{
 		gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
-		return;
+		return false;
 	}
 
 	if (y < 1 || y > DICE_MAX_SIDES)
 	{
 		gs_command_report(si, _("Only 1-100 sides may be used on a dice."));
-		return;
+		return false;
 	}
 
 	if (*c)
@@ -505,12 +506,12 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 		if (*c)
 		{
 			gs_command_report(si, _("Syntax: XdY [ {-|+|*|/} Z ]"));
-			return;
+			return false;
 		}
 		else if (op == '/' && z == 0)
 		{
 			gs_command_report(si, _("Can't divide by zero."));
-			return;
+			return false;
 		}
 	}
 
@@ -551,6 +552,7 @@ static void eval_dice(sourceinfo_t *si, char *s_input)
 	mowgli_strlcat(buffer, result, sizeof(buffer));
 
 	gs_command_report(si, "%s", buffer);
+	return true;
 }
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[])
@@ -587,7 +589,8 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	for (i = 0; i < times; i++)
-		eval_dice(si, arg);
+		if(!eval_dice(si, arg))
+			break;
 }
 
 static void command_calc(sourceinfo_t *si, int parc, char *parv[])
@@ -616,7 +619,8 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	for (i = 0; i < times; i++)
-		eval_calc(si, arg);
+		if (!eval_calc(si, arg))
+			break;
 }
 
 //////////////////////////////////////////////////////////////////////////

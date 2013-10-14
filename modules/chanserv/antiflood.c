@@ -237,7 +237,9 @@ antiflood_enforce_quiet(user_t *u, channel_t *c)
 		chanban_t *cb;
 
 		cb = place_quietmask(c, MTYPE_ADD, hostbuf);
-		cb->flags |= CBAN_ANTIFLOOD;
+		if (cb != NULL)
+			cb->flags |= CBAN_ANTIFLOOD;
+	slog(LG_INFO, "ANTIFLOOD:ENFORCE:QUIET: \2%s!%s@%s\2 on \2%s\2", u->nick, u->user, u->vhost, c->name);
 	}
 }
 
@@ -278,12 +280,14 @@ antiflood_enforce_kickban(user_t *u, channel_t *c)
 		cb = c->bans.head->data;
 		cb->flags |= CBAN_ANTIFLOOD;
 	}
+	slog(LG_INFO, "ANTIFLOOD:ENFORCE:KICKBAN: \2%s!%s@%s\2 from \2%s\2", u->nick, u->user, u->vhost, c->name);
 }
 
 static void
 antiflood_enforce_kline(user_t *u, channel_t *c)
 {
 	kline_add("*", u->host, "Flooding", 86400, chansvs.nick);
+	slog(LG_INFO, "ANTIFLOOD:ENFORCE:AKILL: \2%s!%s@%s\2 from \2%s\2", u->nick, u->user, u->vhost, c->name);
 }
 
 typedef struct {
@@ -422,6 +426,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 		mc->flags &= ~MC_ANTIFLOOD;
 		metadata_delete(mc, METADATA_KEY_ENFORCE_METHOD);
 
+		logcommand(si, CMDLOG_SET, "ANTIFLOOD:NONE: \2%s\2",  mc->name);
 		command_success_nodata(si, _("Flood protection turned off for \2%s\2."), mc->name);
 		return;
 	}
@@ -430,6 +435,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 		mc->flags |= MC_ANTIFLOOD;
 		metadata_delete(mc, METADATA_KEY_ENFORCE_METHOD);
 
+		logcommand(si, CMDLOG_SET, "ANTIFLOOD: %s (%s)",  mc->name, "DEFAULT");
 		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with default settings."), mc->name);
 		return;
 	}
@@ -438,6 +444,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 		mc->flags |= MC_ANTIFLOOD;
 		metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "QUIET");
 
+		logcommand(si, CMDLOG_SET, "ANTIFLOOD: %s (%s)",  mc->name, "QUIET");
 		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "QUIET");
 		return;
 	}
@@ -446,6 +453,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 		mc->flags |= MC_ANTIFLOOD;
 		metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "KICKBAN");
 
+		logcommand(si, CMDLOG_SET, "ANTIFLOOD: %s (%s)",  mc->name, "KICKBAN");
 		command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "KICKBAN");
 		return;
 	}
@@ -456,6 +464,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 			mc->flags |= MC_ANTIFLOOD;
 			metadata_add(mc, METADATA_KEY_ENFORCE_METHOD, "AKILL");
 
+			logcommand(si, CMDLOG_SET, "ANTIFLOOD: %s (%s)",  mc->name, "AKILL");
 			command_success_nodata(si, _("Flood protection turned on for \2%s\2 with \2%s\2 action."), mc->name, "AKILL");
 			return;
 		}

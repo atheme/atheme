@@ -43,6 +43,25 @@ char *random_string(int sz)
 	return buf;
 }
 
+void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
+{
+	char buf[256];
+	int digest[4];
+	md5_state_t ctx;
+
+	snprintf(buf, sizeof buf, "%lu:%s:%s",
+			(unsigned long)(CURRTIME / 300) - v,
+			get_source_name(si),
+			name);
+	md5_init(&ctx);
+	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
+	md5_finish(&ctx, (unsigned char *)digest);
+	/* note: this depends on byte order, but that's ok because
+	 * it's only going to work in the same atheme instance anyway
+	 */
+	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
+}
+
 #ifdef HAVE_GETTIMEOFDAY
 /* starts a timer */
 void s_time(struct timeval *sttime)
@@ -410,7 +429,8 @@ bool validhostmask(const char *host)
 	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
 		return false;
 
-	if (host[0] == ',' || host[0] == '-' || host[0] == '#' || host[0] == '@' || host[0] == '!')
+	if (host[0] == ',' || host[0] == '-' || host[0] == '#' ||
+			host[0] == '@' || host[0] == '!' || host[0] == ':')
 		return false;
 
 	return true;
@@ -466,7 +486,7 @@ char *pretty_mask(char *mask)
                         *t++ = '\0';
                         if(*t != '\0')
                                 user = t;
-                        if(*mask != '\0' && *mask != ':')
+                        if(*mask != '\0')
                                 nick = mask;
                 }
                 else
@@ -479,7 +499,7 @@ char *pretty_mask(char *mask)
         {
                 ex = t;
                 *t++ = '\0';
-                if(*mask != '\0' && *mask != ':')
+                if(*mask != '\0')
                         nick = mask;
                 if(*t != '\0')
                         user = t;
@@ -491,7 +511,7 @@ char *pretty_mask(char *mask)
         }
         else
         {
-                if(*mask != '\0' && *mask != ':')
+                if(*mask != '\0')
                         nick = mask;
         }
 

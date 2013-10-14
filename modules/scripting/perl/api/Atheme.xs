@@ -29,6 +29,7 @@ INCLUDE: metadata.xs
 INCLUDE: account.xs
 INCLUDE: channel.xs
 INCLUDE: channelregistration.xs
+INCLUDE: config.xs
 INCLUDE: nickregistration.xs
 INCLUDE: server.xs
 
@@ -36,3 +37,10 @@ INCLUDE: internal_list.xs
 
 INCLUDE: hooks.xs
 INCLUDE: log.xs
+
+MODULE = Atheme			PACKAGE = Atheme
+
+void
+wallops (const char * message)
+CODE:
+    wallops ("%s", message);

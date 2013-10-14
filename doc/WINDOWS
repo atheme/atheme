@@ -21,11 +21,21 @@ Run mingw-get-inst to install MinGW.  You will need the following components:
 	* MSYS base system
 	* MSYS developers toolkit
 
-This will download and install all MinGW components needed to build Atheme.
 
 Once the installation of MinGW is completed, you will have a new Start Menu
 entry for "MinGW Shell."  Provided you have this, the installation was
 successful.
+
+As of 7.1.0-alpha1, Atheme requires pkg-config to build.  You will require
+additional configuration on Windows for installing pkg-config that will not
+be addressed here. As of the time of writing, documentation for doing so may
+be found at:
+        http://www.gaia-gis.it/spatialite-3.0.0-BETA/mingw_how_to.html#pkg-config
+        
+Versions of Atheme before 7.1.0-alpha1 do not require pkg-config, so if you are
+using an older version, skip installing pkg-config.
+
+This will download and install all MinGW components needed to build Atheme.
 
 Now download a tarball containing the Atheme sources which is sufficiently
 new enough.  If the tarball has this file, it is sufficiently new enough.

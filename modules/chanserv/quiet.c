@@ -57,29 +57,22 @@ static void make_extbanmask(char *buf, size_t buflen, const char *mask)
 	mowgli_strlcat(buf, mask, buflen);
 }
 
+static char get_quiet_ban_char(void)
+{
+	return (ircd->type == PROTOCOL_UNREAL ||
+			ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+}
+
 chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
 	chanban_t *cb = NULL;
+	char banlike_char = get_quiet_ban_char();
 
-	switch (ircd->type)
-	{
-	case PROTOCOL_INSPIRCD:
-		mowgli_strlcpy(rhostbuf, "m:", sizeof rhostbuf);
-		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
-		cb = chanban_add(c, rhostbuf, 'b');
-		break;
-	case PROTOCOL_UNREAL:
-		mowgli_strlcpy(rhostbuf, "~q:", sizeof rhostbuf);
-		mowgli_strlcat(rhostbuf, hostbuf, sizeof rhostbuf);
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', rhostbuf);
-		cb = chanban_add(c, rhostbuf, 'b');
-		break;
-	default:
-		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
-		cb = chanban_add(c, hostbuf, 'q');
-	}
+	make_extbanmask(rhostbuf, sizeof rhostbuf, hostbuf);
+	modestack_mode_param(chansvs.nick, c, MTYPE_ADD, banlike_char,
+			rhostbuf);
+	cb = chanban_add(c, rhostbuf, banlike_char);
 
 	return cb;
 }
@@ -109,15 +102,19 @@ static void make_extban(char *buf, size_t size, user_t *tu)
 	mowgli_strlcat(buf, tu->vhost, size);
 }
 
-static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
+enum devoice_result { DEVOICE_FAILED, DEVOICE_NO_ACTION, DEVOICE_DONE };
+
+static enum devoice_result
+devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
 {
 	chanuser_t *cu;
 	unsigned int flag;
 	char buf[3];
+	enum devoice_result result = DEVOICE_NO_ACTION;
 
 	cu = chanuser_find(c, tu);
 	if (cu == NULL)
-		return true;
+		return DEVOICE_NO_ACTION;
 	if (cu->modes & CSTATUS_OP)
 		flag = CA_OP;
 	else if (cu->modes & CSTATUS_VOICE)
@@ -127,32 +124,41 @@ static bool devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *t
 	if (flag != 0 && !chanacs_source_has_flag(mc, si, flag))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return false;
+		return DEVOICE_FAILED;
 	}
 
 	buf[0] = '-';
 	buf[2] = '\0';
 	if (cu->modes & CSTATUS_OP)
+	{
 		channel_mode_va(chansvs.me->me, c, 2, "-o", tu->nick);
+		result = DEVOICE_DONE;
+	}
 	if (cu->modes & CSTATUS_VOICE)
+	{
 		channel_mode_va(chansvs.me->me, c, 2, "-v", tu->nick);
+		result = DEVOICE_DONE;
+	}
 	if (ircd->uses_owner && (cu->modes & ircd->owner_mode))
 	{
 		buf[1] = ircd->owner_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 	if (ircd->uses_protect && (cu->modes & ircd->protect_mode))
 	{
 		buf[1] = ircd->protect_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 	if (ircd->uses_halfops && (cu->modes & ircd->halfops_mode))
 	{
 		buf[1] = ircd->halfops_mchar[1];
 		channel_mode_va(chansvs.me->me, c, 2, buf, tu->nick);
+		result = DEVOICE_DONE;
 	}
 
-	return true;
+	return result;
 }
 
 /* Notify at most this many users in private notices, otherwise channel */
@@ -187,7 +193,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
 	unsigned int to_notify_count = 0, i;
-	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+	char banlike_char = get_quiet_ban_char();
 
 	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
 
@@ -246,6 +252,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	int n;
 	char *targetlist;
 	char *strtokctx;
+	enum devoice_result devoice_result;
 
 	if (!channel || !target)
 	{
@@ -278,18 +285,16 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	targetlist = strdup(parv[1]);
+	targetlist = strdup(target);
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
-		if (invert_purpose(si, parc, channel, &target, '-', &cs_cmd_unquiet))
-			continue;
-
 		if ((tu = user_find_named(target)))
 		{
 			char hostbuf[BUFSIZE];
 
-			if (!devoice_user(si, mc, c, tu))
+			devoice_result = devoice_user(si, mc, c, tu);
+			if (devoice_result == DEVOICE_FAILED)
 				continue;
 
 			hostbuf[0] = '\0';
@@ -301,7 +306,11 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 			n = remove_ban_exceptions(si->service->me, c, tu);
 			if (n > 0)
 				command_success_nodata(si, _("To ensure the quiet takes effect, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, c->name);
-			notify_victims(si, c, cb, MTYPE_ADD);
+			/* Notify if we did anything. */
+			if (cb != NULL)
+				notify_victims(si, c, cb, MTYPE_ADD);
+			else if (devoice_result == DEVOICE_DONE || n > 0)
+				notify_one_victim(si, c, tu, MTYPE_ADD);
 			logcommand(si, CMDLOG_DO, "QUIET: \2%s\2 on \2%s\2 (for user \2%s!%s@%s\2)", hostbuf, mc->name, tu->nick, tu->user, tu->vhost);
 			if (si->su == NULL || !chanuser_find(mc->chan, si->su))
 				command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
@@ -330,15 +339,14 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 {
         const char *channel = parv[0];
         const char *target = parv[1];
-	char banlike_char = (ircd->type == PROTOCOL_UNREAL || ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
+	char banlike_char = get_quiet_ban_char();
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
 	chanban_t *cb;
 	char *targetlist;
 	char *strtokctx;
-	char *chancop;
-	char *targetcop;
+	char target_extban[BUFSIZE];
 
 	if (!channel)
 	{
@@ -379,17 +387,10 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	targetlist = strdup(parv[1]);
+	targetlist = strdup(target);
 	target = strtok_r(targetlist, " ", &strtokctx);
 	do
 	{
-		chancop = strdup(channel);
-		targetcop = strdup(target);
-		if (invert_purpose(si, parc, chancop, &targetcop, '+', &cs_cmd_quiet))
-			continue;
-		free(chancop);
-		free(targetcop);
-
 		if ((tu = user_find_named(target)))
 		{
 			mowgli_node_t *n, *tn;
@@ -419,13 +420,10 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 			continue;
 		}
-		else if (validhostmask(target))
+		else if (make_extbanmask(target_extban, sizeof target_extban, target),
+				(cb = chanban_find(c, target_extban, banlike_char)) != NULL ||
+				validhostmask(target))
 		{
-			char target_extban[BUFSIZE];
-
-		 	make_extbanmask(target_extban, sizeof target_extban, target);
-
-			cb = chanban_find(c, target_extban, banlike_char);
 			if (cb != NULL)
 			{
 				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, banlike_char, cb->mask);

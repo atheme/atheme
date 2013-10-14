@@ -515,8 +515,8 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 			if (ca->level != oldflags)
 				continue;
 
-			/* don't change entries involving foundership status. */
-			if (oldflags & CA_FOUNDER)
+			/* don't change foundership status. */
+			if ((oldflags ^ flags) & CA_FOUNDER)
 				continue;
 
 			req.ca = ca;
@@ -538,23 +538,14 @@ static void update_role_entry(sourceinfo_t *si, mychan_t *mc, const char *role, 
 		command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 }
 
-static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[], unsigned int restrictflags)
+static unsigned int xflag_apply_batch(unsigned int in, int parc, char *parv[])
 {
 	unsigned int out;
 	int i;
 
 	out = in;
 	for (i = 0; i < parc; i++)
-	{
-#ifdef NOTYET
-		unsigned int flag;
-		flag = xflag_apply(0, parv[i]);
-		if (flag & restrictflags)
-			continue;
-#endif
-
 		out = xflag_apply(out, parv[i]);
-	}
 
 	return out;
 }
@@ -932,6 +923,28 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags |= allow_flags(mc, restrictflags);
 	}
 
+	if (!(ca->level & CA_FOUNDER) && newflags & CA_FOUNDER)
+	{
+		if (mychan_num_founders(mc) >= chansvs.maxfounders)
+		{
+			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			chanacs_close(ca);
+			return;
+		}
+		if (mt == NULL)
+		{
+			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+			chanacs_close(ca);
+			return;
+		}
+		if (!myentity_can_register_channel(mt))
+		{
+			command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
+			chanacs_close(ca);
+			return;
+		}
+	}
+
 	oldflags = ca->level;
 
 	addflags = newflags & ~oldflags;
@@ -1034,14 +1047,6 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	req.ca = ca;
 	req.oldlevel = ca->level;
 
-	newflags = get_template_flags(mc, role);
-	if (newflags == 0)
-	{
-		chanacs_close(ca);
-		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
-		return;
-	}
-
 	restrictflags = chanacs_source_flags(mc, si);
 	if (restrictflags & CA_FOUNDER)
 		restrictflags = ca_all;
@@ -1057,6 +1062,28 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags = allow_flags(mc, restrictflags);
 		else
 			restrictflags |= allow_flags(mc, restrictflags);
+	}
+
+	if (!(ca->level & CA_FOUNDER) && newflags & CA_FOUNDER)
+	{
+		if (mychan_num_founders(mc) >= chansvs.maxfounders)
+		{
+			command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+			chanacs_close(ca);
+			return;
+		}
+		if (mt == NULL)
+		{
+			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+			chanacs_close(ca);
+			return;
+		}
+		if (!myentity_can_register_channel(mt))
+		{
+			command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), mt->name);
+			chanacs_close(ca);
+			return;
+		}
 	}
 
 	oldflags = ca->level;
@@ -1162,6 +1189,10 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
 	oldflags = get_template_flags(mc, role);
 
 	if (oldflags != 0)
@@ -1170,7 +1201,14 @@ static void cs_cmd_role_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
+	if (newflags & ~restrictflags)
+	{
+		unsigned int delta = newflags & ~restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to add flags: \2%s\2"), xflag_tostr(delta));
+		return;
+	}
 
 	if (newflags & CA_FOUNDER)
 		newflags |= CA_FLAGS;
@@ -1242,6 +1280,10 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
 	oldflags = get_template_flags(mc, role);
 
 	if (oldflags == 0)
@@ -1250,7 +1292,20 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2, restrictflags);
+	newflags = xflag_apply_batch(oldflags, parc - 2, parv + 2);
+	if ((oldflags | newflags) & ~restrictflags)
+	{
+		unsigned int delta = (oldflags | newflags) & ~restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
+		return;
+	}
+
+	if ((oldflags ^ newflags) & CA_FOUNDER)
+	{
+		command_fail(si, fault_unimplemented, _("Adding or removing founder status from a role is not implemented."));
+		return;
+	}
 
 	if (newflags & CA_FOUNDER)
 		newflags |= CA_FLAGS;
@@ -1296,9 +1351,9 @@ static void cs_cmd_role_set(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	unsigned int level;
 	const char *channel = parv[0];
 	const char *role = parv[1];
+	unsigned int oldflags, restrictflags;
 
 	mc = mychan_find(channel);
 	if (!mc)
@@ -1320,10 +1375,23 @@ static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	level = get_template_flags(mc, role);
-	if (level == 0)
+	restrictflags = chanacs_source_flags(mc, si);
+	if (restrictflags & CA_FOUNDER)
+		restrictflags = ca_all;
+	else
+		restrictflags = allow_flags(mc, restrictflags);
+	oldflags = get_template_flags(mc, role);
+	if (oldflags == 0)
 	{
 		command_fail(si, fault_toomany, _("Role \2%s\2 does not exist."), role);
+		return;
+	}
+
+	if (oldflags & ~restrictflags)
+	{
+		unsigned int delta = oldflags & ~restrictflags;
+
+		command_fail(si, fault_badparams, _("You do not have appropriate permissions to set flags: \2%s\2"), xflag_tostr(delta));
 		return;
 	}
 

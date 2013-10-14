@@ -49,7 +49,6 @@ struct cmode_ charybdis_mode_list[] = {
   { 'p', CMODE_PRIV   },
   { 's', CMODE_SEC    },
   { 't', CMODE_TOPIC  },
-  { 'c', CMODE_NOCOLOR},
   { 'r', CMODE_REGONLY},
   { 'z', CMODE_OPMOD  },
   { 'g', CMODE_FINVITE},
@@ -57,13 +56,14 @@ struct cmode_ charybdis_mode_list[] = {
   { 'P', CMODE_PERM   },
   { 'F', CMODE_FTARGET},
   { 'Q', CMODE_DISFWD },
-  { 'C', CMODE_NOCTCP },
 
   /* following modes are added as extensions */
   { 'N', CMODE_NPC       },
   { 'S', CMODE_SSLONLY   },
   { 'O', CMODE_OPERONLY  },
   { 'A', CMODE_ADMINONLY },
+  { 'c', CMODE_NOCOLOR   },
+  { 'C', CMODE_NOCTCP    },
 
   { '\0', 0 }
 };

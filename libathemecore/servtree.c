@@ -27,7 +27,7 @@ mowgli_patricia_t *services_name;
 mowgli_patricia_t *services_nick;
 mowgli_heap_t *service_heap;
 
-static void servtree_update(void *dummy);
+void servtree_update(void *dummy);
 
 static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 {
@@ -415,7 +415,7 @@ service_t *service_find_nick(const char *nick)
 	return mowgli_patricia_retrieve(services_nick, nick);
 }
 
-static void servtree_update(void *dummy)
+void servtree_update(void *dummy)
 {
 	service_t *sptr;
 	mowgli_patricia_iteration_state_t state;

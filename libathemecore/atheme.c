@@ -315,7 +315,7 @@ int atheme_main(int argc, char *argv[])
 			  break;
 		  default:
 			  printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n");
-			  exit(EXIT_SUCCESS);
+			  exit(EXIT_FAILURE);
 			  break;
 		}
 	}

@@ -19,6 +19,8 @@
 
    base -- basedn to begin the search for the matching dn of the user
    attribute -- the attribute to search against to find the nick
+   binddn -- distinguished name to bind to for searching (optional)
+   bindauth -- password for the distinguished name (optional, must specify if binddn given)
 
 */
 
@@ -35,6 +37,8 @@ struct
 	char *dnformat;
 	char *attribute;
 	char *base;
+	char *binddn;
+	char *bindauth;
 	bool useDN;
 } ldap_config;
 LDAP *ldap_conn;
@@ -56,6 +60,11 @@ static void ldap_config_ready(void *unused)
 	if ((ldap_config.dnformat == NULL) && ((ldap_config.base == NULL) || (ldap_config.attribute == NULL)))
 	{
 		slog(LG_ERROR, "ldap_config_ready(): ldap {} block requires dnformat or base & attribute definition");
+		return;
+	}
+	if (ldap_config.binddn != NULL && ldap_config.bindauth == NULL)
+	{
+		slog(LG_ERROR, "ldap_config_ready(): ldap{} block requires bindauth to be defined if binddn is defined");
 		return;
 	}
 
@@ -105,7 +114,7 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	{
 		ldap_config_ready(NULL);
 	}
-	if ((ldap_conn == NULL))
+	if (ldap_conn == NULL)
 	{
 		slog(LG_INFO, "ldap_auth_user(): no connection");
 		return false;
@@ -158,13 +167,22 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	else
 	{
 		char what[512];
+		char *binddn = NULL;
 
 		cred.bv_len = 0;
-		res = ldap_sasl_bind_s(ldap_conn, NULL, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
+
+		if (ldap_config.binddn != NULL && ldap_config.bindauth != NULL)
+		{
+			binddn = ldap_config.binddn;
+			cred.bv_val = ldap_config.bindauth;
+			cred.bv_len = strlen(ldap_config.bindauth);
+		}
+
+		res = ldap_sasl_bind_s(ldap_conn, binddn, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
 		if (res == LDAP_SERVER_DOWN)
 		{
 			ldap_config_ready(NULL);
-			res = ldap_sasl_bind_s(ldap_conn, NULL, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
+			res = ldap_sasl_bind_s(ldap_conn, binddn, LDAP_SASL_SIMPLE, &cred, NULL, NULL, NULL);
 		}
 		if (res != LDAP_SUCCESS)
 		{
@@ -211,6 +229,8 @@ void _modinit(module_t * m)
 	add_dupstr_conf_item("DNFORMAT", &conf_ldap_table, 0, &ldap_config.dnformat, NULL);
 	add_dupstr_conf_item("BASE", &conf_ldap_table, 0, &ldap_config.base, NULL);
 	add_dupstr_conf_item("ATTRIBUTE", &conf_ldap_table, 0, &ldap_config.attribute, NULL);
+	add_dupstr_conf_item("BINDDN", &conf_ldap_table, 0, &ldap_config.binddn, NULL);
+	add_dupstr_conf_item("BINDAUTH", &conf_ldap_table, 0, &ldap_config.bindauth, NULL);
 
 	auth_user_custom = &ldap_auth_user;
 
@@ -231,6 +251,8 @@ void _moddeinit(module_unload_intent_t intent)
 	del_conf_item("DNFORMAT", &conf_ldap_table);
 	del_conf_item("BASE", &conf_ldap_table);
 	del_conf_item("ATTRIBUTE", &conf_ldap_table);
+	del_conf_item("BINDDN", &conf_ldap_table);
+	del_conf_item("BINDAUTH", &conf_ldap_table);
 	del_top_conf("LDAP");
 }
 

@@ -116,6 +116,7 @@ typedef struct {
 
 /* misc string stuff */
 E char *random_string(int sz);
+E void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest);
 E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
 E const char *number_to_string(int num);

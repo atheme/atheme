@@ -21,6 +21,7 @@ command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), AC_NO
 
 void _modinit(module_t *m)
 {
+	MODULE_CONFLICT(m, "nickserv/sendpass")
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/setpass");
 
 	service_named_bind_command("nickserv", &ns_sendpass);

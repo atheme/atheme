@@ -14,15 +14,17 @@
 
 DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
+static bool has_protoctl = false;
 static bool use_esvid = false;
 static bool use_mlock = false;
+static char ts6sid[3 + 1] = "";
 
 /* *INDENT-OFF* */
 
 ircd_t Unreal = {
         "UnrealIRCd 3.1 or later",      /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
-        false,                          /* Whether or not we use IRCNet/TS6 UID */
+        true,                           /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
         true,                           /* Whether or not we support channel owners. */
         true,                           /* Whether or not we support channel protection. */
@@ -321,11 +323,13 @@ static unsigned int unreal_server_login(void)
 		return 1;
 
 	me.bursting = true;
+	has_protoctl = false;
 
 	sts("PROTOCTL NICKv2 VHP NICKIP UMODE2 SJOIN SJOIN2 SJ3 NOQUIT TKLEXT ESVID");
+	sts("PROTOCTL SID=%s", me.numeric);
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 
-	services_init();
+	sts(":%s EOS", ME);
 
 	return 0;
 }
@@ -335,35 +339,38 @@ static void unreal_introduce_nick(user_t *u)
 {
 	const char *umode = user_get_umodestr(u);
 
-	sts("NICK %s 1 %lu %s %s %s * %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+	if (!ircd->uses_uid)
+		sts("NICK %s 1 %lu %s %s %s 0 %sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, umode, u->gecos);
+	else
+		sts(":%s UID %s 1 %lu %s %s %s * %sS * * * :%s", ME, u->nick, (unsigned long)u->ts, u->user, u->host, u->uid, umode, u->gecos);
 }
 
 /* invite a user to a channel */
 static void unreal_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
 static void unreal_quit_sts(user_t *u, const char *reason)
 {
-	sts(":%s QUIT :%s", u->nick, reason);
+	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
 /* WALLOPS wrapper */
 static void unreal_wallops_sts(const char *text)
 {
-	sts(":%s GLOBOPS :%s", me.name, text);
+	sts(":%s GLOBOPS :%s", ME, text);
 }
 
 /* join a channel */
 static void unreal_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
-				c->name, modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
+				c->name, modes, CLIENT_NAME(u));
 	else
-		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
-				c->name, u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts,
+				c->name, CLIENT_NAME(u));
 }
 
 /* lower TS */
@@ -406,17 +413,17 @@ static void unreal_msg_global_sts(user_t *from, const char *mask, const char *te
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s PRIVMSG %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s PRIVMSG %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s PRIVMSG %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s PRIVMSG %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 /* NOTICE wrapper */
 static void unreal_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
 static void unreal_notice_global_sts(user_t *from, const char *mask, const char *text)
@@ -429,16 +436,16 @@ static void unreal_notice_global_sts(user_t *from, const char *mask, const char 
 		MOWGLI_ITER_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
-		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
 static void unreal_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
 static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, const char *fmt, ...)
@@ -450,7 +457,7 @@ static void unreal_numeric_sts(server_t *from, int numeric, user_t *target, cons
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from->name, numeric, target->nick, buf);
+	sts(":%s %d %s %s", SERVER_NAME(from), numeric, CLIENT_NAME(target), buf);
 }
 
 /* KILL wrapper */
@@ -477,16 +484,16 @@ static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reaso
 			 * dropped.
 			 */
 		}
-		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
 	}
 	else
-		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
 static void unreal_part_sts(channel_t *c, user_t *u)
 {
-	sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
@@ -495,7 +502,7 @@ static void unreal_kline_sts(const char *server, const char *user, const char *h
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	sts(":%s TKL + G %s %s %s %lu %lu :%s", ME, user, host, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -504,7 +511,7 @@ static void unreal_unkline_sts(const char *server, const char *user, const char 
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL - G %s %s %s", me.name, user, host, svs != NULL ? svs->nick : me.name);
+	sts(":%s TKL - G %s %s %s", ME, user, host, svs != NULL ? svs->nick : me.name);
 }
 
 static void unreal_xline_sts(const char *server, const char *realname, long duration, const char *reason)
@@ -524,12 +531,12 @@ static void unreal_xline_sts(const char *server, const char *realname, long dura
 	if (*escapedreason == ':')
 		*escapedreason = ';';
 
-	sts(":%s SVSNLINE + %s :%s", me.name, escapedreason, realname);
+	sts(":%s SVSNLINE + %s :%s", ME, escapedreason, realname);
 }
 
 static void unreal_unxline_sts(const char *server, const char *realname)
 {
-	sts(":%s SVSNLINE - :%s", me.name, realname);
+	sts(":%s SVSNLINE - :%s", ME, realname);
 }
 
 static void unreal_qline_sts(const char *server, const char *name, long duration, const char *reason)
@@ -543,7 +550,7 @@ static void unreal_qline_sts(const char *server, const char *name, long duration
 	}
 
 	svs = service_find("operserv");
-	sts(":%s TKL + Q * %s %s %lu %lu :%s", me.name, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
+	sts(":%s TKL + Q * %s %s %lu %lu :%s", ME, name, svs != NULL ? svs->nick : me.name, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 static void unreal_unqline_sts(const char *server, const char *name)
@@ -551,7 +558,7 @@ static void unreal_unqline_sts(const char *server, const char *name)
 	service_t *svs;
 
 	svs = service_find("operserv");
-	sts(":%s TKL - Q * %s %s", me.name, name, svs != NULL ? svs->nick : me.name);
+	sts(":%s TKL - Q * %s %s", ME, name, svs != NULL ? svs->nick : me.name);
 }
 
 /* topic wrapper */
@@ -576,7 +583,7 @@ static void unreal_mode_sts(char *sender, channel_t *target, char *modes)
 /* ping wrapper */
 static void unreal_ping_sts(void)
 {
-	sts("PING :%s", me.name);
+	sts("PING :%s", ME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -597,7 +604,10 @@ static void unreal_on_login(user_t *u, myuser_t *account, const char *wantedhost
 		return;
 	}
 
-	sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
+	if (should_reg_umode(u))
+		sts(":%s SVS2MODE %s +rd %s", nicksvs.nick, u->nick, entity(account)->name);
+	else
+		sts(":%s SVS2MODE %s +d %s", nicksvs.nick, u->nick, entity(account)->name);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -618,7 +628,7 @@ static void unreal_jupe(const char *server, const char *reason)
 	server_delete(server);
 
 	svs = service_find("operserv");
-	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : me.name, server, reason);
+	sts(":%s SQUIT %s :%s", svs != NULL ? svs->nick : ME, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
@@ -637,7 +647,7 @@ static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 
 static void unreal_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
-	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
+	sts(":%s SVSNICK %s %s %lu", CLIENT_NAME(source), CLIENT_NAME(u), newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
@@ -645,13 +655,13 @@ static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, 
 {
 	if (duration > 0)
 		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
-				me.name, nick, source->nick,
+				ME, nick, source->nick,
 				(unsigned long)(CURRTIME + duration),
 				(unsigned long)CURRTIME,
 				source->nick,
 				mu ? entity(mu)->name : nick);
 	else
-		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
+		sts(":%s TKL - Q H %s %s", ME, nick, source->nick);
 }
 
 static void unreal_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
@@ -705,7 +715,7 @@ static void unreal_mlock_sts(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name,
+	sts(":%s MLOCK %lu %s :%s", ME, (unsigned long)c->ts, c->name,
 				    mychan_get_sts_mlock(mc));
 }
 
@@ -725,7 +735,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mc = MYCHAN_FROM(c)))
 	{
 		/* Unregistered channel. Clear the MLOCK. */
-		sts(":%s MLOCK %lu %s :", me.name, (unsigned long)c->ts, c->name);
+		sts(":%s MLOCK %lu %s :", ME, (unsigned long)c->ts, c->name);
 		return;
 	}
 
@@ -737,7 +747,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (0 != strcmp(parv[2], mlock))
 	{
 		/* MLOCK is changing, with the same TS. Bounce back the correct one. */
-		sts(":%s MLOCK %lu %s :%s", me.name, (unsigned long)c->ts, c->name, mlock);
+		sts(":%s MLOCK %lu %s :%s", ME, (unsigned long)c->ts, c->name, mlock);
 	}
 }
 
@@ -777,7 +787,7 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
+	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
@@ -978,6 +988,93 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_uid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+	bool realchange;
+	const char *vhost;
+	const char *ipb64;
+	char ipstring[64];
+	int af;
+	size_t iplen;
+	char ipdata[16];
+
+	if (parc == 12)
+	{
+		s = si->s;
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", parv[0]);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, si->s->name);
+
+		vhost = strcmp(parv[8], "*") ? parv[8] : NULL;
+		iplen = 0;
+		if (parc == 11 && strcmp(parv[parc - 2], "*"))
+		{
+			ipb64 = parv[parc - 2];
+			af = AF_INET;
+			if (strlen(ipb64) == 8)
+			{
+				iplen = 4;
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
+					iplen = 0;
+				af = AF_INET;
+			}
+#ifdef AF_INET6
+			else if (strlen(ipb64) == 24)
+			{
+				iplen = 16;
+				if (base64_decode(ipb64, ipdata, iplen) != iplen)
+					iplen = 0;
+				af = AF_INET6;
+			}
+#endif
+			if (iplen != 0)
+				if (!inet_ntop(af, ipdata, ipstring, sizeof ipstring))
+					iplen = 0;
+		}
+		u = user_add(parv[0], parv[3], parv[4], vhost, iplen != 0 ? ipstring : NULL, parv[5], parv[parc - 1], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
+
+		user_mode(u, parv[7]);
+
+		/*
+		 * with ESVID:
+		 * If the user's SVID is equal to their accountname,
+		 * they're properly logged in.  Alternatively, the
+		 * 'without ESVID' criteria is used. --nenolod
+		 *
+		 * without ESVID:
+		 * If the user's SVID is equal to their nick TS,
+		 * they're properly logged in --jilles
+		 */
+		if (use_esvid && !IsDigit(*parv[6]))
+		{
+			handle_burstlogin(u, parv[6], 0);
+
+			if (authservice_loaded && should_reg_umode(u))
+				sts(":%s SVS2MODE %s +r", nicksvs.nick, u->nick);
+		}
+		else if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
+			handle_burstlogin(u, NULL, 0);
+
+		handle_nickchange(u);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
@@ -990,7 +1087,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	size_t iplen;
 	char ipdata[16];
 
-	if (parc == 10 || parc == 11)
+	if (parc > 10)
 	{
 		s = server_find(parv[5]);
 		if (!s)
@@ -1081,6 +1178,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			else
 				/* changed from registered nick, remove +r */
 				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
+		}
+		else if (realchange && !nicksvs.no_nick_ownership && use_esvid)
+		{
+			if (should_reg_umode(si->su))
+				sts(":%s SVS2MODE %s +r", nicksvs.nick, parv[0]);
+			else
+				sts(":%s SVS2MODE %s -r", nicksvs.nick, parv[0]);
 		}
 
 		handle_nickchange(si->su);
@@ -1205,19 +1309,48 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 	const char *inf;
 
+	/* because multiple PROTOCTL messages are allowed without a PROTOCTL END,
+	 * and even if we added a PROTOCTL END in unreal 3.4, we'd still have to do
+	 * this hack in order to support 3.2... -- kaniini
+	 */
+	if (has_protoctl)
+	{
+		if (ts6sid[0] == '\0')
+			ircd->uses_uid = false;
+
+		services_init();
+		has_protoctl = false;	/* only once after PROTOCTL message. */
+	}
+
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	if (si->s == NULL && (inf = strchr(parv[2], ' ')) != NULL)
 		inf++;
 	else
 		inf = parv[2];
-	s = handle_server(si, parv[0], NULL, atoi(parv[1]), inf);
+	s = handle_server(si, parv[0], si->s || !ircd->uses_uid ? NULL : ts6sid, atoi(parv[1]), inf);
 
 	if (s != NULL && s->uplink != me.me)
 	{
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, s->name);
+		sts(":%s PING %s %s", ME, me.name, s->name);
+	}
+}
+
+static void m_sid(sourceinfo_t *si, int parc, char *parv[])
+{
+	server_t *s;
+	const char *inf;
+
+	s = handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[3]);
+
+	if (s != NULL && s->uplink != me.me)
+	{
+		/* elicit PONG for EOB detection; pinging uplink is
+		 * already done elsewhere -- jilles
+		 */
+		sts(":%s PING %s %s", ME, me.name, s->sid);
 	}
 }
 
@@ -1331,18 +1464,26 @@ static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i;
 
+	has_protoctl = true;
+
 	for (i = 0; i < parc; i++)
 	{
 		if (!irccasecmp(parv[i], "ESVID"))
 			use_esvid = true;
 		else if (!irccasecmp(parv[i], "MLOCK"))
 			use_mlock = true;
+		else if (!strncmp(parv[i], "SID=", 4))
+		{
+			ircd->uses_uid = true;
+			mowgli_strlcpy(ts6sid, (parv[i] + 4), sizeof(ts6sid));
+		}
 	}
 }
 
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
 
 	/* Symbol relocation voodoo. */
 	server_login = &unreal_server_login;
@@ -1398,6 +1539,7 @@ void _modinit(module_t * m)
 	pcommand_add("SJOIN", m_sjoin, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("UID", m_uid, 10, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("UMODE2", m_umode, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
@@ -1405,6 +1547,7 @@ void _modinit(module_t * m)
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SID", m_sid, 4, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
 	pcommand_add("VERSION", m_version, 1, MSRC_USER);
@@ -1419,7 +1562,7 @@ void _modinit(module_t * m)
 	pcommand_add("SETHOST", m_sethost, 1, MSRC_USER);
 	pcommand_add("CHGHOST", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
-	pcommand_add("PROTOCTL", m_protoctl, 10, MSRC_UNREG);
+	pcommand_add("PROTOCTL", m_protoctl, 1, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
 

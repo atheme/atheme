@@ -1454,6 +1454,9 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		has_shun = false;
 		has_svstopic_topiclock = false;
 		has_protocol = 0;
+
+		if (parc > 1)
+			has_protocol = atoi(parv[1]);
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0 && parc > 1)
 	{
@@ -1480,7 +1483,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			/* XXX check/store CHANMAX/IDENTMAX */
 		}
 	}
-	else if (strcasecmp(parv[0], "MODULES") == 0 && parc > 1)
+	else if ((strcasecmp(parv[0], "MODULES") == 0 || strcasecmp(parv[0], "MODSUPPORT") == 0) && parc > 1)
 	{
 		if (strstr(parv[1], "m_services_account.so"))
 		{
@@ -1553,7 +1556,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			slog(LG_INFO, "m_capab(): you didn't load m_svshold into inspircd. nickname enforcers will not work.");
 		}
 
-		if (has_protocol < PROTOCOL_12BETA)
+		if (has_protocol && (has_protocol < PROTOCOL_12BETA))
 		{
 			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
 			exit(EXIT_FAILURE);

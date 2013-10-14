@@ -67,12 +67,8 @@ mowgli_module_t *linker_open_ext(const char *path, char *errbuf, int errlen)
 	ret = mowgli_module_open(buf);
 	free(buf);
 
-#ifdef HAVE_DLINFO
 	if (!ret)
-	{
-		mowgli_strlcpy(errbuf, dlerror(), errlen);
-	}
-#endif
+		mowgli_strlcpy(errbuf, "mowgli_module_open() failed", errlen);
 
 	return ret;
 }

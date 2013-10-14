@@ -34,6 +34,11 @@ AC_GNU_SOURCE
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
+PKG_PROG_PKG_CONFIG
+if test -z "$PKG_CONFIG"; then
+	AC_ERROR([pkg-config not found])
+fi
+
 dnl Automake compatibility. --nenolod
 AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
 AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
