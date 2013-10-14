@@ -53,6 +53,7 @@ src/ecdsakeygen/ecdsakeygen
 src/ecdsasign/ecdsasign
 src/footprint/footprint
 tools/createtestdb
+tools/createburst/createburst
 tools/htmlhelp
 buildsys.mk
 extra.mk
