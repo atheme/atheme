@@ -1612,7 +1612,7 @@ groupserv {
 	/* (*)real
 	 * The realname (gecos) information we want GroupServ to have.
 	 */
-	real = "Group Managment Services";
+	real = "Group Management Services";
 
 	/* (*)aliases
 	 * Command aliases for GroupServ.
