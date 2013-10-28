@@ -54,11 +54,11 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 	wallops("\2%s\2 is using MODE on \2%s\2 (set: \2%s\2)",
 		get_oper_name(si), channel, mode);
 	logcommand(si, CMDLOG_ADMIN, "MODE: \2%s\2 on \2%s\2", mode, channel);
+	command_success_nodata(si, _("Setting modes \2%s\2 on \2%s\2."), mode, channel);
 
 	modeparc = sjtoken(mode, ' ', modeparv);
 
 	channel_mode(si->service->me, c, modeparc, modeparv);
-	command_success_nodata(si, _("Set modes \2%s\2 on \2%s\2."), mode, channel);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
