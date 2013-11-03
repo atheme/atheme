@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 2, ns_cmd_drop, { .path = "nickserv/drop" } };
+command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 3, ns_cmd_drop, { .path = "nickserv/drop" } };
 command_t ns_fdrop = { "FDROP", N_("Forces dropping an account registration."), PRIV_USER_ADMIN, 1, ns_cmd_fdrop, { .path = "nickserv/fdrop" } };
 
 void _modinit(module_t *m)
