@@ -8134,7 +8134,7 @@ fi
 $as_echo "$ac_cv_lib_ssl_SSL_read" >&6; }
 if test "x$ac_cv_lib_ssl_SSL_read" = xyes; then :
 
-		for ac_header in openssl/ssl.h openssl/err.h openssl/ec.h
+		for ac_header in openssl/ssl.h openssl/err.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
@@ -8194,7 +8194,7 @@ fi
 $as_echo "$ac_cv_lib_eay32_DH_generate_key" >&6; }
 if test "x$ac_cv_lib_eay32_DH_generate_key" = xyes; then :
 
-				for ac_header in openssl/ssl.h openssl/err.h openssl/ec.h
+				for ac_header in openssl/ssl.h openssl/err.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
@@ -8221,6 +8221,18 @@ fi
 fi
 
 	if test "$SSL" = "yes"; then
+		for ac_header in openssl/ec.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_OPENSSL_EC_H 1
+_ACEOF
+
+fi
+
+done
+ # Defines HAVE_OPENSSL_EC_H
 
 $as_echo "#define HAVE_OPENSSL /**/" >>confdefs.h
 
