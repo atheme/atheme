@@ -251,19 +251,19 @@ AC_ARG_ENABLE(ssl,
 SSL=no
 if test "$enable_ssl" = "yes"; then
 	AC_CHECK_LIB(ssl, SSL_read, [
-		AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
+		AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h openssl/ec.h, [
 			SSL_LIBS="-lssl -lcrypto"
 			AC_SUBST(SSL_LIBS)
 			SSL=yes
-			],,[-])
+			],[SSL=no],[-])
 		], [
 			AC_CHECK_LIB(eay32, DH_generate_key, [
-				AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
+				AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h openssl/ec.h, [
 					# Ugh.
 					SSL_LIBS="-leay32 /mingw/lib/ssleay32.a"
 					AC_SUBST(SSL_LIBS)
 					SSL=yes
-					],,[-])
+					],[SSL=no],[-])
 			], [], [])
 		], -lcrypto)
 	if test "$SSL" = "yes"; then

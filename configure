@@ -8134,7 +8134,7 @@ fi
 $as_echo "$ac_cv_lib_ssl_SSL_read" >&6; }
 if test "x$ac_cv_lib_ssl_SSL_read" = xyes; then :
 
-		for ac_header in openssl/ssl.h openssl/err.h
+		for ac_header in openssl/ssl.h openssl/err.h openssl/ec.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
@@ -8147,6 +8147,8 @@ _ACEOF
 
 			SSL=yes
 
+else
+  SSL=no
 fi
 
 done
@@ -8192,7 +8194,7 @@ fi
 $as_echo "$ac_cv_lib_eay32_DH_generate_key" >&6; }
 if test "x$ac_cv_lib_eay32_DH_generate_key" = xyes; then :
 
-				for ac_header in openssl/ssl.h openssl/err.h
+				for ac_header in openssl/ssl.h openssl/err.h openssl/ec.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
@@ -8206,6 +8208,8 @@ _ACEOF
 
 					SSL=yes
 
+else
+  SSL=no
 fi
 
 done
