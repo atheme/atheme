@@ -83,6 +83,9 @@
 /* Define to 1 if openssl is available */
 #undef HAVE_OPENSSL
 
+/* Define to 1 if you have the <openssl/ec.h> header file. */
+#undef HAVE_OPENSSL_EC_H
+
 /* Define to 1 if you have the <openssl/err.h> header file. */
 #undef HAVE_OPENSSL_ERR_H
 

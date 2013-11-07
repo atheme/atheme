@@ -7,7 +7,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
+#if defined HAVE_OPENSSL && defined HAVE_OPENSSL_EC_H
 
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
