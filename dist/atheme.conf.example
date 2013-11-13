@@ -931,7 +931,9 @@ serverinfo {
 
 /* uplink{} blocks define connections to IRC servers.
  * Multiple may be defined but only one will be used at a time (IRC
- * being a tree shaped network).
+ * being a tree shaped network). Atheme does not currently link over SSL.
+ * To link Atheme over ssl, please connect Atheme to a local ircd and have that
+ * connect to your network over SSL.
  */
 uplink "irc.example.net" {
 	// The server name of the ircd you're linking to goes above.
