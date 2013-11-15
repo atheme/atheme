@@ -5208,7 +5208,7 @@ msgstr "Вы не можете RELEASE самого себя."
 #: modules/nickserv/enforce.c:236
 #, c-format
 msgid "%s has been released."
-msgstr "%s снят с регистрации."
+msgstr "%s освобождён."
 
 #: modules/nickserv/enforce.c:249
 #, c-format
