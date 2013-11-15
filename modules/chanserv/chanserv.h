@@ -65,6 +65,32 @@ static inline void prefix_action_set(mowgli_list_t *actions, char *nick, bool en
 	mowgli_node_add(act, mowgli_node_create(), actions);
 }
 
+static inline void prefix_action_set_all(mowgli_list_t *actions, bool dfl, char *nicklist)
+{
+	char *nick, *strtokctx;
+	bool en;
+
+	nick = strtok_r(nicklist, " ", &strtokctx);
+	do
+	{
+		switch (*nick)
+		{
+		case '-':
+			en = false;
+			nick++;
+			break;
+		case '+':
+			en = true;
+			nick++;
+			break;
+		default:
+			en = dfl;
+		}
+
+		prefix_action_set(actions, nick, en);
+	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
+}
+
 static inline void prefix_action_clear(mowgli_list_t *actions)
 {
 	mowgli_node_t *n, *tn;
