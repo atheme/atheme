@@ -38,4 +38,43 @@ static inline bool invert_purpose(sourceinfo_t *si, int parc, char *chan, char *
 	return false;
 }
 
+struct prefix_action
+{
+	bool en; /* en for "enable" */
+	char nick[0]; /* CAREFUL! */
+};
+
+static inline void prefix_action_set(mowgli_list_t *actions, char *nick, bool en)
+{
+	struct prefix_action *act;
+	mowgli_node_t *n;
+
+	MOWGLI_LIST_FOREACH(n, actions->head)
+	{
+		act = n->data;
+		if (!strcmp(act->nick, nick))
+		{
+			act->en = en;
+			return;
+		}
+	}
+
+	act = smalloc(sizeof(*act) + strlen(nick) + 1);
+	act->en = en;
+	strcpy(act->nick, nick);
+	mowgli_node_add(act, mowgli_node_create(), actions);
+}
+
+static inline void prefix_action_clear(mowgli_list_t *actions)
+{
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, actions->head)
+	{
+		free(n->data);
+		mowgli_node_delete(n, actions);
+		mowgli_node_free(n);
+	}
+}
+
 #endif
