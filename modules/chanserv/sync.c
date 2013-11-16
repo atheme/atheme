@@ -423,6 +423,9 @@ void _modinit(module_t *m)
 	hook_add_event("user_oper");
 	hook_add_user_oper(sync_user);
 
+	hook_add_event("user_deoper");
+	hook_add_user_deoper(sync_user);
+
 	hook_add_event("user_identify");
 	hook_add_user_identify(sync_user);
 
@@ -435,6 +438,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_channel_acl_change(sync_channel_acl_change);
 	hook_del_user_sethost(sync_user);
 	hook_del_user_oper(sync_user);
+	hook_del_user_deoper(sync_user);
 	hook_del_user_identify(sync_user);
 	hook_del_user_register(sync_myuser);
 
