@@ -36,27 +36,30 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("chanserv", &cs_devoice);
 }
 
-static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
+static mowgli_list_t voice_actions;
+
+static void cmd_voice(sourceinfo_t *si, bool voicing, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
+	char *nicklist;
+	bool voice;
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
-	char *nicklist;
-	char *strtokctx;
-
-	if (!chan)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VOICE");
-		command_fail(si, fault_needmoreparams, _("Syntax: VOICE <#channel> [nickname] [...]"));
-		return;
-	}
+	mowgli_node_t *n;
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_VOICE) && (tu != si->su ||
+				!chanacs_source_has_flag(mc, si, CA_AUTOVOICE)))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 	
@@ -67,11 +70,15 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	nick = strtok_r(nicklist, " ", &strtokctx);
-	do
+	prefix_action_set_all(&voice_actions, voicing, nicklist);
+	free(nicklist);
+
+	MOWGLI_LIST_FOREACH(n, voice_actions.head)
 	{
-		if (invert_purpose(si, parc, chan, &nick, '-', &cs_cmd_devoice))
-			continue;
+		struct prefix_action *act = n->data;
+		nick = act->nick;
+		voice = act->en;
+
 		/* figure out who we're going to voice */
 		if (!(tu = user_find_named(nick)))
 		{
@@ -79,13 +86,6 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		if (!chanacs_source_has_flag(mc, si, CA_VOICE) && (tu != si->su ||
-					!chanacs_source_has_flag(mc, si, CA_AUTOVOICE)))
-		{
-			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-			continue;
-		}
-
 		if (is_internal_client(tu))
 			continue;
 
@@ -96,83 +96,45 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
-		cu->modes |= CSTATUS_VOICE;
+		modestack_mode_param(chansvs.nick, mc->chan, voice ? MTYPE_ADD : MTYPE_DEL, 'v', CLIENT_NAME(tu));
+		if (voice)
+			cu->modes |= CSTATUS_VOICE;
+		else
+			cu->modes &= ~CSTATUS_VOICE;
 
 		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
+			change_notify(chansvs.nick, tu, "You have been %svoiced on %s by %s", voice ? "" : "de", mc->name, get_source_name(si));
 
-		logcommand(si, CMDLOG_DO, "VOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
+		logcommand(si, CMDLOG_DO, "%sVOICE: \2%s!%s@%s\2 on \2%s\2", voice ? "": "DE", tu->nick, tu->user, tu->vhost, mc->name);
 		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been voiced on \2%s\2."), tu->nick, mc->name);
-	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
-	free(nicklist);
+			command_success_nodata(si, _("\2%s\2 has been %svoiced on \2%s\2."), tu->nick, voice ? "" : "de", mc->name);
+	}
+
+	prefix_action_clear(&voice_actions);
+}
+
+static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
+{
+	if (!parv[0])
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VOICE");
+		command_fail(si, fault_needmoreparams, _("Syntax: VOICE <#channel> [nickname] [...]"));
+		return;
+	}
+
+	cmd_voice(si, true, parc, parv);
 }
 
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = parv[0];
-	char *nick = parv[1];
-	mychan_t *mc;
-	user_t *tu;
-	chanuser_t *cu;
-	char *nicklist;
-	char *strtokctx;
-
-	if (!chan)
+	if (!parv[0])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEVOICE");
 		command_fail(si, fault_needmoreparams, _("Syntax: DEVOICE <#channel> [nickname] [...]"));
 		return;
 	}
 
-	mc = mychan_find(chan);
-	if (!mc)
-	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
-		return;
-	}
-
-	if (!chanacs_source_has_flag(mc, si, CA_VOICE))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
-	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	nick = strtok_r(nicklist, " ", &strtokctx);
-	do
-	{
-		if (invert_purpose(si, parc, chan, &nick, '+', &cs_cmd_voice))
-			continue;
-		/* figure out who we're going to devoice */
-		if (!(tu = user_find_named(nick)))
-		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
-			continue;
-		}
-
-		if (is_internal_client(tu))
-			continue;
-
-		cu = chanuser_find(mc->chan, tu);
-		if (!cu)
-		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-			continue;
-		}
-
-		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
-		cu->modes &= ~CSTATUS_VOICE;
-
-		if (si->c == NULL && tu != si->su)
-			change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
-
-		logcommand(si, CMDLOG_DO, "DEVOICE: \2%s!%s@%s\2 on \2%s\2", tu->nick, tu->user, tu->vhost, mc->name);
-		if (si->su == NULL || !chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, _("\2%s\2 has been devoiced on \2%s\2."), tu->nick, mc->name);
-	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
-	free(nicklist);
+	cmd_voice(si, false, parc, parv);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
