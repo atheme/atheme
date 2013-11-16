@@ -33,7 +33,7 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 {
 	myentity_t *mt;
 	myentity_iteration_state_t state;
-	unsigned int matches;
+	unsigned int matches = 0;
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
