@@ -52,7 +52,7 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
-	char *nicklist;
+	char *nicks;
 	bool protect;
 	mowgli_node_t *n;
 
@@ -81,9 +81,9 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 		return;
 	}
 
-	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	prefix_action_set_all(&protect_actions, protecting, nicklist);
-	free(nicklist);
+	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	prefix_action_set_all(&protect_actions, protecting, nicks);
+	free(nicks);
 
 	MOWGLI_LIST_FOREACH(n, protect_actions.head)
 	{

@@ -52,7 +52,7 @@ static void cmd_owner(sourceinfo_t *si, bool ownering, int parc, char *parv[])
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
-	char *nicklist;
+	char *nicks;
 	bool owner;
 	mowgli_node_t *n;
 
@@ -81,9 +81,9 @@ static void cmd_owner(sourceinfo_t *si, bool ownering, int parc, char *parv[])
 		return;
 	}
 
-	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	prefix_action_set_all(&owner_actions, ownering, nicklist);
-	free(nicklist);
+	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	prefix_action_set_all(&owner_actions, ownering, nicks);
+	free(nicks);
 
 	MOWGLI_LIST_FOREACH(n, owner_actions.head)
 	{

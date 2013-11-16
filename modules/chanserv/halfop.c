@@ -52,7 +52,7 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 	mychan_t *mc;
 	user_t *tu;
 	chanuser_t *cu;
-	char *nicklist;
+	char *nicks;
 	bool halfop;
 	mowgli_node_t *n;
 
@@ -81,9 +81,9 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 		return;
 	}
 
-	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	prefix_action_set_all(&halfop_actions, halfopping, nicklist);
-	free(nicklist);
+	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	prefix_action_set_all(&halfop_actions, halfopping, nicks);
+	free(nicks);
 
 	MOWGLI_LIST_FOREACH(n, halfop_actions.head)
 	{

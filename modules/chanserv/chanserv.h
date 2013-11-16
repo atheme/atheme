@@ -40,12 +40,12 @@ static inline void prefix_action_set(mowgli_list_t *actions, char *nick, bool en
 	mowgli_node_add(act, mowgli_node_create(), actions);
 }
 
-static inline void prefix_action_set_all(mowgli_list_t *actions, bool dfl, char *nicklist)
+static inline void prefix_action_set_all(mowgli_list_t *actions, bool dfl, char *nicks)
 {
 	char *nick, *strtokctx;
 	bool en;
 
-	nick = strtok_r(nicklist, " ", &strtokctx);
+	nick = strtok_r(nicks, " ", &strtokctx);
 	do
 	{
 		switch (*nick)

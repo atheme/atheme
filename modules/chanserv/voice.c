@@ -42,7 +42,7 @@ static void cmd_voice(sourceinfo_t *si, bool voicing, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *nick = parv[1];
-	char *nicklist;
+	char *nicks;
 	bool voice;
 	mychan_t *mc;
 	user_t *tu;
@@ -69,9 +69,9 @@ static void cmd_voice(sourceinfo_t *si, bool voicing, int parc, char *parv[])
 		return;
 	}
 
-	nicklist = (!nick ? strdup(si->su->nick) : strdup(nick));
-	prefix_action_set_all(&voice_actions, voicing, nicklist);
-	free(nicklist);
+	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	prefix_action_set_all(&voice_actions, voicing, nicks);
+	free(nicks);
 
 	MOWGLI_LIST_FOREACH(n, voice_actions.head)
 	{
