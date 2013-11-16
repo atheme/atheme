@@ -16,7 +16,7 @@ static inline unsigned int custom_founder_check(void)
 struct prefix_action
 {
 	bool en; /* en for "enable" */
-	char nick[0]; /* CAREFUL! */
+	char nick[]; /* CAREFUL! */
 };
 
 static inline void prefix_action_set(mowgli_list_t *actions, char *nick, bool en)
