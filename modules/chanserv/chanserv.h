@@ -87,6 +87,9 @@ static inline void prefix_action_set_all(mowgli_list_t *actions, bool dfl, char 
 			en = dfl;
 		}
 
+		if (!strcmp(nick, ""))
+			continue;
+
 		prefix_action_set(actions, nick, en);
 	} while ((nick = strtok_r(NULL, " ", &strtokctx)) != NULL);
 }
