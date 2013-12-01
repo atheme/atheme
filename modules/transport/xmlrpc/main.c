@@ -498,7 +498,8 @@ static int xmlrpcmethod_privset(void *conn, int parc, char *parv[])
  *
  * XML outputs:
  *       boolean: if nickname is online
- *       string: if nickname is authenticated, what entity he is authed to, else '*'
+ *       string: if nickname is authenticated, what entity they are authed to,
+ *       else '*'
  */
 static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 {

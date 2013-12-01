@@ -847,7 +847,7 @@ static void clones_newuser(hook_user_nick_t *data)
 	if (!u)
 		return;
 
-	/* User has no IP, ignore him */
+	/* User has no IP, ignore them */
 	if (is_internal_client(u) || u->ip == NULL)
 		return;
 
@@ -942,7 +942,7 @@ static void clones_userquit(user_t *u)
 	mowgli_node_t *n;
 	hostentry_t *he;
 
-	/* User has no IP, ignore him */
+	/* User has no IP, ignore them */
 	if (is_internal_client(u) || u->ip == NULL)
 		return;
 

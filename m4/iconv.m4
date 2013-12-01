@@ -30,7 +30,7 @@ AC_DEFUN([AM_ICONV_LINK],
 
   dnl Add $INCICONV to CPPFLAGS before performing the following checks,
   dnl because if the user has installed libiconv and not disabled its use
-  dnl via --without-libiconv-prefix, he wants to use it. The first
+  dnl via --without-libiconv-prefix, they want to use it. The first
   dnl AC_TRY_LINK will then fail, the second AC_TRY_LINK will succeed.
   am_save_CPPFLAGS="$CPPFLAGS"
   AC_LIB_APPENDTOVAR([CPPFLAGS], [$INCICONV])

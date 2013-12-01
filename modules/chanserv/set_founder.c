@@ -89,7 +89,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	if (!is_founder(mc, entity(si->smu)))
 	{
 		/* User is not currently the founder.
-		 * Maybe he is trying to complete a transfer?
+		 * Maybe they are trying to complete a transfer?
 		 */
 		metadata_t *md;
 
@@ -164,7 +164,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	{
 		/* User is currently the founder and
 		 * trying to transfer back to himself.
-		 * Maybe he is trying to cancel a transfer?
+		 * Maybe they are trying to cancel a transfer?
 		 */
 
 		if (metadata_find(mc, "private:verify:founderchg:newfounder"))

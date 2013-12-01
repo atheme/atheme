@@ -17,7 +17,7 @@ ifdef([AC_HELP_STRING],
 
 dnl AC_LIB_PREFIX adds to the CPPFLAGS and LDFLAGS the flags that are needed
 dnl to access previously installed libraries. The basic assumption is that
-dnl a user will want packages to use other packages he previously installed
+dnl a user will want packages to use other packages they have previously installed
 dnl with the same --prefix option.
 dnl This macro is not needed if only AC_LIB_LINKFLAGS is used to locate
 dnl libraries, but is otherwise very convenient.

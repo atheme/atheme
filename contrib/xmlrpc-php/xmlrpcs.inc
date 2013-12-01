@@ -648,8 +648,8 @@
 			if(!headers_sent())
 			{
 				header('Content-Type: '.$r->content_type);
-				// we do not know if client actually told us an accepted charset, but if he did
-				// we have to tell him what we did
+				// we do not know if client actually told us an accepted charset, but if they did
+				// we have to tell them what we did
 				header("Vary: Accept-Charset");
 
 				// http compression of output: only
