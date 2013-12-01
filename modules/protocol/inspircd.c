@@ -223,13 +223,12 @@ static inline void channel_metadata_sts(channel_t *c, const char *key, const cha
 
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-	/* +F doesn't support *, so don't bother checking for it -- w00t */
-	return check_jointhrottle(value, c, mc, u, mu);
+	return check_jointhrottle((*value == '*' ? value + 1 : value), c, mc, u, mu);
 }
 
 static bool check_nickflood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-	return *value == '*' ? check_jointhrottle(value + 1, c, mc, u, mu) : check_jointhrottle(value, c, mc, u, mu);
+	return check_jointhrottle(value, c, mc, u, mu);
 }
 
 static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
