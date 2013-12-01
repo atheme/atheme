@@ -335,7 +335,7 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
  *
  * Iterate through the list of prefix characters we know about.
  * Continue to do so until all prefixes are covered. Then add the
- * nick to the channel, with the privs he has acquired thus far.
+ * nick to the channel, with the privs they have acquired thus far.
  *
  * Once, and only once we have done that do we start in on checking
  * privileges. Otherwise we have a very inefficient way of doing

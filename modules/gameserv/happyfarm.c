@@ -314,7 +314,7 @@ command_t command_join = { "JOIN", N_("Join the Happy Farm game!"), AC_AUTHENTIC
 
 /*
  * Syntax: BUYPLOT
- * Result: Player buys a plot if he has enough money.
+ * Result: Player buys a plot if they have enough money.
  */
 static void __command_buyplot(sourceinfo_t * si, int parc, char *parv[])
 {
@@ -350,7 +350,7 @@ command_t command_buyplot = { "BUYPLOT", N_("Buy a plot of land!"), AC_AUTHENTIC
 
 /*
  * Syntax: SELLPLOT
- * Result: Player buys a plot if he has enough money.
+ * Result: Player sells a plot back to the motherland
  */
 static void __command_sellplot(sourceinfo_t * si, int parc, char *parv[])
 {
