@@ -1436,6 +1436,14 @@ static void m_rsquit(sourceinfo_t *si, int parc, char *parv[])
 	sts(":%s SQUIT %s :Jupe removed by %s", me.numeric, parv[0], si->su->nick);
 }
 
+static void channel_drop(mychan_t *mc)
+{
+	if (mc->chan == NULL)
+		return;
+
+	channel_metadata_sts(mc->chan, "mlock", "");
+}
+
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i, varc;
@@ -1669,6 +1677,8 @@ void _modinit(module_t * m)
 
 	hook_add_event("server_eob");
 	hook_add_server_eob(server_eob);
+	hook_add_event("channel_drop");
+	hook_add_channel_drop(channel_drop);
 
 	m->mflags = MODTYPE_CORE;
 
