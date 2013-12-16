@@ -198,7 +198,6 @@ static bool has_svstopic_topiclock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
-#define PROTOCOL_METADATA_TS	1204
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
@@ -213,13 +212,7 @@ static server_t *sid_find(char *name)
 
 static inline void channel_metadata_sts(channel_t *c, const char *key, const char *value)
 {
-	if (has_protocol < PROTOCOL_METADATA_TS)
-	{
-		sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
-		return;
-	}
-
-	sts(":%s METADATA %s %ld %s :%s", ME, c->name, c->ts, key, value);
+	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
 }
 
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
