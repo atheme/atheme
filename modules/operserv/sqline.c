@@ -241,7 +241,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 				i++;
 		}
 
-		if (i < 3 && (strchr(target, '*') || strchr(target, '?')))
+		if (i < 3 && (strchr(target, '*') || strchr(target, '?')) && !has_priv(si, PRIV_AKILL_ANYMASK))
 		{
 			command_fail(si, fault_badparams, _("Invalid target: \2%s\2. At least three non-wildcard characters are required."), target);
 			return;
