@@ -63,6 +63,7 @@ mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_nod
 bool (*is_valid_nick)(const char *nick) = generic_is_valid_nick;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
+void (*topiclock_sts)(channel_t *c) = generic_topiclock_sts;
 void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason) = generic_quarantine_sts;
 
 unsigned int generic_server_login(void)
@@ -346,6 +347,11 @@ bool generic_is_valid_host(const char *host)
 }
 
 void generic_mlock_sts(channel_t *c)
+{
+	/* nothing to do here. */
+}
+
+void generic_topiclock_sts(channel_t *c)
 {
 	/* nothing to do here. */
 }

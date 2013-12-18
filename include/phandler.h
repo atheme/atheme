@@ -227,6 +227,8 @@ E bool (*is_valid_nick)(const char *nick);
 E bool (*is_valid_host)(const char *host);
 /* burst a channel mlock. */
 E void (*mlock_sts)(channel_t *c);
+/* burst a channel topiclock */
+E void (*topiclock_sts)(channel_t *c);
 /* attempt to quarantine a user.
  * in Unreal-esque terms, this means SHUN.
  * in Hybrid, this means CAPTURE.
@@ -273,6 +275,7 @@ E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mow
 E bool generic_is_valid_host(const char *host);
 E bool generic_is_valid_nick(const char *nick);
 E void generic_mlock_sts(channel_t *c);
+E void generic_topiclock_sts(channel_t *c);
 E void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason);
 
 E struct cmode_ *mode_list;
