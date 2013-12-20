@@ -105,9 +105,8 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	myuser_set_email(si->smu, email);
-
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", entity(si->smu)->name, si->smu->email, email);
+	myuser_set_email(si->smu, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, si->smu->email);
 }
 
