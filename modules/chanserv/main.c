@@ -674,6 +674,7 @@ static void cs_register(hook_channel_req_t *hdata)
 			return;
 
 		mlock_sts(mc->chan);
+		topiclock_sts(mc->chan);
 		check_modes(mc, true);
 	}
 }
@@ -830,6 +831,7 @@ static void cs_newchan(channel_t *c)
 	}
 
 	mlock_sts(c);
+	topiclock_sts(c);
 
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
@@ -871,6 +873,7 @@ static void cs_tschange(channel_t *c)
 
 	/* reset the mlock if needed */
 	mlock_sts(c);
+	topiclock_sts(c);
 }
 
 static void on_shutdown(void *unused)

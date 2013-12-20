@@ -67,6 +67,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:ON: \2%s\2", mc->name);
 
 		mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
+		topiclock_sts(mc->chan);
 
 		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "TOPICLOCK", mc->name);
 		return;
@@ -83,6 +84,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:OFF: \2%s\2", mc->name);
 
 		mc->flags &= ~MC_TOPICLOCK;
+		topiclock_sts(mc->chan);
 
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "TOPICLOCK", mc->name);
 		return;

@@ -726,6 +726,15 @@ static void inspircd_mlock_sts(channel_t *c)
 	channel_metadata_sts(c, "mlock", mychan_get_sts_mlock(mc));
 }
 
+static void  inspircd_topiclock_sts(channel_t *c)
+{
+	mychan_t *mc = MYCHAN_FROM(c);
+	if (mc == NULL || !has_svstopic_topiclock)
+		return;
+
+	channel_metadata_sts(c, "topiclock", (mc->flags & MC_TOPICLOCK ? "1" : ""));
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -1435,6 +1444,7 @@ static void channel_drop(mychan_t *mc)
 		return;
 
 	channel_metadata_sts(mc->chan, "mlock", "");
+	channel_metadata_sts(mc->chan, "topiclock", "");
 }
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
@@ -1625,6 +1635,7 @@ void _modinit(module_t * m)
 	sasl_sts = &inspircd_sasl_sts;
 	quarantine_sts = &inspircd_quarantine_sts;
 	mlock_sts = &inspircd_mlock_sts;
+	topiclock_sts = &inspircd_topiclock_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
