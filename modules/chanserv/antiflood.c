@@ -545,6 +545,7 @@ _moddeinit(module_unload_intent_t intent)
 
 	mowgli_patricia_destroy(mqueue_trie, mqueue_trie_destroy_cb, NULL);
 	mowgli_timer_destroy(base_eventloop, mqueue_gc_timer);
+	mowgli_timer_destroy(base_eventloop, antiflood_unenforce_timer);
 
 	del_conf_item("ANTIFLOOD_ENFORCE_METHOD", &chansvs.me->conf_table);
 }
