@@ -1548,6 +1548,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		TAINT_ON(strstr(parv[1], "m_nickregister.so") != NULL, "inspircd built-in services (m_nickregister) are not compatible with atheme");
 		TAINT_ON(strstr(parv[1], "m_namedmodes.so") != NULL, "namedmodes (m_namedmodes) are unsupported in Atheme due to the fact that any network can change modes around thus possibly breaking mlocks");
 		TAINT_ON(strstr(parv[1], "m_opflags.so") != NULL, "inspircd built-in services (m_opflags) are not compatible with atheme");
+		TAINT_ON(strstr(parv[1], "m_autoop.so") != NULL, "inspircd built-in services (m_autoop) are not compatible with atheme");
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
