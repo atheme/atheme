@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __ATHEME_INTL_H__
-#define __ATHEME_INTL_H__
+#ifndef ATHEME_INTL_H
+#define ATHEME_INTL_H
 
 #ifdef ENABLE_NLS
 # include <locale.h>

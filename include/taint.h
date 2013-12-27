@@ -5,8 +5,8 @@
  * Management of tainted running configuration reasons and status.
  */
 
-#ifndef __TAINT_H__
-#define __TAINT_H__
+#ifndef ATHEME_TAINT_H
+#define ATHEME_TAINT_H
 
 typedef struct {
 	char condition[BUFSIZE];

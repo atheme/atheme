@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _UPLINK_H
-#define _UPLINK_H
+#ifndef ATHEME_UPLINK_H
+#define ATHEME_UPLINK_H
 
 typedef struct uplink_ uplink_t;
 

@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _GLOBAL_H
-#define _GLOBAL_H
+#ifndef ATHEME_GLOBAL_H
+#define ATHEME_GLOBAL_H
 
 /* me, a struct containing basic configuration options and some dynamic
  * information about our uplink and program state */

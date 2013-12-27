@@ -5,8 +5,9 @@
  * Datastream query stuff.
  *
  */
-#ifndef __CLARODATASTREAM
-#define __CLARODATASTREAM
+
+#ifndef ATHEME_DATASTREAM_H
+#define ATHEME_DATASTREAM_H
 
 E void sendq_add(connection_t *cptr, char *buf, size_t len);
 E void sendq_add_eof(connection_t *cptr);

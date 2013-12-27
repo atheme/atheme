@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __CLAROBASEMEMORY
-#define __CLAROBASEMEMORY
+#ifndef ATHEME_MEMORY_H
+#define ATHEME_MEMORY_H
 
 E void *smalloc(size_t size);
 E void *scalloc(size_t elsize, size_t els);

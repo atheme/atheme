@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _TOOLS_H
-#define _TOOLS_H
+#ifndef ATHEME_TOOLS_H
+#define ATHEME_TOOLS_H
 
 /* email stuff */
 E int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param);

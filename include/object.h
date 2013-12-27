@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __ATHEME_OBJECT_H__
-#define __ATHEME_OBJECT_H__
+#ifndef ATHEME_OBJECT_H
+#define ATHEME_OBJECT_H
 
 struct metadata_ {
 	stringref name;

@@ -4,8 +4,8 @@
  * $Id: reslib.h 446 2006-02-12 02:46:54Z db $
  */
 
-#ifndef _CHARYBDIS_RESLIB_H
-#define _CHARYBDIS_RESLIB_H
+#ifndef CHARYBDIS_RESLIB_H
+#define CHARYBDIS_RESLIB_H
 
 /* Longest hostname we're willing to work with.
  * Due to DNSBLs this is more than HOSTLEN.

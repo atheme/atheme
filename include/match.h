@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _MATCH_H
-#define _MATCH_H
+#ifndef ATHEME_MATCH_H
+#define ATHEME_MATCH_H
 
 /* cidr.c */
 E int match_ips(const char *mask, const char *address);

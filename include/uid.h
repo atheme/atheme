@@ -5,14 +5,14 @@
  * UID provider stuff.
  */
 
-#ifndef __UID_H__
-#define __UID_H__
+#ifndef ATHEME_UID_H
+#define ATHEME_UID_H
 
 typedef struct {
 	void (*uid_init)(const char *sid);
 	const char *(*uid_get)(void);
 } uid_provider_t;
 
-extern uid_provider_t *__uid_provider;
+extern uid_provider_t *uid_provider_impl;
 
 #endif

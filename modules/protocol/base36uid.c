@@ -94,10 +94,10 @@ uid_provider_t base36_gen = {
 
 void _modinit(module_t *m)
 {
-	__uid_provider = &base36_gen;
+	uid_provider_impl = &base36_gen;
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	__uid_provider = NULL;
+	uid_provider_impl = NULL;
 }

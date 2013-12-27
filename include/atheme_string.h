@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __CLAROSTRING
-#define __CLAROSTRING
+#ifndef ATHEME_STRING_H
+#define ATHEME_STRING_H
 
 E void strip(char *line);
 E void strip_ctrl(char *line);
