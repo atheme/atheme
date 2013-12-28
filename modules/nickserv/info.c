@@ -37,13 +37,17 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u = NULL;
 	bool recognized = false;
 	const char *name = parv[0];
-	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], *p;
+	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], lastvhostchange[BUFSIZE], *p;
 	time_t registered;
 	struct tm tm, tm2;
 	metadata_t *md;
 	mowgli_node_t *n;
 	mowgli_patricia_iteration_state_t state;
 	const char *vhost;
+	const char *vhost_timestring;
+	const char *vhost_assigner;
+	const char *vhost_assigner_account;
+	time_t vhost_time;
 	bool hide_info;
 	hook_user_req_t req;
 
@@ -135,6 +139,22 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		vhost = md->value;
 	else
 		vhost = NULL;
+
+	if ((md = metadata_find(mu, "private:usercloak-timestamp")))
+		vhost_timestring = md->value;
+	else
+		vhost_timestring = NULL;
+
+	if ((md = metadata_find(mu, "private:usercloak-assigner")))
+		vhost_assigner = md->value;
+	else
+		vhost_assigner = NULL;
+
+	if ((md = metadata_find(mu, "private:usercloak-assigner-account")))
+		vhost_assigner_account = md->value;
+	else
+		vhost_assigner_account = NULL;
+
 	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
 	{
 		mowgli_strlcpy(buf, md->value, sizeof buf);
@@ -149,8 +169,24 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
-	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
+	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_VHOST)))
+	{
 		command_success_nodata(si, _("vHost      : %s"), vhost);
+		if (vhost_timestring)
+		{
+			vhost_time = atoi(vhost_timestring);
+			tm2 = *localtime(&vhost_time);
+			strftime(lastvhostchange, sizeof lastvhostchange, TIME_FORMAT, &tm2);
+			command_success_nodata(si, _("  Assigned : %s (%s ago)"), lastvhostchange, time_ago(vhost_time));
+		}
+		if (vhost_assigner)
+		{
+			if (vhost_assigner_account)
+				command_success_nodata(si, _("  Assigner : %s (account %s)"), vhost_assigner, vhost_assigner_account);
+			else
+				command_success_nodata(si, _("  Assigner : %s"), vhost_assigner);
+		}
+	}
 	if (has_priv(si, PRIV_USER_AUSPEX))
 	{
 		if ((md = metadata_find(mu, "private:host:actual")))

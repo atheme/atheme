@@ -68,7 +68,12 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!check_vhost_validity(si, host))
 		return;
 
+	if (si->su)
+		metadata_add(mu, "private:usercloak-assigner", si->su->nick);
+	if (si->smu)
+		metadata_add(mu, "private:usercloak-assigner-account", entity(si->smu)->name);
 	hs_sethost_all(mu, host);
+
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
 			host, entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
