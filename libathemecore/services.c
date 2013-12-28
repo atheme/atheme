@@ -265,7 +265,7 @@ void joinall(const char *name)
 	MOWGLI_PATRICIA_FOREACH(svs, &state, services_name)
 	{
 		/* service must be online and not a botserv bot */
-		if (svs->me == NULL)
+		if (svs->me == NULL || svs->botonly)
 			continue;
 		join(name, svs->me->nick);
 	}
