@@ -262,7 +262,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_GET, "TAKE: \2%s\2 for \2%s\2", host, entity(si->smu)->name);
 
 			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
-			hs_sethost_all(si->smu, host);
+			hs_sethost_all(si->smu, host, get_source_name(si));
 			do_sethost_all(si->smu, host);
 			
 			return;

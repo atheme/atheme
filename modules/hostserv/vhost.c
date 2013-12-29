@@ -58,7 +58,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	/* deletion action */
 	if (!host)
 	{
-		hs_sethost_all(mu, NULL);
+		hs_sethost_all(mu, NULL, get_source_name(si));
 		command_success_nodata(si, _("Deleted all vhosts for \2%s\2."), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", target);
 		do_sethost_all(mu, NULL); // restore user vhost from user host
@@ -68,8 +68,7 @@ static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!check_vhost_validity(si, host))
 		return;
 
-	metadata_add(mu, "private:usercloak-assigner", get_source_name(si));
-	hs_sethost_all(mu, host);
+	hs_sethost_all(mu, host, get_source_name(si));
 
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to all nicks in account \2%s\2."),
 			host, entity(mu)->name);

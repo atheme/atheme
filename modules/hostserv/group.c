@@ -64,7 +64,7 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	mowgli_strlcpy(buf, md->value, sizeof buf);
-	hs_sethost_all(si->smu, buf);
+	hs_sethost_all(si->smu, buf, get_source_name(si));
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
 }
