@@ -38,6 +38,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	bool recognized = false;
 	const char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], lastvhostchange[BUFSIZE], *p;
+	size_t buflen;
 	time_t registered;
 	struct tm tm, tm2;
 	metadata_t *md;
@@ -48,6 +49,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	const char *vhost_assigner;
 	const char *vhost_assigner_account;
 	time_t vhost_time;
+	bool has_user_auspex;
 	bool hide_info;
 	hook_user_req_t req;
 
@@ -69,9 +71,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	has_user_auspex = has_priv(si, PRIV_USER_AUSPEX);
+
 	if (!(mu = myuser_find_ext(name)))
 	{
-		if (has_priv(si, PRIV_USER_AUSPEX) && (mun = myuser_name_find(name)) != NULL)
+		if (has_user_auspex && (mun = myuser_name_find(name)) != NULL)
 		{
 			const char *setter;
 			const char *reason;
@@ -95,7 +99,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	hide_info = use_account_private && mu->flags & MU_PRIVATE &&
-		mu != si->smu && !has_priv(si, PRIV_USER_AUSPEX);
+		mu != si->smu && !has_user_auspex;
 
 	if (!nicksvs.no_nick_ownership)
 	{
@@ -130,30 +134,22 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
-	if (has_priv(si, PRIV_USER_AUSPEX))
+	if (has_user_auspex)
 	{
 		command_success_nodata(si, _("Entity ID  : %s"), entity(mu)->id);
 	}
 
-	if ((md = metadata_find(mu, "private:usercloak")))
-		vhost = md->value;
-	else
-		vhost = NULL;
+	md = metadata_find(mu, "private:usercloak");
+	vhost = md ? md->value : NULL;
 
-	if ((md = metadata_find(mu, "private:usercloak-timestamp")))
-		vhost_timestring = md->value;
-	else
-		vhost_timestring = NULL;
+	md = metadata_find(mu, "private:usercloak-timestamp");
+	vhost_timestring = md ? md->value : NULL;
 
-	if ((md = metadata_find(mu, "private:usercloak-assigner")))
-		vhost_assigner = md->value;
-	else
-		vhost_assigner = NULL;
+	md = metadata_find(mu, "private:usercloak-assigner");
+	vhost_assigner = md ? md->value : NULL;
 
-	if ((md = metadata_find(mu, "private:usercloak-assigner-account")))
-		vhost_assigner_account = md->value;
-	else
-		vhost_assigner_account = NULL;
+	md = metadata_find(mu, "private:usercloak-assigner-account");
+	vhost_assigner_account = md ? md->value : NULL;
 
 	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
 	{
@@ -169,25 +165,40 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
-	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
+
+	if ((vhost || vhost_timestring || vhost_assigner || vhost_assigner_account) && (si->smu == mu || has_user_auspex))
 	{
-		command_success_nodata(si, _("vHost      : %s"), vhost);
+		buf[0] = '\0';
+		buflen = 0;
+
 		if (vhost_timestring)
 		{
 			vhost_time = atoi(vhost_timestring);
 			tm2 = *localtime(&vhost_time);
-			strftime(lastvhostchange, sizeof lastvhostchange, TIME_FORMAT, &tm2);
-			command_success_nodata(si, _("  Assigned : %s (%s ago)"), lastvhostchange, time_ago(vhost_time));
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm2);
+			buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));
 		}
-		if (vhost_assigner)
+
+		if (has_user_auspex && (vhost_assigner || vhost_assigner_account))
 		{
-			if (vhost_assigner_account)
-				command_success_nodata(si, _("  Assigner : %s (account %s)"), vhost_assigner, vhost_assigner_account);
+			if (!vhost_assigner || !irccasecmp(vhost_assigner, vhost_assigner_account))
+				buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" by %s"), vhost_assigner_account);
 			else
-				command_success_nodata(si, _("  Assigner : %s"), vhost_assigner);
+			{
+				buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" by %s (%s)"), vhost_assigner,
+				                   vhost_assigner_account ? vhost_assigner_account : "");
+			}
 		}
+
+		if (vhost && !buf[0])
+			command_success_nodata(si, _("vHost      : %s"), vhost);
+		else if (vhost && buf[0])
+			command_success_nodata(si, _("vHost      : %s (assigned%s)"), vhost, buf);
+		else if (!vhost && buf[0])
+			command_success_nodata(si, _("vHost      : unassigned%s"), buf);
 	}
-	if (has_priv(si, PRIV_USER_AUSPEX))
+
+	if (has_user_auspex)
 	{
 		if ((md = metadata_find(mu, "private:host:actual")))
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
@@ -233,7 +244,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	/* someone is logged in to this account
 	 * if they're privileged, show them the sessions
 	 */
-	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
+	else if (mu == si->smu || has_user_auspex)
 	{
 		buf[0] = '\0';
 		MOWGLI_ITER_FOREACH(n, mu->logins.head)
@@ -264,7 +275,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (!nicksvs.no_nick_ownership)
 	{
 		/* list registered nicks if privileged */
-		if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
+		if (mu == si->smu || has_user_auspex)
 		{
 			buf[0] = '\0';
 			MOWGLI_ITER_FOREACH(n, mu->nicks.head)
@@ -284,7 +295,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (!(mu->flags & MU_HIDEMAIL)
-		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
+		|| (si->smu == mu || has_user_auspex))
 		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
@@ -369,7 +380,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Flags      : %s"), buf);
 
 #ifdef ENABLE_NLS
-	if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
+	if (mu == si->smu || has_user_auspex)
 		command_success_nodata(si, _("Language   : %s"),
 				language_get_name(mu->language));
 #endif
@@ -379,7 +390,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Oper class : %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
 	}
 
-	if (has_priv(si, PRIV_USER_AUSPEX) || has_priv(si, PRIV_CHAN_AUSPEX))
+	if (has_user_auspex || has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		chanacs_t *ca;
 		int founder = 0, other = 0;
@@ -395,7 +406,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Channels   : %d founder, %d other"), founder, other);
 	}
 
-	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:freeze:freezer")))
+	if (has_user_auspex && (md = metadata_find(mu, "private:freeze:freezer")))
 	{
 		const char *setter = md->value;
 		const char *reason;
@@ -415,7 +426,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	else if (metadata_find(mu, "private:freeze:freezer"))
 		command_success_nodata(si, _("%s has been frozen by the %s administration."), entity(mu)->name, me.netname);
 
-	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, "private:mark:setter")))
+	if (has_user_auspex && (md = metadata_find(mu, "private:mark:setter")))
 	{
 		const char *setter = md->value;
 		const char *reason;
@@ -436,7 +447,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (MU_WAITAUTH & mu->flags)
 		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), entity(mu)->name);
 
-	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
+	if ((mu == si->smu || has_user_auspex) &&
 			(md = metadata_find(mu, "private:verify:emailchg:newemail")))
 	{
 		const char *newemail = md->value;
