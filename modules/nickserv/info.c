@@ -47,7 +47,6 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	const char *vhost;
 	const char *vhost_timestring;
 	const char *vhost_assigner;
-	const char *vhost_assigner_account;
 	time_t vhost_time;
 	bool has_user_auspex;
 	bool hide_info;
@@ -148,9 +147,6 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	md = metadata_find(mu, "private:usercloak-assigner");
 	vhost_assigner = md ? md->value : NULL;
 
-	md = metadata_find(mu, "private:usercloak-assigner-account");
-	vhost_assigner_account = md ? md->value : NULL;
-
 	if (!hide_info && (md = metadata_find(mu, "private:host:vhost")))
 	{
 		mowgli_strlcpy(buf, md->value, sizeof buf);
@@ -166,7 +162,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
 
-	if ((vhost || vhost_timestring || vhost_assigner || vhost_assigner_account) && (si->smu == mu || has_user_auspex))
+	if ((vhost || vhost_timestring || vhost_assigner) && (si->smu == mu || has_user_auspex))
 	{
 		buf[0] = '\0';
 		buflen = 0;
@@ -179,16 +175,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" on %s (%s ago)"), strfbuf, time_ago(vhost_time));
 		}
 
-		if (has_user_auspex && (vhost_assigner || vhost_assigner_account))
-		{
-			if (!vhost_assigner || !irccasecmp(vhost_assigner, vhost_assigner_account))
-				buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" by %s"), vhost_assigner_account);
-			else
-			{
-				buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" by %s (%s)"), vhost_assigner,
-				                   vhost_assigner_account ? vhost_assigner_account : "");
-			}
-		}
+		if (has_user_auspex && vhost_assigner)
+			buflen += snprintf(buf + buflen, BUFSIZE - buflen, _(" by %s"), vhost_assigner);
 
 		if (vhost && !buf[0])
 			command_success_nodata(si, _("vHost      : %s"), vhost);
