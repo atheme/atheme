@@ -694,6 +694,8 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 		return;
 
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, login);
+	if (has_chghostmod)
+		sts(":%s CHGHOST %s %s", me.numeric, target, host);
 }
 
 static void inspircd_sasl_sts(char *target, char mode, char *data)
