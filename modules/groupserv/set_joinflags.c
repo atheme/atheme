@@ -61,7 +61,7 @@ static void gs_cmd_set_joinflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	flags = gs_flags_parser(joinflags, 0);
+	flags = gs_flags_parser(joinflags, 0, flags);
 
 	/* we'll overwrite any existing metadata */
 	metadata_add(mg, "joinflags", number_to_string(flags));

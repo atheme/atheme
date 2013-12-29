@@ -22,7 +22,7 @@ groupacs_t * (*groupacs_find)(mygroup_t *mg, myuser_t *mu, unsigned int flags);
 void (*groupacs_delete)(mygroup_t *mg, myuser_t *mu);
 bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
 
-unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus);
+unsigned int (*gs_flags_parser)(char *flagstring, int allow_minus, unsigned int flags);
 mowgli_list_t * (*myuser_get_membership_list)(myuser_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
 void (*remove_group_chanacs)(mygroup_t *mg);
