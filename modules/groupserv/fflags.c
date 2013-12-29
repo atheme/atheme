@@ -30,8 +30,8 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!parv[0] || !parv[1] || !parv[2])
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-		command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <!group> [user] [changes]"));
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FFLAGS");
+		command_fail(si, fault_needmoreparams, _("Syntax: FFLAGS <!group> [user] [changes]"));
 		return;
 	}
 
@@ -57,7 +57,7 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
-	flags = gs_flags_parser(parv[2], 1);
+	flags = gs_flags_parser(parv[2], 1, flags);
 
 	if (ga != NULL && flags != 0)
 		ga->flags = flags;

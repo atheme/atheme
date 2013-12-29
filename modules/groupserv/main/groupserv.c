@@ -248,10 +248,9 @@ unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 	return count;
 }
 
-unsigned int gs_flags_parser(char *flagstring, int allow_minus)
+unsigned int gs_flags_parser(char *flagstring, int allow_minus, unsigned int flags)
 {
 	char *c;
-	unsigned int flags = 0;
 	unsigned int dir = 0;
 
 	/* XXX: this sucks. :< */
