@@ -169,7 +169,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
-	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_VHOST)))
+	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
 	{
 		command_success_nodata(si, _("vHost      : %s"), vhost);
 		if (vhost_timestring)
