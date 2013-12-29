@@ -37,7 +37,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u = NULL;
 	bool recognized = false;
 	const char *name = parv[0];
-	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], lastvhostchange[BUFSIZE], *p;
+	char buf[BUFSIZE], strfbuf[BUFSIZE], lastlogin[BUFSIZE], *p;
 	size_t buflen;
 	time_t registered;
 	struct tm tm, tm2;
