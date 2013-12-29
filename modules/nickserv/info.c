@@ -167,7 +167,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		buf[0] = '\0';
 		buflen = 0;
 
-		if (vhost_timestring)
+		if (vhost_timestring && (vhost || has_user_auspex))
 		{
 			vhost_time = atoi(vhost_timestring);
 			tm2 = *localtime(&vhost_time);
