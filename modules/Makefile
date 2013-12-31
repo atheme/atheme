@@ -1,4 +1,5 @@
 SUBDIRS = \
+    api \
 	alis \
 	auth \
 	backend \
