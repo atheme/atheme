@@ -8,7 +8,7 @@ void (*http_parse_headers)(http_client_t *container, const char *http_response);
 int (*http_parse_url)(http_client_t *container, const char *url);
 void (*http_add_param)(http_client_t *http, const char *key, const char *value);
 //int (*http_get)(const char *url, http_cb_t cb, void *userdata);
-int (*http_get)(const char *url, void *userdata, http_cb_t cb);
+int (*http_get)(http_client_t *container, void *userdata, http_cb_t cb);
 
 static inline void use_http_symbols(module_t *m)
 {

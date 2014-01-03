@@ -233,7 +233,7 @@ void http_add_param(http_client_t *http, const char *key, const char *value)
     else
     {
         tmp = smalloc(l);
-        snprintf(tmp, l, "?%s=%s", key, value);
+        snprintf(tmp, l, "&%s=%s", key, value);
         http->query_string = srealloc(http->query_string, (strlen(http->query_string) + l));
         mowgli_strlcat(http->query_string, tmp, (strlen(http->query_string) + l));
         free(tmp);
@@ -258,8 +258,9 @@ void http_write_GET(connection_t *cptr)
 
     buf = smalloc(BUFSIZE);
     snprintf(buf, BUFSIZE, 
-            "GET %s HTTP/1.1\r\nUser-Agent: Atheme/%s\r\nHost: %s\r\nAccept: */*\r\n\r\n",
-            container->uri, PACKAGE_VERSION, container->domain);
+            "GET %s%s HTTP/1.1\r\nUser-Agent: Atheme/%s\r\nHost: %s\r\nAccept: */*\r\n\r\n",
+            container->uri, (container->query_string ? container->query_string : ""), PACKAGE_VERSION, container->domain);
+    printf("BUF: %s\n", buf);
     sendq_add(cptr, buf, strlen(buf));
     free(buf);
 }
@@ -292,16 +293,12 @@ void http_handle_EOF(connection_t *cptr)
     container->callback(container, container->userdata);
 }
 
-/*int http_get(const char *url, http_cb_t cb, void *userdata)*/
-int http_get(const char *url, void *userdata, http_cb_t cb)
+int http_get(http_client_t *container, void *userdata, http_cb_t cb)
 {
-    http_client_t *container;
     connection_t *cptr;
 
-    container = http_client_new();
     container->callback = cb;
     container->userdata = userdata;
-    http_parse_url(container, url);
     mowgli_node_add(container, mowgli_node_create(), &http_client_list);
 
     cptr = connection_open_tcp(container->domain,
