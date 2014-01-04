@@ -140,8 +140,6 @@ int http_parse_url(http_client_t *container, const char *url)
 	} else if(strcmp("gopher", container->protocol) == 0) {
 		container->port = 70;
 	} else {
-		/*fprintf(stderr, "unrecognised protocol %s\n", protocol);*/
-		/*last_error = "unrecognised protocol";*/
         container->error = 1;
         container->error_str = sstrdup("unrecognised protocol");
 		free(container->protocol);
@@ -260,7 +258,6 @@ void http_write_GET(connection_t *cptr)
     snprintf(buf, BUFSIZE, 
             "GET %s%s HTTP/1.1\r\nUser-Agent: Atheme/%s\r\nHost: %s\r\nAccept: */*\r\n\r\n",
             container->uri, (container->query_string ? container->query_string : ""), PACKAGE_VERSION, container->domain);
-    printf("BUF: %s\n", buf);
     sendq_add(cptr, buf, strlen(buf));
     free(buf);
 }
