@@ -41,7 +41,8 @@ static void query_string_concat(http_client_t *http, char *str, size_t len)
 		http->query_string_size *= 2;
 		if (http->query_string_size <= http->query_string_len + len)
 			http->query_string_size = http->query_string_len + len + 10;
-		srealloc(http->query_string, http->query_string_size);
+		http->query_string = srealloc(http->query_string,
+		                              http->query_string_size);
 	}
 
 	memcpy(http->query_string + http->query_string_len, str, len);
