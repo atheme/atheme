@@ -7,8 +7,6 @@ DECLARE_MODULE_V1(
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-mowgli_list_t http_client_list;
-
 void _modinit(module_t *m)
 {
 }
@@ -246,12 +244,7 @@ void http_write_GET(connection_t *cptr)
 	http_client_t *container = NULL;
 	char *buf;
 
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, http_client_list.head)
-	{
-		if (((http_client_t *)n->data)->fd == cptr->fd)
-			container = (http_client_t *)n->data;
-	}
-	if (!container)
+	if (!(container = cptr->userdata))
 		return;
 
 	buf = smalloc(BUFSIZE);
@@ -269,17 +262,9 @@ void http_handle_EOF(connection_t *cptr)
 	mowgli_node_t *n, *tn;
 	http_client_t *container;
 
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, http_client_list.head)
+	if (!(container = cptr->userdata))
 	{
-		if (((http_client_t *)n->data)->fd == cptr->fd)
-		{
-			container = (http_client_t *)n->data;
-			mowgli_node_delete(n, &http_client_list);
-		}
-	}
-	if (!container)
-	{
-		slog(LG_INFO, "eof() couldn't find nhttp client");
+		slog(LG_INFO, "eof() couldn't find http client");
 		return;
 	}
 
@@ -296,11 +281,11 @@ int http_get(http_client_t *container, void *userdata, http_cb_t cb)
 
 	container->callback = cb;
 	container->userdata = userdata;
-	mowgli_node_add(container, mowgli_node_create(), &http_client_list);
 
 	cptr = connection_open_tcp(container->domain,
 			NULL, container->port, recvq_put, http_write_GET);
 	container->fd = cptr->fd;
 	/*container->cptr = cptr;*/
 	cptr->close_handler = http_handle_EOF;
+	cptr->userdata = container;
 }
