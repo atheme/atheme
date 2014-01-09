@@ -211,23 +211,19 @@ int http_parse_url(http_client_t *container, const char *url)
 
 void http_add_param(http_client_t *http, const char *key, const char *value)
 {
-	size_t l;
-	char *tmp;
-
-	l = strlen(key) + strlen(value) + 3;
+	size_t len = strlen(key) + strlen(value) + 3;
+	char tmp[len];
 
 	if (http->query_string == NULL)
 	{
-		http->query_string = smalloc(l);
-		snprintf(http->query_string, l, "?%s=%s", key, value);
+		http->query_string = smalloc(len);
+		snprintf(http->query_string, len, "?%s=%s", key, value);
 	}
 	else
 	{
-		tmp = smalloc(l);
-		snprintf(tmp, l, "&%s=%s", key, value);
-		http->query_string = srealloc(http->query_string, (strlen(http->query_string) + l));
-		mowgli_strlcat(http->query_string, tmp, (strlen(http->query_string) + l));
-		free(tmp);
+		len = snprintf(tmp, len, "&%s=%s", key, value);
+		http->query_string = srealloc(http->query_string, (strlen(http->query_string) + len));
+		mowgli_strlcat(http->query_string, tmp, (strlen(http->query_string) + len));
 	}
 
 	return;
@@ -237,17 +233,23 @@ void http_write_GET(connection_t *cptr)
 {
 	mowgli_node_t *n, *tn;
 	http_client_t *container = NULL;
-	char *buf;
+	char buf[BUFSIZE];
+	size_t len;
 
 	if (!(container = cptr->userdata))
 		return;
 
-	buf = smalloc(BUFSIZE);
-	snprintf(buf, BUFSIZE,
-			"GET %s%s HTTP/1.1\r\nUser-Agent: Atheme/%s\r\nHost: %s\r\nAccept: */*\r\n\r\n",
-			container->uri, (container->query_string ? container->query_string : ""), PACKAGE_VERSION, container->domain);
-	sendq_add(cptr, buf, strlen(buf));
-	free(buf);
+	len = snprintf(buf, BUFSIZE,
+			"GET %s%s HTTP/1.1\r\n"
+			"User-Agent: Atheme/%s\r\n"
+			"Host: %s\r\n"
+			"Accept: */*\r\n"
+			"\r\n",
+			container->uri,
+			(container->query_string ? container->query_string : ""),
+			PACKAGE_VERSION,
+			container->domain);
+	sendq_add(cptr, buf, len);
 }
 
 void http_handle_EOF(connection_t *cptr)
