@@ -22,11 +22,6 @@ http_client_t *http_client_new(void)
 	h = smalloc(sizeof(http_client_t));
 	h->headers = mowgli_patricia_create(strcasecanon);
 
-	h->url = h->uri = h->protocol = h->domain = h->query_string =
-		h->error_str = h->data = NULL;
-	h->port = h->http_code = h->error = 0;
-	h->data_len = 0;
-
 	return h;
 }
 
