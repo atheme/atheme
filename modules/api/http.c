@@ -233,11 +233,11 @@ int http_parse_url(http_client_t *container, const char *url)
 
 void http_add_param(http_client_t *http, const char *key, const char *value)
 {
-	size_t len = strlen(key) + strlen(value) + 3;
-	char tmp[len];
+	size_t len = strlen(key) + strlen(value) + 2;
+	char tmp[len+1];
 
-	snprintf(tmp, len, "%c%s=%s",
-	         http->query_string[0] ? '?' : '&', key, value);
+	snprintf(tmp, len+1, "%c%s=%s",
+	         http->query_string[0] ? '&' : '?', key, value);
 
 	query_string_concat(http, tmp, len);
 }
