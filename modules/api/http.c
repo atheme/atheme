@@ -22,7 +22,31 @@ http_client_t *http_client_new(void)
 	h = smalloc(sizeof(http_client_t));
 	h->headers = mowgli_patricia_create(strcasecanon);
 
+	h->query_string_size = 32;
+	h->query_string_len = 0;
+	h->query_string = smalloc(h->query_string_size);
+
 	return h;
+}
+
+static void query_string_reset(http_client_t *http)
+{
+	http->query_string_len = 0;
+	http->query_string[0] = '\0';
+}
+
+static void query_string_concat(http_client_t *http, char *str, size_t len)
+{
+	if (http->query_string_size <= http->query_string_len + len) {
+		http->query_string_size *= 2;
+		if (http->query_string_size <= http->query_string_len + len)
+			http->query_string_size = http->query_string_len + len + 10;
+		srealloc(http->query_string, http->query_string_size);
+	}
+
+	memcpy(http->query_string + http->query_string_len, str, len);
+	http->query_string_len += len;
+	http->query_string[http->query_string_len] = '\0';
 }
 
 void http_parse_headers(http_client_t *container, const char *http_response)
@@ -195,14 +219,11 @@ int http_parse_url(http_client_t *container, const char *url)
 		container->uri = (char *)scalloc(length + 1, sizeof(char));
 		strncpy(container->uri, (url + domain_length), length);
 		container->uri[length] = '\0';
-		if (container->query_string == NULL)
-			container->query_string = sstrdup(strchr(container->uri, (int)'?'));
-		else
+		char *params = strchr(container->uri, '?');
+		if (params != NULL)
 		{
-			char *params = strchr(container->uri, (int)'?');
-			size_t l = strlen(container->query_string) + strlen(params) + 2;
-			container->query_string = srealloc(container->query_string, l);
-			mowgli_strlcat(container->query_string, params, l);
+			query_string_reset(container);
+			query_string_concat(container, params, strlen(params));
 		}
 	}
 
@@ -214,19 +235,10 @@ void http_add_param(http_client_t *http, const char *key, const char *value)
 	size_t len = strlen(key) + strlen(value) + 3;
 	char tmp[len];
 
-	if (http->query_string == NULL)
-	{
-		http->query_string = smalloc(len);
-		snprintf(http->query_string, len, "?%s=%s", key, value);
-	}
-	else
-	{
-		len = snprintf(tmp, len, "&%s=%s", key, value);
-		http->query_string = srealloc(http->query_string, (strlen(http->query_string) + len));
-		mowgli_strlcat(http->query_string, tmp, (strlen(http->query_string) + len));
-	}
+	snprintf(tmp, len, "%c%s=%s",
+	         http->query_string[0] ? '?' : '&', key, value);
 
-	return;
+	query_string_concat(http, tmp, len);
 }
 
 void http_write_GET(connection_t *cptr)
@@ -246,7 +258,7 @@ void http_write_GET(connection_t *cptr)
 			"Accept: */*\r\n"
 			"\r\n",
 			container->uri,
-			(container->query_string ? container->query_string : ""),
+			container->query_string,
 			PACKAGE_VERSION,
 			container->domain);
 	sendq_add(cptr, buf, len);

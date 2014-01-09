@@ -27,6 +27,9 @@ struct http_client_
 	int fd;
 	http_cb_t callback;
 	void *userdata;
+
+	size_t query_string_len;
+	size_t query_string_size;
 };
 
 #endif /* ATHEME_HTTP_COMMON_H */
