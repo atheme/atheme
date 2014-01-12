@@ -181,6 +181,16 @@ static bool nefarious_on_logout(user_t *u, const char *account)
 	return false;
 }
 
+static void nefarious_sasl_sts(char *target, char mode, char *data)
+{
+	sts("%s SASL %c%c %s %c %s", me.numeric, target[0], target[1], target, mode, data);
+}
+
+static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+{
+	sts("%s SASL %c%c %s L %s", me.numeric, target[0], target[1], target, login);
+}
+
 static void nefarious_sethost_sts(user_t *source, user_t *target, const char *host)
 {
 	sts("%s FA %s %s", me.numeric, target->uid, host);
@@ -631,6 +641,21 @@ static void m_account(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
+{
+	sasl_message_t smsg;
+
+	if (parc < 4)
+		return;
+
+	smsg.uid = parv[1];
+	smsg.mode = *parv[2];
+	smsg.buf = parv[3];
+	smsg.ext = parc >= 4 ? parv[4] : NULL;
+
+	hook_call_sasl_input(&smsg);
+}
+
 static void check_hidehost(user_t *u)
 {
 	static bool warned = false;
@@ -674,7 +699,9 @@ void _modinit(module_t * m)
 	topic_sts = &nefarious_topic_sts;
 	ircd_on_login = &nefarious_on_login;
 	ircd_on_logout = &nefarious_on_logout;
+	sasl_sts = &nefarious_sasl_sts;
 	sethost_sts = &nefarious_sethost_sts;
+	svslogin_sts = &nefarious_svslogin_sts;
 	quarantine_sts = &nefarious_quarantine_sts;
 
 	mode_list = nefarious_mode_list;
@@ -685,6 +712,8 @@ void _modinit(module_t * m)
 	ignore_mode_list_size = ARRAY_SIZE(nefarious_ignore_mode_list);
 
 	ircd = &Nefarious;
+
+	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 
 	/* override these */
 	pcommand_delete("B");
