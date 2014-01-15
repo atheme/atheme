@@ -359,6 +359,12 @@ if test "$JSON" = "yes"; then
 	AC_DEFINE(HAVE_JSON,, Define to 1 if JSON is available)
 fi
 
+PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [LIBQRENCODE="yes"], [LIBQRENCODE="no"])
+
+if test "$LIBQRENCODE" = "yes"; then
+	AC_DEFINE(HAVE_LIBQRENCODE,, Define to 1 if libqrencode is available)
+fi
+
 AC_ARG_WITH(libmowgli,
   AC_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],
     [ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
@@ -438,6 +444,7 @@ Configuration:
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
 	JSON support         : ${JSON}
+	QR Code support      : ${LIBQRENCODE}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
 
