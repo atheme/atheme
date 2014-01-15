@@ -42,6 +42,7 @@ BASE_SRCS =				\
 	ptasks.c		\
 	res.c		\
 	reslib.c	\
+	qrcode.c	\
 	send.c		\
 	servers.c		\
 	services.c		\
@@ -65,9 +66,9 @@ SRCS = ${BASE_SRCS} version.c
 include ../buildsys.mk
 include ../extra.mk
 
-CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
+CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
-LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(LIBINTL)
+LIBS		+= $(MOWGLI_LIBS) $(PCRE_LIBS) $(LIBINTL) $(LIBQRENCODE_LIBS)
 LDFLAGS         += $(LDFLAGS_RPATH)
 
 build: depend all
