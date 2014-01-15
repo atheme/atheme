@@ -56,7 +56,7 @@ void (*sethost_sts) (user_t *source, user_t *target, const char *host) = generic
 void (*fnc_sts) (user_t *source, user_t *u, const char *newnick, int type) = generic_fnc_sts;
 void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
-void (*svslogin_sts) (char *target, char *nick, char *user, char *host, stringref login) = generic_svslogin_sts;
+void (*svslogin_sts) (char *target, char *nick, char *user, char *host, myuser_t *account) = generic_svslogin_sts;
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_node_t *first) = generic_next_matching_ban;
 mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
@@ -261,7 +261,7 @@ void generic_invite_sts(user_t *source, user_t *target, channel_t *channel)
 	/* nothing to do here. */	
 }
 
-void generic_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	/* nothing to do here. */
 }

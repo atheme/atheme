@@ -461,7 +461,7 @@ static void ts6_fnc_sts(user_t *source, user_t *u, const char *newnick, int type
 			(unsigned long)u->ts);
 }
 
-static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	user_t *tu = user_find(target);
 	server_t *s;
@@ -474,7 +474,7 @@ static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, s
 		return;
 
 	sts(":%s ENCAP %s SVSLOGIN %s %s %s %s %s", ME, s->name,
-			target, nick, user, host, login);
+			target, nick, user, host, entity(account)->name);
 }
 
 static void ts6_sasl_sts(char *target, char mode, char *data)
