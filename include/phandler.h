@@ -213,7 +213,7 @@ E void (*fnc_sts)(user_t *source, user_t *u, const char *newnick, int type);
 E void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account);
 /* change nick, user, host and/or services login name for a user
  * target may also be a not yet fully introduced UID (for SASL) */
-E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, stringref login);
+E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, myuser_t *account);
 /* send sasl message */
 E void (*sasl_sts) (char *target, char mode, char *data);
 /* find next channel ban (or other ban-like mode) matching user */
@@ -268,7 +268,7 @@ E void generic_jupe(const char *server, const char *reason);
 E void generic_sethost_sts(user_t *source, user_t *target, const char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, const char *newnick, int type);
 E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account);
-E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login);
+E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account);
 E void generic_sasl_sts(char *target, char mode, char *data);
 E mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mowgli_node_t *first);
 E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);

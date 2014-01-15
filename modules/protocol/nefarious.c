@@ -186,14 +186,10 @@ static void nefarious_sasl_sts(char *target, char mode, char *data)
 	sts("%s SASL %c%c %s %c %s", me.numeric, target[0], target[1], target, mode, data);
 }
 
-static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+static void nefarious_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
-	myuser_t *mu = myuser_find(login);
-
-	return_if_fail(mu != NULL);
-
-	sts("%s SASL %c%c %s L %s %lu", me.numeric, target[0], target[1], target, login,
-			(unsigned long)mu->registered);
+	sts("%s SASL %c%c %s L %s %lu", me.numeric, target[0], target[1], target,
+			entity(account)->name, (unsigned long)account->registered);
 }
 
 static void nefarious_sethost_sts(user_t *source, user_t *target, const char *host)

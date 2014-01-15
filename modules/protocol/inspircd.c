@@ -686,14 +686,14 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 	}
 }
 
-static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	user_t *tu = user_find(target);
 
 	if(!tu && !ircd->uses_uid)
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.numeric, target, login);
+	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
 	if (has_chghostmod)
 		sts(":%s CHGHOST %s %s", me.numeric, target, host);
 }

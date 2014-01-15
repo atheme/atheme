@@ -322,9 +322,9 @@ static void p10_sasl_sts(char *target, char mode, char *data)
 	sts("%s XR %c%c %s :SASL:%c:%s", me.numeric, target[0], target[1], target, mode, data);
 }
 
-static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, stringref login)
+static void p10_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
-	sts("%s XR %c%c %s :SASL:L:%s", me.numeric, target[0], target[1], target, login);
+	sts("%s XR %c%c %s :SASL:L:%s", me.numeric, target[0], target[1], target, entity(account)->name);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
