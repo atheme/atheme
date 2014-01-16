@@ -156,6 +156,12 @@ kline_t *kline_add(const char *user, const char *host, const char *reason, long 
 	return kline_add_with_id(user, host, reason, duration, setby, ++me.kline_id);
 }
 
+kline_t *kline_add_user(user_t *u, const char *reason, long duration, const char *setby)
+{
+	return kline_add(config_options.kline_with_ident ? u->user : "*",
+	                 u->ip ? u->ip : u->host, reason, duration, setby);
+}
+
 void kline_delete(kline_t *k)
 {
 	mowgli_node_t *n;
