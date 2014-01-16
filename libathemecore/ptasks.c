@@ -928,7 +928,7 @@ int floodcheck(user_t *u, user_t *t)
 				kline_t *k;
 
 				/* kline them the third time */
-				if (!config_options.kline_ident)
+				if (!config_options.kline_with_ident)
 					k = kline_add("*", u->ip ? u->ip : u->host, "ten minute ban - flooding services", 600, chansvs.nick);
 				else
 					k = kline_add(u->user, u->ip ? u->ip : u->host, "ten minute ban - flooding services", 600, chansvs.nick);

@@ -286,7 +286,7 @@ antiflood_enforce_kickban(user_t *u, channel_t *c)
 static void
 antiflood_enforce_kline(user_t *u, channel_t *c)
 {
-	if (!config_options.kline_ident)
+	if (!config_options.kline_with_ident)
 		kline_add("*", u->host, "Flooding", 86400, chansvs.nick);
 	else
 		kline_add(u->user, u->host, "Flooding", 86400, chansvs.nick);
