@@ -85,6 +85,9 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
 		set_password(mu, password);
 		metadata_delete(mu, "private:setpass:key");
+		metadata_delete(mu, "private:sendpass:sender");
+		metadata_delete(mu, "private:sendpass:timestamp");
+
 
 		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, password);
 
@@ -109,12 +112,34 @@ static void clear_setpass_key(user_t *u)
 		return;
 
 	metadata_delete(mu, "private:setpass:key");
+	metadata_delete(mu, "private:sendpass:sender");
+	metadata_delete(mu, "private:sendpass:timestamp");
+
 	notice(nicksvs.nick, u->nick, "Warning: SENDPASS had been used to mail you a password recovery "
 		"key. Since you have identified, that key is no longer valid.");
 }
 
 static void show_setpass(hook_user_req_t *hdata)
 {
-	if (has_priv(hdata->si, PRIV_USER_AUSPEX) && metadata_find(hdata->mu, "private:setpass:key"))
-		command_success_nodata(hdata->si, "%s has an active password reset key", entity(hdata->mu)->name);
+	if (has_priv(hdata->si, PRIV_USER_AUSPEX)) {
+		if (metadata_find(hdata->mu, "private:setpass:key"))
+			command_success_nodata(hdata->si, "%s has an active password reset key", entity(hdata->mu)->name);
+
+		metadata_t *md;
+		char strfbuf[BUFSIZE];
+
+		if (md = metadata_find(hdata->mu, "private:sendpass:sender")) {
+			const char *sender = md->value;
+			time_t ts;
+			struct tm tm;
+
+			md = metadata_find(hdata->mu, "private:sendpass:timestamp");
+			ts = md != NULL ? atoi(md->value) : 0;
+
+			tm = *localtime(&ts);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+
+			command_success_nodata(hdata->si, _("%s was \2SENDPASSED\2 by %s on %s"), entity(hdata->mu)->name, sender, strfbuf);
+		}
+	}
 }
