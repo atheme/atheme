@@ -69,12 +69,12 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (u->myuser == mu)
-		command_success_nodata(si, "%s%s%s ACC 3", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
+		command_success_nodata(si, "%s%s%s ACC 3 %s", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "", entity(mu)->id);
 	else if ((mn = mynick_find(u->nick)) != NULL && mn->owner == mu &&
 			myuser_access_verify(u, mu))
-		command_success_nodata(si, "%s%s%s ACC 2", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
+		command_success_nodata(si, "%s%s%s ACC 2 %s", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "", entity(mu)->id);
 	else
-		command_success_nodata(si, "%s%s%s ACC 1", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "");
+		command_success_nodata(si, "%s%s%s ACC 1 %s", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? entity(mu)->name : "", entity(mu)->id);
 }
 
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
