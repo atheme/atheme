@@ -1,5 +1,7 @@
 include ../extra.mk
 
+.PHONY: serno.h
+
 SUBDIRS = inline protocol
 
 DISTCLEAN = hooktypes.h serno.h
