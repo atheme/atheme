@@ -56,8 +56,6 @@ int main(int argc, const char **argv)
 		return EXIT_FAILURE;
 	}
 
-	EC_KEY_print_fp(stdout, eckey, 4);
-
 	memset(challenge, '\0', sizeof challenge);
 	len = base64_decode(argv[2], challenge, BUFSIZE);
 	workbuf_p = (unsigned char *) challenge;
