@@ -87,6 +87,8 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, "private:verify:emailchg:newemail");
 	metadata_delete(mu, "private:verify:emailchg:timestamp");
 	metadata_delete(mu, "private:setpass:key");
+	metadata_delete(mu, "private:sendpass:sender");
+	metadata_delete(mu, "private:sendpass:timestamp");
 	/* log them out */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{

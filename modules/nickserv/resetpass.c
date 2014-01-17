@@ -80,6 +80,8 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	set_password(mu, newpass);
 	free(newpass);
 	metadata_delete(mu, "private:setpass:key");
+	metadata_delete(mu, "private:sendpass:sender");
+	metadata_delete(mu, "private:sendpass:timestamp");
 
 	wallops("%s reset the password for the account %s", get_oper_name(si), entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", entity(mu)->name);
