@@ -2041,7 +2041,7 @@ general {
 	 * KLINE user@host instead of *@host.
 	 * Applies to all automatic KLINE's set by services.
 	 */
-	kline_with_ident;
+	#kline_with_ident;
 
 	/* (*)clone_time
 	 * This is the default expiry time for CLONE exemptions in minutes.
