@@ -170,6 +170,17 @@ bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int 
 	return groupacs_find(mg, si->smu, flag) != NULL;
 }
 
+unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, sourceinfo_t *si)
+{
+	groupacs_t *ga;
+
+	ga = groupacs_find(mg, si->smu, 0);
+	if (ga == NULL)
+		return 0;
+
+	return ga->flags;
+}
+
 unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 {
 	mowgli_node_t *n;
