@@ -113,86 +113,16 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
-	/* XXX: this sucks. :< We have to keep this here instead of using the "global" function
-	 * because of the MU_NEVEROP check which is really only needed in FLAGS. 
-	 */
-	c = parv[2];
-	while (*c)
-	{
-		switch(*c)
-		{
-		case '+':
-			dir = 0;
-			break;
-		case '-':
-			dir = 1;
-			break;
-		case '*':
-			if (dir)
-				flags = 0;
-			else
-				flags = GA_ALL;
-			break;
-		case 'F':
-			if (dir)
-				flags &= ~GA_FOUNDER;
-			else
-				flags |= GA_FOUNDER;
-			break;
-		case 'f':
-			if (dir)
-				flags &= ~GA_FLAGS;
-			else
-				flags |= GA_FLAGS;
-			break;
-		case 's':
-			if (dir)
-				flags &= ~GA_SET;
-			else
-				flags |= GA_SET;
-			break;
-		case 'v':
-			if (dir)
-				flags &= ~GA_VHOST;
-			else
-				flags |= GA_VHOST;
-			break;
-		case 'c':
-			if (dir)
-				flags &= ~GA_CHANACS;
-			else
-			{
-				if (mu->flags & MU_NEVEROP)
-				{
-					command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), entity(mu)->name);
-					return;
-				}
-				flags |= GA_CHANACS;
-			}
-			break;
-		case 'm':
-			if (dir)
-				flags &= ~GA_MEMOS;
-			else
-				flags |= GA_MEMOS;
-			break;
-		case 'b':
-			if (dir)
-				flags &= ~GA_BAN;
-			else
-				flags |= GA_BAN;
-			break;
-		case 'i':
-			if (dir)
-				flags &= ~GA_INVITE;
-			else
-				flags |= GA_INVITE;
-			break;
-		default:
-			break;
-		}
+	flags = gs_flags_parser(parv[2], 1, flags);
 
-		c++;
+	/* check for MU_NEVEROP and forbid committing the change if it's enabled */
+	if (!(ga->flags & GA_CHANACS) && (flags & GA_CHANACS))
+	{
+		if (mu->flags & MU_NEVEROP)
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to channel access lists (NEVEROP set)."), entity(mu)->name);
+			return;
+		}
 	}
 
 	if (flags & GA_FOUNDER)
