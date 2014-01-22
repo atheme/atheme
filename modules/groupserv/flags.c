@@ -125,8 +125,21 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (flags & GA_FOUNDER)
+	if ((flags & GA_FOUNDER) && !(ga->flags & GA_FOUNDER))
+	{
+		if (!(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+		{
+			flags &= ~GA_FOUNDER;
+			goto no_founder;
+		}
+
 		flags |= GA_FLAGS;
+	}
+	else if ((ga->flags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+		return;
+	}
 
 	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mu, GA_FOUNDER))
 	{
@@ -143,6 +156,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+no_founder:
 	if (ga != NULL && flags != 0)
 		ga->flags = flags;
 	else if (ga != NULL)
