@@ -84,7 +84,7 @@ static unsigned int ngircd_server_login(void)
 {
 	int ret;
 
-	ret = sts("PASS %s 0210-IRC+ atheme|%s:CLo", curr_uplink->send_pass, PACKAGE_VERSION);
+	ret = sts("PASS %s 0210-IRC+ atheme|%s:CLMo", curr_uplink->send_pass, PACKAGE_VERSION);
 	if (ret == 1)
 		return 1;
 
@@ -285,6 +285,8 @@ static void ngircd_on_login(user_t *u, myuser_t *account, const char *wantedhost
 {
 	return_if_fail(u != NULL);
 
+	sts(":%s METADATA %s accountname :%s", me.name, CLIENT_NAME(u), entity(account)->name);
+
 	if (should_reg_umode(u))
 		sts(":%s MODE %s +R", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u));
 }
@@ -296,6 +298,8 @@ static bool ngircd_on_logout(user_t *u, const char *account)
 
 	if (!nicksvs.no_nick_ownership)
 		sts(":%s MODE %s -R", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u));
+
+	sts(":%s METADATA %s accountname :", me.name, CLIENT_NAME(u));
 
 	return false;
 }
@@ -731,6 +735,29 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
+static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u = user_find(parv[0]);
+
+	return_if_fail(u != NULL);
+
+	if (!strcmp(parv[1], "accountname"))
+	{
+		if (si->s == u->server && (!(si->s->flags & SF_EOB) ||
+		                           (u->myuser != NULL &&
+					    !irccasecmp(entity(u->myuser)->name, parv[2]))))
+			handle_burstlogin(u, parv[2], 0);
+		else if (*parv[2])
+			handle_setlogin(si, u, parv[2], 0);
+		else
+			handle_clearlogin(si, u);
+	}
+	else if (!strcmp(parv[1], "certfp"))
+	{
+		handle_certfp(si, u, parv[2]);
+	}
+}
+
 static void nick_group(hook_user_req_t *hdata)
 {
 	user_t *u;
@@ -813,6 +840,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
+	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 
 	/* XXX: not sure if this is such a great idea, but Anope does it too */
 	pcommand_add("SQUERY", m_privmsg, 2, MSRC_USER);
