@@ -743,7 +743,9 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcmp(parv[1], "accountname"))
 	{
-		if (me.bursting)
+		if (si->s == u->server && (!(si->s->flags & SF_EOB) ||
+		                           (u->myuser != NULL &&
+					    !irccasecmp(entity(u->myuser)->name, parv[2]))))
 			handle_burstlogin(u, parv[2], 0);
 		else if (*parv[2])
 			handle_setlogin(si, u, parv[2], 0);
