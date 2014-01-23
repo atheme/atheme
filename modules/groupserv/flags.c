@@ -26,7 +26,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	mygroup_t *mg;
 	myuser_t *mu;
 	groupacs_t *ga;
-	unsigned int flags = 0;
+	unsigned int flags = 0, oldflags = 0;
 	unsigned int dir = 0;
 	char *c;
 	bool operoverride = false;
@@ -113,10 +113,11 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (ga != NULL)
 		flags = ga->flags;
 
+	oldflags = flags;
 	flags = gs_flags_parser(parv[2], 1, flags);
 
 	/* check for MU_NEVEROP and forbid committing the change if it's enabled */
-	if (!(ga->flags & GA_CHANACS) && (flags & GA_CHANACS))
+	if (!(oldflags & GA_CHANACS) && (flags & GA_CHANACS))
 	{
 		if (mu->flags & MU_NEVEROP)
 		{
@@ -125,7 +126,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if ((flags & GA_FOUNDER) && !(ga->flags & GA_FOUNDER))
+	if ((flags & GA_FOUNDER) && !(oldflags & GA_FOUNDER))
 	{
 		if (!(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 		{
@@ -135,7 +136,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		flags |= GA_FLAGS;
 	}
-	else if ((ga->flags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
+	else if ((oldflags & GA_FOUNDER) && !(flags & GA_FOUNDER) && !(groupacs_sourceinfo_flags(mg, si) & GA_FOUNDER))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
