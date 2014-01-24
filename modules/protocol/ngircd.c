@@ -23,7 +23,7 @@ ircd_t ngIRCd = {
         false,                          /* Whether or not we support channel protection. */
         false,                          /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
-	false,				/* Whether or not we use vHosts. */
+	true,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY | CMODE_PERM,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -313,6 +313,30 @@ static void ngircd_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 %d :%s", ME, server, ++jupe_ctr, reason);
 }
 
+static void ngircd_sethost_sts(user_t *source, user_t *target, const char *host)
+{
+	if (strcmp(target->host, host))
+	{
+		sts(":%s METADATA %s cloakhost :%s", me.name, target->nick, host);
+		sts(":%s MODE %s +x", me.name, target->nick);
+
+		/* if the user sets -x and +x, they need to receive the same host */
+		if (strcmp(host, target->chost))
+		{
+			strshare_unref(target->chost);
+			target->chost = strshare_get(host);
+		}
+	}
+	else
+	{
+		sts(":%s MODE %s -x", me.name, target->nick);
+		sts(":%s METADATA %s cloakhost :", me.name, target->nick);
+
+		strshare_unref(target->chost);
+		target->chost = strshare_get(target->host);
+	}
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -540,12 +564,46 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	user_delete(si->su, parv[0]);
 }
 
+static void ngircd_user_mode(user_t *u, const char *modes)
+{
+	int dir;
+	const char *p;
+
+	return_if_fail(u != NULL);
+
+	user_mode(u, modes);
+	dir = 0;
+	for (p = modes; *p; ++p)
+		switch (*p)
+		{
+			case '-': dir = MTYPE_DEL; break;
+			case '+': dir = MTYPE_ADD; break;
+			case 'x':
+				slog(LG_DEBUG, "user had vhost='%s' chost='%s'", u->vhost, u->chost);
+				if (dir == MTYPE_ADD)
+				{
+					if (strcmp(u->vhost, u->chost))
+					{
+						strshare_unref(u->vhost);
+						u->vhost = strshare_get(u->chost);
+					}
+				}
+				else if (dir == MTYPE_DEL)
+				{
+					strshare_unref(u->vhost);
+					u->vhost = strshare_get(u->host);
+				}
+				slog(LG_DEBUG, "user got vhost='%s' chost='%s'", u->vhost, u->chost);
+				break;
+		}
+}
+
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
-		user_mode(user_find(parv[0]), parv[1]);
+		ngircd_user_mode(user_find(parv[0]), parv[1]);
 }
 
 static void m_kick(sourceinfo_t *si, int parc, char *parv[])
@@ -756,6 +814,11 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	{
 		handle_certfp(si, u, parv[2]);
 	}
+	else if (!strcmp(parv[1], "cloakhost"))
+	{
+		strshare_unref(u->chost);
+		u->chost = strshare_get(parv[2]);
+	}
 }
 
 static void nick_group(hook_user_req_t *hdata)
@@ -803,6 +866,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ngircd_on_login;
 	ircd_on_logout = &ngircd_on_logout;
 	jupe = &ngircd_jupe;
+	sethost_sts = &ngircd_sethost_sts;
 	invite_sts = &ngircd_invite_sts;
 
 	mode_list = ngircd_mode_list;
