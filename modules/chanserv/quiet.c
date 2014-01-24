@@ -130,7 +130,7 @@ devoice_user(sourceinfo_t *si, mychan_t *mc, channel_t *c, user_t *tu)
 	if (cu->modes & CSTATUS_OWNER || cu->modes & CSTATUS_PROTECT)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is protected from quiets; you cannot quiet them."), tu->nick);
-		return;
+		return DEVOICE_FAILED;
 	}
 
 	buf[0] = '-';
