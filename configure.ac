@@ -7,7 +7,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
 
-AC_INIT(atheme, 7.1.0-alpha1, bugs@atheme.org)
+AC_INIT(atheme, 7.1.0-rc1, bugs@atheme.org)
 
 AC_CONFIG_AUX_DIR(autoconf)
 
