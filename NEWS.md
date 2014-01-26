@@ -71,12 +71,8 @@ groupserv
 
 sasl
 ----
-- Properly reject invalid base64 data.
-- plain: Do not assume the data contains any '\0'
-- dh-blowfish: Avoid generating DH parameters on each mech_start()
-- Extend length of valid SASL mechanism from 21 to 60 bytes
 - Add ecdsa-nist256p-challenge mechanism
-- dh-aes: New scheme, intended to replace dh-blowfish.
+- Add dh-aes scheme, intended to replace dh-blowfish.
 - Disable reload capability on all modules.
 
 perl api
