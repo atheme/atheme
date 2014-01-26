@@ -298,4 +298,6 @@ int http_get(http_client_t *container, void *userdata, http_cb_t cb)
 	/*container->cptr = cptr;*/
 	cptr->close_handler = http_handle_EOF;
 	cptr->userdata = container;
+
+	return 0;
 }
