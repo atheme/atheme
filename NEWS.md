@@ -14,7 +14,7 @@ ircd protocol
 - inspircd: Add support for matching extbans modifying matching logic
 - inspircd: Add +H to channel modes
 - inspircd: Add +X and +w to list-like mode list
-- ircd-seven: Support charbdis extension cmodes on ircd-seven as well.
+- ircd-seven: Support charybdis extension cmodes on ircd-seven as well.
 - ts6-generic: Add support for serverinfo::hidden
 - unreal: Add support for extbans.
 - unreal: Add cmode +P for permanent channel.
@@ -77,7 +77,7 @@ sasl
 
 perl api
 --------
-- Function to return account UID
+- Add function to return entity ID
 - Allow sending wallops
 - Allow setting vhosts
 - Allow transferring and dropping channels
