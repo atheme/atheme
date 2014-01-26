@@ -770,12 +770,14 @@ loadmodule "modules/transport/xmlrpc";
  * $registered exttarget match type             modules/exttarget/registered
  * $channel exttarget match type                modules/exttarget/channel
  * $chanacs exttarget match type                modules/exttarget/chanacs
+ * $server exttarget match type                 modules/exttarget/server
  */
 #loadmodule "modules/exttarget/main";
 #loadmodule "modules/exttarget/oper";
 #loadmodule "modules/exttarget/registered";
 #loadmodule "modules/exttarget/channel";
 #loadmodule "modules/exttarget/chanacs";
+#loadmodule "modules/exttarget/server";
 
 /* Other modules.
  *

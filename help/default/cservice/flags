@@ -50,6 +50,10 @@ $registered - Any user who is identified to services.
 #if module exttarget/channel
 $channel:#channel - Any user who is the member of the given channel.
 #endif
+#if module exttarget/server
+$server:server.name - Any user who is connected to the given server.
+                      (The server name may have wildcards.)
+#endif
 
 If you do not have +f you may still remove your own access
 with -*.
