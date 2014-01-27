@@ -23,6 +23,7 @@ struct sasl_session_ {
 
   char *username;
   char *certfp;
+  char *authzid;
 };
 
 struct sasl_message_ {
