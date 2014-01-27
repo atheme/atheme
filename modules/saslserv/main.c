@@ -460,7 +460,7 @@ myuser_t *login_user(sasl_session_t *p)
 
 	if(metadata_find(source_mu, "private:freeze:freezer"))
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
+		sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
 		return NULL;
 	}
 
@@ -468,22 +468,22 @@ myuser_t *login_user(sasl_session_t *p)
 	{
 		if(!may_impersonate(source_mu, target_mu))
 		{
-			sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
+			sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
 			return NULL;
 		}
 
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
+		sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
 
 		if(metadata_find(target_mu, "private:freeze:freezer"))
 		{
-			sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(target_mu)->name);
+			sasl_logcommand(p, target_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(target_mu)->name);
 			return NULL;
 		}
 	}
 
 	if(MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(target_mu)->name);
+		sasl_logcommand(p, target_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(target_mu)->name);
 		return NULL;
 	}
 
