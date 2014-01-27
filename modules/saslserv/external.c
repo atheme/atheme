@@ -52,17 +52,13 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	if(mcfp == NULL)
 		return ASASL_FAIL;
 
-	/* The client response is the authorization identity.
-	 * We do not support authenticating as someone else,
-	 * so the client response should be either empty or match the
-	 * certfp's user.
-	 */
-	name = entity(mcfp->mu)->name;
-	namelen = strlen(name);
-	if(len > 0 && (len != namelen || memcmp(name, message, len)))
-		return ASASL_FAIL;
+	/* The client response is the authorization identity, which is verified
+	 * by saslserv/main, therefore the mechanism need not check it. */
 
+	name = entity(mcfp->mu)->name;
 	p->username = strdup(name);
+	p->authzid = strdup(message);
+
 	return ASASL_DONE;
 }
 
