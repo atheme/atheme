@@ -1,3 +1,10 @@
+Atheme Services 7.2 Development Notes
+=====================================
+
+misc
+----
+- Add a new $server: exttarget accepting server masks
+
 Atheme Services 7.1 Release Notes
 =================================
 In addition to assorted bugfixes in various subsystems from 7.0, the
