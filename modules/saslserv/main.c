@@ -339,10 +339,13 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			if (!(mu->flags & MU_WAITAUTH))
 				svslogin_sts(p->uid, "*", "*", cloak, mu);
 			sasl_sts(p->uid, 'D', "S");
+			/* Will destroy session on introduction of user to net. */
 		}
 		else
+		{
 			sasl_sts(p->uid, 'D', "F");
-		/* Will destroy session on introduction of user to net. */
+			destroy_session(p);
+		}
 		return;
 	}
 	else if(rc == ASASL_MORE)
