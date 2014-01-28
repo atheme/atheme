@@ -25,7 +25,7 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
-static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
+static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
@@ -412,18 +412,18 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 	va_end(args);
 }
 
-static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
+static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 {
 	char priv[512] = PRIV_IMPERSONATE_ANY;
 	char *classname;
 
 	/* Allow same (although this function won't get called in that case anyway) */
 	if(source_mu == target_mu)
-		return TRUE;
+		return true;
 
 	/* Check for wildcard priv */
 	if(has_priv_myuser(source_mu, priv))
-		return TRUE;
+		return true;
 
 	/* Check for target-operclass specific priv */
 	classname = (target_mu->soper && target_mu->soper->classname)
@@ -432,15 +432,15 @@ static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_CLASS_FMT, classname);
 
 	if(has_priv_myuser(source_mu, priv))
-		return TRUE;
+		return true;
 
 	/* Check for target-entity specific priv */
 	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
 
 	if(has_priv_myuser(source_mu, priv))
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 /* authenticated, now double check that their account is ok for login */
