@@ -5,9 +5,18 @@ chanserv
 --------
 - Add a `$server:` exttarget accepting server masks
 
+groupserv
+---------
+- Hook into `sasl_may_impersonate` to support group-membership checks
+
 saslserv
 --------
 - Add support for SASL authorization identities
+- Add a `sasl_may_impersonate` hook
+
+perl api
+--------
+- Export SaslServ's `sasl_may_impersonate` hook
 
 Atheme Services 7.1 Release Notes
 =================================
