@@ -137,6 +137,9 @@ impersonate:any
 impersonate:class:<class>
 	specify accounts in the given operclass as SASL "authorization
 	identity"; for example, 'impersonate:class:sra'
+impersonate:entity:<entity>
+	specify accounts in a given entity as SASL "authorization
+	identity"; for example, 'impersonate:entity:!bncusers'
 
 Overriding the default privilege scheme
 ---------------------------------------

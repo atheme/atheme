@@ -434,6 +434,12 @@ static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 	if(has_priv_myuser(source_mu, priv))
 		return TRUE;
 
+	/* Check for target-entity specific priv */
+	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
+
+	if(has_priv_myuser(source_mu, priv))
+		return TRUE;
+
 	return FALSE;
 }
 
