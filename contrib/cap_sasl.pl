@@ -5,13 +5,13 @@ use vars qw($VERSION %IRSSI);
 
 use MIME::Base64;
 
-$VERSION = "1.5";
+$VERSION = "1.6";
 
 %IRSSI = (
     authors     => 'Michael Tharp and Jilles Tjoelker',
     contact     => 'gxti@partiallystapled.com',
     name        => 'cap_sasl.pl',
-    description => 'Implements PLAIN, EXTERNAL, DH-BLOWFISH SASL authentication mechanism for use with charybdis ircds, and enables CAP MULTI-PREFIX',
+    description => 'Implements SASL authentication and enables CAP "multi-prefix"',
     license     => 'GNU General Public License',
     url         => 'http://ircv3.atheme.org/extensions/sasl-3.1',
 );
@@ -52,6 +52,7 @@ sub event_cap {
 			$server->print('', "CLICAP: now enabled:$caps");
 			if ($caps =~ / sasl /i) {
 				$sasl_auth{$server->{tag}}{buffer} = '';
+				$sasl_auth{$server->{tag}}{state} = 0;
 				if($mech{$sasl_auth{$server->{tag}}{mech}}) {
 					$server->send_raw_now("AUTHENTICATE " . $sasl_auth{$server->{tag}}{mech});
 					Irssi::timeout_add_once(7500, \&timeout, $server->{tag});
@@ -206,7 +207,7 @@ sub cmd_sasl_load {
 }
 
 sub cmd_sasl_mechanisms {
-	Irssi::print("SASL: mechanisms supported: " . join(" ", keys %mech));
+	Irssi::print("SASL: mechanisms supported: " . join(", ", sort keys %mech));
 }
 
 Irssi::signal_add_first('server connected', \&server_connected);
@@ -342,6 +343,43 @@ eval {
 	};
 };
 
+sub in_path {
+	my $exe = shift;
+	return grep {-x "$_/$exe"}
+	       map {length $_ ? $_ : ""}
+		   split(":", $ENV{PATH});
+}
+
+if (in_path("ecdsatool")) {
+	my $ecdsa_sign = sub {
+		if (open(my $proc, "-|", "ecdsatool", "sign", @_)) {
+			chomp(my $resp = <$proc>);
+			close($proc);
+			return $resp;
+		}
+	};
+	$mech{'ECDSA-NIST256P-CHALLENGE'} = sub {
+		my($sasl, $data) = @_;
+		my $u = $sasl->{user};
+		my $k = $sasl->{password};
+		my $state = ++$sasl->{state};
+		if ($state == 1) {
+			if (length $data) {
+				my $signpayload = encode_base64($data);
+				my $payload = $ecdsa_sign->($k, $signpayload);
+				return $u."\0".$u."\0".decode_base64($payload);
+			} else {
+				return $u."\0".$u;
+			}
+		}
+		elsif ($state == 2) {
+			my $signpayload = encode_base64($data);
+			my $payload = $ecdsa_sign->($k, $signpayload);
+			return decode_base64($payload);
+		}
+	};
+};
+
 cmd_sasl_load();
 
-# vim: ts=4
+# vim: ts=4:sw=4
