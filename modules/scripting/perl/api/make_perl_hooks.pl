@@ -113,6 +113,11 @@ my %hook_structs = (
 		u => [ 'user_t', 'user' ],
 		comment => 'const char *',
 	},
+	hook_sasl_may_impersonate_t => {
+		source_mu => [ 'myuser_t', 'source' ],
+		target_mu => [ 'myuser_t', 'target' ],
+		allowed => [ 'int', '+allowed' ]
+	},
 );
 
 sub c_var_to_sv {
