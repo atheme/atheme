@@ -138,6 +138,32 @@ static void user_info_hook(hook_user_req_t *req)
 		command_success_nodata(req->si, _("Groups     : %s"), buf);
 }
 
+static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
+{
+	char priv[BUFSIZE];
+	mowgli_list_t *l;
+	mowgli_node_t *n;
+
+	/* if the request is already granted, don't bother doing any of this. */
+	if (req->allowed)
+		return;
+
+	l = myuser_get_membership_list(req->target_mu);
+
+	MOWGLI_ITER_FOREACH(n, l->head)
+	{
+		groupacs_t *ga = n->data;
+
+		snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(ga->mg)->name);
+
+		if (has_priv_myuser(req->source_mu, priv))
+		{
+			req->allowed = true;
+			return;
+		}
+	}
+}
+
 static void myuser_delete_hook(myuser_t *mu)
 {
 	mowgli_node_t *n, *tn;
@@ -175,11 +201,13 @@ void gs_hooks_init(void)
 	hook_add_event("user_info");
 	hook_add_event("grant_channel_access");
 	hook_add_event("operserv_info");
+	hook_add_event("sasl_may_impersonate");
 
 	hook_add_user_info(user_info_hook);
 	hook_add_myuser_delete(myuser_delete_hook);
 	hook_add_grant_channel_access(grant_channel_access_hook);
 	hook_add_operserv_info(osinfo_hook);
+	hook_add_sasl_may_impersonate(sasl_may_impersonate_hook);
 }
 
 void gs_hooks_deinit(void)
@@ -190,4 +218,5 @@ void gs_hooks_deinit(void)
 	hook_del_myuser_delete(myuser_delete_hook);
 	hook_del_grant_channel_access(grant_channel_access_hook);
 	hook_del_operserv_info(osinfo_hook);
+	hook_del_sasl_may_impersonate(sasl_may_impersonate_hook);
 }
