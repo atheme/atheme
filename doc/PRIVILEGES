@@ -134,9 +134,9 @@ group:admin
 
 impersonate:any
 	specify any account name as SASL "authorization identity"
-impersonate:<class>
+impersonate:class:<class>
 	specify accounts in the given operclass as SASL "authorization
-	identity"; for example, 'impersonate:sra'
+	identity"; for example, 'impersonate:class:sra'
 
 Overriding the default privilege scheme
 ---------------------------------------

@@ -429,7 +429,7 @@ static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 	classname = (target_mu->soper && target_mu->soper->classname)
 			? target_mu->soper->classname : "user";
 
-	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_FMT, classname);
+	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_CLASS_FMT, classname);
 
 	if(has_priv_myuser(source_mu, priv))
 		return TRUE;
