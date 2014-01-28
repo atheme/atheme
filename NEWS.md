@@ -1,9 +1,13 @@
 Atheme Services 7.2 Development Notes
 =====================================
 
-misc
-----
-- Add a new $server: exttarget accepting server masks
+chanserv
+--------
+- Add a `$server:` exttarget accepting server masks
+
+saslserv
+--------
+- Add support for SASL authorization identities
 
 Atheme Services 7.1 Release Notes
 =================================

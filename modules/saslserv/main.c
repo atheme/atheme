@@ -25,7 +25,8 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
-int login_user(sasl_session_t *p);
+static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
+myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
 
@@ -173,6 +174,7 @@ void destroy_session(sasl_session_t *p)
 	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
 	free(p->username);
 	free(p->certfp);
+	free(p->authzid);
 
 	free(p);
 }
@@ -328,8 +330,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 	if(rc == ASASL_DONE)
 	{
-		myuser_t *mu = myuser_find(p->username);
-		if(mu && login_user(p))
+		myuser_t *mu = login_user(p);
+		if(mu)
 		{
 			if ((md = metadata_find(mu, "private:usercloak")))
 				cloak = md->value;
@@ -389,7 +391,7 @@ static void sasl_write(char *target, char *data, int length)
 		rem -= nbytes;
 		last = nbytes;
 	}
-	
+
 	/* The end of a packet is indicated by a string not of length 400.
 	 * If last piece is exactly 400 in size, send an empty string to
 	 * finish the transaction.
@@ -403,48 +405,104 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 {
 	va_list args;
 	char lbuf[BUFSIZE];
-	
+
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	slog(level, "%s %s:%s %s", saslsvs->internal_name, mu ? entity(mu)->name : "", p->uid, lbuf);
 	va_end(args);
 }
 
-/* authenticated, now double check that their account is ok for login */
-int login_user(sasl_session_t *p)
+static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 {
-	myuser_t *mu = myuser_find(p->username);
+	char priv[512] = PRIV_IMPERSONATE_ANY;
+	char *classname;
 
-	if(mu == NULL) /* WTF? */
-		return 0;
+	/* Allow same (although this function won't get called in that case anyway) */
+	if(source_mu == target_mu)
+		return TRUE;
 
- 	if (metadata_find(mu, "private:freeze:freezer"))
+	/* Check for wildcard priv */
+	if(has_priv_myuser(source_mu, priv))
+		return TRUE;
+
+	/* Check for target-operclass specific priv */
+	classname = (target_mu->soper && target_mu->soper->classname)
+			? target_mu->soper->classname : "user";
+
+	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_FMT, classname);
+
+	if(has_priv_myuser(source_mu, priv))
+		return TRUE;
+
+	return FALSE;
+}
+
+/* authenticated, now double check that their account is ok for login */
+myuser_t *login_user(sasl_session_t *p)
+{
+	myuser_t *source_mu, *target_mu;
+
+	/* source_mu is the user whose credentials we verified ("authentication id") */
+	/* target_mu is the user who will be ultimately logged in ("authorization id") */
+
+	source_mu = myuser_find(p->username);
+	if(source_mu == NULL)
+		return NULL;
+
+	if(p->authzid && *p->authzid)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(mu)->name);
-		return 0;
+		target_mu = myuser_find(p->authzid);
+		if(target_mu == NULL)
+			return NULL;
+	}
+	else
+		target_mu = source_mu;
+
+	if(metadata_find(source_mu, "private:freeze:freezer"))
+	{
+		sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
+		return NULL;
 	}
 
-	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
+	if(target_mu != source_mu)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(mu)->name);
-		return 0;
+		if(!may_impersonate(source_mu, target_mu))
+		{
+			sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
+			return NULL;
+		}
+
+		sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
+
+		if(metadata_find(target_mu, "private:freeze:freezer"))
+		{
+			sasl_logcommand(p, target_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(target_mu)->name);
+			return NULL;
+		}
+	}
+
+	if(MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
+	{
+		sasl_logcommand(p, target_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(target_mu)->name);
+		return NULL;
 	}
 
 	/* Log it with the full n!u@h later */
 	p->flags |= ASASL_NEED_LOG;
 
-	/* We just did SASL authentication for a user.  With IRCds which do not have unique UIDs for users,
-	 * we will likely be expecting the login data to be bursted.
-	 * As a result, we should give the core a heads' up that this is going to happen so that hooks will be
-	 * properly fired...
+	/* We just did SASL authentication for a user.  With IRCds which do not
+	 * have unique UIDs for users, we will likely be expecting the login
+	 * data to be bursted.  As a result, we should give the core a heads'
+	 * up that this is going to happen so that hooks will be properly
+	 * fired...
 	 */
-	if (ircd->flags & IRCD_SASL_USE_PUID)
+	if(ircd->flags & IRCD_SASL_USE_PUID)
 	{
-		mu->flags &= ~MU_NOBURSTLOGIN;
-		mu->flags |= MU_PENDINGLOGIN;
+		target_mu->flags &= ~MU_NOBURSTLOGIN;
+		target_mu->flags |= MU_PENDINGLOGIN;
 	}
 
-	return 1;
+	return target_mu;
 }
 
 /* clean up after a user who is finally on the net */

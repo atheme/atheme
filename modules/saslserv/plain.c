@@ -41,18 +41,22 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 
 static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
 {
-	char auth[256];
+	char authz[256];
+	char authc[256];
 	char pass[256];
 	myuser_t *mu;
 	char *end;
 
-	/* Skip the authzid entirely */
+	/* Copy the authzid */
 	end = memchr(message, '\0', len);
 	if (end == NULL)
+		return ASASL_FAIL;
+	if (end - message > 255)
 		return ASASL_FAIL;
 	len -= end - message + 1;
 	if (len <= 0)
 		return ASASL_FAIL;
+	memcpy(authz, message, end - message + 1);
 	message = end + 1;
 
 	/* Copy the authcid */
@@ -64,7 +68,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	len -= end - message + 1;
 	if (len <= 0)
 		return ASASL_FAIL;
-	memcpy(auth, message, end - message + 1);
+	memcpy(authc, message, end - message + 1);
 	message = end + 1;
 
 	/* Copy the password */
@@ -77,10 +81,11 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	pass[end - message] = '\0';
 
 	/* Done dissecting, now check. */
-	if(!(mu = myuser_find_by_nick(auth)))
+	if(!(mu = myuser_find_by_nick(authc)))
 		return ASASL_FAIL;
 
-	p->username = strdup(auth);
+	p->username = strdup(authc);
+	p->authzid = strdup(authz);
 	return verify_password(mu, pass) ? ASASL_DONE : ASASL_FAIL;
 }
 

@@ -42,14 +42,19 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 
 static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
 {
-	char auth[256];
+	char authz[256];
+	char authc[256];
 	char cookie[256];
 	myuser_t *mu;
 
 	/* Skip the authzid entirely */
+
+	if(strlen(message) > 255)
+		return ASASL_FAIL;
 	len -= strlen(message) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
+	strcpy(authz, message);
 	message += strlen(message) + 1;
 
 	/* Copy the authcid */
@@ -58,7 +63,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	len -= strlen(message) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
-	strcpy(auth, message);
+	strcpy(authc, message);
 	message += strlen(message) + 1;
 
 	/* Copy the authcookie */
@@ -67,10 +72,11 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	mowgli_strlcpy(cookie, message, len + 1);
 
 	/* Done dissecting, now check. */
-	if(!(mu = myuser_find_by_nick(auth)))
+	if(!(mu = myuser_find_by_nick(authc)))
 		return ASASL_FAIL;
 
-	p->username = strdup(auth);
+	p->username = strdup(authc);
+	p->authzid = strdup(authz);
 	return authcookie_find(cookie, mu) != NULL ? ASASL_DONE : ASASL_FAIL;
 }
 

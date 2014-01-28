@@ -132,6 +132,12 @@ group:auspex
 group:admin
 	administer groups
 
+impersonate:any
+	specify any account name as SASL "authorization identity"
+impersonate:<class>
+	specify accounts in the given operclass as SASL "authorization
+	identity"; for example, 'impersonate:sra'
+
 Overriding the default privilege scheme
 ---------------------------------------
 
