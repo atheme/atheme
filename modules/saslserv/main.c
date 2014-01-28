@@ -26,7 +26,7 @@ static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
-myuser_t *login_user(sasl_session_t *p);
+static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
 
@@ -438,7 +438,7 @@ static int may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 }
 
 /* authenticated, now double check that their account is ok for login */
-myuser_t *login_user(sasl_session_t *p)
+static myuser_t *login_user(sasl_session_t *p)
 {
 	myuser_t *source_mu, *target_mu;
 
