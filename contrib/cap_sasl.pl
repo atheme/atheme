@@ -11,7 +11,7 @@ $VERSION = "1.5";
     authors     => 'Michael Tharp and Jilles Tjoelker',
     contact     => 'gxti@partiallystapled.com',
     name        => 'cap_sasl.pl',
-    description => 'Implements PLAIN or DH-BLOWFISH SASL authentication mechanism for use with charybdis ircds, and enables CAP MULTI-PREFIX',
+    description => 'Implements PLAIN, EXTERNAL, DH-BLOWFISH SASL authentication mechanism for use with charybdis ircds, and enables CAP MULTI-PREFIX',
     license     => 'GNU General Public License',
     url         => 'http://ircv3.atheme.org/extensions/sasl-3.1',
 );
@@ -233,6 +233,12 @@ $mech{PLAIN} = sub {
 	join("\0", $u, $u, $p);
 };
 
+$mech{EXTERNAL} = sub {
+	my($sasl, $data) = @_;
+
+	"";
+};
+
 eval {
 	require Crypt::OpenSSL::Bignum;
 	my $compute_secret;
@@ -317,7 +323,7 @@ eval {
 		$pass .= "\0";
 		$pass .= chr(rand(256)) while length($pass) % 16;
 
-		my $userpass = $u . $pass; 
+		my $userpass = $u . $pass;
 
 		# Hum... this is a CBC mode cipher. We need an IV :P
 		my $iv = Crypt::CBC->random_bytes(16);
