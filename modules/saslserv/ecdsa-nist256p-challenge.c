@@ -74,7 +74,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 {
 	ecdsa_session_t *s = p->mechdata;
 	myuser_t *mu;
-	char *username;
+	char *end;
 	unsigned char pubkey_raw[BUFSIZE];
 	const unsigned char *pubkey_raw_p;
 	metadata_t *md;
@@ -82,12 +82,14 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 
 	memset(pubkey_raw, '\0', sizeof pubkey_raw);
 
-	username = mowgli_alloc(len + 5);
-	memcpy(username, message, len);
-	username[len] = '\0';
-
-	p->username = sstrdup(username);
-	mowgli_free(username);
+	end = memchr(message, '\0', len);
+	if (end == NULL)
+		p->username = sstrndup(message, len);
+	else
+	{
+		p->username = sstrndup(message, end-message);
+		p->authzid = sstrndup(end+1, len-1-(end-message));
+	}
 
 	mu = myuser_find_by_nick(p->username);
 	if (mu == NULL)
