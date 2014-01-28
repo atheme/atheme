@@ -234,10 +234,10 @@ $mech{PLAIN} = sub {
 };
 
 eval {
-	use Crypt::OpenSSL::Bignum;
-	use Crypt::DH;
-	use Crypt::Blowfish;
-	use Math::BigInt;
+	require Crypt::OpenSSL::Bignum;
+	require Crypt::DH;
+	require Crypt::Blowfish;
+	require Math::BigInt;
 	sub bin2bi { return Crypt::OpenSSL::Bignum->new_from_bin(shift)->to_decimal } # binary to BigInt
 	sub bi2bin { return Crypt::OpenSSL::Bignum->new_from_decimal((shift)->bstr)->to_bin } # BigInt to binary
 	$mech{'DH-BLOWFISH'} = sub {
@@ -269,11 +269,11 @@ eval {
 };
 
 eval {
-	use Crypt::OpenSSL::Bignum;
-	use Crypt::DH;
-	use Math::BigInt;
-	use Crypt::Rijndael;
-	use Crypt::CBC;
+	require Crypt::OpenSSL::Bignum;
+	require Crypt::DH;
+	require Math::BigInt;
+	require Crypt::Rijndael;
+	require Crypt::CBC;
 	sub bin2bi { return Crypt::OpenSSL::Bignum->new_from_bin(shift)->to_decimal } # binary to BigInt
 	sub bi2bin { return Crypt::OpenSSL::Bignum->new_from_decimal((shift)->bstr)->to_bin } # BigInt to binary
 	$mech{'DH-AES'} = sub {
