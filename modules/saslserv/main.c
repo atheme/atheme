@@ -73,6 +73,7 @@ void _modinit(module_t *m)
 	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
 	hook_add_user_add(sasl_newuser);
+	hook_add_event("sasl_may_impersonate");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", delete_stale, NULL, 30);
 
@@ -414,6 +415,7 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 {
+	hook_sasl_may_impersonate_t req;
 	char priv[512] = PRIV_IMPERSONATE_ANY;
 	char *classname;
 
@@ -440,7 +442,14 @@ static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 	if(has_priv_myuser(source_mu, priv))
 		return true;
 
-	return false;
+	/* Allow modules to check too */
+	req.source_mu = source_mu;
+	req.target_mu = target_mu;
+	req.allowed = false;
+
+	hook_call_sasl_may_impersonate(&req);
+
+	return req.allowed;
 }
 
 /* authenticated, now double check that their account is ok for login */

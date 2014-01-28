@@ -40,6 +40,12 @@ struct sasl_mechanism_ {
   void (*mech_finish) (struct sasl_session_ *sptr);
 };
 
+typedef struct {
+  myuser_t *source_mu;
+  myuser_t *target_mu;
+  bool allowed;
+} hook_sasl_may_impersonate_t;
+
 #define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */
 #define ASASL_DONE 2 /* client successfully authenticated */
