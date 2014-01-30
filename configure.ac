@@ -20,6 +20,13 @@ BUILDSYS_SHARED_LIB
 BUILDSYS_PROG_IMPLIB
 LIBS="$LIBS $DYNAMIC_LD_LIBS"
 
+AC_MSG_CHECKING([if you read GIT-Access])
+if ! test -f libmowgli-2/Makefile -a -f modules/contrib/Makefile; then
+	AC_MSG_RESULT(no)
+	AC_ERROR([please read GIT-Access before trying to build from git])
+fi
+AC_MSG_RESULT(yes)
+
 AC_PATH_PROG(RM, rm)
 AC_PATH_PROG(MV, mv)
 AC_PATH_PROG(CP, cp)
