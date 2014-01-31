@@ -108,6 +108,9 @@ static const char *pbkdf2_crypt(const char *key, const char *salt)
 	static unsigned char digestbuf[SHA512_DIGEST_LENGTH];
 	int res, iter;
 
+	if (strlen(salt) < SALTLEN)
+		salt = pbkdf2_salt();
+
 	memcpy(outbuf, salt, SALTLEN);
 
 	res = PKCS5_PBKDF2_HMAC(key, strlen(key), (const unsigned char *)salt, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
