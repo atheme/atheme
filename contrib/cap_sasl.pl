@@ -23,7 +23,9 @@ sub timeout;
 
 sub server_connected {
 	my $server = shift;
-	$server->send_raw_now("CAP LS");
+	if (uc $server->{chat_type} eq 'IRC') {
+		$server->send_raw_now("CAP LS");
+	}
 }
 
 sub event_cap {
