@@ -25,16 +25,18 @@ static chanacs_t *chanacs_ext_match_user(chanacs_t *ca, user_t *u)
 {
 	chanacs_exttarget_t *ent;
 	mychan_t *mc;
+	unsigned int flags;
 
 	ent = (chanacs_exttarget_t *) ca->entity;
 
 	if (!(mc = mychan_find(ent->channel)))
 		return NULL;
 
-	if (chanacs_user_has_flag(mc, u, CA_AKICK))
+	flags = chanacs_user_flags(mc, u);
+	if (flags & CA_AKICK)
 		return NULL;
 
-	if (chanacs_user_has_flag(mc, u, 0))
+	if (flags)
 		return ca;
 
 	return NULL;
