@@ -209,9 +209,11 @@ static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 	mygroup_t *mg;
 	mowgli_node_t *n;
 
-	return_val_if_fail(mu != NULL, false);
 	return_val_if_fail(mt != NULL, false);
 	return_val_if_fail((mg = group(mt)) != NULL, false);
+
+	if (!mu) /* NULL users can't be in groups! :o */
+		return false;
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
@@ -235,6 +237,12 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAKE");
 		command_fail(si, fault_needmoreparams, _("Syntax: TAKE <vhost>"));
+		return;
+	}
+
+	if (si->smu == NULL)
+	{
+		command_fail(si, fault_nochange, _("You can't take vhosts when not logged in"));
 		return;
 	}
 
