@@ -2,6 +2,9 @@
  * Copyright (c) 2011 William Pitcock <nenolod@dereferenced.org>
  *
  * Rights to this code are as documented in doc/LICENSE.
+ * 
+ * $chanacs:#channel gives flags to users in /cs flags #channel if
+ *   the user has flags in the $chanacs:#channel
  */
 
 #include "atheme.h"
