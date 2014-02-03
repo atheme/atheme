@@ -58,6 +58,7 @@ $server:server.name - Any user who is connected to the given server.
 $chanacs:#channel - Any user with channel access in the given channel
                       (including hostmasks).
 #endif
+
 If you do not have +f you may still remove your own access
 with -*.
 
