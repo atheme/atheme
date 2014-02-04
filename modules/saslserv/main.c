@@ -268,7 +268,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	char *cloak, *out = NULL;
 	char temp[BUFSIZE];
 	char mech[61];
-	int out_len = 0;
+	size_t out_len = 0;
 	metadata_t *md;
 
 	/* First piece of data in a session is the name of

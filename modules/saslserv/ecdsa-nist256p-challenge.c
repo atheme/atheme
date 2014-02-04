@@ -27,8 +27,8 @@ DECLARE_MODULE_V1
 
 mowgli_list_t *mechanisms;
 mowgli_node_t *mnode;
-static int mech_start(sasl_session_t *p, char **out, int *out_len);
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len);
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
 static void mech_finish(sasl_session_t *p);
 sasl_mechanism_t mech = {"ECDSA-NIST256P-CHALLENGE", &mech_start, &mech_step, &mech_finish};
 
@@ -57,7 +57,7 @@ void _moddeinit(module_unload_intent_t intent)
 	mowgli_node_delete(mnode, mechanisms);
 }
 
-static int mech_start(sasl_session_t *p, char **out, int *out_len)
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = mowgli_alloc(sizeof(ecdsa_session_t));
 	p->mechdata = s;
@@ -70,7 +70,7 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	return ASASL_MORE;
 }
 
-static int mech_step_accname(sasl_session_t *p, char *message, int len, char **out, int *out_len)
+static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = p->mechdata;
 	myuser_t *mu;
@@ -120,7 +120,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, int len, char **o
 	return ASASL_MORE;
 }
 
-static int mech_step_response(sasl_session_t *p, char *message, int len, char **out, int *out_len)
+static int mech_step_response(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = p->mechdata;
 
@@ -130,9 +130,9 @@ static int mech_step_response(sasl_session_t *p, char *message, int len, char **
 	return ASASL_DONE;
 }
 
-typedef int (*mech_stepfn_t)(sasl_session_t *p, char *message, int len, char **out, int *out_len);
+typedef int (*mech_stepfn_t)(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
 
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	static mech_stepfn_t mech_steps[ECDSA_ST_COUNT] = {
 		[ECDSA_ST_ACCNAME] = &mech_step_accname,

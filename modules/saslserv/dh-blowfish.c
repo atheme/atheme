@@ -25,8 +25,8 @@ static DH *base_dhparams;
 mowgli_list_t *mechanisms;
 mowgli_node_t *mnode;
 
-static int mech_start(sasl_session_t *p, char **out, int *out_len);
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len);
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
 static void mech_finish(sasl_session_t *p);
 sasl_mechanism_t mech = {"DH-BLOWFISH", &mech_start, &mech_step, &mech_finish};
 
@@ -65,7 +65,7 @@ static inline DH *DH_clone(DH *dh)
 	return out;
 }
 
-static int mech_start(sasl_session_t *p, char **out, int *out_len)
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
 	char *ptr;
 	DH *dh;
@@ -97,7 +97,7 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	return ASASL_MORE;
 }
 
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	DH *dh = NULL;
 	BF_KEY key;
