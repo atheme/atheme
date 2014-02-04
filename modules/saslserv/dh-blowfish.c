@@ -104,7 +104,8 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	BIGNUM *their_key = NULL;
 	myuser_t *mu;
 	char *ptr, *secret = NULL, *password = NULL;
-	int size, ret = ASASL_FAIL;
+	int ret = ASASL_FAIL;
+	uint16_t size;
 
 	if (!p->mechdata)
 		return ASASL_FAIL;
@@ -113,7 +114,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	/* Their pub_key */
 	if (len < 2)
 		goto end;
-	size = ntohs(*(unsigned int*)message);
+	size = ntohs(*(uint16_t *)message);
 	message += 2;
 	len -= 2;
 	if (size > len)
