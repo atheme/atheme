@@ -17,8 +17,8 @@ DECLARE_MODULE_V1
 
 mowgli_list_t *mechanisms;
 mowgli_node_t *mnode;
-static int mech_start(sasl_session_t *p, char **out, int *out_len);
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len);
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
 static void mech_finish(sasl_session_t *p);
 sasl_mechanism_t mech = {"PLAIN", &mech_start, &mech_step, &mech_finish};
 
@@ -34,12 +34,12 @@ void _moddeinit(module_unload_intent_t intent)
 	mowgli_node_delete(mnode, mechanisms);
 }
 
-static int mech_start(sasl_session_t *p, char **out, int *out_len)
+static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
 	return ASASL_MORE;
 }
 
-static int mech_step(sasl_session_t *p, char *message, int len, char **out, int *out_len)
+static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	char auth[256];
 	char pass[256];
