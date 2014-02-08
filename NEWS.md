@@ -14,10 +14,6 @@ saslserv
 - Add support for SASL authorization identities
 - Add a `sasl_may_impersonate` hook
 
-gameserv
---------
-- Remove multiplier from CALC and ROLL commands
-
 perl api
 --------
 - Export SaslServ's `sasl_may_impersonate` hook
