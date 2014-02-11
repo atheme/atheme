@@ -1,6 +1,6 @@
 Help for WAITING:
 
-WAITING lists all vhosts currently waiting for activation.
+WAITING lists all vHosts currently waiting for activation.
 
 Syntax: WAITING
 

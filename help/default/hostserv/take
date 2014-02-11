@@ -1,11 +1,11 @@
 Help for TAKE:
 
-TAKE allows you to set a vhost that the network staff
+TAKE allows you to set a vHost that the network staff
 has offered and use it on your account. If the string
-$account is in the vhost, it will be replaced with your
+$account is in the vHost, it will be replaced with your
 account name.
 
-Syntax: TAKE <vhost>
+Syntax: TAKE <vHost>
 
 Examples:
     /msg &nick& TAKE $account.users.example.net
