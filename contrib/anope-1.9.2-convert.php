@@ -241,7 +241,7 @@ function atheme_convert()
 	printf("Opening old anope database\n");
 
 	printf("Beginning conversion process\n");
-	printf("atheme opensex compatable db - DBV 7\n");
+	printf("atheme opensex compatible db - DBV 7\n");
 
 	fwrite($atheme, "DBV 7\n");
 	fwrite($atheme, "CF +vVoOtsriRfhHAb\n");
