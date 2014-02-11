@@ -175,7 +175,10 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 	cptr = si->connection;
 	hd = cptr->userdata;
 	if (hd->sent_reply)
+	{
+		free(newmessage);
 		return;
+	}
 	if (hd->replybuf != NULL)
 	{
 		hd->replybuf = srealloc(hd->replybuf, strlen(hd->replybuf) + strlen(newmessage) + 2);
