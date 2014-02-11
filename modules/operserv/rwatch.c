@@ -193,11 +193,18 @@ static void load_rwatchdb(char *path)
 	if ((srename(path, newpath)) < 0)
 	{
 		slog(LG_ERROR, "load_rwatchdb(): couldn't rename rwatch database.");
-		return;
 	}
-
-	slog(LG_INFO, "The RWATCH database has been converted to the OpenSEX format.");
-	slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
+	else
+	{
+		slog(LG_INFO, "The RWATCH database has been converted to the OpenSEX format.");
+		slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
+	}
+	
+	free(rw->regex);
+	free(rw->reason);
+	if (rw->re != NULL)
+		regex_destroy(rw->re);
+	free(rw);
 }
 
 static void db_h_rw(database_handle_t *db, const char *type)
