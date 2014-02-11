@@ -704,6 +704,7 @@ static void corestorage_h_md(database_handle_t *db, const char *type)
 	{
 		slog(LG_INFO, "db-h-md: attempting to add %s property to non-existant object %s",
 		     prop, name);
+		free(newvalue);
 		return;
 	}
 
