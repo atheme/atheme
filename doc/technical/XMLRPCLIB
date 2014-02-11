@@ -5,12 +5,12 @@ Please note that the Atheme team has modified the original code considerably.
 
 ==================================================================================
 
-The Nomad XML-RPC Library is a light weight, simple implentation of the XML-RPC
+The Nomad XML-RPC Library is a lightweight, simple implemetation of the XML-RPC
 specification (http://www.xmlrpc.com/spec), allowing developers to write applications
 that can process XML-RPC requests.
 
 The lib does not provide you with a socket listener it is up to the developer to
-handle the process of reading and writting to the sockets. 
+handle the process of reading and writing to the sockets.
 
 Type
 ./configure
@@ -40,9 +40,9 @@ xmlrpc_set_options : Some options are define able for each method call these are
                        and <int>, this option allows you to send the one you want, by default
                        the lib sends <i4>, use XMLRPC_I4 for <i4> tags and XMLRPC_INT for <int>
 
-xmlrpc_generic_error : if you need to generate an error responce due to invalid information
+xmlrpc_generic_error : if you need to generate an error response due to invalid information
                        passed to your method you can call this function and it will generate
-                       a valid "fault" responce
+                       a valid "fault" response
 
 xmlrpc_process       : pass the received socket data to this function so that it can process the
                        data, and pass it to the method handler
@@ -56,19 +56,19 @@ xmlrpc_send   : once your method call is done and you want to write data back to
 xmlrpc_char_encode : encode the string to be xml compliant, the xml-rpc spec only states that
                      < and & need to converted but xml itself says anything else is invalid
 
-xmlrpc_array : formats an <array> responce
+xmlrpc_array : formats an <array> response
 
-xmlrpc_double : formats a <double> responce
+xmlrpc_double : formats a <double> response
 
-xmlrpc_base64 : formats a <base64> encoded responce
+xmlrpc_base64 : formats a <base64> encoded response
 
-xmlrpc_boolean : formats a <boolean> responce
+xmlrpc_boolean : formats a <boolean> response
 
-xmlrpc_string  : formats a <string> responce
+xmlrpc_string  : formats a <string> response
 
-xmlrpc_integer : formats a <i4> responce
+xmlrpc_integer : formats a <i4> response
 
-xmlrpc_time2date : formats a <dateTime.iso8601> responce
+xmlrpc_time2date : formats a <dateTime.iso8601> response
 
 xmlrpc_struct_begin : formats a <struct> response
 
