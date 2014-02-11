@@ -1,17 +1,17 @@
 Help for VHOST:
 
 VHOST allows operators to set a virtual host (also
-known as a spoof or cloak) on an account. This vhost
+known as a spoof or cloak) on an account. This vHost
 will be set on the user immediately and each time
 they identify.
 
-Syntax: VHOST <nickname> ON <vhost>
+Syntax: VHOST <nickname> ON <vHost>
 Syntax: VHOST <nickname> OFF
 
 If the nickname is marked, you can override this
 using the FORCE keyword.
 
-Syntax: VHOST <nickname> ON <vhost> FORCE
+Syntax: VHOST <nickname> ON <vHost> FORCE
 Syntax: VHOST <nickname> OFF FORCE
 
 Examples:

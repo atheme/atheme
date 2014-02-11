@@ -2,12 +2,12 @@ Help for RESTRICT:
 
 RESTRICT allows operators to restrict what an account can and can not do.
 It will currently block a user from grouping nicks, registering a channel,
-requesting a vhost or taking an OFFERed vhost.
+requesting a vHost or taking an OFFERed vHost.
 
 This is particularly useful if a user starts abusing these commands.
 
 Syntax: RESTRICT <nickname> ON|OFF <reason>
 
 Examples:
-    /msg &nick& RESTRICT game_boy ON Abusing vhost requests
+    /msg &nick& RESTRICT game_boy ON Abusing vHost requests
     /msg &nick& RESTRICT nenolod OFF
