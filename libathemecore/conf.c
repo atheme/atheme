@@ -824,6 +824,7 @@ bool conf_rehash(void)
 	{
 		slog(LG_ERROR, "conf_rehash(): unable to load configuration file, aborting rehash");
 		runflags &= ~RF_REHASHING;
+		free(hold_me);
 		return false;
 	}
 
