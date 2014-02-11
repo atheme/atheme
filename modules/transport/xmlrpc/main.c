@@ -505,7 +505,7 @@ static int xmlrpcmethod_ison(void *conn, int parc, char *parv[])
 {
 	user_t *u;
 	int i;
-	char buf[BUFSIZE], buf2[BUFSIZE];
+	char buf[XMLRPC_BUFSIZE], buf2[XMLRPC_BUFSIZE];
 
 	for (i = 0; i < parc; i++)
 	{
