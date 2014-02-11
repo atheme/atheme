@@ -1,10 +1,10 @@
 Help for REQUEST:
 
-REQUEST activation of the vhost. You must be identified
+REQUEST activation of the vHost. You must be identified
 to a registered nick to issue this command. Please be
 patient while your request is considered by network staff.
 
-Syntax: REQUEST <vhost>
+Syntax: REQUEST <vHost>
 
 Examples:
     /msg &nick& REQUEST may.explode.on.impact

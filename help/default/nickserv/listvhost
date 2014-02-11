@@ -1,8 +1,8 @@
 Help for LISTVHOST:
 
-LISTVHOST shows accounts which have a vhost set
+LISTVHOST shows accounts which have a vHost set
 on them. If a pattern is given, only accounts
-with vhosts matching the pattern are shown.
+with vHosts matching the pattern are shown.
 
 Syntax: LISTVHOST [pattern]
 

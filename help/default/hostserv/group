@@ -1,7 +1,7 @@
 Help for GROUP:
 
-This command will set the current nick's vhost as the
-vhost for all the nicks in the group, including nicks
+This command will set the current nick's vHost as the
+vHost for all the nicks in the group, including nicks
 that will be added in the future.
 
 Syntax: GROUP

@@ -8,7 +8,7 @@ You can decide who may use GameServ:
     ALL   - allow all channel members
     VOICE - allow ops/voiced
     OP    - allow ops
-    OFF   - allow noone
+    OFF   - allow no-one
 
 For OP and VOICE, both channel status and &nick&
 flags apply.

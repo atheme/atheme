@@ -4,7 +4,7 @@ STATUS returns information about your current
 state. It will show information about your
 nickname, IRC operator, and SRA status.
 
-If the a channel parameter is specified, your
+If the channel parameter is specified, your
 access to the given channel is returned.
 
 Syntax: STATUS [#channel]

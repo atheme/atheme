@@ -1,6 +1,6 @@
 Help for SET NOBOT:
 
-This option makes a channel be unassignable. If a bot
+This option marks a channel as unassignable. If a bot
 is already assigned to the channel, it is unassigned
 automatically when you enable the option.
 
