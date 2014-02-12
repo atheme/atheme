@@ -79,7 +79,10 @@ void _modinit(module_t *m)
 	f = fopen(path, "r");
 
 	if (f)
+	{
 		load_rwatchdb(path); /* because i'm lazy, let's pass path to the function */
+		fclose(f);
+	}
 	else
 	{
 		db_register_type_handler("RW", db_h_rw);
@@ -153,6 +156,9 @@ static void load_rwatchdb(char *path)
 	while (fgets(rBuf, BUFSIZE * 2, f))
 	{
 		item = strtok(rBuf, " ");
+		if (!item)
+			continue;
+
 		strip(item);
 
 		if (!strcmp(item, "RW"))
