@@ -200,11 +200,14 @@ static void load_rwatchdb(char *path)
 		slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
 	}
 	
-	free(rw->regex);
-	free(rw->reason);
-	if (rw->re != NULL)
-		regex_destroy(rw->re);
-	free(rw);
+	if (rw != NULL)
+	{
+		free(rw->regex);
+		free(rw->reason);
+		if (rw->re != NULL)
+			regex_destroy(rw->re);
+		free(rw);
+	}
 }
 
 static void db_h_rw(database_handle_t *db, const char *type)
