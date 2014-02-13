@@ -98,14 +98,14 @@ static const char *override_get_storage_oper_name(sourceinfo_t *si)
 }
 
 struct sourceinfo_vtable override_vtable = {
-	"override",
-	override_command_fail,
-	override_command_success_nodata,
-	override_command_success_string,
-	override_get_source_name,
-	override_get_source_mask,
-	override_get_oper_name,
-	override_get_storage_oper_name,
+	.description = "override",
+	.cmd_fail = override_command_fail,
+	.cmd_success_nodata = override_command_success_nodata,
+	.cmd_success_string = override_command_success_string,
+	.get_source_name = override_get_source_name,
+	.get_source_mask = override_get_source_mask,
+	.get_oper_name = override_get_oper_name,
+	.get_storage_oper_name = override_get_storage_oper_name,
 };
 
 static void override_sourceinfo_dispose(cooked_sourceinfo_t *o_si)

@@ -931,6 +931,12 @@ static void command_table_cb(const char *line, void *data)
 
 void command_success_table(sourceinfo_t *si, table_t *table)
 {
+	if (si->v != NULL && si->v->cmd_success_table)
+	{
+		si->v->cmd_success_table(si, table);
+		return;
+	}
+
 	table_render(table, command_table_cb, si);
 }
 
