@@ -867,7 +867,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	if (si->v != NULL && si->v->cmd_fail)
+	if (si->v != NULL && si->v->cmd_success_nodata)
 	{
 		si->v->cmd_success_nodata(si, buf);
 		return;
@@ -910,7 +910,7 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	if (si->v != NULL && si->v->cmd_fail)
+	if (si->v != NULL && si->v->cmd_success_string)
 	{
 		si->v->cmd_success_string(si, result, buf);
 		return;
