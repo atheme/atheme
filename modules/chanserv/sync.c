@@ -36,7 +36,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 		entity_chanacs_validation_vtable_t *vt;
 
 		vt = myentity_get_chanacs_validator(ca->entity);
-		if (vt->match_entity(ca, entity(cu->user->myuser)) == NULL)
+		if (vt->match_entity(ca, entity(cu->user->myuser)) == NULL && (!vt->match_user || vt->match_user(ca, cu->user) == NULL))
 			return;
 	}
 	fl = chanacs_user_flags(mc, cu->user);
