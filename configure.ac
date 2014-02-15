@@ -359,13 +359,6 @@ if test "x$enablerpath" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
-PKG_CHECK_MODULES(JANSSON, [jansson >= 2.4],
-	[JSON="yes"], [JSON="no"])
-
-if test "$JSON" = "yes"; then
-	AC_DEFINE(HAVE_JSON,, Define to 1 if JSON is available)
-fi
-
 PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [LIBQRENCODE="yes"], [LIBQRENCODE="no"])
 
 if test "$LIBQRENCODE" = "yes"; then
@@ -450,7 +443,6 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
-	JSON support         : ${JSON}
 	QR Code support      : ${LIBQRENCODE}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
