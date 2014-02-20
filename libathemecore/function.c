@@ -709,10 +709,14 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 
 	/* now set up the email */
 	if (pipe(pipfds) < 0)
+	{
+		fclose(in);
 		return 0;
+	}
 	switch (pid = fork())
 	{
 		case -1:
+			fclose(in);
 			return 0;
 		case 0:
 			connection_close_all_fds();
