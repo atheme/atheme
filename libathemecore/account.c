@@ -129,7 +129,12 @@ myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, cons
 	mu->email = strshare_get(email);
 	mu->email_canonical = canonicalize_email(email);
 	if (id)
-		mowgli_strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
+	{
+		if (myentity_find_uid(id) == NULL)
+			mowgli_strlcpy(entity(mu)->id, id, sizeof(entity(mu)->id));
+		else
+			entity(mu)->id[0] = '\0';
+	}
 	else
 		entity(mu)->id[0] = '\0';
 
