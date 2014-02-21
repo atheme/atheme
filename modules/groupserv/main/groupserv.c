@@ -76,7 +76,12 @@ mygroup_t *mygroup_add_id(const char *id, const char *name)
 	entity(mg)->type = ENT_GROUP;
 
 	if (id)
-		mowgli_strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
+	{
+		if (!myentity_find_uid(id))
+			mowgli_strlcpy(entity(mg)->id, id, sizeof(entity(mg)->id));
+		else
+			entity(mg)->id[0] = '\0';
+	}
 	else
 		entity(mg)->id[0] = '\0';
 
