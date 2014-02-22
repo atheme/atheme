@@ -75,6 +75,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 		myuser_set_email(mu, oldmail);
 		command_fail(si, fault_emailfail, _("Sending email failed, account \2%s\2 remains with \2%s\2."),
 				entity(mu)->name, mu->email);
+		free(newpass);
 		return;
 	}
 

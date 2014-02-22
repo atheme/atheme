@@ -556,7 +556,7 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 {
 	metadata_t *md;
 	int i;
-	char buf[BUFSIZE];
+	char buf[XMLRPC_BUFSIZE];
 
 	for (i = 0; i < parc; i++)
 	{
