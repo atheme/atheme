@@ -349,8 +349,8 @@ eval {
 sub in_path {
 	my $exe = shift;
 	return grep {-x "$_/$exe"}
-	       map {length $_ ? $_ : ""}
-		   split(":", $ENV{PATH});
+	       map {length $_ ? $_ : "."}
+	       split(":", $ENV{PATH});
 }
 
 if (in_path("ecdsatool")) {
