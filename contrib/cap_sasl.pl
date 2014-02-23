@@ -122,7 +122,7 @@ sub event_saslend {
 sub timeout {
 	my $tag = shift;
 	my $server = Irssi::server_find_tag($tag);
-	if(!$server->{connected}) {
+	if($server && !$server->{connected}) {
 		$server->print('', "SASL: authentication timed out");
 		$server->send_raw_now("CAP END");
 	}
