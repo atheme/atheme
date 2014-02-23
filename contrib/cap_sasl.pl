@@ -54,7 +54,7 @@ sub event_cap {
 			$server->print('', "CLICAP: now enabled:$caps");
 			if ($caps =~ / sasl /i) {
 				$sasl_auth{$server->{tag}}{buffer} = '';
-				$sasl_auth{$server->{tag}}{state} = 0;
+				$sasl_auth{$server->{tag}}{step} = 0;
 				if($mech{$sasl_auth{$server->{tag}}{mech}}) {
 					$server->send_raw_now("AUTHENTICATE " . $sasl_auth{$server->{tag}}{mech});
 					Irssi::timeout_add_once(7500, \&timeout, $server->{tag});
@@ -364,8 +364,8 @@ if (in_path("ecdsatool")) {
 		my($sasl, $data) = @_;
 		my $u = $sasl->{user};
 		my $k = $sasl->{password};
-		my $state = ++$sasl->{state};
-		if ($state == 1) {
+		my $step = ++$sasl->{step};
+		if ($step == 1) {
 			if (length $data) {
 				my $signpayload = encode_base64($data);
 				my $payload = $ecdsa_sign->($k, $signpayload);
@@ -374,7 +374,7 @@ if (in_path("ecdsatool")) {
 				return $u."\0".$u;
 			}
 		}
-		elsif ($state == 2) {
+		elsif ($step == 2) {
 			my $signpayload = encode_base64($data);
 			my $payload = $ecdsa_sign->($k, $signpayload);
 			return decode_base64($payload);
