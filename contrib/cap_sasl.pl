@@ -30,15 +30,16 @@ sub server_connected {
 
 sub event_cap {
 	my ($server, $args, $nick, $address) = @_;
-	my ($subcmd, $caps, $tosend);
+	my ($subcmd, $caps, $tosend, $sasl);
 
 	$tosend = '';
+	$sasl = $sasl_auth{$server->{tag}};
 	if ($args =~ /^\S+ (\S+) :(.*)$/) {
 		$subcmd = uc $1;
 		$caps = ' '.$2.' ';
 		if ($subcmd eq 'LS') {
 			$tosend .= ' multi-prefix' if $caps =~ / multi-prefix /i;
-			$tosend .= ' sasl' if $caps =~ / sasl /i && defined($sasl_auth{$server->{tag}});
+			$tosend .= ' sasl' if $caps =~ / sasl /i && defined($sasl);
 			$tosend =~ s/^ //;
 			$server->print('', "CLICAP: supported by server:$caps");
 			if (!$server->{connected}) {
@@ -53,13 +54,13 @@ sub event_cap {
 		} elsif ($subcmd eq 'ACK') {
 			$server->print('', "CLICAP: now enabled:$caps");
 			if ($caps =~ / sasl /i) {
-				$sasl_auth{$server->{tag}}{buffer} = '';
-				$sasl_auth{$server->{tag}}{step} = 0;
-				if($mech{$sasl_auth{$server->{tag}}{mech}}) {
-					$server->send_raw_now("AUTHENTICATE " . $sasl_auth{$server->{tag}}{mech});
+				$sasl->{buffer} = '';
+				$sasl->{step} = 0;
+				if($mech{$sasl->{mech}}) {
+					$server->send_raw_now("AUTHENTICATE " . $sasl->{mech});
 					Irssi::timeout_add_once(7500, \&timeout, $server->{tag});
 				}else{
-					$server->print('', 'SASL: attempted to start unknown mechanism "' . $sasl_auth{$server->{tag}}{mech} . '"');
+					$server->print('', 'SASL: attempted to start unknown mechanism "' . $sasl->{mech} . '"');
 				}
 			}
 			elsif (!$server->{connected}) {
