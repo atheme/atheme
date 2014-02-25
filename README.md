@@ -3,7 +3,7 @@
 This program is free but copyrighted software; see the COPYING file for
 details.
 
-Information about atheme-services may be found at http://www.atheme.net/.
+Information about atheme-services may be found at http://atheme.net/.
 
 ## Credits
 
