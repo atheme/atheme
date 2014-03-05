@@ -8,7 +8,9 @@ The answer is in the form <nick> [-> account] ACC <digit> <EID>,
 where <digit> is one of the following:
     0 - account or user does not exist
     1 - account exists but user is not logged in
+#if module nickserv/access
     2 - user is not logged in but recognized (see ACCESS)
+#endif
     3 - user is logged in
 
 If the account is omitted the user's nick is used and
