@@ -419,7 +419,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 				/* one notification only */
 				if (chanuser_find(c, tu))
 					notify_one_victim(si, c, tu, MTYPE_DEL);
-				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d ban%s removed)."),
+				command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d quiet%s removed)."),
 					target, channel, count, (count != 1 ? "s" : ""));
 			}
 			else
