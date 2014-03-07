@@ -176,7 +176,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 		mt = myentity_find(group);
 		if (mt == NULL)
 		{
-			command_fail(si, fault_invalidparams, _("The requested group does not exist."));
+			command_fail(si, fault_badparams, _("The requested group does not exist."));
 			return;
 		}
 	}
@@ -184,7 +184,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 	l = hs_offer_find(host, mt);
 	if (l != NULL)
 	{
-		command_fail(si, fault_invalidparams, _("The requested offer already exists."));
+		command_fail(si, fault_badparams, _("The requested offer already exists."));
 		return;
 	}
 
@@ -217,7 +217,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	l = hs_group_find(host, NULL);
+	l = hs_offer_find(host, NULL);
 	if (l == NULL)
 	{
 		command_fail(si, fault_nosuch_target, _("vhost \2%s\2 not found in vhost offer database."), host);
@@ -234,7 +234,7 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 		free(l->vhost);
 		free(l);
 
-		l = hs_group_find(host, NULL);
+		l = hs_offer_find(host, NULL);
 	}
 
 	command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
