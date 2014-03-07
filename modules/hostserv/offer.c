@@ -35,6 +35,7 @@ struct hsoffered_ {
 	time_t vhost_ts;
 	stringref creator;
 	myentity_t *group;
+	mowgli_node_t node;
 };
 
 typedef struct hsoffered_ hsoffered_t;
@@ -115,7 +116,23 @@ static void db_h_ho(database_handle_t *db, const char *type)
 	l->vhost_ts = vhost_ts;
 	l->creator = strshare_get(creator);
 
-	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
+	mowgli_node_add(l, &l->node, &hs_offeredlist);
+}
+
+static inline hsoffered_t *hs_offer_find(const char *host, myentity_t *mt)
+{
+	mowgli_node_t *n;
+	hsoffered_t *l;
+
+	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
+	{
+		l = n->data;
+
+		if (!irccasecmp(l->vhost, host) && (l->group == mt || mt == NULL))
+			return l;
+	}
+
+	return NULL;
 }
 
 /* OFFER <host> */
@@ -124,6 +141,7 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 	char *group = parv[0];
 	char *host;
 	hsoffered_t *l;
+	myentity_t *mt = NULL;
 
 	if (!group)
 	{
@@ -153,16 +171,31 @@ static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (group != NULL)
+	{
+		mt = myentity_find(group);
+		if (mt == NULL)
+		{
+			command_fail(si, fault_invalidparams, _("The requested group does not exist."));
+			return;
+		}
+	}
+
+	l = hs_offer_find(host, mt);
+	if (l != NULL)
+	{
+		command_fail(si, fault_invalidparams, _("The requested offer already exists."));
+		return;
+	}
+
 	l = smalloc(sizeof(hsoffered_t));
 
-	if (group != NULL)
-		l->group = myentity_find(group);
-
+	l->group = mt;
 	l->vhost = sstrdup(host);
 	l->vhost_ts = CURRTIME;;
 	l->creator = strshare_ref(entity(si->smu)->name);
 
-	mowgli_node_add(l, mowgli_node_create(), &hs_offeredlist);
+	mowgli_node_add(l, &l->node, &hs_offeredlist);
 
 	command_success_nodata(si, _("You have offered vhost \2%s\2."), host);
 	logcommand(si, CMDLOG_ADMIN, "OFFER: \2%s\2", host);
@@ -184,24 +217,27 @@ static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	MOWGLI_ITER_FOREACH(n, hs_offeredlist.head)
+	l = hs_group_find(host, NULL);
+	if (l == NULL)
 	{
-		l = n->data;
-		if (!irccasecmp(l->vhost, host))
-		{
-			logcommand(si, CMDLOG_ADMIN, "UNOFFER: \2%s\2", host);
-
-			mowgli_node_delete(n, &hs_offeredlist);
-
-			strshare_unref(l->creator);
-			free(l->vhost);
-			free(l);
-
-			command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
-			return;
-		}
+		command_fail(si, fault_nosuch_target, _("vhost \2%s\2 not found in vhost offer database."), host);
+		return;
 	}
-	command_success_nodata(si, _("vhost \2%s\2 not found in vhost offer database."), host);
+
+	logcommand(si, CMDLOG_ADMIN, "UNOFFER: \2%s\2", host);
+
+	while (l != NULL)
+	{
+		mowgli_node_delete(&l->node, &hs_offeredlist);
+
+		strshare_unref(l->creator);
+		free(l->vhost);
+		free(l);
+
+		l = hs_group_find(host, NULL);
+	}
+
+	command_success_nodata(si, _("You have unoffered vhost \2%s\2."), host);
 }
 
 static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
@@ -272,7 +308,7 @@ static void hs_cmd_take(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("You have taken vhost \2%s\2."), host);
 			hs_sethost_all(si->smu, host, get_source_name(si));
 			do_sethost_all(si->smu, host);
-			
+
 			return;
 		}
 	}
