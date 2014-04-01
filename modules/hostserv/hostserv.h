@@ -82,7 +82,7 @@ static inline void hs_sethost_all(myuser_t *mu, const char *host, const char *as
 	else
 		metadata_delete(mu, "private:usercloak");
 
-	snprintf(timestring, 16, "%d", time(NULL));
+	snprintf(timestring, 16, "%lu", (unsigned long)time(NULL));
 	metadata_add(mu, "private:usercloak-timestamp", timestring);
 
 	if (assigner != NULL)
