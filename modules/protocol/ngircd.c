@@ -602,6 +602,8 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
+	else if (*parv[0] == '!')
+		;
 	else
 		ngircd_user_mode(user_find(parv[0]), parv[1]);
 }
@@ -622,7 +624,8 @@ static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!c)
 	{
-		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
+		if (*parv[0] != '!')
+			slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
 		return;
 	}
 
