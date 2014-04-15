@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2014 Atheme Development Group
+ * Rights to this code are documented in doc/LICENSE.
+ *
+ * URI parsing code borrowed from libAmy <https://github.com/wilcox-tech/eScape>,
+ * licensed under NCSA.
+ *
+ */
+
 #include "http_common.h"
 #include "datastream.h"
 
