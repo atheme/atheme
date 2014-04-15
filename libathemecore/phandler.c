@@ -79,7 +79,17 @@ void generic_introduce_nick(user_t *u)
 
 void generic_wallops_sts(const char *text)
 {
-	slog(LG_INFO, "Don't know how to send wallops: %s", text);
+	/* ugly, but some ircds offer no alternative -- jilles */
+	user_t *u;
+	mowgli_patricia_iteration_state_t state;
+	char buf[BUFSIZE];
+
+	snprintf(buf, sizeof buf, "*** Notice -- %s", text);
+	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
+	{
+		if (!is_internal_client(u) && is_ircop(u))
+			notice_user_sts(NULL, u, buf);
+	}
 }
 
 void generic_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)

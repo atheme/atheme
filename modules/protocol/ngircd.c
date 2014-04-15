@@ -127,12 +127,6 @@ static void ngircd_quit_sts(user_t *u, const char *reason)
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 }
 
-/* WALLOPS wrapper */
-static void ngircd_wallops_sts(const char *text)
-{
-	sts(":%s WALLOPS :%s", me.name, text);
-}
-
 /* join a channel */
 static void ngircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
@@ -850,7 +844,6 @@ void _modinit(module_t * m)
 	server_login = &ngircd_server_login;
 	introduce_nick = &ngircd_introduce_nick;
 	quit_sts = &ngircd_quit_sts;
-	wallops_sts = &ngircd_wallops_sts;
 	join_sts = &ngircd_join_sts;
 	kick = &ngircd_kick;
 	msg = &ngircd_msg;

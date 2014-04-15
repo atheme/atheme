@@ -128,12 +128,6 @@ static void ircnet_quit_sts(user_t *u, const char *reason)
 	sts(":%s QUIT :%s", u->nick, reason);
 }
 
-/* WALLOPS wrapper */
-static void ircnet_wallops_sts(const char *text)
-{
-	sts(":%s WALLOPS :%s", me.name, text);
-}
-
 /* join a channel */
 static void ircnet_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
@@ -738,7 +732,6 @@ void _modinit(module_t * m)
 	server_login = &ircnet_server_login;
 	introduce_nick = &ircnet_introduce_nick;
 	quit_sts = &ircnet_quit_sts;
-	wallops_sts = &ircnet_wallops_sts;
 	join_sts = &ircnet_join_sts;
 	kick = &ircnet_kick;
 	msg = &ircnet_msg;
