@@ -217,7 +217,7 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	memosvs = service_find("memoserv");
-	if (!irccasecmp(parv[1], memosvs->nick))
+	if (memosvs != NULL && !irccasecmp(parv[1], memosvs->nick))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 cannot be used as an override service."), parv[1]);
 		return;
