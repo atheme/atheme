@@ -98,8 +98,6 @@ void _moddeinit(module_unload_intent_t intent)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		destroy_session(n->data);
-		mowgli_node_delete(n, &sessions);
-		mowgli_node_free(n);
 	}
 }
 
