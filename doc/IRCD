@@ -48,7 +48,8 @@ on the network.
 inspircd
 --------
 
-You should use inspircd12 for inspircd 1.2.x, inspircd 2.0.x and inspircd 2.1.x.
+You should use the "inspircd" protocol module for InspIRCd 1.2 and 2.0.
+InspIRCd 1.2 support is deprecated as of atheme 7.1.
 InspIRCd 1.0.x support (inspircd10) and InspIRCd 1.1.x support (inspircd11)
 have been dropped.
 
