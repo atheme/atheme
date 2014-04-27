@@ -292,7 +292,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 			{
 				sasl_mechanism_t *mptr = n->data;
-				if(l + strlen(mptr->name) > 510)
+				if(l + strlen(mptr->name) > sizeof(temp))
 					break;
 				strcpy(ptr, mptr->name);
 				ptr += strlen(mptr->name);
