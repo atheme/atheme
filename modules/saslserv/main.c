@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 );
 
 mowgli_list_t sessions;
-mowgli_list_t sasl_mechanisms;
+static mowgli_list_t sasl_mechanisms;
 
 sasl_session_t *find_session(const char *uid);
 sasl_session_t *make_session(const char *uid);
@@ -29,6 +29,10 @@ static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
+static void sasl_mech_register(sasl_mechanism_t *mech);
+static void sasl_mech_unregister(sasl_mechanism_t *mech);
+
+sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
 /* main services client routine */
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
@@ -66,6 +70,33 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 
 service_t *saslsvs = NULL;
 mowgli_eventloop_timer_t *delete_stale_timer = NULL;
+
+static void sasl_mech_register(sasl_mechanism_t *mech)
+{
+	mowgli_node_t *node;
+
+	slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
+
+	node = mowgli_node_create();
+	mowgli_node_add(mech, node, &sasl_mechanisms);
+}
+
+static void sasl_mech_unregister(sasl_mechanism_t *mech)
+{
+	mowgli_node_t *n, *tn;
+
+	slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
+	{
+		if (n->data == mech)
+		{
+			mowgli_node_delete(n, &sasl_mechanisms);
+			mowgli_node_free(n);
+			break;
+		}
+	}
+}
 
 void _modinit(module_t *m)
 {
