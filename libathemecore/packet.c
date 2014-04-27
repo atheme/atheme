@@ -79,10 +79,7 @@ static void ping_uplink(void *arg)
 	}
 
 	if (!me.connected)
-	{
-		mowgli_timer_destroy(base_eventloop, ping_uplink_timer);
 		ping_uplink_timer = NULL;
-	}
 }
 
 void irc_handle_connect(connection_t *cptr)
