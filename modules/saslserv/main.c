@@ -137,6 +137,9 @@ void _moddeinit(module_unload_intent_t intent)
 
 	authservice_loaded--;
 
+	if (sessions.head != NULL)
+		slog(LG_DEBUG, "saslserv/main: shutting down with a non-empty session list, a mech did not unregister itself!");
+
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		destroy_session(n->data);
