@@ -39,7 +39,7 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/dh-aes", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
+	"saslserv/dh-aes", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );

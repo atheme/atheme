@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/plain", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
+	"saslserv/plain", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
