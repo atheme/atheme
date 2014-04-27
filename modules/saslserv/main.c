@@ -84,8 +84,19 @@ static void sasl_mech_register(sasl_mechanism_t *mech)
 static void sasl_mech_unregister(sasl_mechanism_t *mech)
 {
 	mowgli_node_t *n, *tn;
+	sasl_session_t *session;
 
 	slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	{
+		session = n->data;
+		if (session->mechptr == mech)
+		{
+			slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
+			destroy_session(session);
+		}
+	}
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
 	{
