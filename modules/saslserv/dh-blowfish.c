@@ -106,6 +106,7 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	char *ptr, *secret = NULL, *password = NULL;
 	int ret = ASASL_FAIL;
 	uint16_t size;
+	int secret_size;
 
 	if (!p->mechdata)
 		return ASASL_FAIL;
@@ -137,7 +138,8 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 
 	/* Compute shared secret */
 	secret = (char*)malloc(DH_size(dh));
-	if ((size = DH_compute_key((unsigned char *)secret, their_key, dh)) == -1)
+	secret_size = DH_compute_key((unsigned char *)secret, their_key, dh);
+	if (secret_size <= 0)
 		goto end;
 
 	/* Data must be multiple of block size, and let's be reasonable about size */
@@ -145,7 +147,7 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 		goto end;
 
 	/* Decrypt! */
-	BF_set_key(&key, size, (unsigned char *)secret);
+	BF_set_key(&key, secret_size, (unsigned char *)secret);
 	ptr = password = (char*)malloc(len + 1);
 	password[len] = '\0';
 	while (len)
