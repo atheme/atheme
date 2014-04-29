@@ -1512,10 +1512,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if ((strcasecmp(parv[0], "MODULES") == 0 || strcasecmp(parv[0], "MODSUPPORT") == 0) && parc > 1)
 	{
-		if (strstr(parv[1], "m_hideoper.so"))
-		{
-			has_hideopermod = true;
-		}
 		if (strstr(parv[1], "m_services_account.so"))
 		{
 			has_servicesmod = true;
@@ -1536,14 +1532,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			has_cbanmod = true;
 		}
-		if (strstr(parv[1], "m_hidechans.so"))
-		{
-			has_hidechansmod = true;
-		}
-		if (strstr(parv[1], "m_servprotect.so"))
-		{
-			has_servprotectmod = true;
-		}
 		if (strstr(parv[1], "m_svshold.so"))
 		{
 			has_svshold = true;
@@ -1557,6 +1545,19 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			has_svstopic_topiclock = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
+	}
+	else if (strcasecmp(parv[0], "USERMODES") == 0 && parc > 1)
+	{
+		varc = sjtoken(parv[1], ' ', varv);
+		for (i = 0; i < varc; i++)
+		{
+			if (!strcmp(varv[i], "hidechans=I"))
+				has_hidechansmod = true;
+			else if (!strcmp(varv[i], "hideoper=H"))
+				has_hideopermod = true;
+			else if (!strcmp(varv[i], "servprotect=k"))
+				has_servprotectmod = true;
+		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
