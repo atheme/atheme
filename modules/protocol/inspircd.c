@@ -1270,23 +1270,6 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_add(c, si->su->nick);
 }
 
-static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
-{
-	si->su = user_find(parv[0]);
-	if (si->su == NULL || si->su->ts != atoi(parv[2]))
-		return;
-	if (is_internal_client(si->su))
-	{
-		// we've already killed the colliding user in user_add/user_changenick
-		// XXX this could cause a services fight if we get desynced and haven't killed the camper
-		sts(":%s NICK %s %lu", si->su->uid, si->su->nick, (unsigned long)si->su->ts);
-	}
-	else
-	{
-		m_nick(si, 2, &parv[1]);
-	}
-}
-
 static void m_save(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
@@ -1706,7 +1689,6 @@ void _modinit(module_t * m)
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_fmode, 3, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SVSNICK", m_svsnick, 3, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SAVE", m_save, 2, MSRC_SERVER);
