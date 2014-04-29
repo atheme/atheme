@@ -197,7 +197,7 @@ static bool has_shun = false;
 static bool has_svstopic_topiclock = false;
 static int has_protocol = 0;
 
-#define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
+#define PROTOCOL_MINIMUM 1202 /* we do not support anything older than this */
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
@@ -1471,11 +1471,19 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		has_svstopic_topiclock = false;
 		has_protocol = 0;
 
+		/* InspIRCd 2.0 and newer sends the protocol version in CAPAB START,
+		 * if there is none sent then we can be sure it's an unsupported version.
+		 */
 		if (parc > 1)
 			has_protocol = atoi(parv[1]);
 		if (has_protocol == 1203 || has_protocol == 1204)
 		{
 			slog(LG_ERROR, "m_capab(): InspIRCd 2.1 beta is not supported.");
+			exit(EXIT_FAILURE);
+		}
+		else if (has_protocol < PROTOCOL_MINIMUM)
+		{
+			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -1484,8 +1492,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		varc = sjtoken(parv[1], ' ', varv);
 		for (i = 0; i < varc; i++)
 		{
-			if (!strncmp(varv[i], "PROTOCOL=", 9))
-				has_protocol = atoi(varv[i] + 9);
 			if(!strncmp(varv[i], "PREFIX=", 7))
 			{
 				if (strstr(varv[i] + 7, "q"))
@@ -1573,12 +1579,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (has_svshold == false)
 		{
 			slog(LG_INFO, "m_capab(): you didn't load m_svshold into inspircd. nickname enforcers will not work.");
-		}
-
-		if (has_protocol && (has_protocol < PROTOCOL_12BETA))
-		{
-			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
-			exit(EXIT_FAILURE);
 		}
 	}
 	else
