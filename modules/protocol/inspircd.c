@@ -1283,6 +1283,41 @@ static void m_svsnick(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+static void m_save(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u = user_find(parv[0]);
+	if (!u)
+		return;
+
+	if (u->ts != atoi(parv[1]))
+	{
+		slog(LG_DEBUG, "m_save(): ignoring SAVE message for %s, TS doesnt match (%lu != %s)", u->nick, (unsigned long)u->ts, parv[1]);
+		return;
+	}
+
+	if (!strcmp(u->nick, u->uid))
+	{
+		slog(LG_DEBUG, "m_save(): ignoring noop SAVE message for %s", u->nick);
+		return;
+	}
+
+	if (is_internal_client(u))
+	{
+		slog(LG_INFO, "m_save(): service %s got hit, changing back", u->nick);
+		sts(":%s NICK %s %lu", u->uid, u->nick, (unsigned long) u->ts);
+		/* XXX services wars */
+	}
+	else
+	{
+		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
+
+		if (user_changenick(u, u->uid, 0))
+			return;
+
+		handle_nickchange(u);
+	}
+}
+
 static void m_error(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
@@ -1664,6 +1699,7 @@ void _modinit(module_t * m)
 	pcommand_add("SVSNICK", m_svsnick, 3, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SAVE", m_save, 2, MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("RSQUIT", m_rsquit, 1, MSRC_USER);
 	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
