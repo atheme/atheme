@@ -2,7 +2,7 @@
  * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * InspIRCd 1.2 - 2.1 link support
+ * InspIRCd link support
  */
 
 #include "atheme.h"
@@ -1473,6 +1473,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 
 		if (parc > 1)
 			has_protocol = atoi(parv[1]);
+		if (has_protocol == 1203 || has_protocol == 1204)
+		{
+			slog(LG_ERROR, "m_capab(): InspIRCd 2.1 beta is not supported.");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0 && parc > 1)
 	{
@@ -1546,12 +1551,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			has_svstopic_topiclock = true;
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
-		TAINT_ON(strstr(parv[1], "m_serverbots.so") != NULL, "inspircd built-in services (m_serverbots) are not compatible with atheme");
-		TAINT_ON(strstr(parv[1], "m_chanacl.so") != NULL, "inspircd built-in services (m_chanacl) are not compatible with atheme");
-		TAINT_ON(strstr(parv[1], "m_chanregister.so") != NULL, "inspircd built-in services (m_chanregister) are not compatible with atheme");
-		TAINT_ON(strstr(parv[1], "m_nickregister.so") != NULL, "inspircd built-in services (m_nickregister) are not compatible with atheme");
-		TAINT_ON(strstr(parv[1], "m_namedmodes.so") != NULL, "namedmodes (m_namedmodes) are unsupported in Atheme due to the fact that any network can change modes around thus possibly breaking mlocks");
-		TAINT_ON(strstr(parv[1], "m_opflags.so") != NULL, "inspircd built-in services (m_opflags) are not compatible with atheme");
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
