@@ -1048,12 +1048,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 1 then it's a nickname change, if it's 2, it's a nickname change with a TS */
 	if (parc == 1 || parc == 2)
 	{
-                if (!si->su)
-                {
-                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
-                        return;
-                }
-
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		if (user_changenick(si->su, parv[0], parc == 2 ? atoi(parv[1]) : CURRTIME))
@@ -1684,7 +1678,7 @@ void _modinit(module_t * m)
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
-	pcommand_add("NICK", m_nick, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("NICK", m_nick, 1, MSRC_USER);
 	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
