@@ -324,7 +324,7 @@ static unsigned int inspircd_server_login(void)
 	 */
 	if (me.numeric == NULL)
 	{
-		slog(LG_ERROR, "inspircd_server_login(): inspircd 1.2 requires a unique identifier. set serverinfo::numeric.");
+		slog(LG_ERROR, "inspircd_server_login(): inspircd requires a unique identifier. set serverinfo::numeric.");
 		exit(EXIT_FAILURE);
 	}
 
