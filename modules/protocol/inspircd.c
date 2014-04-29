@@ -994,17 +994,8 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	int chanc;
-	char *chanv[256];
-	int i;
-
-	chanc = sjtoken(parv[0], ',', chanv);
-	for (i = 0; i < chanc; i++)
-	{
-		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, chanv[i]);
-
-		chanuser_delete(channel_find(chanv[i]), si->su);
-	}
+	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, parv[0]);
+	chanuser_delete(channel_find(parv[0]), si->su);
 }
 
 static void m_uid(sourceinfo_t *si, int parc, char *parv[])
