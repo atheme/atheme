@@ -1248,7 +1248,7 @@ static void m_admin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_away(sourceinfo_t *si, int parc, char *parv[])
 {
-	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
+	handle_away(si->su, parc >= 1 ? parv[parc-1] : NULL);
 }
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
