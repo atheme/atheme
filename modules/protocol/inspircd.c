@@ -1345,6 +1345,12 @@ static void m_opertype(sourceinfo_t *si, int parc, char *parv[])
 	user_mode(si->su, "+o");
 }
 
+static void m_fident(sourceinfo_t *si, int parc, char *parv[])
+{
+	strshare_unref(si->su->user);
+	si->su->user = strshare_get(parv[0]);
+}
+
 static void m_fhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	strshare_unref(si->su->vhost);
@@ -1710,6 +1716,7 @@ void _modinit(module_t * m)
 	pcommand_add("JOIN", m_join, 1, MSRC_USER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
+	pcommand_add("FIDENT", m_fident, 1, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER);
 	pcommand_add("AWAY", m_away, 0, MSRC_USER);
