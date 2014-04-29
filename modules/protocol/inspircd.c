@@ -1045,28 +1045,16 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
-	/* if it's only 1 then it's a nickname change, if it's 2, it's a nickname change with a TS */
-	if (parc == 1 || parc == 2)
-	{
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
+	slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		if (user_changenick(si->su, parv[0], parc == 2 ? atoi(parv[1]) : CURRTIME))
-			return;
+	if (user_changenick(si->su, parv[0], atoi(parv[1])))
+		return;
 
-		/* It could happen that our PING arrived late and the
-		 * server didn't acknowledge EOB yet even though it is
-		 * EOB; don't send double notices in that case -- jilles */
-		if (si->su->server->flags & SF_EOB)
-			handle_nickchange(si->su);
-	}
-	else
-	{
-		int i;
-		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
-
-		for (i = 0; i < parc; i++)
-			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
-	}
+	/* It could happen that our PING arrived late and the
+	 * server didn't acknowledge EOB yet even though it is
+	 * EOB; don't send double notices in that case -- jilles */
+	if (si->su->server->flags & SF_EOB)
+		handle_nickchange(si->su);
 }
 
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
@@ -1678,7 +1666,7 @@ void _modinit(module_t * m)
 	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER | MSRC_UNREG);
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
-	pcommand_add("NICK", m_nick, 1, MSRC_USER);
+	pcommand_add("NICK", m_nick, 2, MSRC_USER);
 	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
