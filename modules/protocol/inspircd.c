@@ -198,6 +198,7 @@ static bool has_svstopic_topiclock = false;
 static int has_protocol = 0;
 
 #define PROTOCOL_MINIMUM 1202 /* we do not support anything older than this */
+#define PROTOCOL_PREFERRED_STR "1202"
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
@@ -333,9 +334,12 @@ static unsigned int inspircd_server_login(void)
 	ircd->uses_protect = false;
 	ircd->uses_halfops = false;
 
-	ret = sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->send_pass, me.numeric, me.desc);
+	ret = sts("CAPAB START " PROTOCOL_PREFERRED_STR);
 	if (ret == 1)
 		return 1;
+	sts("CAPAB CAPABILITIES :PROTOCOL=" PROTOCOL_PREFERRED_STR);
+	sts("CAPAB END");
+	sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->send_pass, me.numeric, me.desc);
 
 	me.bursting = true;
 	return 0;
