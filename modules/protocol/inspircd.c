@@ -15,26 +15,26 @@ DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "At
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-        "InspIRCd", /* IRCd name */
-        "$",                            /* TLD Prefix, used by Global. */
-        true,                           /* Whether or not we use IRCNet/TS6 UID */
-        false,                          /* Whether or not we use RCOMMAND */
-        true,                          /* Whether or not we support channel owners. */
-        true,                          /* Whether or not we support channel protection. */
-        true,                           /* Whether or not we support halfops. */
-	false,				/* Whether or not we use P10 */
-	true,				/* Whether or not we use vHosts. */
+	"InspIRCd",                     /* IRCd name */
+	"$",                            /* TLD Prefix, used by Global. */
+	true,                           /* Whether or not we use IRCNet/TS6 UID */
+	false,                          /* Whether or not we use RCOMMAND */
+	true,                           /* Whether or not we support channel owners. */
+	true,                           /* Whether or not we support channel protection. */
+	true,                           /* Whether or not we support halfops. */
+	false,                          /* Whether or not we use P10 */
+	true,                           /* Whether or not we use vHosts. */
 	CMODE_OPERONLY | CMODE_PERM | CMODE_IMMUNE,	    /* Oper-only cmodes */
-        CSTATUS_OWNER,                    /* Integer flag for owner channel flag. */
-        CSTATUS_PROTECT,                  /* Integer flag for protect channel flag. */
-        CSTATUS_HALFOP,                   /* Integer flag for halfops. */
-        "+q",                           /* Mode we set for owner. */
-        "+a",                           /* Mode we set for protect. */
-        "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_INSPIRCD,		/* Protocol type */
-	CMODE_PERM,                              /* Permanent cmodes */
-	CMODE_IMMUNE,                              /* Oper-immune cmode */
-	"beIgXw",                         /* Ban-like cmodes */
+	CSTATUS_OWNER,                  /* Integer flag for owner channel flag. */
+	CSTATUS_PROTECT,                /* Integer flag for protect channel flag. */
+	CSTATUS_HALFOP,                 /* Integer flag for halfops. */
+	"+q",                           /* Mode we set for owner. */
+	"+a",                           /* Mode we set for protect. */
+	"+h",                           /* Mode we set for halfops. */
+	PROTOCOL_INSPIRCD,              /* Protocol type */
+	CMODE_PERM,                     /* Permanent cmodes */
+	CMODE_IMMUNE,                   /* Oper-immune cmode */
+	"beIgXw",                       /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
 	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
@@ -251,7 +251,7 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 
 static bool check_history(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
-        return check_jointhrottle(value, c, mc, u, mu);
+	return check_jointhrottle(value, c, mc, u, mu);
 }
 
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
@@ -319,7 +319,7 @@ static unsigned int inspircd_server_login(void)
 {
 	int ret;
 
-	/* Check if we have a numeric set. InspIRCd 1.2 protocol 
+	/* Check if we have a numeric set. InspIRCd 1.2 protocol
 	 * requires it. -nenolod
 	 */
 	if (me.numeric == NULL)
@@ -383,7 +383,7 @@ static void inspircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 
 static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %lu", 
+	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %lu",
 		c->name, (unsigned long)c->ts);
 
 	sts(":%s FJOIN %s %lu + :o,%s", me.numeric, c->name, (unsigned long)c->ts, u->uid);
@@ -513,7 +513,7 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 		sts(":%s CBAN %s", ME, name);
 	else
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
-}	
+}
 
 /* topic wrapper */
 static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
@@ -1018,7 +1018,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
-		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */ 
+		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
 		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
 		if (u == NULL)
 			return;
@@ -1045,7 +1045,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	if (parc == 1 || parc == 2)
 	{
                 if (!si->su)
-                {       
+                {
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
                         return;
                 }
@@ -1504,7 +1504,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_hideoper.so"))
 		{
 			has_hideopermod = true;
-		}	
+		}
 		if (strstr(parv[1], "m_services_account.so"))
 		{
 			has_servicesmod = true;
