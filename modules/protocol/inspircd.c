@@ -1508,6 +1508,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 					ircd->uses_halfops = true;
 				}
 			}
+			else if (!strcmp(varv[i], "GLOBOPS=1"))
+			{
+				has_globopsmod = true;
+			}
 			/* XXX check/store CHANMAX/IDENTMAX */
 		}
 	}
