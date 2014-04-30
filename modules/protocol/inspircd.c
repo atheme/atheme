@@ -1203,13 +1203,15 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
+	const crypt_impl_t *ci;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	if (si->s == NULL)
 	{
 		sts(":%s BURST", me.numeric);
-		sts(":%s VERSION :%s. %s %s",
-				me.name, PACKAGE_STRING, me.numeric, get_conf_opts());
+		ci = crypt_get_default_provider();
+		sts(":%s VERSION :%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
+			me.numeric, PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
