@@ -1292,7 +1292,7 @@ static void m_idle(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc == 1 && si->su != NULL)
 	{
-		sts(":%s IDLE %s %lu 0", parv[0], si->su->nick, (unsigned long)CURRTIME);
+		sts(":%s IDLE %s 0 0", parv[0], si->su->uid);
 	}
 	else
 	{
