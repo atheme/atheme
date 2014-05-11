@@ -10,6 +10,9 @@
 #include "list_common.h"
 #include "list.h"
 
+//NickServ mark module
+//Do NOT use this in combination with contrib/multimark!
+
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", false, _modinit, _moddeinit,
