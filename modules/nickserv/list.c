@@ -157,8 +157,6 @@ void _moddeinit(module_unload_intent_t intent)
 
 void list_register(const char *param_name, list_param_t *param) {
 	mowgli_patricia_add(list_params, param_name, param);
-
-	list_param_t *par = mowgli_patricia_retrieve(list_params, param_name);
 }
 
 void list_unregister(const char *param_name) {
