@@ -9,6 +9,8 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,16 +25,35 @@ static void ns_cmd_set_noop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, ns_cmd_set_noop, { .path = "nickserv/set_noop" } };
 
+static bool has_noop(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_NOOP ) == MU_NOOP;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_noop, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t noop;
+	noop.opttype = OPT_BOOL;
+	noop.is_match = has_noop;
+
+	list_register("noop", &noop);
 }
+
+
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_noop, *ns_set_cmdtree);
+
+	list_unregister("noop");
 }
 
 /* SET NOOP [ON|OFF] */

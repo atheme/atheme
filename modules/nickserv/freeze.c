@@ -8,6 +8,8 @@
 
 #include "atheme.h"
 #include "authcookie.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -21,14 +23,51 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
 command_t ns_freeze = { "FREEZE", N_("Freezes an account."), PRIV_USER_ADMIN, 3, ns_cmd_freeze, { .path = "nickserv/freeze" } };
 
+static bool is_frozen(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return !!metadata_find(mu, "private:freeze:freezer");
+}
+
+static bool frozen_match(const mynick_t *mn, const void *arg)
+{
+	const char *frozenpattern = (const char*)arg;
+	metadata_t *mdfrozen;
+
+	myuser_t *mu = mn->owner;
+	mdfrozen = metadata_find(mu, "private:freeze:reason");
+
+	if (mdfrozen != NULL && !match(frozenpattern, mdfrozen->value))
+		return true;
+
+	return false;
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_freeze);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t frozen;
+	frozen.opttype = OPT_BOOL;
+	frozen.is_match = is_frozen;
+
+	static list_param_t frozen_reason;
+	frozen_reason.opttype = OPT_STRING;
+	frozen_reason.is_match = frozen_match;
+
+	list_register("frozen", &frozen);
+	list_register("frozen-reason", &frozen_reason);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_freeze);
+
+	list_unregister("frozen");
+	list_unregister("frozen-reason");
 }
 
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])

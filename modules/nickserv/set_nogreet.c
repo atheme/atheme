@@ -9,6 +9,8 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,15 +25,31 @@ static void ns_cmd_set_nogreet(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_nogreet = { "NOGREET", N_("Allows you to opt-out of channel entry messages."), AC_NONE, 1, ns_cmd_set_nogreet, { .path = "nickserv/set_nogreet" } };
 
+static bool has_nogreet(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_NOGREET ) == MU_NOGREET;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_nogreet, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t nogreet;
+	nogreet.opttype = OPT_BOOL;
+	nogreet.is_match = has_nogreet;
+
+	list_register("nogreet", &nogreet);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
+	list_unregister("nogreet");
 	command_delete(&ns_set_nogreet, *ns_set_cmdtree);
 }
 

@@ -9,6 +9,8 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,16 +25,32 @@ static void ns_cmd_set_emailmemos(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos to your e-mail address."), AC_NONE, 1, ns_cmd_set_emailmemos, { .path = "nickserv/set_emailmemos" } };
 
+static bool has_emailmemos(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_EMAILMEMOS ) == MU_EMAILMEMOS;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_emailmemos, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t emailmemos;
+	emailmemos.opttype = OPT_BOOL;
+	emailmemos.is_match = has_emailmemos;
+
+	list_register("emailmemos", &emailmemos);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_emailmemos, *ns_set_cmdtree);
+	list_unregister("emailmemos");
 }
 
 /* SET EMAILMEMOS [ON|OFF] */

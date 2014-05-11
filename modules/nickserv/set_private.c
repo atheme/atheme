@@ -6,6 +6,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -69,10 +71,25 @@ static void ns_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_set_private = { "PRIVATE", N_("Hides information about you from other users."), AC_NONE, 1, ns_cmd_set_private, { .path = "nickserv/set_private" } };
 
+static bool has_private(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_PRIVATE ) == MU_PRIVATE;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	command_add(&ns_set_private, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t private;
+	private.opttype = OPT_BOOL;
+	private.is_match = has_private;
+
+	list_register("private", &private);
 
 	use_account_private++;
 }
@@ -80,6 +97,8 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_private, *ns_set_cmdtree);
+
+	list_unregister("private");
 
 	use_account_private--;
 }

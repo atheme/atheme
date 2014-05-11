@@ -7,6 +7,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -19,14 +21,51 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
 
+static bool mark_match(const mynick_t *mn, const void *arg)
+{
+	const char *markpattern = (const char*)arg;
+	metadata_t *mdmark;
+
+	myuser_t *mu = mn->owner;
+	mdmark = metadata_find(mu, "private:mark:reason");
+	
+	if (mdmark != NULL && !match(markpattern, mdmark->value))
+		return true;
+
+	return false;
+}
+
+static bool is_marked(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return !!metadata_find(mu, "private:mark:setter");
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_mark);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t mark;
+	mark.opttype = OPT_STRING;
+	mark.is_match = mark_match;
+
+	static list_param_t marked;
+	marked.opttype = OPT_BOOL;
+	marked.is_match = is_marked;
+
+	list_register("mark-reason", &mark);
+	list_register("marked", &marked);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_mark);
+
+	list_unregister("mark-reason");
+	list_unregister("marked");
 }
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])

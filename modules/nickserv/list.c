@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
 
 DECLARE_MODULE_V1
 (
@@ -17,39 +18,153 @@ DECLARE_MODULE_V1
 );
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
+static mowgli_patricia_t *list_params;
 
 command_t ns_list = { "LIST", N_("Lists nicknames registered matching a given pattern."), PRIV_USER_AUSPEX, 10, ns_cmd_list, { .path = "nickserv/list" } };
 
+void list_register(const char *param_name, list_param_t *param);
+void list_unregister(const char *param_name);
+
+static bool email_match(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+	const char *cmpr = (const char*)arg;
+
+	return !match(cmpr, mu->email);
+}
+
+static bool lastlogin_match(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+	const time_t lastlogin = *(time_t *)arg;
+
+	return (CURRTIME - mu->lastlogin) > lastlogin;
+}
+
+static bool pattern_match(const mynick_t *mn, const void *arg)
+{
+	const char *pattern = (const char*)arg;
+
+	char pat[512], *nickpattern = NULL, *hostpattern = NULL, *p;
+	metadata_t *md;
+
+	bool hostmatch;
+
+	myuser_t *mu = mn->owner;
+
+	if (pattern != NULL)
+	{
+		mowgli_strlcpy(pat, pattern, sizeof pat);
+		p = strrchr(pat, ' ');
+		if (p == NULL)
+			p = strrchr(pat, '!');
+		if (p != NULL)
+		{
+			*p++ = '\0';
+			nickpattern = pat;
+			hostpattern = p;
+		}
+		else if (strchr(pat, '@'))
+			hostpattern = pat;
+		else
+			nickpattern = pat;
+		if (nickpattern && !strcmp(nickpattern, "*"))
+			nickpattern = NULL;
+	}
+
+	if (nickpattern && match(nickpattern, mn->nick))
+		return false;
+
+	if (hostpattern)
+	{
+		hostmatch = false;
+		md = metadata_find(mu, "private:host:actual");
+		if (md != NULL && !match(hostpattern, md->value))
+			hostmatch = true;
+		md = metadata_find(mu, "private:host:vhost");
+		if (md != NULL && !match(hostpattern, md->value))
+			hostmatch = true;
+		if (!hostmatch)
+			return false;
+	}
+
+	return true;
+}
+
+static bool registered_match(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+	const time_t age = *(time_t *)arg;
+
+	return (CURRTIME - mu->registered) > age;
+}
+
+static bool has_waitauth(const mynick_t *mn, const void *arg) {
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
+}
+
 void _modinit(module_t *m)
 {
+	list_params = mowgli_patricia_create(strcasecanon);
 	service_named_bind_command("nickserv", &ns_list);
+
+	/* list email */
+	static list_param_t email;
+	email.opttype = OPT_STRING;
+	email.is_match = email_match;
+
+	static list_param_t lastlogin;
+	lastlogin.opttype = OPT_AGE;
+	lastlogin.is_match = lastlogin_match;
+
+	static list_param_t pattern;
+	pattern.opttype = OPT_STRING;
+	pattern.is_match = pattern_match;
+
+	static list_param_t registered;
+	registered.opttype = OPT_AGE;
+	registered.is_match = registered_match;
+
+	list_register("email", &email);
+	list_register("lastlogin", &lastlogin);
+	list_register("mail", &email);
+
+	list_register("pattern", &pattern);
+	list_register("registered", &registered);
+
+	static list_param_t waitauth;
+	waitauth.opttype = OPT_BOOL;
+	waitauth.is_match = has_waitauth;
+
+	list_register("waitauth", &waitauth);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_list);
+
+	list_unregister("email");
+	list_unregister("lastlogin");
+	list_unregister("mail");
+
+	list_unregister("pattern");
+	list_unregister("registered");
+
+	list_unregister("waitauth");
 }
 
-typedef enum {
-	OPT_BOOL,
-	OPT_INT,
-	OPT_STRING,
-	OPT_FLAG,
-	OPT_AGE,
-} list_opttype_t;
+void list_register(const char *param_name, list_param_t *param) {
+	mowgli_patricia_add(list_params, param_name, param);
 
-typedef struct {
-	char *option;
-	list_opttype_t opttype;
-	union {
-		bool *boolval;
-		int *intval;
-		char **strval;
-		unsigned int *flagval;
-		time_t *ageval;
-	} optval;
-	unsigned int flag;
-} list_option_t;
+	list_param_t *par = mowgli_patricia_retrieve(list_params, param_name);
+}
+
+void list_unregister(const char *param_name) {
+	mowgli_patricia_delete(list_params, param_name);
+}
+
 
 static time_t parse_age(char *s)
 {
@@ -71,73 +186,6 @@ static time_t parse_age(char *s)
 		duration = 0;
 
 	return duration;
-}
-
-static bool process_parvarray(sourceinfo_t *si, list_option_t *opts, size_t optsize, int parc, char *parv[])
-{
-	int i;
-	size_t j;
-	bool found;
-
-	for (i = 0; i < parc; i++)
-	{
-		found = false;
-		for (j = 0; j < optsize; j++)
-		{
-			if (!strcasecmp(opts[j].option, parv[i]))
-			{
-				switch(opts[j].opttype)
-				{
-				case OPT_BOOL:
-					*opts[j].optval.boolval = true;
-					break;
-				case OPT_INT:
-					if (i + 1 < parc)
-					{
-						*opts[j].optval.intval = atoi(parv[i + 1]);
-						i++;
-					} else {
-						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
-						return false;
-					}
-					break;
-				case OPT_STRING:
-					if (i + 1 < parc)
-					{
-						*opts[j].optval.strval = parv[i + 1];
-						i++;
-					} else {
-						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
-						return false;
-					}
-					break;
-				case OPT_FLAG:
-					*opts[j].optval.flagval |= opts[j].flag;
-					break;
-				case OPT_AGE:
-					if (i + 1 < parc)
-					{
-						*opts[j].optval.ageval = parse_age(parv[i + 1]);
-						i++;
-					} else {
-						command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, opts[j].option);
-						return false;
-					}
-					break;
-				default:
-					break;
-				}
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criterion"), parv[i]);
-			return false;
-		}
-	}
-
-	return true;
 }
 
 static void build_criteriastr(char *buf, int parc, char *parv[])
@@ -168,12 +216,6 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 
 		mowgli_strlcat(buf, "\2[frozen]\2", BUFSIZE);
 	}
-	if (metadata_find(mu, "private:mark:setter")) {
-		if (*buf)
-			mowgli_strlcat(buf, " ", BUFSIZE);
-
-		mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
-	}
 	if (metadata_find(mu, "private:restrict:setter")) {
 		if (*buf)
 			mowgli_strlcat(buf, " ", BUFSIZE);
@@ -202,229 +244,89 @@ static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char criteriastr[BUFSIZE];
-	char pat[512], *pattern = NULL, *nickpattern = NULL, *hostpattern = NULL, *p, *email = NULL, *markpattern = NULL, *frozenpattern = NULL, *restrictedpattern = NULL;
-	bool hostmatch, markmatch, frozenmatch, restrictedmatch;
+
 	mowgli_patricia_iteration_state_t state;
 	myentity_iteration_state_t mestate;
-	myuser_t *mu;
-	myentity_t *mt;
 	mynick_t *mn;
-	metadata_t *md, *mdmark, *mdfrozen, *mdrestricted;
+
 	int matches = 0;
-	bool frozen = false, marked = false, restricted = false;
-	unsigned int flagset = 0;
-	time_t age = 0, lastlogin = 0;
 
-	list_option_t optstable[] = {
-		{"pattern",	OPT_STRING,	{.strval = &pattern}, 0},
-		{"email",	OPT_STRING,	{.strval = &email}, 0},
-		{"mail",	OPT_STRING,	{.strval = &email}, 0},
-		{"mark-reason", OPT_STRING,	{.strval = &markpattern}, 0},
-		{"frozen-reason", OPT_STRING,   {.strval = &frozenpattern}, 0},
-		{"restricted-reason", OPT_STRING, {.strval = &restrictedpattern}, 0},
-		{"noexpire",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
-		{"held",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
-		{"hold",	OPT_FLAG,	{.flagval = &flagset}, MU_HOLD},
-		{"noop",	OPT_FLAG,	{.flagval = &flagset}, MU_NOOP},
-		{"neverop",	OPT_FLAG,	{.flagval = &flagset}, MU_NEVEROP},
-		{"nevergroup",  OPT_FLAG,	{.flagval = &flagset}, MU_NEVERGROUP},
-		{"waitauth",	OPT_FLAG,	{.flagval = &flagset}, MU_WAITAUTH},
-		{"hidemail",	OPT_FLAG,	{.flagval = &flagset}, MU_HIDEMAIL},
-		{"nomemo",	OPT_FLAG,	{.flagval = &flagset}, MU_NOMEMO},
-		{"emailmemos",	OPT_FLAG,	{.flagval = &flagset}, MU_EMAILMEMOS},
-		{"use-privmsg",	OPT_FLAG,	{.flagval = &flagset}, MU_USE_PRIVMSG},
-		{"private",	OPT_FLAG,	{.flagval = &flagset}, MU_PRIVATE},
-		{"quietchg",	OPT_FLAG,	{.flagval = &flagset}, MU_QUIETCHG},
-		{"nogreet",	OPT_FLAG,	{.flagval = &flagset}, MU_NOGREET},
-		{"regnolimit",	OPT_FLAG,	{.flagval = &flagset}, MU_REGNOLIMIT},
-		{"frozen",	OPT_BOOL,	{.boolval = &frozen}, 0},
-		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
-		{"restricted",	OPT_BOOL,	{.boolval = &restricted}, 0},
-		{"registered",	OPT_AGE,	{.ageval = &age}, 0},
-		{"lastlogin",	OPT_AGE,	{.ageval = &lastlogin}, 0},
-	};
+	int i;
+	bool error = false;
+	bool found;
 
-	if (!process_parvarray(si, optstable, ARRAY_SIZE(optstable), parc, parv))
-		return;
-
-	build_criteriastr(criteriastr, parc, parv);
-
-	if (pattern != NULL)
+	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
-		mowgli_strlcpy(pat, pattern, sizeof pat);
-		p = strrchr(pat, ' ');
-		if (p == NULL)
-			p = strrchr(pat, '!');
-		if (p != NULL)
+		found = true;
+
+		for (i = 0; i < parc; i++)
 		{
-			*p++ = '\0';
-			nickpattern = pat;
-			hostpattern = p;
+			list_param_t *param = mowgli_patricia_retrieve(list_params, parv[i]);
+
+			if (param == NULL) {
+				command_fail(si, fault_badparams, _("\2%s\2 is not a recognized LIST criterion"), parv[i]);
+				error = true;
+				break;
+			}
+
+			if (param->opttype == OPT_BOOL) {
+				if (!param->is_match(mn, true)) {
+					found = false;
+					break;
+				}
+			} else if (param->opttype == OPT_INT) {
+				if (i + 1 < parc) {
+					int arg = atoi(parv[++i]);
+
+					if (!param->is_match (mn, &arg)) {
+						found = false;
+						break;
+					}
+				} else {
+					command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, parv[i]);
+					error = true;
+					break;
+				}
+			} else if (param->opttype == OPT_STRING) {
+				if (i + 1 < parc) {
+					if ( !param->is_match (mn, parv[++i]) ) {
+						found = false;
+						break;
+					}
+				} else {
+					command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, parv[i]);
+					error = true;
+					break;
+				}
+			}
+			else if (param->opttype == OPT_AGE) {
+				if (i + 1 < parc)
+				{
+					time_t age = parse_age(parv[++i]);
+
+					if ( !param->is_match (mn, &age) ) {
+						found = false;
+						break;
+					}
+				} else {
+					command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, parv[i]);
+					error = true;
+					break;
+				}
+			}
+		} //for (i = 0; i < parc; i++)
+
+		if (error) {
+			break;
 		}
-		else if (strchr(pat, '@'))
-			hostpattern = pat;
-		else
-			nickpattern = pat;
-		if (nickpattern && !strcmp(nickpattern, "*"))
-			nickpattern = NULL;
-	}
 
-	if (nicksvs.no_nick_ownership)
-	{
-		MYENTITY_FOREACH_T(mt, &mestate, ENT_USER)
-		{
-			mu = user(mt);
-			if (nickpattern && match(nickpattern, entity(mu)->name))
-				continue;
-			if (hostpattern)
-			{
-				hostmatch = false;
-				md = metadata_find(mu, "private:host:actual");
-				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = true;
-				md = metadata_find(mu, "private:host:vhost");
-				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = true;
-				if (!hostmatch)
-					continue;
-			}
-
-			if (email && match(email, mu->email))
-				continue;
-
-			if (markpattern)
-			{
-				markmatch = false;
-				mdmark = metadata_find(mu, "private:mark:reason");
-				if (mdmark != NULL && !match(markpattern, mdmark->value))
-					markmatch = true;
-
-				if (!markmatch)
-					continue;
-			}
-
-			if (frozenpattern)
-			{
-				frozenmatch = false;
-				mdfrozen = metadata_find(mu, "private:freeze:reason");
-				if (mdfrozen != NULL && !match(frozenpattern, mdfrozen->value))
-					frozenmatch = true;
-
-				if (!frozenmatch)
-					continue;
-			}
-
-			if (restrictedpattern)
-			{
-				restrictedmatch = false;
-				mdrestricted = metadata_find(mu, "private:restrict:reason");
-				if (mdrestricted != NULL && !match(restrictedpattern, mdrestricted->value))
-					restrictedmatch = true;
-
-				if (!restrictedmatch)
-					continue;
-			}
-
-			if (marked && !metadata_find(mu, "private:mark:setter"))
-				continue;
-
-			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
-				continue;
-
-			if (restricted && !metadata_find(mu, "private:restrict:setter"))
-				continue;
-
-			if (flagset && (mu->flags & flagset) != flagset)
-				continue;
-
-			if (age && (CURRTIME - mu->registered) < age)
-				continue;
-
-			if (lastlogin && (CURRTIME - mu->lastlogin) < lastlogin)
-				continue;
-
-			list_one(si, mu, NULL);
-			matches++;
-		}
-	}
-	else
-	{
-		MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
-		{
-			if (nickpattern && match(nickpattern, mn->nick))
-				continue;
-			mu = mn->owner;
-			if (hostpattern)
-			{
-				hostmatch = false;
-				md = metadata_find(mu, "private:host:actual");
-				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = true;
-				md = metadata_find(mu, "private:host:vhost");
-				if (md != NULL && !match(hostpattern, md->value))
-					hostmatch = true;
-				if (!hostmatch)
-					continue;
-			}
-
-			if (email && match(email, mu->email))
-				continue;
-
-			if (markpattern)
-			{
-				markmatch = false;
-				mdmark = metadata_find(mu, "private:mark:reason");
-				if (mdmark != NULL && !match(markpattern, mdmark->value))
-					markmatch = true;
-
-				if (!markmatch)
-					continue;
-			}
-
-			if (frozenpattern)
-			{
-				frozenmatch = false;
-				mdfrozen = metadata_find(mu, "private:freeze:reason");
-				if (mdfrozen != NULL && !match(frozenpattern, mdfrozen->value))
-					frozenmatch = true;
-
-				if (!frozenmatch)
-					continue;
-			}
-			
-			if (restrictedpattern)
-			{
-				restrictedmatch = false;
-				mdrestricted = metadata_find(mu, "private:restrict:reason");
-				if (mdrestricted != NULL && !match(restrictedpattern, mdrestricted->value))
-					restrictedmatch = true;
-
-				if (!restrictedmatch)
-					continue;
-			}
-
-			if (marked && !metadata_find(mu, "private:mark:setter"))
-				continue;
-
-			if (frozen && !metadata_find(mu, "private:freeze:freezer"))
-				continue;
-			
-			if (restricted && !metadata_find(mu, "private:restrict:setter"))
-				continue;
-
-			if (flagset && (mu->flags & flagset) != flagset)
-				continue;
-
-			if (age && (CURRTIME - mu->registered) < age)
-				continue;
-
-			if (lastlogin && (CURRTIME - mu->lastlogin) < lastlogin)
-				continue;
-
+		if (found) {
 			list_one(si, NULL, mn);
 			matches++;
 		}
-	}
+	} //MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
+
+	build_criteriastr(criteriastr, parc, parv);
 
 	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", criteriastr, matches);
 	if (matches == 0)
