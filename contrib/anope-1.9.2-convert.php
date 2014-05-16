@@ -400,6 +400,10 @@ function atheme_convert()
 					{
 						writeline(sprintf("MDU %s private:usercloak %s\n",
 							$lastnick, $nudata[4]));
+						writeline(sprintf("MDU %s private:usercloak-timestamp %d\n",
+							$lastnick, time()));
+						writeline(sprintf("MDU %s private:usercloak-assigner Anope 1.9.2 Convert\n",
+							$lastnick));
 						$hostnicks[$lastnick] = "used";
 					}
 				}
