@@ -69,6 +69,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md, *markmd;
 	bool force = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
+	char timestring[16];
 
 	if (!target)
 	{
@@ -163,6 +164,8 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		metadata_delete(mu, "private:usercloak");
+		metadata_delete(mu, "private:usercloak-timestamp");
+		metadata_delete(mu, "private:usercloak-assigner");
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", entity(mu)->name);
 		if (markmd)
@@ -184,7 +187,12 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	snprintf(timestring, 16, "%lu", (unsigned long)time(NULL));
+
 	metadata_add(mu, "private:usercloak", host);
+	metadata_add(mu, "private:usercloak-timestamp", timestring);
+	metadata_add(mu, "private:usercloak-assigner", get_source_name(si));
+
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
