@@ -66,8 +66,13 @@ vhost(Atheme_Account self, const char *host)
 CODE:
 	mowgli_node_t *n;
 	user_t *u;
+	char timestring[16];
+
+	snprintf(timestring, 16, "%lu", (unsigned long)time(NULL));
 
 	metadata_add(self, "private:usercloak", host);
+	metadata_add(self, "private:usercloak-timestamp", timestring);
+	metadata_add(self, "private:usercloak-assigner", "Perl API");
 
 	MOWGLI_ITER_FOREACH(n, self->logins.head)
 	{
