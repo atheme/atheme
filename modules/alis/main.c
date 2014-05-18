@@ -247,7 +247,7 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 		}
 		else if (!strcasecmp(opt, "-showsecret"))
 		{
-			if (!(has_priv(si, PRIV_CHAN_AUSPEX)))
+			if (has_priv(si, PRIV_CHAN_AUSPEX))
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 				return 0;
@@ -315,7 +315,7 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 	int i;
 
         /* skip +s channels unless -showsecret is used */
-        if(chptr->modes & CMODE_SEC && !(query->showsecret))
+        if(chptr->modes & CMODE_SEC && !query->showsecret)
                 return 0;
 
         if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
