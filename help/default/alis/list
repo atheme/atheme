@@ -12,7 +12,7 @@ Options are:
     -show [m][t]: show modes/topicsetter
     -mode <+|-|=><modes>: modes set/unset/equal
     -topic <pattern>: topic matches pattern
-    -showsecret: show hidden (+s) channels (requires chan:auspex)
+    -showsecret: show secret channels (requires chan:auspex)
 
 Syntax: LIST <pattern> [options]
 
