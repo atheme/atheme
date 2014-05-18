@@ -76,6 +76,7 @@ struct alis_query
 	int mode_ext[256];
 	int skip;
 	int maxmatches;
+	int showsecret;
 };
 
 void _modinit(module_t *m)
@@ -244,6 +245,16 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 					&query->mode_limit,
 					query->mode_ext);
 		}
+		else if (!strcasecmp(opt, "-showsecret"))
+		{
+			if (!(has_priv(si, PRIV_CHAN_AUSPEX)))
+			{
+				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+				return 0;
+			}
+
+			query->showsecret = 1;
+		}
 		else
 		{
 			command_fail(si, fault_badparams, "Invalid option %s", opt);
@@ -303,8 +314,8 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 {
 	int i;
 
-        /* skip +s channels */
-        if(chptr->modes & CMODE_SEC)
+        /* skip +s channels unless -showsecret is used */
+        if(chptr->modes & CMODE_SEC && !(query->showsecret))
                 return 0;
 
         if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
