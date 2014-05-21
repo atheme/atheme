@@ -81,6 +81,7 @@ struct cmode_ ngircd_user_mode_list[] = {
   { 'a', UF_AWAY     },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
+  { 'q', UF_IMMUNE   },
   { '\0', 0 }
 };
 
