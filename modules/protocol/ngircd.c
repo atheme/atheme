@@ -51,6 +51,7 @@ struct cmode_ ngircd_mode_list[] = {
   { 'R', CMODE_REGONLY  },
   { 'r', CMODE_CHANREG  },
   { 'P', CMODE_PERM     },
+  { 'z', CMODE_SSLONLY  },
   { '\0', 0 }
 };
 
