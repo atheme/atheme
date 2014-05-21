@@ -11,7 +11,6 @@ INCLUDES = \
 	nefarious.h	\
 	ratbox.h	\
 	shadowircd.h	\
-	sporksircd.h	\
 	undernet.h	\
 	unreal.h
 
