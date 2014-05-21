@@ -19,18 +19,18 @@ ircd_t ngIRCd = {
         "$",                            /* TLD Prefix, used by Global. */
         false,                          /* Whether or not we use IRCNet/TS6 UID */
         false,                          /* Whether or not we use RCOMMAND */
-        false,                          /* Whether or not we support channel owners. */
-        false,                          /* Whether or not we support channel protection. */
-        false,                          /* Whether or not we support halfops. */
+        true,                           /* Whether or not we support channel owners. */
+        true,                           /* Whether or not we support channel protection. */
+        true,                           /* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	true,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY | CMODE_PERM,	/* Oper-only cmodes */
-        0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+        CSTATUS_OWNER,                  /* Integer flag for owner channel flag. */
+        CSTATUS_PROTECT,                /* Integer flag for protect channel flag. */
+        CSTATUS_HALFOP,                 /* Integer flag for halfops. */
+        "+q",                           /* Mode we set for owner. */
+        "+a",                           /* Mode we set for protect. */
+        "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_NGIRCD,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
 	0,                              /* Oper-immune cmode */
@@ -60,13 +60,19 @@ struct extmode ngircd_ignore_mode_list[] = {
 };
 
 struct cmode_ ngircd_status_mode_list[] = {
+  { 'q', CSTATUS_OWNER   },
+  { 'a', CSTATUS_PROTECT },
   { 'o', CSTATUS_OP      },
+  { 'h', CSTATUS_HALFOP  },
   { 'v', CSTATUS_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ ngircd_prefix_mode_list[] = {
+  { '~', CSTATUS_OWNER   },
+  { '&', CSTATUS_PROTECT },
   { '@', CSTATUS_OP      },
+  { '%', CSTATUS_HALFOP  },
   { '+', CSTATUS_VOICE   },
   { '\0', 0 }
 };
