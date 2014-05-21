@@ -16,7 +16,7 @@ SRCS = \
 	elemental-ircd.c\
 	hybrid.c	\
 	inspircd.c	\
-        ircd-seven.c  \
+	ircd-seven.c  \
 	ircnet.c	\
 	mixin_nohalfops.c	\
 	mixin_noholdnick.c	\
@@ -27,7 +27,6 @@ SRCS = \
 	p10-generic.c	\
 	ratbox.c	\
 	shadowircd.c	\
-	sporksircd.c	\
 	ts6-generic.c	\
 	undernet.c	\
 	unreal.c
