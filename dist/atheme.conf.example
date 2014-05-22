@@ -2049,7 +2049,7 @@ general {
 	 * KLINE *@host if the first character of the ident is ~,
 	 * irrespective of the value of kline_with_ident.
 	 * /
-	#kline_verified_ident
+	#kline_verified_ident;
 
 	/* (*)clone_time
 	 * This is the default expiry time for CLONE exemptions in minutes.
