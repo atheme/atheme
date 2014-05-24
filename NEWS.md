@@ -18,6 +18,10 @@ perl api
 --------
 - Export SaslServ's `sasl_may_impersonate` hook
 
+ircd protocol
+-------------
+- inspircd: Remove InspIRCd 1.2 support
+
 Atheme Services 7.1 Release Notes
 =================================
 In addition to assorted bugfixes in various subsystems from 7.0, the

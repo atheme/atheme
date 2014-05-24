@@ -52,7 +52,7 @@
  * Charybdis IRCd                               modules/protocol/charybdis
  * DreamForge 4.6.7 or later                    modules/protocol/dreamforge
  * Hybrid 7.1.2 and later                       modules/protocol/hybrid
- * InspIRCd 1.2 - 2.1 (link protocol 1201-1204) modules/protocol/inspircd
+ * InspIRCd 2.0                                 modules/protocol/inspircd
  * ircd-ratbox 2.0 and later                    modules/protocol/ratbox
  * IRCNet ircd (ircd 2.11)                      modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
