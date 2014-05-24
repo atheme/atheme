@@ -131,6 +131,7 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	char iv[AES_BLOCK_SIZE];
 	int ret = ASASL_FAIL;
 	uint16_t size;
+	int secret_size;
 
 	if (!p->mechdata)
 		return ASASL_FAIL;
@@ -167,12 +168,13 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 
 	/* Compute shared secret */
 	secret = malloc(DH_size(dh));
-	if ((size = DH_compute_key(secret, their_key, dh)) == -1)
+	secret_size = DH_compute_key(secret, their_key, dh);
+	if (secret_size <= 0)
 		goto end;
 
 	/* Decrypt! (AES_set_decrypt_key takes bits not bytes, hence multiply
 	 * by 8) */
-	AES_set_decrypt_key(secret, size * 8, &key);
+	AES_set_decrypt_key(secret, secret_size * 8, &key);
 
 	ptr = userpw = malloc(len + 1);
 	userpw[len] = '\0';
