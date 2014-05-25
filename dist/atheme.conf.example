@@ -60,7 +60,6 @@
  * Nefarious IRCu 0.4.0 or later                modules/protocol/nefarious
  * ngIRCd 19 or later [experimental]            modules/protocol/ngircd
  * ShadowIRCd 5.0 or later                      modules/protocol/shadowircd
- * SporksIRCd                                   modules/protocol/sporksircd
  * UnrealIRCd 3.2 or later                      modules/protocol/unreal
  *
  * If your IRCd vendor has supplied a module file, build it and load it here
@@ -850,7 +849,7 @@ serverinfo {
 	 * If this is enabled, Atheme will indicate to the uplink IRCd
 	 * that it should not be included in /links output.  This only works
 	 * on the following IRCds at present: charybdis, hybrid, ircd-seven,
-	 * ratbox, shadowircd, sporksircd.
+	 * ratbox, shadowircd.
 	 */
 	#hidden;
 
