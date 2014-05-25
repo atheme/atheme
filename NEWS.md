@@ -1,6 +1,10 @@
 Atheme Services 7.2 Development Notes
 =====================================
 
+nickserv
+--------
+- Make `VHOST` set cloak assigner and timestamp the same way HostServ does
+
 chanserv
 --------
 - Add a `$server:` exttarget accepting server masks
@@ -13,6 +17,11 @@ saslserv
 --------
 - Add support for SASL authorization identities
 - Add a `sasl_may_impersonate` hook
+- Bug fixes in DH-AES and DH-BLOWFISH
+
+alis
+----
+- Add a `list ... -showsecret` flag (chan:auspex) to list secret channels
 
 perl api
 --------
@@ -20,7 +29,23 @@ perl api
 
 ircd protocol
 -------------
-- inspircd: Remove InspIRCd 1.2 support
+- inspircd: Hopefully fix ignored account names when linking to the network
+- inspircd: Various improvements to InspIRCd 2.0 support
+- inspircd: Remove InspIRCd 1.2 and 2.1beta support
+- ircnet: Implement oper-wallops, using individual notices
+- ngircd: Enable +qaohv support
+- ngircd: Ignore non-# channels for now
+- ngircd: Implement oper-wallops, using individual notices
+- unreal: Request MLOCK messages when linking to the network
+
+other
+-----
+- various: Fix quite a few resource leaks and possible null derefs
+- crypto/pbkdf2: Detect malformed (truncated) hashes
+- contrib/cap\_sasl.pl: Import various fixes from freenode's v1.5
+- contrib/cap\_sasl.pl: Implement SASL EXTERNAL, ECDSA-NIST256P-CHALLENGE
+- contrib/cap\_sasl.pl: Fix crash if irssi has ICB or SILC plugins loaded
+- contrib/cap\_sasl.pl: Fix crash if disconnected while waiting for SASL reply
 
 Atheme Services 7.1 Release Notes
 =================================
