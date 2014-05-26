@@ -85,6 +85,7 @@ struct gflags mc_flags[] = {
 	{ 'g', MC_GUARD },
 	{ 'p', MC_PRIVATE },
 	{ 'n', MC_NOSYNC },
+	{ 'f', MC_ANTIFLOOD },
 	{ 0, 0 },
 };
 
