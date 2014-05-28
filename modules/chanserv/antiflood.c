@@ -417,7 +417,7 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 
 	if (parv[1] == NULL)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET FLOOD");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET ANTIFLOOD");
 		return;
 	}
 
