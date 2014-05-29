@@ -9,6 +9,8 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,16 +25,33 @@ static void ns_cmd_set_neverop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, ns_cmd_set_neverop, { .path = "nickserv/set_neverop" } };
 
+static bool has_neverop(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_NEVEROP ) == MU_NEVEROP;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_neverop, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t neverop;
+	neverop.opttype = OPT_BOOL;
+	neverop.is_match = has_neverop;
+
+	list_register("neverop", &neverop);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_neverop, *ns_set_cmdtree);
+
+	list_unregister("neverop");
 }
 
 /* SET NEVEROP [ON|OFF] */

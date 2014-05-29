@@ -7,6 +7,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -18,6 +20,26 @@ DECLARE_MODULE_V1
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
+
+static bool is_restricted(const mynick_t *mn, const void *arg) {
+	myuser_t *mu = mn->owner;
+
+	return !!metadata_find(mu, "private:restrict:setter");
+}
+
+static bool restricted_match(const mynick_t *mn, const void *arg) {
+	const char *restrictedpattern = (const char*)arg;
+	metadata_t *mdrestricted;
+
+	myuser_t *mu = mn->owner;
+
+	mdrestricted = metadata_find(mu, "private:restrict:reason");
+
+	if (mdrestricted != NULL && !match(restrictedpattern, mdrestricted->value))
+		return true;
+
+	return false;
+}
 
 static void info_hook(hook_user_req_t *hdata)
 {
@@ -50,6 +72,19 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t restricted;
+	restricted.opttype = OPT_BOOL;
+	restricted.is_match = is_restricted;
+
+	static list_param_t restrict_match;
+	restrict_match.opttype = OPT_STRING;
+	restrict_match.is_match = restricted_match;
+
+	list_register("restricted", &restricted);
+	list_register("restricted-reason", &restrict_match);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -57,6 +92,9 @@ void _moddeinit(module_unload_intent_t intent)
 	service_named_unbind_command("nickserv", &ns_restrict);
 
 	hook_del_user_info(info_hook);
+
+	list_unregister("restricted");
+	list_unregister("restricted-reason");
 }
 
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])

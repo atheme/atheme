@@ -6,6 +6,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -68,12 +70,28 @@ static void ns_cmd_set_privmsg(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, ns_cmd_set_privmsg, { .path = "nickserv/set_privmsg" } };
 
+static bool uses_privmsg(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_USE_PRIVMSG ) == MU_USE_PRIVMSG;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	command_add(&ns_set_privmsg, *ns_set_cmdtree);
 
 	use_privmsg++;
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t use_privmsg;
+	use_privmsg.opttype = OPT_BOOL;
+	use_privmsg.is_match = uses_privmsg;
+
+	list_register("use-privmsg", &use_privmsg);
+	list_register("use_privmsg", &use_privmsg);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -81,6 +99,9 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&ns_set_privmsg, *ns_set_cmdtree);
 
 	use_privmsg--;
+
+	list_unregister("use-privmsg");
+	list_unregister("use_privmsg");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

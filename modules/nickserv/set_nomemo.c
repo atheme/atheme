@@ -9,6 +9,7 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,16 +24,33 @@ static void ns_cmd_set_nomemo(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to receive memos."), AC_NONE, 1, ns_cmd_set_nomemo, { .path = "nickserv/set_nomemo" } };
 
+static bool has_nomemo(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_NOMEMO ) == MU_NOMEMO;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_nomemo, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t nomemo;
+	nomemo.opttype = OPT_BOOL;
+	nomemo.is_match = has_nomemo;
+
+	list_register("nomemo", &nomemo);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_nomemo, *ns_set_cmdtree);
+
+	list_unregister("nomemo");
 }
 
 /* SET NOMEMO [ON|OFF] */

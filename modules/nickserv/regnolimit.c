@@ -6,6 +6,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -19,14 +21,31 @@ static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
 		      PRIV_ADMIN, 2, ns_cmd_regnolimit, { .path = "nickserv/regnolimit" } };
 
+static bool has_regnolimit(const mynick_t *mn, const void *arg)
+{
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_REGNOLIMIT ) == MU_REGNOLIMIT;
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_regnolimit);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t regnolimit;
+	regnolimit.opttype = OPT_BOOL;
+	regnolimit.is_match = has_regnolimit;
+
+	list_register("regnolimit", &regnolimit);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_regnolimit);
+
+	list_unregister("regnolimit");
 }
 
 static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])

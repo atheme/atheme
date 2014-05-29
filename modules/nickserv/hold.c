@@ -7,6 +7,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -20,14 +22,34 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_hold = { "HOLD", N_("Prevents an account from expiring."),
 		      PRIV_HOLD, 2, ns_cmd_hold, { .path = "nickserv/hold" } };
 
+static bool is_held(const mynick_t *mn, const void *arg) {
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_HOLD ) == MU_HOLD;
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_hold);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t hold;
+	hold.opttype = OPT_BOOL;
+	hold.is_match = is_held;
+
+	list_register("hold", &hold);
+	list_register("held", &hold);
+	list_register("noexpire", &hold);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_hold);
+
+	list_unregister("hold");
+	list_unregister("held");
+	list_unregister("noexpire");
 }
 
 static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])

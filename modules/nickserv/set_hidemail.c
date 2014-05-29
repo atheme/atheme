@@ -9,6 +9,8 @@
 
 #include "atheme.h"
 #include "uplink.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -23,16 +25,32 @@ static void ns_cmd_set_hidemail(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, ns_cmd_set_hidemail, { .path = "nickserv/set_hidemail" } };
 
+static bool has_hidemail(const mynick_t *mn, const void *arg) {
+	myuser_t *mu = mn->owner;
+
+	return ( mu->flags & MU_HIDEMAIL ) == MU_HIDEMAIL;
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_hidemail, *ns_set_cmdtree);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t hidemail;
+	hidemail.opttype = OPT_BOOL;
+	hidemail.is_match = has_hidemail;
+
+	list_register("hidemail", &hidemail);
+
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&ns_set_hidemail, *ns_set_cmdtree);
+	list_unregister("hidemail");
 }
 
 /* SET HIDEMAIL [ON|OFF] */

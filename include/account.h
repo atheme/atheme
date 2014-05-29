@@ -345,6 +345,11 @@ typedef struct {
 	const char *oldname;
 } hook_user_rename_t;
 
+typedef struct {
+	sourceinfo_t *si;
+	const char *nick;
+} hook_info_noexist_req_t;
+
 /* pmodule.c XXX */
 E bool backend_loaded;
 
