@@ -432,6 +432,11 @@ cs_set_cmd_antiflood(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(parv[1], "ON"))
 	{
+		if (MC_ANTIFLOOD & mc->flags)
+		{
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "ANTIFLOOD", mc->name);
+			return;
+		}
 		mc->flags |= MC_ANTIFLOOD;
 		metadata_delete(mc, METADATA_KEY_ENFORCE_METHOD);
 
