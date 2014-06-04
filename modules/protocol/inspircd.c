@@ -1582,10 +1582,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			exit(EXIT_FAILURE);
 		}
 	}
-	else
-	{
-		slog(LG_DEBUG, "m_capab(): unknown CAPAB type %s - out of date protocol module?", parv[0]);
-	}
 }
 
 /* Server ended their burst: warn all their users if necessary -- jilles */
