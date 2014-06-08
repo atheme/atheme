@@ -869,7 +869,7 @@ serverinfo {
 	 * Options include:
 	 *      debug, all      - meta-keyword for all possible categories
 	 *      trace           - meta-keyword for a little bit of info
-	 *      misc            - like trace, but with some more miscillaneous info
+	 *      misc            - like trace, but with some more miscellaneous info
 	 *      notice          - meta-keyword for notice-like information
 	 * ------------------------------------------------------------------------------
 	 *      error           - critical errors
