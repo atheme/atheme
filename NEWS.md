@@ -4,6 +4,8 @@ Atheme Services 7.2 Development Notes
 nickserv
 --------
 - Make `VHOST` set cloak assigner and timestamp the same way HostServ does
+- Make `INFO` call the `user_info_noexist` hook for queries that don't match an account
+- Allow implementing custom filters for `LIST`
 
 chanserv
 --------
@@ -37,6 +39,7 @@ ircd protocol
 - ngircd: Ignore non-# channels for now
 - ngircd: Implement oper-wallops, using individual notices
 - unreal: Request MLOCK messages when linking to the network
+- sporksircd: Nuke obsolete module
 
 other
 -----
