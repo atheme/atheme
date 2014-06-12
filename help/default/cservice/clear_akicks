@@ -1,0 +1,13 @@
+Help for CLEAR AKICKS:
+
+CLEAR AKICKS will remove all AKICK entries, including all
+access list entries whose only flags are +b, from a
+channel's access list.
+
+This command can only be used by users with the +R and
++f flags.
+
+Syntax: CLEAR <#channel> AKICKS
+
+Examples:
+    /msg &nick& CLEAR #atheme AKICKS
