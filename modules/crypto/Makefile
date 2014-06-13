@@ -10,6 +10,7 @@ MODULE = crypto
 
 SRCS =			\
 	pbkdf2.c	\
+	pbkdf2_sha1.c	\
 	posix.c		\
 	ircservices.c	\
 	rawmd5.c	\
