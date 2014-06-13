@@ -46,6 +46,11 @@ typedef struct {
   bool allowed;
 } hook_sasl_may_impersonate_t;
 
+typedef struct {
+	void (*mech_register) (struct sasl_mechanism_ *mech);
+	void (*mech_unregister) (struct sasl_mechanism_ *mech);
+} sasl_mech_register_func_t;
+
 #define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */
 #define ASASL_DONE 2 /* client successfully authenticated */

@@ -39,15 +39,14 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/dh-aes", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
+	"saslserv/dh-aes", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static DH *base_dhparams;
 
-mowgli_list_t *mechanisms;
-mowgli_node_t *mnode;
+sasl_mech_register_func_t *regfuncs;
 
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
 static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
@@ -56,21 +55,19 @@ sasl_mechanism_t mech = {"DH-AES", &mech_start, &mech_step, &mech_finish};
 
 void _modinit(module_t *m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, mechanisms, "saslserv/main", "sasl_mechanisms");
+	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	if ((base_dhparams = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
 		return;
 
-	mnode = mowgli_node_create();
-	mowgli_node_add(&mech, mnode, mechanisms);
+	regfuncs->mech_register(&mech);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	DH_free(base_dhparams);
 
-	mowgli_node_delete(mnode, mechanisms);
-	mowgli_node_free(mnode);
+	regfuncs->mech_unregister(&mech);
 }
 
 static inline DH *DH_clone(DH *dh)

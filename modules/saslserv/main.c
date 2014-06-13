@@ -10,13 +10,13 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
+	"saslserv/main", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 mowgli_list_t sessions;
-mowgli_list_t sasl_mechanisms;
+static mowgli_list_t sasl_mechanisms;
 
 sasl_session_t *find_session(const char *uid);
 sasl_session_t *make_session(const char *uid);
@@ -29,6 +29,10 @@ static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
+static void sasl_mech_register(sasl_mechanism_t *mech);
+static void sasl_mech_unregister(sasl_mechanism_t *mech);
+
+sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
 /* main services client routine */
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
@@ -67,6 +71,44 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 service_t *saslsvs = NULL;
 mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
+static void sasl_mech_register(sasl_mechanism_t *mech)
+{
+	mowgli_node_t *node;
+
+	slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
+
+	node = mowgli_node_create();
+	mowgli_node_add(mech, node, &sasl_mechanisms);
+}
+
+static void sasl_mech_unregister(sasl_mechanism_t *mech)
+{
+	mowgli_node_t *n, *tn;
+	sasl_session_t *session;
+
+	slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	{
+		session = n->data;
+		if (session->mechptr == mech)
+		{
+			slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
+			destroy_session(session);
+		}
+	}
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
+	{
+		if (n->data == mech)
+		{
+			mowgli_node_delete(n, &sasl_mechanisms);
+			mowgli_node_free(n);
+			break;
+		}
+	}
+}
+
 void _modinit(module_t *m)
 {
 	hook_add_event("sasl_input");
@@ -95,11 +137,12 @@ void _moddeinit(module_unload_intent_t intent)
 
 	authservice_loaded--;
 
+	if (sessions.head != NULL)
+		slog(LG_DEBUG, "saslserv/main: shutting down with a non-empty session list, a mech did not unregister itself!");
+
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
 		destroy_session(n->data);
-		mowgli_node_delete(n, &sessions);
-		mowgli_node_free(n);
 	}
 }
 
