@@ -1009,29 +1009,18 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	 * note: you can't rely on realname being p[10], it's actually p[parc - 1].
 	 * reason being that mode params may exist in p[9]+, or not at all.
 	 */
-	if (parc >= 10)
-	{
-		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
+	slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
-		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
-		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
-		if (u == NULL)
-			return;
-		user_mode(u, parv[8]);
+	/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
+	u = user_add(parv[2], parv[5], parv[3], parv[4], parv[6], parv[0], parv[parc - 1], si->s, atol(parv[1]));
+	if (u == NULL)
+		return;
+	user_mode(u, parv[8]);
 
-		/* If server is not yet EOB we will do this later.
-		 * This avoids useless "please identify" -- jilles */
-		if (si->s->flags & SF_EOB)
-			handle_nickchange(u);
-	}
-	else
-	{
-		int i;
-		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
-
-		for (i = 0; i < parc; i++)
-			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
-	}
+	/* If server is not yet EOB we will do this later.
+	 * This avoids useless "please identify" -- jilles */
+	if (si->s->flags & SF_EOB)
+		handle_nickchange(u);
 }
 
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
@@ -1658,7 +1647,7 @@ void _modinit(module_t * m)
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 2, MSRC_USER);
-	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
+	pcommand_add("UID", m_uid, 10, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_fmode, 3, MSRC_USER | MSRC_SERVER);
