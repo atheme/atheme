@@ -43,8 +43,8 @@ static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEAR FLAGS");
-		command_fail(si, fault_needmoreparams, "Syntax: CLEAR <#channel> FLAGS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEAR AKICKS");
+		command_fail(si, fault_needmoreparams, "Syntax: CLEAR <#channel> AKICKS");
 		return;
 	}
 
