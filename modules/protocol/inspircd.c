@@ -648,7 +648,7 @@ static void inspircd_sethost_sts(user_t *source, user_t *target, const char *hos
 		sts(":%s CHGHOST %s %s", source->uid, target->uid, host);
 
 		if (has_cloakingmod && !irccasecmp(target->host, host))
-			sts(":%s SVSMODE %s +x", source->uid, target->uid);
+			sts(":%s MODE %s +x", source->uid, target->uid);
 	}
 	else
 		slog(LG_INFO, "VHOST: Could not set \2%s\2 due to m_chghost not being loaded in inspircd.", host);
