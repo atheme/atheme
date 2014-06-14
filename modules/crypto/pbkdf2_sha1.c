@@ -29,7 +29,7 @@ DECLARE_MODULE_V1("crypto/pbkdf2", false, _modinit, _moddeinit, PACKAGE_VERSION,
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
 
-#define ROUNDS		(128000)
+#define ROUNDS		(65536)
 #define SALTLEN		(16)
 
 /* This is an implementation of PKCS#5 v2.0 password based encryption key
