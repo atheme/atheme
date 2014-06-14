@@ -315,6 +315,11 @@ static bool check_delaymsg(const char *value, channel_t *c, mychan_t *mc, user_t
 	}
 }
 
+static void inspircd_send_fjoin(channel_t *c, user_t *u, char *modes)
+{
+	sts(":%s FJOIN %s %lu %s :o,%s", me.numeric, c->name, (unsigned long)c->ts, modes, u->uid);
+}
+
 /* login to our uplink */
 static unsigned int inspircd_server_login(void)
 {
@@ -373,16 +378,10 @@ static void inspircd_wallops_sts(const char *text)
 /* join a channel */
 static void inspircd_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {
-	if (isnew)
-	{
-		sts(":%s FJOIN %s %lu + :o,%s", me.numeric, c->name, (unsigned long)c->ts, u->uid);
-		if (modes[0] && modes[1])
-			sts(":%s FMODE %s %lu %s", me.numeric, c->name, (unsigned long)c->ts, modes);
-	}
-	else
-	{
-		sts(":%s FJOIN %s %lu + :o,%s", me.numeric, c->name, (unsigned long)c->ts, u->uid);
-	}
+	if (!isnew || !modes[0])
+		modes = "+";
+
+	inspircd_send_fjoin(c, u, modes);
 }
 
 static void inspircd_chan_lowerts(channel_t *c, user_t *u)
@@ -390,8 +389,7 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %lu",
 		c->name, (unsigned long)c->ts);
 
-	sts(":%s FJOIN %s %lu + :o,%s", me.numeric, c->name, (unsigned long)c->ts, u->uid);
-	sts(":%s FMODE %s %lu %s", me.numeric, c->name, (unsigned long)c->ts, channel_modes(c, true));
+	inspircd_send_fjoin(c, u, channel_modes(c, true));
 }
 
 /* kicks a user from a channel */
