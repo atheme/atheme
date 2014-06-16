@@ -9,6 +9,8 @@ my %hooks;
 my %arg_types;
 
 # XXX: Types we haven't exposed to perl yet. Remove these if they do become supported.
+# THIS LIST IS NOT A SUBSTITUTE FOR ACTUALLY DEFINING HOOK STRUCTURES. IT IS FOR STRUCTURES
+# WITH MEMBERS THAT WE CAN'T SUPPORT YET.
 my @unsupported_types = ( 'database_handle_t', 'sasl_message_t',
     'hook_module_load_t', 'hook_myentity_req_t', 'hook_host_request_t',
     'hook_channel_acl_req_t', 'hook_email_canonicalize_t' );
@@ -117,6 +119,10 @@ my %hook_structs = (
 		source_mu => [ 'myuser_t', 'source' ],
 		target_mu => [ 'myuser_t', 'target' ],
 		allowed => [ 'int', '+allowed' ]
+	},
+	hook_info_noexist_req_t => {
+		si => [ 'sourceinfo_t', 'source' ],
+		nick => 'const char *'
 	},
 );
 
