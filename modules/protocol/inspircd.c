@@ -697,7 +697,7 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
 	if (has_chghostmod)
-		sts(":%s CHGHOST %s %s", me.numeric, target, host);
+		sts(":%s ENCAP %c%c%c CHGHOST %s %s", me.numeric, target[0], target[1], target[2], target, host);
 }
 
 static void inspircd_sasl_sts(char *target, char mode, char *data)
