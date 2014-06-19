@@ -411,7 +411,10 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	query.maxmatches = ALIS_MAX_MATCH;
 
 	if (!parse_alis(si, parc, parv, &query))
+	{
+		free_alis(&query);
 		return;
+	}
 
 	logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
 
