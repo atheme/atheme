@@ -279,6 +279,9 @@ static void free_alis(struct alis_query *query)
 {
 	return_if_fail(query != NULL);
 
+	if (query->mask)
+		free(query->mask);
+
 	if (query->topic)
 		free(query->topic);
 }
@@ -396,7 +399,17 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	memset(&query, 0, sizeof(struct alis_query));
 	query.maxmatches = ALIS_MAX_MATCH;
 
-        query.mask = parc >= 1 ? parv[0] : "*";
+	if (parc < 1)
+		query.mask = sstrdup("*");
+	else if (parv[0][0] != '#' && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
+	{
+		size_t max = 1 + strlen(parv[0]) + 2;
+		query.mask = smalloc(max);
+		snprintf(query.mask, max, "*%s*", parv[0]);
+	}
+	else
+		query.mask = sstrdup(parv[0]);
+
 	if (!parse_alis(si, parc - 1, parv + 1, &query))
 		return;
 
