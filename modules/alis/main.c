@@ -28,7 +28,7 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * ALIS, based on the ratbox-services implementation.
  *
  */
@@ -250,8 +250,8 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 					return 0;
 			}
 
-			query->mode = alis_parse_mode(arg+1, 
-					&query->mode_key, 
+			query->mode = alis_parse_mode(arg+1,
+					&query->mode_key,
 					&query->mode_limit,
 					query->mode_ext);
 		}
@@ -292,10 +292,10 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 	int show_topic = 1;
 	char topic[BUFSIZE];
 
-        /* cant show a topicwho, when a channel has no topic. */
-        if(!chptr->topic)
+	/* cant show a topicwho, when a channel has no topic. */
+	if(!chptr->topic)
 	{
-                show_topicwho = 0;
+		show_topicwho = 0;
 		show_topic = 0;
 	}
 	if(show_topic)
@@ -335,13 +335,13 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 {
 	int i;
 
-        /* skip +s channels unless -showsecret is used */
-        if(chptr->modes & CMODE_SEC && !query->showsecret)
-                return 0;
+	/* skip +s channels unless -showsecret is used */
+	if(chptr->modes & CMODE_SEC && !query->showsecret)
+		return 0;
 
-        if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
-           (query->max && (int)MOWGLI_LIST_LENGTH(&chptr->members) > query->max))
-                return 0;
+	if((int)MOWGLI_LIST_LENGTH(&chptr->members) < query->min ||
+	   (query->max && (int)MOWGLI_LIST_LENGTH(&chptr->members) > query->max))
+		return 0;
 
 	if(query->mode_dir == DIR_SET)
 	{
@@ -374,19 +374,19 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 				return 0;
 	}
 
-        if(match(query->mask, chptr->name))
-                return 0;
+	if(match(query->mask, chptr->name))
+		return 0;
 
-        if(query->topic != NULL && match(query->topic, chptr->topic))
-                return 0;
+	if(query->topic != NULL && match(query->topic, chptr->topic))
+		return 0;
 
-        if(query->skip)
-        {
-                query->skip--;
-                return 0;
-        }
+	if(query->skip)
+	{
+		query->skip--;
+		return 0;
+	}
 
-        return 1;
+	return 1;
 }
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
@@ -420,21 +420,21 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		"Returning maximum of %d channel names matching '\2%s\2'",
 		query.maxmatches, query.mask);
 
-        /* hunting for one channel.. */
-        if(strchr(query.mask, '*') == NULL && strchr(query.mask, '?') == NULL)
-        {
-                if((chptr = channel_find(query.mask)) != NULL)
-                {
-                        if(!(chptr->modes & CMODE_SEC) ||
+	/* hunting for one channel.. */
+	if(strchr(query.mask, '*') == NULL && strchr(query.mask, '?') == NULL)
+	{
+		if((chptr = channel_find(query.mask)) != NULL)
+		{
+			if(!(chptr->modes & CMODE_SEC) ||
 					(si->su != NULL &&
 					 chanuser_find(chptr, si->su)))
-                                print_channel(si, chptr, &query);
-                }
+				print_channel(si, chptr, &query);
+		}
 
 		command_success_nodata(si, "End of output");
 		free_alis(&query);
 		return;
-        }
+	}
 
 	MOWGLI_PATRICIA_FOREACH(chptr, &state, chanlist)
 	{
