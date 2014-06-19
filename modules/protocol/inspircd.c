@@ -696,7 +696,9 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 		return;
 
 	sts(":%s METADATA %s accountname :%s", me.numeric, target, entity(account)->name);
-	if (has_chghostmod)
+
+	// If host is a "*" that means no change requested
+	if ((has_chghostmod) && (strcmp(host, "*")))
 		sts(":%s ENCAP %c%c%c CHGHOST %s %s", me.numeric, target[0], target[1], target[2], target, host);
 }
 
