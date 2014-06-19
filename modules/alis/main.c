@@ -193,15 +193,11 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 			if (strchr(arg, '*') == NULL)
 			{
 				size_t max = 1 + strlen(arg) + 2;
-
 				query->topic = smalloc(max);
 				snprintf(query->topic, max, "*%s*", arg);
 			}
 			else
-			{
 				query->topic = sstrdup(arg);
-			}
-			slog(LG_DEBUG, "topic is %s", query->topic);
 		}
 		else if(!strcasecmp(opt, "-show"))
 		{
