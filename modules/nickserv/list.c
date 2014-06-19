@@ -268,7 +268,9 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			if (param->opttype == OPT_BOOL) {
-				if (!param->is_match(mn, true)) {
+				bool arg = true;
+
+				if (!param->is_match(mn, &arg)) {
 					found = false;
 					break;
 				}
@@ -287,7 +289,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				}
 			} else if (param->opttype == OPT_STRING) {
 				if (i + 1 < parc) {
-					if ( !param->is_match (mn, parv[++i]) ) {
+					if (!param->is_match (mn, parv[++i])) {
 						found = false;
 						break;
 					}
@@ -302,7 +304,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				{
 					time_t age = parse_age(parv[++i]);
 
-					if ( !param->is_match (mn, &age) ) {
+					if (!param->is_match (mn, &age)) {
 						found = false;
 						break;
 					}
