@@ -182,12 +182,26 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 		}
 		else if(!strcasecmp(opt, "-topic"))
 		{
-			query->topic = parv[i++];
-			if (query->topic == NULL)
+			arg = parv[i++];
+
+			if (arg == NULL)
 			{
 				command_fail(si, fault_badparams, "Invalid -topic option");
 				return 0;
 			}
+
+			if (strchr(arg, '*') == NULL)
+			{
+				size_t max = 1 + strlen(arg) + 2;
+
+				query->topic = smalloc(max);
+				snprintf(query->topic, max, "*%s*", arg);
+			}
+			else
+			{
+				query->topic = sstrdup(arg);
+			}
+			slog(LG_DEBUG, "topic is %s", query->topic);
 		}
 		else if(!strcasecmp(opt, "-show"))
 		{
@@ -263,6 +277,14 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 	}
 
 	return 1;
+}
+
+static void free_alis(struct alis_query *query)
+{
+	return_if_fail(query != NULL);
+
+	if (query->topic)
+		free(query->topic);
 }
 
 static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query *query)
@@ -401,7 +423,8 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
                 }
 
 		command_success_nodata(si, "End of output");
-                return;
+		free_alis(&query);
+		return;
         }
 
 	MOWGLI_PATRICIA_FOREACH(chptr, &state, chanlist)
@@ -420,7 +443,8 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "End of output");
-        return;
+	free_alis(&query);
+	return;
 }
 
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
