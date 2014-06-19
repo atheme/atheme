@@ -127,8 +127,19 @@ static int alis_parse_mode(const char *text, int *key, int *limit, int *ext)
 
 static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_query *query)
 {
-	int i = 0;
+	int i = 1;
 	char *opt = NULL, *arg = NULL;
+
+	if (parc < 1)
+		query->mask = sstrdup("*");
+	else if (parv[0][0] != '#' && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
+	{
+		size_t max = 1 + strlen(parv[0]) + 2;
+		query->mask = smalloc(max);
+		snprintf(query->mask, max, "*%s*", parv[0]);
+	}
+	else
+		query->mask = sstrdup(parv[0]);
 
 	query->mode_dir = DIR_NONE;
 	while ((opt = parv[i++]))
@@ -399,18 +410,7 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	memset(&query, 0, sizeof(struct alis_query));
 	query.maxmatches = ALIS_MAX_MATCH;
 
-	if (parc < 1)
-		query.mask = sstrdup("*");
-	else if (parv[0][0] != '#' && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
-	{
-		size_t max = 1 + strlen(parv[0]) + 2;
-		query.mask = smalloc(max);
-		snprintf(query.mask, max, "*%s*", parv[0]);
-	}
-	else
-		query.mask = sstrdup(parv[0]);
-
-	if (!parse_alis(si, parc - 1, parv + 1, &query))
+	if (!parse_alis(si, parc, parv, &query))
 		return;
 
 	logcommand(si, CMDLOG_GET, "LIST: \2%s\2", query.mask);
