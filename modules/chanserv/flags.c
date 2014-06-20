@@ -118,17 +118,22 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
 		const char *template, *mod_ago;
+		struct tm tm;
+		char mod_date[64];
 
 		ca = n->data;
 		template = get_template_name(mc, ca->level);
 		mod_ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
+		tm = *localtime(&ca->tmodified);
+		strftime(mod_date, sizeof mod_date, TIME_FORMAT, &tm);
+
 		if (template != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago);
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago, mod_date);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago);
+			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago, on %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago, mod_date);
 		i++;
 	}
 
