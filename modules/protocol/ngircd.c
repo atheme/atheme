@@ -801,8 +801,11 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (strcmp(curr_uplink->receive_pass, parv[0]))
 	{
-		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
-		runflags |= RF_SHUTDOWN;
+		/* 
+		Looks like the password verification agains the ngircd server is not working properly.
+		However, we got communication between these two, so as workaround let's NOT set the RF_SHUTDOWN flag here. 
+		*/
+		slog(LG_INFO, "m_pass(): password mismatch from uplink but will continue anyways");
 	}
 }
 
