@@ -177,18 +177,17 @@ char *time_ago(time_t event)
 	seconds = event;
 
 	if (years)
-		snprintf(ret, sizeof(ret),
-			 "%d year%s, %d week%s, %d day%s", years, years == 1 ? "" : "s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), "%dy %dw %dd", years, weeks, days);
 	else if (weeks)
-		snprintf(ret, sizeof(ret), "%d week%s, %d day%s, %d hour%s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, hours == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), "%dw %dd %dh", weeks, days, hours);
 	else if (days)
-		snprintf(ret, sizeof(ret), "%d day%s, %02d:%02d:%02d", days, days == 1 ? "" : "s", hours, minutes, seconds);
+		snprintf(ret, sizeof(ret), "%dd %dh %dm %ds", days, hours, minutes, seconds);
 	else if (hours)
-		snprintf(ret, sizeof(ret), "%d hour%s, %d minute%s, %d second%s", hours, hours == 1 ? "" : "s", minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), "%dh %dm %ds", hours, minutes, seconds);
 	else if (minutes)
-		snprintf(ret, sizeof(ret), "%d minute%s, %d second%s", minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), "%dm %ds", minutes, seconds);
 	else
-		snprintf(ret, sizeof(ret), "%d second%s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), "%ds", seconds);
 
 	return ret;
 }
