@@ -196,7 +196,7 @@ void destroy_session(sasl_session_t *p)
 
 	if (p->flags & ASASL_NEED_LOG && p->username != NULL)
 	{
-		mu = myuser_find(p->username);
+		mu = myuser_find_by_nick(p->username);
 		if (mu != NULL && !(ircd->flags & IRCD_SASL_USE_PUID))
 			sasl_logcommand(p, mu, CMDLOG_LOGIN, "LOGIN (session timed out)");
 	}
@@ -584,7 +584,7 @@ static void sasl_newuser(hook_user_nick_t *data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	mu = p->username ? myuser_find(p->username) : NULL;
+	mu = p->username ? myuser_find_by_nick(p->username) : NULL;
 	if (mu == NULL)
 	{
 		notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
