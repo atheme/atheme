@@ -514,7 +514,12 @@ static myuser_t *login_user(sasl_session_t *p)
 			return NULL;
 	}
 	else
+	{
 		target_mu = source_mu;
+		if(p->authzid != NULL)
+			free(p->authzid);
+		p->authzid = sstrdup(p->username);
+	}
 
 	if(metadata_find(source_mu, "private:freeze:freezer"))
 	{
@@ -584,11 +589,11 @@ static void sasl_newuser(hook_user_nick_t *data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	mu = p->username ? myuser_find_by_nick(p->username) : NULL;
+	mu = p->authzid ? myuser_find_by_nick(p->authzid) : NULL;
 	if (mu == NULL)
 	{
 		notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		       p->username ? p->username : "??");
+		       p->authzid ? p->authzid : "??");
 		destroy_session(p);
 		/* We'll remove their ircd login in handle_burstlogin() */
 		return;
