@@ -178,9 +178,9 @@ char *time_ago(time_t event)
 
 	if (years)
 		snprintf(ret, sizeof(ret),
-			 "%d year%s, %d week%s, %d day%s, %02d:%02d:%02d", years, years == 1 ? "" : "s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
+			 "%d year%s, %d week%s, %d day%s", years, years == 1 ? "" : "s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s");
 	else if (weeks)
-		snprintf(ret, sizeof(ret), "%d week%s, %d day%s, %02d:%02d:%02d", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
+		snprintf(ret, sizeof(ret), "%d week%s, %d day%s, %d hour%s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, hours == 1 ? "" : "s");
 	else if (days)
 		snprintf(ret, sizeof(ret), "%d day%s, %02d:%02d:%02d", days, days == 1 ? "" : "s", hours, minutes, seconds);
 	else if (hours)
