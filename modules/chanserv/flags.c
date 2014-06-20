@@ -99,7 +99,6 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 	chanacs_t *ca;
 	mowgli_node_t *n;
 	bool operoverride = false;
-	const char *str1, *str2;
 	unsigned int i = 1;
 
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
@@ -118,16 +117,18 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 
 	MOWGLI_ITER_FOREACH(n, mc->chanacs.head)
 	{
-		ca = n->data;
-		str1 = get_template_name(mc, ca->level);
-		str2 = ca->tmodified ? time_ago(ca->tmodified) : "?";
+		const char *template, *mod_ago;
 
-		if (str1 != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), str1,
-				str2);
+		ca = n->data;
+		template = get_template_name(mc, ca->level);
+		mod_ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
+
+		if (template != NULL)
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago]"), i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level),
-				str2);
+			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago);
 		i++;
 	}
 
