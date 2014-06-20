@@ -503,13 +503,13 @@ static myuser_t *login_user(sasl_session_t *p)
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
 
-	source_mu = myuser_find(p->username);
+	source_mu = myuser_find_by_nick(p->username);
 	if(source_mu == NULL)
 		return NULL;
 
 	if(p->authzid && *p->authzid)
 	{
-		target_mu = myuser_find(p->authzid);
+		target_mu = myuser_find_by_nick(p->authzid);
 		if(target_mu == NULL)
 			return NULL;
 	}
