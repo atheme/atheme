@@ -21,7 +21,7 @@ command_t ss_netsplit =
 command_t ss_netsplit_list =
 { "LIST", N_("List currently split servers."), PRIV_SERVER_AUSPEX, 1, ss_cmd_netsplit_list, {.path = ""} };
 
-command_t ss_netsplit_remove = 
+command_t ss_netsplit_remove =
 { "REMOVE", N_("Remove a server from the netsplit list."), PRIV_JUPE, 2, ss_cmd_netsplit_remove, {.path = ""} };
 
 mowgli_patricia_t *ss_netsplit_cmds;

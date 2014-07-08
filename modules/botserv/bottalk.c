@@ -47,7 +47,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: SAY <#channel> <msg>"));
 		return;
 	}
-	
+
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 
@@ -96,7 +96,7 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: ACT <#channel> <msg>"));
 		return;
 	}
-	
+
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 

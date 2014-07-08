@@ -160,7 +160,7 @@ static void nefarious_on_login(user_t *u, myuser_t *mu, const char *wantedhost)
 }
 
 /* P10 does not support logout, so kill the user
- * we can't keep track of which logins are stale and which aren't -- jilles 
+ * we can't keep track of which logins are stale and which aren't -- jilles
  * Except we can in Nefarious --nenolod
  */
 static bool nefarious_on_logout(user_t *u, const char *account)
@@ -434,7 +434,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	else if (parc == 2)
 	{
                 if (!si->su)
-                {       
+                {
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
                         return;
                 }

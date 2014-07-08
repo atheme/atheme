@@ -654,11 +654,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	else if (parc == 2)
 	{
                 if (!si->su)
-                {       
+                {
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
                         return;
                 }
-                
+
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		if (user_changenick(si->su, parv[0], atoi(parv[1])))

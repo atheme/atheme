@@ -188,7 +188,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (crypto_module_loaded)
 		{
-			mowgli_strlcpy(hash, crypt_string(parv[2], gen_salt()), PASSLEN); 
+			mowgli_strlcpy(hash, crypt_string(parv[2], gen_salt()), PASSLEN);
 			soper_add(entity(mu)->name, operclass->name, 0, hash);
 		}
 		else

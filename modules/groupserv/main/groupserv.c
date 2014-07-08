@@ -223,7 +223,7 @@ mowgli_list_t *myuser_get_membership_list(myuser_t *mu)
 	l = mowgli_list_create();
 	privatedata_set(mu, "groupserv:membership", l);
 
-	return l;	
+	return l;
 }
 
 const char *mygroup_founder_names(mygroup_t *mg)

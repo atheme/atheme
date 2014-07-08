@@ -142,7 +142,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 		return;
 	}
-	
+
 	if (!strcasecmp("LIST", params))
 	{
 		if (!globlist.count)

@@ -49,14 +49,14 @@ svsignore_t *svsignore_add(const char *mask, const char *reason)
         mowgli_node_t *n = mowgli_node_create();
 
         svsignore = smalloc(sizeof(svsignore_t));
-                        
+
         mowgli_node_add(svsignore, n, &svs_ignore_list);
-        
+
         svsignore->mask = sstrdup(mask);
         svsignore->settime = CURRTIME;
         svsignore->reason = sstrdup(reason);
         cnt.svsignore++;
-         
+
         return svsignore;
 }
 
@@ -74,9 +74,9 @@ svsignore_t *svsignore_add(const char *mask, const char *reason)
  *
  * Side Effects:
  *     - none
- */                
+ */
 svsignore_t *svsignore_find(user_t *source)
-{       
+{
         svsignore_t *svsignore;
         mowgli_node_t *n;
         char host[BUFSIZE];
@@ -90,11 +90,11 @@ svsignore_t *svsignore_find(user_t *source)
         mowgli_strlcat(host, source->user, BUFSIZE);
         mowgli_strlcat(host, "@", BUFSIZE);
         mowgli_strlcat(host, source->host, BUFSIZE);
-                
+
         MOWGLI_ITER_FOREACH(n, svs_ignore_list.head)
         {
                 svsignore = (svsignore_t *)n->data;
-        
+
                 if (!match(svsignore->mask, host))
                         return svsignore;
         }

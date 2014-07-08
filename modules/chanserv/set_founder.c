@@ -102,7 +102,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mowgli_node_t *n;
 			chanacs_t *ca;
-	
+
 			/* Duplicates the check below. We check below for user
 			 * convenience, but we need to check here as well to
 			 * avoid a verify/use bug that can cause us to make the

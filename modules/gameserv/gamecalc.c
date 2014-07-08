@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2007 William Pitcock <nenolod@nenolod.net>
  * Copyright (c) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
- * 
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator.

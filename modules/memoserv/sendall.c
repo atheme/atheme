@@ -44,19 +44,19 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Grab args */
 	char *m = parv[0];
-	
+
 	/* Arg validation */
 	if (!m)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "SENDALL");
-		
-		command_fail(si, fault_needmoreparams, 
+
+		command_fail(si, fault_needmoreparams,
 			_("Syntax: SENDALL <memo>"));
-		
+
 		return;
 	}
-	
+
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
@@ -75,9 +75,9 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) >= MEMOLEN)
 	{
-		command_fail(si, fault_badparams, 
+		command_fail(si, fault_badparams,
 			"Please make sure your memo is less than %d characters", MEMOLEN);
-		
+
 		return;
 	}
 
@@ -89,7 +89,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Your memo contains invalid characters."));
 		return;
 	}
-	
+
 	si->smu->memo_ratelimit_num++;
 	si->smu->memo_ratelimit_time = CURRTIME;
 
@@ -172,7 +172,7 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SENDALL: \2%s\2 (%d/%d sent)", m, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d accounts."), sent);
 	return;
-}	
+}
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8

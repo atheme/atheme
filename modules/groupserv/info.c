@@ -73,7 +73,7 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		mowgli_strlcat(buf, "ACSNOLIMIT", BUFSIZE);
 	}
-	
+
 	if (mg->flags & MG_OPEN)
 	{
 		if (*buf)

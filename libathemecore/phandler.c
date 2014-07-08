@@ -144,7 +144,7 @@ void generic_notice_channel_sts(user_t *from, channel_t *target, const char *tex
 	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->name, text);
 }
 
-void generic_wallchops(user_t *sender, channel_t *channel, const char *message)	
+void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	/* ugly, but always works -- jilles */
 	mowgli_node_t *n;
@@ -263,12 +263,12 @@ void generic_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 
 void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
-	/* nothing to do here. */	
+	/* nothing to do here. */
 }
 
 void generic_invite_sts(user_t *source, user_t *target, channel_t *channel)
 {
-	/* nothing to do here. */	
+	/* nothing to do here. */
 }
 
 void generic_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)

@@ -77,13 +77,13 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	regex = regex_create(pattern, flags);
-	
+
 	if (regex == NULL)
 	{
 		command_fail(si, fault_badparams, _("The provided regex \2%s\2 is invalid."), pattern);
 		return;
 	}
-		
+
 	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
 		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
@@ -100,7 +100,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 	}
-	
+
 	regex_destroy(regex);
 	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%d\2 matches)", pattern, matches);

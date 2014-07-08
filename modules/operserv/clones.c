@@ -283,7 +283,7 @@ static void db_h_ex(database_handle_t *db, const char *type)
 	{
 		warn = db_sread_uint(db);
 		db_sread_uint(db); /* trash the old KILL value */
-	} 
+	}
 	else
 	{
 		warn = allowed;
@@ -330,7 +330,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 {
 	command_t *c;
 	char *cmd = parv[0];
-	
+
 	/* Bad/missing arg */
 	if (!cmd)
 	{
@@ -338,7 +338,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT|SETEXEMPT|DURATION [parameters]"));
 		return;
 	}
-	
+
 	c = command_find(os_clones_cmds, cmd);
 	if (c == NULL)
 	{
@@ -632,7 +632,7 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>"));
 		return;
 	}
-	
+
 	int clones = atoi(clonesstr);
 
 	if (!strcasecmp(ip, "DEFAULT"))
@@ -889,7 +889,7 @@ static void clones_newuser(hook_user_nick_t *data)
 			if (warn != 0)
 				warn++;
 		}
-			
+
 		/* A hard limit of 2x the "real" limit sounds good IMO --jdhore */
 		if (allowed > (real_allowed * 2))
 			allowed = real_allowed * 2;

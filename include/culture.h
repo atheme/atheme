@@ -3,7 +3,7 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Message translation stuff.
- * 
+ *
  */
 
 #ifndef CULTURE_H

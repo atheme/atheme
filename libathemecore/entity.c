@@ -125,7 +125,7 @@ void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t t
 	{
 		mowgli_patricia_foreach_next(entities, &state->st);
 		e = mowgli_patricia_foreach_cur(entities, &state->st);
-	} 
+	}
 }
 
 myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state)

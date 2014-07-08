@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * channels.c: Channel event and state tracking
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -157,7 +157,7 @@ void channel_delete(channel_t *c)
 	return_if_fail(c != NULL);
 
 	slog(LG_DEBUG, "channel_delete(): %s", c->name);
-	
+
 	modestack_finalize_channel(c);
 
 	/* If this is called from uplink_close(), there may still be services

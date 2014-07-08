@@ -327,7 +327,7 @@ void module_unload(module_t *m, module_unload_intent_t intent)
 		module_t *hm = (module_t *) n->data;
 		mowgli_node_t *hn = mowgli_node_find(m, &hm->dephost);
 
-		mowgli_node_delete(hn, &hm->dephost);		
+		mowgli_node_delete(hn, &hm->dephost);
 		mowgli_node_free(hn);
 		mowgli_node_delete(n, &m->deplist);
 		mowgli_node_free(n);

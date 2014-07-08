@@ -87,8 +87,8 @@ _modinit(module_t *m)
 	hook_add_user_can_register(cracklib_hook);
 
 	hook_add_event("config_ready");
-	hook_add_config_ready(cracklib_config_ready); 
-	
+	hook_add_config_ready(cracklib_config_ready);
+
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 

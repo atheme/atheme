@@ -42,23 +42,23 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo;
 	command_t *cmd;
 	service_t *memoserv;
-	
+
 	/* Grab args */
 	char *target = parv[0];
 	char *m = parv[1];
-	
+
 	/* Arg validation */
 	if (!target || !m)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "SEND");
-		
-		command_fail(si, fault_needmoreparams, 
+
+		command_fail(si, fault_needmoreparams,
 			"Syntax: SEND <user> <memo>");
-		
+
 		return;
 	}
-	
+
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
@@ -77,9 +77,9 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) >= MEMOLEN)
 	{
-		command_fail(si, fault_badparams, 
+		command_fail(si, fault_badparams,
 			"Please make sure your memo is less than %d characters", MEMOLEN);
-		
+
 		return;
 	}
 
@@ -91,7 +91,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Your memo contains invalid characters."));
 		return;
 	}
-	
+
 	memoserv = service_find("memoserv");
 	if (memoserv == NULL)
 		memoserv = si->service;
@@ -99,17 +99,17 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	if (*target != '#' && *target != '!')
 	{
 		/* See if target is valid */
-		if (!(tmu = myuser_find_ext(target))) 
+		if (!(tmu = myuser_find_ext(target)))
 		{
-			command_fail(si, fault_nosuch_target, 
+			command_fail(si, fault_nosuch_target,
 				"\2%s\2 is not registered.", target);
-		
+
 			return;
 		}
 
 		si->smu->memo_ratelimit_num++;
 		si->smu->memo_ratelimit_time = CURRTIME;
-	
+
 		/* Does the user allow memos? --pfish */
 		if (tmu->flags & MU_NOMEMO)
 		{
@@ -118,7 +118,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 
 			return;
 		}
-	
+
 		/* Check to make sure target inbox not full */
 		if (tmu->memos.count >= *maxmemos)
 		{
@@ -127,7 +127,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-	
+
 		/* Make sure we're not on ignore */
 		MOWGLI_ITER_FOREACH(n, tmu->memo_ignores.head)
 		{
@@ -149,14 +149,14 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		logcommand(si, CMDLOG_SET, "SEND: to \2%s\2", entity(tmu)->name);
-	
+
 		/* Malloc and populate struct */
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
 		memo->status = 0;
 		mowgli_strlcpy(memo->sender,entity(si->smu)->name,NICKLEN);
 		mowgli_strlcpy(memo->text,m,MEMOLEN);
-	
+
 		/* Create a linked list node and add to memos */
 		n = mowgli_node_create();
 		mowgli_node_add(memo, n, &tmu->memos);
@@ -167,7 +167,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		{
 			sendemail(si->su, tmu, EMAIL_MEMO, tmu->email, memo->text);
 	        }
-	
+
 		/* Note: do not disclose other nicks they're logged in with
 		 * -- jilles
 		 *

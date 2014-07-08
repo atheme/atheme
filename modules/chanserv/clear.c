@@ -67,7 +67,7 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: CLEAR <#channel> <command> [parameters]"));
 		return;
 	}
-	
+
 	if (parv[0][0] == '#')
 		chan = parv[0], cmd = parv[1];
 	else if (parv[1][0] == '#')

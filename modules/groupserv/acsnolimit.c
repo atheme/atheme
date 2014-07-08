@@ -36,7 +36,7 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
-	
+
 	if (!strcasecmp(parv[1], "ON"))
 	{
 		if (mg->flags & MG_ACSNOLIMIT)

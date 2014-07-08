@@ -108,7 +108,7 @@ static void process_header(connection_t *cptr, char *line)
 static void check_close(connection_t *cptr)
 {
 	struct httpddata *hd;
-	
+
 	hd = cptr->userdata;
 	if (hd->connection_close)
 		sendq_add_eof(cptr);
@@ -191,11 +191,11 @@ static void httpd_recvqhandler(connection_t *cptr)
 			if (hd->lengthdone != hd->length)
 				return;
 			hd->requestbuf[hd->length] = '\0';
-			
+
 			ph->handler(cptr, hd->requestbuf);
 
 			clear_httpddata(hd);
-			return;  
+			return;
 		}
 	}
 

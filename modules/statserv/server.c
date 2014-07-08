@@ -25,7 +25,7 @@ command_t ss_server_list =
 command_t ss_server_count =
 { "COUNT", N_("Count the amount of servers connected to the network."), AC_NONE, 1, ss_cmd_server_count, {.path = ""} };
 
-command_t ss_server_info = 
+command_t ss_server_info =
 { "INFO", N_("Obtain information about a specified server."), AC_NONE, 2, ss_cmd_server_info, {.path = ""} };
 
 mowgli_patricia_t *ss_server_cmds;
@@ -56,7 +56,7 @@ static void ss_cmd_server(sourceinfo_t * si, int parc, char *parv[])
     if (!cmd)
     {
         command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SERVER");
-        command_fail(si, fault_needmoreparams, 
+        command_fail(si, fault_needmoreparams,
                 _("Syntax: SERVER [INFO|LIST|COUNT] [parameters]"));
         return;
     }

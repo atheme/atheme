@@ -31,7 +31,7 @@ static bool mark_match(const mynick_t *mn, const void *arg)
 
 	myuser_t *mu = mn->owner;
 	mdmark = metadata_find(mu, "private:mark:reason");
-	
+
 	if (mdmark != NULL && !match(markpattern, mdmark->value))
 		return true;
 

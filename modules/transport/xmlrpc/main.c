@@ -79,7 +79,7 @@ static void handle_request(connection_t *cptr, void *requestbuf)
 	xmlrpc_process(requestbuf, cptr);
 	current_cptr = NULL;
 
-	return; 
+	return;
 }
 
 static void xmlrpc_config_ready(void *vptr)

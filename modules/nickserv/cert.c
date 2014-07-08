@@ -91,7 +91,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		if (parc < 2)
 		{
 			mcfp = si->su != NULL ? si->su->certfp : NULL;
-			
+
 			if (mcfp == NULL)
 			{
 				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CERT ADD");

@@ -205,7 +205,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 				rc->width = sz;
 
 			if ((sz = strlen(c->value)) > (size_t)rc->width)
-				rc->width = sz;		
+				rc->width = sz;
 		}
 	}
 

@@ -111,7 +111,7 @@ static void process_parvarray(list_option_t *opts, size_t optsize, int parc, cha
 						*opts[j].optval.ageval = parse_age(parv[i + 1]);
 						i++;
 					}
-					break;					
+					break;
 				default:
 					break;
 				}

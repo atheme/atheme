@@ -61,7 +61,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_nickchange");
 	hook_add_user_nickchange(os_sqline_newuser);
 	hook_add_event("channel_join");
-	hook_add_channel_join(os_sqline_chanjoin); 
+	hook_add_channel_join(os_sqline_chanjoin);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -73,7 +73,7 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&os_sqline_del, os_sqline_cmds);
 	command_delete(&os_sqline_list, os_sqline_cmds);
 	command_delete(&os_sqline_sync, os_sqline_cmds);
-	
+
 	hook_del_user_add(os_sqline_newuser);
 	hook_del_user_nickchange(os_sqline_newuser);
 	hook_del_channel_join(os_sqline_chanjoin);
@@ -127,7 +127,7 @@ static void os_cmd_sqline(sourceinfo_t *si, int parc, char *parv[])
 	/* Grab args */
 	char *cmd = parv[0];
 	command_t *c;
-	
+
 	/* Bad/missing arg */
 	if (!cmd)
 	{
@@ -225,7 +225,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mowgli_strlcat(reason, " ", BUFSIZE);
 			mowgli_strlcat(reason, treason, BUFSIZE);
-		}			
+		}
 	}
 
 	char *p;
@@ -261,7 +261,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SQLINE on \2%s\2 was successfully added."), q->mask);
 
-	verbose_wallops("\2%s\2 is \2adding\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), q->mask, 
+	verbose_wallops("\2%s\2 is \2adding\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), q->mask,
 		q->reason);
 	logcommand(si, CMDLOG_ADMIN, "SQLINE:ADD: \2%s\2 (reason: \2%s\2)", q->mask, q->reason);
 }
@@ -271,7 +271,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	qline_t *q;
 	unsigned int number;
-	char *s; 
+	char *s;
 
 	if (!target)
 	{
@@ -341,8 +341,8 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 		} while ((s = strtok(NULL, ",")));
 
 		return;
-	} 
-	
+	}
+
 	if (IsDigit(*target))
 	{
 		unsigned int start = 0, end = 0, i;
@@ -392,7 +392,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		command_success_nodata(si, _("SQLINE on \2%s\2 has been successfully removed."), q->mask);
-		
+
 		verbose_wallops("\2%s\2 is \2removing\2 an \2SQLINE\2 for \2%s\2 -- reason: \2%s\2",
 			get_oper_name(si), q->mask, q->reason);
 
@@ -401,7 +401,7 @@ static void os_cmd_sqline_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	
+
 	if (!(q = qline_find(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("No such SQLINE: \2%s\2."), target);
@@ -426,7 +426,7 @@ static void os_cmd_sqline_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
 		full = true;
-	
+
 	if (full)
 		command_success_nodata(si, _("SQLINE list (with reasons):"));
 	else

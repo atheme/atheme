@@ -86,7 +86,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Fun for helpchan/helpurl. */
 		if (config_options.helpchan && config_options.helpurl)
-			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s or visit the help webpage %s"), 
+			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s or visit the help webpage %s"),
 					config_options.helpchan, config_options.helpurl);
 		else if (config_options.helpchan && !config_options.helpurl)
 			command_success_nodata(si, _("If you're having trouble or you need some additional help, you may want to join the help channel %s"), config_options.helpchan);

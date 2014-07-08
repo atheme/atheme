@@ -300,13 +300,13 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		switch (type)
 		{
-			case type_all: 
+			case type_all:
 				logcommand(si, CMDLOG_GET, "NOOP:LIST");
 				break;
-			case type_hostmask: 
+			case type_hostmask:
 				logcommand(si, CMDLOG_GET, "NOOP:LIST:HOSTMASK");
 				break;
-			case type_server: 
+			case type_server:
 				logcommand(si, CMDLOG_GET, "NOOP:LIST:SERVER");
 				break;
 		}

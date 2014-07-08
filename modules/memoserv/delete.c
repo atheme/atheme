@@ -42,27 +42,27 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int deleteall = 0, deleteold = 0;
 	mymemo_t *memo;
 	char *errptr = NULL;
-	
+
 	/* We only take 1 arg, and we ignore all others */
 	char *arg1 = parv[0];
-	
+
 	/* Does the arg exist? */
 	if (!arg1)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "DELETE");
-		
+
 		command_fail(si, fault_needmoreparams, _("Syntax: DELETE ALL|OLD|message id"));
 		return;
 	}
-	
+
 	/* Do we have any memos? */
 	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nochange, _("You have no memos to delete."));
 		return;
 	}
-	
+
 	/* Do we want to delete all memos? */
 	if (!strcasecmp("all",arg1))
 	{
@@ -75,14 +75,14 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		memonum = strtoul(arg1, &errptr, 10);
-		
+
 		/* Make sure they didn't slip us an alphabetic index */
 		if (!memonum || (errptr && *errptr))
 		{
 			command_fail(si, fault_badparams, _("Invalid message index."));
 			return;
 		}
-		
+
 		/* If int, does that index exist? And do we have something to delete? */
 		if (memonum > si->smu->memos.count)
 		{
@@ -90,34 +90,34 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
-	
+
 	delcount = 0;
-	
+
 	/* Iterate through memos, doing deletion */
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
 		memo = (mymemo_t*) n->data;
-		
+
 		if (i == memonum || deleteall ||
 				(deleteold && memo->status & MEMO_READ))
 		{
 			delcount++;
-			
+
 			if (!(memo->status & MEMO_READ))
 				si->smu->memoct_new--;
-			
+
 			/* Free to node pool, remove from chain */
 			mowgli_node_delete(n, &si->smu->memos);
 			mowgli_node_free(n);
 
 			free(memo);
 		}
-		
+
 	}
-	
+
 	command_success_nodata(si, ngettext(N_("%d memo deleted."), N_("%d memos deleted."), delcount), delcount);
-	
+
 	return;
 }
 

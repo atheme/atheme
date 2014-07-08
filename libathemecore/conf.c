@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * conf.c: Services-specific configuration processing.
  *
- * Copyright (c) 2005-2008 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2008 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -126,8 +126,8 @@ const char *get_conf_opts(void)
 			log_debug_enabled() ? "d" : "",
 			me.auth ? "e" : "",
 			config_options.flood_msgs ? "F" : "",
-			config_options.leave_chans ? "l" : "", 
-			config_options.join_chans ? "j" : "", 
+			config_options.leave_chans ? "l" : "",
+			config_options.join_chans ? "j" : "",
 			chansvs.changets ? "t" : "",
 			!match_mapping ? "R" : "",
 			config_options.raw ? "r" : "",

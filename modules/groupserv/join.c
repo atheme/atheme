@@ -48,7 +48,7 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 		else
 			invited = false;
 	}
-	
+
 	if (!(mg->flags & MG_OPEN) && !invited)
 	{
 		command_fail(si, fault_noprivs, _("Group \2%s\2 is not open to anyone joining."), parv[0]);

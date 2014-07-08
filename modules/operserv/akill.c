@@ -60,7 +60,7 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&os_akill_del, os_akill_cmds);
 	command_delete(&os_akill_list, os_akill_cmds);
 	command_delete(&os_akill_sync, os_akill_cmds);
-	
+
 	hook_del_user_add(os_akill_newuser);
 
 	mowgli_patricia_destroy(os_akill_cmds, NULL, NULL);
@@ -94,7 +94,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 	/* Grab args */
 	char *cmd = parv[0];
         command_t *c;
-	
+
 	/* Bad/missing arg */
 	if (!cmd)
 	{
@@ -189,7 +189,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mowgli_strlcat(reason, " ", BUFSIZE);
 			mowgli_strlcat(reason, treason, BUFSIZE);
-		}			
+		}
 	}
 
 	if (strchr(target,'!'))
@@ -286,7 +286,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("AKILL on \2%s@%s\2 was successfully added."), k->user, k->host);
 
-	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", get_oper_name(si), k->user, k->host, 
+	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", get_oper_name(si), k->user, k->host,
 		k->reason);
 
 	if (duration)
@@ -482,7 +482,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
-	
+
 	if (user || host || num)
 		command_success_nodata(si, _("AKILL list matching given criteria (with reasons):"));
 	else if (full)

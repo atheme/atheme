@@ -19,7 +19,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
-                                                                                   
+
 void _modinit(module_t *m)
 {
         service_named_bind_command("chanserv", &cs_ftransfer);
@@ -58,7 +58,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), name);
 		return;
 	}
-	
+
 	oldfndr = mychan_founder_names(mc);
 	if (!strcmp(mt->name, oldfndr))
 	{

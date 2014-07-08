@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_set_prefix_config_ready(void *unused); 
+static void cs_set_prefix_config_ready(void *unused);
 static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_prefix = { "PREFIX", N_("Sets the channel PREFIX."), AC_NONE, 2, cs_cmd_set_prefix, { .path = "cservice/set_prefix" } };
@@ -29,7 +29,7 @@ void _modinit(module_t *m)
 	command_add(&cs_set_prefix, *cs_set_cmdtree);
 
 	hook_add_event("config_ready");
-	hook_add_config_ready(cs_set_prefix_config_ready); 
+	hook_add_config_ready(cs_set_prefix_config_ready);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -78,8 +78,8 @@ static void cs_cmd_set_prefix(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
 		return;
 	}
-	
-	if (!prefix || !strcasecmp(prefix, "DEFAULT")) 
+
+	if (!prefix || !strcasecmp(prefix, "DEFAULT"))
 	{
 		metadata_delete(mc, "private:prefix");
 		logcommand(si, CMDLOG_SET, "SET:PREFIX: \2%s\2 reset", mc->name);

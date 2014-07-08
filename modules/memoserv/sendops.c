@@ -46,19 +46,19 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	/* Grab args */
 	char *target = parv[0];
 	char *m = parv[1];
-	
+
 	/* Arg validation */
 	if (!target || !m)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "SENDOPS");
-		
-		command_fail(si, fault_needmoreparams, 
+
+		command_fail(si, fault_needmoreparams,
 			"Syntax: SENDOPS <channel> <memo>");
-		
+
 		return;
 	}
-	
+
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
@@ -77,9 +77,9 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) >= MEMOLEN)
 	{
-		command_fail(si, fault_badparams, 
+		command_fail(si, fault_badparams,
 			"Please make sure your memo is less than %d characters", MEMOLEN);
-		
+
 		return;
 	}
 
@@ -91,7 +91,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Your memo contains invalid characters."));
 		return;
 	}
-	
+
 	mc = mychan_find(target);
 
 	if (mc == NULL)
@@ -197,7 +197,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SENDOPS: to \2%s\2 (%d/%d sent)", mc->name, sent, tried);
 	command_success_nodata(si, _("The memo has been successfully sent to %d ops on \2%s\2."), sent, mc->name);
 	return;
-}	
+}
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8

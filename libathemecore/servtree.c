@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005-2006 Atheme Development Group
- * servtree.c: Services binary tree manipulation. (add_service, 
+ * servtree.c: Services binary tree manipulation. (add_service,
  *    del_service, et al.)
  *
  * Permission to use, copy, modify, and/or distribute this software for any

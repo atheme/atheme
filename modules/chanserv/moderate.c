@@ -304,7 +304,7 @@ static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 {
 	csreq_t *cs;
 	myuser_t *mu;
-	
+
 	if (!parv[0])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REJECT");

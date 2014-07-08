@@ -56,7 +56,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
-	
+
 	if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 	{
 		flags_make_bitmasks(flagstr, &addflags, &removeflags);

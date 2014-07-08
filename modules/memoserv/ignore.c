@@ -64,7 +64,7 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "IGNORE");
 
 		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"));

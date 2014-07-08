@@ -72,7 +72,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	{
 		/* not valid! */
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid action"), actionstr);
- 		return;				
+ 		return;
 	}
 
 	if (action != CLEAR_KICK && !has_priv(si, PRIV_MASS_AKILL))

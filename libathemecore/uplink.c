@@ -165,7 +165,7 @@ void uplink_connect(void)
 
 /*
  * uplink_close()
- * 
+ *
  * inputs:
  *       connection pointer of current uplink
  *       triggered by callback close_handler

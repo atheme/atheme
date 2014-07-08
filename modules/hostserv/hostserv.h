@@ -16,7 +16,7 @@ typedef struct {
  * Inputs:
  *      - User to set a vHost on
  *      - a vHost
- * 
+ *
  * Outputs:
  *      - none
  *
@@ -43,7 +43,7 @@ static inline void do_sethost(user_t *u, const char *host)
  * Inputs:
  *      - an account name
  *      - a vHost
- * 
+ *
  * Outputs:
  *      - none
  *

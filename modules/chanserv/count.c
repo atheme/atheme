@@ -67,7 +67,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);

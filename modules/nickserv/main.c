@@ -149,7 +149,7 @@ void _modinit(module_t *m)
 
 	nicksvs.me = service_add("nickserv", NULL);
 	authservice_loaded++;
-	
+
 	add_bool_conf_item("SPAM", &nicksvs.me->conf_table, 0, &nicksvs.spam, false);
 	add_bool_conf_item("NO_NICK_OWNERSHIP", &nicksvs.me->conf_table, 0, &nicksvs.no_nick_ownership, false);
 	add_duration_conf_item("EXPIRE", &nicksvs.me->conf_table, 0, &nicksvs.expiry, "d", 0);

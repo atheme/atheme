@@ -19,7 +19,7 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 1, cs_cmd_invite, { .path = "cservice/invite" } };
-                                                                                   
+
 void _modinit(module_t *m)
 {
         service_named_bind_command("chanserv", &cs_invite);
@@ -73,7 +73,7 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
-	
+
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);

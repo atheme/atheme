@@ -91,7 +91,7 @@ arc4_stir(struct arc4_stream *as)
 	if (fd >= 0) {
 		n = read(fd, rdat.rnd, sizeof(rdat.rnd));
 		close(fd);
-	} 
+	}
 	/* fd < 0?  Ah, what the heck. We'll just take whatever was on the
 	 * stack... */
 

@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * connection.c: Connection and I/O management
  *
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -463,7 +463,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		break;
 	case AF_INET6:
 		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
-		break;	
+		break;
 	}
 
 	if ((connect(s, addr->ai_addr, addr->ai_addrlen) == -1) && ioerrno() != EINPROGRESS && ioerrno() != EINTR && ioerrno() != EWOULDBLOCK)
@@ -544,7 +544,7 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 		break;
 	case AF_INET6:
 		((struct sockaddr_in6 *) addr->ai_addr)->sin6_port = htons(port);
-		break;	
+		break;
 	}
 
 	if (bind(s, addr->ai_addr, addr->ai_addrlen) < 0)

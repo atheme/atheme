@@ -11,7 +11,7 @@ static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 	mg = group(ca->entity);
 
 	return_val_if_fail(mg != NULL, NULL);
-	
+
 	if (!isuser(mt))
 		return NULL;
 
