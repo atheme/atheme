@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2007 William Pitcock <nenolod@nenolod.net>
  * Copyright (c) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
- * 
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator.
@@ -58,10 +58,10 @@ int is_calcoper(char oper);
 // !   = Logical NOT               |
 // d   = Dice Generator, LOL.      |  [Rank 5]
 //                                 |  &   = Bitwise AND
-// [Rank 2]                        |  
+// [Rank 2]                        |
 // ^   = Power                     |  [Rank 6]
 //                                 |  $   = Bitwise XOR (eXclusive OR)
-// [Rank 3]                        |  
+// [Rank 3]                        |
 // * / = Multiply / Divide         |  [Rank 7]
 // % \ = Modulus / Integer-divide  |  |   = Bitwise inclusive OR
 //

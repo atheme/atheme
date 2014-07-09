@@ -176,7 +176,7 @@ static void ts6_msg(const char *from, const char *target, const char *fmt, ...)
 	 * is on it -- jilles
 	 *
 	 * Well, now it's operserv, but yes it's safe to assume that
-	 * the source would be able to send to whatever target it is 
+	 * the source would be able to send to whatever target it is
 	 * sending to. --nenolod
 	 */
 	sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
@@ -850,7 +850,7 @@ static void m_bmask(sourceinfo_t *si, int parc, char *parv[])
 
 	if (atol(parv[0]) > c->ts)
 		return;
-	
+
 	type = *parv[2];
 	if (!strchr(ircd->ban_like_modes, type))
 	{
@@ -914,7 +914,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	else if (parc == 2)
 	{
                 if (!si->su)
-                {       
+                {
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
                         return;
                 }

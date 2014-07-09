@@ -435,7 +435,7 @@ void myuser_set_email(myuser_t *mu, const char *newemail)
  *
  * Side Effects:
  *      - none
- */ 
+ */
 myuser_t *myuser_find_ext(const char *name)
 {
 	user_t *u;
@@ -1773,7 +1773,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false); 
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false);
 
 	if (mt != NULL)
 	{
@@ -1850,7 +1850,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 
 	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
 	return_val_if_fail(mychan != NULL, false);
-	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false); 
+	return_val_if_fail((mt != NULL && hostmask == NULL) || (mt == NULL && hostmask != NULL), false);
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
 
 	if (mt != NULL)
@@ -1948,7 +1948,7 @@ static int expire_myuser_cb(myentity_t *mt, void *unused)
 	/* If they're logged in, update lastlogin time.
 	 * To decrease db traffic, may want to only do
 	 * this if the account would otherwise be
-	 * deleted. -- jilles 
+	 * deleted. -- jilles
 	 */
 	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{

@@ -169,7 +169,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (config_options.ratelimit_uses && config_options.ratelimit_period)
 		ratelimit_count++;
-	
+
 	if (auth_module_loaded)
 	{
 		if (!verify_password(mu, pass))

@@ -196,7 +196,7 @@ static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 			de = n->data;
 
 			if (!irccasecmp(de->ip, ip))
-			{	
+			{
 				command_success_nodata(si, _("\2%s\2 has already been entered into the DNSBL exempts list."), ip);
 				return;
 			}
@@ -368,7 +368,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 	blcptr->dns_query.callback = blacklist_dns_callback;
 
 	/* A sscanf worked fine for chary for many years, it'll be fine here */
-	sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]); 
+	sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]);
 
 	/* becomes 2.0.0.127.torbl.ahbl.org or whatever */
 	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);

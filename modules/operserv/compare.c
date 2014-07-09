@@ -64,7 +64,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 			if (!c1 || !c2)
 			{
 				command_fail(si, fault_nosuch_target, _("Both channels must exist for @compare"));
-				return;				
+				return;
 			}
 
 			command_success_nodata(si, _("Common users in \2%s\2 and \2%s\2"), object1, object2);
@@ -105,7 +105,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* bad syntax */
 			command_fail(si, fault_badparams, _("Bad syntax for @compare. Use @compare on two channels, or two users."));
-			return;				
+			return;
 		}
 	}
 	else
@@ -114,7 +114,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* bad syntax */
 			command_fail(si, fault_badparams, _("Bad syntax for @compare. Use @compare on two channels, or two users."));
-			return;				
+			return;
 		}
 		else
 		{
@@ -125,7 +125,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 			if (!u1 || !u2)
 			{
 				command_fail(si, fault_nosuch_target, _("Both users must exist for @compare"));
-				return;				
+				return;
 			}
 
 			command_success_nodata(si, _("Common channels for \2%s\2 and \2%s\2"), object1, object2);

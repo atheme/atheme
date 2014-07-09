@@ -55,7 +55,7 @@ static void rs_cmd_search(sourceinfo_t *si, int parc, char *parv[])
 
 		continue;
 
-__matched:				
+__matched:
 		listed++;
 
 		command_success_nodata(si, _("Channel \2%s\2:"), mc->name);

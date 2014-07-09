@@ -2,7 +2,7 @@
  * Copyright (c) 2003-2004 E. Will et al.
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file is a meta-module for compatibility with 
+ * This file is a meta-module for compatibility with
  * old setups pre-SET split.
  *
  */

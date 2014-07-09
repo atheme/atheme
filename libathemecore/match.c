@@ -606,12 +606,12 @@ atheme_regex_t *regex_create(char *pattern, int flags)
 	static char errmsg[BUFSIZE];
 	int errnum;
 	atheme_regex_t *preg;
-	
+
 	if (pattern == NULL)
 	{
 		return NULL;
 	}
-	
+
 	preg = smalloc(sizeof(atheme_regex_t));
 	if (flags & AREGEX_PCRE)
 	{
@@ -649,7 +649,7 @@ atheme_regex_t *regex_create(char *pattern, int flags)
 		}
 		preg->type = at_posix;
 	}
-	
+
 	return preg;
 }
 

@@ -46,7 +46,7 @@ static void helpserv_cmd_helpme(sourceinfo_t *si, int parc, char *parv[])
                 slog(LG_INFO, "HELPME:THROTTLED: %s", si->su->nick);
                 return;
         }
-	
+
 	if (si->smu != NULL && metadata_find(si->smu, "private:restrict:setter"))
 	{
 		command_fail(si, fault_noprivs, _("You have been restricted from requesting help by network staff."));

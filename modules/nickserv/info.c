@@ -364,7 +364,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
     {
         if (*buf)
             strcat(buf, ", ");
-        
+
         strcat(buf, "NoGreet");
     }
 

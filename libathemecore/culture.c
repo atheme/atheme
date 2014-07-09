@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * culture.c: Translation framework.
  *
- * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

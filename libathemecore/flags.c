@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * flags.c: Functions to convert a flags table into a bitmask.
  *
- * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -340,7 +340,7 @@ void update_chanacs_flags(void)
 	ca_all = ca_all_enable = 0;
 	for (i = 0; i < ARRAY_SIZE(chanacs_flags); i++)
 	{
-		ca_all |= chanacs_flags[i].value;	
+		ca_all |= chanacs_flags[i].value;
 		if (chanacs_flags[i].def == true)
 			ca_all_enable |= chanacs_flags[i].value;
 	}
@@ -393,7 +393,7 @@ unsigned int xflag_apply(unsigned int in, const char *name)
 	if (status == FLAGS_ADD)
 		out |= flag;
 	else
-		out &= ~flag;	
+		out &= ~flag;
 
 	return out;
 }

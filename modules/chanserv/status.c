@@ -52,7 +52,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_GET, "STATUS: \2%s\2", mc->name);
-		
+
 		if (metadata_find(mc, "private:close:closer"))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);

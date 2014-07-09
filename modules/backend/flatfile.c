@@ -236,15 +236,15 @@ static void flatfile_db_load(const char *filename)
 			target = strtok(NULL, "\n");
 
 			mu = myuser_find(user);
-			
+
 			if (!mu)
 			{
 				slog(LG_DEBUG, "db_load(): invalid ignore (MI %s %s)", user,target);
 				continue;
 			}
-			
+
 			strbuf = sstrdup(target);
-			
+
 			mowgli_node_add(strbuf, mowgli_node_create(), &mu->memo_ignores);
 		}
 		else if (!strcmp("AC", item))
@@ -502,7 +502,7 @@ static void flatfile_db_load(const char *filename)
 					if (fl == OLD_CA_AOP && versn < 4)
 						fl = CA_AOP_DEF;
 
-					/* 
+					/*
 					 * If the database revision is version 6 or newer, CA entries are
 					 * timestamped... otherwise we use 0 as the last modified TS
 					 *    --nenolod/jilles

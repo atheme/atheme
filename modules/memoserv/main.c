@@ -45,7 +45,7 @@ void _moddeinit(module_unload_intent_t intent)
 static void on_user_identify(user_t *u)
 {
 	myuser_t *mu = u->myuser;
-	
+
 	if (mu->memoct_new > 0)
 	{
 		notice(memosvs->me->nick, u->nick, ngettext(N_("You have %d new memo."),

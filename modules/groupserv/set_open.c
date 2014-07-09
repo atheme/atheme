@@ -36,7 +36,7 @@ static void gs_cmd_set_open(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
-	
+
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));

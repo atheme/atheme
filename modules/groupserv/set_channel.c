@@ -31,7 +31,7 @@ static void gs_cmd_set_channel(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
-	
+
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_SET))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));

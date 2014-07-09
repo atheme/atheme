@@ -5,7 +5,7 @@
  * This file contains the main() routine.
  *
  * We're basically re-implementing everything to support
- * oper info messages. Yes, I know this is a bit ugly, but 
+ * oper info messages. Yes, I know this is a bit ugly, but
  * I can't think of a saner way that is efficient, avoids a
  * few bugs and doesn't break people's existing InfoServ DB entries.
  *
@@ -92,7 +92,7 @@ void is_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 static void underscores_to_spaces(char *y)
 {
-	do 
+	do
 	{
 		if(*y == '_')
 			*y = ' ';
@@ -186,7 +186,7 @@ static void display_info(hook_user_nick_t *data)
 		MOWGLI_ITER_FOREACH_PREV(n, logon_info.tail)
 		{
 			l = n->data;
-			
+
 			char *y = sstrdup(l->subject);
 			underscores_to_spaces(y);
 
@@ -232,7 +232,7 @@ static void display_oper_info(user_t *u)
 		MOWGLI_ITER_FOREACH_PREV(n, operlogon_info.tail)
 		{
 			o = n->data;
-			
+
 			char *y = sstrdup(o->subject);
 			underscores_to_spaces(y);
 
@@ -292,7 +292,7 @@ static void is_cmd_post(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Importance must be a digit between 0 and 4"));
 		return;
 	}
-	
+
 	char *y = sstrdup(subject);
 	underscores_to_spaces(y);
 
@@ -472,7 +472,7 @@ static void is_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 		tm = *localtime(&l->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
-		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
+		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, l->nick, dBuf, l->story);
 		free(y);
 	}
@@ -500,7 +500,7 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 
 		tm = *localtime(&o->info_ts);
 		strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
-		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2", 
+		command_success_nodata(si, "%d: [\2%s\2] by \2%s\2 at \2%s\2: \2%s\2",
 			x, y, o->nick, dBuf, o->story);
 		free(y);
 	}
@@ -550,7 +550,7 @@ void _moddeinit(module_unload_intent_t intent)
 		service_delete(infoserv);
 		infoserv = NULL;
 	}
-	
+
 	hook_del_user_add(display_info);
 	hook_del_user_oper(display_oper_info);
 	hook_del_operserv_info(osinfo_hook);

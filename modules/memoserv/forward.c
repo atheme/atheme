@@ -38,25 +38,25 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	mymemo_t *memo, *newmemo;
 	mowgli_node_t *n, *temp;
 	unsigned int i = 1, memonum = 0;
-	
+
 	/* Grab args */
 	char *target = parv[0];
 	char *arg = parv[1];
-	
+
 	/* Arg validator */
 	if (!target || !arg)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "FORWARD");
-		
-		command_fail(si, fault_needmoreparams, 
+
+		command_fail(si, fault_needmoreparams,
 			"Syntax: FORWARD <account> <memo number>");
-		
+
 		return;
 	}
 	else
 		memonum = atoi(arg);
-	
+
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
@@ -76,21 +76,21 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
-	
+
 	/* Make sure target isn't sender */
 	if (si->smu == tmu)
 	{
 		command_fail(si, fault_noprivs, _("You cannot send yourself a memo."));
 		return;
 	}
-	
+
 	/* Make sure arg is an int */
 	if (!memonum)
 	{
 		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
 	}
-	
+
 	/* check if targetuser has nomemo set */
 	if (tmu->flags & MU_NOMEMO)
 	{
@@ -106,7 +106,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_key, _("Invalid memo number."));
 		return;
 	}
-	
+
 	/* Check to make sure target inbox not full */
 	if (tmu->memos.count >= me.mdlimit)
 	{
@@ -148,7 +148,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	logcommand(si, CMDLOG_SET, "FORWARD: to \2%s\2", entity(tmu)->name);
-	
+
 	/* Go to forwarding memos */
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
@@ -157,18 +157,18 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			/* should have some function for send here...  ask nenolod*/
 			memo = (mymemo_t *)n->data;
 			newmemo = smalloc(sizeof(mymemo_t));
-			
+
 			/* Create memo */
 			newmemo->sent = CURRTIME;
 			newmemo->status = 0;
 			mowgli_strlcpy(newmemo->sender,entity(si->smu)->name,NICKLEN);
 			mowgli_strlcpy(newmemo->text,memo->text,MEMOLEN);
-			
+
 			/* Create node, add to their linked list of memos */
 			temp = mowgli_node_create();
 			mowgli_node_add(newmemo, temp, &tmu->memos);
 			tmu->memoct_new++;
-		
+
 			/* Should we email this? */
 			if (tmu->flags & MU_EMAILMEMOS)
 			{

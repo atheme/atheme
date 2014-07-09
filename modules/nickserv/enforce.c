@@ -96,7 +96,7 @@ static void guest_nickname(user_t *u)
 
 	/* Generate a new guest nickname and check if it already exists
 	 * This will try to generate a new nickname 30 different times
-	 * if nicks are in use. If it runs into 30 nicks in use, maybe 
+	 * if nicks are in use. If it runs into 30 nicks in use, maybe
 	 * you shouldn't use this module. */
 	for (tries = 0; tries < 30; tries++)
 	{
@@ -196,13 +196,13 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 
 	u = user_find_named(target);
 	mn = mynick_find(target);
-	
+
 	if (!mn)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
-	
+
 	/* The != NULL check is required to make releasing an enforcer via xmlrpc work */
 	if (u != NULL && u == si->su)
 	{
@@ -294,13 +294,13 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 
 	u = user_find_named(target);
 	mn = mynick_find(target);
-	
+
 	if (!mn)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
-	
+
 	if (u == si->su)
 	{
 		command_fail(si, fault_noprivs, _("You cannot REGAIN yourself."));
@@ -440,7 +440,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 
 	if (hdata->approved)
 		return;
-	
+
 	if (!strncasecmp(hdata->account, nicksvs.enforce_prefix, prefixlen) && isdigit(hdata->account[prefixlen]))
 	{
 		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);

@@ -297,7 +297,7 @@ static void bs_channel_drop(mychan_t *mc)
 	botserv_bot_t *bot;
 
 	if ((bot = bs_mychan_find_bot(mc)) == NULL)
-		return;	
+		return;
 
 	metadata_delete(mc, "private:botserv:bot-assigned");
 	metadata_delete(mc, "private:botserv:bot-handle-fantasy");

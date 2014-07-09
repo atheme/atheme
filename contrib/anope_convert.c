@@ -288,7 +288,7 @@ static void ATHEME_CONVERT_write_channels(void)
 				(unsigned long)ci->time_registered,
 				(unsigned long)ci->last_used, athemeflags,
 				athememon, athememoff,
-				ci->mlock_limit ? ci->mlock_limit : 0, 
+				ci->mlock_limit ? ci->mlock_limit : 0,
 				ci->mlock_key ? ci->mlock_key : "");
 
 			mcout++;

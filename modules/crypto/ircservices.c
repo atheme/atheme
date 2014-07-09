@@ -13,9 +13,9 @@
  * Please read COPYING and README for furhter details.
  *
  * Based on the original code of Epona by Lara.
- * Based on the original code of Services by Andy Church. 
- * 
- * $\Id: myencrypt.c 5 2004-03-29 01:29:50Z dane $ 
+ * Based on the original code of Services by Andy Church.
+ *
+ * $\Id: myencrypt.c 5 2004-03-29 01:29:50Z dane $
  *
  */
 

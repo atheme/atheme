@@ -21,7 +21,7 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 
 	if (CURRTIME < (time_t)(si->smu->registered + nicksvs.expiry))
 	{
-		command_fail(si, fault_noprivs, _("You must be registered for at least \2%d\2 days in order to enable VACATION mode."), 
+		command_fail(si, fault_noprivs, _("You must be registered for at least \2%d\2 days in order to enable VACATION mode."),
 			(nicksvs.expiry / 3600 / 24));
 		return;
 	}

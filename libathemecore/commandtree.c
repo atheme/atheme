@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * commandtree.c: Management of services commands.
  *
- * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2010 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -167,7 +167,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char 
  * inputs -
  *     si:          The origin of the request.
  *     commandtree: The command tree being listed.
- * 
+ *
  * outputs -
  *     A list of available commands.
  */
@@ -223,7 +223,7 @@ static bool string_in_list(const char *str, const char *name)
  *     origin:      The origin of the request.
  *     commandtree: The command tree being listed.
  *     maincmds:    The commands to list verbosely.
- * 
+ *
  * outputs -
  *     A list of available commands.
  */

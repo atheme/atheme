@@ -74,7 +74,7 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);

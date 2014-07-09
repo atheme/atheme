@@ -66,7 +66,7 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&os_sgline_del, os_sgline_cmds);
 	command_delete(&os_sgline_list, os_sgline_cmds);
 	command_delete(&os_sgline_sync, os_sgline_cmds);
-	
+
 	hook_del_user_add(os_sgline_newuser);
 
 	mowgli_patricia_destroy(os_sgline_cmds, NULL, NULL);
@@ -98,7 +98,7 @@ static void os_cmd_sgline(sourceinfo_t *si, int parc, char *parv[])
 	/* Grab args */
 	char *cmd = parv[0];
 	command_t *c;
-	
+
 	/* Bad/missing arg */
 	if (!cmd)
 	{
@@ -190,7 +190,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mowgli_strlcat(reason, " ", BUFSIZE);
 			mowgli_strlcat(reason, treason, BUFSIZE);
-		}			
+		}
 	}
 
 	char *p;
@@ -229,7 +229,7 @@ static void os_cmd_sgline_add(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("SGLINE on \2%s\2 was successfully added."), x->realname);
 
-	verbose_wallops("\2%s\2 is \2adding\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), x->realname, 
+	verbose_wallops("\2%s\2 is \2adding\2 an \2SGLINE\2 for \2%s\2 -- reason: \2%s\2", get_oper_name(si), x->realname,
 		x->reason);
 	logcommand(si, CMDLOG_ADMIN, "SGLINE:ADD: \2%s\2 (reason: \2%s\2)", x->realname, x->reason);
 }
@@ -239,7 +239,7 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	xline_t *x;
 	unsigned int number;
-	char *s; 
+	char *s;
 
 	if (!target)
 	{
@@ -309,8 +309,8 @@ static void os_cmd_sgline_del(sourceinfo_t *si, int parc, char *parv[])
 		} while ((s = strtok(NULL, ",")));
 
 		return;
-	} 
-	
+	}
+
 	if (!(x = xline_find(target)))
 	{
 		command_fail(si, fault_nosuch_target, _("No such SGLINE: \2%s\2."), target);
@@ -335,7 +335,7 @@ static void os_cmd_sgline_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (param != NULL && !strcasecmp(param, "FULL"))
 		full = true;
-	
+
 	if (full)
 		command_success_nodata(si, _("SGLINE list (with reasons):"));
 	else

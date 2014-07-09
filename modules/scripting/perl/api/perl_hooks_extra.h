@@ -22,7 +22,7 @@ static void perl_hook_marshal_hook_expiry_req_t(perl_hook_marshal_direction_t di
 	{
 		HV *hash = newHV();
 		SV *sv_tmp = NULL;
-		/* Doesn't matter which we pick here; the package name determines what it'll be 
+		/* Doesn't matter which we pick here; the package name determines what it'll be
 		 * converted to before use. */
 		sv_tmp = bless_pointer_to_package(data->data.mc, packagename);
 		hv_store(hash, argname, strlen(argname), sv_tmp, 0);

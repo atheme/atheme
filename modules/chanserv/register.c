@@ -71,7 +71,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_notverified, _("You need to verify your email address before you may register channels."));
 		return;
 	}
-	
+
 	/* make sure it isn't already registered */
 	if ((mc = mychan_find(name)))
 	{

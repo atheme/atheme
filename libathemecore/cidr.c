@@ -1,5 +1,5 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * cidr.c: CIDR matching.
  *
  * Most code in this file has been copied from ratbox, src/match.c and
@@ -8,7 +8,7 @@
  *
  * Copyright (c) 1996-2002 Hybrid Development Team
  * Copyright (c) 2002-2005 ircd-ratbox development team
- * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

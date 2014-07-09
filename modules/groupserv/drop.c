@@ -41,7 +41,7 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: DROP <!group>"));
 		return;
 	}
-	
+
 	if (!(mg = mygroup_find(name)))
 	{
 		command_fail(si, fault_nosuch_target, _("Group \2%s\2 does not exist."), name);

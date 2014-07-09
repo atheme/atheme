@@ -43,7 +43,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("The group \2%s\2 does not exist."), parv[0]);
 		return;
 	}
-	
+
 	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FLAGS))
 	{
 		if (has_priv(si, PRIV_GROUP_AUSPEX))
@@ -167,7 +167,7 @@ no_founder:
 		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
 		return;
 	}
-	else 
+	else
 	{
 		if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{

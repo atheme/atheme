@@ -100,7 +100,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
-		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
+		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
 		return;
@@ -140,7 +140,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG \2%s\2, \2%s\2 (invalid key)", get_source_name(si), mu->email);
-		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
+		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."),
 			entity(mu)->name);
 
 		return;

@@ -6,7 +6,7 @@
  * Please read COPYING and README for further details.
  *
  * Based on the original code from Denora
- * 
+ *
  *
  */
 
@@ -217,7 +217,7 @@ static char *xmlrpc_parse(char *buffer)
 	char *tmp = NULL;
 
 	/*
-	   Okay since the buffer could contain 
+	   Okay since the buffer could contain
 	   HTTP header information, lets break
 	   off at the point that the <?xml?> starts
 	 */

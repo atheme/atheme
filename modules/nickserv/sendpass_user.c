@@ -53,7 +53,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: SENDPASS <account>"));
 		return;
 	}
-	
+
 	if (parc > 1)
 	{
 		if (!has_priv(si, PRIV_USER_SENDPASS))

@@ -26,7 +26,7 @@
 /*
  * make createtestdb
  * ./createtestdb 500000 >atheme.db
- * 
+ *
  * then start atheme-services with this atheme.db
  */
 

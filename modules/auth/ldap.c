@@ -9,7 +9,7 @@
  Supports the following options:
 
  url -- required ldap URL (e.g. ldap://host.domain.com/)
- 
+
  then either:
 
    dnformat -- basedn to authenticate against.  Use %s to specify where

@@ -431,7 +431,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				else
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			}
-			
+
 			if (reason)
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, nick, reason);
 			else
@@ -444,7 +444,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 			free(l);
 			return;
 		}
-		
+
 		if (!irccasecmp("*", nick))
 		{
 			if ((svs = service_find("memoserv")) != NULL)
@@ -463,7 +463,7 @@ static void hs_cmd_reject(sourceinfo_t *si, int parc, char *parv[])
 				else
 					notice(si->service->nick, u->nick, "[auto memo] Your requested vhost \2%s\2 for nick \2%s\2 has been rejected.", l->vhost, nick);
 			}
-		
+
 			if (reason)
 				logcommand(si, CMDLOG_REQUEST, "REJECT: \2%s\2 for \2%s\2, Reason: \2%s\2", l->vhost, l->nick, reason);
 			else

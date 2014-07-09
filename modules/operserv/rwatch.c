@@ -205,7 +205,7 @@ static void load_rwatchdb(char *path)
 		slog(LG_INFO, "The RWATCH database has been converted to the OpenSEX format.");
 		slog(LG_INFO, "The old RWATCH database now resides in rwatch.db.old which may be deleted.");
 	}
-	
+
 	if (rw != NULL)
 	{
 		free(rw->regex);

@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * confprocess.c: Generic configuration processing.
  *
- * Copyright (c) 2005-2008 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2008 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -211,7 +211,7 @@ static void set_default(struct ConfTable *ct)
 {
 	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
 		return;
-	
+
 	switch (ct->type)
 	{
 		case CONF_UINT:

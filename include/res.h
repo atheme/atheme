@@ -10,7 +10,7 @@
 #include "atheme.h"
 #include "reslib.h"
 
-/* Maximum number of nameservers in /etc/resolv.conf we care about 
+/* Maximum number of nameservers in /etc/resolv.conf we care about
  * In hybrid, this was 2 -- but in Charybdis, we want to track
  * a few more than that ;) --nenolod
  */

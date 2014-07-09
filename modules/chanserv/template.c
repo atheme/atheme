@@ -99,7 +99,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 		}
-		
+
 		if (metadata_find(mc, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
@@ -160,7 +160,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			}
 			restrictflags = allow_flags(mc, restrictflags);
 		}
-		
+
 		if (metadata_find(mc, "private:close:closer"))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);

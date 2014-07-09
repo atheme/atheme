@@ -149,7 +149,7 @@ mowgli_list_t happy_plot_list = { NULL, NULL, 0 };
  */
 typedef struct {
 	/*
-	 * As previously mentioned, a plot of land contains seeds.  All seeds on a 
+	 * As previously mentioned, a plot of land contains seeds.  All seeds on a
 	 * plot of land are the same type.  So, plot::plant == PLANT_CORN means
 	 * you're growing corn.
 	 */

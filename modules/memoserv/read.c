@@ -42,26 +42,26 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	char strfbuf[BUFSIZE];
 	struct tm tm;
 	bool readnew;
-	
+
 	/* Grab arg */
 	char *arg1 = parv[0];
-	
+
 	if (!arg1)
 	{
-		command_fail(si, fault_needmoreparams, 
+		command_fail(si, fault_needmoreparams,
 			STR_INSUFFICIENT_PARAMS, "READ");
-		
+
 		command_fail(si, fault_needmoreparams, _("Syntax: READ <memo number>"));
 		return;
 	}
-	
+
 	/* Check to see if any memos */
 	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, _("You have no memos."));
 		return;
 	}
-	
+
 	memonum = atoi(arg1);
 	readnew = !strcasecmp(arg1, "NEW");
 	if (!readnew && !memonum)
@@ -69,7 +69,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
 	}
-	
+
 	/* Check to see if memonum is greater than memocount */
 	if (memonum > si->smu->memos.count)
 	{
@@ -77,22 +77,22 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* Go to reading memos */	
+	/* Go to reading memos */
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		memo = (mymemo_t *)n->data;
 		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))
 		{
 			tm = *localtime(&memo->sent);
-			strftime(strfbuf, sizeof strfbuf, 
+			strftime(strfbuf, sizeof strfbuf,
 				TIME_FORMAT, &tm);
-			
+
 			if (!(memo->status & MEMO_READ))
 			{
 				memo->status |= MEMO_READ;
 				si->smu->memoct_new--;
 				tmu = myuser_find(memo->sender);
-				
+
 				/* If the sender is logged in, tell them the memo's been read */
 				/* but not for channel memos */
 				if (memo->status & MEMO_CHANNEL)
@@ -110,7 +110,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						receipt->status = 0;
 						mowgli_strlcpy(receipt->sender, si->service->nick, NICKLEN);
 						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", entity(si->smu)->name, strfbuf);
-						
+
 						/* Attach to their linked list */
 						n = mowgli_node_create();
 						mowgli_node_add(receipt, n, &tmu->memos);
@@ -118,15 +118,15 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 					}
 				}
 			}
-		
-			command_success_nodata(si, 
+
+			command_success_nodata(si,
 				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
-			
-			command_success_nodata(si, 
+
+			command_success_nodata(si,
 				"------------------------------------------");
-			
+
 			command_success_nodata(si, "%s", memo->text);
-			
+
 			if (!readnew)
 				return;
 			if (++numread >= MAX_READ_AT_ONCE && si->smu->memoct_new > 0)

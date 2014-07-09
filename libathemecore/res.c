@@ -15,7 +15,7 @@
  *     --Bleep (Thomas Helvey <tomh@inxpress.net>)
  *
  * This was all needlessly complicated for irc. Simplified. No more hostent
- * All we really care about is the IP -> hostname mappings. Thats all. 
+ * All we really care about is the IP -> hostname mappings. Thats all.
  *
  * Apr 28, 2003 --cryogen and Dianora
  *
@@ -155,7 +155,7 @@ static int res_ourserver(const sockaddr_any_t *inp)
 }
 
 /*
- * timeout_query_list - Remove queries from the list which have been 
+ * timeout_query_list - Remove queries from the list which have been
  * there too long without being resolved.
  */
 static time_t timeout_query_list(time_t now)
@@ -283,8 +283,8 @@ void add_local_domain(char *hname, size_t size)
 }
 
 /*
- * rem_request - remove a request from the list. 
- * This must also free any memory that has been allocated for 
+ * rem_request - remove a request from the list.
+ * This must also free any memory that has been allocated for
  * temporary storage of DNS results.
  */
 static void rem_request(struct reslist *request)
@@ -314,7 +314,7 @@ static struct reslist *make_request(dns_query_t *query)
 }
 
 /*
- * delete_resolver_queries - cleanup outstanding queries 
+ * delete_resolver_queries - cleanup outstanding queries
  * for which there no longer exist clients or conf lines.
  */
 void delete_resolver_queries(const dns_query_t *query)
@@ -357,7 +357,7 @@ static int retryfreq(int timeouts)
 /*
  * send_res_msg - sends msg to a nameserver.
  * This should reflect /etc/resolv.conf.
- * Returns number of nameserver successfully sent to 
+ * Returns number of nameserver successfully sent to
  * or -1 if no successful sends.
  */
 static int send_res_msg(const char *rmsg, int len, int rcount)
@@ -377,7 +377,7 @@ static int send_res_msg(const char *rmsg, int len, int rcount)
 		if (ns_timeout_count[ns] && retrycnt % retryfreq(ns_timeout_count[ns]))
 			continue;
 		if (sendto(res_fd->fd, rmsg, len, 0,
-		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr), 
+		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr),
 				irc_nsaddr_list[ns].saddr_len) == len)
 			return ns;
 	}
@@ -389,7 +389,7 @@ static int send_res_msg(const char *rmsg, int len, int rcount)
 		if (!ns_timeout_count[ns])
 			continue;
 		if (sendto(res_fd->fd, rmsg, len, 0,
-		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr), 
+		     (struct sockaddr *)&(irc_nsaddr_list[ns].saddr),
 				irc_nsaddr_list[ns].saddr_len) == len)
 			return ns;
 	}
@@ -416,7 +416,7 @@ static struct reslist *find_id(int id)
 	return (NULL);
 }
 
-/* 
+/*
  * gethost_byname_type - get host address from name
  *
  */
@@ -672,8 +672,8 @@ static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, c
 		rd_length = irc_ns_get16(current);
 		current += RDLENGTH_SIZE;
 
-		/* 
-		 * Wait to set request->type until we verify this structure 
+		/*
+		 * Wait to set request->type until we verify this structure
 		 */
 		switch (type)
 		{
@@ -742,8 +742,8 @@ static int proc_answer(struct reslist *request, RESHEADER * header, char *buf, c
 static int res_read_single_reply(connection_t *F)
 {
 	char buf[sizeof(RESHEADER) + MAXPACKET]
-		/* Sparc and alpha need 16bit-alignment for accessing header->id 
-		 * (which is uint16_t). Because of the header = (RESHEADER*) buf; 
+		/* Sparc and alpha need 16bit-alignment for accessing header->id
+		 * (which is uint16_t). Because of the header = (RESHEADER*) buf;
 		 * lateron, this is neeeded. --FaUl
 		 */
 #if defined(__sparc__) || defined(__alpha__)
@@ -812,7 +812,7 @@ static int res_read_single_reply(connection_t *F)
 		return 1;
 	}
 	/*
-	 * If this fails there was an error decoding the received packet, 
+	 * If this fails there was an error decoding the received packet,
 	 * give up. -- jilles
 	 */
 	answer_count = proc_answer(request, header, buf, buf + rc);
@@ -834,7 +834,7 @@ static int res_read_single_reply(connection_t *F)
 
 			/*
 			 * Lookup the 'authoritative' name that we were given for the
-			 * ip#. 
+			 * ip#.
 			 *
 			 */
 #ifdef RB_IPV6

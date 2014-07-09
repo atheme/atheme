@@ -1,8 +1,8 @@
 /*
- * atheme-services: A collection of minimalist IRC services   
+ * atheme-services: A collection of minimalist IRC services
  * logger.c: Logging routines
  *
- * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)           
+ * Copyright (c) 2005-2009 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -586,11 +586,11 @@ static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 		lf->write_func(lf, buf);
 	}
 
-	/* 
+	/*
 	 * if the event is in the default loglevel, and we are starting, then
 	 * display it in the controlling terminal.
 	 */
-	if (type != LOG_INTERACTIVE && ((runflags & (RF_LIVE | RF_STARTING) && 
+	if (type != LOG_INTERACTIVE && ((runflags & (RF_LIVE | RF_STARTING) &&
 		(log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
 		(runflags & RF_LIVE && log_force)))
 		fprintf(stderr, "%s %s\n", datetime, logfile_strip_control_codes(buf));

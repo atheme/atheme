@@ -81,8 +81,8 @@ void init_users(void)
  *     - if successful, a user is created and added to the users DTree.
  *     - if unsuccessful, a kill has been sent if necessary
  */
-user_t *user_add(const char *nick, const char *user, const char *host, 
-	const char *vhost, const char *ip, const char *uid, const char *gecos, 
+user_t *user_add(const char *nick, const char *user, const char *host,
+	const char *vhost, const char *ip, const char *uid, const char *gecos,
 	server_t *server, time_t ts)
 {
 	user_t *u, *u2;

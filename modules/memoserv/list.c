@@ -41,27 +41,27 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char line[512];
 	char chan[CHANNELLEN];
 	char *p;
-	
+
 	command_success_nodata(si, ngettext(N_("You have %zu memo (%d new)."),
 					    N_("You have %zu memos (%d new)."),
 					    si->smu->memos.count), si->smu->memos.count, si->smu->memoct_new);
-	
+
 	/* Check to see if any memos */
 	if (!si->smu->memos.count)
 		return;
 
 	/* Go to listing memos */
 	command_success_nodata(si, " ");
-	
+
 	MOWGLI_ITER_FOREACH(n, si->smu->memos.head)
 	{
 		i++;
 		memo = (mymemo_t *)n->data;
 		tm = *localtime(&memo->sent);
-		
-		strftime(strfbuf, sizeof strfbuf, 
+
+		strftime(strfbuf, sizeof strfbuf,
 			TIME_FORMAT, &tm);
-		
+
 		snprintf(line, sizeof line, _("- %d From: %s Sent: %s"),
 				i, memo->sender, strfbuf);
 		if (memo->status & MEMO_CHANNEL && *memo->text == '#')
@@ -82,7 +82,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, "%s", line);
 	}
-	
+
 	return;
 }
 

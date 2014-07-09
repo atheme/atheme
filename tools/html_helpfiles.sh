@@ -4,8 +4,8 @@
 #
 # Script to create simple HTML from the help files
 
-htmldir=${1:-tools/htmlhelp}
-helpdir=${2:-help/default}
+htmldir=${1:-../htmlhelp}
+helpdir=${2:-../help/default}
 
 mkdir -p "$htmldir"
 
