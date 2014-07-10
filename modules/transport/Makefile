@@ -6,7 +6,7 @@
 # $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-SUBDIRS = xmlrpc rfc1459
+SUBDIRS = xmlrpc rfc1459 jsonrpc
 MODULE = transport
 
 SRCS = p10.c
