@@ -1,0 +1,127 @@
+Atheme JSONRPC interface
+-----------------------
+
+The modules/transport/jsonrpc/main module provides an JSONRPC interface to Atheme.
+
+Atheme does not use HTTP authentication, instead using its own system with
+authentication cookies.
+
+JSONRPC is documented in http://json-rpc.org/. It's an exchange of JSON objects
+with a method, parameters, and id. The available methods and the parameters
+they take are documented below:
+
+Methods from modules/transport/jsonrpc:
+
+/*
+ * atheme.login
+ *
+ * Parameters:
+ *       [ account name, password, source ip (optional) ]
+ *
+ * Outputs:
+
+ *       If there is an error, an error object is returned with 'code' set to
+ *       one of the codes below, and 'message' to its corresponding message.
+         *       fault 1 - insufficient parameters
+         *       fault 3 - account is not registered
+         *       fault 5 - invalid username and password
+         *       fault 6 - account is frozen
+ *       If there is no error, the 'result' property of the returned object has
+ *       the authcookie
+
+ * Side Effects:
+ *       an authcookie ticket is created for the myuser_t.
+ *       the user's lastlogin is updated
+ */
+
+Source ip is logged with the request, it does not need to be an IP address.
+
+For web interfaces, the resulting authcookie can be stored in a HTTP cookie,
+avoiding password storage.
+
+The authcookie will be valid for one hour or until Atheme shuts down.
+
+/*
+ * atheme.logout
+ *
+ * Parameters:
+ *       [ authcookie, account name ]
+ *
+ * Outputs:
+ *       If there is an error, an error object is returned with 'code' set to
+ *       one of the codes below, and 'message' to its corresponding message.
+         *       fault 1 - insufficient parameters
+         *       fault 3 - unknown user
+         *       fault 5 - validation failed
+ *       If there is no error, the 'result' property of the returned object has
+ *       a success message
+
+ * Side Effects:
+ *       an authcookie ticket is destroyed.
+ */
+
+/*
+ * atheme.command
+ *
+ * Params:
+ *       [ authcookie, account name, source ip, service name, command name,
+ *       ... ] - The array values after the command name are all parameters
+ *
+ * Outputs:
+ *       Depends on command. Either an error object with error code and message
+ *       is returned, or a result string with the command's output.
+ *
+ * Side Effects:
+ *       command is executed
+ */
+
+/*
+ * atheme.privset
+ *
+ * Inputs:
+ *       [ authcookie, account name ]
+ *
+ * Outputs:
+ *       Privset for user, or error message
+ *
+*/
+
+Authcookie and account name specify authentication for the command; authcookie
+can be specified as '.' to execute a command without a login.
+Source ip is logged with the request, it does not need to be an IP address.
+Service name is the nick of the service.
+Command name is the command to be executed. Subcommand names are parameters.
+Parameters are specified in the same order as on IRC with mostly one distinct
+entity per parameter. Exceptions to this are for example operserv akill (two
+parameters), operserv rwatch (one parameter) and nickserv set property (two
+parameters in all cases).
+
+Failed commands return an appropriate fault code with the first descriptive
+string that would be returned on IRC. Most successful commands return all
+descriptive text that would be returned on IRC; some, such as chanserv getkey,
+return only a result string.
+
+For experimenting with parameters and results you can use contrib/os_testcmd.
+Usage is /os testcmd <servicename> <commandname> [parameters] where the
+parameters are separated with semicolons.
+
+Other methods:
+
+See the source code, modules/transport/jsonrpc/main.c.
+
+Fault codes:
+
+1 : fault_needmoreparams. Not enough parameters
+2 : fault_badparams. Parameters invalid somehow
+3 : fault_nosuch_source. Source account does not exist
+4 : fault_nosuch_target. Target does not exist
+5 : fault_authfail. Bad password or authcookie
+6 : fault_noprivs. Permission denied (various, but not bad password/authcookie)
+7 : fault_nosuch_key. Requested element on target does not exist
+8 : fault_alreadyexists. Something conflicting already exists
+9 : fault_toomany. Too many of something
+10 : fault_emailfail. Sending email failed
+11 : fault_notverified. Account not verified
+12 : fault_nochange. Object is already in requested state
+13 : fault_already_authed. Already logged in
+14 : fault_unimplemented. Function not implemented
