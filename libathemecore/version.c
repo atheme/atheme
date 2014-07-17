@@ -42,7 +42,7 @@ const char *infotext[] =
   "The following people have contributed blood, sweat and tears to",
   "this Atheme release:",
   "  Adam, Adam <adam@sigterm.info>",
-  "  aji, Alex Iadicicco <alex@theta4.com>",
+  "  aji, Alex Iadicicco <alex@ajitek.net>",
   "  alambert, Alex Lambert <alambert@quickfire.org>",
   "  beu, Elfyn McBratney <elfyn.mcbratney@gmail.com>",
   "  binki, Nathan Phillip Brink <ohnobinki@ohnopublishing.net>",
