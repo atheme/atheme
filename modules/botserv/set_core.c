@@ -55,7 +55,7 @@ static void bs_help_set(sourceinfo_t *si, const char *subcmd)
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 	}
 	else
-		help_display(si, si->service, subcmd, bs_set_cmdtree);
+		help_display_as_subcmd(si, si->service, "SET", subcmd, bs_set_cmdtree);
 }
 
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])

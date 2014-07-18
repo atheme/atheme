@@ -30,14 +30,32 @@ static bool command_has_help(command_t *cmd)
 	return (cmd->help.func != NULL || cmd->help.path != NULL);
 }
 
-static command_t *help_cmd_find(sourceinfo_t *si, const char *cmd, mowgli_patricia_t *list)
+static void no_help_available(sourceinfo_t *si, const char *subcmd_of, const char *cmd)
+{
+	const char *text;
+	char buf[512];
+
+	/* this "mess" is to keep from changing the number of gettext'd strings */
+
+	if (subcmd_of)
+	{
+		snprintf(buf, 512, "%s %s", subcmd_of, cmd);
+		text = buf;
+	}
+	else
+		text = cmd;
+
+	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), text);
+}
+
+static command_t *help_cmd_find(sourceinfo_t *si, const char *subcmd_of, const char *cmd, mowgli_patricia_t *list)
 {
 	command_t *c;
 
 	if ((c = mowgli_patricia_retrieve(list, cmd)) != NULL && command_has_help(c))
 		return c;
 
-	command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), cmd);
+	no_help_available(si, subcmd_of, cmd);
 
 	/* Fun for helpchan/helpurl. */
 	if (config_options.helpchan && config_options.helpurl)
@@ -95,7 +113,7 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return false;
 }
 
-void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list)
+void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list)
 {
 	command_t *c;
 	FILE *help_file = NULL;
@@ -109,7 +127,7 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 	subcmd = strtok(NULL, "");
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(si, ccommand, list)))
+	if ((c = help_cmd_find(si, subcmd_of, ccommand, list)))
 	{
 		if (c->help.path)
 		{
@@ -195,9 +213,14 @@ void help_display(sourceinfo_t *si, service_t *service, const char *command, mow
 			c->help.func(si, subcmd);
 		}
 		else
-			command_fail(si, fault_nosuch_target, _("No help available for \2%s\2."), command);
+			no_help_available(si, subcmd_of, command);
 	}
 	free(ccommand);
+}
+
+void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list)
+{
+	help_display_as_subcmd(si, service, NULL, command, list);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -35,6 +35,7 @@ E bool (*command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, cons
 
 /* help.c */
 E void help_display(sourceinfo_t *si, service_t *service, const char *command, mowgli_patricia_t *list);
+E void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *subcmd_of, const char *command, mowgli_patricia_t *list);
 
 /* logger.c */
 E void logaudit_denycmd(sourceinfo_t *si, command_t *cmd, const char *userlevel);

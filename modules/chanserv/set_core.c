@@ -53,7 +53,7 @@ static void cs_help_set(sourceinfo_t *si, const char *subcmd)
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 	}
 	else
-		help_display(si, si->service, subcmd, cs_set_cmdtree);
+		help_display_as_subcmd(si, si->service, "SET", subcmd, cs_set_cmdtree);
 }
 
 /* SET <#channel> <setting> <parameters> */
