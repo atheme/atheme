@@ -170,7 +170,6 @@ crypto
 
 misc
 ----
-- JSONRPC: A JSONRPC transport module was added.
 - xmlrpc: Add metadata accessor
 - security/cmdperm: New module which dynamically infers virtual
   permissions, such as command:chanserv:register
