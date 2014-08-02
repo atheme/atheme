@@ -44,6 +44,9 @@ static void opensex_h_grver(database_handle_t *db, const char *type)
 	opensex_t *rs = (opensex_t *)db->priv;
 	rs->grver = db_sread_int(db);
 	slog(LG_INFO, "opensex: grammar version is %d.", rs->grver);
+
+	if (rs->grver != 1)
+		slog(LG_ERROR, "opensex: grammar version %d is unsupported.  dazed and confused, but trying to continue.", rs->grver);
 }
 
 /***************************************************************************************************/
@@ -88,60 +91,16 @@ static const char *opensex_read_word(database_handle_t *db)
 	char *res;
 	static char buf[BUFSIZE];
 
-	switch (rs->grver)
+	res = rs->token;
+
+	ptr = strchr(res, ' ');
+	if (ptr != NULL)
 	{
-	case 2:
-		res = rs->token;
-
-		ptr = strchr(res, '(');
-		if (ptr != NULL)
-		{
-			char *bi, *pi;
-			bool escaped = false;
-
-			ptr++;
-			for (bi = buf, pi = ptr; *pi != '\0' && (bi - buf) < sizeof buf; pi++)
-			{
-				switch (*pi)
-				{
-				case '\\':
-					escaped = true;
-					pi++;
-					break;
-				case ')':
-					if (!escaped)
-						goto demarshal_out;
-				default:
-					*bi++ = *pi;
-					escaped = false;
-					break;
-				}
-			}
-demarshal_out:
-			*bi++ = '\0';
-			rs->token = pi;
-			res = buf;
-			slog(LG_DEBUG, "opensex_read_word(): read [%s], pi [%s]", res, pi);
-		}
-		else
-			rs->token = NULL;
-
-		break;
-	case 1:
-	default:
-		res = rs->token;
-
-		ptr = strchr(res, ' ');
-		if (ptr != NULL)
-		{
-			*ptr++ = '\0';
-			rs->token = ptr;
-		}
-		else
-			rs->token = NULL;
-
-		break;
+		*ptr++ = '\0';
+		rs->token = ptr;
 	}
+	else
+		rs->token = NULL;
 
 	db->token++;
 
@@ -153,22 +112,7 @@ static const char *opensex_read_str(database_handle_t *db)
 	opensex_t *rs = (opensex_t *)db->priv;
 	char *res;
 
-	switch (rs->grver)
-	{
-	case 2:
-		/*
-		 * no special handling needed for strings verses words.  all words are strings,
-		 * and all types derive from word, so all cells are encapsulated.
-		 */
-		return opensex_read_word(db);
-	case 1:
-	default:
-		/* rs->token will be pointing at the next cell always, and in grammar version 1
-		 * we just eat the remaining line if it's a multi-word cell. --nenolod
-		 */
-		res = rs->token;
-		break;
-	}
+	res = rs->token;
 
 	db->token++;
 	return res;
@@ -215,16 +159,7 @@ static bool opensex_start_row(database_handle_t *db, const char *type)
 	return_val_if_fail(type != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	switch (rs->grver)
-	{
-	case 2:
-		fprintf(rs->f, "(%s)", type);
-		break;
-	case 1:
-	default:
-		fprintf(rs->f, "%s ", type);
-		break;
-	}
+	fprintf(rs->f, "%s ", type);
 
 	return true;
 }
@@ -238,41 +173,7 @@ static bool opensex_write_cell(database_handle_t *db, const char *data, bool mul
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	switch (rs->grver)
-	{
-	case 2:
-		if (data == NULL)
-		{
-			fprintf(rs->f, "(*)");
-			break;
-		}
-
-		bi = buf;
-		*bi++ = '(';
-
-		for (i = data; *i != '\0'; i++)
-		{
-			switch (*i)
-			{
-			case '(':
-			case ')':
-				*bi++ = '\\';
-			default:
-				*bi++ = *i;
-				break;
-			}
-		}
-
-		*bi++ = ')';
-		*bi++ = '\0';
-
-		fprintf(rs->f, "%s", buf);
-		break;
-	case 1:
-	default:
-		fprintf(rs->f, "%s%s", data != NULL ? data : "*", !multiword ? " " : "");
-		break;
-	}
+	fprintf(rs->f, "%s%s", data != NULL ? data : "*", !multiword ? " " : "");
 
 	return true;
 }
@@ -315,14 +216,7 @@ static bool opensex_commit_row(database_handle_t *db)
 	return_val_if_fail(db != NULL, false);
 	rs = (opensex_t *)db->priv;
 
-	switch (rs->grver)
-	{
-	case 1:
-	case 2:
-	default:
-		fprintf(rs->f, "\n");
-		break;
-	}
+	fprintf(rs->f, "\n");
 
 	return true;
 }
@@ -416,11 +310,6 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	rs = scalloc(sizeof(opensex_t), 1);
 	rs->f = f;
 	rs->grver = 1;
-#ifndef EXPERIMENTAL
-	grver = 1;
-#else
-	grver = 2;
-#endif
 
 	db = scalloc(sizeof(database_handle_t), 1);
 	db->priv = rs;
@@ -431,7 +320,7 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	db->token = 0;
 
 	db_start_row(db, "GRVER");
-	db_write_int(db, grver);
+	db_write_int(db, rs->grver);
 	db_commit_row(db);
 
 	rs->grver = grver;
