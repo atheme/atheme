@@ -224,7 +224,7 @@ static void p10_unxline_sts(const char *server, const char *realname)
 
 static void p10_qline_sts(const char *server, const char *name, long duration, const char *reason)
 {
-	if (*name != '#' && *name != '&')
+	if (!VALID_CHANNEL_PFX(name))
 	{
 		slog(LG_INFO, "SQLINE: Could not set SQLINE on \2%s\2, not supported by ircu.", name);
 		return;
@@ -236,7 +236,7 @@ static void p10_qline_sts(const char *server, const char *name, long duration, c
 
 static void p10_unqline_sts(const char *server, const char *name)
 {
-	if (*name != '#' && *name != '&')
+	if (!VALID_CHANNEL_PFX(name))
 	{
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2, not supported by ircu.", name);
 		return;

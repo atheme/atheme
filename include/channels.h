@@ -13,6 +13,7 @@
 						((chan)->mychan != NULL ? (chan)->mychan : mychan_find((chan)->name)) : NULL)
 
 #define VALID_GLOBAL_CHANNEL_PFX(name)	(*(name) == '#' || *(name) == '+' || *(name) == '!')
+#define VALID_CHANNEL_PFX(name)		(VALID_GLOBAL_CHANNEL_PFX(name) || *(name) == '&')
 
 struct channel_
 {
