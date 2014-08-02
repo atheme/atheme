@@ -85,9 +85,9 @@ channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 	channel_t *c;
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!VALID_GLOBAL_CHANNEL_PFX(name))
 	{
-		slog(LG_DEBUG, "channel_add(): got non #channel: %s", name);
+		slog(LG_DEBUG, "channel_add(): got channel with invalid global prefix: %s", name);
 		return NULL;
 	}
 
@@ -354,9 +354,9 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	return_val_if_fail(chan->name != NULL, NULL);
 	return_val_if_fail(nick != NULL, NULL);
 
-	if (*chan->name != '#')
+	if (!VALID_GLOBAL_CHANNEL_PFX(chan->name))
 	{
-		slog(LG_DEBUG, "chanuser_add(): got non #channel: %s", chan->name);
+		slog(LG_DEBUG, "chanuser_add(): got an invalid global channel prefix: %s", chan->name);
 		return NULL;
 	}
 

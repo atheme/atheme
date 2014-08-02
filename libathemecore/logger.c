@@ -89,7 +89,7 @@ static void logfile_join_service(service_t *svs)
 	{
 		logfile_t *lf = n->data;
 
-		if (*lf->log_path != '#')
+		if (!VALID_GLOBAL_CHANNEL_PFX(lf->log_path))
 			continue;
 		c = channel_find(lf->log_path);
 		if (c == NULL || !(c->flags & CHAN_LOG))
@@ -362,7 +362,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		lf->log_type = LOG_INTERACTIVE;
 		lf->write_func = logfile_write_snotices;
 	}
-	else if (*path != '#')
+	else if (!VALID_GLOBAL_CHANNEL_PFX(path))
 	{
 		object_init(object(lf), path, logfile_delete_file);
 		if ((lf->log_file = fopen(path, "a")) == NULL)
