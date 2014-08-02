@@ -404,12 +404,6 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
-		if (chanv[i][0] != '#')
-		{
-			slog(LG_DEBUG, "m_part(): ignored non-# channel: %s", chanv[i]);
-			continue;
-		}
-
 		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, chanv[i]);
 
 		chanuser_delete(channel_find(chanv[i]), si->su);
@@ -520,12 +514,6 @@ static void m_chaninfo(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c;
 	const char *kmode, *lmode;
 	bool swap;
-
-	if (parv[0][0] != '#')
-	{
-		slog(LG_DEBUG, "m_chaninfo(): ignored non-# channel: %s", parv[0]);
-		return;
-	}
 
 	/* Differently from what ngircd does itself, accept all received
 	 * modes and topics. This should help somewhat with resolving the
@@ -747,12 +735,6 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			char *st = strchr(chanv[i], 0x07);
 			if (st != NULL)
 				*st++ = '\0';
-
-			if (chanv[i][0] != '#')
-			{
-				slog(LG_DEBUG, "m_join(): ignored non-# channel: %s", chanv[i]);
-				continue;
-			}
 
 			channel_t *c = channel_find(chanv[i]);
 
