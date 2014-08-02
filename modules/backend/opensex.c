@@ -92,6 +92,8 @@ static const char *opensex_read_word(database_handle_t *db)
 	static char buf[BUFSIZE];
 
 	res = rs->token;
+	if (res == NULL)
+		return NULL;
 
 	ptr = strchr(res, ' ');
 	if (ptr != NULL)
