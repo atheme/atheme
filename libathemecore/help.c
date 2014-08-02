@@ -141,7 +141,7 @@ void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *su
 				if (si->smu != NULL)
 				{
 					langname = language_get_real_name(si->smu->language);
-					if (!strcmp(langname, "en"))
+					if (langname && !strcmp(langname, "en"))
 						langname = NULL;
 				}
 				if (langname != NULL)
