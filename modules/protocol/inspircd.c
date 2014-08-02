@@ -260,7 +260,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	channel_t *target_c;
 	mychan_t *target_mc;
 
-	if (*value != '#' || strlen(value) > 50)
+	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
 		return false;
 	if (u == NULL && mu == NULL)
 		return true;
@@ -412,7 +412,7 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PRIVMSG %s :%s", from_p->uid, *target != '#' ? user->uid : target, buf);
+	sts(":%s PRIVMSG %s :%s", from_p->uid, !VALID_GLOBAL_CHANNEL_PFX(target) ? user->uid : target, buf);
 }
 
 static void inspircd_msg_global_sts(user_t *from, const char *mask, const char *text)
@@ -490,7 +490,7 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 
 	svs = service_find("operserv");
 
-	if (*name != '#')
+	if (!VALID_GLOBAL_CHANNEL_PFX(name))
 	{
 		sts(":%s ADDLINE Q %s %s %lu %ld :%s", me.numeric, name, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
 		return;
@@ -505,7 +505,7 @@ static void inspircd_qline_sts(const char *server, const char *name, long durati
 /* server-to-server UNQLINE wrapper */
 static void inspircd_unqline_sts(const char *server, const char *name)
 {
-	if (*name != '#')
+	if (!VALID_GLOBAL_CHANNEL_PFX(name))
 	{
 		sts(":%s QLINE %s", ME, name);
 		return;

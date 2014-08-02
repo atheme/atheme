@@ -108,7 +108,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	mychan_t *target_mc;
 	chanuser_t *target_cu;
 
-	if (*value != '#' || strlen(value) > 50)
+	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
 		return false;
 	if (u == NULL && mu == NULL)
 		return true;
