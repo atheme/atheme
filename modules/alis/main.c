@@ -132,7 +132,7 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 
 	if (parc < 1)
 		query->mask = sstrdup("*");
-	else if (parv[0][0] != '#' && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
+	else if (!VALID_GLOBAL_CHANNEL_PFX(parv[0]) && strchr(parv[0], '*') == NULL && strchr(parv[0], '?') == NULL)
 	{
 		size_t max = 1 + strlen(parv[0]) + 2;
 		query->mask = smalloc(max);
