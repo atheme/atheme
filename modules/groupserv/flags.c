@@ -144,7 +144,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mu, GA_FOUNDER))
 	{
-		if (mygroup_count_flag(mg, GA_FOUNDER) == 1 )
+		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;

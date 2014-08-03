@@ -59,6 +59,21 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 
 	flags = gs_flags_parser(parv[2], 1, flags);
 
+	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mu, GA_FOUNDER))
+	{
+		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
+		{
+			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
+			return;
+		}
+
+		if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+		{
+			command_fail(si, fault_noprivs, _("You may not remove a founder's +F access."));
+			return;
+		}
+	}
+
 	if (ga != NULL && flags != 0)
 		ga->flags = flags;
 	else if (ga != NULL)
