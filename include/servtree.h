@@ -36,7 +36,7 @@ struct service_ {
 	struct service_ *logtarget;
 };
 
-static inline service_get_log_target(const service_t *svs)
+static inline const char *service_get_log_target(const service_t *svs)
 {
 	if (svs->logtarget != NULL)
 		return service_get_log_target(svs->logtarget);
