@@ -772,7 +772,8 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 /* various access level checkers */
 bool is_founder(mychan_t *mychan, myentity_t *mt)
 {
-	return_val_if_fail(mt != NULL, false);
+	if (mt == NULL)
+		return false;
 
 	if (chanacs_entity_has_flag(mychan, mt, CA_FOUNDER))
 		return true;
