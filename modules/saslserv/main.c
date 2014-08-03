@@ -31,6 +31,7 @@ static void sasl_newuser(hook_user_nick_t *data);
 static void delete_stale(void *vptr);
 static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
+static void mechlist_build_string(char *ptr, size_t buflen);
 
 sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
@@ -301,6 +302,27 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	return NULL;
 }
 
+static void mechlist_build_string(char *ptr, size_t buflen)
+{
+	int l = 0;
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
+	{
+		sasl_mechanism_t *mptr = n->data;
+		if(l + strlen(mptr->name) > buflen)
+			break;
+		strcpy(ptr, mptr->name);
+		ptr += strlen(mptr->name);
+		*ptr++ = ',';
+		l += strlen(mptr->name) + 1;
+	}
+
+	if(l)
+		ptr--;
+	*ptr = '\0';
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -331,24 +353,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		if(!(p->mechptr = find_mechanism(mech)))
 		{
-			char temp[400], *ptr = temp;
-			int l = 0;
-			mowgli_node_t *n;
-
-			MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
-			{
-				sasl_mechanism_t *mptr = n->data;
-				if(l + strlen(mptr->name) > sizeof(temp))
-					break;
-				strcpy(ptr, mptr->name);
-				ptr += strlen(mptr->name);
-				*ptr++ = ',';
-				l += strlen(mptr->name) + 1;
-			}
-
-			if(l)
-				ptr--;
-			*ptr = '\0';
+			char temp[400];
+			mechlist_build_string(temp, sizeof(temp));
 
 			sasl_sts(p->uid, 'M', temp);
 
