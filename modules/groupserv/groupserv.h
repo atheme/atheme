@@ -13,6 +13,7 @@
 
 mygroup_t * (*mygroup_add)(const char *name);
 mygroup_t * (*mygroup_find)(const char *name);
+mygroup_t * (*mygroup_rename)(mygroup_t *mg, const char *name);
 
 unsigned int (*mygroup_count_flag)(mygroup_t *mg, unsigned int flag);
 unsigned int (*myuser_count_group_flag)(myuser_t *mu, unsigned int flagset);
@@ -36,6 +37,7 @@ static inline void use_groupserv_main_symbols(module_t *m)
     MODULE_TRY_REQUEST_DEPENDENCY(m, "groupserv/main");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_add, "groupserv/main", "mygroup_add");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_find, "groupserv/main", "mygroup_find");
+    MODULE_TRY_REQUEST_SYMBOL(m, mygroup_rename, "groupserv/main", "mygroup_rename");
     MODULE_TRY_REQUEST_SYMBOL(m, mygroup_count_flag, "groupserv/main", "mygroup_count_flag");
     MODULE_TRY_REQUEST_SYMBOL(m, myuser_count_group_flag, "groupserv/main", "myuser_count_group_flag");
     MODULE_TRY_REQUEST_SYMBOL(m, groupacs_add, "groupserv/main", "groupacs_add");

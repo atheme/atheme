@@ -27,6 +27,7 @@ BASE_SRCS =			\
 	set_channel.c		\
 	set_description.c	\
 	set_email.c		\
+	set_groupname.c		\
 	set_joinflags.c		\
 	set_open.c		\
 	set_public.c		\

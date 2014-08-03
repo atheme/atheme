@@ -396,3 +396,38 @@ void remove_group_chanacs(mygroup_t *mg)
 			object_unref(ca);
 	}
 }
+
+/*
+ * mygroup_rename(mygroup_t *mg, const char *name)
+ *
+ * Renames a group.
+ *
+ * Inputs:
+ *      - group to rename
+ *      - new name
+ *
+ * Outputs:
+ *      - nothing
+ *
+ * Side Effects:
+ *      - a group is renamed.
+ */
+void mygroup_rename(mygroup_t *mg, const char *name)
+{
+	stringref newname;
+	char nb[NICKLEN];
+
+	return_if_fail(mg != NULL);
+	return_if_fail(name != NULL);
+	return_if_fail(strlen(name) < NICKLEN);
+
+	mowgli_strlcpy(nb, entity(mg)->name, NICKLEN);
+	newname = strshare_get(name);
+
+	myentity_del(entity(mg));
+
+	strshare_unref(entity(mg)->name);
+	entity(mg)->name = newname;
+
+	myentity_put(entity(mg));
+}
