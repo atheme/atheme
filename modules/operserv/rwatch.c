@@ -319,7 +319,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 	rw->regex = sstrdup(pattern);
 	rw->reflags = flags;
 	rw->reason = sstrdup(reason);
-	rw->actions = RWACT_SNOOP;
+	rw->actions = RWACT_SNOOP | ((flags & AREGEX_KLINE) == AREGEX_KLINE ? RWACT_KLINE : 0);
 	rw->re = regex;
 
 	mowgli_node_add(rw, mowgli_node_create(), &rwatch_list);
