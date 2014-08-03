@@ -374,7 +374,7 @@ void service_delete(service_t *sptr)
 	mowgli_heap_free(service_heap, sptr);
 }
 
-service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]))
+service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), service_t *logtarget)
 {
 	service_t *sptr;
 	char internal_name[NICKLEN + 10];
@@ -389,6 +389,7 @@ service_t *service_add_static(const char *name, const char *user, const char *ho
 	sptr->host = sstrdup(host);
 	sptr->real = sstrdup(real);
 	sptr->botonly = true;
+	sptr->logtarget = logtarget;
 
 	servtree_update(NULL);
 

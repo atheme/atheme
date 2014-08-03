@@ -492,7 +492,7 @@ static void db_h_bot(database_handle_t *db, const char *type)
 	bot->real = sstrdup(real);
 	bot->private = private;
 	bot->registered = registered;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
 	service_set_chanmsg(bot->me, true);
 	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 }
@@ -658,7 +658,7 @@ static void bs_cmd_change(sourceinfo_t *si, int parc, char *parv[])
 			return;
 	}
 	bot->registered = CURRTIME;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
 	service_set_chanmsg(bot->me, true);
 
 	/* join it back and also update the metadata */
@@ -742,7 +742,7 @@ static void bs_cmd_add(sourceinfo_t *si, int parc, char *parv[])
 	bot->real = sstrdup(buf);
 	bot->private = false;
 	bot->registered = CURRTIME;
-	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler);
+	bot->me = service_add_static(bot->nick, bot->user, bot->host, bot->real, botserv_channel_handler, chansvs.me);
 	service_set_chanmsg(bot->me, true);
 	mowgli_node_add(bot, &bot->bnode, &bs_bots);
 

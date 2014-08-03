@@ -32,14 +32,24 @@ struct service_ {
 	mowgli_list_t conf_table;
 
 	bool botonly;
+
+	struct service_ *logtarget;
 };
+
+static inline service_get_log_target(const service_t *svs)
+{
+	if (svs->logtarget != NULL)
+		return service_get_log_target(svs->logtarget);
+
+	return svs != NULL ? svs->nick : me.name;
+}
 
 E mowgli_patricia_t *services_name;
 E mowgli_patricia_t *services_nick;
 
 E void servtree_init(void);
 E service_t *service_add(const char *name, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
-E service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]));
+E service_t *service_add_static(const char *name, const char *user, const char *host, const char *real, void (*handler)(sourceinfo_t *si, int parc, char *parv[]), service_t *logtarget);
 E void service_delete(service_t *sptr);
 E service_t *service_find_any(void);
 E service_t *service_find(const char *name);
