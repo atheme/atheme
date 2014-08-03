@@ -568,6 +568,9 @@ void service_named_bind_command(const char *svs, command_t *cmd)
 	return_if_fail(cmd != NULL);
 
 	sptr = service_find(svs);
+	if (sptr == NULL)
+		return;
+
 	service_bind_command(sptr, cmd);
 }
 
@@ -579,6 +582,9 @@ void service_named_unbind_command(const char *svs, command_t *cmd)
 	return_if_fail(cmd != NULL);
 
 	sptr = service_find(svs);
+	if (sptr == NULL)
+		return;
+
 	service_unbind_command(sptr, cmd);
 }
 
