@@ -29,6 +29,7 @@ static void sasl_write(char *target, char *data, int length);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
+static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
 static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
@@ -122,6 +123,8 @@ void _modinit(module_t *m)
 	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
 	hook_add_user_add(sasl_newuser);
+	hook_add_event("server_eob");
+	hook_add_server_eob(sasl_server_eob);
 	hook_add_event("sasl_may_impersonate");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", delete_stale, NULL, 30);
@@ -136,6 +139,7 @@ void _moddeinit(module_unload_intent_t intent)
 
 	hook_del_sasl_input(sasl_input);
 	hook_del_user_add(sasl_newuser);
+	hook_del_server_eob(sasl_server_eob);
 
 	mowgli_timer_destroy(base_eventloop, delete_stale_timer);
 
@@ -306,6 +310,12 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	slog(LG_DEBUG, "find_mechanism(): cannot find mechanism `%s'!", name);
 
 	return NULL;
+}
+
+static void sasl_server_eob(server_t *s)
+{
+	/* new server online, push mechlist to make sure it's using the current one */
+	sasl_mechlist_sts(mechlist_string);
 }
 
 static void mechlist_do_rebuild()
