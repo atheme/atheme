@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 
 mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;
+static char mechlist_string[400];
 
 sasl_session_t *find_session(const char *uid);
 sasl_session_t *make_session(const char *uid);
@@ -28,9 +29,12 @@ static void sasl_write(char *target, char *data, int length);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
+static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
 static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
+static void mechlist_build_string(char *ptr, size_t buflen);
+static void mechlist_do_rebuild();
 
 sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
@@ -79,6 +83,8 @@ static void sasl_mech_register(sasl_mechanism_t *mech)
 
 	node = mowgli_node_create();
 	mowgli_node_add(mech, node, &sasl_mechanisms);
+
+	mechlist_do_rebuild();
 }
 
 static void sasl_mech_unregister(sasl_mechanism_t *mech)
@@ -104,6 +110,8 @@ static void sasl_mech_unregister(sasl_mechanism_t *mech)
 		{
 			mowgli_node_delete(n, &sasl_mechanisms);
 			mowgli_node_free(n);
+
+			mechlist_do_rebuild();
 			break;
 		}
 	}
@@ -115,6 +123,8 @@ void _modinit(module_t *m)
 	hook_add_sasl_input(sasl_input);
 	hook_add_event("user_add");
 	hook_add_user_add(sasl_newuser);
+	hook_add_event("server_eob");
+	hook_add_server_eob(sasl_server_eob);
 	hook_add_event("sasl_may_impersonate");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", delete_stale, NULL, 30);
@@ -129,6 +139,7 @@ void _moddeinit(module_unload_intent_t intent)
 
 	hook_del_sasl_input(sasl_input);
 	hook_del_user_add(sasl_newuser);
+	hook_del_server_eob(sasl_server_eob);
 
 	mowgli_timer_destroy(base_eventloop, delete_stale_timer);
 
@@ -301,6 +312,42 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	return NULL;
 }
 
+static void sasl_server_eob(server_t *s)
+{
+	/* new server online, push mechlist to make sure it's using the current one */
+	sasl_mechlist_sts(mechlist_string);
+}
+
+static void mechlist_do_rebuild()
+{
+	mechlist_build_string(mechlist_string, sizeof(mechlist_string));
+
+	/* push mechanism list to the network */
+	if (me.connected)
+		sasl_mechlist_sts(mechlist_string);
+}
+
+static void mechlist_build_string(char *ptr, size_t buflen)
+{
+	int l = 0;
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
+	{
+		sasl_mechanism_t *mptr = n->data;
+		if(l + strlen(mptr->name) > buflen)
+			break;
+		strcpy(ptr, mptr->name);
+		ptr += strlen(mptr->name);
+		*ptr++ = ',';
+		l += strlen(mptr->name) + 1;
+	}
+
+	if(l)
+		ptr--;
+	*ptr = '\0';
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -331,26 +378,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		if(!(p->mechptr = find_mechanism(mech)))
 		{
-			char temp[400], *ptr = temp;
-			int l = 0;
-			mowgli_node_t *n;
-
-			MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
-			{
-				sasl_mechanism_t *mptr = n->data;
-				if(l + strlen(mptr->name) > sizeof(temp))
-					break;
-				strcpy(ptr, mptr->name);
-				ptr += strlen(mptr->name);
-				*ptr++ = ',';
-				l += strlen(mptr->name) + 1;
-			}
-
-			if(l)
-				ptr--;
-			*ptr = '\0';
-
-			sasl_sts(p->uid, 'M', temp);
+			sasl_sts(p->uid, 'M', mechlist_string);
 
 			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);
