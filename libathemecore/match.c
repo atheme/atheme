@@ -679,6 +679,8 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
 			*pflags |= AREGEX_ICASE;
 		else if (*p == 'p')
 			*pflags |= AREGEX_PCRE;
+		else if (*p == 'K')
+			*pflags |= AREGEX_KLINE;
 		else if (!isalnum(*p))
 			return NULL;
 		p++;

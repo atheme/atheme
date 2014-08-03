@@ -56,6 +56,7 @@ E char *collapse(char *);
 /* regex_create() flags */
 #define AREGEX_ICASE	1 /* case insensitive */
 #define AREGEX_PCRE	2 /* use libpcre engine */
+#define AREGEX_KLINE	4 /* XXX for rwatch, match kline */
 
 typedef struct atheme_regex_ atheme_regex_t;
 
