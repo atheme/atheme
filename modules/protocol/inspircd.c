@@ -711,6 +711,11 @@ static void inspircd_sasl_sts(char *target, char mode, char *data)
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, svs->me->uid, target, mode, data);
 }
 
+static void inspircd_sasl_mechlist_sts(const char *mechlist)
+{
+	sts(":%s METADATA * saslmechlist :%s", ME, mechlist);
+}
+
 static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
 {
 	if (has_shun)
@@ -1622,6 +1627,7 @@ void _modinit(module_t * m)
 	holdnick_sts = &inspircd_holdnick_sts;
 	svslogin_sts = &inspircd_svslogin_sts;
 	sasl_sts = &inspircd_sasl_sts;
+	sasl_mechlist_sts = &inspircd_sasl_mechlist_sts;
 	quarantine_sts = &inspircd_quarantine_sts;
 	mlock_sts = &inspircd_mlock_sts;
 	topiclock_sts = &inspircd_topiclock_sts;
