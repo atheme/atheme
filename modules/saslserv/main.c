@@ -17,6 +17,7 @@ DECLARE_MODULE_V1
 
 mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;
+static char mechlist_string[400];
 
 sasl_session_t *find_session(const char *uid);
 sasl_session_t *make_session(const char *uid);
@@ -32,6 +33,7 @@ static void delete_stale(void *vptr);
 static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
 static void mechlist_build_string(char *ptr, size_t buflen);
+static void mechlist_do_rebuild();
 
 sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
@@ -80,6 +82,8 @@ static void sasl_mech_register(sasl_mechanism_t *mech)
 
 	node = mowgli_node_create();
 	mowgli_node_add(mech, node, &sasl_mechanisms);
+
+	mechlist_do_rebuild();
 }
 
 static void sasl_mech_unregister(sasl_mechanism_t *mech)
@@ -105,6 +109,8 @@ static void sasl_mech_unregister(sasl_mechanism_t *mech)
 		{
 			mowgli_node_delete(n, &sasl_mechanisms);
 			mowgli_node_free(n);
+
+			mechlist_do_rebuild();
 			break;
 		}
 	}
@@ -302,6 +308,15 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	return NULL;
 }
 
+static void mechlist_do_rebuild()
+{
+	mechlist_build_string(mechlist_string, sizeof(mechlist_string));
+
+	/* push mechanism list to the network */
+	if (me.connected)
+		sasl_mechlist_sts(mechlist_string);
+}
+
 static void mechlist_build_string(char *ptr, size_t buflen)
 {
 	int l = 0;
@@ -353,10 +368,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		if(!(p->mechptr = find_mechanism(mech)))
 		{
-			char temp[400];
-			mechlist_build_string(temp, sizeof(temp));
-
-			sasl_sts(p->uid, 'M', temp);
+			sasl_sts(p->uid, 'M', mechlist_string);
 
 			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);
