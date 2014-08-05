@@ -237,6 +237,8 @@ E void (*topiclock_sts)(channel_t *c);
  * pretty much the same thing either way.
  */
 E void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason);
+/* Ask the proto module if this is valid as an extban */
+E bool (*is_extban)(const char *mask);
 
 E unsigned int generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
@@ -280,6 +282,7 @@ E bool generic_is_valid_nick(const char *nick);
 E void generic_mlock_sts(channel_t *c);
 E void generic_topiclock_sts(channel_t *c);
 E void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason);
+E bool generic_is_extban(const char *mask);
 
 E struct cmode_ *mode_list;
 E struct extmode *ignore_mode_list;

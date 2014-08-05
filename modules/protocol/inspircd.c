@@ -183,6 +183,16 @@ static mowgli_node_t *inspircd_next_matching_ban(channel_t *c, user_t *u, int ty
 	return NULL;
 }
 
+static bool inspircd_is_extban(const char *mask)
+{
+	const size_t mask_len = strlen(mask);
+	/* e.g R:Test */
+	if (mask_len < 2 || mask[1] != ':')
+		return false;
+
+	return true;
+}
+
 /* CAPABilities */
 static bool has_hideopermod = false;
 static bool has_servicesmod = false;
@@ -1631,6 +1641,7 @@ void _modinit(module_t * m)
 	quarantine_sts = &inspircd_quarantine_sts;
 	mlock_sts = &inspircd_mlock_sts;
 	topiclock_sts = &inspircd_topiclock_sts;
+	is_extban = &inspircd_is_extban;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;

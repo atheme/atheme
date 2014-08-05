@@ -280,6 +280,28 @@ static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const 
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 }
 
+static bool charybdis_is_extban(const char *mask)
+{
+	const char without_param[] = "oza";
+	const char with_param[] = "ajcxr";
+	const size_t mask_len = strlen(mask);
+	unsigned char offset = 0;
+
+	if ((mask_len < 2 || mask[0] != '$'))
+		return NULL;
+
+	if (mask_len > 2 && mask[1] == '~')
+		offset = 1;
+
+	/* e.g. $a and $~a */
+	if ((mask_len == 2 + offset) && strchr(without_param, mask[1 + offset]))
+		return true;
+	/* e.g. $~a:Shutter and $~a:Shutter */
+	else if ((mask_len >= 3 + offset) && mask[2 + offset] == ':' && strchr(with_param, mask[1 + offset]))
+		return true;
+	return false;
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
@@ -288,6 +310,7 @@ void _modinit(module_t * m)
 
 	next_matching_ban = &charybdis_next_matching_ban;
 	is_valid_host = &charybdis_is_valid_host;
+	is_extban = &charybdis_is_extban;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;
