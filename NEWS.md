@@ -31,6 +31,7 @@ perl api
 
 ircd protocol
 -------------
+- Add user flag for tracking external services clients
 - inspircd: Hopefully fix ignored account names when linking to the network
 - inspircd: Various improvements to InspIRCd 2.0 support
 - inspircd: Remove InspIRCd 1.2 and 2.1beta support
