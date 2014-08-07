@@ -469,7 +469,7 @@ void servtree_update(void *dummy)
 			if (u != NULL)
 				kill_user(NULL, u, "Nick taken by service");
 			sptr->me = user_add(sptr->nick, sptr->user, sptr->host, NULL, NULL, ircd->uses_uid ? uid_get() : NULL, sptr->real, me.me, CURRTIME);
-			sptr->me->flags |= UF_IRCOP | UF_INVIS;
+			sptr->me->flags |= UF_IRCOP | UF_INVIS | UF_SERVICE;
 			if ((sptr == chansvs.me) && !chansvs.fantasy)
 				sptr->me->flags |= UF_DEAF;
 

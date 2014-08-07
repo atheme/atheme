@@ -28,7 +28,7 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 	int fl;
 	bool noop;
 
-	if (is_internal_client(cu->user))
+	if (is_internal_client(cu->user) || is_service(cu->user))
 		return;
 
 	if (ca != NULL && ca->entity != NULL && cu->user->myuser != NULL)

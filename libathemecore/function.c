@@ -811,6 +811,14 @@ bool is_autokline_exempt(user_t *user)
 	return false;
 }
 
+bool is_service(user_t *user)
+{
+	if (UF_SERVICE & user->flags)
+		return true;
+
+	return false;
+}
+
 char *sbytes(float x)
 {
 	if (x > 1073741824.0)

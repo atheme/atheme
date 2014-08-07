@@ -101,11 +101,11 @@ static void ts6_introduce_nick(user_t *u)
 	const char *umode = user_get_umodestr(u);
 
 	if (ircd->uses_uid && use_euid)
-		sts(":%s EUID %s 1 %lu %sS %s %s 0 %s * * :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
+		sts(":%s EUID %s 1 %lu %s %s %s 0 %s * * :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
 	else if (ircd->uses_uid)
-		sts(":%s UID %s 1 %lu %sS %s %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
+		sts(":%s UID %s 1 %lu %s %s %s 0 %s :%s", me.numeric, u->nick, (unsigned long)u->ts, umode, u->user, u->host, u->uid, u->gecos);
 	else
-		sts("NICK %s 1 %lu %sS %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
+		sts("NICK %s 1 %lu %s %s %s %s :%s", u->nick, (unsigned long)u->ts, umode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
