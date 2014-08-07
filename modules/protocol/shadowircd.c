@@ -94,6 +94,7 @@ struct cmode_ shadowircd_user_mode_list[] = {
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { 'D', UF_DEAF     },
+  { 'S', UF_SERVICE  },
   { '\0', 0 }
 };
 

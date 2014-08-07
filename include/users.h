@@ -54,6 +54,7 @@ struct user_
 #define UF_ENFORCER    0x00001000 /* this is an enforcer client */
 #define UF_WASENFORCED 0x00002000 /* this user was FNCed once already */
 #define UF_DEAF        0x00004000 /* user does not receive channel msgs */
+#define UF_SERVICE     0x00008000 /* user is a service (e.g. +S on charybdis) */
 
 #define CLIENT_NAME(user)	((user)->uid != NULL ? (user)->uid : (user)->nick)
 
@@ -72,6 +73,7 @@ E bool is_ircop(user_t *user);
 E bool is_admin(user_t *user);
 E bool is_internal_client(user_t *user);
 E bool is_autokline_exempt(user_t *user);
+E bool is_service(user_t *user);
 
 /* users.c */
 E mowgli_patricia_t *userlist;
