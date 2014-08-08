@@ -26,12 +26,14 @@ E int match_mapping;
 #define C_ALPHA 0x00000001
 #define C_DIGIT 0x00000002
 #define C_NICK  0x00000004
+#define C_USER  0x00000008
 
 E const unsigned int charattrs[];
 
 #define IsAlpha(c)      (charattrs[(unsigned char) (c)] & C_ALPHA)
 #define IsDigit(c)      (charattrs[(unsigned char) (c)] & C_DIGIT)
 #define IsNickChar(c)   (charattrs[(unsigned char) (c)] & C_NICK)
+#define IsUserChar(c)   (charattrs[(unsigned char) (c)] & C_USER)
 #define IsAlphaNum(c)   (IsAlpha((c)) || IsDigit((c)))
 #define IsNon(c)        (!IsAlphaNum((c)))
 
