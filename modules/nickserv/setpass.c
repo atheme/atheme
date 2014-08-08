@@ -121,14 +121,16 @@ static void clear_setpass_key(user_t *u)
 
 static void show_setpass(hook_user_req_t *hdata)
 {
-	if (has_priv(hdata->si, PRIV_USER_AUSPEX)) {
+	if (has_priv(hdata->si, PRIV_USER_AUSPEX))
+	{
 		if (metadata_find(hdata->mu, "private:setpass:key"))
 			command_success_nodata(hdata->si, "%s has an active password reset key", entity(hdata->mu)->name);
 
 		metadata_t *md;
 		char strfbuf[BUFSIZE];
 
-		if (md = metadata_find(hdata->mu, "private:sendpass:sender")) {
+		if ((md = metadata_find(hdata->mu, "private:sendpass:sender")) != NULL)
+		{
 			const char *sender = md->value;
 			time_t ts;
 			struct tm tm;
