@@ -244,18 +244,18 @@ const char *mygroup_founder_names(mygroup_t *mg)
         return names;
 }
 
-unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
+unsigned int myentity_count_group_flag(myentity_t *mt, unsigned int flagset)
 {
 	mowgli_list_t *l;
 	mowgli_node_t *n;
 	unsigned int count = 0;
 
-	l = myentity_get_membership_list(entity(mu));
+	l = myentity_get_membership_list(mt);
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;
 
-		if (ga->mu == mu && ga->flags & flagset)
+		if (ga->mu == user(mt) && ga->flags & flagset)
 			count++;
 	}
 
