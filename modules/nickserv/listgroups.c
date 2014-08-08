@@ -66,7 +66,7 @@ static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_GET, "LISTGROUPS");
 	}
 
-	l = myuser_get_membership_list(mu);
+	l = myentity_get_membership_list(entity(mu));
 
 	if (MOWGLI_LIST_LENGTH(l) == 0)
 	{
@@ -78,10 +78,10 @@ static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
 	{
 		groupacs_t *ga = n->data;
 
-		if (ga->mu != mu)
+		if (ga->mt != entity(mu))
 			continue;
 
-		if (groupacs_find(ga->mg, mu, GA_BAN) != NULL)
+		if ((ga->flags & GA_BAN))
 		{
 			bans++;
 			continue;
