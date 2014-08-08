@@ -17,7 +17,7 @@ E mygroup_t *mygroup_add_id(const char *id, const char *name);
 E mygroup_t *mygroup_find(const char *name);
 
 E groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags);
-E groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags);
+E groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse);
 E void groupacs_delete(mygroup_t *mg, myentity_t *mt);
 
 E bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);

@@ -15,7 +15,7 @@ static chanacs_t *mygroup_chanacs_match_entity(chanacs_t *ca, myentity_t *mt)
 	if (!isuser(mt))
 		return NULL;
 
-	return groupacs_find(mg, mt, GA_CHANACS) != NULL ? ca : NULL;
+	return groupacs_find(mg, mt, GA_CHANACS, true) != NULL ? ca : NULL;
 }
 
 static bool mygroup_can_register_channel(myentity_t *mt)

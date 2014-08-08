@@ -59,7 +59,7 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((ga = groupacs_find(mg, entity(mu), 0)) != NULL)
+	if ((ga = groupacs_find(mg, entity(mu), 0, false)) != NULL)
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is already a member of \2%s\2."), user, group);
 		return;

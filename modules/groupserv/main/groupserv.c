@@ -134,9 +134,8 @@ groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 	return ga;
 }
 
-groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags)
+groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse)
 {
-	static bool recursing = false;
 	mowgli_node_t *n;
 
 	return_val_if_fail(mg != NULL, NULL);
@@ -146,13 +145,11 @@ groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 	{
 		groupacs_t *ga = n->data;
 
-		if (!recursing && isgroup(ga->mt))
+		if (isgroup(ga->mt) && allow_recurse)
 		{
 			groupacs_t *ga2;
 
-			recursing = true;
-			ga2 = groupacs_find(group(ga->mt), mt, flags);
-			recursing = false;
+			ga2 = groupacs_find(group(ga->mt), mt, flags, false);
 
 			if (ga2 != NULL)
 				return ga;
@@ -176,7 +173,7 @@ void groupacs_delete(mygroup_t *mg, myentity_t *mt)
 {
 	groupacs_t *ga;
 
-	ga = groupacs_find(mg, mt, 0);
+	ga = groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
 	{
 		mowgli_node_delete(&ga->gnode, &mg->acs);
@@ -187,14 +184,14 @@ void groupacs_delete(mygroup_t *mg, myentity_t *mt)
 
 bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
 {
-	return groupacs_find(mg, entity(si->smu), flag) != NULL;
+	return groupacs_find(mg, entity(si->smu), flag, true) != NULL;
 }
 
 unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, sourceinfo_t *si)
 {
 	groupacs_t *ga;
 
-	ga = groupacs_find(mg, entity(si->smu), 0);
+	ga = groupacs_find(mg, entity(si->smu), 0, true);
 	if (ga == NULL)
 		return 0;
 

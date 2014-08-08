@@ -19,7 +19,7 @@ unsigned int (*mygroup_count_flag)(mygroup_t *mg, unsigned int flag);
 unsigned int (*myentity_count_group_flag)(myentity_t *mu, unsigned int flagset);
 
 groupacs_t * (*groupacs_add)(mygroup_t *mg, myentity_t *mt, unsigned int flags);
-groupacs_t * (*groupacs_find)(mygroup_t *mg, myentity_t *mt, unsigned int flags);
+groupacs_t * (*groupacs_find)(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse);
 void (*groupacs_delete)(mygroup_t *mg, myentity_t *mt);
 
 bool (*groupacs_sourceinfo_has_flag)(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);

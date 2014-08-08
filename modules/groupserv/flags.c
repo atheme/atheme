@@ -103,13 +103,13 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (isuser(mt) && (MU_NEVERGROUP & user(mt)->flags) && (groupacs_find(mg, mt, 0) == NULL))
+	if (isuser(mt) && (MU_NEVERGROUP & user(mt)->flags) && (groupacs_find(mg, mt, 0, true) == NULL))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to have flags in any groups."), parv[1]);
 		return;
 	}
 
-	ga = groupacs_find(mg, mt, 0);
+	ga = groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
 		flags = ga->flags;
 
@@ -142,7 +142,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER))
+	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER, false))
 	{
 		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{

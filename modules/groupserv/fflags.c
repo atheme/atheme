@@ -53,13 +53,13 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	ga = groupacs_find(mg, mt, 0);
+	ga = groupacs_find(mg, mt, 0, false);
 	if (ga != NULL)
 		flags = ga->flags;
 
 	flags = gs_flags_parser(parv[2], 1, flags);
 
-	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER))
+	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mt, GA_FOUNDER, false))
 	{
 		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
