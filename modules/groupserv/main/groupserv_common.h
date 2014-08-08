@@ -43,6 +43,7 @@ struct mygroup_ {
 #define GA_BAN			0x00000040
 #define GA_INVITE		0x00000080
 #define GA_ALL			(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE)
+#define GA_ALL_OLD		(GA_FLAGS | GA_CHANACS | GA_MEMOS | GA_SET | GA_VHOST | GA_INVITE)
 
 #define PRIV_GROUP_ADMIN "group:admin"
 #define PRIV_GROUP_AUSPEX "group:auspex"
