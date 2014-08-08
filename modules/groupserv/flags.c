@@ -66,7 +66,7 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			ga = n->data;
 
-			command_success_nodata(si, "%-5d %-22s %s", i, entity(ga->mu)->name,
+			command_success_nodata(si, "%-5d %-22s %s", i, ga->mt->name,
 					       gflags_tostr(ga_flags, ga->flags));
 
 			i++;

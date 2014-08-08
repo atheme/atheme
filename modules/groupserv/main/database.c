@@ -43,7 +43,7 @@ static void write_groupdb(database_handle_t *db)
 
 			db_start_row(db, "GACL");
 			db_start_row(db, entity(mg)->name);
-			db_start_row(db, entity(ga->mu)->name);
+			db_start_row(db, mt->name);
 			db_start_row(db, flags);
 			db_commit_row(db);
 		}

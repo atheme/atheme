@@ -52,7 +52,7 @@ static void mygroup_delete(mygroup_t *mg)
 		groupacs_t *ga = n->data;
 
 		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myentity_get_membership_list(entity(ga->mu)));
+		mowgli_node_delete(&ga->unode, myentity_get_membership_list(ga->mt));
 		object_unref(ga);
 	}
 
@@ -125,7 +125,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	object_init(object(ga), NULL, (destructor_t) groupacs_des);
 
 	ga->mg = mg;
-	ga->mu = mu;
+	ga->mt = entity(mu);
 	ga->flags = flags;
 
 	mowgli_node_add(ga, &ga->gnode, &mg->acs);
@@ -147,10 +147,10 @@ groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 
 		if (flags)
 		{
-			if (ga->mu == mu && ga->mg == mg && (ga->flags & flags))
+			if (ga->mt == entity(mu) && ga->mg == mg && (ga->flags & flags))
 				return ga;
 		}
-		else if (ga->mu == mu && ga->mg == mg)
+		else if (ga->mt == entity(mu) && ga->mg == mg)
 			return ga;
 	}
 
@@ -234,11 +234,11 @@ const char *mygroup_founder_names(mygroup_t *mg)
         MOWGLI_ITER_FOREACH(n, mg->acs.head)
         {
                 ga = n->data;
-                if (ga->mu != NULL && ga->flags & GA_FOUNDER)
+                if (ga->mt != NULL && ga->flags & GA_FOUNDER)
                 {
                         if (names[0] != '\0')
                                 mowgli_strlcat(names, ", ", sizeof names);
-                        mowgli_strlcat(names, entity(ga->mu)->name, sizeof names);
+                        mowgli_strlcat(names, ga->mt->name, sizeof names);
                 }
         }
         return names;
@@ -255,7 +255,7 @@ unsigned int myentity_count_group_flag(myentity_t *mt, unsigned int flagset)
 	{
 		groupacs_t *ga = n->data;
 
-		if (ga->mu == user(mt) && ga->flags & flagset)
+		if (ga->mt == mt && ga->flags & flagset)
 			count++;
 	}
 

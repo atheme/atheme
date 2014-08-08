@@ -51,7 +51,7 @@ struct groupacs_ {
 	object_t parent;
 
 	mygroup_t *mg;
-	myuser_t *mu;
+	myentity_t *mt;
 	unsigned int flags;
 
 	mowgli_node_t gnode;

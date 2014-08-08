@@ -175,7 +175,7 @@ static void myuser_delete_hook(myuser_t *mu)
 	{
 		groupacs_t *ga = n->data;
 
-		groupacs_delete(ga->mg, ga->mu);
+		groupacs_delete(ga->mg, user(ga->mt));
 	}
 
 	mowgli_list_free(l);
