@@ -52,7 +52,7 @@ static void mygroup_delete(mygroup_t *mg)
 		groupacs_t *ga = n->data;
 
 		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myuser_get_membership_list(ga->mu));
+		mowgli_node_delete(&ga->unode, myentity_get_membership_list(entity(ga->mu)));
 		object_unref(ga);
 	}
 
@@ -129,7 +129,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 	ga->flags = flags;
 
 	mowgli_node_add(ga, &ga->gnode, &mg->acs);
-	mowgli_node_add(ga, &ga->unode, myuser_get_membership_list(mu));
+	mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(entity(mu)));
 
 	return ga;
 }
@@ -165,7 +165,7 @@ void groupacs_delete(mygroup_t *mg, myuser_t *mu)
 	if (ga != NULL)
 	{
 		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myuser_get_membership_list(mu));
+		mowgli_node_delete(&ga->unode, myentity_get_membership_list(entity(mu)));
 		object_unref(ga);
 	}
 }
@@ -210,18 +210,16 @@ unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag)
 	return count;
 }
 
-mowgli_list_t *myuser_get_membership_list(myuser_t *mu)
+mowgli_list_t *myentity_get_membership_list(myentity_t *mt)
 {
 	mowgli_list_t *l;
 
-	return_val_if_fail(isuser(mu), NULL);
-
-	l = privatedata_get(mu, "groupserv:membership");
+	l = privatedata_get(mt, "groupserv:membership");
 	if (l != NULL)
 		return l;
 
 	l = mowgli_list_create();
-	privatedata_set(mu, "groupserv:membership", l);
+	privatedata_set(mt, "groupserv:membership", l);
 
 	return l;
 }
@@ -252,7 +250,7 @@ unsigned int myuser_count_group_flag(myuser_t *mu, unsigned int flagset)
 	mowgli_node_t *n;
 	unsigned int count = 0;
 
-	l = myuser_get_membership_list(mu);
+	l = myentity_get_membership_list(entity(mu));
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
 		groupacs_t *ga = n->data;

@@ -34,7 +34,7 @@ E unsigned int gs_flags_parser(char *flagstring, int allow_minus, unsigned int f
 E void remove_group_chanacs(mygroup_t *mg);
 
 
-E mowgli_list_t *myuser_get_membership_list(myuser_t *mu);
+E mowgli_list_t *myentity_get_membership_list(myentity_t *mt);
 
 E const char *mygroup_founder_names(mygroup_t *mg);
 

@@ -31,7 +31,7 @@ static void grant_channel_access_hook(user_t *u)
 
 	return_if_fail(u->myuser != NULL);
 
-	l = myuser_get_membership_list(u->myuser);
+	l = myentity_get_membership_list(entity(u->myuser));
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
@@ -116,7 +116,7 @@ static void user_info_hook(hook_user_req_t *req)
 
 	*buf = 0;
 
-	l = myuser_get_membership_list(req->mu);
+	l = myentity_get_membership_list(entity(req->mu));
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
@@ -148,7 +148,7 @@ static void sasl_may_impersonate_hook(hook_sasl_may_impersonate_t *req)
 	if (req->allowed)
 		return;
 
-	l = myuser_get_membership_list(req->target_mu);
+	l = myentity_get_membership_list(entity(req->target_mu));
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
@@ -169,7 +169,7 @@ static void myuser_delete_hook(myuser_t *mu)
 	mowgli_node_t *n, *tn;
 	mowgli_list_t *l;
 
-	l = myuser_get_membership_list(mu);
+	l = myentity_get_membership_list(entity(mu));
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
