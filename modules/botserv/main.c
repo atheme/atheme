@@ -487,7 +487,11 @@ static void db_h_bot(database_handle_t *db, const char *type)
 
 	bot = scalloc(sizeof(botserv_bot_t), 1);
 	bot->nick = sstrdup(nick);
-	bot->user = sstrdup(user);
+
+	if (!is_valid_username(user))
+		user = "botserv";
+
+	bot->user = sstrndup(user, USERLEN - 1);
 	bot->host = sstrdup(host);
 	bot->real = sstrdup(real);
 	bot->private = private;
