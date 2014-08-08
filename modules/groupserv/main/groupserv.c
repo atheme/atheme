@@ -137,36 +137,44 @@ groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags, bool allow_recurse)
 {
 	mowgli_node_t *n;
+	groupacs_t *out = NULL;
 
 	return_val_if_fail(mg != NULL, NULL);
 	return_val_if_fail(mt != NULL, NULL);
+
+	mg->visited = true;
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
 		groupacs_t *ga = n->data;
 
-		if (isgroup(ga->mt) && allow_recurse)
+		if (out != NULL)
+			break;
+
+		if (isgroup(ga->mt) && allow_recurse && !(group(ga->mt)->visited))
 		{
 			groupacs_t *ga2;
 
-			ga2 = groupacs_find(group(ga->mt), mt, flags, false);
+			ga2 = groupacs_find(group(ga->mt), mt, flags, allow_recurse);
 
 			if (ga2 != NULL)
-				return ga;
+				out = ga;
 		}
 		else
 		{
 			if (flags)
 			{
 				if (ga->mt == mt && ga->mg == mg && (ga->flags & flags))
-					return ga;
+					out = ga;
 			}
 			else if (ga->mt == mt && ga->mg == mg)
-				return ga;
+				out = ga;
 		}
 	}
 
-	return NULL;
+	mg->visited = false;
+
+	return out;
 }
 
 void groupacs_delete(mygroup_t *mg, myentity_t *mt)

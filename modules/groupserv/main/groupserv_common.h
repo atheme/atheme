@@ -30,6 +30,8 @@ struct mygroup_ {
 	time_t regtime;
 
 	unsigned int flags;
+
+	bool visited;
 };
 
 #define GA_FOUNDER		0x00000001
