@@ -159,6 +159,12 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 
 		if (!gflags_fromstr(ga_flags, flagset, &flags))
 			slog(LG_INFO, "db-h-gacl: line %d: confused by flags: %s", db->line, flagset);
+
+		/* ACL view permission was added, so make up the permission (#279), but only if the database
+		 * is from atheme 7.1 or earlier. --kaniini
+		 */
+		if (!(their_ga_all & GA_ACLVIEW) && ((flags & GA_ALL_OLD) == their_ga_all))
+			flags |= GA_ACLVIEW;
 	}
 
 	groupacs_add(mg, mt, flags);
