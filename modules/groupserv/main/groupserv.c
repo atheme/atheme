@@ -136,6 +136,7 @@ groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 
 groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 {
+	static bool recursing = false;
 	mowgli_node_t *n;
 
 	return_val_if_fail(mg != NULL, NULL);
@@ -145,13 +146,27 @@ groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 	{
 		groupacs_t *ga = n->data;
 
-		if (flags)
+		if (!recursing && isgroup(ga->mt))
 		{
-			if (ga->mt == mt && ga->mg == mg && (ga->flags & flags))
+			groupacs_t *ga2;
+
+			recursing = true;
+			ga2 = groupacs_find(group(ga->mt), mt, flags);
+			recursing = false;
+
+			if (ga2 != NULL)
 				return ga;
 		}
-		else if (ga->mt == mt && ga->mg == mg)
-			return ga;
+		else
+		{
+			if (flags)
+			{
+				if (ga->mt == mt && ga->mg == mg && (ga->flags & flags))
+					return ga;
+			}
+			else if (ga->mt == mt && ga->mg == mg)
+				return ga;
+		}
 	}
 
 	return NULL;
