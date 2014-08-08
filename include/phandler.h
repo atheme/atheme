@@ -224,6 +224,8 @@ E mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_
 E mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first);
 /* check a nickname for validity; normally you don't need to override this */
 E bool (*is_valid_nick)(const char *nick);
+/* check a username for validity; normally you don't need to override this */
+E bool (*is_valid_username)(const char *username);
 /* check a vhost for validity; the core will already have checked for
  * @!?*, space, empty, : at start, length and cidr masks */
 E bool (*is_valid_host)(const char *host);
@@ -277,6 +279,7 @@ E mowgli_node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, mo
 E mowgli_node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, mowgli_node_t *first);
 E bool generic_is_valid_host(const char *host);
 E bool generic_is_valid_nick(const char *nick);
+E bool generic_is_valid_username(const char *username);
 E void generic_mlock_sts(channel_t *c);
 E void generic_topiclock_sts(channel_t *c);
 E void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason);

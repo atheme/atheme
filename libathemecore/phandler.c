@@ -63,6 +63,7 @@ mowgli_node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, mowgli_no
 mowgli_node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, mowgli_node_t *first) = generic_next_matching_host_chanacs;
 bool (*is_valid_nick)(const char *nick) = generic_is_valid_nick;
 bool (*is_valid_host)(const char *host) = generic_is_valid_host;
+bool (*is_valid_username)(const char *username) = generic_is_valid_username;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
 void (*topiclock_sts)(channel_t *c) = generic_topiclock_sts;
 void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason) = generic_quarantine_sts;
@@ -350,6 +351,19 @@ bool generic_is_valid_nick(const char *nick)
 	for (; *iter != '\0'; iter++)
 	{
 		if (!IsNickChar(*iter))
+			return false;
+	}
+
+	return true;
+}
+
+bool generic_is_valid_username(const char *username)
+{
+	const char *iter = username;
+
+	for (; *iter != '\0'; iter++)
+	{
+		if (!IsUserChar(*iter))
 			return false;
 	}
 
