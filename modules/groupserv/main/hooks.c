@@ -122,7 +122,7 @@ static void user_info_hook(hook_user_req_t *req)
 	{
 		groupacs_t *ga = n->data;
 
-		if (groupacs_find(ga->mg, req->mu, GA_BAN) != NULL)
+		if (ga->flags & GA_BAN)
 			continue;
 
 		if ((ga->mg->flags & MG_PUBLIC) || (req->si->smu == req->mu || has_priv(req->si, PRIV_GROUP_AUSPEX)))
@@ -175,7 +175,7 @@ static void myuser_delete_hook(myuser_t *mu)
 	{
 		groupacs_t *ga = n->data;
 
-		groupacs_delete(ga->mg, user(ga->mt));
+		groupacs_delete(ga->mg, ga->mt);
 	}
 
 	mowgli_list_free(l);

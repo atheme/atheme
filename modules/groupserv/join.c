@@ -78,7 +78,7 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	else
 		flags = gs_flags_parser(gs_config->join_flags, 0, flags);
 
-	ga = groupacs_add(mg, si->smu, flags);
+	ga = groupacs_add(mg, entity(si->smu), flags);
 
 	if (invited)
 		metadata_delete(si->smu, "private:groupinvite");

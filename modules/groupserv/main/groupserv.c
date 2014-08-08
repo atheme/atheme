@@ -114,32 +114,32 @@ static void groupacs_des(groupacs_t *ga)
 	mowgli_heap_free(groupacs_heap, ga);
 }
 
-groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags)
+groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 {
 	groupacs_t *ga;
 
 	return_val_if_fail(mg != NULL, NULL);
-	return_val_if_fail(mu != NULL, NULL);
+	return_val_if_fail(mt != NULL, NULL);
 
 	ga = mowgli_heap_alloc(groupacs_heap);
 	object_init(object(ga), NULL, (destructor_t) groupacs_des);
 
 	ga->mg = mg;
-	ga->mt = entity(mu);
+	ga->mt = mt;
 	ga->flags = flags;
 
 	mowgli_node_add(ga, &ga->gnode, &mg->acs);
-	mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(entity(mu)));
+	mowgli_node_add(ga, &ga->unode, myentity_get_membership_list(mt));
 
 	return ga;
 }
 
-groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
+groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags)
 {
 	mowgli_node_t *n;
 
 	return_val_if_fail(mg != NULL, NULL);
-	return_val_if_fail(mu != NULL, NULL);
+	return_val_if_fail(mt != NULL, NULL);
 
 	MOWGLI_ITER_FOREACH(n, mg->acs.head)
 	{
@@ -147,39 +147,39 @@ groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags)
 
 		if (flags)
 		{
-			if (ga->mt == entity(mu) && ga->mg == mg && (ga->flags & flags))
+			if (ga->mt == mt && ga->mg == mg && (ga->flags & flags))
 				return ga;
 		}
-		else if (ga->mt == entity(mu) && ga->mg == mg)
+		else if (ga->mt == mt && ga->mg == mg)
 			return ga;
 	}
 
 	return NULL;
 }
 
-void groupacs_delete(mygroup_t *mg, myuser_t *mu)
+void groupacs_delete(mygroup_t *mg, myentity_t *mt)
 {
 	groupacs_t *ga;
 
-	ga = groupacs_find(mg, mu, 0);
+	ga = groupacs_find(mg, mt, 0);
 	if (ga != NULL)
 	{
 		mowgli_node_delete(&ga->gnode, &mg->acs);
-		mowgli_node_delete(&ga->unode, myentity_get_membership_list(entity(mu)));
+		mowgli_node_delete(&ga->unode, myentity_get_membership_list(mt));
 		object_unref(ga);
 	}
 }
 
 bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag)
 {
-	return groupacs_find(mg, si->smu, flag) != NULL;
+	return groupacs_find(mg, entity(si->smu), flag) != NULL;
 }
 
 unsigned int groupacs_sourceinfo_flags(mygroup_t *mg, sourceinfo_t *si)
 {
 	groupacs_t *ga;
 
-	ga = groupacs_find(mg, si->smu, 0);
+	ga = groupacs_find(mg, entity(si->smu), 0);
 	if (ga == NULL)
 		return 0;
 

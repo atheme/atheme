@@ -16,9 +16,10 @@ E mygroup_t *mygroup_add(const char *name);
 E mygroup_t *mygroup_add_id(const char *id, const char *name);
 E mygroup_t *mygroup_find(const char *name);
 
-E groupacs_t *groupacs_add(mygroup_t *mg, myuser_t *mu, unsigned int flags);
-E groupacs_t *groupacs_find(mygroup_t *mg, myuser_t *mu, unsigned int flags);
-E void groupacs_delete(mygroup_t *mg, myuser_t *mu);
+E groupacs_t *groupacs_add(mygroup_t *mg, myentity_t *mt, unsigned int flags);
+E groupacs_t *groupacs_find(mygroup_t *mg, myentity_t *mt, unsigned int flags);
+E void groupacs_delete(mygroup_t *mg, myentity_t *mt);
+
 E bool groupacs_sourceinfo_has_flag(mygroup_t *mg, sourceinfo_t *si, unsigned int flag);
 
 E void gs_db_init(void);

@@ -53,13 +53,13 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	ga = groupacs_find(mg, mu, 0);
+	ga = groupacs_find(mg, entity(mu), 0);
 	if (ga != NULL)
 		flags = ga->flags;
 
 	flags = gs_flags_parser(parv[2], 1, flags);
 
-	if (!(flags & GA_FOUNDER) && groupacs_find(mg, mu, GA_FOUNDER))
+	if (!(flags & GA_FOUNDER) && groupacs_find(mg, entity(mu), GA_FOUNDER))
 	{
 		if (mygroup_count_flag(mg, GA_FOUNDER) == 1)
 		{
@@ -78,7 +78,7 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		ga->flags = flags;
 	else if (ga != NULL)
 	{
-		groupacs_delete(mg, mu);
+		groupacs_delete(mg, entity(mu));
 		command_success_nodata(si, _("\2%s\2 has been removed from \2%s\2."), entity(mu)->name, entity(mg)->name);
 		wallops("\2%s\2 is removing flags for \2%s\2 on \2%s\2", get_oper_name(si), entity(mu)->name, entity(mg)->name);
 		logcommand(si, CMDLOG_ADMIN, "FFLAGS:REMOVE: \2%s\2 on \2%s\2", entity(mu)->name, entity(mg)->name);
@@ -91,7 +91,7 @@ static void gs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
 			return;
 		}
-		ga = groupacs_add(mg, mu, flags);
+		ga = groupacs_add(mg, entity(mu), flags);
 	}
 
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)

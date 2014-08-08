@@ -109,15 +109,15 @@ static void db_h_grp(database_handle_t *db, const char *type)
 static void db_h_gacl(database_handle_t *db, const char *type)
 {
 	mygroup_t *mg;
-	myuser_t *mu;
+	myentity_t *mt;
 	unsigned int flags = GA_ALL;	/* GDBV 1 entires had full access */
 
 	const char *name = db_sread_word(db);
-	const char *user = db_sread_word(db);
+	const char *entity = db_sread_word(db);
 	const char *flagset;
 
 	mg = mygroup_find(name);
-	mu = myuser_find(user);
+	mt = myentity_find(entity);
 
 	if (mg == NULL)
 	{
@@ -125,9 +125,9 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 		return;
 	}
 
-	if (mu == NULL)
+	if (mt == NULL)
 	{
-		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent user %s", db->line, user);
+		slog(LG_INFO, "db-h-gacl: line %d: groupacs for nonexistent entity %s", db->line, entity);
 		return;
 	}
 
@@ -139,7 +139,7 @@ static void db_h_gacl(database_handle_t *db, const char *type)
 			slog(LG_INFO, "db-h-gacl: line %d: confused by flags: %s", db->line, flagset);
 	}
 
-	groupacs_add(mg, mu, flags);
+	groupacs_add(mg, mt, flags);
 }
 
 static void db_h_mdg(database_handle_t *db, const char *type)
