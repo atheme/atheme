@@ -638,6 +638,24 @@ const char *user_get_umodestr(user_t *u)
 	return result;
 }
 
+bool user_is_channel_banned(user_t *u, char ban_type)
+{
+	mowgli_node_t *n;
+
+	return_val_if_fail(u != NULL, false);
+	return_val_if_fail(ban_type != 0, false);
+
+	MOWGLI_ITER_FOREACH(n, u->channels.head)
+	{
+		chanuser_t *cu = n->data;
+
+		if (next_matching_ban(cu->chan, u, ban_type, cu->chan->bans.head) != NULL)
+			return true;
+	}
+
+	return false;
+}
+
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
