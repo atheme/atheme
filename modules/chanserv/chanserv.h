@@ -42,7 +42,7 @@ static inline void prefix_action_set(mowgli_list_t *actions, char *nick, bool en
 
 static inline void prefix_action_set_all(mowgli_list_t *actions, bool dfl, char *nicks)
 {
-	char *nick, *strtokctx;
+	char *nick, *strtokctx = NULL;
 	bool en;
 
 	nick = strtok_r(nicks, " ", &strtokctx);
