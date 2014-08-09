@@ -1213,25 +1213,25 @@ const char *mychan_get_mlock(mychan_t *mc)
 	if (mc->mlock_on)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, strcat(buf, "+");
-		strcat(buf, flags_to_string(mc->mlock_on));
+			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		mowgli_strlcat(buf, flags_to_string(mc->mlock_on), sizeof buf);
 	}
 
 	if (mc->mlock_limit)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, strcat(buf, "+");
-		strcat(buf, "l");
-		strcat(params, " ");
-		strcat(params, number_to_string(mc->mlock_limit));
+			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		mowgli_strlcat(buf, "l", sizeof buf);
+		mowgli_strlcat(params, " ", sizeof params);
+		mowgli_strlcat(params, number_to_string(mc->mlock_limit), sizeof params);
 	}
 
 	if (mc->mlock_key)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, strcat(buf, "+");
-		strcat(buf, "k");
-		strcat(params, " *");
+			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		mowgli_strlcat(buf, "k", sizeof buf);
+		mowgli_strlcat(params, " *", sizeof params);
 	}
 
 	if (md)
@@ -1245,7 +1245,7 @@ const char *mychan_get_mlock(mychan_t *mc)
 				if (dir != MTYPE_ADD)
 					dir = MTYPE_ADD, *q++ = '+';
 				*q++ = *p++;
-				strcat(params, " ");
+				mowgli_strlcat(params, " ", sizeof params);
 				qq = params + strlen(params);
 				while (*p != '\0' && *p != ' ')
 					*qq++ = *p++;
@@ -1266,12 +1266,12 @@ const char *mychan_get_mlock(mychan_t *mc)
 	if (mc->mlock_off)
 	{
 		if (dir != MTYPE_DEL)
-			dir = MTYPE_DEL, strcat(buf, "-");
-		strcat(buf, flags_to_string(mc->mlock_off));
+			dir = MTYPE_DEL, mowgli_strlcat(buf, "-", sizeof buf);
+		mowgli_strlcat(buf, flags_to_string(mc->mlock_off), sizeof buf);
 		if (mc->mlock_off & CMODE_LIMIT)
-			strcat(buf, "l");
+			mowgli_strlcat(buf, "l", sizeof buf);
 		if (mc->mlock_off & CMODE_KEY)
-			strcat(buf, "k");
+			mowgli_strlcat(buf, "k", sizeof buf);
 	}
 
 	if (md)
