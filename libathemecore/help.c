@@ -95,15 +95,13 @@ static bool evaluate_condition(sourceinfo_t *si, const char *s)
 		return has_any_privs(si);
 	else if (!strcmp(word, "priv"))
 	{
-		q = strchr(p, ' ');
-		if (q != NULL)
+		if (p != NULL && (q = strchr(p, ' ')) != NULL)
 			*q = '\0';
 		return has_priv(si, p);
 	}
 	else if (!strcmp(word, "module"))
 	{
-		q = strchr(p, ' ');
-		if (q != NULL)
+		if (p != NULL && (q = strchr(p, ' ')) != NULL)
 			*q = '\0';
 		return module_find_published(p) != NULL;
 	}
