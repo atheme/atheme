@@ -257,7 +257,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	chanban_t *cb;
 	int n;
 	char *targetlist;
-	char *strtokctx;
+	char *strtokctx = NULL;
 	enum devoice_result devoice_result;
 
 	if (!channel || !target)
