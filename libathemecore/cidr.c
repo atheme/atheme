@@ -315,6 +315,9 @@ match_cidr(const char *s1, const char *s2)
 	char *len;
 	int cidrlen;
 
+	return_val_if_fail(s1 != NULL, 1);
+	return_val_if_fail(s2 != NULL, 1);
+
 	mowgli_strlcpy(mask, s1, sizeof mask);
 	mowgli_strlcpy(address, s2, sizeof address);
 
