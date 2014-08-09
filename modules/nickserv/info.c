@@ -247,8 +247,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 				buf[0] = '\0';
 			}
 			if (buf[0])
-				strcat(buf, " ");
-			strcat(buf, ((user_t *)(n->data))->nick);
+				mowgli_strlcat(buf, " ", sizeof buf);
+			mowgli_strlcat(buf, ((user_t *)(n->data))->nick, sizeof buf);
 		}
 		if (buf[0])
 			command_success_nodata(si, _("Logins from: %s"), buf);
@@ -278,8 +278,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 					buf[0] = '\0';
 				}
 				if (buf[0])
-					strcat(buf, " ");
-				strcat(buf, ((mynick_t *)(n->data))->nick);
+					mowgli_strlcat(buf, " ", sizeof buf);
+				mowgli_strlcat(buf, ((mynick_t *)(n->data))->nick, sizeof buf);
 			}
 			if (buf[0])
 				command_success_nodata(si, _("Nicks      : %s"), buf);
