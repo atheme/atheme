@@ -94,7 +94,7 @@ static const char *get_template_name(mychan_t *mc, unsigned int level)
 	return iter.res;
 }
 
-static void do_list(sourceinfo_t *si, mychan_t *mc)
+static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 {
 	chanacs_t *ca;
 	mowgli_node_t *n;
@@ -122,6 +122,10 @@ static void do_list(sourceinfo_t *si, mychan_t *mc)
 		char mod_date[64];
 
 		ca = n->data;
+
+		if (flags && !(ca->level & flags))
+			continue;
+
 		template = get_template_name(mc, ca->level);
 		mod_ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 
@@ -179,9 +183,11 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!target)
+	if (!target || (target && !is_valid_nick(target)))
 	{
-		do_list(si, mc);
+		unsigned int flags = (target != NULL) ? flags_to_bitmask(target, 0) : 0;
+
+		do_list(si, mc, flags);
 		return;
 	}
 
@@ -214,7 +220,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	else if (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
 	{
-		do_list(si, mc);
+		do_list(si, mc, 0);
 		free(target);
 
 		return;
