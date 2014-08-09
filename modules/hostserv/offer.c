@@ -255,7 +255,7 @@ static bool myuser_is_in_group(myuser_t *mu, myentity_t *mt)
 	{
 		groupacs_t *ga = n->data;
 
-		if (ga->mu == mu && ga->flags & GA_VHOST)
+		if (ga->mt == entity(mu) && ga->flags & GA_VHOST)
 			return true;
 	}
 
