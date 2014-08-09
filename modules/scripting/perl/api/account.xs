@@ -108,3 +108,10 @@ CODE:
     }
 OUTPUT:
     RETVAL
+
+unsigned int
+flags(Atheme_Account self)
+CODE:
+    RETVAL = self->flags;
+OUTPUT:
+    RETVAL
