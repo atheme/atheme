@@ -191,7 +191,7 @@ static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u
 	ep = evalbuf + 1;
 
 	/* check that the parameter ends with a ] */
-	if ((p = strchr(ep, ']')) != NULL)
+	if ((p = strchr(ep, ']')) == NULL)
 		return false;
 
 	/* we have a ], blast it away and check for a colon. */
