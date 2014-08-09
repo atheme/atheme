@@ -30,7 +30,7 @@ E void gs_hooks_deinit(void);
 
 E void mygroup_set_chanacs_validator(myentity_t *mt);
 E unsigned int mygroup_count_flag(mygroup_t *mg, unsigned int flag);
-E unsigned int gs_flags_parser(char *flagstring, int allow_minus, unsigned int flags);
+E unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags);
 E void remove_group_chanacs(mygroup_t *mg);
 
 E mowgli_list_t *myentity_get_membership_list(myentity_t *mt);

@@ -283,7 +283,7 @@ unsigned int myentity_count_group_flag(myentity_t *mt, unsigned int flagset)
 	return count;
 }
 
-unsigned int gs_flags_parser(char *flagstring, int allow_minus, unsigned int flags)
+unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int flags)
 {
 	char *c;
 	unsigned int dir = 0;
@@ -297,12 +297,10 @@ unsigned int gs_flags_parser(char *flagstring, int allow_minus, unsigned int fla
 		case '+':
 			dir = 0;
 			break;
-		if (allow_minus == 1)
-		{
-			case '-':
+		case '-':
+			if (allow_minus)
 				dir = 1;
-				break;
-		}
+			break;
 		case '*':
 			if (dir)
 				flags = 0;
