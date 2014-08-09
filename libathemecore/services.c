@@ -639,20 +639,24 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	if ((md_failnum = metadata_find(mu, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
 	{
 		metadata_t *md_failtime, *md_failaddr;
-		time_t ts;
+		time_t ts = CURRTIME;
 
 		notice(svs->me->nick, u->nick, "\2%d\2 failed %s since last login.",
 			atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins");
 
 		md_failtime = metadata_find(mu, "private:loginfail:lastfailtime");
-		ts = atol(md_failtime->value);
+		if (md_failtime != NULL)
+			ts = atol(md_failtime->value);
+
 		md_failaddr = metadata_find(mu, "private:loginfail:lastfailaddr");
+		if (md_failaddr != NULL)
+		{
+			tm = *localtime(&ts);
+			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
-
-		notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
-			md_failaddr->value, strfbuf);
+			notice(svs->me->nick, u->nick, "Last failed attempt from: \2%s\2 on %s.",
+				md_failaddr->value, strfbuf);
+		}
 
 		metadata_delete(mu, "private:loginfail:failnum");	/* md_failnum now invalid */
 		metadata_delete(mu, "private:loginfail:lastfailtime");
