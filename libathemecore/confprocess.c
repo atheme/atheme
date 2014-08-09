@@ -162,6 +162,10 @@ bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *
 	const char *unit;
 	char *end;
 
+	return_val_if_fail(ce != NULL, false);
+	return_val_if_fail(var != NULL, false);
+	return_val_if_fail(defunit != NULL, false);
+
 	if (ce->vardata == NULL)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
@@ -209,6 +213,8 @@ bool process_duration_configentry(mowgli_config_file_entry_t *ce, unsigned int *
 
 static void set_default(struct ConfTable *ct)
 {
+	return_if_fail(ct != NULL);
+
 	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
 		return;
 
@@ -236,6 +242,9 @@ static void set_default(struct ConfTable *ct)
 
 static void process_configentry(struct ConfTable *ct, mowgli_config_file_entry_t *ce)
 {
+	return_if_fail(ct != NULL);
+	return_if_fail(ce != NULL);
+
 	if (ct->flags & CONF_NO_REHASH && runflags & RF_REHASHING)
 		return;
 
@@ -295,6 +304,8 @@ void conf_process(mowgli_config_file_t *cfp)
 	struct ConfTable *ct = NULL;
 	struct ConfTable *loadmodule = NULL;
 
+	return_if_fail(cfp != NULL);
+
 	MOWGLI_ITER_FOREACH(tn, confblocks.head)
 	{
 		ct = tn->data;
@@ -347,6 +358,9 @@ int subblock_handler(mowgli_config_file_entry_t *ce, mowgli_list_t *entries)
 	mowgli_node_t *tn;
 	struct ConfTable *ct = NULL;
 
+	return_val_if_fail(ce != NULL, 0);
+	return_val_if_fail(entries != NULL, 0);
+
 	MOWGLI_ITER_FOREACH(tn, entries->head)
 	{
 		ct = tn->data;
@@ -378,6 +392,8 @@ struct ConfTable *find_top_conf(const char *name)
 	mowgli_node_t *n;
 	struct ConfTable *ct;
 
+	return_val_if_fail(name != NULL, NULL);
+
 	MOWGLI_ITER_FOREACH(n, confblocks.head)
 	{
 		ct = n->data;
@@ -394,6 +410,9 @@ struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 	mowgli_node_t *n;
 	struct ConfTable *ct;
 
+	return_val_if_fail(name != NULL, NULL);
+	return_val_if_fail(conflist != NULL, NULL);
+
 	MOWGLI_ITER_FOREACH(n, conflist->head)
 	{
 		ct = n->data;
@@ -408,6 +427,9 @@ struct ConfTable *find_conf_item(const char *name, mowgli_list_t *conflist)
 void add_top_conf(const char *name, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	struct ConfTable *ct;
+
+	return_if_fail(name != NULL);
+	return_if_fail(handler != NULL);
 
 	if (find_top_conf(name))
 	{
@@ -430,6 +452,9 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 {
 	struct ConfTable *ct;
 
+	return_if_fail(name != NULL);
+	return_if_fail(list != NULL);
+
 	if (find_top_conf(name))
 	{
 		slog(LG_DEBUG, "add_top_conf(): duplicate config block '%s'.", name);
@@ -450,6 +475,10 @@ void add_subblock_top_conf(const char *name, mowgli_list_t *list)
 void add_conf_item(const char *name, mowgli_list_t *conflist, int (*handler) (mowgli_config_file_entry_t *ce))
 {
 	struct ConfTable *ct;
+
+	return_if_fail(name != NULL);
+	return_if_fail(conflist != NULL);
+	return_if_fail(handler != NULL);
 
 	if (find_conf_item(name, conflist))
 	{
@@ -563,6 +592,8 @@ void del_top_conf(const char *name)
 {
 	struct ConfTable *ct;
 
+	return_if_fail(name != NULL);
+
 	if (!(ct = find_top_conf(name)))
 	{
 		slog(LG_DEBUG, "del_top_conf(): cannot delete nonexistant block %s", name);
@@ -579,6 +610,9 @@ void del_top_conf(const char *name)
 void del_conf_item(const char *name, mowgli_list_t *conflist)
 {
 	struct ConfTable *ct;
+
+	return_if_fail(name != NULL);
+	return_if_fail(conflist != NULL);
 
 	if (!(ct = find_conf_item(name, conflist)))
 	{
@@ -600,6 +634,8 @@ void del_conf_item(const char *name, mowgli_list_t *conflist)
 
 conf_handler_t conftable_get_conf_handler(struct ConfTable *ct)
 {
+	return_val_if_fail(ct != NULL, NULL);
+
 	return ct->type == CONF_HANDLER ? ct->un.handler : NULL;
 }
 
@@ -608,21 +644,19 @@ int token_to_value(struct Token token_table[], const char *token)
 {
 	int i;
 
-	if ((token_table != NULL) && (token != NULL))
+	return_val_if_fail(token_table != NULL, TOKEN_ERROR);
+	return_val_if_fail(token != NULL, TOKEN_ERROR);
+
+	for (i = 0; token_table[i].text != NULL; i++)
 	{
-		for (i = 0; token_table[i].text != NULL; i++)
+		if (strcasecmp(token_table[i].text, token) == 0)
 		{
-			if (strcasecmp(token_table[i].text, token) == 0)
-			{
-				return token_table[i].value;
-			}
+			return token_table[i].value;
 		}
-		/* If no match... */
-		return TOKEN_UNMATCHED;
 	}
 
 	/* Otherwise... */
-	return TOKEN_ERROR;
+	return TOKEN_UNMATCHED;
 }
 
 void init_confprocess(void)
