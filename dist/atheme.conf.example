@@ -109,11 +109,12 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
- * PBKDF2 cryptography                          modules/crypto/pbkdf2
- * POSIX-style crypt(3)                         modules/crypto/posix
- * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
+ * PBKDF2-SHA-256                               modules/crypto/pbkdf2
+ * PBKDF2-SHA-1 (required for SASL SCRAM-SHA-1) modules/crypto/pbkdf2_sha1
+ * POSIX crypt(3)-style salted MD5              modules/crypto/posix
+ * IRCServices, Anope, etc. compatibility       modules/crypto/ircservices
  * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
- * Raw SHA1 (Anope compatibility)               modules/crypto/rawsha1
+ * Raw SHA-1 (Anope compatibility)              modules/crypto/rawsha1
  *
  * The ircservices, rawmd5 and rawsha1 modules are only recommended for use with
  * a database converted from other services with password encryption.
@@ -536,23 +537,30 @@ loadmodule "modules/infoserv/main";
  * PLAIN mechanism                              modules/saslserv/plain
  * DH-BLOWFISH mechanism (DEPRECATED)           modules/saslserv/dh-blowfish
  * DH-AES mechanism                             modules/saslserv/dh-aes
- * ECDSA-NIST256p-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
- * AUTHCOOKIE mechanism (for IRIS)              modules/saslserv/authcookie
+ * ECDSA-NIST256p-CHALLENGE mechanism           modules/saslserv/ecdsa-nist256p-challenge
+ * AUTHCOOKIE mechanism (for Iris)              modules/saslserv/authcookie
  * EXTERNAL mechanism (IRCv3.1+)                modules/saslserv/external
+ * SCRAM-SHA-1 mechanism                        modules/saslserv/scram-sha-1
  *
  * DH-BLOWFISH has potential issues with weak keys unless the DH parameters
  * are selected to avoid them. Its use is discouraged. Use DH-AES and/or
  * ECDSA-NIST256p-CHALLENGE if at all possible.
  *
- * DH-BLOWFISH, DH-AES, and ECDSA-NIST256p-CHALLENGE all require SSL.
+ * DH-BLOWFISH, DH-AES, ECDSA-NIST256p-CHALLENGE, and SCRAM-SHA-1 require OpenSSL.
+ *
+ * SCRAM-SHA-1 only works if passwords are stored using crypto/pbkdf2_sha1.
+ * It will not work with other crypto modules.
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/plain";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
-#loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL (DEPRECATED) */
-#loadmodule "modules/saslserv/dh-aes"; /* requires SSL */
-#loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
+/* These only work when Atheme is compiled with OpenSSL support. */
+#loadmodule "modules/saslserv/dh-blowfish";     /* DEPRECATED */
+#loadmodule "modules/saslserv/dh-aes";
+#loadmodule "modules/saslserv/ecdsa-nist256p-challenge";
+#loadmodule "modules/saslserv/scram-sha-1";     /* requires crypto/pbkdf2_sha1 */
+
 /* GameServ modules.
  *
  * Here you can disable or enable certain features of GameServ, by
