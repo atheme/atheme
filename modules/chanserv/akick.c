@@ -333,7 +333,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			akick_timeout_t *timeout;
 			time_t expireson = ca2->tmodified+duration;
 
-			snprintf(expiry, sizeof expiry, "%ld", (duration > 0L ? expireson : 0L));
+			snprintf(expiry, sizeof expiry, "%ld", expireson);
 			metadata_add(ca2, "expires", expiry);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list, expires in %s.", get_source_name(si), uname,timediff(duration));
@@ -399,7 +399,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 			akick_timeout_t *timeout;
 			time_t expireson = ca2->tmodified+duration;
 
-			snprintf(expiry, sizeof expiry, "%ld", (duration > 0L ? ca2->tmodified+duration : 0L));
+			snprintf(expiry, sizeof expiry, "%ld", expireson);
 			metadata_add(ca2, "expires", expiry);
 
 			command_success_nodata(si, _("AKICK on \2%s\2 was successfully added for \2%s\2 and will expire in %s."), mt->name, mc->name, timediff(duration));
