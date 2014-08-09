@@ -1244,6 +1244,20 @@ static void unreal_user_mode(user_t *u, const char *changes)
 		}
 }
 
+static bool unreal_is_extban(const char *mask)
+{
+	const char mask_len = strlen(mask);
+	unsigned char offset = 0;
+
+	if (mask_len < 4 || mask[0] != '~' || mask[2] != ':')
+		return false;
+
+	if ((mask[1] < 'a' || mask[1] > 'z') && (mask[1] < 'A' || mask[1] > 'Z'))
+		return false;
+
+	return true;
+}
+
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
@@ -1521,6 +1535,7 @@ void _modinit(module_t * m)
 	svslogin_sts = &unreal_svslogin_sts;
 	quarantine_sts = &unreal_quarantine_sts;
 	mlock_sts = &unreal_mlock_sts;
+	is_extban = &unreal_is_extban;
 
 	next_matching_ban = &unreal_next_matching_ban;
 	mode_list = unreal_mode_list;

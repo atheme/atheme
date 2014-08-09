@@ -63,6 +63,15 @@ static char get_quiet_ban_char(void)
 			ircd->type == PROTOCOL_INSPIRCD) ? 'b' : 'q';
 }
 
+static char *strip_extban(char *mask)
+{
+	if (ircd->type == PROTOCOL_INSPIRCD)
+		return sstrdup(&mask[2]);
+	if (ircd->type == PROTOCOL_UNREAL)
+		return sstrdup(&mask[3]);
+	return sstrdup(mask);
+}
+
 chanban_t *place_quietmask(channel_t *c, int dir, const char *hostbuf)
 {
 	char rhostbuf[BUFSIZE];
@@ -195,6 +204,7 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 {
 	mowgli_node_t *n;
 	chanuser_t *cu;
+	chanban_t tmpban;
 	mowgli_list_t ban_l = { NULL, NULL, 0 };
 	mowgli_node_t ban_n;
 	user_t *to_notify[MAX_SINGLE_NOTIFY];
@@ -210,8 +220,13 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 	if (si->c != NULL)
 		return;
 
+	/* some ircds use an action extban for mute
+	 * strip it from those who do so we can reliably match users */
+	memcpy(&tmpban, cb, sizeof(chanban_t));
+	tmpban.mask = strip_extban(cb->mask);
+
 	/* only check the newly added/removed quiet */
-	mowgli_node_add(cb, &ban_n, &ban_l);
+	mowgli_node_add(&tmpban, &ban_n, &ban_l);
 
 	MOWGLI_ITER_FOREACH(n, c->members.head)
 	{
@@ -235,15 +250,17 @@ static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int di
 		if (dir == MTYPE_ADD)
 			notice(chansvs.nick, c->name,
 					"\2%s\2 quieted \2%s\2",
-					get_source_name(si), cb->mask);
+					get_source_name(si), tmpban.mask);
 		else if (dir == MTYPE_DEL)
 			notice(chansvs.nick, c->name,
 					"\2%s\2 unquieted \2%s\2",
-					get_source_name(si), cb->mask);
+					get_source_name(si), tmpban.mask);
 	}
 	else
 		for (i = 0; i < to_notify_count; i++)
 			notify_one_victim(si, c, to_notify[i], dir);
+
+	free(tmpban.mask);
 }
 
 static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
@@ -322,7 +339,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
 			continue;
 		}
-		else if ((newtarget = pretty_mask(target)) && validhostmask(newtarget))
+		else if ((is_extban(target) && (newtarget = target)) || ((newtarget = pretty_mask(target)) && validhostmask(newtarget)))
 		{
 			cb = place_quietmask(c, MTYPE_ADD, newtarget);
 			notify_victims(si, c, cb, MTYPE_ADD);

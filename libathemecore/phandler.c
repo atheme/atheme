@@ -67,6 +67,7 @@ bool (*is_valid_username)(const char *username) = generic_is_valid_username;
 void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
 void (*topiclock_sts)(channel_t *c) = generic_topiclock_sts;
 void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason) = generic_quarantine_sts;
+bool (*is_extban)(const char *mask) = generic_is_extban;
 
 unsigned int generic_server_login(void)
 {
@@ -389,6 +390,11 @@ void generic_topiclock_sts(channel_t *c)
 void generic_quarantine_sts(user_t *source, user_t *victim, long duration, const char *reason)
 {
 	/* nothing to do here */
+}
+
+bool generic_is_extban(const char *mask)
+{
+	return false;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
