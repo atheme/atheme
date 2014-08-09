@@ -148,15 +148,6 @@ void irc_parse(char *line)
 		else
 			parc = 0;
 
-		/* now we should have origin (or NULL), command, and a parv
-		 * with it's accompanying parc... let's make ABSOLUTELY sure
-		 */
-		if (!command)
-		{
-			slog(LG_DEBUG, "irc_parse(): command not found: %s", coreLine);
-			goto cleanup;
-		}
-
 		/* take the command through the hash table */
 		if ((pcmd = pcommand_find(command)))
 		{
