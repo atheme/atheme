@@ -7,7 +7,7 @@ derived from another package called Shrike.
 Atheme's behavior is tunable using modules and a highly detailed configuration file.
 Almost all behavior can be changed at deployment time just by editing the configuration.
 
-If you are running this code from Git, you should read GIT-Access.md for instructions on
+If you are running this code from Git, you should read GIT-Access for instructions on
 how to fully check out the atheme tree, as it is spread across many repositories.
 
 ## basic build instructions for the impatient
@@ -20,7 +20,7 @@ Atheme will default to installing in `$HOME/atheme`, so make sure you plan accor
     $ make
     $ make install
 
-If you're still lost, read [INSTALL](INSTALL) or [GIT-Access.md](GIT-Access.md).
+If you're still lost, read [INSTALL](INSTALL) or [GIT-Access](GIT-Access) for hints.
 
 ## links / contact
 
