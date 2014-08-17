@@ -38,7 +38,7 @@ struct service_ {
 
 static inline const char *service_get_log_target(const service_t *svs)
 {
-	if (svs->logtarget != NULL)
+	if (svs != NULL && svs->logtarget != NULL)
 		return service_get_log_target(svs->logtarget);
 
 	return svs != NULL ? svs->nick : me.name;
