@@ -79,8 +79,11 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* if target is a service, bail. --nenolod */
-	if (is_internal_client(tu))
+	if (is_service(tu))
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is a network service; you cannot kick or deop them."), tu->nick);
 		return;
+	}
 
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
@@ -142,8 +145,11 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	}
 
         /* if target is a service, bail. --nenolod */
-	if (is_internal_client(tu))
+	if (is_service(tu))
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is a network service; you cannot kick or deop them."), tu->nick);
 		return;
+	}
 
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)

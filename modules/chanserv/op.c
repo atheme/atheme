@@ -86,8 +86,11 @@ static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
 			continue;
 		}
 
-		if (is_internal_client(tu))
+		if (!op && is_service(tu))
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 is a network service; you cannot kick or deop them."), tu->nick);
 			continue;
+		}
 
 		/* SECURE check; we can skip this if deopping or sender == target, because we already verified */
 		if (op && (si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
