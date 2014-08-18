@@ -183,7 +183,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!target || (target && !is_valid_nick(target)))
+	if (!target || (target && target[0] == '+' && flagstr == NULL))
 	{
 		unsigned int flags = (target != NULL) ? flags_to_bitmask(target, 0) : 0;
 
