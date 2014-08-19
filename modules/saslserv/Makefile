@@ -10,8 +10,6 @@ MODULE = saslserv
 
 SRCS = \
 	authcookie.c	\
-	dh-blowfish.c	\
-	dh-aes.c	\
 	ecdsa-nist256p-challenge.c \
 	external.c	\
 	main.c		\
@@ -22,7 +20,6 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-# Only dh-blowfish.so needs this, oh well.
 LIBS		+= ${SSL_LIBS}
 LIBS		+= -L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
 

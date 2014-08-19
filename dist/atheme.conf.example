@@ -534,25 +534,18 @@ loadmodule "modules/infoserv/main";
  *
  * Core components                              modules/saslserv/main
  * PLAIN mechanism                              modules/saslserv/plain
- * DH-BLOWFISH mechanism (DEPRECATED)           modules/saslserv/dh-blowfish
- * DH-AES mechanism                             modules/saslserv/dh-aes
  * ECDSA-NIST256p-CHALLENGE                     modules/saslserv/ecdsa-nist256p-challenge
  * AUTHCOOKIE mechanism (for IRIS)              modules/saslserv/authcookie
  * EXTERNAL mechanism (IRCv3.1+)                modules/saslserv/external
  *
- * DH-BLOWFISH has potential issues with weak keys unless the DH parameters
- * are selected to avoid them. Its use is discouraged. Use DH-AES and/or
- * ECDSA-NIST256p-CHALLENGE if at all possible.
- *
- * DH-BLOWFISH, DH-AES, and ECDSA-NIST256p-CHALLENGE all require SSL.
+ * ECDSA-NIST256p-CHALLENGE support requires that Atheme be compiled against OpenSSL.
  */
 loadmodule "modules/saslserv/main";
 loadmodule "modules/saslserv/plain";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
-#loadmodule "modules/saslserv/dh-blowfish"; /* requires SSL (DEPRECATED) */
-#loadmodule "modules/saslserv/dh-aes"; /* requires SSL */
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
+
 /* GameServ modules.
  *
  * Here you can disable or enable certain features of GameServ, by
