@@ -19,7 +19,7 @@ saslserv
 --------
 - Add support for SASL authorization identities
 - Add a `sasl_may_impersonate` hook
-- Bug fixes in DH-AES and DH-BLOWFISH
+- The DH-AES and DH-BLOWFISH mechanisms were removed in their entirety.
 
 alis
 ----
