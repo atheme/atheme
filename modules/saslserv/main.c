@@ -480,7 +480,7 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *mu, int level, const ch
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-	slog(level, "%s %s:%s %s", saslsvs->internal_name, mu ? entity(mu)->name : "", p->uid, lbuf);
+	slog(level, "%s %s:%s %s", service_get_log_target(saslsvs), mu ? entity(mu)->name : "", p->uid, lbuf);
 	va_end(args);
 }
 
