@@ -47,6 +47,13 @@ static bool is_marked(const mynick_t *mn, const void *arg)
 
 void _modinit(module_t *m)
 {
+	if (module_find_published("nickserv/multimark"))
+	{
+		slog(LG_INFO, "Loading both multimark and mark has severe consequences for the space-time continuum. Refusing to load.");
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	service_named_bind_command("nickserv", &ns_mark);
 
 	use_nslist_main_symbols(m);
