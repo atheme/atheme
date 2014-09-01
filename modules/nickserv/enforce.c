@@ -375,27 +375,27 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* if they are identified to another account, nuke their session first */
-		if (u->myuser)
+		if (si->smu)
 		{
-			command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(u->myuser)->name);
+			command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
 
-			if (ircd_on_logout(u, entity(u->myuser)->name))
+			if (ircd_on_logout(si->su, entity(si->smu)->name))
 				/* logout killed the user... */
 				return;
-		        u->myuser->lastlogin = CURRTIME;
-		        MOWGLI_ITER_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		        si->smu->lastlogin = CURRTIME;
+		        MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
 		        {
-			        if (n->data == u)
+			        if (n->data == si->su)
 		                {
-		                        mowgli_node_delete(n, &u->myuser->logins);
+		                        mowgli_node_delete(n, &si->smu->logins);
 		                        mowgli_node_free(n);
 		                        break;
 		                }
 		        }
-		        u->myuser = NULL;
+		        si->smu = NULL;
 		}
 
-		myuser_login(si->service, u, mn->owner, true);
+		myuser_login(si->service, si->su, mn->owner, true);
 
 		return;
 	}
