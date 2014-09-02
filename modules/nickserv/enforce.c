@@ -374,28 +374,32 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		/* if they are identified to another account, nuke their session first */
-		if (si->smu)
+		/* identify them to the target nick's account if they aren't yet */
+		if (si->smu != mn->owner)
 		{
-			command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
+			/* if they are identified to another account, nuke their session first */
+			if (si->smu != NULL)
+			{
+				command_success_nodata(si, _("You have been logged out of \2%s\2."), entity(si->smu)->name);
 
-			if (ircd_on_logout(si->su, entity(si->smu)->name))
-				/* logout killed the user... */
-				return;
-		        si->smu->lastlogin = CURRTIME;
-		        MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
-		        {
-			        if (n->data == si->su)
-		                {
-		                        mowgli_node_delete(n, &si->smu->logins);
-		                        mowgli_node_free(n);
-		                        break;
-		                }
-		        }
-		        si->smu = NULL;
+				if (ircd_on_logout(si->su, entity(si->smu)->name))
+					/* logout killed the user... */
+					return;
+				si->smu->lastlogin = CURRTIME;
+				MOWGLI_ITER_FOREACH_SAFE(n, tn, si->smu->logins.head)
+				{
+					if (n->data == si->su)
+					{
+						mowgli_node_delete(n, &si->smu->logins);
+						mowgli_node_free(n);
+						break;
+					}
+				}
+				si->su->myuser = NULL;
+			}
+
+			myuser_login(si->service, si->su, mn->owner, true);
 		}
-
-		myuser_login(si->service, si->su, mn->owner, true);
 
 		return;
 	}
