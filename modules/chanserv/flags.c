@@ -133,11 +133,11 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 		strftime(mod_date, sizeof mod_date, TIME_FORMAT, &tm);
 
 		if (template != NULL)
-			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mod_ago, mod_date);
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date);
 		else
-			command_success_nodata(si, _("%-5d %-22s %-20s [modified %s ago, on %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mod_ago, mod_date);
+			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s]"),
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date);
 		i++;
 	}
 
