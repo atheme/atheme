@@ -575,7 +575,7 @@ static void show_multimark(hook_user_req_t *hdata)
 	char time[BUFSIZE];
 
 	myuser_t *setter;
-	char *setter_name;
+	const char *setter_name;
 
 	migrate_user(hdata->mu);
 	l = multimark_list(hdata->mu);
@@ -698,7 +698,7 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	char time[BUFSIZE];
 
 	myuser_t *setter;
-	char *setter_name;
+	const char *setter_name;
 
 	mowgli_list_t *l = restored_mark_list(nick);
 
@@ -759,7 +759,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 	char time[BUFSIZE];
 
 	myuser_t *setter;
-	char *setter_name;
+	const char *setter_name;
 
 	mowgli_list_t *rl;
 
