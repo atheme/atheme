@@ -41,17 +41,23 @@ void handle_info(user_t *u)
 	numeric_sts(me.me, 374, u, ":End of /INFO list");
 }
 
-void handle_version(user_t *u)
+int get_version_string(char *buf, size_t bufsize)
 {
 	const crypt_impl_t *ci = crypt_get_default_provider();
+	return snprintf(buf, bufsize, "%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
+		PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
+}
 
+void handle_version(user_t *u)
+{
 	if (u == NULL)
 		return;
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.me, 351, u, "%s. %s %s :%s [%s] [enc:%s] Build Date: %s",
-		    PACKAGE_STRING, me.name, revision, get_conf_opts(), ircd->ircdname, ci->id, __DATE__);
+	char ver[BUFSIZE];
+	get_version_string(ver, sizeof(ver));
+	numeric_sts(me.me, 351, u, "%s", ver);
 }
 
 void handle_admin(user_t *u)
