@@ -41,6 +41,7 @@ E void pcommand_delete(const char *token);
 E pcommand_t *pcommand_find(const char *token);
 
 /* ptasks.c */
+E int get_version_string(char *, size_t);
 E void handle_version(user_t *);
 E void handle_admin(user_t *);
 E void handle_info(user_t *);
