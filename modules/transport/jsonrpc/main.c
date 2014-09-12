@@ -693,9 +693,9 @@ void jsonrpc_send_data(void *conn, char *str) {
 			"%s"
 			"Server: Atheme/%s\r\n"
 			"Content-Type: application/json\r\n"
-			"Content-Length: %d\r\n\r\n",
+			"Content-Length: %lu\r\n\r\n",
 			hd->connection_close ? "Connection: close\r\n" : "",
-			PACKAGE_VERSION, len);
+			PACKAGE_VERSION, (unsigned long)len);
 
 	sendq_add((connection_t *)conn, buf, strlen(buf));
 	sendq_add((connection_t *)conn, str, len);
