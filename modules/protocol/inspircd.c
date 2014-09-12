@@ -1180,13 +1180,14 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
+	char ver[BUFSIZE];
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	if (si->s == NULL)
 	{
 		sts(":%s BURST", me.numeric);
-		sts(":%s VERSION :%s. %s %s",
-				me.numeric, PACKAGE_STRING, me.numeric, get_conf_opts());
+		get_version_string(ver, sizeof(ver));
+		sts(":%s VERSION :%s", me.numeric, ver);
 		services_init();
 		sts(":%s ENDBURST", me.numeric);
 	}
