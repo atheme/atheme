@@ -236,7 +236,7 @@ static void helpserv_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* CLOSE <nick> */
+/* CLOSE <nick> [reason] */
 static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *nick = parv[0];
@@ -247,10 +247,9 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	if (!nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLOSE");
-		command_fail(si, fault_needmoreparams, _("Syntax: CLOSE <nick>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CLOSE <nick> [reason]"));
 		return;
 	}
-
 
 	MOWGLI_ITER_FOREACH(n, helpserv_reqlist.head)
 	{
@@ -258,8 +257,28 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(l->nick, nick))
 		{
 			if ((u = user_find_named(nick)) != NULL)
-				notice(si->service->nick, u->nick, "[auto notice] Your help request has been closed.");
-			/* VHOSTNICK command below will generate snoop */
+			{
+				if (parv[1] != NULL)
+					notice(si->service->nick, u->nick, "[auto notice] Your help request has been closed: %s", parv[1]);
+				else
+					notice(si->service->nick, u->nick, "[auto notice] Your help request has been closed.");
+			}
+			else
+			{
+				service_t *svs;
+				char buf[BUFSIZE];
+
+				if ((svs = service_find("memoserv")) != NULL && myuser_find(parv[0]) != NULL)
+				{
+					if (parv[1] != NULL)
+						snprintf(buf, BUFSIZE, "%s [auto memo] Your help request has been closed: %s", parv[0], parv[1]);
+					else
+						snprintf(buf, BUFSIZE, "%s [auto memo] Your help request has been closed.", parv[0]);
+
+					command_exec_split(svs, si, "SEND", buf, svs->commands);
+				}
+			}
+
 			logcommand(si, CMDLOG_REQUEST, "CLOSE: Help for \2%s\2 about \2%s\2", nick, l->topic);
 
 			mowgli_node_delete(n, &helpserv_reqlist);
@@ -272,6 +291,7 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
+
 	command_success_nodata(si, _("Nick \2%s\2 not found in help request database."), nick);
 }
 
