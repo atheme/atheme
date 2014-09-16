@@ -59,6 +59,8 @@ void _modinit(module_t *m)
 		return;
 	}
 
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "hostserv/main");
+
 	hostsvs = service_find("hostserv");
 
 	hook_add_event("user_drop");
