@@ -76,6 +76,8 @@ static bool check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, m
 static bool check_delaymsg(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_history(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
+static unsigned int max_rejoindelay = 5;
+
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
   { 'F', check_nickflood },
@@ -293,9 +295,7 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 		ch++;
 	}
 
-	/* don't allow mlocking a rejoin delay mode greater than 5 seconds.
-	   it's extremely rude. --nenolod */
-	if (atoi(value) <= 0 || atoi(value) > 5)
+	if (atoi(value) <= 0 || atoi(value) >= max_rejoindelay)
 	{
 		return false;
 	}
@@ -1514,6 +1514,8 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if ((strcasecmp(parv[0], "MODULES") == 0 || strcasecmp(parv[0], "MODSUPPORT") == 0) && parc > 1)
 	{
+		char *it = NULL;
+
 		if (strstr(parv[1], "m_services_account.so"))
 		{
 			has_servicesmod = true;
@@ -1545,6 +1547,12 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_topiclock.so"))
 		{
 			has_svstopic_topiclock = true;
+		}
+		if ((it = strstr(parv[1], "m_kicknorejoin.so")) != NULL)
+		{
+			it = strchr(it, '=');
+			if (it)
+				max_rejoindelay = atoi(it + 1);
 		}
 		TAINT_ON(strstr(parv[1], "m_invisible.so") != NULL, "invisible (m_invisible) is not presently supported correctly in atheme, and won't be due to ethical obligations");
 	}
