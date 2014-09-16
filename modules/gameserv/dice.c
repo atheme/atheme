@@ -21,22 +21,40 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
 command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 3, command_dice, {.path = "gameserv/roll"} };
 command_t cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc, {.path = "gameserv/calc"} };
 
+static unsigned int max_rolls = 10;
+
 void _modinit(module_t * m)
 {
-	service_named_bind_command("gameserv", &cmd_dice);
-	service_named_bind_command("gameserv", &cmd_calc);
+	service_t *svs;
 
 	service_named_bind_command("chanserv", &cmd_dice);
 	service_named_bind_command("chanserv", &cmd_calc);
+
+	svs = service_find("gameserv");
+	if (!svs)
+		return;
+
+	service_bind_command(svs, &cmd_dice);
+	service_bind_command(svs, &cmd_calc);
+
+	add_uint_conf_item("MAX_ROLLS", &svs->conf_table, 0, &max_rolls, 1, INT_MAX, 10);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	service_named_unbind_command("gameserv", &cmd_dice);
-	service_named_unbind_command("gameserv", &cmd_calc);
+	service_t *svs;
 
 	service_named_unbind_command("chanserv", &cmd_dice);
 	service_named_unbind_command("chanserv", &cmd_calc);
+
+	svs = service_find("gameserv");
+	if (!svs)
+		return;
+
+	service_unbind_command(svs, &cmd_dice);
+	service_unbind_command(svs, &cmd_calc);
+
+	del_conf_item("MAX_ROLLS", &svs->conf_table);
 }
 
 #define CALC_MAX_STACK		(128)
@@ -559,7 +577,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = 1;
+	int i, times = max_rolls;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
@@ -597,7 +615,7 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = 1;
+	int i, times = max_rolls;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
