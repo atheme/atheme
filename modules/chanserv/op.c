@@ -56,13 +56,6 @@ static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_OP) && (tu != si->su ||
-				!chanacs_source_has_flag(mc, si, CA_AUTOOP)))
-	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
-		return;
-	}
-
 	if (metadata_find(mc, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -84,6 +77,12 @@ static void cmd_op(sourceinfo_t *si, bool opping, int parc, char *parv[])
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 			continue;
+		}
+
+		if (!chanacs_source_has_flag(mc, si, CA_OP) && (tu != si->su || !chanacs_source_has_flag(mc, si, CA_AUTOOP)))
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
+			return;
 		}
 
 		if (!op && is_service(tu))

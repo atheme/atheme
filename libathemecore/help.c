@@ -157,6 +157,7 @@ void help_display_as_subcmd(sourceinfo_t *si, service_t *service, const char *su
 			if (!help_file)
 			{
 				command_fail(si, fault_nosuch_target, _("Could not get help file for \2%s\2."), command);
+				free(ccommand);
 				return;
 			}
 
