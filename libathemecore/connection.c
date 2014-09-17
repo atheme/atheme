@@ -473,6 +473,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 		else
 			slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %d (%s)", host, ioerrno(), strerror(ioerrno()));
 		close(s);
+		freeaddrinfo(addr);
 		return NULL;
 	}
 
