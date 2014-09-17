@@ -292,7 +292,7 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	database_handle_t *db;
 	opensex_t *rs;
 	FILE *f;
-	int errno1, grver;
+	int errno1;
 	char bpath[BUFSIZE], path[BUFSIZE];
 
 	snprintf(bpath, BUFSIZE, "%s/%s", datadir, filename != NULL ? filename : "services.db");
@@ -324,8 +324,6 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	db_start_row(db, "GRVER");
 	db_write_int(db, rs->grver);
 	db_commit_row(db);
-
-	rs->grver = grver;
 
 	return db;
 }
