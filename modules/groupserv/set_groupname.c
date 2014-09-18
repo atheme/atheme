@@ -65,6 +65,12 @@ static void gs_cmd_set_groupname(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!groupacs_sourceinfo_has_flag(mg, si, GA_FOUNDER))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
+		return;
+	}
+
 	if (strcmp(entity(mg)->name, newname) == 0)
 	{
 		command_fail(si, fault_nochange, _("The group name is already set to \2%s\2."), newname);
