@@ -111,6 +111,8 @@ struct ConfOption
   bool allow_taint;		/* allow tainted operation */
 
   unsigned int immune_level;	/* what flag is required for kick immunity */
+
+  bool show_entity_id;		/* do not require user:auspex to see entity IDs */
 };
 
 E struct ConfOption config_options;

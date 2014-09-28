@@ -2117,6 +2117,12 @@ general {
 	 *    ircop  - require any ircop privileges for kick immunity (umode +o) 
 	 */
 	immune_level = immune;
+
+	/* show_entity_id
+	 * This makes nick/user & group entity IDs visible to everyone, rather
+	 * than just opers with user:auspex or group:auspex privileges.
+	 */
+	show_entity_id;
 };
 
 /******************************************************************************
