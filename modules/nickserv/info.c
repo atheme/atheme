@@ -390,7 +390,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Oper class : %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
 	}
 
-	if (has_user_auspex || has_priv(si, PRIV_CHAN_AUSPEX))
+	if (mu == si->smu || has_user_auspex || has_priv(si, PRIV_CHAN_AUSPEX))
 	{
 		chanacs_t *ca;
 		int founder = 0, other = 0;
