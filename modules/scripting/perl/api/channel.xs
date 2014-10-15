@@ -84,6 +84,11 @@ CODE:
 OUTPUT:
     RETVAL
 
+void
+notice (Atheme_Channel self, const char * from, const char * notice)
+CODE:
+    notice_channel_sts (user_find_named(from), self, notice);
+
 MODULE = Atheme			PACKAGE = Atheme::ChanUser
 
 Atheme_Channel
