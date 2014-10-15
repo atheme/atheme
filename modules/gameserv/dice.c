@@ -577,7 +577,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = max_rolls;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
@@ -615,7 +615,7 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = max_rolls;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
