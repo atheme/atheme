@@ -577,7 +577,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = max_rolls;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
@@ -594,8 +594,8 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 		times = atoi(parv[0]);
 		arg = parv[1];
 
-		if (times > 10)
-			times = 10;
+		if (times > max_rolls)
+			times = max_rolls;
 	}
 
 	if (!strcasecmp("RICK", arg))
@@ -615,7 +615,7 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg;
 	mychan_t *mc;
-	int i, times = max_rolls;
+	int i, times = 1;
 
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
@@ -632,8 +632,8 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 		times = atoi(parv[0]);
 		arg = parv[1];
 
-		if (times > 10)
-			times = 10;
+		if (times > max_rolls)
+			times = max_rolls;
 	}
 
 	for (i = 0; i < times; i++)
