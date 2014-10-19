@@ -77,6 +77,7 @@ static struct Token cflags[] = {
   { "PRIVATE",     MC_PRIVATE     },
   { "LIMITFLAGS",  MC_LIMITFLAGS  },
   { "ANTIFLOOD",   MC_ANTIFLOOD   },
+  { "PUBACL",      MC_PUBACL      },
   { "NONE",        0              },
   { NULL, 0 }
 };

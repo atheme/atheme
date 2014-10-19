@@ -88,7 +88,7 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;

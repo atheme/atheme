@@ -57,7 +57,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_AUSPEX))
 			operoverride = true;

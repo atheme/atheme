@@ -95,7 +95,7 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (mc != NULL)
 	{
-		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW) && !has_priv(si, PRIV_CHAN_AUSPEX))
+		if (!(mc->flags & MC_PUBACL) && !chanacs_source_has_flag(mc, si, CA_ACLVIEW) && !has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;

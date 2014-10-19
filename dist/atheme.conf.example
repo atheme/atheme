@@ -315,6 +315,7 @@ loadmodule "modules/nickserv/vhost";
  * SET PREFIX command                           modules/chanserv/set_prefix
  * Channel info hiding (SET PRIVATE command)    modules/chanserv/set_private
  * SET PROPERTY command                         modules/chanserv/set_property
+ * SET PUBACL command                           modules/chanserv/set_pubacl
  * SET RESTRICTED command                       modules/chanserv/set_restricted
  * SET SECURE command                           modules/chanserv/set_secure
  * SET TOPICLOCK command                        modules/chanserv/set_topiclock
@@ -382,6 +383,7 @@ loadmodule "modules/chanserv/set_mlock";
 loadmodule "modules/chanserv/set_prefix";
 #loadmodule "modules/chanserv/set_private";
 loadmodule "modules/chanserv/set_property";
+#loadmodule "modules/chanserv/set_pubacl";
 loadmodule "modules/chanserv/set_restricted";
 loadmodule "modules/chanserv/set_secure";
 loadmodule "modules/chanserv/set_topiclock";
@@ -1979,7 +1981,7 @@ general {
 	/* (*)cflags
 	 * The default flags to set for channels upon registration.
 	 * Valid values are: hold, secure, verbose, verbose_ops, keeptopic,
-	 * topiclock, guard, private, nosync, limitflags and none.
+	 * topiclock, guard, private, nosync, limitflags, pubacl and none.
 	 */
 	cflags = { verbose; guard; };
 

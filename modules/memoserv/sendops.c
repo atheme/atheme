@@ -100,7 +100,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+	if (!(mc->flags & MC_PUBACL) && !chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
 	{
 		if (has_priv(si, PRIV_CHAN_ADMIN))
 			operoverride = true;

@@ -56,6 +56,7 @@ SRCS =			\
 	set_prefix.c	\
 	set_private.c	\
 	set_property.c	\
+	set_pubacl.c	\
 	set_restricted.c  \
 	set_secure.c	\
 	set_topiclock.c	\
