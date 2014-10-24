@@ -231,6 +231,14 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		strcat(buf, "PRIVATE");
 	}
 
+	if (MC_PUBACL & mc->flags)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "PUBACL");
+	}
+
 	if (use_limitflags && MC_LIMITFLAGS & mc->flags)
 	{
 		if (*buf)
