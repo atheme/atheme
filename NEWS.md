@@ -5,21 +5,44 @@ nickserv
 --------
 - Make `VHOST` set cloak assigner and timestamp the same way HostServ does
 - Make `INFO` call the `user_info_noexist` hook for queries that don't match an account
+- Make `REGAIN` log you in if successful.
 - Allow implementing custom filters for `LIST`
+- nickserv/multimark: new module which allows multiple MARK entries per nickname.
 
 chanserv
 --------
 - Add a `$server:` exttarget accepting server masks
+- Add `PUBACL` flag which allows the channel access to be public.
+- Don't allow `DEOP` or `KICK` of a services bot.
+- Don't try to expand extbans in various commands.
+- Allow users with +O or +V flags to op/voice themselves, since they can regain op/voice
+  by cycling the channel anyway.
+- chanserv/clear_akicks: new module providing a `CLEAR AKICKS` command.
+
+gameserv
+--------
+- gameserv/dice: make the maximum roll count configurable.
 
 groupserv
 ---------
 - Hook into `sasl_may_impersonate` to support group-membership checks
+- groupserv/set_groupname: new module allowing renaming a groupserv group
+
+helpserv
+--------
+- helpserv/ticket: optionally accept a close reason and send a memo to an offline user
+
+operserv
+--------
+- operserv/rwatch: allow creation of RWATCH rules which k-line if 'K' is a modifier on the
+  provided regexp.
 
 saslserv
 --------
 - Add support for SASL authorization identities
 - Add a `sasl_may_impersonate` hook
 - The DH-AES and DH-BLOWFISH mechanisms were removed in their entirety.
+- Add support for IRCv3.2-draft SASL mechanism list caching, implemented by InspIRCd 2.2.
 
 alis
 ----
@@ -35,6 +58,8 @@ ircd protocol
 - inspircd: Hopefully fix ignored account names when linking to the network
 - inspircd: Various improvements to InspIRCd 2.0 support
 - inspircd: Remove InspIRCd 1.2 and 2.1beta support
+- inspircd: Add support for rejoindelay property in InspIRCd 2.2
+- inspircd: Change the opertype used from 'Services' to 'Service'
 - ircnet: Implement oper-wallops, using individual notices
 - ngircd: Enable +qaohv support
 - ngircd: Ignore non-# channels for now
@@ -46,10 +71,11 @@ other
 -----
 - various: Fix quite a few resource leaks and possible null derefs
 - crypto/pbkdf2: Detect malformed (truncated) hashes
-- contrib/cap\_sasl.pl: Import various fixes from freenode's v1.5
-- contrib/cap\_sasl.pl: Implement SASL EXTERNAL, ECDSA-NIST256P-CHALLENGE
-- contrib/cap\_sasl.pl: Fix crash if irssi has ICB or SILC plugins loaded
-- contrib/cap\_sasl.pl: Fix crash if disconnected while waiting for SASL reply
+- contrib/cap_sasl.pl: Import various fixes from freenode's v1.5
+- contrib/cap_sasl.pl: Implement SASL EXTERNAL, ECDSA-NIST256P-CHALLENGE
+- contrib/cap_sasl.pl: Fix crash if irssi has ICB or SILC plugins loaded
+- contrib/cap_sasl.pl: Fix crash if disconnected while waiting for SASL reply
+- transport/jsonrpc: new module implementing JSONRPC transport
 
 Atheme Services 7.1 Release Notes
 =================================
