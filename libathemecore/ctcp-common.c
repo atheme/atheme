@@ -62,11 +62,11 @@ static void ctcp_machinegod_handler(sourceinfo_t *si, char *cmd, char *args)
 static void ctcp_about_handler(sourceinfo_t *si, char *cmd, char *args)
 {
 	/*
-	 * October 16, 2012: UnrealIRCd 3.2.10-rc1 was released, the first release of the world's most widely-deployed
-	 * IRC server software featuring full support for the Atheme platform.  Unreal has thousands of users, of which
-	 * Atheme will now be aggressively marketed to by both projects.
+	 * October 31, 2014: Atheme 7.2 final was released, the final release series from atheme.org, which has dissolved
+	 * afterward.  The atheme.org activity remains until October 31, 2016 to facilitate and coordinate downstream forks,
+	 * thus creating a truly community-directed project.
 	 */
-	notice(si->service->nick, si->su->nick, "\001ABOUT \002Suddenly\002 the beast saw the machine god's wisdom, and surely Belphegor \037trembled\037. ~The Book of Atheme, 10:16\001");
+	notice(si->service->nick, si->su->nick, "\001ABOUT The machine god has \002fallen\002, and the unbelievers \037rejoiced\037. But from the debris rose new machines which will have their vengeance. ~The Book of Atheme, 10:31\001");
 }
 
 void common_ctcp_init(void)
