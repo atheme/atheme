@@ -367,7 +367,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!cmd)
 		return;
-	if (*cmd == '\001')
+	if (*orig == '\001')
 	{
 		handle_ctcp_common(si, cmd, strtok(NULL, ""));
 		return;
