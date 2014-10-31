@@ -44,6 +44,7 @@ const char *infotext[] =
   "  Adam, Adam <adam@sigterm.info>",
   "  aji, Alex Iadicicco <alex@ajitek.net>",
   "  alambert, Alex Lambert <alambert@quickfire.org>",
+  "  Attila, Attila Molnar <attilamolnar@hush.com>",
   "  beu, Elfyn McBratney <elfyn.mcbratney@gmail.com>",
   "  binki, Nathan Phillip Brink <ohnobinki@ohnopublishing.net>",
   "  Dianora, Diane Bruce <db@db.net>",
