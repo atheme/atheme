@@ -1354,6 +1354,18 @@ static inline void verify_mlock(channel_t *c, time_t ts, const char *their_mlock
 		return mlock_sts(c);
 }
 
+static void verify_topiclock(channel_t *c, bool state)
+{
+	bool mystate;
+	mychan_t *mc = MYCHAN_FROM(c);
+	if (!mc)
+		return;
+
+	mystate = mc->flags & MC_TOPICLOCK;
+	if (state != mystate)
+		inspircd_topiclock_sts(c);
+}
+
 /*
  * :<source server> METADATA <channel|user> <key> :<value>
  * The sole piece of metadata we're interested in is 'accountname', set by Services,
@@ -1425,6 +1437,13 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	{
 		c = channel_find(parv[0]);
 		verify_mlock(c, 0, parv[2]);
+	}
+	else if (!irccasecmp(parv[1], "topiclock"))
+	{
+		bool state = (!strcmp(parv[2], "1"));
+		c = channel_find(parv[0]);
+		if (c)
+			verify_topiclock(c, state);
 	}
 }
 
