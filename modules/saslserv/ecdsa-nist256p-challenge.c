@@ -46,6 +46,7 @@ typedef struct {
 
 void _modinit(module_t *m)
 {
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 	regfuncs->mech_register(&mech);
 }
@@ -93,7 +94,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 	if (mu == NULL)
 		return ASASL_FAIL;
 
-	md = metadata_find(mu, "pubkey");
+	md = metadata_find(mu, "private:pubkey");
 	if (md == NULL)
 		return ASASL_FAIL;
 
