@@ -106,14 +106,14 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			command_fail(si, fault_noprivs, _("\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access."), mc->name, tu->nick);
-			return;
+			continue;
 		}
 
 		cu = chanuser_find(mc->chan, tu);
 		if (!cu)
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
-			return;
+			continue;
 		}
 
 		modestack_mode_param(chansvs.nick, mc->chan, protect ? MTYPE_ADD : MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(tu));
