@@ -276,14 +276,21 @@ static void cs_cmd_topicswap(sourceinfo_t *si, int parc, char *parv[])
 	size_t replace_size = 0;
 	size_t copylen = 0;
 
+	if (parc < 2)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICSWAP");
+		command_fail(si, fault_needmoreparams, _("Syntax: TOPICSWAP <#channel> <search>:[<replace>]"));
+		return;
+	}
+
 	mowgli_strlcpy(commbuf, parv[1], BUFSIZE);
 	search = commbuf;
 	pos = strrchr(commbuf, ':');
 
-	if (!chan || !pos || pos == commbuf)
+	if (!pos || pos == commbuf)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICSWAP");
-		command_fail(si, fault_needmoreparams, _("Syntax: TOPICSWAP <#channel> <search>:[<replace>]"));
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TOPICSWAP");
+		command_fail(si, fault_badparams, _("Syntax: TOPICSWAP <#channel> <search>:[<replace>]"));
 		return;
 	}
 
