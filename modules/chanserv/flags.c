@@ -192,82 +192,12 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/*
-	 * following conditions are for compatibility with Anope just to avoid a whole clusterfuck
-	 * of confused users caused by their 'innovation.'  yeah, that's a word for it alright.
-	 *
-	 * anope 1.9's shiny new FLAGS command has:
-	 *
-	 * FLAGS #channel LIST
-	 * FLAGS #channel MODIFY user flagspec
-	 * FLAGS #channel CLEAR
-	 *
-	 * obviously they do not support the atheme syntax, because lets face it, they like to
-	 * 'innovate.'  this is, of course, hilarious for obvious reasons.  never mind that we
-	 * *invented* the FLAGS system for channel ACLs, so you would think they would find it
-	 * worthwhile to be compatible here.  i guess that would have been too obvious or something
-	 * about their whole 'stealing our design' thing that they have been doing in 1.9 since the
-	 * beginning...  or do i mean 'innovating?'
-	 *
-	 * anyway we rewrite the commands as appropriate in the two if blocks below so that they
-	 * are processed by the flags code as the user would intend.  obviously, we're not really
-	 * capable of handling the anope flag model (which makes honestly zero sense to me, and is
-	 * extremely complex which kind of misses the entire point of the flags UI design...) so if
-	 * some user tries passing anope flags, it will probably be hilarious.  the good news is
-	 * most of the anope flags tie up to atheme flags in some weird way anyway (probably because,
-	 * i don't know, they copied the entire design and then fucked it up?  yeah.  probably that.)
-	 *
-	 *   --nenolod
+	 * There used to be Anope compatibility here, adding support for
+	 * "/msg ChanServ flags #channel modify/clear/list", 
+	 * but this has caused issues described in the following bug report:
+	 * https://github.com/atheme/atheme/issues/397
+	 * ...so it was removed again. ~ToBeFree
 	 */
-	else if (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
-	{
-		do_list(si, mc, 0);
-		free(target);
-
-		return;
-	}
-	else if (!strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
-	{
-		free(target);
-
-		if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
-		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-			return;
-		}
-
-		mowgli_node_t *tn;
-
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
-		{
-			ca = n->data;
-
-			if (ca->level & CA_FOUNDER)
-				continue;
-
-			object_unref(ca);
-		}
-
-		logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
-		command_success_nodata(si, _("Cleared flags in \2%s\2."), mc->name);
-		return;
-	}
-	else if (!strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
-	{
-		free(target);
-
-		if (parc < 3)
-		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-			command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <#channel> MODIFY [target] <flags>"));
-			return;
-		}
-
-		flagstr = strchr(parv[2], ' ');
-		if (flagstr)
-			*flagstr++ = '\0';
-
-		target = strdup(parv[2]);
-	}
 
 	{
 		myentity_t *mt;
