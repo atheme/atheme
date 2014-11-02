@@ -577,6 +577,14 @@ static void show_multimark(hook_user_req_t *hdata)
 	myuser_t *setter;
 	const char *setter_name;
 
+	bool has_user_auspex;
+
+	has_user_auspex = has_priv(hdata->si, PRIV_USER_AUSPEX);
+
+	if (!has_user_auspex) {
+		return;
+	}
+
 	migrate_user(hdata->mu);
 	l = multimark_list(hdata->mu);
 
