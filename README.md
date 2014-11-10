@@ -15,8 +15,8 @@ Due to completion of all defined goals (the development of the IRCv3/IRCv3.1 eco
 usability changes for services, etc.), the development activity of Atheme is winding down. There
 will not be another release cycle after Atheme 7.2. We encourage the community to fork Atheme and
 choose the most suitable forks to drive IRC forward. To this end, we will maintain Atheme 7.2 as a
-suitable base for forking until October 31, 2015, with all services (including this website)
-terminating on October 31, 2016.
+suitable base for forking until October 31, 2015, with all services terminating on October 31,
+2016.
 
 To this end, you may find the following table useful:
 | Milestone                      | Date            |
