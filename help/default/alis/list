@@ -16,19 +16,23 @@ Options are:
     
 The pattern can contain * and ? wildcards. The pattern has to
 match the full channel name or a full topic, depending on where it 
-is used; the wildcards are important. For example, from most to 
-least specific:
- bar        - exactly "bar" without any characters preceding or 
-              following it (matches no channel names)
- ?bar       - any character followed by "bar"
+is used; the wildcards are important. The pattern is also
+automatically surrounded by * wildcards if
+- a channel name pattern starts with a wildcard or a #, or
+- a topic pattern contains no * wildcards.
+
+For example, for channel names, from most to least specific:
+ bar        - anything containing bar
+ ?bar       - any character followed by "bar" with no other characters
  #bar*      - anything starting with "#bar" 
  ##*bar*    - anything starting with ## and containing "bar"
  *cows*moo* - anything containing "cows", 0 or more characters, and "moo"
- *bar*      - anything containing "bar"
+              (equivalent to "cows*moo")
+ *bar*      - anything containing "bar" (equivalent to "bar")
 
 Examples:
-    /msg &nick& LIST *seachterm*
-    /msg &nick& LIST * -topic *seachterm*
+    /msg &nick& LIST searchterm
+    /msg &nick& LIST * -topic multiple*ordered*search*terms
     /msg &nick& LIST * -min 50
     /msg &nick& LIST #foo*
     /msg &nick& LIST -mode =n #foo*
