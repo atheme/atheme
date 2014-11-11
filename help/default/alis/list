@@ -26,7 +26,6 @@ For example, for channel names, from most to least specific:
  #bar*      - anything starting with "#bar" 
  ##*bar*    - anything starting with ## and containing "bar"
  *cows*moo* - anything containing "cows", 0 or more characters, and "moo"
-              (equivalent to "cows*moo")
  *bar*      - anything containing "bar" (equivalent to "bar")
 
 Examples:
