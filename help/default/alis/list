@@ -3,20 +3,34 @@ Help for LIST:
 LIST gives a list of channels matching the
 pattern, modified by the other options.
 
-The pattern can contain * and ? wildcards.
+Syntax: LIST <pattern> [options]
 
 Options are:
-    -min <n>: minimum users in channel
-    -max <n>: maximum users in channel
+    -min <n>: show only channels with at least <n> users
+    -max <n>: show only channels with at most <n> users
     -skip <n>: skip first <n> matches
     -show [m][t]: show modes/topicsetter
     -mode <+|-|=><modes>: modes set/unset/equal
     -topic <pattern>: topic matches pattern
     -showsecret: show secret channels (requires chan:auspex)
-
-Syntax: LIST <pattern> [options]
+    
+The pattern can contain * and ? wildcards. The pattern has to
+match the full channel name or a full topic, depending on where it 
+is used; the wildcards are important. For example, from most to 
+least specific:
+ bar        - exactly "bar" without any characters preceding or 
+              following it (matches no channel names)
+ ?bar       - any character followed by "bar"
+ #bar*      - anything starting with "#bar" 
+ ##*bar*    - anything starting with ## and containing "bar"
+ *cows*moo* - anything containing "cows", 0 or more characters, and "moo"
+ *bar*      - anything containing "bar"
 
 Examples:
     /msg &nick& LIST *seachterm*
     /msg &nick& LIST * -topic *seachterm*
     /msg &nick& LIST * -min 50
+    /msg &nick& LIST #foo*
+    /msg &nick& LIST -mode =n #foo*
+    /msg &nick& LIST -mode -t *freetopic* -show mt
+    /msg &nick& LIST -mode +c ##nocolors* -show t
