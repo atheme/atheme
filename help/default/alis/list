@@ -22,7 +22,6 @@ automatically surrounded by * wildcards if
 - a topic pattern contains no * wildcards.
 
 For example, for channel names, from most to least specific:
- bar        - anything containing bar
  ?bar       - any character followed by "bar" with no other characters
  #bar*      - anything starting with "#bar" 
  ##*bar*    - anything starting with ## and containing "bar"
