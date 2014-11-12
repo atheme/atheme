@@ -19,12 +19,14 @@ suitable base for forking until October 31, 2015, with all services terminating 
 2016.
 
 To this end, you may find the following table useful:
+
 | Milestone                      | Date            |
 | ------------------------------ | --------------- |
 | End of non-security bugfixes   | 1 May 2015      |
 | End of irc.atheme.org          | 31 October 2015 |
 | End of ALL bugfixes            | 1 May 2016      |
 | End of ALL atheme.org services | 31 October 2016 |
+
 
 ## basic build instructions for the impatient
 
