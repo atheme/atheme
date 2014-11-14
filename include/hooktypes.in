@@ -75,6 +75,7 @@ user_verify_register  hook_user_req_t *
 user_check_expire  hook_expiry_req_t *
 user_rename        hook_user_rename_t *
 user_sethost       user_t *
+user_needforce     hook_user_needforce_t *
 myuser_delete      myuser_t *
 metadata_change    hook_metadata_change_t *
 host_request       hook_host_request_t *

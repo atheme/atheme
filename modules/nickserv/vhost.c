@@ -70,6 +70,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	bool force = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
 	char timestring[16];
+	hook_user_needforce_t needforce_hdata;
 
 	if (!target)
 	{
@@ -150,6 +151,40 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		else if (!has_priv(si, PRIV_MARK))
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", entity(mu)->name, markmd->value);
+			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
+			return;
+		}
+	}
+
+	needforce_hdata.si = si;
+	needforce_hdata.mu = mu;
+	needforce_hdata.allowed = 1;
+
+	hook_call_user_needforce(&needforce_hdata);
+
+	if (!needforce_hdata.allowed)
+	{
+		if (!force)
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked)", entity(mu)->name);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked."), entity(mu)->name);
+			if (has_priv(si, PRIV_MARK))
+			{
+				if (host)
+					snprintf(cmdtext, sizeof cmdtext,
+							"VHOST %s ON %s FORCE",
+							entity(mu)->name, host);
+				else
+					snprintf(cmdtext, sizeof cmdtext,
+							"VHOST %s OFF FORCE",
+							entity(mu)->name);
+				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
+			}
+			return;
+		}
+		else if (!has_priv(si, PRIV_MARK))
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked)", entity(mu)->name);
 			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
 			return;
 		}
