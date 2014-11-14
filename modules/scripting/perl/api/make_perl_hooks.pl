@@ -124,6 +124,11 @@ my %hook_structs = (
 		si => [ 'sourceinfo_t', 'source' ],
 		nick => 'const char *'
 	},
+	hook_user_needforce_t => {
+		si => [ 'sourceinfo_t', 'source' ],
+		mu => [ 'myuser_t', 'account' ],
+		allowed => [ 'int', '+allowed' ]
+	},
 );
 
 sub c_var_to_sv {

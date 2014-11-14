@@ -351,6 +351,12 @@ typedef struct {
 	const char *nick;
 } hook_info_noexist_req_t;
 
+typedef struct {
+	sourceinfo_t *si;
+	myuser_t *mu;
+	int allowed;
+} hook_user_needforce_t;
+
 /* pmodule.c XXX */
 E bool backend_loaded;
 
