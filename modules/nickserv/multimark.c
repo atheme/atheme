@@ -31,9 +31,12 @@ static void account_drop_hook(myuser_t *mu);
 static void nick_group_hook(hook_user_req_t *hdata);
 static void nick_ungroup_hook(hook_user_req_t *hdata);
 static void account_register_hook(myuser_t *mu);
+static void multimark_needforce(hook_user_needforce_t *hdata);
 
-static inline mowgli_list_t *multimark_list(myuser_t *mu);
+static bool is_user_marked(myuser_t *mu);
+
 int get_multimark_max(myuser_t *mu);
+static inline mowgli_list_t *multimark_list(myuser_t *mu);
 
 static mowgli_patricia_t *restored_marks;
 
@@ -88,6 +91,12 @@ static bool multimark_match(const mynick_t *mn, const void *arg)
 static bool is_marked(const mynick_t *mn, const void *arg)
 {
 	myuser_t *mu = mn->owner;
+
+	return is_user_marked(mu);
+}
+
+static bool is_user_marked(myuser_t *mu)
+{
 	mowgli_list_t *l = multimark_list(mu);
 
 	return MOWGLI_LIST_LENGTH(l) != 0;
@@ -122,6 +131,9 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_info_noexist");
 	hook_add_user_info_noexist(show_multimark_noexist);
+
+	hook_add_event("user_needforce");
+	hook_add_user_needforce(multimark_needforce);
 
 	hook_add_event("user_drop");
 	hook_add_user_drop(account_drop_hook);
@@ -750,6 +762,17 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 			);
 		}
 	}
+}
+
+static void multimark_needforce(hook_user_needforce_t *hdata)
+{
+	myuser_t *mu;
+	bool marked;
+
+	mu = hdata->mu;
+	marked = is_user_marked(mu);
+
+	hdata->allowed = !marked;
 }
 
 static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])

@@ -47,6 +47,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	enum specialoperation op = op_none;
 	bool ismarked = false;
 	char cmdtext[NICKLEN + 20];
+	hook_user_needforce_t needforce_hdata;
 
 	if (!name)
 	{
@@ -111,6 +112,35 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	needforce_hdata.si = si;
+	needforce_hdata.mu = mu;
+	needforce_hdata.allowed = 1;
+
+	hook_call_user_needforce(&needforce_hdata);
+
+	if (!needforce_hdata.allowed)
+	{
+		ismarked = true;
+		if (op == op_none)
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked)", entity(mu)->name);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked."), entity(mu)->name);
+			if (has_priv(si, PRIV_MARK))
+			{
+				snprintf(cmdtext, sizeof cmdtext,
+						"SENDPASS %s FORCE", entity(mu)->name);
+				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
+			}
+			return;
+		}
+		else if (!has_priv(si, PRIV_MARK))
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS \2%s\2 (marked)", entity(mu)->name);
+			command_fail(si, fault_noprivs, STR_NO_PRIVILEGE, PRIV_MARK);
+			return;
+		}
+	}
+
 	if (op == op_clear)
 	{
 		if (metadata_find(mu, "private:setpass:key"))
@@ -156,7 +186,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			if (ismarked)
 			{
 				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
+				command_success_nodata(si, _("Overriding MARK"));
 			}
 		}
 		else
