@@ -46,6 +46,7 @@ struct multimark {
 	char *setter_uid;
 	char *setter_name;
 	char *restored_from_uid;
+	char *restored_from_account;
 	time_t time;
 	int number;
 	char *mark;
@@ -55,6 +56,7 @@ struct multimark {
 struct restored_mark {
 	char *account_uid;
 	char *account_name;
+	char *nick;
 	char *setter_uid;
 	char *setter_name;
 	time_t time;
@@ -253,6 +255,8 @@ static void write_multimark_db(database_handle_t *db)
 				db_write_word(db, mm->restored_from_uid);
 			}
 
+			db_write_word(db, mm->restored_from_account);
+
 			db_write_uint(db, mm->time);
 			db_write_int(db, mm->number);
 			db_write_str(db, mm->mark);
@@ -268,6 +272,7 @@ static void write_multimark_db(database_handle_t *db)
 			db_start_row(db, "RM");
 			db_write_word(db, rm->account_uid);
 			db_write_word(db, rm->account_name);
+			db_write_word(db, rm->nick);
 			db_write_word(db, rm->setter_uid);
 			db_write_word(db, rm->setter_name);
 			db_write_uint(db, rm->time);
@@ -287,6 +292,7 @@ static void db_h_mm(database_handle_t *db, const char *type)
 	const char *setter_uid = db_sread_word(db);
 	const char *setter_name = db_sread_word(db);
 	const char *restored_from_uid = db_sread_word(db);
+	const char *restored_from_account = db_sread_word(db);
 	time_t time = db_sread_uint(db);
 	int number = db_sread_int(db);
 	const char *mark = db_sread_str(db);
@@ -300,6 +306,7 @@ static void db_h_mm(database_handle_t *db, const char *type)
 	mm->setter_uid = sstrdup(setter_uid);
 	mm->setter_name = sstrdup(setter_name);
 	mm->restored_from_uid = sstrdup(restored_from_uid);
+	mm->restored_from_account = sstrdup(restored_from_account);
 
 	if (!strcasecmp (mm->restored_from_uid, "NULL"))
 	{
@@ -320,17 +327,19 @@ static void db_h_rm(database_handle_t *db, const char *type)
 
 	const char *account_uid = db_sread_word(db);
 	const char *account_name = db_sread_word(db);
+	const char *nick = db_sread_word(db);
 	const char *setter_uid = db_sread_word(db);
 	const char *setter_name = db_sread_word(db);
 	time_t time = db_sread_uint(db);
 	const char *mark = db_sread_str(db);
 
-	mowgli_list_t *l = restored_mark_list(account_name);
+	mowgli_list_t *l = restored_mark_list(nick);
 
 	restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
 
 	rm->account_uid = sstrdup(account_uid);
 	rm->account_name = sstrdup(account_name);
+	rm->nick = sstrdup(nick);
 	rm->setter_uid = sstrdup(setter_uid);
 	rm->setter_name = sstrdup(setter_name);
 	rm->time = time;
@@ -338,7 +347,7 @@ static void db_h_rm(database_handle_t *db, const char *type)
 
 	mowgli_node_add(rm, &rm->node, l);
 
-	mowgli_patricia_add(restored_marks, account_name, l);
+	mowgli_patricia_add(restored_marks, nick, l);
 }
 
 /* Copy old style marks */
@@ -395,6 +404,7 @@ static void migrate_user(myuser_t *mu)
 
 	mm->setter_name = sstrdup(setter);
 	mm->restored_from_uid = NULL;
+	mm->restored_from_account = NULL;
 
 	mm->time = time;
 	mm->number = get_multimark_max(mu);
@@ -439,9 +449,10 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 	multimark_t *mm;
 
 	char *uid = entity(mu)->id;
-	const char *name = hdata->mn->nick;
+	const char *nick = hdata->mn->nick;
+	const char *account = entity(mu)->name;
 
-	mowgli_list_t *rml = restored_mark_list(name);
+	mowgli_list_t *rml = restored_mark_list(nick);
 
 	MOWGLI_ITER_FOREACH(n, l->head)
 	{
@@ -449,7 +460,8 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 
 		restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
 		rm->account_uid = sstrdup(uid);
-		rm->account_name = sstrdup(name);
+		rm->nick = sstrdup(nick);
+		rm->account_name = sstrdup(account);
 		rm->setter_uid = sstrdup(mm->setter_uid);
 		rm->setter_name = sstrdup(mm->setter_name);
 		rm->time = mm->time;
@@ -458,7 +470,7 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 		mowgli_node_add(rm, &rm->node, rml);
 	}
 
-	mowgli_patricia_add(restored_marks, name, rml);
+	mowgli_patricia_add(restored_marks, nick, rml);
 }
 
 static void account_drop_hook(myuser_t *mu)
@@ -478,6 +490,7 @@ static void account_drop_hook(myuser_t *mu)
 
 		restored_mark_t *rm = smalloc(sizeof(restored_mark_t));
 		rm->account_uid = sstrdup(uid);
+		rm->nick = sstrdup(name);
 		rm->account_name = sstrdup(name);
 		rm->setter_uid = sstrdup(mm->setter_uid);
 		rm->setter_name = sstrdup(mm->setter_name);
@@ -513,6 +526,7 @@ static void account_register_hook(myuser_t *mu)
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
+		mm->restored_from_account = rm->account_name;
 		mm->time = rm->time;
 		mm->number = get_multimark_max(mu);
 		mm->mark = sstrdup(rm->mark);
@@ -567,6 +581,7 @@ static void nick_group_hook(hook_user_req_t *hdata)
 		mm->setter_uid = sstrdup(rm->setter_uid);
 		mm->setter_name = sstrdup(rm->setter_name);
 		mm->restored_from_uid = rm->account_uid;
+		mm->restored_from_account = rm->account_name;
 		mm->time = rm->time;
 		mm->number = get_multimark_max(smu);
 		mm->mark = sstrdup(rm->mark);
@@ -653,7 +668,7 @@ static void show_multimark(hook_user_req_t *hdata)
 						hdata->si,
 						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
 						mm->number,
-						mm->restored_from_uid,
+						mm->restored_from_account,
 						entity(user)->name,
 						setter_name,
 						mm->setter_name,
@@ -667,7 +682,7 @@ static void show_multimark(hook_user_req_t *hdata)
 						hdata->si,
 						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
 						mm->number,
-						mm->restored_from_uid,
+						mm->restored_from_account,
 						setter_name,
 						mm->setter_name,
 						time,
@@ -684,7 +699,7 @@ static void show_multimark(hook_user_req_t *hdata)
 						hdata->si,
 						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
 						mm->number,
-						mm->restored_from_uid,
+						mm->restored_from_account,
 						entity(user)->name,
 						setter_name,
 						time,
@@ -697,7 +712,7 @@ static void show_multimark(hook_user_req_t *hdata)
 						hdata->si,
 						_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
 						mm->number,
-						mm->restored_from_uid,
+						mm->restored_from_account,
 						setter_name,
 						time,
 						mm->mark
@@ -822,6 +837,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 		mm->setter_uid = sstrdup(entity(si->smu)->id);
 		mm->setter_name = sstrdup(entity(si->smu)->name);
 		mm->restored_from_uid = NULL;
+		mm->restored_from_account = NULL;
 		mm->time = CURRTIME;
 		mm->number = get_multimark_max(mu);
 		mm->mark = sstrdup(info);
@@ -942,7 +958,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 							si,
 							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 (%s) on \2%s\2: %s"),
 							mm->number,
-							mm->restored_from_uid,
+							mm->restored_from_account,
 							entity(user)->name,
 							setter_name,
 							mm->setter_name,
@@ -956,7 +972,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 							si,
 							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 (%s) on \2%s\2: %s"),
 							mm->number,
-							mm->restored_from_uid,
+							mm->restored_from_account,
 							setter_name,
 							mm->setter_name,
 							time,
@@ -973,7 +989,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 							si,
 							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 (\2%s\2) by \2%s\2 on \2%s\2: %s"),
 							mm->number,
-							mm->restored_from_uid,
+							mm->restored_from_account,
 							entity(user)->name,
 							setter_name,
 							time,
@@ -986,7 +1002,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 							si,
 							_("\2(Restored)\2 Mark \2%d\2 originally set on \2%s\2 by \2%s\2 on \2%s\2: %s"),
 							mm->number,
-							mm->restored_from_uid,
+							mm->restored_from_account,
 							setter_name,
 							time,
 							mm->mark
@@ -1021,6 +1037,7 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 				free(mm->setter_uid);
 				free(mm->setter_name);
 				free(mm->restored_from_uid);
+				free(mm->restored_from_account);
 				free(mm->mark);
 				free(mm);
 
