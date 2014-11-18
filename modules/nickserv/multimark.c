@@ -735,6 +735,14 @@ static void show_multimark_noexist(hook_info_noexist_req_t *hdata)
 	myuser_t *setter;
 	const char *setter_name;
 
+	bool has_user_auspex;
+
+	has_user_auspex = has_priv(hdata->si, PRIV_USER_AUSPEX);
+
+	if (!has_user_auspex) {
+		return;
+	}
+
 	mowgli_list_t *l = restored_mark_list(nick);
 
 	MOWGLI_ITER_FOREACH(n, l->head)
