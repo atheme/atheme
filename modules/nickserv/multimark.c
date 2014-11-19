@@ -1067,6 +1067,6 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "MARK");
-		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
+		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST> [note]"));
 	}
 }
