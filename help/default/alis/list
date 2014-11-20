@@ -12,10 +12,12 @@ Options are:
     -show [m][t]: show modes/topicsetter
     -mode <+|-|=><modes>: modes set/unset/equal
     -topic <pattern>: topic matches pattern
+#if priv chan:auspex
     -showsecret: show secret channels (requires chan:auspex)
-    
+#endif
+
 The pattern can contain * and ? wildcards. The pattern has to
-match the full channel name or a full topic, depending on where it 
+match the full channel name or a full topic, depending on where it
 is used; the wildcards are important. The pattern is also
 automatically surrounded by * wildcards if
 - a channel name pattern starts with a wildcard or a #, or
@@ -23,7 +25,7 @@ automatically surrounded by * wildcards if
 
 For example, for channel names, from most to least specific:
  ?bar       - any character followed by "bar" with no other characters
- #bar*      - anything starting with "#bar" 
+ #bar*      - anything starting with "#bar"
  ##*bar*    - anything starting with ## and containing "bar"
  *cows*moo* - anything containing "cows", 0 or more characters, and "moo"
  *bar*      - anything containing "bar" (equivalent to "bar")
