@@ -18,6 +18,11 @@ Syntax: MARK <nickname> LIST
 
 Shows all marks for a nickname.
 
+Syntax: MARK MIGRATE
+
+Migrates ALL the marks from the old mark module to
+this one.
+
 Examples:
     /msg &nick& MARK tomaw ADD Doesn't actually exist
     /msg &nick& MARK tomaw ADD You can add as many marks as you want
