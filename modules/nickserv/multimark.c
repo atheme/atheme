@@ -418,6 +418,21 @@ static void migrate_user(myuser_t *mu)
 	metadata_delete(mu, "private:mark:timestamp");
 }
 
+static void migrate_all(sourceinfo_t *si)
+{
+	myentity_iteration_state_t state;
+	myentity_t *mt;
+
+	command_success_nodata(si, _("Migrating mark data..."));
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		myuser_t *mu = user(mt);
+		migrate_user(mu);
+	}
+
+	command_success_nodata(si, _("Mark data migrated successfully."));
+}
 
 int get_multimark_max(myuser_t *mu)
 {
@@ -817,10 +832,28 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 
 	mowgli_list_t *rl;
 
+	bool has_admin;
+
+	if (target && !strcasecmp(target, "MIGRATE") && !action)
+	{
+		has_admin = has_priv(si, PRIV_ADMIN);
+
+		if (!has_admin)
+		{
+			command_fail(si, fault_noprivs, _("You need the %s privilege for this operation."), PRIV_ADMIN);
+		}
+		else
+		{
+			migrate_all(si);
+		}
+
+		return;
+	}
+
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
-		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST> [note]"));
+		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
 		return;
 	}
 
@@ -1067,6 +1100,6 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "MARK");
-		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST> [note]"));
+		command_fail(si, fault_needmoreparams, _("usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
 	}
 }
