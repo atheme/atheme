@@ -67,7 +67,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	char *host;
 	myuser_t *mu;
 	metadata_t *md, *markmd;
-	bool force = false;
+	bool force = false, ismarked = false;
 	char cmdtext[NICKLEN + HOSTLEN + 20];
 	char timestring[16];
 	hook_user_needforce_t needforce_hdata;
@@ -130,6 +130,8 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((markmd = metadata_find(mu, "private:mark:setter")))
 	{
+		ismarked = true;
+
 		if (!force)
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked by \2%s\2)", entity(mu)->name, markmd->value);
@@ -164,6 +166,8 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!needforce_hdata.allowed)
 	{
+		ismarked = true;
+
 		if (!force)
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed VHOST \2%s\2 (marked)", entity(mu)->name);
@@ -203,10 +207,14 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, "private:usercloak-assigner");
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", entity(mu)->name);
-		if (markmd)
+		if (ismarked)
 		{
 			wallops("%s deleted vhost from the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
+			if (markmd) {
+				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
+			} else {
+				command_success_nodata(si, _("Overriding MARK(s) placed on the account %s."), entity(mu)->name);
+			}
 		}
 		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
@@ -232,10 +240,14 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 			host, entity(mu)->name);
 	logcommand(si, CMDLOG_ADMIN, "VHOST:ASSIGN: \2%s\2 to \2%s\2",
 			host, entity(mu)->name);
-	if (markmd)
+	if (ismarked)
 	{
 		wallops("%s set vhost %s on the \2MARKED\2 account %s.", get_oper_name(si), host, entity(mu)->name);
-		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
+		if (markmd) {
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), markmd->value, entity(mu)->name);
+		} else {
+			command_success_nodata(si, _("Overriding MARK(s) placed on the account %s."), entity(mu)->name);
+		}
 	}
 	do_sethost_all(mu, host);
 	return;
