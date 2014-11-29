@@ -35,6 +35,6 @@ Examples:
     /msg &nick& LIST * -topic multiple*ordered*search*terms
     /msg &nick& LIST * -min 50
     /msg &nick& LIST #foo*
-    /msg &nick& LIST -mode =n #foo*
-    /msg &nick& LIST -mode -t *freetopic* -show mt
-    /msg &nick& LIST -mode +c ##nocolors* -show t
+    /msg &nick& LIST #foo* -mode =n
+    /msg &nick& LIST *freetopic* -mode -t -show mt
+    /msg &nick& LIST ##nocolors* -mode +c -show t
