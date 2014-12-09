@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2006-2010 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
@@ -36,11 +36,13 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_t *n;
 	char *mcfp;
 	mycertfp_t *cert;
+	user_t *cu;
+	service_t *ns;
 
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CERT");
-		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST [fingerprint]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST|IDENTIFY [fingerprint]"));
 		return;
 	}
 
@@ -155,10 +157,50 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "CERT:DEL: \2%s\2", parv[1]);
 		mycertfp_delete(cert);
 	}
+	else if (!strcasecmp(parv[0], "IDENTIFY"))
+	{
+		cu = si->su;
+		if (cu->certfp == NULL) // No fingerprint
+		{
+			command_fail(si, fault_nochange, _("You do not have a fingerprint!"));
+			return;
+		}
+
+		cert = mycertfp_find(cu->certfp);
+		if (cert == NULL) // Fingerprint not in DB
+		{
+			command_fail(si, fault_nochange, _("Your current fingerprint does not match any accounts!"));
+			return;
+		}
+		ns = service_find("nickserv");
+
+		if (ns == NULL)
+		{
+			return;
+		}
+
+		mu = cert->mu;
+
+		if (cu->myuser != NULL) // Already logged in
+		{
+			command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), entity(cu->myuser)->name);
+			return;
+		}
+
+		if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
+		{
+			command_fail(si, fault_toomany, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+			return;
+		}
+
+		myuser_login(ns, cu, mu, true);
+		logcommand_user(ns, cu, CMDLOG_LOGIN, "LOGIN via CERT IDENTIFY (%s)", cu->certfp);
+		notice(ns->nick, cu->nick, nicksvs.no_nick_ownership ? _("You are now logged in as \2%s\2.") : _("You are now identified for \2%s\2."), entity(mu)->name);
+	}
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "CERT");
-		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST [fingerprint]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST|IDENTIFY [fingerprint]"));
 		return;
 	}
 }
