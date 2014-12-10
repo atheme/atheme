@@ -1741,6 +1741,13 @@ unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 		result |= chanacs_entity_flags(mychan, mt);
 
 	result |= chanacs_entity_flags_by_user(mychan, u);
+
+	/* the user is pending e-mail verification.  so, we want to filter out all flags
+	 * other than CA_AKICK (+b).  that way they have no effective access.  --kaniini
+	 */
+	if (u->myuser != NULL && (u->myuser->flags & MU_WAITAUTH))
+		result &= ~(ca_all & ~CA_AKICK);
+
 	result |= chanacs_host_flags_by_user(mychan, u);
 
 	slog(LG_DEBUG, "chanacs_user_flags(%s, %s): return %s", mychan->name, u->nick, bitmask_to_flags(result));
