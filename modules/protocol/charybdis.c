@@ -17,29 +17,29 @@ DECLARE_MODULE_V1("protocol/charybdis", true, _modinit, NULL, PACKAGE_STRING, "A
 /* *INDENT-OFF* */
 
 ircd_t Charybdis = {
-        "Charybdis",			/* IRCd name */
-        "$$",                           /* TLD Prefix, used by Global. */
-        true,                           /* Whether or not we use IRCNet/TS6 UID */
-        false,                          /* Whether or not we use RCOMMAND */
-        false,                          /* Whether or not we support channel owners. */
-        false,                          /* Whether or not we support channel protection. */
-        false,                          /* Whether or not we support halfops. */
+	"Charybdis",			/* IRCd name */
+	"$$",				/* TLD Prefix, used by Global. */
+	true,				/* Whether or not we use IRCNet/TS6 UID */
+	false,				/* Whether or not we use RCOMMAND */
+	false,				/* Whether or not we support channel owners. */
+	false,				/* Whether or not we support channel protection. */
+	false,				/* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
-        0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+	0,				/* Integer flag for owner channel flag. */
+	0,				/* Integer flag for protect channel flag. */
+	0,				/* Integer flag for halfops. */
+	"+",				/* Mode we set for owner. */
+	"+",				/* Mode we set for protect. */
+	"+",				/* Mode we set for halfops. */
 	PROTOCOL_CHARYBDIS,		/* Protocol type */
-	CMODE_PERM,                     /* Permanent cmodes */
-	0,                              /* Oper-immune cmode */
-	"beIq",                         /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I',                            /* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
+	CMODE_PERM,			/* Permanent cmodes */
+	0,				/* Oper-immune cmode */
+	"beIq",				/* Ban-like cmodes */
+	'e',				/* Except mchar */
+	'I',				/* Invex mchar */
+	IRCD_CIDR_BANS | IRCD_HOLDNICK	/* Flags */
 };
 
 struct cmode_ charybdis_mode_list[] = {
@@ -58,12 +58,12 @@ struct cmode_ charybdis_mode_list[] = {
   { 'Q', CMODE_DISFWD },
 
   /* following modes are added as extensions */
-  { 'N', CMODE_NPC       },
-  { 'S', CMODE_SSLONLY   },
+  { 'N', CMODE_NPC	 },
+  { 'S', CMODE_SSLONLY	 },
   { 'O', CMODE_OPERONLY  },
   { 'A', CMODE_ADMINONLY },
-  { 'c', CMODE_NOCOLOR   },
-  { 'C', CMODE_NOCTCP    },
+  { 'c', CMODE_NOCOLOR	 },
+  { 'C', CMODE_NOCTCP	 },
 
   { '\0', 0 }
 };

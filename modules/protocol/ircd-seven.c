@@ -18,28 +18,28 @@ DECLARE_MODULE_V1("protocol/ircd-seven", true, _modinit, NULL, PACKAGE_STRING, "
 /* *INDENT-OFF* */
 
 ircd_t Seven = {
-        "ircd-seven",			/* IRCd name */
-        "$$",                           /* TLD Prefix, used by Global. */
-        true,                           /* Whether or not we use IRCNet/TS6 UID */
-        false,                          /* Whether or not we use RCOMMAND */
-        false,                          /* Whether or not we support channel owners. */
-        false,                          /* Whether or not we support channel protection. */
-        false,                          /* Whether or not we support halfops. */
+	"ircd-seven",			/* IRCd name */
+	"$$",				/* TLD Prefix, used by Global. */
+	true,				/* Whether or not we use IRCNet/TS6 UID */
+	false,				/* Whether or not we use RCOMMAND */
+	false,				/* Whether or not we support channel owners. */
+	false,				/* Whether or not we support channel protection. */
+	false,				/* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	false,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-        0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+	0,				/* Integer flag for owner channel flag. */
+	0,				/* Integer flag for protect channel flag. */
+	0,				/* Integer flag for halfops. */
+	"+",				/* Mode we set for owner. */
+	"+",				/* Mode we set for protect. */
+	"+",				/* Mode we set for halfops. */
 	PROTOCOL_CHARYBDIS,		/* Protocol type */
-	CMODE_PERM,                     /* Permanent cmodes */
-	CMODE_IMMUNE,                   /* Oper-immune cmode */
-	"beIq",                         /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I',                            /* Invex mchar */
+	CMODE_PERM,			/* Permanent cmodes */
+	CMODE_IMMUNE,			/* Oper-immune cmode */
+	"beIq",				/* Ban-like cmodes */
+	'e',				/* Except mchar */
+	'I',				/* Invex mchar */
 	IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR  /* Flags */
 };
 
@@ -62,8 +62,8 @@ struct cmode_ seven_mode_list[] = {
   { 'C', CMODE_NOCTCP },
 
   /* following modes are added as extensions */
-  { 'N', CMODE_NPC       },
-  { 'S', CMODE_SSLONLY   },
+  { 'N', CMODE_NPC	 },
+  { 'S', CMODE_SSLONLY	 },
   { 'O', CMODE_OPERONLY  },
   { 'A', CMODE_ADMINONLY },
 
@@ -84,24 +84,24 @@ struct cmode_ seven_user_mode_list[] = {
 
 static bool seven_is_valid_hostslash(const char *host)
 {
-        const char *p;
-        bool dot = false;
+	const char *p;
+	bool dot = false;
 
-        if (*host == '.' || *host == '/' || *host == ':')
-                return false;
+	if (*host == '.' || *host == '/' || *host == ':')
+		return false;
 
-        for (p = host; *p != '\0'; p++)
-        {
-                if (*p == '.' || *p == ':' || *p == '/')
-                        dot = true;
-                else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
-                                        (*p >= 'a' && *p <= 'z') || *p == '-'))
-                        return false;
-        }
-        /* hyperion allows a trailing / but RichiH does not want it, whatever */
-        if (dot && p[-1] == '/')
-                return false;
-        return dot;
+	for (p = host; *p != '\0'; p++)
+	{
+		if (*p == '.' || *p == ':' || *p == '/')
+			dot = true;
+		else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+					(*p >= 'a' && *p <= 'z') || *p == '-'))
+			return false;
+	}
+	/* hyperion allows a trailing / but RichiH does not want it, whatever */
+	if (dot && p[-1] == '/')
+		return false;
+	return dot;
 }
 
 static void seven_wallops_sts(const char *reason)
@@ -202,11 +202,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		bool realchange;
 
-                if (!si->su)
-                {
-                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
-                        return;
-                }
+		if (!si->su)
+		{
+			slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
+			return;
+		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 

@@ -15,43 +15,43 @@ DECLARE_MODULE_V1("protocol/ngircd", true, _modinit, NULL, PACKAGE_STRING, "Athe
 /* *INDENT-OFF* */
 
 ircd_t ngIRCd = {
-        "ngIRCd",			/* IRCd name */
-        "$",                            /* TLD Prefix, used by Global. */
-        false,                          /* Whether or not we use IRCNet/TS6 UID */
-        false,                          /* Whether or not we use RCOMMAND */
-        true,                           /* Whether or not we support channel owners. */
-        true,                           /* Whether or not we support channel protection. */
-        true,                           /* Whether or not we support halfops. */
+	"ngIRCd",			/* IRCd name */
+	"$",				/* TLD Prefix, used by Global. */
+	false,				/* Whether or not we use IRCNet/TS6 UID */
+	false,				/* Whether or not we use RCOMMAND */
+	true,				/* Whether or not we support channel owners. */
+	true,				/* Whether or not we support channel protection. */
+	true,				/* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	true,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY | CMODE_PERM,	/* Oper-only cmodes */
-        CSTATUS_OWNER,                  /* Integer flag for owner channel flag. */
-        CSTATUS_PROTECT,                /* Integer flag for protect channel flag. */
-        CSTATUS_HALFOP,                 /* Integer flag for halfops. */
-        "+q",                           /* Mode we set for owner. */
-        "+a",                           /* Mode we set for protect. */
-        "+h",                           /* Mode we set for halfops. */
+	CSTATUS_OWNER,			/* Integer flag for owner channel flag. */
+	CSTATUS_PROTECT,		/* Integer flag for protect channel flag. */
+	CSTATUS_HALFOP,			/* Integer flag for halfops. */
+	"+q",				/* Mode we set for owner. */
+	"+a",				/* Mode we set for protect. */
+	"+h",				/* Mode we set for halfops. */
 	PROTOCOL_NGIRCD,		/* Protocol type */
-	CMODE_PERM,                     /* Permanent cmodes */
-	0,                              /* Oper-immune cmode */
-	"beI",                          /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I',                            /* Invex mchar */
-	0                               /* Flags */
+	CMODE_PERM,			/* Permanent cmodes */
+	0,				/* Oper-immune cmode */
+	"beI",				/* Ban-like cmodes */
+	'e',				/* Except mchar */
+	'I',				/* Invex mchar */
+	0				/* Flags */
 };
 
 struct cmode_ ngircd_mode_list[] = {
-  { 'i', CMODE_INVITE   },
-  { 'm', CMODE_MOD      },
-  { 'n', CMODE_NOEXT    },
-  { 'p', CMODE_PRIV     },
-  { 's', CMODE_SEC      },
-  { 't', CMODE_TOPIC    },
+  { 'i', CMODE_INVITE	},
+  { 'm', CMODE_MOD	},
+  { 'n', CMODE_NOEXT	},
+  { 'p', CMODE_PRIV	},
+  { 's', CMODE_SEC	},
+  { 't', CMODE_TOPIC	},
   { 'O', CMODE_OPERONLY },
-  { 'R', CMODE_REGONLY  },
-  { 'r', CMODE_CHANREG  },
-  { 'P', CMODE_PERM     },
-  { 'z', CMODE_SSLONLY  },
+  { 'R', CMODE_REGONLY	},
+  { 'r', CMODE_CHANREG	},
+  { 'P', CMODE_PERM	},
+  { 'z', CMODE_SSLONLY	},
   { '\0', 0 }
 };
 
@@ -60,20 +60,20 @@ struct extmode ngircd_ignore_mode_list[] = {
 };
 
 struct cmode_ ngircd_status_mode_list[] = {
-  { 'q', CSTATUS_OWNER   },
+  { 'q', CSTATUS_OWNER	 },
   { 'a', CSTATUS_PROTECT },
-  { 'o', CSTATUS_OP      },
+  { 'o', CSTATUS_OP	 },
   { 'h', CSTATUS_HALFOP  },
-  { 'v', CSTATUS_VOICE   },
+  { 'v', CSTATUS_VOICE	 },
   { '\0', 0 }
 };
 
 struct cmode_ ngircd_prefix_mode_list[] = {
-  { '~', CSTATUS_OWNER   },
+  { '~', CSTATUS_OWNER	 },
   { '&', CSTATUS_PROTECT },
-  { '@', CSTATUS_OP      },
+  { '@', CSTATUS_OP	 },
   { '%', CSTATUS_HALFOP  },
-  { '+', CSTATUS_VOICE   },
+  { '+', CSTATUS_VOICE	 },
   { '\0', 0 }
 };
 
@@ -439,11 +439,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 1 then it's a nickname change */
 	else if (parc == 1)
 	{
-                if (!si->su)
-                {
-                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
-                        return;
-                }
+		if (!si->su)
+		{
+			slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
+			return;
+		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
@@ -488,11 +488,11 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_njoin(): new channel: %s", parv[0]);
 
-                /* Give channels created during burst an older "TS"
-                 * so they won't be deopped -- jilles */
+		/* Give channels created during burst an older "TS"
+		 * so they won't be deopped -- jilles */
 		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601, si->s);
 
-                /* if !/+ channel, we don't want to do anything with it */
+		/* if !/+ channel, we don't want to do anything with it */
 		if (c == NULL)
 			return;
 
@@ -807,7 +807,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcmp(parv[1], "accountname"))
 	{
 		if (si->s == u->server && (!(si->s->flags & SF_EOB) ||
-		                           (u->myuser != NULL &&
+					   (u->myuser != NULL &&
 					    !irccasecmp(entity(u->myuser)->name, parv[2]))))
 			handle_burstlogin(u, parv[2], 0);
 		else if (*parv[2])

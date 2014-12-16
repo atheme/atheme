@@ -25,7 +25,7 @@
 
 DECLARE_MODULE_V1("protocol/base36uid", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
 
-static char new_uid[10];		/* allow for \0 */
+static char new_uid[10]; /* allow for \0 */
 static unsigned int uindex = 0;
 
 static void base36_uid_init(const char *sid)
@@ -83,7 +83,7 @@ static void add_one_to_uid(unsigned int i)
 
 static const char *base36_uid_get(void)
 {
-	add_one_to_uid(uindex - 1);	/* index from 0 */
+	add_one_to_uid(uindex - 1); /* index from 0 */
 	return (new_uid);
 }
 

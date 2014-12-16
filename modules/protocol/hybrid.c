@@ -16,29 +16,29 @@ DECLARE_MODULE_V1("protocol/hybrid", true, _modinit, NULL, PACKAGE_STRING, "Athe
 /* *INDENT-OFF* */
 
 ircd_t Hybrid = {
-        "Hybrid 7.1.2+",		/* IRCd name */
-        "$$",                           /* TLD Prefix, used by Global. */
-        true,                           /* Whether or not we use IRCNet/TS6 UID */
-        false,                          /* Whether or not we use RCOMMAND */
-        false,                          /* Whether or not we support channel owners. */
-        false,                          /* Whether or not we support channel protection. */
-        false,                          /* Whether or not we support halfops. */
+	"Hybrid 7.1.2+",		/* IRCd name */
+	"$$",				/* TLD Prefix, used by Global. */
+	true,				/* Whether or not we use IRCNet/TS6 UID */
+	false,				/* Whether or not we use RCOMMAND */
+	false,				/* Whether or not we support channel owners. */
+	false,				/* Whether or not we support channel protection. */
+	false,				/* Whether or not we support halfops. */
 	false,				/* Whether or not we use P10 */
 	false,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
-        0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+	0,				/* Integer flag for owner channel flag. */
+	0,				/* Integer flag for protect channel flag. */
+	0,				/* Integer flag for halfops. */
+	"+",				/* Mode we set for owner. */
+	"+",				/* Mode we set for protect. */
+	"+",				/* Mode we set for halfops. */
 	PROTOCOL_RATBOX,		/* Protocol type */
-	0,                              /* Permanent cmodes */
-	0,                              /* Oper-immune cmode */
-	"beI",                          /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I',                            /* Invex mchar */
-	IRCD_CIDR_BANS                  /* Flags */
+	0,				/* Permanent cmodes */
+	0,				/* Oper-immune cmode */
+	"beI",				/* Ban-like cmodes */
+	'e',				/* Except mchar */
+	'I',				/* Invex mchar */
+	IRCD_CIDR_BANS			/* Flags */
 };
 
 struct cmode_ hybrid_mode_list[] = {
@@ -83,27 +83,27 @@ static void hybrid_quarantine_sts(user_t *source, user_t *victim, long duration,
 
 static void m_tburst(sourceinfo_t *si, int parc, char *parv[])
 {
-       time_t chants = atol(parv[0]);
-       channel_t *c = channel_find(parv[1]);
-       time_t topicts = atol(parv[2]);
+	time_t chants = atol(parv[0]);
+	channel_t *c = channel_find(parv[1]);
+	time_t topicts = atol(parv[2]);
+ 
+	if (c == NULL)
+		return;
 
-       if (c == NULL)
-               return;
+	/* Our uplink is trying to change the topic during burst,
+	 * and we have already set a topic. Assume our change won.
+	 * -- jilles */
+	if (si->s != NULL && si->s->uplink == me.me &&
+			!(si->s->flags & SF_EOB) && c->topic != NULL)
+		return;
 
-       /* Our uplink is trying to change the topic during burst,
-        * and we have already set a topic. Assume our change won.
-        * -- jilles */
-       if (si->s != NULL && si->s->uplink == me.me &&
-                       !(si->s->flags & SF_EOB) && c->topic != NULL)
-               return;
+	if (c->ts < chants || (c->ts == chants && c->topicts >= topicts))
+	{
+		slog(LG_DEBUG, "m_tburst(): ignoring topic on %s", c->name);
+		return;
+	}
 
-       if (c->ts < chants || (c->ts == chants && c->topicts >= topicts))
-       {
-               slog(LG_DEBUG, "m_tburst(): ignoring topic on %s", c->name);
-               return;
-       }
-
-       handle_topic_from(si, c, parv[3], topicts, parv[4]);
+	handle_topic_from(si, c, parv[3], topicts, parv[4]);
 }
 
 

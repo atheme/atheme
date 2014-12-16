@@ -9,7 +9,7 @@
 /*
  * protocol/ts6-generic
  *
- * This module is not very useful on it's own.  It implements
+ * This module is not very useful on it's own.	It implements
  * the basis of the TS6 extended linking profile, which is used
  * by hybrid, charybdis, ratbox (--enable-services), weircd
  * and others.
@@ -430,7 +430,7 @@ static bool ts6_on_logout(user_t *u, const char *account)
 
 /* XXX we don't have an appropriate API for this, what about making JUPE
  * serverside like in P10?
- *       --nenolod
+ *	 --nenolod
  */
 static void ts6_jupe(const char *server, const char *reason)
 {
@@ -913,11 +913,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 2 then it's a nickname change */
 	else if (parc == 2)
 	{
-                if (!si->su)
-                {
-                        slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
-                        return;
-                }
+		if (!si->su)
+		{
+			slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
+			return;
+		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
@@ -1381,7 +1381,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Now we know whether or not we should enable services support,
 	 * so burst the clients.
-	 *       --nenolod
+	 *	 --nenolod
 	 */
 	services_init();
 }
