@@ -450,6 +450,13 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!valid_ip_or_mask(ip))
+	{
+		command_fail(si, fault_badparams, _("Invalid IP/mask given."));
+		command_fail(si, fault_badparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>"));
+		return;
+	}
+
 	clones = atoi(clonesstr);
 
 	if (expiry && !strcasecmp(expiry, "!P"))
