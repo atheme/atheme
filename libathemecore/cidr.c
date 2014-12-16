@@ -208,8 +208,6 @@ inet_pton6(const char *src, u_char *dst)
 				break;	/* '\0' was seen by inet_pton4(). */
 			}
 		}
-		else
-			continue;
 		return (0);
 	}
 	if(saw_xdigit)
