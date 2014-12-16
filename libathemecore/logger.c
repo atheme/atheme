@@ -196,7 +196,7 @@ static void logfile_write(logfile_t *lf, const char *buf)
 
 	time(&t);
 	tm = *localtime(&t);
-	strftime(datetime, sizeof datetime, "[%d/%m/%Y %H:%M:%S]", &tm);
+	strftime(datetime, sizeof datetime, "[%Y-%m-%d %H:%M:%S]", &tm);
 
 	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, logfile_strip_control_codes(buf));
 	fflush((FILE *) lf->log_file);
@@ -570,7 +570,7 @@ static void vslog_ext(log_type_t type, unsigned int level, const char *fmt,
 
 	time(&t);
 	tm = *localtime(&t);
-	strftime(datetime, sizeof datetime, "[%d/%m/%Y %H:%M:%S]", &tm);
+	strftime(datetime, sizeof datetime, "[%Y-%m-%d %H:%M:%S]", &tm);
 
 	MOWGLI_ITER_FOREACH(n, log_files.head)
 	{
