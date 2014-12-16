@@ -15,29 +15,29 @@ DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "At
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-	"InspIRCd",			/* IRCd name */
-	"$",				/* TLD Prefix, used by Global. */
-	true,				/* Whether or not we use IRCNet/TS6 UID */
-	false,				/* Whether or not we use RCOMMAND */
-	true,				/* Whether or not we support channel owners. */
-	true,				/* Whether or not we support channel protection. */
-	true,				/* Whether or not we support halfops. */
-	false,				/* Whether or not we use P10 */
-	true,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-	CSTATUS_OWNER,			/* Integer flag for owner channel flag. */
-	CSTATUS_PROTECT,		/* Integer flag for protect channel flag. */
-	CSTATUS_HALFOP,			/* Integer flag for halfops. */
-	"+q",				/* Mode we set for owner. */
-	"+a",				/* Mode we set for protect. */
-	"+h",				/* Mode we set for halfops. */
-	PROTOCOL_INSPIRCD,		/* Protocol type */
-	CMODE_PERM,			/* Permanent cmodes */
-	CMODE_IMMUNE,			/* Oper-immune cmode */
-	"beIgXw",			/* Ban-like cmodes */
-	'e',				/* Except mchar */
-	'I',				/* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK	/* Flags */
+	.ircdname = "InspIRCd",
+	.tldprefix = "$",
+	.uses_uid = true,
+	.uses_rcommand = false,
+	.uses_owner = true,
+	.uses_protect = true,
+	.uses_halfops = true,
+	.uses_p10 = false,
+	.uses_vhost = true,
+	.oper_only_modes = CMODE_OPERONLY | CMODE_PERM | CMODE_IMMUNE,
+	.owner_mode = CSTATUS_OWNER,
+	.protect_mode = CSTATUS_PROTECT,
+	.halfops_mode = CSTATUS_HALFOP,
+	.owner_mchar = "+q",
+	.protect_mchar = "+a",
+	.halfops_mchar = "+h",
+	.type = PROTOCOL_INSPIRCD,
+	.perm_mode = CMODE_PERM,
+	.oimmune_mode = CMODE_IMMUNE,
+	.ban_like_modes = "beIgXw",
+	.except_mchar = 'e',
+	.invex_mchar = 'I',
+	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
 struct cmode_ inspircd_mode_list[] = {

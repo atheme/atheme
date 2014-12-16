@@ -18,29 +18,29 @@ DECLARE_MODULE_V1("protocol/nefarious", true, _modinit, NULL, PACKAGE_STRING, "A
 /* *INDENT-OFF* */
 
 ircd_t Nefarious = {
-	"Nefarious IRCU 0.4.0 or later", /* IRCd name */
-	"$",				/* TLD Prefix, used by Global. */
-	true,				/* Whether or not we use IRCNet/TS6 UID */
-	false,				/* Whether or not we use RCOMMAND */
-	false,				/* Whether or not we support channel owners. */
-	false,				/* Whether or not we support channel protection. */
-	true,				/* Whether or not we support halfops. */
-	true,				/* Whether or not we use P10 */
-	true,				/* Whether or not we use vhosts. */
-	CMODE_PERM|CMODE_OPERONLY|CMODE_ADMONLY, /* Oper-only cmodes */
-	0,				/* Integer flag for owner channel flag. */
-	0,				/* Integer flag for protect channel flag. */
-	CSTATUS_HALFOP,			/* Integer flag for halfops. */
-	"+",				/* Mode we set for owner. */
-	"+",				/* Mode we set for protect. */
-	"+",				/* Mode we set for halfops. */
-	PROTOCOL_NEFARIOUS,		/* Protocol type */
-	CMODE_PERM,			/* Permanent cmodes */
-	0,				/* Oper-immune cmode */
-	"be",				/* Ban-like cmodes */
-	'e',				/* Except mchar */
-	'e',				/* Invex mchar (+e also exempts from +i in Nefarious) */
-	IRCD_CIDR_BANS			/* Flags */
+	.ircdname = "Nefarious IRCU 0.4.0 or later",
+	.tldprefix = "$",
+	.uses_uid = true,
+	.uses_rcommand = false,
+	.uses_owner = false,
+	.uses_protect = false,
+	.uses_halfops = true,
+	.uses_p10 = true,
+	.uses_vhost = true,
+	.oper_only_modes = CMODE_PERM | CMODE_OPERONLY | CMODE_ADMONLY,
+	.owner_mode = 0,
+	.protect_mode = 0,
+	.halfops_mode = CSTATUS_HALFOP,
+	.owner_mchar = "+",
+	.protect_mchar = "+",
+	.halfops_mchar = "+",
+	.type = PROTOCOL_NEFARIOUS,
+	.perm_mode = CMODE_PERM,
+	.oimmune_mode = 0,
+	.ban_like_modes = "be",
+	.except_mchar = 'e',
+	.invex_mchar = 'e',
+	.flags = IRCD_CIDR_BANS,
 };
 
 struct cmode_ nefarious_mode_list[] = {

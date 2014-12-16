@@ -19,29 +19,29 @@ DECLARE_MODULE_V1("protocol/elemental-ircd", true, _modinit, NULL, PACKAGE_STRIN
 /* *INDENT-OFF* */
 
 ircd_t elemental_ircd = {
-	"elemental-ircd",		/* IRCd name */
-	"$$",				/* TLD Prefix, used by Global. */
-	true,				/* Whether or not we use IRCNet/TS6 UID */
-	false,				/* Whether or not we use RCOMMAND */
-	true,				/* Whether or not we support channel owners. */
-	true,				/* Whether or not we support channel protection. */
-	true,				/* Whether or not we support halfops. */
-	false,				/* Whether or not we use P10 */
-	false,				/* Whether or not we use vHosts. */
-	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-	CSTATUS_OWNER,			/* Integer flag for owner channel flag. */
-	CSTATUS_PROTECT,		/* Integer flag for protect channel flag. */
-	CSTATUS_HALFOP,			/* Integer flag for halfops. */
-	"+y",				/* Mode we set for owner. */
-	"+a",				/* Mode we set for protect. */
-	"+h",				/* Mode we set for halfops. */
-	PROTOCOL_SHADOWIRCD,		/* Protocol type */
-	CMODE_PERM,			/* Permanent cmodes */
-	CMODE_IMMUNE,			/* Oper-immune cmode */
-	"beIq",				/* Ban-like cmodes */
-	'e',				/* Except mchar */
-	'I',				/* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK	/* Flags */
+	.ircdname = "elemental-ircd",
+	.tldprefix = "$$",
+	.uses_uid = true,
+	.uses_rcommand = false,
+	.uses_owner = true,
+	.uses_protect = true,
+	.uses_halfops = true,
+	.uses_p10 = false,
+	.uses_vhost = false,
+	.oper_only_modes = CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE,
+	.owner_mode = CSTATUS_OWNER,
+	.protect_mode = CSTATUS_PROTECT,
+	.halfops_mode = CSTATUS_HALFOP,
+	.owner_mchar = "+y",
+	.protect_mchar = "+a",
+	.halfops_mchar = "+h",
+	.type = PROTOCOL_SHADOWIRCD,
+	.perm_mode = CMODE_PERM,
+	.oimmune_mode = CMODE_IMMUNE,
+	.ban_like_modes = "beIq",
+	.except_mchar = 'e',
+	.invex_mchar = 'I',
+	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK,
 };
 
 struct cmode_ elemental_mode_list[] = {

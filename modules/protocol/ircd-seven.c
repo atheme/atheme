@@ -18,29 +18,29 @@ DECLARE_MODULE_V1("protocol/ircd-seven", true, _modinit, NULL, PACKAGE_STRING, "
 /* *INDENT-OFF* */
 
 ircd_t Seven = {
-	"ircd-seven",			/* IRCd name */
-	"$$",				/* TLD Prefix, used by Global. */
-	true,				/* Whether or not we use IRCNet/TS6 UID */
-	false,				/* Whether or not we use RCOMMAND */
-	false,				/* Whether or not we support channel owners. */
-	false,				/* Whether or not we support channel protection. */
-	false,				/* Whether or not we support halfops. */
-	false,				/* Whether or not we use P10 */
-	false,				/* Whether or not we use vHosts. */
-	CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE, /* Oper-only cmodes */
-	0,				/* Integer flag for owner channel flag. */
-	0,				/* Integer flag for protect channel flag. */
-	0,				/* Integer flag for halfops. */
-	"+",				/* Mode we set for owner. */
-	"+",				/* Mode we set for protect. */
-	"+",				/* Mode we set for halfops. */
-	PROTOCOL_CHARYBDIS,		/* Protocol type */
-	CMODE_PERM,			/* Permanent cmodes */
-	CMODE_IMMUNE,			/* Oper-immune cmode */
-	"beIq",				/* Ban-like cmodes */
-	'e',				/* Except mchar */
-	'I',				/* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR  /* Flags */
+	.ircdname = "ircd-seven",
+	.tldprefix = "$$",
+	.uses_uid = true,
+	.uses_rcommand = false,
+	.uses_owner = false,
+	.uses_protect = false,
+	.uses_halfops = false,
+	.uses_p10 = false,
+	.uses_vhost = false,
+	.oper_only_modes = CMODE_EXLIMIT | CMODE_PERM | CMODE_IMMUNE,
+	.owner_mode = 0,
+	.protect_mode = 0,
+	.halfops_mode = 0,
+	.owner_mchar = "+",
+	.protect_mchar = "+",
+	.halfops_mchar = "+",
+	.type = PROTOCOL_CHARYBDIS,
+	.perm_mode = CMODE_PERM,
+	.oimmune_mode = CMODE_IMMUNE,
+	.ban_like_modes = "beIq",
+	.except_mchar = 'e',
+	.invex_mchar = 'I',
+	.flags = IRCD_CIDR_BANS | IRCD_HOLDNICK | IRCD_TOPIC_NOCOLOUR,
 };
 
 struct cmode_ seven_mode_list[] = {

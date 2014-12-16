@@ -22,29 +22,29 @@ static char ts6sid[3 + 1] = "";
 /* *INDENT-OFF* */
 
 ircd_t Unreal = {
-	"UnrealIRCd 3.1 or later",	/* IRCd name */
-	"$",				/* TLD Prefix, used by Global. */
-	true,				/* Whether or not we use IRCNet/TS6 UID */
-	false,				/* Whether or not we use RCOMMAND */
-	true,				/* Whether or not we support channel owners. */
-	true,				/* Whether or not we support channel protection. */
-	true,				/* Whether or not we support halfops. */
-	false,				/* Whether or not we use P10 */
-	true,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY | CMODE_ADMONLY, /* Oper-only cmodes */
-	CSTATUS_OWNER,			/* Integer flag for owner channel flag. */
-	CSTATUS_PROTECT,		/* Integer flag for protect channel flag. */
-	CSTATUS_HALFOP,			/* Integer flag for halfops. */
-	"+q",				/* Mode we set for owner. */
-	"+a",				/* Mode we set for protect. */
-	"+h",				/* Mode we set for halfops. */
-	PROTOCOL_UNREAL,		/* Protocol type */
-	CMODE_PERM,			/* Permanent cmodes */
-	0,				/* Oper-immune cmode */
-	"beI",				/* Ban-like cmodes */
-	'e',				/* Except mchar */
-	'I',				/* Invex mchar */
-	IRCD_HOLDNICK | IRCD_SASL_USE_PUID /* Flags */
+	.ircdname = "UnrealIRCd 3.1 or later",
+	.tldprefix = "$",
+	.uses_uid = true,
+	.uses_rcommand = false,
+	.uses_owner = true,
+	.uses_protect = true,
+	.uses_halfops = true,
+	.uses_p10 = false,
+	.uses_vhost = true,
+	.oper_only_modes = CMODE_OPERONLY | CMODE_ADMONLY,
+	.owner_mode = CSTATUS_OWNER,
+	.protect_mode = CSTATUS_PROTECT,
+	.halfops_mode = CSTATUS_HALFOP,
+	.owner_mchar = "+q",
+	.protect_mchar = "+a",
+	.halfops_mchar = "+h",
+	.type = PROTOCOL_UNREAL,
+	.perm_mode = CMODE_PERM,
+	.oimmune_mode = 0,
+	.ban_like_modes = "beI",
+	.except_mchar = 'e',
+	.invex_mchar = 'I',
+	.flags = IRCD_HOLDNICK | IRCD_SASL_USE_PUID,
 };
 
 struct cmode_ unreal_mode_list[] = {
