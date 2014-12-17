@@ -56,10 +56,10 @@ sub event_cap {
 			if ($caps =~ / sasl /i) {
 				$sasl->{buffer} = '';
 				$sasl->{step} = 0;
-				if($mech{$sasl->{mech}}) {
+				if ($mech{$sasl->{mech}}) {
 					$server->send_raw_now("AUTHENTICATE " . $sasl->{mech});
 					Irssi::timeout_add_once(7500, \&timeout, $server->{tag});
-				}else{
+				} else {
 					$server->print('', 'SASL: attempted to start unknown mechanism "' . $sasl->{mech} . '"');
 				}
 			}
@@ -93,13 +93,13 @@ sub event_authenticate {
 	$out = '' unless defined $out;
 	$out = $out eq '' ? '+' : encode_base64($out, '');
 
-	while(length $out >= 400) {
+	while (length $out >= 400) {
 		my $subout = substr($out, 0, 400, '');
 		$server->send_raw_now("AUTHENTICATE $subout");
 	}
-	if(length $out) {
+	if (length $out) {
 		$server->send_raw_now("AUTHENTICATE $out");
-	}else{ # Last piece was exactly 400 bytes, we have to send some padding to indicate we're done
+	} else { # Last piece was exactly 400 bytes, we have to send some padding to indicate we're done
 		$server->send_raw_now("AUTHENTICATE +");
 	}
 
@@ -122,8 +122,8 @@ sub event_saslend {
 sub timeout {
 	my $tag = shift;
 	my $server = Irssi::server_find_tag($tag);
-	if($server && !$server->{connected}) {
-		$server->print('', "SASL: authentication timed out");
+	if ($server && !$server->{connected}) {
+		$server->print('', "SASL: authentication timed out", MSGLEVEL_CLIENTERROR);
 		$server->send_raw_now("CAP END");
 	}
 }
@@ -142,13 +142,13 @@ sub cmd_sasl_set {
 	my ($data, $server, $item) = @_;
 
 	if (my($net, $u, $p, $m) = $data =~ /^(\S+) (\S+) (\S+) (\S+)$/) {
-		if($mech{uc $m}) {
+		if ($mech{uc $m}) {
 			$sasl_auth{$net}{user} = $u;
 			$sasl_auth{$net}{password} = $p;
 			$sasl_auth{$net}{mech} = uc $m;
 			Irssi::print("SASL: added $net: [$m] $sasl_auth{$net}{user} *");
-		}else{
-			Irssi::print("SASL: unknown mechanism $m");
+		} else {
+			Irssi::print("SASL: unknown mechanism $m", MSGLEVEL_CLIENTERROR);
 		}
 	} elsif ($data =~ /^(\S+)$/) {
 		$net = $1;
@@ -197,12 +197,12 @@ sub cmd_sasl_load {
 		chomp;
 		my ($net, $u, $p, $m) = split (/\t/, $_, 4);
 		$m ||= "PLAIN";
-		if($mech{uc $m}) {
+		if ($mech{uc $m}) {
 			$sasl_auth{$net}{user} = $u;
 			$sasl_auth{$net}{password} = $p;
 			$sasl_auth{$net}{mech} = uc $m;
-		}else{
-			Irssi::print("SASL: unknown mechanism $m");
+		} else {
+			Irssi::print("SASL: unknown mechanism $m", MSGLEVEL_CLIENTERROR);
 		}
 	}
 	close FILE;
@@ -233,14 +233,13 @@ $mech{PLAIN} = sub {
 	my($sasl, $data) = @_;
 	my $u = $sasl->{user};
 	my $p = $sasl->{password};
-
-	join("\0", $u, $u, $p);
+	return join("\0", $u, $u, $p);
 };
 
 $mech{EXTERNAL} = sub {
 	my($sasl, $data) = @_;
-
-	"";
+	my $u = $sasl->{user};
+	return $u;
 };
 
 sub in_path {
