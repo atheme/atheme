@@ -373,7 +373,7 @@ if (eval {require Crypt::PK::ECC}) {
 			$server->command($cmd);
 		} else {
 			$print->("SASL: update your Irssi settings:");
-			$print->("%P/sasl set $net <nick> $f_priv $mech");
+			$print->("%P/sasl set $net <nick> $f_name.key $mech");
 
 			$print->("SASL: submit your public key to $net:");
 			$print->("%P$cmd");
