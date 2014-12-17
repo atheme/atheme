@@ -365,7 +365,7 @@ if (eval {require Crypt::PK::ECC}) {
 		if ($server) {
 			$print->("SASL: updating your Irssi settings...");
 			$sasl_auth{$net}{user} //= $server->{nick};
-			$sasl_auth{$net}{password} = $f_priv;
+			$sasl_auth{$net}{password} = "$f_name.key";
 			$sasl_auth{$net}{mech} = $mech;
 			cmd_sasl_save(@_);
 
