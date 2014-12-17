@@ -95,7 +95,6 @@ sub event_authenticate {
 
 	if (defined $out) {
 		$out = ($out eq '') ? '+' : encode_base64($out, '');
-
 		while (length $out >= 400) {
 			my $subout = substr($out, 0, 400, '');
 			$server->send_raw_now("AUTHENTICATE $subout");
@@ -149,7 +148,7 @@ sub cmd_sasl {
 sub cmd_sasl_set {
 	my ($data, $server, $item) = @_;
 
-	if (my($net, $u, $p, $m) = $data =~ /^(\S+) (\S+) (\S+) (\S+)$/) {
+	if (my ($net, $u, $p, $m) = $data =~ /^(\S+) (\S+) (\S+) (\S+)$/) {
 		if ($mech{uc $m}) {
 			$sasl_auth{$net}{user} = $u;
 			$sasl_auth{$net}{password} = $p;
@@ -173,48 +172,52 @@ sub cmd_sasl_set {
 
 sub cmd_sasl_show {
 	#my ($data, $server, $item) = @_;
-	my $net;
-	my $count = 0;
-
-	foreach $net (keys %sasl_auth) {
+	my @nets = keys %sasl_auth;
+	for my $net (@nets) {
 		Irssi::print("SASL: $net: [$sasl_auth{$net}{mech}] $sasl_auth{$net}{user} *");
-		$count++;
 	}
-	Irssi::print("SASL: no networks defined") if !$count;
+	Irssi::print("SASL: no networks defined") if !@nets;
 }
 
 sub cmd_sasl_save {
 	#my ($data, $server, $item) = @_;
 	my $file = Irssi::get_irssi_dir()."/sasl.auth";
-	open FILE, "> $file" or return;
-	chmod(0600, $file);
-	foreach my $net (keys %sasl_auth) {
-		printf FILE ("%s\t%s\t%s\t%s\n", $net, $sasl_auth{$net}{user}, $sasl_auth{$net}{password}, $sasl_auth{$net}{mech});
+	if (open(my $fh, ">", $file)) {
+		chmod(0600, $file);
+		for my $net (keys %sasl_auth) {
+			printf $fh ("%s\t%s\t%s\t%s\n",
+				$net,
+				$sasl_auth{$net}{user},
+				$sasl_auth{$net}{password},
+				$sasl_auth{$net}{mech});
+		}
+		close($fh);
+		Irssi::print("SASL: auth saved to '$file'");
+	} else {
+		Irssi::print("SASL: couldn't access '$file': $@");
 	}
-	close FILE;
-	Irssi::print("SASL: auth saved to $file");
 }
 
 sub cmd_sasl_load {
 	#my ($data, $server, $item) = @_;
 	my $file = Irssi::get_irssi_dir()."/sasl.auth";
-
-	open FILE, "< $file" or return;
-	%sasl_auth = ();
-	while (<FILE>) {
-		chomp;
-		my ($net, $u, $p, $m) = split (/\t/, $_, 4);
-		$m ||= "PLAIN";
-		if ($mech{uc $m}) {
-			$sasl_auth{$net}{user} = $u;
-			$sasl_auth{$net}{password} = $p;
-			$sasl_auth{$net}{mech} = uc $m;
-		} else {
-			Irssi::print("SASL: unknown mechanism $m", MSGLEVEL_CLIENTERROR);
+	if (open(my $fh, "<", $file)) {
+		%sasl_auth = ();
+		while (<$fh>) {
+			chomp;
+			my ($net, $u, $p, $m) = split(/\t/, $_, 4);
+			$m ||= "PLAIN";
+			if ($mech{uc $m}) {
+				$sasl_auth{$net}{user} = $u;
+				$sasl_auth{$net}{password} = $p;
+				$sasl_auth{$net}{mech} = uc $m;
+			} else {
+				Irssi::print("SASL: unknown mechanism $m", MSGLEVEL_CLIENTERROR);
+			}
 		}
+		close($fh);
+		Irssi::print("SASL: auth loaded from '$file'");
 	}
-	close FILE;
-	Irssi::print("SASL: auth loaded from $file");
 }
 
 sub cmd_sasl_mechanisms {
@@ -224,11 +227,11 @@ sub cmd_sasl_mechanisms {
 Irssi::signal_add_first('server connected', \&server_connected);
 Irssi::signal_add('event cap', \&event_cap);
 Irssi::signal_add('event authenticate', \&event_authenticate);
-Irssi::signal_add('event 903', 'event_saslend');
-Irssi::signal_add('event 904', 'event_saslend');
-Irssi::signal_add('event 905', 'event_saslend');
-Irssi::signal_add('event 906', 'event_saslend');
-Irssi::signal_add('event 907', 'event_saslend');
+Irssi::signal_add('event 903', \&event_saslend);
+Irssi::signal_add('event 904', \&event_saslend);
+Irssi::signal_add('event 905', \&event_saslend);
+Irssi::signal_add('event 906', \&event_saslend);
+Irssi::signal_add('event 907', \&event_saslend);
 
 Irssi::command_bind('sasl', \&cmd_sasl);
 Irssi::command_bind('sasl load', \&cmd_sasl_load);
@@ -238,20 +241,20 @@ Irssi::command_bind('sasl show', \&cmd_sasl_show);
 Irssi::command_bind('sasl mechanisms', \&cmd_sasl_mechanisms);
 
 $mech{PLAIN} = sub {
-	my($sasl, $data) = @_;
+	my ($sasl, $data) = @_;
 	my $u = $sasl->{user};
 	my $p = $sasl->{password};
 	return join("\0", $u, $u, $p);
 };
 
 $mech{EXTERNAL} = sub {
-	my($sasl, $data) = @_;
+	my ($sasl, $data) = @_;
 	return $sasl->{user} // "";
 };
 
 if (eval {require Crypt::PK::ECC}) {
 	$mech{'ECDSA-NIST256P-CHALLENGE'} = sub {
-		my($sasl, $data) = @_;
+		my ($sasl, $data) = @_;
 		my $u = $sasl->{user};
 		my $k = $sasl->{password};
 		my $step = ++$sasl->{step};
