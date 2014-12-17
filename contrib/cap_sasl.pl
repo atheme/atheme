@@ -5,7 +5,7 @@ use vars qw($VERSION %IRSSI);
 
 use MIME::Base64;
 
-$VERSION = "1.6";
+$VERSION = "1.7";
 
 %IRSSI = (
     authors     => 'Michael Tharp and Jilles Tjoelker',
@@ -242,39 +242,31 @@ $mech{EXTERNAL} = sub {
 	return $u;
 };
 
-sub in_path {
-	my $exe = shift;
-	return grep {-x "$_/$exe"}
-	       map {length $_ ? $_ : "."}
-	       split(":", $ENV{PATH});
-}
-
-if (in_path("ecdsatool")) {
-	my $ecdsa_sign = sub {
-		if (open(my $proc, "-|", "ecdsatool", "sign", @_)) {
-			chomp(my $resp = <$proc>);
-			close($proc);
-			return $resp;
-		}
-	};
+if (eval {require Crypt::PK::ECC}) {
 	$mech{'ECDSA-NIST256P-CHALLENGE'} = sub {
 		my($sasl, $data) = @_;
 		my $u = $sasl->{user};
 		my $k = $sasl->{password};
 		my $step = ++$sasl->{step};
+		if (!-f $k) {
+			Irssi::print("SASL: key file '$k' not found", MSGLEVEL_CLIENTERROR);
+			return;
+		}
+		my $pk = eval {Crypt::PK::ECC->new($k)};
+		if ($@ || !$pk || !$pk->is_private) {
+			Irssi::print("SASL: no private key in file '$k'", MSGLEVEL_CLIENTERROR);
+			return;
+		}
 		if ($step == 1) {
 			if (length $data) {
-				my $signpayload = encode_base64($data);
-				my $payload = $ecdsa_sign->($k, $signpayload);
-				return $u."\0".$u."\0".decode_base64($payload);
+				my $sig = $pk->sign_hash($data);
+				return $u."\0".$u."\0".$sig;
 			} else {
 				return $u."\0".$u;
 			}
 		}
 		elsif ($step == 2) {
-			my $signpayload = encode_base64($data);
-			my $payload = $ecdsa_sign->($k, $signpayload);
-			return decode_base64($payload);
+			return $pk->sign_hash($data);
 		}
 	};
 };
