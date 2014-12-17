@@ -10,8 +10,8 @@ use constant CHALLENGE_SIZE => 32;
 $VERSION = "1.7";
 
 %IRSSI = (
-    authors     => 'Michael Tharp and Jilles Tjoelker',
-    contact     => 'gxti@partiallystapled.com',
+    authors     => 'Michael Tharp (gxti), Jilles Tjoelker (jilles), Mantas Mikulėnas (grawity)',
+    contact     => 'grawity@gmail.com',
     name        => 'cap_sasl.pl',
     description => 'Implements SASL authentication and enables CAP "multi-prefix"',
     license     => 'GNU General Public License',
