@@ -308,6 +308,79 @@ if (eval {require Crypt::PK::ECC}) {
 			}
 		}
 	};
+
+	sub cmd_sasl_keygen {
+		my ($data, $server, $witem) = @_;
+
+		my $mech = "ECDSA-NIST256P-CHALLENGE";
+		my $net;
+		my $print;
+
+		if ($server) {
+			$net = $server->{tag};
+			$print = sub { $server->print("", shift) };
+		} else {
+			$net = $data;
+			$print = sub { Irssi::print(shift) };
+		}
+
+		if (!length $net) {
+			$print->("Please connect to a server first.");
+			return;
+		}
+
+		my $f_name = "sasl-ecdsa-$net";
+		my $f_priv = Irssi::get_irssi_dir()."/$f_name.key";
+		my $f_pub  = Irssi::get_irssi_dir()."/$f_name.pub";
+		if (-e $f_priv) {
+			$print->("SASL: refusing to overwrite '$f_priv'");
+			return;
+		}
+
+		$print->("SASL: generating keypair for '$net'...");
+		my $pk = Crypt::PK::ECC->new;
+		$pk->generate_key("prime256v1");
+
+		my $priv = $pk->export_key_pem("private");
+		my $pub = encode_base64($pk->export_key_raw("public_compressed"), "");
+		my $cmd = "/msg NickServ SET PROPERTY pubkey $pub";
+
+		if (open(my $fh, ">", $f_priv)) {
+			chmod(0600, $f_priv);
+			print $fh $priv;
+			close($fh);
+			$print->("SASL: wrote private key to '$f_priv'");
+		} else {
+			$print->("SASL: could not write '$f_priv': $!");
+			return;
+		}
+
+		if (open(my $fh, ">", $f_pub)) {
+			print $fh $pub."\n";
+			close($fh);
+		} else {
+			$print->("SASL: could not write '$f_pub': $!");
+		}
+
+		if ($server) {
+			$print->("SASL: updating your Irssi settings...");
+			$sasl_auth{$net}{user} //= $server->{nick};
+			$sasl_auth{$net}{password} = $f_priv;
+			$sasl_auth{$net}{mech} = $mech;
+			cmd_sasl_save(@_);
+
+			$print->("SASL: submitting key to NickServ...");
+			$server->command($cmd);
+		} else {
+			$print->("SASL: update your Irssi settings:");
+			$print->("%P/sasl set $net <nick> $f_priv $mech");
+
+			$print->("SASL: submit your public key to $net:");
+			$print->("%P$cmd");
+		}
+	}
+
+	Irssi::command_bind('sasl keygen', \&cmd_sasl_keygen);
 };
 
 cmd_sasl_load();
