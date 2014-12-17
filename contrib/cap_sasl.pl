@@ -1,14 +1,10 @@
 use strict;
 use Irssi;
-use vars qw($VERSION %IRSSI);
-# $Id$
-
 use MIME::Base64;
-
+use vars qw($VERSION %IRSSI);
 use constant CHALLENGE_SIZE => 32;
 
 $VERSION = "1.8";
-
 %IRSSI = (
     authors     => 'Michael Tharp (gxti), Jilles Tjoelker (jilles), Mantas Mikulėnas (grawity)',
     contact     => 'grawity@gmail.com',
@@ -234,7 +230,7 @@ sub cmd_sasl_load {
 			}
 		}
 		close($fh);
-		Irssi::print("SASL: auth loaded from '$file'");
+		Irssi::print("SASL: cap_sasl $VERSION, auth loaded from '$file'");
 	}
 }
 
@@ -329,7 +325,8 @@ if (eval {require Crypt::PK::ECC}) {
 			return;
 		}
 
-		my $f_name = "sasl-ecdsa-$net";
+		my $f_name = lc "sasl-ecdsa-$net";
+		   $f_name =~ s![ /]+!_!g;
 		my $f_priv = Irssi::get_irssi_dir()."/$f_name.key";
 		my $f_pub  = Irssi::get_irssi_dir()."/$f_name.pub";
 		if (-e $f_priv) {
