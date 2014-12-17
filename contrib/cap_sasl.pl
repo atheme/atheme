@@ -90,22 +90,28 @@ sub event_authenticate {
 	$sasl->{buffer} .= $args;
 	return if length($args) == 400;
 
-	my $data = $sasl->{buffer} eq '+' ? '' : decode_base64($sasl->{buffer});
+	my $data = ($sasl->{buffer} eq '+') ? '' : decode_base64($sasl->{buffer});
 	my $out = $mech{$sasl->{mech}}($sasl, $data);
-	$out = '' unless defined $out;
-	$out = $out eq '' ? '+' : encode_base64($out, '');
 
-	while (length $out >= 400) {
-		my $subout = substr($out, 0, 400, '');
-		$server->send_raw_now("AUTHENTICATE $subout");
-	}
-	if (length $out) {
-		$server->send_raw_now("AUTHENTICATE $out");
-	} else { # Last piece was exactly 400 bytes, we have to send some padding to indicate we're done
-		$server->send_raw_now("AUTHENTICATE +");
+	if (defined $out) {
+		$out = ($out eq '') ? '+' : encode_base64($out, '');
+
+		while (length $out >= 400) {
+			my $subout = substr($out, 0, 400, '');
+			$server->send_raw_now("AUTHENTICATE $subout");
+		}
+		if (length $out) {
+			$server->send_raw_now("AUTHENTICATE $out");
+		} else {
+			# Last piece was exactly 400 bytes, we have to send
+			# some padding to indicate we're done.
+			$server->send_raw_now("AUTHENTICATE +");
+		}
+	} else {
+		$server->send_raw_now("AUTHENTICATE *");
 	}
 
-	$sasl->{buffer} = '';
+	$sasl->{buffer} = "";
 	Irssi::signal_stop();
 }
 
@@ -240,8 +246,7 @@ $mech{PLAIN} = sub {
 
 $mech{EXTERNAL} = sub {
 	my($sasl, $data) = @_;
-	my $u = $sasl->{user};
-	return $u;
+	return $sasl->{user} // "";
 };
 
 if (eval {require Crypt::PK::ECC}) {
