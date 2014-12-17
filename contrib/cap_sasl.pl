@@ -120,9 +120,27 @@ sub event_saslend {
 	my $data = $args;
 	$data =~ s/^\S+ :?//;
 	# need this to see it, ?? -- jilles
+
 	$server->print('', $data);
 	if (!$server->{connected}) {
 		$server->send_raw_now("CAP END");
+	}
+}
+
+sub event_saslfail {
+	my ($server, $args, $nick, $address) = @_;
+
+	my $data = $args;
+	$data =~ s/^\S+ :?//;
+
+	if (Irssi::settings_get_bool('sasl_disconnect_on_fail')) {
+		$server->print('', "$data - disconnecting from server", MSGLEVEL_CLIENTERROR);
+		$server->disconnect();
+	} else {
+		$server->print('', "$data - continuing anyway");
+		if (!$server->{connected}) {
+			$server->send_raw_now("CAP END");
+		}
 	}
 }
 
@@ -224,13 +242,15 @@ sub cmd_sasl_mechanisms {
 	Irssi::print("SASL: mechanisms supported: " . join(", ", sort keys %mech));
 }
 
+Irssi::settings_add_bool('server', 'sasl_disconnect_on_fail', 1);
+
 Irssi::signal_add_first('server connected', \&server_connected);
 Irssi::signal_add('event cap', \&event_cap);
 Irssi::signal_add('event authenticate', \&event_authenticate);
 Irssi::signal_add('event 903', \&event_saslend);
-Irssi::signal_add('event 904', \&event_saslend);
+Irssi::signal_add('event 904', \&event_saslfail);
 Irssi::signal_add('event 905', \&event_saslend);
-Irssi::signal_add('event 906', \&event_saslend);
+Irssi::signal_add('event 906', \&event_saslfail);
 Irssi::signal_add('event 907', \&event_saslend);
 
 Irssi::command_bind('sasl', \&cmd_sasl);
