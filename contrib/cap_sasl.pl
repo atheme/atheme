@@ -5,6 +5,8 @@ use vars qw($VERSION %IRSSI);
 
 use MIME::Base64;
 
+use constant CHALLENGE_SIZE => 32;
+
 $VERSION = "1.7";
 
 %IRSSI = (
@@ -258,15 +260,21 @@ if (eval {require Crypt::PK::ECC}) {
 			return;
 		}
 		if ($step == 1) {
-			if (length $data) {
+			if (length $data == CHALLENGE_SIZE) {
 				my $sig = $pk->sign_hash($data);
 				return $u."\0".$u."\0".$sig;
+			} elsif (length $data) {
+				return;
 			} else {
 				return $u."\0".$u;
 			}
 		}
 		elsif ($step == 2) {
-			return $pk->sign_hash($data);
+			if (length $data == CHALLENGE_SIZE) {
+				return $pk->sign_hash($data);
+			} else {
+				return;
+			}
 		}
 	};
 };
