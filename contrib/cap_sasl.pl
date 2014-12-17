@@ -7,7 +7,7 @@ use MIME::Base64;
 
 use constant CHALLENGE_SIZE => 32;
 
-$VERSION = "1.7";
+$VERSION = "1.8";
 
 %IRSSI = (
     authors     => 'Michael Tharp (gxti), Jilles Tjoelker (jilles), Mantas Mikulėnas (grawity)',
