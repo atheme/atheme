@@ -257,7 +257,9 @@ if (eval {require Crypt::PK::ECC}) {
 		my ($sasl, $data) = @_;
 		my $u = $sasl->{user};
 		my $k = $sasl->{password};
-		my $step = ++$sasl->{step};
+		if ($k !~ m!^[/.]!) {
+			$k = Irssi::get_irssi_dir()."/".$k;
+		}
 		if (!-f $k) {
 			Irssi::print("SASL: key file '$k' not found", MSGLEVEL_CLIENTERROR);
 			return;
@@ -267,6 +269,7 @@ if (eval {require Crypt::PK::ECC}) {
 			Irssi::print("SASL: no private key in file '$k'", MSGLEVEL_CLIENTERROR);
 			return;
 		}
+		my $step = ++$sasl->{step};
 		if ($step == 1) {
 			if (length $data == CHALLENGE_SIZE) {
 				my $sig = $pk->sign_hash($data);
