@@ -246,7 +246,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 					holdnick_sts(nicksvs.me->me, 60 + arc4random() % 60, u->nick, mn->owner);
 				else
 					u->flags |= UF_DOENFORCE;
-				command_success_nodata(si, _("%s has been released."), target);
+				command_success_nodata(si, _("\2%s\2 has been released."), target);
 				logcommand(si, CMDLOG_DO, "RELEASE: \2%s!%s@%s\2", u->nick, u->user, u->vhost);
 			}
 		}
