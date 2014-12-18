@@ -4,7 +4,7 @@ use MIME::Base64;
 use vars qw($VERSION %IRSSI);
 use constant CHALLENGE_SIZE => 32;
 
-$VERSION = "1.8";
+$VERSION = "1.8a";
 %IRSSI = (
     authors     => 'Michael Tharp (gxti), Jilles Tjoelker (jilles), Mantas Mikulėnas (grawity)',
     contact     => 'grawity@gmail.com',
@@ -273,7 +273,7 @@ if (eval {require Crypt::PK::ECC}) {
 		my ($sasl, $data) = @_;
 		my $u = $sasl->{user};
 		my $k = $sasl->{password};
-		if ($k !~ m!^[/.]!) {
+		if ($k !~ m!^/!) {
 			$k = Irssi::get_irssi_dir()."/".$k;
 		}
 		if (!-f $k) {
