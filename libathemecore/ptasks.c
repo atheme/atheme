@@ -590,11 +590,11 @@ void handle_message(sourceinfo_t *si, char *target, bool is_notice, char *messag
 			notice(target_u->nick, si->su->nick, "This is a registered nick enforcer, and not a real user.");
 			return;
 		}
-		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
+		if (!is_notice && (isalnum((unsigned char)target[0]) || strchr("[\\]^_`{|}~", target[0])))
 		{
 			/* If it's not a notice and looks like a nick or
 			 * user@server, send back an error message */
-			if (strchr(target, '@') || !ircd->uses_uid || (!ircd->uses_p10 && !isdigit(target[0])))
+			if (strchr(target, '@') || !ircd->uses_uid || (!ircd->uses_p10 && !isdigit((unsigned char)target[0])))
 				numeric_sts(me.me, 401, si->su, "%s :No such nick", target);
 			else
 				numeric_sts(me.me, 401, si->su, "* :Target left IRC. Failed to deliver: [%.20s]", message);

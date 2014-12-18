@@ -252,7 +252,7 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 				return false;
 			arg2 = p + 1;
 		}
-		else if (!isdigit(*p))
+		else if (!isdigit((unsigned char)*p))
 			return false;
 		p++;
 	}
@@ -290,7 +290,7 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 
 	while (*ch)
 	{
-		if (!isdigit(*ch))
+		if (!isdigit((unsigned char)*ch))
 			return false;
 		ch++;
 	}
@@ -311,7 +311,7 @@ static bool check_delaymsg(const char *value, channel_t *c, mychan_t *mc, user_t
 
 	while (*ch)
 	{
-		if (!isdigit(*ch))
+		if (!isdigit((unsigned char)*ch))
 			return false;
 		ch++;
 	}

@@ -101,7 +101,7 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 				return false;
 			arg2 = p + 1;
 		}
-		else if (!isdigit(*p))
+		else if (!isdigit((unsigned char)*p))
 			return false;
 		p++;
 	}

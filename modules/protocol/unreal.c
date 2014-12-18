@@ -125,7 +125,7 @@ static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, us
 				return false;
 			arg2 = p + 1;
 		}
-		else if (!isdigit(*p))
+		else if (!isdigit((unsigned char)*p))
 			return false;
 		p++;
 	}
@@ -156,7 +156,7 @@ static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc
 	{
 		if (*value == '*' && !found_colon)
 			found_colon = true;
-		else if (!isdigit(*value))
+		else if (!isdigit((unsigned char)*value))
 			return false;
 
 		value++;
@@ -201,7 +201,7 @@ static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u
 
 	for (p = strtok(ep, ","); p != NULL; p = strtok(NULL, ","))
 	{
-		while (isdigit(*p))
+		while (isdigit((unsigned char)*p))
 			p++;
 
 		if (!VALID_FLOOD_CHAR(*p))

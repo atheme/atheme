@@ -381,7 +381,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES:KLINE:OFF");
 	}
-	else if (isdigit(arg[0]))
+	else if (isdigit((unsigned char)arg[0]))
 	{
 		unsigned int newgrace = atol(arg);
 		if (kline_enabled && grace_count == newgrace)
@@ -486,7 +486,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		expiry += 3;
 
 		duration = (atol(expiry) * 60);
-		while (isdigit(*expiry))
+		while (isdigit((unsigned char)*expiry))
 			++expiry;
 		if (*expiry == 'h' || *expiry == 'H')
 			duration *= 60;
@@ -720,7 +720,7 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 					else
 					{
 						duration = (atol(expiry) * 60);
-						while (isdigit(*expiry))
+						while (isdigit((unsigned char)*expiry))
 							++expiry;
 						if (*expiry == 'h' || *expiry == 'H')
 							duration *= 60;
@@ -787,7 +787,7 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	duration = (atol(s) * 60);
-	while (isdigit(*s))
+	while (isdigit((unsigned char)*s))
 		s++;
 	if (*s == 'h' || *s == 'H')
 		duration *= 60;

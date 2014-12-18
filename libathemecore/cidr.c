@@ -163,7 +163,7 @@ inet_pton6(const char *src, u_char *dst)
 	curtok = src;
 	saw_xdigit = 0;
 	val = 0;
-	while((ch = tolower(*src++)) != '\0')
+	while((ch = tolower((unsigned char)*src++)) != '\0')
 	{
 		const char *pch;
 

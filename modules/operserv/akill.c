@@ -153,7 +153,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		if (s)
 		{
 			duration = (atol(s) * 60);
-			while (isdigit(*s))
+			while (isdigit((unsigned char)*s))
 				s++;
 			if (*s == 'h' || *s == 'H')
 				duration *= 60;
@@ -473,7 +473,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 			host = param;
 			full = true;
 		}
-		else if (isdigit(param[0]) &&
+		else if (isdigit((unsigned char)param[0]) &&
 				(num = strtoul(param, NULL, 10)) != 0)
 			full = true;
 		else

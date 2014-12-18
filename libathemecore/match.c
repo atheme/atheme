@@ -105,7 +105,7 @@ const unsigned char ToUpperTab[] = {
 int ToLower(int c)
 {
 	if (match_mapping == MATCH_ASCII)
-		return tolower(c);
+		return tolower((unsigned char)c);
 	/* else */
 	return (ToLowerTab[(unsigned char)(c)]);
 }
@@ -113,7 +113,7 @@ int ToLower(int c)
 int ToUpper(int c)
 {
 	if (match_mapping == MATCH_ASCII)
-		return toupper(c);
+		return toupper((unsigned char)c);
 	/* else */
 	return (ToUpperTab[(unsigned char)(c)]);
 }
@@ -309,7 +309,7 @@ void strcasecanon(char *str)
 {
 	while (*str)
 	{
-		*str = toupper(*str);
+		*str = toupper((unsigned char)*str);
 		str++;
 	}
 	return;
@@ -659,7 +659,7 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
 	bool backslash = false;
 
 	c = *pattern;
-	if (isalnum(c) || isspace(c) || c == '\\')
+	if (isalnum((unsigned char)c) || isspace((unsigned char)c) || c == '\\')
 		return NULL;
 	p = pattern + 1;
 	while (*p != c || backslash)
@@ -681,7 +681,7 @@ char *regex_extract(char *pattern, char **pend, int *pflags)
 			*pflags |= AREGEX_PCRE;
 		else if (*p == 'K')
 			*pflags |= AREGEX_KLINE;
-		else if (!isalnum(*p))
+		else if (!isalnum((unsigned char)*p))
 			return NULL;
 		p++;
 	}

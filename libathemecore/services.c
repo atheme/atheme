@@ -1133,7 +1133,7 @@ bool check_vhost_validity(sourceinfo_t *si, const char *host)
 		return false;
 	}
 	p = strrchr(host, '/');
-	if (p != NULL && isdigit(p[1]))
+	if (p != NULL && isdigit((unsigned char)p[1]))
 	{
 		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
 		return false;

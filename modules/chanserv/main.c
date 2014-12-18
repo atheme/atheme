@@ -120,7 +120,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		metadata_t *md = metadata_find(mc, "private:prefix");
 		const char *prefix = (md ? md->value : chansvs.trigger);
 
-		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
+		if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha((unsigned char)*++cmd))
 		{
 			const char *realcmd = service_resolve_alias(si->service, NULL, cmd);
 
@@ -147,7 +147,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			command_exec_split(si->service, si, realcmd, newargs, si->service->commands);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
-		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
+		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum((unsigned char)cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
 		{
 			const char *realcmd;
 			char *pptr;

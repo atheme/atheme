@@ -380,7 +380,7 @@ botserv_channel_handler(sourceinfo_t *si, int parc, char *parv[])
 	if ((sptr = service_find("chanserv")) == NULL)
 		return;
 
-	if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha(*++cmd))
+	if (strlen(cmd) >= 2 && strchr(prefix, cmd[0]) && isalpha((unsigned char)*++cmd))
 	{
 		const char *realcmd = service_resolve_alias(chansvs.me, NULL, cmd);
 

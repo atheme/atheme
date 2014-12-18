@@ -189,7 +189,7 @@ static void os_cmd_sqline_add(sourceinfo_t *si, int parc, char *parv[])
 		if (s)
 		{
 			duration = (atol(s) * 60);
-			while (isdigit(*s))
+			while (isdigit((unsigned char)*s))
 				s++;
 			if (*s == 'h' || *s == 'H')
 				duration *= 60;

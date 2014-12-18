@@ -160,7 +160,7 @@ logfile_strip_control_codes(const char *buf)
 		else if (*in == 3)
 		{
 			in++;
-			while (isdigit(*in))
+			while (isdigit((unsigned char)*in))
 				in++;
 		}
 	}

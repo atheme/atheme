@@ -55,7 +55,7 @@ static time_t parse_age(char *s)
 	time_t duration;
 
 	duration = (atol(s) * 60);
-	while (isdigit(*s))
+	while (isdigit((unsigned char)*s))
 		s++;
 
 	if (*s == 'h' || *s == 'H')

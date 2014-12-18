@@ -73,7 +73,7 @@ static unsigned int ts6_server_login(void)
 		ircd->uses_uid = false;
 		ret = sts("PASS %s :TS", curr_uplink->send_pass);
 	}
-	else if (strlen(me.numeric) == 3 && isdigit(*me.numeric))
+	else if (strlen(me.numeric) == 3 && isdigit((unsigned char)*me.numeric))
 	{
 		ircd->uses_uid = true;
 		ret = sts("PASS %s TS 6 :%s", curr_uplink->send_pass, me.numeric);

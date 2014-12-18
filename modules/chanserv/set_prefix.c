@@ -54,8 +54,8 @@ static int goodprefix(const char *p)
 	int hasnonprint = 0;
 
 	for (i = 0; p[i]; i++) {
-		if (!isspace(p[i])) { haschar = 1; }
-		if (!isprint(p[i])) { hasnonprint = 1; }
+		if (!isspace((unsigned char)p[i])) { haschar = 1; }
+		if (!isprint((unsigned char)p[i])) { hasnonprint = 1; }
 	}
 
 	return haschar && !hasnonprint;
