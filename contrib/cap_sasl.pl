@@ -340,7 +340,7 @@ if (eval {require Crypt::PK::ECC}) {
 
 		my $priv = $pk->export_key_pem("private");
 		my $pub = encode_base64($pk->export_key_raw("public_compressed"), "");
-		my $cmd = "/msg NickServ SET PROPERTY pubkey $pub";
+		my $cmd = "msg NickServ SET PROPERTY pubkey $pub";
 
 		if (open(my $fh, ">", $f_priv)) {
 			chmod(0600, $f_priv);
