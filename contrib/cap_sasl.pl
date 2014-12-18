@@ -10,7 +10,7 @@ $VERSION = "1.8a";
     contact     => 'grawity@gmail.com',
     name        => 'cap_sasl.pl',
     description => 'Implements SASL authentication and enables CAP "multi-prefix"',
-    license     => 'GNU General Public License',
+    license     => 'GPLv2',
     url         => 'http://ircv3.atheme.org/extensions/sasl-3.1',
 );
 
