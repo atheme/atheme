@@ -368,10 +368,12 @@ match_cidr(const char *s1, const char *s2)
 
 int valid_ip_or_mask(const char *src)
 {
-	char ipaddr[IN6ADDRSZ], buf[IN6ADDRSZ];
-	char *mask;
+	char ipaddr[HOSTLEN + 6], buf[IN6ADDRSZ];
+	char *mask, *end;
+	unsigned long cidrlen;
 
-	mowgli_strlcpy(ipaddr, src, sizeof ipaddr);
+	if (mowgli_strlcpy(ipaddr, src, sizeof ipaddr) >= sizeof ipaddr)
+		return 0;
 
 	int is_ipv6 = (strchr(ipaddr, ':') != NULL);
 
@@ -379,31 +381,15 @@ int valid_ip_or_mask(const char *src)
 	{
 		*mask++ = '\0';
 
-		/* Multiple slashes */
-		if (strchr(mask, '/'))
+		if (!isdigit((unsigned char)*mask))
 			return 0;
 
-		/* Trailing slash */
-		if (!strlen(mask))
+		cidrlen = strtoul(mask, &end, 10);
+		if (*end != '\0')
 			return 0;
 
-		int i;
-		for (i = 0; i < strlen(mask); i++)
-		{
-			if (!isdigit(*(mask + i)))
-				return 0;
-		}
-
-		if (is_ipv6)
-		{
-			if (atoi(mask) > 128)
-				return 0;
-		}
-		else
-		{
-			if (atoi(mask) > 32)
-				return 0;
-		}
+		if (cidrlen > (is_ipv6 ? 128 : 32))
+			return 0;
 	}
 
 	if (is_ipv6)
