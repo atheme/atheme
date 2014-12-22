@@ -202,9 +202,11 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("\2%s\2 does not have a vhost set."), entity(mu)->name);
 			return;
 		}
+		snprintf(timestring, 16, "%lu", (unsigned long)time(NULL));
 		metadata_delete(mu, "private:usercloak");
-		metadata_delete(mu, "private:usercloak-timestamp");
-		metadata_delete(mu, "private:usercloak-assigner");
+		metadata_add(mu, "private:usercloak-timestamp", timestring);
+		metadata_add(mu, "private:usercloak-assigner", get_source_name(si));
+
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "VHOST:REMOVE: \2%s\2", entity(mu)->name);
 		if (ismarked)
