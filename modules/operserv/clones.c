@@ -700,9 +700,9 @@ static void os_cmd_clones_setexempt(sourceinfo_t *si, int parc, char *parv[])
 						c->warn = 0;
 						return;
 					}
-					else if (clones >= c->allowed)
+					else if (clones > c->allowed)
 					{
-						command_fail(si, fault_badparams, _("Warned clones limit must be lower than the allowed limit of %d"), c->allowed);
+						command_fail(si, fault_badparams, _("Warned clones limit must be lower than or equal to the allowed limit of %d"), c->allowed);
 						return;
 					}
 
