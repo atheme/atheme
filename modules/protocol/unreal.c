@@ -154,7 +154,7 @@ static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc
 	/* check to make sure all bytes are numbers, allowing for one colon */
 	while (*value != '\0')
 	{
-		if (*value == '*' && !found_colon)
+		if (*value == ':' && !found_colon)
 			found_colon = true;
 		else if (!isdigit((unsigned char)*value))
 			return false;
@@ -218,6 +218,8 @@ static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u
 
 				if (!VALID_ACTION_CHAR(*p))
 					return false;
+
+				continue;
 			}
 
 			/* not valid, needs to be # or nothing */
