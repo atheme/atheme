@@ -69,6 +69,13 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (password && metadata_find(mu, "private:freeze:freezer"))
+	{
+		command_fail(si, fault_authfail, "You cannot ghost users as \2%s\2 because the account has been frozen.", entity(mu)->name);
+		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (frozen)", target);
+		return;
+	}
+
 	if ((target_u->myuser && target_u->myuser == si->smu) || /* they're identified under our account */
 			(!nicksvs.no_nick_ownership && mn && mu == si->smu) || /* we're identified under their nick's account */
 			(!nicksvs.no_nick_ownership && password && mn && verify_password(mu, password))) /* we have their nick's password */
