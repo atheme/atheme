@@ -54,6 +54,12 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from changing your account name by network staff."));
+		return;
+	}
+
 	mn = mynick_find(newname);
 	if (mn == NULL)
 	{
