@@ -96,7 +96,11 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 
 	md = metadata_find(mu, "private:pubkey");
 	if (md == NULL)
-		return ASASL_FAIL;
+	{
+		md = metadata_find(mu, "pubkey");
+		if (md == NULL)
+			return ASASL_FAIL;
+	}
 
 	ret = base64_decode(md->value, (char *)pubkey_raw, BUFSIZE);
 	if (ret == -1)
