@@ -50,7 +50,7 @@ CODE:
 	{
 		ca = n->data;
 		if (ca->entity != NULL && ca->level & CA_FOUNDER)
-			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
+			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER, si->smu);
 	}
 
 	self->used = CURRTIME;
