@@ -200,6 +200,7 @@ loadmodule "modules/crypto/posix";
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)  modules/nickserv/set_privmsg
  * Account info hiding (SET PRIVATE command)    modules/nickserv/set_private
  * SET PROPERTY command                         modules/nickserv/set_property
+ * SET PUBKEY command                           modules/nickserv/set_pubkey
  * SET QUIETCHG command                         modules/nickserv/set_quietchg
  * Password retrieval uses code (SETPASS cmd)   modules/nickserv/setpass
  * STATUS command                               modules/nickserv/status
@@ -255,6 +256,7 @@ loadmodule "modules/nickserv/set_password";
 #loadmodule "modules/nickserv/set_privmsg";
 #loadmodule "modules/nickserv/set_private";
 loadmodule "modules/nickserv/set_property";
+loadmodule "modules/nickserv/set_pubkey";
 loadmodule "modules/nickserv/set_quietchg";
 loadmodule "modules/nickserv/status";
 loadmodule "modules/nickserv/taxonomy";
