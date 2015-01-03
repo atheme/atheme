@@ -1808,7 +1808,7 @@ chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, 
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter)
 {
 	return_val_if_fail(ca != NULL, false);
 	return_val_if_fail(addflags != NULL && removeflags != NULL, false);
@@ -1829,18 +1829,19 @@ bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removef
 		return false;
 	ca->level = (ca->level | *addflags) & ~*removeflags;
 	ca->tmodified = CURRTIME;
+	ca->setter = entity(setter)->name;
 
 	return true;
 }
 
 /* version that doesn't return the changes made */
-bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags)
+bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter)
 {
 	unsigned int a, r;
 
 	a = addflags & ca_all;
 	r = removeflags & ca_all;
-	return chanacs_modify(ca, &a, &r, ca_all);
+	return chanacs_modify(ca, &a, &r, ca_all, setter);
 }
 
 /* Change channel access
@@ -1892,6 +1893,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
+			ca->setter = setter->name;
 			if (ca->level == 0)
 				object_unref(ca);
 		}
@@ -1928,6 +1930,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
+			ca->setter = setter->name;
 			if (ca->level == 0)
 				object_unref(ca);
 		}

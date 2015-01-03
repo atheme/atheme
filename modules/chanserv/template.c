@@ -382,7 +382,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 				}
 				changes++;
-				chanacs_modify_simple(ca, newflags, ~newflags);
+				chanacs_modify_simple(ca, newflags, ~newflags, si->smu);
 				chanacs_close(ca);
 			}
 			logcommand(si, CMDLOG_SET, "TEMPLATE: \2%s\2 \2%s\2 !\2%s\2 (\2%d\2 changes)", mc->name, target, flagstr, changes);

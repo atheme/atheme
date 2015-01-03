@@ -116,7 +116,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		req.ca = ca;
 		req.oldlevel = ca->level;
 
-		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all))
+		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all, si->smu))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), mt->name, mc->name);
@@ -142,7 +142,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		req.ca = ca;
 		req.oldlevel = ca->level;
 
-		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all))
+		if (!chanacs_modify(ca, &addflags, &removeflags, ca_all, si->smu))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags), target, mc->name);

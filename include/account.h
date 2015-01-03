@@ -469,8 +469,8 @@ E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
 E chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
 //inline void chanacs_close(chanacs_t *ca);
-E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
+E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
+E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
 
 //inline bool chanacs_is_table_full(chanacs_t *ca);
 

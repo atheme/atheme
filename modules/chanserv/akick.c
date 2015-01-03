@@ -321,7 +321,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		req.ca = ca2;
 		req.oldlevel = ca2->level;
 
-		chanacs_modify_simple(ca2, CA_AKICK, 0);
+		chanacs_modify_simple(ca2, CA_AKICK, 0, si->smu);
 
 		req.newlevel = ca2->level;
 
@@ -387,7 +387,7 @@ void cs_cmd_akick_add(sourceinfo_t *si, int parc, char *parv[])
 		req.ca = ca2;
 		req.oldlevel = ca2->level;
 
-		chanacs_modify_simple(ca2, CA_AKICK, 0);
+		chanacs_modify_simple(ca2, CA_AKICK, 0, si->smu);
 
 		req.newlevel = ca2->level;
 
@@ -488,7 +488,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 		req.ca = ca;
 		req.oldlevel = ca->level;
 
-		chanacs_modify_simple(ca, 0, CA_AKICK);
+		chanacs_modify_simple(ca, 0, CA_AKICK, si->smu);
 
 		req.newlevel = ca->level;
 
@@ -539,7 +539,7 @@ void cs_cmd_akick_del(sourceinfo_t *si, int parc, char *parv[])
 	req.ca = ca;
 	req.oldlevel = ca->level;
 
-	chanacs_modify_simple(ca, 0, CA_AKICK);
+	chanacs_modify_simple(ca, 0, CA_AKICK, si->smu);
 
 	req.newlevel = ca->level;
 
@@ -714,7 +714,7 @@ void akick_timeout_check(void *arg)
 
 		if (ca)
 		{
-			chanacs_modify_simple(ca, 0, CA_AKICK);
+			chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
 			chanacs_close(ca);
 		}
 
@@ -780,7 +780,7 @@ void akickdel_list_create(void *arg)
 
 			if (CURRTIME > expireson)
 			{
-				chanacs_modify_simple(ca, 0, CA_AKICK);
+				chanacs_modify_simple(ca, 0, CA_AKICK, NULL);
 				chanacs_close(ca);
 			}
 			else

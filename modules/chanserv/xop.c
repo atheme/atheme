@@ -245,7 +245,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		req.ca = ca;
 		req.oldlevel = ca->level;
 
-		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
+		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags, si->smu))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
 			chanacs_close(ca);
@@ -317,7 +317,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 	req.ca = ca;
 	req.oldlevel = ca->level;
 
-	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
+	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags, si->smu))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mt->name, mc->name);
 		chanacs_close(ca);
@@ -513,7 +513,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		changes++;
 		command_success_nodata(si, "%s: %s -> %s", ca->entity != NULL ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), desc);
-		chanacs_modify_simple(ca, newlevel, ~newlevel);
+		chanacs_modify_simple(ca, newlevel, ~newlevel, si->smu);
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
 	if (changes > 0)
