@@ -211,7 +211,7 @@ struct chanacs_
 	mowgli_node_t    cnode;
 	mowgli_node_t    unode;
 
-	stringref setter;
+	myentity_t *setter;
 };
 
 /* the new atheme-style channel flags */

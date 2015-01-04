@@ -1363,7 +1363,7 @@ static void chanacs_delete(chanacs_t *ca)
 	}
 
 	if (ca->setter != NULL)
-		strshare_unref(ca->setter);
+		object_unref(ca->setter);
 
 	metadata_delete_all(ca);
 
@@ -1415,7 +1415,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? strshare_ref(setter->name) : NULL;
+	ca->setter = setter != NULL ? setter : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, &ca->unode, &mt->chanacs);
@@ -1465,7 +1465,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? strshare_ref(setter->name) : NULL;
+	ca->setter = setter != NULL ? setter : NULL;
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
@@ -1829,7 +1829,7 @@ bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removef
 		return false;
 	ca->level = (ca->level | *addflags) & ~*removeflags;
 	ca->tmodified = CURRTIME;
-	ca->setter = entity(setter)->name;
+	ca->setter = entity(setter);
 
 	return true;
 }
@@ -1893,7 +1893,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
-			ca->setter = setter->name;
+			ca->setter = setter;
 			if (ca->level == 0)
 				object_unref(ca);
 		}
@@ -1930,7 +1930,7 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
-			ca->setter = setter->name;
+			ca->setter = setter;
 			if (ca->level == 0)
 				object_unref(ca);
 		}

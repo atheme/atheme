@@ -201,7 +201,7 @@ corestorage_db_save(database_handle_t *db)
 			db_write_word(db, ca->entity ? ca->entity->name : ca->host);
 			db_write_word(db, bitmask_to_flags(ca->level));
 			db_write_time(db, ca->tmodified);
-			db_write_word(db, ca->setter ? ca->setter : "*");
+			db_write_word(db, ca->setter ? ca->setter->name : "*");
 			db_commit_row(db);
 
 			if (object(ca)->metadata)
