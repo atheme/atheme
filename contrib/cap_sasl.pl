@@ -316,17 +316,12 @@ if (eval {require Crypt::PK::ECC}) {
 
 	sub cmd_sasl_keygen {
 		my ($data, $server, $witem) = @_;
-		my $net;
-		my $print;
 
-		if ($server) {
-			$net = $server->{tag};
-			$print = sub { $server->print("", shift) };
-		} else {
-			$net = $data;
-			$print = sub { Irssi::print(shift) };
-		}
+		my $print = $server
+				? sub { $server->print("", shift, shift // MSGLEVEL_CLIENTNOTICE) }
+				: sub { Irssi::print(shift, shift // MSGLEVEL_CLIENTNOTICE) };
 
+		my $net = $server ? $server->{tag} : $data;
 		if (!length $net) {
 			Irssi::print("SASL: please connect to a server first",
 						MSGLEVEL_CLIENTERROR);
@@ -338,7 +333,7 @@ if (eval {require Crypt::PK::ECC}) {
 		my $f_priv = Irssi::get_irssi_dir()."/$f_name.key";
 		my $f_pub  = Irssi::get_irssi_dir()."/$f_name.pub";
 		if (-e $f_priv) {
-			$print->("SASL: refusing to overwrite '$f_priv'");
+			$print->("SASL: refusing to overwrite '$f_priv'", MSGLEVEL_CLIENTERROR);
 			return;
 		}
 
@@ -355,7 +350,7 @@ if (eval {require Crypt::PK::ECC}) {
 			close($fh);
 			$print->("SASL: wrote private key to '$f_priv'");
 		} else {
-			$print->("SASL: could not write '$f_priv': $!");
+			$print->("SASL: could not write '$f_priv': $!", MSGLEVEL_CLIENTERROR);
 			return;
 		}
 
@@ -363,7 +358,7 @@ if (eval {require Crypt::PK::ECC}) {
 			print $fh $pub."\n";
 			close($fh);
 		} else {
-			$print->("SASL: could not write '$f_pub': $!");
+			$print->("SASL: could not write '$f_pub': $!", MSGLEVEL_CLIENTERROR);
 		}
 
 		my $cmdchar = substr(Irssi::settings_get_str("cmdchars"), 0, 1);
@@ -376,13 +371,11 @@ if (eval {require Crypt::PK::ECC}) {
 			$sasl_auth{$net}{password} = "$f_name.key";
 			$sasl_auth{$net}{mech} = $mech;
 			cmd_sasl_save(@_);
-
 			$print->("SASL: submitting pubkey to NickServ...");
 			$server->command($cmd);
 		} else {
 			$print->("SASL: update your Irssi settings:");
 			$print->("%P".$cmdchar."sasl set $net <nick> $f_name.key $mech");
-
 			$print->("SASL: submit your pubkey to $net:");
 			$print->("%P".$cmdchar.$cmd);
 		}
@@ -390,18 +383,10 @@ if (eval {require Crypt::PK::ECC}) {
 
 	sub cmd_sasl_pubkey {
 		my ($data, $server, $witem) = @_;
-		my $arg;
-		my $print;
+
+		my $arg = $server ? $server->{tag} : $data;
+
 		my $f;
-
-		if ($server) {
-			$arg = $server->{tag};
-			$print = sub { $server->print("", shift) };
-		} else {
-			$arg = $data;
-			$print = sub { Irssi::print(shift) };
-		}
-
 		if (!length $arg) {
 			Irssi::print("SASL: please select a server or specify a keyfile path",
 						MSGLEVEL_CLIENTERROR);
@@ -433,8 +418,8 @@ if (eval {require Crypt::PK::ECC}) {
 		}
 
 		my $pub = encode_base64($pk->export_key_raw("public_compressed"), "");
-		$print->("SASL: loaded keyfile '$f'");
-		$print->("SASL: your pubkey is $pub");
+		Irssi::print("SASL: loaded keyfile '$f'");
+		Irssi::print("SASL: your pubkey is $pub");
 	}
 
 	Irssi::command_bind('sasl keygen', \&cmd_sasl_keygen);
