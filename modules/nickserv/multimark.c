@@ -305,12 +305,11 @@ static void db_h_mm(database_handle_t *db, const char *type)
 
 	mm->setter_uid = sstrdup(setter_uid);
 	mm->setter_name = sstrdup(setter_name);
-	mm->restored_from_uid = sstrdup(restored_from_uid);
 	mm->restored_from_account = sstrdup(restored_from_account);
 
-	if (!strcasecmp (mm->restored_from_uid, "NULL"))
+	if (strcasecmp(restored_from_uid, "NULL"))
 	{
-		mm->restored_from_uid = NULL;
+		mm->restored_from_uid = sstrdup(restored_from_uid);
 	}
 
 	mm->time = time;
