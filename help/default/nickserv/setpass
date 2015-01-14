@@ -5,6 +5,9 @@ using a key emailed to you. The key is
 valid for one time only, and also becomes
 invalid if you identify with your old password.
 
+This command should only be used after you have
+already recieved an email with the key.
+
 To set a new password if you know the current
 password, use SET PASSWORD instead of SETPASS.
 
