@@ -308,7 +308,11 @@ unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int fl
 			if (dir)
 				flags = 0;
 			else
-				flags = GA_ALL;
+			{
+				/* preserve existing flags except GA_BAN */
+				flags |= GA_ALL;
+				flags &= ~GA_BAN;
+			}
 			break;
 		default:
 			while (ga_flags[n].ch != 0 && flag == 0)
