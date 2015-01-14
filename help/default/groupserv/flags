@@ -18,6 +18,7 @@ Syntax: FLAGS <!group> [nickname flag_changes]
 Permissions:
     +f - Enables modification of group access list.
     +F - Grants full founder access.
+    +A - Enables viewing of group access list.
     +m - Read memos sent to the group.
     +c - Have channel access in channels where the group has sufficient
          privileges.

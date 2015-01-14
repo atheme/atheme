@@ -287,11 +287,14 @@ unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int fl
 {
 	char *c;
 	unsigned int dir = 0;
+	unsigned int flag;
+	unsigned char n;
 
-	/* XXX: this sucks. :< */
 	c = flagstring;
 	while (*c)
 	{
+		flag = 0;
+		n = 0;
 		switch(*c)
 		{
 		case '+':
@@ -307,55 +310,20 @@ unsigned int gs_flags_parser(char *flagstring, bool allow_minus, unsigned int fl
 			else
 				flags = GA_ALL;
 			break;
-		case 'F':
-			if (dir)
-				flags &= ~GA_FOUNDER;
-			else
-				flags |= GA_FOUNDER;
-			break;
-		case 'f':
-			if (dir)
-				flags &= ~GA_FLAGS;
-			else
-				flags |= GA_FLAGS;
-			break;
-		case 's':
-			if (dir)
-				flags &= ~GA_SET;
-			else
-				flags |= GA_SET;
-			break;
-		case 'v':
-			if (dir)
-				flags &= ~GA_VHOST;
-			else
-				flags |= GA_VHOST;
-			break;
-		case 'c':
-			if (dir)
-				flags &= ~GA_CHANACS;
-			else
-				flags |= GA_CHANACS;
-			break;
-		case 'm':
-			if (dir)
-				flags &= ~GA_MEMOS;
-			else
-				flags |= GA_MEMOS;
-			break;
-		case 'b':
-			if (dir)
-				flags &= ~GA_BAN;
-			else
-				flags |= GA_BAN;
-			break;
-		case 'i':
-			if (dir)
-				flags &= ~GA_INVITE;
-			else
-				flags |= GA_INVITE;
-			break;
 		default:
+			while (ga_flags[n].ch != 0 && flag == 0)
+			{
+				if (ga_flags[n].ch == *c)
+					flag = ga_flags[n].value;
+				else
+					n++;
+			}
+			if (flag == 0)
+				break;
+			if (dir)
+				flags &= ~flag;
+			else
+				flags |= flag;
 			break;
 		}
 
