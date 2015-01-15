@@ -1362,9 +1362,6 @@ static void chanacs_delete(chanacs_t *ca)
 			object_unref(ca->entity);
 	}
 
-	if (ca->setter != NULL)
-		object_unref(ca->setter);
-
 	metadata_delete_all(ca);
 
 	if (ca->host != NULL)
@@ -1415,7 +1412,11 @@ chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *mt, unsigned int level, tim
 	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? setter : NULL;
+
+	if (setter != NULL)
+		mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+	else
+		ca->setter_uid[0] = '\0';
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 	mowgli_node_add(ca, &ca->unode, &mt->chanacs);
@@ -1465,7 +1466,11 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->tmodified = ts;
-	ca->setter = setter != NULL ? setter : NULL;
+
+	if (setter != NULL)
+		mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+	else
+		ca->setter_uid[0] = '\0';
 
 	mowgli_node_add(ca, &ca->cnode, &mychan->chanacs);
 
@@ -1829,7 +1834,10 @@ bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removef
 		return false;
 	ca->level = (ca->level | *addflags) & ~*removeflags;
 	ca->tmodified = CURRTIME;
-	ca->setter = entity(setter);
+	if (setter != NULL)
+		mowgli_strlcpy(ca->setter_uid, entity(setter)->id, IDLEN);
+	else
+		ca->setter_uid[0] = '\0';
 
 	return true;
 }
@@ -1893,7 +1901,11 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
-			ca->setter = setter;
+			if (setter != NULL)
+				mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+			else
+				ca->setter_uid[0] = '\0';
+
 			if (ca->level == 0)
 				object_unref(ca);
 		}
@@ -1930,7 +1942,11 @@ bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsi
 				return false;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
 			ca->tmodified = CURRTIME;
-			ca->setter = setter;
+			if (setter != NULL)
+				mowgli_strlcpy(ca->setter_uid, setter->id, IDLEN);
+			else
+				ca->setter_uid[0] = '\0';
+
 			if (ca->level == 0)
 				object_unref(ca);
 		}

@@ -137,6 +137,8 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 		const char *template, *mod_ago;
 		struct tm tm;
 		char mod_date[64];
+		myentity_t *setter;
+		const char *setter_name;
 
 		ca = n->data;
 
@@ -149,12 +151,17 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 		tm = *localtime(&ca->tmodified);
 		strftime(mod_date, sizeof mod_date, TIME_FORMAT, &tm);
 
+		if (*ca->setter_uid != '\0' && (setter = myentity_find_uid(ca->setter_uid)))
+			setter_name = setter->name;
+		else
+			setter_name = "?";
+
 		if (template != NULL)
 			command_success_nodata(si, _("%-5d %-22s %-20s (%s) (%s) [modified %s ago, on %s by %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date, ca->setter ? ca->setter->name : "?");
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), template, mc->name, mod_ago, mod_date, setter_name);
 		else
 			command_success_nodata(si, _("%-5d %-22s %-20s (%s) [modified %s ago, on %s by %s]"),
-				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date, ca->setter ? ca->setter->name : "?");
+				i, ca->entity ? ca->entity->name : ca->host, bitmask_to_flags(ca->level), mc->name, mod_ago, mod_date, setter_name);
 		i++;
 	}
 

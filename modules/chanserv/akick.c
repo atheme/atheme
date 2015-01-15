@@ -622,6 +622,7 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 		if (ca->level == CA_AKICK)
 		{
 			char buf[BUFSIZE], *buf_iter;
+			myentity_t *setter = NULL;
 
 			md = metadata_find(ca, "reason");
 
@@ -639,17 +640,17 @@ void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[])
 					     ++i, ca->entity != NULL ? ca->entity->name : ca->host,
 					     md != NULL ? md->value : _("no AKICK reason specified"));
 
-			if (ca->setter)
+			if (*ca->setter_uid != '\0' && (setter = myentity_find_uid(ca->setter_uid)))
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("setter: %s"),
-						     ca->setter);
+						     setter->name);
 
 			if (expires_on > 0)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%sexpires: %s"),
-						     ca->setter != NULL ? ", " : "", timediff(time_left));
+						     setter != NULL ? ", " : "", timediff(time_left));
 
 			if (ca->tmodified)
 				buf_iter += snprintf(buf_iter, sizeof(buf) - (buf_iter - buf), _("%smodified: %s"),
-						     expires_on > 0 || ca->setter != NULL ? ", " : "", ago);
+						     expires_on > 0 || setter != NULL ? ", " : "", ago);
 
 			mowgli_strlcat(buf, "]", sizeof buf);
 
