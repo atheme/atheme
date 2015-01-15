@@ -78,6 +78,7 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_REGISTER, "DROP: \2%s\2", entity(mg)->name);
 	remove_group_chanacs(mg);
+	hook_call_group_drop(mg);
 	object_unref(mg);
 	command_success_nodata(si, _("The group \2%s\2 has been dropped."), name);
 	return;

@@ -57,6 +57,8 @@ channel_info       hook_channel_req_t *
 channel_register   hook_channel_req_t *
 channel_check_expire  hook_expiry_req_t *
 channel_acl_change hook_channel_acl_req_t *
+group_drop         mygroup_t *
+group_register     mygroup_t *
 nick_can_register  hook_user_register_check_t *
 nick_group         hook_user_req_t *
 nick_check         user_t *
