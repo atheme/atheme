@@ -159,7 +159,15 @@ static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 no_founder:
 	if (ga != NULL && flags != 0)
-		ga->flags = flags;
+	{
+		if (ga->flags != flags)
+			ga->flags = flags;
+		else
+		{
+			command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), entity(mg)->name, mt->name);
+			return;
+		}
+	}
 	else if (ga != NULL)
 	{
 		groupacs_delete(mg, mt);
@@ -167,7 +175,7 @@ no_founder:
 		logcommand(si, CMDLOG_SET, "FLAGS:REMOVE: \2%s\2 on \2%s\2", mt->name, entity(mg)->name);
 		return;
 	}
-	else
+	else if (flags != 0)
 	{
 		if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
@@ -175,6 +183,11 @@ no_founder:
 			return;
 		}
 		ga = groupacs_add(mg, mt, flags);
+	}
+	else
+	{
+		command_fail(si, fault_nochange, _("Group \2%s\2 access for \2%s\2 unchanged."), entity(mg)->name, mt->name);
+		return;
 	}
 
 	MOWGLI_ITER_FOREACH(n, entity(mg)->chanacs.head)
