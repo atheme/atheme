@@ -179,7 +179,7 @@ no_founder:
 	{
 		if (MOWGLI_LIST_LENGTH(&mg->acs) > gs_config->maxgroupacs && (!(mg->flags & MG_ACSNOLIMIT)))
 		{
-			command_fail(si, fault_toomany, _("Group %s access list is full."), entity(mg)->name);
+			command_fail(si, fault_toomany, _("Group \2%s\2 access list is full."), entity(mg)->name);
 			return;
 		}
 		ga = groupacs_add(mg, mt, flags);

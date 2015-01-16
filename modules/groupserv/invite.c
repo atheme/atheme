@@ -82,13 +82,13 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((svs = service_find("memoserv")) != NULL)
 	{
-		snprintf(buf, BUFSIZE, "%s [auto memo] You have been invited to the group %s.", user, group);
+		snprintf(buf, BUFSIZE, "%s [auto memo] You have been invited to the group \2%s\2.", user, group);
 
 		command_exec_split(svs, si, "SEND", buf, svs->commands);
 	}
 	else
 	{
-		myuser_notice(si->service->nick, mu, "You have been invited to the group %s.", group);
+		myuser_notice(si->service->nick, mu, "You have been invited to the group \2%s\2.", group);
 	}
 
 	logcommand(si, CMDLOG_SET, "INVITE: \2%s\2 \2%s\2", group, user);
