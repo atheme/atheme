@@ -160,6 +160,7 @@ static const char* pbkdf2v2_crypt(const char* pass, const char* crypt_str)
 
 	default:
 		/* This should match the default PRF */
+		prf = PBKDF2_PRF_DEF;
 		md = EVP_sha512();
 		break;
 	}
