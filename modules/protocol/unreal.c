@@ -1251,7 +1251,7 @@ static bool unreal_is_extban(const char *mask)
 	const char mask_len = strlen(mask);
 	unsigned char offset = 0;
 
-	if (mask_len < 4 || mask[0] != '~' || mask[2] != ':')
+	if (mask_len < 4 || mask[0] != '~' || mask[2] != ':' || strchr(mask, ' '))
 		return false;
 
 	if ((mask[1] < 'a' || mask[1] > 'z') && (mask[1] < 'A' || mask[1] > 'Z'))

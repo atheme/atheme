@@ -291,6 +291,9 @@ static bool charybdis_is_extban(const char *mask)
 	if ((mask_len < 2 || mask[0] != '$'))
 		return NULL;
 
+	if (strchr(mask, ' '))
+		return false;
+
 	if (mask_len > 2 && mask[1] == '~')
 		offset = 1;
 
