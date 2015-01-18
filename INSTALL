@@ -31,16 +31,17 @@ Use an unprivileged user account.
 
 Services should compile and run on most POSIX compliant systems. The current
 version is known to work on:
-	FreeBSD 6.3              (i386, amd64)
-	FreeBSD 7.0              (i386, amd64)
-	FreeBSD 8.0              (i386, amd64)
-	Linux (glibc) 2.6.x, 2.7.x, 2.8.x, 2.10.x, 2.11.x   (i386, amd64)
-	MacOS 10.5               (intel) (*)
+	FreeBSD 8.x              (i386, amd64)
+	FreeBSD 9.x              (i386, amd64)
+	FreeBSD 10.x             (i386, amd64)
+	Linux (glibc) 2.8 - 2.20   (i386, amd64)
+	MacOS 10.9               (intel) (*)
 	Windows XP+		 (i386, x64) (*)
 
 Older versions have been tested on:
 	FreeBSD 5.[0,1,2,3,4,5]
-	FreeBSD 6.[0,1,2]
+	FreeBSD 6.[0,1,2,3]
+	FreeBSD 7.[0,1,2,3,4]
 	OpenBSD 3.[5,6,7,8]      (i386, amd64, sparc)
 	NetBSD 1.[5,6]           (i386, amd64, sparc)
 	NetBSD 2.[0]             (i386, amd64, sparc, mips)
