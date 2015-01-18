@@ -37,6 +37,9 @@ DECLARE_MODULE_V1("crypto/pbkdf2v2", false, _modinit, _moddeinit,
 /*
  * Do not change anything below this line unless you know what you are doing,
  * AND how it will (possibly) break backward-, forward-, or cross-compatibility
+ *
+ * In particular, the salt length SHOULD NEVER BE CHANGED. 128 bits is more than
+ * sufficient.
  */
 
 #define PBKDF2_SALTLEN		16
@@ -53,7 +56,7 @@ static const char salt_chars[62] =
  */
 int PKCS5_PBKDF2_HMAC(const char *pass, int pl,
                       const unsigned char *salt, int sl,
-                      int iter, const EVP_MD* PRF,
+                      int iter, const EVP_MD *PRF,
                       int dkLen, unsigned char *out)
 {
 	if (! pass)
@@ -64,7 +67,7 @@ int PKCS5_PBKDF2_HMAC(const char *pass, int pl,
 
 	int tkLen = dkLen;
 	int mdLen = EVP_MD_size(PRF);
-	unsigned char* p = out;
+	unsigned char *p = out;
 	unsigned long i = 1;
 
 	HMAC_CTX hctx;
@@ -104,7 +107,7 @@ int PKCS5_PBKDF2_HMAC(const char *pass, int pl,
 	return 1;
 }
 
-static const char* pbkdf2v2_make_salt(void)
+static const char *pbkdf2v2_make_salt(void)
 {
 	char		salt[PBKDF2_SALTLEN + 1];
 	static char	result[PASSLEN];
@@ -122,7 +125,7 @@ static const char* pbkdf2v2_make_salt(void)
 	return result;
 }
 
-static const char* pbkdf2v2_crypt(const char* pass, const char* crypt_str)
+static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 {
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
@@ -168,12 +171,12 @@ static const char* pbkdf2v2_crypt(const char* pass, const char* crypt_str)
 	/* Compute the PBKDF2 digest */
 	size_t sl = strlen(salt);
 	size_t pl = strlen(pass);
-	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char*) salt, sl,
+	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl,
 	                         iter, md, EVP_MD_size(md), digest);
 
 	/* Convert the digest to Base 64 */
 	memset(digest_b64, 0x00, sizeof digest_b64);
-	(void) base64_encode((const char*) digest, EVP_MD_size(md),
+	(void) base64_encode((const char *) digest, EVP_MD_size(md),
 	                     digest_b64, sizeof digest_b64);
 
 	/* Format the result */
@@ -184,10 +187,28 @@ static const char* pbkdf2v2_crypt(const char* pass, const char* crypt_str)
 	return result;
 }
 
+static int pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
+{
+	unsigned int	prf = 0, iter = 0;
+	char		salt[PBKDF2_SALTLEN + 1];
+
+	if (sscanf(user_pass_string, PBKDF2_F_SCAN, &prf, &iter, salt) < 3)
+		return 0;
+
+	if (prf != PBKDF2_PRF_DEF)
+		return 1;
+
+	if (iter != PBKDF2_ITER_DEF)
+		return 1;
+
+	return 0;
+}
+
 static crypt_impl_t pbkdf2_crypt_impl = {
 	.id = "pbkdf2v2",
 	.crypt = &pbkdf2v2_crypt,
-	.salt = &pbkdf2v2_make_salt
+	.salt = &pbkdf2v2_make_salt,
+	.needs_param_upgrade = &pbkdf2v2_needs_param_upgrade
 };
 
 void _modinit(module_t* m)

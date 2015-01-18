@@ -61,7 +61,17 @@ bool verify_password(myuser_t *mu, const char *password)
 			if (ci == NULL)
 				return false;
 
-			if (ci != NULL && ci != (ci_default = crypt_get_default_provider()))
+			if (ci == (ci_default = crypt_get_default_provider()))
+			{
+				if (ci->needs_param_upgrade != NULL && ci->needs_param_upgrade(mu->pass))
+				{
+					slog(LG_INFO, "verify_password(): transitioning to newer parameters for crypt scheme '%s' for account '%s'",
+					              ci->id, entity(mu)->name);
+
+					mowgli_strlcpy(mu->pass, ci->crypt(password, ci->salt()), PASSLEN);
+				}
+			}
+			else
 			{
 				slog(LG_INFO, "verify_password(): transitioning from crypt scheme '%s' to '%s' for account '%s'",
 					      ci->id, ci_default->id, entity(mu)->name);
