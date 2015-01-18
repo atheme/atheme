@@ -1177,11 +1177,11 @@ chanserv {
 	 */
 	templates {
 		vop = "+AV";
-		hop = "+AHhitrv";
-		aop = "+AOhiortv";
-		sop = "+AOafhiorstv";
+		hop = "+AHehitrv";
+		aop = "+AOehiortv";
+		sop = "+AOaefhiorstv";
 
-		founder = "+AFORafhiorstv";
+		founder = "+AFORaefhiorstv";
 
 		/* some examples (which are commented out...) */
 		#member = "+Ai";
@@ -1245,7 +1245,7 @@ chanserv {
 	 * This MUST include at least 'F' or it will be ignored.
 	 * If it is not set, Atheme will give the user all channel flags.
 	 */
-	#founder_flags = "AFORfiorstv";
+	#founder_flags = "AFORefiorstv";
 
 	/* (*)akick_time
 	 * The default expiration time (in minutes) for AKICKs.
@@ -1403,23 +1403,23 @@ operserv {
 	};
 };
 
-/* SaslServ configuration.
+/* SASLServ configuration.
  *
  * The saslserv {} block contains settings specific to the SaslServ modules.
  *
- * SaslServ provides an authentication agent which is compatible with the
+ * SASLServ provides an authentication agent which is compatible with the
  * SASL over IRC (SASL/IRC) protocol extension.
  */
 saslserv {
 	/* (*)nick
 	 * The nickname we want SaslServ to have.
 	 */
-	nick = "SaslServ";
+	nick = "SASLServ";
 
 	/* (*)user
 	 * The username we want SaslServ to have.
 	 */
-	user = "SaslServ";
+	user = "SASLServ";
 
 	/* (*)host
 	 * The hostname we want SaslServ to have.
