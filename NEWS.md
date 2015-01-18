@@ -88,6 +88,11 @@ other
 - contrib/cap_sasl.pl: Fix crash if disconnected while waiting for SASL reply
 - transport/jsonrpc: new module implementing JSONRPC transport
 
+crypto
+------
+- pbkdf2v2: Newer module implementing PBKDF2-HMAC digest scheme
+            with backward compatibility and limited forward compatibility
+
 Atheme Services 7.1 Release Notes
 =================================
 In addition to assorted bugfixes in various subsystems from 7.0, the
