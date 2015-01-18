@@ -127,7 +127,7 @@ static int mech_step_response(sasl_session_t *p, char *message, size_t len, char
 {
 	ecdsa_session_t *s = p->mechdata;
 
-	if (!ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, (const unsigned char *)message, len, s->pubkey))
+	if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, (const unsigned char *)message, len, s->pubkey) != 1)
 		return ASASL_FAIL;
 
 	return ASASL_DONE;
