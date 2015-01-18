@@ -190,7 +190,7 @@ static bool inspircd_is_extban(const char *mask)
 {
 	const size_t mask_len = strlen(mask);
 	/* e.g R:Test */
-	if (mask_len < 2 || mask[1] != ':')
+	if (mask_len < 2 || mask[1] != ':' || strchr(mask, ' '))
 		return false;
 
 	return true;
