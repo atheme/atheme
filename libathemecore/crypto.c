@@ -45,7 +45,7 @@ static const char *generic_gen_salt(void)
 	return buf;
 }
 
-static int generic_needs_param_upgrade(const char *user_pass_string)
+static bool generic_needs_param_upgrade(const char *user_pass_string)
 {
 	return 0;
 }

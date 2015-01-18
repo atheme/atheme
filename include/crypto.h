@@ -17,7 +17,7 @@ typedef struct {
 	const char *id;
 	const char *(*crypt)(const char *key, const char *salt);
 	const char *(*salt)(void);
-	int (*needs_param_upgrade)(const char *user_pass_string);
+	bool (*needs_param_upgrade)(const char *user_pass_string);
 
 	mowgli_node_t node;
 } crypt_impl_t;

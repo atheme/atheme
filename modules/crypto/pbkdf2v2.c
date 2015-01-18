@@ -187,7 +187,7 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	return result;
 }
 
-static int pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
+static bool pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
 {
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
@@ -208,7 +208,7 @@ static crypt_impl_t pbkdf2_crypt_impl = {
 	.id = "pbkdf2v2",
 	.crypt = &pbkdf2v2_crypt,
 	.salt = &pbkdf2v2_make_salt,
-	.needs_param_upgrade = &pbkdf2v2_needs_param_upgrade
+	.needs_param_upgrade = &pbkdf2v2_needs_param_upgrade,
 };
 
 void _modinit(module_t* m)
