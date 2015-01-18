@@ -71,7 +71,7 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		create_challenge(si, entity(mg)->name, 1, key1);
 		if (strcmp(key, key0) && strcmp(key, key1))
 		{
-			command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
+			command_fail(si, fault_badparams, _("Invalid key for \2%s\2."), "DROP");
 			return;
 		}
 	}
