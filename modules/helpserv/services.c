@@ -22,12 +22,12 @@ command_t helpserv_services = { "SERVICES", N_("List all services currently runn
 
 void _modinit(module_t *m)
 {
-        service_named_bind_command("helpserv", &helpserv_services);
+	service_named_bind_command("helpserv", &helpserv_services);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-        service_named_unbind_command("helpserv", &helpserv_services);
+	service_named_unbind_command("helpserv", &helpserv_services);
 }
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
@@ -39,12 +39,13 @@ static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_PATRICIA_FOREACH(sptr, &state, services_nick)
 	{
-		command_success_nodata(si, _("%s"), sptr->nick);
+		if (!sptr->botonly)
+			command_success_nodata(si, "%s", sptr->nick);
 	}
 
 	command_success_nodata(si, _("More information on each service is available by messaging it like so: /msg service help"));
 
-        return;
+	return;
 }
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
