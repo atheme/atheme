@@ -48,10 +48,10 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 	if (take && !(fl & CA_ALLPRIVS) && (mc->flags & MC_RESTRICTED) && !has_priv_user(cu->user, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		if (mc->chan->nummembers - mc->chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
-			if (!(mc->flags & MC_GUARD))
+			if (mc->chan->numsvcmembers == 0)
 				join(mc->chan->name, chansvs.nick);
 		}
 
@@ -77,10 +77,10 @@ static void do_chanuser_sync(mychan_t *mc, chanuser_t *cu, chanacs_t *ca,
 		metadata_t *md;
 
 		/* Stay on channel if this would empty it -- jilles */
-		if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		if (mc->chan->nummembers - mc->chan->numsvcmembers == 1)
 		{
 			mc->flags |= MC_INHABIT;
-			if (!(mc->flags & MC_GUARD))
+			if (mc->chan->numsvcmembers == 0)
 				join(mc->chan->name, chansvs.nick);
 		}
 

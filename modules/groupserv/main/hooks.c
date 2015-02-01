@@ -56,10 +56,10 @@ static void grant_channel_access_hook(user_t *u)
 				if (ca->level & CA_AKICK && !(ca->level & CA_EXEMPT))
 				{
 					/* Stay on channel if this would empty it -- jilles */
-					if (ca->mychan->chan->nummembers <= (ca->mychan->flags & MC_GUARD ? 2 : 1))
+					if (ca->mychan->chan->nummembers - ca->mychan->chan->numsvcmembers == 1)
 					{
 						ca->mychan->flags |= MC_INHABIT;
-						if (!(ca->mychan->flags & MC_GUARD))
+						if (ca->mychan->chan->numsvcmembers == 0)
 							join(cu->chan->name, chansvs.nick);
 					}
 					ban(chansvs.me->me, ca->mychan->chan, u);

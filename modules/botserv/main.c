@@ -1162,7 +1162,7 @@ bs_part(hook_channel_joinpart_t *hdata)
 	*/
 	if (config_options.leave_chans
 			&& !(mc->flags & MC_INHABIT)
-			&& (cu->chan->nummembers <= 2)
+			&& (cu->chan->nummembers - cu->chan->numsvcmembers == 1)
 			&& !is_internal_client(cu->user))
 	{
 		if (bot)
