@@ -25,6 +25,7 @@ struct channel_
   char **extmodes; /* non-standard simple modes with param eg +j */
 
   unsigned int nummembers;
+  unsigned int numsvcmembers;
 
   time_t ts;
 

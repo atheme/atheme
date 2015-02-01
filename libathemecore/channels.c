@@ -174,6 +174,7 @@ void channel_delete(channel_t *c)
 		cnt.chanuser--;
 	}
 	c->nummembers = 0;
+	c->numsvcmembers = 0;
 
 	hook_call_channel_delete(c);
 
@@ -400,6 +401,8 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	cu->modes = flags;
 
 	chan->nummembers++;
+	if (is_internal_client(u))
+		chan->numsvcmembers++;
 
 	mowgli_node_add(cu, &cu->cnode, &chan->members);
 	mowgli_node_add(cu, &cu->unode, &u->channels);
@@ -458,6 +461,9 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 	chan->nummembers--;
 	cnt.chanuser--;
+
+	if (is_internal_client(user))
+		chan->numsvcmembers--;
 
 	if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
 	{
