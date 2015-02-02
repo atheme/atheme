@@ -38,6 +38,12 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu->flags & MU_WAITAUTH)
+	{
+		command_fail(si, fault_notverified, _("You need to verify your email address before you may register groups."));
+		return;
+	}
+
 	if (mygroup_find(parv[0]))
 	{
 		command_fail(si, fault_alreadyexists, _("The group \2%s\2 already exists."), parv[0]);
@@ -57,11 +63,11 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-        if (metadata_find(si->smu, "private:restrict:setter"))
-        {
-                command_fail(si, fault_noprivs, _("You have been restricted from registering groups by network staff."));
-                return;
-        }
+	if (metadata_find(si->smu, "private:restrict:setter"))
+	{
+		command_fail(si, fault_noprivs, _("You have been restricted from registering groups by network staff."));
+		return;
+	}
 
 	mg = mygroup_add(parv[0]);
 	groupacs_add(mg, entity(si->smu), GA_ALL | GA_FOUNDER);

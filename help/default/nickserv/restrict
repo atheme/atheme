@@ -2,7 +2,8 @@ Help for RESTRICT:
 
 RESTRICT allows operators to restrict what an account can and can not do.
 It will currently block a user from grouping nicks, changing account name,
-registering a channel, requesting a vHost or taking an OFFERed vHost.
+registering a channel, registering a group, requesting a vHost or
+taking an OFFERed vHost.
 
 This is particularly useful if a user starts abusing these commands.
 
