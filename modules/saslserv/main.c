@@ -7,6 +7,7 @@
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 DECLARE_MODULE_V1
 (
@@ -37,6 +38,10 @@ static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild();
 
 sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
+
+struct sourceinfo_vtable sasl_vtable = {
+	.description = "sasl"
+};
 
 /* main services client routine */
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
@@ -438,6 +443,27 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			sasl_sts(p->uid, 'C', "+");
 			free(out);
 			return;
+		}
+	}
+
+	/* If we reach this, they failed SASL auth, so if they were trying
+	 * to identify as a specific user, bad_password them.
+	 */
+	if (p->username)
+	{
+		myuser_t *mu = myuser_find_by_nick(p->username);
+		if (mu)
+		{
+			sourceinfo_t *si = sourceinfo_create();
+			si->service = saslsvs;
+			si->sourcedesc = p->uid;
+			si->connection = curr_uplink->conn;
+			si->v = &sasl_vtable;
+			si->force_language = language_find("en");
+
+			bad_password(si, mu);
+
+			object_unref(si);
 		}
 	}
 
