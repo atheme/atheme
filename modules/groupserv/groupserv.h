@@ -29,7 +29,7 @@ mowgli_list_t * (*myentity_get_membership_list)(myentity_t *mu);
 const char * (*mygroup_founder_names)(mygroup_t *mg);
 void (*remove_group_chanacs)(mygroup_t *mg);
 
-struct gflags *ga_flags;
+gflags_t *ga_flags;
 
 groupserv_config_t *gs_config;
 

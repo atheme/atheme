@@ -42,8 +42,8 @@ E const char *mygroup_founder_names(mygroup_t *mg);
 E service_t *groupsvs;
 E mowgli_list_t gs_cmdtree;
 E mowgli_list_t conf_gs_table;
-E struct gflags ga_flags[];
-E struct gflags mg_flags[];
+E gflags_t ga_flags[];
+E gflags_t mg_flags[];
 
 
 
