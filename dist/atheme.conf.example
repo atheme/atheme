@@ -310,7 +310,6 @@ loadmodule "modules/nickserv/vhost";
  * SET EMAIL command                            modules/chanserv/set_email
  * SET ENTRYMSG command                         modules/chanserv/set_entrymsg
  * SET FANTASY command                          modules/chanserv/set_fantasy
- * SET FOUNDER command                          modules/chanserv/set_founder
  * SET GAMESERV command                         modules/chanserv/set_gameserv
  * SET GUARD command                            modules/chanserv/set_guard
  * SET KEEPTOPIC command                        modules/chanserv/set_keeptopic
@@ -378,7 +377,6 @@ loadmodule "modules/chanserv/set_core";
 loadmodule "modules/chanserv/set_email";
 loadmodule "modules/chanserv/set_entrymsg";
 loadmodule "modules/chanserv/set_fantasy";
-loadmodule "modules/chanserv/set_founder";
 #loadmodule "modules/chanserv/set_gameserv";
 loadmodule "modules/chanserv/set_guard";
 loadmodule "modules/chanserv/set_keeptopic";
