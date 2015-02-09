@@ -174,6 +174,13 @@ while (<$hooktypes>) {
 		next;
 	}
 	next if grep { $_ eq $arg_type } @unsupported_types;
+	unless ($perl_api_types{$arg_type} ||
+	        $hook_structs{$arg_type} ||
+	        (grep { $_ eq $arg_type } @special_types) ||
+	        $arg_type eq "void") {
+		warn "Hook type '$arg_type' is neither specified for use nor marked as currently unsupported\n";
+		next;
+	}
 
 	$hooks{$hookname} = $arg_type;
 	$arg_types{$arg_type} = 1 unless grep { $_ eq $arg_type } @special_types;
