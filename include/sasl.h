@@ -18,6 +18,8 @@ struct sasl_session_ {
   char *buf, *p;
   int len, flags;
 
+  server_t *server;
+
   struct sasl_mechanism_ *mechptr;
   void *mechdata;
 
