@@ -653,6 +653,7 @@ static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
 	smsg.mode = *parv[2];
 	smsg.buf = parv[3];
 	smsg.ext = parc >= 4 ? parv[4] : NULL;
+	smsg.server = si->s ? si->s : NULL;
 
 	hook_call_sasl_input(&smsg);
 }

@@ -33,6 +33,8 @@ struct sasl_message_ {
   char mode;
   char *buf;
   char *ext;
+
+  server_t *server;
 };
 
 struct sasl_mechanism_ {

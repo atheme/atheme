@@ -22,7 +22,7 @@ static char mechlist_string[400];
 static bool hide_server_names;
 
 sasl_session_t *find_session(const char *uid);
-sasl_session_t *make_session(const char *uid);
+sasl_session_t *make_session(const char *uid, server_t *server);
 void destroy_session(sasl_session_t *p);
 static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...);
 static void sasl_input(sasl_message_t *smsg);
@@ -186,7 +186,7 @@ sasl_session_t *find_session(const char *uid)
 }
 
 /* create a new session if it does not already exist */
-sasl_session_t *make_session(const char *uid)
+sasl_session_t *make_session(const char *uid, server_t *server)
 {
 	sasl_session_t *p = find_session(uid);
 	mowgli_node_t *n;
@@ -197,15 +197,7 @@ sasl_session_t *make_session(const char *uid)
 	p = malloc(sizeof(sasl_session_t));
 	memset(p, 0, sizeof(sasl_session_t));
 	p->uid = strdup(uid);
-
-	server_t *s;
-	mowgli_patricia_iteration_state_t state;
-	MOWGLI_PATRICIA_FOREACH(s, &state, servlist)
-	{
-		if (!strncmp(s->sid, p->uid, strlen(s->sid)))
-			p->server = s;
-	}
-
+	p->server = server;
 	n = mowgli_node_create();
 	mowgli_node_add(p, n, &sessions);
 
@@ -250,7 +242,7 @@ void destroy_session(sasl_session_t *p)
 /* interpret an AUTHENTICATE message */
 static void sasl_input(sasl_message_t *smsg)
 {
-	sasl_session_t *p = make_session(smsg->uid);
+	sasl_session_t *p = make_session(smsg->uid, smsg->server);
 	int len = strlen(smsg->buf);
 	char *tmpbuf;
 	int tmplen;
