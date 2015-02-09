@@ -323,11 +323,11 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					/* see if they did something we have to undo */
 					if (source == NULL && cu->user->server != me.me)
 					{
-						hook_channel_mode_change_t hookmsg_chg;
-
-						hookmsg_chg.cu = cu;
-						hookmsg_chg.mchar = status_mode_list[i].mode;
-						hookmsg_chg.mvalue = status_mode_list[i].value;
+						hook_channel_mode_change_t hookmsg_chg = {
+							.cu = cu,
+							.mchar = status_mode_list[i].mode,
+							.mvalue = status_mode_list[i].value
+						};
 
 						hook_call_channel_mode_change(&hookmsg_chg);
 					}

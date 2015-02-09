@@ -138,7 +138,7 @@ typedef struct {
 typedef struct {
 	chanuser_t *cu;
 	const char mchar;
-	unsigned int mvalue;
+	const unsigned int mvalue;
 } hook_channel_mode_change_t;
 
 /* cmode.c */
