@@ -321,20 +321,15 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 						modestack_mode_param(source->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
-					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(chan->name)) && mc->flags & MC_SECURE)
+					if (source == NULL && cu->user->server != me.me)
 					{
-						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
-						{
-							/* they were opped and aren't on the list, deop them */
-							modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
-							cu->modes &= ~status_mode_list[i].value;
-						}
-						else if (ircd->uses_halfops && status_mode_list[i].mode == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
-						{
-							/* same for halfops -- jilles */
-							modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
-							cu->modes &= ~status_mode_list[i].value;
-						}
+						hook_channel_mode_change_t hookmsg_chg;
+
+						hookmsg_chg.cu = cu;
+						hookmsg_chg.mchar = status_mode_list[i].mode;
+						hookmsg_chg.mvalue = status_mode_list[i].value;
+
+						hook_call_channel_mode_change(&hookmsg_chg);
 					}
 				}
 				else

@@ -27,6 +27,7 @@ static void cs_keeptopic_topicset(channel_t *c);
 static void cs_topiccheck(hook_channel_topic_check_t *data);
 static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
+static void cs_bounce_mode_change(hook_channel_mode_change_t *data);
 static void on_shutdown(void *unused);
 
 static mowgli_eventloop_timer_t *cs_leave_empty_timer = NULL;
@@ -278,6 +279,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_topic");
 	hook_add_event("channel_can_change_topic");
 	hook_add_event("channel_tschange");
+	hook_add_event("channel_mode_change");
 	hook_add_event("user_identify");
 	hook_add_event("shutdown");
 	hook_add_channel_join(cs_join);
@@ -288,6 +290,7 @@ void _modinit(module_t *m)
 	hook_add_channel_topic(cs_keeptopic_topicset);
 	hook_add_channel_can_change_topic(cs_topiccheck);
 	hook_add_channel_tschange(cs_tschange);
+	hook_add_channel_mode_change(cs_bounce_mode_change);
 	hook_add_shutdown(on_shutdown);
 
 	cs_leave_empty_timer = mowgli_timer_add(base_eventloop, "cs_leave_empty", cs_leave_empty, NULL, 300);
@@ -332,6 +335,7 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_channel_topic(cs_keeptopic_topicset);
 	hook_del_channel_can_change_topic(cs_topiccheck);
 	hook_del_channel_tschange(cs_tschange);
+	hook_del_channel_mode_change(cs_bounce_mode_change);
 	hook_del_shutdown(on_shutdown);
 
 	mowgli_timer_destroy(base_eventloop, cs_leave_empty_timer);
@@ -902,6 +906,42 @@ static void cs_leave_empty(void *unused)
 			slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);
 			part(mc->chan->name, chansvs.nick);
 		}
+	}
+}
+
+static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
+{
+	mychan_t *mc;
+	chanuser_t *cu;
+	channel_t *chan;
+
+	/* if we have SECURE mode enabled, then we want to bounce any changes */
+	cu = data->cu;
+	chan = cu->chan;
+	mc = chan->mychan;
+
+	if (mc == NULL || (mc != NULL && !(mc->flags & MC_SECURE)))
+		return;
+
+	if (ircd->uses_owner && data->mchar == ircd->owner_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_USEOWNER)))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+		cu->modes &= ~data->mvalue;
+	}
+	else if (ircd->uses_protect && data->mchar == ircd->protect_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_USEPROTECT)))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+		cu->modes &= ~data->mvalue;
+	}
+	else if (data->mchar == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
+		cu->modes &= ~data->mvalue;
+	}
+	else if (ircd->uses_halfops && data->mchar == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
+	{
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
+		cu->modes &= ~data->mvalue;
 	}
 }
 

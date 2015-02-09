@@ -135,6 +135,12 @@ typedef struct {
 	channel_t *c;
 } hook_channel_mode_t;
 
+typedef struct {
+	chanuser_t *cu;
+	const char mchar;
+	unsigned int mvalue;
+} hook_channel_mode_change_t;
+
 /* cmode.c */
 E char *flags_to_string(unsigned int flags);
 E int mode_to_flag(char c);
