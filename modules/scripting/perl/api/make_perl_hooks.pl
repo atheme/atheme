@@ -111,6 +111,11 @@ my %hook_structs = (
 		u => [ 'user_t', 'user' ],
 		c => [ 'channel_t', 'channel' ],
 	},
+	hook_channel_mode_change_t => {
+		cu => [ 'chanuser_t', 'chanuser' ],
+		mchar => 'int',
+		mvalue => 'int',
+	},
 	hook_user_delete_t => {
 		u => [ 'user_t', 'user' ],
 		comment => 'const char *',
