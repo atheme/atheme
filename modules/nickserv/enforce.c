@@ -321,8 +321,7 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
-		if ((si->su != NULL && (user_is_channel_banned(si->su, 'b') || user_is_channel_banned(si->su, 'q'))) ||
-		    (u != NULL && (user_is_channel_banned(u, 'b') || user_is_channel_banned(u, 'q'))))
+		if (si->su != NULL && (user_is_channel_banned(si->su, 'b') || user_is_channel_banned(si->su, 'q')))
 		{
 			command_fail(si, fault_noprivs, _("You can not regain your nickname while banned or quieted on a channel."));
 			return;
