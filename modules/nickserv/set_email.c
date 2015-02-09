@@ -48,12 +48,6 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (si->smu->flags & MU_WAITAUTH)
-	{
-		command_fail(si, fault_noprivs, _("Please verify your original registration before changing your e-mail address."));
-		return;
-	}
-
 	if (!strcasecmp(si->smu->email, email))
 	{
 		md = metadata_find(si->smu, "private:verify:emailchg:newemail");
