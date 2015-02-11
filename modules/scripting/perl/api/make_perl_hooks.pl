@@ -174,6 +174,13 @@ while (<$hooktypes>) {
 		next;
 	}
 	next if grep { $_ eq $arg_type } @unsupported_types;
+	unless ($perl_api_types{$arg_type} ||
+	        $hook_structs{$arg_type} ||
+	        (grep { $_ eq $arg_type } @special_types) ||
+	        $arg_type eq "void") {
+		warn "Hook type '$arg_type' is neither specified for use nor marked as currently unsupported\n";
+		next;
+	}
 
 	$hooks{$hookname} = $arg_type;
 	$arg_types{$arg_type} = 1 unless grep { $_ eq $arg_type } @special_types;
@@ -204,7 +211,7 @@ EOF
 # Write the hook-data marshalling functions.
 #
 
-foreach my $arg_type (keys %arg_types) {
+foreach my $arg_type (sort keys %arg_types) {
 	next if ($arg_type eq 'void');
 
 	if (defined $perl_api_types{$arg_type}) {
@@ -231,7 +238,8 @@ EOF
 
 		my @members;
 
-		while (my ($member, $definition) = each %$struct) {
+		foreach my $member (sort keys %$struct) {
+			my $definition = $struct->{$member};
 			my ($type, $pretty_name, $rw);
 
 			if (ref $definition eq 'ARRAY') {
@@ -301,7 +309,8 @@ EOF
 # Now write the actual hook handlers.
 #
 
-while (my ($hookname, $arg_type) = each %hooks) {
+foreach my $hookname (sort keys %hooks) {
+	my $arg_type = $hooks{$hookname};
 	next if grep { $_ eq $arg_type } @special_types;
 	print $outfile <<"EOF";
 static void perl_hook_$hookname ($arg_type * data)
@@ -346,7 +355,7 @@ print $outfile <<EOF;
 void enable_perl_hook_handler(const char *hookname)
 {
 EOF
-foreach my $hookname (keys %hooks) {
+foreach my $hookname (sort keys %hooks) {
 	print $outfile <<"EOF";
 	if (0 == strcmp(hookname, "$hookname")) {
 		hook_add_$hookname(perl_hook_$hookname);
@@ -363,7 +372,7 @@ print $outfile <<EOF;
 void disable_perl_hook_handler(const char *hookname)
 {
 EOF
-foreach my $hookname (keys %hooks) {
+foreach my $hookname (sort keys %hooks) {
 	print $outfile <<"EOF";
 	if (0 == strcmp(hookname, "$hookname")) {
 		hook_del_$hookname(perl_hook_$hookname);
