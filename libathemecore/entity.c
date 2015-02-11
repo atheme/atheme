@@ -215,10 +215,10 @@ bool myentity_can_register_channel(myentity_t *mt)
 
 	return_val_if_fail(mt != NULL, false);
 
-	if (myentity_count_channels_with_flagset(mt, CA_FOUNDER) >= chansvs.maxchans)
-		return false;
-
 	vt = myentity_get_chanacs_validator(mt);
-	return vt->can_register_channel(mt);
+	if (vt->can_register_channel(mt))
+		return true;
+
+	return (myentity_count_channels_with_flagset(mt, CA_FOUNDER) < chansvs.maxchans);
 }
 
