@@ -278,7 +278,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	if (u == NULL && mu == NULL)
 		return true;
 	target_c = channel_find(value);
-	target_mc = MYCHAN_FROM(target_c);
+	target_mc = mychan_from(target_c);
 	if (target_c == NULL && target_mc == NULL)
 		return false;
 	return true;
@@ -735,7 +735,7 @@ static void inspircd_quarantine_sts(user_t *source, user_t *victim, long duratio
 
 static void inspircd_mlock_sts(channel_t *c)
 {
-	mychan_t *mc = MYCHAN_FROM(c);
+	mychan_t *mc = mychan_from(c);
 
 	if (mc == NULL)
 		return;
@@ -745,7 +745,7 @@ static void inspircd_mlock_sts(channel_t *c)
 
 static void  inspircd_topiclock_sts(channel_t *c)
 {
-	mychan_t *mc = MYCHAN_FROM(c);
+	mychan_t *mc = mychan_from(c);
 	if (mc == NULL || !has_svstopic_topiclock)
 		return;
 
@@ -1342,7 +1342,7 @@ static inline void verify_mlock(channel_t *c, time_t ts, const char *their_mlock
 	const char *mlock_str;
 	mychan_t *mc;
 
-	mc = MYCHAN_FROM(c);
+	mc = mychan_from(c);
 	if (mc == NULL)
 		return;
 
@@ -1358,7 +1358,7 @@ static inline void verify_mlock(channel_t *c, time_t ts, const char *their_mlock
 static void verify_topiclock(channel_t *c, bool state)
 {
 	bool mystate;
-	mychan_t *mc = MYCHAN_FROM(c);
+	mychan_t *mc = mychan_from(c);
 	if (!mc)
 		return;
 

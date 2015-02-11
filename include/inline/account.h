@@ -87,6 +87,11 @@ static inline mychan_t *mychan_find(const char *name)
 	return name ? mowgli_patricia_retrieve(mclist, name) : NULL;
 }
 
+static inline mychan_t *mychan_from(channel_t *chan)
+{
+	return chan ? (chan->mychan ? chan->mychan : mychan_find(chan->name)) : NULL;
+}
+
 static inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
 {
 	return mychan && mt ? (chanacs_entity_flags(mychan, mt) & level) != 0 : false;

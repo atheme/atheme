@@ -357,7 +357,7 @@ on_channel_message(hook_cmessage_data_t *data)
 	if (cu == NULL)
 		return;
 
-	mc = MYCHAN_FROM(data->c);
+	mc = mychan_from(data->c);
 	if (mc == NULL)
 		return;
 

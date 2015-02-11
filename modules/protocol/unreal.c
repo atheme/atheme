@@ -240,7 +240,7 @@ static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t 
 	if (u == NULL && mu == NULL)
 		return true;
 	target_c = channel_find(value);
-	target_mc = MYCHAN_FROM(target_c);
+	target_mc = mychan_from(target_c);
 	if (target_c == NULL && target_mc == NULL)
 		return false;
 	return true;
@@ -709,7 +709,7 @@ static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host
 
 static void unreal_mlock_sts(channel_t *c)
 {
-	mychan_t *mc = MYCHAN_FROM(c);
+	mychan_t *mc = mychan_from(c);
 
 	if (use_mlock == false)
 		return;
@@ -734,7 +734,7 @@ static void m_mlock(sourceinfo_t *si, int parc, char *parv[])
 	if (!(c = channel_find(parv[1])))
 		return;
 
-	if (!(mc = MYCHAN_FROM(c)))
+	if (!(mc = mychan_from(c)))
 	{
 		/* Unregistered channel. Clear the MLOCK. */
 		sts(":%s MLOCK %lu %s :", ME, (unsigned long)c->ts, c->name);

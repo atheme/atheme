@@ -9,9 +9,6 @@
 #ifndef CHANNELS_H
 #define CHANNELS_H
 
-#define MYCHAN_FROM(chan)		(ENSURE_TYPE((chan), channel_t *) != NULL ? \
-						((chan)->mychan != NULL ? (chan)->mychan : mychan_find((chan)->name)) : NULL)
-
 #define VALID_GLOBAL_CHANNEL_PFX(name)	(*(name) == '#' || *(name) == '+' || *(name) == '!')
 #define VALID_CHANNEL_PFX(name)		(VALID_GLOBAL_CHANNEL_PFX(name) || *(name) == '&')
 
