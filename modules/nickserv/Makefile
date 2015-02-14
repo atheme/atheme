@@ -53,6 +53,7 @@ BASE_SRCS =			\
 	set_nogreet.c   \
 	set_nomemo.c	\
 	set_noop.c	\
+	set_nopassword.c	\
 	set_password.c	\
 	set_privmsg.c	\
 	set_private.c	\
