@@ -82,6 +82,11 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	if(!(mu = myuser_find_by_nick(authc)))
 		return ASASL_FAIL;
 
+	/* Return ASASL_FAIL before p->username is set,
+	   to prevent triggering bad_password(). */
+	if (mu->flags & MU_NOPASSWORD)
+		return ASASL_FAIL;
+
 	p->username = strdup(authc);
 	p->authzid = strdup(authz);
 	return verify_password(mu, pass) ? ASASL_DONE : ASASL_FAIL;

@@ -368,6 +368,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
         strcat(buf, "NoGreet");
     }
+	if (MU_NOPASSWORD & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "NoPassword");
+	}
 
 	if (*buf)
 		command_success_nodata(si, _("Flags      : %s"), buf);
