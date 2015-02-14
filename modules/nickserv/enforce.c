@@ -217,7 +217,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (password && (mn->owner->flags & MU_NOPASSWORD))
 	{
-		command_fail(si, fault_authfail, _("Password authentication is disabled for this account"));
+		command_fail(si, fault_authfail, _("Password authentication is disabled for this account."));
 		logcommand(si, CMDLOG_DO, "failed RELEASE \2%s\2 (password authentication disabled)", target);
 		return;
 	}

@@ -78,7 +78,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (password && (mu->flags & MU_NOPASSWORD))
 	{
-		command_fail(si, fault_authfail, _("Password authentication has been disabled for this account."));
+		command_fail(si, fault_authfail, _("Password authentication is disabled for this account."));
 		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (password authentication disabled", target);
 		return;
 	}
