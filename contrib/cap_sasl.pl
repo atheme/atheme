@@ -362,8 +362,7 @@ if (eval {require Crypt::PK::ECC}) {
 		}
 
 		my $cmdchar = substr(Irssi::settings_get_str("cmdchars"), 0, 1);
-		my $cmd = "msg NickServ SET PROPERTY pubkey $pub";
-		# TODO: change to 'SET PUBKEY' when freenode gets support for that
+		my $cmd = "msg NickServ SET PUBKEY $pub";
 
 		if ($server) {
 			$print->("SASL: updating your Irssi settings...");
