@@ -3,12 +3,12 @@
  * Copyright (c) 2008 ShadowIRCd Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This code contains the channel mode definitions for shadowircd.
+ * This code contains the channel mode definitions for elemental-ircd.
  *
  */
 
-#ifndef SHADOWIRCD_H
-#define SHADOWIRCD_H
+#ifndef ELEMENTAL_IRCD_H
+#define ELEMENTAL_IRCD_H
 
 /* Extended channel modes will eventually go here. */
 /* Note that these are involved in atheme.db file format */

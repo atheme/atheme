@@ -131,11 +131,12 @@ etc. You will need a service{} block on all servers.
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.
 
-shadowircd
-----------
+elemental-ircd
+--------------
 
-This protocol module supports the charybdis-based versions of ShadowIRCd
-(5.x and 6.x).
+This protocol module supports elemental-ircd. It might be possible to
+use this protocol module on charybdis-based ShadowIRCd versions when
+protocol/mixin_noowner is loaded.
 
 You will need a service{} block on all servers.
 

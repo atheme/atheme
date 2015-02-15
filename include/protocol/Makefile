@@ -9,7 +9,7 @@ INCLUDES = \
 	ircnet.h	\
 	nefarious.h	\
 	ratbox.h	\
-	shadowircd.h	\
+	elemental-ircd.h \
 	unreal.h
 
 includesubdir = $(PACKAGE)/protocol

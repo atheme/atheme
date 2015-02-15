@@ -12,7 +12,7 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
-#include "protocol/shadowircd.h"
+#include "protocol/elemental-ircd.h"
 
 DECLARE_MODULE_V1("protocol/elemental-ircd", true, _modinit, NULL, PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
 
@@ -35,7 +35,7 @@ ircd_t elemental_ircd = {
 	.owner_mchar = "+y",
 	.protect_mchar = "+a",
 	.halfops_mchar = "+h",
-	.type = PROTOCOL_SHADOWIRCD,
+	.type = PROTOCOL_ELEMENTAL_IRCD,
 	.perm_mode = CMODE_PERM,
 	.oimmune_mode = CMODE_IMMUNE,
 	.ban_like_modes = "beIq",
