@@ -69,6 +69,7 @@ static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:ON: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 enabled the PRIVATE flag"), get_source_name(si));
 
 		mc->flags |= MC_PRIVATE;
 
@@ -86,6 +87,7 @@ static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:PRIVATE:OFF: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 disabled the PRIVATE flag"), get_source_name(si));
 
 		mc->flags &= ~MC_PRIVATE;
 

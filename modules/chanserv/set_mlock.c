@@ -293,6 +293,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been set to \2%s\2."), mc->name, modebuf);
 		logcommand(si, CMDLOG_SET, "SET:MLOCK: \2%s\2 to \2%s\2", mc->name, modebuf);
+		verbose(mc, _("\2%s\2 set the mode lock to \2%s\2"), get_source_name(si), modebuf);
 	}
 	else
 	{

@@ -64,6 +64,7 @@ static void cs_cmd_set_pubacl(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:PUBACL:ON: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 enabled the PUBACL flag"), get_source_name(si));
 
  		mc->flags |= MC_PUBACL;
 
@@ -79,6 +80,7 @@ static void cs_cmd_set_pubacl(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:PUBACL:OFF: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 disabled the PUBACL flag"), get_source_name(si));
 
 		mc->flags &= ~MC_PUBACL;
 

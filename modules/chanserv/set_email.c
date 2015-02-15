@@ -75,6 +75,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, "email", mail);
 
 	logcommand(si, CMDLOG_SET, "SET:EMAIL: \2%s\2 \2%s\2", mc->name, mail);
+	verbose(mc, _("\2%s\2 set the e-mail address for the channel to \2%s\2"), get_source_name(si), mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 

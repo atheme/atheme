@@ -59,6 +59,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_delete(mc, "private:entrymsg");
 			logcommand(si, CMDLOG_SET, "SET:ENTRYMSG:NONE: \2%s\2", mc->name);
+			verbose(mc, _("\2%s\2 cleared the entry message"), get_source_name(si));
 			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
@@ -74,6 +75,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, "private:entrymsg", parv[1]);
 
 	logcommand(si, CMDLOG_SET, "SET:ENTRYMSG: \2%s\2 \2%s\2", mc->name, parv[1]);
+	verbose(mc, _("\2%s\2 set the entry message for the channel to \2%s\2"), get_source_name(si), parv[1]);
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
 

@@ -65,6 +65,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:ON: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 enabled the TOPICLOCK flag"), get_source_name(si));
 
 		mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 		topiclock_sts(mc->chan);
@@ -82,6 +83,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET:TOPICLOCK:OFF: \2%s\2", mc->name);
+		verbose(mc, _("\2%s\2 disabled the TOPICLOCK flag"), get_source_name(si));
 
 		mc->flags &= ~MC_TOPICLOCK;
 		topiclock_sts(mc->chan);
