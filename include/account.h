@@ -400,6 +400,7 @@ E mowgli_list_t qlnlist;
 E qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
 E void qline_delete(const char *mask);
 E qline_t *qline_find(const char *mask);
+E qline_t *qline_find_match(const char *mask);
 E qline_t *qline_find_num(unsigned int number);
 E qline_t *qline_find_user(user_t *u);
 E qline_t *qline_find_channel(channel_t *c);

@@ -483,6 +483,24 @@ qline_t *qline_find(const char *mask)
 	return NULL;
 }
 
+qline_t *qline_find_match(const char *mask)
+{
+	qline_t *q;
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, qlnlist.head)
+	{
+		q = (qline_t *)n->data;
+
+		if (q->duration != 0 && q->expires <= CURRTIME)
+			continue;
+		if (!match(q->mask, mask))
+			return q;
+	}
+
+	return NULL;
+}
+
 qline_t *qline_find_num(unsigned int number)
 {
 	qline_t *q;

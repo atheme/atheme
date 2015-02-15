@@ -345,6 +345,12 @@ static void ns_cmd_regain(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
+		if (qline_find_match(target) && !has_priv(si, PRIV_MASS_AKILL))
+		{
+			command_fail(si, fault_noprivs, _("You can not regain a reserved nickname."));
+			return;
+		}
+
 		/* if this (nick, host) is waiting to be enforced, remove it */
 		if (si->su != NULL)
 		{
