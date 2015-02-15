@@ -4,7 +4,6 @@ INCLUDES = \
 	asuka.h		\
 	bahamut.h	\
 	charybdis.h	\
-	hybrid.h	\
 	inspircd.h	\
 	ircd-seven.h	\
 	ircnet.h	\

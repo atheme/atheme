@@ -11,8 +11,7 @@
  *
  * This module is not very useful on it's own.	It implements
  * the basis of the TS6 extended linking profile, which is used
- * by hybrid, charybdis, ratbox (--enable-services), weircd
- * and others.
+ * by charybdis, ratbox (--enable-services), weircd and others.
  *
  * Everything in this module can be subclassed.  To do so, we
  * recommend either directly subclassing this module, or subclassing
