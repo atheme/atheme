@@ -9,7 +9,6 @@
 MODULE = protocol
 
 SRCS = \
-	asuka.c	\
 	bahamut.c	\
 	base36uid.c	\
 	charybdis.c	\

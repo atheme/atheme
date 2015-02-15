@@ -47,7 +47,6 @@
  * Below is a listing of ircd's known to work with the various protocol modules
  * available.
  *
- * Asuka 1.2.1 or later                         modules/protocol/asuka
  * Bahamut 1.8.x                                modules/protocol/bahamut
  * Charybdis IRCd                               modules/protocol/charybdis
  * DreamForge 4.6.7 or later                    modules/protocol/dreamforge
@@ -825,7 +824,7 @@ serverinfo {
 
 	/* (*)hidehostsuffix
 	 * P10 +x host hiding gives <account>.<hidehostsuffix>.
-	 * If using +x on asuka/bircd/undernet, this must agree
+	 * If using +x on bircd/undernet, this must agree
 	 * with F:HIDDEN_HOST.
 	 */
 	hidehostsuffix = "users.misconfigured";
@@ -1948,7 +1947,7 @@ general {
 	 *
 	 * If enabled, you can tell ChanServ to join via SET GUARD ON.
 	 *
-	 * If you use ircu-like ircd (asuka, bircd, undernet), you must
+	 * If you use ircu-like ircd (bircd, undernet), you must
 	 * leave this enabled, and put guard in default cflags.
 	 *
 	 * For ratbox it is recommended to leave it on and put guard in 
