@@ -206,7 +206,6 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
-		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 		if (ismarked)
 		{
 			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
@@ -214,6 +213,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		}
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));

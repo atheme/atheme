@@ -58,13 +58,14 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((md = metadata_find(mu, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
+		wallops("%s reset the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2 (overriding mark by \2%s\2)", entity(mu)->name, md->value);
 		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
+
 		newpass = random_string(12);
-		command_success_nodata(si, _("The password for the account %s has been changed to %s."), entity(mu)->name, newpass);
 		set_password(mu, newpass);
+		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
 		free(newpass);
-		wallops("%s reset the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
 		return;
 	}
 
@@ -75,16 +76,17 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	newpass = random_string(12);
-	command_success_nodata(si, _("The password for the account %s has been changed to %s."), entity(mu)->name, newpass);
-	set_password(mu, newpass);
-	free(newpass);
+	wallops("%s reset the password for the account %s", get_oper_name(si), entity(mu)->name);
+	logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", entity(mu)->name);
+
 	metadata_delete(mu, "private:setpass:key");
 	metadata_delete(mu, "private:sendpass:sender");
 	metadata_delete(mu, "private:sendpass:timestamp");
 
-	wallops("%s reset the password for the account %s", get_oper_name(si), entity(mu)->name);
-	logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", entity(mu)->name);
+	newpass = random_string(12);
+	set_password(mu, newpass);
+	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
+	free(newpass);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

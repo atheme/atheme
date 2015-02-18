@@ -61,7 +61,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
-		if (!strcasecmp(parv[1], "FORCE"))
+		else if (!strcasecmp(parv[1], "FORCE"))
 			op = op_force;
 		else if (!strcasecmp(parv[1], "CLEAR"))
 			op = op_clear;
@@ -95,10 +95,10 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (metadata_find(mu, "private:setpass:key"))
 		{
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", entity(mu)->name);
 			metadata_delete(mu, "private:setpass:key");
 			metadata_delete(mu, "private:sendpass:sender");
 			metadata_delete(mu, "private:sendpass:timestamp");
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS:CLEAR: \2%s\2", entity(mu)->name);
 			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), entity(mu)->name);
 		}
 		else
@@ -125,17 +125,17 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), entity(mu)->name);
 		return;
 	}
+
 	key = random_string(12);
 	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 	{
-		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
-		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), entity(mu)->name);
 		if (ismarked)
 			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
+		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to the corresponding email address."), entity(mu)->name);
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));

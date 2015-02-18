@@ -89,9 +89,11 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_SET, "SETPASS: \2%s\2", entity(mu)->name);
+
 	metadata_delete(mu, "private:setpass:key");
 	metadata_delete(mu, "private:sendpass:sender");
 	metadata_delete(mu, "private:sendpass:timestamp");
+
 	set_password(mu, password);
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, password);
 
