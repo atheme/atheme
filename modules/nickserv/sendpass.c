@@ -215,7 +215,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		if (mu->flags & MU_NOPASSWORD)
 		{
 			mu->flags &= ~MU_NOPASSWORD;
-			command_success_nodata(si, _("The NOPASSWORD flag for \2%s\2 has been disabled."), entity(mu)->name);
+			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOPASSWORD", entity(mu)->name);
 		}
 	}
 }
