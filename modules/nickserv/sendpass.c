@@ -185,13 +185,18 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		key = random_string(12);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+
+		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
+		{
+			command_fail(si, fault_emailfail, _("Email send failed."));
+			free(key);
+			return;
+		}
+
 		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
 		free(key);
 
-		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
-			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
-		else
-			command_fail(si, fault_emailfail, _("Email send failed."));
+		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 	}
 	else {
 		if (ismarked)
@@ -204,13 +209,18 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		newpass = random_string(12);
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+
+		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
+		{
+			command_fail(si, fault_emailfail, _("Email send failed."));
+			free(newpass);
+			return;
+		}
+
 		set_password(mu, newpass);
 		free(newpass);
 
-		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
-			command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
-		else
-			command_fail(si, fault_emailfail, _("Email send failed."));
+		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 
 		if (mu->flags & MU_NOPASSWORD)
 		{
