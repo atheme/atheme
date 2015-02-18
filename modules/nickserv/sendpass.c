@@ -177,40 +177,41 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), entity(mu)->name);
 			return;
 		}
-		key = random_string(12);
-		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
+
+		if (ismarked)
 		{
-			metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
-			logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
-			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
-			if (ismarked)
-			{
-				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-				command_success_nodata(si, _("Overriding MARK"));
-			}
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
 		}
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
+
+		key = random_string(12);
+		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
+		free(key);
+
+		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
+			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
 		else
 			command_fail(si, fault_emailfail, _("Email send failed."));
-		free(key);
-		return;
 	}
+
+	if (ismarked)
+	{
+		wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
+	}
+	logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
+	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 
 	newpass = random_string(12);
 	set_password(mu, newpass);
 	free(newpass);
 
 	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
-	{
-		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
-		if (ismarked)
-		{
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
-		}
-		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
-	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));
 
