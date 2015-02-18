@@ -195,15 +195,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* this is not without controversy... :) */
-	if (mu->flags & MU_CRYPTPASS)
-	{
-		command_success_nodata(si, _("The password for the account \2%s\2 is encrypted; a new password will be assigned and sent."), name);
-		newpass = random_string(12);
-		set_password(mu, newpass);
-	}
+	newpass = random_string(12);
+	set_password(mu, newpass);
+	free(newpass);
 
-	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, (newpass == NULL) ? mu->pass : newpass))
+	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 		if (ismarked)
@@ -217,9 +213,6 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));
-
-	if (newpass != NULL)
-		free(newpass);
 
 	return;
 }
