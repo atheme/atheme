@@ -56,12 +56,6 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (metadata_find(mu, "private:freeze:freezer"))
-	{
-		command_fail(si, fault_noprivs, _("%s has been frozen by the %s administration."), entity(mu)->name, me.netname);
-		return;
-	}
-
 	if ((md = metadata_find(mu, "private:mark:setter")))
 	{
 		if (has_priv(si, PRIV_MARK))
