@@ -83,11 +83,10 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS: \2%s\2", entity(mu)->name);
 	}
 
-	metadata_delete(mu, "private:setpass:key");
-	metadata_delete(mu, "private:sendpass:sender");
-	metadata_delete(mu, "private:sendpass:timestamp");
-
 	newpass = random_string(12);
+	metadata_delete(mu, "private:setpass:key");
+	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 	set_password(mu, newpass);
 	free(newpass);
 
