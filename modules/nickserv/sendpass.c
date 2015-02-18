@@ -98,8 +98,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), entity(mu)->name, md->value);
 			if (has_priv(si, PRIV_MARK))
 			{
-				snprintf(cmdtext, sizeof cmdtext,
-						"SENDPASS %s FORCE", entity(mu)->name);
+				snprintf(cmdtext, sizeof cmdtext, "SENDPASS %s FORCE", entity(mu)->name);
 				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
 			}
 			return;
@@ -127,8 +126,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked."), entity(mu)->name);
 			if (has_priv(si, PRIV_MARK))
 			{
-				snprintf(cmdtext, sizeof cmdtext,
-						"SENDPASS %s FORCE", entity(mu)->name);
+				snprintf(cmdtext, sizeof cmdtext, "SENDPASS %s FORCE", entity(mu)->name);
 				command_fail(si, fault_badparams, _("Use %s to override this restriction."), cmdtext);
 			}
 			return;
@@ -168,7 +166,6 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* alternative, safer method? */
 	if (command_find(si->service->commands, "SETPASS"))
 	{
 		if (metadata_find(mu, "private:setpass:key"))
@@ -196,26 +193,25 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_fail(si, fault_emailfail, _("Email send failed."));
 	}
+	else {
+		if (ismarked)
+		{
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
+		}
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
 
-	if (ismarked)
-	{
-		wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), entity(mu)->name);
-		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, entity(mu)->name);
+		newpass = random_string(12);
+		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		set_password(mu, newpass);
+		free(newpass);
+
+		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
+			command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
+		else
+			command_fail(si, fault_emailfail, _("Email send failed."));
 	}
-	logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2", name);
-	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
-
-	newpass = random_string(12);
-	set_password(mu, newpass);
-	free(newpass);
-
-	if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SENDPASS, mu->email, newpass))
-		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
-	else
-		command_fail(si, fault_emailfail, _("Email send failed."));
-
-	return;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
