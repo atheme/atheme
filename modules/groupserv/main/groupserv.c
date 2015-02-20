@@ -5,7 +5,7 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-struct gflags ga_flags[] = {
+gflags_t ga_flags[] = {
 	{ 'F', GA_FOUNDER },
 	{ 'f', GA_FLAGS },
 	{ 's', GA_SET },
@@ -18,7 +18,7 @@ struct gflags ga_flags[] = {
 	{ 0, 0 }
 };
 
-struct gflags mg_flags[] = {
+gflags_t mg_flags[] = {
 	{ 'r', MG_REGNOLIMIT },
 	{ 'a', MG_ACSNOLIMIT },
 	{ 'o', MG_OPEN },

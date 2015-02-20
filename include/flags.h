@@ -36,9 +36,9 @@ typedef struct gflags {
 	unsigned int value;
 } gflags_t;
 
-E struct gflags mu_flags[];
-E struct gflags mc_flags[];
-E struct gflags soper_flags[];
+E gflags_t mu_flags[];
+E gflags_t mc_flags[];
+E gflags_t soper_flags[];
 
 E char *gflags_tostr(gflags_t *gflags, unsigned int flags);
 E bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);

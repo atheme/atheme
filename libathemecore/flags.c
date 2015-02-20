@@ -52,7 +52,7 @@ struct flags_table chanacs_flags[256] = {
 	['e'] = {CA_EXEMPT, 0, true,     "exempt"},
 };
 
-struct gflags mu_flags[] = {
+gflags_t mu_flags[] = {
 	{ 'h', MU_HOLD },
 	{ 'n', MU_NEVEROP },
 	{ 'o', MU_NOOP },
@@ -73,7 +73,7 @@ struct gflags mu_flags[] = {
 	{ 0, 0 },
 };
 
-struct gflags mc_flags[] = {
+gflags_t mc_flags[] = {
 	{ 'h', MC_HOLD },
 	{ 'o', MC_NOOP },
 	{ 'l', MC_LIMITFLAGS },
@@ -90,7 +90,7 @@ struct gflags mc_flags[] = {
 	{ 0, 0 },
 };
 
-struct gflags soper_flags[] = {
+gflags_t soper_flags[] = {
 	{ 'c', SOPER_CONF },
 	{ 0, 0 },
 };

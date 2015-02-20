@@ -368,7 +368,8 @@ match_cidr(const char *s1, const char *s2)
 
 int valid_ip_or_mask(const char *src)
 {
-	char ipaddr[HOSTLEN + 6], buf[IN6ADDRSZ];
+	char ipaddr[HOSTLEN + 6];
+	u_char buf[IN6ADDRSZ];
 	char *mask, *end;
 	unsigned long cidrlen;
 
