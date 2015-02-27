@@ -80,7 +80,7 @@ typedef enum {
 #endif
 
 #ifndef TIME_FORMAT
-#define TIME_FORMAT		"%b %d %H:%M:%S %Y"
+#define TIME_FORMAT		"%b %d %H:%M:%S %Y %z"
 #endif
 
 #define HASH_COMMAND		256
