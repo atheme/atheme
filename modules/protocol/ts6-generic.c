@@ -321,6 +321,24 @@ static void ts6_unqline_sts(const char *server, const char *name)
 	sts(":%s ENCAP %s UNRESV %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, name);
 }
 
+/* server-to-server DLINE wrapper */
+static void ts6_dline_sts(const char *server, const char *host, long duration, const char *reason)
+{
+	service_t *svs;
+
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s DLINE %ld %s :%s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, duration, host, reason);
+}
+
+/* server-to-server UNDLINE wrapper */
+static void ts6_undline_sts(const char *server, const char *host)
+{
+	service_t *svs;
+
+	svs = service_find("operserv");
+	sts(":%s ENCAP %s UNDLINE %s", svs != NULL ? CLIENT_NAME(svs->me) : ME, server, host);
+}
+
 /* topic wrapper */
 static void ts6_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -1476,6 +1494,8 @@ void _modinit(module_t * m)
 	sasl_sts = &ts6_sasl_sts;
 	is_valid_host = &ts6_is_valid_host;
 	mlock_sts = &ts6_mlock_sts;
+	dline_sts = &ts6_dline_sts;
+	undline_sts = &ts6_undline_sts;
 
 	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
