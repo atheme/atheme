@@ -528,6 +528,24 @@ static void inspircd_unqline_sts(const char *server, const char *name)
 		slog(LG_INFO, "SQLINE: Could not remove SQLINE on \2%s\2 due to m_cban not being loaded in inspircd.", name);
 }
 
+/* server-to-server ZLINE/DLINE wrapper */
+static void inspircd_dline_sts(const char *server, const char *host, long duration, const char *reason)
+{
+	service_t *svs;
+
+	svs = service_find("operserv");
+	sts(":%s ADDLINE Z %s %s %lu %ld :%s", me.numeric, host, svs != NULL ? svs->nick : me.name, (unsigned long)CURRTIME, duration, reason);
+}
+
+/* server-to-server UNZLINE/UNDLINE wrapper */
+static void inspircd_undline_sts(const char *server, const char *host)
+{
+	service_t *svs;
+
+	svs = service_find("operserv");
+	sts(":%s ZLINE %s", svs != NULL ? svs->me->uid : ME, host);
+}
+
 /* topic wrapper */
 static void inspircd_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
@@ -1668,6 +1686,8 @@ void _modinit(module_t * m)
 	mlock_sts = &inspircd_mlock_sts;
 	topiclock_sts = &inspircd_topiclock_sts;
 	is_extban = &inspircd_is_extban;
+	dline_sts = &inspircd_dline_sts;
+	undline_sts = &inspircd_undline_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
