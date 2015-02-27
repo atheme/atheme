@@ -68,6 +68,8 @@ void (*mlock_sts)(channel_t *c) = generic_mlock_sts;
 void (*topiclock_sts)(channel_t *c) = generic_topiclock_sts;
 void (*quarantine_sts)(user_t *source, user_t *victim, long duration, const char *reason) = generic_quarantine_sts;
 bool (*is_extban)(const char *mask) = generic_is_extban;
+void (*dline_sts)(const char *server, const char *host, long duration, const char *reason) = generic_dline_sts;
+void (*undline_sts)(const char *server, const char *host) = generic_undline_sts;
 
 unsigned int generic_server_login(void)
 {
@@ -215,6 +217,16 @@ void generic_qline_sts(const char *server, const char *mask, long duration, cons
 void generic_unqline_sts(const char *server, const char *mask)
 {
 	/* cant do anything here. bail. */
+}
+
+void generic_dline_sts(const char *server, const char *host, long duration, const char *reason)
+{
+	/* can't do anything here. bail. */
+}
+
+void generic_undline_sts(const char *server, const char *host)
+{
+	/* can't do anything here. bail. */
 }
 
 void generic_topic_sts(channel_t *c, user_t *source, const char *setter, time_t ts, time_t prevts, const char *topic)
