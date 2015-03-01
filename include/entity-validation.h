@@ -10,6 +10,7 @@ struct entity_chanacs_validation_vtable {
 	chanacs_t *(*match_user)(chanacs_t *ca, user_t *mt);
 
 	bool (*can_register_channel)(myentity_t *mt);
+	bool (*allow_foundership)(myentity_t *mt);
 };
 
 E entity_chanacs_validation_vtable_t *myentity_get_chanacs_validator(myentity_t *mt);

@@ -62,6 +62,7 @@ E void myentity_stats(void (*cb)(const char *line, void *privdata), void *privda
 /* chanacs */
 E unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset);
 E bool myentity_can_register_channel(myentity_t *mt);
+E bool myentity_allow_foundership(myentity_t *mt);
 
 typedef struct {
 	myentity_t *entity;
