@@ -96,7 +96,17 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (removeflags & CA_FLAGS)
 			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 		else if (addflags & CA_FOUNDER)
+		{
+			if (!myentity_allow_foundership(mt))
+			{
+				command_fail(si, fault_toomany, _("\2%s\2 cannot take foundership of a channel."), mt->name);
+				chanacs_close(ca);
+				return;
+			}
+
 			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+		}
+
 		if (is_founder(mc, mt) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
