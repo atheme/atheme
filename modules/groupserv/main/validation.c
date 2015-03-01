@@ -32,9 +32,15 @@ static bool mygroup_can_register_channel(myentity_t *mt)
 	return false;
 }
 
+static bool mygroup_allow_foundership(myentity_t *mt)
+{
+	return true;
+}
+
 static entity_chanacs_validation_vtable_t mygroup_chanacs_validate = {
 	.match_entity = mygroup_chanacs_match_entity,
 	.can_register_channel = mygroup_can_register_channel,
+	.allow_foundership = mygroup_allow_foundership,
 };
 
 void mygroup_set_chanacs_validator(myentity_t *mt) {
