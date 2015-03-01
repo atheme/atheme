@@ -51,10 +51,16 @@ static bool channel_ext_can_register_channel(myentity_t *mt)
 	return false;
 }
 
+static bool channel_ext_allow_foundership(myentity_t *mt)
+{
+	return false;
+}
+
 static entity_chanacs_validation_vtable_t channel_ext_validate = {
 	.match_entity = channel_ext_match_entity,
 	.match_user = channel_ext_match_user,
 	.can_register_channel = channel_ext_can_register_channel,
+	.allow_foundership = channel_ext_allow_foundership,
 };
 
 static mowgli_heap_t *channel_ext_heap = NULL;

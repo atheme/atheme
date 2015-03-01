@@ -65,10 +65,16 @@ static bool chanacs_ext_can_register_channel(myentity_t *mt)
 	return false;
 }
 
+static bool chanacs_allow_foundership(myentity_t *mt)
+{
+	return false;
+}
+
 static entity_chanacs_validation_vtable_t chanacs_ext_validate = {
 	.match_entity = chanacs_ext_match_entity,
 	.match_user = chanacs_ext_match_user,
 	.can_register_channel = chanacs_ext_can_register_channel,
+	.allow_foundership = chanacs_allow_foundership,
 };
 
 static mowgli_heap_t *chanacs_ext_heap = NULL;
