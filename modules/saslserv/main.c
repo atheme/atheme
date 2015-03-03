@@ -37,6 +37,7 @@ static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
 static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild();
+static const char *sasl_get_source_name(sourceinfo_t *si);
 
 sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
 
@@ -235,6 +236,8 @@ void destroy_session(sasl_session_t *p)
 	free(p->username);
 	free(p->certfp);
 	free(p->authzid);
+	free(p->host);
+	free(p->ip);
 
 	free(p);
 }
@@ -251,6 +254,13 @@ static void sasl_input(sasl_message_t *smsg)
 	if(smsg->mode == 'D')
 	{
 		destroy_session(p);
+		return;
+	}
+
+	if(smsg->mode == 'H')
+	{
+		p->host = sstrdup(smsg->buf);
+		p->ip   = sstrdup(smsg->ext);
 		return;
 	}
 
@@ -462,15 +472,18 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 				snprintf(description, BUFSIZE, "Unknown user (via SASL)");
 
 			struct sourceinfo_vtable sasl_vtable = {
-				.description = description
+				.description = description,
+				.get_source_name = sasl_get_source_name,
+				.get_source_mask = sasl_get_source_name
 			};
 
 			sourceinfo_t *si = sourceinfo_create();
 			si->service = saslsvs;
-			si->sourcedesc = p->uid;
 			si->connection = curr_uplink->conn;
 			si->v = &sasl_vtable;
 			si->force_language = language_find("en");
+			if (p->host)
+				si->sourcedesc = p->host;
 
 			bad_password(si, mu);
 
@@ -692,6 +705,17 @@ static void delete_stale(void *vptr)
 		} else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
+}
+
+static const char *sasl_get_source_name(sourceinfo_t *si)
+{
+	static char result[HOSTLEN+NICKLEN+10];
+	/* we can reasonably assume that si->v is non-null as this is part of the SASL vtable */
+	if (si->sourcedesc)
+		snprintf(result, sizeof result, "<%s:%s>%s", si->v->description, si->sourcedesc, si->smu ? entity(si->smu)->name : "");
+	else
+		snprintf(result, sizeof result, "<%s>%s", si->v->description, si->smu ? entity(si->smu)->name : "");
+	return result;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
