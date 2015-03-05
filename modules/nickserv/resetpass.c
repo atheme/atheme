@@ -82,9 +82,9 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 	metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 	set_password(mu, newpass);
-	free(newpass);
-
 	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), entity(mu)->name, newpass);
+
+	free(newpass);
 
 	if (mu->flags & MU_NOPASSWORD)
 	{
