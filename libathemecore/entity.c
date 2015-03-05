@@ -184,6 +184,18 @@ static bool linear_can_register_channel(myentity_t *mt)
 
 static bool linear_allow_foundership(myentity_t *mt)
 {
+	myuser_t *mu;
+
+	/* avoid workaround for restricted users where foundership is set on the user after registration. */
+	if ((mu = user(mt)) != NULL)
+	{
+		metadata_t *md;
+
+		md = metadata_find(mu, "private:restrict:setter");
+		if (md != NULL)
+			return false;
+	}
+
 	return true;
 }
 
