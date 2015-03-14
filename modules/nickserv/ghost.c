@@ -69,6 +69,11 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* At this point, we're now checking metadata associated with the target's account.
+	 * If the target nick is unregistered, mu will be unset thus far. */
+	if (target_u->myuser && !mu)
+		mu = target_u->myuser;
+
 	if (password && metadata_find(mu, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, "You cannot ghost users as \2%s\2 because the account has been frozen.", entity(mu)->name);
@@ -79,20 +84,14 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	if (password && (mu->flags & MU_NOPASSWORD))
 	{
 		command_fail(si, fault_authfail, _("Password authentication is disabled for this account."));
-		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (password authentication disabled", target);
+		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (password authentication disabled)", target);
 		return;
 	}
 
 	if ((target_u->myuser && target_u->myuser == si->smu) || /* they're identified under our account */
 			(!nicksvs.no_nick_ownership && mn && mu == si->smu) || /* we're identified under their nick's account */
-			(!nicksvs.no_nick_ownership && password && mn && verify_password(mu, password))) /* we have their nick's password */
+			(!nicksvs.no_nick_ownership && password && mu && verify_password(mu, password))) /* we have their account's password */
 	{
-		/* If we're ghosting an unregistered nick, mu will be unset,
-		 * however if it _is_ registered, we still need to set it or
-		 * the wrong user will have their last seen time updated... */
-		if(target_u->myuser && target_u->myuser == si->smu)
-			mu = target_u->myuser;
-
 		logcommand(si, CMDLOG_DO, "GHOST: \2%s!%s@%s\2", target_u->nick, target_u->user, target_u->vhost);
 
 		kill_user(si->service->me, target_u, "GHOST command used by %s",
