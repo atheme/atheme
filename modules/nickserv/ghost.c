@@ -51,16 +51,16 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(target);
 		mu = mn != NULL ? mn->owner : NULL;
 	}
-	target_u = user_find_named(target);
-	if (!mu && (!target_u || !target_u->myuser))
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
-		return;
-	}
 
+	target_u = user_find_named(target);
 	if (!target_u)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
+		return;
+	}
+	else if (!mu && !target_u->myuser)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
 	else if (target_u == si->su)
@@ -90,7 +90,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((target_u->myuser && target_u->myuser == si->smu) || /* they're identified under our account */
 			(!nicksvs.no_nick_ownership && mn && mu == si->smu) || /* we're identified under their nick's account */
-			(!nicksvs.no_nick_ownership && password && mu && verify_password(mu, password))) /* we have their account's password */
+			(!nicksvs.no_nick_ownership && password && verify_password(mu, password))) /* we have the correct password */
 	{
 		logcommand(si, CMDLOG_DO, "GHOST: \2%s!%s@%s\2", target_u->nick, target_u->user, target_u->vhost);
 
@@ -105,7 +105,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (password && mu)
+	if (password)
 	{
 		logcommand(si, CMDLOG_DO, "failed GHOST \2%s\2 (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
