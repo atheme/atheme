@@ -99,8 +99,13 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, _("\2%s\2 has been ghosted."), target);
 
-		/* don't update the nick's last seen time */
-		mu->lastlogin = CURRTIME;
+		/* Update the account's last seen time.
+		 * Perhaps the ghosted nick belonged to someone else, but we were identified to it?
+		 * Try this first. */
+		if (target_u->myuser && target_u->myuser == si->smu)
+			target_u->myuser->lastlogin = CURRTIME;
+		else
+			mu->lastlogin = CURRTIME;
 
 		return;
 	}
