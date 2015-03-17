@@ -65,7 +65,7 @@ static void ns_cmd_set_nopassword(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp("ON", setting) || !strcasecmp("FORCEON", setting))
+	if (!strcasecmp("ON", setting))
 	{
 		if (MU_NOPASSWORD & si->smu->flags)
 		{
@@ -73,9 +73,9 @@ static void ns_cmd_set_nopassword(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (si->smu->cert_fingerprints.head == NULL && metadata_find(si->smu, "private:pubkey") == NULL && metadata_find(si->smu, "pubkey") == NULL && metadata_find(si->smu, "ecdsa-nist521p-pubkey") == NULL && strcasecmp("FORCEON", setting))
+		if (si->smu->cert_fingerprints.head == NULL && metadata_find(si->smu, "private:pubkey") == NULL && metadata_find(si->smu, "pubkey") == NULL && metadata_find(si->smu, "ecdsa-nist521p-pubkey") == NULL)
 		{
-			command_fail(si, fault_nochange, _("You are trying to enable NoPassword without any possibilty to identify without a password. Use FORCEON if you really want to do this."));
+			command_fail(si, fault_nochange, _("You are trying to enable NoPassword without any possibilty to identify without a password."));
 			return;
 		}
 
