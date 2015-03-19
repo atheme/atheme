@@ -489,7 +489,6 @@ static void inspircd_unkline_sts(const char *server, const char *user, const cha
 {
 	service_t *svs;
 
-	/* I know this looks wrong, but it's really not. Trust me. --w00t */
 	svs = service_find("operserv");
 	sts(":%s DELLINE G %s@%s", svs != NULL ? svs->me->uid : ME, user, host);
 }
