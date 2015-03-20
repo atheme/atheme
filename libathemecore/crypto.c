@@ -132,7 +132,7 @@ const crypt_impl_t *crypt_verify_password(const char *uinput, const char *pass)
 		ci = n->data;
 		cstr = ci->crypt(uinput, pass);
 
-		if (!strcmp(cstr, pass))
+		if (cstr != NULL && !strcmp(cstr, pass))
 			return ci;
 	}
 
