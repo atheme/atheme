@@ -1,0 +1,9 @@
+Aide pour FTRANSFER:
+
+FTRANSFER force le transfert du statut de fondateur
+sur un salon.
+
+Syntaxe : FTRANSFER <#salon> <fondateur>
+
+Exemple :
+    /msg &nick& FTRANSFER #casual vodkaswirl

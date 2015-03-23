@@ -1,0 +1,9 @@
+Help for FTRANSFER:
+
+FTRANSFER forcefully transfers foundership
+of a channel.
+
+Syntax: FTRANSFER <#channel> <founder>
+
+Example:
+    /msg &nick& FTRANSFER #casual vodkaswirl

@@ -1,0 +1,9 @@
+Ayuda para FTRANSFER:
+
+FTRANSFER forza la transferencia de fundadores de
+un canal
+
+Sintaxis: FTRANSFER <#canal> <fundador>
+
+Ejemplo:
+    /msg &nick& FTRANSFER #casual vodkaswirl
