@@ -420,10 +420,18 @@ if (eval {require Crypt::PK::ECC}) {
 		Irssi::print("SASL: loaded keyfile '$f'");
 		Irssi::print("SASL: your pubkey is $pub");
 	}
+} else {
+	sub cmd_sasl_keygen {
+		Irssi::print("'/sasl keygen' requires the Perl 'CryptX' module, which could not be loaded.", MSGLEVEL_CLIENTERROR);
+	}
 
-	Irssi::command_bind('sasl keygen', \&cmd_sasl_keygen);
-	Irssi::command_bind('sasl pubkey', \&cmd_sasl_pubkey);
-};
+	sub cmd_sasl_pubkey {
+		Irssi::print("'/sasl pubkey' requires the Perl 'CryptX' module, which could not be loaded.", MSGLEVEL_CLIENTERROR);
+	}
+}
+
+Irssi::command_bind('sasl keygen', \&cmd_sasl_keygen);
+Irssi::command_bind('sasl pubkey', \&cmd_sasl_pubkey);
 
 cmd_sasl_load();
 
