@@ -314,7 +314,7 @@ if (eval {require Crypt::PK::ECC}) {
 		}
 	};
 
-	sub cmd_sasl_keygen {
+	Irssi::command_bind("sasl keygen" => sub {
 		my ($data, $server, $witem) = @_;
 
 		my $print = $server
@@ -378,9 +378,9 @@ if (eval {require Crypt::PK::ECC}) {
 			$print->("SASL: submit your pubkey to $net:");
 			$print->("%P".$cmdchar.$cmd);
 		}
-	}
+	});
 
-	sub cmd_sasl_pubkey {
+	Irssi::command_bind("sasl pubkey" => sub {
 		my ($data, $server, $witem) = @_;
 
 		my $arg = $server ? $server->{tag} : $data;
@@ -419,19 +419,18 @@ if (eval {require Crypt::PK::ECC}) {
 		my $pub = encode_base64($pk->export_key_raw("public_compressed"), "");
 		Irssi::print("SASL: loaded keyfile '$f'");
 		Irssi::print("SASL: your pubkey is $pub");
-	}
+	});
 } else {
-	sub cmd_sasl_keygen {
-		Irssi::print("'/sasl keygen' requires the Perl 'CryptX' module, which could not be loaded.", MSGLEVEL_CLIENTERROR);
-	}
+	Irssi::command_bind("sasl keygen" => sub {
+		Irssi::print("SASL: cannot '/sasl keygen' as the Perl 'CryptX' module is missing",
+					MSGLEVEL_CLIENTERROR);
+	});
 
-	sub cmd_sasl_pubkey {
-		Irssi::print("'/sasl pubkey' requires the Perl 'CryptX' module, which could not be loaded.", MSGLEVEL_CLIENTERROR);
-	}
+	Irssi::command_bind("sasl pubkey" => sub {
+		Irssi::print("SASL: cannot '/sasl pubkey' as the Perl 'CryptX' module is missing",
+					MSGLEVEL_CLIENTERROR);
+	});
 }
-
-Irssi::command_bind('sasl keygen', \&cmd_sasl_keygen);
-Irssi::command_bind('sasl pubkey', \&cmd_sasl_pubkey);
 
 cmd_sasl_load();
 
