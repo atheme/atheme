@@ -7,29 +7,59 @@ Current criteria are:
 PATTERN       - All users that match a given pattern.
 EMAIL         - All accounts registered with an email address
                 that matches a given pattern.
+#if module nickserv/mark
 MARK-REASON   - All accounts whose mark reason matches a
                 given pattern.
+#endif
+#if module nickserv/freeze
 FROZEN-REASON - All frozen accounts whose freeze reason matches
                 a given pattern.
+#endif
 #if module nickserv/restrict
 RESTRICTED-REASON - All restricted accounts whose restrict reason matches
                 a given pattern.
 #endif
+#if module nickserv/hold
 HOLD          - All users with the HOLD flag set.
+#endif
+#if module nickserv/set_noop
 NOOP          - All users with the NOOP flag set.
+#endif
+#if module nickserv/set_neverop
 NEVEROP       - All users with the NEVEROP flag set.
+#endif
 WAITAUTH      - All users with the WAITAUTH flag set.
+#if module nickserv/set_hidemail
 HIDEMAIL      - All users with the HIDEMAIL flag set.
+#endif
+#if module nickserv/set_nomemo
 NOMEMO        - All users with the NOMEMO flag set.
+#endif
+#if module nickserv/set_emailmemos
 EMAILMEMOS    - All users with the EMAILMEMOS flag set.
+#endif
+#if module nickserv/set_privmsg
 USE-PRIVMSG   - All users with the USEPRIVMSG flag set.
+#endif
+#if module nickserv/set_quietchg
 QUIETCHG      - All users with the QUIETCHG flag set.
+#endif
+#if module nickserv/set_nogreet
 NOGREET       - All users with the NOGREET flag set.
+#endif
+#if module nickserv/set_private
 PRIVATE       - All users with the PRIVATE flag set.
+#endif
+#if module nickserv/regnolimit
 REGNOLIMIT    - All users with the REGNOLIMIT flag set.
+#endif
 
+#if module nickserv/freeze
 FROZEN        - All users frozen by network staff.
+#endif
+#if module nickserv/mark
 MARKED        - All users marked by network staff.
+#endif
 #if module nickserv/restrict
 RESTRICTED    - All users restricted by network staff.
 #endif
