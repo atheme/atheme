@@ -33,6 +33,9 @@ MARKED        - All users marked by network staff.
 #if module nickserv/restrict
 RESTRICTED    - All users restricted by network staff.
 #endif
+#if module nickserv/vacation
+VACATION      - All users marked as being on vacation.
+#endif
 REGISTERED    - User accounts registered longer ago than a given age.
 LASTLOGIN     - User accounts last used longer ago than a given age.
 

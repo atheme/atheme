@@ -7,6 +7,8 @@
  */
 
 #include "atheme.h"
+#include "list_common.h"
+#include "list.h"
 
 DECLARE_MODULE_V1
 (
@@ -79,6 +81,12 @@ static void info_hook(hook_user_req_t *hdata)
 		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", entity(hdata->mu)->name);
 }
 
+static bool is_vacation(const mynick_t *mn, const void *arg) {
+	myuser_t *mu = mn->owner;
+
+	return ( metadata_find(mu, "private:vacation") != NULL );
+}
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_vacation);
@@ -94,6 +102,14 @@ void _modinit(module_t *m)
 
 	hook_add_event("user_info");
 	hook_add_user_info(info_hook);
+
+	use_nslist_main_symbols(m);
+
+	static list_param_t vacation;
+	vacation.opttype = OPT_BOOL;
+	vacation.is_match = is_vacation;
+
+	list_register("vacation", &vacation);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -104,6 +120,8 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_user_check_expire(user_expiry_hook);
 	hook_del_nick_check_expire(nick_expiry_hook);
 	hook_del_user_info(info_hook);
+
+	list_unregister("vacation");
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
