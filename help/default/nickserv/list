@@ -50,6 +50,9 @@ NOGREET       - All users with the NOGREET flag set.
 #if module nickserv/set_private
 PRIVATE       - All users with the PRIVATE flag set.
 #endif
+#if module nickserv/set_nopassword
+NOPASSWORD    - All users with the NOPASSWORD flag set.
+#endif
 #if module nickserv/regnolimit
 REGNOLIMIT    - All users with the REGNOLIMIT flag set.
 #endif
