@@ -339,6 +339,36 @@ void chanfix_autofix_ev(void *unused)
 
 /*************************************************************************************/
 
+static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
+{
+	chanfix_channel_t *chan;
+	mowgli_patricia_iteration_state_t state;
+	unsigned int matches = 0;
+	char *chanpattern = NULL;
+
+	if (parv[0] != NULL)
+		chanpattern = parv[0];
+
+	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
+	{
+		if (chanpattern != NULL && match(chanpattern, chan->name))
+			continue;
+
+		command_success_nodata(si, "- %s", chan->name);
+		matches++;
+	}
+
+	if (chanpattern == NULL)
+		chanpattern = "*";
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", chanpattern, matches);
+	if (matches == 0)
+		command_success_nodata(si, _("No channels matched criteria \2%s\2"), chanpattern);
+	else
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
+}
+
+command_t cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_ADMIN, 0, chanfix_cmd_list, { .path = "chanfix/list" } };
+
 static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;

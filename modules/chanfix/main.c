@@ -28,6 +28,7 @@ void _modinit(module_t *m)
 	}
 
 	chanfix = service_add("chanfix", NULL);
+	service_bind_command(chanfix, &cmd_list);
 	service_bind_command(chanfix, &cmd_chanfix);
 	service_bind_command(chanfix, &cmd_scores);
 	service_bind_command(chanfix, &cmd_info);
