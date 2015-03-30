@@ -489,6 +489,11 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 
 static void account_drop_hook(myuser_t *mu)
 {
+	// Let's turn old marks to new marks at this point,
+	// so that they are preserved.
+
+	migrate_user(mu);
+
 	mowgli_list_t *l = multimark_list(mu);
 
 	mowgli_node_t *n;
@@ -519,17 +524,24 @@ static void account_drop_hook(myuser_t *mu)
 
 static void account_register_hook(myuser_t *mu)
 {
-	mowgli_list_t *l = multimark_list(mu);
-
+	mowgli_list_t *l;
 	mowgli_node_t *n, *tn;
+
 	restored_mark_t *rm;
+	mowgli_list_t *rml;
 
 	const char *name = entity(mu)->name;
 
 	char *setter_name;
 	myuser_t *setter;
 
-	mowgli_list_t *rml = restored_mark_list(name);
+	//Migrate any old-style marks that have already been restored at user
+	//creation.
+
+	migrate_user(mu);
+
+	l = multimark_list(mu);
+	rml = restored_mark_list(name);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rml->head)
 	{
@@ -556,16 +568,21 @@ static void account_register_hook(myuser_t *mu)
 static void nick_group_hook(hook_user_req_t *hdata)
 {
 	myuser_t *smu = hdata->si->smu;
-	mowgli_list_t *l = multimark_list(smu);
+	mowgli_list_t *l;
 
 	mowgli_node_t *n, *tn, *n2;
 	multimark_t *mm2;
+
+	mowgli_list_t *rml;
 	restored_mark_t *rm;
 
 	char *uid = entity(smu)->id;
 	const char *name = hdata->mn->nick;
 
-	mowgli_list_t *rml = restored_mark_list(name);
+	migrate_user(smu);
+
+	l = multimark_list(smu);
+	rml = restored_mark_list(name);
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, rml->head)
 	{
