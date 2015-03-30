@@ -1333,7 +1333,20 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	if (has_protoctl)
 	{
 		if (ts6sid[0] == '\0')
+		{
 			ircd->uses_uid = false;
+			if (me.me->sid)
+			{
+				/* XXX: this is a hack that fixes *most*, though not
+				 * all, of the brokenness when linking to Unreal 3.2
+				 *
+				 * (the EOB is sent before this, therefore still with
+				 * a SID, but apparently still works) --grawity */
+				slog(LG_DEBUG, "m_server(): erasing our SID");
+				free(me.me->sid);
+				me.me->sid = NULL;
+			}
+		}
 
 		services_init();
 		has_protoctl = false;	/* only once after PROTOCTL message. */
