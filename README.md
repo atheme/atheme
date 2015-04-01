@@ -38,7 +38,7 @@ Atheme will default to installing in `$HOME/atheme`, so make sure you plan accor
     $ make
     $ make install
 
-If you're still lost, read [INSTALL](INSTALL) or [GIT-Access](GIT-Access) for hints.
+If you're still lost, read [INSTALL](INSTALL) or [GIT-Access](GIT-Access) for hints. 
 
 ## links / contact
 
