@@ -367,7 +367,7 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, chanpattern);
 }
 
-command_t cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_ADMIN, 0, chanfix_cmd_list, { .path = "chanfix/list" } };
+command_t cmd_list = { "LIST", N_("List all channels with CHANFIX records."), PRIV_CHAN_AUSPEX, 0, chanfix_cmd_list, { .path = "chanfix/list" } };
 
 static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 {
