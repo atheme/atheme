@@ -77,6 +77,7 @@ struct chanban_
 #define CSTATUS_OWNER   0x00000004      /* unreal/inspircd +q */
 #define CSTATUS_PROTECT 0x00000008      /* unreal/inspircd +a */
 #define CSTATUS_HALFOP  0x00000010      /* unreal/inspircd +h */
+#define CSTATUS_IMMUNE	0x00000020	/* inspircd-style per-user immune */
 
 /* chanban_t.flags */
 #define CBAN_ANTIFLOOD  0x00000001	/* chanserv/antiflood set this */
