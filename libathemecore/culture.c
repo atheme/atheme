@@ -231,7 +231,7 @@ language_add(const char *name)
 {
 	language_t *lang;
 
-	if (!strcmp(name, "default"))
+	if (name == NULL || !strcmp(name, "default"))
 		return NULL;
 	lang = language_find(name);
 	if (lang != NULL)
@@ -248,6 +248,9 @@ language_find(const char *name)
 {
 	mowgli_node_t *n;
 	language_t *lang;
+
+	if (name == NULL)
+		return NULL;
 
 	MOWGLI_ITER_FOREACH(n, language_list.head)
 	{
