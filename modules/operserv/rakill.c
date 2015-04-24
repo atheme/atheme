@@ -110,7 +110,10 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* match */
 			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - akilling"), u->nick, u->user, u->host, u->gecos);
-			kline_sts("*", "*", u->host, 604800, reason);
+			if (! (u->flags & UF_KLINESENT)) {
+				kline_sts("*", "*", u->host, 604800, reason);
+				u->flags |= UF_KLINESENT;
+			}
 			matches++;
 		}
 	}

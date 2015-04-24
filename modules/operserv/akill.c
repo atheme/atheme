@@ -85,7 +85,10 @@ static void os_akill_newuser(hook_user_nick_t *data)
 		 * not send a KILL. -- jilles */
 		char reason[BUFSIZE];
 		snprintf(reason, sizeof(reason), "[#%lu] %s", k->number, k->reason);
-		kline_sts("*", k->user, k->host, k->duration ? k->expires - CURRTIME : 0, reason);
+		if (! (u->flags & UF_KLINESENT)) {
+			kline_sts("*", k->user, k->host, k->duration ? k->expires - CURRTIME : 0, reason);
+			u->flags |= UF_KLINESENT;
+		}
 	}
 }
 
