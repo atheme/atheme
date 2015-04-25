@@ -116,7 +116,7 @@ static const char *pbkdf2v2_make_salt(void)
 	memset(result, 0x00, sizeof result);
 
 	for (int i = 0; i < PBKDF2_SALTLEN; i++)
-		salt[i] = salt_chars[rand() % sizeof salt_chars];
+		salt[i] = salt_chars[arc4random() % sizeof salt_chars];
 
 	(void) snprintf(result, sizeof result, PBKDF2_F_SALT,
 	                PBKDF2_PRF_DEF, PBKDF2_ITER_DEF, salt);
