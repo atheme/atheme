@@ -90,12 +90,6 @@ static void print_version(void)
 		printf("%s\n", infotext[i]);
 }
 
-static void rng_reseed(void *unused)
-{
-	(void)unused;
-	arc4random_addrandom((uint8_t *)&cnt, sizeof cnt);
-}
-
 static void process_mowgli_log(const char *line)
 {
 	slog(LG_ERROR, "%s", line);
@@ -439,9 +433,6 @@ int atheme_main(int argc, char *argv[])
 
 	/* check authcookie expires every ten minutes */
 	mowgli_timer_add(base_eventloop, "authcookie_expire", authcookie_expire, NULL, 600);
-
-	/* reseed rng a little every five minutes */
-	mowgli_timer_add(base_eventloop, "rng_reseed", rng_reseed, NULL, 293);
 
 	me.connected = false;
 	uplink_connect();
