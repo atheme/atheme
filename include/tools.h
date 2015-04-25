@@ -25,7 +25,15 @@ E int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, co
 E void arc4random_stir(void);
 E void arc4random_addrandom(unsigned char *dat, int datlen);
 E unsigned int arc4random(void);
+#ifndef HAVE_ARC4RANDOM_BUF
+E void arc4random_buf(void *buf, size_t n);
+#endif /* !HAVE_ARC4RANDOM_BUF */
 #endif /* !HAVE_ARC4RANDOM */
+
+/* explicit_bzero.c */
+#ifndef HAVE_EXPLICIT_BZERO
+E void explicit_bzero(void *p, size_t n);
+#endif /* !HAVE_EXPLICIT_BZERO */
 
 /* cidr.c */
 E int valid_ip_or_mask(const char *src);
