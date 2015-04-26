@@ -824,9 +824,6 @@ void handle_eob(server_t *s)
 		if (s2->flags & SF_EOB2)
 			handle_eob(s2);
 	}
-	/* Reseed RNG now we have a little more data to seed with */
-	if (s->uplink == me.me)
-		srand(rand() ^ ((CURRTIME << 20) + cnt.user + (cnt.chanuser << 12)) ^ (cnt.chan << 17) ^ ~cnt.bin);
 }
 
 /* Received a message from a user, check if they are flooding
