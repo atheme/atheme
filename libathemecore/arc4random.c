@@ -24,7 +24,7 @@
  * ChaCha based random number generator for OpenBSD.
  */
 
-#include "includes.h"
+#include "atheme.h"
 
 #include <sys/types.h>
 
@@ -40,7 +40,9 @@
 #include <openssl/err.h>
 #endif
 
-#include "log.h"
+#define fatal(msg, ...) do { \
+	slog(LG_ERROR, msg, __VA_ARGS__); exit(EXIT_FAILURE); \
+} while (0);
 
 #define KEYSTREAM_ONLY
 #include "chacha_private.h"
