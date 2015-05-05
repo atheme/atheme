@@ -134,20 +134,14 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	char		digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
 	static char	result[PASSLEN];
 
-	/* Attempt to extract the PRF, iteration count and salt */
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) < 3) {
-
-		/*
-		 * Didn't get all of the parameters we wanted, the crypt
-		 * string must not be for a hash produced by this module.
-		 * But we can't just return NULL or an empty string incase
-		 * we're being asked to generate a new password hash for a
-		 * new user registration (rather than for verification) or
-		 * something along those lines. Therefore, generate params.
-		 */
-		(void) sscanf(pbkdf2v2_make_salt(), PBKDF2_F_SCAN,
-		              &prf, &iter, salt);
-	}
+	/*
+	 * Attempt to extract the PRF, iteration count and salt
+	 *
+	 * If this fails, we're trying to verify a hash not produced by
+	 * this module - just bail out, libathemecore can handle NULL
+	 */
+	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) < 3)
+		return NULL;
 
 	/* Look up the digest method corresponding to the PRF */
 	switch (prf) {
@@ -161,10 +155,11 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 		break;
 
 	default:
-		/* This should match the default PRF */
-		prf = PBKDF2_PRF_DEF;
-		md = EVP_sha512();
-		break;
+		/*
+		 * Similar to above, trying to verify a password
+		 * that we cannot ever verify - bail out here
+		 */
+		return NULL;
 	}
 
 	/* Compute the PBKDF2 digest */
