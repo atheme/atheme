@@ -45,3 +45,5 @@ If you're still lost, read [INSTALL](INSTALL) or [GIT-Access](GIT-Access) for hi
  * [GitHub](http://www.github.com/atheme/atheme)
  * [Website](http://www.atheme.net)
  * [IRC](irc://irc.atheme.org/#atheme)
+ * [Basic Help](http://www.stack.nl/~jilles/irc/atheme-help/)
+ * [Advanced Help To Add To Your Own Website](https://github.com/AlphT3ch/Atheme-Help)
