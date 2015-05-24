@@ -189,7 +189,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
 		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 
-		if (sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
+		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 		{
 			command_fail(si, fault_emailfail, _("Email send failed."));
 			free(key);
