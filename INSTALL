@@ -8,6 +8,7 @@ Information about Services may be found at http://www.atheme.net/.
 
 TABLE OF CONTENTS
 -----------------
+
   1. Installation
   2. Upgrading
   3. Setting up IRCd
@@ -20,198 +21,206 @@ You should also read the README and FAQ files.
 1. INSTALLATION
 ---------------
 
+The IRCds supported by Services are listed in `dist/atheme.conf.example`.
+Although many others are supported, Services can provide the richest experience
+with Charybdis, InspIRCd, and UnrealIRCd.
+
 NOTE: if you are using a third party package of Services, most of this section
 will not apply.
 
-NOTE: if you are using a copy of Atheme downloaded from Git, you need to 
-remember to run `git submodule update --init`. If not, you may ignore this step.
+NOTE: if you are using a copy of Atheme downloaded from Git, you need to
+remember to run `git submodule update --init`. If not, you may ignore this
+step.
 
-IMPORTANT NOTE: it is not recommended to use and install services as root.
-Use an unprivileged user account.
+IMPORTANT NOTE: running services as 'root' is not supported. Use an
+unprivileged user account.
 
 Services should compile and run on most POSIX compliant systems. The current
 version is known to work on:
-	FreeBSD 8.x              (i386, amd64)
-	FreeBSD 9.x              (i386, amd64)
-	FreeBSD 10.x             (i386, amd64)
-	Linux (glibc) 2.8 - 2.20   (i386, amd64)
-	MacOS 10.9               (intel) (*)
-	Windows XP+		 (i386, x64) (*)
+
+	FreeBSD 10.x			(i386, amd64)
+	FreeBSD 9.x			(i386, amd64)
+	FreeBSD 8.x			(i386, amd64)
+	Linux (glibc) 2.8–2.20		(i386, amd64)
+	OS X 10.9			(intel) (*)
+	Windows XP+			(i386, x64) (*)
 
 Older versions have been tested on:
-	FreeBSD 5.[0,1,2,3,4,5]
-	FreeBSD 6.[0,1,2,3]
-	FreeBSD 7.[0,1,2,3,4]
-	OpenBSD 3.[5,6,7,8]      (i386, amd64, sparc)
-	NetBSD 1.[5,6]           (i386, amd64, sparc)
-	NetBSD 2.[0]             (i386, amd64, sparc, mips)
-	NetBSD 3.[0]             (i386)
-	DragonFly 1.[0,2,5]
-	Solaris [7,8,9,10]       (i86pc, sun4u)
-	Solaris Express 10       (i86pc, sun4u)
-	MacOS 10.[3.5,4.1]       (intel, powerpc)
 
-For MacOS 10, install libmowgli (version 0.7.x) and pkg-config separately,
-possibly using a package/ports system. The included libmowgli does not
-work on MacOS 10.
+	FreeBSD 7.0–7.4
+	FreeBSD 6.0–6.3
+	FreeBSD 5.0–5.5
+	OpenBSD 3.5–3.8			(i386, amd64, sparc)
+	NetBSD 1.5–1.6			(i386, amd64, sparc)
+	NetBSD 2.0			(i386, amd64, sparc, mips)
+	NetBSD 3.0			(i386)
+	DragonFly 1.0, 1.2, 1.5
+	Solaris 7–10			(i86pc, sun4u)
+	Solaris Express 10		(i86pc, sun4u)
+	OS X 10.3.5, 10.4.1		(intel, powerpc)
 
-For Windows, please read doc/WINDOWS for compilation and installation
-instructions as well as a list of known caveats.
+Notes:
 
-Other BSD-based systems will probably work. Other SysV-based systems *might*
-work provided they support BSD sockets and POSIX function calls.
+ - (*) For OS X 10, install libmowgli (version 0.7.x) and pkg-config
+   separately, possibly using a package/ports system. The included libmowgli
+   does not work on OS X 10.
 
-Services requires a runtime linker. Systems which do not have a runtime linker
-will not be able to run services. However, most systems include a runtime
-linker these days.
+ - (*) For Windows, please read doc/WINDOWS for compilation and installation
+   instructions as well as a list of known caveats.
 
-The IRCds supported by Services are listed in the example config
-(dist/atheme.conf.example). Although many others are supported, Services can
-provide the richest experience with one of the recommended IRCds: Charybdis,
-ShadowIRCD and UnrealIRCd.
+ - Other BSD-based systems will probably work. Other SysV-based systems *might*
+   work provided they support BSD sockets and POSIX function calls.
 
-If you are installing Services from Git and need libmowgli, please read the 
+ - Services requires a runtime linker. Systems which do not have a runtime
+   linker will not be able to run services. However, most systems include a
+   runtime linker these days.
+
+1.1 Compiling
+-------------
+
+If you are installing Services from Git and need libmowgli, please read the
 GIT-Access file for information on how to pull in libmowgli as a submodule.
 
 Run the "configure" script:
-	$ ./configure --prefix=/path/to/install/
+
+    $ ./configure --prefix=/path/to/install/
 
 If no prefix is specified, the default install path is ~/atheme/.
 
-If you're running a large network (more than 2000 users), you should 
+If you're running a large network (more than 2000 users), you should
 pass the --enable-large-net switch to configure for enhanced performance.
 
 The "configure" script will run several tests, write several files, and exit.
-Once this is done you will want to compile services. To do this, simply 
-type:
-	$ make
+Once this is done you will want to compile services. To do this, type:
 
-If you are on a BSD-based operating system, you may get an error like:
+    $ make
 
-"Makefile", line 1: Need an operator
-"Makefile", line 2: Need an operator
-make: fatal errors encountered -- cannot continue
+After compilation, install services using:
 
-upon running 'make'. If so, run gmake instead.
-
-Services will compile. To install, type:
-	$ make install
-
-If you get an error like this:
-
-/usr/bin/install: cannot stat `es.mo': No such file or directory
-Failed to install es.mo!
-
-All you have to do is rerun the "configure" script and pass --disable-nls to it
-like so:    $ ./configure --disable-nls
-It can also be fixed by installing your operating system's gettext package.
-
-
-The newly-compiled binary and several supporting files will be copied to the
-directory you specified in the "configure" script. If no directory (prefix)
-was specified, all the relevant files will be in ~/atheme/.
-
-It is recommended to keep the source directory; you will need it to
-(re)compile modules later.
+    $ make install
 
 Next, you'll want to go to the directory you specified in "configure" and edit
-etc/atheme.conf. You'll need to change every setting or services will 
+etc/atheme.conf. You'll need to change every setting or services will
 not work.
+
+1.2 Errors
+----------
+
+ - If you are on a BSD-based operating system, you may get an error like:
+
+       "Makefile", line 1: Need an operator
+       "Makefile", line 2: Need an operator
+       make: fatal errors encountered -- cannot continue
+
+   upon running 'make'. If so, run 'gmake' instead.
+
+ - If you get an error like this:
+
+       /usr/bin/install: cannot stat `es.mo': No such file or directory
+       Failed to install es.mo!
+
+   You will need to install the 'gettext' package in your OS. Alternatively,
+   recompile Atheme without NLS support:
+
+       $ ./configure --prefix=... --disable-nls
+       $ make
 
 2. UPGRADING
 ------------
 
 IMPORTANT NOTE: backup your configuration file and database!
 
-All custom modules should be recompiled as well. Loading old modules can
-cause services to crash.
+All custom modules should be recompiled as well. Loading old modules can cause
+services to crash.
 
 Sometimes upgrading requires more than recompiling and reinstalling. Be sure to
-read NEWS for important notes concerning the release. This file will
-let you know if you need to change your configuration or convert your database
-to a new format.
+read NEWS for important notes concerning the release. This file will let you
+know if you need to change your configuration or convert your database to a new
+format.
 
 3. SETTING UP IRCD
 ------------------
 
-Services acts as an IRC server with pseudo-clients on it. To link it to 
-your network, you'll need to add some lines in your IRCd's 
-configuration. Services connects to your IRCd, not the other way around.
+Services acts as an IRC server with pseudo-clients on it. To link it to your
+network, you'll need to add some lines in your IRCd's configuration. Services
+connects to your IRCd, not the other way around.
 
 It is suggested that you set up your IRCd (IRC operator access, etc) before
-trying to connect services. Many IRCds do not log much about server 
-connections, so it is best to connect as an IRC operator and watch the 
-server notices.
+trying to connect services. Many IRCds do not log much about server
+connections, so it is best to connect as an IRC operator and watch the server
+notices.
 
 As for the actual lines that need to be added, every IRCd is different. Look
 for documentation for "connect{}" or "link{}" or "C/N lines" for your IRCd. You
-need to allow services to introduce other servers (e.g. "hub_mask" or "H 
-line"), otherwise it will probably be disconnected when the OperServ 
-JUPE command is used.
+need to allow services to introduce other servers (e.g. "hub_mask" or H:line),
+otherwise it will probably be disconnected when the OperServ JUPE command is
+used.
 
 To be perfectly honest, if you can't figure this out you should be running
 neither IRCd nor services.
 
 Additionally, you need to do some configuration on all servers on the network.
-You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks 
-services uses to avoid normal users taking those nicks and causing 
-trouble. Also, many IRCds need to be configured to grant special 
-privileges to services ("service{}", "shared{}", "ulines{}", "U lines", 
-etc).
+You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks services uses
+to avoid normal users taking those nicks and causing trouble. Also, many IRCds
+need to be configured to grant special privileges to services ("service{}",
+"shared{}", "ulines{}", "U lines", etc).
 
-See doc/IRCD for more details concerning IRCd-specific requirements for 
-running services.
+See doc/IRCD for more details concerning IRCd-specific requirements for running
+services.
 
 4. STARTING SERVICES
 --------------------
 
-Go into the directory where you installed atheme-services (by default, 
+Go into the directory where you installed atheme-services (by default,
 ~/atheme/). Type ./bin/atheme-services to launch services.
 
 Services will report any errors and/or detach into the background.
 
-If services doesn't link and/or terminates without warning check the log
-file (var/atheme.log) to see what happened. If this tells you nothing try
-rerunning services via ./bin/atheme-services -dn for more verbose 
-information.
+If services doesn't link and/or terminates without warning check the log file
+(var/atheme.log) to see what happened. If this tells you nothing try rerunning
+services via ./bin/atheme-services -dn for more verbose information.
 
 5. SETTING UP A CRONTAB ENTRY
 -----------------------------
 
-A crontab entry will allow you to check periodically whether services is 
-still running, and restart it if not. You'll need to have atheme-services 
-binaries and data installed in the same directory for this to work 
-without modification.
+A crontab entry will allow you to check periodically whether services is still
+running, and restart it if not. You'll need to have atheme-services binaries
+and data installed in the same directory for this to work without modification.
 
-First rename the etc/atheme.cron.example script that is in Atheme path (by default, 
-~/atheme/) and edit it. You'll need to modify the "cd" part of the file.
-Then ensure that the file is marked as executable by typing
-"chmod +x atheme.cron.example" and try to launch the script to see if it works.
+First rename the etc/atheme.cron.example script that is in Atheme path (by
+default, ~/atheme/) and edit it. You'll need to modify the "cd" part of the
+file.  Then ensure that the file is marked as executable by typing "chmod +x
+atheme.cron.example" and try to launch the script to see if it works.
 
-When this is done, you'll have to add the crontab entry. Type "crontab -e"
-This will open the default text editor with the crontab file. Enter the
-following (with correct path):
+When this is done, you'll have to add the crontab entry. Type "crontab -e" This
+will open the default text editor with the crontab file. Enter the following
+(with correct path):
 
-*/5 * * * * /home/nenolod/atheme/etc/atheme.cron.example >/dev/null 2>&1
+    */5 * * * * ~/atheme/etc/atheme.cron.example >/dev/null 2>&1
 
-The */5 at the beginning means "check every 5 minutes." You may replace
-the 5 with other another number if you want (but less than 60). Save and exit,
-and it's installed.
+The */5 at the beginning means "check every 5 minutes." You may replace the 5
+with other another number if you want (but less than 60). Save and exit, and
+it's installed.
 
 6. COMPILING THE CONTRIB MODULES
 --------------------------------
 
-In the Atheme source there is a directory called contrib filled with
-all sorts of modules that are not included in the main modules directory
-for one reason or another. Compiling these modules is very simple.
+In the Atheme source there is a directory called contrib filled with all sorts
+of modules that are not included in the main modules directory for one reason
+or another. Compiling these modules is very simple.
 
-A README for what each contrib module does is at modules/contrib/README .
+A README for what each contrib module does is at `modules/contrib/README`.
 
-Simply pass the --enable-contrib switch to the configure script like so:
+Pass the --enable-contrib switch to the configure script like so:
 
-			$ ./configure --enable-contrib
+    $ ./configure --enable-contrib
 
 The contrib modules will then be in your atheme install directory (by default
-this is ~/atheme/) in the modules/contrib directory. you can then load them on a live
-network like: "/msg operserv modload contrib/os_kill" or in your atheme.conf
-by adding a loadmodule line like: loadmodule "modules/contrib/os_kill";
+this is ~/atheme/) in the modules/contrib directory. you can then load them on
+a live network like:
+
+    /msg operserv modload contrib/os_kill
+
+or in your atheme.conf by adding a loadmodule line like:
+
+    loadmodule "modules/contrib/os_kill";
