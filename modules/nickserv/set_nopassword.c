@@ -1,9 +1,10 @@
 /*
  * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Copyright (c) 2007 Jilles Tjoelker
+ * Copyright (c) 2015 Max Teufel <max@teufelsnetz.com>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Allows you to opt-out of channel change messages.
+ * Allows you to opt-out of password-based authentication methods.
  *
  */
 
