@@ -39,6 +39,8 @@ void _modinit(module_t *m)
 #else
 	service_named_bind_command("nickserv", &ns_identify);
 #endif
+
+	hook_add_event("user_can_login");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -58,6 +60,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	const char *target = parv[0];
 	const char *password = parv[1];
 	char lau[BUFSIZE];
+	hook_user_login_check_t req;
 
 	if (si->su == NULL)
 	{
@@ -84,6 +87,16 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	if (!mu)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
+		return;
+	}
+
+	req.si = si;
+	req.mu = mu;
+	req.allowed = true;
+	hook_call_user_can_login(&req);
+	if (!req.allowed)
+	{
+		logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to \2%s\2 (denied by hook)", entity(mu)->name);
 		return;
 	}
 

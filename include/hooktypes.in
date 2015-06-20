@@ -69,6 +69,7 @@ nick_check_expire  hook_expiry_req_t *
 sasl_input         sasl_message_t *
 service_introduce  service_t *
 user_can_register  hook_user_register_check_t *
+user_can_login     hook_user_login_check_t *
 user_drop          myuser_t *
 user_identify      user_t *
 user_info          hook_user_req_t *
