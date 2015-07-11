@@ -680,6 +680,7 @@ static myuser_t *login_user(sasl_session_t *p)
 static void sasl_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
+	sasl_mechanism_t *mptr;
 	sasl_session_t *p;
 	myuser_t *mu;
 
@@ -707,11 +708,13 @@ static void sasl_newuser(hook_user_nick_t *data)
 		return;
 	}
 
+	mptr = p->mechptr;
+
 	destroy_session(p);
 
 	myuser_login(saslsvs, u, mu, false);
 
-	logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN");
+	logcommand_user(saslsvs, u, CMDLOG_LOGIN, "LOGIN (%s)", mptr->name);
 }
 
 /* This function is run approximately once every 30 seconds.
