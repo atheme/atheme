@@ -291,6 +291,7 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 {
 	database_handle_t *db;
 	opensex_t *rs;
+	int fd;
 	FILE *f;
 	int errno1;
 	char bpath[BUFSIZE], path[BUFSIZE];
@@ -300,8 +301,8 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 	mowgli_strlcpy(path, bpath, sizeof path);
 	mowgli_strlcat(path, ".new", sizeof path);
 
-	f = fopen(path, "w");
-	if (!f)
+	fd = open(path, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if (fd < 0 || ! (f = fdopen(fd, "w")))
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "db-open-write: cannot open '%s' for writing: %s", path, strerror(errno1));
