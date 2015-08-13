@@ -1,0 +1,12 @@
+Help for SET BLOCKBADWORDSOPS:
+
+SET BLOCKBADWORDSOPS designates whether or not ops
+will be exempt from badword checking on a channel
+where that is enabled as well.
+
+See also: SET BLOCKBADWORDS
+
+Syntax: SET <#channel> BLOCKBADWORDSOPS ON|OFF
+
+Example:
+    /msg &nick& SET #sailors BLOCKBADWORDSOPS ON
