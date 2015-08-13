@@ -3,7 +3,7 @@ Help for BADWORDS:
 BADWORDS maintains a list of glob strings that every word
 in a channel will be checked against (if BLOCKBADWORDS is set).
 
-The ACTION parameter can be: KICK, BAN, KICKBAN or (if your
+The ACTION parameter can be: KICK, WARN, BAN, KICKBAN or (if your
 IRCd supports it) QUIET.
 
 Syntax: BADWORDS <#channel> LIST
