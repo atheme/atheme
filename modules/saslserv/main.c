@@ -255,15 +255,15 @@ static void sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 	free(ssi);
 }
 
+static struct sourceinfo_vtable sasl_vtable = {
+	.description = "SASL",
+	.get_source_name = sasl_get_source_name,
+	.get_source_mask = sasl_get_source_name
+};
+
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p)
 {
 	sasl_sourceinfo_t *ssi;
-
-	struct sourceinfo_vtable sasl_vtable = {
-		.description = "SASL",
-		.get_source_name = sasl_get_source_name,
-		.get_source_mask = sasl_get_source_name
-	};
 
 	ssi = smalloc(sizeof(sasl_sourceinfo_t));
 	object_init(object(ssi), "<sasl sourceinfo>", (destructor_t) sasl_sourceinfo_delete);
