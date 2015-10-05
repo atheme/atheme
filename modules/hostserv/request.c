@@ -49,6 +49,7 @@ struct hsreq_ {
 typedef struct hsreq_ hsreq_t;
 
 mowgli_list_t hs_reqlist;
+static char *groupmemo;
 
 void _modinit(module_t *m)
 {
@@ -73,6 +74,8 @@ void _modinit(module_t *m)
 	hook_add_operserv_info(osinfo_hook);
 	hook_add_db_write(write_hsreqdb);
 
+	add_dupstr_conf_item("REGGROUP", &hostsvs->conf_table, 0, &groupmemo, NULL);
+
 	db_register_type_handler("HR", db_h_hr);
 
  	service_named_bind_command("hostserv", &hs_request);
@@ -89,6 +92,8 @@ void _moddeinit(module_unload_intent_t intent)
 	hook_del_myuser_delete(account_delete_request);
 	hook_del_operserv_info(osinfo_hook);
 	hook_del_db_write(write_hsreqdb);
+
+	del_conf_item("REGGROUP", &hostsvs->conf_table);
 
 	db_unregister_type_handler("HR");
 
@@ -210,6 +215,37 @@ static void osinfo_hook(sourceinfo_t *si)
 	/* Can't think of a better way to phrase this, feel free to fix if you can. */
 	command_success_nodata(si, "Requested vHosts will be per-nick: %s", request_per_nick ? "Yes" : "No");
 }
+
+/*****************************************************************************/
+
+static void send_group_memo(sourceinfo_t *si, const char *memo, ...)
+{
+	service_t *msvs;
+	va_list va;
+	char buf[BUFSIZE];
+
+	return_if_fail(si != NULL);
+	return_if_fail(memo != NULL);
+
+	va_start(va, memo);
+	vsnprintf(buf, BUFSIZE, memo, va);
+	va_end(va);
+
+	if ((msvs = service_find("memoserv")) == NULL)
+		return;
+	else
+	{
+		char cmdbuf[BUFSIZE];
+
+		mowgli_strlcpy(cmdbuf, groupmemo, BUFSIZE);
+		mowgli_strlcat(cmdbuf, " ", BUFSIZE);
+		mowgli_strlcat(cmdbuf, buf, BUFSIZE);
+
+		command_exec_split(msvs, si, "SEND", cmdbuf, msvs->commands);
+	}
+}
+
+/*****************************************************************************/
 
 /* REQUEST <host> */
 static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
@@ -341,6 +377,10 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 			l->vhost_ts = CURRTIME;;
 
 			command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
+
+			if (groupmemo != NULL)
+				send_group_memo(si, "[auto memo] Please review \2%s\2 for me!", host);
+
 			logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
 			if (config_options.ratelimit_uses && config_options.ratelimit_period)
 				ratelimit_count++;
@@ -364,6 +404,10 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	mowgli_node_add(l, n, &hs_reqlist);
 
 	command_success_nodata(si, _("You have requested vhost \2%s\2."), host);
+
+        if (groupmemo != NULL)
+                send_group_memo(si, "[auto memo] Please review \2%s\2 for me!", host);
+
 	logcommand(si, CMDLOG_REQUEST, "REQUEST: \2%s\2", host);
 	if (config_options.ratelimit_uses && config_options.ratelimit_period)
 		ratelimit_count++;

@@ -1180,6 +1180,13 @@ chanserv {
 	 */
 	real = "Channel Services";
 
+	/* reggroup 
+	 * The group that will receive Memos about
+	 * channel Registration requests when
+	 * chanserv/moderate is loaded.
+	 */
+	#reggroup = "!Services-Team";
+
 	/* (*)aliases
 	 * Command aliases for ChanServ.
 	 */
@@ -1746,6 +1753,12 @@ hostserv {
 	 * The GECOS (real name) of the client.
 	 */
 	real = "Host Management Services";
+
+	/* reggroup 
+	 * The group that will receive Memos about
+	 * vHost requests.
+	 */
+	#reggroup = "!Services-Team";
 
 	/* (*)request_per_nick
 	 * Whether the request system should work per nick or per account.
