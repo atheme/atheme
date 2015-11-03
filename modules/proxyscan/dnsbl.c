@@ -65,7 +65,7 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/dnsbl", false, _modinit, _moddeinit,
+	"proxyscan/dnsbl", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );
