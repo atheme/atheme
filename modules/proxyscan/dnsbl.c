@@ -76,8 +76,7 @@ static char *action = NULL;
 
 /* A configured DNSBL */
 struct Blacklist {
-	unsigned int status;	/* If CONF_ILLEGAL, delete when no clients */
-	int refcount;
+	object_t parent;
 	char host[IRCD_RES_HOSTLEN + 1];
 	unsigned int hits;
 	time_t lastwarning;
@@ -108,6 +107,7 @@ mowgli_list_t dnsbl_elist;
 
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
+static void abort_blacklist_queries(user_t *u);
 static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[]);
 static void write_dnsbl_exempt_db(database_handle_t *db);
@@ -325,6 +325,9 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		return;
 	}
 
+	l = dnsbl_queries(blcptr->u);
+	mowgli_node_delete(&blcptr->node, l);
+
 	if (reply != NULL)
 	{
 		/* only accept 127.x.y.z as a listing */
@@ -342,14 +345,9 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 
 	/* they have a blacklist entry for this client */
 	if (listed)
-	{
 		dnsbl_hit(blcptr->u, blcptr->blacklist);
-		return;
-	}
 
-	l = dnsbl_queries(blcptr->u);
-	mowgli_node_delete(&blcptr->node, l);
-
+	object_unref(blcptr->blacklist);
 	free(blcptr);
 }
 
@@ -361,7 +359,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 	int ip[4];
 	mowgli_list_t *l;
 
-	blcptr->blacklist = blptr;
+	blcptr->blacklist = object_ref(blptr);
 	blcptr->u = u;
 
 	blcptr->dns_query.ptr = blcptr;
@@ -377,7 +375,6 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 
 	l = dnsbl_queries(u);
 	mowgli_node_add(blcptr, &blcptr->node, l);
-	blptr->refcount++;
 }
 
 /* public interfaces */
@@ -393,7 +390,8 @@ static struct Blacklist *new_blacklist(char *name)
 	if (blptr == NULL)
 	{
 		blptr = malloc(sizeof(struct Blacklist));
-		mowgli_node_add(blptr, &blptr->node, &blacklist_list);
+		object_init(object(blptr), "proxyscan dnsbl", NULL);
+		mowgli_node_add(object_ref(blptr), &blptr->node, &blacklist_list);
 	}
 
 	mowgli_strlcpy(blptr->host, name, IRCD_RES_HOSTLEN + 1);
@@ -409,7 +407,6 @@ static void lookup_blacklists(user_t *u)
 	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
 	{
 		struct Blacklist *blptr = (struct Blacklist *) n->data;
-		blptr->status = 0;
 
 		if (u == NULL)
 			return;
@@ -426,11 +423,9 @@ static void destroy_blacklists(void)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, blacklist_list.head)
 	{
 		blptr = n->data;
-		blptr->hits = 0; /* keep it simple and consistent */
 
 		mowgli_node_delete(n, &blacklist_list);
-
-		free(n->data);
+		object_unref(blptr);
 	}
 }
 
@@ -484,29 +479,43 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 
 	svs = service_find("operserv");
 
+	abort_blacklist_queries(u);
+
 	if (!strcasecmp("SNOOP", action))
 	{
 		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-		/* abort_blacklist_queries(u); */
 		return;
 	}
 	else if (!strcasecmp("NOTIFY", action))
 	{
 		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 		notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-		/* abort_blacklist_queries(u); */
 		return;
 	}
 	else if (!strcasecmp("KLINE", action))
 	{
 		if (! (u->flags & UF_KLINESENT)) {
 			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-			/* abort_blacklist_queries(u); */
 			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
 			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
 			u->flags |= UF_KLINESENT;
 		}
 		return;
+	}
+}
+
+static void abort_blacklist_queries(user_t *u)
+{
+	mowgli_node_t *n, *tn;
+	mowgli_list_t *l = dnsbl_queries(u);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
+	{
+		struct BlacklistClient *blcptr = n->data;
+
+		delete_resolver_queries(&blcptr->dns_query);
+		mowgli_node_delete(n, l);
+		free(blcptr);
 	}
 }
 
@@ -590,6 +599,9 @@ _modinit(module_t *m)
 	hook_add_event("user_add");
 	hook_add_user_add(check_dnsbls);
 
+	hook_add_event("user_delete");
+	hook_add_user_delete(abort_blacklist_queries);
+
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
@@ -606,6 +618,7 @@ _moddeinit(module_unload_intent_t intent)
 
 	hook_del_db_write(write_dnsbl_exempt_db);
 	hook_del_user_add(check_dnsbls);
+	hook_del_user_delete(abort_blacklist_queries);
 	hook_del_config_purge(dnsbl_config_purge);
 	hook_del_operserv_info(osinfo_hook);
 
