@@ -25,5 +25,6 @@
 #define CMODE_SSLONLY	0x00400000	/* charybdis extensions/chm_sslonly.c +S */
 #define CMODE_OPERONLY	0x00800000	/* charybdis extensions/chm_operonly.c +O */
 #define CMODE_ADMINONLY	0x01000000	/* charybdis extensions/chm_adminonly.c +A */
+#define CMODE_NONOTICE	0x02000000	/* charybdis extensions/chm_nonotice.c +T */
 
 #endif

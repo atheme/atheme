@@ -64,6 +64,7 @@ struct cmode_ charybdis_mode_list[] = {
   { 'A', CMODE_ADMINONLY },
   { 'c', CMODE_NOCOLOR	 },
   { 'C', CMODE_NOCTCP	 },
+  { 'T', CMODE_NONOTICE  },
 
   { '\0', 0 }
 };
