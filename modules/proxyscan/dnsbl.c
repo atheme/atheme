@@ -363,21 +363,27 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 }
 
 /* XXX: no IPv6 implementation, not to concerned right now though. */
+/* 2015-12-06: at least we shouldn't crash on bad inputs anymore... -bcode */
 static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 {
-	struct BlacklistClient *blcptr = malloc(sizeof(struct BlacklistClient));
 	char buf[IRCD_RES_HOSTLEN + 1];
 	int ip[4];
 	mowgli_list_t *l;
+
+	if (u->ip == NULL)
+		return;
+
+	/* A sscanf worked fine for chary for many years, it'll be fine here */
+	if (sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
+		return;
+
+	struct BlacklistClient *blcptr = malloc(sizeof(struct BlacklistClient));
 
 	blcptr->blacklist = object_ref(blptr);
 	blcptr->u = u;
 
 	blcptr->dns_query.ptr = blcptr;
 	blcptr->dns_query.callback = blacklist_dns_callback;
-
-	/* A sscanf worked fine for chary for many years, it'll be fine here */
-	sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]);
 
 	/* becomes 2.0.0.127.torbl.ahbl.org or whatever */
 	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
