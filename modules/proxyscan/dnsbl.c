@@ -169,6 +169,7 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 		{
 			action = n;
 			command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), action_names[n]);
+			logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", action_names[n]);
 			return;
 		}
 	}
