@@ -72,7 +72,25 @@ DECLARE_MODULE_V1
 
 mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 mowgli_patricia_t **os_set_cmdtree;
-static char *action = NULL;
+
+enum dnsbl_action {
+	DNSBL_ACT_NONE,
+	DNSBL_ACT_NOTIFY,
+	DNSBL_ACT_SNOOP,
+	DNSBL_ACT_KLINE,
+} action;
+
+#define ITEM_DESC(x) [DNSBL_ACT_ ## x] = #x
+
+const char *action_names[] = {
+	ITEM_DESC(NONE),
+	ITEM_DESC(NOTIFY),
+	ITEM_DESC(SNOOP),
+	ITEM_DESC(KLINE),
+	NULL
+};
+
+#undef ITEM_DESC
 
 /* A configured DNSBL */
 struct Blacklist {
@@ -145,25 +163,17 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp("SNOOP", act) || !strcasecmp("KLINE", act) || !strcasecmp("NOTIFY", act))
+	for (enum dnsbl_action n = 0; action_names[n] != NULL; n++)
 	{
-		action = sstrdup(act);
-		command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), act);
-		logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", act);
-		return;
+		if (!strcasecmp(action_names[n], act))
+		{
+			action = n;
+			command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), action_names[n]);
+			return;
+		}
 	}
-	else if (!strcasecmp("NONE", act))
-	{
-		action = NULL;
-		command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), act);
-		logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", act);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, _("Invalid action given."));
-		return;
-	}
+
+	command_fail(si, fault_badparams, _("Invalid action given."));
 }
 
 static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
@@ -448,6 +458,27 @@ static void dnsbl_config_purge(void *unused)
 	destroy_blacklists();
 }
 
+static int dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
+{
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	for (enum dnsbl_action n = 0; action_names[n] != NULL; n++)
+	{
+		if (!strcasecmp(action_names[n], ce->vardata))
+		{
+			action = n;
+			return 0;
+		}
+	}
+
+	conf_report_warning(ce, "invalid parameter for configuration option");
+	return 0;
+}
+
 static void check_dnsbls(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
@@ -459,7 +490,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 	if (is_internal_client(u))
 		return;
 
-	if (!action)
+	if (action == DNSBL_ACT_NONE)
 		return;
 
 	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
@@ -481,26 +512,26 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 
 	abort_blacklist_queries(u);
 
-	if (!strcasecmp("SNOOP", action))
+	switch (action)
 	{
-		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-		return;
-	}
-	else if (!strcasecmp("NOTIFY", action))
-	{
-		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-		notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-		return;
-	}
-	else if (!strcasecmp("KLINE", action))
-	{
-		if (! (u->flags & UF_KLINESENT)) {
-			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+		case DNSBL_ACT_KLINE:
+			if (! (u->flags & UF_KLINESENT)) {
+				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+				notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
+				kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
+				u->flags |= UF_KLINESENT;
+			}
+			break;
+
+		case DNSBL_ACT_NOTIFY:
 			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
-			u->flags |= UF_KLINESENT;
-		}
-		return;
+			// FALLTHROUGH
+		case DNSBL_ACT_SNOOP:
+			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+			break;
+
+		default:
+			break; // do nothing
 	}
 }
 
@@ -522,11 +553,11 @@ static void abort_blacklist_queries(user_t *u)
 static void osinfo_hook(sourceinfo_t *si)
 {
 	mowgli_node_t *n;
+	const char *name = action_names[action];
 
-	if (action)
-		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", action);
-	else
-		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", "None");
+	return_if_fail(name != NULL);
+
+	command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", name);
 
 	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
 	{
@@ -605,7 +636,7 @@ _modinit(module_t *m)
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
-	add_dupstr_conf_item("dnsbl_action", &proxyscan->conf_table, 0, &action, NULL);
+	add_conf_item("dnsbl_action", &proxyscan->conf_table, dnsbl_action_config_handler);
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
 
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
