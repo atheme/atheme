@@ -91,14 +91,16 @@ static int encrypt_in_place(char *buf, int size)
 static int check_password(const char *plaintext, const char *password)
 {
     char buf[BUFSIZE];
+    int cmp;
 
     if (myencrypt(plaintext, strlen(plaintext), buf, sizeof(buf)) < 0)
         return -1;
 #ifdef ENCRYPT_MD5
-    if (strcmp(buf, password) == 0)
+    cmp = strcmp(buf, password) == 0;
 #else
-    if (0)
+    cmp = 0;
 #endif
+    if (cmp)
         return 1;
     else
         return 0;
