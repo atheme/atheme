@@ -777,8 +777,9 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 			s->append_char(s, c);
 		}
 	}
+	s->append_char(s, 0);
 
-	memcpy(outbuffer, s->str, XMLRPC_BUFSIZE);
+	strncpy(outbuffer, s->str, XMLRPC_BUFSIZE);
 }
 
 static void xmlrpc_append_char_encode(mowgli_string_t *s, const char *s1)
