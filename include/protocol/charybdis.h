@@ -27,4 +27,6 @@
 #define CMODE_ADMINONLY	0x01000000	/* charybdis extensions/chm_adminonly.c +A */
 #define CMODE_NONOTICE	0x02000000	/* charybdis extensions/chm_nonotice.c +T */
 
+#define CMODE_IMMUNE	0x04000000	/* charybdis +M */
+
 #endif
