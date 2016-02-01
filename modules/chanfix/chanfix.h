@@ -88,5 +88,6 @@ E command_t cmd_scores;
 E command_t cmd_info;
 E command_t cmd_help;
 E command_t cmd_mark;
+E command_t cmd_nofix;
 
 #endif

@@ -1,0 +1,12 @@
+Help for NOFIX:
+
+NOFIX allows operators to make a channel be essentially
+ignored by ChanFix as far as automatic and manual
+fixes.
+
+NOFIX information will be displayed in INFO output.
+
+Syntax: NOFIX <#channel> ON|OFF <reason>
+
+Examples:
+    /msg &nick& NOFIX #warez ON Channel not supported by services on this network.

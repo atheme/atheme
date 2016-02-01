@@ -1,4 +1,5 @@
 /* chanfix - channel fixing service
+ * Copyright (c) 2014-2016 Xtheme Development Group
  * Copyright (c) 2010 Atheme Development Group
  */
 
@@ -34,6 +35,7 @@ void _modinit(module_t *m)
 	service_bind_command(chanfix, &cmd_info);
 	service_bind_command(chanfix, &cmd_help);
 	service_bind_command(chanfix, &cmd_mark);
+	service_bind_command(chanfix, &cmd_nofix);
 
 	hook_add_event("channel_can_register");
 	hook_add_channel_can_register(chanfix_can_register);

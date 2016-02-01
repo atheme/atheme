@@ -291,6 +291,12 @@ void chanfix_autofix_ev(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
+
+	        /* Do not fix NOFIX'd channels */
+		if ((metadata_find(chan, "private:nofix:setter")) != NULL)
+                return;
+
+
 		if (!chanfix_do_autofix && !chan->fix_requested)
 			continue;
 
@@ -397,6 +403,13 @@ static void chanfix_cmd_fix(sourceinfo_t *si, int parc, char *parv[])
 	if (mychan_find(parv[0]))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is already registered."), parv[0]);
+		return;
+	}
+
+        /* Do not fix NOFIX'd channels */
+        if ((metadata_find(chan, "private:nofix:setter")) != NULL)
+	{
+		command_fail(si, fault_nochange, _("\2%s\2 has NOFIX enabled."), parv[0]);
 		return;
 	}
 
@@ -549,6 +562,24 @@ static void chanfix_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
 	}
 
+        if ((md = metadata_find(chan, "private:nofix:setter")) != NULL)
+        {
+                const char *setter = md->value;
+                const char *reason;
+                time_t ts;
+
+                md = metadata_find(chan, "private:nofix:reason");
+                reason = md != NULL ? md->value : "unknown";
+
+                md = metadata_find(chan, "private:mark:timestamp");
+                ts = md != NULL ? atoi(md->value) : 0;
+
+                tm = *localtime(&ts);
+                strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
+
+                command_success_nodata(si, _("%s had \2NOFIX\2 set by %s on %s (%s)"), chan->name, setter, strfbuf, reason);
+        }
+
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 }
 
@@ -627,6 +658,80 @@ static void chanfix_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 }
 
 command_t cmd_mark = { "MARK", N_("Adds a note to a channel."), PRIV_MARK, 3, chanfix_cmd_mark, { .path = "chanfix/mark" } };
+
+/* NOFIX <channel> ON|OFF [reason] */
+static void chanfix_cmd_nofix(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *target = parv[0];
+	char *action = parv[1];
+	char *info = parv[2];
+	chanfix_channel_t *chan;
+
+	if (!target || !action)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOFIX");
+		command_fail(si, fault_needmoreparams, _("Usage: NOFIX <#channel> <ON|OFF> [reason]"));
+		return;
+	}
+
+	if (target[0] != '#')
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOFIX");
+		return;
+	}
+
+	if ((chan = chanfix_channel_find(parv[0])) == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("No CHANFIX record available for \2%s\2; try again later."),
+			     parv[0]);
+		return;
+	}
+
+	if (!strcasecmp(action, "ON"))
+	{
+		if (!info)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
+			command_fail(si, fault_needmoreparams, _("Usage: NOFIX <#channel> ON <reason>"));
+			return;
+		}
+
+		if (metadata_find(chan, "private:nofix:setter"))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 already has NOFIX set."), target);
+			return;
+		}
+
+		metadata_add(chan, "private:nofix:setter", get_oper_name(si));
+		metadata_add(chan, "private:nofix:reason", info);
+		metadata_add(chan, "private:nofix:timestamp", number_to_string(CURRTIME));
+
+		logcommand(si, CMDLOG_ADMIN, "NOFIX:ON: \2%s\2 (reason: \2%s\2)", chan->name, info);
+		command_success_nodata(si, _("\2%s\2 is now set to NOFIX."), target);
+	}
+	else if (!strcasecmp(action, "OFF"))
+	{
+		if (!metadata_find(chan, "private:nofix:setter"))
+		{
+			command_fail(si, fault_nochange, _("\2%s\2 is not set to NOFIX."), target);
+			return;
+		}
+
+		metadata_delete(chan, "private:nofix:setter");
+		metadata_delete(chan, "private:nofix:reason");
+		metadata_delete(chan, "private:nofix:timestamp");
+
+		logcommand(si, CMDLOG_ADMIN, "NOFIX:OFF: \2%s\2", chan->name);
+		command_success_nodata(si, _("\2%s\2 is no longer set to NOFIX."), target);
+	}
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOFIX");
+		command_fail(si, fault_badparams, _("Usage: NOFIX <#channel> <ON|OFF> <reason>"));
+	}
+}
+
+command_t cmd_nofix = { "NOFIX", N_("Adds NOFIX to a channel."), PRIV_CHAN_ADMIN, 3, chanfix_cmd_nofix, { .path = "chanfix/nofix" } };
 
 /* HELP <command> [params] */
 static void chanfix_cmd_help(sourceinfo_t *si, int parc, char *parv[])
