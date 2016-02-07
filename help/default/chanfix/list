@@ -1,0 +1,11 @@
+Help for LIST:
+
+LIST displays a list of matching &nick&
+channels (or all channels if no criteria
+is given)
+
+Syntax: INFO [*]
+
+Examples:
+    /msg &nick& LIST
+    /msg &nick& LIST #Chat*
