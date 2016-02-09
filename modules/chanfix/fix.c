@@ -1,7 +1,7 @@
 /* chanfix - channel fixing service
  * 
  * Copyright (c) 2010-2016 Atheme Development Group
- *
+ * Copyright (c) 2014-2016 Austin Ellis <siniStar@IRC4Fun.net>
  */
 
 #include "atheme.h"
@@ -348,8 +348,12 @@ void chanfix_autofix_ev(void *unused)
 static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
+	metadata_t *md, *mdnofix;
+	char *nofixpattern = NULL, *markpattern = NULL;
+	char buf[BUFSIZE];
 	mowgli_patricia_iteration_state_t state;
 	unsigned int matches = 0;
+	bool nofix = false, nofixmatch;
 	char *chanpattern = NULL;
 
 	if (parv[0] != NULL)
@@ -360,7 +364,28 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (chanpattern != NULL && match(chanpattern, chan->name))
 			continue;
 
-		command_success_nodata(si, "- %s", chan->name);
+		if (nofixpattern)
+		{
+			nofixmatch = false;
+			md = metadata_find(chan, "private:nofix:reason");
+			if (md != NULL && !match(nofixpattern, md->value))
+				nofixmatch = true;
+
+			if (!nofixmatch)
+				continue;
+		}
+
+		if (nofix && !metadata_find(chan, "private:nofix:setter"))
+			continue;
+
+		/* in the future we could add a LIMIT parameter */
+		*buf = '\0';
+
+		if (metadata_find(chan, "private:nofix:setter")) {
+			mowgli_strlcat(buf, "\2[NOFIX]\2", BUFSIZE);
+		}
+
+		command_success_nodata(si, "- %s %s", chan->name, buf);
 		matches++;
 	}
 
