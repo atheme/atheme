@@ -353,7 +353,7 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 	mowgli_patricia_iteration_state_t state;
 	unsigned int matches = 0;
-	bool nofix = false, nofixmatch;
+	bool nofix = false, marked = false, markmatch, nofixmatch;
 	char *chanpattern = NULL;
 
 	if (parv[0] != NULL)
@@ -378,11 +378,29 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		if (nofix && !metadata_find(chan, "private:nofix:setter"))
 			continue;
 
+		if (markpattern)
+		{
+			markmatch = false;
+			md = metadata_find(chan, "private:mark:reason");
+			if (md != NULL && !match(markpattern, md->value))
+				markmatch = true;
+
+			if (!markmatch)
+				continue;
+		}
+
+		if (marked && !metadata_find(chan, "private:mark:setter"))
+			continue;
+
 		/* in the future we could add a LIMIT parameter */
 		*buf = '\0';
 
 		if (metadata_find(chan, "private:nofix:setter")) {
 			mowgli_strlcat(buf, "\2[NOFIX]\2", BUFSIZE);
+		}
+
+		if (metadata_find(chan, "private:mark:setter")) {
+			mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
 		}
 
 		command_success_nodata(si, "- %s %s", chan->name, buf);
