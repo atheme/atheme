@@ -1,16 +1,9 @@
 Atheme Services 7.2 Development Notes
 =====================================
 
-This is the last ever release series of Atheme.  We would say some things about how this was a
-'fun' and 'exciting' experience, but at least for the last couple of years it really wasn't.
-So we won't.  Instead, we have this:
-
-    01:32 <Argure> atheme dies today
-    01:32 <Argure> fuck yeah.
-
-Atheme has already been forked multiple times in response to our announcement, so this doesn't
-mean the end of the world.  You can find a list of forks at <http://www.atheme.net> until the
-website is discontinued on October 31, 2016.
+As of late February 2016, Atheme is being brought back to live development (managed 
+and maintained by a few of the fork maintainers.  We look forward to bringing Atheme
+back into it's spotlight.  Stay tuned for new developements, fixes, and releases.
 
 nickserv
 --------
