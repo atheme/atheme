@@ -1,6 +1,7 @@
 include ../../extra.mk
 
 INCLUDES = \
+	asuka.h		\
 	bahamut.h	\
 	charybdis.h	\
 	inspircd.h	\
