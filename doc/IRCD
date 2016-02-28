@@ -142,26 +142,6 @@ You will need a service{} block on all servers.
 If you want to use akills, you need shared{} blocks for services on all servers
 on the network.
 
-undernet
---------
-
-You need U:lines or UWorld entries for services on all servers on the network.
-
-You must enable join_chans as P10 is designed for services to work that way.
-
-P10 does not support logout, so users are killed (from the services server)
-when they log out. It is suggested that the logout module is not loaded.
-Users dropping their account will be killed; this cannot be avoided.
-
-For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
-in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
-
-Atheme does not support oplevels; they should be disabled.
-
-chanserv::changets can be used with ircu version 2.10.12.06 or newer; if any
-server on the network is 2.10.11.x, netsplits will occur whenever Atheme tries
-to lower TS.
-
 unreal
 ------
 

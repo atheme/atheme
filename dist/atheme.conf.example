@@ -55,7 +55,6 @@
  * ircd-ratbox 2.0 and later                    modules/protocol/ratbox
  * IRCNet ircd (ircd 2.11)                      modules/protocol/ircnet
  * ircd-seven                                   modules/protocol/ircd-seven
- * ircu 2.10.11.07 or later                     modules/protocol/undernet
  * Nefarious IRCu 0.4.0 or later                modules/protocol/nefarious
  * ngIRCd 19 or later [experimental]            modules/protocol/ngircd
  * ShadowIRCd 5.0 or later                      modules/protocol/shadowircd
@@ -825,7 +824,7 @@ serverinfo {
 
 	/* (*)hidehostsuffix
 	 * P10 +x host hiding gives <account>.<hidehostsuffix>.
-	 * If using +x on asuka/bircd/undernet, this must agree
+	 * If using +x on asuka/bircd, this must agree
 	 * with F:HIDDEN_HOST.
 	 */
 	hidehostsuffix = "users.misconfigured";
@@ -1948,7 +1947,7 @@ general {
 	 *
 	 * If enabled, you can tell ChanServ to join via SET GUARD ON.
 	 *
-	 * If you use ircu-like ircd (asuka, bircd, undernet), you must
+	 * If you use ircu-like ircd (asuka, bircd), you must
 	 * leave this enabled, and put guard in default cflags.
 	 *
 	 * For ratbox it is recommended to leave it on and put guard in 
