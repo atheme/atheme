@@ -824,7 +824,7 @@ serverinfo {
 
 	/* (*)hidehostsuffix
 	 * P10 +x host hiding gives <account>.<hidehostsuffix>.
-	 * If using +x on asuka/bircd, this must agree
+	 * If using +x on asuka, this must agree
 	 * with F:HIDDEN_HOST.
 	 */
 	hidehostsuffix = "users.misconfigured";
@@ -1947,7 +1947,7 @@ general {
 	 *
 	 * If enabled, you can tell ChanServ to join via SET GUARD ON.
 	 *
-	 * If you use ircu-like ircd (asuka, bircd), you must
+	 * If you use ircu-like ircd (asuka), you must
 	 * leave this enabled, and put guard in default cflags.
 	 *
 	 * For ratbox it is recommended to leave it on and put guard in 
