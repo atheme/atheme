@@ -29,7 +29,8 @@ SRCS = \
 	shadowircd.c	\
 	ts6-generic.c	\
 	undernet.c	\
-	unreal.c
+	unreal.c	\
+	unreal4.c
 
 include ../../extra.mk
 include ../../buildsys.mk
