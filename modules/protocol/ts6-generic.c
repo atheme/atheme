@@ -517,6 +517,11 @@ static void ts6_sasl_sts(char *target, char mode, char *data)
 			data);
 }
 
+static void ts6_sasl_mechlist_sts(const char *mechlist)
+{
+	sts(":%s ENCAP * MECHLIST :%s", ME, mechlist);
+}
+
 static void ts6_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *mu)
 {
 	if (use_euid)
@@ -1492,6 +1497,7 @@ void _modinit(module_t * m)
 	holdnick_sts = &ts6_holdnick_sts;
 	svslogin_sts = &ts6_svslogin_sts;
 	sasl_sts = &ts6_sasl_sts;
+	sasl_mechlist_sts = &ts6_sasl_mechlist_sts;
 	is_valid_host = &ts6_is_valid_host;
 	mlock_sts = &ts6_mlock_sts;
 	dline_sts = &ts6_dline_sts;
