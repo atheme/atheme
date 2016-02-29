@@ -297,6 +297,11 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	csreq_destroy(cs);
+	/* Check if GUARD is enabled by default and if so, ChanServ should join even 
+	 * if the founder is no longer present or identified. --siniStar
+	 */
+	if (mc->flags & MC_GUARD)
+		join(mc->name, chansvs.nick);
 	logcommand(si, CMDLOG_ADMIN, "ACTIVATE: \2%s\2", parv[0]);
 }
 
