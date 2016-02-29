@@ -222,6 +222,14 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "FANTASY");
 	}
+	
+	if (MC_NOSYNC & mc->flags)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "NOSYNC");
+	}
 
 	if (use_channel_private && MC_PRIVATE & mc->flags)
 	{
