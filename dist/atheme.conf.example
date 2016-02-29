@@ -636,6 +636,7 @@ loadmodule "modules/saslserv/authcookie";
  * VHOST and LISTVHOST commands                 modules/hostserv/vhost
  * VHOSTNICK command                            modules/hostserv/vhostnick
  * GROUP command                                modules/hostserv/group
+ * DROP command                                 modules/hostserv/drop
  */
 #loadmodule "modules/hostserv/main";
 #loadmodule "modules/hostserv/help";
@@ -645,6 +646,7 @@ loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/hostserv/vhost";
 #loadmodule "modules/hostserv/vhostnick";
 #loadmodule "modules/hostserv/group";
+#loadmodule "modules/hostserv/drop";
 
 /* HelpServ modules.
  * HelpServ allows users to request help from network staff in a few different ways.
