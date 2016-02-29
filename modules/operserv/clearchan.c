@@ -4,6 +4,9 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
+ * 
+ * Default AKILL time is 7 days (604800 seconds)
+ *
  */
 
 #include "atheme.h"
@@ -45,6 +48,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	char reason[512];
 	int matches = 0;
 	int ignores = 0;
+	kline_t *k;
 
 	if (!actionstr || !targchan || !treason)
 	{
@@ -121,7 +125,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 								cu->user->nick, cu->user->user, cu->user->host);
 					} else {
 						if (! (cu->user->flags & UF_KLINESENT)) {
-							kline_sts("*", "*", cu->user->host, 604800, reason);
+							k = kline_add(cu->user->user, cu->user->host, reason, 604800, "*");
 							cu->user->flags |= UF_KLINESENT;
 						}
 					}
