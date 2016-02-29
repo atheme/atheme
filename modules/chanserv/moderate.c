@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2016 Atheme Development Group <http://atheme.github.io>
  * Copyright (c) 2012 William Pitcock <nenolod@dereferenced.org>.
  *
  * Permission to use, copy, modify, and/or distribute this software for any
@@ -25,7 +26,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/moderate", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	"Atheme Development Group <http://atheme.github.io>"
 );
 
 static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
@@ -34,11 +35,11 @@ static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
 static void can_register(hook_channel_register_check_t *req);
 
 static command_t cs_activate = { "ACTIVATE", N_("Activates a pending registration"), PRIV_CHAN_ADMIN,
-				 2, cs_cmd_activate, { .path = "chanserv/activate" } };
+				 2, cs_cmd_activate, { .path = "cservice/activate" } };
 static command_t cs_reject   = { "REJECT", N_("Rejects a pending registration"), PRIV_CHAN_ADMIN,
-				 2, cs_cmd_reject, { .path = "chanserv/reject" } };
+				 2, cs_cmd_reject, { .path = "cservice/reject" } };
 static command_t cs_waiting  = { "WAITING", N_("View pending registrations"), PRIV_CHAN_ADMIN,
-				 1, cs_cmd_waiting, { .path = "chanserv/waiting" } };
+				 1, cs_cmd_waiting, { .path = "cservice/waiting" } };
 
 typedef struct {
 	char *name;
