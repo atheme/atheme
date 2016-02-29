@@ -284,14 +284,14 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 		                        !(cu->modes & CSTATUS_OWNER))
         		{
 		                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-        	        	                ircd->owner_mchar[1], CLIENT_NAME(si->su));
+        	        	                ircd->owner_mchar[1], CLIENT_NAME(u));
         		        cu->modes |= CSTATUS_OWNER;
 		        }
         		else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
 	        	                !(cu->modes & CSTATUS_PROTECT))
 		        {
 		                modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-                		                ircd->protect_mchar[1], CLIENT_NAME(si->su));
+                		                ircd->protect_mchar[1], CLIENT_NAME(u));
         	        	cu->modes |= CSTATUS_PROTECT;
 		        }
 		}
