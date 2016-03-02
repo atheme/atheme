@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2010 Atheme Development Group
+ * Copyright (c) 2005-2016 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains version information.
@@ -13,7 +13,7 @@ const char *revision = SERNO;
 const char *infotext[] =
 {
   "Atheme IRC Services --",
-  "Copyright (c) 2005-2015 Atheme Development Group (http://www.atheme.org)",
+  "Copyright (c) 2005-2016 Atheme Development Group (http://atheme.github.io)",
   "Portions copyright (c) 2004 Shrike Developers (http://www.malkier.net)",
   " ",
   "Permission to use, copy, modify, and/or distribute this software for any",
@@ -33,14 +33,18 @@ const char *infotext[] =
   " ",
   "Currently Atheme's core group consists of the following developers,",
   "in nick-alphabetical order:",
+  "  ilbelkyr, Janik Kleinhoff <janik@kleinhoff.de>",
+  "  mt, Max Teufel <max@teufelsnetz.com>",
+  "  siniStar, Austin Ellis <siniStar@IRC4Fun.net>",
+  " ",
+  "The following people have contributed blood, sweat and tears to",
+  "Atheme:",
   "  elly, Elly <elly@leptoquark.net>",
   "  jdhore, JD Horelick <jdhore1@gmail.com>",
   "  jilles, Jilles Tjoelker <jilles@stack.nl>",
-  "  nenolod, William Pitcock <nenolod@nenolod.net>",
+  "  kaniini, William Pitcock <nenolod@nenolod.net>",
   "  spb, Stephen Bennett <spb@exherbo.org>",
   " ",
-  "The following people have contributed blood, sweat and tears to",
-  "this Atheme release:",
   "  Adam, Adam <adam@sigterm.info>",
   "  aji, Alex Iadicicco <alex@ajitek.net>",
   "  alambert, Alex Lambert <alambert@quickfire.org>",
@@ -72,6 +76,6 @@ const char *infotext[] =
   "  rintaun, Matt Lanigan <rintaun@projectxero.net>",
   "  sycobuny, Stephen Belcher <sycobuny@malkier.net>",
   " ",
-  "Visit our website at http://www.atheme.net",
+  "Visit our website at http://atheme.github.io",
   0,
 };
