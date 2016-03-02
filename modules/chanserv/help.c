@@ -62,10 +62,9 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		{
 			command_success_nodata(si, _("Please note that channels will expire if there are no eligible channel successors."));
 		}
-		command_success_nodata(si, _("Successors are primarily those who have the +R flag\n"
-					"set on their account in the channel, although other\n"
-					"people may be chosen depending on their access\n"
-					"level and activity."));
+		command_success_nodata(si, _("Successors are primarily those who have the +S (if available) or +R flag\n"
+					"set on their account in the channel, although other people may be chosen\n"
+					"depending on their access level and activity."));
 		command_success_nodata(si, " ");
 		if (chansvs.fantasy && config_options.join_chans && chansvs.trigger != '\0')
 		{
