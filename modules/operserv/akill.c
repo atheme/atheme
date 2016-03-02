@@ -495,7 +495,13 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 
 	MOWGLI_ITER_FOREACH(n, klnlist.head)
 	{
+		struct tm tm;
+		char settime[64];
+ 
 		k = (kline_t *)n->data;
+		
+		tm = *localtime(&k->settime);
+		strftime(settime, sizeof settime, TIME_FORMAT, &tm);
 
 		if (num != 0 && k->number != num)
 			continue;
@@ -505,13 +511,13 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		if (k->duration && full)
-			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 on %s - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, settime, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
 		else if (k->duration && !full)
-			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - expires in \2%s\2"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 on %s - expires in \2%s\2"), k->number, k->user, k->host, k->setby, settime, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
 		else if (!k->duration && full)
-			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - \2permanent\2 - (%s)"), k->number, k->user, k->host, k->setby, k->reason);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 on %s - \2permanent\2 - (%s)"), k->number, k->user, k->host, k->setby, settime, k->reason);
 		else
-			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - \2permanent\2"), k->number, k->user, k->host, k->setby);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 on %s - \2permanent\2"), k->number, k->user, k->host, k->setby, settime);
 	}
 
 	if (user || host || num)
