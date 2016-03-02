@@ -1,0 +1,9 @@
+Help for SET GROUPNAME:
+
+SET GROUPNAME allows you to change or set the name of your group.
+This is shown when a user requests info about the group.
+
+Syntax: SET <!OldGroupName> GROUPNAME <!NewGroupName>
+
+Example:
+    /msg &nick& SET !OldGroup GROUPNAME !NewGroup
