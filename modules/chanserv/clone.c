@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Atheme Development Group
+ * Copyright (c) 2010-2016 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService CLONE functions.
@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/clone", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	"Atheme Development Group <http://atheme.github.io>"
 );
 
 static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);
@@ -133,6 +133,14 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Copy channel flags */
 	mc2->flags = mc->flags;
+
+	/* Do not copy over a HOLD, as it can be manually placed if it is 
+		required by the target channel. (It should not get it by default)
+								-siniStar */
+	if (MC_HOLD & mc2->flags)
+	{
+				mc2->flags &= ~MC_HOLD;
+	}
 
 	command_add_flood(si, FLOOD_MODERATE);
 
