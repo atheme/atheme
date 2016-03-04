@@ -126,12 +126,15 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_PATRICIA_FOREACH(md, &state, object(mc)->metadata)
 	{
 		if(!strncmp(md->name, "private:topic:", 14))
-				continue;
+		{
 			continue;
+		}
 
 		/* Strip out private:mark data --shaynejellesma */
 		if(!strncmp(md->name, "private:mark:", 13))
-				continue;
+		{
+			continue;
+		}
 
 		/* Replace ANTIFLOOD AKILL with QUIET if it exists --shaynejellesma */
 		if((strcasecmp(md->name, "private:antiflood:enforce-method") == 0) && (strcasecmp(md->value, "AKILL") == 0))
