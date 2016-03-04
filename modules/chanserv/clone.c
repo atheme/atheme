@@ -127,6 +127,18 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if(!strncmp(md->name, "private:topic:", 14))
 				continue;
+			continue;
+
+		/* Strip out private:mark data --shaynejellesma */
+		if(!strncmp(md->name, "private:mark:", 13))
+				continue;
+
+		/* Replace ANTIFLOOD AKILL with QUIET if it exists --shaynejellesma */
+		if((strcasecmp(md->name, "private:antiflood:enforce-method") == 0) && (strcasecmp(md->value, "AKILL") == 0))
+		{
+			metadata_add(mc2, md->name, "QUIET");
+			continue;
+		}
 
 		metadata_add(mc2, md->name, md->value);
 	}
@@ -134,13 +146,9 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	/* Copy channel flags */
 	mc2->flags = mc->flags;
 
-	/* Do not copy over a HOLD, as it can be manually placed if it is 
-		required by the target channel. (It should not get it by default)
-								-siniStar */
-	if (MC_HOLD & mc2->flags)
-	{
-				mc2->flags &= ~MC_HOLD;
-	}
+	/* Remove HOLD flag if it exists --shaynejellesma */
+	if (mc2->flags & MC_HOLD)
+		mc2->flags &= ~MC_HOLD;
 
 	command_add_flood(si, FLOOD_MODERATE);
 
