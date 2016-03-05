@@ -192,83 +192,63 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/*
-	 * following conditions are for compatibility with Anope just to avoid a whole clusterfuck
-	 * of confused users caused by their 'innovation.'  yeah, that's a word for it alright.
-	 *
-	 * anope 1.9's shiny new FLAGS command has:
-	 *
-	 * FLAGS #channel LIST
-	 * FLAGS #channel MODIFY user flagspec
-	 * FLAGS #channel CLEAR
-	 *
-	 * obviously they do not support the atheme syntax, because lets face it, they like to
-	 * 'innovate.'  this is, of course, hilarious for obvious reasons.  never mind that we
-	 * *invented* the FLAGS system for channel ACLs, so you would think they would find it
-	 * worthwhile to be compatible here.  i guess that would have been too obvious or something
-	 * about their whole 'stealing our design' thing that they have been doing in 1.9 since the
-	 * beginning...  or do i mean 'innovating?'
-	 *
-	 * anyway we rewrite the commands as appropriate in the two if blocks below so that they
-	 * are processed by the flags code as the user would intend.  obviously, we're not really
-	 * capable of handling the anope flag model (which makes honestly zero sense to me, and is
-	 * extremely complex which kind of misses the entire point of the flags UI design...) so if
-	 * some user tries passing anope flags, it will probably be hilarious.  the good news is
-	 * most of the anope flags tie up to atheme flags in some weird way anyway (probably because,
-	 * i don't know, they copied the entire design and then fucked it up?  yeah.  probably that.)
-	 *
-	 *   --nenolod
-	 */
-	else if (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
-	{
-		do_list(si, mc, 0);
-		free(target);
-
-		return;
-	}
-	else if (!strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
-	{
-		free(target);
-
-		if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
-		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-			return;
-		}
-
-		mowgli_node_t *tn;
-
-		MOWGLI_ITER_FOREACH_SAFE(n, tn, mc->chanacs.head)
-		{
-			ca = n->data;
-
-			if (ca->level & CA_FOUNDER)
-				continue;
-
-			object_unref(ca);
-		}
-
-		logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
-		command_success_nodata(si, _("Cleared flags in \2%s\2."), mc->name);
-		return;
-	}
-	else if (!strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
-	{
-		free(target);
-
-		if (parc < 3)
-		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
-			command_fail(si, fault_needmoreparams, _("Syntax: FLAGS <#channel> MODIFY [target] <flags>"));
-			return;
-		}
-
-		flagstr = strchr(parv[2], ' ');
-		if (flagstr)
-			*flagstr++ = '\0';
-
-		target = strdup(parv[2]);
-	}
-
+	 * There used to be Anope compatibility here, adding support for
+ 	 * "/msg ChanServ flags #channel modify/clear/list". 
+ 	 * It seemed to be a feature, but it was completely weird,
+ 	 * because any user could register the nicks "clear", "modify" and "list",
+ 	 * changing the behavior of ChanServ's commands on the whole IRC network.
+ 	 * 
+ 	 * #### before registration:
+	 * "/msg ChanServ flags #channel list"
+	 * --> shows the flags for #channel
+	 * "/msg ChanServ flags #channel modify Username +-modification"
+	 * --> modifies the flags for Username on #channel
+	 * "/msg ChanServ flags #channel clear"
+	 * --> clears the channel's flags (!)
+	 * 
+	 * #### after registration:
+	 * "/msg ChanServ flags #channel list"
+	 * --> shows the flags for the user who grouped the nick "list"
+	 * "/msg ChanServ flags #channel modify Username +-modification"
+	 * --> [ChanServ] Invalid template name given, use /msg ChanServ TEMPLATE #channel for a list (!)
+	 * "/msg ChanServ flags #channel clear"
+	 * --> shows the flags for the user who grouped the nick "clear"
+ 	 *
+ 	 * This has also been a security issue:
+ 	 * If Alice uses the nick "clear" and the founder of #channel
+ 	 * wants to give them privileges, Alice could quickly drop/ungroup
+ 	 * their "clear" nick to cause the founder to clear their whole #channel flags list.
+ 	 * This can be *very* annoying and hard to restore.
+ 	 * As it - as far as I know - also includes all AKICK entries,
+ 	 * it could even be abused to cause the founder to unban all people on the AKICK list.
+ 	 *
+ 	 * Another example:
+ 	 * If there is someone who has a nick that matches a template,
+ 	 * the FLAGS MODIFY command can be abused. Let's say Alice added "lover"
+ 	 * as a template for +AVeiorstv in their #channel (this actually happened).
+ 	 * Alice is used to the Anope compatibility syntax and wants to give
+ 	 * the user "LoVeR" the +V flag, and nothing more.
+ 	 *
+ 	 * Alice now wants to use the following command to first check the current flags of LoVeR:
+	 * /msg ChanServ flags #channel modify LoVeR
+	 * --> Expected result: [ChanServ] No flags for LoVeR in #channel.
+	 * Alice would like to use
+	 * "/msg ChanServ flags #channel modify LoVeR +V" to give "LoVeR" the needed flag.
+	 * However, LoVeR quickly and silently, for example using an identified
+	 * webchat in the background, groups the "modify" nick to their account.
+	 * Now Alice uses the command:
+	 * "/msg ChanServ flags #channel modify LoVeR"
+	 * ...to see LoVeR's flags on #channel, as that has always worked like this.
+	 * They got used to this Anope command syntax and are happy to be able to use it here, too.
+	 * However, as "modify" is now grouped, the command will produce the following result:
+	 * --> [ChanServ] Flags +AVeiorstv were set on LoVeR in #channel.
+	 * Whoops, LoVeR got some permissions they should not have received,
+	 * by changing the behavior of a services command just by grouping the "modify" nick
+	 * to their account. Before someone understands what happened, LoVeR abuses their privileges.
+ 	 * 
+ 	 * This is why this "feature" has been removed. ~ToBeFree
+ 	 */
+	
 	{
 		myentity_t *mt;
 
