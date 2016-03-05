@@ -258,6 +258,8 @@ void services_init(void)
 			kill_id_sts(NULL, svs->nick, "Attempt to use service nick");
 		introduce_nick(svs->me);
 	}
+
+	hook_add_event("user_can_login");
 }
 
 void joinall(const char *name)
@@ -575,6 +577,7 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	myuser_t *mu;
 	mycertfp_t *mcfp;
 	service_t *svs;
+	hook_user_login_check_t req;
 
 	free(u->certfp);
 	u->certfp = sstrdup(certfp);
@@ -600,6 +603,15 @@ void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp)
 	if (MOWGLI_LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
 		notice(svs->me->nick, u->nick, _("There are already \2%zu\2 sessions logged in to \2%s\2 (maximum allowed: %u)."), MOWGLI_LIST_LENGTH(&mu->logins), entity(mu)->name, me.maxlogins);
+		return;
+	}
+
+	req.si = si;
+	req.mu = mu;
+	req.allowed = true;
+	hook_call_user_can_login(&req);
+	if (!req.allowed)
+	{
 		return;
 	}
 
