@@ -176,7 +176,7 @@ static void check_registration_keywords(hook_user_register_check_t *hdata)
 
 	if (!strcasecmp(hdata->account, "LIST") || !strcasecmp(hdata->account, "CLEAR") || !strcasecmp(hdata->account, "MODIFY"))
 	{
-		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);
+		command_fail(hdata->si, fault_badparams, _("The nick \2%s\2 is reserved and cannot be registered."), hdata->account);
 		hdata->approved = 1;
 	}
 }

@@ -531,7 +531,7 @@ static void check_registration(hook_user_register_check_t *hdata)
 
 	if (!strncasecmp(hdata->account, nicksvs.enforce_prefix, prefixlen) && isdigit((unsigned char)hdata->account[prefixlen]))
 	{
-		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);
+		command_fail(hdata->si, fault_badparams, _("The nick \2%s\2 is reserved and cannot be registered."), hdata->account);
 		hdata->approved = 1;
 	}
 }
