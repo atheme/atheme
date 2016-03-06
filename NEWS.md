@@ -2,8 +2,8 @@ Atheme Services 7.2 Development Notes
 =====================================
 
 As of late February 2016, Atheme is being brought back to live development (managed 
-and maintained by a few of the fork maintainers.  We look forward to bringing Atheme
-back into it's spotlight.  Stay tuned for new developements, fixes, and releases.
+and maintained by a few of the fork maintainers). We look forward to bringing Atheme
+back into its spotlight.  Stay tuned for new developments, fixes, and releases.
 
 nickserv
 --------
