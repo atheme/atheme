@@ -17,18 +17,35 @@ DECLARE_MODULE_V1
 );
 
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
+static void check_registration_keywords(hook_user_register_check_t *hdata);
 
 command_t cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channel."),
                         AC_NONE, 3, cs_cmd_flags, { .path = "cservice/flags" } };
 
+static bool anope_flags_compat = true;
+
 void _modinit(module_t *m)
 {
 	service_named_bind_command("chanserv", &cs_flags);
+
+	add_bool_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table, 0, &anope_flags_compat, true);
+
+	hook_add_event("nick_can_register");
+	hook_add_nick_can_register(check_registration_keywords);
+
+	hook_add_event("user_can_register");
+	hook_add_user_can_register(check_registration_keywords);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_flags);
+
+	hook_del_nick_can_register(check_registration_keywords);
+
+	hook_del_user_can_register(check_registration_keywords);
+
+	del_conf_item("ANOPE_FLAGS_COMPAT", &chansvs.me->conf_table);
 }
 
 typedef struct {
@@ -150,6 +167,20 @@ static void do_list(sourceinfo_t *si, mychan_t *mc, unsigned int flags)
 		logcommand(si, CMDLOG_GET, "FLAGS: \2%s\2", mc->name);
 }
 
+static void check_registration_keywords(hook_user_register_check_t *hdata)
+{
+	if (hdata->approved || !anope_flags_compat)
+	{
+		return;
+	}
+
+	if (!strcasecmp(hdata->account, "LIST") || !strcasecmp(hdata->account, "CLEAR") || !strcasecmp(hdata->account, "MODIFY"))
+	{
+		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);
+		hdata->approved = 1;
+	}
+}
+
 /* FLAGS <channel> [user] [flags] */
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -218,14 +249,14 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	 *
 	 *   --nenolod
 	 */
-	else if (!strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
+	else if (anope_flags_compat && !strcasecmp(target, "LIST") && myentity_find_ext(target) == NULL)
 	{
 		do_list(si, mc, 0);
 		free(target);
 
 		return;
 	}
-	else if (!strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
+	else if (anope_flags_compat && !strcasecmp(target, "CLEAR") && myentity_find_ext(target) == NULL)
 	{
 		free(target);
 
@@ -251,7 +282,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Cleared flags in \2%s\2."), mc->name);
 		return;
 	}
-	else if (!strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
+	else if (anope_flags_compat && !strcasecmp(target, "MODIFY") && myentity_find_ext(target) == NULL)
 	{
 		free(target);
 
