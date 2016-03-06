@@ -378,7 +378,7 @@ int valid_ip_or_mask(const char *src)
 
 	int is_ipv6 = (strchr(ipaddr, ':') != NULL);
 
-	if (mask = strchr(ipaddr, '/'))
+	if ((mask = strchr(ipaddr, '/')))
 	{
 		*mask++ = '\0';
 
