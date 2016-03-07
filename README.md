@@ -25,6 +25,6 @@ If you're still lost, read [INSTALL](INSTALL) or [GIT-Access](GIT-Access) for hi
 
 ## links / contact
 
- * [GitHub](http://www.github.com/atheme/atheme)
+ * [GitHub](https://github.com/atheme/atheme)
  * [Website](http://atheme.github.io/)
  * [IRC] irc://chat.freenode.net/ #atheme

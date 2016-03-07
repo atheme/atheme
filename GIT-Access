@@ -1,5 +1,5 @@
 The Atheme GIT repository can be checked out using the following command:
-	$ git clone git://github.com/atheme/atheme.git atheme-devel
+	$ git clone https://github.com/atheme/atheme.git atheme-devel
 	$ cd atheme-devel
 
 You should then run these commands to get the source for libmowgli-2 and
@@ -12,4 +12,4 @@ be present.
 
 Atheme's GIT repository depot can be browsed over the internet at 
 the following address:
-	http://github.com/atheme/atheme/
+	https://github.com/atheme/atheme/
