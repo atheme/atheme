@@ -1474,6 +1474,36 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
+/*
+ * :src MD <type> <object name> <variable name> <value>
+ * :virgule.cluenet.org MD client 1RGGFJS0G certfp :8ef42b0e3f6f7b9ca9ab841be34c4797e91be67a1bd8721217ef1f319debfe0e
+ */
+static void m_md(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *type = parv[0];
+	char *obj = parv[1];
+	char *key = parv[2];
+	char *value = (parc >= 4) ? parv[3] : NULL;
+
+	user_t *u;
+	channel_t *c;
+
+	if (!strcmp(type, "client"))
+	{
+		u = user_find(obj);
+		if (!u)
+		{
+			slog(LG_DEBUG, "m_md(): got metadata '%s' for unknown %s '%s'", key, type, obj);
+			return;
+		}
+
+		if (!strcmp(key, "certfp"))
+		{
+			handle_certfp(si, u, value);
+		}
+	}
+}
+
 static void nick_group(hook_user_req_t *hdata)
 {
 	user_t *u;
@@ -1599,6 +1629,7 @@ void _modinit(module_t * m)
 	pcommand_add("PROTOCTL", m_protoctl, 1, MSRC_UNREG);
 	pcommand_add("SASL", m_sasl, 4, MSRC_SERVER);
 	pcommand_add("MLOCK", m_mlock, 3, MSRC_SERVER);
+	pcommand_add("MD", m_md, 3, MSRC_SERVER);
 
 	hook_add_event("nick_group");
 	hook_add_nick_group(nick_group);
