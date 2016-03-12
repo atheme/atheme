@@ -8,25 +8,68 @@ Les critère actuels sont :
 PATTERN       - Tous les utilisateurs qui correpondent au pattern donné.
 EMAIL         - Tous les comptes enregistrés qui ont une adresse email
 	      	qui correspond au pattern donné.
+#if module nickserv/mark
 MARK-REASON   - Tous les comptes qui ont une raison de "marque" qui
-	      	correpond au pattern donné.
-FROZEN-REASON - Tous les comptes gelés qui ont un motif qui correpond
-	      	au pattern donné.
+	        correspond au pattern donné.
+#endif
+#if module nickserv/freeze
+FROZEN-REASON - Tous les comptes gelés qui ont un motif qui correspond
+	        au pattern donné.
+#endif
+#if module nickserv/restrict
+RESTRICT-REASON - Tous les comptes limités qui ont un motif qui correspond
+	        au pattern donné.
+#endif
+#if module nickserv/hold
 HOLD          - Tous les utilisateurs avec le flag HOLD actif.
+#endif
+#if module nickserv/set_noop
 NOOP          - Tous les utilisateurs avec le flag NOOP actif.
+#endif
+#if module nickserv/set_neverop
 NEVEROP       - Tous les utilisateurs avec le flag NEVEROP actif.
+#endif
 WAITAUTH      - Tous les utilisateurs avec le flag WAITAUTH actif.
+#if module nickserv/set_hidemail
 HIDEMAIL      - Tous les utilisateurs avec le flag HIDEMAIL actif.
+#endif
+#if module nickserv/set_nomemo
 NOMEMO        - Tous les utilisateurs avec le flag NOMEMO actif.
+#endif
+#if module nickserv/set_emailmemos
 EMAILMEMOS    - Tous les utilisateurs avec le flag EMAILMEMOS actif.
+#endif
+#if module nickserv/set_privmsg
 USE-PRIVMSG   - Tous les utilisateurs avec le flag USEPRIVMSG actif.
+#endif
+#if module nickserv/set_quietchg
 QUIETCHG      - Tous les utilisateurs avec le flag QUIETCHG actif.
+#endif
+#if module nickserv/set_nogreet
 NOGREET       - Tous les utilisateurs avec le flag NOGREET actif.
+#endif
+#if module nickserv/set_private
 PRIVATE       - Tous les utilisateurs avec le flag PRIVATE actif.
+#endif
+#if module nickserv/set_nopassword
+NOPASSWORD    - Tous les utilisateurs avec le flag NOPASSWORD actif.
+#endif
+#if module nickserv/regnolimit
 REGNOLIMIT    - Tous les utilisateurs avec le flag REGNOLIMIT actif.
+#end
 
+#if module nickserv/freeze
 FROZEN        - Tous les utilisateurs gelés par l'équipe du réseau.
+#endif
+#if module nickserv/mark
 MARKED        - Tous les utilisateurs marqués par l'équipe du réseau.
+#endif
+#if module nickserv/restricted
+RESTRICTED    - Tous les utilisateurs limités par l'équipe du réseau.
+#endif
+#if module nickserv/vacation
+VACATION      - Tous les utilisateurs marqués d'être en vacances.
+#endif
 REGISTERED    - Les comptes d'utilisateurs enregistrés depuis plus longtemps
 	      	que l'âge donné.
 LASTLOGIN     - Les comptes utilisateurs non utilisés depuis plus de l'âge donné.
