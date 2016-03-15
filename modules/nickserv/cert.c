@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2010 Atheme Development Group
+ * Copyright (c) 2006-2016 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Changes and shows nickname CertFP authentication lists.
@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/cert", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	"Atheme Development Group <http://atheme.github.io>"
 );
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
@@ -33,14 +33,56 @@ void _moddeinit(module_unload_intent_t intent)
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	mowgli_node_t *n;
+	mowgli_node_t *n, *tn;
 	char *mcfp;
 	mycertfp_t *cert;
 
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CERT");
-		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST [fingerprint]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST|CLEAR [fingerprint]"));
+		return;
+	}
+
+	if (!strcasecmp(parv[0], "CLEAR"))
+	{
+		if (parc < 2)
+		{
+			mu = si->smu;
+			if (mu == NULL)
+			{
+				command_fail(si, fault_noprivs, _("You are not logged in."));
+				return;
+			}
+		}
+		else
+		{
+			if (!has_priv(si, PRIV_USER_AUSPEX))
+			{
+				command_fail(si, fault_noprivs, _("You are not authorized to use the target argument."));
+				return;
+			}
+
+			if (!(mu = myuser_find_ext(parv[1])))
+			{
+				command_fail(si, fault_badparams, _("\2%s\2 is not registered."), parv[1]);
+				return;
+			}
+		}
+
+		if (mu != si->smu)
+			logcommand(si, CMDLOG_ADMIN, "CERT:CLEAR: \2%s\2", entity(mu)->name);
+		else
+			logcommand(si, CMDLOG_GET, "CERT:CLEAR");
+
+		command_success_nodata(si, _("Clearing all fingerprints for \2%s\2:"), entity(mu)->name);
+
+		MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->cert_fingerprints.head)
+		{
+			mycertfp_delete((mycertfp_t *) n->data);
+		}
+
+		command_success_nodata(si, _("All fingerprints for \2%s\2 have been removed."), entity(mu)->name);
 		return;
 	}
 
@@ -158,7 +200,7 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "CERT");
-		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST [fingerprint]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: CERT ADD|DEL|LIST|CLEAR [fingerprint]"));
 		return;
 	}
 }
