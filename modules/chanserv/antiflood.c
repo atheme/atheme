@@ -27,8 +27,8 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org/>"
 );
 
-static int antiflood_msg_time = 60;
-static int antiflood_msg_count = 10;
+static time_t antiflood_msg_time = 60;
+static size_t antiflood_msg_count = 10;
 
 #define METADATA_KEY_ENFORCE_METHOD	"private:antiflood:enforce-method"
 
