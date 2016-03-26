@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/vhost", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void vhost_on_identify(user_t *u);

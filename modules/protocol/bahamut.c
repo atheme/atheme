@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
 

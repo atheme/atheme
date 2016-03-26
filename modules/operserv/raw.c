@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"operserv/raw", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);

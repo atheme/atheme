@@ -11,7 +11,7 @@ DECLARE_MODULE_V1
 (
 	"memoserv/sendall", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[]);

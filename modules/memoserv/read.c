@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"memoserv/read", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 #define MAX_READ_AT_ONCE 5

@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"hostserv/main", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void on_user_identify(user_t *u);

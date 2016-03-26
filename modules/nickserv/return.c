@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/return", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[]);

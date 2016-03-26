@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/freeze", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);

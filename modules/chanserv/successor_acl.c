@@ -11,7 +11,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/successor_acl", true, _modinit, NULL,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static unsigned int successor_flag = 0;

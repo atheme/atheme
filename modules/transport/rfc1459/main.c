@@ -29,7 +29,7 @@ DECLARE_MODULE_V1
 (
 	"transport/rfc1459", true, _modinit, _moddeinit,
 	PACKAGE_VERSION,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 void _modinit(module_t *m)

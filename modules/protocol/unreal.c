@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
 
 static bool has_protoctl = false;
 static bool use_esvid = false;

@@ -11,7 +11,7 @@ DECLARE_MODULE_V1
 (
 	"exttarget/channel", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static mowgli_patricia_t **exttarget_tree = NULL;

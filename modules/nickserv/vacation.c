@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/vacation", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])

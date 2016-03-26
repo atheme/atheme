@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/clone", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
+	VENDOR_STRING
 );
 
 static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);

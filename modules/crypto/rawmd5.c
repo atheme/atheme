@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"crypto/rawmd5", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 #define RAWMD5_PREFIX "$rawmd5$"
