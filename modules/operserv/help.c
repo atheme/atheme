@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"operserv/help", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[]);

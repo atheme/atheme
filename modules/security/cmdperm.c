@@ -20,7 +20,7 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("security/cmdperm", false, _modinit, _moddeinit, PACKAGE_VERSION, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("security/cmdperm", false, _modinit, _moddeinit, PACKAGE_VERSION, VENDOR_STRING);
 
 static bool (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = NULL;
 

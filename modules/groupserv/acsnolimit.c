@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"groupserv/acsnolimit", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);

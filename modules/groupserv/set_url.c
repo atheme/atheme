@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"groupserv/set_url", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void gs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);

@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"operserv/clones", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 #define CLONESDB_VERSION	3

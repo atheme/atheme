@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"operserv/rehash", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[]);

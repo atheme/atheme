@@ -37,7 +37,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("protocol/ts6-generic", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ts6-generic", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
 
 static bool use_rserv_support = false;
 static bool use_tb = false;

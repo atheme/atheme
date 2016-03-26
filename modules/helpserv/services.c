@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"helpserv/services", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void helpserv_cmd_services(sourceinfo_t *si, int parc, char *parv[]);

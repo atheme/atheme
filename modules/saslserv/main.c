@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"saslserv/main", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 mowgli_list_t sessions;

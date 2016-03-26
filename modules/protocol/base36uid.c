@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("protocol/base36uid", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/base36uid", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
 
 static char new_uid[10]; /* allow for \0 */
 static unsigned int uindex = 0;

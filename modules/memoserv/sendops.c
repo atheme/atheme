@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"memoserv/sendops", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[]);

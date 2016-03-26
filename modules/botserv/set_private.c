@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"botserv/set_private", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 mowgli_patricia_t **bs_set_cmdtree;

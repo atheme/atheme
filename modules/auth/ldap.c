@@ -28,7 +28,7 @@
 
 #include <ldap.h>
 
-DECLARE_MODULE_V1("auth/ldap", false, _modinit, _moddeinit, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("auth/ldap", false, _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_list_t conf_ldap_table;
 struct

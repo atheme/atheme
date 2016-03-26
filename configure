@@ -4832,6 +4832,10 @@ VERSION=7.2.6
 
 
 
+$as_echo "#define VENDOR_STRING \"Atheme Development Group <http://atheme.github.io>\"" >>confdefs.h
+
+
+
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE "$PACKAGE"
 _ACEOF

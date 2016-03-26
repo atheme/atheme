@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/set_guard", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void cs_set_guard_config_ready(void *unused);

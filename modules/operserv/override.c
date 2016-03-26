@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"operserv/override", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);

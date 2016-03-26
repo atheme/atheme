@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"misc/canon_gmail", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)

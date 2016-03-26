@@ -13,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"hostserv/onoff", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);

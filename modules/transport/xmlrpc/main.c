@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 (
 	"transport/xmlrpc", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 static void handle_request(connection_t *cptr, void *requestbuf);

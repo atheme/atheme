@@ -29,7 +29,7 @@ DECLARE_MODULE_V1
 (
 	"transport/p10", true, _modinit, _moddeinit,
 	PACKAGE_VERSION,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 /* parses a P10 IRC stream */

@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 (
 	"protocol/mixin_nohalfops", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 bool oldflag;

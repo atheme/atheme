@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"botserv/info", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.org/>"
+	VENDOR_STRING
 );
 
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);

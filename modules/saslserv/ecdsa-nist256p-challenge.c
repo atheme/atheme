@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 (
 	"saslserv/ecdsa-nist256p-challenge", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 sasl_mech_register_func_t *regfuncs;

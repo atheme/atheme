@@ -17,7 +17,7 @@ DECLARE_MODULE_V1
 (
 	"scripting/perl", false, _modinit, _moddeinit,
 	"$Id$",
-	"Atheme Development Group <http://www.atheme.org>"
+	VENDOR_STRING
 );
 
 /*
