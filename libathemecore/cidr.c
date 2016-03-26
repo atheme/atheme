@@ -42,13 +42,13 @@
 /* compares the first 'mask' bits
  * returns 1 if equal, 0 if not */
 static int
-comp_with_mask(void *addr, void *dest, u_int mask)
+comp_with_mask(void *addr, void *dest, unsigned int mask)
 {
 	if (memcmp(addr, dest, mask / 8) == 0)
 	{
 		int n = mask / 8;
 		int m = ((-1) << (8 - (mask % 8)));
-		if (mask % 8 == 0 || (((u_char *) addr)[n] & m) == (((u_char *) dest)[n] & m))
+		if (mask % 8 == 0 || (((unsigned char *) addr)[n] & m) == (((unsigned char *) dest)[n] & m))
 		{
 			return (1);
 		}
@@ -90,10 +90,10 @@ comp_with_mask(void *addr, void *dest, u_int mask)
  *	Paul Vixie, 1996.
  */
 static int
-inet_pton4(const char *src, u_char *dst)
+inet_pton4(const char *src, unsigned char *dst)
 {
 	int saw_digit, octets, ch;
-	u_char tmp[INADDRSZ], *tp;
+	unsigned char tmp[INADDRSZ], *tp;
 
 	saw_digit = 0;
 	octets = 0;
@@ -103,7 +103,7 @@ inet_pton4(const char *src, u_char *dst)
 
 		if(ch >= '0' && ch <= '9')
 		{
-			u_int new = *tp * 10 + (ch - '0');
+			unsigned int new = *tp * 10 + (ch - '0');
 
 			if(new > 255)
 				return (0);
@@ -145,13 +145,13 @@ inet_pton4(const char *src, u_char *dst)
  *	Paul Vixie, 1996.
  */
 static int
-inet_pton6(const char *src, u_char *dst)
+inet_pton6(const char *src, unsigned char *dst)
 {
 	static const char xdigits[] = "0123456789abcdef";
-	u_char tmp[IN6ADDRSZ], *tp, *endp, *colonp;
+	unsigned char tmp[IN6ADDRSZ], *tp, *endp, *colonp;
 	const char *curtok;
 	int ch, saw_xdigit;
-	u_int val;
+	unsigned int val;
 
 	tp = memset(tmp, '\0', IN6ADDRSZ);
 	endp = tp + IN6ADDRSZ;
@@ -193,8 +193,8 @@ inet_pton6(const char *src, u_char *dst)
 			}
 			if(tp + INT16SZ > endp)
 				return (0);
-			*tp++ = (u_char) (val >> 8) & 0xff;
-			*tp++ = (u_char) val & 0xff;
+			*tp++ = (unsigned char) (val >> 8) & 0xff;
+			*tp++ = (unsigned char) val & 0xff;
 			saw_xdigit = 0;
 			val = 0;
 			continue;
@@ -214,8 +214,8 @@ inet_pton6(const char *src, u_char *dst)
 	{
 		if(tp + INT16SZ > endp)
 			return (0);
-		*tp++ = (u_char) (val >> 8) & 0xff;
-		*tp++ = (u_char) val & 0xff;
+		*tp++ = (unsigned char) (val >> 8) & 0xff;
+		*tp++ = (unsigned char) val & 0xff;
 	}
 	if(colonp != NULL)
 	{
@@ -369,7 +369,7 @@ match_cidr(const char *s1, const char *s2)
 int valid_ip_or_mask(const char *src)
 {
 	char ipaddr[HOSTLEN + 6];
-	u_char buf[IN6ADDRSZ];
+	unsigned char buf[IN6ADDRSZ];
 	char *mask, *end;
 	unsigned long cidrlen;
 

@@ -141,7 +141,7 @@ void set_match_mapping(int type)
 
 int match(const char *mask, const char *name)
 {
-	const u_char *m = (const u_char *)mask, *n = (const u_char *)name;
+	const unsigned char *m = (const unsigned char *)mask, *n = (const unsigned char *)name;
 	const char *ma = mask, *na = name;
 	int wild = 0, q = 0, calls = 0;
 
@@ -172,14 +172,14 @@ int match(const char *mask, const char *name)
 		{
 			if (!*n)
 				return 0;
-			for (m--; (m > (const u_char *) mask) && (*m == '?' || *m == '&' || *m == '#'); m--)
+			for (m--; (m > (const unsigned char *) mask) && (*m == '?' || *m == '&' || *m == '#'); m--)
 				;
-			if ((m > (const u_char *) mask) && (*m == '*') && (m[-1] != '\\'))
+			if ((m > (const unsigned char *) mask) && (*m == '*') && (m[-1] != '\\'))
 				return 0;
 			if (!wild)
 				return 1;
-			m = (const u_char *) ma;
-			n = (const u_char *)++ na;
+			m = (const unsigned char *) ma;
+			n = (const unsigned char *)++ na;
 		}
 		else if (!*n)
 			return 1;
@@ -195,8 +195,8 @@ int match(const char *mask, const char *name)
 		{
 			if (!wild)
 				return 1;
-			m = (const u_char *) ma;
-			n = (const u_char *)++ na;
+			m = (const unsigned char *) ma;
+			n = (const unsigned char *)++ na;
 		}
 		else
 		{
