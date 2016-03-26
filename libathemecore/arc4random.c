@@ -64,14 +64,14 @@
 static int rs_initialized;
 static pid_t rs_stir_pid;
 static chacha_ctx rs;		/* chacha context for random keystream */
-static u_char rs_buf[RSBUFSZ];	/* keystream blocks */
+static unsigned char rs_buf[RSBUFSZ];	/* keystream blocks */
 static size_t rs_have;		/* valid bytes at end of rs_buf */
 static size_t rs_count;		/* bytes till reseed */
 
-static inline void _rs_rekey(u_char *dat, size_t datlen);
+static inline void _rs_rekey(unsigned char *dat, size_t datlen);
 
 static inline void
-_rs_init(u_char *buf, size_t n)
+_rs_init(unsigned char *buf, size_t n)
 {
 	if (n < KEYSZ + IVSZ)
 		return;
@@ -83,7 +83,7 @@ _rs_init(u_char *buf, size_t n)
 #define SSH_RANDOM_DEV "/dev/urandom"
 /* XXX use getrandom() if supported on Linux */
 static void
-getrnd(u_char *s, size_t len)
+getrnd(unsigned char *s, size_t len)
 {
 	int fd;
 	ssize_t r;
@@ -108,7 +108,7 @@ getrnd(u_char *s, size_t len)
 static void
 _rs_stir(void)
 {
-	u_char rnd[KEYSZ + IVSZ];
+	unsigned char rnd[KEYSZ + IVSZ];
 
 #ifdef WITH_OPENSSL
 	if (RAND_bytes(rnd, sizeof(rnd)) <= 0)
@@ -145,7 +145,7 @@ _rs_stir_if_needed(size_t len)
 }
 
 static inline void
-_rs_rekey(u_char *dat, size_t datlen)
+_rs_rekey(unsigned char *dat, size_t datlen)
 {
 #ifndef KEYSTREAM_ONLY
 	memset(rs_buf, 0,RSBUFSZ);
@@ -169,7 +169,7 @@ _rs_rekey(u_char *dat, size_t datlen)
 static inline void
 _rs_random_buf(void *_buf, size_t n)
 {
-	u_char *buf = (u_char *)_buf;
+	unsigned char *buf = (unsigned char *)_buf;
 	size_t m;
 
 	_rs_stir_if_needed(n);
@@ -188,7 +188,7 @@ _rs_random_buf(void *_buf, size_t n)
 }
 
 static inline void
-_rs_random_u32(u_int32_t *val)
+_rs_random_u32(uint32_t *val)
 {
 	_rs_stir_if_needed(sizeof(*val));
 	if (rs_have < sizeof(*val))
@@ -208,7 +208,7 @@ arc4random_stir(void)
 }
 
 void
-arc4random_addrandom(u_char *dat, int datlen)
+arc4random_addrandom(unsigned char *dat, int datlen)
 {
 	int m;
 
@@ -224,10 +224,10 @@ arc4random_addrandom(u_char *dat, int datlen)
 	_ARC4_UNLOCK();
 }
 
-u_int32_t
+uint32_t
 arc4random(void)
 {
-	u_int32_t val;
+	uint32_t val;
 
 	_ARC4_LOCK();
 	_rs_random_u32(&val);
@@ -236,7 +236,7 @@ arc4random(void)
 }
 
 /*
- * If we are providing arc4random, then we can provide a more efficient 
+ * If we are providing arc4random, then we can provide a more efficient
  * arc4random_buf().
  */
 # ifndef HAVE_ARC4RANDOM_BUF
@@ -256,7 +256,7 @@ void
 arc4random_buf(void *_buf, size_t n)
 {
 	size_t i;
-	u_int32_t r = 0;
+	uint32_t r = 0;
 	char *buf = (char *)_buf;
 
 	for (i = 0; i < n; i++) {
@@ -280,10 +280,10 @@ arc4random_buf(void *_buf, size_t n)
  * [2**32 % upper_bound, 2**32) which maps back to [0, upper_bound)
  * after reduction modulo upper_bound.
  */
-u_int32_t
-arc4random_uniform(u_int32_t upper_bound)
+uint32_t
+arc4random_uniform(uint32_t upper_bound)
 {
-	u_int32_t r, min;
+	uint32_t r, min;
 
 	if (upper_bound < 2)
 		return 0;
