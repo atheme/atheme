@@ -1,0 +1,27 @@
+language: c
+
+addons:
+  apt:
+    packages:
+      - libperl-dev
+      - libssl-dev
+
+sudo: false
+
+compiler:
+  - gcc
+  - clang
+
+env:
+  - OPTIONAL_CONF_ARGS=""
+  - OPTIONAL_CONF_ARGS="--with-perl"
+  - OPTIONAL_CONF_ARGS="--enable-contrib"
+
+script:
+  - ./configure --disable-nls --enable-ssl $OPTIONAL_CONF_ARGS
+  - make -j $(nproc)
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: OPTIONAL_CONF_ARGS="--enable-contrib"
