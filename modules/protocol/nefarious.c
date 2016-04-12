@@ -363,12 +363,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* got the right number of args for an introduction? */
 	if (parc >= 8)
 	{
-		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
-		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
+		/*
+		 * -> Mh N jilles 1 1460435852 jilles 127.0.0.1 +ixCc 1A130C.572B1.6F53B5.8DD3B8.IP 1A130C.572B1.6F53B5.8DD3B8.IP DSBHPW Mhw2O :Real Name
+		 */
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s@%s (%s)", si->s->name, parv[0],parv[4],parv[7]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
-		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], parv[7], ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 		if (u == NULL)
 			return;
 
@@ -690,6 +691,14 @@ static void check_hidehost(user_t *u)
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
+static void p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
+{
+	/* hold permanent akills for four weeks -- jilles
+	 *  This was changed in Nefarious 2.
+	 */
+	sts("%s GL * +%s@%s %ld %lu :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, (unsigned long)CURRTIME, reason);
+}
+
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
@@ -705,7 +714,7 @@ void _modinit(module_t * m)
 	sethost_sts = &nefarious_sethost_sts;
 	svslogin_sts = &nefarious_svslogin_sts;
 	quarantine_sts = &nefarious_quarantine_sts;
-
+	kline_sts = &p10_kline_sts;
 	mode_list = nefarious_mode_list;
 	ignore_mode_list = nefarious_ignore_mode_list;
 	status_mode_list = nefarious_status_mode_list;
