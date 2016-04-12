@@ -369,9 +369,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s@%s (%s)", si->s->name, parv[0],parv[4],parv[7]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
-		/*
-		 * Give Atheme the masked ip/host from Nefarious2.
-		 */
 		u = user_add(parv[0], parv[3], parv[4], parv[7], ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 		if (u == NULL)
 			return;
