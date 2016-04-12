@@ -363,18 +363,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* got the right number of args for an introduction? */
 	if (parc >= 8)
 	{
-		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
-		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
-
 		/*
 		 * -> Mh N jilles 1 1460435852 jilles 127.0.0.1 +ixCc 1A130C.572B1.6F53B5.8DD3B8.IP 1A130C.572B1.6F53B5.8DD3B8.IP DSBHPW Mhw2O :Real Name
-		 * It looks like the protocol was altered a bit in Nefarious 2 (the current version).
 		 */
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s@%s (%s)", si->s->name, parv[0],parv[4],parv[7]);
 
 		decode_p10_ip(parv[parc - 3], ipstring);
 		/*
-		 * For the purpose of banning users, changing the fourth argument from NULL to parv[7] will stop Atheme from exposing unmasked IP addresses when banning an unregistered user. -- x
+		 * Give Atheme the masked ip/host from Nefarious2.
 		 */
 		u = user_add(parv[0], parv[3], parv[4], parv[7], ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 		if (u == NULL)
@@ -701,8 +697,7 @@ static void check_hidehost(user_t *u)
 static void p10_kline_sts(const char *server, const char *user, const char *host, long duration, const char *reason)
 {
 	/* hold permanent akills for four weeks -- jilles
-	 * It looks like Nefarious 2 changed up the protocol a bit when it comes to glines.
-	 * This will make GLines work in Nefarious 2. Credit goes to tacocat/GLolol @ freenode. -- x
+	 *  This was changed in Nefarious 2.
 	 */
 	sts("%s GL * +%s@%s %ld %lu :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, (unsigned long)CURRTIME, reason);
 }
