@@ -346,12 +346,15 @@ void update_chanacs_flags(void)
 			ca_all_enable |= chanacs_flags[i].value;
 	}
 
-	if (!ircd->uses_halfops)
-		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
-	if (!ircd->uses_protect)
-		ca_all &= ~CA_USEPROTECT;
-	if (!ircd->uses_owner)
-		ca_all &= ~CA_USEOWNER;
+	if (ircd != NULL)
+	{
+		if (!ircd->uses_halfops)
+			ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
+		if (!ircd->uses_protect)
+			ca_all &= ~CA_USEPROTECT;
+		if (!ircd->uses_owner)
+			ca_all &= ~CA_USEOWNER;
+	}
 }
 
 unsigned int xflag_lookup(const char *name)
