@@ -22,6 +22,7 @@ BASE_SRCS =			\
 	help.c	\
 	hold.c	\
 	identify.c	\
+	identifywithlimits.c	\
 	info.c	\
 	info_lastquit.c	\
 	list.c	\

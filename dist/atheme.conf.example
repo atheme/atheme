@@ -166,6 +166,7 @@ loadmodule "modules/crypto/posix";
  * HELP command                                 modules/nickserv/help
  * Nickname expiry override (HOLD command)      modules/nickserv/hold
  * IDENTIFY command                             modules/nickserv/identify
+ * IDENTIFY with LIMITS (AKILLs Failures)       modules/nickserv/identifywithlimits
  * INFO command                                 modules/nickserv/info
  * Last quit message in INFO                    modules/nickserv/info_lastquit
  * LIST command                                 modules/nickserv/list
@@ -221,6 +222,7 @@ loadmodule "modules/nickserv/group";
 loadmodule "modules/nickserv/help";
 loadmodule "modules/nickserv/hold";
 loadmodule "modules/nickserv/identify";
+#loadmodule "modules/nickserv/identifywithlimits";
 loadmodule "modules/nickserv/info";
 #loadmodule "modules/nickserv/info_lastquit";
 loadmodule "modules/nickserv/list";
