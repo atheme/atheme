@@ -179,6 +179,9 @@
 /* Define to 1 if you have the `__va_copy' function or macro. */
 #undef HAVE___VA_COPY
 
+/* Uncomment to enable reproducible builds. */
+#undef REPRODUCIBLE_BUILDS
+
 /* Uncomment to enable large network support. */
 #undef LARGE_NETWORK
 
