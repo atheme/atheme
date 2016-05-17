@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2016 Atheme Development Group
  * Copyright (c) 2005-2006 Patrick Fish, et al
  * Copyright (c) 2011 William Pitcock <nenolod@atheme.org>.
  *
@@ -64,7 +65,7 @@ static struct priv_category chanserv_privs = {
 		{ PRIV_CHAN_ADMIN, N_("drop channels, close channels, transfer ownership") },
 		{ PRIV_CHAN_CMODES, N_("mlock operator modes") },
 		{ PRIV_JOIN_STAFFONLY, N_("join staff channels") },
-		{ PRIV_MARK, N_("mark accounts") },
+		{ PRIV_MARK, N_("mark channels") },
 		{ PRIV_HOLD, N_("hold accounts") },
 		{ PRIV_REG_NOLIMIT, N_("bypass channel registration limits") },
 		{ NULL, NULL },
