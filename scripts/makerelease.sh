@@ -1,7 +1,7 @@
 #!/bin/sh
 # mkrelease.sh: Creates a release suitable for distfiles.atheme.org.
 #
-# Copyright (c) 2007, 2011 atheme.org
+# Copyright (c) 2007, 2011, 2016 atheme.org
 #
 # Permission to use, copy, modify, and/or distribute this software for
 # any purpose with or without fee is hereby granted, provided that the above
@@ -30,7 +30,7 @@ if [ "x$2" = "x--automatic" ]; then
 	AUTOMATIC="yes"
 fi
 
-TIP=`git log -1 --pretty=oneline | cut -d" " -f1`
+COMMIT=`git rev-parse HEAD`
 
 WRKDIR=`pwd`
 
@@ -39,7 +39,7 @@ if [ -d $RELEASENAME ]; then
 	rm -rf $WRKDIR/$RELEASENAME/
 fi
 
-echo "Making release named $RELEASENAME (tip $TIP)"
+echo "Making release named $RELEASENAME (commit $COMMIT)"
 
 echo
 echo "Building root: $RELEASENAME/"
@@ -53,6 +53,7 @@ cd $RELEASENAME
 tar -xzvf $WRKDIR/$RELEASENAME-libmowgli-2.tar.gz
 tar -xzvf $WRKDIR/$RELEASENAME-modules-contrib.tar.gz
 sh autogen.sh
+echo "#define SERNO \"$COMMIT\"" > include/serno.h
 rm -rf autogen.sh autom4te.cache
 rm -rf .gitignore
 
