@@ -54,7 +54,7 @@ tar -xzvf $WRKDIR/$RELEASENAME-libmowgli-2.tar.gz
 tar -xzvf $WRKDIR/$RELEASENAME-modules-contrib.tar.gz
 sh autogen.sh
 echo "#define SERNO \"$COMMIT\"" > include/serno.h
-rm -rf autogen.sh autom4te.cache
+rm -rf autom4te.cache
 rm -rf .gitignore
 
 # Run application specific instructions here.
