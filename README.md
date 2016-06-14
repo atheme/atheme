@@ -33,5 +33,5 @@ wiki (http://github.com/atheme/atheme/wiki) for hints.
 
  * [GitHub](https://github.com/atheme/atheme)  
  * [Website](http://atheme.github.io/)  
- * [Website](https://github.com/atheme/atheme/wiki)  
+ * [Wiki](https://github.com/atheme/atheme/wiki)  
  * [IRC] irc://chat.freenode.net/ #atheme  
