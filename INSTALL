@@ -4,7 +4,8 @@ atheme-services -- a set of services for IRC networks
 This program is free but copyrighted software; see the LICENSE file for
 details.
 
-Information about Services may be found at http://www.atheme.net/.
+Information about Services may be found at https://atheme.github.io/
+Additional information can be found at: https://github.com/atheme/atheme/wiki
 
 TABLE OF CONTENTS
 -----------------
@@ -20,6 +21,9 @@ You should also read the README and FAQ files.
 
 1. INSTALLATION
 ---------------
+
+You will need to obtain Atheme either by downloading the package from our
+website (https://atheme.github.io/) or git clone (https://github.com/atheme/atheme.git)
 
 The IRCds supported by Services are listed in `dist/atheme.conf.example`.
 Although many others are supported, Services can provide the richest experience
