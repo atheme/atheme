@@ -649,7 +649,7 @@ static void unreal_sethost_sts(user_t *source, user_t *target, const char *host)
 
 static void unreal_fnc_sts(user_t *source, user_t *u, const char *newnick, int type)
 {
-	sts(":%s SVSNICK %s %s %lu", CLIENT_NAME(source), CLIENT_NAME(u), newnick,
+	sts(":%s SVSNICK %s %s %lu", ME, CLIENT_NAME(u), newnick,
 			(unsigned long)(CURRTIME - 60));
 }
 
