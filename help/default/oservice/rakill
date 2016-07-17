@@ -12,4 +12,4 @@ The regex syntax is exactly the same.
 Syntax: RAKILL /<pattern>/[i][p] <reason>
 
 Example:
-    /msg &nick& RAKILL /^m[oo|00]cow/i No moocows allowed.
+    /msg &nick& RAKILL /^m(oo|00)cow/i No moocows allowed.
