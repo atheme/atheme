@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2009 Celestin, et al.
+ * Copyright (c) 2014-2016 Austin Ellis
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file is a meta-module for compatibility with old
@@ -14,6 +15,7 @@ DECLARE_MODULE_V1
 (
 	"botserv/set", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
+	VENDOR_STRING
 );
 
 void _modinit(module_t *m)
