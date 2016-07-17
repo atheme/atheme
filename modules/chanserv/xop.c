@@ -263,13 +263,13 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 			/* they have access? change it! */
 			logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), target, mc->name, leveldesc);
-			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), target, leveldesc);
+			verbose(mc, _("\2%s\2 changed \2%s\2's access to \2%s\2."), get_source_name(si), target, leveldesc);
 		}
 		else
 		{
 			logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), target, leveldesc, mc->name);
-			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
+			verbose(mc, _("\2%s\2 added \2%s\2 to the %s list."), get_source_name(si), target, leveldesc);
 		}
 
 		return;
@@ -334,14 +334,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		/* they have access? change it! */
 		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2 (changed access)", mc->name, leveldesc, mt->name);
 		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mt->name, mc->name, leveldesc);
-		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mt->name, leveldesc);
+		verbose(mc, _("\2%s\2 changed \2%s\2's access to \2%s\2."), get_source_name(si), mt->name, leveldesc);
 	}
 	else
 	{
 		/* they have no access, add */
 		logcommand(si, CMDLOG_SET, "ADD: \2%s\2 \2%s\2 on \2%s\2", mc->name, leveldesc, mt->name);
 		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
-		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mt->name, leveldesc);
+		verbose(mc, _("\2%s\2 added \2%s\2 to the %s list."), get_source_name(si), mt->name, leveldesc);
 	}
 }
 
@@ -377,7 +377,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 		hook_call_channel_acl_change(&req);
 		object_unref(ca);
 
-		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
+		verbose(mc, _("\2%s\2 removed \2%s\2 from the %s list."), get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, target);
 		command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), target, leveldesc, mc->name);
 		return;
@@ -401,7 +401,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *
 
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mt->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "DEL: \2%s\2 \2%s\2 from \2%s\2", mc->name, leveldesc, mt->name);
-	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mt->name, leveldesc);
+	verbose(mc, _("\2%s\2 removed \2%s\2 from the %s list."), get_source_name(si), mt->name, leveldesc);
 }
 
 
@@ -517,7 +517,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
 	if (changes > 0)
-		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", get_source_name(si), changes);
+		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%d\2 changes)"), get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
 

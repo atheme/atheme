@@ -512,7 +512,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		flagstr = bitmask_to_flags2(addflags, removeflags);
 		command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 		logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 \2%s\2 \2%s\2", mc->name, target, flagstr);
-		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2", get_source_name(si), flagstr, target);
+		verbose(mc, _("\2%s\2 set flags \2%s\2 on \2%s\2"), get_source_name(si), flagstr, target);
 	}
 
 	free(target);

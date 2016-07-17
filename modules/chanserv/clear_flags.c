@@ -87,7 +87,7 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLEAR:FLAGS: \2%s\2", mc->name);
 	command_success_nodata(si, _("Cleared flags in \2%s\2."), name);
 	if (changes > 0)
-		verbose(mc, "\2%s\2 removed all %d non-founder access entries.",
+		verbose(mc, _("\2%s\2 removed all %d non-founder access entries."),
 				get_source_name(si), changes);
 }
 

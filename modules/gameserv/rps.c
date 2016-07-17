@@ -46,7 +46,7 @@ static void command_rps(sourceinfo_t *si, int parc, char *parv[])
 	if (!gs_do_parameters(si, &parc, &parv, &mc))
 		return;
 
-	gs_command_report(si, "%s", rps_responses[rand() % 3]);
+	gs_command_report(si, "%s", _(rps_responses[rand() % 3]));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
