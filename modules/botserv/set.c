@@ -14,7 +14,6 @@ DECLARE_MODULE_V1
 (
 	"botserv/set", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Rizon Development Group <http://dev.rizon.net>"
 );
 
 void _modinit(module_t *m)
@@ -24,6 +23,7 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_fantasy");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_nobot");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_private");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_saycaller");
 
 }
 
