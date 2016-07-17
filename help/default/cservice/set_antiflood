@@ -1,14 +1,14 @@
-Help for SET ANTIFLOOD:
- 
+Help for SET ANTIFLOOD:
+
 SET ANTIFLOOD configures ChanServ flood control settings.
 The action parameter can be QUIET, KICKBAN or AKILL.
- 
+
 Flood control can be turned off using the OFF setting, and
 turned on using default settings with the ON setting.
- 
+
 Syntax: SET <#channel> ANTIFLOOD <action>
 Syntax: SET <#channel> ANTIFLOOD OFF
- 
+
 Examples:
     /msg &nick& SET #channel ANTIFLOOD QUIET
     /msg &nick& SET #silence ANTIFLOOD KICKBAN
