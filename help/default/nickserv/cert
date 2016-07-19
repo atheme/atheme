@@ -8,6 +8,7 @@ You cannot add the same fingerprint to multiple accounts.
 Syntax: CERT LIST
 Syntax: CERT ADD [fingerprint]
 Syntax: CERT DEL <fingerprint>
+Syntax: CERT CLEAR
 #if priv user:auspex
 
 Operators with user:auspex privilege can also
@@ -20,3 +21,4 @@ Examples:
     /msg &nick& CERT LIST
     /msg &nick& CERT ADD f3a1aad46ca88e180c25c9c7021a4b3a
     /msg &nick& CERT DEL f3a1aad46ca88e180c25c9c7021a4b3a
+    /msg &nick& CERT CLEAR
