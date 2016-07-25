@@ -608,7 +608,7 @@ loadmodule "modules/saslserv/authcookie";
  * SET FANTASY command                          modules/botserv/set_fantasy
  * SET NOBOT command                            modules/botserv/set_nobot
  * SET PRIVATE command                          modules/botserv/set_private
- * SET SAYCALLER command						modules/botserv/set_saycaller
+ * SET SAYCALLER command                        modules/botserv/set_saycaller
  */
 #loadmodule "modules/botserv/main";
 #loadmodule "modules/botserv/help";
