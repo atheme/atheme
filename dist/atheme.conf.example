@@ -618,7 +618,7 @@ loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/botserv/set_fantasy";
 #loadmodule "modules/botserv/set_nobot";
 #loadmodule "modules/botserv/set_private";
-#loadmodule "modules/botserv/set_saycaller"
+#loadmodule "modules/botserv/set_saycaller";
 
 /* HostServ modules.
  *
