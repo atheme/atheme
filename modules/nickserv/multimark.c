@@ -345,8 +345,6 @@ static void db_h_rm(database_handle_t *db, const char *type)
 	rm->mark = sstrdup(mark);
 
 	mowgli_node_add(rm, &rm->node, l);
-
-	mowgli_patricia_add(restored_marks, nick, l);
 }
 
 /* Copy old style marks */
@@ -483,8 +481,6 @@ static void nick_ungroup_hook(hook_user_req_t *hdata)
 
 		mowgli_node_add(rm, &rm->node, rml);
 	}
-
-	mowgli_patricia_add(restored_marks, nick, rml);
 }
 
 static void account_drop_hook(myuser_t *mu)
@@ -518,8 +514,6 @@ static void account_drop_hook(myuser_t *mu)
 
 		mowgli_node_add(rm, &rm->node, rml);
 	}
-
-	mowgli_patricia_add(restored_marks, name, rml);
 }
 
 static void account_register_hook(myuser_t *mu)
@@ -561,8 +555,6 @@ static void account_register_hook(myuser_t *mu)
 
 		mowgli_node_delete(&rm->node, rml);
 	}
-
-	mowgli_patricia_add(restored_marks, name, rml);
 }
 
 static void nick_group_hook(hook_user_req_t *hdata)
@@ -619,8 +611,6 @@ static void nick_group_hook(hook_user_req_t *hdata)
 
 		mowgli_node_add(mm, &mm->node, l);
 	}
-
-	mowgli_patricia_add(restored_marks, name, rml);
 }
 
 static void show_multimark(hook_user_req_t *hdata)
