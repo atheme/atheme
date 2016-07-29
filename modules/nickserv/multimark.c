@@ -879,8 +879,6 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	l = multimark_list(mu);
-
 	if (!strcasecmp(action, "ADD"))
 	{
 		if (!info)
@@ -889,6 +887,8 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_needmoreparams, _("Usage: MARK <target> ADD <note>"));
 			return;
 		}
+
+		l = multimark_list(mu);
 
 		mm = smalloc(sizeof(multimark_t));
 		mm->setter_uid = sstrdup(entity(si->smu)->id);
@@ -961,6 +961,8 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		command_success_nodata(si, _("\2%s\2's marks:"), target);
+
+		l = multimark_list(mu);
 
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
@@ -1082,6 +1084,8 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 
 		bool found = false;
 		int num = atoi(info);
+
+		l = multimark_list(mu);
 
 		MOWGLI_ITER_FOREACH(n, l->head)
 		{
