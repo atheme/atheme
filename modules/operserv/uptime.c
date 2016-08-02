@@ -33,7 +33,11 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(si, CMDLOG_GET, "UPTIME");
 
+#ifdef REPRODUCIBLE_BUILDS
+	command_success_nodata(si, "%s [%s]", PACKAGE_STRING, revision);
+#else
         command_success_nodata(si, "%s [%s] Build Date: %s", PACKAGE_STRING, revision, __DATE__);
+#endif
         command_success_nodata(si, _("Services have been up for %s"), timediff(CURRTIME - me.start));
 	command_success_nodata(si, _("Current PID: %d"), getpid());
         command_success_nodata(si, _("Registered accounts: %d"), cnt.myuser);

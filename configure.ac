@@ -211,6 +211,23 @@ dnl gettext
 LOCALEDIR='${datadir}/locale'
 AC_SUBST(LOCALEDIR)
 
+REPRODUCIBLEBUILDS="no"
+AC_MSG_CHECKING(if you want reproducible builds)
+AC_ARG_ENABLE(reproducible-builds,
+AC_HELP_STRING([--enable-reproducible-builds],[ Enable reproducible builds.]),
+[
+  case "$enableval" in
+  yes)
+    REPRODUCIBLEBUILDS="yes"
+    AC_DEFINE([REPRODUCIBLE_BUILDS], 1, [Uncomment to enable reproducible builds.])
+    ;;
+  no)
+    REPRODUCIBLEBUILDS="no"
+    ;;
+  esac
+])
+AC_MSG_RESULT($REPRODUCIBLEBUILDS)
+
 LARGENET="no"
 AC_MSG_CHECKING(if you want large network support)
 AC_ARG_ENABLE(large-net,
@@ -439,6 +456,7 @@ Configuration:
 	Logfile directory    : ${LOGDIR}
 	Data directory       : ${DATADIR}
 	PID directory        : ${RUNDIR}
+	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
 	OpenSSL SASL support : ${SSL}
 	Contrib modules      : ${CONTRIB}

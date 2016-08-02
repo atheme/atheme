@@ -774,6 +774,7 @@ with_cracklib
 with_ldap
 with_perl
 enable_fhs_paths
+enable_reproducible_builds
 enable_large_net
 enable_contrib
 enable_ssl
@@ -1415,6 +1416,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-nls           do not use Native Language Support
   --enable-fhs-paths      Use more FHS-like pathnames (for packagers).
+  --enable-reproducible-builds
+                          Enable reproducible builds.
   --enable-large-net      Enable large network support.
   --enable-contrib        Enable contrib modules.
   --disable-ssl           don't use OpenSSL to provide more SASL mechanisms
@@ -8049,6 +8052,29 @@ $as_echo "$FHSPATHS" >&6; }
 LOCALEDIR='${datadir}/locale'
 
 
+REPRODUCIBLEBUILDS="no"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want reproducible builds" >&5
+$as_echo_n "checking if you want reproducible builds... " >&6; }
+# Check whether --enable-reproducible-builds was given.
+if test "${enable_reproducible_builds+set}" = set; then :
+  enableval=$enable_reproducible_builds;
+  case "$enableval" in
+  yes)
+    REPRODUCIBLEBUILDS="yes"
+
+$as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
+
+    ;;
+  no)
+    REPRODUCIBLEBUILDS="no"
+    ;;
+  esac
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $REPRODUCIBLEBUILDS" >&5
+$as_echo "$REPRODUCIBLEBUILDS" >&6; }
+
 LARGENET="no"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want large network support" >&5
 $as_echo_n "checking if you want large network support... " >&6; }
@@ -11491,6 +11517,7 @@ Configuration:
 	Logfile directory    : ${LOGDIR}
 	Data directory       : ${DATADIR}
 	PID directory        : ${RUNDIR}
+	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
 	OpenSSL SASL support : ${SSL}
 	Contrib modules      : ${CONTRIB}
