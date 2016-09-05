@@ -42,6 +42,11 @@ static bool chanfix_should_handle(chanfix_channel_t *cfchan, channel_t *c)
 	/* enough ops, don't touch it */
 	if (n >= CHANFIX_OP_THRESHHOLD)
 		return false;
+
+	/* Do not fix NOFIX'd channels */
+	if ((metadata_find(cfchan, "private:nofix:setter")) != NULL)
+		return false;
+
 	/* only start a fix for opless channels, and consider a fix done
 	 * after CHANFIX_FIX_TIME if any ops were given
 	 */
@@ -291,11 +296,6 @@ void chanfix_autofix_ev(void *unused)
 
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
-
-	        /* Do not fix NOFIX'd channels */
-		if ((metadata_find(chan, "private:nofix:setter")) != NULL)
-                return;
-
 
 		if (!chanfix_do_autofix && !chan->fix_requested)
 			continue;
