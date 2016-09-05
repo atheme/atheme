@@ -629,12 +629,13 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	metadata_t *md_loginaddr;
 	struct tm tm;
 	mynick_t *mn;
+	operclass_t *operclass;
 
 	return_if_fail(svs != NULL && svs->me != NULL);
 	return_if_fail(u->myuser == NULL);
 
 	if (is_soper(mu))
-		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2", u->nick, entity(mu)->name);
+		slog(LG_INFO, "SOPER: \2%s\2 as \2%s\2 (%s)", u->nick, entity(mu)->name, mu->soper->operclass->name);
 
 	myuser_notice(svs->me->nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, entity(mu)->name);
 
