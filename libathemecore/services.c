@@ -838,7 +838,7 @@ bool bad_password(sourceinfo_t *si, myuser_t *mu)
 	}
 
 	if (is_soper(mu))
-		slog(LG_INFO, "SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), entity(mu)->name);
+		slog(LG_INFO, "SOPER:AF: \2%s\2 FAILED Authentication as \2%s\2 (%s)", get_source_name(si), entity(mu)->name, mu->soper->operclass->name);
 
 	if (count % 10 == 0)
 	{
