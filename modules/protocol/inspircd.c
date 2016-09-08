@@ -296,7 +296,7 @@ static bool check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, use
 		ch++;
 	}
 
-	if (atoi(value) <= 0 || atoi(value) >= max_rejoindelay)
+	if (atoi(value) <= 0 || atoi(value) > max_rejoindelay)
 	{
 		return false;
 	}
