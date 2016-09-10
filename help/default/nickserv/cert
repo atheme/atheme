@@ -5,6 +5,11 @@ CERT maintains a list of CertFP fingerprints that will allow
 
 You cannot add the same fingerprint to multiple accounts.
 
+CERT is agnostic with regard to the fingerprinting algorithm
+used. The fingerprint that needs to be used here depends on
+what algorithm the IRCd is using. If in question, please ask
+network staff.
+
 Syntax: CERT LIST
 Syntax: CERT ADD [fingerprint]
 Syntax: CERT DEL <fingerprint>
