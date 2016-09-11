@@ -782,6 +782,15 @@ loadmodule "modules/transport/xmlrpc";
 #loadmodule "modules/exttarget/chanacs";
 #loadmodule "modules/exttarget/server";
 
+/* Proxyscan (DNSBL) modules.
+ *
+ * Atheme can also check set DNS Blacklists for matches and respond 
+ * as set.  Activate modules here and customize further down under Proxyscan
+ * section.
+ */
+#loadmodule "modules/proxyscan/main";
+#loadmodule "modules/proxyscan/dnsbl";
+
 /* Other modules.
  *
  * Put any other modules you want to load on startup here. The path
@@ -2134,6 +2143,32 @@ general {
 	 * than just opers with user:auspex or group:auspex privileges.
 	 */
 	show_entity_id;
+};
+
+proxyscan {
+	/* Here you can configure the details of your Proxyscan (DNS Blacklist)
+	 * scanner service.  
+	 */
+
+	nick = "Proxyscan";
+	user = "dnsbl";
+	host = "services.int";
+	real = "Proxyscan Service";
+
+	blacklists {
+	 "dnsbl.dronebl.org";
+	 "rbl.efnetrbl.org";
+	 "tor.efnet.org";
+	};
+	
+	/* Available DNSBL_ACTION's:
+	 * NONE - Do nothing
+	 * NOTIFY - Notify user that they are listed in a DNSBL and which one
+	 * SNOOP - Report the user to the logchannel or services channel
+	 * KLINE - AKILL the user from the network (default AKILL is 24 hours)
+	 */
+	 
+	DNSBL_ACTION = kline;
 };
 
 /******************************************************************************
