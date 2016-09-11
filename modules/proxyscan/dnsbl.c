@@ -51,13 +51,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* To configure/use, add a block to the proxyscan{} section of your atheme.conf
- * like this:
- *
- * blacklists {
- *	"dnsbl.dronebl.org";
- *	"rbl.efnetrbl.org";
- * };
+/* To configure/use: see the proxyscan{} section of your atheme.conf
  */
 
 #include "atheme.h"
@@ -514,6 +508,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 {
 	service_t *svs;
+	kline_t *k;
 
 	svs = service_find("operserv");
 
@@ -525,7 +520,7 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 			if (! (u->flags & UF_KLINESENT)) {
 				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 				notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
-				kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
+				k = kline_add("*", u->ip, "Banned (DNS Blacklist)", 86400, "Proxyscan");
 				u->flags |= UF_KLINESENT;
 			}
 			break;
@@ -582,7 +577,7 @@ static void write_dnsbl_exempt_db(database_handle_t *db)
 	{
 		dnsbl_exempt_t *de = n->data;
 
-		db_start_row(db, "BW");
+		db_start_row(db, "BLE");
 		db_write_word(db, de->ip);
 		db_write_time(db, de->exempt_ts);
 		db_write_word(db, de->creator);
