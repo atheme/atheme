@@ -265,10 +265,10 @@ static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 
 			tm = *localtime(&de->exempt_ts);
 			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
-			command_success_nodata(si, "IP: \2%s\2 Reason: \2%s\2 (%s - %s)",
+			command_success_nodata(si, _("IP: \2%s\2 Reason: \2%s\2 (%s - %s)"),
 					de->ip, de->reason, de->creator, buf);
 		}
-		command_success_nodata(si, "End of list.");
+		command_success_nodata(si, _("End of list."));
 		logcommand(si, CMDLOG_GET, "DNSBL:EXEMPT:LIST");
 	}
 	else
@@ -295,12 +295,12 @@ static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[])
 	{
 		lookup_blacklists(u);
 		logcommand(si, CMDLOG_ADMIN, "DNSBLSCAN: %s", user);
-		command_success_nodata(si, "%s has been scanned.", user);
+		command_success_nodata(si, _("%s has been scanned."), user);
 		return;
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "User %s is not on the network, you can not scan them.", user);
+		command_fail(si, fault_badparams, _("User %s is not on the network, you can not scan them."), user);
 		return;
 	}
 }
@@ -524,14 +524,14 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 		case DNSBL_ACT_KLINE:
 			if (! (u->flags & UF_KLINESENT)) {
 				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-				notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
+				notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
 				kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
 				u->flags |= UF_KLINESENT;
 			}
 			break;
 
 		case DNSBL_ACT_NOTIFY:
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
+			notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
 			// FALLTHROUGH
 		case DNSBL_ACT_SNOOP:
 			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
@@ -564,13 +564,13 @@ static void osinfo_hook(sourceinfo_t *si)
 
 	return_if_fail(name != NULL);
 
-	command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", name);
+	command_success_nodata(si, _("Action taken when a user is on a DNSBL: %s"), name);
 
 	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
 	{
 		struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-		command_success_nodata(si, "Blacklist(s): %s", blptr->host);
+		command_success_nodata(si, _("Blacklist(s): %s"), blptr->host);
 	}
 }
 
@@ -643,7 +643,7 @@ _modinit(module_t *m)
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
-	add_conf_item("dnsbl_action", &proxyscan->conf_table, dnsbl_action_config_handler);
+	add_conf_item("DNSBL_ACTION", &proxyscan->conf_table, dnsbl_action_config_handler);
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
 
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
@@ -664,7 +664,7 @@ _moddeinit(module_unload_intent_t intent)
 
 	proxyscan = service_find("proxyscan");
 
-	del_conf_item("dnsbl_action", &proxyscan->conf_table);
+	del_conf_item("DNSBL_ACTION", &proxyscan->conf_table);
 	del_conf_item("BLACKLISTS", &proxyscan->conf_table);
 
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);
