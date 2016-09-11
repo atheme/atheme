@@ -2161,14 +2161,14 @@ proxyscan {
 	 "tor.efnet.org";
 	};
 	
-	/* Available DNSBL_ACTION's:
+	/* Available dnsbl_action's:
 	 * NONE - Do nothing
 	 * NOTIFY - Notify user that they are listed in a DNSBL and which one
 	 * SNOOP - Report the user to the logchannel or services channel
 	 * KLINE - AKILL the user from the network (default AKILL is 24 hours)
 	 */
 	 
-	DNSBL_ACTION = kline;
+	dnsbl_action = kline;
 };
 
 /******************************************************************************
