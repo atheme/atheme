@@ -12,13 +12,16 @@ LOCALES=es.po ru.po cy.po de.po da.po fr.po
 
 include ../buildsys.mk
 
-POTTEMPLATE=$(PACKAGE).pot
+POTTEMPLATE=$(PACKAGE_NAME).pot
 
 update-pot:
 	@echo Updating $(POTTEMPLATE) ...
-	xgettext --default-domain=$(PACKAGE) --language=C \
+	xgettext --default-domain=$(PACKAGE_NAME) --language=C \
 	--keyword=_ --keyword=N_ --from-code="utf-8" \
-	--directory=.. --files-from=POTFILES.in -o $(POTTEMPLATE)
+	--directory=.. --files-from=POTFILES.in -o $(POTTEMPLATE) \
+	--package-name=$(PACKAGE_NAME) --package-version=$(PACKAGE_VERSION) \
+	--copyright-holder=Atheme \
+	--msgid-bugs-address=https://github.com/atheme/atheme/issues
 
 update-po: update-pot
 	@echo Updating .po -files ...
