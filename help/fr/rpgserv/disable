@@ -1,8 +1,0 @@
-Aide pour DISABLE:
-
-Désactive RPGServ sur un salon.
-
-Syntaxe : DISABLE <#salon>
-
-Exemple :
-    /msg &nick& DISABLE #ooc

@@ -547,28 +547,6 @@ loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
 
-/* RPGServ modules.
- *
- * Here you can disable or enable certain features of RPGServ, by
- * defining which modules are loaded. You can even disable RPGServ
- * entirely.
- *
- * Core components                              modules/rpgserv/main
- * ENABLE/DISABLE commands                      modules/rpgserv/enable
- * HELP command                                 modules/rpgserv/help
- * INFO command                                 modules/rpgserv/info
- * LIST command                                 modules/rpgserv/list
- * SEARCH command                               modules/rpgserv/search
- * SET commands                                 modules/rpgserv/set
- */
-#loadmodule "modules/rpgserv/main";
-#loadmodule "modules/rpgserv/enable";
-#loadmodule "modules/rpgserv/help";
-#loadmodule "modules/rpgserv/info";
-#loadmodule "modules/rpgserv/list";
-#loadmodule "modules/rpgserv/search";
-#loadmodule "modules/rpgserv/set";
-
 /* BotServ modules.
  *
  * Here you can disable or enable certain features of BotServ, by
@@ -1464,46 +1442,6 @@ memoserv {
 	 * What is the maximum amount of memos a user can have in their inbox?
 	 */
 	maxmemos = 30;
-};
-
-/* RPGServ configuration.
- *
- * The rpgserv {} block contains settings specific to the RPGServ modules.
- *
- * RPGServ provides a facility for finding roleplaying channels.
- */
-rpgserv {
-	/* (*)nick
-	 * The nickname we want RPGServ to have.
-	 */
-	nick = "RPGServ";
-
-	/* (*)user
-	 * Sets the username used for this client.
-	 */
-	user = "RPGServ";
-
-	/* (*)host
-	 * The hostname used for this client.
-	 */
-	host = "services.int";
-
-	/* (*)real
-	 * The GECOS (real name) of the client.
-	 */
-	real = "RPG Finding Services";
-
-	/* (*)aliases
-	 * Command aliases for RPGServ.
-	 */
-	aliases {
-	};
-	
-	/* (*)access
-	 * Command access changes for RPGServ.
-	 */
-	access {
-	};
 };
 
 /* BotServ configuration.

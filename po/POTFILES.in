@@ -224,12 +224,6 @@ modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
 modules/proxyscan/dnsbl.c
-modules/rpgserv/enable.c
-modules/rpgserv/help.c
-modules/rpgserv/info.c
-modules/rpgserv/list.c
-modules/rpgserv/search.c
-modules/rpgserv/set.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
 modules/statserv/channel.c

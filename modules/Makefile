@@ -18,7 +18,6 @@ SUBDIRS = \
 	operserv \
 	protocol \
 	proxyscan \
-	rpgserv \
 	saslserv \
 	security \
 	statserv \
