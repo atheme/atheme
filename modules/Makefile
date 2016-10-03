@@ -7,7 +7,6 @@ SUBDIRS = \
 	chanserv \
 	crypto \
 	exttarget \
-	gameserv \
 	global \
 	groupserv \
 	helpserv \

@@ -31,7 +31,6 @@ for d in $helpdir/*; do
 		nickserv) service=NickServ ;;
 		oservice) service=OperServ ;;
 		userserv) service=UserServ ;;
-		gameserv) service=GameServ ;;
 		infoserv) service=InfoServ ;;
 		*) continue ;;
 	esac

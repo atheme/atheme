@@ -1,8 +1,0 @@
-Ayuda or EIGHTBALL:
-
-Pregunta a la bola mágica.
-
-Sintaxis: EIGHTBALL
-
-Ejemplo:
-    /msg &nick& EIGHTBALL

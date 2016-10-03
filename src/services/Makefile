@@ -38,7 +38,6 @@ build: ../../dist/atheme.conf.userserv-example ../../dist/atheme.conf.operserv-e
 	  -e '/^\/\* MemoServ module/,/^$$/d' \
 	  -e '/modules\/infoserv\//s/^/#/' \
 	  -e '/^\/\* SASL agent module/,/^$$/d' \
-	  -e '/^\/\* GameServ module/,/^$$/d' \
 	  -e '/^\/\* BotServ module/,/^$$/d' \
 	  -e '/^\/\* HostServ module/,/^$$/d' \
 	  -e '/^\/\* HelpServ module/,/^$$/d' \
