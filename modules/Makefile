@@ -7,7 +7,6 @@ SUBDIRS = \
 	chanserv \
 	crypto \
 	exttarget \
-	gameserv \
 	global \
 	groupserv \
 	helpserv \
@@ -19,7 +18,6 @@ SUBDIRS = \
 	operserv \
 	protocol \
 	proxyscan \
-	rpgserv \
 	saslserv \
 	security \
 	statserv \

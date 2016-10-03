@@ -45,7 +45,6 @@ modules/chanserv/set_email.c
 modules/chanserv/set_entrymsg.c
 modules/chanserv/set_fantasy.c
 modules/chanserv/set_founder.c
-modules/chanserv/set_gameserv.c
 modules/chanserv/set_guard.c
 modules/chanserv/set_keeptopic.c
 modules/chanserv/set_limitflags.c
@@ -91,14 +90,6 @@ modules/contrib/os_procwatch.c
 modules/contrib/os_resolve.c
 modules/contrib/os_testproc.c
 modules/contrib/os_trace.c
-modules/gameserv/dice.c
-modules/gameserv/eightball.c
-modules/gameserv/gamecalc.c
-modules/gameserv/happyfarm.c
-modules/gameserv/help.c
-modules/gameserv/lottery.c
-modules/gameserv/namegen.c
-modules/gameserv/rps.c
 modules/global/main.c
 modules/groupserv/acsnolimit.c
 modules/groupserv/drop.c
@@ -233,12 +224,6 @@ modules/operserv/sqline.c
 modules/operserv/update.c
 modules/operserv/uptime.c
 modules/proxyscan/dnsbl.c
-modules/rpgserv/enable.c
-modules/rpgserv/help.c
-modules/rpgserv/info.c
-modules/rpgserv/list.c
-modules/rpgserv/search.c
-modules/rpgserv/set.c
 modules/scripting/perl/api/perl_command.c
 modules/scripting/perl/perl_module.c
 modules/statserv/channel.c

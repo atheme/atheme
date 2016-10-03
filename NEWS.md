@@ -1,3 +1,11 @@
+Atheme Services 7.3 Development Notes
+=====================================
+
+general
+-------
+- GameServ and RpgServ have been removed due to lack of benefits and to decrease
+  the amount of necessary maintenance.
+
 Atheme Services 7.2 Development Notes
 =====================================
 

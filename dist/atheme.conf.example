@@ -309,7 +309,6 @@ loadmodule "modules/nickserv/vhost";
  * SET EMAIL command                            modules/chanserv/set_email
  * SET ENTRYMSG command                         modules/chanserv/set_entrymsg
  * SET FANTASY command                          modules/chanserv/set_fantasy
- * SET GAMESERV command                         modules/chanserv/set_gameserv
  * SET GUARD command                            modules/chanserv/set_guard
  * SET KEEPTOPIC command                        modules/chanserv/set_keeptopic
  * SET LIMITFLAGS command                       modules/chanserv/set_limitflags
@@ -376,7 +375,6 @@ loadmodule "modules/chanserv/set_core";
 loadmodule "modules/chanserv/set_email";
 loadmodule "modules/chanserv/set_entrymsg";
 loadmodule "modules/chanserv/set_fantasy";
-#loadmodule "modules/chanserv/set_gameserv";
 loadmodule "modules/chanserv/set_guard";
 loadmodule "modules/chanserv/set_keeptopic";
 #loadmodule "modules/chanserv/set_limitflags";
@@ -548,52 +546,6 @@ loadmodule "modules/saslserv/plain";
 loadmodule "modules/saslserv/authcookie";
 #loadmodule "modules/saslserv/external";
 #loadmodule "modules/saslserv/ecdsa-nist256p-challenge"; /* requires SSL */
-
-/* GameServ modules.
- *
- * Here you can disable or enable certain features of GameServ, by
- * defining which modules are loaded. You can even disable GameServ
- * entirely.
- *
- * Core components                              modules/gameserv/main
- * DICE/WOD commands                            modules/gameserv/dice
- * EIGHTBALL command                            modules/gameserv/eightball
- * Game-specific dice calculators               modules/gameserv/gamecalc
- * HELP commands                                modules/gameserv/help
- * LOTTERY command                              modules/gameserv/lottery
- * NAMEGEN command                              modules/gameserv/namegen
- * RPS command                                  modules/gameserv/rps
- */
-#loadmodule "modules/gameserv/main";
-#loadmodule "modules/gameserv/dice";
-#loadmodule "modules/gameserv/eightball";
-#loadmodule "modules/gameserv/gamecalc";
-#loadmodule "modules/gameserv/help";
-#loadmodule "modules/gameserv/lottery";
-#loadmodule "modules/gameserv/namegen";
-#loadmodule "modules/gameserv/rps";
-
-/* RPGServ modules.
- *
- * Here you can disable or enable certain features of RPGServ, by
- * defining which modules are loaded. You can even disable RPGServ
- * entirely.
- *
- * Core components                              modules/rpgserv/main
- * ENABLE/DISABLE commands                      modules/rpgserv/enable
- * HELP command                                 modules/rpgserv/help
- * INFO command                                 modules/rpgserv/info
- * LIST command                                 modules/rpgserv/list
- * SEARCH command                               modules/rpgserv/search
- * SET commands                                 modules/rpgserv/set
- */
-#loadmodule "modules/rpgserv/main";
-#loadmodule "modules/rpgserv/enable";
-#loadmodule "modules/rpgserv/help";
-#loadmodule "modules/rpgserv/info";
-#loadmodule "modules/rpgserv/list";
-#loadmodule "modules/rpgserv/search";
-#loadmodule "modules/rpgserv/set";
 
 /* BotServ modules.
  *
@@ -1490,86 +1442,6 @@ memoserv {
 	 * What is the maximum amount of memos a user can have in their inbox?
 	 */
 	maxmemos = 30;
-};
-
-/* GameServ configuration.
- *
- * The gameserv {} block contains settings specific to the GameServ modules.
- *
- * GameServ provides various in-channel commands for games.
- */
-gameserv {
-	/* (*)nick
-	 * The nickname we want GameServ to have.
-	 */
-	nick = "GameServ";
-
-	/* (*)user
-	 * Sets the username used for this client.
-	 */
-	user = "GameServ";
-
-	/* (*)host
-	 * The hostname used for this client.
-	 */
-	host = "services.int";
-
-	/* (*)real
-	 * The GECOS (real name) of the client.
-	 */
-	real = "Game Services";
-
-	/* (*)aliases
-	 * Command aliases for GameServ.
-	 */
-	aliases {
-	};
-	
-	/* (*)access
-	 * Command access changes for GameServ.
-	 */
-	access {
-	};
-};
-
-/* RPGServ configuration.
- *
- * The rpgserv {} block contains settings specific to the RPGServ modules.
- *
- * RPGServ provides a facility for finding roleplaying channels.
- */
-rpgserv {
-	/* (*)nick
-	 * The nickname we want RPGServ to have.
-	 */
-	nick = "RPGServ";
-
-	/* (*)user
-	 * Sets the username used for this client.
-	 */
-	user = "RPGServ";
-
-	/* (*)host
-	 * The hostname used for this client.
-	 */
-	host = "services.int";
-
-	/* (*)real
-	 * The GECOS (real name) of the client.
-	 */
-	real = "RPG Finding Services";
-
-	/* (*)aliases
-	 * Command aliases for RPGServ.
-	 */
-	aliases {
-	};
-	
-	/* (*)access
-	 * Command access changes for RPGServ.
-	 */
-	access {
-	};
 };
 
 /* BotServ configuration.

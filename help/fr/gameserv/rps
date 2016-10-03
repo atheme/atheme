@@ -1,8 +1,0 @@
-Aide pour RPS:
-
-RPS choisira aléatoirement "Pierre", "Papier" ou "Ciseaux".
-
-Syntaxe : RPS
-
-Exemples :
-    /msg &nick& RPS
