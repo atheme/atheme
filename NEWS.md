@@ -1,9 +1,9 @@
-Atheme Services 7.2 Development Notes
-=====================================
+Atheme Services 7.2.7 Release Notes
+===================================
 
-As of late February 2016, Atheme is being brought back to live development (managed 
-and maintained by a few of the fork maintainers). We look forward to bringing Atheme
-back into its spotlight.  Stay tuned for new developments, fixes, and releases.
+Since late February 2016, Atheme is being brought back to development (managed and
+maintained by a few of the fork maintainers). Atheme 7.2.7 is the first release
+since that change. It includes various fixes, some backported from the forks.
 
 security
 --------
