@@ -297,7 +297,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		if (flagstr)
 			*flagstr++ = '\0';
 
-		target = strdup(parv[2]);
+		target = sstrdup(parv[2]);
 	}
 
 	{

@@ -54,8 +54,8 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	 * by saslserv/main, therefore the mechanism need not check it. */
 
 	name = entity(mcfp->mu)->name;
-	p->username = strdup(name);
-	p->authzid = strdup(message);
+	p->username = sstrdup(name);
+	p->authzid = sstrdup(message);
 
 	return ASASL_DONE;
 }

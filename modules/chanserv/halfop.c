@@ -81,7 +81,7 @@ static void cmd_halfop(sourceinfo_t *si, bool halfopping, int parc, char *parv[]
 		return;
 	}
 
-	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&halfop_actions, halfopping, nicks);
 	free(nicks);
 

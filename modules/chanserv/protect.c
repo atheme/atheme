@@ -81,7 +81,7 @@ static void cmd_protect(sourceinfo_t *si, bool protecting, int parc, char *parv[
 		return;
 	}
 
-	nicks = (!nick ? strdup(si->su->nick) : strdup(nick));
+	nicks = (!nick ? sstrdup(si->su->nick) : sstrdup(nick));
 	prefix_action_set_all(&protect_actions, protecting, nicks);
 	free(nicks);
 
