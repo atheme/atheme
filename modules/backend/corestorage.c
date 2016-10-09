@@ -805,7 +805,7 @@ static void corestorage_h_si(database_handle_t *db, const char *type)
 	strip(buf);
 	svsignore = svsignore_add(mask, reason);
 	svsignore->settime = settime;
-	svsignore->setby = strdup(setby);
+	svsignore->setby = sstrdup(setby);
 }
 
 static void corestorage_h_kid(database_handle_t *db, const char *type)

@@ -43,7 +43,7 @@ static void recurse_module_deplist(module_t *m, mowgli_list_t *deplist)
 		if (found)
 			continue;
 
-		module_dependency_t *dep = malloc(sizeof(module_dependency_t));
+		module_dependency_t *dep = smalloc(sizeof(module_dependency_t));
 		dep->name = sstrdup(dm->name);
 		dep->can_unload = dm->can_unload;
 		mowgli_node_add(dep, mowgli_node_create(), deplist);
@@ -90,7 +90,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	mowgli_list_t *module_deplist = mowgli_list_create();
-	module_dependency_t *self_dep = malloc(sizeof(module_dependency_t));
+	module_dependency_t *self_dep = smalloc(sizeof(module_dependency_t));
 	self_dep->name = sstrdup(module);
 	self_dep->can_unload = m->can_unload;
 	mowgli_node_add(self_dep, mowgli_node_create(), module_deplist);

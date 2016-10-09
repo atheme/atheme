@@ -196,9 +196,9 @@ sasl_session_t *make_session(const char *uid, server_t *server)
 	if(p)
 		return p;
 
-	p = malloc(sizeof(sasl_session_t));
+	p = smalloc(sizeof(sasl_session_t));
 	memset(p, 0, sizeof(sasl_session_t));
-	p->uid = strdup(uid);
+	p->uid = sstrdup(uid);
 	p->server = server;
 	n = mowgli_node_create();
 	mowgli_node_add(p, n, &sessions);
@@ -309,7 +309,7 @@ static void sasl_input(sasl_message_t *smsg)
 		/* (C)lient data */
 		if(p->buf == NULL)
 		{
-			p->buf = (char *)malloc(len + 1);
+			p->buf = (char *)smalloc(len + 1);
 			p->p = p->buf;
 			p->len = len;
 		}

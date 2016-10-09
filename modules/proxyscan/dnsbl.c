@@ -371,7 +371,7 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 	if (sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
 		return;
 
-	struct BlacklistClient *blcptr = malloc(sizeof(struct BlacklistClient));
+	struct BlacklistClient *blcptr = smalloc(sizeof(struct BlacklistClient));
 
 	blcptr->blacklist = object_ref(blptr);
 	blcptr->u = u;
@@ -400,7 +400,7 @@ static struct Blacklist *new_blacklist(char *name)
 
 	if (blptr == NULL)
 	{
-		blptr = malloc(sizeof(struct Blacklist));
+		blptr = smalloc(sizeof(struct Blacklist));
 		object_init(object(blptr), "proxyscan dnsbl", NULL);
 		mowgli_node_add(object_ref(blptr), &blptr->node, &blacklist_list);
 	}
