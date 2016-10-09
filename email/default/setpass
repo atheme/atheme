@@ -14,7 +14,7 @@ compromise your account.
 In order to set a new password, you must send the following command
 on IRC, where <password> is the new password you wish to set.
 
-   /msg &nicksvs& SETPASS &accountname& &param& <password>
+/msg &nicksvs& SETPASS &accountname& &param& <password>
 
 --
 If this message is unsolicited, please contact &replyto&

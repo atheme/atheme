@@ -9,7 +9,7 @@ Date: &date&
 In order to complete the e-mail address change, you must verify your new
 e-mail address by issuing the following command on IRC:
 
-   /msg &nicksvs& VERIFY EMAILCHG &accountname& &param&
+/msg &nicksvs& VERIFY EMAILCHG &accountname& &param&
 
 Thank you for updating your e-mail address on file with the &netname&
 IRC network!
