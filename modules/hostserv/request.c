@@ -217,11 +217,15 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 	char *host = parv[0];
 	const char *target;
 	mynick_t *mn;
-	char buf[NICKLEN + 20];
-	metadata_t *md;
+	myentity_t *mt;
+	myuser_t *mu;
+	myentity_iteration_state_t state;
+	char buf[BUFSIZE], strfbuf[BUFSIZE];
+	metadata_t *md, *md_timestamp, *md_assigner;
 	mowgli_node_t *n;
 	hsreq_t *l;
 	hook_host_request_t hdata;
+	int matches = 0;
 
 	if (!host)
 	{
@@ -276,6 +280,31 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!check_vhost_validity(si, host))
 		return;
+
+	MYENTITY_FOREACH_T(mt, &state, ENT_USER)
+	{
+		mu = user(mt);
+		md = metadata_find(mu, "private:usercloak");
+		if (md != NULL && !match(host, md->value))
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 is already assigned to another user.  You will need to request a \2different\2 vhost or see network staff."), host);
+			slog(LG_INFO, "VHOSTREQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
+				return;
+		}
+		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
+		{
+			snprintf(buf, BUFSIZE, "%s:%s", "private:usercloak", ((mynick_t *)(n->data))->nick);
+			md = metadata_find(mu, buf);
+			if (md == NULL)
+				continue;
+			if (!match(host, md->value))
+			{
+			command_fail(si, fault_noprivs, _("\2%s\2 is already assigned to another user.  You will need to request a \2different\2 vhost or see network staff."), host);
+			slog(LG_INFO, "VHOSTREQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
+				return;
+			}
+		}
+	}
 
 	hdata.host = host;
 	hdata.si = si;
