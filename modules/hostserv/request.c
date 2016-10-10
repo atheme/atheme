@@ -288,7 +288,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 		if (md != NULL && !match(host, md->value))
 		{
 			command_fail(si, fault_noprivs, _("\2%s\2 is already assigned to another user.  You will need to request a \2different\2 vhost or see network staff."), host);
-			slog(LG_INFO, "VHOSTREQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
+			logcommand(si, CMDLOG_REQUEST, "REQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
 				return;
 		}
 		MOWGLI_ITER_FOREACH(n, mu->nicks.head)
@@ -300,7 +300,7 @@ static void hs_cmd_request(sourceinfo_t *si, int parc, char *parv[])
 			if (!match(host, md->value))
 			{
 			command_fail(si, fault_noprivs, _("\2%s\2 is already assigned to another user.  You will need to request a \2different\2 vhost or see network staff."), host);
-			slog(LG_INFO, "VHOSTREQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
+			logcommand(si, CMDLOG_REQUEST, "REQUEST:FAILED: \2%s\2 is already assigned to another user.", host);
 				return;
 			}
 		}
