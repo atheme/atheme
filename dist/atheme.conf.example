@@ -105,6 +105,13 @@ loadmodule "modules/backend/opensex";
  * If you have several thousand accounts, this conversion may take
  * appreciable time.
  *
+ * A note to OpenBSD users: OpenBSD's crypt() implementation returns
+ * null when you tell it to do md5crypt, since MD5 is no longer
+ * considered safe for general use. As such, if you try to run Atheme
+ * with the modules/crypto/posix module, it will segfault as soon as it
+ * tries to hash something. Thankfully, OpenBSD includes LibreSSL by
+ * default, meaning that you can load PBKDF2 without issue.
+ *
  * The following crypto modules are available:
  *
  * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
