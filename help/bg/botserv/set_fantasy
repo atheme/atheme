@@ -1,0 +1,11 @@
+Help for SET FANTASY:
+
+Enables or disables fantasy mode on a channel.
+When it is enabled, users will be able to use all
+chanserv commands like !op, !deop, !voice, !devoice,
+!kick, !kb, !unban, !akick, !info on a channel.
+
+Syntax: SET <#channel> FANTASY {ON|OFF}
+
+Examples:
+    /msg &nick& SET #help FANTASY ON

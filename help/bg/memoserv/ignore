@@ -1,0 +1,13 @@
+Помощ за IGNORE:
+
+/MS IGNORE ADD|DEL|LIST|CLEAR ACCOUNT
+ЗАБРАНЯВАТЕ ПОЛУЧАВАНЕ НА СЪОБЩЕНИЯ ОТ ОПРЕДЕЛЕНИ АКАУНТИ.
+МОЖЕ ДА ДОБАВИТЕ ДО 40 ПОТРЕБИТЕЛЯ В СПИСЪКА.
+
+ПРИМЕР: /MSG MS IGNORE ADD KOG – ДОБАВЯТЕ АКАУНТ В СПИСЪКА
+
+/MSG MS IGNORE DEL KOG – ПРЕМАХВАТЕ АКАУНТ
+
+/MSG MS IGNORE LIST – ВИЖДАТЕ СПИСЪКА
+
+/MSG MS IGNORE CLEAR – ПРЕМАХВАТЕ ВСИЧКИ ОТ СПИСЪКА

@@ -1,0 +1,19 @@
+Help for VHOST:
+
+VHOST allows operators to set a virtual host (also
+known as a spoof or cloak) on an account. This vHost
+will be set on the user immediately and each time
+they log in.
+
+Syntax: VHOST <account> ON <vHost>
+Syntax: VHOST <account> OFF
+
+If the account is marked, you can override this
+using the FORCE keyword.
+
+Syntax: VHOST <account> ON <vHost> FORCE
+Syntax: VHOST <account> OFF FORCE
+
+Examples:
+    /msg &nick& VHOST spb ON may.explode.on.impact
+    /msg &nick& VHOST nenolod OFF

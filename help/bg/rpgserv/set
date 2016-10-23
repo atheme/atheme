@@ -1,0 +1,37 @@
+Help for SET:
+
+SET allows you to provide details about your role-playing
+channel. See the examples below to learn the command syntax.
+
+GENRE (one selection only; choose the most relevant if multi-genre)
+     APOCALYPSE       ANIME            ANTROPOMORPH     CYBERPUNK
+     FANTASY          HORROR           MULTIGENRE       REALISTIC
+     SCIFI            STEAMPUNK        
+
+PERIOD (one selection only)
+     PREHISTORIC      ANTIQUITY        MIDDLEAGES       EARLYMODERN
+     MODERN           FUTURE
+
+RULESET (one selection only)
+     ADND             HOMEBREW         DND3.0           DND3.5
+     DND4.0           FREEFORM         OTHER            OWOD
+     NWOD
+
+RATING (one selection only)
+     G                PG               PG13             R
+     ADULT
+
+SYSTEM (multiple selections possible)
+     CHARAPPROVAL     DICED            SHEETED
+
+SETTING (free-form text)
+STORYLINE (free-form text)
+SUMMARY (free-form text)
+
+Example:
+    /msg &nick& SET #ooc GENRE FANTASY
+         Set the GENRE for #ooc to FANTASY
+    /msg &nick& SET #ooc SYSTEM CHARAPPROVAL DICED
+         Set the SYSTEM for #ooc to "Character Approval" and "Diced"
+    /msg &nick& SET #ooc SYSTEM
+         Clear the setting for SYSTEM on channel #ooc

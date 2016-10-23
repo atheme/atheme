@@ -1,0 +1,19 @@
+Help for REQUEST:
+
+REQUEST sending of an announcement. You must be identified
+to a registered nick to issue this command. Please be
+patient while your request is considered by network staff.
+
+Note, you can only have 1 announcement pending at a time.
+If you make a mistake, please CANCEL your current one and
+re-request it, if you would like to submit a second one, please
+wait until your first one is approved or denied.
+
+Underscores ("_") in the subject will be replaced with spaces
+automatically as you can not put spaces in the subject.
+They will not be replaced in the rest of the announcement.
+
+Syntax: REQUEST <subject> <announcement>
+
+Examples:
+    /msg &nick& REQUEST Some_Subject This is an announcement!

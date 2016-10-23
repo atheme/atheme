@@ -1,0 +1,10 @@
+Help for SET OPEN:
+
+SET OPEN allows a group to be open to any user joining
+whenever they like. Users that JOIN the group will have
+no privileges by default.
+
+Syntax: SET <!group> OPEN <ON|OFF>
+
+Examples:
+    /msg &nick& SET !awesome-people OPEN ON

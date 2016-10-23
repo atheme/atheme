@@ -1,0 +1,9 @@
+Help for REJECT:
+
+Reject the requested announcement for the given nick.
+A memo informing the user will also be sent.
+
+Syntax: REJECT <nick>
+
+Examples:
+    /msg &nick& REJECT nenolod

@@ -1,0 +1,9 @@
+Help for LIST:
+
+LIST allows you to view all informational messages in the database.
+These messages will also be sent to all users on connect.
+
+Syntax: LIST
+
+Example:
+    /msg &nick& LIST

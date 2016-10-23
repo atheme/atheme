@@ -1,0 +1,9 @@
+Help for SET PUBLIC:
+
+SET PUBLIC shows group membership when users request NickServ
+INFO of members of the group.
+
+Syntax: SET <!group> PUBLIC <ON|OFF>
+
+Examples:
+    /msg &nick& SET !awesome-people PUBLIC ON

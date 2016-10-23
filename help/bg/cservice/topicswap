@@ -1,0 +1,8 @@
+Help for TOPICSWAP:
+
+Allows easily swapping out parts of a topic on a channel.
+
+Syntax: TOPICSWAP <#channel> <search>:[<replace>]
+
+Examples:
+    /msg &nick& TOPICSWAP #foo orange:apple

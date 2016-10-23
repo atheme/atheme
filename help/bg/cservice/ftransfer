@@ -1,0 +1,9 @@
+Помощ за FTRANSFER:
+
+FTRANSFER ПОЗВОЛЯВА ПРЕХВЪРЛЯНЕ СОБСТВЕНОСТТА НА ДАДЕН КАНАЛ.
+
+КОМАНДА: FTRANSFER <#CHANNEL><FOUNDER>
+
+ПРИМЕР:
+
+/MSG CHANSERV FTRANSFER #CASUAL VODKASWIRL

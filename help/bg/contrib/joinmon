@@ -1,0 +1,31 @@
+Help for JOINMON:
+
+JOINMON allows you to maintain a list of glob patterns that match nicks of
+users who will have their channel joins sent to the logchannel (under
+the info loglevel).
+
+These patterns are saved to the Atheme database and are kept between
+services restarts.
+
+Syntax: JOINMON ADD <pattern> [reason]
+
+Examples:
+    /msg &nick& JOINMON ADD jdhore1 some reason
+    /msg &nick& JOINMON ADD jd* another reason
+    /msg &nick& JOINMON ADD machineg?d imposter
+
+JOINMON DEL allows you to remove entries from the list of currently
+monitored user patterns.
+
+Syntax: JOINMON DEL <pattern>
+
+Examples:
+    /msg &nick& JOINMON DEL jdhore1
+    /msg &nick& JOINMON DEL machineg?d
+
+JOINMON LIST allows you to list the currently monitored user patterns.
+
+Syntax: JOINMON LIST
+
+Examples:
+    /msg &nick& JOINMON LIST

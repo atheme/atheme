@@ -1,0 +1,29 @@
+Help for RMATCH:
+
+RMATCH shows all users whose
+nick!user@host gecos
+matches the given regular expression.
+
+Instead of a slash, any character that
+is not a letter, digit, whitespace or
+backslash and does not occur in the pattern
+can be used. An i after the pattern means
+case insensitive matching.
+
+By default, the pattern is a POSIX extended
+regular expression. If PCRE support has been
+compiled in, you can put a p after the pattern
+to use it.
+
+By default, there is a limit on the number
+of matches. To override this limit, add
+the FORCE keyword. In any case the actual
+number of matches will be shown.
+
+Syntax: RMATCH /<pattern>/[i][p] [FORCE]
+
+Example:
+    /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
+    /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
+    /msg &nick& RMATCH /^[^ ]* [^ ]*$/
+    /msg &nick& RMATCH /\d\d\d/p

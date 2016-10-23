@@ -1,0 +1,12 @@
+Помощ за SET FANTASY:
+
+КОМАНДАТА SET FANTASY ВИ ПОЗВОЛЯВА 
+ДА ВКЛЮЧИТЕ/ИЗКЛЮЧИТЕ CHANSERV ПУБЛИЧНИТЕ КОМАНДИ (!OP, !DEOP И Т.Н.) В КАНАЛА.
+
+GUARD ТРЯБВА ДА Е ВКЛЮЧЕН, ЗА ДА ИЗПОЛЗВАТЕ ТАЗИ КОМАНДА.
+
+КОМАНДА: SET <#CHANNEL> FANTASY ON|OFF
+
+ПРИМЕР:
+
+/MSG CHANSERV SET #CHATSPIKE FANTASY ON

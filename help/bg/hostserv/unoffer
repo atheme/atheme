@@ -1,0 +1,8 @@
+Помощ за UNOFFER:
+
+ИЗТРИЙ ПРЕДЛОЖЕН ХОСТ ОТ OFFER СПИСЪКА.
+
+КОМАНДА: UNOFFER <VHOST>
+
+ПРИМЕРИ:
+/MSG HOSTSERV UNOFFER USERS.EXAMPLE.NET

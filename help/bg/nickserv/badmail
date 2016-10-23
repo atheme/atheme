@@ -1,0 +1,15 @@
+Помощ за BADMAIL:
+
+/NS BADMAIL ADD EMAIL [REASON]
+/NS BADMAIL DEL EMAIL
+/NS BADMAIL LIST
+
+АДМИНИСТРАТОРИ МОГАТ ДА ЗАБРАНЯТ РЕГИСТРИРАНЕ НА АКАУНТИ С ОПРЕДЕЛЕНИ EMAIL АДРЕСИ. ПОЗВОЛЕНИ СА ГЛОБАЛНИ МАСКИ В АДРЕСИТЕ.
+
+ПРИМЕРИ:
+
+/MSG NS BADMAIL ADD JDHORE1@GMAIL.COM BAR REASON – ДОБАВЯТЕ АДРЕС
+/MSG NS BADMAIL ADD *@AOL.COM BAR REASON
+/MSG NS BADMAIL ADD *@*.TK FOO REASON
+/MSG NS BADMAIL DEL FOO@BAR.COM – ПРЕМАХВАТЕ АДРЕС
+/MSG NS BADMAIL LIST – ВИЖДАТЕ СПИСЪКА С АДРЕСИ

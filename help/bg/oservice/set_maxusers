@@ -1,0 +1,11 @@
+Help for SET MAXUSERS:
+
+SET MAXUSERS allows setting how many accounts one email
+address may have registered. This can be overridden on
+a per-email basis with the emailexempts configuration
+block.
+
+Syntax: SET MAXUSERS <value>
+
+Example:
+    /msg &nick& SET MAXUSERS 7

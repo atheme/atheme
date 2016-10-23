@@ -1,0 +1,9 @@
+Help for DOWN:
+
+DOWN removes all current access you have on a given channel.
+It does not remove the flags or xOP that you have, just the modes.
+
+Syntax: DOWN <#channel>
+
+Examples:
+    /msg &nick& DOWN #foo

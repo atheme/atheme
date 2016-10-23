@@ -1,0 +1,17 @@
+Help for BADWORDS:
+
+BADWORDS maintains a list of glob strings that every word
+in a channel will be checked against (if BLOCKBADWORDS is set).
+
+The ACTION parameter can be: KICK, WARN, BAN, KICKBAN or (if your
+IRCd supports it) QUIET.
+
+Syntax: BADWORDS <#channel> LIST
+Syntax: BADWORDS <#channel> ADD <word> <action>
+Syntax: BADWORDS <#channel> DEL <word>
+
+Examples:
+    /msg &nick& BADWORDS #atheme LIST
+    /msg &nick& BADWORDS #sailors ADD f?ck kick
+    /msg &nick& BADWORDS #sailors ADD *dam?it* quiet
+    /msg &nick& BADWORDS #desensitized DEL f?ck

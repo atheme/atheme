@@ -1,0 +1,6 @@
+Help for HELP:
+
+HELP displays help information on all
+commands in services.
+
+Syntax: HELP <command> [parameters]

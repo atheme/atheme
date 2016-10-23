@@ -1,0 +1,9 @@
+Help for SET MAXLOGINS:
+
+SET MAXLOGINS allows setting how many users may be logged into
+one account at the same time.
+
+Syntax: SET MAXLOGINS <value>
+
+Example:
+    /msg &nick& SET MAXLOGINS 7

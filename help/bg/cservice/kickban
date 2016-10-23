@@ -1,0 +1,12 @@
+Помощ за KICKBAN:
+
+КОМАНДАТА KICKBAN ВИ ПОЗВОЛЯВА ДА ПРЕМАХНЕТЕ ПОТРЕБИТЕЛ ОТ КАНАЛА И ДА МУ СЛОЖИТЕ BAN.
+
+ВСИЧКИ ПРЕДИШНИ СЪВПАДАЩИ BANS ЩЕ БЪДАТ ПРЕМАХНАТИ.
+
+КОМАНДА: KICKBAN <#CHANNEL><NICK> [REASON]
+
+ПРИМЕРИ:
+
+/MSG CHANSERV KICKBAN #FOO ABUSER
+/MSG CHANSERV KICKBAN #FOO ABUSER GO AWAY

@@ -1,0 +1,9 @@
+Help for UNBAN:
+
+The UNBAN command allows you to remove all bans matching
+you from a channel.
+
+Syntax: UNBAN <#channel>
+
+Examples:
+    /msg &nick& UNBAN #chat

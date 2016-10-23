@@ -1,0 +1,10 @@
+Help for READONLY:
+
+READONLY allows services operators to enable
+or disable readonly mode while services is
+running.
+
+Syntax: READONLY ON|OFF
+
+Examples:
+    /msg &nick& READONLY ON

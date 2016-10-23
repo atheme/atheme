@@ -1,0 +1,22 @@
+Help for DEFCON:
+
+DEFCON allows you to implement defense condition-based security on your network.
+Use of this module is highly not recommended as it is a bad way to handle
+network security and it has a very high possibility of annoying your users.
+
+LEVELS:
+    Levels define the amount of security that will be implemented.
+    Each level builds on the level below it (3 has everything 4 has and more,
+    as an example).
+
+    1 - all connecting users are AKILLed for 15 minutes.
+    2 - all users (except services opers) are ignored by services.
+    3 - all channels are forced mode +R (by default).
+    4 - no nick registrations allowed, no channel registrations allowed.
+    5 - Normal network operation. No restrictions.
+
+
+Syntax: DEFCON <level>
+
+Example:
+    /msg &nick& DEFCON 4

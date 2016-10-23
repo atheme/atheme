@@ -1,0 +1,10 @@
+Помощ за FVERIFY:
+
+/NS FVERIFY OPERATION NICKNAME
+
+АДМИНИСТРАТОРИ МОГАТ ДА ДАВАТ ПОТВЪРЖДЕНИЕ ЗА ИЗВЪРШВАНЕ НА ОПЕРАЦИИ С ПСЕВДОНИМИ, БЕЗ ПОТРЕБИТЕЛЯТ ДА ПОЛУЧАВА ПИСМО С КОД.
+
+ПРИМЕРИ:
+
+/MSG NS FVERIFY REGISTER JENNY
+/MSG NS FVERIFY EMAILCHG AERIANA

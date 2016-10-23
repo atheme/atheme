@@ -1,0 +1,14 @@
+Help for COMPARE:
+
+COMPARE allows operators with chan:auspex
+privilege to view matching information
+on two users, or two channels.
+
+It is useful in clone detection,
+amongst other situations.
+
+Syntax: COMPARE <#channel|user> <#channel|user>
+
+Example:
+    /msg &nick& COMPARE #warez #dcc
+    /msg &nick& COMPARE w00t Brik

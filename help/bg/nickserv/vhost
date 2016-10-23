@@ -1,0 +1,17 @@
+Помощ за VHOST:
+
+/NS VHOST NICKNAME ON VHOST
+/NS VHOST NICKNAME OFF
+
+АДМИНИСТРАТОР МОЖЕ ДА ЗАДАДЕ ВИРТУАЛЕН ХОСТ 
+(VHOST, ИЗВЕСТЕН СЪЩО КАТО SPOOF ИЛИ CLOAK) НА АКАУНТ. 
+ТОЙ ЩЕ СЕ ПОСТАВЯ ПРИ ВСЯКО ИДЕНТИФИЦИРАНЕ С АКАУНТА.
+
+/NS VHOST NICKNAME ON VHOST FORCE
+/NS VHOST NICKNAME OFF FORCE
+
+АКО АКАУНТЪТ Е ОТБЕЛЯЗАН С КОМАНДА MARK, ТРЯБВА ДА СЕ УКАЖЕ ПАРАМЕТЪР FORCE.
+
+ПРИМЕРИ:
+/MSG NS VHOST SPB ON MAY.EXPLODE.ON.IMPACT
+/MSG NS VHOST NENOLOD OFF

@@ -1,0 +1,11 @@
+Help for LISTCHANS:
+
+LISTCHANS shows the channels that a group has
+access to.
+
+AKICKs are not shown.
+
+Syntax: LISTCHANS <group>
+
+Example:
+    /msg &nick& LISTCHANS !foo

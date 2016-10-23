@@ -1,0 +1,19 @@
+Help for SET JOINFLAGS:
+
+SET JOINFLAGS allows a group to specify the flags assigned
+to a user when they JOIN the group (if the group is open).
+
+Note that this must be valid, else "+" will be set on joining
+users. If no parameter is provided or the parameter is OFF, the
+join flags will be returned to network default.
+
+See "/msg &nick& HELP FLAGS" for details of the different flags that
+are valid here.
+
+Syntax: SET <!group>  JOINFLAGS [OFF|flags]
+
+Examples:
+    /msg &nick& SET !awesome-people JOINFLAGS OFF
+    /msg &nick& SET !foo JOINFLAGS +
+    /msg &nick& SET !foo JOINFLAGS +v
+    /msg &nick& SET !foo JOINFLAGS +cfv

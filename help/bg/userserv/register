@@ -1,0 +1,18 @@
+Help for REGISTER:
+
+This will register an account with &nick&. This allows
+you to get access to channels more easily and use memos
+(if enabled). The password is a case-sensitive password
+that you make up. Please write down or memorize your
+password! You will need it later to change settings.
+#if auth
+
+You have to to confirm the email address. To do this,
+follow the instructions in the message sent to the email
+address.
+#endif
+
+Syntax: REGISTER <account> <password> <email-address>
+
+Examples:
+    /msg &nick& REGISTER foo sesame foo@bar.com

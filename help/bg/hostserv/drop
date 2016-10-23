@@ -1,0 +1,11 @@
+Help for DROP:
+
+Drops (unsets) the vHost assigned to the nick in use.
+When you use this command, any user who performs a /whois
+on your nick will see the original host given to you by the IRCd,
+which may show your real IP address.
+
+Syntax: DROP
+
+Examples:
+    /msg &nick& DROP

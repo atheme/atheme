@@ -1,0 +1,12 @@
+Help for FDROP:
+
+FDROP allows you to "unregister" a registered group.
+
+Once you FDROP a group all of the data associated
+with it (access lists, metadata, etc) are removed and cannot
+be restored.
+
+Syntax: FDROP <!group>
+
+Examples:
+    /msg &nick& FDROP !baz

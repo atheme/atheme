@@ -1,0 +1,12 @@
+Help for ROLL:
+
+ROLL lets you roll a series of virtual dice
+and display the result to either yourself or
+a channel. You can also specify a number of
+dice rolls that can be done at once.
+
+Syntax: ROLL [times] <#dice>d<#sides>
+
+Example:
+    /msg &nick& ROLL 2d16
+    /msg &nick& ROLL 5 4d16
