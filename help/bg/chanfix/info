@@ -1,0 +1,10 @@
+Help for INFO:
+
+INFO displays chanfix information such as
+the highest score, usercount, score stepping
+and the fix status of the channel.
+
+Syntax: INFO <#channel>
+
+Examples:
+    /msg &nick& INFO #foo

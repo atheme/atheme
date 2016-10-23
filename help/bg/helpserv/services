@@ -1,0 +1,9 @@
+Help for SERVICES:
+
+SERVICES allows you to view a list of all services running on the network
+so you can choose one to message and get more help.
+
+Syntax: SERVICES
+
+Examples:
+    /msg &nick& SERVICES

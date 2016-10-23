@@ -1,0 +1,8 @@
+Помощ за ROLE DEL:
+
+ROLE DEL ЩЕ ИЗТРИЕ КОНКРЕТНА РОЛЯ ОТ КАНАЛА.
+
+КОМАНДА: ROLE <#CHANNEL> DEL <ROLE>
+
+ПРИМЕР:
+/MSG CHANSERV ROLE #ATHEME DEL HELPERS

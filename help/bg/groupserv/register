@@ -1,0 +1,9 @@
+Help for REGISTER:
+
+REGISTER allows you to register a group so that you can easily
+manage a number of users and channels.
+
+Syntax: REGISTER <!group>
+
+Examples:
+    /msg &nick& REGISTER !developers

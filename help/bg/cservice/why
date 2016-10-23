@@ -1,0 +1,8 @@
+Помощ за WHY:
+
+КОМАНДАТА WHY ВИ ПОКАЗВА ДАННИ ЗА ПОТРЕБИТЕЛ НА ЛИНИЯ, КОИТО Е В СПИСЪКА (ACCESS LIST) НА КАНАЛА.
+
+КОМАНДА: WHY <#CHANNEL> [NICKNAME]
+
+ПРИМЕР:
+/MSG CHANSERV WHY #ATHEME JILLES^

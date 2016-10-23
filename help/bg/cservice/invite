@@ -1,0 +1,10 @@
+Помощ за INVITE:
+
+INVITE ВИ ПОЗВОЛЯВА ДА СЕ ПОКАНИТЕ В ДАДЕН КАНАЛ. 
+ПОЛЕЗНО Е АКО СТЕ СЛОЖИЛИ +I CHANNEL MODE.
+
+КОМАНДА: INVITE <#CHANNEL>
+
+ПРИМЕР:
+
+/MSG CHANSERV INVITE #FOO

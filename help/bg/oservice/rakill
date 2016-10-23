@@ -1,0 +1,15 @@
+Help for RAKILL:
+
+RAKILL allows for regex-based akills,
+which are useful for removing clones
+or botnets. The akills are not added
+to &nick&'s list and last a week.
+
+Be careful, as regex is very easy to
+make mistakes with. Use RMATCH first.
+The regex syntax is exactly the same.
+
+Syntax: RAKILL /<pattern>/[i][p] <reason>
+
+Example:
+    /msg &nick& RAKILL /^m(oo|00)cow/i No moocows allowed.

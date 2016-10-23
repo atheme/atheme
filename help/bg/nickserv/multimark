@@ -1,0 +1,30 @@
+Help for MARK:
+
+MARK allows operators to attach notes to an account.
+For example, an operator could mark the account of
+a spammer so that others know the user has previously
+been warned.
+
+Syntax: MARK <nickname> ADD <note>
+
+Adds a mark to a nick. Marks will be shown on doing
+MARK <nick> LIST or using NickServ info.
+
+Syntax: MARK <nickname> DEL <number>
+
+Deletes the mark with the given number.
+
+Syntax: MARK <nickname> LIST
+
+Shows all marks for a nickname.
+
+Syntax: MARK MIGRATE
+
+Migrates ALL the marks from the old mark module to
+this one.
+
+Examples:
+    /msg &nick& MARK tomaw ADD Doesn't actually exist
+    /msg &nick& MARK tomaw ADD You can add as many marks as you want
+    /msg &nick& MARK tomaw LIST
+    /msg &nick& MARK tomaw DEL 2

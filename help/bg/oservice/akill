@@ -1,0 +1,66 @@
+Help for AKILL:
+
+AKILL allows you to maintain network-wide bans.
+Services will keep your AKILLs stored and allow for easy management.
+
+Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>
+
+If the !P token is specified the AKILL will never expire (permanent).
+If the !T token is specified expire time must follow, in minutes,
+hours ("h"), days ("d") or weeks ("w").
+
+Examples:
+    /msg &nick& AKILL ADD foo !T 5 bar reason
+    /msg &nick& AKILL ADD foo !T 3d bar reason
+    /msg &nick& AKILL ADD foo@bar.com !P foo reason
+    /msg &nick& AKILL ADD foo@bar.com foo reason
+
+The first example looks for the user with a nickname of "foo" and adds
+a 5 minute AKILL for "bar reason."
+
+The second example is similar but adds the AKILL for 3 days instead of
+5 minutes.
+
+The third example adds a permanent AKILL on foo@bar.com for "foo reason."
+
+The fourth example adds a AKILL on foo@bar.com for the duration specified
+in the configuration file for "foo reason."
+
+Syntax: AKILL DEL <hostmask|number>
+
+If number is specified it correlates with the number on AKILL LIST.
+You may specify multiple numbers by separating with commas.
+You may specify a range by using a colon.
+
+Examples:
+    /msg &nick& AKILL DEL foo@bar.com
+    /msg &nick& AKILL DEL 5
+    /msg &nick& AKILL DEL 1,2,5,10
+    /msg &nick& AKILL DEL 1:5,7,9:11
+
+Syntax: AKILL LIST [FULL]
+
+If FULL is specified the AKILL reasons will be shown.
+
+Examples:
+    /msg &nick& AKILL LIST
+    /msg &nick& AKILL LIST FULL
+
+Syntax: AKILL LIST <hostmask>
+
+Shows any AKILLs matching the given hostmask, with reasons.
+This command will not perform DNS lookups on a host,
+for best results repeat it with host and IP address.
+
+Examples:
+    /msg &nick& AKILL LIST test@192.168.1.1
+
+Syntax: AKILL LIST <number>
+
+Shows the given AKILL, with reason.
+
+Syntax: AKILL SYNC
+
+Sends all akills to all servers. This can be useful in case
+services will be down or do not see a user as matching a
+certain akill.

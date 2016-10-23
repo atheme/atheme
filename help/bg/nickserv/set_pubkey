@@ -1,0 +1,9 @@
+Help for SET PUBKEY:
+
+SET PUBKEY allows you to change your public
+key used for SASL ECDSA-NIST256p-CHALLENGE
+authentication.
+If no pubkey is given, your public key will
+be removed from the services database.
+
+Syntax: SET PUBKEY [<pubkey>]

@@ -1,0 +1,27 @@
+Help for BOT:
+
+Allows opers to create, modify, and delete bots
+that users will be able to use on their own channels.
+
+BOT ADD adds a bot with the given nickname, username,
+hostname and realname. Since no integrity checks are done
+for these settings, be careful.
+
+BOT CHANGE allows you to change nickname, username, hostname
+or realname of a bot without actually deleting it (and all
+the data associated with it).
+
+BOT DEL removes the given bot from the bot list.
+
+Note: you cannot create a bot that has a nick that is
+currently registered. If an unregistered user is currently
+using the nick, they will be killed.
+
+Syntax: BOT ADD <nick> <user> <host> <real>
+Syntax: BOT CHANGE <oldnick> <newnick> [<user> [<host> [<real>]]]
+Syntax: BOT DEL <nick>
+
+Examples:
+    /msg &nick& BOT ADD Security Security security.example.net Security
+    /msg &nick& BOT CHANGE Security NetBot NetBot Services.Example.Net MyNet
+    /msg &nick& BOT DEL Security

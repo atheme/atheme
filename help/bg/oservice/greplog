@@ -1,0 +1,26 @@
+Help for GREPLOG:
+
+GREPLOG searches through services logs and
+displays matching lines.
+
+The first parameter is either a service name
+(to search all commands given to that service)
+or an asterisk (to search all changes to services
+data).
+
+The second parameter is the pattern to search for.
+It may contain * and ? wildcards and should usually
+start and end in *.
+
+The optional third parameter is the number of
+previous days to search in addition to today.
+
+Note that this command will only work if sufficient
+information is written to log files.
+
+Syntax: GREPLOG <service> <pattern> [days]
+Syntax: GREPLOG * <pattern> [days]
+
+Examples:
+    /msg &nick& GREPLOG ChanServ *#somechan* 7
+    /msg &nick& GREPLOG * *#somechan* 60

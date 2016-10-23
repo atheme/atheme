@@ -1,0 +1,9 @@
+Help for GENERATEHASH:
+
+GENERATEHASH generates a Atheme password hash. Useful
+to easily create a password for a services oper password.
+
+Syntax: GENERATEHASH <password>
+
+Examples:
+    /msg &nick& GENERATEHASH ThIsPassw0rd

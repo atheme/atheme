@@ -1,0 +1,14 @@
+Help for FREEZE:
+
+FREEZE allows operators to "freeze" an abusive user's
+account. Users cannot log into a frozen account. Thus,
+users cannot obtain the access associated with the
+account.
+
+FREEZE information will be displayed in INFO output.
+
+Syntax: FREEZE <account> ON|OFF <reason>
+
+Examples:
+    /msg &nick& FREEZE pfish ON Persistent spammer
+    /msg &nick& FREEZE alambert OFF

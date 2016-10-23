@@ -1,0 +1,7 @@
+Помощ за SET QUIETCHG:
+
+/NS SET QUIETCHG ON|OFF
+
+ОПРЕДЕЛЯТЕ ДАЛИ ДА БЪДЕТЕ УВЕДОМЯВАНИ ПРИ ПРОМЯНА НА ПРАВАТА ВИ ЗА КАНАЛ ОТ CHANSERV.
+
+ПРИМЕР: /MSG NS SET QUIETCHG ON

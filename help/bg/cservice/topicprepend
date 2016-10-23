@@ -1,0 +1,8 @@
+Помощ за TOPICPREPEND:
+
+КОМАНДАТА TOPICPREPEND ВИ ПОЗВОЛЯВА ДА ПРЕМАХНЕТЕ ПРОМЯНАТА.
+
+КОМАНДА: TOPICPREPEND <#CHANNEL><TOPIC>
+
+ПРИМЕР:
+/MSG CHANSERV TOPICPREPEND #FOO BAR

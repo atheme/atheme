@@ -1,0 +1,10 @@
+Help for HELPME:
+
+HELPME allows you to easily request help from the network staff.
+This works more like an alert than a ticketing system.
+
+Syntax: HELPME [topic]
+
+Examples:
+    /msg &nick& HELPME
+    /msg &nick& HELPME I need help with registering a channel.

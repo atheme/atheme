@@ -1,0 +1,25 @@
+Help for POST:
+
+POST allows you to post one-time messages to all users (that will be sent when
+you run the command) or messages that all users will see upon connect or
+messages only opers will see when they oper-up.
+
+Underscores ("_") in the subject will be replaced by spaces.
+
+IMPORTANCE:
+    Importance defines the type of message that will be sent.
+
+    0 - Only display to opers upon oper-up.
+    1 - Only display to users upon connect.
+    2 - Send a notice to all users now.
+    3 - Display message to all users upon connect AND send a notice to
+            all users now.
+    4 - Send a privmsg/query to all users now. It is important to note that this
+            may annoy users and should only be used when absolutely necessary.
+
+
+Syntax: POST <importance> <subject> <message>
+
+Example:
+    /msg &nick& POST 2 Info1 Some important information for users.
+    /msg &nick& POST 1 Multi_Word_Subject Some more information.

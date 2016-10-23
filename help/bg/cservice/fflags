@@ -1,0 +1,15 @@
+Помощ за FFLAGS:
+
+КОМАНДАТА FFLAGS ПОЗВОЛЯВА НА 
+IRC ОПЕРАТОРИТЕ ДА ПРОМЕНЯТ ПРИНУДИТЕЛНО ФЛАГОВЕТЕ В КАНАЛА. 
+КОМАНДАТА Е СЪЩАТА КАТО ПРИ FLAGS,С ТАЗИ РАЗЛИКА, 
+ЧЕ ЗАДАВАТЕ КАКВИ ФЛАГОВЕ ДА ПРОМЕНИТЕ. 
+ПРОМЯНАТА В СПИСЪКА НА КАНАЛА СЕ ПРАВИ С FLAGS.
+
+КОМАНДА: FFLAGS <#CHANNEL><NICKNAME|HOSTMASK><TEMPLATE>
+
+КОМАНДА: FFLAGS <#CHANNEL><NICKNAME|HOSTMASK><FLAG_CHANGES>
+
+ПРИМЕР:
+
+/MSG CHANSERV FFLAGS #BULGARIA M00N AOP

@@ -1,0 +1,12 @@
+Help for UNASSIGN:
+
+Unassigns a bot from a channel. When you use this command,
+the bot won't join the channel anymore. However, bot
+configuration for the channel is kept, so you will always
+be able to reassign a bot later without having to reconfigure
+it entirely.
+
+Syntax: UNASSIGN <chan>
+
+Examples:
+    /msg &nick& UNASSIGN #help

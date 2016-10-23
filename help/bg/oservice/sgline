@@ -1,0 +1,53 @@
+Help for SGLINE:
+
+SGLINE allows you to maintain network-wide bans by
+real name (gecos). It works similarly to AKILL.
+
+Syntax: SGLINE ADD <gecos> [!P|!T <minutes>] <reason>
+
+If the !P token is specified the SGLINE will never expire (permanent).
+If the !T token is specified expire time must follow, in minutes,
+hours ("h"), days ("d") or weeks ("w").
+
+Examples:
+    /msg &nick& SGLINE ADD foo !T 5 bar reason
+    /msg &nick& SGLINE ADD foo !T 3d bar reason
+    /msg &nick& SGLINE ADD foo !P foo reason
+    /msg &nick& SGLINE ADD foo foo reason
+
+The first example looks for the user with a gecos of "foo" and adds
+a 5 minute SGLINE for "bar reason."
+
+The second example is similar but adds the SGLINE for 3 days instead of
+5 minutes.
+
+The third example adds a permanent SGLINE on foo for "foo reason."
+
+The fourth example adds a SGLINE on foo for the duration specified
+in the configuration file for "foo reason."
+
+Syntax: SGLINE DEL <gecos|number>
+
+If number is specified it correlates with the number on SGLINE LIST.
+You may specify multiple numbers by separating with commas.
+You may specify a range by using a colon.
+
+Examples:
+    /msg &nick& SGLINE DEL foo
+    /msg &nick& SGLINE DEL 5
+    /msg &nick& SGLINE DEL 1,2,5,10
+    /msg &nick& SGLINE DEL 1:5,7,9:11
+
+Syntax: SGLINE LIST [FULL]
+
+If FULL is specified the SGLINE reasons will be shown.
+
+Examples:
+    /msg &nick& SGLINE LIST
+    /msg &nick& SGLINE LIST FULL
+
+Syntax: SGLINE SYNC
+
+Sends all sglines to all servers. This can be useful in case
+services will be down or do not see a user as matching a
+certain sgline.

@@ -1,0 +1,11 @@
+Help for SERVER:
+
+SERVER provides various information about the servers on the network.
+
+Syntax: SERVER COUNT
+
+Returns the amount of connected servers.
+
+Syntax: SERVER LIST
+
+Returns a list of all connected servers.

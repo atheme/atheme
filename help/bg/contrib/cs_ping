@@ -1,0 +1,9 @@
+Help for PING:
+
+PING allows a user to verify their network connectivity by "pinging" &nick& and
+having it reply with "Pong!".
+
+Syntax: PING
+
+Examples:
+    /msg &nick& PING

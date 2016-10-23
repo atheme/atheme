@@ -1,0 +1,9 @@
+Help for FREGISTER:
+
+FREGISTER allows a services operator with the user:fregister priv
+to register a nickname on behalf of another user.
+
+Syntax: FREGISTER <account> <password> <email> [CRYPTPASS|HIDEMAIL|NOOP|NEVEROP]
+
+Examples:
+    /msg &nick& FREGISTER nenolod randompass nenolod@nenolod.net

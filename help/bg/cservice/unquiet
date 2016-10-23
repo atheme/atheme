@@ -1,0 +1,14 @@
+Помощ за UNQUIET:
+
+КОМАНДАТА UNQUIET ВИ ПОЗВОЛЯВА 
+ДА МАХНЕТЕ ЗАБРАНАТА ЗА ПИСАНЕ НА ДАДЕН ПОТРЕБИТЕЛ ИЛИ ХОСТ. 
+АКО НЕ ДОБАВИТЕ NICKNAME ИЛИ HOSTMASK, ЩЕ БЪДЕ ИЗПОЛЗВАНЕ ВЪРХУ ВАС.
+
+АФЕКТИРАНИТЕ ПОТРЕБИТЕЛИ ЩЕ БЪДАТ УВЕДОМЕНИ, ЧЕ ГО ПРАВИТЕ.
+
+КОМАНДА: UNQUIET <#CHANNEL> [NICKNAME|HOSTMASK]
+
+ПРИМЕРИ:
+
+/MSG CHANSERV UNQUIET #CHAT DIABLO-D3
+/MSG CHANSERV UNQUIET #CHAT *!*@*.TRILUG.ORG

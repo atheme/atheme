@@ -1,0 +1,9 @@
+Help for LOTTERY:
+
+LOTTERY randomly chooses a user on
+the channel where it is run.
+
+Syntax: LOTTERY
+
+Example:
+    /msg &nick& LOTTERY

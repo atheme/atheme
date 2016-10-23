@@ -1,0 +1,10 @@
+Help for JOIN:
+
+JOIN allows you to join a group set as open for anyone to
+join. No privileges will be set on you when you join a group
+this way, you will only be listed as a group member.
+
+Syntax: JOIN <!group>
+
+Examples:
+    /msg &nick& JOIN !baz

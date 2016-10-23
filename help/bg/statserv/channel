@@ -1,0 +1,14 @@
+Help for CHANNEL:
+
+CHANNEL provides various minor informations about channels.
+
+Syntax: CHANNEL COUNT
+
+This would give you the total amount of channels.
+
+Syntax: CHANNEL TOPIC <channel>
+
+Examples:
+    /msg &nick& CHANNEL TOPIC #atheme
+
+This example would get the topic for #atheme.

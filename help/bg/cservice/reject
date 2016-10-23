@@ -1,0 +1,13 @@
+Help for REJECT:
+
+REJECT allows you to deny a channel's
+registration request.  (For networks that
+moderate Channel Registration requests)
+
+Syntax: REJECT <#channel>
+
+Examples:
+    /msg &nick& REJECT #BotHouse
+See Also:
+    /msg &nick& WAITING
+    /msg &nick& ACTIVATE #Channel

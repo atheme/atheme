@@ -1,0 +1,78 @@
+Help for CLONES:
+
+CLONES keeps track of the number of clients
+per IP address. Warnings are displayed in
+the snoop channel about IP addresses with
+multiple clients.
+
+CLONES only works on clients whose IP address
+Atheme knows. If the ircd does not support
+propagating IP addresses at all, CLONES is
+not useful; if IP addresses are not sent for
+spoofed clients, those clients are exempt from
+CLONES checking.
+
+Syntax: CLONES KLINE ON|OFF|<count>
+
+Enables/disables banning IP addresses with more
+than the allowed number clients from the network
+for one hour (these bans are not added to the
+AKILL list). This setting is saved in etc/services.db
+and defaults to off.
+
+If a count is specified, <count> warning kills will
+be performed before setting a k-line.
+
+Syntax: CLONES LIST
+
+Shows all IP addresses with more than 3 clients
+with the number of clients and whether the IP
+address is exempt.
+
+Syntax: CLONES ADDEXEMPT <ip> <clones> [!P|!T <minutes>] <reason>
+
+Adds an IP address to the clone exemption list.
+The IP address must match exactly with the form
+used by the ircd (mind '::' shortening with IPv6).
+The IP address can also be a CIDR mask, for example
+192.168.1.0/24. Single IPs take priority above CIDR.
+<clones> is the number of clones allowed; it must be
+at least 4. Warnings are sent if this number is
+met, and a network ban may be set if the number
+is exceeded.
+The reason is shown in LISTEXEMPT.
+The clone exemption list is stored in etc/services.db.
+
+Syntax: CLONES DELEXEMPT <ip>
+
+Removes an IP address from the clone exemption list.
+
+Syntax: CLONES SETEXEMPT [DEFAULT | <ip>] <ALLOWED | WARN> <limit>
+
+Sets either the default or a given exemption's ALLOWED or
+WARN limit to the specified number of clones. WARN or ALLOWED
+can be 0, disabling any warning messages or kills.
+
+Syntax: CLONES SETEXEMPT <ip> <REASON | DURATION> <value>
+
+Sets the reason or duration of a given exemption to the
+specified value. The DURATION value can be 0, making the
+exemption permanent.
+
+Syntax: CLONES LISTEXEMPT
+
+Shows the clone exemption list with reasons.
+
+Example:
+    /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
+    /msg &nick& CLONES DELEXEMPT 192.168.1.2
+
+Syntax: CLONES DURATION
+
+Allows modifying the duration that hosts who clone
+are banned for. Defaults to one hour. Is saved between
+restarts.
+
+Example:
+    /msg &nick& CLONES DURATION 30m
+

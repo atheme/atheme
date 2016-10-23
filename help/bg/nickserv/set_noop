@@ -1,0 +1,8 @@
+Помощ за SET NOOP:
+
+/NS SET NOOP ON|OFF
+
+ЗАБРАНЯВАТЕ НА SERVICES ДА ВИ ДАВАТ АВТОМАТИЧНО OP В КАНАЛИ, В КОИТО ИМАТЕ ПРАВА.
+МОЖЕТЕ САМИ ЗА СИ ВЗЕМЕТЕ OP ИЛИ VOICE В НЯКОЙ КАНАЛ С КОМАНДИТЕ OP И VOICE КЪМ CHANSERV.
+
+ПРИМЕР: /MSG NS SET NOOP ON

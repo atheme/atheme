@@ -1,0 +1,11 @@
+Помощ за STATUS:
+
+КОМАНДАТА STATUS ВРЪЩА ИНФОРМАЦИЯ ЗА ТЕКУЩОТО ВИ СЪСТОЯНИЕ. 
+ЩЕ ПОКАЖЕ ДАННИ ЗА ВАШИЯ NICKNAME, IRC OPERATOR И SRA STATUS.
+
+КОМАНДА: STATUS [#CHANNEL]
+
+ПРИМЕР:
+
+/MSG CHANSERV STATUS
+/MSG CHANSERV STATUS #FOO

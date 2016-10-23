@@ -1,0 +1,10 @@
+Help for REQUEST:
+
+REQUEST help from network staff. This works much like
+a bugtracker or helpdesk ticketing system. Please be
+patient while your request is considered by network staff.
+
+Syntax: REQUEST <topic>
+
+Examples:
+    /msg &nick& REQUEST I need help with a vHost.

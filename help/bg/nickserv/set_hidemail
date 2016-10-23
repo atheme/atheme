@@ -1,0 +1,8 @@
+Помощ за SET HIDEMAIL:
+
+/NS SET HIDEMAIL ON|OFF
+
+СКРИВА EMAIL АДРЕСА НА АКАУНТА,
+ПРИ КОЕТО ДРУГИТЕ ПОТРЕБИТЕЛИ НЯМА ДА ГО ВИЖДАТ С КОМАНДА INFO.
+
+ПРИМЕР: /MSG NS SET HIDEMAIL ON

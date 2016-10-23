@@ -1,0 +1,40 @@
+Help for FLAGS:
+
+The FLAGS command allows for the granting/removal of group
+privileges on a more specific, non-generalized level. It
+supports registered nicknames as targets.
+
+When only the group argument is given, a listing of
+permissions granted to users will be displayed.
+
+Syntax: FLAGS <!group>
+
+You can modify a users' flags if you yourself have the +f flag.
+This has much the same syntax as chanserv/flags, using + to add
+flags to a user and - to remove flags from a user.
+
+Syntax: FLAGS <!group> [nickname flag_changes]
+
+Permissions:
+    +f - Enables modification of group access list.
+    +F - Grants full founder access.
+    +A - Enables viewing of group access list.
+    +m - Read memos sent to the group.
+    +c - Have channel access in channels where the group has sufficient
+         privileges.
+    +v - Take vhosts offered to the group through HostServ.
+    +s - Ability to use &nick& SET commands on the group.
+    +b - Ban a user from the group. The user will not be able to join the
+         group with the JOIN command and it will not show up in their
+         NickServ INFO or anywhere else. NOTE that setting this flag will NOT
+         automatically remove the users' privileges (if applicable).
+    +i - Grants the ability to invite users to the group.
+
+The special permission +* adds all permissions except +F.
+The special permission -* removes all permissions including +F.
+
+Examples:
+    /msg &nick& FLAGS !baz
+    /msg &nick& FLAGS !baz foo +F
+    /msg &nick& FLAGS !baz foo -*
+    /msg &nick& FLAGS !baz foo +fmc
