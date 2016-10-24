@@ -76,7 +76,7 @@ static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 		mowgli_strlcat(buf, iter + 1 < amt ? ", " : ".", BUFSIZE);
 	}
 
-	gs_command_report(si, "Some names to ponder: %s", buf);
+	gs_command_report(si, _("Some names to ponder: %s"), buf);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

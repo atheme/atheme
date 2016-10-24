@@ -298,7 +298,7 @@ typedef struct {
 static antiflood_enforce_method_impl_t antiflood_enforce_methods[ANTIFLOOD_ENFORCE_COUNT] = {
 	[ANTIFLOOD_ENFORCE_QUIET]   = { &antiflood_enforce_quiet, &antiflood_unenforce_banlike },
 	[ANTIFLOOD_ENFORCE_KICKBAN] = { &antiflood_enforce_kickban, &antiflood_unenforce_banlike },
-	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline },
+	[ANTIFLOOD_ENFORCE_KLINE]   = { &antiflood_enforce_kline, NULL },
 };
 
 static inline antiflood_enforce_method_impl_t *

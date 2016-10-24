@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2016 Atheme Development Group <http://atheme.github.io/>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Allows a user to drop (unset) their assigned vhost without 
+ * Allows a user to drop (unset) their assigned vhost without
  * Staff intervention.
  *
  */
@@ -18,7 +18,6 @@ DECLARE_MODULE_V1
 );
 
 static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
-static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 

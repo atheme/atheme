@@ -315,7 +315,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	rw = malloc(sizeof(rwatch_t));
+	rw = smalloc(sizeof(rwatch_t));
 	rw->regex = sstrdup(pattern);
 	rw->reflags = flags;
 	rw->reason = sstrdup(reason);

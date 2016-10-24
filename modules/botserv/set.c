@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2009 Celestin, et al.
+ * Copyright (c) 2014-2016 Austin Ellis
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file is a meta-module for compatibility with old
@@ -14,7 +15,7 @@ DECLARE_MODULE_V1
 (
 	"botserv/set", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Rizon Development Group <http://dev.rizon.net>"
+	VENDOR_STRING
 );
 
 void _modinit(module_t *m)
@@ -24,6 +25,7 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_fantasy");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_nobot");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_private");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "botserv/set_saycaller");
 
 }
 

@@ -61,8 +61,8 @@ static void nickserv_handle_nickchange(user_t *u)
 
 		if (!(u->flags & UF_SEENINFO) && chansvs.me != NULL)
 		{
-			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
-			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
+			notice(nicksvs.nick, u->nick, _("Welcome to %s, %s! Here on %s, we provide services to enable the "
+			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2."),
 			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == false) ? "msg " : "", nicksvs.me->disp, (ircd->uses_rcommand == false) ? "msg " : "", chansvs.me->disp);
 
 			u->flags |= UF_SEENINFO;

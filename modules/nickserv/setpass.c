@@ -65,6 +65,12 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu == mu)
+	{
+		command_fail(si, fault_already_authed, _("You are logged in and can change your password using the SET PASSWORD command."));
+		return;
+	}
+
 	if (strlen(password) >= PASSLEN)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SETPASS");

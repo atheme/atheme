@@ -51,13 +51,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* To configure/use, add a block to the proxyscan{} section of your atheme.conf
- * like this:
- *
- * blacklists {
- *	"dnsbl.dronebl.org";
- *	"rbl.efnetrbl.org";
- * };
+/* To configure/use: see the proxyscan{} section of your atheme.conf
  */
 
 #include "atheme.h"
@@ -65,19 +59,36 @@
 
 DECLARE_MODULE_V1
 (
-	"contrib/dnsbl", false, _modinit, _moddeinit,
+	"proxyscan/dnsbl", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );
 
 mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 mowgli_patricia_t **os_set_cmdtree;
-static char *action = NULL;
+
+enum dnsbl_action {
+	DNSBL_ACT_NONE,
+	DNSBL_ACT_NOTIFY,
+	DNSBL_ACT_SNOOP,
+	DNSBL_ACT_KLINE,
+} action;
+
+#define ITEM_DESC(x) [DNSBL_ACT_ ## x] = #x
+
+const char *action_names[] = {
+	ITEM_DESC(NONE),
+	ITEM_DESC(NOTIFY),
+	ITEM_DESC(SNOOP),
+	ITEM_DESC(KLINE),
+	NULL
+};
+
+#undef ITEM_DESC
 
 /* A configured DNSBL */
 struct Blacklist {
-	unsigned int status;	/* If CONF_ILLEGAL, delete when no clients */
-	int refcount;
+	object_t parent;
 	char host[IRCD_RES_HOSTLEN + 1];
 	unsigned int hits;
 	time_t lastwarning;
@@ -108,6 +119,7 @@ mowgli_list_t dnsbl_elist;
 
 static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[]);
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr);
+static void abort_blacklist_queries(user_t *u);
 static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[]);
 static void write_dnsbl_exempt_db(database_handle_t *db);
@@ -145,25 +157,18 @@ static void os_cmd_set_dnsblaction(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!strcasecmp("SNOOP", act) || !strcasecmp("KLINE", act) || !strcasecmp("NOTIFY", act))
+	for (enum dnsbl_action n = 0; action_names[n] != NULL; n++)
 	{
-		action = sstrdup(act);
-		command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), act);
-		logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", act);
-		return;
+		if (!strcasecmp(action_names[n], act))
+		{
+			action = n;
+			command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), action_names[n]);
+			logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", action_names[n]);
+			return;
+		}
 	}
-	else if (!strcasecmp("NONE", act))
-	{
-		action = NULL;
-		command_success_nodata(si, _("DNSBLACTION successfully set to \2%s\2"), act);
-		logcommand(si, CMDLOG_ADMIN, "SET:DNSBLACTION: \2%s\2", act);
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, _("Invalid action given."));
-		return;
-	}
+
+	command_fail(si, fault_badparams, _("Invalid action given."));
 }
 
 static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
@@ -254,10 +259,10 @@ static void ps_cmd_dnsblexempt(sourceinfo_t *si, int parc, char *parv[])
 
 			tm = *localtime(&de->exempt_ts);
 			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
-			command_success_nodata(si, "IP: \2%s\2 Reason: \2%s\2 (%s - %s)",
+			command_success_nodata(si, _("IP: \2%s\2 Reason: \2%s\2 (%s - %s)"),
 					de->ip, de->reason, de->creator, buf);
 		}
-		command_success_nodata(si, "End of list.");
+		command_success_nodata(si, _("End of list."));
 		logcommand(si, CMDLOG_GET, "DNSBL:EXEMPT:LIST");
 	}
 	else
@@ -284,12 +289,12 @@ static void ps_cmd_dnsblscan(sourceinfo_t *si, int parc, char *parv[])
 	{
 		lookup_blacklists(u);
 		logcommand(si, CMDLOG_ADMIN, "DNSBLSCAN: %s", user);
-		command_success_nodata(si, "%s has been scanned.", user);
+		command_success_nodata(si, _("%s has been scanned."), user);
 		return;
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "User %s is not on the network, you can not scan them.", user);
+		command_fail(si, fault_badparams, _("User %s is not on the network, you can not scan them."), user);
 		return;
 	}
 }
@@ -325,6 +330,9 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 		return;
 	}
 
+	l = dnsbl_queries(blcptr->u);
+	mowgli_node_delete(&blcptr->node, l);
+
 	if (reply != NULL)
 	{
 		/* only accept 127.x.y.z as a listing */
@@ -342,33 +350,34 @@ static void blacklist_dns_callback(void *vptr, dns_reply_t *reply)
 
 	/* they have a blacklist entry for this client */
 	if (listed)
-	{
 		dnsbl_hit(blcptr->u, blcptr->blacklist);
-		return;
-	}
 
-	l = dnsbl_queries(blcptr->u);
-	mowgli_node_delete(&blcptr->node, l);
-
+	object_unref(blcptr->blacklist);
 	free(blcptr);
 }
 
 /* XXX: no IPv6 implementation, not to concerned right now though. */
+/* 2015-12-06: at least we shouldn't crash on bad inputs anymore... -bcode */
 static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 {
-	struct BlacklistClient *blcptr = malloc(sizeof(struct BlacklistClient));
 	char buf[IRCD_RES_HOSTLEN + 1];
 	int ip[4];
 	mowgli_list_t *l;
 
-	blcptr->blacklist = blptr;
+	if (u->ip == NULL)
+		return;
+
+	/* A sscanf worked fine for chary for many years, it'll be fine here */
+	if (sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]) != 4)
+		return;
+
+	struct BlacklistClient *blcptr = smalloc(sizeof(struct BlacklistClient));
+
+	blcptr->blacklist = object_ref(blptr);
 	blcptr->u = u;
 
 	blcptr->dns_query.ptr = blcptr;
 	blcptr->dns_query.callback = blacklist_dns_callback;
-
-	/* A sscanf worked fine for chary for many years, it'll be fine here */
-	sscanf(u->ip, "%d.%d.%d.%d", &ip[3], &ip[2], &ip[1], &ip[0]);
 
 	/* becomes 2.0.0.127.torbl.ahbl.org or whatever */
 	snprintf(buf, sizeof buf, "%d.%d.%d.%d.%s", ip[0], ip[1], ip[2], ip[3], blptr->host);
@@ -377,7 +386,6 @@ static void initiate_blacklist_dnsquery(struct Blacklist *blptr, user_t *u)
 
 	l = dnsbl_queries(u);
 	mowgli_node_add(blcptr, &blcptr->node, l);
-	blptr->refcount++;
 }
 
 /* public interfaces */
@@ -392,8 +400,9 @@ static struct Blacklist *new_blacklist(char *name)
 
 	if (blptr == NULL)
 	{
-		blptr = malloc(sizeof(struct Blacklist));
-		mowgli_node_add(blptr, &blptr->node, &blacklist_list);
+		blptr = smalloc(sizeof(struct Blacklist));
+		object_init(object(blptr), "proxyscan dnsbl", NULL);
+		mowgli_node_add(object_ref(blptr), &blptr->node, &blacklist_list);
 	}
 
 	mowgli_strlcpy(blptr->host, name, IRCD_RES_HOSTLEN + 1);
@@ -409,7 +418,6 @@ static void lookup_blacklists(user_t *u)
 	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
 	{
 		struct Blacklist *blptr = (struct Blacklist *) n->data;
-		blptr->status = 0;
 
 		if (u == NULL)
 			return;
@@ -426,11 +434,9 @@ static void destroy_blacklists(void)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, blacklist_list.head)
 	{
 		blptr = n->data;
-		blptr->hits = 0; /* keep it simple and consistent */
 
 		mowgli_node_delete(n, &blacklist_list);
-
-		free(n->data);
+		object_unref(blptr);
 	}
 }
 
@@ -453,6 +459,27 @@ static void dnsbl_config_purge(void *unused)
 	destroy_blacklists();
 }
 
+static int dnsbl_action_config_handler(mowgli_config_file_entry_t *ce)
+{
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	for (enum dnsbl_action n = 0; action_names[n] != NULL; n++)
+	{
+		if (!strcasecmp(action_names[n], ce->vardata))
+		{
+			action = n;
+			return 0;
+		}
+	}
+
+	conf_report_warning(ce, "invalid parameter for configuration option");
+	return 0;
+}
+
 static void check_dnsbls(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
@@ -464,7 +491,7 @@ static void check_dnsbls(hook_user_nick_t *data)
 	if (is_internal_client(u))
 		return;
 
-	if (!action)
+	if (action == DNSBL_ACT_NONE)
 		return;
 
 	MOWGLI_ITER_FOREACH(n, dnsbl_elist.head)
@@ -481,49 +508,64 @@ static void check_dnsbls(hook_user_nick_t *data)
 static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 {
 	service_t *svs;
+	kline_t *k;
 
 	svs = service_find("operserv");
 
-	if (!strcasecmp("SNOOP", action))
+	abort_blacklist_queries(u);
+
+	switch (action)
 	{
-		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-		/* abort_blacklist_queries(u); */
-		return;
+		case DNSBL_ACT_KLINE:
+			if (! (u->flags & UF_KLINESENT)) {
+				slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+				notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
+				k = kline_add("*", u->ip, "Banned (DNS Blacklist)", 86400, "Proxyscan");
+				u->flags |= UF_KLINESENT;
+			}
+			break;
+
+		case DNSBL_ACT_NOTIFY:
+			notice(svs->nick, u->nick, _("Your IP address %s is listed in DNS Blacklist %s"), u->ip, blptr->host);
+			// FALLTHROUGH
+		case DNSBL_ACT_SNOOP:
+			slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+			break;
+
+		default:
+			break; // do nothing
 	}
-	else if (!strcasecmp("NOTIFY", action))
+}
+
+static void abort_blacklist_queries(user_t *u)
+{
+	mowgli_node_t *n, *tn;
+	mowgli_list_t *l = dnsbl_queries(u);
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, l->head)
 	{
-		slog(LG_INFO, "DNSBL: \2%s\2!%s@%s [%s] is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-		notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-		/* abort_blacklist_queries(u); */
-		return;
-	}
-	else if (!strcasecmp("KLINE", action))
-	{
-		if (! (u->flags & UF_KLINESENT)) {
-			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
-			/* abort_blacklist_queries(u); */
-			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
-			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");
-			u->flags |= UF_KLINESENT;
-		}
-		return;
+		struct BlacklistClient *blcptr = n->data;
+
+		delete_resolver_queries(&blcptr->dns_query);
+		mowgli_node_delete(n, l);
+		free(blcptr);
 	}
 }
 
 static void osinfo_hook(sourceinfo_t *si)
 {
 	mowgli_node_t *n;
+	const char *name = action_names[action];
 
-	if (action)
-		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", action);
-	else
-		command_success_nodata(si, "Action taken when a user is an a DNSBL: %s", "None");
+	return_if_fail(name != NULL);
+
+	command_success_nodata(si, _("Action taken when a user is on a DNSBL: %s"), name);
 
 	MOWGLI_ITER_FOREACH(n, blacklist_list.head)
 	{
 		struct Blacklist *blptr = (struct Blacklist *) n->data;
 
-		command_success_nodata(si, "Blacklist(s): %s", blptr->host);
+		command_success_nodata(si, _("Blacklist(s): %s"), blptr->host);
 	}
 }
 
@@ -535,7 +577,7 @@ static void write_dnsbl_exempt_db(database_handle_t *db)
 	{
 		dnsbl_exempt_t *de = n->data;
 
-		db_start_row(db, "BW");
+		db_start_row(db, "BLE");
 		db_write_word(db, de->ip);
 		db_write_time(db, de->exempt_ts);
 		db_write_word(db, de->creator);
@@ -590,10 +632,13 @@ _modinit(module_t *m)
 	hook_add_event("user_add");
 	hook_add_user_add(check_dnsbls);
 
+	hook_add_event("user_delete");
+	hook_add_user_delete(abort_blacklist_queries);
+
 	hook_add_event("operserv_info");
 	hook_add_operserv_info(osinfo_hook);
 
-	add_dupstr_conf_item("dnsbl_action", &proxyscan->conf_table, 0, &action, NULL);
+	add_conf_item("DNSBL_ACTION", &proxyscan->conf_table, dnsbl_action_config_handler);
 	add_conf_item("BLACKLISTS", &proxyscan->conf_table, dnsbl_config_handler);
 
 	command_add(&os_set_dnsblaction, *os_set_cmdtree);
@@ -606,6 +651,7 @@ _moddeinit(module_unload_intent_t intent)
 
 	hook_del_db_write(write_dnsbl_exempt_db);
 	hook_del_user_add(check_dnsbls);
+	hook_del_user_delete(abort_blacklist_queries);
 	hook_del_config_purge(dnsbl_config_purge);
 	hook_del_operserv_info(osinfo_hook);
 
@@ -613,7 +659,7 @@ _moddeinit(module_unload_intent_t intent)
 
 	proxyscan = service_find("proxyscan");
 
-	del_conf_item("dnsbl_action", &proxyscan->conf_table);
+	del_conf_item("DNSBL_ACTION", &proxyscan->conf_table);
 	del_conf_item("BLACKLISTS", &proxyscan->conf_table);
 
 	command_delete(&os_set_dnsblaction, *os_set_cmdtree);

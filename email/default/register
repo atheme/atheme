@@ -9,7 +9,7 @@ Date: &date&
 In order to complete your account registration, you must type the following
 command on IRC:
 
-   /msg &nicksvs& VERIFY REGISTER &accountname& &param&
+/msg &nicksvs& VERIFY REGISTER &accountname& &param&
 
 Thank you for registering your account on the &netname& IRC network!
 

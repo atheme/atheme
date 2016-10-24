@@ -704,7 +704,7 @@ int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, cons
 
 	date = timebuf;
 
-	snprintf(from, sizeof from, "\"%s\" <%s>",
+	snprintf(from, sizeof from, "\"%s Network Services\" <%s>",
 			me.netname, me.register_email);
 	snprintf(to, sizeof to, "\"%s\" <%s>", entity(mu)->name, email);
 	/* \ is special here; escape it */

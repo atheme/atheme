@@ -534,7 +534,7 @@ static bool eval_dice(sourceinfo_t *si, char *s_input)
 	}
 
 	total = 0.0;
-	snprintf(buffer, 1024, "\2%s\2 rolled %ud%u: ", si->su->nick, x, y);
+	snprintf(buffer, 1024, _("\2%s\2 rolled %ud%u: "), si->su->nick, x, y);
 	for (roll = 0; roll < x; ++roll)
 	{
 		snprintf(result, 32, "%d ", dice = (1 + (arc4random() % y)));
@@ -543,10 +543,10 @@ static bool eval_dice(sourceinfo_t *si, char *s_input)
 	}
 
 	if (op == '\0')
-		snprintf(result, 32, " <Total: %g>", total);
+		snprintf(result, 32, _(" <Total: %g>"), total);
 	else
 	{
-		snprintf(result, 32, " <Total: %g(%c%u) = ", total, op, z);
+		snprintf(result, 32, _(" <Total: %g(%c%u) = "), total, op, z);
 		mowgli_strlcat(buffer, result, sizeof(buffer));
 		switch (op)
 		{
@@ -600,9 +600,9 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp("RICK", arg))
 	{
-		gs_command_report(si, "Never gonna give you up; Never gonna let you down");
-		gs_command_report(si, "Never gonna run around and desert you; Never gonna make you cry");
-		gs_command_report(si, "Never gonna say goodbye; Never gonna tell a lie and hurt you");
+		gs_command_report(si, _("Never gonna give you up; Never gonna let you down"));
+		gs_command_report(si, _("Never gonna run around and desert you; Never gonna make you cry"));
+		gs_command_report(si, _("Never gonna say goodbye; Never gonna tell a lie and hurt you"));
 		return;
 	}
 

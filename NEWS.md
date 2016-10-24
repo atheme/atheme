@@ -5,6 +5,12 @@ As of late February 2016, Atheme is being brought back to live development (mana
 and maintained by a few of the fork maintainers). We look forward to bringing Atheme
 back into its spotlight.  Stay tuned for new developments, fixes, and releases.
 
+security
+--------
+
+- [CVE-2014-9773](https://www.cvedetails.com/cve/CVE-2014-9773/): Remote attackers could modify the behavior of the Anope FLAGS compatibility code by registering the keyword nicks LIST, CLEAR, or MODIFY. Reported by ToBeFree.
+- [CVE-2016-4478](https://www.cvedetails.com/cve/CVE-2016-4478/): Buffer overflow in XMLRPC code. Reported by hc.
+
 nickserv
 --------
 - Make `VHOST` set cloak assigner and timestamp the same way HostServ does
@@ -12,6 +18,20 @@ nickserv
 - Make `REGAIN` log you in if successful.
 - Allow implementing custom filters for `LIST`
 - nickserv/multimark: new module which allows multiple MARK entries per nickname.
+- wallops when vhosting a marked account
+- nickserv/vhost: update usercloak metadata on vhost removal
+- nickserv/{enforce,ghost}: respect frozen accounts
+- nickserv/set_accountname: disallow change if RESTRICTed
+- nickserv/set_pubkey: new module (keeping backwards compatibility with old syntax)
+- nickserv/set_nopassword: new module
+- nickserv/{reset,set,send}pass: various fixes
+- nickserv/regain: the target user's bannedness shouldn't matter
+- nickserv: Verify that the nick being regained is valid.
+- nickserv/enforce: prevent regaining reserved nicks
+- nickserv/cert: Add CLEAR command
+- nickserv/set_email: relax verification requirements so that typo'd email addresses can be fixed (closes #441)
+- nickserv/list: new criterion VACATION
+- nickserv/info: show "Channels" line if the source user also is the target
 
 chanserv
 --------
@@ -22,6 +42,18 @@ chanserv
 - Allow users with +O or +V flags to op/voice themselves, since they can regain op/voice
   by cycling the channel anyway.
 - chanserv/clear_akicks: new module providing a `CLEAR AKICKS` command.
+- Always move on to the next nick in case of an error in /cs op etc.
+- Tell the user who they failed to op/voice if they don't have enough privs
+- +e added to chanserv{} templates and founder_flags
+- chanserv: remove set_founder
+- chanserv: use myentity_allow_foundership() to control whether or not an entity can take +F (ref #427)
+- chanserv/set_*: announce changes via verbose()
+- chanserv/flags: make Anope FLAGS compatibility an option (addresses CVE-2014-9773)
+- fix an issue where activating a channel in the moderation queue would op the wrong person
+- chanserv: move libathemecore component of bouncing mode changes on secure channels to chanserv (closes #449)
+- chanserv/clone: do not clone HOLD, and ANTIFLOOD AKILL flags
+- MC_SECURE: do not deop services
+- help: mention INFO instead of RECOVER
 
 gameserv
 --------
@@ -31,15 +63,23 @@ groupserv
 ---------
 - Hook into `sasl_may_impersonate` to support group-membership checks
 - groupserv/set_groupname: new module allowing renaming a groupserv group
+- Added group_register and group_drop hooks (addresses #428)
+- groupserv: Rewrite flags parser to use ga_flags
+- groupserv: Fix incorrect behaviour for flags +*
+- groupserv: Fix inconsistencies with FLAGS
+- groupserv/main: allow groups to take +F (ref #427)
+- Add unverified user check
 
 helpserv
 --------
 - helpserv/ticket: optionally accept a close reason and send a memo to an offline user
+- helpserv/ticket: mention possibility of using close reason in the help file, and log it
 
 operserv
 --------
 - operserv/rwatch: allow creation of RWATCH rules which k-line if 'K' is a modifier on the
   provided regexp.
+- some commands now use kline_add instead of kline_sts to allow easier management of automated klines
 
 saslserv
 --------
@@ -47,6 +87,11 @@ saslserv
 - Add a `sasl_may_impersonate` hook
 - The DH-AES and DH-BLOWFISH mechanisms were removed in their entirety.
 - Add support for IRCv3.2-draft SASL mechanism list caching, implemented by InspIRCd 2.2.
+- saslserv/ecdsa-nist256p-challenge: add backwards compatibility for old pubkey syntax
+- saslserv: call bad_password on SASL authentication failure
+- saslserv: use message source to get the source server
+- saslserv: try to include source host in SASL failure message
+- SASL: Log mechanism used by authenticated clients
 
 alis
 ----
@@ -55,6 +100,7 @@ alis
 perl api
 --------
 - Export SaslServ's `sasl_may_impersonate` hook
+- Forward compatibility for hooks
 
 ircd protocol
 -------------
@@ -70,6 +116,23 @@ ircd protocol
 - ngircd: Implement oper-wallops, using individual notices
 - unreal: Request MLOCK messages when linking to the network
 - sporksircd: Nuke obsolete module
+- clean up the mix of spaces & tabs
+- convert ircd_t to C99 struct syntax
+- unreal: fix checking of +f syntax
+- ts6-generic: add DLINE/UNDLINE implementation
+- ts6-generic: add support for sending mechlists
+- unreal: Add support for unreal 4 in a separate module
+- hybrid: remove obsolete module
+- undernet: remove obsolete module
+- ShadowIRCd: remove obsolete module
+- inspircd: add ZLINE/UNZLINE implementation
+- inspircd: use DELLINE for XLine removal
+- inspircd: properly recognize CSTATUS_IMMUNE (+Y)
+- inspircd: Only set hideoper mode on oper pseudoclients
+- charybdis: Support chm_nonotice.so (Block channel notices) extension
+- charybdis: Support cmode +M in charybdis and make it oper-only
+- charybdis: Setting CMODE_IMMUNE as .oimmune_mode
+- inspircd: Fix atoi logic error preventing maximum rejoindelay value
 
 other
 -----
@@ -80,11 +143,48 @@ other
 - contrib/cap_sasl.pl: Fix crash if irssi has ICB or SILC plugins loaded
 - contrib/cap_sasl.pl: Fix crash if disconnected while waiting for SASL reply
 - transport/jsonrpc: new module implementing JSONRPC transport
+- contrib/cap_sasl.pl: various other improvements
+- time_format: show the timezone
+- exttarget: explicitly disallow foundership for exttargets (closes #427)
+- help: various updates to reflect changes
+- help: clarify some behavior
+- [database] Make services respect an external umask when saving
+- transport/xmlrpc: Do not copy more bytes than were allocated (addresses CVE-2016-4478)
+- add a user_can_login(si, mu) hook
+- Add an option to strip build date for reproducible builds
+- botserv/set_saycaller: (optionally) give caller-nick
+- chanfix/fix: stay in log channel after fixes
+- various: code style fixes, fix some memory leaks and some warnings
+- i18n: mark more strings as translatable
+- atheme.conf example: updated to reflect changes
+- proxyscan/dnsbl: Improve the module and fix multiple crashes
+- i18n: update po/POTFILES.in
 
 crypto
 ------
 - pbkdf2v2: Newer module implementing PBKDF2-HMAC digest scheme
             with backward compatibility and limited forward compatibility
+
+libathemecore
+-------------
+
+- add dline/undline core interface
+- user_is_channel_banned(): respect +e if applicable
+- user_is_channel_banned(): check for voice/op/etc.
+- do not allow entities under restriction to take +F at all (closes #439)
+- fix issue where pretty_mask would return host!*@*
+- chanacs_user_flags(): do not grant effective flags other than +b to unverified users (closes #416).
+- flags: update_chanacs_flags(): do not assume that a protocol module is loaded.
+- try_kick(): add support for inspircd-style per-user kick immunity the right way
+- entity: add new entity validator for taking +F (ref #427)
+- logger: use ISO 8601 in log files
+
+hostserv
+--------
+
+- hostserv: Remove group-specific offered vhosts when group dropped
+- Add DROP command
+- hostserv/request: Ignore request if requested vhost already set
 
 Atheme Services 7.1 Release Notes
 =================================

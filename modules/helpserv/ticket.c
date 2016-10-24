@@ -279,7 +279,10 @@ static void helpserv_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 				}
 			}
 
-			logcommand(si, CMDLOG_REQUEST, "CLOSE: Help for \2%s\2 about \2%s\2", nick, l->topic);
+			if (parv[1] != NULL)
+				logcommand(si, CMDLOG_REQUEST, "CLOSE: Help for \2%s\2 about \2%s\2 (\2%s\2)", nick, l->topic, parv[1]);
+			else
+				logcommand(si, CMDLOG_REQUEST, "CLOSE: Help for \2%s\2 about \2%s\2", nick, l->topic);
 
 			mowgli_node_delete(n, &helpserv_reqlist);
 

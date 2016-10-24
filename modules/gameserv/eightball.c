@@ -72,7 +72,7 @@ static void command_eightball(sourceinfo_t *si, int parc, char *parv[])
 		N_("No chance at all!")
 	};
 
-	gs_command_report(si, "%s", eightball_responses[rand() % 28]);
+	gs_command_report(si, "%s", _(eightball_responses[rand() % 28]));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

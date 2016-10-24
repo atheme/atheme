@@ -108,7 +108,10 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (MOWGLI_LIST_LENGTH(&mu->logins) > 0)
 	{
-		command_fail(si, fault_noprivs, _("This operation cannot be performed on %s, because someone is logged in to it."), entity(mu)->name);
+		if (si->smu == mu)
+			command_fail(si, fault_already_authed, _("You are logged in and can change your password using the SET PASSWORD command."));
+		else
+			command_fail(si, fault_noprivs, _("This operation cannot be performed on %s, because someone is logged in to it."), entity(mu)->name);
 		return;
 	}
 

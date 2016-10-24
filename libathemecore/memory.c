@@ -1,6 +1,6 @@
 /*
  * atheme-services: A collection of minimalist IRC services
- * memory.c: Logging routines
+ * memory.c: Memory wrappers
  *
  * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)
  *

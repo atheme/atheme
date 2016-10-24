@@ -821,7 +821,7 @@ static void cs_cmd_access_del(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was removed from the \2%s\2 role in \2%s\2."), target, role, channel);
-	verbose(mc, "\2%s\2 deleted \2%s\2 from the access list (had role: \2%s\2).", get_source_name(si), target, role);
+	verbose(mc, _("\2%s\2 deleted \2%s\2 from the access list (had role: \2%s\2)."), get_source_name(si), target, role);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:DEL: \2%s\2 from \2%s\2", target, mc->name);
 }
@@ -968,7 +968,7 @@ static void cs_cmd_access_add(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 was added with the \2%s\2 role in \2%s\2."), target, role, channel);
-	verbose(mc, "\2%s\2 added \2%s\2 to the access list (with role: \2%s\2).", get_source_name(si), target, role);
+	verbose(mc, _("\2%s\2 added \2%s\2 to the access list (with role: \2%s\2)."), get_source_name(si), target, role);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:ADD: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
 }
@@ -1109,7 +1109,7 @@ static void cs_cmd_access_set(sourceinfo_t *si, int parc, char *parv[])
 	chanacs_close(ca);
 
 	command_success_nodata(si, _("\2%s\2 now has the \2%s\2 role in \2%s\2."), target, role, channel);
-	verbose(mc, "\2%s\2 changed the access list role for \2%s\2 to \2%s\2.", get_source_name(si), target, role);
+	verbose(mc, _("\2%s\2 changed the access list role for \2%s\2 to \2%s\2."), get_source_name(si), target, role);
 
 	logcommand(si, CMDLOG_SET, "ACCESS:SET: \2%s\2 to \2%s\2 as \2%s\2", target, mc->name, role);
 }

@@ -115,7 +115,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 	memset(s->challenge, 'A', CHALLENGE_LENGTH);
 #endif
 
-	*out = malloc(400);
+	*out = smalloc(400);
 	memcpy(*out, s->challenge, CHALLENGE_LENGTH);
 	*out_len = CHALLENGE_LENGTH;
 
