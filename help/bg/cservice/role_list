@@ -1,8 +1,0 @@
-Помощ за ROLE LIST:
-
-ROLE LIST ПОКАЗВА ВСИЧКИ РОЛИ В КАНАЛА, КАКТО И ФЛАГОВЕТЕ КЪМ ТЯХ.
-
-КОМАНДА: ROLE <#CHANNEL> LIST
-
-ПРИМЕР:
-/MSG CHANSERV ROLE #BAZ LIST

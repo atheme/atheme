@@ -1,7 +1,0 @@
-Помощ за SET NEVEROP:
-
-/NS SET NEVEROP ON|OFF
-
-ЗАБРАНЯВА ВЪЗМОЖНОСТТА ДА ВИ БЪДАТ ДАВАНИ ПРАВА ЧРЕЗ CHANSERV ЗА КАНАЛИ.
-
-ПРИМЕР: /MSG NS SET NEVEROP ON

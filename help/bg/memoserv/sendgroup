@@ -1,7 +1,0 @@
-Помощ за SENDGROUP:
-
-/MS SENDGROUP !GROUP TEXT
-ИЗПРАЩАТЕ СЪОБЩЕНИЕ ДО ВСИЧКИ ПОТРЕБИТЕЛИ ОТ ОПРЕДЕЛЕНА ГРУПА, 
-КОИТО ИМАТ ФЛАГ +M В НЕЯ.
-
-ПРИМЕР: /MSG MS SENDGROUP !OPERS BEWARE OF BADGUY

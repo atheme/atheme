@@ -1,8 +1,0 @@
-Помощ за TOPICAPPEND:
-
-КОМАНДАТА TOPICAPPEND ВИ ПОЗВОЛЯВА ДА ГО ДОПЪЛВАТЕ.
-
-КОМАНДА: TOPICAPPEND <#CHANNEL><TOPIC>
-
-ПРИМЕР:
-/MSG CHANSERV TOPICAPPEND #FOO BAR

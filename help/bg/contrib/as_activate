@@ -1,9 +1,0 @@
-Help for ACTIVATE:
-
-Send the requested announcement for the given nick.
-A memo informing the user will also be sent.
-
-Syntax: ACTIVATE <nick>
-
-Examples:
-    /msg &nick& ACTIVATE nenolod

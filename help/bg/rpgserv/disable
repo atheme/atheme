@@ -1,8 +1,0 @@
-Help for DISABLE:
-
-Disables RPGServ for a channel.
-
-Syntax: DISABLE <#channel>
-
-Example:
-    /msg &nick& DISABLE #ooc

@@ -1,8 +1,0 @@
-Помощ за SET GUARD:
-
-КОМАНДАТА SET GUARD ВИ ПОЗВОЛЯВА ДА ВКАРАТЕ CHANSERV В КАНАЛА..
-
-КОМАНДА: SET <#CHANNEL> GUARD ON|OFF
-
-ПРИМЕР:
-/MSG CHANSERV SET #ATHEME GUARD ON

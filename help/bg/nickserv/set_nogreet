@@ -1,7 +1,0 @@
-Помощ за SET NOGREET:
-
-/NS SET NOGREET ON|OFF
-
-ЗАБРАНЯВАТЕ ДА ВИ БЪДАТ ПОКАЗВАНИ ВХОДЯЩИТЕ СЪОБЩЕНИЯ НА КАНАЛИТЕ (ВИЖТЕ CHANSERV SET ENTRYMSG).
-
-ПРИМЕР: /MSG NS SET NOGREET ON

@@ -1,9 +1,0 @@
-Help for CLOSE:
-
-Close the help request from the given nick.
-The user will be notified that their request was closed.
-
-Syntax: CLOSE <nick> [reason]
-
-Examples:
-    /msg &nick& CLOSE Grue It is now no longer pitch dark.

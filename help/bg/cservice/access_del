@@ -1,8 +1,0 @@
-Помощ за ACCESS DEL:
-
-ACCESS DEL ЩЕ ИЗТРИЕ РОЛЯТА НА КОНКРЕТЕН ПОТРЕБИТЕЛ В КАНАЛА.
-
-КОМАНДА: ACCESS <#CHANNEL> DEL <НИК>
-
-ПРИМЕР:
-/MSG CHANSERV ACCESS #ATHEME DEL M00N

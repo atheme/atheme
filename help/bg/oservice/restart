@@ -1,8 +1,0 @@
-Help for RESTART:
-
-RESTART shuts down services and restarts them.
-
-Syntax: RESTART
-
-Example:
-    /msg &nick& RESTART

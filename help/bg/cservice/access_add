@@ -1,9 +1,0 @@
-Помощ за ACCESS ADD:
-
-ACCESS ADD ЩЕ ДАДЕ НА КОНКРЕТЕН ПОТРЕБИТЕЛ РОЛЯ В КАНАЛА.
-
-КОМАНДА: ACCESS <#CHANNEL> ADD <НИК><РОЛЯ>
-
-ПРИМЕР:
-
-/MSG CHANSERV ACCESS #ATHEME ADD M00N HELPERS

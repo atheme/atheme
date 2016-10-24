@@ -1,9 +1,0 @@
-Help for SHUTDOWN:
-
-SHUTDOWN shuts down services. Services will
-not reconnect or restart.
-
-Syntax: SHUTDOWN
-
-Example:
-    /msg &nick& SHUTDOWN

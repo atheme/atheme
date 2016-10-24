@@ -1,9 +1,0 @@
-Help for RESETPASS:
-
-RESETPASS sets a random password for the specified
-account.
-
-Syntax: RESETPASS <account>
-
-Examples:
-    /msg &nick& RESETPASS pfish

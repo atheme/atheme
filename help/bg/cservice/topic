@@ -1,8 +1,0 @@
-Помощ за TOPIC:
-
-КОМАНДАТА TOPIC ВИ ПОЗВОЛЯВА ДА ГО ПРОМЕНЯТЕ.
-
-КОМАНДА: TOPIC <#CHANNEL><TOPIC>
-
-ПРИМЕР:
-/MSG CHANSERV TOPIC #FOO BAR

@@ -1,8 +1,0 @@
-Help for PINGSPAM:
-
-PINGSPAM spams a user with pings from every service, plus some bonus notices.
-
-Syntax: PINGSPAM <target>
-
-Examples:
-    /msg &nick& PINGSPAM foo-person
