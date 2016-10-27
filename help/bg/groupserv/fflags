@@ -1,0 +1,13 @@
+Help for FFLAGS:
+
+The FFLAGS command allows an oper to force a flags
+change on a group. The syntax is the same as FLAGS,
+except that the target and flags changes must be given.
+Viewing any group's access list is done with FLAGS.
+
+Syntax: FFLAGS <!group> <nickname> <flag_changes>
+
+Examples:
+    /msg &nick& FFLAGS !baz foo +F
+    /msg &nick& FFLAGS !baz foo -*
+    /msg &nick& FFLAGS !baz foo +fmc

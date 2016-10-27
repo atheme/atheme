@@ -1,0 +1,9 @@
+Help for REGNOLIMIT:
+
+REGNOLIMIT allows a group to collectively maintain an
+unlimited amount of channel registrations.
+
+Syntax: REGNOLIMIT <!group> ON|OFF
+
+Examples:
+    /msg &nick& REGNOLIMIT !awesome-people ON

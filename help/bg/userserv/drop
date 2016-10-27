@@ -1,0 +1,15 @@
+Help for DROP:
+
+Using this command removes your account from services' database.
+You will lose all your channel access and memos. If an account
+is dropped, anyone else can re-register it. You need to log in
+to services before doing this.
+
+When dropping and re-registering an account during a netsplit,
+users on the other side of the split may later be recognized
+as the new account.
+
+Syntax: DROP <account> <password>
+
+Examples:
+    /msg &nick& DROP foo bar

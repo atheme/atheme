@@ -1,0 +1,10 @@
+Help for INFO:
+
+INFO displays group information such as
+registration time, group URL, email address
+and founder.
+
+Syntax: INFO <!group>
+
+Examples:
+    /msg &nick& INFO !baz

@@ -1,0 +1,9 @@
+Help for LISTLOGINS:
+
+LISTLOGINS lists details of all clients currently authenticated as you including
+their nick!user@host mask and their real host.
+
+Syntax: LISTLOGINS
+
+Examples:
+    /msg &nick& LISTLOGINS

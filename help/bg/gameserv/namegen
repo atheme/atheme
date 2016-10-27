@@ -1,0 +1,12 @@
+Help for NAMEGEN:
+
+NAMEGEN provides you with a list of possible
+names you could use.
+
+It can display the result to either yourself or
+a channel.
+
+Syntax: NAMEGEN [number of names]
+
+Example:
+    /msg &nick& NAMEGEN 5

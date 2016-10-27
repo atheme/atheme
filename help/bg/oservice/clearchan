@@ -1,0 +1,17 @@
+Help for CLEARCHAN:
+
+CLEARCHAN allows operators to clear
+a channel in one of three ways: KICK,
+which kicks all users from the channel, KILL,
+which kills all users in the channel off the
+network, or AKILL, which sets a one week
+network ban against the hosts of all users in
+the channel.
+
+This command should not be used lightly.
+
+Syntax: CLEARCHAN KICK|KILL|AKILL <#channel> <reason>
+
+Example:
+    /msg &nick& CLEARCHAN KICK #warez warez is bad, mk?
+    /msg &nick& CLEARCHAN AKILL #warez you were warned!

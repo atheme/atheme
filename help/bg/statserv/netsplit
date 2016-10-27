@@ -1,0 +1,16 @@
+Help for NETSPLIT:
+
+NETSPLIT allows you to monitor server splits.
+
+Syntax: NETSPLIT LIST
+
+Lists all servers currently split from the network
+and how long they have been disconnected.
+
+Syntax: NETSPLIT REMOVE <server>
+
+Removes a given server from the netsplit list.
+
+Examples:
+   /msg &nick& NETSPLIT REMOVE moocow.int
+

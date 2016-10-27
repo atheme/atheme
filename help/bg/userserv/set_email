@@ -1,0 +1,15 @@
+Help for SET EMAIL:
+
+SET EMAIL changes the e-mail address
+associated with an account. The e-mail
+address is used for password retrieval.
+
+You may be required to confirm the new
+e-mail address. To confirm the address,
+follow the instructions in the message
+sent to the new address.
+
+Syntax: SET EMAIL <new address>
+
+Example:
+    /msg &nick& SET EMAIL dan@example.com

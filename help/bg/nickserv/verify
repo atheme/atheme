@@ -1,0 +1,11 @@
+Помощ за VERIFY:
+
+/NS VERIFY OPERATION NICKNAME KEY
+ПОТВЪРЖДЕНИЕ ПРИ ОПРЕДЕЛЕНИ ОПЕРАЦИИ, 
+СВЪРЗАНИ С ВАШИЯ АКАУНТ 
+(АКО В МРЕЖАТА Е НАСТРОЕНО ДА СЕ ИЗИСКВАТ ПОТВЪРЖДЕНИЯ).
+КЛЮЧЪТ (KEY) СЕ ПОЛУЧАВА В ПИСМО НА EMAIL АДРЕСА НА АКАУНТА.
+
+ПРИМЕРИ:
+/MSG NS VERIFY REGISTER JENNY 161803399
+/MSG NS VERIFY EMAILCHG AERIANA 271828183

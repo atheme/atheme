@@ -1,0 +1,16 @@
+Помощ за SET PREFIX:
+
+КОМАНДАТА PREFIX ВИ ПОЗВОЛЯВА 
+ДА ПРОМЕНИТЕ КАК ДА ИЗПОЛЗВАТЕ ПУБЛИЧНИТЕ КОМАНДИ. 
+ТОВА Е ПОЛЕЗНО, АКО ИМАТЕ БОТ, 
+КОЙТО СЕ ПРИПОКРИВА ПРЕФИКСА НА CHANSERV. 
+ПРЕМАХВАЙКИ ПРЕФИКСА (ИЛИ DEFAULT) ГО АНУЛИРА ДО СТАНДАРТНИЯ ЗА МРЕЖАТА.
+
+КОМАНДА: SET <#CHANNEL> PREFIX [PREFIX]
+
+ПРИМЕРИ:
+
+/MSG CHANSERV SET #FOO PREFIX
+/MSG CHANSERV SET #FOO PREFIX ‘
+/MSG CHANSERV SET #C PREFIX %
+/MSG CHANSERV SET #C PREFIX DEFAULT

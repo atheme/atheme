@@ -1,0 +1,7 @@
+Помощ за SET NEVERGROUP:
+
+/NS SET NEVERGROUP ON|OFF
+
+ЗАБРАНЯВА ВЪЗМОЖНОСТТА ДА ВИ ВКЛЮЧВАТ В ГРУПИ (ВИЖТЕ КОМАНДИТЕ КЪМ GROUPSERV).
+
+ПРИМЕР: /MSG NS SET NEVERGROUP ON

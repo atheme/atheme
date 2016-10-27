@@ -1,0 +1,10 @@
+Help for SET ENFORCEPREFIX:
+
+SET ENFORCEPREFIX changes the prefix of the nick
+that a user will be changed to when they use an
+enforced nickname and fail to authenticate to it.
+
+Syntax: SET ENFORCEPREFIX <prefix>
+
+Example:
+    /msg &nick& SET ENFORCEPREFIX Guest

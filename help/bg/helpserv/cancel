@@ -1,0 +1,8 @@
+Help for CANCEL:
+
+CANCEL allows you to cancel a currently pending request for help.
+
+Syntax: CANCEL
+
+Examples:
+    /msg &nick& CANCEL

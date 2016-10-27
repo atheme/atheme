@@ -1,0 +1,10 @@
+Help for FORBID:
+
+FORBID disallows the use of a specified nickname, similar to
+RESV or QLINE in your IRCd.
+
+Syntax: FORBID <nickname> ON|OFF [reason]
+
+Examples:
+    /msg &nick& FORBID spb ON No reason.
+    /msg &nick& FORBID spb OFF

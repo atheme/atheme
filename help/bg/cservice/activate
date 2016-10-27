@@ -1,0 +1,13 @@
+Help for ACTIVATE:
+
+ACTIVATE allows you to accept a channel's
+registration request.  (For networks that
+moderate Channel Registration requests)
+
+Syntax: ACTIVATE <#channel>
+
+Examples:
+    /msg &nick& ACTIVATE #FunChat
+See Also:
+    /msg &nick& WAITING
+    /msg &nick& REJECT #Channel

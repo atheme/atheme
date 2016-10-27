@@ -1,0 +1,11 @@
+Help for PERL:
+
+Inspect the Perl interpreter, including debug information on
+loaded scripts and more.
+
+To load scripts into Atheme, use the MODLOAD/MODUNLOAD/MODRELOAD
+commands, providing the script's filename instead of a compiled
+module.
+
+Examples:
+    /msg &nick& PERL

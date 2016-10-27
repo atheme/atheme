@@ -1,0 +1,14 @@
+Help for SET PROPERTY:
+
+SET PROPERTY manipulates metadata
+associated with an account.
+
+To delete a metadata entry, specify
+the name and leave the value blank.
+
+Syntax: SET PROPERTY <name> [value]
+
+Example:
+    /msg &nick& SET PROPERTY URL http://www.example.com/~jay/
+    /msg &nick& SET PROPERTY SIGN Pisces
+    /msg &nick& SET PROPERTY ICQ

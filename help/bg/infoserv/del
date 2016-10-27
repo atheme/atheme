@@ -1,0 +1,10 @@
+Help for DEL:
+
+DEL is used to delete informational messages that you no longer
+want users to see on connect. This will not allow you to delete
+oper &nick& messages.
+
+Syntax: DEL <id>
+
+Example:
+    /msg &nick& DEL 1

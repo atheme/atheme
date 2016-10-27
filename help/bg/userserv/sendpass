@@ -1,0 +1,28 @@
+Help for SENDPASS:
+
+#if !module nickserv/setpass
+SENDPASS emails the password for the specified
+account to the corresponding email address.
+#else
+SENDPASS emails a key to the email address
+corresponding to the specified account
+that can be used to set a new password
+using SETPASS.
+#endif
+
+Syntax: SENDPASS <account>
+
+If the account is marked, you can override this
+using the FORCE keyword.
+
+Syntax: SENDPASS <account> FORCE
+#if module nickserv/setpass
+
+If a key has been emailed but not yet used,
+you can clear it using the CLEAR keyword.
+
+Syntax: SENDPASS <account> CLEAR
+#endif
+
+Examples:
+    /msg &nick& SENDPASS foo

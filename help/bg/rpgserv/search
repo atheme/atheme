@@ -1,0 +1,19 @@
+Help for SEARCH:
+
+SEARCH allows you to search for a compatible role-playing
+channel based off selected criteria. To view available criteria,
+view the help file for the SET command via /msg &nick& HELP SET
+
+The search options listed on the SET help file can be used as
+keywords with the SEARCH command. For examples, please see below.
+
+Syntax: SEARCH <keywords>
+
+Example:
+    /msg &nick& SEARCH FANTASY MIDDLEAGES FREEFORM PG13 R
+         Search for a game with a genre of fantasy, period of
+         middle ages, ruleset of freeform and a rating of PG13
+         or R.
+    /msg &nick& SEARCH CYBERPUNK FANTASY REALISTIC
+         Search for all games that have a genre of cyberpunk,
+         fantasy, or realistic.

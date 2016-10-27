@@ -1,0 +1,9 @@
+Help for SET COMMITINTERVAL:
+
+SET COMMITINTERVAL allows network staff to set how often (in minutes)
+the services database will be written to disk.
+
+Syntax: SET COMMITINTERVAL <time in minutes>
+
+Example:
+    /msg &nick& SET COMMITINTERVAL 5

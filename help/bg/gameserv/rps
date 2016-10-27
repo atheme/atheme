@@ -1,0 +1,8 @@
+Help for RPS:
+
+RPS will randomly reply "Rock", "Paper", or "Scissors".
+
+Syntax: RPS
+
+Examples:
+    /msg &nick& RPS

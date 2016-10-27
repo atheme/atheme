@@ -1,0 +1,8 @@
+Help for CANCEL:
+
+CANCEL a pending announcement.
+
+Syntax: CANCEL
+
+Examples:
+    /msg &nick& CANCEL

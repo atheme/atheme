@@ -1,0 +1,11 @@
+Помощ за LISTVHOST:
+
+/NS LISTVHOST [PATTERN]
+
+АДМИНИСТРАТОРИ МОГАТ ДА ВИДЯТ КОИ АКАУНТИ ИМАТ ЗАПИСАН VHOST АДРЕС.
+МОЖЕ ДА СЕ ТЪРСЯТ САМО АДРЕСИ, СЪВПАДАЩИ С ОПРЕДЕЛЕНА МАСКА (PATTERN).
+
+ПРИМЕРИ:
+
+/MSG NS LISTVHOST
+/MSG NS LISTVHOST *STAFF*

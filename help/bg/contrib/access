@@ -1,0 +1,32 @@
+Help for ACCESS:
+
+The ACCESS command allows displaying and changing
+privileges on channels.
+
+The LIST subcommand displays a list of users and
+their privileges.
+
+Syntax: ACCESS <#channel> LIST
+
+The ADD subcommand adds a user to the access list
+or changes their privileges if they were already on
+the access list.
+
+If the level field is specified, it specifies the
+privileges to grant, see the FLAGS and TEMPLATE
+help files. If not, the user will be given
+privileges appropriate for day-to-day management
+of the channel.
+
+Syntax: ACCESS <#channel> ADD <nickname> [level]
+
+The DEL subcommand removes a user from the access list.
+
+Syntax: ACCESS <#channel> DEL <nickname>
+
+Examples:
+    /msg &nick& ACCESS #foo LIST
+    /msg &nick& ACCESS #foo ADD bar OP
+    /msg &nick& ACCESS #foo DEL bar
+
+See also: FLAGS, TEMPLATE

@@ -1,0 +1,11 @@
+Help for INJECT:
+
+INJECT fakes data from the uplink.  This
+command is for debugging only and should
+not be used unless you know what you're doing.
+
+Syntax: INJECT <parameters>
+
+Examples:
+    /msg &nick& INJECT :uplink.network.com PING :shrike.network.com
+    /msg &nick& INJECT :foo PRIVMSG &nick& :HELP INJECT
