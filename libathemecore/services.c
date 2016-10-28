@@ -626,7 +626,6 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	char lau[BUFSIZE], lao[BUFSIZE];
 	char strfbuf[BUFSIZE];
 	metadata_t *md_failnum;
-	metadata_t *md_loginaddr;
 	struct tm tm;
 	mynick_t *mn;
 	operclass_t *operclass;
@@ -643,23 +642,20 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 	mowgli_node_add(u, mowgli_node_create(), &mu->logins);
 	u->flags &= ~UF_SOPER_PASS;
 
-	/* check for previous login and let them know */
-	if (metadata_find(mu, "private:host:actual") != NULL)
-	{
-		metadata_t *md_loginaddr;
-		time_t ts = CURRTIME;
+	/* check for previous login and let them know, unless they have opt'd OUT */
 
-		md_loginaddr = metadata_find(mu, "private:host:actual");
-		if (md_loginaddr != NULL)
+		if (metadata_find(mu, "private:host:actual") != NULL && metadata_find(mu, "private:showlast:optout") == NULL)
 		{
+			metadata_t *md_loginaddr;
+			time_t ts = CURRTIME;
+
+			md_loginaddr = metadata_find(mu, "private:host:actual");
 			tm = *localtime(&mu->lastlogin);
 			strftime(strfbuf, sizeof strfbuf, TIME_FORMAT, &tm);
 
-			notice(svs->me->nick, u->nick, "Last login from: \2%s\2 on %s.",
-				md_loginaddr->value, strfbuf);
-		}
+			notice(svs->me->nick, u->nick, "Last login from: \2%s\2 on %s.", md_loginaddr->value, strfbuf);
 
-	}
+		}
 
 	/* keep track of login address for users */
 	mowgli_strlcpy(lau, u->user, BUFSIZE);

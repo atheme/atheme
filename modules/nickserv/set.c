@@ -24,6 +24,7 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_core");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_email");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_emailmemos");
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidelastlogin");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_hidemail");
 
 #ifdef ENABLE_NLS

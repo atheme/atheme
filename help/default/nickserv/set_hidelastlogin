@@ -1,0 +1,9 @@
+Help for SET HIDELASTLOGIN:
+
+SET HIDELASTLOGIN will OPT you out of the Last Login 
+notice sent to you upon authenticating to Services.
+
+Syntax: SET HIDELASTLOGIN ON|OFF
+
+Example:
+    /msg &nick& SET HIDELASTLOGIN ON
