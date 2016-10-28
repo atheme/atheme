@@ -349,11 +349,11 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanfix_channel_t *chan;
 	metadata_t *md, *mdnofix;
-	char *nofixpattern = NULL, *markpattern = NULL;
+	char *markpattern = NULL, *nofixpattern = NULL;
 	char buf[BUFSIZE];
 	mowgli_patricia_iteration_state_t state;
 	unsigned int matches = 0;
-	bool nofix = false, marked = false, markmatch, nofixmatch;
+	bool marked = false, nofix = false, markmatch, nofixmatch;
 	char *chanpattern = NULL;
 
 	if (parv[0] != NULL)
@@ -362,20 +362,6 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	MOWGLI_PATRICIA_FOREACH(chan, &state, chanfix_channels)
 	{
 		if (chanpattern != NULL && match(chanpattern, chan->name))
-			continue;
-
-		if (nofixpattern)
-		{
-			nofixmatch = false;
-			md = metadata_find(chan, "private:nofix:reason");
-			if (md != NULL && !match(nofixpattern, md->value))
-				nofixmatch = true;
-
-			if (!nofixmatch)
-				continue;
-		}
-
-		if (nofix && !metadata_find(chan, "private:nofix:setter"))
 			continue;
 
 		if (markpattern)
@@ -389,18 +375,32 @@ static void chanfix_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				continue;
 		}
 
-		if (marked && !metadata_find(chan, "private:mark:setter"))
+		if (markmatch && !metadata_find(chan, "private:mark:setter"))
+			continue;
+
+		if (nofixpattern)
+		{
+			nofixmatch = false;
+			md = metadata_find(chan, "private:nofix:reason");
+			if (md != NULL && !match(nofixpattern, md->value))
+				nofixmatch = true;
+
+			if (!nofixmatch)
+				continue;
+		}
+
+		if (nofixmatch && !metadata_find(chan, "private:nofix:setter"))
 			continue;
 
 		/* in the future we could add a LIMIT parameter */
 		*buf = '\0';
 
-		if (metadata_find(chan, "private:nofix:setter")) {
-			mowgli_strlcat(buf, "\2[NOFIX]\2", BUFSIZE);
-		}
-
 		if (metadata_find(chan, "private:mark:setter")) {
 			mowgli_strlcat(buf, "\2[marked]\2", BUFSIZE);
+		}
+
+		if (metadata_find(chan, "private:nofix:setter")) {
+			mowgli_strlcat(buf, "\2[nofix]\2", BUFSIZE);
 		}
 
 		command_success_nodata(si, "- %s %s", chan->name, buf);
