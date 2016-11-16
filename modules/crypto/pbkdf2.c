@@ -31,65 +31,6 @@ DECLARE_MODULE_V1("crypto/pbkdf2", false, _modinit, _moddeinit, PACKAGE_VERSION,
 #define ROUNDS		(128000)
 #define SALTLEN		(16)
 
-/* This is an implementation of PKCS#5 v2.0 password based encryption key
- * derivation function PBKDF2.
- * SHA1 version verified against test vectors posted by Peter Gutmann
- * <pgut001@cs.auckland.ac.nz> to the PKCS-TNG <pkcs-tng@rsa.com> mailing list.
- */
-int PKCS5_PBKDF2_HMAC(const char *pass, int passlen,
-			   const unsigned char *salt, int saltlen, int iter,
-			   const EVP_MD *digest,
-			   int keylen, unsigned char *out)
-{
-	unsigned char digtmp[EVP_MAX_MD_SIZE], *p, itmp[4];
-	int cplen, j, k, tkeylen, mdlen;
-	unsigned long i = 1;
-	HMAC_CTX hctx;
-
-	mdlen = EVP_MD_size(digest);
-
-	HMAC_CTX_init(&hctx);
-	p = out;
-	tkeylen = keylen;
-	if(!pass)
-		passlen = 0;
-	else if(passlen == -1)
-		passlen = strlen(pass);
-	while(tkeylen)
-	{
-		if(tkeylen > mdlen)
-			cplen = mdlen;
-		else
-			cplen = tkeylen;
-		/* We are unlikely to ever use more than 256 blocks (5120 bits!)
-		 * but just in case...
-		 */
-		itmp[0] = (unsigned char)((i >> 24) & 0xff);
-		itmp[1] = (unsigned char)((i >> 16) & 0xff);
-		itmp[2] = (unsigned char)((i >> 8) & 0xff);
-		itmp[3] = (unsigned char)(i & 0xff);
-		HMAC_Init_ex(&hctx, pass, passlen, digest, NULL);
-		HMAC_Update(&hctx, salt, saltlen);
-		HMAC_Update(&hctx, itmp, 4);
-		HMAC_Final(&hctx, digtmp, NULL);
-		memcpy(p, digtmp, cplen);
-		for(j = 1; j < iter; j++)
-		{
-			HMAC(digest, pass, passlen,
-				 digtmp, mdlen, digtmp, NULL);
-			for(k = 0; k < cplen; k++)
-				p[k] ^= digtmp[k];
-		}
-		tkeylen-= cplen;
-		i++;
-		p+= cplen;
-	}
-	HMAC_CTX_cleanup(&hctx);
-	return 1;
-}
-
-/*******************************************************************************************/
-
 static const char *pbkdf2_salt(void)
 {
 	static char buf[SALTLEN + 1];
