@@ -50,63 +50,6 @@ DECLARE_MODULE_V1("crypto/pbkdf2v2", false, _modinit, _moddeinit,
 static const char salt_chars[62] =
 	"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 
-/*
- * This equivalent implementation provided incase the user doesn't
- * have a new enough OpenSSL library installed on their machine
- */
-int PKCS5_PBKDF2_HMAC(const char *pass, int pl,
-                      const unsigned char *salt, int sl,
-                      int iter, const EVP_MD *PRF,
-                      int dkLen, unsigned char *out)
-{
-	if (! pass)
-		pl = 0;
-
-	if (pass && pl < 0)
-		pl = strlen(pass);
-
-	int tkLen = dkLen;
-	int mdLen = EVP_MD_size(PRF);
-	unsigned char *p = out;
-	unsigned long i = 1;
-
-	HMAC_CTX hctx;
-	HMAC_CTX_init(&hctx);
-
-	while (tkLen) {
-
-		unsigned char itmp[4];
-		itmp[0] = (unsigned char) ((i >> 24) & 0xFF);
-		itmp[1] = (unsigned char) ((i >> 16) & 0xFF);
-		itmp[2] = (unsigned char) ((i >>  8) & 0xFF);
-		itmp[3] = (unsigned char) ((i >>  0) & 0xFF);
-		i++;
-
-		unsigned char digtmp[EVP_MAX_MD_SIZE];
-		HMAC_Init_ex(&hctx, pass, pl, PRF, NULL);
-		HMAC_Update(&hctx, salt, sl);
-		HMAC_Update(&hctx, itmp, 4);
-		HMAC_Final(&hctx, digtmp, NULL);
-
-		int cpLen = (tkLen > mdLen) ? mdLen : tkLen;
-		memcpy(p, digtmp, cpLen);
-
-		int j, k;
-		for (j = 1; j < iter; j++) {
-			HMAC(PRF, pass, pl, digtmp, mdLen, digtmp, NULL);
-			for (k = 0; k < cpLen; k++)
-				p[k] ^= digtmp[k];
-		}
-
-		tkLen -= cpLen;
-		p += cpLen;
-	}
-
-	HMAC_CTX_cleanup(&hctx);
-
-	return 1;
-}
-
 static const char *pbkdf2v2_make_salt(void)
 {
 	char		salt[PBKDF2_SALTLEN + 1];
