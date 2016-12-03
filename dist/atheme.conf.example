@@ -107,8 +107,8 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
- * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
- * PBKDF2 cryptography (old)                    modules/crypto/pbkdf2
+ * PBKDF2 cryptography (new, recommended)       modules/crypto/pbkdf2v2
+ * PBKDF2 cryptography (old, compatibility)     modules/crypto/pbkdf2
  * POSIX-style crypt(3)                         modules/crypto/posix
  * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
  * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
@@ -126,6 +126,7 @@ loadmodule "modules/backend/opensex";
  *
  * The rawsha1 and pbkdf2/pbkdf2v2 modules require OpenSSL.
  */
+#loadmodule "modules/crypto/pbkdf2v2";
 loadmodule "modules/crypto/posix";
 
 /* Authentication module.
