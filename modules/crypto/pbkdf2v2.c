@@ -28,13 +28,6 @@ DECLARE_MODULE_V1("crypto/pbkdf2v2", false, _modinit, _moddeinit,
 #include <openssl/evp.h>
 
 /*
- * You can change the 2 values below without invalidating old hashes
- */
-
-#define PBKDF2_PRF_DEF		6
-#define PBKDF2_ITER_DEF		64000
-
-/*
  * Do not change anything below this line unless you know what you are doing,
  * AND how it will (possibly) break backward-, forward-, or cross-compatibility
  *
@@ -47,8 +40,15 @@ DECLARE_MODULE_V1("crypto/pbkdf2v2", false, _modinit, _moddeinit,
 #define PBKDF2_F_SALT		"$z$%u$%u$%s$"
 #define PBKDF2_F_PRINT		"$z$%u$%u$%s$%s"
 
+#define PBKDF2_C_MIN		10000
+#define PBKDF2_C_MAX		5000000
+#define PBKDF2_C_DEF		64000
+
 static const char salt_chars[62] =
 	"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
+
+static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
+static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
 static const char *pbkdf2v2_make_salt(void)
 {
@@ -62,7 +62,7 @@ static const char *pbkdf2v2_make_salt(void)
 		salt[i] = salt_chars[arc4random() % sizeof salt_chars];
 
 	(void) snprintf(result, sizeof result, PBKDF2_F_SALT,
-	                PBKDF2_PRF_DEF, PBKDF2_ITER_DEF, salt);
+	                pbkdf2v2_digest, pbkdf2v2_rounds, salt);
 
 	return result;
 }
@@ -132,30 +132,59 @@ static bool pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
 	if (sscanf(user_pass_string, PBKDF2_F_SCAN, &prf, &iter, salt) < 3)
 		return 0;
 
-	if (prf != PBKDF2_PRF_DEF)
+	if (prf != pbkdf2v2_digest)
 		return 1;
 
-	if (iter != PBKDF2_ITER_DEF)
+	if (iter != pbkdf2v2_rounds)
 		return 1;
 
 	return 0;
 }
 
-static crypt_impl_t pbkdf2_crypt_impl = {
+static int c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *ce)
+{
+	if (ce->vardata == NULL)
+	{
+		conf_report_warning(ce, "no parameter for configuration option");
+		return 0;
+	}
+
+	if (!strcasecmp(ce->vardata, "SHA256"))
+		pbkdf2v2_digest = 5;
+	else if (!strcasecmp(ce->vardata, "SHA512"))
+		pbkdf2v2_digest = 6;
+	else
+		conf_report_warning(ce, "invalid parameter for configuration option");
+
+	return 0;
+}
+
+static crypt_impl_t pbkdf2v2_crypt_impl = {
 	.id = "pbkdf2v2",
 	.crypt = &pbkdf2v2_crypt,
 	.salt = &pbkdf2v2_make_salt,
 	.needs_param_upgrade = &pbkdf2v2_needs_param_upgrade,
 };
 
+static mowgli_list_t conf_pbkdf2v2_table;
+
 void _modinit(module_t* m)
 {
-	crypt_register(&pbkdf2_crypt_impl);
+	crypt_register(&pbkdf2v2_crypt_impl);
+
+	add_subblock_top_conf("PBKDF2V2", &conf_pbkdf2v2_table);
+	add_conf_item("DIGEST", &conf_pbkdf2v2_table, c_ci_pbkdf2v2_digest);
+	add_uint_conf_item("ROUNDS", &conf_pbkdf2v2_table, 0, &pbkdf2v2_rounds,
+	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
 }
 
 void _moddeinit(module_unload_intent_t intent)
 {
-	crypt_unregister(&pbkdf2_crypt_impl);
+	del_conf_item("DIGEST", &conf_pbkdf2v2_table);
+	del_conf_item("ROUNDS", &conf_pbkdf2v2_table);
+	del_top_conf("PBKDF2V2");
+
+	crypt_unregister(&pbkdf2v2_crypt_impl);
 }
 
-#endif
+#endif /* HAVE_OPENSSL */

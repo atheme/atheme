@@ -804,6 +804,27 @@ loadmodule "modules/transport/xmlrpc";
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
  ******************************************************************************/
 
+/*
+ * If you are using the crypto/pbkdf2v2 module, you may wish to edit this block
+ *
+ * It is recommended to either leave the values at the defaults, or experiment
+ * with them so that it takes approximately 1 second for users to identify.
+ */
+pbkdf2v2 {
+
+	/* digest
+	 * Valid values are "SHA256" and "SHA512"
+	 * The default is "SHA512"
+	 */
+	#digest = "SHA512";
+
+	/* rounds
+	 * Valid values are 10000 to 5000000 (inclusive)
+	 * The default is 64000
+	 */
+	#rounds = 64000;
+};
+
 /* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
 	/* name
