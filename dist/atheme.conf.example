@@ -107,8 +107,8 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
- * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
- * PBKDF2 cryptography (old)                    modules/crypto/pbkdf2
+ * PBKDF2 cryptography (new, recommended)       modules/crypto/pbkdf2v2
+ * PBKDF2 cryptography (old, compatibility)     modules/crypto/pbkdf2
  * POSIX-style crypt(3)                         modules/crypto/posix
  * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
  * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
@@ -126,6 +126,7 @@ loadmodule "modules/backend/opensex";
  *
  * The rawsha1 and pbkdf2/pbkdf2v2 modules require OpenSSL.
  */
+#loadmodule "modules/crypto/pbkdf2v2";
 loadmodule "modules/crypto/posix";
 
 /* Authentication module.
@@ -802,6 +803,27 @@ loadmodule "modules/transport/xmlrpc";
 /******************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
  ******************************************************************************/
+
+/*
+ * If you are using the crypto/pbkdf2v2 module, you may wish to edit this block
+ *
+ * It is recommended to either leave the values at the defaults, or experiment
+ * with them so that it takes approximately 1 second for users to identify.
+ */
+pbkdf2v2 {
+
+	/* digest
+	 * Valid values are "SHA256" and "SHA512"
+	 * The default is "SHA512"
+	 */
+	#digest = "SHA512";
+
+	/* rounds
+	 * Valid values are 10000 to 5000000 (inclusive)
+	 * The default is 64000
+	 */
+	#rounds = 64000;
+};
 
 /* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
