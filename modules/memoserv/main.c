@@ -38,6 +38,9 @@ void _modinit(module_t *m)
 
 void _moddeinit(module_unload_intent_t intent)
 {
+	hook_del_user_identify(on_user_identify);
+	hook_del_user_away(on_user_away);
+
         if (memosvs != NULL)
                 service_delete(memosvs);
 }
