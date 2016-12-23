@@ -54,6 +54,11 @@ static void on_user_identify(user_t *u)
 		notice(memosvs->me->nick, u->nick, _("To read them, type /%s%s READ NEW"),
 					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
 	}
+	if (mu->memos.count >= maxmemos)
+	{
+		notice(memosvs->me->nick, u->nick, _("Your memo inbox is full! Please "
+		                                     "delete memos you no longer need."));
+	}
 }
 
 static void on_user_away(user_t *u)
@@ -79,6 +84,11 @@ static void on_user_away(user_t *u)
 						       mu->memoct_new), mu->memoct_new);
 		notice(memosvs->me->nick, u->nick, _("To read them, type /%s%s READ NEW"),
 					ircd->uses_rcommand ? "" : "msg ", memosvs->disp);
+	}
+	if (mu->memos.count >= maxmemos)
+	{
+		notice(memosvs->me->nick, u->nick, _("Your memo inbox is full! Please "
+		                                     "delete memos you no longer need."));
 	}
 }
 
