@@ -751,7 +751,7 @@ loadmodule "modules/groupserv/set_url";
  *
  * HTTP Server                                  modules/misc/httpd
  */
-loadmodule "modules/misc/httpd";
+#loadmodule "modules/misc/httpd";
 
 /* XMLRPC server module.
  * 
@@ -760,7 +760,7 @@ loadmodule "modules/misc/httpd";
  *
  * XMLRPC handler for the httpd                 modules/transport/xmlrpc
  */
-loadmodule "modules/transport/xmlrpc";
+#loadmodule "modules/transport/xmlrpc";
 
 /* Extended target entity types. [EXPERIMENTAL]
  *
