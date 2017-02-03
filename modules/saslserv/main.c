@@ -609,6 +609,7 @@ static myuser_t *login_user(sasl_session_t *p)
 	req.mu = source_mu;
 	req.allowed = true;
 	hook_call_user_can_login(&req);
+	object_unref(req.si);
 	if (!req.allowed)
 	{
 		sasl_logcommand(p, source_mu, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(source_mu)->name);
