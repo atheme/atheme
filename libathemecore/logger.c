@@ -635,6 +635,60 @@ void slog(unsigned int level, const char *fmt, ...)
 	va_end(args);
 }
 
+const char *format_user(user_t *source, bool full)
+{
+	static char buf[BUFSIZE];
+	char accountbuf[NICKLEN * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
+	bool showaccount;
+
+	accountbuf[0] = '\0';
+	if (source->myuser != NULL)
+		snprintf(accountbuf, sizeof accountbuf, "%s/%s",
+				entity(source->myuser)->name, entity(source->myuser)->id);
+	showaccount = source->myuser == NULL || irccasecmp(entity(source->myuser)->name, source->nick);
+
+	if(full)
+		snprintf(buf, sizeof buf, "%s:%s!%s@%s[%s]",
+			accountbuf,
+			source->nick, source->user, source->host,
+			source->ip != NULL ? source->ip : source->host);
+	else
+		snprintf(buf, sizeof buf, "%s%s%s%s",
+			source->nick,
+			showaccount ? " (" : "",
+			showaccount ? (source->myuser ? entity(source->myuser)->name : "") : "",
+			showaccount ? ")" : "");
+	return buf;
+}
+
+const char *format_external(const char *type, connection_t *source, const char *sourcedesc, myuser_t *mu, bool full)
+{
+	static char buf[BUFSIZE];
+
+	if(full)
+		snprintf(buf, sizeof buf, "%s:%s(%s)[%s]",
+			mu != NULL ? entity(mu)->name : "",
+			type,
+			source != NULL ? source->hbuf : "<noconn>",
+			sourcedesc != NULL ? sourcedesc : "<unknown>");
+	else
+		snprintf(buf, sizeof buf, "<%s>%s",
+			type,
+			mu != NULL ? entity(mu)->name : "");
+	return buf;
+}
+
+const char *format_sourceinfo(sourceinfo_t *si, bool full)
+{
+	if(si->v != NULL && si->v->format != NULL)
+		return si->v->format(si, full);
+
+	if(si->su != NULL)
+		return format_user(si->su, full);
+	else
+		return format_external(si->v != NULL ? si->v->description : "unknown", si->connection, si->sourcedesc, si->smu, full);
+}
+
 /*
  * logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
  *
@@ -661,10 +715,14 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
-	if (si->su != NULL)
-		logcommand_user(si->service, si->su, level, "%s", lbuf);
-	else
-		logcommand_external(si->service, si->v != NULL ? si->v->description : "unknown", si->connection, si->sourcedesc, si->smu, level, "%s", lbuf);
+	slog_ext(LOG_NONINTERACTIVE, level, "%s %s %s",
+			service_get_log_target(si->service),
+			format_sourceinfo(si, true),
+			lbuf);
+	slog_ext(LOG_INTERACTIVE, level, "%s %s %s",
+			service_get_log_target(si->service),
+			format_sourceinfo(si, false),
+			lbuf);
 }
 
 /*
@@ -689,31 +747,18 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 {
 	va_list args;
 	char lbuf[BUFSIZE];
-	char accountbuf[NICKLEN * 5]; /* entity name len is NICKLEN * 4, plus another for the ID */
-	bool showaccount;
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	accountbuf[0] = '\0';
-	if (source->myuser != NULL)
-		snprintf(accountbuf, sizeof accountbuf, "%s/%s",
-				entity(source->myuser)->name, entity(source->myuser)->id);
-
-	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s!%s@%s[%s] %s",
+	slog_ext(LOG_NONINTERACTIVE, level, "%s %s %s",
 			service_get_log_target(svs),
-			accountbuf,
-			source->nick, source->user, source->host,
-			source->ip != NULL ? source->ip : source->host,
+			format_user(source, true),
 			lbuf);
-	showaccount = source->myuser == NULL || irccasecmp(entity(source->myuser)->name, source->nick);
-	slog_ext(LOG_INTERACTIVE, level, "%s %s%s%s%s %s",
+	slog_ext(LOG_INTERACTIVE, level, "%s %s %s",
 			service_get_log_target(svs),
-			source->nick,
-			showaccount ? " (" : "",
-			showaccount ? (source->myuser ? entity(source->myuser)->name : "") : "",
-			showaccount ? ")" : "",
+			format_user(source, false),
 			lbuf);
 }
 
@@ -748,17 +793,13 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	slog_ext(LOG_NONINTERACTIVE, level, "%s %s:%s(%s)[%s] %s",
+	slog_ext(LOG_NONINTERACTIVE, level, "%s %s %s",
 			service_get_log_target(svs),
-			mu != NULL ? entity(mu)->name : "",
-			type,
-			source != NULL ? source->hbuf : "<noconn>",
-			sourcedesc != NULL ? sourcedesc : "<unknown>",
+			format_external(type, source, sourcedesc, mu, true),
 			lbuf);
-	slog_ext(LOG_INTERACTIVE, level, "%s <%s>%s %s",
+	slog_ext(LOG_INTERACTIVE, level, "%s %s %s",
 			service_get_log_target(svs),
-			type,
-			mu != NULL ? entity(mu)->name : "",
+			format_external(type, source, sourcedesc, mu, false),
 			lbuf);
 }
 
