@@ -512,6 +512,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if (mu)
 		{
 			sourceinfo_t *si = sasl_sourceinfo_create(p);
+			logcommand(si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)", p->mechptr->name, entity(mu)->name);
 			bad_password(si, mu);
 			object_unref(si);
 		}
