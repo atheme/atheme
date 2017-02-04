@@ -83,7 +83,7 @@
 /* Define to 1 if the system has the type `long double'. */
 #undef HAVE_LONG_DOUBLE
 
-/* Define to 1 if the system has the type 'long long int'. */
+/* Define to 1 if the system has the type `long long int'. */
 #undef HAVE_LONG_LONG_INT
 
 /* Define to 1 if you have the <memory.h> header file. */
@@ -161,7 +161,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if the system has the type 'unsigned long long int'. */
+/* Define to 1 if the system has the type `unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
 
 /* Define to 1 if you have the <varargs.h> header file. */
@@ -178,9 +178,6 @@
 
 /* Define to 1 if you have the `__va_copy' function or macro. */
 #undef HAVE___VA_COPY
-
-/* Uncomment to enable reproducible builds. */
-#undef REPRODUCIBLE_BUILDS
 
 /* Uncomment to enable large network support. */
 #undef LARGE_NETWORK
@@ -205,6 +202,9 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* Uncomment to enable reproducible builds. */
+#undef REPRODUCIBLE_BUILDS
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

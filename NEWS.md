@@ -1,3 +1,10 @@
+Atheme Services 7.2.8 Release Notes
+===================================
+
+This is a security release fixing a memory leak that could potentially be abused
+by attackers to cause a denial of service. Users of Atheme 7.2.7 should update to
+version 7.2.8; older releases are not affected.
+
 Atheme Services 7.2.7 Release Notes
 ===================================
 
