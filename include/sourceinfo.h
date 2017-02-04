@@ -12,6 +12,7 @@
 struct sourceinfo_vtable
 {
 	const char *description;
+	const char *(*format)(sourceinfo_t *si, bool full);
 	void (*cmd_fail)(sourceinfo_t *si, cmd_faultcode_t code, const char *message);
 	void (*cmd_success_nodata)(sourceinfo_t *si, const char *message);
 	void (*cmd_success_string)(sourceinfo_t *si, const char *result, const char *message);
