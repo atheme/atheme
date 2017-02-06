@@ -648,11 +648,9 @@ static myuser_t *login_user(sasl_session_t *p)
 
 		logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
 
-		req.si = sasl_sourceinfo_create(p);
 		req.mu = target_mu;
 		req.allowed = true;
 		hook_call_user_can_login(&req);
-		object_unref(req.si);
 		if (!req.allowed)
 		{
 			logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(target_mu)->name);
