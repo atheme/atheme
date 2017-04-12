@@ -35,13 +35,13 @@ void _moddeinit(module_unload_intent_t intent)
 
 static user_t *pick_a_sucker(channel_t *c)
 {
-	int slot = arc4random() % MOWGLI_LIST_LENGTH(&c->members);
+	int slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 	chanuser_t *cu;
 
 	cu = (chanuser_t *) mowgli_node_nth_data(&c->members, slot);
 	while (cu != NULL && is_internal_client(cu->user))
 	{
-		slot = arc4random() % MOWGLI_LIST_LENGTH(&c->members);
+		slot = arc4random_uniform(MOWGLI_LIST_LENGTH(&c->members));
 		cu = (chanuser_t *) mowgli_node_nth_data(&c->members, slot);
 	}
 
