@@ -128,7 +128,7 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 	if (!action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "BADMAIL");
-		command_fail(si, fault_needmoreparams, _("Syntax: BADMAIL ADD|DEL|LIST [parameters]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: BADMAIL ADD|DEL|LIST|TEST [parameters]"));
 		return;
 	}
 
@@ -208,18 +208,64 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		char buf[BUFSIZE];
 		struct tm tm;
+		unsigned long count = 0;
 
 		MOWGLI_ITER_FOREACH(n, ns_maillist.head)
 		{
 			l = n->data;
 
-			tm = *localtime(&l->mail_ts);
-			strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
-			command_success_nodata(si, "Email: \2%s\2, Reason: \2%s\2 (%s - %s)",
-				l->mail, l->reason, l->creator, buf);
+			if ((!email) || !match(email, l->mail))
+			{
+				count++;
+				tm = *localtime(&l->mail_ts);
+				strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+				command_success_nodata(si, _("Email: \2%s\2, Reason: \2%s\2 (%s - %s)"),
+					l->mail, l->reason, l->creator, buf);
+			}
 		}
-		command_success_nodata(si, "End of list.");
-		logcommand(si, CMDLOG_GET, "BADMAIL:LIST");
+		if (email && !count)
+			command_success_nodata(si, _("No entries matching pattern \2%s\2 found in badmail database."), email);
+		else
+			command_success_nodata(si, _("End of list."));
+
+		if (email)
+			logcommand(si, CMDLOG_GET, "BADMAIL:LIST: \2%s\2 (\2%ld\2 matches)", email, count);
+		else
+			logcommand(si, CMDLOG_GET, "BADMAIL:LIST (\2%ld\2 matches)", count);
+		return;
+	}
+	else if (!strcasecmp("TEST", action))
+	{
+		char buf[BUFSIZE];
+		struct tm tm;
+		unsigned long count = 0;
+
+		if (!email)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "BADMAIL");
+			command_fail(si, fault_needmoreparams, _("Syntax: BADMAIL TEST <email>"));
+			return;
+		}
+
+		MOWGLI_ITER_FOREACH(n, ns_maillist.head)
+		{
+			l = n->data;
+
+			if (!match(l->mail, email))
+			{
+				count++;
+				tm = *localtime(&l->mail_ts);
+				strftime(buf, BUFSIZE, TIME_FORMAT, &tm);
+				command_success_nodata(si, _("Email: \2%s\2, Reason: \2%s\2 (%s - %s)"),
+					l->mail, l->reason, l->creator, buf);
+			}
+		}
+		if (count)
+			command_success_nodata(si, _("%ld badmail pattern(s) disallowing \2%s\2 found."), count, email);
+		else
+			command_success_nodata(si, _("\2%s\2 is not listed in the badmail database."), email);
+
+		logcommand(si, CMDLOG_GET, "BADMAIL:TEST: \2%s\2 (\2%ld\2 matches)", email, count);
 		return;
 	}
 	else

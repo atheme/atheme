@@ -27,8 +27,19 @@ Examples:
     /msg &nick& BADMAIL DEL *@aol.com
 
 BADMAIL LIST allows you to list the currently banned email addresses.
+You may specify a pattern to view a filtered list.
 
-Syntax: BADMAIL LIST
+Syntax: BADMAIL LIST [pattern]
 
 Examples:
     /msg &nick& BADMAIL LIST
+    /msg &nick& BADMAIL LIST *@gmail.com
+
+BADMAIL TEST allows you to quickly look up which patterns (if any)
+prevent the use of an email address. This is particularly useful
+if you make frequent use of glob patterns.
+
+Syntax: BADMAIL TEST <email>
+
+Examples:
+    /msg &nick& BADMAIL TEST harmless-user@example.com
