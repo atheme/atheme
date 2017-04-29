@@ -1412,23 +1412,23 @@ operserv {
 	};
 };
 
-/* SaslServ configuration.
+/* SASLServ configuration.
  *
  * The saslserv {} block contains settings specific to the SaslServ modules.
  *
- * SaslServ provides an authentication agent which is compatible with the
+ * SASLServ provides an authentication agent which is compatible with the
  * SASL over IRC (SASL/IRC) protocol extension.
  */
 saslserv {
 	/* (*)nick
 	 * The nickname we want SaslServ to have.
 	 */
-	nick = "SaslServ";
+	nick = "SASLServ";
 
 	/* (*)user
 	 * The username we want SaslServ to have.
 	 */
-	user = "SaslServ";
+	user = "SASLServ";
 
 	/* (*)host
 	 * The hostname we want SaslServ to have.
