@@ -377,10 +377,11 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		join(chan->name, chansvs.nick);
 
 	/*
-	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
-	 * or special privs to join restricted chans, boot them. -- w00t
+	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK),
+	 * boot them -- w00t
+	 * Updated to not make staff immune to this. -- lyska
 	 */
-	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
+	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers - chan->numsvcmembers == 1)
