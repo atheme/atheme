@@ -16,16 +16,19 @@ DECLARE_MODULE_V1
 );
 
 static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_fgroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHENTICATED, 0, ns_cmd_group, { .path = "nickserv/group" } };
+command_t ns_fgroup = { "FGROUP", N_("Forces a nickname onto an account."), PRIV_USER_ADMIN, 2, ns_cmd_fgroup, { .path = "nickserv/fgroup" } };
 command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
 command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_group);
+	service_named_bind_command("nickserv", &ns_fgroup);
 	service_named_bind_command("nickserv", &ns_ungroup);
 	service_named_bind_command("nickserv", &ns_fungroup);
 }
@@ -33,6 +36,7 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_group);
+	service_named_unbind_command("nickserv", &ns_fgroup);
 	service_named_unbind_command("nickserv", &ns_ungroup);
 	service_named_unbind_command("nickserv", &ns_fungroup);
 }
@@ -100,6 +104,47 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	hdata.mu = si->smu;
 	hdata.mn = mn;
 	hook_call_nick_group(&hdata);
+}
+
+static void ns_cmd_fgroup(sourceinfo_t *si, int parc, char *parv[])
+{
+	mynick_t *mn;
+	myuser_t *mu;
+	const char *nick = parv[0];
+	const char *user = parv[1];
+
+	if (parc < 2)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FUNGROUP");
+		command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <account> <nick>"));
+		return;
+	}
+
+	if (!(mu = myuser_find_ext(user)))
+	{
+		command_fail(si, fault_nosuch_target, _("User \2%s\2 is not registered."), user);
+		return;
+	}
+
+	if (myuser_find_ext(nick))
+	{
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is already in use."), nick);
+		return;
+	}
+
+	if (!is_valid_nick(nick))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid nickname."), nick);
+		return;
+	}
+
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FGROUP: \2%s\2 to \2%s\2", nick, entity(mu)->name);
+	wallops("%s grouped the nick \2%s\2 to %s", get_oper_name(si), nick, entity(mu)->name);
+	command_success_nodata(si, _("\2%s\2 is now grouped to \2%s\2"), nick, entity(mu)->name);
+
+	mn = mynick_add(mu, nick);
+	mn->registered = CURRTIME;
+	mn->lastseen = CURRTIME;
 }
 
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
