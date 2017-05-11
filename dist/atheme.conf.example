@@ -253,6 +253,7 @@ loadmodule "modules/nickserv/set_neverop";
 loadmodule "modules/nickserv/set_nogreet";
 loadmodule "modules/nickserv/set_nomemo";
 loadmodule "modules/nickserv/set_noop";
+#loadmodule "modules/nickserv/set_nopassword";
 loadmodule "modules/nickserv/set_password";
 #loadmodule "modules/nickserv/set_privmsg";
 #loadmodule "modules/nickserv/set_private";
