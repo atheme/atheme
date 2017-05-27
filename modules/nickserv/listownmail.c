@@ -60,7 +60,7 @@ static void ns_cmd_listownmail(sourceinfo_t *si, int parc, char *parv[])
 
 		continue_if_fail(mu != NULL);
 
-		if (!strcasecmp(si->smu->email, mu->email))
+		if (!strcasecmp(si->smu->email_canonical, mu->email_canonical))
 		{
 			/* in the future we could add a LIMIT parameter */
 			if (matches == 0)
