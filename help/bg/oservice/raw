@@ -1,0 +1,11 @@
+Help for RAW:
+
+RAW injects data into the uplink.  This
+command is for debugging only and should
+not be used unless you know what you're
+doing.
+
+Syntax: RAW <parameters>
+
+Example:
+    /msg &nick& RAW :&nick& OPERWALL :My admin is a loser

@@ -1,0 +1,14 @@
+Help for WAITING:
+
+WAITING will show Services Operators the
+channel registration request list.  (For 
+networks that moderate Channel Registration 
+requests)
+
+Syntax: WAITING
+
+Examples:
+    /msg &nick& WAITING
+See Also:
+    /msg &nick& ACTIVATE #FunChat
+    /msg &nick& REJECT #BotHouse

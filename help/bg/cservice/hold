@@ -1,0 +1,11 @@
+Помощ за HOLD:
+
+HOLD НЕ ПОЗВОЛЯВА КАНАЛА ДА ИЗЧЕЗНЕ (EXPIRING). 
+КАНАЛИТЕ С КОМАНДАТА HELD ЩЕ ИЗЧЕЗНАТ, 
+АКО НЯМАТ SUCCESSORS.
+
+КОМАНДА: HOLD <#CHANNEL> ON|OFF
+
+ПРИМЕР:
+
+/MSG CHANSERV HOLD #ATHEME ON

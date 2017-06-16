@@ -1,0 +1,12 @@
+Help for JUPE:
+
+JUPE introduces a fake server with the given name, so
+that the real server cannot connect. Jupes only last
+as long as services is connected to the uplink and
+can also (on most ircds) be removed with a simple
+/squit command.
+
+Syntax: JUPE <server> <reason>
+
+Example:
+    /msg &nick& JUPE irc.blah.net very unstable server

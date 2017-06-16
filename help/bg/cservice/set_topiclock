@@ -1,0 +1,15 @@
+Помощ за SET TOPICLOCK:
+
+КОМАНДАТА SET TOPICLOCK ПОЗВОЛЯВА НА CHANSERV 
+ДА ПРЕМАХВАМ ПРОМЯНАТА НА ТОПИКА ОТ ПОТРЕБИТЕЛИ, 
+КОИТО НЯМАТ ФЛАГ +T. 
+СМЯНАТА ПО ВРЕМЕ НА NETSPLITS ИЛИ ПРИ ЛИПСА НА SERVICES ЩЕ БЪДЕ ОТКАЗАНА.
+
+КОМАНДАТА TOPICLOCK ИЗИСКВА KEEPTOPIC И АВТОМАТИЧНО ЩЕ Я ВКЛЮЧИ; 
+ИЗКЛЮЧВАНЕТО НА KEEPTOPIC ЩЕ ИЗКЛЮЧИ СЪЩО ТАКА TOPICLOCK.
+
+КОМАНДА: SET <#CHANNEL> TOPICLOCK ON|OFF
+
+ПРИМЕР:
+
+/MSG CHANSERV SET #FOO TOPICLOCK ON

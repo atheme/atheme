@@ -1,0 +1,18 @@
+Help for LISTCHANS:
+
+LISTCHANS shows the channels that you have access
+to, including those that you own.
+
+AKICKs and host-based access are not shown.
+
+Syntax: LISTCHANS
+#if priv user:auspex
+
+Operators with user:auspex privilege can also
+check another user's access.
+
+Syntax: LISTCHANS <account>
+#endif
+
+Example:
+    /msg &nick& LISTCHANS

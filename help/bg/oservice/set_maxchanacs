@@ -1,0 +1,9 @@
+Help for SET MAXCHANACS:
+
+SET MAXCHANACS allows setting the maximum number of entries
+allowed in a channel's access list.
+
+Syntax: SET MAXCHANACS <value>
+
+Example:
+    /msg &nick& SET MAXCHANACS 30

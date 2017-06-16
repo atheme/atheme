@@ -1,0 +1,10 @@
+Помощ за SET EMAILMEMOS:
+
+/NS SET EMAILMEMOS ON|OFF
+
+ОПРЕДЕЛЯТЕ ДАЛИ СЪОБЩЕНИЯТА, 
+КОИТО СА ИЗПРАТЕНИ НА ВАШИЯ АКАУНТ, 
+ДА СЕ ПРЕПРАЩАТ НА ВАШИЯ EMAIL АДРЕС.
+ВИЖТЕ КОМАНДИТЕ КЪМ MEMOSERV (MS).
+
+ПРИМЕР: /MSG NS SET EMAILMEMOS ON

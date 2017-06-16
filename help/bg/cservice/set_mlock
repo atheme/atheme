@@ -1,0 +1,18 @@
+Помощ за SET MLOCK:
+
+КОМАНДАТА MLOCK (“MODE LOCK”) ВИ ПОЗВОЛЯВА 
+ДА НАЛОЖИТЕ ОПРЕДЕЛЕНИ ФУНКЦИИ В КАНАЛА. 
+ТОВА МОЖЕ ДА ПРЕДОТВРАТИ ЗЛОНАМЕРЕНИ ФЛАГОВЕ КАТО +KL. 
+LOCKED MODES МОЖЕ ДА СА ДРАЗНЕЩИ, 
+АКО ВЛИЗАТЕ В КАНАЛА (ВКЛЮЧВА KEYS).
+
+КОМАНДА: SET <#CHANNEL> MLOCK [MODES]
+
+ПРИМЕРИ:
+
+/MSG CHANSERV SET #FOO MLOCK +NT-LK
+/MSG CHANSERV SET #FOO MLOCK +INST-KL
+/MSG CHANSERV SET #C MLOCK +NTK C
+/MSG CHANSERV SET #FOO MLOCK +NTCJF-KL 2:30 #OVERFLOW
+/MSG CHANSERV SET #OVERFLOW MLOCK +MNTF-KLJF
+/MSG CHANSERV SET #FOO1 MLOCK +NTLL 40 #FOO2

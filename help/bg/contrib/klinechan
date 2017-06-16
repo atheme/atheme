@@ -1,0 +1,9 @@
+Help for KLINECHAN:
+
+KLINECHAN k:lines all users joining a channel. Useful for unwanted Botnet
+channels and the like.
+
+Syntax: KLINECHAN <#channel> <ON|OFF> [reason]
+
+Examples:
+    /msg &nick& KLINECHAN #lamers ON Channel of Lamers.

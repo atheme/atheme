@@ -1,0 +1,15 @@
+Помощ за SET ENFORCETIME:
+
+/NS SET ENFORCETIME TIME|DEFAULT
+
+ОПРЕДЕЛЯТЕ ДО КОЛКО ВРЕМЕ (TIME) МОЖЕ ДА СЕ ИЗПОЛЗВА ВАШ ПСЕВДОНИМ, 
+БЕЗ ДА Е ИДЕНТИФИЦИРАН, ПРИ ВКЛЮЧЕНА НАСТРОЙКА SET ENFORCE, 
+ПРЕДИ ДА БЪДЕ ПРОМЕНЕН АВТОМАТИЧНО.
+МОЖЕ ДА ЗАДАДЕТЕ ВРЕМЕ ОТ 1 ДО 180 СЕКУНДИ, 
+ИЛИ DEFAULT ЗА СТАНДАРТНО НАСТРОЕНОТО ЗА МРЕЖАТА.
+
+ПРИМЕРИ:
+
+/MSG NS SET ENFORCETIME DEFAULT
+/MSG NS SET ENFORCETIME 90
+/MSG NS SET ENFORCETIME 3

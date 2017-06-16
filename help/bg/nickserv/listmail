@@ -1,0 +1,10 @@
+Помощ за LISTMAIL:
+
+/NS LISTMAIL EMAIL
+
+АДМИНИСТРАТОРИ МОГАТ ДА ВИДЯТ КОИ АКАУНТИ СА РЕГИСТРИРАНИ С ОПРЕДЕЛЕН EMAIL АДРЕС. ПОЗВОЛЕНИ СА WILDCARDS.
+
+ПРИМЕРИ:
+
+/MSG NS LISTMAIL PATRICK@EXAMPLE.COM
+/MSG NS LISTMAIL *@CAM.AC.UK

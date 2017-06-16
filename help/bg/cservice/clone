@@ -1,0 +1,18 @@
+Help for CLONE:
+
+CLONE copies a channel's chanacs and metadata
+to a new channel. Both channels must be registered
+with &nick& and you must be founder in the target
+channel for this command to work.
+
+It will not copy the topic as most people will
+want that different between the 2 channels.
+
+It will also remove all chanacs (except founders)
+and metadata of the same type from the target
+channel.
+
+Syntax: CLONE <#source-channel> <#target-channel>
+
+Examples:
+    /msg &nick& CLONE #funstuff #morefun

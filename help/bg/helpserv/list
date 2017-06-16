@@ -1,0 +1,8 @@
+Help for LIST:
+
+LIST lists all currently open help requests.
+
+Syntax: LIST
+
+Examples:
+    /msg &nick& LIST

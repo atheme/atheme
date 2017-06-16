@@ -1,0 +1,8 @@
+Help for SET PUBACL:
+
+SET PUBACL allows the channel access list to be publicly visible.
+
+Syntax: SET <#channel> PUBACL ON|OFF
+
+Example:
+    /msg &nick& SET #foo PUBACL ON

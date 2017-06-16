@@ -1,0 +1,17 @@
+Помощ за CERT:
+
+/NS CERT ADD [FINGERPRINT]
+/NS CERT DEL FINGERPRINT
+/NS CERT LIST
+
+ОПРЕДЕЛЯТЕ СПИСЪК ОТ КОДОВЕ 
+– CERTFP FINGERPRINTS – 
+ЧРЕЗ КОИТО NICKSERV ДА ВИ РАЗПОЗНАВА И ИДЕНТИФИЦИРА АВТОМАТИЧНО.
+НЕ МОЖЕ ДА ЗАДАВАТЕ ЕДНАКВИ КОДОВЕ НА РАЗЛИЧНИ АКАУНТИ.
+АДМИНИСТРАТОРИ С USER:AUSPEX ПРАВА МОГАТ ДА ВИДЯТ КОДОВЕТЕ НА ДРУГ ПОТРЕБИТЕЛ С /NS CERT LIST NICK
+
+ПРИМЕРИ:
+
+/MSG NS CERT ADD F3A1AAD46CA88E180C25C9C7021A4B3A
+/MSG NS CERT DEL F3A1AAD46CA88E180C25C9C7021A4B3A
+/MSG NS CERT LIST

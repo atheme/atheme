@@ -1,0 +1,15 @@
+Помощ за ROLE SET:
+
+КОМАНДАТА ROLE SET ВИ ПОЗВОЛЯВА 
+ДА ПРОМЕНЯТЕ ФЛАГОВЕТЕ ПО ДАДЕНА РОЛЯ, КОЯТО СЪЩЕСТВУВА. 
+ВСИЧКИ ПОТРЕБИТЕЛИ С ТАЗИ РОЛЯ, 
+ЩЕ ПОЛУЧАТ ПРОМЯНАТА. 
+РАЗЛИЧНИТЕ ФЛАГОВЕ ТРЯБВА 
+ДА СА ОТДЕЛЕНИ С ИНТЕРВАЛ ПРИДРУЖАВАЩ ГИ С (+ ИЛИ -) ПРЕДИ ВСЕКИ ФЛАГ.
+
+КОМАНДА: ROLE <#CHANNEL> SET <ROLE><FLAGS>
+
+ПРИМЕРИ:
+/MSG CHANSERV ROLE #ATHEME SET CHANNEL-OPS +ACL-CHANGE +SET +RECOVER
+/MSG CHANSERV ROLE #ATHEME SET HELPERS +INVITE
+/MSG CHANSERV ROLE #FOO SET HELPERS -TOPIC -INVITE

@@ -1,0 +1,9 @@
+Помощ за GETKEY:
+
+GETKEY ВРЪЩА ПАРОЛАТА (+K, ПАРОЛАТА, С КОЯТО СЕ ВЛИЗА) НА ДАДЕН КАНАЛ: /JOIN #CHANNEL KEY
+
+КОМАНДА: GETKEY <#CHANNEL>
+
+ПРИМЕР:
+
+/MSG CHANSERV GETKEY #FOO

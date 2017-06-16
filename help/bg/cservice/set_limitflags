@@ -1,0 +1,13 @@
+Помощ за SET LIMITFLAGS:
+
+SET LIMITFLAGS СЕ ИЗПОЛЗВА ЧРЕЗ ФЛАГА +F.
+
+ПОТРЕБИТЕЛИ С ФЛАГ+F, 
+КОИТО НЯМАТ +S ИЛИ +R МОГАТ ДА СЛОЖАТ +B (AKICK) И ПОТРЕБИТЕЛИ, 
+КОИТО НЯМАТ ФЛАГОВЕТЕ +S ИЛИ +R НЕ МОГАТ ДА СЛАГАТ +S, +R И +F.
+
+КОМАНДА: SET <#CHANNEL> LIMITFLAGS ON|OFF
+
+ПРИМЕР:
+
+/MSG CHANSERV SET #FOO LIMITFLAGS ON

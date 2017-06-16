@@ -1,0 +1,9 @@
+Help for SET KLINETIME:
+
+SET KLINETIME allows network staff to set a default time before
+AKILLs with no provided duration will expire.
+
+Syntax: SET KLINETIME <time in days>
+
+Example:
+    /msg &nick& SET KLINETIME 5

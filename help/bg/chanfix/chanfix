@@ -1,0 +1,11 @@
+Help for CHANFIX:
+
+CHANFIX allows you to manually "fix" a
+unregistered channel by fixing certain
+modes and giving ops to the user(s) with 
+the highest scores. 
+
+Syntax: CHANFIX <#channel>
+
+Example:
+    /msg &nick& CHANFIX #foo

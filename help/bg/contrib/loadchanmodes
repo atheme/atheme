@@ -1,0 +1,11 @@
+Help for LOADCHANMODES:
+
+LOADCHANMODES loads all channel modes, topics and bans for every channel on
+the network when they were saved with SAVECHANMODES. LOADCHANMODES looks in
+DATADIR/chanmodes.txt for the saved data. This path is usually
+~/atheme/etc/chanmodes.txt , but it may vary on your install.
+
+Syntax: LOADCHANMODES
+
+Examples:
+    /msg &nick& LOADCHANMODES

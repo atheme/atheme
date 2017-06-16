@@ -1,0 +1,15 @@
+Help for LIST:
+
+LIST shows accounts that match a given
+pattern. Wildcards are allowed.
+
+If user@host is also given, only accounts
+whose last seen host matches it are shown.
+
+Syntax: LIST <pattern>
+Syntax: LIST <pattern>!<user@host>
+
+Examples:
+    /msg &nick& LIST james*
+    /msg &nick& LIST *a?ambert*
+    /msg &nick& LIST *!*@*.de

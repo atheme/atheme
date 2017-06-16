@@ -1,0 +1,10 @@
+Help for OLIST:
+
+LIST allows you to view all oper informational messages in the database.
+These messages will also be sent to all opers upon oper-up.
+This command will not list user informational messages, use LIST for that.
+
+Syntax: OLIST
+
+Example:
+    /msg &nick& OLIST

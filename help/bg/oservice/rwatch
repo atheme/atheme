@@ -1,0 +1,44 @@
+Help for RWATCH:
+
+RWATCH maintains a list of regular expressions,
+which the nick!user@host gecos
+of all connecting clients are matched against.
+Matching clients can be displayed in the snoop
+channel and/or banned from the network. These
+network bans are set on *@host, last 24 hours
+and are not added to the AKILL list.
+The RWATCH list is stored in etc/rwatch.db and
+saved whenever it is modified.
+
+See RMATCH for more information about regular
+expression syntax.
+
+Syntax: RWATCH ADD /<pattern>/[i][p] <reason>
+
+Adds a regular expression to the RWATCH list.
+The reason is shown in snoop notices and kline reasons.
+
+Syntax: RWATCH DEL /<pattern>/[i][p]
+
+Removes a regular expression from the RWATCH list.
+
+Syntax: RWATCH LIST
+
+Shows the RWATCH list. The meaning of the letters is:
+    i - case insensitive match
+    p - PCRE pattern
+    S - matching clients are shown in the snoop channel
+    K - matching clients are banned from the network
+
+Syntax: RWATCH SET /<pattern>/[i][p] <options>
+
+Changes the action for a regular expression. Possible
+values for <options> are:
+    SNOOP   - enables display in the snoop channel
+    NOSNOOP - disables display in the snoop channel
+    KLINE   - enables network bans
+    NOKLINE - disables network bans
+
+Example:
+    /msg &nick& RWATCH ADD /^m(oo|00)cow/i moocow figure
+    /msg &nick& RWATCH DEL /^m(oo|00)cow/i

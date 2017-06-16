@@ -1,0 +1,11 @@
+Help for DNSBLSCAN:
+
+DNSBLSCAN allows network staff to scan an individual user (currently
+logged onto the network) against the list of blacklists. It will take
+whatever the current DNSBLACTION is against the user if their IP is
+listed in one of the blacklists.
+
+Syntax: DNSBLSCAN <user>
+
+Examples:
+    /msg &nick& DNSBLSCAN jdhore

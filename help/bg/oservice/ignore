@@ -1,0 +1,17 @@
+Help for IGNORE:
+
+Services has an ignore list which functions similarly to
+the way a user can ignore another user. If a user matches
+a mask in the ignore list and attempts to use services,
+they will not get a reply.
+
+    ADD   - Add a mask to the ignore list.
+    DEL   - Delete a mask from the ignore list.
+    LIST  - List all the entries in the ignore list.
+    CLEAR - Clear all the entries in the ignore list.
+
+Examples:
+    /msg &nick& IGNORE ADD pfish!*@* flooding services
+    /msg &nick& IGNORE DEL pfish!*@*
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

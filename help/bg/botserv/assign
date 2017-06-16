@@ -1,0 +1,10 @@
+Help for ASSIGN:
+
+Assigns a bot pointed out by nick to the channel chan. You
+can then configure the bot for the channel so it fits
+your needs.
+
+Syntax: ASSIGN <chan> <nick>
+
+Examples:
+    /msg &nick& ASSIGN #help Security

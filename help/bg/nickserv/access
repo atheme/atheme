@@ -1,0 +1,22 @@
+Помощ за ACCESS:
+
+/NS ACCESS ADD [MASK]
+/NS ACCESS DEL MASK
+/NS ACCESS LIST
+
+ОПРЕДЕЛЯТЕ СПИСЪК ОТ USER@HOST АДРЕСИ (MASK), 
+ОТ КОИТО NICKSERV ДА ВИ РАЗПОЗНАВА И ДА НЕ ИЗИСКВА ДА СИ ПРОМЕНИТЕ ПСЕВДОНИМА. 
+ДОПУСКАТ СЕ ГЛОБАЛНИ СИМВОЛИ (WILDCARDS).
+ЗА ДА НЕ БЪДЕ ПРЕКРАТЕНА АВТОМАТИЧНО РЕГИСТРАЦИЯТА НА ПСЕВДОНИМА ПРИ НЕИЗПОЛЗВАНЕ (EXPIRE), 
+ЗА ДА ПОЛЗВАТЕ ПРАВАТА СИ В КАНАЛИ, 
+ИЛИ ЗА ПРОМЯНА НА НАСТРОЙКИТЕ НА ПСЕВДОНИМА, 
+ВСЕ ПАК СЕ ИЗИСКВА ИДЕНТИФИЦИРАНЕ.
+АДМИНИСТРАТОРИ С USER:AUSPEX ПРАВА МОГАТ ДА ВИДЯТ АДРЕСИТЕ НА ДРУГ ПОТРЕБИТЕЛ С /NS ACCESS LIST NICK
+
+ПРИМЕРИ:
+
+/MSG NS ACCESS ADD JACK@HOST.EXAMPLE.COM – ДОБАВЯТЕ АДРЕС
+/MSG NS ACCESS ADD USER@10.0.0.8
+/MSG NS ACCESS ADD JILLES@192.168.1.0/24
+/MSG NS ACCESS DEL *SOMEONE@*.AREA.OLD.EXAMPLE.NET – ПРЕМАХВАТЕ АДРЕС
+/MSG NS ACCESS LIST – ВИЖДАТЕ СПИСЪКА С АДРЕСИ

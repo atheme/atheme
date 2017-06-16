@@ -1,0 +1,8 @@
+Help for UPDATE:
+
+UPDATE flushes the database to disk.
+
+Syntax: UPDATE
+
+Example:
+    /msg &nick& UPDATE

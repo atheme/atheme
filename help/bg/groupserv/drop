@@ -1,0 +1,14 @@
+Help for DROP:
+
+DROP allows you to "unregister" a registered group.
+
+Once you DROP a group all of the data associated
+with it (access lists, metadata, etc) are removed and cannot
+be restored.
+
+See help on FLAGS for transferring a group to another user.
+
+Syntax: DROP <!group>
+
+Examples:
+    /msg &nick& DROP !baz

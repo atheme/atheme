@@ -1,0 +1,18 @@
+Help for INFO:
+
+INFO displays account information such as
+registration time, flags, and other details.
+
+You can query the account a user is logged in as
+by specifying an equals sign followed by their
+nick. This '=' convention works with most commands.
+
+Syntax: INFO <account>
+Syntax: INFO =<online user>
+
+Examples:
+    /msg &nick& INFO w00t
+Shows information about the account w00t.
+    /msg &nick& INFO =w00tie[home]
+Shows information about the account the user
+w00tie[home] is logged in as.

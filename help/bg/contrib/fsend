@@ -1,0 +1,17 @@
+Help for FSEND:
+
+FSEND allows you to forcibly send a memo to a nickname
+that is offline at the moment.  When they come online 
+they will be told they have messages waiting for them 
+and will have an opportunity to read your memo.
+
+Your memo cannot be more than 300 characters.
+
+FSEND will override the target user having the NOMEMO
+flag set and the target user having the source (you) on
+memoserv ignore.
+
+Syntax: FSEND <user|nick> text
+
+Examples:
+    /msg &nick& FSEND Kog pay your bills

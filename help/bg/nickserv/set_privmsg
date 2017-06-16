@@ -1,0 +1,7 @@
+Помощ за SET PRIVMSG:
+
+/NS SET PRIVMSG ON|OFF
+
+ОПРЕДЕЛЯТЕ ДАЛИ ДА ПОЛУЧАВАТЕ СЪОБЩЕНИЯТА ОТ SERVICES КАТО ЛИЧНИ СЪОБЩЕНИЯ.
+
+ПРИМЕР: /MSG NS SET PRIVMSG ON

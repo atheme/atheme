@@ -1,0 +1,10 @@
+Help for SET SAYCALLER:
+
+This option when turned on will prefix any &nick& SAY
+or ACTION command messages with the caller's nickname.
+
+Syntax: SET <channel> SAYCALLER {ON|OFF}
+
+Examples:
+    /msg &nick& SET #ChatZone SAYCALLER ON
+    /msg &nick& SET #ChatZone SAYCALLER OFF

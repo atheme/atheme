@@ -1,0 +1,14 @@
+Help for SET DNSBLACTION:
+
+SET DNSBLACTION allows setting what action will be taken when
+a user is listed in a given DNS blacklist.
+
+SNOOP - Message the services log channel only.
+NOTIFY - Message the services log channel and notify the user.
+KLINE - Message the services log channel and k-line the user.
+NONE - Disable DNSBL lookups.
+
+Syntax: SET DNSBLACTION <SNOOP|NOTIFY|KLINE|NONE>
+
+Example:
+    /msg &nick& SET DNSBLACTION NOTIFY
