@@ -11,6 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2016-10-19 14:40+0300\n"
 "Last-Translator: \n"
 "Language-Team: سند 0sanad0@gmail.com\n"
+"Language-Team: Plamen Vasilev a.k.a Paco <p.vasileff@gmail.com>\n"
 "Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,32 +112,31 @@ msgstr "***** Край на Помощ *****"
 #: modules/backend/opensex.c:268
 #, c-format
 msgid "DATABASE ERROR: db-open-read: cannot open '%s' for reading: %s"
-msgstr ""
-"ГРЕШКА В БАЗАТА ДАННИ :db-open-read : не може да се отвори \"%s\" за четене:"
-"%s"
+msgstr ""ГРЕШКА В БАЗАТА ДАННИ: db-open-read: не може да се отвори '%s' за четене: %s""
 
 #: modules/backend/opensex.c:309
 #, c-format
 msgid "DATABASE ERROR: db-open-write: cannot open '%s' for writing: %s"
-msgstr ""
+msgstr "ГРЕШКА В БАЗАТА ДАННИ: db-open-write: не може да се отвори '%s' за писане: %s"
 
 #: modules/backend/opensex.c:362
 #, c-format
 msgid ""
 "DATABASE ERROR: db_save(): cannot rename services.db.new to services.db: %s"
 msgstr ""
+"ГРЕШКА В БАЗАТА ДАННИ: db_save(): services.db.new не може да бъде преименуван на services.db: %s"
 
 #: modules/botserv/bottalk.c:23
 msgid "Makes the bot say the given text on the given channel."
-msgstr ""
+msgstr "Кара бота да казва даден текст в даден канал."
 
 #: modules/botserv/bottalk.c:24
 msgid "Makes the bot do the equivalent of a \"/me\" command."
-msgstr ""
+msgstr "Кара бота да изпълнява действия \"/me\" команда."
 
 #: modules/botserv/bottalk.c:49
 msgid "Syntax: SAY <#channel> <msg>"
-msgstr "Пример:Say #Канал съобщение"
+msgstr "Синтаксис: SAY <#канал> <съобщение>"
 
 #: modules/botserv/bottalk.c:58 modules/botserv/bottalk.c:124
 #: modules/botserv/set_fantasy.c:70 modules/botserv/set_nobot.c:55
@@ -180,7 +180,7 @@ msgstr "Пример:Say #Канал съобщение"
 #: modules/rpgserv/set.c:178
 #, c-format
 msgid "Channel %s is not registered."
-msgstr "Канал  %s   не е регистриран."
+msgstr "Канал %s не е регистриран."
 
 #: modules/botserv/bottalk.c:64 modules/botserv/bottalk.c:130
 #: modules/chanserv/ban.c:62 modules/chanserv/ban.c:146
@@ -192,7 +192,7 @@ msgstr "Канал  %s   не е регистриран."
 #: modules/chanserv/topic.c:307 modules/chanserv/unban_self.c:74
 #, c-format
 msgid "%s is currently empty."
-msgstr "%s е празен."
+msgstr "%s в момента е празен."
 
 #: modules/botserv/bottalk.c:76 modules/botserv/bottalk.c:142
 #: modules/botserv/set_saycaller.c:68
@@ -204,11 +204,11 @@ msgstr "%s е замразен."
 #: modules/botserv/main.c:954
 #, c-format
 msgid "%s does not have a bot assigned."
-msgstr ""
+msgstr "%s няма назначен бот."
 
 #: modules/botserv/bottalk.c:115
 msgid "Syntax: ACT <#channel> <msg>"
-msgstr ""
+msgstr "Синтаксис: ACT <#канал> <съобщение>"
 
 #: modules/botserv/help.c:20 modules/chanfix/fix.c:625
 #: modules/chanserv/help.c:20 modules/contrib/ircd_announceserv.c:29
@@ -224,47 +224,47 @@ msgstr "Показва контекстуална информация за по
 #: modules/botserv/help.c:40
 #, c-format
 msgid "%s allows users to request a custom bot for their channel."
-msgstr ""
+msgstr "%s позволява на потребителите да поискат персонален бот за техните канали."
 
 #: modules/botserv/info.c:22
 msgid "Allows you to see BotServ information about a channel or a bot."
-msgstr ""
+msgstr "Позволява Ви да виждате BotServ информация за канал или бот."
 
 #: modules/botserv/info.c:58 modules/botserv/info.c:131
 #: modules/chanserv/info.c:48 modules/chanserv/info.c:55
 msgid "Syntax: INFO <#channel>"
-msgstr "Пример: INFO #Канал"
+msgstr "Синтаксис: INFO <#канал>"
 
 #: modules/botserv/info.c:59 modules/botserv/info.c:132
 msgid "Syntax: INFO <botnick>"
-msgstr ""
+msgstr "Синтаксис: INFO <ботник>"
 
 #: modules/botserv/info.c:74
 #, c-format
 msgid "Information for bot %s:"
-msgstr ""
+msgstr "Информация за бот %s:"
 
 #: modules/botserv/info.c:75
 #, c-format
 msgid "     Mask : %s@%s"
-msgstr ""
+msgstr "     Маска : %s@%s"
 
 #: modules/botserv/info.c:76
 #, c-format
 msgid "Real name : %s"
-msgstr ""
+msgstr "Истинско име : %s"
 
 #: modules/botserv/info.c:80
 #, c-format
 msgid "  Created : %s (%s ago)"
-msgstr ""
+msgstr "  Създаден : %s (преди %s)"
 
 #: modules/botserv/info.c:82
 msgid "  Options : Private"
-msgstr ""
+msgstr "  Опции : Лично"
 
 #: modules/botserv/info.c:84
-msgid "  Options : None"
+msgid "  Опции : Няма"
 msgstr ""
 
 #: modules/botserv/info.c:85
@@ -275,7 +275,7 @@ msgstr ""
 #: modules/botserv/info.c:92
 #, c-format
 msgid "%d: %s"
-msgstr ""
+msgstr "%d: %s"
 
 #: modules/botserv/info.c:104
 #, c-format
