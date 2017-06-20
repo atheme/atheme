@@ -724,7 +724,7 @@ static void flatfile_db_load(const char *filename)
 	free(buf);
 
 	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
-	db_save(NULL);
+	db_save(NULL, DB_SAVE_BLOCKING);
 
 	slog(LG_INFO, "Your database has been converted to the new OpenSEX format automatically.");
 	slog(LG_INFO, "You must now change the backend module in the config file to ensure that the OpenSEX database is loaded.");

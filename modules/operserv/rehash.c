@@ -37,7 +37,7 @@ void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
 	expire_check(NULL);
 	if (db_save)
-		db_save(NULL);
+		db_save(NULL, DB_SAVE_BG_IMPORTANT);
 
 	logcommand(si, CMDLOG_ADMIN, "REHASH");
 	wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, get_oper_name(si));

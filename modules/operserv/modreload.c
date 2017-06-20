@@ -131,7 +131,7 @@ static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_INFO, "UPDATE (due to reload of module \2%s\2): \2%s\2",
 				reloading_semipermanent_module->name, get_oper_name(si));
 		wallops("Updating database by request of \2%s\2.", get_oper_name(si));
-		db_save(NULL);
+		db_save(NULL, DB_SAVE_BG_IMPORTANT);
 	}
 
 	module_unload(m, MODULE_UNLOAD_INTENT_RELOAD);

@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
 	slog(LG_INFO, "*** phase 5: writing corrected state to object store");
 
-	db_save(filename);
+	db_save(filename, DB_SAVE_BLOCKING);
 
 	return EXIT_SUCCESS;
 }
