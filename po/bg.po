@@ -112,7 +112,7 @@ msgstr "***** Край на Помощ *****"
 #: modules/backend/opensex.c:268
 #, c-format
 msgid "DATABASE ERROR: db-open-read: cannot open '%s' for reading: %s"
-msgstr ""ГРЕШКА В БАЗАТА ДАННИ: db-open-read: не може да се отвори '%s' за четене: %s""
+msgstr "ГРЕШКА В БАЗАТА ДАННИ: db-open-read: не може да се отвори '%s' за четене: %s"
 
 #: modules/backend/opensex.c:309
 #, c-format
