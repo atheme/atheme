@@ -961,42 +961,39 @@ static void corestorage_db_write(void *filename, db_save_strategy_t strategy)
 		slog(LG_DEBUG, "db_save(): previous save unfinished, skipping save");
 		return;
 	}
-	else
+
+	if (child_pid)
 	{
-		if (child_pid)
+		slog(LG_DEBUG, "db_save(): interrupting unfinished previous save for forced save");
+		if (kill(child_pid, SIGKILL) == -1 && errno != ESRCH)
 		{
-			slog(LG_DEBUG, "db_save(): interrupting unfinished previous save for forced save");
-			if (kill(child_pid, SIGKILL) == -1 && errno != ESRCH)
-			{
-				slog(LG_ERROR, "db_save(): kill() on previous save failed; trying to carry on somehow...");
-				waitpid(child_pid, NULL, 0);
-			}
+			slog(LG_ERROR, "db_save(): kill() on previous save failed; trying to carry on somehow...");
+			waitpid(child_pid, NULL, 0);
 		}
+	}
 
-		if (strategy == DB_SAVE_BLOCKING)
-		{
+	if (strategy == DB_SAVE_BLOCKING)
+	{
+		corestorage_db_write_blocking(filename);
+		return;
+	}
+
+	pid_t pid = fork();
+	switch (pid)
+	{
+		case -1:
+			slog(LG_ERROR, "db_save(): fork() failed; writing database synchronously");
 			corestorage_db_write_blocking(filename);
-		}
-		else
-		{
-			pid_t pid = fork();
-			switch (pid)
-			{
-				case -1:
-					slog(LG_ERROR, "db_save(): fork() failed; writing database synchronously");
-					corestorage_db_write_blocking(filename);
-					break;
+			return;
 
-				case 0:
-					corestorage_db_write_blocking(filename);
-					exit(EXIT_SUCCESS);
+		case 0:
+			corestorage_db_write_blocking(filename);
+			exit(EXIT_SUCCESS);
 
-				default:
-					child_pid = pid;
-					childproc_add(pid, "db_save", corestorage_db_saved_cb, NULL);
-					break;
-			}
-		}
+		default:
+			child_pid = pid;
+			childproc_add(pid, "db_save", corestorage_db_saved_cb, NULL);
+			return;
 	}
 #endif
 }
