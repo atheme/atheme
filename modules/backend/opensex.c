@@ -327,6 +327,9 @@ static database_handle_t *opensex_db_open_write(const char *filename)
 		errno1 = errno;
 		slog(LG_ERROR, "db-open-write: cannot open '%s' for writing: %s", path, strerror(errno1));
 		wallops(_("\2DATABASE ERROR\2: db-open-write: cannot open '%s' for writing: %s"), path, strerror(errno1));
+#ifdef HAVE_FLOCK
+		close(lockfd);
+#endif
 		return NULL;
 	}
 
