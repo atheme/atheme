@@ -1004,6 +1004,12 @@ static void corestorage_db_write_blocking(void *filename)
 
 	db = db_open(filename, DB_WRITE);
 
+	if (! db)
+	{
+		slog(LG_ERROR, "db_write_blocking(): db_open() failed, aborting save");
+		return;
+	}
+
 	corestorage_db_save(db);
 	hook_call_db_write(db);
 
