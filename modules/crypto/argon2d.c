@@ -499,7 +499,7 @@ argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pas
 
 static void
 argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_block *const ref,
-                   struct argon2d_block *const next, const int xor)
+                   struct argon2d_block *const next, const bool xor)
 {
 	struct argon2d_block block_r;
 	struct argon2d_block block_t;
@@ -573,10 +573,11 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 		const uint64_t rand_p = ctx->mem[prv_off].v[0x00];
 		const uint64_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p);
 
-		struct argon2d_block *const ref = &ctx->mem[ref_idx];
+		const struct argon2d_block *const prv = &ctx->mem[prv_off];
+		const struct argon2d_block *const ref = &ctx->mem[ref_idx];
 		struct argon2d_block *const cur = &ctx->mem[cur_off];
 
-		(void) argon2d_fill_block(&ctx->mem[prv_off], ref, cur, ((!pass) ? 0x00 : 0x01));
+		(void) argon2d_fill_block(prv, ref, cur, ((pass) ? true : false));
 	}
 }
 
