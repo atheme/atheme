@@ -477,33 +477,14 @@ argon2d_hash_init(struct argon2d_context *const restrict ctx, uint8_t *const res
 
 static uint32_t
 argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pass, const uint8_t slice,
-            const uint64_t rand_p, const bool same_lane)
+            const uint64_t rand_p)
 {
-	uint32_t ra_size;
+	uint32_t ra_size = (ctx->index - 0x01);
 
 	if (pass)
-	{
-		ra_size = ctx->lane_len - ctx->seg_len;
-
-		if (same_lane)
-			ra_size += (ctx->index - 0x01);
-		else if (!ctx->index)
-			ra_size -= 0x01;
-	}
-	else
-	{
-		if (slice)
-		{
-			ra_size = slice * ctx->seg_len;
-
-			if (same_lane)
-				ra_size += (ctx->index - 0x01);
-			else if (!ctx->index)
-				ra_size -= 0x01;
-		}
-		else
-			ra_size = (ctx->index - 0x01);
-	}
+		ra_size += (ctx->lane_len - ctx->seg_len);
+	else if (slice)
+		ra_size += (slice * ctx->seg_len);
 
 	uint64_t relative_pos = (uint64_t)(rand_p & 0xFFFFFFFF);
 	relative_pos = ((relative_pos * relative_pos) >> 0x20);
@@ -590,10 +571,9 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 		ctx->index = i;
 
 		const uint64_t rand_p = ctx->mem[prv_off].v[0x00];
-		const uint64_t ref_lane = ((!pass && !slice) ? 0x00 : ((rand_p >> 32)) % 0x01);
-		const uint64_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p, (ref_lane == 0x00));
+		const uint64_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p);
 
-		struct argon2d_block *const ref = &ctx->mem[ref_idx + (ctx->lane_len * ref_lane)];
+		struct argon2d_block *const ref = &ctx->mem[ref_idx];
 		struct argon2d_block *const cur = &ctx->mem[cur_off];
 
 		(void) argon2d_fill_block(&ctx->mem[prv_off], ref, cur, ((!pass) ? 0x00 : 0x01));
