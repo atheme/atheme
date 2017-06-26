@@ -499,7 +499,7 @@ argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pas
 
 static void
 argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_block *const ref,
-                   struct argon2d_block *const next, const bool xor)
+                   struct argon2d_block *const next, const uint32_t pass)
 {
 	struct argon2d_block block_r;
 	struct argon2d_block block_t;
@@ -508,7 +508,7 @@ argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_
 	(void) argon2d_xor_block(&block_r, prev);
 	(void) argon2d_copy_block(&block_t, &block_r);
 
-	if (xor)
+	if (pass != 0x00)
 		(void) argon2d_xor_block(&block_t, next);
 
 	uint64_t *const v = block_r.v;
@@ -556,12 +556,12 @@ argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_
 static inline void
 argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t pass, const uint8_t slice)
 {
-	uint32_t start_idx = ((!pass && !slice) ? 0x02 : 0x00);
+	const uint32_t start_idx = ((!pass && !slice) ? 0x02 : 0x00);
 	uint32_t cur_off = (slice * ctx->seg_len) + start_idx;
 	uint32_t prv_off = (cur_off - 0x01);
 
-	if (!(cur_off % ctx->lane_len))
-		prv_off = (cur_off + ctx->lane_len - 0x01);
+	if ((cur_off % ctx->lane_len) == 0x00)
+		prv_off += ctx->lane_len;
 
 	for (uint32_t i = start_idx; i < ctx->seg_len; i++, cur_off++, prv_off++)
 	{
@@ -571,13 +571,13 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 		ctx->index = i;
 
 		const uint64_t rand_p = ctx->mem[prv_off].v[0x00];
-		const uint64_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p);
+		const uint32_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p);
 
 		const struct argon2d_block *const prv = &ctx->mem[prv_off];
 		const struct argon2d_block *const ref = &ctx->mem[ref_idx];
 		struct argon2d_block *const cur = &ctx->mem[cur_off];
 
-		(void) argon2d_fill_block(prv, ref, cur, ((pass) ? true : false));
+		(void) argon2d_fill_block(prv, ref, cur, pass);
 	}
 }
 
@@ -605,9 +605,9 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	(void) blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ);
 	(void) argon2d_load_block(&ctx->mem[0x01], bhash_bytes);
 
-	for (uint32_t pass = 0; pass < ctx->t_cost; pass++)
+	for (uint32_t pass = 0x00; pass < ctx->t_cost; pass++)
 	{
-		for (uint8_t slice = 0; slice < ARGON2_SYNC_POINTS; slice++)
+		for (uint8_t slice = 0x00; slice < ARGON2_SYNC_POINTS; slice++)
 		{
 			ctx->index = 0x00;
 			(void) argon2d_segment_fill(ctx, pass, slice);
