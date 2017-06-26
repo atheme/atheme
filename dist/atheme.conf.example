@@ -109,7 +109,7 @@ loadmodule "modules/backend/opensex";
  *
  * Argon2d (Password Hashing Competition, v1.3) modules/crypto/argon2d
  * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
- * PBKDF2 cryptography (old)                    modules/crypto/pbkdf2
+ * PBKDF2 cryptography (compatibility only)     modules/crypto/pbkdf2
  * POSIX-style crypt(3)                         modules/crypto/posix
  * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
  * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
@@ -829,6 +829,26 @@ argon2d {
 	 * The default is 32
 	 */
 	#time = 32;
+};
+
+/*
+ * If you are using modules/crypto/pbkdf2v2, you may wish to edit this
+ * block. See the comment on the argon2d {} block above for advice
+ * regarding parameter choice that also applies here.
+ */
+pbkdf2v2 {
+
+	/* digest
+	 * Valid values are "SHA256" and "SHA512"
+	 * The default is "SHA512"
+	 */
+	#digest = "SHA512";
+
+	/* rounds
+	 * Valid values are 10,000 to 5,000,000 (inclusive)
+	 * The default is 64,000
+	 */
+	#rounds = 64000;
 };
 
 /* The serverinfo{} block defines how we appear on the IRC network. */
