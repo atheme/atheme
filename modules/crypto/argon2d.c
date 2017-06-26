@@ -99,7 +99,7 @@ struct argon2d_context
 {
 	struct argon2d_block   *mem;
 	const uint8_t          *pass;
-	uint8_t                *salt;
+	const uint8_t          *salt;
 	uint8_t                *hash;
 	uint32_t                passlen;
 	uint32_t                m_cost;
