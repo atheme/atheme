@@ -107,6 +107,7 @@ loadmodule "modules/backend/opensex";
  *
  * The following crypto modules are available:
  *
+ * Argon2d (Password Hashing Competition, v1.3) modules/crypto/argon2d
  * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
  * PBKDF2 cryptography (old)                    modules/crypto/pbkdf2
  * POSIX-style crypt(3)                         modules/crypto/posix
@@ -119,12 +120,15 @@ loadmodule "modules/backend/opensex";
  *
  * To transition between crypto schemes, load the preferred scheme first
  * and as users login, they will be migrated to the new preferred scheme. Like:
+ *
+ * loadmodule "modules/crypto/argon2d";
  * loadmodule "modules/crypto/pbkdf2v2";
  * loadmodule "modules/crypto/pbkdf2";
  * loadmodule "modules/crypto/posix";
  * loadmodule "modules/crypto/ircservices";
  *
  * The rawsha1 and pbkdf2/pbkdf2v2 modules require OpenSSL.
+ * The Argon2d module has no dependencies and is recommended.
  */
 loadmodule "modules/crypto/posix";
 
@@ -803,6 +807,29 @@ loadmodule "modules/groupserv/set_url";
 /******************************************************************************
  * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
  ******************************************************************************/
+
+/*
+ * If you are using modules/crypto/argon2d, you may wish to edit this
+ * block. It is recommended to either leave the values at their defaults,
+ * or experiment with them so that it takes approximately 0.5-1.0 seconds
+ * for users to identify. Services blocks while the digest is being
+ * computed or verified, so don't set these too large, or people can hang
+ * services by trying many password attempts at once.
+ */
+argon2d {
+
+	/* memory cost (as a power of 2, in KiB)
+	 * Valid values are 8 (256 KiB) to 20 (1 GiB) (inclusive)
+	 * The default is 14
+	 */
+	#memory = 14;      /* 2^14 KiB == 16384 KiB (16 MiB) */
+
+	/* time cost (iterations over the memory)
+	 * Valid values are 4 to 16384 (inclusive)
+	 * The default is 32
+	 */
+	#time = 32;
+};
 
 /* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
