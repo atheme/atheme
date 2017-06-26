@@ -249,12 +249,11 @@ blake2b_compress(struct blake2b_state *const restrict state, const uint8_t *cons
 		v[x] = state->h[x];
 		v[x + 0x08] = blake2b_iv[x];
 	}
-
 	for (size_t x = 0x00; x < 0x02; x++)
+	{
 		v[x + 0x0C] ^= state->t[x];
-
-	for (size_t x = 0x00; x < 0x02; x++)
 		v[x + 0x0E] ^= state->f[x];
+	}
 
 #define F(r, i, a, b, c, d) do {                                    \
 	    (a) = (a) + (b) + m[blake2b_sig[r][(i * 0x02) + 0x00]]; \
@@ -342,8 +341,7 @@ blake2b_final(struct blake2b_state *const restrict state, uint8_t *const restric
 }
 
 static inline bool
-blake2b_full(const uint8_t *const restrict in, const size_t inlen,
-             uint8_t *const restrict out, const size_t outlen)
+blake2b_full(const uint8_t *const restrict in, const size_t inlen, uint8_t *const restrict out, const size_t outlen)
 {
 	struct blake2b_state state;
 	(void) blake2b_init(&state, outlen);
@@ -355,8 +353,7 @@ blake2b_full(const uint8_t *const restrict in, const size_t inlen,
 }
 
 static bool
-blake2b_long(const uint8_t *const restrict in, const size_t inlen,
-             uint8_t *restrict out, const size_t outlen)
+blake2b_long(const uint8_t *const restrict in, const size_t inlen, uint8_t *restrict out, const size_t outlen)
 {
 	uint8_t outlen_buf[4] = { 0x00, 0x00, 0x00, 0x00 };
 	struct blake2b_state blake_state;
@@ -508,7 +505,7 @@ argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pas
 			ra_size = (ctx->index - 0x01);
 	}
 
-	uint64_t relative_pos = (uint64_t) (rand_p & 0xFFFFFFFF);
+	uint64_t relative_pos = (uint64_t)(rand_p & 0xFFFFFFFF);
 	relative_pos = ((relative_pos * relative_pos) >> 0x20);
 	relative_pos = (ra_size - 0x01 - ((ra_size * relative_pos) >> 0x20));
 
@@ -521,7 +518,7 @@ argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pas
 
 static void
 argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_block *const ref,
-                  struct argon2d_block *const next, const int xor)
+                   struct argon2d_block *const next, const int xor)
 {
 	struct argon2d_block block_r;
 	struct argon2d_block block_t;
@@ -861,4 +858,4 @@ atheme_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) in
 }
 
 DECLARE_MODULE_V1("crypto/argon2d", false, atheme_argon2d_modinit, atheme_argon2d_moddeinit,
-	          PACKAGE_VERSION, "Aaron M. D. Jones <aaronmdjones@gmail.com>");
+                  PACKAGE_VERSION, "Aaron M. D. Jones <aaronmdjones@gmail.com>");
