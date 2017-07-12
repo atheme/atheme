@@ -373,9 +373,18 @@ static int c_uplink(mowgli_config_file_entry_t *ce)
 		}
 	}
 
-	if ((send_password) && (strchr(send_password, ' ')))
-		conf_report_warning(ce, "send_password for uplink %s is invalid (has spaces); continuing anyway", name);
-	if ((receive_password) && (strchr(receive_password, ' ')))
+	if (send_password == NULL || send_password[0] == '\0')
+	{
+		conf_report_warning(ce, "send_password for uplink %s is empty or missing; ignoring uplink", name);
+		return 0;
+	}
+	else if (strchr(send_password, ' ') != NULL)
+	{
+		conf_report_warning(ce, "send_password for uplink %s is invalid (has spaces); ignoring uplink", name);
+		return 0;
+	}
+
+	if (receive_password != NULL && strchr(receive_password, ' ') != NULL)
 		conf_report_warning(ce, "receive_password for uplink %s is invalid (has spaces); continuing anyway", name);
 
 	uplink_add(name, host, send_password, receive_password, vhost, port);
