@@ -913,7 +913,8 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (strcmp(curr_uplink->receive_pass, parv[0]))
+	if (curr_uplink->receive_pass != NULL &&
+	    strcmp(curr_uplink->receive_pass, parv[0]))
 	{
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;
