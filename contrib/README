@@ -17,6 +17,11 @@ anope_convert.c - An ANOPE MODULE to convert an Anope 1.7.x or 1.8.x database
                   to an Atheme database. This will output a new-style OpenSEX
                   Atheme database.
 
+convertrservtoatheme - Converts a ratbox-services sqlite3 database to an Atheme
+                       flatfile database. Takes the sqlite3 database pathname
+                       as an argument and outputs the Atheme flatfile to
+                       standard output.
+
 cap_sasl.pl - An irssi script with a implementation of SASL.
 
 check_collisions.pl - Checks two Atheme databases for account and channel
