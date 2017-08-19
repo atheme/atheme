@@ -31,6 +31,7 @@ struct sasl_session_ {
 
   char *host;
   char *ip;
+  bool tls;
 };
 
 struct sasl_message_ {

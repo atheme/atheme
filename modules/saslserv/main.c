@@ -301,6 +301,10 @@ static void sasl_input(sasl_message_t *smsg)
 		/* (H)ost information */
 		p->host = sstrdup(smsg->parv[0]);
 		p->ip   = sstrdup(smsg->parv[1]);
+
+		if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
+			p->tls = true;
+
 		return;
 
 	case 'S':
@@ -309,6 +313,7 @@ static void sasl_input(sasl_message_t *smsg)
 		{
 			free(p->certfp);
 			p->certfp = sstrdup(smsg->parv[1]);
+			p->tls = true;
 		}
 		/* fallthrough to 'C' */
 
