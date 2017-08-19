@@ -650,11 +650,17 @@ static void m_sasl(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 4)
 		return;
 
+	(void) memset(&smsg, 0x00, sizeof smsg);
+
 	smsg.uid = parv[1];
 	smsg.mode = *parv[2];
-	smsg.buf = parv[3];
-	smsg.ext = parc >= 4 ? parv[4] : NULL;
-	smsg.server = si->s ? si->s : NULL;
+	smsg.parc = parc - 3;
+	smsg.server = si->s;
+
+	if (smsg.parc > SASL_MESSAGE_MAXPARA)
+		smsg.parc = SASL_MESSAGE_MAXPARA;
+
+	(void) memcpy(smsg.parv, &parv[3], smsg.parc * sizeof(char *));
 
 	hook_call_sasl_input(&smsg);
 }
