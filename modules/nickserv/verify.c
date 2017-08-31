@@ -15,6 +15,7 @@ DECLARE_MODULE_V1
 	VENDOR_STRING
 );
 
+static void on_user_identify(user_t *u);
 static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -23,6 +24,8 @@ command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registrat
 
 void _modinit(module_t *m)
 {
+	hook_add_event("user_identify");
+	hook_add_user_identify(on_user_identify);
 	service_named_bind_command("nickserv", &ns_verify);
 	service_named_bind_command("nickserv", &ns_fverify);
 }
@@ -232,6 +235,15 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Invalid operation specified for \2FVERIFY\2."));
 		command_fail(si, fault_badparams, _("Valid operations are REGISTER and EMAILCHG."));
 		return;
+	}
+}
+
+static void on_user_identify(user_t *u)
+{
+	myuser_t *mu = u->myuser;
+
+	if (MU_WAITAUTH & mu->flags) {
+		notice(nicksvs.nick, u->nick, _("You have \2NOT COMPLETED\2 registration verification."));
 	}
 }
 
