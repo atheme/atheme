@@ -291,7 +291,7 @@ static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p)
 static void sasl_input(sasl_message_t *smsg)
 {
 	sasl_session_t *p = make_session(smsg->uid, smsg->server);
-	int len = strlen(smsg->buf);
+	int len = strlen(smsg->parv[0]);
 	char *tmpbuf;
 	int tmplen;
 
@@ -299,16 +299,21 @@ static void sasl_input(sasl_message_t *smsg)
 	{
 	case 'H':
 		/* (H)ost information */
-		p->host = sstrdup(smsg->buf);
-		p->ip   = sstrdup(smsg->ext);
+		p->host = sstrdup(smsg->parv[0]);
+		p->ip   = sstrdup(smsg->parv[1]);
+
+		if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
+			p->tls = true;
+
 		return;
 
 	case 'S':
 		/* (S)tart authentication */
-		if(smsg->mode == 'S' && smsg->ext != NULL && !strcmp(smsg->buf, "EXTERNAL"))
+		if(smsg->mode == 'S' && smsg->parc >= 2 && !strcmp(smsg->parv[0], "EXTERNAL"))
 		{
 			free(p->certfp);
-			p->certfp = sstrdup(smsg->ext);
+			p->certfp = sstrdup(smsg->parv[1]);
+			p->tls = true;
 		}
 		/* fallthrough to 'C' */
 
@@ -334,7 +339,7 @@ static void sasl_input(sasl_message_t *smsg)
 			p->len += len;
 		}
 
-		memcpy(p->p, smsg->buf, len);
+		memcpy(p->p, smsg->parv[0], len);
 
 		/* Messages not exactly 400 bytes are the end of a packet. */
 		if(len < 400)
