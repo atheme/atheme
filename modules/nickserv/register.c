@@ -227,7 +227,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SOPER: \2%s\2 as \2%s\2", get_oper_name(si), entity(mu)->name);
 	}
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), entity(mu)->name, mu->email, pass);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), entity(mu)->name, mu->email);
 	hook_call_user_register(mu);
 
 	if (si->su != NULL)
