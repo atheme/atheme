@@ -4,6 +4,12 @@ Atheme Services 7.3 Development Notes
 There have been various changes since the last non-point release, most of which
 are not documented here yet.
 
+security
+--------
+- Services now accept email addresses that may contain shell metacharacters.
+  If your `mta` setting points at a shell script, please ensure that it
+  properly handles email addresses with special characters in them.
+
 Atheme Services 7.2 Release Notes
 =================================
 

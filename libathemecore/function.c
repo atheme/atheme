@@ -241,13 +241,9 @@ int validemail(const char *email)
 	if (strlen(email) >= EMAILLEN)
 		return 0;
 
-#if 0
 	/* RFC2822 */
 #define EXTRA_ATEXTCHARS "!#$%&'*+-/=?^_`{|}~"
-#else
-	/* commonly used subset */
-#define EXTRA_ATEXTCHARS "%+-=^_"
-#endif
+
 	/* note that we do not allow domain literals or quoted strings */
 	for (i = 0; email[i] != '\0'; i++)
 	{
