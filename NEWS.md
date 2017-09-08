@@ -1,16 +1,15 @@
-Atheme Services 7.2.8 Release Notes
-===================================
+Atheme Services 7.3 Development Notes
+=====================================
 
-This is a security release fixing a memory leak that could potentially be abused
-by attackers to cause a denial of service. Users of Atheme 7.2.7 should update to
-version 7.2.8; older releases are not affected.
+There have been various changes since the last non-point release, most of which
+are not documented here yet.
 
-Atheme Services 7.2.7 Release Notes
-===================================
+Atheme Services 7.2 Release Notes
+=================================
 
 Since late February 2016, Atheme is being brought back to development (managed and
 maintained by a few of the fork maintainers). Atheme 7.2.7 is the first release
-since that change. It includes various fixes, some backported from the forks.
+since that change. The 7.2 line includes various fixes, some backported from the forks.
 
 security
 --------
