@@ -696,6 +696,13 @@ void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount)
 		metadata_delete(mu, "private:loginfail:lastfailaddr");
 	}
 
+	if (mu->flags & MU_WAITAUTH)
+	{
+		notice(svs->me->nick, u->nick, _("You have \2NOT COMPLETED\2 registration verification."));
+		notice(svs->me->nick, u->nick, _("An email containing nickname activation instructions was sent to \2%s\2."), mu->email);
+		notice(svs->me->nick, u->nick, _("If you do not complete registration within one day, your nickname will expire."));
+	}
+
 	mu->lastlogin = CURRTIME;
 	mn = mynick_find(u->nick);
 	if (mn != NULL && mn->owner == mu)
