@@ -56,13 +56,6 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (*chan != '#')
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "INVITE");
-		command_fail(si, fault_badparams, _("Syntax: INVITE <#channel>"));
-		return;
-	}
-
 	if (!(mc = mychan_find(chan)))
 	{
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
