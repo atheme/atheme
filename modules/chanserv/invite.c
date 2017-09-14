@@ -80,12 +80,6 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (chanacs_source_has_flag(mc, si, CA_SUSPENDED))
-	{
-		command_fail(si, fault_noprivs, _("Your access in %s is \2suspended\2."), chan);
-		return;
-	}
-
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
