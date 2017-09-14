@@ -78,6 +78,7 @@ struct ConfOption
   unsigned int ratelimit_uses;	    /* uses of a ratelimited command */
   unsigned int ratelimit_period;    /* period in which ratelimit_uses are done */
   unsigned int kline_time;          /* default expire for klines  */
+  unsigned int vhost_change;        /* days in which a user must wait between vhost changes */
   unsigned int clone_time;          /* default expire for clone exemptions */
   unsigned int commit_interval;     /* interval between commits   */
 

@@ -2110,6 +2110,12 @@ general {
 	 */
 	ratelimit_period = 60;
 
+	/* (*)vhost_change
+	 * The default number of days between vHost changes once a user has used HostServ
+	 * TAKE or REQUEST.  (Helps to deter rabid host-swappers and ban evaders.)
+	 */
+	#vhost_change = 30;
+
 	/* (*)kline_time
 	 * The default expire time for KLINE's in days.
 	 * Setting this to 0 makes all KLINE's permanent.
