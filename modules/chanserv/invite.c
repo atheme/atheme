@@ -61,12 +61,6 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
-	
-	if (metadata_find(mc, "private:frozen:freezer"))
-	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is frozen."), chan);
-		return;
-	}
 
 	if (metadata_find(mc, "private:close:closer"))
 	{
