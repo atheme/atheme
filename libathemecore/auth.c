@@ -53,31 +53,32 @@ bool verify_password(myuser_t *mu, const char *password)
 		return auth_user_custom(mu, password);
 
 	if (mu->flags & MU_CRYPTPASS)
+	{
 		if (crypto_module_loaded)
 		{
 			const crypt_impl_t *ci, *ci_default;
+			const char *new_salt, *new_hash;
 
-			ci = crypt_verify_password(password, mu->pass);
-			if (ci == NULL)
+			if ((ci = crypt_verify_password(password, mu->pass)) == NULL)
 				return false;
 
-			if (ci == (ci_default = crypt_get_default_provider()))
-			{
-				if (ci->needs_param_upgrade != NULL && ci->needs_param_upgrade(mu->pass))
-				{
-					slog(LG_INFO, "verify_password(): transitioning to newer parameters for crypt scheme '%s' for account '%s'",
-					              ci->id, entity(mu)->name);
-
-					mowgli_strlcpy(mu->pass, ci->crypt(password, ci->salt()), PASSLEN);
-				}
-			}
-			else
-			{
+			if ((ci_default = crypt_get_default_provider()) != ci)
 				slog(LG_INFO, "verify_password(): transitioning from crypt scheme '%s' to '%s' for account '%s'",
 					      ci->id, ci_default->id, entity(mu)->name);
+			else if (ci->needs_param_upgrade != NULL && ci->needs_param_upgrade(mu->pass))
+				slog(LG_INFO, "verify_password(): transitioning to newer parameters for crypt scheme '%s' for account '%s'",
+				              ci->id, entity(mu)->name);
+			else
+				return true;
 
-				mowgli_strlcpy(mu->pass, ci_default->crypt(password, ci_default->salt()), PASSLEN);
-			}
+			if ((new_salt = ci_default->salt()) == NULL)
+				slog(LG_ERROR, "verify_password(): salt generation failed for crypt scheme '%s'",
+				               ci_default->id);
+			else if ((new_hash = ci_default->crypt(password, new_salt)) == NULL)
+				slog(LG_ERROR, "verify_password(): hash generation failed for crypt scheme '%s'",
+				               ci_default->id);
+			else
+				mowgli_strlcpy(mu->pass, new_hash, PASSLEN);
 
 			return true;
 		}
@@ -86,11 +87,12 @@ bool verify_password(myuser_t *mu, const char *password)
 			 * but don't complain about crypted password '*',
 			 * this is supposed to never match
 			 */
-			if (strcmp(password, "*"))
-				slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
+			if (strcmp(mu->pass, "*"))
+				slog(LG_ERROR, "verify_password(): can't check crypted password -- no crypto module!");
+
 			return false;
 		}
+	}
 	else
 		return (strcmp(mu->pass, password) == 0);
 }
-
