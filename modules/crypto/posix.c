@@ -183,6 +183,10 @@ static const char *openssl_crypt_string(const char *key, const char *salt)
 	mowgli_strlcpy(real_salt, salt + 3, sizeof real_salt);
 
 	term = strrchr(real_salt, '$');
+
+	if (term == NULL)
+		return NULL;
+
 	*term = '\0';
 
 	return openssl_md5crypt(key, real_salt);
