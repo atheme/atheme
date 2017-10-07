@@ -726,19 +726,18 @@ static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
 static const char *
 atheme_argon2d_salt(void)
 {
-	static char res[PASSLEN];
-
 	const uint32_t m_cost = 0x01 << (uint32_t)atheme_argon2d_mcost;
 	const uint32_t t_cost = (uint32_t)atheme_argon2d_tcost;
-	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	char salt_b64[0x8000];
 
+	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
 	for (size_t x = 0x00; x < sizeof salt; x++)
 		salt[x] = (uint8_t) arc4random();
 
+	char salt_b64[0x8000];
 	(void) argon2d_enc_b64(salt, sizeof salt, salt_b64);
 
-	if (snprintf(res, sizeof res, ATHEME_ARGON2D_SAVESALT, m_cost, t_cost, salt_b64) >= (int) sizeof res)
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVESALT, m_cost, t_cost, salt_b64) >= PASSLEN)
 		return NULL;
 
 	return res;
@@ -747,21 +746,17 @@ atheme_argon2d_salt(void)
 static const char *
 atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict encoded)
 {
-	static char res[PASSLEN];
-
-	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	uint8_t hash[ATHEME_ARGON2D_HASHLEN];
-	char salt_b64[0x8000];
-	char hash_b64[0x8000];
 	uint32_t m_cost;
 	uint32_t t_cost;
-
+	char salt_b64[0x8000];
 	if (sscanf(encoded, ATHEME_ARGON2D_LOADSALT, &m_cost, &t_cost, salt_b64) != 3)
 		return NULL;
 
+	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
 	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
 		return NULL;
 
+	uint8_t hash[ATHEME_ARGON2D_HASHLEN];
 	struct argon2d_context ctx = {
 
 		.pass = (const uint8_t *) pass,
@@ -775,9 +770,11 @@ atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict
 	if (!argon2d_hash_raw(&ctx))
 		return NULL;
 
+	char hash_b64[0x8000];
 	(void) argon2d_enc_b64(hash, sizeof hash, hash_b64);
 
-	if (snprintf(res, sizeof res, ATHEME_ARGON2D_SAVEHASH, m_cost, t_cost, salt_b64, hash_b64) >= PASSLEN)
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVEHASH, m_cost, t_cost, salt_b64, hash_b64) >= PASSLEN)
 		return NULL;
 
 	return res;
@@ -786,14 +783,13 @@ atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict
 static bool
 atheme_argon2d_upgrade(const char *const restrict encoded)
 {
-	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	char salt_b64[0x8000];
 	uint32_t m_cost;
 	uint32_t t_cost;
-
+	char salt_b64[0x8000];
 	if (sscanf(encoded, ATHEME_ARGON2D_LOADSALT, &m_cost, &t_cost, salt_b64) != 3)
 		return false;
 
+	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
 	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
 		return false;
 
