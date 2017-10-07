@@ -167,10 +167,10 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 }
 
 static crypt_impl_t pbkdf2v2_crypt_impl = {
-	.id = "pbkdf2v2",
-	.crypt = &pbkdf2v2_crypt,
-	.salt = &pbkdf2v2_make_salt,
-	.needs_param_upgrade = &pbkdf2v2_needs_param_upgrade,
+	.id                     = "pbkdf2v2",
+	.crypt                  = &pbkdf2v2_crypt,
+	.salt                   = &pbkdf2v2_make_salt,
+	.needs_param_upgrade    = &pbkdf2v2_needs_param_upgrade,
 };
 
 static mowgli_list_t conf_pbkdf2v2_table;
