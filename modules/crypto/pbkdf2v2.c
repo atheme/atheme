@@ -130,7 +130,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 }
 
 static bool
-pbkdf2v2_needs_param_upgrade(const char *const restrict crypt_str)
+pbkdf2v2_upgrade(const char *const restrict crypt_str)
 {
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
@@ -170,7 +170,7 @@ static crypt_impl_t pbkdf2v2_crypt_impl = {
 	.id                     = "pbkdf2v2",
 	.crypt                  = &pbkdf2v2_crypt,
 	.salt                   = &pbkdf2v2_salt,
-	.needs_param_upgrade    = &pbkdf2v2_needs_param_upgrade,
+	.needs_param_upgrade    = &pbkdf2v2_upgrade,
 };
 
 static mowgli_list_t conf_pbkdf2v2_table;
