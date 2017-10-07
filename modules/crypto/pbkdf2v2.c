@@ -32,17 +32,16 @@
  * sufficient.
  */
 
-#define PBKDF2_SALTLEN		16
-#define PBKDF2_F_SCAN		"$z$%u$%u$%16[A-Za-z0-9]$"
-#define PBKDF2_F_SALT		"$z$%u$%u$%s$"
-#define PBKDF2_F_PRINT		"$z$%u$%u$%s$%s"
+#define PBKDF2_SALTLEN  16
+#define PBKDF2_F_SCAN   "$z$%u$%u$%16[A-Za-z0-9]$"
+#define PBKDF2_F_SALT   "$z$%u$%u$%s$"
+#define PBKDF2_F_PRINT  "$z$%u$%u$%s$%s"
 
-#define PBKDF2_C_MIN		10000
-#define PBKDF2_C_MAX		5000000
-#define PBKDF2_C_DEF		64000
+#define PBKDF2_C_MIN    10000
+#define PBKDF2_C_MAX    5000000
+#define PBKDF2_C_DEF    64000
 
-static const char salt_chars[62] =
-	"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
+static const char salt_chars[62] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 
 static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
 static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
