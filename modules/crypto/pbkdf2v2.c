@@ -72,23 +72,20 @@ pbkdf2v2_salt(void)
 static const char *
 pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt_str)
 {
-	unsigned int	prf = 0, iter = 0;
-	char		salt[PBKDF2_SALTLEN + 1];
-
-	const EVP_MD*	md = NULL;
-	unsigned char	digest[EVP_MAX_MD_SIZE];
-	char		digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
-
 	/*
 	 * Attempt to extract the PRF, iteration count and salt
 	 *
 	 * If this fails, we're trying to verify a hash not produced by
 	 * this module - just bail out, libathemecore can handle NULL
 	 */
+	unsigned int prf;
+	unsigned int iter;
+	char salt[PBKDF2_SALTLEN + 1];
 	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return NULL;
 
 	/* Look up the digest method corresponding to the PRF */
+	const EVP_MD *md;
 	switch (prf) {
 
 	case 5:
@@ -108,14 +105,14 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	}
 
 	/* Compute the PBKDF2 digest */
-	size_t sl = strlen(salt);
-	size_t pl = strlen(pass);
-	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl,
-	                         iter, md, EVP_MD_size(md), digest);
+	const size_t sl = strlen(salt);
+	const size_t pl = strlen(pass);
+	unsigned char digest[EVP_MAX_MD_SIZE];
+	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, iter, md, EVP_MD_size(md), digest);
 
 	/* Convert the digest to Base 64 */
-	(void) base64_encode((const char *) digest, EVP_MD_size(md),
-	                     digest_b64, sizeof digest_b64);
+	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
+	(void) base64_encode((const char *) digest, EVP_MD_size(md), digest_b64, sizeof digest_b64);
 
 	/* Format the result */
 	static char res[PASSLEN];
@@ -128,8 +125,9 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 static bool
 pbkdf2v2_upgrade(const char *const restrict crypt_str)
 {
-	unsigned int	prf = 0, iter = 0;
-	char		salt[PBKDF2_SALTLEN + 1];
+	unsigned int prf;
+	unsigned int iter;
+	char salt[PBKDF2_SALTLEN + 1];
 
 	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return false;
