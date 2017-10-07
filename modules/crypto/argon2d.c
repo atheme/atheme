@@ -128,7 +128,7 @@ static const uint64_t blake2b_iv[0x08] = {
 	UINT64_C(0x1F83D9ABFB41BD6B), UINT64_C(0x5BE0CD19137E2179)
 };
 
-static const uint64_t blake2b_sig[0x0C][0x10] = {
+static const uint64_t blake2b_sigma[0x0C][0x10] = {
 
 	{ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F },
 	{ 0x0E, 0x0A, 0x04, 0x08, 0x09, 0x0F, 0x0D, 0x06, 0x01, 0x0C, 0x00, 0x02, 0x0B, 0x07, 0x05, 0x03 },
@@ -255,13 +255,13 @@ blake2b_compress(struct blake2b_state *const restrict state, const uint8_t *cons
 		v[x + 0x0E] ^= state->f[x];
 	}
 
-#define G(r, i, a, b, c, d) do {                                    \
-	    (a) = (a) + (b) + m[blake2b_sig[r][(i * 0x02) + 0x00]]; \
-	    (d) = blake2b_rotr64(((d) ^ (a)), 0x20); (c) += (d);    \
-	    (b) = blake2b_rotr64(((b) ^ (c)), 0x18);                \
-	    (a) = (a) + (b) + m[blake2b_sig[r][(i * 0x02) + 0x01]]; \
-	    (d) = blake2b_rotr64(((d) ^ (a)), 0x10); (c) += (d);    \
-	    (b) = blake2b_rotr64(((b) ^ (c)), 0x3F);                \
+#define G(r, i, a, b, c, d) do {                                      \
+	    (a) = (a) + (b) + m[blake2b_sigma[r][(i * 0x02) + 0x00]]; \
+	    (d) = blake2b_rotr64(((d) ^ (a)), 0x20); (c) += (d);      \
+	    (b) = blake2b_rotr64(((b) ^ (c)), 0x18);                  \
+	    (a) = (a) + (b) + m[blake2b_sigma[r][(i * 0x02) + 0x01]]; \
+	    (d) = blake2b_rotr64(((d) ^ (a)), 0x10); (c) += (d);      \
+	    (b) = blake2b_rotr64(((b) ^ (c)), 0x3F);                  \
 	} while (0)
 
 	for (size_t x = 0x00; x < 0x0C; x++)
