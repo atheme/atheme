@@ -51,7 +51,7 @@ static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
 static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
 static const char *
-pbkdf2v2_make_salt(void)
+pbkdf2v2_salt(void)
 {
 	/* Fill salt array with random bytes */
 	unsigned char rawsalt[PBKDF2_SALTLEN];
@@ -169,7 +169,7 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 static crypt_impl_t pbkdf2v2_crypt_impl = {
 	.id                     = "pbkdf2v2",
 	.crypt                  = &pbkdf2v2_crypt,
-	.salt                   = &pbkdf2v2_make_salt,
+	.salt                   = &pbkdf2v2_salt,
 	.needs_param_upgrade    = &pbkdf2v2_needs_param_upgrade,
 };
 
