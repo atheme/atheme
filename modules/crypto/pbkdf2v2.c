@@ -126,7 +126,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	if (snprintf(res, PASSLEN, PBKDF2_F_PRINT, prf, iter, salt, digest_b64) >= PASSLEN)
 		return NULL;
 
-	return result;
+	return res;
 }
 
 static bool
