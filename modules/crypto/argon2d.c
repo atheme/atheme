@@ -718,6 +718,10 @@ argon2d_enc_b64(const uint8_t *restrict src, size_t src_len, char *restrict dst)
 	*dst = 0x00;
 }
 
+/*
+ * The default memory and time cost variables
+ * These can be adjusted in the configuration file
+ */
 static unsigned int atheme_argon2d_mcost = ARGON2D_MEMCOST_DEF;
 static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
 
