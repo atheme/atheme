@@ -22,9 +22,6 @@
 
 #ifdef HAVE_OPENSSL
 
-DECLARE_MODULE_V1("crypto/pbkdf2v2", false, _modinit, _moddeinit,
-                  PACKAGE_VERSION, "Aaron Jones <aaronmdjones@gmail.com>");
-
 #include <openssl/evp.h>
 
 /*
@@ -175,8 +172,8 @@ static crypt_impl_t pbkdf2v2_crypt_impl = {
 
 static mowgli_list_t pbkdf2v2_conf_table;
 
-void
-_modinit(module_t __attribute__((unused)) *const restrict m)
+static void
+crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 {
 	crypt_register(&pbkdf2v2_crypt_impl);
 
@@ -186,8 +183,8 @@ _modinit(module_t __attribute__((unused)) *const restrict m)
 	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
 }
 
-void
-_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+static void
+crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
@@ -195,5 +192,8 @@ _moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 
 	crypt_unregister(&pbkdf2v2_crypt_impl);
 }
+
+DECLARE_MODULE_V1("crypto/pbkdf2v2", false, crypto_pbkdf2v2_modinit, crypto_pbkdf2v2_moddeinit,
+                  PACKAGE_VERSION, "Aaron Jones <aaronmdjones@gmail.com>");
 
 #endif /* HAVE_OPENSSL */
