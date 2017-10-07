@@ -173,24 +173,24 @@ static crypt_impl_t pbkdf2v2_crypt_impl = {
 	.needs_param_upgrade    = &pbkdf2v2_upgrade,
 };
 
-static mowgli_list_t conf_pbkdf2v2_table;
+static mowgli_list_t pbkdf2v2_conf_table;
 
 void
 _modinit(module_t *const restrict m)
 {
 	crypt_register(&pbkdf2v2_crypt_impl);
 
-	add_subblock_top_conf("PBKDF2V2", &conf_pbkdf2v2_table);
-	add_conf_item("DIGEST", &conf_pbkdf2v2_table, c_ci_pbkdf2v2_digest);
-	add_uint_conf_item("ROUNDS", &conf_pbkdf2v2_table, 0, &pbkdf2v2_rounds,
+	add_subblock_top_conf("PBKDF2V2", &pbkdf2v2_conf_table);
+	add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
+	add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
 	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
 }
 
 void
 _moddeinit(const module_unload_intent_t intent)
 {
-	del_conf_item("DIGEST", &conf_pbkdf2v2_table);
-	del_conf_item("ROUNDS", &conf_pbkdf2v2_table);
+	del_conf_item("DIGEST", &pbkdf2v2_conf_table);
+	del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
 	del_top_conf("PBKDF2V2");
 
 	crypt_unregister(&pbkdf2v2_crypt_impl);
