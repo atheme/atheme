@@ -55,11 +55,11 @@ static const char *pbkdf2v2_make_salt(void)
 	char		salt[PBKDF2_SALTLEN + 1];
 	static char	result[PASSLEN];
 
-	memset(salt, 0x00, sizeof salt);
-	memset(result, 0x00, sizeof result);
-
 	for (int i = 0; i < PBKDF2_SALTLEN; i++)
 		salt[i] = salt_chars[arc4random() % sizeof salt_chars];
+
+	/* NULL-terminate the string */
+	salt[PBKDF2_SALTLEN] = 0x00;
 
 	(void) snprintf(result, sizeof result, PBKDF2_F_SALT,
 	                pbkdf2v2_digest, pbkdf2v2_rounds, salt);
@@ -112,12 +112,10 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	                         iter, md, EVP_MD_size(md), digest);
 
 	/* Convert the digest to Base 64 */
-	memset(digest_b64, 0x00, sizeof digest_b64);
 	(void) base64_encode((const char *) digest, EVP_MD_size(md),
 	                     digest_b64, sizeof digest_b64);
 
 	/* Format the result */
-	memset(result, 0x00, sizeof result);
 	(void) snprintf(result, sizeof result, PBKDF2_F_PRINT,
 	                prf, iter, salt, digest_b64);
 
