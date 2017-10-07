@@ -616,10 +616,8 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 
 	struct argon2d_block bhash_final;
 	(void) argon2d_copy_block(&bhash_final, &ctx->mem[ctx->lane_len - 0x01]);
-
-	uint8_t bhash_inter[ARGON2_BLKSZ];
-	(void) argon2d_store_block(bhash_inter, &bhash_final);
-	(void) blake2b_long(bhash_inter, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
+	(void) argon2d_store_block(bhash_bytes, &bhash_final);
+	(void) blake2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
 
 	(void) free(ctx->mem);
 	return true;
