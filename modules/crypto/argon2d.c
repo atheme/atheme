@@ -66,33 +66,33 @@
 
 struct blake2b_param
 {
-	uint8_t         hash_len;
-	uint8_t         key_len;
-	uint8_t         fanout;
-	uint8_t         depth;
-	uint32_t        leaf_len;
-	uint64_t        node_off;
-	uint8_t         node_depth;
-	uint8_t         inner_len;
-	uint8_t         reserved[0x0E];
-	uint8_t         salt[BLAKE2B_SALTLEN];
-	uint8_t         personal[BLAKE2B_PERSLEN];
+	uint8_t                 hash_len;
+	uint8_t                 key_len;
+	uint8_t                 fanout;
+	uint8_t                 depth;
+	uint32_t                leaf_len;
+	uint64_t                node_off;
+	uint8_t                 node_depth;
+	uint8_t                 inner_len;
+	uint8_t                 reserved[0x0E];
+	uint8_t                 salt[BLAKE2B_SALTLEN];
+	uint8_t                 personal[BLAKE2B_PERSLEN];
 } __attribute__((packed));
 
 struct blake2b_state
 {
-	uint64_t        h[0x08];
-	uint64_t        t[0x02];
-	uint64_t        f[0x02];
-	size_t          buflen;
-	size_t          outlen;
-	uint8_t         last_node;
-	uint8_t         buf[BLAKE2B_BLOCKLEN];
+	uint64_t                h[0x08];
+	uint64_t                t[0x02];
+	uint64_t                f[0x02];
+	size_t                  buflen;
+	size_t                  outlen;
+	uint8_t                 last_node;
+	uint8_t                 buf[BLAKE2B_BLOCKLEN];
 };
 
 struct argon2d_block
 {
-	uint64_t        v[ARGON2_BLK_QWORDS];
+	uint64_t                v[ARGON2_BLK_QWORDS];
 };
 
 struct argon2d_context
