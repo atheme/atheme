@@ -747,7 +747,7 @@ atheme_argon2d_salt(void)
 }
 
 static const char *
-atheme_argon2d_crypt(const char *const pass, const char *const encoded)
+atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict encoded)
 {
 	static char res[PASSLEN];
 
@@ -786,7 +786,7 @@ atheme_argon2d_crypt(const char *const pass, const char *const encoded)
 }
 
 static bool
-atheme_argon2d_upgrade(const char *const encoded)
+atheme_argon2d_upgrade(const char *const restrict encoded)
 {
 	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
 	char salt_b64[0x8000];
