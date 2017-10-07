@@ -730,8 +730,7 @@ atheme_argon2d_salt(void)
 	const uint32_t t_cost = (uint32_t)atheme_argon2d_tcost;
 
 	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	for (size_t x = 0x00; x < sizeof salt; x++)
-		salt[x] = (uint8_t) arc4random();
+	(void) arc4random_buf(salt, sizeof salt);
 
 	char salt_b64[0x8000];
 	(void) argon2d_enc_b64(salt, sizeof salt, salt_b64);
