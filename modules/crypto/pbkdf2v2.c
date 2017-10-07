@@ -176,7 +176,7 @@ static crypt_impl_t pbkdf2v2_crypt_impl = {
 static mowgli_list_t pbkdf2v2_conf_table;
 
 void
-_modinit(module_t *const restrict m)
+_modinit(module_t __attribute__((unused)) *const restrict m)
 {
 	crypt_register(&pbkdf2v2_crypt_impl);
 
@@ -187,7 +187,7 @@ _modinit(module_t *const restrict m)
 }
 
 void
-_moddeinit(const module_unload_intent_t intent)
+_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
