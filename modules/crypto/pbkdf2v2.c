@@ -89,7 +89,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	 * If this fails, we're trying to verify a hash not produced by
 	 * this module - just bail out, libathemecore can handle NULL
 	 */
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) < 3)
+	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return NULL;
 
 	/* Look up the digest method corresponding to the PRF */
@@ -135,7 +135,7 @@ pbkdf2v2_needs_param_upgrade(const char *const restrict user_pass_string)
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
 
-	if (sscanf(user_pass_string, PBKDF2_F_SCAN, &prf, &iter, salt) < 3)
+	if (sscanf(user_pass_string, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return 0;
 
 	if (prf != pbkdf2v2_digest)
