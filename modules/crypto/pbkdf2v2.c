@@ -99,8 +99,8 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
-	const int sl = (int) strlen(salt);
 	const int pl = (int) strlen(pass);
+	const int sl = (int) strlen(salt);
 	unsigned char digest[EVP_MAX_MD_SIZE];
 	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
 
