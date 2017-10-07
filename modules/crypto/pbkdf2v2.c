@@ -136,15 +136,15 @@ pbkdf2v2_needs_param_upgrade(const char *const restrict crypt_str)
 	char		salt[PBKDF2_SALTLEN + 1];
 
 	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
-		return 0;
+		return false;
 
 	if (prf != pbkdf2v2_digest)
-		return 1;
+		return true;
 
 	if (iter != pbkdf2v2_rounds)
-		return 1;
+		return true;
 
-	return 0;
+	return false;
 }
 
 static int
