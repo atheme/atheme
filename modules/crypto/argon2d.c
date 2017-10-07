@@ -751,6 +751,9 @@ atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict
 	if (sscanf(encoded, ATHEME_ARGON2D_LOADSALT, &m_cost, &t_cost, salt_b64) != 3)
 		return NULL;
 
+	if ((m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (t_cost > ARGON2D_TIMECOST_MAX))
+		return NULL;
+
 	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
 	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
 		return NULL;
