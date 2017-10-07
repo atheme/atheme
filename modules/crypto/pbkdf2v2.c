@@ -59,7 +59,7 @@ pbkdf2v2_salt(void)
 		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
 
 	/* NULL-terminate the string */
-	salt[PBKDF2_SALTLEN] = 0x00;
+	salt[sizeof rawsalt] = 0x00;
 
 	/* Format and return the result */
 	static char res[PASSLEN];
