@@ -52,24 +52,24 @@ static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
 static const char *pbkdf2v2_make_salt(void)
 {
-	unsigned char	rawsalt[PBKDF2_SALTLEN];
-	char		salt[sizeof rawsalt + 1];
-	static char	result[PASSLEN];
-
 	/* Fill salt array with random bytes */
+	unsigned char rawsalt[PBKDF2_SALTLEN];
 	(void) arc4random_buf(rawsalt, sizeof rawsalt);
 
 	/* Use random byte as index into printable character array, turning it into a printable string */
+	char salt[sizeof rawsalt + 1];
 	for (size_t i = 0; i < sizeof rawsalt; i++)
 		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
 
 	/* NULL-terminate the string */
 	salt[PBKDF2_SALTLEN] = 0x00;
 
-	(void) snprintf(result, sizeof result, PBKDF2_F_SALT,
-	                pbkdf2v2_digest, pbkdf2v2_rounds, salt);
+	/* Format and return the result */
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, PBKDF2_F_SALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+		return NULL;
 
-	return result;
+	return res;
 }
 
 static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
