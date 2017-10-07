@@ -84,25 +84,19 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return NULL;
 
-	/* Look up the digest method corresponding to the PRF */
+	/*
+	 * Look up the digest method corresponding to the PRF
+	 *
+	 * If this fails, we are trying to verify a hash that we don't
+	 * know how to compute, just bail out like above.
+	 */
 	const EVP_MD *md;
-	switch (prf) {
-
-	case 5:
+	if (prf == 5)
 		md = EVP_sha256();
-		break;
-
-	case 6:
+	else if (prf == 6)
 		md = EVP_sha512();
-		break;
-
-	default:
-		/*
-		 * Similar to above, trying to verify a password
-		 * that we cannot ever verify - bail out here
-		 */
+	else
 		return NULL;
-	}
 
 	/* Compute the PBKDF2 digest */
 	const size_t sl = strlen(salt);
