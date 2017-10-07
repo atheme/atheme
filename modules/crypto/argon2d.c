@@ -812,29 +812,29 @@ static crypt_impl_t atheme_argon2d_crypt_impl = {
 	.needs_param_upgrade    = &atheme_argon2d_upgrade,
 };
 
-static mowgli_list_t conf_table;
+static mowgli_list_t atheme_argon2d_conf_table;
 
 static void
 atheme_argon2d_modinit(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&atheme_argon2d_crypt_impl);
-	(void) add_subblock_top_conf("ARGON2D", &conf_table);
 
-	(void) add_uint_conf_item("MEMORY", &conf_table, 0, &atheme_argon2d_mcost,
-	                          ARGON2D_MEMCOST_MIN, ARGON2D_MEMCOST_MAX,
-	                          ARGON2D_MEMCOST_DEF);
+	(void) add_subblock_top_conf("ARGON2D", &atheme_argon2d_conf_table);
 
-	(void) add_uint_conf_item("TIME", &conf_table, 0, &atheme_argon2d_tcost,
-	                          ARGON2D_TIMECOST_MIN, ARGON2D_TIMECOST_MAX,
-	                          ARGON2D_TIMECOST_DEF);
+	(void) add_uint_conf_item("MEMORY", &atheme_argon2d_conf_table, 0, &atheme_argon2d_mcost,
+	                          ARGON2D_MEMCOST_MIN, ARGON2D_MEMCOST_MAX, ARGON2D_MEMCOST_DEF);
+
+	(void) add_uint_conf_item("TIME", &atheme_argon2d_conf_table, 0, &atheme_argon2d_tcost,
+	                          ARGON2D_TIMECOST_MIN, ARGON2D_TIMECOST_MAX, ARGON2D_TIMECOST_DEF);
 }
 
 static void
 atheme_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) del_conf_item("TIME", &conf_table);
-	(void) del_conf_item("MEMORY", &conf_table);
+	(void) del_conf_item("TIME", &atheme_argon2d_conf_table);
+	(void) del_conf_item("MEMORY", &atheme_argon2d_conf_table);
 	(void) del_top_conf("ARGON2D");
+
 	(void) crypt_unregister(&atheme_argon2d_crypt_impl);
 }
 
