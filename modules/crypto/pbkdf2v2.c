@@ -80,7 +80,6 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	const EVP_MD*	md = NULL;
 	unsigned char	digest[EVP_MAX_MD_SIZE];
 	char		digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
-	static char	result[PASSLEN];
 
 	/*
 	 * Attempt to extract the PRF, iteration count and salt
@@ -121,8 +120,9 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	                     digest_b64, sizeof digest_b64);
 
 	/* Format the result */
-	(void) snprintf(result, sizeof result, PBKDF2_F_PRINT,
-	                prf, iter, salt, digest_b64);
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, PBKDF2_F_PRINT, prf, iter, salt, digest_b64) >= PASSLEN)
+		return NULL;
 
 	return result;
 }
