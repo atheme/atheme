@@ -99,14 +99,14 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
-	const size_t sl = strlen(salt);
-	const size_t pl = strlen(pass);
+	const int sl = (int) strlen(salt);
+	const int pl = (int) strlen(pass);
 	unsigned char digest[EVP_MAX_MD_SIZE];
-	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, iter, md, EVP_MD_size(md), digest);
+	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
 
 	/* Convert the digest to Base 64 */
 	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
-	(void) base64_encode((const char *) digest, EVP_MD_size(md), digest_b64, sizeof digest_b64);
+	(void) base64_encode((const char *) digest, (size_t) EVP_MD_size(md), digest_b64, sizeof digest_b64);
 
 	/* Format the result */
 	static char res[PASSLEN];
