@@ -52,11 +52,16 @@ static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
 static const char *pbkdf2v2_make_salt(void)
 {
-	char		salt[PBKDF2_SALTLEN + 1];
+	unsigned char	rawsalt[PBKDF2_SALTLEN];
+	char		salt[sizeof rawsalt + 1];
 	static char	result[PASSLEN];
 
-	for (int i = 0; i < PBKDF2_SALTLEN; i++)
-		salt[i] = salt_chars[arc4random() % sizeof salt_chars];
+	/* Fill salt array with random bytes */
+	(void) arc4random_buf(rawsalt, sizeof rawsalt);
+
+	/* Use random byte as index into printable character array, turning it into a printable string */
+	for (size_t i = 0; i < sizeof rawsalt; i++)
+		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
 
 	/* NULL-terminate the string */
 	salt[PBKDF2_SALTLEN] = 0x00;
