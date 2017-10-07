@@ -487,8 +487,8 @@ argon2d_idx(const struct argon2d_context *const restrict ctx, const uint32_t pas
 		ra_size += (slice * ctx->seg_len);
 
 	uint64_t relative_pos = (uint64_t)(rand_p & 0xFFFFFFFF);
-	relative_pos = ((relative_pos * relative_pos) >> 0x20);
-	relative_pos = (ra_size - 0x01 - ((ra_size * relative_pos) >> 0x20));
+	relative_pos = ((relative_pos * relative_pos) >> 0x20U);
+	relative_pos = (ra_size - 0x01 - ((ra_size * relative_pos) >> 0x20U));
 
 	uint32_t start_pos = 0x00;
 	if (pass && slice != (ARGON2_SYNC_POINTS - 0x01))
@@ -623,8 +623,8 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	return true;
 }
 
-#define EQ(x, y) ((((0x00 - (((unsigned) (x)) ^ ((unsigned) (y)))) >> 0x08) & 0xFF) ^ 0xFF)
-#define GT(x, y) (((((unsigned) (y)) - ((unsigned) (x))) >> 0x08) & 0xFF)
+#define EQ(x, y) ((((0x00 - (((unsigned) (x)) ^ ((unsigned) (y)))) >> 0x08U) & 0xFF) ^ 0xFF)
+#define GT(x, y) (((((unsigned) (y)) - ((unsigned) (x))) >> 0x08U) & 0xFF)
 #define GE(x, y) (GT(y, x) ^ 0xFF)
 #define LE(x, y) (GE(y, x))
 
@@ -664,7 +664,7 @@ argon2d_dec_b64(const char *restrict src, uint8_t *restrict dst, const size_t ds
 		}
 		if (exiting)
 		{
-			if (acc_len > 0x04 || (acc & ((0x01 << acc_len) - 0x01)) != 0x00)
+			if (acc_len > 0x04 || (acc & ((0x01U << acc_len) - 0x01)) != 0x00)
 				return 0;
 
 			return written;
@@ -679,7 +679,7 @@ argon2d_dec_b64(const char *restrict src, uint8_t *restrict dst, const size_t ds
 				break;
 			}
 
-			acc = ((acc << 0x06) | ((uint64_t) d));
+			acc = ((acc << 0x06U) | ((uint64_t) d));
 			acc_len += 0x06;
 		}
 	}
@@ -692,25 +692,25 @@ argon2d_enc_b64(const uint8_t *restrict src, size_t src_len, char *restrict dst)
 
 	while (src_len > 0x02)
 	{
-		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02)];
-		*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04) + (src[0x01] >> 0x04))];
-		*dst++ = base64_etab[(size_t)(((src[0x01] & 0x0F) << 0x02) + (src[0x02] >> 0x06))];
-		*dst++ = base64_etab[(size_t)(src[0x02] & 0x3F)];
+		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02U)];
+		*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04U) + (src[0x01] >> 0x04U))];
+		*dst++ = base64_etab[(size_t)(((src[0x01] & 0x0F) << 0x02U) + (src[0x02] >> 0x06U))];
+		*dst++ = base64_etab[(size_t)(src[0x02] & 0x3FU)];
 
 		src += 0x03;
 		src_len -= 0x03;
 	}
 	if (src_len > 0x00)
 	{
-		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02)];
+		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02U)];
 
 		if (src_len > 0x01)
 		{
-			*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04) + (src[0x01] >> 0x04))];
-			*dst++ = base64_etab[(size_t)((src[0x01] & 0x0F) << 0x02)];
+			*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04U) + (src[0x01] >> 0x04U))];
+			*dst++ = base64_etab[(size_t)((src[0x01] & 0x0F) << 0x02U)];
 		}
 		else
-			*dst++ = base64_etab[(size_t)((src[0x00] & 0x03) << 0x04)];
+			*dst++ = base64_etab[(size_t)((src[0x00] & 0x03) << 0x04U)];
 	}
 
 	*dst = 0x00;
@@ -726,7 +726,7 @@ static unsigned int atheme_argon2d_tcost = ARGON2D_TIMECOST_DEF;
 static const char *
 atheme_argon2d_salt(void)
 {
-	const uint32_t m_cost = 0x01 << (uint32_t)atheme_argon2d_mcost;
+	const uint32_t m_cost = 0x01U << (uint32_t)atheme_argon2d_mcost;
 	const uint32_t t_cost = (uint32_t)atheme_argon2d_tcost;
 
 	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
@@ -792,7 +792,7 @@ atheme_argon2d_upgrade(const char *const restrict encoded)
 	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
 		return false;
 
-	if (m_cost != (0x01 << atheme_argon2d_mcost))
+	if (m_cost != (0x01U << atheme_argon2d_mcost))
 		return true;
 
 	if (t_cost != atheme_argon2d_tcost)
