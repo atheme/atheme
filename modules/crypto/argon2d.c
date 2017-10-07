@@ -529,14 +529,14 @@ argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_
                    struct argon2d_block *const next, const uint32_t pass)
 {
 	struct argon2d_block block_r;
-	struct argon2d_block block_t;
+	struct argon2d_block block_x;
 
 	(void) argon2d_copy_block(&block_r, ref);
 	(void) argon2d_xor_block(&block_r, prev);
-	(void) argon2d_copy_block(&block_t, &block_r);
+	(void) argon2d_copy_block(&block_x, &block_r);
 
 	if (pass != 0x00)
-		(void) argon2d_xor_block(&block_t, next);
+		(void) argon2d_xor_block(&block_x, next);
 
 	uint64_t *const v = block_r.v;
 
@@ -576,7 +576,7 @@ argon2d_fill_block(const struct argon2d_block *const prev, const struct argon2d_
 
 #undef F
 
-	(void) argon2d_copy_block(next, &block_t);
+	(void) argon2d_copy_block(next, &block_x);
 	(void) argon2d_xor_block(next, &block_r);
 }
 
