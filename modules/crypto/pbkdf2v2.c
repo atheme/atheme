@@ -50,7 +50,8 @@ static const char salt_chars[62] =
 static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
 static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
-static const char *pbkdf2v2_make_salt(void)
+static const char *
+pbkdf2v2_make_salt(void)
 {
 	/* Fill salt array with random bytes */
 	unsigned char rawsalt[PBKDF2_SALTLEN];
@@ -72,7 +73,8 @@ static const char *pbkdf2v2_make_salt(void)
 	return res;
 }
 
-static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
+static const char *
+pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 {
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
@@ -127,7 +129,8 @@ static const char *pbkdf2v2_crypt(const char *pass, const char *crypt_str)
 	return result;
 }
 
-static bool pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
+static bool
+pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
 {
 	unsigned int	prf = 0, iter = 0;
 	char		salt[PBKDF2_SALTLEN + 1];
@@ -144,7 +147,8 @@ static bool pbkdf2v2_needs_param_upgrade(const char *user_pass_string)
 	return 0;
 }
 
-static int c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *ce)
+static int
+c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *ce)
 {
 	if (ce->vardata == NULL)
 	{
@@ -171,7 +175,8 @@ static crypt_impl_t pbkdf2v2_crypt_impl = {
 
 static mowgli_list_t conf_pbkdf2v2_table;
 
-void _modinit(module_t* m)
+void
+_modinit(module_t* m)
 {
 	crypt_register(&pbkdf2v2_crypt_impl);
 
@@ -181,7 +186,8 @@ void _modinit(module_t* m)
 	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+void
+_moddeinit(module_unload_intent_t intent)
 {
 	del_conf_item("DIGEST", &conf_pbkdf2v2_table);
 	del_conf_item("ROUNDS", &conf_pbkdf2v2_table);
