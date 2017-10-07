@@ -99,7 +99,6 @@ struct argon2d_block
 
 struct argon2d_context
 {
-	struct argon2d_block   *mem;
 	const uint8_t          *pass;
 	const uint8_t          *salt;
 	uint8_t                *hash;
@@ -143,6 +142,34 @@ static const uint64_t blake2b_sigma[0x0C][0x10] = {
 	{ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F },
 	{ 0x0E, 0x0A, 0x04, 0x08, 0x09, 0x0F, 0x0D, 0x06, 0x01, 0x0C, 0x00, 0x02, 0x0B, 0x07, 0x05, 0x03 }
 };
+
+/*
+ * This is reallocated on-demand to save allocating and freeing every time we
+ * digest a password. The mempoolsz variable tracks how large (in blocks) the
+ * currently-allocated memory pool is.
+ */
+static struct argon2d_block *argon2d_mempool = NULL;
+static uint32_t argon2d_mempoolsz = 0;
+
+static inline bool
+atheme_argon2d_mempool_realloc(const uint32_t mem_blocks)
+{
+	if (argon2d_mempool != NULL && argon2d_mempoolsz >= mem_blocks)
+		return true;
+
+	struct argon2d_block *mempool_tmp;
+	const size_t required_sz = mem_blocks * sizeof(struct argon2d_block);
+
+	if (!(mempool_tmp = realloc(argon2d_mempool, required_sz)))
+	{
+		(void) slog(LG_ERROR, "%s: memory allocation failure", __func__);
+		return false;
+	}
+
+	argon2d_mempool = mempool_tmp;
+	argon2d_mempoolsz = mem_blocks;
+	return true;
+}
 
 #if (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)) || \
     defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) || defined(__MIPSEL__) || defined(__AARCH64EL__) || \
@@ -570,12 +597,12 @@ argon2d_segment_fill(struct argon2d_context *const restrict ctx, const uint32_t 
 
 		ctx->index = i;
 
-		const uint64_t rand_p = ctx->mem[prv_off].v[0x00];
+		const uint64_t rand_p = argon2d_mempool[prv_off].v[0x00];
 		const uint32_t ref_idx = argon2d_idx(ctx, pass, slice, rand_p);
 
-		const struct argon2d_block *const prv = &ctx->mem[prv_off];
-		const struct argon2d_block *const ref = &ctx->mem[ref_idx];
-		struct argon2d_block *const cur = &ctx->mem[cur_off];
+		const struct argon2d_block *const prv = &argon2d_mempool[prv_off];
+		const struct argon2d_block *const ref = &argon2d_mempool[ref_idx];
+		struct argon2d_block *const cur = &argon2d_mempool[cur_off];
 
 		(void) argon2d_fill_block(prv, ref, cur, pass);
 	}
@@ -590,7 +617,7 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 
 	ctx->lane_len = mem_blocks;
 
-	if (!(ctx->mem = calloc((size_t) mem_blocks, sizeof(struct argon2d_block))))
+	if (!atheme_argon2d_mempool_realloc(mem_blocks))
 		return false;
 
 	uint8_t bhash_init[ARGON2_PRESEED_LEN];
@@ -600,10 +627,10 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 
 	uint8_t bhash_bytes[ARGON2_BLKSZ];
 	(void) blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ);
-	(void) argon2d_load_block(&ctx->mem[0x00], bhash_bytes);
+	(void) argon2d_load_block(&argon2d_mempool[0x00], bhash_bytes);
 	(void) blake2b_store32(bhash_init + ARGON2_PREHASH_LEN, 0x01);
 	(void) blake2b_long(bhash_init, ARGON2_PRESEED_LEN, bhash_bytes, ARGON2_BLKSZ);
-	(void) argon2d_load_block(&ctx->mem[0x01], bhash_bytes);
+	(void) argon2d_load_block(&argon2d_mempool[0x01], bhash_bytes);
 
 	for (uint32_t pass = 0x00; pass < ctx->t_cost; pass++)
 	{
@@ -615,11 +642,9 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	}
 
 	struct argon2d_block bhash_final;
-	(void) argon2d_copy_block(&bhash_final, &ctx->mem[ctx->lane_len - 0x01]);
+	(void) argon2d_copy_block(&bhash_final, &argon2d_mempool[ctx->lane_len - 0x01]);
 	(void) argon2d_store_block(bhash_bytes, &bhash_final);
 	(void) blake2b_long(bhash_bytes, ARGON2_BLKSZ, ctx->hash, ATHEME_ARGON2D_HASHLEN);
-
-	(void) free(ctx->mem);
 	return true;
 }
 
@@ -836,6 +861,8 @@ atheme_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) in
 	(void) del_top_conf("ARGON2D");
 
 	(void) crypt_unregister(&atheme_argon2d_crypt_impl);
+
+	(void) free(argon2d_mempool);
 }
 
 DECLARE_MODULE_V1("crypto/argon2d", false, atheme_argon2d_modinit, atheme_argon2d_moddeinit,
