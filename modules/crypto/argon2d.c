@@ -79,6 +79,8 @@ struct blake2b_param
 	uint8_t                 personal[BLAKE2B_PERSLEN];
 } __attribute__((packed));
 
+#pragma pack(pop)
+
 struct blake2b_state
 {
 	uint64_t                h[0x08];
@@ -108,8 +110,6 @@ struct argon2d_context
 	uint32_t                seg_len;
 	uint32_t                index;
 };
-
-#pragma pack(pop)
 
 enum BLAKE2B_SZCHK_STATIC_ASSERT
 {
