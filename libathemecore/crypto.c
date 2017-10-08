@@ -26,89 +26,55 @@
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 bool crypto_module_loaded = false;
 
-static const char *generic_crypt_string(const char *str, const char *salt)
+const crypt_impl_t *
+crypt_get_default_provider(void)
 {
-	return str;
-}
-
-static const char *generic_gen_salt(void)
-{
-	static char buf[BUFSIZE];
-	char *ht = random_string(6);
-
-	mowgli_strlcpy(buf, "$1$", BUFSIZE);
-	mowgli_strlcat(buf, ht, BUFSIZE);
-	mowgli_strlcat(buf, "$", BUFSIZE);
-
-	free(ht);
-
-	return buf;
-}
-
-static bool generic_needs_param_upgrade(const char *user_pass_string)
-{
-	return 0;
-}
-
-static const crypt_impl_t fallback_crypt_impl = {
-	.id = "plaintext",
-	.crypt = &generic_crypt_string,
-	.salt = &generic_gen_salt,
-	.needs_param_upgrade = &generic_needs_param_upgrade,
-};
-
-const crypt_impl_t *crypt_get_default_provider(void)
-{
-	crypt_impl_t *ci;
-
 	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
-		return &fallback_crypt_impl;
+		return NULL;
 
-	/* top of stack should handle string crypting, should be populated by now */
-	return_val_if_fail(crypt_impl_list.head != NULL, &fallback_crypt_impl);
-	ci = crypt_impl_list.head->data;
+	if (!crypt_impl_list.head)
+		return NULL;
 
-	/* ensure the provider is populated */
-	return_val_if_fail(ci->crypt != NULL, &fallback_crypt_impl);
-	return_val_if_fail(ci->salt != NULL, &fallback_crypt_impl);
-
-	return ci;
+	return crypt_impl_list.head->data;
 }
 
-/*
- * crypt_string is just like crypt(3) under UNIX
- * systems. Modules provide this function, otherwise
- * it returns the string unencrypted.
- */
-const char *crypt_string(const char *key, const char *salt)
+const char *
+gen_salt(void)
 {
-	const crypt_impl_t *ci = crypt_get_default_provider();
+	const crypt_impl_t *const ci = crypt_get_default_provider();
 
-	return ci->crypt(key, salt);
-}
-
-const char *gen_salt(void)
-{
-	const crypt_impl_t *ci = crypt_get_default_provider();
+	if (!ci)
+		return NULL;
 
 	return ci->salt();
 }
 
-void crypt_register(crypt_impl_t *impl)
+const char *
+crypt_string(const char *const restrict password, const char *restrict salt)
+{
+	const crypt_impl_t *const ci = crypt_get_default_provider();
+
+	if (!ci)
+		return NULL;
+
+	if (!salt || !*salt)
+		salt = ci->salt();
+
+	return ci->crypt(password, salt);
+}
+
+void
+crypt_register(crypt_impl_t *impl)
 {
 	return_if_fail(impl != NULL);
-
-	if (impl->crypt == NULL)
-		impl->crypt = &generic_crypt_string;
-	if (impl->salt == NULL)
-		impl->salt = &generic_gen_salt;
 
 	mowgli_node_add(impl, &impl->node, &crypt_impl_list);
 
 	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
 }
 
-void crypt_unregister(crypt_impl_t *impl)
+void
+crypt_unregister(crypt_impl_t *impl)
 {
 	return_if_fail(impl != NULL);
 
@@ -117,35 +83,19 @@ void crypt_unregister(crypt_impl_t *impl)
 	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
 }
 
-/*
- * crypt_verify_password is a frontend to crypt_string().
- */
-const crypt_impl_t *crypt_verify_password(const char *uinput, const char *pass)
+const crypt_impl_t *
+crypt_verify_password(const char *const restrict password, const char *const restrict crypt_str)
 {
 	mowgli_node_t *n;
-	const char *cstr;
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
-		crypt_impl_t *ci;
+		const crypt_impl_t *const ci = n->data;
+		const char *const result = ci->crypt(password, crypt_str);
 
-		ci = n->data;
-		cstr = ci->crypt(uinput, pass);
-
-		if (cstr != NULL && !strcmp(cstr, pass))
+		if (result != NULL && !strcmp(result, crypt_str))
 			return ci;
 	}
 
-	cstr = fallback_crypt_impl.crypt(uinput, pass);
-
-	if (!strcmp(cstr, pass))
-		return &fallback_crypt_impl;
-
 	return NULL;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
