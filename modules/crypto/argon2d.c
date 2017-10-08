@@ -100,8 +100,8 @@ struct argon2d_block
 struct argon2d_context
 {
 	const uint8_t          *pass;
-	const uint8_t          *salt;
-	uint8_t                *hash;
+	uint8_t                 salt[ATHEME_ARGON2D_SALTLEN];
+	uint8_t                 hash[ATHEME_ARGON2D_HASHLEN];
 	uint32_t                passlen;
 	uint32_t                m_cost;
 	uint32_t                t_cost;
@@ -770,38 +770,30 @@ atheme_argon2d_salt(void)
 static const char *
 atheme_argon2d_crypt(const char *const restrict pass, const char *const restrict encoded)
 {
-	uint32_t m_cost;
-	uint32_t t_cost;
+	struct argon2d_context ctx;
+	(void) memset(&ctx, 0x00, sizeof ctx);
+
 	char salt_b64[0x8000];
-	if (sscanf(encoded, ATHEME_ARGON2D_LOADSALT, &m_cost, &t_cost, salt_b64) != 3)
+	if (sscanf(encoded, ATHEME_ARGON2D_LOADSALT, &ctx.m_cost, &ctx.t_cost, salt_b64) != 3)
 		return NULL;
 
-	if ((m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (t_cost > ARGON2D_TIMECOST_MAX))
+	if ((ctx.m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (ctx.t_cost > ARGON2D_TIMECOST_MAX))
 		return NULL;
 
-	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
+	if (argon2d_dec_b64(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
 		return NULL;
 
-	uint8_t hash[ATHEME_ARGON2D_HASHLEN];
-	struct argon2d_context ctx = {
-
-		.pass = (const uint8_t *) pass,
-		.salt = salt,
-		.hash = hash,
-		.passlen = (uint32_t) strlen(pass),
-		.m_cost = m_cost,
-		.t_cost = t_cost,
-	};
+	ctx.pass = (const uint8_t *) pass;
+	ctx.passlen = (uint32_t) strlen(pass);
 
 	if (!argon2d_hash_raw(&ctx))
 		return NULL;
 
 	char hash_b64[0x8000];
-	(void) argon2d_enc_b64(hash, sizeof hash, hash_b64);
+	(void) argon2d_enc_b64(ctx.hash, sizeof ctx.hash, hash_b64);
 
 	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVEHASH, m_cost, t_cost, salt_b64, hash_b64) >= PASSLEN)
+	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVEHASH, ctx.m_cost, ctx.t_cost, salt_b64, hash_b64) >= PASSLEN)
 		return NULL;
 
 	return res;
