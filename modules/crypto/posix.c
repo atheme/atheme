@@ -3,41 +3,64 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * POSIX-style crypt(3) wrapper.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"crypto/posix", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+#if !defined(HAVE_CRYPT) && !defined(HAVE_OPENSSL)
+#  warning "crypt(3) and OpenSSL are both unavailable, this module is unusable"
+#else
+
+#define ATHEME_POSIX_SALTLEN 6
+
+static const char salt_chars[62] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
+
+static const char *
+posix_salt(void)
+{
+	/* Fill salt array with random bytes */
+	unsigned char rawsalt[ATHEME_POSIX_SALTLEN];
+	(void) arc4random_buf(rawsalt, sizeof rawsalt);
+
+	/* Use random byte as index into printable character array, turning it into a printable string */
+	char salt[sizeof rawsalt + 1];
+	for (size_t i = 0; i < sizeof rawsalt; i++)
+		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
+
+	/* NULL-terminate the string */
+	salt[sizeof rawsalt] = 0x00;
+
+	/* Format and return the result */
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, "$1$%s$", salt) >= PASSLEN)
+		return NULL;
+
+	return res;
+}
 
 #if defined(HAVE_CRYPT)
 
-static const char *posixc_crypt_string(const char *key, const char *salt)
-{
-	const char *result;
-	char salt2[3];
-	static int warned;
+static bool warned_des_fallback = false;
 
-	result = crypt(key, salt);
-	if (!strncmp(salt, "$1$", 3) && strncmp(result, "$1$", 3))
+static const char *
+posix_crypt(const char *const restrict password, const char *const restrict crypt_str)
+{
+	const char *const result = crypt(password, crypt_str);
+
+	if (!strncmp(crypt_str, "$1$", 3) && strncmp(result, "$1$", 3))
 	{
-		if (!warned)
-			slog(LG_INFO, "posixc_crypt_string(): broken crypt() detected, falling back to DES");
-		warned = 1;
-		salt2[0] = salt[3];
-		salt2[1] = salt[4];
-		salt2[2] = '\0';
-		result = crypt(key, salt2);
+		if (!warned_des_fallback)
+		{
+			slog(LG_ERROR, "%s: broken crypt(3) detected, falling back to DES!", __func__);
+			warned_des_fallback = true;
+		}
+
+		char newsalt[3] = { crypt_str[3], crypt_str[4], 0x00 };
+		return crypt(password, newsalt);
 	}
+
 	return result;
 }
-
-static const char *(*crypt_impl_)(const char *key, const char *salt) = &posixc_crypt_string;
 
 #elif defined(HAVE_OPENSSL)
 
@@ -69,7 +92,8 @@ static unsigned const char cov_2char[64] = {
  * 'magic' string was changed -- the laziest application of the NIH principle
  * I've ever encountered.)
  */
-static const char *openssl_md5crypt(const char *passwd, const char *salt)
+static const char *
+openssl_md5crypt(const char *passwd, const char *salt)
 {
 	const char *magic = "1";
 	static char out_buf[6 + 9 + 24 + 2]; /* "$apr1$..salt..$.......md5hash..........\0" */
@@ -146,9 +170,6 @@ static const char *openssl_md5crypt(const char *passwd, const char *salt)
 			buf_perm[dest] = buf[source];
 		buf_perm[14] = buf[5];
 		buf_perm[15] = buf[11];
-#ifndef PEDANTIC /* Unfortunately, this generates a "no effect" warning */
-		soft_assert(16 == sizeof buf_perm);
-#endif
 
 		output = salt_out + salt_len;
 		soft_assert(output == out_buf + strlen(out_buf));
@@ -175,14 +196,14 @@ static const char *openssl_md5crypt(const char *passwd, const char *salt)
 	return out_buf;
 }
 
-static const char *openssl_crypt_string(const char *key, const char *salt)
+static const char *
+posix_crypt(const char *const restrict key, const char *const restrict salt)
 {
 	char real_salt[BUFSIZE];
-	char *term;
 
 	mowgli_strlcpy(real_salt, salt + 3, sizeof real_salt);
 
-	term = strrchr(real_salt, '$');
+	char *const term = strrchr(real_salt, '$');
 
 	if (term == NULL)
 		return NULL;
@@ -192,43 +213,28 @@ static const char *openssl_crypt_string(const char *key, const char *salt)
 	return openssl_md5crypt(key, real_salt);
 }
 
-static const char *(*crypt_impl_)(const char *key, const char *salt) = &openssl_crypt_string;
+#endif /* HAVE_OPENSSL */
 
-#else
+static crypt_impl_t crypto_posix_impl = {
 
-#warning could not find a crypt impl, sorry (this is stubbed)
-
-static const char *stub_crypt_string(const char *key, const char *salt)
-{
-	return key;
-}
-
-static const char *(*crypt_impl_)(const char *key, const char *salt) = &stub_crypt_string;
-
-#endif
-
-static crypt_impl_t posix_crypt_impl = {
-	.id = "posix",
+	.id     = "posix",
+	.salt   = &posix_salt,
+	.crypt  = &posix_crypt,
 };
 
-void _modinit(module_t *m)
+static void
+crypto_posix_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	posix_crypt_impl.crypt = crypt_impl_;
-
-#if defined(HAVE_CRYPT) || defined(HAVE_OPENSSL)
-	crypt_register(&posix_crypt_impl);
-#endif
+	crypt_register(&crypto_posix_impl);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+crypto_posix_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-#if defined(HAVE_CRYPT) || defined(HAVE_OPENSSL)
-	crypt_unregister(&posix_crypt_impl);
-#endif
+	crypt_unregister(&crypto_posix_impl);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+DECLARE_MODULE_V1("crypto/posix", false, crypto_posix_modinit, crypto_posix_moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
+
+#endif /* HAVE_CRYPT || HAVE_OPENSSL */
