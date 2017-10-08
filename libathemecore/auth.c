@@ -26,25 +26,29 @@
 bool auth_module_loaded = false;
 bool (*auth_user_custom)(myuser_t *mu, const char *password);
 
-void set_password(myuser_t *mu, const char *newpassword)
+void
+set_password(myuser_t *const restrict mu, const char *const restrict password)
 {
-	if (mu == NULL || newpassword == NULL)
+	if (mu == NULL || password == NULL)
 		return;
 
 	/* if we can, try to crypt it */
-	if (crypto_module_loaded)
+	const char *const hash = crypt_string(password, NULL);
+
+	if (hash)
 	{
 		mu->flags |= MU_CRYPTPASS;
-		mowgli_strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), PASSLEN);
+		mowgli_strlcpy(mu->pass, hash, PASSLEN);
 	}
 	else
 	{
-		mu->flags &= ~MU_CRYPTPASS;			/* just in case */
-		mowgli_strlcpy(mu->pass, newpassword, PASSLEN);
+		mu->flags &= ~MU_CRYPTPASS;
+		mowgli_strlcpy(mu->pass, password, PASSLEN);
 	}
 }
 
-bool verify_password(myuser_t *mu, const char *password)
+bool
+verify_password(myuser_t *const restrict mu, const char *const restrict password)
 {
 	if (mu == NULL || password == NULL)
 		return false;
