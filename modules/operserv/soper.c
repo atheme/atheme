@@ -132,7 +132,6 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	operclass_t *operclass;
-	char hash[PASSLEN];
 
 	if (parc < 2)
 	{
@@ -166,6 +165,8 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	const char *hash = NULL;
+
 	if (!has_all_operclass(si, operclass))
 	{
 		command_fail(si, fault_noprivs, _("Oper class \2%s\2 has more privileges than you."), operclass->name);
@@ -177,25 +178,21 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 				entity(mu)->name, mu->soper->operclass->name);
 		return;
 	}
+	else if (parv[2] && !(hash = crypt_string(parv[2], NULL)))
+	{
+		command_fail(si, fault_internalerror, _("Hash generation for oper password failed."));
+		return;
+	}
 
 	wallops("\2%s\2 is changing oper class for \2%s\2 to \2%s\2",
 		get_oper_name(si), entity(mu)->name, operclass->name);
+
 	logcommand(si, CMDLOG_ADMIN, "SOPER:ADD: \2%s\2 \2%s\2", entity(mu)->name, operclass->name);
+
 	if (is_soper(mu))
 		soper_delete(mu->soper);
 
-	if (parv[2])
-	{
-		if (crypto_module_loaded)
-		{
-			mowgli_strlcpy(hash, crypt_string(parv[2], gen_salt()), PASSLEN);
-			soper_add(entity(mu)->name, operclass->name, 0, hash);
-		}
-		else
-			soper_add(entity(mu)->name, operclass->name, 0, parv[2]);
-	}
-	else
-		soper_add(entity(mu)->name, operclass->name, 0, NULL);
+	soper_add(entity(mu)->name, operclass->name, 0, hash);
 
 	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), entity(mu)->name, operclass->name);
 }
