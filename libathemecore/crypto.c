@@ -63,6 +63,23 @@ crypt_string(const char *const restrict password, const char *restrict salt)
 	return ci->crypt(password, salt);
 }
 
+static void
+crypt_log_modchg(const char *const restrict caller, const char *const restrict which,
+                 const crypt_impl_t *const restrict impl)
+{
+	const unsigned int level = (runflags & RF_STARTING) ? LG_DEBUG : LG_INFO;
+	const crypt_impl_t *const ci = crypt_get_default_provider();
+
+	(void) slog(level, "%s: %s crypto provider %s", caller, which, impl->id);
+
+	if (ci == impl)
+		(void) slog(level, "%s: default crypto provider is now '%s'", caller, ci->id);
+	else if (ci != NULL)
+		(void) slog(level, "%s: default crypto provider is still '%s'", caller, ci->id);
+	else
+		(void) slog(LG_ERROR, "%s: no crypto provider is available!", caller);
+}
+
 void
 crypt_register(crypt_impl_t *impl)
 {
@@ -71,6 +88,8 @@ crypt_register(crypt_impl_t *impl)
 	mowgli_node_add(impl, &impl->node, &crypt_impl_list);
 
 	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
+
+	(void) crypt_log_modchg(__func__, "registered", impl);
 }
 
 void
@@ -81,6 +100,8 @@ crypt_unregister(crypt_impl_t *impl)
 	mowgli_node_delete(&impl->node, &crypt_impl_list);
 
 	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
+
+	(void) crypt_log_modchg(__func__, "unregistered", impl);
 }
 
 const crypt_impl_t *
