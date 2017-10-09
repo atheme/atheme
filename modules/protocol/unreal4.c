@@ -692,6 +692,11 @@ static void unreal_sasl_sts(char *target, char mode, char *data)
 	sts(":%s SASL %s %s %c %s", saslserv->me->nick, servermask, target, mode, data);
 }
 
+static void unreal_sasl_mechlist_sts(const char *mechlist)
+{
+	sts("MD client %s saslmechlist :%s", ME, mechlist);
+}
+
 static void unreal_svslogin_sts(char *target, char *nick, char *user, char *host, myuser_t *account)
 {
 	char servermask[BUFSIZE], *p;
@@ -1587,6 +1592,7 @@ void _modinit(module_t * m)
 	holdnick_sts = &unreal_holdnick_sts;
 	chan_lowerts = &unreal_chan_lowerts;
 	sasl_sts = &unreal_sasl_sts;
+	sasl_mechlist_sts = &unreal_sasl_mechlist_sts;
 	svslogin_sts = &unreal_svslogin_sts;
 	quarantine_sts = &unreal_quarantine_sts;
 	mlock_sts = &unreal_mlock_sts;
