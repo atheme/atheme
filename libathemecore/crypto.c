@@ -71,10 +71,8 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 
 	(void) slog(level, "%s: %s crypto provider '%s'", caller, which, impl->id);
 
-	if (ci == impl)
-		(void) slog(level, "%s: default crypto provider is now '%s'", caller, ci->id);
-	else if (ci != NULL)
-		(void) slog(level, "%s: default crypto provider is still '%s'", caller, ci->id);
+	if (ci)
+		(void) slog(level, "%s: default crypto provider is (now) '%s'", caller, ci->id);
 	else
 		(void) slog(LG_ERROR, "%s: no crypto provider is available!", caller);
 }
