@@ -11,7 +11,6 @@
 
 E const char *crypt_string(const char *key, const char *salt);
 E const char *gen_salt(void);
-E bool crypto_module_loaded;
 
 typedef struct {
 	const char *id;

@@ -24,7 +24,6 @@
 #include "atheme.h"
 
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
-bool crypto_module_loaded = false;
 
 const crypt_impl_t *
 crypt_get_default_provider(void)
@@ -87,8 +86,6 @@ crypt_register(crypt_impl_t *impl)
 
 	mowgli_node_add(impl, &impl->node, &crypt_impl_list);
 
-	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
-
 	(void) crypt_log_modchg(__func__, "registered", impl);
 }
 
@@ -98,8 +95,6 @@ crypt_unregister(crypt_impl_t *impl)
 	return_if_fail(impl != NULL);
 
 	mowgli_node_delete(&impl->node, &crypt_impl_list);
-
-	crypto_module_loaded = MOWGLI_LIST_LENGTH(&crypt_impl_list) > 0 ? true : false;
 
 	(void) crypt_log_modchg(__func__, "unregistered", impl);
 }
