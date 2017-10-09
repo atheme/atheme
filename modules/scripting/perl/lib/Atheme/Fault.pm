@@ -18,7 +18,8 @@ use constant {
 	nochange	=> 12,
 	already_authed	=> 13,
 	unimplemented	=> 14,
-	badauthcookie	=> 15
+	badauthcookie	=> 15,
+	internalerror	=> 16,
 };
 
 require Exporter;
@@ -27,7 +28,7 @@ our @ISA = qw/Exporter/;
 our @EXPORT_OK;
 our %EXPORT_TAGS = ( all => [ qw(
 	needmoreparams badparams nosuch_source nosuch_target authfail noprivs nosuch_key alreadyexists
-	toomany emailfail notverified nochange already_authed unimplemented badauthcookie
+	toomany emailfail notverified nochange already_authed unimplemented badauthcookie internalerror
 )]);
 
 Exporter::export_ok_tags('all');
