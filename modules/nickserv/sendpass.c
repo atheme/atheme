@@ -186,9 +186,15 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS: \2%s\2 (change key)", name);
 
 		key = random_string(12);
-		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
-		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
 
+		const char *const hash = crypt_string(key, NULL);
+
+		if (!hash)
+		{
+			command_fail(si, fault_internalerror, _("Hash generation for password change key failed."));
+			free(key);
+			return;
+		}
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, mu, EMAIL_SETPASS, mu->email, key))
 		{
 			command_fail(si, fault_emailfail, _("Email send failed."));
@@ -196,7 +202,9 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_add(mu, "private:setpass:key", crypt_string(key, gen_salt()));
+		metadata_add(mu, "private:sendpass:sender", get_oper_name(si));
+		metadata_add(mu, "private:sendpass:timestamp", number_to_string(time(NULL)));
+		metadata_add(mu, "private:setpass:key", hash);
 		free(key);
 
 		command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), entity(mu)->name, mu->email);
