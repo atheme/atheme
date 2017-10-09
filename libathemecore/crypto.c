@@ -70,7 +70,7 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 	const unsigned int level = (runflags & RF_STARTING) ? LG_DEBUG : LG_INFO;
 	const crypt_impl_t *const ci = crypt_get_default_provider();
 
-	(void) slog(level, "%s: %s crypto provider %s", caller, which, impl->id);
+	(void) slog(level, "%s: %s crypto provider '%s'", caller, which, impl->id);
 
 	if (ci == impl)
 		(void) slog(level, "%s: default crypto provider is now '%s'", caller, ci->id);
