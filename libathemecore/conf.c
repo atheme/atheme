@@ -119,12 +119,14 @@ mowgli_list_t conf_la_table;
 
 const char *get_conf_opts(void)
 {
+	const crypt_impl_t *const ci_default = crypt_get_default_provider();
+
 	static char opts[53];
 
 	snprintf(opts, sizeof opts, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
 			match_mapping ? "A" : "",
 			auth_module_loaded ? "a" : "",
-			crypto_module_loaded ? "c" : "",
+			ci_default ? "c" : "",
 			log_debug_enabled() ? "d" : "",
 			me.auth ? "e" : "",
 			config_options.flood_msgs ? "F" : "",
