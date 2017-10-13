@@ -50,6 +50,10 @@
  * ARCH_IS_BIG_ENDIAN.
  */
 
+#ifndef MD5_DIGEST_LENGTH
+#define MD5_DIGEST_LENGTH 16
+#endif
+
 typedef unsigned char md5_byte_t; /* 8-bit byte */
 typedef unsigned int md5_word_t; /* 32-bit word */
 
