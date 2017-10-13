@@ -10,6 +10,12 @@ security
   If your `mta` setting points at a shell script, please ensure that it
   properly handles email addresses with special characters in them.
 
+- Services will now refuse to encrypt new passwords with older compatibility
+  modules. You must load an encryption-capable password crypto module if you
+  want new user registrations and changed passwords to be encrypted; you will
+  receive an error message every time encryption is attempted if you do not.
+  Please see dist/atheme.conf.example for more information.
+
 Atheme Services 7.2 Release Notes
 =================================
 
@@ -174,6 +180,8 @@ other
 
 crypto
 ------
+- argon2d:  New module implementing algorithm that won the Password
+            Hashing Competition (2015).
 - pbkdf2v2: Newer module implementing PBKDF2-HMAC digest scheme
             with backward compatibility and limited forward compatibility
 
