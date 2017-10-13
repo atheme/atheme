@@ -99,24 +99,24 @@ struct myuser_
 };
 
 /* Keep this synchronized with mu_flags in libathemecore/flags.c */
-#define MU_HOLD        0x00000001
-#define MU_NEVEROP     0x00000002
-#define MU_NOOP        0x00000004
-#define MU_WAITAUTH    0x00000008
-#define MU_HIDEMAIL    0x00000010
-#define MU_NOMEMO      0x00000040
-#define MU_EMAILMEMOS  0x00000080
-#define MU_CRYPTPASS   0x00000100
-#define MU_NOBURSTLOGIN 0x00000400
-#define MU_ENFORCE     0x00000800 /* XXX limited use at this time */
-#define MU_USE_PRIVMSG 0x00001000 /* use PRIVMSG */
-#define MU_PRIVATE     0x00002000
-#define MU_QUIETCHG    0x00004000
-#define MU_NOGREET     0x00008000
-#define MU_REGNOLIMIT  0x00010000
-#define MU_NEVERGROUP  0x00020000
-#define MU_PENDINGLOGIN 0x00040000
-#define MU_NOPASSWORD  0x00080000
+#define MU_HOLD         0x00000001U
+#define MU_NEVEROP      0x00000002U
+#define MU_NOOP         0x00000004U
+#define MU_WAITAUTH     0x00000008U
+#define MU_HIDEMAIL     0x00000010U
+#define MU_NOMEMO       0x00000040U
+#define MU_EMAILMEMOS   0x00000080U
+#define MU_CRYPTPASS    0x00000100U
+#define MU_NOBURSTLOGIN 0x00000400U
+#define MU_ENFORCE      0x00000800U /* XXX limited use at this time */
+#define MU_USE_PRIVMSG  0x00001000U /* use PRIVMSG */
+#define MU_PRIVATE      0x00002000U
+#define MU_QUIETCHG     0x00004000U
+#define MU_NOGREET      0x00008000U
+#define MU_REGNOLIMIT   0x00010000U
+#define MU_NEVERGROUP   0x00020000U
+#define MU_PENDINGLOGIN 0x00040000U
+#define MU_NOPASSWORD   0x00080000U
 
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5
@@ -174,26 +174,26 @@ struct mychan_
 };
 
 /* Keep this synchronized with mc_flags in libathemecore/flags.c */
-#define MC_HOLD        0x00000001
-#define MC_NOOP        0x00000002
-#define MC_LIMITFLAGS  0x00000004
-#define MC_SECURE      0x00000008
-#define MC_VERBOSE     0x00000010
-#define MC_RESTRICTED  0x00000020
-#define MC_KEEPTOPIC   0x00000040
-#define MC_VERBOSE_OPS 0x00000080
-#define MC_TOPICLOCK   0x00000100
-#define MC_GUARD       0x00000200
-#define MC_PRIVATE     0x00000400
-#define MC_NOSYNC      0x00000800
-#define MC_ANTIFLOOD   0x00001000
-#define MC_PUBACL      0x00002000
+#define MC_HOLD         0x00000001U
+#define MC_NOOP         0x00000002U
+#define MC_LIMITFLAGS   0x00000004U
+#define MC_SECURE       0x00000008U
+#define MC_VERBOSE      0x00000010U
+#define MC_RESTRICTED   0x00000020U
+#define MC_KEEPTOPIC    0x00000040U
+#define MC_VERBOSE_OPS  0x00000080U
+#define MC_TOPICLOCK    0x00000100U
+#define MC_GUARD        0x00000200U
+#define MC_PRIVATE      0x00000400U
+#define MC_NOSYNC       0x00000800U
+#define MC_ANTIFLOOD    0x00001000U
+#define MC_PUBACL       0x00002000U
 
 /* The following are temporary state */
-#define MC_INHABIT     0x80000000 /* we're on channel to enforce akick/staffonly/close */
-#define MC_MLOCK_CHECK 0x40000000 /* we need to check mode locks */
-#define MC_FORCEVERBOSE 0x20000000 /* fantasy cmd in progress, be verbose */
-#define MC_RECREATED   0x10000000 /* created with new channelTS */
+#define MC_INHABIT      0x80000000U /* we're on channel to enforce akick/staffonly/close */
+#define MC_MLOCK_CHECK  0x40000000U /* we need to check mode locks */
+#define MC_FORCEVERBOSE 0x20000000U /* fantasy cmd in progress, be verbose */
+#define MC_RECREATED    0x10000000U /* created with new channelTS */
 
 #define MC_VERBOSE_MASK (MC_VERBOSE | MC_VERBOSE_OPS)
 
@@ -215,28 +215,28 @@ struct chanacs_
 };
 
 /* the new atheme-style channel flags */
-#define CA_VOICE         0x00000001 /* Ability to use voice/devoice command. */
-#define CA_AUTOVOICE     0x00000002 /* Gain voice automatically upon entry. */
-#define CA_OP            0x00000004 /* Ability to use op/deop command. */
-#define CA_AUTOOP        0x00000008 /* Gain ops automatically upon entry. */
-#define CA_TOPIC         0x00000010 /* Ability to use /msg X topic */
-#define CA_SET           0x00000020 /* Ability to use /msg X set */
-#define CA_REMOVE        0x00000040 /* Ability to use /msg X kick */
-#define CA_INVITE        0x00000080 /* Ability to use /msg X invite */
-#define CA_RECOVER       0x00000100 /* Ability to use /msg X recover */
-#define CA_FLAGS         0x00000200 /* Ability to write to channel flags table */
-#define CA_HALFOP	 0x00000400 /* Ability to use /msg X halfop */
-#define CA_AUTOHALFOP	 0x00000800 /* Gain halfops automatically upon entry. */
-#define CA_ACLVIEW	 0x00001000 /* Can view access lists */
-#define CA_FOUNDER	 0x00002000 /* Is a channel founder */
-#define CA_USEPROTECT	 0x00004000 /* Ability to use /msg X protect */
-#define CA_USEOWNER	 0x00008000 /* Ability to use /msg X owner */
-#define CA_EXEMPT	 0x00010000 /* Exempt from akick, can use /msg X unban on self */
+#define CA_VOICE         0x00000001U /* Ability to use voice/devoice command. */
+#define CA_AUTOVOICE     0x00000002U /* Gain voice automatically upon entry. */
+#define CA_OP            0x00000004U /* Ability to use op/deop command. */
+#define CA_AUTOOP        0x00000008U /* Gain ops automatically upon entry. */
+#define CA_TOPIC         0x00000010U /* Ability to use /msg X topic */
+#define CA_SET           0x00000020U /* Ability to use /msg X set */
+#define CA_REMOVE        0x00000040U /* Ability to use /msg X kick */
+#define CA_INVITE        0x00000080U /* Ability to use /msg X invite */
+#define CA_RECOVER       0x00000100U /* Ability to use /msg X recover */
+#define CA_FLAGS         0x00000200U /* Ability to write to channel flags table */
+#define CA_HALFOP        0x00000400U /* Ability to use /msg X halfop */
+#define CA_AUTOHALFOP    0x00000800U /* Gain halfops automatically upon entry. */
+#define CA_ACLVIEW       0x00001000U /* Can view access lists */
+#define CA_FOUNDER       0x00002000U /* Is a channel founder */
+#define CA_USEPROTECT    0x00004000U /* Ability to use /msg X protect */
+#define CA_USEOWNER      0x00008000U /* Ability to use /msg X owner */
+#define CA_EXEMPT        0x00010000U /* Exempt from akick, can use /msg X unban on self */
 
-/*#define CA_SUSPENDED	 0x40000000 * Suspended access entry (not yet implemented) */
-#define CA_AKICK         0x80000000 /* Automatic kick */
+/*#define CA_SUSPENDED     0x40000000U * Suspended access entry (not yet implemented) */
+#define CA_AKICK         0x80000000U /* Automatic kick */
 
-#define CA_NONE          0x0
+#define CA_NONE          0x0U
 
 /* xOP defaults, compatible with Atheme 0.3 */
 #define CA_VOP_DEF       (CA_VOICE | CA_AUTOVOICE | CA_ACLVIEW)
@@ -263,11 +263,11 @@ struct chanacs_
 #define OLD_CA_AOP           (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC)
 
 /* shrike CA_ flags */
-#define SHRIKE_CA_VOP           0x00000002
-#define SHRIKE_CA_AOP           0x00000004
-#define SHRIKE_CA_SOP           0x00000008
-#define SHRIKE_CA_FOUNDER       0x00000010
-#define SHRIKE_CA_SUCCESSOR     0x00000020
+#define SHRIKE_CA_VOP           0x00000002U
+#define SHRIKE_CA_AOP           0x00000004U
+#define SHRIKE_CA_SOP           0x00000008U
+#define SHRIKE_CA_FOUNDER       0x00000010U
+#define SHRIKE_CA_SUCCESSOR     0x00000020U
 
 /* struct for account memos */
 struct mymemo_ {
@@ -278,8 +278,8 @@ struct mymemo_ {
 };
 
 /* memo status flags */
-#define MEMO_READ          0x00000001
-#define MEMO_CHANNEL       0x00000002
+#define MEMO_READ          0x00000001U
+#define MEMO_CHANNEL       0x00000002U
 
 /* account related hooks */
 typedef struct {
