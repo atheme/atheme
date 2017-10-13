@@ -177,6 +177,8 @@ other
 
 crypto
 ------
+- argon2d:  New module implementing algorithm that won the Password
+            Hashing Competition (2015).
 - pbkdf2v2: Newer module implementing PBKDF2-HMAC digest scheme
             with backward compatibility and limited forward compatibility
 
