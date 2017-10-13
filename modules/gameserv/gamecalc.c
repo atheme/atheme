@@ -94,7 +94,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 
 			for (i = 0; i < dice; i++)
 			{
-				roll = (arc4random() % 10) + 1;
+				roll = arc4random_uniform(10) + 1;
 
 				end_p += snprintf(end_p, BUFSIZE - (end_p - buf), "%d  ", roll);
 
@@ -162,7 +162,7 @@ static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
 
 		if (dice == 0 && !strcasecmp(arg_dice, "-chance"))
 		{
-			roll = (arc4random() % 10) + 1;
+			roll = arc4random_uniform(10) + 1;
 
 			if (roll == 1)
 				botches++;
@@ -191,7 +191,7 @@ static void command_nwod(sourceinfo_t *si, int parc, char *parv[])
 
 			for (i = 0; i < dice; i++)
 			{
-				roll = (arc4random() % 10) + 1;
+				roll = arc4random_uniform(10) + 1;
 
 				end_p += snprintf(end_p, BUFSIZE - (end_p - buf), "%d  ", roll);
 
