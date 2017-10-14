@@ -72,6 +72,7 @@ struct cmode_ unreal_mode_list[] = {
   { 'G', CMODE_CENSOR	},
   { 'r', CMODE_CHANREG	},
   { 'P', CMODE_PERM	},
+  { 'T', CMODE_NONOTICE	},
   { '\0', 0 }
 };
 
