@@ -165,6 +165,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		{"topiclock",	OPT_FLAG,	{.flagval = &flagset}, MC_TOPICLOCK},
 		{"guard",	OPT_FLAG,	{.flagval = &flagset}, MC_GUARD},
 		{"private",	OPT_FLAG,	{.flagval = &flagset}, MC_PRIVATE},
+		{"pubacl",	OPT_FLAG,	{.flagval = &flagset}, MC_PUBACL},
 		{"closed",	OPT_BOOL,	{.boolval = &closed}, 0},
 		{"marked",	OPT_BOOL,	{.boolval = &marked}, 0},
 		{"aclsize",	OPT_INT,	{.intval = &aclsize}, 0},
@@ -245,7 +246,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		matches++;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 matches)", criteriastr, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST: \2%s\2 (\2%d\2 match%s)", criteriastr, matches, matches == 1 ? "" : "es");
 	if (matches == 0)
 		command_success_nodata(si, _("No channel matched criteria \2%s\2"), criteriastr);
 	else
