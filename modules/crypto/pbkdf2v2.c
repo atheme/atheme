@@ -91,7 +91,9 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	 * know how to compute, just bail out like above.
 	 */
 	const EVP_MD *md;
-	if (prf == 5)
+	if (prf == 4)
+		md = EVP_sha1();
+	else if (prf == 5)
 		md = EVP_sha256();
 	else if (prf == 6)
 		md = EVP_sha512();
@@ -144,7 +146,9 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 		return 0;
 	}
 
-	if (!strcasecmp(ce->vardata, "SHA256"))
+	if (!strcasecmp(ce->vardata, "SHA1"))
+		pbkdf2v2_digest = 4;
+	else if (!strcasecmp(ce->vardata, "SHA256"))
 		pbkdf2v2_digest = 5;
 	else if (!strcasecmp(ce->vardata, "SHA512"))
 		pbkdf2v2_digest = 6;

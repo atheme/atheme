@@ -839,7 +839,7 @@ argon2d {
 pbkdf2v2 {
 
 	/* digest
-	 * Valid values are "SHA256" and "SHA512"
+	 * Valid values are "SHA1", "SHA256" and "SHA512"
 	 * The default is "SHA512"
 	 */
 	#digest = "SHA512";
