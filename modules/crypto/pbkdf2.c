@@ -40,8 +40,11 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 		return false;
 
 	unsigned char buf[SHA512_DIGEST_LENGTH];
-	(void) PKCS5_PBKDF2_HMAC(password, (int) strlen(password), (const unsigned char *) parameters,
-	                         ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, md, SHA512_DIGEST_LENGTH, buf);
+	const int ret = PKCS5_PBKDF2_HMAC(password, (int) strlen(password), (const unsigned char *) parameters,
+	                                  ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, md,
+	                                  SHA512_DIGEST_LENGTH, buf);
+	if (!ret)
+		return false;
 
 	char result[(2 * SHA512_DIGEST_LENGTH) + 1];
 	for (size_t i = 0; i < SHA512_DIGEST_LENGTH; i++)
