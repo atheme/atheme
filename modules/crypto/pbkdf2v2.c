@@ -102,7 +102,10 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	const int pl = (int) strlen(password);
 	const int sl = (int) strlen(salt);
 	unsigned char digest[EVP_MAX_MD_SIZE];
-	(void) PKCS5_PBKDF2_HMAC(password, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
+	const int ret = PKCS5_PBKDF2_HMAC(password, pl, (unsigned char *) salt, sl, (int) iter, md,
+	                                  EVP_MD_size(md), digest);
+	if (!ret)
+		return NULL;
 
 	/* Convert the digest to Base 64 */
 	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
