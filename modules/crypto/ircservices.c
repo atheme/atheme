@@ -103,25 +103,19 @@ static int check_password(const char *plaintext, const char *password)
 
 /*************************************************************************/
 
-DECLARE_MODULE_V1
-(
-	"crypto/ircservices", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Jilles Tjoelker <jilles@stack.nl>"
-);
-
-static const char *ircservices_crypt_string(const char *key, const char *salt)
+static const char *
+atheme_ircservices_crypt(const char *password, const char *parameters)
 {
 	static char output[PASSMAX];
-	if (salt[0] == '$' && salt[1] == '1') /* this is a new pw XXX */
+	if (parameters[0] == '$' && parameters[1] == '1') /* this is a new pw XXX */
 	{
-		myencrypt(key, strlen(key), output, PASSMAX);
+		myencrypt(password, strlen(password), output, PASSMAX);
 		return output;
 	}
 	else
 	{
-		if (check_password(key, salt))
-			return salt;
+		if (check_password(password, parameters))
+			return parameters;
 		else
 		{
 			output[0] = '\0';
@@ -130,23 +124,23 @@ static const char *ircservices_crypt_string(const char *key, const char *salt)
 	}
 }
 
-static crypt_impl_t ircservices_crypt_impl = {
-	.id = "ircservices",
-	.crypt = &ircservices_crypt_string,
+static crypt_impl_t crypto_ircservices_impl = {
+
+	.id         = "ircservices",
+	.crypt      = &atheme_ircservices_crypt,
 };
 
-void _modinit(module_t *m)
+static void
+crypto_ircservices_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&ircservices_crypt_impl);
+	(void) crypt_register(&crypto_ircservices_impl);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+crypto_ircservices_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	crypt_unregister(&ircservices_crypt_impl);
+	(void) crypt_unregister(&crypto_ircservices_impl);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+DECLARE_MODULE_V1("crypto/ircservices", false, crypto_ircservices_modinit, crypto_ircservices_moddeinit,
+                  PACKAGE_STRING, "Jilles Tjoelker <jilles@stack.nl>");

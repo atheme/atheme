@@ -9,16 +9,10 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"crypto/rawmd5", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 #define RAWMD5_PREFIX "$rawmd5$"
 
-static const char *rawmd5_crypt_string(const char *key, const char *salt)
+static const char *
+atheme_rawmd5_crypt(const char *password, const char *parameters)
 {
 	static char output[2 * 16 + sizeof(RAWMD5_PREFIX)];
 	md5_state_t ctx;
@@ -26,7 +20,7 @@ static const char *rawmd5_crypt_string(const char *key, const char *salt)
 	int i;
 
 	md5_init(&ctx);
-	md5_append(&ctx, (const unsigned char *)key, strlen(key));
+	md5_append(&ctx, (const unsigned char *)password, strlen(password));
 	md5_finish(&ctx, digest);
 
 	strcpy(output, RAWMD5_PREFIX);
@@ -37,23 +31,23 @@ static const char *rawmd5_crypt_string(const char *key, const char *salt)
 	return output;
 }
 
-static crypt_impl_t rawmd5_crypt_impl = {
-	.id = "rawmd5",
-	.crypt = &rawmd5_crypt_string,
+static crypt_impl_t crypto_rawmd5_impl = {
+
+	.id         = "rawmd5",
+	.crypt      = &atheme_rawmd5_crypt,
 };
 
-void _modinit(module_t *m)
+static void
+crypto_rawmd5_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&rawmd5_crypt_impl);
+	(void) crypt_register(&crypto_rawmd5_impl);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+crypto_rawmd5_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	crypt_unregister(&rawmd5_crypt_impl);
+	(void) crypt_unregister(&crypto_rawmd5_impl);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+DECLARE_MODULE_V1("crypto/rawmd5", false, crypto_rawmd5_modinit, crypto_rawmd5_moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);

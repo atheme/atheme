@@ -22,8 +22,6 @@
 
 #ifdef HAVE_OPENSSL
 
-DECLARE_MODULE_V1("crypto/pbkdf2", false, _modinit, _moddeinit, PACKAGE_VERSION, VENDOR_STRING);
-
 #include <openssl/evp.h>
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
@@ -31,7 +29,8 @@ DECLARE_MODULE_V1("crypto/pbkdf2", false, _modinit, _moddeinit, PACKAGE_VERSION,
 #define ROUNDS		(128000)
 #define SALTLEN		(16)
 
-static const char *pbkdf2_salt(void)
+static const char *
+atheme_pbkdf2_salt(void)
 {
 	static char buf[SALTLEN + 1];
 	char *randstr = random_string(SALTLEN);
@@ -43,18 +42,19 @@ static const char *pbkdf2_salt(void)
 	return buf;
 }
 
-static const char *pbkdf2_crypt(const char *key, const char *salt)
+static const char *
+atheme_pbkdf2_crypt(const char *password, const char *parameters)
 {
 	static char outbuf[PASSLEN];
 	static unsigned char digestbuf[SHA512_DIGEST_LENGTH];
 	int res, iter;
 
-	if (strlen(salt) < SALTLEN)
-		salt = pbkdf2_salt();
+	if (strlen(parameters) < SALTLEN)
+		return NULL;
 
-	memcpy(outbuf, salt, SALTLEN);
+	memcpy(outbuf, parameters, SALTLEN);
 
-	res = PKCS5_PBKDF2_HMAC(key, strlen(key), (const unsigned char *)salt, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
+	res = PKCS5_PBKDF2_HMAC(password, strlen(password), (const unsigned char *)parameters, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
 
 	for (iter = 0; iter < SHA512_DIGEST_LENGTH; iter++)
 		sprintf(outbuf + SALTLEN + (iter * 2), "%02x", 255 & digestbuf[iter]);
@@ -62,20 +62,26 @@ static const char *pbkdf2_crypt(const char *key, const char *salt)
 	return outbuf;
 }
 
-static crypt_impl_t pbkdf2_crypt_impl = {
-	.id = "pbkdf2",
-	.crypt = &pbkdf2_crypt,
-	.salt = &pbkdf2_salt
+static crypt_impl_t crypto_pbkdf2_impl = {
+
+	.id         = "pbkdf2",
+	.salt       = &atheme_pbkdf2_salt,
+	.crypt      = &atheme_pbkdf2_crypt,
 };
 
-void _modinit(module_t *m)
+static void
+crypto_pbkdf2_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&pbkdf2_crypt_impl);
+	(void) crypt_register(&crypto_pbkdf2_impl);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+crypto_pbkdf2_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	crypt_unregister(&pbkdf2_crypt_impl);
+	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }
+
+DECLARE_MODULE_V1("crypto/pbkdf2", false, crypto_pbkdf2_modinit, crypto_pbkdf2_moddeinit,
+                  PACKAGE_VERSION, VENDOR_STRING);
 
 #endif

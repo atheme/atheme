@@ -16,7 +16,7 @@
 static const char salt_chars[62] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 
 static const char *
-posix_salt(void)
+atheme_posix_salt(void)
 {
 	/* Fill salt array with random bytes */
 	unsigned char rawsalt[ATHEME_POSIX_SALTLEN];
@@ -43,11 +43,11 @@ posix_salt(void)
 static bool warned_des_fallback = false;
 
 static const char *
-posix_crypt(const char *const restrict password, const char *const restrict crypt_str)
+atheme_posix_crypt(const char *const restrict password, const char *const restrict parameters)
 {
-	const char *const result = crypt(password, crypt_str);
+	const char *const result = crypt(password, parameters);
 
-	if (!strncmp(crypt_str, "$1$", 3) && strncmp(result, "$1$", 3))
+	if (!strncmp(parameters, "$1$", 3) && strncmp(result, "$1$", 3))
 	{
 		if (!warned_des_fallback)
 		{
@@ -55,7 +55,7 @@ posix_crypt(const char *const restrict password, const char *const restrict cryp
 			warned_des_fallback = true;
 		}
 
-		char newsalt[3] = { crypt_str[3], crypt_str[4], 0x00 };
+		char newsalt[3] = { parameters[3], parameters[4], 0x00 };
 		return crypt(password, newsalt);
 	}
 
@@ -197,11 +197,11 @@ openssl_md5crypt(const char *passwd, const char *salt)
 }
 
 static const char *
-posix_crypt(const char *const restrict key, const char *const restrict salt)
+atheme_posix_crypt(const char *const restrict password, const char *const restrict parameters)
 {
 	char real_salt[BUFSIZE];
 
-	mowgli_strlcpy(real_salt, salt + 3, sizeof real_salt);
+	mowgli_strlcpy(real_salt, parameters + 3, sizeof real_salt);
 
 	char *const term = strrchr(real_salt, '$');
 
@@ -210,28 +210,28 @@ posix_crypt(const char *const restrict key, const char *const restrict salt)
 
 	*term = '\0';
 
-	return openssl_md5crypt(key, real_salt);
+	return openssl_md5crypt(password, real_salt);
 }
 
 #endif /* HAVE_OPENSSL */
 
 static crypt_impl_t crypto_posix_impl = {
 
-	.id     = "posix",
-	.salt   = &posix_salt,
-	.crypt  = &posix_crypt,
+	.id        = "posix",
+	.salt      = &atheme_posix_salt,
+	.crypt     = &atheme_posix_crypt,
 };
 
 static void
 crypto_posix_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&crypto_posix_impl);
+	(void) crypt_register(&crypto_posix_impl);
 }
 
 static void
 crypto_posix_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	crypt_unregister(&crypto_posix_impl);
+	(void) crypt_unregister(&crypto_posix_impl);
 }
 
 DECLARE_MODULE_V1("crypto/posix", false, crypto_posix_modinit, crypto_posix_moddeinit,

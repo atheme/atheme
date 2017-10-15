@@ -28,13 +28,20 @@ static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 const crypt_impl_t *
 crypt_get_default_provider(void)
 {
+	mowgli_node_t *n;
+
 	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
 		return NULL;
 
-	if (!crypt_impl_list.head)
-		return NULL;
+	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
+	{
+		const crypt_impl_t *const ci = n->data;
 
-	return crypt_impl_list.head->data;
+		if (ci->salt != NULL && ci->crypt != NULL)
+			return ci;
+	}
+
+	return NULL;
 }
 
 const char *
@@ -49,17 +56,20 @@ gen_salt(void)
 }
 
 const char *
-crypt_string(const char *const restrict password, const char *restrict salt)
+crypt_string(const char *const restrict password, const char *restrict parameters)
 {
 	const crypt_impl_t *const ci = crypt_get_default_provider();
 
 	if (!ci)
 		return NULL;
 
-	if (!salt || !*salt)
-		salt = ci->salt();
+	if (!parameters || !*parameters)
+		parameters = ci->salt();
 
-	return ci->crypt(password, salt);
+	if (!parameters)
+		return NULL;
+
+	return ci->crypt(password, parameters);
 }
 
 static void
@@ -78,37 +88,56 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 }
 
 void
-crypt_register(crypt_impl_t *impl)
+crypt_register(crypt_impl_t *const restrict impl)
 {
 	return_if_fail(impl != NULL);
 
-	mowgli_node_add(impl, &impl->node, &crypt_impl_list);
-
-	(void) crypt_log_modchg(__func__, "registered", impl);
+	if ((impl->salt != NULL && impl->crypt != NULL) || impl->verify != NULL)
+	{
+		mowgli_node_add(impl, &impl->node, &crypt_impl_list);
+		(void) crypt_log_modchg(__func__, "registered", impl);
+	}
+	else
+		(void) slog(LG_ERROR, "%s: crypto provider '%s' provides neither salt/crypt nor verify methods",
+		                      __func__, impl->id);
 }
 
 void
-crypt_unregister(crypt_impl_t *impl)
+crypt_unregister(crypt_impl_t *const restrict impl)
 {
 	return_if_fail(impl != NULL);
 
-	mowgli_node_delete(&impl->node, &crypt_impl_list);
-
-	(void) crypt_log_modchg(__func__, "unregistered", impl);
+	if ((impl->salt != NULL && impl->crypt != NULL) || impl->verify != NULL)
+	{
+		mowgli_node_delete(&impl->node, &crypt_impl_list);
+		(void) crypt_log_modchg(__func__, "unregistered", impl);
+	}
 }
 
 const crypt_impl_t *
-crypt_verify_password(const char *const restrict password, const char *const restrict crypt_str)
+crypt_verify_password(const char *const restrict password, const char *const restrict parameters)
 {
 	mowgli_node_t *n;
+
+	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
+		return NULL;
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
 		const crypt_impl_t *const ci = n->data;
-		const char *const result = ci->crypt(password, crypt_str);
 
-		if (result != NULL && !strcmp(result, crypt_str))
-			return ci;
+		if (ci->verify != NULL)
+		{
+			if (ci->verify(password, parameters))
+				return ci;
+		}
+		else if (ci->crypt != NULL)
+		{
+			const char *const result = ci->crypt(password, parameters);
+
+			if (result != NULL && strcmp(result, parameters) == 0)
+				return ci;
+		}
 	}
 
 	return NULL;

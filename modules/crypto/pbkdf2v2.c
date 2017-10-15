@@ -47,7 +47,7 @@ static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
 static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
 
 static const char *
-pbkdf2v2_salt(void)
+atheme_pbkdf2v2_salt(void)
 {
 	/* Fill salt array with random bytes */
 	unsigned char rawsalt[PBKDF2_SALTLEN];
@@ -70,7 +70,7 @@ pbkdf2v2_salt(void)
 }
 
 static const char *
-pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt_str)
+atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const restrict parameters)
 {
 	/*
 	 * Attempt to extract the PRF, iteration count and salt
@@ -81,7 +81,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	unsigned int prf;
 	unsigned int iter;
 	char salt[PBKDF2_SALTLEN + 1];
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
+	if (sscanf(parameters, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return NULL;
 
 	/*
@@ -99,10 +99,10 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
-	const int pl = (int) strlen(pass);
+	const int pl = (int) strlen(password);
 	const int sl = (int) strlen(salt);
 	unsigned char digest[EVP_MAX_MD_SIZE];
-	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
+	(void) PKCS5_PBKDF2_HMAC(password, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
 
 	/* Convert the digest to Base 64 */
 	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
@@ -117,13 +117,13 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 }
 
 static bool
-pbkdf2v2_upgrade(const char *const restrict crypt_str)
+atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int iter;
 	char salt[PBKDF2_SALTLEN + 1];
 
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
+	if (sscanf(parameters, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
 		return false;
 
 	if (prf != pbkdf2v2_digest)
@@ -154,11 +154,12 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	return 0;
 }
 
-static crypt_impl_t pbkdf2v2_crypt_impl = {
-	.id                     = "pbkdf2v2",
-	.crypt                  = &pbkdf2v2_crypt,
-	.salt                   = &pbkdf2v2_salt,
-	.needs_param_upgrade    = &pbkdf2v2_upgrade,
+static crypt_impl_t crypto_pbkdf2v2_impl = {
+
+	.id         = "pbkdf2v2",
+	.salt       = &atheme_pbkdf2v2_salt,
+	.crypt      = &atheme_pbkdf2v2_crypt,
+	.recrypt    = &atheme_pbkdf2v2_recrypt,
 };
 
 static mowgli_list_t pbkdf2v2_conf_table;
@@ -166,22 +167,22 @@ static mowgli_list_t pbkdf2v2_conf_table;
 static void
 crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&pbkdf2v2_crypt_impl);
+	(void) crypt_register(&crypto_pbkdf2v2_impl);
 
-	add_subblock_top_conf("PBKDF2V2", &pbkdf2v2_conf_table);
-	add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
-	add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
-	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
+	(void) add_subblock_top_conf("PBKDF2V2", &pbkdf2v2_conf_table);
+	(void) add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
+	(void) add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
+	                          PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
 }
 
 static void
 crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	del_conf_item("DIGEST", &pbkdf2v2_conf_table);
-	del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
-	del_top_conf("PBKDF2V2");
+	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
+	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
+	(void) del_top_conf("PBKDF2V2");
 
-	crypt_unregister(&pbkdf2v2_crypt_impl);
+	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
 }
 
 DECLARE_MODULE_V1("crypto/pbkdf2v2", false, crypto_pbkdf2v2_modinit, crypto_pbkdf2v2_moddeinit,

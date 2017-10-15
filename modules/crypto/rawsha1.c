@@ -13,16 +13,10 @@
 
 #include <openssl/sha.h>
 
-DECLARE_MODULE_V1
-(
-	"crypto/rawsha1", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 #define RAWSHA1_PREFIX "$rawsha1$"
 
-static const char *rawsha1_crypt_string(const char *key, const char *salt)
+static const char *
+atheme_rawsha1_crypt(const char *password, const char *parameters)
 {
 	static char output[2 * SHA_DIGEST_LENGTH + sizeof(RAWSHA1_PREFIX)];
 	SHA_CTX ctx;
@@ -30,7 +24,7 @@ static const char *rawsha1_crypt_string(const char *key, const char *salt)
 	int i;
 
 	SHA1_Init(&ctx);
-	SHA1_Update(&ctx, key, strlen(key));
+	SHA1_Update(&ctx, password, strlen(password));
 	SHA1_Final(digest, &ctx);
 
 	strcpy(output, RAWSHA1_PREFIX);
@@ -41,25 +35,25 @@ static const char *rawsha1_crypt_string(const char *key, const char *salt)
 	return output;
 }
 
-static crypt_impl_t rawsha1_crypt_impl = {
-	.id = "rawsha1",
-	.crypt = &rawsha1_crypt_string,
+static crypt_impl_t crypto_rawsha1_impl = {
+
+	.id         = "rawsha1",
+	.crypt      = &atheme_rawsha1_crypt,
 };
 
-void _modinit(module_t *m)
+static void
+crypto_rawsha1_modinit(module_t __attribute__((unused)) *const restrict m)
 {
-	crypt_register(&rawsha1_crypt_impl);
+	(void) crypt_register(&crypto_rawsha1_impl);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+crypto_rawsha1_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	crypt_unregister(&rawsha1_crypt_impl);
+	(void) crypt_unregister(&crypto_rawsha1_impl);
 }
+
+DECLARE_MODULE_V1("crypto/rawsha1", false, crypto_rawsha1_modinit, crypto_rawsha1_moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 #endif /* HAVE_OPENSSL */
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
