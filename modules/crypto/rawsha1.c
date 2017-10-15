@@ -13,32 +13,40 @@
 
 #include <openssl/sha.h>
 
-#define RAWSHA1_PREFIX "$rawsha1$"
+#define MODULE_PREFIX_STR       "$rawsha1$"
+#define MODULE_PREFIX_LEN       9
+#define MODULE_DIGEST_LEN       SHA_DIGEST_LENGTH
+#define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
-static const char *
-atheme_rawsha1_crypt(const char *password, const char *parameters)
+static bool
+atheme_rawsha1_verify(const char *const restrict password, const char *const restrict parameters)
 {
-	static char output[2 * SHA_DIGEST_LENGTH + sizeof(RAWSHA1_PREFIX)];
+	if (strlen(parameters) != MODULE_PARAMS_LEN)
+		return false;
+
+	if (strncmp(parameters, MODULE_PREFIX_STR, MODULE_PREFIX_LEN) != 0)
+		return false;
+
 	SHA_CTX ctx;
-	unsigned char digest[SHA_DIGEST_LENGTH];
-	int i;
+	unsigned char digest[MODULE_DIGEST_LEN];
 
-	SHA1_Init(&ctx);
-	SHA1_Update(&ctx, password, strlen(password));
-	SHA1_Final(digest, &ctx);
+	(void) SHA1_Init(&ctx);
+	(void) SHA1_Update(&ctx, (const unsigned char *) password, strlen(password));
+	(void) SHA1_Final(digest, &ctx);
 
-	strcpy(output, RAWSHA1_PREFIX);
-	for (i = 0; i < SHA_DIGEST_LENGTH; i++)
-		sprintf(output + sizeof(RAWSHA1_PREFIX) - 1 + i * 2, "%02x",
-				255 & digest[i]);
+	char result[(2 * MODULE_DIGEST_LEN) + 1];
 
-	return output;
+	for (size_t i = 0; i < sizeof digest; i++)
+		(void) sprintf(result + i * 2, "%02x", 255 & digest[i]);
+
+	return constant_mem_eq((const unsigned char *) parameters + MODULE_PREFIX_LEN,
+	                       (const unsigned char *) result, sizeof result);
 }
 
 static crypt_impl_t crypto_rawsha1_impl = {
 
 	.id         = "rawsha1",
-	.crypt      = &atheme_rawsha1_crypt,
+	.verify     = &atheme_rawsha1_verify,
 };
 
 static void
