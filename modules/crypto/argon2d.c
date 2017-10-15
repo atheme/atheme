@@ -38,7 +38,11 @@
 #define ARGON2D_TIMECOST_MAX    16384
 
 #define ATHEME_ARGON2D_LOADB64  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-#define ATHEME_ARGON2D_LOADSALT "$argon2d$v=19$m=%" PRIu32 ",t=%" PRIu32 ",p=1$%[" ATHEME_ARGON2D_LOADB64 "]$"
+
+// Format strings for (s)scanf(3)
+#define ATHEME_ARGON2D_LOADSALT "$argon2d$v=19$m=%" SCNu32 ",t=%" SCNu32 ",p=1$%[" ATHEME_ARGON2D_LOADB64 "]$"
+
+// Format strings for (sn)printf(3)
 #define ATHEME_ARGON2D_SAVESALT "$argon2d$v=19$m=%" PRIu32 ",t=%" PRIu32 ",p=1$%s$"
 #define ATHEME_ARGON2D_SAVEHASH ATHEME_ARGON2D_SAVESALT "%s"
 
