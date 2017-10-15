@@ -50,8 +50,10 @@ atheme_pbkdf2_verify(const char *const restrict password, const char *const rest
 	for (size_t i = 0; i < SHA512_DIGEST_LENGTH; i++)
 		(void) sprintf(result + (i * 2), "%02x", 255 & buf[i]);
 
-	return constant_mem_eq((const unsigned char *) parameters + ATHEME_PBKDF2_SALTLEN,
-	                       (const unsigned char *) result, sizeof result);
+	if (strcmp(result, parameters + ATHEME_PBKDF2_SALTLEN) != 0)
+		return false;
+
+	return true;
 }
 
 static crypt_impl_t crypto_pbkdf2_impl = {

@@ -35,8 +35,10 @@ atheme_rawmd5_verify(const char *const restrict password, const char *const rest
 	for (size_t i = 0; i < sizeof digest; i++)
 		(void) sprintf(result + i * 2, "%02x", 255 & digest[i]);
 
-	return constant_mem_eq((const unsigned char *) parameters + MODULE_PREFIX_LEN,
-	                       (const unsigned char *) result, sizeof result);
+	if (strcmp(result, parameters + MODULE_PREFIX_LEN) != 0)
+		return false;
+
+	return true;
 }
 
 static crypt_impl_t crypto_rawmd5_impl = {

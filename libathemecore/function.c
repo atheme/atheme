@@ -871,23 +871,6 @@ char *combine_path(const char *parent, const char *child)
 	return sstrdup(buf);
 }
 
-/*
- * Do not be tempted to "optimise" this function.
- * It is deliberately designed, and required, to run in (as) constant time (as possible).
- */
-bool
-constant_mem_eq(const unsigned char *const restrict in1, const unsigned char *const restrict in2,
-                const size_t length)
-{
-	unsigned int diff = 0;
-
-	for (size_t i = 0; i < length; i++)
-		diff |= (in1[i] ^ in2[i]);
-
-	const bool result = !!!diff;
-	return result;
-}
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8

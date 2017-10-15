@@ -831,7 +831,10 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 	if (!argon2d_hash_raw(&ctx))
 		return false;
 
-	return constant_mem_eq(ctx.hash, dec_hash, sizeof dec_hash);
+	if (memcmp(ctx.hash, dec_hash, ATHEME_ARGON2D_HASHLEN) != 0)
+		return false;
+
+	return true;
 }
 
 static bool

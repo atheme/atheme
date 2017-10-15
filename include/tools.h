@@ -150,8 +150,6 @@ E float bytes(float x);
 E unsigned long makekey(void);
 E int srename(const char *old_fn, const char *new_fn);
 
-E bool constant_mem_eq(const unsigned char *in1, const unsigned char *in2, size_t length);
-
 /* time stuff */
 #if HAVE_GETTIMEOFDAY
 E void s_time(struct timeval *sttime);
