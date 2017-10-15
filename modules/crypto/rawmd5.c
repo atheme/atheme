@@ -9,32 +9,40 @@
 
 #include "atheme.h"
 
-#define RAWMD5_PREFIX "$rawmd5$"
+#define MODULE_PREFIX_STR       "$rawmd5$"
+#define MODULE_PREFIX_LEN       8
+#define MODULE_DIGEST_LEN       MD5_DIGEST_LENGTH
+#define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
-static const char *
-atheme_rawmd5_crypt(const char *password, const char *parameters)
+static bool
+atheme_rawmd5_verify(const char *const restrict password, const char *const restrict parameters)
 {
-	static char output[2 * 16 + sizeof(RAWMD5_PREFIX)];
+	if (strlen(parameters) != MODULE_PARAMS_LEN)
+		return false;
+
+	if (strncmp(parameters, MODULE_PREFIX_STR, MODULE_PREFIX_LEN) != 0)
+		return false;
+
 	md5_state_t ctx;
-	unsigned char digest[16];
-	int i;
+	unsigned char digest[MODULE_DIGEST_LEN];
 
-	md5_init(&ctx);
-	md5_append(&ctx, (const unsigned char *)password, strlen(password));
-	md5_finish(&ctx, digest);
+	(void) md5_init(&ctx);
+	(void) md5_append(&ctx, (const unsigned char *) password, strlen(password));
+	(void) md5_finish(&ctx, digest);
 
-	strcpy(output, RAWMD5_PREFIX);
-	for (i = 0; i < 16; i++)
-		sprintf(output + sizeof(RAWMD5_PREFIX) - 1 + i * 2, "%02x",
-				255 & digest[i]);
+	char result[(2 * MODULE_DIGEST_LEN) + 1];
 
-	return output;
+	for (size_t i = 0; i < sizeof digest; i++)
+		(void) sprintf(result + i * 2, "%02x", 255 & digest[i]);
+
+	return constant_mem_eq((const unsigned char *) parameters + MODULE_PREFIX_LEN,
+	                       (const unsigned char *) result, sizeof result);
 }
 
 static crypt_impl_t crypto_rawmd5_impl = {
 
 	.id         = "rawmd5",
-	.crypt      = &atheme_rawmd5_crypt,
+	.verify     = &atheme_rawmd5_verify,
 };
 
 static void
