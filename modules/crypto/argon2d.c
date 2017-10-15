@@ -40,6 +40,7 @@
 #define ATHEME_ARGON2D_LOADB64  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 #define ATHEME_ARGON2D_LOADSALT "$argon2d$v=19$m=%" PRIu32 ",t=%" PRIu32 ",p=1$%[" ATHEME_ARGON2D_LOADB64 "]$"
 #define ATHEME_ARGON2D_SAVESALT "$argon2d$v=19$m=%" PRIu32 ",t=%" PRIu32 ",p=1$%s$"
+#define ATHEME_ARGON2D_LOADHASH ATHEME_ARGON2D_LOADSALT "%s"
 #define ATHEME_ARGON2D_SAVEHASH ATHEME_ARGON2D_SAVESALT "%s"
 
 #define ATHEME_ARGON2D_AUTHLEN  0x00
@@ -800,6 +801,36 @@ atheme_argon2d_crypt(const char *const restrict password, const char *const rest
 }
 
 static bool
+atheme_argon2d_verify(const char *const restrict password, const char *const restrict parameters)
+{
+	struct argon2d_context ctx;
+	(void) memset(&ctx, 0x00, sizeof ctx);
+
+	char salt_b64[0x8000];
+	char hash_b64[0x8000];
+	if (sscanf(parameters, ATHEME_ARGON2D_LOADHASH, &ctx.m_cost, &ctx.t_cost, salt_b64, hash_b64) != 4)
+		return false;
+
+	if ((ctx.m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (ctx.t_cost > ARGON2D_TIMECOST_MAX))
+		return false;
+
+	if (argon2d_dec_b64(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
+		return false;
+
+	uint8_t dec_hash[ATHEME_ARGON2D_HASHLEN];
+	if (argon2d_dec_b64(hash_b64, dec_hash, sizeof dec_hash) != sizeof dec_hash)
+		return false;
+
+	ctx.pass = (const uint8_t *) password;
+	ctx.passlen = (uint32_t) strlen(password);
+
+	if (!argon2d_hash_raw(&ctx))
+		return false;
+
+	return constant_mem_eq(ctx.hash, dec_hash, sizeof dec_hash);
+}
+
+static bool
 atheme_argon2d_recrypt(const char *const restrict parameters)
 {
 	uint32_t m_cost;
@@ -826,6 +857,7 @@ static crypt_impl_t crypto_argon2d_impl = {
 	.id         = "argon2d",
 	.salt       = &atheme_argon2d_salt,
 	.crypt      = &atheme_argon2d_crypt,
+	.verify     = &atheme_argon2d_verify,
 	.recrypt    = &atheme_argon2d_recrypt,
 };
 
