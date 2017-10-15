@@ -90,12 +90,14 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	 * If this fails, we are trying to verify a hash that we don't
 	 * know how to compute, just bail out like above.
 	 */
-	const EVP_MD *md;
+	const EVP_MD *md = NULL;
+
 	if (prf == 5)
 		md = EVP_sha256();
 	else if (prf == 6)
 		md = EVP_sha512();
-	else
+
+	if (!md)
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
