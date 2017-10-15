@@ -26,47 +26,35 @@
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
 
-#define ROUNDS		(128000)
-#define SALTLEN		(16)
+#define ATHEME_PBKDF2_ROUNDS    128000
+#define ATHEME_PBKDF2_SALTLEN   16
 
-static const char *
-atheme_pbkdf2_salt(void)
+static bool
+atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters)
 {
-	static char buf[SALTLEN + 1];
-	char *randstr = random_string(SALTLEN);
+	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * SHA512_DIGEST_LENGTH)))
+		return false;
 
-	mowgli_strlcpy(buf, randstr, sizeof buf);
+	const EVP_MD *const md = EVP_sha512();
+	if (!md)
+		return false;
 
-	free(randstr);
+	unsigned char buf[SHA512_DIGEST_LENGTH];
+	(void) PKCS5_PBKDF2_HMAC(password, (int) strlen(password), (const unsigned char *) parameters,
+	                         ATHEME_PBKDF2_SALTLEN, ATHEME_PBKDF2_ROUNDS, md, SHA512_DIGEST_LENGTH, buf);
 
-	return buf;
-}
+	char result[(2 * SHA512_DIGEST_LENGTH) + 1];
+	for (size_t i = 0; i < SHA512_DIGEST_LENGTH; i++)
+		(void) sprintf(result + (i * 2), "%02x", 255 & buf[i]);
 
-static const char *
-atheme_pbkdf2_crypt(const char *password, const char *parameters)
-{
-	static char outbuf[PASSLEN];
-	static unsigned char digestbuf[SHA512_DIGEST_LENGTH];
-	int res, iter;
-
-	if (strlen(parameters) < SALTLEN)
-		return NULL;
-
-	memcpy(outbuf, parameters, SALTLEN);
-
-	res = PKCS5_PBKDF2_HMAC(password, strlen(password), (const unsigned char *)parameters, SALTLEN, ROUNDS, EVP_sha512(), SHA512_DIGEST_LENGTH, digestbuf);
-
-	for (iter = 0; iter < SHA512_DIGEST_LENGTH; iter++)
-		sprintf(outbuf + SALTLEN + (iter * 2), "%02x", 255 & digestbuf[iter]);
-
-	return outbuf;
+	return constant_mem_eq((const unsigned char *) parameters + ATHEME_PBKDF2_SALTLEN,
+	                       (const unsigned char *) result, sizeof result);
 }
 
 static crypt_impl_t crypto_pbkdf2_impl = {
 
 	.id         = "pbkdf2",
-	.salt       = &atheme_pbkdf2_salt,
-	.crypt      = &atheme_pbkdf2_crypt,
+	.verify     = &atheme_pbkdf2_verify,
 };
 
 static void
