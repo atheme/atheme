@@ -91,6 +91,7 @@ void
 crypt_register(crypt_impl_t *const restrict impl)
 {
 	return_if_fail(impl != NULL);
+	return_if_fail(impl->id != NULL);
 
 	if ((impl->salt != NULL && impl->crypt != NULL) || impl->verify != NULL)
 	{
