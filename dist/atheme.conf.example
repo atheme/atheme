@@ -96,40 +96,54 @@
  */
 loadmodule "modules/backend/opensex";
 
-/* Crypto module.
+/* Password hashing modules.
  *
- * If you would like encryption for your services passwords, please
- * select a module here. Note that upon starting with a crypto module
- * YOUR PASSWORDS ARE IMMEDIATELY AND IRREVERSIBLY CONVERTED. Make at
- * least TWO backups of your database before experimenting with this.
- * If you have several thousand accounts, this conversion may take
- * appreciable time.
+ * If you would like encryption for your services passwords, or to migrate
+ * from another IRC services package which used encryption for its passwords,
+ * please select a module here.
  *
- * The following crypto modules are available:
+ * The following encryption-capable crypto modules are available:
  *
- * Argon2d (Password Hashing Competition, v1.3) modules/crypto/argon2d
- * PBKDF2 cryptography (new)                    modules/crypto/pbkdf2v2
- * PBKDF2 cryptography (compatibility only)     modules/crypto/pbkdf2
- * POSIX-style crypt(3)                         modules/crypto/posix
- * IRCServices (also Anope etc) compatibility   modules/crypto/ircservices
- * Raw MD5 (Anope compatibility)                modules/crypto/rawmd5
- * Raw SHA1 (Anope compatibility)               modules/crypto/rawsha1
+ *   Argon2d (Password Hashing Competition, v1.3)  modules/crypto/argon2d
+ *   PBKDF2 cryptography (better format)           modules/crypto/pbkdf2v2
+ *   POSIX-style crypt(3)                          modules/crypto/posix
  *
- * The ircservices, rawmd5 and rawsha1 modules are only recommended for use with
- * a database converted from other services with password encryption.
+ * If you do not load an encryption-capable crypto module, some features will
+ * not work correctly, and errors will be logged on e.g. user registration
+ * that it was not possible to encrypt their password. Support for running
+ * without an encryption-capable crypto module will be removed in a later
+ * version of this software; for now it is just highly discouraged.
+ *
+ * Note that upon starting with an encryption-capable crypto module YOUR
+ * PASSWORDS ARE IMMEDIATELY AND IRREVERSIBLY CONVERTED. Make at least TWO
+ * backups of your database before experimenting with this. If you have
+ * several thousand accounts, this conversion may take a long time.
+ *
+ * The following modules can only be used to /verify/ existing encrypted
+ * passwords, for example when upgrading from an older version of this
+ * software, or migrating from something else:
+ *
+ *   PBKDF2 (Atheme <= 7.2 compatibility)          modules/crypto/pbkdf2
+ *   Raw MD5 (Anope ~1.8 compatibility)            modules/crypto/rawmd5
+ *   Raw SHA1 (Anope ~1.8 compatibility)           modules/crypto/rawsha1
+ *   IRCServices (+ Anope) compatibility           modules/crypto/ircservices
  *
  * To transition between crypto schemes, load the preferred scheme first
- * and as users login, they will be migrated to the new preferred scheme. Like:
+ * and as users login or set new passwords, they will be migrated to the new
+ * preferred scheme. Like:
  *
  * loadmodule "modules/crypto/argon2d";
  * loadmodule "modules/crypto/pbkdf2v2";
  * loadmodule "modules/crypto/pbkdf2";
  * loadmodule "modules/crypto/posix";
- * loadmodule "modules/crypto/ircservices";
  *
+ * The posix module requires crypt(3) or OpenSSL.
  * The rawsha1 and pbkdf2/pbkdf2v2 modules require OpenSSL.
  * The Argon2d module has no dependencies and is recommended.
  */
+loadmodule "modules/crypto/argon2d";
+#loadmodule "modules/crypto/pbkdf2v2";
+#loadmodule "modules/crypto/pbkdf2";
 loadmodule "modules/crypto/posix";
 
 /* Authentication module.
