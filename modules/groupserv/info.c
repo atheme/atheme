@@ -93,6 +93,11 @@ static void gs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, _("Flags       : %s"), buf);
 
+	if ((md = metadata_find(mg, "joinflags")) != NULL)
+	{
+		command_success_nodata(si, _("Join flags  : %s"), gflags_tostr(ga_flags, atoi(md->value)));
+	}
+
 	command_success_nodata(si, _("\2*** End of Info ***\2"));
 
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", parv[0]);
