@@ -57,6 +57,7 @@ struct cmode_ unreal_mode_list[] = {
   { 's', CMODE_SEC	},
   { 't', CMODE_TOPIC	},
   { 'c', CMODE_NOCOLOR	},
+  { 'D', CMODE_DELAYJOIN	},
   { 'M', CMODE_MODREG	},
   { 'R', CMODE_REGONLY	},
   { 'O', CMODE_OPERONLY },
@@ -66,7 +67,6 @@ struct cmode_ unreal_mode_list[] = {
   { 'K', CMODE_NOKNOCK	},
   { 'V', CMODE_NOINVITE },
   { 'C', CMODE_NOCTCP	},
-  { 'u', CMODE_HIDING	},
   { 'z', CMODE_SSLONLY	},
   { 'N', CMODE_STICKY	},
   { 'G', CMODE_CENSOR	},
@@ -76,12 +76,10 @@ struct cmode_ unreal_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static bool check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
 
 struct extmode unreal_ignore_mode_list[] = {
-  { 'j', check_jointhrottle },
   { 'f', check_flood },
   { 'L', check_forward },
   { '\0', 0 }
@@ -114,30 +112,6 @@ struct cmode_ unreal_user_mode_list[] = {
 };
 
 /* *INDENT-ON* */
-
-static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
-{
-	const char *p, *arg2;
-
-	p = value, arg2 = NULL;
-	while (*p != '\0')
-	{
-		if (*p == ':')
-		{
-			if (arg2 != NULL)
-				return false;
-			arg2 = p + 1;
-		}
-		else if (!isdigit((unsigned char)*p))
-			return false;
-		p++;
-	}
-	if (arg2 == NULL)
-		return false;
-	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
-		return false;
-	return true;
-}
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
 static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
