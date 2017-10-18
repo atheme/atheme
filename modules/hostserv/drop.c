@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"hostserv/drop", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
+	VENDOR_STRING
 );
 
 static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);

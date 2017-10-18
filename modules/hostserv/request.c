@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"hostserv/request", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Rizon Development Group <http://www.rizon.net>"
+	VENDOR_STRING
 );
 
 bool request_per_nick;

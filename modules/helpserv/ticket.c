@@ -12,7 +12,7 @@ DECLARE_MODULE_V1
 (
 	"helpserv/ticket", true, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.net>"
+	VENDOR_STRING
 );
 
 unsigned int ratelimit_count = 0;

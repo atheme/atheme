@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 (
 	"nickserv/set_pubkey", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Zohlai Development Group"
+	VENDOR_STRING
 );
 
 mowgli_patricia_t **ns_set_cmdtree;
