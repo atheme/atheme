@@ -2206,6 +2206,14 @@ general {
 	 */
 	immune_level = immune;
 
+	/* (*)send_sasl_quit
+	 * If enabled, SaslServ will send a /QUIT before the the services server
+	 * either restarts or shuts down.  Some IRCds unfortunately need this in
+	 * order for cap-notify and the "sasl" cap to function properly.
+	 * Default: disabled
+	 */
+	#send_sasl_quit;
+
 	/* show_entity_id
 	 * This makes nick/user & group entity IDs visible to everyone, rather
 	 * than just opers with user:auspex or group:auspex privileges.

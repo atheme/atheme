@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2016 ChatLounge IRC Network Development Team
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
@@ -37,6 +39,7 @@ static void sasl_mech_register(sasl_mechanism_t *mech);
 static void sasl_mech_unregister(sasl_mechanism_t *mech);
 static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild();
+static void on_shutdown(void *unused);
 static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full);
 static const char *sasl_get_source_name(sourceinfo_t *si);
 
@@ -137,6 +140,8 @@ void _modinit(module_t *m)
 	saslsvs = service_add("saslserv", saslserv);
 	add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
 	authservice_loaded++;
+
+	hook_add_shutdown(on_shutdown);
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -151,10 +156,12 @@ void _moddeinit(module_unload_intent_t intent)
 
 	del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
 
-        if (saslsvs != NULL)
+	if (saslsvs != NULL)
 		service_delete(saslsvs);
 
 	authservice_loaded--;
+
+	hook_del_shutdown(on_shutdown);
 
 	if (sessions.head != NULL)
 		slog(LG_DEBUG, "saslserv/main: shutting down with a non-empty session list, a mech did not unregister itself!");
@@ -759,6 +766,12 @@ static void delete_stale(void *vptr)
 		} else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
+}
+
+static void on_shutdown(void *unused)
+{
+	if (config_options.send_sasl_quit && saslsvs->me != NULL)
+		quit_sts(saslsvs->me, "shutting down");
 }
 
 static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full)
