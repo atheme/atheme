@@ -80,7 +80,7 @@ pbkdf2v2_salt(void)
 }
 
 static const char *
-pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt_str)
+pbkdf2v2_crypt(const char *const restrict password, const char *const restrict parameters)
 {
 	/*
 	 * Attempt to extract the PRF, iteration count and salt
@@ -94,7 +94,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 
 	(void) memset(salt, 0x00, sizeof salt);
 
-	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return NULL;
 
 	/*
@@ -114,14 +114,14 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
-	const size_t pl = strlen(pass);
+	const size_t pl = strlen(password);
 	const size_t sl = strlen(salt);
 
 	if (sl < PBKDF2_SALTLEN_MIN || sl > PBKDF2_SALTLEN_MAX)
 		return NULL;
 
 	unsigned char digest[EVP_MAX_MD_SIZE];
-	const int ret = PKCS5_PBKDF2_HMAC(pass, (int) pl, (unsigned char *) salt, (int) sl, (int) iter, md,
+	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) salt, (int) sl, (int) iter, md,
 	                                  EVP_MD_size(md), digest);
 	if (!ret)
 		return NULL;
@@ -139,7 +139,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 }
 
 static bool
-pbkdf2v2_upgrade(const char *const restrict crypt_str)
+pbkdf2v2_upgrade(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int iter;
@@ -147,7 +147,7 @@ pbkdf2v2_upgrade(const char *const restrict crypt_str)
 
 	(void) memset(salt, 0x00, sizeof salt);
 
-	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return false;
 
 	if (prf != pbkdf2v2_digest)
