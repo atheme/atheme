@@ -129,29 +129,6 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 	return true;
 }
 
-static const char *
-atheme_pbkdf2v2_salt(void)
-{
-	/* Fill salt array with random bytes */
-	unsigned char rawsalt[PBKDF2_SALTLEN_DEF];
-	(void) arc4random_buf(rawsalt, sizeof rawsalt);
-
-	/* Use random byte as index into printable character array, turning it into a printable string */
-	char salt[sizeof rawsalt + 1];
-	for (size_t i = 0; i < sizeof rawsalt; i++)
-		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
-
-	/* NULL-terminate the string */
-	salt[sizeof rawsalt] = 0x00;
-
-	/* Format and return the result */
-	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
-		return NULL;
-
-	return res;
-}
-
 static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
@@ -215,6 +192,29 @@ parsed:
 	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
 
 	return (ret == 1) ? true : false;
+}
+
+static const char *
+atheme_pbkdf2v2_salt(void)
+{
+	/* Fill salt array with random bytes */
+	unsigned char rawsalt[PBKDF2_SALTLEN_DEF];
+	(void) arc4random_buf(rawsalt, sizeof rawsalt);
+
+	/* Use random byte as index into printable character array, turning it into a printable string */
+	char salt[sizeof rawsalt + 1];
+	for (size_t i = 0; i < sizeof rawsalt; i++)
+		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
+
+	/* NULL-terminate the string */
+	salt[sizeof rawsalt] = 0x00;
+
+	/* Format and return the result */
+	static char res[PASSLEN];
+	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+		return NULL;
+
+	return res;
 }
 
 static const char *
