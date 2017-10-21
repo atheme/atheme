@@ -39,6 +39,10 @@
 #define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
 
+#define PBKDF2_PRF_HMAC_SHA1        4U
+#define PBKDF2_PRF_HMAC_SHA2_256    5U
+#define PBKDF2_PRF_HMAC_SHA2_512    6U
+
 #define PBKDF2_SALTLEN  16
 
 #define PBKDF2_C_MIN    10000
@@ -95,11 +99,11 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	 * know how to compute, just bail out like above.
 	 */
 	const EVP_MD *md;
-	if (prf == 4)
+	if (prf == PBKDF2_PRF_HMAC_SHA1)
 		md = EVP_sha1();
-	else if (prf == 5)
+	else if (prf == PBKDF2_PRF_HMAC_SHA2_256)
 		md = EVP_sha256();
-	else if (prf == 6)
+	else if (prf == PBKDF2_PRF_HMAC_SHA2_512)
 		md = EVP_sha512();
 	else
 		return NULL;
@@ -151,11 +155,11 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	}
 
 	if (!strcasecmp(ce->vardata, "SHA1"))
-		pbkdf2v2_digest = 4;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA1;
 	else if (!strcasecmp(ce->vardata, "SHA256"))
-		pbkdf2v2_digest = 5;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256;
 	else if (!strcasecmp(ce->vardata, "SHA512"))
-		pbkdf2v2_digest = 6;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
 	else
 		conf_report_warning(ce, "invalid parameter for configuration option");
 
