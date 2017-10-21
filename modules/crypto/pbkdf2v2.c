@@ -43,16 +43,16 @@
 #define PBKDF2_PRF_HMAC_SHA2_256    5U
 #define PBKDF2_PRF_HMAC_SHA2_512    6U
 
-#define PBKDF2_SALTLEN  16
+#define PBKDF2_ITERCNT_MIN          10000U
+#define PBKDF2_ITERCNT_MAX          5000000U
+#define PBKDF2_ITERCNT_DEF          64000U
 
-#define PBKDF2_C_MIN    10000
-#define PBKDF2_C_MAX    5000000
-#define PBKDF2_C_DEF    64000
+#define PBKDF2_SALTLEN  16
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
 static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
-static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
+static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 
 static const char *
 pbkdf2v2_salt(void)
@@ -183,7 +183,7 @@ crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 	add_subblock_top_conf("PBKDF2V2", &pbkdf2v2_conf_table);
 	add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
 	add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
-	                             PBKDF2_C_MIN, PBKDF2_C_MAX, PBKDF2_C_DEF);
+	                             PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_MAX, PBKDF2_ITERCNT_DEF);
 }
 
 static void
