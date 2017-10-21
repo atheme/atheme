@@ -144,7 +144,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 			goto parsed;
 		}
 
-		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
+		(void) slog(LG_DEBUG, "%s: no sscanf(3) was successful", __func__);
 	}
 	else
 	{
@@ -154,7 +154,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 			goto parsed;
 		}
 
-		(void) slog(LG_DEBUG, "%s: no sscanf(3) was successful", __func__);
+		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
 	}
 
 	return false;
