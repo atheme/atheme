@@ -36,8 +36,10 @@
 
 #define PBKDF2_FN_PREFIX            "$z$%u$%u$"
 #define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+#define PBKDF2_FN_BASE64            PBKDF2_FN_BASE62 "+/"
 
 #define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
+#define PBKDF2_FN_LOADHASH          PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
 #define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
 
@@ -61,6 +63,7 @@ struct pbkdf2v2_parameters
 {
 	const EVP_MD    *md;
 	unsigned char    cdg[EVP_MAX_MD_SIZE];
+	unsigned char    sdg[EVP_MAX_MD_SIZE];
 	char             salt[0x8000];
 	size_t           dl;
 	size_t           sl;
@@ -98,12 +101,27 @@ atheme_pbkdf2v2_salt(void)
 
 static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
-                        struct pbkdf2v2_parameters *const restrict parsed)
+                        struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
-	(void) memset(parsed, 0x00, sizeof *parsed);
+	char sdg64[0x8000];
 
-	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) != 3)
-		return false;
+	(void) memset(parsed, 0x00, sizeof *parsed);
+	(void) memset(sdg64, 0x00, sizeof sdg64);
+
+	if (verifying)
+	{
+		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+			goto parsed;
+	}
+	else
+	{
+		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) == 3)
+			goto parsed;
+	}
+
+	return false;
+
+parsed:
 
 	switch (parsed->a)
 	{
@@ -146,6 +164,12 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 	if (! pl)
 		return false;
 
+	if (verifying)
+	{
+		if (*sdg64 && base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
+			return false;
+	}
+
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
 	                                  (int) parsed->c, parsed->md, dl_i, parsed->cdg);
 
@@ -157,7 +181,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 {
 	struct pbkdf2v2_parameters parsed;
 
-	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed))
+	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, false))
 		return NULL;
 
 	char cdg64[EVP_MAX_MD_SIZE * 3];
@@ -171,6 +195,20 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		return NULL;
 
 	return res;
+}
+
+static bool
+atheme_pbkdf2v2_verify(const char *const restrict password, const char *const restrict parameters)
+{
+	struct pbkdf2v2_parameters parsed;
+
+	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, true))
+		return false;
+
+	if (memcmp(parsed.sdg, parsed.cdg, parsed.dl) != 0)
+		return false;
+
+	return true;
 }
 
 static bool
@@ -223,6 +261,7 @@ static crypt_impl_t crypto_pbkdf2v2_impl = {
 	.id         = "pbkdf2v2",
 	.salt       = &atheme_pbkdf2v2_salt,
 	.crypt      = &atheme_pbkdf2v2_crypt,
+	.verify     = &atheme_pbkdf2v2_verify,
 	.recrypt    = &atheme_pbkdf2v2_recrypt,
 };
 
