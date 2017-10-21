@@ -26,6 +26,8 @@
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
 
+#include "pbkdf2v2.h"
+
 /*
  * Do not change anything below this line unless you know what you are doing,
  * AND how it will (possibly) break backward-, forward-, or cross-compatibility
@@ -46,14 +48,6 @@
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
 #define PBKDF2_FS_SAVEHASH          PBKDF2_FN_SAVEHASH "$%s"
 
-#define PBKDF2_PRF_HMAC_SHA1        4U
-#define PBKDF2_PRF_HMAC_SHA2_256    5U
-#define PBKDF2_PRF_HMAC_SHA2_512    6U
-
-#define PBKDF2_PRF_SCRAM_SHA1       44U
-#define PBKDF2_PRF_SCRAM_SHA2_256   45U
-#define PBKDF2_PRF_SCRAM_SHA2_512   46U     /* Not currently specified */
-
 #define PBKDF2_DIGEST_MIN           SHA_DIGEST_LENGTH
 #define PBKDF2_DIGEST_MAX           SHA512_DIGEST_LENGTH
 #define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
@@ -65,21 +59,6 @@
 #define PBKDF2_SALTLEN_MIN          8U
 #define PBKDF2_SALTLEN_MAX          32U
 #define PBKDF2_SALTLEN_DEF          16U
-
-struct pbkdf2v2_parameters
-{
-	const EVP_MD    *md;
-	unsigned char    cdg[EVP_MAX_MD_SIZE];
-	unsigned char    sdg[EVP_MAX_MD_SIZE];
-	unsigned char    ssk[EVP_MAX_MD_SIZE];
-	unsigned char    shk[EVP_MAX_MD_SIZE];
-	char             salt[0x8000];
-	size_t           dl;
-	size_t           sl;
-	unsigned int     a;
-	unsigned int     c;
-	bool             scram;
-};
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
