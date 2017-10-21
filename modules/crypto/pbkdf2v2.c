@@ -92,16 +92,23 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 			break;
 
 		default:
+			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, parsed->a);
 			return false;
 	}
 
 	if (! parsed->md)
+	{
+		(void) slog(LG_ERROR, "%s: parsed->md is NULL", __func__);
 		return false;
+	}
 
 	const int dl_i = EVP_MD_size(parsed->md);
 
 	if (dl_i < PBKDF2_DIGEST_MIN || dl_i > PBKDF2_DIGEST_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: EVP_MD_size() has bogus value '%d'", __func__, dl_i);
 		return false;
+	}
 
 	parsed->dl = (size_t) dl_i;
 
@@ -127,17 +134,27 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 	{
 		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
 		{
+			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 			matched_ssk_shk = true;
 			goto parsed;
 		}
-
 		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+		{
+			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 			goto parsed;
+		}
+
+		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
 	}
 	else
 	{
 		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) == 3)
+		{
+			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADSALT (Encrypting)", __func__);
 			goto parsed;
+		}
+
+		(void) slog(LG_DEBUG, "%s: no sscanf(3) was successful", __func__);
 	}
 
 	return false;
@@ -145,37 +162,57 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 parsed:
 
 	if (! atheme_pbkdf2v2_determine_prf(parsed))
+		// This function logs messages on failure
 		return false;
 
 	parsed->sl = strlen(parsed->salt);
 
 	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: salt '%s' length %zu out of range", __func__, parsed->salt, parsed->sl);
 		return false;
-
+	}
 	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", __func__, parsed->c);
 		return false;
+	}
 
 	const size_t pl = strlen(password);
 
 	if (! pl)
+	{
+		(void) slog(LG_ERROR, "%s: password length == 0", __func__);
 		return false;
+	}
 
 	if (matched_ssk_shk)
 	{
 		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: decoding ssk ('%s') failed", __func__, ssk64);
 			return false;
-
+		}
 		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: decoding shk ('%s') failed", __func__, shk64);
 			return false;
+		}
 	}
 	else if (verifying)
 	{
 		if (base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: decoding sdg ('%s') failed", __func__, sdg64);
 			return false;
+		}
 	}
 
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
 	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
+
+	if (ret != 1)
+		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
 
 	return (ret == 1) ? true : false;
 }
@@ -198,7 +235,10 @@ atheme_pbkdf2v2_salt(void)
 	/* Format and return the result */
 	static char res[PASSLEN];
 	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 		return NULL;
+	}
 
 	return res;
 }
@@ -209,6 +249,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	struct pbkdf2v2_parameters parsed;
 
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, false))
+		// This function logs messages on failure
 		return NULL;
 
 	static char res[PASSLEN];
@@ -222,32 +263,50 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
 		if (HMAC(parsed.md, "Server Key", 10, parsed.cdg, parsed.dl, csk, NULL) == NULL)
+		{
+			(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 			return NULL;
-
+		}
 		if (HMAC(parsed.md, "Client Key", 10, parsed.cdg, parsed.dl, cck, NULL) == NULL)
+		{
+			(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
 			return NULL;
-
+		}
 		if (EVP_Digest(cck, parsed.dl, chk, NULL, parsed.md, NULL) != 1)
+		{
+			(void) slog(LG_ERROR, "%s: EVP_Digest(cck) failed for chk", __func__);
 			return NULL;
-
+		}
 		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for csk", __func__);
 			return NULL;
-
+		}
 		if (base64_encode((const char *) chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
-
+		}
 		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt, csk64, chk64) >= PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf() would have overflowed result buffer (BUG)", __func__);
 			return NULL;
+		}
 	}
 	else
 	{
 		char cdg64[EVP_MAX_MD_SIZE * 3];
 
 		if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
-
+		}
 		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 			return NULL;
+		}
 	}
 
 	return res;
@@ -259,6 +318,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 	struct pbkdf2v2_parameters parsed;
 
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, true))
+		// This function logs messages on failure
 		return false;
 
 	if (parsed.scram)
@@ -266,15 +326,23 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 		unsigned char csk[EVP_MAX_MD_SIZE];
 
 		if (HMAC(parsed.md, "Server Key", 10, parsed.cdg, parsed.dl, csk, NULL) == NULL)
+		{
+			(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 			return false;
-
+		}
 		if (memcmp(parsed.ssk, csk, parsed.dl) != 0)
+		{
+			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on ssk (invalid password?)", __func__);
 			return false;
+		}
 	}
 	else
 	{
 		if (memcmp(parsed.sdg, parsed.cdg, parsed.dl) != 0)
+		{
+			(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on sdg (invalid password?)", __func__);
 			return false;
+		}
 	}
 
 	return true;
@@ -290,16 +358,25 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	(void) memset(salt, 0x00, sizeof salt);
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	{
+		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
 		return false;
-
+	}
 	if (prf != pbkdf2v2_digest)
+	{
+		(void) slog(LG_DEBUG, "%s: prf (%u) != default (%u)", __func__, prf, pbkdf2v2_digest);
 		return true;
-
+	}
 	if (iter != pbkdf2v2_rounds)
+	{
+		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, iter, pbkdf2v2_rounds);
 		return true;
-
+	}
 	if (strlen(salt) != PBKDF2_SALTLEN_DEF)
+	{
+		(void) slog(LG_DEBUG, "%s: salt length is different", __func__);
 		return true;
+	}
 
 	return false;
 }
