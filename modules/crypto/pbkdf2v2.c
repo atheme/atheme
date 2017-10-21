@@ -40,12 +40,19 @@
 
 #define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
 #define PBKDF2_FN_LOADHASH          PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
+#define PBKDF2_FS_LOADHASH          PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
+
 #define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
+#define PBKDF2_FS_SAVEHASH          PBKDF2_FN_SAVEHASH "$%s"
 
 #define PBKDF2_PRF_HMAC_SHA1        4U
 #define PBKDF2_PRF_HMAC_SHA2_256    5U
 #define PBKDF2_PRF_HMAC_SHA2_512    6U
+
+#define PBKDF2_PRF_SCRAM_SHA1       44U
+#define PBKDF2_PRF_SCRAM_SHA2_256   45U
+#define PBKDF2_PRF_SCRAM_SHA2_512   46U     /* Not currently specified */
 
 #define PBKDF2_DIGEST_MIN           SHA_DIGEST_LENGTH
 #define PBKDF2_DIGEST_MAX           SHA512_DIGEST_LENGTH
@@ -64,11 +71,14 @@ struct pbkdf2v2_parameters
 	const EVP_MD    *md;
 	unsigned char    cdg[EVP_MAX_MD_SIZE];
 	unsigned char    sdg[EVP_MAX_MD_SIZE];
+	unsigned char    ssk[EVP_MAX_MD_SIZE];
+	unsigned char    shk[EVP_MAX_MD_SIZE];
 	char             salt[0x8000];
 	size_t           dl;
 	size_t           sl;
 	unsigned int     a;
 	unsigned int     c;
+	bool             scram;
 };
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
@@ -104,12 +114,19 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
 	char sdg64[0x8000];
+	char ssk64[0x8000];
+	char shk64[0x8000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 	(void) memset(sdg64, 0x00, sizeof sdg64);
+	(void) memset(ssk64, 0x00, sizeof ssk64);
+	(void) memset(shk64, 0x00, sizeof shk64);
 
 	if (verifying)
 	{
+		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+			goto parsed;
+
 		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
 			goto parsed;
 	}
@@ -125,14 +142,23 @@ parsed:
 
 	switch (parsed->a)
 	{
+		case PBKDF2_PRF_SCRAM_SHA1:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA1:
 			parsed->md = EVP_sha1();
 			break;
 
+		case PBKDF2_PRF_SCRAM_SHA2_256:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_256:
 			parsed->md = EVP_sha256();
 			break;
 
+		case PBKDF2_PRF_SCRAM_SHA2_512:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_512:
 			parsed->md = EVP_sha512();
 			break;
@@ -166,6 +192,12 @@ parsed:
 
 	if (verifying)
 	{
+		if (*ssk64 && base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+			return false;
+
+		if (*shk64 && base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+			return false;
+
 		if (*sdg64 && base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
 			return false;
 	}
@@ -184,15 +216,44 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, false))
 		return NULL;
 
-	char cdg64[EVP_MAX_MD_SIZE * 3];
-
-	if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
-		return NULL;
-
 	static char res[PASSLEN];
 
-	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
-		return NULL;
+	if (parsed.scram)
+	{
+		unsigned char csk[EVP_MAX_MD_SIZE];
+		unsigned char cck[EVP_MAX_MD_SIZE];
+		unsigned char chk[EVP_MAX_MD_SIZE];
+		char csk64[EVP_MAX_MD_SIZE * 3];
+		char chk64[EVP_MAX_MD_SIZE * 3];
+
+		if (HMAC(parsed.md, "Server Key", 10, parsed.cdg, parsed.dl, csk, NULL) == NULL)
+			return NULL;
+
+		if (HMAC(parsed.md, "Client Key", 10, parsed.cdg, parsed.dl, cck, NULL) == NULL)
+			return NULL;
+
+		if (EVP_Digest(cck, parsed.dl, chk, NULL, parsed.md, NULL) != 1)
+			return NULL;
+
+		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
+			return NULL;
+
+		if (base64_encode((const char *) chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
+			return NULL;
+
+		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt, csk64, chk64) >= PASSLEN)
+			return NULL;
+	}
+	else
+	{
+		char cdg64[EVP_MAX_MD_SIZE * 3];
+
+		if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
+			return NULL;
+
+		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
+			return NULL;
+	}
 
 	return res;
 }
@@ -205,8 +266,21 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, true))
 		return false;
 
-	if (memcmp(parsed.sdg, parsed.cdg, parsed.dl) != 0)
-		return false;
+	if (parsed.scram)
+	{
+		unsigned char csk[EVP_MAX_MD_SIZE];
+
+		if (HMAC(parsed.md, "Server Key", 10, parsed.cdg, parsed.dl, csk, NULL) == NULL)
+			return false;
+
+		if (memcmp(parsed.ssk, csk, parsed.dl) != 0)
+			return false;
+	}
+	else
+	{
+		if (memcmp(parsed.sdg, parsed.cdg, parsed.dl) != 0)
+			return false;
+	}
 
 	return true;
 }
@@ -250,6 +324,14 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256;
 	else if (!strcasecmp(ce->vardata, "SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
+/*
+	else if (!strcasecmp(ce->vardata, "SCRAM-SHA1"))
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1;
+	else if (!strcasecmp(ce->vardata, "SCRAM-SHA256"))
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256;
+	else if (!strcasecmp(ce->vardata, "SCRAM-SHA512"))
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512;
+*/
 	else
 		conf_report_warning(ce, "invalid parameter for configuration option");
 
