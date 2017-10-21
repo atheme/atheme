@@ -23,6 +23,8 @@
 #ifdef HAVE_OPENSSL
 
 #include <openssl/evp.h>
+#include <openssl/hmac.h>
+#include <openssl/sha.h>
 
 /*
  * Do not change anything below this line unless you know what you are doing,
@@ -43,6 +45,10 @@
 #define PBKDF2_PRF_HMAC_SHA2_256    5U
 #define PBKDF2_PRF_HMAC_SHA2_512    6U
 
+#define PBKDF2_DIGEST_MIN           SHA_DIGEST_LENGTH
+#define PBKDF2_DIGEST_MAX           SHA512_DIGEST_LENGTH
+#define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
+
 #define PBKDF2_ITERCNT_MIN          10000U
 #define PBKDF2_ITERCNT_MAX          5000000U
 #define PBKDF2_ITERCNT_DEF          64000U
@@ -51,9 +57,20 @@
 #define PBKDF2_SALTLEN_MAX          32U
 #define PBKDF2_SALTLEN_DEF          16U
 
+struct pbkdf2v2_parameters
+{
+	const EVP_MD    *md;
+	unsigned char    cdg[EVP_MAX_MD_SIZE];
+	char             salt[0x8000];
+	size_t           dl;
+	size_t           sl;
+	unsigned int     a;
+	unsigned int     c;
+};
+
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
-static unsigned int pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
+static unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 
 static const char *
@@ -79,62 +96,78 @@ atheme_pbkdf2v2_salt(void)
 	return res;
 }
 
+static bool
+atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
+                        struct pbkdf2v2_parameters *const restrict parsed)
+{
+	(void) memset(parsed, 0x00, sizeof *parsed);
+
+	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) != 3)
+		return false;
+
+	switch (parsed->a)
+	{
+		case PBKDF2_PRF_HMAC_SHA1:
+			parsed->md = EVP_sha1();
+			break;
+
+		case PBKDF2_PRF_HMAC_SHA2_256:
+			parsed->md = EVP_sha256();
+			break;
+
+		case PBKDF2_PRF_HMAC_SHA2_512:
+			parsed->md = EVP_sha512();
+			break;
+
+		default:
+			break;
+	}
+
+	if (! parsed->md)
+		return false;
+
+	parsed->sl = strlen(parsed->salt);
+
+	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
+		return false;
+
+	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
+		return false;
+
+	const int dl_i = EVP_MD_size(parsed->md);
+
+	if (dl_i < PBKDF2_DIGEST_MIN || dl_i > PBKDF2_DIGEST_MAX)
+		return false;
+
+	parsed->dl = (size_t) dl_i;
+
+	const size_t pl = strlen(password);
+
+	if (! pl)
+		return false;
+
+	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
+	                                  (int) parsed->c, parsed->md, dl_i, parsed->cdg);
+
+	return (ret == 1) ? true : false;
+}
+
 static const char *
 atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const restrict parameters)
 {
-	/*
-	 * Attempt to extract the PRF, iteration count and salt
-	 *
-	 * If this fails, we're trying to verify a hash not produced by
-	 * this module - just bail out, libathemecore can handle NULL
-	 */
-	unsigned int prf;
-	unsigned int iter;
-	char salt[0x8000];
+	struct pbkdf2v2_parameters parsed;
 
-	(void) memset(salt, 0x00, sizeof salt);
-
-	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed))
 		return NULL;
 
-	/*
-	 * Look up the digest method corresponding to the PRF
-	 *
-	 * If this fails, we are trying to verify a hash that we don't
-	 * know how to compute, just bail out like above.
-	 */
-	const EVP_MD *md = NULL;
+	char cdg64[EVP_MAX_MD_SIZE * 3];
 
-	if (prf == PBKDF2_PRF_HMAC_SHA1)
-		md = EVP_sha1();
-	else if (prf == PBKDF2_PRF_HMAC_SHA2_256)
-		md = EVP_sha256();
-	else if (prf == PBKDF2_PRF_HMAC_SHA2_512)
-		md = EVP_sha512();
-
-	if (!md)
+	if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		return NULL;
 
-	/* Compute the PBKDF2 digest */
-	const size_t pl = strlen(password);
-	const size_t sl = strlen(salt);
-
-	if (sl < PBKDF2_SALTLEN_MIN || sl > PBKDF2_SALTLEN_MAX)
-		return NULL;
-
-	unsigned char digest[EVP_MAX_MD_SIZE];
-	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) salt, (int) sl, (int) iter, md,
-	                                  EVP_MD_size(md), digest);
-	if (!ret)
-		return NULL;
-
-	/* Convert the digest to Base 64 */
-	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
-	(void) base64_encode((const char *) digest, (size_t) EVP_MD_size(md), digest_b64, sizeof digest_b64);
-
-	/* Format the result */
 	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, prf, iter, salt, digest_b64) >= PASSLEN)
+
+	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
 		return NULL;
 
 	return res;
