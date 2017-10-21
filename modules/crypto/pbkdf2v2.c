@@ -35,7 +35,7 @@
 #define PBKDF2_FN_PREFIX            "$z$%u$%u$"
 #define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-#define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%16[" PBKDF2_FN_BASE62 "]$"
+#define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
 #define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
 
@@ -47,7 +47,9 @@
 #define PBKDF2_ITERCNT_MAX          5000000U
 #define PBKDF2_ITERCNT_DEF          64000U
 
-#define PBKDF2_SALTLEN  16
+#define PBKDF2_SALTLEN_MIN          8U
+#define PBKDF2_SALTLEN_MAX          32U
+#define PBKDF2_SALTLEN_DEF          16U
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
@@ -58,7 +60,7 @@ static const char *
 pbkdf2v2_salt(void)
 {
 	/* Fill salt array with random bytes */
-	unsigned char rawsalt[PBKDF2_SALTLEN];
+	unsigned char rawsalt[PBKDF2_SALTLEN_DEF];
 	(void) arc4random_buf(rawsalt, sizeof rawsalt);
 
 	/* Use random byte as index into printable character array, turning it into a printable string */
@@ -88,7 +90,10 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	 */
 	unsigned int prf;
 	unsigned int iter;
-	char salt[PBKDF2_SALTLEN + 1];
+	char salt[0x8000];
+
+	(void) memset(salt, 0x00, sizeof salt);
+
 	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return NULL;
 
@@ -109,10 +114,17 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 		return NULL;
 
 	/* Compute the PBKDF2 digest */
-	const int pl = (int) strlen(pass);
-	const int sl = (int) strlen(salt);
+	const size_t pl = strlen(pass);
+	const size_t sl = strlen(salt);
+
+	if (sl < PBKDF2_SALTLEN_MIN || sl > PBKDF2_SALTLEN_MAX)
+		return NULL;
+
 	unsigned char digest[EVP_MAX_MD_SIZE];
-	(void) PKCS5_PBKDF2_HMAC(pass, pl, (unsigned char *) salt, sl, (int) iter, md, EVP_MD_size(md), digest);
+	const int ret = PKCS5_PBKDF2_HMAC(pass, (int) pl, (unsigned char *) salt, (int) sl, (int) iter, md,
+	                                  EVP_MD_size(md), digest);
+	if (!ret)
+		return NULL;
 
 	/* Convert the digest to Base 64 */
 	char digest_b64[(EVP_MAX_MD_SIZE * 2) + 5];
@@ -131,7 +143,9 @@ pbkdf2v2_upgrade(const char *const restrict crypt_str)
 {
 	unsigned int prf;
 	unsigned int iter;
-	char salt[PBKDF2_SALTLEN + 1];
+	char salt[0x8000];
+
+	(void) memset(salt, 0x00, sizeof salt);
 
 	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return false;
@@ -140,6 +154,9 @@ pbkdf2v2_upgrade(const char *const restrict crypt_str)
 		return true;
 
 	if (iter != pbkdf2v2_rounds)
+		return true;
+
+	if (strlen(salt) != PBKDF2_SALTLEN_DEF)
 		return true;
 
 	return false;
