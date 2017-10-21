@@ -121,10 +121,15 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 	(void) memset(ssk64, 0x00, sizeof ssk64);
 	(void) memset(shk64, 0x00, sizeof shk64);
 
+	bool matched_ssk_shk = false;
+
 	if (verifying)
 	{
 		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+		{
+			matched_ssk_shk = true;
 			goto parsed;
+		}
 
 		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
 			goto parsed;
@@ -155,15 +160,17 @@ parsed:
 	if (! pl)
 		return false;
 
-	if (verifying)
+	if (matched_ssk_shk)
 	{
-		if (*ssk64 && base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
 			return false;
 
-		if (*shk64 && base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
 			return false;
-
-		if (*sdg64 && base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
+	}
+	else if (verifying)
+	{
+		if (base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
 			return false;
 	}
 
