@@ -51,7 +51,7 @@
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
-static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
+static unsigned int pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 
 static const char *
