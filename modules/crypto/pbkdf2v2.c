@@ -312,11 +312,11 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256;
 	else if (!strcasecmp(ce->vardata, "SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
-/*
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA1"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1;
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA256"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256;
+/*	// No specification
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512;
 */
