@@ -32,16 +32,20 @@
  * sufficient.
  */
 
+#define PBKDF2_FN_PREFIX            "$z$%u$%u$"
+#define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+#define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%16[" PBKDF2_FN_BASE62 "]$"
+#define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
+#define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
+
 #define PBKDF2_SALTLEN  16
-#define PBKDF2_F_SCAN   "$z$%u$%u$%16[A-Za-z0-9]$"
-#define PBKDF2_F_SALT   "$z$%u$%u$%s$"
-#define PBKDF2_F_PRINT  "$z$%u$%u$%s$%s"
 
 #define PBKDF2_C_MIN    10000
 #define PBKDF2_C_MAX    5000000
 #define PBKDF2_C_DEF    64000
 
-static const char salt_chars[62] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
+static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
 static unsigned int pbkdf2v2_digest = 6; /* SHA512 */
 static unsigned int pbkdf2v2_rounds = PBKDF2_C_DEF;
@@ -63,7 +67,7 @@ pbkdf2v2_salt(void)
 
 	/* Format and return the result */
 	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, PBKDF2_F_SALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
 		return NULL;
 
 	return res;
@@ -81,7 +85,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 	unsigned int prf;
 	unsigned int iter;
 	char salt[PBKDF2_SALTLEN + 1];
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
+	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return NULL;
 
 	/*
@@ -112,7 +116,7 @@ pbkdf2v2_crypt(const char *const restrict pass, const char *const restrict crypt
 
 	/* Format the result */
 	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, PBKDF2_F_PRINT, prf, iter, salt, digest_b64) >= PASSLEN)
+	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, prf, iter, salt, digest_b64) >= PASSLEN)
 		return NULL;
 
 	return res;
@@ -125,7 +129,7 @@ pbkdf2v2_upgrade(const char *const restrict crypt_str)
 	unsigned int iter;
 	char salt[PBKDF2_SALTLEN + 1];
 
-	if (sscanf(crypt_str, PBKDF2_F_SCAN, &prf, &iter, salt) != 3)
+	if (sscanf(crypt_str, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 		return false;
 
 	if (prf != pbkdf2v2_digest)
