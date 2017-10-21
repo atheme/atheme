@@ -92,7 +92,7 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 			break;
 
 		default:
-			break;
+			return false;
 	}
 
 	if (! parsed->md)
