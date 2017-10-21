@@ -86,6 +86,49 @@ static const char salt_chars[62] = PBKDF2_FN_BASE62;
 static unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 
+static bool
+atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
+{
+	switch (parsed->a)
+	{
+		case PBKDF2_PRF_SCRAM_SHA1:
+			parsed->scram = true;
+			/* FALLTHROUGH */
+		case PBKDF2_PRF_HMAC_SHA1:
+			parsed->md = EVP_sha1();
+			break;
+
+		case PBKDF2_PRF_SCRAM_SHA2_256:
+			parsed->scram = true;
+			/* FALLTHROUGH */
+		case PBKDF2_PRF_HMAC_SHA2_256:
+			parsed->md = EVP_sha256();
+			break;
+
+		case PBKDF2_PRF_SCRAM_SHA2_512:
+			parsed->scram = true;
+			/* FALLTHROUGH */
+		case PBKDF2_PRF_HMAC_SHA2_512:
+			parsed->md = EVP_sha512();
+			break;
+
+		default:
+			break;
+	}
+
+	if (! parsed->md)
+		return false;
+
+	const int dl_i = EVP_MD_size(parsed->md);
+
+	if (dl_i < PBKDF2_DIGEST_MIN || dl_i > PBKDF2_DIGEST_MAX)
+		return false;
+
+	parsed->dl = (size_t) dl_i;
+
+	return true;
+}
+
 static const char *
 atheme_pbkdf2v2_salt(void)
 {
@@ -140,34 +183,7 @@ atheme_pbkdf2v2_compute(const char *const restrict password, const char *const r
 
 parsed:
 
-	switch (parsed->a)
-	{
-		case PBKDF2_PRF_SCRAM_SHA1:
-			parsed->scram = true;
-			/* FALLTHROUGH */
-		case PBKDF2_PRF_HMAC_SHA1:
-			parsed->md = EVP_sha1();
-			break;
-
-		case PBKDF2_PRF_SCRAM_SHA2_256:
-			parsed->scram = true;
-			/* FALLTHROUGH */
-		case PBKDF2_PRF_HMAC_SHA2_256:
-			parsed->md = EVP_sha256();
-			break;
-
-		case PBKDF2_PRF_SCRAM_SHA2_512:
-			parsed->scram = true;
-			/* FALLTHROUGH */
-		case PBKDF2_PRF_HMAC_SHA2_512:
-			parsed->md = EVP_sha512();
-			break;
-
-		default:
-			break;
-	}
-
-	if (! parsed->md)
+	if (! atheme_pbkdf2v2_determine_prf(parsed))
 		return false;
 
 	parsed->sl = strlen(parsed->salt);
@@ -177,13 +193,6 @@ parsed:
 
 	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
 		return false;
-
-	const int dl_i = EVP_MD_size(parsed->md);
-
-	if (dl_i < PBKDF2_DIGEST_MIN || dl_i > PBKDF2_DIGEST_MAX)
-		return false;
-
-	parsed->dl = (size_t) dl_i;
 
 	const size_t pl = strlen(password);
 
@@ -203,7 +212,7 @@ parsed:
 	}
 
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
-	                                  (int) parsed->c, parsed->md, dl_i, parsed->cdg);
+	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
 
 	return (ret == 1) ? true : false;
 }
