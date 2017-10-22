@@ -190,12 +190,12 @@ parsed:
 	{
 		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
 		{
-			(void) slog(LG_ERROR, "%s: decoding ssk ('%s') failed", __func__, ssk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
 			return false;
 		}
 		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
 		{
-			(void) slog(LG_ERROR, "%s: decoding shk ('%s') failed", __func__, shk64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed", __func__, shk64);
 			return false;
 		}
 	}
@@ -203,7 +203,7 @@ parsed:
 	{
 		if (base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
 		{
-			(void) slog(LG_ERROR, "%s: decoding sdg ('%s') failed", __func__, sdg64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
 			return false;
 		}
 	}
