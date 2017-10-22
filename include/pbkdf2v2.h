@@ -25,7 +25,7 @@ struct pbkdf2v2_parameters
 	unsigned char    sdg[EVP_MAX_MD_SIZE];
 	unsigned char    ssk[EVP_MAX_MD_SIZE];
 	unsigned char    shk[EVP_MAX_MD_SIZE];
-	char             salt[0x8000];
+	char             salt[0x2000];
 	size_t           dl;
 	size_t           sl;
 	unsigned int     a;

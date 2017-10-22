@@ -119,9 +119,9 @@ static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
-	char sdg64[0x8000];
-	char ssk64[0x8000];
-	char shk64[0x8000];
+	char sdg64[0x2000];
+	char ssk64[0x2000];
+	char shk64[0x2000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 	(void) memset(sdg64, 0x00, sizeof sdg64);
@@ -353,7 +353,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int iter;
-	char salt[0x8000];
+	char salt[0x2000];
 
 	(void) memset(salt, 0x00, sizeof salt);
 
