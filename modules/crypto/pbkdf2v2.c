@@ -258,18 +258,21 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 
 	if (parsed.scram)
 	{
+		static const char ServerKeyStr[] = "Server Key";
+		static const char ClientKeyStr[] = "Client Key";
+
 		unsigned char csk[EVP_MAX_MD_SIZE];
 		unsigned char cck[EVP_MAX_MD_SIZE];
 		unsigned char chk[EVP_MAX_MD_SIZE];
 		char csk64[EVP_MAX_MD_SIZE * 3];
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
-		if (HMAC(parsed.md, "Server Key", 10, parsed.cdg, parsed.dl, csk, NULL) == NULL)
+		if (HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ServerKeyStr, 10, csk, NULL) == NULL)
 		{
 			(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 			return NULL;
 		}
-		if (HMAC(parsed.md, "Client Key", 10, parsed.cdg, parsed.dl, cck, NULL) == NULL)
+		if (HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ClientKeyStr, 10, cck, NULL) == NULL)
 		{
 			(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
 			return NULL;
