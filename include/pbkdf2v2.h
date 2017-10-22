@@ -20,17 +20,17 @@
 
 struct pbkdf2v2_parameters
 {
-	const EVP_MD    *md;
-	unsigned char    cdg[EVP_MAX_MD_SIZE];
-	unsigned char    sdg[EVP_MAX_MD_SIZE];
-	unsigned char    ssk[EVP_MAX_MD_SIZE];
-	unsigned char    shk[EVP_MAX_MD_SIZE];
-	char             salt[0x2000];
-	size_t           dl;
-	size_t           sl;
-	unsigned int     a;
-	unsigned int     c;
-	bool             scram;
+	const EVP_MD    *md;                    // OpenSSL EVP(3) Digest Method
+	unsigned char    cdg[EVP_MAX_MD_SIZE];  // PBKDF2 Digest (Computed)
+	unsigned char    sdg[EVP_MAX_MD_SIZE];  // PBKDF2 Digest (Stored)
+	unsigned char    ssk[EVP_MAX_MD_SIZE];  // SCRAM-SHA ServerKey (Stored)
+	unsigned char    shk[EVP_MAX_MD_SIZE];  // SCRAM-SHA StoredKey (Stored)
+	char             salt[0x2000];          // PBKDF2 Salt
+	size_t           dl;                    // Digest Length
+	size_t           sl;                    // Salt Length
+	unsigned int     a;                     // PRF ID (one of the macros above)
+	unsigned int     c;                     // PBKDF2 Iteration Count
+	bool             scram;                 // Whether to use HMAC-SHA or SCRAM-SHA
 };
 
 #endif /* !PBKDF2V2_H */
