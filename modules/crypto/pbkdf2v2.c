@@ -267,12 +267,12 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		char csk64[EVP_MAX_MD_SIZE * 3];
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
-		if (HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ServerKeyStr, 10, csk, NULL) == NULL)
+		if (! HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ServerKeyStr, 10, csk, NULL))
 		{
 			(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 			return NULL;
 		}
-		if (HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ClientKeyStr, 10, cck, NULL) == NULL)
+		if (! HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ClientKeyStr, 10, cck, NULL))
 		{
 			(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
 			return NULL;
@@ -332,7 +332,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 		unsigned char csk[EVP_MAX_MD_SIZE];
 
-		if (HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ServerKeyStr, 10, csk, NULL) == NULL)
+		if (! HMAC(parsed.md, parsed.cdg, (int) parsed.dl, (const unsigned char *) ServerKeyStr, 10, csk, NULL))
 		{
 			(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 			return false;
@@ -391,7 +391,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 static int
 c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 {
-	if (ce->vardata == NULL)
+	if (!ce->vardata)
 	{
 		conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
