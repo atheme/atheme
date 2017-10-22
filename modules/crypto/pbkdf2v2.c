@@ -61,7 +61,7 @@ struct pbkdf2v2_parameters
 {
 	const EVP_MD    *md;
 	unsigned char    cdg[EVP_MAX_MD_SIZE];
-	char             salt[0x8000];
+	char             salt[0x2000];
 	size_t           dl;
 	size_t           sl;
 	unsigned int     a;
@@ -178,7 +178,7 @@ pbkdf2v2_upgrade(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int iter;
-	char salt[0x8000];
+	char salt[0x2000];
 
 	(void) memset(salt, 0x00, sizeof salt);
 
