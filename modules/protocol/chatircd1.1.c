@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014-2017 ChatLounge IRC Network Development Team
- * Copyright (c) 2003-2004 E. Will et al.
  * Copyright (c) 2005-2007 Atheme Development Group
+ * Copyright (c) 2003-2004 E. Will et al.
  *
  * Rights to this code are documented in doc/LICENSE.
  *
@@ -18,12 +18,12 @@ DECLARE_MODULE_V1
 (
 	"protocol/chatircd", true, _modinit, NULL,
 	PACKAGE_STRING,
-	"ChatLounge IRC Network Development Team <http://www.chatlounge.net>"
+	VENDOR_STRING
 );
 
 /* *INDENT-OFF* */
 
-ircd_t chatircd = {
+ircd_t ChatIRCd = {
 	.ircdname = "ChatIRCd",                     /* IRCd name */
 	.tldprefix = "$$",                          /* TLD Prefix, used by Global. */
 	.uses_uid = true,                           /* Whether or not we use IRCNet/TS6 UID */
@@ -76,15 +76,6 @@ struct cmode_ chatircd_mode_list[] = {
   { '\0', 0 }
 };
 
-static bool check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-static bool check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
-
-struct extmode chatircd_ignore_mode_list[] = {
-  { 'f', check_forward },
-  { 'j', check_jointhrottle },
-  { '\0', 0 }
-};
-
 struct cmode_ chatircd_status_mode_list[] = {
   { 'y', CSTATUS_OWNER },
   { 'a', CSTATUS_PROTECT },
@@ -103,75 +94,7 @@ struct cmode_ chatircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ chatircd_user_mode_list[] = {
-  { 'p', UF_IMMUNE   },
-  { 'a', UF_ADMIN    },
-  { 'i', UF_INVIS    },
-  { 'o', UF_IRCOP    },
-  { 'D', UF_DEAF     },
-  { 'S', UF_SERVICE  },
-  { '\0', 0 }
-};
-
 /* *INDENT-ON* */
-
-/* ircd allows forwards to existing channels; the target channel must be
- * +F or the setter must have ops in it */
-static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
-{
-	channel_t *target_c;
-	mychan_t *target_mc;
-	chanuser_t *target_cu;
-
-	if (!VALID_GLOBAL_CHANNEL_PFX(value) || strlen(value) > 50)
-		return false;
-	if (u == NULL && mu == NULL)
-		return true;
-	target_c = channel_find(value);
-	target_mc = mychan_from(target_c);
-	if (target_c == NULL && target_mc == NULL)
-		return false;
-	if (target_c != NULL && target_c->modes & CMODE_FTARGET)
-		return true;
-	if (target_mc != NULL && target_mc->mlock_on & CMODE_FTARGET)
-		return true;
-	if (u != NULL)
-	{
-		target_cu = chanuser_find(target_c, u);
-		if (target_cu != NULL && target_cu->modes & CSTATUS_OP)
-			return true;
-		if (chanacs_user_flags(target_mc, u) & CA_SET)
-			return true;
-	}
-	else if (mu != NULL)
-		if (chanacs_entity_has_flag(target_mc, entity(mu), CA_SET))
-			return true;
-	return false;
-}
-
-static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
-{
-	const char *p, *arg2;
-
-	p = value, arg2 = NULL;
-	while (*p != '\0')
-	{
-		if (*p == ':')
-		{
-			if (arg2 != NULL)
-				return false;
-			arg2 = p + 1;
-		}
-		else if (!isdigit((unsigned char)*p))
-			return false;
-		p++;
-	}
-	if (arg2 == NULL)
-		return false;
-	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
-		return false;
-	return true;
-}
 
 /* this may be slow, but it is not used much */
 /* returns true if it matches, false if not */
@@ -302,23 +225,6 @@ static mowgli_node_t *chatircd_next_matching_ban(channel_t *c, user_t *u, int ty
 	return NULL;
 }
 
-static bool chatircd_is_valid_host(const char *host)
-{
-	const char *p;
-
-	for (p = host; *p != '\0'; p++)
-		if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
-					(*p >= 'a' && *p <= 'z') || *p == '.'
-					|| *p == ':' || *p == '-' || *p == '/'))
-			return false;
-	return true;
-}
-
-static void chatircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
-{
-	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
-}
-
 static bool chatircd_is_extban(const char *mask)
 {
 	const char without_param[] = "oza";
@@ -346,22 +252,16 @@ static bool chatircd_is_extban(const char *mask)
 
 void _modinit(module_t * m)
 {
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
-
-	notice_channel_sts = &chatircd_notice_channel_sts;
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
 	next_matching_ban = &chatircd_next_matching_ban;
-	is_valid_host = &chatircd_is_valid_host;
 	is_extban = &chatircd_is_extban;
 
 	mode_list = chatircd_mode_list;
-	ignore_mode_list = chatircd_ignore_mode_list;
 	status_mode_list = chatircd_status_mode_list;
 	prefix_mode_list = chatircd_prefix_mode_list;
-	user_mode_list = chatircd_user_mode_list;
-	ignore_mode_list_size = ARRAY_SIZE(chatircd_ignore_mode_list);
 
-	ircd = &chatircd;
+	ircd = &ChatIRCd;
 
 	m->mflags = MODTYPE_CORE;
 
