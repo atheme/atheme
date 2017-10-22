@@ -431,7 +431,7 @@ atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_
 	}
 	else
 	{
-		(void) slog(LG_INFO, "%s: doing SCRAM-SHA login with regular PBDKF2 credentials", __func__);
+		(void) slog(LG_INFO, "%s: doing SCRAM-SHA login with regular PBKDF2 credentials", __func__);
 
 		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
 			// This function logs messages on failure
