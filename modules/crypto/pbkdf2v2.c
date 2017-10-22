@@ -210,11 +210,13 @@ parsed:
 
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
 	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
-
 	if (ret != 1)
+	{
 		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
+		return false;
+	}
 
-	return (ret == 1) ? true : false;
+	return true;
 }
 
 static const char *
