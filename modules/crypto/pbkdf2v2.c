@@ -60,6 +60,12 @@
 #define PBKDF2_SALTLEN_MAX          32U
 #define PBKDF2_SALTLEN_DEF          16U
 
+/*
+ * Provided for modules/saslserv/scram-sha
+ * This is a prototype to avoid clang -Wmissing-prototypes warnings
+ */
+bool atheme_pbkdf2v2_scram_ex(const char *restrict, struct pbkdf2v2_parameters *restrict);
+
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
 static unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
@@ -396,6 +402,45 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	return false;
 }
 
+/*
+ * Provided for modules/saslserv/scram-sha
+ */
+bool
+atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_parameters *const restrict parsed)
+{
+	char ssk64[0x8000];
+	char shk64[0x8000];
+
+	(void) memset(parsed, 0x00, sizeof *parsed);
+	(void) memset(ssk64, 0x00, sizeof ssk64);
+	(void) memset(shk64, 0x00, sizeof shk64);
+
+	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) != 5)
+		return false;
+
+	if (! atheme_pbkdf2v2_determine_prf(parsed))
+		return false;
+
+	if (parsed->scram)
+	{
+		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+			return false;
+
+		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+			return false;
+	}
+	else
+	{
+		(void) slog(LG_INFO, "%s: doing SCRAM-SHA login with regular PBDKF2 credentials", __func__);
+
+		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
+			// This function logs messages on failure
+			return false;
+	}
+
+	return true;
+}
+
 static int
 c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 {
@@ -424,6 +469,12 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 
 	return 0;
 }
+
+/*
+ * This variable will not be used, but ensures that if the function prototype above changes,
+ * and we didn't update the typedef in include/pbkdf2v2.h, the compiler will warn us about it.
+ */
+static const atheme_pbkdf2v2_scram_ex_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_ex;
 
 static crypt_impl_t crypto_pbkdf2v2_impl = {
 
