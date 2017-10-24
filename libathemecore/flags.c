@@ -74,6 +74,7 @@ gflags_t mu_flags[] = {
 };
 
 gflags_t mc_flags[] = {
+	{ 'a', MC_PUBACL },
 	{ 'h', MC_HOLD },
 	{ 'o', MC_NOOP },
 	{ 'l', MC_LIMITFLAGS },

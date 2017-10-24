@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2010 Atheme Development Group, et al.
+ * Copyright (c) 2017 ChatLounge IRC Network Development Team
+ *
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for OS INFO
@@ -58,6 +60,8 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Default channel fantasy trigger: %s"), chansvs.trigger);
 	command_success_nodata(si, _("Maximum number of entries allowed in a channel access list (if 0, unlimited): %d"), chansvs.maxchanacs);
 	command_success_nodata(si, _("Maximum number of founders allowed per channel: %d"), chansvs.maxfounders);
+	command_success_nodata(si, _("Show entity IDs to everyone: %s"),
+		config_options.show_entity_id ? "Yes" : "No");
 
 	if (IS_TAINTED)
 	{
