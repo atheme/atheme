@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2003-2004 E. Will et al.
  * Copyright (C) 2005-2006 Atheme Development Group
- * Copyright (c) 2016 ChatLounge IRC Network Development Team
- *
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Global data
@@ -114,8 +112,6 @@ struct ConfOption
   bool allow_taint;		/* allow tainted operation */
 
   unsigned int immune_level;	/* what flag is required for kick immunity */
-
-  bool send_sasl_quit;	/* Whether SaslServ sends a /quit before a shutdown or restart. */
 
   bool show_entity_id;		/* do not require user:auspex to see entity IDs */
 };

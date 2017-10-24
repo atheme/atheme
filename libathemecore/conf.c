@@ -2,9 +2,7 @@
  * atheme-services: A collection of minimalist IRC services
  * conf.c: Services-specific configuration processing.
  *
- * Copyright (c) 2005-2008 Atheme Project (https://atheme.github.io)
- * Copyright (c) 2016 ChatLounge IRC Network Development Team
- *     (https://www.chatlounge.net)
+ * Copyright (c) 2005-2008 Atheme Project (http://www.atheme.org)
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -257,7 +255,6 @@ void init_newconf(void)
 	add_dupstr_conf_item("LANGUAGE", &conf_gi_table, 0, &config_options.language, "en");
 	add_conf_item("EXEMPTS", &conf_gi_table, c_gi_exempts);
 	add_conf_item("IMMUNE_LEVEL", &conf_gi_table, c_gi_immune_level);
-	add_bool_conf_item("SEND_SASL_QUIT", &conf_gi_table, 0, &config_options.send_sasl_quit, false);
 	add_bool_conf_item("SHOW_ENTITY_ID", &conf_gi_table, 0, &config_options.show_entity_id, false);
 
 	/* language:: stuff */
