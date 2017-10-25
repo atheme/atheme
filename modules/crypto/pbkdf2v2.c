@@ -218,10 +218,10 @@ parsed:
 
 static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
-                             unsigned char csk[EVP_MAX_MD_SIZE],
-                             unsigned char chk[EVP_MAX_MD_SIZE])
+                             unsigned char csk[EVP_MAX_MD_SIZE+1],
+                             unsigned char chk[EVP_MAX_MD_SIZE+1])
 {
-	unsigned char cck[EVP_MAX_MD_SIZE];
+	unsigned char cck[EVP_MAX_MD_SIZE+1];
 
 	if (csk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
 	{
@@ -281,8 +281,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 
 	if (parsed.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE];
-		unsigned char chk[EVP_MAX_MD_SIZE];
+		unsigned char csk[EVP_MAX_MD_SIZE+1];
+		unsigned char chk[EVP_MAX_MD_SIZE+1];
 		char csk64[EVP_MAX_MD_SIZE * 3];
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
@@ -336,7 +336,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (parsed.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE];
+		unsigned char csk[EVP_MAX_MD_SIZE+1];
 
 		if (! atheme_pbkdf2v2_scram_derive(&parsed, csk, NULL))
 			// This function logs messages on failure

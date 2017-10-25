@@ -21,10 +21,10 @@
 struct pbkdf2v2_parameters
 {
 	const EVP_MD    *md;                    // OpenSSL EVP(3) Digest Method
-	unsigned char    cdg[EVP_MAX_MD_SIZE];  // PBKDF2 Digest (Computed)
-	unsigned char    sdg[EVP_MAX_MD_SIZE];  // PBKDF2 Digest (Stored)
-	unsigned char    ssk[EVP_MAX_MD_SIZE];  // SCRAM-SHA ServerKey (Stored)
-	unsigned char    shk[EVP_MAX_MD_SIZE];  // SCRAM-SHA StoredKey (Stored)
+	unsigned char    cdg[EVP_MAX_MD_SIZE+1];  // PBKDF2 Digest (Computed)
+	unsigned char    sdg[EVP_MAX_MD_SIZE+1];  // PBKDF2 Digest (Stored)
+	unsigned char    ssk[EVP_MAX_MD_SIZE+1];  // SCRAM-SHA ServerKey (Stored)
+	unsigned char    shk[EVP_MAX_MD_SIZE+1];  // SCRAM-SHA StoredKey (Stored)
 	char             salt[0x2000];          // PBKDF2 Salt
 	size_t           dl;                    // Digest Length
 	size_t           sl;                    // Salt Length
