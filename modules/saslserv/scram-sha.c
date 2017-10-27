@@ -258,8 +258,14 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		// Memory allocation failure
 		goto fail;
 
+	// Base64-encode our salt
+	char Salt64[PBKDF2_SALTLEN_MAX * 3];
+	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
+		// Base64 encoding error
+		goto fail;
+
 	// Construct server-first-message
-	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt, s->db.c);
+	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, Salt64, s->db.c);
 
 	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 12) || ol >= RESPONSE_LENGTH)
 		// String writing error
