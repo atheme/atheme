@@ -391,7 +391,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// Create server-final-message
 	(*out)[0] = 'v';
 	(*out)[1] = '=';
-	(void) memcpy((*out) + 2, ServerSignature64, *out_len);
+	(void) memcpy((*out) + 2, ServerSignature64, *out_len - 2);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
