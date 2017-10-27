@@ -83,7 +83,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			unsigned char name = (unsigned char) *str++;
 
 			if (name < 'A' || (name > 'Z' && name < 'a') || name > 'z')
-				// Section 5: "All attribute names are single US-ASCII letters"
+				// RFC 5802 Section 5: "All attribute names are single US-ASCII letters"
 				return false;
 
 			if (str < end && *str++ == '=')
@@ -169,7 +169,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 
 	switch (message[0])
 	{
-		// Section 7 (gs2-cbind-flag)
+		// RFC 5802 Section 7 (gs2-cbind-flag)
 		case 'y':
 		case 'n':
 			message++;
