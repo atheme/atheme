@@ -333,6 +333,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 		// GS2 header from client's second message doesn't match their first message
 		goto fail;
 
+	// Decode ClientProof from client-final-message
 	if (base64_decode(input['p'], (char *) ClientProof, sizeof ClientProof) != s->db.dl)
 		// Base64 decoding error
 		goto fail;
