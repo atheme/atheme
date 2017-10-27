@@ -382,7 +382,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 
 	if (c_gs2_len == (size_t) -1)
 	{
-		(void) slog(LG_ERROR, "%s: base64_decode() for GS2 header failed", __func__);
+		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", __func__);
 		goto fail;
 	}
 	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
@@ -394,7 +394,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// Decode ClientProof from client-final-message
 	if (base64_decode(input['p'], (char *) ClientProof, sizeof ClientProof) != s->db.dl)
 	{
-		(void) slog(LG_ERROR, "%s: base64_decode() for ClientProof failed", __func__);
+		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
 		goto fail;
 	}
 
