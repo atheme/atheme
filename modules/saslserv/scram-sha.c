@@ -261,7 +261,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	// Construct server-first-message
 	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt, s->db.c);
 
-	if (ol < NONCE_LENGTH || ol >= RESPONSE_LENGTH)
+	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 12) || ol >= RESPONSE_LENGTH)
 		// String writing error
 		goto fail;
 
