@@ -73,6 +73,8 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 {
 	const char *const end = str + strlen(str);
 
+	(void) slog(LG_DEBUG, "%s: parsing '%s'", __func__, str);
+
 	for (;;)
 	{
 		if (str < end && *str == ',')
@@ -83,8 +85,11 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			unsigned char name = (unsigned char) *str++;
 
 			if (name < 'A' || (name > 'Z' && name < 'a') || name > 'z')
+			{
 				// RFC 5802 Section 5: "All attribute names are single US-ASCII letters"
+				(void) slog(LG_DEBUG, "%s: invalid attribute name", __func__);
 				return false;
+			}
 
 			if (str < end && *str++ == '=')
 			{
@@ -104,12 +109,16 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 				}
 			}
 			else
-				// Attributes must have values
+			{
+				(void) slog(LG_DEBUG, "%s: attribute without value", __func__);
 				return false;
+			}
 		}
 		else
-			// Reached end of attribute list without parsing valid attribute last
+		{
+			(void) slog(LG_DEBUG, "%s: hit end of list with no previous valid attribute", __func__);
 			return false;
+		}
 	}
 }
 
@@ -164,31 +173,32 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	(void) memset(input, 0x00, sizeof input);
 
 	if (strnlen(data, len) != len)
-		// NULL byte in data received from client
+	{
+		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
 		goto fail;
+	}
 
-	switch (message[0])
+	switch (*message++)
 	{
 		// RFC 5802 Section 7 (gs2-cbind-flag)
 		case 'y':
 		case 'n':
-			message++;
 			break;
 
 		case 'p':
-			// We don't support channel binding
+			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", __func__);
 			goto fail;
 
 		default:
-			// Invalid first byte
+			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", __func__);
 			goto fail;
 	}
 
-	if (message[0] == ',')
-		message++;
-	else
-		// Malformed GS2 header
+	if (*message++ != ',')
+	{
+		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", __func__);
 		goto fail;
+	}
 
 	// Does GS2 header include an authzid ?
 	if (message[0] == 'a' && message[1] == '=')
@@ -202,45 +212,64 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		// Locate end of authzid
 		const char *const pos = strchr(message + 1, ',');
 		if (! pos)
-			// Malformed GS2 header
+		{
+			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", __func__);
 			goto fail;
+		}
 
 		// Copy authzid
-		p->authzid = strndup(message, (size_t) (pos - message));
+		if (! (p->authzid = strndup(message, (size_t) (pos - message))))
+		{
+			(void) slog(LG_ERROR, "%s: strndup(3) for authzid failed", __func__);
+			goto fail;
+		}
+
+		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, p->authzid);
+
 		message = pos + 1;
 	}
-	else if (message[0] == ',')
-		message++;
-	else
-		// Malformed GS2 header
+	else if (*message++ != ',')
+	{
+		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", __func__);
 		goto fail;
+	}
 
 	if (! sasl_scramsha_attrlist_parse(message, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
 	if (input['m'] || ! (input['n'] && *input['n'] && input['r'] && *input['r']))
-		// Unacceptable SCRAM attributes (or lack thereof)
+	{
+		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
 		goto fail;
+	}
 
 	/*
 	 * TODO: Normalise the username
 	 */
 	if (! (s->mu = myuser_find(input['n'])))
-		// No such user
+	{
+		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, input['n']);
 		goto fail;
+	}
+	else
+		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, input['n']);
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
-		// User's password is not encrypted
+	{
+		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", __func__);
 		goto fail;
+	}
 
 	if (! sasl_scramsha_ex(s->mu->pass, &s->db))
 		// User's password is not in a PBKDF2 format
 		goto fail;
 
 	if (s->db.a != prf)
-		// PBKDF2 PRF algorithm in user's password hash does not match the PRF in the SCRAM mechanism name
+	{
+		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", __func__, s->db.a, prf);
 		goto fail;
+	}
 
 	p->username = strdup(input['n']);
 	s->c_gs2_len = (size_t) (message - header);
@@ -251,25 +280,33 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->sn = random_string(NONCE_LENGTH);
 
 	if (! p->username || ! s->c_gs2_buf || ! s->c_msg_buf || ! s->cn || ! s->sn)
-		// Memory allocation failure
+	{
+		(void) slog(LG_ERROR, "%s: strndup: memory allocation failure", __func__);
 		goto fail;
+	}
 
 	if (! (*out = mowgli_alloc(RESPONSE_LENGTH)))
-		// Memory allocation failure
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_alloc: memory allocation failure", __func__);
 		goto fail;
+	}
 
 	// Base64-encode our salt
 	char Salt64[PBKDF2_SALTLEN_MAX * 3];
 	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
-		// Base64 encoding error
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed", __func__);
 		goto fail;
+	}
 
 	// Construct server-first-message
 	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, Salt64, s->db.c);
 
 	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
-		// String writing error
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", __func__);
 		goto fail;
+	}
 
 	*out_len = (size_t) ol;
 
@@ -310,52 +347,73 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	(void) memset(input, 0x00, sizeof input);
 
 	if (strnlen(data, len) != len)
-		// NULL byte in data received from client
+	{
+		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
 		goto fail;
+	}
 
 	if (! sasl_scramsha_attrlist_parse(data, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
 	if (input['m'] || ! (input['c'] && *input['c'] && input['p'] && *input['p'] && input['r'] && *input['r']))
-		// Unacceptable SCRAM attributes (or lack thereof)
+	{
+		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
 		goto fail;
+	}
 
 	// Concatenate the s-nonce to the c-nonce
 	const int xl = snprintf(x_nonce, RESPONSE_LENGTH, "%s%s", s->cn, s->sn);
 
 	if (xl < NONCE_LENGTH || xl >= RESPONSE_LENGTH)
-		// String writing error
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
 		goto fail;
+	}
 
 	if (strcmp(x_nonce, input['r']) != 0)
-		// Nonce from client doesn't match nonce we sent
+	{
+		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", __func__);
 		goto fail;
+	}
 
 	// Decode GS2 header from client-final-message
 	const size_t c_gs2_len = base64_decode(input['c'], c_gs2_buf, sizeof c_gs2_buf);
 
-	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
-		// GS2 header from client's second message doesn't match their first message
+	if (c_gs2_len == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_decode() for GS2 header failed", __func__);
 		goto fail;
+	}
+	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
+	{
+		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", __func__);
+		goto fail;
+	}
 
 	// Decode ClientProof from client-final-message
 	if (base64_decode(input['p'], (char *) ClientProof, sizeof ClientProof) != s->db.dl)
-		// Base64 decoding error
+	{
+		(void) slog(LG_ERROR, "%s: base64_decode() for ClientProof failed", __func__);
 		goto fail;
+	}
 
 	// Construct AuthMessage
 	const int alen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                          s->c_msg_buf, s->s_msg_buf, input['c'], input['r']);
 
 	if (alen < NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
-		// String writing error
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", __func__);
 		goto fail;
+	}
 
 	// Calculate ClientSignature
 	if (! HMAC(s->db.md, s->db.shk, (int) s->db.dl, AuthMessageR, (size_t) alen, ClientSignature, NULL))
-		// HMAC calculation error
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() for ClientSignature failed", __func__);
 		goto fail;
+	}
 
 	// XOR ClientProof with calculated ClientSignature to derive ClientKey
 	for (size_t x = 0; x < s->db.dl; x++)
@@ -363,13 +421,17 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 
 	// Compute StoredKey from derived ClientKey
 	if (EVP_Digest(ClientKey, s->db.dl, StoredKey, NULL, s->db.md, NULL) != 1)
-		// Digest calculation error
+	{
+		(void) slog(LG_ERROR, "%s: EVP_Digest() for StoredKey failed", __func__);
 		goto fail;
+	}
 
 	// Check computed StoredKey matches the database StoredKey
 	if (memcmp(StoredKey, s->db.shk, s->db.dl) != 0)
-		// Incorrect password?
+	{
+		(void) slog(LG_DEBUG, "%s: memcmp(3) mismatch on StoredKey; incorrect password?", __func__);
 		goto fail;
+	}
 
 	/* ******************************************************** *
 	 * AUTHENTICATION OF THE CLIENT HAS SUCCEEDED AT THIS POINT *
@@ -377,22 +439,28 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 
 	// Calculate ServerSignature
 	if (! HMAC(s->db.md, s->db.ssk, (int) s->db.dl, AuthMessageR, (size_t) alen, ServerSignature, NULL))
-		// HMAC calculation error
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() for ServerSignature failed", __func__);
 		goto fail;
+	}
 
 	// Encode ServerSignature
 	*out_len = base64_encode(ServerSignatureT, s->db.dl, ServerSignature64, sizeof ServerSignature64);
 
 	if (*out_len == (size_t) -1)
-		// Base64 encoding error
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", __func__);
 		goto fail;
+	}
 
 	// We need to prepend "v=" to the Base64 data
 	(*out_len) += 2;
 
 	if (! (*out = mowgli_alloc(*out_len)))
-		// Memory allocation failure
+	{
+		(void) slog(LG_ERROR, "%s: mowgli_alloc(): memory allocation failure", __func__);
 		goto fail;
+	}
 
 	// Create server-final-message
 	(*out)[0] = 'v';
