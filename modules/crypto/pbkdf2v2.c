@@ -376,13 +376,19 @@ atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_
 {
 	char ssk64[0x8000];
 	char shk64[0x8000];
+	char sdg64[0x8000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
-	(void) memset(ssk64, 0x00, sizeof ssk64);
-	(void) memset(shk64, 0x00, sizeof shk64);
 
-	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) != 5)
-		return false;
+	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+		goto parsed;
+
+	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+		goto parsed;
+
+	return false;
+
+parsed:
 
 	if (! atheme_pbkdf2v2_determine_prf(parsed))
 		return false;
@@ -410,6 +416,10 @@ atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_
 			default:
 				return false;
 		}
+
+		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
+		if (base64_decode(sdg64, (char *) parsed->cdg, sizeof parsed->cdg) != parsed->dl)
+			return false;
 
 		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
 			// This function logs messages on failure
