@@ -29,36 +29,6 @@
 #include "pbkdf2v2.h"
 
 /*
- * Do not change anything below this line unless you know what you are doing,
- * AND how it will (possibly) break backward-, forward-, or cross-compatibility
- *
- * In particular, the salt length SHOULD NEVER BE CHANGED. 128 bits is more than
- * sufficient.
- */
-
-#define PBKDF2_FN_PREFIX            "$z$%u$%u$"
-#define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-#define PBKDF2_FN_BASE64            PBKDF2_FN_BASE62 "+/="
-
-#define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
-#define PBKDF2_FN_LOADHASH          PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
-#define PBKDF2_FS_LOADHASH          PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
-
-#define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
-#define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
-#define PBKDF2_FS_SAVEHASH          PBKDF2_FN_SAVEHASH "$%s"
-
-#define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
-
-#define PBKDF2_ITERCNT_MIN          10000U
-#define PBKDF2_ITERCNT_MAX          5000000U
-#define PBKDF2_ITERCNT_DEF          64000U
-
-#define PBKDF2_SALTLEN_MIN          8U
-#define PBKDF2_SALTLEN_MAX          32U
-#define PBKDF2_SALTLEN_DEF          16U
-
-/*
  * Provided for modules/saslserv/scram-sha
  * This is a prototype to avoid clang -Wmissing-prototypes warnings
  */
