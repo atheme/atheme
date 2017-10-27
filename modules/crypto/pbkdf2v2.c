@@ -422,11 +422,25 @@ atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_
 	}
 	else
 	{
-		(void) slog(LG_INFO, "%s: doing SCRAM-SHA login with regular PBKDF2 credentials", __func__);
+		switch (parsed->a)
+		{
+			case PBKDF2_PRF_HMAC_SHA1:
+				parsed->a = PBKDF2_PRF_SCRAM_SHA1;
+				break;
+
+			case PBKDF2_PRF_HMAC_SHA2_256:
+				parsed->a = PBKDF2_PRF_SCRAM_SHA2_256;
+				break;
+
+			default:
+				return false;
+		}
 
 		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
 			// This function logs messages on failure
 			return false;
+
+		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials", __func__);
 	}
 
 	return true;
