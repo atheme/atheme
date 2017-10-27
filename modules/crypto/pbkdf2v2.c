@@ -133,6 +133,10 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
+	/*
+	 * TODO: If computing SCRAM-SHA format, normalise the password
+	 */
+
 	parsed->sl = strlen(parsed->salt);
 
 	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
