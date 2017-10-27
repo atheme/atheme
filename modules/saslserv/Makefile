@@ -13,7 +13,8 @@ SRCS = \
 	ecdsa-nist256p-challenge.c \
 	external.c	\
 	main.c		\
-	plain.c
+	plain.c		\
+	scram-sha.c
 
 include ../../extra.mk
 include ../../buildsys.mk
