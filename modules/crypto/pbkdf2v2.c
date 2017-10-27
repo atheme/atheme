@@ -36,8 +36,9 @@ bool atheme_pbkdf2v2_scram_ex(const char *restrict, struct pbkdf2v2_parameters *
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
-static unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
+
+unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 
 static bool
 atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
