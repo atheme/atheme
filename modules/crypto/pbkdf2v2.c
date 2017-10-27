@@ -381,25 +381,37 @@ atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
 	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+	{
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 		goto parsed;
-
+	}
 	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+	{
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 		goto parsed;
+	}
 
+	(void) slog(LG_DEBUG, "%s: could not extract necessary information from database", __func__);
 	return false;
 
 parsed:
 
 	if (! atheme_pbkdf2v2_determine_prf(parsed))
+		// This function logs messages on failure
 		return false;
 
 	if (parsed->scram)
 	{
 		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
 			return false;
-
+		}
 		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, shk64);
 			return false;
+		}
 	}
 	else
 	{
@@ -414,12 +426,16 @@ parsed:
 				break;
 
 			default:
+				(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, parsed->a);
 				return false;
 		}
 
 		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
 		if (base64_decode(sdg64, (char *) parsed->cdg, sizeof parsed->cdg) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
 			return false;
+		}
 
 		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
 			// This function logs messages on failure
