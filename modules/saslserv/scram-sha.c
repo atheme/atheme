@@ -267,6 +267,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
+	// These cannot fail
 	p->username = sstrdup(input['n']);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
@@ -274,14 +275,6 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->c_msg_buf = sstrndup(message, len);
 	s->cn = sstrdup(input['r']);
 	s->sn = random_string(NONCE_LENGTH);
-
-	if (! s->sn)
-	{
-		(void) slog(LG_ERROR, "%s: random_string: memory allocation failure", __func__);
-		goto fail;
-	}
-
-	// Cannot fail
 	*out = smalloc(RESPONSE_LENGTH);
 
 	// Base64-encode our salt
