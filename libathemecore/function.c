@@ -30,15 +30,12 @@ char ch[] = "abcdefghijklmnopqrstuvwxyz";
  */
 char *random_string(int sz)
 {
-	int i;
 	char *buf = smalloc(sz + 1); /* padding */
 
-	for (i = 0; i < sz; i++)
-	{
-		buf[i] = ch[arc4random() % 26];
-	}
+	(void) arc4random_buf(buf, sz);
 
-	buf[sz] = 0;
+	for (size_t i = 0; i < sz; i++)
+		buf[i] = ch[buf[i] % 26];
 
 	return buf;
 }
