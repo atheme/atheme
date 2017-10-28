@@ -32,7 +32,7 @@
 /* does malloc()'s job and dies if malloc() fails */
 void *smalloc(size_t size)
 {
-        void *buf = calloc(size, 1);
+        void *buf = calloc(1, size);
 
         if (!buf)
                 RAISE_EXCEPTION;
