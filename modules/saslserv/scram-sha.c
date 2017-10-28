@@ -92,7 +92,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_a
 
 				if (pos)
 				{
-					(*attrs)[name] = strndup(str, (size_t) (pos - str));
+					(*attrs)[name] = sstrndup(str, (size_t) (pos - str));
 					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
 					                      (char) name, (*attrs)[name]);
 
@@ -100,7 +100,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_a
 				}
 				else
 				{
-					(*attrs)[name] = strndup(str, (size_t) (end - str));
+					(*attrs)[name] = sstrndup(str, (size_t) (end - str));
 					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
 					                      (char) name, (*attrs)[name]);
 
@@ -218,11 +218,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		}
 
 		// Copy authzid
-		if (! (p->authzid = strndup(message, (size_t) (pos - message))))
-		{
-			(void) slog(LG_ERROR, "%s: strndup(3) for authzid failed", __func__);
-			goto fail;
-		}
+		p->authzid = sstrndup(message, (size_t) (pos - message));
 
 		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, p->authzid);
 
@@ -271,25 +267,22 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	p->username = strdup(input['n']);
+	p->username = sstrdup(input['n']);
 	s->c_gs2_len = (size_t) (message - header);
-	s->c_gs2_buf = strndup(header, s->c_gs2_len);
+	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
 	s->c_msg_len = len;
-	s->c_msg_buf = strndup(message, len);
-	s->cn = strdup(input['r']);
+	s->c_msg_buf = sstrndup(message, len);
+	s->cn = sstrdup(input['r']);
 	s->sn = random_string(NONCE_LENGTH);
 
-	if (! p->username || ! s->c_gs2_buf || ! s->c_msg_buf || ! s->cn || ! s->sn)
+	if (! s->sn)
 	{
-		(void) slog(LG_ERROR, "%s: strndup: memory allocation failure", __func__);
+		(void) slog(LG_ERROR, "%s: random_string: memory allocation failure", __func__);
 		goto fail;
 	}
 
-	if (! (*out = mowgli_alloc(RESPONSE_LENGTH)))
-	{
-		(void) slog(LG_ERROR, "%s: mowgli_alloc: memory allocation failure", __func__);
-		goto fail;
-	}
+	// Cannot fail
+	*out = smalloc(RESPONSE_LENGTH);
 
 	// Base64-encode our salt
 	char Salt64[PBKDF2_SALTLEN_MAX * 3];
@@ -311,7 +304,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	*out_len = (size_t) ol;
 
 	s->s_msg_len = *out_len;
-	s->s_msg_buf = strdup(*out);
+	s->s_msg_buf = sstrdup(*out);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_CLIENTPROOF;
@@ -456,11 +449,8 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// We need to prepend "v=" to the Base64 data
 	(*out_len) += 2;
 
-	if (! (*out = mowgli_alloc(*out_len)))
-	{
-		(void) slog(LG_ERROR, "%s: mowgli_alloc(): memory allocation failure", __func__);
-		goto fail;
-	}
+	// Cannot fail
+	*out = smalloc(*out_len);
 
 	// Create server-final-message
 	(*out)[0] = 'v';
