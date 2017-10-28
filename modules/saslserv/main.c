@@ -457,7 +457,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if(len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,
 					&out, &out_len);
-		else if ((tlen = base64_decode(buf, temp, BUFSIZE)) &&
+		else if ((tlen = base64_decode(buf, temp, sizeof temp)) &&
 				tlen != (size_t)-1)
 			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
 		else
@@ -470,6 +470,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	if(rc == ASASL_DONE)
 	{
 		myuser_t *mu = login_user(p);
+
 		if(mu)
 		{
 			if ((md = metadata_find(mu, "private:usercloak")))
@@ -479,6 +480,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 			if (!(mu->flags & MU_WAITAUTH))
 				svslogin_sts(p->uid, "*", "*", cloak, mu);
+
 			sasl_sts(p->uid, 'D', "S");
 			/* Will destroy session on introduction of user to net. */
 		}
@@ -487,25 +489,32 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);
 		}
+
 		return;
 	}
-	else if(rc == ASASL_MORE)
+
+	if(rc == ASASL_MORE)
 	{
 		if(out_len)
 		{
-			if(base64_encode(out, out_len, temp, BUFSIZE))
+			const size_t rs = base64_encode(out, out_len, temp, sizeof temp);
+
+			if (rs == (size_t) -1)
 			{
-				sasl_write(p->uid, temp, strlen(temp));
-				free(out);
-				return;
+				(void) slog(LG_ERROR, "%s: base64_encode() failed", __func__);
+				(void) sasl_sts(p->uid, 'D', "F");
+				(void) destroy_session(p);
 			}
+			else
+				(void) sasl_write(p->uid, temp, rs);
 		}
 		else
 		{
-			sasl_sts(p->uid, 'C', "+");
-			free(out);
-			return;
+			(void) sasl_sts(p->uid, 'C', "+");
 		}
+
+		(void) free(out);
+		return;
 	}
 
 	/* If we reach this, they failed SASL auth, so if they were trying
