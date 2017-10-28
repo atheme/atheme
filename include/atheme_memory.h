@@ -13,7 +13,7 @@ E void *smalloc(size_t size);
 E void *scalloc(size_t elsize, size_t els);
 E void *srealloc(void *oldptr, size_t newsize);
 E char *sstrdup(const char *s);
-E char *sstrndup(const char *s, int len);
+E char *sstrndup(const char *s, size_t len);
 
 #endif
 

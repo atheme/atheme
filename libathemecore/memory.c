@@ -74,7 +74,7 @@ char *sstrdup(const char *s)
 }
 
 /* does strndup()'s job, only with the above memory functions */
-char *sstrndup(const char *s, int len)
+char *sstrndup(const char *s, size_t len)
 {
 	char *t;
 
