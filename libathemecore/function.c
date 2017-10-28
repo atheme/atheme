@@ -28,7 +28,7 @@ char ch[] = "abcdefghijklmnopqrstuvwxyz";
 /* This function uses smalloc() to allocate memory.
  * You MUST free the result when you are done with it!
  */
-char *random_string(int sz)
+char *random_string(size_t sz)
 {
 	char *buf = smalloc(sz + 1); /* padding */
 
