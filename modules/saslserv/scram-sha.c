@@ -69,17 +69,12 @@ typedef char *scram_attr_list[128];
 static atheme_pbkdf2v2_scram_ex_fn sasl_scramsha_ex = NULL;
 
 static int
-sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attrs)
+sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
 {
-	const char *const end = str + strlen(str);
-
-	(void) slog(LG_DEBUG, "%s: parsing '%s'", __func__, str);
+	const char *const end = str + len;
 
 	for (;;)
 	{
-		if (str < end && *str == ',')
-			str++;
-
 		if (str < end)
 		{
 			unsigned char name = (unsigned char) *str++;
@@ -98,11 +93,16 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 				if (pos)
 				{
 					(*attrs)[name] = strndup(str, (size_t) (pos - str));
-					str = pos;
+					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+					                      (char) name, (*attrs)[name]);
+
+					str = pos + 1;
 				}
 				else
 				{
 					(*attrs)[name] = strndup(str, (size_t) (end - str));
+					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+					                      (char) name, (*attrs)[name]);
 
 					// Reached end of attribute list
 					return true;
@@ -110,7 +110,7 @@ sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const re
 			}
 			else
 			{
-				(void) slog(LG_DEBUG, "%s: attribute without value", __func__);
+				(void) slog(LG_DEBUG, "%s: attribute '%c' without value", __func__, (char) name);
 				return false;
 			}
 		}
@@ -234,7 +234,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(message, &input))
+	if (! sasl_scramsha_attrlist_parse(message, len - ((size_t) (message - data)), &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
@@ -352,7 +352,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(data, &input))
+	if (! sasl_scramsha_attrlist_parse(data, len, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
