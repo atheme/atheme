@@ -137,7 +137,7 @@ static int
 sasl_scramsha_start(sasl_session_t *const restrict p, char __attribute__((unused)) **const restrict out,
                     size_t __attribute__((unused)) *const restrict out_len)
 {
-	p->mechdata = calloc(1, sizeof(struct scramsha_session));
+	p->mechdata = smalloc(sizeof(struct scramsha_session));
 
 	return ASASL_MORE;
 }
