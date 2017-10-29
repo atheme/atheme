@@ -141,7 +141,9 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 				src++;
 				src_len--;
 
-				if (src_len == 0 && done == 0)
+				if (src_len == 0 && done >= 2)
+					break;
+				else if (src_len == 0 && done == 0)
 					return written;
 				else if (src_len == 0)
 					return failure;
