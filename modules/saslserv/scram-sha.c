@@ -482,8 +482,8 @@ sasl_scramsha_step_success(sasl_session_t *const restrict p)
 
 	(void) slog(LG_INFO, "%s: login succeeded, attempting to convert user's hash to SCRAM format", __func__);
 
-	char csk64[EVP_MAX_MD_SIZE];
-	char chk64[EVP_MAX_MD_SIZE];
+	char csk64[EVP_MAX_MD_SIZE * 3];
+	char chk64[EVP_MAX_MD_SIZE * 3];
 	char res[PASSLEN];
 
 	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
