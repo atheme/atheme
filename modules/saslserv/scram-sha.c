@@ -350,7 +350,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// Concatenate the s-nonce to the c-nonce
 	const int xl = snprintf(x_nonce, RESPONSE_LENGTH, "%s%s", s->cn, s->sn);
 
-	if (xl < NONCE_LENGTH || xl >= RESPONSE_LENGTH)
+	if (xl <= NONCE_LENGTH || xl >= RESPONSE_LENGTH)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
 		goto fail;
