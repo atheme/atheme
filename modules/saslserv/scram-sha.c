@@ -325,7 +325,6 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	char c_gs2_buf[RESPONSE_LENGTH];
 
 	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
-	const char *const ServerSignatureT = (const char *) ServerSignature;
 
 	struct scramsha_session *const s = p->mechdata;
 
@@ -378,7 +377,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	}
 
 	// Decode ClientProof from client-final-message
-	if (base64_decode(input['p'], (char *) ClientProof, sizeof ClientProof) != s->db.dl)
+	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
 		goto fail;
@@ -431,7 +430,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	}
 
 	// Encode ServerSignature
-	*out_len = base64_encode(ServerSignatureT, s->db.dl, ServerSignature64, sizeof ServerSignature64);
+	*out_len = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
 
 	if (*out_len == (size_t) -1)
 	{
@@ -487,11 +486,11 @@ sasl_scramsha_step_success(sasl_session_t *const restrict p)
 	char chk64[EVP_MAX_MD_SIZE];
 	char res[PASSLEN];
 
-	if (base64_encode((const char *) s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
+	if (base64_encode(s->db.ssk, s->db.dl, csk64, sizeof csk64) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode for ssk failed", __func__);
 	}
-	else if (base64_encode((const char *) s->db.shk, s->db.dl, chk64, sizeof chk64) == (size_t) -1)
+	else if (base64_encode(s->db.shk, s->db.dl, chk64, sizeof chk64) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", __func__);
 	}

@@ -160,12 +160,12 @@ parsed:
 
 	if (matched_ssk_shk)
 	{
-		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		if (base64_decode(ssk64, parsed->ssk, sizeof parsed->ssk) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
 			return false;
 		}
-		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+		if (base64_decode(shk64, parsed->shk, sizeof parsed->shk) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for shk failed", __func__, shk64);
 			return false;
@@ -173,7 +173,7 @@ parsed:
 	}
 	else if (verifying)
 	{
-		if (base64_decode(sdg64, (char *) parsed->sdg, sizeof parsed->sdg) != parsed->dl)
+		if (base64_decode(sdg64, parsed->sdg, sizeof parsed->sdg) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
 			return false;
@@ -193,10 +193,10 @@ parsed:
 
 static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
-                             unsigned char csk[EVP_MAX_MD_SIZE+1],
-                             unsigned char chk[EVP_MAX_MD_SIZE+1])
+                             unsigned char csk[EVP_MAX_MD_SIZE],
+                             unsigned char chk[EVP_MAX_MD_SIZE])
 {
-	unsigned char cck[EVP_MAX_MD_SIZE+1];
+	unsigned char cck[EVP_MAX_MD_SIZE];
 
 	if (csk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
 	{
@@ -256,8 +256,8 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 
 	if (parsed.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE+1];
-		unsigned char chk[EVP_MAX_MD_SIZE+1];
+		unsigned char csk[EVP_MAX_MD_SIZE];
+		unsigned char chk[EVP_MAX_MD_SIZE];
 		char csk64[EVP_MAX_MD_SIZE * 3];
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
@@ -265,12 +265,12 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			// This function logs messages on failure
 			return false;
 
-		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
+		if (base64_encode(csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for csk", __func__);
 			return NULL;
 		}
-		if (base64_encode((const char *) chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
+		if (base64_encode(chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
@@ -285,7 +285,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 	{
 		char cdg64[EVP_MAX_MD_SIZE * 3];
 
-		if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
+		if (base64_encode(parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
 		{
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
@@ -311,7 +311,7 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 
 	if (parsed.scram)
 	{
-		unsigned char csk[EVP_MAX_MD_SIZE+1];
+		unsigned char csk[EVP_MAX_MD_SIZE];
 
 		if (! atheme_pbkdf2v2_scram_derive(&parsed, csk, NULL))
 			// This function logs messages on failure
@@ -402,12 +402,12 @@ parsed:
 
 	if (parsed->scram)
 	{
-		if (base64_decode(ssk64, (char *) parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		if (base64_decode(ssk64, parsed->ssk, sizeof parsed->ssk) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
 			return false;
 		}
-		if (base64_decode(shk64, (char *) parsed->shk, sizeof parsed->shk) != parsed->dl)
+		if (base64_decode(shk64, parsed->shk, sizeof parsed->shk) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, shk64);
 			return false;
@@ -431,7 +431,7 @@ parsed:
 		}
 
 		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
-		if (base64_decode(sdg64, (char *) parsed->cdg, sizeof parsed->cdg) != parsed->dl)
+		if (base64_decode(sdg64, parsed->cdg, sizeof parsed->cdg) != parsed->dl)
 		{
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
 			return false;

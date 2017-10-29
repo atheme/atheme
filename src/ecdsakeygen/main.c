@@ -49,7 +49,12 @@ int main(int argc, const char **argv)
 	workbuf_p = workbuf;
 	i2o_ECPublicKey(prv, &workbuf_p);
 	workbuf_p = workbuf;
-	base64_encode((const char *)workbuf_p, len, encbuf, BUFSIZE);
+
+	if (base64_encode(workbuf_p, len, encbuf, sizeof encbuf) == (size_t) -1)
+	{
+		fprintf(stderr, "Failed to encode public key!\n");
+		return EXIT_FAILURE;
+	}
 
 	printf("Keypair:\n");
 	EC_KEY_print_fp(stdout, prv, 4);

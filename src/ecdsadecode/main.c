@@ -47,8 +47,14 @@ int main(int argc, const char **argv)
 	pub = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 	EC_KEY_set_conv_form(pub, POINT_CONVERSION_COMPRESSED);
 
-	len = base64_decode(argv[1], workbuf, BUFSIZE);
+	len = base64_decode(argv[1], workbuf, sizeof workbuf);
 	workbuf_p = (unsigned char *) workbuf;
+
+	if (len == (size_t) -1)
+	{
+		fprintf(stderr, "Failed to decode key!\n");
+		return EXIT_FAILURE;
+	}
 
 	o2i_ECPublicKey(&pub, &workbuf_p, len);
 	if (!EC_KEY_check_key(pub))

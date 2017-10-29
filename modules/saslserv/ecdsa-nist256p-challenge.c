@@ -77,7 +77,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 	unsigned char pubkey_raw[BUFSIZE];
 	const unsigned char *pubkey_raw_p;
 	metadata_t *md;
-	int ret;
+	size_t ret;
 
 	memset(pubkey_raw, '\0', sizeof pubkey_raw);
 
@@ -102,12 +102,12 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 			return ASASL_FAIL;
 	}
 
-	ret = base64_decode(md->value, (char *)pubkey_raw, BUFSIZE);
-	if (ret == -1)
+	ret = base64_decode(md->value, pubkey_raw, BUFSIZE);
+	if (ret == (size_t) -1)
 		return ASASL_FAIL;
 
 	pubkey_raw_p = pubkey_raw;
-	o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, ret);
+	o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, (long) ret);
 
 #ifndef DEBUG_STATIC_CHALLENGE_VECTOR
 	RAND_pseudo_bytes(s->challenge, CHALLENGE_LENGTH);

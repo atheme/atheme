@@ -57,8 +57,14 @@ int main(int argc, const char **argv)
 	}
 
 	memset(challenge, '\0', sizeof challenge);
-	len = base64_decode(argv[2], challenge, BUFSIZE);
+	len = base64_decode(argv[2], challenge, sizeof challenge);
 	workbuf_p = (unsigned char *) challenge;
+
+	if (len == (size_t) -1)
+	{
+		fprintf(stderr, "Failed to decode challenge!\n");
+		return EXIT_FAILURE;
+	}
 
 	buf_len = ECDSA_size(eckey);
 	sig_buf = mowgli_alloc(buf_len);
@@ -70,7 +76,12 @@ int main(int argc, const char **argv)
 		return EXIT_FAILURE;
 	}
 
-	base64_encode(sig_buf, buf_len, challenge, BUFSIZE);
+	if (base64_encode(sig_buf, buf_len, challenge, sizeof challenge) == (size_t) -1)
+	{
+		fprintf(stderr, "Failed to encode signature!\n");
+		return EXIT_FAILURE;
+	}
+
 	printf("%s\n", challenge);
 
 	mowgli_free(sig_buf);
