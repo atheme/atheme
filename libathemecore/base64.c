@@ -65,7 +65,7 @@ base64_encode(const void *const restrict in, const size_t in_len, char *const re
 
 	while (src_len >= 3)
 	{
-		if (dst)
+		if (dst != NULL)
 		{
 			if ((written + 4) >= dst_len)
 				return failure;
@@ -83,7 +83,7 @@ base64_encode(const void *const restrict in, const size_t in_len, char *const re
 	}
 	if (src_len > 0)
 	{
-		if (dst)
+		if (dst != NULL)
 		{
 			if ((written + 4) >= dst_len)
 				return failure;
@@ -106,7 +106,7 @@ base64_encode(const void *const restrict in, const size_t in_len, char *const re
 		else
 			written += 4;
 	}
-	if (dst)
+	if (dst != NULL)
 	{
 		if (written >= dst_len)
 			return failure;
