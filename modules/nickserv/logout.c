@@ -22,6 +22,8 @@ command_t ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE
 void _modinit(module_t *m)
 {
 	service_named_bind_command("nickserv", &ns_logout);
+
+	hook_add_event("user_can_logout");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -36,6 +38,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn;
 	char *user = parv[0];
 	char *pass = parv[1];
+	hook_user_logout_check_t req;
 
 	if ((!si->smu) && (!user || !pass))
 	{
@@ -58,7 +61,27 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is not logged in."), user);
 			return;
 		}
+	}
+	else if (si->su == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
+		command_fail(si, fault_needmoreparams, _("Syntax: LOGOUT <target> <password>"));
+		return;
+	}
 
+	req.si = si;
+	req.u = u;
+	req.allowed = true;
+	hook_call_user_can_logout(&req);
+	if (!req.allowed)
+	{
+		logcommand(si, CMDLOG_LOGIN, "failed LOGOUT \2%s\2 (denied by hook)", u->nick);
+		command_fail(si, fault_authfail, _("You cannot log out \2%s\2 because the server configuration disallows it."), entity(u->myuser)->name);
+		return;
+	}
+
+	if (user)
+	{
 		if (u->myuser == si->smu || (pass != NULL && verify_password(u->myuser, pass)))
 			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
 		else if (pass != NULL)
@@ -74,13 +97,6 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 	}
-	else if (si->su == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
-		command_fail(si, fault_needmoreparams, _("Syntax: LOGOUT <target> <password>"));
-		return;
-	}
-
 
 	if (is_soper(u->myuser))
 		logcommand(si, CMDLOG_ADMIN, "DESOPER: \2%s\2 as \2%s\2", u->nick, entity(u->myuser)->name);

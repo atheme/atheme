@@ -41,6 +41,7 @@ void _modinit(module_t *m)
 #endif
 
 	hook_add_event("user_can_login");
+	hook_add_event("user_can_logout");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -60,7 +61,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	const char *target = parv[0];
 	const char *password = parv[1];
 	char lau[BUFSIZE];
-	hook_user_login_check_t req;
+	hook_user_login_check_t login_req;
+	hook_user_logout_check_t logout_req;
 
 	if (si->su == NULL)
 	{
@@ -90,11 +92,17 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	req.si = si;
-	req.mu = mu;
-	req.allowed = true;
-	hook_call_user_can_login(&req);
-	if (!req.allowed)
+	login_req.si = si;
+	login_req.mu = mu;
+	login_req.allowed = true;
+	logout_req.si = si;
+	logout_req.u = u;
+	logout_req.allowed = true;
+	hook_call_user_can_login(&login_req);
+	if (login_req.allowed && u->myuser)
+		hook_call_user_can_logout(&logout_req);
+
+	if (!login_req.allowed || !logout_req.allowed)
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot log in as \2%s\2 because the server configuration disallows it."
 									   : "You cannot identify to \2%s\2 because the server configuration disallows it.", entity(mu)->name);

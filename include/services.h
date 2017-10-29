@@ -112,6 +112,7 @@ E void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void (*notice)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
 E bool bad_password(sourceinfo_t *si, myuser_t *mu);
+E bool ircd_logout_or_kill(user_t *u, const char *login);
 
 E sourceinfo_t *sourceinfo_create(void);
 E void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);

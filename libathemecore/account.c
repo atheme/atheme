@@ -212,7 +212,7 @@ void myuser_delete(myuser_t *mu)
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
-		if (!authservice_loaded || !ircd_on_logout(u, entity(mu)->name))
+		if (!authservice_loaded || !ircd_logout_or_kill(u, entity(mu)->name))
 		{
 			u->myuser = NULL;
 			mowgli_node_delete(n, &mu->logins);

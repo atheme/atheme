@@ -338,6 +338,12 @@ typedef struct {
 } hook_user_login_check_t;
 
 typedef struct {
+	sourceinfo_t *si;
+	user_t *u;
+	bool allowed;
+} hook_user_logout_check_t;
+
+typedef struct {
 	user_t *u;
 	mynick_t *mn;
 } hook_nick_enforce_t;
