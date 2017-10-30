@@ -246,7 +246,7 @@ pbkdf2v2_crypt(const char *const restrict password, const char *const restrict p
 
 		if (! pbkdf2v2_scram_derive(&parsed, csk, chk))
 			// This function logs messages on failure
-			return false;
+			return NULL;
 
 		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
 		{
