@@ -40,10 +40,15 @@
 #define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
 #define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
 #define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
+#define PBKDF2_FS_SAVEHASH          PBKDF2_FN_SAVEHASH "$%s"
 
 #define PBKDF2_PRF_HMAC_SHA1        4U
 #define PBKDF2_PRF_HMAC_SHA2_256    5U
 #define PBKDF2_PRF_HMAC_SHA2_512    6U
+
+#define PBKDF2_PRF_SCRAM_SHA1       44U
+#define PBKDF2_PRF_SCRAM_SHA2_256   45U
+#define PBKDF2_PRF_SCRAM_SHA2_512   46U
 
 #define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
 
@@ -64,6 +69,19 @@ struct pbkdf2v2_parameters
 	size_t           sl;
 	unsigned int     a;
 	unsigned int     c;
+	bool             scram;
+};
+
+static const unsigned char ServerKeyStr[] = {
+
+	// ASCII for "Server Key"
+	0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x20, 0x4B, 0x65, 0x79
+};
+
+static const unsigned char ClientKeyStr[] = {
+
+	// ASCII for "Client Key"
+	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
 };
 
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
@@ -95,6 +113,25 @@ pbkdf2v2_salt(void)
 }
 
 static bool
+pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
+                      unsigned char csk[static EVP_MAX_MD_SIZE],
+                      unsigned char chk[static EVP_MAX_MD_SIZE])
+{
+	unsigned char cck[EVP_MAX_MD_SIZE];
+
+	if (! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+		return false;
+
+	if (! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+		return false;
+
+	if (EVP_Digest(cck, parsed->dl, chk, NULL, parsed->md, NULL) != 1)
+		return false;
+
+	return true;
+}
+
+static bool
 pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
                  struct pbkdf2v2_parameters *const restrict parsed)
 {
@@ -105,16 +142,25 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 
 	switch (parsed->a)
 	{
+		case PBKDF2_PRF_SCRAM_SHA1:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA1:
 			parsed->md = EVP_sha1();
 			parsed->dl = SHA_DIGEST_LENGTH;
 			break;
 
+		case PBKDF2_PRF_SCRAM_SHA2_256:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_256:
 			parsed->md = EVP_sha256();
 			parsed->dl = SHA256_DIGEST_LENGTH;
 			break;
 
+		case PBKDF2_PRF_SCRAM_SHA2_512:
+			parsed->scram = true;
+			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_512:
 			parsed->md = EVP_sha512();
 			parsed->dl = SHA512_DIGEST_LENGTH;
@@ -126,6 +172,10 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 
 	if (! parsed->md)
 		return false;
+
+	/*
+	 * TODO: If computing SCRAM-SHA format, normalise the password
+	 */
 
 	parsed->sl = strlen(parsed->salt);
 
@@ -154,15 +204,37 @@ pbkdf2v2_crypt(const char *const restrict password, const char *const restrict p
 	if (! pbkdf2v2_compute(password, parameters, &parsed))
 		return NULL;
 
-	char cdg64[EVP_MAX_MD_SIZE * 3];
-
-	if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
-		return NULL;
-
 	static char res[PASSLEN];
 
-	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
-		return NULL;
+	if (parsed.scram)
+	{
+		unsigned char csk[EVP_MAX_MD_SIZE];
+		unsigned char chk[EVP_MAX_MD_SIZE];
+		char csk64[EVP_MAX_MD_SIZE * 3];
+		char chk64[EVP_MAX_MD_SIZE * 3];
+
+		if (! pbkdf2v2_scram_derive(&parsed, csk, chk))
+			return false;
+
+		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
+			return NULL;
+
+		if (base64_encode((const char *) chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
+			return NULL;
+
+		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt, csk64, chk64) >= PASSLEN)
+			return NULL;
+	}
+	else
+	{
+		char cdg64[EVP_MAX_MD_SIZE * 3];
+
+		if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
+			return NULL;
+
+		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
+			return NULL;
+	}
 
 	return res;
 }
