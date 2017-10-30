@@ -243,7 +243,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	/*
 	 * TODO: Normalise the username
 	 */
-	if (! (s->mu = myuser_find(input['n'])))
+	if (! (s->mu = myuser_find_by_nick(input['n'])))
 	{
 		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, input['n']);
 		goto fail;
@@ -271,8 +271,8 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	p->username = sstrdup(input['n']);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_len = len;
-	s->c_msg_buf = sstrndup(message, len);
+	s->c_msg_len = len - s->c_gs2_len;
+	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->cn = sstrdup(input['r']);
 	s->sn = random_string(NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);

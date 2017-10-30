@@ -30,14 +30,14 @@ char ch[] = "abcdefghijklmnopqrstuvwxyz";
  */
 char *random_string(size_t sz)
 {
-	char *buf = smalloc(sz + 1); /* padding */
+	unsigned char *buf = smalloc(sz + 1); /* padding */
 
 	(void) arc4random_buf(buf, sz);
 
 	for (size_t i = 0; i < sz; i++)
 		buf[i] = ch[buf[i] % 26];
 
-	return buf;
+	return (char *) buf;
 }
 
 void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
