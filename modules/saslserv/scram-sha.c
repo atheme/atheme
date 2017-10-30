@@ -243,7 +243,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	/*
 	 * TODO: Normalise the username
 	 */
-	if (! (s->mu = myuser_find(input['n'])))
+	if (! (s->mu = myuser_find_by_nick(input['n'])))
 	{
 		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, input['n']);
 		goto fail;
