@@ -2,14 +2,17 @@ language: c
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - libperl-dev
       - libssl-dev
+      - gcc-5
 
 sudo: false
 
 compiler:
-  - gcc
+  - gcc-5
   - clang
 
 env:
