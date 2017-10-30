@@ -263,7 +263,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 
 		if (! atheme_pbkdf2v2_scram_derive(&parsed, csk, chk))
 			// This function logs messages on failure
-			return false;
+			return NULL;
 
 		if (base64_encode(csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
 		{
