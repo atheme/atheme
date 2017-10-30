@@ -45,8 +45,6 @@
 #define PBKDF2_PRF_HMAC_SHA2_256    5U
 #define PBKDF2_PRF_HMAC_SHA2_512    6U
 
-#define PBKDF2_DIGEST_MIN           SHA_DIGEST_LENGTH
-#define PBKDF2_DIGEST_MAX           SHA512_DIGEST_LENGTH
 #define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
 
 #define PBKDF2_ITERCNT_MIN          10000U
@@ -109,14 +107,17 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 	{
 		case PBKDF2_PRF_HMAC_SHA1:
 			parsed->md = EVP_sha1();
+			parsed->dl = SHA_DIGEST_LENGTH;
 			break;
 
 		case PBKDF2_PRF_HMAC_SHA2_256:
 			parsed->md = EVP_sha256();
+			parsed->dl = SHA256_DIGEST_LENGTH;
 			break;
 
 		case PBKDF2_PRF_HMAC_SHA2_512:
 			parsed->md = EVP_sha512();
+			parsed->dl = SHA512_DIGEST_LENGTH;
 			break;
 
 		default:
@@ -134,20 +135,13 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
 		return false;
 
-	const int dl_i = EVP_MD_size(parsed->md);
-
-	if (dl_i < PBKDF2_DIGEST_MIN || dl_i > PBKDF2_DIGEST_MAX)
-		return false;
-
-	parsed->dl = (size_t) dl_i;
-
 	const size_t pl = strlen(password);
 
 	if (! pl)
 		return false;
 
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
-	                                  (int) parsed->c, parsed->md, dl_i, parsed->cdg);
+	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
 
 	return (ret == 1) ? true : false;
 }
