@@ -107,7 +107,10 @@ pbkdf2v2_salt(void)
 	/* Format and return the result */
 	static char res[PASSLEN];
 	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 		return NULL;
+	}
 
 	return res;
 }
@@ -120,13 +123,20 @@ pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
 	unsigned char cck[EVP_MAX_MD_SIZE];
 
 	if (! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
 		return false;
-
+	}
 	if (! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
 		return false;
-
+	}
 	if (EVP_Digest(cck, parsed->dl, chk, NULL, parsed->md, NULL) != 1)
+	{
+		(void) slog(LG_ERROR, "%s: EVP_Digest(cck) failed for chk", __func__);
 		return false;
+	}
 
 	return true;
 }
@@ -138,7 +148,10 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) != 3)
+	{
+		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
 		return false;
+	}
 
 	switch (parsed->a)
 	{
@@ -167,11 +180,15 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 			break;
 
 		default:
-			break;
+			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, parsed->a);
+			return false;
 	}
 
 	if (! parsed->md)
+	{
+		(void) slog(LG_ERROR, "%s: parsed->md is NULL", __func__);
 		return false;
+	}
 
 	/*
 	 * TODO: If computing SCRAM-SHA format, normalise the password
@@ -180,20 +197,33 @@ pbkdf2v2_compute(const char *const restrict password, const char *const restrict
 	parsed->sl = strlen(parsed->salt);
 
 	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: salt '%s' length %zu out of range", __func__, parsed->salt, parsed->sl);
 		return false;
-
+	}
 	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", __func__, parsed->c);
 		return false;
+	}
 
 	const size_t pl = strlen(password);
 
 	if (! pl)
+	{
+		(void) slog(LG_ERROR, "%s: password length == 0", __func__);
 		return false;
+	}
 
 	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
 	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
+	if (ret != 1)
+	{
+		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
+		return false;
+	}
 
-	return (ret == 1) ? true : false;
+	return true;
 }
 
 static const char *
@@ -202,6 +232,7 @@ pbkdf2v2_crypt(const char *const restrict password, const char *const restrict p
 	struct pbkdf2v2_parameters parsed;
 
 	if (! pbkdf2v2_compute(password, parameters, &parsed))
+		// This function logs messages on failure
 		return NULL;
 
 	static char res[PASSLEN];
@@ -214,26 +245,39 @@ pbkdf2v2_crypt(const char *const restrict password, const char *const restrict p
 		char chk64[EVP_MAX_MD_SIZE * 3];
 
 		if (! pbkdf2v2_scram_derive(&parsed, csk, chk))
+			// This function logs messages on failure
 			return false;
 
 		if (base64_encode((const char *) csk, parsed.dl, csk64, sizeof csk64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for csk", __func__);
 			return NULL;
-
+		}
 		if (base64_encode((const char *) chk, parsed.dl, chk64, sizeof chk64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
-
+		}
 		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt, csk64, chk64) >= PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf() would have overflowed result buffer (BUG)", __func__);
 			return NULL;
+		}
 	}
 	else
 	{
 		char cdg64[EVP_MAX_MD_SIZE * 3];
 
 		if (base64_encode((const char *) parsed.cdg, parsed.dl, cdg64, sizeof cdg64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
-
+		}
 		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
+		{
+			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 			return NULL;
+		}
 	}
 
 	return res;
@@ -249,16 +293,25 @@ pbkdf2v2_upgrade(const char *const restrict parameters)
 	(void) memset(salt, 0x00, sizeof salt);
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	{
+		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
 		return false;
-
+	}
 	if (prf != pbkdf2v2_digest)
+	{
+		(void) slog(LG_DEBUG, "%s: prf (%u) != default (%u)", __func__, prf, pbkdf2v2_digest);
 		return true;
-
+	}
 	if (iter != pbkdf2v2_rounds)
+	{
+		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, iter, pbkdf2v2_rounds);
 		return true;
-
+	}
 	if (strlen(salt) != PBKDF2_SALTLEN_DEF)
+	{
+		(void) slog(LG_DEBUG, "%s: salt length is different", __func__);
 		return true;
+	}
 
 	return false;
 }
