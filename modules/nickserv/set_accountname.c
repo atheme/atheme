@@ -28,6 +28,8 @@ void _modinit(module_t *m)
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_accountname, *ns_set_cmdtree);
+
+	hook_add_event("user_can_rename");
 }
 
 void _moddeinit(module_unload_intent_t intent)
@@ -40,6 +42,7 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *newname = parv[0];
 	mynick_t *mn;
+	hook_user_rename_check_t req;
 
 	if (!newname)
 	{
@@ -75,6 +78,17 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcmp(entity(si->smu)->name, newname))
 	{
 		command_fail(si, fault_nochange, _("Your account name is already set to \2%s\2."), newname);
+		return;
+	}
+
+	req.si = si;
+	req.mu = si->smu;
+	req.mn = mn;
+	req.allowed = true;
+	hook_call_user_can_rename(&req);
+	if (!req.allowed)
+	{
+		command_fail(si, fault_authfail, _("You cannot change account name because the server configuration disallows it."));
 		return;
 	}
 

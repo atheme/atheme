@@ -355,6 +355,13 @@ typedef struct {
 } hook_metadata_change_t;
 
 typedef struct {
+	sourceinfo_t *si;
+	myuser_t *mu;
+	mynick_t *mn;
+	bool allowed;
+} hook_user_rename_check_t;
+
+typedef struct {
 	myuser_t *mu;
 	const char *oldname;
 } hook_user_rename_t;
