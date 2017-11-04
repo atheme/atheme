@@ -143,13 +143,8 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 	}
 
 	if (dst != NULL)
-	{
-		if (written >= dst_len)
-			return failure;
-
 		// Don't increase the result variable for the NULL terminator -- it reflects string length
 		dst[written] = 0x00;
-	}
 
 	return written;
 }
