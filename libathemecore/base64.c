@@ -210,7 +210,7 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 
 		if (done > 1)
 		{
-			if (out != NULL)
+			if (dst != NULL)
 			{
 				if (written >= dst_len)
 					return failure;
@@ -221,9 +221,10 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			else
 				written++;
 		}
+
 		if (done > 2)
 		{
-			if (out != NULL)
+			if (dst != NULL)
 			{
 				if (written >= dst_len)
 					return failure;
@@ -234,9 +235,10 @@ base64_decode(const char *restrict src, void *const restrict out, const size_t o
 			else
 				written++;
 		}
+
 		if (done > 3)
 		{
-			if (out != NULL)
+			if (dst != NULL)
 			{
 				if (written >= dst_len)
 					return failure;
