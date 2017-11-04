@@ -653,98 +653,7 @@ argon2d_hash_raw(struct argon2d_context *const restrict ctx)
 	return true;
 }
 
-#define EQ(x, y) ((((0x00 - (((unsigned) (x)) ^ ((unsigned) (y)))) >> 0x08U) & 0xFF) ^ 0xFF)
-#define GT(x, y) (((((unsigned) (y)) - ((unsigned) (x))) >> 0x08U) & 0xFF)
-#define GE(x, y) (GT(y, x) ^ 0xFF)
-#define LE(x, y) (GE(y, x))
 
-static inline uint8_t
-argon2d_dec_b64_char(const char v)
-{
-	const uint8_t c = (const uint8_t) v;
-	const uint8_t x = (GE(c, 0x41) & LE(c, 0x5A) & (c - 0x41)) | (GE(c, 0x61) & LE(c, 0x7A) & \
-	                  (c - 0x47)) | (GE(c, 0x30) & LE(c, 0x39) & (c + 0x04)) | (EQ(c, 0x2B) & \
-	                  0x3E) | (EQ(c, 0x2F) & 0x3F);
-
-	return (x | (EQ(x, 0x00) & (EQ(c, 0x41) ^ 0xFF)));
-}
-
-#undef EQ
-#undef GT
-#undef GE
-#undef LE
-
-static inline size_t
-argon2d_dec_b64(const char *restrict src, uint8_t *restrict dst, const size_t dst_len)
-{
-	size_t written = 0x00;
-	size_t acc_len = 0x00;
-	uint64_t acc = 0x00;
-	bool exiting = false;
-
-	for (;;)
-	{
-		while (acc_len >= 0x08)
-		{
-			if (written++ >= dst_len)
-				return 0;
-
-			acc_len -= 0x08;
-			*dst++ = ((uint8_t)((acc >> acc_len) & 0xFF));
-		}
-		if (exiting)
-		{
-			if (acc_len > 0x04 || (acc & ((0x01U << acc_len) - 0x01)) != 0x00)
-				return 0;
-
-			return written;
-		}
-		while (acc_len < 0x3C)
-		{
-			uint8_t d = argon2d_dec_b64_char(*src++);
-
-			if (d == 0xFF)
-			{
-				exiting = true;
-				break;
-			}
-
-			acc = ((acc << 0x06U) | ((uint64_t) d));
-			acc_len += 0x06;
-		}
-	}
-}
-
-static inline void
-argon2d_enc_b64(const uint8_t *restrict src, size_t src_len, char *restrict dst)
-{
-	static const char base64_etab[] = ATHEME_ARGON2D_LOADB64;
-
-	while (src_len > 0x02)
-	{
-		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02U)];
-		*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04U) + (src[0x01] >> 0x04U))];
-		*dst++ = base64_etab[(size_t)(((src[0x01] & 0x0F) << 0x02U) + (src[0x02] >> 0x06U))];
-		*dst++ = base64_etab[(size_t)(src[0x02] & 0x3FU)];
-
-		src += 0x03;
-		src_len -= 0x03;
-	}
-	if (src_len > 0x00)
-	{
-		*dst++ = base64_etab[(size_t)(src[0x00] >> 0x02U)];
-
-		if (src_len > 0x01)
-		{
-			*dst++ = base64_etab[(size_t)(((src[0x00] & 0x03) << 0x04U) + (src[0x01] >> 0x04U))];
-			*dst++ = base64_etab[(size_t)((src[0x01] & 0x0F) << 0x02U)];
-		}
-		else
-			*dst++ = base64_etab[(size_t)((src[0x00] & 0x03) << 0x04U)];
-	}
-
-	*dst = 0x00;
-}
 
 /*
  * The default memory and time cost variables
@@ -763,7 +672,8 @@ atheme_argon2d_salt(void)
 	(void) arc4random_buf(salt, sizeof salt);
 
 	char salt_b64[0x2000];
-	(void) argon2d_enc_b64(salt, sizeof salt, salt_b64);
+	if (base64_encode_raw(salt, sizeof salt, salt_b64, sizeof salt_b64) == (size_t) -1)
+		return NULL;
 
 	static char res[PASSLEN];
 	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVESALT, m_cost, t_cost, salt_b64) >= PASSLEN)
@@ -785,7 +695,7 @@ atheme_argon2d_crypt(const char *const restrict password, const char *const rest
 	if ((ctx.m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (ctx.t_cost > ARGON2D_TIMECOST_MAX))
 		return NULL;
 
-	if (argon2d_dec_b64(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
+	if (base64_decode(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
 		return NULL;
 
 	ctx.pass = (const uint8_t *) password;
@@ -795,7 +705,8 @@ atheme_argon2d_crypt(const char *const restrict password, const char *const rest
 		return NULL;
 
 	char hash_b64[0x2000];
-	(void) argon2d_enc_b64(ctx.hash, sizeof ctx.hash, hash_b64);
+	if (base64_encode_raw(ctx.hash, sizeof ctx.hash, hash_b64, sizeof hash_b64) == (size_t) -1)
+		return NULL;
 
 	static char res[PASSLEN];
 	if (snprintf(res, PASSLEN, ATHEME_ARGON2D_SAVEHASH, ctx.m_cost, ctx.t_cost, salt_b64, hash_b64) >= PASSLEN)
@@ -818,11 +729,11 @@ atheme_argon2d_verify(const char *const restrict password, const char *const res
 	if ((ctx.m_cost > (0x01U << ARGON2D_MEMCOST_MAX)) || (ctx.t_cost > ARGON2D_TIMECOST_MAX))
 		return false;
 
-	if (argon2d_dec_b64(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
+	if (base64_decode(salt_b64, ctx.salt, sizeof ctx.salt) != sizeof ctx.salt)
 		return false;
 
 	uint8_t dec_hash[ATHEME_ARGON2D_HASHLEN];
-	if (argon2d_dec_b64(hash_b64, dec_hash, sizeof dec_hash) != sizeof dec_hash)
+	if (base64_decode(hash_b64, dec_hash, sizeof dec_hash) != sizeof dec_hash)
 		return false;
 
 	ctx.pass = (const uint8_t *) password;
@@ -847,7 +758,7 @@ atheme_argon2d_recrypt(const char *const restrict parameters)
 		return false;
 
 	uint8_t salt[ATHEME_ARGON2D_SALTLEN];
-	if (argon2d_dec_b64(salt_b64, salt, sizeof salt) != sizeof salt)
+	if (base64_decode(salt_b64, salt, sizeof salt) != sizeof salt)
 		return false;
 
 	if (m_cost != (0x01U << atheme_argon2d_mcost))
