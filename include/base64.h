@@ -44,6 +44,7 @@
 #define BASE64_H
 
 extern size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize) __attribute__((warn_unused_result));
+extern size_t base64_encode_raw(const void *src, size_t srclength, char *target, size_t targsize) __attribute__((warn_unused_result));
 extern size_t base64_decode(const char *src, void *target, size_t targsize) __attribute__((warn_unused_result));
 
 #endif /* BASE64_H */
