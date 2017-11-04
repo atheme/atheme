@@ -64,6 +64,9 @@ base64_encode_x(const void *const restrict in, const size_t in_len, char *const 
 
 	size_t written = 0;
 
+	if (dst != NULL && dst_len == 0)
+		return failure;
+
 	while (src_len >= 3)
 	{
 		if (dst != NULL)
