@@ -53,8 +53,9 @@ static const unsigned char base64_dtable[] = {
 	0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-size_t
-base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
+static size_t
+base64_encode_x(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len,
+                const bool terminate)
 {
 	static const size_t failure = (size_t) -1;
 
@@ -81,31 +82,63 @@ base64_encode(const void *const restrict in, const size_t in_len, char *const re
 		src += 3;
 		src_len -= 3;
 	}
-	if (src_len > 0)
+
+	if (src_len == 2)
 	{
 		if (dst != NULL)
 		{
-			if ((written + 4) >= dst_len)
+			if ((written + 3) >= dst_len)
 				return failure;
 
-			if (src_len > 1)
+			dst[written++] = base64_etable[src[0] >> 0x02U];
+			dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
+			dst[written++] = base64_etable[(src[1] & 0x0FU) << 0x02U];
+
+			if (terminate)
 			{
-				dst[written++] = base64_etable[src[0] >> 0x02U];
-				dst[written++] = base64_etable[((src[0] & 0x03U) << 0x04U) + (src[1] >> 0x04U)];
-				dst[written++] = base64_etable[(src[1] & 0x0FU) << 0x02U];
+				if ((written + 1) >= dst_len)
+					return failure;
+
 				dst[written++] = '=';
 			}
-			else
+		}
+		else
+		{
+			written += 3;
+
+			if (terminate)
+				written++;
+		}
+	}
+
+	if (src_len == 1)
+	{
+		if (dst != NULL)
+		{
+			if ((written + 2) >= dst_len)
+				return failure;
+
+			dst[written++] = base64_etable[src[0] >> 0x02U];
+			dst[written++] = base64_etable[(src[0] & 0x03U) << 0x04U];
+
+			if (terminate)
 			{
-				dst[written++] = base64_etable[src[0] >> 0x02U];
-				dst[written++] = base64_etable[(src[0] & 0x03U) << 0x04U];
+				if ((written + 2) >= dst_len)
+					return failure;
+
 				dst[written++] = '=';
 				dst[written++] = '=';
 			}
 		}
 		else
-			written += 4;
+		{
+			written += 2;
+
+			if (terminate)
+				written += 2;
+		}
 	}
+
 	if (dst != NULL)
 	{
 		if (written >= dst_len)
@@ -116,6 +149,18 @@ base64_encode(const void *const restrict in, const size_t in_len, char *const re
 	}
 
 	return written;
+}
+
+size_t
+base64_encode(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
+{
+	return base64_encode_x(in, in_len, dst, dst_len, true);
+}
+
+size_t
+base64_encode_raw(const void *const restrict in, const size_t in_len, char *const restrict dst, const size_t dst_len)
+{
+	return base64_encode_x(in, in_len, dst, dst_len, false);
 }
 
 size_t
