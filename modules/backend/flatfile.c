@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"backend/flatfile", true, _modinit, NULL,
+	"backend/flatfile", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

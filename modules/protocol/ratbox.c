@@ -12,7 +12,8 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("protocol/ratbox", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
 

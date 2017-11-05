@@ -12,7 +12,8 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static bool has_protoctl = false;
 static bool use_esvid = false;

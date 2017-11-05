@@ -38,7 +38,7 @@
 
 DECLARE_MODULE_V1
 (
-	"alis/main", false, _modinit, _moddeinit,
+	"alis/main", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"William Pitcock <nenolod -at- nenolod.net>"
 );

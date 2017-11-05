@@ -12,7 +12,8 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("protocol/bahamut", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
 

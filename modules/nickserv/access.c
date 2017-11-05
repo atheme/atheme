@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/access", false, _modinit, _moddeinit,
+	"nickserv/access", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

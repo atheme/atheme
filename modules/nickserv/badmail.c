@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/badmail", true, _modinit, _moddeinit,
+	"nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://www.atheme.net>"
 );

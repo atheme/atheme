@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"botserv/main", true, _modinit, _moddeinit,
+	"botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Rizon Development Group <http://www.atheme.org>"
 );

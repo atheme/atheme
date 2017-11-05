@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"gameserv/namegen", false, _modinit, _moddeinit,
+	"gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

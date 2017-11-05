@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/inject", false, _modinit, _moddeinit,
+	"operserv/inject", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

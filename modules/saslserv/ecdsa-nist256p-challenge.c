@@ -20,7 +20,7 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/ecdsa-nist256p-challenge", false, _modinit, _moddeinit,
+	"saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

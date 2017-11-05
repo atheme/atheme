@@ -16,7 +16,7 @@
 
 DECLARE_MODULE_V1
 (
-	"protocol/chatircd", true, _modinit, NULL,
+	"protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

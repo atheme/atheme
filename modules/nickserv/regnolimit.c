@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/regnolimit", false, _modinit, _moddeinit,
+	"nickserv/regnolimit", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

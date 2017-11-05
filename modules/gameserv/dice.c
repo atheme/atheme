@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-DECLARE_MODULE_V1("gameserv/dice", false, _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("gameserv/dice", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_calc(sourceinfo_t *si, int parc, char *parv[]);

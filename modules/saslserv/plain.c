@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"saslserv/plain", false, _modinit, _moddeinit,
+	"saslserv/plain", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

@@ -807,5 +807,6 @@ crypto_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) in
 	(void) free(argon2d_mempool);
 }
 
-DECLARE_MODULE_V1("crypto/argon2d", false, crypto_argon2d_modinit, crypto_argon2d_moddeinit,
+DECLARE_MODULE_V1("crypto/argon2d", MODULE_UNLOAD_CAPABILITY_OK,
+                  crypto_argon2d_modinit, crypto_argon2d_moddeinit,
                   PACKAGE_VERSION, "Aaron M. D. Jones <aaronmdjones@gmail.com>");

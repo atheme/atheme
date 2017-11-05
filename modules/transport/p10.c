@@ -27,7 +27,7 @@
 
 DECLARE_MODULE_V1
 (
-	"transport/p10", true, _modinit, _moddeinit,
+	"transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_VERSION,
 	VENDOR_STRING
 );

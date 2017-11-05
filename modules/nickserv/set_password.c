@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/set_password", false, _modinit, _moddeinit,
+	"nickserv/set_password", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

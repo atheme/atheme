@@ -605,7 +605,8 @@ sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
 
-DECLARE_MODULE_V1("saslserv/scram-sha", false, sasl_scramsha_modinit, sasl_scramsha_moddeinit,
+DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK,
+                  sasl_scramsha_modinit, sasl_scramsha_moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);
 
 #endif /* HAVE_OPENSSL */

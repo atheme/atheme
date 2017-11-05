@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/halfop", false, _modinit, _moddeinit,
+	"chanserv/halfop", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

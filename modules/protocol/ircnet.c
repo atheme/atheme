@@ -13,7 +13,8 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
 

@@ -10,7 +10,8 @@
 #include "pmodule.h"
 #include "protocol/ngircd.h"
 
-DECLARE_MODULE_V1("protocol/ngircd", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
+DECLARE_MODULE_V1("protocol/ngircd", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
 

@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"exttarget/chanacs", false, _modinit, _moddeinit,
+	"exttarget/chanacs", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

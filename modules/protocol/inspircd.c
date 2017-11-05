@@ -10,7 +10,8 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
 
 /* *INDENT-OFF* */
 

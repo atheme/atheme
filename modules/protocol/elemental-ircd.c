@@ -14,7 +14,8 @@
 #include "pmodule.h"
 #include "protocol/elemental-ircd.h"
 
-DECLARE_MODULE_V1("protocol/elemental-ircd", true, _modinit, NULL, PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
+DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+                  PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
 
 /* *INDENT-OFF* */
 

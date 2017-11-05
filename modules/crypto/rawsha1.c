@@ -63,7 +63,8 @@ crypto_rawsha1_moddeinit(const module_unload_intent_t __attribute__((unused)) in
 	(void) crypt_unregister(&crypto_rawsha1_impl);
 }
 
-DECLARE_MODULE_V1("crypto/rawsha1", false, crypto_rawsha1_modinit, crypto_rawsha1_moddeinit,
+DECLARE_MODULE_V1("crypto/rawsha1", MODULE_UNLOAD_CAPABILITY_OK,
+                  crypto_rawsha1_modinit, crypto_rawsha1_moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);
 
 #endif /* HAVE_OPENSSL */

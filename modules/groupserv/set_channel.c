@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"groupserv/set_channel", false, _modinit, _moddeinit,
+	"groupserv/set_channel", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

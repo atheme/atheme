@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"nickserv/set_nopassword", false, _modinit, _moddeinit,
+	"nickserv/set_nopassword", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Zohlai Development Group"
 );

@@ -6,7 +6,7 @@
 
 DECLARE_MODULE_V1
 (
-	"rpgserv/help", false, _modinit, _moddeinit,
+	"rpgserv/help", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

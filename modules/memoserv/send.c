@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/send", false, _modinit, _moddeinit,
+	"memoserv/send", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

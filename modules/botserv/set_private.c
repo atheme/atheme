@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"botserv/set_private", false, _modinit, _moddeinit,
+	"botserv/set_private", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

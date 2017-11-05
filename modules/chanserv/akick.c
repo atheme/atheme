@@ -18,7 +18,7 @@ static void akickdel_list_create(void *arg);
 
 DECLARE_MODULE_V1
 (
-	"chanserv/akick", false, _modinit, _moddeinit,
+	"chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

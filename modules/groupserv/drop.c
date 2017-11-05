@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"groupserv/drop", false, _modinit, _moddeinit,
+	"groupserv/drop", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

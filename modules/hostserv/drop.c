@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"hostserv/drop", false, _modinit, _moddeinit,
+	"hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Atheme Development Group <http://atheme.github.io>"
 );

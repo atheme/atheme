@@ -9,7 +9,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/successor_acl", true, _modinit, NULL,
+	"chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

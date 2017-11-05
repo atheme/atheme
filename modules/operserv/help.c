@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/help", false, _modinit, _moddeinit,
+	"operserv/help", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

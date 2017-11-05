@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/set_core", false, _modinit, _moddeinit,
+	"chanserv/set_core", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

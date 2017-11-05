@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"hostserv/request", true, _modinit, _moddeinit,
+	"hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	"Rizon Development Group <http://www.rizon.net>"
 );

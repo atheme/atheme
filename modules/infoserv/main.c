@@ -16,7 +16,7 @@
 
 DECLARE_MODULE_V1
 (
-	"infoserv/main", true, _modinit, _moddeinit,
+	"infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

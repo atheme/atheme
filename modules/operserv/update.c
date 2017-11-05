@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/update", false, _modinit, _moddeinit,
+	"operserv/update", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

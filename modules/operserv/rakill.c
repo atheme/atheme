@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"operserv/rakill", false, _modinit, _moddeinit,
+	"operserv/rakill", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

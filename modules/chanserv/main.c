@@ -13,7 +13,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/main", true, _modinit, _moddeinit,
+	"chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

@@ -15,7 +15,7 @@
 
 DECLARE_MODULE_V1
 (
-	"protocol/mixin_nohalfops", true, _modinit, _moddeinit,
+	"protocol/mixin_nohalfops", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

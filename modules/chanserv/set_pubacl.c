@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/set_pubacl", false, _modinit, _moddeinit,
+	"chanserv/set_pubacl", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

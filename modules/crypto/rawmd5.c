@@ -59,5 +59,6 @@ crypto_rawmd5_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 	(void) crypt_unregister(&crypto_rawmd5_impl);
 }
 
-DECLARE_MODULE_V1("crypto/rawmd5", false, crypto_rawmd5_modinit, crypto_rawmd5_moddeinit,
+DECLARE_MODULE_V1("crypto/rawmd5", MODULE_UNLOAD_CAPABILITY_OK,
+                  crypto_rawmd5_modinit, crypto_rawmd5_moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);

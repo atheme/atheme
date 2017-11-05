@@ -10,7 +10,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/clear_users", false, _modinit, _moddeinit,
+	"chanserv/clear_users", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

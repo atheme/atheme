@@ -12,7 +12,7 @@
 
 DECLARE_MODULE_V1
 (
-	"chanserv/unban_self", false, _modinit, _moddeinit,
+	"chanserv/unban_self", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );

@@ -16,7 +16,7 @@
 
 DECLARE_MODULE_V1
 (
-	"backend/opensex", true, _modinit, NULL,
+	"backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
 	PACKAGE_STRING,
 	VENDOR_STRING
 );
