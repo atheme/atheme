@@ -84,6 +84,12 @@ const char *crypt_string(const char *key, const char *salt)
 {
 	const crypt_impl_t *ci = crypt_get_default_provider();
 
+	if (!salt || !*salt)
+		salt = ci->salt();
+
+	if (!salt)
+		return NULL;
+
 	return ci->crypt(key, salt);
 }
 
