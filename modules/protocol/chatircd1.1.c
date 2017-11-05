@@ -89,8 +89,6 @@ struct cmode_ chatircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
 /* this may be slow, but it is not used much */
 /* returns true if it matches, false if not */
 /* note that the host part matches differently from a regular ban */

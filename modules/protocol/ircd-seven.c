@@ -16,8 +16,6 @@ DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER,
                   _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
-/* *INDENT-OFF* */
-
 ircd_t Seven = {
 	.ircdname = "ircd-seven",
 	.tldprefix = "$$",
@@ -80,8 +78,6 @@ struct cmode_ seven_user_mode_list[] = {
   { 'S', UF_SERVICE  },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 static bool seven_is_valid_hostslash(const char *host)
 {

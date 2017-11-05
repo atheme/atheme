@@ -100,8 +100,6 @@ struct cmode_ charybdis_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
 /* ircd allows forwards to existing channels; the target channel must be
  * +F or the setter must have ops in it */
 static bool check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)

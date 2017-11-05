@@ -96,8 +96,6 @@ struct cmode_ nefarious_user_mode_list[] = {
 
 static void check_hidehost(user_t *u);
 
-/* *INDENT-ON* */
-
 /* join a channel */
 static void nefarious_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
 {

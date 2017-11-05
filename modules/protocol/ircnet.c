@@ -16,8 +16,6 @@ DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER,
                   _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
-/* *INDENT-OFF* */
-
 ircd_t IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",
 	.tldprefix = "$$",
@@ -75,8 +73,6 @@ struct cmode_ ircnet_user_mode_list[] = {
   { 'o', UF_IRCOP    },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 /* login to our uplink */
 static unsigned int ircnet_server_login(void)

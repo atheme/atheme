@@ -17,8 +17,6 @@ DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
                   _modinit, NULL,
                   PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
 
-/* *INDENT-OFF* */
-
 ircd_t elemental_ircd = {
 	.ircdname = "elemental-ircd",
 	.tldprefix = "$$",
@@ -101,8 +99,6 @@ struct cmode_ elemental_user_mode_list[] = {
   { 'S', UF_SERVICE  },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 void _modinit(module_t * m)
 {

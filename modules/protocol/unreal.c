@@ -110,8 +110,6 @@ struct cmode_ unreal_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
 static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
 	const char *p, *arg2;

@@ -16,8 +16,6 @@ DECLARE_MODULE_V1("protocol/bahamut", MODULE_UNLOAD_CAPABILITY_NEVER,
                   _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
-/* *INDENT-OFF* */
-
 ircd_t Bahamut = {
 	.ircdname = "Bahamut 1.8.x",
 	.tldprefix = "$",
@@ -84,8 +82,6 @@ struct cmode_ bahamut_user_mode_list[] = {
   { 'o', UF_IRCOP    },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 static bool check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {

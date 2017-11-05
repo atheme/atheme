@@ -16,8 +16,6 @@ DECLARE_MODULE_V1("protocol/asuka", MODULE_UNLOAD_CAPABILITY_NEVER,
                   _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
-/* *INDENT-OFF* */
-
 ircd_t Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",
 	.tldprefix = "$",
@@ -84,8 +82,6 @@ struct cmode_ asuka_user_mode_list[] = {
 };
 
 static void check_hidehost(user_t *u);
-
-/* *INDENT-ON* */
 
 /* NOTICE wrapper */
 static void asuka_notice_channel_sts(user_t *from, channel_t *target, const char *text)

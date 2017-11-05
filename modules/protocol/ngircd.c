@@ -85,8 +85,6 @@ struct cmode_ ngircd_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
 /* login to our uplink */
 static unsigned int ngircd_server_login(void)
 {

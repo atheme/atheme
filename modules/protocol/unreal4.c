@@ -22,8 +22,6 @@ static bool use_esvid = false;
 static bool use_mlock = false;
 static char ts6sid[3 + 1] = "";
 
-/* *INDENT-OFF* */
-
 ircd_t Unreal = {
 	.ircdname = "UnrealIRCd 4 or later",
 	.tldprefix = "$",
@@ -111,8 +109,6 @@ struct cmode_ unreal_user_mode_list[] = {
   { 'd', UF_DEAF     },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 /* +f 3:1 or +f *3:1 (which is like +f [3t]:1 or +f [3t#b]:1) */
 static inline bool check_flood_old(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)

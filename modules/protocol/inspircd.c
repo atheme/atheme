@@ -222,9 +222,6 @@ static server_t *sid_find(char *name)
 	return server_find(sid);
 }
 
-
-/* *INDENT-ON* */
-
 static inline void channel_metadata_sts(channel_t *c, const char *key, const char *value)
 {
 	sts(":%s METADATA %s %s :%s", ME, c->name, key, value);
