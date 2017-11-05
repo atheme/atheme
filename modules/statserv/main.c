@@ -3,12 +3,12 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the body of StatServ.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
+DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
                   PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 service_t *statsvs;
@@ -56,9 +56,3 @@ void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[])
 
     help_display(si, si->service, command, si->service->commands);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

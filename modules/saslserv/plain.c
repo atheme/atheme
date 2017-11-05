@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * PLAIN mechanism provider
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"saslserv/plain", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("saslserv/plain", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 sasl_mech_register_func_t *regfuncs;
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
@@ -95,9 +91,3 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 static void mech_finish(sasl_session_t *p)
 {
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

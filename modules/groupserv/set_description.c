@@ -3,18 +3,14 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the GroupServ HELP command.
- *
  */
 
 #include "atheme.h"
 #include "groupserv.h"
 
-DECLARE_MODULE_V1
-(
-	"groupserv/set_description", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("groupserv/set_description", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -73,4 +69,3 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	command_delete(&gs_set_description, gs_set_cmdtree);
 }
-

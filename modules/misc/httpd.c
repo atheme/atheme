@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Generic HTTPd
- *
  */
 
 #include "atheme.h"
@@ -12,12 +11,9 @@
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
 
-DECLARE_MODULE_V1
-(
-	"misc/httpd", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("misc/httpd", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 connection_t *listener;
 mowgli_list_t httpd_path_handlers;
@@ -424,6 +420,3 @@ void _moddeinit(module_unload_intent_t intent)
 	del_conf_item("PORT", &conf_httpd_table);
 	del_top_conf("HTTPD");
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */

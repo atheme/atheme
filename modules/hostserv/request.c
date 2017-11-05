@@ -4,18 +4,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows requesting a vhost for a nick/account
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1
-(
-	"hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Rizon Development Group <http://www.rizon.net>"
-);
+DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Rizon Development Group <http://www.rizon.net>");
 
 bool request_per_nick;
 service_t *hostsvs;
@@ -607,9 +603,3 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

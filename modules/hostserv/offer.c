@@ -4,19 +4,15 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows opers to offer vhosts to users
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 #include "../groupserv/groupserv.h"
 
-DECLARE_MODULE_V1
-(
-	"hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.net>"
-);
+DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.net>");
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -397,9 +393,3 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "End of list.");
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

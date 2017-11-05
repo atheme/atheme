@@ -4,7 +4,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for bahamut-based ircd.
- *
  */
 
 #include "atheme.h"
@@ -12,15 +11,14 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
 static bool has_protoctl = false;
 static bool use_esvid = false;
 static bool use_mlock = false;
 static char ts6sid[3 + 1] = "";
-
-/* *INDENT-OFF* */
 
 ircd_t Unreal = {
 	.ircdname = "UnrealIRCd 3.1 or later",
@@ -1615,9 +1613,3 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

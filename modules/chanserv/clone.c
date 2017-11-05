@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService CLONE functions.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/clone", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/clone", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -153,9 +149,3 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

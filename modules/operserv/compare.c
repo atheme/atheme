@@ -3,17 +3,13 @@
  * Rights to this code are documented in doc/LICENCE.
  *
  * This file contains functionality implementing OperServ COMPARE.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/compare", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Robin Burchell <surreal.w00t@gmail.com>"
-);
+DECLARE_MODULE_V1("operserv/compare", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Robin Burchell <surreal.w00t@gmail.com>");
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -170,9 +166,3 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches comparing %s and %s"), matches, object1, object2);
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

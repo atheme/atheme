@@ -3,18 +3,14 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1
-(
-	"memoserv/main", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("memoserv/main", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
@@ -94,9 +90,3 @@ static void on_user_away(user_t *u)
 		                                     "delete memos you no longer need."));
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

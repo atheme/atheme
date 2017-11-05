@@ -3,7 +3,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
@@ -11,12 +10,9 @@
 #include "template.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1
-(
-	"chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_join(hook_channel_joinpart_t *hdata);
 static void cs_part(hook_channel_joinpart_t *hdata);
@@ -944,9 +940,3 @@ static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 		cu->modes &= ~data->mvalue;
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

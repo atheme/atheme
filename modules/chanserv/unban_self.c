@@ -5,17 +5,13 @@
  * This file contains a CService UNBAN which can only unbans the source
  * user, not others.
  * Do not load chanserv/ban and chanserv/unban_self together.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/unban_self", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/unban_self", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -113,9 +109,3 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

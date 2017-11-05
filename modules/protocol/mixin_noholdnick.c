@@ -7,12 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/mixin_noholdnick", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("protocol/mixin_noholdnick", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 int oldflag;
 
@@ -34,9 +31,3 @@ void _moddeinit(module_unload_intent_t intent)
 
 	ircd->flags |= oldflag;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

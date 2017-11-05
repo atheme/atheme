@@ -10,12 +10,9 @@
 #include <sys/stat.h>
 #include <crack.h>
 
-DECLARE_MODULE_V1
-(
-	"nickserv/cracklib", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-        PACKAGE_STRING,
-        VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/cracklib", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 bool cracklib_warn;
 

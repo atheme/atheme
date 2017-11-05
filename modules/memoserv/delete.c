@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv DELETE function
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"memoserv/delete", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("memoserv/delete", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -120,9 +116,3 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 
 	return;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

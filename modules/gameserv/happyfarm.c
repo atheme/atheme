@@ -10,7 +10,8 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-DECLARE_MODULE_V1("gameserv/happyfarm", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
+DECLARE_MODULE_V1("gameserv/happyfarm", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);
 
 /* Privatedata schema... */

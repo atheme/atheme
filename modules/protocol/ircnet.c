@@ -5,7 +5,6 @@
  * This file contains protocol support for IRCnet ircd's.
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
- *
  */
 
 #include "atheme.h"
@@ -13,7 +12,8 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
 
 /* *INDENT-OFF* */
@@ -797,9 +797,3 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -18,12 +18,9 @@
 #define CHALLENGE_LENGTH	SHA256_DIGEST_LENGTH
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
-DECLARE_MODULE_V1
-(
-	"saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 sasl_mech_register_func_t *regfuncs;
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
@@ -160,9 +157,3 @@ static void mech_finish(sasl_session_t *p)
 }
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

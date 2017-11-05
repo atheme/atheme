@@ -7,12 +7,9 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-DECLARE_MODULE_V1
-(
-	"exttarget/oper", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("exttarget/oper", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static mowgli_patricia_t **exttarget_tree = NULL;
 

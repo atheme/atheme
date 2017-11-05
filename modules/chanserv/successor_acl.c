@@ -7,12 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static unsigned int successor_flag = 0;
 

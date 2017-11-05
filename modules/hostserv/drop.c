@@ -4,18 +4,14 @@
  *
  * Allows a user to drop (unset) their assigned vhost without
  * Staff intervention.
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1
-(
-	"hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
-);
+DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
 
 static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 

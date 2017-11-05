@@ -3,18 +3,14 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the OperServ SET command.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1
-(
-	"operserv/set", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/set", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_help_set(sourceinfo_t *si, const char *subcmd);
 static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -548,9 +544,3 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&os_set_enforceprefix, os_set_cmdtree);
 	mowgli_patricia_destroy(os_set_cmdtree, NULL, NULL);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ SETPASS function.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void clear_setpass_key(user_t *u);
 static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[]);

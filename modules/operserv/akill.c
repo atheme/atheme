@@ -5,17 +5,13 @@
  *
  * This file contains functionality which implements
  * the OperServ AKILL command.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/akill", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_akill_newuser(hook_user_nick_t *data);
 
@@ -555,9 +551,3 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("AKILL list synchronized to servers."));
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

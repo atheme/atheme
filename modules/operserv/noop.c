@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * OperServ NOOP command.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 typedef struct noop_ noop_t;
 
@@ -355,9 +351,3 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

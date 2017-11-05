@@ -5,18 +5,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Sets the public key (for SASL ECDSA-NIST256p-CHALLENGE) of a user.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Zohlai Development Group"
-);
+DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Zohlai Development Group");
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -70,9 +66,3 @@ static void ns_cmd_set_pubkey(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your public key is now set to \2%s\2."), newkey);
 	return;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

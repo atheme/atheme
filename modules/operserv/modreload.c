@@ -3,12 +3,9 @@
 #include "uplink.h" /* XXX: For sendq_flush and curr_uplink */
 #include "datastream.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/modreload", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/modreload", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_cmd_modreload(sourceinfo_t *si, int parc, char *parv[]);
 

@@ -3,18 +3,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService FLAGS functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/flags", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/flags", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 static void check_registration_keywords(hook_user_register_check_t *hdata);
@@ -524,9 +520,3 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	free(target);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -3,18 +3,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService TEMPLATE functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/template", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/template", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void list_generic_flags(sourceinfo_t *si);
 
@@ -398,9 +394,3 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

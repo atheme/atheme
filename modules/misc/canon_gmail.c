@@ -9,12 +9,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"misc/canon_gmail", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("misc/canon_gmail", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 {

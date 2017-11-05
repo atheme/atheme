@@ -4,17 +4,13 @@
  *
  * This file is a meta-module for compatibility with old
  * setups pre-SET split.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/set", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 void _modinit(module_t *m)
 {
@@ -42,9 +38,3 @@ void _modinit(module_t *m)
 void _moddeinit(module_unload_intent_t intent)
 {
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

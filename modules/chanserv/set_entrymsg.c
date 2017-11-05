@@ -4,17 +4,13 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the CService SET ENTRYMSG command.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/set_entrymsg", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/set_entrymsg", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -78,9 +74,3 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 set the entry message for the channel to \2%s\2"), get_source_name(si), parv[1]);
 	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

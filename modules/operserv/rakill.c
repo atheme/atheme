@@ -3,7 +3,6 @@
  * Rights to this code are as defined in doc/LICENSE.
  *
  * Regexp-based AKILL implementation.
- *
  */
 
 /*
@@ -13,12 +12,9 @@
  */
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/rakill", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/rakill", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -122,9 +118,3 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches for %s akilled."), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

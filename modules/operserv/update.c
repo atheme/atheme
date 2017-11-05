@@ -3,17 +3,13 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService UPDATE command.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/update", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/update", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_cmd_update(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -39,9 +35,3 @@ void os_cmd_update(sourceinfo_t *si, int parc, char *parv[])
 		db_save(NULL, DB_SAVE_BG_IMPORTANT);
 	/* db_save() will wallops/snoop/log the error */
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

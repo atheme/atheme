@@ -4,7 +4,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for ratbox-based ircd.
- *
  */
 
 #include "atheme.h"
@@ -12,10 +11,9 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+DECLARE_MODULE_V1("protocol/ratbox", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
-
-/* *INDENT-OFF* */
 
 ircd_t Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",
@@ -78,8 +76,6 @@ struct cmode_ ratbox_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
 void _modinit(module_t * m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
@@ -97,9 +93,3 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

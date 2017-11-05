@@ -4,18 +4,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Changes the account name to another registered nick
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_accountname", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/set_accountname", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -83,9 +79,3 @@ static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 	myuser_rename(si->smu, newname);
 	return;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

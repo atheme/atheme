@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Dynamic services operator privileges
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/soper", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[]);
@@ -315,9 +311,3 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Cleared password for \2%s\2."), entity(mu)->name);
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

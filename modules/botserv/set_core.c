@@ -4,18 +4,14 @@
  *
  * This file contains a BService SET which can change
  * botserv settings on channel or bot.
- *
  */
 
 #include "atheme.h"
 #include "botserv.h"
 
-DECLARE_MODULE_V1
-(
-	"botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Rizon Development Group <http://dev.rizon.net>"
-);
+DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Rizon Development Group <http://dev.rizon.net>");
 
 static void bs_help_set(sourceinfo_t *si, const char *subcmd);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -83,9 +79,3 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	parv[1] = dest;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -3,19 +3,15 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the nickserv LISTGROUPS function.
- *
  */
 
 #include "atheme.h"
 
 #include "../groupserv/groupserv.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/listgroups", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/listgroups", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -111,5 +107,3 @@ void _moddeinit(module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_listgroups);
 }
-
-

@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * A simple module inspector.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/modinspect", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("operserv/modinspect", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -70,9 +66,3 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

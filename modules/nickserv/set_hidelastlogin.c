@@ -4,18 +4,13 @@
  *
  * Hides (opts you OUT) of the automatic Last Login notice upon
  * successfully authenticating to your account.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_hidelastlogin", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/set_hidelastlogin", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -86,5 +81,3 @@ static void ns_cmd_set_hidelastlogin(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
-
-

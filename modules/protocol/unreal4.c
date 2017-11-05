@@ -6,7 +6,6 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for bahamut-based ircd.
- *
  */
 
 #include "atheme.h"
@@ -14,7 +13,8 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
                   PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
 
 static bool has_protoctl = false;
@@ -1629,9 +1629,3 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

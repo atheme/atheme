@@ -22,12 +22,9 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/moderate", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
-);
+DECLARE_MODULE_V1("chanserv/moderate", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
 
 static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);

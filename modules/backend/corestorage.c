@@ -18,12 +18,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 unsigned int dbv;
 unsigned int their_ca_all;
@@ -1057,9 +1054,3 @@ void _modinit(module_t *m)
 
 	backend_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

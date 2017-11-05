@@ -3,12 +3,12 @@
  * Released under the same terms as Atheme itself.
  *
  * Netsplit monitor
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("statserv/netsplit", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
+DECLARE_MODULE_V1("statserv/netsplit", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
                   PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[]);

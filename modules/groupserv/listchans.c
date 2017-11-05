@@ -3,18 +3,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the GroupServ LISTCHANS function.
- *
  */
 
 #include "atheme.h"
 #include "groupserv.h"
 
-DECLARE_MODULE_V1
-(
-	"groupserv/listchans", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("groupserv/listchans", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -97,9 +93,3 @@ static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 						    N_("\2%d\2 channel access matches for the group \2%s\2"), i),
 						    i, entity(mg)->name);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

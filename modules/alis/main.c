@@ -30,18 +30,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * ALIS, based on the ratbox-services implementation.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1
-(
-	"alis/main", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"William Pitcock <nenolod -at- nenolod.net>"
-);
+DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "William Pitcock <nenolod -at- nenolod.net>");
 
 #define ALIS_MAX_PARC	10
 #define ALIS_MAX_MATCH	60

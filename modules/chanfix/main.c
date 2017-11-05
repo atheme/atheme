@@ -6,12 +6,9 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-DECLARE_MODULE_V1
-(
-	"chanfix/main", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanfix/main", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 service_t *chanfix;
 mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;

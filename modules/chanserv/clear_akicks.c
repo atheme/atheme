@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService CLEAR FLAGS functions.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/clear_akicks", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/clear_akicks", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -90,9 +86,3 @@ static void cs_cmd_clear_akicks(sourceinfo_t *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 removed all %d AKICK entries."),
 				get_source_name(si), changes);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

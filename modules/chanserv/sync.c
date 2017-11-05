@@ -7,12 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/sync", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/sync", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -447,9 +444,3 @@ void _moddeinit(module_unload_intent_t intent)
 
 	del_conf_item("NO_VHOST_SYNC", &chansvs.me->conf_table);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

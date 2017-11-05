@@ -5,7 +5,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows you to opt-out of password-based authentication methods.
- *
  */
 
 #include "atheme.h"
@@ -13,12 +12,9 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_nopassword", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Zohlai Development Group"
-);
+DECLARE_MODULE_V1("nickserv/set_nopassword", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, "Zohlai Development Group");
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -110,9 +106,3 @@ static void ns_cmd_set_nopassword(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

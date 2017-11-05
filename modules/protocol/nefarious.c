@@ -5,7 +5,6 @@
  * This file contains protocol support for P10 ircd's.
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
- *
  */
 
 #include "atheme.h"
@@ -13,10 +12,9 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, NULL,
+DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, NULL,
                   PACKAGE_STRING, VENDOR_STRING);
-
-/* *INDENT-OFF* */
 
 ircd_t Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",
@@ -753,9 +751,3 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

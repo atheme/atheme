@@ -4,18 +4,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Enable fantasy commands.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1
-(
-	"botserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("botserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_patricia_t **bs_set_cmdtree;
 
@@ -98,9 +94,3 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> FANTASY {ON|OFF}"));
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

@@ -3,18 +3,14 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService OWNER functions.
- *
  */
 
 #include "atheme.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);
@@ -156,9 +152,3 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 
 	cmd_protect(si, false, parc, parv);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

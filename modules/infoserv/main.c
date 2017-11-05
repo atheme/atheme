@@ -8,18 +8,14 @@
  * oper info messages. Yes, I know this is a bit ugly, but
  * I can't think of a saner way that is efficient, avoids a
  * few bugs and doesn't break people's existing InfoServ DB entries.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1
-(
-	"infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 struct logoninfo_ {
         stringref nick;
@@ -566,9 +562,3 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(infoserv, &is_list);
 	service_unbind_command(infoserv, &is_olist);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

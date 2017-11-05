@@ -3,12 +3,12 @@
  * Released under the same terms as Atheme itself.
  *
  * Channel information gatherer for statistics (Useful mostly for XMLRPC)
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
+DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
                   PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);

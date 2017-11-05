@@ -7,12 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_enforcetime", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/set_enforcetime", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -77,9 +74,3 @@ static void ns_cmd_set_enforcetime(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ENFORCETIME");
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

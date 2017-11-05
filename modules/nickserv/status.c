@@ -3,17 +3,13 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService STATUS function.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/status", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/status", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
@@ -124,9 +120,3 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != NULL && is_ircop(si->su))
 		command_success_nodata(si, _("You are an IRC operator."));
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

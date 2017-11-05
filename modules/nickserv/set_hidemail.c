@@ -4,7 +4,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Hides your e-mail address.
- *
  */
 
 #include "atheme.h"
@@ -12,12 +11,9 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_hidemail", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("nickserv/set_hidemail", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -102,9 +98,3 @@ static void ns_cmd_set_hidemail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

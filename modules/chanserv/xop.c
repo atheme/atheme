@@ -3,19 +3,15 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService XOP functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK,
+                  _modinit, _moddeinit,
+                  PACKAGE_STRING, VENDOR_STRING);
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
@@ -520,9 +516,3 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%d\2 changes)"), get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
