@@ -392,5 +392,4 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
 
-VENDOR_DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.net/>")
+SIMPLE_DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER)

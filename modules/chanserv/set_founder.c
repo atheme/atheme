@@ -214,5 +214,4 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }
 
-VENDOR_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Atheme Development Group <http://www.atheme.org/>")
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK)

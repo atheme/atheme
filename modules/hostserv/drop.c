@@ -66,5 +66,4 @@ static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 }
 
-VENDOR_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Atheme Development Group <http://atheme.github.io/>")
+SIMPLE_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

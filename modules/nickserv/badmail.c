@@ -269,5 +269,4 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-VENDOR_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.net/>")
+SIMPLE_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER)

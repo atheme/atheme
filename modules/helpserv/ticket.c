@@ -343,5 +343,4 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
         command_fail(si, fault_badparams, _("You do not have a help request to cancel."));
 }
 
-VENDOR_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.net/>")
+SIMPLE_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER)

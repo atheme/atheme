@@ -1749,5 +1749,4 @@ mod_deinit(const module_unload_intent_t intent)
 {
 }
 
-VENDOR_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.org/>")
+SIMPLE_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER)
