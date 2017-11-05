@@ -20,9 +20,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/antiflood", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/antiflood", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static time_t antiflood_msg_time = 60;
 static size_t antiflood_msg_count = 10;

@@ -13,12 +13,8 @@
 
 #include <dlfcn.h>
 
-DECLARE_MODULE_V1
-(
-	"scripting/perl", false, _modinit, _moddeinit,
-	"$Id$",
-	VENDOR_STRING
-);
+SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 /*
  * Definitions:

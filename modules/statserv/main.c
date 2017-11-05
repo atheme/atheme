@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
+VENDOR_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Alexandria Wolcott <alyx@sporksmoo.net>",
+                         _modinit, _moddeinit);
 
 service_t *statsvs;
 

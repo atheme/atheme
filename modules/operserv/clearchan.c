@@ -9,9 +9,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Robin Burchell <surreal.w00t@gmail.com>");
+VENDOR_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Robin Burchell <surreal.w00t@gmail.com>",
+                         _modinit, _moddeinit);
 
 #define CLEAR_KICK 1
 #define CLEAR_KILL 2

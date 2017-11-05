@@ -9,9 +9,8 @@
 #include "gameserv_common.h"
 #include "namegen_tab.h"
 
-DECLARE_MODULE_V1("gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void command_namegen(sourceinfo_t *si, int parc, char *parv[]);
 

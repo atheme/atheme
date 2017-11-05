@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/kick", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/kick", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);

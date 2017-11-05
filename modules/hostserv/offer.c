@@ -10,9 +10,9 @@
 #include "hostserv.h"
 #include "../groupserv/groupserv.h"
 
-DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.net>");
+VENDOR_DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.net>",
+                         _modinit, _moddeinit);
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);

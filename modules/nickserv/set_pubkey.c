@@ -10,9 +10,9 @@
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Zohlai Development Group");
+VENDOR_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Zohlai Development Group",
+                         _modinit, _moddeinit);
 
 mowgli_patricia_t **ns_set_cmdtree;
 

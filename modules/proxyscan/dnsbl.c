@@ -57,9 +57,8 @@
 #include "atheme.h"
 #include "conf.h"
 
-DECLARE_MODULE_V1("proxyscan/dnsbl", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("proxyscan/dnsbl", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 mowgli_list_t blacklist_list = { NULL, NULL, 0 };
 mowgli_patricia_t **os_set_cmdtree;

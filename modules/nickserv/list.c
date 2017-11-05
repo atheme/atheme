@@ -10,9 +10,8 @@
 #include "atheme.h"
 #include "list_common.h"
 
-DECLARE_MODULE_V1("nickserv/list", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/list", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static mowgli_patricia_t *list_params;

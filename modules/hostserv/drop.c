@@ -9,9 +9,9 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
+VENDOR_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://atheme.github.io>",
+                         _modinit, _moddeinit);
 
 static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 

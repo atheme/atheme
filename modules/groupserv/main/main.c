@@ -5,12 +5,8 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-DECLARE_MODULE_V1
-(
-	"groupserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+SIMPLE_DECLARE_MODULE_V1("groupserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
+                         _modinit, _moddeinit);
 
 service_t *groupsvs;
 

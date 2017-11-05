@@ -9,9 +9,8 @@
 #include "template.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);

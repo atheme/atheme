@@ -14,9 +14,8 @@
 # include <sys/file.h>
 #endif
 
-DECLARE_MODULE_V1("backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 typedef struct opensex_ {
 	/* Lexing state */

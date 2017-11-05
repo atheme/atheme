@@ -9,9 +9,9 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Rizon Development Group <http://www.rizon.net>");
+VENDOR_DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Rizon Development Group <http://www.rizon.net>",
+                         _modinit, _moddeinit);
 
 bool request_per_nick;
 service_t *hostsvs;

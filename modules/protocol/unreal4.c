@@ -13,9 +13,9 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
+VENDOR_DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://atheme.github.io/>",
+                         _modinit, NULL);
 
 static bool has_protoctl = false;
 static bool use_esvid = false;

@@ -25,12 +25,8 @@
 #include "uplink.h"
 #include "rfc1459.h"
 
-DECLARE_MODULE_V1
-(
-	"transport/rfc1459", true, _modinit, _moddeinit,
-	PACKAGE_VERSION,
-	VENDOR_STRING
-);
+SIMPLE_DECLARE_MODULE_V1("transport/rfc1459", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, _moddeinit);
 
 void _modinit(module_t *m)
 {

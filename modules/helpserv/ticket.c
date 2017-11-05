@@ -7,9 +7,10 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.net>");
+VENDOR_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.net>",
+                         _modinit, _moddeinit);
+
 
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;

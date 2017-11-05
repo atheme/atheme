@@ -13,9 +13,9 @@
 #include "pmodule.h"
 #include "protocol/elemental-ircd.h"
 
-DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
+VENDOR_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "PonyChat Development Group <http://www.ponychat.net/>",
+                         _modinit, NULL);
 
 ircd_t elemental_ircd = {
 	.ircdname = "elemental-ircd",

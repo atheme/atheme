@@ -9,9 +9,8 @@
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1("botserv/set_nobot", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("botserv/set_nobot", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 mowgli_patricia_t **bs_set_cmdtree;
 

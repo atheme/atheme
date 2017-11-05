@@ -70,6 +70,6 @@ crypto_ircservices_moddeinit(const module_unload_intent_t __attribute__((unused)
 	(void) crypt_unregister(&crypto_ircservices_impl);
 }
 
-DECLARE_MODULE_V1("crypto/ircservices", MODULE_UNLOAD_CAPABILITY_OK,
-                  crypto_ircservices_modinit, crypto_ircservices_moddeinit,
-                  PACKAGE_STRING, "Jilles Tjoelker <jilles@stack.nl>");
+VENDOR_DECLARE_MODULE_V1("crypto/ircservices", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Jilles Tjoelker <jilles@stack.nl>",
+                         crypto_ircservices_modinit, crypto_ircservices_moddeinit);

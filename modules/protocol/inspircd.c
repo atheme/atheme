@@ -10,9 +10,9 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
+VENDOR_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.org/>",
+                         _modinit, NULL);
 
 ircd_t InspIRCd = {
 	.ircdname = "InspIRCd",

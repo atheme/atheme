@@ -8,9 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);

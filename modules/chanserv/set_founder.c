@@ -8,9 +8,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org>");
+VENDOR_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://www.atheme.org/>",
+                         _modinit, _moddeinit);
 
 static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
 

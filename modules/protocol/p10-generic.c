@@ -11,9 +11,8 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("protocol/p10-generic", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("protocol/p10-generic", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 static void check_hidehost(user_t *u);
 

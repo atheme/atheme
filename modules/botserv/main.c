@@ -8,9 +8,9 @@
 #include "atheme.h"
 #include "botserv.h"
 
-DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Rizon Development Group <http://www.atheme.org>");
+VENDOR_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Rizon Development Group <http://dev.rizon.net/>",
+                         _modinit, _moddeinit);
 
 static void bs_join(hook_channel_joinpart_t *hdata);
 static void bs_part(hook_channel_joinpart_t *hdata);

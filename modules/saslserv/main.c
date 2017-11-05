@@ -8,9 +8,8 @@
 #include "atheme.h"
 #include "uplink.h"
 
-DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;

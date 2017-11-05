@@ -8,9 +8,8 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1("chanserv/op", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/op", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);

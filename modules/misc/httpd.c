@@ -11,9 +11,8 @@
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
 
-DECLARE_MODULE_V1("misc/httpd", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("misc/httpd", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 connection_t *listener;
 mowgli_list_t httpd_path_handlers;

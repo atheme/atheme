@@ -9,9 +9,9 @@
 #include "atheme.h"
 #include "botserv.h"
 
-DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Rizon Development Group <http://dev.rizon.net>");
+VENDOR_DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Rizon Development Group <http://dev.rizon.net/>",
+                         _modinit, _moddeinit);
 
 static void bs_help_set(sourceinfo_t *si, const char *subcmd);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);

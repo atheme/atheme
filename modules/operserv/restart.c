@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/restart", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("operserv/restart", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
 

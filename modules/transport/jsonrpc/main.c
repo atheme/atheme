@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * JSONRPC implementation
- *
  */
 
 #include "atheme.h"
@@ -12,12 +11,8 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-DECLARE_MODULE_V1
-(
-	"transport/jsonrpc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+SIMPLE_DECLARE_MODULE_V1("transport/jsonrpc", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void handle_request(connection_t *cptr, void *requestbuf);
 

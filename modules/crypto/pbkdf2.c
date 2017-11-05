@@ -74,8 +74,7 @@ crypto_pbkdf2_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }
 
-DECLARE_MODULE_V1("crypto/pbkdf2", MODULE_UNLOAD_CAPABILITY_OK,
-                  crypto_pbkdf2_modinit, crypto_pbkdf2_moddeinit,
-                  PACKAGE_VERSION, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("crypto/pbkdf2", MODULE_UNLOAD_CAPABILITY_OK,
+                         crypto_pbkdf2_modinit, crypto_pbkdf2_moddeinit);
 
 #endif

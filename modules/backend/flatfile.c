@@ -9,9 +9,8 @@
 #include "atheme.h"
 #include "template.h"
 
-DECLARE_MODULE_V1("backend/flatfile", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("backend/flatfile", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 /* database versions */
 #define DB_SHRIKE	1

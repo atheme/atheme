@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void clear_setpass_key(user_t *u);
 static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[]);

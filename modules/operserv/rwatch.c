@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/rwatch", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("operserv/rwatch", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, _moddeinit);
 
 static void rwatch_newuser(hook_user_nick_t *data);
 static void rwatch_nickchange(hook_user_nick_t *data);

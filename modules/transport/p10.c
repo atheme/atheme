@@ -25,9 +25,8 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_VERSION, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, _moddeinit);
 
 /* parses a P10 IRC stream */
 static void p10_parse(char *line)

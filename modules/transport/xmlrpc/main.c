@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * New xmlrpc implementation
- *
  */
 
 #include "atheme.h"
@@ -12,12 +11,8 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-DECLARE_MODULE_V1
-(
-	"transport/xmlrpc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
+SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void handle_request(connection_t *cptr, void *requestbuf);
 
@@ -614,6 +609,3 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 
 	return 0;
 }
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */

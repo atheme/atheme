@@ -8,9 +8,8 @@
 #include "atheme.h"
 #include "conf.h"
 
-DECLARE_MODULE_V1("operserv/modload", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("operserv/modload", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 

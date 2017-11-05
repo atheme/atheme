@@ -10,9 +10,8 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1("nickserv/freeze", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/freeze", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 

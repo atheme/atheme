@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://www.atheme.net>");
+VENDOR_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.net>",
+                         _modinit, _moddeinit);
 
 static void check_registration(hook_user_register_check_t *hdata);
 static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[]);

@@ -16,9 +16,8 @@
 #define COMMAND_LC "identify"
 #endif
 
-DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 

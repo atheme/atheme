@@ -35,9 +35,9 @@
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "William Pitcock <nenolod -at- nenolod.net>");
+VENDOR_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK,
+                         "William Pitcock <nenolod -at- nenolod.net>",
+                         _modinit, _moddeinit);
 
 #define ALIS_MAX_PARC	10
 #define ALIS_MAX_MATCH	60

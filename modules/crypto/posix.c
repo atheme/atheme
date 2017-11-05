@@ -234,8 +234,7 @@ crypto_posix_moddeinit(const module_unload_intent_t __attribute__((unused)) inte
 	(void) crypt_unregister(&crypto_posix_impl);
 }
 
-DECLARE_MODULE_V1("crypto/posix", MODULE_UNLOAD_CAPABILITY_OK,
-                  crypto_posix_modinit, crypto_posix_moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("crypto/posix", MODULE_UNLOAD_CAPABILITY_OK,
+                         crypto_posix_modinit, crypto_posix_moddeinit);
 
 #endif /* HAVE_CRYPT || HAVE_OPENSSL */

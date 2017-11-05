@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Robin Burchell <surreal.w00t@gmail.com>");
+VENDOR_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Robin Burchell <surreal.w00t@gmail.com>",
+                         _modinit, _moddeinit);
 
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 

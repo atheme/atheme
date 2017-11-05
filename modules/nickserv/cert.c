@@ -7,9 +7,9 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/cert", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, "Atheme Development Group <http://atheme.github.io>");
+VENDOR_DECLARE_MODULE_V1("nickserv/cert", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://atheme.github.io>",
+                         _modinit, _moddeinit);
 
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
 

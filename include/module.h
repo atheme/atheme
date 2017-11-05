@@ -90,12 +90,20 @@ typedef struct {
 	int handled;
 } hook_module_load_t;
 
-#define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	v4_moduleheader_t _header = { \
-		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4, \
-		CURRENT_ABI_REVISION, "unknown", \
-		name, norestart, modinit, deinit, ven, ver \
+#define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
+	v4_moduleheader_t _header = {                                      \
+		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
+		CURRENT_ABI_REVISION, "unknown",                           \
+		name, unloadcap, modinit, moddeinit, ven, ver              \
 	}
+
+#define VENDOR_DECLARE_MODULE_V1(name, unloadcap, ven, modinit, moddeinit) \
+	DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit,             \
+	                  PACKAGE_STRING, ven)
+
+#define SIMPLE_DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit)      \
+	VENDOR_DECLARE_MODULE_V1(name, unloadcap, VENDOR_STRING,           \
+	                         modinit, moddeinit)
 
 E void _modinit(module_t *m);
 E void _moddeinit(module_unload_intent_t intent);

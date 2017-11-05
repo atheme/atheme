@@ -10,9 +10,8 @@
 #include "atheme.h"
 #include "botserv.h"
 
-DECLARE_MODULE_V1("botserv/set", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("botserv/set", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 void _modinit(module_t *m)
 {

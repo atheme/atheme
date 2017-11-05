@@ -18,9 +18,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 unsigned int dbv;
 unsigned int their_ca_all;

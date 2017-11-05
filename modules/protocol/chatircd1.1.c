@@ -14,9 +14,8 @@
 #include "pmodule.h"
 #include "protocol/chatircd.h"
 
-DECLARE_MODULE_V1("protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 ircd_t ChatIRCd = {
 	.ircdname = "ChatIRCd",                     /* IRCd name */

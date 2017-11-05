@@ -8,9 +8,8 @@
 #include "atheme.h"
 #include "template.h"
 
-DECLARE_MODULE_V1("chanserv/template", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("chanserv/template", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void list_generic_flags(sourceinfo_t *si);
 

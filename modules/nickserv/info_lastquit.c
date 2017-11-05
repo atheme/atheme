@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/info_lastquit", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/info_lastquit", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void user_delete_info_hook(hook_user_delete_t *hdata)
 {

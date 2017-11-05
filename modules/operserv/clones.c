@@ -7,9 +7,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/clones", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("operserv/clones", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, _moddeinit);
 
 #define CLONESDB_VERSION	3
 #define CLONES_GRACE_TIMEPERIOD	180

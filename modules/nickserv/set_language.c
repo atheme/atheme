@@ -11,9 +11,8 @@
 
 #ifdef ENABLE_NLS
 
-DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 mowgli_patricia_t **ns_set_cmdtree;
 

@@ -13,9 +13,8 @@
 #include "atheme.h"
 #include <limits.h>
 
-DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, _moddeinit);
 
 struct logoninfo_ {
         stringref nick;

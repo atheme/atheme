@@ -5,9 +5,8 @@
 #include "atheme.h"
 #include "prettyprint.h"
 
-DECLARE_MODULE_V1("rpgserv/set", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("rpgserv/set", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 

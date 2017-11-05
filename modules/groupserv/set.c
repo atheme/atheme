@@ -10,9 +10,8 @@
 #define IN_GROUPSERV_SET
 #include "groupserv.h"
 
-DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);

@@ -9,9 +9,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void os_akill_newuser(hook_user_nick_t *data);
 

@@ -4,9 +4,8 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("rpgserv/enable", MODULE_UNLOAD_CAPABILITY_OK,
-                  _modinit, _moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("rpgserv/enable", MODULE_UNLOAD_CAPABILITY_OK,
+                         _modinit, _moddeinit);
 
 static void rs_cmd_enable(sourceinfo_t *si, int parc, char *parv[]);
 static void rs_cmd_disable(sourceinfo_t *si, int parc, char *parv[]);

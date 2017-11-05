@@ -12,9 +12,8 @@
 #include "protocol/charybdis.h"
 #include "protocol/ircd-seven.h"
 
-DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER,
-                  _modinit, NULL,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         _modinit, NULL);
 
 ircd_t Seven = {
 	.ircdname = "ircd-seven",
