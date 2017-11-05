@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/clone", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_clone = { "CLONE", "Clones a channel.", AC_NONE, 2, cs_cmd_clone, { .path = "cservice/clone" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_clone);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_clone);
 }
@@ -148,3 +147,5 @@ static void cs_cmd_clone(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "CLONE: \2%s\2 to \2%s\2", mc->name, mc2->name);
 	command_success_nodata(si, _("Cloned \2%s\2 to \2%s\2."), source, target);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/clone", MODULE_UNLOAD_CAPABILITY_OK)

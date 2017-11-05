@@ -8,19 +8,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/help", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help, { .path = "help" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_help);
 }
@@ -57,3 +56,5 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	/* take the command through the hash table */
 	help_display(si, si->service, command, si->service->commands);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/help", MODULE_UNLOAD_CAPABILITY_OK)

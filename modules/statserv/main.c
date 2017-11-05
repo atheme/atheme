@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Alexandria Wolcott <alyx@sporksmoo.net>",
-                         _modinit, _moddeinit);
-
 service_t *statsvs;
 
 static void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[]);
@@ -19,13 +15,15 @@ command_t ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
 };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
     statsvs = service_add("statserv", NULL);
     service_named_bind_command("statserv", &ss_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
     service_named_unbind_command("statserv", &ss_help);
     if (statsvs != NULL)
@@ -56,3 +54,6 @@ void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[])
 
     help_display(si, si->service, command, si->service->commands);
 }
+
+VENDOR_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Alexandria Wolcott <alyx@sporksmoo.net>")

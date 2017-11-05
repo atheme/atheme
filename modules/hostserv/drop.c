@@ -9,20 +9,18 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-VENDOR_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Atheme Development Group <http://atheme.github.io>",
-                         _modinit, _moddeinit);
-
 static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_drop = { "DROP", N_("Drops your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_drop, { .path = "hostserv/drop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_drop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_drop);
 }
@@ -67,3 +65,6 @@ static void hs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	do_sethost_all(si->smu, NULL); // restore user vhost from user host
 
 }
+
+VENDOR_DECLARE_MODULE_V1("hostserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://atheme.github.io/>")

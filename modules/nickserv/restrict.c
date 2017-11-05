@@ -9,9 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/restrict", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_restrict = { "RESTRICT", N_("Restrict a user from using certain commands."), PRIV_MARK, 3, ns_cmd_restrict, { .path = "nickserv/restrict" } };
@@ -61,7 +58,8 @@ static void info_hook(hook_user_req_t *hdata)
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_restrict);
 
@@ -82,7 +80,8 @@ void _modinit(module_t *m)
 	list_register("restricted-reason", &restrict_match);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_restrict);
 
@@ -157,3 +156,5 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: RESTRICT <target> <ON|OFF> [note]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/restrict", MODULE_UNLOAD_CAPABILITY_OK)

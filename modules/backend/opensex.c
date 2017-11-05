@@ -14,9 +14,6 @@
 # include <sys/file.h>
 #endif
 
-SIMPLE_DECLARE_MODULE_V1("backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 typedef struct opensex_ {
 	/* Lexing state */
 	char *buf;
@@ -399,7 +396,8 @@ static database_module_t opensex_mod = {
 	.db_parse = opensex_db_parse,
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/corestorage");
 
@@ -411,3 +409,10 @@ void _modinit(module_t *m)
 
 	backend_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Robin Burchell <surreal.w00t@gmail.com>",
-                         _modinit, _moddeinit);
-
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_rnc = { "RNC", N_("Shows the most frequent realnames on the network"), PRIV_USER_AUSPEX, 1, os_cmd_rnc, { .path = "oservice/rnc" } };
@@ -22,12 +18,14 @@ struct rnc_t_
 	int count;
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rnc);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_rnc);
 }
@@ -90,3 +88,6 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
+
+VENDOR_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Robin Burchell <surreal.w00t@gmail.com>")

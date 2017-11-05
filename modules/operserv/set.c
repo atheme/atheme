@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include <limits.h>
 
-SIMPLE_DECLARE_MODULE_V1("operserv/set", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_help_set(sourceinfo_t *si, const char *subcmd);
 static void os_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_set_recontime(sourceinfo_t *si, int parc, char *parv[]);
@@ -501,7 +498,8 @@ static void os_cmd_set_enforceprefix(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SET:ENFORCEPREFIX: \2%s\2", prefix);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_set);
 
@@ -523,7 +521,8 @@ void _modinit(module_t *m)
 	command_add(&os_set_enforceprefix, os_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_set);
 	command_delete(&os_set_recontime, os_set_cmdtree);
@@ -543,3 +542,5 @@ void _moddeinit(module_unload_intent_t intent)
 	command_delete(&os_set_enforceprefix, os_set_cmdtree);
 	mowgli_patricia_destroy(os_set_cmdtree, NULL, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/set", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,23 +7,22 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/clear_flags", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_clear_flags = { "FLAGS", "Clears all channel flags.", AC_NONE, 2, cs_cmd_clear_flags, { .path = "cservice/clear_flags" } };
 
 mowgli_patricia_t **cs_clear_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
 
         command_add(&cs_clear_flags, *cs_clear_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_clear_flags, *cs_clear_cmds);
 }
@@ -85,3 +84,5 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 removed all %d non-founder access entries."),
 				get_source_name(si), changes);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/clear_flags", MODULE_UNLOAD_CAPABILITY_OK)

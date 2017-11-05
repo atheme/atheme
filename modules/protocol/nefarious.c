@@ -12,9 +12,6 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",
 	.tldprefix = "$",
@@ -701,7 +698,8 @@ static void p10_kline_sts(const char *server, const char *user, const char *host
 	sts("%s GL * +%s@%s %ld %lu :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, (unsigned long)CURRTIME, reason);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
@@ -748,3 +746,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER)

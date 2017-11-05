@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/sendpass", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass, { .path = "nickserv/sendpass" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_CONFLICT(m, "nickserv/sendpass_user")
 	service_named_bind_command("nickserv", &ns_sendpass);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_sendpass);
 }
@@ -238,3 +237,5 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/sendpass", MODULE_UNLOAD_CAPABILITY_OK)

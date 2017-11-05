@@ -37,9 +37,6 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/ts6-generic", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 static bool use_rserv_support = false;
 static bool use_tb = false;
 static bool use_euid = false;
@@ -1465,7 +1462,8 @@ static server_t *sid_find(char *name)
 	return server_find(sid);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -1556,3 +1554,10 @@ void _modinit(module_t * m)
 
 	m->mflags = MODTYPE_CORE;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/ts6-generic", MODULE_UNLOAD_CAPABILITY_NEVER)

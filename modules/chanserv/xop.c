@@ -9,9 +9,6 @@
 #include "template.h"
 #include "chanserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
 static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc);
@@ -34,7 +31,8 @@ command_t cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
 command_t cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
                          AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_aop);
 	service_named_bind_command("chanserv", &cs_sop);
@@ -44,7 +42,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("chanserv", &cs_forcexop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_aop);
 	service_named_unbind_command("chanserv", &cs_sop);
@@ -515,3 +514,5 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		verbose(mc, _("\2%s\2 reset access levels to xOP (\2%d\2 changes)"), get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK)

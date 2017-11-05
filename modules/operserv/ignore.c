@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/ignore", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
@@ -26,7 +23,8 @@ mowgli_patricia_t *os_ignore_cmds;
 mowgli_list_t svs_ignore_list;
 
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_ignore);
 
@@ -41,7 +39,8 @@ void _modinit(module_t *m)
 	use_svsignore++;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_ignore);
 
@@ -225,3 +224,5 @@ static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

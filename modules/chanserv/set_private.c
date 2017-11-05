@@ -8,16 +8,14 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_private", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_private = { "PRIVATE", N_("Hides information about a channel."), AC_NONE, 2, cs_cmd_set_private, { .path = "cservice/set_private" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
@@ -26,7 +24,8 @@ void _modinit(module_t *m)
 	use_channel_private++;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_private, *cs_set_cmdtree);
 
@@ -97,3 +96,5 @@ static void cs_cmd_set_private(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_private", MODULE_UNLOAD_CAPABILITY_OK)

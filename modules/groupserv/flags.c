@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/flags", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_flags = { "FLAGS", N_("Sets flags on a user in a group."), AC_AUTHENTICATED, 3, gs_cmd_flags, { .path = "groupserv/flags" } };
@@ -202,14 +199,18 @@ no_founder:
 	logcommand(si, CMDLOG_SET, "FLAGS: \2%s\2 now has flags \2%s\2 on \2%s\2", mt->name, gflags_tostr(ga_flags,  ga->flags), entity(mg)->name);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_flags);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_flags);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/flags", MODULE_UNLOAD_CAPABILITY_OK)

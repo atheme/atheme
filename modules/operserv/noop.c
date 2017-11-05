@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 typedef struct noop_ noop_t;
 
 struct noop_ {
@@ -30,7 +27,8 @@ static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_noop);
 	hook_add_event("user_oper");
@@ -38,7 +36,8 @@ void _modinit(module_t *m)
 	hook_add_event("user_delete");
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -350,3 +349,5 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER)

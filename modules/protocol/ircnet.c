@@ -12,9 +12,6 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",
 	.tldprefix = "$$",
@@ -720,7 +717,8 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -792,3 +790,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER)

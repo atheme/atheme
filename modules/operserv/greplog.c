@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/greplog", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_greplog = { "GREPLOG", N_("Searches through the logs."), PRIV_CHAN_AUSPEX, 3, os_cmd_greplog, { .path = "oservice/greplog" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_greplog);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_greplog);
 }
@@ -203,3 +202,5 @@ static void os_cmd_greplog(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/greplog", MODULE_UNLOAD_CAPABILITY_OK)

@@ -9,9 +9,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_akill_newuser(hook_user_nick_t *data);
 
 static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[]);
@@ -30,7 +27,8 @@ command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), 
 
 mowgli_patricia_t *os_akill_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_akill);
 
@@ -46,7 +44,8 @@ void _modinit(module_t *m)
 	hook_add_user_add(os_akill_newuser);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_akill);
 
@@ -492,9 +491,9 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	{
 		struct tm tm;
 		char settime[64];
- 
+
 		k = (kline_t *)n->data;
-		
+
 		tm = *localtime(&k->settime);
 		strftime(settime, sizeof settime, TIME_FORMAT, &tm);
 
@@ -550,3 +549,5 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("AKILL list synchronized to servers."));
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/akill", MODULE_UNLOAD_CAPABILITY_OK)

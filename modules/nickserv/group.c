@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/group", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
@@ -18,14 +15,16 @@ command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_AUTHE
 command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_AUTHENTICATED, 1, ns_cmd_ungroup, { .path = "nickserv/ungroup" } };
 command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup, { .path = "nickserv/fungroup" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_group);
 	service_named_bind_command("nickserv", &ns_ungroup);
 	service_named_bind_command("nickserv", &ns_fungroup);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_group);
 	service_named_unbind_command("nickserv", &ns_ungroup);
@@ -225,3 +224,5 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, entity(mu)->name);
 	object_unref(mn);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/group", MODULE_UNLOAD_CAPABILITY_OK)

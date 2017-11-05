@@ -8,16 +8,14 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("botserv/set_saycaller", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **bs_set_cmdtree;
 
 static void bs_cmd_set_saycaller(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set_saycaller = { "SAYCALLER", N_("Enable Caller-ID on BotServ actions or messages."), AC_AUTHENTICATED, 2, bs_cmd_set_saycaller, { .path = "botserv/set_saycaller" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 
@@ -25,7 +23,8 @@ void _modinit(module_t *m)
 
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&bs_set_saycaller, *bs_set_cmdtree);
 
@@ -85,3 +84,5 @@ static void bs_cmd_set_saycaller(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> SAYCALLER {ON|OFF}"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("botserv/set_saycaller", MODULE_UNLOAD_CAPABILITY_OK)

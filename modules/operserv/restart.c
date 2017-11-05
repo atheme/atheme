@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/restart", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_restart);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_restart);
 }
@@ -31,3 +30,5 @@ static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[])
 
 	runflags |= RF_RESTART;
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/restart", MODULE_UNLOAD_CAPABILITY_OK)

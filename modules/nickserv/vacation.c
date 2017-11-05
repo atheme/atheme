@@ -10,9 +10,6 @@
 #include "list_common.h"
 #include "list.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/vacation", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 {
 	char tsbuf[BUFSIZE];
@@ -83,7 +80,8 @@ static bool is_vacation(const mynick_t *mn, const void *arg) {
 	return ( metadata_find(mu, "private:vacation") != NULL );
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_vacation);
 
@@ -108,7 +106,8 @@ void _modinit(module_t *m)
 	list_register("vacation", &vacation);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_vacation);
 
@@ -119,3 +118,5 @@ void _moddeinit(module_unload_intent_t intent)
 
 	list_unregister("vacation");
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/vacation", MODULE_UNLOAD_CAPABILITY_OK)

@@ -9,10 +9,6 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Robin Burchell <surreal.w00t@gmail.com>",
-                         _modinit, _moddeinit);
-
 #define CLEAR_KICK 1
 #define CLEAR_KILL 2
 #define CLEAR_AKILL 3
@@ -21,12 +17,14 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_clearchan);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_clearchan);
 }
@@ -131,3 +129,6 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
+
+VENDOR_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Robin Burchell <surreal.w00t@gmail.com>")

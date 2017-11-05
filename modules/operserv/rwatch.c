@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/rwatch", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 static void rwatch_newuser(hook_user_nick_t *data);
 static void rwatch_nickchange(hook_user_nick_t *data);
 
@@ -52,7 +49,8 @@ command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex 
 rwatch_t *rwread = NULL;
 FILE *f;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rwatch);
 
@@ -85,7 +83,8 @@ void _modinit(module_t *m)
 	}
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -640,3 +639,5 @@ static void rwatch_nickchange(hook_user_nick_t *data)
 		}
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/rwatch", MODULE_UNLOAD_CAPABILITY_NEVER)

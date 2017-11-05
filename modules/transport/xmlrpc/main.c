@@ -11,9 +11,6 @@
 #include "datastream.h"
 #include "authcookie.h"
 
-SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void handle_request(connection_t *cptr, void *requestbuf);
 
 path_handler_t handle_xmlrpc = { NULL, handle_request };
@@ -95,7 +92,8 @@ static void xmlrpc_config_ready(void *vptr)
 		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc {} block missing or invalid");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
@@ -117,7 +115,8 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n;
 
@@ -609,3 +608,5 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 
 	return 0;
 }
+
+SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK)

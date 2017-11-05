@@ -8,20 +8,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/invite", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_invite = { "INVITE", N_("Invites you to a channel."),
                         AC_NONE, 2, cs_cmd_invite, { .path = "cservice/invite" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_invite);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_invite);
 }
@@ -85,3 +84,5 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "INVITE: \2%s\2", mc->name);
 	command_success_nodata(si, _("You have been invited to \2%s\2."), mc->name);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/invite", MODULE_UNLOAD_CAPABILITY_OK)

@@ -8,22 +8,21 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("hostserv/onoff", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void hs_cmd_on(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_on = { "ON", N_("Activates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_on, { .path = "hostserv/on" } };
 command_t hs_off = { "OFF", N_("Deactivates your assigned vhost."), AC_AUTHENTICATED, 1, hs_cmd_off, { .path = "hostserv/off" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_on);
 	service_named_bind_command("hostserv", &hs_off);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_on);
 	service_named_unbind_command("hostserv", &hs_off);
@@ -101,3 +100,5 @@ static void hs_cmd_off(sourceinfo_t *si, int parc, char *parv[])
 	do_sethost(si->su, NULL);
 	command_success_nodata(si, _("Your vhost of \2%s\2 is now deactivated."), md->value);
 }
+
+SIMPLE_DECLARE_MODULE_V1("hostserv/onoff", MODULE_UNLOAD_CAPABILITY_OK)

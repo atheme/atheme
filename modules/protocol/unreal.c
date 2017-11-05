@@ -11,9 +11,6 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 static bool has_protoctl = false;
 static bool use_esvid = false;
 static bool use_mlock = false;
@@ -1514,7 +1511,8 @@ static void m_protoctl(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -1610,3 +1608,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/unreal", MODULE_UNLOAD_CAPABILITY_NEVER)

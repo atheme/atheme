@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.net>",
-                         _modinit, _moddeinit);
-
 static void check_registration(hook_user_register_check_t *hdata);
 static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -30,7 +26,8 @@ typedef struct badmail_ badmail_t;
 
 mowgli_list_t ns_maillist;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -48,7 +45,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_badmail);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_can_register(check_registration);
 	hook_del_db_write(write_bedb);
@@ -270,3 +268,6 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+VENDOR_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.net/>")

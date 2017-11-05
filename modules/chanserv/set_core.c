@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_help_set(sourceinfo_t *si, const char *subcmd);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -17,14 +14,16 @@ command_t cs_set = { "SET", N_("Sets various control flags."), AC_NONE, 3, cs_cm
 
 mowgli_patricia_t *cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_set);
 
 	cs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_set);
 
@@ -86,3 +85,5 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

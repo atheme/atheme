@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/register", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
@@ -19,12 +16,14 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_register = { "REGISTER", N_("Registers a channel."),
                            AC_AUTHENTICATED, 3, cs_cmd_register, { .path = "cservice/register" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_register);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_register);
 }
@@ -180,3 +179,5 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		cu->modes |= CSTATUS_PROTECT;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/register", MODULE_UNLOAD_CAPABILITY_OK)

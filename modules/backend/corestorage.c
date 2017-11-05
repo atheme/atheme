@@ -18,9 +18,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 unsigned int dbv;
 unsigned int their_ca_all;
 
@@ -1012,7 +1009,8 @@ static void corestorage_db_write_blocking(void *filename)
 	db_close(db);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	m->mflags = MODTYPE_CORE;
 
@@ -1053,3 +1051,10 @@ void _modinit(module_t *m)
 
 	backend_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("backend/corestorage", MODULE_UNLOAD_CAPABILITY_NEVER)

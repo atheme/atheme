@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/clones", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 #define CLONESDB_VERSION	3
 #define CLONES_GRACE_TIMEPERIOD	180
 
@@ -91,7 +88,8 @@ static void clones_configready(void *unused)
 	clones_warn = config_options.default_clone_warn;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;
@@ -159,7 +157,8 @@ static void free_hostentry(const char *key, void *data, void *privdata)
 	mowgli_heap_free(hostentry_heap, he);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -965,3 +964,5 @@ static void clones_userquit(user_t *u)
 		}
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/clones", MODULE_UNLOAD_CAPABILITY_NEVER)

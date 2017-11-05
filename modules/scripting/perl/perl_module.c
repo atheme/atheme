@@ -13,9 +13,6 @@
 
 #include <dlfcn.h>
 
-SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 /*
  * Definitions:
  *  PERL_INIT_FILE is the perl script that is used to boot the Atheme interface.
@@ -399,7 +396,8 @@ void perl_script_module_unload_handler(module_t *m, module_unload_intent_t inten
 /*
  * Module startup/shutdown
  */
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	perl_script_module_heap = mowgli_heap_create(sizeof(perl_script_module_t), 256, BH_NOW);
 	if (!perl_script_module_heap)
@@ -422,7 +420,8 @@ void _modinit(module_t *m)
 	add_top_conf("LOADSCRIPT", conf_loadscript);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_perl);
 
@@ -471,3 +470,5 @@ static int conf_loadscript(mowgli_config_file_entry_t *ce)
 
 	return 0;
 }
+
+SIMPLE_DECLARE_MODULE_V1("scripting/perl", MODULE_UNLOAD_CAPABILITY_OK)

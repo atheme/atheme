@@ -9,9 +9,6 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("botserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **bs_set_cmdtree;
 
 static void bs_set_fantasy_config_ready(void *unused);
@@ -20,7 +17,8 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_set_fantasy = { "FANTASY", N_("Enable fantasy commands."), AC_AUTHENTICATED, 2, bs_cmd_set_fantasy, { .path = "botserv/set_fantasy" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, bs_set_cmdtree, "botserv/set_core", "bs_set_cmdtree");
 
@@ -30,7 +28,8 @@ void _modinit(module_t *m)
 	hook_add_config_ready(bs_set_fantasy_config_ready);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&bs_set_fantasy, *bs_set_cmdtree);
 
@@ -93,3 +92,5 @@ static void bs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Syntax: SET <#channel> FANTASY {ON|OFF}"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("botserv/set_fantasy", MODULE_UNLOAD_CAPABILITY_OK)

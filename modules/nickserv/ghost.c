@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/ghost", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_ghost = { "GHOST", N_("Reclaims use of a nickname."), AC_NONE, 2, ns_cmd_ghost, { .path = "nickserv/ghost" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_ghost);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_ghost);
 }
@@ -117,3 +116,5 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You may not ghost \2%s\2."), target);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/ghost", MODULE_UNLOAD_CAPABILITY_OK)

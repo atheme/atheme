@@ -8,20 +8,19 @@
 #include "atheme.h"
 #include "template.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/count", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_count = { "COUNT", N_("Shows number of entries in access lists."),
                          AC_NONE, 1, cs_cmd_count, { .path = "cservice/count" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_count);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_count);
 }
@@ -120,3 +119,5 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_GET, "COUNT: \2%s\2", mc->name);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/count", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/hold", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_hold = { "HOLD", N_("Prevents a channel from expiring."),
 			PRIV_HOLD, 2, cs_cmd_hold, { .path = "cservice/hold" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_hold);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_hold);
 }
@@ -84,3 +83,5 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: HOLD <#channel> <ON|OFF>"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/hold", MODULE_UNLOAD_CAPABILITY_OK)

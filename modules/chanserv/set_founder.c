@@ -8,24 +8,22 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Atheme Development Group <http://www.atheme.org/>",
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_founder = { "FOUNDER", N_("Transfers foundership of a channel."), AC_NONE, 2, cs_cmd_set_founder, { .path = "cservice/set_founder" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_founder, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_founder, *cs_set_cmdtree);
 }
@@ -215,3 +213,6 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, entity(si->smu)->name);
 }
+
+VENDOR_DECLARE_MODULE_V1("chanserv/set_founder", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://www.atheme.org/>")

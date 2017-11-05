@@ -9,19 +9,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/info", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_info = { "INFO", N_("Shows some useful information about the current settings of services."), PRIV_SERVER_AUSPEX, 1, os_cmd_info, { .path = "oservice/info" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_info);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_info);
 }
@@ -87,3 +86,5 @@ static void os_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	hook_call_operserv_info(si);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/info", MODULE_UNLOAD_CAPABILITY_OK)

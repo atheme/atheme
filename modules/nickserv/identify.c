@@ -16,9 +16,6 @@
 #define COMMAND_LC "identify"
 #endif
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
@@ -27,7 +24,8 @@ command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_N
 command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login, { .path = "nickserv/identify" } };
 #endif
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 #ifdef NICKSERV_LOGIN
 	service_named_bind_command("nickserv", &ns_login);
@@ -38,7 +36,8 @@ void _modinit(module_t *m)
 	hook_add_event("user_can_login");
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 #ifdef NICKSERV_LOGIN
 	service_named_unbind_command("nickserv", &ns_login);
@@ -176,3 +175,5 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), entity(mu)->name);
 	bad_password(si, mu);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/" COMMAND_LC, MODULE_UNLOAD_CAPABILITY_OK)

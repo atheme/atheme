@@ -10,14 +10,12 @@
 #include "uplink.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/set_groupname", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_set_groupname(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set_groupname = { "GROUPNAME", N_("Changes the group's name."), AC_NONE, 1, gs_cmd_set_groupname, { .path = "groupserv/set_groupname" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         use_groupserv_main_symbols(m);
         use_groupserv_set_symbols(m);
@@ -25,7 +23,8 @@ void _modinit(module_t *m)
 	command_add(&gs_set_groupname, gs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&gs_set_groupname, gs_set_cmdtree);
 }
@@ -83,3 +82,5 @@ static void gs_cmd_set_groupname(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_REGISTER, "SET:GROUPNAME: \2%s\2 to \2%s\2", oldname, newname);
 	command_success_nodata(si, _("The group \2%s\2 has been renamed to \2%s\2."), oldname, newname);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/set_groupname", MODULE_UNLOAD_CAPABILITY_OK)

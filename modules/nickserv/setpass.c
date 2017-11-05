@@ -7,16 +7,14 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void clear_setpass_key(user_t *u);
 static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[]);
 static void show_setpass(hook_user_req_t *hdata);
 
 command_t ns_setpass = { "SETPASS", N_("Changes a password using an authcode."), AC_NONE, 3, ns_cmd_setpass, { .path = "nickserv/setpass" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(clear_setpass_key);
@@ -25,7 +23,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_setpass);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_identify(clear_setpass_key);
 	hook_del_user_info(show_setpass);
@@ -146,3 +145,5 @@ static void show_setpass(hook_user_req_t *hdata)
 		}
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/setpass", MODULE_UNLOAD_CAPABILITY_OK)

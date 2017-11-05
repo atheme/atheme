@@ -8,21 +8,20 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-SIMPLE_DECLARE_MODULE_V1("gameserv/eightball", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NONE, 2, command_eightball, { .path = "gameserv/eightball" } };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_eightball);
 
 	service_named_bind_command("chanserv", &cmd_eightball);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_eightball);
 
@@ -69,3 +68,5 @@ static void command_eightball(sourceinfo_t *si, int parc, char *parv[])
 
 	gs_command_report(si, "%s", _(eightball_responses[rand() % 28]));
 }
+
+SIMPLE_DECLARE_MODULE_V1("gameserv/eightball", MODULE_UNLOAD_CAPABILITY_OK)

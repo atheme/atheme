@@ -9,21 +9,20 @@
 #include "gameserv_common.h"
 #include "namegen_tab.h"
 
-SIMPLE_DECLARE_MODULE_V1("gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void command_namegen(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_NONE, 2, command_namegen, { .path = "gameserv/namegen" } };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_namegen);
 
 	service_named_bind_command("chanserv", &cmd_namegen);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_namegen);
 
@@ -73,3 +72,5 @@ static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 
 	gs_command_report(si, _("Some names to ponder: %s"), buf);
 }
+
+SIMPLE_DECLARE_MODULE_V1("gameserv/namegen", MODULE_UNLOAD_CAPABILITY_OK)

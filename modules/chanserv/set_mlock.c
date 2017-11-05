@@ -8,23 +8,22 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_mlock", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_mlock = { "MLOCK", N_("Sets channel mode lock."), AC_NONE, 2, cs_cmd_set_mlock, { .path = "cservice/set_mlock" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_mlock, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_mlock, *cs_set_cmdtree);
 }
@@ -304,3 +303,5 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_mlock", MODULE_UNLOAD_CAPABILITY_OK)

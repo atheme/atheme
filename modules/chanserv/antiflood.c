@@ -20,9 +20,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/antiflood", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static time_t antiflood_msg_time = 60;
 static size_t antiflood_msg_count = 10;
 
@@ -503,8 +500,8 @@ c_ci_antiflood_enforce_method(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-void
-_modinit(module_t *m)
+static void
+mod_init(module_t *m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
@@ -536,8 +533,8 @@ _modinit(module_t *m)
 	add_conf_item("ANTIFLOOD_ENFORCE_METHOD", &chansvs.me->conf_table, c_ci_antiflood_enforce_method);
 }
 
-void
-_moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(module_unload_intent_t intent)
 {
 	command_delete(&cs_set_antiflood, *cs_set_cmdtree);
 
@@ -550,3 +547,5 @@ _moddeinit(module_unload_intent_t intent)
 
 	del_conf_item("ANTIFLOOD_ENFORCE_METHOD", &chansvs.me->conf_table);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/antiflood", MODULE_UNLOAD_CAPABILITY_OK)

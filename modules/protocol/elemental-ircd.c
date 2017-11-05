@@ -13,10 +13,6 @@
 #include "pmodule.h"
 #include "protocol/elemental-ircd.h"
 
-VENDOR_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "PonyChat Development Group <http://www.ponychat.net/>",
-                         _modinit, NULL);
-
 ircd_t elemental_ircd = {
 	.ircdname = "elemental-ircd",
 	.tldprefix = "$$",
@@ -100,7 +96,8 @@ struct cmode_ elemental_user_mode_list[] = {
   { '\0', 0 }
 };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
@@ -115,3 +112,11 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+VENDOR_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "PonyChat Development Group <http://www.ponychat.net/>")

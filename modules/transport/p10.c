@@ -25,9 +25,6 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-SIMPLE_DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 /* parses a P10 IRC stream */
 static void p10_parse(char *line)
 {
@@ -189,7 +186,8 @@ cleanup:
 
 void (*default_parse)(char *line) = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
@@ -197,7 +195,10 @@ void _modinit(module_t *m)
 	parse = &p10_parse;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	parse = default_parse;
 }
+
+SIMPLE_DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -28,9 +28,6 @@
 
 #include <ldap.h>
 
-SIMPLE_DECLARE_MODULE_V1("auth/ldap", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_list_t conf_ldap_table;
 
 struct
@@ -222,7 +219,8 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	return false;
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(ldap_config_ready);
@@ -240,7 +238,8 @@ void _modinit(module_t * m)
 	auth_module_loaded = true;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	auth_user_custom = NULL;
 
@@ -258,3 +257,5 @@ void _moddeinit(module_unload_intent_t intent)
 	del_conf_item("BINDAUTH", &conf_ldap_table);
 	del_top_conf("LDAP");
 }
+
+SIMPLE_DECLARE_MODULE_V1("auth/ldap", MODULE_UNLOAD_CAPABILITY_OK)

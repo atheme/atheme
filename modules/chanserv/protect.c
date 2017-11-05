@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -19,7 +16,8 @@ command_t cs_protect = { "PROTECT", N_("Gives the channel protection flag to a u
 command_t cs_deprotect = { "DEPROTECT", N_("Removes channel protection flag from a user."),
                         AC_NONE, 2, cs_cmd_deprotect, { .path = "cservice/protect" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (ircd != NULL && !ircd->uses_protect)
 	{
@@ -32,7 +30,8 @@ void _modinit(module_t *m)
         service_named_bind_command("chanserv", &cs_deprotect);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_protect);
 	service_named_unbind_command("chanserv", &cs_deprotect);
@@ -151,3 +150,5 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 
 	cmd_protect(si, false, parc, parv);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/protect", MODULE_UNLOAD_CAPABILITY_OK)

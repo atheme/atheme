@@ -12,9 +12,6 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/asuka", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",
 	.tldprefix = "$",
@@ -325,7 +322,8 @@ static void check_hidehost(user_t *u)
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
@@ -356,3 +354,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/asuka", MODULE_UNLOAD_CAPABILITY_NEVER)

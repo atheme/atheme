@@ -12,9 +12,6 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/bahamut", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t Bahamut = {
 	.ircdname = "Bahamut 1.8.x",
 	.tldprefix = "$",
@@ -897,7 +894,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
@@ -976,3 +974,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/bahamut", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_help_set(sourceinfo_t *si, const char *subcmd);
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -67,15 +64,19 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_set);
 
 	ns_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_set);
 	mowgli_patricia_destroy(ns_set_cmdtree, NULL, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

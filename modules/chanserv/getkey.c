@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/getkey", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
                         AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_getkey);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_getkey);
 }
@@ -71,3 +70,5 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 	command_success_string(si, mc->chan->key, _("Channel \2%s\2 key is: %s"),
 			mc->name, mc->chan->key);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/getkey", MODULE_UNLOAD_CAPABILITY_OK)

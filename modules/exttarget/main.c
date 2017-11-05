@@ -7,9 +7,6 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-SIMPLE_DECLARE_MODULE_V1("exttarget/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t *exttarget_tree = NULL;
 
 static void exttarget_find(hook_myentity_req_t *req)
@@ -35,7 +32,8 @@ static void exttarget_find(hook_myentity_req_t *req)
 		req->entity = val(j);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	exttarget_tree = mowgli_patricia_create(strcasecanon);
 
@@ -43,9 +41,12 @@ void _modinit(module_t *m)
 	hook_add_myentity_find(exttarget_find);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_myentity_find(exttarget_find);
 
 	mowgli_patricia_destroy(exttarget_tree, NULL, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("exttarget/main", MODULE_UNLOAD_CAPABILITY_OK)

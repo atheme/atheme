@@ -7,22 +7,21 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 3, ns_cmd_drop, { .path = "nickserv/drop" } };
 command_t ns_fdrop = { "FDROP", N_("Forces dropping an account registration."), PRIV_USER_ADMIN, 1, ns_cmd_fdrop, { .path = "nickserv/fdrop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_drop);
 	service_named_bind_command("nickserv", &ns_fdrop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_drop);
 	service_named_unbind_command("nickserv", &ns_fdrop);
@@ -179,3 +178,5 @@ static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), entity(mu)->name);
 	object_dispose(mu);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

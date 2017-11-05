@@ -7,11 +7,6 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.net>",
-                         _modinit, _moddeinit);
-
-
 unsigned int ratelimit_count = 0;
 time_t ratelimit_firsttime = 0;
 
@@ -41,7 +36,8 @@ typedef struct ticket_ ticket_t;
 
 mowgli_list_t helpserv_reqlist;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -64,7 +60,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("helpserv", &helpserv_cancel);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_myuser_delete(account_delete_request);
@@ -345,3 +342,6 @@ static void helpserv_cmd_cancel(sourceinfo_t *si, int parc, char *parv[])
         }
         command_fail(si, fault_badparams, _("You do not have a help request to cancel."));
 }
+
+VENDOR_DECLARE_MODULE_V1("helpserv/ticket", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.net/>")

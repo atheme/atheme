@@ -8,22 +8,21 @@
 #include "atheme.h"
 #include "../groupserv/groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("memoserv/sendgroup", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendgroup = { "SENDGROUP", N_("Sends a memo to all members on a group."),
                            AC_AUTHENTICATED, 2, ms_cmd_sendgroup, { .path = "memoserv/sendgroup" } };
 static unsigned int *maxmemos;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_sendgroup);
         MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_sendgroup);
 }
@@ -182,3 +181,5 @@ static void ms_cmd_sendgroup(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The memo has been successfully sent to %d members on \2%s\2."), sent, entity(mg)->name);
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("memoserv/sendgroup", MODULE_UNLOAD_CAPABILITY_OK)

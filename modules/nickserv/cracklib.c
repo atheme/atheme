@@ -10,9 +10,6 @@
 #include <sys/stat.h>
 #include <crack.h>
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/cracklib", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 bool cracklib_warn;
 
 static void cracklib_config_ready(void *unused)
@@ -100,3 +97,5 @@ _moddeinit(module_unload_intent_t intent)
 
 	del_conf_item("CRACKLIB_WARN", &nicksvs.me->conf_table);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/cracklib", MODULE_UNLOAD_CAPABILITY_OK)

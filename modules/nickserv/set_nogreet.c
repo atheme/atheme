@@ -11,9 +11,6 @@
 #include "list_common.h"
 #include "list.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_nogreet", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_nogreet(sourceinfo_t *si, int parc, char *parv[]);
@@ -27,7 +24,8 @@ static bool has_nogreet(const mynick_t *mn, const void *arg)
 	return ( mu->flags & MU_NOGREET ) == MU_NOGREET;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
@@ -42,7 +40,8 @@ void _modinit(module_t *m)
 	list_register("nogreet", &nogreet);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	list_unregister("nogreet");
 	command_delete(&ns_set_nogreet, *ns_set_cmdtree);
@@ -97,3 +96,5 @@ static void ns_cmd_set_nogreet(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_nogreet", MODULE_UNLOAD_CAPABILITY_OK)

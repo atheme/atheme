@@ -5,9 +5,6 @@
 #include "atheme.h"
 #include "groupserv_main.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
-                         _modinit, _moddeinit);
-
 service_t *groupsvs;
 
 typedef struct {
@@ -19,7 +16,8 @@ typedef struct {
 
 extern mowgli_heap_t *mygroup_heap, *groupacs_heap;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	groupserv_persist_record_t *rec = mowgli_global_storage_get("atheme.groupserv.main.persist");
 
@@ -54,7 +52,8 @@ void _modinit(module_t *m)
 	gs_hooks_init();
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	gs_db_deinit();
 	gs_hooks_deinit();
@@ -86,3 +85,5 @@ void _moddeinit(module_unload_intent_t intent)
 			break;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/main", MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY)

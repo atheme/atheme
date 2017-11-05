@@ -9,23 +9,22 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_password", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, ns_cmd_set_password, { .path = "nickserv/set_password" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_password, *ns_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_password, *ns_set_cmdtree);
 }
@@ -69,3 +68,5 @@ static void ns_cmd_set_password(sourceinfo_t *si, int parc, char *parv[])
 
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_password", MODULE_UNLOAD_CAPABILITY_OK)

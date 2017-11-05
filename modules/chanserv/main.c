@@ -10,9 +10,6 @@
 #include "template.h"
 #include <limits.h>
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 static void cs_join(hook_channel_joinpart_t *hdata);
 static void cs_part(hook_channel_joinpart_t *hdata);
 static void cs_register(hook_channel_req_t *mc);
@@ -259,7 +256,8 @@ static int c_ci_templates(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);
@@ -309,7 +307,8 @@ void _modinit(module_t *m)
 	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (chansvs.me)
 	{
@@ -939,3 +938,5 @@ static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 		cu->modes &= ~data->mvalue;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "template.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/flags", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[]);
 static void check_registration_keywords(hook_user_register_check_t *hdata);
 
@@ -19,7 +16,8 @@ command_t cs_flags = { "FLAGS", N_("Manipulates specific permissions on a channe
 
 static bool anope_flags_compat = true;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_flags);
 
@@ -32,7 +30,8 @@ void _modinit(module_t *m)
 	hook_add_user_can_register(check_registration_keywords);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_flags);
 
@@ -519,3 +518,5 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	free(target);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/flags", MODULE_UNLOAD_CAPABILITY_OK)

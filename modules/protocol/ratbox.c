@@ -11,9 +11,6 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/ratbox", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t Ratbox = {
 	.ircdname = "Ratbox (1.0 or later)",
 	.tldprefix = "$$",
@@ -75,7 +72,8 @@ struct cmode_ ratbox_user_mode_list[] = {
   { '\0', 0 }
 };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/ts6-generic");
 
@@ -92,3 +90,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/ratbox", MODULE_UNLOAD_CAPABILITY_NEVER)

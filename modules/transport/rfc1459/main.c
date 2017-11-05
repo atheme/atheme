@@ -25,15 +25,16 @@
 #include "uplink.h"
 #include "rfc1459.h"
 
-SIMPLE_DECLARE_MODULE_V1("transport/rfc1459", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	parse = &irc_parse;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	parse = NULL;
 }
+
+SIMPLE_DECLARE_MODULE_V1("transport/rfc1459", MODULE_UNLOAD_CAPABILITY_NEVER)

@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/info_lastquit", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void user_delete_info_hook(hook_user_delete_t *hdata)
 {
 	if (hdata->u->myuser == NULL)
@@ -32,7 +29,8 @@ static void info_hook(hook_user_req_t *hdata)
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_delete_info");
 	hook_add_user_delete_info(user_delete_info_hook);
@@ -41,8 +39,11 @@ void _modinit(module_t *m)
 	hook_add_first_user_info(info_hook);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_delete_info(user_delete_info_hook);
 	hook_del_user_info(info_hook);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/info_lastquit", MODULE_UNLOAD_CAPABILITY_OK)

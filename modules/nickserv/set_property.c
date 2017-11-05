@@ -9,23 +9,22 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_property", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, ns_cmd_set_property, { .path = "nickserv/set_property" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_property, *ns_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_property, *ns_set_cmdtree);
 }
@@ -106,3 +105,5 @@ static void ns_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET:PROPERTY: \2%s\2 to \2%s\2", property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_property", MODULE_UNLOAD_CAPABILITY_OK)

@@ -12,19 +12,18 @@
 #include "atheme.h"
 #include <limits.h>
 
-SIMPLE_DECLARE_MODULE_V1("operserv/rmatch", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch, { .path = "oservice/rmatch" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rmatch);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_rmatch);
 }
@@ -100,3 +99,5 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RMATCH: \2%s\2 (\2%d\2 matches)", pattern, matches);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/rmatch", MODULE_UNLOAD_CAPABILITY_OK)

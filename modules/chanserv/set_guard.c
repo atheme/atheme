@@ -8,9 +8,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_guard", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_set_guard_config_ready(void *unused);
 
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
@@ -19,7 +16,8 @@ command_t cs_set_guard = { "GUARD", N_("Sets whether or not services will inhabi
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
@@ -29,7 +27,8 @@ void _modinit(module_t *m)
 	hook_add_config_ready(cs_set_guard_config_ready);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_guard, *cs_set_cmdtree);
 
@@ -116,3 +115,5 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_guard", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/sync", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_sync = { "SYNC", "Forces channel statuses to flags.",
@@ -401,7 +398,8 @@ static void cs_cmd_set_nosync(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 	service_named_bind_command("chanserv", &cs_sync);
@@ -429,7 +427,8 @@ void _modinit(module_t *m)
 	hook_add_user_register(sync_myuser);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_channel_acl_change(sync_channel_acl_change);
 	hook_del_user_sethost(sync_user);
@@ -443,3 +442,5 @@ void _moddeinit(module_unload_intent_t intent)
 
 	del_conf_item("NO_VHOST_SYNC", &chansvs.me->conf_table);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/sync", MODULE_UNLOAD_CAPABILITY_OK)

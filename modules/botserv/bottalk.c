@@ -9,22 +9,21 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("botserv/bottalk", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[]);
 static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_say = { "SAY", N_("Makes the bot say the given text on the given channel."), AC_AUTHENTICATED, 2, bs_cmd_say, { .path = "botserv/say" } };
 command_t bs_act = { "ACT", N_("Makes the bot do the equivalent of a \"/me\" command."), AC_AUTHENTICATED, 2, bs_cmd_act, { .path = "botserv/act" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_say);
 	service_named_bind_command("botserv", &bs_act);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_say);
 	service_named_unbind_command("botserv", &bs_act);
@@ -65,7 +64,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
-	
+
 	if (metadata_find(mc, "private:frozen:freezer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is frozen."), mc->name);
@@ -88,7 +87,7 @@ static void bs_cmd_say(sourceinfo_t *si, int parc, char *parv[])
 		msg(bot->nick, channel, "(%s) %s", saybuf, message);
 		logcommand(si, CMDLOG_DO, "SAY:\2%s\2: \2%s\2", channel, message);
 	}
-	else 
+	else
 	{
 
 	msg(bot->nick, channel, "%s", message);
@@ -160,3 +159,5 @@ static void bs_cmd_act(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_DO, "ACT:\2%s\2: \2%s\2", channel, message);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("botserv/bottalk", MODULE_UNLOAD_CAPABILITY_OK)

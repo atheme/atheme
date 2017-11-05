@@ -9,9 +9,6 @@
 #include "atheme.h"
 #include "botserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("botserv/info", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a channel or a bot."), AC_NONE, 1, bs_cmd_info, { .path = "botserv/info" } };
@@ -19,7 +16,8 @@ command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a 
 fn_botserv_bot_find *botserv_bot_find;
 mowgli_list_t *bs_bots;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
 	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
@@ -27,7 +25,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("botserv", &bs_info);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_info);
 }
@@ -127,3 +126,5 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("Syntax: INFO <botnick>"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("botserv/info", MODULE_UNLOAD_CAPABILITY_OK)

@@ -782,7 +782,7 @@ static crypt_impl_t crypto_argon2d_impl = {
 static mowgli_list_t atheme_argon2d_conf_table;
 
 static void
-crypto_argon2d_modinit(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&crypto_argon2d_impl);
 
@@ -796,7 +796,7 @@ crypto_argon2d_modinit(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-crypto_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) del_conf_item("TIME", &atheme_argon2d_conf_table);
 	(void) del_conf_item("MEMORY", &atheme_argon2d_conf_table);
@@ -807,6 +807,4 @@ crypto_argon2d_moddeinit(const module_unload_intent_t __attribute__((unused)) in
 	(void) free(argon2d_mempool);
 }
 
-VENDOR_DECLARE_MODULE_V1("crypto/argon2d", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Aaron M. D. Jones <aaronmdjones@gmail.com>",
-                         crypto_argon2d_modinit, crypto_argon2d_moddeinit);
+SIMPLE_DECLARE_MODULE_V1("crypto/argon2d", MODULE_UNLOAD_CAPABILITY_OK)

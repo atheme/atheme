@@ -587,7 +587,7 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 }
 
 static void
-sasl_scramsha_modinit(module_t *const restrict m)
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_ex, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_ex");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
@@ -597,7 +597,7 @@ sasl_scramsha_modinit(module_t *const restrict m)
 }
 
 static void
-sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
 	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
@@ -605,7 +605,6 @@ sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
 
-SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK,
-                         sasl_scramsha_modinit, sasl_scramsha_moddeinit);
+SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK)
 
 #endif /* HAVE_OPENSSL */

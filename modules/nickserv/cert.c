@@ -7,21 +7,19 @@
 
 #include "atheme.h"
 
-VENDOR_DECLARE_MODULE_V1("nickserv/cert", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Atheme Development Group <http://atheme.github.io>",
-                         _modinit, _moddeinit);
-
 static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_cert = { "CERT", N_("Changes and shows your nickname CertFP authentication list."), AC_NONE, 2, ns_cmd_cert, { .path = "nickserv/cert" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_cert);
 
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_cert);
 }
@@ -200,3 +198,6 @@ static void ns_cmd_cert(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+VENDOR_DECLARE_MODULE_V1("nickserv/cert", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Atheme Development Group <http://atheme.github.io/>")

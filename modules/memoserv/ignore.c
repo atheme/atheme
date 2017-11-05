@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("memoserv/ignore", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
@@ -24,7 +21,8 @@ command_t ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring mem
 
 mowgli_patricia_t *ms_ignore_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("memoserv", &ms_ignore);
 
@@ -37,7 +35,8 @@ void _modinit(module_t *m)
 	command_add(&ms_ignore_list, ms_ignore_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_ignore);
 
@@ -216,3 +215,5 @@ static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "-------------------------");
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("memoserv/ignore", MODULE_UNLOAD_CAPABILITY_OK)

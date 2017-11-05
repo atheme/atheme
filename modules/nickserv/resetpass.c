@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/resetpass", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_resetpass);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_resetpass);
 }
@@ -87,3 +86,5 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOPASSWORD", entity(mu)->name);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/resetpass", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/recover", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_recover = { "RECOVER", N_("Regain control of your channel."),
                         AC_NONE, 1, cs_cmd_recover, { .path = "cservice/recover" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_recover);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_recover);
 }
@@ -195,3 +194,5 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Recover complete for \2%s\2."), mc->chan->name);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/recover", MODULE_UNLOAD_CAPABILITY_OK)

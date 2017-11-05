@@ -8,23 +8,22 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_gameserv", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_gameserv = { "GAMESERV", N_("Allows or disallows gaming services."), AC_NONE, 2, cs_cmd_set_gameserv, { .path = "cservice/set_gameserv" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_gameserv, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_gameserv, *cs_set_cmdtree);
 }
@@ -101,3 +100,5 @@ static void cs_cmd_set_gameserv(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been disabled for \2%s\2."), "GAMESERV", mc->name);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_gameserv", MODULE_UNLOAD_CAPABILITY_OK)

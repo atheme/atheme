@@ -8,23 +8,22 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_email", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_NONE, 2, cs_cmd_set_email, { .path = "cservice/set_email" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_email, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_email, *cs_set_cmdtree);
 }
@@ -73,3 +72,5 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 set the e-mail address for the channel to \2%s\2"), get_source_name(si), mail);
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

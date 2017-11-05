@@ -8,21 +8,20 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-SIMPLE_DECLARE_MODULE_V1("gameserv/rps", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_rps = { "RPS", N_("Rock Paper Scissors."), AC_NONE, 2, command_rps, { .path = "gameserv/rps" } };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_rps);
 
 	service_named_bind_command("chanserv", &cmd_rps);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_rps);
 
@@ -43,3 +42,5 @@ static void command_rps(sourceinfo_t *si, int parc, char *parv[])
 
 	gs_command_report(si, "%s", _(rps_responses[rand() % 3]));
 }
+
+SIMPLE_DECLARE_MODULE_V1("gameserv/rps", MODULE_UNLOAD_CAPABILITY_OK)

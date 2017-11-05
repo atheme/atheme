@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/jupe", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_jupe);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_jupe);
 }
@@ -67,3 +66,4 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been jupitered."), server);
 }
 
+SIMPLE_DECLARE_MODULE_V1("operserv/jupe", MODULE_UNLOAD_CAPABILITY_OK)

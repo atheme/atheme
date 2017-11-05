@@ -7,21 +7,20 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/modlist", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modlist = { "MODLIST", N_("Lists loaded modules."), PRIV_SERVER_AUSPEX, 0, os_cmd_modlist, { .path = "oservice/modlist" } };
 
 extern mowgli_list_t modules;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modlist);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_modlist);
 }
@@ -43,3 +42,5 @@ static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%d\2 modules loaded."), i);
 	logcommand(si, CMDLOG_GET, "MODLIST");
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/modlist", MODULE_UNLOAD_CAPABILITY_OK)

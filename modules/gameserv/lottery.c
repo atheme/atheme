@@ -8,21 +8,20 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-SIMPLE_DECLARE_MODULE_V1("gameserv/lottery", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void command_lottery(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_lottery = { "LOTTERY", N_("Choose a random user on a channel."), AC_NONE, 2, command_lottery, { .path = "gameserv/lottery" } };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_lottery);
 
 	service_named_bind_command("chanserv", &cmd_lottery);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_lottery);
 
@@ -63,3 +62,5 @@ static void command_lottery(sourceinfo_t *si, int parc, char *parv[])
 
 	gs_command_report(si, "%s", u->nick);
 }
+
+SIMPLE_DECLARE_MODULE_V1("gameserv/lottery", MODULE_UNLOAD_CAPABILITY_OK)

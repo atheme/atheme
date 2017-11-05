@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/logout", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_logout = { "LOGOUT", N_("Logs your services session out."), AC_NONE, 2, ns_cmd_logout, { .path = "nickserv/logout" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_logout);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_logout);
 }
@@ -110,3 +109,5 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		u->myuser = NULL;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/logout", MODULE_UNLOAD_CAPABILITY_OK)

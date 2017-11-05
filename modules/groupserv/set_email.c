@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/set_email", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_set_email = { "EMAIL", N_("Sets the group e-mail address."), AC_AUTHENTICATED, 2, gs_cmd_set_email, { .path = "groupserv/set_email" } };
@@ -59,7 +56,8 @@ static void gs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The e-mail address for group \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 	use_groupserv_set_symbols(m);
@@ -67,7 +65,10 @@ void _modinit(module_t *m)
 	command_add(&gs_set_email, gs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&gs_set_email, gs_set_cmdtree);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

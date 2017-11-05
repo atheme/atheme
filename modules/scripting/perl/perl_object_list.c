@@ -55,5 +55,3 @@ void free_object_list(void)
 	mowgli_list_free(perl_object_references);
 	perl_object_references = NULL;
 }
-
-

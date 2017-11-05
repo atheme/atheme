@@ -10,9 +10,6 @@
 #define IN_GROUPSERV_SET
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -20,7 +17,8 @@ command_t gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED,
 
 mowgli_patricia_t *gs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
@@ -29,7 +27,8 @@ void _modinit(module_t *m)
 	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_set);
 
@@ -91,3 +90,5 @@ static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	parv[1] = group;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK)

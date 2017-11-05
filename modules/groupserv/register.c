@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/register", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_register = { "REGISTER", N_("Registers a group."), AC_AUTHENTICATED, 2, gs_cmd_register, { .path = "groupserv/register" } };
@@ -73,14 +70,18 @@ static void gs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_register);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_register);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/register", MODULE_UNLOAD_CAPABILITY_OK)

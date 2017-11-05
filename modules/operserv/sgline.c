@@ -9,9 +9,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/sgline", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_sgline_newuser(hook_user_nick_t *data);
 
 static void os_cmd_sgline(sourceinfo_t *si, int parc, char *parv[]);
@@ -29,7 +26,8 @@ command_t os_sgline_sync = { "SYNC", N_("Synchronises network realname bans to s
 
 mowgli_patricia_t *os_sgline_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (ircd != NULL && xline_sts == generic_xline_sts)
 	{
@@ -53,7 +51,8 @@ void _modinit(module_t *m)
 	hook_add_user_add(os_sgline_newuser);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_sgline);
 
@@ -374,3 +373,5 @@ static void os_cmd_sgline_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("SGLINE list synchronized to servers."));
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/sgline", MODULE_UNLOAD_CAPABILITY_OK)

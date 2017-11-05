@@ -10,24 +10,22 @@
 #include "atheme.h"
 #include "uplink.h"
 
-VENDOR_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Zohlai Development Group",
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_pubkey(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_pubkey = { "PUBKEY", N_("Changes your ECDSA-NIST256p-CHALLENGE public key."), AC_NONE, 1, ns_cmd_set_pubkey, { .path = "nickserv/set_pubkey" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_pubkey, *ns_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_pubkey, *ns_set_cmdtree);
 }
@@ -66,3 +64,6 @@ static void ns_cmd_set_pubkey(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Your public key is now set to \2%s\2."), newkey);
 	return;
 }
+
+VENDOR_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
+                         "Zohlai Development Group")

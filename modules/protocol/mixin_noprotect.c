@@ -9,14 +9,11 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/mixin_noprotect", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 bool oldflag;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
-
 	if (ircd == NULL)
 	{
 		slog(LG_ERROR, "Module %s must be loaded after a protocol module.", m->name);
@@ -34,9 +31,11 @@ void _modinit(module_t *m)
 	update_chanacs_flags();
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
-
 	ircd->uses_protect = oldflag;
 	update_chanacs_flags();
 }
+
+SIMPLE_DECLARE_MODULE_V1("protocol/mixin_noprotect", MODULE_UNLOAD_CAPABILITY_NEVER)

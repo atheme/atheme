@@ -8,20 +8,19 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/listchans", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_listchans = { "LISTCHANS", N_("Lists channels that a group has access to."), AC_NONE, 1, gs_cmd_listchans, { .path = "groupserv/listchans" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 	service_named_bind_command("groupserv", &gs_listchans);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_listchans);
 }
@@ -92,3 +91,5 @@ static void gs_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 						    N_("\2%d\2 channel access matches for the group \2%s\2"), i),
 						    i, entity(mg)->name);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/listchans", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/drop", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -18,13 +15,15 @@ command_t cs_drop = { "DROP", N_("Drops a channel registration."),
 command_t cs_fdrop = { "FDROP", N_("Forces dropping of a channel registration."),
                         PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop, { .path = "cservice/fdrop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_drop);
         service_named_bind_command("chanserv", &cs_fdrop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_drop);
 	service_named_unbind_command("chanserv", &cs_fdrop);
@@ -162,3 +161,5 @@ static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The channel \2%s\2 has been dropped."), name);
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("helpserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 service_t *helpserv;
 
 static void helpserv_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
@@ -40,14 +37,16 @@ void helpserv_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	helpserv = service_add("helpserv", NULL);
 
 	service_bind_command(helpserv, &helpserv_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_unbind_command(helpserv, &helpserv_help);
 
@@ -57,3 +56,5 @@ void _moddeinit(module_unload_intent_t intent)
 		helpserv = NULL;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("helpserv/main", MODULE_UNLOAD_CAPABILITY_OK)

@@ -10,10 +10,6 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-VENDOR_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Atheme Development Group <http://www.atheme.org/>",
-                         _modinit, NULL);
-
 ircd_t InspIRCd = {
 	.ircdname = "InspIRCd",
 	.tldprefix = "$",
@@ -1648,7 +1644,8 @@ static void server_eob(server_t *s)
 	}
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -1746,3 +1743,11 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+VENDOR_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Atheme Development Group <http://www.atheme.org/>")

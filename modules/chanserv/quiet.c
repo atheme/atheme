@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/quiet", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -19,13 +16,15 @@ command_t cs_quiet = { "QUIET", N_("Sets a quiet on a channel."),
 command_t cs_unquiet = { "UNQUIET", N_("Removes a quiet on a channel."),
 			AC_AUTHENTICATED, 2, cs_cmd_unquiet, { .path = "cservice/unquiet" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_quiet);
 	service_named_bind_command("chanserv", &cs_unquiet);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_quiet);
 	service_named_unbind_command("chanserv", &cs_unquiet);
@@ -465,3 +464,5 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 	} while ((target = strtok_r(NULL, " ", &strtokctx)) != NULL);
 	free(targetlist);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/quiet", MODULE_UNLOAD_CAPABILITY_OK)

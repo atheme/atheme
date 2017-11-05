@@ -12,9 +12,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/invite", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_invite = { "INVITE", N_("Invites a user to a group."), AC_AUTHENTICATED, 2, gs_cmd_invite, { .path = "groupserv/invite" } };
@@ -90,14 +87,18 @@ static void gs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been invited to \2%s\2"), user, group);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_invite);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_invite);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/invite", MODULE_UNLOAD_CAPABILITY_OK)

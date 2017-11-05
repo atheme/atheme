@@ -9,19 +9,18 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/inject", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_inject = { "INJECT", N_("Fakes data from the uplink (debugging tool)."), PRIV_ADMIN, 1, os_cmd_inject, { .path = "oservice/inject" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_inject);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_inject);
 }
@@ -57,3 +56,5 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	parse(inject);
 	injecting = false;
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/inject", MODULE_UNLOAD_CAPABILITY_OK)

@@ -4,9 +4,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("rpgserv/help", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_help = { "HELP", N_("Displays contextual help information."),
@@ -31,12 +28,16 @@ static void rs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("rpgserv", &rs_help);
 }
+
+SIMPLE_DECLARE_MODULE_V1("rpgserv/help", MODULE_UNLOAD_CAPABILITY_OK)

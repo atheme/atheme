@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/clear_bans", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel."),
@@ -17,14 +14,16 @@ command_t cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel.
 
 mowgli_patricia_t **cs_clear_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
 
 	command_add(&cs_clear_bans, *cs_clear_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_clear_bans, *cs_clear_cmds);
 }
@@ -102,3 +101,5 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Cleared %s modes on \2%s\2 (%d removed)."),
 			item, parv[0], hits);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/clear_bans", MODULE_UNLOAD_CAPABILITY_OK)

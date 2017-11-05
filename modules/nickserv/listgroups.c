@@ -9,9 +9,6 @@
 
 #include "../groupserv/groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/listgroups", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listgroups = { "LISTGROUPS", N_("Lists groups that you have access to."), AC_NONE, 1, ns_cmd_listgroups, { .path = "nickserv/listgroups" } };
@@ -95,14 +92,18 @@ static void ns_cmd_listgroups(sourceinfo_t *si, int parc, char *parv[])
 						    i, entity(mu)->name);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("nickserv", &ns_listgroups);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_listgroups);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/listgroups", MODULE_UNLOAD_CAPABILITY_OK)

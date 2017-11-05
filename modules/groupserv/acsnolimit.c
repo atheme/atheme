@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/acsnolimit", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_acsnolimit = { "ACSNOLIMIT", N_("Allow a group to bypass access list limits."), PRIV_GROUP_ADMIN, 2, gs_cmd_acsnolimit, { .path = "groupserv/acsnolimit" } };
@@ -67,14 +64,18 @@ static void gs_cmd_acsnolimit(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_acsnolimit);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_acsnolimit);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/acsnolimit", MODULE_UNLOAD_CAPABILITY_OK)

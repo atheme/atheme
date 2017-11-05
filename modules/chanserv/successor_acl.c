@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 static unsigned int successor_flag = 0;
 
 static void channel_pick_successor_hook(hook_channel_succession_req_t *req)
@@ -36,7 +33,8 @@ static void channel_succession_hook(hook_channel_succession_req_t *req)
 	chanacs_change_simple(req->mc, entity(req->mu), NULL, 0, successor_flag, NULL);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	m->mflags = MODTYPE_CORE;
 
@@ -50,3 +48,10 @@ void _modinit(module_t *m)
 	hook_add_first_channel_pick_successor(channel_pick_successor_hook);
 	hook_add_channel_succession(channel_succession_hook);
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/successor_acl", MODULE_UNLOAD_CAPABILITY_NEVER)

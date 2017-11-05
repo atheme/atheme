@@ -7,9 +7,6 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-SIMPLE_DECLARE_MODULE_V1("exttarget/registered", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static mowgli_patricia_t **exttarget_tree = NULL;
 
 static myentity_t dummy_entity;
@@ -58,7 +55,8 @@ static myentity_t *registered_validate_f(const char *param)
 	return &dummy_entity;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, exttarget_tree, "exttarget/main", "exttarget_tree");
 
@@ -67,7 +65,10 @@ void _modinit(module_t *m)
 	object_init(object(&dummy_entity), "$registered", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_patricia_delete(*exttarget_tree, "registered");
 }
+
+SIMPLE_DECLARE_MODULE_V1("exttarget/registered", MODULE_UNLOAD_CAPABILITY_OK)

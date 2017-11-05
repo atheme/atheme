@@ -9,23 +9,22 @@
 #include "atheme.h"
 #include "uplink.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/set_email", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, ns_cmd_set_email, { .path = "nickserv/set_email" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_email, *ns_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_email, *ns_set_cmdtree);
 }
@@ -98,3 +97,5 @@ static void ns_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	myuser_set_email(si->smu, email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), entity(si->smu)->name, si->smu->email);
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

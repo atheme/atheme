@@ -8,10 +8,6 @@
 #include "atheme.h"
 #include "botserv.h"
 
-VENDOR_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Rizon Development Group <http://dev.rizon.net/>",
-                         _modinit, _moddeinit);
-
 static void bs_join(hook_channel_joinpart_t *hdata);
 static void bs_part(hook_channel_joinpart_t *hdata);
 
@@ -964,7 +960,8 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -1016,7 +1013,8 @@ void _modinit(module_t *m)
 	notice                = bs_notice;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -1167,3 +1165,6 @@ bs_part(hook_channel_joinpart_t *hdata)
 			part(cu->chan->name, chansvs.nick);
 	}
 }
+
+VENDOR_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
+                         "Rizon Development Group <http://dev.rizon.net/>")

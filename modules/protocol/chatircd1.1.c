@@ -14,9 +14,6 @@
 #include "pmodule.h"
 #include "protocol/chatircd.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t ChatIRCd = {
 	.ircdname = "ChatIRCd",                     /* IRCd name */
 	.tldprefix = "$$",                          /* TLD Prefix, used by Global. */
@@ -242,7 +239,8 @@ static bool chatircd_is_extban(const char *mask)
 	return false;
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
@@ -259,3 +257,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER)

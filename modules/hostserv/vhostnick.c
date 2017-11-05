@@ -8,19 +8,18 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("hostserv/vhostnick", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_vhostnick);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_vhostnick);
 }
@@ -95,3 +94,5 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 		do_sethost(u, host);
 	return;
 }
+
+SIMPLE_DECLARE_MODULE_V1("hostserv/vhostnick", MODULE_UNLOAD_CAPABILITY_OK)

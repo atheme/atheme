@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include <limits.h>
 
-SIMPLE_DECLARE_MODULE_V1("memoserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
 
@@ -18,7 +15,8 @@ service_t *memosvs = NULL;
 /*struct memoserv_conf *memosvs_conf;*/
 unsigned int maxmemos;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
@@ -31,7 +29,8 @@ void _modinit(module_t *m)
 	add_uint_conf_item("MAXMEMOS", &memosvs->conf_table, 0, &maxmemos, 1, INT_MAX, 30);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_identify(on_user_identify);
 	hook_del_user_away(on_user_away);
@@ -89,3 +88,5 @@ static void on_user_away(user_t *u)
 		                                     "delete memos you no longer need."));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("memoserv/main", MODULE_UNLOAD_CAPABILITY_OK)

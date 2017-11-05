@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/why", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_why);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_why);
 }
@@ -156,3 +155,5 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/why", MODULE_UNLOAD_CAPABILITY_OK)

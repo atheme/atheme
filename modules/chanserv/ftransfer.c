@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/ftransfer", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer, { .path = "cservice/ftransfer" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_ftransfer);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_ftransfer);
 }
@@ -90,3 +89,5 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mc, "private:verify:founderchg:newfounder");
 	metadata_delete(mc, "private:verify:founderchg:timestamp");
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/ftransfer", MODULE_UNLOAD_CAPABILITY_OK)

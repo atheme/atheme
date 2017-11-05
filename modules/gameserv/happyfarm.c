@@ -10,9 +10,6 @@
 #include "atheme.h"
 #include "gameserv_common.h"
 
-SIMPLE_DECLARE_MODULE_V1("gameserv/happyfarm", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 /* Privatedata schema... */
 #define SCHEMA_KEY_HAPPYFARMER		"gameserv:happyfarm:farmer"
 
@@ -416,7 +413,8 @@ command_t command_happyfarm = { "HAPPYFARM", N_("Happy Farm!"), AC_AUTHENTICATED
 
 /*******************************************************************************************/
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	farmer_heap = mowgli_heap_create(sizeof(happy_farmer_t), 32, BH_LAZY);
 	plot_heap = mowgli_heap_create(sizeof(happy_plot_t), 32, BH_LAZY);
@@ -430,7 +428,8 @@ void _modinit(module_t * m)
 	command_add(&command_sellplot, happyfarm_cmd_subtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&command_join, happyfarm_cmd_subtree);
 	command_delete(&command_buyplot, happyfarm_cmd_subtree);
@@ -443,3 +442,5 @@ void _moddeinit(module_unload_intent_t intent)
 	mowgli_heap_destroy(farmer_heap);
 	mowgli_heap_destroy(plot_heap);
 }
+
+SIMPLE_DECLARE_MODULE_V1("gameserv/happyfarm", MODULE_UNLOAD_CAPABILITY_OK)

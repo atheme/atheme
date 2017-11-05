@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/uptime", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime, { .path = "oservice/uptime" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_uptime);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_uptime);
 }
@@ -41,3 +40,5 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
         command_success_nodata(si, _("Registered channels: %d"), cnt.mychan);
         command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/uptime", MODULE_UNLOAD_CAPABILITY_OK)

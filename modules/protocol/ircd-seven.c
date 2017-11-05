@@ -12,9 +12,6 @@
 #include "protocol/charybdis.h"
 #include "protocol/ircd-seven.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 ircd_t Seven = {
 	.ircdname = "ircd-seven",
 	.tldprefix = "$$",
@@ -270,7 +267,8 @@ static void nick_ungroup(hook_user_req_t *hdata)
 		sts(":%s ENCAP * IDENTIFIED %s %s OFF", ME, CLIENT_NAME(u), u->nick);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
@@ -298,3 +296,10 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = true;
 }
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/ircd-seven", MODULE_UNLOAD_CAPABILITY_NEVER)

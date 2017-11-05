@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("global/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 /* global list struct */
 struct global_ {
 	char *text;
@@ -190,7 +187,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	globsvs = service_add("global", NULL);
 
@@ -200,7 +198,8 @@ void _modinit(module_t *m)
 	service_bind_command(globsvs, &gs_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_unbind_command(globsvs, &gs_help);
 	service_unbind_command(globsvs, &gs_global);
@@ -209,3 +208,5 @@ void _moddeinit(module_unload_intent_t intent)
 	if (globsvs != NULL)
 		service_delete(globsvs);
 }
+
+SIMPLE_DECLARE_MODULE_V1("global/main", MODULE_UNLOAD_CAPABILITY_OK)

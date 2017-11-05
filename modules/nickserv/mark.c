@@ -12,9 +12,6 @@
 //NickServ mark module
 //Do NOT use this in combination with contrib/multimark!
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/mark", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark, { .path = "nickserv/mark" } };
@@ -40,7 +37,8 @@ static bool is_marked(const mynick_t *mn, const void *arg)
 	return !!metadata_find(mu, "private:mark:setter");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (module_find_published("nickserv/multimark"))
 	{
@@ -65,7 +63,8 @@ void _modinit(module_t *m)
 	list_register("marked", &marked);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_mark);
 
@@ -148,3 +147,5 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: MARK <target> <ON|OFF> [note]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/mark", MODULE_UNLOAD_CAPABILITY_OK)

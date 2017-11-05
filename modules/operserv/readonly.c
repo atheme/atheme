@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/readonly", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_readonly = { "READONLY", N_("Changes the state of read-only mode for services."),
 		      PRIV_ADMIN, 1, os_cmd_readonly, { .path = "oservice/readonly" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_readonly);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_readonly);
 }
@@ -77,3 +76,5 @@ static void os_cmd_readonly(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: READONLY <ON|OFF>"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/readonly", MODULE_UNLOAD_CAPABILITY_OK)

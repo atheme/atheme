@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/mode", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_mode = { "MODE", N_("Changes modes on channels."), PRIV_OMODE, 2, os_cmd_mode, { .path = "oservice/mode" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_mode);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_mode);
 }
@@ -55,3 +54,5 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 
 	channel_mode(si->service->me, c, modeparc, modeparv);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/mode", MODULE_UNLOAD_CAPABILITY_OK)

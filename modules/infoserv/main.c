@@ -13,9 +13,6 @@
 #include "atheme.h"
 #include <limits.h>
 
-SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, _moddeinit);
-
 struct logoninfo_ {
         stringref nick;
         char *subject;
@@ -505,7 +502,8 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -536,7 +534,8 @@ void _modinit(module_t *m)
 	service_bind_command(infoserv, &is_olist);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
 
@@ -561,3 +560,5 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(infoserv, &is_list);
 	service_unbind_command(infoserv, &is_olist);
 }
+
+SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

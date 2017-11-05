@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/modinspect", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modinspect = { "MODINSPECT", N_("Displays information about loaded modules."), PRIV_SERVER_AUSPEX, 1, os_cmd_modinspect, { .path = "oservice/modinspect" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modinspect);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_modinspect);
 }
@@ -65,3 +64,5 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 					( m->can_unload == MODULE_UNLOAD_CAPABILITY_NEVER ? "No" : "Reload only"));
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/modinspect", MODULE_UNLOAD_CAPABILITY_OK)

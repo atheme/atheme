@@ -8,23 +8,22 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/set_property", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set_property = { "PROPERTY", N_("Manipulates channel metadata."), AC_NONE, 2, cs_cmd_set_property, { .path = "cservice/set_property" } };
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_property, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_property, *cs_set_cmdtree);
 }
@@ -110,3 +109,5 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 added the metadata entry \2%s\2 with value \2%s\2"), get_source_name(si), property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_property", MODULE_UNLOAD_CAPABILITY_OK)

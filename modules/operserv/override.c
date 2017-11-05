@@ -7,19 +7,18 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/override", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_override = { "OVERRIDE", N_("Perform a transaction on another user's account"), PRIV_OVERRIDE, 4, os_cmd_override, { .path = "oservice/override" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_override);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_override);
 }
@@ -245,3 +244,5 @@ static void os_cmd_override(sourceinfo_t *si, int parc, char *parv[])
 
 	object_unref(o_si);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/override", MODULE_UNLOAD_CAPABILITY_OK)

@@ -8,13 +8,11 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("hostserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void on_user_identify(user_t *u);
 service_t *hostsvs;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
@@ -22,7 +20,8 @@ void _modinit(module_t *m)
 	hostsvs = service_add("hostserv", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (hostsvs != NULL)
 		service_delete(hostsvs);
@@ -45,3 +44,5 @@ static void on_user_identify(user_t *u)
 
 	do_sethost(u, md->value);
 }
+
+SIMPLE_DECLARE_MODULE_V1("hostserv/main", MODULE_UNLOAD_CAPABILITY_OK)

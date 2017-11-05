@@ -10,9 +10,6 @@
 #include "list_common.h"
 #include "list.h"
 
-SIMPLE_DECLARE_MODULE_V1("nickserv/freeze", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
@@ -39,7 +36,8 @@ static bool frozen_match(const mynick_t *mn, const void *arg)
 	return false;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_freeze);
 
@@ -57,7 +55,8 @@ void _modinit(module_t *m)
 	list_register("frozen-reason", &frozen_reason);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_freeze);
 
@@ -153,3 +152,5 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <account> <ON|OFF> [reason]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/freeze", MODULE_UNLOAD_CAPABILITY_OK)

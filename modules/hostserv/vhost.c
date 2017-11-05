@@ -8,22 +8,21 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("hostserv/vhost", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void hs_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_vhost = { "VHOST", N_("Manages per-account virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhost, { .path = "hostserv/vhost" } };
 command_t hs_listvhost = { "LISTVHOST", N_("Lists user virtual hosts."), PRIV_USER_AUSPEX, 1, hs_cmd_listvhost, { .path = "hostserv/listvhost" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_vhost);
 	service_named_bind_command("hostserv", &hs_listvhost);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_vhost);
 	service_named_unbind_command("hostserv", &hs_listvhost);
@@ -139,3 +138,5 @@ static void hs_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
 						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
+
+SIMPLE_DECLARE_MODULE_V1("hostserv/vhost", MODULE_UNLOAD_CAPABILITY_OK)

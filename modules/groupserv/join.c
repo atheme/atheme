@@ -8,9 +8,6 @@
 #include "atheme.h"
 #include "groupserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("groupserv/join", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t gs_join = { "JOIN", N_("Join a open group."), AC_AUTHENTICATED, 2, gs_cmd_join, { .path = "groupserv/join" } };
@@ -81,14 +78,18 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_join);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_join);
 }
+
+SIMPLE_DECLARE_MODULE_V1("groupserv/join", MODULE_UNLOAD_CAPABILITY_OK)

@@ -7,20 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/mark", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_mark = { "MARK", N_("Adds a note to a channel."),
 			PRIV_MARK, 3, cs_cmd_mark, { .path = "cservice/mark" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_mark);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_mark);
 }
@@ -96,3 +95,5 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: MARK <#channel> <ON|OFF> [note]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/mark", MODULE_UNLOAD_CAPABILITY_OK)

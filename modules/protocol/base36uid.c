@@ -23,9 +23,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("protocol/base36uid", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         _modinit, NULL);
-
 static char new_uid[10]; /* allow for \0 */
 static unsigned int uindex = 0;
 
@@ -93,12 +90,16 @@ uid_provider_t base36_gen = {
 	.uid_get = base36_uid_get,
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	uid_provider_impl = &base36_gen;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	uid_provider_impl = NULL;
 }
+
+SIMPLE_DECLARE_MODULE_V1("protocol/base36uid", MODULE_UNLOAD_CAPABILITY_NEVER)

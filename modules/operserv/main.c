@@ -7,18 +7,19 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 service_t *opersvs = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         opersvs = service_add("operserv", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (opersvs != NULL)
 		service_delete(opersvs);
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/main", MODULE_UNLOAD_CAPABILITY_OK)

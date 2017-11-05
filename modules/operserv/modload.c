@@ -8,19 +8,18 @@
 #include "atheme.h"
 #include "conf.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/modload", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_modload = { "MODLOAD", N_("Loads a module."), PRIV_ADMIN, 20, os_cmd_modload, { .path = "oservice/modload" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_modload);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_modload);
 }
@@ -64,3 +63,5 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/modload", MODULE_UNLOAD_CAPABILITY_OK)

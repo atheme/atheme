@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/clear", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_help_clear(sourceinfo_t *si, const char *subcmd);
 
@@ -18,14 +15,16 @@ command_t cs_clear = { "CLEAR", N_("Channel removal toolkit."),
 
 mowgli_patricia_t *cs_clear_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_clear);
 
 	cs_clear_cmds = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_clear);
 
@@ -84,3 +83,5 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 	parv[1] = chan;
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/clear", MODULE_UNLOAD_CAPABILITY_OK)

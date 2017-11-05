@@ -8,19 +8,18 @@
 #include "atheme.h"
 #include "hostserv.h"
 
-SIMPLE_DECLARE_MODULE_V1("hostserv/group", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_group = { "GROUP", N_("Syncs the vhost for all nicks in a group."), AC_AUTHENTICATED, 1, hs_cmd_group, { .path = "hostserv/group" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_group);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_group);
 }
@@ -63,3 +62,5 @@ static void hs_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	do_sethost_all(si->smu, buf);
 	command_success_nodata(si, _("All vhosts in the group \2%s\2 have been set to \2%s\2."), entity(si->smu)->name, buf);
 }
+
+SIMPLE_DECLARE_MODULE_V1("hostserv/group", MODULE_UNLOAD_CAPABILITY_OK)

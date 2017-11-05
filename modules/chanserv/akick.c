@@ -15,9 +15,6 @@ static void cs_cmd_akick_list(sourceinfo_t *si, int parc, char *parv[]);
 static void akick_timeout_check(void *arg);
 static void akickdel_list_create(void *arg);
 
-SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 command_t cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
                         AC_NONE, 4, cs_cmd_akick, { .path = "cservice/akick" } };
 command_t cs_akick_add = { "ADD", N_("Adds a channel AKICK."),
@@ -47,7 +44,8 @@ static akick_timeout_t *akick_add_timeout(mychan_t *mc, myentity_t *mt, const ch
 
 mowgli_heap_t *akick_timeout_heap;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_akick);
 
@@ -69,7 +67,8 @@ void _modinit(module_t *m)
 	mowgli_timer_add_once(base_eventloop, "akickdel_list_create", akickdel_list_create, NULL, 0);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_akick);
 
@@ -790,3 +789,5 @@ void akickdel_list_create(void *arg)
 		}
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/akick", MODULE_UNLOAD_CAPABILITY_OK)

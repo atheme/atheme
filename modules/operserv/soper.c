@@ -7,9 +7,6 @@
 
 #include "atheme.h"
 
-SIMPLE_DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK,
-                         _modinit, _moddeinit);
-
 static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[]);
@@ -27,7 +24,8 @@ command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services op
 
 mowgli_patricia_t *os_soper_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_soper);
 
@@ -40,7 +38,8 @@ void _modinit(module_t *m)
 	command_add(&os_soper_setpass, os_soper_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_soper);
 	command_delete(&os_soper_list, os_soper_cmds);
@@ -310,3 +309,5 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Cleared password for \2%s\2."), entity(mu)->name);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK)
