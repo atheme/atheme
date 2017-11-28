@@ -68,6 +68,7 @@ typedef char *scram_attr_list[128];
 
 static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
 static atheme_pbkdf2v2_scram_normalize_fn sasl_scramsha_normalize = NULL;
+static const sasl_mech_register_func_t *sasl_regfuncs = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -271,7 +272,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	}
 
 	if (! sasl_scramsha_dbextract(s->mu->pass, &s->db))
-		// User's password is not in a PBKDF2 format
+		// User's password hash is not in a compatible (PBKDF2 v2) format
 		goto fail;
 
 	if (s->db.a != prf)
@@ -290,7 +291,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->sn = random_string(NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);
 
-	// Base64-encode our salt
+	// Base64-encode the user's salt
 	char Salt64[PBKDF2_SALTLEN_MAX * 3];
 	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
 	{
@@ -460,7 +461,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// Create server-final-message
 	(*out)[0] = 'v';
 	(*out)[1] = '=';
-	(void) memcpy((*out) + 2, ServerSignature64, *out_len - 2);
+	(void) memcpy((*out) + 2, ServerSignature64, (*out_len) - 2);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
@@ -570,13 +571,11 @@ static sasl_mechanism_t sasl_scramsha_mech_sha2_256 = {
 	"SCRAM-SHA-256", &sasl_scramsha_start, &sasl_scramsha_step_sha2_256, &sasl_scramsha_finish,
 };
 
-static const sasl_mech_register_func_t *regfuncs = NULL;
-
 static void
 sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 {
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
 	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
 
@@ -587,11 +586,11 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 	switch (*pbkdf2v2_digest)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1:
-			(void) regfuncs->mech_register(&sasl_scramsha_mech_sha1);
+			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha1);
 			return;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256:
-			(void) regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
+			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
 			return;
 	}
 
@@ -604,7 +603,7 @@ sasl_scramsha_modinit(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
-	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(sasl_scramsha_config_ready);
@@ -613,8 +612,8 @@ sasl_scramsha_modinit(module_t *const restrict m)
 static void
 sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
