@@ -31,7 +31,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) && defined(HAVE_LIBIDN)
 
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
@@ -66,7 +66,9 @@ struct scramsha_session
 
 typedef char *scram_attr_list[128];
 
-static atheme_pbkdf2v2_scram_ex_fn sasl_scramsha_ex = NULL;
+static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
+static atheme_pbkdf2v2_scram_normalize_fn sasl_scramsha_normalize = NULL;
+static const sasl_mech_register_func_t *sasl_regfuncs = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -203,10 +205,6 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	// Does GS2 header include an authzid ?
 	if (message[0] == 'a' && message[1] == '=')
 	{
-		/*
-		 * TODO: Normalise the username
-		 */
-
 		message += 2;
 
 		// Locate end of authzid
@@ -219,6 +217,18 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 
 		// Copy authzid
 		p->authzid = sstrndup(message, (size_t) (pos - message));
+
+		// Normalize it
+		const char *const authzid_nm = sasl_scramsha_normalize(p->authzid);
+		if (! authzid_nm)
+		{
+			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
+			goto fail;
+		}
+
+		// Replace supplied authzid with normalized one
+		(void) free(p->authzid);
+		p->authzid = sstrdup(authzid_nm);
 
 		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, p->authzid);
 
@@ -240,16 +250,20 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	/*
-	 * TODO: Normalise the username
-	 */
-	if (! (s->mu = myuser_find_by_nick(input['n'])))
+	const char *const username = sasl_scramsha_normalize(input['n']);
+
+	if (! username)
 	{
-		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, input['n']);
+		(void) slog(LG_DEBUG, "%s: SASLprep normalization of username failed", __func__);
+		goto fail;
+	}
+	else if (! (s->mu = myuser_find_by_nick(username)))
+	{
+		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, username);
 		goto fail;
 	}
 	else
-		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, input['n']);
+		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, username);
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
 	{
@@ -257,8 +271,8 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	if (! sasl_scramsha_ex(s->mu->pass, &s->db))
-		// User's password is not in a PBKDF2 format
+	if (! sasl_scramsha_dbextract(s->mu->pass, &s->db))
+		// User's password hash is not in a compatible (PBKDF2 v2) format
 		goto fail;
 
 	if (s->db.a != prf)
@@ -268,7 +282,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	}
 
 	// These cannot fail
-	p->username = sstrdup(input['n']);
+	p->username = sstrdup(username);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
 	s->c_msg_len = len - s->c_gs2_len;
@@ -277,7 +291,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->sn = random_string(NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);
 
-	// Base64-encode our salt
+	// Base64-encode the user's salt
 	char Salt64[PBKDF2_SALTLEN_MAX * 3];
 	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
 	{
@@ -447,7 +461,7 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	// Create server-final-message
 	(*out)[0] = 'v';
 	(*out)[1] = '=';
-	(void) memcpy((*out) + 2, ServerSignature64, *out_len - 2);
+	(void) memcpy((*out) + 2, ServerSignature64, (*out_len) - 2);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
@@ -557,28 +571,42 @@ static sasl_mechanism_t sasl_scramsha_mech_sha2_256 = {
 	"SCRAM-SHA-256", &sasl_scramsha_start, &sasl_scramsha_step_sha2_256, &sasl_scramsha_finish,
 };
 
-static const sasl_mech_register_func_t *regfuncs = NULL;
-
 static void
 sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 {
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
-	const unsigned int *const pbkdf2v2_digest = module_locate_symbol("crypto/pbkdf2v2", "pbkdf2v2_digest");
+	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
 
 	if (! pbkdf2v2_digest)
 		// module_locate_symbol() logs error messages on failure
 		return;
 
+	const crypt_impl_t *const ci_default = crypt_get_default_provider();
+
+	if (! ci_default)
+	{
+		(void) slog(LG_ERROR, "%s: %s is apparently loaded but no crypto provider is available (BUG)",
+		                      __func__, PBKDF2V2_CRYPTO_MODULE_NAME);
+	}
+	else if (strcmp(ci_default->id, "pbkdf2v2") != 0)
+	{
+		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS!", __func__,
+		                     PBKDF2V2_CRYPTO_MODULE_NAME);
+		(void) slog(LG_INFO, "%s: newly registered users will be unable to login with this module", __func__);
+		(void) slog(LG_INFO, "%s: users who change their passwords will be unable to login with this module",
+		                     __func__);
+	}
+
 	switch (*pbkdf2v2_digest)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1:
-			(void) regfuncs->mech_register(&sasl_scramsha_mech_sha1);
+			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha1);
 			return;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256:
-			(void) regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
+			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
 			return;
 	}
 
@@ -589,8 +617,17 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 static void
 mod_init(module_t *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_ex, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_ex");
-	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
+	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
+	{
+		(void) slog(LG_ERROR, "module %s needs module %s", m->name, PBKDF2V2_CRYPTO_MODULE_NAME);
+
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(sasl_scramsha_config_ready);
@@ -599,12 +636,12 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK)
 
-#endif /* HAVE_OPENSSL */
+#endif /* HAVE_OPENSSL && HAVE_LIBIDN */

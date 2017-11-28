@@ -22,6 +22,5 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS		+= ${SSL_LIBS}
-LIBS 		+= -L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
+LIBS 		+= -L../../libathemecore -lathemecore ${LDFLAGS_RPATH} ${SSL_LIBS} ${LIBIDN_LIBS}
 

@@ -10,6 +10,8 @@
 
 #include <openssl/evp.h>
 
+#define PBKDF2V2_CRYPTO_MODULE_NAME "crypto/pbkdf2v2"
+
 #define PBKDF2_FN_PREFIX            "$z$%u$%u$"
 #define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define PBKDF2_FN_BASE64            PBKDF2_FN_BASE62 "+/="
@@ -69,8 +71,14 @@ static const unsigned char ClientKeyStr[] = {
 
 /*
  * For modules/saslserv/scram-sha to make an inter-module function call to
- * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_ex()
+ * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_dbextract()
  */
-typedef bool (*atheme_pbkdf2v2_scram_ex_fn)(const char *restrict, struct pbkdf2v2_parameters *restrict);
+typedef bool (*atheme_pbkdf2v2_scram_dbextract_fn)(const char *restrict, struct pbkdf2v2_parameters *restrict);
+
+/*
+ * For modules/saslserv/scram-sha to make an inter-module function call to
+ * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_normalize()
+ */
+typedef const char *(*atheme_pbkdf2v2_scram_normalize_fn)(const char *restrict);
 
 #endif /* !PBKDF2V2_H */
