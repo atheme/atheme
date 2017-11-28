@@ -601,6 +601,14 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 static void
 sasl_scramsha_modinit(module_t *const restrict m)
 {
+	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
+	{
+		(void) slog(LG_ERROR, "module %s needs module %s", m->name, PBKDF2V2_CRYPTO_MODULE_NAME);
+
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_regfuncs, "saslserv/main", "sasl_mech_register_funcs");
