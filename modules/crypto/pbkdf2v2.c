@@ -84,6 +84,32 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 }
 
 static bool
+atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
+                             unsigned char csk[EVP_MAX_MD_SIZE],
+                             unsigned char chk[EVP_MAX_MD_SIZE])
+{
+	unsigned char cck[EVP_MAX_MD_SIZE];
+
+	if (csk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
+		return false;
+	}
+	if (chk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
+	{
+		(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
+		return false;
+	}
+	if (chk && EVP_Digest(cck, parsed->dl, chk, NULL, parsed->md, NULL) != 1)
+	{
+		(void) slog(LG_ERROR, "%s: EVP_Digest(cck) failed for chk", __func__);
+		return false;
+	}
+
+	return true;
+}
+
+static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
@@ -185,32 +211,6 @@ parsed:
 	if (ret != 1)
 	{
 		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
-		return false;
-	}
-
-	return true;
-}
-
-static bool
-atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
-                             unsigned char csk[EVP_MAX_MD_SIZE],
-                             unsigned char chk[EVP_MAX_MD_SIZE])
-{
-	unsigned char cck[EVP_MAX_MD_SIZE];
-
-	if (csk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ServerKeyStr, sizeof ServerKeyStr, csk, NULL))
-	{
-		(void) slog(LG_ERROR, "%s: HMAC() failed for csk", __func__);
-		return false;
-	}
-	if (chk && ! HMAC(parsed->md, parsed->cdg, (int) parsed->dl, ClientKeyStr, sizeof ClientKeyStr, cck, NULL))
-	{
-		(void) slog(LG_ERROR, "%s: HMAC() failed for cck", __func__);
-		return false;
-	}
-	if (chk && EVP_Digest(cck, parsed->dl, chk, NULL, parsed->md, NULL) != 1)
-	{
-		(void) slog(LG_ERROR, "%s: EVP_Digest(cck) failed for chk", __func__);
 		return false;
 	}
 
