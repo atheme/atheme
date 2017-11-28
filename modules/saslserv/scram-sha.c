@@ -583,6 +583,22 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 		// module_locate_symbol() logs error messages on failure
 		return;
 
+	const crypt_impl_t *const ci_default = crypt_get_default_provider();
+
+	if (! ci_default)
+	{
+		(void) slog(LG_ERROR, "%s: %s is apparently loaded but no crypto provider is available (BUG)",
+		                      __func__, PBKDF2V2_CRYPTO_MODULE_NAME);
+	}
+	else if (strcmp(ci_default->id, "pbkdf2v2") != 0)
+	{
+		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS!", __func__,
+		                     PBKDF2V2_CRYPTO_MODULE_NAME);
+		(void) slog(LG_INFO, "%s: newly registered users will be unable to login with this module", __func__);
+		(void) slog(LG_INFO, "%s: users who change their passwords will be unable to login with this module",
+		                     __func__);
+	}
+
 	switch (*pbkdf2v2_digest)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1:
