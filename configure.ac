@@ -97,6 +97,24 @@ AS_IF([test "x$with_cracklib" != "xno"],
 AC_SUBST(CRACKLIB_C)
 AC_SUBST([CRACKLIB_LIBS])
 
+LIBIDN="no"
+LIBIDN_LIBS=""
+AC_ARG_WITH([libidn],
+	[AS_HELP_STRING([--with-libidn], [Compile with GNU libidn for SASL SCRAM-SHA support.])],
+	[],
+	[with_libidn="auto"])
+AS_IF([test "x$with_libidn" != "xno"],
+	[LIBS_save="$LIBS"
+	AC_SEARCH_LIBS([stringprep], [idn],
+		[LIBIDN="yes"
+		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
+		AS_IF([test "x$ac_cv_search_stringprep" != "xnone required"],
+			[LIBIDN_LIBS="$ac_cv_search_stringprep"])],
+		[AS_IF([test "x$with_libidn" != "xauto"],
+			[AC_MSG_ERROR([--with-libidn was specified but GNU libidn could not be found.])])])
+	LIBS="$LIBS_save"])
+AC_SUBST([LIBIDN_LIBS])
+
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
 	[],
@@ -458,7 +476,8 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
-	OpenSSL SASL support : ${SSL}
+	OpenSSL support      : ${SSL}
+	GNU libidn support   : ${LIBIDN}
 	Contrib modules      : ${CONTRIB}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}

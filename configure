@@ -655,6 +655,7 @@ perlpath
 LDAP_AUTHC
 LDAP_LIBS
 LDAP_CFLAGS
+LIBIDN_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
 LIBOBJS
@@ -744,7 +745,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -772,6 +772,7 @@ with_gnu_ld
 with_libiconv_prefix
 with_libintl_prefix
 with_cracklib
+with_libidn
 with_ldap
 with_perl
 enable_fhs_paths
@@ -840,7 +841,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1093,15 +1093,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1239,7 +1230,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1392,7 +1383,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1448,6 +1438,7 @@ Optional Packages:
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --with-cracklib         Compile cracklib nickserv submodule for checking
                           password strength.
+  --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module.
   --with-libmowgli[=prefix]
@@ -7821,6 +7812,88 @@ fi
 
 
 
+LIBIDN="no"
+LIBIDN_LIBS=""
+
+# Check whether --with-libidn was given.
+if test "${with_libidn+set}" = set; then :
+  withval=$with_libidn;
+else
+  with_libidn="auto"
+fi
+
+if test "x$with_libidn" != "xno"; then :
+  LIBS_save="$LIBS"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
+$as_echo_n "checking for library containing stringprep... " >&6; }
+if ${ac_cv_search_stringprep+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char stringprep ();
+int
+main ()
+{
+return stringprep ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' idn; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_stringprep=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_stringprep+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_stringprep+:} false; then :
+
+else
+  ac_cv_search_stringprep=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_stringprep" >&5
+$as_echo "$ac_cv_search_stringprep" >&6; }
+ac_res=$ac_cv_search_stringprep
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  LIBIDN="yes"
+
+$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
+
+		if test "x$ac_cv_search_stringprep" != "xnone required"; then :
+  LIBIDN_LIBS="$ac_cv_search_stringprep"
+fi
+else
+  if test "x$with_libidn" != "xauto"; then :
+  as_fn_error $? "--with-libidn was specified but GNU libidn could not be found." "$LINENO" 5
+fi
+fi
+
+	LIBS="$LIBS_save"
+fi
+
+
 
 # Check whether --with-ldap was given.
 if test "${with_ldap+set}" = set; then :
@@ -11531,7 +11604,8 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
-	OpenSSL SASL support : ${SSL}
+	OpenSSL support      : ${SSL}
+	GNU libidn support   : ${LIBIDN}
 	Contrib modules      : ${CONTRIB}
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
