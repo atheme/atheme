@@ -567,7 +567,7 @@ crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) i
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
 }
 
-DECLARE_MODULE_V1("crypto/pbkdf2v2", false, crypto_pbkdf2v2_modinit, crypto_pbkdf2v2_moddeinit,
+DECLARE_MODULE_V1(PBKDF2V2_CRYPTO_MODULE_NAME, false, crypto_pbkdf2v2_modinit, crypto_pbkdf2v2_moddeinit,
                   PACKAGE_VERSION, "Aaron Jones <aaronmdjones@gmail.com>");
 
 #endif /* HAVE_OPENSSL */

@@ -578,7 +578,7 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
 	(void) regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
-	const unsigned int *const pbkdf2v2_digest = module_locate_symbol("crypto/pbkdf2v2", "pbkdf2v2_digest");
+	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
 
 	if (! pbkdf2v2_digest)
 		// module_locate_symbol() logs error messages on failure
@@ -602,8 +602,8 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 static void
 sasl_scramsha_modinit(module_t *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_dbextract");
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_normalize");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	(void) hook_add_event("config_ready");

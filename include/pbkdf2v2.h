@@ -10,6 +10,8 @@
 
 #include <openssl/evp.h>
 
+#define PBKDF2V2_CRYPTO_MODULE_NAME "crypto/pbkdf2v2"
+
 #define PBKDF2_FN_PREFIX            "$z$%u$%u$"
 #define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define PBKDF2_FN_BASE64            PBKDF2_FN_BASE62 "+/="
