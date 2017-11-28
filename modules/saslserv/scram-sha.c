@@ -31,7 +31,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_OPENSSL
+#if defined(HAVE_OPENSSL) && defined(HAVE_LIBIDN)
 
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
@@ -608,4 +608,4 @@ sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 DECLARE_MODULE_V1("saslserv/scram-sha", false, sasl_scramsha_modinit, sasl_scramsha_moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);
 
-#endif /* HAVE_OPENSSL */
+#endif /* HAVE_OPENSSL && HAVE_LIBIDN */
