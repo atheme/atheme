@@ -67,6 +67,7 @@ struct scramsha_session
 typedef char *scram_attr_list[128];
 
 static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
+static atheme_pbkdf2v2_scram_normalize_fn sasl_scramsha_normalize = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -203,10 +204,6 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	// Does GS2 header include an authzid ?
 	if (message[0] == 'a' && message[1] == '=')
 	{
-		/*
-		 * TODO: Normalise the username
-		 */
-
 		message += 2;
 
 		// Locate end of authzid
@@ -219,6 +216,18 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 
 		// Copy authzid
 		p->authzid = sstrndup(message, (size_t) (pos - message));
+
+		// Normalize it
+		const char *const authzid_nm = sasl_scramsha_normalize(p->authzid);
+		if (! authzid_nm)
+		{
+			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
+			goto fail;
+		}
+
+		// Replace supplied authzid with normalized one
+		(void) free(p->authzid);
+		p->authzid = sstrdup(authzid_nm);
 
 		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, p->authzid);
 
@@ -240,16 +249,20 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	/*
-	 * TODO: Normalise the username
-	 */
-	if (! (s->mu = myuser_find_by_nick(input['n'])))
+	const char *const username = sasl_scramsha_normalize(input['n']);
+
+	if (! username)
 	{
-		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, input['n']);
+		(void) slog(LG_DEBUG, "%s: SASLprep normalization of username failed", __func__);
+		goto fail;
+	}
+	else if (! (s->mu = myuser_find_by_nick(username)))
+	{
+		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, username);
 		goto fail;
 	}
 	else
-		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, input['n']);
+		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, username);
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
 	{
@@ -268,7 +281,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	}
 
 	// These cannot fail
-	p->username = sstrdup(input['n']);
+	p->username = sstrdup(username);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
 	s->c_msg_len = len - s->c_gs2_len;
@@ -590,6 +603,7 @@ static void
 sasl_scramsha_modinit(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_dbextract");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_normalize");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	(void) hook_add_event("config_ready");
