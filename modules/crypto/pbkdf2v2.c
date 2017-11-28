@@ -103,6 +103,8 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
 	return true;
 }
 
+#ifdef HAVE_LIBIDN
+
 /* **********************************************************************************************
  * This function is provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677)                *
  *                                                                                              *
@@ -197,6 +199,8 @@ static const atheme_pbkdf2v2_scram_dbextract_fn __attribute__((unused)) ex_fn_pt
 /* **********************************************************************************************
  * End external function                                                                        *
  ********************************************************************************************** */
+
+#endif /* HAVE_LIBIDN */
 
 static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
