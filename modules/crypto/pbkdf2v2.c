@@ -28,12 +28,6 @@
 
 #include "pbkdf2v2.h"
 
-/*
- * Provided for modules/saslserv/scram-sha
- * This is a prototype to avoid clang -Wmissing-prototypes warnings
- */
-bool atheme_pbkdf2v2_scram_ex(const char *restrict, struct pbkdf2v2_parameters *restrict);
-
 static const char salt_chars[62] = PBKDF2_FN_BASE62;
 
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
@@ -108,6 +102,100 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
 
 	return true;
 }
+
+/* **********************************************************************************************
+ * This function is provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677)                *
+ *                                                                                              *
+ * A prototype for it appears first, to avoid `-Wmissing-prototypes' diagnostics (under Clang)  *
+ *                                                                                              *
+ * A constant-but-unused function pointer for it appears last, so that the compiler can verify  *
+ * its signature matches the typedef in include/pbkdf2v2.h (necessary for bug-free inter-module *
+ * function calls)                                                                              *
+ ********************************************************************************************** */
+
+bool atheme_pbkdf2v2_scram_ex(const char *restrict, struct pbkdf2v2_parameters *restrict);
+
+bool
+atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_parameters *const restrict parsed)
+{
+	char ssk64[0x8000];
+	char shk64[0x8000];
+	char sdg64[0x8000];
+
+	(void) memset(parsed, 0x00, sizeof *parsed);
+
+	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+	{
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
+		goto parsed;
+	}
+	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+	{
+		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
+		goto parsed;
+	}
+
+	(void) slog(LG_DEBUG, "%s: could not extract necessary information from database", __func__);
+	return false;
+
+parsed:
+
+	if (! atheme_pbkdf2v2_determine_prf(parsed))
+		// This function logs messages on failure
+		return false;
+
+	if (parsed->scram)
+	{
+		if (base64_decode(ssk64, parsed->ssk, sizeof parsed->ssk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
+			return false;
+		}
+		if (base64_decode(shk64, parsed->shk, sizeof parsed->shk) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, shk64);
+			return false;
+		}
+	}
+	else
+	{
+		switch (parsed->a)
+		{
+			case PBKDF2_PRF_HMAC_SHA1:
+				parsed->a = PBKDF2_PRF_SCRAM_SHA1;
+				break;
+
+			case PBKDF2_PRF_HMAC_SHA2_256:
+				parsed->a = PBKDF2_PRF_SCRAM_SHA2_256;
+				break;
+
+			default:
+				(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, parsed->a);
+				return false;
+		}
+
+		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
+		if (base64_decode(sdg64, parsed->cdg, sizeof parsed->cdg) != parsed->dl)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
+			return false;
+		}
+
+		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
+			// This function logs messages on failure
+			return false;
+
+		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials", __func__);
+	}
+
+	return true;
+}
+
+static const atheme_pbkdf2v2_scram_ex_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_ex;
+
+/* **********************************************************************************************
+ * End external function                                                                        *
+ ********************************************************************************************** */
 
 static bool
 atheme_pbkdf2v2_compute(const char *const restrict password, const char *const restrict parameters,
@@ -368,85 +456,6 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	return false;
 }
 
-/*
- * Provided for modules/saslserv/scram-sha
- */
-bool
-atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_parameters *const restrict parsed)
-{
-	char ssk64[0x8000];
-	char shk64[0x8000];
-	char sdg64[0x8000];
-
-	(void) memset(parsed, 0x00, sizeof *parsed);
-
-	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
-	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
-		goto parsed;
-	}
-	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
-	{
-		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
-		goto parsed;
-	}
-
-	(void) slog(LG_DEBUG, "%s: could not extract necessary information from database", __func__);
-	return false;
-
-parsed:
-
-	if (! atheme_pbkdf2v2_determine_prf(parsed))
-		// This function logs messages on failure
-		return false;
-
-	if (parsed->scram)
-	{
-		if (base64_decode(ssk64, parsed->ssk, sizeof parsed->ssk) != parsed->dl)
-		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, ssk64);
-			return false;
-		}
-		if (base64_decode(shk64, parsed->shk, sizeof parsed->shk) != parsed->dl)
-		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for ssk failed", __func__, shk64);
-			return false;
-		}
-	}
-	else
-	{
-		switch (parsed->a)
-		{
-			case PBKDF2_PRF_HMAC_SHA1:
-				parsed->a = PBKDF2_PRF_SCRAM_SHA1;
-				break;
-
-			case PBKDF2_PRF_HMAC_SHA2_256:
-				parsed->a = PBKDF2_PRF_SCRAM_SHA2_256;
-				break;
-
-			default:
-				(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, parsed->a);
-				return false;
-		}
-
-		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
-		if (base64_decode(sdg64, parsed->cdg, sizeof parsed->cdg) != parsed->dl)
-		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for sdg failed", __func__, sdg64);
-			return false;
-		}
-
-		if (! atheme_pbkdf2v2_scram_derive(parsed, parsed->ssk, parsed->shk))
-			// This function logs messages on failure
-			return false;
-
-		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials", __func__);
-	}
-
-	return true;
-}
-
 static int
 c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 {
@@ -475,12 +484,6 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 
 	return 0;
 }
-
-/*
- * This variable will not be used, but ensures that if the function prototype above changes,
- * and we didn't update the typedef in include/pbkdf2v2.h, the compiler will warn us about it.
- */
-static const atheme_pbkdf2v2_scram_ex_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_ex;
 
 static crypt_impl_t crypto_pbkdf2v2_impl = {
 
