@@ -5,6 +5,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - libidn11-dev
       - libperl-dev
       - libssl-dev
       - gcc-5
@@ -21,7 +22,7 @@ env:
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
 script:
-  - ./configure --disable-nls --enable-ssl $OPTIONAL_CONF_ARGS
+  - ./configure --disable-nls --enable-ssl --with-libidn $OPTIONAL_CONF_ARGS
   - make -j $(nproc)
 
 matrix:
