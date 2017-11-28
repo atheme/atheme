@@ -69,8 +69,8 @@ static const unsigned char ClientKeyStr[] = {
 
 /*
  * For modules/saslserv/scram-sha to make an inter-module function call to
- * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_ex()
+ * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_dbextract()
  */
-typedef bool (*atheme_pbkdf2v2_scram_ex_fn)(const char *restrict, struct pbkdf2v2_parameters *restrict);
+typedef bool (*atheme_pbkdf2v2_scram_dbextract_fn)(const char *restrict, struct pbkdf2v2_parameters *restrict);
 
 #endif /* !PBKDF2V2_H */

@@ -113,10 +113,11 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
  * function calls)                                                                              *
  ********************************************************************************************** */
 
-bool atheme_pbkdf2v2_scram_ex(const char *restrict, struct pbkdf2v2_parameters *restrict);
+bool atheme_pbkdf2v2_scram_dbextract(const char *restrict, struct pbkdf2v2_parameters *restrict);
 
 bool
-atheme_pbkdf2v2_scram_ex(const char *const restrict parameters, struct pbkdf2v2_parameters *const restrict parsed)
+atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
+                                struct pbkdf2v2_parameters *const restrict parsed)
 {
 	char ssk64[0x8000];
 	char shk64[0x8000];
@@ -191,7 +192,7 @@ parsed:
 	return true;
 }
 
-static const atheme_pbkdf2v2_scram_ex_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_ex;
+static const atheme_pbkdf2v2_scram_dbextract_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_dbextract;
 
 /* **********************************************************************************************
  * End external function                                                                        *

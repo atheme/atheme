@@ -66,7 +66,7 @@ struct scramsha_session
 
 typedef char *scram_attr_list[128];
 
-static atheme_pbkdf2v2_scram_ex_fn sasl_scramsha_ex = NULL;
+static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -257,7 +257,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
-	if (! sasl_scramsha_ex(s->mu->pass, &s->db))
+	if (! sasl_scramsha_dbextract(s->mu->pass, &s->db))
 		// User's password is not in a PBKDF2 format
 		goto fail;
 
@@ -589,7 +589,7 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 static void
 sasl_scramsha_modinit(module_t *const restrict m)
 {
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_ex, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_ex");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, "crypto/pbkdf2v2", "atheme_pbkdf2v2_scram_dbextract");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 
 	(void) hook_add_event("config_ready");
