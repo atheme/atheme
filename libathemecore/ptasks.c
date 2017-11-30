@@ -767,7 +767,10 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
 		if (lastkill != CURRTIME && killcount < 5 + me.me->users)
-			killcount = 0, lastkill = CURRTIME;
+		{
+			killcount = 0;
+			lastkill = CURRTIME;
+		}
 		killcount++;
 		if (killcount < 5 + me.me->users)
 			reintroduce_user(u);
