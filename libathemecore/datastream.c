@@ -345,7 +345,10 @@ int recvq_getline(connection_t *cptr, char *buf, size_t len)
 		if (l > len)
 			l = len;
 		if (sq == sq2 && l >= (size_t) (newline - sq->buf - sq->firstused + 1))
-			cptr->flags &= ~CF_NONEWLINE, l = newline - sq->buf - sq->firstused + 1;
+		{
+			cptr->flags &= ~CF_NONEWLINE;
+			l = newline - sq->buf - sq->firstused + 1;
+		}
 		memcpy(p, sq->buf + sq->firstused, l);
 
 		p += l;
