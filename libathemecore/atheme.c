@@ -286,7 +286,6 @@ int atheme_main(int argc, char *argv[])
 		  case 'h':
 			  print_help();
 			  exit(EXIT_SUCCESS);
-			  break;
 		  case 'r':
 			  readonly = true;
 			  break;
@@ -307,11 +306,9 @@ int atheme_main(int argc, char *argv[])
 		  case 'v':
 			  print_version();
 			  exit(EXIT_SUCCESS);
-			  break;
 		  default:
 			  printf("usage: atheme [-dhnvr] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_FAILURE);
-			  break;
 		}
 	}
 
