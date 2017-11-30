@@ -8894,6 +8894,44 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Waggressive-loop-optimizations " >&5
+$as_echo_n "checking for C compiler flag(s) -Waggressive-loop-optimizations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Waggressive-loop-optimizations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Walloc-zero " >&5
 $as_echo_n "checking for C compiler flag(s) -Walloc-zero ... " >&6; }
 
@@ -9084,44 +9122,6 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wconversion " >&5
-$as_echo_n "checking for C compiler flag(s) -Wconversion ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -Wconversion"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
-		unset CFLAGS_SAVED
-
-
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wdangling-else " >&5
 $as_echo_n "checking for C compiler flag(s) -Wdangling-else ... " >&6; }
 
@@ -9274,44 +9274,6 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wduplicate-decl-specifier " >&5
-$as_echo_n "checking for C compiler flag(s) -Wduplicate-decl-specifier ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -Wduplicate-decl-specifier"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
-		unset CFLAGS_SAVED
-
-
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wduplicated-branches " >&5
 $as_echo_n "checking for C compiler flag(s) -Wduplicated-branches ... " >&6; }
 
@@ -9393,6 +9355,44 @@ $as_echo_n "checking for C compiler flag(s) -Wfatal-errors ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
 		CFLAGS="${CFLAGS} -Wfatal-errors"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wfloat-equal " >&5
+$as_echo_n "checking for C compiler flag(s) -Wfloat-equal ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wfloat-equal"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -9882,44 +9882,6 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-parameter-type " >&5
-$as_echo_n "checking for C compiler flag(s) -Wmissing-parameter-type ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -Wmissing-parameter-type"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
-		unset CFLAGS_SAVED
-
-
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-prototypes " >&5
 $as_echo_n "checking for C compiler flag(s) -Wmissing-prototypes ... " >&6; }
 
@@ -10077,6 +10039,44 @@ $as_echo_n "checking for C compiler flag(s) -Wold-style-definition ... " >&6; }
 
 		CFLAGS_SAVED="${CFLAGS}"
 		CFLAGS="${CFLAGS} -Wold-style-definition"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Woverlength-strings " >&5
+$as_echo_n "checking for C compiler flag(s) -Woverlength-strings ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Woverlength-strings"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10533,6 +10533,44 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstringop-truncation " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstringop-truncation ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstringop-truncation"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wtrampolines " >&5
 $as_echo_n "checking for C compiler flag(s) -Wtrampolines ... " >&6; }
 
@@ -10609,44 +10647,6 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wuninitialized " >&5
-$as_echo_n "checking for C compiler flag(s) -Wuninitialized ... " >&6; }
-
-		CFLAGS_SAVED="${CFLAGS}"
-		CFLAGS="${CFLAGS} -Wuninitialized"
-
-		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
-
-else
-
-				ATHEME_CC_TEST_CFLAGS_RESULT='no'
-				CFLAGS="${CFLAGS_SAVED}"
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
-		unset CFLAGS_SAVED
-
-
-
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wunsafe-loop-optimizations " >&5
 $as_echo_n "checking for C compiler flag(s) -Wunsafe-loop-optimizations ... " >&6; }
 
@@ -10690,6 +10690,44 @@ $as_echo_n "checking for C compiler flag(s) -Wunsuffixed-float-constants ... " >
 
 		CFLAGS_SAVED="${CFLAGS}"
 		CFLAGS="${CFLAGS} -Wunsuffixed-float-constants"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wunused " >&5
+$as_echo_n "checking for C compiler flag(s) -Wunused ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wunused"
 
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
