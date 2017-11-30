@@ -138,7 +138,6 @@ loadmodule "modules/backend/opensex";
  * loadmodule "modules/crypto/pbkdf2";
  * loadmodule "modules/crypto/posix";
  *
- * The posix module requires crypt(3) or OpenSSL.
  * The rawsha1 and pbkdf2/pbkdf2v2 modules require OpenSSL.
  * The Argon2d module has no dependencies and is recommended.
  */
