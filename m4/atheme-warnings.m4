@@ -28,7 +28,6 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS],
 			ATHEME_CC_TEST_CFLAGS([-Wbad-function-cast])
 			ATHEME_CC_TEST_CFLAGS([-Wc99-c11-compat])
 			ATHEME_CC_TEST_CFLAGS([-Wcast-qual])
-			ATHEME_CC_TEST_CFLAGS([-Wconversion])
 			ATHEME_CC_TEST_CFLAGS([-Wdangling-else])
 			ATHEME_CC_TEST_CFLAGS([-Wdate-time])
 			ATHEME_CC_TEST_CFLAGS([-Wdisabled-optimization])
