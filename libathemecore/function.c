@@ -257,7 +257,10 @@ int validemail(const char *email)
 				return 0;
 		}
 		else if (c == '@')
-			atcnt++, dotcnt1 = 0;
+		{
+			atcnt++;
+			dotcnt1 = 0;
+		}
 		else if ((c >= 'a' && c <= 'z') ||
 				(c >= 'A' && c <= 'Z') ||
 				(c >= '0' && c <= '9') ||
@@ -819,13 +822,13 @@ bool is_service(user_t *user)
 
 char *sbytes(float x)
 {
-	if (x > 1073741824.0)
+	if (x > 1073741824.0f)
 		return "GB";
 
-	else if (x > 1048576.0)
+	else if (x > 1048576.0f)
 		return "MB";
 
-	else if (x > 1024.0)
+	else if (x > 1024.0f)
 		return "KB";
 
 	return "B";
@@ -833,14 +836,14 @@ char *sbytes(float x)
 
 float bytes(float x)
 {
-	if (x > 1073741824.0)
-		return (x / 1073741824.0);
+	if (x > 1073741824.0f)
+		return (x / 1073741824.0f);
 
-	if (x > 1048576.0)
-		return (x / 1048576.0);
+	if (x > 1048576.0f)
+		return (x / 1048576.0f);
 
-	if (x > 1024.0)
-		return (x / 1024.0);
+	if (x > 1024.0f)
+		return (x / 1024.0f);
 
 	return x;
 }
