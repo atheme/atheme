@@ -7,10 +7,6 @@
 
 #include "atheme.h"
 
-#if !defined(HAVE_CRYPT) && !defined(HAVE_OPENSSL)
-#  warning "crypt(3) and OpenSSL are both unavailable, this module is unusable"
-#else
-
 #define ATHEME_POSIX_SALTLEN 6
 
 static const char salt_chars[62] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
@@ -62,15 +58,10 @@ atheme_posix_crypt(const char *const restrict password, const char *const restri
 	return result;
 }
 
-#elif defined(HAVE_OPENSSL)
-
-#include <openssl/bio.h>
-#include <openssl/err.h>
-#include <openssl/evp.h>
-#include <openssl/md5.h>
+#else /* HAVE_CRYPT */
 
 /* Yanked out of OpenSSL-1.0.0g apps/passwd.c */
-static unsigned const char cov_2char[64] = {
+static const unsigned char cov_2char[64] = {
 	/* from crypto/des/fcrypt.c */
 	0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35,
 	0x36,0x37,0x38,0x39,0x41,0x42,0x43,0x44,
@@ -101,7 +92,7 @@ openssl_md5crypt(const char *passwd, const char *salt)
 	char *salt_out;
 	int n;
 	unsigned int i;
-	EVP_MD_CTX md,md2;
+	md5_state_t md,md2;
 	size_t passwd_len, salt_len;
 
 	passwd_len = strlen(passwd);
@@ -116,48 +107,44 @@ openssl_md5crypt(const char *passwd, const char *salt)
 	salt_len = strlen(salt_out);
 	soft_assert(salt_len <= 8);
 
-	EVP_MD_CTX_init(&md);
-	EVP_DigestInit_ex(&md,EVP_md5(), NULL);
-	EVP_DigestUpdate(&md, passwd, passwd_len);
-	EVP_DigestUpdate(&md, "$", 1);
-	EVP_DigestUpdate(&md, magic, strlen(magic));
-	EVP_DigestUpdate(&md, "$", 1);
-	EVP_DigestUpdate(&md, salt_out, salt_len);
+	md5_init(&md);
+	md5_append(&md, passwd, passwd_len);
+	md5_append(&md, "$", 1);
+	md5_append(&md, magic, strlen(magic));
+	md5_append(&md, "$", 1);
+	md5_append(&md, salt_out, salt_len);
 
-	EVP_MD_CTX_init(&md2);
-	EVP_DigestInit_ex(&md2,EVP_md5(), NULL);
-	EVP_DigestUpdate(&md2, passwd, passwd_len);
-	EVP_DigestUpdate(&md2, salt_out, salt_len);
-	EVP_DigestUpdate(&md2, passwd, passwd_len);
-	EVP_DigestFinal_ex(&md2, buf, NULL);
+	md5_init(&md2);
+	md5_append(&md2, passwd, passwd_len);
+	md5_append(&md2, salt_out, salt_len);
+	md5_append(&md2, passwd, passwd_len);
+	md5_finish(&md2, buf);
 
 	for (i = passwd_len; i > sizeof buf; i -= sizeof buf)
-		EVP_DigestUpdate(&md, buf, sizeof buf);
-	EVP_DigestUpdate(&md, buf, i);
+		md5_append(&md, buf, sizeof buf);
+	md5_append(&md, buf, i);
 
 	n = passwd_len;
 	while (n)
 	{
-		EVP_DigestUpdate(&md, (n & 1) ? "\0" : passwd, 1);
+		md5_append(&md, (n & 1) ? "\0" : passwd, 1);
 		n >>= 1;
 	}
-	EVP_DigestFinal_ex(&md, buf, NULL);
+	md5_finish(&md, buf);
 
 	for (i = 0; i < 1000; i++)
 	{
-		EVP_DigestInit_ex(&md2,EVP_md5(), NULL);
-		EVP_DigestUpdate(&md2, (i & 1) ? (unsigned const char *) passwd : buf,
+		md5_init(&md2);
+		md5_append(&md2, (i & 1) ? (const unsigned char *) passwd : buf,
 		                       (i & 1) ? passwd_len : sizeof buf);
 		if (i % 3)
-			EVP_DigestUpdate(&md2, salt_out, salt_len);
+			md5_append(&md2, salt_out, salt_len);
 		if (i % 7)
-			EVP_DigestUpdate(&md2, passwd, passwd_len);
-		EVP_DigestUpdate(&md2, (i & 1) ? buf : (unsigned const char *) passwd,
+			md5_append(&md2, passwd, passwd_len);
+		md5_append(&md2, (i & 1) ? buf : (const unsigned char *) passwd,
 		                       (i & 1) ? sizeof buf : passwd_len);
-		EVP_DigestFinal_ex(&md2, buf, NULL);
+		md5_finish(&md2, buf);
 	}
-
-	EVP_MD_CTX_cleanup(&md2);
 
 	{
 		/* transform buf into output string */
@@ -191,7 +178,6 @@ openssl_md5crypt(const char *passwd, const char *salt)
 		*output = 0;
 		soft_assert(strlen(out_buf) < sizeof(out_buf));
 	 }
-	EVP_MD_CTX_cleanup(&md);
 
 	return out_buf;
 }
@@ -213,7 +199,7 @@ atheme_posix_crypt(const char *const restrict password, const char *const restri
 	return openssl_md5crypt(password, real_salt);
 }
 
-#endif /* HAVE_OPENSSL */
+#endif /* !HAVE_CRYPT */
 
 static crypt_impl_t crypto_posix_impl = {
 
@@ -236,5 +222,3 @@ crypto_posix_moddeinit(const module_unload_intent_t __attribute__((unused)) inte
 
 DECLARE_MODULE_V1("crypto/posix", false, crypto_posix_modinit, crypto_posix_moddeinit,
                   PACKAGE_STRING, VENDOR_STRING);
-
-#endif /* HAVE_CRYPT || HAVE_OPENSSL */

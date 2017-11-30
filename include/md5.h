@@ -75,9 +75,9 @@ void md5_init(md5_state_t *pms);
 
 /* Append a string to the message. */
 #ifdef P3
-void md5_append(P3(md5_state_t *pms, const md5_byte_t *data, size_t nbytes));
+void md5_append(P3(md5_state_t *pms, const void *data, size_t nbytes));
 #else
-void md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes);
+void md5_append(md5_state_t *pms, const void *data, size_t nbytes);
 #endif
 
 /* Finish the message and return the digest. */

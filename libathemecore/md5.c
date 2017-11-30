@@ -250,9 +250,10 @@ md5_init(md5_state_t *pms)
 }
 
 void
-md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes)
+md5_append(md5_state_t *pms, const void *data_in, size_t nbytes)
 {
-    const md5_byte_t *p = data;
+    const md5_byte_t *data = data_in;
+    const md5_byte_t *p = data_in;
     size_t left = nbytes;
     size_t offset = (pms->count[0] >> 3) & 63;
     md5_word_t nbits = (md5_word_t)(nbytes << 3);
