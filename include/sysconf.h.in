@@ -19,7 +19,7 @@
 /* Define to 1 if you have the `asprintf' function. */
 #undef HAVE_ASPRINTF
 
-/* Define if crypt() is available */
+/* Define to 1 if crypt(3) is available */
 #undef HAVE_CRYPT
 
 /* Define if the GNU dcgettext() function is already present or preinstalled.
@@ -98,7 +98,7 @@
 /* Define to 1 if you have the `memset_s' function. */
 #undef HAVE_MEMSET_S
 
-/* Define to 1 if openssl is available */
+/* Define to 1 if OpenSSL is available */
 #undef HAVE_OPENSSL
 
 /* Define to 1 if you have the <openssl/ec.h> header file. */

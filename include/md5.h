@@ -66,11 +66,6 @@ typedef struct md5_state_s {
     md5_byte_t buf[64];		/* accumulate block */
 } md5_state_t;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /* Initialize the algorithm. */
 #ifdef P1
 void md5_init(P1(md5_state_t *pms));
@@ -80,9 +75,9 @@ void md5_init(md5_state_t *pms);
 
 /* Append a string to the message. */
 #ifdef P3
-void md5_append(P3(md5_state_t *pms, const md5_byte_t *data, size_t nbytes));
+void md5_append(P3(md5_state_t *pms, const void *data, size_t nbytes));
 #else
-void md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes);
+void md5_append(md5_state_t *pms, const void *data, size_t nbytes);
 #endif
 
 /* Finish the message and return the digest. */
@@ -90,10 +85,6 @@ void md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes);
 void md5_finish(P2(md5_state_t *pms, md5_byte_t digest[16]));
 #else
 void md5_finish(md5_state_t *pms, md5_byte_t digest[16]);
-#endif
-
-#ifdef __cplusplus
-}  /* end extern "C" */
 #endif
 
 #endif /* md5_INCLUDED */

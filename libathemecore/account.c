@@ -1213,14 +1213,20 @@ const char *mychan_get_mlock(mychan_t *mc)
 	if (mc->mlock_on)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		{
+			dir = MTYPE_ADD;
+			mowgli_strlcat(buf, "+", sizeof buf);
+		}
 		mowgli_strlcat(buf, flags_to_string(mc->mlock_on), sizeof buf);
 	}
 
 	if (mc->mlock_limit)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		{
+			dir = MTYPE_ADD;
+			mowgli_strlcat(buf, "+", sizeof buf);
+		}
 		mowgli_strlcat(buf, "l", sizeof buf);
 		mowgli_strlcat(params, " ", sizeof params);
 		mowgli_strlcat(params, number_to_string(mc->mlock_limit), sizeof params);
@@ -1229,7 +1235,10 @@ const char *mychan_get_mlock(mychan_t *mc)
 	if (mc->mlock_key)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, mowgli_strlcat(buf, "+", sizeof buf);
+		{
+			dir = MTYPE_ADD;
+			mowgli_strlcat(buf, "+", sizeof buf);
+		}
 		mowgli_strlcat(buf, "k", sizeof buf);
 		mowgli_strlcat(params, " *", sizeof params);
 	}
@@ -1243,7 +1252,10 @@ const char *mychan_get_mlock(mychan_t *mc)
 			if (p[1] != ' ' && p[1] != '\0')
 			{
 				if (dir != MTYPE_ADD)
-					dir = MTYPE_ADD, *q++ = '+';
+				{
+					dir = MTYPE_ADD;
+					*q++ = '+';
+				}
 				*q++ = *p++;
 				mowgli_strlcat(params, " ", sizeof params);
 				qq = params + strlen(params);
@@ -1266,7 +1278,10 @@ const char *mychan_get_mlock(mychan_t *mc)
 	if (mc->mlock_off)
 	{
 		if (dir != MTYPE_DEL)
-			dir = MTYPE_DEL, mowgli_strlcat(buf, "-", sizeof buf);
+		{
+			dir = MTYPE_DEL;
+			mowgli_strlcat(buf, "-", sizeof buf);
+		}
 		mowgli_strlcat(buf, flags_to_string(mc->mlock_off), sizeof buf);
 		if (mc->mlock_off & CMODE_LIMIT)
 			mowgli_strlcat(buf, "l", sizeof buf);
@@ -1283,7 +1298,10 @@ const char *mychan_get_mlock(mychan_t *mc)
 			if (p[1] == ' ' || p[1] == '\0')
 			{
 				if (dir != MTYPE_DEL)
-					dir = MTYPE_DEL, *q++ = '-';
+				{
+					dir = MTYPE_DEL;
+					*q++ = '-';
+				}
 				*q++ = *p;
 			}
 			p++;

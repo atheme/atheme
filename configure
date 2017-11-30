@@ -1417,7 +1417,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-nls           do not use Native Language Support
-  --enable-fhs-paths      Use more FHS-like pathnames (for packagers).
+  --enable-fhs-paths      Use more FHS-like pathnames (for packagers)
   --enable-reproducible-builds
                           Enable reproducible builds.
   --enable-large-net      Enable large network support.
@@ -1426,7 +1426,7 @@ Optional Features:
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
   --enable-profile        Enable profiling extensions
-  --disable-rpath         Disable use of -Wl,-rpath= during linking.
+  --disable-rpath         Disable use of -Wl,-rpath= during linking
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1436,11 +1436,11 @@ Optional Packages:
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
   --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --with-cracklib         Compile cracklib nickserv submodule for checking
-                          password strength.
+  --with-cracklib         Compile NickServ cracklib module for checking
+                          password strength
   --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
-  --without-perl          Disable building perl scripting module.
+  --without-perl          Disable building perl scripting module
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, or
                           "no" to force use of internal libmowgli
@@ -2726,11 +2726,11 @@ $as_echo "no" >&6; }
 
 
 
-LIBS="$LIBS $DYNAMIC_LD_LIBS"
+LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access" >&5
 $as_echo_n "checking if you read GIT-Access... " >&6; }
-if ! test -f libmowgli-2/Makefile -a -f modules/contrib/Makefile; then
+if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	as_fn_error $? "please read GIT-Access before trying to build from git" "$LINENO" 5
@@ -4455,7 +4455,6 @@ $as_echo "$ac_cv_safe_to_define___extensions__" >&6; }
   $as_echo "#define _TANDEM_SOURCE 1" >>confdefs.h
 
 
-
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether byte ordering is bigendian" >&5
 $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
 if ${ac_cv_c_bigendian+:} false; then :
@@ -4828,18 +4827,13 @@ $as_echo "no" >&6; }
 	fi
 
 fi
-if test -z "$PKG_CONFIG"; then
+if test -z "${PKG_CONFIG}"; then
 	as_fn_error $? "pkg-config not found" "$LINENO" 5
 fi
 
 PACKAGE=atheme
 
 VERSION=7.3.0-dev
-
-
-
-$as_echo "#define VENDOR_STRING \"Atheme Development Group <http://atheme.github.io>\"" >>confdefs.h
-
 
 
 cat >>confdefs.h <<_ACEOF
@@ -4850,6 +4844,9 @@ _ACEOF
 cat >>confdefs.h <<_ACEOF
 #define VERSION "$VERSION"
 _ACEOF
+
+
+$as_echo "#define VENDOR_STRING \"Atheme Development Group <http://atheme.github.io>\"" >>confdefs.h
 
 
 
@@ -6513,7 +6510,7 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 LIBS="${LIBS} ${LIBINTL}"
 
-if test "$prefix" = "NONE"; then
+if test "x${prefix}" = "xNONE"; then
 	prefix="${ac_default_prefix}"
 fi
 
@@ -6699,7 +6696,7 @@ ac_res=$ac_cv_search_crypt
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-$as_echo "#define HAVE_CRYPT /**/" >>confdefs.h
+$as_echo "#define HAVE_CRYPT 1" >>confdefs.h
 
 fi
 
@@ -7742,8 +7739,9 @@ else
   with_cracklib="auto"
 fi
 
-if test "x$with_cracklib" != "xno"; then :
-  LIBS_save="$LIBS"
+if test "x${with_cracklib}" != "xno"; then :
+
+	LIBS_save="${LIBS}"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
 $as_echo_n "checking for library containing FascistCheck... " >&6; }
 if ${ac_cv_search_FascistCheck+:} false; then :
@@ -7797,17 +7795,22 @@ $as_echo "$ac_cv_search_FascistCheck" >&6; }
 ac_res=$ac_cv_search_FascistCheck
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  CRACKLIB_C="cracklib.c"
-		if test "x$ac_cv_search_FascistCheck" != "xnone required"; then :
+
+		CRACKLIB_C="cracklib.c"
+		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
   CRACKLIB_LIBS="$ac_cv_search_FascistCheck"
 fi
+
 else
-  if test "x$with_cracklib" != "xauto"; then :
-  as_fn_error $? "--with-cracklib was specified but cracklib could not be found." "$LINENO" 5
-fi
+
+		if test "x${with_cracklib}" != "xauto"; then :
+  as_fn_error $? "--with-cracklib was specified but cracklib could not be found" "$LINENO" 5
 fi
 
-	LIBS="$LIBS_save"
+fi
+
+	LIBS="${LIBS_save}"
+
 fi
 
 
@@ -7822,8 +7825,9 @@ else
   with_libidn="auto"
 fi
 
-if test "x$with_libidn" != "xno"; then :
-  LIBS_save="$LIBS"
+if test "x${with_libidn}" != "xno"; then :
+
+	LIBS_save="${LIBS}"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
 $as_echo_n "checking for library containing stringprep... " >&6; }
 if ${ac_cv_search_stringprep+:} false; then :
@@ -7877,20 +7881,25 @@ $as_echo "$ac_cv_search_stringprep" >&6; }
 ac_res=$ac_cv_search_stringprep
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  LIBIDN="yes"
+
+		LIBIDN="yes"
 
 $as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
 
-		if test "x$ac_cv_search_stringprep" != "xnone required"; then :
+		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
   LIBIDN_LIBS="$ac_cv_search_stringprep"
 fi
+
 else
-  if test "x$with_libidn" != "xauto"; then :
-  as_fn_error $? "--with-libidn was specified but GNU libidn could not be found." "$LINENO" 5
-fi
+
+		if test "x${with_libidn}" != "xauto"; then :
+  as_fn_error $? "--with-libidn was specified but GNU libidn could not be found" "$LINENO" 5
 fi
 
-	LIBS="$LIBS_save"
+fi
+
+	LIBS="${LIBS_save}"
+
 fi
 
 
@@ -7902,62 +7911,12 @@ else
   with_ldap="auto"
 fi
 
+if test "x${with_ldap}" != "xno"; then :
 
-if test "x$with_ldap" != "xno"; then :
-
-# Thank autoconf and openldap developers for making me do all this stuff.
-LDAP_CFLAGS=""
-LDAP_LIBS=""
-LDAP_AUTHC=""
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
-$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
-if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lldap  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char ldap_initialize ();
-int
-main ()
-{
-return ldap_initialize ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ldap_ldap_initialize=yes
-else
-  ac_cv_lib_ldap_ldap_initialize=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
-$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
-if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
-
+	# Thank autoconf and openldap developers for making me do all this stuff.
 	LDAP_CFLAGS=""
-	LDAP_LIBS="-lldap"
-	LDAP_AUTHC="ldap.c"
-
-else
-
-	unset ac_cv_lib_ldap_ldap_initialize
-	saveCFLAGS="$CFLAGS"
-	saveLIBS="$LIBS"
-	CFLAGS="$CFLAGS -I/usr/local/include"
-	LIBS="$LIBS -L/usr/local/lib"
+	LDAP_LIBS=""
+	LDAP_AUTHC=""
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
 $as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
 if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
@@ -7996,22 +7955,71 @@ fi
 $as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
 if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
-		LDAP_CFLAGS="-I/usr/local/include"
-		LDAP_LIBS="-L/usr/local/lib -lldap"
+		LDAP_CFLAGS=""
+		LDAP_LIBS="-lldap"
 		LDAP_AUTHC="ldap.c"
 
+else
+
+		unset ac_cv_lib_ldap_ldap_initialize
+		saveCFLAGS="${CFLAGS}"
+		saveLIBS="${LIBS}"
+		CFLAGS="${CFLAGS} -I/usr/local/include"
+		LIBS="${LIBS} -L/usr/local/lib"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
+$as_echo_n "checking for ldap_initialize in -lldap... " >&6; }
+if ${ac_cv_lib_ldap_ldap_initialize+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lldap  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_initialize ();
+int
+main ()
+{
+return ldap_initialize ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_ldap_ldap_initialize=yes
+else
+  ac_cv_lib_ldap_ldap_initialize=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ldap_ldap_initialize" >&5
+$as_echo "$ac_cv_lib_ldap_ldap_initialize" >&6; }
+if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
+
+			LDAP_CFLAGS="-I/usr/local/include"
+			LDAP_LIBS="-L/usr/local/lib -lldap"
+			LDAP_AUTHC="ldap.c"
+
 fi
 
-	CFLAGS="$saveCFLAGS"
-	LIBS="$saveLIBS"
+		CFLAGS="${saveCFLAGS}"
+		LIBS="${saveLIBS}"
 
 fi
 
 
 fi
 
-if test "x$with_ldap" = "xyes" && test "x$LDAP_AUTHC" = "x"; then :
-  as_fn_error $? "LDAP support was explicitly requested but could not be found." "$LINENO" 5
+if test "x${with_ldap}" = "xyes" && test "x${LDAP_AUTHC}" = "x"; then :
+  as_fn_error $? "LDAP support was explicitly requested but could not be found" "$LINENO" 5
 fi
 
 
@@ -8027,7 +8035,7 @@ else
 fi
 
 
-if test "x$with_perl" != "xno"; then :
+if test "x${with_perl}" != "xno"; then :
 
   # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
@@ -8069,7 +8077,7 @@ $as_echo "no" >&6; }
 fi
 
 
-  if test -n "$perlpath"; then
+  if test -n "${perlpath}"; then
       PERL_ENABLE=perl
       PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts`
       PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
@@ -8081,8 +8089,8 @@ fi
 
 fi
 
-if test "x$with_perl" = "xyes" && test "x$PERL_CFLAGS" = "x"; then :
-  as_fn_error $? "Perl support was requested but Perl could not be found." "$LINENO" 5
+if test "x${with_perl}" = "xyes" && test "x${PERL_CFLAGS}" = "x"; then :
+  as_fn_error $? "Perl support was requested but Perl could not be found" "$LINENO" 5
 fi
 
 
@@ -8203,7 +8211,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CONTRIB" >&5
 $as_echo "$CONTRIB" >&6; }
 
-if test "$CONTRIB" = "yes"; then
+if test "x${CONTRIB}" = "xyes"; then
 	CONTRIB_ENABLE="contrib"
 else
 	CONTRIB_ENABLE=""
@@ -8220,7 +8228,7 @@ fi
 
 
 SSL=no
-if test "$enable_ssl" = "yes"; then
+if test "x${enable_ssl}" = "xyes"; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SSL_read in -lssl" >&5
 $as_echo_n "checking for SSL_read in -lssl... " >&6; }
 if ${ac_cv_lib_ssl_SSL_read+:} false; then :
@@ -8345,7 +8353,7 @@ fi
 
 fi
 
-	if test "$SSL" = "yes"; then
+	if test "x${SSL}" = "xyes"; then
 		for ac_header in openssl/ec.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
@@ -8359,120 +8367,17 @@ fi
 done
  # Defines HAVE_OPENSSL_EC_H
 
-$as_echo "#define HAVE_OPENSSL /**/" >>confdefs.h
+$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
 	fi
 fi
 
 case "$host" in
 *-*-mingw32)
-    CFLAGS="-I/mingw/include $CFLAGS"
-    LIBS="$LIBS -lwsock32 -lws2_32 -lregex"
+    CFLAGS="-I/mingw/include ${CFLAGS}"
+    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
         ;;
 esac
-
-
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -std=gnu99" >&5
-$as_echo_n "checking GCC flag(s) -std=gnu99... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_std_gnu99+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -std=gnu99 -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <string.h>
-#include <stdio.h>
-int main(void);
-
-int
-main ()
-{
-
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_std_gnu99=yes
-else
-  atheme_cv_c_gcc_std_gnu99=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
-
-  if test "x$atheme_cv_c_gcc_std_gnu99" = xyes; then
-   CWARNS="${CWARNS}-std=gnu99 "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_std_gnu99=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
-
-
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Werror-implicit-function-declaration" >&5
-$as_echo_n "checking GCC flag(s) -Werror-implicit-function-declaration... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_error_implicit_function_declaration+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Werror-implicit-function-declaration -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <string.h>
-#include <stdio.h>
-int main(void);
-
-int
-main ()
-{
-
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_error_implicit_function_declaration=yes
-else
-  atheme_cv_c_gcc_w_error_implicit_function_declaration=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
-
-  if test "x$atheme_cv_c_gcc_w_error_implicit_function_declaration" = xyes; then
-   CWARNS="${CWARNS}-Werror-implicit-function-declaration "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_error_implicit_function_declaration=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
-
 
 # Check whether --enable-warnings was given.
 if test "${enable_warnings+set}" = set; then :
@@ -8481,977 +8386,2916 @@ else
   enable_warnings=no
 fi
 
-if test "x$enable_warnings" = "xyes"; then :
+if test "x${enable_warnings}" = "xyes"; then :
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wall" >&5
-$as_echo_n "checking GCC flag(s) -Wall... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_all+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Werror=unknown-warning-option " >&5
+$as_echo_n "checking for C compiler flag(s) -Werror=unknown-warning-option ... " >&6; }
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wall -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Werror=unknown-warning-option"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_all=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_all=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_all" = xyes; then
-   CWARNS="${CWARNS}-Wall "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_all=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wpointer-arith" >&5
-$as_echo_n "checking GCC flag(s) -Wpointer-arith... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_pointer_arith+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wpointer-arith -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Werror=implicit " >&5
+$as_echo_n "checking for C compiler flag(s) -Werror=implicit ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Werror=implicit"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_pointer_arith=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_pointer_arith=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_pointer_arith" = xyes; then
-   CWARNS="${CWARNS}-Wpointer-arith "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_pointer_arith=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wimplicit -Wnested-externs" >&5
-$as_echo_n "checking GCC flag(s) -Wimplicit -Wnested-externs... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_implicit+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wimplicit -Wnested-externs -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Weverything " >&5
+$as_echo_n "checking for C compiler flag(s) -Weverything ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Weverything"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_implicit=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_implicit=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_implicit" = xyes; then
-   CWARNS="${CWARNS}-Wimplicit -Wnested-externs "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_implicit=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wcast-align" >&5
-$as_echo_n "checking GCC flag(s) -Wcast-align... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_cast_align+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wcast-align -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"; then :
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-address-of-packed-member " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-address-of-packed-member ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-address-of-packed-member"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_cast_align=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_cast_align=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_cast_align" = xyes; then
-   CWARNS="${CWARNS}-Wcast-align "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_cast_align=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wcast-qual" >&5
-$as_echo_n "checking GCC flag(s) -Wcast-qual... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_cast_qual+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wcast-qual -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-disabled-macro-expansion " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-disabled-macro-expansion ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-disabled-macro-expansion"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_cast_qual=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_cast_qual=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_cast_qual" = xyes; then
-   CWARNS="${CWARNS}-Wcast-qual "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_cast_qual=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations" >&5
-$as_echo_n "checking GCC flag(s) -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_prototypes+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-format-pedantic " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-format-pedantic ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-format-pedantic"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_prototypes=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_prototypes=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_prototypes" = xyes; then
-   CWARNS="${CWARNS}-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_prototypes=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wparentheses" >&5
-$as_echo_n "checking GCC flag(s) -Wparentheses... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_parentheses+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wparentheses -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-missing-variable-declarations " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-missing-variable-declarations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-missing-variable-declarations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_parentheses=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_parentheses=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_parentheses" = xyes; then
-   CWARNS="${CWARNS}-Wparentheses "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_parentheses=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -W -Wno-unused" >&5
-$as_echo_n "checking GCC flag(s) -W -Wno-unused... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -W -Wno-unused -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-pedantic " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-pedantic ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-pedantic"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w" = xyes; then
-   CWARNS="${CWARNS}-W -Wno-unused "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wextra" >&5
-$as_echo_n "checking GCC flag(s) -Wextra... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_extra+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wextra -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-reserved-id-macro " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-reserved-id-macro ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-reserved-id-macro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_extra=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_extra=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_extra" = xyes; then
-   CWARNS="${CWARNS}-Wextra "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_extra=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wshadow" >&5
-$as_echo_n "checking GCC flag(s) -Wshadow... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_shadow+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wshadow -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-unused-command-line-argument " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-unused-command-line-argument ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-unused-command-line-argument"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_shadow=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_shadow=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_shadow" = xyes; then
-   CWARNS="${CWARNS}-Wshadow "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_shadow=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wundef" >&5
-$as_echo_n "checking GCC flag(s) -Wundef... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_undef+:} false; then :
-  $as_echo_n "(cached) " >&6
+
+
 else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wundef -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wall " >&5
+$as_echo_n "checking for C compiler flag(s) -Wall ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wall"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_undef=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_undef=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_undef" = xyes; then
-   CWARNS="${CWARNS}-Wundef "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_undef=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wpacked" >&5
-$as_echo_n "checking GCC flag(s) -Wpacked... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_packed+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wpacked -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wextra " >&5
+$as_echo_n "checking for C compiler flag(s) -Wextra ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wextra"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_packed=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_packed=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_packed" = xyes; then
-   CWARNS="${CWARNS}-Wpacked "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_packed=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wnested-externs" >&5
-$as_echo_n "checking GCC flag(s) -Wnested-externs... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_nested_externs+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wnested-externs -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Waggregate-return " >&5
+$as_echo_n "checking for C compiler flag(s) -Waggregate-return ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Waggregate-return"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_nested_externs=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_nested_externs=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_nested_externs" = xyes; then
-   CWARNS="${CWARNS}-Wnested-externs "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_nested_externs=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wunused-function -Wunused-label -Wunused-value -Wunused-variable" >&5
-$as_echo_n "checking GCC flag(s) -Wunused-function -Wunused-label -Wunused-value -Wunused-variable... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_unused+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wunused-function -Wunused-label -Wunused-value -Wunused-variable -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Waggressive-loop-optimizations " >&5
+$as_echo_n "checking for C compiler flag(s) -Waggressive-loop-optimizations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Waggressive-loop-optimizations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_unused=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_unused=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_unused" = xyes; then
-   CWARNS="${CWARNS}-Wunused-function -Wunused-label -Wunused-value -Wunused-variable "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_unused=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wredundant-decls" >&5
-$as_echo_n "checking GCC flag(s) -Wredundant-decls... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_redundant_decls+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wredundant-decls -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Walloc-zero " >&5
+$as_echo_n "checking for C compiler flag(s) -Walloc-zero ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Walloc-zero"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_redundant_decls=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_redundant_decls=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_redundant_decls" = xyes; then
-   CWARNS="${CWARNS}-Wredundant-decls "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_redundant_decls=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wfloat-equal" >&5
-$as_echo_n "checking GCC flag(s) -Wfloat-equal... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_float_equal+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wfloat-equal -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Walloca " >&5
+$as_echo_n "checking for C compiler flag(s) -Walloca ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Walloca"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_float_equal=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_float_equal=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_float_equal" = xyes; then
-   CWARNS="${CWARNS}-Wfloat-equal "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_float_equal=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wformat=2 -fno-builtin-strftime" >&5
-$as_echo_n "checking GCC flag(s) -Wformat=2 -fno-builtin-strftime... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_format+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wformat=2 -fno-builtin-strftime -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wbad-function-cast " >&5
+$as_echo_n "checking for C compiler flag(s) -Wbad-function-cast ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wbad-function-cast"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_format=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_format=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_format" = xyes; then
-   CWARNS="${CWARNS}-Wformat=2 -fno-builtin-strftime "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_format=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wdisabled-optimization" >&5
-$as_echo_n "checking GCC flag(s) -Wdisabled-optimization... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_disabled_optimization+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wdisabled-optimization -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wc99-c11-compat " >&5
+$as_echo_n "checking for C compiler flag(s) -Wc99-c11-compat ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wc99-c11-compat"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_disabled_optimization=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_disabled_optimization=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_c_gcc_w_disabled_optimization" = xyes; then
-   CWARNS="${CWARNS}-Wdisabled-optimization "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_disabled_optimization=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -Wunreachable-code" >&5
-$as_echo_n "checking GCC flag(s) -Wunreachable-code... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_c_gcc_w_unreachable_code+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wcast-qual " >&5
+$as_echo_n "checking for C compiler flag(s) -Wcast-qual ... " >&6; }
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -Wunreachable-code -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wcast-qual"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wdangling-else " >&5
+$as_echo_n "checking for C compiler flag(s) -Wdangling-else ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wdangling-else"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
 
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_c_gcc_w_unreachable_code=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_c_gcc_w_unreachable_code=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wdate-time " >&5
+$as_echo_n "checking for C compiler flag(s) -Wdate-time ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wdate-time"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wdisabled-optimization " >&5
+$as_echo_n "checking for C compiler flag(s) -Wdisabled-optimization ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wdisabled-optimization"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wdouble-promotion " >&5
+$as_echo_n "checking for C compiler flag(s) -Wdouble-promotion ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wdouble-promotion"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wduplicated-branches " >&5
+$as_echo_n "checking for C compiler flag(s) -Wduplicated-branches ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wduplicated-branches"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wduplicated-cond " >&5
+$as_echo_n "checking for C compiler flag(s) -Wduplicated-cond ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wduplicated-cond"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wfatal-errors " >&5
+$as_echo_n "checking for C compiler flag(s) -Wfatal-errors ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wfatal-errors"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wfloat-equal " >&5
+$as_echo_n "checking for C compiler flag(s) -Wfloat-equal ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wfloat-equal"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-nonliteral " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-nonliteral ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-nonliteral"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-security " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-security ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-security"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-signedness " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-signedness ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-signedness"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wformat-y2k " >&5
+$as_echo_n "checking for C compiler flag(s) -Wformat-y2k ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wformat-y2k"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Winline " >&5
+$as_echo_n "checking for C compiler flag(s) -Winline ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Winline"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Winit-self " >&5
+$as_echo_n "checking for C compiler flag(s) -Winit-self ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Winit-self"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Winvalid-pch " >&5
+$as_echo_n "checking for C compiler flag(s) -Winvalid-pch ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Winvalid-pch"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wjump-misses-init " >&5
+$as_echo_n "checking for C compiler flag(s) -Wjump-misses-init ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wjump-misses-init"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wlogical-op " >&5
+$as_echo_n "checking for C compiler flag(s) -Wlogical-op ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wlogical-op"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-declarations " >&5
+$as_echo_n "checking for C compiler flag(s) -Wmissing-declarations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wmissing-declarations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-format-attribute " >&5
+$as_echo_n "checking for C compiler flag(s) -Wmissing-format-attribute ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wmissing-format-attribute"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-include-dirs " >&5
+$as_echo_n "checking for C compiler flag(s) -Wmissing-include-dirs ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wmissing-include-dirs"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wmissing-prototypes " >&5
+$as_echo_n "checking for C compiler flag(s) -Wmissing-prototypes ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wmissing-prototypes"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wnested-externs " >&5
+$as_echo_n "checking for C compiler flag(s) -Wnested-externs ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wnested-externs"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wnormalized=nfkc " >&5
+$as_echo_n "checking for C compiler flag(s) -Wnormalized=nfkc ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wnormalized=nfkc"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wnull-dereference " >&5
+$as_echo_n "checking for C compiler flag(s) -Wnull-dereference ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wnull-dereference"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wold-style-definition " >&5
+$as_echo_n "checking for C compiler flag(s) -Wold-style-definition ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wold-style-definition"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Woverlength-strings " >&5
+$as_echo_n "checking for C compiler flag(s) -Woverlength-strings ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Woverlength-strings"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wpointer-arith " >&5
+$as_echo_n "checking for C compiler flag(s) -Wpointer-arith ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wpointer-arith"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wpointer-compare " >&5
+$as_echo_n "checking for C compiler flag(s) -Wpointer-compare ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wpointer-compare"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wredundant-decls " >&5
+$as_echo_n "checking for C compiler flag(s) -Wredundant-decls ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wredundant-decls"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wregister " >&5
+$as_echo_n "checking for C compiler flag(s) -Wregister ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wregister"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wrestrict " >&5
+$as_echo_n "checking for C compiler flag(s) -Wrestrict ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wrestrict"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wshadow " >&5
+$as_echo_n "checking for C compiler flag(s) -Wshadow ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wshadow"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstack-protector " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstack-protector ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstack-protector"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstrict-overflow=3 " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstrict-overflow=3 ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstrict-overflow=3"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+			if test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xno"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstrict-overflow " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstrict-overflow ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstrict-overflow"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
 fi
 
-  if test "x$atheme_cv_c_gcc_w_unreachable_code" = xyes; then
-   CWARNS="${CWARNS}-Wunreachable-code "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_c_gcc_w_unreachable_code=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstrict-prototypes " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstrict-prototypes ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstrict-prototypes"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstringop-overflow=4 " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstringop-overflow=4 ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstringop-overflow=4"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wstringop-truncation " >&5
+$as_echo_n "checking for C compiler flag(s) -Wstringop-truncation ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wstringop-truncation"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wtrampolines " >&5
+$as_echo_n "checking for C compiler flag(s) -Wtrampolines ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wtrampolines"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wundef " >&5
+$as_echo_n "checking for C compiler flag(s) -Wundef ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wundef"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wunsafe-loop-optimizations " >&5
+$as_echo_n "checking for C compiler flag(s) -Wunsafe-loop-optimizations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wunsafe-loop-optimizations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wunsuffixed-float-constants " >&5
+$as_echo_n "checking for C compiler flag(s) -Wunsuffixed-float-constants ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wunsuffixed-float-constants"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wunused " >&5
+$as_echo_n "checking for C compiler flag(s) -Wunused ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wunused"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wvla " >&5
+$as_echo_n "checking for C compiler flag(s) -Wvla ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wvla"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wwrite-strings " >&5
+$as_echo_n "checking for C compiler flag(s) -Wwrite-strings ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wwrite-strings"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+
+
+fi
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-cast-align " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-cast-align ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-cast-align"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-conversion " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-conversion ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-conversion"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-inline " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-inline ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-inline"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-missing-declarations " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-missing-declarations ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-missing-declarations"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-missing-include-dirs " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-missing-include-dirs ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-missing-include-dirs"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-missing-prototypes " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-missing-prototypes ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-missing-prototypes"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-packed " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-packed ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-packed"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-padded " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-padded ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-padded"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-sign-conversion " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-sign-conversion ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-sign-conversion"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-suggest-attribute=format " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-suggest-attribute=format ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-suggest-attribute=format"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-unused-parameter " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-unused-parameter ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-unused-parameter"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wno-unused-variable " >&5
+$as_echo_n "checking for C compiler flag(s) -Wno-unused-variable ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wno-unused-variable"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
 
 
 
@@ -9464,211 +11308,160 @@ else
   enable_propolice=no
 fi
 
-if test "x$enable_propolice" = "xyes"; then :
+if test "x${enable_propolice}" = "xyes"; then :
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -fno-stack-protector-all" >&5
-$as_echo_n "checking GCC flag(s) -fno-stack-protector-all... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_nspa+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-stack-protector-all " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-stack-protector-all ... " >&6; }
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -fno-stack-protector-all -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fno-stack-protector-all"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_nspa=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_nspa=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_nspa" = xyes; then
-   CWARNS="${CWARNS}-fno-stack-protector-all "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_nspa=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -fno-pie" >&5
-$as_echo_n "checking GCC flag(s) -fno-pie... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_npie+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -fno-pie -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -fno-pie " >&5
+$as_echo_n "checking for C compiler flag(s) -fno-pie ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -fno-pie"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_npie=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_npie=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_npie" = xyes; then
-   CWARNS="${CWARNS}-fno-pie "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_npie=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -nonow" >&5
-$as_echo_n "checking GCC flag(s) -nonow... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_nonow+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -nonow -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -nonow " >&5
+$as_echo_n "checking for C compiler flag(s) -nonow ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -nonow"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_nonow=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_nonow=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_nonow" = xyes; then
-   CWARNS="${CWARNS}-nonow "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_nonow=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -norelro" >&5
-$as_echo_n "checking GCC flag(s) -norelro... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_no_relro+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -norelro -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -norelro " >&5
+$as_echo_n "checking for C compiler flag(s) -norelro ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -norelro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_no_relro=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_no_relro=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_no_relro" = xyes; then
-   CWARNS="${CWARNS}-norelro "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_no_relro=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
+
+
 
 
 fi
@@ -9680,61 +11473,49 @@ else
   enable_profile=no
 fi
 
-if test "x$enable_profile" = "xyes"; then :
+if test "x${enable_profile}" = "xyes"; then :
 
 
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking GCC flag(s) -pg" >&5
-$as_echo_n "checking GCC flag(s) -pg... " >&6; }
- if test "${GCC-no}" = yes
- then
-  if ${atheme_cv_pg+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -pg " >&5
+$as_echo_n "checking for C compiler flag(s) -pg ... " >&6; }
 
-   oldcflags="${CFLAGS-}"
-   CFLAGS="${CFLAGS-} ${CWARNS} -pg -Werror"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -pg"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#include <string.h>
-#include <stdio.h>
-int main(void);
 
 int
 main ()
 {
 
-    strcmp("a","b"); fprintf(stdout,"test ok\n");
-
   ;
   return 0;
 }
+
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  atheme_cv_pg=yes
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
 else
-  atheme_cv_pg=no
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   CFLAGS="${oldcflags}"
-fi
 
-  if test "x$atheme_cv_pg" = xyes; then
-   CWARNS="${CWARNS}-pg "
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
-$as_echo "ok" >&6; }
-  else
-   atheme_cv_pg=''
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  fi
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- fi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
+$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
+		unset CFLAGS_SAVED
 
-ac_save_LDFLAGS="${LDFLAGS} -pg"
-LDFLAGS=${ac_save_LDFLAGS}
+
+	ac_save_LDFLAGS="${LDFLAGS} -pg"
+	LDFLAGS="${ac_save_LDFLAGS}"
+
 
 fi
 
@@ -9745,13 +11526,13 @@ CPPFLAGS=${ac_save_CPPFLAGS}
 enablerpath="yes"
 # Check whether --enable-rpath was given.
 if test "${enable_rpath+set}" = set; then :
-  enableval=$enable_rpath; enablerpath="$enableval"
+  enableval=$enable_rpath; enablerpath="${enableval}"
 else
   enablerpath="yes"
 fi
 
 
-if test "x$enablerpath" != "xyes"; then
+if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
@@ -9823,9 +11604,9 @@ $as_echo "yes" >&6; }
 	LIBQRENCODE="yes"
 fi
 
-if test "$LIBQRENCODE" = "yes"; then
+if test "x${LIBQRENCODE}" = "xyes"; then
 
-$as_echo "#define HAVE_LIBQRENCODE /**/" >>confdefs.h
+$as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 
 fi
 
@@ -9838,7 +11619,7 @@ else
 fi
 
 
-if test "x$with_libmowgli" = "xyes"; then
+if test "x${with_libmowgli}" = "xyes"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
@@ -9910,9 +11691,9 @@ fi
 
 
 
-if test "x$with_libmowgli" = "xyes"; then :
+if test "x${with_libmowgli}" = "xyes"; then :
 
-elif test "x$with_libmowgli" = "xno"; then :
+elif test "x${with_libmowgli}" = "xno"; then :
 
     MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
     MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
@@ -9926,8 +11707,8 @@ else
     MOWGLI_LIBS="-L$with_libmowgli/lib -lmowgli-2"
 fi
 
-CPPFLAGS="$CPPFLAGS $MOWGLI_CFLAGS"
-LIBS="$LIBS $MOWGLI_LIBS"
+CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+LIBS="${LIBS} ${MOWGLI_LIBS}"
 
 
 
@@ -9942,7 +11723,7 @@ else
 fi
 
 
-if test "x$with_pcre" != xno; then
+if test "x${with_pcre}" != "xno"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
@@ -10000,11 +11781,9 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-		as_fn_error $? "PCRE requested, but not found." "$LINENO" 5
+                as_fn_error but not found "PCRE requested" "$LINENO" 5
 elif test $pkg_failed = untried; then
-
-		as_fn_error $? "PCRE requested, but not found." "$LINENO" 5
+	as_fn_error but not found "PCRE requested" "$LINENO" 5
 else
 	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
 	PCRE_LIBS=$pkg_cv_PCRE_LIBS
@@ -10012,7 +11791,6 @@ else
 $as_echo "yes" >&6; }
 	:
 fi
-
 
 
 
@@ -10024,7 +11802,7 @@ BUILDROOT=`pwd`
 
 
 PODIR=""
-if test "x$USE_NLS" = "xyes"; then
+if test "x${USE_NLS}" = "xyes"; then
 	PODIR="po"
 fi
 
@@ -11593,11 +13371,14 @@ fi
 
 d=`eval echo ${MODDIR}`
 d=`eval echo $d`
+d=`eval echo $d`
+d=`eval echo $d`
+
 echo "
 Configuration:
 	Atheme version       : ${PACKAGE_VERSION}
 	Installation prefix  : ${prefix}
-	Module root directory: `eval echo $d`
+	Module root directory: ${d}
 	Config directory     : ${sysconfdir}
 	Logfile directory    : ${LOGDIR}
 	Data directory       : ${DATADIR}
