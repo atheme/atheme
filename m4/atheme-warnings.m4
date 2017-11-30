@@ -22,6 +22,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS],
 			ATHEME_CC_TEST_CFLAGS([-Wextra])
 
 			ATHEME_CC_TEST_CFLAGS([-Waggregate-return])
+			ATHEME_CC_TEST_CFLAGS([-Waggressive-loop-optimizations])
 			ATHEME_CC_TEST_CFLAGS([-Walloc-zero])
 			ATHEME_CC_TEST_CFLAGS([-Walloca])
 			ATHEME_CC_TEST_CFLAGS([-Wbad-function-cast])
@@ -35,6 +36,7 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS],
 			ATHEME_CC_TEST_CFLAGS([-Wduplicated-branches])
 			ATHEME_CC_TEST_CFLAGS([-Wduplicated-cond])
 			ATHEME_CC_TEST_CFLAGS([-Wfatal-errors])
+			ATHEME_CC_TEST_CFLAGS([-Wfloat-equal])
 			ATHEME_CC_TEST_CFLAGS([-Wformat-nonliteral])
 			ATHEME_CC_TEST_CFLAGS([-Wformat-security])
 			ATHEME_CC_TEST_CFLAGS([-Wformat-signedness])
@@ -51,6 +53,8 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS],
 			ATHEME_CC_TEST_CFLAGS([-Wnested-externs])
 			ATHEME_CC_TEST_CFLAGS([-Wnormalized=nfkc])
 			ATHEME_CC_TEST_CFLAGS([-Wnull-dereference])
+			ATHEME_CC_TEST_CFLAGS([-Wold-style-definition])
+			ATHEME_CC_TEST_CFLAGS([-Woverlength-strings])
 			ATHEME_CC_TEST_CFLAGS([-Wpointer-arith])
 			ATHEME_CC_TEST_CFLAGS([-Wpointer-compare])
 			ATHEME_CC_TEST_CFLAGS([-Wredundant-decls])
@@ -66,10 +70,12 @@ AC_DEFUN([ATHEME_CC_ENABLE_WARNINGS],
 
 			ATHEME_CC_TEST_CFLAGS([-Wstrict-prototypes])
 			ATHEME_CC_TEST_CFLAGS([-Wstringop-overflow=4])
+			ATHEME_CC_TEST_CFLAGS([-Wstringop-truncation])
 			ATHEME_CC_TEST_CFLAGS([-Wtrampolines])
 			ATHEME_CC_TEST_CFLAGS([-Wundef])
 			ATHEME_CC_TEST_CFLAGS([-Wunsafe-loop-optimizations])
 			ATHEME_CC_TEST_CFLAGS([-Wunsuffixed-float-constants])
+			ATHEME_CC_TEST_CFLAGS([-Wunused])
 			ATHEME_CC_TEST_CFLAGS([-Wvla])
 			ATHEME_CC_TEST_CFLAGS([-Wwrite-strings])
 
