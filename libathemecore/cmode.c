@@ -461,7 +461,10 @@ static void modestack_clear(struct modestackdata *md)
 	md->modes_off = 0;
 	md->limitused = 0;
 	for (i = 0; i < ignore_mode_list_size; i++)
-		md->extmodesused[i] = 0, *md->extmodes[i] = '\0';
+	{
+		md->extmodesused[i] = 0;
+		*md->extmodes[i] = '\0';
+	}
 	md->pmodes[0] = '\0';
 	md->params[0] = '\0';
 	md->totallen = 0;
@@ -484,14 +487,20 @@ static void modestack_flush(struct modestackdata *md)
 	if (md->modes_off)
 	{
 		if (dir != MTYPE_DEL)
-			dir = MTYPE_DEL, *p++ = '-';
+		{
+			dir = MTYPE_DEL;
+			*p++ = '-';
+		}
 		mowgli_strlcpy(p, flags_to_string(md->modes_off), end - p);
 		p += strlen(p);
 	}
 	if (md->limitused && md->limit == 0)
 	{
 		if (dir != MTYPE_DEL)
-			dir = MTYPE_DEL, *p++ = '-';
+		{
+			dir = MTYPE_DEL;
+			*p++ = '-';
+		}
 		*p++ = 'l';
 	}
 	for (i = 0; i < ignore_mode_list_size; i++)
@@ -499,21 +508,30 @@ static void modestack_flush(struct modestackdata *md)
 		if (md->extmodesused[i] && *md->extmodes[i] == '\0')
 		{
 			if (dir != MTYPE_DEL)
-				dir = MTYPE_DEL, *p++ = '-';
+			{
+				dir = MTYPE_DEL;
+				*p++ = '-';
+			}
 			*p++ = ignore_mode_list[i].mode;
 		}
 	}
 	if (md->modes_on)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, *p++ = '+';
+		{
+			dir = MTYPE_ADD;
+			*p++ = '+';
+		}
 		mowgli_strlcpy(p, flags_to_string(md->modes_on), end - p);
 		p += strlen(p);
 	}
 	if (md->limitused && md->limit != 0)
 	{
 		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, *p++ = '+';
+		{
+			dir = MTYPE_ADD;
+			*p++ = '+';
+		}
 		*p++ = 'l';
 	}
 	for (i = 0; i < ignore_mode_list_size; i++)
@@ -521,7 +539,10 @@ static void modestack_flush(struct modestackdata *md)
 		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
 		{
 			if (dir != MTYPE_ADD)
-				dir = MTYPE_ADD, *p++ = '+';
+			{
+				dir = MTYPE_ADD;
+				*p++ = '+';
+			}
 			*p++ = ignore_mode_list[i].mode;
 		}
 	}
@@ -584,9 +605,15 @@ static struct modestackdata *modestack_init(const char *source, channel_t *chann
 static void modestack_add_simple(struct modestackdata *md, int dir, int flags)
 {
 	if (dir == MTYPE_ADD)
-		md->modes_on |= flags, md->modes_off &= ~flags;
+	{
+		md->modes_on |= flags;
+		md->modes_off &= ~flags;
+	}
 	else if (dir == MTYPE_DEL)
-		md->modes_off |= flags, md->modes_on &= ~flags;
+	{
+		md->modes_off |= flags;
+		md->modes_on &= ~flags;
+	}
 	else
 		slog(LG_ERROR, "modestack_add_simple(): invalid direction");
 }
