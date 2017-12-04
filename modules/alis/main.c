@@ -475,5 +475,4 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, alis->commands);
 }
 
-VENDOR_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         "William Pitcock <nenolod -at- nenolod.net>")
+SIMPLE_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK)

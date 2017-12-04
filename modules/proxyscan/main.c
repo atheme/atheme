@@ -34,5 +34,4 @@ mod_deinit(const module_unload_intent_t intent)
 	service_delete(proxyscan);
 }
 
-VENDOR_DECLARE_MODULE_V1("proxyscan/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         "William Pitcock <nenolod@dereferenced.org>")
+SIMPLE_DECLARE_MODULE_V1("proxyscan/main", MODULE_UNLOAD_CAPABILITY_OK)

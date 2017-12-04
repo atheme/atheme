@@ -1166,5 +1166,4 @@ bs_part(hook_channel_joinpart_t *hdata)
 	}
 }
 
-VENDOR_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Rizon Development Group <http://dev.rizon.net/>")
+SIMPLE_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

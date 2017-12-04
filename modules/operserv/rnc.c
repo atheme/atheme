@@ -89,5 +89,4 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
 
-VENDOR_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Robin Burchell <surreal.w00t@gmail.com>")
+SIMPLE_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK)

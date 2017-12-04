@@ -65,5 +65,4 @@ static void ns_cmd_set_pubkey(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-VENDOR_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Zohlai Development Group")
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_pubkey", MODULE_UNLOAD_CAPABILITY_OK)

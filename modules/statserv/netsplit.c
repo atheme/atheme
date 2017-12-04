@@ -172,5 +172,4 @@ mod_deinit(const module_unload_intent_t intent)
     mowgli_patricia_destroy(splitlist, NULL, NULL);
 }
 
-VENDOR_DECLARE_MODULE_V1("statserv/netsplit", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Alexandria Wolcott <alyx@sporksmoo.net>")
+SIMPLE_DECLARE_MODULE_V1("statserv/netsplit", MODULE_UNLOAD_CAPABILITY_OK)

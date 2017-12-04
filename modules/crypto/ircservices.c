@@ -70,5 +70,4 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 	(void) crypt_unregister(&crypto_ircservices_impl);
 }
 
-VENDOR_DECLARE_MODULE_V1("crypto/ircservices", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Jilles Tjoelker <jilles@stack.nl>")
+SIMPLE_DECLARE_MODULE_V1("crypto/ircservices", MODULE_UNLOAD_CAPABILITY_OK)

@@ -55,5 +55,4 @@ void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[])
     help_display(si, si->service, command, si->service->commands);
 }
 
-VENDOR_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Alexandria Wolcott <alyx@sporksmoo.net>")
+SIMPLE_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK)

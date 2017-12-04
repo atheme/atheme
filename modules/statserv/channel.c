@@ -107,5 +107,4 @@ static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[])
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }
 
-VENDOR_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Alexandria Wolcott <alyx@sporksmoo.net>")
+SIMPLE_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK)

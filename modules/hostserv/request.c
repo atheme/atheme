@@ -602,5 +602,4 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
-VENDOR_DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "Rizon Development Group <http://www.rizon.net/>")
+SIMPLE_DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER)

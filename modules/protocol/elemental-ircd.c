@@ -118,5 +118,4 @@ mod_deinit(const module_unload_intent_t intent)
 {
 }
 
-VENDOR_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER,
-                         "PonyChat Development Group <http://www.ponychat.net/>")
+SIMPLE_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER)

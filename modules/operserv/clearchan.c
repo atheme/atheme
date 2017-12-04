@@ -130,5 +130,4 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
 
-VENDOR_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Robin Burchell <surreal.w00t@gmail.com>")
+SIMPLE_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK)

@@ -130,5 +130,4 @@ static void ss_cmd_server_count(sourceinfo_t * si, int parc, char *parv[])
     command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }
 
-VENDOR_DECLARE_MODULE_V1("statserv/server", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Alexandria Wolcott <alyx@sporksmoo.net>")
+SIMPLE_DECLARE_MODULE_V1("statserv/server", MODULE_UNLOAD_CAPABILITY_OK)

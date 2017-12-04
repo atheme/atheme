@@ -78,5 +78,4 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-VENDOR_DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Rizon Development Group <http://dev.rizon.net/>")
+SIMPLE_DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

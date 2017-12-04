@@ -165,5 +165,4 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
 }
 
-VENDOR_DECLARE_MODULE_V1("operserv/compare", MODULE_UNLOAD_CAPABILITY_OK,
-                         "Robin Burchell <surreal.w00t@gmail.com>")
+SIMPLE_DECLARE_MODULE_V1("operserv/compare", MODULE_UNLOAD_CAPABILITY_OK)
