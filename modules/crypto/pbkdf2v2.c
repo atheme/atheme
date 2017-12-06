@@ -121,7 +121,7 @@ atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_parameters *const restrict
 {
 	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
 	{
-		(void) slog(LG_ERROR, "%s: salt '%s' length %zu out of range", __func__, parsed->salt, parsed->sl);
+		(void) slog(LG_ERROR, "%s: salt length %zu out of range", __func__, parsed->sl);
 		return false;
 	}
 	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
