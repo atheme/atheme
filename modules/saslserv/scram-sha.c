@@ -293,7 +293,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 
 	// Base64-encode the user's salt
 	char Salt64[PBKDF2_SALTLEN_MAX * 3];
-	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
+	if (base64_encode(s->db.salt, s->db.sl, Salt64, sizeof Salt64) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed", __func__);
 		goto fail;
