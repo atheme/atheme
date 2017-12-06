@@ -46,25 +46,31 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 	switch (parsed->a)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			parsed->scram = true;
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA1:
+		case PBKDF2_PRF_HMAC_SHA1_S64:
 			parsed->md = EVP_sha1();
 			parsed->dl = SHA_DIGEST_LENGTH;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
 			parsed->scram = true;
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_256:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
 			parsed->md = EVP_sha256();
 			parsed->dl = SHA256_DIGEST_LENGTH;
 			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_512:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
 			parsed->scram = true;
 			/* FALLTHROUGH */
 		case PBKDF2_PRF_HMAC_SHA2_512:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
 			parsed->md = EVP_sha512();
 			parsed->dl = SHA512_DIGEST_LENGTH;
 			break;
@@ -72,6 +78,18 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 		default:
 			(void) slog(LG_DEBUG, "%s: PRF ID '%u' unknown", __func__, parsed->a);
 			return false;
+	}
+
+	switch (parsed->a)
+	{
+		case PBKDF2_PRF_HMAC_SHA1_S64:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			parsed->salt64 = true;
+			break;
 	}
 
 	if (! parsed->md)
@@ -154,18 +172,19 @@ bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
                                 struct pbkdf2v2_parameters *const restrict parsed)
 {
+	char salt64[0x8000];
 	char ssk64[0x8000];
 	char shk64[0x8000];
 	char sdg64[0x8000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
-	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, salt64, ssk64, shk64) == 5)
 	{
 		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 		goto parsed;
 	}
-	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, salt64, sdg64) == 4)
 	{
 		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 		goto parsed;
@@ -180,11 +199,46 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
-	parsed->sl = strlen(parsed->salt);
+	if (parsed->salt64)
+	{
+		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
+			return false;
+		}
+	}
+	else
+	{
+		parsed->sl = strlen(salt64);
+
+		(void) memcpy(parsed->salt, salt64, parsed->sl);
+	}
 
 	if (! atheme_pbkdf2v2_parameters_sane(parsed))
 		// This function logs messages on failure
 		return false;
+
+	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
+	switch (parsed->a)
+	{
+		case PBKDF2_PRF_HMAC_SHA1:
+		case PBKDF2_PRF_HMAC_SHA1_S64:
+		case PBKDF2_PRF_SCRAM_SHA1:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+			parsed->a = PBKDF2_PRF_SCRAM_SHA1;
+			break;
+
+		case PBKDF2_PRF_HMAC_SHA2_256:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_256:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+			parsed->a = PBKDF2_PRF_SCRAM_SHA2_256;
+			break;
+
+		default:
+			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, parsed->a);
+			return false;
+	}
 
 	if (parsed->scram)
 	{
@@ -201,21 +255,6 @@ parsed:
 	}
 	else
 	{
-		switch (parsed->a)
-		{
-			case PBKDF2_PRF_HMAC_SHA1:
-				parsed->a = PBKDF2_PRF_SCRAM_SHA1;
-				break;
-
-			case PBKDF2_PRF_HMAC_SHA2_256:
-				parsed->a = PBKDF2_PRF_SCRAM_SHA2_256;
-				break;
-
-			default:
-				(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, parsed->a);
-				return false;
-		}
-
 		// atheme_pbkdf2v2_scram_derive() uses parsed->cdg; not parsed->sdg
 		if (base64_decode(sdg64, parsed->cdg, sizeof parsed->cdg) != parsed->dl)
 		{
@@ -270,11 +309,13 @@ static bool
 atheme_pbkdf2v2_compute(const char *restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
+	char salt64[0x2000];
 	char sdg64[0x2000];
 	char ssk64[0x2000];
 	char shk64[0x2000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
+	(void) memset(salt64, 0x00, sizeof salt64);
 	(void) memset(sdg64, 0x00, sizeof sdg64);
 	(void) memset(ssk64, 0x00, sizeof ssk64);
 	(void) memset(shk64, 0x00, sizeof shk64);
@@ -283,13 +324,13 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 
 	if (verifying)
 	{
-		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt, ssk64, shk64) == 5)
+		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, salt64, ssk64, shk64) == 5)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 			matched_ssk_shk = true;
 			goto parsed;
 		}
-		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt, sdg64) == 4)
+		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, salt64, sdg64) == 4)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 			goto parsed;
@@ -299,7 +340,7 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 	}
 	else
 	{
-		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt) == 3)
+		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, salt64) == 3)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADSALT (Encrypting)", __func__);
 			goto parsed;
@@ -322,7 +363,20 @@ parsed:
 		return false;
 #endif /* HAVE_LIBIDN */
 
-	parsed->sl = strlen(parsed->salt);
+	if (parsed->salt64)
+	{
+		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
+			return false;
+		}
+	}
+	else
+	{
+		parsed->sl = strlen(salt64);
+
+		(void) memcpy(parsed->salt, salt64, parsed->sl);
+	}
 
 	if (! atheme_pbkdf2v2_parameters_sane(parsed))
 		// This function logs messages on failure
@@ -358,8 +412,8 @@ parsed:
 		}
 	}
 
-	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, (unsigned char *) parsed->salt, (int) parsed->sl,
-	                                  (int) parsed->c, parsed->md, (int) parsed->dl, parsed->cdg);
+	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, parsed->salt, (int) parsed->sl, (int) parsed->c,
+	                                  parsed->md, (int) parsed->dl, parsed->cdg);
 	if (ret != 1)
 	{
 		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);
@@ -372,19 +426,16 @@ parsed:
 static const char *
 atheme_pbkdf2v2_salt(void)
 {
-	/* Fill salt array with random bytes */
 	unsigned char rawsalt[PBKDF2_SALTLEN_DEF];
 	(void) arc4random_buf(rawsalt, sizeof rawsalt);
 
-	/* Use random byte as index into printable character array, turning it into a printable string */
-	char salt[sizeof rawsalt + 1];
-	for (size_t i = 0; i < sizeof rawsalt; i++)
-		salt[i] = salt_chars[rawsalt[i] % sizeof salt_chars];
+	char salt[PBKDF2_SALTLEN_MAX * 3];
+	if (base64_encode(rawsalt, sizeof rawsalt, salt, sizeof salt) == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
+		return NULL;
+	}
 
-	/* NULL-terminate the string */
-	salt[sizeof rawsalt] = 0x00;
-
-	/* Format and return the result */
 	static char res[PASSLEN];
 	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
 	{
@@ -530,19 +581,19 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	}
 
 	if (!strcasecmp(ce->vardata, "SHA1"))
-		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA1;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA1_S64;
 	else if (!strcasecmp(ce->vardata, "SHA256"))
-		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256_S64;
 	else if (!strcasecmp(ce->vardata, "SHA512"))
-		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512;
+		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512_S64;
 #ifdef HAVE_LIBIDN
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA1"))
-		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1;
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1_S64;
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA256"))
-		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256;
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 /*	// No specification
 	else if (!strcasecmp(ce->vardata, "SCRAM-SHA512"))
-		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512;
+		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512_S64;
 */
 #endif /* HAVE_LIBIDN */
 	else

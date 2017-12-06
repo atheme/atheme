@@ -40,7 +40,7 @@
 #define PBKDF2_PRF_SCRAM_SHA2_256_S64   65U
 #define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U     /* Not currently specified */
 
-#define PBKDF2_DIGEST_DEF               PBKDF2_PRF_HMAC_SHA2_512
+#define PBKDF2_DIGEST_DEF               PBKDF2_PRF_HMAC_SHA2_512_S64
 
 #define PBKDF2_ITERCNT_MIN              10000U
 #define PBKDF2_ITERCNT_MAX              5000000U
@@ -57,12 +57,13 @@ struct pbkdf2v2_parameters
 	unsigned char    sdg[EVP_MAX_MD_SIZE];      // PBKDF2 Digest (Stored)
 	unsigned char    ssk[EVP_MAX_MD_SIZE];      // SCRAM-SHA ServerKey (Stored)
 	unsigned char    shk[EVP_MAX_MD_SIZE];      // SCRAM-SHA StoredKey (Stored)
-	char             salt[0x2000];              // PBKDF2 Salt
+	unsigned char    salt[PBKDF2_SALTLEN_MAX];  // PBKDF2 Salt
 	size_t           dl;                        // Digest Length
 	size_t           sl;                        // Salt Length
 	unsigned int     a;                         // PRF ID (one of the macros above)
 	unsigned int     c;                         // PBKDF2 Iteration Count
 	bool             scram;                     // Whether to use HMAC-SHA or SCRAM-SHA
+	bool             salt64;                    // Whether the salt was base64-encoded
 };
 
 static const unsigned char ServerKeyStr[] = {
