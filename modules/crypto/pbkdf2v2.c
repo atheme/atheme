@@ -573,31 +573,31 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 static int
 c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 {
-	if (!ce->vardata)
+	if (! ce->vardata)
 	{
-		conf_report_warning(ce, "no parameter for configuration option");
+		(void) conf_report_warning(ce, "no parameter for configuration option");
 		return 0;
 	}
 
-	if (!strcasecmp(ce->vardata, "SHA1"))
+	if (! strcasecmp(ce->vardata, "SHA1"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA1_S64;
-	else if (!strcasecmp(ce->vardata, "SHA256"))
+	else if (! strcasecmp(ce->vardata, "SHA256"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_256_S64;
-	else if (!strcasecmp(ce->vardata, "SHA512"))
+	else if (! strcasecmp(ce->vardata, "SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_HMAC_SHA2_512_S64;
 #ifdef HAVE_LIBIDN
-	else if (!strcasecmp(ce->vardata, "SCRAM-SHA1"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA1"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA1_S64;
-	else if (!strcasecmp(ce->vardata, "SCRAM-SHA256"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA256"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 /*	// No specification
-	else if (!strcasecmp(ce->vardata, "SCRAM-SHA512"))
+	else if (! strcasecmp(ce->vardata, "SCRAM-SHA512"))
 		pbkdf2v2_digest = PBKDF2_PRF_SCRAM_SHA2_512_S64;
 */
 #endif /* HAVE_LIBIDN */
 	else
 	{
-		conf_report_warning(ce, "invalid parameter for configuration option -- using default");
+		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");
 		pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 	}
 
