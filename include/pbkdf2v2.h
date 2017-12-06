@@ -10,37 +10,37 @@
 
 #include <openssl/evp.h>
 
-#define PBKDF2V2_CRYPTO_MODULE_NAME "crypto/pbkdf2v2"
+#define PBKDF2V2_CRYPTO_MODULE_NAME     "crypto/pbkdf2v2"
 
-#define PBKDF2_FN_PREFIX            "$z$%u$%u$"
-#define PBKDF2_FN_BASE62            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-#define PBKDF2_FN_BASE64            PBKDF2_FN_BASE62 "+/="
+#define PBKDF2_FN_PREFIX                "$z$%u$%u$"
+#define PBKDF2_FN_BASE62                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+#define PBKDF2_FN_BASE64                PBKDF2_FN_BASE62 "+/="
 
-#define PBKDF2_FN_LOADSALT          PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
-#define PBKDF2_FN_LOADHASH          PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
-#define PBKDF2_FS_LOADHASH          PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
+#define PBKDF2_FN_LOADSALT              PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
+#define PBKDF2_FN_LOADHASH              PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
+#define PBKDF2_FS_LOADHASH              PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
 
-#define PBKDF2_FN_SAVESALT          PBKDF2_FN_PREFIX "%s$"
-#define PBKDF2_FN_SAVEHASH          PBKDF2_FN_SAVESALT "%s"
-#define PBKDF2_FS_SAVEHASH          PBKDF2_FN_SAVEHASH "$%s"
+#define PBKDF2_FN_SAVESALT              PBKDF2_FN_PREFIX "%s$"
+#define PBKDF2_FN_SAVEHASH              PBKDF2_FN_SAVESALT "%s"
+#define PBKDF2_FS_SAVEHASH              PBKDF2_FN_SAVEHASH "$%s"
 
-#define PBKDF2_PRF_HMAC_SHA1        4U
-#define PBKDF2_PRF_HMAC_SHA2_256    5U
-#define PBKDF2_PRF_HMAC_SHA2_512    6U
+#define PBKDF2_PRF_HMAC_SHA1            4U
+#define PBKDF2_PRF_HMAC_SHA2_256        5U
+#define PBKDF2_PRF_HMAC_SHA2_512        6U
 
-#define PBKDF2_PRF_SCRAM_SHA1       44U
-#define PBKDF2_PRF_SCRAM_SHA2_256   45U
-#define PBKDF2_PRF_SCRAM_SHA2_512   46U     /* Not currently specified */
+#define PBKDF2_PRF_SCRAM_SHA1           44U
+#define PBKDF2_PRF_SCRAM_SHA2_256       45U
+#define PBKDF2_PRF_SCRAM_SHA2_512       46U     /* Not currently specified */
 
-#define PBKDF2_DIGEST_DEF           PBKDF2_PRF_HMAC_SHA2_512
+#define PBKDF2_DIGEST_DEF               PBKDF2_PRF_HMAC_SHA2_512
 
-#define PBKDF2_ITERCNT_MIN          10000U
-#define PBKDF2_ITERCNT_MAX          5000000U
-#define PBKDF2_ITERCNT_DEF          64000U
+#define PBKDF2_ITERCNT_MIN              10000U
+#define PBKDF2_ITERCNT_MAX              5000000U
+#define PBKDF2_ITERCNT_DEF              64000U
 
-#define PBKDF2_SALTLEN_MIN          8U
-#define PBKDF2_SALTLEN_MAX          32U
-#define PBKDF2_SALTLEN_DEF          16U
+#define PBKDF2_SALTLEN_MIN              8U
+#define PBKDF2_SALTLEN_MAX              32U
+#define PBKDF2_SALTLEN_DEF              16U
 
 struct pbkdf2v2_parameters
 {
