@@ -336,7 +336,7 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 			goto parsed;
 		}
 
-		(void) slog(LG_DEBUG, "%s: no sscanf(3) was successful", __func__);
+		(void) slog(LG_DEBUG, "%s: sscanf(3) was unsuccessful", __func__);
 	}
 	else
 	{
@@ -346,7 +346,7 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 			goto parsed;
 		}
 
-		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
+		(void) slog(LG_ERROR, "%s: sscanf(3) was unsuccessful (BUG)", __func__);
 	}
 
 	return false;
@@ -551,7 +551,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 	{
-		(void) slog(LG_ERROR, "%s: no sscanf(3) was successful (BUG?)", __func__);
+		(void) slog(LG_ERROR, "%s: sscanf(3) was unsuccessful (BUG)", __func__);
 		return false;
 	}
 	if (prf != pbkdf2v2_digest)
