@@ -178,19 +178,18 @@ bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
                                 struct pbkdf2v2_parameters *const restrict parsed)
 {
-	char salt64[0x1000];
 	char ssk64[0x1000];
 	char shk64[0x1000];
 	char sdg64[0x1000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
-	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, salt64, ssk64, shk64) == 5)
+	if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt64, ssk64, shk64) == 5)
 	{
 		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 		goto parsed;
 	}
-	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, salt64, sdg64) == 4)
+	if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt64, sdg64) == 4)
 	{
 		(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 		goto parsed;
@@ -205,27 +204,18 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
-	if (parsed->salt_was_b64)
+	// Ensure that the SCRAM-SHA module has a base64-encoded salt if it wasn't already so
+	if (! parsed->salt_was_b64)
 	{
-		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
+		parsed->sl = strlen(parsed->salt64);
+
+		(void) memcpy(parsed->salt, parsed->salt64, parsed->sl);
+
+		if (base64_encode(parsed->salt, parsed->sl, parsed->salt64, sizeof parsed->salt64) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
 			return false;
 		}
-
-		if (! atheme_pbkdf2v2_parameters_sane(parsed))
-			// This function logs messages on failure
-			return false;
-	}
-	else
-	{
-		parsed->sl = strlen(salt64);
-
-		if (! atheme_pbkdf2v2_parameters_sane(parsed))
-			// This function logs messages on failure
-			return false;
-
-		(void) memcpy(parsed->salt, salt64, parsed->sl);
 	}
 
 	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
@@ -319,7 +309,6 @@ static bool
 atheme_pbkdf2v2_compute(const char *restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
-	char salt64[0x1000];
 	char sdg64[0x1000];
 	char ssk64[0x1000];
 	char shk64[0x1000];
@@ -328,12 +317,12 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 
 	if (verifying)
 	{
-		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, salt64, ssk64, shk64) == 5)
+		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, parsed->salt64, ssk64, shk64) == 5)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
 			goto parsed;
 		}
-		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, salt64, sdg64) == 4)
+		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, parsed->salt64, sdg64) == 4)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADHASH (HMAC-SHA)", __func__);
 			goto parsed;
@@ -343,7 +332,7 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 	}
 	else
 	{
-		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, salt64) == 3)
+		if (sscanf(parameters, PBKDF2_FN_LOADSALT, &parsed->a, &parsed->c, parsed->salt64) == 3)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FN_LOADSALT (Encrypting)", __func__);
 			goto parsed;
@@ -362,9 +351,9 @@ parsed:
 
 	if (parsed->salt_was_b64)
 	{
-		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
+		if ((parsed->sl = base64_decode(parsed->salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, parsed->salt64);
 			return false;
 		}
 
@@ -374,13 +363,19 @@ parsed:
 	}
 	else
 	{
-		parsed->sl = strlen(salt64);
+		parsed->sl = strlen(parsed->salt64);
 
 		if (! atheme_pbkdf2v2_parameters_sane(parsed))
 			// This function logs messages on failure
 			return false;
 
-		(void) memcpy(parsed->salt, salt64, parsed->sl);
+		(void) memcpy(parsed->salt, parsed->salt64, parsed->sl);
+
+		if (base64_encode(parsed->salt, parsed->sl, parsed->salt64, sizeof parsed->salt64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
+			return false;
+		}
 	}
 
 #ifdef HAVE_LIBIDN
@@ -465,14 +460,6 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		// This function logs messages on failure
 		return NULL;
 
-	char salt64[PBKDF2_SALTLEN_MAX * 3];
-
-	if (base64_encode(parsed.salt, parsed.sl, salt64, sizeof salt64) == (size_t) -1)
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
-		return NULL;
-	}
-
 	static char res[PASSLEN];
 
 	if (parsed.scram)
@@ -496,7 +483,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, salt64, csk64, chk64) >= PASSLEN)
+		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt64, csk64, chk64) >= PASSLEN)
 		{
 			(void) slog(LG_ERROR, "%s: snprintf() would have overflowed result buffer (BUG)", __func__);
 			return NULL;
@@ -511,7 +498,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, salt64, cdg64) >= PASSLEN)
+		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt64, cdg64) >= PASSLEN)
 		{
 			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 			return NULL;
