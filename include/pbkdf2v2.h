@@ -52,18 +52,19 @@
 
 struct pbkdf2v2_parameters
 {
-	const EVP_MD    *md;                        // OpenSSL EVP(3) Digest Method
-	unsigned char    cdg[EVP_MAX_MD_SIZE];      // PBKDF2 Digest (Computed)
-	unsigned char    sdg[EVP_MAX_MD_SIZE];      // PBKDF2 Digest (Stored)
-	unsigned char    ssk[EVP_MAX_MD_SIZE];      // SCRAM-SHA ServerKey (Stored)
-	unsigned char    shk[EVP_MAX_MD_SIZE];      // SCRAM-SHA StoredKey (Stored)
-	unsigned char    salt[PBKDF2_SALTLEN_MAX];  // PBKDF2 Salt
-	size_t           dl;                        // Digest Length
-	size_t           sl;                        // Salt Length
-	unsigned int     a;                         // PRF ID (one of the macros above)
-	unsigned int     c;                         // PBKDF2 Iteration Count
-	bool             scram;                     // Whether to use HMAC-SHA or SCRAM-SHA
-	bool             salt_was_b64;              // Whether the salt was base64-encoded
+	const EVP_MD    *md;                                // OpenSSL EVP(3) Digest Method
+	unsigned char    cdg[EVP_MAX_MD_SIZE];              // PBKDF2 Digest (Computed)
+	unsigned char    sdg[EVP_MAX_MD_SIZE];              // PBKDF2 Digest (Stored)
+	unsigned char    ssk[EVP_MAX_MD_SIZE];              // SCRAM-SHA ServerKey (Stored)
+	unsigned char    shk[EVP_MAX_MD_SIZE];              // SCRAM-SHA StoredKey (Stored)
+	unsigned char    salt[PBKDF2_SALTLEN_MAX];          // PBKDF2 Salt
+	char             salt64[PBKDF2_SALTLEN_MAX * 3];    // PBKDF2 Salt (Base64-encoded)
+	size_t           dl;                                // Digest Length
+	size_t           sl;                                // Salt Length
+	unsigned int     a;                                 // PRF ID (one of the macros above)
+	unsigned int     c;                                 // PBKDF2 Iteration Count
+	bool             scram;                             // Whether to use HMAC-SHA or SCRAM-SHA
+	bool             salt_was_b64;                      // Whether the salt was base64-encoded
 };
 
 static const unsigned char ServerKeyStr[] = {
