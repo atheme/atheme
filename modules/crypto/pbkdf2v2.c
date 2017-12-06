@@ -561,10 +561,47 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, iter, pbkdf2v2_rounds);
 		return true;
 	}
-	if (strlen(salt) != PBKDF2_SALTLEN_DEF)
+
+	bool salt64 = false;
+
+	switch (prf)
 	{
-		(void) slog(LG_DEBUG, "%s: salt length is different", __func__);
-		return true;
+		case PBKDF2_PRF_HMAC_SHA1_S64:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			salt64 = true;
+			break;
+	}
+
+	if (salt64)
+	{
+		unsigned char rawsalt[PBKDF2_SALTLEN_MAX];
+
+		const size_t sl = base64_decode(salt, rawsalt, sizeof rawsalt);
+
+		if (sl == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt);
+			return false;
+		}
+		if (sl != PBKDF2_SALTLEN_DEF)
+		{
+			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, PBKDF2_SALTLEN_DEF);
+			return true;
+		}
+	}
+	else
+	{
+		const size_t sl = strlen(salt);
+
+		if (sl != PBKDF2_SALTLEN_DEF)
+		{
+			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, PBKDF2_SALTLEN_DEF);
+			return true;
+		}
 	}
 
 	return false;
