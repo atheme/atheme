@@ -357,12 +357,6 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
-#ifdef HAVE_LIBIDN
-	if (parsed->scram && ((password = atheme_pbkdf2v2_scram_normalize(password)) == NULL))
-		// This function logs messages on failure
-		return false;
-#endif /* HAVE_LIBIDN */
-
 	if (parsed->salt64)
 	{
 		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
@@ -385,6 +379,12 @@ parsed:
 
 		(void) memcpy(parsed->salt, salt64, parsed->sl);
 	}
+
+#ifdef HAVE_LIBIDN
+	if (parsed->scram && ((password = atheme_pbkdf2v2_scram_normalize(password)) == NULL))
+		// This function logs messages on failure
+		return false;
+#endif /* HAVE_LIBIDN */
 
 	const size_t pl = strlen(password);
 
