@@ -500,7 +500,7 @@ sasl_scramsha_step_success(sasl_session_t *const restrict p)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", __func__);
 	}
-	else if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt, csk64, chk64) >= PASSLEN)
+	else if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) >= PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 	}
