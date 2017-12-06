@@ -40,7 +40,7 @@ static unsigned int pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 
 static bool
-atheme_pbkdf2v2_salt64(const unsigned int prf)
+atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 {
 	switch (prf)
 	{
@@ -96,7 +96,7 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 			return false;
 	}
 
-	parsed->salt64 = atheme_pbkdf2v2_salt64(parsed->a);
+	parsed->salt_was_b64 = atheme_pbkdf2v2_salt_is_b64(parsed->a);
 
 	if (! parsed->md)
 	{
@@ -205,7 +205,7 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
-	if (parsed->salt64)
+	if (parsed->salt_was_b64)
 	{
 		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
 		{
@@ -360,7 +360,7 @@ parsed:
 		// This function logs messages on failure
 		return false;
 
-	if (parsed->salt64)
+	if (parsed->salt_was_b64)
 	{
 		if ((parsed->sl = base64_decode(salt64, parsed->salt, sizeof parsed->salt)) == (size_t) -1)
 		{
@@ -579,7 +579,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 		return true;
 	}
 
-	if (atheme_pbkdf2v2_salt64(prf))
+	if (atheme_pbkdf2v2_salt_is_b64(prf))
 	{
 		unsigned char salt[PBKDF2_SALTLEN_MAX];
 
