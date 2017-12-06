@@ -16,7 +16,7 @@
 #define PBKDF2_FN_BASE62                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define PBKDF2_FN_BASE64                PBKDF2_FN_BASE62 "+/="
 
-#define PBKDF2_FN_LOADSALT              PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE62 "]$"
+#define PBKDF2_FN_LOADSALT              PBKDF2_FN_PREFIX "%[" PBKDF2_FN_BASE64 "]$"
 #define PBKDF2_FN_LOADHASH              PBKDF2_FN_LOADSALT "%[" PBKDF2_FN_BASE64 "]"
 #define PBKDF2_FS_LOADHASH              PBKDF2_FN_LOADHASH "$%[" PBKDF2_FN_BASE64 "]"
 
