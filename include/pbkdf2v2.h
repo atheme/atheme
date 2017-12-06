@@ -47,7 +47,7 @@
 #define PBKDF2_ITERCNT_DEF              64000U
 
 #define PBKDF2_SALTLEN_MIN              8U
-#define PBKDF2_SALTLEN_MAX              32U
+#define PBKDF2_SALTLEN_MAX              64U
 #define PBKDF2_SALTLEN_DEF              16U
 
 struct pbkdf2v2_parameters
