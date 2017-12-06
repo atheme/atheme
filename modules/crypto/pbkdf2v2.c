@@ -560,10 +560,10 @@ static bool
 atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 {
 	unsigned int prf;
-	unsigned int iter;
-	char salt[0x1000];
+	unsigned int c;
+	char salt64[0x1000];
 
-	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
+	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &c, salt64) != 3)
 	{
 		(void) slog(LG_ERROR, "%s: sscanf(3) was unsuccessful (BUG)", __func__);
 		return false;
@@ -573,21 +573,21 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 		(void) slog(LG_DEBUG, "%s: prf (%u) != default (%u)", __func__, prf, pbkdf2v2_digest);
 		return true;
 	}
-	if (iter != pbkdf2v2_rounds)
+	if (c != pbkdf2v2_rounds)
 	{
-		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, iter, pbkdf2v2_rounds);
+		(void) slog(LG_DEBUG, "%s: rounds (%u) != default (%u)", __func__, c, pbkdf2v2_rounds);
 		return true;
 	}
 
 	if (atheme_pbkdf2v2_salt64(prf))
 	{
-		unsigned char rawsalt[PBKDF2_SALTLEN_MAX];
+		unsigned char salt[PBKDF2_SALTLEN_MAX];
 
-		const size_t sl = base64_decode(salt, rawsalt, sizeof rawsalt);
+		const size_t sl = base64_decode(salt64, salt, sizeof salt);
 
 		if (sl == (size_t) -1)
 		{
-			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt);
+			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
 			return false;
 		}
 		if (sl != pbkdf2v2_saltsz)
@@ -598,7 +598,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	}
 	else
 	{
-		const size_t sl = strlen(salt);
+		const size_t sl = strlen(salt64);
 
 		if (sl != pbkdf2v2_saltsz)
 		{
