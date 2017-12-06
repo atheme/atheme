@@ -319,10 +319,6 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 	char shk64[0x2000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
-	(void) memset(salt64, 0x00, sizeof salt64);
-	(void) memset(sdg64, 0x00, sizeof sdg64);
-	(void) memset(ssk64, 0x00, sizeof ssk64);
-	(void) memset(shk64, 0x00, sizeof shk64);
 
 	bool matched_ssk_shk = false;
 
@@ -552,8 +548,6 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	unsigned int prf;
 	unsigned int iter;
 	char salt[0x2000];
-
-	(void) memset(salt, 0x00, sizeof salt);
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 	{
