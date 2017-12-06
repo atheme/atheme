@@ -51,7 +51,7 @@ enum scramsha_step
 
 struct scramsha_session
 {
-	struct pbkdf2v2_parameters  db;         // Parsed credentials from database
+	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	myuser_t                   *mu;         // User we are authenticating as
 	char                       *cn;         // Client nonce
 	char                       *sn;         // Server nonce

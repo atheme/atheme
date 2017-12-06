@@ -50,7 +50,7 @@
 #define PBKDF2_SALTLEN_MAX              64U
 #define PBKDF2_SALTLEN_DEF              32U
 
-struct pbkdf2v2_parameters
+struct pbkdf2v2_dbentry
 {
 	const EVP_MD    *md;                                // OpenSSL EVP(3) Digest Method
 	unsigned char    cdg[EVP_MAX_MD_SIZE];              // PBKDF2 Digest (Computed)
@@ -83,7 +83,7 @@ static const unsigned char ClientKeyStr[] = {
  * For modules/saslserv/scram-sha to make an inter-module function call to
  * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_dbextract()
  */
-typedef bool (*atheme_pbkdf2v2_scram_dbextract_fn)(const char *restrict, struct pbkdf2v2_parameters *restrict);
+typedef bool (*atheme_pbkdf2v2_scram_dbextract_fn)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
 
 /*
  * For modules/saslserv/scram-sha to make an inter-module function call to

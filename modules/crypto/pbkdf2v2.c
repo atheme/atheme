@@ -57,7 +57,7 @@ atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
 }
 
 static bool
-atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
+atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_dbentry *const restrict parsed)
 {
 	switch (parsed->a)
 	{
@@ -116,7 +116,7 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 }
 
 static inline bool
-atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_parameters *const restrict parsed)
+atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_dbentry *const restrict parsed)
 {
 	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
 	{
@@ -133,7 +133,7 @@ atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_parameters *const restrict
 }
 
 static bool
-atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
+atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_dbentry *const parsed,
                              unsigned char csk[EVP_MAX_MD_SIZE],
                              unsigned char chk[EVP_MAX_MD_SIZE])
 {
@@ -171,12 +171,12 @@ atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
  * module function calls)                                                                       *
  ********************************************************************************************** */
 
-bool atheme_pbkdf2v2_scram_dbextract(const char *restrict, struct pbkdf2v2_parameters *restrict);
+bool atheme_pbkdf2v2_scram_dbextract(const char *restrict, struct pbkdf2v2_dbentry *restrict);
 const char *atheme_pbkdf2v2_scram_normalize(const char *restrict);
 
 bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
-                                struct pbkdf2v2_parameters *const restrict parsed)
+                                struct pbkdf2v2_dbentry *const restrict parsed)
 {
 	char ssk64[0x1000];
 	char shk64[0x1000];
@@ -307,7 +307,7 @@ static const atheme_pbkdf2v2_scram_normalize_fn __attribute__((unused)) nm_fn_pt
 
 static bool
 atheme_pbkdf2v2_compute(const char *restrict password, const char *const restrict parameters,
-                        struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
+                        struct pbkdf2v2_dbentry *const restrict parsed, const bool verifying)
 {
 	char sdg64[0x1000];
 	char ssk64[0x1000];
@@ -454,7 +454,7 @@ atheme_pbkdf2v2_salt(void)
 static const char *
 atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const restrict parameters)
 {
-	struct pbkdf2v2_parameters parsed;
+	struct pbkdf2v2_dbentry parsed;
 
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, false))
 		// This function logs messages on failure
@@ -511,7 +511,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 static bool
 atheme_pbkdf2v2_verify(const char *const restrict password, const char *const restrict parameters)
 {
-	struct pbkdf2v2_parameters parsed;
+	struct pbkdf2v2_dbentry parsed;
 
 	if (! atheme_pbkdf2v2_compute(password, parameters, &parsed, true))
 		// This function logs messages on failure
