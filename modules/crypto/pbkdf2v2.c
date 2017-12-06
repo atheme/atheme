@@ -34,8 +34,6 @@
 
 #define ATHEME_SASLPREP_MAXLEN (PASSLEN + 1)
 
-static const char salt_chars[62] = PBKDF2_FN_BASE62;
-
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 
 unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
