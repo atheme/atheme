@@ -35,6 +35,7 @@
 #define ATHEME_SASLPREP_MAXLEN (PASSLEN + 1)
 
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
+static unsigned int pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 
 unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 
@@ -432,18 +433,21 @@ parsed:
 static const char *
 atheme_pbkdf2v2_salt(void)
 {
-	unsigned char rawsalt[PBKDF2_SALTLEN_DEF];
-	(void) arc4random_buf(rawsalt, sizeof rawsalt);
+	unsigned char salt[PBKDF2_SALTLEN_MAX];
 
-	char salt[PBKDF2_SALTLEN_MAX * 3];
-	if (base64_encode(rawsalt, sizeof rawsalt, salt, sizeof salt) == (size_t) -1)
+	(void) arc4random_buf(salt, (size_t) pbkdf2v2_saltsz);
+
+	char salt64[PBKDF2_SALTLEN_MAX * 3];
+
+	if (base64_encode(salt, (size_t) pbkdf2v2_saltsz, salt64, sizeof salt64) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
 		return NULL;
 	}
 
 	static char res[PASSLEN];
-	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt) >= PASSLEN)
+
+	if (snprintf(res, PASSLEN, PBKDF2_FN_SAVESALT, pbkdf2v2_digest, pbkdf2v2_rounds, salt64) >= PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 		return NULL;
@@ -586,9 +590,9 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt);
 			return false;
 		}
-		if (sl != PBKDF2_SALTLEN_DEF)
+		if (sl != pbkdf2v2_saltsz)
 		{
-			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, PBKDF2_SALTLEN_DEF);
+			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, pbkdf2v2_saltsz);
 			return true;
 		}
 	}
@@ -596,9 +600,9 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	{
 		const size_t sl = strlen(salt);
 
-		if (sl != PBKDF2_SALTLEN_DEF)
+		if (sl != pbkdf2v2_saltsz)
 		{
-			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, PBKDF2_SALTLEN_DEF);
+			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, pbkdf2v2_saltsz);
 			return true;
 		}
 	}
@@ -660,6 +664,8 @@ crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 	(void) add_conf_item("DIGEST", &pbkdf2v2_conf_table, c_ci_pbkdf2v2_digest);
 	(void) add_uint_conf_item("ROUNDS", &pbkdf2v2_conf_table, 0, &pbkdf2v2_rounds,
 	                          PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_MAX, PBKDF2_ITERCNT_DEF);
+	(void) add_uint_conf_item("SALTLEN", &pbkdf2v2_conf_table, 0, &pbkdf2v2_saltsz,
+	                          PBKDF2_SALTLEN_MIN, PBKDF2_SALTLEN_MAX, PBKDF2_SALTLEN_DEF);
 }
 
 static void
@@ -667,6 +673,7 @@ crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) i
 {
 	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
+	(void) del_conf_item("SALTLEN", &pbkdf2v2_conf_table);
 	(void) del_top_conf("PBKDF2V2");
 
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
