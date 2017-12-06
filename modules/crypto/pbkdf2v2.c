@@ -320,14 +320,11 @@ atheme_pbkdf2v2_compute(const char *restrict password, const char *const restric
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
-	bool matched_ssk_shk = false;
-
 	if (verifying)
 	{
 		if (sscanf(parameters, PBKDF2_FS_LOADHASH, &parsed->a, &parsed->c, salt64, ssk64, shk64) == 5)
 		{
 			(void) slog(LG_DEBUG, "%s: matched PBKDF2_FS_LOADHASH (SCRAM-SHA)", __func__);
-			matched_ssk_shk = true;
 			goto parsed;
 		}
 		if (sscanf(parameters, PBKDF2_FN_LOADHASH, &parsed->a, &parsed->c, salt64, sdg64) == 4)
@@ -394,7 +391,7 @@ parsed:
 		return false;
 	}
 
-	if (matched_ssk_shk)
+	if (verifying && parsed->scram)
 	{
 		if (base64_decode(ssk64, parsed->ssk, sizeof parsed->ssk) != parsed->dl)
 		{
