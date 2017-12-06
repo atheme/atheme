@@ -41,6 +41,23 @@ static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
 
 static bool
+atheme_pbkdf2v2_salt64(const unsigned int prf)
+{
+	switch (prf)
+	{
+		case PBKDF2_PRF_HMAC_SHA1_S64:
+		case PBKDF2_PRF_HMAC_SHA2_256_S64:
+		case PBKDF2_PRF_HMAC_SHA2_512_S64:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
+		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
+			return true;
+	}
+
+	return false;
+}
+
+static bool
 atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 {
 	switch (parsed->a)
@@ -80,17 +97,7 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 			return false;
 	}
 
-	switch (parsed->a)
-	{
-		case PBKDF2_PRF_HMAC_SHA1_S64:
-		case PBKDF2_PRF_HMAC_SHA2_256_S64:
-		case PBKDF2_PRF_HMAC_SHA2_512_S64:
-		case PBKDF2_PRF_SCRAM_SHA1_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
-			parsed->salt64 = true;
-			break;
-	}
+	parsed->salt64 = atheme_pbkdf2v2_salt64(parsed->a);
 
 	if (! parsed->md)
 	{
@@ -562,21 +569,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 		return true;
 	}
 
-	bool salt64 = false;
-
-	switch (prf)
-	{
-		case PBKDF2_PRF_HMAC_SHA1_S64:
-		case PBKDF2_PRF_HMAC_SHA2_256_S64:
-		case PBKDF2_PRF_HMAC_SHA2_512_S64:
-		case PBKDF2_PRF_SCRAM_SHA1_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-		case PBKDF2_PRF_SCRAM_SHA2_512_S64:
-			salt64 = true;
-			break;
-	}
-
-	if (salt64)
+	if (atheme_pbkdf2v2_salt64(prf))
 	{
 		unsigned char rawsalt[PBKDF2_SALTLEN_MAX];
 
