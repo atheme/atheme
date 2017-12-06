@@ -461,6 +461,14 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		// This function logs messages on failure
 		return NULL;
 
+	char salt64[PBKDF2_SALTLEN_MAX * 3];
+
+	if (base64_encode(parsed.salt, parsed.sl, salt64, sizeof salt64) == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
+		return NULL;
+	}
+
 	static char res[PASSLEN];
 
 	if (parsed.scram)
@@ -484,7 +492,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for chk", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, parsed.salt, csk64, chk64) >= PASSLEN)
+		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, parsed.a, parsed.c, salt64, csk64, chk64) >= PASSLEN)
 		{
 			(void) slog(LG_ERROR, "%s: snprintf() would have overflowed result buffer (BUG)", __func__);
 			return NULL;
@@ -499,7 +507,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 			(void) slog(LG_ERROR, "%s: base64_encode() failed for cdg", __func__);
 			return NULL;
 		}
-		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, parsed.salt, cdg64) >= PASSLEN)
+		if (snprintf(res, PASSLEN, PBKDF2_FN_SAVEHASH, parsed.a, parsed.c, salt64, cdg64) >= PASSLEN)
 		{
 			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 			return NULL;
