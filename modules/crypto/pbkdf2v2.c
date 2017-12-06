@@ -91,6 +91,23 @@ atheme_pbkdf2v2_determine_prf(struct pbkdf2v2_parameters *const restrict parsed)
 	return true;
 }
 
+static inline bool
+atheme_pbkdf2v2_parameters_sane(const struct pbkdf2v2_parameters *const restrict parsed)
+{
+	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: salt '%s' length %zu out of range", __func__, parsed->salt, parsed->sl);
+		return false;
+	}
+	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
+	{
+		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", __func__, parsed->c);
+		return false;
+	}
+
+	return true;
+}
+
 static bool
 atheme_pbkdf2v2_scram_derive(const struct pbkdf2v2_parameters *const parsed,
                              unsigned char csk[EVP_MAX_MD_SIZE],
@@ -160,6 +177,12 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
 parsed:
 
 	if (! atheme_pbkdf2v2_determine_prf(parsed))
+		// This function logs messages on failure
+		return false;
+
+	parsed->sl = strlen(parsed->salt);
+
+	if (! atheme_pbkdf2v2_parameters_sane(parsed))
 		// This function logs messages on failure
 		return false;
 
@@ -301,16 +324,9 @@ parsed:
 
 	parsed->sl = strlen(parsed->salt);
 
-	if (parsed->sl < PBKDF2_SALTLEN_MIN || parsed->sl > PBKDF2_SALTLEN_MAX)
-	{
-		(void) slog(LG_ERROR, "%s: salt '%s' length %zu out of range", __func__, parsed->salt, parsed->sl);
+	if (! atheme_pbkdf2v2_parameters_sane(parsed))
+		// This function logs messages on failure
 		return false;
-	}
-	if (parsed->c < PBKDF2_ITERCNT_MIN || parsed->c > PBKDF2_ITERCNT_MAX)
-	{
-		(void) slog(LG_ERROR, "%s: iteration count '%u' out of range", __func__, parsed->c);
-		return false;
-	}
 
 	const size_t pl = strlen(password);
 
