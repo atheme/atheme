@@ -291,16 +291,8 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->sn = random_string(NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);
 
-	// Base64-encode the user's salt
-	char Salt64[PBKDF2_SALTLEN_MAX * 3];
-	if (base64_encode(s->db.salt, s->db.sl, Salt64, sizeof Salt64) == (size_t) -1)
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed", __func__);
-		goto fail;
-	}
-
 	// Construct server-first-message
-	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, Salt64, s->db.c);
+	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
 
 	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
 	{
