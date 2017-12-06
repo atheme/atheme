@@ -43,8 +43,8 @@
 #ifndef BASE64_H
 #define BASE64_H
 
-extern size_t base64_encode(char const *src, size_t srclength, char *target, size_t targsize);
-extern size_t base64_decode(char const *src, char *target, size_t targsize);
+extern size_t base64_encode(const void *src, size_t srclength, char *target, size_t targsize);
+extern size_t base64_decode(const char *src, void *target, size_t targsize);
 
 #endif /* BASE64_H */
 
