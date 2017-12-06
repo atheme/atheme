@@ -206,17 +206,21 @@ parsed:
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
 			return false;
 		}
+
+		if (! atheme_pbkdf2v2_parameters_sane(parsed))
+			// This function logs messages on failure
+			return false;
 	}
 	else
 	{
 		parsed->sl = strlen(salt64);
 
+		if (! atheme_pbkdf2v2_parameters_sane(parsed))
+			// This function logs messages on failure
+			return false;
+
 		(void) memcpy(parsed->salt, salt64, parsed->sl);
 	}
-
-	if (! atheme_pbkdf2v2_parameters_sane(parsed))
-		// This function logs messages on failure
-		return false;
 
 	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
 	switch (parsed->a)
@@ -370,17 +374,21 @@ parsed:
 			(void) slog(LG_ERROR, "%s: base64_decode('%s') for salt failed", __func__, salt64);
 			return false;
 		}
+
+		if (! atheme_pbkdf2v2_parameters_sane(parsed))
+			// This function logs messages on failure
+			return false;
 	}
 	else
 	{
 		parsed->sl = strlen(salt64);
 
+		if (! atheme_pbkdf2v2_parameters_sane(parsed))
+			// This function logs messages on failure
+			return false;
+
 		(void) memcpy(parsed->salt, salt64, parsed->sl);
 	}
-
-	if (! atheme_pbkdf2v2_parameters_sane(parsed))
-		// This function logs messages on failure
-		return false;
 
 	const size_t pl = strlen(password);
 
