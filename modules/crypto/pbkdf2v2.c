@@ -597,7 +597,10 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 */
 #endif /* HAVE_LIBIDN */
 	else
-		conf_report_warning(ce, "invalid parameter for configuration option");
+	{
+		conf_report_warning(ce, "invalid parameter for configuration option -- using default");
+		pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
+	}
 
 	return 0;
 }
