@@ -172,10 +172,10 @@ bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters,
                                 struct pbkdf2v2_parameters *const restrict parsed)
 {
-	char salt64[0x8000];
-	char ssk64[0x8000];
-	char shk64[0x8000];
-	char sdg64[0x8000];
+	char salt64[0x1000];
+	char ssk64[0x1000];
+	char shk64[0x1000];
+	char sdg64[0x1000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
@@ -313,10 +313,10 @@ static bool
 atheme_pbkdf2v2_compute(const char *restrict password, const char *const restrict parameters,
                         struct pbkdf2v2_parameters *const restrict parsed, const bool verifying)
 {
-	char salt64[0x2000];
-	char sdg64[0x2000];
-	char ssk64[0x2000];
-	char shk64[0x2000];
+	char salt64[0x1000];
+	char sdg64[0x1000];
+	char ssk64[0x1000];
+	char shk64[0x1000];
 
 	(void) memset(parsed, 0x00, sizeof *parsed);
 
@@ -547,7 +547,7 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 {
 	unsigned int prf;
 	unsigned int iter;
-	char salt[0x2000];
+	char salt[0x1000];
 
 	if (sscanf(parameters, PBKDF2_FN_LOADSALT, &prf, &iter, salt) != 3)
 	{
