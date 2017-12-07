@@ -546,13 +546,8 @@ atheme_pbkdf2v2_recrypt(const char *const restrict parameters)
 	}
 	else
 	{
-		const size_t sl = strlen(salt64);
-
-		if (sl != pbkdf2v2_saltsz)
-		{
-			(void) slog(LG_DEBUG, "%s: salt length (%zu) != default (%u)", __func__, sl, pbkdf2v2_saltsz);
-			return true;
-		}
+		(void) slog(LG_DEBUG, "%s: salt wasn't base64-encoded", __func__);
+		return true;
 	}
 
 	return false;
