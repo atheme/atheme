@@ -237,20 +237,6 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 		return false;
 	}
 
-	// Ensure that the SCRAM-SHA module has a base64-encoded salt if it wasn't already so
-	if (! dbe->salt_was_b64)
-	{
-		dbe->sl = strlen(dbe->salt64);
-
-		(void) memcpy(dbe->salt, dbe->salt64, dbe->sl);
-
-		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
-		{
-			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
-			return false;
-		}
-	}
-
 	// Ensure that the SCRAM-SHA module knows which one of 2 possible algorithms we're using
 	switch (dbe->a)
 	{
@@ -271,6 +257,20 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 		default:
 			(void) slog(LG_DEBUG, "%s: unsupported PRF '%u'", __func__, dbe->a);
 			return false;
+	}
+
+	// Ensure that the SCRAM-SHA module has a base64-encoded salt if it wasn't already so
+	if (! dbe->salt_was_b64)
+	{
+		dbe->sl = strlen(dbe->salt64);
+
+		(void) memcpy(dbe->salt, dbe->salt64, dbe->sl);
+
+		if (base64_encode(dbe->salt, dbe->sl, dbe->salt64, sizeof dbe->salt64) == (size_t) -1)
+		{
+			(void) slog(LG_ERROR, "%s: base64_encode() failed for salt", __func__);
+			return false;
+		}
 	}
 
 	if (! dbe->scram)
