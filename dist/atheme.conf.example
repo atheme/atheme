@@ -863,6 +863,13 @@ pbkdf2v2 {
 	 * The default is 64,000
 	 */
 	#rounds = 64000;
+
+	/* saltlen
+	 * You should only change this if you *really* know what you're doing
+	 * Valid values are 8 to 64 (inclusive)
+	 * The default is 32
+	 */
+	#saltlen = 32;
 };
 
 /* The serverinfo{} block defines how we appear on the IRC network. */

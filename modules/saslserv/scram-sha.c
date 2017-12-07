@@ -51,7 +51,7 @@ enum scramsha_step
 
 struct scramsha_session
 {
-	struct pbkdf2v2_parameters  db;         // Parsed credentials from database
+	struct pbkdf2v2_dbentry     db;         // Parsed credentials from database
 	myuser_t                   *mu;         // User we are authenticating as
 	char                       *cn;         // Client nonce
 	char                       *sn;         // Server nonce
@@ -291,16 +291,8 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->sn = random_string(NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);
 
-	// Base64-encode the user's salt
-	char Salt64[PBKDF2_SALTLEN_MAX * 3];
-	if (base64_encode(s->db.salt, strlen(s->db.salt), Salt64, sizeof Salt64) == (size_t) -1)
-	{
-		(void) slog(LG_ERROR, "%s: base64_encode() for salt failed", __func__);
-		goto fail;
-	}
-
 	// Construct server-first-message
-	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, Salt64, s->db.c);
+	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
 
 	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
 	{
@@ -508,7 +500,7 @@ sasl_scramsha_step_success(sasl_session_t *const restrict p)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode for shk failed", __func__);
 	}
-	else if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt, csk64, chk64) >= PASSLEN)
+	else if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, s->db.a, s->db.c, s->db.salt64, csk64, chk64) >= PASSLEN)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 	}
