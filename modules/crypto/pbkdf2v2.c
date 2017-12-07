@@ -446,7 +446,7 @@ atheme_pbkdf2v2_crypt(const char *const restrict password, const char *const res
 		}
 		if (snprintf(res, PASSLEN, PBKDF2_FS_SAVEHASH, dbe.a, dbe.c, dbe.salt64, csk64, chk64) >= PASSLEN)
 		{
-			(void) slog(LG_ERROR, "%s: snprintf() would have overflowed result buffer (BUG)", __func__);
+			(void) slog(LG_ERROR, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
 			return NULL;
 		}
 	}
