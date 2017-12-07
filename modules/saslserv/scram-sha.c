@@ -593,11 +593,11 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 
 	switch (*pbkdf2v2_digest)
 	{
-		case PBKDF2_PRF_SCRAM_SHA1:
+		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha1);
 			return;
 
-		case PBKDF2_PRF_SCRAM_SHA2_256:
+		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
 			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
 			return;
 	}
