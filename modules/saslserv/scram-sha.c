@@ -304,7 +304,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	// Construct server-first-message
 	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
 
-	if (ol <= (NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
+	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", __func__);
 		goto fail;
