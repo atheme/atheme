@@ -37,7 +37,7 @@
 static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
 static unsigned int pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
 
-unsigned int pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
+unsigned int pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
 
 static bool
 atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
@@ -586,7 +586,7 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 	else
 	{
 		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");
-		pbkdf2v2_digest = PBKDF2_DIGEST_DEF;
+		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
 	}
 
 	return 0;

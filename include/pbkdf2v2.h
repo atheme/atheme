@@ -39,7 +39,7 @@
 #define PBKDF2_PRF_SCRAM_SHA2_256_S64   65U
 #define PBKDF2_PRF_SCRAM_SHA2_512_S64   66U     /* Not currently specified */
 
-#define PBKDF2_DIGEST_DEF               PBKDF2_PRF_HMAC_SHA2_512_S64
+#define PBKDF2_PRF_DEFAULT              PBKDF2_PRF_HMAC_SHA2_512_S64
 
 #define PBKDF2_ITERCNT_MIN              10000U
 #define PBKDF2_ITERCNT_MAX              5000000U
