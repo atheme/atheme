@@ -281,6 +281,16 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		goto fail;
 	}
 
+	unsigned char server_nonce_raw[NONCE_LENGTH];
+	(void) arc4random_buf(server_nonce_raw, sizeof server_nonce_raw);
+
+	char server_nonce[NONCE_LENGTH * 3];
+	if (base64_encode(server_nonce_raw, sizeof server_nonce_raw, server_nonce, sizeof server_nonce) == (size_t) -1)
+	{
+		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
+		goto fail;
+	}
+
 	// These cannot fail
 	p->username = sstrdup(username);
 	s->c_gs2_len = (size_t) (message - header);
@@ -288,7 +298,7 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 	s->c_msg_len = len - s->c_gs2_len;
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->cn = sstrdup(input['r']);
-	s->sn = random_string(NONCE_LENGTH);
+	s->sn = sstrndup(server_nonce, NONCE_LENGTH);
 	*out = smalloc(RESPONSE_LENGTH);
 
 	// Construct server-first-message
