@@ -164,7 +164,7 @@ sasl_scramsha_finish(sasl_session_t *const restrict p)
 
 static int
 sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const restrict data, const size_t len,
-                               char **restrict out, size_t *const restrict out_len, const unsigned int prf)
+                               char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
 
@@ -326,8 +326,8 @@ fail:
 }
 
 static int
-sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const restrict data, const size_t len,
-                               char **restrict out, size_t *const restrict out_len)
+sasl_scramsha_step_clientproof(struct scramsha_session *const restrict s, char *const restrict data,
+                               const size_t len, char **const restrict out, size_t *const restrict out_len)
 {
 	unsigned char ClientSignature[EVP_MAX_MD_SIZE];
 	unsigned char ServerSignature[EVP_MAX_MD_SIZE];
@@ -341,8 +341,6 @@ sasl_scramsha_step_clientproof(sasl_session_t *const restrict p, char *const res
 	char c_gs2_buf[RESPONSE_LENGTH];
 
 	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
-
-	struct scramsha_session *const s = p->mechdata;
 
 	scram_attr_list input;
 	(void) memset(input, 0x00, sizeof input);
@@ -476,10 +474,8 @@ fail:
 }
 
 static int
-sasl_scramsha_step_success(sasl_session_t *const restrict p)
+sasl_scramsha_step_success(const struct scramsha_session *const restrict s)
 {
-	struct scramsha_session *const s = p->mechdata;
-
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
 		return ASASL_DONE;
@@ -531,7 +527,7 @@ static inline int
 sasl_scramsha_step_x(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
                      char **restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
-	const struct scramsha_session *const s = p->mechdata;
+	struct scramsha_session *const s = p->mechdata;
 
 	switch (s->step)
 	{
@@ -539,10 +535,10 @@ sasl_scramsha_step_x(sasl_session_t *const restrict p, char *const restrict mess
 			return sasl_scramsha_step_clientfirst(p, message, len, out, out_len, prf);
 
 		case SCRAMSHA_STEP_CLIENTPROOF:
-			return sasl_scramsha_step_clientproof(p, message, len, out, out_len);
+			return sasl_scramsha_step_clientproof(s, message, len, out, out_len);
 
 		case SCRAMSHA_STEP_PASSED:
-			return sasl_scramsha_step_success(p);
+			return sasl_scramsha_step_success(s);
 
 		case SCRAMSHA_STEP_FAILED:
 			return ASASL_FAIL;
