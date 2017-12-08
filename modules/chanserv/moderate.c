@@ -26,7 +26,7 @@ DECLARE_MODULE_V1
 (
 	"chanserv/moderate", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
+	VENDOR_STRING
 );
 
 static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);

@@ -14,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"botserv/set_core", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Rizon Development Group <http://dev.rizon.net>"
+	VENDOR_STRING
 );
 
 static void bs_help_set(sourceinfo_t *si, const char *subcmd);
