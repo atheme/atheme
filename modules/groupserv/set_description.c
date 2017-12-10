@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the GroupServ HELP command.
- *
  */
 
 #include "atheme.h"
 #include "groupserv.h"
-
-DECLARE_MODULE_V1
-(
-	"groupserv/set_description", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -61,7 +53,8 @@ static void gs_cmd_set_description(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The description of \2%s\2 has been set to \2%s\2."), parv[0], desc);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 	use_groupserv_set_symbols(m);
@@ -69,8 +62,10 @@ void _modinit(module_t *m)
 	command_add(&gs_set_description, gs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&gs_set_description, gs_set_cmdtree);
 }
 
+SIMPLE_DECLARE_MODULE_V1("groupserv/set_description", MODULE_UNLOAD_CAPABILITY_OK)

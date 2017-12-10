@@ -3,18 +3,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService OP functions.
- *
  */
 
 #include "atheme.h"
 #include "chanserv.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/op", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
@@ -24,13 +16,15 @@ command_t cs_op = { "OP", N_("Gives channel ops to a user."),
 command_t cs_deop = { "DEOP", N_("Removes channel ops from a user."),
                         AC_NONE, 2, cs_cmd_deop, { .path = "cservice/op_voice" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_op);
         service_named_bind_command("chanserv", &cs_deop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_op);
 	service_named_unbind_command("chanserv", &cs_deop);
@@ -147,8 +141,4 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	cmd_op(si, false, parc, parv);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/op", MODULE_UNLOAD_CAPABILITY_OK)

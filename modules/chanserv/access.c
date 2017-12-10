@@ -8,13 +8,6 @@
 #include "atheme.h"
 #include "template.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/access", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void cs_cmd_access(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_help_access(sourceinfo_t *si, const char *subcmd);
 
@@ -75,7 +68,8 @@ command_t cs_role_del =  { "DEL", N_("Delete a role."),
 mowgli_patricia_t *cs_access_cmds;
 mowgli_patricia_t *cs_role_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_access);
 	service_named_bind_command("chanserv", &cs_role);
@@ -95,7 +89,8 @@ void _modinit(module_t *m)
 	command_add(&cs_role_del, cs_role_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_access);
 	service_named_unbind_command("chanserv", &cs_role);
@@ -1405,8 +1400,4 @@ static void cs_cmd_role_del(sourceinfo_t *si, int parc, char *parv[])
 	update_role_entry(si, mc, role, 0);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/access", MODULE_UNLOAD_CAPABILITY_OK)

@@ -1,5 +1,5 @@
 /* chanfix - channel fixing service
- * 
+ *
  * Copyright (c) 2010-2016 Atheme Development Group
  * Copyright (c) 2014-2016 Austin Ellis <siniStar@IRC4Fun.net>
  */

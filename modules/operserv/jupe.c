@@ -3,28 +3,22 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Jupiters a server.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/jupe", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_jupe = { "JUPE", N_("Jupiters a server."), PRIV_JUPE, 2, os_cmd_jupe, { .path = "oservice/jupe" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_jupe);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_jupe);
 }
@@ -72,8 +66,4 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been jupitered."), server);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/jupe", MODULE_UNLOAD_CAPABILITY_OK)

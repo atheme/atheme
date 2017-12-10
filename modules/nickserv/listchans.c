@@ -4,28 +4,22 @@
  *
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/listchans", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_listchans = { "LISTCHANS", N_("Lists channels that you have access to."), AC_NONE, 1, ns_cmd_listchans, { .path = "nickserv/listchans" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_listchans);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_listchans);
 }
@@ -102,8 +96,4 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 						    i, entity(mu)->name);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/listchans", MODULE_UNLOAD_CAPABILITY_OK)

@@ -4,17 +4,9 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the CService SET EMAIL command.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/set_email", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -22,14 +14,16 @@ command_t cs_set_email = { "EMAIL", N_("Sets the channel e-mail address."), AC_N
 
 mowgli_patricia_t **cs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_set_cmdtree, "chanserv/set_core", "cs_set_cmdtree");
 
 	command_add(&cs_set_email, *cs_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_set_email, *cs_set_cmdtree);
 }
@@ -79,8 +73,4 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/set_email", MODULE_UNLOAD_CAPABILITY_OK)

@@ -10,13 +10,6 @@
 #include "atheme.h"
 #include "list_common.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/list", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static mowgli_patricia_t *list_params;
 
@@ -105,7 +98,8 @@ static bool has_waitauth(const mynick_t *mn, const void *arg) {
 	return ( mu->flags & MU_WAITAUTH ) == MU_WAITAUTH;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	list_params = mowgli_patricia_create(strcasecanon);
 	service_named_bind_command("nickserv", &ns_list);
@@ -141,7 +135,8 @@ void _modinit(module_t *m)
 	list_register("waitauth", &waitauth);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_list);
 
@@ -335,8 +330,4 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, ngettext(N_("\2%d\2 match for criteria \2%s\2"), N_("\2%d\2 matches for criteria \2%s\2"), matches), matches, criteriastr);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/list", MODULE_UNLOAD_CAPABILITY_OK)

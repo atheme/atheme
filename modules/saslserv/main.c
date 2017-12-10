@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
-
-DECLARE_MODULE_V1
-(
-	"saslserv/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;
@@ -121,7 +113,8 @@ static void sasl_mech_unregister(sasl_mechanism_t *mech)
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("sasl_input");
 	hook_add_sasl_input(sasl_input);
@@ -139,7 +132,8 @@ void _modinit(module_t *m)
 	authservice_loaded++;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -807,8 +801,4 @@ static const char *sasl_get_source_name(sourceinfo_t *si)
 	return result;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)

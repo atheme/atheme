@@ -4,19 +4,11 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows opers to offer vhosts to users
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 #include "../groupserv/groupserv.h"
-
-DECLARE_MODULE_V1
-(
-	"hostserv/offer", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.net>"
-);
 
 static void hs_cmd_offer(sourceinfo_t *si, int parc, char *parv[]);
 static void hs_cmd_unoffer(sourceinfo_t *si, int parc, char *parv[]);
@@ -45,7 +37,8 @@ typedef struct hsoffered_ hsoffered_t;
 
 mowgli_list_t hs_offeredlist;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -66,7 +59,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("hostserv", &hs_take);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_db_write(write_hsofferdb);
 	db_unregister_type_handler("HO");
@@ -398,8 +392,4 @@ static void hs_cmd_offerlist(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "OFFERLIST");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("hostserv/offer", MODULE_UNLOAD_CAPABILITY_NEVER)

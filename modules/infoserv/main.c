@@ -8,18 +8,10 @@
  * oper info messages. Yes, I know this is a bit ugly, but
  * I can't think of a saner way that is efficient, avoids a
  * few bugs and doesn't break people's existing InfoServ DB entries.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
-
-DECLARE_MODULE_V1
-(
-	"infoserv/main", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 struct logoninfo_ {
         stringref nick;
@@ -510,7 +502,8 @@ static void is_cmd_olist(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -541,7 +534,8 @@ void _modinit(module_t *m)
 	service_bind_command(infoserv, &is_olist);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	del_conf_item("LOGONINFO_COUNT", &infoserv->conf_table);
 
@@ -567,8 +561,4 @@ void _moddeinit(module_unload_intent_t intent)
 	service_unbind_command(infoserv, &is_olist);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("infoserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

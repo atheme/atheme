@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Aaron Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2015-2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -599,7 +599,7 @@ static crypt_impl_t crypto_pbkdf2v2_impl = {
 static mowgli_list_t pbkdf2v2_conf_table;
 
 static void
-crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2v2_impl);
 
@@ -612,7 +612,7 @@ crypto_pbkdf2v2_modinit(module_t __attribute__((unused)) *const restrict m)
 }
 
 static void
-crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
@@ -622,7 +622,6 @@ crypto_pbkdf2v2_moddeinit(const module_unload_intent_t __attribute__((unused)) i
 	(void) crypt_unregister(&crypto_pbkdf2v2_impl);
 }
 
-DECLARE_MODULE_V1(PBKDF2V2_CRYPTO_MODULE_NAME, false, crypto_pbkdf2v2_modinit, crypto_pbkdf2v2_moddeinit,
-                  PACKAGE_VERSION, "Aaron Jones <aaronmdjones@gmail.com>");
+SIMPLE_DECLARE_MODULE_V1(PBKDF2V2_CRYPTO_MODULE_NAME, MODULE_UNLOAD_CAPABILITY_OK)
 
 #endif /* HAVE_OPENSSL */

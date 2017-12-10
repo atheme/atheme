@@ -3,7 +3,6 @@
  * Rights to this code are as defined in doc/LICENSE.
  *
  * Regexp-based AKILL implementation.
- *
  */
 
 /*
@@ -13,23 +12,18 @@
  */
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"operserv/rakill", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_rakill = { "RAKILL", N_("Sets a group of AKILLs against users matching a specific regex pattern."), PRIV_MASS_AKILL, 1, os_cmd_rakill, { .path = "oservice/rakill" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rakill);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_rakill);
 }
@@ -123,8 +117,4 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RAKILL: \2%s\2 (reason: \2%s\2) (\2%d\2 matches)", pattern, reason, matches);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/rakill", MODULE_UNLOAD_CAPABILITY_OK)

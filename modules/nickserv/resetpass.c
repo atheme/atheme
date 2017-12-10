@@ -3,28 +3,22 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for nickserv RESETPASS
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/resetpass", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass, { .path = "nickserv/resetpass" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_resetpass);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_resetpass);
 }
@@ -93,8 +87,4 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/resetpass", MODULE_UNLOAD_CAPABILITY_OK)

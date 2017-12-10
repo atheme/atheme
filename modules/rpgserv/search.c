@@ -4,13 +4,6 @@
 #include "atheme.h"
 #include "prettyprint.h"
 
-DECLARE_MODULE_V1
-(
-	"rpgserv/search", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void rs_cmd_search(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_search = { "SEARCH", N_("Search for games based on specific criteria."),
@@ -77,12 +70,16 @@ __matched:
 	logcommand(si, CMDLOG_GET, "RPGSERV:SEARCH");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_search);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("rpgserv", &rs_search);
 }
+
+SIMPLE_DECLARE_MODULE_V1("rpgserv/search", MODULE_UNLOAD_CAPABILITY_OK)

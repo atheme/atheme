@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService KICK functions.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/kick", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);
@@ -23,13 +15,15 @@ command_t cs_kick = { "KICK", N_("Removes a user from a channel."),
 command_t cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
 			AC_NONE, 3, cs_cmd_kickban, { .path = "cservice/kickban" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_kick);
 	service_named_bind_command("chanserv", &cs_kickban);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_kick);
 	service_named_unbind_command("chanserv", &cs_kickban);
@@ -176,8 +170,4 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/kick", MODULE_UNLOAD_CAPABILITY_OK)

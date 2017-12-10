@@ -6,17 +6,12 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for ponychat-ircd.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/elemental-ircd.h"
-
-DECLARE_MODULE_V1("protocol/elemental-ircd", true, _modinit, NULL, PACKAGE_STRING, "PonyChat Development Group <http://www.ponychat.net>");
-
-/* *INDENT-OFF* */
 
 ircd_t elemental_ircd = {
 	.ircdname = "elemental-ircd",
@@ -101,9 +96,8 @@ struct cmode_ elemental_user_mode_list[] = {
   { '\0', 0 }
 };
 
-/* *INDENT-ON* */
-
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
@@ -119,8 +113,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/elemental-ircd", MODULE_UNLOAD_CAPABILITY_NEVER)

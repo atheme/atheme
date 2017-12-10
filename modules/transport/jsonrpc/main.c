@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * JSONRPC implementation
- *
  */
 
 #include "atheme.h"
@@ -11,13 +10,6 @@
 #include "jsonrpclib.h"
 #include "datastream.h"
 #include "authcookie.h"
-
-DECLARE_MODULE_V1
-(
-	"transport/jsonrpc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void handle_request(connection_t *cptr, void *requestbuf);
 
@@ -53,7 +45,8 @@ static void handle_request(connection_t *cptr, void *requestbuf)
 	return;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
@@ -65,14 +58,15 @@ void _modinit(module_t *m)
 	jsonrpc_register_method("atheme.login", jsonrpcmethod_login);
 	jsonrpc_register_method("atheme.logout", jsonrpcmethod_logout);
 	jsonrpc_register_method("atheme.command", jsonrpcmethod_command);
-	
+
 	jsonrpc_register_method("atheme.privset", jsonrpcmethod_privset);
 	jsonrpc_register_method("atheme.ison", jsonrpcmethod_ison);
 	jsonrpc_register_method("atheme.metadata", jsonrpcmethod_metadata);
 
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n;
 
@@ -704,3 +698,5 @@ void jsonrpc_send_data(void *conn, char *str) {
 		sendq_add_eof((connection_t *) conn);
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("transport/jsonrpc", MODULE_UNLOAD_CAPABILITY_OK)

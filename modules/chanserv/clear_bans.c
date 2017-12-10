@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService KICK functions.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/clear_bans", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -22,14 +14,16 @@ command_t cs_clear_bans = { "BANS", N_("Clears bans or other lists of a channel.
 
 mowgli_patricia_t **cs_clear_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
 
 	command_add(&cs_clear_bans, *cs_clear_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&cs_clear_bans, *cs_clear_cmds);
 }
@@ -108,8 +102,4 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 			item, parv[0], hits);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/clear_bans", MODULE_UNLOAD_CAPABILITY_OK)

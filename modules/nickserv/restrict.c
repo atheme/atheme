@@ -3,19 +3,11 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Restrictions for nicknames.
- *
  */
 
 #include "atheme.h"
 #include "list_common.h"
 #include "list.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/restrict", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -66,7 +58,8 @@ static void info_hook(hook_user_req_t *hdata)
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_restrict);
 
@@ -87,7 +80,8 @@ void _modinit(module_t *m)
 	list_register("restricted-reason", &restrict_match);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_restrict);
 
@@ -163,8 +157,4 @@ static void ns_cmd_restrict(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/restrict", MODULE_UNLOAD_CAPABILITY_OK)

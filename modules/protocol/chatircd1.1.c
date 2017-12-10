@@ -14,15 +14,6 @@
 #include "pmodule.h"
 #include "protocol/chatircd.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/chatircd", true, _modinit, NULL,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
-/* *INDENT-OFF* */
-
 ircd_t ChatIRCd = {
 	.ircdname = "ChatIRCd",                     /* IRCd name */
 	.tldprefix = "$$",                          /* TLD Prefix, used by Global. */
@@ -93,8 +84,6 @@ struct cmode_ chatircd_prefix_mode_list[] = {
   { '+', CSTATUS_VOICE },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 /* this may be slow, but it is not used much */
 /* returns true if it matches, false if not */
@@ -250,7 +239,8 @@ static bool chatircd_is_extban(const char *mask)
 	return false;
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/charybdis");
 
@@ -268,9 +258,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
 
+SIMPLE_DECLARE_MODULE_V1("protocol/chatircd", MODULE_UNLOAD_CAPABILITY_NEVER)

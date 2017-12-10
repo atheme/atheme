@@ -3,28 +3,22 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService RAW command.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/restart", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_restart = { "RESTART", N_("Restart services."), PRIV_ADMIN, 0, os_cmd_restart, { .path = "oservice/restart" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("operserv", &os_restart);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_restart);
 }
@@ -37,8 +31,4 @@ static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[])
 	runflags |= RF_RESTART;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/restart", MODULE_UNLOAD_CAPABILITY_OK)

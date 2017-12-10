@@ -5,13 +5,6 @@
 #include "atheme.h"
 #include "prettyprint.h"
 
-DECLARE_MODULE_V1
-(
-	"rpgserv/set", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_set = { "SET", N_("Sets RPG properties of your channel."),
@@ -210,12 +203,16 @@ static void rs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_set);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("rpgserv", &rs_set);
 }
+
+SIMPLE_DECLARE_MODULE_V1("rpgserv/set", MODULE_UNLOAD_CAPABILITY_OK)

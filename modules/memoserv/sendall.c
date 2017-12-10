@@ -7,26 +7,21 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"memoserv/sendall", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_sendall = { "SENDALL", N_("Sends a memo to all accounts."),
                          PRIV_ADMIN, 1, ms_cmd_sendall, { .path = "memoserv/sendall" } };
 static unsigned int *maxmemos;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_sendall);
         MODULE_TRY_REQUEST_SYMBOL(m, maxmemos, "memoserv/main", "maxmemos");
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_sendall);
 }
@@ -174,8 +169,4 @@ static void ms_cmd_sendall(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("memoserv/sendall", MODULE_UNLOAD_CAPABILITY_OK)

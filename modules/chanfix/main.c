@@ -6,17 +6,11 @@
 #include "atheme.h"
 #include "chanfix.h"
 
-DECLARE_MODULE_V1
-(
-	"chanfix/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 service_t *chanfix;
 mowgli_eventloop_timer_t *chanfix_autofix_timer = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	chanfix_persist_record_t *rec = mowgli_global_storage_get("atheme.chanfix.main.persist");
 
@@ -45,7 +39,8 @@ void _modinit(module_t *m)
 	chanfix_autofix_timer = mowgli_timer_add(base_eventloop, "chanfix_autofix", chanfix_autofix_ev, NULL, 60);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	chanfix_persist_record_t *rec = NULL;
 
@@ -74,3 +69,5 @@ void _moddeinit(module_unload_intent_t intent)
 
 	chanfix_gather_deinit(intent, rec);
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanfix/main", MODULE_UNLOAD_CAPABILITY_OK)

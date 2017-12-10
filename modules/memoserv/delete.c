@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv DELETE function
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"memoserv/delete", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -22,13 +14,15 @@ command_t ms_delete = { "DELETE", N_("Deletes memos."),
 command_t ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_AUTHENTICATED, 1, ms_cmd_delete, { .path = "memoserv/delete" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_delete);
 	service_named_bind_command("memoserv", &ms_del);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_delete);
 	service_named_unbind_command("memoserv", &ms_del);
@@ -121,8 +115,4 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("memoserv/delete", MODULE_UNLOAD_CAPABILITY_OK)

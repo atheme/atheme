@@ -3,14 +3,9 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the body of StatServ.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-("statserv/main", false, _modinit, _moddeinit,
- PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 service_t *statsvs;
 
@@ -20,13 +15,15 @@ command_t ss_help =
 { "HELP", N_("Displays contextual help information."), AC_NONE, 2, ss_cmd_help, {.path = "help"}
 };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
     statsvs = service_add("statserv", NULL);
     service_named_bind_command("statserv", &ss_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
     service_named_unbind_command("statserv", &ss_help);
     if (statsvs != NULL)
@@ -58,8 +55,4 @@ void ss_cmd_help(sourceinfo_t * si, int parc, char *parv[])
     help_display(si, si->service, command, si->service->commands);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("statserv/main", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,13 +3,6 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"rpgserv/list", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t rs_list = { "LIST", N_("Lists games."),
@@ -43,12 +36,16 @@ static void rs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "RPGSERV:LIST");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("rpgserv", &rs_list);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("rpgserv", &rs_list);
 }
+
+SIMPLE_DECLARE_MODULE_V1("rpgserv/list", MODULE_UNLOAD_CAPABILITY_OK)

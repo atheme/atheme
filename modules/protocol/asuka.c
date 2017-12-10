@@ -5,17 +5,12 @@
  * This file contains protocol support for P10 ircd's.
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/asuka.h"
-
-DECLARE_MODULE_V1("protocol/asuka", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
-
-/* *INDENT-OFF* */
 
 ircd_t Asuka = {
 	.ircdname = "Asuka 1.2.1 and later",
@@ -83,8 +78,6 @@ struct cmode_ asuka_user_mode_list[] = {
 };
 
 static void check_hidehost(user_t *u);
-
-/* *INDENT-ON* */
 
 /* NOTICE wrapper */
 static void asuka_notice_channel_sts(user_t *from, channel_t *target, const char *text)
@@ -329,7 +322,8 @@ static void check_hidehost(user_t *u)
 	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
@@ -361,8 +355,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/asuka", MODULE_UNLOAD_CAPABILITY_NEVER)

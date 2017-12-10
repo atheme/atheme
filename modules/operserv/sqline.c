@@ -5,17 +5,9 @@
  *
  * This file contains functionality which implements
  * the OperServ SQLINE command.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/sqline", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void os_sqline_newuser(hook_user_nick_t *data);
 static void os_sqline_chanjoin(hook_channel_joinpart_t *hdata);
@@ -36,7 +28,8 @@ command_t os_sqline_sync = { "SYNC", N_("Synchronises network name bans to serve
 
 mowgli_patricia_t *os_sqline_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (ircd != NULL && qline_sts == generic_qline_sts)
 	{
@@ -64,7 +57,8 @@ void _modinit(module_t *m)
 	hook_add_channel_join(os_sqline_chanjoin);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_sqline);
 
@@ -470,8 +464,4 @@ static void os_cmd_sqline_sync(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("SQLINE list synchronized to servers."));
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/sqline", MODULE_UNLOAD_CAPABILITY_OK)

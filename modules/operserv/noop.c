@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * OperServ NOOP command.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/noop", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 typedef struct noop_ noop_t;
 
@@ -35,7 +27,8 @@ static mowgli_eventloop_timer_t *noop_kill_users_timer = NULL;
 
 command_t os_noop = { "NOOP", N_("Restricts IRCop access."), PRIV_NOOP, 4, os_cmd_noop, { .path = "oservice/noop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_noop);
 	hook_add_event("user_oper");
@@ -43,7 +36,8 @@ void _modinit(module_t *m)
 	hook_add_event("user_delete");
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -356,8 +350,4 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/noop", MODULE_UNLOAD_CAPABILITY_NEVER)

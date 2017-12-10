@@ -20,8 +20,6 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("security/cmdperm", false, _modinit, _moddeinit, PACKAGE_VERSION, VENDOR_STRING);
-
 static bool (*parent_command_authorize)(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel) = NULL;
 
 static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_t *c, const char *userlevel)
@@ -41,13 +39,17 @@ static bool cmdperm_command_authorize(service_t *svs, sourceinfo_t *si, command_
 	return parent_command_authorize(svs, si, c, userlevel);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	parent_command_authorize = command_authorize;
 	command_authorize = cmdperm_command_authorize;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_authorize = parent_command_authorize;
 }
+
+SIMPLE_DECLARE_MODULE_V1("security/cmdperm", MODULE_UNLOAD_CAPABILITY_OK)

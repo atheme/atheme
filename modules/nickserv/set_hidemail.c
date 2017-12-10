@@ -4,20 +4,12 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Hides your e-mail address.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "list_common.h"
 #include "list.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/set_hidemail", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 mowgli_patricia_t **ns_set_cmdtree;
 
@@ -31,7 +23,8 @@ static bool has_hidemail(const mynick_t *mn, const void *arg) {
 	return ( mu->flags & MU_HIDEMAIL ) == MU_HIDEMAIL;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
@@ -47,7 +40,8 @@ void _modinit(module_t *m)
 
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_hidemail, *ns_set_cmdtree);
 	list_unregister("hidemail");
@@ -103,8 +97,4 @@ static void ns_cmd_set_hidemail(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_hidemail", MODULE_UNLOAD_CAPABILITY_OK)

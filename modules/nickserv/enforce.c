@@ -15,13 +15,6 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/enforce",false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 typedef struct {
 	char nick[NICKLEN];
 	char host[HOSTLEN];
@@ -623,7 +616,8 @@ static int idcheck_foreach_cb(myentity_t *mt, void *privdata)
 	return 0;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
@@ -661,7 +655,8 @@ void _modinit(module_t *m)
 	hook_add_nick_enforce(check_enforce);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	enforce_remove_enforcers(NULL);
 
@@ -679,8 +674,4 @@ void _moddeinit(module_unload_intent_t intent)
 	mowgli_heap_destroy(enforce_timeout_heap);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/enforce", MODULE_UNLOAD_CAPABILITY_OK)

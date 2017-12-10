@@ -3,29 +3,23 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows setting a vhost on a nick
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1
-(
-	"hostserv/vhostnick", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t hs_vhostnick = { "VHOSTNICK", N_("Manages per-nick virtual hosts."), PRIV_USER_VHOST, 2, hs_cmd_vhostnick, { .path = "hostserv/vhostnick" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("hostserv", &hs_vhostnick);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("hostserv", &hs_vhostnick);
 }
@@ -101,8 +95,4 @@ static void hs_cmd_vhostnick(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("hostserv/vhostnick", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,29 +3,23 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the ChanServ WHY function.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/why", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_why = { "WHY", N_("Explains channel access logic."),
 		     AC_NONE, 2, cs_cmd_why, { .path = "cservice/why" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_why);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_why);
 }
@@ -162,8 +156,4 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 				u->nick, mc->name);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/why", MODULE_UNLOAD_CAPABILITY_OK)

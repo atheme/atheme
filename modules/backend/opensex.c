@@ -14,13 +14,6 @@
 # include <sys/file.h>
 #endif
 
-DECLARE_MODULE_V1
-(
-	"backend/opensex", true, _modinit, NULL,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 typedef struct opensex_ {
 	/* Lexing state */
 	char *buf;
@@ -403,7 +396,8 @@ static database_module_t opensex_mod = {
 	.db_parse = opensex_db_parse,
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "backend/corestorage");
 
@@ -416,8 +410,9 @@ void _modinit(module_t *m)
 	backend_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("backend/opensex", MODULE_UNLOAD_CAPABILITY_NEVER)

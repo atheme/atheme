@@ -3,18 +3,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService OP functions.
- *
  */
 
 #include "atheme.h"
 #include "chanserv.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/halfop", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[]);
@@ -24,7 +16,8 @@ command_t cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
 command_t cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
                         AC_NONE, 2, cs_cmd_dehalfop, { .path = "cservice/halfop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (ircd != NULL && !ircd->uses_halfops)
 	{
@@ -37,7 +30,8 @@ void _modinit(module_t *m)
         service_named_bind_command("chanserv", &cs_dehalfop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_halfop);
 	service_named_unbind_command("chanserv", &cs_dehalfop);
@@ -157,8 +151,4 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	cmd_halfop(si, false, parc, parv);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/halfop", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows setting a vhost on an account
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/vhost", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void vhost_on_identify(user_t *u);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
@@ -22,7 +14,8 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 command_t ns_vhost = { "VHOST", N_("Manages user virtualhosts."), PRIV_USER_VHOST, 4, ns_cmd_vhost, { .path = "nickserv/vhost" } };
 command_t ns_listvhost = { "LISTVHOST", N_("Lists user virtualhosts."), PRIV_USER_AUSPEX, 1, ns_cmd_listvhost, { .path = "nickserv/listvhost" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(vhost_on_identify);
@@ -30,7 +23,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_listvhost);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_identify(vhost_on_identify);
 	service_named_unbind_command("nickserv", &ns_vhost);
@@ -299,8 +293,4 @@ static void vhost_on_identify(user_t *u)
 	do_sethost(u, md->value);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/vhost", MODULE_UNLOAD_CAPABILITY_OK)

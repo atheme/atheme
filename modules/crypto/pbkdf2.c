@@ -63,18 +63,17 @@ static crypt_impl_t crypto_pbkdf2_impl = {
 };
 
 static void
-crypto_pbkdf2_modinit(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&crypto_pbkdf2_impl);
 }
 
 static void
-crypto_pbkdf2_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) crypt_unregister(&crypto_pbkdf2_impl);
 }
 
-DECLARE_MODULE_V1("crypto/pbkdf2", false, crypto_pbkdf2_modinit, crypto_pbkdf2_moddeinit,
-                  PACKAGE_VERSION, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("crypto/pbkdf2", MODULE_UNLOAD_CAPABILITY_OK)
 
 #endif

@@ -4,18 +4,10 @@
  *
  * This file contains a BService SET which can change
  * botserv settings on channel or bot.
- *
  */
 
 #include "atheme.h"
 #include "botserv.h"
-
-DECLARE_MODULE_V1
-(
-	"botserv/set_core", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Rizon Development Group <http://dev.rizon.net>"
-);
 
 static void bs_help_set(sourceinfo_t *si, const char *subcmd);
 static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -24,14 +16,16 @@ command_t bs_set = { "SET", N_("Configures bot options."), AC_NONE, 3, bs_cmd_se
 
 mowgli_patricia_t *bs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_set);
 
 	bs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_set);
 
@@ -84,8 +78,4 @@ static void bs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("botserv/set_core", MODULE_UNLOAD_CAPABILITY_OK)

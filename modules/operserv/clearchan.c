@@ -4,19 +4,10 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * 
  * Default AKILL time is 7 days (604800 seconds)
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/clearchan", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Robin Burchell <surreal.w00t@gmail.com>"
-);
 
 #define CLEAR_KICK 1
 #define CLEAR_KILL 2
@@ -26,12 +17,14 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_clearchan = { "CLEARCHAN", N_("Clears a channel via KICK, KILL or AKILL"), PRIV_CHAN_ADMIN, 3, os_cmd_clearchan, { .path = "oservice/clearchan" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_clearchan);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_clearchan);
 }
@@ -137,8 +130,4 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN: \2%s\2 \2%s\2 (reason: \2%s\2) (\2%d\2 matches, \2%d\2 ignores)", actionstr, targchan, treason, matches, ignores);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/clearchan", MODULE_UNLOAD_CAPABILITY_OK)

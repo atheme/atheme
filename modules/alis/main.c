@@ -30,18 +30,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * ALIS, based on the ratbox-services implementation.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
-
-DECLARE_MODULE_V1
-(
-	"alis/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"William Pitcock <nenolod -at- nenolod.net>"
-);
 
 #define ALIS_MAX_PARC	10
 #define ALIS_MAX_MATCH	60
@@ -79,14 +71,16 @@ struct alis_query
 	int showsecret;
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	alis = service_add("alis", NULL);
 	service_bind_command(alis, &alis_list);
 	service_bind_command(alis, &alis_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_unbind_command(alis, &alis_list);
 	service_unbind_command(alis, &alis_help);
@@ -480,3 +474,5 @@ static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	help_display(si, si->service, command, alis->commands);
 }
+
+SIMPLE_DECLARE_MODULE_V1("alis/main", MODULE_UNLOAD_CAPABILITY_OK)

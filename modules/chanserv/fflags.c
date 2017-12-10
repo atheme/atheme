@@ -3,30 +3,24 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService FFLAGS functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/fflags", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags, { .path = "cservice/fflags" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_fflags);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_fflags);
 }
@@ -168,8 +162,4 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, _("\2%s\2 forced flags change \2%s\2 on \2%s\2."), get_source_name(si), flagstr, target);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/fflags", MODULE_UNLOAD_CAPABILITY_OK)

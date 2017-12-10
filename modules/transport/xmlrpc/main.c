@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * New xmlrpc implementation
- *
  */
 
 #include "atheme.h"
@@ -11,13 +10,6 @@
 #include "xmlrpclib.h"
 #include "datastream.h"
 #include "authcookie.h"
-
-DECLARE_MODULE_V1
-(
-	"transport/xmlrpc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void handle_request(connection_t *cptr, void *requestbuf);
 
@@ -100,7 +92,8 @@ static void xmlrpc_config_ready(void *vptr)
 		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc {} block missing or invalid");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
@@ -122,7 +115,8 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.metadata", xmlrpcmethod_metadata);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n;
 
@@ -615,5 +609,4 @@ static int xmlrpcmethod_metadata(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("transport/xmlrpc", MODULE_UNLOAD_CAPABILITY_OK)

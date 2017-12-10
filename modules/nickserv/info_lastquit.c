@@ -7,13 +7,6 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/info_lastquit", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void user_delete_info_hook(hook_user_delete_t *hdata)
 {
 	if (hdata->u->myuser == NULL)
@@ -36,7 +29,8 @@ static void info_hook(hook_user_req_t *hdata)
 	}
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_delete_info");
 	hook_add_user_delete_info(user_delete_info_hook);
@@ -45,14 +39,11 @@ void _modinit(module_t *m)
 	hook_add_first_user_info(info_hook);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_delete_info(user_delete_info_hook);
 	hook_del_user_info(info_hook);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/info_lastquit", MODULE_UNLOAD_CAPABILITY_OK)

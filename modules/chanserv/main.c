@@ -3,20 +3,12 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include "chanserv.h"
 #include "template.h"
 #include <limits.h>
-
-DECLARE_MODULE_V1
-(
-	"chanserv/main", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_join(hook_channel_joinpart_t *hdata);
 static void cs_part(hook_channel_joinpart_t *hdata);
@@ -264,7 +256,8 @@ static int c_ci_templates(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(chanserv_config_ready);
@@ -314,7 +307,8 @@ void _modinit(module_t *m)
 	add_duration_conf_item("AKICK_TIME", &chansvs.me->conf_table, 0, &chansvs.akick_time, "m", 0);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (chansvs.me)
 	{
@@ -945,8 +939,4 @@ static void cs_bounce_mode_change(hook_channel_mode_change_t *data)
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

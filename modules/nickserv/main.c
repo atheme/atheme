@@ -3,19 +3,11 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include "conf.h" /* XXX conf_ni_table */
 #include <limits.h>
-
-DECLARE_MODULE_V1
-(
-	"nickserv/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 struct
 {
@@ -139,7 +131,8 @@ static int c_ni_emailexempts(mowgli_config_file_entry_t *ce)
 	return 0;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         hook_add_event("config_ready");
         hook_add_config_ready(nickserv_config_ready);
@@ -161,7 +154,8 @@ void _modinit(module_t *m)
 	add_uint_conf_item("MAXNICKS", &nicksvs.me->conf_table, 9, &nicksvs.maxnicks, 1, INT_MAX, 5);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
         if (nicksvs.me)
 	{
@@ -178,8 +172,4 @@ void _moddeinit(module_unload_intent_t intent)
         hook_del_nick_check(nickserv_handle_nickchange);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/main", MODULE_UNLOAD_CAPABILITY_OK)

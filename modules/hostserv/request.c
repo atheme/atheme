@@ -4,18 +4,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows requesting a vhost for a nick/account
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
-
-DECLARE_MODULE_V1
-(
-	"hostserv/request", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Rizon Development Group <http://www.rizon.net>"
-);
 
 bool request_per_nick;
 service_t *hostsvs;
@@ -52,7 +44,8 @@ typedef struct hsreq_ hsreq_t;
 mowgli_list_t hs_reqlist;
 static char *groupmemo;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -86,7 +79,8 @@ void _modinit(module_t *m)
 	add_bool_conf_item("REQUEST_PER_NICK", &hostsvs->conf_table, 0, &request_per_nick, false);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_drop(account_drop_request);
 	hook_del_nick_ungroup(nick_drop_request);
@@ -608,8 +602,4 @@ static void hs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "WAITING");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("hostserv/request", MODULE_UNLOAD_CAPABILITY_NEVER)

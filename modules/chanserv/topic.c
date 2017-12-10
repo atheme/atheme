@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService TOPIC functions.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/topic", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[]);
@@ -29,7 +21,8 @@ command_t cs_topicprepend = { "TOPICPREPEND", N_("Prepends a topic on a channel.
 command_t cs_topicswap = { "TOPICSWAP", N_("Swap part of the topic on a channel."),
                         AC_NONE, 2, cs_cmd_topicswap, { .path = "cservice/topicswap" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_topic);
         service_named_bind_command("chanserv", &cs_topicappend);
@@ -37,7 +30,8 @@ void _modinit(module_t *m)
         service_named_bind_command("chanserv", &cs_topicswap);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_topic);
 	service_named_unbind_command("chanserv", &cs_topicappend);
@@ -366,8 +360,4 @@ invalid_error:
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/topic", MODULE_UNLOAD_CAPABILITY_OK)

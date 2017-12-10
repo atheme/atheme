@@ -3,28 +3,22 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the BotServ HELP command.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"botserv/help", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t bs_help = { "HELP", N_(N_("Displays contextual help information.")), AC_NONE, 1, bs_cmd_help, { .path = "help" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("botserv", &bs_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_help);
 }
@@ -53,8 +47,4 @@ void bs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	help_display(si, si->service, command, si->service->commands);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("botserv/help", MODULE_UNLOAD_CAPABILITY_OK)

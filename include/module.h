@@ -13,14 +13,14 @@
 #include "abirev.h"
 
 typedef enum {
-	MODULE_UNLOAD_INTENT_PERM,
-	MODULE_UNLOAD_INTENT_RELOAD,
+	MODULE_UNLOAD_INTENT_PERM            = 0,
+	MODULE_UNLOAD_INTENT_RELOAD          = 1,
 } module_unload_intent_t;
 
 typedef enum {
-	MODULE_UNLOAD_CAPABILITY_OK,
-	MODULE_UNLOAD_CAPABILITY_NEVER,
-	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY,
+	MODULE_UNLOAD_CAPABILITY_OK          = 0,
+	MODULE_UNLOAD_CAPABILITY_NEVER       = 1,
+	MODULE_UNLOAD_CAPABILITY_RELOAD_ONLY = 2,
 } module_unload_capability_t;
 
 typedef struct module_ module_t;
@@ -90,15 +90,10 @@ typedef struct {
 	int handled;
 } hook_module_load_t;
 
-#define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	v4_moduleheader_t _header = { \
-		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4, \
-		CURRENT_ABI_REVISION, "unknown", \
-		name, norestart, modinit, deinit, ven, ver \
-	}
-
-E void _modinit(module_t *m);
-E void _moddeinit(module_unload_intent_t intent);
+typedef struct module_dependency_ {
+	char *name;
+	module_unload_capability_t can_unload;
+} module_dependency_t;
 
 E void modules_init(void);
 E module_t *module_load(const char *filespec);
@@ -110,37 +105,47 @@ E module_t *module_find(const char *name);
 E module_t *module_find_published(const char *name);
 E bool module_request(const char *name);
 
-#define MODULE_TRY_REQUEST_DEPENDENCY(self, modname) \
-	if (module_request(modname) == false)				\
-	{								\
-		(self)->mflags = MODTYPE_FAIL;				\
-		return;							\
-	}
+#define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
+        v4_moduleheader_t _header = {                                      \
+                MAPI_ATHEME_MAGIC, MAPI_ATHEME_V4,                         \
+                CURRENT_ABI_REVISION, "unknown",                           \
+                name, unloadcap, modinit, moddeinit, ven, ver              \
+        }
 
-#define MODULE_TRY_REQUEST_SYMBOL(self, dest, modname, sym) \
-	if ((dest = module_locate_symbol(modname, sym)) == NULL)		\
-	{									\
-		MODULE_TRY_REQUEST_DEPENDENCY(self, modname);			\
-		if ((dest = module_locate_symbol(modname, sym)) == NULL)	\
-		{								\
-			(self)->mflags = MODTYPE_FAIL;				\
-			return;							\
-		}								\
-	}
+#define VENDOR_DECLARE_MODULE_V1(name, unloadcap, ven)                     \
+        DECLARE_MODULE_V1(name, unloadcap, mod_init, mod_deinit,           \
+                          PACKAGE_STRING, ven);
 
-#define MODULE_CONFLICT(self, modname) \
-	if (module_find_published(modname))					\
-	{									\
-		slog(LG_ERROR, "module %s conflicts with %s, unloading",	\
-		     self->name, modname);					\
-		(self)->mflags = MODTYPE_FAIL;					\
-		return;								\
-	}
+#define SIMPLE_DECLARE_MODULE_V1(name, unloadcap)                          \
+        DECLARE_MODULE_V1(name, unloadcap, mod_init, mod_deinit,           \
+                          PACKAGE_STRING, VENDOR_STRING);
 
-typedef struct module_dependency_ {
-	char *name;
-	module_unload_capability_t can_unload;
-} module_dependency_t;
+#define MODULE_TRY_REQUEST_DEPENDENCY(self, modname)                       \
+        if (module_request(modname) == false)                              \
+        {                                                                  \
+                (self)->mflags = MODTYPE_FAIL;                             \
+                return;                                                    \
+        }
+
+#define MODULE_TRY_REQUEST_SYMBOL(self, dest, modname, sym)                \
+        if ((dest = module_locate_symbol(modname, sym)) == NULL)           \
+        {                                                                  \
+                MODULE_TRY_REQUEST_DEPENDENCY(self, modname);              \
+                if ((dest = module_locate_symbol(modname, sym)) == NULL)   \
+                {                                                          \
+                        (self)->mflags = MODTYPE_FAIL;                     \
+                        return;                                            \
+                }                                                          \
+        }
+
+#define MODULE_CONFLICT(self, modname)                                     \
+        if (module_find_published(modname))                                \
+        {                                                                  \
+                slog(LG_ERROR, "module %s conflicts with %s, unloading",   \
+                     self->name, modname);                                 \
+                (self)->mflags = MODTYPE_FAIL;                             \
+                return;                                                    \
+        }
 
 #endif
 

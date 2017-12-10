@@ -5,17 +5,12 @@
  * This file contains protocol support for IRCnet ircd's.
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/ircnet.h"
-
-DECLARE_MODULE_V1("protocol/ircnet", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
-
-/* *INDENT-OFF* */
 
 ircd_t IRCNet = {
 	.ircdname = "ircd 2.11.1p1 or later",
@@ -74,8 +69,6 @@ struct cmode_ ircnet_user_mode_list[] = {
   { 'o', UF_IRCOP    },
   { '\0', 0 }
 };
-
-/* *INDENT-ON* */
 
 /* login to our uplink */
 static unsigned int ircnet_server_login(void)
@@ -724,7 +717,8 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -797,8 +791,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/ircnet", MODULE_UNLOAD_CAPABILITY_NEVER)

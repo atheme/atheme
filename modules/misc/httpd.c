@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Generic HTTPd
- *
  */
 
 #include "atheme.h"
@@ -11,13 +10,6 @@
 #include "datastream.h"
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
-
-DECLARE_MODULE_V1
-(
-	"misc/httpd", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 connection_t *listener;
 mowgli_list_t httpd_path_handlers;
@@ -398,7 +390,8 @@ static void httpd_config_ready(void *vptr)
 
 static mowgli_eventloop_timer_t *httpd_checkidle_timer = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	httpd_checkidle_timer = mowgli_timer_add(base_eventloop, "httpd_checkidle", httpd_checkidle, NULL, 60);
 
@@ -413,7 +406,8 @@ void _modinit(module_t *m)
 	add_uint_conf_item("PORT", &conf_httpd_table, 0, &httpd_config.port, 1, 65535, 0);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_timer_destroy(base_eventloop, httpd_checkidle_timer);
 
@@ -425,5 +419,4 @@ void _moddeinit(module_unload_intent_t intent)
 	del_top_conf("HTTPD");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("misc/httpd", MODULE_UNLOAD_CAPABILITY_OK)

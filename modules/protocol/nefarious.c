@@ -5,17 +5,12 @@
  * This file contains protocol support for P10 ircd's.
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
- *
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
 #include "protocol/nefarious.h"
-
-DECLARE_MODULE_V1("protocol/nefarious", true, _modinit, NULL, PACKAGE_STRING, VENDOR_STRING);
-
-/* *INDENT-OFF* */
 
 ircd_t Nefarious = {
 	.ircdname = "Nefarious IRCU 0.4.0 or later",
@@ -96,8 +91,6 @@ struct cmode_ nefarious_user_mode_list[] = {
 };
 
 static void check_hidehost(user_t *u);
-
-/* *INDENT-ON* */
 
 /* join a channel */
 static void nefarious_join_sts(channel_t *c, user_t *u, bool isnew, char *modes)
@@ -705,7 +698,8 @@ static void p10_kline_sts(const char *server, const char *user, const char *host
 	sts("%s GL * +%s@%s %ld %lu :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, (unsigned long)CURRTIME, reason);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/p10-generic");
 
@@ -753,8 +747,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/nefarious", MODULE_UNLOAD_CAPABILITY_NEVER)

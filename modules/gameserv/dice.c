@@ -5,15 +5,12 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator.
- *
  */
 
 #include "atheme.h"
 #include "gameserv_common.h"
 
 #include <math.h>
-
-DECLARE_MODULE_V1("gameserv/dice", false, _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_calc(sourceinfo_t *si, int parc, char *parv[]);
@@ -23,7 +20,8 @@ command_t cmd_calc = { "CALC", N_("Calculate stuff."), AC_NONE, 3, command_calc,
 
 static unsigned int max_rolls = 10;
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_t *svs;
 
@@ -40,7 +38,8 @@ void _modinit(module_t * m)
 	add_uint_conf_item("MAX_ROLLS", &svs->conf_table, 0, &max_rolls, 1, INT_MAX, 10);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_t *svs;
 
@@ -641,4 +640,4 @@ static void command_calc(sourceinfo_t *si, int parc, char *parv[])
 			break;
 }
 
-//////////////////////////////////////////////////////////////////////////
+SIMPLE_DECLARE_MODULE_V1("gameserv/dice", MODULE_UNLOAD_CAPABILITY_OK)

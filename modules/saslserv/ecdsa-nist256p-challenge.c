@@ -18,13 +18,6 @@
 #define CHALLENGE_LENGTH	SHA256_DIGEST_LENGTH
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
-DECLARE_MODULE_V1
-(
-	"saslserv/ecdsa-nist256p-challenge", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 sasl_mech_register_func_t *regfuncs;
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
 static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
@@ -44,14 +37,16 @@ typedef struct {
 	unsigned char challenge[CHALLENGE_LENGTH];
 } ecdsa_session_t;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
 	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
 	regfuncs->mech_register(&mech);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	regfuncs->mech_unregister(&mech);
 }
@@ -159,10 +154,6 @@ static void mech_finish(sasl_session_t *p)
 	mowgli_free(s);
 }
 
-#endif
+SIMPLE_DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK)
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+#endif

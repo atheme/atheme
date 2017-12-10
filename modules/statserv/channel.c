@@ -3,13 +3,9 @@
  * Released under the same terms as Atheme itself.
  *
  * Channel information gatherer for statistics (Useful mostly for XMLRPC)
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1("statserv/channel", false, _modinit, _moddeinit,
-        PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 static void ss_cmd_channel(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_channel_topic(sourceinfo_t * si, int parc, char *parv[]);
@@ -26,7 +22,8 @@ command_t ss_channel_count =
 
 mowgli_patricia_t *ss_channel_cmds;
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
     service_named_bind_command("statserv", &ss_channel);
 
@@ -36,7 +33,8 @@ void _modinit(module_t * m)
     command_add(&ss_channel_count, ss_channel_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
     service_named_unbind_command("statserv", &ss_channel);
 
@@ -108,3 +106,5 @@ static void ss_cmd_channel_count(sourceinfo_t * si, int parc, char *parv[])
 {
     command_success_nodata(si, "There are %u channels on the network.", mowgli_patricia_size(chanlist));
 }
+
+SIMPLE_DECLARE_MODULE_V1("statserv/channel", MODULE_UNLOAD_CAPABILITY_OK)

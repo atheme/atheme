@@ -3,29 +3,23 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService GETKEY functions.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/getkey", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_getkey = { "GETKEY", N_("Returns the key (+k) of a channel."),
                         AC_NONE, 1, cs_cmd_getkey, { .path = "cservice/getkey" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_getkey);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_getkey);
 }
@@ -77,8 +71,4 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 			mc->name, mc->chan->key);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/getkey", MODULE_UNLOAD_CAPABILITY_OK)

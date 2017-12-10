@@ -3,18 +3,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService TEMPLATE functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/template", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void list_generic_flags(sourceinfo_t *si);
 
@@ -23,12 +15,14 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[]);
 command_t cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
                         AC_NONE, 3, cs_cmd_template, { .path = "cservice/template" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_flags);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_flags);
 }
@@ -399,8 +393,4 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/template", MODULE_UNLOAD_CAPABILITY_OK)

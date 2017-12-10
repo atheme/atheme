@@ -9,13 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_privmsg", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 /* SET PRIVMSG ON|OFF */
@@ -77,7 +70,8 @@ static bool uses_privmsg(const mynick_t *mn, const void *arg)
 	return ( mu->flags & MU_USE_PRIVMSG ) == MU_USE_PRIVMSG;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	command_add(&ns_set_privmsg, *ns_set_cmdtree);
@@ -94,7 +88,8 @@ void _modinit(module_t *m)
 	list_register("use_privmsg", &use_privmsg);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_privmsg, *ns_set_cmdtree);
 
@@ -104,8 +99,4 @@ void _moddeinit(module_unload_intent_t intent)
 	list_unregister("use_privmsg");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_privmsg", MODULE_UNLOAD_CAPABILITY_OK)

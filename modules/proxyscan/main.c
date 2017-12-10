@@ -20,16 +20,18 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("proxyscan/main", false, _modinit, _moddeinit, PACKAGE_VERSION, "William Pitcock <nenolod@dereferenced.org>");
-
 static service_t *proxyscan = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	proxyscan = service_add("proxyscan", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_delete(proxyscan);
 }
+
+SIMPLE_DECLARE_MODULE_V1("proxyscan/main", MODULE_UNLOAD_CAPABILITY_OK)

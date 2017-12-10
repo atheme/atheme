@@ -5,23 +5,15 @@
  * Module to disable owner (+q) mode.
  * This will stop Atheme setting this mode by itself, but it can still
  * be used via OperServ MODE etc.
- *
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/mixin_noowner", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 bool oldflag;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
-
 	if (ircd == NULL)
 	{
 		slog(LG_ERROR, "Module %s must be loaded after a protocol module.", m->name);
@@ -39,15 +31,11 @@ void _modinit(module_t *m)
 	update_chanacs_flags();
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
-
 	ircd->uses_owner = oldflag;
 	update_chanacs_flags();
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("protocol/mixin_noowner", MODULE_UNLOAD_CAPABILITY_NEVER)

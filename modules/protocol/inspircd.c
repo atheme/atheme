@@ -10,10 +10,6 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", true, _modinit, NULL, PACKAGE_STRING, "Atheme Development Group <http://www.atheme.org/>");
-
-/* *INDENT-OFF* */
-
 ircd_t InspIRCd = {
 	.ircdname = "InspIRCd",
 	.tldprefix = "$",
@@ -221,9 +217,6 @@ static server_t *sid_find(char *name)
 	mowgli_strlcpy(sid, name, 4);
 	return server_find(sid);
 }
-
-
-/* *INDENT-ON* */
 
 static inline void channel_metadata_sts(channel_t *c, const char *key, const char *value)
 {
@@ -1651,7 +1644,8 @@ static void server_eob(server_t *s)
 	}
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "protocol/base36uid");
@@ -1750,8 +1744,9 @@ void _modinit(module_t * m)
 	pmodule_loaded = true;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+}
+
+SIMPLE_DECLARE_MODULE_V1("protocol/inspircd", MODULE_UNLOAD_CAPABILITY_NEVER)

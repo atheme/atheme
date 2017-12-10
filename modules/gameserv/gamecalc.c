@@ -5,18 +5,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator.
- *
  */
 
 #include "atheme.h"
 #include "gameserv_common.h"
-
-DECLARE_MODULE_V1
-(
-	"gameserv/gamecalc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 static void command_nwod(sourceinfo_t *si, int parc, char *parv[]);
@@ -26,7 +18,8 @@ command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, comma
 command_t cmd_nwod = { "NWOD", N_("New WOD-style dice generation."), AC_NONE, 7, command_nwod, { .path = "gameserv/roll" } };
 command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df, { .path = "gameserv/roll" } };
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("gameserv", &cmd_wod);
 	service_named_bind_command("gameserv", &cmd_nwod);
@@ -37,7 +30,8 @@ void _modinit(module_t * m)
 	service_named_bind_command("chanserv", &cmd_df);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("gameserv", &cmd_wod);
 	service_named_unbind_command("gameserv", &cmd_nwod);
@@ -269,8 +263,4 @@ static void command_df(sourceinfo_t *si, int parc, char *parv[])
 	gs_command_report(si, _("Result: %s"), buf);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("gameserv/gamecalc", MODULE_UNLOAD_CAPABILITY_OK)

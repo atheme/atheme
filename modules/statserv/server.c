@@ -3,13 +3,9 @@
  * Released under the same terms as Atheme itself.
  *
  * Gather information about networked servers.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1("statserv/server", false, _modinit, _moddeinit,
-        PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 static void ss_cmd_server(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_server_info(sourceinfo_t * si, int parc, char *parv[]);
@@ -30,7 +26,8 @@ command_t ss_server_info =
 
 mowgli_patricia_t *ss_server_cmds;
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
     service_named_bind_command("statserv", &ss_server);
     ss_server_cmds = mowgli_patricia_create(strcasecanon);
@@ -39,7 +36,8 @@ void _modinit(module_t * m)
     command_add(&ss_server_info, ss_server_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
     service_named_unbind_command("statserv", &ss_server);
     command_delete(&ss_server_list, ss_server_cmds);
@@ -131,3 +129,5 @@ static void ss_cmd_server_count(sourceinfo_t * si, int parc, char *parv[])
 {
     command_success_nodata(si, _("Network size: %u servers"), mowgli_patricia_size(servlist));
 }
+
+SIMPLE_DECLARE_MODULE_V1("statserv/server", MODULE_UNLOAD_CAPABILITY_OK)

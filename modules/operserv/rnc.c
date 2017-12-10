@@ -3,17 +3,9 @@
  * Rights to this code are documented in doc/LICENCE.
  *
  * This file contains functionality implementing OperServ RNC.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/rnc", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Robin Burchell <surreal.w00t@gmail.com>"
-);
 
 static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -26,12 +18,14 @@ struct rnc_t_
 	int count;
 };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_rnc);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_rnc);
 }
@@ -95,8 +89,4 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "RNC: \2%d\2", count);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/rnc", MODULE_UNLOAD_CAPABILITY_OK)

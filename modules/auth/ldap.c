@@ -6,31 +6,30 @@
  */
 
 /*
- Supports the following options:
-
- url -- required ldap URL (e.g. ldap://host.domain.com/)
-
- then either:
-
-   dnformat -- basedn to authenticate against.  Use %s to specify where
-        to insert the nick
-
- or
-
-   base -- basedn to begin the search for the matching dn of the user
-   attribute -- the attribute to search against to find the nick
-   binddn -- distinguished name to bind to for searching (optional)
-   bindauth -- password for the distinguished name (optional, must specify if binddn given)
-
-*/
+ * Supports the following options:
+ *
+ * url -- required ldap URL (e.g. ldap://host.domain.com/)
+ *
+ * then either:
+ *
+ *   dnformat  -- basedn to authenticate against.
+ *                Use %s to specify where to insert the nick
+ *
+ * or:
+ *
+ *   base      -- basedn to begin the search for the matching dn of the user
+ *   attribute -- the attribute to search against to find the nick
+ *   binddn    -- distinguished name to bind to for searching (optional)
+ *   bindauth  -- password for the distinguished name
+ *                (optional, must specify if binddn given)
+ */
 
 #include "atheme.h"
 
 #include <ldap.h>
 
-DECLARE_MODULE_V1("auth/ldap", false, _modinit, _moddeinit, PACKAGE_STRING, VENDOR_STRING);
-
 mowgli_list_t conf_ldap_table;
+
 struct
 {
 	char *url;
@@ -41,6 +40,7 @@ struct
 	char *bindauth;
 	bool useDN;
 } ldap_config;
+
 LDAP *ldap_conn;
 
 static void ldap_config_ready(void *unused)
@@ -219,7 +219,8 @@ static bool ldap_auth_user(myuser_t *mu, const char *password)
 	return false;
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("config_ready");
 	hook_add_config_ready(ldap_config_ready);
@@ -237,7 +238,8 @@ void _modinit(module_t * m)
 	auth_module_loaded = true;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	auth_user_custom = NULL;
 
@@ -256,8 +258,4 @@ void _moddeinit(module_unload_intent_t intent)
 	del_top_conf("LDAP");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("auth/ldap", MODULE_UNLOAD_CAPABILITY_OK)

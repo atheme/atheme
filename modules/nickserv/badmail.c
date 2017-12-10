@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Allows banning certain email addresses from registering.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"nickserv/badmail", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.net>"
-);
 
 static void check_registration(hook_user_register_check_t *hdata);
 static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[]);
@@ -34,7 +26,8 @@ typedef struct badmail_ badmail_t;
 
 mowgli_list_t ns_maillist;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -52,7 +45,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("nickserv", &ns_badmail);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_can_register(check_registration);
 	hook_del_db_write(write_bedb);
@@ -275,8 +269,4 @@ static void ns_cmd_badmail(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/badmail", MODULE_UNLOAD_CAPABILITY_NEVER)

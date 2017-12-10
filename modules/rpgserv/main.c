@@ -4,24 +4,21 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"rpgserv/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 service_t *rpgserv;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	rpgserv = service_add("rpgserv", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (rpgserv) {
 		service_delete(rpgserv);
 		rpgserv = NULL;
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("rpgserv/main", MODULE_UNLOAD_CAPABILITY_OK)

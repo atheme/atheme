@@ -7,18 +7,11 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/mixin_noholdnick", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 int oldflag;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
-
 	if (ircd == NULL)
 	{
 		slog(LG_ERROR, "Module %s must be loaded after a protocol module.", m->name);
@@ -29,14 +22,10 @@ void _modinit(module_t *m)
 	ircd->flags &= ~IRCD_HOLDNICK;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
-
 	ircd->flags |= oldflag;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("protocol/mixin_noholdnick", MODULE_UNLOAD_CAPABILITY_OK)

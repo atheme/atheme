@@ -3,23 +3,16 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include "hostserv.h"
 
-DECLARE_MODULE_V1
-(
-	"hostserv/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void on_user_identify(user_t *u);
 service_t *hostsvs;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
@@ -27,7 +20,8 @@ void _modinit(module_t *m)
 	hostsvs = service_add("hostserv", NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	if (hostsvs != NULL)
 		service_delete(hostsvs);
@@ -51,8 +45,4 @@ static void on_user_identify(user_t *u)
 	do_sethost(u, md->value);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("hostserv/main", MODULE_UNLOAD_CAPABILITY_OK)

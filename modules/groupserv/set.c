@@ -3,20 +3,12 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the GroupServ HELP command.
- *
  */
 
 #include "atheme.h"
 
 #define IN_GROUPSERV_SET
 #include "groupserv.h"
-
-DECLARE_MODULE_V1
-(
-	"groupserv/set", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void gs_help_set(sourceinfo_t *si, const char *subcmd);
 static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -25,7 +17,8 @@ command_t gs_set = { "SET", N_("Sets various control flags."), AC_AUTHENTICATED,
 
 mowgli_patricia_t *gs_set_cmdtree;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
@@ -34,7 +27,8 @@ void _modinit(module_t *m)
 	gs_set_cmdtree = mowgli_patricia_create(strcasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_set);
 
@@ -97,9 +91,4 @@ static void gs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("groupserv/set", MODULE_UNLOAD_CAPABILITY_OK)

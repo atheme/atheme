@@ -3,29 +3,23 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService INFO functions.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/info", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_info = { "INFO", N_("Displays information on registrations."),
                         AC_NONE, 2, cs_cmd_info, { .path = "cservice/info" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("chanserv", &cs_info);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_info);
 }
@@ -222,7 +216,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "FANTASY");
 	}
-	
+
 	if (MC_NOSYNC & mc->flags)
 	{
 		if (*buf)
@@ -322,8 +316,4 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "INFO: \2%s\2", mc->name);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/info", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include <limits.h>
-
-DECLARE_MODULE_V1
-(
-	"memoserv/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void on_user_identify(user_t *u);
 static void on_user_away(user_t *u);
@@ -23,7 +15,8 @@ service_t *memosvs = NULL;
 /*struct memoserv_conf *memosvs_conf;*/
 unsigned int maxmemos;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	hook_add_event("user_identify");
 	hook_add_user_identify(on_user_identify);
@@ -36,7 +29,8 @@ void _modinit(module_t *m)
 	add_uint_conf_item("MAXMEMOS", &memosvs->conf_table, 0, &maxmemos, 1, INT_MAX, 30);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_identify(on_user_identify);
 	hook_del_user_away(on_user_away);
@@ -95,8 +89,4 @@ static void on_user_away(user_t *u)
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("memoserv/main", MODULE_UNLOAD_CAPABILITY_OK)

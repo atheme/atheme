@@ -9,13 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_private", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 /* SET PRIVATE ON|OFF */
@@ -78,7 +71,8 @@ static bool has_private(const mynick_t *mn, const void *arg)
 	return ( mu->flags & MU_PRIVATE ) == MU_PRIVATE;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 	command_add(&ns_set_private, *ns_set_cmdtree);
@@ -94,7 +88,8 @@ void _modinit(module_t *m)
 	use_account_private++;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_private, *ns_set_cmdtree);
 
@@ -103,8 +98,4 @@ void _moddeinit(module_unload_intent_t intent)
 	use_account_private--;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_private", MODULE_UNLOAD_CAPABILITY_OK)

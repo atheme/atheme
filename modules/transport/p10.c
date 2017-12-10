@@ -25,13 +25,6 @@
 #include "uplink.h"
 #include "pmodule.h"
 
-DECLARE_MODULE_V1
-(
-	"transport/p10", true, _modinit, _moddeinit,
-	PACKAGE_VERSION,
-	VENDOR_STRING
-);
-
 /* parses a P10 IRC stream */
 static void p10_parse(char *line)
 {
@@ -193,7 +186,8 @@ cleanup:
 
 void (*default_parse)(char *line) = NULL;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "transport/rfc1459");
 
@@ -201,13 +195,10 @@ void _modinit(module_t *m)
 	parse = &p10_parse;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	parse = default_parse;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("transport/p10", MODULE_UNLOAD_CAPABILITY_NEVER)

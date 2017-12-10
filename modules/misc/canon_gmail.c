@@ -9,13 +9,6 @@
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1
-(
-	"misc/canon_gmail", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 {
 	static char buf[EMAILLEN + 1];
@@ -49,12 +42,16 @@ static void canonicalize_gmail(char email[EMAILLEN + 1], void *user_data)
 	strcpy(email, buf);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	register_email_canonicalizer(canonicalize_gmail, NULL);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	unregister_email_canonicalizer(canonicalize_gmail, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("misc/canon_gmail", MODULE_UNLOAD_CAPABILITY_OK)

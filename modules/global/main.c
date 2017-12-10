@@ -3,17 +3,9 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"global/main", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 /* global list struct */
 struct global_ {
@@ -29,8 +21,6 @@ command_t gs_help = { "HELP", N_("Displays contextual help information."),
 		      PRIV_GLOBAL, 1, gs_cmd_help, { .path = "help" } };
 command_t gs_global = { "GLOBAL", N_("Sends a global notice."),
 			PRIV_GLOBAL, 1, gs_cmd_global, { .path = "gservice/global" } };
-
-/* *INDENT-ON* */
 
 /* HELP <command> [params] */
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
@@ -197,7 +187,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "\2GLOBAL LIST\2 to preview what will be sent, " "or \2GLOBAL\2 to store additional lines.", MOWGLI_LIST_LENGTH(&globlist));
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	globsvs = service_add("global", NULL);
 
@@ -207,7 +198,8 @@ void _modinit(module_t *m)
 	service_bind_command(globsvs, &gs_help);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_unbind_command(globsvs, &gs_help);
 	service_unbind_command(globsvs, &gs_global);
@@ -217,8 +209,4 @@ void _moddeinit(module_unload_intent_t intent)
 		service_delete(globsvs);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("global/main", MODULE_UNLOAD_CAPABILITY_OK)

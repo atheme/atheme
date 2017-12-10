@@ -4,7 +4,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Changes the language services uses to talk to you.
- *
  */
 
 #include "atheme.h"
@@ -12,27 +11,22 @@
 
 #ifdef ENABLE_NLS
 
-DECLARE_MODULE_V1
-(
-	"nickserv/set_language", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 mowgli_patricia_t **ns_set_cmdtree;
 
 static void ns_cmd_set_language(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_set_language = { "LANGUAGE", N_("Changes the language services uses to talk to you."), AC_NONE, 1, ns_cmd_set_language, { .path = "nickserv/set_language" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, ns_set_cmdtree, "nickserv/set_core", "ns_set_cmdtree");
 
 	command_add(&ns_set_language, *ns_set_cmdtree);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	command_delete(&ns_set_language, *ns_set_cmdtree);
 }
@@ -69,10 +63,7 @@ static void ns_cmd_set_language(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-#endif /* ENABLE_NLS */
+SIMPLE_DECLARE_MODULE_V1("nickserv/set_language", MODULE_UNLOAD_CAPABILITY_OK)
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+
+#endif /* ENABLE_NLS */

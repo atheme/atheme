@@ -3,17 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Dynamic services operator privileges
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/soper", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[]);
@@ -32,7 +24,8 @@ command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services op
 
 mowgli_patricia_t *os_soper_cmds;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_soper);
 
@@ -45,7 +38,8 @@ void _modinit(module_t *m)
 	command_add(&os_soper_setpass, os_soper_cmds);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_soper);
 	command_delete(&os_soper_list, os_soper_cmds);
@@ -316,8 +310,4 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/soper", MODULE_UNLOAD_CAPABILITY_OK)

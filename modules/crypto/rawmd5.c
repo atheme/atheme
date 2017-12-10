@@ -48,16 +48,15 @@ static crypt_impl_t crypto_rawmd5_impl = {
 };
 
 static void
-crypto_rawmd5_modinit(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&crypto_rawmd5_impl);
 }
 
 static void
-crypto_rawmd5_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) crypt_unregister(&crypto_rawmd5_impl);
 }
 
-DECLARE_MODULE_V1("crypto/rawmd5", false, crypto_rawmd5_modinit, crypto_rawmd5_moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("crypto/rawmd5", MODULE_UNLOAD_CAPABILITY_OK)

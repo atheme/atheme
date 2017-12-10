@@ -2,7 +2,6 @@
  *
  * Copyright (c) 2014 Atheme Development Group
  * Please read COPYING and README for further details.
- *
  */
 
 #include <mowgli.h>
@@ -228,4 +227,3 @@ char *jsonrpc_normalizeBuffer(const char *buf)
 
 	return (newbuf);
 }
-

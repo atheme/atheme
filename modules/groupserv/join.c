@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the GroupServ HELP command.
- *
  */
 
 #include "atheme.h"
 #include "groupserv.h"
-
-DECLARE_MODULE_V1
-(
-	"groupserv/join", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -86,15 +78,18 @@ static void gs_cmd_join(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("You are now a member of \2%s\2."), entity(mg)->name);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_join);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_join);
 }
 
+SIMPLE_DECLARE_MODULE_V1("groupserv/join", MODULE_UNLOAD_CAPABILITY_OK)

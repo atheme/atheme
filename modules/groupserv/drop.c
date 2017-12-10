@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the GroupServ HELP command.
- *
  */
 
 #include "atheme.h"
 #include "groupserv.h"
-
-DECLARE_MODULE_V1
-(
-	"groupserv/drop", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -85,15 +77,18 @@ static void gs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	use_groupserv_main_symbols(m);
 
 	service_named_bind_command("groupserv", &gs_drop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("groupserv", &gs_drop);
 }
 
+SIMPLE_DECLARE_MODULE_V1("groupserv/drop", MODULE_UNLOAD_CAPABILITY_OK)

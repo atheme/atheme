@@ -3,29 +3,23 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv FORWARD function
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"memoserv/forward", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_forward = { "FORWARD", N_(N_("Forwards a memo.")),
                         AC_AUTHENTICATED, 2, ms_cmd_forward, { .path = "memoserv/forward" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
         service_named_bind_command("memoserv", &ms_forward);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("memoserv", &ms_forward);
 }
@@ -196,8 +190,4 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("memoserv/forward", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,28 +3,22 @@
  * Rights to this code are documented in doc/LICENCE.
  *
  * This file contains functionality implementing OperServ COMPARE.
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1
-(
-	"operserv/compare", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Robin Burchell <surreal.w00t@gmail.com>"
-);
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare, { .path = "oservice/compare" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("operserv", &os_compare);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("operserv", &os_compare);
 }
@@ -171,8 +165,4 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "COMPARE: \2%s\2 to \2%s\2 (\2%d\2 matches)", object1, object2, matches);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("operserv/compare", MODULE_UNLOAD_CAPABILITY_OK)

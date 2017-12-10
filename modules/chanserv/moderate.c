@@ -22,13 +22,6 @@
 #include "atheme.h"
 #include "chanserv.h"
 
-DECLARE_MODULE_V1
-(
-	"chanserv/moderate", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Atheme Development Group <http://atheme.github.io>"
-);
-
 static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_reject(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[]);
@@ -298,7 +291,7 @@ static void cs_cmd_activate(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	csreq_destroy(cs);
-	/* Check if GUARD is enabled by default and if so, ChanServ should join even 
+	/* Check if GUARD is enabled by default and if so, ChanServ should join even
 	 * if the founder is no longer present or identified. --siniStar
 	 */
 	if (mc->flags & MC_GUARD)
@@ -357,7 +350,8 @@ static void cs_cmd_waiting(sourceinfo_t *si, int parc, char *parv[])
 
 /*****************************************************************************/
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	csreq_list = mowgli_patricia_create(strcasecanon);
 
@@ -375,7 +369,8 @@ void _modinit(module_t *m)
 	db_register_type_handler("CSREQ", csreq_demarshal);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_patricia_destroy(csreq_list, NULL, NULL);
 
@@ -390,3 +385,5 @@ void _moddeinit(module_unload_intent_t intent)
 
 	db_unregister_type_handler("CSREQ");
 }
+
+SIMPLE_DECLARE_MODULE_V1("chanserv/moderate", MODULE_UNLOAD_CAPABILITY_OK)

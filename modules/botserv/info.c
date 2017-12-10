@@ -4,18 +4,10 @@
  *
  * This file contains a BService INFO which can show
  * botserv settings on channel or bot.
- *
  */
 
 #include "atheme.h"
 #include "botserv.h"
-
-DECLARE_MODULE_V1
-(
-	"botserv/info", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -24,7 +16,8 @@ command_t bs_info = { "INFO", N_("Allows you to see BotServ information about a 
 fn_botserv_bot_find *botserv_bot_find;
 mowgli_list_t *bs_bots;
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, bs_bots, "botserv/main", "bs_bots");
 	MODULE_TRY_REQUEST_SYMBOL(m, botserv_bot_find, "botserv/main", "botserv_bot_find");
@@ -32,7 +25,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("botserv", &bs_info);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("botserv", &bs_info);
 }
@@ -133,10 +127,4 @@ static void bs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
-
-
+SIMPLE_DECLARE_MODULE_V1("botserv/info", MODULE_UNLOAD_CAPABILITY_OK)

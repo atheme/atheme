@@ -3,13 +3,9 @@
  * Released under the same terms as Atheme itself.
  *
  * Netsplit monitor
- *
  */
 
 #include "atheme.h"
-
-DECLARE_MODULE_V1("statserv/netsplit", false, _modinit, _moddeinit,
-        PACKAGE_STRING, "Alexandria Wolcott <alyx@sporksmoo.net>");
 
 static void ss_cmd_netsplit(sourceinfo_t * si, int parc, char *parv[]);
 static void ss_cmd_netsplit_list(sourceinfo_t * si, int parc, char *parv[]);
@@ -125,7 +121,8 @@ static void ss_cmd_netsplit_remove(sourceinfo_t * si, int parc, char *parv[])
         command_fail(si, fault_nosuch_target, _("The server \2%s\2 does is not a split server."), name);
 }
 
-void _modinit(module_t * m)
+static void
+mod_init(module_t *const restrict m)
 {
     service_named_bind_command("statserv", &ss_netsplit);
 
@@ -150,7 +147,8 @@ void _modinit(module_t * m)
     splitlist = mowgli_patricia_create(irccasecanon);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
     mowgli_patricia_iteration_state_t state;
     split_t *s;
@@ -173,3 +171,5 @@ void _moddeinit(module_unload_intent_t intent)
     mowgli_patricia_destroy(ss_netsplit_cmds, NULL, NULL);
     mowgli_patricia_destroy(splitlist, NULL, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("statserv/netsplit", MODULE_UNLOAD_CAPABILITY_OK)

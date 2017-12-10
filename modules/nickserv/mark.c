@@ -3,7 +3,6 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Marking for nicknames.
- *
  */
 
 #include "atheme.h"
@@ -12,13 +11,6 @@
 
 //NickServ mark module
 //Do NOT use this in combination with contrib/multimark!
-
-DECLARE_MODULE_V1
-(
-	"nickserv/mark", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -45,7 +37,8 @@ static bool is_marked(const mynick_t *mn, const void *arg)
 	return !!metadata_find(mu, "private:mark:setter");
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (module_find_published("nickserv/multimark"))
 	{
@@ -70,7 +63,8 @@ void _modinit(module_t *m)
 	list_register("marked", &marked);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_mark);
 
@@ -154,8 +148,4 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/mark", MODULE_UNLOAD_CAPABILITY_OK)

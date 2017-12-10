@@ -7,13 +7,6 @@
 #include "atheme.h"
 #include "exttarget.h"
 
-DECLARE_MODULE_V1
-(
-	"exttarget/server", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static mowgli_patricia_t **exttarget_tree = NULL;
 
 typedef struct {
@@ -117,7 +110,8 @@ static myentity_t *server_validate_f(const char *param)
 	return object_sink_ref(ext);
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_SYMBOL(m, exttarget_tree, "exttarget/main", "exttarget_tree");
 
@@ -127,9 +121,12 @@ void _modinit(module_t *m)
 	server_ext_heap = mowgli_heap_create(sizeof(server_exttarget_t), 32, BH_LAZY);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_heap_destroy(server_ext_heap);
 	mowgli_patricia_delete(*exttarget_tree, "server");
 	mowgli_patricia_destroy(server_exttarget_tree, NULL, NULL);
 }
+
+SIMPLE_DECLARE_MODULE_V1("exttarget/server", MODULE_UNLOAD_CAPABILITY_OK)

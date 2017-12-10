@@ -10,13 +10,6 @@
 #include "list.h"
 #include "account.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/multimark", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[]);
 
 static void write_multimark_db(database_handle_t *db);
@@ -104,7 +97,8 @@ static bool is_user_marked(myuser_t *mu)
 	return MOWGLI_LIST_LENGTH(l) != 0;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	static list_param_t mark_check;
 
@@ -165,7 +159,8 @@ void _modinit(module_t *m)
 	list_register("marked", &mark_check);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_db_write(write_multimark_db);
 	db_unregister_type_handler("MM");
@@ -1113,3 +1108,5 @@ static void ns_cmd_multimark(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("Usage: MARK <target> <ADD|DEL|LIST|MIGRATE> [note]"));
 	}
 }
+
+SIMPLE_DECLARE_MODULE_V1("nickserv/multimark", MODULE_UNLOAD_CAPABILITY_OK)

@@ -3,18 +3,10 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
- *
  */
 
 #include "atheme.h"
 #include "botserv.h"
-
-DECLARE_MODULE_V1
-(
-	"botserv/main", true, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	"Rizon Development Group <http://www.atheme.org>"
-);
 
 static void bs_join(hook_channel_joinpart_t *hdata);
 static void bs_part(hook_channel_joinpart_t *hdata);
@@ -968,7 +960,8 @@ static void bs_cmd_unassign(sourceinfo_t *si, int parc, char *parv[])
 
 /* ******************************************************************** */
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	if (!module_find_published("backend/opensex"))
 	{
@@ -1020,7 +1013,8 @@ void _modinit(module_t *m)
 	notice                = bs_notice;
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	mowgli_node_t *n, *tn;
 
@@ -1172,8 +1166,4 @@ bs_part(hook_channel_joinpart_t *hdata)
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("botserv/main", MODULE_UNLOAD_CAPABILITY_NEVER)

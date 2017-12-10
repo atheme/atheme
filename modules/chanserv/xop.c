@@ -3,19 +3,11 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService XOP functions.
- *
  */
 
 #include "atheme.h"
 #include "template.h"
 #include "chanserv.h"
-
-DECLARE_MODULE_V1
-(
-	"chanserv/xop", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myentity_t *mt, char *target, unsigned int level, const char *leveldesc, unsigned int restrictflags);
@@ -39,7 +31,8 @@ command_t cs_vop = { "VOP", N_("Manipulates a channel VOP list."),
 command_t cs_forcexop = { "FORCEXOP", N_("Forces access levels to xOP levels."),
                          AC_NONE, 1, cs_cmd_forcexop, { .path = "cservice/forcexop" } };
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("chanserv", &cs_aop);
 	service_named_bind_command("chanserv", &cs_sop);
@@ -49,7 +42,8 @@ void _modinit(module_t *m)
 	service_named_bind_command("chanserv", &cs_forcexop);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("chanserv", &cs_aop);
 	service_named_unbind_command("chanserv", &cs_sop);
@@ -521,8 +515,4 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "FORCEXOP: \2%s\2 (\2%d\2 changes)", mc->name, changes);
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("chanserv/xop", MODULE_UNLOAD_CAPABILITY_OK)

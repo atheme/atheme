@@ -209,16 +209,15 @@ static crypt_impl_t crypto_posix_impl = {
 };
 
 static void
-crypto_posix_modinit(module_t __attribute__((unused)) *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
 	(void) crypt_register(&crypto_posix_impl);
 }
 
 static void
-crypto_posix_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) crypt_unregister(&crypto_posix_impl);
 }
 
-DECLARE_MODULE_V1("crypto/posix", false, crypto_posix_modinit, crypto_posix_moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("crypto/posix", MODULE_UNLOAD_CAPABILITY_OK)

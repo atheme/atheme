@@ -613,7 +613,7 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 }
 
 static void
-sasl_scramsha_modinit(module_t *const restrict m)
+mod_init(module_t *const restrict m)
 {
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
 	{
@@ -632,7 +632,7 @@ sasl_scramsha_modinit(module_t *const restrict m)
 }
 
 static void
-sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
 	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
@@ -640,7 +640,6 @@ sasl_scramsha_moddeinit(const module_unload_intent_t __attribute__((unused)) int
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
 
-DECLARE_MODULE_V1("saslserv/scram-sha", false, sasl_scramsha_modinit, sasl_scramsha_moddeinit,
-                  PACKAGE_STRING, VENDOR_STRING);
+SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK)
 
 #endif /* HAVE_OPENSSL && HAVE_LIBIDN */

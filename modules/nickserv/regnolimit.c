@@ -9,13 +9,6 @@
 #include "list_common.h"
 #include "list.h"
 
-DECLARE_MODULE_V1
-(
-	"nickserv/regnolimit", false, _modinit, _moddeinit,
-	PACKAGE_STRING,
-	VENDOR_STRING
-);
-
 static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_regnolimit = { "REGNOLIMIT", N_("Allow a user to bypass registration limits."),
@@ -28,7 +21,8 @@ static bool has_regnolimit(const mynick_t *mn, const void *arg)
 	return ( mu->flags & MU_REGNOLIMIT ) == MU_REGNOLIMIT;
 }
 
-void _modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 	service_named_bind_command("nickserv", &ns_regnolimit);
 
@@ -41,7 +35,8 @@ void _modinit(module_t *m)
 	list_register("regnolimit", &regnolimit);
 }
 
-void _moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	service_named_unbind_command("nickserv", &ns_regnolimit);
 
@@ -102,8 +97,4 @@ static void ns_cmd_regnolimit(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */
+SIMPLE_DECLARE_MODULE_V1("nickserv/regnolimit", MODULE_UNLOAD_CAPABILITY_OK)
