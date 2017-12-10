@@ -106,7 +106,8 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 		return ASASL_FAIL;
 
 	pubkey_raw_p = pubkey_raw;
-	o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, ret);
+	if (! o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, ret))
+		return ASASL_FAIL;
 
 	(void) arc4random_buf(s->challenge, CHALLENGE_LENGTH);
 
