@@ -12,7 +12,6 @@
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
-#include <openssl/rand.h>
 #include <openssl/sha.h>
 
 #define CHALLENGE_LENGTH	SHA256_DIGEST_LENGTH
@@ -109,11 +108,7 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 	pubkey_raw_p = pubkey_raw;
 	o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, ret);
 
-#ifndef DEBUG_STATIC_CHALLENGE_VECTOR
-	RAND_pseudo_bytes(s->challenge, CHALLENGE_LENGTH);
-#else
-	memset(s->challenge, 'A', CHALLENGE_LENGTH);
-#endif
+	(void) arc4random_buf(s->challenge, CHALLENGE_LENGTH);
 
 	*out = malloc(400);
 	memcpy(*out, s->challenge, CHALLENGE_LENGTH);
