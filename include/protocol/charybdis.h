@@ -6,9 +6,8 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_CHARYBDIS_H
+#define INC_PROTO_CHARYBDIS_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* hyperion +c */
@@ -29,4 +28,4 @@
 
 #define CMODE_IMMUNE	0x04000000	/* charybdis +M */
 
-#endif
+#endif /* !INC_PROTO_CHARYBDIS_H */

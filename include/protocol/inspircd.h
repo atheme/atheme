@@ -6,9 +6,8 @@
  *
  */
 
-#ifndef INSPIRCD_H
-#define INSPIRCD_H
-
+#ifndef INC_PROTO_INSPIRCD_H
+#define INC_PROTO_INSPIRCD_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* bahamut +c */
@@ -29,4 +28,4 @@
 #define CMODE_PERM		0x08000000	/* chary +P */
 #define CMODE_DELAYJOIN 0x20000000  /* Inspircd +D */
 
-#endif /* !INSPIRCD_H */
+#endif /* !INC_PROTO_INSPIRCD_H */

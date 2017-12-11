@@ -6,9 +6,8 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_UNREAL_H
+#define INC_PROTO_UNREAL_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* bahamut +c */
@@ -28,4 +27,4 @@
 #define CMODE_CENSOR    0x04000000	/* unreal +G */
 #define CMODE_PERM	0x08000000	/* unreal +P */
 
-#endif
+#endif /* !INC_PROTO_UNREAL_H */

@@ -6,10 +6,9 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_IRCNET_H
+#define INC_PROTO_IRCNET_H
 
 /* Extended channel modes will eventually go here. */
 
-#endif
+#endif /* !INC_PROTO_IRCNET_H */

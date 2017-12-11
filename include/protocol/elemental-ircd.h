@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef ELEMENTAL_IRCD_H
-#define ELEMENTAL_IRCD_H
+#ifndef INC_PROTO_ELEMENTAL_IRCD_H
+#define INC_PROTO_ELEMENTAL_IRCD_H
 
 /* Extended channel modes will eventually go here. */
 /* Note that these are involved in atheme.db file format */
@@ -34,4 +34,4 @@
 #define CMODE_NOREPEAT	0x40000000	/* shadowircd +K */
 #define CMODE_KICKNOREJOIN 0x80000000 /* shadowircd +J */
 
-#endif
+#endif /* !INC_PROTO_ELEMENTAL_IRCD_H */
