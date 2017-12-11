@@ -3,12 +3,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This code contains the channel mode definitions for ircnet ircd.
- *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_ASUKA_H
+#define INC_PROTO_ASUKA_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR		0x00001000
@@ -18,4 +16,4 @@
 #define CMODE_NOQUIT		0x00010000
 #define CMODE_NONOTICE		0x00020000
 
-#endif
+#endif /* !INC_PROTO_ASUKA_H */

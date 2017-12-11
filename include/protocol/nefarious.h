@@ -6,9 +6,8 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_NEFARIOUS_H
+#define INC_PROTO_NEFARIOUS_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR		0x00001000
@@ -27,4 +26,4 @@
 #define CMODE_SOFTPRIV		0x02000000
 #define CMODE_SSLONLY		0x04000000
 
-#endif
+#endif /* !INC_PROTO_NEFARIOUS_H */

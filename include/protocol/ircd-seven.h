@@ -7,7 +7,7 @@
  *
  */
 
-#ifndef IRCD_SEVEN_H
-#define IRCD_SEVEN_H
+#ifndef INC_PROTO_IRCD_SEVEN_H
+#define INC_PROTO_IRCD_SEVEN_H
 
-#endif
+#endif /* !INC_PROTO_IRCD_SEVEN_H */

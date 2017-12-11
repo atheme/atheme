@@ -5,8 +5,8 @@
  * This code contains the channel mode definitions for ngircd.
  */
 
-#ifndef NGIRCD_H
-#define NGIRCD_H
+#ifndef INC_PROTO_NGIRCD_H
+#define INC_PROTO_NGIRCD_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_REGONLY	0x00001000
@@ -14,4 +14,4 @@
 #define CMODE_PERM	0x00004000
 #define CMODE_SSLONLY	0x00008000
 
-#endif
+#endif /* !INC_PROTO_NGIRCD_H */

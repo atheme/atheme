@@ -6,9 +6,8 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
-
+#ifndef INC_PROTO_UNREAL_H
+#define INC_PROTO_UNREAL_H
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR   0x00001000  /* bahamut +c */
@@ -30,4 +29,4 @@
 #define CMODE_NONOTICE  0x10000000  /* unreal +T */
 #define CMODE_DELAYJOIN 0x20000000	/* unreal +D (4.0.x and later) */
 
-#endif
+#endif /* !INC_PROTO_UNREAL_H */
