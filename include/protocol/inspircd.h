@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef RATBOX_H
-#define RATBOX_H
+#ifndef INSPIRCD_H
+#define INSPIRCD_H
 
 
 /* Extended channel modes will eventually go here. */
@@ -29,4 +29,4 @@
 #define CMODE_PERM		0x08000000	/* chary +P */
 #define CMODE_DELAYJOIN 0x20000000  /* Inspircd +D */
 
-#endif
+#endif /* !INSPIRCD_H */
