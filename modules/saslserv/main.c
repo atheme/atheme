@@ -812,7 +812,7 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 	(void) hook_add_event("user_can_login");
 
 	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
-	saslsvs = service_add("saslserv", saslserv);
+	saslsvs = service_add("saslserv", &saslserv);
 	authservice_loaded++;
 
 	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
@@ -829,12 +829,12 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 
 	(void) del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
 
-        if (saslsvs != NULL)
+        if (saslsvs)
 		(void) service_delete(saslsvs);
 
 	authservice_loaded--;
 
-	if (sessions.head != NULL)
+	if (sessions.head)
 		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
 		                      "a mechanism did not unregister itself! (BUG)");
 }
