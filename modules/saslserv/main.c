@@ -343,10 +343,10 @@ find_mechanism(char *name)
 }
 
 static void
-sasl_server_eob(server_t *s)
+sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
 {
 	/* new server online, push mechlist to make sure it's using the current one */
-	sasl_mechlist_sts(mechlist_string);
+	(void) sasl_mechlist_sts(mechlist_string);
 }
 
 static void
