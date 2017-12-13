@@ -15,7 +15,6 @@ typedef struct {
 
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
-static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
@@ -255,6 +254,121 @@ sasl_session_abort(sasl_session_t *const restrict p)
 {
 	(void) sasl_sts(p->uid, 'D', "F");
 	(void) destroy_session(p);
+}
+
+/* authenticated, now double check that their account is ok for login */
+static myuser_t *
+login_user(sasl_session_t *p)
+{
+	/* source_mu is the user whose credentials we verified ("authentication id") */
+	/* target_mu is the user who will be ultimately logged in ("authorization id") */
+
+	myuser_t *const source_mu = myuser_find_by_nick(p->username);
+	if (! source_mu)
+		return NULL;
+
+	sourceinfo_t *const si = sasl_sourceinfo_create(p);
+
+	hook_user_login_check_t req = {
+
+		.si = si,
+		.mu = source_mu,
+		.allowed = true,
+	};
+
+	(void) hook_call_user_can_login(&req);
+
+	if (! req.allowed)
+	{
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
+		                                    entity(source_mu)->name);
+		return NULL;
+	}
+
+	myuser_t *target_mu = source_mu;
+
+	if (p->authzid && *p->authzid)
+	{
+		if (! (target_mu = myuser_find_by_nick(p->authzid)))
+		{
+			(void) object_unref(si);
+			return NULL;
+		}
+	}
+	else
+	{
+		(void) free(p->authzid);
+		p->authzid = sstrdup(p->username);
+	}
+
+	if (metadata_find(source_mu, "private:freeze:freezer"))
+	{
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
+		(void) object_unref(si);
+		return NULL;
+	}
+
+	if (target_mu != source_mu)
+	{
+		if (! may_impersonate(source_mu, target_mu))
+		{
+			(void) logcommand(si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
+			                                    entity(source_mu)->name, entity(target_mu)->name);
+			(void) object_unref(si);
+			return NULL;
+		}
+
+		req.mu = target_mu;
+		req.allowed = true;
+
+		(void) hook_call_user_can_login(&req);
+
+		if (! req.allowed)
+		{
+			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
+			                                    entity(target_mu)->name);
+			(void) object_unref(si);
+			return NULL;
+		}
+
+		if (metadata_find(target_mu, "private:freeze:freezer"))
+		{
+			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
+			                                    entity(target_mu)->name);
+			(void) object_unref(si);
+			return NULL;
+		}
+	}
+
+	if (MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
+	{
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
+		                                    entity(target_mu)->name);
+		(void) object_unref(si);
+		return NULL;
+	}
+
+	/* Log it with the full n!u@h later */
+	p->flags |= ASASL_NEED_LOG;
+
+	/* We just did SASL authentication for a user.  With IRCds which do not
+	 * have unique UIDs for users, we will likely be expecting the login
+	 * data to be bursted.  As a result, we should give the core a heads'
+	 * up that this is going to happen so that hooks will be properly
+	 * fired...
+	 */
+	if (ircd->flags & IRCD_SASL_USE_PUID)
+	{
+		target_mu->flags &= ~MU_NOBURSTLOGIN;
+		target_mu->flags |= MU_PENDINGLOGIN;
+	}
+
+	if (target_mu != source_mu)
+		(void) logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2",
+		                                    entity(source_mu)->name, entity(target_mu)->name);
+
+	(void) object_unref(si);
+	return target_mu;
 }
 
 /* output an arbitrary amount of data to the SASL client */
@@ -529,121 +643,6 @@ may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 	(void) hook_call_sasl_may_impersonate(&req);
 
 	return req.allowed;
-}
-
-/* authenticated, now double check that their account is ok for login */
-static myuser_t *
-login_user(sasl_session_t *p)
-{
-	/* source_mu is the user whose credentials we verified ("authentication id") */
-	/* target_mu is the user who will be ultimately logged in ("authorization id") */
-
-	myuser_t *const source_mu = myuser_find_by_nick(p->username);
-	if (! source_mu)
-		return NULL;
-
-	sourceinfo_t *const si = sasl_sourceinfo_create(p);
-
-	hook_user_login_check_t req = {
-
-		.si = si,
-		.mu = source_mu,
-		.allowed = true,
-	};
-
-	(void) hook_call_user_can_login(&req);
-
-	if (! req.allowed)
-	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
-		                                    entity(source_mu)->name);
-		return NULL;
-	}
-
-	myuser_t *target_mu = source_mu;
-
-	if (p->authzid && *p->authzid)
-	{
-		if (! (target_mu = myuser_find_by_nick(p->authzid)))
-		{
-			(void) object_unref(si);
-			return NULL;
-		}
-	}
-	else
-	{
-		(void) free(p->authzid);
-		p->authzid = sstrdup(p->username);
-	}
-
-	if (metadata_find(source_mu, "private:freeze:freezer"))
-	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
-		(void) object_unref(si);
-		return NULL;
-	}
-
-	if (target_mu != source_mu)
-	{
-		if (! may_impersonate(source_mu, target_mu))
-		{
-			(void) logcommand(si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
-			                                    entity(source_mu)->name, entity(target_mu)->name);
-			(void) object_unref(si);
-			return NULL;
-		}
-
-		req.mu = target_mu;
-		req.allowed = true;
-
-		(void) hook_call_user_can_login(&req);
-
-		if (! req.allowed)
-		{
-			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
-			                                    entity(target_mu)->name);
-			(void) object_unref(si);
-			return NULL;
-		}
-
-		if (metadata_find(target_mu, "private:freeze:freezer"))
-		{
-			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
-			                                    entity(target_mu)->name);
-			(void) object_unref(si);
-			return NULL;
-		}
-	}
-
-	if (MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
-	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
-		                                    entity(target_mu)->name);
-		(void) object_unref(si);
-		return NULL;
-	}
-
-	/* Log it with the full n!u@h later */
-	p->flags |= ASASL_NEED_LOG;
-
-	/* We just did SASL authentication for a user.  With IRCds which do not
-	 * have unique UIDs for users, we will likely be expecting the login
-	 * data to be bursted.  As a result, we should give the core a heads'
-	 * up that this is going to happen so that hooks will be properly
-	 * fired...
-	 */
-	if (ircd->flags & IRCD_SASL_USE_PUID)
-	{
-		target_mu->flags &= ~MU_NOBURSTLOGIN;
-		target_mu->flags |= MU_PENDINGLOGIN;
-	}
-
-	if (target_mu != source_mu)
-		(void) logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2",
-		                                    entity(source_mu)->name, entity(target_mu)->name);
-
-	(void) object_unref(si);
-	return target_mu;
 }
 
 /* clean up after a user who is finally on the net */
