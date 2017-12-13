@@ -742,20 +742,21 @@ sasl_newuser(hook_user_nick_t *data)
  * after no more than 60 seconds.
  */
 static void
-delete_stale(void *vptr)
+delete_stale(void __attribute__((unused)) *const restrict vptr)
 {
-	sasl_session_t *p;
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
-		p = n->data;
-		if(p->flags & ASASL_MARKED_FOR_DELETION)
+		sasl_session_t *const p = n->data;
+
+		if (p->flags & ASASL_MARKED_FOR_DELETION)
 		{
-			mowgli_node_delete(n, &sessions);
-			destroy_session(p);
-			mowgli_node_free(n);
-		} else
+			(void) mowgli_node_delete(n, &sessions);
+			(void) destroy_session(p);
+			(void) mowgli_node_free(n);
+		}
+		else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
 }
