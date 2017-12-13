@@ -790,7 +790,8 @@ sasl_get_source_name(sourceinfo_t *si)
 	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
 
 	if (ssi->sess->server && ! hide_server_names)
-		(void) snprintf(description, BUFSIZE, "Unknown user on %s (via SASL)", ssi->sess->server->name);
+		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
+		                                                 ssi->sess->server->name);
 	else
 		(void) mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
 
