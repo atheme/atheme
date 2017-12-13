@@ -25,8 +25,6 @@ static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
 static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
-static void sasl_mech_register(sasl_mechanism_t *mech);
-static void sasl_mech_unregister(sasl_mechanism_t *mech);
 static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild(void);
 static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full);
@@ -47,52 +45,6 @@ static struct sourceinfo_vtable sasl_vtable = {
 	.get_source_name    = sasl_get_source_name,
 	.get_source_mask    = sasl_get_source_name,
 };
-
-const sasl_core_functions_t sasl_core_functions = {
-
-	.mech_register      = &sasl_mech_register,
-	.mech_unregister    = &sasl_mech_unregister,
-};
-
-static void
-sasl_mech_register(sasl_mechanism_t *mech)
-{
-	mowgli_node_t *const node = mowgli_node_create();
-
-	(void) slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
-	(void) mowgli_node_add(mech, node, &sasl_mechanisms);
-	(void) mechlist_do_rebuild();
-}
-
-static void
-sasl_mech_unregister(sasl_mechanism_t *mech)
-{
-	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
-
-	mowgli_node_t *n, *tn;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
-	{
-		sasl_session_t *const session = n->data;
-
-		if (session->mechptr == mech)
-		{
-			(void) slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
-			(void) destroy_session(session);
-		}
-	}
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
-	{
-		if (n->data == mech)
-		{
-			(void) mowgli_node_delete(n, &sasl_mechanisms);
-			(void) mowgli_node_free(n);
-			(void) mechlist_do_rebuild();
-
-			break;
-		}
-	}
-}
 
 /*
  * Begin SASL-specific code
@@ -767,6 +719,46 @@ sasl_get_source_name(sourceinfo_t *si)
 	return result;
 }
 
+static void
+sasl_mech_register(sasl_mechanism_t *mech)
+{
+	mowgli_node_t *const node = mowgli_node_create();
+
+	(void) slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
+	(void) mowgli_node_add(mech, node, &sasl_mechanisms);
+	(void) mechlist_do_rebuild();
+}
+
+static void
+sasl_mech_unregister(sasl_mechanism_t *mech)
+{
+	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	{
+		sasl_session_t *const session = n->data;
+
+		if (session->mechptr == mech)
+		{
+			(void) slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
+			(void) destroy_session(session);
+		}
+	}
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
+	{
+		if (n->data == mech)
+		{
+			(void) mowgli_node_delete(n, &sasl_mechanisms);
+			(void) mowgli_node_free(n);
+			(void) mechlist_do_rebuild();
+
+			break;
+		}
+	}
+}
+
 /* main services client routine */
 static void
 saslserv(sourceinfo_t *si, int parc, char *parv[])
@@ -838,5 +830,12 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
 		                      "a mechanism did not unregister itself! (BUG)");
 }
+
+/* This structure is imported by SASL mechanism modules */
+const sasl_core_functions_t sasl_core_functions = {
+
+	.mech_register      = &sasl_mech_register,
+	.mech_unregister    = &sasl_mech_unregister,
+};
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)
