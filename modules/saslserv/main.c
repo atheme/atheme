@@ -41,10 +41,11 @@ static service_t *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static struct sourceinfo_vtable sasl_vtable = {
-	.description = "SASL",
-	.format = sasl_format_sourceinfo,
-	.get_source_name = sasl_get_source_name,
-	.get_source_mask = sasl_get_source_name
+
+	.description        = "SASL",
+	.format             = sasl_format_sourceinfo,
+	.get_source_name    = sasl_get_source_name,
+	.get_source_mask    = sasl_get_source_name,
 };
 
 const sasl_core_functions_t sasl_core_functions = {
