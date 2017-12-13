@@ -11,8 +11,7 @@ static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
 mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-          char __attribute__((unused)) **const restrict out,
-          size_t __attribute__((unused)) *const restrict out_len)
+          char __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict out_len)
 {
 	if (! (message && len))
 		return ASASL_FAIL;
