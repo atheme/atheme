@@ -34,7 +34,7 @@ static const char *sasl_get_source_name(sourceinfo_t *si);
 
 static mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;
-static char mechlist_string[400];
+static char mechlist_string[SASL_S2S_MAXLEN];
 static bool hide_server_names;
 
 static service_t *saslsvs = NULL;
