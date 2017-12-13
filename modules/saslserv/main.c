@@ -9,8 +9,8 @@
 #include "uplink.h"
 
 typedef struct {
-	sourceinfo_t parent;
-	sasl_session_t *sess;
+	sourceinfo_t     parent;
+	sasl_session_t  *sess;
 } sasl_sourceinfo_t;
 
 static mowgli_list_t sessions;
