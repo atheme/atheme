@@ -784,20 +784,22 @@ sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 static const char *
 sasl_get_source_name(sourceinfo_t *si)
 {
-	static char result[HOSTLEN+NICKLEN+10];
+	static char result[HOSTLEN + NICKLEN + 10];
 	char description[BUFSIZE];
-	sasl_sourceinfo_t *ssi = (sasl_sourceinfo_t *) si;
 
-	if (ssi->sess->server && !hide_server_names)
-		snprintf(description, BUFSIZE, "Unknown user on %s (via SASL)", ssi->sess->server->name);
+	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+
+	if (ssi->sess->server && ! hide_server_names)
+		(void) snprintf(description, BUFSIZE, "Unknown user on %s (via SASL)", ssi->sess->server->name);
 	else
-		mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
+		(void) mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
 
 	/* we can reasonably assume that si->v is non-null as this is part of the SASL vtable */
 	if (si->sourcedesc)
-		snprintf(result, sizeof result, "<%s:%s>%s", description, si->sourcedesc, si->smu ? entity(si->smu)->name : "");
+		(void) snprintf(result, sizeof result, "<%s:%s>%s", description, si->sourcedesc,
+		                si->smu ? entity(si->smu)->name : "");
 	else
-		snprintf(result, sizeof result, "<%s>%s", description, si->smu ? entity(si->smu)->name : "");
+		(void) snprintf(result, sizeof result, "<%s>%s", description, si->smu ? entity(si->smu)->name : "");
 
 	return result;
 }
