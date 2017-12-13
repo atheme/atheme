@@ -66,10 +66,8 @@ struct scramsha_session
 
 typedef char *scram_attr_list[128];
 
-static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
-static atheme_pbkdf2v2_scram_normalize_fn sasl_scramsha_normalize = NULL;
-
 static const sasl_core_functions_t *sasl_core_functions = NULL;
+static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -202,7 +200,7 @@ mech_step_clientfirst(sasl_session_t *const restrict p, char *const restrict dat
 		p->authzid = sstrndup(message, (size_t) (pos - message));
 
 		// Normalize it
-		const char *const authzid_nm = sasl_scramsha_normalize(p->authzid);
+		const char *const authzid_nm = pbkdf2v2_scram_functions->normalize(p->authzid);
 		if (! authzid_nm)
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
@@ -233,7 +231,7 @@ mech_step_clientfirst(sasl_session_t *const restrict p, char *const restrict dat
 		goto fail;
 	}
 
-	const char *const username = sasl_scramsha_normalize(input['n']);
+	const char *const username = pbkdf2v2_scram_functions->normalize(input['n']);
 
 	if (! username)
 	{
@@ -254,7 +252,7 @@ mech_step_clientfirst(sasl_session_t *const restrict p, char *const restrict dat
 		goto fail;
 	}
 
-	if (! sasl_scramsha_dbextract(s->mu->pass, &s->db))
+	if (! pbkdf2v2_scram_functions->dbextract(s->mu->pass, &s->db))
 		// User's password hash is not in a compatible (PBKDF2 v2) format
 		goto fail;
 
@@ -636,9 +634,8 @@ mod_init(module_t *const restrict m)
 		return;
 	}
 
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
+	MODULE_TRY_REQUEST_SYMBOL(m, pbkdf2v2_scram_functions, PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_scram_functions");
 
 	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(sasl_scramsha_config_ready);
