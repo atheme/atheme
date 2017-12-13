@@ -11,9 +11,8 @@
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
-mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-          char __attribute__((unused)) **const restrict out,
-          size_t __attribute__((unused)) *const restrict out_len)
+mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+          void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {
 	if (! p->certfp)
 		return ASASL_FAIL;
@@ -22,15 +21,15 @@ mech_step(struct sasl_session *const restrict p, char *const restrict message, c
 	if (! mcfp)
 		return ASASL_FAIL;
 
-	if (message && len)
+	if (in && inlen)
 	{
 		char authzid[NICKLEN];
 
-		if (! len || len >= sizeof authzid)
+		if (! inlen || inlen >= sizeof authzid)
 			return ASASL_FAIL;
 
 		(void) memset(authzid, 0x00, sizeof authzid);
-		(void) memcpy(authzid, message, len);
+		(void) memcpy(authzid, in, inlen);
 
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
 			return ASASL_FAIL;

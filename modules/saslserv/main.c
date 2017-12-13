@@ -399,10 +399,8 @@ static void
 sasl_packet(struct sasl_session *p, char *buf, size_t len)
 {
 	int rc;
-	char temp[SASL_C2S_MAXLEN * 2];
-	metadata_t *md;
 
-	char *out = NULL;
+	void *out = NULL;
 	size_t out_len = 0;
 
 	/* First piece of data in a session is the name of
@@ -437,12 +435,13 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 	}
 	else
 	{
+		unsigned char inbuf[SASL_C2S_MAXLEN * 2];
 		size_t tlen = 0;
 
 		if (len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, NULL, 0, &out, &out_len);
-		else if ((tlen = base64_decode(buf, temp, sizeof temp)) && tlen != (size_t) -1)
-			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
+		else if ((tlen = base64_decode(buf, inbuf, sizeof inbuf)) && tlen != (size_t) -1)
+			rc = p->mechptr->mech_step(p, inbuf, tlen, &out, &out_len);
 		else
 			rc = ASASL_FAIL;
 
@@ -460,6 +459,7 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 		if (mu)
 		{
 			char *cloak = "*";
+			metadata_t *md;
 
 			if ((md = metadata_find(mu, "private:usercloak")))
 				cloak = md->value;
@@ -480,7 +480,8 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 	{
 		if (out && out_len)
 		{
-			const size_t rs = base64_encode(out, out_len, temp, sizeof temp);
+			char outbuf[SASL_C2S_MAXLEN * 2];
+			const size_t rs = base64_encode(out, out_len, outbuf, sizeof outbuf);
 
 			if (rs == (size_t) -1)
 			{
@@ -488,7 +489,7 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 				(void) sasl_session_abort(p);
 			}
 			else
-				(void) sasl_write(p->uid, temp, rs);
+				(void) sasl_write(p->uid, outbuf, rs);
 		}
 		else
 			(void) sasl_sts(p->uid, 'C', "+");

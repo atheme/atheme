@@ -34,8 +34,8 @@ struct ecdsa_session
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
-mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) **const restrict out,
-           size_t __attribute__((unused)) *const restrict out_len)
+mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
+           size_t __attribute__((unused)) *const restrict outlen)
 {
 	struct ecdsa_session *const s = smalloc(sizeof *s);
 
@@ -49,32 +49,34 @@ mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) *
 }
 
 static int
-mech_step_accname(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-                  char **const restrict out, size_t *const restrict out_len)
+mech_step_accname(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                  void **const restrict out, size_t *const restrict outlen)
 {
 	struct ecdsa_session *const s = p->mechdata;
 
-	if (! (message && len))
+	if (! (in && inlen))
 		return ASASL_FAIL;
 
 	char authcid[NICKLEN];
 	(void) memset(authcid, 0x00, sizeof authcid);
 
-	const char *const end = memchr(message, 0x00, len);
+	const char *const end = memchr(in, 0x00, inlen);
 	if (! end)
 	{
-		if (! len || len >= sizeof authcid)
+		if (! inlen || inlen >= sizeof authcid)
 			return ASASL_FAIL;
 
-		(void) memcpy(authcid, message, len);
+		(void) memcpy(authcid, in, inlen);
 	}
 	else
 	{
 		char authzid[NICKLEN];
 		(void) memset(authzid, 0x00, sizeof authzid);
 
-		const size_t authcid_length = (size_t) (end - message);
-		const size_t authzid_length = len - 1 - authcid_length;
+		const char *const accnames = in;
+
+		const size_t authcid_length = (size_t) (end - accnames);
+		const size_t authzid_length = inlen - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length >= sizeof authcid)
 			return ASASL_FAIL;
@@ -82,7 +84,7 @@ mech_step_accname(struct sasl_session *const restrict p, char *const restrict me
 		if (! authzid_length || authzid_length >= sizeof authcid)
 			return ASASL_FAIL;
 
-		(void) memcpy(authcid, message, authcid_length);
+		(void) memcpy(authcid, accnames, authcid_length);
 		(void) memcpy(authzid, end + 1, authzid_length);
 
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
@@ -109,7 +111,7 @@ mech_step_accname(struct sasl_session *const restrict p, char *const restrict me
 		return ASASL_FAIL;
 
 	*out = smalloc(CHALLENGE_LENGTH);
-	*out_len = CHALLENGE_LENGTH;
+	*outlen = CHALLENGE_LENGTH;
 
 	(void) arc4random_buf(s->challenge, CHALLENGE_LENGTH);
 	(void) memcpy(*out, s->challenge, CHALLENGE_LENGTH);
@@ -119,26 +121,26 @@ mech_step_accname(struct sasl_session *const restrict p, char *const restrict me
 }
 
 static int
-mech_step_response(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-                   char __attribute__((unused)) **const restrict out,
-                   size_t __attribute__((unused)) *const restrict out_len)
+mech_step_response(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                   void __attribute__((unused)) **const restrict out,
+                   size_t __attribute__((unused)) *const restrict outlen)
 {
 	struct ecdsa_session *const s = p->mechdata;
 
-	if (! (message && len))
+	if (! (in && inlen))
 		return ASASL_FAIL;
 
-	if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, (unsigned char *) message, (int) len, s->pubkey) != 1)
+	if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in, (int) inlen, s->pubkey) != 1)
 		return ASASL_FAIL;
 
 	return ASASL_DONE;
 }
 
-typedef int (*mech_stepfn_t)(struct sasl_session *p, char *message, size_t len, char **out, size_t *out_len);
+typedef int (*mech_stepfn_t)(struct sasl_session *, const void *, size_t, void **, size_t *);
 
 static int
-mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-          char **const restrict out, size_t *const restrict out_len)
+mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+          void **const restrict out, size_t *const restrict outlen)
 {
 	static mech_stepfn_t mech_steps[ECDSA_ST_COUNT] = {
 		[ECDSA_ST_ACCNAME] = &mech_step_accname,
@@ -148,7 +150,7 @@ mech_step(struct sasl_session *const restrict p, char *const restrict message, c
 	struct ecdsa_session *const s = p->mechdata;
 
 	if (mech_steps[s->step] != NULL)
-		return mech_steps[s->step](p, message, len, out, out_len);
+		return mech_steps[s->step](p, in, inlen, out, outlen);
 
 	return ASASL_FAIL;
 }

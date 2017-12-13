@@ -134,7 +134,7 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 }
 
 static int
-mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) **const restrict out,
+mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
            size_t __attribute__((unused)) *const restrict out_len)
 {
 	p->mechdata = smalloc(sizeof(struct scramsha_session));
@@ -143,18 +143,21 @@ mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) *
 }
 
 static int
-mech_step_clientfirst(struct sasl_session *const restrict p, char *const restrict data, const size_t len,
-                      char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
+mech_step_clientfirst(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                      void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
+	if (! (in && inlen))
+		return ASASL_FAIL;
+
 	struct scramsha_session *const s = p->mechdata;
 
-	const char *const header = data;
-	const char *message = data;
+	const char *const header = in;
+	const char *message = in;
 
 	scram_attr_list input;
 	(void) memset(input, 0x00, sizeof input);
 
-	if (strnlen(data, len) != len)
+	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
 		goto fail;
@@ -235,7 +238,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(message, len - ((size_t) (message - data)), &input))
+	if (! sasl_scramsha_attrlist_parse(message, inlen - ((size_t) (message - header)), &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
@@ -290,7 +293,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 	// These cannot fail
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
-	s->c_msg_len = len - s->c_gs2_len;
+	s->c_msg_len = inlen - s->c_gs2_len;
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->cn = sstrdup(input['r']);
 	s->sn = sstrndup(server_nonce, NONCE_LENGTH);
@@ -306,11 +309,11 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 	}
 
 	// Cannot fail
-	*out_len = (size_t) ol;
-	*out = smalloc(*out_len);
-	(void) memcpy(*out, response, *out_len);
+	*outlen = (size_t) ol;
+	*out = smalloc(*outlen);
+	(void) memcpy(*out, response, *outlen);
 
-	s->s_msg_len = *out_len;
+	s->s_msg_len = *outlen;
 	s->s_msg_buf = sstrdup(response);
 
 	(void) sasl_scramsha_attrlist_free(&input);
@@ -324,19 +327,22 @@ fail:
 }
 
 static int
-mech_step_clientproof(struct scramsha_session *const restrict s, char *const restrict data, const size_t len,
-                      char **const restrict out, size_t *const restrict out_len)
+mech_step_clientproof(struct scramsha_session *const restrict s, const void *const restrict in, const size_t inlen,
+                      void **const restrict out, size_t *const restrict outlen)
 {
+	if (! (in && inlen))
+		return ASASL_FAIL;
+
 	scram_attr_list input;
 	(void) memset(input, 0x00, sizeof input);
 
-	if (strnlen(data, len) != len)
+	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(data, len, &input))
+	if (! sasl_scramsha_attrlist_parse(in, inlen, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
@@ -454,9 +460,9 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Cannot fail
-	*out_len = (size_t) ol;
-	*out = smalloc(*out_len);
-	(void) memcpy(*out, response, *out_len);
+	*outlen = (size_t) ol;
+	*out = smalloc(*outlen);
+	(void) memcpy(*out, response, *outlen);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
@@ -519,18 +525,18 @@ mech_step_success(const struct scramsha_session *const restrict s)
 }
 
 static inline int
-mech_step_dispatch(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-                   char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
+mech_step_dispatch(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                   void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
 
 	switch (s->step)
 	{
 		case SCRAMSHA_STEP_CLIENTFIRST:
-			return mech_step_clientfirst(p, message, len, out, out_len, prf);
+			return mech_step_clientfirst(p, in, inlen, out, outlen, prf);
 
 		case SCRAMSHA_STEP_CLIENTPROOF:
-			return mech_step_clientproof(s, message, len, out, out_len);
+			return mech_step_clientproof(s, in, inlen, out, outlen);
 
 		case SCRAMSHA_STEP_PASSED:
 			return mech_step_success(s);
@@ -541,17 +547,17 @@ mech_step_dispatch(struct sasl_session *const restrict p, char *const restrict m
 }
 
 static int
-mech_step_sha1(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-               char **const restrict out, size_t *const restrict out_len)
+mech_step_sha1(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+               void **const restrict out, size_t *const restrict outlen)
 {
-	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA1);
+	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA1);
 }
 
 static int
-mech_step_sha2_256(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-                   char **const restrict out, size_t *const restrict out_len)
+mech_step_sha2_256(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+                   void **const restrict out, size_t *const restrict outlen)
 {
-	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA2_256);
+	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA2_256);
 }
 
 static void

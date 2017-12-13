@@ -50,8 +50,8 @@ struct sasl_message
 struct sasl_mechanism
 {
 	char       name[SASL_MECHANISM_MAXLEN];
-	int      (*mech_start)(struct sasl_session *, char **, size_t *);
-	int      (*mech_step)(struct sasl_session *, char *, size_t, char **, size_t *);
+	int      (*mech_start)(struct sasl_session *, void **, size_t *);
+	int      (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
 	void     (*mech_finish)(struct sasl_session *);
 };
 

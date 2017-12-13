@@ -10,21 +10,21 @@
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
-mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
-          char __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict out_len)
+mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+          void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {
-	if (! (message && len))
+	if (! (in && inlen))
 		return ASASL_FAIL;
 
 	char data[768];
-	if (len >= sizeof data)
+	if (inlen >= sizeof data)
 		return ASASL_FAIL;
 
 	(void) memset(data, 0x00, sizeof data);
-	(void) memcpy(data, message, len);
+	(void) memcpy(data, in, inlen);
 
 	const char *ptr = data;
-	const char *const end = data + len;
+	const char *const end = data + inlen;
 
 	const char *const authzid = ptr;
 	if (! *ptr || (ptr += strlen(ptr) + 1) >= end)
