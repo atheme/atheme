@@ -26,7 +26,7 @@ static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild(void);
 
 static mowgli_list_t sessions;
-static mowgli_list_t sasl_mechanisms;
+static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN];
 static bool hide_server_names;
 
@@ -278,7 +278,7 @@ find_mechanism(char *name)
 {
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
 		sasl_mechanism_t *const mptr = n->data;
 
@@ -314,7 +314,7 @@ mechlist_build_string(char *ptr, size_t buflen)
 	size_t l = 0;
 	mowgli_node_t *n;
 
-	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
+	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
 		sasl_mechanism_t *const mptr = n->data;
 
@@ -716,7 +716,7 @@ sasl_mech_register(sasl_mechanism_t *mech)
 	mowgli_node_t *const node = mowgli_node_create();
 
 	(void) slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
-	(void) mowgli_node_add(mech, node, &sasl_mechanisms);
+	(void) mowgli_node_add(mech, node, &mechanisms);
 	(void) mechlist_do_rebuild();
 }
 
@@ -737,11 +737,11 @@ sasl_mech_unregister(sasl_mechanism_t *mech)
 			(void) destroy_session(session);
 		}
 	}
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, mechanisms.head)
 	{
 		if (n->data == mech)
 		{
-			(void) mowgli_node_delete(n, &sasl_mechanisms);
+			(void) mowgli_node_delete(n, &mechanisms);
 			(void) mowgli_node_free(n);
 			(void) mechlist_do_rebuild();
 
