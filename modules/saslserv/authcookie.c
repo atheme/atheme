@@ -11,44 +11,45 @@
 static const sasl_core_functions_t *sasl_core_functions = NULL;
 
 static int
-mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+mech_step(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+          char __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict out_len)
 {
-	char authz[256];
-	char authc[256];
-	char cookie[256];
-	myuser_t *mu;
-
-	/* Skip the authzid entirely */
-
-	if(strlen(message) > 255)
-		return ASASL_FAIL;
-	len -= strlen(message) + 1;
-	if(len <= 0)
-		return ASASL_FAIL;
-	strcpy(authz, message);
-	message += strlen(message) + 1;
-
-	/* Copy the authcid */
-	if(strlen(message) > 255)
-		return ASASL_FAIL;
-	len -= strlen(message) + 1;
-	if(len <= 0)
-		return ASASL_FAIL;
-	strcpy(authc, message);
-	message += strlen(message) + 1;
-
-	/* Copy the authcookie */
-	if(strlen(message) > 255)
-		return ASASL_FAIL;
-	mowgli_strlcpy(cookie, message, len + 1);
-
-	/* Done dissecting, now check. */
-	if(!(mu = myuser_find_by_nick(authc)))
+	if (! (message && len))
 		return ASASL_FAIL;
 
-	p->username = sstrdup(authc);
-	p->authzid = sstrdup(authz);
-	return authcookie_find(cookie, mu) != NULL ? ASASL_DONE : ASASL_FAIL;
+	char data[768];
+	if (len >= sizeof data)
+		return ASASL_FAIL;
+
+	(void) memset(data, 0x00, sizeof data);
+	(void) memcpy(data, message, len);
+
+	const char *ptr = data;
+	const char *const end = data + len;
+
+	const char *const authzid = ptr;
+	if (! *ptr || (ptr += strlen(ptr) + 1) >= end)
+		return ASASL_FAIL;
+
+	const char *const authcid = ptr;
+	if (! *ptr || (ptr += strlen(ptr) + 1) >= end)
+		return ASASL_FAIL;
+
+	const char *const secret = ptr;
+	if (! *secret)
+		return ASASL_FAIL;
+
+	myuser_t *const mu = myuser_find_by_nick(authcid);
+	if (! mu)
+		return ASASL_FAIL;
+
+	p->username = sstrdup(authcid);
+	p->authzid = sstrdup(authzid);
+
+	if (! authcookie_find(secret, mu))
+		return ASASL_FAIL;
+
+	return ASASL_DONE;
 }
 
 static sasl_mechanism_t mech = {
@@ -68,7 +69,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) sasl_core_functions->mech_unregister(&mech);
 }
