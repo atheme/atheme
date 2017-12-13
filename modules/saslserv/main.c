@@ -13,9 +13,6 @@ typedef struct {
 	sasl_session_t *sess;
 } sasl_sourceinfo_t;
 
-static void sasl_newuser(hook_user_nick_t *data);
-static void sasl_server_eob(server_t *s);
-static void delete_stale(void *vptr);
 static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild(void);
 
