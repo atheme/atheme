@@ -385,6 +385,15 @@ mechlist_build_string(char *ptr, size_t buflen)
 	*ptr = 0x00;
 }
 
+/* abort an SASL session
+ */
+static inline void
+sasl_session_abort(sasl_session_t *const restrict p)
+{
+	(void) sasl_sts(p->uid, 'D', "F");
+	(void) destroy_session(p);
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -392,34 +401,32 @@ static void
 sasl_packet(sasl_session_t *p, char *buf, size_t len)
 {
 	int rc;
-	size_t tlen = 0;
-	char *cloak, *out = NULL;
 	char temp[BUFSIZE];
-	char mech[61];
-	size_t out_len = 0;
 	metadata_t *md;
+
+	char *out = NULL;
+	size_t out_len = 0;
 
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
 	 */
-	if(!p->mechptr)
+	if (! p->mechptr)
 	{
-		if(len > 60)
+		char mech[SASL_MECHANISM_MAXLEN];
+
+		if (len >= sizeof mech)
 		{
-			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
+			(void) sasl_session_abort(p);
 			return;
 		}
 
-		memcpy(mech, buf, len);
-		mech[len] = '\0';
+		(void) memset(mech, 0x00, sizeof mech);
+		(void) memcpy(mech, buf, len);
 
-		if(!(p->mechptr = find_mechanism(mech)))
+		if (! (p->mechptr = find_mechanism(mech)))
 		{
-			sasl_sts(p->uid, 'M', mechlist_string);
-
-			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
+			(void) sasl_sts(p->uid, 'M', mechlist_string);
+			(void) sasl_session_abort(p);
 			return;
 		}
 
@@ -427,65 +434,64 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 			rc = p->mechptr->mech_start(p, &out, &out_len);
 		else
 			rc = ASASL_MORE;
-	}else{
-		if(len == 1 && *buf == '+')
-			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,
-					&out, &out_len);
-		else if ((tlen = base64_decode(buf, temp, sizeof temp)) &&
-				tlen != (size_t)-1)
+	}
+	else
+	{
+		size_t tlen = 0;
+
+		if (len == 1 && *buf == '+')
+			rc = p->mechptr->mech_step(p, NULL, 0, &out, &out_len);
+		else if ((tlen = base64_decode(buf, temp, sizeof temp)) && tlen != (size_t) -1)
 			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
 		else
 			rc = ASASL_FAIL;
+
+		if (tlen == (size_t) -1)
+			(void) slog(LG_ERROR, "%s: base64_decode() failed", __func__);
 	}
 
 	/* Some progress has been made, reset timeout. */
 	p->flags &= ~ASASL_MARKED_FOR_DELETION;
 
-	if(rc == ASASL_DONE)
+	if (rc == ASASL_DONE)
 	{
-		myuser_t *mu = login_user(p);
+		myuser_t *const mu = login_user(p);
 
-		if(mu)
+		if (mu)
 		{
+			char *cloak = "*";
+
 			if ((md = metadata_find(mu, "private:usercloak")))
 				cloak = md->value;
-			else
-				cloak = "*";
 
-			if (!(mu->flags & MU_WAITAUTH))
-				svslogin_sts(p->uid, "*", "*", cloak, mu);
+			if (! (mu->flags & MU_WAITAUTH))
+				(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
 
-			sasl_sts(p->uid, 'D', "S");
+			(void) sasl_sts(p->uid, 'D', "S");
 			/* Will destroy session on introduction of user to net. */
 		}
 		else
-		{
-			sasl_sts(p->uid, 'D', "F");
-			destroy_session(p);
-		}
+			(void) sasl_session_abort(p);
 
 		return;
 	}
 
-	if(rc == ASASL_MORE)
+	if (rc == ASASL_MORE)
 	{
-		if(out_len)
+		if (out && out_len)
 		{
 			const size_t rs = base64_encode(out, out_len, temp, sizeof temp);
 
 			if (rs == (size_t) -1)
 			{
 				(void) slog(LG_ERROR, "%s: base64_encode() failed", __func__);
-				(void) sasl_sts(p->uid, 'D', "F");
-				(void) destroy_session(p);
+				(void) sasl_session_abort(p);
 			}
 			else
 				(void) sasl_write(p->uid, temp, rs);
 		}
 		else
-		{
 			(void) sasl_sts(p->uid, 'C', "+");
-		}
 
 		(void) free(out);
 		return;
@@ -496,19 +502,21 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 	 */
 	if (p->username)
 	{
-		myuser_t *mu = myuser_find_by_nick(p->username);
+		myuser_t *const mu = myuser_find_by_nick(p->username);
+
 		if (mu)
 		{
-			sourceinfo_t *si = sasl_sourceinfo_create(p);
-			logcommand(si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)", p->mechptr->name, entity(mu)->name);
-			bad_password(si, mu);
-			object_unref(si);
+			sourceinfo_t *const si = sasl_sourceinfo_create(p);
+
+			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
+			                                    p->mechptr->name, entity(mu)->name);
+			(void) bad_password(si, mu);
+			(void) object_unref(si);
 		}
 	}
 
-	free(out);
-	sasl_sts(p->uid, 'D', "F");
-	destroy_session(p);
+	(void) free(out);
+	(void) sasl_session_abort(p);
 }
 
 /* output an arbitrary amount of data to the SASL client */

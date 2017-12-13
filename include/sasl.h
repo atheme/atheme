@@ -9,7 +9,8 @@
 #ifndef SASL_H
 #define SASL_H
 
-#define SASL_MESSAGE_MAXPARA	8	/* arbitrary, increment if needed in future */
+#define SASL_MESSAGE_MAXPARA    8       /* arbitrary, increment if needed in future */
+#define SASL_MECHANISM_MAXLEN   60
 
 typedef struct sasl_session sasl_session_t;
 typedef struct sasl_message sasl_message_t;
@@ -44,7 +45,7 @@ struct sasl_message
 
 struct sasl_mechanism
 {
-	char       name[60];
+	char       name[SASL_MECHANISM_MAXLEN];
 	int      (*mech_start)(sasl_session_t *, char **, size_t *);
 	int      (*mech_step)(sasl_session_t *, char *, size_t, char **, size_t *);
 	void     (*mech_finish)(sasl_session_t *);
