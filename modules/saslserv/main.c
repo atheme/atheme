@@ -435,7 +435,7 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 	}
 	else
 	{
-		unsigned char inbuf[SASL_C2S_MAXLEN * 2];
+		unsigned char inbuf[SASL_C2S_MAXLEN];
 		size_t tlen = 0;
 
 		if (len == 1 && *buf == '+')
