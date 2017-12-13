@@ -13,9 +13,6 @@ typedef struct {
 	sasl_session_t *sess;
 } sasl_sourceinfo_t;
 
-static sasl_session_t *find_session(const char *uid);
-static sasl_session_t *make_session(const char *uid, server_t *server);
-static void destroy_session(sasl_session_t *p);
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, size_t len);
