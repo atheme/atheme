@@ -764,19 +764,21 @@ delete_stale(void __attribute__((unused)) *const restrict vptr)
 static const char *
 sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 {
-	sasl_sourceinfo_t *ssi = (sasl_sourceinfo_t *) si;
-	static char buf[BUFSIZE];
-	if(full)
-		snprintf(buf, sizeof buf, "SASL/%s:%s[%s]:%s",
-			ssi->sess->uid ? ssi->sess->uid : "?",
-			ssi->sess->host ? ssi->sess->host : "?",
-			ssi->sess->ip ? ssi->sess->ip : "?",
-			ssi->sess->server ? ssi->sess->server->name : "?");
-	else
-		snprintf(buf, sizeof buf, "SASL(%s)",
-			ssi->sess->host ? ssi->sess->host : "?");
-	return buf;
+	static char result[BUFSIZE];
 
+	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+
+	if (full)
+		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
+		                ssi->sess->uid ? ssi->sess->uid : "?",
+		                ssi->sess->host ? ssi->sess->host : "?",
+		                ssi->sess->ip ? ssi->sess->ip : "?",
+		                ssi->sess->server ? ssi->sess->server->name : "?");
+	else
+		(void) snprintf(result, sizeof result, "SASL(%s)",
+		                ssi->sess->host ? ssi->sess->host : "?");
+
+	return result;
 }
 
 static const char *
