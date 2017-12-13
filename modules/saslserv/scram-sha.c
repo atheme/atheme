@@ -528,6 +528,9 @@ static inline int
 mech_step_dispatch(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                    void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
+	if (! (p && p->mechdata))
+		return ASASL_FAIL;
+
 	struct scramsha_session *const s = p->mechdata;
 
 	switch (s->step)

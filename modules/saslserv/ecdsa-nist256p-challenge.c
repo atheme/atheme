@@ -51,10 +51,10 @@ static int
 mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
           void **const restrict out, size_t *const restrict outlen)
 {
-	struct ecdsa_session *const s = p->mechdata;
-
-	if (! (in && inlen))
+	if (! (p && p->mechdata && in && inlen))
 		return ASASL_FAIL;
+
+	struct ecdsa_session *const s = p->mechdata;
 
 	if (s->step == ECDSA_ST_RESPONSE)
 	{

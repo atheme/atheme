@@ -14,7 +14,7 @@ static int
 mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
           void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {
-	if (! p->certfp)
+	if (! (p && p->certfp))
 		return ASASL_FAIL;
 
 	mycertfp_t *const mcfp = mycertfp_find(p->certfp);
