@@ -13,7 +13,6 @@ typedef struct {
 	sasl_session_t *sess;
 } sasl_sourceinfo_t;
 
-static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static void sasl_newuser(hook_user_nick_t *data);
 static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
@@ -244,6 +243,44 @@ mechlist_build_string(char *ptr, size_t buflen)
 		ptr--;
 
 	*ptr = 0x00;
+}
+
+static bool
+may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
+{
+	/* Allow same (although this function won't get called in that case anyway) */
+	if (source_mu == target_mu)
+		return true;
+
+	char priv[BUFSIZE] = PRIV_IMPERSONATE_ANY;
+
+	/* Check for wildcard priv */
+	if (has_priv_myuser(source_mu, priv))
+		return true;
+
+	/* Check for target-operclass specific priv */
+	const char *const classname = (target_mu->soper && target_mu->soper->classname) ?
+	                                  target_mu->soper->classname : "user";
+	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_CLASS_FMT, classname);
+	if (has_priv_myuser(source_mu, priv))
+		return true;
+
+	/* Check for target-entity specific priv */
+	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
+	if (has_priv_myuser(source_mu, priv))
+		return true;
+
+	/* Allow modules to check too */
+	hook_sasl_may_impersonate_t req = {
+
+		.source_mu = source_mu,
+		.target_mu = target_mu,
+		.allowed = false,
+	};
+
+	(void) hook_call_sasl_may_impersonate(&req);
+
+	return req.allowed;
 }
 
 /* authenticated, now double check that their account is ok for login */
@@ -604,44 +641,6 @@ sasl_input(sasl_message_t *smsg)
 		(void) destroy_session(p);
 		return;
 	}
-}
-
-static bool
-may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
-{
-	/* Allow same (although this function won't get called in that case anyway) */
-	if (source_mu == target_mu)
-		return true;
-
-	char priv[BUFSIZE] = PRIV_IMPERSONATE_ANY;
-
-	/* Check for wildcard priv */
-	if (has_priv_myuser(source_mu, priv))
-		return true;
-
-	/* Check for target-operclass specific priv */
-	const char *const classname = (target_mu->soper && target_mu->soper->classname) ?
-	                                  target_mu->soper->classname : "user";
-	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_CLASS_FMT, classname);
-	if (has_priv_myuser(source_mu, priv))
-		return true;
-
-	/* Check for target-entity specific priv */
-	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
-	if (has_priv_myuser(source_mu, priv))
-		return true;
-
-	/* Allow modules to check too */
-	hook_sasl_may_impersonate_t req = {
-
-		.source_mu = source_mu,
-		.target_mu = target_mu,
-		.allowed = false,
-	};
-
-	(void) hook_call_sasl_may_impersonate(&req);
-
-	return req.allowed;
 }
 
 /* clean up after a user who is finally on the net */
