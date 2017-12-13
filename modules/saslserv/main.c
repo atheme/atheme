@@ -46,10 +46,6 @@ static struct sourceinfo_vtable sasl_vtable = {
 	.get_source_mask    = sasl_get_source_name,
 };
 
-/*
- * Begin SASL-specific code
- */
-
 /* find an existing session by uid */
 static sasl_session_t *
 find_session(const char *uid)
