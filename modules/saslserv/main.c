@@ -221,15 +221,16 @@ sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 static sourceinfo_t *
 sasl_sourceinfo_create(sasl_session_t *p)
 {
-	sasl_sourceinfo_t *ssi;
+	sasl_sourceinfo_t *const ssi = smalloc(sizeof *ssi);
 
-	ssi = smalloc(sizeof(sasl_sourceinfo_t));
-	object_init(object(ssi), "<sasl sourceinfo>", (destructor_t) sasl_sourceinfo_delete);
+	(void) object_init(object(ssi), "<sasl sourceinfo>", (destructor_t) sasl_sourceinfo_delete);
 
 	ssi->parent.s = p->server;
 	ssi->parent.connection = curr_uplink->conn;
+
 	if (p->host)
 		ssi->parent.sourcedesc = p->host;
+
 	ssi->parent.service = saslsvs;
 	ssi->parent.v = &sasl_vtable;
 
