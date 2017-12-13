@@ -31,19 +31,7 @@ typedef struct {
 	unsigned char challenge[CHALLENGE_LENGTH];
 } ecdsa_session_t;
 
-static int mech_start(sasl_session_t *, char **, size_t *);
-static int mech_step(sasl_session_t *, char *, size_t, char **, size_t *);
-static void mech_finish(sasl_session_t *);
-
 static const sasl_core_functions_t *sasl_core_functions = NULL;
-
-static sasl_mechanism_t mech = {
-
-	.name           = "ECDSA-NIST256P-CHALLENGE",
-	.mech_start     = &mech_start,
-	.mech_step      = &mech_step,
-	.mech_finish    = &mech_finish,
-};
 
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
@@ -147,6 +135,14 @@ static void mech_finish(sasl_session_t *p)
 
 	mowgli_free(s);
 }
+
+static sasl_mechanism_t mech = {
+
+	.name           = "ECDSA-NIST256P-CHALLENGE",
+	.mech_start     = &mech_start,
+	.mech_step      = &mech_step,
+	.mech_finish    = &mech_finish,
+};
 
 static void
 mod_init(module_t *const restrict m)

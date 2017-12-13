@@ -8,17 +8,7 @@
 #include "atheme.h"
 #include "authcookie.h"
 
-static int mech_step(sasl_session_t *, char *, size_t, char **, size_t *);
-
 static const sasl_core_functions_t *sasl_core_functions = NULL;
-
-static sasl_mechanism_t mech = {
-
-	.name           = "AUTHCOOKIE",
-	.mech_start     = NULL,
-	.mech_step      = &mech_step,
-	.mech_finish    = NULL,
-};
 
 static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
@@ -59,6 +49,14 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	p->authzid = sstrdup(authz);
 	return authcookie_find(cookie, mu) != NULL ? ASASL_DONE : ASASL_FAIL;
 }
+
+static sasl_mechanism_t mech = {
+
+	.name           = "AUTHCOOKIE",
+	.mech_start     = NULL,
+	.mech_step      = &mech_step,
+	.mech_finish    = NULL,
+};
 
 static void
 mod_init(module_t *const restrict m)
