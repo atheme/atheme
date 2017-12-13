@@ -212,18 +212,12 @@ destroy_session(sasl_session_t *p)
 	(void) free(p);
 }
 
-static void
-sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
-{
-	(void) free(ssi);
-}
-
 static sourceinfo_t *
 sasl_sourceinfo_create(sasl_session_t *p)
 {
 	sasl_sourceinfo_t *const ssi = smalloc(sizeof *ssi);
 
-	(void) object_init(object(ssi), "<sasl sourceinfo>", (destructor_t) sasl_sourceinfo_delete);
+	(void) object_init(object(ssi), "<sasl sourceinfo>", &free);
 
 	ssi->parent.s = p->server;
 	ssi->parent.connection = curr_uplink->conn;
