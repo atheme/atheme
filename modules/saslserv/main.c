@@ -352,11 +352,11 @@ sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
 static void
 mechlist_do_rebuild(void)
 {
-	mechlist_build_string(mechlist_string, sizeof(mechlist_string));
+	(void) mechlist_build_string(mechlist_string, sizeof mechlist_string);
 
 	/* push mechanism list to the network */
 	if (me.connected)
-		sasl_mechlist_sts(mechlist_string);
+		(void) sasl_mechlist_sts(mechlist_string);
 }
 
 static void
