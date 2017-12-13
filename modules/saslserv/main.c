@@ -808,8 +808,6 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t intent)
 {
-	mowgli_node_t *n, *tn;
-
 	hook_del_sasl_input(sasl_input);
 	hook_del_user_add(sasl_newuser);
 	hook_del_server_eob(sasl_server_eob);
@@ -824,12 +822,8 @@ mod_deinit(const module_unload_intent_t intent)
 	authservice_loaded--;
 
 	if (sessions.head != NULL)
-		slog(LG_DEBUG, "saslserv/main: shutting down with a non-empty session list, a mech did not unregister itself!");
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
-	{
-		destroy_session(n->data);
-	}
+		slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
+		               "a mechanism did not unregister itself! (BUG)");
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)
