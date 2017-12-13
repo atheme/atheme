@@ -57,22 +57,40 @@ mech_step_accname(struct sasl_session *const restrict p, char *const restrict me
 	if (! (message && len))
 		return ASASL_FAIL;
 
+	char authcid[NICKLEN];
+	(void) memset(authcid, 0x00, sizeof authcid);
+
 	const char *const end = memchr(message, 0x00, len);
 	if (! end)
 	{
-		p->username = sstrndup(message, len);
+		if (! len || len >= sizeof authcid)
+			return ASASL_FAIL;
+
+		(void) memcpy(authcid, message, len);
 	}
 	else
 	{
+		char authzid[NICKLEN];
+		(void) memset(authzid, 0x00, sizeof authzid);
+
 		const size_t authcid_length = (size_t) (end - message);
 		const size_t authzid_length = len - 1 - authcid_length;
 
-		p->username = sstrndup(message, authcid_length);
-		p->authzid = sstrndup(end + 1, authzid_length);
+		if (! authcid_length || authcid_length >= sizeof authcid)
+			return ASASL_FAIL;
+
+		if (! authzid_length || authzid_length >= sizeof authcid)
+			return ASASL_FAIL;
+
+		(void) memcpy(authcid, message, authcid_length);
+		(void) memcpy(authzid, end + 1, authzid_length);
+
+		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+			return ASASL_FAIL;
 	}
 
-	myuser_t *const mu = myuser_find_by_nick(p->username);
-	if (mu == NULL)
+	myuser_t *mu = NULL;
+	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 		return ASASL_FAIL;
 
 	metadata_t *md;

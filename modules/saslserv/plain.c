@@ -39,15 +39,25 @@ mech_step(struct sasl_session *const restrict p, char *const restrict message, c
 	if (! *secret)
 		return ASASL_FAIL;
 
-	myuser_t *const mu = myuser_find_by_nick(authcid);
-	if (! mu)
+	if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+		return ASASL_FAIL;
+
+	myuser_t *mu = NULL;
+	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
 		return ASASL_FAIL;
 
 	if (mu->flags & MU_NOPASSWORD)
-		return ASASL_FAIL;
+	{
+		/* Don't bad_password() the user */
 
-	p->username = sstrdup(authcid);
-	p->authzid = sstrdup(authzid);
+		(void) free(p->authceid);
+		(void) free(p->authzeid);
+
+		p->authceid = NULL;
+		p->authzeid = NULL;
+
+		return ASASL_FAIL;
+	}
 
 	if (! verify_password(mu, secret))
 		return ASASL_FAIL;

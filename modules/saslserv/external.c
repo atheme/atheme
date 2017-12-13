@@ -25,17 +25,20 @@ mech_step(struct sasl_session *const restrict p, char *const restrict message, c
 	if (message && len)
 	{
 		char authzid[NICKLEN];
-		if (len >= sizeof authzid)
+
+		if (! len || len >= sizeof authzid)
 			return ASASL_FAIL;
 
 		(void) memset(authzid, 0x00, sizeof authzid);
 		(void) memcpy(authzid, message, len);
 
-		p->authzid = sstrdup(authzid);
+		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+			return ASASL_FAIL;
 	}
 
 	const char *const authcid = entity(mcfp->mu)->name;
-	p->username = sstrdup(authcid);
+	if (! sasl_core_functions->authcid_can_login(p, authcid, NULL))
+		return ASASL_FAIL;
 
 	return ASASL_DONE;
 }

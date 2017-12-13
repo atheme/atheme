@@ -186,9 +186,11 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 	// Does GS2 header include an authzid ?
 	if (message[0] == 'a' && message[1] == '=')
 	{
+		char authzid[NICKLEN];
+
 		message += 2;
 
-		// Locate end of authzid
+		// Locate its end
 		const char *const pos = strchr(message + 1, ',');
 		if (! pos)
 		{
@@ -196,22 +198,35 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 			goto fail;
 		}
 
-		// Copy authzid
-		p->authzid = sstrndup(message, (size_t) (pos - message));
+		// Check its length
+		const size_t authzid_length = (size_t) (pos - message);
+		if (authzid_length >= sizeof authzid)
+		{
+			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'", __func__, authzid_length);
+			goto fail;
+		}
+
+		// Copy it
+		(void) memset(authzid, 0x00, sizeof authzid);
+		(void) memcpy(authzid, message, authzid_length);
 
 		// Normalize it
-		const char *const authzid_nm = pbkdf2v2_scram_functions->normalize(p->authzid);
-		if (! authzid_nm)
+		const char *const authzid_nm = pbkdf2v2_scram_functions->normalize(authzid);
+		if (! authzid_nm || ! *authzid_nm)
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
 			goto fail;
 		}
 
-		// Replace supplied authzid with normalized one
-		(void) free(p->authzid);
-		p->authzid = sstrdup(authzid_nm);
+		// Log it
+		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, authzid_nm);
 
-		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, p->authzid);
+		// Check it exists and can login
+		if (! sasl_core_functions->authzid_can_login(p, authzid_nm, NULL))
+		{
+			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", __func__);
+			goto fail;
+		}
 
 		message = pos + 1;
 	}
@@ -231,20 +246,21 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 		goto fail;
 	}
 
-	const char *const username = pbkdf2v2_scram_functions->normalize(input['n']);
+	const char *const authcid_nm = pbkdf2v2_scram_functions->normalize(input['n']);
 
-	if (! username)
+	if (! authcid_nm || ! *authcid_nm)
 	{
-		(void) slog(LG_DEBUG, "%s: SASLprep normalization of username failed", __func__);
-		goto fail;
-	}
-	if (! (s->mu = myuser_find_by_nick(username)))
-	{
-		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, username);
+		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", __func__);
 		goto fail;
 	}
 
-	(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, username);
+	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid_nm);
+
+	if (! sasl_core_functions->authcid_can_login(p, authcid_nm, &s->mu))
+	{
+		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", __func__);
+		goto fail;
+	}
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
 	{
@@ -273,7 +289,6 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 	}
 
 	// These cannot fail
-	p->username = sstrdup(username);
 	s->c_gs2_len = (size_t) (message - header);
 	s->c_gs2_buf = sstrndup(header, s->c_gs2_len);
 	s->c_msg_len = len - s->c_gs2_len;

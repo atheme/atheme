@@ -22,13 +22,14 @@ struct sasl_session
 {
 	struct sasl_mechanism   *mechptr;
 	server_t                *server;
+	sourceinfo_t            *si;
 	char                    *uid;
 	char                    *buf;
 	char                    *p;
 	void                    *mechdata;
-	char                    *username;
+	char                    *authceid;
+	char                    *authzeid;
 	char                    *certfp;
-	char                    *authzid;
 	char                    *host;
 	char                    *ip;
 	size_t                   len;
@@ -55,10 +56,10 @@ struct sasl_mechanism
 
 struct sasl_core_functions
 {
-
 	void     (*mech_register)(struct sasl_mechanism *);
 	void     (*mech_unregister)(struct sasl_mechanism *);
-
+	bool     (*authcid_can_login)(struct sasl_session *, const char *, myuser_t **);
+	bool     (*authzid_can_login)(struct sasl_session *, const char *, myuser_t **);
 };
 
 typedef struct {

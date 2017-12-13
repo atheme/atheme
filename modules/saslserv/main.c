@@ -74,9 +74,12 @@ static struct sourceinfo_vtable sasl_vtable = {
 	.get_source_mask    = sasl_get_source_name,
 };
 
-static sourceinfo_t *
-sasl_sourceinfo_create(struct sasl_session *p)
+static void
+sasl_sourceinfo_recreate(struct sasl_session *p)
 {
+	if (p->si)
+		(void) object_unref(p->si);
+
 	struct sasl_sourceinfo *const ssi = smalloc(sizeof *ssi);
 
 	(void) object_init(object(ssi), "<sasl sourceinfo>", &free);
@@ -93,7 +96,7 @@ sasl_sourceinfo_create(struct sasl_session *p)
 	ssi->parent.force_language = language_find("en");
 	ssi->sess = p;
 
-	return &ssi->parent;
+	p->si = &ssi->parent;
 }
 
 /* find an existing session by uid */
@@ -141,17 +144,12 @@ make_session(const char *uid, server_t *server)
 static void
 destroy_session(struct sasl_session *p)
 {
-	if (p->flags & ASASL_NEED_LOG && p->username)
+	if (p->flags & ASASL_NEED_LOG && p->authceid)
 	{
-		myuser_t *const mu = myuser_find_by_nick(p->username);
+		myuser_t *const mu = myuser_find_uid(p->authceid);
 
 		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
-		{
-			sourceinfo_t *const si = sasl_sourceinfo_create(p);
-
-			(void) logcommand(si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-			(void) object_unref(si);
-		}
+			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
 	}
 
 	mowgli_node_t *n, *tn;
@@ -168,8 +166,11 @@ destroy_session(struct sasl_session *p)
 	if (p->mechptr && p->mechptr->mech_finish)
 		(void) p->mechptr->mech_finish(p);
 
-	(void) free(p->username);
-	(void) free(p->authzid);
+	if (p->si)
+		(void) object_unref(p->si);
+
+	(void) free(p->authceid);
+	(void) free(p->authzeid);
 	(void) free(p->certfp);
 	(void) free(p->host);
 	(void) free(p->buf);
@@ -285,48 +286,26 @@ login_user(struct sasl_session *p)
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
 
-	myuser_t *const source_mu = myuser_find_by_nick(p->username);
+	myuser_t *const source_mu = myuser_find_uid(p->authceid);
 	if (! source_mu)
 		return NULL;
 
-	sourceinfo_t *const si = sasl_sourceinfo_create(p);
-
-	hook_user_login_check_t req = {
-
-		.si = si,
-		.mu = source_mu,
-		.allowed = true,
-	};
-
-	(void) hook_call_user_can_login(&req);
-
-	if (! req.allowed)
-	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
-		                                    entity(source_mu)->name);
-		return NULL;
-	}
-
 	myuser_t *target_mu = source_mu;
 
-	if (p->authzid && *p->authzid)
+	if (p->authzeid && *p->authzeid)
 	{
-		if (! (target_mu = myuser_find_by_nick(p->authzid)))
-		{
-			(void) object_unref(si);
+		if (! (target_mu = myuser_find_uid(p->authzeid)))
 			return NULL;
-		}
 	}
 	else
 	{
-		(void) free(p->authzid);
-		p->authzid = sstrdup(p->username);
+		(void) free(p->authzeid);
+		p->authzeid = sstrdup(p->authceid);
 	}
 
 	if (metadata_find(source_mu, "private:freeze:freezer"))
 	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
-		(void) object_unref(si);
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
 		return NULL;
 	}
 
@@ -334,39 +313,23 @@ login_user(struct sasl_session *p)
 	{
 		if (! may_impersonate(source_mu, target_mu))
 		{
-			(void) logcommand(si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
-			                                    entity(source_mu)->name, entity(target_mu)->name);
-			(void) object_unref(si);
-			return NULL;
-		}
-
-		req.mu = target_mu;
-		req.allowed = true;
-
-		(void) hook_call_user_can_login(&req);
-
-		if (! req.allowed)
-		{
-			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
-			                                    entity(target_mu)->name);
-			(void) object_unref(si);
+			(void) logcommand(p->si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
+			                                       entity(source_mu)->name, entity(target_mu)->name);
 			return NULL;
 		}
 
 		if (metadata_find(target_mu, "private:freeze:freezer"))
 		{
-			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
-			                                    entity(target_mu)->name);
-			(void) object_unref(si);
+			(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
+			                                       entity(target_mu)->name);
 			return NULL;
 		}
 	}
 
 	if (MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
 	{
-		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
-		                                    entity(target_mu)->name);
-		(void) object_unref(si);
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
+		                                       entity(target_mu)->name);
 		return NULL;
 	}
 
@@ -386,10 +349,9 @@ login_user(struct sasl_session *p)
 	}
 
 	if (target_mu != source_mu)
-		(void) logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2",
-		                                    entity(source_mu)->name, entity(target_mu)->name);
+		(void) logcommand(p->si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2",
+		                                       entity(source_mu)->name, entity(target_mu)->name);
 
-	(void) object_unref(si);
 	return target_mu;
 }
 
@@ -448,6 +410,8 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 	 */
 	if (! p->mechptr)
 	{
+		(void) sasl_sourceinfo_recreate(p);
+
 		char mech[SASL_MECHANISM_MAXLEN];
 
 		if (len >= sizeof mech)
@@ -533,21 +497,23 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 		return;
 	}
 
+	/* We might have more information to construct a more accurate sourceinfo now?
+	 * TODO: Investigate whether this is necessary
+	 */
+	(void) sasl_sourceinfo_recreate(p);
+
 	/* If we reach this, they failed SASL auth, so if they were trying
 	 * to identify as a specific user, bad_password them.
 	 */
-	if (p->username)
+	if (p->authceid)
 	{
-		myuser_t *const mu = myuser_find_by_nick(p->username);
+		myuser_t *const mu = myuser_find_uid(p->authceid);
 
 		if (mu)
 		{
-			sourceinfo_t *const si = sasl_sourceinfo_create(p);
-
-			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
-			                                    p->mechptr->name, entity(mu)->name);
-			(void) bad_password(si, mu);
-			(void) object_unref(si);
+			(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
+			                                       p->mechptr->name, entity(mu)->name);
+			(void) bad_password(p->si, mu);
 		}
 	}
 
@@ -656,11 +622,11 @@ sasl_newuser(hook_user_nick_t *data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	myuser_t *const mu = p->authzid ? myuser_find_by_nick(p->authzid) : NULL;
+	myuser_t *const mu = p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
 	if (! mu)
 	{
 		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		                                      p->authzid ? p->authzid : "??");
+		                                      p->authzeid ? p->authzeid : "??");
 		(void) destroy_session(p);
 
 		/* We'll remove their ircd login in handle_burstlogin() */
@@ -737,6 +703,64 @@ sasl_mech_unregister(struct sasl_mechanism *mech)
 			break;
 		}
 	}
+}
+
+static bool
+sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
+                       myuser_t **const restrict muo)
+{
+	myuser_t *const mu = myuser_find_by_nick(authcid);
+
+	if (! mu)
+		return false;
+
+	if (muo)
+		*muo = mu;
+
+	p->authceid = sstrdup(entity(mu)->id);
+
+	hook_user_login_check_t req = {
+
+		.si         = p->si,
+		.mu         = mu,
+		.allowed    = true,
+	};
+
+	(void) hook_call_user_can_login(&req);
+
+	if (! req.allowed)
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(mu)->name);
+
+	return req.allowed;
+}
+
+static bool
+sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
+                       myuser_t **const restrict muo)
+{
+	myuser_t *const mu = myuser_find_by_nick(authzid);
+
+	if (! mu)
+		return false;
+
+	if (muo)
+		*muo = mu;
+
+	p->authzeid = sstrdup(entity(mu)->id);
+
+	hook_user_login_check_t req = {
+
+		.si         = p->si,
+		.mu         = mu,
+		.allowed    = true,
+	};
+
+	(void) hook_call_user_can_login(&req);
+
+	if (! req.allowed)
+		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(mu)->name);
+
+	return req.allowed;
 }
 
 /* main services client routine */
@@ -816,6 +840,8 @@ const struct sasl_core_functions sasl_core_functions = {
 
 	.mech_register      = &sasl_mech_register,
 	.mech_unregister    = &sasl_mech_unregister,
+	.authcid_can_login  = &sasl_authcid_can_login,
+	.authzid_can_login  = &sasl_authzid_can_login,
 };
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)
