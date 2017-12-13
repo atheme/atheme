@@ -13,9 +13,6 @@ typedef struct {
 	sasl_session_t *sess;
 } sasl_sourceinfo_t;
 
-static void mechlist_build_string(char *ptr, size_t buflen);
-static void mechlist_do_rebuild(void);
-
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN];
@@ -207,16 +204,6 @@ sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
 }
 
 static void
-mechlist_do_rebuild(void)
-{
-	(void) mechlist_build_string(mechlist_string, sizeof mechlist_string);
-
-	/* push mechanism list to the network */
-	if (me.connected)
-		(void) sasl_mechlist_sts(mechlist_string);
-}
-
-static void
 mechlist_build_string(char *ptr, size_t buflen)
 {
 	size_t l = 0;
@@ -240,6 +227,16 @@ mechlist_build_string(char *ptr, size_t buflen)
 		ptr--;
 
 	*ptr = 0x00;
+}
+
+static void
+mechlist_do_rebuild(void)
+{
+	(void) mechlist_build_string(mechlist_string, sizeof mechlist_string);
+
+	/* push mechanism list to the network */
+	if (me.connected)
+		(void) sasl_mechlist_sts(mechlist_string);
 }
 
 static bool
