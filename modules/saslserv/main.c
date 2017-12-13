@@ -215,9 +215,7 @@ destroy_session(sasl_session_t *p)
 static void
 sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 {
-	return_if_fail(ssi != NULL);
-
-	free(ssi);
+	(void) free(ssi);
 }
 
 static sourceinfo_t *
