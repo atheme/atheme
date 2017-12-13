@@ -58,35 +58,32 @@ const sasl_core_functions_t sasl_core_functions = {
 static void
 saslserv(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *cmd;
-	char *text;
-	char orig[BUFSIZE];
-
 	/* this should never happen */
 	if (parv[0][0] == '&')
 	{
-		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
+		(void) slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
 		return;
 	}
 
 	/* make a copy of the original for debugging */
-	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
+	char orig[BUFSIZE];
+	(void) mowgli_strlcpy(orig, parv[parc - 1], sizeof orig);
 
 	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
-	text = strtok(NULL, "");
+	char *const cmd = strtok(parv[parc - 1], " ");
+	char *const text = strtok(NULL, "");
 
-	if (!cmd)
+	if (! cmd)
 		return;
+
 	if (*orig == '\001')
 	{
-		handle_ctcp_common(si, cmd, text);
+		(void) handle_ctcp_common(si, cmd, text);
 		return;
 	}
 
-	command_fail(si, fault_noprivs, "This service exists to identify "
-			"connecting clients to the network. It has no "
-			"public interface.");
+	(void) command_fail(si, fault_noprivs, "This service exists to identify connecting clients to the network. "
+	                                       "It has no public interface.");
 }
 
 static void
