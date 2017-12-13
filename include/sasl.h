@@ -28,7 +28,7 @@ struct sasl_session
 	char              *authzid;
 	char              *host;
 	char              *ip;
-	int                len;
+	size_t             len;
 	int                flags;
 	bool               tls;
 };

@@ -18,8 +18,8 @@ static sasl_session_t *make_session(const char *uid, server_t *server);
 static void destroy_session(sasl_session_t *p);
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
 static void sasl_input(sasl_message_t *smsg);
-static void sasl_packet(sasl_session_t *p, char *buf, int len);
-static void sasl_write(char *target, char *data, int length);
+static void sasl_packet(sasl_session_t *p, char *buf, size_t len);
+static void sasl_write(char *target, char *data, size_t length);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
@@ -255,9 +255,9 @@ static void
 sasl_input(sasl_message_t *smsg)
 {
 	sasl_session_t *p = make_session(smsg->uid, smsg->server);
-	int len = strlen(smsg->parv[0]);
+	size_t len = strlen(smsg->parv[0]);
 	char *tmpbuf;
-	int tmplen;
+	size_t tmplen;
 
 	switch(smsg->mode)
 	{
@@ -364,7 +364,7 @@ mechlist_do_rebuild(void)
 static void
 mechlist_build_string(char *ptr, size_t buflen)
 {
-	int l = 0;
+	size_t l = 0;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
@@ -387,7 +387,7 @@ mechlist_build_string(char *ptr, size_t buflen)
  * and feeding returned data back to client.
  */
 static void
-sasl_packet(sasl_session_t *p, char *buf, int len)
+sasl_packet(sasl_session_t *p, char *buf, size_t len)
 {
 	int rc;
 	size_t tlen = 0;
@@ -511,14 +511,14 @@ sasl_packet(sasl_session_t *p, char *buf, int len)
 
 /* output an arbitrary amount of data to the SASL client */
 static void
-sasl_write(char *target, char *data, int length)
+sasl_write(char *target, char *data, size_t length)
 {
 	char out[401];
-	int last = 400, rem = length;
+	size_t last = 400, rem = length;
 
 	while(rem)
 	{
-		int nbytes = rem > 400 ? 400 : rem;
+		const size_t nbytes = rem > 400 ? 400 : rem;
 		memcpy(out, data, nbytes);
 		out[nbytes] = '\0';
 		sasl_sts(target, 'C', out);
