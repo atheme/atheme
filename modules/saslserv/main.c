@@ -523,28 +523,28 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 static void
 sasl_write(char *target, char *data, size_t length)
 {
-	char out[401];
-	size_t last = 400, rem = length;
+	size_t last = SASL_S2S_MAXLEN;
+	size_t rem = length;
 
-	while(rem)
+	while (rem)
 	{
-		const size_t nbytes = rem > 400 ? 400 : rem;
-		memcpy(out, data, nbytes);
-		out[nbytes] = '\0';
-		sasl_sts(target, 'C', out);
+		const size_t nbytes = (rem > SASL_S2S_MAXLEN) ? SASL_S2S_MAXLEN : rem;
+
+		char out[SASL_S2S_MAXLEN + 1];
+		(void) memset(out, 0x00, sizeof out);
+		(void) memcpy(out, data, nbytes);
+		(void) sasl_sts(target, 'C', out);
 
 		data += nbytes;
 		rem -= nbytes;
 		last = nbytes;
 	}
 
-	/* The end of a packet is indicated by a string not of length 400.
-	 * If last piece is exactly 400 in size, send an empty string to
-	 * finish the transaction.
-	 * Also if there is no data at all.
+	/* The end of a packet is indicated by a string not of the maximum length. If last piece was the
+	 * maximum length, or if there was no data at all, send an empty string to finish the transaction.
 	 */
-	if(last == 400)
-		sasl_sts(target, 'C', "+");
+	if (last == SASL_S2S_MAXLEN)
+		(void) sasl_sts(target, 'C', "+");
 }
 
 static bool

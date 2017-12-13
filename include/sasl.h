@@ -11,6 +11,7 @@
 
 #define SASL_MESSAGE_MAXPARA    8       /* arbitrary, increment if needed in future */
 #define SASL_MECHANISM_MAXLEN   60
+#define SASL_S2S_MAXLEN         400
 
 typedef struct sasl_session sasl_session_t;
 typedef struct sasl_message sasl_message_t;
