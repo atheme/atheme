@@ -20,10 +20,10 @@ struct authcookie_ {
 
 E void authcookie_init(void);
 E authcookie_t *authcookie_create(myuser_t *mu);
-E authcookie_t *authcookie_find(char *ticket, myuser_t *myuser);
+E authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser);
 E void authcookie_destroy(authcookie_t *ac);
 E void authcookie_destroy_all(myuser_t *mu);
-E bool authcookie_validate(char *ticket, myuser_t *myuser);
+E bool authcookie_validate(const char *ticket, myuser_t *myuser);
 E void authcookie_expire(void *arg);
 
 #endif
