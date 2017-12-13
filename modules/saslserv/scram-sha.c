@@ -137,35 +137,17 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 }
 
 static int
-sasl_scramsha_start(sasl_session_t *const restrict p, char __attribute__((unused)) **const restrict out,
-                    size_t __attribute__((unused)) *const restrict out_len)
+mech_start(sasl_session_t *const restrict p, char __attribute__((unused)) **const restrict out,
+           size_t __attribute__((unused)) *const restrict out_len)
 {
 	p->mechdata = smalloc(sizeof(struct scramsha_session));
 
 	return ASASL_MORE;
 }
 
-static void
-sasl_scramsha_finish(sasl_session_t *const restrict p)
-{
-	if (p && p->mechdata)
-	{
-		struct scramsha_session *const s = p->mechdata;
-
-		(void) free(s->cn);
-		(void) free(s->sn);
-		(void) free(s->c_gs2_buf);
-		(void) free(s->c_msg_buf);
-		(void) free(s->s_msg_buf);
-		(void) free(s);
-
-		p->mechdata = NULL;
-	}
-}
-
 static int
-sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const restrict data, const size_t len,
-                               char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
+mech_step_clientfirst(sasl_session_t *const restrict p, char *const restrict data, const size_t len,
+                      char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
 
@@ -258,13 +240,13 @@ sasl_scramsha_step_clientfirst(sasl_session_t *const restrict p, char *const res
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of username failed", __func__);
 		goto fail;
 	}
-	else if (! (s->mu = myuser_find_by_nick(username)))
+	if (! (s->mu = myuser_find_by_nick(username)))
 	{
 		(void) slog(LG_DEBUG, "%s: no such user '%s'", __func__, username);
 		goto fail;
 	}
-	else
-		(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, username);
+
+	(void) slog(LG_DEBUG, "%s: parsed username '%s'", __func__, username);
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
 	{
@@ -327,8 +309,8 @@ fail:
 }
 
 static int
-sasl_scramsha_step_clientproof(struct scramsha_session *const restrict s, char *const restrict data,
-                               const size_t len, char **const restrict out, size_t *const restrict out_len)
+mech_step_clientproof(struct scramsha_session *const restrict s, char *const restrict data, const size_t len,
+                      char **const restrict out, size_t *const restrict out_len)
 {
 	unsigned char ClientSignature[EVP_MAX_MD_SIZE];
 	unsigned char ServerSignature[EVP_MAX_MD_SIZE];
@@ -459,7 +441,7 @@ sasl_scramsha_step_clientproof(struct scramsha_session *const restrict s, char *
 	// Cannot fail
 	*out = smalloc(*out_len);
 
-	// Create server-final-message
+	// Construct server-final-message
 	(*out)[0] = 'v';
 	(*out)[1] = '=';
 	(void) memcpy((*out) + 2, ServerSignature64, (*out_len) - 2);
@@ -475,7 +457,7 @@ fail:
 }
 
 static int
-sasl_scramsha_step_success(const struct scramsha_session *const restrict s)
+mech_step_success(const struct scramsha_session *const restrict s)
 {
 	if (s->db.scram)
 		// User's password hash was already in SCRAM format, nothing to do
@@ -525,21 +507,21 @@ sasl_scramsha_step_success(const struct scramsha_session *const restrict s)
 }
 
 static inline int
-sasl_scramsha_step_x(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
-                     char **restrict out, size_t *const restrict out_len, const unsigned int prf)
+mech_step_dispatch(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+                   char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
 
 	switch (s->step)
 	{
 		case SCRAMSHA_STEP_CLIENTFIRST:
-			return sasl_scramsha_step_clientfirst(p, message, len, out, out_len, prf);
+			return mech_step_clientfirst(p, message, len, out, out_len, prf);
 
 		case SCRAMSHA_STEP_CLIENTPROOF:
-			return sasl_scramsha_step_clientproof(s, message, len, out, out_len);
+			return mech_step_clientproof(s, message, len, out, out_len);
 
 		case SCRAMSHA_STEP_PASSED:
-			return sasl_scramsha_step_success(s);
+			return mech_step_success(s);
 
 		case SCRAMSHA_STEP_FAILED:
 			return ASASL_FAIL;
@@ -547,40 +529,64 @@ sasl_scramsha_step_x(sasl_session_t *const restrict p, char *const restrict mess
 }
 
 static int
-sasl_scramsha_step_sha1(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
-                        char **restrict out, size_t *const restrict out_len)
+mech_step_sha1(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+               char **const restrict out, size_t *const restrict out_len)
 {
-	return sasl_scramsha_step_x(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA1);
+	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA1);
 }
 
 static int
-sasl_scramsha_step_sha2_256(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
-                            char **restrict out, size_t *const restrict out_len)
+mech_step_sha2_256(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+                   char **const restrict out, size_t *const restrict out_len)
 {
-	return sasl_scramsha_step_x(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA2_256);
+	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA2_256);
+}
+
+static void
+mech_finish(sasl_session_t *const restrict p)
+{
+	if (! (p && p->mechdata))
+		return;
+
+	struct scramsha_session *const s = p->mechdata;
+
+	(void) free(s->cn);
+	(void) free(s->sn);
+	(void) free(s->c_gs2_buf);
+	(void) free(s->c_msg_buf);
+	(void) free(s->s_msg_buf);
+	(void) free(s);
+
+	p->mechdata = NULL;
 }
 
 static sasl_mechanism_t sasl_scramsha_mech_sha1 = {
 
 	.name           = "SCRAM-SHA-1",
-	.mech_start     = &sasl_scramsha_start,
-	.mech_step      = &sasl_scramsha_step_sha1,
-	.mech_finish    = &sasl_scramsha_finish,
+	.mech_start     = &mech_start,
+	.mech_step      = &mech_step_sha1,
+	.mech_finish    = &mech_finish,
 };
 
 static sasl_mechanism_t sasl_scramsha_mech_sha2_256 = {
 
 	.name           = "SCRAM-SHA-256",
-	.mech_start     = &sasl_scramsha_start,
-	.mech_step      = &sasl_scramsha_step_sha2_256,
-	.mech_finish    = &sasl_scramsha_finish,
+	.mech_start     = &mech_start,
+	.mech_step      = &mech_step_sha2_256,
+	.mech_finish    = &mech_finish,
 };
+
+static inline void
+sasl_scramsha_mechs_unregister(void)
+{
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
+}
 
 static void
 sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 {
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_scramsha_mechs_unregister();
 
 	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
 
@@ -641,8 +647,7 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_scramsha_mechs_unregister();
 
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
