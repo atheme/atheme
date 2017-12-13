@@ -550,39 +550,37 @@ sasl_write(char *target, char *data, size_t length)
 static bool
 may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 {
-	hook_sasl_may_impersonate_t req;
-	char priv[512] = PRIV_IMPERSONATE_ANY;
-	char *classname;
-
 	/* Allow same (although this function won't get called in that case anyway) */
-	if(source_mu == target_mu)
+	if (source_mu == target_mu)
 		return true;
 
+	char priv[BUFSIZE] = PRIV_IMPERSONATE_ANY;
+
 	/* Check for wildcard priv */
-	if(has_priv_myuser(source_mu, priv))
+	if (has_priv_myuser(source_mu, priv))
 		return true;
 
 	/* Check for target-operclass specific priv */
-	classname = (target_mu->soper && target_mu->soper->classname)
-			? target_mu->soper->classname : "user";
-
-	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_CLASS_FMT, classname);
-
-	if(has_priv_myuser(source_mu, priv))
+	const char *const classname = (target_mu->soper && target_mu->soper->classname) ?
+	                                  target_mu->soper->classname : "user";
+	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_CLASS_FMT, classname);
+	if (has_priv_myuser(source_mu, priv))
 		return true;
 
 	/* Check for target-entity specific priv */
-	snprintf(priv, sizeof(priv), PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
-
-	if(has_priv_myuser(source_mu, priv))
+	(void) snprintf(priv, sizeof priv, PRIV_IMPERSONATE_ENTITY_FMT, entity(target_mu)->name);
+	if (has_priv_myuser(source_mu, priv))
 		return true;
 
 	/* Allow modules to check too */
-	req.source_mu = source_mu;
-	req.target_mu = target_mu;
-	req.allowed = false;
+	hook_sasl_may_impersonate_t req = {
 
-	hook_call_sasl_may_impersonate(&req);
+		.source_mu = source_mu,
+		.target_mu = target_mu,
+		.allowed = false,
+	};
+
+	(void) hook_call_sasl_may_impersonate(&req);
 
 	return req.allowed;
 }
