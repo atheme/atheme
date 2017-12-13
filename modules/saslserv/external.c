@@ -11,25 +11,31 @@
 static const sasl_core_functions_t *sasl_core_functions = NULL;
 
 static int
-mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+mech_step(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+          char __attribute__((unused)) **const restrict out,
+          size_t __attribute__((unused)) *const restrict out_len)
 {
-	mycertfp_t *mcfp;
-	const char *name;
-	int namelen;
-
-	if(p->certfp == NULL)
+	if (! p->certfp)
 		return ASASL_FAIL;
 
-	mcfp = mycertfp_find(p->certfp);
-	if(mcfp == NULL)
+	mycertfp_t *const mcfp = mycertfp_find(p->certfp);
+	if (! mcfp)
 		return ASASL_FAIL;
 
-	/* The client response is the authorization identity, which is verified
-	 * by saslserv/main, therefore the mechanism need not check it. */
+	if (message && len)
+	{
+		char authzid[NICKLEN];
+		if (len >= sizeof authzid)
+			return ASASL_FAIL;
 
-	name = entity(mcfp->mu)->name;
-	p->username = sstrdup(name);
-	p->authzid = sstrdup(message);
+		(void) memset(authzid, 0x00, sizeof authzid);
+		(void) memcpy(authzid, message, len);
+
+		p->authzid = sstrdup(authzid);
+	}
+
+	const char *const authcid = entity(mcfp->mu)->name;
+	p->username = sstrdup(authcid);
 
 	return ASASL_DONE;
 }
@@ -51,7 +57,7 @@ mod_init(module_t *const restrict m)
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
 	(void) sasl_core_functions->mech_unregister(&mech);
 }
