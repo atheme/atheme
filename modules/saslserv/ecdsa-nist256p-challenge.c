@@ -21,7 +21,6 @@ enum ecdsa_step
 {
 	ECDSA_ST_ACCNAME    = 0,
 	ECDSA_ST_RESPONSE   = 1,
-	ECDSA_ST_COUNT      = 2,
 };
 
 struct ecdsa_session
@@ -49,13 +48,21 @@ mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) *
 }
 
 static int
-mech_step_accname(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
-                  void **const restrict out, size_t *const restrict outlen)
+mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
+          void **const restrict out, size_t *const restrict outlen)
 {
 	struct ecdsa_session *const s = p->mechdata;
 
 	if (! (in && inlen))
 		return ASASL_FAIL;
+
+	if (s->step == ECDSA_ST_RESPONSE)
+	{
+		if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in, (int) inlen, s->pubkey) != 1)
+			return ASASL_FAIL;
+
+		return ASASL_DONE;
+	}
 
 	char authcid[NICKLEN];
 	(void) memset(authcid, 0x00, sizeof authcid);
@@ -118,41 +125,6 @@ mech_step_accname(struct sasl_session *const restrict p, const void *const restr
 
 	s->step = ECDSA_ST_RESPONSE;
 	return ASASL_MORE;
-}
-
-static int
-mech_step_response(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
-                   void __attribute__((unused)) **const restrict out,
-                   size_t __attribute__((unused)) *const restrict outlen)
-{
-	struct ecdsa_session *const s = p->mechdata;
-
-	if (! (in && inlen))
-		return ASASL_FAIL;
-
-	if (ECDSA_verify(0, s->challenge, CHALLENGE_LENGTH, in, (int) inlen, s->pubkey) != 1)
-		return ASASL_FAIL;
-
-	return ASASL_DONE;
-}
-
-typedef int (*mech_stepfn_t)(struct sasl_session *, const void *, size_t, void **, size_t *);
-
-static int
-mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
-          void **const restrict out, size_t *const restrict outlen)
-{
-	static mech_stepfn_t mech_steps[ECDSA_ST_COUNT] = {
-		[ECDSA_ST_ACCNAME] = &mech_step_accname,
-		[ECDSA_ST_RESPONSE] = &mech_step_response,
-	};
-
-	struct ecdsa_session *const s = p->mechdata;
-
-	if (mech_steps[s->step] != NULL)
-		return mech_steps[s->step](p, in, inlen, out, outlen);
-
-	return ASASL_FAIL;
 }
 
 static void
