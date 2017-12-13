@@ -14,8 +14,6 @@ typedef struct {
 } sasl_sourceinfo_t;
 
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
-static void sasl_input(sasl_message_t *smsg);
-static void sasl_packet(sasl_session_t *p, char *buf, size_t len);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
@@ -186,89 +184,6 @@ sasl_sourceinfo_create(sasl_session_t *p)
 	ssi->sess = p;
 
 	return &ssi->parent;
-}
-
-/* interpret an AUTHENTICATE message */
-static void
-sasl_input(sasl_message_t *smsg)
-{
-	sasl_session_t *const p = make_session(smsg->uid, smsg->server);
-
-	size_t len = strlen(smsg->parv[0]);
-	char *tmpbuf;
-	size_t tmplen;
-
-	switch(smsg->mode)
-	{
-	case 'H':
-		/* (H)ost information */
-		p->host = sstrdup(smsg->parv[0]);
-		p->ip   = sstrdup(smsg->parv[1]);
-
-		if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
-			p->tls = true;
-
-		return;
-
-	case 'S':
-		/* (S)tart authentication */
-		if (smsg->mode == 'S' && smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
-		{
-			(void) free(p->certfp);
-
-			p->certfp = sstrdup(smsg->parv[1]);
-			p->tls = true;
-		}
-		/* fallthrough to 'C' */
-
-	case 'C':
-		/* (C)lient data */
-		if (p->buf == NULL)
-		{
-			p->buf = (char *)smalloc(len + 1);
-			p->p = p->buf;
-			p->len = len;
-		}
-		else
-		{
-			if (p->len + len >= 8192) /* This is a little much... */
-			{
-				(void) sasl_sts(p->uid, 'D', "F");
-				(void) destroy_session(p);
-
-				return;
-			}
-
-			p->buf = (char *)realloc(p->buf, p->len + len + 1);
-			p->p = p->buf + p->len;
-			p->len += len;
-		}
-
-		(void) memcpy(p->p, smsg->parv[0], len);
-
-		/* Messages not exactly 400 bytes are the end of a packet. */
-		if (len < 400)
-		{
-			p->buf[p->len] = 0x00;
-
-			tmpbuf = p->buf;
-			tmplen = p->len;
-
-			p->len = 0;
-			p->buf = NULL;
-			p->p = NULL;
-
-			(void) sasl_packet(p, tmpbuf, tmplen);
-			(void) free(tmpbuf);
-		}
-
-		return;
-
-	case 'D':
-		/* (D)one -- when we receive it, means client abort */
-		(void) destroy_session(p);
-		return;
-	}
 }
 
 /* find a mechanism by name */
@@ -493,6 +408,89 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 
 	(void) free(out);
 	(void) sasl_session_abort(p);
+}
+
+/* interpret an AUTHENTICATE message */
+static void
+sasl_input(sasl_message_t *smsg)
+{
+	sasl_session_t *const p = make_session(smsg->uid, smsg->server);
+
+	size_t len = strlen(smsg->parv[0]);
+	char *tmpbuf;
+	size_t tmplen;
+
+	switch(smsg->mode)
+	{
+	case 'H':
+		/* (H)ost information */
+		p->host = sstrdup(smsg->parv[0]);
+		p->ip   = sstrdup(smsg->parv[1]);
+
+		if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
+			p->tls = true;
+
+		return;
+
+	case 'S':
+		/* (S)tart authentication */
+		if (smsg->mode == 'S' && smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
+		{
+			(void) free(p->certfp);
+
+			p->certfp = sstrdup(smsg->parv[1]);
+			p->tls = true;
+		}
+		/* fallthrough to 'C' */
+
+	case 'C':
+		/* (C)lient data */
+		if (p->buf == NULL)
+		{
+			p->buf = (char *)smalloc(len + 1);
+			p->p = p->buf;
+			p->len = len;
+		}
+		else
+		{
+			if (p->len + len >= 8192) /* This is a little much... */
+			{
+				(void) sasl_sts(p->uid, 'D', "F");
+				(void) destroy_session(p);
+
+				return;
+			}
+
+			p->buf = (char *)realloc(p->buf, p->len + len + 1);
+			p->p = p->buf + p->len;
+			p->len += len;
+		}
+
+		(void) memcpy(p->p, smsg->parv[0], len);
+
+		/* Messages not exactly 400 bytes are the end of a packet. */
+		if (len < 400)
+		{
+			p->buf[p->len] = 0x00;
+
+			tmpbuf = p->buf;
+			tmplen = p->len;
+
+			p->len = 0;
+			p->buf = NULL;
+			p->p = NULL;
+
+			(void) sasl_packet(p, tmpbuf, tmplen);
+			(void) free(tmpbuf);
+		}
+
+		return;
+
+	case 'D':
+		/* (D)one -- when we receive it, means client abort */
+		(void) destroy_session(p);
+		return;
+	}
 }
 
 static bool
