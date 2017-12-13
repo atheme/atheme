@@ -8,10 +8,11 @@
 #include "atheme.h"
 #include "uplink.h"
 
-typedef struct {
+struct sasl_sourceinfo
+{
 	sourceinfo_t     parent;
 	sasl_session_t  *sess;
-} sasl_sourceinfo_t;
+};
 
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
@@ -26,7 +27,7 @@ sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 {
 	static char result[BUFSIZE];
 
-	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+	struct sasl_sourceinfo *const ssi = (struct sasl_sourceinfo *) si;
 
 	if (full)
 		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
@@ -47,7 +48,7 @@ sasl_get_source_name(sourceinfo_t *si)
 	static char result[HOSTLEN + NICKLEN + 10];
 	char description[BUFSIZE];
 
-	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+	struct sasl_sourceinfo *const ssi = (struct sasl_sourceinfo *) si;
 
 	if (ssi->sess->server && ! hide_server_names)
 		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
@@ -76,7 +77,7 @@ static struct sourceinfo_vtable sasl_vtable = {
 static sourceinfo_t *
 sasl_sourceinfo_create(sasl_session_t *p)
 {
-	sasl_sourceinfo_t *const ssi = smalloc(sizeof *ssi);
+	struct sasl_sourceinfo *const ssi = smalloc(sizeof *ssi);
 
 	(void) object_init(object(ssi), "<sasl sourceinfo>", &free);
 
