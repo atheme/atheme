@@ -10,7 +10,8 @@
 
 static const sasl_core_functions_t *sasl_core_functions = NULL;
 
-static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+static int
+mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	mycertfp_t *mcfp;
 	const char *name;

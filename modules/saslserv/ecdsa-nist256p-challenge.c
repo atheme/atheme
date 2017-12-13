@@ -33,7 +33,8 @@ typedef struct {
 
 static const sasl_core_functions_t *sasl_core_functions = NULL;
 
-static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
+static int
+mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = mowgli_alloc(sizeof(ecdsa_session_t));
 	p->mechdata = s;
@@ -46,7 +47,8 @@ static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 	return ASASL_MORE;
 }
 
-static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+static int
+mech_step_accname(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = p->mechdata;
 	myuser_t *mu;
@@ -100,7 +102,8 @@ static int mech_step_accname(sasl_session_t *p, char *message, size_t len, char 
 	return ASASL_MORE;
 }
 
-static int mech_step_response(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+static int
+mech_step_response(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = p->mechdata;
 
@@ -112,7 +115,8 @@ static int mech_step_response(sasl_session_t *p, char *message, size_t len, char
 
 typedef int (*mech_stepfn_t)(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
 
-static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
+static int
+mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	static mech_stepfn_t mech_steps[ECDSA_ST_COUNT] = {
 		[ECDSA_ST_ACCNAME] = &mech_step_accname,
@@ -126,7 +130,8 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	return ASASL_FAIL;
 }
 
-static void mech_finish(sasl_session_t *p)
+static void
+mech_finish(sasl_session_t *p)
 {
 	ecdsa_session_t *s = p->mechdata;
 
