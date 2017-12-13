@@ -244,7 +244,8 @@ sasl_sourceinfo_create(sasl_session_t *p)
 static void
 sasl_input(sasl_message_t *smsg)
 {
-	sasl_session_t *p = make_session(smsg->uid, smsg->server);
+	sasl_session_t *const p = make_session(smsg->uid, smsg->server);
+
 	size_t len = strlen(smsg->parv[0]);
 	char *tmpbuf;
 	size_t tmplen;
@@ -263,9 +264,10 @@ sasl_input(sasl_message_t *smsg)
 
 	case 'S':
 		/* (S)tart authentication */
-		if(smsg->mode == 'S' && smsg->parc >= 2 && !strcmp(smsg->parv[0], "EXTERNAL"))
+		if (smsg->mode == 'S' && smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
 		{
-			free(p->certfp);
+			(void) free(p->certfp);
+
 			p->certfp = sstrdup(smsg->parv[1]);
 			p->tls = true;
 		}
@@ -273,7 +275,7 @@ sasl_input(sasl_message_t *smsg)
 
 	case 'C':
 		/* (C)lient data */
-		if(p->buf == NULL)
+		if (p->buf == NULL)
 		{
 			p->buf = (char *)smalloc(len + 1);
 			p->p = p->buf;
@@ -281,10 +283,11 @@ sasl_input(sasl_message_t *smsg)
 		}
 		else
 		{
-			if(p->len + len + 1 > 8192) /* This is a little much... */
+			if (p->len + len >= 8192) /* This is a little much... */
 			{
-				sasl_sts(p->uid, 'D', "F");
-				destroy_session(p);
+				(void) sasl_sts(p->uid, 'D', "F");
+				(void) destroy_session(p);
+
 				return;
 			}
 
@@ -293,24 +296,29 @@ sasl_input(sasl_message_t *smsg)
 			p->len += len;
 		}
 
-		memcpy(p->p, smsg->parv[0], len);
+		(void) memcpy(p->p, smsg->parv[0], len);
 
 		/* Messages not exactly 400 bytes are the end of a packet. */
-		if(len < 400)
+		if (len < 400)
 		{
-			p->buf[p->len] = '\0';
+			p->buf[p->len] = 0x00;
+
 			tmpbuf = p->buf;
 			tmplen = p->len;
-			p->buf = p->p = NULL;
+
 			p->len = 0;
-			sasl_packet(p, tmpbuf, tmplen);
-			free(tmpbuf);
+			p->buf = NULL;
+			p->p = NULL;
+
+			(void) sasl_packet(p, tmpbuf, tmplen);
+			(void) free(tmpbuf);
 		}
+
 		return;
 
 	case 'D':
 		/* (D)one -- when we receive it, means client abort */
-		destroy_session(p);
+		(void) destroy_session(p);
 		return;
 	}
 }
