@@ -175,45 +175,41 @@ make_session(const char *uid, server_t *server)
 static void
 destroy_session(sasl_session_t *p)
 {
-	mowgli_node_t *n, *tn;
-	myuser_t *mu;
-
-	if (p->flags & ASASL_NEED_LOG && p->username != NULL)
+	if (p->flags & ASASL_NEED_LOG && p->username)
 	{
-		mu = myuser_find_by_nick(p->username);
-		if (mu != NULL && !(ircd->flags & IRCD_SASL_USE_PUID))
+		myuser_t *const mu = myuser_find_by_nick(p->username);
+
+		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
 		{
-			sourceinfo_t *si = sasl_sourceinfo_create(p);
-			logcommand(si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-			object_unref(si);
+			sourceinfo_t *const si = sasl_sourceinfo_create(p);
+
+			(void) logcommand(si, CMDLOG_LOGIN, "LOGIN (session timed out)");
+			(void) object_unref(si);
 		}
 	}
+
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
-		if(n->data == p)
+		if (n->data == p)
 		{
-			mowgli_node_delete(n, &sessions);
-			mowgli_node_free(n);
+			(void) mowgli_node_delete(n, &sessions);
+			(void) mowgli_node_free(n);
 		}
 	}
 
-	free(p->uid);
-	free(p->buf);
-	p->buf = p->p = NULL;
+	if (p->mechptr && p->mechptr->mech_finish)
+		(void) p->mechptr->mech_finish(p);
 
-	if(p->mechptr && p->mechptr->mech_finish)
-		p->mechptr->mech_finish(p); /* Free up any mechanism data */
-
-	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
-
-	free(p->username);
-	free(p->certfp);
-	free(p->authzid);
-	free(p->host);
-	free(p->ip);
-
-	free(p);
+	(void) free(p->username);
+	(void) free(p->authzid);
+	(void) free(p->certfp);
+	(void) free(p->host);
+	(void) free(p->buf);
+	(void) free(p->uid);
+	(void) free(p->ip);
+	(void) free(p);
 }
 
 static void
