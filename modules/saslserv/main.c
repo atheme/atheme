@@ -399,7 +399,7 @@ static void
 sasl_packet(struct sasl_session *p, char *buf, size_t len)
 {
 	int rc;
-	char temp[BUFSIZE];
+	char temp[SASL_C2S_MAXLEN * 2];
 	metadata_t *md;
 
 	char *out = NULL;
@@ -564,7 +564,7 @@ sasl_input(sasl_message_t *smsg)
 		}
 		else
 		{
-			if (p->len + len >= 8192) /* This is a little much... */
+			if (p->len + len >= SASL_C2S_MAXLEN)
 			{
 				(void) sasl_session_abort(p);
 				return;

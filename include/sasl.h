@@ -12,6 +12,7 @@
 #define SASL_MESSAGE_MAXPARA    8       /* arbitrary, increment if needed in future */
 #define SASL_MECHANISM_MAXLEN   60
 #define SASL_S2S_MAXLEN         400
+#define SASL_C2S_MAXLEN         8192
 
 struct sasl_session;
 struct sasl_message;
