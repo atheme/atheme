@@ -27,8 +27,6 @@ static void sasl_server_eob(server_t *s);
 static void delete_stale(void *vptr);
 static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild(void);
-static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full);
-static const char *sasl_get_source_name(sourceinfo_t *si);
 
 static mowgli_list_t sessions;
 static mowgli_list_t sasl_mechanisms;
@@ -37,14 +35,6 @@ static bool hide_server_names;
 
 static service_t *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
-
-static struct sourceinfo_vtable sasl_vtable = {
-
-	.description        = "SASL",
-	.format             = sasl_format_sourceinfo,
-	.get_source_name    = sasl_get_source_name,
-	.get_source_mask    = sasl_get_source_name,
-};
 
 /* find an existing session by uid */
 static sasl_session_t *
@@ -127,6 +117,58 @@ destroy_session(sasl_session_t *p)
 	(void) free(p->ip);
 	(void) free(p);
 }
+
+static const char *
+sasl_format_sourceinfo(sourceinfo_t *si, bool full)
+{
+	static char result[BUFSIZE];
+
+	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+
+	if (full)
+		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
+		                ssi->sess->uid ? ssi->sess->uid : "?",
+		                ssi->sess->host ? ssi->sess->host : "?",
+		                ssi->sess->ip ? ssi->sess->ip : "?",
+		                ssi->sess->server ? ssi->sess->server->name : "?");
+	else
+		(void) snprintf(result, sizeof result, "SASL(%s)",
+		                ssi->sess->host ? ssi->sess->host : "?");
+
+	return result;
+}
+
+static const char *
+sasl_get_source_name(sourceinfo_t *si)
+{
+	static char result[HOSTLEN + NICKLEN + 10];
+	char description[BUFSIZE];
+
+	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
+
+	if (ssi->sess->server && ! hide_server_names)
+		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
+		                                                 ssi->sess->server->name);
+	else
+		(void) mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
+
+	/* we can reasonably assume that si->v is non-null as this is part of the SASL vtable */
+	if (si->sourcedesc)
+		(void) snprintf(result, sizeof result, "<%s:%s>%s", description, si->sourcedesc,
+		                si->smu ? entity(si->smu)->name : "");
+	else
+		(void) snprintf(result, sizeof result, "<%s>%s", description, si->smu ? entity(si->smu)->name : "");
+
+	return result;
+}
+
+static struct sourceinfo_vtable sasl_vtable = {
+
+	.description        = "SASL",
+	.format             = sasl_format_sourceinfo,
+	.get_source_name    = sasl_get_source_name,
+	.get_source_mask    = sasl_get_source_name,
+};
 
 static sourceinfo_t *
 sasl_sourceinfo_create(sasl_session_t *p)
@@ -669,50 +711,6 @@ delete_stale(void __attribute__((unused)) *const restrict vptr)
 		else
 			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
-}
-
-static const char *
-sasl_format_sourceinfo(sourceinfo_t *si, bool full)
-{
-	static char result[BUFSIZE];
-
-	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
-
-	if (full)
-		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
-		                ssi->sess->uid ? ssi->sess->uid : "?",
-		                ssi->sess->host ? ssi->sess->host : "?",
-		                ssi->sess->ip ? ssi->sess->ip : "?",
-		                ssi->sess->server ? ssi->sess->server->name : "?");
-	else
-		(void) snprintf(result, sizeof result, "SASL(%s)",
-		                ssi->sess->host ? ssi->sess->host : "?");
-
-	return result;
-}
-
-static const char *
-sasl_get_source_name(sourceinfo_t *si)
-{
-	static char result[HOSTLEN + NICKLEN + 10];
-	char description[BUFSIZE];
-
-	sasl_sourceinfo_t *const ssi = (sasl_sourceinfo_t *) si;
-
-	if (ssi->sess->server && ! hide_server_names)
-		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
-		                                                 ssi->sess->server->name);
-	else
-		(void) mowgli_strlcpy(description, "Unknown user (via SASL)", sizeof description);
-
-	/* we can reasonably assume that si->v is non-null as this is part of the SASL vtable */
-	if (si->sourcedesc)
-		(void) snprintf(result, sizeof result, "<%s:%s>%s", description, si->sourcedesc,
-		                si->smu ? entity(si->smu)->name : "");
-	else
-		(void) snprintf(result, sizeof result, "<%s>%s", description, si->smu ? entity(si->smu)->name : "");
-
-	return result;
 }
 
 static void
