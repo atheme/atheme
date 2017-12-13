@@ -38,8 +38,7 @@
 
 #include "pbkdf2v2.h"
 
-#define NONCE_LENGTH                32          // This should be more than sufficient
-#define RESPONSE_LENGTH             372         // (372 * 1.333) + strlen("AUTHENTICATE \r\n") == 511
+#define NONCE_LENGTH                64          // This should be more than sufficient
 
 enum scramsha_step
 {
@@ -295,21 +294,24 @@ mech_step_clientfirst(struct sasl_session *const restrict p, char *const restric
 	s->c_msg_buf = sstrndup(message, s->c_msg_len);
 	s->cn = sstrdup(input['r']);
 	s->sn = sstrndup(server_nonce, NONCE_LENGTH);
-	*out = smalloc(RESPONSE_LENGTH);
 
 	// Construct server-first-message
-	const int ol = snprintf(*out, RESPONSE_LENGTH, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
+	char response[SASL_C2S_MAXLEN];
+	const int ol = snprintf(response, sizeof response, "r=%s%s,s=%s,i=%u", s->cn, s->sn, s->db.salt64, s->db.c);
 
-	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= RESPONSE_LENGTH)
+	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= (int) sizeof response)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", __func__);
 		goto fail;
 	}
 
+	// Cannot fail
 	*out_len = (size_t) ol;
+	*out = smalloc(*out_len);
+	(void) memcpy(*out, response, *out_len);
 
 	s->s_msg_len = *out_len;
-	s->s_msg_buf = sstrdup(*out);
+	s->s_msg_buf = sstrdup(response);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_CLIENTPROOF;
@@ -325,19 +327,6 @@ static int
 mech_step_clientproof(struct scramsha_session *const restrict s, char *const restrict data, const size_t len,
                       char **const restrict out, size_t *const restrict out_len)
 {
-	unsigned char ClientSignature[EVP_MAX_MD_SIZE];
-	unsigned char ServerSignature[EVP_MAX_MD_SIZE];
-	unsigned char ClientProof[EVP_MAX_MD_SIZE];
-	unsigned char ClientKey[EVP_MAX_MD_SIZE];
-	unsigned char StoredKey[EVP_MAX_MD_SIZE];
-
-	char ServerSignature64[EVP_MAX_MD_SIZE * 3];
-	char AuthMessage[RESPONSE_LENGTH * 4];
-	char x_nonce[RESPONSE_LENGTH * 2];
-	char c_gs2_buf[RESPONSE_LENGTH];
-
-	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
-
 	scram_attr_list input;
 	(void) memset(input, 0x00, sizeof input);
 
@@ -358,14 +347,13 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Concatenate the s-nonce to the c-nonce
-	const int xl = snprintf(x_nonce, RESPONSE_LENGTH, "%s%s", s->cn, s->sn);
-
-	if (xl <= NONCE_LENGTH || xl >= RESPONSE_LENGTH)
+	char x_nonce[SASL_C2S_MAXLEN];
+	const int xl = snprintf(x_nonce, sizeof x_nonce, "%s%s", s->cn, s->sn);
+	if (xl <= NONCE_LENGTH || xl >= (int) sizeof x_nonce)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
 		goto fail;
 	}
-
 	if (strcmp(x_nonce, input['r']) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", __func__);
@@ -373,8 +361,8 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Decode GS2 header from client-final-message
+	char c_gs2_buf[SASL_C2S_MAXLEN];
 	const size_t c_gs2_len = base64_decode(input['c'], c_gs2_buf, sizeof c_gs2_buf);
-
 	if (c_gs2_len == (size_t) -1)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", __func__);
@@ -387,6 +375,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Decode ClientProof from client-final-message
+	unsigned char ClientProof[EVP_MAX_MD_SIZE];
 	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
@@ -394,6 +383,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Construct AuthMessage
+	char AuthMessage[SASL_C2S_MAXLEN];
 	const int alen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                          s->c_msg_buf, s->s_msg_buf, input['c'], input['r']);
 
@@ -403,7 +393,10 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 		goto fail;
 	}
 
+	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
+
 	// Calculate ClientSignature
+	unsigned char ClientSignature[EVP_MAX_MD_SIZE];
 	if (! HMAC(s->db.md, s->db.shk, (int) s->db.dl, AuthMessageR, (size_t) alen, ClientSignature, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: HMAC() for ClientSignature failed", __func__);
@@ -411,10 +404,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// XOR ClientProof with calculated ClientSignature to derive ClientKey
+	unsigned char ClientKey[EVP_MAX_MD_SIZE];
 	for (size_t x = 0; x < s->db.dl; x++)
 		ClientKey[x] = ClientProof[x] ^ ClientSignature[x];
 
 	// Compute StoredKey from derived ClientKey
+	unsigned char StoredKey[EVP_MAX_MD_SIZE];
 	if (EVP_Digest(ClientKey, s->db.dl, StoredKey, NULL, s->db.md, NULL) != 1)
 	{
 		(void) slog(LG_ERROR, "%s: EVP_Digest() for StoredKey failed", __func__);
@@ -433,6 +428,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	 * ******************************************************** */
 
 	// Calculate ServerSignature
+	unsigned char ServerSignature[EVP_MAX_MD_SIZE];
 	if (! HMAC(s->db.md, s->db.ssk, (int) s->db.dl, AuthMessageR, (size_t) alen, ServerSignature, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: HMAC() for ServerSignature failed", __func__);
@@ -440,24 +436,27 @@ mech_step_clientproof(struct scramsha_session *const restrict s, char *const res
 	}
 
 	// Encode ServerSignature
-	*out_len = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
-
-	if (*out_len == (size_t) -1)
+	char ServerSignature64[EVP_MAX_MD_SIZE * 3];
+	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
+	if (rs == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", __func__);
 		goto fail;
 	}
 
-	// We need to prepend "v=" to the Base64 data
-	(*out_len) += 2;
+	// Construct server-final-message
+	char response[EVP_MAX_MD_SIZE * 3];
+	const int ol = snprintf(response, sizeof response, "v=%s", ServerSignature64);
+	if (ol < (int) s->db.dl || ol >= (int) sizeof response)
+	{
+		(void) slog(LG_ERROR, "%s: snprintf(3) for response failed (BUG?)", __func__);
+		goto fail;
+	}
 
 	// Cannot fail
+	*out_len = (size_t) ol;
 	*out = smalloc(*out_len);
-
-	// Construct server-final-message
-	(*out)[0] = 'v';
-	(*out)[1] = '=';
-	(void) memcpy((*out) + 2, ServerSignature64, (*out_len) - 2);
+	(void) memcpy(*out, response, *out_len);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
