@@ -589,84 +589,91 @@ may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 static myuser_t *
 login_user(sasl_session_t *p)
 {
-	myuser_t *source_mu, *target_mu;
-	hook_user_login_check_t req;
-	sourceinfo_t *si;
-
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
 
-	source_mu = myuser_find_by_nick(p->username);
-	if(source_mu == NULL)
+	myuser_t *const source_mu = myuser_find_by_nick(p->username);
+	if (! source_mu)
 		return NULL;
 
-	req.si = si = sasl_sourceinfo_create(p);
-	req.mu = source_mu;
-	req.allowed = true;
-	hook_call_user_can_login(&req);
-	if (!req.allowed)
+	sourceinfo_t *const si = sasl_sourceinfo_create(p);
+
+	hook_user_login_check_t req = {
+
+		.si = si,
+		.mu = source_mu,
+		.allowed = true,
+	};
+
+	(void) hook_call_user_can_login(&req);
+
+	if (! req.allowed)
 	{
-		logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(source_mu)->name);
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
+		                                    entity(source_mu)->name);
 		return NULL;
 	}
 
-	if(p->authzid && *p->authzid)
+	myuser_t *target_mu = source_mu;
+
+	if (p->authzid && *p->authzid)
 	{
-		target_mu = myuser_find_by_nick(p->authzid);
-		if(target_mu == NULL)
+		if (! (target_mu = myuser_find_by_nick(p->authzid)))
 		{
-			object_unref(si);
+			(void) object_unref(si);
 			return NULL;
 		}
 	}
 	else
 	{
-		target_mu = source_mu;
-		if(p->authzid != NULL)
-			free(p->authzid);
+		(void) free(p->authzid);
 		p->authzid = sstrdup(p->username);
 	}
 
-	if(metadata_find(source_mu, "private:freeze:freezer"))
+	if (metadata_find(source_mu, "private:freeze:freezer"))
 	{
-		logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
-		object_unref(si);
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(source_mu)->name);
+		(void) object_unref(si);
 		return NULL;
 	}
 
-	if(target_mu != source_mu)
+	if (target_mu != source_mu)
 	{
-		if(!may_impersonate(source_mu, target_mu))
+		if (! may_impersonate(source_mu, target_mu))
 		{
-			logcommand(si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
-			object_unref(si);
+			(void) logcommand(si, CMDLOG_LOGIN, "denied IMPERSONATE by \2%s\2 to \2%s\2",
+			                                    entity(source_mu)->name, entity(target_mu)->name);
+			(void) object_unref(si);
 			return NULL;
 		}
-
-		logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2", entity(source_mu)->name, entity(target_mu)->name);
 
 		req.mu = target_mu;
 		req.allowed = true;
-		hook_call_user_can_login(&req);
-		if (!req.allowed)
+
+		(void) hook_call_user_can_login(&req);
+
+		if (! req.allowed)
 		{
-			logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(target_mu)->name);
-			object_unref(si);
+			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)",
+			                                    entity(target_mu)->name);
+			(void) object_unref(si);
 			return NULL;
 		}
 
-		if(metadata_find(target_mu, "private:freeze:freezer"))
+		if (metadata_find(target_mu, "private:freeze:freezer"))
 		{
-			logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)", entity(target_mu)->name);
-			object_unref(si);
+			(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (frozen)",
+			                                    entity(target_mu)->name);
+			(void) object_unref(si);
 			return NULL;
 		}
 	}
 
-	if(MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
+	if (MOWGLI_LIST_LENGTH(&target_mu->logins) >= me.maxlogins)
 	{
-		logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)", entity(target_mu)->name);
-		object_unref(si);
+		(void) logcommand(si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (too many logins)",
+		                                    entity(target_mu)->name);
+		(void) object_unref(si);
 		return NULL;
 	}
 
@@ -679,13 +686,17 @@ login_user(sasl_session_t *p)
 	 * up that this is going to happen so that hooks will be properly
 	 * fired...
 	 */
-	if(ircd->flags & IRCD_SASL_USE_PUID)
+	if (ircd->flags & IRCD_SASL_USE_PUID)
 	{
 		target_mu->flags &= ~MU_NOBURSTLOGIN;
 		target_mu->flags |= MU_PENDINGLOGIN;
 	}
 
-	object_unref(si);
+	if (target_mu != source_mu)
+		(void) logcommand(si, CMDLOG_LOGIN, "allowed IMPERSONATE by \2%s\2 to \2%s\2",
+		                                    entity(source_mu)->name, entity(target_mu)->name);
+
+	(void) object_unref(si);
 	return target_mu;
 }
 
