@@ -31,11 +31,15 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	const char *const end = data + inlen;
 
 	const char *const authzid = ptr;
-	if (! *ptr || (ptr += strlen(ptr) + 1) >= end)
+	if (! *authzid)
+		return ASASL_FAIL;
+	if ((ptr += strlen(authzid) + 1) >= end)
 		return ASASL_FAIL;
 
 	const char *const authcid = ptr;
-	if (! *ptr || (ptr += strlen(ptr) + 1) >= end)
+	if (! *authcid)
+		return ASASL_FAIL;
+	if ((ptr += strlen(authcid) + 1) >= end)
 		return ASASL_FAIL;
 
 	const char *const secret = ptr;
