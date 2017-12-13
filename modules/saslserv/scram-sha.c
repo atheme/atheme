@@ -66,7 +66,7 @@ struct scramsha_session
 
 typedef char *scram_attr_list[128];
 
-static const sasl_core_functions_t *sasl_core_functions = NULL;
+static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
 static int
@@ -135,7 +135,7 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 }
 
 static int
-mech_start(sasl_session_t *const restrict p, char __attribute__((unused)) **const restrict out,
+mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) **const restrict out,
            size_t __attribute__((unused)) *const restrict out_len)
 {
 	p->mechdata = smalloc(sizeof(struct scramsha_session));
@@ -144,7 +144,7 @@ mech_start(sasl_session_t *const restrict p, char __attribute__((unused)) **cons
 }
 
 static int
-mech_step_clientfirst(sasl_session_t *const restrict p, char *const restrict data, const size_t len,
+mech_step_clientfirst(struct sasl_session *const restrict p, char *const restrict data, const size_t len,
                       char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
@@ -505,7 +505,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 }
 
 static inline int
-mech_step_dispatch(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step_dispatch(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
                    char **const restrict out, size_t *const restrict out_len, const unsigned int prf)
 {
 	struct scramsha_session *const s = p->mechdata;
@@ -527,21 +527,21 @@ mech_step_dispatch(sasl_session_t *const restrict p, char *const restrict messag
 }
 
 static int
-mech_step_sha1(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step_sha1(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
                char **const restrict out, size_t *const restrict out_len)
 {
 	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA1);
 }
 
 static int
-mech_step_sha2_256(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step_sha2_256(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
                    char **const restrict out, size_t *const restrict out_len)
 {
 	return mech_step_dispatch(p, message, len, out, out_len, PBKDF2_PRF_SCRAM_SHA2_256);
 }
 
 static void
-mech_finish(sasl_session_t *const restrict p)
+mech_finish(struct sasl_session *const restrict p)
 {
 	if (! (p && p->mechdata))
 		return;
@@ -558,7 +558,7 @@ mech_finish(sasl_session_t *const restrict p)
 	p->mechdata = NULL;
 }
 
-static sasl_mechanism_t sasl_scramsha_mech_sha1 = {
+static struct sasl_mechanism sasl_scramsha_mech_sha1 = {
 
 	.name           = "SCRAM-SHA-1",
 	.mech_start     = &mech_start,
@@ -566,7 +566,7 @@ static sasl_mechanism_t sasl_scramsha_mech_sha1 = {
 	.mech_finish    = &mech_finish,
 };
 
-static sasl_mechanism_t sasl_scramsha_mech_sha2_256 = {
+static struct sasl_mechanism sasl_scramsha_mech_sha2_256 = {
 
 	.name           = "SCRAM-SHA-256",
 	.mech_start     = &mech_start,

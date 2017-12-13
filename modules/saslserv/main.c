@@ -10,8 +10,8 @@
 
 struct sasl_sourceinfo
 {
-	sourceinfo_t     parent;
-	sasl_session_t  *sess;
+	sourceinfo_t             parent;
+	struct sasl_session     *sess;
 };
 
 static mowgli_list_t sessions;
@@ -75,7 +75,7 @@ static struct sourceinfo_vtable sasl_vtable = {
 };
 
 static sourceinfo_t *
-sasl_sourceinfo_create(sasl_session_t *p)
+sasl_sourceinfo_create(struct sasl_session *p)
 {
 	struct sasl_sourceinfo *const ssi = smalloc(sizeof *ssi);
 
@@ -97,7 +97,7 @@ sasl_sourceinfo_create(sasl_session_t *p)
 }
 
 /* find an existing session by uid */
-static sasl_session_t *
+static struct sasl_session *
 find_session(const char *uid)
 {
 	if (! uid)
@@ -107,7 +107,7 @@ find_session(const char *uid)
 
 	MOWGLI_ITER_FOREACH(n, sessions.head)
 	{
-		sasl_session_t *const p = n->data;
+		struct sasl_session *const p = n->data;
 
 		if (p->uid && strcmp(p->uid, uid) == 0)
 			return p;
@@ -117,10 +117,10 @@ find_session(const char *uid)
 }
 
 /* create a new session if it does not already exist */
-static sasl_session_t *
+static struct sasl_session *
 make_session(const char *uid, server_t *server)
 {
-	sasl_session_t *p;
+	struct sasl_session *p;
 
 	if (! (p = find_session(uid)))
 	{
@@ -139,7 +139,7 @@ make_session(const char *uid, server_t *server)
 
 /* free a session and all its contents */
 static void
-destroy_session(sasl_session_t *p)
+destroy_session(struct sasl_session *p)
 {
 	if (p->flags & ASASL_NEED_LOG && p->username)
 	{
@@ -179,14 +179,14 @@ destroy_session(sasl_session_t *p)
 }
 
 /* find a mechanism by name */
-static sasl_mechanism_t *
+static struct sasl_mechanism *
 find_mechanism(char *name)
 {
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
-		sasl_mechanism_t *const mptr = n->data;
+		struct sasl_mechanism *const mptr = n->data;
 
 		if (strcmp(mptr->name, name) == 0)
 			return mptr;
@@ -212,7 +212,7 @@ mechlist_build_string(char *ptr, size_t buflen)
 
 	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
-		sasl_mechanism_t *const mptr = n->data;
+		struct sasl_mechanism *const mptr = n->data;
 
 		if (l + strlen(mptr->name) > buflen)
 			break;
@@ -280,7 +280,7 @@ may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 
 /* authenticated, now double check that their account is ok for login */
 static myuser_t *
-login_user(sasl_session_t *p)
+login_user(struct sasl_session *p)
 {
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
@@ -424,7 +424,7 @@ sasl_write(char *target, char *data, size_t length)
 /* abort an SASL session
  */
 static inline void
-sasl_session_abort(sasl_session_t *const restrict p)
+sasl_session_abort(struct sasl_session *const restrict p)
 {
 	(void) sasl_sts(p->uid, 'D', "F");
 	(void) destroy_session(p);
@@ -434,7 +434,7 @@ sasl_session_abort(sasl_session_t *const restrict p)
  * and feeding returned data back to client.
  */
 static void
-sasl_packet(sasl_session_t *p, char *buf, size_t len)
+sasl_packet(struct sasl_session *p, char *buf, size_t len)
 {
 	int rc;
 	char temp[BUFSIZE];
@@ -559,7 +559,7 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 static void
 sasl_input(sasl_message_t *smsg)
 {
-	sasl_session_t *const p = make_session(smsg->uid, smsg->server);
+	struct sasl_session *const p = make_session(smsg->uid, smsg->server);
 
 	size_t len = strlen(smsg->parv[0]);
 	char *tmpbuf;
@@ -648,7 +648,7 @@ sasl_newuser(hook_user_nick_t *data)
 		return;
 
 	/* Not concerned unless it's a SASL login. */
-	sasl_session_t *const p = find_session(u->uid);
+	struct sasl_session *const p = find_session(u->uid);
 	if (! p)
 		return;
 
@@ -667,7 +667,7 @@ sasl_newuser(hook_user_nick_t *data)
 		return;
 	}
 
-	sasl_mechanism_t *const mptr = p->mechptr;
+	struct sasl_mechanism *const mptr = p->mechptr;
 
 	(void) destroy_session(p);
 	(void) myuser_login(saslsvs, u, mu, false);
@@ -686,7 +686,7 @@ delete_stale(void __attribute__((unused)) *const restrict vptr)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
-		sasl_session_t *const p = n->data;
+		struct sasl_session *const p = n->data;
 
 		if (p->flags & ASASL_MARKED_FOR_DELETION)
 		{
@@ -700,7 +700,7 @@ delete_stale(void __attribute__((unused)) *const restrict vptr)
 }
 
 static void
-sasl_mech_register(sasl_mechanism_t *mech)
+sasl_mech_register(struct sasl_mechanism *mech)
 {
 	mowgli_node_t *const node = mowgli_node_create();
 
@@ -710,7 +710,7 @@ sasl_mech_register(sasl_mechanism_t *mech)
 }
 
 static void
-sasl_mech_unregister(sasl_mechanism_t *mech)
+sasl_mech_unregister(struct sasl_mechanism *mech)
 {
 	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
 
@@ -718,7 +718,7 @@ sasl_mech_unregister(sasl_mechanism_t *mech)
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
-		sasl_session_t *const session = n->data;
+		struct sasl_session *const session = n->data;
 
 		if (session->mechptr == mech)
 		{
@@ -812,7 +812,7 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 }
 
 /* This structure is imported by SASL mechanism modules */
-const sasl_core_functions_t sasl_core_functions = {
+const struct sasl_core_functions sasl_core_functions = {
 
 	.mech_register      = &sasl_mech_register,
 	.mech_unregister    = &sasl_mech_unregister,

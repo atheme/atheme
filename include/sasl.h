@@ -13,26 +13,27 @@
 #define SASL_MECHANISM_MAXLEN   60
 #define SASL_S2S_MAXLEN         400
 
-typedef struct sasl_session sasl_session_t;
-typedef struct sasl_message sasl_message_t;
-typedef struct sasl_mechanism sasl_mechanism_t;
+struct sasl_session;
+struct sasl_message;
+struct sasl_mechanism;
+struct sasl_core_functions;
 
 struct sasl_session
 {
-	sasl_mechanism_t  *mechptr;
-	server_t          *server;
-	char              *uid;
-	char              *buf;
-	char              *p;
-	void              *mechdata;
-	char              *username;
-	char              *certfp;
-	char              *authzid;
-	char              *host;
-	char              *ip;
-	size_t             len;
-	int                flags;
-	bool               tls;
+	struct sasl_mechanism   *mechptr;
+	server_t                *server;
+	char                    *uid;
+	char                    *buf;
+	char                    *p;
+	void                    *mechdata;
+	char                    *username;
+	char                    *certfp;
+	char                    *authzid;
+	char                    *host;
+	char                    *ip;
+	size_t                   len;
+	int                      flags;
+	bool                     tls;
 };
 
 struct sasl_message
@@ -47,9 +48,17 @@ struct sasl_message
 struct sasl_mechanism
 {
 	char       name[SASL_MECHANISM_MAXLEN];
-	int      (*mech_start)(sasl_session_t *, char **, size_t *);
-	int      (*mech_step)(sasl_session_t *, char *, size_t, char **, size_t *);
-	void     (*mech_finish)(sasl_session_t *);
+	int      (*mech_start)(struct sasl_session *, char **, size_t *);
+	int      (*mech_step)(struct sasl_session *, char *, size_t, char **, size_t *);
+	void     (*mech_finish)(struct sasl_session *);
+};
+
+struct sasl_core_functions
+{
+
+	void     (*mech_register)(struct sasl_mechanism *);
+	void     (*mech_unregister)(struct sasl_mechanism *);
+
 };
 
 typedef struct {
@@ -60,12 +69,7 @@ typedef struct {
 
 } hook_sasl_may_impersonate_t;
 
-typedef struct {
-
-	void     (*mech_register)(sasl_mechanism_t *);
-	void     (*mech_unregister)(sasl_mechanism_t *);
-
-} sasl_core_functions_t;
+typedef struct sasl_message sasl_message_t;
 
 #define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */

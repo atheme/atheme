@@ -7,10 +7,10 @@
 
 #include "atheme.h"
 
-static const sasl_core_functions_t *sasl_core_functions = NULL;
+static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
-mech_step(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
           char __attribute__((unused)) **const restrict out,
           size_t __attribute__((unused)) *const restrict out_len)
 {
@@ -55,7 +55,7 @@ mech_step(sasl_session_t *const restrict p, char *const restrict message, const 
 	return ASASL_DONE;
 }
 
-static sasl_mechanism_t mech = {
+static struct sasl_mechanism mech = {
 
 	.name           = "PLAIN",
 	.mech_start     = NULL,

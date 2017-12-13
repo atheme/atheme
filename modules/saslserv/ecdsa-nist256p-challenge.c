@@ -31,10 +31,10 @@ struct ecdsa_session
 	enum ecdsa_step  step;
 };
 
-static const sasl_core_functions_t *sasl_core_functions = NULL;
+static const struct sasl_core_functions *sasl_core_functions = NULL;
 
 static int
-mech_start(sasl_session_t *const restrict p, char __attribute__((unused)) **const restrict out,
+mech_start(struct sasl_session *const restrict p, char __attribute__((unused)) **const restrict out,
            size_t __attribute__((unused)) *const restrict out_len)
 {
 	struct ecdsa_session *const s = smalloc(sizeof *s);
@@ -49,7 +49,7 @@ mech_start(sasl_session_t *const restrict p, char __attribute__((unused)) **cons
 }
 
 static int
-mech_step_accname(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step_accname(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
                   char **const restrict out, size_t *const restrict out_len)
 {
 	struct ecdsa_session *const s = p->mechdata;
@@ -101,7 +101,7 @@ mech_step_accname(sasl_session_t *const restrict p, char *const restrict message
 }
 
 static int
-mech_step_response(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step_response(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
                    char __attribute__((unused)) **const restrict out,
                    size_t __attribute__((unused)) *const restrict out_len)
 {
@@ -116,10 +116,10 @@ mech_step_response(sasl_session_t *const restrict p, char *const restrict messag
 	return ASASL_DONE;
 }
 
-typedef int (*mech_stepfn_t)(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
+typedef int (*mech_stepfn_t)(struct sasl_session *p, char *message, size_t len, char **out, size_t *out_len);
 
 static int
-mech_step(sasl_session_t *const restrict p, char *const restrict message, const size_t len,
+mech_step(struct sasl_session *const restrict p, char *const restrict message, const size_t len,
           char **const restrict out, size_t *const restrict out_len)
 {
 	static mech_stepfn_t mech_steps[ECDSA_ST_COUNT] = {
@@ -136,7 +136,7 @@ mech_step(sasl_session_t *const restrict p, char *const restrict message, const 
 }
 
 static void
-mech_finish(sasl_session_t *const restrict p)
+mech_finish(struct sasl_session *const restrict p)
 {
 	if (! (p && p->mechdata))
 		return;
@@ -151,7 +151,7 @@ mech_finish(sasl_session_t *const restrict p)
 	p->mechdata = NULL;
 }
 
-static sasl_mechanism_t mech = {
+static struct sasl_mechanism mech = {
 
 	.name           = "ECDSA-NIST256P-CHALLENGE",
 	.mech_start     = &mech_start,
