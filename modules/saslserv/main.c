@@ -23,11 +23,11 @@ static service_t *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static const char *
-sasl_format_sourceinfo(sourceinfo_t *si, bool full)
+sasl_format_sourceinfo(sourceinfo_t *const restrict si, const bool full)
 {
 	static char result[BUFSIZE];
 
-	struct sasl_sourceinfo *const ssi = (struct sasl_sourceinfo *) si;
+	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;
 
 	if (full)
 		(void) snprintf(result, sizeof result, "SASL/%s:%s[%s]:%s",
@@ -43,12 +43,12 @@ sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 }
 
 static const char *
-sasl_get_source_name(sourceinfo_t *si)
+sasl_get_source_name(sourceinfo_t *const restrict si)
 {
 	static char result[HOSTLEN + NICKLEN + 10];
 	char description[BUFSIZE];
 
-	struct sasl_sourceinfo *const ssi = (struct sasl_sourceinfo *) si;
+	const struct sasl_sourceinfo *const ssi = (const struct sasl_sourceinfo *) si;
 
 	if (ssi->sess->server && ! hide_server_names)
 		(void) snprintf(description, sizeof description, "Unknown user on %s (via SASL)",
@@ -75,7 +75,7 @@ static struct sourceinfo_vtable sasl_vtable = {
 };
 
 static void
-sasl_sourceinfo_recreate(struct sasl_session *p)
+sasl_sourceinfo_recreate(struct sasl_session *const restrict p)
 {
 	if (p->si)
 		(void) object_unref(p->si);
@@ -101,7 +101,7 @@ sasl_sourceinfo_recreate(struct sasl_session *p)
 
 /* find an existing session by uid */
 static struct sasl_session *
-find_session(const char *uid)
+find_session(const char *const restrict uid)
 {
 	if (! uid)
 		return NULL;
@@ -121,7 +121,7 @@ find_session(const char *uid)
 
 /* create a new session if it does not already exist */
 static struct sasl_session *
-make_session(const char *uid, server_t *server)
+make_session(const char *const restrict uid, server_t *const restrict server)
 {
 	struct sasl_session *p;
 
@@ -142,7 +142,7 @@ make_session(const char *uid, server_t *server)
 
 /* free a session and all its contents */
 static void
-destroy_session(struct sasl_session *p)
+destroy_session(struct sasl_session *const restrict p)
 {
 	if (p->flags & ASASL_NEED_LOG && p->authceid)
 	{
@@ -181,7 +181,7 @@ destroy_session(struct sasl_session *p)
 
 /* find a mechanism by name */
 static struct sasl_mechanism *
-find_mechanism(char *name)
+find_mechanism(const char *const restrict name)
 {
 	mowgli_node_t *n;
 
@@ -206,7 +206,7 @@ sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
 }
 
 static void
-mechlist_build_string(char *ptr, size_t buflen)
+mechlist_build_string(char *restrict ptr, const size_t buflen)
 {
 	size_t l = 0;
 	mowgli_node_t *n;
@@ -242,7 +242,7 @@ mechlist_do_rebuild(void)
 }
 
 static bool
-may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
+may_impersonate(myuser_t *const source_mu, myuser_t *const target_mu)
 {
 	/* Allow same (although this function won't get called in that case anyway) */
 	if (source_mu == target_mu)
@@ -281,7 +281,7 @@ may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 
 /* authenticated, now double check that their account is ok for login */
 static myuser_t *
-login_user(struct sasl_session *p)
+login_user(struct sasl_session *const restrict p)
 {
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
@@ -357,7 +357,7 @@ login_user(struct sasl_session *p)
 
 /* output an arbitrary amount of data to the SASL client */
 static void
-sasl_write(char *target, char *data, size_t length)
+sasl_write(char *const restrict target, const char *restrict data, const size_t length)
 {
 	size_t last = SASL_S2S_MAXLEN;
 	size_t rem = length;
@@ -396,7 +396,7 @@ sasl_session_abort(struct sasl_session *const restrict p)
  * and feeding returned data back to client.
  */
 static void
-sasl_packet(struct sasl_session *p, char *buf, size_t len)
+sasl_packet(struct sasl_session *const restrict p, const char *const restrict buf, const size_t len)
 {
 	int rc;
 
@@ -524,7 +524,7 @@ sasl_packet(struct sasl_session *p, char *buf, size_t len)
 
 /* interpret an AUTHENTICATE message */
 static void
-sasl_input(sasl_message_t *smsg)
+sasl_input(sasl_message_t *const restrict smsg)
 {
 	struct sasl_session *const p = make_session(smsg->uid, smsg->server);
 
@@ -605,7 +605,7 @@ sasl_input(sasl_message_t *smsg)
 
 /* clean up after a user who is finally on the net */
 static void
-sasl_newuser(hook_user_nick_t *data)
+sasl_newuser(hook_user_nick_t *const restrict data)
 {
 	/* If the user has been killed, don't do anything. */
 	user_t *const u = data->u;
@@ -665,7 +665,7 @@ delete_stale(void __attribute__((unused)) *const restrict vptr)
 }
 
 static void
-sasl_mech_register(struct sasl_mechanism *mech)
+sasl_mech_register(struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *const node = mowgli_node_create();
 
@@ -675,7 +675,7 @@ sasl_mech_register(struct sasl_mechanism *mech)
 }
 
 static void
-sasl_mech_unregister(struct sasl_mechanism *mech)
+sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 {
 	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
 
@@ -764,7 +764,7 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 
 /* main services client routine */
 static void
-saslserv(sourceinfo_t *si, int parc, char *parv[])
+saslserv(sourceinfo_t *const restrict si, const int parc, char **const restrict parv)
 {
 	/* this should never happen */
 	if (parv[0][0] == '&')
