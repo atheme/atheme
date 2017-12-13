@@ -42,7 +42,8 @@ const sasl_core_functions_t sasl_core_functions = {
 };
 
 /* main services client routine */
-static void saslserv(sourceinfo_t *si, int parc, char *parv[])
+static void
+saslserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
 	char *text;
@@ -75,7 +76,8 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 			"public interface.");
 }
 
-static void sasl_mech_register(sasl_mechanism_t *mech)
+static void
+sasl_mech_register(sasl_mechanism_t *mech)
 {
 	mowgli_node_t *node;
 
@@ -87,7 +89,8 @@ static void sasl_mech_register(sasl_mechanism_t *mech)
 	mechlist_do_rebuild();
 }
 
-static void sasl_mech_unregister(sasl_mechanism_t *mech)
+static void
+sasl_mech_unregister(sasl_mechanism_t *mech)
 {
 	mowgli_node_t *n, *tn;
 	sasl_session_t *session;
@@ -168,7 +171,8 @@ mod_deinit(const module_unload_intent_t intent)
  */
 
 /* find an existing session by uid */
-static sasl_session_t *find_session(const char *uid)
+static sasl_session_t *
+find_session(const char *uid)
 {
 	sasl_session_t *p;
 	mowgli_node_t *n;
@@ -187,7 +191,8 @@ static sasl_session_t *find_session(const char *uid)
 }
 
 /* create a new session if it does not already exist */
-static sasl_session_t *make_session(const char *uid, server_t *server)
+static sasl_session_t *
+make_session(const char *uid, server_t *server)
 {
 	sasl_session_t *p = find_session(uid);
 	mowgli_node_t *n;
@@ -206,7 +211,8 @@ static sasl_session_t *make_session(const char *uid, server_t *server)
 }
 
 /* free a session and all its contents */
-static void destroy_session(sasl_session_t *p)
+static void
+destroy_session(sasl_session_t *p)
 {
 	mowgli_node_t *n, *tn;
 	myuser_t *mu;
@@ -254,7 +260,8 @@ typedef struct {
 	sasl_session_t *sess;
 } sasl_sourceinfo_t;
 
-static void sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
+static void
+sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 {
 	return_if_fail(ssi != NULL);
 
@@ -268,7 +275,8 @@ static struct sourceinfo_vtable sasl_vtable = {
 	.get_source_mask = sasl_get_source_name
 };
 
-static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p)
+static sourceinfo_t *
+sasl_sourceinfo_create(sasl_session_t *p)
 {
 	sasl_sourceinfo_t *ssi;
 
@@ -289,7 +297,8 @@ static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p)
 }
 
 /* interpret an AUTHENTICATE message */
-static void sasl_input(sasl_message_t *smsg)
+static void
+sasl_input(sasl_message_t *smsg)
 {
 	sasl_session_t *p = make_session(smsg->uid, smsg->server);
 	int len = strlen(smsg->parv[0]);
@@ -363,7 +372,8 @@ static void sasl_input(sasl_message_t *smsg)
 }
 
 /* find a mechanism by name */
-static sasl_mechanism_t *find_mechanism(char *name)
+static sasl_mechanism_t *
+find_mechanism(char *name)
 {
 	mowgli_node_t *n;
 	sasl_mechanism_t *mptr;
@@ -380,13 +390,15 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	return NULL;
 }
 
-static void sasl_server_eob(server_t *s)
+static void
+sasl_server_eob(server_t *s)
 {
 	/* new server online, push mechlist to make sure it's using the current one */
 	sasl_mechlist_sts(mechlist_string);
 }
 
-static void mechlist_do_rebuild(void)
+static void
+mechlist_do_rebuild(void)
 {
 	mechlist_build_string(mechlist_string, sizeof(mechlist_string));
 
@@ -395,7 +407,8 @@ static void mechlist_do_rebuild(void)
 		sasl_mechlist_sts(mechlist_string);
 }
 
-static void mechlist_build_string(char *ptr, size_t buflen)
+static void
+mechlist_build_string(char *ptr, size_t buflen)
 {
 	int l = 0;
 	mowgli_node_t *n;
@@ -419,7 +432,8 @@ static void mechlist_build_string(char *ptr, size_t buflen)
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
-static void sasl_packet(sasl_session_t *p, char *buf, int len)
+static void
+sasl_packet(sasl_session_t *p, char *buf, int len)
 {
 	int rc;
 	size_t tlen = 0;
@@ -542,7 +556,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 }
 
 /* output an arbitrary amount of data to the SASL client */
-static void sasl_write(char *target, char *data, int length)
+static void
+sasl_write(char *target, char *data, int length)
 {
 	char out[401];
 	int last = 400, rem = length;
@@ -568,7 +583,8 @@ static void sasl_write(char *target, char *data, int length)
 		sasl_sts(target, 'C', "+");
 }
 
-static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
+static bool
+may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 {
 	hook_sasl_may_impersonate_t req;
 	char priv[512] = PRIV_IMPERSONATE_ANY;
@@ -608,7 +624,8 @@ static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu)
 }
 
 /* authenticated, now double check that their account is ok for login */
-static myuser_t *login_user(sasl_session_t *p)
+static myuser_t *
+login_user(sasl_session_t *p)
 {
 	myuser_t *source_mu, *target_mu;
 	hook_user_login_check_t req;
@@ -711,7 +728,8 @@ static myuser_t *login_user(sasl_session_t *p)
 }
 
 /* clean up after a user who is finally on the net */
-static void sasl_newuser(hook_user_nick_t *data)
+static void
+sasl_newuser(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	sasl_mechanism_t *mptr;
@@ -756,7 +774,8 @@ static void sasl_newuser(hook_user_nick_t *data)
  * flagging all the others. This way stale sessions are deleted
  * after no more than 60 seconds.
  */
-static void delete_stale(void *vptr)
+static void
+delete_stale(void *vptr)
 {
 	sasl_session_t *p;
 	mowgli_node_t *n, *tn;
@@ -774,7 +793,8 @@ static void delete_stale(void *vptr)
 	}
 }
 
-static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full)
+static const char *
+sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 {
 	sasl_sourceinfo_t *ssi = (sasl_sourceinfo_t *) si;
 	static char buf[BUFSIZE];
@@ -791,7 +811,8 @@ static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full)
 
 }
 
-static const char *sasl_get_source_name(sourceinfo_t *si)
+static const char *
+sasl_get_source_name(sourceinfo_t *si)
 {
 	static char result[HOSTLEN+NICKLEN+10];
 	char description[BUFSIZE];
