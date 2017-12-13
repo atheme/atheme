@@ -45,21 +45,6 @@ static sasl_mechanism_t mech = {
 	.mech_finish    = &mech_finish,
 };
 
-static void
-mod_init(module_t *const restrict m)
-{
-	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
-
-	(void) sasl_core_functions->mech_register(&mech);
-}
-
-static void
-mod_deinit(const module_unload_intent_t intent)
-{
-	(void) sasl_core_functions->mech_unregister(&mech);
-}
-
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len)
 {
 	ecdsa_session_t *s = mowgli_alloc(sizeof(ecdsa_session_t));
@@ -161,6 +146,21 @@ static void mech_finish(sasl_session_t *p)
 		EC_KEY_free(s->pubkey);
 
 	mowgli_free(s);
+}
+
+static void
+mod_init(module_t *const restrict m)
+{
+	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
+
+	(void) sasl_core_functions->mech_register(&mech);
+}
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+	(void) sasl_core_functions->mech_unregister(&mech);
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK)

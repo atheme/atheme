@@ -20,20 +20,6 @@ static sasl_mechanism_t mech = {
 	.mech_finish    = NULL,
 };
 
-static void
-mod_init(module_t *const restrict m)
-{
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
-
-	(void) sasl_core_functions->mech_register(&mech);
-}
-
-static void
-mod_deinit(const module_unload_intent_t intent)
-{
-	(void) sasl_core_functions->mech_unregister(&mech);
-}
-
 static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len)
 {
 	mycertfp_t *mcfp;
@@ -55,6 +41,20 @@ static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, s
 	p->authzid = sstrdup(message);
 
 	return ASASL_DONE;
+}
+
+static void
+mod_init(module_t *const restrict m)
+{
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
+
+	(void) sasl_core_functions->mech_register(&mech);
+}
+
+static void
+mod_deinit(const module_unload_intent_t intent)
+{
+	(void) sasl_core_functions->mech_unregister(&mech);
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/external", MODULE_UNLOAD_CAPABILITY_OK)
