@@ -8,6 +8,11 @@
 #include "atheme.h"
 #include "uplink.h"
 
+typedef struct {
+	sourceinfo_t parent;
+	sasl_session_t *sess;
+} sasl_sourceinfo_t;
+
 static sasl_session_t *find_session(const char *uid);
 static sasl_session_t *make_session(const char *uid, server_t *server);
 static void destroy_session(sasl_session_t *p);
@@ -34,6 +39,13 @@ static bool hide_server_names;
 
 static service_t *saslsvs = NULL;
 static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
+
+static struct sourceinfo_vtable sasl_vtable = {
+	.description = "SASL",
+	.format = sasl_format_sourceinfo,
+	.get_source_name = sasl_get_source_name,
+	.get_source_mask = sasl_get_source_name
+};
 
 const sasl_core_functions_t sasl_core_functions = {
 
@@ -209,11 +221,6 @@ destroy_session(sasl_session_t *p)
 	free(p);
 }
 
-typedef struct {
-	sourceinfo_t parent;
-	sasl_session_t *sess;
-} sasl_sourceinfo_t;
-
 static void
 sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 {
@@ -221,13 +228,6 @@ sasl_sourceinfo_delete(sasl_sourceinfo_t *ssi)
 
 	free(ssi);
 }
-
-static struct sourceinfo_vtable sasl_vtable = {
-	.description = "SASL",
-	.format = sasl_format_sourceinfo,
-	.get_source_name = sasl_get_source_name,
-	.get_source_mask = sasl_get_source_name
-};
 
 static sourceinfo_t *
 sasl_sourceinfo_create(sasl_session_t *p)
