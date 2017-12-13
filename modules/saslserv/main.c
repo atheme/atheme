@@ -154,18 +154,19 @@ find_session(const char *uid)
 static sasl_session_t *
 make_session(const char *uid, server_t *server)
 {
-	sasl_session_t *p = find_session(uid);
-	mowgli_node_t *n;
+	sasl_session_t *p;
 
-	if(p)
-		return p;
+	if (! (p = find_session(uid)))
+	{
+		p = smalloc(sizeof *p);
+		(void) memset(p, 0x00, sizeof *p);
 
-	p = smalloc(sizeof(sasl_session_t));
-	memset(p, 0, sizeof(sasl_session_t));
-	p->uid = sstrdup(uid);
-	p->server = server;
-	n = mowgli_node_create();
-	mowgli_node_add(p, n, &sessions);
+		p->uid = sstrdup(uid);
+		p->server = server;
+
+		mowgli_node_t *const n = mowgli_node_create();
+		(void) mowgli_node_add(p, n, &sessions);
+	}
 
 	return p;
 }
