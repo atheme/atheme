@@ -805,43 +805,43 @@ sasl_get_source_name(sourceinfo_t *si)
 }
 
 static void
-mod_init(module_t *const restrict m)
+mod_init(module_t __attribute__((unused)) *const restrict m)
 {
-	hook_add_event("sasl_input");
-	hook_add_sasl_input(sasl_input);
-	hook_add_event("user_add");
-	hook_add_user_add(sasl_newuser);
-	hook_add_event("server_eob");
-	hook_add_server_eob(sasl_server_eob);
-	hook_add_event("sasl_may_impersonate");
-	hook_add_event("user_can_login");
+	(void) hook_add_event("sasl_input");
+	(void) hook_add_sasl_input(&sasl_input);
+	(void) hook_add_event("user_add");
+	(void) hook_add_user_add(&sasl_newuser);
+	(void) hook_add_event("server_eob");
+	(void) hook_add_server_eob(&sasl_server_eob);
+	(void) hook_add_event("sasl_may_impersonate");
+	(void) hook_add_event("user_can_login");
 
-	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", delete_stale, NULL, 30);
-
+	delete_stale_timer = mowgli_timer_add(base_eventloop, "sasl_delete_stale", &delete_stale, NULL, 30);
 	saslsvs = service_add("saslserv", saslserv);
-	add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
 	authservice_loaded++;
+
+	(void) add_bool_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table, 0, &hide_server_names, false);
 }
 
 static void
-mod_deinit(const module_unload_intent_t intent)
+mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	hook_del_sasl_input(sasl_input);
-	hook_del_user_add(sasl_newuser);
-	hook_del_server_eob(sasl_server_eob);
+	(void) hook_del_sasl_input(&sasl_input);
+	(void) hook_del_user_add(&sasl_newuser);
+	(void) hook_del_server_eob(&sasl_server_eob);
 
-	mowgli_timer_destroy(base_eventloop, delete_stale_timer);
+	(void) mowgli_timer_destroy(base_eventloop, delete_stale_timer);
 
-	del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
+	(void) del_conf_item("HIDE_SERVER_NAMES", &saslsvs->conf_table);
 
         if (saslsvs != NULL)
-		service_delete(saslsvs);
+		(void) service_delete(saslsvs);
 
 	authservice_loaded--;
 
 	if (sessions.head != NULL)
-		slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
-		               "a mechanism did not unregister itself! (BUG)");
+		(void) slog(LG_ERROR, "saslserv/main: shutting down with a non-empty session list; "
+		                      "a mechanism did not unregister itself! (BUG)");
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/main", MODULE_UNLOAD_CAPABILITY_OK)
