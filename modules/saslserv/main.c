@@ -367,18 +367,22 @@ mechlist_build_string(char *ptr, size_t buflen)
 
 	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
-		sasl_mechanism_t *mptr = n->data;
-		if(l + strlen(mptr->name) > buflen)
+		sasl_mechanism_t *const mptr = n->data;
+
+		if (l + strlen(mptr->name) > buflen)
 			break;
-		strcpy(ptr, mptr->name);
+
+		(void) strcpy(ptr, mptr->name);
+
 		ptr += strlen(mptr->name);
 		*ptr++ = ',';
 		l += strlen(mptr->name) + 1;
 	}
 
-	if(l)
+	if (l)
 		ptr--;
-	*ptr = '\0';
+
+	*ptr = 0x00;
 }
 
 /* given an entire sasl message, advance session by passing data to mechanism
