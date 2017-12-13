@@ -134,16 +134,16 @@ sasl_mech_unregister(sasl_mechanism_t *mech)
 static sasl_session_t *
 find_session(const char *uid)
 {
-	sasl_session_t *p;
-	mowgli_node_t *n;
-
-	if (uid == NULL)
+	if (! uid)
 		return NULL;
+
+	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, sessions.head)
 	{
-		p = n->data;
-		if(p->uid != NULL && !strcmp(p->uid, uid))
+		sasl_session_t *const p = n->data;
+
+		if (p->uid && strcmp(p->uid, uid) == 0)
 			return p;
 	}
 
