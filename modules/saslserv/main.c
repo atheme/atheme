@@ -89,14 +89,11 @@ saslserv(sourceinfo_t *si, int parc, char *parv[])
 static void
 sasl_mech_register(sasl_mechanism_t *mech)
 {
-	mowgli_node_t *node;
+	mowgli_node_t *const node = mowgli_node_create();
 
-	slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
-
-	node = mowgli_node_create();
-	mowgli_node_add(mech, node, &sasl_mechanisms);
-
-	mechlist_do_rebuild();
+	(void) slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
+	(void) mowgli_node_add(mech, node, &sasl_mechanisms);
+	(void) mechlist_do_rebuild();
 }
 
 static void
