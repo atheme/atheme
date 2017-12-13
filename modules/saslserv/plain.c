@@ -16,7 +16,11 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	if (! (in && inlen))
 		return ASASL_FAIL;
 
-	char data[768];
+	/*
+	 * Data format: authzid 0x00 authcid 0x00 password
+	 * + Final byte to ensure password is NULL-terminated
+	 */
+	char data[NICKLEN + 1 + NICKLEN + 1 + PASSLEN + 1];
 	if (inlen >= sizeof data)
 		return ASASL_FAIL;
 
