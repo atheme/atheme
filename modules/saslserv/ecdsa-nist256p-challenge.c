@@ -18,12 +18,6 @@
 #define CHALLENGE_LENGTH	SHA256_DIGEST_LENGTH
 #define CURVE_IDENTIFIER	NID_X9_62_prime256v1
 
-sasl_mech_register_func_t *regfuncs;
-static int mech_start(sasl_session_t *p, char **out, size_t *out_len);
-static int mech_step(sasl_session_t *p, char *message, size_t len, char **out, size_t *out_len);
-static void mech_finish(sasl_session_t *p);
-sasl_mechanism_t mech = {"ECDSA-NIST256P-CHALLENGE", &mech_start, &mech_step, &mech_finish};
-
 typedef enum {
 	ECDSA_ST_INIT = 0,
 	ECDSA_ST_ACCNAME,
@@ -37,18 +31,33 @@ typedef struct {
 	unsigned char challenge[CHALLENGE_LENGTH];
 } ecdsa_session_t;
 
+static int mech_start(sasl_session_t *, char **, size_t *);
+static int mech_step(sasl_session_t *, char *, size_t, char **, size_t *);
+static void mech_finish(sasl_session_t *);
+
+static const sasl_core_functions_t *sasl_core_functions = NULL;
+
+static sasl_mechanism_t mech = {
+
+	.name           = "ECDSA-NIST256P-CHALLENGE",
+	.mech_start     = &mech_start,
+	.mech_step      = &mech_step,
+	.mech_finish    = &mech_finish,
+};
+
 static void
 mod_init(module_t *const restrict m)
 {
 	MODULE_TRY_REQUEST_DEPENDENCY(m, "nickserv/set_pubkey");
-	MODULE_TRY_REQUEST_SYMBOL(m, regfuncs, "saslserv/main", "sasl_mech_register_funcs");
-	regfuncs->mech_register(&mech);
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
+
+	(void) sasl_core_functions->mech_register(&mech);
 }
 
 static void
 mod_deinit(const module_unload_intent_t intent)
 {
-	regfuncs->mech_unregister(&mech);
+	(void) sasl_core_functions->mech_unregister(&mech);
 }
 
 static int mech_start(sasl_session_t *p, char **out, size_t *out_len)

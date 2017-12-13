@@ -32,7 +32,11 @@ static void mechlist_do_rebuild(void);
 static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full);
 static const char *sasl_get_source_name(sourceinfo_t *si);
 
-sasl_mech_register_func_t sasl_mech_register_funcs = { &sasl_mech_register, &sasl_mech_unregister };
+const sasl_core_functions_t sasl_core_functions = {
+
+	.mech_register      = &sasl_mech_register,
+	.mech_unregister    = &sasl_mech_unregister,
+};
 
 /* main services client routine */
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
@@ -230,9 +234,12 @@ void destroy_session(sasl_session_t *p)
 	free(p->uid);
 	free(p->buf);
 	p->buf = p->p = NULL;
-	if(p->mechptr)
+
+	if(p->mechptr && p->mechptr->mech_finish)
 		p->mechptr->mech_finish(p); /* Free up any mechanism data */
+
 	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
+
 	free(p->username);
 	free(p->certfp);
 	free(p->authzid);
@@ -446,7 +453,10 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			return;
 		}
 
-		rc = p->mechptr->mech_start(p, &out, &out_len);
+		if (p->mechptr->mech_start)
+			rc = p->mechptr->mech_start(p, &out, &out_len);
+		else
+			rc = ASASL_MORE;
 	}else{
 		if(len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, (char []) { '\0' }, 0,

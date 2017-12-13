@@ -63,7 +63,7 @@ typedef struct {
 	void     (*mech_register)(sasl_mechanism_t *);
 	void     (*mech_unregister)(sasl_mechanism_t *);
 
-} sasl_mech_register_func_t;
+} sasl_core_functions_t;
 
 #define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */

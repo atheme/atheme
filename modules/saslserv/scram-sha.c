@@ -68,7 +68,8 @@ typedef char *scram_attr_list[128];
 
 static atheme_pbkdf2v2_scram_dbextract_fn sasl_scramsha_dbextract = NULL;
 static atheme_pbkdf2v2_scram_normalize_fn sasl_scramsha_normalize = NULL;
-static const sasl_mech_register_func_t *sasl_regfuncs = NULL;
+
+static const sasl_core_functions_t *sasl_core_functions = NULL;
 
 static int
 sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
@@ -561,19 +562,25 @@ sasl_scramsha_step_sha2_256(sasl_session_t *const restrict p, char *const restri
 
 static sasl_mechanism_t sasl_scramsha_mech_sha1 = {
 
-	"SCRAM-SHA-1", &sasl_scramsha_start, &sasl_scramsha_step_sha1, &sasl_scramsha_finish,
+	.name           = "SCRAM-SHA-1",
+	.mech_start     = &sasl_scramsha_start,
+	.mech_step      = &sasl_scramsha_step_sha1,
+	.mech_finish    = &sasl_scramsha_finish,
 };
 
 static sasl_mechanism_t sasl_scramsha_mech_sha2_256 = {
 
-	"SCRAM-SHA-256", &sasl_scramsha_start, &sasl_scramsha_step_sha2_256, &sasl_scramsha_finish,
+	.name           = "SCRAM-SHA-256",
+	.mech_start     = &sasl_scramsha_start,
+	.mech_step      = &sasl_scramsha_step_sha2_256,
+	.mech_finish    = &sasl_scramsha_finish,
 };
 
 static void
 sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 {
-	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
 	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
 
@@ -600,11 +607,11 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 	switch (*pbkdf2v2_digest)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
-			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha1);
+			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha1);
 			return;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-			(void) sasl_regfuncs->mech_register(&sasl_scramsha_mech_sha2_256);
+			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_256);
 			return;
 	}
 
@@ -625,7 +632,7 @@ mod_init(module_t *const restrict m)
 
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_dbextract, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_dbextract");
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_scramsha_normalize, PBKDF2V2_CRYPTO_MODULE_NAME, "atheme_pbkdf2v2_scram_normalize");
-	MODULE_TRY_REQUEST_SYMBOL(m, sasl_regfuncs, "saslserv/main", "sasl_mech_register_funcs");
+	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
 
 	(void) hook_add_event("config_ready");
 	(void) hook_add_config_ready(sasl_scramsha_config_ready);
@@ -634,8 +641,8 @@ mod_init(module_t *const restrict m)
 static void
 mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha1);
-	(void) sasl_regfuncs->mech_unregister(&sasl_scramsha_mech_sha2_256);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha1);
+	(void) sasl_core_functions->mech_unregister(&sasl_scramsha_mech_sha2_256);
 
 	(void) hook_del_config_ready(sasl_scramsha_config_ready);
 }
