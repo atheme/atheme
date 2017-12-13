@@ -16,7 +16,6 @@ typedef struct {
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, size_t len);
-static void sasl_write(char *target, char *data, size_t length);
 static bool may_impersonate(myuser_t *source_mu, myuser_t *target_mu);
 static myuser_t *login_user(sasl_session_t *p);
 static void sasl_newuser(hook_user_nick_t *data);
@@ -343,6 +342,34 @@ sasl_session_abort(sasl_session_t *const restrict p)
 	(void) destroy_session(p);
 }
 
+/* output an arbitrary amount of data to the SASL client */
+static void
+sasl_write(char *target, char *data, size_t length)
+{
+	size_t last = SASL_S2S_MAXLEN;
+	size_t rem = length;
+
+	while (rem)
+	{
+		const size_t nbytes = (rem > SASL_S2S_MAXLEN) ? SASL_S2S_MAXLEN : rem;
+
+		char out[SASL_S2S_MAXLEN + 1];
+		(void) memset(out, 0x00, sizeof out);
+		(void) memcpy(out, data, nbytes);
+		(void) sasl_sts(target, 'C', out);
+
+		data += nbytes;
+		rem -= nbytes;
+		last = nbytes;
+	}
+
+	/* The end of a packet is indicated by a string not of the maximum length. If last piece was the
+	 * maximum length, or if there was no data at all, send an empty string to finish the transaction.
+	 */
+	if (last == SASL_S2S_MAXLEN)
+		(void) sasl_sts(target, 'C', "+");
+}
+
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
@@ -466,34 +493,6 @@ sasl_packet(sasl_session_t *p, char *buf, size_t len)
 
 	(void) free(out);
 	(void) sasl_session_abort(p);
-}
-
-/* output an arbitrary amount of data to the SASL client */
-static void
-sasl_write(char *target, char *data, size_t length)
-{
-	size_t last = SASL_S2S_MAXLEN;
-	size_t rem = length;
-
-	while (rem)
-	{
-		const size_t nbytes = (rem > SASL_S2S_MAXLEN) ? SASL_S2S_MAXLEN : rem;
-
-		char out[SASL_S2S_MAXLEN + 1];
-		(void) memset(out, 0x00, sizeof out);
-		(void) memcpy(out, data, nbytes);
-		(void) sasl_sts(target, 'C', out);
-
-		data += nbytes;
-		rem -= nbytes;
-		last = nbytes;
-	}
-
-	/* The end of a packet is indicated by a string not of the maximum length. If last piece was the
-	 * maximum length, or if there was no data at all, send an empty string to finish the transaction.
-	 */
-	if (last == SASL_S2S_MAXLEN)
-		(void) sasl_sts(target, 'C', "+");
 }
 
 static bool
