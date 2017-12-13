@@ -566,9 +566,7 @@ sasl_input(sasl_message_t *smsg)
 		{
 			if (p->len + len >= 8192) /* This is a little much... */
 			{
-				(void) sasl_sts(p->uid, 'D', "F");
-				(void) destroy_session(p);
-
+				(void) sasl_session_abort(p);
 				return;
 			}
 
