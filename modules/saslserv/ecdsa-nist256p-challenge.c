@@ -138,6 +138,9 @@ mech_step(sasl_session_t *const restrict p, char *const restrict message, const 
 static void
 mech_finish(sasl_session_t *const restrict p)
 {
+	if (! (p && p->mechdata))
+		return;
+
 	struct ecdsa_session *const s = p->mechdata;
 
 	if (s->pubkey)
