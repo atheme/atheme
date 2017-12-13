@@ -9,6 +9,8 @@
 #ifndef AUTHCOOKIE_H
 #define AUTHCOOKIE_H
 
+#define AUTHCOOKIE_LENGTH 20
+
 typedef struct authcookie_ authcookie_t;
 
 struct authcookie_ {
