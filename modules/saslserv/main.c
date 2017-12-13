@@ -99,29 +99,28 @@ sasl_mech_register(sasl_mechanism_t *mech)
 static void
 sasl_mech_unregister(sasl_mechanism_t *mech)
 {
-	mowgli_node_t *n, *tn;
-	sasl_session_t *session;
+	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
 
-	slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
 	{
-		session = n->data;
+		sasl_session_t *const session = n->data;
+
 		if (session->mechptr == mech)
 		{
-			slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
-			destroy_session(session);
+			(void) slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
+			(void) destroy_session(session);
 		}
 	}
-
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sasl_mechanisms.head)
 	{
 		if (n->data == mech)
 		{
-			mowgli_node_delete(n, &sasl_mechanisms);
-			mowgli_node_free(n);
+			(void) mowgli_node_delete(n, &sasl_mechanisms);
+			(void) mowgli_node_free(n);
+			(void) mechlist_do_rebuild();
 
-			mechlist_do_rebuild();
 			break;
 		}
 	}
