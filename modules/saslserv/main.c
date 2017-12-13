@@ -8,14 +8,9 @@
 #include "atheme.h"
 #include "uplink.h"
 
-mowgli_list_t sessions;
-static mowgli_list_t sasl_mechanisms;
-static char mechlist_string[400];
-static bool hide_server_names;
-
-sasl_session_t *find_session(const char *uid);
-sasl_session_t *make_session(const char *uid, server_t *server);
-void destroy_session(sasl_session_t *p);
+static sasl_session_t *find_session(const char *uid);
+static sasl_session_t *make_session(const char *uid, server_t *server);
+static void destroy_session(sasl_session_t *p);
 static sourceinfo_t *sasl_sourceinfo_create(sasl_session_t *p);
 static void sasl_input(sasl_message_t *smsg);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
@@ -31,6 +26,14 @@ static void mechlist_build_string(char *ptr, size_t buflen);
 static void mechlist_do_rebuild(void);
 static const char *sasl_format_sourceinfo(sourceinfo_t *si, bool full);
 static const char *sasl_get_source_name(sourceinfo_t *si);
+
+static mowgli_list_t sessions;
+static mowgli_list_t sasl_mechanisms;
+static char mechlist_string[400];
+static bool hide_server_names;
+
+static service_t *saslsvs = NULL;
+static mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 const sasl_core_functions_t sasl_core_functions = {
 
@@ -71,9 +74,6 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 			"connecting clients to the network. It has no "
 			"public interface.");
 }
-
-service_t *saslsvs = NULL;
-mowgli_eventloop_timer_t *delete_stale_timer = NULL;
 
 static void sasl_mech_register(sasl_mechanism_t *mech)
 {
@@ -168,7 +168,7 @@ mod_deinit(const module_unload_intent_t intent)
  */
 
 /* find an existing session by uid */
-sasl_session_t *find_session(const char *uid)
+static sasl_session_t *find_session(const char *uid)
 {
 	sasl_session_t *p;
 	mowgli_node_t *n;
@@ -187,7 +187,7 @@ sasl_session_t *find_session(const char *uid)
 }
 
 /* create a new session if it does not already exist */
-sasl_session_t *make_session(const char *uid, server_t *server)
+static sasl_session_t *make_session(const char *uid, server_t *server)
 {
 	sasl_session_t *p = find_session(uid);
 	mowgli_node_t *n;
@@ -206,7 +206,7 @@ sasl_session_t *make_session(const char *uid, server_t *server)
 }
 
 /* free a session and all its contents */
-void destroy_session(sasl_session_t *p)
+static void destroy_session(sasl_session_t *p)
 {
 	mowgli_node_t *n, *tn;
 	myuser_t *mu;
