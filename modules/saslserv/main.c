@@ -247,15 +247,6 @@ mechlist_build_string(char *ptr, size_t buflen)
 	*ptr = 0x00;
 }
 
-/* abort an SASL session
- */
-static inline void
-sasl_session_abort(sasl_session_t *const restrict p)
-{
-	(void) sasl_sts(p->uid, 'D', "F");
-	(void) destroy_session(p);
-}
-
 /* authenticated, now double check that their account is ok for login */
 static myuser_t *
 login_user(sasl_session_t *p)
@@ -397,6 +388,15 @@ sasl_write(char *target, char *data, size_t length)
 	 */
 	if (last == SASL_S2S_MAXLEN)
 		(void) sasl_sts(target, 'C', "+");
+}
+
+/* abort an SASL session
+ */
+static inline void
+sasl_session_abort(sasl_session_t *const restrict p)
+{
+	(void) sasl_sts(p->uid, 'D', "F");
+	(void) destroy_session(p);
 }
 
 /* given an entire sasl message, advance session by passing data to mechanism
