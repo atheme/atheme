@@ -328,16 +328,16 @@ static sasl_mechanism_t *
 find_mechanism(char *name)
 {
 	mowgli_node_t *n;
-	sasl_mechanism_t *mptr;
 
 	MOWGLI_ITER_FOREACH(n, sasl_mechanisms.head)
 	{
-		mptr = n->data;
-		if(!strcmp(mptr->name, name))
+		sasl_mechanism_t *const mptr = n->data;
+
+		if (strcmp(mptr->name, name) == 0)
 			return mptr;
 	}
 
-	slog(LG_DEBUG, "find_mechanism(): cannot find mechanism `%s'!", name);
+	(void) slog(LG_DEBUG, "find_mechanism(): cannot find mechanism '%s'!", name);
 
 	return NULL;
 }
