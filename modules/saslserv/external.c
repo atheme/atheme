@@ -23,15 +23,10 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 
 	if (in && inlen)
 	{
-		char authzid[NICKLEN];
-
-		if (! inlen || inlen >= sizeof authzid)
+		if (inlen >= NICKLEN)
 			return ASASL_FAIL;
 
-		(void) memset(authzid, 0x00, sizeof authzid);
-		(void) memcpy(authzid, in, inlen);
-
-		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
+		if (! sasl_core_functions->authzid_can_login(p, in, NULL))
 			return ASASL_FAIL;
 	}
 

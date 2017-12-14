@@ -19,17 +19,12 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 
 	/*
 	 * Data format: authzid 0x00 authcid 0x00 authcookie
-	 * + Final byte to ensure authcookie is NULL-terminated
 	 */
-	char data[NICKLEN + 1 + NICKLEN + 1 + AUTHCOOKIE_LENGTH + 1];
-	if (inlen >= sizeof data)
+	if (inlen > (NICKLEN + 1 + NICKLEN + 1 + AUTHCOOKIE_LENGTH))
 		return ASASL_FAIL;
 
-	(void) memset(data, 0x00, sizeof data);
-	(void) memcpy(data, in, inlen);
-
-	const char *ptr = data;
-	const char *const end = data + inlen;
+	const char *ptr = in;
+	const char *const end = in + inlen;
 
 	const char *const authzid = ptr;
 	if (! *authzid)

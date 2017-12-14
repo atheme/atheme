@@ -424,13 +424,17 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	}
 	else
 	{
-		unsigned char inbuf[SASL_C2S_MAXLEN];
+		unsigned char inbuf[SASL_C2S_MAXLEN + 1];
 		size_t tlen = 0;
 
 		if (len == 1 && *buf == '+')
 			rc = p->mechptr->mech_step(p, NULL, 0, &out, &out_len);
-		else if ((tlen = base64_decode(buf, inbuf, sizeof inbuf)) && tlen != (size_t) -1)
+		else if ((tlen = base64_decode(buf, inbuf, SASL_C2S_MAXLEN)) && tlen != (size_t) -1)
+		{
+			// Ensure input is NULL-terminated for modules that want to process the data as a string
+			inbuf[tlen] = 0x00;
 			rc = p->mechptr->mech_step(p, inbuf, tlen, &out, &out_len);
+		}
 		else
 			rc = ASASL_FAIL;
 

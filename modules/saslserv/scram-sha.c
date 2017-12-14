@@ -69,54 +69,43 @@ static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
 static int
-sasl_scramsha_attrlist_parse(const char *restrict str, const size_t len, scram_attr_list *const restrict attrs)
+sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attrs)
 {
-	const char *const end = str + len;
-
 	for (;;)
 	{
-		if (str < end)
+		unsigned char name = (unsigned char) *str++;
+
+		if (name < 'A' || (name > 'Z' && name < 'a') || name > 'z')
 		{
-			unsigned char name = (unsigned char) *str++;
+			// RFC 5802 Section 5: "All attribute names are single US-ASCII letters"
+			(void) slog(LG_DEBUG, "%s: invalid attribute name", __func__);
+			return false;
+		}
 
-			if (name < 'A' || (name > 'Z' && name < 'a') || name > 'z')
+		if (*str++ == '=')
+		{
+			const char *const pos = strchr(str, ',');
+
+			if (pos)
 			{
-				// RFC 5802 Section 5: "All attribute names are single US-ASCII letters"
-				(void) slog(LG_DEBUG, "%s: invalid attribute name", __func__);
-				return false;
-			}
-
-			if (str < end && *str++ == '=')
-			{
-				const char *const pos = memchr(str, ',', (size_t) (end - str));
-
-				if (pos)
-				{
-					(*attrs)[name] = sstrndup(str, (size_t) (pos - str));
-					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
-					                      (char) name, (*attrs)[name]);
-
-					str = pos + 1;
-				}
-				else
-				{
-					(*attrs)[name] = sstrndup(str, (size_t) (end - str));
-					(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
-					                      (char) name, (*attrs)[name]);
-
-					// Reached end of attribute list
-					return true;
-				}
+				(*attrs)[name] = sstrndup(str, (size_t) (pos - str));
+				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+				                      (char) name, (*attrs)[name]);
+				str = pos + 1;
 			}
 			else
 			{
-				(void) slog(LG_DEBUG, "%s: attribute '%c' without value", __func__, (char) name);
-				return false;
+				(*attrs)[name] = sstrdup(str);
+				(void) slog(LG_DEBUG, "%s: parsed '%c'='%s'", __func__,
+				                      (char) name, (*attrs)[name]);
+
+				// Reached end of attribute list
+				return true;
 			}
 		}
 		else
 		{
-			(void) slog(LG_DEBUG, "%s: hit end of list with no previous valid attribute", __func__);
+			(void) slog(LG_DEBUG, "%s: attribute '%c' without value", __func__, (char) name);
 			return false;
 		}
 	}
@@ -238,7 +227,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(message, inlen - ((size_t) (message - header)), &input))
+	if (! sasl_scramsha_attrlist_parse(message, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
@@ -342,7 +331,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 		goto fail;
 	}
 
-	if (! sasl_scramsha_attrlist_parse(in, inlen, &input))
+	if (! sasl_scramsha_attrlist_parse(in, &input))
 		// Malformed SCRAM attribute list
 		goto fail;
 
