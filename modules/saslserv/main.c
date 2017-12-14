@@ -544,8 +544,17 @@ sasl_input(sasl_message_t *const restrict smsg)
 
 	case 'S':
 		/* (S)tart authentication */
-		if (smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
+		if (strcmp(smsg->parv[0], "EXTERNAL") == 0)
 		{
+			if (smsg->parc < 2)
+			{
+				(void) slog(LG_DEBUG, "%s: client %s starting EXTERNAL authentication without a "
+				                      "fingerprint", __func__, smsg->uid);
+
+				(void) sasl_session_abort(p);
+				return;
+			}
+
 			(void) free(p->certfp);
 
 			p->certfp = sstrdup(smsg->parv[1]);
