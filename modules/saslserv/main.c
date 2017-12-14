@@ -121,7 +121,7 @@ find_session(const char *const restrict uid)
 
 /* create a new session if it does not already exist */
 static struct sasl_session *
-make_session(const char *const restrict uid, server_t *const restrict server)
+find_or_make_session(const char *const restrict uid, server_t *const restrict server)
 {
 	struct sasl_session *p;
 
@@ -515,7 +515,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 static void
 sasl_input(sasl_message_t *const restrict smsg)
 {
-	struct sasl_session *const p = make_session(smsg->uid, smsg->server);
+	struct sasl_session *const p = find_or_make_session(smsg->uid, smsg->server);
 
 	const size_t len = strlen(smsg->parv[0]);
 
