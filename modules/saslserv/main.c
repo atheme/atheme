@@ -560,8 +560,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 		if (p->buf == NULL)
 		{
 			p->buf = (char *)smalloc(len + 1);
-			p->p = p->buf;
-			p->len = len;
+			p->len = 0;
 		}
 		else
 		{
@@ -572,11 +571,10 @@ sasl_input(sasl_message_t *const restrict smsg)
 			}
 
 			p->buf = (char *)realloc(p->buf, p->len + len + 1);
-			p->p = p->buf + p->len;
-			p->len += len;
 		}
 
-		(void) memcpy(p->p, smsg->parv[0], len);
+		(void) memcpy(p->buf + p->len, smsg->parv[0], len);
+		p->len += len;
 
 		/* Messages not exactly 400 bytes are the end of a packet. */
 		if (len < 400)
@@ -586,9 +584,8 @@ sasl_input(sasl_message_t *const restrict smsg)
 			tmpbuf = p->buf;
 			tmplen = p->len;
 
-			p->len = 0;
 			p->buf = NULL;
-			p->p = NULL;
+			p->len = 0;
 
 			(void) sasl_packet(p, tmpbuf, tmplen);
 			(void) free(tmpbuf);

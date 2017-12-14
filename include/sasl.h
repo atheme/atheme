@@ -26,7 +26,6 @@ struct sasl_session
 	sourceinfo_t            *si;
 	char                    *uid;
 	char                    *buf;
-	char                    *p;
 	void                    *mechdata;
 	char                    *authceid;
 	char                    *authzeid;
