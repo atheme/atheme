@@ -561,16 +561,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 			return;
 		}
 
-		if (p->buf == NULL)
-		{
-			p->buf = (char *)smalloc(len + 1);
-			p->len = 0;
-		}
-		else
-		{
-			p->buf = (char *)realloc(p->buf, p->len + len + 1);
-		}
-
+		p->buf = srealloc(p->buf, p->len + len + 1);
 		(void) memcpy(p->buf + p->len, smsg->parv[0], len);
 		p->len += len;
 
