@@ -410,18 +410,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	{
 		(void) sasl_sourceinfo_recreate(p);
 
-		char mech[SASL_MECHANISM_MAXLEN];
-
-		if (len >= sizeof mech)
-		{
-			(void) sasl_session_abort(p);
-			return;
-		}
-
-		(void) memset(mech, 0x00, sizeof mech);
-		(void) memcpy(mech, buf, len);
-
-		if (! (p->mechptr = find_mechanism(mech)))
+		if (! (p->mechptr = find_mechanism(buf)))
 		{
 			(void) sasl_sts(p->uid, 'M', mechlist_string);
 			(void) sasl_session_abort(p);
@@ -560,7 +549,9 @@ sasl_input(sasl_message_t *const restrict smsg)
 			p->certfp = sstrdup(smsg->parv[1]);
 			p->tls = true;
 		}
-		/* fallthrough to 'C' */
+
+		(void) sasl_packet(p, smsg->parv[0], 0);
+		return;
 
 	case 'C':
 		/* (C)lient data */
