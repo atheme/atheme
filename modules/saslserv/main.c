@@ -555,6 +555,12 @@ sasl_input(sasl_message_t *const restrict smsg)
 
 	case 'C':
 		/* (C)lient data */
+		if (p->len + len >= SASL_C2S_MAXLEN)
+		{
+			(void) sasl_session_abort(p);
+			return;
+		}
+
 		if (p->buf == NULL)
 		{
 			p->buf = (char *)smalloc(len + 1);
@@ -562,12 +568,6 @@ sasl_input(sasl_message_t *const restrict smsg)
 		}
 		else
 		{
-			if (p->len + len >= SASL_C2S_MAXLEN)
-			{
-				(void) sasl_session_abort(p);
-				return;
-			}
-
 			p->buf = (char *)realloc(p->buf, p->len + len + 1);
 		}
 
