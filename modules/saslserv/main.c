@@ -559,6 +559,12 @@ sasl_input(sasl_message_t *const restrict smsg)
 
 	case 'C':
 		/* (C)lient data */
+		if (! p->len && len == 1 && smsg->parv[0][0] == '+')
+		{
+			(void) sasl_packet(p, smsg->parv[0], len);
+			return;
+		}
+
 		if (p->len + len >= SASL_C2S_MAXLEN)
 		{
 			(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", __func__, smsg->uid);
