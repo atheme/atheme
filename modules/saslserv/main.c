@@ -718,6 +718,10 @@ sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const 
 
 	p->authceid = sstrdup(entity(mu)->id);
 
+	if (p->authzeid && strcmp(p->authceid, p->authzeid) == 0)
+		// authzid_can_login already ran the hook for this user
+		return true;
+
 	hook_user_login_check_t req = {
 
 		.si         = p->si,
@@ -746,6 +750,10 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 		*muo = mu;
 
 	p->authzeid = sstrdup(entity(mu)->id);
+
+	if (p->authceid && strcmp(p->authceid, p->authzeid) == 0)
+		// authcid_can_login already ran the hook for this user
+		return true;
 
 	hook_user_login_check_t req = {
 
