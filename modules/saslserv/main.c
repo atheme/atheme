@@ -406,7 +406,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
 	 */
-	if (! p->mechptr)
+	if (! p->mechptr && ! len)
 	{
 		(void) sasl_sourceinfo_recreate(p);
 
@@ -421,6 +421,12 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			rc = p->mechptr->mech_start(p, &out, &out_len);
 		else
 			rc = ASASL_MORE;
+	}
+	else if (! p->mechptr)
+	{
+		(void) slog(LG_ERROR, "%s: session has no mechanism (BUG!)", __func__);
+		(void) sasl_session_abort(p);
+		return;
 	}
 	else
 	{
