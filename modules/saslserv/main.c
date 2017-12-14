@@ -529,8 +529,6 @@ sasl_input(sasl_message_t *const restrict smsg)
 	struct sasl_session *const p = make_session(smsg->uid, smsg->server);
 
 	size_t len = strlen(smsg->parv[0]);
-	char *tmpbuf;
-	size_t tmplen;
 
 	switch(smsg->mode)
 	{
@@ -581,14 +579,11 @@ sasl_input(sasl_message_t *const restrict smsg)
 		{
 			p->buf[p->len] = 0x00;
 
-			tmpbuf = p->buf;
-			tmplen = p->len;
+			(void) sasl_packet(p, p->buf, p->len);
+			(void) free(p->buf);
 
 			p->buf = NULL;
 			p->len = 0;
-
-			(void) sasl_packet(p, tmpbuf, tmplen);
-			(void) free(tmpbuf);
 		}
 
 		return;
