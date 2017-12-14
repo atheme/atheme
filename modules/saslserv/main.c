@@ -517,7 +517,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 {
 	struct sasl_session *const p = make_session(smsg->uid, smsg->server);
 
-	size_t len = strlen(smsg->parv[0]);
+	const size_t len = strlen(smsg->parv[0]);
 
 	switch(smsg->mode)
 	{
