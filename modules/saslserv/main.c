@@ -544,7 +544,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 
 	case 'S':
 		/* (S)tart authentication */
-		if (smsg->mode == 'S' && smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
+		if (smsg->parc >= 2 && strcmp(smsg->parv[0], "EXTERNAL") == 0)
 		{
 			(void) free(p->certfp);
 
