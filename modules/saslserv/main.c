@@ -571,7 +571,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 			return;
 		}
 
-		if (p->len + len >= SASL_C2S_MAXLEN)
+		if ((p->len + len) > SASL_C2S_MAXLEN)
 		{
 			(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", __func__, smsg->uid);
 			(void) sasl_session_abort(p);
