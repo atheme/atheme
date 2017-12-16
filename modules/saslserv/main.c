@@ -357,7 +357,7 @@ login_user(struct sasl_session *const restrict p)
 
 /* output an arbitrary amount of data to the SASL client */
 static void
-sasl_write(char *const restrict target, const char *restrict data, const size_t length)
+sasl_write(const char *const restrict target, const char *restrict data, const size_t length)
 {
 	/* Optimisation:
 	 *     If the data we send will not require splitting it into chunks, don't.
