@@ -521,6 +521,18 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	(void) sasl_session_abort(p);
 }
 
+static inline void
+sasl_buf_process(struct sasl_session *const restrict p)
+{
+	p->buf[p->len] = 0x00;
+
+	(void) sasl_packet(p, p->buf, p->len);
+	(void) free(p->buf);
+
+	p->buf = NULL;
+	p->len = 0;
+}
+
 /* interpret an AUTHENTICATE message */
 static void
 sasl_input(sasl_message_t *const restrict smsg)
@@ -585,15 +597,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 		if (len == 1 && smsg->parv[0][0] == '+')
 		{
 			if (p->buf)
-			{
-				p->buf[p->len] = 0x00;
-
-				(void) sasl_packet(p, p->buf, p->len);
-				(void) free(p->buf);
-
-				p->buf = NULL;
-				p->len = 0;
-			}
+				(void) sasl_buf_process(p);
 			else
 				/* This function already deals with the special case of 1 '+' character */
 				(void) sasl_packet(p, smsg->parv[0], len);
@@ -627,15 +631,7 @@ sasl_input(sasl_message_t *const restrict smsg)
 
 		/* Messages not exactly 400 bytes are the end of data. */
 		if (len < SASL_S2S_MAXLEN)
-		{
-			p->buf[p->len] = 0x00;
-
-			(void) sasl_packet(p, p->buf, p->len);
-			(void) free(p->buf);
-
-			p->buf = NULL;
-			p->len = 0;
-		}
+			(void) sasl_buf_process(p);
 
 		return;
 
