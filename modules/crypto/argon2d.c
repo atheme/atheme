@@ -22,13 +22,6 @@
 
 #include "atheme.h"
 
-#include <inttypes.h>
-#include <limits.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #define ARGON2D_MEMCOST_MIN     8
 #define ARGON2D_MEMCOST_DEF     14
 #define ARGON2D_MEMCOST_MAX     20
