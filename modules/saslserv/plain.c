@@ -23,7 +23,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		return ASASL_FAIL;
 
 	const char *ptr = in;
-	const char *const end = in + inlen;
+	const char *const end = ptr + inlen;
 
 	const char *const authzid = ptr;
 	if (! *authzid)
