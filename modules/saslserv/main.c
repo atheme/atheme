@@ -489,7 +489,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	{
 		if (out && out_len)
 		{
-			char outbuf[SASL_C2S_MAXLEN * 2];
+			char outbuf[SASL_C2S_MAXLEN + 1];
 			const size_t rs = base64_encode(out, out_len, outbuf, sizeof outbuf);
 
 			if (rs == (size_t) -1)
