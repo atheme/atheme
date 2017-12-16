@@ -206,35 +206,37 @@ sasl_server_eob(server_t __attribute__((unused)) *const restrict s)
 }
 
 static void
-mechlist_build_string(char *restrict ptr, const size_t buflen)
+mechlist_build_string(void)
 {
-	size_t l = 0;
+	char *buf = mechlist_string;
+	size_t tmplen = 0;
 	mowgli_node_t *n;
 
 	MOWGLI_ITER_FOREACH(n, mechanisms.head)
 	{
-		struct sasl_mechanism *const mptr = n->data;
+		const struct sasl_mechanism *const mptr = n->data;
+		const size_t namelen = strlen(mptr->name);
 
-		if (l + strlen(mptr->name) > buflen)
+		if (tmplen + namelen >= sizeof mechlist_string)
 			break;
 
-		(void) strcpy(ptr, mptr->name);
+		(void) memcpy(buf, mptr->name, namelen);
 
-		ptr += strlen(mptr->name);
-		*ptr++ = ',';
-		l += strlen(mptr->name) + 1;
+		buf += namelen;
+		*buf++ = ',';
+		tmplen += namelen + 1;
 	}
 
-	if (l)
-		ptr--;
+	if (tmplen)
+		buf--;
 
-	*ptr = 0x00;
+	*buf = 0x00;
 }
 
 static void
 mechlist_do_rebuild(void)
 {
-	(void) mechlist_build_string(mechlist_string, sizeof mechlist_string);
+	(void) mechlist_build_string();
 
 	/* push mechanism list to the network */
 	if (me.connected)
