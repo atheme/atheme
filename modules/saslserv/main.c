@@ -359,6 +359,16 @@ login_user(struct sasl_session *const restrict p)
 static void
 sasl_write(char *const restrict target, const char *restrict data, const size_t length)
 {
+	/* Optimisation:
+	 *     If the data we send will not require splitting it into chunks, don't.
+	 *     This avoids unnecessary memory copies.
+	 */
+	if (length < SASL_S2S_MAXLEN)
+	{
+		(void) sasl_sts(target, 'C', data);
+		return;
+	}
+
 	size_t last = SASL_S2S_MAXLEN;
 	size_t rem = length;
 
