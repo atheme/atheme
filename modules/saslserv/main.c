@@ -455,7 +455,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			rc = ASASL_FAIL;
 
 		if (tlen == (size_t) -1)
-			(void) slog(LG_ERROR, "%s: base64_decode() failed", __func__);
+			(void) slog(LG_DEBUG, "%s: base64_decode() failed", __func__);
 	}
 
 	/* Some progress has been made, reset timeout. */
