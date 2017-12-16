@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (C) 2005-2017 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.

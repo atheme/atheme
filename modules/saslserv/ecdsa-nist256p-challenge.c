@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2013 William Pitcock <nenolod@dereferenced.org>
+ * Copyright (C) 2013 William Pitcock <nenolod@dereferenced.org>
+ * Copyright (C) 2017 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * ECDSA-NIST256P-CHALLENGE mechanism provider.

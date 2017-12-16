@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 Atheme Development Group
+ * Copyright (C) 2006-2017 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * EXTERNAL IRCv3.1 SASL draft mechanism implementation.

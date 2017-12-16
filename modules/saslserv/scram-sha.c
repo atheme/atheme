@@ -9,8 +9,8 @@
  *   - RFC 7677 <https://tools.ietf.org/html/rfc7677>
  *     "SCRAM-SHA-256 and SCRAM-SHA-256-PLUS SASL Mechanisms"
  *
- * Copyright (c) 2014 Mantas Mikulėnas <grawity@gmail.com>
- * Copyright (c) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
+ * Copyright (C) 2014 Mantas Mikulėnas <grawity@gmail.com>
+ * Copyright (C) 2017 Aaron M. D. Jones <aaronmdjones@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
