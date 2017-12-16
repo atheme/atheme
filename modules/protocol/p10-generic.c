@@ -314,7 +314,7 @@ static void p10_jupe(const char *server, const char *reason)
 	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
 }
 
-static void p10_sasl_sts(char *target, char mode, char *data)
+static void p10_sasl_sts(const char *target, char mode, const char *data)
 {
 	sts("%s XR %c%c %s :SASL:%c:%s", me.numeric, target[0], target[1], target, mode, data);
 }

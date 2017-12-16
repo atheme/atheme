@@ -44,7 +44,7 @@ static bool use_eopmod = false;
 static bool use_mlock = false;
 
 static void server_eob(server_t *s);
-static server_t *sid_find(char *name);
+static server_t *sid_find(const char *name);
 
 static char ts6sid[3 + 1] = "";
 
@@ -492,7 +492,7 @@ static void ts6_svslogin_sts(char *target, char *nick, char *user, char *host, m
 			target, nick, user, host, entity(account)->name);
 }
 
-static void ts6_sasl_sts(char *target, char mode, char *data)
+static void ts6_sasl_sts(const char *target, char mode, const char *data)
 {
 	service_t *svs;
 	server_t *s = sid_find(target);
@@ -1455,7 +1455,7 @@ static void channel_drop(mychan_t *mc)
 			mc->chan->name);
 }
 
-static server_t *sid_find(char *name)
+static server_t *sid_find(const char *name)
 {
 	char sid[4];
 	mowgli_strlcpy(sid, name, 4);
