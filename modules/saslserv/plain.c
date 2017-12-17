@@ -9,7 +9,7 @@
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static int
+static unsigned int
 mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
           void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {

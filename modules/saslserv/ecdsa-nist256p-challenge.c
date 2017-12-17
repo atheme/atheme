@@ -33,7 +33,7 @@ struct ecdsa_session
 
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 
-static int
+static unsigned int
 mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
            size_t __attribute__((unused)) *const restrict outlen)
 {
@@ -48,7 +48,7 @@ mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) *
 	return ASASL_MORE;
 }
 
-static int
+static unsigned int
 mech_step(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
           void **const restrict out, size_t *const restrict outlen)
 {

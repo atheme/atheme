@@ -123,7 +123,7 @@ sasl_scramsha_attrlist_free(scram_attr_list *const restrict attrs)
 	}
 }
 
-static int
+static unsigned int
 mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) **const restrict out,
            size_t __attribute__((unused)) *const restrict out_len)
 {
@@ -132,7 +132,7 @@ mech_start(struct sasl_session *const restrict p, void __attribute__((unused)) *
 	return ASASL_MORE;
 }
 
-static int
+static unsigned int
 mech_step_clientfirst(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                       void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
@@ -316,7 +316,7 @@ error:
 	return ASASL_ERROR;
 }
 
-static int
+static unsigned int
 mech_step_clientproof(struct scramsha_session *const restrict s, const void *const restrict in, const size_t inlen,
                       void **const restrict out, size_t *const restrict outlen)
 {
@@ -469,7 +469,7 @@ fail:
 	return ASASL_FAIL;
 }
 
-static int
+static unsigned int
 mech_step_success(const struct scramsha_session *const restrict s)
 {
 	if (s->db.scram)
@@ -519,7 +519,7 @@ mech_step_success(const struct scramsha_session *const restrict s)
 	return ASASL_DONE;
 }
 
-static inline int
+static inline unsigned int
 mech_step_dispatch(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                    void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
@@ -547,14 +547,14 @@ mech_step_dispatch(struct sasl_session *const restrict p, const void *const rest
 	}
 }
 
-static int
+static unsigned int
 mech_step_sha1(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                void **const restrict out, size_t *const restrict outlen)
 {
 	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA1);
 }
 
-static int
+static unsigned int
 mech_step_sha2_256(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                    void **const restrict out, size_t *const restrict outlen)
 {

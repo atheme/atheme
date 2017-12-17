@@ -410,7 +410,7 @@ sasl_session_abort(struct sasl_session *const restrict p)
 static void
 sasl_packet(struct sasl_session *const restrict p, const char *const restrict buf, const size_t len)
 {
-	int rc;
+	unsigned int rc;
 
 	void *out = NULL;
 	size_t out_len = 0;

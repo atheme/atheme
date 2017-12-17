@@ -14,13 +14,13 @@
 #define SASL_S2S_MAXLEN             400
 #define SASL_C2S_MAXLEN             8192
 
-#define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
-#define ASASL_NEED_LOG              2 /* user auth success needs to be logged still */
+#define ASASL_MARKED_FOR_DELETION   1U /* see delete_stale() in saslserv/main.c */
+#define ASASL_NEED_LOG              2U /* user auth success needs to be logged still */
 
-#define ASASL_FAIL                  0 /* client supplied invalid credentials / screwed up their formatting */
-#define ASASL_MORE                  1 /* everything looks good so far, but we're not done yet */
-#define ASASL_DONE                  2 /* client successfully authenticated */
-#define ASASL_ERROR                 3 /* an error occurred in mech or it doesn't want to bad_password() the user */
+#define ASASL_FAIL                  0U /* client supplied invalid credentials / screwed up their formatting */
+#define ASASL_MORE                  1U /* everything looks good so far, but we're not done yet */
+#define ASASL_DONE                  2U /* client successfully authenticated */
+#define ASASL_ERROR                 3U /* an error occurred in mech or it doesn't want to bad_password() the user */
 
 struct sasl_session;
 struct sasl_message;
@@ -41,7 +41,7 @@ struct sasl_session
 	char                    *host;
 	char                    *ip;
 	size_t                   len;
-	int                      flags;
+	unsigned int             flags;
 	bool                     tls;
 };
 
@@ -56,10 +56,10 @@ struct sasl_message
 
 struct sasl_mechanism
 {
-	char       name[SASL_MECHANISM_MAXLEN];
-	int      (*mech_start)(struct sasl_session *, void **, size_t *);
-	int      (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
-	void     (*mech_finish)(struct sasl_session *);
+	char           name[SASL_MECHANISM_MAXLEN];
+	unsigned int (*mech_start)(struct sasl_session *, void **, size_t *);
+	unsigned int (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
+	void         (*mech_finish)(struct sasl_session *);
 };
 
 struct sasl_core_functions
