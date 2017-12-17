@@ -9,10 +9,17 @@
 #ifndef SASL_H
 #define SASL_H
 
-#define SASL_MESSAGE_MAXPARA    8       /* arbitrary, increment if needed in future */
-#define SASL_MECHANISM_MAXLEN   60
-#define SASL_S2S_MAXLEN         400
-#define SASL_C2S_MAXLEN         8192
+#define SASL_MESSAGE_MAXPARA        8       /* arbitrary, increment if needed in future */
+#define SASL_MECHANISM_MAXLEN       60
+#define SASL_S2S_MAXLEN             400
+#define SASL_C2S_MAXLEN             8192
+
+#define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
+#define ASASL_NEED_LOG              2 /* user auth success needs to be logged still */
+
+#define ASASL_FAIL                  0 /* client supplied invalid credentials / screwed up their formatting */
+#define ASASL_MORE                  1 /* everything looks good so far, but we're not done yet */
+#define ASASL_DONE                  2 /* client successfully authenticated */
 
 struct sasl_session;
 struct sasl_message;
@@ -71,12 +78,5 @@ typedef struct {
 } hook_sasl_may_impersonate_t;
 
 typedef struct sasl_message sasl_message_t;
-
-#define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
-#define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */
-#define ASASL_DONE 2 /* client successfully authenticated */
-
-#define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
-#define ASASL_NEED_LOG              2 /* user auth success needs to be logged still */
 
 #endif
