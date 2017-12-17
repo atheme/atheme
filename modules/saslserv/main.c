@@ -500,6 +500,94 @@ sasl_buf_process(struct sasl_session *const restrict p)
 	return true;
 }
 
+static void
+sasl_input_hostinfo(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+{
+	p->host = sstrdup(smsg->parv[0]);
+	p->ip   = sstrdup(smsg->parv[1]);
+
+	if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
+		p->tls = true;
+}
+
+static bool __attribute__((warn_unused_result))
+sasl_input_startauth(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+{
+	if (strcmp(smsg->parv[0], "EXTERNAL") == 0)
+	{
+		if (smsg->parc < 2)
+		{
+			(void) slog(LG_DEBUG, "%s: client %s starting EXTERNAL authentication without a "
+			                      "fingerprint", __func__, smsg->uid);
+			return false;
+		}
+
+		(void) free(p->certfp);
+
+		p->certfp = sstrdup(smsg->parv[1]);
+		p->tls = true;
+	}
+
+	return sasl_packet(p, smsg->parv[0], 0);
+}
+
+static bool __attribute__((warn_unused_result))
+sasl_input_clientdata(const sasl_message_t *const restrict smsg, struct sasl_session *const restrict p)
+{
+	/* This is complicated.
+	 *
+	 * Clients are restricted to sending us 300 bytes (400 Base-64 characters), but the mechanism
+	 * that they have chosen could require them to send more than this amount, so they have to send
+	 * it 400 Base-64 characters at a time in stages. When we receive data less than 400 characters,
+	 * we know we don't need to buffer any more data, and can finally process it.
+	 *
+	 * However, if the client wants to send us a multiple of 400 characters and no more, we would be
+	 * waiting forever for them to send 'the rest', even though there isn't any. This is solved by
+	 * having them send a single '+' character to indicate that they have no more data to send.
+	 *
+	 * This is also what clients send us when they do not want to send us any data at all, and in
+	 * either event, this is *NOT* *DATA* we are receiving, and we should not buffer it.
+	 */
+
+	const size_t len = strlen(smsg->parv[0]);
+
+	/* End of data? */
+	if (len == 1 && smsg->parv[0][0] == '+')
+	{
+		if (p->buf)
+			return sasl_buf_process(p);
+
+		/* This function already deals with the special case of 1 '+' character */
+		return sasl_packet(p, smsg->parv[0], len);
+	}
+
+	/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
+	 * need to buffer it at all, and can process it immediately.
+	 */
+	if (! p->buf && len < SASL_S2S_MAXLEN)
+		return sasl_packet(p, smsg->parv[0], len);
+
+	/* We need to buffer the data now, but first check if the client hasn't sent us an excessive
+	 * amount already.
+	 */
+	if ((p->len + len) > SASL_C2S_MAXLEN)
+	{
+		(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", __func__, smsg->uid);
+		return false;
+	}
+
+	/* (Re)allocate a buffer, append the received data to it, and update its recorded length. */
+	p->buf = srealloc(p->buf, p->len + len + 1);
+	(void) memcpy(p->buf + p->len, smsg->parv[0], len);
+	p->len += len;
+
+	/* Messages not exactly 400 characters are the end of data. */
+	if (len < SASL_S2S_MAXLEN)
+		return sasl_buf_process(p);
+
+	return true;
+}
+
 /* free a session and all its contents */
 static void
 destroy_session(struct sasl_session *const restrict p)
@@ -554,107 +642,23 @@ sasl_input(sasl_message_t *const restrict smsg)
 {
 	struct sasl_session *const p = find_or_make_session(smsg->uid, smsg->server);
 
-	const size_t len = strlen(smsg->parv[0]);
-
 	switch(smsg->mode)
 	{
 	case 'H':
 		/* (H)ost information */
-		p->host = sstrdup(smsg->parv[0]);
-		p->ip   = sstrdup(smsg->parv[1]);
-
-		if (smsg->parc >= 3 && strcmp(smsg->parv[2], "P") != 0)
-			p->tls = true;
-
+		(void) sasl_input_hostinfo(smsg, p);
 		return;
 
 	case 'S':
 		/* (S)tart authentication */
-		if (strcmp(smsg->parv[0], "EXTERNAL") == 0)
-		{
-			if (smsg->parc < 2)
-			{
-				(void) slog(LG_DEBUG, "%s: client %s starting EXTERNAL authentication without a "
-				                      "fingerprint", __func__, smsg->uid);
-
-				(void) sasl_session_abort(p);
-				return;
-			}
-
-			(void) free(p->certfp);
-
-			p->certfp = sstrdup(smsg->parv[1]);
-			p->tls = true;
-		}
-
-		if (! sasl_packet(p, smsg->parv[0], 0))
+		if (! sasl_input_startauth(smsg, p))
 			(void) sasl_session_abort(p);
 
 		return;
 
 	case 'C':
 		/* (C)lient data */
-
-		/* This is complicated.
-		 *
-		 * Clients are restricted to sending us 300 bytes (400 Base-64 characters), but the mechanism
-		 * that they have chosen could require them to send more than this amount, so they have to send
-		 * it 400 Base-64 characters at a time in stages. When we receive data less than 400 characters,
-		 * we know we don't need to buffer any more data, and can finally process it.
-		 *
-		 * However, if the client wants to send us a multiple of 400 characters and no more, we would be
-		 * waiting forever for them to send 'the rest', even though there isn't any. This is solved by
-		 * having them send a single '+' character to indicate that they have no more data to send.
-		 *
-		 * This is also what clients send us when they do not want to send us any data at all, and in
-		 * either event, this is *NOT* *DATA* we are receiving, and we should not buffer it.
-		 */
-
-		/* End of data? */
-		if (len == 1 && smsg->parv[0][0] == '+')
-		{
-			bool result;
-
-			if (p->buf)
-				result = sasl_buf_process(p);
-			else
-				/* This function already deals with the special case of 1 '+' character */
-				result = sasl_packet(p, smsg->parv[0], len);
-
-			if (! result)
-				(void) sasl_session_abort(p);
-
-			return;
-		}
-
-		/* Optimisation: If there is no buffer yet and this data is less than 400 characters, we don't
-		 * need to buffer it at all, and can process it immediately.
-		 */
-		if (! p->buf && len < SASL_S2S_MAXLEN)
-		{
-			if (! sasl_packet(p, smsg->parv[0], len))
-				(void) sasl_session_abort(p);
-
-			return;
-		}
-
-		/* We need to buffer the data now, but first check if the client hasn't sent us an excessive
-		 * amount already.
-		 */
-		if ((p->len + len) > SASL_C2S_MAXLEN)
-		{
-			(void) slog(LG_DEBUG, "%s: client %s has exceeded allowed data length", __func__, smsg->uid);
-			(void) sasl_session_abort(p);
-			return;
-		}
-
-		/* (Re)allocate a buffer, append the received data to it, and update its recorded length. */
-		p->buf = srealloc(p->buf, p->len + len + 1);
-		(void) memcpy(p->buf + p->len, smsg->parv[0], len);
-		p->len += len;
-
-		/* Messages not exactly 400 bytes are the end of data. */
-		if (len < SASL_S2S_MAXLEN && ! sasl_buf_process(p))
+		if (! sasl_input_clientdata(smsg, p))
 			(void) sasl_session_abort(p);
 
 		return;
