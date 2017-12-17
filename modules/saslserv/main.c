@@ -140,45 +140,6 @@ find_or_make_session(const char *const restrict uid, server_t *const restrict se
 	return p;
 }
 
-/* free a session and all its contents */
-static void
-destroy_session(struct sasl_session *const restrict p)
-{
-	if (p->flags & ASASL_NEED_LOG && p->authceid)
-	{
-		myuser_t *const mu = myuser_find_uid(p->authceid);
-
-		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
-			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
-	}
-
-	mowgli_node_t *n, *tn;
-
-	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
-	{
-		if (n->data == p)
-		{
-			(void) mowgli_node_delete(n, &sessions);
-			(void) mowgli_node_free(n);
-		}
-	}
-
-	if (p->mechptr && p->mechptr->mech_finish)
-		(void) p->mechptr->mech_finish(p);
-
-	if (p->si)
-		(void) object_unref(p->si);
-
-	(void) free(p->authceid);
-	(void) free(p->authzeid);
-	(void) free(p->certfp);
-	(void) free(p->host);
-	(void) free(p->buf);
-	(void) free(p->uid);
-	(void) free(p->ip);
-	(void) free(p);
-}
-
 /* find a mechanism by name */
 static struct sasl_mechanism *
 find_mechanism(const char *const restrict name)
@@ -395,19 +356,10 @@ sasl_write(const char *const restrict target, const char *restrict data, const s
 		(void) sasl_sts(target, 'C', "+");
 }
 
-/* abort an SASL session
- */
-static inline void
-sasl_session_abort(struct sasl_session *const restrict p)
-{
-	(void) sasl_sts(p->uid, 'D', "F");
-	(void) destroy_session(p);
-}
-
 /* given an entire sasl message, advance session by passing data to mechanism
  * and feeding returned data back to client.
  */
-static void
+static bool __attribute__((warn_unused_result))
 sasl_packet(struct sasl_session *const restrict p, const char *const restrict buf, const size_t len)
 {
 	unsigned int rc;
@@ -425,8 +377,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		if (! (p->mechptr = find_mechanism(buf)))
 		{
 			(void) sasl_sts(p->uid, 'M', mechlist_string);
-			(void) sasl_session_abort(p);
-			return;
+			return false;
 		}
 
 		if (p->mechptr->mech_start)
@@ -437,8 +388,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	else if (! p->mechptr)
 	{
 		(void) slog(LG_ERROR, "%s: session has no mechanism (BUG!)", __func__);
-		(void) sasl_session_abort(p);
-		return;
+		return false;
 	}
 	else
 	{
@@ -479,12 +429,12 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 				(void) svslogin_sts(p->uid, "*", "*", cloak, mu);
 
 			(void) sasl_sts(p->uid, 'D', "S");
-			/* Will destroy session on introduction of user to net. */
-		}
-		else
-			(void) sasl_session_abort(p);
 
-		return;
+			/* Will destroy session on introduction of user to net. */
+			return true;
+		}
+
+		return false;
 	}
 
 	if (rc == ASASL_MORE)
@@ -494,19 +444,20 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			char outbuf[SASL_C2S_MAXLEN + 1];
 			const size_t rs = base64_encode(out, out_len, outbuf, sizeof outbuf);
 
+			(void) free(out);
+
 			if (rs == (size_t) -1)
 			{
 				(void) slog(LG_ERROR, "%s: base64_encode() failed", __func__);
-				(void) sasl_session_abort(p);
+				return false;
 			}
-			else
-				(void) sasl_write(p->uid, outbuf, rs);
+
+			(void) sasl_write(p->uid, outbuf, rs);
 		}
 		else
 			(void) sasl_sts(p->uid, 'C', "+");
 
-		(void) free(out);
-		return;
+		return true;
 	}
 
 	if (rc == ASASL_FAIL && p->authceid)
@@ -530,19 +481,71 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 	}
 
 	(void) free(out);
-	(void) sasl_session_abort(p);
+	return false;
 }
 
-static inline void
+static bool __attribute__((warn_unused_result))
 sasl_buf_process(struct sasl_session *const restrict p)
 {
 	p->buf[p->len] = 0x00;
 
-	(void) sasl_packet(p, p->buf, p->len);
+	if (! sasl_packet(p, p->buf, p->len))
+		return false;
+
 	(void) free(p->buf);
 
 	p->buf = NULL;
 	p->len = 0;
+
+	return true;
+}
+
+/* free a session and all its contents */
+static void
+destroy_session(struct sasl_session *const restrict p)
+{
+	if (p->flags & ASASL_NEED_LOG && p->authceid)
+	{
+		myuser_t *const mu = myuser_find_uid(p->authceid);
+
+		if (mu && ! (ircd->flags & IRCD_SASL_USE_PUID))
+			(void) logcommand(p->si, CMDLOG_LOGIN, "LOGIN (session timed out)");
+	}
+
+	mowgli_node_t *n, *tn;
+
+	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
+	{
+		if (n->data == p)
+		{
+			(void) mowgli_node_delete(n, &sessions);
+			(void) mowgli_node_free(n);
+		}
+	}
+
+	if (p->mechptr && p->mechptr->mech_finish)
+		(void) p->mechptr->mech_finish(p);
+
+	if (p->si)
+		(void) object_unref(p->si);
+
+	(void) free(p->authceid);
+	(void) free(p->authzeid);
+	(void) free(p->certfp);
+	(void) free(p->host);
+	(void) free(p->buf);
+	(void) free(p->uid);
+	(void) free(p->ip);
+	(void) free(p);
+}
+
+/* abort an SASL session
+ */
+static inline void
+sasl_session_abort(struct sasl_session *const restrict p)
+{
+	(void) sasl_sts(p->uid, 'D', "F");
+	(void) destroy_session(p);
 }
 
 /* interpret an AUTHENTICATE message */
@@ -584,7 +587,9 @@ sasl_input(sasl_message_t *const restrict smsg)
 			p->tls = true;
 		}
 
-		(void) sasl_packet(p, smsg->parv[0], 0);
+		if (! sasl_packet(p, smsg->parv[0], 0))
+			(void) sasl_session_abort(p);
+
 		return;
 
 	case 'C':
@@ -608,11 +613,16 @@ sasl_input(sasl_message_t *const restrict smsg)
 		/* End of data? */
 		if (len == 1 && smsg->parv[0][0] == '+')
 		{
+			bool result;
+
 			if (p->buf)
-				(void) sasl_buf_process(p);
+				result = sasl_buf_process(p);
 			else
 				/* This function already deals with the special case of 1 '+' character */
-				(void) sasl_packet(p, smsg->parv[0], len);
+				result = sasl_packet(p, smsg->parv[0], len);
+
+			if (! result)
+				(void) sasl_session_abort(p);
 
 			return;
 		}
@@ -622,7 +632,9 @@ sasl_input(sasl_message_t *const restrict smsg)
 		 */
 		if (! p->buf && len < SASL_S2S_MAXLEN)
 		{
-			(void) sasl_packet(p, smsg->parv[0], len);
+			if (! sasl_packet(p, smsg->parv[0], len))
+				(void) sasl_session_abort(p);
+
 			return;
 		}
 
@@ -642,8 +654,8 @@ sasl_input(sasl_message_t *const restrict smsg)
 		p->len += len;
 
 		/* Messages not exactly 400 bytes are the end of data. */
-		if (len < SASL_S2S_MAXLEN)
-			(void) sasl_buf_process(p);
+		if (len < SASL_S2S_MAXLEN && ! sasl_buf_process(p))
+			(void) sasl_session_abort(p);
 
 		return;
 
