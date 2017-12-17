@@ -169,4 +169,4 @@ mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/ecdsa-nist256p-challenge", MODULE_UNLOAD_CAPABILITY_OK)
 
-#endif
+#endif /* HAVE_OPENSSL && HAVE_OPENSSL_EC_H */
