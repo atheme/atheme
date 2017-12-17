@@ -2,25 +2,35 @@
  * Copyright (c) 2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Data structures for SASL plugin use.
- *
+ * Data structures and macros for SASL mechanisms.
  */
 
 #ifndef SASL_H
 #define SASL_H
 
-#define SASL_MESSAGE_MAXPARA        8       /* arbitrary, increment if needed in future */
+// Maximum number of parameters for an SASL S2S command (arbitrary, increment in future if necessary)
+#define SASL_MESSAGE_MAXPARA        8
+
+// Maximum length of an SASL mechanism name (including terminating NULL byte)
 #define SASL_MECHANISM_MAXLEN       60
+
+// Maximum length of Base-64 data a client can send in one shot
 #define SASL_S2S_MAXLEN             400
+
+// Maximum length of Base-64 data a client can send in total (buffered)
 #define SASL_C2S_MAXLEN             8192
 
-#define ASASL_MARKED_FOR_DELETION   1U /* see delete_stale() in saslserv/main.c */
-#define ASASL_NEED_LOG              2U /* user auth success needs to be logged still */
+/* Flags for sasl_session->flags
+ */
+#define ASASL_MARKED_FOR_DELETION   1U  // see delete_stale() in saslserv/main.c
+#define ASASL_NEED_LOG              2U  // user auth success needs to be logged still
 
-#define ASASL_FAIL                  0U /* client supplied invalid credentials / screwed up their formatting */
-#define ASASL_MORE                  1U /* everything looks good so far, but we're not done yet */
-#define ASASL_DONE                  2U /* client successfully authenticated */
-#define ASASL_ERROR                 3U /* an error occurred in mech or it doesn't want to bad_password() the user */
+/* Return values for sasl_mechanism -> mech_start() or mech_step()
+ */
+#define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting
+#define ASASL_MORE                  1U  // everything looks good so far, but we're not done yet
+#define ASASL_DONE                  2U  // client successfully authenticated
+#define ASASL_ERROR                 3U  // an error occurred in mech or it doesn't want to bad_password() the user
 
 struct sasl_session;
 struct sasl_message;
@@ -29,20 +39,20 @@ struct sasl_core_functions;
 
 struct sasl_session
 {
-	struct sasl_mechanism   *mechptr;
-	server_t                *server;
-	sourceinfo_t            *si;
-	char                    *uid;
-	char                    *buf;
-	void                    *mechdata;
-	char                    *authceid;
-	char                    *authzeid;
-	char                    *certfp;
-	char                    *host;
-	char                    *ip;
-	size_t                   len;
-	unsigned int             flags;
-	bool                     tls;
+	struct sasl_mechanism   *mechptr;       // Mechanism they're using
+	server_t                *server;        // Server they're on
+	sourceinfo_t            *si;            // The source info for logcommand() and bad_password()
+	char                    *uid;           // Network UID
+	char                    *buf;           // Buffered Base-64 data from them (so far)
+	void                    *mechdata;      // Mechanism-specific allocated memory
+	char                    *authceid;      // Entity ID for authcid
+	char                    *authzeid;      // Entity ID for authzid
+	char                    *certfp;        // TLS client certificate fingerprint (if any)
+	char                    *host;          // Hostname
+	char                    *ip;            // IP address
+	size_t                   len;           // Length of buffered Base-64 data
+	unsigned int             flags;         // Flags (described above)
+	bool                     tls;           // Whether their connection to the network is using TLS
 };
 
 struct sasl_message
