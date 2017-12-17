@@ -20,6 +20,7 @@
 #define ASASL_FAIL                  0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE                  1 /* everything looks good so far, but we're not done yet */
 #define ASASL_DONE                  2 /* client successfully authenticated */
+#define ASASL_ERROR                 3 /* an error occurred in mech or it doesn't want to bad_password() the user */
 
 struct sasl_session;
 struct sasl_message;

@@ -53,7 +53,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
           void **const restrict out, size_t *const restrict outlen)
 {
 	if (! (p && p->mechdata && in && inlen))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	struct ecdsa_session *const s = p->mechdata;
 
@@ -72,7 +72,7 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 	if (! end)
 	{
 		if (! inlen || inlen >= sizeof authcid)
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 
 		(void) memcpy(authcid, in, inlen);
 	}
@@ -87,36 +87,36 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
 		const size_t authzid_length = inlen - 1 - authcid_length;
 
 		if (! authcid_length || authcid_length >= sizeof authcid)
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 
 		if (! authzid_length || authzid_length >= sizeof authcid)
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 
 		(void) memcpy(authcid, accnames, authcid_length);
 		(void) memcpy(authzid, end + 1, authzid_length);
 
 		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 	}
 
 	myuser_t *mu = NULL;
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	metadata_t *md;
 	if (! (md = metadata_find(mu, "private:pubkey")) && ! (md = metadata_find(mu, "pubkey")))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	unsigned char pubkey_raw[0x1000];
 	(void) memset(pubkey_raw, 0x00, sizeof pubkey_raw);
 
 	const size_t ret = base64_decode(md->value, pubkey_raw, sizeof pubkey_raw);
 	if (ret == (size_t) -1)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	const unsigned char *pubkey_raw_p = pubkey_raw;
 	if (! o2i_ECPublicKey(&s->pubkey, &pubkey_raw_p, (long) ret))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	*out = smalloc(CHALLENGE_LENGTH);
 	*outlen = CHALLENGE_LENGTH;

@@ -454,7 +454,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 			rc = p->mechptr->mech_step(p, inbuf, tlen, &out, &out_len);
 		}
 		else
-			rc = ASASL_FAIL;
+			rc = ASASL_ERROR;
 
 		if (tlen == (size_t) -1)
 			(void) slog(LG_DEBUG, "%s: base64_decode() failed", __func__);
@@ -509,20 +509,20 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		return;
 	}
 
-	/* We might have more information to construct a more accurate sourceinfo now?
-	 * TODO: Investigate whether this is necessary
-	 */
-	(void) sasl_sourceinfo_recreate(p);
-
-	/* If we reach this, they failed SASL auth, so if they were trying
-	 * to identify as a specific user, bad_password them.
-	 */
-	if (p->authceid)
+	if (rc == ASASL_FAIL && p->authceid)
 	{
+		/* If we reach this, they failed SASL auth, so if they were trying
+		 * to identify as a specific user, bad_password them.
+		 */
 		myuser_t *const mu = myuser_find_uid(p->authceid);
 
 		if (mu)
 		{
+			/* We might have more information to construct a more accurate sourceinfo now?
+			 * TODO: Investigate whether this is necessary
+			 */
+			(void) sasl_sourceinfo_recreate(p);
+
 			(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN (%s) to \2%s\2 (bad password)",
 			                                       p->mechptr->name, entity(mu)->name);
 			(void) bad_password(p->si, mu);

@@ -15,39 +15,39 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
           void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {
 	if (! (p && in && inlen))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	/*
 	 * Data format: authzid 0x00 authcid 0x00 authcookie
 	 */
 	if (inlen > (NICKLEN + 1 + NICKLEN + 1 + AUTHCOOKIE_LENGTH))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	const char *ptr = in;
 	const char *const end = ptr + inlen;
 
 	const char *const authzid = ptr;
 	if (! *authzid)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 	if ((ptr += strlen(authzid) + 1) >= end)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	const char *const authcid = ptr;
 	if (! *authcid)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 	if ((ptr += strlen(authcid) + 1) >= end)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	const char *const secret = ptr;
 	if (! *secret)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	myuser_t *mu = NULL;
 	if (! sasl_core_functions->authcid_can_login(p, authcid, &mu))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	if (! authcookie_find(secret, mu))
 		return ASASL_FAIL;

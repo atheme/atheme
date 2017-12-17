@@ -46,6 +46,7 @@ enum scramsha_step
 	SCRAMSHA_STEP_CLIENTPROOF   = 1,        // Waiting for client-final-message
 	SCRAMSHA_STEP_PASSED        = 2,        // Authentication has succeeded
 	SCRAMSHA_STEP_FAILED        = 3,        // Authentication has failed
+	SCRAMSHA_STEP_ERRORED       = 4,        // Authentication has errored
 };
 
 struct scramsha_session
@@ -136,7 +137,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
                       void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
 	if (! (in && inlen))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	struct scramsha_session *const s = p->mechdata;
 
@@ -149,7 +150,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
-		goto fail;
+		goto error;
 	}
 
 	switch (*message++)
@@ -161,17 +162,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 		case 'p':
 			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", __func__);
-			goto fail;
+			goto error;
 
 		default:
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", __func__);
-			goto fail;
+			goto error;
 	}
 
 	if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Does GS2 header include an authzid ?
@@ -186,7 +187,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! pos)
 		{
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", __func__);
-			goto fail;
+			goto error;
 		}
 
 		// Check its length
@@ -194,7 +195,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (authzid_length >= sizeof authzid)
 		{
 			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'", __func__, authzid_length);
-			goto fail;
+			goto error;
 		}
 
 		// Copy it
@@ -206,7 +207,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! authzid_nm || ! *authzid_nm)
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
-			goto fail;
+			goto error;
 		}
 
 		// Log it
@@ -216,7 +217,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! sasl_core_functions->authzid_can_login(p, authzid_nm, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", __func__);
-			goto fail;
+			goto error;
 		}
 
 		message = pos + 1;
@@ -224,17 +225,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	else if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", __func__);
-		goto fail;
+		goto error;
 	}
 
 	if (! sasl_scramsha_attrlist_parse(message, &input))
 		// Malformed SCRAM attribute list
-		goto fail;
+		goto error;
 
 	if (input['m'] || ! (input['n'] && *input['n'] && input['r'] && *input['r']))
 	{
 		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
-		goto fail;
+		goto error;
 	}
 
 	const char *const authcid_nm = pbkdf2v2_scram_functions->normalize(input['n']);
@@ -242,7 +243,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	if (! authcid_nm || ! *authcid_nm)
 	{
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid_nm);
@@ -250,23 +251,23 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	if (! sasl_core_functions->authcid_can_login(p, authcid_nm, &s->mu))
 	{
 		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	if (! (s->mu->flags & MU_CRYPTPASS))
 	{
 		(void) slog(LG_DEBUG, "%s: user's password is not encrypted", __func__);
-		goto fail;
+		goto error;
 	}
 
 	if (! pbkdf2v2_scram_functions->dbextract(s->mu->pass, &s->db))
 		// User's password hash is not in a compatible (PBKDF2 v2) format
-		goto fail;
+		goto error;
 
 	if (s->db.a != prf)
 	{
 		(void) slog(LG_DEBUG, "%s: PRF ID mismatch: server(%u) != client(%u)", __func__, s->db.a, prf);
-		goto fail;
+		goto error;
 	}
 
 	unsigned char server_nonce_raw[NONCE_LENGTH];
@@ -276,7 +277,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	if (base64_encode(server_nonce_raw, sizeof server_nonce_raw, server_nonce, sizeof server_nonce) == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() failed (BUG)", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// These cannot fail
@@ -294,7 +295,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	if (ol <= (int)(NONCE_LENGTH + PBKDF2_SALTLEN_MIN + 16) || ol >= (int) sizeof response)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for server-first-message failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Cannot fail
@@ -309,10 +310,10 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	s->step = SCRAMSHA_STEP_CLIENTPROOF;
 	return ASASL_MORE;
 
-fail:
+error:
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_FAILED;
-	return ASASL_FAIL;
+	return ASASL_ERROR;
 }
 
 static int
@@ -320,7 +321,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
                       void **const restrict out, size_t *const restrict outlen)
 {
 	if (! (in && inlen))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	scram_attr_list input;
 	(void) memset(input, 0x00, sizeof input);
@@ -328,17 +329,17 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
-		goto fail;
+		goto error;
 	}
 
 	if (! sasl_scramsha_attrlist_parse(in, &input))
 		// Malformed SCRAM attribute list
-		goto fail;
+		goto error;
 
 	if (input['m'] || ! (input['c'] && *input['c'] && input['p'] && *input['p'] && input['r'] && *input['r']))
 	{
 		(void) slog(LG_DEBUG, "%s: attribute list unacceptable", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Concatenate the s-nonce to the c-nonce
@@ -347,12 +348,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (xl <= NONCE_LENGTH || xl >= (int) sizeof x_nonce)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
-		goto fail;
+		goto error;
 	}
 	if (strcmp(x_nonce, input['r']) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: nonce sent by client doesn't match nonce we sent", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Decode GS2 header from client-final-message
@@ -361,12 +362,12 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (c_gs2_len == (size_t) -1)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for GS2 header failed", __func__);
-		goto fail;
+		goto error;
 	}
 	if (c_gs2_len != s->c_gs2_len || memcmp(s->c_gs2_buf, c_gs2_buf, c_gs2_len) != 0)
 	{
 		(void) slog(LG_DEBUG, "%s: GS2 header mismatch", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Decode ClientProof from client-final-message
@@ -374,7 +375,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (base64_decode(input['p'], ClientProof, sizeof ClientProof) != s->db.dl)
 	{
 		(void) slog(LG_DEBUG, "%s: base64_decode() for ClientProof failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Construct AuthMessage
@@ -385,7 +386,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (alen < NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", __func__);
-		goto fail;
+		goto error;
 	}
 
 	const unsigned char *const AuthMessageR = (const unsigned char *) AuthMessage;
@@ -395,7 +396,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (! HMAC(s->db.md, s->db.shk, (int) s->db.dl, AuthMessageR, (size_t) alen, ClientSignature, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: HMAC() for ClientSignature failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// XOR ClientProof with calculated ClientSignature to derive ClientKey
@@ -408,7 +409,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (EVP_Digest(ClientKey, s->db.dl, StoredKey, NULL, s->db.md, NULL) != 1)
 	{
 		(void) slog(LG_ERROR, "%s: EVP_Digest() for StoredKey failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Check computed StoredKey matches the database StoredKey
@@ -427,7 +428,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (! HMAC(s->db.md, s->db.ssk, (int) s->db.dl, AuthMessageR, (size_t) alen, ServerSignature, NULL))
 	{
 		(void) slog(LG_ERROR, "%s: HMAC() for ServerSignature failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Encode ServerSignature
@@ -436,7 +437,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (rs == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Construct server-final-message
@@ -445,7 +446,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (ol < (int) s->db.dl || ol >= (int) sizeof response)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for response failed (BUG?)", __func__);
-		goto fail;
+		goto error;
 	}
 
 	// Cannot fail
@@ -456,6 +457,11 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
 	return ASASL_MORE;
+
+error:
+	(void) sasl_scramsha_attrlist_free(&input);
+	s->step = SCRAMSHA_STEP_ERRORED;
+	return ASASL_ERROR;
 
 fail:
 	(void) sasl_scramsha_attrlist_free(&input);
@@ -518,7 +524,7 @@ mech_step_dispatch(struct sasl_session *const restrict p, const void *const rest
                    void **const restrict out, size_t *const restrict outlen, const unsigned int prf)
 {
 	if (! (p && p->mechdata))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	struct scramsha_session *const s = p->mechdata;
 
@@ -535,6 +541,9 @@ mech_step_dispatch(struct sasl_session *const restrict p, const void *const rest
 
 		case SCRAMSHA_STEP_FAILED:
 			return ASASL_FAIL;
+
+		case SCRAMSHA_STEP_ERRORED:
+			return ASASL_ERROR;
 	}
 }
 

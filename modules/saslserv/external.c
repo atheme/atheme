@@ -15,24 +15,24 @@ mech_step(struct sasl_session *const restrict p, const void *const restrict in, 
           void __attribute__((unused)) **const restrict out, size_t __attribute__((unused)) *const restrict outlen)
 {
 	if (! (p && p->certfp))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	mycertfp_t *const mcfp = mycertfp_find(p->certfp);
 	if (! mcfp)
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	if (in && inlen)
 	{
 		if (inlen >= NICKLEN)
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 
 		if (! sasl_core_functions->authzid_can_login(p, in, NULL))
-			return ASASL_FAIL;
+			return ASASL_ERROR;
 	}
 
 	const char *const authcid = entity(mcfp->mu)->name;
 	if (! sasl_core_functions->authcid_can_login(p, authcid, NULL))
-		return ASASL_FAIL;
+		return ASASL_ERROR;
 
 	return ASASL_DONE;
 }
