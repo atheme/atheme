@@ -72,6 +72,8 @@ static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 static bool
 sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attrs)
 {
+	(void) memset(*attrs, 0x00, sizeof *attrs);
+
 	for (;;)
 	{
 		unsigned char name = (unsigned char) *str++;
@@ -144,13 +146,10 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	const char *const header = in;
 	const char *message = in;
 
-	scram_attr_list input;
-	(void) memset(input, 0x00, sizeof input);
-
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
-		goto error;
+		return ASASL_ERROR;
 	}
 
 	switch (*message++)
@@ -162,17 +161,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 		case 'p':
 			(void) slog(LG_DEBUG, "%s: channel binding requested but unsupported", __func__);
-			goto error;
+			return ASASL_ERROR;
 
 		default:
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (invalid first byte)", __func__);
-			goto error;
+			return ASASL_ERROR;
 	}
 
 	if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (cbind flag not one letter)", __func__);
-		goto error;
+		return ASASL_ERROR;
 	}
 
 	// Does GS2 header include an authzid ?
@@ -187,7 +186,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! pos)
 		{
 			(void) slog(LG_DEBUG, "%s: malformed GS2 header (no end to authzid)", __func__);
-			goto error;
+			return ASASL_ERROR;
 		}
 
 		// Check its length
@@ -195,7 +194,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (authzid_length >= sizeof authzid)
 		{
 			(void) slog(LG_DEBUG, "%s: unacceptable authzid length '%zu'", __func__, authzid_length);
-			goto error;
+			return ASASL_ERROR;
 		}
 
 		// Copy it
@@ -207,7 +206,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! authzid_nm || ! *authzid_nm)
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
-			goto error;
+			return ASASL_ERROR;
 		}
 
 		// Log it
@@ -217,7 +216,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		if (! sasl_core_functions->authzid_can_login(p, authzid_nm, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", __func__);
-			goto error;
+			return ASASL_ERROR;
 		}
 
 		message = pos + 1;
@@ -225,9 +224,10 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 	else if (*message++ != ',')
 	{
 		(void) slog(LG_DEBUG, "%s: malformed GS2 header (authzid section not empty)", __func__);
-		goto error;
+		return ASASL_ERROR;
 	}
 
+	scram_attr_list input;
 	if (! sasl_scramsha_attrlist_parse(message, &input))
 		// Malformed SCRAM attribute list
 		goto error;
@@ -323,15 +323,13 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	if (! (in && inlen))
 		return ASASL_ERROR;
 
-	scram_attr_list input;
-	(void) memset(input, 0x00, sizeof input);
-
 	if (strnlen(in, inlen) != inlen)
 	{
 		(void) slog(LG_DEBUG, "%s: NULL byte in data received from client", __func__);
-		goto error;
+		return ASASL_ERROR;
 	}
 
+	scram_attr_list input;
 	if (! sasl_scramsha_attrlist_parse(in, &input))
 		// Malformed SCRAM attribute list
 		goto error;
