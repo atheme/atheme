@@ -154,7 +154,7 @@ find_mechanism(const char *const restrict name)
 			return mptr;
 	}
 
-	(void) slog(LG_DEBUG, "find_mechanism(): cannot find mechanism '%s'!", name);
+	(void) slog(LG_DEBUG, "%s: cannot find mechanism '%s'!", __func__, name);
 
 	return NULL;
 }
@@ -736,7 +736,7 @@ sasl_mech_register(struct sasl_mechanism *const restrict mech)
 {
 	mowgli_node_t *const node = mowgli_node_create();
 
-	(void) slog(LG_DEBUG, "sasl_mech_register(): registering %s", mech->name);
+	(void) slog(LG_DEBUG, "%s: registering %s", __func__, mech->name);
 	(void) mowgli_node_add(mech, node, &mechanisms);
 	(void) mechlist_do_rebuild();
 }
@@ -744,7 +744,7 @@ sasl_mech_register(struct sasl_mechanism *const restrict mech)
 static void
 sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 {
-	(void) slog(LG_DEBUG, "sasl_mech_unregister(): unregistering %s", mech->name);
+	(void) slog(LG_DEBUG, "%s: unregistering %s", __func__, mech->name);
 
 	mowgli_node_t *n, *tn;
 
@@ -754,7 +754,7 @@ sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 
 		if (session->mechptr == mech)
 		{
-			(void) slog(LG_DEBUG, "sasl_mech_unregister(): destroying session %s", session->uid);
+			(void) slog(LG_DEBUG, "%s: destroying session %s", __func__, session->uid);
 			(void) destroy_session(session);
 		}
 	}
@@ -844,7 +844,7 @@ saslserv(sourceinfo_t *const restrict si, const int parc, char **const restrict 
 	/* this should never happen */
 	if (parv[0][0] == '&')
 	{
-		(void) slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
+		(void) slog(LG_ERROR, "%s: got parv with local channel: %s", __func__, parv[0]);
 		return;
 	}
 
