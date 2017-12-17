@@ -69,7 +69,7 @@ typedef char *scram_attr_list[128];
 static const struct sasl_core_functions *sasl_core_functions = NULL;
 static const struct pbkdf2v2_scram_functions *pbkdf2v2_scram_functions = NULL;
 
-static int
+static bool
 sasl_scramsha_attrlist_parse(const char *restrict str, scram_attr_list *const restrict attrs)
 {
 	for (;;)
