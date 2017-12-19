@@ -77,6 +77,7 @@ AC_SEARCH_LIBS([crypt], [crypt], [AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if c
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
 
+CRACKLIB="no"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
 AC_ARG_WITH([cracklib],
@@ -85,6 +86,7 @@ AC_ARG_WITH([cracklib],
 AS_IF([test "x${with_cracklib}" != "xno"], [
 	LIBS_save="${LIBS}"
 	AC_SEARCH_LIBS([FascistCheck], [crack], [
+		CRACKLIB="yes"
 		CRACKLIB_C="cracklib.c"
 		AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"],
 			[CRACKLIB_LIBS="$ac_cv_search_FascistCheck"])
@@ -448,6 +450,7 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
+	CrackLib support     : ${CRACKLIB}
 	QR Code support      : ${LIBQRENCODE}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}

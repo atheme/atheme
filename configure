@@ -7729,6 +7729,7 @@ fi
 fi
 
 
+CRACKLIB="no"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
 
@@ -7796,6 +7797,7 @@ ac_res=$ac_cv_search_FascistCheck
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
+		CRACKLIB="yes"
 		CRACKLIB_C="cracklib.c"
 		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
   CRACKLIB_LIBS="$ac_cv_search_FascistCheck"
@@ -13391,6 +13393,7 @@ Configuration:
 	Mowgli installation  : ${MOWGLI_SOURCE}
 	PCRE support         : ${with_pcre}
 	Perl support         : ${with_perl}
+	CrackLib support     : ${CRACKLIB}
 	QR Code support      : ${LIBQRENCODE}
 	CFLAGS               : ${CFLAGS}
 	Internationalization : ${USE_NLS}
