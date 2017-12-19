@@ -72,8 +72,8 @@ static void osinfo_hook(sourceinfo_t *si)
 	command_success_nodata(si, "Registrations will fail with bad passwords: %s", cracklib_warn ? "No" : "Yes");
 }
 
-void
-_modinit(module_t *m)
+static void
+mod_init(module_t *const restrict m)
 {
 
 	hook_add_event("user_can_register");
@@ -88,8 +88,8 @@ _modinit(module_t *m)
 	add_bool_conf_item("CRACKLIB_WARN", &nicksvs.me->conf_table, 0, &cracklib_warn, false);
 }
 
-void
-_moddeinit(module_unload_intent_t intent)
+static void
+mod_deinit(const module_unload_intent_t intent)
 {
 	hook_del_user_can_register(cracklib_hook);
 	hook_del_config_ready(cracklib_config_ready);
