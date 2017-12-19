@@ -1,20 +1,24 @@
 language: c
+sudo: false
+os: linux
 
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty
     packages:
+      - libgettextpo-dev
+      - libcrack2-dev
       - libidn11-dev
       - libperl-dev
       - libssl-dev
+      - clang-6.0
       - gcc-5
 
-sudo: false
-
 compiler:
+  - clang-6.0
   - gcc-5
-  - clang
 
 env:
   - OPTIONAL_CONF_ARGS=""
@@ -22,7 +26,7 @@ env:
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
 script:
-  - ./configure --disable-nls --enable-ssl --with-libidn $OPTIONAL_CONF_ARGS
+  - ./configure --enable-nls --enable-ssl --with-libidn --with-cracklib ${OPTIONAL_CONF_ARGS}
   - make -j $(nproc)
 
 matrix:
