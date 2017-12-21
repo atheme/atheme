@@ -418,13 +418,33 @@ if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
+LIBQRENCODE="no"
 QRCODE_C=""
-PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [LIBQRENCODE="yes"], [LIBQRENCODE="no"])
-if test "x${LIBQRENCODE}" = "xyes"; then
-	AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode is available])
-	QRCODE_C="qrcode.c"
-fi
-AC_SUBST([QRCODE_C])
+AC_ARG_WITH([qrencode],
+	[AS_HELP_STRING([--with-qrencode], [Compile with libqrencode for generating QR codes])],
+	[], [with_qrencode="auto"])
+
+case "${with_qrencode}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-qrencode])
+		;;
+esac
+
+AS_IF([test "x${with_qrencode}" != "xno"], [
+	PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [
+		LIBQRENCODE="yes"
+		QRCODE_C="qrcode.c"
+		AC_SUBST([QRCODE_C])
+		AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode is available])
+	], [
+		LIBQRENCODE="no"
+		AS_IF([test "x${with_qrencode}" = "xyes"], [
+			AC_MSG_ERROR([--with-qrencode was specified but libqrencode could not be found])
+		])
+	])
+])
 
 AC_ARG_WITH([libmowgli],
   AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
