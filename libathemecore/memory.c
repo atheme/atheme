@@ -29,7 +29,11 @@
 # define RAISE_EXCEPTION raise(SIGUSR1)
 #endif
 
-/* does malloc()'s job and dies if malloc() fails */
+/* does malloc()'s job and dies if malloc() fails
+ *
+ * Note that this function MUST RETURN ZERO-INITIALIZED MEMORY
+ * Parts of the codebase assume this is so and will malfunction otherwise
+ */
 void *smalloc(size_t size)
 {
         void *buf = calloc(1, size);
