@@ -23,19 +23,20 @@
 
 #include "atheme.h"
 
-char ch[] = "abcdefghijklmnopqrstuvwxyz";
-
 /* This function uses smalloc() to allocate memory.
- * You MUST free the result when you are done with it!
+ * You MUST free() the result when you are done with it!
  */
-char *random_string(size_t sz)
+char *
+random_string(const size_t sz)
 {
-	unsigned char *buf = smalloc(sz + 1); /* padding */
+	static const char ch[62] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	unsigned char *const buf = smalloc(sz + 1); /* NULL terminator */
 
 	(void) arc4random_buf(buf, sz);
 
 	for (size_t i = 0; i < sz; i++)
-		buf[i] = ch[buf[i] % 26];
+		buf[i] = ch[buf[i] % sizeof ch];
 
 	return (char *) buf;
 }
