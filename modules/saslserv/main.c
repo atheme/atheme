@@ -8,12 +8,6 @@
 #include "atheme.h"
 #include "uplink.h"
 
-struct sasl_sourceinfo
-{
-	sourceinfo_t             parent;
-	struct sasl_session     *sess;
-};
-
 static mowgli_list_t sessions;
 static mowgli_list_t mechanisms;
 static char mechlist_string[SASL_S2S_MAXLEN];

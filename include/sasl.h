@@ -41,7 +41,7 @@ struct sasl_session
 {
 	struct sasl_mechanism   *mechptr;       // Mechanism they're using
 	server_t                *server;        // Server they're on
-	sourceinfo_t            *si;            // The source info for logcommand() and bad_password()
+	sourceinfo_t            *si;            // The source info for logcommand(), bad_password(), and login hooks
 	char                    *uid;           // Network UID
 	char                    *buf;           // Buffered Base-64 data from them (so far)
 	void                    *mechdata;      // Mechanism-specific allocated memory
@@ -53,6 +53,12 @@ struct sasl_session
 	size_t                   len;           // Length of buffered Base-64 data
 	unsigned int             flags;         // Flags (described above)
 	bool                     tls;           // Whether their connection to the network is using TLS
+};
+
+struct sasl_sourceinfo
+{
+	sourceinfo_t             parent;
+	struct sasl_session     *sess;
 };
 
 struct sasl_message
