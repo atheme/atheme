@@ -83,6 +83,15 @@ CRACKLIB_LIBS=""
 AC_ARG_WITH([cracklib],
 	[AS_HELP_STRING([--with-cracklib], [Compile NickServ cracklib module for checking password strength])],
 	[], [with_cracklib="auto"])
+
+case "${with_cracklib}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-cracklib])
+		;;
+esac
+
 AS_IF([test "x${with_cracklib}" != "xno"], [
 	LIBS_save="${LIBS}"
 	AC_SEARCH_LIBS([FascistCheck], [crack], [
@@ -104,6 +113,15 @@ LIBCRYPTO_LIBS=""
 AC_ARG_WITH([openssl],
 	[AS_HELP_STRING([--with-openssl], [Compile with OpenSSL to provide more functionality.])],
 	[], [with_openssl="auto"])
+
+case "${with_openssl}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-openssl])
+		;;
+esac
+
 AS_IF([test "x${with_openssl}" != "xno"], [
 	LIBS_save="${LIBS}"
 	AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
@@ -133,6 +151,15 @@ LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
 	[AS_HELP_STRING([--with-libidn], [Compile with GNU libidn for SASL SCRAM-SHA support.])],
 	[], [with_libidn="auto"])
+
+case "${with_libidn}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-libidn])
+		;;
+esac
+
 AS_IF([test "x${with_libidn}" != "xno"], [
 	LIBS_save="${LIBS}"
 	AC_SEARCH_LIBS([stringprep], [idn], [
@@ -160,6 +187,15 @@ AS_IF([test "x${LIBIDN}" = "xyes"], [
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
 	[], [with_ldap="auto"])
+
+case "${with_ldap}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-ldap])
+		;;
+esac
+
 AS_IF([test "x${with_ldap}" != "xno"], [
 	# Thank autoconf and openldap developers for making me do all this stuff.
 	LDAP_CFLAGS=""
@@ -195,6 +231,15 @@ AC_SUBST(LDAP_AUTHC)
 AC_ARG_WITH([perl],
         [AS_HELP_STRING([--without-perl], [Disable building perl scripting module])],
         [], [with_perl="no"])
+
+
+case "${with_perl}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-perl])
+		;;
+esac
 
 AS_IF([test "x${with_perl}" != "xno"],
 [

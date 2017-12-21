@@ -7752,6 +7752,15 @@ else
   with_cracklib="auto"
 fi
 
+
+case "${with_cracklib}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-cracklib" "$LINENO" 5
+		;;
+esac
+
 if test "x${with_cracklib}" != "xno"; then :
 
 	LIBS_save="${LIBS}"
@@ -7838,6 +7847,15 @@ if test "${with_openssl+set}" = set; then :
 else
   with_openssl="auto"
 fi
+
+
+case "${with_openssl}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-openssl" "$LINENO" 5
+		;;
+esac
 
 if test "x${with_openssl}" != "xno"; then :
 
@@ -7967,6 +7985,15 @@ else
   with_libidn="auto"
 fi
 
+
+case "${with_libidn}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-libidn" "$LINENO" 5
+		;;
+esac
+
 if test "x${with_libidn}" != "xno"; then :
 
 	LIBS_save="${LIBS}"
@@ -8070,6 +8097,15 @@ if test "${with_ldap+set}" = set; then :
 else
   with_ldap="auto"
 fi
+
+
+case "${with_ldap}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-ldap" "$LINENO" 5
+		;;
+esac
 
 if test "x${with_ldap}" != "xno"; then :
 
@@ -8194,6 +8230,15 @@ else
   with_perl="no"
 fi
 
+
+
+case "${with_perl}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-perl" "$LINENO" 5
+		;;
+esac
 
 if test "x${with_perl}" != "xno"; then :
 
