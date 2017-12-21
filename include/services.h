@@ -137,10 +137,12 @@ E void command_add_flood(sourceinfo_t *si, unsigned int amount);
 E void common_ctcp_init(void);
 E unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
 
+#ifdef HAVE_LIBQRENCODE
 /* qrcode.c */
 E void command_success_qrcode(sourceinfo_t *si, const char *data);
+#endif /* HAVE_LIBQRENCODE */
 
-#endif
+#endif /* !SERVICES_H */
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8

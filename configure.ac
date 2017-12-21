@@ -418,11 +418,13 @@ if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
+QRCODE_C=""
 PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [LIBQRENCODE="yes"], [LIBQRENCODE="no"])
-
 if test "x${LIBQRENCODE}" = "xyes"; then
 	AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode is available])
+	QRCODE_C="qrcode.c"
 fi
+AC_SUBST([QRCODE_C])
 
 AC_ARG_WITH([libmowgli],
   AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),

@@ -23,9 +23,7 @@
 
 #include "atheme.h"
 
-#ifdef HAVE_LIBQRENCODE
-# include <qrencode.h>
-#endif
+#include <qrencode.h>
 
 static const char prologue[] = "\0031,15";
 static const char invert = 22;
@@ -89,7 +87,6 @@ qrcode_scanline(char *buffer, size_t bufsize, unsigned char *row, size_t width)
 void
 command_success_qrcode(sourceinfo_t *si, const char *data)
 {
-#ifdef HAVE_LIBQRENCODE
 	char *buf;
 	QRcode *code;
 	size_t bufsize, realwidth;
@@ -127,5 +124,4 @@ command_success_qrcode(sourceinfo_t *si, const char *data)
 
 	free(buf);
 	QRcode_free(code);
-#endif
 }

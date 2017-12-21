@@ -3,7 +3,7 @@ LIB_MAJOR	= 1
 LIB_MINOR	= 0
 HELP_LINGUAS	= es ru fr
 
-BASE_SRCS =				\
+SRCS =				\
 	account.c		\
 	atheme.c		\
 	arc4random.c		\
@@ -41,9 +41,9 @@ BASE_SRCS =				\
 	pmodule.c		\
 	privs.c		\
 	ptasks.c		\
+	$(QRCODE_C)	\
 	res.c		\
 	reslib.c	\
-	qrcode.c	\
 	send.c		\
 	servers.c		\
 	services.c		\
@@ -60,12 +60,11 @@ BASE_SRCS =				\
 	ubase64.c		\
 	users.c		\
 	uid.c			\
-	uplink.c
+	uplink.c	\
+	version.c
 
-SRCS = ${BASE_SRCS} version.c
-
-include ../buildsys.mk
 include ../extra.mk
+include ../buildsys.mk
 
 CPPFLAGS	+= $(MOWGLI_CFLAGS) $(PCRE_CFLAGS) $(LIBQRENCODE_CFLAGS) -I../include -DBINDIR=\"$(bindir)\"
 CFLAGS		+= $(LIB_CFLAGS)
