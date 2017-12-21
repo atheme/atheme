@@ -26,7 +26,7 @@ env:
   - OPTIONAL_CONF_ARGS="--enable-contrib"
 
 script:
-  - ./configure --enable-nls --enable-ssl --with-libidn --with-cracklib ${OPTIONAL_CONF_ARGS}
+  - ./configure --enable-nls --with-openssl --with-libidn --with-cracklib ${OPTIONAL_CONF_ARGS}
   - make -j $(nproc)
 
 matrix:
