@@ -21,13 +21,11 @@
 #include "atheme.h"
 #include "libathemecore.h"
 
-#if defined HAVE_OPENSSL && defined HAVE_OPENSSL_EC_H
+#if defined(HAVE_OPENSSL) && defined(HAVE_OPENSSL_EC_H)
 
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
-#include <openssl/rand.h>
-#include <openssl/sha.h>
 
 int main(int argc, const char **argv)
 {
@@ -71,10 +69,14 @@ int main(int argc, const char **argv)
 
 #else
 
-int main(int argc, const char **argv)
+int main(void)
 {
-	printf("I'm sorry, you didn't compile Atheme with OpenSSL support.\n");
-	return EXIT_SUCCESS;
+#ifdef HAVE_OPENSSL
+	(void) fprintf(stderr, "I'm sorry; your OpenSSL does not have elliptic curve cryptography support.\n");
+#else
+	(void) fprintf(stderr, "I'm sorry; you didn't compile Atheme with OpenSSL support.\n");
+#endif
+	return EXIT_FAILURE;
 }
 
 #endif

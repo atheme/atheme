@@ -635,7 +635,6 @@ MOWGLI_LIBS
 MOWGLI_CFLAGS
 LIBQRENCODE_LIBS
 LIBQRENCODE_CFLAGS
-SSL_LIBS
 CONTRIB_ENABLE
 LOCALEDIR
 BUILDDIR
@@ -656,6 +655,7 @@ LDAP_AUTHC
 LDAP_LIBS
 LDAP_CFLAGS
 LIBIDN_LIBS
+LIBCRYPTO_LIBS
 CRACKLIB_LIBS
 CRACKLIB_C
 LIBOBJS
@@ -745,6 +745,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -772,6 +773,7 @@ with_gnu_ld
 with_libiconv_prefix
 with_libintl_prefix
 with_cracklib
+with_openssl
 with_libidn
 with_ldap
 with_perl
@@ -779,7 +781,6 @@ enable_fhs_paths
 enable_reproducible_builds
 enable_large_net
 enable_contrib
-enable_ssl
 enable_warnings
 enable_propolice
 enable_profile
@@ -841,6 +842,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1093,6 +1095,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1230,7 +1241,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1383,6 +1394,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1422,7 +1434,6 @@ Optional Features:
                           Enable reproducible builds.
   --enable-large-net      Enable large network support.
   --enable-contrib        Enable contrib modules.
-  --disable-ssl           don't use OpenSSL to provide more SASL mechanisms
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
   --enable-profile        Enable profiling extensions
@@ -1438,6 +1449,7 @@ Optional Packages:
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --with-cracklib         Compile NickServ cracklib module for checking
                           password strength
+  --with-openssl          Compile with OpenSSL to provide more functionality.
   --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module
@@ -7817,6 +7829,134 @@ fi
 
 
 
+LIBCRYPTO="no"
+LIBCRYPTO_LIBS=""
+
+# Check whether --with-openssl was given.
+if test "${with_openssl+set}" = set; then :
+  withval=$with_openssl;
+else
+  with_openssl="auto"
+fi
+
+if test "x${with_openssl}" != "xno"; then :
+
+	LIBS_save="${LIBS}"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
+$as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
+if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char EVP_DigestUpdate ();
+int
+main ()
+{
+return EVP_DigestUpdate ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' crypto; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_EVP_DigestUpdate=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
+
+else
+  ac_cv_search_EVP_DigestUpdate=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_EVP_DigestUpdate" >&5
+$as_echo "$ac_cv_search_EVP_DigestUpdate" >&6; }
+ac_res=$ac_cv_search_EVP_DigestUpdate
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+		LIBCRYPTO="yes"
+		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
+  LIBCRYPTO_LIBS="$ac_cv_search_EVP_DigestUpdate"
+fi
+
+else
+
+		if test "x${with_openssl}" != "xauto"; then :
+  as_fn_error $? "--with-openssl was specified but OpenSSL could not be found" "$LINENO" 5
+fi
+
+fi
+
+	LIBS="${LIBS_save}"
+
+fi
+if test "x${LIBCRYPTO}" = "xyes"; then :
+
+	for ac_header in openssl/ec.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_OPENSSL_EC_H 1
+_ACEOF
+
+fi
+
+done
+
+	for ac_header in openssl/evp.h openssl/hmac.h openssl/sha.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+
+		LIBCRYPTO="no"
+		if test "x${with_openssl}" = "xyes"; then :
+  as_fn_error $? "required header file missing" "$LINENO" 5
+fi
+
+fi
+
+done
+
+
+fi
+if test "x${LIBCRYPTO}" = "xyes"; then :
+
+
+$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
+
+
+
+fi
+
 LIBIDN="no"
 LIBIDN_LIBS=""
 
@@ -7885,9 +8025,6 @@ if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
 		LIBIDN="yes"
-
-$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
-
 		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
   LIBIDN_LIBS="$ac_cv_search_stringprep"
 fi
@@ -7903,7 +8040,28 @@ fi
 	LIBS="${LIBS_save}"
 
 fi
+if test "x${LIBIDN}" = "xyes"; then :
 
+	if test "x${LIBCRYPTO}" = "xyes"; then :
+
+
+$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
+
+
+
+else
+
+		if test "x${with_libidn}" = "xyes"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too" >&5
+$as_echo "$as_me: WARNING: --with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too" >&2;}
+
+fi
+		LIBIDN="no (requires OpenSSL)"
+
+fi
+
+fi
 
 
 # Check whether --with-ldap was given.
@@ -8220,159 +8378,6 @@ else
 fi
 
 
-
-# Check whether --enable-ssl was given.
-if test "${enable_ssl+set}" = set; then :
-  enableval=$enable_ssl;
-else
-  enable_ssl=yes
-fi
-
-
-SSL=no
-if test "x${enable_ssl}" = "xyes"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SSL_read in -lssl" >&5
-$as_echo_n "checking for SSL_read in -lssl... " >&6; }
-if ${ac_cv_lib_ssl_SSL_read+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lssl -lcrypto $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char SSL_read ();
-int
-main ()
-{
-return SSL_read ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ssl_SSL_read=yes
-else
-  ac_cv_lib_ssl_SSL_read=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ssl_SSL_read" >&5
-$as_echo "$ac_cv_lib_ssl_SSL_read" >&6; }
-if test "x$ac_cv_lib_ssl_SSL_read" = xyes; then :
-
-		for ac_header in openssl/ssl.h openssl/err.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-			SSL_LIBS="-lssl -lcrypto"
-
-			SSL=yes
-
-else
-  SSL=no
-fi
-
-done
-
-
-else
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DH_generate_key in -leay32" >&5
-$as_echo_n "checking for DH_generate_key in -leay32... " >&6; }
-if ${ac_cv_lib_eay32_DH_generate_key+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-leay32  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char DH_generate_key ();
-int
-main ()
-{
-return DH_generate_key ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_eay32_DH_generate_key=yes
-else
-  ac_cv_lib_eay32_DH_generate_key=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_eay32_DH_generate_key" >&5
-$as_echo "$ac_cv_lib_eay32_DH_generate_key" >&6; }
-if test "x$ac_cv_lib_eay32_DH_generate_key" = xyes; then :
-
-				for ac_header in openssl/ssl.h openssl/err.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_preproc "$LINENO" "$ac_header" "$as_ac_Header"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-					# Ugh.
-					SSL_LIBS="-leay32 /mingw/lib/ssleay32.a"
-
-					SSL=yes
-
-else
-  SSL=no
-fi
-
-done
-
-
-fi
-
-
-fi
-
-	if test "x${SSL}" = "xyes"; then
-		for ac_header in openssl/ec.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "openssl/ec.h" "ac_cv_header_openssl_ec_h" "$ac_includes_default"
-if test "x$ac_cv_header_openssl_ec_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_OPENSSL_EC_H 1
-_ACEOF
-
-fi
-
-done
- # Defines HAVE_OPENSSL_EC_H
-
-$as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
-
-	fi
-fi
 
 case "$host" in
 *-*-mingw32)
@@ -13387,7 +13392,7 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
-	OpenSSL support      : ${SSL}
+	OpenSSL support      : ${LIBCRYPTO}
 	GNU libidn support   : ${LIBIDN}
 	Contrib modules      : ${CONTRIB}
 	Mowgli installation  : ${MOWGLI_SOURCE}

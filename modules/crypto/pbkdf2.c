@@ -23,8 +23,8 @@
 #ifdef HAVE_OPENSSL
 
 #include <openssl/evp.h>
-#include <openssl/sha.h>
 #include <openssl/hmac.h>
+#include <openssl/sha.h>
 
 #define ATHEME_PBKDF2_ROUNDS    128000
 #define ATHEME_PBKDF2_SALTLEN   16

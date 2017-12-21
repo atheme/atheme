@@ -99,6 +99,35 @@ AS_IF([test "x${with_cracklib}" != "xno"], [
 AC_SUBST([CRACKLIB_C])
 AC_SUBST([CRACKLIB_LIBS])
 
+LIBCRYPTO="no"
+LIBCRYPTO_LIBS=""
+AC_ARG_WITH([openssl],
+	[AS_HELP_STRING([--with-openssl], [Compile with OpenSSL to provide more functionality.])],
+	[], [with_openssl="auto"])
+AS_IF([test "x${with_openssl}" != "xno"], [
+	LIBS_save="${LIBS}"
+	AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
+		LIBCRYPTO="yes"
+		AS_IF([test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"],
+			[LIBCRYPTO_LIBS="$ac_cv_search_EVP_DigestUpdate"])
+	], [
+		AS_IF([test "x${with_openssl}" != "xauto"],
+			[AC_MSG_ERROR([--with-openssl was specified but OpenSSL could not be found])])
+	])
+	LIBS="${LIBS_save}"
+])
+AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
+	AC_CHECK_HEADERS([openssl/ec.h], [], [], [])
+	AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/sha.h], [], [
+		LIBCRYPTO="no"
+		AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
+	], [])
+])
+AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
+	AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
+	AC_SUBST([LIBCRYPTO_LIBS])
+])
+
 LIBIDN="no"
 LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
@@ -108,7 +137,6 @@ AS_IF([test "x${with_libidn}" != "xno"], [
 	LIBS_save="${LIBS}"
 	AC_SEARCH_LIBS([stringprep], [idn], [
 		LIBIDN="yes"
-		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
 		AS_IF([test "x${ac_cv_search_stringprep}" != "xnone required"],
 			[LIBIDN_LIBS="$ac_cv_search_stringprep"])
 	], [
@@ -117,7 +145,17 @@ AS_IF([test "x${with_libidn}" != "xno"], [
 	])
 	LIBS="${LIBS_save}"
 ])
-AC_SUBST([LIBIDN_LIBS])
+AS_IF([test "x${LIBIDN}" = "xyes"], [
+	AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
+		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
+		AC_SUBST([LIBIDN_LIBS])
+	], [
+		AS_IF([test "x${with_libidn}" = "xyes"], [
+			AC_MSG_WARN([--with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too])
+		])
+		LIBIDN="no (requires OpenSSL)"
+	])
+])
 
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
@@ -286,34 +324,6 @@ fi
 
 AC_SUBST([CONTRIB_ENABLE])
 
-AC_ARG_ENABLE([ssl],
-	AS_HELP_STRING([--disable-ssl],[don't use OpenSSL to provide more SASL mechanisms]),
-	[], [enable_ssl=yes])
-
-SSL=no
-if test "x${enable_ssl}" = "xyes"; then
-	AC_CHECK_LIB([ssl], [SSL_read], [
-		AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h], [
-			SSL_LIBS="-lssl -lcrypto"
-			AC_SUBST([SSL_LIBS])
-			SSL=yes
-			],[SSL=no],[-])
-		], [
-			AC_CHECK_LIB([eay32], [DH_generate_key], [
-				AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
-					# Ugh.
-					SSL_LIBS="-leay32 /mingw/lib/ssleay32.a"
-					AC_SUBST([SSL_LIBS])
-					SSL=yes
-					],[SSL=no],[-])
-			], [], [])
-		], [-lcrypto])
-	if test "x${SSL}" = "xyes"; then
-		AC_CHECK_HEADERS([openssl/ec.h], [], [], []) # Defines HAVE_OPENSSL_EC_H
-		AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
-	fi
-fi
-
 case "$host" in
 *-*-mingw32)
     CFLAGS="-I/mingw/include ${CFLAGS}"
@@ -444,7 +454,7 @@ Configuration:
 	PID directory        : ${RUNDIR}
 	Reproducible builds  : ${REPRODUCIBLEBUILDS}
 	Large network support: ${LARGENET}
-	OpenSSL support      : ${SSL}
+	OpenSSL support      : ${LIBCRYPTO}
 	GNU libidn support   : ${LIBIDN}
 	Contrib modules      : ${CONTRIB}
 	Mowgli installation  : ${MOWGLI_SOURCE}
