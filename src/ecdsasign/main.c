@@ -68,7 +68,7 @@ int main(int argc, const char **argv)
 	sig_buf = mowgli_alloc(buf_len);
 	sig_buf_p = sig_buf;
 
-	if (!ECDSA_sign(0, challenge, len, sig_buf_p, &buf_len, eckey))
+	if (!ECDSA_sign(0, workbuf_p, len, sig_buf_p, &buf_len, eckey))
 	{
 		fprintf(stderr, "Failed to sign challenge!\n");
 		return EXIT_FAILURE;
