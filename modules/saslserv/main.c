@@ -128,7 +128,6 @@ find_or_make_session(const char *const restrict uid, server_t *const restrict se
 	if (! (p = find_session(uid)))
 	{
 		p = smalloc(sizeof *p);
-		(void) memset(p, 0x00, sizeof *p);
 
 		p->uid = sstrdup(uid);
 		p->server = server;
