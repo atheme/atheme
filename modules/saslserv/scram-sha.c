@@ -260,6 +260,12 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		goto error;
 	}
 
+	if (s->mu->flags & MU_NOPASSWORD)
+	{
+		(void) slog(LG_DEBUG, "%s: user has NOPASSWORD flag set", __func__);
+		goto error;
+	}
+
 	if (! pbkdf2v2_scram_functions->dbextract(s->mu->pass, &s->db))
 		// User's password hash is not in a compatible (PBKDF2 v2) format
 		goto error;
