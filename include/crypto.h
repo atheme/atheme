@@ -3,31 +3,32 @@
  * Rights to this code are as documented under doc/LICENSE.
  *
  * Cryptographic module support.
- *
  */
 
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
+#define PWVERIFY_FLAG_NONE      0x0000U // Initial state
+#define PWVERIFY_FLAG_MYMODULE  0x0001U // This password hash was from 'this' crypto module
+#define PWVERIFY_FLAG_RECRYPT   0x0002U // This password needs re-encrypting
+
 typedef struct {
 
 	const char *id;
-	const char *(*salt)(void);
 	const char *(*crypt)(const char *password, const char *parameters);
-	bool (*verify)(const char *password, const char *parameters);
-	bool (*recrypt)(const char *parameters);
+	bool (*verify)(const char *password, const char *parameters, unsigned int *flags);
 
 	mowgli_node_t node;
+
 } crypt_impl_t;
 
-E const crypt_impl_t *crypt_get_default_provider(void);
 E void crypt_register(crypt_impl_t *impl);
 E void crypt_unregister(crypt_impl_t *impl);
 
-E const char *gen_salt(void);
+E const crypt_impl_t *crypt_get_default_provider(void);
+E const crypt_impl_t *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
+E const char *crypt_password(const char *password);
 E const char *crypt_string(const char *password, const char *parameters);
-
-E const crypt_impl_t *crypt_verify_password(const char *password, const char *parameters);
 
 #endif
 

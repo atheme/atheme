@@ -30,7 +30,8 @@
 #define ATHEME_PBKDF2_SALTLEN   16
 
 static bool
-atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters)
+atheme_pbkdf2_verify(const char *const restrict password, const char *const restrict parameters,
+                     unsigned int __attribute__((unused)) *const restrict flags)
 {
 	if (strlen(parameters) != (ATHEME_PBKDF2_SALTLEN + (2 * SHA512_DIGEST_LENGTH)))
 		return false;

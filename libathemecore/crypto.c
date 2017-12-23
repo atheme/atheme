@@ -25,53 +25,6 @@
 
 static mowgli_list_t crypt_impl_list = { NULL, NULL, 0 };
 
-const crypt_impl_t *
-crypt_get_default_provider(void)
-{
-	mowgli_node_t *n;
-
-	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
-		return NULL;
-
-	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
-	{
-		const crypt_impl_t *const ci = n->data;
-
-		if (ci->salt != NULL && ci->crypt != NULL)
-			return ci;
-	}
-
-	return NULL;
-}
-
-const char *
-gen_salt(void)
-{
-	const crypt_impl_t *const ci = crypt_get_default_provider();
-
-	if (!ci)
-		return NULL;
-
-	return ci->salt();
-}
-
-const char *
-crypt_string(const char *const restrict password, const char *restrict parameters)
-{
-	const crypt_impl_t *const ci = crypt_get_default_provider();
-
-	if (!ci)
-		return NULL;
-
-	if (!parameters || !*parameters)
-		parameters = ci->salt();
-
-	if (!parameters)
-		return NULL;
-
-	return ci->crypt(password, parameters);
-}
-
 static void
 crypt_log_modchg(const char *const restrict caller, const char *const restrict which,
                  const crypt_impl_t *const restrict impl)
@@ -90,56 +43,137 @@ crypt_log_modchg(const char *const restrict caller, const char *const restrict w
 void
 crypt_register(crypt_impl_t *const restrict impl)
 {
-	return_if_fail(impl != NULL);
-	return_if_fail(impl->id != NULL);
+	if (! impl || ! impl->id)
+		return;
 
-	if ((impl->salt != NULL && impl->crypt != NULL) || impl->verify != NULL)
+	if (impl->crypt || impl->verify)
 	{
-		mowgli_node_add(impl, &impl->node, &crypt_impl_list);
+		(void) mowgli_node_add(impl, &impl->node, &crypt_impl_list);
 		(void) crypt_log_modchg(__func__, "registered", impl);
 	}
 	else
-		(void) slog(LG_ERROR, "%s: crypto provider '%s' provides neither salt/crypt nor verify methods",
+		(void) slog(LG_ERROR, "%s: crypto provider '%s' provides neither crypt nor verify methods (BUG)",
 		                      __func__, impl->id);
 }
 
 void
 crypt_unregister(crypt_impl_t *const restrict impl)
 {
-	return_if_fail(impl != NULL);
+	if (! impl || ! impl->id)
+		return;
 
-	if ((impl->salt != NULL && impl->crypt != NULL) || impl->verify != NULL)
+	if (impl->crypt || impl->verify)
 	{
-		mowgli_node_delete(&impl->node, &crypt_impl_list);
+		(void) mowgli_node_delete(&impl->node, &crypt_impl_list);
 		(void) crypt_log_modchg(__func__, "unregistered", impl);
 	}
 }
 
 const crypt_impl_t *
-crypt_verify_password(const char *const restrict password, const char *const restrict parameters)
+crypt_get_default_provider(void)
 {
 	mowgli_node_t *n;
-
-	if (!MOWGLI_LIST_LENGTH(&crypt_impl_list))
-		return NULL;
 
 	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
 	{
 		const crypt_impl_t *const ci = n->data;
 
-		if (ci->verify != NULL)
+		if (ci->crypt)
+			return ci;
+	}
+
+	return NULL;
+}
+
+const crypt_impl_t *
+crypt_verify_password(const char *const restrict password, const char *const restrict parameters,
+                      unsigned int *const restrict flags)
+{
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
+	{
+		const crypt_impl_t *const ci = n->data;
+
+		if (ci->verify)
 		{
-			if (ci->verify(password, parameters))
+			unsigned int myflags = PWVERIFY_FLAG_NONE;
+
+			if (ci->verify(password, parameters, &myflags))
+			{
+				if (flags)
+					*flags = myflags;
+
 				return ci;
+			}
+
+			/* If password verification failed and the password hash was produced
+			 * by the module we just tried, there's no point continuing to test it
+			 * against the other modules. This saves some CPU time.
+			 */
+			if (myflags & PWVERIFY_FLAG_MYMODULE)
+				return NULL;
+
+			continue;
 		}
-		else if (ci->crypt != NULL)
+
+		if (ci->crypt)
 		{
 			const char *const result = ci->crypt(password, parameters);
 
-			if (result != NULL && strcmp(result, parameters) == 0)
+			if (result && strcmp(result, parameters) == 0)
 				return ci;
+
+			continue;
 		}
 	}
 
 	return NULL;
+}
+
+const char *
+crypt_password(const char *const restrict password)
+{
+	bool encryption_capable_module = false;
+
+	mowgli_node_t *n;
+
+	MOWGLI_ITER_FOREACH(n, crypt_impl_list.head)
+	{
+		const crypt_impl_t *const ci = n->data;
+
+		if (! ci->crypt)
+		{
+			(void) slog(LG_DEBUG, "%s: skipping incapable provider '%s'", __func__, ci->id);
+			continue;
+		}
+
+		encryption_capable_module = true;
+
+		const char *const result = ci->crypt(password, NULL);
+
+		if (! result)
+		{
+			(void) slog(LG_ERROR, "%s: ci->crypt() failed for provider '%s'", __func__, ci->id);
+			continue;
+		}
+
+		(void) slog(LG_DEBUG, "%s: encrypted password with provider '%s'", __func__, ci->id);
+		return result;
+	}
+
+	if (encryption_capable_module)
+		(void) slog(LG_ERROR, "%s: all encryption-capable crypto modules failed", __func__);
+	else
+		(void) slog(LG_ERROR, "%s: you have no encryption-capable crypto module", __func__);
+
+	return NULL;
+}
+
+const char *
+crypt_string(const char *const restrict password, const char __attribute__((unused)) *const restrict parameters)
+{
+	(void) slog(LG_DEBUG, "%s: this is provided for compatibility only; use crypt_password()", __func__);
+
+	return crypt_password(password);
 }

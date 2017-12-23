@@ -33,7 +33,7 @@ set_password(myuser_t *const restrict mu, const char *const restrict password)
 		return;
 
 	/* if we can, try to crypt it */
-	const char *const hash = crypt_string(password, NULL);
+	const char *const hash = crypt_password(password);
 
 	if (hash)
 	{
@@ -53,7 +53,7 @@ set_password(myuser_t *const restrict mu, const char *const restrict password)
 bool
 verify_password(myuser_t *const restrict mu, const char *const restrict password)
 {
-	if (mu == NULL || password == NULL)
+	if (! mu || ! password)
 		return false;
 
 	if (auth_module_loaded && auth_user_custom)
@@ -62,29 +62,29 @@ verify_password(myuser_t *const restrict mu, const char *const restrict password
 	if (mu->flags & MU_CRYPTPASS)
 	{
 		const crypt_impl_t *ci, *ci_default;
-		const char *new_salt, *new_hash;
+		unsigned int verify_flags = PWVERIFY_FLAG_NONE;
 
-		if ((ci = crypt_verify_password(password, mu->pass)) == NULL)
+		if (! (ci = crypt_verify_password(password, mu->pass, &verify_flags)))
 			// Verification failure
 			return false;
 
-		if ((ci_default = crypt_get_default_provider()) == NULL)
+		if (! (ci_default = crypt_get_default_provider()) || ! ci_default->crypt)
 			// Verification succeeded but we don't have a module that can create new password hashes
 			return true;
 
 		if (ci != ci_default)
 			(void) slog(LG_INFO, "%s: transitioning from crypt scheme '%s' to '%s' for account '%s'",
 				             __func__, ci->id, ci_default->id, entity(mu)->name);
-		else if (ci->recrypt != NULL && ci->recrypt(mu->pass))
+		else if (verify_flags & PWVERIFY_FLAG_RECRYPT)
 			(void) slog(LG_INFO, "%s: re-encrypting password for account '%s'",
 			                     __func__, entity(mu)->name);
 		else
 			// Verification succeeded and re-encrypting not required, nothing more to do
 			return true;
 
-		if ((new_salt = ci_default->salt()) == NULL)
-			(void) slog(LG_ERROR, "%s: salt generation failed", __func__);
-		else if ((new_hash = ci_default->crypt(password, new_salt)) == NULL)
+		const char *new_hash;
+
+		if (! (new_hash = ci_default->crypt(password, NULL)))
 			(void) slog(LG_ERROR, "%s: hash generation failed", __func__);
 		else
 			(void) mowgli_strlcpy(mu->pass, new_hash, PASSLEN);

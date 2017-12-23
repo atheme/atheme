@@ -32,7 +32,7 @@ static bool verify_operserv_password(soper_t *so, char *password)
 	if (so == NULL || password == NULL)
 		return false;
 
-	return crypt_verify_password(password, so->password) != NULL;
+	return crypt_verify_password(password, so->password, NULL) != NULL;
 }
 
 static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])

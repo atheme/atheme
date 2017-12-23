@@ -1,0 +1,51 @@
+Password Crypto API Documentation
+---------------------------------
+
+This document serves as a reference for how to write password crypto modules
+(the ones usually located under modules/crypto/).
+
+When creating a password hash, modules are expected to encode all of their
+parameters (module name, salt, digest, any other pertinent information) into
+a string and return that to libathemecore.
+
+This string should contain everything necessary to:
+
+1) Verify a password hash string was produced by this module
+2) Verify a password against a password hash string
+3) Determine if the password needs re-encrypting (for example, digest
+   algorithm upgrade).
+
+There are 2 functions a module can provide: 'crypt' and 'verify'. How they
+behave depends on whether you provide one, or the other, or both:
+
+- If you provide 'crypt' but not 'verify', then 'crypt' is expected to be
+  able to both encrypt new passwords (this will be the case when the second
+  parameter is NULL) and compute digests of passwords against pre-existing
+  information (the password hash string, given as the second argument). It
+  should return a password hash string, which, if the supplied password was
+  correct (in the second case), should compare string-equal to its original
+  output.
+
+- If you provide 'verify' but not 'crypt', then 'verify' only has to process
+  the password hash string (second argument) and verify the password against
+  it. It should return true if the password successfully verifies, and false
+  otherwise, or upon encountering errors. The module will not be used to
+  encrypt new passwords.
+
+- If you provide 'crypt' and 'verify', then 'crypt' will only be called to
+  encrypt new passwords; its second parameter will always be NULL, and its
+  output does not need to be string-equal to its original output (this allows
+  you to change the format of the password hash string over time).
+
+When 'verify' is being executed and you are certain that the password hash
+string (second parameter) was indeed produced by this module, you should set
+the PWVERIFY_FLAG_MYMODULE flag (third parameter). This will prevent Atheme
+from continuing to try other modules in turn if your verification function
+returns false. If you detect that the password should be re-encrypted (for
+example, if there is a better digest algorithm available in a newer version
+of the module), you should set the PWVERIFY_FLAG_RECRYPT flag. Note that this
+flag has no effect if your module does not provide a 'crypt' function.
+
+For an actual example of all of this, please see modules/crypto/argon2d,
+which provides both functions, and modules/crypto/rawmd5, which provides only
+a 'verify' function.

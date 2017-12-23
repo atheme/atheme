@@ -39,8 +39,12 @@ atheme_posix_salt(void)
 static bool warned_des_fallback = false;
 
 static const char *
-atheme_posix_crypt(const char *const restrict password, const char *const restrict parameters)
+atheme_posix_crypt(const char *const restrict password, const char *restrict parameters)
 {
+	if (! parameters)
+		if (! (parameters = atheme_posix_salt()))
+			return NULL;
+
 	const char *const result = crypt(password, parameters);
 
 	if (!strncmp(parameters, "$1$", 3) && strncmp(result, "$1$", 3))
@@ -84,7 +88,7 @@ static const unsigned char cov_2char[64] = {
  * I've ever encountered.)
  */
 static const char *
-openssl_md5crypt(const char *passwd, const char *salt)
+posix_md5crypt(const char *passwd, const char *salt)
 {
 	const char *magic = "1";
 	static char out_buf[6 + 9 + 24 + 2]; /* "$apr1$..salt..$.......md5hash..........\0" */
@@ -183,8 +187,12 @@ openssl_md5crypt(const char *passwd, const char *salt)
 }
 
 static const char *
-atheme_posix_crypt(const char *const restrict password, const char *const restrict parameters)
+atheme_posix_crypt(const char *const restrict password, const char *restrict parameters)
 {
+	if (! parameters)
+		if (! (parameters = atheme_posix_salt()))
+			return NULL;
+
 	char real_salt[BUFSIZE];
 
 	mowgli_strlcpy(real_salt, parameters + 3, sizeof real_salt);
@@ -196,7 +204,7 @@ atheme_posix_crypt(const char *const restrict password, const char *const restri
 
 	*term = '\0';
 
-	return openssl_md5crypt(password, real_salt);
+	return posix_md5crypt(password, real_salt);
 }
 
 #endif /* !HAVE_CRYPT */
@@ -204,7 +212,6 @@ atheme_posix_crypt(const char *const restrict password, const char *const restri
 static crypt_impl_t crypto_posix_impl = {
 
 	.id        = "posix",
-	.salt      = &atheme_posix_salt,
 	.crypt     = &atheme_posix_crypt,
 };
 

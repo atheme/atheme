@@ -80,7 +80,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	md = metadata_find(mu, "private:setpass:key");
-	if (md == NULL || crypt_verify_password(key, md->value) == NULL)
+	if (md == NULL || crypt_verify_password(key, md->value, NULL) == NULL)
 	{
 		if (md != NULL)
 			logcommand(si, CMDLOG_SET, "failed SETPASS (invalid key)");

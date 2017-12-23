@@ -19,13 +19,16 @@
 #define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
 
 static bool
-atheme_rawsha1_verify(const char *const restrict password, const char *const restrict parameters)
+atheme_rawsha1_verify(const char *const restrict password, const char *const restrict parameters,
+                      unsigned int *const restrict flags)
 {
 	if (strlen(parameters) != MODULE_PARAMS_LEN)
 		return false;
 
 	if (strncmp(parameters, MODULE_PREFIX_STR, MODULE_PREFIX_LEN) != 0)
 		return false;
+
+	*flags |= PWVERIFY_FLAG_MYMODULE;
 
 	SHA_CTX ctx;
 	unsigned char digest[MODULE_DIGEST_LEN];

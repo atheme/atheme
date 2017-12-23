@@ -63,7 +63,6 @@ struct pbkdf2v2_dbentry
 	unsigned int     a;                                 // PRF ID (one of the macros above)
 	unsigned int     c;                                 // PBKDF2 Iteration Count
 	bool             scram;                             // Whether to use HMAC-SHA or SCRAM-SHA
-	bool             salt_was_b64;                      // Whether the salt was base64-encoded
 };
 
 static const unsigned char ServerKeyStr[] = {

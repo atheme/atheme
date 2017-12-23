@@ -17,6 +17,11 @@
 
 #include "atheme.h"
 
+#define MODULE_PREFIX_STR       "$ircservices$"
+#define MODULE_PREFIX_LEN       13
+#define MODULE_DIGEST_LEN       8
+#define MODULE_PARAMS_LEN       (MODULE_PREFIX_LEN + (2 * MODULE_DIGEST_LEN))
+
 #define XTOI(c) ((c)>9 ? (c)-'A'+10 : (c)-'0')
 
 static inline void
@@ -34,14 +39,23 @@ atheme_ircservices_encrypt(const char *const restrict src, char *const restrict 
 	for (size_t i = 0; i < 32; i += 2)
 		dest2[i / 2] = XTOI(digest[i]) << 4 | XTOI(digest[i + 1]);
 
-	(void) strcpy(dest, "$ircservices$");
-	for (size_t i = 0; i < 8; i++)
-		(void) sprintf(dest + 13 + 2 * i, "%02x", 255 & dest2[i]);
+	(void) strcpy(dest, MODULE_PREFIX_STR);
+	for (size_t i = 0; i < MODULE_DIGEST_LEN; i++)
+		(void) sprintf(dest + MODULE_PREFIX_LEN + 2 * i, "%02x", 255 & dest2[i]);
 }
 
 static bool
-atheme_ircservices_verify(const char *const restrict password, const char *const restrict parameters)
+atheme_ircservices_verify(const char *const restrict password, const char *const restrict parameters,
+                          unsigned int *const restrict flags)
 {
+	if (strlen(parameters) != MODULE_PARAMS_LEN)
+		return false;
+
+	if (strncmp(parameters, MODULE_PREFIX_STR, MODULE_PREFIX_LEN) != 0)
+		return false;
+
+	*flags |= PWVERIFY_FLAG_MYMODULE;
+
 	char result[BUFSIZE];
 
 	(void) atheme_ircservices_encrypt(password, result);
