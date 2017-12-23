@@ -687,7 +687,7 @@ atheme_argon2d_crypt(const char *const restrict password,
 }
 
 static bool
-atheme_argon2d_recrypt(struct argon2d_context *const restrict ctx)
+atheme_argon2d_recrypt(const struct argon2d_context *const restrict ctx)
 {
 	const uint32_t m_cost_def = (uint32_t) (0x01U << atheme_argon2d_mcost);
 	const uint32_t t_cost_def = (uint32_t) atheme_argon2d_tcost;
