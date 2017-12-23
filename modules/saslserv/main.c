@@ -768,11 +768,12 @@ sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 	}
 }
 
-static bool
-sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
-                       myuser_t **const restrict muo)
+static inline bool
+sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const restrict authxid,
+                       myuser_t **const restrict muo, char **const restrict val_name,
+                       char **const restrict val_eid, const char *const restrict other_val_eid)
 {
-	myuser_t *const mu = myuser_find_by_nick(authcid);
+	myuser_t *const mu = myuser_find_by_nick(authxid);
 
 	if (! mu)
 		return false;
@@ -780,11 +781,11 @@ sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (muo)
 		*muo = mu;
 
-	p->authcid = sstrdup(entity(mu)->name);
-	p->authceid = sstrdup(entity(mu)->id);
+	*val_name = sstrdup(entity(mu)->name);
+	*val_eid = sstrdup(entity(mu)->id);
 
-	if (p->authzeid && strcmp(p->authceid, p->authzeid) == 0)
-		// authzid_can_login already ran the hook for this user
+	if (other_val_eid && strcmp(*val_eid, other_val_eid) == 0)
+		// We have already executed the user_can_login hook for this user
 		return true;
 
 	hook_user_login_check_t req = {
@@ -803,37 +804,17 @@ sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const 
 }
 
 static bool
+sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
+                       myuser_t **const restrict muo)
+{
+	return sasl_authxid_can_login(p, authcid, muo, &p->authcid, &p->authceid, p->authzeid);
+}
+
+static bool
 sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
                        myuser_t **const restrict muo)
 {
-	myuser_t *const mu = myuser_find_by_nick(authzid);
-
-	if (! mu)
-		return false;
-
-	if (muo)
-		*muo = mu;
-
-	p->authzid = sstrdup(entity(mu)->name);
-	p->authzeid = sstrdup(entity(mu)->id);
-
-	if (p->authceid && strcmp(p->authceid, p->authzeid) == 0)
-		// authcid_can_login already ran the hook for this user
-		return true;
-
-	hook_user_login_check_t req = {
-
-		.si         = p->si,
-		.mu         = mu,
-		.allowed    = true,
-	};
-
-	(void) hook_call_user_can_login(&req);
-
-	if (! req.allowed)
-		(void) logcommand(p->si, CMDLOG_LOGIN, "failed LOGIN to \2%s\2 (denied by hook)", entity(mu)->name);
-
-	return req.allowed;
+	return sasl_authxid_can_login(p, authzid, muo, &p->authzid, &p->authzeid, p->authceid);
 }
 
 /* main services client routine */
