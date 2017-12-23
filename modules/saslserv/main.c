@@ -255,7 +255,9 @@ login_user(struct sasl_session *const restrict p)
 	}
 	else
 	{
+		(void) free(p->authzid);
 		(void) free(p->authzeid);
+		p->authzid = sstrdup(p->authcid);
 		p->authzeid = sstrdup(p->authceid);
 	}
 
@@ -610,6 +612,8 @@ destroy_session(struct sasl_session *const restrict p)
 	if (p->si)
 		(void) object_unref(p->si);
 
+	(void) free(p->authcid);
+	(void) free(p->authzid);
 	(void) free(p->authceid);
 	(void) free(p->authzeid);
 	(void) free(p->certfp);
@@ -685,7 +689,7 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 	if (! mu)
 	{
 		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		                                      p->authzeid ? p->authzeid : "??");
+		                                      p->authzid ? p->authzid : "??");
 		(void) destroy_session(p);
 
 		/* We'll remove their ircd login in handle_burstlogin() */
@@ -776,6 +780,7 @@ sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (muo)
 		*muo = mu;
 
+	p->authcid = sstrdup(entity(mu)->name);
 	p->authceid = sstrdup(entity(mu)->id);
 
 	if (p->authzeid && strcmp(p->authceid, p->authzeid) == 0)
@@ -809,6 +814,7 @@ sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (muo)
 		*muo = mu;
 
+	p->authzid = sstrdup(entity(mu)->name);
 	p->authzeid = sstrdup(entity(mu)->id);
 
 	if (p->authceid && strcmp(p->authceid, p->authzeid) == 0)

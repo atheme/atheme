@@ -45,6 +45,8 @@ struct sasl_session
 	char                    *uid;           // Network UID
 	char                    *buf;           // Buffered Base-64 data from them (so far)
 	void                    *mechdata;      // Mechanism-specific allocated memory
+	char                    *authcid;       // Authentication identity (user having credentials verified)
+	char                    *authzid;       // Authorization identity (user being logged in)
 	char                    *authceid;      // Entity ID for authcid
 	char                    *authzeid;      // Entity ID for authzid
 	char                    *certfp;        // TLS client certificate fingerprint (if any)
