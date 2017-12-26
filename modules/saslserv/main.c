@@ -241,25 +241,21 @@ login_user(struct sasl_session *const restrict p)
 {
 	/* source_mu is the user whose credentials we verified ("authentication id") */
 	/* target_mu is the user who will be ultimately logged in ("authorization id") */
+	myuser_t *source_mu;
+	myuser_t *target_mu;
 
-	myuser_t *const source_mu = myuser_find_uid(p->authceid);
-	if (! source_mu)
+	if (! *p->authceid || ! (source_mu = myuser_find_uid(p->authceid)))
 		return NULL;
 
-	myuser_t *target_mu = source_mu;
+	if (! *p->authzeid)
+	{
+		target_mu = source_mu;
 
-	if (p->authzeid && *p->authzeid)
-	{
-		if (! (target_mu = myuser_find_uid(p->authzeid)))
-			return NULL;
+		(void) mowgli_strlcpy(p->authzid, p->authcid, NICKLEN);
+		(void) mowgli_strlcpy(p->authzeid, p->authceid, IDLEN);
 	}
-	else
-	{
-		(void) free(p->authzid);
-		(void) free(p->authzeid);
-		p->authzid = sstrdup(p->authcid);
-		p->authzeid = sstrdup(p->authceid);
-	}
+	else if (! (target_mu = myuser_find_uid(p->authzeid)))
+		return NULL;
 
 	if (metadata_find(source_mu, "private:freeze:freezer"))
 	{
@@ -455,7 +451,7 @@ sasl_packet(struct sasl_session *const restrict p, const char *const restrict bu
 		return true;
 	}
 
-	if (rc == ASASL_FAIL && p->authceid)
+	if (rc == ASASL_FAIL && *p->authceid)
 	{
 		/* If we reach this, they failed SASL auth, so if they were trying
 		 * to identify as a specific user, bad_password them.
@@ -587,7 +583,7 @@ sasl_input_clientdata(const sasl_message_t *const restrict smsg, struct sasl_ses
 static void
 destroy_session(struct sasl_session *const restrict p)
 {
-	if (p->flags & ASASL_NEED_LOG && p->authceid)
+	if (p->flags & ASASL_NEED_LOG && *p->authceid)
 	{
 		myuser_t *const mu = myuser_find_uid(p->authceid);
 
@@ -612,10 +608,6 @@ destroy_session(struct sasl_session *const restrict p)
 	if (p->si)
 		(void) object_unref(p->si);
 
-	(void) free(p->authcid);
-	(void) free(p->authzid);
-	(void) free(p->authceid);
-	(void) free(p->authzeid);
 	(void) free(p->certfp);
 	(void) free(p->host);
 	(void) free(p->buf);
@@ -685,11 +677,11 @@ sasl_newuser(hook_user_nick_t *const restrict data)
 	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
-	myuser_t *const mu = p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
+	myuser_t *const mu = *p->authzeid ? myuser_find_uid(p->authzeid) : NULL;
 	if (! mu)
 	{
 		(void) notice(saslsvs->nick, u->nick, "Account %s dropped, login cancelled",
-		                                      p->authzid ? p->authzid : "??");
+		                                      *p->authzid ? p->authzid : "???");
 		(void) destroy_session(p);
 
 		/* We'll remove their ircd login in handle_burstlogin() */
@@ -770,8 +762,8 @@ sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 
 static inline bool
 sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const restrict authxid,
-                       myuser_t **const restrict muo, char **const restrict val_name,
-                       char **const restrict val_eid, const char *const restrict other_val_eid)
+                       myuser_t **const restrict muo, char *const restrict val_name,
+                       char *const restrict val_eid, const char *const restrict other_val_eid)
 {
 	myuser_t *const mu = myuser_find_by_nick(authxid);
 
@@ -781,10 +773,10 @@ sasl_authxid_can_login(struct sasl_session *const restrict p, const char *const 
 	if (muo)
 		*muo = mu;
 
-	*val_name = sstrdup(entity(mu)->name);
-	*val_eid = sstrdup(entity(mu)->id);
+	(void) mowgli_strlcpy(val_name, entity(mu)->name, NICKLEN);
+	(void) mowgli_strlcpy(val_eid, entity(mu)->id, IDLEN);
 
-	if (other_val_eid && strcmp(*val_eid, other_val_eid) == 0)
+	if (strcmp(val_eid, other_val_eid) == 0)
 		// We have already executed the user_can_login hook for this user
 		return true;
 
@@ -807,14 +799,14 @@ static bool
 sasl_authcid_can_login(struct sasl_session *const restrict p, const char *const restrict authcid,
                        myuser_t **const restrict muo)
 {
-	return sasl_authxid_can_login(p, authcid, muo, &p->authcid, &p->authceid, p->authzeid);
+	return sasl_authxid_can_login(p, authcid, muo, p->authcid, p->authceid, p->authzeid);
 }
 
 static bool
 sasl_authzid_can_login(struct sasl_session *const restrict p, const char *const restrict authzid,
                        myuser_t **const restrict muo)
 {
-	return sasl_authxid_can_login(p, authzid, muo, &p->authzid, &p->authzeid, p->authceid);
+	return sasl_authxid_can_login(p, authzid, muo, p->authzid, p->authzeid, p->authceid);
 }
 
 /* main services client routine */
