@@ -211,7 +211,7 @@ static int has_protocol = 0;
 #define PROTOCOL_PREFERRED_STR "1202"
 
 /* find a user's server by extracting the SID and looking that up. --nenolod */
-static server_t *sid_find(char *name)
+static server_t *sid_find(const char *name)
 {
 	char sid[4];
 	mowgli_strlcpy(sid, name, 4);
@@ -720,7 +720,7 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 		sts(":%s ENCAP %c%c%c CHGHOST %s %s", me.numeric, target[0], target[1], target[2], target, host);
 }
 
-static void inspircd_sasl_sts(char *target, char mode, char *data)
+static void inspircd_sasl_sts(const char *target, char mode, const char *data)
 {
 	service_t *svs;
 	server_t *s = sid_find(target);

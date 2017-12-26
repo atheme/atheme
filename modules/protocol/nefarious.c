@@ -174,7 +174,7 @@ static bool nefarious_on_logout(user_t *u, const char *account)
 	return false;
 }
 
-static void nefarious_sasl_sts(char *target, char mode, char *data)
+static void nefarious_sasl_sts(const char *target, char mode, const char *data)
 {
 	sts("%s SASL %c%c %s %c %s", me.numeric, target[0], target[1], target, mode, data);
 }

@@ -2,76 +2,100 @@
  * Copyright (c) 2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Data structures for SASL plugin use.
- *
+ * Data structures and macros for SASL mechanisms.
  */
 
 #ifndef SASL_H
 #define SASL_H
 
-#define SASL_MESSAGE_MAXPARA	8	/* arbitrary, increment if needed in future */
+// Maximum number of parameters for an SASL S2S command (arbitrary, increment in future if necessary)
+#define SASL_MESSAGE_MAXPARA        8
 
-typedef struct sasl_session_ sasl_session_t;
-typedef struct sasl_message_ sasl_message_t;
-typedef struct sasl_mechanism_ sasl_mechanism_t;
+// Maximum length of an SASL mechanism name (including terminating NULL byte)
+#define SASL_MECHANISM_MAXLEN       60
 
-struct sasl_session_ {
-  char *uid;
-  char *buf, *p;
-  int len, flags;
+// Maximum length of Base-64 data a client can send in one shot
+#define SASL_S2S_MAXLEN             400
 
-  server_t *server;
+// Maximum length of Base-64 data a client can send in total (buffered)
+#define SASL_C2S_MAXLEN             8192
 
-  struct sasl_mechanism_ *mechptr;
-  void *mechdata;
+/* Flags for sasl_session->flags
+ */
+#define ASASL_MARKED_FOR_DELETION   1U  // see delete_stale() in saslserv/main.c
+#define ASASL_NEED_LOG              2U  // user auth success needs to be logged still
 
-  char *username;
-  char *certfp;
-  char *authzid;
+/* Return values for sasl_mechanism -> mech_start() or mech_step()
+ */
+#define ASASL_FAIL                  0U  // client supplied invalid credentials / screwed up their formatting
+#define ASASL_MORE                  1U  // everything looks good so far, but we're not done yet
+#define ASASL_DONE                  2U  // client successfully authenticated
+#define ASASL_ERROR                 3U  // an error occurred in mech or it doesn't want to bad_password() the user
 
-  char *host;
-  char *ip;
-  bool tls;
+struct sasl_session;
+struct sasl_message;
+struct sasl_mechanism;
+struct sasl_core_functions;
+
+struct sasl_session
+{
+	struct sasl_mechanism   *mechptr;       // Mechanism they're using
+	server_t                *server;        // Server they're on
+	sourceinfo_t            *si;            // The source info for logcommand(), bad_password(), and login hooks
+	char                    *uid;           // Network UID
+	char                    *buf;           // Buffered Base-64 data from them (so far)
+	void                    *mechdata;      // Mechanism-specific allocated memory
+	char                    *authcid;       // Authentication identity (user having credentials verified)
+	char                    *authzid;       // Authorization identity (user being logged in)
+	char                    *authceid;      // Entity ID for authcid
+	char                    *authzeid;      // Entity ID for authzid
+	char                    *certfp;        // TLS client certificate fingerprint (if any)
+	char                    *host;          // Hostname
+	char                    *ip;            // IP address
+	size_t                   len;           // Length of buffered Base-64 data
+	unsigned int             flags;         // Flags (described above)
+	bool                     tls;           // Whether their connection to the network is using TLS
 };
 
-struct sasl_message_ {
-  char *uid;
-  char mode;
-  char *parv[SASL_MESSAGE_MAXPARA];
-  int parc;
-
-  server_t *server;
+struct sasl_sourceinfo
+{
+	sourceinfo_t             parent;
+	struct sasl_session     *sess;
 };
 
-struct sasl_mechanism_ {
-  char name[60];
-  int (*mech_start) (struct sasl_session_ *sptr, char **buffer, size_t *buflen);
-  int (*mech_step) (struct sasl_session_ *sptr, char *message, size_t length, char **buffer, size_t *buflen);
-  void (*mech_finish) (struct sasl_session_ *sptr);
+struct sasl_message
+{
+	server_t  *server;
+	char      *uid;
+	char      *parv[SASL_MESSAGE_MAXPARA];
+	int        parc;
+	char       mode;
+};
+
+struct sasl_mechanism
+{
+	char           name[SASL_MECHANISM_MAXLEN];
+	unsigned int (*mech_start)(struct sasl_session *, void **, size_t *);
+	unsigned int (*mech_step)(struct sasl_session *, const void *, size_t, void **, size_t *);
+	void         (*mech_finish)(struct sasl_session *);
+};
+
+struct sasl_core_functions
+{
+	void     (*mech_register)(struct sasl_mechanism *);
+	void     (*mech_unregister)(struct sasl_mechanism *);
+	bool     (*authcid_can_login)(struct sasl_session *, const char *, myuser_t **);
+	bool     (*authzid_can_login)(struct sasl_session *, const char *, myuser_t **);
 };
 
 typedef struct {
-  myuser_t *source_mu;
-  myuser_t *target_mu;
-  bool allowed;
+
+	myuser_t  *source_mu;
+	myuser_t  *target_mu;
+	bool       allowed;
+
 } hook_sasl_may_impersonate_t;
 
-typedef struct {
-	void (*mech_register) (struct sasl_mechanism_ *mech);
-	void (*mech_unregister) (struct sasl_mechanism_ *mech);
-} sasl_mech_register_func_t;
-
-#define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
-#define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */
-#define ASASL_DONE 2 /* client successfully authenticated */
-
-#define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
-#define ASASL_NEED_LOG              2 /* user auth success needs to be logged still */
+typedef struct sasl_message sasl_message_t;
 
 #endif
-
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
- */

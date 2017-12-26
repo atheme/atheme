@@ -77,16 +77,10 @@ static const unsigned char ClientKeyStr[] = {
 	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
 };
 
-/*
- * For modules/saslserv/scram-sha to make an inter-module function call to
- * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_dbextract()
- */
-typedef bool (*atheme_pbkdf2v2_scram_dbextract_fn)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
-
-/*
- * For modules/saslserv/scram-sha to make an inter-module function call to
- * modules/crypto/pbkdf2v2:atheme_pbkdf2v2_scram_normalize()
- */
-typedef const char *(*atheme_pbkdf2v2_scram_normalize_fn)(const char *restrict);
+struct pbkdf2v2_scram_functions
+{
+	bool             (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
+	const char *     (*normalize)(const char *restrict);
+};
 
 #endif /* !PBKDF2V2_H */

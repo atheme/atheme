@@ -54,7 +54,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
 {
 	authcookie_t *au = mowgli_heap_alloc(authcookie_heap);
 
-	au->ticket = random_string(20);
+	au->ticket = random_string(AUTHCOOKIE_LENGTH);
 	au->myuser = mu;
 	au->expire = CURRTIME + 3600;
 
@@ -75,7 +75,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
  * Side Effects:
  *       none
  */
-authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
+authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser)
 {
 	mowgli_node_t *n;
 	authcookie_t *ac;
@@ -205,7 +205,7 @@ void authcookie_expire(void *arg)
  * Side Effects:
  *       expired authcookies are destroyed here
  */
-bool authcookie_validate(char *ticket, myuser_t *myuser)
+bool authcookie_validate(const char *ticket, myuser_t *myuser)
 {
 	authcookie_t *ac = authcookie_find(ticket, myuser);
 

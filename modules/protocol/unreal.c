@@ -665,7 +665,7 @@ static void unreal_quarantine_sts(user_t *source, user_t *victim, long duration,
 	sts(":%s SHUN +*@%s %ld :%s", source->nick, victim->host, duration, reason);
 }
 
-static void unreal_sasl_sts(char *target, char mode, char *data)
+static void unreal_sasl_sts(const char *target, char mode, const char *data)
 {
 	char servermask[BUFSIZE], *p;
 	service_t *saslserv;

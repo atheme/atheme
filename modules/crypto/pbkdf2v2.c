@@ -256,17 +256,11 @@ atheme_pbkdf2v2_recrypt(const struct pbkdf2v2_dbentry *const restrict dbe)
  * These 2 functions are provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677, RFC 4013) *
  * The second function is also used by *this* module for password normalization (in SCRAM mode) *
  *                                                                                              *
- * Prototypes for them appear first, to avoid `-Wmissing-prototypes' diagnostics (under Clang)  *
- *                                                                                              *
- * Constant-but-unused function pointers for them appear last, so that the compiler can verify  *
- * their signatures match the typedefs in include/pbkdf2v2.h (necessary for bug-free inter-     *
- * module function calls)                                                                       *
+ * A structure containing pointers to them appears last, so that it can be imported by the      *
+ * SCRAM-SHA module.                                                                            *
  ********************************************************************************************** */
 
-bool atheme_pbkdf2v2_scram_dbextract(const char *restrict, struct pbkdf2v2_dbentry *restrict);
-const char *atheme_pbkdf2v2_scram_normalize(const char *restrict);
-
-bool
+static bool
 atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pbkdf2v2_dbentry *const restrict dbe)
 {
 	if (! atheme_pbkdf2v2_parse_dbentry(dbe, parameters))
@@ -325,7 +319,7 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 	return true;
 }
 
-const char *
+static const char *
 atheme_pbkdf2v2_scram_normalize(const char *const restrict input)
 {
 	static char buf[ATHEME_SASLPREP_MAXLEN];
@@ -349,11 +343,14 @@ atheme_pbkdf2v2_scram_normalize(const char *const restrict input)
 	return buf;
 }
 
-static const atheme_pbkdf2v2_scram_dbextract_fn __attribute__((unused)) ex_fn_ptr = &atheme_pbkdf2v2_scram_dbextract;
-static const atheme_pbkdf2v2_scram_normalize_fn __attribute__((unused)) nm_fn_ptr = &atheme_pbkdf2v2_scram_normalize;
+const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
+
+	.dbextract      = &atheme_pbkdf2v2_scram_dbextract,
+	.normalize      = &atheme_pbkdf2v2_scram_normalize,
+};
 
 /* **********************************************************************************************
- * End external functions                                                                       *
+ * End SCRAM-SHA functions                                                                      *
  ********************************************************************************************** */
 
 #endif /* HAVE_LIBIDN */
