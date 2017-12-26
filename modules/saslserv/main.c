@@ -733,8 +733,6 @@ sasl_mech_register(struct sasl_mechanism *const restrict mech)
 static void
 sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 {
-	(void) slog(LG_DEBUG, "%s: unregistering %s", __func__, mech->name);
-
 	mowgli_node_t *n, *tn;
 
 	MOWGLI_ITER_FOREACH_SAFE(n, tn, sessions.head)
@@ -751,6 +749,7 @@ sasl_mech_unregister(struct sasl_mechanism *const restrict mech)
 	{
 		if (n->data == mech)
 		{
+			(void) slog(LG_DEBUG, "%s: unregistering %s", __func__, mech->name);
 			(void) mowgli_node_delete(n, &mechanisms);
 			(void) mowgli_node_free(n);
 			(void) mechlist_do_rebuild();
