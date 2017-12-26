@@ -77,10 +77,13 @@ static const unsigned char ClientKeyStr[] = {
 	0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x20, 0x4B, 0x65, 0x79
 };
 
+typedef void (*pbkdf2v2_confhook_fn)(unsigned int, unsigned int, unsigned int);
+
 struct pbkdf2v2_scram_functions
 {
 	bool             (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
 	const char *     (*normalize)(const char *restrict);
+	void             (*confhook)(pbkdf2v2_confhook_fn);
 };
 
 #endif /* !PBKDF2V2_H */

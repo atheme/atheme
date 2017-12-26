@@ -38,6 +38,11 @@
 
 #include "pbkdf2v2.h"
 
+/* Maximum iteration count Cyrus SASL clients will process
+ * Taken from <https://github.com/cyrusimap/cyrus-sasl/blob/f76eb971d456619d0f26/plugins/scram.c#L79>
+ */
+#define CYRUS_SASL_ITERMAX          0x10000U
+
 #define NONCE_LENGTH                64          // This should be more than sufficient
 
 enum scramsha_step
@@ -597,16 +602,8 @@ sasl_scramsha_mechs_unregister(void)
 }
 
 static void
-sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
+sasl_scramsha_pbkdf2v2_confhook(const unsigned int prf, const unsigned int iter, const unsigned int saltlen)
 {
-	(void) sasl_scramsha_mechs_unregister();
-
-	const unsigned int *const pbkdf2v2_digest = module_locate_symbol(PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_digest");
-
-	if (! pbkdf2v2_digest)
-		// module_locate_symbol() logs error messages on failure
-		return;
-
 	const crypt_impl_t *const ci_default = crypt_get_default_provider();
 
 	if (! ci_default)
@@ -616,31 +613,39 @@ sasl_scramsha_config_ready(void __attribute__((unused)) *const restrict unused)
 	}
 	else if (strcmp(ci_default->id, "pbkdf2v2") != 0)
 	{
-		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS!", __func__,
+		(void) slog(LG_INFO, "%s: %s is not the default crypto provider, PLEASE INVESTIGATE THIS! "
+		                     "Newly registered users, and users who change their passwords, will not "
+		                     "be able to login with this module until this is rectified.", __func__,
 		                     PBKDF2V2_CRYPTO_MODULE_NAME);
-		(void) slog(LG_INFO, "%s: newly registered users will be unable to login with this module", __func__);
-		(void) slog(LG_INFO, "%s: users who change their passwords will be unable to login with this module",
-		                     __func__);
 	}
 
-	switch (*pbkdf2v2_digest)
+	(void) sasl_scramsha_mechs_unregister();
+
+	switch (prf)
 	{
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
 			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha1);
-			return;
+			break;
 
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
 			(void) sasl_core_functions->mech_register(&sasl_scramsha_mech_sha2_256);
+			break;
+
+		default:
+			(void) slog(LG_ERROR, "%s: pbkdf2v2::digest is not set to a supported value -- "
+			                      "this module will not do anything", __func__);
 			return;
 	}
 
-	(void) slog(LG_ERROR, "%s: pbkdf2v2::digest is not set to a supported value -- "
-	                      "this module will not do anything", __func__);
+	if (iter > CYRUS_SASL_ITERMAX)
+		(void) slog(LG_INFO, "%s: iteration count (%u) is higher than Cyrus SASL library maximum (%u) -- "
+		                     "client logins may fail if they use Cyrus", __func__, iter, CYRUS_SASL_ITERMAX);
 }
 
 static void
 mod_init(module_t *const restrict m)
 {
+	// Services administrators using this module should be fully aware of the requirements for correctly doing so
 	if (! module_find_published(PBKDF2V2_CRYPTO_MODULE_NAME))
 	{
 		(void) slog(LG_ERROR, "module %s needs module %s", m->name, PBKDF2V2_CRYPTO_MODULE_NAME);
@@ -652,16 +657,20 @@ mod_init(module_t *const restrict m)
 	MODULE_TRY_REQUEST_SYMBOL(m, sasl_core_functions, "saslserv/main", "sasl_core_functions");
 	MODULE_TRY_REQUEST_SYMBOL(m, pbkdf2v2_scram_functions, PBKDF2V2_CRYPTO_MODULE_NAME, "pbkdf2v2_scram_functions");
 
-	(void) hook_add_event("config_ready");
-	(void) hook_add_config_ready(sasl_scramsha_config_ready);
+	/* Pass our funcptr to the pbkdf2v2 module, which will immediately call us back with its
+	 * configuration. We use its configuration to decide which SASL mechanism to register.
+	 */
+	(void) pbkdf2v2_scram_functions->confhook(&sasl_scramsha_pbkdf2v2_confhook);
 }
 
 static void
 mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
-	(void) sasl_scramsha_mechs_unregister();
+	// Unregister configuration interest in the pbkdf2v2 module
+	(void) pbkdf2v2_scram_functions->confhook(NULL);
 
-	(void) hook_del_config_ready(sasl_scramsha_config_ready);
+	// Unregister all SASL mechanisms
+	(void) sasl_scramsha_mechs_unregister();
 }
 
 SIMPLE_DECLARE_MODULE_V1("saslserv/scram-sha", MODULE_UNLOAD_CAPABILITY_OK)

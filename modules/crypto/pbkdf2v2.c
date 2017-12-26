@@ -34,10 +34,33 @@
 
 #define ATHEME_SASLPREP_MAXLEN (PASSLEN + 1)
 
-static unsigned int pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
-static unsigned int pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
+static unsigned int pbkdf2v2_digest = 0;
+static unsigned int pbkdf2v2_rounds = 0;
+static unsigned int pbkdf2v2_saltsz = 0;
 
-unsigned int pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
+static pbkdf2v2_confhook_fn pbkdf2v2_confhook = NULL;
+
+static inline void
+atheme_pbkdf2v2_confhook_dispatch(void)
+{
+	if (pbkdf2v2_confhook)
+		(void) pbkdf2v2_confhook(pbkdf2v2_digest, pbkdf2v2_rounds, pbkdf2v2_saltsz);
+}
+
+static void
+atheme_pbkdf2v2_config_ready(void __attribute__((unused)) *const restrict unused)
+{
+	if (! pbkdf2v2_digest)
+		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
+
+	if (! pbkdf2v2_rounds)
+		pbkdf2v2_rounds = PBKDF2_ITERCNT_DEF;
+
+	if (! pbkdf2v2_saltsz)
+		pbkdf2v2_saltsz = PBKDF2_SALTLEN_DEF;
+
+	(void) atheme_pbkdf2v2_confhook_dispatch();
+}
 
 static bool
 atheme_pbkdf2v2_salt_is_b64(const unsigned int prf)
@@ -253,7 +276,7 @@ atheme_pbkdf2v2_recrypt(const struct pbkdf2v2_dbentry *const restrict dbe)
 #ifdef HAVE_LIBIDN
 
 /* **********************************************************************************************
- * These 2 functions are provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677, RFC 4013) *
+ * These 3 functions are provided for modules/saslserv/scram-sha (RFC 5802, RFC 7677, RFC 4013) *
  * The second function is also used by *this* module for password normalization (in SCRAM mode) *
  *                                                                                              *
  * A structure containing pointers to them appears last, so that it can be imported by the      *
@@ -343,10 +366,19 @@ atheme_pbkdf2v2_scram_normalize(const char *const restrict input)
 	return buf;
 }
 
+static void
+atheme_pbkdf2v2_scram_confhook(const pbkdf2v2_confhook_fn confhook)
+{
+	pbkdf2v2_confhook = confhook;
+
+	(void) atheme_pbkdf2v2_confhook_dispatch();
+}
+
 const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 
 	.dbextract      = &atheme_pbkdf2v2_scram_dbextract,
 	.normalize      = &atheme_pbkdf2v2_scram_normalize,
+	.confhook       = &atheme_pbkdf2v2_scram_confhook,
 };
 
 /* **********************************************************************************************
@@ -529,9 +561,11 @@ atheme_pbkdf2v2_verify(const char *const restrict password, const char *const re
 static int
 c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 {
+	pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
+
 	if (! ce->vardata)
 	{
-		(void) conf_report_warning(ce, "no parameter for configuration option");
+		(void) conf_report_warning(ce, "no parameter for configuration option -- using default");
 		return 0;
 	}
 
@@ -552,10 +586,7 @@ c_ci_pbkdf2v2_digest(mowgli_config_file_entry_t *const restrict ce)
 */
 #endif /* HAVE_LIBIDN */
 	else
-	{
 		(void) conf_report_warning(ce, "invalid parameter for configuration option -- using default");
-		pbkdf2v2_digest = PBKDF2_PRF_DEFAULT;
-	}
 
 	return 0;
 }
@@ -580,11 +611,16 @@ mod_init(module_t __attribute__((unused)) *const restrict m)
 	                          PBKDF2_ITERCNT_MIN, PBKDF2_ITERCNT_MAX, PBKDF2_ITERCNT_DEF);
 	(void) add_uint_conf_item("SALTLEN", &pbkdf2v2_conf_table, 0, &pbkdf2v2_saltsz,
 	                          PBKDF2_SALTLEN_MIN, PBKDF2_SALTLEN_MAX, PBKDF2_SALTLEN_DEF);
+
+	(void) hook_add_event("config_ready");
+	(void) hook_add_config_ready(&atheme_pbkdf2v2_config_ready);
 }
 
 static void
 mod_deinit(const module_unload_intent_t __attribute__((unused)) intent)
 {
+	(void) hook_del_config_ready(&atheme_pbkdf2v2_config_ready);
+
 	(void) del_conf_item("DIGEST", &pbkdf2v2_conf_table);
 	(void) del_conf_item("ROUNDS", &pbkdf2v2_conf_table);
 	(void) del_conf_item("SALTLEN", &pbkdf2v2_conf_table);
