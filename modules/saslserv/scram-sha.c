@@ -321,7 +321,7 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 
 error:
 	(void) sasl_scramsha_attrlist_free(&input);
-	s->step = SCRAMSHA_STEP_FAILED;
+	s->step = SCRAMSHA_STEP_ERRORED;
 	return ASASL_ERROR;
 }
 
