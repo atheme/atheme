@@ -32,8 +32,6 @@
 
 #include "pbkdf2v2.h"
 
-#define ATHEME_SASLPREP_MAXLEN (PASSLEN + 1)
-
 static unsigned int pbkdf2v2_digest = 0;
 static unsigned int pbkdf2v2_rounds = 0;
 static unsigned int pbkdf2v2_saltsz = 0;
@@ -342,28 +340,18 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 	return true;
 }
 
-static const char *
-atheme_pbkdf2v2_scram_normalize(const char *const restrict input)
+static bool
+atheme_pbkdf2v2_scram_normalize(char *const restrict buf, const size_t buflen)
 {
-	static char buf[ATHEME_SASLPREP_MAXLEN];
-
-	(void) memset(buf, 0x00, ATHEME_SASLPREP_MAXLEN);
-
-	if (snprintf(buf, ATHEME_SASLPREP_MAXLEN, "%s", input) >= ATHEME_SASLPREP_MAXLEN)
-	{
-		(void) slog(LG_DEBUG, "%s: snprintf(3) would have overflowed result buffer (BUG)", __func__);
-		return NULL;
-	}
-
-	const int ret = stringprep(buf, ATHEME_SASLPREP_MAXLEN, (Stringprep_profile_flags) 0, stringprep_saslprep);
+	const int ret = stringprep(buf, buflen, (Stringprep_profile_flags) 0, stringprep_saslprep);
 
 	if (ret != STRINGPREP_OK)
 	{
 		(void) slog(LG_DEBUG, "%s: %s", __func__, stringprep_strerror((Stringprep_rc) ret));
-		return NULL;
+		return false;
 	}
 
-	return buf;
+	return true;
 }
 
 static void
@@ -388,24 +376,27 @@ const struct pbkdf2v2_scram_functions pbkdf2v2_scram_functions = {
 #endif /* HAVE_LIBIDN */
 
 static bool
-atheme_pbkdf2v2_compute(const char *restrict password, struct pbkdf2v2_dbentry *const restrict dbe)
+atheme_pbkdf2v2_compute(const char *const restrict password, struct pbkdf2v2_dbentry *const restrict dbe)
 {
+	char key[PASSLEN];
+	(void) mowgli_strlcpy(key, password, sizeof key);
+
 #ifdef HAVE_LIBIDN
-	if (dbe->scram && ! (password = atheme_pbkdf2v2_scram_normalize(password)))
+	if (dbe->scram && ! atheme_pbkdf2v2_scram_normalize(key, sizeof key))
 		// This function logs messages on failure
 		return false;
 #endif /* HAVE_LIBIDN */
 
-	const size_t pl = strlen(password);
+	const size_t kl = strlen(key);
 
-	if (! pl)
+	if (! kl)
 	{
 		(void) slog(LG_DEBUG, "%s: password length == 0", __func__);
 		return false;
 	}
 
-	const int ret = PKCS5_PBKDF2_HMAC(password, (int) pl, dbe->salt, (int) dbe->sl, (int) dbe->c,
-	                                  dbe->md, (int) dbe->dl, dbe->cdg);
+	const int ret = PKCS5_PBKDF2_HMAC(key, (int) kl, dbe->salt, (int) dbe->sl, (int) dbe->c, dbe->md,
+	                                  (int) dbe->dl, dbe->cdg);
 	if (ret != 1)
 	{
 		(void) slog(LG_ERROR, "%s: PKCS5_PBKDF2_HMAC() failed", __func__);

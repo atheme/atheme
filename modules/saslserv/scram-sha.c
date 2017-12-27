@@ -207,18 +207,17 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		(void) memcpy(authzid, message, authzid_length);
 
 		// Normalize it
-		const char *const authzid_nm = pbkdf2v2_scram_functions->normalize(authzid);
-		if (! authzid_nm || ! *authzid_nm)
+		if (! pbkdf2v2_scram_functions->normalize(authzid, sizeof authzid))
 		{
 			(void) slog(LG_DEBUG, "%s: SASLprep normalization of authzid failed", __func__);
 			return ASASL_ERROR;
 		}
 
 		// Log it
-		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, authzid_nm);
+		(void) slog(LG_DEBUG, "%s: parsed authzid '%s'", __func__, authzid);
 
 		// Check it exists and can login
-		if (! sasl_core_functions->authzid_can_login(p, authzid_nm, NULL))
+		if (! sasl_core_functions->authzid_can_login(p, authzid, NULL))
 		{
 			(void) slog(LG_DEBUG, "%s: authzid_can_login failed", __func__);
 			return ASASL_ERROR;
@@ -243,17 +242,26 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		goto error;
 	}
 
-	const char *const authcid_nm = pbkdf2v2_scram_functions->normalize(input['n']);
+	char authcid[NICKLEN];
+	const size_t authcid_length = strlen(input['n']);
 
-	if (! authcid_nm || ! *authcid_nm)
+	if (authcid_length >= sizeof authcid)
+	{
+		(void) slog(LG_DEBUG, "%s: unacceptable authcid length '%zu'", __func__, authcid_length);
+		goto error;
+	}
+
+	(void) mowgli_strlcpy(authcid, input['n'], sizeof authcid);
+
+	if (! pbkdf2v2_scram_functions->normalize(authcid, sizeof authcid))
 	{
 		(void) slog(LG_DEBUG, "%s: SASLprep normalization of authcid failed", __func__);
 		goto error;
 	}
 
-	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid_nm);
+	(void) slog(LG_DEBUG, "%s: parsed authcid '%s'", __func__, authcid);
 
-	if (! sasl_core_functions->authcid_can_login(p, authcid_nm, &s->mu))
+	if (! sasl_core_functions->authcid_can_login(p, authcid, &s->mu))
 	{
 		(void) slog(LG_DEBUG, "%s: authcid_can_login failed", __func__);
 		goto error;

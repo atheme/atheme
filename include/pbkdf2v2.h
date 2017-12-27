@@ -82,7 +82,7 @@ typedef void (*pbkdf2v2_confhook_fn)(unsigned int, unsigned int, unsigned int);
 struct pbkdf2v2_scram_functions
 {
 	bool             (*dbextract)(const char *restrict, struct pbkdf2v2_dbentry *restrict);
-	const char *     (*normalize)(const char *restrict);
+	bool             (*normalize)(char *restrict, size_t);
 	void             (*confhook)(pbkdf2v2_confhook_fn);
 };
 
