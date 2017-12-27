@@ -47,6 +47,9 @@ atheme_posix_crypt(const char *const restrict password, const char *restrict par
 
 	const char *const result = crypt(password, parameters);
 
+	if (! result)
+		return NULL;
+
 	if (!strncmp(parameters, "$1$", 3) && strncmp(result, "$1$", 3))
 	{
 		if (!warned_des_fallback)
