@@ -41,8 +41,10 @@ static pbkdf2v2_confhook_fn pbkdf2v2_confhook = NULL;
 static inline void
 atheme_pbkdf2v2_confhook_dispatch(void)
 {
-	if (pbkdf2v2_confhook)
-		(void) pbkdf2v2_confhook(pbkdf2v2_digest, pbkdf2v2_rounds, pbkdf2v2_saltsz);
+	if (! pbkdf2v2_confhook || ! pbkdf2v2_digest || ! pbkdf2v2_rounds || ! pbkdf2v2_saltsz)
+		return;
+
+	(void) pbkdf2v2_confhook(pbkdf2v2_digest, pbkdf2v2_rounds, pbkdf2v2_saltsz);
 }
 
 static void
