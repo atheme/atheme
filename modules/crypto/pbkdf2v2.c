@@ -330,12 +330,21 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 		}
 	}
 
+	/* If the password hash was not in SCRAM format, then we only have SaltedPassword,
+	 * not ServerKey and StoredKey. This means that in order for the login to succeed,
+	 * we need to derive the latter 2 from what we have (this is fast and easy).
+	 */
 	if (! dbe->scram)
 	{
 		if (! atheme_pbkdf2v2_scram_derive(dbe, dbe->sdg, dbe->ssk, dbe->shk))
 			// This function logs messages on failure
 			return false;
 
+		/* If the database is breached in the future, SaltedPassword can be used to compute
+		 * the ClientKey and impersonate the client to this service (without knowing the
+		 * original password). If the login is successful, the SCRAM-SHA module will convert
+		 * the database entry into a SCRAM format to avoid this. Log a message anyway.
+		 */
 		(void) slog(LG_INFO, "%s: attempting SCRAM-SHA login with regular PBKDF2 credentials", __func__);
 	}
 
