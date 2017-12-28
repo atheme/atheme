@@ -558,14 +558,14 @@ static unsigned int
 mech_step_sha1(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                void **const restrict out, size_t *const restrict outlen)
 {
-	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA1);
+	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA1_S64);
 }
 
 static unsigned int
 mech_step_sha2_256(struct sasl_session *const restrict p, const void *const restrict in, const size_t inlen,
                    void **const restrict out, size_t *const restrict outlen)
 {
-	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA2_256);
+	return mech_step_dispatch(p, in, inlen, out, outlen, PBKDF2_PRF_SCRAM_SHA2_256_S64);
 }
 
 static void

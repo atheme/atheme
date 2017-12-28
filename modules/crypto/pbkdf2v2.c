@@ -301,14 +301,14 @@ atheme_pbkdf2v2_scram_dbextract(const char *const restrict parameters, struct pb
 		case PBKDF2_PRF_HMAC_SHA1_S64:
 		case PBKDF2_PRF_SCRAM_SHA1:
 		case PBKDF2_PRF_SCRAM_SHA1_S64:
-			dbe->a = PBKDF2_PRF_SCRAM_SHA1;
+			dbe->a = PBKDF2_PRF_SCRAM_SHA1_S64;
 			break;
 
 		case PBKDF2_PRF_HMAC_SHA2_256:
 		case PBKDF2_PRF_HMAC_SHA2_256_S64:
 		case PBKDF2_PRF_SCRAM_SHA2_256:
 		case PBKDF2_PRF_SCRAM_SHA2_256_S64:
-			dbe->a = PBKDF2_PRF_SCRAM_SHA2_256;
+			dbe->a = PBKDF2_PRF_SCRAM_SHA2_256_S64;
 			break;
 
 		default:
