@@ -54,12 +54,6 @@ static void cs_cmd_clear_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!mc->chan)
-	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
-		return;
-	}
-
 	if (!chanacs_source_has_flag(mc, si, CA_FOUNDER))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
