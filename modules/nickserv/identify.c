@@ -61,8 +61,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	const char *target = parv[0];
 	const char *password = parv[1];
 	char lau[BUFSIZE];
-	hook_user_login_check_t login_req;
-	hook_user_logout_check_t logout_req;
 
 	if (si->su == NULL)
 	{
@@ -92,12 +90,17 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	login_req.si = si;
-	login_req.mu = mu;
-	login_req.allowed = true;
-	logout_req.si = si;
-	logout_req.u = u;
-	logout_req.allowed = true;
+	hook_user_login_check_t login_req = {
+		.si      = si,
+		.mu      = mu,
+		.allowed = true,
+	};
+	hook_user_logout_check_t logout_req = {
+		.si      = si,
+		.u       = u,
+		.allowed = true,
+		.relogin = true,
+	};
 	hook_call_user_can_login(&login_req);
 	if (login_req.allowed && u->myuser)
 		hook_call_user_can_logout(&logout_req);

@@ -392,11 +392,14 @@ void handle_nickchange(user_t *u)
 bool ircd_logout_or_kill(user_t *u, const char *login)
 {
 	service_t *svs = service_find("operserv");
-	hook_user_logout_check_t req;
 
-	req.si = NULL;
-	req.u = u;
-	req.allowed = true;
+	hook_user_logout_check_t req = {
+		.si      = NULL,
+		.u       = u,
+		.allowed = true,
+		.relogin = false,
+	};
+
 	hook_call_user_can_logout(&req);
 
 	if (req.allowed)

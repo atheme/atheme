@@ -340,6 +340,7 @@ typedef struct {
 typedef struct {
 	sourceinfo_t *si;
 	user_t *u;
+	const bool relogin;
 	bool allowed;
 } hook_user_logout_check_t;
 

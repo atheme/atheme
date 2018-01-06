@@ -38,7 +38,6 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn;
 	char *user = parv[0];
 	char *pass = parv[1];
-	hook_user_logout_check_t req;
 
 	if ((!si->smu) && (!user || !pass))
 	{
@@ -69,9 +68,12 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	req.si = si;
-	req.u = u;
-	req.allowed = true;
+	hook_user_logout_check_t req = {
+		.si      = si,
+		.u       = u,
+		.allowed = true,
+		.relogin = false,
+	};
 	hook_call_user_can_logout(&req);
 	if (!req.allowed)
 	{
