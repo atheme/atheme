@@ -98,7 +98,8 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				if (memo->status & MEMO_CHANNEL)
 					;
 				else if (strcasecmp(si->service->nick, memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
-					myuser_notice(si->service->me->nick, tmu, "%s has read your memo, which was sent at %s", entity(si->smu)->name, strfbuf);
+					myuser_notice(si->service->me->nick, tmu, "%s has read your memo, which was sent at %s.  The memo contained the following text:", entity(si->smu)->name, strfbuf);
+					myuser_notice(si->service->me->nick, tmu, "%s", memo->text);
 				else
 				{
 					/* If they have an account, their inbox is not full and they aren't memoserv */
