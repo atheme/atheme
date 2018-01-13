@@ -1,0 +1,23 @@
+Building from the Git repository
+--------------------------------
+
+The Atheme Git repository can be checked out using the following command:
+  $ git clone --recursive 'https://github.com/atheme/atheme.git' atheme-devel
+  $ cd atheme-devel
+
+Atheme's Git repository depot can be browsed over the internet at the
+following address: <https://github.com/atheme/atheme/>
+
+
+
+Building from release tarballs
+------------------------------
+
+If you did not use Git, but received the GIT-Access.txt error anyway, this
+means you downloaded the wrong source archive.
+
+When downloading releases from GitHub, you MUST use the attached archive:
+
+	atheme-7.x.x.tar.bz2
+
+DO NOT use the "Source code (tar.gz)" links, as they're missing submodules.

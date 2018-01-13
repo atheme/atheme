@@ -15,10 +15,10 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([include/sysconf.h])
 AC_PREFIX_DEFAULT([~/atheme])
 
-AC_MSG_CHECKING([if you read GIT-Access])
+AC_MSG_CHECKING([if you read GIT-Access.txt])
 if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
 	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([please read GIT-Access before trying to build from git])
+	AC_MSG_ERROR([please read GIT-Access.txt before trying to build from git])
 fi
 AC_MSG_RESULT([yes])
 
