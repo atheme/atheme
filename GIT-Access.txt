@@ -1,15 +1,31 @@
-The Atheme GIT repository can be checked out using the following command:
+Building from the Git repository
+--------------------------------
+
+The Atheme Git repository can be checked out using the following command:
+
 	$ git clone https://github.com/atheme/atheme.git atheme-devel
 	$ cd atheme-devel
-
-You should then run these commands to get the source for libmowgli-2 and
-the contrib modules. Even if you don't end up needing these, (you did not
-enable contrib modules or you have a system-wide libmowgli installation)
-you should still fetch the sources, as the build system expects them to
-be present.
 	$ git submodule init
 	$ git submodule update
 
-Atheme's GIT repository depot can be browsed over the internet at 
-the following address:
+You MUST run these commands to get the source for libmowgli-2 and the contrib
+modules. Even if you don't end up needing these, (you did not enable contrib
+modules or you have a system-wide libmowgli installation) you should still
+fetch the sources, as the build system expects them to be present.
+
+Atheme's Git repository depot can be browsed over the internet at the following
+address:
+
 	https://github.com/atheme/atheme/
+
+Building from release tarballs
+------------------------------
+
+If you did not use Git, but received the GIT-Access error anyway, this means
+you downloaded the wrong source archive.
+
+When downloading releases from GitHub, you MUST use the attached archive:
+
+	atheme-7.x.x.tar.bz2
+
+DO NOT use the "Source code (tar.gz)" links, as they're missing submodules.
