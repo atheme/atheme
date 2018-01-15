@@ -711,7 +711,7 @@ DELETE_FAILED = exit $$?
 else
 
 QUIET = 
-LINK_STATUS = printf "Link: ${LD} $@ $$LDOBJS ${LDFLAGS} ${LIBS}\n"
+LINK_STATUS = printf "Link: ${LD} -o $@ $$LDOBJS ${LDFLAGS} ${LIBS}\n"
 LINK_OK = true
 LINK_FAILED = exit $$?
 INSTALL_STATUS = printf "Install: $$i\n"
