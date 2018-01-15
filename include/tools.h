@@ -35,7 +35,12 @@ E uint32_t arc4random_uniform(uint32_t upper_bound);
 
 /* explicit_bzero.c */
 #ifndef HAVE_EXPLICIT_BZERO
+#  ifdef HAVE_MEMSET_S
+#    define explicit_bzero(p, n) memset_s((p), (n), 0x00, (n))
+#  else /* HAVE_MEMSET_S */
+E void *(* volatile volatile_memset)(void *, int, size_t);
 E void explicit_bzero(void *p, size_t n);
+#  endif /* !HAVE_MEMSET_S */
 #endif /* !HAVE_EXPLICIT_BZERO */
 
 /* cidr.c */
