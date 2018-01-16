@@ -79,47 +79,47 @@ struct soper_ {
 #define SOPER_CONF	0x1 /* oper is listed in atheme.conf */
 
 /* privs.c */
-E mowgli_list_t operclasslist;
-E mowgli_list_t soperlist;
+extern mowgli_list_t operclasslist;
+extern mowgli_list_t soperlist;
 
-E void init_privs(void);
+extern void init_privs(void);
 
-E operclass_t *operclass_add(const char *name, const char *privs, int flags);
-E void operclass_delete(operclass_t *operclass);
-E operclass_t *operclass_find(const char *name);
+extern operclass_t *operclass_add(const char *name, const char *privs, int flags);
+extern void operclass_delete(operclass_t *operclass);
+extern operclass_t *operclass_find(const char *name);
 
-E soper_t *soper_add(const char *name, const char *classname, int flags, const char *password);
-E void soper_delete(soper_t *soper);
-E soper_t *soper_find(myuser_t *myuser);
-E soper_t *soper_find_named(const char *name);
+extern soper_t *soper_add(const char *name, const char *classname, int flags, const char *password);
+extern void soper_delete(soper_t *soper);
+extern soper_t *soper_find(myuser_t *myuser);
+extern soper_t *soper_find_named(const char *name);
 
-E bool is_soper(myuser_t *myuser);
-E bool is_conf_soper(myuser_t *myuser);
+extern bool is_soper(myuser_t *myuser);
+extern bool is_conf_soper(myuser_t *myuser);
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
  * warning: do not use this for any kind of real privilege! */
-E bool has_any_privs(sourceinfo_t *);
-E bool has_any_privs_user(user_t *);
+extern bool has_any_privs(sourceinfo_t *);
+extern bool has_any_privs_user(user_t *);
 /* has_priv(): for sources of commands */
-E bool has_priv(sourceinfo_t *, const char *);
+extern bool has_priv(sourceinfo_t *, const char *);
 /* has_priv_user(): for online users */
-E bool has_priv_user(user_t *, const char *);
+extern bool has_priv_user(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
-E bool has_priv_myuser(myuser_t *, const char *);
+extern bool has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */
-E bool has_priv_operclass(operclass_t *, const char *);
+extern bool has_priv_operclass(operclass_t *, const char *);
 /* has_all_operclass(): checks if source has all privs in operclass */
-E bool has_all_operclass(sourceinfo_t *, operclass_t *);
+extern bool has_all_operclass(sourceinfo_t *, operclass_t *);
 
 /* get_sourceinfo_soper(): get the specific operclass role which is granting
  * privilege authority
  */
-E const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
+extern const soper_t *get_sourceinfo_soper(sourceinfo_t *si);
 /* get_sourceinfo_operclass(): get the specific operclass role which is granting
  * privilege authority
  */
-E const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si);
+extern const operclass_t *get_sourceinfo_operclass(sourceinfo_t *si);
 
 #endif /* PRIVS_H */
 

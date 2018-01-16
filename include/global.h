@@ -61,7 +61,7 @@ struct me
   bool hidden;			/* whether or not we should hide ourselves in /links (if the ircd supports it) */
 };
 
-E me_t me;
+extern me_t me;
 
 /* values for me.auth */
 #define AUTH_NONE  0
@@ -116,7 +116,7 @@ struct ConfOption
   bool show_entity_id;		/* do not require user:auspex to see entity IDs */
 };
 
-E struct ConfOption config_options;
+extern struct ConfOption config_options;
 
 /* keep track of how many of what we have */
 struct cnt
@@ -145,7 +145,7 @@ struct cnt
   unsigned int myuser_name;
 };
 
-E struct cnt cnt;
+extern struct cnt cnt;
 
 typedef struct claro_state_ {
 	unsigned int node;
@@ -154,12 +154,12 @@ typedef struct claro_state_ {
 	int maxfd;
 } claro_state_t;
 
-E claro_state_t claro_state;
+extern claro_state_t claro_state;
 
 #define CURRTIME claro_state.currtime
 
 /* run flags */
-E int runflags;
+extern int runflags;
 
 #define RF_LIVE         0x00000001      /* don't fork  */
 #define RF_SHUTDOWN     0x00000002      /* shut down   */
@@ -168,36 +168,36 @@ E int runflags;
 #define RF_REHASHING    0x00000010      /* rehashing   */
 
 /* node.c */
-E void init_nodes(void);
+extern void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
-E void mark_all_illegal(void);
-E void unmark_all_illegal(void);
-E void remove_illegals(void);
+extern void mark_all_illegal(void);
+extern void unmark_all_illegal(void);
+extern void remove_illegals(void);
 
 /* atheme.c */
-E mowgli_eventloop_t *base_eventloop;
-E bool cold_start;
-E bool readonly;
-E bool offline_mode;
-E bool permissive_mode;
-E char *config_file;
-E char *datadir;
+extern mowgli_eventloop_t *base_eventloop;
+extern bool cold_start;
+extern bool readonly;
+extern bool offline_mode;
+extern bool permissive_mode;
+extern char *config_file;
+extern char *datadir;
 
 /* conf.c */
-E const char *get_conf_opts(void);
+extern const char *get_conf_opts(void);
 
 /* version.c */
-E const char *creation;
-E const char *platform;
-E const char *version;
-E const char *revision;
-E const char *osinfo;
-E const char *infotext[];
+extern const char *creation;
+extern const char *platform;
+extern const char *version;
+extern const char *revision;
+extern const char *osinfo;
+extern const char *infotext[];
 
 /* signal.c */
-E void check_signals(void);
-E void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data);
-E void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
+extern void check_signals(void);
+extern void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data);
+extern void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data));
 
 #endif
 

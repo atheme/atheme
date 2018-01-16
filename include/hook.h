@@ -16,15 +16,15 @@ struct hook_ {
 	mowgli_list_t hooks;
 };
 
-E hook_t *hook_add_event(const char *);
-E void hook_del_event(const char *);
-E void hook_del_hook(const char *, hookfn_t);
-E void hook_add_hook(const char *, hookfn_t);
-E void hook_add_hook_first(const char *, hookfn_t);
-E void hook_call_event(const char *, void *);
+extern hook_t *hook_add_event(const char *);
+extern void hook_del_event(const char *);
+extern void hook_del_hook(const char *, hookfn_t);
+extern void hook_add_hook(const char *, hookfn_t);
+extern void hook_add_hook_first(const char *, hookfn_t);
+extern void hook_call_event(const char *, void *);
 
-E void hook_stop(void);
-E void hook_continue(void *newptr);
+extern void hook_stop(void);
+extern void hook_continue(void *newptr);
 
 #endif
 

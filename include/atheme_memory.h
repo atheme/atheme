@@ -9,11 +9,11 @@
 #ifndef ATHEME_MEMORY_H
 #define ATHEME_MEMORY_H
 
-E void *smalloc(size_t size);
-E void *scalloc(size_t elsize, size_t els);
-E void *srealloc(void *oldptr, size_t newsize);
-E char *sstrdup(const char *s);
-E char *sstrndup(const char *s, size_t len);
+extern void *smalloc(size_t size);
+extern void *scalloc(size_t elsize, size_t els);
+extern void *srealloc(void *oldptr, size_t newsize);
+extern char *sstrdup(const char *s);
+extern char *sstrndup(const char *s, size_t len);
 
 #endif
 

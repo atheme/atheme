@@ -10,14 +10,14 @@
 #define INTERNAL_H
 
 /* internal functions */
-E void event_init(void);
-E void hooks_init(void);
-E void init_dlink_nodes(void);
-E void init_netio(void);
-E void init_socket_queues(void);
-E void init_signal_handlers(void);
+extern void event_init(void);
+extern void hooks_init(void);
+extern void init_dlink_nodes(void);
+extern void init_netio(void);
+extern void init_socket_queues(void);
+extern void init_signal_handlers(void);
 
-E void language_init(void);
+extern void language_init(void);
 
 #endif
 

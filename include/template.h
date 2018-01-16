@@ -13,15 +13,15 @@ typedef struct {
 	unsigned int flags;
 } default_template_t;
 
-E const char *getitem(const char *str, const char *name);
-E unsigned int get_template_flags(mychan_t *mc, const char *name);
+extern const char *getitem(const char *str, const char *name);
+extern unsigned int get_template_flags(mychan_t *mc, const char *name);
 
-E void set_global_template_flags(const char *name, unsigned int flags);
-E unsigned int get_global_template_flags(const char *name);
-E void clear_global_template_flags(void);
-E void fix_global_template_flags(void);
+extern void set_global_template_flags(const char *name, unsigned int flags);
+extern unsigned int get_global_template_flags(const char *name);
+extern void clear_global_template_flags(void);
+extern void fix_global_template_flags(void);
 
-E mowgli_patricia_t *global_template_dict;
+extern mowgli_patricia_t *global_template_dict;
 
 #endif /* TEMPLATE_H */
 

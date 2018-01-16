@@ -62,32 +62,32 @@ typedef struct chanfix_persist {
 	mowgli_patricia_t *chanfix_channels;
 } chanfix_persist_record_t;
 
-E service_t *chanfix;
-E mowgli_patricia_t *chanfix_channels;
+extern service_t *chanfix;
+extern mowgli_patricia_t *chanfix_channels;
 
-E void chanfix_gather_init(chanfix_persist_record_t *);
-E void chanfix_gather_deinit(module_unload_intent_t, chanfix_persist_record_t *);
+extern void chanfix_gather_init(chanfix_persist_record_t *);
+extern void chanfix_gather_deinit(module_unload_intent_t, chanfix_persist_record_t *);
 
-E void chanfix_oprecord_update(chanfix_channel_t *chan, user_t *u);
-E void chanfix_oprecord_delete(chanfix_oprecord_t *orec);
-E chanfix_oprecord_t *chanfix_oprecord_create(chanfix_channel_t *chan, user_t *u);
-E chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u);
-E chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan);
-E chanfix_channel_t *chanfix_channel_find(const char *name);
-E chanfix_channel_t *chanfix_channel_get(channel_t *chan);
-E void chanfix_gather(void *unused);
-E void chanfix_expire(void *unused);
+extern void chanfix_oprecord_update(chanfix_channel_t *chan, user_t *u);
+extern void chanfix_oprecord_delete(chanfix_oprecord_t *orec);
+extern chanfix_oprecord_t *chanfix_oprecord_create(chanfix_channel_t *chan, user_t *u);
+extern chanfix_oprecord_t *chanfix_oprecord_find(chanfix_channel_t *chan, user_t *u);
+extern chanfix_channel_t *chanfix_channel_create(const char *name, channel_t *chan);
+extern chanfix_channel_t *chanfix_channel_find(const char *name);
+extern chanfix_channel_t *chanfix_channel_get(channel_t *chan);
+extern void chanfix_gather(void *unused);
+extern void chanfix_expire(void *unused);
 
-E bool chanfix_do_autofix;
-E void chanfix_autofix_ev(void *unused);
-E void chanfix_can_register(hook_channel_register_check_t *req);
+extern bool chanfix_do_autofix;
+extern void chanfix_autofix_ev(void *unused);
+extern void chanfix_can_register(hook_channel_register_check_t *req);
 
-E command_t cmd_list;
-E command_t cmd_chanfix;
-E command_t cmd_scores;
-E command_t cmd_info;
-E command_t cmd_help;
-E command_t cmd_mark;
-E command_t cmd_nofix;
+extern command_t cmd_list;
+extern command_t cmd_chanfix;
+extern command_t cmd_scores;
+extern command_t cmd_info;
+extern command_t cmd_help;
+extern command_t cmd_mark;
+extern command_t cmd_nofix;
 
 #endif

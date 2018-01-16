@@ -11,7 +11,7 @@
 #define ATHEME_TOOLS_H
 
 /* email stuff */
-E int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param);
+extern int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, const char *param);
 
 /* email types (meaning of param argument) */
 #define EMAIL_REGISTER	"register"	/* register an account/nick (verification code) */
@@ -22,14 +22,14 @@ E int sendemail(user_t *u, myuser_t *mu, const char *type, const char *email, co
 
 /* arc4random.c */
 #ifndef HAVE_ARC4RANDOM
-E void arc4random_stir(void);
-E void arc4random_addrandom(unsigned char *dat, int datlen);
-E unsigned int arc4random(void);
+extern void arc4random_stir(void);
+extern void arc4random_addrandom(unsigned char *dat, int datlen);
+extern unsigned int arc4random(void);
 #ifndef HAVE_ARC4RANDOM_BUF
-E void arc4random_buf(void *buf, size_t n);
+extern void arc4random_buf(void *buf, size_t n);
 #endif /* !HAVE_ARC4RANDOM_BUF */
 #ifndef HAVE_ARC4RANDOM_UNIFORM
-E uint32_t arc4random_uniform(uint32_t upper_bound);
+extern uint32_t arc4random_uniform(uint32_t upper_bound);
 #endif /* !HAVE_ARC4RANDOM_UNIFORM */
 #endif /* !HAVE_ARC4RANDOM */
 
@@ -38,13 +38,13 @@ E uint32_t arc4random_uniform(uint32_t upper_bound);
 #  ifdef HAVE_MEMSET_S
 #    define explicit_bzero(p, n) memset_s((p), (n), 0x00, (n))
 #  else /* HAVE_MEMSET_S */
-E void *(* volatile volatile_memset)(void *, int, size_t);
-E void explicit_bzero(void *p, size_t n);
+extern void *(* volatile volatile_memset)(void *, int, size_t);
+extern void explicit_bzero(void *p, size_t n);
 #  endif /* !HAVE_MEMSET_S */
 #endif /* !HAVE_EXPLICIT_BZERO */
 
 /* cidr.c */
-E int valid_ip_or_mask(const char *src);
+extern int valid_ip_or_mask(const char *src);
 
 typedef enum {
 	LOG_ANY = 0,
@@ -70,12 +70,12 @@ struct logfile_ {
 	log_type_t log_type;
 };
 
-E char *log_path; /* contains path to default log. */
-E int log_force;
+extern char *log_path; /* contains path to default log. */
+extern int log_force;
 
-E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
-E void logfile_register(logfile_t *lf);
-E void logfile_unregister(logfile_t *lf);
+extern logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
+extern void logfile_register(logfile_t *lf);
+extern void logfile_unregister(logfile_t *lf);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */
@@ -113,15 +113,15 @@ E void logfile_unregister(logfile_t *lf);
 #define CMDLOG_LOGIN    LG_CMD_LOGIN
 #define CMDLOG_GET      LG_CMD_GET
 
-E void log_open(void);
-E void log_shutdown(void);
-E bool log_debug_enabled(void);
-E void log_master_set_mask(unsigned int mask);
-E logfile_t *logfile_find_mask(unsigned int log_mask);
-E void slog(unsigned int level, const char *fmt, ...) PRINTFLIKE(2, 3);
-E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) PRINTFLIKE(3, 4);
-E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...) PRINTFLIKE(4, 5);
-E void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) PRINTFLIKE(7, 8);
+extern void log_open(void);
+extern void log_shutdown(void);
+extern bool log_debug_enabled(void);
+extern void log_master_set_mask(unsigned int mask);
+extern logfile_t *logfile_find_mask(unsigned int log_mask);
+extern void slog(unsigned int level, const char *fmt, ...) PRINTFLIKE(2, 3);
+extern void logcommand(sourceinfo_t *si, int level, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...) PRINTFLIKE(4, 5);
+extern void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...) PRINTFLIKE(7, 8);
 
 /* function.c */
 
@@ -134,35 +134,35 @@ typedef struct {
 } email_canonicalizer_item_t;
 
 /* misc string stuff */
-E char *random_string(size_t sz);
-E void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest);
-E void tb2sp(char *line);
-E char *replace(char *s, int size, const char *old, const char *new);
-E const char *number_to_string(int num);
-E int validemail(const char *email);
-E stringref canonicalize_email(const char *email);
-E void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data);
-E void register_email_canonicalizer(email_canonicalizer_t func, void *user_data);
-E void unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data);
-E bool email_within_limits(const char *email);
-E bool validhostmask(const char *host);
-E char *pretty_mask(char *mask);
-E bool validtopic(const char *topic);
-E bool has_ctrl_chars(const char *text);
-E char *sbytes(float x);
-E float bytes(float x);
+extern char *random_string(size_t sz);
+extern void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest);
+extern void tb2sp(char *line);
+extern char *replace(char *s, int size, const char *old, const char *new);
+extern const char *number_to_string(int num);
+extern int validemail(const char *email);
+extern stringref canonicalize_email(const char *email);
+extern void canonicalize_email_case(char email[EMAILLEN + 1], void *user_data);
+extern void register_email_canonicalizer(email_canonicalizer_t func, void *user_data);
+extern void unregister_email_canonicalizer(email_canonicalizer_t func, void *user_data);
+extern bool email_within_limits(const char *email);
+extern bool validhostmask(const char *host);
+extern char *pretty_mask(char *mask);
+extern bool validtopic(const char *topic);
+extern bool has_ctrl_chars(const char *text);
+extern char *sbytes(float x);
+extern float bytes(float x);
 
-E unsigned long makekey(void);
-E int srename(const char *old_fn, const char *new_fn);
+extern unsigned long makekey(void);
+extern int srename(const char *old_fn, const char *new_fn);
 
 /* time stuff */
 #if HAVE_GETTIMEOFDAY
-E void s_time(struct timeval *sttime);
-E void e_time(struct timeval sttime, struct timeval *ttime);
-E int tv2ms(struct timeval *tv);
+extern void s_time(struct timeval *sttime);
+extern void e_time(struct timeval sttime, struct timeval *ttime);
+extern int tv2ms(struct timeval *tv);
 #endif
-E char *time_ago(time_t event);
-E char *timediff(time_t seconds);
+extern char *time_ago(time_t event);
+extern char *timediff(time_t seconds);
 
 #ifndef timersub
 #define timersub(tvp, uvp, vvp)                                         \
@@ -177,18 +177,18 @@ E char *timediff(time_t seconds);
 #endif
 
 /* tokenize.c */
-E int sjtoken(char *message, char delimiter, char **parv);
-E int tokenize(char *message, char **parv);
+extern int sjtoken(char *message, char delimiter, char **parv);
+extern int tokenize(char *message, char **parv);
 
 /* ubase64.c */
-E const char *uinttobase64(char *buf, uint64_t v, int64_t count);
-E unsigned int base64touint(const char *buf);
-E void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
+extern const char *uinttobase64(char *buf, uint64_t v, int64_t count);
+extern unsigned int base64touint(const char *buf);
+extern void decode_p10_ip(const char *b64, char ipstring[HOSTIPLEN]);
 
 /* sharedheap.c */
-E mowgli_heap_t *sharedheap_get(size_t size);
-E void sharedheap_unref(mowgli_heap_t *heap);
-E char *combine_path(const char *parent, const char *child);
+extern mowgli_heap_t *sharedheap_get(size_t size);
+extern void sharedheap_unref(mowgli_heap_t *heap);
+extern char *combine_path(const char *parent, const char *child);
 
 #if !HAVE_VSNPRINTF
 int rpl_vsnprintf(char *, size_t, const char *, va_list);

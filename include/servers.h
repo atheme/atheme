@@ -54,18 +54,18 @@ typedef struct {
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 /* servers.c */
-E mowgli_patricia_t *servlist;
-E mowgli_list_t tldlist;
+extern mowgli_patricia_t *servlist;
+extern mowgli_list_t tldlist;
 
-E void init_servers(void);
+extern void init_servers(void);
 
-E tld_t *tld_add(const char *name);
-E void tld_delete(const char *name);
-E tld_t *tld_find(const char *name);
+extern tld_t *tld_add(const char *name);
+extern void tld_delete(const char *name);
+extern tld_t *tld_find(const char *name);
 
-E server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
-E void server_delete(const char *name);
-E server_t *server_find(const char *name);
+extern server_t *server_add(const char *name, unsigned int hops, server_t *uplink, const char *id, const char *desc);
+extern void server_delete(const char *name);
+extern server_t *server_find(const char *name);
 
 #endif
 

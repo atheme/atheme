@@ -27,44 +27,44 @@ struct pcommand_ {
 #define MAXPARC		35 /* max # params to protocol command */
 
 /* pmodule.c */
-E mowgli_heap_t *pcommand_heap;
-E mowgli_heap_t *messagetree_heap;
-E mowgli_patricia_t *pcommands;
+extern mowgli_heap_t *pcommand_heap;
+extern mowgli_heap_t *messagetree_heap;
+extern mowgli_patricia_t *pcommands;
 
-E bool pmodule_loaded;
+extern bool pmodule_loaded;
 
-E void pcommand_init(void);
-E void pcommand_add(const char *token,
+extern void pcommand_init(void);
+extern void pcommand_add(const char *token,
 	void (*handler)(sourceinfo_t *si, int parc, char *parv[]),
 	int minparc, int sourcetype);
-E void pcommand_delete(const char *token);
-E pcommand_t *pcommand_find(const char *token);
+extern void pcommand_delete(const char *token);
+extern pcommand_t *pcommand_find(const char *token);
 
 /* ptasks.c */
-E int get_version_string(char *, size_t);
-E void handle_version(user_t *);
-E void handle_admin(user_t *);
-E void handle_info(user_t *);
-E void handle_stats(user_t *, char);
-E void handle_whois(user_t *, const char *);
-E void handle_trace(user_t *, const char *, const char *);
-E void handle_motd(user_t *);
-E void handle_away(user_t *, const char *);
-E void handle_message(sourceinfo_t *, char *, bool, char *);
-E void handle_topic_from(sourceinfo_t *, channel_t *, const char *, time_t, const char *);
-E void handle_kill(sourceinfo_t *, const char *, const char *);
-E server_t *handle_server(sourceinfo_t *, const char *, const char *, int, const char *);
-E void handle_eob(server_t *);
-E bool should_reg_umode(user_t *);
+extern int get_version_string(char *, size_t);
+extern void handle_version(user_t *);
+extern void handle_admin(user_t *);
+extern void handle_info(user_t *);
+extern void handle_stats(user_t *, char);
+extern void handle_whois(user_t *, const char *);
+extern void handle_trace(user_t *, const char *, const char *);
+extern void handle_motd(user_t *);
+extern void handle_away(user_t *, const char *);
+extern void handle_message(sourceinfo_t *, char *, bool, char *);
+extern void handle_topic_from(sourceinfo_t *, channel_t *, const char *, time_t, const char *);
+extern void handle_kill(sourceinfo_t *, const char *, const char *);
+extern server_t *handle_server(sourceinfo_t *, const char *, const char *, int, const char *);
+extern void handle_eob(server_t *);
+extern bool should_reg_umode(user_t *);
 
 /* services.c */
-E void services_init(void);
-E void reintroduce_user(user_t *u);
-E void handle_nickchange(user_t *u);
-E void handle_burstlogin(user_t *u, const char *login, time_t ts);
-E void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts);
-E void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp);
-E void handle_clearlogin(sourceinfo_t *si, user_t *u);
+extern void services_init(void);
+extern void reintroduce_user(user_t *u);
+extern void handle_nickchange(user_t *u);
+extern void handle_burstlogin(user_t *u, const char *login, time_t ts);
+extern void handle_setlogin(sourceinfo_t *si, user_t *u, const char *login, time_t ts);
+extern void handle_certfp(sourceinfo_t *si, user_t *u, const char *certfp);
+extern void handle_clearlogin(sourceinfo_t *si, user_t *u);
 
 #endif
 

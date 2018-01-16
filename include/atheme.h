@@ -11,9 +11,6 @@
 
 /* *INDENT-OFF* */
 
-#define E extern
-#define DLE
-
 #include "sysconf.h"
 #include "stdinc.h"
 #include "i18n.h"

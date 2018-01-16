@@ -28,21 +28,21 @@ typedef struct {
 /*
  * Creates a new table object. Use object_unref() to destroy it.
  */
-E table_t *table_new(const char *fmt, ...) PRINTFLIKE(1, 2);
+extern table_t *table_new(const char *fmt, ...) PRINTFLIKE(1, 2);
 
 /*
  * Renders a table, each line going to callback().
  */
-E void table_render(table_t *t, void (*callback)(const char *line, void *data), void *data);
+extern void table_render(table_t *t, void (*callback)(const char *line, void *data), void *data);
 
 /*
  * Associates a value with a row.
  */
-E void table_cell_associate(table_row_t *r, const char *name, const char *value);
+extern void table_cell_associate(table_row_t *r, const char *name, const char *value);
 
 /*
  * Associates a row with a table.
  */
-E table_row_t *table_row_new(table_t *t);
+extern table_row_t *table_row_new(table_t *t);
 
 #endif

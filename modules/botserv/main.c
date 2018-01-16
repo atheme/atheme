@@ -32,7 +32,7 @@ service_t *botsvs;
 
 unsigned int min_users = 0;
 
-E mowgli_list_t mychan;
+extern mowgli_list_t mychan;
 
 mowgli_list_t bs_bots;
 

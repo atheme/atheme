@@ -48,21 +48,21 @@ typedef struct {
 	myentity_type_t type;
 } myentity_iteration_state_t;
 
-E void myentity_foreach(int (*cb)(myentity_t *me, void *privdata), void *privdata);
-E void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *me, void *privdata), void *privdata);
-E void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t type);
-E void myentity_foreach_next(myentity_iteration_state_t *state);
-E myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state);
+extern void myentity_foreach(int (*cb)(myentity_t *me, void *privdata), void *privdata);
+extern void myentity_foreach_t(myentity_type_t type, int (*cb)(myentity_t *me, void *privdata), void *privdata);
+extern void myentity_foreach_start(myentity_iteration_state_t *state, myentity_type_t type);
+extern void myentity_foreach_next(myentity_iteration_state_t *state);
+extern myentity_t *myentity_foreach_cur(myentity_iteration_state_t *state);
 
 #define MYENTITY_FOREACH_T(elem, state, type) for (myentity_foreach_start(state, type); (elem = myentity_foreach_cur(state)); myentity_foreach_next(state))
 #define MYENTITY_FOREACH(elem, state) MYENTITY_FOREACH_T(elem, state, 0)
 
-E void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata);
+extern void myentity_stats(void (*cb)(const char *line, void *privdata), void *privdata);
 
 /* chanacs */
-E unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset);
-E bool myentity_can_register_channel(myentity_t *mt);
-E bool myentity_allow_foundership(myentity_t *mt);
+extern unsigned int myentity_count_channels_with_flagset(myentity_t *mt, unsigned int flagset);
+extern bool myentity_can_register_channel(myentity_t *mt);
+extern bool myentity_allow_foundership(myentity_t *mt);
 
 typedef struct {
 	myentity_t *entity;

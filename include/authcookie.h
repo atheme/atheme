@@ -20,13 +20,13 @@ struct authcookie_ {
 	mowgli_node_t node;
 };
 
-E void authcookie_init(void);
-E authcookie_t *authcookie_create(myuser_t *mu);
-E authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser);
-E void authcookie_destroy(authcookie_t *ac);
-E void authcookie_destroy_all(myuser_t *mu);
-E bool authcookie_validate(const char *ticket, myuser_t *myuser);
-E void authcookie_expire(void *arg);
+extern void authcookie_init(void);
+extern authcookie_t *authcookie_create(myuser_t *mu);
+extern authcookie_t *authcookie_find(const char *ticket, myuser_t *myuser);
+extern void authcookie_destroy(authcookie_t *ac);
+extern void authcookie_destroy_all(myuser_t *mu);
+extern bool authcookie_validate(const char *ticket, myuser_t *myuser);
+extern void authcookie_expire(void *arg);
 
 #endif
 
