@@ -9,11 +9,11 @@
 #ifndef AUTH_H
 #define AUTH_H
 
-E void set_password(myuser_t *mu, const char *newpassword);
-E bool verify_password(myuser_t *mu, const char *password);
+extern void set_password(myuser_t *mu, const char *newpassword);
+extern bool verify_password(myuser_t *mu, const char *password);
 
-E bool auth_module_loaded;
-E bool (*auth_user_custom)(myuser_t *mu, const char *password);
+extern bool auth_module_loaded;
+extern bool (*auth_user_custom)(myuser_t *mu, const char *password);
 
 #endif
 

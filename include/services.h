@@ -82,64 +82,64 @@ struct nicksvs_
 #define FLOOD_LIGHT 0
 
 /* atheme.c */
-E chansvs_t chansvs;
-E nicksvs_t nicksvs;
+extern chansvs_t chansvs;
+extern nicksvs_t nicksvs;
 
 /* services.c */
-E int authservice_loaded;
-E int use_myuser_access;
-E int use_svsignore;
-E int use_privmsg;
-E int use_account_private;
-E int use_channel_private;
-E int use_limitflags;
+extern int authservice_loaded;
+extern int use_myuser_access;
+extern int use_svsignore;
+extern int use_privmsg;
+extern int use_account_private;
+extern int use_channel_private;
+extern int use_limitflags;
 
-E int ban(user_t *source, channel_t *chan, user_t *target);
-E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
-E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
+extern int ban(user_t *source, channel_t *chan, user_t *target);
+extern int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
+extern int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
 
-E void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason);
-E void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason);
+extern void try_kick_real(user_t *source, channel_t *chan, user_t *target, const char *reason);
+extern void (*try_kick)(user_t *source, channel_t *chan, user_t *target, const char *reason);
 
-E void kill_user(user_t *source, user_t *victim, const char *fmt, ...) PRINTFLIKE(3, 4);
-E void introduce_enforcer(const char *nick);
-E void join(const char *chan, const char *nick);
-E void joinall(const char *name);
-E void part(const char *chan, const char *nick);
-E void partall(const char *name);
-E void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount);
-E void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
-E void (*notice)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
-E void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
-E bool bad_password(sourceinfo_t *si, myuser_t *mu);
+extern void kill_user(user_t *source, user_t *victim, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void introduce_enforcer(const char *nick);
+extern void join(const char *chan, const char *nick);
+extern void joinall(const char *name);
+extern void part(const char *chan, const char *nick);
+extern void partall(const char *name);
+extern void myuser_login(service_t *svs, user_t *u, myuser_t *mu, bool sendaccount);
+extern void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
+extern void (*notice)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
+extern bool bad_password(sourceinfo_t *si, myuser_t *mu);
 
-E sourceinfo_t *sourceinfo_create(void);
-E void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
-E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
-E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);
-E void command_success_table(sourceinfo_t *si, table_t *table);
-E const char *get_source_name(sourceinfo_t *si);
-E const char *get_source_mask(sourceinfo_t *si);
-E const char *get_oper_name(sourceinfo_t *si);
-E const char *get_storage_oper_name(sourceinfo_t *si);
-E const char *get_source_security_label(sourceinfo_t *si);
+extern sourceinfo_t *sourceinfo_create(void);
+extern void command_fail(sourceinfo_t *si, cmd_faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
+extern void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void command_success_table(sourceinfo_t *si, table_t *table);
+extern const char *get_source_name(sourceinfo_t *si);
+extern const char *get_source_mask(sourceinfo_t *si);
+extern const char *get_oper_name(sourceinfo_t *si);
+extern const char *get_storage_oper_name(sourceinfo_t *si);
+extern const char *get_source_security_label(sourceinfo_t *si);
 
-E void wallops(const char *, ...) PRINTFLIKE(1, 2);
-E void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
-E bool check_vhost_validity(sourceinfo_t *si, const char *host);
+extern void wallops(const char *, ...) PRINTFLIKE(1, 2);
+extern void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
+extern bool check_vhost_validity(sourceinfo_t *si, const char *host);
 
 /* ptasks.c */
-E void handle_topic(channel_t *, const char *, time_t, const char *);
-E int floodcheck(user_t *, user_t *);
-E void command_add_flood(sourceinfo_t *si, unsigned int amount);
+extern void handle_topic(channel_t *, const char *, time_t, const char *);
+extern int floodcheck(user_t *, user_t *);
+extern void command_add_flood(sourceinfo_t *si, unsigned int amount);
 
 /* ctcp-common.c */
-E void common_ctcp_init(void);
-E unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
+extern void common_ctcp_init(void);
+extern unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
 
 #ifdef HAVE_LIBQRENCODE
 /* qrcode.c */
-E void command_success_qrcode(sourceinfo_t *si, const char *data);
+extern void command_success_qrcode(sourceinfo_t *si, const char *data);
 #endif /* HAVE_LIBQRENCODE */
 
 #endif /* !SERVICES_H */

@@ -11,14 +11,14 @@
 #define ATHEME_MATCH_H
 
 /* cidr.c */
-E int match_ips(const char *mask, const char *address);
-E int match_cidr(const char *mask, const char *address);
+extern int match_ips(const char *mask, const char *address);
+extern int match_cidr(const char *mask, const char *address);
 
 /* match.c */
 #define MATCH_RFC1459   0
 #define MATCH_ASCII     1
 
-E int match_mapping;
+extern int match_mapping;
 
 #define IsLower(c)  ((unsigned char)(c) > 0x5f)
 #define IsUpper(c)  ((unsigned char)(c) < 0x60)
@@ -28,7 +28,7 @@ E int match_mapping;
 #define C_NICK  0x00000004
 #define C_USER  0x00000008
 
-E const unsigned int charattrs[];
+extern const unsigned int charattrs[];
 
 #define IsAlpha(c)      (charattrs[(unsigned char) (c)] & C_ALPHA)
 #define IsDigit(c)      (charattrs[(unsigned char) (c)] & C_DIGIT)
@@ -37,23 +37,23 @@ E const unsigned int charattrs[];
 #define IsAlphaNum(c)   (IsAlpha((c)) || IsDigit((c)))
 #define IsNon(c)        (!IsAlphaNum((c)))
 
-E const unsigned char ToLowerTab[];
-E const unsigned char ToUpperTab[];
+extern const unsigned char ToLowerTab[];
+extern const unsigned char ToUpperTab[];
 
 void set_match_mapping(int);
 
-E int ToLower(int);
-E int ToUpper(int);
+extern int ToLower(int);
+extern int ToUpper(int);
 
-E int irccasecmp(const char *, const char *);
-E int ircncasecmp(const char *, const char *, size_t);
+extern int irccasecmp(const char *, const char *);
+extern int ircncasecmp(const char *, const char *, size_t);
 
-E void irccasecanon(char *);
-E void strcasecanon(char *);
-E void noopcanon(char *);
+extern void irccasecanon(char *);
+extern void strcasecanon(char *);
+extern void noopcanon(char *);
 
-E int match(const char *, const char *);
-E char *collapse(char *);
+extern int match(const char *, const char *);
+extern char *collapse(char *);
 
 /* regex_create() flags */
 #define AREGEX_ICASE	1 /* case insensitive */
@@ -62,10 +62,10 @@ E char *collapse(char *);
 
 typedef struct atheme_regex_ atheme_regex_t;
 
-E atheme_regex_t *regex_create(char *pattern, int flags);
-E char *regex_extract(char *pattern, char **pend, int *pflags);
-E bool regex_match(atheme_regex_t *preg, char *string);
-E bool regex_destroy(atheme_regex_t *preg);
+extern atheme_regex_t *regex_create(char *pattern, int flags);
+extern char *regex_extract(char *pattern, char **pend, int *pflags);
+extern bool regex_match(atheme_regex_t *preg, char *string);
+extern bool regex_destroy(atheme_regex_t *preg);
 
 #endif
 

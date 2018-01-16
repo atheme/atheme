@@ -95,15 +95,15 @@ typedef struct module_dependency_ {
 	module_unload_capability_t can_unload;
 } module_dependency_t;
 
-E void modules_init(void);
-E module_t *module_load(const char *filespec);
-E void module_load_dir(const char *dirspec);
-E void module_load_dir_match(const char *dirspec, const char *pattern);
-E void *module_locate_symbol(const char *modname, const char *sym);
-E void module_unload(module_t *m, module_unload_intent_t intent);
-E module_t *module_find(const char *name);
-E module_t *module_find_published(const char *name);
-E bool module_request(const char *name);
+extern void modules_init(void);
+extern module_t *module_load(const char *filespec);
+extern void module_load_dir(const char *dirspec);
+extern void module_load_dir_match(const char *dirspec, const char *pattern);
+extern void *module_locate_symbol(const char *modname, const char *sym);
+extern void module_unload(module_t *m, module_unload_intent_t intent);
+extern module_t *module_find(const char *name);
+extern module_t *module_find_published(const char *name);
+extern bool module_request(const char *name);
 
 #define DECLARE_MODULE_V1(name, unloadcap, modinit, moddeinit, ver, ven)   \
         v4_moduleheader_t _header = {                                      \

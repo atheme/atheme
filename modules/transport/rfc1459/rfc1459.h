@@ -9,7 +9,7 @@
 #ifndef RFC1459_H
 #define RFC1459_H
 
-E void irc_parse(char *line);
+extern void irc_parse(char *line);
 
 #endif
 

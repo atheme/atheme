@@ -22,13 +22,13 @@ typedef struct {
 
 } crypt_impl_t;
 
-E void crypt_register(crypt_impl_t *impl);
-E void crypt_unregister(crypt_impl_t *impl);
+extern void crypt_register(crypt_impl_t *impl);
+extern void crypt_unregister(crypt_impl_t *impl);
 
-E const crypt_impl_t *crypt_get_default_provider(void);
-E const crypt_impl_t *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
-E const char *crypt_password(const char *password);
-E const char *crypt_string(const char *password, const char *parameters);
+extern const crypt_impl_t *crypt_get_default_provider(void);
+extern const crypt_impl_t *crypt_verify_password(const char *password, const char *parameters, unsigned int *flags);
+extern const char *crypt_password(const char *password);
+extern const char *crypt_string(const char *password, const char *parameters);
 
 #endif
 

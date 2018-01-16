@@ -16,7 +16,7 @@ typedef struct {
 	mowgli_node_t node;
 } taint_reason_t;
 
-E mowgli_list_t taint_list;
+extern mowgli_list_t taint_list;
 
 #define IS_TAINTED	MOWGLI_LIST_LENGTH(&taint_list)
 #define TAINT_ON(cond, reason) \

@@ -32,27 +32,27 @@ struct uplink_
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
 
 /* uplink.c */
-E mowgli_list_t uplinks;
-E uplink_t *curr_uplink;
+extern mowgli_list_t uplinks;
+extern uplink_t *curr_uplink;
 
-E void init_uplinks(void);
-E uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
-E void uplink_delete(uplink_t *u);
-E uplink_t *uplink_find(const char *name);
-E void uplink_connect(void);
+extern void init_uplinks(void);
+extern uplink_t *uplink_add(const char *name, const char *host, const char *send_password, const char *receive_password, const char *vhost, int port);
+extern void uplink_delete(uplink_t *u);
+extern uplink_t *uplink_find(const char *name);
+extern void uplink_connect(void);
 
 /* packet.c */
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY
-E struct timeval burstime;
+extern struct timeval burstime;
 #endif
 
-E void (*parse)(char *line);
-E void irc_handle_connect(connection_t *cptr);
+extern void (*parse)(char *line);
+extern void irc_handle_connect(connection_t *cptr);
 
 /* send.c */
-E int sts(const char *fmt, ...) PRINTFLIKE(1, 2);
-E void io_loop(void);
+extern int sts(const char *fmt, ...) PRINTFLIKE(1, 2);
+extern void io_loop(void);
 
 #endif
 

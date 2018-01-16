@@ -365,7 +365,7 @@ typedef struct {
 } hook_user_needforce_t;
 
 /* pmodule.c XXX */
-E bool backend_loaded;
+extern bool backend_loaded;
 
 /* dbhandler.c */
 /* BLOCKING:     wait for the write to finish; cancel previous write if necessary
@@ -377,125 +377,125 @@ typedef enum {
 	DB_SAVE_BG_REGULAR,
 	DB_SAVE_BG_IMPORTANT
 } db_save_strategy_t;
-E void (*db_save)(void *arg, db_save_strategy_t strategy);
-E void (*db_load)(const char *arg);
+extern void (*db_save)(void *arg, db_save_strategy_t strategy);
+extern void (*db_load)(const char *arg);
 
 /* function.c */
-E bool is_founder(mychan_t *mychan, myentity_t *myuser);
+extern bool is_founder(mychan_t *mychan, myentity_t *myuser);
 
 /* node.c */
-E mowgli_list_t klnlist;
+extern mowgli_list_t klnlist;
 
-E kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
-E kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
-E kline_t *kline_add_user(user_t *user, const char *reason, long duration, const char *setby);
-E void kline_delete(kline_t *k);
-E kline_t *kline_find(const char *user, const char *host);
-E kline_t *kline_find_num(unsigned long number);
-E kline_t *kline_find_user(user_t *u);
-E void kline_expire(void *arg);
+extern kline_t *kline_add_with_id(const char *user, const char *host, const char *reason, long duration, const char *setby, unsigned long id);
+extern kline_t *kline_add(const char *user, const char *host, const char *reason, long duration, const char *setby);
+extern kline_t *kline_add_user(user_t *user, const char *reason, long duration, const char *setby);
+extern void kline_delete(kline_t *k);
+extern kline_t *kline_find(const char *user, const char *host);
+extern kline_t *kline_find_num(unsigned long number);
+extern kline_t *kline_find_user(user_t *u);
+extern void kline_expire(void *arg);
 
-E mowgli_list_t xlnlist;
+extern mowgli_list_t xlnlist;
 
-E xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby);
-E void xline_delete(const char *realname);
-E xline_t *xline_find(const char *realname);
-E xline_t *xline_find_num(unsigned int number);
-E xline_t *xline_find_user(user_t *u);
-E void xline_expire(void *arg);
+extern xline_t *xline_add(const char *realname, const char *reason, long duration, const char *setby);
+extern void xline_delete(const char *realname);
+extern xline_t *xline_find(const char *realname);
+extern xline_t *xline_find_num(unsigned int number);
+extern xline_t *xline_find_user(user_t *u);
+extern void xline_expire(void *arg);
 
-E mowgli_list_t qlnlist;
+extern mowgli_list_t qlnlist;
 
-E qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
-E void qline_delete(const char *mask);
-E qline_t *qline_find(const char *mask);
-E qline_t *qline_find_match(const char *mask);
-E qline_t *qline_find_num(unsigned int number);
-E qline_t *qline_find_user(user_t *u);
-E qline_t *qline_find_channel(channel_t *c);
-E void qline_expire(void *arg);
+extern qline_t *qline_add(const char *mask, const char *reason, long duration, const char *setby);
+extern void qline_delete(const char *mask);
+extern qline_t *qline_find(const char *mask);
+extern qline_t *qline_find_match(const char *mask);
+extern qline_t *qline_find_num(unsigned int number);
+extern qline_t *qline_find_user(user_t *u);
+extern qline_t *qline_find_channel(channel_t *c);
+extern void qline_expire(void *arg);
 
 /* account.c */
-E mowgli_patricia_t *nicklist;
-E mowgli_patricia_t *oldnameslist;
-E mowgli_patricia_t *mclist;
+extern mowgli_patricia_t *nicklist;
+extern mowgli_patricia_t *oldnameslist;
+extern mowgli_patricia_t *mclist;
 
-E void init_accounts(void);
+extern void init_accounts(void);
 
-E myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
-E myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
-E void myuser_delete(myuser_t *mu);
+extern myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
+extern myuser_t *myuser_add_id(const char *id, const char *name, const char *pass, const char *email, unsigned int flags);
+extern void myuser_delete(myuser_t *mu);
 //inline myuser_t *myuser_find(const char *name);
-E void myuser_rename(myuser_t *mu, const char *name);
-E void myuser_set_email(myuser_t *mu, const char *newemail);
-E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) PRINTFLIKE(3, 4);
+extern void myuser_rename(myuser_t *mu, const char *name);
+extern void myuser_set_email(myuser_t *mu, const char *newemail);
+extern myuser_t *myuser_find_ext(const char *name);
+extern void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 
-E bool myuser_access_verify(user_t *u, myuser_t *mu);
-E bool myuser_access_add(myuser_t *mu, const char *mask);
-E char *myuser_access_find(myuser_t *mu, const char *mask);
-E void myuser_access_delete(myuser_t *mu, const char *mask);
+extern bool myuser_access_verify(user_t *u, myuser_t *mu);
+extern bool myuser_access_add(myuser_t *mu, const char *mask);
+extern char *myuser_access_find(myuser_t *mu, const char *mask);
+extern void myuser_access_delete(myuser_t *mu, const char *mask);
 
-E mynick_t *mynick_add(myuser_t *mu, const char *name);
-E void mynick_delete(mynick_t *mn);
+extern mynick_t *mynick_add(myuser_t *mu, const char *name);
+extern void mynick_delete(mynick_t *mn);
 //inline mynick_t *mynick_find(const char *name);
 
-E myuser_name_t *myuser_name_add(const char *name);
+extern myuser_name_t *myuser_name_add(const char *name);
 //inline myuser_name_t *myuser_name_find(const char *name);
-E void myuser_name_remember(const char *name, myuser_t *mu);
-E void myuser_name_restore(const char *name, myuser_t *mu);
+extern void myuser_name_remember(const char *name, myuser_t *mu);
+extern void myuser_name_restore(const char *name, myuser_t *mu);
 
-E mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp);
-E void mycertfp_delete(mycertfp_t *mcfp);
-E mycertfp_t *mycertfp_find(const char *certfp);
+extern mycertfp_t *mycertfp_add(myuser_t *mu, const char *certfp);
+extern void mycertfp_delete(mycertfp_t *mcfp);
+extern mycertfp_t *mycertfp_find(const char *certfp);
 
-E mychan_t *mychan_add(char *name);
+extern mychan_t *mychan_add(char *name);
 //inline mychan_t *mychan_find(const char *name);
-E bool mychan_isused(mychan_t *mc);
-E unsigned int mychan_num_founders(mychan_t *mc);
-E const char *mychan_founder_names(mychan_t *mc);
-E myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel);
-E myuser_t *mychan_pick_successor(mychan_t *mc);
-E const char *mychan_get_mlock(mychan_t *mc);
-E const char *mychan_get_sts_mlock(mychan_t *mc);
+extern bool mychan_isused(mychan_t *mc);
+extern unsigned int mychan_num_founders(mychan_t *mc);
+extern const char *mychan_founder_names(mychan_t *mc);
+extern myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel);
+extern myuser_t *mychan_pick_successor(mychan_t *mc);
+extern const char *mychan_get_mlock(mychan_t *mc);
+extern const char *mychan_get_sts_mlock(mychan_t *mc);
 
-E chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts, myentity_t *setter);
-E chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter);
+extern chanacs_t *chanacs_add(mychan_t *mychan, myentity_t *myuser, unsigned int level, time_t ts, myentity_t *setter);
+extern chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts, myentity_t *setter);
 
-E chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
-E unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *myuser);
+extern chanacs_t *chanacs_find(mychan_t *mychan, myentity_t *myuser, unsigned int level);
+extern unsigned int chanacs_entity_flags(mychan_t *mychan, myentity_t *myuser);
 //inline bool chanacs_entity_has_flag(mychan_t *mychan, myentity_t *mt, unsigned int level)
-E chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *myuser, unsigned int level);
-E chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
-E unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
-E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
-E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
-E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
-E bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
-E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
+extern chanacs_t *chanacs_find_literal(mychan_t *mychan, myentity_t *myuser, unsigned int level);
+extern chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level);
+extern unsigned int chanacs_host_flags(mychan_t *mychan, const char *host);
+extern chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level);
+extern chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
+extern chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
+extern bool chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
+extern unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 //inline bool chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
-E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
+extern unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
-E chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
+extern chanacs_t *chanacs_open(mychan_t *mychan, myentity_t *mt, const char *hostmask, bool create, myentity_t *setter);
 //inline void chanacs_close(chanacs_t *ca);
-E bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
-E bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
+extern bool chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myuser_t *setter);
+extern bool chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags, myuser_t *setter);
 
 //inline bool chanacs_is_table_full(chanacs_t *ca);
 
-E bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter);
-E bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter);
+extern bool chanacs_change(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags, myentity_t *setter);
+extern bool chanacs_change_simple(mychan_t *mychan, myentity_t *mt, const char *hostmask, unsigned int addflags, unsigned int removeflags, myentity_t *setter);
 
-E void expire_check(void *arg);
+extern void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
-E void db_check(void);
+extern void db_check(void);
 
 /* svsignore.c */
-E mowgli_list_t svs_ignore_list;
+extern mowgli_list_t svs_ignore_list;
 
-E svsignore_t *svsignore_find(user_t *user);
-E svsignore_t *svsignore_add(const char *mask, const char *reason);
-E void svsignore_delete(svsignore_t *svsignore);
+extern svsignore_t *svsignore_find(user_t *user);
+extern svsignore_t *svsignore_add(const char *mask, const char *reason);
+extern void svsignore_delete(svsignore_t *svsignore);
 
 #include "entity-validation.h"
 

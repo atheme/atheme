@@ -28,24 +28,24 @@ typedef struct {
 #endif
 } object_t;
 
-E void init_metadata(void);
+extern void init_metadata(void);
 
-E void object_init(object_t *, const char *name, destructor_t destructor);
-E void *object_ref(void *);
-E void *object_sink_ref(void *);
-E void object_unref(void *);
-E void object_dispose(void *);
+extern void object_init(object_t *, const char *name, destructor_t destructor);
+extern void *object_ref(void *);
+extern void *object_sink_ref(void *);
+extern void object_unref(void *);
+extern void object_dispose(void *);
 
-E metadata_t *metadata_add(void *target, const char *name, const char *value);
-E void metadata_delete(void *target, const char *name);
-E metadata_t *metadata_find(void *target, const char *name);
-E void metadata_delete_all(void *target);
+extern metadata_t *metadata_add(void *target, const char *name, const char *value);
+extern void metadata_delete(void *target, const char *name);
+extern metadata_t *metadata_find(void *target, const char *name);
+extern void metadata_delete_all(void *target);
 
-E void *privatedata_get(void *target, const char *key);
-E void privatedata_set(void *target, const char *key, void *data);
+extern void *privatedata_get(void *target, const char *key);
+extern void privatedata_set(void *target, const char *key, void *data);
 
 #ifdef OBJECT_DEBUG
-E mowgli_list_t object_list;
+extern mowgli_list_t object_list;
 #endif
 
 #define object(x) ((object_t *) x)

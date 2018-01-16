@@ -17,35 +17,35 @@ struct flags_table
 	const char *name;
 };
 
-E unsigned int ca_all;
-E struct flags_table chanacs_flags[256];
+extern unsigned int ca_all;
+extern struct flags_table chanacs_flags[256];
 
-E unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name);
-E void flags_clear(unsigned char flag);
-E unsigned int flags_find_slot(void);
+extern unsigned int flags_associate(unsigned char flag, unsigned int restrictflags, bool def, const char *name);
+extern void flags_clear(unsigned char flag);
+extern unsigned int flags_find_slot(void);
 
-E void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags);
-E unsigned int flags_to_bitmask(const char *, unsigned int flags);
-E char *bitmask_to_flags(unsigned int);
-E char *bitmask_to_flags2(unsigned int, unsigned int);
-E unsigned int allow_flags(mychan_t *mc, unsigned int flags);
-E void update_chanacs_flags(void);
+extern void flags_make_bitmasks(const char *string, unsigned int *addflags, unsigned int *removeflags);
+extern unsigned int flags_to_bitmask(const char *, unsigned int flags);
+extern char *bitmask_to_flags(unsigned int);
+extern char *bitmask_to_flags2(unsigned int, unsigned int);
+extern unsigned int allow_flags(mychan_t *mc, unsigned int flags);
+extern void update_chanacs_flags(void);
 
 typedef struct gflags {
 	char ch;
 	unsigned int value;
 } gflags_t;
 
-E gflags_t mu_flags[];
-E gflags_t mc_flags[];
-E gflags_t soper_flags[];
+extern gflags_t mu_flags[];
+extern gflags_t mc_flags[];
+extern gflags_t soper_flags[];
 
-E char *gflags_tostr(gflags_t *gflags, unsigned int flags);
-E bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
+extern char *gflags_tostr(gflags_t *gflags, unsigned int flags);
+extern bool gflags_fromstr(gflags_t *gflags, const char *f, unsigned int *res);
 
-E unsigned int xflag_lookup(const char *name);
-E unsigned int xflag_apply(unsigned int in, const char *name);
-E const char *xflag_tostr(unsigned int flags);
+extern unsigned int xflag_lookup(const char *name);
+extern unsigned int xflag_apply(unsigned int in, const char *name);
+extern const char *xflag_tostr(unsigned int flags);
 
 #endif
 

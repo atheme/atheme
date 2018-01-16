@@ -140,45 +140,45 @@ typedef struct {
 } hook_channel_mode_change_t;
 
 /* cmode.c */
-E char *flags_to_string(unsigned int flags);
-E int mode_to_flag(char c);
-E void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[]);
-E void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...);
-E void clear_simple_modes(channel_t *c);
-E char *channel_modes(channel_t *c, bool doparams);
-E void modestack_flush_channel(channel_t *channel);
-E void modestack_forget_channel(channel_t *channel);
-E void modestack_finalize_channel(channel_t *channel);
-E void check_modes(mychan_t *mychan, bool sendnow);
+extern char *flags_to_string(unsigned int flags);
+extern int mode_to_flag(char c);
+extern void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[]);
+extern void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...);
+extern void clear_simple_modes(channel_t *c);
+extern char *channel_modes(channel_t *c, bool doparams);
+extern void modestack_flush_channel(channel_t *channel);
+extern void modestack_forget_channel(channel_t *channel);
+extern void modestack_finalize_channel(channel_t *channel);
+extern void check_modes(mychan_t *mychan, bool sendnow);
 
-E void modestack_mode_simple_real(const char *source, channel_t *channel, int dir, int flags);
-E void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, unsigned int limit);
-E void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, unsigned int i, const char *value);
-E void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value);
+extern void modestack_mode_simple_real(const char *source, channel_t *channel, int dir, int flags);
+extern void modestack_mode_limit_real(const char *source, channel_t *channel, int dir, unsigned int limit);
+extern void modestack_mode_ext_real(const char *source, channel_t *channel, int dir, unsigned int i, const char *value);
+extern void modestack_mode_param_real(const char *source, channel_t *channel, int dir, char type, const char *value);
 
-E void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags);
-E void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit);
-E void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value);
-E void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value);
+extern void (*modestack_mode_simple)(const char *source, channel_t *channel, int dir, int flags);
+extern void (*modestack_mode_limit)(const char *source, channel_t *channel, int dir, unsigned int limit);
+extern void (*modestack_mode_ext)(const char *source, channel_t *channel, int dir, unsigned int i, const char *value);
+extern void (*modestack_mode_param)(const char *source, channel_t *channel, int dir, char type, const char *value);
 
-E void modestack_flush_now(void);
+extern void modestack_flush_now(void);
 
 /* channels.c */
-E mowgli_patricia_t *chanlist;
+extern mowgli_patricia_t *chanlist;
 
-E void init_channels(void);
+extern void init_channels(void);
 
-E channel_t *channel_add(const char *name, time_t ts, server_t *creator);
-E void channel_delete(channel_t *c);
+extern channel_t *channel_add(const char *name, time_t ts, server_t *creator);
+extern void channel_delete(channel_t *c);
 //inline channel_t *channel_find(const char *name);
 
-E chanuser_t *chanuser_add(channel_t *chan, const char *user);
-E void chanuser_delete(channel_t *chan, user_t *user);
-E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
+extern chanuser_t *chanuser_add(channel_t *chan, const char *user);
+extern void chanuser_delete(channel_t *chan, user_t *user);
+extern chanuser_t *chanuser_find(channel_t *chan, user_t *user);
 
-E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
-E void chanban_delete(chanban_t *c);
-E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
+extern chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
+extern void chanban_delete(chanban_t *c);
+extern chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 //inline void chanban_clear(channel_t *chan);
 
 #endif

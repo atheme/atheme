@@ -70,32 +70,32 @@ typedef struct {
 } hook_user_delete_t;
 
 /* function.c */
-E bool is_ircop(user_t *user);
-E bool is_admin(user_t *user);
-E bool is_internal_client(user_t *user);
-E bool is_autokline_exempt(user_t *user);
-E bool is_service(user_t *user);
+extern bool is_ircop(user_t *user);
+extern bool is_admin(user_t *user);
+extern bool is_internal_client(user_t *user);
+extern bool is_autokline_exempt(user_t *user);
+extern bool is_service(user_t *user);
 
 /* users.c */
-E mowgli_patricia_t *userlist;
-E mowgli_patricia_t *uidlist;
+extern mowgli_patricia_t *userlist;
+extern mowgli_patricia_t *uidlist;
 
-E void init_users(void);
+extern void init_users(void);
 
-E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
-E void user_delete(user_t *u, const char *comment);
-E user_t *user_find(const char *nick);
-E user_t *user_find_named(const char *nick);
-E void user_changeuid(user_t *u, const char *uid);
-E bool user_changenick(user_t *u, const char *nick, time_t ts);
-E void user_mode(user_t *user, const char *modes);
-E void user_sethost(user_t *source, user_t *target, const char *host);
-E const char *user_get_umodestr(user_t *u);
-E bool user_is_channel_banned(user_t *u, char ban_type);
+extern user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
+extern void user_delete(user_t *u, const char *comment);
+extern user_t *user_find(const char *nick);
+extern user_t *user_find_named(const char *nick);
+extern void user_changeuid(user_t *u, const char *uid);
+extern bool user_changenick(user_t *u, const char *nick, time_t ts);
+extern void user_mode(user_t *user, const char *modes);
+extern void user_sethost(user_t *source, user_t *target, const char *host);
+extern const char *user_get_umodestr(user_t *u);
+extern bool user_is_channel_banned(user_t *u, char ban_type);
 
 /* uid.c */
-E void init_uid(void);
-E const char *uid_get(void);
+extern void init_uid(void);
+extern const char *uid_get(void);
 
 #endif
 

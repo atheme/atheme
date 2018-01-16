@@ -9,15 +9,15 @@
 #ifndef ATHEME_STRING_H
 #define ATHEME_STRING_H
 
-E void strip(char *line);
-E void strip_ctrl(char *line);
+extern void strip(char *line);
+extern void strip_ctrl(char *line);
 
 #ifndef HAVE_STRTOK_R
-E char *strtok_r(char *s, const char *delim, char **lasts);
+extern char *strtok_r(char *s, const char *delim, char **lasts);
 #endif
 
 #ifndef HAVE_STRCASESTR
-E char *strcasestr(char *s, const char *find);
+extern char *strcasestr(char *s, const char *find);
 #endif
 
 #endif
