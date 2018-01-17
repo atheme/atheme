@@ -391,13 +391,12 @@ AS_IF([test "x${enable_propolice}" = "xyes"],
 AC_ARG_ENABLE([profile],
 	[AS_HELP_STRING([--enable-profile],[ Enable profiling extensions])],
 	[], [enable_profile=no])
-AS_IF([test "x${enable_profile}" = "xyes"],
-	[
+AS_IF([test "x${enable_profile}" = "xyes"], [
+	CFLAGS_SAVED="${CFLAGS}"
 	ATHEME_CC_TEST_CFLAGS([-pg])
-	ac_save_LDFLAGS="${LDFLAGS} -pg"
-	LDFLAGS="${ac_save_LDFLAGS}"
-	]
-)
+	AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"], [LDFLAGS="${LDFLAGS} -pg"])
+	CFLAGS="${CFLAGS_SAVED}"
+])
 
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
