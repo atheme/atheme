@@ -535,6 +535,9 @@ AC_OUTPUT
 prefix="$(eval echo "${prefix}")"
 prefix="$(eval echo "${prefix}")"
 
+bindir="$(eval echo "${bindir}")"
+bindir="$(eval echo "${bindir}")"
+
 MODDIR="$(eval echo "${MODDIR}")"
 MODDIR="$(eval echo "${MODDIR}")"
 
@@ -556,6 +559,7 @@ Configuration:
     Atheme Version ..........: ${PACKAGE_VERSION}
 
     Installation Prefix .....: ${prefix}
+    Binary Directory ........: ${bindir}
     Module Directory ........: ${MODDIR}/modules
     Config Directory ........: ${sysconfdir}
     Logfile Directory .......: ${LOGDIR}
