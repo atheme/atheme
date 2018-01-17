@@ -14017,7 +14017,7 @@ Configuration:
     Atheme Version ..........: ${PACKAGE_VERSION}
 
     Installation Prefix .....: ${prefix}
-    Module Root Directory ...: ${MODDIR}
+    Module Directory ........: ${MODDIR}/modules
     Config Directory ........: ${sysconfdir}
     Logfile Directory .......: ${LOGDIR}
     Data Directory ..........: ${DATADIR}
