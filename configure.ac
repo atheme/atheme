@@ -367,10 +367,14 @@ case "${host}" in
         ;;
 esac
 
+BUILD_WARNINGS="No"
 AC_ARG_ENABLE([warnings],
 	[AS_HELP_STRING([--enable-warnings],[ Enable compiler warnings])],
-	[], [enable_warnings=no])
-AS_IF([test "x${enable_warnings}" = "xyes"], [ATHEME_CC_ENABLE_WARNINGS])
+	[], [enable_warnings="no"])
+AS_IF([test "x${enable_warnings}" = "xyes"], [
+	ATHEME_CC_ENABLE_WARNINGS
+	BUILD_WARNINGS="Yes"
+])
 
 AC_ARG_ENABLE([propolice],
 	[AS_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)])],
@@ -534,6 +538,7 @@ Configuration:
     Internationalization ....: ${USE_GETTEXT}
     Large Network Support ...: ${LARGE_NET}
     Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+    Build Warnings ..........: ${BUILD_WARNINGS}
 
     CrackLib Support ........: ${LIBCRACKLIB}
     GNU libidn Support ......: ${LIBIDN}
