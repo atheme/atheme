@@ -398,6 +398,22 @@ AS_IF([test "x${enable_profile}" = "xyes"], [
 	CFLAGS="${CFLAGS_SAVED}"
 ])
 
+AC_ARG_ENABLE([relro],
+	[AS_HELP_STRING([--enable-relro], [Enable -Wl,-z,relro to mark the relocation table read-only])],
+	[], [enable_relro="yes"])
+
+AC_ARG_ENABLE([nonlazy-bind],
+	[AS_HELP_STRING([--enable-nonlazy-bind], [Enable -Wl,-z,now to resolve all symbols at startup time])],
+	[], [enable_nonlazy_bind="yes"])
+
+AC_ARG_ENABLE([as-needed],
+	[AS_HELP_STRING([--enable-as-needed], [Enable -Wl,--as-needed to strip unnecessary libraries at link time])],
+	[], [enable_as_needed="yes"])
+
+AS_IF([test "x${enable_relro}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,-z,relro])])
+AS_IF([test "x${enable_nonlazy_bind}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,-z,now])])
+AS_IF([test "x${enable_as_needed}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,--as-needed])])
+
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
 AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),

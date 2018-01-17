@@ -784,6 +784,9 @@ enable_contrib
 enable_warnings
 enable_propolice
 enable_profile
+enable_relro
+enable_nonlazy_bind
+enable_as_needed
 enable_rpath
 with_libmowgli
 with_pcre
@@ -1427,6 +1430,12 @@ Optional Features:
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
   --enable-profile        Enable profiling extensions
+  --enable-relro          Enable -Wl,-z,relro to mark the relocation table
+                          read-only
+  --enable-nonlazy-bind   Enable -Wl,-z,now to resolve all symbols at startup
+                          time
+  --enable-as-needed      Enable -Wl,--as-needed to strip unnecessary
+                          libraries at link time
   --disable-rpath         Disable use of -Wl,-rpath= during linking
 
 Optional Packages:
@@ -11791,6 +11800,160 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
   LDFLAGS="${LDFLAGS} -pg"
 fi
 	CFLAGS="${CFLAGS_SAVED}"
+
+fi
+
+# Check whether --enable-relro was given.
+if test "${enable_relro+set}" = set; then :
+  enableval=$enable_relro;
+else
+  enable_relro="yes"
+fi
+
+
+# Check whether --enable-nonlazy-bind was given.
+if test "${enable_nonlazy_bind+set}" = set; then :
+  enableval=$enable_nonlazy_bind;
+else
+  enable_nonlazy_bind="yes"
+fi
+
+
+# Check whether --enable-as-needed was given.
+if test "${enable_as_needed+set}" = set; then :
+  enableval=$enable_as_needed;
+else
+  enable_as_needed="yes"
+fi
+
+
+if test "x${enable_relro}" = "xyes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wl,-z,relro " >&5
+$as_echo_n "checking for C compiler flag(s) -Wl,-z,relro ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wl,-z,relro"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+fi
+if test "x${enable_nonlazy_bind}" = "xyes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wl,-z,now " >&5
+$as_echo_n "checking for C compiler flag(s) -Wl,-z,now ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wl,-z,now"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
+
+fi
+if test "x${enable_as_needed}" = "xyes"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler flag(s) -Wl,--as-needed " >&5
+$as_echo_n "checking for C compiler flag(s) -Wl,--as-needed ... " >&6; }
+
+		CFLAGS_SAVED="${CFLAGS}"
+		CFLAGS="${CFLAGS} -Wl,--as-needed"
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+		unset CFLAGS_SAVED
+
 
 fi
 
