@@ -15,7 +15,7 @@ plugindir = $(MODDIR)/modules/scripting
 CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR=\"$(plugindir)\"
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS) $(PERL_LIBS)
-LIBS +=	-L../../../libathemecore -lathemecore ${LDFLAGS_RPATH}
+LIBS +=	-L../../../libathemecore -lathemecore
 
 # Some of the code from Perl is not designed to compile with warnings.
 PERL_WARN_HACKS = -Wno-redundant-decls -Wno-float-equal -Wno-unused-value

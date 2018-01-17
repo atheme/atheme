@@ -1,4 +1,4 @@
-dnl Copyright (c) 2005 Atheme Development Group
+dnl Copyright (C) 2005-2018 Atheme Development Group
 dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
@@ -46,22 +46,20 @@ if test -z "${PKG_CONFIG}"; then
 	AC_MSG_ERROR([pkg-config not found])
 fi
 
-dnl Automake compatibility. --nenolod
-AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
-AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
-AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE"], [Name of package])
-AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Version number of package])
-AC_DEFINE([VENDOR_STRING], ["Atheme Development Group <http://atheme.github.io>"], [Vendor and URL for modules's "vendor" field])
-
-dnl GNU gettext
-
-dnl Uncomment this if we choose to provide our own libintl.
-AM_GNU_GETTEXT([external])
-LIBS="${LIBS} ${LIBINTL}"
-
 if test "x${prefix}" = "xNONE"; then
 	prefix="${ac_default_prefix}"
 fi
+
+dnl Automake compatibility. --nenolod
+AC_SUBST([PACKAGE], [AC_PACKAGE_TARNAME])
+AC_SUBST([VERSION], [AC_PACKAGE_VERSION])
+AC_DEFINE_UNQUOTED([PACKAGE], ["${PACKAGE}"], [Name of package])
+AC_DEFINE_UNQUOTED([VERSION], ["${VERSION}"], [Version number of package])
+AC_DEFINE([VENDOR_STRING], ["Atheme Development Group <http://atheme.github.io>"], [Vendor and URL for modules's "vendor" field])
+
+dnl GNU gettext
+AM_GNU_GETTEXT([external])
+LIBS="${LIBS} ${LIBINTL}"
 
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
@@ -71,13 +69,13 @@ AC_CHECK_HEADERS([link.h],,,[-])
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS([inet_pton inet_ntop gettimeofday umask arc4random arc4random_buf arc4random_uniform explicit_bzero memset_s getrlimit fork getpid execve strtok_r inet_ntop strcasestr flock])
-AC_CHECK_FUNC([socket], [], AC_CHECK_LIB([socket], [socket]))
-AC_CHECK_FUNC([gethostbyname], [], AC_CHECK_LIB([nsl], [gethostbyname]))
+AC_CHECK_FUNC([socket], [], [AC_CHECK_LIB([socket], [socket])])
+AC_CHECK_FUNC([gethostbyname], [], [AC_CHECK_LIB([nsl], [gethostbyname])])
 AC_SEARCH_LIBS([crypt], [crypt], [AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if crypt(3) is available])])
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
 
-CRACKLIB="no"
+LIBCRACKLIB="No"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
 AC_ARG_WITH([cracklib],
@@ -93,22 +91,22 @@ case "${with_cracklib}" in
 esac
 
 AS_IF([test "x${with_cracklib}" != "xno"], [
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	AC_SEARCH_LIBS([FascistCheck], [crack], [
-		CRACKLIB="yes"
+		LIBCRACKLIB="Yes"
 		CRACKLIB_C="cracklib.c"
 		AS_IF([test "x${ac_cv_search_FascistCheck}" != "xnone required"],
-			[CRACKLIB_LIBS="$ac_cv_search_FascistCheck"])
+			[CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"])
 	], [
 		AS_IF([test "x${with_cracklib}" != "xauto"],
 			[AC_MSG_ERROR([--with-cracklib was specified but cracklib could not be found])])
 	])
-	LIBS="${LIBS_save}"
+	LIBS="${LIBS_SAVED}"
 ])
 AC_SUBST([CRACKLIB_C])
 AC_SUBST([CRACKLIB_LIBS])
 
-LIBCRYPTO="no"
+LIBCRYPTO="No"
 LIBCRYPTO_LIBS=""
 AC_ARG_WITH([openssl],
 	[AS_HELP_STRING([--with-openssl], [Compile with OpenSSL to provide more functionality.])],
@@ -123,30 +121,30 @@ case "${with_openssl}" in
 esac
 
 AS_IF([test "x${with_openssl}" != "xno"], [
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	AC_SEARCH_LIBS([EVP_DigestUpdate], [crypto], [
-		LIBCRYPTO="yes"
+		LIBCRYPTO="Yes"
 		AS_IF([test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"],
-			[LIBCRYPTO_LIBS="$ac_cv_search_EVP_DigestUpdate"])
+			[LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"])
 	], [
 		AS_IF([test "x${with_openssl}" != "xauto"],
 			[AC_MSG_ERROR([--with-openssl was specified but OpenSSL could not be found])])
 	])
-	LIBS="${LIBS_save}"
+	LIBS="${LIBS_SAVED}"
 ])
-AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
+AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
 	AC_CHECK_HEADERS([openssl/ec.h], [], [], [])
 	AC_CHECK_HEADERS([openssl/evp.h openssl/hmac.h openssl/sha.h], [], [
-		LIBCRYPTO="no"
+		LIBCRYPTO="No"
 		AS_IF([test "x${with_openssl}" = "xyes"], [AC_MSG_ERROR([required header file missing])])
 	], [])
 ])
-AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
+AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
 	AC_DEFINE([HAVE_OPENSSL], [1], [Define to 1 if OpenSSL is available])
 	AC_SUBST([LIBCRYPTO_LIBS])
 ])
 
-LIBIDN="no"
+LIBIDN="No"
 LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
 	[AS_HELP_STRING([--with-libidn], [Compile with GNU libidn for SASL SCRAM-SHA support.])],
@@ -161,27 +159,18 @@ case "${with_libidn}" in
 esac
 
 AS_IF([test "x${with_libidn}" != "xno"], [
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	AC_SEARCH_LIBS([stringprep], [idn], [
-		LIBIDN="yes"
+		LIBIDN="Yes"
 		AS_IF([test "x${ac_cv_search_stringprep}" != "xnone required"],
-			[LIBIDN_LIBS="$ac_cv_search_stringprep"])
+			[LIBIDN_LIBS="${ac_cv_search_stringprep}"])
+		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
+		AC_SUBST([LIBIDN_LIBS])
 	], [
 		AS_IF([test "x${with_libidn}" != "xauto"],
 			[AC_MSG_ERROR([--with-libidn was specified but GNU libidn could not be found])])
 	])
-	LIBS="${LIBS_save}"
-])
-AS_IF([test "x${LIBIDN}" = "xyes"], [
-	AS_IF([test "x${LIBCRYPTO}" = "xyes"], [
-		AC_DEFINE([HAVE_LIBIDN], [1], [Define to 1 if we have GNU libidn available.])
-		AC_SUBST([LIBIDN_LIBS])
-	], [
-		AS_IF([test "x${with_libidn}" = "xyes"], [
-			AC_MSG_WARN([--with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too])
-		])
-		LIBIDN="no (requires OpenSSL)"
-	])
+	LIBS="${LIBS_SAVED}"
 ])
 
 AC_ARG_WITH([ldap],
@@ -207,8 +196,8 @@ AS_IF([test "x${with_ldap}" != "xno"], [
 		LDAP_AUTHC="ldap.c"
 	], [
 		unset ac_cv_lib_ldap_ldap_initialize
-		saveCFLAGS="${CFLAGS}"
-		saveLIBS="${LIBS}"
+		CFLAGS_SAVED="${CFLAGS}"
+		LIBS_SAVED="${LIBS}"
 		CFLAGS="${CFLAGS} -I/usr/local/include"
 		LIBS="${LIBS} -L/usr/local/lib"
 		AC_CHECK_LIB([ldap], [ldap_initialize], [
@@ -216,18 +205,19 @@ AS_IF([test "x${with_ldap}" != "xno"], [
 			LDAP_LIBS="-L/usr/local/lib -lldap"
 			LDAP_AUTHC="ldap.c"
 		])
-		CFLAGS="${saveCFLAGS}"
-		LIBS="${saveLIBS}"
+		CFLAGS="${CFLAGS_SAVED}"
+		LIBS="${LIBS_SAVED}"
 	])
 ])
 
 AS_IF([test "x${with_ldap}" = "xyes" && test "x${LDAP_AUTHC}" = "x"],
 	[AC_MSG_ERROR([LDAP support was explicitly requested but could not be found])])
 
-AC_SUBST(LDAP_CFLAGS)
-AC_SUBST(LDAP_LIBS)
-AC_SUBST(LDAP_AUTHC)
+AC_SUBST([LDAP_CFLAGS])
+AC_SUBST([LDAP_LIBS])
+AC_SUBST([LDAP_AUTHC])
 
+LIBPERL="No"
 AC_ARG_WITH([perl],
         [AS_HELP_STRING([--without-perl], [Disable building perl scripting module])],
         [], [with_perl="no"])
@@ -243,29 +233,31 @@ esac
 
 AS_IF([test "x${with_perl}" != "xno"],
 [
-  AC_PATH_PROG(perlpath, perl)
+  AC_PATH_PROG([perlpath], [perl])
+
   if test -n "${perlpath}"; then
-      PERL_ENABLE=perl
-      PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts`
-      PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
+      PERL_ENABLE="perl"
+      PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+      PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
+      LIBPERL="Yes"
   fi
 
   dnl if Perl is built with threading support, we need to link atheme against libpthread
-  if test -n "`echo "$PERL_LIBS" | grep pthread`"; then
-     LIBS="$LIBS -lpthread"
+  if test -n "$(echo "${PERL_LIBS}" | grep pthread)"; then
+     LIBS="${LIBS} -lpthread"
   fi
 ])
 
 AS_IF([test "x${with_perl}" = "xyes" && test "x${PERL_CFLAGS}" = "x"],
 	[AC_MSG_ERROR([Perl support was requested but Perl could not be found])])
 
-AC_SUBST(PERL_CFLAGS)
-AC_SUBST(PERL_LIBS)
-AC_SUBST(PERL_ENABLE)
+AC_SUBST([PERL_CFLAGS])
+AC_SUBST([PERL_LIBS])
+AC_SUBST([PERL_ENABLE])
 
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"
-AC_SUBST(mkdir_p)
+AC_SUBST([mkdir_p])
 
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
@@ -279,7 +271,7 @@ AC_MSG_CHECKING([if you want FHS-like pathnames])
 AC_ARG_ENABLE([fhs-paths],
 AS_HELP_STRING([--enable-fhs-paths], [ Use more FHS-like pathnames (for packagers)]),
 [
-  case "$enableval" in
+  case "${enableval}" in
   yes)
     FHSPATHS="yes"
     DOCDIR='${datadir}/doc/atheme'
@@ -294,7 +286,7 @@ AS_HELP_STRING([--enable-fhs-paths], [ Use more FHS-like pathnames (for packager
     ;;
   esac
 ])
-AC_MSG_RESULT([$FHSPATHS])
+AC_MSG_RESULT([${FHSPATHS}])
 AC_SUBST([DOCDIR])
 AC_SUBST([MODDIR])
 AC_SUBST([SHAREDIR])
@@ -311,65 +303,64 @@ dnl gettext
 LOCALEDIR='${datadir}/locale'
 AC_SUBST([LOCALEDIR])
 
-REPRODUCIBLEBUILDS="no"
+REPRODUCIBLE_BUILDS="No"
 AC_MSG_CHECKING([if you want reproducible builds])
 AC_ARG_ENABLE([reproducible-builds],
 AS_HELP_STRING([--enable-reproducible-builds],[ Enable reproducible builds.]),
 [
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    REPRODUCIBLEBUILDS="yes"
+    REPRODUCIBLE_BUILDS="Yes"
     AC_DEFINE([REPRODUCIBLE_BUILDS], [1], [Uncomment to enable reproducible builds.])
     ;;
   no)
-    REPRODUCIBLEBUILDS="no"
+    REPRODUCIBLE_BUILDS="No"
     ;;
   esac
 ])
-AC_MSG_RESULT([$REPRODUCIBLEBUILDS])
+AC_MSG_RESULT([${REPRODUCIBLE_BUILDS}])
 
-LARGENET="no"
+LARGE_NET="No"
 AC_MSG_CHECKING([if you want large network support])
 AC_ARG_ENABLE([large-net],
 AS_HELP_STRING([--enable-large-net],[ Enable large network support.]),
 [
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    LARGENET="yes"
+    LARGE_NET="Yes"
     AC_DEFINE([LARGE_NETWORK], [1], [Uncomment to enable large network support.])
     ;;
   no)
-    LARGENET="no"
+    LARGE_NET="No"
     ;;
   esac
 ])
-AC_MSG_RESULT([$LARGENET])
+AC_MSG_RESULT([${LARGE_NET}])
 
-CONTRIB="no"
+CONTRIB="No"
+CONTRIB_ENABLE=""
 AC_MSG_CHECKING([if you want contrib modules])
 AC_ARG_ENABLE([contrib],
 AS_HELP_STRING([--enable-contrib],[ Enable contrib modules.]),
 [
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    CONTRIB="yes"
+    CONTRIB="Yes"
     ;;
   no)
-    CONTRIB="no"
+    CONTRIB="No"
     ;;
   esac
 ])
-AC_MSG_RESULT([$CONTRIB])
+AC_MSG_RESULT([${CONTRIB}])
 
-if test "x${CONTRIB}" = "xyes"; then
+if test "x${CONTRIB}" = "xYes"; then
 	CONTRIB_ENABLE="contrib"
-else
-	CONTRIB_ENABLE=""
 fi
 
 AC_SUBST([CONTRIB_ENABLE])
 
-case "$host" in
+case "${host}" in
 *-*-mingw32)
     CFLAGS="-I/mingw/include ${CFLAGS}"
     LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
@@ -404,11 +395,6 @@ AS_IF([test "x${enable_profile}" = "xyes"],
 	]
 )
 
-ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-CPPFLAGS=${ac_save_CPPFLAGS}
-AC_SUBST(CPPFLAGS)
-dnl export CFLAGS
-
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
 AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),
@@ -418,7 +404,62 @@ if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
-LIBQRENCODE="no"
+AC_ARG_WITH([libmowgli],
+  AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
+  [], [with_libmowgli=yes])
+
+if test "x${with_libmowgli}" = "xyes"; then
+  PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0],
+    [MOWGLI_SOURCE="System"],
+    [with_libmowgli="no"])
+fi
+
+AS_IF(
+  [test "x${with_libmowgli}" = "xyes"], [ ],
+  [test "x${with_libmowgli}" = "xno"], [
+    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+    LIBMOWGLI="libmowgli-2"
+    MOWGLI_SOURCE="Internal"
+    AC_CONFIG_SUBDIRS([libmowgli-2])],
+  [ MOWGLI_SOURCE="System"
+    MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+    MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2" ])
+
+CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+LIBS="${LIBS} ${MOWGLI_LIBS}"
+
+AC_SUBST([MOWGLI_CFLAGS])
+AC_SUBST([MOWGLI_LIBS])
+AC_SUBST([LIBMOWGLI])
+
+LIBPCRE="No"
+AC_ARG_WITH([pcre],
+	[AS_HELP_STRING([--with-pcre], [Enable Perl-Compatible Regular Expression support])],
+	[], [with_pcre="auto"])
+
+case "${with_pcre}" in
+	no | yes | auto)
+		;;
+	*)
+		AC_MSG_ERROR([invalid option for --with-pcre])
+		;;
+esac
+
+AS_IF([test "x${with_pcre}" != "xno"], [
+	PKG_CHECK_MODULES([PCRE], [libpcre], [
+		LIBPCRE="Yes"
+		AC_DEFINE([HAVE_PCRE], [1], [Define to 1 if PCRE is available.])
+		AC_SUBST([PCRE_CFLAGS])
+		AC_SUBST([PCRE_LIBS])
+	], [
+		AS_IF([test "x${with_pcre}" != "xauto"], [
+		      AC_MSG_ERROR([--with-pcre was specified but the PCRE library could not be found])
+		])
+	])
+])
+
+LIBQRENCODE="No"
 QRCODE_C=""
 AC_ARG_WITH([qrencode],
 	[AS_HELP_STRING([--with-qrencode], [Compile with libqrencode for generating QR codes])],
@@ -433,68 +474,35 @@ case "${with_qrencode}" in
 esac
 
 AS_IF([test "x${with_qrencode}" != "xno"], [
-	PKG_CHECK_MODULES(LIBQRENCODE, [libqrencode], [
-		LIBQRENCODE="yes"
+	PKG_CHECK_MODULES([LIBQRENCODE], [libqrencode], [
+		LIBQRENCODE="Yes"
 		QRCODE_C="qrcode.c"
 		AC_SUBST([QRCODE_C])
 		AC_DEFINE([HAVE_LIBQRENCODE], [1], [Define to 1 if libqrencode is available])
 	], [
-		LIBQRENCODE="no"
+		LIBQRENCODE="No"
 		AS_IF([test "x${with_qrencode}" = "xyes"], [
 			AC_MSG_ERROR([--with-qrencode was specified but libqrencode could not be found])
 		])
 	])
 ])
 
-AC_ARG_WITH([libmowgli],
-  AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
-  [], [with_libmowgli=yes])
-
-if test "x${with_libmowgli}" = "xyes"; then
-  PKG_CHECK_MODULES([MOWGLI], [libmowgli-2 >= 2.0.0],
-    [MOWGLI_SOURCE="system"],
-    [with_libmowgli=no])
-fi
-
-AS_IF(
-  [test "x${with_libmowgli}" = "xyes"], [ ],
-  [test "x${with_libmowgli}" = "xno"], [
-    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-    LIBMOWGLI="libmowgli-2"
-    MOWGLI_SOURCE="internal"
-    AC_CONFIG_SUBDIRS([libmowgli-2])],
-  [ MOWGLI_SOURCE="system"
-    MOWGLI_CFLAGS="-I$with_libmowgli/include/libmowgli-2"
-    MOWGLI_LIBS="-L$with_libmowgli/lib -lmowgli-2" ])
-
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-AC_SUBST([MOWGLI_CFLAGS])
-AC_SUBST([MOWGLI_LIBS])
-AC_SUBST([LIBMOWGLI])
-
-AC_ARG_WITH([pcre],
-AS_HELP_STRING([--with-pcre],[ Enable PCRE regular expression support]),
-[],
-[with_pcre=no])
-
-if test "x${with_pcre}" != "xno"; then
-	PKG_CHECK_MODULES([PCRE], [libpcre], [], [AC_MSG_ERROR(PCRE requested, but not found)])
-	AC_SUBST([PCRE_CFLAGS])
-	AC_SUBST([PCRE_LIBS])
-	AC_DEFINE([HAVE_PCRE], [1], [Define if you want to use PCRE])
-fi
-
 BUILDROOT=`pwd`
 AC_SUBST([BUILDROOT])
 
 PODIR=""
+USE_GETTEXT="No"
 if test "x${USE_NLS}" = "xyes"; then
 	PODIR="po"
+	USE_GETTEXT="Yes"
 fi
 AC_SUBST([PODIR])
+
+CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
+LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+AC_SUBST([CPPFLAGS])
+AC_SUBST([LDFLAGS])
 
 BUILDSYS_TOUCH_DEPS
 
@@ -505,31 +513,42 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT
 
-d=`eval echo ${MODDIR}`
-d=`eval echo $d`
-d=`eval echo $d`
-d=`eval echo $d`
+d="$(eval echo "${MODDIR}")"
+d="$(eval echo "${d}")"
+d="$(eval echo "${d}")"
+d="$(eval echo "${d}")"
 
 echo "
 Configuration:
-	Atheme version       : ${PACKAGE_VERSION}
-	Installation prefix  : ${prefix}
-	Module root directory: ${d}
-	Config directory     : ${sysconfdir}
-	Logfile directory    : ${LOGDIR}
-	Data directory       : ${DATADIR}
-	PID directory        : ${RUNDIR}
-	Reproducible builds  : ${REPRODUCIBLEBUILDS}
-	Large network support: ${LARGENET}
-	OpenSSL support      : ${LIBCRYPTO}
-	GNU libidn support   : ${LIBIDN}
-	Contrib modules      : ${CONTRIB}
-	Mowgli installation  : ${MOWGLI_SOURCE}
-	PCRE support         : ${with_pcre}
-	Perl support         : ${with_perl}
-	CrackLib support     : ${CRACKLIB}
-	QR Code support      : ${LIBQRENCODE}
-	CFLAGS               : ${CFLAGS}
-	Internationalization : ${USE_NLS}
+
+    Atheme Version ..........: ${PACKAGE_VERSION}
+
+    Installation Prefix .....: ${prefix}
+    Module Root Directory ...: ${d}
+    Config Directory ........: ${sysconfdir}
+    Logfile Directory .......: ${LOGDIR}
+    Data Directory ..........: ${DATADIR}
+    PID Directory ...........: ${RUNDIR}
+
+    Contrib Modules .........: ${CONTRIB}
+    Internationalization ....: ${USE_GETTEXT}
+    Large Network Support ...: ${LARGE_NET}
+    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+
+    CrackLib Support ........: ${LIBCRACKLIB}
+    GNU libidn Support ......: ${LIBIDN}
+    OpenSSL Support .........: ${LIBCRYPTO}
+    PCRE Support ............: ${LIBPCRE}
+    Perl Support ............: ${LIBPERL}
+    QR Code Support .........: ${LIBQRENCODE}
+
+    Mowgli Installation .....: ${MOWGLI_SOURCE}
+
+    CC ......................: ${CC}
+    CFLAGS ..................: ${CFLAGS}
+    CPPFLAGS ................: ${CPPFLAGS}
+
+    LD ......................: ${LD}
+    LDFLAGS .................: ${LDFLAGS}
 
 Type make to build Atheme, and make install to install it."

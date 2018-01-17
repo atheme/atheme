@@ -13,5 +13,5 @@ plugindir = $(MODDIR)/modules/groupserv
 CPPFLAGS += -I../../../include -I..
 CFLAGS += $(PLUGIN_CFLAGS)
 LDFLAGS += $(PLUGIN_LDFLAGS)
-LIBS +=	-L../../../libathemecore -lathemecore ${LDFLAGS_RPATH}
+LIBS +=	-L../../../libathemecore -lathemecore
 

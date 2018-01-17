@@ -113,7 +113,7 @@
 /* Define to 1 if you have the <openssl/sha.h> header file. */
 #undef HAVE_OPENSSL_SHA_H
 
-/* Define if you want to use PCRE */
+/* Define to 1 if PCRE is available. */
 #undef HAVE_PCRE
 
 /* Define to 1 if the system has the type `ptrdiff_t'. */

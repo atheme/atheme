@@ -14,5 +14,5 @@ include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-LIBS +=	-L../../libathemecore -lathemecore ${LDFLAGS_RPATH}
+LIBS +=	-L../../libathemecore -lathemecore
 CPPFLAGS	+= -I../../include

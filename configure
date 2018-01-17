@@ -627,15 +627,15 @@ enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
 PODIR
 BUILDROOT
+QRCODE_C
+LIBQRENCODE_LIBS
+LIBQRENCODE_CFLAGS
 PCRE_LIBS
 PCRE_CFLAGS
 LIBMOWGLI
 subdirs
 MOWGLI_LIBS
 MOWGLI_CFLAGS
-QRCODE_C
-LIBQRENCODE_LIBS
-LIBQRENCODE_CFLAGS
 CONTRIB_ENABLE
 LOCALEDIR
 BUILDDIR
@@ -746,7 +746,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -786,9 +785,9 @@ enable_warnings
 enable_propolice
 enable_profile
 enable_rpath
-with_qrencode
 with_libmowgli
 with_pcre
+with_qrencode
 '
       ac_precious_vars='build_alias
 host_alias
@@ -800,12 +799,12 @@ LIBS
 CPPFLAGS
 CPP
 PKG_CONFIG
-LIBQRENCODE_CFLAGS
-LIBQRENCODE_LIBS
 MOWGLI_CFLAGS
 MOWGLI_LIBS
 PCRE_CFLAGS
-PCRE_LIBS'
+PCRE_LIBS
+LIBQRENCODE_CFLAGS
+LIBQRENCODE_LIBS'
 ac_subdirs_all='libmowgli-2'
 
 # Initialize some variables set by options.
@@ -844,7 +843,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1097,15 +1095,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1243,7 +1232,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1396,7 +1385,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1455,11 +1443,11 @@ Optional Packages:
   --with-libidn           Compile with GNU libidn for SASL SCRAM-SHA support.
   --without-ldap          Disable building ldap auth module.
   --without-perl          Disable building perl scripting module
-  --with-qrencode         Compile with libqrencode for generating QR codes
   --with-libmowgli[=prefix]
                           Specify location of system libmowgli install, or
                           "no" to force use of internal libmowgli
-  --with-pcre             Enable PCRE regular expression support
+  --with-pcre             Enable Perl-Compatible Regular Expression support
+  --with-qrencode         Compile with libqrencode for generating QR codes
 
 Some influential environment variables:
   CC          C compiler command
@@ -1471,15 +1459,15 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
   PKG_CONFIG  path to pkg-config utility
-  LIBQRENCODE_CFLAGS
-              C compiler flags for LIBQRENCODE, overriding pkg-config
-  LIBQRENCODE_LIBS
-              linker flags for LIBQRENCODE, overriding pkg-config
   MOWGLI_CFLAGS
               C compiler flags for MOWGLI, overriding pkg-config
   MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
   PCRE_CFLAGS C compiler flags for PCRE, overriding pkg-config
   PCRE_LIBS   linker flags for PCRE, overriding pkg-config
+  LIBQRENCODE_CFLAGS
+              C compiler flags for LIBQRENCODE, overriding pkg-config
+  LIBQRENCODE_LIBS
+              linker flags for LIBQRENCODE, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -4846,23 +4834,26 @@ if test -z "${PKG_CONFIG}"; then
 	as_fn_error $? "pkg-config not found" "$LINENO" 5
 fi
 
+if test "x${prefix}" = "xNONE"; then
+	prefix="${ac_default_prefix}"
+fi
+
 PACKAGE=atheme
 
 VERSION=7.3.0-dev
 
 
 cat >>confdefs.h <<_ACEOF
-#define PACKAGE "$PACKAGE"
+#define PACKAGE "${PACKAGE}"
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define VERSION "$VERSION"
+#define VERSION "${VERSION}"
 _ACEOF
 
 
 $as_echo "#define VENDOR_STRING \"Atheme Development Group <http://atheme.github.io>\"" >>confdefs.h
-
 
 
 # Find a good install program.  We prefer a C program (faster),
@@ -6525,10 +6516,6 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 LIBS="${LIBS} ${LIBINTL}"
 
-if test "x${prefix}" = "xNONE"; then
-	prefix="${ac_default_prefix}"
-fi
-
 
 for ac_header in link.h
 do :
@@ -7744,7 +7731,7 @@ fi
 fi
 
 
-CRACKLIB="no"
+LIBCRACKLIB="No"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
 
@@ -7766,7 +7753,7 @@ esac
 
 if test "x${with_cracklib}" != "xno"; then :
 
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing FascistCheck" >&5
 $as_echo_n "checking for library containing FascistCheck... " >&6; }
 if ${ac_cv_search_FascistCheck+:} false; then :
@@ -7821,10 +7808,10 @@ ac_res=$ac_cv_search_FascistCheck
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-		CRACKLIB="yes"
+		LIBCRACKLIB="Yes"
 		CRACKLIB_C="cracklib.c"
 		if test "x${ac_cv_search_FascistCheck}" != "xnone required"; then :
-  CRACKLIB_LIBS="$ac_cv_search_FascistCheck"
+  CRACKLIB_LIBS="${ac_cv_search_FascistCheck}"
 fi
 
 else
@@ -7835,13 +7822,13 @@ fi
 
 fi
 
-	LIBS="${LIBS_save}"
+	LIBS="${LIBS_SAVED}"
 
 fi
 
 
 
-LIBCRYPTO="no"
+LIBCRYPTO="No"
 LIBCRYPTO_LIBS=""
 
 # Check whether --with-openssl was given.
@@ -7862,7 +7849,7 @@ esac
 
 if test "x${with_openssl}" != "xno"; then :
 
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing EVP_DigestUpdate" >&5
 $as_echo_n "checking for library containing EVP_DigestUpdate... " >&6; }
 if ${ac_cv_search_EVP_DigestUpdate+:} false; then :
@@ -7917,9 +7904,9 @@ ac_res=$ac_cv_search_EVP_DigestUpdate
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-		LIBCRYPTO="yes"
+		LIBCRYPTO="Yes"
 		if test "x${ac_cv_search_EVP_DigestUpdate}" != "xnone required"; then :
-  LIBCRYPTO_LIBS="$ac_cv_search_EVP_DigestUpdate"
+  LIBCRYPTO_LIBS="${ac_cv_search_EVP_DigestUpdate}"
 fi
 
 else
@@ -7930,10 +7917,10 @@ fi
 
 fi
 
-	LIBS="${LIBS_save}"
+	LIBS="${LIBS_SAVED}"
 
 fi
-if test "x${LIBCRYPTO}" = "xyes"; then :
+if test "x${LIBCRYPTO}" = "xYes"; then :
 
 	for ac_header in openssl/ec.h
 do :
@@ -7958,7 +7945,7 @@ _ACEOF
 
 else
 
-		LIBCRYPTO="no"
+		LIBCRYPTO="No"
 		if test "x${with_openssl}" = "xyes"; then :
   as_fn_error $? "required header file missing" "$LINENO" 5
 fi
@@ -7969,7 +7956,7 @@ done
 
 
 fi
-if test "x${LIBCRYPTO}" = "xyes"; then :
+if test "x${LIBCRYPTO}" = "xYes"; then :
 
 
 $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
@@ -7978,7 +7965,7 @@ $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
 fi
 
-LIBIDN="no"
+LIBIDN="No"
 LIBIDN_LIBS=""
 
 # Check whether --with-libidn was given.
@@ -7999,7 +7986,7 @@ esac
 
 if test "x${with_libidn}" != "xno"; then :
 
-	LIBS_save="${LIBS}"
+	LIBS_SAVED="${LIBS}"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing stringprep" >&5
 $as_echo_n "checking for library containing stringprep... " >&6; }
 if ${ac_cv_search_stringprep+:} false; then :
@@ -8054,10 +8041,14 @@ ac_res=$ac_cv_search_stringprep
 if test "$ac_res" != no; then :
   test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
 
-		LIBIDN="yes"
+		LIBIDN="Yes"
 		if test "x${ac_cv_search_stringprep}" != "xnone required"; then :
-  LIBIDN_LIBS="$ac_cv_search_stringprep"
+  LIBIDN_LIBS="${ac_cv_search_stringprep}"
 fi
+
+$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
+
+
 
 else
 
@@ -8067,29 +8058,7 @@ fi
 
 fi
 
-	LIBS="${LIBS_save}"
-
-fi
-if test "x${LIBIDN}" = "xyes"; then :
-
-	if test "x${LIBCRYPTO}" = "xyes"; then :
-
-
-$as_echo "#define HAVE_LIBIDN 1" >>confdefs.h
-
-
-
-else
-
-		if test "x${with_libidn}" = "xyes"; then :
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too" >&5
-$as_echo "$as_me: WARNING: --with-libidn is only useful for the SASL SCRAM-SHA module which needs OpenSSL too" >&2;}
-
-fi
-		LIBIDN="no (requires OpenSSL)"
-
-fi
+	LIBS="${LIBS_SAVED}"
 
 fi
 
@@ -8161,8 +8130,8 @@ if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 else
 
 		unset ac_cv_lib_ldap_ldap_initialize
-		saveCFLAGS="${CFLAGS}"
-		saveLIBS="${LIBS}"
+		CFLAGS_SAVED="${CFLAGS}"
+		LIBS_SAVED="${LIBS}"
 		CFLAGS="${CFLAGS} -I/usr/local/include"
 		LIBS="${LIBS} -L/usr/local/lib"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap_initialize in -lldap" >&5
@@ -8209,8 +8178,8 @@ if test "x$ac_cv_lib_ldap_ldap_initialize" = xyes; then :
 
 fi
 
-		CFLAGS="${saveCFLAGS}"
-		LIBS="${saveLIBS}"
+		CFLAGS="${CFLAGS_SAVED}"
+		LIBS="${LIBS_SAVED}"
 
 fi
 
@@ -8225,6 +8194,7 @@ fi
 
 
 
+LIBPERL="No"
 
 # Check whether --with-perl was given.
 if test "${with_perl+set}" = set; then :
@@ -8285,14 +8255,16 @@ $as_echo "no" >&6; }
 fi
 
 
+
   if test -n "${perlpath}"; then
-      PERL_ENABLE=perl
-      PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts`
-      PERL_LIBS=`perl -MExtUtils::Embed -e ldopts`
+      PERL_ENABLE="perl"
+      PERL_CFLAGS="$(perl -MExtUtils::Embed -e ccopts)"
+      PERL_LIBS="$(perl -MExtUtils::Embed -e ldopts)"
+      LIBPERL="Yes"
   fi
 
-    if test -n "`echo "$PERL_LIBS" | grep pthread`"; then
-     LIBS="$LIBS -lpthread"
+    if test -n "$(echo "${PERL_LIBS}" | grep pthread)"; then
+     LIBS="${LIBS} -lpthread"
   fi
 
 fi
@@ -8321,7 +8293,7 @@ $as_echo_n "checking if you want FHS-like pathnames... " >&6; }
 # Check whether --enable-fhs-paths was given.
 if test "${enable_fhs_paths+set}" = set; then :
   enableval=$enable_fhs_paths;
-  case "$enableval" in
+  case "${enableval}" in
   yes)
     FHSPATHS="yes"
     DOCDIR='${datadir}/doc/atheme'
@@ -8338,8 +8310,8 @@ if test "${enable_fhs_paths+set}" = set; then :
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $FHSPATHS" >&5
-$as_echo "$FHSPATHS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${FHSPATHS}" >&5
+$as_echo "${FHSPATHS}" >&6; }
 
 
 
@@ -8353,81 +8325,80 @@ $as_echo "$FHSPATHS" >&6; }
 LOCALEDIR='${datadir}/locale'
 
 
-REPRODUCIBLEBUILDS="no"
+REPRODUCIBLE_BUILDS="No"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want reproducible builds" >&5
 $as_echo_n "checking if you want reproducible builds... " >&6; }
 # Check whether --enable-reproducible-builds was given.
 if test "${enable_reproducible_builds+set}" = set; then :
   enableval=$enable_reproducible_builds;
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    REPRODUCIBLEBUILDS="yes"
+    REPRODUCIBLE_BUILDS="Yes"
 
 $as_echo "#define REPRODUCIBLE_BUILDS 1" >>confdefs.h
 
     ;;
   no)
-    REPRODUCIBLEBUILDS="no"
+    REPRODUCIBLE_BUILDS="No"
     ;;
   esac
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $REPRODUCIBLEBUILDS" >&5
-$as_echo "$REPRODUCIBLEBUILDS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${REPRODUCIBLE_BUILDS}" >&5
+$as_echo "${REPRODUCIBLE_BUILDS}" >&6; }
 
-LARGENET="no"
+LARGE_NET="No"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want large network support" >&5
 $as_echo_n "checking if you want large network support... " >&6; }
 # Check whether --enable-large-net was given.
 if test "${enable_large_net+set}" = set; then :
   enableval=$enable_large_net;
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    LARGENET="yes"
+    LARGE_NET="Yes"
 
 $as_echo "#define LARGE_NETWORK 1" >>confdefs.h
 
     ;;
   no)
-    LARGENET="no"
+    LARGE_NET="No"
     ;;
   esac
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $LARGENET" >&5
-$as_echo "$LARGENET" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${LARGE_NET}" >&5
+$as_echo "${LARGE_NET}" >&6; }
 
-CONTRIB="no"
+CONTRIB="No"
+CONTRIB_ENABLE=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want contrib modules" >&5
 $as_echo_n "checking if you want contrib modules... " >&6; }
 # Check whether --enable-contrib was given.
 if test "${enable_contrib+set}" = set; then :
   enableval=$enable_contrib;
-  case "$enableval" in
+  case "${enableval}" in
   yes)
-    CONTRIB="yes"
+    CONTRIB="Yes"
     ;;
   no)
-    CONTRIB="no"
+    CONTRIB="No"
     ;;
   esac
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CONTRIB" >&5
-$as_echo "$CONTRIB" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${CONTRIB}" >&5
+$as_echo "${CONTRIB}" >&6; }
 
-if test "x${CONTRIB}" = "xyes"; then
+if test "x${CONTRIB}" = "xYes"; then
 	CONTRIB_ENABLE="contrib"
-else
-	CONTRIB_ENABLE=""
 fi
 
 
 
-case "$host" in
+case "${host}" in
 *-*-mingw32)
     CFLAGS="-I/mingw/include ${CFLAGS}"
     LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
@@ -11574,10 +11545,6 @@ $as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 
 fi
 
-ac_save_CPPFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
-CPPFLAGS=${ac_save_CPPFLAGS}
-
-
 enablerpath="yes"
 # Check whether --enable-rpath was given.
 if test "${enable_rpath+set}" = set; then :
@@ -11591,7 +11558,220 @@ if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
 
-LIBQRENCODE="no"
+
+# Check whether --with-libmowgli was given.
+if test "${with_libmowgli+set}" = set; then :
+  withval=$with_libmowgli;
+else
+  with_libmowgli=yes
+fi
+
+
+if test "x${with_libmowgli}" = "xyes"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
+$as_echo_n "checking for MOWGLI... " >&6; }
+
+if test -n "$MOWGLI_CFLAGS"; then
+    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$MOWGLI_LIBS"; then
+    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
+        else
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$MOWGLI_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+                with_libmowgli="no"
+elif test $pkg_failed = untried; then
+	with_libmowgli="no"
+else
+	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
+	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	MOWGLI_SOURCE="System"
+fi
+fi
+
+
+
+if test "x${with_libmowgli}" = "xyes"; then :
+
+elif test "x${with_libmowgli}" = "xno"; then :
+
+    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
+    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
+    LIBMOWGLI="libmowgli-2"
+    MOWGLI_SOURCE="Internal"
+    subdirs="$subdirs libmowgli-2"
+
+else
+   MOWGLI_SOURCE="System"
+    MOWGLI_CFLAGS="-I${with_libmowgli}/include/libmowgli-2"
+    MOWGLI_LIBS="-L${with_libmowgli}/lib -lmowgli-2"
+fi
+
+CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
+LIBS="${LIBS} ${MOWGLI_LIBS}"
+
+
+
+
+
+LIBPCRE="No"
+
+# Check whether --with-pcre was given.
+if test "${with_pcre+set}" = set; then :
+  withval=$with_pcre;
+else
+  with_pcre="auto"
+fi
+
+
+case "${with_pcre}" in
+	no | yes | auto)
+		;;
+	*)
+		as_fn_error $? "invalid option for --with-pcre" "$LINENO" 5
+		;;
+esac
+
+if test "x${with_pcre}" != "xno"; then :
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
+$as_echo_n "checking for PCRE... " >&6; }
+
+if test -n "$PCRE_CFLAGS"; then
+    pkg_cv_PCRE_CFLAGS="$PCRE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE_LIBS"; then
+    pkg_cv_PCRE_LIBS="$PCRE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libpcre" 2>&1`
+        else
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors "libpcre" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PCRE_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+		if test "x${with_pcre}" != "xauto"; then :
+
+		      as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+
+fi
+
+elif test $pkg_failed = untried; then
+
+		if test "x${with_pcre}" != "xauto"; then :
+
+		      as_fn_error $? "--with-pcre was specified but the PCRE library could not be found" "$LINENO" 5
+
+fi
+
+else
+	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
+	PCRE_LIBS=$pkg_cv_PCRE_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+		LIBPCRE="Yes"
+
+$as_echo "#define HAVE_PCRE 1" >>confdefs.h
+
+
+
+
+fi
+
+fi
+
+LIBQRENCODE="No"
 QRCODE_C=""
 
 # Check whether --with-qrencode was given.
@@ -11670,7 +11850,7 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-		LIBQRENCODE="no"
+		LIBQRENCODE="No"
 		if test "x${with_qrencode}" = "xyes"; then :
 
 			as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
@@ -11679,7 +11859,7 @@ fi
 
 elif test $pkg_failed = untried; then
 
-		LIBQRENCODE="no"
+		LIBQRENCODE="No"
 		if test "x${with_qrencode}" = "xyes"; then :
 
 			as_fn_error $? "--with-qrencode was specified but libqrencode could not be found" "$LINENO" 5
@@ -11692,7 +11872,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-		LIBQRENCODE="yes"
+		LIBQRENCODE="Yes"
 		QRCODE_C="qrcode.c"
 
 
@@ -11703,201 +11883,21 @@ fi
 
 fi
 
-
-# Check whether --with-libmowgli was given.
-if test "${with_libmowgli+set}" = set; then :
-  withval=$with_libmowgli;
-else
-  with_libmowgli=yes
-fi
-
-
-if test "x${with_libmowgli}" = "xyes"; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MOWGLI" >&5
-$as_echo_n "checking for MOWGLI... " >&6; }
-
-if test -n "$MOWGLI_CFLAGS"; then
-    pkg_cv_MOWGLI_CFLAGS="$MOWGLI_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$MOWGLI_LIBS"; then
-    pkg_cv_MOWGLI_LIBS="$MOWGLI_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmowgli-2 >= 2.0.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmowgli-2 >= 2.0.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
-        else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MOWGLI_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                with_libmowgli=no
-elif test $pkg_failed = untried; then
-	with_libmowgli=no
-else
-	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
-	MOWGLI_LIBS=$pkg_cv_MOWGLI_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	MOWGLI_SOURCE="system"
-fi
-fi
-
-
-
-if test "x${with_libmowgli}" = "xyes"; then :
-
-elif test "x${with_libmowgli}" = "xno"; then :
-
-    MOWGLI_CFLAGS="-I../libmowgli-2/src/libmowgli -I../../libmowgli-2/src/libmowgli -I../../../libmowgli-2/src/libmowgli"
-    MOWGLI_LIBS="-L../libmowgli-2/src/libmowgli -L../../libmowgli-2/src/libmowgli -L../../../libmowgli-2/src/libmowgli -lmowgli-2"
-    LIBMOWGLI="libmowgli-2"
-    MOWGLI_SOURCE="internal"
-    subdirs="$subdirs libmowgli-2"
-
-else
-   MOWGLI_SOURCE="system"
-    MOWGLI_CFLAGS="-I$with_libmowgli/include/libmowgli-2"
-    MOWGLI_LIBS="-L$with_libmowgli/lib -lmowgli-2"
-fi
-
-CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
-LIBS="${LIBS} ${MOWGLI_LIBS}"
-
-
-
-
-
-
-# Check whether --with-pcre was given.
-if test "${with_pcre+set}" = set; then :
-  withval=$with_pcre;
-else
-  with_pcre=no
-fi
-
-
-if test "x${with_pcre}" != "xno"; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PCRE" >&5
-$as_echo_n "checking for PCRE... " >&6; }
-
-if test -n "$PCRE_CFLAGS"; then
-    pkg_cv_PCRE_CFLAGS="$PCRE_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$PCRE_LIBS"; then
-    pkg_cv_PCRE_LIBS="$PCRE_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpcre") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libpcre" 2>&1`
-        else
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors "libpcre" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PCRE_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                as_fn_error but not found "PCRE requested" "$LINENO" 5
-elif test $pkg_failed = untried; then
-	as_fn_error but not found "PCRE requested" "$LINENO" 5
-else
-	PCRE_CFLAGS=$pkg_cv_PCRE_CFLAGS
-	PCRE_LIBS=$pkg_cv_PCRE_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-
-
-
-$as_echo "#define HAVE_PCRE 1" >>confdefs.h
-
-fi
-
 BUILDROOT=`pwd`
 
 
 PODIR=""
+USE_GETTEXT="No"
 if test "x${USE_NLS}" = "xyes"; then
 	PODIR="po"
+	USE_GETTEXT="Yes"
 fi
+
+
+CPPFLAGS="${CPPFLAGS} -DPREFIX=\\\"\${prefix}\\\" -DBINDIR=\\\"\${bindir}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
+LDFLAGS="${LDFLAGS} ${LDFLAGS_RPATH}"
+
+
 
 
 
@@ -13462,31 +13462,42 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-d=`eval echo ${MODDIR}`
-d=`eval echo $d`
-d=`eval echo $d`
-d=`eval echo $d`
+d="$(eval echo "${MODDIR}")"
+d="$(eval echo "${d}")"
+d="$(eval echo "${d}")"
+d="$(eval echo "${d}")"
 
 echo "
 Configuration:
-	Atheme version       : ${PACKAGE_VERSION}
-	Installation prefix  : ${prefix}
-	Module root directory: ${d}
-	Config directory     : ${sysconfdir}
-	Logfile directory    : ${LOGDIR}
-	Data directory       : ${DATADIR}
-	PID directory        : ${RUNDIR}
-	Reproducible builds  : ${REPRODUCIBLEBUILDS}
-	Large network support: ${LARGENET}
-	OpenSSL support      : ${LIBCRYPTO}
-	GNU libidn support   : ${LIBIDN}
-	Contrib modules      : ${CONTRIB}
-	Mowgli installation  : ${MOWGLI_SOURCE}
-	PCRE support         : ${with_pcre}
-	Perl support         : ${with_perl}
-	CrackLib support     : ${CRACKLIB}
-	QR Code support      : ${LIBQRENCODE}
-	CFLAGS               : ${CFLAGS}
-	Internationalization : ${USE_NLS}
+
+    Atheme Version ..........: ${PACKAGE_VERSION}
+
+    Installation Prefix .....: ${prefix}
+    Module Root Directory ...: ${d}
+    Config Directory ........: ${sysconfdir}
+    Logfile Directory .......: ${LOGDIR}
+    Data Directory ..........: ${DATADIR}
+    PID Directory ...........: ${RUNDIR}
+
+    Contrib Modules .........: ${CONTRIB}
+    Internationalization ....: ${USE_GETTEXT}
+    Large Network Support ...: ${LARGE_NET}
+    Reproducible Builds .....: ${REPRODUCIBLE_BUILDS}
+
+    CrackLib Support ........: ${LIBCRACKLIB}
+    GNU libidn Support ......: ${LIBIDN}
+    OpenSSL Support .........: ${LIBCRYPTO}
+    PCRE Support ............: ${LIBPCRE}
+    Perl Support ............: ${LIBPERL}
+    QR Code Support .........: ${LIBQRENCODE}
+
+    Mowgli Installation .....: ${MOWGLI_SOURCE}
+
+    CC ......................: ${CC}
+    CFLAGS ..................: ${CFLAGS}
+    CPPFLAGS ................: ${CPPFLAGS}
+
+    LD ......................: ${LD}
+    LDFLAGS .................: ${LDFLAGS}
 
 Type make to build Atheme, and make install to install it."

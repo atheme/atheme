@@ -77,7 +77,6 @@ ac_ct_CC ?= @ac_ct_CC@
 build_alias ?= @build_alias@
 PACKAGE_VERSION ?= @PACKAGE_VERSION@
 USE_NLS ?= @USE_NLS@
-LDFLAGS_RPATH ?= @LDFLAGS_RPATH@
 libdir ?= @libdir@
 CFLAGS ?= @CFLAGS@
 INSTALL_LIB ?= @INSTALL_LIB@
