@@ -2,18 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = security
-
-SRCS = cmdperm.c
+MODULE		= security
+SRCS		= cmdperm.c
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
-
+LIBS		+= -L../../libathemecore -lathemecore

@@ -1,15 +1,12 @@
-
 # Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = groupserv
+MODULE		= groupserv
+SUBDIRS		= main
 
-BASE_SRCS =			\
+SRCS =				\
 	acsnolimit.c		\
 	drop.c			\
 	fdrop.c			\
@@ -33,14 +30,9 @@ BASE_SRCS =			\
 	set_public.c		\
 	set_url.c		\
 
-SRCS = ${BASE_SRCS} ${EXTRA_SRCS}
-
-SUBDIRS = main
-
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
-
+LIBS		+= -L../../libathemecore -lathemecore

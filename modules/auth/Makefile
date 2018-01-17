@@ -2,20 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = auth
-
-SRCS =			\
-	dummy.c				\
-	$(LDAP_AUTHC)
+MODULE		= auth
+SRCS		= dummy.c $(LDAP_AUTHC)
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-LIBS 		+= -L../../libathemecore -lathemecore
-CPPFLAGS	+= -I../../include $(LDAP_CFLAGS)
-LIBS		+= $(LDAP_LIBS)
+CPPFLAGS	+= $(LDAP_CFLAGS) -I../../include
+LIBS 		+= $(LDAP_LIBS) -L../../libathemecore -lathemecore

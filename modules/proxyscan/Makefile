@@ -2,17 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-#
 
-MODULE = proxyscan
-
-SRCS = main.c dnsbl.c
+MODULE		= proxyscan
+SRCS		= dnsbl.c main.c
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
-
+LIBS		+= -L../../libathemecore -lathemecore

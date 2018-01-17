@@ -1,7 +1,6 @@
-PROG		= dbverify${PROG_SUFFIX}
 HELP_LINGUAS	= es ru
-
-SRCS = main.c
+PROG		= dbverify${PROG_SUFFIX}
+SRCS		= main.c
 
 include ../../extra.mk
 include ../../buildsys.mk

@@ -2,18 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = exttarget
-
-SRCS = main.c oper.c registered.c channel.c chanacs.c server.c
+MODULE		= exttarget
+SRCS		= chanacs.c channel.c main.c oper.c registered.c server.c
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore
-
+LIBS		+= -L../../libathemecore -lathemecore

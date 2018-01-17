@@ -2,24 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = rpgserv
-
-SRCS =  main.c \
-	enable.c \
-	help.c \
-	info.c \
-	list.c \
-	search.c \
-	set.c
+MODULE		= rpgserv
+SRCS		= enable.c help.c info.c list.c main.c search.c set.c
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS +=	-L../../libathemecore -lathemecore -lm
-
+LIBS		+= -L../../libathemecore -lathemecore -lm

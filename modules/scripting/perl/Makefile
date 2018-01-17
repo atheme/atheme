@@ -1,28 +1,24 @@
 # Copyright (c) 2010 Atheme Development Group
 # Rights to this code are documented in doc/LICENSE.
 
-PLUGIN = perl$(PLUGIN_SUFFIX)
-
-SRCS = perl_module.c perl_object_list.c perlxsi.c
-
-SUBDIRS = api
+PLUGIN		= perl$(PLUGIN_SUFFIX)
+SUBDIRS		= api
+SRCS		= perl_module.c perl_object_list.c perlxsi.c
 
 include ../../../extra.mk
 include ../../../buildsys.mk
 
-plugindir = $(MODDIR)/modules/scripting
+plugindir	= $(MODDIR)/modules/scripting
 
-CPPFLAGS += -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR=\"$(plugindir)\"
-CFLAGS += $(PLUGIN_CFLAGS)
-LDFLAGS += $(PLUGIN_LDFLAGS) $(PERL_LIBS)
-LIBS +=	-L../../../libathemecore -lathemecore
+CPPFLAGS	+= -I../../../include -I. $(PERL_CFLAGS) -DPERL_MODDIR=\"$(plugindir)\"
+LIBS		+= $(PERL_LIBS) -L../../../libathemecore -lathemecore
+
+CFLAGS		+= $(PLUGIN_CFLAGS)
+LDFLAGS		+= $(PLUGIN_LDFLAGS)
 
 # Some of the code from Perl is not designed to compile with warnings.
-PERL_WARN_HACKS = -Wno-redundant-decls -Wno-float-equal -Wno-unused-value
-PERL_WARN_HACKS += -Wno-nested-externs
-CFLAGS += $(PERL_WARN_HACKS)
-# This does not make any sense, but other warning flags are in CPPFLAGS too.
-CPPFLAGS += $(PERL_WARN_HACKS)
+CFLAGS		+= -Wno-redundant-decls -Wno-float-equal -Wno-unused-value
+CFLAGS		+= -Wno-nested-externs -Wno-unused-variable -Wno-shadow
 
 perlxsi.c:
 	perl -MExtUtils::Embed -e xsinit

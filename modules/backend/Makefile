@@ -2,17 +2,13 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = backend
-
-SRCS = flatfile.c corestorage.c opensex.c
+MODULE		= backend
+SRCS		= corestorage.c flatfile.c opensex.c
 
 include ../../extra.mk
 include ../../buildsys.mk
 include ../../buildsys.module.mk
 
-LIBS +=	-L../../libathemecore -lathemecore
 CPPFLAGS	+= -I../../include
+LIBS		+= -L../../libathemecore -lathemecore

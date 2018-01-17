@@ -1,50 +1,50 @@
-SHARED_LIB		= ${LIB_PREFIX}athemecore${LIB_SUFFIX}
+SHARED_LIB	= ${LIB_PREFIX}athemecore${LIB_SUFFIX}
 LIB_MAJOR	= 1
 LIB_MINOR	= 0
 HELP_LINGUAS	= es ru fr
 
 SRCS =				\
 	account.c		\
-	atheme.c		\
 	arc4random.c		\
-	auth.c		\
+	atheme.c		\
+	auth.c			\
 	authcookie.c		\
 	base64.c		\
 	channels.c		\
-	cidr.c		\
-	cmode.c		\
+	cidr.c			\
+	cmode.c			\
 	commandtree.c		\
-	ctcp-common.c		\
-	conf.c		\
+	conf.c			\
 	confprocess.c		\
 	connection.c		\
 	crypto.c		\
+	ctcp-common.c		\
 	culture.c		\
 	database_backend.c	\
 	datastream.c		\
-	entity.c	\
+	entity.c		\
 	explicit_bzero.c	\
-	flags.c		\
+	flags.c			\
 	function.c		\
-	help.c		\
-	hook.c		\
+	help.c			\
+	hook.c			\
 	linker.c		\
 	logger.c		\
-	match.c		\
+	match.c			\
 	md5.c			\
 	memory.c		\
 	module.c		\
-	node.c		\
+	node.c			\
 	object.c		\
 	packet.c		\
 	phandler.c		\
 	pmodule.c		\
-	privs.c		\
+	privs.c			\
 	ptasks.c		\
-	$(QRCODE_C)	\
-	res.c		\
-	reslib.c	\
-	send.c		\
+	$(QRCODE_C)		\
+	res.c			\
+	reslib.c		\
+	send.c			\
 	servers.c		\
 	services.c		\
 	servtree.c		\
@@ -54,13 +54,13 @@ SRCS =				\
 	string.c		\
 	strshare.c		\
 	svsignore.c		\
-	table.c		\
+	table.c			\
 	template.c		\
 	tokenize.c		\
 	ubase64.c		\
-	users.c		\
 	uid.c			\
-	uplink.c	\
+	uplink.c		\
+	users.c			\
 	version.c
 
 include ../extra.mk

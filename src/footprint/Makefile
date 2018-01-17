@@ -1,6 +1,5 @@
 PROG_NOINST	= footprint${PROG_SUFFIX}
-
-SRCS = main.c
+SRCS		= main.c
 
 include ../../extra.mk
 include ../../buildsys.mk

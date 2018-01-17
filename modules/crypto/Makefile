@@ -2,18 +2,15 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-MODULE = crypto
+MODULE		= crypto
 
 SRCS =			\
 	argon2d.c	\
+	ircservices.c	\
 	pbkdf2.c	\
 	pbkdf2v2.c	\
 	posix.c		\
-	ircservices.c	\
 	rawmd5.c	\
 	rawsha1.c
 
@@ -22,4 +19,4 @@ include ../../buildsys.mk
 include ../../buildsys.module.mk
 
 CPPFLAGS	+= -I../../include
-LIBS 		+= -L../../libathemecore -lathemecore ${LIBCRYPTO_LIBS} ${LIBIDN_LIBS}
+LIBS 		+= ${LIBCRYPTO_LIBS} ${LIBIDN_LIBS} -L../../libathemecore -lathemecore

@@ -1,6 +1,5 @@
-PROG		= dragon${PROG_SUFFIX}
-
-SRCS = main.c
+PROG_NOINST	= dragon${PROG_SUFFIX}
+SRCS		= main.c
 
 include ../../extra.mk
 include ../../buildsys.mk

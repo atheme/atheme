@@ -2,12 +2,9 @@
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
-#
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
-#
 
-SUBDIRS = $(PERL_ENABLE)
-MODULE = scripting
+MODULE		= scripting
+SUBDIRS		= $(PERL_ENABLE)
 
 include ../../extra.mk
 include ../../buildsys.mk

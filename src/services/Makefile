@@ -1,7 +1,6 @@
-PROG		= atheme-services${PROG_SUFFIX}
 HELP_LINGUAS	= es ru
-
-SRCS = main.c
+PROG		= atheme-services${PROG_SUFFIX}
+SRCS		= main.c
 
 include ../../extra.mk
 include ../../buildsys.mk
