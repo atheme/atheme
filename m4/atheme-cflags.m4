@@ -12,13 +12,21 @@ AC_DEFUN([ATHEME_CC_TEST_CFLAGS],
 				AC_LANG_PROGRAM([[]], [[]])
 			], [
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
+
+				AC_MSG_RESULT([yes])
 			], [
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
+
+				AC_MSG_RESULT([no])
+			], [
+				ATHEME_CC_TEST_CFLAGS_RESULT='no'
+				CFLAGS="${CFLAGS_SAVED}"
+
+				AC_MSG_RESULT([skipped as we are cross-compiling])
 			]
 		)
 
-		AC_MSG_RESULT([${ATHEME_CC_TEST_CFLAGS_RESULT}])
 		unset CFLAGS_SAVED
 	]
 )

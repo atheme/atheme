@@ -8440,17 +8440,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8478,17 +8481,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8517,17 +8523,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8559,17 +8568,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8597,17 +8609,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8635,17 +8650,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8673,17 +8691,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8711,17 +8732,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8749,17 +8773,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8787,17 +8814,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8830,17 +8860,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8868,17 +8901,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8907,17 +8943,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8945,17 +8984,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -8983,17 +9025,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9021,17 +9066,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9059,17 +9107,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9097,17 +9148,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9135,17 +9189,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9173,17 +9230,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9211,17 +9271,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9249,17 +9312,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9287,17 +9353,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9325,17 +9394,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9363,17 +9435,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9401,17 +9476,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9439,17 +9517,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9477,17 +9558,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9515,17 +9599,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9553,17 +9640,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9591,17 +9681,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9629,17 +9722,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9667,17 +9763,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9705,17 +9804,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9743,17 +9845,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9781,17 +9886,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9819,17 +9927,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9857,17 +9968,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9895,17 +10009,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9933,17 +10050,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -9971,17 +10091,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10009,17 +10132,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10047,17 +10173,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10085,17 +10214,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10123,17 +10255,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10161,17 +10296,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10199,17 +10337,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10237,17 +10378,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10275,17 +10419,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10313,17 +10460,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10351,17 +10501,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10389,17 +10542,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10428,17 +10584,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10467,17 +10626,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10508,17 +10670,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10546,17 +10711,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10584,17 +10752,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10622,17 +10793,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10660,17 +10834,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10698,17 +10875,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10736,17 +10916,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10774,17 +10957,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10812,17 +10998,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10850,17 +11039,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10893,17 +11085,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10931,17 +11126,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -10969,17 +11167,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11007,17 +11208,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11045,17 +11249,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11083,17 +11290,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11121,17 +11331,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11159,17 +11372,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11197,17 +11413,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11235,17 +11454,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11273,17 +11495,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11311,17 +11536,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11364,17 +11592,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11402,17 +11633,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11440,17 +11674,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11478,17 +11715,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
@@ -11529,17 +11769,20 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='yes'
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
 
 				ATHEME_CC_TEST_CFLAGS_RESULT='no'
 				CFLAGS="${CFLAGS_SAVED}"
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ATHEME_CC_TEST_CFLAGS_RESULT}" >&5
-$as_echo "${ATHEME_CC_TEST_CFLAGS_RESULT}" >&6; }
 		unset CFLAGS_SAVED
 
 
