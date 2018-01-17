@@ -532,10 +532,23 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT
 
-d="$(eval echo "${MODDIR}")"
-d="$(eval echo "${d}")"
-d="$(eval echo "${d}")"
-d="$(eval echo "${d}")"
+prefix="$(eval echo "${prefix}")"
+prefix="$(eval echo "${prefix}")"
+
+MODDIR="$(eval echo "${MODDIR}")"
+MODDIR="$(eval echo "${MODDIR}")"
+
+sysconfdir="$(eval echo "${sysconfdir}")"
+sysconfdir="$(eval echo "${sysconfdir}")"
+
+LOGDIR="$(eval echo "${LOGDIR}")"
+LOGDIR="$(eval echo "${LOGDIR}")"
+
+DATADIR="$(eval echo "${DATADIR}")"
+DATADIR="$(eval echo "${DATADIR}")"
+
+RUNDIR="$(eval echo "${RUNDIR}")"
+RUNDIR="$(eval echo "${RUNDIR}")"
 
 echo "
 Configuration:
@@ -543,7 +556,7 @@ Configuration:
     Atheme Version ..........: ${PACKAGE_VERSION}
 
     Installation Prefix .....: ${prefix}
-    Module Root Directory ...: ${d}
+    Module Root Directory ...: ${MODDIR}
     Config Directory ........: ${sysconfdir}
     Logfile Directory .......: ${LOGDIR}
     Data Directory ..........: ${DATADIR}
