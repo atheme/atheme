@@ -8371,6 +8371,17 @@ fi
 fi
 
 
+
+
+case "${host}" in
+*-*-mingw32)
+    CFLAGS="-I/mingw/include ${CFLAGS}"
+    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
+        ;;
+esac
+
+
+
 LIBCRACKLIB="No"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
@@ -8465,6 +8476,8 @@ fi
 	LIBS="${LIBS_SAVED}"
 
 fi
+
+
 
 
 
@@ -8605,6 +8618,8 @@ $as_echo "#define HAVE_OPENSSL 1" >>confdefs.h
 
 fi
 
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 
@@ -8701,6 +8716,8 @@ fi
 	LIBS="${LIBS_SAVED}"
 
 fi
+
+
 
 
 # Check whether --with-ldap was given.
@@ -8834,6 +8851,8 @@ fi
 
 
 
+
+
 LIBPERL="No"
 
 # Check whether --with-perl was given.
@@ -8917,6 +8936,8 @@ fi
 
 
 
+
+
 mkdir_p="mkdir -p"
 
 
@@ -8965,6 +8986,8 @@ $as_echo "${FHSPATHS}" >&6; }
 LOCALEDIR='${datadir}/locale'
 
 
+
+
 REPRODUCIBLE_BUILDS="No"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want reproducible builds" >&5
 $as_echo_n "checking if you want reproducible builds... " >&6; }
@@ -8988,6 +9011,8 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${REPRODUCIBLE_BUILDS}" >&5
 $as_echo "${REPRODUCIBLE_BUILDS}" >&6; }
 
+
+
 LARGE_NET="No"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if you want large network support" >&5
 $as_echo_n "checking if you want large network support... " >&6; }
@@ -9010,6 +9035,8 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${LARGE_NET}" >&5
 $as_echo "${LARGE_NET}" >&6; }
+
+
 
 CONTRIB="No"
 CONTRIB_ENABLE=""
@@ -9038,12 +9065,7 @@ fi
 
 
 
-case "${host}" in
-*-*-mingw32)
-    CFLAGS="-I/mingw/include ${CFLAGS}"
-    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
-        ;;
-esac
+
 
 BUILD_WARNINGS="No"
 # Check whether --enable-warnings was given.
@@ -12199,6 +12221,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
+
+
 # Check whether --enable-propolice was given.
 if test "${enable_propolice+set}" = set; then :
   enableval=$enable_propolice;
@@ -12375,6 +12399,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 fi
+
+
 
 # Check whether --enable-profile was given.
 if test "${enable_profile+set}" = set; then :
@@ -12581,6 +12607,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
+
+
 enablerpath="yes"
 # Check whether --enable-rpath was given.
 if test "${enable_rpath+set}" = set; then :
@@ -12593,6 +12621,8 @@ fi
 if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
+
+
 
 
 # Check whether --with-libmowgli was given.
@@ -12697,6 +12727,8 @@ fi
 
 CPPFLAGS="${CPPFLAGS} ${MOWGLI_CFLAGS}"
 LIBS="${LIBS} ${MOWGLI_LIBS}"
+
+
 
 
 
@@ -12815,6 +12847,8 @@ fi
 
 fi
 
+
+
 LIBQRENCODE="No"
 QRCODE_C=""
 
@@ -12930,6 +12964,8 @@ $as_echo "#define HAVE_LIBQRENCODE 1" >>confdefs.h
 fi
 
 fi
+
+
 
 BUILDROOT=`pwd`
 
@@ -14528,6 +14564,8 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
+
 
 
 prefix="$(eval echo "${prefix}")"

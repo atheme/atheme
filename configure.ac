@@ -76,6 +76,18 @@ AC_SEARCH_LIBS([crypt], [crypt], [AC_DEFINE([HAVE_CRYPT], [1], [Define to 1 if c
 HW_FUNC_SNPRINTF
 HW_FUNC_ASPRINTF
 
+
+
+dnl If we're building on Windows we need socket and regex libraries from mingw
+case "${host}" in
+*-*-mingw32)
+    CFLAGS="-I/mingw/include ${CFLAGS}"
+    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
+        ;;
+esac
+
+
+
 LIBCRACKLIB="No"
 CRACKLIB_C=""
 CRACKLIB_LIBS=""
@@ -106,6 +118,8 @@ AS_IF([test "x${with_cracklib}" != "xno"], [
 ])
 AC_SUBST([CRACKLIB_C])
 AC_SUBST([CRACKLIB_LIBS])
+
+
 
 LIBCRYPTO="No"
 LIBCRYPTO_LIBS=""
@@ -145,6 +159,8 @@ AS_IF([test "x${LIBCRYPTO}" = "xYes"], [
 	AC_SUBST([LIBCRYPTO_LIBS])
 ])
 
+
+
 LIBIDN="No"
 LIBIDN_LIBS=""
 AC_ARG_WITH([libidn],
@@ -173,6 +189,8 @@ AS_IF([test "x${with_libidn}" != "xno"], [
 	])
 	LIBS="${LIBS_SAVED}"
 ])
+
+
 
 AC_ARG_WITH([ldap],
 	[AS_HELP_STRING([--without-ldap],[Disable building ldap auth module.])],
@@ -218,6 +236,8 @@ AC_SUBST([LDAP_CFLAGS])
 AC_SUBST([LDAP_LIBS])
 AC_SUBST([LDAP_AUTHC])
 
+
+
 LIBPERL="No"
 AC_ARG_WITH([perl],
         [AS_HELP_STRING([--without-perl], [Disable building perl scripting module])],
@@ -255,6 +275,8 @@ AS_IF([test "x${with_perl}" = "xyes" && test "x${PERL_CFLAGS}" = "x"],
 AC_SUBST([PERL_CFLAGS])
 AC_SUBST([PERL_LIBS])
 AC_SUBST([PERL_ENABLE])
+
+
 
 dnl gettextize's Makefile.in wants this
 mkdir_p="mkdir -p"
@@ -304,6 +326,8 @@ dnl gettext
 LOCALEDIR='${datadir}/locale'
 AC_SUBST([LOCALEDIR])
 
+
+
 REPRODUCIBLE_BUILDS="No"
 AC_MSG_CHECKING([if you want reproducible builds])
 AC_ARG_ENABLE([reproducible-builds],
@@ -321,6 +345,8 @@ AS_HELP_STRING([--enable-reproducible-builds],[ Enable reproducible builds.]),
 ])
 AC_MSG_RESULT([${REPRODUCIBLE_BUILDS}])
 
+
+
 LARGE_NET="No"
 AC_MSG_CHECKING([if you want large network support])
 AC_ARG_ENABLE([large-net],
@@ -337,6 +363,8 @@ AS_HELP_STRING([--enable-large-net],[ Enable large network support.]),
   esac
 ])
 AC_MSG_RESULT([${LARGE_NET}])
+
+
 
 CONTRIB="No"
 CONTRIB_ENABLE=""
@@ -361,12 +389,7 @@ fi
 
 AC_SUBST([CONTRIB_ENABLE])
 
-case "${host}" in
-*-*-mingw32)
-    CFLAGS="-I/mingw/include ${CFLAGS}"
-    LIBS="${LIBS} -lwsock32 -lws2_32 -lregex"
-        ;;
-esac
+
 
 BUILD_WARNINGS="No"
 AC_ARG_ENABLE([warnings],
@@ -376,6 +399,8 @@ AS_IF([test "x${enable_warnings}" = "xyes"], [
 	ATHEME_CC_ENABLE_WARNINGS
 	BUILD_WARNINGS="Yes"
 ])
+
+
 
 AC_ARG_ENABLE([propolice],
 	[AS_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)])],
@@ -388,6 +413,8 @@ AS_IF([test "x${enable_propolice}" = "xyes"],
 	ATHEME_CC_TEST_CFLAGS([-norelro])
 	]
 )
+
+
 
 AC_ARG_ENABLE([profile],
 	[AS_HELP_STRING([--enable-profile],[ Enable profiling extensions])],
@@ -410,6 +437,8 @@ AS_IF([test "x${enable_relro}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,relro]
 AS_IF([test "x${enable_nonlazy_bind}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,now])])
 AS_IF([test "x${enable_as_needed}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,--as-needed])])
 
+
+
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
 AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),
@@ -418,6 +447,8 @@ AS_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking]),
 if test "x${enablerpath}" != "xyes"; then
 	LDFLAGS_RPATH=""
 fi
+
+
 
 AC_ARG_WITH([libmowgli],
   AS_HELP_STRING([--with-libmowgli@<:@=prefix@:>@],[ Specify location of system libmowgli install, or "no" to force use of internal libmowgli]),
@@ -448,6 +479,8 @@ AC_SUBST([MOWGLI_CFLAGS])
 AC_SUBST([MOWGLI_LIBS])
 AC_SUBST([LIBMOWGLI])
 
+
+
 LIBPCRE="No"
 AC_ARG_WITH([pcre],
 	[AS_HELP_STRING([--with-pcre], [Enable Perl-Compatible Regular Expression support])],
@@ -473,6 +506,8 @@ AS_IF([test "x${with_pcre}" != "xno"], [
 		])
 	])
 ])
+
+
 
 LIBQRENCODE="No"
 QRCODE_C=""
@@ -502,6 +537,8 @@ AS_IF([test "x${with_qrencode}" != "xno"], [
 	])
 ])
 
+
+
 BUILDROOT=`pwd`
 AC_SUBST([BUILDROOT])
 
@@ -527,6 +564,8 @@ AC_CONFIG_FILES([
 	atheme-services.pc
 ])
 AC_OUTPUT
+
+
 
 prefix="$(eval echo "${prefix}")"
 prefix="$(eval echo "${prefix}")"
