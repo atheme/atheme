@@ -685,6 +685,8 @@ INSTALL_SCRIPT
 INSTALL_PROGRAM
 VERSION
 PACKAGE
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
 PKG_CONFIG
 SET_MAKE
 EGREP
@@ -810,6 +812,8 @@ LIBS
 CPPFLAGS
 CPP
 PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
 MOWGLI_CFLAGS
 MOWGLI_LIBS
 PCRE_CFLAGS
@@ -1477,6 +1481,10 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
   PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
   MOWGLI_CFLAGS
               C compiler flags for MOWGLI, overriding pkg-config
   MOWGLI_LIBS linker flags for MOWGLI, overriding pkg-config
@@ -4735,6 +4743,11 @@ fi
 
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
 	if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
@@ -4847,7 +4860,6 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
-
 fi
 if test -z "${PKG_CONFIG}"; then
 	as_fn_error $? "pkg-config not found" "$LINENO" 5
@@ -12614,6 +12626,7 @@ if test -n "$MOWGLI_CFLAGS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12630,6 +12643,7 @@ if test -n "$MOWGLI_LIBS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli-2 >= 2.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12640,6 +12654,8 @@ fi
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -12647,17 +12663,17 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
         else
-	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors "libmowgli-2 >= 2.0.0" 2>&1`
+	        MOWGLI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmowgli-2 >= 2.0.0" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$MOWGLI_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                with_libmowgli="no"
+	with_libmowgli="no"
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	with_libmowgli="no"
 else
 	MOWGLI_CFLAGS=$pkg_cv_MOWGLI_CFLAGS
@@ -12728,6 +12744,7 @@ if test -n "$PCRE_CFLAGS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12744,6 +12761,7 @@ if test -n "$PCRE_LIBS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PCRE_LIBS=`$PKG_CONFIG --libs "libpcre" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12754,6 +12772,8 @@ fi
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -12761,15 +12781,13 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libpcre" 2>&1`
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre" 2>&1`
         else
-	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors "libpcre" 2>&1`
+	        PCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$PCRE_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
 
 		if test "x${with_pcre}" != "xauto"; then :
 
@@ -12778,6 +12796,8 @@ $as_echo "no" >&6; }
 fi
 
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 		if test "x${with_pcre}" != "xauto"; then :
 
@@ -12838,6 +12858,7 @@ if test -n "$LIBQRENCODE_CFLAGS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBQRENCODE_CFLAGS=`$PKG_CONFIG --cflags "libqrencode" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12854,6 +12875,7 @@ if test -n "$LIBQRENCODE_LIBS"; then
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBQRENCODE_LIBS=`$PKG_CONFIG --libs "libqrencode" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
@@ -12864,6 +12886,8 @@ fi
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -12871,15 +12895,13 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libqrencode" 2>&1`
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode" 2>&1`
         else
-	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors "libqrencode" 2>&1`
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBQRENCODE_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
 
 		LIBQRENCODE="No"
 		if test "x${with_qrencode}" = "xyes"; then :
@@ -12889,6 +12911,8 @@ $as_echo "no" >&6; }
 fi
 
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 		LIBQRENCODE="No"
 		if test "x${with_qrencode}" = "xyes"; then :
