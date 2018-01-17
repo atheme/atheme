@@ -7,6 +7,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
 
+AC_LANG([C])
 AC_INIT([atheme], [7.3.0-dev], [https://github.com/atheme/atheme/issues/])
 
 AC_CONFIG_AUX_DIR([autoconf])
