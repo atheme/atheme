@@ -391,12 +391,6 @@ AS_IF([test "x${enable_propolice}" = "xyes"],
 AC_ARG_ENABLE([profile],
 	[AS_HELP_STRING([--enable-profile],[ Enable profiling extensions])],
 	[], [enable_profile=no])
-AS_IF([test "x${enable_profile}" = "xyes"], [
-	CFLAGS_SAVED="${CFLAGS}"
-	ATHEME_CC_TEST_CFLAGS([-pg])
-	AS_IF([test "x${ATHEME_CC_TEST_CFLAGS_RESULT}" = "xyes"], [LDFLAGS="${LDFLAGS} -pg"])
-	CFLAGS="${CFLAGS_SAVED}"
-])
 
 AC_ARG_ENABLE([relro],
 	[AS_HELP_STRING([--enable-relro], [Enable -Wl,-z,relro to mark the relocation table read-only])],
@@ -410,9 +404,10 @@ AC_ARG_ENABLE([as-needed],
 	[AS_HELP_STRING([--enable-as-needed], [Enable -Wl,--as-needed to strip unnecessary libraries at link time])],
 	[], [enable_as_needed="yes"])
 
-AS_IF([test "x${enable_relro}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,-z,relro])])
-AS_IF([test "x${enable_nonlazy_bind}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,-z,now])])
-AS_IF([test "x${enable_as_needed}" = "xyes"], [ATHEME_CC_TEST_CFLAGS([-Wl,--as-needed])])
+AS_IF([test "x${enable_profile}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-pg])])
+AS_IF([test "x${enable_relro}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,relro])])
+AS_IF([test "x${enable_nonlazy_bind}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,-z,now])])
+AS_IF([test "x${enable_as_needed}" = "xyes"], [ATHEME_LD_TEST_LDFLAGS([-Wl,--as-needed])])
 
 enablerpath="yes"
 AC_ARG_ENABLE([rpath],
