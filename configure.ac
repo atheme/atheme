@@ -15,18 +15,22 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([include/sysconf.h])
 AC_PREFIX_DEFAULT([~/atheme])
 
-dnl Buildsys module stuff
-BUILDSYS_INIT
-BUILDSYS_SHARED_LIB
-BUILDSYS_PROG_IMPLIB
-LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
-
 AC_MSG_CHECKING([if you read GIT-Access])
 if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
 	AC_MSG_RESULT([no])
 	AC_MSG_ERROR([please read GIT-Access before trying to build from git])
 fi
 AC_MSG_RESULT([yes])
+
+if test "x${prefix}" = "xNONE"; then
+	prefix="${ac_default_prefix}"
+fi
+
+dnl Buildsys module stuff
+BUILDSYS_INIT
+BUILDSYS_SHARED_LIB
+BUILDSYS_PROG_IMPLIB
+LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
 
 AC_PATH_PROG([RM], [rm])
 AC_PATH_PROG([MV], [mv])
@@ -45,10 +49,6 @@ AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 if test -z "${PKG_CONFIG}"; then
 	AC_MSG_ERROR([pkg-config not found])
-fi
-
-if test "x${prefix}" = "xNONE"; then
-	prefix="${ac_default_prefix}"
 fi
 
 dnl Automake compatibility. --nenolod

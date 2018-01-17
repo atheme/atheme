@@ -2456,6 +2456,20 @@ ac_config_headers="$ac_config_headers include/sysconf.h"
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access" >&5
+$as_echo_n "checking if you read GIT-Access... " >&6; }
+if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	as_fn_error $? "please read GIT-Access before trying to build from git" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+if test "x${prefix}" = "xNONE"; then
+	prefix="${ac_default_prefix}"
+fi
+
 
 	# Extract the first word of "tput", so it can be a program name with args.
 set dummy tput; ac_word=$2
@@ -2757,16 +2771,6 @@ $as_echo "no" >&6; }
 
 
 LIBS="${LIBS} ${DYNAMIC_LD_LIBS}"
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if you read GIT-Access" >&5
-$as_echo_n "checking if you read GIT-Access... " >&6; }
-if ! test -f "libmowgli-2/Makefile" -a -f "modules/contrib/Makefile"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	as_fn_error $? "please read GIT-Access before trying to build from git" "$LINENO" 5
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
 
 # Extract the first word of "rm", so it can be a program name with args.
 set dummy rm; ac_word=$2
@@ -4863,10 +4867,6 @@ $as_echo "no" >&6; }
 fi
 if test -z "${PKG_CONFIG}"; then
 	as_fn_error $? "pkg-config not found" "$LINENO" 5
-fi
-
-if test "x${prefix}" = "xNONE"; then
-	prefix="${ac_default_prefix}"
 fi
 
 PACKAGE=atheme
