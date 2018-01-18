@@ -43,7 +43,10 @@
  */
 #define CYRUS_SASL_ITERMAX          0x10000U
 
-#define NONCE_LENGTH                64          // This should be more than sufficient
+#define NONCE_LENGTH                64U         // This should be more than sufficient
+#define NONCE_LENGTH_MIN            8U          // Minimum acceptable client nonce length
+#define NONCE_LENGTH_MAX            1024U       // Maximum acceptable client nonce length
+#define NONCE_LENGTH_MAX_COMBINED   (NONCE_LENGTH + NONCE_LENGTH_MAX)
 
 enum scramsha_step
 {
@@ -242,6 +245,14 @@ mech_step_clientfirst(struct sasl_session *const restrict p, const void *const r
 		goto error;
 	}
 
+	const size_t nlen = strlen(input['r']);
+
+	if (nlen < NONCE_LENGTH_MIN || nlen > NONCE_LENGTH_MAX)
+	{
+		(void) slog(LG_DEBUG, "%s: nonce length unacceptable", __func__);
+		goto error;
+	}
+
 	char authcid[NICKLEN];
 	const size_t authcid_length = strlen(input['n']);
 
@@ -350,9 +361,9 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	}
 
 	// Concatenate the s-nonce to the c-nonce
-	char x_nonce[SASL_C2S_MAXLEN];
+	char x_nonce[NONCE_LENGTH_MAX_COMBINED + 1];
 	const int xl = snprintf(x_nonce, sizeof x_nonce, "%s%s", s->cn, s->sn);
-	if (xl <= NONCE_LENGTH || xl >= (int) sizeof x_nonce)
+	if (xl <= (int) NONCE_LENGTH || xl >= (int) sizeof x_nonce)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for concatenated salts failed (BUG?)", __func__);
 		goto error;
@@ -390,7 +401,7 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	const int alen = snprintf(AuthMessage, sizeof AuthMessage, "%s,%s,c=%s,r=%s",
 	                          s->c_msg_buf, s->s_msg_buf, input['c'], input['r']);
 
-	if (alen < NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
+	if (alen <= (int) NONCE_LENGTH || alen >= (int) sizeof AuthMessage)
 	{
 		(void) slog(LG_ERROR, "%s: snprintf(3) for AuthMessage failed (BUG?)", __func__);
 		goto error;
