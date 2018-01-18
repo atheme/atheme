@@ -452,25 +452,20 @@ mech_step_clientproof(struct scramsha_session *const restrict s, const void *con
 	// Encode ServerSignature
 	char ServerSignature64[EVP_MAX_MD_SIZE * 3];
 	const size_t rs = base64_encode(ServerSignature, s->db.dl, ServerSignature64, sizeof ServerSignature64);
+
 	if (rs == (size_t) -1)
 	{
 		(void) slog(LG_ERROR, "%s: base64_encode() for ServerSignature failed", __func__);
 		goto error;
 	}
 
-	// Construct server-final-message
-	char response[EVP_MAX_MD_SIZE * 3];
-	const int ol = snprintf(response, sizeof response, "v=%s", ServerSignature64);
-	if (ol < (int) s->db.dl || ol >= (int) sizeof response)
-	{
-		(void) slog(LG_ERROR, "%s: snprintf(3) for response failed (BUG?)", __func__);
-		goto error;
-	}
+	// This cannot fail
+	*outlen = rs + 2;
+	*out    = smalloc(rs + 2);
 
-	// Cannot fail
-	*outlen = (size_t) ol;
-	*out = smalloc(*outlen);
-	(void) memcpy(*out, response, *outlen);
+	// Construct server-final-message
+	(void) memcpy(*out, "v=", 2);
+	(void) memcpy(*out + 2, ServerSignature64, rs);
 
 	(void) sasl_scramsha_attrlist_free(&input);
 	s->step = SCRAMSHA_STEP_PASSED;
