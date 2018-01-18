@@ -8,8 +8,8 @@ notified that you did it.
 If the last parameter is omitted the action is performed
 on the person requesting the command.
 
-Syntax: OP|DEOP <#channel> [nickname]
-Syntax: VOICE|DEVOICE <#channel> [nickname]
+Syntax: OP|DEOP <#channel> [nickname]…
+Syntax: VOICE|DEVOICE <#channel> [nickname]…
 
 Examples:
     /msg &nick& OP #foo bar
