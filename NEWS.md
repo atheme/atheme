@@ -14,7 +14,78 @@ security
   modules. You must load an encryption-capable password crypto module if you
   want new user registrations and changed passwords to be encrypted; you will
   receive an error message every time encryption is attempted if you do not.
-  Please see dist/atheme.conf.example for more information.
+  Please see dist/atheme.conf.example and the Password Cryptography section
+  below for more information.
+
+SASL
+----
+- SASLServ and its modules have been almost entirely re-written
+- Add support for SASL SCRAM-SHA logins
+- Advertise SASL mechanism list to UnrealIRCd servers
+- Use a parameter vector to allow an arbitrary number of S2S arguments
+- Indicate whether the client is on a plaintext connection or not
+  This can be used by user_can_login hooks
+
+MemoServ
+--------
+- MemoServ: let user know when their inbox is full
+
+ChanServ
+--------
+- Save PUBACL flag to database so it isn't lost when services restarts
+
+IRCds
+-----
+- Support chm_nonotice.s (Block channel notices) extension in charybdis IRCd
+- Support cmode +M in charybdis (and make it oper-only)
+- Support cmode +T in UnrealIRCd
+- Support cmode +D in UnrealIRCd 4
+- Add protocol module for ChatIRCd 1.1.x
+- Check for NULL send/receive password on connection to IRCd
+
+misc
+----
+- Replace Base-64 codec to fix erroneous failures and add a raw encoder
+- atheme.conf.example: document SET NOPASSWORD module
+
+Build System
+------------
+- m4/: don't check for warning flags that gcc -Wall enables
+- m4/: don't check for warning flags that gcc -Wextra enables
+- m4/: check for more warning flags
+- m4/: support clang's -Weverything flag
+- configure: Detect PCRE support automatically instead of requiring the
+  user to ask us to build against it (--with-pcre)
+- buildsys.mk.in: clearly indicate link output file for 'make V=1' text
+- Makefiles: remove PCRE CFLAGS and LIBS from programs that don't use it
+- Makefiles: build source files in alphabetical order
+- configure: conditionally compile libathemecore/qrcode.c
+- configure: add --with(out)-qrencode flag to allow controlling detection
+- configure: Make --enable-ssl now --with-openssl to match libmowgli
+- configure: If --with-openssl, only build against libcrypto, not libssl
+- configure: cleanly separate CFLAGS from CPPFLAGS
+- configure: don't add MOWGLI_CFLAGS and MOWGLI_LIBS twice
+- configure: print expanded directories
+- configure: print final configuration in a nicer, grouped, format
+- configure: print CC/CFLAGS/CPPFLAGS/LD/LDFLAGS
+- configure: indicate if --enable-warnings
+- configure: detect support for -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
+- Update third-party files (ABOUT-NLS, autoconf/*, m4/*.m4)
+- Clarify that GIT-Access is a file by renaming it to GIT-Access.txt
+
+Password Cryptography
+---------------------
+- libathemecore/crypto: log current crypto provider on mod(un/re)load
+- libathemecore/crypto: rip out plaintext fallback implementation
+- Make old modules (ircservices, pbkdf2, rawmd5, rawsha1) verify-only
+- Warn admin if no encryption-capable crypto modules are loaded
+- Generating new encrypted passwords is now much more efficient
+- Try encrypting a password with each module in turn instead of giving up
+- Indicating whether a password needs re-encrypting is now much more efficient
+- Verifying a password hash no longer wastes CPU time on modules that didn't
+  produce it if the module that did produce it fails to verify it
+
+
 
 Atheme Services 7.2 Release Notes
 =================================
