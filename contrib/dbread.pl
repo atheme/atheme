@@ -135,7 +135,7 @@ sub db_load {
             setby    => $item[4],
             reason   => $item[5],
          };
-         
+
          $numklines++;
       }
 
