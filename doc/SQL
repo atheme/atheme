@@ -1,7 +1,7 @@
 Read this first
 ---------------
 
-As of version 2.2, Services no longer supports SQL databases. To use 
+As of version 2.2, Services no longer supports SQL databases. To use
 Services 2.2 or newer, you will need to switch to the flatfile backend.
 
 The information on how to use the SQL backend has been removed as
