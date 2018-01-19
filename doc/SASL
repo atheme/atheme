@@ -71,7 +71,7 @@ S: NOTICE AUTH :*** Looking up your hostname...
 S: NOTICE AUTH :*** Checking Ident
 S: NOTICE AUTH :*** No Ident response
 S: NOTICE AUTH :*** Found your hostname
-S: :jaguar.test CAP jilles ACK :sasl 
+S: :jaguar.test CAP jilles ACK :sasl
 C: AUTHENTICATE PLAIN
 S: AUTHENTICATE +
 C: AUTHENTICATE amlsbGVzAGppbGxlcwBzZXNhbWU=
@@ -97,7 +97,7 @@ S: NOTICE AUTH :*** No Ident response
 S: NOTICE AUTH :*** Found your hostname
 S: :jaguar.test CAP * LS :multi-prefix sasl
 C: CAP REQ :multi-prefix sasl
-S: :jaguar.test CAP jilles ACK :multi-prefix sasl 
+S: :jaguar.test CAP jilles ACK :multi-prefix sasl
 C: AUTHENTICATE PLAIN
 S: AUTHENTICATE +
 C: AUTHENTICATE amlsbGVzAGppbGxlcwBzZXNhbWU=
